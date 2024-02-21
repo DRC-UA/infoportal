@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "ES2021",
+      "dom"
+    ],
+    "target": "ESNext",
+    "module": "CommonJS",
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./lib",
+    "checkJs": false,
+    "rootDir": "./src",
+    "composite": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowJs": true
+  },
+  "include": [
+    "src/**/*",
+    "ressources/**/*"
+  ]
+}

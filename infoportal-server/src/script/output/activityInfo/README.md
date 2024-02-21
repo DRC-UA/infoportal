@@ -1,0 +1,1 @@
+# Generated ActivityInfo interfaces.
