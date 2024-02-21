@@ -41,12 +41,12 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
       if (DatatableColumn.isQuick(col)) {
         if (col.type === undefined) {
           (col as unknown as DatatableColumn.InnerProps<T>).render = (_: T) => {
-            const value = col.renderQuick(_) as any
+            const value = col.renderQuick(_) ?? DatatableUtils.blank as any
             return {label: value, value: undefined}
           }
         } else {
           (col as unknown as DatatableColumn.InnerProps<T>).render = (_: T) => {
-            const value = col.renderQuick(_) as any
+            const value = col.renderQuick(_) ?? DatatableUtils.blank as any
             return {
               label: value,
               tooltip: value,
@@ -59,6 +59,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
         const render = col.render
         col.render = (_: T) => {
           const rendered = render(_)
+          if (rendered.value === undefined) rendered.value = DatatableUtils.blank
           if (rendered.option === undefined) rendered.option = rendered.label
           return rendered as any
         }
