@@ -21,17 +21,24 @@ export const shelterCashStatusType: Record<ShelterCashStatus, StateStatus> = {
 }
 
 export enum CashStatus {
+  Selected = 'Selected',
+  Pending = 'Pending',
   Paid = 'Paid',
   Rejected = 'Rejected',
   Referred = 'Referred',
-  Received = 'Received',
+
+  // Paid = 'Paid',
+  // Rejected = 'Rejected',
+  // Referred = 'Referred',
+  // Received = 'Received',
 }
 
 export const cashStatusType: Record<CashStatus, StateStatus> = {
   Paid: 'success',
   Rejected: 'error',
   Referred: 'disabled',
-  Received: 'info',
+  Pending: 'warning',
+  Selected: 'info'
 }
 
 export const koboValidationStatus: Record<KoboValidation, StateStatus> = {
