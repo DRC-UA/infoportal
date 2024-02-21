@@ -1,5 +1,6 @@
 import {TOTP, URI} from 'otpauth'
 import {ApiClient} from '../../../core/client/ApiClient'
+import fetch from 'node-fetch'
 
 export class WfpBuildingBlockClient {
 
@@ -39,7 +40,7 @@ export class WfpBuildingBlockClient {
         'resetOtp': false,
         'otp': this.getOtpCode(),
       })
-    }).then(_ => _.json()).then(_ => _.apiToken)
+    }).then(_ => _.json()).then((_: any) => _.apiToken)
   }
 
   generate = async () => {
