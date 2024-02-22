@@ -141,6 +141,7 @@ export namespace KoboGeneralMapping {
     elderlyCount: number
     childrenCount: number
     adultCount: number
+    persons: Person.PersonWDisability[]
   }
 
   export const addIndividualBreakdownColumn = <T extends StandardKoboFormQuestion>(row: T): T & {custom: IndividualBreakdown} => {
@@ -158,12 +159,13 @@ export namespace KoboGeneralMapping {
     hh?.forEach(_ => {
       _.disabilities?.forEach(disabilities.add, disabilities)
       if (_.age && _.age < 18) childrenCount++
-      if (_.age && _.age >= 18) adultCount++
+      if (_.age && _.age >= 18 && _.age < 60) adultCount++
       if (_.age && _.age >= 60) elderlyCount++
       if (_.disabilities && !_.disabilities.includes('diff_none')) disabilitiesCount++
     })
     disabilities.delete('diff_none')
     return {
+      persons: hh,
       adultCount: adultCount,
       elderlyCount: elderlyCount,
       childrenCount: childrenCount,

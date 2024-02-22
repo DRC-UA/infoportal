@@ -21,13 +21,15 @@ export interface DatatableSearch<T = any> {
   orderBy?: OrderBy
 }
 
+export type HeaderParams<T extends DatatableRow> = {
+  data: T[]
+  filteredData: T[]
+  filteredAndSortedData: T[]
+}
+
 export type DatatableRow = Record<string, any> // Record<string, any/* string | number[] | string[] | Date | number | undefined*/>
 export interface DatatableTableProps<T extends DatatableRow, K extends string = string> extends Omit<BoxProps, 'onSelect'> {
-  header?: ReactNode | ((_: {
-    data: T[]
-    filteredData: T[]
-    filteredAndSortedData: T[]
-  }) => ReactNode)
+  header?: ReactNode | ((_: HeaderParams<T>) => ReactNode)
   id: string
   loading?: boolean
   total?: number

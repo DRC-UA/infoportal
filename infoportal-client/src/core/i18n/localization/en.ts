@@ -133,6 +133,7 @@ export const en = Object.freeze({
     min: 'Min',
     max: 'Max',
     disabilities: 'Disabilities',
+    minors: 'Minors',
     children: 'Children',
     PwD: 'PwD',
     PwDs: 'PwDs',

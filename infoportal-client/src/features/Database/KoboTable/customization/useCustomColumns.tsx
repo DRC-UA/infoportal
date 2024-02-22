@@ -1,5 +1,14 @@
 import {KoboAnswer, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {CashStatus, currentProtectionProjects, KoboGeneralMapping, DrcProject, Ecrec_cashRegistration, KoboEcrec_cashRegistration, KoboIndex, ProtectionHhsTags} from '@infoportal-common'
+import {
+  CashStatus,
+  currentProtectionProjects,
+  KoboGeneralMapping,
+  DrcProject,
+  Ecrec_cashRegistration,
+  KoboEcrec_cashRegistration,
+  KoboIndex,
+  ProtectionHhsTags
+} from '@infoportal-common'
 import React, {useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {map, Obj} from '@alexandreannic/ts-utils'
@@ -19,14 +28,14 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
     const individualsBreakdown: DatatableColumn.Props<any>[] = [
       {
         id: 'custom_children',
-        head: m.children,
+        head: m.minors + ' < 18',
         type: 'number',
         width: 20,
         renderQuick: (row: {custom: KoboGeneralMapping.IndividualBreakdown}) => row.custom.childrenCount,
       },
       {
         id: 'custom_adult',
-        head: m.adults + ' 18+',
+        head: m.adults + ' 18 ≤ age < 60',
         type: 'number',
         width: 20,
         renderQuick: (row: {custom: KoboGeneralMapping.IndividualBreakdown}) => row.custom.adultCount,

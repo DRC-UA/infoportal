@@ -1,4 +1,4 @@
-import {KoboAnswer, KoboValidation} from '@/core/sdk/server/kobo/Kobo'
+import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {IpBtn} from '@/shared/Btn'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import React, {useMemo, useState} from 'react'
@@ -8,13 +8,11 @@ import {DatabaseKoboTableExportBtn} from '@/features/Database/KoboTable/Database
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {DatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
-import {Icon, Switch, Theme, useTheme} from '@mui/material'
+import {Switch, Theme, useTheme} from '@mui/material'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useCustomColumns} from '@/features/Database/KoboTable/customization/useCustomColumns'
-import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
-import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {DatabaseTableProps} from '@/features/Database/KoboTable/DatabaseKoboTable'
 import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyncBtn'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
@@ -22,6 +20,8 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {SelectValidationStatus} from '@/shared/customInput/SelectStatus'
+import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
+import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -98,6 +98,7 @@ export const DatabaseKoboTableContent = ({
   }, [schemaColumns])
 
   const selectedHeader = useCustomSelectedHeader(selectedIds)
+  const header = useCustomHeader()
 
   return (
     <>
@@ -128,6 +129,7 @@ export const DatabaseKoboTableContent = ({
               <IpBtn
                 icon="move_up"
                 variant="outlined"
+                sx={{mr: 1}}
                 iconSx={{color: (t: Theme) => t.palette.text.disabled, transform: 'rotate(90deg)'}}
                 onClick={() => setRepeatGroupAsColumns(_ => !_)}
                 tooltip={m._koboDatabase.repeatGroupsAsColumns}
@@ -135,6 +137,7 @@ export const DatabaseKoboTableContent = ({
                 <Switch size="small" sx={{mr: -1}} checked={repeatGroupsAsColumns}/>
               </IpBtn>
             )}
+            {header?.(params)}
 
             <IpIconBtn
               href={ctx.schema.schemaUnsanitized.deployment__links.url}
