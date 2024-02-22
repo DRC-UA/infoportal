@@ -13,6 +13,7 @@ import {
   DatatableTableProps
 } from '@/shared/Datatable/util/datatableType'
 import {OrderBy} from '@alexandreannic/react-hooks-lib'
+import {usePersistentState} from '@/shared/hook/usePersistantState'
 
 export type UseDatatableData<T extends DatatableRow> = ReturnType<typeof useDatatableData<T>>
 
@@ -30,16 +31,16 @@ export const useDatatableData = <T extends DatatableRow>({
   columnsIndex: Record<KeyOf<T>, DatatableColumn.InnerProps<T>>
 }) => {
   const [filters, setFilters] = useState<Record<KeyOf<T>, DatatableFilterValue>>(defaultFilters ?? {} as any)
-  const [search, setSearch] = useState<DatatableSearch<any>>({
+  const [search, setSearch] = usePersistentState<DatatableSearch<any>>({
     limit: defaultLimit,
     offset: 0,
+  }, {
+    transformFromStorage: _ => {
+      _.offset = 0
+      return _
+    },
+    storageKey: `datatable-paginate-${id}`,
   })
-  // const [search, setSearch] = usePersistentState<DatatableSearch<any>>({
-  //   limit: defaultLimit,
-  //   offset: 0,
-  // }, {
-  //   storageKey: `datatable-paginate-${id}`,
-  // })
 
   const resetSearch = () => setSearch({limit: defaultLimit, offset: 0,})
 
