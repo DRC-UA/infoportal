@@ -69,7 +69,7 @@ export const ProtectionDashboardMonitoLivelihood = ({
         <Div column sx={{flex: 1}}>
           <SlidePanel title={m.protHHS2.hhOutOfWorkAndSeekingEmployment}>
             <ChartLineByKey
-              getDate={_ => _.submissionTime}
+              getDate={_ => _.date!}
               question="including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment"
               data={data}
               displayedValues={['yes']}
