@@ -1,13 +1,13 @@
 import {Protection_hhs3} from '../generated/Protection_hhs3'
 import {KoboAnswer, KoboBaseTags, KoboGeneralMapping, PersonDetails} from './Common'
-import {Protection_Hhs2} from '../generated/Protection_Hhs2'
+import {Protection_hhs2} from '../generated/Protection_hhs2'
 import {DrcDonor, DrcProject} from '../../type/Drc'
 
 export namespace KoboProtection_hhs3 {
 
   export type Person = PersonDetails & {
-    lackDoc: Protection_Hhs2.T['does_1_lack_doc']
-    isIdpRegistered: Protection_Hhs2.T['is_member_1_registered']
+    lackDoc: Protection_hhs2.T['does_1_lack_doc']
+    isIdpRegistered: Protection_hhs2.T['is_member_1_registered']
   }
 
   export type T = KoboAnswer<Omit<Protection_hhs3.T, 'hh_char_hh_det'>, ProtectionHhsTags> & {

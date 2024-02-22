@@ -1,7 +1,7 @@
 import {IpSelectOption, IpSelectSingle, IpSelectSingleNullableProps} from '@/shared/Select/SelectSingle'
 import {fnSwitch, Obj} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
-import {StateStatus} from '@infoportal-common'
+import {StateStatus, CashStatus} from '@infoportal-common'
 import {Box, Icon, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 import {KoboValidation} from '@/core/sdk/server/kobo/Kobo'
@@ -18,19 +18,6 @@ export const shelterCashStatusType: Record<ShelterCashStatus, StateStatus> = {
   Rejected: 'error',
   FirstPayment: 'info',
   Paid: 'success',
-}
-
-export enum CashStatus {
-  Selected = 'Selected',
-  Pending = 'Pending',
-  Paid = 'Paid',
-  Rejected = 'Rejected',
-  Referred = 'Referred',
-
-  // Paid = 'Paid',
-  // Rejected = 'Rejected',
-  // Referred = 'Referred',
-  // Received = 'Received',
 }
 
 export const cashStatusType: Record<CashStatus, StateStatus> = {

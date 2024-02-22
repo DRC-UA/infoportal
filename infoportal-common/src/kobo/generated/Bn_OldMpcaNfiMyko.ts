@@ -125,7 +125,10 @@ export const map = (_: Record<keyof T, any>): T => ({
 	..._,
 	phone: _.phone ? +_.phone : undefined,
 	Total_Family: _.Total_Family ? +_.Total_Family : undefined,
-	group_in3fh72: _.group_in3fh72?.map(extractQuestionName),
+	group_in3fh72: _.group_in3fh72?.map(extractQuestionName).map((_: any) => {
+		_['AgeHH'] = _.AgeHH ? +_.AgeHH : undefined
+		return _	
+}),
 	Kits_to_be_provided: _.Kits_to_be_provided?.split(' '),
 	HKMV_: _.HKMV_ ? +_.HKMV_ : undefined,
 	HKF_: _.HKF_ ? +_.HKF_ : undefined,

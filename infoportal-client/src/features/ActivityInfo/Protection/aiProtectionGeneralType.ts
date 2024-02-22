@@ -1,5 +1,5 @@
 import {fnSwitch} from '@alexandreannic/ts-utils'
-import {DrcProject, Protection_Hhs2} from '@infoportal-common'
+import {DrcProject, Protection_hhs2} from '@infoportal-common'
 import {AiTypeProtectionRmm} from '@/features/ActivityInfo/Protection/aiProtectionGeneralInterface'
 import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 
@@ -33,7 +33,7 @@ export namespace AiProtectionGeneralType {
     answer: KoboAnswer<any>
   }
 
-  export const mapStatus = (s: (keyof typeof Protection_Hhs2.options['do_you_identify_as_any_of_the_following']) | undefined): any => fnSwitch(s!, {
+  export const mapStatus = (s: (keyof typeof Protection_hhs2.options['do_you_identify_as_any_of_the_following']) | undefined): any => fnSwitch(s!, {
     returnee: 'Returnees',
     non_displaced: 'Non-Displaced',
     idp: 'IDPs',

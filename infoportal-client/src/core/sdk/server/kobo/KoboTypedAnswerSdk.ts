@@ -22,7 +22,7 @@ import {
   Protection_communityMonitoring,
   Protection_gbv,
   Protection_groupSession,
-  Protection_Hhs2,
+  Protection_hhs2,
   Protection_hhs3,
   Protection_pss,
   ProtectionCommunityMonitoringTags,
@@ -138,10 +138,10 @@ export class KoboTypedAnswerSdk {
     })
   }
 
-  readonly searchProtection_Hhs2 = (filters: KoboAnswerFilter = {}) => {
+  readonly searchProtection_hhs2 = (filters: KoboAnswerFilter = {}) => {
     return this.search({
       formId: KoboIndex.byName('protection_hhs2_1').id,
-      fnMapKobo: Protection_Hhs2.map,
+      fnMapKobo: Protection_hhs2.map,
       fnMapTags: _ => _ as ProtectionHhsTags,
       ...filters,
     })

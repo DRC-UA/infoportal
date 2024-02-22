@@ -201,12 +201,12 @@ export const generateKoboInterface = async (koboSdk: KoboSdk, outDir: string) =>
     {formName: 'Bn_OldMpcaNfiNaa', formId: KoboIndex.byName('bn_1_mpcaNfiNaa').id},
     {formName: 'Bn_OldMpcaNfiMyko', formId: KoboIndex.byName('bn_1_mpcaNfiMyko').id},
     {
-      formName: 'Protection_Hhs2', formId: KoboIndex.byName('protection_hhs2').id,
+      formName: 'Protection_hhs2', formId: KoboIndex.byName('protection_hhs2').id,
       overrideAllOptions: {
         health_1_2: ['Health'],
       },
     },
-    {formName: 'safety_incident', formId: KoboIndex.byName('safety_incident').id},
+    {formName: 'Safety_incidentTracker', formId: KoboIndex.byName('safety_incident').id},
   ]
   return Promise.all(forms.map(f => new KoboInterfaceGenerator(koboSdk, {
     outDir,

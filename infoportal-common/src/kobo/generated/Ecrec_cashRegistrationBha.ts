@@ -38,6 +38,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   ben_det_hromada: undefined | string,
 	  // ben_det/ben_det_settlement [select_one_from_file] 2.5.4 Select settlement where registration is taking place
   ben_det_settlement: string,
+	  // ben_det/ben_det_settlement_other [text] 2.5.4.1 If other, specify
+  ben_det_settlement_other: string | undefined,
 	  // ben_det/ben_det_res_stat [select_one] 2.6 Select residential status
   ben_det_res_stat: undefined | Option<'ben_det_res_stat'>,
 	  // ben_det/ben_det_prev_oblast [select_one] 2.6.1 What is your area of origin prior to displacement? (Select Oblast)

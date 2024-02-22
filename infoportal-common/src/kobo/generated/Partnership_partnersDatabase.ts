@@ -842,7 +842,10 @@ export const map = (_: Record<keyof T, any>): T => ({
 	If_yes_which_types_of_actors: _.If_yes_which_types_of_actors?.split(' '),
 	If_yes_which: _.If_yes_which?.split(' '),
 	Number_of_offices: _.Number_of_offices ? +_.Number_of_offices : undefined,
-	group_ts4rc87: _.group_ts4rc87?.map(extractQuestionName),
+	group_ts4rc87: _.group_ts4rc87?.map(extractQuestionName).map((_: any) => {
+		_['Oblast'] = _.Oblast?.split(' ')
+		return _	
+}),
 	Which_sectors_does_the_organiz: _.Which_sectors_does_the_organiz?.split(' '),
 	If_yes_how: _.If_yes_how?.split(' '),
 	Select_if_the_organi_inorities_in_Ukraine: _.Select_if_the_organi_inorities_in_Ukraine?.split(' '),
@@ -856,9 +859,44 @@ export const map = (_: Record<keyof T, any>): T => ({
 	Which_assistance_would_the_CSO: _.Which_assistance_would_the_CSO?.split(' '),
 	What_kind_of_capacity_needs_to: _.What_kind_of_capacity_needs_to?.split(' '),
 	Number_of_agreements_with_DRC: _.Number_of_agreements_with_DRC ? +_.Number_of_agreements_with_DRC : undefined,
-	group_vi2hh32: _.group_vi2hh32?.map(extractQuestionName),
+	group_vi2hh32: _.group_vi2hh32?.map(extractQuestionName).map((_: any) => {
+		_['SGA_number'] = _.SGA_number ? +_.SGA_number : undefined
+		_['SGA_start_date'] = _.SGA_start_date ? new Date(_.SGA_start_date) : undefined
+		_['SGA_end_date'] = _.SGA_end_date ? new Date(_.SGA_end_date) : undefined
+		_['Amount_UAH'] = _.Amount_UAH ? +_.Amount_UAH : undefined
+		_['Amount_USD'] = _.Amount_USD ? +_.Amount_USD : undefined
+		_['Funding_provided_in_ding_activities_USD'] = _.Funding_provided_in_ding_activities_USD ? +_.Funding_provided_in_ding_activities_USD : undefined
+		_['Funding_provided_in_in_kind_support_USD'] = _.Funding_provided_in_in_kind_support_USD ? +_.Funding_provided_in_in_kind_support_USD : undefined
+		_['Date_received_letter_Request_for_Payment'] = _.Date_received_letter_Request_for_Payment ? new Date(_.Date_received_letter_Request_for_Payment) : undefined
+		_['Date_payment_confirmed'] = _.Date_payment_confirmed ? new Date(_.Date_payment_confirmed) : undefined
+		_['Amount_UAH_001'] = _.Amount_UAH_001 ? +_.Amount_UAH_001 : undefined
+		_['Tranches_received_'] = _.Tranches_received_ ? +_.Tranches_received_ : undefined
+		_['Funding_reported_on_'] = _.Funding_reported_on_ ? +_.Funding_reported_on_ : undefined
+		_['Project_code'] = _.Project_code ? +_.Project_code : undefined
+		_['Total_budget_of_the_project_USD'] = _.Total_budget_of_the_project_USD ? +_.Total_budget_of_the_project_USD : undefined
+		_['Sectors_funded'] = _.Sectors_funded?.split(' ')
+		_['Oblasts'] = _.Oblasts?.split(' ')
+		_['Number_of_beneficiaries_planned'] = _.Number_of_beneficiaries_planned ? +_.Number_of_beneficiaries_planned : undefined
+		_['Number_of_beneficiaries_PwD_planned'] = _.Number_of_beneficiaries_PwD_planned ? +_.Number_of_beneficiaries_PwD_planned : undefined
+		_['Number_of_beneficiaries_reached_001'] = _.Number_of_beneficiaries_reached_001 ? +_.Number_of_beneficiaries_reached_001 : undefined
+		_['Number_of_beneficiaries_PwD_reached_001'] = _.Number_of_beneficiaries_PwD_reached_001 ? +_.Number_of_beneficiaries_PwD_reached_001 : undefined
+		_['Oblast_001'] = _.Oblast_001?.split(' ')
+		_['Minority_group'] = _.Minority_group?.split(' ')
+		return _	
+}),
 	Date_of_last_vetting_check: _.Date_of_last_vetting_check ? new Date(_.Date_of_last_vetting_check) : undefined,
-	group_kd9el87: _.group_kd9el87?.map(extractQuestionName),
-	group_rr27n40: _.group_rr27n40?.map(extractQuestionName),
+	group_kd9el87: _.group_kd9el87?.map(extractQuestionName).map((_: any) => {
+		_['Year'] = _.Year ? new Date(_.Year) : undefined
+		_['Annual_budget_USD'] = _.Annual_budget_USD ? +_.Annual_budget_USD : undefined
+		_['Full_time_staff'] = _.Full_time_staff ? +_.Full_time_staff : undefined
+		_['Part_time_staff'] = _.Part_time_staff ? +_.Part_time_staff : undefined
+		_['Volunteers'] = _.Volunteers ? +_.Volunteers : undefined
+		_['If_yes_which_001'] = _.If_yes_which_001?.split(' ')
+		return _	
+}),
+	group_rr27n40: _.group_rr27n40?.map(extractQuestionName).map((_: any) => {
+		_['Year_001'] = _.Year_001 ? new Date(_.Year_001) : undefined
+		return _	
+}),
 }) as T
 }

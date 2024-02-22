@@ -6,7 +6,7 @@ import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
 import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Protection_Hhs2} from '@infoportal-common'
+import {Protection_hhs2} from '@infoportal-common'
 
 export const SnapshotProtMonitoNN2Displacement = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -51,7 +51,7 @@ export const SnapshotProtMonitoNN2Displacement = () => {
                 by={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence}
                 filter={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence !== 'unable_unwilling_to_answer'}
                 label={{
-                  ...Protection_Hhs2.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
+                  ...Protection_hhs2.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
                   integrate_into_the_local_community_of_current_place_of_residence: m.snapshotProtMonito.integrateIntoTheLocalCommunity,
                   return_to_the_area_of_origin: m.returnToThePlaceOfHabitualResidence
                 }}
@@ -65,7 +65,7 @@ export const SnapshotProtMonitoNN2Displacement = () => {
                 filterValue={['unable_unwilling_to_answer']}
                 by={_ => _.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin}
                 label={{
-                  ...Protection_Hhs2.options.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin,
+                  ...Protection_hhs2.options.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin,
                   increased_restored_access_to_livelihood_employment_and_economic_opportunities: 'Increased/restored access to livelihood/employment',
                   repaired_housing_compensation_for_destroyedor_damaged_property: 'Repaired housing/compensation for damaged property',
                 }}
@@ -81,7 +81,7 @@ export const SnapshotProtMonitoNN2Displacement = () => {
                 filterValue={['unable_unwilling_to_answer']}
                 by={_ => _.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community}
                 label={{
-                  ...Protection_Hhs2.options.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community,
+                  ...Protection_hhs2.options.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community,
                   access_to_essential_services: 'Access to essential services',
                 }}
               />

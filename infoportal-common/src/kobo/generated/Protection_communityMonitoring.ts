@@ -227,6 +227,9 @@ export const map = (_: Record<keyof T, any>): T => ({
 	date: _.date ? new Date(_.date) : undefined,
 	informant_age: _.informant_age ? +_.informant_age : undefined,
 	numb_part: _.numb_part ? +_.numb_part : undefined,
-	hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName),
+	hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName).map((_: any) => {
+		_['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
+		return _	
+}),
 }) as T
 }

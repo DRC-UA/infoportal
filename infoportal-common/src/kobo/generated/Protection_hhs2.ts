@@ -1,4 +1,4 @@
-export namespace Protection_Hhs2 {
+export namespace Protection_hhs2 {
 export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	// Form id: aRHsewShwZhXiy8jrBj9zf
 	export interface T {

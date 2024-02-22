@@ -299,9 +299,15 @@ export const map = (_: Record<keyof T, any>): T => ({
 	idd_001: _.idd_001 ? new Date(_.idd_001) : undefined,
 	ccerho: _.ccerho?.split(' '),
 	hmo: _.hmo ? +_.hmo : undefined,
-	oflo: _.oflo?.map(extractQuestionName),
+	oflo: _.oflo?.map(extractQuestionName).map((_: any) => {
+
+		return _	
+}),
 	aop: _.aop ? +_.aop : undefined,
-	loop: _.loop?.map(extractQuestionName),
+	loop: _.loop?.map(extractQuestionName).map((_: any) => {
+
+		return _	
+}),
 	scs: _.scs ? +_.scs : undefined,
 	scf: _.scf ? +_.scf : undefined,
 	scp: _.scp ? +_.scp : undefined,

@@ -115,7 +115,7 @@ export const ProtectionDashboardMonitoLivelihood = ({
                   between_12001_15000_UAH: _ => _.what_is_the_average_month_income_per_household === 'between_12001_15000_UAH',
                   more_than_15000_UAH: _ => _.what_is_the_average_month_income_per_household === 'more_than_15000_UAH',
                 },
-                filter: _ => _.how_many_ind ?? 0,
+                filter: _ => _.ben_det_hh_size ?? 0,
               })
               return {income, hhSize}
             }}>

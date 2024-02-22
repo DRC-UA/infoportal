@@ -22,10 +22,16 @@ export interface PersonDetails extends Person.Person {
 }
 
 export enum CashStatus {
+  Selected = 'Selected',
+  Pending = 'Pending',
   Paid = 'Paid',
   Rejected = 'Rejected',
   Referred = 'Referred',
-  Received = 'Received',
+
+  // Paid = 'Paid',
+  // Rejected = 'Rejected',
+  // Referred = 'Referred',
+  // Received = 'Received',
 }
 
 export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {

@@ -4,7 +4,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@/core/i18n'
 import {seq, Seq} from '@alexandreannic/ts-utils'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {KoboProtection_hhs3, Period, Protection_Hhs2} from '@infoportal-common'
+import {KoboProtection_hhs3, Period, Protection_hhs2} from '@infoportal-common'
 
 export interface SnapshotProtMonitoContext {
   computed: NonNullable<UseProtHHS2Data>
@@ -22,8 +22,8 @@ export const SnapshotProtMonitoringProvider = ({
   children,
 }: {
   filters?: {
-    currentOblast?: Protection_Hhs2.T['where_are_you_current_living_oblast'][],
-    drcOffice?: Protection_Hhs2.T['staff_to_insert_their_DRC_office'][],
+    currentOblast?: Protection_hhs2.T['where_are_you_current_living_oblast'][],
+    drcOffice?: Protection_hhs2.T['staff_to_insert_their_DRC_office'][],
   }
   period: Partial<Period>,
   children: ReactNode

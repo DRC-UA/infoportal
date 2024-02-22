@@ -12,7 +12,7 @@ import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
 import {Enum, seq} from '@alexandreannic/ts-utils'
-import {OblastIndex, Person, Protection_Hhs2} from '@infoportal-common'
+import {OblastIndex, Person, Protection_hhs2} from '@infoportal-common'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 
 export const SnapshotProtMonitoEchoSample = () => {
@@ -112,12 +112,12 @@ export const SnapshotProtMonitoEchoSample = () => {
                   <ChartBarSingleBy
                     data={data}
                     by={_ => _.what_is_the_type_of_your_household}
-                    label={Protection_Hhs2.options.what_is_the_type_of_your_household}
+                    label={Protection_hhs2.options.what_is_the_type_of_your_household}
                   />
                 </SlidePanel>
                 <SlidePanel>
                   <SlidePanelTitle>{m.displacementStatus}</SlidePanelTitle>
-                  <ChartBarSingleBy data={data} by={_ => _.do_you_identify_as_any_of_the_following} label={Protection_Hhs2.options.do_you_identify_as_any_of_the_following}/>
+                  <ChartBarSingleBy data={data} by={_ => _.do_you_identify_as_any_of_the_following} label={Protection_hhs2.options.do_you_identify_as_any_of_the_following}/>
                 </SlidePanel>
               </Div>
             </Div>

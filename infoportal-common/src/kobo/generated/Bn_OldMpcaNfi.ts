@@ -2606,7 +2606,10 @@ export const map = (_: Record<keyof T, any>): T => ({
 	hh_elderly_check: _.hh_elderly_check ? +_.hh_elderly_check : undefined,
 	agex: _.agex ? +_.agex : undefined,
 	Total_Family: _.Total_Family ? +_.Total_Family : undefined,
-	group_in3fh72: _.group_in3fh72?.map(extractQuestionName),
+	group_in3fh72: _.group_in3fh72?.map(extractQuestionName).map((_: any) => {
+		_['AgeHH'] = _.AgeHH ? +_.AgeHH : undefined
+		return _	
+}),
 	Does_anyone_in_your_elect_all_that_apply: _.Does_anyone_in_your_elect_all_that_apply?.split(' '),
 	Kits_to_be_provided: _.Kits_to_be_provided?.split(' '),
 	HKMV_: _.HKMV_ ? +_.HKMV_ : undefined,

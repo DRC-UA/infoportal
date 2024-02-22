@@ -2614,7 +2614,11 @@ export const map = (_: Record<keyof T, any>): T => ({
 	hh_char_res_dis_select_l: _.hh_char_res_dis_select_l?.split(' '),
 	hh_char_hhh_age_l: _.hh_char_hhh_age_l ? +_.hh_char_hhh_age_l : undefined,
 	hh_char_hhh_dis_select_l: _.hh_char_hhh_dis_select_l?.split(' '),
-	hh_char_hh_det_l: _.hh_char_hh_det_l?.map(extractQuestionName),
+	hh_char_hh_det_l: _.hh_char_hh_det_l?.map(extractQuestionName).map((_: any) => {
+		_['hh_char_hh_det_age_l'] = _.hh_char_hh_det_age_l ? +_.hh_char_hh_det_age_l : undefined
+		_['hh_char_hh_det_dis_select_l'] = _.hh_char_hh_det_dis_select_l?.split(' ')
+		return _	
+}),
 	hh_char_dis_select_l: _.hh_char_dis_select_l?.split(' '),
 	nfi_dist_hkf_l: _.nfi_dist_hkf_l ? +_.nfi_dist_hkf_l : undefined,
 	nfi_dist_hkmv_l: _.nfi_dist_hkmv_l ? +_.nfi_dist_hkmv_l : undefined,

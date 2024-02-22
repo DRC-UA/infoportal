@@ -37,7 +37,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // gi/numb_part [integer] Number of participants
   numb_part: number | undefined,
 	  // gi/hh_char_hh_det [begin_repeat] Participant
-  hh_char_hh_det: {hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined,hh_char_hh_det_age: number | undefined | undefined,hh_char_hh_det_status: undefined | Option<'hh_char_hh_det_status'> | undefined}[] | undefined,
+  hh_char_hh_det: {hh_char_hh_new_ben: undefined | Option<'hh_char_hh_new_ben'> | undefined,hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined,hh_char_hh_det_age: number | undefined | undefined,hh_char_hh_det_status: undefined | Option<'hh_char_hh_det_status'> | undefined}[] | undefined,
 	  // gi/topic_activity [text] Topic/Type of activity
   topic_activity: string | undefined,
 	  // gi/comments [text] Comments
@@ -49,6 +49,11 @@ staff_to_insert_their_DRC_office: {
 	'dnipro': `Dnipro`,
 	'kharkiv': `Kharkiv`,
 	'mykolaiv': `Mykolaiv`
+},
+new_ben: {
+	'yes': `Yes`,
+	'no': `No`,
+	'bno': `Both new and old beneficiaries`
 },
 staff_code_001: {
 	'CEJ001': `CEJ-A`,
@@ -139,7 +144,7 @@ activity: {
 	'glac': `GBV survivors and those at risk supported with legal assistance and counselling.`,
 	'other': `Other`
 },
-new_ben: {
+hh_char_hh_new_ben: {
 	'yes': `Yes`,
 	'no': `No`
 },
@@ -193,6 +198,9 @@ export const map = (_: Record<keyof T, any>): T => ({
 	date: _.date ? new Date(_.date) : undefined,
 	new_ben_yes: _.new_ben_yes ? +_.new_ben_yes : undefined,
 	numb_part: _.numb_part ? +_.numb_part : undefined,
-	hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName),
+	hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName).map((_: any) => {
+		_['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
+		return _	
+}),
 }) as T
 }

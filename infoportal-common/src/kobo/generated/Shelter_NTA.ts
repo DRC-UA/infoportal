@@ -247,6 +247,58 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   pictures_apt_damage10: string,
 	  // Technical/rehab_solo [select_one] Do you see yourself capable and willing to rehabilitate the shelter yourswelf in case DRC only provides the required materials and tools?
   rehab_solo: undefined | Option<'rehab_solo'>,
+	  // Technical/modality [select_one] What kind of support modality would you prefer?
+  modality: undefined | Option<'modality'>,
+	  // pay_det/agreed_amount [decimal] Please write below the agreeed amount for the payment based on the technical assessment
+  agreed_amount: number | undefined,
+	  // pay_det/payment_instatlment [select_one] How many instalments will be used to transfer this amount?
+  payment_instatlment: undefined | Option<'payment_instatlment'>,
+	  // pay_det/ben_det_surname_l [text] What is your surname name (as shown in personal ID)?
+  ben_det_surname_l: string | undefined,
+	  // pay_det/ben_det_first_name_l [text] What is your first name (as shown in personal ID)?
+  ben_det_first_name_l: string | undefined,
+	  // pay_det/ben_det_pat_name_l [text] What is your patronymic name?
+  ben_det_pat_name_l: string | undefined,
+	  // pay_det/ben_det_ph_number_l [integer] What is your phone number?
+  ben_det_ph_number_l: number | undefined,
+	  // pay_det/pay_consent [select_one] Thank you for answering the questions above, are you willing to provide your payment details?
+  pay_consent: undefined | Option<'pregnant_lac'>,
+	  // pay_det/pay_det_s/pay_det_id_type [select_one] What form of ID do you have?
+  pay_det_id_type: undefined | Option<'pay_det_id_type'>,
+	  // pay_det/pay_det_s/pay_det_id_type_oth [text] What other form of ID do you have?
+  pay_det_id_type_oth: string | undefined,
+	  // pay_det/pay_det_s/pay_det_pass_ser [text] Input Passport Series
+  pay_det_pass_ser: string | undefined,
+	  // pay_det/pay_det_s/pay_det_pass_num [text] Number of ID
+  pay_det_pass_num: string | undefined,
+	  // pay_det/pay_det_s/pay_det_id_ph [image] Take a photo of the ID
+  pay_det_id_ph: string,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_yn [select_one] Do you have an individual tax number (TIN)?
+  pay_det_tax_id_yn: undefined | Option<'pregnant_lac'>,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_num_001 [text] What is your individual tax number?
+  pay_det_tax_id_num_001: string | undefined,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_ph_001 [image] Take a photo of the Tax ID
+  pay_det_tax_id_ph_001: string,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt [select_one] Do you have a tax exemptions?
+  pay_det_tax_exempt: undefined | Option<'pregnant_lac'>,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt_im [image] Take a photo of the proof of the tax of exemptions
+  pay_det_tax_exempt_im: string,
+	  // pay_det/pay_det_s/pay_det_pay_meth [select_one] What is your preferred payment method?
+  pay_det_pay_meth: undefined | Option<'pay_det_pay_meth'>,
+	  // pay_det/pay_det_s/pay_det_iban [text] What is your IBAN number?
+  pay_det_iban: string | undefined,
+	  // pay_det/pay_det_s/pay_det_iban_im [image] Take a picture of IBAN number if available
+  pay_det_iban_im: string,
+	  // pay_det/pay_det_s/pay_address [text] Your address
+  pay_address: string | undefined,
+	  // pay_det/pay_det_s/pay_zip [text] Your ZIP code
+  pay_zip: string | undefined,
+	  // pay_det/pay_det_s/pay_det_add_im [image] Take a picture of the address page of passport
+  pay_det_add_im: string,
+	  // pay_det/pay_det_s/pay_det_pay_meth_oth [text] What other Payment methods do you prefer?
+  pay_det_pay_meth_oth: string | undefined,
+	  // pay_det/pay_det_s/pay_det_pay_meth_none [text] Can you highlight the main reason that none of these payment methods are suitable to you?
+  pay_det_pay_meth_none: string | undefined,
 	  // Displacement/displaced [select_one] Have you been temporarily displaced and returned to your shelter?
   displaced: undefined | Option<'pregnant_lac'>,
 	  // Displacement/return_time [select_one] If yes, when did you return?
@@ -388,6 +440,10 @@ rehab_solo: {
 	'no': `No`,
 	'i_dont_know': `I don't know`
 },
+payment_instatlment: {
+	'_1': `1`,
+	'_2': `2`
+},
 doc_available: {
 	'yes': `Yes`,
 	'provide_later': `Provide Later`
@@ -454,6 +510,13 @@ enum_name: {
 	'OH': `Oleh Hryshchenko`,
 	'ex1': `extra1`,
 	'ex2': `extra2`,
+	'olena_antonenko': `Olena Antonenko`,
+	'liudmyla_bakhmutova': `Liudmyla Bakhmutova`,
+	'dmytro_pavlov': `Dmytro Pavlov`,
+	'svitlana_kiiko': `Svitlana Kiiko`,
+	'dmytro_nykonenko': `Dmytro Nykonenko`,
+	'serhii_tkachov': `Serhii Tkachov`,
+	'vasyl_proskurin': `Vasyl Proskurin`,
 	'ext1': `extra1`,
 	'ext2': `extra2`,
 	'KL': `Klym Oleksandr`,
@@ -463,6 +526,10 @@ enum_name: {
 	'TD': `Taras Dubenko`,
 	'x1': `extra1`,
 	'x2': `extra2`
+},
+modality: {
+	'contractor': `Contractor approach`,
+	'cash_for_repair': `Cash for repair approach`
 },
 ben_det_oblast: {
 	'cherkaska': `Cherkasy`,
@@ -490,6 +557,25 @@ ben_det_oblast: {
 	'zakarpatska': `Zakarpattia`,
 	'zaporizka': `Zaporizhzhia`,
 	'zhytomyrska': `Zhytomyr`
+},
+pay_det_id_type: {
+	'nat_pass_card': `A = National Passport (card)`,
+	'nat_pass_book': `B = National Passport (book)`,
+	'nat_pass_diia': `C = National Passport (Diia app)`,
+	'pass_ussr_red': `D = Passport (USSR red book)`,
+	'pass_int': `E = Passport for international travel`,
+	'birth_certificate': `F = Birth certificate`,
+	'driver_lic': `G = Driver’s license`,
+	'pen_cert': `H = Pensioner certificate`,
+	'oth_id': `I = Other Form of ID`,
+	'no_id': `J = No ID`
+},
+pay_det_pay_meth: {
+	'raiff_trans': `A = Remittance Raiffaisen AVAL`,
+	'ukrpost': `B = Ukrposhta`,
+	'bank_card': `C = Bank card`,
+	'other_pay': `D = Other Payment Method`,
+	'none_pay': `E = None of the above fit my needs`
 }}
 
 const extractQuestionName = (_: Record<string, any>) => {
@@ -513,12 +599,17 @@ export const map = (_: Record<keyof T, any>): T => ({
 	apartment_number: _.apartment_number ? +_.apartment_number : undefined,
 	owner_number: _.owner_number ? +_.owner_number : undefined,
 	ben_det_hh_size: _.ben_det_hh_size ? +_.ben_det_hh_size : undefined,
-	hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName),
+	hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName).map((_: any) => {
+		_['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
+		_['hh_char_hh_det_dis_select'] = _.hh_char_hh_det_dis_select?.split(' ')
+		return _	
+}),
 	window_number: _.window_number ? +_.window_number : undefined,
 	interior_door_damage: _.interior_door_damage ? +_.interior_door_damage : undefined,
 	apartment_window: _.apartment_window ? +_.apartment_window : undefined,
 	apartment_balcony: _.apartment_balcony ? +_.apartment_balcony : undefined,
 	interior_apt_door_damage: _.interior_apt_door_damage ? +_.interior_apt_door_damage : undefined,
+	ben_det_ph_number_l: _.ben_det_ph_number_l ? +_.ben_det_ph_number_l : undefined,
 	hh_char_dis_select: _.hh_char_dis_select?.split(' '),
 	see_number: _.see_number ? +_.see_number : undefined,
 	hear_number: _.hear_number ? +_.hear_number : undefined,

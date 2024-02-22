@@ -54,6 +54,17 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // group_hh_composition/ben_det_hh_size [integer] 3.2. How many individuals, including the respondent, are in the household?
   ben_det_hh_size: number | undefined,
 	    hh_char_hh_det: {hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined,hh_char_hh_det_age: number | undefined | undefined,hh_char_hh_det_disability: undefined | Option<'do_you_have_a_household_member_that_has_a_lot_of_difficulty'>[] | undefined,have6_15: string | undefined,hh_char_wg_seeing_even_if_wearing_glasses: string | undefined,hh_char_wg_hearing_even_if_using_a_hearing_aid: string | undefined,hh_char_wg_walking_or_climbing_steps: string | undefined,hh_char_wg_remembering_or_concentrating: string | undefined,hh_char_wg_selfcare_such_as_washing_all_over_or_dressing: string | undefined,hh_char_wg_using_your_usual_language_have_difficulty_communicating: string | undefined,haveBoy: string | undefined,haveOtherSex: string | undefined,haveGirl: string | undefined,haveAdultMale: string | undefined,haveAdultFemale: string | undefined}[] | undefined,
+	    total_hh_char_wg_seeing_even_if_wearing_glasses: string,
+	    total_hh_char_wg_hearing_even_if_using_a_hearing_aid: string,
+	    total_hh_char_wg_walking_or_climbing_steps: string,
+	    total_hh_char_wg_remembering_or_concentrating: string,
+	    total_hh_char_wg_selfcare_such_as_washing_all_over_or_dressing: string,
+	    total_hh_char_wg_using_your_usual_language_have_difficulty_communicating: string,
+	    total_haveBoy: string,
+	    total_haveOtherSex: string,
+	    total_haveGirl: string,
+	    total_haveAdultMale: string,
+	    total_haveAdultFemale: string,
 	  // group_hh_composition/calc_hh_char_hh_det_disability [calculate] concat
   calc_hh_char_hh_det_disability: string,
 	  // group_hh_composition/are_you_separated_from_any_of_your_households_members [select_multiple] 3.3. Are you separated from any of your households members?
