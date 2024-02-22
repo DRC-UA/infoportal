@@ -51,7 +51,7 @@ const mapSga = (data: Seq<PartnershipData>) => {
     .map(sga => ({
       ...sga,
       project: Enum.values(DrcProject).find(_ => _.includes('' + sga.Project_code)),
-      year: (sga.SGA_start_date as unknown as string)?.split('-')[0]
+      year: sga.SGA_start_date?.getFullYear().toString()
     }))
 }
 
@@ -290,7 +290,7 @@ export const _PartnershipDashboard = ({
           <Panel title={m._partner.percentByTypeOfOrg}>
             <PanelBody>
               <Lazy deps={[filteredAndPickedData]} fn={() => {
-                const res = Enum.entries(filteredAndPickedSgas.groupBy(_ => _.year)).filter(([year]) => year !== 'undefined').map(([year, d]) => {
+                const res = Enum.entries(filteredAndPickedSgas.groupBy(_ => _.year!)).filter(([year]) => year !== 'undefined').map(([year, d]) => {
                   const distincted = d.distinct(_ => _.Partner_name_Ukrainian)
                   return {
                     name: year,

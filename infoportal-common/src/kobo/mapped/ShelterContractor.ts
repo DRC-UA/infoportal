@@ -1,6 +1,6 @@
 import {Enum} from '@alexandreannic/ts-utils'
-import {KoboShelterTa} from '@/core/sdk/server/kobo/custom/KoboShelterTA'
-import {Shelter_TA} from '@/core/sdk/server/kobo/generatedInterface/Shelter_TA'
+import {Shelter_TA} from '../generated'
+import {KoboShelterTa} from './KoboShelterTA'
 
 export enum ShelterContractor {
   'Artbudservice' = 'Artbudservice',
@@ -480,6 +480,8 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
   // [ShelterContractor['Framplus']]: WAITING_FOR_PRICES,
   [ShelterContractor['Kronos']]: WAITING_FOR_PRICES,
   [ShelterContractor['Monolit']]: WAITING_FOR_PRICES,
+  [ShelterContractor['Darwin']]: WAITING_FOR_PRICES,
+  [ShelterContractor['Cash']]: WAITING_FOR_PRICES,
 }
 const oblasts = {
   mykolaivska: [

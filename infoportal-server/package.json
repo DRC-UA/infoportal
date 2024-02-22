@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "node -r tsconfig-paths/register lib/index.js",
-    "build": "tsc --build",
+    "build": "tsc --build --force",
     "dev-r": "nodemon src/index.ts",
     "dev": "ts-node src/index.ts",
     "debug": "npm run build && node --inspect-brk lib/index.js",
