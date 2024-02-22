@@ -11,8 +11,6 @@ import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {EventEmitter} from 'events'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
-import cluster from 'cluster'
-import os from 'os'
 
 export const appEventEmitter = new EventEmitter()
 
@@ -89,13 +87,13 @@ const startApp = async (conf: AppConf) => {
     // }))
 
     console.log(`Master ${process.pid} is running`)
-    const core = conf.production ? os.cpus().length : 1
-    for (let i = 0; i < core; i++) {
-      cluster.fork()
-    }
-    cluster.on('exit', (worker, code, signal) => {
-      console.log(`Worker ${worker.process.pid} died`)
-    })
+    // const core = conf.production ? os.cpus().length : 1
+    // for (let i = 0; i < core; i++) {
+    //   cluster.fork()
+    // }
+    // cluster.on('exit', (worker, code, signal) => {
+    //   console.log(`Worker ${worker.process.pid} died`)
+    // })
     if (conf.production) {
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
@@ -111,11 +109,11 @@ const startApp = async (conf: AppConf) => {
       services,
     ).start()
   }
-  if (cluster.isPrimary) {
+  // if (cluster.isPrimary) {
     init()
-  } else {
+  // } else {
     start()
-  }
+  // }
 }
 
 // runAi.washRMM()
