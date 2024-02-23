@@ -11,9 +11,11 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // background/back_donor [select_one] 1.3 Project
   back_donor: undefined | Option<'back_donor'>,
 	  // background/reg_drc [select_one] 1.4 Where you registered by DRC for a cash transfer for livelihoods?
-  reg_drc: undefined | Option<'back_consent'>,
+  reg_drc: undefined | Option<'committed_one_person_idp'>,
+	  // background/which_support_registered [select_one] 1.4. For which support were you registered for?
+  which_support_registered: undefined | Option<'which_support_registered'>,
 	  // background/back_consent [select_one] 1.5.1 Consent
-  back_consent: undefined | Option<'back_consent'>,
+  back_consent: undefined | Option<'committed_one_person_idp'>,
 	  // background/back_consen_no_reas [text] 1.5.2 Can you please give the reason for why you do not wish to consent to the questionnaire?
   back_consen_no_reas: string | undefined,
 	  // background/pay_det_tax_id_num [text] 1.6 What is your individual tax number?
@@ -36,6 +38,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   ben_det_hromada: undefined | string,
 	  // ben_det/ben_det_settlement [select_one_from_file] 2.5.4 Select settlement where registration is taking place
   ben_det_settlement: string,
+	  // ben_det/ben_det_settlement_other [text] 2.5.4.1 If "Other", please specify
+  ben_det_settlement_other: string | undefined,
 	  // ben_det/ben_det_res_stat [select_one] 2.5.5 Select residential status
   ben_det_res_stat: undefined | Option<'ben_det_res_stat'>,
 	  // ben_det/ben_det_income [integer] 2.6 What was the total value in UAH of all the resources your household received in the last one month?
@@ -44,7 +48,13 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   ben_det_hh_size: number | undefined,
 	  // cash_farmers/land_own [decimal] How much land do you own:
   land_own: number | undefined,
-	  // cash_farmers/land_cultivate [decimal] How much land do you cultivate or manage for crops and/or livestock:
+	  // cash_farmers/has_agriculture_exp [select_one] Is agriculture or farming the primary source of livelihood in your household?
+  has_agriculture_exp: undefined | Option<'committed_one_person_idp'>,
+	  // cash_farmers/depend_basic_needs [select_one] Do you depend on farming to meet your basic needs?
+  depend_basic_needs: undefined | Option<'committed_one_person_idp'>,
+	  // cash_farmers/consume_majority [select_one] Do you consume a majority of the crops you produce / livestock that you manage
+  consume_majority: undefined | Option<'committed_one_person_idp'>,
+	  // cash_farmers/land_cultivate [decimal] How much land do you cultivate or manage for crops and/or livestock (in hectares) :
   land_cultivate: number | undefined,
 	  // cash_farmers/not_many_livestock [note] #### 🔘 How many of the following livestock do you have:
   not_many_livestock: string,
@@ -60,11 +70,23 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   many_poultry: number | undefined,
 	  // cash_farmers/type_assistance [select_multiple] Please indicate what support you received:
   type_assistance: undefined | Option<'type_assistance'>[],
-	  // fin_det/fin_det_res [text] 4.1 Other Comments from Respondent
+	  // cash_businesses/organization_business [select_one] Organization form of business
+  organization_business: undefined | Option<'organization_business'>,
+	  // cash_businesses/organization_business_other [text] If "Other", please specify
+  organization_business_other: string | undefined,
+	  // cash_businesses/main_business_activities [select_multiple] State the main business activities of the household to date
+  main_business_activities: undefined | Option<'main_business_activities'>[],
+	  // cash_businesses/main_business_activities_other [text] If "Other", please specify
+  main_business_activities_other: string | undefined,
+	  // cash_businesses/long_business_operational [select_one] How long has your business been operational?
+  long_business_operational: undefined | Option<'long_business_operational'>,
+	  // cash_businesses/committed_one_person_idp [select_one] Are you committed to hiring at least one person one person who has been affected by the war such as an IDP or returnee?
+  committed_one_person_idp: undefined | Option<'committed_one_person_idp'>,
+	  // fin_det/fin_det_res [text] 5.1 Other Comments from Respondent
   fin_det_res: string | undefined,
-	  // fin_det/fin_det_enum [text] 4.2 Other Comments from Enumerator
+	  // fin_det/fin_det_enum [text] 5.2 Other Comments from Enumerator
   fin_det_enum: string | undefined,
-	  // fin_det/fin_det_oth_doc_im [image] 4.3 Please take picture of any other relevant document
+	  // fin_det/fin_det_oth_doc_im [image] 5.3 Please take picture of any other relevant document
   fin_det_oth_doc_im: string,
 	}
 export const options = {
@@ -258,15 +280,49 @@ undefined: {
 },
 back_donor: {
 	'uhf6': `UHF-6`,
-	'uhf7': `UHF-7`
+	'uhf7': `UHF-7`,
+	'bha_llh_348': `BHA – LLH 348`
 },
-back_consent: {
-	'yes': `A = Yes`,
-	'no': `B = No`
+which_support_registered: {
+	'scf_iap': `Sectoral Cash for Farmers [Improving Agricultural Production]`,
+	'scfb_lr': `Sectoral Cash for Businesses [Livelihood Restoration]`
+},
+committed_one_person_idp: {
+	'yes': `Yes`,
+	'no': `No`
 },
 type_assistance: {
 	'cfas': `Cash for Animal Shelter`,
 	'cfaf': `Cash for Animal Feed`
+},
+organization_business: {
+	'private_entrepreneur': `Private entrepreneur`,
+	'private_enterprise': `Private enterprise`,
+	'limited_company': `Limited Liability Company (LLC)`,
+	'farming_enterprise': `Farming enterprise`,
+	'collective_enterprise': `Collective enterprise`,
+	'other': `Other`
+},
+main_business_activities: {
+	'agro_processing': `Agro-processing`,
+	'agriculture': `Agriculture (crop and/or livestock)`,
+	'transport_services': `Transport services`,
+	'construction_Construction': `Construction`,
+	'food_services': `Food services`,
+	'electrical': `Electrical`,
+	'mechanics': `Mechanics`,
+	'plumber': `Plumber`,
+	'petty_trade': `Petty trade`,
+	'retail_trade': `Retail and wholesale trade`,
+	'sewing_repair': `Sewing/Shoe repair`,
+	'small_manufacturing': `Small manufacturing`,
+	'hairdressing_barber': `Hairdressing/barber`,
+	'it': `IT`,
+	'other': `Other`
+},
+long_business_operational: {
+	'under_two': `Under two years`,
+	'over_two': `Over two years`
 },
 ben_det_oblast: {
 	'cherkaska': `Cherkaska`,
@@ -323,5 +379,6 @@ export const map = (_: Record<keyof T, any>): T => ({
 	many_pig: _.many_pig ? +_.many_pig : undefined,
 	many_poultry: _.many_poultry ? +_.many_poultry : undefined,
 	type_assistance: _.type_assistance?.split(' '),
+	main_business_activities: _.main_business_activities?.split(' '),
 }) as T
 }
