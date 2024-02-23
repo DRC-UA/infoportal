@@ -49,13 +49,7 @@ export enum DrcSupportSuggestion {
   ManualCheck = 'ManualCheck',
 }
 
-const unAgencies = [
-  'FAO',
-  'IOM',
-  'UNHCR',
-  'UNICEF',
-  'WFP',
-]
+const unAgencies = ['FAO', 'IOM', 'UNHCR', 'UNICEF', 'WFP']
 
 export const getDrcSuggestion = (_: WfpDeduplication): DrcSupportSuggestion => {
   if (!_.existingOrga || !_.existingStart || !_.existingEnd) return DrcSupportSuggestion.ThreeMonthsNoDuplication

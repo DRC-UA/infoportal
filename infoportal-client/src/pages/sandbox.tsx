@@ -1,12 +1,12 @@
 import React from 'react'
 import {SessionProvider} from '@/core/Session/SessionContext'
-import {Playground} from '@/features/Playground'
+import {Sandbox} from '@/features/Sandbox'
 
 const Page = () => {
 
   return (
     <SessionProvider>
-      <Playground/>
+      <Sandbox/>
     </SessionProvider>
   )
 }
