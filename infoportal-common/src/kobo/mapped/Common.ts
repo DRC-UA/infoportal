@@ -74,6 +74,8 @@ export type KoboAnswer<
 export namespace KoboGeneralMapping {
 
   type StandardKoboFormQuestion = Pick<Ecrec_cashRegistration.T,
+    'hh_char_dis_select' |
+    'hh_char_dis_level' |
     'hh_char_hh_det' |
     'hh_char_hhh_dis_select' |
     'hh_char_hhh_age' |
@@ -146,7 +148,16 @@ export namespace KoboGeneralMapping {
 
   export const addIndividualBreakdownColumn = <T extends StandardKoboFormQuestion>(row: T): T & {custom: IndividualBreakdown} => {
     const p = KoboGeneralMapping.getPersonsFromStupidKoboForm(row)
-    ;(row as any).custom = KoboGeneralMapping.getIndividualBreakdown(p)
+    const custom = KoboGeneralMapping.getIndividualBreakdown(p)
+    if (custom.disabilitiesCount === 0 &&
+      row.hh_char_dis_select &&
+      !row.hh_char_dis_select?.includes('diff_none') &&
+      row.hh_char_dis_level && row.hh_char_dis_level !== 'zero'
+    ) {
+      custom.disabilities = row.hh_char_dis_select
+      custom.disabilitiesCount = 1
+    }
+    (row as any).custom = custom
     return (row as any)
   }
 
@@ -161,7 +172,7 @@ export namespace KoboGeneralMapping {
       if (_.age && _.age < 18) childrenCount++
       if (_.age && _.age >= 18 && _.age < 60) adultCount++
       if (_.age && _.age >= 60) elderlyCount++
-      if (_.disabilities && !_.disabilities.includes('diff_none')) disabilitiesCount++
+      if (_.disabilities && !_.disabilities.includes('diff_none') && !_.disabilityLevel?.includes('zero')) disabilitiesCount++
     })
     disabilities.delete('diff_none')
     return {

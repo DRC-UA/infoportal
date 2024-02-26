@@ -15,6 +15,7 @@ export namespace Person {
     age?: number
     gender?: Gender
     disabilities?: Bn_Re.Option<'hh_char_dis_select'>[]
+    disabilityLevel?: Bn_Re.Option<'hh_char_dis_level'>[]
   }
 
   export const create = (_: Person) => _
