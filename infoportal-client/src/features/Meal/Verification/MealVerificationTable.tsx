@@ -63,7 +63,7 @@ export const MealVerificationTable = () => {
 
   const {mealVerification, activity, formName} = useMemo(() => {
     const mealVerification = ctx.fetcherVerifications.get?.find(_ => _.id === id)
-    const activity = mealVerificationActivities.find(_ => _.name === mealVerification?.activity)
+    const activity = mealVerificationActivities.find(_ => _.id === mealVerification?.activity)
     // if (!activity) throw new Error(`No activity ${mealVerification?.activity}.`)
     const formInfo = activity ? KoboIndex.searchById(activity.registration.koboFormId) : undefined
     // if (!formInfo) throw new Error(`No form coded for id ${activity.registration.koboFormId}.`)
@@ -80,6 +80,7 @@ export const MealVerificationTable = () => {
       fetcherVerificationAnswers.fetch({force: false, clean: false}, mealVerification.id)
     }
   }, [mealVerification, activity])
+  console.log('fetcherVerificationAnswers', fetcherVerificationAnswers.get)
 
   return (
     <Page width="full">
@@ -199,8 +200,10 @@ const MealVerificationTableContent = <
   const mergedData: Seq<MergedData> | undefined = useMemo(() => {
     return map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
       const indexDataVerified = seq(verified).groupBy(_ => _[activity.joinColumn] ?? '')
+      console.log('...', origin, indexVerification)
       return seq(origin).filter(_ => indexVerification[_.id]).map(_ => {
         const dataVerified = indexDataVerified[_[activity.joinColumn]]
+        console.log(activity.joinColumn, _[activity.joinColumn], dataVerified)
         if (dataVerified && dataVerified.length > 1) throw new Error(_[activity.joinColumn] + ' exist ' + dataVerified?.length)
         const mergedData: Omit<MergedData, 'score'> = {
           data: _,
@@ -227,6 +230,7 @@ const MealVerificationTableContent = <
     fetcherDataOrigin.get,
     indexVerification,
   ])
+  // console.log('mergedData', indexVerification, fetcherDataOrigin.get, fetcherDataVerified.get)
 
   const stats = useMemo(() => {
     if (!mergedData) return

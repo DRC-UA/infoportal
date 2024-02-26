@@ -77,8 +77,8 @@ const improved = seq([
   5,
   3,
 ]).map(_ => {
-  if (_ === 1 || _ === 2) return '👎 Significantly hindered my ability'
-  if (_ === 5 || _ === 4) return '👍 A lot - Makes my life easier'
+  if (_ === 1 || _ === 2) return '🌋 Significantly hindered my ability'
+  if (_ === 5 || _ === 4) return '🏖️ A lot - Makes my life easier'
 }).compact()
 
 const bugs = seq([
@@ -151,8 +151,8 @@ const bugs = seq([
   1,
 ]).map(_ => {
   _ = 6 - _
-  if (_ === 1 || _ === 2) return '👎 A lot - Looks like Microsoft apps'
-  if (_ === 5 || _ === 4) return '👍 All working fine'
+  if (_ === 1 || _ === 2) return '🐌 A lot - Looks like Microsoft apps'
+  if (_ === 5 || _ === 4) return '🏎️ All working fine'
 }).compact()
 
 const satisfaction = seq([
@@ -319,7 +319,7 @@ export const Sandbox = () => {
         <PanelFeatures savableAsImg>
           <ChartBar data={new Obj(seq(bugs).groupBy(_ => _))
             .mapValues(_ => makeChartData({value: _.length}))
-            // .sort((a, b) => b[0].toString().localeCompare(a[0].toString()))
+            .sort((b, a) => a[0].toString().localeCompare(b[0].toString()))
             .get()}/>
         </PanelFeatures>
       </Box>
@@ -327,7 +327,7 @@ export const Sandbox = () => {
         <PanelFeatures savableAsImg>
           <ChartBar data={new Obj(seq(improved).groupBy(_ => _))
             .mapValues(_ => makeChartData({value: _.length}))
-            // .sort((a, b) => b[0].toString().localeCompare(a[0].toString()))
+            .sort((b, a) => a[0].toString().localeCompare(b[0].toString()))
             .get()}/>
         </PanelFeatures>
       </Box>
@@ -336,7 +336,7 @@ export const Sandbox = () => {
           <ChartBar data={new Obj(seq(satisfaction).groupBy(_ => _))
             .map((k, v) => [k, k.toString().startsWith('1') || k.toString().startsWith('2') ? 0 : v.length])
             .mapValues(_ => makeChartData({value: _}))
-            // .sort((a, b) => b[0].toString().localeCompare(a[0].toString()))
+            .sort((a, b) => b[0].toString().localeCompare(a[0].toString()))
             .get()}/>
         </PanelFeatures>
       </Box>
@@ -344,7 +344,7 @@ export const Sandbox = () => {
         <PanelFeatures savableAsImg>
           <ChartBar data={new Obj(seq(currentFeatures).groupBy(_ => _))
             .mapValues(_ => makeChartData({label: _[0], value: _.length}))
-            // .sort((a, b) => b[0].toString().localeCompare(a[0].toString()))
+            .sort((a, b) => a[0].toString().localeCompare(b[0].toString()))
             .get()}/>
         </PanelFeatures>
       </Box>

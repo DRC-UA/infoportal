@@ -234,6 +234,14 @@ export const _ShelterDashboard = ({
             {formatLargeNumber(computed.persons.length / data.length, {maximumFractionDigits: 2})}
           </SlideWidget>
         </Div>
+        <Panel title={m.project}>
+          <PanelBody>
+            <ChartBarSingleBy
+              data={data}
+              by={_ => _.ta?.tags?.project!}
+            />
+          </PanelBody>
+        </Panel>
         <Panel title={m.ageGroup}>
           <PanelBody>
             <AgeGroupTable tableId="shelter-dashboard-ag" persons={computed.persons}/>

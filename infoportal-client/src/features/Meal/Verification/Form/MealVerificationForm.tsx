@@ -20,6 +20,7 @@ import {MealVerificationAnsers, MealVerificationAnswersStatus} from '@/core/sdk/
 import {useNavigate} from 'react-router'
 import {mealVerificationActivities, mealVerificationActivitiesIndex, mealVerificationConf} from '@/features/Meal/Verification/mealVerificationConfig'
 import {mealIndex} from '@/features/Meal/Meal'
+import {appConfig} from '@/conf/AppConfig'
 
 export interface MealVerificationForm {
   activity: string
@@ -94,9 +95,12 @@ export const MealVerificationForm = () => {
     </IpBtn>
   )
 
+  const activity = useMemoFn(form.watch('activity'), name => mealVerificationActivitiesIndex[name])
+
   const submit = async ({answerIds, ...form}: MealVerificationForm) => {
+    if (!activity) return
     try {
-      const numElementsToSelect = Math.floor((mealVerificationConf.sampleSizeRatio) * answerIds.length)
+      const numElementsToSelect = Math.floor((activity.sampleSizeRatio) * answerIds.length)
       const answers: Omit<MealVerificationAnsers, 'id'>[] = answerIds
         .sort(() => Math.random() - 0.5)
         .map((a, i) => ({
@@ -108,9 +112,8 @@ export const MealVerificationForm = () => {
       navigate(mealIndex.siteMap.verification._)
     } catch (e) {
     }
-  }
 
-  const activity = useMemoFn(form.watch('activity'), name => mealVerificationActivities.find(_ => _.name === name))
+  }
 
   return (
     <Page>
@@ -131,9 +134,15 @@ export const MealVerificationForm = () => {
                     }}>
                       {mealVerificationActivities.map(activity =>
                         <ScRadioGroupItem
-                          key={activity.name}
-                          value={activity.name}
-                          title={KoboIndex.searchById(mealVerificationActivitiesIndex[activity.name].registration.koboFormId)?.translation}
+                          key={activity.id}
+                          value={activity.id}
+                          title={mealVerificationActivitiesIndex[activity.id].label}
+                          description={
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                              <Icon fontSize="small" sx={{mr: .5}}>{appConfig.icons.koboForm}</Icon>
+                              {KoboIndex.searchById(mealVerificationActivitiesIndex[activity.id].registration.koboFormId)?.translation}
+                            </Box>
+                          }
                         />
                       )}
                     </ScRadioGroup>
@@ -188,42 +197,43 @@ export const MealVerificationForm = () => {
             <Step>
               <StepLabel>{m.recap}</StepLabel>
               <StepContent>
-                <RenderRow icon="info" label={form.watch('name')}>
-                  {form.watch('desc')}
-                </RenderRow>
                 {activity && (
-                  <RenderRow label={m._mealVerif.selectedKoboForm} icon="fact_check">
-                    <Txt bold block size="big">{activity.name}</Txt>
-                    <Txt block>
-                      {m._mealVerif.koboForm}:&nbsp;
-                      <Box component="span" sx={{fontFamily: 'monospace'}}>{KoboIndex.searchById(activity.registration.koboFormId)?.translation}</Box>
-                    </Txt>
-                  </RenderRow>
-                )}
-                <RenderRow label={m.filters} icon="filter_alt">
-                  <Txt bold block size="small">
-                    <pre>{JSON.stringify(form.watch('filters'), null, 2)}</pre>
-                  </Txt>
-                </RenderRow>
-                <RenderRow label={m.data} icon="table_view">
-                  <Box dangerouslySetInnerHTML={{__html: m._mealVerif.selectedData(form.watch().answerIds?.length)}}/>
-                  <Box sx={{mt: .5}}>
-                    <Icon color="disabled" sx={{verticalAlign: 'top', mr: 1}}>subdirectory_arrow_right</Icon>
-                    {m._mealVerif.sampleSizeN(mealVerificationConf.sampleSizeRatio * 100)}
-                    <Icon color="disabled" sx={{verticalAlign: 'top', mx: 1}}>east</Icon>
-                    <Txt sx={{borderRadius: 1000, border: '1px solid ' + t.palette.success.light, py: .5, px: 1, color: t.palette.success.main}}
-                         dangerouslySetInnerHTML={{
-                           __html: m._mealVerif.dataToBeVerified(
-                             Math.floor(mealVerificationConf.sampleSizeRatio * form.watch().answerIds?.length)
-                           )
-                         }}/>
-                  </Box>
-                </RenderRow>
+                  <>
+                    <RenderRow icon="info" label={form.watch('name')}>
+                      {form.watch('desc')}
+                    </RenderRow>
+                    <RenderRow label={m._mealVerif.selectedKoboForm} icon="fact_check">
+                      <Txt bold block size="big">{activity.label}</Txt>
+                      <Txt block>
+                        {m._mealVerif.koboForm}:&nbsp;
+                        <Box component="span" sx={{fontFamily: 'monospace'}}>{KoboIndex.searchById(activity.registration.koboFormId)?.translation}</Box>
+                      </Txt>
+                    </RenderRow>
+                    <RenderRow label={m.filters} icon="filter_alt">
+                      <Txt bold block size="small">
+                        <pre>{JSON.stringify(form.watch('filters'), null, 2)}</pre>
+                      </Txt>
+                    </RenderRow>
+                    <RenderRow label={m.data} icon="table_view">
+                      <Box dangerouslySetInnerHTML={{__html: m._mealVerif.selectedData(form.watch().answerIds?.length)}}/>
+                      <Box sx={{mt: .5}}>
+                        <Icon color="disabled" sx={{verticalAlign: 'top', mr: 1}}>subdirectory_arrow_right</Icon>
+                        {m._mealVerif.sampleSizeN(activity.sampleSizeRatio * 100)}
+                        <Icon color="disabled" sx={{verticalAlign: 'top', mx: 1}}>east</Icon>
+                        <Txt
+                          sx={{borderRadius: 1000, border: '1px solid ' + t.palette.success.light, py: .5, px: 1, color: t.palette.success.main}}
+                          dangerouslySetInnerHTML={{
+                            __html: m._mealVerif.dataToBeVerified(Math.floor(activity.sampleSizeRatio * form.watch().answerIds?.length))
+                          }}/>
+                      </Box>
+                    </RenderRow>
 
-                <Box sx={{mb: 1}}>
-                  <NextBtn label={m.submit} loading={asyncCreate.loading} disabled={!form.formState.isValid} onClick={form.handleSubmit(submit)}/>
-                  <BackBtn/>
-                </Box>
+                    <Box sx={{mb: 1}}>
+                      <NextBtn label={m.submit} loading={asyncCreate.loading} disabled={!form.formState.isValid} onClick={form.handleSubmit(submit)}/>
+                      <BackBtn/>
+                    </Box>
+                  </>
+                )}
               </StepContent>
             </Step>
           </Stepper>

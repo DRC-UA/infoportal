@@ -216,7 +216,7 @@ export class KoboTypedAnswerSdk {
 
   readonly searchEcrec_cashRegistrationBha = (filters: KoboAnswerFilter = {}) => {
     return this.search({
-      formId: KoboIndex.byName('ecrec_cashRegistration').id,
+      formId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
       fnMapKobo: Ecrec_cashRegistrationBha.map,
       fnMapTags: _ => _ as KoboEcrec_cashRegistration.Tags,
       ...filters,
