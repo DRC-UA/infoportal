@@ -1,5 +1,5 @@
 import {ApiClient} from '../ApiClient'
-import {KoboIndex, Period, UUID} from '@infoportal-common'
+import {KeyOf, KoboIndex, Period, UUID} from '@infoportal-common'
 import {Kobo, KoboAnswer, KoboAnswerId, KoboBaseTags, KoboId} from '@/core/sdk/server/kobo/Kobo'
 import {AnswersFilters} from '@/core/sdk/server/kobo/KoboApiSdk'
 import {endOfDay, startOfDay} from 'date-fns'
@@ -61,6 +61,26 @@ export class KoboAnswerSdk {
   }: any) => {
     return this.client.post<ApiPaginate<Record<string, any>>>(`/kobo/answer/${formId}`, {body: {...KoboAnswerSdk.mapFilters(filters), ...paginate}})
       .then(Kobo.mapPaginateAnswerMetaData(fnMapKobo, fnMapTags, fnMapCustom))
+  }
+
+  readonly updateInKobo = <T extends Record<string, any>, K extends KeyOf<T>>({
+    formId,
+    answerIds,
+    question,
+    answer,
+  }: {
+    formId: KoboId
+    answerIds: KoboAnswerId
+    question: K
+    answer: T[K]
+  }) => {
+    return this.client.post(`/kobo/answer/${formId}`, {
+      body: {
+        answerIds,
+        question,
+        answer,
+      }
+    })
   }
 
   readonly updateTag = ({formId, answerIds, tags}: {

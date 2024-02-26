@@ -105,7 +105,7 @@ export const DatabaseKoboTableContent = ({
       <Datatable
         onFiltersChange={onFiltersChange}
         onDataChange={onDataChange}
-        select={ctx.canEdit && selectedHeader ? {
+        select={ctx.canEdit ? {
           onSelect: setSelectedIds,
           selectActions: selectedHeader,
           getId: _ => _.id,

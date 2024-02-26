@@ -473,6 +473,9 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     // background: t.palette.background.paper,
     boxShadow: 'inset -2px 0 1px -1px rgba(0,0,0,0.2), -1px 0px 1px 0px rgba(0,0,0,0.14), -1px 0px 3px 0px rgba(0,0,0,0.12)',
   },
+  '.table .td-selected': {
+    border: `2px solid blue`,
+  },
   '.table .td-sticky-end': {
     paddingTop: '1px',
     boxShadow: 'inset 2px 0 1px -1px rgba(0,0,0,0.2), 1px 0px 1px 0px rgba(0,0,0,0.14), 1px 0px 3px 0px rgba(0,0,0,0.12)',
