@@ -38,7 +38,7 @@ export const KoboSelectTag = <
   const enumKeys = Enum.keys(enumerator)
   const updateTag = useAsync((_: {formId: KoboId, answerId: KoboAnswerId, key: KeyOf<TTag>, value: any}) => api.kobo.answer.updateTag({
     formId: _.formId,
-    answerIds: [_.answerId],
+    submissionIds: [_.answerId],
     tags: {[_.key]: _.value}
   }), {
     requestKey: ([_]) => cfmMakeUpdateRequestKey(_.formId, _.answerId, _.key as any)

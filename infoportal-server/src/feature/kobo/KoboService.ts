@@ -222,7 +222,7 @@ export class KoboService {
   readonly getFormDetails = async (formId: KoboId) => {
     const dbForm = await this.prisma.koboForm.findFirstOrThrow({where: {id: formId}})
     const sdk = await this.sdkGenerator.get(dbForm.serverId)
-    return await sdk.getForm(dbForm.id)
+    return sdk.getForm(dbForm.id)
   }
 
   readonly translateForm = async ({
@@ -251,8 +251,8 @@ export class KoboService {
             'start': () => format(d[k], 'yyyy-MM-dd'),
             'end': () => format(d[k], 'yyyy-MM-dd'),
           }, _ => indexOptionsLabels[d[k]] ?? d[k])
-        })()
-        ;(translated as any)[translatedKey.replace(/(<([^>]+)>)/gi, '')] = translatedValue
+        })();
+        (translated as any)[translatedKey.replace(/(<([^>]+)>)/gi, '')] = translatedValue
       })
       return translated
     })
@@ -303,6 +303,30 @@ export class KoboService {
   //
   //   workbook.toFileAsync(appConf.rootProjectDir + `/${fileName}.xlsx`, {password})
   // }
+
+  readonly updateAnswers = async ({
+    formId,
+    submissionIds,
+    question,
+    answer
+  }: {
+    formId: KoboId,
+    submissionIds: KoboAnswerId[],
+    question: string,
+    answer?: string
+  }) => {
+    const sdk = await this.sdkGenerator.get()
+    await Promise.all([
+      sdk.updateData({formId, submissionIds: submissionIds, data: {[question]: answer}}),
+      // this.prisma.koboAnswers.updateMany({
+      //   where: {id: {in: submissionIds}}
+      //   data: {
+      //     answers:
+      //   }
+      // })
+    ])
+
+  }
 
   readonly updateTags = async ({formId, answerIds, tags}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>}) => {
     const answers = await this.prisma.koboAnswers.findMany({

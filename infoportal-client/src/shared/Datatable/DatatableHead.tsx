@@ -116,6 +116,7 @@ export const DatatableHeadContent = ({
   return (
     <span style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
       {column.typeIcon}
+      {column.subHeader}
       {/*(() => {
         if (column.typeIcon) return column.typeIcon
         // switch (column.type) {

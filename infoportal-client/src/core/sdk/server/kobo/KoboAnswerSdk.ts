@@ -63,33 +63,33 @@ export class KoboAnswerSdk {
       .then(Kobo.mapPaginateAnswerMetaData(fnMapKobo, fnMapTags, fnMapCustom))
   }
 
-  readonly updateInKobo = <T extends Record<string, any>, K extends KeyOf<T>>({
+  readonly updateSubmission = <T extends Record<string, any>, K extends KeyOf<T>>({
     formId,
-    answerIds,
+    submissionIds,
     question,
     answer,
   }: {
     formId: KoboId
-    answerIds: KoboAnswerId
+    submissionIds: KoboAnswerId[]
     question: K
     answer: T[K]
   }) => {
-    return this.client.post(`/kobo/answer/${formId}`, {
+    return this.client.post(`/kobo/answer/${formId}/update`, {
       body: {
-        answerIds,
+        submissionIds,
         question,
         answer,
       }
     })
   }
 
-  readonly updateTag = ({formId, answerIds, tags}: {
+  readonly updateTag = ({formId, submissionIds, tags}: {
     formId: KoboId,
-    answerIds: KoboAnswerId[],
+    submissionIds: KoboAnswerId[],
     tags: Record<string, any>
   }) => {
     for (let k in tags) if (tags[k] === undefined) tags[k] = null
-    return this.client.post(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: answerIds}})
+    return this.client.post(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: submissionIds}})
   }
 
   readonly getAllFromLocalForm = (filters: AnswersFilters = {}) => {

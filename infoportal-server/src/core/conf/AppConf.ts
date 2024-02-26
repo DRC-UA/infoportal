@@ -34,6 +34,7 @@ export const appConf = {
   //   port: e(int, defaultValue(5432))('DB_PORT')
   // },
   kobo: {
+    dbDefaultServerId: e(defaultValue('4820279f-6c3d-47ba-8afe-47f86b16ab5d'))('KOBO_DB_DEFAULT_SERVERID'),
     url: e(defaultValue('https://kobo.humanitarianresponse.info'))('KOBO_URL'),
     token: e(required)('KOBO_TOKEN'),
   },

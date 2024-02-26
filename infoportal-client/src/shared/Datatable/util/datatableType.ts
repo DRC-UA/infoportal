@@ -94,6 +94,7 @@ export namespace DatatableColumn {
     style?: (_: T) => CSSProperties
     styleHead?: CSSProperties
     typeIcon?: ReactNode
+    subHeader?: ReactNode,
     className?: string | ((_: T) => string | undefined)
     stickyEnd?: boolean
   }

@@ -244,7 +244,7 @@ export const CfmProvider = ({
   }) => {
     return api.kobo.answer.updateTag({
       formId: params.formId,
-      answerIds: [params.answerId],
+      submissionIds: [params.answerId],
       tags: {[params.key]: params.value}
     }).then(() => {
       const formName = formIdMapping[params.formId]
