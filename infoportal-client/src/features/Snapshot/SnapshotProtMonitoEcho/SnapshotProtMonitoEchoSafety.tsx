@@ -4,7 +4,7 @@ import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, S
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
-import {chain, OblastIndex, Protection_hhs2} from '@infoportal-common'
+import {chain, OblastIndex, Protection_hhs2, Protection_hhs3} from '@infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
@@ -106,33 +106,40 @@ export const SnapshotProtMonitoEchoSafety = () => {
                     //   })
                     // }}
                   >
-                    Perceptions of safety vary significantly depending on the surveyed area. Overall <b>37%</b> of respondents indicated a poor sense of safety mainly due to
-                    shelling presence or armed actors and UXOs contamination. This figure is particularly high in the areas of
-                    Kherson (<b>60%</b>), Sumy (<b>43%</b>) and Chernihiv (<b>38%</b>). <b>1%</b> of respondents reported protection incidents experienced by
-                    household members over the past 6 months.
+                    Reports of significant stress and deterioration of mental health and wellbeing continue to be prevalent in Ukraine.
+                    Older individuals and those with disabilities are more prone to experiencing psychological distress, often stemming from an elevated sense of loneliness, a lack
+                    of social engagement, and a shortage of communal spaces for interaction and connection with others.
                   </p>
                 }
               </Lazy>
             </SlideTxt>
             <SlidePanel>
-              <SlidePanelTitle>{m.protHHS2.typeOfIncident}</SlidePanelTitle>
-              <Lazy deps={[groupedIndividualsType.type]} fn={() =>
-                chain(ChartHelperOld.multiple({
-                  data: groupedIndividualsType.type,
-                  filterValue: ['unable_unwilling_to_answer']
-                }))
-                  .map(ChartHelperOld.setLabel({
-                    ...Protection_hhs2.options.what_type_of_incidents_took_place_has_any_adult_male_member_experienced_violence,
-                    // TODO TO REMOVE
-                    // other_specify: 'Psychological abuse',
-                  }))
-                  .map(ChartHelperOld.sortBy.value)
-                  .get()
-              }>
-                {_ => (
-                  <ChartBar data={_}/>
-                )}
-              </Lazy>
+              <SlidePanelTitle>{m.majorStressFactors}</SlidePanelTitle>
+              <ChartBarMultipleBy
+                data={data}
+                filterValue={['unable_unwilling_to_answer']}
+                by={_ => _.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
+                label={Protection_hhs3.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
+                limit={5}
+              />
+              {/*<SlidePanelTitle>{m.protHHS2.typeOfIncident}</SlidePanelTitle>*/}
+              {/*<Lazy deps={[groupedIndividualsType.type]} fn={() =>*/}
+              {/*  chain(ChartHelperOld.multiple({*/}
+              {/*    data: groupedIndividualsType.type,*/}
+              {/*    filterValue: ['unable_unwilling_to_answer']*/}
+              {/*  }))*/}
+              {/*    .map(ChartHelperOld.setLabel({*/}
+              {/*      ...Protection_hhs2.options.what_type_of_incidents_took_place_has_any_adult_male_member_experienced_violence,*/}
+              {/*      // TODO TO REMOVE*/}
+              {/*      // other_specify: 'Psychological abuse',*/}
+              {/*    }))*/}
+              {/*    .map(ChartHelperOld.sortBy.value)*/}
+              {/*    .get()*/}
+              {/*}>*/}
+              {/*  {_ => (*/}
+              {/*    <ChartBar data={_}/>*/}
+              {/*  )}*/}
+              {/*</Lazy>*/}
             </SlidePanel>
             <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.freedomOfMovement}</SlidePanelTitle>

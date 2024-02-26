@@ -31,9 +31,8 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             }}>
               {_ =>
                 <SlideTxt>
-                  Significant challenges in accessing the compensation mechanism for damaged and destroyed property are still being reported, including due to a lack of required
-                  documentation. While a low level of awareness on land and property rights has been identified, requests for legal awareness and assistance on HLP-related issues
-                  (including obtaining property documentation and applying for compensation) have become more widespread, especially along frontline areas and the Russian border.
+                  Physical access remains considerably challenging for residents of rural and remote areas in need of civil status and HLP documentation as well as access to remedies.
+                  Administrative offices are situated in larger towns and raion centers, posing difficulties for many to access due limited availability of public and private transport options and the associated transportation costs.
                 </SlideTxt>
               }
             </Lazy>
@@ -97,7 +96,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 mergeOptions={{
                   distrust_of_public_institutions_and_authorities: 'other_specify',
                   discrimination: 'other_specify',
-                  distance_or_cost_of_transportation: 'other_specify',
+                  // distance_or_cost_of_transportation: 'other_specify',
                 }}
                 filterValue={[
                   'no',

@@ -38,7 +38,7 @@ export const SnapshotProtMonitoEchoSample = () => {
               implemented through household surveys in the following oblasts:
               <ul style={{columns: 2}}>
                 {seq(new Enum(computed.byCurrentOblast).entries())
-                  .filter(([k, v]) => v.value > 0)
+                  .filter(([k, v]) => v.value > 5)
                   .map(([k]) => {
                     const r = OblastIndex.byIso(k).shortName
                     if (!r) throw new Error(k)

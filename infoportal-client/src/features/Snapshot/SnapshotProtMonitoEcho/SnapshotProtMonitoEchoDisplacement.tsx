@@ -22,10 +22,8 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
         <Div>
           <Div column>
             <SlideTxt sx={{mb: .5}} block>
-              Compared to the previous monitoring month, a higher proportion of IDP respondents indicated their intention to integrate into the local community <Txt bold
-                                                                                                                                                                     sx={{color: t.palette.success.main}}>(+15%)</Txt>.
-              Conversely, a lower proportion of IDP respondents indicated their intention to return. However, the scarcity of affordable housing poses a significant obstacle to the
-              integration of IDPs.
+              Compared to the previous monitoring month, a higher proportion of IDP respondents indicated their intention to integrate into the local community<Txt bold sx={{color: t.palette.success.main}}> (+7%)</Txt>.
+              However, the limited access to economic opportunities and affordable housing poses a significant obstacle to the integration of IDPs.
             </SlideTxt>
 
             <SlidePanel>

@@ -71,15 +71,8 @@ export const SnapshotProtMonitoEchoNeeds = () => {
               }}>
                 {_ =>
                   <p>
-                    <div>healthPnCount: {_.healthPnCount}</div>
-                    <div>healthPn: {_.healthPn}</div>
-                    <div>healthPnRural: {_.healthPnRural}</div>
-                    <div>healthPnUrban: {_.healthPnUrban}</div>
-                    <div>barriersRural: {_.barriersRural}</div>
-                    <div>barriersUrban: {_.barriersUrban}</div>
-                    Risk of eviction is the top priority concern of IDP respondents (<b>34%</b>). The risk of closure of collective sites in the coming months <Txt color="hint">(Resolution
-                    #930)</Txt>, coupled
-                    with the rising cost of housing and utilities, are likely to increase precariousness and hardship among IDP communities at the onset of winter.
+                    Risk of eviction remains a top priority concern for IDPs.
+                    This is consistent with findings from the previous monitoring period and is linked to the <Txt color="hint">(Resolution #930)</Txt> on the functioning of the collective sites. Access to healthcare, including specialized services, remains very challenging.
                   </p>
                 }
               </Lazy>

@@ -33,10 +33,8 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                     // __html: m.snapshotProtMonito.echo.livelihood({
                     //   outOfWork: toPercent(_.percent, 0),
                   >
-                    A prevalent concern raised by household respondents continues to be the limited availability of livelihood opportunities, with <b>16%</b> of respondents
-                    reporting being out of work and seeking employment. Among single female caregivers, <b>42%</b> reported housework and childcare responsibilities as the key
-                    factor influencing their employment status, directly linked with the lack of kindergartens. As a result of limited livelihood and economic opportunities, a
-                    considerable portion of the population is currently dependent on social protection schemes and humanitarian assistance.
+                    The main causes of unemployment remain consistent with past reports: limited job opportunities, physical impairments, and responsibilities related to housework and caring for children. The constrained job market not only diminishes purchasing power but also exacerbates economic hardship, aggravated by continuous hikes in the prices of essential goods.
+                    Consequently, a significant portion of the Ukrainian population currently relies on social protection schemes and humanitarian assistance.
                   </p>
                 }
               </Lazy>
