@@ -8,7 +8,8 @@ import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Protection_hhs2, toPercent} from '@infoportal-common'
+import {Protection_hhs2, Protection_hhs3, toPercent} from '@infoportal-common'
+import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 
 export const SnapshotProtMonitoNN2Safety = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -41,7 +42,10 @@ export const SnapshotProtMonitoNN2Safety = () => {
                     //   __html: m.snapshotProtMonito.nn2.safety(_)
                     // }}
                   >
-                    <b>33%</b> of respondents indicated a poor sense of safety mainly due to shelling and UXOs contamination. Reports indicate challenges with the functionality of the air alert system, particularly in frontline communities. Additionally, the absence of operational and accessible bomb shelters forces residents to seek refuge in unreliable home basements. There are ongoing reports of considerable stress and deteriorating mental health and well-being, with older individuals and those with disabilities being particularly vulnerable to experiencing psychological distress.
+                    <b>33%</b> of respondents indicated a poor sense of safety mainly due to shelling and UXOs contamination. Reports indicate challenges with the functionality of
+                    the air alert system, particularly in frontline communities. Additionally, the absence of operational and accessible bomb shelters forces residents to seek
+                    refuge in unreliable home basements. There are ongoing reports of considerable stress and deteriorating mental health and well-being, with older individuals and
+                    those with disabilities being particularly vulnerable to experiencing psychological distress.
                   </p>
                 }
               </Lazy>
@@ -58,9 +62,24 @@ export const SnapshotProtMonitoNN2Safety = () => {
                 filterValue={['unable_unwilling_to_answer']}
                 mergeOptions={{
                   lack_of_access_to_employment_opportunities: 'other_specify',
-                  missing_family_members:'other_specify',
-                  fear_of_being_sexually_assaulted:'other_specify',
+                  missing_family_members: 'other_specify',
+                  fear_of_being_sexually_assaulted: 'other_specify',
                 }}
+              />
+            </SlidePanel>
+            <SlidePanel>
+              <Lazy deps={[data.flatMap(p => p.persons)]} fn={(x) => ChartHelperOld.percentage({
+                data: x.map(_ => _.lackDoc).compact().filter(_ => !_.includes('unable_unwilling_to_answer')),
+                value: _ => !_.includes('none'),
+              })}>
+                {(_, last) => <ChartPieWidget title={m.lackOfPersonalDoc} dense sx={{mb: 1}} value={_.value} base={_.base}/>}
+              </Lazy>
+              <ChartBarMultipleBy
+                data={data.flatMap(p => p.persons)}
+                filterValue={['none']}
+                by={_ => _.lackDoc}
+                label={Protection_hhs3.options.does_lack_doc}
+                base="percentOfTotalChoices"
               />
             </SlidePanel>
           </Div>
@@ -98,7 +117,8 @@ export const SnapshotProtMonitoNN2Safety = () => {
               <ChartPieWidgetBy
                 title={m.protHHS2.freedomOfMovement}
                 filter={_ => !_.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area!.includes('no')}
-                filterBase={_ => !!_.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area && !_.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area.includes('unable_unwilling_to_answer')}
+                filterBase={_ => !!_.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area && !_.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area.includes(
+                  'unable_unwilling_to_answer')}
                 compare={{before: computed.lastMonth}}
                 data={data}
                 {...snapShotDefaultPieProps}
