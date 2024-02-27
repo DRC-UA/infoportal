@@ -15,7 +15,7 @@ export const AnswerTable = <T extends Record<string, any>, >({
       title=""
       {...props}
       data={answers}
-      columns={Object.keys(answers[0]).map(k => ({
+      columns={Object.keys(answers?.[0] ?? {}).map(k => ({
         id: k,
         head: k,
         render: _ => JSON.stringify(_[k]),

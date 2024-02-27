@@ -4,7 +4,7 @@ import {ProtectionActivity, ProtectionActivityFlat} from '@/features/Protection/
 import {useI18n} from '@/core/i18n'
 import {useMemo, useState} from 'react'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {hash, KoboIndex, Period} from '@infoportal-common'
+import {hash, KoboIndex, Period, PeriodHelper} from '@infoportal-common'
 import {endOfDay, startOfDay} from 'date-fns'
 import {useAppSettings} from '@/core/context/ConfigContext'
 
@@ -80,8 +80,8 @@ export const useProtectionFilters = (data?: Seq<ProtectionActivity>, flatData?: 
     if (!data) return
     const filteredBy_date = data.filter(d => {
       try {
-        if (period?.start && period.start.getTime() >= d.date.getTime()) return false
-        if (period?.end && period.end.getTime() <= d.date.getTime()) return false
+        const isDateIn = PeriodHelper.isDateIn(period, d.date)
+        if (!isDateIn) return false
         if (custom.echo && hash(d.id, 'dedup') % 100 <= conf.other.protection.echoDuplicationEstimationPercent) return false
         if (custom.echoDisability && hash(d.id, 'disability') % 100 >= conf.other.protection.echoDisabilityEstimationPercent) return false
         return true
