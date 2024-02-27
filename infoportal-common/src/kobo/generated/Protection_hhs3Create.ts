@@ -2546,12 +2546,12 @@ export namespace Protection_hhs3Create {
       'unable_unwilling_to_answer': `Unable/unwilling to answer`
     },
     what_is_the_type_of_your_household: {
-      'one_person_household': `One person household (any person living alone)`,
-      'couple_without_children': `Couple without children (2 members)`,
-      'couple_with_children': `Couple with children (3+ members)`,
-      'mother_with_children': `Mother with children (2+ members)`,
-      'father_with_children': `Father with children (2+ members)`,
-      'extended_family': `Extended family (2+ members – may contain partners, children and any other familial relative but must not include any extra-familial members)`
+      'one_person_household': `One person household`,
+      'couple_without_children': `Couple without children`,
+      'couple_with_children': `Couple with children`,
+      'mother_with_children': `Mother with children`,
+      'father_with_children': `Father with children`,
+      'extended_family': `Extended family`
     },
     hh_char_hh_det_gender: {
       'male': `Male`,

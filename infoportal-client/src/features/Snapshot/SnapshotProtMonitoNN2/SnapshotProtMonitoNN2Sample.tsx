@@ -12,7 +12,7 @@ import {ChartPie} from '@/shared/charts/ChartPie'
 import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Person, Protection_hhs2} from '@infoportal-common'
+import {Person, Protection_hhs2, Protection_hhs3} from '@infoportal-common'
 
 export const SnapshotProtMonitoNN2Sample = () => {
   const theme = useTheme()
@@ -78,7 +78,7 @@ export const SnapshotProtMonitoNN2Sample = () => {
                   <ChartBarSingleBy
                     data={data}
                     by={_ => _.what_is_the_type_of_your_household}
-                    label={Protection_hhs2.options.what_is_the_type_of_your_household}
+                    label={Protection_hhs3.options.what_is_the_type_of_your_household}
                   />
                 </SlidePanel>
               </Div>

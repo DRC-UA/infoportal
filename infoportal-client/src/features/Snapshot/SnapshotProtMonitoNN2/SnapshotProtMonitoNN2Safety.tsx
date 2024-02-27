@@ -86,7 +86,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
                 label={Protection_hhs2.options.please_rate_your_sense_of_safety_in_this_location}
                 filter={_ => _.please_rate_your_sense_of_safety_in_this_location !== 'unable_unwilling_to_answer'}
               />
-              <SlidePanelTitle sx={{mt: 4}}>{m.influencingFactors}</SlidePanelTitle>
+              <SlidePanelTitle sx={{mt: 3}}>{m.influencingFactors}</SlidePanelTitle>
               <ChartBarMultipleBy
                 data={data}
                 by={_ => _.what_are_the_main_factors_that_make_this_location_feel_unsafe}

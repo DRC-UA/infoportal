@@ -150,7 +150,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
               />
               <ChartBarMultipleBy
                 by={_ => _.what_are_your_main_concerns_regarding_your_accommodation}
-                label={Protection_hhs2.options.what_are_your_main_concerns_regarding_your_accommodation}
+                label={Protection_hhs3.options.what_are_your_main_concerns_regarding_your_accommodation}
                 data={data}
                 filterValue={['unable_unwilling_to_answer', 'none']}
               />
