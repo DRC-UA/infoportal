@@ -10,7 +10,7 @@ import {SnapshotProtMonitoNN2Sample} from '@/features/Snapshot/SnapshotProtMonit
 import {SnapshotProtMonitoNN2Displacement} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Displacement'
 import {Box, Theme} from '@mui/material'
 import {OblastIndex, Period} from '@infoportal-common'
-import {endOfMonth, startOfMonth} from 'date-fns'
+import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 export const snapshotAlternateColor = (t: Theme) => t.palette.grey[500]
@@ -34,8 +34,10 @@ export const snapShotDefaultPieProps: Partial<Pick<ChartPieIndicatorProps, 'dens
 }
 export const SnapshotProtMonitoNN2 = () => {
   const [period, setPeriod] = useState<Partial<Period>>({
-    start: startOfMonth(new Date()),
-    end: endOfMonth(new Date()),
+    start: startOfMonth(new Date(2023, 11, 1)),
+    end: endOfMonth(new Date(2024, 0, 31)),
+    //start: subMonths(startOfMonth(new Date()), 2),
+    //end: endOfMonth(new Date()),
   })
   const value: [Date | undefined, Date | undefined] = useMemo(() => [period.start, period.end], [period])
   return (
@@ -60,7 +62,7 @@ const _SnapshotProtMonitoring = () => {
   return (
     <Pdf>
       <SnapshotProtMonitoNN2Sample/>
-      <SnapshotProtMonitoNN2Displacement/>
+      {/* <SnapshotProtMonitoNN2Displacement/> */}
       <SnapshotProtMonitoNN2Safety/>
       <SnapshotProtMonitoNN2Needs/>
       <SnapshotProtMonitoNN2Livelihood/>

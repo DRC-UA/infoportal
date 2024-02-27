@@ -34,7 +34,7 @@ export const SnapshotProtMonitoEchoSample = () => {
         <Div>
           <Div column sx={{flex: 4}}>
             <SlideTxt>
-              This snapshot summarizes the findings of <b>Protection Monitoring</b> (PM)
+              This snapshot summarizes the findings of <b>protection monitoring</b> (PM)
               implemented through household surveys in the following oblasts:
               <ul style={{columns: 2}}>
                 {seq(new Enum(computed.byCurrentOblast).entries())
@@ -52,7 +52,7 @@ export const SnapshotProtMonitoEchoSample = () => {
             </SlideTxt>
             <UkraineMap data={computed.byCurrentOblast} sx={{mx: 1}}/>
             <SlideTxt>
-              DRC protection monitoring targeted Internally Displaced Persons (IDPs) and people
+              DRC protection monitoring targeted internally displaced persons  (IDPs) and people
               directly exposed to and affected by the current armed conflict in order to understand
               the protection needs facing affected populations; informing DRC and the protection
               communities' response.

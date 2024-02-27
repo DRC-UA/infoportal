@@ -75,7 +75,7 @@ export const ProtectionDashboardMonitoHousing = ({
                 'destroyed',
                 'unfinished',
               ])}
-              filter={_ => _.what_is_the_general_condition_of_your_accommodation === 'unable_unwilling_to_answer'}
+              filter={_ => _.what_is_the_general_condition_of_your_accommodation !== 'unable_unwilling_to_answer'}
             />
           </SlidePanel>
         </Div>

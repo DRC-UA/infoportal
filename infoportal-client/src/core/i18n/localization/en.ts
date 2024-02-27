@@ -226,8 +226,8 @@ export const en = Object.freeze({
     originOblast: 'Oblast of origin',
     admin: 'Admin',
     idpOriginOblast: 'Origin oblast of IDPs',
-    currentOblast: 'Current oblast',
-    idpPopulationByOblast: 'IDP population by oblast',
+    currentOblast: 'Oblast of displacement',
+    idpPopulationByOblast: 'IDP population by oblast of origin and displacement',
     age: 'Age',
     submitAll: 'Submit all',
     submit: 'Submit',
@@ -540,7 +540,7 @@ export const en = Object.freeze({
         }: {
           outOfWork?: string
           //}) => `<b>${outOfWork}</b> of respondents reported household members being out of work and seeking employment remains quite high, with main unemployment factor being the lack of available jobs.`,
-        }) => `The percentage of surveyed individuals out of work and seeking employment remains quite high at <b>${outOfWork}</b> of responses, with main unemployment factor being the lack of available jobs. As a result of the limited livelihood opportunities or challenges in accessing livelihoods, a considerable proportion of the surveyed population is currently dependent on social protection schemes and humanitarian assistance.`,
+        }) => `With a majority of elderly respondents in rural areas where DRC protection teams operate, a considerable proportion of the surveyed population is currently dependent on social protection schemes and humanitarian assistance. 19% of respondents indicated facing basic needs gaps.`,
         needs: ({
           healthPn,
           damagedAcc,
@@ -567,6 +567,7 @@ export const en = Object.freeze({
       basicNeeds: `Basic Needs`,
       livelihood: `Livelihoods & Coping mechanisms`,
       safetyProtectionIncidents: 'Safety & Major Stress Factors',
+      MainProtectionNeeds: 'Main Protection Needs',
       displacementDesc: `Majority of the IDPs surveyed during the monitoring period reported having left their place of habitual residence between February and May 2022. Main factors influencing departure reported included shelling and attacks on civilians, destruction or damage of housing, land or property due to conflict, as well as occupation of property, exposure to UXOs/landmines and lack of access to livelihoods.`,
       integrateIntoTheLocalCommunity: 'Integrate into the local community',
       monitoredHhByOblast: 'Monitored HH By Oblast',
