@@ -182,7 +182,7 @@ export const DatabaseKoboTableContent = ({
         <DatatableKoboEditModal
           formId={ctx.form.id}
           column={selectedColumn}
-          submissionIds={selectedIds}
+          answerIds={selectedIds}
           onClose={() => setSelectedColumn(undefined)}
         />
       )}

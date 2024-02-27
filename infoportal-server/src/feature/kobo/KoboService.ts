@@ -306,17 +306,21 @@ export class KoboService {
 
   readonly updateAnswers = async ({
     formId,
-    submissionIds,
+    answerIds,
     question,
     answer
   }: {
     formId: KoboId,
-    submissionIds: KoboAnswerId[],
+    answerIds: KoboAnswerId[],
     question: string,
     answer?: string
   }) => {
     const sdk = await this.sdkGenerator.get()
     const answers = answerIds.map(_ => _ + '')
+    console.log(`UPDATE "KoboAnswers"
+                 SET answers = jsonb_set(answers, '{${question}}', ${answer})
+                 WHERE id IN (${(answers).join(',')})`
+    )
     const res = await this.prisma.$executeRaw`UPDATE "KoboAnswers"
                                               SET answers = jsonb_set(answers, '{${question}}', ${answer})
                                               WHERE id IN (${(answers).join(',')})`

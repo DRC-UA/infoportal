@@ -16,12 +16,12 @@ import {Alert} from 'mui-extension'
 export const DatatableKoboEditModal = ({
   formId,
   column,
-  submissionIds,
+  answerIds,
   onClose
 }: {
   formId: KoboId,
   column: string
-  submissionIds: KoboAnswerId[]
+  answerIds: KoboAnswerId[]
   onClose?: () => void,
 }) => {
   const {m} = useI18n()
@@ -41,8 +41,8 @@ export const DatatableKoboEditModal = ({
       open={!!column}
       onClose={onClose}
       loading={asyncUpdate.loading}
-      onConfirm={() => asyncUpdate.call({formId, submissionIds, question: column, answer: value})}
-      title={`${m.edit} (${submissionIds.length})`}
+      onConfirm={() => asyncUpdate.call({formId, answerIds, question: column, answer: value})}
+      title={`${m.edit} (${answerIds.length})`}
     >
       {asyncUpdate.error && (
         <Alert type="error">
