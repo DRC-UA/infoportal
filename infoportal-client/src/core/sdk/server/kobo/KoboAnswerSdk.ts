@@ -11,6 +11,13 @@ export interface KoboAnswerFilter {
   readonly filters?: AnswersFilters
 }
 
+export type KoboUpdateAnswers<T extends Record<string, any>, K extends KeyOf<T>> = {
+  formId: KoboId
+  answerIds: KoboAnswerId[]
+  question: K
+  answer: T[K]
+}
+
 interface KoboAnswerSearch {
   <
     TKoboAnswer extends Record<string, any>,
@@ -63,18 +70,13 @@ export class KoboAnswerSdk {
       .then(Kobo.mapPaginateAnswerMetaData(fnMapKobo, fnMapTags, fnMapCustom))
   }
 
-  readonly updateSubmission = <T extends Record<string, any>, K extends KeyOf<T>>({
+  readonly updateAnswers = <T extends Record<string, any>, K extends KeyOf<T>>({
     formId,
     answerIds,
     question,
     answer,
-  }: {
-    formId: KoboId
-    answerIds: KoboAnswerId[]
-    question: K
-    answer: T[K]
-  }) => {
-    return this.client.post(`/kobo/answer/${formId}/update`, {
+  }: KoboUpdateAnswers<T, K>) => {
+    return this.client.patch(`/kobo/answer/${formId}`, {
       body: {
         answerIds: answerIds,
         question,
@@ -89,7 +91,7 @@ export class KoboAnswerSdk {
     tags: Record<string, any>
   }) => {
     for (let k in tags) if (tags[k] === undefined) tags[k] = null
-    return this.client.post(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: answerIds}})
+    return this.client.patch(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: answerIds}})
   }
 
   readonly getAllFromLocalForm = (filters: AnswersFilters = {}) => {

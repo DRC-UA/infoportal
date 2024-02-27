@@ -6,6 +6,7 @@ import {map} from '@alexandreannic/ts-utils'
 import axios from 'axios'
 import {appConf} from '../../../../core/conf/AppConf'
 import {KoboForm} from '@prisma/client'
+import {ApiKoboUpdate} from './type/KoboUpdate'
 
 const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
   return {
@@ -89,12 +90,7 @@ export class KoboSdk {
     formId: KoboId,
     submissionIds: string[],
     data: TData
-  }) => {
-    // return this.api.patch(`/v2/assets/${formId}/data/${submissionId}/`, {
-    //   body: {
-    //     'start': new Date().toISOString(),
-    //   }
-    // })
+  }): Promise<ApiKoboUpdate> => {
     return this.api.patch(`/v2/assets/${formId}/data/bulk/`, {
       // qs: {format: 'json'},
       body: {

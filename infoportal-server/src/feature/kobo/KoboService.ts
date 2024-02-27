@@ -316,21 +316,15 @@ export class KoboService {
     answer?: string
   }) => {
     const sdk = await this.sdkGenerator.get()
-    const answers = answerIds.map(_ => _ + '')
-    console.log(`UPDATE "KoboAnswers"
-                 SET answers = jsonb_set(answers, '{${question}}', ${answer})
-                 WHERE id IN (${(answers).join(',')})`
-    )
-    const res = await this.prisma.$executeRaw`UPDATE "KoboAnswers"
-                                              SET answers = jsonb_set(answers, '{${question}}', ${answer})
-                                              WHERE id IN (${(answers).join(',')})`
-    console.log(res)
-    await Promise.all([
+    const [x] = await Promise.all([
       sdk.updateData({formId, submissionIds: answerIds, data: {[question]: answer}}),
-      // this.prisma.$queryRaw`UPDATE "KoboAnswers"
-      //                       SET answers = jsonb_set(answers, '{${question}}', '"${answer}"')
-      //                       WHERE id IN (${Prisma.join(answerIds.map(_ => `'${_}'`))})`
+      await this.prisma.$executeRawUnsafe(
+        `UPDATE "KoboAnswers"
+         SET answers = jsonb_set(answers, '{${question}}', '"${answer}"')
+         WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
+        `)
     ])
+    console.log(x)
   }
 
   readonly updateTags = async ({formId, answerIds, tags}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>}) => {

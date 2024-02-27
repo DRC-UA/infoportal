@@ -12,6 +12,7 @@ import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {useIpToast} from '@/core/useToast'
 import {Datepicker} from '@/shared/Datepicker/Datepicker'
 import {Alert} from 'mui-extension'
+import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 
 export const DatatableKoboEditModal = ({
   formId,
@@ -29,7 +30,17 @@ export const DatatableKoboEditModal = ({
   // const {toastHttpError} = useIpToast()
   const ctx = useDatabaseKoboTableContext()
 
-  const asyncUpdate = useAsync((params: any) => api.kobo.answer.updateSubmission(params))
+  const asyncUpdate = useAsync((params: KoboUpdateAnswers<any, any>) => api.kobo.answer.updateAnswers(params)
+    .then(() => {
+      const answerIdsIndex = new Set(params.answerIds)
+      ctx.setData(data => data.map(d => {
+        if (answerIdsIndex.has(d.id)) {
+          d[params.question] = params.answer
+        }
+        return d
+      }))
+    })
+  )
   // useEffectFn(asyncUpdate.error, toastHttpError)
 
   const [value, setValue] = useState<any>()

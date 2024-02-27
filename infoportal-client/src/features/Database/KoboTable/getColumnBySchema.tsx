@@ -1,7 +1,7 @@
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {I18nContextProps} from '@/core/i18n/I18n'
 import {KoboApiColType, KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
-import {KoboAnswer, KoboAnswerId, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {KoboAnswer, KoboAnswerId, KoboAnswerMetaData, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {SheetHeadTypeIcon} from '@/shared/Sheet/SheetHead'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {mapFor, seq} from '@alexandreannic/ts-utils'
@@ -23,6 +23,21 @@ const ignoredColType: Set<KoboApiColType> = new Set([
   'end_repeat',
   // 'begin_repeat',
   // 'note',
+])
+
+const noEditableColumnsId = new Set<keyof KoboAnswerMetaData>([
+  'start',
+  'end',
+  'version',
+  'submissionTime',
+  'submittedBy',
+  'id',
+  'uuid',
+  'validationStatus',
+  'validatedBy',
+  'lastValidatedTimestamp',
+  'geolocation',
+  'tags',
 ])
 
 const editableColumns: Set<KoboApiColType> = new Set([
@@ -91,7 +106,11 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
     }
   })()
 
-  const showEditBtn = onSelectColumn && selectedIds && selectedIds?.length > 0 && editableColumns.has(q.type) && q.name !== 'id'
+  const showEditBtn = onSelectColumn
+    && selectedIds && selectedIds?.length > 0
+    && editableColumns.has(q.type)
+    && !noEditableColumnsId.has(q.name as any)
+
   const common = {
     id: getId(q),
     ...showEditBtn ? {typeIcon: null} : {},

@@ -1,4 +1,4 @@
-import React, {ReactNode, useCallback, useContext, useEffect, useRef, useState} from 'react'
+import React, {Dispatch, ReactNode, SetStateAction, useCallback, useContext, useEffect, useRef, useState} from 'react'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
 import {Kobo, KoboAnswer, KoboAnswerId, KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {KeyOf, UUID} from '@infoportal-common'
@@ -25,6 +25,7 @@ export interface DatabaseKoboContext {
     value: any
   }) => Promise<void>>
   data: KoboMappedAnswer[]
+  setData: Dispatch<SetStateAction<KoboMappedAnswer[]>>
 }
 
 const Context = React.createContext({} as DatabaseKoboContext)
@@ -126,6 +127,7 @@ export const DatabaseKoboTableProvider = (props: {
       asyncEdit,
       asyncUpdateTag,
       data: mappedData,
+      setData: setMappedData,
     }}>
       {children}
     </Context.Provider>

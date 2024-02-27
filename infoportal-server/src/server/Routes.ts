@@ -148,8 +148,8 @@ export const getRoutes = (
     router.get('/kobo/form/:id', auth(), errorCatcher(koboForm.get))
     router.put('/kobo/form', auth(), errorCatcher(koboForm.create))
     router.post('/kobo/answer/:formId/by-access', auth(), errorCatcher(koboAnswer.searchByUserAccess))
-    router.post('/kobo/answer/:formId/tag', auth(), errorCatcher(koboAnswer.updateTag))
-    router.post('/kobo/answer/:formId/update', auth(), errorCatcher(koboAnswer.updateAnswers))
+    router.patch('/kobo/answer/:formId/tag', auth(), errorCatcher(koboAnswer.updateTag))
+    router.patch('/kobo/answer/:formId', auth(), errorCatcher(koboAnswer.updateAnswers))
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
 
     router.post('/shelter/search', errorCatcher(shelter.search))
