@@ -60,6 +60,7 @@ export const styleUtils = (t: Theme) => ({
     return `${t.spacing(top)} ${t.spacing(right)} ${t.spacing(bottom)} ${t.spacing(left)}`
   },
   color: {
+    toolbar: t.palette.mode === 'dark' ? t.palette.background.paper : '#e9eef6',
     success: '#00b79f',
     error: '#cf0040',
     warning: '#ff9800',
