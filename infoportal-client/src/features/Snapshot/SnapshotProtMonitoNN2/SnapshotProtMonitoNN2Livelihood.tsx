@@ -111,7 +111,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
                 limit={4}
               />
             </SlidePanel>
-            <SlidePanel>
+            {/* <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.unemploymentFactors}</SlidePanelTitle>
               <ChartBarMultipleBy
                 by={_ => _.what_are_the_reasons_for_being_out_of_work}
@@ -119,7 +119,18 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
                 data={data}
                 filterValue={['unable_unwilling_to_answer']}
               />
-            </SlidePanel>
+            </SlidePanel> */}
+             <SlidePanel title={m.copyingMechanisms}>
+            <ChartBarMultipleBy
+              data={data}
+              by={_ => _.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges}
+              label={{
+                ...Protection_hhs2.options.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
+                reducing_consumption_of_food: m.protHHS2.reducing_consumption_of_food,
+              }}
+              filterValue={['unable_unwilling_to_answer']}
+            />
+          </SlidePanel>
           </Div>
         </Div>
       </PdfSlideBody>

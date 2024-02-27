@@ -25,9 +25,9 @@ export const SnapshotProtMonitoNN2Sample = () => {
         <Div>
           <Div column sx={{flex: 3.6}}>
             <SlideTxt>
-              This snapshot summarizes the findings of Protection Monitoring (PM) implemented through household surveys in Mykolaiv Oblast between August and September 2023. DRC
-              protection monitoring targeted Internally Displaced Persons (IDPs) and people directly exposed to and affected by the current armed conflict in order to understand
-              the protection needs facing affected populations; informing DRC and the protection communities' response.
+            This snapshot summarizes the findings of protection monitoring (PM) implemented through household surveys in Mykolaiv Oblast between 
+            December 2023 and January 2024. DRC protection monitoring targeted internally displaced persons (IDPs) and people directly exposed to and affected by the 
+            current armed conflict in order to understand the protection needs facing affected populations; informing DRC and the protection communities' response.
             </SlideTxt>
             <Box sx={{height: 316, borderRadius: t => t.shape.borderRadius}}>
               <PanelTitle sx={{mb: 3, mt: 1}}>{m.idpOriginOblast}</PanelTitle>

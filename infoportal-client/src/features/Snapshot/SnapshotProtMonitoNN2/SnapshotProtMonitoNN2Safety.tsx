@@ -16,7 +16,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
 
   return (
     <PdfSlide>
-      <SlideHeader>{m.snapshotProtMonito.safetyProtectionIncidents}</SlideHeader>
+      <SlideHeader>{m.snapshotProtMonito.MainProtectionNeeds}</SlideHeader>
       <PdfSlideBody>
         <Div>
           <Div column>
@@ -41,9 +41,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
                     //   __html: m.snapshotProtMonito.nn2.safety(_)
                     // }}
                   >
-                    96% of respondents indicating feeling unsafe or very unsafe reported shelling/threat of shelling as the main factor. Families with members serving with the
-                    military in the frontlines, as well as isolated elderly and persons with disabilities who were unable to flee because of age or physical impairment and/or lack
-                    of financial resources and who suffer from the breakdown of their usual support system, are particularly prone to high levels of anxiety and loneliness.
+                    <b>33%</b> of respondents indicated a poor sense of safety mainly due to shelling and UXOs contamination. Reports indicate challenges with the functionality of the air alert system, particularly in frontline communities. Additionally, the absence of operational and accessible bomb shelters forces residents to seek refuge in unreliable home basements. There are ongoing reports of considerable stress and deteriorating mental health and well-being, with older individuals and those with disabilities being particularly vulnerable to experiencing psychological distress.
                   </p>
                 }
               </Lazy>
@@ -53,8 +51,16 @@ export const SnapshotProtMonitoNN2Safety = () => {
               <ChartBarMultipleBy
                 data={data}
                 by={_ => _.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
-                label={Protection_hhs2.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
+                label={{
+                  ...Protection_hhs2.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members,
+                  other_specify: 'Other'
+                }}
                 filterValue={['unable_unwilling_to_answer']}
+                mergeOptions={{
+                  lack_of_access_to_employment_opportunities: 'other_specify',
+                  missing_family_members:'other_specify',
+                  fear_of_being_sexually_assaulted:'other_specify',
+                }}
               />
             </SlidePanel>
           </Div>
