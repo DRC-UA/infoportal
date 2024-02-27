@@ -89,7 +89,7 @@ export const DatabaseKoboTableContent = ({
               onChange={(e) => {
                 ctx.updateTag({
                   formId: ctx.form.id,
-                  submissionIds: [row.id],
+                  answerIds: [row.id],
                   tags: {_validation: e},
                 })
               }}

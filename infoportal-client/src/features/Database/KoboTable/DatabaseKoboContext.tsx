@@ -84,10 +84,10 @@ export const DatabaseKoboTableProvider = (props: {
   const updateTag = useCallback((params: Parameters<ApiSdk['kobo']['answer']['updateTag']>[0]) => {
     const req = api.kobo.answer.updateTag({
       formId: form.id,
-      submissionIds: params.submissionIds,
+      answerIds: params.answerIds,
       tags: params.tags,
     })
-    const updatedIds = new Set(params.submissionIds)
+    const updatedIds = new Set(params.answerIds)
     setMappedData(prev => prev.map(_ => updatedIds.has(_.id) ? ({..._, tags: params.tags as any}) : _))
     return req.catch(e => {
       toastError(m._koboDatabase.tagNotUpdated)
@@ -113,7 +113,7 @@ export const DatabaseKoboTableProvider = (props: {
     })
     await api.kobo.answer.updateTag({
       formId: form.id,
-      submissionIds: answerIds,
+      answerIds: answerIds,
       tags: {[key]: value}
     })
   })

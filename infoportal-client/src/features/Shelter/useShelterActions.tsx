@@ -52,7 +52,7 @@ export const useShelterActions = <T extends Record<string, any>, >({
     const loading = toastLoading(m._shelter.updatingTag(props.answerIds.length, props.key as string, props.value as string))
     await api.kobo.answer.updateTag({
       formId,
-      submissionIds: props.answerIds,
+      answerIds: props.answerIds,
       tags: {[props.key]: props.value},
     }).then(() => {
       loading.setOpen(false)
@@ -71,7 +71,7 @@ export const useShelterActions = <T extends Record<string, any>, >({
     const loading = toastLoading(m._shelter.updatingTag(1, key as string, value as string))
     return api.kobo.answer.updateTag({
       formId,
-      submissionIds: [answerId],
+      answerIds: [answerId],
       tags: {[key]: value},
     }).then(() => {
       loading.setOpen(false)

@@ -113,7 +113,7 @@ export const MpcaProvider = ({
     const newTags = {[key]: value}
     await api.kobo.answer.updateTag({
       formId,
-      submissionIds: answerIds,
+      answerIds: answerIds,
       tags: newTags,
     })
     fetcherData.set(prev => {

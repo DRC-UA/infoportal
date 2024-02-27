@@ -11,6 +11,7 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {useIpToast} from '@/core/useToast'
 import {Datepicker} from '@/shared/Datepicker/Datepicker'
+import {Alert} from 'mui-extension'
 
 export const DatatableKoboEditModal = ({
   formId,
@@ -25,11 +26,11 @@ export const DatatableKoboEditModal = ({
 }) => {
   const {m} = useI18n()
   const {api} = useAppSettings()
-  const {toastHttpError} = useIpToast()
+  // const {toastHttpError} = useIpToast()
   const ctx = useDatabaseKoboTableContext()
 
   const asyncUpdate = useAsync((params: any) => api.kobo.answer.updateSubmission(params))
-  useEffectFn(asyncUpdate.error, toastHttpError)
+  // useEffectFn(asyncUpdate.error, toastHttpError)
 
   const [value, setValue] = useState<any>()
 
@@ -43,6 +44,11 @@ export const DatatableKoboEditModal = ({
       onConfirm={() => asyncUpdate.call({formId, submissionIds, question: column, answer: value})}
       title={`${m.edit} (${submissionIds.length})`}
     >
+      {asyncUpdate.error && (
+        <Alert type="error">
+          {m.somethingWentWrong}
+        </Alert>
+      )}
       <Box sx={{mb: 1.5, minWidth: 340}}>{ctx.schema.translate.question(column)}</Box>
       {(() => {
         switch (columnDef.type) {
@@ -73,8 +79,7 @@ export const DatatableKoboEditModal = ({
           }
           case 'datetime':
           case 'date': {
-            return (<Datepicker value={value} onChange={setValue}/>
-            )
+            return <Datepicker value={value} onChange={setValue}/>
           }
         }
       })()}

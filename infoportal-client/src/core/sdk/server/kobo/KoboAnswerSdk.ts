@@ -65,31 +65,31 @@ export class KoboAnswerSdk {
 
   readonly updateSubmission = <T extends Record<string, any>, K extends KeyOf<T>>({
     formId,
-    submissionIds,
+    answerIds,
     question,
     answer,
   }: {
     formId: KoboId
-    submissionIds: KoboAnswerId[]
+    answerIds: KoboAnswerId[]
     question: K
     answer: T[K]
   }) => {
     return this.client.post(`/kobo/answer/${formId}/update`, {
       body: {
-        submissionIds,
+        answerIds: answerIds,
         question,
         answer,
       }
     })
   }
 
-  readonly updateTag = ({formId, submissionIds, tags}: {
+  readonly updateTag = ({formId, answerIds, tags}: {
     formId: KoboId,
-    submissionIds: KoboAnswerId[],
+    answerIds: KoboAnswerId[],
     tags: Record<string, any>
   }) => {
     for (let k in tags) if (tags[k] === undefined) tags[k] = null
-    return this.client.post(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: submissionIds}})
+    return this.client.post(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: answerIds}})
   }
 
   readonly getAllFromLocalForm = (filters: AnswersFilters = {}) => {
