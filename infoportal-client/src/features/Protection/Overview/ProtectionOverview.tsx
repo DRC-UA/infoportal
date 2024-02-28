@@ -4,13 +4,13 @@ import {Panel, PanelBody} from '@/shared/Panel'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import React from 'react'
+import React, {useState} from 'react'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {groupBy, koboFormTranslation, OblastName, Protection_pss} from '@infoportal-common'
 import {Sheet} from '@/shared/Sheet/Sheet'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Enum, Obj} from '@alexandreannic/ts-utils'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
@@ -19,8 +19,10 @@ import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {ProtectionOverviewFilterCustom} from '@/features/Protection/Overview/ProtectionOverviewFilterCustom'
+import {IpSelectMultiple, IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
 
 export const ProtectionOverview = () => {
+  const [displacementStatus, setDisplacementStatus] = useState<Protection_pss.Option<'hh_char_hh_det_status'>[]>([])
   const ctx = useProtectionContext()
   const {m, formatLargeNumber} = useI18n()
   if (!ctx.data) return
@@ -75,7 +77,14 @@ export const ProtectionOverview = () => {
             </Panel>
             <Panel title={m.ageGroup}>
               <PanelBody>
-                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered}/>
+                <IpSelectMultiple
+                  label={m.displacementStatus}
+                  sx={{maxWidth: 200, mb: 1}}
+                  options={Obj.entries(Protection_pss.options.hh_char_hh_det_status).map(([value, children]) => IpSelectMultipleHelper.makeOption({value, children}))}
+                  value={displacementStatus}
+                  onChange={setDisplacementStatus}
+                />
+                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered.filter(_ => displacementStatus.length === 0 || displacementStatus.includes(_.status!))}/>
               </PanelBody>
             </Panel>
             <Panel title={m.form}>
@@ -169,8 +178,22 @@ export const ProtectionOverview = () => {
                   {type: 'select_one', id: 'hromada', head: 'hromada', renderExport: _ => _.hromada, render: _ => _.hromada, renderValue: _ => _.hromada},
                   {type: 'number', id: 'protection_gbv', head: 'gbv', renderExport: _ => _.protection_gbv, render: _ => _.protection_gbv, renderValue: _ => _.protection_gbv},
                   {type: 'number', id: 'protection_pss', head: 'pss', renderExport: _ => _.protection_pss, render: _ => _.protection_pss, renderValue: _ => _.protection_pss},
-                  {type: 'number', id: 'protection_hhs2_1', head: 'hhs', renderExport: _ => _.protection_hhs2_1, render: _ => _.protection_hhs2_1, renderValue: _ => _.protection_hhs2_1},
-                  {type: 'number', id: 'protection_groupSession', head: 'groupSession', renderExport: _ => _.protection_groupSession, render: _ => _.protection_groupSession, renderValue: _ => _.protection_groupSession},
+                  {
+                    type: 'number',
+                    id: 'protection_hhs2_1',
+                    head: 'hhs',
+                    renderExport: _ => _.protection_hhs2_1,
+                    render: _ => _.protection_hhs2_1,
+                    renderValue: _ => _.protection_hhs2_1
+                  },
+                  {
+                    type: 'number',
+                    id: 'protection_groupSession',
+                    head: 'groupSession',
+                    renderExport: _ => _.protection_groupSession,
+                    render: _ => _.protection_groupSession,
+                    renderValue: _ => _.protection_groupSession
+                  },
                   {
                     id: 'actions', head: '', width: 120, renderExport: false, render: _ => (
                       <>

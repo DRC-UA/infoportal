@@ -5,6 +5,10 @@ import {makeSx} from '@/core/theme'
 
 type Option<T extends string | number = string> = {value: T, children: ReactNode, key?: string}
 
+export class IpSelectMultipleHelper {
+  static readonly makeOption = <T extends string | number = string>(_: Option<T>) => _
+}
+
 export interface IpSelectMultipleProps<T extends string | number = string> extends Pick<FormControlProps, 'placeholder' | 'disabled' | 'id'> {
   label?: ReactNode
   showUndefinedOption?: boolean
