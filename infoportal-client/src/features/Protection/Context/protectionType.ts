@@ -1,8 +1,9 @@
 import {DrcDonor, DrcOffice, DrcProject, Oblast, Person, Protection_pss} from '@infoportal-common'
 import {KoboAnswerMetaData} from '@/core/sdk/server/kobo/Kobo'
 
+export type DisplacementStatus = Protection_pss.Option<'hh_char_hh_det_status'>
 export interface PersonWithStatus extends Person.Person {
-  status: Protection_pss.Option<'hh_char_hh_det_status'>
+  status: DisplacementStatus
 }
 
 export type ProtectionKoboForm =
@@ -25,6 +26,7 @@ export interface ProtectionActivity extends KoboAnswerMetaData {
   project?: DrcProject[]
   donor?: DrcDonor[]
   persons?: PersonWithStatus[]
+  hhDisplacementStatus?: DisplacementStatus
   koboForm: ProtectionKoboForm
   // koboForm: Extract<KoboFormName,
   //   'protection_gbv' |

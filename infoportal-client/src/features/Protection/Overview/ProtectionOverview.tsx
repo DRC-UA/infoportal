@@ -20,9 +20,10 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {ProtectionOverviewFilterCustom} from '@/features/Protection/Overview/ProtectionOverviewFilterCustom'
 import {IpSelectMultiple, IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
+import {DisplacementStatus} from '@/features/Protection/Context/protectionType'
 
 export const ProtectionOverview = () => {
-  const [displacementStatus, setDisplacementStatus] = useState<Protection_pss.Option<'hh_char_hh_det_status'>[]>([])
+  const [displacementStatus, setDisplacementStatus] = useState<DisplacementStatus[]>([])
   const ctx = useProtectionContext()
   const {m, formatLargeNumber} = useI18n()
   if (!ctx.data) return
@@ -84,7 +85,9 @@ export const ProtectionOverview = () => {
                   value={displacementStatus}
                   onChange={setDisplacementStatus}
                 />
-                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered.filter(_ => displacementStatus.length === 0 || displacementStatus.includes(_.status!))}/>
+                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered.filter(_ =>
+                  displacementStatus.length === 0 || displacementStatus.includes(_.hhDisplacementStatus ?? _.status!)
+                )}/>
               </PanelBody>
             </Panel>
             <Panel title={m.form}>
