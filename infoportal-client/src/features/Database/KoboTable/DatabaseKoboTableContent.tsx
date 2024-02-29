@@ -22,6 +22,7 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {SelectValidationStatus} from '@/shared/customInput/SelectStatus'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
+import {DatatableKoboEditModal} from '@/features/Database/KoboTable/DatatableKoboEditModal'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -33,6 +34,7 @@ export const DatabaseKoboTableContent = ({
   const theme = useTheme()
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [selectedColumn, setSelectedColumn] = useState<string | undefined>()
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswer | undefined>()
   const [groupModalOpen, setOpenGroupModalAnswer] = useState<{
     columnId: string,
@@ -43,6 +45,7 @@ export const DatabaseKoboTableContent = ({
   const extraColumns = useCustomColumns()
   const schemaColumns = useMemo(() => {
     return getColumnBySchema({
+      selectedIds: selectedIds,
       data: ctx.data,
       schema: ctx.schema.schemaHelper.sanitizedSchema.content.survey,
       groupSchemas: ctx.schema.schemaHelper.groupSchemas,
@@ -52,8 +55,9 @@ export const DatabaseKoboTableContent = ({
       m,
       repeatGroupsAsColumn: repeatGroupsAsColumns,
       onOpenGroupModal: setOpenGroupModalAnswer,
+      onSelectColumn: setSelectedColumn,
     })
-  }, [ctx.schema.schemaUnsanitized, langIndex, repeatGroupsAsColumns])
+  }, [ctx.schema.schemaUnsanitized, langIndex, selectedIds, repeatGroupsAsColumns])
 
   const columns = useMemo(() => {
     const action: DatatableColumn.Props<any> = {
@@ -105,7 +109,7 @@ export const DatabaseKoboTableContent = ({
       <Datatable
         onFiltersChange={onFiltersChange}
         onDataChange={onDataChange}
-        select={ctx.canEdit && selectedHeader ? {
+        select={ctx.canEdit ? {
           onSelect: setSelectedIds,
           selectActions: selectedHeader,
           getId: _ => _.id,
@@ -172,6 +176,14 @@ export const DatabaseKoboTableContent = ({
           anchorEl={groupModalOpen.event.target}
           groupData={groupModalOpen.group}
           onClose={() => setOpenGroupModalAnswer(undefined)}
+        />
+      )}
+      {selectedColumn && (
+        <DatatableKoboEditModal
+          formId={ctx.form.id}
+          column={selectedColumn}
+          answerIds={selectedIds}
+          onClose={() => setSelectedColumn(undefined)}
         />
       )}
     </>

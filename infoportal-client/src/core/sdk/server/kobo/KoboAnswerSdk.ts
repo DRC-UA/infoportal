@@ -1,5 +1,5 @@
 import {ApiClient} from '../ApiClient'
-import {KoboIndex, Period, UUID} from '@infoportal-common'
+import {KeyOf, KoboIndex, Period, UUID} from '@infoportal-common'
 import {Kobo, KoboAnswer, KoboAnswerId, KoboBaseTags, KoboId} from '@/core/sdk/server/kobo/Kobo'
 import {AnswersFilters} from '@/core/sdk/server/kobo/KoboApiSdk'
 import {endOfDay, startOfDay} from 'date-fns'
@@ -9,6 +9,13 @@ import {ApiPaginate, ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
 export interface KoboAnswerFilter {
   readonly paginate?: ApiPagination
   readonly filters?: AnswersFilters
+}
+
+export type KoboUpdateAnswers<T extends Record<string, any>, K extends KeyOf<T>> = {
+  formId: KoboId
+  answerIds: KoboAnswerId[]
+  question: K
+  answer: T[K]
 }
 
 interface KoboAnswerSearch {
@@ -63,13 +70,28 @@ export class KoboAnswerSdk {
       .then(Kobo.mapPaginateAnswerMetaData(fnMapKobo, fnMapTags, fnMapCustom))
   }
 
+  readonly updateAnswers = <T extends Record<string, any>, K extends KeyOf<T>>({
+    formId,
+    answerIds,
+    question,
+    answer,
+  }: KoboUpdateAnswers<T, K>) => {
+    return this.client.patch(`/kobo/answer/${formId}`, {
+      body: {
+        answerIds: answerIds,
+        question,
+        answer,
+      }
+    })
+  }
+
   readonly updateTag = ({formId, answerIds, tags}: {
     formId: KoboId,
     answerIds: KoboAnswerId[],
     tags: Record<string, any>
   }) => {
     for (let k in tags) if (tags[k] === undefined) tags[k] = null
-    return this.client.post(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: answerIds}})
+    return this.client.patch(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: answerIds}})
   }
 
   readonly getAllFromLocalForm = (filters: AnswersFilters = {}) => {

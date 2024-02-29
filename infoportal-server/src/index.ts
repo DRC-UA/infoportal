@@ -39,7 +39,9 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  const prisma = new PrismaClient()
+  const prisma = new PrismaClient({
+    // log: ['query']
+  })
   const services = initServices(
     // koboSdk,
     // ecrecAppSdk,
