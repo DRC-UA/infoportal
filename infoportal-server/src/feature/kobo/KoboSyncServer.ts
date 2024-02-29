@@ -6,12 +6,20 @@ import {logger, Logger} from '../../helper/Logger'
 import {createdBySystem} from '../../db/DbInit'
 import {koboServerId} from '../../core/conf/KoboFormsId'
 import {seq} from '@alexandreannic/ts-utils'
+import {GlobalEvent} from '../../core/GlobalEvent'
+
+export type KoboSyncServerResult = {
+  answersIdsDeleted: KoboId[]
+  answersCreated: KoboAnswer[]
+  answersUpdated: KoboAnswer[]
+}
 
 export class KoboSyncServer {
 
   constructor(
     private prisma: PrismaClient,
     private koboSdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
+    private event = GlobalEvent.Class.getInstance(),
     private log: Logger = logger('KoboSyncServer')
   ) {
   }
@@ -31,17 +39,18 @@ export class KoboSyncServer {
 
   readonly syncApiForm = async ({serverId = koboServerId.prod, formId, updatedBy}: {serverId?: UUID, formId: KoboId, updatedBy?: string}) => {
     try {
-      this.log.info(`Synchronizing ${formId} by ${updatedBy}...`)
-      await this.syncApiFormInfo(serverId, formId)
-      await this.syncApiFormAnswers(serverId, formId)
-      await this.prisma.koboForm.update({
-        where: {id: formId},
-        data: {
-          updatedAt: new Date(),
-          updatedBy: updatedBy,
-        }
-      })
-      this.log.info(`Synchronizing ${formId} by ${updatedBy}... COMPLETED.`)
+      // this.log.info(`Synchronizing ${formId} by ${updatedBy}...`)
+      // await this.syncApiFormInfo(serverId, formId)
+      // const res = await this.syncApiFormAnswers(serverId, formId)
+      // await this.prisma.koboForm.update({
+      //   where: {id: formId},
+      //   data: {
+      //     updatedAt: new Date(),
+      //     updatedBy: updatedBy,
+      //   }
+      // })
+      // this.log.info(`Synchronizing ${formId} by ${updatedBy}... COMPLETED.`)
+      this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId})
     } catch (e) {
       this.log.info(`Synchronizing ${formId} by ${updatedBy}... FAILED.`)
       throw e
@@ -57,7 +66,7 @@ export class KoboSyncServer {
     })
   }
 
-  private readonly syncApiFormAnswers = async (serverId: UUID, formId: KoboId) => {
+  private readonly syncApiFormAnswers = async (serverId: UUID, formId: KoboId): Promise<KoboSyncServerResult> => {
     const sdk = await this.koboSdkGenerator.get(serverId)
     this.log.info(`Fetch remote answers...`)
     const remoteAnswers = await sdk.getAnswers(formId).then(_ => _.data)
@@ -74,6 +83,7 @@ export class KoboSyncServer {
       const idsToDelete = [...localAnswersIndex.keys()].filter(_ => !remoteIdsIndex.has(_))
       this.log.info(`Handle delete (${idsToDelete.length})...`)
       await this.prisma.koboAnswers.deleteMany({where: {source: null, formId, id: {in: idsToDelete}}})
+      return idsToDelete
     }
 
     const handleCreate = async () => {
@@ -98,10 +108,11 @@ export class KoboSyncServer {
         }
         return res
       })
-      return this.prisma.koboAnswers.createMany({
+      await this.prisma.koboAnswers.createMany({
         data: inserts,
         skipDuplicates: true,
       })
+      return notInsertedAnswers
     }
 
     const handleUpdate = async () => {
@@ -128,10 +139,16 @@ export class KoboSyncServer {
           }
         })
       }))
+      return answersToUpdate
     }
 
-    await handleDelete()
-    await handleCreate()
-    await handleUpdate()
+    const answersIdsDeleted = await handleDelete()
+    const answersCreated = await handleCreate()
+    const answersUpdated = await handleUpdate()
+    return {
+      answersIdsDeleted,
+      answersCreated,
+      answersUpdated,
+    }
   }
 }

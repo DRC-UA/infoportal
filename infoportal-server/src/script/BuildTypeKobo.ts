@@ -5,7 +5,7 @@ import * as fs from 'fs'
 import {ApiClient} from '../core/client/ApiClient'
 import {appConf} from '../core/conf/AppConf'
 import {KoboId} from '../feature/connector/kobo/KoboClient/type/KoboAnswer'
-import {KoboIndex} from '@infoportal-common'
+import {KoboIndex} from '../../../infoportal-common'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string,
@@ -200,6 +200,11 @@ export const generateKoboInterface = async (koboSdk: KoboSdk, outDir: string) =>
     {formName: 'Bn_OldMpcaNfi', formId: KoboIndex.byName('bn_1_mpcaNfi').id},
     {formName: 'Bn_OldMpcaNfiNaa', formId: KoboIndex.byName('bn_1_mpcaNfiNaa').id},
     {formName: 'Bn_OldMpcaNfiMyko', formId: KoboIndex.byName('bn_1_mpcaNfiMyko').id},
+    {
+      formName: 'Bn_cashForRentRegistration',
+      formId: KoboIndex.byName('bn_cashForRentRegistration').id,
+      skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion',]
+    },
     {
       formName: 'Protection_hhs2', formId: KoboIndex.byName('protection_hhs2').id,
       overrideAllOptions: {

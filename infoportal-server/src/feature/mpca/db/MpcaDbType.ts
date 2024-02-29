@@ -37,6 +37,7 @@ export enum MpcaProgram {
   CashForFuel = 'CashForFuel',
   CashForUtilities = 'CashForUtilities',
   CashForRent = 'CashForRent',
+  CashForRepair = 'CashForRepair',
   CashForEducation = 'CashForEducation',
   MPCA = 'MPCA',
 }

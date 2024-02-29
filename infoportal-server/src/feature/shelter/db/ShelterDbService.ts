@@ -52,7 +52,7 @@ export class ShelterDbService {
     })
 
     ta.forEach(d => {
-      const refId = d.nta_id ? d.nta_id.replaceAll(/[^\d]/g, '') : d.id
+      const refId = d.nta_id ? ('' + d.nta_id).replaceAll(/[^\d]/g, '') : d.id
       if (!index[refId]) index[refId] = {}
       const price = ShelterContractorPrices.compute({
         answer: d,

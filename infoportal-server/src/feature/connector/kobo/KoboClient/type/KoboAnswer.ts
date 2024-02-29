@@ -29,7 +29,7 @@ export type KoboAnswerMetaData<TTag extends Record<string, any> | undefined = un
   attachments?: KoboAttachment[]
   geolocation: ApiKoboAnswerMetaData['_geolocation']
   /** Extracted from question `date` when exists. */
-  date?: Date
+  date: Date
   submissionTime: ApiKoboAnswerMetaData['_submission_time']
   id: ApiKoboAnswerMetaData['_id']
   uuid: ApiKoboAnswerMetaData['_uuid']

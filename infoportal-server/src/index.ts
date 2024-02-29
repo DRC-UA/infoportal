@@ -9,10 +9,8 @@ import {logger} from './helper/Logger'
 // import {washRMM} from './feature/connector/activity-info/generatedModel/washRMM'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
-import {EventEmitter} from 'events'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
-
-export const appEventEmitter = new EventEmitter()
+import {KoboUnifiedService} from './feature/kobo/unified/KoboUnifiedService'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -88,7 +86,7 @@ const startApp = async (conf: AppConf) => {
     //   }
     // }))
 
-    console.log(`Master ${process.pid} is running`)
+    // console.log(`Master ${process.pid} is running`)
     // const core = conf.production ? os.cpus().length : 1
     // for (let i = 0; i < core; i++) {
     //   cluster.fork()
@@ -96,12 +94,14 @@ const startApp = async (conf: AppConf) => {
     // cluster.on('exit', (worker, code, signal) => {
     //   console.log(`Worker ${worker.process.pid} died`)
     // })
+    new KoboUnifiedService(prisma).start()
     if (conf.production) {
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
       ShelterCachedDb.constructSingleton(prisma).warmUp()
     }
   }
+
   const start = () => {
     new Server(
       conf,
@@ -112,9 +112,9 @@ const startApp = async (conf: AppConf) => {
     ).start()
   }
   // if (cluster.isPrimary) {
-    init()
+  init()
   // } else {
-    start()
+  start()
   // }
 }
 

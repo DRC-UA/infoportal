@@ -67,7 +67,10 @@ export class KoboAnswerSdk {
     fnMapCustom,
   }: any) => {
     return this.client.post<ApiPaginate<Record<string, any>>>(`/kobo/answer/${formId}`, {body: {...KoboAnswerSdk.mapFilters(filters), ...paginate}})
-      .then(Kobo.mapPaginateAnswerMetaData(fnMapKobo, fnMapTags, fnMapCustom))
+      .then(x => {
+        console.log(x.data)
+        return Kobo.mapPaginateAnswerMetaData(fnMapKobo, fnMapTags, fnMapCustom)(x)
+      })
   }
 
   readonly updateAnswers = <T extends Record<string, any>, K extends KeyOf<T>>({

@@ -1,6 +1,6 @@
 import {PrismaClient} from '@prisma/client'
 import {ApiPaginate, KoboIndex, Period, PeriodHelper, UUID, ApiPaginateHelper} from '@infoportal-common'
-import {KoboEvent} from '../../kobo/KoboEvent'
+import {GlobalEvent} from '../../../core/GlobalEvent'
 import {MemoryDatabase, MemoryDatabaseInterface} from '../../../core/MemoryDatabase'
 import {ShelterDbService} from './ShelterDbService'
 import {ShelterEntity} from './ShelterDbType'
@@ -27,9 +27,9 @@ export class ShelterCachedDb {
 
   private constructor(
     private meme: MemoryDatabaseInterface<ShelterEntity, UUID>,
-    private koboEvent: KoboEvent = new KoboEvent(),
+    private koboEvent: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
   ) {
-    this.koboEvent.listenTagEdited(async (x) => {
+    this.koboEvent.listen(GlobalEvent.Event.KOBO_TAG_EDITED, async (x) => {
       switch (x.formId) {
         case KoboIndex.byName('shelter_ta').id: {
           x.answerIds.forEach(id => {

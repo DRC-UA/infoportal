@@ -267,7 +267,7 @@ export class MpcaDbService {
           const oblast = OblastIndex.byKoboName(_.ben_det_oblast ?? (_ as any).ben_det_oblastgov)
           return ({
             source: 'shelter_cashForRepair',
-            prog: [MpcaProgram.CashForRent],
+            prog: [MpcaProgram.CashForRepair],
             enumerator: Shelter_cashForRepair.options.name_enum[_.name_enum!],
             oblast: oblast.name,
             oblastIso: oblast.iso,

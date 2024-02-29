@@ -9,8 +9,9 @@ import {KoboAnswersFilters} from '../../server/controller/kobo/ControllerKoboAns
 import {UserSession} from '../session/UserSession'
 import {AccessService} from '../access/AccessService'
 import {AppFeatureId} from '../access/AccessType'
-import {KoboEvent} from './KoboEvent'
+import {GlobalEvent} from '../../core/GlobalEvent'
 import {defaultPagination} from '../../core/Type'
+import Event = GlobalEvent.Event
 
 export interface KoboAnswerFilter {
   filters?: KoboAnswersFilters,
@@ -32,7 +33,7 @@ export class KoboService {
     private prisma: PrismaClient,
     private access = new AccessService(prisma),
     private sdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
-    private event: KoboEvent = new KoboEvent(),
+    private event: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
   ) {
   }
 
@@ -116,6 +117,7 @@ export class KoboService {
     }).then(_ => _.map(d => ({
       start: d.start,
       end: d.end,
+      date: d.date,
       version: d.version ?? undefined,
       attachments: d.attachments,
       geolocation: d.geolocation,
@@ -351,7 +353,7 @@ export class KoboService {
         }
       })
     }))
-    this.event.emitTagEdited({formId, answerIds, tags})
+    this.event.emit(Event.KOBO_TAG_EDITED, {formId, answerIds, tags})
   }
 }
 
