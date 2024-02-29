@@ -103,6 +103,8 @@ export enum DrcProject {
   'UKR-000340 Augustinus Fonden' = 'UKR-000340 Augustinus Fonden',
 }
 
+export const allProjects = Obj.values(DrcProject)
+
 export class DrcProjectHelper {
   static readonly list = Obj.keys(DrcProject)
 
