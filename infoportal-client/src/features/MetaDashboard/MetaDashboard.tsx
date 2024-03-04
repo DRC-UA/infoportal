@@ -28,18 +28,22 @@ export const MetaDashboard = () => {
   if (!data) return <></>
   return (
     <Layout>
-      <_MetaDashboard data={data}/>
+      <_MetaDashboard data={data} loading={fetcherKoboUnified.loading}/>
     </Layout>
   )
 }
 
-export const _MetaDashboard = ({data}: {
+export const _MetaDashboard = ({
+  data,
+  loading,
+}: {
+  loading?: boolean
   data: Seq<KoboUnified>
 }) => {
   const {m, formatLargeNumber} = useI18n()
   const ctx = useMetaDashboardData(data)
   return (
-    <Page width="lg">
+    <Page width="lg" loading={loading}>
       <DataFilterLayout
         data={ctx.filteredData}
         filters={ctx.filters}
@@ -73,7 +77,9 @@ export const _MetaDashboard = ({data}: {
         </Div>
         <Div>
           <Div column>
-            <SlidePanel title={m.ageGroup}><AgeGroupTable tableId="meta-dashboard" persons={ctx.filteredPersons}/></SlidePanel>
+            <SlidePanel title={m.ageGroup}>
+              <AgeGroupTable tableId="meta-dashboard" persons={ctx.filteredPersons} enableDisplacementStatusFilter/>
+            </SlidePanel>
             <SlidePanel title={m.currentOblast}>
               <UaMapBy sx={{mx: 2}} getOblast={_ => OblastIndex.byName(_.oblast).iso} data={ctx.filteredData} fillBaseOn="value"/>
             </SlidePanel>

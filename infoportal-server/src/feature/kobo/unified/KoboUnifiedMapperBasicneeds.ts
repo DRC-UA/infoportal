@@ -7,16 +7,7 @@ export class KoboUnifiedBasicneeds {
 
   static readonly bn_re = (row: KoboUnifiedOrigin<Bn_Re.T>): KoboUnifiedCreate => {
     const answer = Bn_Re.map(row.answers)
-    const group = [...answer.hh_char_hh_det ?? [],
-      {
-        hh_char_hh_det_age: answer.hh_char_hhh_age,
-        hh_char_hh_det_gender: answer.hh_char_hhh_gender
-      },
-      {
-        hh_char_hh_det_age: answer.hh_char_res_age,
-        hh_char_hh_det_gender: answer.hh_char_res_gender,
-      },
-    ].filter(_ => _.hh_char_hh_det_gender !== undefined || _.hh_char_hh_det_age !== undefined)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = seq(answer.back_donor ?? []).filter(_ => _ !== '' as any).distinct(_ => _).map(d => fnSwitch(d, {
       uhf_chj: DrcProject['UKR-000314 UHF4'],
@@ -113,21 +104,39 @@ export class KoboUnifiedBasicneeds {
   static readonly bn_rrm = (row: KoboUnifiedOrigin<Bn_RapidResponse.T>): undefined | KoboUnifiedCreate => {
     const answer = Bn_RapidResponse.map(row.answers)
     if (answer.form_length === 'short') return
-    const group = [...answer.hh_char_hh_det_l?.map(_ => ({
-      hh_char_hh_det_age: _.hh_char_hh_det_age_l,
-      hh_char_hh_det_gender: _.hh_char_hh_det_gender_l,
-      hh_char_hh_det_dis_level: _.hh_char_hh_det_dis_level_l,
-      hh_char_hh_det_dis_select: _.hh_char_hh_det_dis_select_l,
-    })) ?? [],
-      {
-        hh_char_hh_det_age: answer.hh_char_hhh_age_l,
-        hh_char_hh_det_gender: answer.hh_char_hhh_gender_l
-      },
-      {
-        hh_char_hh_det_age: answer.hh_char_res_age_l,
-        hh_char_hh_det_gender: answer.hh_char_res_gender_l,
-      },
-    ].filter(_ => _.hh_char_hh_det_age !== undefined || _.hh_char_hh_det_gender !== undefined)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals({
+      hh_char_hh_det: answer.hh_char_hh_det_l?.map(_ => ({
+        hh_char_hh_det_age: _.hh_char_hh_det_age_l,
+        hh_char_hh_det_gender: _.hh_char_hh_det_gender_l,
+        hh_char_hh_det_dis_level: _.hh_char_hh_det_dis_level_l,
+        hh_char_hh_det_dis_select: _.hh_char_hh_det_dis_select_l,
+      })),
+      hh_char_hhh_age: answer.hh_char_hhh_age_l,
+      hh_char_hhh_gender: answer.hh_char_hhh_gender_l,
+      hh_char_hhh_dis_level: answer.hh_char_hhh_dis_level_l,
+      hh_char_hhh_dis_select: answer.hh_char_hhh_dis_select_l,
+      hh_char_res_age: answer.hh_char_res_age_l,
+      hh_char_res_gender: answer.hh_char_res_gender_l,
+      hh_char_res_dis_level: answer.hh_char_res_dis_level_l,
+      hh_char_res_dis_select: answer.hh_char_res_dis_select_l,
+      ben_det_res_stat: answer.ben_det_res_stat_l,
+    })
+
+    // const group = [...answer.hh_char_hh_det_l?.map(_ => ({
+    //   hh_char_hh_det_age: _.hh_char_hh_det_age_l,
+    //   hh_char_hh_det_gender: _.hh_char_hh_det_gender_l,
+    //   hh_char_hh_det_dis_level: _.hh_char_hh_det_dis_level_l,
+    //   hh_char_hh_det_dis_select: _.hh_char_hh_det_dis_select_l,
+    // })) ?? [],
+    //   {
+    //     hh_char_hh_det_age: answer.hh_char_hhh_age_l,
+    //     hh_char_hh_det_gender: answer.hh_char_hhh_gender_l
+    //   },
+    //   {
+    //     hh_char_hh_det_age: answer.hh_char_res_age_l,
+    //     hh_char_hh_det_gender: answer.hh_char_res_gender_l,
+    //   },
+    // ].filter(_ => _.hh_char_hh_det_age !== undefined || _.hh_char_hh_det_gender !== undefined)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = fnSwitch(answer.back_donor_l!, {
       sdc_umy: DrcProject[`UKR-000330 SDC2`],

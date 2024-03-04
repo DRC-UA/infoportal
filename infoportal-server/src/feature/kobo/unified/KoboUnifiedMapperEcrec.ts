@@ -18,19 +18,9 @@ export class KoboUnifiedMapperEcrec {
 
   static readonly cashRegistration = (answer: KoboUnifiedOrigin<Ecrec_cashRegistration.T>): KoboUnifiedCreate => {
     const _ = answer.answers
-    const group = [..._.hh_char_hh_det ?? [],
-      {
-        hh_char_hh_det_age: _.hh_char_hhh_age,
-        hh_char_hh_det_gender: _.hh_char_hhh_gender
-      },
-      {
-        hh_char_hh_det_age: _.hh_char_res_age,
-        hh_char_hh_det_gender: _.hh_char_res_gender,
-      },
-    ].filter(_ => _.hh_char_hh_det_gender !== undefined || _.hh_char_hh_det_age !== undefined)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
     const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
     const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistration.options.back_donor[_.back_donor!])
-    console.log(_.back_donor, project)
 
     return {
       id: answer.id,
@@ -52,13 +42,7 @@ export class KoboUnifiedMapperEcrec {
       sector: DrcSector.Livelihoods,
       activity: [DrcProgram.SectoralCash],
       individualsCount: safeNumber(_.ben_det_hh_size),
-      individuals: group.map(p => ({
-        age: safeNumber(p.hh_char_hh_det_age),
-        gender: fnSwitch(p.hh_char_hh_det_gender!, {
-          female: Person.Gender.Female,
-          male: Person.Gender.Male,
-        }, () => void 0)
-      })),
+      individuals: group.map(KoboGeneralMapping.mapPersonDetails),
       project: project ? [project] : [],
       donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
       lastName: _.ben_det_surname,
@@ -71,7 +55,7 @@ export class KoboUnifiedMapperEcrec {
 
   static readonly cashRegistrationBha = (answer: KoboUnifiedOrigin<Ecrec_cashRegistrationBha.T>): KoboUnifiedCreate => {
     const _ = answer.answers
-    const group = [..._.hh_char_hh_det ?? []].filter(_ => _.hh_char_hh_det_gender !== undefined || _.hh_char_hh_det_age !== undefined)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
     const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
     const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistrationBha.options.back_donor[_.back_donor!])
 

@@ -62,7 +62,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         render: (row: {custom: KoboGeneralMapping.IndividualBreakdown}) => {
           return {
             value: row.custom.disabilities,
-            label: row.custom.disabilities.map(_ => Ecrec_cashRegistration.options.hh_char_dis_select[_]).join(' | '),
+            label: row.custom.disabilities.join(' | '),
           }
         }
       },

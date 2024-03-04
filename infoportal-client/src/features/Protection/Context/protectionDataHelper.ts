@@ -1,6 +1,6 @@
 import {
-  AILocationHelper, allProjects,
-  DrcProject,
+  AILocationHelper,
+  allProjects,
   DrcProjectHelper,
   KoboGeneralMapping,
   KoboProtection_hhs3,
@@ -36,7 +36,7 @@ export class ProtectionDataHelper {
       hromada: aiLoc.Hromada,
       project: [project],
       donor: [DrcProjectHelper.donorByProject[project!]],
-      persons: d.hh_char_hh_det?.filter((_: any) => _.hh_char_hh_new_ben !== 'no').map(KoboGeneralMapping.mapPersonWithStatus),
+      persons: d.hh_char_hh_det?.filter((_: any) => _.hh_char_hh_new_ben !== 'no').map(KoboGeneralMapping.mapPersonDetails),
     }
   }
 
@@ -53,7 +53,7 @@ export class ProtectionDataHelper {
       hromada: aiLoc.Hromada,
       project: [project],
       donor: [DrcProjectHelper.donorByProject[project!]],
-      persons: d.hh_char_hh_det?.map(KoboGeneralMapping.mapPersonWithStatus),
+      persons: d.hh_char_hh_det?.map(KoboGeneralMapping.mapPersonDetails),
     }
   }
 
@@ -70,7 +70,7 @@ export class ProtectionDataHelper {
       hromada: aiLoc.Hromada,
       project: [project],
       donor: [DrcProjectHelper.donorByProject[project!]],
-      persons: d.hh_char_hh_det?.map(KoboGeneralMapping.mapPersonWithStatus),
+      persons: d.hh_char_hh_det?.map(KoboGeneralMapping.mapPersonDetails),
       // ?.filter((_: any) => _.hh_char_hh_new_ben !== 'no')
     }
   }

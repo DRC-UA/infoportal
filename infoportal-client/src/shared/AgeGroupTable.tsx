@@ -1,37 +1,57 @@
-import {add, Person} from '@infoportal-common'
-import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
+import {add, DisplacementStatus, Person, PersonDetails} from '@infoportal-common'
 import {Sheet} from '@/shared/Sheet/Sheet'
-import React, {useMemo} from 'react'
+import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Enum, Obj} from '@alexandreannic/ts-utils'
+import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 
+const displacementStatusOptions = Obj.values(DisplacementStatus)
 
 export const AgeGroupTable = ({
   tableId,
   persons,
+  enableDisplacementStatusFilter,
 }: {
+  enableDisplacementStatusFilter?: boolean
   tableId: string
-  persons?: Person.Person[]
+  persons?: PersonDetails[]
 }) => {
+  const [displacementStatus, setDisplacementStatus] = useState<DisplacementStatus[]>([])
   const [tableAgeGroup, setTableAgeGroup] = usePersistentState<typeof Person.ageGroups[0]>('ECHO', {storageKey: 'mpca-dashboard-ageGroup'})
   const {m, formatLargeNumber} = useI18n()
+
   const data = useMemo(() => {
     if (!persons) return
-    const gb = Person.groupByGenderAndGroup(Person.getAgeGroup(tableAgeGroup))(persons)
+    const filteredPersons = enableDisplacementStatusFilter ? persons.filter(_ => displacementStatus.length === 0 || displacementStatus.includes(_.displacement!)) : persons
+    const gb = Person.groupByGenderAndGroup(Person.getAgeGroup(tableAgeGroup))(filteredPersons)
     return Enum.entries(gb).map(([k, v]) => ({ageGroup: k, ...v}))
-  }, [persons, tableAgeGroup])
+  }, [persons, tableAgeGroup, displacementStatus])
+
   return (
     <Sheet
       id={tableId}
       className="ip-border"
       hidePagination
       header={
-        <ScRadioGroup value={tableAgeGroup} onChange={setTableAgeGroup} dense inline>
-          {Person.ageGroups.map(_ =>
-            <ScRadioGroupItem key={_} value={_} title={m._ageGroup[_]} hideRadio/>
+        <>
+          {enableDisplacementStatusFilter && (
+            <IpSelectMultiple
+              label={m.displacementStatus}
+              sx={{maxWidth: 160, mr: 1}}
+              options={displacementStatusOptions}
+              value={displacementStatus}
+              onChange={setDisplacementStatus}
+            />
           )}
-        </ScRadioGroup>
+          <IpSelectSingle label={m.ageGroup} sx={{maxWidth: 100}} options={Person.ageGroups} hideNullOption onChange={setTableAgeGroup} value={tableAgeGroup}/>
+          {/*<ScRadioGroup value={tableAgeGroup} onChange={setTableAgeGroup} dense inline>*/}
+          {/*  {Person.ageGroups.map(_ =>*/}
+          {/*    <ScRadioGroupItem key={_} value={_} title={m._ageGroup[_]} hideRadio/>*/}
+          {/*  )}*/}
+          {/*</ScRadioGroup>*/}
+        </>
       }
       data={data}
       columns={[
