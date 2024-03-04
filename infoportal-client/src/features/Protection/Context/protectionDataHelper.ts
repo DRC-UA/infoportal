@@ -53,7 +53,7 @@ export class ProtectionDataHelper {
       hromada: aiLoc.Hromada,
       project: [project],
       donor: [DrcProjectHelper.donorByProject[project!]],
-      persons: d.hh_char_hh_det?.map(KoboGeneralMapping.mapPersonDetails),
+      persons: d.hh_char_hh_det?.filter((_: any) => _.hh_char_hh_new_ben !== 'no').map(KoboGeneralMapping.mapPersonDetails),
     }
   }
 
@@ -76,7 +76,6 @@ export class ProtectionDataHelper {
   }
 
   static readonly mapHhs = (d: KoboProtection_hhs3.T): ProtectionActivity => {
-    console.log(d.tags?.projects)
     return {
       ...Kobo.extraxtAnswerMetaData(d),
       date: d.date,

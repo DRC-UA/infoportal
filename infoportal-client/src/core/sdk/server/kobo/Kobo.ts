@@ -51,6 +51,7 @@ export interface KoboBaseTags {
 export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {
   start: Date
   end: Date
+  date: Date
   version: string
   submissionTime: Date
   submittedBy?: string
@@ -104,8 +105,8 @@ export class Kobo {
       ..._,
       data: _.data.map(({answers, ...meta}) => {
         const r = {
-          ...Kobo.mapAnswerMetaData(meta, fnMapTags),
           ...fnMap(answers),
+          ...Kobo.mapAnswerMetaData(meta, fnMapTags),
         }
         return fnMapCustom ? fnMapCustom(r) : r
       })
@@ -149,6 +150,7 @@ export class Kobo {
       ...k,
       start: new Date(k.start),
       end: new Date(k.end),
+      date: new Date(k.date),
       submissionTime: new Date(k.submissionTime),
       version: k.version,
       id: k.id,
