@@ -33,6 +33,7 @@ const builtEnum = buildEnumFromObject([
 
 export type MpcaRowSource = keyof typeof builtEnum
 
+/** @deprecated Use DrcProgram */
 export enum MpcaProgram {
   CashForFuel = 'CashForFuel',
   CashForUtilities = 'CashForUtilities',

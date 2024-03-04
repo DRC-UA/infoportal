@@ -1,5 +1,7 @@
-import {DisplacementStatus, DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector, OblastName, PersonDetails, UUID} from '@infoportal-common'
-import {KoboAnswerMetaData, KoboId} from '../../connector/kobo/KoboClient/type/KoboAnswer'
+import {UUID} from '../type/Generic'
+import {OblastName} from '../location'
+import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc'
+import {DisplacementStatus, KoboId, PersonDetails} from './mapper'
 
 export type KoboUnified = {
   id: UUID
@@ -27,13 +29,3 @@ export type KoboUnified = {
   individualsCount?: number
   individuals?: PersonDetails[]
 }
-
-export type KoboUnifiedOrigin<T extends Record<string, any> = any> = {
-  formId: KoboAnswerMetaData['id']
-  uuid: KoboAnswerMetaData['uuid']
-  answers: T
-  date: KoboAnswerMetaData['date']
-  id: KoboAnswerMetaData['id']
-}
-
-export type KoboUnifiedCreate = KoboUnified

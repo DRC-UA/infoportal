@@ -12,6 +12,22 @@ export enum DrcOffice {
   Chernivtsi = 'Chernivtsi',
 }
 
+export const drcOffices = Obj.values(DrcOffice)
+
+export enum DrcProgram {
+  CashForFuel = 'CashForFuel',
+  CashForUtilities = 'CashForUtilities',
+  CashForRent = 'CashForRent',
+  CashForRepair = 'CashForRepair',
+  CashForEducation = 'CashForEducation',
+  MPCA = 'MPCA',
+  NFI = 'NFI',
+  ESK = 'ESK',
+  InfantWinterClothing = 'InfantWinterClothing',
+  InfantHygieneKit = 'InfantHygieneKit',
+  SectoralCash = 'Sectoral Cash',
+}
+
 export const drcOfficeShort: Record<DrcOffice, string> = {
   [DrcOffice.Kyiv]: 'KYV',
   [DrcOffice.Sumy]: 'UMY',

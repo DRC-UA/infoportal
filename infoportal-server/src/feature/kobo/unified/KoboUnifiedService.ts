@@ -6,13 +6,17 @@ import {KoboUnifiedBasicneeds} from './KoboUnifiedMapperBasicneeds'
 import {KoboUnifiedCreate, KoboUnifiedOrigin} from './KoboUnifiedType'
 import {logger, Logger} from '../../../helper/Logger'
 import {KoboService} from '../KoboService'
-import {UUID} from '@infoportal-common'
+import {KoboUnified, UUID} from '@infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 import Event = GlobalEvent.Event
+import {KoboUnifiedMapperEcrec} from './KoboUnifiedMapperEcrec'
 
 class KoboUnifiedMapper {
-  static readonly map: Record<KoboId, (_: KoboAnswerFlat<any>) => KoboUnifiedCreate> = {
+  static readonly mappers: Record<KoboId, (_: KoboAnswerFlat<any>) => KoboUnifiedCreate | undefined> = {
     [koboFormsId.prod.bn_re]: KoboUnifiedBasicneeds.bn_re,
+    [koboFormsId.prod.bn_rapidResponse]: KoboUnifiedBasicneeds.bn_rrm,
+    [koboFormsId.prod.ecrec_cashRegistration]: KoboUnifiedMapperEcrec.cashRegistration,
+    [koboFormsId.prod.ecrec_cashRegistrationBha]: KoboUnifiedMapperEcrec.cashRegistrationBha,
   }
 }
 
@@ -28,14 +32,18 @@ export class KoboUnifiedService {
 
   readonly start = () => {
     this.log.info(`Start listening to ${Event.KOBO_FORM_SYNCHRONIZED}`)
-    this.event.listen(Event.KOBO_FORM_SYNCHRONIZED, this.synchronize)
+    this.event.listen(Event.KOBO_FORM_SYNCHRONIZED, _ => {
+      if()
+      this.synchronize(_)
+    })
   }
 
-  private build = async ({
-    formId,
-  }: {formId: KoboId}) => {
-    const answers = await this.kobo.searchAnswers({formId}).then(_ => _.data)
-
+  readonly search = () => {
+    return this.prisma.koboAnsersUnified.findMany({
+      include: {
+        individuals: true
+      }
+    })
   }
 
   private synchronize = async ({
@@ -43,13 +51,13 @@ export class KoboUnifiedService {
   }: {
     formId: KoboId
   }) => {
-    const mapper = KoboUnifiedMapper.map[formId]
+    const mapper = KoboUnifiedMapper.mappers[formId]
     if (!mapper) {
       this.log.error(`No mapper implemented for ${formId}`)
       return
     }
     this.log.info(`Fetch remote answers...`)
-    const remoteAnswers: KoboUnifiedOrigin[] = await this.prisma.koboAnswers.findMany({
+    const remoteAnswers = await this.prisma.koboAnswers.findMany({
       select: {
         formId: true,
         uuid: true,
@@ -58,8 +66,8 @@ export class KoboUnifiedService {
         id: true
       },
       where: {formId}
-    })
-    const remoteIdsIndex: Map<KoboId, KoboUnifiedOrigin> = remoteAnswers.reduce((map, curr) => map.set(curr.id, curr), new Map<KoboId, KoboUnifiedOrigin>)
+    }).then((_: KoboUnifiedOrigin[]) => seq(_).map(mapper).compact())
+    const remoteIdsIndex: Map<KoboId, KoboUnified> = remoteAnswers.reduce((map, curr) => map.set(curr.id, curr), new Map<KoboId, KoboUnified>)
 
     this.log.info(`Fetch remote answers... ${remoteAnswers.length} fetched.`)
 
@@ -79,15 +87,18 @@ export class KoboUnifiedService {
     const handleCreate = async () => {
       const notInsertedAnswers = remoteAnswers.filter(_ => !localAnswersIndex.has(_.id))
       this.log.info(`Handle create (${notInsertedAnswers.length})...`)
-      const mapped = notInsertedAnswers.map(mapper)
-      const individuals = mapped.flatMap(_ => {
-        const res: Prisma.KoboIndividualUncheckedCreateInput[] = _.individuals?.map(ind => ({...ind, unifiedId: _.id})) ?? []
+      const individuals = notInsertedAnswers.flatMap(_ => {
+        const res: Prisma.KoboIndividualUncheckedCreateInput[] = _.individuals?.map(ind => ({
+          ...ind,
+          disability: ind.disability ?? [],
+          unifiedId: _.id
+        })) ?? []
         delete _['individuals']
         return res
       })
       await this.prisma.koboAnsersUnified.createMany({
-        data: mapped,
-        // skipDuplicates: true,
+        data: notInsertedAnswers,
+        skipDuplicates: true,
       })
       await this.prisma.koboIndividual.createMany({
         data: individuals
@@ -103,7 +114,7 @@ export class KoboUnifiedService {
       }).compact()
       this.log.info(`Handle update (${answersToUpdate.length})...`)
       await Promise.all(answersToUpdate.map(a => {
-        const {individuals, ...answer} = mapper(a)
+        const {individuals, ...answer} = a
         return this.prisma.koboAnsersUnified.update({
           where: {
             id: a.id,

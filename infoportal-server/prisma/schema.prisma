@@ -65,12 +65,13 @@ enum Gender {
 }
 
 model KoboIndividual {
-  id         String             @id @default(uuid())
-  age        Int?
-  gender     Gender?
-  disability String?
-  unified    KoboAnsersUnified? @relation(fields: [unifiedId], references: [id])
-  unifiedId  String?
+  id           String            @id @default(uuid())
+  age          Int?
+  gender       Gender?
+  disability   String[]
+  displacement String?
+  unified      KoboAnsersUnified @relation(fields: [unifiedId], references: [id], onDelete: Cascade)
+  unifiedId    String
 }
 
 model KoboAnsersUnified {

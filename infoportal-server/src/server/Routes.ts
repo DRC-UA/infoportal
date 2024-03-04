@@ -22,6 +22,7 @@ import {ControllerMpca} from './controller/ControllerMpca'
 import {ControllerShelter} from './controller/ControllerShelter'
 import {ControllerMealVerification} from './controller/ControllerMealVerification'
 import {ControllerGroup} from './controller/ControllerGroup'
+import {ControllerKoboUnified} from './controller/ControllerKoboUnified'
 
 export interface AuthenticatedRequest extends Request {
   user?: UserSession
@@ -71,6 +72,7 @@ export const getRoutes = (
   const proxy = new ControllerProxy(prisma)
   const shelter = new ControllerShelter(prisma)
   const mealVerification = new ControllerMealVerification(prisma)
+  const koboUnified = new ControllerKoboUnified(prisma)
 
   const auth = ({adminOnly = false}: {adminOnly?: boolean} = {}) => async (req: Request, res: Response, next: NextFunction) => {
     // req.session.user = {
@@ -105,6 +107,8 @@ export const getRoutes = (
     router.post('/session/connect-as-revert', auth(), errorCatcher(session.revertConnectAs))
     router.delete('/session', errorCatcher(session.logout))
     router.get('/session', errorCatcher(session.get))
+
+    router.post('/kobo-unified/search', errorCatcher(koboUnified.search))
 
     router.put('/proxy', auth({adminOnly: true}), errorCatcher(proxy.create))
     router.post('/proxy/:id', auth({adminOnly: true}), errorCatcher(proxy.update))

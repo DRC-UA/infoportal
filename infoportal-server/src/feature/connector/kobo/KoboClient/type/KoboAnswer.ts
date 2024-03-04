@@ -1,8 +1,10 @@
 import {ApiPaginate, Period, UUID} from '@infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 
+/** @deprecated use from common lib*/
 export type KoboId = string
 
+/** @deprecated use from common lib*/
 export type KoboAnswerId = string
 
 export interface KoboAnswerParams extends Partial<Period> {

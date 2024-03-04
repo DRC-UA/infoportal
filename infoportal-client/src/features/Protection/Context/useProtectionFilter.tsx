@@ -21,11 +21,7 @@ export const useProtectionFilters = (data?: Seq<ProtectionActivity>, flatData?: 
   const {m} = useI18n()
   const {conf} = useAppSettings()
   const [custom, setCustom] = useState<ProtectionCustomFilter>({})
-  const [period, setPeriod] = useState<Partial<Period>>({
-    start: startOfDay(new Date(2023, 4, 1)),
-    end: endOfDay(new Date(2023, 11, 31))
-  })
-
+  const [period, setPeriod] = useState<Partial<Period>>({})
   const shape = useMemo(() => {
     const d = data ?? seq([])
     return DataFilter.makeShape<ProtectionActivity>({

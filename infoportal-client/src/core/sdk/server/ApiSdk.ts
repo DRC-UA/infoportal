@@ -17,6 +17,7 @@ import {GroupSdk} from '@/core/sdk/server/group/GroupSdk'
 import {ShelterSdk} from '@/core/sdk/server/shelter/ShelterSdk'
 import {MealVerificationClient} from '@/core/sdk/server/mealVerification/MealVerificationClient'
 import {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {KoboUnifiedSdk} from '@/core/sdk/server/kobo-unified/KoboUnifiedSdk'
 
 export class ApiSdk {
   constructor(private client: ApiClient) {
@@ -36,6 +37,7 @@ export class ApiSdk {
   }
   readonly session = new SessionSdk(this.client)
   readonly nfi = new NfiMPcaSdk(this.client)
+  readonly koboUnified = new KoboUnifiedSdk(this.client)
   readonly kobo = {
     typedAnswers: new KoboTypedAnswerSdk(this.client),
     answer: new KoboAnswerSdk(this.client),
