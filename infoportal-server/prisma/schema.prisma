@@ -36,7 +36,7 @@ model KoboAnswers {
   formId                 String
   start                  DateTime
   end                    DateTime
-  date                   DateTime?
+  date                   DateTime
   version                String?
   submissionTime         DateTime
   validationStatus       String?
@@ -52,7 +52,7 @@ model KoboAnswers {
 
   mpcaPaymentTools  MpcaPaymentToolAnswers[]
   mealVerifications MealVerificationAnswers[]
-  index             KoboAnsersIndex?
+  unified           KoboAnsersUnified?
 
   @@unique([id, formId])
   @@index([start, end, submissionTime, formId])
@@ -64,38 +64,45 @@ enum Gender {
   Other
 }
 
-model KoboAnsersIndividual {
-  id                String           @id
-  age               Int?
-  gender            Gender?
-  disability        String?
-  KoboAnsersIndex   KoboAnsersIndex? @relation(fields: [koboAnsersIndexId], references: [id])
-  koboAnsersIndexId String?
+model KoboIndividual {
+  id           String            @id @default(uuid())
+  age          Int?
+  gender       Gender?
+  disability   String[]
+  displacement String?
+  unified      KoboAnsersUnified @relation(fields: [unifiedId], references: [id], onDelete: Cascade)
+  unifiedId    String
 }
 
-model KoboAnsersIndex {
-  id        String      @id
-  answer    KoboAnswers @relation(fields: [answersId], references: [id], onDelete: Cascade)
-  answersId String
+model KoboAnsersUnified {
+  id               String      @id
+  uuid             String
+  answer           KoboAnswers @relation(fields: [id], references: [id], onDelete: Cascade)
+  formId           String
+  referencedFormId String?
+  date             DateTime
 
-  oblast         String?
-  raion          String?
-  hromada        String?
-  settlement     String?
-  taxId          String?
-  firstName      String?
-  lastName       String?
-  patronymicName String?
-  phone          String?
-  activity       String?
-  office         String?
-  project        String?
-  donor          String?
-  disStatus      String?
+  oblast           String?
+  raion            String?
+  hromada          String?
+  settlement       String?
+  individualsCount Int?
+  enumerator       String?
+  taxId            String?
+  firstName        String?
+  lastName         String?
+  patronymicName   String?
+  phone            String?
+  activity         String[]
+  sector           String?
+  office           String?
+  project          String[]
+  donor            String[]
+  disStatus        String?
+  address          String?
 
-  individuals KoboAnsersIndividual[]
+  individuals KoboIndividual[]
 
-  @@unique([answersId])
   @@index([project, oblast, taxId, phone, activity, office])
 }
 

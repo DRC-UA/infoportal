@@ -1,7 +1,8 @@
 import {Protection_hhs3} from '../generated/Protection_hhs3'
-import {KoboAnswer, KoboBaseTags, KoboGeneralMapping, PersonDetails} from './Common'
+import {KoboAnswer, KoboBaseTags, PersonDetails} from './Common'
 import {Protection_hhs2} from '../generated/Protection_hhs2'
 import {DrcDonor, DrcProject} from '../../type/Drc'
+import {KoboGeneralMapping} from './KoboMapper'
 
 export namespace KoboProtection_hhs3 {
 
@@ -18,7 +19,7 @@ export namespace KoboProtection_hhs3 {
     const r: T = d as unknown as T
     r.persons = d.hh_char_hh_det?.map((_, i) => {
       return {
-        ...KoboGeneralMapping.mapPersonWithStatus(_ as any),
+        ...KoboGeneralMapping.mapPersonDetails(_ as any),
         lackDoc: d.hh_char_hh_doc?.[i].does_lack_doc,
         isIdpRegistered: d.hh_char_hh_doc?.[i].is_member_registered
       }

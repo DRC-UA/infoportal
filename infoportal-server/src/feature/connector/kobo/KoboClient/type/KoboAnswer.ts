@@ -1,8 +1,10 @@
 import {ApiPaginate, Period, UUID} from '@infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 
+/** @deprecated use from common lib*/
 export type KoboId = string
 
+/** @deprecated use from common lib*/
 export type KoboAnswerId = string
 
 export interface KoboAnswerParams extends Partial<Period> {
@@ -29,7 +31,7 @@ export type KoboAnswerMetaData<TTag extends Record<string, any> | undefined = un
   attachments?: KoboAttachment[]
   geolocation: ApiKoboAnswerMetaData['_geolocation']
   /** Extracted from question `date` when exists. */
-  date?: Date
+  date: Date
   submissionTime: ApiKoboAnswerMetaData['_submission_time']
   id: ApiKoboAnswerMetaData['_id']
   uuid: ApiKoboAnswerMetaData['_uuid']

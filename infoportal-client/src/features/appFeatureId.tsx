@@ -20,6 +20,7 @@ export enum AppFeatureId {
   hdp = 'hdp',
   safety = 'safety',
   protection = 'protection',
+  unifiedDashboard = 'unifiedDashboard',
 }
 
 export interface AppFeature {
@@ -33,6 +34,15 @@ export interface AppFeature {
 }
 
 export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
+  unifiedDashboard: {
+    id: AppFeatureId.unifiedDashboard,
+    name: 'Meta Dashboard',
+    materialIcons: 'public',
+    color: '#000',
+    path: '/meta-dashboard',
+    category: 'general',
+    showIf: (u) => u?.admin
+  },
   kobo_database: {
     id: AppFeatureId.kobo_database,
     name: 'Kobo Databases',

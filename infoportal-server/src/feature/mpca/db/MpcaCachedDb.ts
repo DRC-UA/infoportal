@@ -3,8 +3,9 @@ import {PrismaClient} from '@prisma/client'
 import {ApiPaginate, ApiPaginateHelper, KoboIndex, UUID} from '@infoportal-common'
 import {MpcaDataFilter, MpcaEntity} from './MpcaDbType'
 import {Enum} from '@alexandreannic/ts-utils'
-import {KoboEvent} from '../../kobo/KoboEvent'
+import {GlobalEvent} from '../../../core/GlobalEvent'
 import {MemoryDatabase, MemoryDatabaseInterface} from '../../../core/MemoryDatabase'
+import Event = GlobalEvent.Event
 
 export class MpcaCachedDb {
   private static instance: MpcaCachedDb
@@ -27,9 +28,9 @@ export class MpcaCachedDb {
 
   private constructor(
     private meme: MemoryDatabaseInterface<MpcaEntity, UUID>,
-    private koboEvent: KoboEvent = new KoboEvent(),
+    private event: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
   ) {
-    this.koboEvent.listenTagEdited(async (x) => {
+    this.event.listen(Event.KOBO_TAG_EDITED, async (x) => {
       if (![
         KoboIndex.byName('bn_re').id,
         KoboIndex.byName('bn_1_mpcaNfi').id,

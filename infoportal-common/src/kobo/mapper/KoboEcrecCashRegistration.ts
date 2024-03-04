@@ -1,5 +1,6 @@
 import {Ecrec_cashRegistration} from '../generated/Ecrec_cashRegistration'
-import {CashStatus, KoboAnswer, KoboBaseTags, KoboGeneralMapping} from './Common'
+import {CashStatus, KoboAnswer, KoboBaseTags} from './Common'
+import {KoboGeneralMapping} from './KoboMapper'
 
 export namespace KoboEcrec_cashRegistration {
 

@@ -1,6 +1,7 @@
 import {Enum, Obj, seq} from '@alexandreannic/ts-utils'
 import {KeyOf, NonNullableKeys} from './Generic'
 import {Bn_Re} from '../kobo/generated/Bn_Re'
+import {DisplacementStatus} from '../kobo/mapper'
 
 export namespace Person {
 
@@ -9,13 +10,6 @@ export namespace Person {
   export interface Person {
     age?: number
     gender?: Gender
-  }
-
-  export interface PersonWDisability extends Person {
-    age?: number
-    gender?: Gender
-    disabilities?: Bn_Re.Option<'hh_char_dis_select'>[]
-    disabilityLevel?: Bn_Re.Option<'hh_char_dis_level'>[]
   }
 
   export const create = (_: Person) => _

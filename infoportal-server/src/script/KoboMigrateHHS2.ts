@@ -176,6 +176,7 @@ export const KoboMigrateHHS2 = ({
         id: _.id,
         uuid: _.uuid,
         formId: newFormId,
+        date: _.submissionTime,
         start: _.start,
         end: _.end,
         version: _.version,
