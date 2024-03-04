@@ -33,7 +33,6 @@ export class KoboUnifiedService {
   readonly start = () => {
     this.log.info(`Start listening to ${Event.KOBO_FORM_SYNCHRONIZED}`)
     this.event.listen(Event.KOBO_FORM_SYNCHRONIZED, _ => {
-      if()
       this.synchronize(_)
     })
   }
