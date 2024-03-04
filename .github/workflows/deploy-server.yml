@@ -4,17 +4,14 @@
 name: Build & Deploy SERVER to Azure - drc-imaa-ukr-tools
 
 on:
-#  push:
-#    branches:
-#      - main
+  #  push:
+  #    branches:
+  #      - main
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    #    defaults:
-    #      run:
-    #        working-directory: ./infoportal-server
 
     steps:
       - uses: actions/checkout@v4
@@ -24,10 +21,13 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: npm install, build, and test (library)
+      - name: ls
+        run: ls -l
+
+      - name: npm install, build, and test (lib)
         working-directory: ./infoportal-common
         run: |
-          npm ci
+          npm install
           npm run build --if-present
           npm run test --if-present
 
@@ -39,14 +39,17 @@ jobs:
           npm run test --if-present
 
       - name: Zip artifact for deployment
-        working-directory: ./
-        run: zip release.zip ./* -r
+        run: zip release.zip ./infoportal-server ./infoportal-common -r
+
+      - name: ls
+        run: ls -l
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: ./release.zip
+          path: release.zip
+
 
   deploy:
     runs-on: ubuntu-latest
@@ -56,6 +59,10 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
+      - name: ls
+        run:
+          ls -l
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
@@ -64,6 +71,9 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
+      - name: ls
+        run: ls -l
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -71,4 +81,4 @@ jobs:
           app-name: 'drc-imaa-ukr-tools-api'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E871FD3330364D1EB594BD9D2FED4983 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_498AC70480F04DF09CF86CBF3D15E5B2 }}
