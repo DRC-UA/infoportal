@@ -17,7 +17,7 @@ import {KoboUnifiedCreate, KoboUnifiedOrigin} from './KoboUnifiedType'
 export class KoboUnifiedMapperEcrec {
 
   static readonly cashRegistration = (answer: KoboUnifiedOrigin<Ecrec_cashRegistration.T>): KoboUnifiedCreate => {
-    const _ = answer.answers
+    const _ = Ecrec_cashRegistration.map(answer.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
     const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
     const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistration.options.back_donor[_.back_donor!])
@@ -54,7 +54,7 @@ export class KoboUnifiedMapperEcrec {
   }
 
   static readonly cashRegistrationBha = (answer: KoboUnifiedOrigin<Ecrec_cashRegistrationBha.T>): KoboUnifiedCreate => {
-    const _ = answer.answers
+    const _ = Ecrec_cashRegistrationBha.map(answer.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
     const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
     const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistrationBha.options.back_donor[_.back_donor!])

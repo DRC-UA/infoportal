@@ -20,8 +20,13 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
         return (_: HeaderParams<{custom: KoboGeneralMapping.IndividualBreakdown}>) => {
           return (
             <PopoverWrapper
+              popoverProps={{
+                sx: {
+                  minWidth: 500,
+                }
+              }}
               content={() => (
-                <AgeGroupTable tableId="useCustomHeader" persons={_.filteredData.flatMap(_ => _.custom.persons)}/>
+                <AgeGroupTable tableId="useCustomHeader" enableDisplacementStatusFilter persons={_.filteredData.flatMap(_ => _.custom.persons)}/>
               )}
             >
               <IpIconBtn children="group"/>

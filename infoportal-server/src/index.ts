@@ -48,7 +48,7 @@ const startApp = async (conf: AppConf) => {
   )
   const init = async () => {
     const log = logger('')
-    log.info(`Starting...`)
+    log.info(`Starting... v5.0`)
 
     log.info(`Initialize database ${conf.db.url.split('@')[1]}...`)
     await new DbInit(conf, prisma).initializeDatabase()

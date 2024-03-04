@@ -1,4 +1,4 @@
-import {add, DisplacementStatus, Person, PersonDetails} from '@infoportal-common'
+import {add, DisplacementStatus, Person, PersonDetails, WgDisability} from '@infoportal-common'
 import {Sheet} from '@/shared/Sheet/Sheet'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
@@ -8,6 +8,7 @@ import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 
 const displacementStatusOptions = Obj.values(DisplacementStatus)
+const disabilitiesOptions = Obj.values(WgDisability)
 
 export const AgeGroupTable = ({
   tableId,
@@ -19,15 +20,20 @@ export const AgeGroupTable = ({
   persons?: PersonDetails[]
 }) => {
   const [displacementStatus, setDisplacementStatus] = useState<DisplacementStatus[]>([])
+  const [pwd, setPwd] = useState<'Yes' | 'All'>('All')
   const [tableAgeGroup, setTableAgeGroup] = usePersistentState<typeof Person.ageGroups[0]>('ECHO', {storageKey: 'mpca-dashboard-ageGroup'})
   const {m, formatLargeNumber} = useI18n()
 
   const data = useMemo(() => {
     if (!persons) return
-    const filteredPersons = enableDisplacementStatusFilter ? persons.filter(_ => displacementStatus.length === 0 || displacementStatus.includes(_.displacement!)) : persons
+    const filteredPersons = enableDisplacementStatusFilter ? persons.filter(_ => {
+      if (displacementStatus.length > 0 && !displacementStatus.includes(_.displacement!)) return false
+      if (pwd === 'Yes' && (_.disability === undefined || _.disability.includes(WgDisability.None) || _.disability.length === 0)) return false
+      return true
+    }) : persons
     const gb = Person.groupByGenderAndGroup(Person.getAgeGroup(tableAgeGroup))(filteredPersons)
     return Enum.entries(gb).map(([k, v]) => ({ageGroup: k, ...v}))
-  }, [persons, tableAgeGroup, displacementStatus])
+  }, [persons, tableAgeGroup, pwd, displacementStatus])
 
   return (
     <Sheet
@@ -37,13 +43,23 @@ export const AgeGroupTable = ({
       header={
         <>
           {enableDisplacementStatusFilter && (
-            <IpSelectMultiple
-              label={m.displacementStatus}
-              sx={{maxWidth: 160, mr: 1}}
-              options={displacementStatusOptions}
-              value={displacementStatus}
-              onChange={setDisplacementStatus}
-            />
+            <>
+              <IpSelectMultiple
+                label={m.displacementStatus}
+                sx={{maxWidth: 160, mr: 1}}
+                options={displacementStatusOptions}
+                value={displacementStatus}
+                onChange={setDisplacementStatus}
+              />
+              <IpSelectSingle
+                hideNullOption
+                label={m.disability}
+                sx={{maxWidth: 160, mr: 1}}
+                options={['Yes', 'All']}
+                value={pwd}
+                onChange={_ => setPwd(_)}
+              />
+            </>
           )}
           <IpSelectSingle label={m.ageGroup} sx={{maxWidth: 100}} options={Person.ageGroups} hideNullOption onChange={setTableAgeGroup} value={tableAgeGroup}/>
           {/*<ScRadioGroup value={tableAgeGroup} onChange={setTableAgeGroup} dense inline>*/}
