@@ -1,10 +1,5 @@
-import {DrcDonor, DrcOffice, DrcProject, Oblast, Person, Protection_pss} from '@infoportal-common'
+import {DisplacementStatus, DrcDonor, DrcOffice, DrcProject, Oblast, Person, PersonDetails, Protection_pss} from '@infoportal-common'
 import {KoboAnswerMetaData} from '@/core/sdk/server/kobo/Kobo'
-
-export type DisplacementStatus = Protection_pss.Option<'hh_char_hh_det_status'>
-export interface PersonWithStatus extends Person.Person {
-  status: DisplacementStatus
-}
 
 export type ProtectionKoboForm =
   'protection_gbv' |
@@ -15,7 +10,7 @@ export type ProtectionKoboForm =
 
 // export type ProtectionKoboForm = ArrayValues<typeof ProtectionDataHelper.koboForms>
 
-export type ProtectionActivityFlat  = Omit<ProtectionActivity, 'persons'> & PersonWithStatus
+export type ProtectionActivityFlat  = Omit<ProtectionActivity, 'persons'> & PersonDetails
 
 export interface ProtectionActivity extends KoboAnswerMetaData {
   date: Date
@@ -25,7 +20,7 @@ export interface ProtectionActivity extends KoboAnswerMetaData {
   hromada?: string
   project?: DrcProject[]
   donor?: DrcDonor[]
-  persons?: PersonWithStatus[]
+  persons?: PersonDetails[]
   hhDisplacementStatus?: DisplacementStatus
   koboForm: ProtectionKoboForm
   // koboForm: Extract<KoboFormName,

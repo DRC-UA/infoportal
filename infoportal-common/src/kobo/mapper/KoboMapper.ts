@@ -75,6 +75,7 @@ export namespace KoboGeneralMapping {
         idp: DisplacementStatus.Idp,
         returnee: DisplacementStatus.Returnee,
         'non-displaced': DisplacementStatus.NonDisplaced,
+        ['non_displaced' as any]: DisplacementStatus.NonDisplaced,
       }, () => undefined)
     else
       res.displacement = fnSwitch(p.ben_det_res_stat!, {

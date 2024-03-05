@@ -8,7 +8,7 @@ import React, {useState} from 'react'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
-import {groupBy, koboFormTranslation, OblastName, Protection_pss} from '@infoportal-common'
+import {DisplacementStatus, groupBy, koboFormTranslation, OblastName, Protection_pss} from '@infoportal-common'
 import {Sheet} from '@/shared/Sheet/Sheet'
 import {Enum, Obj} from '@alexandreannic/ts-utils'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
@@ -20,7 +20,6 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {ProtectionOverviewFilterCustom} from '@/features/Protection/Overview/ProtectionOverviewFilterCustom'
 import {IpSelectMultiple, IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
-import {DisplacementStatus} from '@/features/Protection/Context/protectionType'
 
 export const ProtectionOverview = () => {
   const [displacementStatus, setDisplacementStatus] = useState<DisplacementStatus[]>([])
@@ -81,12 +80,12 @@ export const ProtectionOverview = () => {
                 <IpSelectMultiple
                   label={m.displacementStatus}
                   sx={{maxWidth: 200, mb: 1}}
-                  options={Obj.entries(Protection_pss.options.hh_char_hh_det_status).map(([value, children]) => IpSelectMultipleHelper.makeOption({value, children}))}
+                  options={Obj.values(DisplacementStatus).map(_ => IpSelectMultipleHelper.makeOption({value: _, children: _}))}
                   value={displacementStatus}
                   onChange={setDisplacementStatus}
                 />
                 <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered.filter(_ =>
-                  displacementStatus.length === 0 || displacementStatus.includes(_.hhDisplacementStatus ?? _.status!)
+                  displacementStatus.length === 0 || displacementStatus.includes(_.hhDisplacementStatus ?? _.displacement!)
                 )}/>
               </PanelBody>
             </Panel>
@@ -120,8 +119,8 @@ export const ProtectionOverview = () => {
               <PanelBody>
                 <ChartBarSingleBy
                   data={data.flatFiltered}
-                  by={_ => _.status}
-                  label={Protection_pss.options.hh_char_hh_det_status}
+                  by={_ => _.displacement}
+                  label={DisplacementStatus}
                 />
               </PanelBody>
             </Panel>
