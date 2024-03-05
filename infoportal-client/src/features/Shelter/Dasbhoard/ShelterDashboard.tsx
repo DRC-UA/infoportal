@@ -113,6 +113,19 @@ export const ShelterDashboard = () => {
         getValue: _ => _.ta?.tags?.progress,
         getOptions: (get) => DataFilter.buildOptionsFromObject(ShelterProgress),
       },
+      accommodation: {
+        icon: 'home',
+        label: m._shelter.accommodation,
+        getValue: _ => _.nta?.dwelling_type ?? DataFilter.blank,
+        getOptions: (get) => [
+          DataFilter.blankOption,
+          ...get()
+            .map(_ => _.nta?.dwelling_type)
+            .distinct(_ => _)
+            .compact()
+            .map(_ => DataFilter.buildOption(_, ctx.nta.schema.translate.choice('dwelling_type', _)))
+        ],
+      },
       damageLevel: {
         icon: 'construction',
         label: m.levelOfPropertyDamaged,

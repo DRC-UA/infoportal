@@ -131,7 +131,8 @@ export class ShelterTaTagsHelper {
 }
 
 export const shelterDrcProject = [
-  // HRK
+  DrcProject['UKR-000270 Pooled Funds'],
+  DrcProject['UKR-000308 UNHCR'],
   DrcProject['UKR-000308 UNHCR'],
   DrcProject['UKR-000314 UHF4'],
   DrcProject['UKR-000322 ECHO2'],
