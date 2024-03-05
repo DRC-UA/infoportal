@@ -29,6 +29,7 @@ const noEditableColumnsId = new Set<keyof KoboAnswerMetaData>([
   'start',
   'end',
   'version',
+  'date',
   'submissionTime',
   'submittedBy',
   'id',

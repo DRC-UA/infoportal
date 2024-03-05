@@ -38,7 +38,7 @@ export const AppHeaderFeatures = (props: Omit<IpIconBtnProps, 'children'>) => {
             .filter((_, features) => features.length > 0)
             .entries()
             .map(([category, features]) => (
-              <Box key={category} sx={{p: 1, background: styleUtils(t).color.toolbar, mb: .5, borderRadius: (t.shape.borderRadius - 2) + 'px'}}>
+              <Box key={category} sx={{p: 1, background: t.palette.background.default, mb: .5, borderRadius: (t.shape.borderRadius - 2) + 'px'}}>
                 <Txt bold uppercase size="small" color="hint" sx={{fontWeight: '600', ml: 1}}>{category}</Txt>
                 <Box>
                   {features!.map(feature => (
