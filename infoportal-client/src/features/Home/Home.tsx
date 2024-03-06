@@ -51,11 +51,11 @@ const _Home = () => {
                   }}
                 >
                   <FeatureLogo feature={feature} iconSize={fnSwitch(layoutCtx.currentBreakpointDown, {
-                    xl: 75,
-                    lg: 70,
-                    md: 65,
-                    sm: 60,
-                    xs: 55,
+                    xl: 70,
+                    lg: 65,
+                    md: 60,
+                    sm: 55,
+                    xs: 50,
                   })}/>
                 </Grid>
               ))}
