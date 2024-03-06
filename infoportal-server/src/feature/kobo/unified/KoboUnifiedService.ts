@@ -26,7 +26,7 @@ export class KoboUnifiedService {
     private prisma: PrismaClient,
     private kobo = new KoboService(prisma),
     private event = GlobalEvent.Class.getInstance(),
-    private log: Logger = logger('KoboSyncServer'),
+    private log: Logger = logger('KoboUnifiedService'),
   ) {
   }
 

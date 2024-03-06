@@ -39,17 +39,17 @@ export class KoboSyncServer {
 
   readonly syncApiForm = async ({serverId = koboServerId.prod, formId, updatedBy}: {serverId?: UUID, formId: KoboId, updatedBy?: string}) => {
     try {
-      // this.log.info(`Synchronizing ${formId} by ${updatedBy}...`)
-      // await this.syncApiFormInfo(serverId, formId)
-      // const res = await this.syncApiFormAnswers(serverId, formId)
-      // await this.prisma.koboForm.update({
-      //   where: {id: formId},
-      //   data: {
-      //     updatedAt: new Date(),
-      //     updatedBy: updatedBy,
-      //   }
-      // })
-      // this.log.info(`Synchronizing ${formId} by ${updatedBy}... COMPLETED.`)
+      this.log.info(`Synchronizing ${formId} by ${updatedBy}...`)
+      await this.syncApiFormInfo(serverId, formId)
+      await this.syncApiFormAnswers(serverId, formId)
+      await this.prisma.koboForm.update({
+        where: {id: formId},
+        data: {
+          updatedAt: new Date(),
+          updatedBy: updatedBy,
+        }
+      })
+      this.log.info(`Synchronizing ${formId} by ${updatedBy}... COMPLETED.`)
       this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId})
     } catch (e) {
       this.log.info(`Synchronizing ${formId} by ${updatedBy}... FAILED.`)
