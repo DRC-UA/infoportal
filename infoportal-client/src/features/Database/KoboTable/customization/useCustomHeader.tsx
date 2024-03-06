@@ -25,7 +25,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
                 slotProps: {
                   paper: {
                     sx: {
-                      minWidth: 500
+                      minWidth: 510
                     }
                   }
                 }

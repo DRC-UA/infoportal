@@ -115,6 +115,7 @@ export const en = Object.freeze({
     mykolaiv: 'Mykolaiv',
     lastConnectedAt: 'Last connection',
     validation: 'Validation',
+    onlyPwds: 'Only PwDs',
     consideredAsPwd: 'Are not considered PwDs when the <b>level of difficulty</b> is not set or set to "No, no difficulty".',
     perpetrators: 'Perpetrators',
     kyiv: 'Kyiv',

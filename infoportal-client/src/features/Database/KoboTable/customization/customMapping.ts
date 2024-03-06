@@ -1,4 +1,4 @@
-import {KoboGeneralMapping, KoboIndex, addIndividualBreakdownColumnForRrm} from '@infoportal-common'
+import {KoboGeneralMapping, KoboIndex} from '@infoportal-common'
 
 export const databaseCustomMapping: Record<any, (_: any) => any> = {
   [KoboIndex.byName('ecrec_cashRegistration').id]: KoboGeneralMapping.addIndividualBreakdownColumn,

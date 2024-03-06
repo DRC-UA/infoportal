@@ -1,14 +1,13 @@
 import {add, DisplacementStatus, Person, PersonDetails, WgDisability} from '@infoportal-common'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {Enum, Obj} from '@alexandreannic/ts-utils'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
-import {Alert} from 'mui-extension'
-import {Box, BoxProps} from '@mui/material'
+import {Box, BoxProps, Switch, Theme} from '@mui/material'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {IpBtn} from '@/shared/Btn'
 
 const displacementStatusOptions = Obj.values(DisplacementStatus)
 const disabilitiesOptions = Obj.values(WgDisability)
@@ -24,7 +23,7 @@ export const AgeGroupTable = ({
   persons?: PersonDetails[]
 } & BoxProps) => {
   const [displacementStatus, setDisplacementStatus] = useState<DisplacementStatus[]>([])
-  const [pwd, setPwd] = useState<'Yes' | 'All'>('All')
+  const [onlyPwd, setOnlyPwd] = useState<boolean>(false)
   const [tableAgeGroup, setTableAgeGroup] = usePersistentState<typeof Person.ageGroups[0]>('ECHO', {storageKey: 'mpca-dashboard-ageGroup'})
   const {m, formatLargeNumber} = useI18n()
 
@@ -32,44 +31,43 @@ export const AgeGroupTable = ({
     if (!persons) return
     const filteredPersons = enableDisplacementStatusFilter ? persons.filter(_ => {
       if (displacementStatus.length > 0 && !displacementStatus.includes(_.displacement!)) return false
-      if (pwd === 'Yes' && (_.disability === undefined || _.disability.includes(WgDisability.None) || _.disability.length === 0)) return false
+      if (onlyPwd && (_.disability === undefined || _.disability.includes(WgDisability.None) || _.disability.length === 0)) return false
       return true
     }) : persons
     const gb = Person.groupByGenderAndGroup(Person.getAgeGroup(tableAgeGroup))(filteredPersons)
     return Enum.entries(gb).map(([k, v]) => ({ageGroup: k, ...v}))
-  }, [persons, tableAgeGroup, pwd, displacementStatus])
+  }, [persons, tableAgeGroup, onlyPwd, displacementStatus])
 
   return (
     <Box {...sx}>
-      {enableDisplacementStatusFilter && (
-        <Alert type="info" dense sx={{mb: 1}} dangerouslySetInnerHTML={{__html: m.consideredAsPwd}}/>
-      )}
       <Datatable
         id={tableId}
         className="ip-border"
         hidePagination
         header={
           <>
+            <IpSelectSingle label={m.ageGroup} sx={{maxWidth: 100}} options={Person.ageGroups} hideNullOption onChange={setTableAgeGroup} value={tableAgeGroup}/>
             {enableDisplacementStatusFilter && (
               <>
                 <IpSelectMultiple
                   label={m.displacementStatus}
-                  sx={{maxWidth: 160, mr: 1}}
+                  sx={{maxWidth: 160, ml: 1}}
                   options={displacementStatusOptions}
                   value={displacementStatus}
                   onChange={setDisplacementStatus}
                 />
-                <IpSelectSingle
-                  hideNullOption
-                  label={m.disability}
-                  sx={{maxWidth: 160, mr: 1}}
-                  options={['Yes', 'All']}
-                  value={pwd}
-                  onChange={_ => setPwd(_)}
-                />
+                <IpBtn
+                  variant="outlined"
+                  iconSx={{color: (t: Theme) => t.palette.text.disabled, transform: 'rotate(90deg)'}}
+                  onClick={() => setOnlyPwd(_ => !_)}
+                  tooltip={m.consideredAsPwd}
+                  sx={{textTransform: 'initial', ml: 1, whiteSpace: 'nowrap', fontWeight: 400, color: t => t.palette.text.secondary}}
+                >
+                  {m.onlyPwds}
+                  <Switch size="small" sx={{mr: -1}} checked={onlyPwd}/>
+                </IpBtn>
               </>
             )}
-            <IpSelectSingle label={m.ageGroup} sx={{maxWidth: 100}} options={Person.ageGroups} hideNullOption onChange={setTableAgeGroup} value={tableAgeGroup}/>
             {/*<ScRadioGroup value={tableAgeGroup} onChange={setTableAgeGroup} dense inline>*/}
             {/*  {Person.ageGroups.map(_ =>*/}
             {/*    <ScRadioGroupItem key={_} value={_} title={m._ageGroup[_]} hideRadio/>*/}

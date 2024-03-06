@@ -142,7 +142,7 @@ const _Datatable = <T extends DatatableRow>({
             ctx.data.setFilters({})
             ctx.data.resetSearch()
           }}>
-            <IpIconBtn sx={{mr: 1}} children="filter_alt_off" tooltip={m.clearFilter} disabled={!filterCount}/>
+            <IpIconBtn children="filter_alt_off" tooltip={m.clearFilter} disabled={!filterCount}/>
           </Badge>
           <DatatableColumnToggle
             sx={{mr: 1}}
