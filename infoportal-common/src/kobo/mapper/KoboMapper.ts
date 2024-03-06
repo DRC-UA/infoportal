@@ -1,4 +1,4 @@
-import {Bn_Re, Ecrec_cashRegistration, Protection_pss} from '../generated'
+import {Bn_RapidResponse, Bn_Re, Ecrec_cashRegistration, Protection_pss} from '../generated'
 import {DrcOffice, DrcProjectHelper} from '../../type/Drc'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex} from '../../location'
@@ -84,7 +84,7 @@ export namespace KoboGeneralMapping {
         ret: DisplacementStatus.Returnee,
         ref_asy: DisplacementStatus.Refugee,
       }, () => undefined)
-    if (p.hh_char_hh_det_dis_level !== 'zero')
+    if (p.hh_char_hh_det_dis_level !== undefined && p.hh_char_hh_det_dis_level !== 'zero')
       res.disability = seq(p.hh_char_hh_det_dis_select ?? []).map(_ => fnSwitch(_!, {
         diff_see: WgDisability.See,
         diff_hear: WgDisability.Hear,
@@ -121,6 +121,13 @@ export namespace KoboGeneralMapping {
 
   export const addIndividualBreakdownColumn = <T extends XlsKoboIndividuals>(row: T): T & {custom: IndividualBreakdown} => {
     const p = KoboGeneralMapping.collectXlsKoboIndividuals(row).map(mapPersonDetails)
+    const custom = KoboGeneralMapping.getIndividualBreakdown(p)
+    ;(row as any).custom = custom
+    return (row as any)
+  }
+
+  export const addIndividualBreakdownColumnForRrm = (row: Bn_RapidResponse.T): Bn_RapidResponse.T & {custom: IndividualBreakdown} => {
+    const p = KoboGeneralMapping.collectXlsKoboIndividualsForRrm(row).map(mapPersonDetails)
     const custom = KoboGeneralMapping.getIndividualBreakdown(p)
     ;(row as any).custom = custom
     return (row as any)
@@ -175,5 +182,33 @@ export namespace KoboGeneralMapping {
       (_ as unknown as XlsKoboIndividual).ben_det_res_stat = d.ben_det_res_stat
       return _ as unknown as XlsKoboIndividual
     }) ?? []
+  }
+
+  export const collectXlsKoboIndividualsForRrm = (d: Bn_RapidResponse.T): XlsKoboIndividual[] => {
+    return [
+      ...collectXlsKoboIndividualsFromStandardizedKoboForm({
+        ben_det_res_stat: d.ben_det_res_stat_l,
+        hh_char_hh_det: d.hh_char_hh_det_l?.map(_ => ({
+          hh_char_hh_det_dis_level: _.hh_char_hh_det_dis_level_l,
+          hh_char_hh_det_dis_select: _.hh_char_hh_det_dis_select_l,
+          hh_char_hh_det_age: _.hh_char_hh_det_age_l,
+          hh_char_hh_det_gender: _.hh_char_hh_det_gender_l,
+        }))
+      }),
+      {
+        hh_char_hh_det_dis_level: d.hh_char_hhh_dis_level_l,
+        hh_char_hh_det_dis_select: d.hh_char_hhh_dis_select_l,
+        hh_char_hh_det_age: d.hh_char_hhh_age_l,
+        hh_char_hh_det_gender: d.hh_char_hhh_gender_l,
+        ben_det_res_stat: d.ben_det_res_stat_l,
+      },
+      {
+        hh_char_hh_det_dis_level: d.hh_char_res_dis_level_l,
+        hh_char_hh_det_dis_select: d.hh_char_res_dis_select_l,
+        hh_char_hh_det_age: d.hh_char_res_age_l,
+        hh_char_hh_det_gender: d.hh_char_res_gender_l,
+        ben_det_res_stat: d.ben_det_res_stat_l,
+      },
+    ].filter(_ => _.hh_char_hh_det_age !== undefined || _.hh_char_hh_det_gender !== undefined)
   }
 }

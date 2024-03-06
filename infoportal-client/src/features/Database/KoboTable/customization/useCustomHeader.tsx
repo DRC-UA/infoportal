@@ -13,6 +13,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('ecrec_cashRegistration').id:
       case KoboIndex.byName('ecrec_cashRegistrationBha').id:
       case KoboIndex.byName('bn_re').id:
+      case KoboIndex.byName('bn_rapidResponse').id:
       case KoboIndex.byName('shelter_nta').id:
       case KoboIndex.byName('bn_cashForRentRegistration').id:
       case KoboIndex.byName('bn_cashForRentApplication').id:
@@ -21,12 +22,21 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
           return (
             <PopoverWrapper
               popoverProps={{
-                sx: {
-                  minWidth: 500,
+                slotProps: {
+                  paper: {
+                    sx: {
+                      minWidth: 500
+                    }
+                  }
                 }
               }}
               content={() => (
-                <AgeGroupTable tableId="useCustomHeader" enableDisplacementStatusFilter persons={_.filteredData.flatMap(_ => _.custom.persons)}/>
+                <AgeGroupTable
+                  tableId="useCustomHeader"
+                  enableDisplacementStatusFilter
+                  persons={_.filteredData.flatMap(_ => _.custom.persons)}
+                  sx={{p: 1}}
+                />
               )}
             >
               <IpIconBtn children="group"/>

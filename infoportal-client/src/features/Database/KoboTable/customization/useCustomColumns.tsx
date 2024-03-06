@@ -109,11 +109,22 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
     })
 
     const extra: Record<string, DatatableColumn.Props<any>[]> = {
-      [KoboIndex.byName('shelter_nta').id]: [...individualsBreakdown,],
-      [KoboIndex.byName('bn_cashForRentRegistration').id]: [...individualsBreakdown,],
-      [KoboIndex.byName('bn_cashForRentApplication').id]: [...individualsBreakdown,],
+      [KoboIndex.byName('shelter_nta').id]: [
+        ...individualsBreakdown,
+      ],
+      [KoboIndex.byName('bn_cashForRentRegistration').id]: [
+        paymentStatus,
+        ...individualsBreakdown,
+      ],
+      [KoboIndex.byName('bn_cashForRentApplication').id]: [
+        ...individualsBreakdown,
+      ],
+      [KoboIndex.byName('bn_rapidResponse').id]: [
+        paymentStatus,
+        ...individualsBreakdown,
+      ],
       [KoboIndex.byName('bn_re').id]: [
-        // paymentStatus,
+        paymentStatus,
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('shelter_cashForShelter').id]: [

@@ -17,18 +17,21 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
           <SelectShelterCashStatus
             disabled={!ctx.canEdit}
             sx={{maxWidth: 120}}
-            placeholder={m.project}
+            label={m.project}
             onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})}
           />
         )
       }
+      case KoboIndex.byName('bn_cashForRentRegistration').id:
+      case KoboIndex.byName('bn_rapidResponse').id:
+      case KoboIndex.byName('bn_re').id:
       case KoboIndex.byName('ecrec_cashRegistrationBha').id:
       case KoboIndex.byName('ecrec_cashRegistration').id: {
         return (
           <SelectCashStatus
             disabled={!ctx.canEdit}
             sx={{maxWidth: 120}}
-            placeholder={m.project}
+            label={m.status}
             onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})}
           />
         )
