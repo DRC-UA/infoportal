@@ -126,13 +126,16 @@ export class AccessService {
       this.searchFromGroup({featureId, user}),
       this.searchFromAccess({featureId, user}),
     ])
-    const accessPriority = {[FeatureAccessLevel.Admin]: 2, [FeatureAccessLevel.Write]: 1, [FeatureAccessLevel.Read]: 0}
     return [
       ...fromAccess,
       ...fromGroup.map(_ => {
+        const accesses = _.group?.items.reduce((acc, curr) => {
+          acc.set(curr.level, curr.level)
+          return acc
+        }, new Map<FeatureAccessLevel, FeatureAccessLevel>())
         return ({
           ..._,
-          level: _.group?.items?.sort((a, b) => accessPriority[a.level] - accessPriority[b.level])[0]?.level ?? _.level,
+          level: accesses?.get('Admin') ?? accesses?.get('Write') ?? FeatureAccessLevel.Read,
           groupName: _.group?.name,
         })
       })
