@@ -1,7 +1,7 @@
 import {Layout} from '@/shared/Layout'
 import {HashRouter as Router, NavLink, Route, Routes} from 'react-router-dom'
 import React, {ReactNode} from 'react'
-import {AiWash} from '@/features/ActivityInfo/NFI/AiWash'
+import {AiWash} from '@/features/ActivityInfo/Wash/AiWash'
 import {AiMpca} from '@/features/ActivityInfo/Mpca/AiMpca'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Enum} from '@alexandreannic/ts-utils'
