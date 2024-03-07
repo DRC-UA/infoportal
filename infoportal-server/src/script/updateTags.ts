@@ -3,8 +3,8 @@ import {PrismaClient} from '@prisma/client'
 import {KoboService} from '../feature/kobo/KoboService'
 import {KoboMappedAnswersService} from '../feature/kobo/KoboMappedAnswersService'
 import {Enum, seq} from '@alexandreannic/ts-utils'
-import {KoboIndex} from '@infoportal-common'
-import {EcrecCashRegistrationPaymentStatus, EcrecCashRegistrationTags} from '../db/koboForm/DbHelperEcrecCashRegistration'
+import {CashStatus, KoboIndex} from '@infoportal-common'
+import {EcrecCashRegistrationTags} from '../db/koboForm/DbHelperEcrecCashRegistration'
 
 export const updateTags = async () => {
   const prisma = new PrismaClient()
@@ -23,7 +23,7 @@ export const updateTags = async () => {
     const tag: EcrecCashRegistrationTags = {
       program: xlsRow.program,
       paidUah: xlsRow.amount,
-      status: EcrecCashRegistrationPaymentStatus.Paid,
+      status: CashStatus.Paid,
     }
     console.log(xlsRow.taxid, id)
     await koboService.updateTags({

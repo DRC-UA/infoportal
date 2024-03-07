@@ -40,6 +40,7 @@ export type KoboAnswerMetaData<TTag extends Record<string, any> | undefined = un
   submittedBy?: string
   lastValidatedTimestamp?: number
   source?: string
+  updatedAt?: Date
   tags?: TTag
 }
 

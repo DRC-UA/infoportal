@@ -22,6 +22,7 @@ export enum DrcProgram {
   CashForEducation = 'CashForEducation',
   MPCA = 'MPCA',
   NFI = 'NFI',
+  ShelterRepair = 'ShelterRepair',
   ESK = 'ESK',
   InfantWinterClothing = 'InfantWinterClothing',
   InfantHygieneKit = 'InfantHygieneKit',

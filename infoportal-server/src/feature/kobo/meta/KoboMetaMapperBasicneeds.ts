@@ -97,7 +97,6 @@ export class KoboUnifiedBasicneeds {
       patronymicName: answer.ben_det_pat_name,
       taxId: answer.pay_det_tax_id_num,
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
-
     }
   }
 

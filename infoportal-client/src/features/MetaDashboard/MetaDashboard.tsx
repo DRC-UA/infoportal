@@ -1,7 +1,7 @@
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import React, {useEffect} from 'react'
-import {KoboIndex, KoboUnified, OblastIndex} from '@infoportal-common'
+import {KoboIndex, IKoboMeta, OblastIndex} from '@infoportal-common'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {map, Seq, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
@@ -20,15 +20,15 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 
 export const MetaDashboard = () => {
   const {api} = useAppSettings()
-  const fetcherKoboUnified = useFetcher(api.koboUnified.search)
-  const data = map(fetcherKoboUnified.get, _ => seq(_.data))
+  const fetcherKoboMeta = useFetcher(api.koboMeta.search)
+  const data = map(fetcherKoboMeta.get, _ => seq(_.data))
   useEffect(() => {
-    fetcherKoboUnified.fetch()
+    fetcherKoboMeta.fetch()
   }, [])
   if (!data) return <></>
   return (
     <Layout>
-      <_MetaDashboard data={data} loading={fetcherKoboUnified.loading}/>
+      <_MetaDashboard data={data} loading={fetcherKoboMeta.loading}/>
     </Layout>
   )
 }
@@ -38,7 +38,7 @@ export const _MetaDashboard = ({
   loading,
 }: {
   loading?: boolean
-  data: Seq<KoboUnified>
+  data: Seq<IKoboMeta>
 }) => {
   const {m, formatLargeNumber} = useI18n()
   const ctx = useMetaDashboardData(data)
@@ -91,6 +91,7 @@ export const _MetaDashboard = ({
             <SlidePanel title={m.form}><ChartBarSingleBy data={ctx.filteredData} by={_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId}/></SlidePanel>
             <SlidePanel title={m.program}><ChartBarMultipleByKey data={ctx.filteredData} property="activity"/></SlidePanel>
             <SlidePanel title={m.project}><ChartBarMultipleByKey data={ctx.filteredData} property="project"/></SlidePanel>
+            <SlidePanel title={m.status}><ChartBarSingleBy data={ctx.filteredData} by={_ => _.status}/></SlidePanel>
           </Div>
         </Div>
       </Div>

@@ -1,6 +1,4 @@
-export enum EcrecCashRegistrationPaymentStatus {
-  Paid = 'Paid'
-}
+import {CashStatus} from '@infoportal-common'
 
 export enum EcrecCashRegistrationProgram {
   CashforAnimalFeed = 'CashforAnimalFeed',
@@ -8,7 +6,7 @@ export enum EcrecCashRegistrationProgram {
 }
 
 export interface EcrecCashRegistrationTags {
-  status?: EcrecCashRegistrationPaymentStatus
+  status?: CashStatus
   program?: EcrecCashRegistrationProgram
   paidUah?: number
 }

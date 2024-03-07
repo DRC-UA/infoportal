@@ -55,6 +55,7 @@ export class KoboMappedAnswersService {
   ) => {
     return this.kobo.searchAnswers({
       formId,
+      includeMeta: true,
       ...filters,
     }).then(KoboMappedAnswersService.map(fn, fnTag))
   }

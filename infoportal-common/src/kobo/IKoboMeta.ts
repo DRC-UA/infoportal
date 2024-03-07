@@ -3,13 +3,20 @@ import {OblastName} from '../location'
 import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc'
 import {DisplacementStatus, KoboId, PersonDetails} from './mapper'
 
-export type KoboUnified = {
+export enum KoboMetaStatus {
+  Committed = 'Committed',
+  Pending = 'Pending',
+  Rejected = 'Rejected',
+}
+
+export type IKoboMeta = {
   id: UUID
   uuid: UUID
   formId: KoboId
   referencedFormId?: KoboId
-
+  updatedAt?: Date
   date: Date
+
   oblast: OblastName
   enumerator?: string
   raion?: string
@@ -26,6 +33,7 @@ export type KoboUnified = {
   office?: DrcOffice
   project?: DrcProject[]
   donor?: DrcDonor[]
-  individualsCount?: number
-  individuals?: PersonDetails[]
+  personsCount?: number
+  persons?: PersonDetails[]
+  status?: KoboMetaStatus
 }

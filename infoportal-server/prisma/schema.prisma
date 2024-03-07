@@ -34,6 +34,7 @@ model KoboAnswers {
   uuid                   String
   form                   KoboForm  @relation(fields: [formId], references: [id])
   formId                 String
+  updatedAt              DateTime?
   start                  DateTime
   end                    DateTime
   date                   DateTime
@@ -52,7 +53,7 @@ model KoboAnswers {
 
   mpcaPaymentTools  MpcaPaymentToolAnswers[]
   mealVerifications MealVerificationAnswers[]
-  unified           KoboMeta?
+  meta              KoboMeta?
 
   @@unique([id, formId])
   @@index([start, end, submissionTime, formId])
@@ -81,26 +82,26 @@ model KoboMeta {
   formId           String
   referencedFormId String?
   date             DateTime
-
-  oblast         String?
-  raion          String?
-  hromada        String?
-  settlement     String?
-  personsCount   Int?
-  enumerator     String?
-  taxId          String?
-  firstName      String?
-  lastName       String?
-  patronymicName String?
-  phone          String?
-  activity       String[]
-  sector         String?
-  office         String?
-  project        String[]
-  donor          String[]
-  disStatus      String?
-  address        String?
-  status         String?
+  updatedAt        DateTime?
+  oblast           String?
+  raion            String?
+  hromada          String?
+  settlement       String?
+  personsCount     Int?
+  enumerator       String?
+  taxId            String?
+  firstName        String?
+  lastName         String?
+  patronymicName   String?
+  phone            String?
+  activity         String[]
+  sector           String?
+  office           String?
+  project          String[]
+  donor            String[]
+  disStatus        String?
+  address          String?
+  status           String?
 
   persons KoboPerson[]
 

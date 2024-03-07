@@ -1,39 +1,17 @@
-import {DisplacementStatus, DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector, OblastName, PersonDetails, UUID} from '@infoportal-common'
+import {DisplacementStatus, DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector, IKoboMeta, OblastName, PersonDetails, UUID} from '@infoportal-common'
 import {KoboAnswerMetaData, KoboId} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 
-export type KoboMeta = {
-  id: UUID
-  uuid: UUID
-  formId: KoboId
-  referencedFormId?: KoboId
-
-  date: Date
-  oblast: OblastName
-  enumerator?: string
-  raion?: string
-  hromada?: string
-  settlement?: string
-  taxId?: string
-  firstName?: string
-  lastName?: string
-  patronymicName?: string
-  phone?: string
-  disStatus?: DisplacementStatus
-  sector: DrcSector
-  activity: DrcProgram[]
-  office?: DrcOffice
-  project?: DrcProject[]
-  donor?: DrcDonor[]
-  personsCount?: number
-  persons?: PersonDetails[]
-}
-
-export type KoboMetaOrigin<T extends Record<string, any> = any> = {
+export type KoboMetaOrigin<
+  TAnswer extends Record<string, any> = any,
+  TTag extends undefined | Record<string, any> = undefined,
+> = {
   formId: KoboAnswerMetaData['id']
   uuid: KoboAnswerMetaData['uuid']
-  answers: T
+  answers: TAnswer
   date: KoboAnswerMetaData['date']
   id: KoboAnswerMetaData['id']
+  updatedAt?: KoboAnswerMetaData['updatedAt']
+  tags?: TTag
 }
 
-export type KoboMetaCreate = KoboMeta
+export type KoboMetaCreate = IKoboMeta

@@ -97,7 +97,7 @@ export class KoboService {
         {submissionTime: 'desc',},
       ],
       include: {
-        unified: includeMeta,
+        meta: includeMeta,
       },
       where: {
         deletedAt: null,
@@ -327,11 +327,11 @@ export class KoboService {
       sdk.updateData({formId, submissionIds: answerIds, data: {[question]: answer}}),
       await this.prisma.$executeRawUnsafe(
         `UPDATE "KoboAnswers"
-         SET answers = jsonb_set(answers, '{${question}}', '"${answer}"')
+         SET answers     = jsonb_set(answers, '{${question}}', '"${answer}"'),
+             "updatedAt" = NOW()
          WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
         `)
     ])
-    console.log(x)
   }
 
   readonly updateTags = async ({formId, answerIds, tags}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>}) => {
@@ -354,6 +354,7 @@ export class KoboService {
           id: answer.id,
         },
         data: {
+          updatedAt: new Date(),
           tags: newTag,
         }
       })

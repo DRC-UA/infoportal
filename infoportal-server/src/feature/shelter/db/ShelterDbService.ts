@@ -27,11 +27,11 @@ export class ShelterDbService {
 
   readonly search = async (): Promise<Seq<ShelterEntity>> => {
     const [
-      ta,
       nta,
+      ta,
     ] = await Promise.all([
-      this.kobo.searchShelter_Ta().then(_ => _.data),
       this.kobo.searchShelter_Nta().then(_ => _.data),
+      this.kobo.searchShelter_Ta().then(_ => _.data),
     ])
 
     const index: Record<KoboAnswerId, Omit<ShelterEntity, 'id'>> = {} as any

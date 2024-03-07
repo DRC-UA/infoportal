@@ -8,15 +8,16 @@ import {
   Ecrec_cashRegistrationBha,
   KoboGeneralMapping,
   KoboIndex,
+  KoboMetaStatus,
   OblastIndex,
-  Person,
   safeNumber
 } from '@infoportal-common'
 import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
+import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashRegistration'
 
 export class KoboMetaMapperEcrec {
 
-  static readonly cashRegistration = (answer: KoboMetaOrigin<Ecrec_cashRegistration.T>): KoboMetaCreate => {
+  static readonly cashRegistration = (answer: KoboMetaOrigin<Ecrec_cashRegistration.T, EcrecCashRegistrationTags>): KoboMetaCreate => {
     const _ = Ecrec_cashRegistration.map(answer.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
     const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
@@ -50,10 +51,15 @@ export class KoboMetaMapperEcrec {
       patronymicName: _.ben_det_pat_name,
       taxId: _.pay_det_tax_id_num,
       phone: _.ben_det_ph_number ? '' + _.ben_det_ph_number : undefined,
+      status: fnSwitch(answer.tags?.status!, {
+        Paid: KoboMetaStatus.Committed,
+        Pending: KoboMetaStatus.Pending,
+        Rejected: KoboMetaStatus.Rejected,
+      }, () => undefined)
     }
   }
 
-  static readonly cashRegistrationBha = (answer: KoboMetaOrigin<Ecrec_cashRegistrationBha.T>): KoboMetaCreate => {
+  static readonly cashRegistrationBha = (answer: KoboMetaOrigin<Ecrec_cashRegistrationBha.T, EcrecCashRegistrationTags>): KoboMetaCreate => {
     const _ = Ecrec_cashRegistrationBha.map(answer.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
     const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
@@ -94,6 +100,11 @@ export class KoboMetaMapperEcrec {
       patronymicName: _.ben_det_pat_name,
       taxId: _.pay_det_tax_id_num,
       phone: _.ben_det_ph_number ? '' + _.ben_det_ph_number : undefined,
+      status: fnSwitch(answer.tags?.status!, {
+        Paid: KoboMetaStatus.Committed,
+        Pending: KoboMetaStatus.Pending,
+        Rejected: KoboMetaStatus.Rejected,
+      }, () => undefined)
     }
   }
 }

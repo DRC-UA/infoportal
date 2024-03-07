@@ -20,7 +20,7 @@ export enum AppFeatureId {
   hdp = 'hdp',
   safety = 'safety',
   protection = 'protection',
-  unifiedDashboard = 'unifiedDashboard',
+  unifiedDashboard = 'metaDashboard',
 }
 
 export interface AppFeature {
@@ -34,11 +34,11 @@ export interface AppFeature {
 }
 
 export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
-  unifiedDashboard: {
+  metaDashboard: {
     id: AppFeatureId.unifiedDashboard,
     name: 'Meta Dashboard',
     materialIcons: 'public',
-    color: '#000',
+    color: '#7300d7',
     path: '/meta-dashboard',
     category: 'general',
     showIf: (u) => u?.admin

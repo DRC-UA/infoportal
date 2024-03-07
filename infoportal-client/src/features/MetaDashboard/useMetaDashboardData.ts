@@ -1,23 +1,17 @@
 import {useMemo, useState} from 'react'
-import {Seq, seq} from '@alexandreannic/ts-utils'
+import {Seq} from '@alexandreannic/ts-utils'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {appConfig} from '@/conf/AppConfig'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {Person, KoboIndex, OblastIndex, PeriodHelper, KoboUnified, Period, drcOffices} from '@infoportal-common'
+import {drcOffices, IKoboMeta, KoboIndex, KoboMetaStatus, OblastIndex, Period, PeriodHelper} from '@infoportal-common'
 import {useI18n} from '@/core/i18n'
 
-export const useMetaDashboardData = (data: Seq<KoboUnified>) => {
+export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
   const {m} = useI18n()
   const [period, setPeriod] = useState<Partial<Period>>({})
 
   const shape = useMemo(() => {
-    return DataFilter.makeShape<KoboUnified>({
-      form: {
-        icon: appConfig.icons.koboForm,
-        label: m.koboForms,
-        getValue: _ => _.formId,
-        getOptions: () => data.map(_ => _.formId!).distinct(_ => _).sort().map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation ?? _))
-      },
+    return DataFilter.makeShape<IKoboMeta>({
       activity: {
         multiple: true,
         icon: appConfig.icons.program,
@@ -37,6 +31,18 @@ export const useMetaDashboardData = (data: Seq<KoboUnified>) => {
         label: m.project,
         getValue: _ => _.project,
         getOptions: () => DataFilter.buildOptions(data.flatMap(_ => _.project!).distinct(_ => _).sort())
+      },
+      status: {
+        icon: 'check_circle',
+        label: m.status,
+        getValue: _ => _.status,
+        getOptions: () => DataFilter.buildOptionsFromObject(KoboMetaStatus),
+      },
+      form: {
+        icon: appConfig.icons.koboForm,
+        label: m.koboForms,
+        getValue: _ => _.formId,
+        getOptions: () => data.map(_ => _.formId!).distinct(_ => _).sort().map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation ?? _))
       },
       oblast: {
         icon: appConfig.icons.oblast,
@@ -78,7 +84,7 @@ export const useMetaDashboardData = (data: Seq<KoboUnified>) => {
     return DataFilter.filterData(filteredBy_date, shape, filters)
   }, [data, filters, period, shape])
 
-  const filteredPersons = useMemo(() => filteredData.flatMap(_ => _.individuals ?? []), [filteredData])
+  const filteredPersons = useMemo(() => filteredData.flatMap(_ => _.persons ?? []), [filteredData])
 
   return {
     shape,
