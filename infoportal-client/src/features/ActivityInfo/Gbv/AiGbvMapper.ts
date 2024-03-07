@@ -1,9 +1,8 @@
-import {DrcProject} from '@infoportal-common'
+import {DrcProject, DrcProjectHelper, Protection_gbv} from '@infoportal-common'
 import {AiTypeGbv} from '@/features/ActivityInfo/Gbv/AiTypeGbv'
-import {fnSwitch, PromiseReturn} from '@alexandreannic/ts-utils'
-import {ApiSdk} from '@/core/sdk/server/ApiSdk'
+import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
-import {DrcProjectHelper} from '../../../../../infoportal-common/src/type/Drc'
+import {KoboUnwrapResult} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
 export namespace AiGbvMapper {
 
@@ -22,16 +21,20 @@ export namespace AiGbvMapper {
     [DrcProject['UKR-000304 PSPU']]: 'GBV-DRC-00005',
   } as const
 
-  export const mapGbvActivity = (reportingMonth: string) => (res: PromiseReturn<ReturnType<ApiSdk['kobo']['typedAnswers']['searchProtection_gbv']>>) => {
+  export const mapGbvActivity = (reportingMonth: string) => (res: KoboUnwrapResult<'searchProtection_gbv'>) => {
     const data: Type[] = []
-    res.data.forEach(d => {
+    res.data.filter(_ => _.new_ben !== 'no').forEach(d => {
       d.meta.persons!.forEach(ind => {
         data.push({
           answer: d,
           ...AiMapper.getLocation(d),
           ...AiMapper.disaggregatePersons([ind]),
           'Reporting Month': reportingMonth,
-          'Plan/Project Code': fnSwitch(DrcProjectHelper.searchByCode(d.project)!, planCode, () => undefined)!,
+          'Plan/Project Code': fnSwitch(
+            DrcProjectHelper.search(Protection_gbv.options.project[d.project!])!,
+            planCode,
+            () => '⚠️' + Protection_gbv.options.project[d.project!] as any
+          )!,
           'Population Group': AiMapper.mapPopulationGroup(ind.displacement),
           'Indicators': fnSwitch(d.activity!, {
             'pssac': '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)',
@@ -48,6 +51,4 @@ export namespace AiGbvMapper {
     })
     return data
   }
-
-
 }

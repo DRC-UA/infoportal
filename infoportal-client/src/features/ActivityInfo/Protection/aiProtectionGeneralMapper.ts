@@ -1,9 +1,9 @@
-import {AILocationHelper, Bn_Re, DrcProject, OblastIndex, Person, PersonDetails, Protection_groupSession} from '@infoportal-common'
-import {fnSwitch, PromiseReturn} from '@alexandreannic/ts-utils'
-import {ApiSdk} from '@/core/sdk/server/ApiSdk'
+import {AILocationHelper, DrcProject, OblastIndex, Person} from '@infoportal-common'
+import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiTypeGeneralProtection} from '@/features/ActivityInfo/Protection/AiTypeGeneralProtection'
-import Gender = Person.Gender
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
+import {KoboUnwrapResult} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import Gender = Person.Gender
 
 export namespace AiProtectionMapper {
 
@@ -36,7 +36,7 @@ export namespace AiProtectionMapper {
     [DrcProject['UKR-000330 SDC2']]: 'PRT-DRC-00007',
   })
 
-  export const mapHhs = (reportingMonth: string) => (res: PromiseReturn<ReturnType<ApiSdk['kobo']['typedAnswers']['searchProtection_hhs3']>>) => {
+  export const mapHhs = (reportingMonth: string) => (res: KoboUnwrapResult<'searchProtection_hhs3'>) => {
     const data: Type[] = []
 
     res.data.forEach(d => {
@@ -64,7 +64,7 @@ export namespace AiProtectionMapper {
     return data
   }
 
-  export const mapGroupSession = (reportingMonth: string) => (res: PromiseReturn<ReturnType<ApiSdk['kobo']['typedAnswers']['searchProtection_groupSession']>>) => {
+  export const mapGroupSession = (reportingMonth: string) => (res: KoboUnwrapResult<'searchProtection_groupSession'>) => {
     const data: Type[] = []
 
     res.data.forEach(d => {
@@ -106,7 +106,7 @@ export namespace AiProtectionMapper {
     return data
   }
 
-  export const mapCommunityMonitoring = (reportingMonth: string) => (res: PromiseReturn<ReturnType<ApiSdk['kobo']['typedAnswers']['searchProtection_communityMonitoring']>>) => {
+  export const mapCommunityMonitoring = (reportingMonth: string) => (res: KoboUnwrapResult<'searchProtection_communityMonitoring'>) => {
     const data: Type[] = []
     res.data.forEach(d => {
       switch (d.activity) {

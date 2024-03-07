@@ -159,6 +159,14 @@ export class DrcProjectHelper {
       return acc
     }, {} as Record<DrcProject, DrcDonor>)
 
+  static readonly extractCode = (str?: string): string | undefined => {
+    return str?.match(/UKR.(000\d\d\d)/)?.[1]
+  }
+
+  static readonly search = (str?: string): DrcProject | undefined => {
+    return DrcProjectHelper.searchByCode(DrcProjectHelper.extractCode(str))
+  }
+
   static readonly searchByCode = (code?: string): DrcProject | undefined => {
     if (code) return Obj.values(DrcProject).find(_ => _.includes(code))
   }

@@ -5,15 +5,15 @@ import {ProtectionActivity, ProtectionActivityFlat} from '@/features/Protection/
 import {Seq, seq} from '@alexandreannic/ts-utils'
 import {ProtectionDataHelper} from '@/features/Protection/Context/protectionDataHelper'
 import {UseProtectionFilter, useProtectionFilters} from '@/features/Protection/Context/useProtectionFilter'
-import {KoboUnwrapAnserType} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {KoboUnwrapAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
 export interface ProtectionContext {
   filters: Omit<UseProtectionFilter, 'data'>
   fetching: boolean
-  fetcherGbv: UseFetcher<() => KoboUnwrapAnserType<'searchProtection_gbv'>>
-  fetcherPss: UseFetcher<() => KoboUnwrapAnserType<'searchProtection_pss'>>
-  fetcherHhs: UseFetcher<() => KoboUnwrapAnserType<'searchProtection_hhs3'>>
-  fetcherGroupSession: UseFetcher<() => KoboUnwrapAnserType<'searchProtection_groupSession'>>
+  fetcherGbv: UseFetcher<() => Promise<KoboUnwrapAnswer<'searchProtection_gbv'>[]>>
+  fetcherPss: UseFetcher<() => Promise<KoboUnwrapAnswer<'searchProtection_pss'>[]>>
+  fetcherHhs: UseFetcher<() => Promise<KoboUnwrapAnswer<'searchProtection_hhs3'>[]>>
+  fetcherGroupSession: UseFetcher<() => Promise<KoboUnwrapAnswer<'searchProtection_groupSession'>[]>>
   data?: {
     filtered: Seq<ProtectionActivity>
     all: Seq<ProtectionActivity>
@@ -48,8 +48,8 @@ export const ProtectionProvider = ({
   const mappedData = useMemo(() => {
     if (allFetchers.find(_ => _.get === undefined)) return
     const res: Seq<ProtectionActivity> = seq()
-    res.push(...fetcherGbv.get?.filter(_ => _.new_ben !== 'no').map(ProtectionDataHelper.mapGbv) ?? [])
-    res.push(...fetcherPss.get?.filter(_ => _.new_ben !== 'no').map(ProtectionDataHelper.mapPss) ?? [])
+    res.push(...fetcherGbv.get?.map(ProtectionDataHelper.mapGbv) ?? [])
+    res.push(...fetcherPss.get?.map(ProtectionDataHelper.mapPss) ?? [])
     res.push(...fetcherGroupSession.get?.map(ProtectionDataHelper.mapGroupSession) ?? [])
     res.push(...fetcherHhs.get
       ?.filter(_ => _.have_you_filled_out_this_form_before === 'no' && _.present_yourself === 'yes')

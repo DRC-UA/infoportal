@@ -38,9 +38,10 @@ import {
 } from '@infoportal-common'
 import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 
-export type KoboUnwrapAnserType<T extends keyof KoboTypedAnswerSdk> = Promise<Awaited<ReturnType<KoboTypedAnswerSdk[T]>>['data']>
+export type KoboUnwrapResult<T extends keyof KoboTypedAnswerSdk> = Awaited<ReturnType<KoboTypedAnswerSdk[T]>>
+export type KoboUnwrapAnswer<T extends keyof KoboTypedAnswerSdk> = NonNullable<Awaited<ReturnType<KoboTypedAnswerSdk[T]>>['data'][number]>
 
 /** @deprecated should be coming from the unified database */
 type Meta = {
@@ -191,8 +192,32 @@ export class KoboTypedAnswerSdk {
     return this.search({
       formId: KoboIndex.byName('protection_pss').id,
       fnMapKobo: Protection_pss.map,
+      fnMapCustom: _ => {
+        if (_.new_ben === 'no') return
+        const persons: PersonDetails[] | undefined = (_.hh_char_hh_det ?? [])
+          .filter((_: any) => _.hh_char_hh_new_ben !== 'no')
+          .map(p => {
+            return {
+              gender: fnSwitch(p.hh_char_hh_det_gender!, {
+                male: Person.Gender.Male,
+                female: Person.Gender.Female,
+                other: Person.Gender.Other
+              }, () => undefined),
+              age: p.hh_char_hh_det_age,
+              displacement: fnSwitch(p.hh_char_hh_det_status!, {
+                idp: DisplacementStatus.Idp,
+                returnee: DisplacementStatus.Idp,
+                'non-displaced': DisplacementStatus.NonDisplaced,
+              }, () => undefined),
+            }
+          })
+        return makeMeta(_, {persons})
+      },
       ...filters,
-    })
+    }).then(_ => ({
+      ..._,
+      data: seq(_.data).compact(),
+    }))
   }
 
   readonly searchProtection_groupSession = (filters: KoboAnswerFilter = {}) => {
@@ -208,25 +233,31 @@ export class KoboTypedAnswerSdk {
       formId: KoboIndex.byName('protection_gbv').id,
       fnMapKobo: Protection_gbv.map,
       fnMapCustom: _ => {
-        const persons: PersonDetails[] | undefined = (_.hh_char_hh_det ?? []).map(p => {
-          return {
-            gender: fnSwitch(p.hh_char_hh_det_gender!, {
-              male: Person.Gender.Male,
-              female: Person.Gender.Female,
-              other: Person.Gender.Other
-            }, () => undefined),
-            age: p.hh_char_hh_det_age,
-            displacement: fnSwitch(p.hh_char_hh_det_status!, {
-              idp: DisplacementStatus.Idp,
-              returnee: DisplacementStatus.Idp,
-              'non-displaced': DisplacementStatus.NonDisplaced,
-            }, () => undefined),
-          }
-        })
+        if (_.new_ben === 'no') return
+        const persons: PersonDetails[] | undefined = (_.hh_char_hh_det ?? [])
+          .filter(_ => _.hh_char_hh_new_ben !== 'no')
+          .map(p => {
+            return {
+              gender: fnSwitch(p.hh_char_hh_det_gender!, {
+                male: Person.Gender.Male,
+                female: Person.Gender.Female,
+                other: Person.Gender.Other
+              }, () => undefined),
+              age: p.hh_char_hh_det_age,
+              displacement: fnSwitch(p.hh_char_hh_det_status!, {
+                idp: DisplacementStatus.Idp,
+                returnee: DisplacementStatus.Idp,
+                'non-displaced': DisplacementStatus.NonDisplaced,
+              }, () => undefined),
+            }
+          })
         return makeMeta(_, {persons})
       },
       ...filters,
-    })
+    }).then(_ => ({
+      ..._,
+      data: seq(_.data).compact(),
+    }))
   }
 
   readonly searchSafetyIncident = (filters: KoboAnswerFilter = {}): Promise<ApiPaginate<KoboAnswer<KoboSafetyIncidentHelper.Type>>> => {

@@ -11,9 +11,10 @@ import {
   Protection_pss
 } from '@infoportal-common'
 import {ProtectionActivity} from '@/features/Protection/Context/protectionType'
-import {Kobo, KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {getAiLocation} from '@/features/ActivityInfo/Protection/aiProtectionGeneralMapper'
+import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {fnSwitch} from '@alexandreannic/ts-utils'
+import {KoboUnwrapAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 
 export class ProtectionDataHelper {
 
@@ -26,7 +27,7 @@ export class ProtectionDataHelper {
 
   static readonly mapPss = (d: KoboAnswer<Protection_pss.T>): ProtectionActivity => {
     const project = KoboGeneralMapping.mapProject(Protection_pss.options.project[d.project!])
-    const aiLoc = getAiLocation(d)
+    const aiLoc = AiMapper.getLocation(d)
     return {
       ...d,
       date: d.date,
@@ -37,13 +38,13 @@ export class ProtectionDataHelper {
       hromada: aiLoc.Hromada,
       project: project ? [project] : [],
       donor: [DrcProjectHelper.donorByProject[project!]],
-      persons: d.hh_char_hh_det?.filter((_: any) => _.hh_char_hh_new_ben !== 'no').map(KoboGeneralMapping.mapPersonDetails),
+      persons: d.hh_char_hh_det?.map(KoboGeneralMapping.mapPersonDetails),
     }
   }
 
-  static readonly mapGbv = (d: KoboAnswer<Protection_gbv.T>): ProtectionActivity => {
+  static readonly mapGbv = (d: KoboUnwrapAnswer<'searchProtection_gbv'>): ProtectionActivity => {
     const project = KoboGeneralMapping.mapProject(Protection_gbv.options.project[d.project!])
-    const aiLoc = getAiLocation(d)
+    const aiLoc = AiMapper.getLocation(d)
     return {
       ...d,
       date: d.date,
@@ -54,13 +55,13 @@ export class ProtectionDataHelper {
       hromada: aiLoc.Hromada,
       project: project ? [project] : [],
       donor: [DrcProjectHelper.donorByProject[project!]],
-      persons: d.hh_char_hh_det?.filter((_: any) => _.hh_char_hh_new_ben !== 'no').map(KoboGeneralMapping.mapPersonDetails),
+      persons: d.hh_char_hh_det?.map(KoboGeneralMapping.mapPersonDetails),
     }
   }
 
   static readonly mapGroupSession = (d: KoboAnswer<Protection_groupSession.T>): ProtectionActivity => {
     const project = KoboGeneralMapping.mapProject(Protection_groupSession.options.project[d.project!])
-    const aiLoc = getAiLocation(d)
+    const aiLoc = AiMapper.getLocation(d)
     return {
       ...d,
       date: d.date,
