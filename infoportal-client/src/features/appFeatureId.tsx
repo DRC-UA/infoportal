@@ -186,7 +186,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: 'silver',
     path: '/snapshot',
     category: 'settings',
-    showIf: _ => _ && _?.admin
+    showIf: _ => true
   },
   admin: {
     id: AppFeatureId.admin,

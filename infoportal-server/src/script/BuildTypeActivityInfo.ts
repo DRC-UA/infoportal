@@ -2,8 +2,8 @@ import {ActivityInfoBuildType} from '../feature/activityInfo/databaseInterface/A
 
 
 (async () => {
-  await ActivityInfoBuildType.snfiRmm()
-  // await ActivityInfoBuildType.generalProtectionRmm()
-  // await ActivityInfoBuildType.mpcaRmm()
-  // await ActivityInfoBuildType.washRMM()
+  await ActivityInfoBuildType.snfi()
+  await ActivityInfoBuildType.generalProtection()
+  await ActivityInfoBuildType.mpca()
+  await ActivityInfoBuildType.wash()
 })()

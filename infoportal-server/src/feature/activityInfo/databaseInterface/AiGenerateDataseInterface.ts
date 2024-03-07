@@ -9,10 +9,10 @@ import columnsListMap = AiProtectionHhs.columnsListMap
 import {getObj} from '../../../helper/Utils'
 
 export const ActivityInfoBuildType = {
-  washRMM: () => generateDatabaseInterface({
+  wash: () => generateDatabaseInterface({
     optionsLimit: 200000,
-    formId: activityInfoForms.washRmm,
-    name: 'washRMM',
+    formId: activityInfoForms.wash,
+    name: 'wash',
     ignoredQuestions: [
       'Total Reached (All Population Groups)',
     ],
@@ -24,6 +24,8 @@ export const ActivityInfoBuildType = {
       /Implementing Partner/,
     ],
     skipQuestionsOptions: [
+      /Donor Name/,
+      /Reporting Organization/,
       /Sub-Implementing Partner/,
       /Hormada/,
       /Settlement/,
@@ -42,9 +44,9 @@ export const ActivityInfoBuildType = {
     }
   }),
 
-  snfiRmm: () => generateDatabaseInterface({
-    formId: activityInfoForms.snfiRmm,
-    name: 'snfiRmm',
+  snfi: () => generateDatabaseInterface({
+    formId: activityInfoForms.snfi,
+    name: 'snfi',
     skipQuestionsOptions: [
       /Oblast/,
       /Raion/,
@@ -53,40 +55,74 @@ export const ActivityInfoBuildType = {
       /Collective Site/,
     ],
     filterOptions: {
-      'Reporting Partner': _ => {
+      'Reporting Organization': _ => {
         return _.includes('Danish Refugee Council')
       },
       'Implementing Partner': _ => {
         return _.includes('Danish Refugee Council')
       }
-    }
+    },
   }),
 
-  generalProtectionRmm: () => generateDatabaseInterface({
+  generalProtection: () => generateDatabaseInterface({
     formId: activityInfoForms.generalProtectionRmm,
-    name: 'generalProtectionRmm',
-  }),
-
-  mpcaRmm: () => generateDatabaseInterface({
-    optionsLimit: 200,
-    formId: activityInfoForms.mpcaRmm,
-    name: 'mpcaRmm',
-    ignoredQuestions: [],
-    skipQuestion: [
-      /MPCA Indicators/,
-      // /Implementing Partner/,
-      // /MPCA Indicators/,
-    ],
+    name: 'generalProtection',
+    filterOptions: {
+      'Reporting Organization': _ => {
+        return _.includes('Danish Refugee Council')
+      },
+    },
     skipQuestionsOptions: [
-      /Sub-Implementing Partner/,
+      /Implementing Partner/,
+      /Implementing Partner 2/,
       /OblastIndex/,
       /Raion/,
       /Hormada/,
       /Settlement/,
+      /Collective Site/,
+    ]
+  }),
+  mineAction: () => generateDatabaseInterface({
+    formId: activityInfoForms.mineAction,
+    name: 'mineAction',
+    filterOptions: {
+      'Reporting Organization': _ => {
+        return _.includes('Danish Refugee Council')
+      },
+    },
+    skipQuestionsOptions: [
+      /Implementing Partner/,
+      /Implementing Partner 2/,
+      /OblastIndex/,
+      /Raion/,
+      /Hormada/,
+      /Settlement/,
+      /Collective Site/,
+    ]
+  }),
+
+  mpca: () => generateDatabaseInterface({
+    optionsLimit: 200,
+    formId: activityInfoForms.mpca,
+    name: 'mpca',
+    ignoredQuestions: [],
+    skipQuestion: [
+      /MPCA Indicators/,
+      /Donor/,
+      // /Implementing Partner/,
+      // /MPCA Indicators/,
+    ],
+    skipQuestionsOptions: [
+      /Implementing Partner/,
+      /OblastIndex/,
+      /Raion/,
+      /Hromada/i,
+      /Settlement/,
+      /Collective Site/,
     ],
     pickSpecificOptionSet: {},
     filterOptions: {
-      'Partner Organization': _ => {
+      'Reporting Organization': _ => {
         return _.includes('Danish Refugee Council')
       },
     }
@@ -133,7 +169,7 @@ const generateDatabaseInterface = async ({
   const x = new ActivityInfoSdk()
   const formDesc = await x.fetchForm(formId)
 
-  const getElements = (f: FormDescs, ids: AIID[]): FormDesc['schema']['elements'] => {
+  const getElements = (f: FormDescs, ids: AIID[]): FormDesc['schema']['elements'][] => {
     const ignoredInputs = [
       'subform',
       'section',
@@ -155,21 +191,21 @@ const generateDatabaseInterface = async ({
       .filter(_ => !ignoredQuestions.includes(_.label))
 
     const subFormsIds = seq(elements)
+      .filter(_ => _.type === 'subform')
       // .filter(_ => !!_.typeParameters.formId)
-      .map(_ => _.typeParameters.formId ?? _.typeParameters.range?.[0]?.formId)
+      .map(_ => _.typeParameters?.formId ?? _.typeParameters?.range?.[0]?.formId)
       .compact()
       .get()
 
     return [
-      ...questions,
-      ...subFormsIds.length > 0 ? getElements(f, subFormsIds) : [],
+      questions,
+      subFormsIds.length > 0 ? getElements(f, subFormsIds).flat() : [],
     ]
   }
 
   const getOptions = async (
     f: FormDescs,
     e: FormDesc['schema']['elements'][0],
-    // filter?: (_: string) => boolean
   ): Promise<{
     formId: AIID,
     optionId: AIID,
@@ -178,11 +214,18 @@ const generateDatabaseInterface = async ({
   }> => {
     const optionId = e.typeParameters.range![0].formId
     const getRandomOptions = () => {
-      return (f[optionId].schema.elements.find(_ => (_.code ?? '').includes('ENG')) ?? f[optionId].schema.elements[0]).id
+      return (f[optionId].schema.elements.find(_ => _.code === e.code || (_.code ?? '').includes('ENG')) ?? f[optionId].schema.elements[0]).id
     }
     const optionDefId = pickSpecificOptionSet[optionId] ?? getObj(columnsListMap, optionId)?.labelsId ?? getRandomOptions()
+    if (formId === 'c8uhbuclqb1fjlg2') {
+      console.log('optionDefId', optionDefId)
+    }
     // const optionDefId = pickSpecificOptionSet[optionId] ?? getObj(columnsListMap, optionId)?.listId ?? getRandomOptions()
-    const options = await x.fetchColumns(optionId, optionDefId)
+    const options = await x.fetchColumns(
+      optionId,
+      optionDefId,
+      e.validationCondition?.replace(e.id + '.', '')
+    )
     const filter = filterOptions[e.label]
     return {
       formId: e.id,
@@ -192,14 +235,12 @@ const generateDatabaseInterface = async ({
     }
   }
 
-  const print = async () => {
-    const forms = getElements(formDesc, [formId])
-    console.log(forms)
-    const options = await Promise.all(forms
+  const prepareData = async (form: FormDesc['schema']['elements']): Promise<AIFormInformation[]> => {
+    const options = await Promise.all(form
       .filter(_ => _.type === 'reference' && !pickSpecificOptionSet[_.id])
       .map(_ => getOptions(formDesc, _))
     )
-    const data = forms.map(q => {
+    return form.map(q => {
       const o = options.find(_ => _.formId === q.id)
       return {
         id: q.id,
@@ -211,23 +252,33 @@ const generateDatabaseInterface = async ({
         required: q.required,
       }
     })
-    generate(data)
   }
 
   const sanitalizeNonASCIIChar = (_: string) => _.replace(/[^\x00-\x7F]/g, ' ')
 
-  const generate = (data: AIFormInformation[]) => {
-    fs.writeFileSync(outputDir + '/AiType' + capitalize(name) + '.ts',
+  const print = async () => {
+    const [form, subForm] = getElements(formDesc, [formId])
+    const formData = await prepareData(form)
+    const formSubData = await prepareData(subForm)
+
+    const filePath = outputDir + '/AiType' + capitalize(name) + '.ts'
+    console.log(`Generate into ${filePath}`)
+    fs.writeFileSync(filePath,
       `export namespace AiType${capitalize(name)} {` +
-      generateInterface(data) + '\n\n' +
-      generateMappingFn(data) + '\n\n' +
-      generateOptions(data) + '\n\n' +
+      generateInterface(formData) + '\n\n' +
+      generateMappingFn(formData) + '\n\n' +
+      printOptions(formData) + '\n\n' +
+      (formSubData.length > 0 ?
+        generateInterface(formSubData, 'sub') + '\n\n' +
+        generateMappingFn(formSubData, 'sub') + '\n\n' +
+        printOptions(formSubData, 'sub') + '\n\n'
+        : '') +
       '}'
     )
   }
 
-  const generateOptions = (d: AIFormInformation[]) => {
-    return `export const options = {\n`
+  const printOptions = (d: AIFormInformation[], prefix = '') => {
+    return `export const options${capitalize(prefix)} = {\n`
       + d.filter(_ => !!_.options).map(q => ``
         + `  '${q.label}': {\n`
         + `    ${q.options?.map(o => `"${o.label}": '${o.id}'`).join(',\n    ')}`
@@ -240,15 +291,15 @@ const generateDatabaseInterface = async ({
     return !!skipQuestionsOptions.find(_ => _.test(label))
   }
 
-  const generateMappingFn = (d: AIFormInformation[]) => {
-    return `export const map = (a: Type) => ({\n`
+  const generateMappingFn = (d: AIFormInformation[], prefix = '') => {
+    return `export const map${capitalize(prefix)} = (a: Type${capitalize(prefix)}) => ({\n`
       + d.map(q => {
         const mapValue = fnSwitch(q.type, {
           'enumerated': () => {
-            return `options['${q.label}'][a['${q.label}']!]`
+            return `options${capitalize(prefix)}['${q.label}'][a['${q.label}']!]`
           },
           'reference': () => {
-            return `'${q.optionsId}' + ':' + options['${q.label}'][a['${q.label}']!]`
+            return `'${q.optionsId}' + ':' + options${capitalize(prefix)}['${q.label}'][a['${q.label}']!]`
           },
         }, _ => `a['${q.label}']`)
         return `  '${q.id}': a['${q.label}'] === undefined ? undefined : ${mapValue}`
@@ -256,14 +307,14 @@ const generateDatabaseInterface = async ({
       + '\n})'
   }
 
-  const generateInterface = (d: AIFormInformation[]) => {
+  const generateInterface = (d: AIFormInformation[], prefix = '') => {
     return ``
-      + `type Opt<T extends keyof typeof options> = keyof (typeof options)[T]\n\n`
-      + `export interface Type {\n`
+      + `type Opt${capitalize(prefix)}<T extends keyof typeof options${capitalize(prefix)}> = keyof (typeof options${capitalize(prefix)})[T]\n\n`
+      + `export interface Type${capitalize(prefix)} {\n`
       + d.map(q => {
         const type = fnSwitch(q.type, {
-          reference: `Opt<'${q.label}'>`,
-          enumerated: `Opt<'${q.label}'>`,
+          reference: `Opt${capitalize(prefix)}<'${q.label}'>`,
+          enumerated: `Opt${capitalize(prefix)}<'${q.label}'>`,
           quantity: 'number',
         }, _ => 'string')
         return `  '${q.label}'${q.required ? '' : '?'}: ${type}`
@@ -271,5 +322,5 @@ const generateDatabaseInterface = async ({
       + '\n}'
   }
 
-  console.error(await print())
+  await print()
 }

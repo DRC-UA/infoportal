@@ -1,7 +1,6 @@
 import {AIID, Database, Form, FormDescs} from '../model/ActivityInfo'
-import {makeid} from '@infoportal-common'
 import {appConf} from '../../../core/conf/AppConf'
-import {AiProtectionHhs} from '../sandbox/AiProtectionHhs'
+import {Obj} from '@alexandreannic/ts-utils'
 
 interface ActicityInfoBody {
   [key: string]: any
@@ -99,6 +98,7 @@ export class ActivityInfoSdk {
   readonly fetchColumns = async (formId: AIID, optionDefId: AIID, filter?: string): Promise<{id: AIID, label: string}[]> => {
     return this.api.post(`/resources/query/columns`, {
       body: {
+        filter,
         // filter: filter ? `_id == \\"${filter}\\"` : undefined,
         rowSources: [{'rootFormId': formId}],
         columns: [{'id': 'id', 'expression': '_id'}, {'id': 'k1', 'expression': optionDefId}],
@@ -111,6 +111,19 @@ export class ActivityInfoSdk {
           label: res.k1.values[i],
         }))
       })
+  }
+
+  readonly fetchColumnsFree = async (body: any): Promise<{id: AIID, label: string}[]> => {
+    return this.api.post(`/resources/query/columns`, {body}).then(_ => _.columns)
+      // .then(_ => {
+      // const {id, value} = _.columns
+      // const res = (id.values as string[]).reduce((acc, id, i) => {
+      //   @ts-ignore
+        // acc[value.values[i]] = id
+        // return acc
+      // }, {})
+      // return res
+    // })
   }
 
   readonly publish = (params: any) => {
@@ -127,71 +140,71 @@ export class ActivityInfoSdk {
   // }
 
   /** @deprecated should generated related model and use function mapping */
-  static readonly makeForm = (params: AiProtectionHhs.FormParams): any => {
-    const getKeyId = (id: keyof typeof AiProtectionHhs.inputs) => AiProtectionHhs.inputs[id].id
-    // const buildOption = <T extends keyof typeof AiProtectionHhs.inputsOptions>(t: T, defaultValue?: keyof (typeof AiProtectionHhs.inputsOptions)[T]) => {
-    //   return {
-    //     [inputs[t].id]: (inputs[t] as any).optionsId + ':' + ((AiProtectionHhs.inputsOptions as any)[t][(params as any)[t] ?? defaultValue])
-    //   }
-    // }
-    // const buildValue = <T extends keyof AiProtectionHhs.FormParams>(t: T) => {
-    //   return {[inputs[t].id]: params[t]}
-    // }
-
-    // @ts-ignore
-    const buildOption = <T extends Partial<Record<keyof typeof inputs, any>>, K extends keyof T>(obj: T, k: K, defaultValue?: keyof (typeof AiProtectionHhs.inputsOptions)[K]) => {
-      const input = (AiProtectionHhs.inputs as any)[k]
-      const value = (obj as any)[k] ?? defaultValue
-      if (value !== undefined)
-        return {[input.id]: input.optionsId + ':' + (AiProtectionHhs.inputsOptions as any)[k][value]}
-    }
-
-    const buildValue = <T extends Partial<Record<keyof typeof AiProtectionHhs.inputs, any>>, K extends keyof T>(obj: T, k: K) => {
-      const input = (AiProtectionHhs.inputs as any)[k]
-      const value = obj[k]
-      if (value !== undefined)
-        return {[input.id]: value}
-    }
-    const recordId = 'drcaalex' + makeid(9)
-    return {
-      'changes': [
-        {
-          formId: 'cas3n26ldsu5aea5',
-          recordId,
-          parentRecordId: null,
-          fields: {
-            ...buildOption(params, 'Partner Organization', 'DRC - Danish Demining Group (DRC-DDG)'),
-            ...buildOption(params, 'Plan Code'),
-            ...buildOption(params, 'Oblast'),
-            ...buildOption(params, 'Raion'),
-            ...buildOption(params, 'Hromada'),
-            ...buildValue(params, 'Settlement'),
-            ...buildValue(params, 'Collective Centre'),
-            // 'Response Theme': '',
-          },
-        },
-        ...params.subActivities.map(x => {
-          return {
-            formId: 'cy3vehlldsu5aeb6',
-            recordId: 'alexdrc' + makeid(9),
-            parentRecordId: recordId,
-            fields: {
-              ...buildValue(x, 'Reporting Month'),
-              ...buildOption(x, 'Population Group'),
-              ...buildOption(x, 'Protection Indicators', '# of persons reached through protection monitoring'),
-              // ...buildOption(x, 'Protection Sub-Indicators', '# of persons reached through protection monitoring'),
-              ...buildValue(x, 'Total Individuals Reached'),
-              ...buildValue(x, 'Girls'),
-              ...buildValue(x, 'Boys'),
-              ...buildValue(x, 'Adult Women'),
-              ...buildValue(x, 'Adult Men'),
-              ...buildValue(x, 'Elderly Women'),
-              ...buildValue(x, 'Elderly Men'),
-              ...buildValue(x, 'People with disability'),
-            }
-          }
-        }),
-      ]
-    }
-  }
+  // static readonly makeForm = (params: AiProtectionHhs.FormParams): any => {
+  //   const getKeyId = (id: keyof typeof AiProtectionHhs.inputs) => AiProtectionHhs.inputs[id].id
+  //   // const buildOption = <T extends keyof typeof AiProtectionHhs.inputsOptions>(t: T, defaultValue?: keyof (typeof AiProtectionHhs.inputsOptions)[T]) => {
+  //   //   return {
+  //   //     [inputs[t].id]: (inputs[t] as any).optionsId + ':' + ((AiProtectionHhs.inputsOptions as any)[t][(params as any)[t] ?? defaultValue])
+  //   //   }
+  //   // }
+  //   // const buildValue = <T extends keyof AiProtectionHhs.FormParams>(t: T) => {
+  //   //   return {[inputs[t].id]: params[t]}
+  //   // }
+  //
+  //   // @ts-ignore
+  //   const buildOption = <T extends Partial<Record<keyof typeof inputs, any>>, K extends keyof T>(obj: T, k: K, defaultValue?: keyof (typeof AiProtectionHhs.inputsOptions)[K]) => {
+  //     const input = (AiProtectionHhs.inputs as any)[k]
+  //     const value = (obj as any)[k] ?? defaultValue
+  //     if (value !== undefined)
+  //       return {[input.id]: input.optionsId + ':' + (AiProtectionHhs.inputsOptions as any)[k][value]}
+  //   }
+  //
+  //   const buildValue = <T extends Partial<Record<keyof typeof AiProtectionHhs.inputs, any>>, K extends keyof T>(obj: T, k: K) => {
+  //     const input = (AiProtectionHhs.inputs as any)[k]
+  //     const value = obj[k]
+  //     if (value !== undefined)
+  //       return {[input.id]: value}
+  //   }
+  //   const recordId = 'drcaalex' + makeid(9)
+  //   return {
+  //     'changes': [
+  //       {
+  //         formId: 'cas3n26ldsu5aea5',
+  //         recordId,
+  //         parentRecordId: null,
+  //         fields: {
+  //           ...buildOption(params, 'Partner Organization', 'DRC - Danish Demining Group (DRC-DDG)'),
+  //           ...buildOption(params, 'Plan Code'),
+  //           ...buildOption(params, 'Oblast'),
+  //           ...buildOption(params, 'Raion'),
+  //           ...buildOption(params, 'Hromada'),
+  //           ...buildValue(params, 'Settlement'),
+  //           ...buildValue(params, 'Collective Centre'),
+  //           // 'Response Theme': '',
+  //         },
+  //       },
+  //       ...params.subActivities.map(x => {
+  //         return {
+  //           formId: 'cy3vehlldsu5aeb6',
+  //           recordId: 'alexdrc' + makeid(9),
+  //           parentRecordId: recordId,
+  //           fields: {
+  //             ...buildValue(x, 'Reporting Month'),
+  //             ...buildOption(x, 'Population Group'),
+  //             ...buildOption(x, 'Protection Indicators', '# of persons reached through protection monitoring'),
+  //             // ...buildOption(x, 'Protection Sub-Indicators', '# of persons reached through protection monitoring'),
+  //             ...buildValue(x, 'Total Individuals Reached'),
+  //             ...buildValue(x, 'Girls'),
+  //             ...buildValue(x, 'Boys'),
+  //             ...buildValue(x, 'Adult Women'),
+  //             ...buildValue(x, 'Adult Men'),
+  //             ...buildValue(x, 'Elderly Women'),
+  //             ...buildValue(x, 'Elderly Men'),
+  //             ...buildValue(x, 'People with disability'),
+  //           }
+  //         }
+  //       }),
+  //     ]
+  //   }
+  // }
 }
