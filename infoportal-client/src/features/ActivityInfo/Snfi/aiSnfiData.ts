@@ -16,7 +16,6 @@ import {
   ShelterTaPriceLevel
 } from '@infoportal-common'
 import {fnSwitch, RequiredProperty, Seq, seq} from '@alexandreannic/ts-utils'
-import {AiLocation, getAiLocation} from '@/features/ActivityInfo/Protection/aiProtectionGeneralMapper'
 import {format} from 'date-fns'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
@@ -24,11 +23,21 @@ import {AiBundle} from '@/features/ActivityInfo/shared/AiBundle'
 import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
 import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {ShelterNorth202312} from '@/features/ActivityInfo/Snfi/shelterNorth202312'
+import {AiTypeSnfi} from '@/features/ActivityInfo/Snfi/AiTypeSnfi'
 
 export type AiSnfiBundle = Omit<AiBundle, 'data'> & {
   nta?: KoboAnswer<Shelter_NTA.T>[]
   ta?: KoboAnswer<Shelter_TA.T>[]
   esk?: KoboAnswer<Bn_Re.T>[]
+}
+
+const planCodes = {
+  [DrcProject['UKR-000298 Novo-Nordisk']]: 'SNFI-DRC-00001',
+  [DrcProject['UKR-000314 UHF4']]: 'SNFI-DRC-00002',
+  [DrcProject['UKR-000336 UHF6']]: 'SNFI-DRC-00003',
+  [DrcProject['UKR-000355 Danish MFA']]: 'SNFI-DRC-00004',
+  [DrcProject['UKR-000360 Novo-Nordisk']]: 'SNFI-DRC-00005',
+  [DrcProject['UKR-000322 ECHO2']]: 'SNFI-DRC-00006',
 }
 
 export class AiShelterData {
@@ -58,15 +67,14 @@ export class AiShelterData {
         {by: _ => _.levelDamage},
       ],
       finalTransform: (grouped, [project, Oblast, Raion, Hromada, level]) => {
-        const activity: AiSnfiInterface.Type = {
+        const activity: AiTypeSnfi.Type = {
           Oblast, Raion, Hromada,
           'Implementing Partner': 'Danish Refugee Council',
-          'Report to a planned project': project ? 'Yes' : 'No',
-          'Plan Code': fnSwitch(project, {
+          'Plan/Project Code': fnSwitch(project, {
             'UKR-000284 BHA': DrcProject['UKR-000284 BHA'],
             'UKR-000308 UNHCR': DrcProject['UKR-000308 UNHCR'],
             'UKR-000336 UHF-6': DrcProject['UKR-000336 UHF6'],
-            'UKR-000322 ECHO': DrcProject['UKR-000322 ECHO2'],
+            'UKR-000322 ECHO': 'SNFI-DRC-00006',
           }),
           'Reporting Partner': 'Danish Refugee Council',
           'SNFI indictors': level,
