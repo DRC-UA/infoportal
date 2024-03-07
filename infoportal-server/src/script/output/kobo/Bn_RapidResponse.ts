@@ -188,6 +188,28 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // hh_char_l/hh_char_dis_level_l [select_one] 3.4.2 What is the level of difficulty for the selected options in the previous questions?
   hh_char_dis_level_l: undefined | Option<'hh_char_dis_level_l'>,
 	    calc_dis_level_l: string,
+	  // mpca_bha_345/extent_basic_needs_bha345 [select_one] M02. To what extent is your household able to meet the basic needs of your HH according to your priorities?
+  extent_basic_needs_bha345: undefined | Option<'extent_basic_needs_bha345'>,
+	  // mpca_bha_345/basic_needs_unable_fulfill_bha345 [select_multiple] M02.1 Which basic needs is your household currently unable to fulfill?
+  basic_needs_unable_fulfill_bha345: undefined | Option<'basic_needs_unable_fulfill_bha345'>[],
+	  // mpca_bha_345/basic_needs_unable_fulfill_other_bha345 [text] M02.1 Which other basic needs is your household currently unable to fulfill
+  basic_needs_unable_fulfill_other_bha345: string | undefined,
+	  // mpca_bha_345/basic_needs_unable_fully_reason_bha345 [select_multiple] M02.2 Why are you unable to fully meet this need?${basic_needs_unable_fulfill_bha345}
+  basic_needs_unable_fully_reason_bha345: undefined | Option<'basic_needs_unable_fully_reason_bha345'>[],
+	  // mpca_bha_345/basic_needs_unable_fully_reason_other_bha345 [text] M02.2 Why are you unable to fully meet this need, if other?${basic_needs_unable_fulfill_bha345}
+  basic_needs_unable_fully_reason_other_bha345: string | undefined,
+	  // mpca_bha_345/items_basic_level_comfort_bha_345 [select_one] M11. Does your household currently have enough clothing, bedding, cooking supplies, fuel, lighting, and other items needed to provide a basic level of comfort?
+  items_basic_level_comfort_bha_345: undefined | Option<'pay_det_tax_exempt_l'>,
+	  // mpca_bha_345/items_basic_level_comfort_no_bha_345 [select_multiple] M11.1 If no, what items do you still feel you need?
+  items_basic_level_comfort_no_bha_345: undefined | Option<'items_basic_level_comfort_no_bha_345'>[],
+	  // mpca_bha_345/items_basic_level_comfort_no_other_bha_345 [text] M11.1.1 What other  items do you still feel you need?
+  items_basic_level_comfort_no_other_bha_345: string | undefined,
+	  // mpca_bha_345/member_access_water_bha_345 [select_multiple] M12. Does each of your household member have access to safe water in sufficient quantities for drinking, cooking and washing?
+  member_access_water_bha_345: undefined | Option<'member_access_water_bha_345'>[],
+	  // mpca_bha_345/access_water_3options_bha_345 [calculate] Select 3 answers?
+  access_water_3options_bha_345: string,
+	  // mpca_bha_345/access_water_3options_bha_346_true [note] Three options be selected
+  access_water_3options_bha_346_true: string,
 	  // nfi_l/eligibility_summary_nfi_l [note] **Based on minimum standards this house is eligible for:**
   eligibility_summary_nfi_l: string,
 	  // nfi_l/nfi_fam_hy_1_l [note] **1** Family Hygiene Kit (HKMV)
@@ -236,6 +258,10 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   note_heavy_damage_l: string,
 	  // Section_4a_ESK_l/estimate_sqm_damage_l [integer] 4.2 Can you estimate the square meter or roof or window that is damaged?
   estimate_sqm_damage_l: number | undefined,
+	  // Section_4a_ESK_l/esk_bha_345_m04/living_space_essential_activities_bha_345 [select_one] M04. Does your current living space allow you to conduct essential household activities with dignity, security, and provide protection from physical and environmental harm?
+  living_space_essential_activities_bha_345: undefined | Option<'pay_det_tax_exempt_l'>,
+	  // Section_4a_ESK_l/esk_bha_345_m04/current_living_space_sufficient_bha_345 [select_multiple] M04.1 Does your current living space is sufficient to provide
+  current_living_space_sufficient_bha_345: undefined | Option<'current_living_space_sufficient_bha_345'>[],
 	  // Section_4a_ESK_l/eligibility_summary_esk_l [note] Based upon the answers above, the household is eligible for the following:
   eligibility_summary_esk_l: string,
 	    calc_eligible: string,
@@ -355,6 +381,7 @@ back_donor: {
 	'echo': `ECHO`,
 	'uhf_4': `UHF 4`,
 	'bha': `BHA`,
+	'bha_345': `BHA_345`,
 	'novo': `NovoNordisk`,
 	'pooled': `Pool Funds`,
 	'sdc': `SDC`
@@ -523,6 +550,12 @@ back_donor_l: {
 	'bha_dnk': `BHA`,
 	'bha_hrk': `BHA`,
 	'bha_nlv': `BHA`,
+	'lwo_bha_345': `BHA_345`,
+	'chj_bha_345': `BHA_345`,
+	'dnk_bha_345': `BHA_345`,
+	'hrk_bha_345': `BHA_345`,
+	'nlv_bha_345': `BHA_345`,
+	'umy_bha_345': `BHA_345`,
 	'echo_chj': `ECHO`,
 	'echo_dnk': `ECHO`,
 	'echo_hrk': `ECHO`,
@@ -2582,6 +2615,51 @@ pay_det_pay_meth_l: {
 	'bank_card': `C = Bank card`,
 	'other_pay': `D = Other Payment Method`,
 	'none_pay': `E = None of the above fit my needs`
+},
+current_living_space_sufficient_bha_345: {
+	'thermal_comfort': `A = Thermal comfort`,
+	'fresh_air': `B = Fresh air`,
+	'protection_elements': `C = Protection from the elements`,
+	'privacy': `D = Privacy`,
+	'safety_health': `E = Safety and health`
+},
+extent_basic_needs_bha345: {
+	'all': `A = All`,
+	'most': `B = Most`,
+	'about_half': `C = About half`,
+	'some': `D = Some(less than half)`,
+	'none': `E = None`
+},
+basic_needs_unable_fulfill_bha345: {
+	'Food': `A = Food`,
+	'hygiene_items': `B = Hygiene items`,
+	'rent': `C = Rent`,
+	'utilities': `D = Utilities`,
+	'heating': `E = Heating (fuel)`,
+	'healthcare': `F = Healthcare (services)`,
+	'medication': `G = Medication`,
+	'clothing': `H = Clothing`,
+	'other': `J = Other`
+},
+basic_needs_unable_fully_reason_bha345: {
+	'insufficient_cash': `Insufficient cash resources`,
+	'lack_services': `Lack of goods/services`,
+	'lack_access_safety': `Lack of physical access related to safety`,
+	'other': `Other (specify)`
+},
+items_basic_level_comfort_no_bha_345: {
+	'clothing': `A = Clothing`,
+	'bedding': `B = Bedding`,
+	'cooking_dining_utensils': `C = Cooking and dining utensils`,
+	'lighting': `D = Lighting`,
+	'fuel_heating': `E = Fuel/heating`,
+	'other': `J = Other`
+},
+member_access_water_bha_345: {
+	'drinking': `A = For drinking`,
+	'cooking': `B = For cooking`,
+	'washing': `C = For washing`,
+	'none': `D = None`
 }}
 
 const extractQuestionName = (_: Record<string, any>) => {
@@ -2620,6 +2698,10 @@ export const map = (_: Record<keyof T, any>): T => ({
 		return _	
 }),
 	hh_char_dis_select_l: _.hh_char_dis_select_l?.split(' '),
+	basic_needs_unable_fulfill_bha345: _.basic_needs_unable_fulfill_bha345?.split(' '),
+	basic_needs_unable_fully_reason_bha345: _.basic_needs_unable_fully_reason_bha345?.split(' '),
+	items_basic_level_comfort_no_bha_345: _.items_basic_level_comfort_no_bha_345?.split(' '),
+	member_access_water_bha_345: _.member_access_water_bha_345?.split(' '),
 	nfi_dist_hkf_l: _.nfi_dist_hkf_l ? +_.nfi_dist_hkf_l : undefined,
 	nfi_dist_hkmv_l: _.nfi_dist_hkmv_l ? +_.nfi_dist_hkmv_l : undefined,
 	nfi_dist_hkf_001_l: _.nfi_dist_hkf_001_l ? +_.nfi_dist_hkf_001_l : undefined,
@@ -2631,6 +2713,7 @@ export const map = (_: Record<keyof T, any>): T => ({
 	nfi_kit_cc: _.nfi_kit_cc ? +_.nfi_kit_cc : undefined,
 	nfi_bed: _.nfi_bed ? +_.nfi_bed : undefined,
 	estimate_sqm_damage_l: _.estimate_sqm_damage_l ? +_.estimate_sqm_damage_l : undefined,
+	current_living_space_sufficient_bha_345: _.current_living_space_sufficient_bha_345?.split(' '),
 	cfr_accom_cond_occ_rat_l: _.cfr_accom_cond_occ_rat_l ? +_.cfr_accom_cond_occ_rat_l : undefined,
 }) as T
 }

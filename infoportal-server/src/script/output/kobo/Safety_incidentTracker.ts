@@ -1,4 +1,4 @@
-export namespace safety_incident {
+export namespace Safety_incidentTracker {
 export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	// Form id: aAJNkn7v9fRL2XqQCgEkXf
 	export interface T {
