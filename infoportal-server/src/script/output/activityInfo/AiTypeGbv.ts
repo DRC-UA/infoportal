@@ -1,4 +1,4 @@
-export namespace AiTypeGeneralProtection {type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
+export namespace AiTypeGbv {type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
 
 export interface Type {
   'ID'?: string,
@@ -19,7 +19,7 @@ export const map = (a: Type) => ({
   'c1g03yllqf3085j4t': a['Reporting Organization'] === undefined ? undefined : 'czbgrslpwg36j52' + ':' + options['Reporting Organization'][a['Reporting Organization']!],
   'ct68whplqf3085j4u': a['Implementing Partner'] === undefined ? undefined : a['Implementing Partner'],
   'cz796xnlqf3085j4v': a['Implementing Partner 2'] === undefined ? undefined : a['Implementing Partner 2'],
-  'ctn2ej8lqf3085j4w': a['Plan/Project Code'] === undefined ? undefined : 'cuar8eplqf1xm9225' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
+  'cokrtv7lrixjgcd9': a['Plan/Project Code'] === undefined ? undefined : 'cqfsgcblr6f4hbpzu' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
   'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + options['Oblast'][a['Oblast']!],
   'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : a['Raion'],
   'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : a['Hromada'],
@@ -33,13 +33,11 @@ export const options = {
     "Danish Refugee Council": 'cloyih3lpwhjdsu2r0'
   },
   'Plan/Project Code': {
-    "PRT-DRC-00001": 'cepwx9plsai8rlfd',
-    "PRT-DRC-00002": 'c5woab2lsaieofhe',
-    "PRT-DRC-00003": 'c6oy73wlsaihu52f',
-    "PRT-DRC-00004": 'clsx70blsaiucltg',
-    "PRT-DRC-00005": 'cyvk25tlsaiz8skh',
-    "PRT-DRC-00006": 'c5yiak4lsaj2cpei',
-    "PRT-DRC-00007": 'c7ddst8lsaj7gnaj'
+    "GBV-DRC-00001": 'c10nfqbls2wqyvg2',
+    "GBV-DRC-00002": 'co0svlsls2x3ndr3',
+    "GBV-DRC-00003": 'cftn5bgls2xbfl14',
+    "GBV-DRC-00004": 'cqr8n0hls2xh58h5',
+    "GBV-DRC-00005": 'c3xqrqfls2xll546'
   },
   'Oblast': {
     "Autonomous Republic of Crimea_Автономна Республіка Крим": 'c5c2sr3lq3kjj6gd',
@@ -80,6 +78,7 @@ type OptSub<T extends keyof typeof optionsSub> = keyof (typeof optionsSub)[T]
 export interface TypeSub {
   'Reporting Month': string,
   'Population Group': OptSub<'Population Group'>,
+  'Type of beneficiaries'?: OptSub<'Type of beneficiaries'>,
   'Indicators': OptSub<'Indicators'>,
   'Total Individuals Reached': number,
   'Girls (0-17)': number,
@@ -89,12 +88,15 @@ export interface TypeSub {
   'Older Women (60+)': number,
   'Older Men (60+)': number,
   'Non-individuals Reached/Quantity': number,
-  'People with Disability'?: number
+  'People with Disability'?: number,
+  'Was the service provided to evacuees?'?: OptSub<'Was the service provided to evacuees?'>,
+  'How many evacuees received the service?'?: number
 }
 
 export const mapSub = (a: TypeSub) => ({
   'c3qgzazlqf3umfi5q': a['Reporting Month'] === undefined ? undefined : a['Reporting Month'],
   'cfk8s3wlqf3umfi5r': a['Population Group'] === undefined ? undefined : 'cf8ig2alq6dbe8t2' + ':' + optionsSub['Population Group'][a['Population Group']!],
+  'c6893c2lslppffd6': a['Type of beneficiaries'] === undefined ? undefined : optionsSub['Type of beneficiaries'][a['Type of beneficiaries']!],
   'cdy5p8nlqf3umfi5s': a['Indicators'] === undefined ? undefined : 'c8uhbuclqb1fjlg2' + ':' + optionsSub['Indicators'][a['Indicators']!],
   'c91ka88lqf3umfi5w': a['Total Individuals Reached'] === undefined ? undefined : a['Total Individuals Reached'],
   'cehoaaplqf3umfi5x': a['Girls (0-17)'] === undefined ? undefined : a['Girls (0-17)'],
@@ -104,7 +106,9 @@ export const mapSub = (a: TypeSub) => ({
   'cdrd176lqf3umfi61': a['Older Women (60+)'] === undefined ? undefined : a['Older Women (60+)'],
   'c81tgzdlqf3umfi62': a['Older Men (60+)'] === undefined ? undefined : a['Older Men (60+)'],
   'cnaij95lqf3umfi63': a['Non-individuals Reached/Quantity'] === undefined ? undefined : a['Non-individuals Reached/Quantity'],
-  'cz8i6pylqf3umfi64': a['People with Disability'] === undefined ? undefined : a['People with Disability']
+  'cz8i6pylqf3umfi64': a['People with Disability'] === undefined ? undefined : a['People with Disability'],
+  'cq1dlstlt6ysqm63': a['Was the service provided to evacuees?'] === undefined ? undefined : optionsSub['Was the service provided to evacuees?'][a['Was the service provided to evacuees?']!],
+  'cokstg6lt73gbxif': a['How many evacuees received the service?'] === undefined ? undefined : a['How many evacuees received the service?']
 })
 
 export const optionsSub = {
@@ -113,39 +117,36 @@ export const optionsSub = {
     "Non-Displaced": 'ck6ulx8lq6dgcok6',
     "Returnees": 'cuz9qi9lq6dgcok7'
   },
+  'Type of beneficiaries': {
+    "New beneficiaries": 'clxysqflslppffd5',
+    "Repeated beneficiaries": 'cv19gg2lslpptjy7'
+  },
   'Indicators': {
-    "# of individuals who received case management services (not including specialized CP & GBV services)": 'cuv5lkclqmgu66u1f',
-    "# of individuals who participated in community-based protection activities": 'cfye7v0lqmgu66u1g',
-    "# of individuals in a community trained on protection approaches or issues (not including GBV or Child Protection)": 'c4gngpdlqmgu66u1h',
-    "# of individuals supported through community-based organizations with social rehabilitation": 'cigruiclqmgu66u1i',
-    "# of organizations of people with disabilities (OPDs) supported to provide social rehabilitation": 'cr9kr8qlqmgu66v1j',
-    "# of hotlines established and operated": 'chkpac2lqmgu66v1k',
-    "# of calls received by hotlines from individuals": 'cevyso1lqmgu66v1l',
-    "# of individuals with specific needs who received cash assistance to prevent, mitigate or respond to protection risks": 'cxnbfd8lqmgu66v1m',
-    "# of individuals with specific needs who received in-kind protection assistance to prevent, mitigate or respond to protection risks": 'cbolgy6lqmgu66v1n',
-    "# of individuals who received legal assistance on HLP issues": 'cugc39qlqmgu66v1o',
-    "# of individuals who successfully secured HLP documentation": 'cepn945lqmgu66v1p',
-    "# of individuals who received legal assistance": 'c9xmy7flqmgu66v1q',
-    "# of individuals who successfully secured civil documentation": 'c99v29olqmgu66v1r',
-    "# of individuals who received protection counselling": 'c5qlvw9lqmgu66v1s',
-    "# of individuals who received legal counselling": 'c4qmnm2lqmgu66v1t',
-    "# of individuals who received HLP legal counselling": 'c4b7guylqmgu66v1u',
-    "# of individuals reached through protection monitoring at the household level": 'cx5yue4lqmgu66v1v',
-    "# of locations assessed through community level protection monitoring": 'clez5molqmgu66v1w',
-    "# of interviews conducted with key informants through community level protection monitoring": 'cicv1plqmgu66v1x',
-    "# of individuals who received individual or group-based psychosocial support": 'c3d56b7lqmgu66v1y',
-    "# of individuals with specific needs referred to specialized services and assistance": 'cjt0ciglqmgu66v1z',
-    "# of individuals provided with transportation services": 'ccpeionlqmgu66v20',
-    "# of individuals who participated in awareness raising activities on Protection": 'csxs7tvlqmgu66v21',
-    "# of individuals who participated in awareness raising sessions on HLP": 'cv8k7nolqmgu66v22',
-    "# of advocacy interventions undertaken on protection issues": 'c6aftmvlqmgu66v23',
-    "# of protection assessments conducted": 'cckhamclqmgu66v24',
-    "# of humanitarian staff trained on protection approaches or issues": 'csbl6nxlqmgu66v25',
-    "# of government staff trained on protection approaches or issues": 'chymmkklqmgu66v26',
-    "# of humanitarian staff trained on HLP": 'c8bht7flqmgu66v27',
-    "# of government staff trained on HLP": 'cc1gtwnlqmgu66v28',
-    "# of community centers established or maintained": 'c2395qdlqmgu66v29',
-    "# of government institutions supported": 'cy4jvntlqmgu66v2a'
+    "# of individuals supported with GBV case management that meet GBViE minimum standards": 'c296s26lqmgu66ul',
+    "# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)": 'c5q9o3xlqmgu66um',
+    "# of GBV hotlines operational": 'c6rdt1clqmgu66un',
+    "# of individuals who received services in GBV crisis rooms": 'citub83lqmgu66uo',
+    "# of operational GBV crisis rooms": 'c2d0f3ulqmgu66up',
+    "# of individuals who received services in GBV day care centers": 'cjeproolqmgu66uq',
+    "# of operational GBV day care center": 'cm844hglqmgu66ur',
+    "# of individuals who received services in shelters": 'c72si1ylqmgu66us',
+    "# of operational GBV shelters": 'cv5v0z7lqmgu66ut',
+    "# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces": 'c5x9amllqmgu66uu',
+    "# of operational women and girls' safe spaces": 'cagbueslqmgu66uv',
+    "# of individuals at risk supported with GBV specialized legal assistance and counseling": 'c6g3oerlqmgu66uw',
+    "# of individuals reached with humanitarian cash and voucher assistance for GBV case management and/or other GBV response": 'cn8myhdlqmgu66ux',
+    "# of women and girls at risk who received dignity kits": 'chyifk6lqmgu66uy',
+    "# of individuals reached with awareness-raising activities and GBV-life-saving information": 'cvauilxlqmgu66uz',
+    "# of GBV awareness campaigns through social media, websites, TV and radio": 'ctrecbblqmgu66u10',
+    "# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards": 'c8wzmoylqmgu66u11',
+    "# of GBV assessments conducted": 'cdycodllqmgu66u12',
+    "# of GBV safety audits conducted in collective sites and selected public areas": 'cduyu4slqmgu66u13',
+    "# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards": 'c5zjdi5lqmgu66u14',
+    "# of GBV advocacy interventions undertaken with decision-makers and communities": 'c3ufluolqmgu66u15'
+  },
+  'Was the service provided to evacuees?': {
+    "Yes": 'cuieqxklt6ysqm62',
+    "No": 'cw6e6s4lt6z214r4'
   }
 }
 

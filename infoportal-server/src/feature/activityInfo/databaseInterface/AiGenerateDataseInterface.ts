@@ -81,6 +81,25 @@ export const ActivityInfoBuildType = {
       /Collective Site/,
     ]
   }),
+
+  gbv: () => generateDatabaseInterface({
+    formId: activityInfoForms.gbv,
+    name: 'gbv',
+    filterOptions: {
+      'Reporting Organization': _ => {
+        return _.includes('Danish Refugee Council')
+      },
+    },
+    skipQuestionsOptions: [
+      /Implementing Partner/,
+      /Implementing Partner 2/,
+      /Raion/,
+      /Hromada/,
+      /Settlement/,
+      /Collective Site/,
+    ]
+  }),
+
   mineAction: () => generateDatabaseInterface({
     formId: activityInfoForms.mineAction,
     name: 'mineAction',

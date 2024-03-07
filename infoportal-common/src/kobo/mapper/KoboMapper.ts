@@ -7,14 +7,14 @@ import {DisplacementStatus, PersonDetails, WgDisability} from './Common'
 
 export namespace KoboGeneralMapping {
 
-  type XlsKoboIndividual = Pick<NonNullable<Ecrec_cashRegistration.T['hh_char_hh_det']>[0],
+  export type XlsKoboIndividual = Pick<NonNullable<Ecrec_cashRegistration.T['hh_char_hh_det']>[0],
     'hh_char_hh_det_gender' |
     'hh_char_hh_det_age' |
     'hh_char_hh_det_dis_select' |
     'hh_char_hh_det_dis_level'
   > & Partial<Pick<Ecrec_cashRegistration.T, 'ben_det_res_stat'>>
 
-  type XlsKoboIndividuals = Partial<Pick<Ecrec_cashRegistration.T,
+  export type XlsKoboIndividuals = Partial<Pick<Ecrec_cashRegistration.T,
     'hh_char_dis_select' |
     'hh_char_dis_level' |
     // 'hh_char_hh_det' |

@@ -98,6 +98,7 @@ export enum DrcProject {
   'UKR-000342 Pooled Funds' = 'UKR-000342 Pooled Funds',
   'UKR-000249 Finnish MFA' = 'UKR-000249 Finnish MFA',
   'UKR-000293 French MFA' = 'UKR-000293 French MFA',
+  'UKR-000355 Danish MFA' = 'UKR-000355 Danish MFA',
   'UKR-000255 EU IcSP' = 'UKR-000255 EU IcSP',
   'UKR-000230 PM WRA' = 'UKR-000230 PM WRA',
   'UKR-000231 PM WKA' = 'UKR-000231 PM WKA',

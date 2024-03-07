@@ -1,6 +1,6 @@
 import {Enum, Seq, seq} from '@alexandreannic/ts-utils'
 
-type GroupByKey = string | number | symbol
+type GroupByKey = string | number
 
 export const groupBy: {
   <T extends Record<GroupByKey, any>, A extends GroupByKey, R extends any>(_: {
@@ -79,7 +79,7 @@ export const groupBy: {
     ],
     finalTransform: (_: Seq<T>, groups: [A, B, C, D, E, F, G]) => R
   }): Record<A, Record<B, Record<C, Record<D, Record<E, Record<E, Record<E, G>>>>>>>
-  
+
   // <T extends Record<GroupByKey, any>, A extends GroupByKey, B extends GroupByKey, C extends GroupByKey, D extends GroupByKey, E extends GroupByKey, R extends any>(_: {
   //   data: T[],
   //   groups: [

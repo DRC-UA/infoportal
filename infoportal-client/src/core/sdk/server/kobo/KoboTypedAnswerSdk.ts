@@ -5,6 +5,7 @@ import {
   Bn_OldMpcaNfi,
   Bn_RapidResponse,
   Bn_Re,
+  DisplacementStatus,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   KoboEcrec_cashRegistration,
@@ -19,6 +20,8 @@ import {
   Meal_VerificationWinterization,
   Meal_VisitMonitoring,
   Partnership_partnersDatabase,
+  Person,
+  PersonDetails,
   Protection_communityMonitoring,
   Protection_gbv,
   Protection_groupSession,
@@ -35,9 +38,27 @@ import {
 } from '@infoportal-common'
 import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
+import {fnSwitch} from '@alexandreannic/ts-utils'
 
 export type KoboUnwrapAnserType<T extends keyof KoboTypedAnswerSdk> = Promise<Awaited<ReturnType<KoboTypedAnswerSdk[T]>>['data']>
 
+/** @deprecated should be coming from the unified database */
+type Meta = {
+  persons: PersonDetails[]
+}
+
+/** @deprecated should be coming from the unified database */
+type WithMeta<T extends Record<string, any>> = T & {
+  meta: {
+    persons: PersonDetails[]
+  }
+}
+
+/** @deprecated should be coming from the unified database */
+export const makeMeta = <T extends Record<string, any>>(t: T, meta: Meta): WithMeta<T> => {
+  (t as any).meta = meta
+  return t as any
+}
 
 export class KoboTypedAnswerSdk {
 
@@ -186,6 +207,24 @@ export class KoboTypedAnswerSdk {
     return this.search({
       formId: KoboIndex.byName('protection_gbv').id,
       fnMapKobo: Protection_gbv.map,
+      fnMapCustom: _ => {
+        const persons: PersonDetails[] | undefined = (_.hh_char_hh_det ?? []).map(p => {
+          return {
+            gender: fnSwitch(p.hh_char_hh_det_gender!, {
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+              other: Person.Gender.Other
+            }, () => undefined),
+            age: p.hh_char_hh_det_age,
+            displacement: fnSwitch(p.hh_char_hh_det_status!, {
+              idp: DisplacementStatus.Idp,
+              returnee: DisplacementStatus.Idp,
+              'non-displaced': DisplacementStatus.NonDisplaced,
+            }, () => undefined),
+          }
+        })
+        return makeMeta(_, {persons})
+      },
       ...filters,
     })
   }

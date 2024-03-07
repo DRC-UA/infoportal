@@ -3,6 +3,7 @@ import {fnSwitch, PromiseReturn} from '@alexandreannic/ts-utils'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiTypeGeneralProtection} from '@/features/ActivityInfo/Protection/AiTypeGeneralProtection'
 import Gender = Person.Gender
+import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 
 export namespace AiProtectionMapper {
 
@@ -21,32 +22,8 @@ export namespace AiProtectionMapper {
     'Older Men (60+)': AiTypeGeneralProtection.TypeSub['Older Men (60+)']
     'Older Women (60+)': AiTypeGeneralProtection.TypeSub['Older Women (60+)']
     'Total Individuals Reached': AiTypeGeneralProtection.TypeSub['Total Individuals Reached']
-    'People with Disability': AiTypeGeneralProtection.TypeSub['People with Disability']
-    answer: any
-  }
-
-  const disaggregatePersons = (persons: PersonDetails[]): Pick<Type,
-    'Adult Men (18-59)' |
-    'Adult Women (18-59)' |
-    'Boys (0-17)' |
-    'Girls (0-17)' |
-    'Older Men (60+)' |
-    'Older Women (60+)' |
-    'Total Individuals Reached' |
-    'People with Disability'
-  > => {
-    const personsDefined = persons.filter(_ => !!_.gender && !!_.age)
-    const disaggregation = Person.groupByGenderAndGroup(Person.ageGroup.UNHCR)(personsDefined)
-    return {
-      'Adult Men (18-59)': disaggregation['18 - 59'].Male,
-      'Adult Women (18-59)': disaggregation['18 - 59'].Female,
-      'Boys (0-17)': disaggregation['0 - 17'].Male,
-      'Girls (0-17)': disaggregation['0 - 17'].Female,
-      'Older Men (60+)': disaggregation['60+'].Male,
-      'Older Women (60+)': disaggregation['60+'].Female,
-      'Total Individuals Reached': personsDefined.length,
-      'People with Disability': personsDefined.filter(_ => _.disability).length,
-    }
+    'People with Disability'?: AiTypeGeneralProtection.TypeSub['People with Disability']
+    answer: Record<string, any>
   }
 
   const planCode = Object.freeze({
@@ -59,21 +36,6 @@ export namespace AiProtectionMapper {
     [DrcProject['UKR-000330 SDC2']]: 'PRT-DRC-00007',
   })
 
-  type AiLocation = Pick<AiTypeGeneralProtection.Type, 'Oblast' | 'Raion' | 'Hromada'>
-
-  export const getAiLocation = (d: Pick<Protection_groupSession.T, 'ben_det_oblast' | 'ben_det_hromada' | 'ben_det_raion'>): AiLocation => {
-    const oblast = OblastIndex.byKoboName(d.ben_det_oblast!).name
-    const raion = AILocationHelper.findRaion(oblast, Bn_Re.options.ben_det_raion[d.ben_det_raion as keyof typeof Bn_Re.options.ben_det_raion] ?? d.ben_det_raion)!
-    const hromada = AILocationHelper.findHromada(oblast,
-      raion?.en,
-      Bn_Re.options.ben_det_hromada[d.ben_det_hromada as keyof typeof Bn_Re.options.ben_det_hromada] ?? d.ben_det_hromada)
-    return {
-      Oblast: AILocationHelper.findOblast(oblast)!,
-      Raion: raion?._5w as any,
-      Hromada: hromada?._5w as any,
-    }
-  }
-
   export const mapHhs = (reportingMonth: string) => (res: PromiseReturn<ReturnType<ApiSdk['kobo']['typedAnswers']['searchProtection_hhs3']>>) => {
     const data: Type[] = []
 
@@ -84,7 +46,7 @@ export namespace AiProtectionMapper {
           Oblast: AILocationHelper.findOblast(OblastIndex.byIso(d.where_are_you_current_living_oblast!).name)!,
           Raion: AILocationHelper.findRaionByIso(d.where_are_you_current_living_raion)?._5w as any,
           Hromada: AILocationHelper.findHromadaByIso(d.where_are_you_current_living_hromada!)?._5w as any,
-          ...disaggregatePersons([ind]),
+          ...AiMapper.disaggregatePersons([ind]),
           'Reporting Month': reportingMonth,
           'Plan/Project Code': fnSwitch(d.tags?.projects?.[0]!, planCode, () => undefined)!,
           'Population Group': fnSwitch(d.do_you_identify_as_any_of_the_following!, {
@@ -117,8 +79,8 @@ export namespace AiProtectionMapper {
       d.hh_char_hh_det!.forEach(ind => {
         data.push({
           answer: d,
-          ...getAiLocation(d),
-          ...disaggregatePersons([{
+          ...AiMapper.getLocation(d),
+          ...AiMapper.disaggregatePersons([{
             age: ind.hh_char_hh_det_age,
             gender: fnSwitch(ind.hh_char_hh_det_gender!, {
               female: Gender.Female,
@@ -151,8 +113,8 @@ export namespace AiProtectionMapper {
         case 'kll': {
           data.push({
             answer: d,
-            ...getAiLocation(d),
-            ...disaggregatePersons([{
+            ...AiMapper.getLocation(d),
+            ...AiMapper.disaggregatePersons([{
               age: d.informant_age,
               gender: fnSwitch(d.informant_gender!, {
                 female: Gender.Female,
@@ -179,8 +141,8 @@ export namespace AiProtectionMapper {
           d.hh_char_hh_det!.forEach(ind => {
             data.push({
               answer: d,
-              ...getAiLocation(d),
-              ...disaggregatePersons([{
+              ...AiMapper.getLocation(d),
+              ...AiMapper.disaggregatePersons([{
                 age: ind.hh_char_hh_det_age,
                 gender: fnSwitch(ind.hh_char_hh_det_gender!, {
                   female: Gender.Female,

@@ -25,7 +25,7 @@ export const AiProtectionGeneral = () => {
       api.kobo.typedAnswers.searchProtection_hhs3({filters}).then(AiProtectionMapper.mapHhs(period)),
     ]).then(_ => _.reduce((acc, curr) => [...acc, ...curr], []))
 
-    const form: AiProtectionGeneralBundle[] = []
+    const bundles: AiProtectionGeneralBundle[] = []
     let i = 0
     groupBy({
       data: mappedData,
@@ -47,7 +47,6 @@ export const AiProtectionGeneral = () => {
         const subActivities = Obj.entries(grouped.groupBy(_ => _['Indicators']))
           .flatMap(([indicator, byIndicator]) => {
             return Obj.entries(byIndicator.groupBy(_ => _['Population Group'])).map(([group, v]) => {
-              console.log(v)
               const x: AiTypeGeneralProtection.TypeSub = {
                 'Indicators': indicator,
                 'Population Group': group,
@@ -63,17 +62,17 @@ export const AiProtectionGeneral = () => {
               return x
             })
           })
-        subActivities.forEach(s => {
-          const request = ActivityInfoSdk.makeRecordRequests({
-            activityIdPrefix: 'drcprot',
-            activityYYYYMM: period,
-            formId: activitiesConfig.protection_general.id,
-            activity,
-            subActivities,
-            activityIndex: i,
-            subformId: activitiesConfig.protection_general.subId,
-          })
-          form.push({
+        const request = ActivityInfoSdk.makeRecordRequests({
+          activityIdPrefix: 'drcprot',
+          activityYYYYMM: period,
+          formId: activitiesConfig.protection_general.id,
+          activity,
+          subActivities,
+          activityIndex: i++,
+          subformId: activitiesConfig.protection_general.subId,
+        })
+        subActivities.forEach((s) => {
+          bundles.push({
             recordId: request.changes[0].recordId,
             activity: activity,
             subActivity: s,
@@ -83,7 +82,7 @@ export const AiProtectionGeneral = () => {
         })
       },
     })
-    return form
+    return bundles
   })
 
   return (

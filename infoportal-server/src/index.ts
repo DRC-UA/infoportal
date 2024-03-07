@@ -49,13 +49,14 @@ const startApp = async (conf: AppConf) => {
   // // })
   // // .then(console.log)
   // // return
-  await Promise.all([
-    ActivityInfoBuildType.generalProtection(),
-    // ActivityInfoBuildType.mineAction(),
-    // ActivityInfoBuildType.snfi(),
-    // ActivityInfoBuildType.mpca(),
-    // ActivityInfoBuildType.wash(),
-  ])
+  // await Promise.all([
+  //   ActivityInfoBuildType.generalProtection(),
+  //   ActivityInfoBuildType.gbv(),
+  //   // ActivityInfoBuildType.mineAction(),
+  //   // ActivityInfoBuildType.snfi(),
+  //   // ActivityInfoBuildType.mpca(),
+  //   // ActivityInfoBuildType.wash(),
+  // ])
   // return
   const prisma = new PrismaClient({
     // log: ['query']
