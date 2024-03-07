@@ -2,31 +2,31 @@ import {Prisma, PrismaClient} from '@prisma/client'
 import {GlobalEvent} from '../../../core/GlobalEvent'
 import {KoboAnswerFlat, KoboId} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 import {koboFormsId} from '../../../core/conf/KoboFormsId'
-import {KoboUnifiedBasicneeds} from './KoboUnifiedMapperBasicneeds'
-import {KoboUnifiedCreate, KoboUnifiedOrigin} from './KoboUnifiedType'
+import {KoboUnifiedBasicneeds} from './KoboMetaMapperBasicneeds'
+import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 import {logger, Logger} from '../../../helper/Logger'
 import {KoboService} from '../KoboService'
 import {KoboUnified, UUID} from '@infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 import Event = GlobalEvent.Event
-import {KoboUnifiedMapperEcrec} from './KoboUnifiedMapperEcrec'
+import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 
 class KoboUnifiedMapper {
-  static readonly mappers: Record<KoboId, (_: KoboAnswerFlat<any>) => KoboUnifiedCreate | undefined> = {
+  static readonly mappers: Record<KoboId, (_: KoboAnswerFlat<any>) => KoboMetaCreate | undefined> = {
     [koboFormsId.prod.bn_re]: KoboUnifiedBasicneeds.bn_re,
     [koboFormsId.prod.bn_rapidResponse]: KoboUnifiedBasicneeds.bn_rrm,
-    [koboFormsId.prod.ecrec_cashRegistration]: KoboUnifiedMapperEcrec.cashRegistration,
-    [koboFormsId.prod.ecrec_cashRegistrationBha]: KoboUnifiedMapperEcrec.cashRegistrationBha,
+    [koboFormsId.prod.ecrec_cashRegistration]: KoboMetaMapperEcrec.cashRegistration,
+    [koboFormsId.prod.ecrec_cashRegistrationBha]: KoboMetaMapperEcrec.cashRegistrationBha,
   }
 }
 
-export class KoboUnifiedService {
+export class KoboMetaService {
 
   constructor(
     private prisma: PrismaClient,
     private kobo = new KoboService(prisma),
     private event = GlobalEvent.Class.getInstance(),
-    private log: Logger = logger('KoboUnifiedService'),
+    private log: Logger = logger('KoboMetaService'),
   ) {
   }
 
@@ -38,9 +38,9 @@ export class KoboUnifiedService {
   }
 
   readonly search = () => {
-    return this.prisma.koboAnsersUnified.findMany({
+    return this.prisma.koboMeta.findMany({
       include: {
-        individuals: true
+        persons: true
       }
     })
   }
@@ -65,13 +65,13 @@ export class KoboUnifiedService {
         id: true
       },
       where: {formId}
-    }).then((_: KoboUnifiedOrigin[]) => seq(_).map(mapper).compact())
+    }).then((_: KoboMetaOrigin[]) => seq(_).map(mapper).compact())
     const remoteIdsIndex: Map<KoboId, KoboUnified> = remoteAnswers.reduce((map, curr) => map.set(curr.id, curr), new Map<KoboId, KoboUnified>)
 
     this.log.info(`Fetch remote answers... ${remoteAnswers.length} fetched.`)
 
     this.log.info(`Fetch local answers...`)
-    const localAnswersIndex = await this.prisma.koboAnsersUnified.findMany({where: {formId}, select: {id: true, uuid: true}}).then(_ => {
+    const localAnswersIndex = await this.prisma.koboMeta.findMany({where: {formId}, select: {id: true, uuid: true}}).then(_ => {
       return _.reduce((map, curr) => map.set(curr.id, curr.uuid), new Map<KoboId, UUID>())
     })
     this.log.info(`Fetch local answers... ${localAnswersIndex.size} fetched.`)
@@ -79,7 +79,7 @@ export class KoboUnifiedService {
     const handleDelete = async () => {
       const idsToDelete = [...localAnswersIndex.keys()].filter(_ => !remoteIdsIndex.has(_))
       this.log.info(`Handle delete (${idsToDelete.length})...`)
-      await this.prisma.koboAnsersUnified.deleteMany({where: {formId, id: {in: idsToDelete}}})
+      await this.prisma.koboMeta.deleteMany({where: {formId, id: {in: idsToDelete}}})
       return idsToDelete
     }
 
@@ -87,19 +87,19 @@ export class KoboUnifiedService {
       const notInsertedAnswers = remoteAnswers.filter(_ => !localAnswersIndex.has(_.id))
       this.log.info(`Handle create (${notInsertedAnswers.length})...`)
       const individuals = notInsertedAnswers.flatMap(_ => {
-        const res: Prisma.KoboIndividualUncheckedCreateInput[] = _.individuals?.map(ind => ({
+        const res: Prisma.KoboPersonUncheckedCreateInput[] = _.persons?.map(ind => ({
           ...ind,
           disability: ind.disability ?? [],
-          unifiedId: _.id
+          metaId: _.id
         })) ?? []
-        delete _['individuals']
+        delete _['persons']
         return res
       })
-      await this.prisma.koboAnsersUnified.createMany({
+      await this.prisma.koboMeta.createMany({
         data: notInsertedAnswers,
         skipDuplicates: true,
       })
-      await this.prisma.koboIndividual.createMany({
+      await this.prisma.koboPerson.createMany({
         data: individuals
       })
       return notInsertedAnswers
@@ -114,12 +114,12 @@ export class KoboUnifiedService {
       this.log.info(`Handle update (${answersToUpdate.length})...`)
       await Promise.all(answersToUpdate.map(a => {
         const {individuals, ...answer} = a
-        return this.prisma.koboAnsersUnified.update({
+        return this.prisma.koboMeta.update({
           where: {
             id: a.id,
           },
           data: {
-            individuals: {
+            persons: {
               createMany: {data: individuals ?? []}
             },
             ...answer
@@ -138,33 +138,33 @@ export class KoboUnifiedService {
       // answersUpdated,
     }
 
-    // const current = await this.prisma.koboAnsersUnified.findMany()
+    // const current = await this.prisma.koboMeta.findMany()
     // current.map(_ => _.answerUuid)
     // const remoteIdsIndex: Map<KoboId, KoboUnified> = current.reduce((map, answer) => map.set(rest.id, answer), new Map())
     //
     //
-    // this.log.info('Synchronizing unified database...')
+    // this.log.info('Synchronizing meta database...')
     // console.log({
     //   answersIdsDeleted,
     //   answersUpdated,
     //   answersCreated,
     // })
     // const mapper = KoboUnifiedMapper.map[formId]
-    // await this.prisma.koboAnsersUnified.deleteMany({
+    // await this.prisma.koboMeta.deleteMany({
     //   where: {
     //     id: {in: answersIdsDeleted}
     //   }
     // })
-    // await this.prisma.koboAnsersUnified.createMany({
+    // await this.prisma.koboMeta.createMany({
     //   data: answersCreated.map(mapper),
     // })
     // await Promise.all(answersUpdated.map(a => {
-    //   return this.prisma.koboAnsersUnified.updateMany({
+    //   return this.prisma.koboMeta.updateMany({
     //     where: {id: a.id},
     //     data: answersCreated.map(mapper),
     //   })
     // }))
-    // this.log.info('Synchronizing unified database... COMPLETED')
+    // this.log.info('Synchronizing meta database... COMPLETED')
   }
 
 }

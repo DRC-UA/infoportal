@@ -12,11 +12,11 @@ import {
   Person,
   safeNumber
 } from '@infoportal-common'
-import {KoboUnifiedCreate, KoboUnifiedOrigin} from './KoboUnifiedType'
+import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 
-export class KoboUnifiedMapperEcrec {
+export class KoboMetaMapperEcrec {
 
-  static readonly cashRegistration = (answer: KoboUnifiedOrigin<Ecrec_cashRegistration.T>): KoboUnifiedCreate => {
+  static readonly cashRegistration = (answer: KoboMetaOrigin<Ecrec_cashRegistration.T>): KoboMetaCreate => {
     const _ = Ecrec_cashRegistration.map(answer.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
     const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
@@ -41,8 +41,8 @@ export class KoboUnifiedMapperEcrec {
       hromada: KoboGeneralMapping.searchHromada(_.ben_det_hromada),
       sector: DrcSector.Livelihoods,
       activity: [DrcProgram.SectoralCash],
-      individualsCount: safeNumber(_.ben_det_hh_size),
-      individuals: group.map(KoboGeneralMapping.mapPersonDetails),
+      personsCount: safeNumber(_.ben_det_hh_size),
+      persons: group.map(KoboGeneralMapping.mapPersonDetails),
       project: project ? [project] : [],
       donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
       lastName: _.ben_det_surname,
@@ -53,7 +53,7 @@ export class KoboUnifiedMapperEcrec {
     }
   }
 
-  static readonly cashRegistrationBha = (answer: KoboUnifiedOrigin<Ecrec_cashRegistrationBha.T>): KoboUnifiedCreate => {
+  static readonly cashRegistrationBha = (answer: KoboMetaOrigin<Ecrec_cashRegistrationBha.T>): KoboMetaCreate => {
     const _ = Ecrec_cashRegistrationBha.map(answer.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
     const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
@@ -78,8 +78,8 @@ export class KoboUnifiedMapperEcrec {
       hromada: KoboGeneralMapping.searchHromada(_.ben_det_hromada),
       sector: DrcSector.Livelihoods,
       activity: [DrcProgram.SectoralCash],
-      individualsCount: safeNumber(_.ben_det_hh_size),
-      individuals: group.map(KoboGeneralMapping.mapPersonDetails),
+      personsCount: safeNumber(_.ben_det_hh_size),
+      persons: group.map(KoboGeneralMapping.mapPersonDetails),
       // group.map(p => ({
       //   age: safeNumber(p.hh_char_hh_det_age),
       //   gender: fnSwitch(p.hh_char_hh_det_gender!, {

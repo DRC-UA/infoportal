@@ -10,7 +10,7 @@ import {logger} from './helper/Logger'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
-import {KoboUnifiedService} from './feature/kobo/unified/KoboUnifiedService'
+import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -94,7 +94,7 @@ const startApp = async (conf: AppConf) => {
     // cluster.on('exit', (worker, code, signal) => {
     //   console.log(`Worker ${worker.process.pid} died`)
     // })
-    new KoboUnifiedService(prisma).start()
+    new KoboMetaService(prisma).start()
     if (conf.production) {
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()

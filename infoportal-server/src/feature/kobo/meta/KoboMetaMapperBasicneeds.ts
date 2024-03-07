@@ -1,11 +1,11 @@
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {Bn_RapidResponse, DrcOffice, DrcProgram, DrcProject, DrcProjectHelper, DrcSector, KoboGeneralMapping, KoboIndex, OblastIndex, Person, safeNumber} from '@infoportal-common'
 import {Bn_Re} from '../../../script/output/kobo/Bn_Re'
-import {KoboUnifiedCreate, KoboUnifiedOrigin} from './KoboUnifiedType'
+import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 
 export class KoboUnifiedBasicneeds {
 
-  static readonly bn_re = (row: KoboUnifiedOrigin<Bn_Re.T>): KoboUnifiedCreate => {
+  static readonly bn_re = (row: KoboMetaOrigin<Bn_Re.T>): KoboMetaCreate => {
     const answer = Bn_Re.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
@@ -88,8 +88,8 @@ export class KoboUnifiedBasicneeds {
         esk: DrcProgram.ESK,
         ihk: DrcProgram.InfantHygieneKit
       }, () => undefined)).distinct(_ => _).compact() ?? [],
-      individualsCount: safeNumber(answer.ben_det_hh_size),
-      individuals: group.map(KoboGeneralMapping.mapPersonDetails),
+      personsCount: safeNumber(answer.ben_det_hh_size),
+      persons: group.map(KoboGeneralMapping.mapPersonDetails),
       project: project,
       donor: donor,
       lastName: answer.ben_det_surname,
@@ -101,7 +101,7 @@ export class KoboUnifiedBasicneeds {
     }
   }
 
-  static readonly bn_rrm = (row: KoboUnifiedOrigin<Bn_RapidResponse.T>): undefined | KoboUnifiedCreate => {
+  static readonly bn_rrm = (row: KoboMetaOrigin<Bn_RapidResponse.T>): undefined | KoboMetaCreate => {
     const answer = Bn_RapidResponse.map(row.answers)
     if (answer.form_length === 'short') return
     const group = KoboGeneralMapping.collectXlsKoboIndividuals({
@@ -193,8 +193,8 @@ export class KoboUnifiedBasicneeds {
         ihk: DrcProgram.InfantHygieneKit,
         esk: DrcProgram.ESK,
       }, () => undefined)).compact(),
-      individualsCount: safeNumber(answer.ben_det_hh_size_l),
-      individuals: group.map(KoboGeneralMapping.mapPersonDetails),
+      personsCount: safeNumber(answer.ben_det_hh_size_l),
+      persons: group.map(KoboGeneralMapping.mapPersonDetails),
       project: project ? [project] : [],
       donor: donor ? [donor] : [],
       lastName: answer.ben_det_surname_l,

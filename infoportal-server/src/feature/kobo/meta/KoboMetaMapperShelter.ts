@@ -1,7 +1,7 @@
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {DrcOffice, DrcProgram, DrcProject, DrcProjectHelper, DrcSector, KoboIndex, OblastIndex, Person, safeNumber} from '@infoportal-common'
 import {Bn_Re} from '../../../script/output/kobo/Bn_Re'
-import {KoboUnifiedCreate, KoboUnifiedOrigin} from './KoboUnifiedType'
+import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 
 export class KoboUnifiedBasicneeds {
 
@@ -20,7 +20,7 @@ export class KoboUnifiedBasicneeds {
   //   ]
   // }
 
-  static readonly bn_re = (row: KoboUnifiedOrigin<Bn_Re.T>): KoboUnifiedCreate => {
+  static readonly bn_re = (row: KoboMetaOrigin<Bn_Re.T>): KoboMetaCreate => {
     const answer = Bn_Re.map(row.answers)
     // if (row.id === '536773364') {
     // throw new Error()
@@ -115,8 +115,8 @@ export class KoboUnifiedBasicneeds {
         esk: DrcProgram.ESK,
         ihk: DrcProgram.InfantHygieneKit
       }, () => undefined)).distinct(_ => _).compact() ?? [],
-      individualsCount: safeNumber(answer.ben_det_hh_size),
-      individuals: group.map(p => ({
+      personsCount: safeNumber(answer.ben_det_hh_size),
+      persons: group.map(p => ({
         age: safeNumber(p.hh_char_hh_det_age),
         gender: fnSwitch(p.hh_char_hh_det_gender!, {
           female: Person.Gender.Female,

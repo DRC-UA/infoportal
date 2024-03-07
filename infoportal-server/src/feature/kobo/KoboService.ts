@@ -82,7 +82,9 @@ export class KoboService {
     formId,
     filters = {},
     paginate = defaultPagination,
+    includeMeta,
   }: {
+    includeMeta?: boolean
     formId: string,
     filters?: KoboAnswersFilters,
     paginate?: ApiPagination
@@ -94,6 +96,9 @@ export class KoboService {
         {date: 'desc',},
         {submissionTime: 'desc',},
       ],
+      include: {
+        unified: includeMeta,
+      },
       where: {
         deletedAt: null,
         date: {

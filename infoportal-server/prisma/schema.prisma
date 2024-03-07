@@ -52,7 +52,7 @@ model KoboAnswers {
 
   mpcaPaymentTools  MpcaPaymentToolAnswers[]
   mealVerifications MealVerificationAnswers[]
-  unified           KoboAnsersUnified?
+  unified           KoboMeta?
 
   @@unique([id, formId])
   @@index([start, end, submissionTime, formId])
@@ -64,17 +64,17 @@ enum Gender {
   Other
 }
 
-model KoboIndividual {
-  id           String            @id @default(uuid())
+model KoboPerson {
+  id           String   @id @default(uuid())
   age          Int?
   gender       Gender?
   disability   String[]
   displacement String?
-  unified      KoboAnsersUnified @relation(fields: [unifiedId], references: [id], onDelete: Cascade)
-  unifiedId    String
+  meta         KoboMeta @relation(fields: [metaId], references: [id], onDelete: Cascade)
+  metaId       String
 }
 
-model KoboAnsersUnified {
+model KoboMeta {
   id               String      @id
   uuid             String
   answer           KoboAnswers @relation(fields: [id], references: [id], onDelete: Cascade)
@@ -82,26 +82,27 @@ model KoboAnsersUnified {
   referencedFormId String?
   date             DateTime
 
-  oblast           String?
-  raion            String?
-  hromada          String?
-  settlement       String?
-  individualsCount Int?
-  enumerator       String?
-  taxId            String?
-  firstName        String?
-  lastName         String?
-  patronymicName   String?
-  phone            String?
-  activity         String[]
-  sector           String?
-  office           String?
-  project          String[]
-  donor            String[]
-  disStatus        String?
-  address          String?
+  oblast         String?
+  raion          String?
+  hromada        String?
+  settlement     String?
+  personsCount   Int?
+  enumerator     String?
+  taxId          String?
+  firstName      String?
+  lastName       String?
+  patronymicName String?
+  phone          String?
+  activity       String[]
+  sector         String?
+  office         String?
+  project        String[]
+  donor          String[]
+  disStatus      String?
+  address        String?
+  status         String?
 
-  individuals KoboIndividual[]
+  persons KoboPerson[]
 
   @@index([project, oblast, taxId, phone, activity, office])
 }
