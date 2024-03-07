@@ -1,8 +1,9 @@
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {DrcProject, Protection_hhs2} from '@infoportal-common'
-import {AiTypeProtectionRmm} from '@/features/ActivityInfo/Protection/aiProtectionGeneralInterface'
+import {AiTypeProtectionRmm} from '@/features/ActivityInfo/Protection/____aiProtectionGeneralInterface'
 import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 
+/** @deprecated*/
 export namespace AiProtectionGeneralType {
 
   export enum Status {

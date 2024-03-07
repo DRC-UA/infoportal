@@ -16,8 +16,9 @@ import {IpBtn} from '@/shared/Btn'
 import {useIpToast} from '@/core/useToast'
 import {Txt} from 'mui-extension'
 import {useAsync} from '@/shared/hook/useAsync'
-import {AiBundle} from '@/features/ActivityInfo/shared/AiType'
+import {AiBundle} from '@/features/ActivityInfo/shared/AiBundle'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 
 type AiMpcaBundle = AiBundle<AiMpcaInterface.Type> & {
   // Properties not asked in the AI form
@@ -114,7 +115,7 @@ export const AiMpca = () => {
               activity: AiMpcaInterface.map(activity),
               activityYYYYMM: period.replace('-', '').replace(/^\d\d/, ''),
               activityIndex: i++,
-              formId: ActivityInfoSdk.formId.mpca,
+              formId: activitiesConfig.mpca.id,
             })
           })
         },

@@ -20,7 +20,7 @@ import {AiLocation, getAiLocation} from '@/features/ActivityInfo/Protection/aiPr
 import {format} from 'date-fns'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiBundle} from '@/features/ActivityInfo/shared/AiType'
+import {AiBundle} from '@/features/ActivityInfo/shared/AiBundle'
 import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
 import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {ShelterNorth202312} from '@/features/ActivityInfo/Snfi/shelterNorth202312'

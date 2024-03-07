@@ -11,10 +11,6 @@ import {AiFslc} from '@/features/ActivityInfo/Fslc/AiFslc'
 import {AiGbv} from '@/features/ActivityInfo/Gbv/AiGbv'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 
-export const activityInfoFormIds = {
-  fslc: 'csgkp3xlg0yezpb8'
-}
-
 interface Activity {
   // id: string
   name: string,
@@ -22,39 +18,40 @@ interface Activity {
   path: string
 }
 
-const activities = {
+export const activitiesConfig = {
   'protection_general': {
-    // id: 'protection_general',
+    id: 'cnr7gculteoyj914',
+    subId: 'c4u0d3glqf3085j58',
     name: 'Protection',
     path: '/protection_general',
     componnent: <AiProtectionGeneral/>,
   },
   'gbv': {
-    // id: 'nfi',
+    id: 'c6mrp6dlqv1q7q243w',
     name: 'GBV',
     path: '/gbc',
     componnent: <AiGbv/>,
   },
-  'nfi': {
-    // id: 'nfi',
+  'wash': {
+    id: 'cz86p3tlqc7h66y2',
     name: 'WASH (NFI)',
     path: '/wash_nfi',
     componnent: <AiWash/>,
   },
   'mpca': {
-    // id: 'mpca',
+    id: 'c9vv9j8lqm633lj1tm',
     name: 'MPCA',
     path: '/mpca',
     componnent: <AiMpca/>,
   },
-  'shelter': {
-    // id: 'shelter',
+  'snfi': {
+    id: 'c95ky7klr95z6ia3v',
     name: 'SNFI',
     path: '/snfi',
     componnent: <AiSnfi/>,
   },
-  'ecrec': {
-    // id: 'shelter',
+  'fslc': {
+    id: '',
     name: 'FSLC',
     path: '/fslc',
     componnent: <AiFslc/>,
@@ -63,16 +60,16 @@ const activities = {
 
 export const activityInfoIndex = {
   basePath: '/activity-info',
-  siteMap: new Enum(activities).transform((k, v) => [k, v.path]).get()
+  siteMap: new Enum(activitiesConfig).transform((k, v) => [k, v.path]).get()
 }
 
 const ActivityInfoSidebar = () => {
   return (
     <Sidebar>
-      {Enum.keys(activities).map(k =>
-        <NavLink to={activities[k].path} key={k}>
+      {Enum.keys(activitiesConfig).map(k =>
+        <NavLink to={activitiesConfig[k].path} key={k}>
           {({isActive, isPending}) => (
-            <SidebarItem key={k} active={isActive}>{activities[k].name}</SidebarItem>
+            <SidebarItem key={k} active={isActive}>{activitiesConfig[k].name}</SidebarItem>
           )}
         </NavLink>
       )}
@@ -85,7 +82,7 @@ export const ActivityInfo = () => {
     <Router>
       <Layout sidebar={<ActivityInfoSidebar/>} title={appFeaturesIndex.activity_info.name}>
         <Routes>
-          {Enum.values(activities).map(k =>
+          {Enum.values(activitiesConfig).map(k =>
             <Route key={k.path} path={k.path} element={k.componnent}/>
           )}
         </Routes>

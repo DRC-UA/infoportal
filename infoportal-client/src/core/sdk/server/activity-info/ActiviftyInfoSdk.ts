@@ -1,5 +1,5 @@
 import {ApiClient} from '../ApiClient'
-import {AiTypeProtectionRmm} from '@/features/ActivityInfo/Protection/aiProtectionGeneralInterface'
+import {AiTypeProtectionRmm} from '@/features/ActivityInfo/Protection/____aiProtectionGeneralInterface'
 import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 
 interface ActivityInfoRequest {
@@ -13,10 +13,6 @@ interface ActivityInfoRequest {
 
 export class ActivityInfoSdk {
   constructor(private client: ApiClient) {
-  }
-
-  static readonly formId = {
-    mpca: 'cxeirf9ldwx90rs6'
   }
 
   static readonly makeRecordRequest = (params: ActivityInfoRequest): ActiviftyInfoRecords => {
@@ -36,7 +32,7 @@ export class ActivityInfoSdk {
     subActivities,
   }: ActivityInfoRequest & {
     subformId: string,
-    subActivities: any[]
+    subActivities?: any[]
   }) => {
     const parentRequest = ActivityInfoSdk.makeRecordRequestContent({
       activityIdPrefix,
@@ -49,7 +45,7 @@ export class ActivityInfoSdk {
     return {
       'changes': [
         parentRequest,
-        ...subActivities.map((_, i) =>
+        ...subActivities?.map((_, i) =>
           ActivityInfoSdk.makeRecordRequestContent({
             activity: _,
             activityIndex: i,
@@ -57,7 +53,7 @@ export class ActivityInfoSdk {
             activityIdPrefix: activityIdPrefix + 'i' + ('' + i).padStart(3, '0'),
             formId: subformId,
             parentRecordId: parentRequest.recordId,
-          }))
+          })) ?? []
       ]
     }
   }

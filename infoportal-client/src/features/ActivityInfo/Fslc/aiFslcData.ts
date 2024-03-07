@@ -2,11 +2,11 @@ import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiTypeFslc} from '@/features/ActivityInfo/Fslc/aiFslcInterface'
 import {DrcProject, Ecrec_cashRegistration, groupBy, Period, Person} from '@infoportal-common'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
-import {getAiLocation} from '@/features/ActivityInfo/Protection/aiProtectionGeneralMapper'
+import {AiProtectionMapper} from '@/features/ActivityInfo/Protection/aiProtectionGeneralMapper'
 import {addDays, format} from 'date-fns'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-import {activityInfoFormIds} from '@/features/ActivityInfo/ActivityInfo'
-import {AiBundle} from '@/features/ActivityInfo/shared/AiType'
+import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
+import {AiBundle} from '@/features/ActivityInfo/shared/AiBundle'
 import groupByGenderAndGroup = Person.groupByGenderAndGroup
 import Gender = Person.Gender
 
@@ -19,7 +19,7 @@ export class AiFslcData {
       .then(_ => {
         return _.data
           // .filter(_ => _.tags?.status === EcrecCashRegistrationPaymentStatus.Paid)
-          .map(_ => ({..._, ...getAiLocation(_)}))
+          .map(_ => ({..._, ...AiProtectionMapper.getAiLocation(_)}))
       })
       .then(data => {
         console.log('after,', data.length)
@@ -114,7 +114,7 @@ export class AiFslcData {
               activity,
               requestBody: ActivityInfoSdk.makeRecordRequest({
                 activity: AiTypeFslc.map(activity),
-                formId: activityInfoFormIds.fslc,
+                formId: activitiesConfig.fslc.id,
                 activityIdPrefix: 'drcecrec',
                 activityYYYYMM: format(period.start, 'yyMM'),
                 activityIndex: index++,

@@ -37,26 +37,26 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  // new ActivityInfoSdk().fetchColumnsFree({
-  //   'rowSources': [{'rootFormId': 'c8uhbuclqb1fjlg2'}],
-  //   'columns': [
-  //     {'id': 'id', 'expression': '_id'},
-  //     {'id': 'value', 'expression': 'cj3g7eilqb1p98je'}
-  //   ],
-  //   'truncateStrings': false,
-  //   'filter': 'c92lm98lqb1gaar3 == "PGP"',
-  //   'tags': ['data-entry-ref', 'key-matrix']
-  // })
-  // .then(console.log)
-  // return
+  // // new ActivityInfoSdk().fetchColumnsFree({
+  // //   'rowSources': [{'rootFormId': 'c8uhbuclqb1fjlg2'}],
+  // //   'columns': [
+  // //     {'id': 'id', 'expression': '_id'},
+  // //     {'id': 'value', 'expression': 'cj3g7eilqb1p98je'}
+  // //   ],
+  // //   'truncateStrings': false,
+  // //   'filter': 'c92lm98lqb1gaar3 == "PGP"',
+  // //   'tags': ['data-entry-ref', 'key-matrix']
+  // // })
+  // // .then(console.log)
+  // // return
   await Promise.all([
-    ActivityInfoBuildType.mineAction(),
-    ActivityInfoBuildType.snfi(),
     ActivityInfoBuildType.generalProtection(),
-    ActivityInfoBuildType.mpca(),
-    ActivityInfoBuildType.wash(),
+    // ActivityInfoBuildType.mineAction(),
+    // ActivityInfoBuildType.snfi(),
+    // ActivityInfoBuildType.mpca(),
+    // ActivityInfoBuildType.wash(),
   ])
-  return
+  // return
   const prisma = new PrismaClient({
     // log: ['query']
   })

@@ -27,7 +27,7 @@ export const ActivityInfoBuildType = {
       /Donor Name/,
       /Reporting Organization/,
       /Sub-Implementing Partner/,
-      /Hormada/,
+      /Hromada/,
       /Settlement/,
     ],
     pickSpecificOptionSet: {
@@ -75,9 +75,8 @@ export const ActivityInfoBuildType = {
     skipQuestionsOptions: [
       /Implementing Partner/,
       /Implementing Partner 2/,
-      /OblastIndex/,
       /Raion/,
-      /Hormada/,
+      /Hromada/,
       /Settlement/,
       /Collective Site/,
     ]
@@ -95,7 +94,7 @@ export const ActivityInfoBuildType = {
       /Implementing Partner 2/,
       /OblastIndex/,
       /Raion/,
-      /Hormada/,
+      /Hromada/,
       /Settlement/,
       /Collective Site/,
     ]
@@ -147,7 +146,7 @@ interface AIFormInformation {
 const generateDatabaseInterface = async ({
   formId,
   name,
-  optionsLimit = 20,
+  optionsLimit = 100,
   ignoredQuestions = [],
   pickSpecificOptionSet = {},
   skipQuestionsOptions = [],
@@ -217,9 +216,6 @@ const generateDatabaseInterface = async ({
       return (f[optionId].schema.elements.find(_ => _.code === e.code || (_.code ?? '').includes('ENG')) ?? f[optionId].schema.elements[0]).id
     }
     const optionDefId = pickSpecificOptionSet[optionId] ?? getObj(columnsListMap, optionId)?.labelsId ?? getRandomOptions()
-    if (formId === 'c8uhbuclqb1fjlg2') {
-      console.log('optionDefId', optionDefId)
-    }
     // const optionDefId = pickSpecificOptionSet[optionId] ?? getObj(columnsListMap, optionId)?.listId ?? getRandomOptions()
     const options = await x.fetchColumns(
       optionId,
@@ -288,7 +284,7 @@ const generateDatabaseInterface = async ({
   }
 
   const isFetchingQuestionOptionBlocked = (label: string) => {
-    return !!skipQuestionsOptions.find(_ => _.test(label))
+    return !!skipQuestionsOptions.find(_ => _.test(label.trim()))
   }
 
   const generateMappingFn = (d: AIFormInformation[], prefix = '') => {

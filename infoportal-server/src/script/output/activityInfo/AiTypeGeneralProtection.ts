@@ -9,7 +9,7 @@ export namespace AiTypeGeneralProtection {
     'Plan/Project Code': Opt<'Plan/Project Code'>,
     'Oblast': Opt<'Oblast'>,
     'Raion': string,
-    'Hromada': Opt<'Hromada'>,
+    'Hromada': string,
     'Settlement'?: string,
     'Collective Site'?: string,
     'Response Theme': Opt<'Response Theme'>
@@ -23,7 +23,7 @@ export namespace AiTypeGeneralProtection {
     'ctn2ej8lqf3085j4w': a['Plan/Project Code'] === undefined ? undefined : 'cuar8eplqf1xm9225' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
     'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + options['Oblast'][a['Oblast']!],
     'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : a['Raion'],
-    'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + options['Hromada'][a['Hromada']!],
+    'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : a['Hromada'],
     'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : a['Settlement'],
     'ce0zvlllqf3085j52': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
     'c18374vlqf3085j54': a['Response Theme'] === undefined ? undefined : options['Response Theme'][a['Response Theme']!]
@@ -62,29 +62,14 @@ export namespace AiTypeGeneralProtection {
       'Odeska_Одеська': 'c2uwqqqlq3kjj6ht',
       'Poltavska_Полтавська': 'cwq2uuxlq3kjj6hu',
       'Rivnenska_Рівненська': 'c2j0t0flq3kjj6hv',
-      'Sevastopol_Севастополь': 'cjvbpkplq3kjj6hw'
-    },
-    'Hromada': {
-      'Aromatnenska_UA0102003': 'ceyv5tolq3la4dr249',
-      'Bakhchysaraiska_UA0102005': 'cn5h6calq3la4dr24a',
-      'Verkhorichenska_UA0102009': 'cnc7xsvlq3la4dr24b',
-      'Vilinska_UA0102011': 'c2zc7cflq3la4dr24c',
-      'Holubynska_UA0102013': 'ck5pbm3lq3la4dr24d',
-      'Dolynnenska_UA0102015': 'cd4tehilq3la4dr24e',
-      'Zaliznychnenska_UA0102017': 'cb69w6qlq3la4dr24f',
-      'Zelenivska_UA0102019': 'ck1p0oolq3la4dr24g',
-      'Kashtanivska_UA0102025': 'crr9kz3lq3la4dr24h',
-      'Krasnomatska_UA0102027': 'ceel6f4lq3la4dr24i',
-      'Kuibyshevska_UA0102029': 'cekrlc6lq3la4dr24j',
-      'Pishchanivska_UA0102033': 'cs9ovk0lq3la4dr24k',
-      'Plodivska_UA0102035': 'clcrplnlq3la4dr24l',
-      'Poshtivska_UA0102037': 'c49nm87lq3la4dr24m',
-      'Skalystivska_UA0102039': 'ckh1vyelq3la4dr24n',
-      'Tabachnenska_UA0102041': 'cameja8lq3la4dr24o',
-      'Tinystivska_UA0102045': 'c55vt83lq3la4dr24p',
-      'Uhlivska_UA0102047': 'c3cf7gylq3la4dr24q',
-      'Aromatnivska_UA0104001': 'csl2jq3lq3la4dr24r',
-      'Bahativska_UA0104003': 'c4cw1izlq3la4dr24s'
+      'Sevastopol_Севастополь': 'cjvbpkplq3kjj6hw',
+      'Sumska_Сумська': 'cb4nm4xlq3kjj6hx',
+      'Ternopilska_Тернопільська': 'clrrzfslq3kjj6hy',
+      'Vinnytska_Вінницька': 'cvx17yllq3kjj6hz',
+      'Volynska_Волинська': 'cdzklrblq3kjj6h10',
+      'Zakarpatska_Закарпатська': 'cfqiux5lq3kjj6h11',
+      'Zaporizka_Запорізька': 'cmqvx7elq3kjj6h12',
+      'Zhytomyrska_Житомирська': 'c51dllnlq3kjj6h13'
     },
     'Response Theme': {
       'No specific theme': 'c40c4vklqf3085j55'
@@ -149,7 +134,19 @@ export namespace AiTypeGeneralProtection {
       '# of individuals reached through protection monitoring at the household level': 'cx5yue4lqmgu66v1v',
       '# of locations assessed through community level protection monitoring': 'clez5molqmgu66v1w',
       '# of interviews conducted with key informants through community level protection monitoring': 'cicv1plqmgu66v1x',
-      '# of individuals who received individual or group-based psychosocial support': 'c3d56b7lqmgu66v1y'
+      '# of individuals who received individual or group-based psychosocial support': 'c3d56b7lqmgu66v1y',
+      '# of individuals with specific needs referred to specialized services and assistance': 'cjt0ciglqmgu66v1z',
+      '# of individuals provided with transportation services': 'ccpeionlqmgu66v20',
+      '# of individuals who participated in awareness raising activities on Protection': 'csxs7tvlqmgu66v21',
+      '# of individuals who participated in awareness raising sessions on HLP': 'cv8k7nolqmgu66v22',
+      '# of advocacy interventions undertaken on protection issues': 'c6aftmvlqmgu66v23',
+      '# of protection assessments conducted': 'cckhamclqmgu66v24',
+      '# of humanitarian staff trained on protection approaches or issues': 'csbl6nxlqmgu66v25',
+      '# of government staff trained on protection approaches or issues': 'chymmkklqmgu66v26',
+      '# of humanitarian staff trained on HLP': 'c8bht7flqmgu66v27',
+      '# of government staff trained on HLP': 'cc1gtwnlqmgu66v28',
+      '# of community centers established or maintained': 'c2395qdlqmgu66v29',
+      '# of government institutions supported': 'cy4jvntlqmgu66v2a'
     }
   }
 
