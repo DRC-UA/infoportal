@@ -26,15 +26,19 @@ export namespace AiProtectionMapper {
     answer: Record<string, any>
   }
 
-  const planCode = Object.freeze({
-    [DrcProject['UKR-000298 Novo-Nordisk']]: 'PRT-DRC-00001',
-    [DrcProject['UKR-000309 OKF']]: 'PRT-DRC-00002',
-    [DrcProject['UKR-000314 UHF4']]: 'PRT-DRC-00003',
-    [DrcProject['UKR-000322 ECHO2']]: 'PRT-DRC-00004',
-    [DrcProject['UKR-000345 BHA2']]: 'PRT-DRC-00005',
-    [DrcProject['UKR-000336 UHF6']]: 'PRT-DRC-00006',
-    [DrcProject['UKR-000330 SDC2']]: 'PRT-DRC-00007',
-  })
+  const getPlanCode = (_?: DrcProject): Type['Plan/Project Code'] => {
+    const planCode = Object.freeze({
+      [DrcProject['UKR-000298 Novo-Nordisk']]: 'PRT-DRC-00001',
+      [DrcProject['UKR-000309 OKF']]: 'PRT-DRC-00002',
+      [DrcProject['UKR-000314 UHF4']]: 'PRT-DRC-00003',
+      [DrcProject['UKR-000322 ECHO2']]: 'PRT-DRC-00004',
+      [DrcProject['UKR-000345 BHA2']]: 'PRT-DRC-00005',
+      [DrcProject['UKR-000336 UHF6']]: 'PRT-DRC-00006',
+      [DrcProject['UKR-000330 SDC2']]: 'PRT-DRC-00007',
+    })
+    // @ts-ignore
+    return planCode[_] ?? `!!! ${_}`
+  }
 
   export const mapHhs = (reportingMonth: string) => (res: KoboUnwrapResult<'searchProtection_hhs3'>) => {
     const data: Type[] = []
@@ -48,7 +52,7 @@ export namespace AiProtectionMapper {
           Hromada: AILocationHelper.findHromadaByIso(d.where_are_you_current_living_hromada!)?._5w as any,
           ...AiMapper.disaggregatePersons([ind]),
           'Reporting Month': reportingMonth,
-          'Plan/Project Code': fnSwitch(d.tags?.projects?.[0]!, planCode, () => undefined)!,
+          'Plan/Project Code': getPlanCode(d.tags?.projects?.[0]),
           'Population Group': fnSwitch(d.do_you_identify_as_any_of_the_following!, {
             returnee: 'Returnees',
             idp: 'Internally Displaced',
@@ -89,7 +93,7 @@ export namespace AiProtectionMapper {
             }, () => undefined)
           }]),
           'Reporting Month': reportingMonth,
-          'Plan/Project Code': fnSwitch(project!, planCode, () => undefined)!,
+          'Plan/Project Code': getPlanCode(project!),
           'Population Group': fnSwitch(ind.hh_char_hh_det_status!, {
             returnee: 'Returnees',
             idp: 'Internally Displaced',
@@ -123,7 +127,7 @@ export namespace AiProtectionMapper {
               }, () => undefined)
             }]),
             'Reporting Month': reportingMonth,
-            'Plan/Project Code': fnSwitch(d.tags?.project!, planCode, () => undefined)!,
+            'Plan/Project Code': getPlanCode(d.tags?.project),
             'Population Group': fnSwitch(d.informant_status!, {
               returnee: 'Returnees',
               idp: 'Internally Displaced',
@@ -151,7 +155,7 @@ export namespace AiProtectionMapper {
                 }, () => undefined)
               }]),
               'Reporting Month': reportingMonth,
-              'Plan/Project Code': fnSwitch(d.tags?.project!, planCode, () => undefined)!,
+              'Plan/Project Code': getPlanCode(d.tags?.project),
               'Population Group': fnSwitch(ind.hh_char_hh_det_status!, {
                 returnee: 'Returnees',
                 idp: 'Internally Displaced',

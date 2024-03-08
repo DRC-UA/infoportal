@@ -31,9 +31,10 @@ export class ActivityInfoSdk {
     subformId,
     subActivities,
   }: ActivityInfoRequest & {
-    subformId: string,
+    subformId?: string,
     subActivities?: any[]
   }) => {
+    activityYYYYMM = activityYYYYMM.replace('-', '')
     const parentRequest = ActivityInfoSdk.makeRecordRequestContent({
       activityIdPrefix,
       activity,
@@ -45,7 +46,7 @@ export class ActivityInfoSdk {
     return {
       'changes': [
         parentRequest,
-        ...subActivities?.map((_, i) =>
+        ...subformId ? subActivities?.map((_, i) =>
           ActivityInfoSdk.makeRecordRequestContent({
             activity: _,
             activityIndex: i,
@@ -53,7 +54,7 @@ export class ActivityInfoSdk {
             activityIdPrefix: activityIdPrefix + 'i' + ('' + i).padStart(3, '0'),
             formId: subformId,
             parentRecordId: parentRequest.recordId,
-          })) ?? []
+          })) ?? [] : []
       ]
     }
   }

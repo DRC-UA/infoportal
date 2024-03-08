@@ -8,8 +8,8 @@ export class KoboMetaSdk {
   constructor(private client: ApiClient) {
   }
 
-  readonly search = (body: KoboMetaSearchParans = {}): Promise<ApiPaginate<IKoboMeta>> => {
-    return this.client.post(`/kobo-unified/search`, {body})
+  readonly search = <TTag = any>(body: KoboMetaSearchParans = {}): Promise<ApiPaginate<IKoboMeta<TTag>>> => {
+    return this.client.post(`/kobo-meta/search`, {body})
       .then(ApiSdkUtils.mapPaginate(KoboMetaHelper.mapEntity))
   }
 }

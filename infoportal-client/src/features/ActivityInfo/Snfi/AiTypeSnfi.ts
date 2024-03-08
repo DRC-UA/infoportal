@@ -67,7 +67,8 @@ export const options = {
     "SNFI-DRC-00003": 'cfk562tltfvw5658',
     "SNFI-DRC-00004": 'cxdte2dltfvym1p9',
     "SNFI-DRC-00005": 'cz4d1myltfw08qza',
-    "SNFI-DRC-00006": 'cqpalmjlth6tlpb2'
+    "SNFI-DRC-00006": 'cqpalmjlth6tlpb2',
+    "SNFI-DRC-00007": 'chd9sl9ltihdbdn4'
   },
   'Indicators - SNFI': {
     "# of individuals supported with emergency shelter support": 'cqbiyfslrke6ze93',

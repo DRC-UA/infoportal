@@ -11,6 +11,7 @@ import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
+import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/AiGenerateDataseInterface'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -53,7 +54,7 @@ const startApp = async (conf: AppConf) => {
   //   ActivityInfoBuildType.generalProtection(),
   //   ActivityInfoBuildType.gbv(),
   //   // ActivityInfoBuildType.mineAction(),
-  //   // ActivityInfoBuildType.snfi(),
+  //   ActivityInfoBuildType.snfi(),
   //   // ActivityInfoBuildType.mpca(),
   //   // ActivityInfoBuildType.wash(),
   // ])

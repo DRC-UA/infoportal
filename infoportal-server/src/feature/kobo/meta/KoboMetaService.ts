@@ -2,7 +2,7 @@ import {Prisma, PrismaClient} from '@prisma/client'
 import {GlobalEvent} from '../../../core/GlobalEvent'
 import {KoboAnswerFlat} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 import {koboFormsId} from '../../../core/conf/KoboFormsId'
-import {KoboUnifiedBasicneeds} from './KoboMetaMapperBasicneeds'
+import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds'
 import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 import {logger, Logger} from '../../../helper/Logger'
 import {KoboService} from '../KoboService'
@@ -21,8 +21,8 @@ type CreateMapper = (_: KoboAnswerFlat<any>) => KoboMetaCreate | undefined
 
 class KoboMetaMapper {
   static readonly mappersCreate: Record<KoboId, CreateMapper> = {
-    [koboFormsId.prod.bn_re]: KoboUnifiedBasicneeds.bn_re,
-    [koboFormsId.prod.bn_rapidResponse]: KoboUnifiedBasicneeds.bn_rrm,
+    [koboFormsId.prod.bn_re]: KoboMetaBasicneeds.bn_re,
+    [koboFormsId.prod.bn_rapidResponse]: KoboMetaBasicneeds.bn_rrm,
     [koboFormsId.prod.ecrec_cashRegistration]: KoboMetaMapperEcrec.cashRegistration,
     [koboFormsId.prod.ecrec_cashRegistrationBha]: KoboMetaMapperEcrec.cashRegistrationBha,
     [koboFormsId.prod.shelter_NTA]: KoboMetaMapperShelter.createNta,
@@ -118,6 +118,7 @@ export class KoboMetaService {
       .withConcurrency(this.conf.db.maxConcurrency)
       .for(updates)
       .process(async ([koboId, {persons, ...update}]) => {
+        console.log(koboId, update)
         return this.prisma.koboMeta.update({
           where: {id: koboId},
           data: update,
@@ -181,15 +182,13 @@ export class KoboMetaService {
         delete _['persons']
         return res
       })
-      await Promise.all([
-        this.prisma.koboMeta.createMany({
-          data: seq(notInsertedAnswers),
-          skipDuplicates: true,
-        }),
-        this.prisma.koboPerson.createMany({
-          data: persons
-        })
-      ])
+      await this.prisma.koboMeta.createMany({
+        data: seq(notInsertedAnswers),
+        skipDuplicates: true,
+      })
+      await this.prisma.koboPerson.createMany({
+        data: persons
+      })
       return notInsertedAnswers
     }
 

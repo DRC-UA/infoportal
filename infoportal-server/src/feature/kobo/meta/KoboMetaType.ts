@@ -14,4 +14,4 @@ export type KoboMetaOrigin<
   tags?: TTag
 }
 
-export type KoboMetaCreate = IKoboMeta
+export type KoboMetaCreate<TTags = any> = IKoboMeta<TTags>

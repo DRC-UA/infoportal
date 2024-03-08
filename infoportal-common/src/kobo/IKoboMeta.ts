@@ -1,15 +1,9 @@
 import {UUID} from '../type/Generic'
 import {OblastName} from '../location'
 import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc'
-import {DisplacementStatus, KoboId, PersonDetails} from './mapper'
+import {DisplacementStatus, KoboId, PersonDetails, ShelterTaPriceLevel} from './mapper'
 
-export enum KoboMetaStatus {
-  Committed = 'Committed',
-  Pending = 'Pending',
-  Rejected = 'Rejected',
-}
-
-export type IKoboMeta = {
+export type IKoboMeta<TTag = any> = {
   id: UUID
   uuid: UUID
   formId: KoboId
@@ -27,7 +21,7 @@ export type IKoboMeta = {
   lastName?: string
   patronymicName?: string
   phone?: string
-  disStatus?: DisplacementStatus
+  displacement?: DisplacementStatus
   sector: DrcSector
   activity: DrcProgram[]
   office?: DrcOffice
@@ -37,4 +31,15 @@ export type IKoboMeta = {
   persons?: PersonDetails[]
   status?: KoboMetaStatus
   committedAt?: Date
+  tags?: TTag
+}
+
+export enum KoboMetaStatus {
+  Committed = 'Committed',
+  Pending = 'Pending',
+  Rejected = 'Rejected',
+}
+
+export type KoboMetaShelterRepairTags = {
+  damageLevel?: ShelterTaPriceLevel
 }

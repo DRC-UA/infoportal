@@ -3,7 +3,7 @@ import {Bn_RapidResponse, DrcOffice, DrcProgram, DrcProject, DrcProjectHelper, D
 import {Bn_Re} from '../../../script/output/kobo/Bn_Re'
 import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 
-export class KoboUnifiedBasicneeds {
+export class KoboMetaBasicneeds {
 
   static readonly bn_re = (row: KoboMetaOrigin<Bn_Re.T>): KoboMetaCreate => {
     const answer = Bn_Re.map(row.answers)

@@ -11,7 +11,7 @@ import {
   Shelter_NTA,
   Shelter_TA,
   ShelterTaTags,
-  Bn_Re, KoboMetaStatus, KoboId
+  Bn_Re, KoboMetaStatus, KoboId, KoboMetaShelterRepairTags
 } from '@infoportal-common'
 import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 
@@ -44,7 +44,6 @@ export namespace KoboMetaMapperShelter {
   export const createNta = (row: KoboMetaOrigin<Shelter_NTA.T>): KoboMetaCreate => {
     const answer = Shelter_NTA.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(mapDisabilityAll(answer)).map(KoboGeneralMapping.mapPerson)
-    console.log({raw: row.answers.hh_char_hh_det, lgth: group})
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
 
     return {
@@ -61,6 +60,7 @@ export namespace KoboMetaMapperShelter {
         umy: DrcOffice.Sumy,
       }, () => undefined),
       oblast: oblast.name,
+      displacement: KoboGeneralMapping.mapDisplacementStatus(answer.ben_det_res_stat),
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Shelter,
@@ -75,16 +75,18 @@ export namespace KoboMetaMapperShelter {
     }
   }
 
-  export const updateTa = (row: KoboMetaOrigin<Shelter_TA.T, ShelterTaTags>): [KoboId, Partial<KoboMetaCreate>] | undefined => {
+  export const updateTa = (row: KoboMetaOrigin<Shelter_TA.T, ShelterTaTags>): [KoboId, Partial<KoboMetaCreate<KoboMetaShelterRepairTags>>] | undefined => {
     if (!row.tags || !row.answers.nta_id) return
     const project = row.tags.project
     return [
       row.answers.nta_id,
       {
+        referencedFormId: KoboIndex.byName('shelter_ta').id,
         project: project ? [project] : undefined,
         donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
         status: row.tags.workDoneAt ? KoboMetaStatus.Committed : KoboMetaStatus.Pending,
         committedAt: row.tags.workDoneAt,
+        tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {}
       }
     ]
   }

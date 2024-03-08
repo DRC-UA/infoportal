@@ -30,7 +30,7 @@ export interface AiBundle2<
   recordId: string
   data: KoboAnswer<TAnswer>[],
   activity: TActivity,
-  subActivity: TSubActivity,
+  subActivity?: TSubActivity,
   requestBody: ActiviftyInfoRecords,
 }
 
@@ -98,18 +98,25 @@ export const BundleTable = ({
                 )
               }
             },
+            {
+              id: 'id',
+              type: 'select_one',
+              head: 'Record ID',
+              renderQuick: _ => _.recordId
+            },
             ...Object.keys(first.activity).map(colId => ({
               head: colId,
               id: colId,
+              // type: 'select_one',
               // type: 'string',
-              // type: typeof first[colId] === 'string' ? 'select_one' : 'number',
+              type: typeof first.activity[colId] === 'number' ? 'number' : 'select_one' as any,
               renderQuick: (_: any) => _.activity[colId] as any,
             })),
-            ...Obj.keys(first.subActivity).map(colId => ({
+            ...Obj.keys(first.subActivity ?? {}).map(colId => ({
               head: colId,
               id: colId,
               // type: 'string',
-              // type: typeof first[colId] === 'string' ? 'select_one' : 'number',
+              type: typeof first.activity[colId] === 'number' ? 'number' : 'select_one' as any,
               renderQuick: (_: any) => _.subActivity[colId] as any,
             })),
           ]}

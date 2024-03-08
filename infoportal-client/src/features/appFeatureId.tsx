@@ -20,7 +20,7 @@ export enum AppFeatureId {
   hdp = 'hdp',
   safety = 'safety',
   protection = 'protection',
-  unifiedDashboard = 'metaDashboard',
+  metaDashboard = 'metaDashboard',
 }
 
 export interface AppFeature {
@@ -35,7 +35,7 @@ export interface AppFeature {
 
 export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
   metaDashboard: {
-    id: AppFeatureId.unifiedDashboard,
+    id: AppFeatureId.metaDashboard,
     name: 'Meta Dashboard',
     materialIcons: 'public',
     color: '#7300d7',

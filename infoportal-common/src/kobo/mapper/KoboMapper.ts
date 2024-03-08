@@ -40,6 +40,19 @@ export namespace KoboGeneralMapping {
     mykolaiv: DrcOffice.Mykolaiv,
   }, () => undefined)
 
+  type XlsDisplacementStatus = NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status'] | Bn_Re.T['ben_det_res_stat']
+
+  export const mapDisplacementStatus = (_?: XlsDisplacementStatus): DisplacementStatus | undefined => {
+    return fnSwitch(_!, {
+      idp: DisplacementStatus.Idp,
+      long_res: DisplacementStatus.NonDisplaced,
+      ret: DisplacementStatus.Returnee,
+      ref_asy: DisplacementStatus.Refugee,
+      returnee: DisplacementStatus.Returnee,
+      'non-displaced': DisplacementStatus.NonDisplaced,
+    }, () => undefined)
+  }
+
   export const mapProject = (_?: string) => {
     if (!_) return
     const extractCode = _.match(/UKR-000\d{3}/)?.[0]
@@ -71,12 +84,7 @@ export namespace KoboGeneralMapping {
   }): PersonDetails => {
     const res: PersonDetails = KoboGeneralMapping.mapPerson(p as any)
     if (p.hh_char_hh_det_status)
-      res.displacement = fnSwitch(p.hh_char_hh_det_status!, {
-        idp: DisplacementStatus.Idp,
-        returnee: DisplacementStatus.Returnee,
-        'non-displaced': DisplacementStatus.NonDisplaced,
-        ['non_displaced' as any]: DisplacementStatus.NonDisplaced,
-      }, () => undefined)
+      res.displacement = mapDisplacementStatus(p.hh_char_hh_det_status)
     else
       res.displacement = fnSwitch(p.ben_det_res_stat!, {
         idp: DisplacementStatus.Idp,
