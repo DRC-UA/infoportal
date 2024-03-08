@@ -27,7 +27,7 @@ export const MetaDashboard = () => {
   }, [])
   if (!data) return <></>
   return (
-    <Layout>
+    <Layout loading={fetcherKoboMeta.loading}>
       <_MetaDashboard data={data} loading={fetcherKoboMeta.loading}/>
     </Layout>
   )
@@ -43,7 +43,7 @@ export const _MetaDashboard = ({
   const {m, formatLargeNumber} = useI18n()
   const ctx = useMetaDashboardData(data)
   return (
-    <Page width="lg" loading={loading}>
+    <Page width="lg">
       <DataFilterLayout
         data={ctx.filteredData}
         filters={ctx.filters}

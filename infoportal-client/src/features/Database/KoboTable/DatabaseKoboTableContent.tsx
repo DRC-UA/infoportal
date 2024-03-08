@@ -107,6 +107,7 @@ export const DatabaseKoboTableContent = ({
   return (
     <>
       <Datatable
+        rowsPerPageOptions={[20, 50, 100]}
         onFiltersChange={onFiltersChange}
         onDataChange={onDataChange}
         select={ctx.canEdit ? {

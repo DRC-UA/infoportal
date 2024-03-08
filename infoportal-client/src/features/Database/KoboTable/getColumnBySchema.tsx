@@ -14,7 +14,6 @@ import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {removeHtml} from '@infoportal-common'
-import {User} from '@sentry/react'
 
 const ignoredColType: Set<KoboApiColType> = new Set([
   'begin_group',
@@ -290,7 +289,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           typeIcon: <SheetHeadTypeIcon children="location_on" tooltip="geopoint"/>,
           ...common,
           type: 'string',
-          renderQuick: row => JSON.stringify(row)
+          renderQuick: row => JSON.stringify(getVal(row, q.name))
         }
       }
       default: {
