@@ -99,10 +99,11 @@ model KoboMeta {
   office           String?
   project          String[]
   donor            String[]
-  disStatus        String?
+  displacement     String?
   address          String?
   status           String?
   committedAt      DateTime?
+  tags             Json?
 
   persons KoboPerson[]
 
