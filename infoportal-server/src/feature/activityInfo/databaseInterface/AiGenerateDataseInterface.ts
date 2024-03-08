@@ -1,12 +1,9 @@
-import {AiProtectionHhs} from '../sandbox/AiProtectionHhs'
 import {ActivityInfoSdk} from '../sdk/ActivityInfoSdk'
 import {activityInfoForms, AIID, FormDesc, FormDescs} from '../model/ActivityInfo'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import fs from 'fs'
 import {capitalize} from '@infoportal-common'
 import {appConf} from '../../../core/conf/AppConf'
-import columnsListMap = AiProtectionHhs.columnsListMap
-import {getObj} from '../../../helper/Utils'
 
 export const ActivityInfoBuildType = {
   wash: () => generateDatabaseInterface({
@@ -234,7 +231,7 @@ const generateDatabaseInterface = async ({
     const getRandomOptions = () => {
       return (f[optionId].schema.elements.find(_ => _.code === e.code || (_.code ?? '').includes('ENG')) ?? f[optionId].schema.elements[0]).id
     }
-    const optionDefId = pickSpecificOptionSet[optionId] ?? getObj(columnsListMap, optionId)?.labelsId ?? getRandomOptions()
+    const optionDefId = pickSpecificOptionSet[optionId] ?? getRandomOptions()
     // const optionDefId = pickSpecificOptionSet[optionId] ?? getObj(columnsListMap, optionId)?.listId ?? getRandomOptions()
     const options = await x.fetchColumns(
       optionId,

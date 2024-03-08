@@ -1,5 +1,4 @@
 import {ApiClient} from '../ApiClient'
-import {AiTypeProtectionRmm} from '@/features/ActivityInfo/Protection/____aiProtectionGeneralInterface'
 import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 
 interface ActivityInfoRequest {
@@ -75,7 +74,7 @@ export class ActivityInfoSdk {
     }
   }
 
-  readonly submitActivity = (body: AiTypeProtectionRmm.FormParams[]) => {
+  readonly submitActivity = (body: ActiviftyInfoRecords[]) => {
     return this.client.post(`/activity-info/activity`, {body})
   }
 
