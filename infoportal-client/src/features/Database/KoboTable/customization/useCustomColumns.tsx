@@ -1,14 +1,5 @@
-import {KoboAnswer, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {
-  CashStatus,
-  currentProtectionProjects,
-  DrcProject,
-  Ecrec_cashRegistration,
-  KoboEcrec_cashRegistration,
-  KoboGeneralMapping,
-  KoboIndex,
-  ProtectionHhsTags,
-} from '@infoportal-common'
+import {KoboAnswer, KoboBaseTags, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {CashStatus, currentProtectionProjects, DrcProject, Ecrec_cashRegistration, KoboGeneralMapping, KoboIndex, KoboTagStatus, ProtectionHhsTags,} from '@infoportal-common'
 import React, {useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {map, Obj} from '@alexandreannic/ts-utils'
@@ -19,6 +10,7 @@ import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {SelectCashStatus, SelectShelterCashStatus, ShelterCashStatus} from '@/shared/customInput/SelectStatus'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 
 export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const ctx = useDatabaseKoboTableContext()
@@ -66,46 +58,80 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         }
       },
     ]
-    const paymentStatus: DatatableColumn.Props<any> = ({
-      id: 'custom_status',
-      head: m.status,
-      type: 'select_one',
-      width: 120,
-      options: () => SheetUtils.buildOptions(Obj.keys(CashStatus), true),
-      render: (row: KoboEcrec_cashRegistration.T) => {
+
+    const lastStatusUpdate: DatatableColumn.Props<any> = {
+      id: 'lastStatusUpdate',
+      width: 129,
+      head: m.lastStatusUpdate,
+      type: 'date',
+      render: (row: KoboAnswer<{}, KoboBaseTags & KoboTagStatus>) => {
         return {
-          value: row.tags?.status,
-          label: (
-            <SelectCashStatus
-              disabled={!ctx.canEdit}
-              value={row.tags?.status}
-              placeholder={m.project}
-              onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'status'})}
-            />
-          )
+          value: row.tags?.lastStatusUpdate,
+          label: <IpDatepicker
+            value={row.tags?.lastStatusUpdate}
+            onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'lastStatusUpdate'})}
+          />
         }
       }
-    })
-    const paymentStatusShelter: DatatableColumn.Props<any> = ({
-      id: 'custom_status',
-      head: m.status,
-      type: 'select_one',
-      width: 120,
-      options: () => SheetUtils.buildOptions(Obj.keys(ShelterCashStatus), true),
-      render: (row: any) => {
-        return {
-          value: row.tags?.status,
-          label: (
-            <SelectShelterCashStatus
-              disabled={!ctx.canEdit}
-              value={row.tags?.status}
-              placeholder={m.project}
-              onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'status'})}
-            />
-          )
-        }
-      }
-    })
+    }
+
+    const paymentStatus = (): DatatableColumn.Props<any>[] => {
+      return [
+        {
+          id: 'custom_status',
+          head: m.status,
+          type: 'select_one',
+          width: 120,
+          options: () => SheetUtils.buildOptions(Obj.keys(CashStatus), true),
+          render: (row: KoboAnswer<{}, KoboBaseTags & KoboTagStatus>) => {
+            return {
+              value: row.tags?.status,
+              label: (
+                <SelectCashStatus
+                  disabled={!ctx.canEdit}
+                  value={row.tags?.status}
+                  placeholder={m.project}
+                  onChange={_ => {
+                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'status'})
+                    // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
+                  }}
+                />
+              )
+            }
+          }
+        },
+        lastStatusUpdate,
+      ]
+    }
+
+    const paymentStatusShelter = (): DatatableColumn.Props<any>[] => {
+      return [
+        {
+          id: 'custom_status',
+          head: m.status,
+          type: 'select_one',
+          width: 120,
+          options: () => SheetUtils.buildOptions(Obj.keys(ShelterCashStatus), true),
+          render: (row: any) => {
+            return {
+              value: row.tags?.status,
+              label: (
+                <SelectShelterCashStatus
+                  disabled={!ctx.canEdit}
+                  value={row.tags?.status}
+                  placeholder={m.project}
+                  onChange={_ => {
+                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'status'})
+                    // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
+                  }}
+                />
+              )
+            }
+          }
+        },
+        lastStatusUpdate,
+      ]
+    }
 
     // const validatedAt: DatatableColumn.Props<any> = () => {
     //   return {
@@ -129,30 +155,30 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_cashForRentRegistration').id]: [
-        paymentStatus,
+        ...paymentStatus(),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_cashForRentApplication').id]: [
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_rapidResponse').id]: [
-        paymentStatus,
+        ...paymentStatus(),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_re').id]: [
-        paymentStatus,
+        ...paymentStatus(),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('shelter_cashForShelter').id]: [
-        paymentStatusShelter,
+        ...paymentStatusShelter(),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('ecrec_cashRegistration').id]: [
-        paymentStatus,
+        ...paymentStatus(),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('ecrec_cashRegistrationBha').id]: [
-        paymentStatus,
+        ...paymentStatus(),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('protection_communityMonitoring').id]: [

@@ -14,6 +14,11 @@ export interface KoboBaseTags {
   _validation?: KoboValidation
 }
 
+export interface KoboTagStatus<T = any> {
+  status: T,
+  lastStatusUpdate?: Date
+}
+
 export interface PersonDetails extends Person.Person {
   displacement?: DisplacementStatus
   disability?: WgDisability[]

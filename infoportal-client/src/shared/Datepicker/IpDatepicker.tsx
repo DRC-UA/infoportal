@@ -1,8 +1,8 @@
-import {InputProps as StandardInputProps, TextField, TextFieldProps} from '@mui/material'
+import {FormControl, Input, InputLabel, OutlinedInput, OutlinedInputProps, InputProps as StandardInputProps, TextField, TextFieldProps} from '@mui/material'
 import {zonedTimeToUtc} from 'date-fns-tz'
 import React, {useEffect, useState} from 'react'
 
-export interface DatepickerProps extends Omit<TextFieldProps, 'onChange'> {
+export interface DatepickerProps extends Omit<OutlinedInputProps, 'onChange' | 'value'>, Pick<TextFieldProps, 'InputProps' | 'InputLabelProps'> {
   min?: Date
   max?: Date
   value?: Date
@@ -16,15 +16,37 @@ export interface DatepickerProps extends Omit<TextFieldProps, 'onChange'> {
     | 'endOfDay'
 }
 
-export const Datepicker = ({
+const date2string = (_: Date) => {
+  return [
+    _.getFullYear(),
+    (_.getMonth() + 1).toString().padStart(2, '0'),
+    _.getDate().toString().padStart(2, '0'),
+  ].join('-')
+}
+
+const safeDate2string = (_?: string | Date) => {
+  if (_ === undefined || _ === null) return
+  try {
+    return date2string(_ as any)
+  } catch (e) {
+    try {
+      return date2string(new Date(_))
+    } catch (e) {
+    }
+  }
+}
+
+export const IpDatepicker = ({
   value,
   min,
   max,
   onChange,
   label,
   fullWidth,
-  InputProps,
+  InputLabelProps,
+  id,
   timeOfDay = 'startOfDay',
+  sx,
   ...props
 }: DatepickerProps) => {
   const onChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,15 +64,9 @@ export const Datepicker = ({
 
   const [displayedDate, setDisplayedDate] = useState<string | undefined>(undefined)
 
-  const date2String = (_?: Date) => _ ? [
-    _.getFullYear(),
-    (_.getMonth() + 1).toString().padStart(2, '0'),
-    _.getDate().toString().padStart(2, '0'),
-  ].join('-') : undefined
-
   useEffect(() => {
     if (value) {
-      const yyyymmdd = date2String(value)
+      const yyyymmdd = safeDate2string(value)
       setDisplayedDate(yyyymmdd)
     } else {
       setDisplayedDate(undefined)
@@ -58,22 +74,23 @@ export const Datepicker = ({
   }, [setDisplayedDate, value])
 
   return (
-    <TextField
-      {...props}
-      type="date"
-      inputProps={{
-        min: date2String(min),
-        max: date2String(max),
-      }}
-      margin="dense"
-      variant="outlined"
-      size="small"
-      label={label}
-      InputProps={InputProps}
-      value={displayedDate}
-      onChange={onChangeDate}
-      fullWidth={fullWidth}
-      InputLabelProps={{shrink: true}}
-    />
+    <FormControl size="small" sx={{...sx}}>
+      <InputLabel {...InputLabelProps} shrink={true} htmlFor={id}>{label}</InputLabel>
+      <OutlinedInput
+        {...props}
+        id={id}
+        type="date"
+        inputProps={{
+          min: safeDate2string(min),
+          max: safeDate2string(max),
+        }}
+        margin="dense"
+        size="small"
+        label={label}
+        value={displayedDate}
+        onChange={onChangeDate}
+        fullWidth={fullWidth}
+      />
+    </FormControl>
   )
 }

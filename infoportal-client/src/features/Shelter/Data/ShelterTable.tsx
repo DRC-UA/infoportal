@@ -29,7 +29,7 @@ import {ShelterSelectContractor, ShelterSelectStatus} from '@/features/Shelter/D
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {SelectDrcProject} from '@/shared/SelectDrcProject'
 import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
-import {Datepicker} from '@/shared/Datepicker/Datepicker'
+import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableInput} from '@/shared/TableInput'
 import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyncBtn'
@@ -607,7 +607,7 @@ export const ShelterTable = () => {
         width: 134,
         renderValue: _ => _.ta?.tags?.workDoneAt,
         render: (row: ShelterEntity) => row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted && map(row.ta, ta => (
-          <Datepicker
+          <IpDatepicker
             value={row.ta?.tags?.workDoneAt}
             onChange={_ => ctx.ta.asyncUpdate.call({
               answerId: ta.id,

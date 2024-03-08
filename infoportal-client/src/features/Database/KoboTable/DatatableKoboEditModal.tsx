@@ -10,7 +10,7 @@ import {IpInput} from '@/shared/Input/Input'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {useIpToast} from '@/core/useToast'
-import {Datepicker} from '@/shared/Datepicker/Datepicker'
+import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {Alert} from 'mui-extension'
 import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 
@@ -90,7 +90,7 @@ export const DatatableKoboEditModal = ({
           }
           case 'datetime':
           case 'date': {
-            return <Datepicker value={value} onChange={setValue}/>
+            return <IpDatepicker value={value} onChange={setValue}/>
           }
         }
       })()}

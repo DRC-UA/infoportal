@@ -3,8 +3,10 @@ import {Enum} from '@alexandreannic/ts-utils'
 
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
+/**@deprecated use from common*/
 export type KoboId = string
 
+/**@deprecated use from common*/
 export type KoboAnswerId = string
 
 export type KoboServer = {

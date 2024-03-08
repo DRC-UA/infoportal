@@ -1,4 +1,4 @@
-import {ReactNode, useMemo} from 'react'
+import React, {ReactNode, useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useI18n} from '@/core/i18n'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
@@ -6,6 +6,8 @@ import {KoboAnswerId} from '@/core/sdk/server/kobo/Kobo'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {currentProtectionProjects, KoboIndex} from '@infoportal-common'
 import {SelectCashStatus, SelectShelterCashStatus} from '@/shared/customInput/SelectStatus'
+import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
+import {IpInput} from '@/shared/Input/Input'
 
 export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode => {
   const ctx = useDatabaseKoboTableContext()
@@ -18,7 +20,10 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
             disabled={!ctx.canEdit}
             sx={{maxWidth: 120}}
             label={m.project}
-            onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})}
+            onChange={_ => {
+              ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
+              // ctx.asyncUpdateTag.call({answerIds: selectedIds, value: new Date(), key: 'lastStatusUpdate'})
+            }}
           />
         )
       }
@@ -28,12 +33,21 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
       case KoboIndex.byName('ecrec_cashRegistrationBha').id:
       case KoboIndex.byName('ecrec_cashRegistration').id: {
         return (
-          <SelectCashStatus
-            disabled={!ctx.canEdit}
-            sx={{maxWidth: 120}}
-            label={m.status}
-            onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})}
-          />
+          <>
+            <SelectCashStatus
+              disabled={!ctx.canEdit}
+              sx={{maxWidth: 120, mr: 1}}
+              label={m.status}
+              onChange={_ => {
+                ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
+                // ctx.asyncUpdateTag.call({answerIds: selectedIds, value: new Date(), key: 'lastStatusUpdate'})
+              }}
+            />
+            <IpDatepicker
+              label={m.lastStatusUpdate}
+              onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'lastStatusUpdate'})}
+            />
+          </>
         )
       }
       case KoboIndex.byName('protection_communityMonitoring').id: {

@@ -2,7 +2,7 @@ import {addDays, subDays} from 'date-fns'
 import React, {useEffect, useState} from 'react'
 import {useI18n} from '../../core/i18n'
 import {Box, BoxProps} from '@mui/material'
-import {Datepicker} from '../Datepicker/Datepicker'
+import {IpDatepicker} from '../Datepicker/IpDatepicker'
 
 export interface PeriodPickerProps extends Omit<BoxProps, 'defaultValue' | 'onChange'> {
   min?: Date
@@ -57,7 +57,7 @@ export const PeriodPickerNative = ({
         ...sx,
       }}
     >
-      <Datepicker
+      <IpDatepicker
         min={min}
         max={max}
         label={label?.[0] ?? m.start}
@@ -77,7 +77,7 @@ export const PeriodPickerNative = ({
         timeOfDay="startOfDay"
       />
 
-      <Datepicker
+      <IpDatepicker
         min={min}
         max={max}
         label={label?.[1] ?? m.end}
