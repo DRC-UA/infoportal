@@ -102,7 +102,7 @@ model KoboMeta {
   displacement     String?
   address          String?
   status           String?
-  committedAt      DateTime?
+  lastStatusUpdate DateTime?
   tags             Json?
 
   persons KoboPerson[]

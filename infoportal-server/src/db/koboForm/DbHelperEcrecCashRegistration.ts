@@ -1,12 +1,11 @@
-import {CashStatus} from '@infoportal-common'
+import {CashStatus, KoboTagStatus} from '@infoportal-common'
 
 export enum EcrecCashRegistrationProgram {
   CashforAnimalFeed = 'CashforAnimalFeed',
   CashforAnimalShelter = 'CashforAnimalShelter',
 }
 
-export interface EcrecCashRegistrationTags {
-  status?: CashStatus
+export interface EcrecCashRegistrationTags extends KoboTagStatus {
   program?: EcrecCashRegistrationProgram
   paidUah?: number
 }

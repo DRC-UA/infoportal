@@ -1,11 +1,24 @@
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
-import {Bn_RapidResponse, DrcOffice, DrcProgram, DrcProject, DrcProjectHelper, DrcSector, KoboGeneralMapping, KoboIndex, OblastIndex, Person, safeNumber} from '@infoportal-common'
-import {Bn_Re} from '../../../script/output/kobo/Bn_Re'
+import {
+  Bn_RapidResponse,
+  DrcOffice,
+  DrcProgram,
+  DrcProject,
+  DrcProjectHelper,
+  DrcSector,
+  KoboGeneralMapping,
+  KoboIndex,
+  KoboMetaHelper,
+  KoboTagStatus,
+  OblastIndex,
+  safeNumber,
+  Bn_Re
+} from '@infoportal-common'
 import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 
 export class KoboMetaBasicneeds {
 
-  static readonly bn_re = (row: KoboMetaOrigin<Bn_Re.T>): KoboMetaCreate => {
+  static readonly bn_re = (row: KoboMetaOrigin<Bn_Re.T, KoboTagStatus>): KoboMetaCreate => {
     const answer = Bn_Re.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
@@ -97,10 +110,12 @@ export class KoboMetaBasicneeds {
       patronymicName: answer.ben_det_pat_name,
       taxId: answer.pay_det_tax_id_num,
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+      status: KoboMetaHelper.mapCashStatus(row.tags?.status),
+      lastStatusUpdate: row.tags?.lastStatusUpdate,
     }
   }
 
-  static readonly bn_rrm = (row: KoboMetaOrigin<Bn_RapidResponse.T>): undefined | KoboMetaCreate => {
+  static readonly bn_rrm = (row: KoboMetaOrigin<Bn_RapidResponse.T, KoboTagStatus>): undefined | KoboMetaCreate => {
     const answer = Bn_RapidResponse.map(row.answers)
     if (answer.form_length === 'short') return
     const group = KoboGeneralMapping.collectXlsKoboIndividuals({
@@ -120,22 +135,6 @@ export class KoboMetaBasicneeds {
       hh_char_res_dis_select: answer.hh_char_res_dis_select_l,
       ben_det_res_stat: answer.ben_det_res_stat_l,
     })
-
-    // const group = [...answer.hh_char_hh_det_l?.map(_ => ({
-    //   hh_char_hh_det_age: _.hh_char_hh_det_age_l,
-    //   hh_char_hh_det_gender: _.hh_char_hh_det_gender_l,
-    //   hh_char_hh_det_dis_level: _.hh_char_hh_det_dis_level_l,
-    //   hh_char_hh_det_dis_select: _.hh_char_hh_det_dis_select_l,
-    // })) ?? [],
-    //   {
-    //     hh_char_hh_det_age: answer.hh_char_hhh_age_l,
-    //     hh_char_hh_det_gender: answer.hh_char_hhh_gender_l
-    //   },
-    //   {
-    //     hh_char_hh_det_age: answer.hh_char_res_age_l,
-    //     hh_char_hh_det_gender: answer.hh_char_res_gender_l,
-    //   },
-    // ].filter(_ => _.hh_char_hh_det_age !== undefined || _.hh_char_hh_det_gender !== undefined)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = fnSwitch(answer.back_donor_l!, {
       sdc_umy: DrcProject[`UKR-000330 SDC2`],
@@ -201,7 +200,8 @@ export class KoboMetaBasicneeds {
       patronymicName: answer.ben_det_pat_name_l,
       taxId: answer.pay_det_tax_id_num_l,
       phone: answer.ben_det_ph_number_l ? '' + answer.ben_det_ph_number_l : undefined,
-
+      status: KoboMetaHelper.mapCashStatus(row.tags?.status),
+      lastStatusUpdate: row.tags?.lastStatusUpdate,
     }
   }
 }

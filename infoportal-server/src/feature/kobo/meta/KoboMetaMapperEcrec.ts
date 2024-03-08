@@ -8,7 +8,7 @@ import {
   Ecrec_cashRegistrationBha,
   KoboGeneralMapping,
   KoboIndex,
-  KoboMetaStatus,
+  KoboMetaHelper,
   OblastIndex,
   safeNumber
 } from '@infoportal-common'
@@ -17,19 +17,19 @@ import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashR
 
 export class KoboMetaMapperEcrec {
 
-  static readonly cashRegistration = (answer: KoboMetaOrigin<Ecrec_cashRegistration.T, EcrecCashRegistrationTags>): KoboMetaCreate => {
-    const _ = Ecrec_cashRegistration.map(answer.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
-    const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
-    const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistration.options.back_donor[_.back_donor!])
+  static readonly cashRegistration = (row: KoboMetaOrigin<Ecrec_cashRegistration.T, EcrecCashRegistrationTags>): KoboMetaCreate => {
+    const answer = Ecrec_cashRegistration.map(row.answers)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
+    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistration.options.back_donor[answer.back_donor!])
 
     return {
-      id: answer.id,
-      uuid: answer.uuid,
-      date: answer.date,
+      id: row.id,
+      uuid: row.uuid,
+      date: row.date,
       formId: KoboIndex.byName('ecrec_cashRegistration').id,
-      enumerator: Ecrec_cashRegistration.options.back_enum[_.back_enum!],
-      office: fnSwitch(_.back_office!, {
+      enumerator: Ecrec_cashRegistration.options.back_enum[answer.back_enum!],
+      office: fnSwitch(answer.back_office!, {
         chj: DrcOffice.Chernihiv,
         dnk: DrcOffice.Dnipro,
         hrk: DrcOffice.Kharkiv,
@@ -38,40 +38,37 @@ export class KoboMetaMapperEcrec {
         umy: DrcOffice.Sumy,
       }, () => undefined),
       oblast: oblast.name,
-      raion: KoboGeneralMapping.searchRaion(_.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(_.ben_det_hromada),
+      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
+      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Livelihoods,
       activity: [DrcProgram.SectoralCash],
-      personsCount: safeNumber(_.ben_det_hh_size),
+      personsCount: safeNumber(answer.ben_det_hh_size),
       persons: group.map(KoboGeneralMapping.mapPersonDetails),
       project: project ? [project] : [],
       donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
-      lastName: _.ben_det_surname,
-      firstName: _.ben_det_first_name,
-      patronymicName: _.ben_det_pat_name,
-      taxId: _.pay_det_tax_id_num,
-      phone: _.ben_det_ph_number ? '' + _.ben_det_ph_number : undefined,
-      status: fnSwitch(answer.tags?.status!, {
-        Paid: KoboMetaStatus.Committed,
-        Pending: KoboMetaStatus.Pending,
-        Rejected: KoboMetaStatus.Rejected,
-      }, () => undefined)
+      lastName: answer.ben_det_surname,
+      firstName: answer.ben_det_first_name,
+      patronymicName: answer.ben_det_pat_name,
+      taxId: answer.pay_det_tax_id_num,
+      phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+      status: KoboMetaHelper.mapCashStatus(row.tags?.status),
+      lastStatusUpdate: row.tags?.lastStatusUpdate,
     }
   }
 
-  static readonly cashRegistrationBha = (answer: KoboMetaOrigin<Ecrec_cashRegistrationBha.T, EcrecCashRegistrationTags>): KoboMetaCreate => {
-    const _ = Ecrec_cashRegistrationBha.map(answer.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(_)
-    const oblast = OblastIndex.byKoboName(_.ben_det_oblast!)
-    const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistrationBha.options.back_donor[_.back_donor!])
+  static readonly cashRegistrationBha = (row: KoboMetaOrigin<Ecrec_cashRegistrationBha.T, EcrecCashRegistrationTags>): KoboMetaCreate => {
+    const answer = Ecrec_cashRegistrationBha.map(row.answers)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
+    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistrationBha.options.back_donor[answer.back_donor!])
 
     return {
-      id: answer.id,
-      uuid: answer.uuid,
-      date: answer.date,
+      id: row.id,
+      uuid: row.uuid,
+      date: row.date,
       formId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
-      enumerator: Ecrec_cashRegistrationBha.options.back_enum[_.back_enum!],
-      office: fnSwitch(_.back_office!, {
+      enumerator: Ecrec_cashRegistrationBha.options.back_enum[answer.back_enum!],
+      office: fnSwitch(answer.back_office!, {
         chj: DrcOffice.Chernihiv,
         dnk: DrcOffice.Dnipro,
         hrk: DrcOffice.Kharkiv,
@@ -80,11 +77,11 @@ export class KoboMetaMapperEcrec {
         umy: DrcOffice.Sumy,
       }, () => undefined),
       oblast: oblast.name,
-      raion: KoboGeneralMapping.searchRaion(_.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(_.ben_det_hromada),
+      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
+      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Livelihoods,
       activity: [DrcProgram.SectoralCash],
-      personsCount: safeNumber(_.ben_det_hh_size),
+      personsCount: safeNumber(answer.ben_det_hh_size),
       persons: group.map(KoboGeneralMapping.mapPersonDetails),
       // group.map(p => ({
       //   age: safeNumber(p.hh_char_hh_det_age),
@@ -95,16 +92,13 @@ export class KoboMetaMapperEcrec {
       // })),
       project: project ? [project] : [],
       donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
-      lastName: _.ben_det_surname,
-      firstName: _.ben_det_first_name,
-      patronymicName: _.ben_det_pat_name,
-      taxId: _.pay_det_tax_id_num,
-      phone: _.ben_det_ph_number ? '' + _.ben_det_ph_number : undefined,
-      status: fnSwitch(answer.tags?.status!, {
-        Paid: KoboMetaStatus.Committed,
-        Pending: KoboMetaStatus.Pending,
-        Rejected: KoboMetaStatus.Rejected,
-      }, () => undefined)
+      lastName: answer.ben_det_surname,
+      firstName: answer.ben_det_first_name,
+      patronymicName: answer.ben_det_pat_name,
+      taxId: answer.pay_det_tax_id_num,
+      phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+      status: KoboMetaHelper.mapCashStatus(row.tags?.status),
+      lastStatusUpdate: row.tags?.lastStatusUpdate,
     }
   }
 }

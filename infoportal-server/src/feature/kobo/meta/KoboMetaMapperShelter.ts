@@ -85,7 +85,7 @@ export namespace KoboMetaMapperShelter {
         project: project ? [project] : undefined,
         donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
         status: row.tags.workDoneAt ? KoboMetaStatus.Committed : KoboMetaStatus.Pending,
-        committedAt: row.tags.workDoneAt,
+        lastStatusUpdate: row.tags.workDoneAt,
         tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {}
       }
     ]
