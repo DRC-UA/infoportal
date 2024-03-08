@@ -2,12 +2,12 @@ import {KoboAnswer, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {
   CashStatus,
   currentProtectionProjects,
-  KoboGeneralMapping,
   DrcProject,
   Ecrec_cashRegistration,
   KoboEcrec_cashRegistration,
+  KoboGeneralMapping,
   KoboIndex,
-  ProtectionHhsTags
+  ProtectionHhsTags,
 } from '@infoportal-common'
 import React, {useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -16,10 +16,9 @@ import {useI18n} from '@/core/i18n'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
-import {SelectCashStatus} from '@/shared/customInput/SelectStatus'
+import {SelectCashStatus, SelectShelterCashStatus, ShelterCashStatus} from '@/shared/customInput/SelectStatus'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-import {SelectShelterCashStatus, ShelterCashStatus} from '@/shared/customInput/SelectStatus'
 
 export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const ctx = useDatabaseKoboTableContext()
@@ -107,6 +106,23 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         }
       }
     })
+
+    // const validatedAt: DatatableColumn.Props<any> = () => {
+    //   return {
+    //     id: 'Paid on',
+    //     head: m.paidOn,
+    //     type: 'date',
+    //     render: (_: KoboAnswer<any, KoboBaseTags & TagWithStatus>) => {
+    //       return {
+    //         value: _.tags?.validatedAt,
+    //         label: <DatePicker
+    //           value={_.tags?.validatedAt}
+    //           onChange={_ => ctx.asyncUpdateTag.call({answerIds: [_.id], value: _, key: 'validatedAt'})}
+    //         />
+    //       }
+    //     }
+    //   }
+    // }
 
     const extra: Record<string, DatatableColumn.Props<any>[]> = {
       [KoboIndex.byName('shelter_nta').id]: [

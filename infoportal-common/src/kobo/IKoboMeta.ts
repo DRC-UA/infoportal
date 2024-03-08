@@ -36,4 +36,5 @@ export type IKoboMeta = {
   personsCount?: number
   persons?: PersonDetails[]
   status?: KoboMetaStatus
+  committedAt?: Date
 }

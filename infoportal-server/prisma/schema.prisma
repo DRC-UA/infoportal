@@ -102,6 +102,7 @@ model KoboMeta {
   disStatus        String?
   address          String?
   status           String?
+  committedAt      DateTime?
 
   persons KoboPerson[]
 

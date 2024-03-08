@@ -6,13 +6,15 @@ import {KoboUnifiedBasicneeds} from './KoboMetaMapperBasicneeds'
 import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 import {logger, Logger} from '../../../helper/Logger'
 import {KoboService} from '../KoboService'
-import {seq} from '@alexandreannic/ts-utils'
+import {map, seq} from '@alexandreannic/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
-import Event = GlobalEvent.Event
-import {KoboId} from '@infoportal-common'
+import {DrcProgram, KoboId, KoboMetaStatus} from '@infoportal-common'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../../core/conf/AppConf'
+import {yup} from '../../../helper/Utils'
+import {InferType} from 'yup'
+import Event = GlobalEvent.Event
 
 type UpdateMapper = (_: KoboAnswerFlat<any>) => [KoboId, Partial<Omit<KoboMetaCreate, 'id'>>] | undefined
 type CreateMapper = (_: KoboAnswerFlat<any>) => KoboMetaCreate | undefined
@@ -28,6 +30,16 @@ class KoboMetaMapper {
   static readonly mappersUpdate: Record<KoboId, UpdateMapper> = {
     [koboFormsId.prod.shelter_TA]: KoboMetaMapperShelter.updateTa,
   }
+}
+
+export namespace KoboMetaParams {
+  export const schemaSearchFilter = yup.object({
+    filters: yup.object({
+      status: yup.array().of(yup.mixed<KoboMetaStatus>().defined()).optional(),
+      activities: yup.array().of(yup.mixed<DrcProgram>().defined()).optional(),
+    })
+  })
+  export type SearchFilter = InferType<typeof schemaSearchFilter>
 }
 
 export class KoboMetaService {
@@ -52,10 +64,17 @@ export class KoboMetaService {
     })
   }
 
-  readonly search = () => {
+  readonly search = ({filters}: KoboMetaParams.SearchFilter) => {
     return this.prisma.koboMeta.findMany({
       include: {
         persons: true
+      },
+      where: {
+        // activity: {
+        //   hasSome: filters.activities!
+        // }
+        ...map(filters.status, _ => ({status: {in: _}})),
+        ...map(filters.activities, _ => ({activity: {hasSome: _}}))
       }
     })
   }

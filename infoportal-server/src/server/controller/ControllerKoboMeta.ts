@@ -1,9 +1,9 @@
 import {PrismaClient} from '@prisma/client'
-import {KoboMetaService} from '../../feature/kobo/meta/KoboMetaService'
+import {KoboMetaParams, KoboMetaService} from '../../feature/kobo/meta/KoboMetaService'
 import {NextFunction, Request, Response} from 'express'
 import {DbHelper} from '../../db/DbHelper'
 
-export class ControllerKoboUnified {
+export class ControllerKoboMeta {
 
   constructor(
     private prisma: PrismaClient,
@@ -12,7 +12,8 @@ export class ControllerKoboUnified {
   }
 
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
-    const data = await this.service.search()
+    const body = await KoboMetaParams.schemaSearchFilter.validate(req.body)
+    const data = await this.service.search(body)
     res.send(DbHelper.toPaginate()(data))
   }
 }

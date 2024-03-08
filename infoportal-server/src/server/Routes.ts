@@ -22,7 +22,7 @@ import {ControllerMpca} from './controller/ControllerMpca'
 import {ControllerShelter} from './controller/ControllerShelter'
 import {ControllerMealVerification} from './controller/ControllerMealVerification'
 import {ControllerGroup} from './controller/ControllerGroup'
-import {ControllerKoboUnified} from './controller/ControllerKoboUnified'
+import {ControllerKoboMeta} from './controller/ControllerKoboMeta'
 
 export interface AuthenticatedRequest extends Request {
   user?: UserSession
@@ -72,7 +72,7 @@ export const getRoutes = (
   const proxy = new ControllerProxy(prisma)
   const shelter = new ControllerShelter(prisma)
   const mealVerification = new ControllerMealVerification(prisma)
-  const koboUnified = new ControllerKoboUnified(prisma)
+  const koboUnified = new ControllerKoboMeta(prisma)
 
   const auth = ({adminOnly = false}: {adminOnly?: boolean} = {}) => async (req: Request, res: Response, next: NextFunction) => {
     // req.session.user = {

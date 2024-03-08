@@ -81,6 +81,7 @@ export const en = Object.freeze({
     hhs: 'HHs',
     accessLevel: 'Access level',
     females: 'Females',
+    paidOn: 'Paid on',
     adultMen: 'Adult men',
     adultWomen: 'Adult women',
     boy: 'Boy',
