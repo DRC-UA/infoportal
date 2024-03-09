@@ -17,6 +17,7 @@ import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {SelectDrcProject} from '@/shared/SelectDrcProject'
 import {Box, FormControlLabel, Switch} from '@mui/material'
 import {useAsync} from '@/shared/hook/useAsync'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
 export const getKoboImagePath = (url: string): string => {
   return appConfig.apiURL + `/kobo-api/${kobo.drcUa.server.prod}/attachment?path=${url.split('api')[1]}`
@@ -315,7 +316,7 @@ export const MpcaData = () => {
               id: 'status',
               type: 'select_one',
               head: m.status,
-              render: _ => _.tags?.status + ' ' + _.tags?.committed,
+              render: _ => _.tags?.status ?? DatatableUtils.blank,
             }
             // {
             //   id: 'committed',

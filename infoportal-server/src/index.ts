@@ -40,8 +40,8 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  await cleanMpca()
-  return
+  // await cleanMpca()
+  // return
   // // new ActivityInfoSdk().fetchColumnsFree({
   // //   'rowSources': [{'rootFormId': 'c8uhbuclqb1fjlg2'}],
   // //   'columns': [
