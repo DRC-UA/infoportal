@@ -192,6 +192,7 @@ export const en = Object.freeze({
     displacementStatus: 'Displacement status',
     householdStatus: 'Household Status',
     individuals: 'Individuals',
+    uniqIndividuals: 'Uniq individuals',
     submissions: 'Submissions',
     householdSize: 'Household size',
     hhSize: 'HH size',

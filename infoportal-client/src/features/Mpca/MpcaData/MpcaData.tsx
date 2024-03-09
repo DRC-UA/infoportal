@@ -59,20 +59,20 @@ export const MpcaData = () => {
                     value: p ? [p] : null,
                   })
                 }}/>
-                <FormControlLabel
-                  sx={{pl: .5, pr: 1.5, py: .5, ml: 0, mr: 1, border: t => '1px solid ' + t.palette.divider, borderRadius: 100}}
-                  label={m.mpca.commit}
-                  control={
-                    <Switch size="small" onChange={(p, checked) => {
-                      ctx.asyncUpdates.call({
-                        answerIds: selected,
-                        key: 'committed',
-                        value: checked ? new Date() : undefined,
-                      })
-                    }}/>
+                {/*<FormControlLabel*/}
+                {/*  sx={{pl: .5, pr: 1.5, py: .5, ml: 0, mr: 1, border: t => '1px solid ' + t.palette.divider, borderRadius: 100}}*/}
+                {/*  label={m.mpca.commit}*/}
+                {/*  control={*/}
+                {/*    <Switch size="small" onChange={(p, checked) => {*/}
+                {/*      ctx.asyncUpdates.call({*/}
+                {/*        answerIds: selected,*/}
+                {/*        key: 'committed',*/}
+                {/*        value: checked ? new Date() : undefined,*/}
+                {/*      })*/}
+                {/*    }}/>*/}
 
-                  }
-                />
+                {/*  }*/}
+                {/*/>*/}
                 {/*<AaSelectSingle*/}
                 {/*  label={m.mpca.committed}*/}
                 {/*  sx={{width: 140, mr: 1}}*/}

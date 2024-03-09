@@ -6,14 +6,13 @@ import {PrismaClient} from '@prisma/client'
 import {MpcaPaymentService} from './feature/mpca/mpcaPayment/MpcaPaymentService'
 import {DbInit} from './db/DbInit'
 import {logger} from './helper/Logger'
-// import {washRMM} from './feature/connector/activity-info/generatedModel/washRMM'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
-import {ActivityInfoSdk} from './feature/activityInfo/sdk/ActivityInfoSdk'
-import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
-import {cleanMpca} from './script/20240309-cleanMpcaCommit/CleanMpcaCommit'
+import {GlobalEvent} from './core/GlobalEvent'
+import {KoboIndex} from '@infoportal-common'
+import {duration, sleep} from '@alexandreannic/ts-utils'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -66,6 +65,17 @@ const startApp = async (conf: AppConf) => {
   const prisma = new PrismaClient({
     // log: ['query']
   })
+  // new KoboMetaService(prisma).start()
+  // const event = GlobalEvent.Class.getInstance()
+  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('bn_rapidResponse').id})
+  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('bn_re').id})
+  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('ecrec_cashRegistrationBha').id})
+  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('ecrec_cashRegistration').id})
+  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('shelter_nta').id})
+  //
+  // await sleep(duration(1, 'day'))
+  // return
+
   const services = initServices(
     // koboSdk,
     // ecrecAppSdk,

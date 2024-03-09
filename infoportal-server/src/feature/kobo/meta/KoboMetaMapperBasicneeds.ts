@@ -9,7 +9,6 @@ import {
   DrcSector,
   DrcSectorHelper,
   KoboGeneralMapping,
-  KoboIndex,
   KoboMetaHelper,
   KoboTagStatus,
   OblastIndex,

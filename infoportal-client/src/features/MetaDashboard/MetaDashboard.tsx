@@ -17,6 +17,8 @@ import {Layout} from '@/shared/Layout'
 import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {format} from 'date-fns'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {appFeatures, appFeaturesIndex} from '@/features/appFeatureId'
+import {Lazy} from '@/shared/Lazy'
 
 export const MetaDashboard = () => {
   const {api} = useAppSettings()
@@ -27,7 +29,7 @@ export const MetaDashboard = () => {
   }, [])
   if (!data) return <></>
   return (
-    <Layout loading={fetcherKoboMeta.loading}>
+    <Layout title={appFeaturesIndex.metaDashboard.name} loading={fetcherKoboMeta.loading}>
       <_MetaDashboard data={data} loading={fetcherKoboMeta.loading}/>
     </Layout>
   )
@@ -73,6 +75,15 @@ export const _MetaDashboard = ({
           </SlideWidget>
           <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
             {formatLargeNumber(ctx.filteredPersons.length)}
+          </SlideWidget>
+          <SlideWidget sx={{flex: 1}} icon="person" title={m.uniqIndividuals}>
+            <Lazy deps={[ctx.filteredData]} fn={() => {
+              const wtTax = ctx.filteredData.filter(_ => _.taxId === undefined)
+              const wTax = ctx.filteredData.filter(_ => _.taxId !== undefined).distinct(_ => _.taxId)
+              return wtTax.length + wTax.length
+            }}>
+              {_ => formatLargeNumber(_)}
+            </Lazy>
           </SlideWidget>
         </Div>
         <Div>
