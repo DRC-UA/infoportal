@@ -39,7 +39,6 @@ export const refactoProjectForHhs = async (prisma: PrismaClient) => {
       if (ipt.length > 0) parsedTag.ipt = ipt
       if (ai) parsedTag.ai = ai
       if (tag.ai === 'undefined' as any) parsedTag.ai === undefined
-      console.log(tag, '>', parsedTag)
       await prisma.koboAnswers.update({
         where: {id: answer.id},
         data: {tags: parsedTag as any}
@@ -64,7 +63,6 @@ export const refactoProjectForProtCommunitylevel = async (prisma: PrismaClient) 
       const parsedTag: {project?: DrcProject} = {}
       if (project) parsedTag.project = project
       if (tag.project === 'undefined' as any) parsedTag.project === undefined
-      console.log(answer.id, tag, '>', parsedTag)
       await prisma.koboAnswers.update({
         where: {id: answer.id},
         data: {tags: parsedTag as any}

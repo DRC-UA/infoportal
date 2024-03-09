@@ -11,9 +11,10 @@ import {
   Shelter_NTA,
   Shelter_TA,
   ShelterTaTags,
-  Bn_Re, KoboMetaStatus, KoboId, KoboMetaShelterRepairTags
+  Bn_Re, KoboMetaStatus, KoboId, KoboMetaShelterRepairTags, KoboTagStatus
 } from '@infoportal-common'
 import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
+import {MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
 
 export namespace KoboMetaMapperShelter {
 
@@ -41,16 +42,12 @@ export namespace KoboMetaMapperShelter {
     return row
   }
 
-  export const createNta = (row: KoboMetaOrigin<Shelter_NTA.T>): KoboMetaCreate => {
+  export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_NTA.T>> = row => {
     const answer = Shelter_NTA.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(mapDisabilityAll(answer)).map(KoboGeneralMapping.mapPerson)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
 
     return {
-      id: row.id,
-      uuid: row.uuid,
-      date: row.date.toISOString() as any,
-      formId: KoboIndex.byName('shelter_nta').id,
       enumerator: Shelter_NTA.options.enum_name[answer.enum_name!],
       office: fnSwitch(answer.back_office!, {
         cej: DrcOffice.Chernihiv,
@@ -64,7 +61,7 @@ export namespace KoboMetaMapperShelter {
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Shelter,
-      activity: [DrcProgram.ShelterRepair],
+      activity: DrcProgram.ShelterRepair,
       personsCount: safeNumber(answer.ben_det_hh_size),
       persons: group,
       lastName: answer.ben_det_surname_l,
@@ -75,7 +72,7 @@ export namespace KoboMetaMapperShelter {
     }
   }
 
-  export const updateTa = (row: KoboMetaOrigin<Shelter_TA.T, ShelterTaTags>): [KoboId, Partial<KoboMetaCreate<KoboMetaShelterRepairTags>>] | undefined => {
+  export const updateTa: MetaMapperMerge<KoboMetaOrigin<Shelter_TA.T, ShelterTaTags>, KoboMetaShelterRepairTags> = row => {
     if (!row.tags || !row.answers.nta_id) return
     const project = row.tags.project
     return [

@@ -88,7 +88,7 @@ export const AiProtectionGeneral = () => {
   return (
     <Page width="full">
       <Panel>
-        <BundleTable fetcher={fetcher}/>
+        <BundleTable id="prot" fetcher={fetcher}/>
       </Panel>
     </Page>
   )

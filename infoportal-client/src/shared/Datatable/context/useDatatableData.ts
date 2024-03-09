@@ -125,11 +125,12 @@ const filterBy = <T extends DatatableRow>({
       case 'date': {
         return row => {
           const typedFilter = filter as DatatableFilterValueDate
-          const v = col.render(row).value as Date | undefined
+          let v = col.render(row).value as Date | undefined
           if (v === undefined) return false
           if (!((v as any) instanceof Date)) {
             console.warn(`Value of ${String(k)} is`, v, `but Date expected.`)
-            throw new Error(`Value of ${String(k)} is ${v} but Date expected.`)
+            v = new Date(v)
+            // throw new Error(`Value of ${String(k)} is ${v} but Date expected.`)
           }
           const [min, max] = typedFilter
           return (!min || v.getTime() >= min.getTime()) && (!max || v.getTime() <= max.getTime())

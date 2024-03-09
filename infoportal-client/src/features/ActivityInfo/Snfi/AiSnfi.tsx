@@ -8,18 +8,17 @@ import {BundleTable} from '@/features/ActivityInfo/shared/AiBundle'
 
 export const AiSnfi = () => {
   const {api} = useAppSettings()
-  const fetcher = useFetcher((p: string) => {
-    const res = Promise.all([
-      AiShelterMapper.reqRepairs(api)(p),
-      // AiShelterMapper.reqEsk(api)(p),
+  const fetcher = useFetcher((period: string) => {
+    return Promise.all([
+      AiShelterMapper.reqRepairs(api)(period),
+      AiShelterMapper.reqEsk(api)(period),
     ]).then(_ => _.reduce((acc, r) => [...acc, ...r], []))
-    return res
   })
-  
+
   return (
     <Page width="full">
       <Panel>
-        <BundleTable fetcher={fetcher}/>
+        <BundleTable fetcher={fetcher} id="snfi"/>
       </Panel>
     </Page>
   )

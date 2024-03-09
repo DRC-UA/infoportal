@@ -25,7 +25,6 @@ export const updateTags = async () => {
       paidUah: xlsRow.amount,
       status: CashStatus.Paid,
     }
-    console.log(xlsRow.taxid, id)
     await koboService.updateTags({
       answerIds: [id],
       formId: KoboIndex.byName('ecrec_cashRegistration').id,

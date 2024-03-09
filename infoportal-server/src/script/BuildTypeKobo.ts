@@ -334,9 +334,7 @@ const extractQuestionName = (_: Record<string, any>) => {
 
   // readonly skipQuestionInBeginRepeat = (survey: KoboApiForm['content']['survey']) => (_: KoboApiForm['content']['survey'][0]) => {
   //   const repeatItem = this.getBeginRepeatQuestion(survey)
-  //   console.log(repeatItem)
   //   return _ => repeatItem.every(r => {
-  //     console.log('$qpath', _.$qpath)
   //     return !_.$qpath.includes(r.name + '-')
   //   })
   // }

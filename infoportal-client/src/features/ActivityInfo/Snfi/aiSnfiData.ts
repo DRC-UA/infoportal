@@ -1,4 +1,4 @@
-import {Bn_Re, DisplacementStatus, DrcProgram, DrcProject, groupBy, KoboMetaShelterRepairTags, PeriodHelper, ShelterTaPriceLevel} from '@infoportal-common'
+import {KoboMetaStatus, Bn_Re, DisplacementStatus, DrcProgram, DrcProject, groupBy, KoboMetaShelterRepairTags, PeriodHelper, ShelterTaPriceLevel} from '@infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
@@ -17,6 +17,7 @@ export namespace AiShelterMapper {
     [DrcProject['UKR-000360 Novo-Nordisk']]: 'SNFI-DRC-00005',
     [DrcProject['UKR-000322 ECHO2']]: 'SNFI-DRC-00006',
     [DrcProject['UKR-000308 UNHCR']]: 'SNFI-DRC-00007',
+    [DrcProject['UKR-000284 BHA']]: 'SNFI-DRC-00008',
   }
 
   const getPlanCode = (p: DrcProject): AiTypeSnfi.Type['Plan/Project Code'] => {
@@ -81,98 +82,101 @@ export namespace AiShelterMapper {
   //   return bundle
   // }
 
-  // export const reqEsk = (api: ApiSdk) => (period: string): Promise<Bundle[]> => {
-  //   return api.kobo.typedAnswers.searchBn_Re({filters: period})
-  //     .then(_ => _.data.filter(_ => _.back_prog_type?.find(p => p.includes('esk') || p.includes('nfi'))).map(_ => ({..._, ...AiMapper.getLocation(_)})))
-  //     .then(data => {
-  //       const bundle: Bundle[] = []
-  //       let index = 0
-  //       groupBy({
-  //         data,
-  //         groups: [
-  //           {
-  //             by: (_): DrcProject => mapBnreDonor(_.donor_esk ?? _.back_donor?.[0])!,
-  //           },
-  //           {by: _ => _.Oblast!},
-  //           {by: _ => _.Raion!},
-  //           {by: _ => _.Hromada!},
-  //           {
-  //             by: _ => fnSwitch(_.ben_det_res_stat!, {
-  //               idp: 'IDPs',
-  //               long_res: 'Non-Displaced',
-  //               ret: 'Returnees',
-  //               ref_asy: 'Non-Displaced',
-  //             }, () => 'Non-Displaced')
-  //           },
-  //           {by: _ => _.back_prog_type!.find(p => p.includes('esk')) ? 'esk' : 'nfi'}
-  //         ],
-  //         finalTransform: (grouped, [project, oblast, raion, hromada, status, kitType]) => {
-  //           const persons: Person.Person[] = grouped.flatMap(_ => Person.filterDefined(KoboBnReHelper.getPersons(_)))
-  //           const disaggregation = Person.groupByGenderAndGroup(Person.ageGroup.UNHCR)(persons)
-  //           const activity: AiTypeSnfi.Type = {
-  //             'SNFI indictors': kitType,
-  //             'Implementing Partner': 'Danish Refugee Council',
-  //             'Report to a planned project': DrcProject ? 'Yes' : 'No',
-  //             ...(DrcProject ? {'Plan Code': project} : {}) as any,
-  //             // 'Plan Code': AiShelterData.planCode[project],
-  //             'Reporting Partner': 'Danish Refugee Council',
-  //             'Oblast': oblast,
-  //             'Raion': raion,
-  //             'Hromada': hromada,
-  //             'Implementation status': 'Complete',
-  //             'Reporting Date (YYYY-MM-DD)': format(period.end, 'yyyy-MM-dd'),
-  //             'Population Group': status,
-  //             'Indicator Value (HHs reached, buildings, etc.)': grouped.length,
-  //             '# Individuals Reached': persons.length,
-  //             'Girls (0-17)': disaggregation['0 - 17'].Female,
-  //             'Boys (0-17)': disaggregation['0 - 17'].Male,
-  //             'Women (18-59)': disaggregation['18 - 59'].Female,
-  //             'Men (18-59)': disaggregation['18 - 59'].Male,
-  //             'Elderly Women (60+)': disaggregation['60+'].Female,
-  //             'Elderly Men (60+)': disaggregation['60+'].Male,
-  //             'People with disability': 0,
-  //           }
-  //           bundle.push({
-  //             activity,
-  //             esk: grouped,
-  //             requestBody: ActivityInfoSdk.makeRecordRequest({
-  //               activity: AiSnfiInterface.map(activity),
-  //               formId: 'ckrgu2uldtxbgbg1h',
-  //               activityYYYYMM: format(period.start, 'yyyyMM'),
-  //               activityIdPrefix: 'drcesk',
-  //               activityIndex: index++,
-  //             })
-  //           })
-  //         }
-  //       })
-  //       return bundle
-  //     })
-  // }
+  export const reqEsk = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
+    const period = PeriodHelper.fromYYYYMM(periodStr)
+    return api.koboMeta.search({
+      filters: {
+        status: [KoboMetaStatus.Committed],
+        activities: [
+          DrcProgram.ESK,
+          DrcProgram.CashForFuel,
+          DrcProgram.CashForUtilities,
+          DrcProgram.CashForRent,
+          DrcProgram.CashForRepair,
+        ]
+      }
+    })
+      .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
+      .then(data => {
+        const bundle: Bundle[] = []
+        let i = 0
+        groupBy({
+          data,
+          groups: [
+            {by: _ => _.project?.[0]!,},
+            {by: _ => _.oblast!},
+            {by: _ => _.raion!},
+            {by: _ => _.hromada!},
+            {
+              by: _ => fnSwitch(_.displacement!, {
+                Idp: 'Internally Displaced',
+                NonDisplaced: 'Non-Displaced',
+                Returnee: 'Returnees',
+                Refugee: 'Non-Displaced',
+              }, () => 'Non-Displaced')
+            },
+            {by: _ => _.activity!}
+          ],
+          finalTransform: (grouped, [project, oblast, raion, hromada, displacement, activity]) => {
+            const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
+            const ai: AiTypeSnfi.Type = {
+              'Indicators - SNFI': fnSwitch(activity, {
+                [DrcProgram.ESK]: '# supported with emergency shelter support',
+                [DrcProgram.CashForFuel]: '# reached with support for winter energy needs (cash/voucher/fuel)',
+                [DrcProgram.CashForUtilities]: '# supported with cash for utilities',
+                [DrcProgram.CashForRent]: '# supported by cash for rent (RMI)',
+                [DrcProgram.CashForRepair]: '# supported with light humanitarian repairs',
+              }, () => '!!!' as any),
+              'Implementing Partner': 'Danish Refugee Council',
+              'Plan/Project Code': getPlanCode(project),
+              'Reporting Organization': 'Danish Refugee Council',
+              'Oblast': oblast,
+              'Raion': raion,
+              'Hromada': hromada,
+              'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
+              'Reporting Month': periodStr,
+              'Population Group': displacement,
+              'Non-individuals Reached': grouped.length,
+              'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
+              'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
+              'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
+              'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
+              'Adult Men (18-59)': disaggregation['Adult Men (18-59)'] ?? 0,
+              'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
+              'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
+              'People with disability': 0,
+              'Distribution through Common Pipeline': 'No',
+              'Distribution through inter-agency convoy (HOPC)': 'No',
+            }
+            const request = ActivityInfoSdk.makeRecordRequests({
+              activityIdPrefix: 'drcsnfi',
+              activityYYYYMM: periodStr,
+              formId: activitiesConfig.snfi.id,
+              activity,
+              activityIndex: i++,
+            })
 
-  // export const reqRepairs = (api: ApiSdk) => (periodStr: string) => {
-  //   const period = PeriodHelper.fromYYYYMM(periodStr)
-  //   return api.shelter.search().then(res =>
-  //     seq(res.data)
-  //       .compactBy('nta')
-  //       .compactBy('ta')
-  //       .map(_ => ({
-  //         ..._,
-  //         ...AiMapper.getLocation(_.nta),
-  //         ...AiMapper.disaggregatePersons(_.nta.hh_char_hh_det),
-  //       }))
-  //   ).then(res => {
-  //     return mapRepair(periodStr)(res.filter(_ => PeriodHelper.isDateIn(period, _.ta.tags?.workDoneAt)))
-  //   })
-  // }
+            bundle.push({
+              recordId: request.changes[0].recordId,
+              data: grouped,
+              activity: ai,
+              requestBody: request,
+            })
+          }
+        })
+        return bundle
+      })
+  }
 
   export const reqRepairs = (api: ApiSdk) => (periodStr: string) => {
     const period = PeriodHelper.fromYYYYMM(periodStr)
     return api.koboMeta.search<KoboMetaShelterRepairTags>({
       filters: {
+        status: [KoboMetaStatus.Committed],
         activities: [DrcProgram.ShelterRepair]
       }
     })
-      .then(_ => _.data)
+      .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       // .then(_ => _.data.flatMap(({persons, ...row}) => (persons ?? []).map(_ => ({...row, ..._}))))
       .then(data => {
         const bundle: Bundle[] = []
@@ -218,13 +222,13 @@ export namespace AiShelterMapper {
               'Reporting Month': periodStr,
               'Population Group': status,
               'Non-individuals Reached': grouped.length,
-              'Adult Men (18-59)': disagg['Adult Men (18-59)'],
-              'Adult Women (18-59)': disagg['Adult Women (18-59)'],
-              'Boys (0-17)': disagg['Boys (0-17)'],
-              'Girls (0-17)': disagg['Girls (0-17)'],
-              'Older Women (60+)': disagg['Older Women (60+)'],
-              'Older Men (60+)': disagg['Older Men (60+)'],
-              'Total Individuals Reached': disagg['Total Individuals Reached'],
+              'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,
+              'Adult Women (18-59)': disagg['Adult Women (18-59)'] ?? 0,
+              'Boys (0-17)': disagg['Boys (0-17)'] ?? 0,
+              'Girls (0-17)': disagg['Girls (0-17)'] ?? 0,
+              'Older Women (60+)': disagg['Older Women (60+)'] ?? 0,
+              'Older Men (60+)': disagg['Older Men (60+)'] ?? 0,
+              'Total Individuals Reached': disagg['Total Individuals Reached'] ?? 0,
               'Distribution through Common Pipeline': 'No',
               'Distribution through inter-agency convoy (HOPC)': 'No',
             }

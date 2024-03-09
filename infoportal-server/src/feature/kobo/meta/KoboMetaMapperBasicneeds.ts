@@ -1,28 +1,27 @@
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {
   Bn_RapidResponse,
+  Bn_Re,
   DrcOffice,
   DrcProgram,
   DrcProject,
   DrcProjectHelper,
   DrcSector,
+  DrcSectorHelper,
   KoboGeneralMapping,
   KoboIndex,
   KoboMetaHelper,
   KoboTagStatus,
   OblastIndex,
-  safeNumber,
-  Bn_Re
+  safeNumber
 } from '@infoportal-common'
-import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
+import {KoboMetaOrigin} from './KoboMetaType'
+import {MetaMapped, MetaMapperInsert} from './KoboMetaService'
 
 export class KoboMetaBasicneeds {
 
-  static readonly bn_re = (row: KoboMetaOrigin<Bn_Re.T, KoboTagStatus>): KoboMetaCreate => {
-    const answer = Bn_Re.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
-    const project = seq(answer.back_donor ?? []).filter(_ => _ !== '' as any).distinct(_ => _).map(d => fnSwitch(d, {
+  private static readonly getBnreProject = (back_donor?: Bn_Re.Option<'back_donor'> | Bn_RapidResponse.Option<'back_donor_l'>) => {
+    return fnSwitch(back_donor!, {
       uhf_chj: DrcProject['UKR-000314 UHF4'],
       uhf_dnk: DrcProject['UKR-000314 UHF4'],
       uhf_hrk: DrcProject['UKR-000314 UHF4'],
@@ -70,52 +69,58 @@ export class KoboMetaBasicneeds {
       uhf7_nlv: DrcProject['UKR-000352 UHF7'],
       uhf7_umy: DrcProject['UKR-000352 UHF7'],
       umy_danida: DrcProject['UKR-000267 DANIDA'],
-    }, _ => _ as DrcProject))
-    const donor = project.map(_ => DrcProjectHelper.donorByProject[_])
-
-    return {
-      id: row.id,
-      uuid: row.uuid,
-      date: row.date.toISOString() as any,
-      formId: KoboIndex.byName('bn_re').id,
-      enumerator: Bn_Re.options.back_enum[answer.back_enum!],
-      office: fnSwitch(answer.back_office!, {
-        chj: DrcOffice.Chernihiv,
-        dnk: DrcOffice.Dnipro,
-        hrk: DrcOffice.Kharkiv,
-        lwo: DrcOffice.Lviv,
-        nlv: DrcOffice.Mykolaiv,
-        umy: DrcOffice.Sumy,
-      }, () => undefined),
-      oblast: oblast.name,
-      raion: Bn_Re.options.ben_det_raion[answer.ben_det_raion!],
-      hromada: Bn_Re.options.ben_det_hromada[answer.ben_det_hromada!],
-      sector: DrcSector.MPCA,
-      activity: seq(answer.back_prog_type)?.map(prog => fnSwitch(prog.split('_')[0], {
-        'cfr': DrcProgram.CashForRent,
-        'cfe': DrcProgram.CashForEducation,
-        'mpca': DrcProgram.MPCA,
-        'csf': DrcProgram.CashForFuel,
-        'cfu': DrcProgram.CashForUtilities,
-        nfi: DrcProgram.NFI,
-        esk: DrcProgram.ESK,
-        ihk: DrcProgram.InfantHygieneKit
-      }, () => undefined)).distinct(_ => _).compact() ?? [],
-      personsCount: safeNumber(answer.ben_det_hh_size),
-      persons: group.map(KoboGeneralMapping.mapPersonDetails),
-      project: project,
-      donor: donor,
-      lastName: answer.ben_det_surname,
-      firstName: answer.ben_det_first_name,
-      patronymicName: answer.ben_det_pat_name,
-      taxId: answer.pay_det_tax_id_num,
-      phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
-      status: KoboMetaHelper.mapCashStatus(row.tags?.status),
-      lastStatusUpdate: row.tags?.lastStatusUpdate,
-    }
+    }, _ => _ as DrcProject)
   }
 
-  static readonly bn_rrm = (row: KoboMetaOrigin<Bn_RapidResponse.T, KoboTagStatus>): undefined | KoboMetaCreate => {
+  static readonly bn_re: MetaMapperInsert<KoboMetaOrigin<Bn_Re.T, KoboTagStatus>> = row => {
+    const answer = Bn_Re.map(row.answers)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
+    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+
+    const activities = seq(answer.back_prog_type)?.map(prog => fnSwitch(prog.split('_')[0], {
+      'cfr': {activity: DrcProgram.CashForRent, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfr!)},
+      'cfe': {activity: DrcProgram.CashForEducation, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfe!)},
+      'mpca': {activity: DrcProgram.MPCA, project: KoboMetaBasicneeds.getBnreProject(answer.donor_mpca!)},
+      'csf': {activity: DrcProgram.CashForFuel, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cff!)},
+      'cfu': {activity: DrcProgram.CashForUtilities, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfu!)},
+      nfi: {activity: DrcProgram.NFI, project: KoboMetaBasicneeds.getBnreProject(answer.donor_nfi!)},
+      esk: {activity: DrcProgram.ESK, project: KoboMetaBasicneeds.getBnreProject(answer.donor_esk!)},
+      ihk: {activity: DrcProgram.InfantHygieneKit, project: KoboMetaBasicneeds.getBnreProject(answer.donor_ihk!)},
+    }, () => undefined)).distinct(_ => _).compact() ?? []
+
+    const prepare = (activity: DrcProgram, project: DrcProject): MetaMapped => {
+      return {
+        enumerator: Bn_Re.options.back_enum[answer.back_enum!],
+        office: fnSwitch(answer.back_office!, {
+          chj: DrcOffice.Chernihiv,
+          dnk: DrcOffice.Dnipro,
+          hrk: DrcOffice.Kharkiv,
+          lwo: DrcOffice.Lviv,
+          nlv: DrcOffice.Mykolaiv,
+          umy: DrcOffice.Sumy,
+        }, () => undefined),
+        oblast: oblast.name,
+        raion: Bn_Re.options.ben_det_raion[answer.ben_det_raion!],
+        hromada: Bn_Re.options.ben_det_hromada[answer.ben_det_hromada!],
+        sector: DrcSector.MPCA,
+        activity: activity,
+        personsCount: safeNumber(answer.ben_det_hh_size),
+        persons: group.map(KoboGeneralMapping.mapPersonDetails),
+        project: [project],
+        donor: [DrcProjectHelper.donorByProject[project]],
+        lastName: answer.ben_det_surname,
+        firstName: answer.ben_det_first_name,
+        patronymicName: answer.ben_det_pat_name,
+        taxId: answer.pay_det_tax_id_num,
+        phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+        status: KoboMetaHelper.mapCashStatus(row.tags?.status),
+        lastStatusUpdate: row.tags?.lastStatusUpdate,
+      }
+    }
+    return activities.map(_ => prepare(_.activity, _.project ?? KoboMetaBasicneeds.getBnreProject(answer.back_donor?.[0])))
+  }
+
+  static readonly bn_rrm: MetaMapperInsert<KoboMetaOrigin<Bn_RapidResponse.T, KoboTagStatus>> = (row) => {
     const answer = Bn_RapidResponse.map(row.answers)
     if (answer.form_length === 'short') return
     const group = KoboGeneralMapping.collectXlsKoboIndividuals({
@@ -163,26 +168,10 @@ export class KoboMetaBasicneeds {
     }, _ => _ as DrcProject)
     const donor = DrcProjectHelper.donorByProject[project]
 
-    const programs = seq(answer.back_prog_type_l).map(_ => _.split('_')[0]).distinct(_ => _)
-    return {
-      id: row.id,
-      uuid: row.uuid,
-      date: row.date.toISOString() as any,
-      formId: KoboIndex.byName('bn_rapidResponse').id,
-      enumerator: Bn_RapidResponse.options.back_enum_l[answer.back_enum_l!],
-      office: fnSwitch(answer.back_office!, {
-        chj: DrcOffice.Chernihiv,
-        dnk: DrcOffice.Dnipro,
-        hrk: DrcOffice.Kharkiv,
-        lwo: DrcOffice.Lviv,
-        nlv: DrcOffice.Mykolaiv,
-        umy: DrcOffice.Sumy,
-      }, () => undefined),
-      oblast: oblast.name,
-      raion: Bn_RapidResponse.options.ben_det_raion_l[answer.ben_det_raion!],
-      hromada: Bn_RapidResponse.options.ben_det_hromada_l[answer.ben_det_hromada!],
-      sector: DrcSector.MPCA,
-      activity: programs.map(prog => fnSwitch(prog, {
+    const programs = seq(answer.back_prog_type_l)
+      .map(_ => _.split('_')[0])
+      .distinct(_ => _)
+      .map(prog => fnSwitch(prog, {
         mpca: DrcProgram.MPCA,
         nfi: DrcProgram.NFI,
         cfr: DrcProgram.CashForRent,
@@ -190,18 +179,38 @@ export class KoboMetaBasicneeds {
         iwk: DrcProgram.InfantWinterClothing,
         ihk: DrcProgram.InfantHygieneKit,
         esk: DrcProgram.ESK,
-      }, () => undefined)).compact(),
-      personsCount: safeNumber(answer.ben_det_hh_size_l),
-      persons: group.map(KoboGeneralMapping.mapPersonDetails),
-      project: project ? [project] : [],
-      donor: donor ? [donor] : [],
-      lastName: answer.ben_det_surname_l,
-      firstName: answer.ben_det_first_name_l,
-      patronymicName: answer.ben_det_pat_name_l,
-      taxId: answer.pay_det_tax_id_num_l,
-      phone: answer.ben_det_ph_number_l ? '' + answer.ben_det_ph_number_l : undefined,
-      status: KoboMetaHelper.mapCashStatus(row.tags?.status),
-      lastStatusUpdate: row.tags?.lastStatusUpdate,
+      }, () => undefined))
+      .compact()
+
+    const prepare = (p: DrcProgram): MetaMapped => {
+      return {
+        enumerator: Bn_RapidResponse.options.back_enum_l[answer.back_enum_l!],
+        office: fnSwitch(answer.back_office!, {
+          chj: DrcOffice.Chernihiv,
+          dnk: DrcOffice.Dnipro,
+          hrk: DrcOffice.Kharkiv,
+          lwo: DrcOffice.Lviv,
+          nlv: DrcOffice.Mykolaiv,
+          umy: DrcOffice.Sumy,
+        }, () => undefined),
+        oblast: oblast.name,
+        raion: Bn_RapidResponse.options.ben_det_raion_l[answer.ben_det_raion!],
+        hromada: Bn_RapidResponse.options.ben_det_hromada_l[answer.ben_det_hromada!],
+        sector: DrcSectorHelper.findByProgram(p),
+        activity: p,
+        personsCount: safeNumber(answer.ben_det_hh_size_l),
+        persons: group.map(KoboGeneralMapping.mapPersonDetails),
+        project: project ? [project] : [],
+        donor: donor ? [donor] : [],
+        lastName: answer.ben_det_surname_l,
+        firstName: answer.ben_det_first_name_l,
+        patronymicName: answer.ben_det_pat_name_l,
+        taxId: answer.pay_det_tax_id_num_l,
+        phone: answer.ben_det_ph_number_l ? '' + answer.ben_det_ph_number_l : undefined,
+        status: KoboMetaHelper.mapCashStatus(row.tags?.status),
+        lastStatusUpdate: row.tags?.lastStatusUpdate,
+      }
     }
+    return programs.map(prepare)
   }
 }

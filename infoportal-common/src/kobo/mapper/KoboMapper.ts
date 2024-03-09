@@ -3,7 +3,7 @@ import {DrcOffice, DrcProjectHelper} from '../../type/Drc'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex} from '../../location'
 import {Person} from '../../type/Person'
-import {DisplacementStatus, PersonDetails, WgDisability} from './Common'
+import {DisplacementStatus, KoboAnswer, KoboBaseTags, KoboTagStatus, PersonDetails, WgDisability} from './Common'
 
 export namespace KoboGeneralMapping {
 
@@ -132,6 +132,11 @@ export namespace KoboGeneralMapping {
     const custom = KoboGeneralMapping.getIndividualBreakdown(p)
     ;(row as any).custom = custom
     return (row as any)
+  }
+
+  export const handleStatus = <T extends KoboAnswer<{}, KoboBaseTags & KoboTagStatus>>(row: T): T => {
+    if (row.tags?.lastStatusUpdate) row.tags.lastStatusUpdate = new Date(row.tags?.lastStatusUpdate)
+    return row
   }
 
   export const addIndividualBreakdownColumnForRrm = (row: Bn_RapidResponse.T): Bn_RapidResponse.T & {custom: IndividualBreakdown} => {

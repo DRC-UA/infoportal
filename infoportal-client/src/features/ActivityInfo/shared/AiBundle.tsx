@@ -14,6 +14,7 @@ import {IpInput} from '@/shared/Input/Input'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {format, subMonths} from 'date-fns'
+import {Fender} from 'mui-extension'
 
 export interface AiBundle<TActivity = any, TAnswer extends Record<string, any> = any> {
   data: KoboAnswer<TAnswer>[],
@@ -37,7 +38,9 @@ export interface AiBundle2<
 
 export const BundleTable = ({
   fetcher,
+  id,
 }: {
+  id: string
   fetcher: UseFetcher<(period: string) => Promise<AiBundle2<any, any, any>[]>>
 }) => {
   const {api, conf} = useAppSettings()
@@ -60,50 +63,50 @@ export const BundleTable = ({
 
   return (
     <>
-      {map(maybeFirst, first =>
-        <Datatable
-          showExportBtn
-          id={first.recordId}
-          loading={fetcher.loading}
-          data={fetcher.get}
-          header={
-            <Box sx={{display: 'flex', alignItems: 'center', flex: 1,}}>
-              <IpInput helperText={null} sx={{width: 200}} type="month" value={period} onChange={e => setPeriod(e.target.value)}/>
-              <IpBtn icon="send" variant="contained" sx={{ml: 'auto'}} onClick={() => {
-                if (!fetcher.get) return
-                _submit.call('all', fetcher.get.map(_ => _.requestBody)).catch(toastHttpError)
-              }}>
-                {m.submitAll}
-              </IpBtn>
-            </Box>
-          }
-          columns={[
-            {
-              width: 120,
-              id: 'actions',
-              noCsvExport: true,
-              renderQuick: _ => {
-                return (
-                  <>
-                    <AiSendBtn
-                      disabled={!_.activity.Hromada}
-                      onClick={() => {
-                        _submit.call(_.recordId, _.requestBody).catch(toastHttpError)
-                      }}
-                    />
-                    <AiViewAnswers answers={_.data}/>
-                    <AiPreviewActivity activity={{..._.activity, ..._.subActivity}}/>
-                    <AiPreviewRequest request={_.requestBody}/>
-                  </>
-                )
-              }
-            },
-            {
-              id: 'id',
-              type: 'select_one',
-              head: 'Record ID',
-              renderQuick: _ => _.recordId
-            },
+      <Datatable
+        showExportBtn
+        id={`datatable-ai-${id}`}
+        loading={fetcher.loading}
+        data={fetcher.get}
+        header={
+          <Box sx={{display: 'flex', alignItems: 'center', flex: 1,}}>
+            <IpInput helperText={null} sx={{width: 200}} type="month" value={period} onChange={e => setPeriod(e.target.value)}/>
+            <IpBtn icon="send" variant="contained" sx={{ml: 'auto'}} onClick={() => {
+              if (!fetcher.get) return
+              _submit.call('all', fetcher.get.map(_ => _.requestBody)).catch(toastHttpError)
+            }}>
+              {m.submitAll}
+            </IpBtn>
+          </Box>
+        }
+        columns={[
+          {
+            width: 120,
+            id: 'actions',
+            noCsvExport: true,
+            renderQuick: _ => {
+              return (
+                <>
+                  <AiSendBtn
+                    disabled={!_.activity.Hromada}
+                    onClick={() => {
+                      _submit.call(_.recordId, _.requestBody).catch(toastHttpError)
+                    }}
+                  />
+                  <AiViewAnswers answers={_.data}/>
+                  <AiPreviewActivity activity={{..._.activity, ..._.subActivity}}/>
+                  <AiPreviewRequest request={_.requestBody}/>
+                </>
+              )
+            }
+          },
+          {
+            id: 'id',
+            type: 'select_one',
+            head: 'Record ID',
+            renderQuick: _ => _.recordId
+          },
+          ...map(maybeFirst, first => [
             ...Object.keys(first.activity).map(colId => ({
               head: colId,
               id: colId,
@@ -118,10 +121,9 @@ export const BundleTable = ({
               // type: 'string',
               type: typeof first.activity[colId] === 'number' ? 'number' : 'select_one' as any,
               renderQuick: (_: any) => _.subActivity[colId] as any,
-            })),
-          ]}
-        />
-      )}
+            }))]) ?? []
+        ]}
+      />
     </>
   )
 }

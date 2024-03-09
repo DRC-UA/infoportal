@@ -93,7 +93,7 @@ export const AiGbv = () => {
   return (
     <Page width="full">
       <Panel>
-        <BundleTable fetcher={fetcher}/>
+        <BundleTable id="gbv" fetcher={fetcher}/>
       </Panel>
     </Page>
   )

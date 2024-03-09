@@ -1,4 +1,4 @@
-import {ActivityInfoBuildType} from '../feature/activityInfo/databaseInterface/AiGenerateDataseInterface'
+import {ActivityInfoBuildType} from '../feature/activityInfo/databaseInterface/ActivityInfoBuildType'
 
 
 (async () => {

@@ -53,7 +53,6 @@ interface XLSD {
   }))
 
   const errors: any[] = []
-  console.log(json.length, dbData.length)
   const res = seq(json)
     .map(_ => {
       const db = indexByTax[_.tax_id]

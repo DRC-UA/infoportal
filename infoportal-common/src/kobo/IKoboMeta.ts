@@ -24,7 +24,7 @@ export type IKoboMeta<TTag = any> = {
   phone?: string
   displacement?: DisplacementStatus
   sector: DrcSector
-  activity: DrcProgram[]
+  activity?: DrcProgram
   office?: DrcOffice
   project?: DrcProject[]
   donor?: DrcDonor[]

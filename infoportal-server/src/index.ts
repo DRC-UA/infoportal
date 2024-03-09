@@ -11,7 +11,8 @@ import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
-import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/AiGenerateDataseInterface'
+import {ActivityInfoSdk} from './feature/activityInfo/sdk/ActivityInfoSdk'
+import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -51,14 +52,14 @@ const startApp = async (conf: AppConf) => {
   // // .then(console.log)
   // // return
   // await Promise.all([
-  //   ActivityInfoBuildType.generalProtection(),
+  //   ActivityInfoBuildType.fslc(),
   //   ActivityInfoBuildType.gbv(),
   //   // ActivityInfoBuildType.mineAction(),
   //   ActivityInfoBuildType.snfi(),
   //   // ActivityInfoBuildType.mpca(),
   //   // ActivityInfoBuildType.wash(),
   // ])
-  // return
+  return
   const prisma = new PrismaClient({
     // log: ['query']
   })

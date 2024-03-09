@@ -1,33 +1,31 @@
 import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
+  Bn_Re,
   DrcOffice,
-  DrcProgram,
+  DrcProgram, DrcProject,
   DrcProjectHelper,
   DrcSector,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   KoboGeneralMapping,
   KoboIndex,
-  KoboMetaHelper,
+  KoboMetaHelper, KoboTagStatus,
   OblastIndex,
   safeNumber
 } from '@infoportal-common'
 import {KoboMetaCreate, KoboMetaOrigin} from './KoboMetaType'
 import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashRegistration'
+import {MetaMapperInsert} from './KoboMetaService'
 
 export class KoboMetaMapperEcrec {
 
-  static readonly cashRegistration = (row: KoboMetaOrigin<Ecrec_cashRegistration.T, EcrecCashRegistrationTags>): KoboMetaCreate => {
+  static readonly cashRegistration: MetaMapperInsert<KoboMetaOrigin<Ecrec_cashRegistration.T, EcrecCashRegistrationTags>> = row => {
     const answer = Ecrec_cashRegistration.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
-    const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistration.options.back_donor[answer.back_donor!])
+    const project = DrcProjectHelper.search(Ecrec_cashRegistration.options.back_donor[answer.back_donor!])
 
     return {
-      id: row.id,
-      uuid: row.uuid,
-      date: row.date,
-      formId: KoboIndex.byName('ecrec_cashRegistration').id,
       enumerator: Ecrec_cashRegistration.options.back_enum[answer.back_enum!],
       office: fnSwitch(answer.back_office!, {
         chj: DrcOffice.Chernihiv,
@@ -41,7 +39,7 @@ export class KoboMetaMapperEcrec {
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Livelihoods,
-      activity: [DrcProgram.SectoralCash],
+      activity: DrcProgram.SectoralCash,
       personsCount: safeNumber(answer.ben_det_hh_size),
       persons: group.map(KoboGeneralMapping.mapPersonDetails),
       project: project ? [project] : [],
@@ -56,17 +54,13 @@ export class KoboMetaMapperEcrec {
     }
   }
 
-  static readonly cashRegistrationBha = (row: KoboMetaOrigin<Ecrec_cashRegistrationBha.T, EcrecCashRegistrationTags>): KoboMetaCreate => {
+  static readonly cashRegistrationBha: MetaMapperInsert<KoboMetaOrigin<Ecrec_cashRegistrationBha.T, EcrecCashRegistrationTags>> = row => {
     const answer = Ecrec_cashRegistrationBha.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
-    const project = KoboGeneralMapping.mapProject(Ecrec_cashRegistrationBha.options.back_donor[answer.back_donor!])
+    const project = DrcProjectHelper.search(Ecrec_cashRegistrationBha.options.back_donor[answer.back_donor!])
 
     return {
-      id: row.id,
-      uuid: row.uuid,
-      date: row.date,
-      formId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
       enumerator: Ecrec_cashRegistrationBha.options.back_enum[answer.back_enum!],
       office: fnSwitch(answer.back_office!, {
         chj: DrcOffice.Chernihiv,
@@ -80,7 +74,7 @@ export class KoboMetaMapperEcrec {
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Livelihoods,
-      activity: [DrcProgram.SectoralCash],
+      activity: DrcProgram.SectoralCash,
       personsCount: safeNumber(answer.ben_det_hh_size),
       persons: group.map(KoboGeneralMapping.mapPersonDetails),
       // group.map(p => ({

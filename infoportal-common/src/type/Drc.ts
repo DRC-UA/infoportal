@@ -26,19 +26,7 @@ export enum DrcProgram {
   ESK = 'ESK',
   InfantWinterClothing = 'InfantWinterClothing',
   InfantHygieneKit = 'InfantHygieneKit',
-  SectoralCash = 'Sectoral Cash',
-}
-
-export const drcOfficeShort: Record<DrcOffice, string> = {
-  [DrcOffice.Kyiv]: 'KYV',
-  [DrcOffice.Sumy]: 'UMY',
-  [DrcOffice.Mykolaiv]: 'NLV',
-  [DrcOffice.Lviv]: 'LWO',
-  [DrcOffice.Chernihiv]: 'CEJ',
-  [DrcOffice.Kharkiv]: 'HRK',
-  [DrcOffice.Dnipro]: 'DNK',
-  [DrcOffice.Poltava]: 'Poltava',
-  [DrcOffice.Chernivtsi]: 'Chernivtsi',
+  SectoralCash = 'SectoralCash',
 }
 
 export enum DrcSector {
@@ -56,6 +44,39 @@ export enum DrcSector {
   Evacuations = 'Evacuations',
   GBV = 'GBV',
   EORE = 'EORE',
+}
+
+export class DrcSectorHelper {
+  private static readonly byProgram = {
+    CashForFuel: DrcSector.Shelter,
+    CashForUtilities: DrcSector.Shelter,
+    CashForRent: DrcSector.Shelter,
+    CashForRepair: DrcSector.Shelter,
+    CashForEducation: DrcSector.Shelter,
+    MPCA: DrcSector.MPCA,
+    NFI: DrcSector.NFI,
+    ShelterRepair: DrcSector.Shelter,
+    ESK: DrcSector.Shelter,
+    InfantWinterClothing: DrcSector.NFI,
+    InfantHygieneKit: DrcSector.NFI,
+    SectoralCash: DrcSector.NFI,
+  } as const
+
+  static readonly findByProgram = (p: DrcProgram): DrcSector => {
+    return DrcSectorHelper.byProgram[p]
+  }
+}
+
+export const drcOfficeShort: Record<DrcOffice, string> = {
+  [DrcOffice.Kyiv]: 'KYV',
+  [DrcOffice.Sumy]: 'UMY',
+  [DrcOffice.Mykolaiv]: 'NLV',
+  [DrcOffice.Lviv]: 'LWO',
+  [DrcOffice.Chernihiv]: 'CEJ',
+  [DrcOffice.Kharkiv]: 'HRK',
+  [DrcOffice.Dnipro]: 'DNK',
+  [DrcOffice.Poltava]: 'Poltava',
+  [DrcOffice.Chernivtsi]: 'Chernivtsi',
 }
 
 export enum DrcDonor {

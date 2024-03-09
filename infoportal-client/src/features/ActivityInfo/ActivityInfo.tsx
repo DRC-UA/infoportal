@@ -11,13 +11,6 @@ import {AiFslc} from '@/features/ActivityInfo/Fslc/AiFslc'
 import {AiGbv} from '@/features/ActivityInfo/Gbv/AiGbv'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 
-interface Activity {
-  // id: string
-  name: string,
-  componnent: ReactNode,
-  path: string
-}
-
 export const activitiesConfig = {
   'protection_general': {
     id: 'cnr7gculteoyj914',

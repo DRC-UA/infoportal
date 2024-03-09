@@ -94,7 +94,7 @@ model KoboMeta {
   lastName         String?
   patronymicName   String?
   phone            String?
-  activity         String[]
+  activity         String?
   sector           String?
   office           String?
   project          String[]
