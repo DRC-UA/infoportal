@@ -304,31 +304,37 @@ export const MpcaData = () => {
             {type: 'string', id: 'firstName', head: m.firstName, render: _ => _.firstName},
             {type: 'string', id: 'patronyme', head: m.patronyme, render: _ => _.patronyme},
             {
-              id: 'status',
-              head: m.status,
+              id: 'displacement',
+              head: m.displacementStatus,
               render: _ => _.benefStatus,
               type: 'select_one',
               // options: () => SheetUtils.buildOptions(Enum.keys(bn_ReOptions.ben_det_res_stat)),
             },
             {id: 'phone', type: 'string', head: m.phone, render: _ => _.phone},
             {
-              id: 'committed',
+              id: 'status',
               type: 'select_one',
-              head: m.mpca.committed,
-              tooltip: null,
-              renderValue: row => row.tags?.committed ? 'true' : 'false',
-              renderOption: row => row.tags?.committed ? m.mpca.committed : SheetUtils.blankLabel,
-              render: row => (
-                <>
-                  <Switch size="small" checked={!!row.tags?.committed} onChange={(e, checked) => ctx.asyncUpdates.call({
-                    formId: KoboIndex.byName(row.source).id,
-                    answerIds: [row.id],
-                    key: 'committed',
-                    value: checked ? new Date() : null,
-                  })}/>
-                </>
-              )
+              head: m.status,
+              render: _ => _.tags?.status + ' ' + _.tags?.committed,
             }
+            // {
+            //   id: 'committed',
+            //   type: 'select_one',
+            //   head: m.mpca.committed,
+            //   tooltip: null,
+            //   renderValue: row => row.tags?.committed ? 'true' : 'false',
+            //   renderOption: row => row.tags?.committed ? m.mpca.committed : SheetUtils.blankLabel,
+            //   render: row => (
+            //     <>
+            //       <Switch size="small" checked={!!row.tags?.committed} onChange={(e, checked) => ctx.asyncUpdates.call({
+            //         formId: KoboIndex.byName(row.source).id,
+            //         answerIds: [row.id],
+            //         key: 'committed',
+            //         value: checked ? new Date() : null,
+            //       })}/>
+            //     </>
+            //   )
+            // }
           ]}
         />
       </Panel>

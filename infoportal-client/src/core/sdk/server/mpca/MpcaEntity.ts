@@ -1,11 +1,10 @@
-import {Bn_Re, DrcDonor, DrcOffice, DrcProject, KoboFormName, OblastISO, OblastName, Person} from '@infoportal-common'
+import {Bn_Re, DrcDonor, DrcOffice, DrcProject, KoboFormName, KoboTagStatus, OblastISO, OblastName, Person} from '@infoportal-common'
 import {KoboAnswerId, KoboAttachment, KoboBaseTags} from '@/core/sdk/server/kobo/Kobo'
 import {WfpDeduplication} from '@/core/sdk/server/wfpDeduplication/WfpDeduplication'
 import {DeepPartial, Enum} from '@alexandreannic/ts-utils'
 
-export interface MpcaTypeTag extends KoboBaseTags {
+export interface MpcaTypeTag extends KoboBaseTags, KoboTagStatus {
   projects?: DrcProject[]
-  committed?: Date
 }
 
 const buildEnumFromObject = <T extends KoboFormName>(t: T[]): { [K in T]: K } => {

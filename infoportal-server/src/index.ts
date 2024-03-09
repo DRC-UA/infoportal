@@ -13,6 +13,7 @@ import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 import {ActivityInfoSdk} from './feature/activityInfo/sdk/ActivityInfoSdk'
 import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
+import {cleanMpca} from './script/20240309-cleanMpcaCommit/CleanMpcaCommit'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -39,6 +40,8 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
+  await cleanMpca()
+  return
   // // new ActivityInfoSdk().fetchColumnsFree({
   // //   'rowSources': [{'rootFormId': 'c8uhbuclqb1fjlg2'}],
   // //   'columns': [
@@ -51,15 +54,15 @@ const startApp = async (conf: AppConf) => {
   // // })
   // // .then(console.log)
   // // return
-  await Promise.all([
-    //   ActivityInfoBuildType.fslc(),
-    //   ActivityInfoBuildType.gbv(),
-    //   // ActivityInfoBuildType.mineAction(),
-    //   ActivityInfoBuildType.snfi(),
-    ActivityInfoBuildType.mpca(),
-    ActivityInfoBuildType.wash(),
-  ])
-  return
+  // await Promise.all([
+  //   //   ActivityInfoBuildType.fslc(),
+  //   //   ActivityInfoBuildType.gbv(),
+  //   //   // ActivityInfoBuildType.mineAction(),
+  //   //   ActivityInfoBuildType.snfi(),
+  //   ActivityInfoBuildType.mpca(),
+  //   ActivityInfoBuildType.wash(),
+  // ])
+  // return
   const prisma = new PrismaClient({
     // log: ['query']
   })
