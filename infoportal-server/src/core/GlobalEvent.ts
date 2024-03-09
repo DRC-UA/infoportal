@@ -19,17 +19,20 @@ export namespace GlobalEvent {
 
   export enum Event {
     KOBO_FORM_SYNCHRONIZED = 'KOBO_FORM_SYNCHRONIZED',
-    KOBO_TAG_EDITED = 'KOBO_TAG_EDITED'
+    KOBO_TAG_EDITED = 'KOBO_TAG_EDITED',
+    WFP_DEDUPLICATION_SYNCHRONIZED = 'WFP_DEDUPLICATION_SYNCHRONIZED',
   }
 
   type Emit = {
     (event: Event.KOBO_TAG_EDITED, params: KoboTagEditedParams): void
     (event: Event.KOBO_FORM_SYNCHRONIZED, params: KoboFormSyncParams): void
+    (event: Event.WFP_DEDUPLICATION_SYNCHRONIZED, params: void): void
   }
 
   type Listen = {
     (event: Event.KOBO_TAG_EDITED, cb: (params: KoboTagEditedParams) => void): void
     (event: Event.KOBO_FORM_SYNCHRONIZED, cb: (params: KoboFormSyncParams) => void): void
+    (event: Event.WFP_DEDUPLICATION_SYNCHRONIZED, cb: () => void): void
   }
 
 

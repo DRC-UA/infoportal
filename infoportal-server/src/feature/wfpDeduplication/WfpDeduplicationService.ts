@@ -8,6 +8,8 @@ import {seq} from '@alexandreannic/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../core/conf/AppConf'
 import {WfpDeduplicationHelper} from './WfpDeduplicationType'
+import {GlobalEvent} from '../../core/GlobalEvent'
+import Event = GlobalEvent.Event
 
 export interface WfpDbSearch {
   limit?: number
@@ -24,6 +26,7 @@ export class WfpDeduplicationService {
     private prisma: PrismaClient,
     private access: AccessService = new AccessService(prisma),
     private conf = appConf,
+    private event = GlobalEvent.Class.getInstance(),
   ) {
   }
 
@@ -80,5 +83,6 @@ export class WfpDeduplicationService {
         create: _,
       })
     )
+    this.event.emit(Event.WFP_DEDUPLICATION_SYNCHRONIZED)
   }
 }

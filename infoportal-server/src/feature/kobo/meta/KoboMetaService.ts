@@ -62,6 +62,14 @@ export class KoboMetaService {
       else if (updateMapper) this.syncMerge({formId: _.formId, mapper: updateMapper})
       else this.log.error(`No mapper implemented for ${JSON.stringify(_.formId)}`)
     })
+    this.event.listen(Event.WFP_DEDUPLICATION_SYNCHRONIZED, () => {
+      this.syncWfpDeduplication()
+    })
+  }
+
+  private syncWfpDeduplication = async () => {
+    // const data = await this.prisma.mpcaWfpDeduplication.findMany()
+    // data.
   }
 
   readonly search = ({filters}: KoboMetaParams.SearchFilter) => {

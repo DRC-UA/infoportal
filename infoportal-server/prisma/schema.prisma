@@ -102,6 +102,7 @@ model KoboMeta {
   displacement     String?
   address          String?
   status           String?
+  amount           Int
   lastStatusUpdate DateTime?
   tags             Json?
 
