@@ -26,16 +26,22 @@ export namespace AiMapper {
     }, () => 'Non-Displaced')
   }
 
-  export const disaggregatePersons = (persons: PersonDetails[]): Pick<AiTypeGeneralProtection.TypeSub,
-    'Adult Men (18-59)' |
-    'Adult Women (18-59)' |
-    'Boys (0-17)' |
-    'Girls (0-17)' |
-    'Older Men (60+)' |
-    'Older Women (60+)' |
-    'Total Individuals Reached' |
-    'People with Disability'
-  > => {
+  export const disaggregatePersons = (persons: PersonDetails[]): {
+    'Adult Men (18-59)'?: number
+    'Adult Women (18-59)'?: number
+    'Boys (0-17)'?: number
+    'Girls (0-17)'?: number
+    'Older Men (60+)'?: number
+    'Older Women (60+)'?: number
+    'Total Individuals Reached'?: number
+    'People with Disability'?: number
+    'Girls with disability (0-17)'?: number,
+    'Boys with disability (0-17)'?: number,
+    'Adult Women with disability (18-59)'?: number,
+    'Adult Men with disability (18-59)'?: number,
+    'Older Women with disability (60+)'?: number,
+    'Older Men with disability (60+)'?: number
+  } => {
     const personsDefined = persons.filter(_ => !!_.gender && !!_.age)
     const disaggregation = Person.groupByGenderAndGroup(Person.ageGroup.UNHCR)(personsDefined)
     return {
@@ -47,6 +53,12 @@ export namespace AiMapper {
       'Older Women (60+)': disaggregation['60+'].Female,
       'Total Individuals Reached': personsDefined.length,
       'People with Disability': personsDefined.filter(_ => _.disability).length,
+      'Girls with disability (0-17)': personsDefined.filter(_ => _.disability && _.gender === Person.Gender.Female && _.age! < 18).length,
+      'Boys with disability (0-17)': personsDefined.filter(_ => _.disability && _.gender === Person.Gender.Male && _.age! < 18).length,
+      'Adult Women with disability (18-59)': personsDefined.filter(_ => _.disability && _.gender === Person.Gender.Female && _.age! >= 18 && _.age! < 60).length,
+      'Adult Men with disability (18-59)': personsDefined.filter(_ => _.disability && _.gender === Person.Gender.Male && _.age! >= 18 && _.age! < 60).length,
+      'Older Women with disability (60+)': personsDefined.filter(_ => _.disability && _.gender === Person.Gender.Female && _.age! > 60).length,
+      'Older Men with disability (60+)': personsDefined.filter(_ => _.disability && _.gender === Person.Gender.Male && _.age! > 60).length,
     }
   }
 }

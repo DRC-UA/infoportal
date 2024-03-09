@@ -137,13 +137,12 @@ export const ActivityInfoBuildType = {
     name: 'mpca',
     ignoredQuestions: [],
     skipQuestion: [
-      /MPCA Indicators/,
-      /Donor/,
+      // /MPCA Indicators/,
+      // /Donor/,
       // /Implementing Partner/,
       // /MPCA Indicators/,
     ],
     skipQuestionsOptions: [
-      /Implementing Partner/,
       /OblastIndex/,
       /Raion/,
       /Hromada/i,
@@ -152,6 +151,9 @@ export const ActivityInfoBuildType = {
     ],
     pickSpecificOptionSet: {},
     filterOptions: {
+      'Implementing Partner': _ => {
+        return _.includes('Danish Refugee Council')
+      },
       'Reporting Organization': _ => {
         return _.includes('Danish Refugee Council')
       },
