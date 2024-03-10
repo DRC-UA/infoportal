@@ -16,10 +16,8 @@ export namespace AiMpcaMapper {
     const bundle: Bundle[] = []
     let i = 0
     return api.koboMeta.search({
-      filters: {
-        activities: [DrcProgram.MPCA],
-        status: [KoboMetaStatus.Committed]
-      }
+      activities: [DrcProgram.MPCA],
+      status: [KoboMetaStatus.Committed]
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       .then(data => {

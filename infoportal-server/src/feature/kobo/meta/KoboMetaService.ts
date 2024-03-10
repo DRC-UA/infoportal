@@ -14,6 +14,7 @@ import {yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
 import Event = GlobalEvent.Event
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
+import {Cache} from '../../../helper/Cache'
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'id' | 'uuid' | 'date' | 'updatedAt' | 'formId'>
 export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => [KoboId, Partial<MetaMapped<TTag>>] | undefined
@@ -41,11 +42,9 @@ class KoboMetaMapper {
 
 export namespace KoboMetaParams {
   export const schemaSearchFilter = yup.object({
-    filters: yup.object({
-      status: yup.array().of(yup.mixed<KoboMetaStatus>().defined()).optional(),
-      activities: yup.array().of(yup.mixed<DrcProgram>().defined()).optional(),
-    })
-  })
+    status: yup.array().of(yup.mixed<KoboMetaStatus>().defined()).optional(),
+    activities: yup.array().of(yup.mixed<DrcProgram>().defined()).optional(),
+  }).optional()
   export type SearchFilter = InferType<typeof schemaSearchFilter>
 }
 
@@ -79,19 +78,21 @@ export class KoboMetaService {
     // data.
   }
 
-  readonly search = ({filters}: KoboMetaParams.SearchFilter) => {
+  readonly search = Cache.request((params: KoboMetaParams.SearchFilter = {}) => {
     return this.prisma.koboMeta.findMany({
       include: {
         persons: true
       },
       where: {
-        //   hasSome: filters.activities!
-        // }
-        ...map(filters.status, _ => ({status: {in: _}})),
-        ...map(filters.activities, _ => ({activity: {in: _}}))
+        ...map(params?.status, _ => ({status: {in: _}})),
+        ...map(params?.activities, _ => ({activity: {in: _}}))
       }
     })
-  }
+  }, {
+    ifParams: ([params]) => {
+      return params === undefined || Object.keys(params).length === 0
+    }
+  })
 
   private info = (formId: KoboId, message: string) => this.log.info(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
 

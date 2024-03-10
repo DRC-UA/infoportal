@@ -28,15 +28,13 @@ export namespace AiProtectionMapper {
   export const req = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
     const period = PeriodHelper.fromYYYYMM(periodStr)
     return api.koboMeta.search({
-      filters: {
-        activities: [
-          DrcProgram.PSS,
-          DrcProgram.ProtectionMonitoring,
-          DrcProgram.CommunityLevelPm,
-          DrcProgram.AwarenessRaisingSession,
-        ],
-        status: [KoboMetaStatus.Committed],
-      }
+      activities: [
+        DrcProgram.PSS,
+        DrcProgram.ProtectionMonitoring,
+        DrcProgram.CommunityLevelPm,
+        DrcProgram.AwarenessRaisingSession,
+      ],
+      status: [KoboMetaStatus.Committed],
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       .then(data => {

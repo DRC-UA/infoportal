@@ -1,10 +1,8 @@
 import {DrcProgram, IKoboMeta, KoboMetaStatus} from '@infoportal-common'
 
 export interface KoboMetaSearchParans {
-  filters?: {
-    activities?: DrcProgram[]
-    status?: KoboMetaStatus[]
-  }
+  activities?: DrcProgram[]
+  status?: KoboMetaStatus[]
 }
 
 export class KoboMetaHelper {

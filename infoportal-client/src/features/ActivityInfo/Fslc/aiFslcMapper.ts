@@ -17,10 +17,8 @@ export namespace AiFslcMapper {
     const bundle: Bundle[] = []
     let i = 0
     return api.koboMeta.search({
-      filters: {
-        activities: [DrcProgram.SectoralCash],
-        status: [KoboMetaStatus.Committed]
-      }
+      activities: [DrcProgram.SectoralCash],
+      status: [KoboMetaStatus.Committed]
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       .then(data => {

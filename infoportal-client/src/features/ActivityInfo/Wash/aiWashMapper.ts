@@ -21,13 +21,11 @@ export namespace AiWashMapper {
   export const req = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
     const period = PeriodHelper.fromYYYYMM(periodStr)
     return api.koboMeta.search({
-      filters: {
-        status: [KoboMetaStatus.Committed],
-        activities: [
-          DrcProgram.NFI,
-          DrcProgram.HygieneKit,
-        ]
-      }
+      status: [KoboMetaStatus.Committed],
+      activities: [
+        DrcProgram.NFI,
+        DrcProgram.HygieneKit,
+      ]
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       .then(data => {

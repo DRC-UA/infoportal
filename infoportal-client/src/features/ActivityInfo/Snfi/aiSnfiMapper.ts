@@ -85,16 +85,14 @@ export namespace AiShelterMapper {
   export const reqEsk = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
     const period = PeriodHelper.fromYYYYMM(periodStr)
     return api.koboMeta.search({
-      filters: {
-        status: [KoboMetaStatus.Committed],
-        activities: [
-          DrcProgram.ESK,
-          DrcProgram.CashForFuel,
-          DrcProgram.CashForUtilities,
-          DrcProgram.CashForRent,
-          DrcProgram.CashForRepair,
-        ]
-      }
+      status: [KoboMetaStatus.Committed],
+      activities: [
+        DrcProgram.ESK,
+        DrcProgram.CashForFuel,
+        DrcProgram.CashForUtilities,
+        DrcProgram.CashForRent,
+        DrcProgram.CashForRepair,
+      ]
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       .then(data => {
@@ -169,10 +167,8 @@ export namespace AiShelterMapper {
   export const reqRepairs = (api: ApiSdk) => (periodStr: string) => {
     const period = PeriodHelper.fromYYYYMM(periodStr)
     return api.koboMeta.search<KoboMetaShelterRepairTags>({
-      filters: {
-        status: [KoboMetaStatus.Committed],
-        activities: [DrcProgram.ShelterRepair]
-      }
+      status: [KoboMetaStatus.Committed],
+      activities: [DrcProgram.ShelterRepair]
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       // .then(_ => _.data.flatMap(({persons, ...row}) => (persons ?? []).map(_ => ({...row, ..._}))))
