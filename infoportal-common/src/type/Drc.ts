@@ -27,14 +27,15 @@ export enum DrcProgram {
   InfantWinterClothing = 'InfantWinterClothing',
   HygieneKit = 'HygieneKit',
   SectoralCash = 'SectoralCash',
+  PSS = 'PSS',
+  GBV = 'GBV',
 }
 
 export enum DrcSector {
   NFI = 'NFI',
   WaSH = 'WaSH',
-  Protection = 'Protection',
-  PSS = 'PSS',
   Education = 'Education',
+  Protection = 'Protection',
   Livelihoods = 'Livelihoods',
   FoodSecurity = 'FoodSecurity',
   MPCA = 'MPCA',
@@ -42,7 +43,6 @@ export enum DrcSector {
   Nutrition = 'Nutrition',
   Shelter = 'Shelter',
   Evacuations = 'Evacuations',
-  GBV = 'GBV',
   EORE = 'EORE',
 }
 
@@ -72,6 +72,7 @@ export class DrcSectorHelper {
   static readonly isAutoValidatedActivity = (_: DrcProgram) => DrcSectorHelper.autoValidatedActivity.has(_)
 
   static readonly findByProgram = (p: DrcProgram): DrcSector => {
+    // @ts-ignore
     return DrcSectorHelper.byProgram[p]
   }
 }
