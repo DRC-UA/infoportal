@@ -1,6 +1,6 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiBundle2} from '@/features/ActivityInfo/shared/AiBundle'
-import {AiTypeGeneralProtection} from '@/features/ActivityInfo/Protection/AiTypeGeneralProtection'
+import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {AILocationHelper, DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
@@ -9,9 +9,9 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 
 export namespace AiProtectionMapper {
 
-  type Bundle = AiBundle2<AiTypeGeneralProtection.Type, AiTypeGeneralProtection.TypeSub>
+  type Bundle = AiBundle2<AiProtectionType.Type, AiProtectionType.TypeSub>
 
-  const getPlanCode = (_?: DrcProject): AiTypeGeneralProtection.Type['Plan/Project Code'] => {
+  const getPlanCode = (_?: DrcProject): AiProtectionType.Type['Plan/Project Code'] => {
     const planCode = Object.freeze({
       [DrcProject['UKR-000298 Novo-Nordisk']]: 'PRT-DRC-00001',
       [DrcProject['UKR-000309 OKF']]: 'PRT-DRC-00002',
@@ -51,7 +51,7 @@ export namespace AiProtectionMapper {
             {by: _ => _.project?.[0]!},
           ],
           finalTransform: (grouped, [oblast, raion, hromada, project]) => {
-            const ai: AiTypeGeneralProtection.Type = {
+            const ai: AiProtectionType.Type = {
               'Oblast': AILocationHelper.findOblast(oblast) ?? '⚠️' + oblast as any,
               'Raion': AILocationHelper.findRaion(oblast, raion)?._5w ?? '⚠️' + raion as any,
               'Hromada': AILocationHelper.findHromada(oblast, raion, hromada)?._5w ?? '⚠️' + hromada as any,
@@ -59,7 +59,7 @@ export namespace AiProtectionMapper {
               'Reporting Organization': 'Danish Refugee Council',
               'Response Theme': 'No specific theme',
             }
-            const subActivities: {data: any[], ai: AiTypeGeneralProtection.TypeSub}[] = []
+            const subActivities: {data: any[], ai: AiProtectionType.TypeSub}[] = []
             groupBy({
               data: grouped.flatMap(_ => _.persons?.map(p => ({..._, ...p})) ?? []),
               groups: [

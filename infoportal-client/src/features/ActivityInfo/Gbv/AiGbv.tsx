@@ -5,12 +5,12 @@ import {add, groupBy, PeriodHelper} from '@infoportal-common'
 import {Panel} from '@/shared/Panel'
 import {Page} from '@/shared/Page'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-import {AiTypeGbv} from '@/features/ActivityInfo/Gbv/AiTypeGbv'
+import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 import {AiGbvMapper} from '@/features/ActivityInfo/Gbv/AiGbvMapper'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {useFetcher} from '@/shared/hook/useFetcher'
 
-type AiGbvBundle = AiBundle2<AiTypeGbv.Type, AiTypeGbv.TypeSub>
+type AiGbvBundle = AiBundle2<AiGbvType.Type, AiGbvType.TypeSub>
 
 export const AiGbv = () => {
   const {api} = useAppSettings()
@@ -30,13 +30,13 @@ export const AiGbv = () => {
 
         ],
         finalTransform: (grouped, [Oblast, Raion, Hromada, PlanCode]) => {
-          const activity: AiTypeGbv.Type = {
+          const activity: AiGbvType.Type = {
             Oblast, Raion, Hromada,
             'Reporting Organization': 'Danish Refugee Council',
             'Response Theme': 'No specific theme',
             'Plan/Project Code': PlanCode,
           }
-          const subActivities: AiTypeGbv.TypeSub[] = []
+          const subActivities: AiGbvType.TypeSub[] = []
           groupBy({
             data: grouped,
             groups: [

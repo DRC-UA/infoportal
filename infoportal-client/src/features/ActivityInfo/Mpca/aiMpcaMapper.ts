@@ -5,11 +5,11 @@ import {AiBundle2} from '@/features/ActivityInfo/shared/AiBundle'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
-import {AiTypeMpca} from '@/features/ActivityInfo/Mpca/AiTypeMpca'
+import {AiMpcaType} from '@/features/ActivityInfo/Mpca/aiMpcaType'
 
 export namespace AiMpcaMapper {
 
-  type Bundle = AiBundle2<AiTypeMpca.Type>
+  type Bundle = AiBundle2<AiMpcaType.Type>
 
   export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
     const period = PeriodHelper.fromYYYYMM(periodStr)
@@ -36,7 +36,7 @@ export namespace AiMpcaMapper {
             ],
             finalTransform: (grouped, [oblast, raion, hromada, project, displacement]) => {
               const disag = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
-              const ai: AiTypeMpca.Type = {
+              const ai: AiMpcaType.Type = {
                 'Reporting Organization': 'Danish Refugee Council',
                 'Implementing Partner': 'Danish Refugee Council',
                 'Raion': raion,

@@ -1,10 +1,10 @@
-import {AiTypeGeneralProtection} from '@/features/ActivityInfo/Protection/AiTypeGeneralProtection'
+import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {AILocationHelper, Bn_Re, DisplacementStatus, OblastIndex, Person, PersonDetails, Protection_groupSession} from '@infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 
 export namespace AiMapper {
 
-  export type Location = Pick<AiTypeGeneralProtection.Type, 'Oblast' | 'Raion' | 'Hromada'>
+  export type Location = Pick<AiProtectionType.Type, 'Oblast' | 'Raion' | 'Hromada'>
 
   export const getLocation = (d: Pick<Protection_groupSession.T, 'ben_det_oblast' | 'ben_det_hromada' | 'ben_det_raion'>): Location => {
     const oblast = OblastIndex.byKoboName(d.ben_det_oblast!).name
@@ -19,7 +19,7 @@ export namespace AiMapper {
     }
   }
 
-  export const mapPopulationGroup = (_?: DisplacementStatus): AiTypeGeneralProtection.TypeSub['Population Group'] => {
+  export const mapPopulationGroup = (_?: DisplacementStatus): AiProtectionType.TypeSub['Population Group'] => {
     return fnSwitch(_!, {
       Idp: 'Internally Displaced',
       Returnee: 'Returnees',

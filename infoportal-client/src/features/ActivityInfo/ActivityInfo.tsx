@@ -6,7 +6,7 @@ import {AiMpca} from '@/features/ActivityInfo/Mpca/AiMpca'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Enum} from '@alexandreannic/ts-utils'
 import {AiSnfi} from '@/features/ActivityInfo/Snfi/AiSnfi'
-import {AiProtectionGeneral} from '@/features/ActivityInfo/Protection/AiProtectionGeneral'
+import {AiProtection} from '@/features/ActivityInfo/Protection/AiProtection'
 import {AiFslc} from '@/features/ActivityInfo/Fslc/AiFslc'
 import {AiGbv} from '@/features/ActivityInfo/Gbv/AiGbv'
 import {appFeaturesIndex} from '@/features/appFeatureId'
@@ -17,7 +17,7 @@ export const activitiesConfig = {
     subId: 'c4u0d3glqf3085j58',
     name: 'Protection',
     path: '/protection_general',
-    componnent: <AiProtectionGeneral/>,
+    componnent: <AiProtection/>,
   },
   'gbv': {
     id: 'c6mrp6dlqv1q7q243w',

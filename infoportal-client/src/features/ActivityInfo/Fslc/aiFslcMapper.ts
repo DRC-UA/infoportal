@@ -1,5 +1,5 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiTypeFslc} from '@/features/ActivityInfo/Fslc/AiTypeFslc'
+import {AiFslcType} from '@/features/ActivityInfo/Fslc/aiFslcType'
 import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper, Person} from '@infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
@@ -8,7 +8,7 @@ import {AiBundle2} from '@/features/ActivityInfo/shared/AiBundle'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 
 export namespace AiFslcMapper {
-  export type Bundle = AiBundle2<AiTypeFslc.Type>
+  export type Bundle = AiBundle2<AiFslcType.Type>
 
   const getPlanCode = (_: DrcProject) => '!!! TODO' as any
 
@@ -43,7 +43,7 @@ export namespace AiFslcMapper {
           ],
           finalTransform: (grouped, [project, oblast, raion, hromada, displacement, activity]) => {
             const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
-            const ai: AiTypeFslc.Type = {
+            const ai: AiFslcType.Type = {
               'Reporting Month': periodStr,
               'Reporting Organization': 'Danish Refugee Council',
               'Activity and indicator': '!!! TODO' as any,

@@ -1,15 +1,15 @@
 import {DrcProject, DrcProjectHelper, Protection_gbv} from '@infoportal-common'
-import {AiTypeGbv} from '@/features/ActivityInfo/Gbv/AiTypeGbv'
+import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {KoboUnwrapResult} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
 export namespace AiGbvMapper {
 
-  export type Type = Omit<AiTypeGbv.Type,
+  export type Type = Omit<AiGbvType.Type,
     'Reporting Organization' |
     'Response Theme'
-  > & AiTypeGbv.TypeSub & {
+  > & AiGbvType.TypeSub & {
     answer: Record<string, any>
   }
 

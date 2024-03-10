@@ -1,4 +1,4 @@
-export namespace AiTypeSnfi {
+export namespace AiSnfiType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
 
   export interface Type {

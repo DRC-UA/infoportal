@@ -3,7 +3,7 @@ import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiBundle2} from '@/features/ActivityInfo/shared/AiBundle'
-import {AiTypeSnfi} from '@/features/ActivityInfo/Snfi/AiTypeSnfi'
+import {AiSnfiType} from '@/features/ActivityInfo/Snfi/aiSnfiType'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 
@@ -20,12 +20,12 @@ export namespace AiShelterMapper {
     [DrcProject['UKR-000284 BHA']]: 'SNFI-DRC-00008',
   }
 
-  const getPlanCode = (p: DrcProject): AiTypeSnfi.Type['Plan/Project Code'] => {
+  const getPlanCode = (p: DrcProject): AiSnfiType.Type['Plan/Project Code'] => {
     // @ts-ignore
     return planCodes[p] ?? `!!! ${p}`
   }
 
-  export type Bundle = AiBundle2<AiTypeSnfi.Type>
+  export type Bundle = AiBundle2<AiSnfiType.Type>
 
   const mapBnreDonor = (_?: keyof typeof Bn_Re.options.back_donor) => {
     if (!_) return
@@ -119,7 +119,7 @@ export namespace AiShelterMapper {
           ],
           finalTransform: (grouped, [project, oblast, raion, hromada, displacement, activity]) => {
             const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
-            const ai: AiTypeSnfi.Type = {
+            const ai: AiSnfiType.Type = {
               'Indicators - SNFI': fnSwitch(activity, {
                 [DrcProgram.ESK]: '# supported with emergency shelter support',
                 [DrcProgram.CashForFuel]: '# reached with support for winter energy needs (cash/voucher/fuel)',
@@ -201,12 +201,12 @@ export namespace AiShelterMapper {
               by: row => fnSwitch(row.displacement!, {
                 [DisplacementStatus.Idp]: 'IDPs',
                 [DisplacementStatus.Returnee]: 'Returnees',
-              }, () => 'Non-Displaced') as AiTypeSnfi.Type['Population Group']
+              }, () => 'Non-Displaced') as AiSnfiType.Type['Population Group']
             }
           ],
           finalTransform: (grouped, [project, oblast, raion, hromada, damageLevel, status]) => {
             const disagg = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons ?? []))
-            const activity: AiTypeSnfi.Type = {
+            const activity: AiSnfiType.Type = {
               'Indicators - SNFI': fnSwitch(damageLevel, {
                 [ShelterTaPriceLevel.Light]: '# of individuals supported with light humanitarian repairs',
                 [ShelterTaPriceLevel.Medium]: '# of individuals supported with medium humanitarian repairs',

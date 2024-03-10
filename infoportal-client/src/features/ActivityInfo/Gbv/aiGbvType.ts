@@ -1,4 +1,4 @@
-export namespace AiTypeGbv {type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
+export namespace AiGbvType {type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
 
 export interface Type {
   'ID'?: string,

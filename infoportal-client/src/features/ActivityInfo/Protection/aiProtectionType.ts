@@ -1,4 +1,4 @@
-export namespace AiTypeGeneralProtection {
+export namespace AiProtectionType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
 
   export interface Type {
