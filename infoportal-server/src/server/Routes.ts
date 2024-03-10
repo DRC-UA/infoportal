@@ -109,6 +109,7 @@ export const getRoutes = (
     router.get('/session', errorCatcher(session.get))
 
     router.post('/kobo-meta/search', errorCatcher(koboMeta.search))
+    router.post('/kobo-meta/sync', errorCatcher(koboMeta.sync))
 
     router.put('/proxy', auth({adminOnly: true}), errorCatcher(proxy.create))
     router.post('/proxy/:id', auth({adminOnly: true}), errorCatcher(proxy.update))

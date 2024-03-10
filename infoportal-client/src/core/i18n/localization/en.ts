@@ -1,6 +1,7 @@
 import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
 import {capitalize, OblastIndex, OblastISO} from '@infoportal-common'
+import {appFeaturesIndex} from '@/features/appFeatureId'
 
 const invalidDate = ''
 
@@ -409,6 +410,10 @@ export const en = Object.freeze({
       valid: 'Validity',
       viewRegistrationData: 'View Registration Data',
       viewDataCheck: 'View Verification Data',
+    },
+    _meta: {
+      refresh: 'Sync ' + appFeaturesIndex.metaDashboard.name,
+      refreshLong: 'Refresh started, can takes few minutes.',
     },
     protHHS2: {
       freedomOfMovement: 'Barriers to Freedom of Movement',

@@ -12,4 +12,7 @@ export class KoboMetaSdk {
     return this.client.post(`/kobo-meta/search`, {body})
       .then(ApiSdkUtils.mapPaginate(KoboMetaHelper.mapEntity))
   }
+  readonly sync = (): Promise<void> => {
+    return this.client.post(`/kobo-meta/sync`)
+  }
 }

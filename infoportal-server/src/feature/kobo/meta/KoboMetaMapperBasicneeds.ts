@@ -2,11 +2,11 @@ import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {
   Bn_RapidResponse,
   Bn_Re,
+  CashStatus,
   DrcOffice,
   DrcProgram,
   DrcProject,
   DrcProjectHelper,
-  DrcSector,
   DrcSectorHelper,
   KoboGeneralMapping,
   KoboMetaHelper,
@@ -77,17 +77,18 @@ export class KoboMetaBasicneeds {
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
 
     const activities = seq(answer.back_prog_type)?.map(prog => fnSwitch(prog.split('_')[0], {
-      'cfr': {activity: DrcProgram.CashForRent, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfr!)},
-      'cfe': {activity: DrcProgram.CashForEducation, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfe!)},
-      'mpca': {activity: DrcProgram.MPCA, project: KoboMetaBasicneeds.getBnreProject(answer.donor_mpca!)},
-      'csf': {activity: DrcProgram.CashForFuel, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cff!)},
-      'cfu': {activity: DrcProgram.CashForUtilities, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfu!)},
+      cfr: {activity: DrcProgram.CashForRent, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfr!)},
+      cfe: {activity: DrcProgram.CashForEducation, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfe!)},
+      mpca: {activity: DrcProgram.MPCA, project: KoboMetaBasicneeds.getBnreProject(answer.donor_mpca!)},
+      csf: {activity: DrcProgram.CashForFuel, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cff!)},
+      cfu: {activity: DrcProgram.CashForUtilities, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfu!)},
       nfi: {activity: DrcProgram.NFI, project: KoboMetaBasicneeds.getBnreProject(answer.donor_nfi!)},
       esk: {activity: DrcProgram.ESK, project: KoboMetaBasicneeds.getBnreProject(answer.donor_esk!)},
-      ihk: {activity: DrcProgram.InfantHygieneKit, project: KoboMetaBasicneeds.getBnreProject(answer.donor_ihk!)},
+      ihk: {activity: DrcProgram.HygieneKit, project: KoboMetaBasicneeds.getBnreProject(answer.donor_ihk!)},
     }, () => undefined)).distinct(_ => _).compact() ?? []
 
     const prepare = (activity: DrcProgram, project: DrcProject): MetaMapped => {
+      const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
       return {
         enumerator: Bn_Re.options.back_enum[answer.back_enum!],
         office: fnSwitch(answer.back_office!, {
@@ -101,8 +102,8 @@ export class KoboMetaBasicneeds {
         oblast: oblast.name,
         raion: Bn_Re.options.ben_det_raion[answer.ben_det_raion!],
         hromada: Bn_Re.options.ben_det_hromada[answer.ben_det_hromada!],
-        sector: DrcSector.MPCA,
-        activity: activity,
+        sector: DrcSectorHelper.findByProgram(activity),
+        activity,
         personsCount: safeNumber(answer.ben_det_hh_size),
         persons: group.map(KoboGeneralMapping.mapPersonDetails),
         project: [project],
@@ -112,8 +113,8 @@ export class KoboMetaBasicneeds {
         patronymicName: answer.ben_det_pat_name,
         taxId: answer.pay_det_tax_id_num,
         phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
-        status: KoboMetaHelper.mapCashStatus(row.tags?.status),
-        lastStatusUpdate: row.tags?.lastStatusUpdate,
+        status: KoboMetaHelper.mapCashStatus(status),
+        lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
       }
     }
     return activities.map(_ => prepare(_.activity, _.project ?? KoboMetaBasicneeds.getBnreProject(answer.back_donor?.[0])))
@@ -176,12 +177,13 @@ export class KoboMetaBasicneeds {
         cfr: DrcProgram.CashForRent,
         cfe: DrcProgram.CashForEducation,
         iwk: DrcProgram.InfantWinterClothing,
-        ihk: DrcProgram.InfantHygieneKit,
+        ihk: DrcProgram.HygieneKit,
         esk: DrcProgram.ESK,
       }, () => undefined))
       .compact()
 
-    const prepare = (p: DrcProgram): MetaMapped => {
+    const prepare = (activity: DrcProgram): MetaMapped => {
+      const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
       return {
         enumerator: Bn_RapidResponse.options.back_enum_l[answer.back_enum_l!],
         office: fnSwitch(answer.back_office!, {
@@ -195,8 +197,8 @@ export class KoboMetaBasicneeds {
         oblast: oblast.name,
         raion: Bn_RapidResponse.options.ben_det_raion_l[answer.ben_det_raion!],
         hromada: Bn_RapidResponse.options.ben_det_hromada_l[answer.ben_det_hromada!],
-        sector: DrcSectorHelper.findByProgram(p),
-        activity: p,
+        sector: DrcSectorHelper.findByProgram(activity),
+        activity: activity,
         personsCount: safeNumber(answer.ben_det_hh_size_l),
         persons: group.map(KoboGeneralMapping.mapPersonDetails),
         project: project ? [project] : [],
@@ -206,8 +208,8 @@ export class KoboMetaBasicneeds {
         patronymicName: answer.ben_det_pat_name_l,
         taxId: answer.pay_det_tax_id_num_l,
         phone: answer.ben_det_ph_number_l ? '' + answer.ben_det_ph_number_l : undefined,
-        status: KoboMetaHelper.mapCashStatus(row.tags?.status),
-        lastStatusUpdate: row.tags?.lastStatusUpdate,
+        status: KoboMetaHelper.mapCashStatus(status),
+        lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
       }
     }
     return programs.map(prepare)

@@ -1,7 +1,7 @@
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import React, {useEffect} from 'react'
-import {KoboIndex, IKoboMeta, OblastIndex} from '@infoportal-common'
+import {IKoboMeta, KoboIndex, OblastIndex} from '@infoportal-common'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {map, Seq, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
@@ -17,7 +17,7 @@ import {Layout} from '@/shared/Layout'
 import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {format} from 'date-fns'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {appFeatures, appFeaturesIndex} from '@/features/appFeatureId'
+import {appFeaturesIndex} from '@/features/appFeatureId'
 import {Lazy} from '@/shared/Lazy'
 
 export const MetaDashboard = () => {
@@ -100,7 +100,7 @@ export const _MetaDashboard = ({
               <ChartLineBy getX={_ => format(_.date, 'yyyy-MM')} getY={_ => 1} label={m.submissions} data={data}/>
             </SlidePanel>
             <SlidePanel title={m.form}><ChartBarSingleBy data={ctx.filteredData} by={_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId}/></SlidePanel>
-            <SlidePanel title={m.program}><ChartBarMultipleByKey data={ctx.filteredData} property="activity"/></SlidePanel>
+            <SlidePanel title={m.program}><ChartBarSingleBy data={ctx.filteredData} by={_ => _.activity}/></SlidePanel>
             <SlidePanel title={m.project}><ChartBarMultipleByKey data={ctx.filteredData} property="project"/></SlidePanel>
             <SlidePanel title={m.status}><ChartBarSingleBy data={ctx.filteredData} by={_ => _.status}/></SlidePanel>
           </Div>

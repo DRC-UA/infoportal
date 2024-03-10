@@ -206,6 +206,6 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     category: 'settings',
     showIf: _ => _ && _?.email === appConfig.contact
   }
-}
+} as const
 
 export const appFeatures = Enum.values(appFeaturesIndex)

@@ -25,7 +25,7 @@ export enum DrcProgram {
   ShelterRepair = 'ShelterRepair',
   ESK = 'ESK',
   InfantWinterClothing = 'InfantWinterClothing',
-  InfantHygieneKit = 'InfantHygieneKit',
+  HygieneKit = 'HygieneKit',
   SectoralCash = 'SectoralCash',
 }
 
@@ -47,6 +47,7 @@ export enum DrcSector {
 }
 
 export class DrcSectorHelper {
+
   private static readonly byProgram = {
     CashForFuel: DrcSector.Shelter,
     CashForUtilities: DrcSector.Shelter,
@@ -58,9 +59,17 @@ export class DrcSectorHelper {
     ShelterRepair: DrcSector.Shelter,
     ESK: DrcSector.Shelter,
     InfantWinterClothing: DrcSector.NFI,
-    InfantHygieneKit: DrcSector.NFI,
+    HygieneKit: DrcSector.NFI,
     SectoralCash: DrcSector.NFI,
   } as const
+
+  private static readonly autoValidatedActivity = new Set([
+    DrcProgram.NFI,
+    DrcProgram.HygieneKit,
+    DrcProgram.ESK,
+    DrcProgram.InfantWinterClothing,
+  ])
+  static readonly isAutoValidatedActivity = (_: DrcProgram) => DrcSectorHelper.autoValidatedActivity.has(_)
 
   static readonly findByProgram = (p: DrcProgram): DrcSector => {
     return DrcSectorHelper.byProgram[p]

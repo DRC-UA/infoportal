@@ -17,7 +17,7 @@ export namespace AiMpcaMapper {
     let i = 0
     return api.koboMeta.search({
       filters: {
-        activities: [DrcProgram.SectoralCash],
+        activities: [DrcProgram.MPCA],
         status: [KoboMetaStatus.Committed]
       }
     })

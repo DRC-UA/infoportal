@@ -7,12 +7,14 @@ import {DisplacementStatus, KoboAnswer, KoboBaseTags, KoboTagStatus, PersonDetai
 
 export namespace KoboGeneralMapping {
 
-  export type XlsKoboIndividual = Pick<NonNullable<Ecrec_cashRegistration.T['hh_char_hh_det']>[0],
+  type XlsIndividualBase = NonNullable<Ecrec_cashRegistration.T['hh_char_hh_det']>[0]
+  export type XlsKoboIndividual = Pick<XlsIndividualBase,
     'hh_char_hh_det_gender' |
-    'hh_char_hh_det_age' |
+    'hh_char_hh_det_age'
+  > & Partial<Pick<XlsIndividualBase,
     'hh_char_hh_det_dis_select' |
     'hh_char_hh_det_dis_level'
-  > & Partial<Pick<Ecrec_cashRegistration.T, 'ben_det_res_stat'>>
+  >> & Partial<Pick<Ecrec_cashRegistration.T, 'ben_det_res_stat'>>
 
   export type XlsKoboIndividuals = Partial<Pick<Ecrec_cashRegistration.T,
     'hh_char_dis_select' |

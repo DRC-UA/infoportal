@@ -10,9 +10,8 @@ import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
-import {GlobalEvent} from './core/GlobalEvent'
-import {KoboIndex} from '@infoportal-common'
-import {duration, sleep} from '@alexandreannic/ts-utils'
+import {runGenerateKoboInterface} from './script/BuildTypeKobo'
+import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -39,6 +38,8 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
+  // await runGenerateKoboInterface()
+  // return
   // await cleanMpca()
   // return
   // // new ActivityInfoSdk().fetchColumnsFree({
@@ -54,10 +55,10 @@ const startApp = async (conf: AppConf) => {
   // // .then(console.log)
   // // return
   // await Promise.all([
-  //   //   ActivityInfoBuildType.fslc(),
-  //   //   ActivityInfoBuildType.gbv(),
-  //   //   // ActivityInfoBuildType.mineAction(),
-  //   //   ActivityInfoBuildType.snfi(),
+  //   ActivityInfoBuildType.fslc(),
+  //   ActivityInfoBuildType.gbv(),
+  //   ActivityInfoBuildType.mineAction(),
+  //   ActivityInfoBuildType.snfi(),
   //   ActivityInfoBuildType.mpca(),
   //   ActivityInfoBuildType.wash(),
   // ])
@@ -65,13 +66,6 @@ const startApp = async (conf: AppConf) => {
   const prisma = new PrismaClient({
     // log: ['query']
   })
-  // new KoboMetaService(prisma).start()
-  // const event = GlobalEvent.Class.getInstance()
-  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('bn_rapidResponse').id})
-  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('bn_re').id})
-  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('ecrec_cashRegistrationBha').id})
-  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('ecrec_cashRegistration').id})
-  // event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId: KoboIndex.byName('shelter_nta').id})
   //
   // await sleep(duration(1, 'day'))
   // return

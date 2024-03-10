@@ -6,19 +6,12 @@ export const ActivityInfoBuildType = {
     optionsLimit: 200000,
     formId: activityInfoForms.wash,
     name: 'wash',
-    ignoredQuestions: [
-      'Total Reached (All Population Groups)',
-    ],
-    skipQuestion: [
-      /Collective Sites/,
-      /Total Reached \(No Disaggregation\)/,
-      /Oblast/,
-      /Raion/,
-      /Implementing Partner/,
-    ],
+    ignoredQuestions: [],
+    skipQuestion: [],
     skipQuestionsOptions: [
       /Donor Name/,
-      /Reporting Organization/,
+      /Raion/,
+      /Hromada/,
       /Sub-Implementing Partner/,
       /Hromada/,
       /Settlement/,
@@ -28,7 +21,7 @@ export const ActivityInfoBuildType = {
       c6q8ni3lepq77hp3: 'cocmup7lepq89f38',
     },
     filterOptions: {
-      'Organisation': _ => {
+      'Reporting Organization': _ => {
         return _.includes('Danish Refugee Council')
       },
       'Implementing Partner': _ => {
@@ -143,7 +136,6 @@ export const ActivityInfoBuildType = {
       // /MPCA Indicators/,
     ],
     skipQuestionsOptions: [
-      /OblastIndex/,
       /Raion/,
       /Hromada/i,
       /Settlement/,

@@ -5,7 +5,7 @@ import * as fs from 'fs'
 import {ApiClient} from '../core/client/ApiClient'
 import {appConf} from '../core/conf/AppConf'
 import {KoboId} from '../feature/connector/kobo/KoboClient/type/KoboAnswer'
-import {KoboIndex} from '../../../infoportal-common'
+import {KoboIndex} from '@infoportal-common'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string,
@@ -16,7 +16,7 @@ interface KoboInterfaceGeneratorParams {
   overrideAllOptions?: Record<string, string[]>
 }
 
-export const generateKoboInterface = async (koboSdk: KoboSdk, outDir: string) => {
+const generateKoboInterfaceConfig = async (koboSdk: KoboSdk, outDir: string) => {
   const forms: Omit<KoboInterfaceGeneratorParams, 'outDir'>[] = [
     {
       formName: 'Shelter_north', formId: KoboIndex.byName('shelter_north').id,
@@ -68,6 +68,12 @@ export const generateKoboInterface = async (koboSdk: KoboSdk, outDir: string) =>
     {formName: 'Shelter_cashForRepair', formId: KoboIndex.byName('shelter_cashForRepair').id},
     {
       formName: 'Ecrec_cashRegistration', formId: KoboIndex.byName('ecrec_cashRegistration').id, skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
+    },
+    {
+      formName: 'Shelter_cashForShelter', formId: KoboIndex.byName('shelter_cashForShelter').id, skipQuestionTyping: [
         'ben_det_hromada',
         'ben_det_raion',
       ]
@@ -414,7 +420,7 @@ const extractQuestionName = (_: Record<string, any>) => {
   }
 }
 
-(async () => {
+export const runGenerateKoboInterface = async () => {
   const koboSdk = new KoboSdk(new ApiClient({
       baseUrl: appConf.kobo.url + '/api',
       headers: {
@@ -422,8 +428,9 @@ const extractQuestionName = (_: Record<string, any>) => {
       }
     })
   )
-  await generateKoboInterface(
+  await generateKoboInterfaceConfig(
     koboSdk,
     appConf.rootProjectDir + '/src/script/output/kobo',
   )
-})()
+}
+runGenerateKoboInterface()
