@@ -1,6 +1,7 @@
 import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
 import {capitalize, OblastIndex, OblastISO} from '@infoportal-common'
+import {appFeaturesIndex} from '@/features/appFeatureId'
 
 const invalidDate = ''
 
@@ -192,6 +193,7 @@ export const en = Object.freeze({
     displacementStatus: 'Displacement status',
     householdStatus: 'Household Status',
     individuals: 'Individuals',
+    uniqIndividuals: 'Unique individuals (by Tax)',
     submissions: 'Submissions',
     householdSize: 'Household size',
     hhSize: 'HH size',
@@ -408,6 +410,11 @@ export const en = Object.freeze({
       valid: 'Validity',
       viewRegistrationData: 'View Registration Data',
       viewDataCheck: 'View Verification Data',
+    },
+    _meta: {
+      refresh: 'Sync ' + appFeaturesIndex.metaDashboard.name,
+      refreshLong: 'Refresh started, can takes few minutes.',
+      pluggedKobo: 'Plugged Kobo',
     },
     protHHS2: {
       freedomOfMovement: 'Barriers to Freedom of Movement',

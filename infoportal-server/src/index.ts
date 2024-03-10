@@ -6,11 +6,11 @@ import {PrismaClient} from '@prisma/client'
 import {MpcaPaymentService} from './feature/mpca/mpcaPayment/MpcaPaymentService'
 import {DbInit} from './db/DbInit'
 import {logger} from './helper/Logger'
-// import {washRMM} from './feature/connector/activity-info/generatedModel/washRMM'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
+import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -37,9 +37,22 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
+  // await new BuildKoboType().build('Protection_pss')
+  // await cleanMpca()
+  // @ts-ignore
+  // await Promise.all([
+  //   ActivityInfoBuildType.fslc(),
+  //   ActivityInfoBuildType.gbv(),
+  // //   ActivityInfoBuildType.mineAction(),
+  //   ActivityInfoBuildType.snfi(),
+  // //   ActivityInfoBuildType.mpca(),
+  //   ActivityInfoBuildType.wash(),
+  // ])
+  // return
   const prisma = new PrismaClient({
     // log: ['query']
   })
+
   const services = initServices(
     // koboSdk,
     // ecrecAppSdk,

@@ -2,14 +2,28 @@ import {Enum, lazy} from '@alexandreannic/ts-utils'
 import {OblastIndex} from './oblastIndex'
 import {AiOblast, aiOblasts} from './aiOblasts'
 import {hromadas} from './hromadas'
-import {AILocation, raions} from './raions'
+import {raions} from './raions'
 import {Settlement, SettlementIso} from './settlements'
+import {aiRaions} from './aiRaions'
+import {aiHromadas} from './aiHromadas'
+import {aiSettlements} from './aiSettlements'
 // @ts-ignore
 const settlements$ = import('../../ressources/settlements.json').then(_ => _ as Record<SettlementIso, Settlement>)
 // const aiSettlements$ = import('../../ressources/aiSettlements.ts').then(_ => _ as Record<string, string>)
 
 // const settlements = _settlements as any
 // const settlements = JSON.parse(_settlements)
+
+export type AILocation = {
+  iso: string
+  ua: string
+  // ru: string
+  en: string
+  _5w: string
+  parent: string
+  // lat_centroid: number
+  // lon_centroid: number
+}
 
 export class AILocationHelper {
 

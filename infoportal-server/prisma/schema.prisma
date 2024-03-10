@@ -94,15 +94,17 @@ model KoboMeta {
   lastName         String?
   patronymicName   String?
   phone            String?
-  activity         String[]
+  activity         String?
   sector           String?
   office           String?
   project          String[]
   donor            String[]
-  disStatus        String?
+  displacement     String?
   address          String?
   status           String?
-  committedAt      DateTime?
+  amount           Int?
+  lastStatusUpdate DateTime?
+  tags             Json?
 
   persons KoboPerson[]
 

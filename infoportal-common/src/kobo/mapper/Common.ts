@@ -14,8 +14,8 @@ export interface KoboBaseTags {
   _validation?: KoboValidation
 }
 
-export interface KoboTagStatus<T = any> {
-  status: T,
+export interface KoboTagStatus<T = CashStatus> {
+  status?: T,
   lastStatusUpdate?: Date
 }
 

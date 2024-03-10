@@ -1,6 +1,6 @@
 export namespace Protection_pss {
 export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-	// Form id: a8Tn94arrSaH2FQBhUa9Zo
+	// Form id: a52hN5iiCW73mxqqfmEAfp
 	export interface T {
 	    start: string,
 	    end: string,
@@ -26,20 +26,28 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   location: undefined | Option<'location'>,
 	  // introduction/location_other [text] If "Other", please specify
   location_other: string | undefined,
-	  // gi/activity [select_one] Which topic was the group information session about?
+	  // gi/activity [select_one] Which activity have you conducted?
   activity: undefined | Option<'activity'>,
 	  // gi/activity_other [text] If "Other", please specify
   activity_other: string | undefined,
-	  // gi/activity_topic [text] Precise topic
-  activity_topic: string | undefined,
+	  // gi/activity_other_001 [select_one] What is this session?
+  activity_other_001: undefined | Option<'activity_other_001'>,
+	  // gi/cycle_code [text] Group code
+  cycle_code: string | undefined,
 	  // gi/new_ben [select_one] Are they new beneficiaries?
   new_ben: undefined | Option<'new_ben'>,
-	  // gi/new_ben_no [integer] If no new beneficiaries, session number
+	  // gi/new_ben_no [integer] Session number
   new_ben_no: number | undefined,
+	  // gi/cycle_type [select_one] Cycle duration
+  cycle_type: undefined | Option<'cycle_type'>,
+	  // gi/cycle_finished_at [date] Cycle finish date
+  cycle_finished_at: Date | undefined,
 	  // gi/numb_part [integer] Number of participants
   numb_part: number | undefined,
 	  // gi/hh_char_hh_det [begin_repeat] Participant
-  hh_char_hh_det: {hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined,hh_char_hh_det_age: number | undefined | undefined,hh_char_hh_det_status: undefined | Option<'hh_char_hh_det_status'> | undefined}[] | undefined,
+  hh_char_hh_det: {hh_char_hh_name: string | undefined | undefined,hh_char_hh_new_ben: undefined | Option<'hh_char_hh_new_ben'> | undefined,hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined,hh_char_hh_det_age: number | undefined | undefined,hh_char_hh_det_status: undefined | Option<'hh_char_hh_det_status'> | undefined,hh_char_hh_session: undefined | Option<'hh_char_hh_session'>[] | undefined}[] | undefined,
+	  // gi/top_type_act [text] Topic/Type of activity
+  top_type_act: string | undefined,
 	  // gi/comments [text] Comments
   comments: string | undefined,
 	}
@@ -146,11 +154,64 @@ staff_code_001: {
 },
 project: {
 	'bha': `UKR-000284 BHA`,
-	'novo': `UKR-000298 Novo Nordisk`,
+	'bha2': `UKR-000345 BHA`,
 	'okf': `UKR-000309 OKF`,
 	'uhf4': `UKR-000314 UHF IV`,
-	'echo': `UKR-000322 ECHO`,
-	'uhf6': `UKR-000336 UHF VI`
+	'uhf6': `UKR-000336 UHF VI`,
+	'echo': `UKR-000322 ECHO`
+},
+location: {
+	'logow': `Governmental collective site`,
+	'lopri': `Private collective site`,
+	'lohum': `Humanitarian hub`,
+	'locso': `CSO/CBO premises`,
+	'loloc': `Local authorities' premises`,
+	'locom': `Community space`,
+	'loedu': `Educational facility`,
+	'lopub': `Public service building`,
+	'loeres': `Resilience hubs`,
+	'other': `Other`
+},
+hh_char_hh_det_gender: {
+	'male': `Male`,
+	'female': `Female`,
+	'other': `Other`,
+	'unspecified': `Unspecified`
+},
+activity: {
+	'mhpss': `MHPSS awareness session`,
+	'pfa': `Psychological first aid (PFA)`,
+	'rsa': `Recreational/Social Activity`,
+	'fra': `Focused recreational activity`,
+	'pgs': `Psychosocial group session`,
+	'ace': `Commemorative event / community event`,
+	'ais': `Individual session`,
+	'other': `Other`
+},
+new_ben: {
+	'yes': `Yes`,
+	'no': `No`,
+	'bno': `Both new and old beneficiaries`
+},
+hh_char_hh_det_status: {
+	'idp': `IDP`,
+	'returnee': `Returnee`,
+	'non-displaced': `Non-displaced`,
+	'unspec': `Unspecified`,
+	'other': `Other`
+},
+hh_char_hh_new_ben: {
+	'yes': `Yes`,
+	'no': `No`
+},
+cycle_type: {
+	'short': `Short (5 sessions)`,
+	'long': `Long (8 sessions)`
+},
+activity_other_001: {
+	'fise': `First session`,
+	'fose': `Follow session`,
+	'bofi': `Both first session and follow session`
 },
 ben_det_oblast: {
 	'cherkaska': `Cherkaska`,
@@ -179,42 +240,15 @@ ben_det_oblast: {
 	'zaporizka': `Zaporizka`,
 	'zhytomyrska': `Zhytomyrska`
 },
-location: {
-	'logow': `Governmental collective site`,
-	'lopri': `Private collective site`,
-	'lohum': `Humanitarian hub`,
-	'locso': `CSO/CBO premises`,
-	'loloc': `Local authorities' premises`,
-	'locom': `Community space`,
-	'loedu': `Educational facility`,
-	'lopub': `Public service building`,
-	'loeres': `Resilience hubs`,
-	'lodrc': `DRC WGSS`,
-	'looth': `Other WGSS`,
-	'other': `Other`
-},
-activity: {
-	'gpt': `General protection topic`,
-	'let': `Legal topic`,
-	'pss': `PSS topic`,
-	'other': `Other`
-},
-new_ben: {
-	'yes': `Yes`,
-	'no': `No`
-},
-hh_char_hh_det_gender: {
-	'male': `Male`,
-	'female': `Female`,
-	'other': `Other`,
-	'unspecified': `Unspecified`
-},
-hh_char_hh_det_status: {
-	'idp': `IDP`,
-	'returnee': `Returnee`,
-	'non-displaced': `Non-displaced`,
-	'unspec': `Unspecified`,
-	'other': `Other`
+hh_char_hh_session: {
+	'session1': `Session 1`,
+	'session2': `Session 2`,
+	'session3': `Session 3`,
+	'session4': `Session 4`,
+	'session5': `Session 5`,
+	'session6': `Session 6`,
+	'session7': `Session 7`,
+	'session8': `Session 8`
 }}
 
 const extractQuestionName = (_: Record<string, any>) => {
@@ -231,9 +265,11 @@ export const map = (_: Record<keyof T, any>): T => ({
 	..._,
 	date: _.date ? new Date(_.date) : undefined,
 	new_ben_no: _.new_ben_no ? +_.new_ben_no : undefined,
+	cycle_finished_at: _.cycle_finished_at ? new Date(_.cycle_finished_at) : undefined,
 	numb_part: _.numb_part ? +_.numb_part : undefined,
 	hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName).map((_: any) => {
 		_['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
+		_['hh_char_hh_session'] = _.hh_char_hh_session?.split(' ')
 		return _	
 }),
 }) as T

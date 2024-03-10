@@ -50,6 +50,7 @@ export const activityInfoForms = {
   generalProtectionRmm: 'czd5jf7lqf2zv4r4r',
   mineAction: 'cmnzatklqv1q3s243u',
   snfi: 'c95ky7klr95z6ia3v',
+  fslc: 'chxr3zlqc5qatg2',
   wash: 'cz86p3tlqc7h66y2',
   mpca: 'c9vv9j8lqm633lj1tm',
   gbv: 'c6mrp6dlqv1q7q243w',

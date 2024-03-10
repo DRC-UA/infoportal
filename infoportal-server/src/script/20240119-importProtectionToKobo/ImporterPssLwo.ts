@@ -76,7 +76,7 @@ export namespace ImportPssLwo {
         }),
       },
       gi: {
-        activity: 'pss',
+        activity: 'mhpss',
         activity_topic: _.Topic,
         new_ben: 'yes',
         new_ben_no: +_['Session No'],

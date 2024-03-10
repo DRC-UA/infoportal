@@ -30,7 +30,6 @@ interface XLSD {
       const ta = taAnswers.find(_ => _.nta_id === j['DRC reference number'])
       if (!ta) throw new Error('')
       if (!ta.tags) ta.tags = {}
-      console.log(`Update ${ta.id}`, ta.nta_id, j['Contract number'])
       ta.tags.agreement = j['Contract number']
       await prisma.koboAnswers.update({
         where: {id: ta.id},

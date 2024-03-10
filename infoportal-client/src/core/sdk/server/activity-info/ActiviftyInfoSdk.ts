@@ -1,10 +1,9 @@
 import {ApiClient} from '../ApiClient'
-import {AiTypeProtectionRmm} from '@/features/ActivityInfo/Protection/aiProtectionGeneralInterface'
 import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 
 interface ActivityInfoRequest {
   activityIdPrefix: string
-  activity: any
+  activity: Record<string, any>
   activityYYYYMM: string
   activityIndex: number
   formId: string
@@ -13,10 +12,6 @@ interface ActivityInfoRequest {
 
 export class ActivityInfoSdk {
   constructor(private client: ApiClient) {
-  }
-
-  static readonly formId = {
-    mpca: 'cxeirf9ldwx90rs6'
   }
 
   static readonly makeRecordRequest = (params: ActivityInfoRequest): ActiviftyInfoRecords => {
@@ -35,9 +30,10 @@ export class ActivityInfoSdk {
     subformId,
     subActivities,
   }: ActivityInfoRequest & {
-    subformId: string,
-    subActivities: any[]
+    subformId?: string,
+    subActivities?: Record<string, any>[]
   }) => {
+    activityYYYYMM = activityYYYYMM.replace('-', '')
     const parentRequest = ActivityInfoSdk.makeRecordRequestContent({
       activityIdPrefix,
       activity,
@@ -49,7 +45,7 @@ export class ActivityInfoSdk {
     return {
       'changes': [
         parentRequest,
-        ...subActivities.map((_, i) =>
+        ...subformId ? subActivities?.map((_, i) =>
           ActivityInfoSdk.makeRecordRequestContent({
             activity: _,
             activityIndex: i,
@@ -57,7 +53,7 @@ export class ActivityInfoSdk {
             activityIdPrefix: activityIdPrefix + 'i' + ('' + i).padStart(3, '0'),
             formId: subformId,
             parentRecordId: parentRequest.recordId,
-          }))
+          })) ?? [] : []
       ]
     }
   }
@@ -78,7 +74,7 @@ export class ActivityInfoSdk {
     }
   }
 
-  readonly submitActivity = (body: AiTypeProtectionRmm.FormParams[]) => {
+  readonly submitActivity = (body: ActiviftyInfoRecords[]) => {
     return this.client.post(`/activity-info/activity`, {body})
   }
 

@@ -61,6 +61,7 @@ export const appConfig = {
     mealReferralMatrix: 'https://drcngo.sharepoint.com/:x:/r/sites/UKRPortal/_layouts/15/Doc.aspx?sourcedoc=%7B401B9D94-94AF-4D88-A85D-BBCCAC7196FE%7D&file=DRC%20Ukraine%20CFM%20Referral%20Matrix_updated.xlsx&action=default&mobileredirect=true'
   },
   icons: {
+    sector: 'category',
     program: 'book',
     koboForm: appFeaturesIndex.kobo_database.materialIcons,
     donor: 'handshake',

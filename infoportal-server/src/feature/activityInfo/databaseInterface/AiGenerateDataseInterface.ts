@@ -1,133 +1,9 @@
-import {AiProtectionHhs} from '../sandbox/AiProtectionHhs'
 import {ActivityInfoSdk} from '../sdk/ActivityInfoSdk'
-import {activityInfoForms, AIID, FormDesc, FormDescs} from '../model/ActivityInfo'
+import {AIID, FormDesc, FormDescs} from '../model/ActivityInfo'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import fs from 'fs'
 import {capitalize} from '@infoportal-common'
 import {appConf} from '../../../core/conf/AppConf'
-import columnsListMap = AiProtectionHhs.columnsListMap
-import {getObj} from '../../../helper/Utils'
-
-export const ActivityInfoBuildType = {
-  wash: () => generateDatabaseInterface({
-    optionsLimit: 200000,
-    formId: activityInfoForms.wash,
-    name: 'wash',
-    ignoredQuestions: [
-      'Total Reached (All Population Groups)',
-    ],
-    skipQuestion: [
-      /Collective Sites/,
-      /Total Reached \(No Disaggregation\)/,
-      /Oblast/,
-      /Raion/,
-      /Implementing Partner/,
-    ],
-    skipQuestionsOptions: [
-      /Donor Name/,
-      /Reporting Organization/,
-      /Sub-Implementing Partner/,
-      /Hormada/,
-      /Settlement/,
-    ],
-    pickSpecificOptionSet: {
-      cg7insdlee1c3h0s: 'cbc6ncylee1d4ulu',
-      c6q8ni3lepq77hp3: 'cocmup7lepq89f38',
-    },
-    filterOptions: {
-      'Organisation': _ => {
-        return _.includes('Danish Refugee Council')
-      },
-      'Implementing Partner': _ => {
-        return _.includes('Danish Refugee Council')
-      }
-    }
-  }),
-
-  snfi: () => generateDatabaseInterface({
-    formId: activityInfoForms.snfi,
-    name: 'snfi',
-    skipQuestionsOptions: [
-      /Oblast/,
-      /Raion/,
-      /Hromada/,
-      /Settlement/,
-      /Collective Site/,
-    ],
-    filterOptions: {
-      'Reporting Organization': _ => {
-        return _.includes('Danish Refugee Council')
-      },
-      'Implementing Partner': _ => {
-        return _.includes('Danish Refugee Council')
-      }
-    },
-  }),
-
-  generalProtection: () => generateDatabaseInterface({
-    formId: activityInfoForms.generalProtectionRmm,
-    name: 'generalProtection',
-    filterOptions: {
-      'Reporting Organization': _ => {
-        return _.includes('Danish Refugee Council')
-      },
-    },
-    skipQuestionsOptions: [
-      /Implementing Partner/,
-      /Implementing Partner 2/,
-      /OblastIndex/,
-      /Raion/,
-      /Hormada/,
-      /Settlement/,
-      /Collective Site/,
-    ]
-  }),
-  mineAction: () => generateDatabaseInterface({
-    formId: activityInfoForms.mineAction,
-    name: 'mineAction',
-    filterOptions: {
-      'Reporting Organization': _ => {
-        return _.includes('Danish Refugee Council')
-      },
-    },
-    skipQuestionsOptions: [
-      /Implementing Partner/,
-      /Implementing Partner 2/,
-      /OblastIndex/,
-      /Raion/,
-      /Hormada/,
-      /Settlement/,
-      /Collective Site/,
-    ]
-  }),
-
-  mpca: () => generateDatabaseInterface({
-    optionsLimit: 200,
-    formId: activityInfoForms.mpca,
-    name: 'mpca',
-    ignoredQuestions: [],
-    skipQuestion: [
-      /MPCA Indicators/,
-      /Donor/,
-      // /Implementing Partner/,
-      // /MPCA Indicators/,
-    ],
-    skipQuestionsOptions: [
-      /Implementing Partner/,
-      /OblastIndex/,
-      /Raion/,
-      /Hromada/i,
-      /Settlement/,
-      /Collective Site/,
-    ],
-    pickSpecificOptionSet: {},
-    filterOptions: {
-      'Reporting Organization': _ => {
-        return _.includes('Danish Refugee Council')
-      },
-    }
-  })
-}
 
 interface AiFormOption {
   id: string
@@ -144,10 +20,10 @@ interface AIFormInformation {
   required?: boolean
 }
 
-const generateDatabaseInterface = async ({
+export const generateDatabaseInterface = async ({
   formId,
   name,
-  optionsLimit = 20,
+  optionsLimit = 100,
   ignoredQuestions = [],
   pickSpecificOptionSet = {},
   skipQuestionsOptions = [],
@@ -216,10 +92,7 @@ const generateDatabaseInterface = async ({
     const getRandomOptions = () => {
       return (f[optionId].schema.elements.find(_ => _.code === e.code || (_.code ?? '').includes('ENG')) ?? f[optionId].schema.elements[0]).id
     }
-    const optionDefId = pickSpecificOptionSet[optionId] ?? getObj(columnsListMap, optionId)?.labelsId ?? getRandomOptions()
-    if (formId === 'c8uhbuclqb1fjlg2') {
-      console.log('optionDefId', optionDefId)
-    }
+    const optionDefId = pickSpecificOptionSet[optionId] ?? getRandomOptions()
     // const optionDefId = pickSpecificOptionSet[optionId] ?? getObj(columnsListMap, optionId)?.listId ?? getRandomOptions()
     const options = await x.fetchColumns(
       optionId,
@@ -288,7 +161,7 @@ const generateDatabaseInterface = async ({
   }
 
   const isFetchingQuestionOptionBlocked = (label: string) => {
-    return !!skipQuestionsOptions.find(_ => _.test(label))
+    return !!skipQuestionsOptions.find(_ => _.test(label.trim()))
   }
 
   const generateMappingFn = (d: AIFormInformation[], prefix = '') => {

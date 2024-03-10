@@ -45,7 +45,7 @@ export const AppHeaderFeatures = (props: Omit<IpIconBtnProps, 'children'>) => {
                     <FeatureLogo
                       key={feature.id}
                       feature={feature}
-                      iconSize={40}
+                      iconSize={44}
                       sx={{
                         display: 'inline-block',
                         height: iconSize,

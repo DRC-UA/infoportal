@@ -1,15 +1,10 @@
 import {UUID} from '../type/Generic'
 import {OblastName} from '../location'
 import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc'
-import {DisplacementStatus, KoboId, PersonDetails} from './mapper'
+import {CashStatus, DisplacementStatus, KoboId, PersonDetails, ShelterTaPriceLevel} from './mapper'
+import {fnSwitch} from '@alexandreannic/ts-utils'
 
-export enum KoboMetaStatus {
-  Committed = 'Committed',
-  Pending = 'Pending',
-  Rejected = 'Rejected',
-}
-
-export type IKoboMeta = {
+export type IKoboMeta<TTag = any> = {
   id: UUID
   uuid: UUID
   formId: KoboId
@@ -27,14 +22,38 @@ export type IKoboMeta = {
   lastName?: string
   patronymicName?: string
   phone?: string
-  disStatus?: DisplacementStatus
+  displacement?: DisplacementStatus
   sector: DrcSector
-  activity: DrcProgram[]
+  activity?: DrcProgram
   office?: DrcOffice
   project?: DrcProject[]
   donor?: DrcDonor[]
   personsCount?: number
   persons?: PersonDetails[]
   status?: KoboMetaStatus
-  committedAt?: Date
+  lastStatusUpdate?: Date
+  tags?: TTag
+}
+
+export enum KoboMetaStatus {
+  Committed = 'Committed',
+  Pending = 'Pending',
+  Rejected = 'Rejected',
+}
+
+export type KoboMetaShelterRepairTags = {
+  damageLevel?: ShelterTaPriceLevel
+}
+
+export namespace KoboMetaHelper {
+  const cashStatus: Partial<Record<CashStatus, KoboMetaStatus>> = {
+    Selected: KoboMetaStatus.Pending,
+    Pending: KoboMetaStatus.Pending,
+    Paid: KoboMetaStatus.Committed,
+    Rejected: KoboMetaStatus.Rejected,
+  }
+
+  export const mapCashStatus = (_?: CashStatus): KoboMetaStatus | undefined => {
+    return fnSwitch(_!, cashStatus, () => undefined)
+  }
 }

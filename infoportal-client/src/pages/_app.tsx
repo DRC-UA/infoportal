@@ -71,7 +71,7 @@ const AppWithConfig = (props: AppProps) => {
       // _ => <StyledEngineProvider injectFirst children={_}/>,
       _ => <LocalizationProvider children={_} dateAdapter={AdapterDateFns}/>,
       _ => <ToastProvider children={_}/>,
-      _ => <ThemeProvider theme={muiTheme({dark: false && settings.darkTheme})} children={_}/>,
+      _ => <ThemeProvider theme={muiTheme({dark: process.env.NODE_ENV === 'development' ? true : false})} children={_}/>,
       _ => <CssBaseline children={_}/>,
       _ => <I18nProvider children={_}/>,
       _ => <MsalProvider children={_} instance={msal}/>,

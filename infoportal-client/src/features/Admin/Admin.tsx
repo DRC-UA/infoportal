@@ -8,6 +8,11 @@ import {Layout} from '@/shared/Layout'
 import {AdminProxy} from '@/features/Admin/AdminProxy'
 import {AdminGroups} from '@/features/Admin/AdminGroups'
 import {appFeaturesIndex} from '@/features/appFeatureId'
+import {IpIconBtn} from '@/shared/IconBtn'
+import {IpBtn} from '@/shared/Btn'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useIpToast} from '@/core/useToast'
+import {useAsync} from '@/shared/hook/useAsync'
 
 export const adminModule = {
   basePath: '/admin',
@@ -21,6 +26,9 @@ export const adminModule = {
 const AdminSidebar = () => {
   const path = (page: string) => '' + page
   const {m} = useI18n()
+  const {api} = useAppSettings()
+  const {toastInfo} = useIpToast()
+  const asyncRefresh = useAsync(api.koboMeta.sync)
   return (
     <Sidebar>
       <SidebarBody>
@@ -39,6 +47,17 @@ const AdminSidebar = () => {
             <SidebarItem icon="settings_input_antenna" active={isActive}>{m.proxy}</SidebarItem>
           }
         </NavLink>
+        <SidebarItem
+          icon={appFeaturesIndex.metaDashboard.materialIcons}
+          onClick={() => asyncRefresh.call().then(() => toastInfo(m._meta.refreshLong))}
+        >
+          {m._meta.refresh}
+          <IpIconBtn
+            color="primary"
+            loading={asyncRefresh.loading}
+            children="cloud_sync"
+          />
+        </SidebarItem>
       </SidebarBody>
     </Sidebar>
   )

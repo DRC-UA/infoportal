@@ -14,6 +14,21 @@ export enum DrcOffice {
 
 export const drcOffices = Obj.values(DrcOffice)
 
+export enum DrcSector {
+  NFI = 'NFI',
+  WaSH = 'WaSH',
+  Education = 'Education',
+  Protection = 'Protection',
+  Livelihoods = 'Livelihoods',
+  FoodSecurity = 'FoodSecurity',
+  MPCA = 'MPCA',
+  Health = 'Health',
+  Nutrition = 'Nutrition',
+  Shelter = 'Shelter',
+  Evacuations = 'Evacuations',
+  EORE = 'EORE',
+}
+
 export enum DrcProgram {
   CashForFuel = 'CashForFuel',
   CashForUtilities = 'CashForUtilities',
@@ -25,8 +40,48 @@ export enum DrcProgram {
   ShelterRepair = 'ShelterRepair',
   ESK = 'ESK',
   InfantWinterClothing = 'InfantWinterClothing',
-  InfantHygieneKit = 'InfantHygieneKit',
-  SectoralCash = 'Sectoral Cash',
+  HygieneKit = 'HygieneKit',
+  SectoralCash = 'SectoralCash',
+  PSS = 'PSS',
+  GBV = 'GBV',
+  ProtectionMonitoring = 'ProtectionMonitoring',
+  AwarenessRaisingSession = 'AwarenessRaisingSession',
+  CommunityLevelPm = 'CommunityLevelPm',
+  Legal = 'Legal',
+  Fgd = 'Fgd',
+  Observation = 'Observation',
+}
+
+export class DrcSectorHelper {
+
+  private static readonly byProgram = {
+    CashForFuel: DrcSector.Shelter,
+    CashForUtilities: DrcSector.Shelter,
+    CashForRent: DrcSector.Shelter,
+    CashForRepair: DrcSector.Shelter,
+    CashForEducation: DrcSector.Shelter,
+    MPCA: DrcSector.MPCA,
+    NFI: DrcSector.NFI,
+    ShelterRepair: DrcSector.Shelter,
+    ESK: DrcSector.Shelter,
+    InfantWinterClothing: DrcSector.NFI,
+    HygieneKit: DrcSector.NFI,
+    SectoralCash: DrcSector.NFI,
+
+  } as const
+
+  private static readonly autoValidatedActivity = new Set([
+    DrcProgram.NFI,
+    DrcProgram.HygieneKit,
+    DrcProgram.ESK,
+    DrcProgram.InfantWinterClothing,
+  ])
+  static readonly isAutoValidatedActivity = (_: DrcProgram) => DrcSectorHelper.autoValidatedActivity.has(_)
+
+  static readonly findByProgram = (p: DrcProgram): DrcSector => {
+    // @ts-ignore
+    return DrcSectorHelper.byProgram[p]
+  }
 }
 
 export const drcOfficeShort: Record<DrcOffice, string> = {
@@ -39,23 +94,6 @@ export const drcOfficeShort: Record<DrcOffice, string> = {
   [DrcOffice.Dnipro]: 'DNK',
   [DrcOffice.Poltava]: 'Poltava',
   [DrcOffice.Chernivtsi]: 'Chernivtsi',
-}
-
-export enum DrcSector {
-  NFI = 'NFI',
-  WaSH = 'WaSH',
-  Protection = 'Protection',
-  PSS = 'PSS',
-  Education = 'Education',
-  Livelihoods = 'Livelihoods',
-  FoodSecurity = 'FoodSecurity',
-  MPCA = 'MPCA',
-  Health = 'Health',
-  Nutrition = 'Nutrition',
-  Shelter = 'Shelter',
-  Evacuations = 'Evacuations',
-  GBV = 'GBV',
-  EORE = 'EORE',
 }
 
 export enum DrcDonor {
@@ -98,6 +136,7 @@ export enum DrcProject {
   'UKR-000342 Pooled Funds' = 'UKR-000342 Pooled Funds',
   'UKR-000249 Finnish MFA' = 'UKR-000249 Finnish MFA',
   'UKR-000293 French MFA' = 'UKR-000293 French MFA',
+  'UKR-000355 Danish MFA' = 'UKR-000355 Danish MFA',
   'UKR-000255 EU IcSP' = 'UKR-000255 EU IcSP',
   'UKR-000230 PM WRA' = 'UKR-000230 PM WRA',
   'UKR-000231 PM WKA' = 'UKR-000231 PM WKA',
@@ -157,6 +196,14 @@ export class DrcProjectHelper {
       })
       return acc
     }, {} as Record<DrcProject, DrcDonor>)
+
+  static readonly extractCode = (str?: string): string | undefined => {
+    return str?.match(/UKR.(000\d\d\d)/)?.[1]
+  }
+
+  static readonly search = (str?: string): DrcProject | undefined => {
+    return DrcProjectHelper.searchByCode(DrcProjectHelper.extractCode(str))
+  }
 
   static readonly searchByCode = (code?: string): DrcProject | undefined => {
     if (code) return Obj.values(DrcProject).find(_ => _.includes(code))

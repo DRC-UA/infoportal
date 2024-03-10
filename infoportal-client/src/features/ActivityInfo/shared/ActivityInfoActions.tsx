@@ -3,7 +3,7 @@ import {AnswerTable} from './AnswerTable'
 import {Modal} from 'mui-extension/lib/Modal'
 import {useI18n} from '@/core/i18n'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {AiBundle} from '@/features/ActivityInfo/shared/AiType'
+import {AiBundle} from '@/features/ActivityInfo/shared/AiBundle'
 import {IpBtnProps} from '@/shared/Btn'
 
 export const ActivityInfoActions = ({

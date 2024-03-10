@@ -3,18 +3,20 @@ import {DrcOffice, DrcProjectHelper} from '../../type/Drc'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex} from '../../location'
 import {Person} from '../../type/Person'
-import {DisplacementStatus, PersonDetails, WgDisability} from './Common'
+import {DisplacementStatus, KoboAnswer, KoboBaseTags, KoboTagStatus, PersonDetails, WgDisability} from './Common'
 
 export namespace KoboGeneralMapping {
 
-  type XlsKoboIndividual = Pick<NonNullable<Ecrec_cashRegistration.T['hh_char_hh_det']>[0],
-    'hh_char_hh_det_gender' |
-    'hh_char_hh_det_age' |
+  type XlsIndividualBase = NonNullable<Ecrec_cashRegistration.T['hh_char_hh_det']>[0]
+  export type XlsKoboIndividual = {
+    'hh_char_hh_det_gender'?: 'male' | 'female' | 'other' | 'unspecified' | 'unable_unwilling_to_answer'
+    'hh_char_hh_det_age'?: number
+  } & Partial<Pick<XlsIndividualBase,
     'hh_char_hh_det_dis_select' |
     'hh_char_hh_det_dis_level'
-  > & Partial<Pick<Ecrec_cashRegistration.T, 'ben_det_res_stat'>>
+  >> & Partial<Pick<Ecrec_cashRegistration.T, 'ben_det_res_stat'>>
 
-  type XlsKoboIndividuals = Partial<Pick<Ecrec_cashRegistration.T,
+  export type XlsKoboIndividuals = Partial<Pick<Ecrec_cashRegistration.T,
     'hh_char_dis_select' |
     'hh_char_dis_level' |
     // 'hh_char_hh_det' |
@@ -39,6 +41,19 @@ export namespace KoboGeneralMapping {
     kharkiv: DrcOffice.Kharkiv,
     mykolaiv: DrcOffice.Mykolaiv,
   }, () => undefined)
+
+  type XlsDisplacementStatus = NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status'] | Bn_Re.T['ben_det_res_stat']
+
+  export const mapDisplacementStatus = (_?: XlsDisplacementStatus): DisplacementStatus | undefined => {
+    return fnSwitch(_!, {
+      idp: DisplacementStatus.Idp,
+      long_res: DisplacementStatus.NonDisplaced,
+      ret: DisplacementStatus.Returnee,
+      ref_asy: DisplacementStatus.Refugee,
+      returnee: DisplacementStatus.Returnee,
+      'non-displaced': DisplacementStatus.NonDisplaced,
+    }, () => undefined)
+  }
 
   export const mapProject = (_?: string) => {
     if (!_) return
@@ -71,12 +86,7 @@ export namespace KoboGeneralMapping {
   }): PersonDetails => {
     const res: PersonDetails = KoboGeneralMapping.mapPerson(p as any)
     if (p.hh_char_hh_det_status)
-      res.displacement = fnSwitch(p.hh_char_hh_det_status!, {
-        idp: DisplacementStatus.Idp,
-        returnee: DisplacementStatus.Returnee,
-        'non-displaced': DisplacementStatus.NonDisplaced,
-        ['non_displaced' as any]: DisplacementStatus.NonDisplaced,
-      }, () => undefined)
+      res.displacement = mapDisplacementStatus(p.hh_char_hh_det_status)
     else
       res.displacement = fnSwitch(p.ben_det_res_stat!, {
         idp: DisplacementStatus.Idp,
@@ -124,6 +134,11 @@ export namespace KoboGeneralMapping {
     const custom = KoboGeneralMapping.getIndividualBreakdown(p)
     ;(row as any).custom = custom
     return (row as any)
+  }
+
+  export const handleStatus = <T extends KoboAnswer<{}, KoboBaseTags & KoboTagStatus>>(row: T): T => {
+    if (row.tags?.lastStatusUpdate) row.tags.lastStatusUpdate = new Date(row.tags?.lastStatusUpdate)
+    return row
   }
 
   export const addIndividualBreakdownColumnForRrm = (row: Bn_RapidResponse.T): Bn_RapidResponse.T & {custom: IndividualBreakdown} => {

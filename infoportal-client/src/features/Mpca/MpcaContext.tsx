@@ -1,6 +1,6 @@
 import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
 import {MicrosoftGraphClient} from '@/core/sdk/microsoftGraph/microsoftGraphClient'
-import {DrcProjectHelper, KoboIndex, NonNullableKey} from '@infoportal-common'
+import {CashStatus, DrcProjectHelper, KoboIndex, NonNullableKey} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {MpcaPayment} from '@/core/sdk/server/mpcaPaymentTool/MpcaPayment'
 import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
@@ -9,6 +9,7 @@ import {Enum, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {KoboAnswerId, KoboId} from '@/core/sdk/server/kobo/Kobo'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
+import {SelectCashStatus} from '@/shared/customInput/SelectStatus'
 
 // [DONORS according to Alix]
 
@@ -72,7 +73,7 @@ export const MpcaProvider = ({
     return fetcherData.get?.map(_ => {
       _.finalProject = _.tags?.projects?.[0] ?? _.project
       _.finalDonor = map(_.tags?.projects?.[0], p => DrcProjectHelper.donorByProject[p]) ?? _.donor
-      _.amountUahCommitted = !!_.tags?.committed ? _.amountUahFinal : 0
+      _.amountUahCommitted = _.tags?.status === CashStatus.Paid ? _.amountUahFinal : 0
       return _
     })
   }, [fetcherData.get])

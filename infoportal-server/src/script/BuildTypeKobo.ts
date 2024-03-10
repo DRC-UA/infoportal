@@ -1,11 +1,11 @@
 import {KoboSdk} from '../feature/connector/kobo/KoboClient/KoboSdk'
-import {fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {KoboApiForm} from '../feature/connector/kobo/KoboClient/type/KoboApiForm'
 import * as fs from 'fs'
 import {ApiClient} from '../core/client/ApiClient'
 import {appConf} from '../core/conf/AppConf'
 import {KoboId} from '../feature/connector/kobo/KoboClient/type/KoboAnswer'
-import {KoboIndex} from '../../../infoportal-common'
+import {KoboIndex} from '@infoportal-common'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string,
@@ -16,207 +16,242 @@ interface KoboInterfaceGeneratorParams {
   overrideAllOptions?: Record<string, string[]>
 }
 
-export const generateKoboInterface = async (koboSdk: KoboSdk, outDir: string) => {
-  const forms: Omit<KoboInterfaceGeneratorParams, 'outDir'>[] = [
-    {
-      formName: 'Shelter_north', formId: KoboIndex.byName('shelter_north').id,
-    },
-    {
-      formName: 'Partnership_partnersDatabase', formId: KoboIndex.byName('partnership_partnersDatabase').id,
-      overrideOptionsByQuestion: {
-        Type_of_organization: {
-          'municipal_organization_or_othe': [`Government-run entity`],
+export class BuildKoboType {
+  constructor(
+    private conf = appConf,
+    private sdk = new KoboSdk(new ApiClient({
+        baseUrl: conf.kobo.url + '/api',
+        headers: {
+          Authorization: KoboSdk.makeAuthorizationHeader(conf.kobo.token),
         }
-      }
-    },
-    {
-      formName: 'Partnership_assessment', formId: KoboIndex.byName('partnership_assessment').id,
-    },
-    {
-      formName: 'Partnership_initialQuestionnaire', formId: KoboIndex.byName('partnership_initialQuestionnaire').id,
-    },
-    {
-      formName: 'Protection_communityMonitoring', formId: KoboIndex.byName('protection_communityMonitoring').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    // {
-    //   formName: 'Protection_hhs2_2',
-    //   formId: 'aQBCaoRUxvtb5BQcv7wnTK',
-    // },
-    {
-      formName: 'Protection_gbv', formId: KoboIndex.byName('protection_gbv').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Protection_groupSession', formId: KoboIndex.byName('protection_groupSession').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Protection_pss', formId: KoboIndex.byName('protection_groupSession').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {formName: 'Bn_cashForRentApplication', formId: KoboIndex.byName('bn_cashForRentApplication').id},
-    {formName: 'Bn_RapidResponse', formId: KoboIndex.byName('bn_rapidResponse').id},
-    {formName: 'Shelter_cashForRepair', formId: KoboIndex.byName('shelter_cashForRepair').id},
-    {
-      formName: 'Ecrec_cashRegistration', formId: KoboIndex.byName('ecrec_cashRegistration').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Ecrec_cashRegistrationBha', formId: KoboIndex.byName('ecrec_cashRegistrationBha').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Meal_VerificationEcrec', formId: KoboIndex.byName('meal_verificationEcrec').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Meal_VerificationWinterization', formId: KoboIndex.byName('meal_verificationWinterization').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Meal_VisitMonitoring', formId: KoboIndex.byName('meal_visitMonitoring').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Meal_CfmInternal', formId: KoboIndex.byName('meal_cfmInternal').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Meal_CfmExternal', formId: KoboIndex.byName('meal_cfmExternal').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Shelter_NTA', formId: KoboIndex.byName('shelter_nta').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Shelter_TA', formId: KoboIndex.byName('shelter_ta').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
-    },
-    {
-      formName: 'Bn_rapidResponseSidar',
-      formId: KoboIndex.byName('bn_rapidResponseSida').id,
-    },
-    {
-      formName: 'Protection_hhs',
-      formId: KoboIndex.byName('protection_hhs2_1').id,
-      overrideAllOptions: {
-        other_specify: ['Other'],
-        health_1_2: ['Health'],
+      })
+    ),
+    private outDir: string = conf.rootProjectDir + '/src/script/output/kobo'
+  ) {
+  }
+
+  static readonly config = Obj.map({
+      Shelter_north: {
+        formId: KoboIndex.byName('shelter_north').id,
       },
-      overrideOptionsByQuestion: {
-        what_are_the_barriers_to_accessing_health_services: {
-          safety_risks_associated_with_access_to_presence_at_health_facility: ['Safety risks associated with access to/presence at health facility'],
-        },
-        what_are_your_main_concerns_regarding_your_accommodation: {
-          'risk_of_eviction': [`Risk of eviction`],
-          'accommodations_condition': [`Accommodation’s condition`],
-          'overcrowded_lack_of_privacy': [`Overcrowded/Lack of privacy`],
-          'lack_of_functioning_utilities': [`Lack of functioning utilities`],
-          'lack_of_connectivity': [`Lack of connectivity`],
-          'security_and_safety_risks': [`Security and safety risks`],
-          'lack_of_financial_compensation_or_rehabilitation_for_damage_or_destruction_of_housing': [`Lack of support for damaged housing`],
-        },
-        what_is_the_type_of_your_household: {
-          'one_person_household': [`One person household`],
-          'couple_without_children': [`Couple without children`],
-          'couple_with_children': [`Couple with children`],
-          'mother_with_children': [`Mother with children`],
-          'father_with_children': [`Father with children`],
-          'extended_family': [`Extended family`],
+      Partnership_partnersDatabase: {
+        formId: KoboIndex.byName('partnership_partnersDatabase').id,
+        overrideOptionsByQuestion: {
+          Type_of_organization: {
+            'municipal_organization_or_othe': [`Government-run entity`],
+          }
         }
-      }
-    },
-    {
-      formName: 'Protection_hhs3',
-      formId: KoboIndex.byName('protection_hhs3').id,
-      overrideAllOptions: {
-        other_specify: ['Other'],
-        health_1_2: ['Health'],
       },
-      overrideOptionsByQuestion: {
-        what_are_the_barriers_to_accessing_health_services: {
-          safety_risks_associated_with_access_to_presence_at_health_facility: ['Safety risks associated with access to/presence at health facility'],
+      Partnership_assessment: {
+        formId: KoboIndex.byName('partnership_assessment').id,
+      },
+      Partnership_initialQuestionnaire: {
+        formId: KoboIndex.byName('partnership_initialQuestionnaire').id,
+      },
+      Protection_communityMonitoring: {
+        formId: KoboIndex.byName('protection_communityMonitoring').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Protection_gbv: {
+        formId: KoboIndex.byName('protection_gbv').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Protection_groupSession: {
+        formId: KoboIndex.byName('protection_groupSession').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Protection_pss: {
+        formId: KoboIndex.byName('protection_pss').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Bn_cashForRentApplication: {
+        formId: KoboIndex.byName('bn_cashForRentApplication').id
+      },
+      Bn_RapidResponse: {
+        formId: KoboIndex.byName('bn_rapidResponse').id
+      },
+      Shelter_cashForRepair: {
+        formId: KoboIndex.byName('shelter_cashForRepair').id
+      },
+      Ecrec_cashRegistration: {
+        formId: KoboIndex.byName('ecrec_cashRegistration').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Shelter_cashForShelter: {
+        formId: KoboIndex.byName('shelter_cashForShelter').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Ecrec_cashRegistrationBha: {
+        formId: KoboIndex.byName('ecrec_cashRegistrationBha').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Meal_VerificationEcrec: {
+        formId: KoboIndex.byName('meal_verificationEcrec').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Meal_VerificationWinterization: {
+        formId: KoboIndex.byName('meal_verificationWinterization').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Meal_VisitMonitoring: {
+        formId: KoboIndex.byName('meal_visitMonitoring').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Meal_CfmInternal: {
+        formId: KoboIndex.byName('meal_cfmInternal').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Meal_CfmExternal: {
+        formId: KoboIndex.byName('meal_cfmExternal').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Shelter_NTA: {
+        formId: KoboIndex.byName('shelter_nta').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Shelter_TA: {
+        formId: KoboIndex.byName('shelter_ta').id, skipQuestionTyping: [
+          'ben_det_hromada',
+          'ben_det_raion',
+        ]
+      },
+      Bn_rapidResponseSidar: {
+        formId: KoboIndex.byName('bn_rapidResponseSida').id,
+      },
+      Protection_hhs: {
+        formId: KoboIndex.byName('protection_hhs2_1').id,
+        overrideAllOptions: {
+          other_specify: ['Other'],
+          health_1_2: ['Health'],
         },
-        what_are_your_main_concerns_regarding_your_accommodation: {
-          'risk_of_eviction': [`Risk of eviction`],
-          'accommodations_condition': [`Accommodation’s condition`],
-          'overcrowded_lack_of_privacy': [`Overcrowded/Lack of privacy`],
-          'lack_of_functioning_utilities': [`Lack of functioning utilities`],
-          'lack_of_connectivity': [`Lack of connectivity`],
-          'security_and_safety_risks': [`Security and safety risks`],
-          'lack_of_financial_compensation_or_rehabilitation_for_damage_or_destruction_of_housing': [`Lack of support for damaged housing`],
-        },
-        what_is_the_type_of_your_household: {
-          'one_person_household': [`One person household`],
-          'couple_without_children': [`Couple without children`],
-          'couple_with_children': [`Couple with children`],
-          'mother_with_children': [`Mother with children`],
-          'father_with_children': [`Father with children`],
-          'extended_family': [`Extended family`],
+        overrideOptionsByQuestion: {
+          what_are_the_barriers_to_accessing_health_services: {
+            safety_risks_associated_with_access_to_presence_at_health_facility: ['Safety risks associated with access to/presence at health facility'],
+          },
+          what_are_your_main_concerns_regarding_your_accommodation: {
+            'risk_of_eviction': [`Risk of eviction`],
+            'accommodations_condition': [`Accommodation’s condition`],
+            'overcrowded_lack_of_privacy': [`Overcrowded/Lack of privacy`],
+            'lack_of_functioning_utilities': [`Lack of functioning utilities`],
+            'lack_of_connectivity': [`Lack of connectivity`],
+            'security_and_safety_risks': [`Security and safety risks`],
+            'lack_of_financial_compensation_or_rehabilitation_for_damage_or_destruction_of_housing': [`Lack of support for damaged housing`],
+          },
+          what_is_the_type_of_your_household: {
+            'one_person_household': [`One person household`],
+            'couple_without_children': [`Couple without children`],
+            'couple_with_children': [`Couple with children`],
+            'mother_with_children': [`Mother with children`],
+            'father_with_children': [`Father with children`],
+            'extended_family': [`Extended family`],
+          }
         }
-      }
-    },
-    {
-      formName: 'Bn_0_mpcaRegNewShort', formId: KoboIndex.byName('bn_0_mpcaRegNewShort').id, skipQuestionTyping: ['hromada', 'raion']
-    },
-    {
-      formName: 'Bn_0_mpcaReg', formId: KoboIndex.byName('bn_0_mpcaReg').id, skipQuestionTyping: ['hromada', 'raion']
-    },
-    {
-      formName: 'Bn_0_mpcaRegNoSig', formId: KoboIndex.byName('bn_0_mpcaRegNoSig').id, skipQuestionTyping: ['hromada', 'raion']
-    },
-    {
-      formName: 'Bn_0_mpcaRegESign', formId: KoboIndex.byName('bn_0_mpcaRegESign').id, skipQuestionTyping: ['hromada', 'raion']
-    },
-    {formName: 'Bn_Re', formId: KoboIndex.byName('bn_re').id},
-    {formName: 'Bn_OldMpcaNfi', formId: KoboIndex.byName('bn_1_mpcaNfi').id},
-    {formName: 'Bn_OldMpcaNfiNaa', formId: KoboIndex.byName('bn_1_mpcaNfiNaa').id},
-    {formName: 'Bn_OldMpcaNfiMyko', formId: KoboIndex.byName('bn_1_mpcaNfiMyko').id},
-    {
-      formName: 'Bn_cashForRentRegistration',
-      formId: KoboIndex.byName('bn_cashForRentRegistration').id,
-      skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion',]
-    },
-    {
-      formName: 'Protection_hhs2', formId: KoboIndex.byName('protection_hhs2').id,
-      overrideAllOptions: {
-        health_1_2: ['Health'],
       },
-    },
-    {formName: 'Safety_incidentTracker', formId: KoboIndex.byName('safety_incident').id},
-  ]
-  return Promise.all(forms.map(f => new KoboInterfaceGenerator(koboSdk, {
-    outDir,
-    ...f,
-  }).generate()))
+      Protection_hhs3: {
+        formId: KoboIndex.byName('protection_hhs3').id,
+        overrideAllOptions: {
+          other_specify: ['Other'],
+          health_1_2: ['Health'],
+        },
+        overrideOptionsByQuestion: {
+          what_are_the_barriers_to_accessing_health_services: {
+            safety_risks_associated_with_access_to_presence_at_health_facility: ['Safety risks associated with access to/presence at health facility'],
+          },
+          what_are_your_main_concerns_regarding_your_accommodation: {
+            'risk_of_eviction': [`Risk of eviction`],
+            'accommodations_condition': [`Accommodation’s condition`],
+            'overcrowded_lack_of_privacy': [`Overcrowded/Lack of privacy`],
+            'lack_of_functioning_utilities': [`Lack of functioning utilities`],
+            'lack_of_connectivity': [`Lack of connectivity`],
+            'security_and_safety_risks': [`Security and safety risks`],
+            'lack_of_financial_compensation_or_rehabilitation_for_damage_or_destruction_of_housing': [`Lack of support for damaged housing`],
+          },
+          what_is_the_type_of_your_household: {
+            'one_person_household': [`One person household`],
+            'couple_without_children': [`Couple without children`],
+            'couple_with_children': [`Couple with children`],
+            'mother_with_children': [`Mother with children`],
+            'father_with_children': [`Father with children`],
+            'extended_family': [`Extended family`],
+          }
+        }
+      },
+      Bn_0_mpcaRegNewShort: {
+        formId: KoboIndex.byName('bn_0_mpcaRegNewShort').id, skipQuestionTyping: ['hromada', 'raion']
+      },
+      Bn_0_mpcaReg: {
+        formId: KoboIndex.byName('bn_0_mpcaReg').id, skipQuestionTyping: ['hromada', 'raion']
+      },
+      Bn_0_mpcaRegNoSig: {
+        formId: KoboIndex.byName('bn_0_mpcaRegNoSig').id, skipQuestionTyping: ['hromada', 'raion']
+      },
+      Bn_0_mpcaRegESign: {
+        formId: KoboIndex.byName('bn_0_mpcaRegESign').id, skipQuestionTyping: ['hromada', 'raion']
+      },
+      Bn_Re: {
+        formId: KoboIndex.byName('bn_re').id
+      },
+      Bn_OldMpcaNfi: {
+        formId: KoboIndex.byName('bn_1_mpcaNfi').id
+      },
+      Bn_OldMpcaNfiNaa: {
+        formId: KoboIndex.byName('bn_1_mpcaNfiNaa').id
+      },
+      Bn_OldMpcaNfiMyko: {
+        formId: KoboIndex.byName('bn_1_mpcaNfiMyko').id
+      },
+      Bn_cashForRentRegistration: {
+        formId: KoboIndex.byName('bn_cashForRentRegistration').id,
+        skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion',]
+      },
+      Protection_hhs2: {
+        formId: KoboIndex.byName('protection_hhs2').id,
+        overrideAllOptions: {
+          health_1_2: ['Health'],
+        },
+      },
+      Safety_incidentTracker: {
+        formId: KoboIndex.byName('safety_incident').id
+      },
+    }, (k, v) => [k, {formName: k, ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>]
+  )
+
+  readonly build = (f: keyof typeof BuildKoboType['config']) => {
+    return new KoboInterfaceGenerator(this.sdk, {
+      outDir: this.outDir,
+      ...BuildKoboType.config[f],
+    }).generate()
+  }
+
+  readonly buildAll = () => {
+    return Promise.all(Obj.keys(BuildKoboType.config).map(this.build))
+  }
 }
 
 const ignoredQuestionTypes: KoboApiForm['content']['survey'][0]['type'][] = [
@@ -334,9 +369,7 @@ const extractQuestionName = (_: Record<string, any>) => {
 
   // readonly skipQuestionInBeginRepeat = (survey: KoboApiForm['content']['survey']) => (_: KoboApiForm['content']['survey'][0]) => {
   //   const repeatItem = this.getBeginRepeatQuestion(survey)
-  //   console.log(repeatItem)
   //   return _ => repeatItem.every(r => {
-  //     console.log('$qpath', _.$qpath)
   //     return !_.$qpath.includes(r.name + '-')
   //   })
   // }
@@ -415,17 +448,3 @@ const extractQuestionName = (_: Record<string, any>) => {
       + '\n}}'
   }
 }
-
-(async () => {
-  const koboSdk = new KoboSdk(new ApiClient({
-      baseUrl: appConf.kobo.url + '/api',
-      headers: {
-        Authorization: KoboSdk.makeAuthorizationHeader(appConf.kobo.token),
-      }
-    })
-  )
-  await generateKoboInterface(
-    koboSdk,
-    appConf.rootProjectDir + '/src/script/output/kobo',
-  )
-})()

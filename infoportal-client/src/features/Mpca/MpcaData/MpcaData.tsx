@@ -17,6 +17,7 @@ import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {SelectDrcProject} from '@/shared/SelectDrcProject'
 import {Box, FormControlLabel, Switch} from '@mui/material'
 import {useAsync} from '@/shared/hook/useAsync'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
 export const getKoboImagePath = (url: string): string => {
   return appConfig.apiURL + `/kobo-api/${kobo.drcUa.server.prod}/attachment?path=${url.split('api')[1]}`
@@ -58,20 +59,20 @@ export const MpcaData = () => {
                     value: p ? [p] : null,
                   })
                 }}/>
-                <FormControlLabel
-                  sx={{pl: .5, pr: 1.5, py: .5, ml: 0, mr: 1, border: t => '1px solid ' + t.palette.divider, borderRadius: 100}}
-                  label={m.mpca.commit}
-                  control={
-                    <Switch size="small" onChange={(p, checked) => {
-                      ctx.asyncUpdates.call({
-                        answerIds: selected,
-                        key: 'committed',
-                        value: checked ? new Date() : undefined,
-                      })
-                    }}/>
+                {/*<FormControlLabel*/}
+                {/*  sx={{pl: .5, pr: 1.5, py: .5, ml: 0, mr: 1, border: t => '1px solid ' + t.palette.divider, borderRadius: 100}}*/}
+                {/*  label={m.mpca.commit}*/}
+                {/*  control={*/}
+                {/*    <Switch size="small" onChange={(p, checked) => {*/}
+                {/*      ctx.asyncUpdates.call({*/}
+                {/*        answerIds: selected,*/}
+                {/*        key: 'committed',*/}
+                {/*        value: checked ? new Date() : undefined,*/}
+                {/*      })*/}
+                {/*    }}/>*/}
 
-                  }
-                />
+                {/*  }*/}
+                {/*/>*/}
                 {/*<AaSelectSingle*/}
                 {/*  label={m.mpca.committed}*/}
                 {/*  sx={{width: 140, mr: 1}}*/}
@@ -304,31 +305,37 @@ export const MpcaData = () => {
             {type: 'string', id: 'firstName', head: m.firstName, render: _ => _.firstName},
             {type: 'string', id: 'patronyme', head: m.patronyme, render: _ => _.patronyme},
             {
-              id: 'status',
-              head: m.status,
+              id: 'displacement',
+              head: m.displacementStatus,
               render: _ => _.benefStatus,
               type: 'select_one',
               // options: () => SheetUtils.buildOptions(Enum.keys(bn_ReOptions.ben_det_res_stat)),
             },
             {id: 'phone', type: 'string', head: m.phone, render: _ => _.phone},
             {
-              id: 'committed',
+              id: 'status',
               type: 'select_one',
-              head: m.mpca.committed,
-              tooltip: null,
-              renderValue: row => row.tags?.committed ? 'true' : 'false',
-              renderOption: row => row.tags?.committed ? m.mpca.committed : SheetUtils.blankLabel,
-              render: row => (
-                <>
-                  <Switch size="small" checked={!!row.tags?.committed} onChange={(e, checked) => ctx.asyncUpdates.call({
-                    formId: KoboIndex.byName(row.source).id,
-                    answerIds: [row.id],
-                    key: 'committed',
-                    value: checked ? new Date() : null,
-                  })}/>
-                </>
-              )
+              head: m.status,
+              render: _ => _.tags?.status ?? DatatableUtils.blank,
             }
+            // {
+            //   id: 'committed',
+            //   type: 'select_one',
+            //   head: m.mpca.committed,
+            //   tooltip: null,
+            //   renderValue: row => row.tags?.committed ? 'true' : 'false',
+            //   renderOption: row => row.tags?.committed ? m.mpca.committed : SheetUtils.blankLabel,
+            //   render: row => (
+            //     <>
+            //       <Switch size="small" checked={!!row.tags?.committed} onChange={(e, checked) => ctx.asyncUpdates.call({
+            //         formId: KoboIndex.byName(row.source).id,
+            //         answerIds: [row.id],
+            //         key: 'committed',
+            //         value: checked ? new Date() : null,
+            //       })}/>
+            //     </>
+            //   )
+            // }
           ]}
         />
       </Panel>

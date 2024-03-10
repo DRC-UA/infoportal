@@ -10,6 +10,7 @@ import {SidebarHeader} from './SidebarHeader'
 import {stopPropagation} from 'mui-extension'
 import {useI18n} from '../../../core/i18n'
 import {useAppSettings} from '@/core/context/ConfigContext'
+import {appConfig} from '@/conf/AppConfig'
 
 let sidebar: HTMLElement | null = null
 let header: HTMLElement | null = null
@@ -109,7 +110,7 @@ export const Sidebar = ({
         <SidebarBody>{children}</SidebarBody>
         {/*<Icon onClick={() => setDarkTheme(_ => !_)}>{darkTheme ? 'light_mode' : 'dark_mode'}</Icon>*/}
         <SidebarFooter>
-          <SidebarItem disabled={true} onClick={stopPropagation(() => setDarkTheme(_ => !_))} icon="dark_mode" sx={{mr: 0, pr: 0}}>
+          <SidebarItem disabled={process.env.NODE_ENV !== 'development'} onClick={stopPropagation(() => setDarkTheme(_ => !_))} icon="dark_mode" sx={{mr: 0, pr: 0}}>
             {m.theme}
             <Switch color="primary" sx={{ml: 'auto'}} checked={darkTheme}/>
           </SidebarItem>

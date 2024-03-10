@@ -68,6 +68,19 @@ export class ActivityInfoSdk {
       }]
     }
   }
+
+  readonly restore = (formId: string, recordId: string) => {
+    return this.api.postNoJSON(`/resources/update`, {
+      body: {
+        changes: [{
+          formId,
+          recordId,
+          deleted: false,
+        }]
+      }
+    })
+  }
+
   readonly softDeleteRecord = (formId: string, recordId: string) => {
     return this.api.postNoJSON(`/resources/update`, {
       body: {
@@ -113,17 +126,40 @@ export class ActivityInfoSdk {
       })
   }
 
-  readonly fetchColumnsFree = async (body: any): Promise<{id: AIID, label: string}[]> => {
+  readonly fetchColumnsFree = async (body: any): Promise<Record<AIID, {values: string[]}>> => {
     return this.api.post(`/resources/query/columns`, {body}).then(_ => _.columns)
-      // .then(_ => {
-      // const {id, value} = _.columns
-      // const res = (id.values as string[]).reduce((acc, id, i) => {
-      //   @ts-ignore
-        // acc[value.values[i]] = id
-        // return acc
-      // }, {})
-      // return res
+    // .then(_ => {
+    // const {id, value} = _.columns
+    // const res = (id.values as string[]).reduce((acc, id, i) => {
+    //   @ts-ignore
+    // acc[value.values[i]] = id
+    // return acc
+    // }, {})
+    // return res
     // })
+  }
+
+  readonly fetchColumnsDemoFslc = async () => {
+    return this.fetchColumnsFree({
+      'rowSources': [{'rootFormId': 'cvseljqlqb3ntvj7j'}],
+      'columns': [{'id': '_id', 'expression': '_id'}, {
+        'id': 'Activity',
+        'expression': 'cdu30d0lqb3o3gm7u'
+      }, {
+        'id': 'Subactivity',
+        'expression': 'cxgts7wls342mqv2'
+      }, {'id': 'Indicator', 'expression': 'c8qwc6llqb3o3gm7v'}],
+      'truncateStrings': false,
+      'tags': ['data-entry-ref', 'key-matrix']
+    }).then(_ => {
+      return _._id.values.reduce((acc, id, i) => {
+        if (!acc[_.Activity.values[i]]) acc[_.Activity.values[i]] = {}
+        if (!acc[_.Activity.values[i]][_.Subactivity.values[i]]) acc[_.Activity.values[i]][_.Subactivity.values[i]] = {}
+        if (!acc[_.Activity.values[i]][_.Subactivity.values[i]][_.Indicator.values[i]]) acc[_.Activity.values[i]][_.Subactivity.values[i]][_.Indicator.values[i]] = {}
+        acc[_.Activity.values[i]][_.Subactivity.values[i]][_.Indicator.values[i]] = id
+        return acc
+      }, {} as Record<string, any>)
+    }).then(console.log)
   }
 
   readonly publish = (params: any) => {

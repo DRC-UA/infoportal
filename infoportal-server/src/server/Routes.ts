@@ -72,7 +72,7 @@ export const getRoutes = (
   const proxy = new ControllerProxy(prisma)
   const shelter = new ControllerShelter(prisma)
   const mealVerification = new ControllerMealVerification(prisma)
-  const koboUnified = new ControllerKoboMeta(prisma)
+  const koboMeta = new ControllerKoboMeta(prisma)
 
   const auth = ({adminOnly = false}: {adminOnly?: boolean} = {}) => async (req: Request, res: Response, next: NextFunction) => {
     // req.session.user = {
@@ -108,7 +108,8 @@ export const getRoutes = (
     router.delete('/session', errorCatcher(session.logout))
     router.get('/session', errorCatcher(session.get))
 
-    router.post('/kobo-unified/search', errorCatcher(koboUnified.search))
+    router.post('/kobo-meta/search', errorCatcher(koboMeta.search))
+    router.post('/kobo-meta/sync', errorCatcher(koboMeta.sync))
 
     router.put('/proxy', auth({adminOnly: true}), errorCatcher(proxy.create))
     router.post('/proxy/:id', auth({adminOnly: true}), errorCatcher(proxy.update))

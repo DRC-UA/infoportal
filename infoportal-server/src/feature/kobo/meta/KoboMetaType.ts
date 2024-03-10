@@ -11,7 +11,7 @@ export type KoboMetaOrigin<
   date: KoboAnswerMetaData['date']
   id: KoboAnswerMetaData['id']
   updatedAt?: KoboAnswerMetaData['updatedAt']
-  tags?: TTag
+  tags?: TTag | null
 }
 
-export type KoboMetaCreate = IKoboMeta
+export type KoboMetaCreate<TTags = any> = IKoboMeta<TTags>

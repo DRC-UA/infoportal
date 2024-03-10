@@ -1,4 +1,4 @@
-export namespace AiTypeMineAction {
+export namespace AiProtectionType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
 
   export interface Type {
@@ -9,7 +9,7 @@ export namespace AiTypeMineAction {
     'Plan/Project Code': Opt<'Plan/Project Code'>,
     'Oblast': Opt<'Oblast'>,
     'Raion': string,
-    'Hromada': Opt<'Hromada'>,
+    'Hromada': string,
     'Settlement'?: string,
     'Collective Site'?: string,
     'Response Theme': Opt<'Response Theme'>
@@ -20,11 +20,11 @@ export namespace AiTypeMineAction {
     'c1g03yllqf3085j4t': a['Reporting Organization'] === undefined ? undefined : 'czbgrslpwg36j52' + ':' + options['Reporting Organization'][a['Reporting Organization']!],
     'ct68whplqf3085j4u': a['Implementing Partner'] === undefined ? undefined : a['Implementing Partner'],
     'cz796xnlqf3085j4v': a['Implementing Partner 2'] === undefined ? undefined : a['Implementing Partner 2'],
-    'ccn9h61lrkokg015': a['Plan/Project Code'] === undefined ? undefined : 'c9c396nlr6f4i48zv' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
-    'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + options['Oblast'][a['Oblast']!],
-    'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : a['Raion'],
-    'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + options['Hromada'][a['Hromada']!],
-    'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : a['Settlement'],
+    'ctn2ej8lqf3085j4w': a['Plan/Project Code'] === undefined ? undefined : 'cuar8eplqf1xm9225' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
+    'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
+    'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
+    'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
+    'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
     'ce0zvlllqf3085j52': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
     'c18374vlqf3085j54': a['Response Theme'] === undefined ? undefined : options['Response Theme'][a['Response Theme']!]
   })
@@ -34,17 +34,13 @@ export namespace AiTypeMineAction {
       'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'
     },
     'Plan/Project Code': {
-      'MA-DRC-00001': 'csduwtmlsn2cadn8',
-      'MA-DRC-00002': 'c1ibtnblsnbwirq2',
-      'MA-DRC-00003': 'c410zexlsogr3942',
-      'MA-DRC-00004': 'ckql3hzlsogumin3',
-      'MA-DRC-00005': 'c5h7kj9lsohodvh4',
-      'MA-DRC-00006': 'cfr73p4lsohuagv5',
-      'MA-DRC-00007': 'cnpgzxlsoi5jhb6',
-      'MA-DRC-00008': 'c4dqoqzlsoi8e4m7',
-      'MA-DRC-00009': 'cbq4ql1lsojygo38',
-      'MA-DRC-00010': 'cvnl97qlsok0t9m9',
-      'MA-DRC-00011': 'c4bck8ylssrdvtb2'
+      'PRT-DRC-00001': 'cepwx9plsai8rlfd',
+      'PRT-DRC-00002': 'c5woab2lsaieofhe',
+      'PRT-DRC-00003': 'c6oy73wlsaihu52f',
+      'PRT-DRC-00004': 'clsx70blsaiucltg',
+      'PRT-DRC-00005': 'cyvk25tlsaiz8skh',
+      'PRT-DRC-00006': 'c5yiak4lsaj2cpei',
+      'PRT-DRC-00007': 'c7ddst8lsaj7gnaj'
     },
     'Oblast': {
       'Autonomous Republic of Crimea_Автономна Республіка Крим': 'c5c2sr3lq3kjj6gd',
@@ -66,29 +62,14 @@ export namespace AiTypeMineAction {
       'Odeska_Одеська': 'c2uwqqqlq3kjj6ht',
       'Poltavska_Полтавська': 'cwq2uuxlq3kjj6hu',
       'Rivnenska_Рівненська': 'c2j0t0flq3kjj6hv',
-      'Sevastopol_Севастополь': 'cjvbpkplq3kjj6hw'
-    },
-    'Hromada': {
-      'Aromatnenska_UA0102003': 'ceyv5tolq3la4dr249',
-      'Bakhchysaraiska_UA0102005': 'cn5h6calq3la4dr24a',
-      'Verkhorichenska_UA0102009': 'cnc7xsvlq3la4dr24b',
-      'Vilinska_UA0102011': 'c2zc7cflq3la4dr24c',
-      'Holubynska_UA0102013': 'ck5pbm3lq3la4dr24d',
-      'Dolynnenska_UA0102015': 'cd4tehilq3la4dr24e',
-      'Zaliznychnenska_UA0102017': 'cb69w6qlq3la4dr24f',
-      'Zelenivska_UA0102019': 'ck1p0oolq3la4dr24g',
-      'Kashtanivska_UA0102025': 'crr9kz3lq3la4dr24h',
-      'Krasnomatska_UA0102027': 'ceel6f4lq3la4dr24i',
-      'Kuibyshevska_UA0102029': 'cekrlc6lq3la4dr24j',
-      'Pishchanivska_UA0102033': 'cs9ovk0lq3la4dr24k',
-      'Plodivska_UA0102035': 'clcrplnlq3la4dr24l',
-      'Poshtivska_UA0102037': 'c49nm87lq3la4dr24m',
-      'Skalystivska_UA0102039': 'ckh1vyelq3la4dr24n',
-      'Tabachnenska_UA0102041': 'cameja8lq3la4dr24o',
-      'Tinystivska_UA0102045': 'c55vt83lq3la4dr24p',
-      'Uhlivska_UA0102047': 'c3cf7gylq3la4dr24q',
-      'Aromatnivska_UA0104001': 'csl2jq3lq3la4dr24r',
-      'Bahativska_UA0104003': 'c4cw1izlq3la4dr24s'
+      'Sevastopol_Севастополь': 'cjvbpkplq3kjj6hw',
+      'Sumska_Сумська': 'cb4nm4xlq3kjj6hx',
+      'Ternopilska_Тернопільська': 'clrrzfslq3kjj6hy',
+      'Vinnytska_Вінницька': 'cvx17yllq3kjj6hz',
+      'Volynska_Волинська': 'cdzklrblq3kjj6h10',
+      'Zakarpatska_Закарпатська': 'cfqiux5lq3kjj6h11',
+      'Zaporizka_Запорізька': 'cmqvx7elq3kjj6h12',
+      'Zhytomyrska_Житомирська': 'c51dllnlq3kjj6h13'
     },
     'Response Theme': {
       'No specific theme': 'c40c4vklqf3085j55'
@@ -108,7 +89,7 @@ export namespace AiTypeMineAction {
     'Adult Men (18-59)': number,
     'Older Women (60+)': number,
     'Older Men (60+)': number,
-    'Non-individuals Reached/Quantity': number,
+    'Non-individuals Reached/Quantity'?: number,
     'People with Disability'?: number
   }
 
@@ -134,16 +115,38 @@ export namespace AiTypeMineAction {
       'Returnees': 'cuz9qi9lq6dgcok7'
     },
     'Indicators': {
-      '# of individuals who participated in face-to-face EORE sessions in the educational institutions (e.g. schools)': 'ck8w3wflqmgu66u16',
-      '# of organizations (national or local) who received capacity building support to become an accredited EORE operator': 'cau7kexlqmgu66u17',
-      '# mine / ERW survivors who received cash assistance (SADD)': 'cihm2xplqmgu66u18',
-      '# of mine / ERW survivor who received MHPSS (SADD)': 'cy1jgeilqmgu66u19',
-      'Area surveyed (square metres) - (TBD)': 'cmg8547lqmgu66u1a',
-      'Area cleared (square metres)': 'ci7ya6zlqmgu66u1b',
-      '# of individuals who directly benefitted from land clearance (SADD)': 'cl00iz2lqmgu66u1c',
-      '# of interventions (equipment provision) to national mine action institutions': 'clxeupalqmgu66u1d',
-      '# of personnel trained on mine action activities (IMAS) related to survey and clearance': 'chks7q9lqmgu66u1e',
-      '# of individuals who participated in face-to-face EORE sessions excluding educational institutions (e.g. communities)': 'cepwuk2ls044z522'
+      '# of individuals who received case management services (not including specialized CP & GBV services)': 'cuv5lkclqmgu66u1f',
+      '# of individuals who participated in community-based protection activities': 'cfye7v0lqmgu66u1g',
+      '# of individuals in a community trained on protection approaches or issues (not including GBV or Child Protection)': 'c4gngpdlqmgu66u1h',
+      '# of individuals supported through community-based organizations with social rehabilitation': 'cigruiclqmgu66u1i',
+      '# of organizations of people with disabilities (OPDs) supported to provide social rehabilitation': 'cr9kr8qlqmgu66v1j',
+      '# of hotlines established and operated': 'chkpac2lqmgu66v1k',
+      '# of calls received by hotlines from individuals': 'cevyso1lqmgu66v1l',
+      '# of individuals with specific needs who received cash assistance to prevent, mitigate or respond to protection risks': 'cxnbfd8lqmgu66v1m',
+      '# of individuals with specific needs who received in-kind protection assistance to prevent, mitigate or respond to protection risks': 'cbolgy6lqmgu66v1n',
+      '# of individuals who received legal assistance on HLP issues': 'cugc39qlqmgu66v1o',
+      '# of individuals who successfully secured HLP documentation': 'cepn945lqmgu66v1p',
+      '# of individuals who received legal assistance': 'c9xmy7flqmgu66v1q',
+      '# of individuals who successfully secured civil documentation': 'c99v29olqmgu66v1r',
+      '# of individuals who received protection counselling': 'c5qlvw9lqmgu66v1s',
+      '# of individuals who received legal counselling': 'c4qmnm2lqmgu66v1t',
+      '# of individuals who received HLP legal counselling': 'c4b7guylqmgu66v1u',
+      '# of individuals reached through protection monitoring at the household level': 'cx5yue4lqmgu66v1v',
+      '# of locations assessed through community level protection monitoring': 'clez5molqmgu66v1w',
+      '# of interviews conducted with key informants through community level protection monitoring': 'cicv1plqmgu66v1x',
+      '# of individuals who received individual or group-based psychosocial support': 'c3d56b7lqmgu66v1y',
+      '# of individuals with specific needs referred to specialized services and assistance': 'cjt0ciglqmgu66v1z',
+      '# of individuals provided with transportation services': 'ccpeionlqmgu66v20',
+      '# of individuals who participated in awareness raising activities on Protection': 'csxs7tvlqmgu66v21',
+      '# of individuals who participated in awareness raising sessions on HLP': 'cv8k7nolqmgu66v22',
+      '# of advocacy interventions undertaken on protection issues': 'c6aftmvlqmgu66v23',
+      '# of protection assessments conducted': 'cckhamclqmgu66v24',
+      '# of humanitarian staff trained on protection approaches or issues': 'csbl6nxlqmgu66v25',
+      '# of government staff trained on protection approaches or issues': 'chymmkklqmgu66v26',
+      '# of humanitarian staff trained on HLP': 'c8bht7flqmgu66v27',
+      '# of government staff trained on HLP': 'cc1gtwnlqmgu66v28',
+      '# of community centers established or maintained': 'c2395qdlqmgu66v29',
+      '# of government institutions supported': 'cy4jvntlqmgu66v2a'
     }
   }
 
