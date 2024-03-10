@@ -10,8 +10,7 @@ import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
-import {runGenerateKoboInterface} from './script/BuildTypeKobo'
-import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
+import {BuildKoboType} from './script/BuildTypeKobo'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -38,7 +37,7 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  // await runGenerateKoboInterface()
+  // await new BuildKoboType().build('Protection_pss')
   // return
   // await cleanMpca()
   // return

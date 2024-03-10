@@ -193,7 +193,7 @@ export const en = Object.freeze({
     displacementStatus: 'Displacement status',
     householdStatus: 'Household Status',
     individuals: 'Individuals',
-    uniqIndividuals: 'Uniq individuals',
+    uniqIndividuals: 'Unique individuals (by Tax)',
     submissions: 'Submissions',
     householdSize: 'Household size',
     hhSize: 'HH size',
@@ -414,6 +414,7 @@ export const en = Object.freeze({
     _meta: {
       refresh: 'Sync ' + appFeaturesIndex.metaDashboard.name,
       refreshLong: 'Refresh started, can takes few minutes.',
+      pluggedKobo: 'Plugged Kobo',
     },
     protHHS2: {
       freedomOfMovement: 'Barriers to Freedom of Movement',

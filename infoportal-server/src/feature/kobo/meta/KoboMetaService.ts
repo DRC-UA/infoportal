@@ -13,6 +13,7 @@ import {appConf} from '../../../core/conf/AppConf'
 import {yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
 import Event = GlobalEvent.Event
+import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'id' | 'uuid' | 'date' | 'updatedAt' | 'formId'>
 export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => [KoboId, Partial<MetaMapped<TTag>>] | undefined
@@ -27,6 +28,11 @@ class KoboMetaMapper {
     [KoboIndex.byName('shelter_nta').id]: KoboMetaMapperShelter.createNta,
     [KoboIndex.byName('bn_cashForRentRegistration').id]: KoboMetaMapperShelter.createCfRent,
     [KoboIndex.byName('shelter_cashForShelter').id]: KoboMetaMapperShelter.createCfShelter,
+    [KoboIndex.byName('protection_pss').id]: KoboMetaMapperProtection.pss,
+    [KoboIndex.byName('protection_gbv').id]: KoboMetaMapperProtection.gbv,
+    [KoboIndex.byName('protection_hhs3').id]: KoboMetaMapperProtection.hhs,
+    [KoboIndex.byName('protection_groupSession').id]: KoboMetaMapperProtection.groupSession,
+    [KoboIndex.byName('protection_communityMonitoring').id]: KoboMetaMapperProtection.communityMonitoring,
   }
   static readonly mappersUpdate: Record<KoboId, MetaMapperMerge> = {
     [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa,

@@ -14,6 +14,21 @@ export enum DrcOffice {
 
 export const drcOffices = Obj.values(DrcOffice)
 
+export enum DrcSector {
+  NFI = 'NFI',
+  WaSH = 'WaSH',
+  Education = 'Education',
+  Protection = 'Protection',
+  Livelihoods = 'Livelihoods',
+  FoodSecurity = 'FoodSecurity',
+  MPCA = 'MPCA',
+  Health = 'Health',
+  Nutrition = 'Nutrition',
+  Shelter = 'Shelter',
+  Evacuations = 'Evacuations',
+  EORE = 'EORE',
+}
+
 export enum DrcProgram {
   CashForFuel = 'CashForFuel',
   CashForUtilities = 'CashForUtilities',
@@ -29,21 +44,10 @@ export enum DrcProgram {
   SectoralCash = 'SectoralCash',
   PSS = 'PSS',
   GBV = 'GBV',
-}
-
-export enum DrcSector {
-  NFI = 'NFI',
-  WaSH = 'WaSH',
-  Education = 'Education',
-  Protection = 'Protection',
-  Livelihoods = 'Livelihoods',
-  FoodSecurity = 'FoodSecurity',
-  MPCA = 'MPCA',
-  Health = 'Health',
-  Nutrition = 'Nutrition',
-  Shelter = 'Shelter',
-  Evacuations = 'Evacuations',
-  EORE = 'EORE',
+  ProtectionMonitoring = 'ProtectionMonitoring',
+  AwarenessRaisingSession = 'AwarenessRaisingSession',
+  CommunityLevelPm = 'CommunityLevelPm',
+  Legal = 'Legal',
 }
 
 export class DrcSectorHelper {
@@ -61,6 +65,7 @@ export class DrcSectorHelper {
     InfantWinterClothing: DrcSector.NFI,
     HygieneKit: DrcSector.NFI,
     SectoralCash: DrcSector.NFI,
+
   } as const
 
   private static readonly autoValidatedActivity = new Set([

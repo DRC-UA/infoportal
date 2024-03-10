@@ -9,7 +9,7 @@ export namespace KoboGeneralMapping {
 
   type XlsIndividualBase = NonNullable<Ecrec_cashRegistration.T['hh_char_hh_det']>[0]
   export type XlsKoboIndividual = {
-    'hh_char_hh_det_gender'?: 'male' | 'female' | 'other' | 'unspecified'
+    'hh_char_hh_det_gender'?: 'male' | 'female' | 'other' | 'unspecified' | 'unable_unwilling_to_answer'
     'hh_char_hh_det_age'?: number
   } & Partial<Pick<XlsIndividualBase,
     'hh_char_hh_det_dis_select' |

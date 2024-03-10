@@ -12,12 +12,17 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
 
   const shape = useMemo(() => {
     return DataFilter.makeShape<IKoboMeta>({
+      sector: {
+        icon: 'category',
+        label: m.sector,
+        getValue: _ => _.sector,
+        getOptions: () => DataFilter.buildOptions(data.flatMap(_ => _.sector!).distinct(_ => _).sort()),
+      },
       activity: {
-        multiple: true,
         icon: appConfig.icons.program,
         label: m.program,
         getValue: _ => _.activity,
-        getOptions: () => DataFilter.buildOptions(data.flatMap(_ => _.activity!).distinct(_ => _).sort()),
+        getOptions: (get) => DataFilter.buildOptions(get().flatMap(_ => _.activity!).distinct(_ => _).sort()),
       },
       office: {
         icon: appConfig.icons.office,
