@@ -47,7 +47,6 @@ export const _MetaDashboard = ({
   const ctx = useMetaDashboardData(data)
   return (
     <Page width="lg" loading={loading}>
-      {JSON.stringify(loading)}
       <DataFilterLayout
         data={ctx.filteredData}
         filters={ctx.filters}

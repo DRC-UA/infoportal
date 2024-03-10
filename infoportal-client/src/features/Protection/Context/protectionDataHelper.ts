@@ -27,7 +27,7 @@ export class ProtectionDataHelper {
 
   static readonly mapPss = (d: KoboAnswer<Protection_pss.T>): ProtectionActivity => {
     const project = KoboGeneralMapping.mapProject(Protection_pss.options.project[d.project!])
-    const aiLoc = AiMapper.getLocation(d)
+    const aiLoc = AiMapper.getLocation(d as any)
     return {
       ...d,
       date: d.date,

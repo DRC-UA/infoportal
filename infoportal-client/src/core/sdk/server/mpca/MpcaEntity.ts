@@ -153,9 +153,9 @@ export class MpcaHelper {
     [DrcProject['UKR-000330 SDC2']]: true,
   })
 
-  static readonly map = (_: Record<keyof MpcaEntity, any>): MpcaEntity => {
+  static readonly map = (_: MpcaEntity): MpcaEntity => {
     _.date = new Date(_.date)
-    if (_.tags?.committed) _.tags.committed = new Date(_.tags.committed)
+    if (_.tags?.lastStatusUpdate) _.tags.lastStatusUpdate = new Date(_.tags.lastStatusUpdate)
     return _
   }
 }

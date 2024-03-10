@@ -48,6 +48,8 @@ export enum DrcProgram {
   AwarenessRaisingSession = 'AwarenessRaisingSession',
   CommunityLevelPm = 'CommunityLevelPm',
   Legal = 'Legal',
+  Fgd = 'Fgd',
+  Observation = 'Observation',
 }
 
 export class DrcSectorHelper {

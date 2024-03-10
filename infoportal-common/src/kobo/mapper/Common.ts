@@ -15,7 +15,7 @@ export interface KoboBaseTags {
 }
 
 export interface KoboTagStatus<T = CashStatus> {
-  status: T,
+  status?: T,
   lastStatusUpdate?: Date
 }
 
