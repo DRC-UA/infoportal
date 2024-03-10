@@ -38,21 +38,7 @@ const initServices = (
 
 const startApp = async (conf: AppConf) => {
   // await new BuildKoboType().build('Protection_pss')
-  // return
   // await cleanMpca()
-  // return
-  // // new ActivityInfoSdk().fetchColumnsFree({
-  // //   'rowSources': [{'rootFormId': 'c8uhbuclqb1fjlg2'}],
-  // //   'columns': [
-  // //     {'id': 'id', 'expression': '_id'},
-  // //     {'id': 'value', 'expression': 'cj3g7eilqb1p98je'}
-  // //   ],
-  // //   'truncateStrings': false,
-  // //   'filter': 'c92lm98lqb1gaar3 == "PGP"',
-  // //   'tags': ['data-entry-ref', 'key-matrix']
-  // // })
-  // // .then(console.log)
-  // // return
   // await Promise.all([
   //   ActivityInfoBuildType.fslc(),
   //   ActivityInfoBuildType.gbv(),
@@ -65,9 +51,6 @@ const startApp = async (conf: AppConf) => {
   const prisma = new PrismaClient({
     // log: ['query']
   })
-  //
-  // await sleep(duration(1, 'day'))
-  // return
 
   const services = initServices(
     // koboSdk,
