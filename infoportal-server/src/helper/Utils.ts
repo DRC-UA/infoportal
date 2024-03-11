@@ -2,6 +2,7 @@ import {v4} from 'uuid'
 import {addMonths, differenceInMonths, format, isAfter, isBefore, startOfMonth} from 'date-fns'
 import * as _yup from 'yup'
 import {Obj} from '@alexandreannic/ts-utils'
+import {log} from 'winston'
 
 export const getObj = <K extends string, V extends any>(o: Record<K, V>, key: string): V | undefined => {
   // @ts-ignore
@@ -45,6 +46,22 @@ export const mapMultipleChoices = <T>(value: string | undefined, map: {[key: str
 }
 
 export const msToString = (duration: number) => format(duration, 'dd hh:mm:ss')
+
+export async function processBatches<T>({
+  data,
+  batchSize,
+  run,
+}: {
+  data: T[],
+  batchSize: number,
+  run: (item: T[], index: number) => Promise<any>
+}): Promise<void> {
+  for (let i = 0; i < data.length; i += batchSize) {
+    console.log('===', i + '<' + data.length + '   -' + (i + batchSize), data.slice(i, batchSize + i).length)
+    await run(data.slice(i, batchSize + i), i)
+  }
+}
+
 
 export namespace Util {
 
