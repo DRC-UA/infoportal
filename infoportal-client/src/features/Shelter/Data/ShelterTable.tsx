@@ -33,7 +33,7 @@ import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableInput} from '@/shared/TableInput'
 import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyncBtn'
-import {SelectValidationStatus} from '@/shared/customInput/SelectStatus'
+import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 
 export const ShelterTable = () => {
   const ctx = useShelterContext()
@@ -297,7 +297,8 @@ export const ShelterTable = () => {
         ],
         renderValue: (row: ShelterEntity) => row.nta?.tags?._validation,
         render: (row: ShelterEntity) => map(row.nta, nta => (
-          <SelectValidationStatus
+          <SelectStatusBy
+            enum="KoboValidation"
             compact
             value={nta.tags?._validation}
             onChange={(tagChange) => {
@@ -642,8 +643,9 @@ export const ShelterTable = () => {
                   marginLeft: t => t.spacing(1) + ' !important',
                 }
               }}>
-                <SelectValidationStatus
+                <SelectStatusBy
                   compact
+                  enum="KoboValidation"
                   disabled={selectedNta.length === 0}
                   sx={{maxWidth: 110}}
                   label={m._shelter.validationStatus}

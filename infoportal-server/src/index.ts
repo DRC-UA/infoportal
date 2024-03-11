@@ -10,7 +10,7 @@ import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
-import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
+import {cleanMpca, migrateHhsTags} from './script/20240309-cleanMpcaCommit/CleanMpcaCommit'
 
 const initServices = (
   // koboClient: KoboSdk,
@@ -38,7 +38,9 @@ const initServices = (
 
 const startApp = async (conf: AppConf) => {
   // await new BuildKoboType().build('Protection_pss')
+  // await migrateHhsTags()
   // await cleanMpca()
+  // return
   // @ts-ignore
   // await Promise.all([
   //   ActivityInfoBuildType.fslc(),

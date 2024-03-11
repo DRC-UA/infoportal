@@ -9,7 +9,6 @@ import {Enum, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {KoboAnswerId, KoboId} from '@/core/sdk/server/kobo/Kobo'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
-import {SelectCashStatus} from '@/shared/customInput/SelectStatus'
 
 // [DONORS according to Alix]
 
