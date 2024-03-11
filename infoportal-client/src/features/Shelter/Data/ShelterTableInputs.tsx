@@ -1,5 +1,4 @@
-import {Shelter_TA, ShelterContractor, ShelterContractorPrices, ShelterProgress, ShelterTagValidation} from '@infoportal-common'
-import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
+import {Shelter_TA, ShelterContractor, ShelterContractorPrices, ShelterProgress} from '@infoportal-common'
 import {AaSelect, AaSelectBase, AaSelectSimple} from '@/shared/Select/Select'
 import React from 'react'
 import {Enum} from '@alexandreannic/ts-utils'

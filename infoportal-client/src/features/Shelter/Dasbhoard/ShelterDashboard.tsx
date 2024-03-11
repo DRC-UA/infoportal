@@ -7,18 +7,7 @@ import {Box} from '@mui/material'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {useI18n} from '@/core/i18n'
 import {Enum, fnSwitch, seq, Seq} from '@alexandreannic/ts-utils'
-import {
-  DrcOffice,
-  OblastIndex,
-  Period,
-  PeriodHelper,
-  Shelter_NTA,
-  ShelterContractor,
-  shelterDrcProject,
-  ShelterProgress,
-  ShelterTagValidation,
-  ShelterTaPriceLevel
-} from '@infoportal-common'
+import {DrcOffice, OblastIndex, Period, PeriodHelper, Shelter_NTA, ShelterContractor, shelterDrcProject, ShelterProgress, ShelterTaPriceLevel} from '@infoportal-common'
 import {ChartHelperOld, makeChartData} from '@/shared/charts/chartHelperOld'
 import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
 import {Currency} from '@/features/Mpca/Dashboard/MpcaDashboard'
@@ -38,10 +27,11 @@ import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {appConfig} from '@/conf/AppConfig'
+import {KoboValidation} from '../../../../../infoportal-common/src/kobo/mapper/Common'
 
 const today = new Date()
 
-// TODO Data re-fetched to bypass offices access filter. Need to find a more proper way
+// TODO Data re-fetched from ShelterTable to display data from all offices no matter accesses. Need to find a more proper way
 export const ShelterDashboard = () => {
   const ctx = useShelterContext()
   const [currency, setCurrency] = usePersistentState<Currency>(Currency.USD, {storageKey: 'mpca-dashboard-currency'})
@@ -105,7 +95,7 @@ export const ShelterDashboard = () => {
         icon: 'check',
         label: m._shelter.validationStatus,
         getValue: _ => _.nta?.tags?._validation,
-        getOptions: (get) => DataFilter.buildOptionsFromObject(ShelterTagValidation),
+        getOptions: (get) => DataFilter.buildOptionsFromObject(KoboValidation),
       },
       status: {
         icon: 'engineering',

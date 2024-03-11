@@ -11,13 +11,13 @@ import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {
   add,
   KoboShelterTa,
+  KoboValidation,
   safeNumber,
   Shelter_NTA,
   ShelterContractor,
   ShelterContractorPrices,
   shelterDrcProject,
   ShelterProgress,
-  ShelterTagValidation,
   ShelterTaPriceLevel
 } from '@infoportal-common'
 import {Txt} from 'mui-extension'
@@ -291,9 +291,9 @@ export const ShelterTable = () => {
         width: 0,
         typeIcon: null,
         options: () => [
-          {value: ShelterTagValidation.Accepted, label: <TableIcon color="success">check_circle</TableIcon>},
-          {value: ShelterTagValidation.Rejected, label: <TableIcon color="error">cancel</TableIcon>},
-          {value: ShelterTagValidation.Pending, label: <TableIcon color="warning">schedule</TableIcon>},
+          {value: KoboValidation.Approved, label: <TableIcon color="success">check_circle</TableIcon>},
+          {value: KoboValidation.Rejected, label: <TableIcon color="error">cancel</TableIcon>},
+          {value: KoboValidation.Pending, label: <TableIcon color="warning">schedule</TableIcon>},
         ],
         renderValue: (row: ShelterEntity) => row.nta?.tags?._validation,
         render: (row: ShelterEntity) => map(row.nta, nta => (
@@ -310,7 +310,6 @@ export const ShelterTable = () => {
           />
         )),
       },
-      // column.validation,
       {
         id: 'TA',
         width: 0,

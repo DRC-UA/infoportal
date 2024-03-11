@@ -38,7 +38,7 @@ export class KoboMetaMapperProtection {
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Protection,
       activity: answer.activity ? fnSwitch(answer.activity, {
-        fgd: DrcProgram.Fgd,
+        fgd: DrcProgram.FGD,
         kll: DrcProgram.CommunityLevelPm,
         observation: DrcProgram.Observation,
       }) : undefined,

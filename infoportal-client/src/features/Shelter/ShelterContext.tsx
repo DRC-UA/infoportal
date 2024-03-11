@@ -44,7 +44,6 @@ export const ShelterProvider = ({
     if (!data.index || !prev) return prev
     const set = new Set(answerIds)
     return prev.map(_ => {
-      // if (set.has(_[form]?.id ?? '-1')) console.log(_[form]?.tags)
       if (set.has(_[form]?.id ?? '!') && _[form]) {
         _[form]!.tags = {
           ...(_[form]?.tags ?? {}),

@@ -89,14 +89,7 @@ export enum ShelterProgress {
   InvoicePaymentProcessed = 'InvoicePaymentProcessed',
 }
 
-export enum ShelterTagValidation {
-  Accepted = 'Accepted',
-  Rejected = 'Rejected',
-  Pending = 'Pending',
-}
-
 export interface ShelterNtaTags extends KoboBaseTags {
-  validation?: ShelterTagValidation
   interviewee_name?: string
   pay_det_tax_id_num?: string
 }
