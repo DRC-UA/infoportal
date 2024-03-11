@@ -1,15 +1,13 @@
 import {IpIconBtn, IpIconBtnProps} from '@/shared/IconBtn'
 import React from 'react'
 import {useSession} from '@/core/Session/SessionContext'
-import {Box, Grid, Popover, useTheme} from '@mui/material'
-import {useI18n} from '@/core/i18n'
-import {AppFeature, appFeatures} from '@/features/appFeatureId'
+import {Box, Popover, useTheme} from '@mui/material'
+import {appFeatures} from '@/features/appFeatureId'
 import {FeatureLogo} from '@/features/FeatureLogo'
-import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
-import {styleUtils} from '@/core/theme'
+import {Obj, seq} from '@alexandreannic/ts-utils'
 import {Txt} from 'mui-extension'
 
-const iconSize = 92
+const iconSize = 94
 
 export const AppHeaderFeatures = (props: Omit<IpIconBtnProps, 'children'>) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
@@ -44,6 +42,7 @@ export const AppHeaderFeatures = (props: Omit<IpIconBtnProps, 'children'>) => {
                   {features!.map(feature => (
                     <FeatureLogo
                       key={feature.id}
+                      fontSize="small"
                       feature={feature}
                       iconSize={44}
                       sx={{

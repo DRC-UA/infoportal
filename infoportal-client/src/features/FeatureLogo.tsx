@@ -1,17 +1,20 @@
 import {AppFeature} from '@/features/appFeatureId'
 import React from 'react'
 import {ButtonBase, ButtonBaseProps, Icon, useTheme} from '@mui/material'
-import {Txt} from 'mui-extension'
+import {Txt, TxtProps} from 'mui-extension'
 import Link from 'next/link'
+import {styleUtils} from '@/core/theme'
 
 export const FeatureLogo = ({
   feature,
   sx,
   iconSize = 80,
+  fontSize,
   ...props
 }: {
   feature: AppFeature
   iconSize?: number
+  fontSize?: TxtProps['fontSize']
 } & ButtonBaseProps) => {
   const t = useTheme()
   return (
@@ -34,7 +37,7 @@ export const FeatureLogo = ({
         <Icon sx={{color: feature.color, fontSize: iconSize + 'px !important'}}>
           {feature.materialIcons}
         </Icon>
-        <Txt block fontSize="big" bold sx={{mt: .5}} truncate>{feature.name}</Txt>
+        <Txt block bold sx={{fontSize: styleUtils(t).fontSize.small, mt: .5}} truncate>{feature.name}</Txt>
       </ButtonBase>
     </Link>
   )

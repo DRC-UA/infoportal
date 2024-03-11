@@ -48,7 +48,7 @@ export enum DrcProgram {
   AwarenessRaisingSession = 'AwarenessRaisingSession',
   CommunityLevelPm = 'CommunityLevelPm',
   Legal = 'Legal',
-  Fgd = 'Fgd',
+  FGD = 'FGD',
   Observation = 'Observation',
 }
 

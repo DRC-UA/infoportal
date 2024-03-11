@@ -37,11 +37,11 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
   metaDashboard: {
     id: AppFeatureId.metaDashboard,
     name: 'Meta Dashboard',
-    materialIcons: 'public',
+    materialIcons: 'language',
     color: '#7300d7',
     path: '/meta-dashboard',
     category: 'general',
-    showIf: (u) => u?.admin
+    showIf: (u) => true
   },
   kobo_database: {
     id: AppFeatureId.kobo_database,

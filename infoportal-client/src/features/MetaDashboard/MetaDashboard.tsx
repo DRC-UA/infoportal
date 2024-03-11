@@ -1,9 +1,9 @@
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {IKoboMeta, KoboIndex, OblastIndex} from '@infoportal-common'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
-import {map, Seq, seq} from '@alexandreannic/ts-utils'
+import {map, Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared/Page'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
@@ -19,6 +19,14 @@ import {format} from 'date-fns'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {Lazy} from '@/shared/Lazy'
+import {ChartHelper} from '@/shared/charts/chartHelper'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {PieChart} from 'recharts'
+import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
+import {Box, RadioGroup, useTheme} from '@mui/material'
+import {Txt} from 'mui-extension'
+import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
+import {usePersistentState} from '@/shared/hook/usePersistantState'
 
 export const MetaDashboard = () => {
   const {api} = useAppSettings()
@@ -43,8 +51,10 @@ export const _MetaDashboard = ({
   loading?: boolean
   data: Seq<IKoboMeta>
 }) => {
+  const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
   const ctx = useMetaDashboardData(data)
+  const [showProjectsBy, setShowProjectsBy] = usePersistentState<'donor' | 'project'>('donor', {storageKey: 'meta-dashboard-showProject'})
   return (
     <Page width="lg" loading={loading}>
       <DataFilterLayout
@@ -106,11 +116,45 @@ export const _MetaDashboard = ({
           </Div>
           <Div column>
             <SlidePanel>
+              <Lazy deps={[ctx.filteredData]} fn={() => {
+                return ChartHelper.single({
+                  data: ctx.filteredData.map(_ => _.status ?? 'Blank'),
+                  percent: true,
+                }).get()
+              }}>
+                {_ => (
+                  <Box>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                      <ChartPieWidget value={_.Committed?.value ?? 0} base={1} color={t.palette.success.main}/>
+                      <ChartPieWidget value={_.Pending?.value ?? 0} base={1} color={t.palette.warning.main}/>
+                      <ChartPieWidget value={_.Rejected?.value ?? 0} base={1} color={t.palette.error.main}/>
+                      <ChartPieWidget value={_.Blank?.value ?? 0} base={1} color={t.palette.info.main}/>
+                    </Box>
+                    <Box sx={{display: 'flex', mt: 1, justifyContent: 'space-between'}}>
+                      <Txt block sx={{flex: 1, textAlign: 'center'}}>{m.committed}</Txt>
+                      <Txt block sx={{flex: 1, textAlign: 'center'}}> {m.pending}</Txt>
+                      <Txt block sx={{flex: 1, textAlign: 'center'}}> {m.rejected}</Txt>
+                      <Txt block sx={{flex: 1, textAlign: 'center'}}>{m.blank}</Txt>
+                    </Box>
+                  </Box>
+                )}
+              </Lazy>
+            </SlidePanel>
+            <SlidePanel>
+              <ScRadioGroup value={showProjectsBy} onChange={setShowProjectsBy} inline dense>
+                <ScRadioGroupItem hideRadio value="donoor" title={m.donor}/>
+                <ScRadioGroupItem hideRadio value="project" title={m.project}/>
+              </ScRadioGroup>
+              {showProjectsBy === 'project' ? (
+                <ChartBarMultipleByKey data={ctx.filteredData} property="project"/>
+              ) : (
+                <ChartBarMultipleByKey data={ctx.filteredData} property="donor"/>
+              )}
+            </SlidePanel>
+            <SlidePanel>
               <ChartLineBy getX={_ => format(_.date, 'yyyy-MM')} getY={_ => 1} label={m.submissions} data={data}/>
             </SlidePanel>
             <SlidePanel title={m.program}><ChartBarSingleBy data={ctx.filteredData} by={_ => _.activity}/></SlidePanel>
-            <SlidePanel title={m.project}><ChartBarMultipleByKey data={ctx.filteredData} property="project"/></SlidePanel>
-            <SlidePanel title={m.status}><ChartBarSingleBy data={ctx.filteredData} by={_ => _.status}/></SlidePanel>
           </Div>
         </Div>
       </Div>

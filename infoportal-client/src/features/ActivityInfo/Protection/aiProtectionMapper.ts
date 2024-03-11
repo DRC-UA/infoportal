@@ -68,7 +68,7 @@ export namespace AiProtectionMapper {
                   data: grouped,
                   ai: {
                     'Indicators': fnSwitch(activity, {
-                      [DrcProgram.Fgd]: '# of interviews conducted with key informants through community level protection monitoring',
+                      [DrcProgram.FGD]: '# of interviews conducted with key informants through community level protection monitoring',
                       [DrcProgram.PSS]: '# of individuals who received individual or group-based psychosocial support',
                       [DrcProgram.ProtectionMonitoring]: '# of individuals reached through protection monitoring at the household level',
                       [DrcProgram.CommunityLevelPm]: '# of key informants reached through community level protection monitoring',

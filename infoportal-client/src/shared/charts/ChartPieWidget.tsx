@@ -21,6 +21,7 @@ export interface ChartPieIndicatorProps extends Omit<PanelProps, 'title'> {
   showBase?: boolean
   evolution?: number
   tooltip?: string
+  color?: string
 }
 
 export const ChartPieWidget = ({
@@ -37,6 +38,7 @@ export const ChartPieWidget = ({
   tooltip,
   fractionDigits = 0,
   sx,
+  color,
   ...props
 }: ChartPieIndicatorProps) => {
   const {m, formatLargeNumber} = useI18n()
@@ -56,7 +58,7 @@ export const ChartPieWidget = ({
         alignItems: 'center',
         ...sx,
       }}>
-        <Donut percent={value / base} size={dense ? 45 : 50}/>
+        <Donut percent={value / base} size={dense ? 45 : 50} color={color}/>
         <Box sx={{ml: dense ? 1 : 1.5}}>
           <SlidePanelTitle icon={titleIcon} noWrap={noWrap} sx={{mb: 0}}>
             {title}
@@ -107,9 +109,11 @@ const renderPercent = (value: number, isPercent?: boolean, fractionDigits = 1) =
 const Donut = ({
   percent = 0,
   size = 55,
+  color,
 }: {
   percent?: number
   size?: number
+  color?: string
 }) => {
   const theme = useTheme()
   return (
@@ -126,8 +130,8 @@ const Donut = ({
         rest: 1 - percent,
       }}
       colors={{
-        value: theme.palette.primary.main,
-        rest: alpha(theme.palette.primary.main, .16),
+        value: color ?? theme.palette.primary.main,
+        rest: alpha(color ?? theme.palette.primary.main, .16),
       }}
       m={{
         value: 'ukrainian',
