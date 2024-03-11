@@ -1,5 +1,5 @@
 import {format} from 'date-fns'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Enum, map} from '@alexandreannic/ts-utils'
 import React, {useMemo} from 'react'
 import {ChartLine, ChartLineProps} from '@/shared/charts/ChartLine'
 
@@ -32,14 +32,18 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
     const res: Record<string, Record<string, number>> = {}
     data.forEach(d => {
       Enum.entries(curves).map(([q, fn]) => {
-        const date = fn(d) as Date | undefined
-        if (!date) return
-        const yyyyMM = format(date, 'yyyy-MM')
-        if (date.getTime() > end.getTime() || (start && date.getTime() < start.getTime())) return
-        if (!res[yyyyMM]) res[yyyyMM] = {} as any
-        if (!res[yyyyMM][q]) res[yyyyMM][q] = 0
-        res[yyyyMM][q] += 1
-      })
+        const date = map(fn(d), d => typeof d === 'string' ? new Date(d) : d) as Date | undefined
+        try {
+          if (!date) return
+          const yyyyMM = format(date, 'yyyy-MM')
+          if (date.getTime() > end.getTime() || (start && date.getTime() < start.getTime())) return
+          if (!res[yyyyMM]) res[yyyyMM] = {} as any
+          if (!res[yyyyMM][q]) res[yyyyMM][q] = 0
+          res[yyyyMM][q] += 1
+        } catch (e) {
+          console.error('Invalid date', date, e)
+        }
+      }).filter(_ => _ !== undefined)
     })
     return Enum.entries(res)
       .map(([date, v]) => {
