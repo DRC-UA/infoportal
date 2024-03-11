@@ -10,7 +10,14 @@ import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 export namespace AiFslcMapper {
   export type Bundle = AiBundle2<AiFslcType.Type>
 
-  const getPlanCode = (_: DrcProject) => '!!! TODO' as any
+  const getPlanCode = (_: DrcProject) => {
+    const map = {
+      [DrcProject['UKR-000348 BHA3']]: 'FSLC-DRC-00001',
+      [DrcProject['UKR-000336 UHF6']]: 'FSLC-DRC-00002',
+      [DrcProject['UKR-000352 UHF7']]: 'FSLC-DRC-00003',
+    }
+    return (map as any)[_] ?? '!!!'
+  }
 
   export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
     const period = PeriodHelper.fromYYYYMM(periodStr)

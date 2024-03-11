@@ -124,6 +124,7 @@ export enum DrcDonor {
 export enum DrcProject {
   'UKR-000284 BHA' = 'UKR-000284 BHA',
   'UKR-000345 BHA2' = 'UKR-000345 BHA2',
+  'UKR-000348 BHA3' = 'UKR-000348 BHA3',
   'UKR-000269 ECHO1' = 'UKR-000269 ECHO1',
   'UKR-000322 ECHO2' = 'UKR-000322 ECHO2',
   'UKR-000226 SDC' = 'UKR-000226 SDC',
@@ -165,7 +166,7 @@ export class DrcProjectHelper {
   static readonly list = Obj.keys(DrcProject)
 
   static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = {
-    [DrcDonor.BHA]: [DrcProject['UKR-000284 BHA'], DrcProject['UKR-000345 BHA2']],
+    [DrcDonor.BHA]: [DrcProject['UKR-000284 BHA'], DrcProject['UKR-000345 BHA2'], DrcProject['UKR-000348 BHA3']],
     [DrcDonor.ECHO]: [DrcProject['UKR-000269 ECHO1'], DrcProject['UKR-000322 ECHO2']],
     [DrcDonor.SDC]: [DrcProject['UKR-000226 SDC'], DrcProject['UKR-000330 SDC2']],
     [DrcDonor.FCDO]: [DrcProject['UKR-000247 FCDO'],],

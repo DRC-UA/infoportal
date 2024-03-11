@@ -92,7 +92,8 @@ export const WfpDeduplicationData = () => {
               head: m.amount,
               align: 'right',
               renderExport: true,
-              render: _ => formatLargeNumber(_.amount)
+              render: _ => formatLargeNumber(_.amount),
+              renderValue: _ => _.amount,
             },
             {
               id: 'validFrom',

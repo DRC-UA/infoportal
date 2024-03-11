@@ -7,6 +7,7 @@ import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {AiMpcaType} from '@/features/ActivityInfo/Mpca/aiMpcaType'
 
+const averageAssistanceAmount = 445
 export namespace AiMpcaMapper {
 
   type Bundle = AiBundle2<AiMpcaType.Type>
@@ -58,7 +59,7 @@ export namespace AiMpcaMapper {
                 'Number of Covered Months': 'Three months (recommended)',
                 'Financial Service Provider (FSP)': 'Bank Transfer',
                 'Population Group': displacement,
-                'Total amount (USD) distributed through multi-purpose cash assistance': 'TODO' as any,
+                'Total amount (USD) distributed through multi-purpose cash assistance': averageAssistanceAmount,
                 'Payments Frequency': 'Multiple payments',
                 'Activity Plan Code': project as never,
                 'Indicators - MPCA': '# of individuals assisted with multi-purpose cash assistance',

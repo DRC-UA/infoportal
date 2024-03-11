@@ -82,7 +82,11 @@ export namespace AiFslcType {
     'Implementing Partner': {
       'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'
     },
-    'Activity Plan Code': {},
+    'Activity Plan Code': {
+      'FSLC-DRC-00001': 'csp3fvaltn0j3ou2',
+      'FSLC-DRC-00002': 'cbcn08hltn0lsg03',
+      'FSLC-DRC-00003': 'cex9iwdltn0pa1y4',
+    },
     'Activity and indicator': {
       'Distribution of in-kind food assistance': {
         'General Food Distribution': {
