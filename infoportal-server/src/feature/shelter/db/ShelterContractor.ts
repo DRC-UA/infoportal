@@ -1,6 +1,6 @@
 import {Enum, map} from '@alexandreannic/ts-utils'
 import {NumberKeys} from '@infoportal-common'
-import {Shelter_TA} from '../../../script/output/kobo/Shelter_TA'
+import {Shelter_TA} from '@infoportal-common'
 
 export enum ShelterContractor {
   'Artbudservice' = 'Artbudservice',

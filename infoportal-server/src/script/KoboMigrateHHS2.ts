@@ -2,7 +2,7 @@ import {PrismaClient} from '@prisma/client'
 import {logger, Logger} from '../helper/Logger'
 import {KoboSyncServer} from '../feature/kobo/KoboSyncServer'
 import {KoboApiService} from '../feature/kobo/KoboApiService'
-import {Protection_hhs} from './output/kobo/Protection_hhs'
+import {Protection_hhs} from '@infoportal-common'
 
 export const KoboMigrateHHS2 = ({
     prisma,

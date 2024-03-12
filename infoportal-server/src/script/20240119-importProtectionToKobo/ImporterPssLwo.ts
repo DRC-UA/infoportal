@@ -1,7 +1,7 @@
 import {fnSwitch, mapFor} from '@alexandreannic/ts-utils'
 import {parse, setHours} from 'date-fns'
 import {ImportKoboPss} from './KoboImportPss'
-import {Bn_Re} from '../output/kobo/Bn_Re'
+import {Bn_Re} from '@infoportal-common'
 
 export namespace ImportPssLwo {
 

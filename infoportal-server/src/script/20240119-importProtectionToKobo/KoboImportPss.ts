@@ -1,4 +1,4 @@
-import {Protection_pss} from '../output/kobo/Protection_pss'
+import {Protection_pss} from '@infoportal-common'
 
 type Opt<T extends keyof typeof Protection_pss.options> = keyof (typeof Protection_pss.options)[T]
 

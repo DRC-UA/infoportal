@@ -1,7 +1,7 @@
 import {DrcDonor, DrcOffice, DrcProject, OblastISO, OblastName, Period, Person} from '@infoportal-common'
 import {KoboAttachment} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 import {WfpDeduplication} from '../../wfpDeduplication/WfpDeduplicationType'
-import {Bn_Re} from '../../../script/output/kobo/Bn_Re'
+import {Bn_Re} from '@infoportal-common'
 import {KoboFormName} from '@infoportal-common'
 
 // export enum MpcaRowSource {

@@ -1,4 +1,4 @@
-import {Protection_groupSession} from '../output/kobo/Protection_groupSession'
+import {Protection_groupSession} from '@infoportal-common'
 
 type Opt<T extends keyof typeof Protection_groupSession.options> = keyof (typeof Protection_groupSession.options)[T]
 

@@ -1,7 +1,7 @@
 import {KoboImportGroupSession} from './KoboImportGroupSession'
 import {ImportPssLwo} from './ImporterPssLwo'
 import {fnSwitch} from '@alexandreannic/ts-utils'
-import {Protection_groupSession} from '../output/kobo/Protection_groupSession'
+import {Protection_groupSession} from '@infoportal-common'
 
 export namespace ImporterGroupSessionCej {
 

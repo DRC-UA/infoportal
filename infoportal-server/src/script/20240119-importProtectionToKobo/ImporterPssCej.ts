@@ -1,7 +1,7 @@
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {parse, setHours} from 'date-fns'
 import {ImportKoboPss} from './KoboImportPss'
-import {Protection_groupSession} from '../output/kobo/Protection_groupSession'
+import {Protection_groupSession} from '@infoportal-common'
 
 export namespace ImportPssCej {
 

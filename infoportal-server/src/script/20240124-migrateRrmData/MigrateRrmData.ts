@@ -1,6 +1,6 @@
 import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from '../../feature/kobo/KoboSdkGenerator'
-import {Bn_rapidResponseSidar} from '../output/kobo/Bn_rapidResponseSidar'
+import {Bn_rapidResponseSidar} from '@infoportal-common'
 import {KoboMappedAnswersService} from '../../feature/kobo/KoboMappedAnswersService'
 import {DeepPartial} from '@alexandreannic/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'

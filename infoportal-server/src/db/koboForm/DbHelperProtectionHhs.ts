@@ -3,7 +3,7 @@ import {DbKoboFormHelper} from './Helper'
 import {Enum, map} from '@alexandreannic/ts-utils'
 import {endOfDay, endOfMonth, parse, startOfMonth} from 'date-fns'
 import {DrcProject, KoboIndex} from '@infoportal-common'
-import {Protection_hhs} from '../../script/output/kobo/Protection_hhs'
+import {Protection_hhs} from '@infoportal-common'
 
 type Office = typeof Protection_hhs.options['staff_to_insert_their_DRC_office']
 

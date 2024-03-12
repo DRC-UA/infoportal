@@ -1,8 +1,8 @@
 import {DrcOffice, OblastISO, OblastName} from '@infoportal-common'
 import {KoboAnswerFlat, KoboAnswerId} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 import {ShelterNtaTags, ShelterTaTags} from '../../kobo/tags/ShelterTags'
-import {Shelter_TA} from '../../../script/output/kobo/Shelter_TA'
-import {Shelter_NTA} from '../../../script/output/kobo/Shelter_NTA'
+import {Shelter_TA} from '@infoportal-common'
+import {Shelter_NTA} from '@infoportal-common'
 
 export enum ShelterTaPriceLevel {
   Light = 'Light',

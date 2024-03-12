@@ -3,10 +3,10 @@ import {KoboSdkGenerator} from '../../feature/kobo/KoboSdkGenerator'
 import {PromisePool} from '@supercharge/promise-pool'
 import {ApiKoboAnswerMetaData, KoboAnswer} from '../../feature/connector/kobo/KoboClient/type/KoboAnswer'
 import {scriptConf} from '../ScriptConf'
-import {Protection_hhs} from '../output/kobo/Protection_hhs'
+import {Protection_hhs} from '@infoportal-common'
 import {mapFor} from '@alexandreannic/ts-utils'
 import {KoboIndex} from '@infoportal-common'
-import {Protection_hhs3Create} from '../output/kobo/Protection_hhs3Create'
+import {Protection_hhs3Create} from '@infoportal-common'
 
 const retryIds = []
 const problemId = [

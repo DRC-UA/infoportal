@@ -8,10 +8,10 @@ import {appConf} from '../../../core/conf/AppConf'
 import {MpcaDataTag, MpcaEntity, MpcaProgram} from './MpcaDbType'
 import {WfpDeduplication} from '../../wfpDeduplication/WfpDeduplicationType'
 import {KoboSyncServer} from '../../kobo/KoboSyncServer'
-import {Bn_Re} from '../../../script/output/kobo/Bn_Re'
-import {Bn_OldMpcaNfi} from '../../../script/output/kobo/Bn_OldMpcaNfi'
-import {Bn_RapidResponse} from '../../../script/output/kobo/Bn_RapidResponse'
-import {Shelter_cashForRepair} from '../../../script/output/kobo/Shelter_cashForRepair'
+import {Bn_Re} from '@infoportal-common'
+import {Bn_OldMpcaNfi} from '@infoportal-common'
+import {Bn_RapidResponse} from '@infoportal-common'
+import {Shelter_cashForRepair} from '@infoportal-common'
 
 export class MpcaDbService {
 
