@@ -337,7 +337,7 @@ export const _MPCADashboard = ({
             </SlidePanel>
           </Div>
         </Div>
-        {session.admin && (
+        {(session.admin || session.drcJob === 'Finance Manager') && (
           <Div>
             <Div column>
               <MpcaDuplicatedCheckPanel data={data}/>

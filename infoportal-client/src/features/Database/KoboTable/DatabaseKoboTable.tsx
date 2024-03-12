@@ -30,7 +30,7 @@ export const DatabaseTableRoute = () => {
   return (
     <>
       {map(ctx.getForm(formId), form =>
-        <Page width="full">
+        <Page width="full" sx={{p: 0}}>
           <Panel>
             <DatabaseTable
               serverId={serverId}
@@ -73,7 +73,11 @@ export const DatabaseTable = ({
   const {accesses, session} = useSession()
   const {toastHttpError} = useIpToast()
   const ctxSchema = useKoboSchemaContext()
-  const fetcherSchemaIfUnknown = useFetcher(() => api.koboApi.getForm({serverId, id: formId}).then(_ => KoboSchemaHelper.buildBundle({m, schema: _, langIndex: ctxSchema.langIndex})))
+  const fetcherSchemaIfUnknown = useFetcher(() => api.koboApi.getForm({serverId, id: formId}).then(_ => KoboSchemaHelper.buildBundle({
+    m,
+    schema: _,
+    langIndex: ctxSchema.langIndex
+  })))
   const formName = KoboIndex.searchById(formId)?.name
 
   useEffect(function getSchema() {

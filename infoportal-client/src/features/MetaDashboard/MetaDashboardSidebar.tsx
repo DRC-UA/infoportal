@@ -125,7 +125,7 @@ export const MetaDashboardSidebarBody = (
               //   horizontal: 'left',
               variant={filters[name]?.length ?? 0 > 0 ? 'dot' : undefined}
               // badgeContent={filters[name]?.length}
-              sx={{color: t.palette.text.secondary, marginLeft: 'auto'}}
+              sx={{color: t.palette.text.secondary, marginLeft: 'auto', mr: .5}}
             >
               <IpIconBtn children="clear" size="small" onClick={() => onClear?.(name)}/>
             </Badge>

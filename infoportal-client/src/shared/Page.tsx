@@ -95,7 +95,10 @@ export const Page = ({
         width={width}
         animated={!disableAnimation}
         sx={{
-          ...sx, my: 1, px: 1, ...disableAnimation && {transform: 'none',}
+          my: 1,
+          px: 1,
+          ...disableAnimation && {transform: 'none',},
+          ...sx,
         }}
       >
         {children}
