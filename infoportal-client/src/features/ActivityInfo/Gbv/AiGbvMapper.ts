@@ -3,6 +3,7 @@ import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {KoboUnwrapResult} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {aiInvalidValueFlag} from '@/features/ActivityInfo/shared/AiBundle'
 
 export namespace AiGbvMapper {
 
@@ -33,7 +34,7 @@ export namespace AiGbvMapper {
           'Plan/Project Code': fnSwitch(
             DrcProjectHelper.search(Protection_gbv.options.project[d.project!])!,
             planCode,
-            () => '⚠️' + Protection_gbv.options.project[d.project!] as any
+            () => aiInvalidValueFlag + Protection_gbv.options.project[d.project!] as any
           )!,
           'Population Group': AiMapper.mapPopulationGroup(ind.displacement),
           'Indicators': fnSwitch(d.activity!, {

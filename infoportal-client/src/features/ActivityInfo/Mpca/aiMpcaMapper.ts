@@ -1,7 +1,7 @@
-import {DrcProgram, DrcProjectHelper, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
+import {DrcProgram, DrcProject, DrcProjectHelper, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-import {AiBundle2} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundle, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
@@ -10,7 +10,16 @@ import {AiMpcaType} from '@/features/ActivityInfo/Mpca/aiMpcaType'
 const averageAssistanceAmount = 445
 export namespace AiMpcaMapper {
 
-  type Bundle = AiBundle2<AiMpcaType.Type>
+  type Bundle = AiBundle<AiMpcaType.Type>
+
+  const getPlanCode = (_: DrcProject) => {
+    return fnSwitch(_ as any, {
+      [DrcProject['UKR-000336 UHF6']]: 'MPCA-DRC-00004',
+      [DrcProject['UKR-000298 Novo-Nordisk']]: 'MPCA-DRC-00003',
+      [DrcProject['UKR-000309 OKF']]: 'MPCA-DRC-00002',
+      [DrcProject['UKR-000270 Pooled Funds']]: 'MPCA-DRC-00001',
+    })
+  }
 
   export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
     const period = PeriodHelper.fromYYYYMM(periodStr)
@@ -61,9 +70,9 @@ export namespace AiMpcaMapper {
                 'Population Group': displacement,
                 'Total amount (USD) distributed through multi-purpose cash assistance': averageAssistanceAmount,
                 'Payments Frequency': 'Multiple payments',
-                'Activity Plan Code': project as never,
+                'Activity Plan Code': getPlanCode(project) as any,
                 'Indicators - MPCA': '# of individuals assisted with multi-purpose cash assistance',
-                'Reporting Month': periodStr,
+                'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
                 'Girls (0-17)': disag['Girls (0-17)'] ?? 0,
                 'Boys (0-17)': disag['Boys (0-17)'] ?? 0,
                 'Adult Women (18-59)': disag['Adult Women (18-59)'] ?? 0,
@@ -82,11 +91,12 @@ export namespace AiMpcaMapper {
               const request = ActivityInfoSdk.makeRecordRequests({
                 activityIdPrefix: 'drcflsc',
                 activityYYYYMM: periodStr,
-                formId: activitiesConfig.snfi.id,
+                formId: activitiesConfig.mpca.id,
                 activity: AiMpcaType.map(AiMapper.mapLocationToRecordId(ai)),
                 activityIndex: i++,
               })
               bundle.push({
+                submit: checkAiValid(ai.Raion, ai.Hromada, ai['Activity Plan Code']),
                 recordId: request.changes[0].recordId,
                 data: grouped,
                 activity: ai,

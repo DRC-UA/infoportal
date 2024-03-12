@@ -4,7 +4,7 @@ import {Panel} from '@/shared/Panel'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {AiShelterMapper} from '@/features/ActivityInfo/Snfi/aiSnfiMapper'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {BundleTable} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundleTable} from '@/features/ActivityInfo/shared/AiBundle'
 
 export const AiSnfi = () => {
   const {api} = useAppSettings()
@@ -18,7 +18,7 @@ export const AiSnfi = () => {
   return (
     <Page width="full">
       <Panel>
-        <BundleTable fetcher={fetcher} id="snfi"/>
+        <AiBundleTable fetcher={fetcher} id="snfi"/>
       </Panel>
     </Page>
   )

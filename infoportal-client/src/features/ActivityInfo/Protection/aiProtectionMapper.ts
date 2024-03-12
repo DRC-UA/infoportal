@@ -1,15 +1,15 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiBundle2} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
-import {AILocationHelper, aiRaions, DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
-import {fnSwitch, map} from '@alexandreannic/ts-utils'
+import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
+import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 
 export namespace AiProtectionMapper {
 
-  type Bundle = AiBundle2<AiProtectionType.Type, AiProtectionType.TypeSub>
+  type Bundle = AiBundle<AiProtectionType.Type, AiProtectionType.TypeSub>
 
   const getPlanCode = (_?: DrcProject): AiProtectionType.Type['Plan/Project Code'] => {
     const planCode = Object.freeze({
@@ -22,7 +22,7 @@ export namespace AiProtectionMapper {
       [DrcProject['UKR-000330 SDC2']]: 'PRT-DRC-00007',
     })
     // @ts-ignore
-    return planCode[_] ?? `!!! ${_}`
+    return planCode[_] ?? `${aiInvalidValueFlag} ${_}`
   }
 
   export const req = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
@@ -75,7 +75,7 @@ export namespace AiProtectionMapper {
                       [DrcProgram.AwarenessRaisingSession]: '# of individuals who participated in awareness raising activities on Protection',
                     }, () => '!!!' as any),
                     'Population Group': AiMapper.mapPopulationGroup(displacement),
-                    'Reporting Month': periodStr,
+                    'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
                     ...disaggregation,
                     // 'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
                     // 'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
@@ -99,6 +99,7 @@ export namespace AiProtectionMapper {
             })
             subActivities.forEach((s) => {
               bundles.push({
+                submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Plan/Project Code']),
                 recordId: request.changes[0].recordId,
                 activity: ai,
                 subActivity: s.ai,

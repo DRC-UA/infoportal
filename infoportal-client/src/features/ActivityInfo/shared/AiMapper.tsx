@@ -19,10 +19,11 @@ export namespace AiMapper {
   export type Location = Pick<AiProtectionType.Type, 'Oblast' | 'Raion' | 'Hromada'>
 
   export const getLocationByMeta = (oblast: string, raion: string, hromada: string): Location => {
+    const hromadaLoc = AILocationHelper.findHromada(oblast, raion, hromada)
     return {
       'Oblast': AILocationHelper.findOblast(oblast) ?? '⚠️' + oblast as any,
       'Raion': AILocationHelper.findRaion(oblast, raion)?._5w ?? '⚠️' + raion as any,
-      'Hromada': AILocationHelper.findHromada(oblast, raion, hromada)?._5w ?? '⚠️' + hromada as any,
+      'Hromada': hromadaLoc ? (hromadaLoc.en + '_' + hromadaLoc.iso) : '⚠️' + hromada as any,
     }
   }
 
@@ -48,9 +49,9 @@ export namespace AiMapper {
       raion?.en,
       Bn_Re.options.ben_det_hromada[d.ben_det_hromada as keyof typeof Bn_Re.options.ben_det_hromada] ?? d.ben_det_hromada)
     return {
-      Oblast: AILocationHelper.findOblast(oblast)!,
+      Oblast: AILocationHelper.findOblast(oblast)! as any, //  @FIXME
       Raion: raion?._5w as any,
-      Hromada: hromada?._5w as any,
+      Hromada: hromada ? (hromada.en + '_' + hromada.iso) : undefined!,
     }
   }
 

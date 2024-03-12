@@ -2,7 +2,7 @@ import {KoboMetaStatus, Bn_Re, DisplacementStatus, DrcProgram, DrcProject, group
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiBundle2} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundle, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {AiSnfiType} from '@/features/ActivityInfo/Snfi/aiSnfiType'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
@@ -25,7 +25,7 @@ export namespace AiShelterMapper {
     return planCodes[p] ?? `!!! ${p}`
   }
 
-  export type Bundle = AiBundle2<AiSnfiType.Type>
+  export type Bundle = AiBundle<AiSnfiType.Type>
 
   const mapBnreDonor = (_?: keyof typeof Bn_Re.options.back_donor) => {
     if (!_) return
@@ -130,7 +130,7 @@ export namespace AiShelterMapper {
               'Reporting Organization': 'Danish Refugee Council',
               ...AiMapper.getLocationByMeta(oblast, raion, hromada),
               'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
-              'Reporting Month': periodStr,
+              'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
               'Population Group': displacement,
               'Non-individuals Reached': grouped.length,
               'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
@@ -153,6 +153,7 @@ export namespace AiShelterMapper {
             })
 
             bundle.push({
+              submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Plan/Project Code']),
               recordId: request.changes[0].recordId,
               data: grouped,
               activity: ai,
@@ -213,7 +214,7 @@ export namespace AiShelterMapper {
               'Raion': raion,
               'Hromada': hromada,
               'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
-              'Reporting Month': periodStr,
+              'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
               'Population Group': status,
               'Non-individuals Reached': grouped.length,
               'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,

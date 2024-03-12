@@ -2,7 +2,6 @@ import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import React, {useEffect, useMemo, useState} from 'react'
-import {fi} from 'date-fns/locale'
 import {UseFetcher} from '@/shared/hook/useFetcher'
 import {map, Obj} from '@alexandreannic/ts-utils'
 import {AiPreviewActivity, AiPreviewRequest, AiSendBtn, AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
@@ -14,20 +13,14 @@ import {IpInput} from '@/shared/Input/Input'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {format, subMonths} from 'date-fns'
-import {Fender} from 'mui-extension'
 
-export interface AiBundle<TActivity = any, TAnswer extends Record<string, any> = any> {
-  data: KoboAnswer<TAnswer>[],
-  activity: TActivity,
-  subActivity: TActivity,
-  requestBody: ActiviftyInfoRecords,
-}
 
-export interface AiBundle2<
+export interface AiBundle<
   TActivity = any,
   TSubActivity extends any = undefined,
   TAnswer extends Record<string, any> = any
 > {
+  submit?: boolean
   recordId: string
   data: KoboAnswer<TAnswer>[],
   activity: TActivity,
@@ -35,13 +28,17 @@ export interface AiBundle2<
   requestBody: ActiviftyInfoRecords,
 }
 
+export const aiInvalidValueFlag = '⚠️'
+export const checkAiValid = (...args: (string | undefined)[]) => {
+  return !args.find(_ => _ === undefined || _.includes(aiInvalidValueFlag))
+}
 
-export const BundleTable = ({
+export const AiBundleTable = ({
   fetcher,
   id,
 }: {
   id: string
-  fetcher: UseFetcher<(period: string) => Promise<AiBundle2<any, any, any>[]>>
+  fetcher: UseFetcher<(period: string) => Promise<AiBundle<any, any, any>[]>>
 }) => {
   const {api, conf} = useAppSettings()
   const {toastHttpError} = useIpToast()
@@ -79,7 +76,7 @@ export const BundleTable = ({
             />
             <IpBtn icon="send" variant="contained" sx={{ml: 'auto'}} onClick={() => {
               if (!fetcher.get) return
-              _submit.call('all', fetcher.get.map(_ => _.requestBody)).catch(toastHttpError)
+              _submit.call('all', fetcher.get.filter(_ => _.submit).map(_ => _.requestBody)).catch(toastHttpError)
             }}>
               {m.submitAll}
             </IpBtn>
@@ -94,9 +91,9 @@ export const BundleTable = ({
               return (
                 <>
                   <AiSendBtn
-                    disabled={!_.activity.Hromada}
+                    disabled={!_.submit}
                     onClick={() => {
-                      _submit.call(_.recordId, _.requestBody).catch(toastHttpError)
+                      _submit.call(_.recordId, [_.requestBody]).catch(toastHttpError)
                     }}
                   />
                   <AiViewAnswers answers={_.data}/>

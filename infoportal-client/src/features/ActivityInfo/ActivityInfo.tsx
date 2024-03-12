@@ -13,7 +13,7 @@ import {appFeaturesIndex} from '@/features/appFeatureId'
 
 export const activitiesConfig = {
   'protection_general': {
-    id: 'cnr7gculteoyj914',
+    id: 'czd5jf7lqf2zv4r4r',
     subId: 'c4u0d3glqf3085j58',
     name: 'Protection',
     path: '/protection_general',
@@ -21,6 +21,7 @@ export const activitiesConfig = {
   },
   'gbv': {
     id: 'c6mrp6dlqv1q7q243w',
+    subId: 'cdgpehzlqv1q7q243x',
     name: 'GBV',
     path: '/gbc',
     componnent: <AiGbv/>,

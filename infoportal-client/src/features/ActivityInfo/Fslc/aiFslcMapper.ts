@@ -4,19 +4,18 @@ import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from '@in
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
-import {AiBundle2} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 
 export namespace AiFslcMapper {
-  export type Bundle = AiBundle2<AiFslcType.Type>
+  export type Bundle = AiBundle<AiFslcType.Type>
 
   const getPlanCode = (_: DrcProject) => {
-    const map = {
+    fnSwitch(_, {
       [DrcProject['UKR-000348 BHA3']]: 'FSLC-DRC-00001',
       [DrcProject['UKR-000336 UHF6']]: 'FSLC-DRC-00002',
       [DrcProject['UKR-000352 UHF7']]: 'FSLC-DRC-00003',
-    }
-    return (map as any)[_] ?? '!!!'
+    }, () => aiInvalidValueFlag + _)
   }
 
   export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
@@ -49,9 +48,9 @@ export namespace AiFslcMapper {
           finalTransform: (grouped, [project, oblast, raion, hromada, displacement, activity]) => {
             const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
             const ai: AiFslcType.Type = {
-              'Reporting Month': periodStr,
+              'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
               'Reporting Organization': 'Danish Refugee Council',
-              'Activity and indicator': '!!! TODO' as any,
+              'Activity and indicator': 'Agriculture and livestock inputs (cash)',
               'Implementing Partner': 'Danish Refugee Council',
               'Activity Plan Code': getPlanCode(project) as never,
               ...AiMapper.getLocationByMeta(oblast, raion, hromada),
@@ -79,6 +78,7 @@ export namespace AiFslcMapper {
             })
 
             bundle.push({
+              submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Activity Plan Code']),
               recordId: request.changes[0].recordId,
               data: grouped,
               activity: ai,

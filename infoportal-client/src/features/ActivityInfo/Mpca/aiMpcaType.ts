@@ -46,8 +46,8 @@ export namespace AiMpcaType {
     'cakkhd9lqntdpktd': a['Payments Frequency'] === undefined ? undefined : options['Payments Frequency'][a['Payments Frequency']!],
     'cjrs9bzlr0f2x6wd': a['Financial Service Provider (FSP)'] === undefined ? undefined : options['Financial Service Provider (FSP)'][a['Financial Service Provider (FSP)']!],
     'cb7ml4clqnt87pf3': a['Response Theme'] === undefined ? undefined : options['Response Theme'][a['Response Theme']!],
-    'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
-    'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
+    // 'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
+    'cshl0i7lq6so74qp': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
     'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
     'cf2masdlq6so74qr': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
     'cmol4qhlq6so74qv': a['Reporting Month'] === undefined ? undefined : a['Reporting Month'],
@@ -78,7 +78,12 @@ export namespace AiMpcaType {
     'Implementing Partner': {
       'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'
     },
-    'Activity Plan Code': {},
+    'Activity Plan Code': {
+      'MPCA-DRC-00001': 'cghgcrlltn5k1wn2',
+      'MPCA-DRC-00002': 'cf1o4x9ltn5mws75',
+      'MPCA-DRC-00003': 'cin9hupltn5o8y68',
+      'MPCA-DRC-00004': 'clpzjvyltn5ow78a',
+    },
     'Donor': {
       'ACT Alliance': 'cvkyilllqf1uylbd4',
       'AICM Ukraine': 'cjtjqpglqf1uylbd5',

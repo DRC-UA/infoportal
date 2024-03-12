@@ -1,6 +1,6 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import React from 'react'
-import {AiBundle2, BundleTable} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundle, AiBundleTable, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {add, groupBy, PeriodHelper} from '@infoportal-common'
 import {Panel} from '@/shared/Panel'
 import {Page} from '@/shared/Page'
@@ -11,7 +11,7 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 
-type AiGbvBundle = AiBundle2<AiGbvType.Type, AiGbvType.TypeSub>
+type AiGbvBundle = AiBundle<AiGbvType.Type, AiGbvType.TypeSub>
 
 export const AiGbv = () => {
   const {api} = useAppSettings()
@@ -73,10 +73,11 @@ export const AiGbv = () => {
             activity: AiGbvType.map(AiMapper.mapLocationToRecordId(activity)),
             subActivities: subActivities.map(AiGbvType.mapSub),
             activityIndex: i++,
-            subformId: activitiesConfig.protection_general.subId,
+            subformId: activitiesConfig.gbv.subId,
           })
           subActivities.forEach(s => {
             bundles.push({
+              submit: checkAiValid(activity.Oblast, activity.Raion, activity.Hromada, activity['Plan/Project Code']),
               recordId: request.changes[0].recordId,
               activity: activity,
               subActivity: s,
@@ -94,7 +95,7 @@ export const AiGbv = () => {
   return (
     <Page width="full">
       <Panel>
-        <BundleTable id="gbv" fetcher={fetcher}/>
+        <AiBundleTable id="gbv" fetcher={fetcher}/>
       </Panel>
     </Page>
   )

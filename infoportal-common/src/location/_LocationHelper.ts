@@ -4,9 +4,6 @@ import {AiOblast, aiOblasts} from './aiOblasts'
 import {hromadas} from './hromadas'
 import {raions} from './raions'
 import {Settlement, SettlementIso} from './settlements'
-import {aiRaions} from './aiRaions'
-import {aiHromadas} from './aiHromadas'
-import {aiSettlements} from './aiSettlements'
 // @ts-ignore
 const settlements$ = import('../../ressources/settlements.json').then(_ => _ as Record<SettlementIso, Settlement>)
 // const aiSettlements$ = import('../../ressources/aiSettlements.ts').then(_ => _ as Record<string, string>)

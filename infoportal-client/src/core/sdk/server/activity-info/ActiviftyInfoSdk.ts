@@ -4,7 +4,7 @@ import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInf
 interface ActivityInfoRequest {
   activityIdPrefix: string
   activity: Record<string, any>
-  activityYYYYMM: string
+  activityYYYYMM?: string
   activityIndex: number
   formId: string
   parentRecordId?: string
@@ -33,7 +33,7 @@ export class ActivityInfoSdk {
     subformId?: string,
     subActivities?: Record<string, any>[]
   }) => {
-    activityYYYYMM = activityYYYYMM.replace('-', '')
+    activityYYYYMM = activityYYYYMM?.replace('-', '')
     const parentRequest = ActivityInfoSdk.makeRecordRequestContent({
       activityIdPrefix,
       activity,
@@ -49,8 +49,7 @@ export class ActivityInfoSdk {
           ActivityInfoSdk.makeRecordRequestContent({
             activity: _,
             activityIndex: i,
-            activityYYYYMM,
-            activityIdPrefix: activityIdPrefix + 'i' + ('' + i).padStart(3, '0'),
+            activityIdPrefix: parentRequest.recordId,
             formId: subformId,
             parentRecordId: parentRequest.recordId,
           })) ?? [] : []
