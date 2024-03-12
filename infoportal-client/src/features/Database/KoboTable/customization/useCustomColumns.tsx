@@ -62,7 +62,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
     const lastStatusUpdate: DatatableColumn.Props<any> = {
       id: 'lastStatusUpdate',
       width: 129,
-      head: m.lastStatusUpdate,
+      head: m.paidOn,
       type: 'date',
       render: (row: KoboAnswer<{}, KoboBaseTags & KoboTagStatus>) => {
         return {
