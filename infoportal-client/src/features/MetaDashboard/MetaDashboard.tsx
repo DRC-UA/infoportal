@@ -1,15 +1,11 @@
-import {useFetcher} from '@/shared/hook/useFetcher'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import React, {useEffect, useState} from 'react'
-import {IKoboMeta, KoboIndex, OblastIndex} from '@infoportal-common'
+import React from 'react'
+import {KoboIndex, OblastIndex} from '@infoportal-common'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
-import {map, Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared/Page'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
-import {useMetaDashboardData} from '@/features/MetaDashboard/useMetaDashboardData'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
@@ -20,65 +16,66 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelper} from '@/shared/charts/chartHelper'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-import {PieChart} from 'recharts'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
-import {Box, RadioGroup, useTheme} from '@mui/material'
+import {Box, useTheme} from '@mui/material'
 import {Txt} from 'mui-extension'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
+import {MetaDashboardSidebar} from '@/features/MetaDashboard/MetaDashboardSidebar'
+import {MetaDashboardProvider, useMetaDashboardContext} from '@/features/MetaDashboard/MetaDashboardContext'
 
 export const MetaDashboard = () => {
-  const {api} = useAppSettings()
-  const fetcherKoboMeta = useFetcher(api.koboMeta.search)
-  const data = map(fetcherKoboMeta.get, _ => seq(_.data))
-  useEffect(() => {
-    fetcherKoboMeta.fetch()
-  }, [])
   return (
-    <Layout title={appFeaturesIndex.metaDashboard.name} loading={fetcherKoboMeta.loading}>
-      {data && (
-        <_MetaDashboard data={data} loading={fetcherKoboMeta.loading}/>
+    <MetaDashboardProvider>
+      <_MetaDashboard/>
+    </MetaDashboardProvider>
+  )
+}
+
+export const _MetaDashboard = () => {
+  const ctx = useMetaDashboardContext()
+  return (
+    <Layout
+      title={appFeaturesIndex.metaDashboard.name}
+      loading={ctx.fetcher.loading}
+      sidebar={<MetaDashboardSidebar/>}
+    >
+      {ctx.fetcher.get && (
+        <MetaDashboardBody/>
       )}
     </Layout>
   )
 }
 
-export const _MetaDashboard = ({
-  data,
-  loading,
-}: {
-  loading?: boolean
-  data: Seq<IKoboMeta>
-}) => {
+export const MetaDashboardBody = () => {
   const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
-  const ctx = useMetaDashboardData(data)
   const [showProjectsBy, setShowProjectsBy] = usePersistentState<'donor' | 'project'>('donor', {storageKey: 'meta-dashboard-showProject'})
+  const {data: ctx, fetcher} = useMetaDashboardContext()
   return (
-    <Page width="lg" loading={loading}>
-      <DataFilterLayout
-        data={ctx.filteredData}
-        filters={ctx.filters}
-        shapes={ctx.shape}
-        setFilters={ctx.setFilters}
-        onClear={() => {
-          ctx.setFilters({})
-          ctx.setPeriod({})
-        }}
-        before={
-          <>
-            <PeriodPicker
-              defaultValue={[ctx.period.start, ctx.period.end]}
-              onChange={([start, end]) => {
-                ctx.setPeriod(prev => ({...prev, start, end}))
-              }}
-              label={[m.start, m.endIncluded]}
-              max={today}
-            />
-          </>
-        }
-      />
+    <Page width="lg" loading={fetcher.loading}>
+      {/*<DataFilterLayout*/}
+      {/*  data={ctx.filteredData}*/}
+      {/*  filters={ctx.shapeFilters}*/}
+      {/*  shapes={ctx.shape}*/}
+      {/*  setFilters={ctx.setShapeFilters}*/}
+      {/*  onClear={() => {*/}
+      {/*    ctx.setShapeFilters({})*/}
+      {/*    ctx.setPeriod({})*/}
+      {/*  }}*/}
+      {/*  before={*/}
+      {/*    <>*/}
+      {/*      <PeriodPicker*/}
+      {/*        defaultValue={[ctx.period.start, ctx.period.end]}*/}
+      {/*        onChange={([start, end]) => {*/}
+      {/*          ctx.setPeriod(prev => ({...prev, start, end}))*/}
+      {/*        }}*/}
+      {/*        label={[m.start, m.endIncluded]}*/}
+      {/*        max={today}*/}
+      {/*      />*/}
+      {/*    </>*/}
+      {/*  }*/}
+      {/*/>*/}
       <Div column>
         <Div>
           <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
@@ -95,13 +92,7 @@ export const _MetaDashboard = ({
             {formatLargeNumber(ctx.filteredData.flatMap(_ => _.persons ?? []).length)}
           </SlideWidget>
           <SlideWidget sx={{flex: 1}} icon="person" title={m.uniqIndividuals}>
-            <Lazy deps={[ctx.filteredData]} fn={() => {
-              const wtTax = ctx.filteredData.filter(_ => !_.taxId)
-              const wTax = ctx.filteredData.filter(_ => !!_.taxId).distinct(_ => _.taxId)
-              return wtTax.flatMap(_ => _.persons ?? []).length + wTax.flatMap(_ => _.persons ?? []).length
-            }}>
-              {_ => formatLargeNumber(_)}
-            </Lazy>
+            {formatLargeNumber(ctx.distinctPersons.length)}
           </SlideWidget>
         </Div>
         <Div>
@@ -152,7 +143,7 @@ export const _MetaDashboard = ({
               )}
             </SlidePanel>
             <SlidePanel>
-              <ChartLineBy getX={_ => format(_.date, 'yyyy-MM')} getY={_ => 1} label={m.submissions} data={data}/>
+              <ChartLineBy getX={_ => format(_.date, 'yyyy-MM')} getY={_ => 1} label={m.submissions} data={ctx.filteredData}/>
             </SlidePanel>
             <SlidePanel title={m.program}><ChartBarSingleBy data={ctx.filteredData} by={_ => _.activity}/></SlidePanel>
           </Div>

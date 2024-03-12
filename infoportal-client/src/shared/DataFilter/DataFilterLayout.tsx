@@ -10,7 +10,7 @@ import {useI18n} from '@/core/i18n'
 import {DataFilterLayoutPopup} from '@/shared/DataFilter/DataFilterLayoutPopup'
 
 export interface FilterLayoutProps extends Pick<BoxProps, 'sx'> {
-  readonly onClear?: () => void
+  readonly onClear?: (name?: string) => void
   readonly filters: Record<string, string[] | undefined>
   readonly setFilters: Dispatch<SetStateAction<Record<string, undefined | string[]>>>
   readonly before?: ReactNode
@@ -102,7 +102,7 @@ export const DataFilterLayout = ({
           />
         )}
         {onClear && (
-          <IpIconBtn children="clear" tooltip={m.clearFilter} onClick={onClear}/>
+          <IpIconBtn children="clear" tooltip={m.clearFilter} onClick={() => onClear()}/>
         )}
       </Box>
     </Box>
