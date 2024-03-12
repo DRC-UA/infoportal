@@ -58,7 +58,8 @@ export const appConfig = {
   chatGptApiKey: _()(Env.NEXT_PUBLIC_CHATGPT_APIKEY),
   appOff: _(bool, defaultValue(false))(Env.NEXT_PUBLIC_APP_OFF),
   externalLink: {
-    mealReferralMatrix: 'https://drcngo.sharepoint.com/:x:/r/sites/UKRPortal/_layouts/15/Doc.aspx?sourcedoc=%7B401B9D94-94AF-4D88-A85D-BBCCAC7196FE%7D&file=DRC%20Ukraine%20CFM%20Referral%20Matrix_updated.xlsx&action=default&mobileredirect=true'
+    mealReferralMatrix: 'https://drcngo.sharepoint.com/:x:/r/sites/UKRPortal/_layouts/15/Doc.aspx?sourcedoc=%7B401B9D94-94AF-4D88-A85D-BBCCAC7196FE%7D&file=DRC%20Ukraine%20CFM%20Referral%20Matrix_updated.xlsx&action=default&mobileredirect=true',
+    metaDashboardReadMe: 'https://drcngo.sharepoint.com/sites/UKRPortal/_layouts/15/doc.aspx?sourcedoc={4acb5576-3be2-4939-8f77-2364e048d321}',
   },
   icons: {
     sector: 'category',
