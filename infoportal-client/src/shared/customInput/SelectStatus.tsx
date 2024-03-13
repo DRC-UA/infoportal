@@ -86,7 +86,7 @@ const OptionLabelTypeCompact = ({
     'warning': <Icon sx={{color: t.palette.warning.main}} title={type}>schedule</Icon>,
     'info': <Icon sx={{color: t.palette.info.main}} title={type}>info</Icon>,
     'success': <Icon sx={{color: t.palette.success.main}} title={type}>check_circle</Icon>,
-  }, () => 'oops')
+  })
 }
 
 
@@ -127,7 +127,7 @@ export const SelectStatusBy = <
 ) => {
   return (
     // @ts-ignore
-    <SelectStatus labels={SelectStatusConfig.statusType[props.enum]} status={SelectStatusConfig.enumStatus[props.enum]} {...props}/>
+    <SelectStatus {...props} labels={SelectStatusConfig.statusType[props.enum]} status={SelectStatusConfig.enumStatus[props.enum]}/>
   )
 }
 

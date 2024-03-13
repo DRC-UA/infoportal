@@ -55,9 +55,9 @@ export enum CashStatus {
 }
 
 export enum CashForRentStatus {
-  FirstPending = 'FristPending',
-  FirstPaid = 'FristPaid',
-  FirstRejected = 'FristRejected',
+  FirstPending = 'FirstPending',
+  FirstPaid = 'FirstPaid',
+  FirstRejected = 'FirstRejected',
   SecondPending = 'SecondPending',
   SecondPaid = 'SecondPaid',
   SecondRejected = 'SecondRejected',

@@ -75,7 +75,10 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       }
     }
 
-    const paymentStatus = (enumerator: SelectStatusConfig.EnumStatus = 'CashStatus', key: string = 'status'): DatatableColumn.Props<any>[] => {
+    const paymentStatus = (
+      enumerator: SelectStatusConfig.EnumStatus = 'CashStatus',
+      key: string = 'status'
+    ): DatatableColumn.Props<any>[] => {
       return [
         {
           id: 'custom_status',
