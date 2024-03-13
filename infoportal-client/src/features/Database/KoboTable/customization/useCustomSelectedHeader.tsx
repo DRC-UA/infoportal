@@ -22,12 +22,29 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
             label={m.project}
             onChange={_ => {
               ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
-              // ctx.asyncUpdateTag.call({answerIds: selectedIds, value: new Date(), key: 'lastStatusUpdate'})
             }}
           />
         )
       }
-      case KoboIndex.byName('bn_cashForRentRegistration').id:
+      case KoboIndex.byName('bn_cashForRentRegistration').id: {
+        return (
+          <>
+            <SelectStatusBy
+              enum="CashForRentStatus"
+              sx={{maxWidth: 120, mr: 1}}
+              disabled={!ctx.canEdit}
+              placeholder={m.project}
+              onChange={_ => {
+                ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
+              }}
+            />
+            <IpDatepicker
+              label={m.lastStatusUpdate}
+              onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'lastStatusUpdate'})}
+            />
+          </>
+        )
+      }
       case KoboIndex.byName('bn_rapidResponse').id:
       case KoboIndex.byName('bn_re').id:
       case KoboIndex.byName('ecrec_cashRegistrationBha').id:
@@ -42,7 +59,6 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
               label={m.status}
               onChange={_ => {
                 ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
-                // ctx.asyncUpdateTag.call({answerIds: selectedIds, value: new Date(), key: 'lastStatusUpdate'})
               }}
             />
             <IpDatepicker
