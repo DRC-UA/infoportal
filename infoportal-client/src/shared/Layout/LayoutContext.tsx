@@ -47,7 +47,9 @@ export const LayoutProvider = ({title: _title, showSidebarButton, mobileBreakpoi
   useEffectFn(_title, setTitle)
 
   useEffect(() => {
-    document.title = (title ?? '') + ' - InfoPortal'
+    document.title = (process.env.NODE_ENV === 'development' ? '(IP) ' : '')
+      + (title ? title + ' - ' : '')
+      + 'InfoPortal'
     window.addEventListener('resize', () => setPageWidth(getWidth()))
     // TODO looks needed when duplicate tab, must be verified
     setPageWidth(getWidth())
