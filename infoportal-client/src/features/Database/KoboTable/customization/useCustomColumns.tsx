@@ -1,5 +1,5 @@
 import {KoboAnswer, KoboBaseTags, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {CashStatus, currentProtectionProjects, DrcProject, Ecrec_cashRegistration, KoboGeneralMapping, KoboIndex, KoboTagStatus, ProtectionHhsTags,} from '@infoportal-common'
+import {currentProtectionProjects, DrcProject, Ecrec_cashRegistration, KoboGeneralMapping, KoboIndex, KoboTagStatus, ProtectionHhsTags,} from '@infoportal-common'
 import React, {useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {map, Obj} from '@alexandreannic/ts-utils'
@@ -7,7 +7,7 @@ import {useI18n} from '@/core/i18n'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
-import {SelectCashStatus, SelectShelterCashStatus, ShelterCashStatus} from '@/shared/customInput/SelectStatus'
+import {SelectStatusBy, SelectStatusConfig, ShelterCashStatus} from '@/shared/customInput/SelectStatus'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
@@ -75,24 +75,28 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       }
     }
 
-    const paymentStatus = (): DatatableColumn.Props<any>[] => {
+    const paymentStatus = (
+      enumerator: SelectStatusConfig.EnumStatus = 'CashStatus',
+      key: string = 'status'
+    ): DatatableColumn.Props<any>[] => {
       return [
         {
           id: 'custom_status',
           head: m.status,
           type: 'select_one',
           width: 120,
-          options: () => SheetUtils.buildOptions(Obj.keys(CashStatus), true),
-          render: (row: KoboAnswer<{}, KoboBaseTags & KoboTagStatus>) => {
+          options: () => SheetUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
+          render: (row: KoboAnswer<{}, any>) => {
             return {
-              value: row.tags?.status,
+              value: row.tags?.[key],
               label: (
-                <SelectCashStatus
+                <SelectStatusBy
+                  enum={enumerator}
                   disabled={!ctx.canEdit}
                   value={row.tags?.status}
                   placeholder={m.project}
                   onChange={_ => {
-                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'status'})
+                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: key})
                     // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
                   }}
                 />
@@ -116,7 +120,8 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
             return {
               value: row.tags?.status,
               label: (
-                <SelectShelterCashStatus
+                <SelectStatusBy
+                  enum="ShelterCashStatus"
                   disabled={!ctx.canEdit}
                   value={row.tags?.status}
                   placeholder={m.project}
@@ -155,7 +160,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_cashForRentRegistration').id]: [
-        ...paymentStatus(),
+        ...paymentStatus('CashForRentStatus'),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_cashForRentApplication').id]: [

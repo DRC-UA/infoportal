@@ -1,7 +1,7 @@
 import {IpSelectOption, IpSelectSingle, IpSelectSingleNullableProps} from '@/shared/Select/SelectSingle'
-import {fnSwitch, Obj} from '@alexandreannic/ts-utils'
+import {fnSwitch, KeyOf, Obj} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
-import {StateStatus, CashStatus} from '@infoportal-common'
+import {CashForRentStatus, CashStatus, StateStatus} from '@infoportal-common'
 import {Box, Icon, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 import {KoboValidation} from '@/core/sdk/server/kobo/Kobo'
@@ -13,25 +13,46 @@ export enum ShelterCashStatus {
   Paid = 'Paid',
 }
 
-export const shelterCashStatusType: Record<ShelterCashStatus, StateStatus> = {
-  Selected: 'warning',
-  Rejected: 'error',
-  FirstPayment: 'info',
-  Paid: 'success',
-}
+export namespace SelectStatusConfig {
+  export const enumStatus = {
+    ShelterCashStatus: ShelterCashStatus,
+    CashStatus: CashStatus,
+    KoboValidation: KoboValidation,
+    CashForRentStatus: CashForRentStatus,
+  }
 
-export const cashStatusType: Record<CashStatus, StateStatus> = {
-  Paid: 'success',
-  Rejected: 'error',
-  Referred: 'disabled',
-  Pending: 'warning',
-  Selected: 'info'
-}
+  export type EnumStatus = keyof typeof enumStatus
 
-export const koboValidationStatus: Record<KoboValidation, StateStatus> = {
-  [KoboValidation.Approved]: 'success',
-  [KoboValidation.Pending]: 'warning',
-  [KoboValidation.Rejected]: 'error',
+  export const statusType = {
+    ShelterCashStatus: {
+      Selected: 'warning',
+      Rejected: 'error',
+      FirstPayment: 'info',
+      Paid: 'success',
+    } as Record<ShelterCashStatus, StateStatus>,
+    CashStatus: {
+      Paid: 'success',
+      Rejected: 'error',
+      Referred: 'disabled',
+      Pending: 'warning',
+      Selected: 'info'
+    } as Record<CashStatus, StateStatus>,
+    KoboValidation: {
+      [KoboValidation.Approved]: 'success',
+      [KoboValidation.Pending]: 'warning',
+      [KoboValidation.Rejected]: 'error',
+    } as Record<KoboValidation, StateStatus>,
+    CashForRentStatus: {
+      [CashForRentStatus.FirstPending]: 'warning',
+      [CashForRentStatus.FirstPaid]: 'success',
+      [CashForRentStatus.FirstRejected]: 'error',
+      [CashForRentStatus.SecondPending]: 'warning',
+      [CashForRentStatus.SecondPaid]: 'success',
+      [CashForRentStatus.SecondRejected]: 'error',
+      [CashForRentStatus.Selected]: 'info',
+      [CashForRentStatus.Referred]: 'disabled',
+    } as Record<CashForRentStatus, StateStatus>
+  }
 }
 
 const commonProps = {borderRadius: '20px', px: 1}
@@ -50,8 +71,9 @@ const OptionLabelType = ({
     'warning': <Box sx={{...commonProps, background: t.palette.warning.main, color: t.palette.warning.contrastText}}>{children}</Box>,
     'info': <Box sx={{...commonProps, background: t.palette.info.main, color: t.palette.info.contrastText}}>{children}</Box>,
     'success': <Box sx={{...commonProps, background: t.palette.success.main, color: t.palette.success.contrastText}}>{children}</Box>,
-  })
+  }, () => undefined)
 }
+
 const OptionLabelTypeCompact = ({
   type,
 }: {
@@ -94,14 +116,18 @@ export const SelectStatus = <T extends string>({
   )
 }
 
-export const SelectCashStatus = (props: Omit<SelectStatusProps<CashStatus>, 'status' | 'labels'>) => {
-  return <SelectStatus status={CashStatus} labels={cashStatusType} {...props}/>
+export const SelectStatusBy = <
+  K extends SelectStatusConfig.EnumStatus,
+  V extends typeof SelectStatusConfig.enumStatus[K][KeyOf<typeof SelectStatusConfig.enumStatus[K]>]
+>(
+// @ts-ignore
+  props: Omit<SelectStatusProps<V>, 'status' | 'labels'> & {
+    enum: K
+  }
+) => {
+  return (
+    // @ts-ignore
+    <SelectStatus {...props} labels={SelectStatusConfig.statusType[props.enum]} status={SelectStatusConfig.enumStatus[props.enum]}/>
+  )
 }
 
-export const SelectShelterCashStatus = (props: Omit<SelectStatusProps<ShelterCashStatus>, 'status' | 'labels'>) => {
-  return <SelectStatus status={ShelterCashStatus} labels={shelterCashStatusType} {...props}/>
-}
-
-export const SelectValidationStatus = (props: Omit<SelectStatusProps<KoboValidation>, 'status' | 'labels'>) => {
-  return <SelectStatus status={KoboValidation} labels={koboValidationStatus}{...props}/>
-}

@@ -54,6 +54,17 @@ export enum CashStatus {
   // Received = 'Received',
 }
 
+export enum CashForRentStatus {
+  FirstPending = 'FirstPending',
+  FirstPaid = 'FirstPaid',
+  FirstRejected = 'FirstRejected',
+  SecondPending = 'SecondPending',
+  SecondPaid = 'SecondPaid',
+  SecondRejected = 'SecondRejected',
+  Selected = 'Selected',
+  Referred = 'Referred',
+}
+
 export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {
   start: Date
   end: Date

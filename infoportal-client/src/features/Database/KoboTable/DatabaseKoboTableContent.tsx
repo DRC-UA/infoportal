@@ -19,10 +19,10 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-import {SelectValidationStatus} from '@/shared/customInput/SelectStatus'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
 import {DatatableKoboEditModal} from '@/features/Database/KoboTable/DatatableKoboEditModal'
+import {SelectStatus, SelectStatusBy} from '@/shared/customInput/SelectStatus'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -82,7 +82,8 @@ export const DatabaseKoboTableContent = ({
           value: value ?? DatatableUtils.blank,
           option: value ? m[value] : DatatableUtils.blank,
           label: (
-            <SelectValidationStatus
+            <SelectStatusBy
+              enum="KoboValidation"
               compact
               disabled={!ctx.canEdit || ctx.fetcherAnswers.loading}
               value={value}
