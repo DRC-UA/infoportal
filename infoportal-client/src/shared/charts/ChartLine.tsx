@@ -80,7 +80,7 @@ export const ChartLine = ({
             )}
             <XAxis dataKey="name"/>
             <YAxis/>
-            <Tooltip wrapperStyle={{zIndex: 100, borderRadius: 4}} formatter={_ => percent ? `${_}%'` : formatLargeNumber(_ as any, {maximumFractionDigits: 2})}/>
+            <Tooltip wrapperStyle={{zIndex: 100, borderRadius: 4}} formatter={_ => percent ? `${_}` : formatLargeNumber(_ as any, {maximumFractionDigits: 2})}/>
             {lines.map((line, i) => (
               <Line
                 isAnimationActive={!disableAnimation}
