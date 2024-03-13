@@ -88,7 +88,6 @@ export const MetaDashboardSidebarSelect = ({
         {(options() ?? []).map(o =>
           <FormControlLabel
             key={o.value}
-
             control={<Checkbox size="small" name={o.value ?? undefined} checked={value.includes(o.value as any)}/>}
             label={<Txt size="small">{o.label}</Txt>}
             sx={css.option}

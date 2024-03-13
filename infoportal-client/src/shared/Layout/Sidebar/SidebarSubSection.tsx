@@ -31,12 +31,12 @@ export const SidebarSubSection = ({
       background: styleUtils(t).color.toolbar,
     }}>
       <Box sx={{pl: keepOpen ? 1 : .5, mb: 0, display: 'flex', alignItems: 'center'}}>
+        <Txt bold color="hint" sx={{fontSize: '.825em', flex: 1}}>{title}</Txt>
         {!keepOpen && (
           <IpIconBtn onClick={() => setOpen(_ => !_)} size="small" sx={{mr: 1}}>
             {open ? 'expand_less' : 'expand_more'}
           </IpIconBtn>
         )}
-        <Txt bold color="hint" sx={{fontSize: '.825em', flex: 1}}>{title}</Txt>
       </Box>
       <Collapse in={keepOpen || open}>
         {children}

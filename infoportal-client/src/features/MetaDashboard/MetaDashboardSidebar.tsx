@@ -8,7 +8,7 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {useI18n} from '@/core/i18n'
 import {FilterLayoutProps} from '@/shared/DataFilter/DataFilterLayout'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {Badge, Box, capitalize, Switch, useTheme} from '@mui/material'
+import {Badge, Box, capitalize, Icon, Switch, useTheme} from '@mui/material'
 import {MetaDashboardSidebarSelect} from '@/features/MetaDashboard/MetaDashboardSidebarSelect'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {SidebarSubSection} from '@/shared/Layout/Sidebar/SidebarSubSection'
@@ -117,6 +117,7 @@ export const MetaDashboardSidebarBody = (
       {Obj.entries(shapes).map(([name, shape]) =>
         <SidebarSubSection title={
           <Box sx={{display: 'flex', alignItems: 'center'}}>
+            <Icon fontSize="small" sx={{visibility: shape.icon ? 'inherit' : 'hidden', color: t.palette.text.secondary, mr: 1}}>{shape.icon}</Icon>
             {capitalize(name)}
             <Badge
               color="primary"
@@ -125,7 +126,7 @@ export const MetaDashboardSidebarBody = (
               //   horizontal: 'left',
               variant={filters[name]?.length ?? 0 > 0 ? 'dot' : undefined}
               // badgeContent={filters[name]?.length}
-              sx={{color: t.palette.text.secondary, marginLeft: 'auto', mr: .5}}
+              sx={{color: t.palette.text.secondary, marginLeft: 'auto', mr: .25}}
             >
               <IpIconBtn children="clear" size="small" onClick={() => onClear?.(name)}/>
             </Badge>
