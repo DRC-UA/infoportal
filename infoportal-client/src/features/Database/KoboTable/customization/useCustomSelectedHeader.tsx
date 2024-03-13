@@ -31,6 +31,7 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
       case KoboIndex.byName('bn_rapidResponse').id:
       case KoboIndex.byName('bn_re').id:
       case KoboIndex.byName('ecrec_cashRegistrationBha').id:
+      case KoboIndex.byName('shelter_cashForRepair').id:
       case KoboIndex.byName('ecrec_cashRegistration').id: {
         return (
           <>

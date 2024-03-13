@@ -169,6 +169,9 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         ...paymentStatus(),
         ...individualsBreakdown,
       ],
+      [KoboIndex.byName('shelter_cashForRepair').id]: [
+        ...paymentStatusShelter(),
+      ],
       [KoboIndex.byName('shelter_cashForShelter').id]: [
         ...paymentStatusShelter(),
         ...individualsBreakdown,
