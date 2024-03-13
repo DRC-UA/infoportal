@@ -36,6 +36,7 @@ export interface KoboSchema {
       label?: string[]
       name: string
       type:
+        'file' |
         'deviceid' |
         'end_repeat' |
         'begin_repeat' |

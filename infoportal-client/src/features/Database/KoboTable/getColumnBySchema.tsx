@@ -3,7 +3,7 @@ import {I18nContextProps} from '@/core/i18n/I18n'
 import {KoboApiColType, KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
 import {KoboAnswer, KoboAnswerId, KoboAnswerMetaData, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {SheetHeadTypeIcon} from '@/shared/Sheet/SheetHead'
-import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
+import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
 import {mapFor, seq} from '@alexandreannic/ts-utils'
 import {formatDate, formatDateTime} from '@/core/i18n/localization/en'
 import {IpBtn} from '@/shared/Btn'
@@ -14,6 +14,15 @@ import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {removeHtml} from '@infoportal-common'
+import {Txt} from 'mui-extension'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+
+const imageExtension = new Set([
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+])
 
 const ignoredColType: Set<KoboApiColType> = new Set([
   'begin_group',
@@ -133,6 +142,20 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
               tooltip: value,
               export: value,
               label: <KoboAttachedImg attachments={row.attachments} fileName={value}/>
+            }
+          }
+        }
+      }
+      case 'file': {
+        return {
+          typeIcon: <SheetHeadTypeIcon children="functions" tooltip="insert_drive_file"/>,
+          ...common,
+          type: 'string',
+          render: row => {
+            const fileName = getVal(row, q.name)
+            return {
+              value: fileName ?? DatatableUtils.blank,
+              label: <Txt link><a href={findFileUrl(fileName, row.attachments)} target="_blank">{fileName}</a></Txt>
             }
           }
         }

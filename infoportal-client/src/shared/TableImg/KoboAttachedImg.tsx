@@ -22,6 +22,11 @@ export const proxyKoboImg = ({
 
 const parseKoboFileName = (fileName?: string) => fileName ? fileName.replaceAll(' ', '_').replaceAll(/[^0-9a-zA-Z-_.]/g, '') : undefined
 
+export const findFileUrl = (fileName: string, attachments: KoboAttachment[]) => {
+  const parsedFileName = parseKoboFileName(fileName)
+  return parsedFileName ? attachments.find(_ => _.filename.includes(parsedFileName))?.download_small_url : undefined
+}
+
 export const koboImgHelper = ({
   fileName,
   serverId = kobo.drcUa.server.prod,
@@ -33,8 +38,7 @@ export const koboImgHelper = ({
   attachments: KoboAttachment[]
   conf?: AppConfig
 }) => {
-  const parsedFileName = parseKoboFileName(fileName)
-  const url = parsedFileName ? attachments.find(_ => _.filename.includes(parsedFileName))?.download_small_url : undefined
+  const url = findFileUrl(fileName, attachments)
   return proxyKoboImg({
     url,
     serverId,
