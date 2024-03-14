@@ -3,9 +3,6 @@ import {KoboIndex, OblastIndex} from '@infoportal-common'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared/Page'
-import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
-import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
@@ -79,37 +76,43 @@ export const MetaDashboardBody = () => {
       <Div column>
         <Div>
           <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
-            <Lazy deps={[ctx.filteredData]} fn={() => {
-              return ctx.filteredData.distinct(_ => _.formId).length
+            <Lazy deps={[ctx.data]} fn={() => {
+              return ctx.data.distinct(_ => _.formId).length
             }}>
               {_ => formatLargeNumber(_)}
             </Lazy>
           </SlideWidget>
-          <SlideWidget sx={{flex: 1}} icon="group" title={m.submissions}>
-            {formatLargeNumber(ctx.filteredData.length)}
+          <SlideWidget sx={{flex: 1}} icon="storage" title={m.submissions}>
+            {formatLargeNumber(ctx.data.length)}
+          </SlideWidget>
+          <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
+            {formatLargeNumber(ctx.uniqueData.length)}
+          </SlideWidget>
+          <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
+            {(ctx.uniquePersons.length / ctx.uniqueData.length).toFixed(2)}
           </SlideWidget>
           <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
-            {formatLargeNumber(ctx.filteredData.flatMap(_ => _.persons ?? []).length)}
+            {formatLargeNumber(ctx.persons.length)}
           </SlideWidget>
           <SlideWidget sx={{flex: 1}} icon="person" title={m.uniqIndividuals}>
-            {formatLargeNumber(ctx.distinctPersons.length)}
+            {formatLargeNumber(ctx.uniquePersons.length)}
           </SlideWidget>
         </Div>
         <Div>
           <Div column>
             <SlidePanel title={m.ageGroup}>
-              <AgeGroupTable tableId="meta-dashboard" persons={ctx.filteredPersons} enableDisplacementStatusFilter/>
+              <AgeGroupTable tableId="meta-dashboard" persons={ctx.persons} enableDisplacementStatusFilter/>
             </SlidePanel>
             <SlidePanel title={m.currentOblast}>
-              <UaMapBy sx={{mx: 2}} getOblast={_ => OblastIndex.byName(_.oblast).iso} data={ctx.filteredData} fillBaseOn="value"/>
+              <UaMapBy sx={{mx: 2}} getOblast={_ => OblastIndex.byName(_.oblast).iso} data={ctx.data} fillBaseOn="value"/>
             </SlidePanel>
-            <SlidePanel title={m.form}><ChartBarSingleBy data={ctx.filteredData} by={_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId}/></SlidePanel>
+            <SlidePanel title={m.form}><ChartBarSingleBy data={ctx.data} by={_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId}/></SlidePanel>
           </Div>
           <Div column>
             <SlidePanel>
-              <Lazy deps={[ctx.filteredData]} fn={() => {
+              <Lazy deps={[ctx.data]} fn={() => {
                 return ChartHelper.single({
-                  data: ctx.filteredData.map(_ => _.status ?? 'Blank'),
+                  data: ctx.data.map(_ => _.status ?? 'Blank'),
                   percent: true,
                 }).get()
               }}>
@@ -137,15 +140,15 @@ export const MetaDashboardBody = () => {
                 <ScRadioGroupItem hideRadio value="project" title={m.project}/>
               </ScRadioGroup>
               {showProjectsBy === 'project' ? (
-                <ChartBarMultipleByKey data={ctx.filteredData} property="project"/>
+                <ChartBarMultipleByKey data={ctx.data} property="project"/>
               ) : (
-                <ChartBarMultipleByKey data={ctx.filteredData} property="donor"/>
+                <ChartBarMultipleByKey data={ctx.data} property="donor"/>
               )}
             </SlidePanel>
             <SlidePanel>
-              <ChartLineBy getX={_ => format(_.date, 'yyyy-MM')} getY={_ => 1} label={m.submissions} data={ctx.filteredData}/>
+              <ChartLineBy getX={_ => format(_.date, 'yyyy-MM')} getY={_ => 1} label={m.submissions} data={ctx.data}/>
             </SlidePanel>
-            <SlidePanel title={m.program}><ChartBarSingleBy data={ctx.filteredData} by={_ => _.activity}/></SlidePanel>
+            <SlidePanel title={m.program}><ChartBarSingleBy data={ctx.data} by={_ => _.activity}/></SlidePanel>
           </Div>
         </Div>
       </Div>

@@ -2,6 +2,7 @@ import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
   Bn_cashForRentRegistration,
   Bn_Re,
+  CashForRentStatus,
   DrcOffice,
   DrcProgram,
   DrcProjectHelper,
@@ -49,10 +50,20 @@ export namespace KoboMetaMapperShelter {
     return row
   }
 
-  export const createCfRent: MetaMapperInsert<KoboMetaOrigin<Bn_cashForRentRegistration.T>> = row => {
+  export const createCfRent: MetaMapperInsert<KoboMetaOrigin<Bn_cashForRentRegistration.T, KoboTagStatus<CashForRentStatus>>> = row => {
     const answer = Bn_cashForRentRegistration.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const status = fnSwitch(row.tags?.status!, {
+      FirstPending: KoboMetaStatus.Pending,
+      FirstPaid: KoboMetaStatus.Pending,
+      FirstRejected: KoboMetaStatus.Pending,
+      SecondPending: KoboMetaStatus.Pending,
+      SecondPaid: KoboMetaStatus.Committed,
+      SecondRejected: KoboMetaStatus.Pending,
+      Selected: KoboMetaStatus.Rejected,
+      Referred: undefined,
+    }, () => undefined)
     return {
       enumerator: Bn_cashForRentRegistration.options.back_enum[answer.back_enum!],
       office: answer.back_office ? fnSwitch(answer.back_office, {
@@ -76,6 +87,8 @@ export namespace KoboMetaMapperShelter {
       patronymicName: answer.ben_det_pat_name,
       taxId: answer.pay_det_tax_id_num,
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+      status,
+      lastStatusUpdate: row.tags?.lastStatusUpdate,
     }
   }
 

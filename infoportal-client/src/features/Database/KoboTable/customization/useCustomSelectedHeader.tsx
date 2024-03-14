@@ -39,7 +39,7 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
               }}
             />
             <IpDatepicker
-              label={m.lastStatusUpdate}
+              label={m.paidOn}
               onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'lastStatusUpdate'})}
             />
           </>
@@ -62,7 +62,7 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
               }}
             />
             <IpDatepicker
-              label={m.lastStatusUpdate}
+              label={m.paidOn}
               onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'lastStatusUpdate'})}
             />
           </>

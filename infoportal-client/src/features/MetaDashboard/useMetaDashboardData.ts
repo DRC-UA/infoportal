@@ -1,22 +1,27 @@
 import {useCallback, useMemo, useState} from 'react'
-import {Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@alexandreannic/ts-utils'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {appConfig} from '@/conf/AppConfig'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {drcOffices, IKoboMeta, KoboIndex, KoboMetaStatus, OblastIndex, Period, PeriodHelper} from '@infoportal-common'
 import {useI18n} from '@/core/i18n'
 
+export type DistinctBy = 'taxId' | 'phone' | 'submission'
 export type MetaDashboardCustomFilter = {
-  distinctBy?: 'taxId' | 'phone'
+  distinctBy?: ('taxId' | 'phone' | 'submission')[]
 }
 
-export const distinctByTaxId = <T extends {taxId?: string}, >(data: Seq<T>): Seq<T> => {
-  const alreadyMet = new Set()
-  return data.filter(_ => {
-    if (!_.taxId) return true
-    if (alreadyMet.has(_.taxId)) return false
-    alreadyMet.add(_.taxId)
-    return true
+export const distinctBys = <T extends Record<string, any>, K extends keyof T, >(data: Seq<T>, params: Record<K, boolean>): Seq<T> => {
+  const keys = Obj.keys(params).filter(k => params[k])
+  if (keys.length === 0) return data
+  const alreadyMet = new Map<string, Set<string>>(keys.map(_ => [_, new Set()]))
+  return data.filter(row => {
+    return keys.every(key => {
+      if (!row[key]) return true
+      if (alreadyMet.get(key)!.has(row[key])) return false
+      alreadyMet.get(key)!.add(row[key])
+      return true
+    })
   })
 }
 
@@ -92,6 +97,7 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
   }, [data])
   const [shapeFilters, setShapeFilters] = usePersistentState<DataFilter.InferShape<typeof shape>>({}, {storageKey: 'meta-dashboard-filters'})
   const [customFilters, setCustomFilters] = usePersistentState<MetaDashboardCustomFilter>({}, {storageKey: 'meta-dashboard-custom-filters'})
+  const distinctBy = useMemo(() => new Set(customFilters.distinctBy), [customFilters.distinctBy])
 
   const filteredData = useMemo(() => {
     const filteredBy_date = data.filter(d => {
@@ -106,15 +112,16 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
         console.log(e, d)
       }
     })
-    return DataFilter.filterData(filteredBy_date, shape, shapeFilters)
-  }, [data, shapeFilters, period, shape])
+    const filteredByShape = DataFilter.filterData(filteredBy_date, shape, shapeFilters)
+    return distinctBys(filteredByShape, {
+      taxId: !!distinctBy.has('taxId'),
+      phone: !!distinctBy.has('phone'),
+    })
+  }, [data, shapeFilters, period, shape, customFilters])
 
-  const distinctData = useMemo(() => {
-    return distinctByTaxId(filteredData)
-  }, [filteredData, customFilters.distinctBy])
-
-  const filteredPersons = useMemo(() => filteredData.flatMap(_ => _.persons ?? []), [filteredData])
-  const distinctPersons = useMemo(() => distinctData.flatMap(_ => _.persons ?? []), [distinctData])
+  const uniqueData = useMemo(() => filteredData.distinct(_ => _.koboId), [filteredData])
+  const persons = useMemo(() => filteredData.flatMap(_ => _.persons ?? []), [filteredData])
+  const uniquePersons = useMemo(() => uniqueData.flatMap(_ => _.persons ?? []), [filteredData])
 
   const clearAllFilter = useCallback(() => {
     setShapeFilters({})
@@ -133,9 +140,23 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
     setShapeFilters,
     customFilters,
     setCustomFilters,
+    distinctBy,
+    setDistinctBy: (key: DistinctBy, value: boolean) => {
+      setCustomFilters(d => {
+        return {
+          ...d,
+          distinctBy: value
+            ? d.distinctBy?.includes(key)
+              ? d.distinctBy
+              : [...d.distinctBy ?? [], key]
+            : d.distinctBy?.filter(_ => key !== _)
+        }
+      })
+    },
     clearAllFilter,
-    distinctPersons,
-    filteredData: customFilters.distinctBy === 'taxId' ? distinctData : filteredData,
-    filteredPersons: customFilters.distinctBy === 'taxId' ? distinctPersons : filteredPersons,
+    data: distinctBy.has('submission') ? uniqueData : data,
+    persons: distinctBy.has('submission') ? uniquePersons : persons,
+    uniqueData,
+    uniquePersons,
   }
 }

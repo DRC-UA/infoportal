@@ -2,19 +2,35 @@ import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Side
 import {useMetaDashboardContext} from '@/features/MetaDashboard/MetaDashboardContext'
 import {Obj, seq} from '@alexandreannic/ts-utils'
 import {DebouncedInput} from '@/shared/DebouncedInput'
-import React from 'react'
+import React, {ReactNode} from 'react'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {useI18n} from '@/core/i18n'
 import {FilterLayoutProps} from '@/shared/DataFilter/DataFilterLayout'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {Badge, Box, capitalize, Icon, Switch, useTheme} from '@mui/material'
+import {Badge, Box, capitalize, Switch, useTheme} from '@mui/material'
 import {MetaDashboardSidebarSelect} from '@/features/MetaDashboard/MetaDashboardSidebarSelect'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {SidebarSubSection} from '@/shared/Layout/Sidebar/SidebarSubSection'
-import {SidebarTitle, Txt} from 'mui-extension'
+import {SidebarTitle} from 'mui-extension'
 import {IpBtn} from '@/shared/Btn'
 import {appConfig} from '@/conf/AppConfig'
+
+export const Item = ({
+  label,
+  children,
+}: {
+  label: ReactNode
+  children: ReactNode
+}) => {
+  const {m} = useI18n()
+  return (
+    <Box sx={{display: 'flex', alignItems: 'center', px: 1, py: .25}}>
+      {label}
+      {children}
+    </Box>
+  )
+}
 
 export const MetaDashboardSidebar = () => {
   const {m, formatLargeNumber} = useI18n()
@@ -61,19 +77,34 @@ export const MetaDashboardSidebar = () => {
               />
             </Box>
           </SidebarSubSection>
-          <SidebarSubSection title={m.distinct}>
-            <Box sx={{display: 'flex', alignItems: 'center', px: 1}}>
-              {m._meta.distinctByTaxId}
+          <SidebarSubSection title={m.distinct} icon="join_inner">
+            <Item label={m._meta.distinctBySubmission}>
               <Switch
                 sx={{marginLeft: 'auto'}}
                 size="small"
-                checked={ctx.customFilters.distinctBy === 'taxId'}
-                onChange={e => ctx.setCustomFilters(_ => ({..._, distinctBy: e.currentTarget.checked ? 'taxId' : undefined}))}
+                checked={ctx.distinctBy.has('submission')}
+                onChange={e => ctx.setDistinctBy('submission', e.currentTarget.checked)}
               />
-            </Box>
+            </Item>
+            <Item label={m._meta.distinctByTaxId}>
+              <Switch
+                sx={{marginLeft: 'auto'}}
+                size="small"
+                checked={ctx.distinctBy.has('taxId')}
+                onChange={e => ctx.setDistinctBy('taxId', e.currentTarget.checked)}
+              />
+            </Item>
+            <Item label={m._meta.distinctByPhone}>
+              <Switch
+                sx={{marginLeft: 'auto'}}
+                size="small"
+                checked={ctx.distinctBy.has('phone')}
+                onChange={e => ctx.setDistinctBy('phone', e.currentTarget.checked)}
+              />
+            </Item>
           </SidebarSubSection>
           <MetaDashboardSidebarBody
-            data={ctx.filteredData}
+            data={ctx.data}
             filters={ctx.shapeFilters}
             shapes={ctx.shape}
             setFilters={ctx.setShapeFilters}
@@ -115,9 +146,8 @@ export const MetaDashboardSidebarBody = (
   return (
     <>
       {Obj.entries(shapes).map(([name, shape]) =>
-        <SidebarSubSection title={
+        <SidebarSubSection icon={shape.icon} title={
           <Box sx={{display: 'flex', alignItems: 'center'}}>
-            <Icon fontSize="small" sx={{visibility: shape.icon ? 'inherit' : 'hidden', color: t.palette.text.secondary, mr: 1}}>{shape.icon}</Icon>
             {capitalize(name)}
             <Badge
               color="primary"
