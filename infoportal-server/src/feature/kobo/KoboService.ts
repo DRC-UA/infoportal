@@ -1,9 +1,9 @@
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
-import {ApiPaginate, ApiPaginateHelper, ApiPagination, UUID} from '@infoportal-common'
+import {ApiPaginate, ApiPaginateHelper, ApiPagination, KoboIndex, UUID} from '@infoportal-common'
 import {DbKoboAnswer, KoboAnswerId, KoboId} from '../connector/kobo/KoboClient/type/KoboAnswer'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {filterKoboQuestionType, KoboApiQuestion} from '../connector/kobo/KoboClient/type/KoboApiForm'
-import {Enum, fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {duration, Enum, fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {format} from 'date-fns'
 import {KoboAnswersFilters} from '../../server/controller/kobo/ControllerKoboAnswer'
 import {UserSession} from '../session/UserSession'
@@ -11,6 +11,8 @@ import {AccessService} from '../access/AccessService'
 import {AppFeatureId} from '../access/AccessType'
 import {GlobalEvent} from '../../core/GlobalEvent'
 import {defaultPagination} from '../../core/Type'
+import {app} from '../../index'
+import {SytemCache} from '../../helper/IpCache'
 import Event = GlobalEvent.Event
 
 export interface KoboAnswerFilter {
@@ -37,17 +39,20 @@ export class KoboService {
   ) {
   }
 
+  static readonly largeForm = new Set([
+    KoboIndex.byName('bn_re').id,
+    KoboIndex.byName('ecrec_cashRegistration').id,
+    KoboIndex.byName('ecrec_cashRegistrationBha').id,
+  ])
+
   readonly getForms = async (): Promise<KoboForm[]> => {
     return this.prisma.koboForm.findMany()
   }
 
-  readonly searchAnswersByUsersAccess = async ({
-    user,
-    ...params
-  }: {
+  readonly searchAnswersByUsersAccess = async ({user, ...params}: {
     formId: string,
     filters: KoboAnswersFilters,
-    paginate: ApiPagination
+    paginate?: Partial<ApiPagination>
     user?: UserSession
   }) => {
     if (!user) return ApiPaginateHelper.make()([])
@@ -78,75 +83,86 @@ export class KoboService {
     return data
   }
 
-  readonly searchAnswers = ({
-    formId,
-    filters = {},
-    paginate = defaultPagination,
-    includeMeta,
-  }: {
-    includeMeta?: boolean
-    formId: string,
-    filters?: KoboAnswersFilters,
-    paginate?: ApiPagination
-  }): Promise<ApiPaginate<DbKoboAnswer>> => {
-    return this.prisma.koboAnswers.findMany({
-      take: paginate.limit,
-      skip: paginate.offset,
-      orderBy: [
-        {date: 'desc',},
-        {submissionTime: 'desc',},
-      ],
-      include: {
-        meta: includeMeta,
-      },
-      where: {
-        deletedAt: null,
-        date: {
-          gte: filters.start,
-          lt: filters.end,
-        },
+  readonly searchAnswers = app.cache.request({
+    key: SytemCache.KoboAnswers,
+    cacheIf: (params) => {
+      return KoboService.largeForm.has(params.formId)
+        && Object.keys(params.filters ?? {}).length === 0
+        && Object.keys(params.paginate ?? {}).length === 0
+    },
+    genIndex: p => p.formId,
+    ttl: duration(1, 'day'),
+    fn: (params: {
+      includeMeta?: boolean
+      formId: string,
+      filters?: KoboAnswersFilters,
+      paginate?: Partial<ApiPagination>
+    }): Promise<ApiPaginate<DbKoboAnswer>> => {
+      const {
         formId,
-        AND: filters.filterBy?.map((filter) => ({
-          OR: filter.value.map(v => ({
-            answers: {
-              path: [filter.column],
-              ...v ? {
-                ['string_contains']: v
-              } : {
-                equals: Prisma.DbNull,
+        filters = {},
+        paginate = defaultPagination,
+        includeMeta,
+      } = params
+      return this.prisma.koboAnswers.findMany({
+        take: paginate.limit,
+        skip: paginate.offset,
+        orderBy: [
+          {date: 'desc',},
+          {submissionTime: 'desc',},
+        ],
+        include: {
+          meta: includeMeta,
+        },
+        where: {
+          deletedAt: null,
+          date: {
+            gte: filters.start,
+            lt: filters.end,
+          },
+          formId,
+          AND: filters.filterBy?.map((filter) => ({
+            OR: filter.value.map(v => ({
+              answers: {
+                path: [filter.column],
+                ...v ? {
+                  ['string_contains']: v
+                } : {
+                  equals: Prisma.DbNull,
+                }
               }
-            }
-          }))
-        })),
-      }
-    }).then(_ => _.map(d => ({
-      start: d.start,
-      end: d.end,
-      date: d.date,
-      version: d.version ?? undefined,
-      attachments: d.attachments,
-      geolocation: d.geolocation,
-      submissionTime: d.submissionTime,
-      id: d.id,
-      uuid: d.uuid,
-      validationStatus: d.validationStatus as any,
-      validatedBy: d.validatedBy ?? undefined,
-      lastValidatedTimestamp: d.lastValidatedTimestamp ?? undefined,
-      answers: d.answers as any,
-      formId: d.formId,
-      tags: d.tags,
-    })))
-      // .then(_ => {
-      //   if (_?.[0].answers.date)
-      //     return _.sort((a, b) => {
-      //       return (b.answers.date as string ?? b.submissionTime.toISOString()).localeCompare(
-      //         a.answers.date as string ?? a.submissionTime.toISOString()
-      //       )
-      //     })
-      //   return _
-      // })
-      .then(ApiPaginateHelper.make())
-  }
+            }))
+          })),
+        }
+      }).then(_ => _.map(d => ({
+        start: d.start,
+        end: d.end,
+        date: d.date,
+        version: d.version ?? undefined,
+        attachments: d.attachments,
+        geolocation: d.geolocation,
+        submissionTime: d.submissionTime,
+        id: d.id,
+        uuid: d.uuid,
+        validationStatus: d.validationStatus as any,
+        validatedBy: d.validatedBy ?? undefined,
+        lastValidatedTimestamp: d.lastValidatedTimestamp ?? undefined,
+        answers: d.answers as any,
+        formId: d.formId,
+        tags: d.tags,
+      })))
+        // .then(_ => {
+        //   if (_?.[0].answers.date)
+        //     return _.sort((a, b) => {
+        //       return (b.answers.date as string ?? b.submissionTime.toISOString()).localeCompare(
+        //         a.answers.date as string ?? a.submissionTime.toISOString()
+        //       )
+        //     })
+        //   return _
+        // })
+        .then(ApiPaginateHelper.make())
+    }
+  })
 
   // readonly generateXLSForHHS = async ({start, end}: {start?: Date, end?: Date}) => {
   //   const filePattern = (oblast: string) => `drc.ua.prot.hh2.${start ? format(start, 'yyyy-MM') + '.' : ''}${oblast}`

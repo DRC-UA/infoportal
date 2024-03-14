@@ -48,8 +48,8 @@ export class KoboAnswerSdk {
 
   readonly searchByAccess: KoboAnswerSearch = ({
     formId,
-    filters = {},
-    paginate = {offset: 0, limit: 100000},
+    filters,
+    paginate,
     fnMapKobo = (_: any) => _,
     fnMapTags = (_?: any) => _,
     fnMapCustom,
@@ -113,7 +113,8 @@ export class KoboAnswerSdk {
     }
   }
 
-  private static mapFilters = (_: AnswersFilters): AnswersFilters => {
+  private static mapFilters = (_?: AnswersFilters): AnswersFilters | undefined => {
+    if (!_) return
     return {
       ..._,
       start: map(_.start ?? undefined, startOfDay),

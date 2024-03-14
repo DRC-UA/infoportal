@@ -7,6 +7,8 @@ import {createdBySystem} from '../../db/DbInit'
 import {koboServerId} from '../../core/conf/KoboFormsId'
 import {seq} from '@alexandreannic/ts-utils'
 import {GlobalEvent} from '../../core/GlobalEvent'
+import {app} from '../../index'
+import {SytemCache} from '../../helper/IpCache'
 
 export type KoboSyncServerResult = {
   answersIdsDeleted: KoboId[]
@@ -20,7 +22,8 @@ export class KoboSyncServer {
     private prisma: PrismaClient,
     private koboSdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
     private event = GlobalEvent.Class.getInstance(),
-    private log: Logger = logger('KoboSyncServer')
+    private appCache = app.cache,
+    private log: Logger = logger('KoboSyncServer'),
   ) {
   }
 
@@ -147,6 +150,7 @@ export class KoboSyncServer {
     const answersIdsDeleted = await handleDelete()
     const answersCreated = await handleCreate()
     const answersUpdated = await handleUpdate()
+    this.appCache.clear(SytemCache.KoboAnswers, formId)
     return {
       answersIdsDeleted,
       answersCreated,

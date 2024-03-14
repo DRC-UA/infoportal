@@ -13,7 +13,7 @@ import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 import {GlobalCache, IpCache} from './helper/IpCache'
 import {duration} from '@alexandreannic/ts-utils'
 
-export const system = {
+export const app = {
   cache: new GlobalCache(new IpCache<IpCache<any>>({
     ttl: duration(20, 'day'),
     cleaningCheckupInterval: duration(20, 'day',)

@@ -6,6 +6,6 @@ export const defaultPagination = {
 }
 
 export const validateApiPaginate = yup.object({
-  offset: yup.number().default(defaultPagination.offset),
-  limit: yup.number().default(defaultPagination.limit),
+  offset: yup.number(),
+  limit: yup.number(),
 })

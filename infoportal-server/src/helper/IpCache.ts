@@ -7,14 +7,14 @@ export interface CacheData<V> {
   value: V;
 }
 
-export interface CacheParams<P> {
+export interface CacheParams {
   ttl?: Duration,
   cleaningCheckupInterval?: Duration,
-  ifParams?: (p: P) => boolean
 }
 
 export enum SytemCache {
   Meta = 'Meta',
+  KoboAnswers = 'KoboAnswers',
 }
 
 export class GlobalCache {
@@ -26,45 +26,54 @@ export class GlobalCache {
 
   }
 
-  readonly request = <T, P extends Array<any>>(key: SytemCache, fn: ((...p: P) => Promise<T>), params?: CacheParams<P>): (...p: P) => Promise<T> => {
+  readonly request = <T, P extends Array<any>>({
+    key,
+    fn,
+    cacheIf,
+    genIndex,
+    ...params
+  }: CacheParams & {
+    key: SytemCache,
+    fn: (...p: P) => Promise<T>,
+    cacheIf?: (...p: P) => boolean,
+    genIndex?: (...p: P) => string
+  }): (...p: P) => Promise<T> => {
     this.log.info(`Initialize cache ${key}.`)
     if (!this.cache.has(key)) {
-      // TODO Is called twice by some black magic
       //   throw new Error(`Already registered cash ` + key)
+
+      // TODO Is called twice by some black magic
       this.cache.set(key, new IpCache(params))
     }
     const getCache = () => {
-      if (!this.cache.has(key)) {
-        this.cache.set(key, new IpCache(params))
-      }
       return this.cache.get(key)!
     }
     return async (...p: P) => {
-      if (params?.ifParams?.(p) === false) return fn(...p)
-      const argsHashed = hashArgs(p)
-      const cachedValue = getCache().get(argsHashed)
+      if (!cacheIf?.(...p)) return fn(...p)
+      const index = genIndex ? genIndex(...p) : hashArgs(p)
+      const cachedValue = getCache().get(index)
       if (cachedValue === undefined) {
         const value = await fn(...p)
-        getCache().set(argsHashed, value)
+        getCache().set(index, value)
         return value
       }
       return cachedValue
     }
   }
 
-  readonly clear = (key: SytemCache) => {
+  readonly clear = (key: SytemCache, subKey?: string) => {
     this.log.info(`Reset cache ${key}.`)
-    this.cache.remove(key)
+    if (subKey) this.cache.get(key)?.remove(subKey)
+    else this.cache.remove(key)
   }
 }
 
 export class IpCache<V = undefined> {
 
   /** @deprecated preare to use GlobalCache for this app */
-  static readonly request = <T, P extends Array<any>>(fn: ((...p: P) => Promise<T>), params?: CacheParams<P>): (...p: P) => Promise<T> => {
+  static readonly request = <T, P extends Array<any>>(fn: ((...p: P) => Promise<T>), params?: CacheParams): (...p: P) => Promise<T> => {
     const cache = new IpCache(params)
     return async (...p: P) => {
-      if (params?.ifParams?.(p) === false) return fn(...p)
       const argsHashed = hashArgs(p)
       const cachedValue = cache.get(argsHashed)
       if (cachedValue === undefined) {
@@ -79,7 +88,7 @@ export class IpCache<V = undefined> {
   constructor({
     ttl = duration(1, 'hour'),
     cleaningCheckupInterval = duration(2, 'day'),
-  }: CacheParams<any> = {}) {
+  }: CacheParams = {}) {
     this.ttl = ttl
     this.cleaningCheckupInterval = cleaningCheckupInterval
     this.intervalRef = setInterval(this.cleanCheckup, cleaningCheckupInterval)

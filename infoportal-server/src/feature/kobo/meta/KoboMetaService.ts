@@ -14,7 +14,7 @@ import {yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
 import {SytemCache} from '../../../helper/IpCache'
-import {system} from '../../../index'
+import {app} from '../../../index'
 import Event = GlobalEvent.Event
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'koboId' | 'id' | 'uuid' | 'date' | 'updatedAt' | 'formId'>
@@ -70,7 +70,7 @@ export class KoboMetaService {
       else this.log.error(`No mapper implemented for ${JSON.stringify(_.formId)}`)
       setTimeout(() => {
         // Wait for the database to be rebuilt before clear the cache
-        system.cache.clear(SytemCache.Meta)
+        app.cache.clear(SytemCache.Meta)
       }, duration(1, 'minute'))
     })
     this.event.listen(Event.WFP_DEDUPLICATION_SYNCHRONIZED, () => {
@@ -83,29 +83,31 @@ export class KoboMetaService {
     // data.
   }
 
-  readonly search = system.cache.request(SytemCache.Meta, async (params: KoboMetaParams.SearchFilter = {}) => {
-    const meta = await this.prisma.koboMeta.findMany({
-      where: {
-        ...map(params?.status, _ => ({status: {in: _}})),
-        ...map(params?.activities, _ => ({activity: {in: _}}))
-      }
-    })
-    const persons = await this.prisma.koboPerson.findMany({
-      where: {
-        koboAnswerId: {
-          in: meta.map(_ => _.koboId)
-        }
-      }
-    }).then(_ => seq(_).groupBy(_ => _.koboAnswerId))
-    const res: IKoboMeta[] = meta.map(_ => {
-      let imeta: IKoboMeta = _ as any
-      imeta.persons = persons[_.koboId] as any ?? []
-      return imeta
-    })
-    return res
-  }, {
-    ifParams: ([params]) => {
+  readonly search = app.cache.request({
+    key: SytemCache.Meta,
+    cacheIf: (params) => {
       return params === undefined || Object.keys(params).length === 0
+    },
+    fn: async (params: KoboMetaParams.SearchFilter = {}) => {
+      const meta = await this.prisma.koboMeta.findMany({
+        where: {
+          ...map(params?.status, _ => ({status: {in: _}})),
+          ...map(params?.activities, _ => ({activity: {in: _}}))
+        }
+      })
+      const persons = await this.prisma.koboPerson.findMany({
+        where: {
+          koboAnswerId: {
+            in: meta.map(_ => _.koboId)
+          }
+        }
+      }).then(_ => seq(_).groupBy(_ => _.koboAnswerId))
+      const res: IKoboMeta[] = meta.map(_ => {
+        let imeta: IKoboMeta = _ as any
+        imeta.persons = persons[_.koboId] as any ?? []
+        return imeta
+      })
+      return res
     }
   })
 
@@ -233,14 +235,14 @@ export class KoboMetaService {
   }
 
   readonly sync = () => {
-    system.cache.clear(SytemCache.Meta)
+    app.cache.clear(SytemCache.Meta)
     const keys = Obj.keys(KoboMetaMapper.mappersCreate)
     keys.forEach((formId, i) => {
       this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId, index: i, total: keys.length - 1})
     })
     setTimeout(() => {
       // Wait for the database to be rebuilt before clear the cache
-      system.cache.clear(SytemCache.Meta)
+      app.cache.clear(SytemCache.Meta)
     }, duration(5, 'minute'))
   }
 }
