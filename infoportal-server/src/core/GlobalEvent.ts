@@ -8,12 +8,16 @@ export namespace GlobalEvent {
   interface KoboTagEditedParams {
     formId: KoboId,
     answerIds: KoboAnswerId[],
-    tags: Record<string, any>
+    tags: Record<string, any>,
+    index?: number
+    total?: number
   }
 
   interface KoboFormSyncParams
     // extends KoboSyncServerResult
   {
+    index?: number
+    total?: number
     formId: KoboId
   }
 

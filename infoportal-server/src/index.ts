@@ -10,8 +10,15 @@ import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
-import {cleanMpca, migrateHhsTags} from './script/20240309-cleanMpcaCommit/CleanMpcaCommit'
+import {GlobalCache, IpCache} from './helper/IpCache'
+import {duration} from '@alexandreannic/ts-utils'
 
+export const system = {
+  cache: new GlobalCache(new IpCache<IpCache<any>>({
+    ttl: duration(20, 'day'),
+    cleaningCheckupInterval: duration(20, 'day',)
+  }))
+}
 const initServices = (
   // koboClient: KoboSdk,
   // ecrecSdk: EcrecSdk,

@@ -1,4 +1,5 @@
 import {duration, Duration, filterUndefined, hashArgs} from '@alexandreannic/ts-utils'
+import {logger, Logger} from './Logger'
 
 export interface CacheData<V> {
   lastUpdate: Date;
@@ -12,14 +13,56 @@ export interface CacheParams<P> {
   ifParams?: (p: P) => boolean
 }
 
-export class Cache<V = undefined> {
+export enum SytemCache {
+  Meta = 'Meta',
+}
 
-  /**
-   * TODO(Alex): Really similar to lazy(). Check if it could be factorized.
-   * TODO(Alex): Also check if to force Promise return type is necessary.
-   */
+export class GlobalCache {
+
+  constructor(
+    private cache: IpCache<IpCache<any>>,
+    private log: Logger = logger('GlobalCache')
+  ) {
+
+  }
+
+  readonly request = <T, P extends Array<any>>(key: SytemCache, fn: ((...p: P) => Promise<T>), params?: CacheParams<P>): (...p: P) => Promise<T> => {
+    this.log.info(`Initialize cache ${key}.`)
+    if (!this.cache.has(key)) {
+      // TODO Is called twice by some black magic
+      //   throw new Error(`Already registered cash ` + key)
+      this.cache.set(key, new IpCache(params))
+    }
+    const getCache = () => {
+      if (!this.cache.has(key)) {
+        this.cache.set(key, new IpCache(params))
+      }
+      return this.cache.get(key)!
+    }
+    return async (...p: P) => {
+      if (params?.ifParams?.(p) === false) return fn(...p)
+      const argsHashed = hashArgs(p)
+      const cachedValue = getCache().get(argsHashed)
+      if (cachedValue === undefined) {
+        const value = await fn(...p)
+        getCache().set(argsHashed, value)
+        return value
+      }
+      return cachedValue
+    }
+  }
+
+  readonly clear = (key: SytemCache) => {
+    this.log.info(`Reset cache ${key}.`)
+    this.cache.remove(key)
+  }
+}
+
+export class IpCache<V = undefined> {
+
+  /** @deprecated preare to use GlobalCache for this app */
   static readonly request = <T, P extends Array<any>>(fn: ((...p: P) => Promise<T>), params?: CacheParams<P>): (...p: P) => Promise<T> => {
-    const cache = new Cache(params)
+    const cache = new IpCache(params)
     return async (...p: P) => {
       if (params?.ifParams?.(p) === false) return fn(...p)
       const argsHashed = hashArgs(p)
@@ -33,7 +76,7 @@ export class Cache<V = undefined> {
     }
   }
 
-  private constructor({
+  constructor({
     ttl = duration(1, 'hour'),
     cleaningCheckupInterval = duration(2, 'day'),
   }: CacheParams<any> = {}) {

@@ -4,17 +4,18 @@ import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds'
 import {KoboMetaCreate} from './KoboMetaType'
 import {logger, Logger} from '../../../helper/Logger'
 import {KoboService} from '../KoboService'
-import {map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {duration, map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
-import {DrcProgram, IKoboMeta, kobo, KoboId, KoboIndex, KoboMetaStatus} from '@infoportal-common'
+import {DrcProgram, IKoboMeta, KoboId, KoboIndex, KoboMetaStatus} from '@infoportal-common'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../../core/conf/AppConf'
 import {yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
-import Event = GlobalEvent.Event
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
-import {Cache} from '../../../helper/Cache'
+import {SytemCache} from '../../../helper/IpCache'
+import {system} from '../../../index'
+import Event = GlobalEvent.Event
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'koboId' | 'id' | 'uuid' | 'date' | 'updatedAt' | 'formId'>
 export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => [KoboId, Partial<MetaMapped<TTag>>] | undefined
@@ -67,6 +68,10 @@ export class KoboMetaService {
       if (createMapper) this.syncInsert({formId: _.formId, mapper: createMapper})
       else if (updateMapper) this.syncMerge({formId: _.formId, mapper: updateMapper})
       else this.log.error(`No mapper implemented for ${JSON.stringify(_.formId)}`)
+      setTimeout(() => {
+        // Wait for the database to be rebuilt before clear the cache
+        system.cache.clear(SytemCache.Meta)
+      }, duration(1, 'minute'))
     })
     this.event.listen(Event.WFP_DEDUPLICATION_SYNCHRONIZED, () => {
       this.syncWfpDeduplication()
@@ -78,7 +83,7 @@ export class KoboMetaService {
     // data.
   }
 
-  readonly search = Cache.request(async (params: KoboMetaParams.SearchFilter = {}) => {
+  readonly search = system.cache.request(SytemCache.Meta, async (params: KoboMetaParams.SearchFilter = {}) => {
     const meta = await this.prisma.koboMeta.findMany({
       where: {
         ...map(params?.status, _ => ({status: {in: _}})),
@@ -228,9 +233,14 @@ export class KoboMetaService {
   }
 
   readonly sync = () => {
-    Obj.keys(KoboMetaMapper.mappersCreate).forEach(formId => {
-      this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId})
+    system.cache.clear(SytemCache.Meta)
+    const keys = Obj.keys(KoboMetaMapper.mappersCreate)
+    keys.forEach((formId, i) => {
+      this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId, index: i, total: keys.length - 1})
     })
+    setTimeout(() => {
+      // Wait for the database to be rebuilt before clear the cache
+      system.cache.clear(SytemCache.Meta)
+    }, duration(5, 'minute'))
   }
-
 }
