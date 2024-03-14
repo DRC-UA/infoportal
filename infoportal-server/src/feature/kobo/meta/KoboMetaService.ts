@@ -7,7 +7,7 @@ import {KoboService} from '../KoboService'
 import {map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
-import {DrcProgram, IKoboMeta, KoboId, KoboIndex, KoboMetaStatus} from '@infoportal-common'
+import {DrcProgram, IKoboMeta, kobo, KoboId, KoboIndex, KoboMetaStatus} from '@infoportal-common'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../../core/conf/AppConf'
 import {yup} from '../../../helper/Utils'
@@ -16,7 +16,7 @@ import Event = GlobalEvent.Event
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
 import {Cache} from '../../../helper/Cache'
 
-export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'id' | 'uuid' | 'date' | 'updatedAt' | 'formId'>
+export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'koboId' | 'id' | 'uuid' | 'date' | 'updatedAt' | 'formId'>
 export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => [KoboId, Partial<MetaMapped<TTag>>] | undefined
 export type MetaMapperInsert<T extends Record<string, any> = any> = (_: T) => MetaMapped | MetaMapped[] | undefined
 
@@ -78,16 +78,26 @@ export class KoboMetaService {
     // data.
   }
 
-  readonly search = Cache.request((params: KoboMetaParams.SearchFilter = {}) => {
-    return this.prisma.koboMeta.findMany({
-      include: {
-        persons: true
-      },
+  readonly search = Cache.request(async (params: KoboMetaParams.SearchFilter = {}) => {
+    const meta = await this.prisma.koboMeta.findMany({
       where: {
         ...map(params?.status, _ => ({status: {in: _}})),
         ...map(params?.activities, _ => ({activity: {in: _}}))
       }
     })
+    const persons = await this.prisma.koboPerson.findMany({
+      where: {
+        koboAnswerId: {
+          in: meta.map(_ => _.koboId)
+        }
+      }
+    }).then(_ => seq(_).groupBy(_ => _.koboAnswerId))
+    const res: IKoboMeta[] = meta.map(_ => {
+      let imeta: IKoboMeta = _ as any
+      imeta.persons = persons[_.koboId] as any ?? []
+      return imeta
+    })
+    return res
   }, {
     ifParams: ([params]) => {
       return params === undefined || Object.keys(params).length === 0
@@ -116,20 +126,13 @@ export class KoboMetaService {
         }
       }
     }).then(res => {
-        return seq(res)
+        return seq(res.flatMap(({meta, ..._}) => meta.map(m => ({..._, meta: m}))))
           .filter(_ => _.meta?.uuid === undefined || _.uuid !== _.meta.uuid || _.updatedAt?.getTime() !== _.meta.updatedAt?.getTime())
           .map(mapper)
           .compact()
       }
     )
-    // this.info(formId, `Clean persons ${updates.length}...`)
-    // await this.prisma.koboPerson.deleteMany({
-    //   where: {
-    //     id: {
-    //       in: updates.map(_ => _[1].id).compact()
-    //     }
-    //   }
-    // })
+
     this.info(formId, `Update ${updates.length}...`)
     await PromisePool
       .withConcurrency(this.conf.db.maxConcurrency)
@@ -138,18 +141,13 @@ export class KoboMetaService {
         return this.prisma.koboMeta.update({
           where: {id: koboId},
           data: update,
-          // data: {
-          // ...update,
-          // persons: {
-          // createMany: {
-          //   data: seq(persons).compact()
-          // },
-          // }
-          // },
+
         })
       })
     this.info(formId, `Update ${updates.length}... COMPLETED`)
   }
+
+  static readonly makeMetaId = (koboId: KoboId, activity: DrcProgram) => koboId + activity
 
   private syncInsert = async ({
     formId,
@@ -159,7 +157,7 @@ export class KoboMetaService {
     mapper: MetaMapperInsert,
   }) => {
     this.info(formId, `Fetch Kobo answers...`)
-    const koboAnswers: Seq<IKoboMeta> = await this.prisma.koboAnswers.findMany({
+    const koboAnswers: Seq<KoboMetaCreate> = await this.prisma.koboAnswers.findMany({
       select: {
         formId: true,
         uuid: true,
@@ -175,7 +173,8 @@ export class KoboMetaService {
         const m = [mapper(r)].flat()
         return seq(m).compact().map(_ => {
           return {
-            id: r.id,
+            // id: KoboMetaService.makeMetaId(r.id, _.activity!),
+            koboId: r.id,
             uuid: r.uuid,
             formId: r.formId,
             updatedAt: r.updatedAt ?? undefined,
@@ -185,106 +184,47 @@ export class KoboMetaService {
         })
       })
     })
-    const koboAnswerIdsIndex = koboAnswers.reduce((map, curr) => map.set(curr.id, curr), new Map<KoboId, IKoboMeta>())
 
     this.info(formId, `Fetch Kobo answers... ${koboAnswers.length} fetched.`)
 
-    this.info(formId, `Fetch Meta answers...`)
-    const metaIndex = await this.prisma.koboMeta.findMany({where: {formId}, select: {id: true, uuid: true, updatedAt: true}}).then(_ => {
-      return _.reduce((map, {id, ...curr}) => map.set(id, curr), new Map<KoboId, {uuid: string, updatedAt?: Date | null}>())
-    })
-    this.info(formId, `Fetch Meta answers... ${metaIndex.size} fetched.`)
-
-    const handleDelete = async () => {
-      const idsToDelete = [...metaIndex.keys()].filter(_ => !koboAnswerIdsIndex.has(_))
-      this.info(formId, `Handle delete (${idsToDelete.length})...`)
-      await this.prisma.koboMeta.deleteMany({where: {formId, id: {in: idsToDelete}}})
-      return idsToDelete
-    }
-
     const handleCreate = async () => {
-      const notInsertedAnswers = koboAnswers.filter(_ => !metaIndex.has(_.id))
-      this.info(formId, `Handle create (${notInsertedAnswers.length})...`)
-      const persons = notInsertedAnswers.flatMap(_ => {
+      this.info(formId, `Handle create (${koboAnswers.length})...`)
+      const persons = koboAnswers.distinct(_ => _.koboId).flatMap(_ => {
         const res: Prisma.KoboPersonUncheckedCreateInput[] = _.persons?.map(ind => ({
           ...ind,
           disability: ind.disability ?? [],
-          metaId: _.id
+          koboAnswerId: _.koboId
         })) ?? []
-        delete _['persons']
         return res
       })
-      await this.prisma.koboMeta.createMany({
-        data: seq(notInsertedAnswers),
-        skipDuplicates: true,
-      })
-      await this.prisma.koboPerson.createMany({
-        data: persons
-      })
-      return notInsertedAnswers
-    }
-
-    const handleUpdate = async () => {
-      const answersToUpdate = seq(Array.from(metaIndex.entries())).map(([id, meta]) => {
-        const match = koboAnswerIdsIndex.get(id)
-        if (match === undefined) return
-        const hasBeenUpdated = match.uuid !== meta.uuid || match.updatedAt?.getTime() !== meta.updatedAt?.getTime()
-        return hasBeenUpdated ? match : undefined
-      }).compact()
-      this.info(formId, `Handle update (${answersToUpdate.length})...`)
-      await Promise.all(answersToUpdate.map(a => {
-        const {persons, ...answer} = a
-        return this.prisma.koboMeta.update({
-          where: {
-            id: a.id,
-          },
-          data: {
-            // persons: {
-            //   createMany: {data: persons ?? []}
-            // },
-            ...answer
-          }
+      await Promise.all([
+        this.prisma.koboMeta.createMany({
+          data: seq(koboAnswers.map(_ => {
+            delete _['persons']
+            return _
+          })),
+          skipDuplicates: true,
+        }),
+        await this.prisma.koboPerson.createMany({
+          data: persons
         })
-      }))
-      return answersToUpdate
+      ])
+      return koboAnswers
     }
 
-    const answersIdsDeleted = await handleDelete()
-    const answersCreated = await handleCreate()
-    const answersUpdated = await handleUpdate()
-    return {
-      // answersIdsDeleted,
-      // answersCreated,
-      // answersUpdated,
-    }
-
-    // const current = await this.prisma.koboMeta.findMany()
-    // current.map(_ => _.answerUuid)
-    // const koboAnswerIdsIndex: Map<KoboId, KoboUnified> = current.reduce((map, answer) => map.set(rest.id, answer), new Map())
-    //
-    //
-    // this.info(formId, 'Synchronizing meta database...')
-    // console.log({
-    //   answersIdsDeleted,
-    //   answersUpdated,
-    //   answersCreated,
-    // })
-    // const mapper = KoboUnifiedMapper.map[formId]
-    // await this.prisma.koboMeta.deleteMany({
-    //   where: {
-    //     id: {in: answersIdsDeleted}
-    //   }
-    // })
-    // await this.prisma.koboMeta.createMany({
-    //   data: answersCreated.map(mapper),
-    // })
-    // await Promise.all(answersUpdated.map(a => {
-    //   return this.prisma.koboMeta.updateMany({
-    //     where: {id: a.id},
-    //     data: answersCreated.map(mapper),
-    //   })
-    // }))
-    // this.info(formId, 'Synchronizing meta database... COMPLETED')
+    await Promise.all([
+      this.prisma.koboMeta.deleteMany({where: {formId}}),
+      this.prisma.koboPerson.deleteMany({
+        where: {
+          koboAnswerId: {
+            in: koboAnswers.map(_ => _.koboId)
+          }
+        }
+      })
+    ])
+    await handleCreate()
+    this.info(formId, `Handle create (${koboAnswers.length})... CREATED!`)
+    return {}
   }
 
   readonly sync = () => {

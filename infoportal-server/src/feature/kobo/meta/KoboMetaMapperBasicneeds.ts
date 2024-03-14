@@ -76,16 +76,18 @@ export class KoboMetaBasicneeds {
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
 
-    const activities = seq(answer.back_prog_type)?.map(prog => fnSwitch(prog.split('_')[0], {
-      cfr: {activity: DrcProgram.CashForRent, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfr!)},
-      cfe: {activity: DrcProgram.CashForEducation, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfe!)},
-      mpca: {activity: DrcProgram.MPCA, project: KoboMetaBasicneeds.getBnreProject(answer.donor_mpca!)},
-      csf: {activity: DrcProgram.CashForFuel, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cff!)},
-      cfu: {activity: DrcProgram.CashForUtilities, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfu!)},
-      nfi: {activity: DrcProgram.NFI, project: KoboMetaBasicneeds.getBnreProject(answer.donor_nfi!)},
-      esk: {activity: DrcProgram.ESK, project: KoboMetaBasicneeds.getBnreProject(answer.donor_esk!)},
-      ihk: {activity: DrcProgram.HygieneKit, project: KoboMetaBasicneeds.getBnreProject(answer.donor_ihk!)},
-    }, () => undefined)).distinct(_ => _).compact() ?? []
+    const activities = seq(answer.back_prog_type)?.map(prog => {
+      return fnSwitch(prog.split('_')[0], {
+        cfr: {activity: DrcProgram.CashForRent, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfr ?? answer.back_donor?.[0])},
+        cfe: {activity: DrcProgram.CashForEducation, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfe ?? answer.back_donor?.[0])},
+        mpca: {activity: DrcProgram.MPCA, project: KoboMetaBasicneeds.getBnreProject(answer.donor_mpca ?? answer.back_donor?.[0])},
+        csf: {activity: DrcProgram.CashForFuel, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cff ?? answer.back_donor?.[0])},
+        cfu: {activity: DrcProgram.CashForUtilities, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfu ?? answer.back_donor?.[0])},
+        nfi: {activity: DrcProgram.NFI, project: KoboMetaBasicneeds.getBnreProject(answer.donor_nfi ?? answer.back_donor?.[0])},
+        esk: {activity: DrcProgram.ESK, project: KoboMetaBasicneeds.getBnreProject(answer.donor_esk ?? answer.back_donor?.[0])},
+        ihk: {activity: DrcProgram.HygieneKit, project: KoboMetaBasicneeds.getBnreProject(answer.donor_ihk ?? answer.back_donor?.[0])},
+      }, () => undefined)
+    }).compact().distinct(_ => _.activity) ?? []
 
     const prepare = (activity: DrcProgram, project: DrcProject): MetaMapped => {
       const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
@@ -117,7 +119,10 @@ export class KoboMetaBasicneeds {
         lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
       }
     }
-    return activities.map(_ => prepare(_.activity, _.project ?? KoboMetaBasicneeds.getBnreProject(answer.back_donor?.[0])))
+    return activities.map(_ => prepare(
+      _.activity,
+      _.project ?? KoboMetaBasicneeds.getBnreProject(answer.back_donor?.[0]),
+    ))
   }
 
   static readonly bn_rrm: MetaMapperInsert<KoboMetaOrigin<Bn_RapidResponse.T, KoboTagStatus>> = (row) => {

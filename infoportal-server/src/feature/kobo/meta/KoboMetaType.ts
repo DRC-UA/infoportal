@@ -14,4 +14,4 @@ export type KoboMetaOrigin<
   tags?: TTag | null
 }
 
-export type KoboMetaCreate<TTags = any> = IKoboMeta<TTags>
+export type KoboMetaCreate<TTags = any> = Omit<IKoboMeta<TTags>, 'id'>

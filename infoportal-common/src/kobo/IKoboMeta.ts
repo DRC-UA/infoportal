@@ -7,6 +7,7 @@ import {fnSwitch} from '@alexandreannic/ts-utils'
 export type IKoboMeta<TTag = any> = {
   id: UUID
   uuid: UUID
+  koboId: KoboId
   formId: KoboId
   referencedFormId?: KoboId
   updatedAt?: Date

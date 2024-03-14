@@ -119,7 +119,12 @@ export class KoboMetaMapperProtection {
     const answer = Protection_pss.map(row.answers)
     if (answer.new_ben === 'no') return
     const persons = answer.hh_char_hh_det
-      ?.filter(_ => _.hh_char_hh_new_ben !== 'no' && _.hh_char_hh_session && _.hh_char_hh_session?.length > 3)
+      ?.filter(_ => {
+        if (_.hh_char_hh_new_ben === 'no' || !_.hh_char_hh_session) return false
+        if (answer.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
+        if (answer.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
+        return false
+      })
       .map(KoboGeneralMapping.mapPersonDetails) ?? []
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)!
     const project = answer.project ? fnSwitch(answer.project, {
