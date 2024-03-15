@@ -25,7 +25,7 @@ export const distinctBys = <T extends Record<string, any>, K extends keyof T, >(
   })
 }
 
-export type UseMetaDashboardData = ReturnType<typeof useMetaDashboardData>
+export type UseMetaData = ReturnType<typeof useMetaDashboardData>
 export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
   const {m} = useI18n()
   const [periodCommit, setPeriodCommit] = useState<Partial<Period>>({})

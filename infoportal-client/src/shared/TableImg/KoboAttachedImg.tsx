@@ -6,17 +6,19 @@ import {useMemo} from 'react'
 
 export const proxyKoboImg = ({
   url,
+  fileName,
   serverId = kobo.drcUa.server.prod,
   conf = appConfig,
 }: {
   url?: string
+  fileName?: string
   serverId?: string
   conf?: AppConfig
 }) => {
   const path = url?.split('api')[1]
   return {
     path,
-    fullUrl: path ? conf.apiURL + `/kobo-api/${serverId}/attachment?path=${path}` : undefined
+    fullUrl: path ? conf.apiURL + `/kobo-api/${serverId}/attachment?path=${path}&file=${fileName}` : undefined
   }
 }
 
@@ -41,6 +43,7 @@ export const koboImgHelper = ({
   const url = findFileUrl({fileName, attachments})
   return proxyKoboImg({
     url,
+    fileName,
     serverId,
     conf,
   })

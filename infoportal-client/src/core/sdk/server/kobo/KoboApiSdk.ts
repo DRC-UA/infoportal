@@ -34,29 +34,6 @@ export class KoboApiSdk {
   constructor(private client: ApiClient, private conf: AppConfig = appConfig) {
   }
 
-  /** @deprecated */
-  readonly getAnswersFromLocalForm = <T extends Record<string, any> = Record<string, string | undefined>>({
-    formId,
-    filters = {},
-    paginate = {offset: 0, limit: 100000},
-    fnMap = (_: any) => _,
-  }: {
-    formId: UUID,
-  } & FiltersProps & FnMap<T>): Promise<ApiPaginate<KoboAnswer<T>>> => {
-    return this.client.get<ApiPaginate<Record<string, any>>>(`/kobo-api/local-form`, {qs: {...filters, ...paginate}})
-      .then(_ => {
-          return ({
-            ..._,
-            data: _.data.map(_ => ({
-              ..._,
-              ...Kobo.mapAnswerMetaData(_),
-              ...fnMap(_.answers) as any
-            }))
-          })
-        }
-      )
-  }
-
   readonly editAnswer = (serverId: KoboId, formId: KoboId, answerId: number) => {
     return this.client.post(`/kobo-api/${serverId}/${formId}/${answerId}`)
   }

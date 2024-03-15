@@ -1,18 +1,18 @@
 import React, {ReactNode, useContext, useEffect} from 'react'
 import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {UseMetaDashboardData, useMetaDashboardData} from '@/features/MetaDashboard/useMetaDashboardData'
+import {UseMetaData, useMetaDashboardData} from '@/features/Meta/useMetaData'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 
-export type MetaDashboardContext = {
+export type MetaContext = {
   fetcher: UseFetcher<ApiSdk['koboMeta']['search']>
-  data: UseMetaDashboardData
+  data: UseMetaData
 }
 
-const Context = React.createContext({} as MetaDashboardContext)
+const Context = React.createContext({} as MetaContext)
 
-export const useMetaDashboardContext = () => useContext<MetaDashboardContext>(Context)
+export const useMetaContext = () => useContext<MetaContext>(Context)
 
 export const MetaDashboardProvider = ({
   children,

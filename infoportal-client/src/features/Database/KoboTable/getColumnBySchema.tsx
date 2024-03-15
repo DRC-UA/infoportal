@@ -155,7 +155,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
             const fileName = getVal(row, q.name)
             return {
               value: fileName ?? DatatableUtils.blank,
-              label: <Txt link><a href={findFileUrl({fileName, attachments: row.attachments})} target="_blank">{fileName}</a></Txt>
+              label: <Txt link><a href={koboImgHelper({fileName, attachments: row.attachments}).fullUrl} target="_blank">{fileName}</a></Txt>
             }
           }
         }

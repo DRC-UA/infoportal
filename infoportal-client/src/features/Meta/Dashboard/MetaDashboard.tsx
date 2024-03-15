@@ -1,5 +1,5 @@
 import React from 'react'
-import {KoboIndex, OblastIndex} from '@infoportal-common'
+import {KoboIndex, OblastIndex} from '../../../../../infoportal-common/src'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared/Page'
@@ -18,37 +18,15 @@ import {Box, useTheme} from '@mui/material'
 import {Txt} from 'mui-extension'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {MetaDashboardSidebar} from '@/features/MetaDashboard/MetaDashboardSidebar'
-import {MetaDashboardProvider, useMetaDashboardContext} from '@/features/MetaDashboard/MetaDashboardContext'
+import {MetaSidebar} from '@/features/Meta/MetaSidebar'
+import {useMetaContext} from '@/features/Meta/MetaContext'
+
 
 export const MetaDashboard = () => {
-  return (
-    <MetaDashboardProvider>
-      <_MetaDashboard/>
-    </MetaDashboardProvider>
-  )
-}
-
-export const _MetaDashboard = () => {
-  const ctx = useMetaDashboardContext()
-  return (
-    <Layout
-      title={appFeaturesIndex.metaDashboard.name}
-      loading={ctx.fetcher.loading}
-      sidebar={<MetaDashboardSidebar/>}
-    >
-      {ctx.fetcher.get && (
-        <MetaDashboardBody/>
-      )}
-    </Layout>
-  )
-}
-
-export const MetaDashboardBody = () => {
   const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
   const [showProjectsBy, setShowProjectsBy] = usePersistentState<'donor' | 'project'>('donor', {storageKey: 'meta-dashboard-showProject'})
-  const {data: ctx, fetcher} = useMetaDashboardContext()
+  const {data: ctx, fetcher} = useMetaContext()
   return (
     <Page width="lg" loading={fetcher.loading}>
       {/*<DataFilterLayout*/}
@@ -119,16 +97,10 @@ export const MetaDashboardBody = () => {
                 {_ => (
                   <Box>
                     <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                      <ChartPieWidget value={_.Committed?.value ?? 0} base={1} color={t.palette.success.main}/>
-                      <ChartPieWidget value={_.Pending?.value ?? 0} base={1} color={t.palette.warning.main}/>
-                      <ChartPieWidget value={_.Rejected?.value ?? 0} base={1} color={t.palette.error.main}/>
-                      <ChartPieWidget value={_.Blank?.value ?? 0} base={1} color={t.palette.info.main}/>
-                    </Box>
-                    <Box sx={{display: 'flex', mt: 1, justifyContent: 'space-between'}}>
-                      <Txt block sx={{flex: 1, textAlign: 'center'}}>{m.committed}</Txt>
-                      <Txt block sx={{flex: 1, textAlign: 'center'}}> {m.pending}</Txt>
-                      <Txt block sx={{flex: 1, textAlign: 'center'}}> {m.rejected}</Txt>
-                      <Txt block sx={{flex: 1, textAlign: 'center'}}>{m.blank}</Txt>
+                      <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.committed}</Txt>} value={_.Committed?.value ?? 0} base={1} color={t.palette.success.main}/>
+                      <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.pending}</Txt>} value={_.Pending?.value ?? 0} base={1} color={t.palette.warning.main}/>
+                      <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.rejected}</Txt>} value={_.Rejected?.value ?? 0} base={1} color={t.palette.error.main}/>
+                      <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.blank}</Txt>} value={_.Blank?.value ?? 0} base={1} color={t.palette.info.main}/>
                     </Box>
                   </Box>
                 )}

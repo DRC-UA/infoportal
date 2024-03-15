@@ -57,7 +57,7 @@ export namespace SelectStatusConfig {
 
 const commonProps = {borderRadius: '20px', px: 1}
 
-const OptionLabelType = ({
+export const OptionLabelType = ({
   type,
   children,
 }: {
@@ -74,7 +74,7 @@ const OptionLabelType = ({
   }, () => undefined)
 }
 
-const OptionLabelTypeCompact = ({
+export const OptionLabelTypeCompact = ({
   type,
 }: {
   type: StateStatus
@@ -86,7 +86,7 @@ const OptionLabelTypeCompact = ({
     'warning': <Icon sx={{color: t.palette.warning.main}} title={type}>schedule</Icon>,
     'info': <Icon sx={{color: t.palette.info.main}} title={type}>info</Icon>,
     'success': <Icon sx={{color: t.palette.success.main}} title={type}>check_circle</Icon>,
-  })
+  }, () => undefined)
 }
 
 

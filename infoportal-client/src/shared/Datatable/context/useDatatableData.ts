@@ -14,6 +14,7 @@ import {
 } from '@/shared/Datatable/util/datatableType'
 import {OrderBy} from '@alexandreannic/react-hooks-lib'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
 export type UseDatatableData<T extends DatatableRow> = ReturnType<typeof useDatatableData<T>>
 
@@ -166,7 +167,7 @@ const filterBy = <T extends DatatableRow>({
         return row => {
           const typedFilter = filter as DatatableFilterValueString
           const v = col.render(row).value
-          if (v === undefined && typedFilter?.filterBlank !== false) return false
+          if ((v === DatatableUtils.blank) && typedFilter?.filterBlank !== false) return false
           if (typedFilter?.value === undefined) return true
           if (typeof v !== 'string' && typeof v !== 'number') {
             console.warn('Value of ${String(k)} is', v)

@@ -22,7 +22,7 @@ const css = makeSx({
   }
 })
 
-export const MetaDashboardSidebarSelect = ({
+export const MetaSidebarSelect = ({
   value = [],
   label,
   addBlankOption,

@@ -93,6 +93,9 @@ export class KoboMetaService {
         where: {
           ...map(params?.status, _ => ({status: {in: _}})),
           ...map(params?.activities, _ => ({activity: {in: _}}))
+        },
+        orderBy: {
+          date: 'desc',
         }
       })
       const persons = await this.prisma.koboPerson.findMany({

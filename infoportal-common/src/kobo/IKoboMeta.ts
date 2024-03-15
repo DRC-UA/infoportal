@@ -1,4 +1,4 @@
-import {UUID} from '../type/Generic'
+import {StateStatus, UUID} from '../type/Generic'
 import {OblastName} from '../location'
 import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc'
 import {CashStatus, DisplacementStatus, KoboId, PersonDetails, ShelterTaPriceLevel} from './mapper'
@@ -40,6 +40,12 @@ export enum KoboMetaStatus {
   Committed = 'Committed',
   Pending = 'Pending',
   Rejected = 'Rejected',
+}
+
+export const koboMetaStatusLabel: Record<KoboMetaStatus, StateStatus> = {
+  Committed: 'success',
+  Pending: 'warning',
+  Rejected: 'error',
 }
 
 export type KoboMetaShelterRepairTags = {

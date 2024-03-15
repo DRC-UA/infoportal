@@ -1,5 +1,6 @@
 import {DatatableBlankValue, DatatableColumn, DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import React, {ReactNode} from 'react'
+import {Obj} from '@alexandreannic/ts-utils'
 
 export class DatatableUtils {
 
@@ -23,6 +24,10 @@ export class DatatableUtils {
 
   static readonly buildOption = (_: string): DatatableOptions => {
     return {value: _, label: _}
+  }
+
+  static readonly buildOptionByEnum = (_: Record<string, string>): DatatableOptions[] => {
+    return Obj.entries(_).map(([value, label]) => ({value, label}))
   }
 
   static readonly buildCustomOption = (_: string, label?: ReactNode): DatatableOptions => {
