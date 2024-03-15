@@ -19,7 +19,7 @@ export class ControllerActivityInfo {
     const activities: any[] = req.body
     try {
       // TODO Remove hard email
-      if (req.session.user?.email !== this.conf.ownerEmail && req.session.user?.email !== 'isabel.pearson@drc.ngo') {
+      if (req.session.user?.email !== this.conf.ownerEmail && req.session.user?.email !== 'isabel.pearson@drc.ngo' && req.session.user?.email !== 'vladyslav.marchenko@drc.ngo') {
         throw new AppError.Forbidden('only_owner_can_submit_ai')
       }
       this.log.info(`Insert ${activities.length} activities`)
