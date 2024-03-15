@@ -138,6 +138,24 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       ]
     }
 
+    const ecrecScore: DatatableColumn.Props<any>[] = [
+      {
+        id: 'vulnerability_sore',
+        head: m.vulnerability,
+        type: 'number',
+        renderQuick: _ => _.custom.vulnerability,
+      },
+      {
+        id: 'eligibility_score',
+        head: m.vulnerability,
+        type: 'select_one',
+        renderQuick: _ => {
+          console.log(_.custom)
+          return _.custom.eligibility ? 'Yes' : 'No'
+        },
+      },
+    ]
+
     // const validatedAt: DatatableColumn.Props<any> = () => {
     //   return {
     //     id: 'Paid on',
@@ -184,10 +202,12 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       [KoboIndex.byName('ecrec_cashRegistration').id]: [
         ...paymentStatus(),
         ...individualsBreakdown,
+        ...ecrecScore,
       ],
       [KoboIndex.byName('ecrec_cashRegistrationBha').id]: [
         ...paymentStatus(),
         ...individualsBreakdown,
+        ...ecrecScore,
       ],
       [KoboIndex.byName('protection_communityMonitoring').id]: [
         {

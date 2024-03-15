@@ -258,6 +258,8 @@ export const en = Object.freeze({
     group: 'Group',
     required: 'Required',
     invalidEmail: 'Invalid email',
+    eligibility: 'Eligibility',
+    vulnerability: 'Vulnerability',
     confirmYourOffice: (office: string) => `Confirm ${office} office`,
     itCannotBeChanged: (admin: string) => `For privacy reasons, you will not be able to change it later without contacting ${admin}.`,
     select: 'Select',
