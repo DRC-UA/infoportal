@@ -100,8 +100,9 @@ const _Datatable = <T extends DatatableRow>({
   rowsPerPageOptions,
   title,
   onClickRows,
+  exportAdditionalSheets,
   ...props
-}: Pick<DatatableTableProps<T>, 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
+}: Pick<DatatableTableProps<T>, 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
   const ctx = useDatatableContext()
   const _generateXLSFromArray = useAsync(generateXLSFromArray)
   useEffect(() => ctx.select?.onSelect(ctx.selected.toArray), [ctx.selected.get])
@@ -109,23 +110,27 @@ const _Datatable = <T extends DatatableRow>({
 
   const exportToCSV = () => {
     if (ctx.data.filteredAndSortedData) {
-      _generateXLSFromArray.call(slugify(title) ?? 'noname', {
-        datatableName: 'data',
-        data: ctx.data.filteredAndSortedData,
-        schema: ctx.columns
-          .filter(_ => _.noCsvExport !== true)
-          .map((q, i) => ({
-            head: q.head as string ?? q.id,
-            render: (row: any) => {
-              const rendered = q.render(row)
-              let value = rendered.export ?? rendered.label
-              if (isValidElement(value)) value = Utils.extractInnerText(value)
-              if (value instanceof Date) value = format(value, 'yyyy-MM-dd hh:mm:ss')
-              if (!isNaN(value as any)) value = +(value as number)
-              return value as any
-            }
-          })),
-      })
+      _generateXLSFromArray.call(slugify(title) ?? id ?? 'noname', [
+        {
+          sheetName: 'data',
+          data: ctx.data.filteredAndSortedData,
+          schema: ctx.columns
+            .filter(_ => _.noCsvExport !== true)
+            .map((q, i) => ({
+              head: q.head as string ?? q.id,
+              render: (row: any) => {
+                const rendered = q.render(row)
+                if (rendered.export) return rendered.export
+                let value = rendered.label
+                if (value instanceof Date) value = format(value, 'yyyy-MM-dd hh:mm:ss')
+                if (isValidElement(value)) value = Utils.extractInnerText(value)
+                if (value !== '' && !isNaN(value as any)) value = +(value as number)
+                return value as any
+              }
+            })),
+        },
+        ...exportAdditionalSheets ? exportAdditionalSheets(ctx.data.filteredAndSortedData as any) : []
+      ])
     }
   }
 
@@ -157,7 +162,12 @@ const _Datatable = <T extends DatatableRow>({
             filteredAndSortedData: ctx.data.filteredAndSortedData as T[],
           }) : header}
           {showExportBtn && (
-            <IpIconBtn loading={_generateXLSFromArray.loading} onClick={exportToCSV} children="download"/>
+            <IpIconBtn
+              loading={_generateXLSFromArray.loading}
+              onClick={exportToCSV}
+              children="download"
+              tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.downloadAsXLS}}/>}
+            />
           )}
           {ctx.selected.size > 0 && (
             <Box sx={{

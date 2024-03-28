@@ -66,6 +66,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       type: 'date',
       render: (row: KoboAnswer<{}, KoboBaseTags & KoboTagStatus>) => {
         return {
+          export: row.tags?.lastStatusUpdate,
           value: row.tags?.lastStatusUpdate,
           label: <IpDatepicker
             value={row.tags?.lastStatusUpdate}
@@ -88,6 +89,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           options: () => SheetUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
           render: (row: KoboAnswer<{}, any>) => {
             return {
+              export: row.tags?.[key],
               value: row.tags?.[key],
               label: (
                 <SelectStatusBy
@@ -118,6 +120,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           options: () => SheetUtils.buildOptions(Obj.keys(ShelterCashStatus), true),
           render: (row: any) => {
             return {
+              export: row.tags?.status ?? DatatableUtils.blank,
               value: row.tags?.status,
               label: (
                 <SelectStatusBy
@@ -150,7 +153,6 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         head: m.vulnerability,
         type: 'select_one',
         renderQuick: _ => {
-          console.log(_.custom)
           return _.custom.eligibility ? 'Yes' : 'No'
         },
       },
@@ -218,6 +220,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswer<any, ProtectionHhsTags>) => {
             return {
+              export: row.tags?.project ?? DatatableUtils.blank,
               tooltip: row.tags?.project,
               value: row.tags?.project ?? SheetUtils.blank,
               label: (
@@ -238,11 +241,12 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         {
           id: 'tags_project',
           head: m.project,
-          type: 'select_multiple',
+          type: 'select_one',
           width: 200,
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswer<any, ProtectionHhsTags>) => {
             return {
+              export: row.tags?.project ?? DatatableUtils.blank,
               tooltip: row.tags?.project,
               value: row.tags?.project ?? SheetUtils.blank,
               label: (
@@ -268,6 +272,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswer<any, ProtectionHhsTags>) => {
             return {
+              export: row.tags?.projects?.join(' | ') ?? DatatableUtils.blank,
               tooltip: row.tags?.projects,
               value: map(row.tags?.projects, p => p.length === 0 ? undefined : p) ?? [SheetUtils.blank],
               label: (
@@ -291,6 +296,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswer<any, ProtectionHhsTags>) => {
             return {
+              export: row.tags?.projects?.join(' | ') ?? DatatableUtils.blank,
               tooltip: row.tags?.projects,
               value: map(row.tags?.projects, p => p.length === 0 ? undefined : p) ?? [SheetUtils.blank],
               label: (

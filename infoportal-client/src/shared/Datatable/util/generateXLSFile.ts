@@ -2,7 +2,7 @@ import * as ExcelJS from 'exceljs'
 import {Utils} from '@/utils/utils'
 
 export interface GenerateXlsFromArrayParams<T = any> {
-  datatableName: string
+  sheetName: string
   data: T[]
   schema: {
     head: string
@@ -13,9 +13,9 @@ export interface GenerateXlsFromArrayParams<T = any> {
 export const generateXLSFromArray = async <T>(fileName: string, params: GenerateXlsFromArrayParams<T>[] | GenerateXlsFromArrayParams<T>) => {
   const workbook = new ExcelJS.Workbook()
   ;[params].flatMap(_ => _).map(({
-    data, schema, datatableName
+    data, schema, sheetName
   }) => {
-    const datatable = workbook.addWorksheet(datatableName)
+    const datatable = workbook.addWorksheet(sheetName)
     const header = datatable.addRow(schema.map(_ => _.head))
     // header.fill = {
     //   type: 'pattern',

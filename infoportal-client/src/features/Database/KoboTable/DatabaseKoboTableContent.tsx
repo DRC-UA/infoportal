@@ -4,7 +4,7 @@ import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {AaSelect} from '@/shared/Select/Select'
-import {DatabaseKoboTableExportBtn} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
+import {DatabaseKoboTableExportBtn, renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {DatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
@@ -23,6 +23,8 @@ import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customizati
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
 import {DatatableKoboEditModal} from '@/features/Database/KoboTable/DatatableKoboEditModal'
 import {SelectStatus, SelectStatusBy} from '@/shared/customInput/SelectStatus'
+import {Enum, seq} from '@alexandreannic/ts-utils'
+import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -64,12 +66,18 @@ export const DatabaseKoboTableContent = ({
       id: 'actions',
       head: '',
       width: 0,
-      renderQuick: _ => (
-        <>
-          <TableIconBtn tooltip={m.view} children="visibility" onClick={() => setOpenModalAnswer(_)}/>
-          <TableIconBtn disabled={!ctx.canEdit} tooltip={m.edit} target="_blank" href={ctx.asyncEdit(_.id)} children="edit"/>
-        </>
-      )
+      noCsvExport: true,
+      render: _ => {
+        return {
+          value: null as any,
+          label: (
+            <>
+              <TableIconBtn tooltip={m.view} children="visibility" onClick={() => setOpenModalAnswer(_)}/>
+              <TableIconBtn disabled={!ctx.canEdit} tooltip={m.edit} target="_blank" href={ctx.asyncEdit(_.id)} children="edit"/>
+            </>
+          )
+        }
+      }
     }
     const validation: DatatableColumn.Props<any> = {
       id: 'validation',
@@ -79,6 +87,7 @@ export const DatabaseKoboTableContent = ({
       render: (row: KoboAnswer) => {
         const value = row.tags?._validation
         return {
+          export: value ? m[value] : DatatableUtils.blank,
           value: value ?? DatatableUtils.blank,
           option: value ? m[value] : DatatableUtils.blank,
           label: (
@@ -108,6 +117,7 @@ export const DatabaseKoboTableContent = ({
   return (
     <>
       <Datatable
+        showExportBtn
         rowsPerPageOptions={[20, 50, 100]}
         onFiltersChange={onFiltersChange}
         onDataChange={onDataChange}
@@ -116,6 +126,29 @@ export const DatabaseKoboTableContent = ({
           selectActions: selectedHeader,
           getId: _ => _.id,
         } : undefined}
+        exportAdditionalSheets={data => {
+          const questionToAddInGroups = ctx.schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name))
+          return Enum.entries(ctx.schema.schemaHelper.groupSchemas).map(([groupName, questions]) => {
+            const _: GenerateXlsFromArrayParams<any> = {
+              sheetName: groupName as string,
+              data: seq(data).flatMap(d => (d[groupName] as any[])?.map(_ => ({
+                ..._,
+                id: d.id,
+                start: d.start,
+                end: d.end,
+                submissionTime: d.submissionTime,
+              }))).compact(),
+              schema: renderExportKoboSchema({
+                schema: [...questionToAddInGroups, ...questions],
+                groupSchemas: ctx.schema.schemaHelper.groupSchemas,
+                translateQuestion: ctx.schema.translate.question,
+                translateChoice: ctx.schema.translate.choice,
+              })
+            }
+            return _
+          })
+        }}
+        title={ctx.form.name}
         id={ctx.form.id}
         getRenderRowKey={_ => _.id}
         columns={columns}
@@ -152,15 +185,17 @@ export const DatabaseKoboTableContent = ({
               tooltip={m._koboDatabase.openKoboForm}
               sx={{marginLeft: 'auto'}}
             />
-            <DatabaseKoboTableExportBtn
-              data={params.filteredAndSortedData}
-              repeatGroupsAsColumns={repeatGroupsAsColumns}
-              tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.downloadAsXLS}}/>}
-            />
             <DatabaseKoboSyncBtn
               loading={ctx.asyncRefresh.loading}
               tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.pullDataAt(ctx.form.updatedAt)}}/>}
               onClick={ctx.asyncRefresh.call}
+            />
+            <DatabaseKoboTableExportBtn
+              columns={columns}
+              data={params.filteredAndSortedData}
+              repeatGroupsAsColumns={repeatGroupsAsColumns}
+              tooltip={'Download as XLS (DEPRECATED VERSION - Without calculated columns - Kept in case of bugs with the new button)'}
+              // tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.downloadAsXLS}}/>}
             />
           </>
         }

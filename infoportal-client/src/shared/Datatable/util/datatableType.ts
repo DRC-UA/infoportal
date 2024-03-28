@@ -2,6 +2,7 @@ import React, {CSSProperties, ReactNode} from 'react'
 import {BoxProps} from '@mui/material'
 import {KeyOf} from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
+import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
 
 export type DatatablePropertyType = 'date' | 'number' | 'string' | 'select_one' | 'select_multiple'
 
@@ -50,6 +51,7 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   hidePagination?: boolean
   showColumnsToggleBtnTooltip?: string
   showExportBtn?: boolean
+  exportAdditionalSheets?: (filteredAndSortedData: T[]) => GenerateXlsFromArrayParams[]
   renderEmptyState?: ReactNode
   onFiltersChange?: (_: Record<KeyOf<T>, DatatableFilterValue>) => void
   onDataChange?: (_: {

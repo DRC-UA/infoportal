@@ -140,7 +140,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
             return {
               value,
               tooltip: value,
-              export: value,
+              export: koboImgHelper({attachments: row.attachments, fileName: getVal(row, q.name)}).fullUrl,
               label: <KoboAttachedImg attachments={row.attachments} fileName={value}/>
             }
           }
@@ -154,6 +154,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           render: row => {
             const fileName = getVal(row, q.name)
             return {
+              export: findFileUrl({fileName, attachments: row.attachments}),
               value: fileName ?? DatatableUtils.blank,
               label: <Txt link><a href={findFileUrl({fileName, attachments: row.attachments})} target="_blank">{fileName}</a></Txt>,
               // label: <Txt link><a href={koboImgHelper({fileName, attachments: row.attachments}).fullUrl} target="_blank">{fileName}</a></Txt>
@@ -248,6 +249,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           render: row => {
             const group = row[q.name] as KoboAnswer[] | undefined
             return {
+              export: group?.length,
               value: group?.length,
               label: group && <IpBtn sx={{py: '4px'}} onClick={(event) => onOpenGroupModal?.({
                 columnId: q.name,
@@ -268,6 +270,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
             const v = getVal(row, q.name) as string | undefined
             const render = translateChoice(q.name, v)
             return {
+              export: render,
               value: v ?? SheetUtils.blank,
               tooltip: render ?? m._koboDatabase.valueNoLongerInOption,
               label: render ?? (

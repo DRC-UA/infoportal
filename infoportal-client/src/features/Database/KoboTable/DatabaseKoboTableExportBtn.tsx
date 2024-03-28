@@ -10,8 +10,9 @@ import {IpIconBtn, IpIconBtnProps} from '@/shared/IconBtn'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useAsync} from '@/shared/hook/useAsync'
 import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
+import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 
-const renderExportSchema = <T extends KoboMappedAnswer>({
+export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
   schema,
   translateQuestion,
   translateChoice,
@@ -88,7 +89,7 @@ const renderExportSchema = <T extends KoboMappedAnswer>({
         }
       case 'begin_repeat': {
         if (repeatGroupsAsColumns) {
-          return mapFor(17, i => renderExportSchema({
+          return mapFor(17, i => renderExportKoboSchema({
             groupSchemas,
             schema: groupSchemas[q.name],
             translateQuestion,
@@ -110,9 +111,11 @@ const renderExportSchema = <T extends KoboMappedAnswer>({
 
 export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
   data,
+  columns,
   repeatGroupsAsColumns,
   ...props
 }: {
+  columns: DatatableColumn.Props<T, any>[]
   repeatGroupsAsColumns?: boolean
   data: T[] | undefined
 } & Pick<IpIconBtnProps, 'sx' | 'tooltip'>) => {
@@ -127,7 +130,7 @@ export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
         {
           sheetName: slugify(ctx.schema.schemaUnsanitized.name),
           data: data,
-          schema: renderExportSchema({
+          schema: renderExportKoboSchema({
             schema: ctx.schema.schemaHelper.sanitizedSchema.content.survey,
             groupSchemas: ctx.schema.schemaHelper.groupSchemas,
             translateQuestion: ctx.schema.translate.question,
@@ -145,7 +148,7 @@ export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
               end: d.end,
               submissionTime: d.submissionTime,
             }))).compact(),
-            schema: renderExportSchema({
+            schema: renderExportKoboSchema({
               schema: [...questionToAddInGroups, ...questions],
               groupSchemas: ctx.schema.schemaHelper.groupSchemas,
               translateQuestion: ctx.schema.translate.question,
@@ -158,6 +161,6 @@ export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
     }
   }
   return (
-    <IpIconBtn tooltip={m.downloadAsXLS} loading={_generateXLSFromArray.loading} onClick={exportToCSV} children="download" {...props}/>
+    <IpIconBtn sx={{color: t => t.palette.text.secondary}} loading={_generateXLSFromArray.loading} onClick={exportToCSV} children="download" {...props}/>
   )
 }
