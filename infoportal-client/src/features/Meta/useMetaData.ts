@@ -26,6 +26,7 @@ export const distinctBys = <T extends Record<string, any>, K extends keyof T, >(
 }
 
 export type UseMetaData = ReturnType<typeof useMetaDashboardData>
+
 export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
   const {m} = useI18n()
   const [periodCommit, setPeriodCommit] = useState<Partial<Period>>({})
@@ -119,14 +120,15 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
     })
   }, [data, shapeFilters, period, shape, customFilters])
 
-  const uniqueData = useMemo(() => filteredData.distinct(_ => _.koboId), [filteredData])
-  const persons = useMemo(() => filteredData.flatMap(_ => _.persons ?? []), [filteredData])
-  const uniquePersons = useMemo(() => uniqueData.flatMap(_ => _.persons ?? []), [filteredData])
+  const filteredUniqueData = useMemo(() => filteredData.distinct(_ => _.koboId), [filteredData])
+  const filteredPersons = useMemo(() => filteredData.flatMap(_ => _.persons ?? []), [filteredData])
+  const filteredUniquePersons = useMemo(() => filteredUniqueData.flatMap(_ => _.persons ?? []), [filteredData])
 
   const clearAllFilter = useCallback(() => {
     setShapeFilters({})
     setCustomFilters({})
     setPeriod({})
+    setPeriodCommit({})
     setCustomFilters({})
   }, [])
 
@@ -154,9 +156,10 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
       })
     },
     clearAllFilter,
-    data: distinctBy.has('submission') ? uniqueData : data,
-    persons: distinctBy.has('submission') ? uniquePersons : persons,
-    uniqueData,
-    uniquePersons,
+    data,
+    filteredData: distinctBy.has('submission') ? filteredUniqueData : filteredData,
+    filteredPersons: distinctBy.has('submission') ? filteredUniquePersons : filteredPersons,
+    filteredUniqueData,
+    filteredUniquePersons,
   }
 }

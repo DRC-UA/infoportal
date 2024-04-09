@@ -24,7 +24,7 @@ export const MetaTable = () => {
   const {m, formatDate, formatDateTime} = useI18n()
 
   const mappedData: Data[] = useMemo(() => {
-    const source = ctx.data.uniqueData.filter(_ => _.status !== KoboMetaStatus.Rejected)
+    const source = ctx.data.data.filter(_ => _.status !== KoboMetaStatus.Rejected)
     const byPhone = source.groupBy(_ => _.phone ?? '')
     const byTax = source.groupBy(_ => _.taxId ?? '')
     return ctx.data.data.map(_ => {
