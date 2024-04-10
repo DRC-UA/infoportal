@@ -71,6 +71,18 @@ export const MetaTable = () => {
         }
       },
       {
+        type: 'date',
+        id: 'lastStatusUpdate',
+        head: m.lastStatusUpdate,
+        render: _ => {
+          return {
+            value: _.lastStatusUpdate,
+            label: formatDate(_.lastStatusUpdate),
+            tooltip: formatDateTime(_.lastStatusUpdate),
+          }
+        }
+      },
+      {
         id: 'formId',
         type: 'select_one',
         head: m.koboForm,

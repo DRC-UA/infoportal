@@ -57,7 +57,7 @@ export namespace AiProtectionMapper {
             }
             const subActivities: {data: any[], ai: AiProtectionType.TypeSub}[] = []
             groupBy({
-              data: grouped.flatMap(_ => _.persons?.map(p => ({..._, ...p})) ?? []),
+              data: grouped,
               groups: [
                 {by: _ => _.activity!},
                 {by: _ => _.displacement!},
