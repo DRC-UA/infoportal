@@ -1,4 +1,4 @@
-import React, {Dispatch, ReactNode, SetStateAction, useCallback, useContext, useEffect, useRef, useState} from 'react'
+import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useRef, useState} from 'react'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
 import {Kobo, KoboAnswer, KoboAnswerId, KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {KeyOf, UUID} from '@infoportal-common'
@@ -16,7 +16,6 @@ export interface DatabaseKoboContext {
   schema: KoboSchemaHelper.Bundle
   canEdit?: boolean
   form: KoboForm
-  updateTag: ApiSdk['kobo']['answer']['updateTag']
   asyncRefresh: UseAsyncSimple<() => Promise<void>>
   asyncEdit: (answerId: KoboAnswerId) => string
   asyncUpdateTag: UseAsyncSimple<(_: {
@@ -82,20 +81,6 @@ export const DatabaseKoboTableProvider = (props: {
     }
   }, [data])
 
-  const updateTag = useCallback((params: Parameters<ApiSdk['kobo']['answer']['updateTag']>[0]) => {
-    const req = api.kobo.answer.updateTag({
-      formId: form.id,
-      answerIds: params.answerIds,
-      tags: params.tags,
-    })
-    const updatedIds = new Set(params.answerIds)
-    setMappedData(prev => prev.map(_ => updatedIds.has(_.id) ? ({..._, tags: params.tags as any}) : _))
-    return req.catch(e => {
-      toastError(m._koboDatabase.tagNotUpdated)
-      fetcherAnswers.fetch({force: true, clean: false})
-    })
-  }, [mappedData])
-
   const asyncUpdateTag = useAsync(async ({
     answerIds,
     key,
@@ -105,17 +90,19 @@ export const DatabaseKoboTableProvider = (props: {
     key: KeyOf<any>,
     value: any,
   }) => {
-    const index = new Set(answerIds)
-    setMappedData(prev => {
-      return prev?.map(_ => {
-        if (index.has(_.id)) _.tags = {...(_.tags ?? {}), [key]: value}
-        return _
-      })
-    })
-    await api.kobo.answer.updateTag({
+    const req = api.kobo.answer.updateTag({
       formId: form.id,
       answerIds: answerIds,
       tags: {[key]: value}
+    })
+    const index = new Set(answerIds)
+    setMappedData(prev => prev?.map(_ => {
+      if (index.has(_.id)) _.tags = {...(_.tags ?? {}), [key]: value}
+      return _
+    }))
+    return req.catch(e => {
+      toastError(m._koboDatabase.tagNotUpdated)
+      fetcherAnswers.fetch({force: true, clean: false})
     })
   })
 
@@ -123,7 +110,6 @@ export const DatabaseKoboTableProvider = (props: {
     <Context.Provider value={{
       ...props,
       asyncRefresh,
-      updateTag,
       asyncEdit,
       asyncUpdateTag,
       data: mappedData,

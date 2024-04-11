@@ -15,10 +15,11 @@ import {duration} from '@alexandreannic/ts-utils'
 
 export const app = {
   cache: new GlobalCache(new IpCache<IpCache<any>>({
-    ttl: duration(20, 'day'),
+    ttlMs: duration(20, 'day'),
     cleaningCheckupInterval: duration(20, 'day',)
   }))
 }
+
 const initServices = (
   // koboClient: KoboSdk,
   // ecrecSdk: EcrecSdk,

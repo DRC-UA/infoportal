@@ -8,7 +8,7 @@ export interface CacheData<V> {
 }
 
 export interface CacheParams {
-  ttl?: Duration,
+  ttlMs?: number,
   cleaningCheckupInterval?: Duration,
 }
 
@@ -72,7 +72,7 @@ export class GlobalCache {
 
 export class IpCache<V = undefined> {
 
-  /** @deprecated preare to use GlobalCache for this app */
+  /** @deprecated prefere to use GlobalCache for this app */
   static readonly request = <T, P extends Array<any>>(fn: ((...p: P) => Promise<T>), params?: CacheParams): (...p: P) => Promise<T> => {
     const cache = new IpCache(params)
     return async (...p: P) => {
@@ -88,17 +88,17 @@ export class IpCache<V = undefined> {
   }
 
   constructor({
-    ttl = duration(1, 'hour'),
+    ttlMs = duration(1, 'hour'),
     cleaningCheckupInterval = duration(2, 'day'),
   }: CacheParams = {}) {
-    this.ttl = ttl
-    this.cleaningCheckupInterval = cleaningCheckupInterval
+    this.ttlMs = ttlMs
+    this.cleaningCheckupIntervalMs = cleaningCheckupInterval
     this.intervalRef = setInterval(this.cleanCheckup, cleaningCheckupInterval)
   }
 
-  private readonly ttl: Duration
+  private readonly ttlMs: number
 
-  private readonly cleaningCheckupInterval: Duration
+  private readonly cleaningCheckupIntervalMs: number
 
   private readonly intervalRef
 
@@ -127,11 +127,11 @@ export class IpCache<V = undefined> {
     return Array.from(this.cache.keys())
   }
 
-  readonly set = <T = any>(key: string, value: V extends undefined ? T : V, ttl?: Duration): void => {
+  readonly set = <T = any>(key: string, value: V extends undefined ? T : V, ttlMs?: number): void => {
     this.cache.set(key, {
       // @ts-ignore
       value,
-      expiration: ttl || this.ttl,
+      expiration: ttlMs || this.ttlMs,
       lastUpdate: new Date(),
     })
   }

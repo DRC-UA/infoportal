@@ -91,7 +91,7 @@ export class KoboService {
         && Object.keys(params.paginate ?? {}).length === 0
     },
     genIndex: p => p.formId,
-    ttl: duration(1, 'day'),
+    ttlMs: duration(1, 'day'),
     fn: (params: {
       includeMeta?: boolean
       formId: string,

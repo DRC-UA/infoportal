@@ -22,7 +22,7 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
 import {DatatableKoboEditModal} from '@/features/Database/KoboTable/DatatableKoboEditModal'
-import {SelectStatus, SelectStatusBy} from '@/shared/customInput/SelectStatus'
+import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {Enum, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
 
@@ -97,10 +97,10 @@ export const DatabaseKoboTableContent = ({
               disabled={!ctx.canEdit || ctx.fetcherAnswers.loading}
               value={value}
               onChange={(e) => {
-                ctx.updateTag({
-                  formId: ctx.form.id,
+                ctx.asyncUpdateTag.call({
                   answerIds: [row.id],
-                  tags: {_validation: e},
+                  key: '_validation',
+                  value: e,
                 })
               }}
             />

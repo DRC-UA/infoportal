@@ -95,10 +95,10 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
                 <SelectStatusBy
                   enum={enumerator}
                   disabled={!ctx.canEdit}
-                  value={row.tags?.status}
+                  value={row.tags?.[key]}
                   placeholder={m.project}
                   onChange={_ => {
-                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: key})
+                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key})
                     // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
                   }}
                 />
