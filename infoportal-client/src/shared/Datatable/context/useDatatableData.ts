@@ -150,6 +150,9 @@ const filterBy = <T extends DatatableRow>({
           const typedFilter = filter as DatatableFilterValueSelect
           const v = col.render(row).value as string[]
           const vArray = Array.isArray(v) ? v : [v]
+          if (typedFilter.length === 1 && typedFilter[0] === DatatableUtils.blank) {
+            return vArray.length === 1 && vArray[0] === DatatableUtils.blank
+          }
           return !!vArray.find(_ => (typedFilter).includes(_))
         }
       }

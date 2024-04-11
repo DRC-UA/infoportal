@@ -138,8 +138,10 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
   hdp: {
     id: AppFeatureId.hdp,
     name: 'HDP',
-    // materialIcons: 'display_settings',
     materialIcons: 'rocket_launch',
+    // materialIcons: 'explosion',
+    // materialIcons: 'destruction',
+    // materialIcons: 'bomb',
     color: '#027ca2',
     path: '/hdp',
     category: 'programs',

@@ -86,6 +86,7 @@ export const ShelterDashboard = () => {
           .map(_ => ({value: _, label: _}))
       },
       project: {
+        multiple: true,
         icon: appConfig.icons.project,
         label: m.project,
         getValue: _ => _.ta?.tags?.project,
@@ -239,7 +240,7 @@ export const _ShelterDashboard = ({
         </Div>
         <Panel title={m.project}>
           <PanelBody>
-            <ChartBarSingleBy
+            <ChartBarMultipleBy
               data={data}
               by={_ => _.ta?.tags?.project!}
             />

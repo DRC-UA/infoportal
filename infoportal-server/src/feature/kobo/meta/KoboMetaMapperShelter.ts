@@ -1,4 +1,4 @@
-import {fnSwitch, map} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@alexandreannic/ts-utils'
 import {
   Bn_cashForRentRegistration,
   Bn_Re,
@@ -163,8 +163,8 @@ export namespace KoboMetaMapperShelter {
       row.answers.nta_id,
       {
         referencedFormId: KoboIndex.byName('shelter_ta').id,
-        project: project ? [project] : undefined,
-        donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
+        project: project,
+        donor: (project ?? []).map(_ => DrcProjectHelper.donorByProject[_]),
         status: row.tags.workDoneAt ? KoboMetaStatus.Committed : KoboMetaStatus.Pending,
         lastStatusUpdate: row.tags.workDoneAt,
         tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {}

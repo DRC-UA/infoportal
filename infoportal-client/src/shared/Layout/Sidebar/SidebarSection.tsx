@@ -17,7 +17,7 @@ export const SidebarSection = ({
   title: ReactNode
   children: ReactNode
 }) => {
-  const [open, setOpen] = usePersistentState(defaultOpen, {storageKey: 'sidebar-section-' + id + title})
+  const [open, setOpen] = usePersistentState(defaultOpen, {storageKey: 'sidebar-section-' + (id ?? '') + title})
   const margin = 1 / (dense ? 4 : 2)
   return (
     <Box sx={{

@@ -18,7 +18,7 @@ export const usePersistentState = <S>(
       try {
         return transformFromStorage(JSON.parse(storedValue))
       } catch (error) {
-        console.error(`Error parsing localStorage key "${storageKey}":`, error)
+        // console.error(`Error parsing localStorage key "${storageKey}": ${JSON.stringify(storedValue)}.`, error)
       }
     }
     return initialState

@@ -59,7 +59,10 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
         const render = col.render
         col.render = (_: T) => {
           const rendered = render(_)
-          if (rendered.value === undefined) rendered.value = DatatableUtils.blank
+          if (col.type === 'select_multiple' && (rendered.value === undefined || rendered.value === null || (rendered.value as any)?.length === 0))
+            rendered.value = [DatatableUtils.blank]
+          else if (rendered.value === undefined || rendered.value === null)
+            rendered.value = DatatableUtils.blank
           if (rendered.option === undefined) rendered.option = rendered.label
           return rendered as any
         }

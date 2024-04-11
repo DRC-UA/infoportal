@@ -107,7 +107,7 @@ export interface ShelterTaTags extends KoboBaseTags {
   agreement?: string
   workOrder?: string
   // donor?: string
-  project?: DrcProject
+  project?: DrcProject[]
   workDoneAt?: Date
   price?: number
   damageLevel: ShelterTaPriceLevel
@@ -125,7 +125,6 @@ export class ShelterTaTagsHelper {
 
 export const shelterDrcProject = [
   DrcProject['UKR-000270 Pooled Funds'],
-  DrcProject['UKR-000308 UNHCR'],
   DrcProject['UKR-000308 UNHCR'],
   DrcProject['UKR-000314 UHF4'],
   DrcProject['UKR-000322 ECHO2'],

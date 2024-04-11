@@ -29,6 +29,6 @@ export interface ShelterTaTags {
   agreement?: string
   workOrder?: string
   donor?: string
-  project?: DrcProject
+  project?: DrcProject[]
   workDoneAt?: Date
 }
