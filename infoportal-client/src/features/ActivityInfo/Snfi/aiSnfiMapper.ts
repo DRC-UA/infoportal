@@ -1,8 +1,8 @@
-import {KoboMetaStatus, Bn_Re, DisplacementStatus, DrcProgram, DrcProject, groupBy, KoboMetaShelterRepairTags, PeriodHelper, ShelterTaPriceLevel} from '@infoportal-common'
+import {Bn_Re, DisplacementStatus, DrcProgram, DrcProject, groupBy, KoboMetaShelterRepairTags, KoboMetaStatus, PeriodHelper, ShelterTaPriceLevel} from '@infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiBundle, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {AiSnfiType} from '@/features/ActivityInfo/Snfi/aiSnfiType'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
@@ -22,7 +22,7 @@ export namespace AiShelterMapper {
 
   const getPlanCode = (p: DrcProject): AiSnfiType.Type['Plan/Project Code'] => {
     // @ts-ignore
-    return planCodes[p] ?? `!!! ${p}`
+    return planCodes[p] ?? `${aiInvalidValueFlag} ${p}`
   }
 
   export type Bundle = AiBundle<AiSnfiType.Type>
@@ -119,18 +119,22 @@ export namespace AiShelterMapper {
             const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
             const ai: AiSnfiType.Type = {
               'Indicators - SNFI': fnSwitch(activity, {
-                [DrcProgram.ESK]: '# supported with emergency shelter support',
-                [DrcProgram.CashForFuel]: '# reached with support for winter energy needs (cash/voucher/fuel)',
-                [DrcProgram.CashForUtilities]: '# supported with cash for utilities',
-                [DrcProgram.CashForRent]: '# supported by cash for rent (RMI)',
-                [DrcProgram.CashForRepair]: '# supported with light humanitarian repairs',
-              }, () => '!!!' as any),
+                [DrcProgram.ESK]: '# of individuals supported with emergency shelter support',
+                [DrcProgram.CashForFuel]: '# of individuals reached with support for winter energy needs (cash/voucher/fuel)',
+                [DrcProgram.CashForUtilities]: '# of individuals supported with cash for utilities',
+                [DrcProgram.CashForRent]: '# of individuals supported by cash for rent (RMI)',
+                [DrcProgram.CashForRepair]: '# of individuals supported with light humanitarian repairs',
+              }, () => aiInvalidValueFlag as keyof typeof AiSnfiType.options['Indicators - SNFI']),
               'Implementing Partner': 'Danish Refugee Council',
               'Plan/Project Code': getPlanCode(project),
               'Reporting Organization': 'Danish Refugee Council',
               ...AiMapper.getLocationByMeta(oblast, raion, hromada),
               'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
-              'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
+              'Reporting Month': fnSwitch(periodStr, {
+                '2024-01': '2024-03',
+                '2024-02': '2024-03'
+              }, () => periodStr),
+              // 'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
               'Population Group': displacement,
               'Non-individuals Reached': grouped.length,
               'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,

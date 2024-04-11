@@ -100,7 +100,6 @@ export class ControllerKoboApi {
       }).validate(req.query)
       const sdk = await this.koboSdkGenerator.get(id)
       const img = await sdk.getAttachement(path)
-      console.log(img)
       if (!fileName) {
         res.set('Content-Type', 'image/jpeg')
         res.set('Content-Length', img.length)

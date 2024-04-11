@@ -45,7 +45,7 @@ export const activitiesConfig = {
     componnent: <AiSnfi/>,
   },
   'fslc': {
-    id: '',
+    id: 'chxr3zlqc5qatg2',
     name: 'FSLC',
     path: '/fslc',
     componnent: <AiFslc/>,

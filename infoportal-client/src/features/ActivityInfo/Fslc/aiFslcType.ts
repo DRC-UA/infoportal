@@ -1,5 +1,107 @@
+import {DrcProgram} from '@infoportal-common'
+
 export namespace AiFslcType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
+
+  const activities = {
+    'Distribution of in-kind food assistance': {
+      'General Food Distribution': {
+        '# of individuals receiving in-kind food assistance to ensure their immediate access to food': 'c9dypo1ls348s0b5'
+      },
+      'Rapid Response Ration': {
+        '# of individuals receiving in-kind food assistance to ensure their immediate access to food': 'czaqo8pls348s0b6'
+      },
+      'Institutional feeding': {
+        '# of individuals receiving in-kind food assistance to ensure their immediate access to food': 'c6eqanrls348s0b7'
+      },
+      'Hot meals': {
+        '# of individuals receiving in-kind food assistance to ensure their immediate access to food': 'ckvrpisls348s0b8'
+      }
+    },
+    'Provision of market-based assistance': {
+      'Provision of market-based relief voucher assistance (value voucher or commodity voucher)': {
+        '# of individuals receiving market-based assistance to ensure their immediate access to food': 'cz6z2r0ls348s0b9'
+      }
+    },
+    'Agriculture and livestock inputs (in-kind)': {
+      'Cereal seeds and tools': {
+        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cixs9g2ls348s0ba'
+      },
+      'Vegetable seed and tools': {
+        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cpebsb1ls348s0bb'
+      },
+      'Emergency livestock and poultry input (restocking, poultry distribution)': {
+        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cej6la3ls348s0bc'
+      },
+      'Support to livestock and poultry health': {
+        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cneib8ls348s0bd'
+      },
+      'Support to livestock and poultry feed': {
+        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cig2ayfls348s0be'
+      },
+      'Support to beekeepers (tools and equipment)': {
+        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'ck031yals348s0bf'
+      },
+      'Training on agricultural practice': {
+        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'c49afnvls348s0bg'
+      }
+    },
+    'Agriculture and livestock inputs (cash)': {
+      'Agricultural grants': {
+        '# of individuals receiving sectoral cash to contributing to household food security': 'c6b7ldwls348s0bh'
+      },
+      'Sectoral cash for seeds and tools': {
+        '# of individuals receiving sectoral cash to contributing to household food security': 'cih2ke9ls348s0bi'
+      },
+      'Sectoral cash for livestock and poultry input (restocking/distribution)': {
+        '# of individuals receiving sectoral cash to contributing to household food security': 'c4s25icls348s0bj'
+      },
+      'Sectoral cash for temporary livestock shelter': {
+        '# of individuals receiving sectoral cash to contributing to household food security': 'c3ivapgls348s0bk'
+      },
+      'Sectoral cash for animal feed': {
+        '# of individuals receiving sectoral cash to contributing to household food security': 'cwp0gqrls348s0bl'
+      },
+      'Sectoral cash for livestock health': {
+        '# of individuals receiving sectoral cash to contributing to household food security': 'cvhl3kyls348s0bm'
+      }
+    },
+    'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain': {
+      'Support to cooperatives and market linkages': {
+        '# of individuals supported with rehabilitation of the agricultural infrastructure, cooperative support, and value chain': 'clelxdqls348s0bn'
+      },
+      'Temporary repair of grain and vegetable storage': {
+        '# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage': 'c5z99zsls348s0bo'
+      },
+      'Temporary repair of livestock shelter/barns': {
+        '# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage': 'cgo6mccls348s0bp'
+      }
+    },
+    'Urban and off-farm (Non-agricultural) livelihoods': {
+      'Small business grants (startup grants)': {
+        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'c1v7epols348s0bq'
+      },
+      'Cash for work': {
+        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'cs92sbbls348s0br'
+      },
+      'Employment and reskilling': {
+        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'cl2lo8pls348s0bs'
+      },
+      'Job placement and counseling': {
+        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'c4pozswls348s0bt'
+      },
+      'Temporary employment programs': {
+        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'c9shzxfls348s0bu'
+      },
+      'Technical and vocational education and training (TVET)': {
+        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'cyatasals348s0bv'
+      },
+      'Bussiness trainings and skill enhancement workshops': {
+        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'c68psfcls348s0bw'
+      }
+    }
+  }
+
 
   export interface Type {
     'Reporting Month': string,
@@ -46,16 +148,16 @@ export namespace AiFslcType {
     'cwboqx7lqc9cx5i12': a['Activity and indicator'] === undefined ? undefined : 'cvseljqlqb3ntvj7j' + ':' + options['Activity and indicator'][a['Activity and indicator']!],
     'c3lymiilqc9r6qr14': a['Implementation Status'] === undefined ? undefined : options['Implementation Status'][a['Implementation Status']!],
     'cp6l488lqca6as81s': a['Frequency'] === undefined ? undefined : options['Frequency'][a['Frequency']!],
-    'cc8x4wylqc9v51s19': a['Modality'] === undefined ? undefined : options['Modality'][a['Modality']!],
+    // 'cc8x4wylqc9v51s19': a['Modality'] === undefined ? undefined : options['Modality'][a['Modality']!],
     'c14yq8gls26mj3nc': a['Kcal covered  (per person per day)'] === undefined ? undefined : a['Kcal covered  (per person per day)'],
     'cet46puls26p5noe': a['Unit'] === undefined ? undefined : options['Unit'][a['Unit']!],
     'c4hr51dls270cnki': a['Total Quantity distributed (per person)'] === undefined ? undefined : a['Total Quantity distributed (per person)'],
     'chs58s3lqca2w271q': a['Total Value (local currency)'] === undefined ? undefined : a['Total Value (local currency)'],
     'c9axoqdlqca1d331n': a['Currency'] === undefined ? undefined : options['Currency'][a['Currency']!],
     'cxjlomilqc9wp9b1c': a['Cash delivery mechanism'] === undefined ? undefined : options['Cash delivery mechanism'][a['Cash delivery mechanism']!],
-    'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
-    'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
-    'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
+    'cddimyllqc7p5vdk': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
+    'cgzvhgwlqc7zjuvl': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
+    'cluq8u7lqc81x2bm': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
     'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
     'c1m3xohls2786wqk': a['Location type'] === undefined ? undefined : options['Location type'][a['Location type']!],
     'c68n3qzlqc981m410': a['Population Group'] === undefined ? undefined : 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!],
@@ -88,131 +190,12 @@ export namespace AiFslcType {
       'FSLC-DRC-00003': 'cex9iwdltn0pa1y4',
     },
     'Activity and indicator': {
-      'Distribution of in-kind food assistance': {
-        'General Food Distribution': {
-          '# of individuals receiving in-kind food assistance to ensure their immediate access to food': 'c9dypo1ls348s0b5'
-        },
-        'Rapid Response Ration': {
-          '# of individuals receiving in-kind food assistance to ensure their immediate access to food': 'czaqo8pls348s0b6'
-        },
-        'Institutional feeding': {
-          '# of individuals receiving in-kind food assistance to ensure their immediate access to food': 'c6eqanrls348s0b7'
-        },
-        'Hot meals': {
-          '# of individuals receiving in-kind food assistance to ensure their immediate access to food': 'ckvrpisls348s0b8'
-        }
-      },
-      'Provision of market-based assistance': {
-        'Provision of market-based relief voucher assistance (value voucher or commodity voucher)': {
-          '# of individuals receiving market-based assistance to ensure their immediate access to food': 'cz6z2r0ls348s0b9'
-        }
-      },
-      'Agriculture and livestock inputs (in-kind)': {
-        'Cereal seeds and tools': {
-          '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cixs9g2ls348s0ba'
-        },
-        'Vegetable seed and tools': {
-          '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cpebsb1ls348s0bb'
-        },
-        'Emergency livestock and poultry input (restocking, poultry distribution)': {
-          '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cej6la3ls348s0bc'
-        },
-        'Support to livestock and poultry health': {
-          '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cneib8ls348s0bd'
-        },
-        'Support to livestock and poultry feed': {
-          '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'cig2ayfls348s0be'
-        },
-        'Support to beekeepers (tools and equipment)': {
-          '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'ck031yals348s0bf'
-        },
-        'Training on agricultural practice': {
-          '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption': 'c49afnvls348s0bg'
-        }
-      },
-      'Agriculture and livestock inputs (cash)': {
-        'Agricultural grants': {
-          '# of individuals receiving sectoral cash to contributing to household food security': 'c6b7ldwls348s0bh'
-        },
-        'Sectoral cash for seeds and tools': {
-          '# of individuals receiving sectoral cash to contributing to household food security': 'cih2ke9ls348s0bi'
-        },
-        'Sectoral cash for livestock and poultry input (restocking/distribution)': {
-          '# of individuals receiving sectoral cash to contributing to household food security': 'c4s25icls348s0bj'
-        },
-        'Sectoral cash for temporary livestock shelter': {
-          '# of individuals receiving sectoral cash to contributing to household food security': 'c3ivapgls348s0bk'
-        },
-        'Sectoral cash for animal feed': {
-          '# of individuals receiving sectoral cash to contributing to household food security': 'cwp0gqrls348s0bl'
-        },
-        'Sectoral cash for livestock health': {
-          '# of individuals receiving sectoral cash to contributing to household food security': 'cvhl3kyls348s0bm'
-        }
-      },
-      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain': {
-        'Support to cooperatives and market linkages': {
-          '# of individuals supported with rehabilitation of the agricultural infrastructure, cooperative support, and value chain': 'clelxdqls348s0bn'
-        },
-        'Temporary repair of grain and vegetable storage': {
-          '# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage': 'c5z99zsls348s0bo'
-        },
-        'Temporary repair of livestock shelter/barns': {
-          '# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage': 'cgo6mccls348s0bp'
-        }
-      },
-      'Urban and off-farm (Non-agricultural) livelihoods': {
-        'Small business grants (startup grants)': {
-          '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'c1v7epols348s0bq'
-        },
-        'Cash for work': {
-          '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'cs92sbbls348s0br'
-        },
-        'Employment and reskilling': {
-          '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'cl2lo8pls348s0bs'
-        },
-        'Job placement and counseling': {
-          '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'c4pozswls348s0bt'
-        },
-        'Temporary employment programs': {
-          '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'c9shzxfls348s0bu'
-        },
-        'Technical and vocational education and training (TVET)': {
-          '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'cyatasals348s0bv'
-        },
-        'Bussiness trainings and skill enhancement workshops': {
-          '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability': 'c68psfcls348s0bw'
-        }
-      }
-
-      // "# of individuals receiving in-kind food assistance to ensure their immediate access to food": 'c9dypo1ls348s0b5',
-      // "# of individuals receiving in-kind food assistance to ensure their immediate access to food": 'czaqo8pls348s0b6',
-      // "# of individuals receiving in-kind food assistance to ensure their immediate access to food": 'c6eqanrls348s0b7',
-      // "# of individuals receiving in-kind food assistance to ensure their immediate access to food": 'ckvrpisls348s0b8',
-      // "# of individuals receiving market-based assistance to ensure their immediate access to food": 'cz6z2r0ls348s0b9',
-      // "# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption": 'cixs9g2ls348s0ba',
-      // "# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption": 'cpebsb1ls348s0bb',
-      // "# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption": 'cej6la3ls348s0bc',
-      // "# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption": 'cneib8ls348s0bd',
-      // "# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption": 'cig2ayfls348s0be',
-      // "# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption": 'ck031yals348s0bf',
-      // "# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption": 'c49afnvls348s0bg',
-      // "# of individuals receiving sectoral cash to contributing to household food security": 'c6b7ldwls348s0bh',
-      // "# of individuals receiving sectoral cash to contributing to household food security": 'cih2ke9ls348s0bi',
-      // "# of individuals receiving sectoral cash to contributing to household food security": 'c4s25icls348s0bj',
-      // "# of individuals receiving sectoral cash to contributing to household food security": 'c3ivapgls348s0bk',
-      // "# of individuals receiving sectoral cash to contributing to household food security": 'cwp0gqrls348s0bl',
-      // "# of individuals receiving sectoral cash to contributing to household food security": 'cvhl3kyls348s0bm',
-      // "# of individuals supported with rehabilitation of the agricultural infrastructure, cooperative support, and value chain": 'clelxdqls348s0bn',
-      // "# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage": 'c5z99zsls348s0bo',
-      // "# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage": 'cgo6mccls348s0bp',
-      // "# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability": 'c1v7epols348s0bq',
-      // "# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability": 'cs92sbbls348s0br',
-      // "# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability": 'cl2lo8pls348s0bs',
-      // "# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability": 'c4pozswls348s0bt',
-      // "# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability": 'c9shzxfls348s0bu',
-      // "# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability": 'cyatasals348s0bv',
-      // "# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability": 'c68psfcls348s0bw'
+      [DrcProgram.SectoralCashForAgriculture]: 'cv58tzkluclbdwv3',
+      [DrcProgram.SectoralCashForAnimalFeed]: 'cx8imqaluclbdwv7',
+      [DrcProgram.SectoralCashForAnimalShelterRepair]: 'cy77eh2luclbdwvb',
+      // [DrcProgram.SectoralCashForAgriculture]: activities['Agriculture and livestock inputs (cash)']['Agricultural grants']['# of individuals receiving sectoral cash to contributing to household food security'],
+      // [DrcProgram.SectoralCashForAnimalFeed]: activities['Agriculture and livestock inputs (cash)']['Sectoral cash for animal feed']['# of individuals receiving sectoral cash to contributing to household food security'],
+      // [DrcProgram.SectoralCashForAnimalShelterRepair]: activities['Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain']['Temporary repair of livestock shelter/barns']['# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage'],
     },
     'Implementation Status': {
       'Completed': 'cg07fuklqc9r6qq13',

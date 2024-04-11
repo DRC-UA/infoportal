@@ -11,7 +11,7 @@ export namespace AiFslcMapper {
   export type Bundle = AiBundle<AiFslcType.Type>
 
   const getPlanCode = (_: DrcProject) => {
-    fnSwitch(_, {
+    return fnSwitch(_, {
       [DrcProject['UKR-000348 BHA3']]: 'FSLC-DRC-00001',
       [DrcProject['UKR-000336 UHF6']]: 'FSLC-DRC-00002',
       [DrcProject['UKR-000352 UHF7']]: 'FSLC-DRC-00003',
@@ -23,7 +23,11 @@ export namespace AiFslcMapper {
     const bundle: Bundle[] = []
     let i = 0
     return api.koboMeta.search({
-      activities: [DrcProgram.SectoralCash],
+      activities: [
+        DrcProgram.SectoralCashForAgriculture,
+        DrcProgram.SectoralCashForAnimalShelterRepair,
+        DrcProgram.SectoralCashForAnimalFeed,
+      ],
       status: [KoboMetaStatus.Committed]
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
@@ -31,6 +35,7 @@ export namespace AiFslcMapper {
         groupBy({
           data,
           groups: [
+            {by: _ => _.activity!},
             {by: _ => _.project?.[0]!,},
             {by: _ => _.oblast!},
             {by: _ => _.raion!},
@@ -43,14 +48,16 @@ export namespace AiFslcMapper {
                 Refugee: 'Non-Displaced',
               }, () => 'Non-Displaced')
             },
-            {by: _ => _.activity!}
           ],
-          finalTransform: (grouped, [project, oblast, raion, hromada, displacement, activity]) => {
+          finalTransform: (grouped, [activity, project, oblast, raion, hromada, displacement]) => {
             const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
             const ai: AiFslcType.Type = {
-              'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
+              'Reporting Month': fnSwitch(periodStr, {
+                '2024-01': '2024-03',
+                '2024-02': '2024-03'
+              }, () => periodStr),
               'Reporting Organization': 'Danish Refugee Council',
-              'Activity and indicator': 'Agriculture and livestock inputs (cash)',
+              'Activity and indicator': activity as any,
               'Implementing Partner': 'Danish Refugee Council',
               'Activity Plan Code': getPlanCode(project) as never,
               ...AiMapper.getLocationByMeta(oblast, raion, hromada),
@@ -72,7 +79,7 @@ export namespace AiFslcMapper {
             const request = ActivityInfoSdk.makeRecordRequests({
               activityIdPrefix: 'drcflsc',
               activityYYYYMM: periodStr,
-              formId: activitiesConfig.snfi.id,
+              formId: activitiesConfig.fslc.id,
               activity: AiFslcType.map(AiMapper.mapLocationToRecordId(ai)),
               activityIndex: i++,
             })

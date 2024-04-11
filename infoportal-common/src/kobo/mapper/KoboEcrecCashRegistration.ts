@@ -35,7 +35,6 @@ export namespace KoboEcrec_cashRegistration {
   }
 
   export const calculateVulnerabilities = (_: KoboEcrec_cashRegistration.T) => {
-    console.log('1')
     const res = KoboGeneralMapping.addIndividualBreakdownColumn(_)
     res.custom.eligibility = (_.land_cultivate ?? 0) >= 5
       && res.consume_majority === 'yes'

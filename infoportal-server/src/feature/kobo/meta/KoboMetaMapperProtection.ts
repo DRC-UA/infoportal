@@ -9,11 +9,13 @@ import {
   KoboGeneralMapping,
   KoboMetaStatus,
   KoboTagStatus,
-  OblastIndex, Protection_communityMonitoring,
+  OblastIndex,
+  Protection_communityMonitoring,
   Protection_gbv,
   Protection_groupSession,
   Protection_hhs3,
-  Protection_pss, ProtectionCommunityMonitoringTags,
+  Protection_pss,
+  ProtectionCommunityMonitoringTags,
   ProtectionHhsTags
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
@@ -33,7 +35,7 @@ export class KoboMetaMapperProtection {
         mykolaiv: DrcOffice.Mykolaiv,
         sumy: DrcOffice.Sumy,
       }, () => undefined),
-      oblast: OblastIndex.byIso(answer.ben_det_oblast)?.name!,
+      oblast: OblastIndex.byKoboName(answer.ben_det_oblast)?.name!,
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Protection,

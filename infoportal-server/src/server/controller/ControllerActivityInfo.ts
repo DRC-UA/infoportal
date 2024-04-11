@@ -25,15 +25,15 @@ export class ControllerActivityInfo {
       this.log.info(`Insert ${activities.length} activities`)
       const status = await Util.promiseSequentially(activities.map(_ => () => this.api.publish(_)))//.then(_ => _.map(_ => JSON.parse(_)))
       // const status = await Promise.all(activities.map(this.api.publish))//.then(_ => _.map(_ => JSON.parse(_)))
-      // if (status?.find(_ => !!_.code)) {
-      //   console.error(status)
-      //   throw new AppError.BadRequest('cannot insert activity')
-      // }
+      const errors = status.filter(_ => _ !== '')
+      if (errors.length > 0) {
+        this.log.error(`Failed to insert ${errors.length} activities on ${activities.length}`)
+        throw new AppError.BadRequest(JSON.stringify(errors))
+      }
       this.log.info(`${activities.length} activities inserted !`)
       res.send(status)
     } catch (e) {
       console.error(activities)
-      this.log.error(`Failed to insert ${activities.length} activities`)
       console.error(e)
       throw e
     }

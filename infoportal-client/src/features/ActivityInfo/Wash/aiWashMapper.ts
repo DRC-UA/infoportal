@@ -81,7 +81,7 @@ export namespace AiWashMapper {
               const request = ActivityInfoSdk.makeRecordRequests({
                 activityIdPrefix: 'drcwash',
                 activityYYYYMM: periodStr,
-                formId: activitiesConfig.snfi.id,
+                formId: activitiesConfig.wash.id,
                 activity: AiWashType.map(AiMapper.mapLocationToRecordId(ai)),
                 activityIndex: i++,
               })

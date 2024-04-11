@@ -57,7 +57,6 @@ export async function processBatches<T>({
   run: (item: T[], index: number) => Promise<any>
 }): Promise<void> {
   for (let i = 0; i < data.length; i += batchSize) {
-    console.log('===', i + '<' + data.length + '   -' + (i + batchSize), data.slice(i, batchSize + i).length)
     await run(data.slice(i, batchSize + i), i)
   }
 }

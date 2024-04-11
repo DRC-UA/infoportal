@@ -80,7 +80,6 @@ export const MealVerificationTable = () => {
       fetcherVerificationAnswers.fetch({force: false, clean: false}, mealVerification.id)
     }
   }, [mealVerification, activity])
-  console.log('fetcherVerificationAnswers', fetcherVerificationAnswers.get)
 
   return (
     <Page width="full">
@@ -200,7 +199,6 @@ const MealVerificationTableContent = <
   const mergedData: Seq<MergedData> | undefined = useMemo(() => {
     return map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
       const indexDataVerified = seq(verified).groupBy(_ => _[activity.joinColumn] ?? '')
-      console.log('...', origin, indexVerification)
       return seq(origin).filter(_ => indexVerification[_.id]).map(_ => {
         const dataVerified = indexDataVerified[_[activity.joinColumn]]
         console.log(activity.joinColumn, _[activity.joinColumn], dataVerified)

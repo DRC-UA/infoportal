@@ -54,9 +54,9 @@ export const ActivityInfoBuildType = {
     name: 'snfi',
     skipQuestionsOptions: [
       /Oblast/,
-      // /Raion/,
-      // /Hromada/,
-      // /Settlement/,
+      /Raion/,
+      /Hromada/,
+      /Settlement/,
       /Collective Site/,
     ],
     filterOptions: {

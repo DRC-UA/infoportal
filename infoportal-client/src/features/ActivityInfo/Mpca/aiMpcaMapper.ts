@@ -18,7 +18,7 @@ export namespace AiMpcaMapper {
       [DrcProject['UKR-000298 Novo-Nordisk']]: 'MPCA-DRC-00003',
       [DrcProject['UKR-000309 OKF']]: 'MPCA-DRC-00002',
       [DrcProject['UKR-000270 Pooled Funds']]: 'MPCA-DRC-00001',
-    })
+    }, () => _)
   }
 
   export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
