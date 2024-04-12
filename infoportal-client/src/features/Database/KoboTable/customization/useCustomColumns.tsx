@@ -193,11 +193,13 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       [KoboIndex.byName('bn_re').id]: [
         ...paymentStatus(),
         ...individualsBreakdown,
-    {
+      {
       id: 'eligibility_summary_esk2',
-        head: 'Eligibility Summary',
-        type: 'number',
-        renderQuick: row => typeof row.estimate_sqm_damage === 'number' ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined
+      head: 'Eligibility Summary',
+      type: 'number',
+      renderQuick: (row: KoboAnswer<any, any>) => {
+        return row.estimate_sqm_damage !== undefined ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined;
+      }
     }],
       [KoboIndex.byName('shelter_cashForRepair').id]: [
         ...paymentStatusShelter(),
