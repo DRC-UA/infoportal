@@ -243,7 +243,7 @@ export const en = Object.freeze({
     originOblast: 'Oblast of origin',
     admin: 'Admin',
     idpOriginOblast: 'Origin oblast of IDPs',
-    currentOblast: 'Oblast of displacement',
+    currentOblast: 'Current oblast',
     idpPopulationByOblast: 'IDP population by oblast of origin and displacement',
     age: 'Age',
     submitAll: 'Submit all',
