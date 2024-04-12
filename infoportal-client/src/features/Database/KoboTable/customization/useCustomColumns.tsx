@@ -59,13 +59,6 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       },
     ]
 
-    const eligibilityColumn: DatatableColumn.Props<any> = {
-      id: 'eligibility_summary_esk2',
-      head: 'Eligibility Summary',
-      type: 'number',
-      renderQuick: _ => _.estimate_sqm_damage <= 15 ? 1 : 2
-    };
-
     const lastStatusUpdate: DatatableColumn.Props<any> = {
       id: 'lastStatusUpdate',
       width: 129,
@@ -200,8 +193,12 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       [KoboIndex.byName('bn_re').id]: [
         ...paymentStatus(),
         ...individualsBreakdown,
-        eligibilityColumn
-      ],
+    {
+      id: 'eligibility_summary_esk2',
+        head: 'Eligibility Summary',
+        type: 'number',
+        renderQuick: row => typeof row.estimate_sqm_damage === 'number' ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined
+    }],
       [KoboIndex.byName('shelter_cashForRepair').id]: [
         ...paymentStatusShelter(),
       ],
