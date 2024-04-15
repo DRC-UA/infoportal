@@ -26,6 +26,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import Alert from '@mui/material/Alert'
 
 export enum MergedDataStatus {
   Selected = 'Selected',
@@ -171,6 +172,8 @@ const MealVerificationTableContent = <
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat<any> | undefined>()
   const [display, setDisplay] = useState<'data' | 'dataCheck' | 'all'>('all')
 
+  const [duplicateError, setDuplicateError] = useState<string | null>(null);
+
   useEffect(() => {
     fetcherDataVerified.fetch()
     fetcherDataOrigin.fetch()
@@ -196,12 +199,17 @@ const MealVerificationTableContent = <
   }
 
   const mergedData: Seq<MergedData> | undefined = useMemo(() => {
+    const duplicateErrors = [];
     return map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
       const indexDataVerified = seq(verified).groupBy(_ => _[activity.joinColumn] ?? '')
       return seq(origin).filter(_ => indexVerification[_.id]).map(_ => {
         const dataVerified = indexDataVerified[_[activity.joinColumn]]
         console.log(activity.joinColumn, _[activity.joinColumn], dataVerified)
-        if (dataVerified && dataVerified.length > 1) throw new Error(_[activity.joinColumn] + ' exist ' + dataVerified?.length)
+        if (dataVerified && dataVerified.length > 1) {
+          const error = `Duplicate ID found for ${_[activity.joinColumn]}. Number of duplicates is: ${dataVerified.length}.`;
+          duplicateErrors.push(error);
+          setDuplicateError(error);
+        }
         const mergedData: Omit<MergedData, 'score'> = {
           data: _,
           dataCheck: dataVerified?.[0],
@@ -226,6 +234,7 @@ const MealVerificationTableContent = <
     fetcherDataVerified.get,
     fetcherDataOrigin.get,
     indexVerification,
+    activity
   ])
   // console.log('mergedData', indexVerification, fetcherDataOrigin.get, fetcherDataVerified.get)
 
@@ -248,6 +257,11 @@ const MealVerificationTableContent = <
 
   return (
     <>
+      {duplicateError && (
+        <Box sx={{ mb: 2 }}>
+          <Alert severity="error">{duplicateError}</Alert>
+        </Box>
+      )}
       {stats && (
         <Div sx={{mb: 2, alignItems: 'stretch'}}>
           <SlidePanel sx={{flex: 1}}>
@@ -359,7 +373,13 @@ const MealVerificationTableContent = <
               id: 'taxid',
               head: m.taxID,
               type: 'string',
-              renderQuick: _ => _.data[activity.joinColumn]
+              renderQuick: _ => _.data[activity.joinColumn],
+              style: (rowData: MergedData) => {
+                if (duplicateError && duplicateError.includes(rowData.data[activity.joinColumn])) {
+                  return {color: 'red', fontWeight: 'bold'};
+                }
+                return {};
+              },
             },
             {
               id: 'status',
