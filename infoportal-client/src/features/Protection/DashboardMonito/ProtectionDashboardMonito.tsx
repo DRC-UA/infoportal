@@ -1,5 +1,5 @@
 import React, {lazy, useEffect, useMemo, useState} from 'react'
-import {Enum, map, seq, Seq} from '@alexandreannic/ts-utils'
+import {Enum, seq, Seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {useProtectionDashboardMonitoData} from './useProtectionDashboardMonitoData'
 import {ProtectionDashboardMonitoSample} from './ProtectionDashboardMonitoSample'
@@ -19,7 +19,6 @@ import {KoboIndex, KoboProtection_hhs3, Period, Person, Protection_hhs3} from '@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {DashboardFilterOptions} from '@/shared/DashboardLayout/DashboardFilterOptions'
-import LokiDb from 'lokijs'
 import {Messages} from '@/core/i18n/localization/en'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useFetcher} from '@/shared/hook/useFetcher'
@@ -107,7 +106,7 @@ export const ProtectionDashboardMonito = () => {
       hh_sex_1: {
         getValue: _ => _.persons?.[0]?.gender,
         getOptions: () => DataFilter.buildOptionsFromObject(Person.Gender),
-        icon: 'female',
+        icon: 'check_circle',
         label: m.respondent
       },
       do_you_identify_as_any_of_the_following: {
@@ -135,50 +134,27 @@ export const ProtectionDashboardMonito = () => {
 
   const [optionFilter, setOptionFilters] = useState<DataFilter.InferShape<typeof filterShape> & CustomFilterOptionFilters>({})
 
-  const database = useMemo(() => {
-    if (!_answers.get) return
-    const loki = new LokiDb(KoboIndex.byName('protection_hhs3').id, {
-      persistenceMethod: 'memory',
-    })
-    const table = loki.addCollection('data', {
-      indices: [
-        'staff_to_insert_their_DRC_office',
-        'where_are_you_current_living_oblast',
-        'what_is_your_area_of_origin_oblast',
-        'type_of_site',
-        'do_you_identify_as_any_of_the_following',
-        'what_is_the_type_of_your_household',
-        'do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household',
-      ]
-    })
-    _answers.get.forEach(_ => {
-      table.insert({..._})
-    })
-    return table
-  }, [_answers.get])
-
   const data: Seq<KoboProtection_hhs3.T> | undefined = useMemo(() => {
-    return map(database, _ => {
-      const {hhComposition, ...basicFilters} = optionFilter
-      const filtered = seq(DataFilter.filterDataFromLokiJs(_ as any, filterShape, basicFilters as any)) as Seq<KoboProtection_hhs3.T>
-      if (hhComposition && hhComposition.length > 0)
-        return filtered.filter(d => !!d.persons?.find(p => {
-          if (!p.age) return false
-          if (p.gender === Person.Gender.Female) {
-            if (hhComposition.includes('girl') && p.age < 17) return true
-            if (hhComposition.includes('olderFemale') && p.age > 60) return true
-            if (hhComposition.includes('adultFemale')) return true
-          }
-          if (p.gender === Person.Gender.Male) {
-            if (hhComposition.includes('boy') && p.age < 17) return true
-            if (hhComposition.includes('olderMale') && p.age > 60) return true
-            if (hhComposition.includes('adultMale')) return true
-          }
-          return false
-        }))
-      return filtered
-    })
-  }, [database, optionFilter])
+    if (!_answers.get) return
+    const {hhComposition, ...basicFilters} = optionFilter
+    const filtered = seq(DataFilter.filterData(_answers.get, filterShape, basicFilters as any)) as Seq<KoboProtection_hhs3.T>
+    if (hhComposition && hhComposition.length > 0)
+      return filtered.filter(d => !!d.persons?.find(p => {
+        if (!p.age) return false
+        if (p.gender === Person.Gender.Female) {
+          if (hhComposition.includes('girl') && p.age < 17) return true
+          if (hhComposition.includes('olderFemale') && p.age > 60) return true
+          if (hhComposition.includes('adultFemale')) return true
+        }
+        if (p.gender === Person.Gender.Male) {
+          if (hhComposition.includes('boy') && p.age < 17) return true
+          if (hhComposition.includes('olderMale') && p.age > 60) return true
+          if (hhComposition.includes('adultMale')) return true
+        }
+        return false
+      }))
+    return filtered
+  }, [_answers.get, optionFilter])
 
   const computed = useProtectionDashboardMonitoData({data: data})
 

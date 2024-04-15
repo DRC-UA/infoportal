@@ -74,20 +74,6 @@ export namespace DataFilter {
       return _ => filterValue.includes(shape.getValue!(_) as any)
     })) as Seq<TData>
   }
-
-  /** @deprecated not working properly */
-  export const filterDataFromLokiJs = <TData extends object, TValue extends string, TName extends string>(
-    d: Collection<TData>,
-    shapes: Partial<Record<TName, Shape<TData, TValue>>>,
-    filters: Record<TName, string[]>
-  ): TData[] => {
-    const lokiFilters: any = {}
-    Enum.entries(filters).forEach(([filterName, filterValue]) => {
-      if (!filterValue || filterValue.length <= 0) return
-      lokiFilters[filterName] = {$in: filterValue}
-    })
-    return d.find(lokiFilters)
-  }
 }
 
 
