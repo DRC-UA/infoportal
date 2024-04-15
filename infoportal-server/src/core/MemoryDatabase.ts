@@ -7,6 +7,7 @@ export interface MemoryDatabaseInterface<T, TID> {
   refresh: () => Promise<T[]>
   warmUp: () => Promise<T[]>
   get: () => Promise<T[]>
+  clear: () => void
 }
 
 export class MemoryDatabase {
@@ -60,6 +61,7 @@ export class MemoryDatabase {
       },
       refresh: build,
       warmUp: build,
+      clear: () => this.cache.delete(params.name),
       get: () => {
         return map(this.cache.get(params.name), _ => _) ?? build()
       }

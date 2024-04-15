@@ -1,5 +1,5 @@
 import {PrismaClient} from '@prisma/client'
-import {ApiPaginate, KoboIndex, Period, PeriodHelper, UUID, ApiPaginateHelper} from '@infoportal-common'
+import {ApiPaginate, ApiPaginateHelper, KoboIndex, Period, PeriodHelper, UUID} from '@infoportal-common'
 import {GlobalEvent} from '../../../core/GlobalEvent'
 import {MemoryDatabase, MemoryDatabaseInterface} from '../../../core/MemoryDatabase'
 import {ShelterDbService} from './ShelterDbService'
@@ -29,6 +29,11 @@ export class ShelterCachedDb {
     private meme: MemoryDatabaseInterface<ShelterEntity, UUID>,
     private koboEvent: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
   ) {
+    this.koboEvent.listen(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, async (x) => {
+      if ([KoboIndex.byName('shelter_ta').id, KoboIndex.byName('shelter_ta').id].includes(x.formId)) {
+        this.meme.clear()
+      }
+    })
     this.koboEvent.listen(GlobalEvent.Event.KOBO_TAG_EDITED, async (x) => {
       switch (x.formId) {
         case KoboIndex.byName('shelter_ta').id: {
