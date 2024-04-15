@@ -106,7 +106,7 @@ export const ProtectionDashboardMonito = () => {
       hh_sex_1: {
         getValue: _ => _.persons?.[0]?.gender,
         getOptions: () => DataFilter.buildOptionsFromObject(Person.Gender),
-        icon: 'check_circle',
+        icon: 'female',
         label: m.respondent
       },
       do_you_identify_as_any_of_the_following: {
