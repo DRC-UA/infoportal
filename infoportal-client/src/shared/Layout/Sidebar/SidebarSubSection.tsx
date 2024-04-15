@@ -31,6 +31,7 @@ export const SidebarSubSection = ({
       py: margin,
       borderRadius: t.shape.borderRadius + 'px',
       background: styleUtils(t).color.toolbar,
+      overflow: 'hidden',
     }}>
       <Box sx={{pl: keepOpen ? 1 : .5, mb: 0, display: 'flex', alignItems: 'center'}}>
         <Icon fontSize="small" sx={{visibility: icon ? 'inherit' : 'hidden', color: t.palette.text.secondary, mr: 1}}>{icon}</Icon>

@@ -1,7 +1,7 @@
 import {DrcProgram, DrcProject, DrcProjectHelper, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-import {AiBundle, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
@@ -14,11 +14,16 @@ export namespace AiMpcaMapper {
 
   const getPlanCode = (_: DrcProject) => {
     return fnSwitch(_ as any, {
+      // TODO wrongly set on Kobo answers
+      [DrcProject['UKR-000284 BHA']]: 'MPCA-DRC-00007',
+      [DrcProject['UKR-000345 BHA2']]: 'MPCA-DRC-00007',
+      [DrcProject['UKR-000330 SDC2']]: 'MPCA-DRC-00006',
+      [DrcProject['UKR-000347 DANIDA']]: 'MPCA-DRC-00005',
       [DrcProject['UKR-000336 UHF6']]: 'MPCA-DRC-00004',
       [DrcProject['UKR-000298 Novo-Nordisk']]: 'MPCA-DRC-00003',
       [DrcProject['UKR-000309 OKF']]: 'MPCA-DRC-00002',
       [DrcProject['UKR-000270 Pooled Funds']]: 'MPCA-DRC-00001',
-    }, () => _)
+    }, () => aiInvalidValueFlag + _)
   }
 
   export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
@@ -54,6 +59,7 @@ export namespace AiMpcaMapper {
                   UHF: 'Ukraine Humanitarian Fund (UHF)',
                   NovoNordisk: 'Novo Nordisk (NN)',
                   OKF: `Ole Kirk's Foundation (OKF)`,
+                  PoolFunds: 'Private Donor (PDonor)',
                   SDCS: `Swiss Agency for Development and Cooperation (SDC)`,
                   BHA: `USAID's Bureau for Humanitarian Assistance (USAID/BHA)`,
                   FINM: 'Ministry of Foreign Affairs - Finland (MFA Finland)',
@@ -63,7 +69,8 @@ export namespace AiMpcaMapper {
                   DUT: 'Dutch Relief Alliance (DutchRelief)',
                   ECHO: 'European Commission Humanitarian Aid Department and Civil Protection (ECHO)',
                   DANI: `Danish International Development Agency - Ministry of Foreign Affairs - Denmark (DANIDA)`,
-                }, () => undefined) as any,
+                  SDC: 'Swiss Agency for Development and Cooperation (SDC)',
+                }, () => aiInvalidValueFlag) as any,
                 'Response Theme': 'No specific theme',
                 'Number of Covered Months': 'Three months (recommended)',
                 'Financial Service Provider (FSP)': 'Bank Transfer',
@@ -89,7 +96,7 @@ export namespace AiMpcaMapper {
                 'Older Men with disability (60+)': disag['Older Men with disability (60+)'] ?? 0,
               } as const
               const request = ActivityInfoSdk.makeRecordRequests({
-                activityIdPrefix: 'drcflsc',
+                activityIdPrefix: 'drcmpca',
                 activityYYYYMM: periodStr,
                 formId: activitiesConfig.mpca.id,
                 activity: AiMpcaType.map(AiMapper.mapLocationToRecordId(ai)),

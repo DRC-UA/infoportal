@@ -22,7 +22,7 @@ export class ControllerActivityInfo {
       if (req.session.user?.email !== this.conf.ownerEmail && req.session.user?.email !== 'isabel.pearson@drc.ngo' && req.session.user?.email !== 'vladyslav.marchenko@drc.ngo') {
         throw new AppError.Forbidden('only_owner_can_submit_ai')
       }
-      this.log.info(`Insert ${activities.length} activities`)
+      this.log.info(`Inserting ${activities.length} activities...`)
       const status = await Util.promiseSequentially(activities.map(_ => () => this.api.publish(_)))//.then(_ => _.map(_ => JSON.parse(_)))
       // const status = await Promise.all(activities.map(this.api.publish))//.then(_ => _.map(_ => JSON.parse(_)))
       const errors = status.filter(_ => _ !== '')

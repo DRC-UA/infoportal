@@ -534,7 +534,8 @@ back_donor_l: {
 	'pool_dnk': `Pooled Funds`,
 	'pool_hrk': `Pooled Funds`,
 	'pool_lwo': `Pooled Funds`,
-	'pool_nlv': `Pooled Funds`
+	'pool_nlv': `Pooled Funds`,
+	'nlv_bha_345': `BHA2`
 },
 back_prog_type_l: {
 	'mpca_umy': `MPCA`,

@@ -83,6 +83,9 @@ export namespace AiMpcaType {
       'MPCA-DRC-00002': 'cf1o4x9ltn5mws75',
       'MPCA-DRC-00003': 'cin9hupltn5o8y68',
       'MPCA-DRC-00004': 'clpzjvyltn5ow78a',
+      'MPCA-DRC-00005': 'ccyfia1luwf5qys3',
+      'MPCA-DRC-00006': 'cmfd695luwfodg67',
+      'MPCA-DRC-00007': 'cj53fxfluwfvu265i',
     },
     'Donor': {
       'ACT Alliance': 'cvkyilllqf1uylbd4',
