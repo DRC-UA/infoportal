@@ -113,7 +113,7 @@ const _Datatable = <T extends DatatableRow>({
 
   const exportToCSV = () => {
     if (ctx.data.filteredAndSortedData) {
-      _generateXLSFromArray.call(slugify(title) ?? id ?? 'noname', [
+      _generateXLSFromArray.call((slugify(title) ?? id ?? 'noname') + '_' + format(new Date(), 'yyyy-MM-dd_HH:mm:ss'), [
         {
           sheetName: 'data',
           data: ctx.data.filteredAndSortedData,

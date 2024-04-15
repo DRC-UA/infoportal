@@ -1,8 +1,7 @@
 import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import React, {ReactNode, useCallback, useMemo} from 'react'
 import {Page} from '@/shared/Page'
-import {Sheet} from '@/shared/Sheet/Sheet'
-import {Enum, fnSwitch, Obj} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {IpInput} from '@/shared/Input/Input'
@@ -31,10 +30,11 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {Autocomplete} from '@mui/material'
 import {useSession} from '@/core/Session/SessionContext'
 import {Modal} from 'mui-extension/lib/Modal'
-import {SheetColumnProps} from '@/shared/Sheet/util/sheetType'
 import {SelectDrcProject} from '@/shared/SelectDrcProject'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {Datatable} from '@/shared/Datatable/Datatable'
+import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 
 export interface CfmDataFilters extends KoboAnswerFilter {
 }
@@ -85,52 +85,56 @@ export const CfmTable = ({}: any) => {
   // }, {requestKey: _ => _[0]})
 
 
-  const buildTagEnumColumn = useCallback(<T extends keyof Partial<KoboMealCfmTag>, K extends string, >({
+  const buildTagObjColumn = useCallback(<T extends keyof Partial<KoboMealCfmTag>, K extends string, >({
     head,
     tag,
     enumerator,
     translate,
     value,
     ...sheetProps
-  }: Pick<SheetColumnProps<any>, 'typeIcon' | 'style' | 'styleHead' | 'width'> & {
+  }: Pick<DatatableColumn.Props<any>, 'typeIcon' | 'style' | 'styleHead' | 'width'> & {
     head: string
     value?: KoboMealCfmTag[T]
     enumerator: Record<K, string>
     translate?: Record<K, ReactNode>
     tag: T,
-  }): SheetColumnProps<CfmData> => {
-    const enumKeys = Enum.keys(enumerator)
+  }): DatatableColumn.Props<CfmData> => {
+    const enumKeys = Obj.keys(enumerator)
     return {
       id: tag,
       head,
       type: 'select_one',
       options: () => enumKeys.map(_ => ({value: _, label: _})),
-      renderValue: row => (row?.tags?.[tag] ?? value) as string,
-      render: row => (
-        <AaSelect
-          showUndefinedOption
-          value={(row.tags as any)?.[tag] ?? value ?? ''}
-          onChange={(tagChange) => {
-            ctx.updateTag.call({
-              formId: row.formId,
-              answerId: row.id,
-              key: tag,
-              value: tagChange,
-            })
-          }}
-          options={enumKeys.map(_ => ({
-            value: _, children: translate ? translate[_] : _,
-          }))
-          }
-        />
-      ),
+      render: row => {
+        return {
+          value: (row?.tags?.[tag] ?? value) as string,
+          label: (
+            <AaSelect
+              showUndefinedOption
+              value={(row.tags as any)?.[tag] ?? value ?? ''}
+              onChange={(tagChange) => {
+                ctx.updateTag.call({
+                  formId: row.formId,
+                  answerId: row.id,
+                  key: tag,
+                  value: tagChange,
+                })
+              }}
+              options={enumKeys.map(_ => ({
+                value: _, children: translate ? translate[_] : _,
+              }))
+              }
+            />
+          )
+        }
+      },
       ...sheetProps,
     }
   }, [ctx.visibleData])
 
   const column = useMemo(() => {
     return {
-      status: buildTagEnumColumn({
+      status: buildTagObjColumn({
         head: m.status,
         width: 0,
         typeIcon: null,
@@ -140,13 +144,13 @@ export const CfmTable = ({}: any) => {
         enumerator: KoboMealCfmStatus,
         translate: cfmStatusIconIndex
       }),
-      office: buildTagEnumColumn({
+      office: buildTagObjColumn({
         head: m.office,
         tag: 'office',
         width: 100,
         enumerator: DrcOffice,
       }),
-      program: buildTagEnumColumn({
+      program: buildTagObjColumn({
         head: m.program,
         width: 140,
         tag: 'program',
@@ -158,7 +162,8 @@ export const CfmTable = ({}: any) => {
   return (
     <Page width="full">
       <Panel>
-        <Sheet
+        <Datatable
+          showExportBtn
           defaultFilters={{
             status: [
               KoboMealCfmStatus.Processing,
@@ -198,26 +203,31 @@ export const CfmTable = ({}: any) => {
               typeIcon: null,
               width: 0,
               options: () => Obj.keys(KoboMealCfmStatus).map(_ => ({value: _, label: _})),
-              renderValue: row => row?.tags?.status ?? KoboMealCfmStatus.Open,
-              render: row => (
-                <IpSelectSingle
-                  value={row.tags?.status ?? KoboMealCfmStatus.Open ?? ''}
-                  onChange={(tagChange) => {
-                    ctx.updateTag.call({
-                      formId: row.formId,
-                      answerId: row.id,
-                      key: 'status',
-                      value: tagChange,
-                    })
-                  }}
-                  options={Obj.keys(KoboMealCfmStatus)
-                    .filter(_ => !ctx.authorizations.sum.admin ? _ !== KoboMealCfmStatus.Archived : true)
-                    .map(_ => ({
-                      value: _, children: <CfmStatusIcon status={KoboMealCfmStatus[_]}/>,
-                    }))
-                  }
-                />
-              ),
+              render: row => {
+                return {
+                  export: row?.tags?.status ?? KoboMealCfmStatus.Open,
+                  value: row?.tags?.status ?? KoboMealCfmStatus.Open,
+                  label: (
+                    <IpSelectSingle
+                      value={row.tags?.status ?? KoboMealCfmStatus.Open ?? ''}
+                      onChange={(tagChange) => {
+                        ctx.updateTag.call({
+                          formId: row.formId,
+                          answerId: row.id,
+                          key: 'status',
+                          value: tagChange,
+                        })
+                      }}
+                      options={Obj.keys(KoboMealCfmStatus)
+                        .filter(_ => !ctx.authorizations.sum.admin ? _ !== KoboMealCfmStatus.Archived : true)
+                        .map(_ => ({
+                          value: _, children: <CfmStatusIcon status={KoboMealCfmStatus[_]}/>,
+                        }))
+                      }
+                    />
+                  )
+                }
+              }
             },
             {
               type: 'select_one',
@@ -226,63 +236,81 @@ export const CfmTable = ({}: any) => {
               typeIcon: null,
               align: 'center',
               head: m._cfm.priority,
-              tooltip: null,
               options: () => [
                 {value: CfmDataPriority.Low, label: CfmDataPriority.Low},
                 {value: CfmDataPriority.Medium, label: CfmDataPriority.Medium},
                 {value: CfmDataPriority.High, label: CfmDataPriority.High},
               ],
-              renderValue: _ => _.priority,
-              render: _ => <CfmPriorityLogo priority={_.priority}/>,
+              render: _ => {
+                return {
+                  tooltip: null,
+                  export: _.priority,
+                  value: _.priority,
+                  label: <CfmPriorityLogo priority={_.priority}/>
+                }
+              },
             },
             {
               type: 'string',
               head: m.id,
               id: 'id',
               width: 78,
-              render: _ => _.id,
+              renderQuick: _ => _.id,
             },
             {
               type: 'date',
               head: m.koboSubmissionTime,
               id: 'submission_time',
               width: 78,
-              renderValue: _ => _.submissionTime,
-              render: _ => formatDate(_.submissionTime),
+              render: _ => {
+                return {
+                  label: formatDate(_.submissionTime),
+                  value: _.submissionTime,
+                }
+              }
             },
             {
               type: 'date',
               head: m.date,
               id: 'date',
               width: 78,
-              renderValue: _ => _.date,
-              render: _ => formatDate(_.date),
+              render: _ => {
+                return {
+                  label: formatDate(_.date),
+                  value: _.date
+                }
+              }
             },
             {
               type: 'select_one',
               head: m.form,
               id: 'form',
               width: 80,
-              options: () => Enum.keys(CfmDataSource).map(_ => ({value: _, label: m._cfm.form[_]})),
-              render: _ => m._cfm.form[_.form]
+              options: () => Obj.keys(CfmDataSource).map(_ => ({value: _, label: m._cfm.form[_]})),
+              renderQuick: _ => m._cfm.form[_.form]
             },
             {
               type: 'select_one',
               head: m.project,
               id: 'project',
               width: 180,
-              // options: () => Enum.keys(Meal_CfmInternal.options.feedback_type).map(k => ({value: k, label: ctx.schemaExternal.translate('feedback_type', k)})),
-              renderValue: _ => _.project,
-              renderOption: _ => _.project,
-              render: row => row.form === CfmDataSource.Internal
-                ? row.project
-                : <SelectDrcProject
-                  label={null}
-                  value={row.project}
-                  onChange={newValue => {
-                    ctx.updateTag.call({formId: row.formId, answerId: row.id, key: 'project', value: newValue})
-                  }}
-                />
+              // options: () => Obj.keys(Meal_CfmInternal.options.feedback_type).map(k => ({value: k, label: ctx.schemaExternal.translate('feedback_type', k)})),
+              render: row => {
+                return {
+                  export: row.project,
+                  value: row.project,
+                  option: row.project,
+                  label: row.form === CfmDataSource.Internal
+                    ? row.project
+                    : <SelectDrcProject
+                      label={null}
+                      value={row.project}
+                      onChange={newValue => {
+                        ctx.updateTag.call({formId: row.formId, answerId: row.id, key: 'project', value: newValue})
+                      }}
+                    />
+                }
+              }
             },
             column.office,
             column.program,
@@ -290,136 +318,154 @@ export const CfmTable = ({}: any) => {
               width: 170,
               type: 'select_one',
               // options: () => seq(ctx.visibleData).map(_ => _.tags?.focalPointEmail).compact().distinct(_ => _).map(SheetUtils.buildOption),
-              renderValue: _ => _.tags?.focalPointEmail,
               head: m.focalPoint,
-              renderOption: _ => _.tags?.focalPointEmail,
               id: 'focalPoint',
-              render: row => (
-                <DebouncedInput<string>
-                  debounce={1250}
-                  value={row.tags?.focalPointEmail}
-                  onChange={_ => {
-                    if (_ === '' || Regexp.get.drcEmail.test(_))
-                      ctx.updateTag.call({formId: row.formId, answerId: row.id, key: 'focalPointEmail', value: _})
-                  }}
-                >
-                  {(value, onChange) => (
-                    <Autocomplete
-                      freeSolo
-                      loading={ctx.users.loading}
-                      disableClearable
-                      value={value}
-                      onChange={(e, _) => onChange(_)}
-                      options={ctx.users.get?.map((option) => option.email) ?? []}
-                      // renderInput={(params) => <TextField {...params} label="freeSolo" />}
-                      renderInput={({InputProps, ...props}) => <IpInput
-                        {...InputProps}
-                        {...props}
-                        helperText={null}
-                        placeholder="@drc.ngo"
-                        endAdornment={value && !Regexp.get.drcEmail.test(value) && <TableIcon tooltip={m.invalidEmail} color="error">error</TableIcon>}
-                      />
-                      }
-                    />
-                  )}
-                </DebouncedInput>
-              ),
+              render: row => {
+                return {
+                  export: row.tags?.focalPointEmail,
+                  value: row.tags?.focalPointEmail,
+                  option: row.tags?.focalPointEmail,
+                  label: (
+                    <DebouncedInput<string>
+                      debounce={1250}
+                      value={row.tags?.focalPointEmail}
+                      onChange={_ => {
+                        if (_ === '' || Regexp.get.drcEmail.test(_))
+                          ctx.updateTag.call({formId: row.formId, answerId: row.id, key: 'focalPointEmail', value: _})
+                      }}
+                    >
+                      {(value, onChange) => (
+                        <Autocomplete
+                          freeSolo
+                          loading={ctx.users.loading}
+                          disableClearable
+                          value={value}
+                          onChange={(e, _) => onChange(_)}
+                          options={ctx.users.get?.map((option) => option.email) ?? []}
+                          // renderInput={(params) => <TextField {...params} label="freeSolo" />}
+                          renderInput={({InputProps, ...props}) => <IpInput
+                            {...InputProps}
+                            {...props}
+                            helperText={null}
+                            placeholder="@drc.ngo"
+                            endAdornment={value && !Regexp.get.drcEmail.test(value) && <TableIcon tooltip={m.invalidEmail} color="error">error</TableIcon>}
+                          />
+                          }
+                        />
+                      )}
+                    </DebouncedInput>
+                  )
+                }
+              }
             },
             {
               type: 'select_one',
               head: m._cfm.feedbackType,
               id: 'feedbackType',
               width: 120,
-              renderValue: _ => _.category,
-              renderOption: _ => ctx.schemaInternal.translate.choice('feedback_type', _.category),
-              render: row => row.form === CfmDataSource.Internal
-                ? ctx.schemaInternal.translate.choice('feedback_type', row.category)
-                : <AaSelect
-                  defaultValue={row.category}
-                  onChange={newValue => {
-                    ctx.updateTag.call({formId: row.formId, answerId: row.id, key: 'feedbackTypeOverride', value: newValue})
-                  }}
-                  options={Enum.entries(Meal_CfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
-                />
+              render: row => {
+                return {
+                  value: row.category,
+                  option: ctx.schemaInternal.translate.choice('feedback_type', row.category),
+                  label: row.form === CfmDataSource.Internal
+                    ? ctx.schemaInternal.translate.choice('feedback_type', row.category)
+                    : <AaSelect
+                      defaultValue={row.category}
+                      onChange={newValue => {
+                        ctx.updateTag.call({formId: row.formId, answerId: row.id, key: 'feedbackTypeOverride', value: newValue})
+                      }}
+                      options={Obj.entries(Meal_CfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
+                    />
+                }
+              }
             },
             {
               type: 'select_one',
               head: m._cfm.feedbackTypeExternal,
               id: 'feedbackTypeExternal',
-              // options: () => Enum.entries(m._cfm._feedbackType).map(([k, v]) => ({value: k, label: v})),
-              renderValue: _ => _.external_feedback_type,
-              render: _ => m._cfm._feedbackType[_.external_feedback_type!],
+              // options: () => Obj.entries(m._cfm._feedbackType).map(([k, v]) => ({value: k, label: v})),
+              render: _ => {
+                return {
+                  value: _.external_feedback_type,
+                  label: m._cfm._feedbackType[_.external_feedback_type!]
+                }
+              },
             },
             {
               type: 'string',
               head: m._cfm.feedback,
               id: 'feedback',
-              render: _ => _.feedback,
+              renderQuick: _ => _.feedback,
             },
             {
               type: 'string',
               head: m.comments,
               id: 'comments',
-              render: _ => _.comments,
+              renderQuick: _ => _.comments,
             },
             {
               type: 'string',
               head: m.name,
               id: 'name',
-              render: _ => _.name,
+              renderQuick: _ => _.name,
             },
             {
               type: 'select_one',
               head: m.gender,
               width: 80,
               id: 'gender',
-              options: () => Enum.keys(Meal_CfmInternal.options.gender).map(value => ({value, label: ctx.schemaExternal.translate.choice('gender', value)})),
-              renderValue: _ => _.gender,
-              render: _ => ctx.schemaExternal.translate.choice('gender', _.gender)
+              options: () => Obj.keys(Meal_CfmInternal.options.gender).map(value => ({value, label: ctx.schemaExternal.translate.choice('gender', value)})),
+              render: _ => {
+                return {
+                  value: _.gender,
+                  label: ctx.schemaExternal.translate.choice('gender', _.gender)
+                }
+              }
             },
             {
               type: 'string',
               head: m.email,
               id: 'email',
-              render: _ => _.email,
+              renderQuick: _ => _.email,
             },
             {
               type: 'string',
               head: m.phone,
               id: 'phone',
-              render: _ => _.phone,
+              renderQuick: _ => _.phone,
             },
             {
               type: 'select_one',
               head: m.oblast,
               options: () => OblastIndex.names.map(value => ({value, label: value})),
               id: 'oblast',
-              render: _ => _.oblast,
+              renderQuick: _ => _.oblast,
             },
             {
               type: 'select_one',
               head: m.raion,
               id: 'raion',
-              render: _ => ctx.schemaExternal.translate.choice('ben_det_raion', _.ben_det_raion),
+              renderQuick: _ => ctx.schemaExternal.translate.choice('ben_det_raion', _.ben_det_raion),
             },
             {
               type: 'select_one',
               head: m.hromada,
               id: 'hromada',
-              render: _ => ctx.schemaExternal.translate.choice('ben_det_hromada', _.ben_det_hromada),
+              renderQuick: _ => ctx.schemaExternal.translate.choice('ben_det_hromada', _.ben_det_hromada),
             },
             {
               type: 'string',
               head: m.note,
               id: 'note',
-              render: _ => _.tags?.notes
+              renderQuick: _ => _.tags?.notes
             },
             {
               id: 'actions',
               width: 95,
               align: 'center',
+              noCsvExport: true,
               stickyEnd: true,
-              render: row => (
+              renderQuick: row => (
                 <>
                   {(ctx.authorizations.sum.write || session.email === row.tags?.focalPointEmail) && (
                     <>

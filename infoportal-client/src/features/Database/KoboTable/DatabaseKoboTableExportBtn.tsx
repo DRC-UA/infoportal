@@ -119,14 +119,14 @@ export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
   repeatGroupsAsColumns?: boolean
   data: T[] | undefined
 } & Pick<IpIconBtnProps, 'sx' | 'tooltip'>) => {
-  const {m} = useI18n()
   const _generateXLSFromArray = useAsync(generateXLSFromArray)
   const ctx = useDatabaseKoboTableContext()
+  const {formatDateTime} = useI18n()
 
   const exportToCSV = () => {
     if (data) {
       const questionToAddInGroups = ctx.schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name))
-      _generateXLSFromArray.call(slugify(ctx.schema.schemaUnsanitized.name), [
+      _generateXLSFromArray.call(slugify(ctx.schema.schemaUnsanitized.name) + '_' + formatDateTime(new Date()), [
         {
           sheetName: slugify(ctx.schema.schemaUnsanitized.name),
           data: data,
