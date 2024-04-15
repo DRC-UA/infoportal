@@ -94,6 +94,7 @@ export class KoboMetaMapperProtection {
     const answer = Protection_hhs3.map(row.answers)
     const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
 
+    if (answer.have_you_filled_out_this_form_before === 'yes' || answer.present_yourself === 'no') return
     return {
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
         chernihiv: DrcOffice.Chernihiv,

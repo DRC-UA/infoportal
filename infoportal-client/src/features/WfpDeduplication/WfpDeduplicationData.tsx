@@ -1,6 +1,5 @@
 import {Page} from '@/shared/Page'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import React, {useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
@@ -12,6 +11,7 @@ import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {format} from 'date-fns'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 export const DeduplicationStatusIcon = ({status}: {status: WfpDeduplicationStatus}) => {
   return fnSwitch(status, {
@@ -28,13 +28,17 @@ export const WfpDeduplicationData = () => {
   const {formatDate, formatLargeNumber} = useI18n()
   const {m} = useI18n()
 
-  const existingOrga = useMemo(() => {
-    if (!_search.get) return
-    return seq(_search.get.data)
-      .map(_ => _.existingOrga)
-      .distinct(_ => _)
-      .compact()
-      .map(SheetUtils.buildOption)
+  const {existingOrga, taxIdCounter} = useMemo(() => {
+    if (!_search.get) return {}
+    const data = seq(_search.get.data)
+    return {
+      taxIdCounter: data.groupByAndApply(_ => _.taxId ?? '', _ => _.length),
+      existingOrga: data
+        .map(_ => _.existingOrga)
+        .distinct(_ => _)
+        .compact()
+        .map(SheetUtils.buildOption)
+    }
   }, [_search.get])
 
   useEffect(() => {
@@ -44,7 +48,7 @@ export const WfpDeduplicationData = () => {
   return (
     <Page width="full">
       <Panel>
-        <Sheet
+        <Datatable
           id="wfp"
           showExportBtn
           title={'wfp-deduplication-' + format(new Date(), 'yyyy-MM-dd')}
@@ -53,68 +57,87 @@ export const WfpDeduplicationData = () => {
             {
               id: 'fileName',
               head: m.fileName,
-              renderExport: true,
-              render: _ => _.fileName,
+              renderQuick: _ => _.fileName,
               type: 'string',
             },
             {
               id: 'createdAt',
               head: m.createdAt,
-              renderExport: true,
-              render: _ => formatDate(_.createdAt),
-              renderValue: _ => _.createdAt,
+              render: _ => {
+                return {
+                  label: formatDate(_.createdAt),
+                  value: _.createdAt,
+                }
+              },
               type: 'date'
             },
             {
               id: 'office',
               head: m.office,
-              renderExport: true,
-              render: _ => _.office,
+              renderQuick: _ => _.office,
               type: 'select_one',
               options: () => Enum.values(DrcOffice).map(_ => ({label: _, value: _}))
             },
             // {
             //   id: 'beneficiaryId',
             //   head: 'beneficiaryId',
-            //   renderExport: true,
             //   render: _ => _.beneficiaryId, type: 'string'
             // },
             {
               id: 'taxId',
               head: m.taxID,
-              renderExport: true,
-              render: _ => _.taxId ?? <Txt color="error">{m.mpca.uploadWfpTaxIdMapping}</Txt>,
               type: 'string',
+              render: _ => {
+                return {
+                  value: _.taxId,
+                  label: _.taxId ?? <Txt color="error">{m.mpca.uploadWfpTaxIdMapping}</Txt>,
+                }
+              }
+            },
+            {
+              id: 'taxId',
+              head: m.taxID,
+              type: 'number',
+              renderQuick: _ => taxIdCounter?.[_.taxId!] ?? 0
             },
             {
               id: 'amount',
               type: 'number',
               head: m.amount,
               align: 'right',
-              renderExport: true,
-              render: _ => formatLargeNumber(_.amount),
-              renderValue: _ => _.amount,
+              render: _ => {
+                return {
+                  label: formatLargeNumber(_.amount),
+                  value: _.amount,
+                }
+              },
             },
             {
               id: 'validFrom',
               head: m.validFrom,
               type: 'date',
-              renderExport: true,
-              render: _ => formatDate(_.validFrom)
+              render: _ => {
+                return {
+                  label: formatDate(_.validFrom),
+                  value: _.validFrom,
+                }
+              }
             },
             {
               id: 'expiry',
               head: m.expiry,
-              renderExport: true,
               type: 'date',
-              render: _ => formatDate(_.expiry)
+              render: _ => {
+                return {
+                  label: formatDate(_.expiry),
+                  value: _.expiry,
+                }
+              }
             },
             {
               id: 'suggestion',
               head: m.suggestion,
-              renderExport: true,
-              render: _ => m.mpca.drcSupportSuggestion[_.suggestion],
-              renderValue: _ => m.mpca.drcSupportSuggestion[_.suggestion] ?? SheetUtils.blank,
+              renderQuick: _ => m.mpca.drcSupportSuggestion[_.suggestion],
               width: 246,
               type: 'select_one',
               // options: () => Enum.keys(DrcSupportSuggestion).map(_ => ({label: m.mpca.drcSupportSuggestion[_], value: _})),
@@ -126,38 +149,52 @@ export const WfpDeduplicationData = () => {
               width: 0,
               type: 'select_one',
               options: () => SheetUtils.buildOptions(Enum.keys(WfpDeduplicationStatus), true),
-              tooltip: _ => m.mpca.status[_.status],
-              renderExport: false,
-              render: _ => <DeduplicationStatusIcon status={_.status}/>,
-              renderValue: _ => _.status ?? SheetUtils.blank,
+              render: _ => {
+                return {
+                  tooltip: m.mpca.status[_.status],
+                  label: <DeduplicationStatusIcon status={_.status}/>,
+                  value: _.status ?? SheetUtils.blank,
+                }
+              },
             },
             {
               id: 'existingOrga',
               head: m.mpca.existingOrga,
-              renderExport: true,
-              render: _ => _.existingOrga,
+              renderQuick: _ => _.existingOrga,
               options: existingOrga ? (() => existingOrga) : undefined,
               type: 'select_one',
             },
             {
               id: 'existingAmount',
               head: m.mpca.existingAmount,
-              align: 'right', renderExport: true,
-              render: _ => _.existingAmount && formatLargeNumber(_.existingAmount),
+              render: _ => {
+                return {
+                  label: _.existingAmount && formatLargeNumber(_.existingAmount),
+                  value: _.existingAmount,
+                }
+              },
               type: 'number',
             },
             {
               id: 'existingStart',
               head: m.mpca.existingStart,
-              renderExport: true,
-              render: _ => _.existingStart && formatDate(_.existingStart),
+              render: _ => {
+                return {
+                  label: _.existingStart && formatDate(_.existingStart),
+                  value: _.existingStart,
+                }
+              },
               type: 'date',
             },
             {
               id: 'existingEnd',
               head: m.mpca.existingEnd,
-              renderExport: true,
-              render: _ => _.existingEnd && formatDate(_.existingEnd),
+              render: _ => {
+                return {
+                  label: _.existingEnd && formatDate(_.existingEnd),
+                  value: _.existingEnd,
+                }
+              },
               type: 'date',
             },
           ]}
