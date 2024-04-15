@@ -6,7 +6,7 @@ import {ShelterEntity, ShelterTaPriceLevel} from './ShelterDbType'
 import {KoboAnswerId} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 import {Enum, fnSwitch, Seq, seq} from '@alexandreannic/ts-utils'
 import {DrcOffice, KoboIndex, OblastIndex} from '@infoportal-common'
-import {ShelterContractorPrices} from './ShelterContractor'
+import {ShelterContractorPrices} from '@infoportal-common'
 
 export class ShelterDbService {
 

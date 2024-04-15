@@ -26,7 +26,7 @@ export class ShelterContractorPrices {
 
   static readonly findContractor = ({
     oblast,
-    lot,
+    lot
   }: {
     oblast?: keyof typeof Shelter_TA.options['ben_det_oblast']
     lot: 1 | 2
@@ -41,7 +41,7 @@ export class ShelterContractorPrices {
   static readonly compute = ({
     answer,
     contractor1,
-    contractor2,
+    contractor2
   }: {
     contractor1?: ShelterContractor
     contractor2?: ShelterContractor
@@ -83,7 +83,7 @@ const lot1: (keyof Shelter_TA.T)[] = [
   'outer_seels_galvanized_with_pvc_coating_lm',
   'window_slopes_m',
   'minor_window_repairs_pc',
-  'doubleglazed_upvc_door_m',
+  'doubleglazed_upvc_door_m'
 ]
 
 const lot2: (keyof Shelter_TA.T)[] = [
@@ -124,7 +124,7 @@ const lot2: (keyof Shelter_TA.T)[] = [
   'steel_radiator_1000',
   'steel_radiator_2000',
   'bimetallic_radiator_sections_length_mm_pc',
-  'wall_mountes_cable_wiring_lm',
+  'wall_mountes_cable_wiring_lm'
 ]
 
 const WAITING_FOR_PRICES_LOT1: Partial<Record<keyof Shelter_TA.T, number>> = {
@@ -138,7 +138,7 @@ const WAITING_FOR_PRICES_LOT1: Partial<Record<keyof Shelter_TA.T, number>> = {
   outer_seels_galvanized_with_pvc_coating_lm: -1,
   window_slopes_m: -1,
   minor_window_repairs_pc: -1,
-  doubleglazed_upvc_door_m: -1,
+  doubleglazed_upvc_door_m: -1
 }
 
 const WAITING_FOR_PRICES_LOT2: Partial<Record<keyof Shelter_TA.T, number>> = {
@@ -179,12 +179,12 @@ const WAITING_FOR_PRICES_LOT2: Partial<Record<keyof Shelter_TA.T, number>> = {
   steel_radiator_1000: -1,
   steel_radiator_2000: -1,
   bimetallic_radiator_sections_length_mm_pc: -1,
-  wall_mountes_cable_wiring_lm: -1,
+  wall_mountes_cable_wiring_lm: -1
 }
 
 const WAITING_FOR_PRICES = {
   ...WAITING_FOR_PRICES_LOT1,
-  ...WAITING_FOR_PRICES_LOT2,
+  ...WAITING_FOR_PRICES_LOT2
 }
 
 const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelter_TA.T, number>>>> = {
@@ -226,7 +226,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 654200,
     steel_radiator_2000: 654200,
     bimetallic_radiator_sections_length_mm_pc: 189700,
-    wall_mountes_cable_wiring_lm: 25000,
+    wall_mountes_cable_wiring_lm: 25000
   },
   [ShelterContractor['Megalit']]: {
     dismantling_of_structures: 85000,
@@ -239,7 +239,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     outer_seels_galvanized_with_pvc_coating_lm: 38000,
     window_slopes_m: 121900,
     minor_window_repairs_pc: 90000,
-    doubleglazed_upvc_door_m: 530000,
+    doubleglazed_upvc_door_m: 530000
   },
   [ShelterContractor['Artbudservice']]: {
     dismantling_of_structures2: 202,
@@ -279,7 +279,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 571103,
     steel_radiator_2000: 571103,
     bimetallic_radiator_sections_length_mm_pc: 571103,
-    wall_mountes_cable_wiring_lm: 38749,
+    wall_mountes_cable_wiring_lm: 38749
   },
   [ShelterContractor['Kramelitbud']]: {
     dismantling_of_structures: 85000,
@@ -330,7 +330,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 497000,
     steel_radiator_2000: 497000,
     bimetallic_radiator_sections_length_mm_pc: 487000,
-    wall_mountes_cable_wiring_lm: 31500,
+    wall_mountes_cable_wiring_lm: 31500
   },
   [ShelterContractor['Osnova-R']]: {
     dismantling_of_structures: 111111,
@@ -343,7 +343,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     outer_seels_galvanized_with_pvc_coating_lm: 9504,
     window_slopes_m: 284776,
     minor_window_repairs_pc: 38241,
-    doubleglazed_upvc_door_m: 341101,
+    doubleglazed_upvc_door_m: 341101
   },
   [ShelterContractor['Dosvid 2002']]: {
     dismantling_of_structures: 134000,
@@ -394,7 +394,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 418600,
     steel_radiator_2000: 418600,
     bimetallic_radiator_sections_length_mm_pc: 711500,
-    wall_mountes_cable_wiring_lm: 37700,
+    wall_mountes_cable_wiring_lm: 37700
   },
   [ShelterContractor['Donmegastroy']]: {
     dismantling_of_structures2: 113855,
@@ -435,7 +435,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_2000: 2213400,
     bimetallic_radiator_sections_length_mm_pc: 1699962,
     wall_mountes_cable_wiring_lm: 42839,
-    ...WAITING_FOR_PRICES_LOT1,
+    ...WAITING_FOR_PRICES_LOT1
   },
   [ShelterContractor['Framplus']]: {
     dismantling_of_structures2: 113855,
@@ -475,13 +475,13 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 2213400,
     steel_radiator_2000: 2213400,
     bimetallic_radiator_sections_length_mm_pc: 1699962,
-    wall_mountes_cable_wiring_lm: 42839,
+    wall_mountes_cable_wiring_lm: 42839
   },
   // [ShelterContractor['Framplus']]: WAITING_FOR_PRICES,
   [ShelterContractor['Kronos']]: WAITING_FOR_PRICES,
   [ShelterContractor['Monolit']]: WAITING_FOR_PRICES,
   [ShelterContractor['Darwin']]: WAITING_FOR_PRICES,
-  [ShelterContractor['Cash']]: WAITING_FOR_PRICES,
+  [ShelterContractor['Cash']]: WAITING_FOR_PRICES
 }
 const oblasts = {
   mykolaivska: [
@@ -493,12 +493,13 @@ const oblasts = {
     ShelterContractor['Kronos'],
     ShelterContractor['Darwin'],
     ShelterContractor['Monolit'],
+    ShelterContractor['Cash']
   ],
   sumska: [
     ShelterContractor['Dosvid 2002'],
     ShelterContractor['Osnova-R'],
     // ShelterContractor['Kramelitbud'],
-    ShelterContractor['Zhilvest'],
+    ShelterContractor['Zhilvest']
   ],
   kharkivska: [
     ShelterContractor['Dosvid 2002'],
@@ -510,6 +511,6 @@ const oblasts = {
     ShelterContractor['Kronos'],
     ShelterContractor['Monolit'],
     ShelterContractor['Darwin'],
-    ShelterContractor['Cash'],
+    ShelterContractor['Cash']
   ]
 }
