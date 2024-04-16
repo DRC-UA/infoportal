@@ -172,6 +172,8 @@ const MealVerificationTableContent = <
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat<any> | undefined>()
   const [display, setDisplay] = useState<'data' | 'dataCheck' | 'all'>('all')
 
+  const [duplicateError, setDuplicateError] = useState<string | null>(null)
+
   useEffect(() => {
     fetcherDataVerified.fetch()
     fetcherDataOrigin.fetch()
@@ -197,18 +199,19 @@ const MealVerificationTableContent = <
   }
 
   const {mergedData, duplicateErrors} = useMemo(() => {
-    const duplicateErrors: string[] = []
-    const mergedData= map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
+    const newDuplicateErrors: string[] = []
+    const newMergedData = map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
       const indexDataVerified = seq(verified).groupBy(_ => _[activity.joinColumn] ?? '')
-       return seq(origin).filter(_ => indexVerification[_.id]).map(_ => {
-          const dataVerified = indexDataVerified[_[activity.joinColumn]]
-          console.log(activity.joinColumn, _[activity.joinColumn], dataVerified)
-          if (dataVerified && dataVerified.length > 1) {
-            duplicateErrors.push(_[activity.joinColumn])
-          }
+      return seq(origin).filter(_ => indexVerification[_.id]).flatMap(_ => {
+        const dataVerified = indexDataVerified[_[activity.joinColumn]]
+        if (dataVerified && dataVerified.length > 1 && !newDuplicateErrors.includes(_[activity.joinColumn])) {
+          console.log('activities:', _[activity.joinColumn])
+          newDuplicateErrors.push(_[activity.joinColumn])
+        }
+        return (dataVerified ?? []).map(dv => {
           const mergedData: Omit<MergedData, 'score'> = {
             data: _,
-            dataCheck: dataVerified?.[0],
+            dataCheck: dv,
             status: (() => {
               if (!!dataVerified) return MergedDataStatus.Completed
               if (indexVerification[_.id]?.status === MealVerificationAnswersStatus.Selected) return MergedDataStatus.Selected
@@ -220,20 +223,29 @@ const MealVerificationTableContent = <
             score: seq(activity.verifiedColumns).sum(c => areEquals(c, mergedData) ? 1 : 0),
           }
           return res
-        }).sortByNumber(_ => fnSwitch(_.status, {
-          [MergedDataStatus.Completed]: 1,
-          [MergedDataStatus.NotSelected]: 2,
-          [MergedDataStatus.Selected]: 0,
-        }))
-      })
-      return {mergedData, duplicateErrors}
+        })
+      }).sortByNumber(_ => fnSwitch(_.status, {
+        [MergedDataStatus.Completed]: 1,
+        [MergedDataStatus.NotSelected]: 2,
+        [MergedDataStatus.Selected]: 0,
+      }))
+    })
+    return {mergedData: newMergedData, duplicateErrors: newDuplicateErrors}
   }, [
     fetcherDataVerified.get,
     fetcherDataOrigin.get,
     indexVerification,
     activity
   ])
-  // console.log('mergedData', indexVerification, fetcherDataOrigin.get, fetcherDataVerified.get)
+
+  useEffect(() => {
+    if (duplicateErrors.length > 0) {
+      setDuplicateError(duplicateErrors.join(', '))
+    } else {
+      setDuplicateError(null)
+    }
+  }, [duplicateErrors])
+
 
   const stats = useMemo(() => {
     if (!mergedData) return
@@ -255,7 +267,7 @@ const MealVerificationTableContent = <
   return (
     <>
       {duplicateErrors.length > 0 && (
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{mb: 2}}>
           <Alert severity="error">{m._mealVerif.duplicateErrors(duplicateErrors)}</Alert>
         </Box>
       )}
@@ -373,9 +385,9 @@ const MealVerificationTableContent = <
               renderQuick: _ => _.data[activity.joinColumn],
               style: (rowData: MergedData) => {
                 if (duplicateErrors && duplicateErrors.includes(rowData.data[activity.joinColumn])) {
-                  return {color: 'red', fontWeight: 'bold'};
+                  return {color: 'red', fontWeight: 'bold'}
                 }
-                return {};
+                return {}
               },
             },
             {
