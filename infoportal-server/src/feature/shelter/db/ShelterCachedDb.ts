@@ -29,19 +29,19 @@ export class ShelterCachedDb {
     private meme: MemoryDatabaseInterface<ShelterEntity, UUID>,
     private koboEvent: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
   ) {
-    this.koboEvent.listen(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, async (x) => {
-      if ([KoboIndex.byName('shelter_ta').id, KoboIndex.byName('shelter_ta').id].includes(x.formId)) {
+    this.koboEvent.listen(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, async (_) => {
+      if ([KoboIndex.byName('shelter_ta').id, KoboIndex.byName('shelter_ta').id].includes(_.formId)) {
         this.meme.clear()
       }
     })
-    this.koboEvent.listen(GlobalEvent.Event.KOBO_TAG_EDITED, async (x) => {
-      switch (x.formId) {
+    this.koboEvent.listen(GlobalEvent.Event.KOBO_TAG_EDITED, async (eventParams) => {
+      switch (eventParams.formId) {
         case KoboIndex.byName('shelter_ta').id: {
-          x.answerIds.forEach(id => {
+          eventParams.answerIds.forEach(id => {
             this.meme.update(id, prev => {
               prev.ta!.tags = {
                 ...prev.ta?.tags ?? {},
-                ...x.tags,
+                ...eventParams.tags,
               }
               return prev
             })
@@ -49,11 +49,11 @@ export class ShelterCachedDb {
           break
         }
         case KoboIndex.byName('shelter_nta').id: {
-          x.answerIds.forEach(id => {
+          eventParams.answerIds.forEach(id => {
             this.meme.update(id, prev => {
               prev.nta!.tags = {
                 ...prev.nta?.tags ?? {},
-                ...x.tags,
+                ...eventParams.tags,
               }
               return prev
             })

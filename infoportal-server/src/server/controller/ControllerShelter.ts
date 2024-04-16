@@ -3,6 +3,7 @@ import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
 import {ShelterCachedDb} from '../../feature/shelter/db/ShelterCachedDb'
 import {ShelterDbService} from '../../feature/shelter/db/ShelterDbService'
+import {ApiPaginateHelper, PeriodHelper} from '@infoportal-common'
 
 export class ControllerShelter {
 
@@ -26,7 +27,10 @@ export class ControllerShelter {
       end: yup.date(),
       // })
     }).validate(req.body)
-    const data = await this.cache.search(body)
-    res.send(data)
+    const data = await this.service.search().then(_ => {
+      return _.filter(_ => PeriodHelper.isDateIn(body, _.nta?.submissionTime ?? _.ta?.submissionTime))
+    })
+    // const data = await this.cache.search(body)
+    res.send(ApiPaginateHelper.make()(data))
   }
 }
