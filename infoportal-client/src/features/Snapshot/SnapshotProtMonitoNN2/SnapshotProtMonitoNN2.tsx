@@ -7,10 +7,9 @@ import {ChartPieIndicatorProps} from '@/shared/charts/ChartPieWidget'
 import {SnapshotProtMonitoNN2Needs} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Needs'
 import {SnapshotProtMonitoNN2Livelihood} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Livelihood'
 import {SnapshotProtMonitoNN2Sample} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Sample'
-import {SnapshotProtMonitoNN2Displacement} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Displacement'
 import {Box, Theme} from '@mui/material'
 import {OblastIndex, Period} from '@infoportal-common'
-import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
+import {endOfMonth, startOfMonth} from 'date-fns'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 export const snapshotAlternateColor = (t: Theme) => t.palette.grey[500]
@@ -34,8 +33,8 @@ export const snapShotDefaultPieProps: Partial<Pick<ChartPieIndicatorProps, 'dens
 }
 export const SnapshotProtMonitoNN2 = () => {
   const [period, setPeriod] = useState<Partial<Period>>({
-    start: startOfMonth(new Date(2023, 11, 1)),
-    end: endOfMonth(new Date(2024, 0, 31)),
+    start: startOfMonth(new Date(2024, 1, 1)),
+    end: endOfMonth(new Date(2024, 2, 31)),
     //start: subMonths(startOfMonth(new Date()), 2),
     //end: endOfMonth(new Date()),
   })

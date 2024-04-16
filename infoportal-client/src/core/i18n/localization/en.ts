@@ -570,7 +570,7 @@ export const en = Object.freeze({
         }: {
           outOfWork?: string
           //}) => `<b>${outOfWork}</b> of respondents reported household members being out of work and seeking employment remains quite high, with main unemployment factor being the lack of available jobs.`,
-        }) => `With a majority of elderly respondents in rural areas where DRC protection teams operate, a considerable proportion of the surveyed population is currently dependent on social protection schemes and humanitarian assistance. 19% of respondents indicated facing basic needs gaps.`,
+        }) => `The primary reasons for unemployment remain unchanged from previous reports, with a shortage of job opportunities identified as the key factor. To address gaps in meeting basic needs, individuals are resorting to depending on external support, cutting back on expenses related to food and healthcare and depleting savings, a situation that may be exacerbated by Resolution 332 introducing changes in payment of IDP benefits.`,
         needs: ({
           healthPn,
           damagedAcc,

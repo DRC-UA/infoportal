@@ -36,37 +36,6 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
                 }
               </Lazy>
             </SlideTxt>
-            <SlidePanel>
-              <SlidePanelTitle>{m.monthlyIncomePerHH}</SlidePanelTitle>
-              <Lazy deps={[data]} fn={() => {
-                const income = chain(ChartHelperOld.single({
-                  filterValue: ['no_income', 'unable_unwilling_to_answer'],
-                  data: data.map(_ => _.what_is_the_average_month_income_per_household).compact(),
-                }))
-                  .map(ChartHelperOld.setLabel(Protection_hhs2.options.what_is_the_average_month_income_per_household))
-                  .map(ChartHelperOld.sortBy.custom(Object.keys(Protection_hhs2.options.what_is_the_average_month_income_per_household)))
-                  .get()
-
-                const hhSize = ChartHelperOld.sumByCategory({
-                  data,
-                  categories: {
-                    // no_income: _ => _.what_is_the_average_month_income_per_household === 'no_income',
-                    up_to_3000_UAH: _ => _.what_is_the_average_month_income_per_household === 'up_to_3000_UAH',
-                    between_3001_6000_UAH: _ => _.what_is_the_average_month_income_per_household === 'between_3001_6000_UAH',
-                    between_6001_9000_UAH: _ => _.what_is_the_average_month_income_per_household === 'between_6001_9000_UAH',
-                    between_9001_12000_UAH: _ => _.what_is_the_average_month_income_per_household === 'between_9001_12000_UAH',
-                    between_12001_15000_UAH: _ => _.what_is_the_average_month_income_per_household === 'between_12001_15000_UAH',
-                    more_than_15000_UAH: _ => _.what_is_the_average_month_income_per_household === 'more_than_15000_UAH',
-                  },
-                  filter: _ => _.ben_det_hh_size ?? 0,
-                })
-                return {income, hhSize}
-              }}>
-                {res => <ChartBar data={res.income} descs={Enum.transform(res.hhSize, (k, _) => [k, m.protHHSnapshot.avgHhSize(_.value / (_.base ?? 1))])}/>}
-              </Lazy>
-            </SlidePanel>
-          </Div>
-          <Div column>
             <Div>
               <SlidePanel sx={{flex: 1}}>
                 <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
@@ -100,6 +69,38 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
                 </Lazy>
               </SlidePanel>
             </Div>
+            <SlidePanel>
+              <SlidePanelTitle>{m.monthlyIncomePerHH}</SlidePanelTitle>
+              <Lazy deps={[data]} fn={() => {
+                const income = chain(ChartHelperOld.single({
+                  filterValue: ['no_income', 'unable_unwilling_to_answer'],
+                  data: data.map(_ => _.what_is_the_average_month_income_per_household).compact(),
+                }))
+                  .map(ChartHelperOld.setLabel(Protection_hhs2.options.what_is_the_average_month_income_per_household))
+                  .map(ChartHelperOld.sortBy.custom(Object.keys(Protection_hhs2.options.what_is_the_average_month_income_per_household)))
+                  .get()
+
+                const hhSize = ChartHelperOld.sumByCategory({
+                  data,
+                  categories: {
+                    // no_income: _ => _.what_is_the_average_month_income_per_household === 'no_income',
+                    up_to_3000_UAH: _ => _.what_is_the_average_month_income_per_household === 'up_to_3000_UAH',
+                    between_3001_6000_UAH: _ => _.what_is_the_average_month_income_per_household === 'between_3001_6000_UAH',
+                    between_6001_9000_UAH: _ => _.what_is_the_average_month_income_per_household === 'between_6001_9000_UAH',
+                    between_9001_12000_UAH: _ => _.what_is_the_average_month_income_per_household === 'between_9001_12000_UAH',
+                    between_12001_15000_UAH: _ => _.what_is_the_average_month_income_per_household === 'between_12001_15000_UAH',
+                    more_than_15000_UAH: _ => _.what_is_the_average_month_income_per_household === 'more_than_15000_UAH',
+                  },
+                  filter: _ => _.ben_det_hh_size ?? 0,
+                })
+                return {income, hhSize}
+              }}>
+                {res => <ChartBar data={res.income} descs={Enum.transform(res.hhSize, (k, _) => [k, m.protHHSnapshot.avgHhSize(_.value / (_.base ?? 1))])}/>}
+              </Lazy>
+            </SlidePanel>
+          </Div>
+          <Div column>
+
 
             <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.mainSourceOfIncome}</SlidePanelTitle>
@@ -115,23 +116,40 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
               <SlidePanelTitle>{m.protHHS2.unemploymentFactors}</SlidePanelTitle>
               <ChartBarMultipleBy
                 by={_ => _.what_are_the_reasons_for_being_out_of_work}
-                label={Protection_hhs2.options.what_are_the_reasons_for_being_out_of_work}
+                label={{
+                  ...Protection_hhs2.options.what_are_the_reasons_for_being_out_of_work,
+                  other_specify: 'Other'
+                }}
                 data={data}
+                mergeOptions={{
+                  lack_of_information_about_job_market: 'other_specify',
+                  lack_of_experience: 'other_specify',
+                  mine_containment: 'other_specify',
+                  physical_impairment_limitations: 'other_specify',
+                  housework_caring_for_children: 'other_specify',
+                }}
                 filterValue={['unable_unwilling_to_answer']}
               />
             </SlidePanel>
-             <SlidePanel>
-             <SlidePanelTitle>{m.copyingMechanisms}</SlidePanelTitle>
-            <ChartBarMultipleBy
-              data={data}
-              by={_ => _.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges}
-              label={{
-                ...Protection_hhs2.options.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
-                reducing_consumption_of_food: m.protHHS2.reducing_consumption_of_food,
-              }}
-              filterValue={['unable_unwilling_to_answer']}
-            />
-          </SlidePanel>
+            <SlidePanel>
+              <SlidePanelTitle>{m.copyingMechanisms}</SlidePanelTitle>
+              <ChartBarMultipleBy
+                data={data}
+                mergeOptions={{
+                  selling_off_household_productive_assets: 'other_specify',
+                  no_coping_strategy: 'other_specify',
+                  borrowing_money: 'other_specify',
+                  selling_off_received_humanitarian_assistance: 'other_specify'
+                }}
+                by={_ => _.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges}
+                label={{
+                  ...Protection_hhs2.options.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
+                  reducing_consumption_of_food: m.protHHS2.reducing_consumption_of_food,
+                  other_specify: 'Other'
+                }}
+                filterValue={['unable_unwilling_to_answer']}
+              />
+            </SlidePanel>
           </Div>
         </Div>
       </PdfSlideBody>

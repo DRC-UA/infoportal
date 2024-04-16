@@ -3,6 +3,9 @@ import {isValidElement, ReactNode} from 'react'
 
 export namespace Utils {
 
+
+export const clearParenthesis = (_: string) => _.replaceAll(/(.*)\([^(]*\)/g, '$1')
+
   export const extractInnerText = (node: ReactNode): string => {
     if (typeof node === 'string') {
       return node

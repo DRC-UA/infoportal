@@ -11,12 +11,12 @@ import {Txt} from 'mui-extension'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
-
+import {useTheme} from '@mui/material'
 
 export const SnapshotProtMonitoEchoNeeds = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
   const {formatLargeNumber, m} = useI18n()
-
+  const t = useTheme()
   return (
     <PdfSlide>
       <SlideHeader>{m.snapshotProtMonito.basicNeeds}</SlideHeader>
@@ -71,8 +71,9 @@ export const SnapshotProtMonitoEchoNeeds = () => {
               }}>
                 {_ =>
                   <p>
-                    Risk of eviction remains a top priority concern for IDPs.
-                    This is consistent with findings from the previous monitoring period and is linked to the <Txt color="hint">(Resolution #930)</Txt> on the functioning of the collective sites. Access to healthcare, including specialized services, remains very challenging.
+                    Compared to the previous monitoring month, a substantially higher percentage of respondents indicated facing barriers to accessing healthcare
+                    <Txt bold sx={{color: t.palette.success.main}}> (+19%)</Txt>.
+                    Residents in rural areas are significantly more affected, with <b>56%</b> of respondents indicating barriers to accessing healthcare.
                   </p>
                 }
               </Lazy>

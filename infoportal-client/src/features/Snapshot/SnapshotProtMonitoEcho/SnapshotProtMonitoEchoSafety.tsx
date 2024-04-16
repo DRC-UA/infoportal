@@ -4,8 +4,7 @@ import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, S
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
-import {chain, OblastIndex, Protection_hhs2, Protection_hhs3} from '@infoportal-common'
-import {ChartBar} from '@/shared/charts/ChartBar'
+import {OblastIndex, Protection_hhs2, Protection_hhs3} from '@infoportal-common'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
@@ -106,9 +105,9 @@ export const SnapshotProtMonitoEchoSafety = () => {
                     //   })
                     // }}
                   >
-                    Reports of significant stress and deterioration of mental health and wellbeing continue to be prevalent in Ukraine.
-                    Older individuals and those with disabilities are more prone to experiencing psychological distress, often stemming from an elevated sense of loneliness, a lack
-                    of social engagement, and a shortage of communal spaces for interaction and connection with others.
+                    Reports persist of substantial stress and declining mental health and well-being across Ukraine.
+                    Older individuals and people with disabilities are particularly susceptible to psychological distress, often triggered by feelings of heightened loneliness,
+                    reduced social interaction, and a shortage of communal spaces for social engagement and connection.
                   </p>
                 }
               </Lazy>

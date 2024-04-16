@@ -31,8 +31,11 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             }}>
               {_ =>
                 <SlideTxt>
-                  Physical access remains considerably challenging for residents of rural and remote areas in need of civil status and HLP documentation as well as access to remedies.
-                  Administrative offices are situated in larger towns and raion centers, posing difficulties for many to access due limited availability of public and private transport options and the associated transportation costs.
+                  Access to compensation mechanisms for damaged and destroyed property continues to pose challenges. While persons of concern can apply for the housing recovery
+                  programme on the Diya online platform, the application process is complex, especially for applicants lacking ownership documents, technical certificates or facing
+                  inheritance issues.
+                  In addition, following Resolution 332, there has been a significant number of requests for legal information and support concerning the cancellation of payments
+                  and the entitlement to ongoing assistance.
                 </SlideTxt>
               }
             </Lazy>
@@ -88,6 +91,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 filterBase={_ => !_.includes('unable_unwilling_to_answer')}
                 data={data}
                 {...snapShotDefaultPieProps}
+
               />
               <ChartBarMultipleBy
                 data={data}
@@ -96,6 +100,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 mergeOptions={{
                   distrust_of_public_institutions_and_authorities: 'other_specify',
                   discrimination: 'other_specify',
+                  lack_of_devices_or_internet_connectivity_to_access_online_procedure: 'other_specify',
                   // distance_or_cost_of_transportation: 'other_specify',
                 }}
                 filterValue={[
@@ -154,11 +159,9 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 filterValue={['unable_unwilling_to_answer', 'none']}
                 mergeOptions={{
                   cost_estimation_certificate_state_commission_issued_when_personal_request_is_made: 'other_specify',
-                  inheritance_certificate: 'other_specify',
                   // death_certificate_of_predecessor: 'other_specify',
                   document_issues_by_police_state_emergency_service_proving_that_the_house_was_damaged_destroyedfor_ukrainian_state_control_areas: 'document_issues_by_local_self_government_proving_that_the_house_was_damaged_destroyed',
                   informatsiyna_dovidka_informational_extract_on_damaged_property: 'other_specify',
-                  death_declaration_certificate_by_ambulance_or_police_of_predecessor: 'other_specify',
                   construction_stage_substituted_with_bti_certificate_following_completion_of_construction: 'other_specify',
                   inheritance_will: 'other_specify',
                 }}

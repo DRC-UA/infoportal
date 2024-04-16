@@ -1,21 +1,20 @@
 import React, {useMemo} from 'react'
 import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
-import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
+import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {Lazy} from '@/shared/Lazy'
-import {Protection_hhs2, Protection_hhs3, toPercent} from '@infoportal-common'
+import {Protection_hhs3, toPercent} from '@infoportal-common'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartHelper} from '@/shared/charts/chartHelper'
 import {Obj, seq} from '@alexandreannic/ts-utils'
-import {Panel, PanelBody} from '@/shared/Panel'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Box} from '@mui/material'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
+import {Utils} from '@/utils/utils'
 
 export const SnapshotProtMonitoNN2Needs = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -62,9 +61,9 @@ export const SnapshotProtMonitoNN2Needs = () => {
                     {/* <b>{_.healthPn}</b> of respondents indicated health as a priority need. <b>{_.damagedAcc}</b> of respondents reported damage to their accommodation. Significant
                     challenges in accessing the
                     compensation mechanism for damaged and destroyed property are still being reported, including due to the lack of essential ownership documents. */}
-                    Shelter concerns have risen during the winter season with significant challenges related to heating , especially in frontline communities, with a substantial
-                    shortfall in essential heating appliances and the shortages of solid fuel. Persons with reduced mobility continue to face disproportionate barriers to accessing
-                    essential services, including healthcare, due to a lack of specialized transportation and a lack of financial resources.
+                    Barriers to access healthcare, including due to a lack of available (specialized) health care services, continue to be significantly reported, particularly
+                    affecting persons with reduced mobility, while the lack of available and affordable transportation further compounds the challenges faced by vulnerable
+                    populations in reaching essential services.
                   </p>
                 }
               </Lazy>
@@ -73,7 +72,13 @@ export const SnapshotProtMonitoNN2Needs = () => {
               <Box sx={{display: 'flex', flexWrap: 'wrap', m: -1}}>
                 {mostSelected.byCategory.map(_ =>
                   <Box key={_.label} sx={{flex: '1 1 50%', m: 0, p: 1}}>
-                    <ChartPieWidget dense value={_.value.value} base={mostSelected.total} title={Protection_hhs3.options.what_is_your_1_priority[_.label]} showValue/>
+                    <ChartPieWidget
+                      dense
+                      value={_.value.value}
+                      base={mostSelected.total}
+                      title={Utils.clearParenthesis(Protection_hhs3.options.what_is_your_1_priority[_.label])}
+                      showValue
+                    />
                   </Box>
                 )}
               </Box>
@@ -125,6 +130,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
                 title={m.protHHS2.hhWithMemberHavingDifficulties}
                 filter={_ => !_.includes('no')}
                 data={data}
+                compare={{before: computed.lastMonth}}
                 sx={{mb: 1}}
               />
               <ChartBarMultipleByKey
@@ -133,6 +139,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
                 label={{
                   ...Protection_hhs3.options.do_you_have_a_household_member_that_has_a_lot_of_difficulty,
                   wg_using_your_usual_language_have_difficulty_communicating: m.protHHS2.wg_using_your_usual_language_have_difficulty_communicating,
+
                 }}
                 filterValue={['no', 'unable_unwilling_to_answer']}
               />
@@ -155,8 +162,8 @@ export const SnapshotProtMonitoNN2Needs = () => {
                 filterValue={['unable_unwilling_to_answer', 'none']}
               />
             </SlidePanel>
-            <SlidePanel>
-              <SlidePanelTitle>{m.accommodationCondition}</SlidePanelTitle>
+            {/* <SlidePanel> */}
+            {/* <SlidePanelTitle>{m.accommodationCondition}</SlidePanelTitle>
               <ChartBarSingleBy
                 data={data}
                 by={_ => _.what_is_the_general_condition_of_your_accommodation}
@@ -169,6 +176,26 @@ export const SnapshotProtMonitoNN2Needs = () => {
                   'unfinished',
                 ])}
                 filter={_ => _.what_is_the_general_condition_of_your_accommodation !== 'unable_unwilling_to_answer'}
+              />
+            </SlidePanel> */}
+            <SlidePanel>
+              <ChartPieWidgetByKey
+                title={m.protHHS2.barriersToAccessHealth}
+                sx={{mb: 2}}
+                property="do_you_have_access_to_health_care_in_your_current_location"
+                compare={{before: computed.lastMonth}}
+                filter={_ => _ !== 'yes'}
+                filterBase={_ => _ !== 'unable_unwilling_to_answer'}
+                data={data}
+              />
+              <ChartBarMultipleBy
+                data={data}
+                by={_ => _.what_are_the_barriers_to_accessing_health_services}
+                label={{
+                  ...Protection_hhs3.options.what_are_the_barriers_to_accessing_health_services,
+                  other_specify: 'Other'
+                }}
+                filterValue={['unable_unwilling_to_answer']}
               />
             </SlidePanel>
           </Div>

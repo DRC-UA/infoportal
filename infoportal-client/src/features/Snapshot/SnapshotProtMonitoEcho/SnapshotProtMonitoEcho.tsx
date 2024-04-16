@@ -25,8 +25,7 @@ export const snapShotDefaultPieProps: Partial<Pick<ChartPieIndicatorProps, 'dens
   hideEvolution?: boolean
 } = {
   dense: true,
-  hideEvolution: true,
-  evolution: undefined,
+  hideEvolution: false,
   showBase: true,
   showValue: true,
   sx: {

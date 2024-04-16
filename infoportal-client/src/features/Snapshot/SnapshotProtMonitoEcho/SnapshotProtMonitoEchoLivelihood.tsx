@@ -5,11 +5,9 @@ import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
-import {chain, Protection_hhs2} from '@infoportal-common'
-import {ChartBar} from '@/shared/charts/ChartBar'
+import {Protection_hhs2} from '@infoportal-common'
 import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {Obj} from '@alexandreannic/ts-utils'
 
 export const SnapshotProtMonitoEchoLivelihood = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -33,8 +31,9 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                     // __html: m.snapshotProtMonito.echo.livelihood({
                     //   outOfWork: toPercent(_.percent, 0),
                   >
-                    The main causes of unemployment remain consistent with past reports: limited job opportunities, physical impairments, and responsibilities related to housework and caring for children. The constrained job market not only diminishes purchasing power but also exacerbates economic hardship, aggravated by continuous hikes in the prices of essential goods.
-                    Consequently, a significant portion of the Ukrainian population currently relies on social protection schemes and humanitarian assistance.
+                    The primary reasons for unemployment remain unchanged from previous reports, with a shortage of job opportunities identified as the key factor.
+                    To address gaps in meeting basic needs, individuals are resorting to depleting savings and cutting back on expenses related to food and healthcare, a situation
+                    that may be exacerbated by Resolution 332.
                   </p>
                 }
               </Lazy>
@@ -74,7 +73,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
               </SlidePanel>
             </Div>
 
-            <SlidePanel>
+            {/* <SlidePanel>
               <SlidePanelTitle>{m.monthlyIncomePerHH}</SlidePanelTitle>
               <Lazy deps={[data]} fn={() => {
                 const income = chain(ChartHelperOld.single({
@@ -102,6 +101,17 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
               }}>
                 {res => <ChartBar data={res.income} descs={Obj.mapValues(res.hhSize, _ => m.protHHSnapshot.avgHhSize(_.value / (_.base ?? 1)))}/>}
               </Lazy>
+            </SlidePanel> */}
+            <SlidePanel title={m.copyingMechanisms}>
+              <ChartBarMultipleBy
+                data={data}
+                by={_ => _.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges}
+                label={{
+                  ...Protection_hhs2.options.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
+                  reducing_consumption_of_food: m.protHHS2.reducing_consumption_of_food,
+                }}
+                filterValue={['unable_unwilling_to_answer']}
+              />
             </SlidePanel>
           </Div>
           <Div column>

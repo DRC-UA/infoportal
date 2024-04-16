@@ -1,5 +1,5 @@
 import React from 'react'
-import {Box, Icon, useTheme} from '@mui/material'
+import {Box, useTheme} from '@mui/material'
 import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
@@ -22,8 +22,10 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
         <Div>
           <Div column>
             <SlideTxt sx={{mb: .5}} block>
-              Compared to the previous monitoring month, a higher proportion of IDP respondents indicated their intention to integrate into the local community<Txt bold sx={{color: t.palette.success.main}}> (+7%)</Txt>.
-              However, the limited access to economic opportunities and affordable housing poses a significant obstacle to the integration of IDPs.
+              Compared to the previous monitoring month, a substantially higher proportion of IDPs have indicated their intention to return
+              <Txt bold sx={{color: t.palette.success.main}}> (+12%)</Txt>.
+              This can be linked with Resolution 332 that introduced changes in payment of IDP benefits, with a substantial number of IDPs who lost their eligibility or need to
+              re-apply, possibly influencing decisions regarding their place of residence.
             </SlideTxt>
 
             <SlidePanel>
@@ -99,8 +101,9 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
                 by={_ => _.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community}
                 label={{
                   ...Protection_hhs2.options.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community,
-                  access_to_essential_services: 'Access to essential services',
+                  access_to_essential_services: 'Access to essential services'
                 }}
+                limit={4}
               />
             </SlidePanel>
 
