@@ -180,6 +180,38 @@ export class BuildKoboType {
           health_1_2: ['Health'],
         },
         overrideOptionsByQuestion: {
+          what_is_the_general_condition_of_your_accommodation: {
+            partially_damaged: [`Partially damaged`],
+            severely_damaged: [`Severely damaged`],
+            destroyed: [`Destroyed`],
+          },
+          what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members: {
+            fear_of_property_being_damaged_or_destroyedby_armed_violence: [`Fear of property being damaged by armed violence`],
+          },
+          have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation: {
+            lack_of_devices_or_internet_connectivity_to_access_online_procedure: ['Unable to access online procedure']
+          },
+          why_did_you_decide_to_return_to_your_area_of_origin: {
+            improved_security_in_area_of_origin: [`Improved security in area of origin`],
+            increased_restored_service_availability_in_area_of_origin: [`Increased/restored service availability in area of origin`],
+            increased_restored_access_to_livelihood_employment_and_economic_opportunities_in_area_of_origin: [`Increased access to livelihood in area of origin`],
+            repaired_restored_infrastructure_in_area_of_origin: [`Repaired/restored infrastructure in area of origin`],
+            repaired_housing_compensation_for_destroyedor_damaged_property_in_area_of_origin: [`Repaired property in area of origin`],
+            seeking_family_reunification_in_area_of_origin: [`Seeking family reunification in area of origin`],
+            insecurity_armed_conflict_in_area_of_displacement: [`Insecurity/armed conflict`],
+            social_tensions_and_conflict_with_host_community_in_area_of_displacement: [`Social tensions and conflict with host community`],
+            eviction_eviction_threats_in_area_of_displacement: [`Eviction/eviction threats`],
+            lack_of_access_to_essential_services_in_area_of_displacement: [`Lack of access to essential services`],
+            lack_of_access_to_livelihoods_employment_and_economic_opportunities_in_area_of_displacement: ['Lack of access to livelihoods']
+          },
+          do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area: {
+            lack_of_transportationfinancial_resources_to_pay_transportation: ['Transportation/financial constraints'],
+          },
+          what_is_your_1_priority: {
+            health_m: ['Mental health'],
+            health_1_2: ['Health care'],
+            health_srh: ['SRHealth'],
+          },
           what_are_the_barriers_to_accessing_health_services: {
             safety_risks_associated_with_access_to_presence_at_health_facility: ['Safety risks associated with access to/presence at health facility'],
           },
@@ -431,8 +463,8 @@ const extractQuestionName = (_: Record<string, any>) => {
       }
       res[questionName][choice.name] = (() => {
         try {
-          return this.options.overrideOptionsByQuestion?.[questionName][choice.name][0]
-            ?? this.options.overrideAllOptions?.[choice.name][0]
+          return this.options.overrideOptionsByQuestion?.[questionName]?.[choice.name]?.[0]
+            ?? this.options.overrideAllOptions?.[choice.name]?.[0]
             ?? choice.label[0]
         } catch (e: any) {
           return choice.label[0]
