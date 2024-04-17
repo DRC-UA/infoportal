@@ -38,17 +38,21 @@ export class GlobalCache {
     genIndex?: (...p: P) => string
   }): (...p: P) => Promise<T> => {
     this.log.info(`Initialize cache ${key}.`)
+    if (!this.cache.has(key)) {
+      //   throw new Error(`Already registered cash ` + key)
+      // TODO Is called twice by some black magic
+      this.cache.set(key, new IpCache(params))
+    }
+    const getCache = () => {
+      return this.cache.get(key)!
+    }
     return async (...p: P) => {
-      if (!this.cache.has(key)) {
-        //   throw new Error(`Already registered cash ` + key)
-        // TODO Is called twice by some black magic
-        this.cache.set(key, new IpCache(params))
-      }
       if (!cacheIf?.(...p)) return fn(...p)
       const index = genIndex ? genIndex(...p) : hashArgs(p)
-      const cache = this.cache.get(key)!
+      const cache = getCache()
+      if (!cache) this.log.error(`Cannot retrived cache for ${key}.`)
       const cachedValue = cache?.get(index)
-      if (cachedValue === undefined) {
+      if (cache && cachedValue === undefined) {
         const value = await fn(...p)
         cache.set(index, value)
         return value
