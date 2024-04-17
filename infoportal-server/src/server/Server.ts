@@ -14,7 +14,7 @@ import {PrismaSessionStore} from '@quixo3/prisma-session-store'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import {IpSentry} from '../plugins/Sentry'
-import * as Sentry from '@sentry/node'
+// import * as Sentry from '@sentry/node'
 
 // import sessionFileStore from 'session-file-store'
 
@@ -71,9 +71,9 @@ export class Server {
 
   readonly start = () => {
     const app = express()
-    new IpSentry(this.conf, app,)
-    app.use(Sentry.Handlers.requestHandler())
-    app.use(Sentry.Handlers.tracingHandler())
+    // new IpSentry(this.conf, app,)
+    // app.use(Sentry.Handlers.requestHandler())
+    // app.use(Sentry.Handlers.tracingHandler())
     app.set('trust proxy', 1)
     // app.use(this.corsHeader)
     app.use(cors({
@@ -114,7 +114,7 @@ export class Server {
       this.services,
       this.log,
     ))
-    app.use(Sentry.Handlers.errorHandler())
+    // app.use(Sentry.Handlers.errorHandler())
     app.use(this.errorHandler)
     app.listen(this.conf.port, () => {
       this.log.info(`server start listening on port ${this.conf.port}`)

@@ -43,7 +43,7 @@ const App = ({
 
   const router = useRouter()
   useEffect(() => {
-    initSentry(appConfig)
+    // initSentry(appConfigConfig)
     api.session.track(router.pathname)
   }, [router])
 
