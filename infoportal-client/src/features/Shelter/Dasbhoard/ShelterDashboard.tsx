@@ -40,7 +40,6 @@ export const ShelterDashboard = () => {
   const {m} = useI18n()
 
   const filterShape = useMemo(() => {
-    const d = ctx.data.mappedData ?? seq([])
     return DataFilter.makeShape<ShelterEntity>({
       office: {
         icon: 'business',
@@ -157,7 +156,7 @@ export const ShelterDashboard = () => {
   const filteredData = useMemo(() => {
     if (!filteredByDate) return
     return DataFilter.filterData(filteredByDate, filterShape, filters)
-  }, [ctx.data, filters, filterShape,])
+  }, [filteredByDate, filters, filterShape,])
 
   const computed = useShelterComputedData({data: filteredData})
 
@@ -172,6 +171,7 @@ export const ShelterDashboard = () => {
         onClear={() => {
           setFilters({})
           setPeriodFilter({})
+          setWorkDonePeriodFilter({})
         }}
         before={
           <>
