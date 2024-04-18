@@ -39,6 +39,43 @@ const registerActivity = <
 
 export const mealVerificationActivities = seq([
   registerActivity({
+    sampleSizeRatio: .1,
+    label: 'Training grants',
+    id: 'Training grants',
+    registration: {
+      koboFormId: KoboIndex.byName('ecrec_trainingGrants').id,
+      fetch: 'searchEcrec_trainingGrants',
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
+      fetch: 'searchMeal_verificationEcrec',
+    },
+    joinColumn: 'ben_det_ph_number',
+    dataColumns: [],
+    verifiedColumns: [
+      'back_consent',
+      'back_consen_no_reas',
+      'ben_det_surname',
+      'ben_det_first_name',
+      'ben_det_pat_name',
+      'ben_det_ph_number',
+      'ben_det_oblast',
+      'ben_det_raion',
+      'ben_det_hromada',
+      // 'ben_det_settlement',
+      'ben_det_res_stat',
+      'ben_det_income',
+      'ben_det_hh_size',
+      'you_currently_employed',
+      'you_currently_employed_no',
+      'registered_training_facility',
+      'registered_training_facility_yes',
+      'training_activities_support',
+      'training_activities_support_yes_paid',
+      'training_activities_support_yes_consequence',
+    ]
+  }),
+  registerActivity({
     sampleSizeRatio: .2,
     label: 'Cash for Fuel & Cash for Utilities',
     id: 'Cash for Fuel & Cash for Utilities',
