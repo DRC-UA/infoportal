@@ -1,5 +1,5 @@
-import {DisplacementStatus, DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector, IKoboMeta, OblastName, PersonDetails, UUID} from '@infoportal-common'
-import {KoboAnswerMetaData, KoboId} from '../../connector/kobo/KoboClient/type/KoboAnswer'
+import {IKoboMeta} from '@infoportal-common'
+import {KoboAnswerMetaData} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 
 export type KoboMetaOrigin<
   TAnswer extends Record<string, any> = any,
@@ -15,3 +15,4 @@ export type KoboMetaOrigin<
 }
 
 export type KoboMetaCreate<TTags = any> = Omit<IKoboMeta<TTags>, 'id'>
+

@@ -15,10 +15,13 @@ import {SidebarSubSection} from '@/shared/Layout/Sidebar/SidebarSubSection'
 import {SidebarTitle} from 'mui-extension'
 import {IpBtn} from '@/shared/Btn'
 import {appConfig} from '@/conf/AppConfig'
-import {mpcaIndex} from '@/features/Mpca/Mpca'
 import {NavLink} from 'react-router-dom'
 import {metaSiteMap} from '@/features/Meta/Meta'
 import {useLocation} from 'react-router'
+import {useAsync} from '@/shared/hook/useAsync'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useIpToast} from '@/core/useToast'
+import {useSession} from '@/core/Session/SessionContext'
 
 export const Item = ({
   label,
@@ -41,6 +44,10 @@ export const MetaSidebar = () => {
   const path = (page: string) => '' + page
   const {data: ctx} = useMetaContext()
   const location = useLocation()
+  const {api} = useAppSettings()
+  const asyncRefresh = useAsync(api.koboMeta.sync)
+  const {toastInfo} = useIpToast()
+  const {session} = useSession()
 
   return (
     <Sidebar>
@@ -55,6 +62,20 @@ export const MetaSidebar = () => {
             <SidebarItem active={isActive} icon={appConfig.icons.dataTable}>{m.data}</SidebarItem>
           )}
         </NavLink>
+
+        {session.admin && (
+          <SidebarItem
+            icon="refresh"
+            onClick={() => asyncRefresh.call().then(() => toastInfo(m._meta.refreshLong))}
+          >
+            {m._meta.refresh}
+            <IpIconBtn
+              color="primary"
+              loading={asyncRefresh.loading}
+              children="cloud_sync"
+            />
+          </SidebarItem>
+        )}
         <SidebarItem href={appConfig.externalLink.metaDashboardReadMe} icon="info" iconEnd="open_in_new" target="_blank" children="Read Me"/>
         <SidebarHr/>
 

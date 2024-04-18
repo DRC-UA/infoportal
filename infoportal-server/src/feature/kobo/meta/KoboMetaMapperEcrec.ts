@@ -14,7 +14,7 @@ import {
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashRegistration'
-import {MetaMapperInsert} from './KoboMetaService'
+import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
 
 export class KoboMetaMapperEcrec {
 
@@ -29,7 +29,7 @@ export class KoboMetaMapperEcrec {
     if (answer.animal_shelter_need === 'yes') activities.push(DrcProgram.SectoralCashForAnimalShelterRepair)
 
     return activities.map(activity => {
-      return {
+      return KoboMetaMapper.make({
         enumerator: Ecrec_cashRegistration.options.back_enum[answer.back_enum!],
         office: fnSwitch(answer.back_office!, {
           chj: DrcOffice.Chernihiv,
@@ -55,7 +55,7 @@ export class KoboMetaMapperEcrec {
         phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
         status: KoboMetaHelper.mapCashStatus(row.tags?.status),
         lastStatusUpdate: row.tags?.lastStatusUpdate,
-      }
+      })
     })
   }
 
@@ -65,7 +65,7 @@ export class KoboMetaMapperEcrec {
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = DrcProjectHelper.search(Ecrec_cashRegistrationBha.options.back_donor[answer.back_donor!])
 
-    return {
+    return KoboMetaMapper.make({
       enumerator: Ecrec_cashRegistrationBha.options.back_enum[answer.back_enum!],
       office: fnSwitch(answer.back_office!, {
         chj: DrcOffice.Chernihiv,
@@ -98,6 +98,6 @@ export class KoboMetaMapperEcrec {
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
       status: KoboMetaHelper.mapCashStatus(row.tags?.status),
       lastStatusUpdate: row.tags?.lastStatusUpdate,
-    }
+    })
   }
 }

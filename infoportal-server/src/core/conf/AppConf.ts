@@ -24,7 +24,7 @@ export const appConf = {
     password: e(required)('BUILDINGBLOCK_WFP_PASSWORD'),
   },
   db: {
-    maxConcurrency: e(int, defaultValue(100))('DATABASE_MAX_CONCURRENCY'),
+    maxConcurrency: e(int, defaultValue(50))('DATABASE_MAX_CONCURRENCY'),
     url: e(required)('DATABASE_URL')
   },
   //   host: e(required)('DB_HOST'),

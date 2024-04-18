@@ -7,21 +7,31 @@ import {KoboService} from '../KoboService'
 import {duration, map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
-import {DrcProgram, IKoboMeta, KoboId, KoboIndex, KoboMetaStatus} from '@infoportal-common'
-import {PromisePool} from '@supercharge/promise-pool'
+import {DrcDonor, DrcProgram, DrcProject, IKoboMeta, KoboId, KoboIndex, KoboMetaStatus, PersonDetails} from '@infoportal-common'
 import {appConf} from '../../../core/conf/AppConf'
 import {yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
 import {SytemCache} from '../../../helper/IpCache'
 import {app} from '../../../index'
+import {PromisePool} from '@supercharge/promise-pool'
 import Event = GlobalEvent.Event
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'koboId' | 'id' | 'uuid' | 'date' | 'updatedAt' | 'formId'>
 export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => [KoboId, Partial<MetaMapped<TTag>>] | undefined
 export type MetaMapperInsert<T extends Record<string, any> = any> = (_: T) => MetaMapped | MetaMapped[] | undefined
 
-class KoboMetaMapper {
+export class KoboMetaMapper {
+  static readonly make = (_: Omit<MetaMapped, 'project' | 'donor'> & {
+    project?: DrcProject[]
+    donor?: DrcDonor[]
+    persons?: PersonDetails[]
+  }): MetaMapped => {
+    if (!_.project) _.project = []
+    if (!_.donor) _.donor = []
+    return _ as any
+  }
+
   static readonly mappersCreate: Record<KoboId, MetaMapperInsert> = {
     [KoboIndex.byName('bn_re').id]: KoboMetaBasicneeds.bn_re,
     [KoboIndex.byName('bn_rapidResponse').id]: KoboMetaBasicneeds.bn_rrm,
@@ -69,9 +79,9 @@ export class KoboMetaService {
       else if (updateMapper) this.syncMerge({formId: _.formId, mapper: updateMapper})
       else this.log.error(`No mapper implemented for ${JSON.stringify(_.formId)}`)
       setTimeout(() => {
-        // Wait for the database to be rebuilt before clear the cache
+        // Wait for the database to be rebuilt before clearing the cache
         app.cache.clear(SytemCache.Meta)
-      }, duration(1, 'minute'))
+      }, duration(10, 'minute'))
     })
     this.event.listen(Event.WFP_DEDUPLICATION_SYNCHRONIZED, () => {
       this.syncWfpDeduplication()
@@ -126,32 +136,36 @@ export class KoboMetaService {
     this.info(formId, `Fetch Kobo answers...`)
     const updates = await this.prisma.koboAnswers.findMany({
       where: {formId},
-      include: {
-        meta: {
-          select: {
-            uuid: true,
-            updatedAt: true,
-            id: true,
-          }
-        }
-      }
+      // include: {
+      //   meta: {
+      //     select: {
+      //       uuid: true,
+      //       updatedAt: true,
+      //       id: true,
+      //     }
+      //   }
+      // }
     }).then(res => {
-        return seq(res.flatMap(({meta, ..._}) => meta.map(m => ({..._, meta: m}))))
-          .filter(_ => _.meta?.uuid === undefined || _.uuid !== _.meta.uuid || _.updatedAt?.getTime() !== _.meta.updatedAt?.getTime())
-          .map(mapper)
-          .compact()
-      }
-    )
+      return seq(res)
+        // .filter(_ => _.meta?.uuid === undefined || _.uuid !== _.meta.uuid || _.updatedAt?.getTime() !== _.meta.updatedAt?.getTime())
+        .map(mapper)
+        .compact()
+    })
 
     this.info(formId, `Update ${updates.length}...`)
+    // await Promise.all(updates.map(async ([koboId, {persons, ...update}], i) => {
+    //   return this.prisma.koboMeta.updateMany({
+    //     where: {koboId: {in: [koboId]}},
+    //     data: update,
+    //   })
+    // }))
     await PromisePool
       .withConcurrency(this.conf.db.maxConcurrency)
       .for(updates)
-      .process(async ([koboId, {persons, ...update}]) => {
+      .process(async ([koboId, {persons, ...update}], i) => {
         return this.prisma.koboMeta.update({
           where: {id: koboId},
           data: update,
-
         })
       })
     this.info(formId, `Update ${updates.length}... COMPLETED`)
@@ -238,14 +252,12 @@ export class KoboMetaService {
   }
 
   readonly sync = () => {
-    app.cache.clear(SytemCache.Meta)
-    const keys = Obj.keys(KoboMetaMapper.mappersCreate)
+    const keys = [
+      ...Obj.keys(KoboMetaMapper.mappersCreate),
+      ...Obj.keys(KoboMetaMapper.mappersUpdate)
+    ]
     keys.forEach((formId, i) => {
       this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId, index: i, total: keys.length - 1})
     })
-    setTimeout(() => {
-      // Wait for the database to be rebuilt before clear the cache
-      app.cache.clear(SytemCache.Meta)
-    }, duration(5, 'minute'))
   }
 }

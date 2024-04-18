@@ -27,10 +27,10 @@ export type IKoboMeta<TTag = any> = {
   sector: DrcSector
   activity?: DrcProgram
   office?: DrcOffice
-  project?: DrcProject[]
-  donor?: DrcDonor[]
-  personsCount?: number
+  project: DrcProject[]
+  donor: DrcDonor[]
   persons?: PersonDetails[]
+  personsCount?: number
   status?: KoboMetaStatus
   lastStatusUpdate?: Date
   tags?: TTag
@@ -53,6 +53,7 @@ export type KoboMetaShelterRepairTags = {
 }
 
 export namespace KoboMetaHelper {
+
   const cashStatus: Partial<Record<CashStatus, KoboMetaStatus>> = {
     Selected: KoboMetaStatus.Pending,
     Pending: KoboMetaStatus.Pending,

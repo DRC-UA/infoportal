@@ -19,7 +19,7 @@ import {
   ProtectionHhsTags
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
-import {MetaMapperInsert} from './KoboMetaService'
+import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
 
 export class KoboMetaMapperProtection {
 
@@ -95,7 +95,7 @@ export class KoboMetaMapperProtection {
     const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
 
     if (answer.have_you_filled_out_this_form_before === 'yes' || answer.present_yourself === 'no') return
-    return {
+    return KoboMetaMapper.make({
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
         chernihiv: DrcOffice.Chernihiv,
         dnipro: DrcOffice.Dnipro,
@@ -111,11 +111,11 @@ export class KoboMetaMapperProtection {
       activity: DrcProgram.ProtectionMonitoring,
       persons,
       personsCount: persons.length,
-      project: row.tags?.projects,
+      project: row.tags?.projects ?? [],
       donor: row.tags?.projects?.map(_ => DrcProjectHelper.donorByProject[_]),
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
-    }
+    })
   }
 
   static readonly pss: MetaMapperInsert<KoboMetaOrigin<Protection_pss.T, KoboTagStatus>> = row => {
@@ -158,7 +158,7 @@ export class KoboMetaMapperProtection {
       project: project ? [project] : [],
       donor: project ? [DrcProjectHelper.donorByProject[project]] : [],
       status: KoboMetaStatus.Committed,
-      lastStatusUpdate: row.date,
+      lastStatusUpdate: answer.cycle_finished_at ?? row.date,
     }
   }
 
