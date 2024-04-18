@@ -10,6 +10,10 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
   const ctx = useDatabaseKoboTableContext()
   return useMemo(() => {
     switch (ctx.form.id) {
+      case KoboIndex.byName('protection_pss').id:
+      case KoboIndex.byName('protection_hhs3').id:
+      case KoboIndex.byName('protection_gbv').id:
+      case KoboIndex.byName('protection_groupSession').id:
       case KoboIndex.byName('ecrec_cashRegistration').id:
       case KoboIndex.byName('ecrec_cashRegistrationBha').id:
       case KoboIndex.byName('bn_re').id:

@@ -9,4 +9,8 @@ export const databaseCustomMapping: Record<any, (_: any) => any> = {
   [KoboIndex.byName('bn_cashForRentApplication').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('shelter_cashForShelter').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('shelter_nta').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
+  [KoboIndex.byName('protection_pss').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
+  [KoboIndex.byName('protection_hhs3').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
+  [KoboIndex.byName('protection_gbv').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
+  [KoboIndex.byName('protection_groupSession').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
 }
