@@ -1,5 +1,8 @@
 import {ApiClient} from '../ApiClient'
 import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
+import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
+import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {
   Bn_cashForRentApplication,
   Bn_OldMpcaNfi,
@@ -8,6 +11,7 @@ import {
   DisplacementStatus,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
+  Ecrec_trainingGrants,
   KoboEcrec_cashRegistration,
   KoboGeneralMapping,
   KoboIndex,
@@ -36,9 +40,6 @@ import {
   ShelterNtaTags,
   ShelterTaTagsHelper
 } from '@infoportal-common'
-import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
-import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 
 export type KoboUnwrapResult<T extends keyof KoboTypedAnswerSdk> = Awaited<ReturnType<KoboTypedAnswerSdk[T]>>
 export type KoboUnwrapAnswer<T extends keyof KoboTypedAnswerSdk> = NonNullable<Awaited<ReturnType<KoboTypedAnswerSdk[T]>>['data'][number]>
@@ -299,6 +300,14 @@ export class KoboTypedAnswerSdk {
       fnMapKobo: Ecrec_cashRegistration.map,
       fnMapTags: _ => _ as KoboEcrec_cashRegistration.Tags,
       fnMapCustom: KoboGeneralMapping.addIndividualBreakdownColumn,
+      ...filters,
+    })
+  }
+
+  readonly searchEcrec_trainingGrants = (filters: KoboAnswerFilter = {}) => {
+    return this.search({
+      formId: KoboIndex.byName('ecrec_trainingGrants').id,
+      fnMapKobo: Ecrec_trainingGrants.map,
       ...filters,
     })
   }
