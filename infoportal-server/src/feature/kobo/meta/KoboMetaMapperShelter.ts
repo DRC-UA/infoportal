@@ -1,4 +1,4 @@
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
   Bn_cashForRentRegistration,
   Bn_Re,
@@ -106,27 +106,7 @@ export namespace KoboMetaMapperShelter {
     const answer = Shelter_cashForShelter.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
-    const projects: DrcProject[] = [];
-    if (answer.donor) {
-      const donorIds: string[] = answer.donor.split(',');
-      for (const donorId of donorIds) {
-        const project = fnSwitch(donorId.trim(), {
-          '270_pooled_funds': DrcProject['UKR-000270 Pooled Funds'],
-          '298_novo_nordisk': DrcProject['UKR-000298 Novo-Nordisk'],
-          '308_unhcr': DrcProject['UKR-000308 UNHCR'],
-          '314_uhf4': DrcProject['UKR-000314 UHF4'],
-          '322_echo': DrcProject['UKR-000322 ECHO2'],
-          '336_uhf6': DrcProject['UKR-000336 UHF6'],
-          '345_bha': DrcProject['UKR-000345 BHA2'],
-        }, () => undefined);
-        if (project) {
-          projects.push(project);
-        }
-      }
-    }
-
-    const donors: DrcDonor[] | undefined = projects.length > 0 ? projects.map(project => DrcProjectHelper.donorByProject[project]) : undefined;
-
+    const project = DrcProjectHelper.search(Shelter_cashForShelter.options.donor[answer.donor!])
     return KoboMetaMapper.make({
       enumerator: Shelter_cashForShelter.options.name_enum[answer.name_enum!],
       office: answer.back_office ? fnSwitch(answer.back_office, {
@@ -137,7 +117,8 @@ export namespace KoboMetaMapperShelter {
         umy: DrcOffice.Sumy,
         // lwo: DrcOffice.Lviv,
       }) : undefined,
-      donor: donors,
+      project: project ? [project] : [],
+      donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
       oblast: oblast.name,
       // displacement: KoboGeneralMapping.mapDisplacementStatus(answer.),
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),

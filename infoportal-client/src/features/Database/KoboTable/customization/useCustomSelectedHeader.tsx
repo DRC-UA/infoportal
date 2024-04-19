@@ -19,15 +19,15 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
             <SelectStatusBy
               enum="ShelterCashStatus"
               disabled={!ctx.canEdit}
-              sx={{ maxWidth: 120, mr: 1 }}
+              sx={{maxWidth: 120, mr: 1}}
               label={m.status}
               onChange={_ => {
-                ctx.asyncUpdateTag.call({ answerIds: selectedIds, value: _, key: 'status' });
+                ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
               }}
             />
             <IpDatepicker
               label={m.paidOn}
-              onChange={_ => ctx.asyncUpdateTag.call({ answerIds: selectedIds, value: _, key: 'lastStatusUpdate' })}
+              onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'lastStatusUpdate'})}
             />
           </>
         )
