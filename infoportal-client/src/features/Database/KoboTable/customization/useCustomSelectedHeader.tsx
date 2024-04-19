@@ -15,15 +15,21 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
     switch (ctx.form.id) {
       case KoboIndex.byName('shelter_cashForShelter').id: {
         return (
-          <SelectStatusBy
-            enum="ShelterCashStatus"
-            disabled={!ctx.canEdit}
-            sx={{maxWidth: 120}}
-            label={m.project}
-            onChange={_ => {
-              ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
-            }}
-          />
+          <>
+            <SelectStatusBy
+              enum="ShelterCashStatus"
+              disabled={!ctx.canEdit}
+              sx={{ maxWidth: 120, mr: 1 }}
+              label={m.project}
+              onChange={_ => {
+                ctx.asyncUpdateTag.call({ answerIds: selectedIds, value: _, key: 'status' });
+              }}
+            />
+            <IpDatepicker
+              label={m.paidOn}
+              onChange={_ => ctx.asyncUpdateTag.call({ answerIds: selectedIds, value: _, key: 'lastStatusUpdate' })}
+            />
+          </>
         )
       }
       case KoboIndex.byName('bn_cashForRentRegistration').id: {

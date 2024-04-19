@@ -8,6 +8,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   back_office: undefined | Option<'back_office'>,
 	  // general_information/name_enum [select_one] Name of enumerator
   name_enum: undefined | Option<'name_enum'>,
+	  // general_information/donor [select_one] Select Donor
+  donor: undefined | Option<'donor'>,
 	  // general_information/info [note] INFO: Introduction to DRC:
   info: string,
 	  // general_information/infokdrc [note] DRC is a Danish non-governmental humanitarian organization and that currently implements a project providing shelter support to households with damaged shelters. DRC will determine whether you are eligible for this support, which is the form of cash for repairs.
@@ -148,6 +150,15 @@ back_office: {
 	'hrk': `Kharkiv (HRK)`,
 	'nlv': `Mykolaiv (NLV)`
 },
+donor: {
+	'270_pooled_funds': `Pooled Funds (UKR-000270)`,
+	'298_novo_nordisk': `Novo-Nordisk (UKR-000298)`,
+	'308_unhcr': `UNHCR (UKR-000308)`,
+	'314_uhf4': `UHF4 (UKR-000314)`,
+	'322_echo': `ECHO2 (UKR-000322)`,
+	'336_uhf6': `UHF6 (UKR-000336)`,
+	'345_bha': `BHA2 (UKR-000345)`
+},
 name_enum: {
 	'1': `1`,
 	'2': `2`,
@@ -183,7 +194,8 @@ name_enum: {
 	'inna_kovalchuk': `Inna Kovalchuk`,
 	'oksana_shevchenko': `Oksana Shevchenko`,
 	'yuliia_van': `Yuliia Van-Fun-Fu`,
-	'serhii_yanukovych': `Serhii Yanukovych`
+	'serhii_yanukovych': `Serhii Yanukovych`,
+	'serhii_krasnoselskyi': `Serhii Krasnoselskyi`
 },
 bigp: {
 	'yes': `Yes`,
