@@ -1,5 +1,5 @@
 import {AppConfig, appConfig} from '@/conf/AppConfig'
-import {kobo} from '@infoportal-common'
+import {koboIndex} from '@infoportal-common'
 import {TableImg} from '@/shared/TableImg/TableImg'
 import {KoboAttachment} from '@/core/sdk/server/kobo/Kobo'
 import {useMemo} from 'react'
@@ -7,7 +7,7 @@ import {useMemo} from 'react'
 export const proxyKoboImg = ({
   url,
   fileName,
-  serverId = kobo.drcUa.server.prod,
+  serverId = koboIndex.drcUa.server.prod,
   conf = appConfig,
 }: {
   url?: string
@@ -31,7 +31,7 @@ export const findFileUrl = ({fileName, attachments}: {fileName?: string, attachm
 
 export const koboImgHelper = ({
   fileName,
-  serverId = kobo.drcUa.server.prod,
+  serverId = koboIndex.drcUa.server.prod,
   attachments,
   conf = appConfig,
 }: {

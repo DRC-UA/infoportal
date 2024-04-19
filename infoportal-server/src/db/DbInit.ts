@@ -1,9 +1,8 @@
 import {FeatureAccessLevel, Prisma, PrismaClient} from '@prisma/client'
-import {koboServerId} from '../core/conf/KoboFormsId'
 import {appConf, AppConf} from '../core/conf/AppConf'
 import {AppFeatureId, KoboDatabaseFeatureParams} from '../feature/access/AccessType'
 import {KoboMigrateHHS2} from '../script/KoboMigrateHHS2'
-import {DrcJob, DrcOffice, KoboIndex} from '@infoportal-common'
+import {DrcJob, DrcOffice, koboIndex, KoboIndex} from '@infoportal-common'
 import {DbHelperProtectionHhs} from './koboForm/DbHelperProtectionHhs'
 
 export const createdBySystem = 'SYSTEM'
@@ -40,7 +39,7 @@ export class DbInit {
     if (await this.prisma.koboAnswers.count() === 0)
       await KoboMigrateHHS2({
         prisma: this.prisma,
-        serverId: koboServerId.prod,
+        serverId: koboIndex.drcUa.server.prod,
         oldFormId: KoboIndex.byName('protection_hhs2').id,
         newFormId: KoboIndex.byName('protection_hhs2_1').id,
       }).run()
@@ -149,7 +148,7 @@ export class DbInit {
       return Promise.all([
         this.prisma.koboServer.create({
           data: {
-            id: koboServerId.prod,
+            id: koboIndex.drcUa.server.prod,
             url: 'https://kobo.humanitarianresponse.info',
             urlV1: 'https://kc-eu.kobotoolbox.org',
             token: appConf.kobo.token,
@@ -157,7 +156,7 @@ export class DbInit {
         }),
         this.prisma.koboServer.create({
           data: {
-            id: koboServerId.dev,
+            id: koboIndex.drcUa.server.dev,
             url: 'https://kf.kobotoolbox.org',
             urlV1: 'https://kc.kobotoolbox.org',
             token: 'TODO',

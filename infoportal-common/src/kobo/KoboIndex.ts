@@ -1,10 +1,11 @@
 import {Obj, seq} from '@alexandreannic/ts-utils'
 
-/** @deprecated*/
-export const kobo = {
+/** @deprecated Only use it to access server */
+export const koboIndex = {
   drcUa: {
     server: {
       prod: '4820279f-6c3d-47ba-8afe-47f86b16ab5d' as const,
+      dev: 'b90ec4b4-4426-48f3-a924-f6a1866ee698'
     },
     form: {
       safety_incident: 'aAJNkn7v9fRL2XqQCgEkXf',
@@ -66,10 +67,10 @@ export const kobo = {
   }
 }
 
-export type KoboFormName = keyof typeof kobo.drcUa.form
+export type KoboFormName = keyof typeof koboIndex.drcUa.form
 
 /** @deprecated*/
-export const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(kobo.drcUa.form)).reduceObject(([k, v]) => [v, k])
+export const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex.drcUa.form)).reduceObject(([k, v]) => [v, k])
 
 /** @deprecated*/
 export const koboFormTranslation: Record<KoboFormName, string> = {
@@ -136,8 +137,8 @@ export namespace KoboIndex {
     }
   }
 
-  export const byName = (name: keyof typeof kobo.drcUa.form) => {
-    const id = kobo.drcUa.form[name]
+  export const byName = (name: keyof typeof koboIndex.drcUa.form) => {
+    const id = koboIndex.drcUa.form[name]
     const translation = koboFormTranslation[name]
     return {
       name,

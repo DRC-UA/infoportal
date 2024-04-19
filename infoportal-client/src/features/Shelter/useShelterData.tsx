@@ -3,7 +3,7 @@ import {KoboAnswerId} from '@/core/sdk/server/kobo/Kobo'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useMemo} from 'react'
 import {useAsync} from '@/shared/hook/useAsync'
-import {kobo, KoboIndex} from '@infoportal-common'
+import {koboIndex, KoboIndex} from '@infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 import {useIpToast} from '@/core/useToast'
 import {useFetcher} from '@/shared/hook/useFetcher'
@@ -41,8 +41,8 @@ export const useShelterData = () => {
 
   const asyncSyncAnswers = useAsync(async () => {
     await Promise.all([
-      api.koboApi.synchronizeAnswers(kobo.drcUa.server.prod, KoboIndex.byName('shelter_ta').id),
-      api.koboApi.synchronizeAnswers(kobo.drcUa.server.prod, KoboIndex.byName('shelter_nta').id),
+      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('shelter_ta').id),
+      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('shelter_nta').id),
     ])
     await fetchAll()
   })

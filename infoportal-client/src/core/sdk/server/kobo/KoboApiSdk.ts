@@ -1,5 +1,5 @@
 import {ApiClient} from '../ApiClient'
-import {kobo, UUID} from '@infoportal-common'
+import {koboIndex, UUID} from '@infoportal-common'
 import {ApiKoboForm, Kobo, KoboAnswer, KoboAnswerId, KoboId} from './Kobo'
 import {KoboSchema} from './KoboApi'
 import {appConfig, AppConfig} from '@/conf/AppConfig'
@@ -66,11 +66,11 @@ export class KoboApiSdk {
       )
   }
 
-  readonly getForm = ({serverId = kobo.drcUa.server.prod, id}: {serverId?: UUID, id: KoboId}): Promise<KoboSchema> => {
+  readonly getForm = ({serverId = koboIndex.drcUa.server.prod, id}: {serverId?: UUID, id: KoboId}): Promise<KoboSchema> => {
     return this.client.get(`/kobo-api/${serverId}/${id}`)
   }
 
-  readonly getEditUrl = ({serverId = kobo.drcUa.server.prod, formId, answerId}: {
+  readonly getEditUrl = ({serverId = koboIndex.drcUa.server.prod, formId, answerId}: {
     serverId?: UUID,
     formId: KoboId,
     answerId: KoboAnswerId

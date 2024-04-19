@@ -7,7 +7,7 @@ import {Panel} from '@/shared/Panel'
 import {map} from '@alexandreannic/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {appConfig} from '@/conf/AppConfig'
-import {kobo, KoboIndex} from '@infoportal-common'
+import {koboIndex, KoboIndex} from '@infoportal-common'
 import {IpBtn} from '@/shared/Btn'
 import {TableImg} from '@/shared/TableImg/TableImg'
 import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicationData'
@@ -20,7 +20,7 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
 export const getKoboImagePath = (url: string): string => {
-  return appConfig.apiURL + `/kobo-api/${kobo.drcUa.server.prod}/attachment?path=${url.split('api')[1]}`
+  return appConfig.apiURL + `/kobo-api/${koboIndex.drcUa.server.prod}/attachment?path=${url.split('api')[1]}`
 }
 
 export const MpcaData = () => {

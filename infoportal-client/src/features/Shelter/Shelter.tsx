@@ -9,7 +9,7 @@ import {AppFeatureId, appFeaturesIndex} from '@/features/appFeatureId'
 import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
 import {ShelterTable} from '@/features/Shelter/Data/ShelterTable'
 import {ShelterProvider} from '@/features/Shelter/ShelterContext'
-import {kobo, KoboFormName, KoboIndex, Shelter_NTA} from '@infoportal-common'
+import {koboIndex, KoboFormName, KoboIndex, Shelter_NTA} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import Link from 'next/link'
 import {databaseIndex} from '@/features/Database/databaseIndex'
@@ -53,7 +53,7 @@ const ShelterSidebar = () => {
             <SidebarItem icon="table_chart" active={isActive}>{m.data}</SidebarItem>
           )}
         </NavLink>
-        <Link href={conf.linkToFeature(AppFeatureId.kobo_database, databaseIndex.siteMap.access.absolute(kobo.drcUa.server.prod, KoboIndex.byName('shelter_nta').id))}>
+        <Link href={conf.linkToFeature(AppFeatureId.kobo_database, databaseIndex.siteMap.access.absolute(koboIndex.drcUa.server.prod, KoboIndex.byName('shelter_nta').id))}>
           <SidebarItem icon="person_add" iconEnd="open_in_new">{m.accesses}</SidebarItem>
         </Link>
         <SidebarSection title={m.koboForms}>

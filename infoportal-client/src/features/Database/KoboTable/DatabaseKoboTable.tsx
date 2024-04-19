@@ -13,7 +13,7 @@ import {useSession} from '@/core/Session/SessionContext'
 import {Access, AccessLevel} from '@/core/sdk/server/access/Access'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {DatabaseKoboTableProvider} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {kobo, KoboIndex, UUID} from '@infoportal-common'
+import {koboIndex, KoboIndex, UUID} from '@infoportal-common'
 import {KoboForm, KoboId, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {Skeleton} from '@mui/material'
 import {SheetFilterValue} from '@/shared/Sheet/util/sheetType'
@@ -60,7 +60,7 @@ export interface DatabaseTableProps {
 }
 
 export const DatabaseTable = ({
-  serverId = kobo.drcUa.server.prod,
+  serverId = koboIndex.drcUa.server.prod,
   form,
   formId,
   onFiltersChange,

@@ -1,10 +1,9 @@
-import {KoboIndex, UUID} from '@infoportal-common'
+import {koboIndex, KoboIndex, UUID} from '@infoportal-common'
 import {KoboAnswer, KoboId} from '../connector/kobo/KoboClient/type/KoboAnswer'
 import {Prisma, PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {logger, Logger} from '../../helper/Logger'
 import {createdBySystem} from '../../db/DbInit'
-import {koboServerId} from '../../core/conf/KoboFormsId'
 import {seq} from '@alexandreannic/ts-utils'
 import {GlobalEvent} from '../../core/GlobalEvent'
 import {app} from '../../index'
@@ -42,7 +41,7 @@ export class KoboSyncServer {
 
   private info = (formId: string, message: string) => this.log.info(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
 
-  readonly syncApiForm = async ({serverId = koboServerId.prod, formId, updatedBy}: {serverId?: UUID, formId: KoboId, updatedBy?: string}) => {
+  readonly syncApiForm = async ({serverId = koboIndex.drcUa.server.prod, formId, updatedBy}: {serverId?: UUID, formId: KoboId, updatedBy?: string}) => {
     try {
       this.info(formId, `Synchronizing by ${updatedBy}...`)
       await this.syncApiFormInfo(serverId, formId)
