@@ -4,7 +4,7 @@ import {useI18n} from '@/core/i18n'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {KoboAnswerId} from '@/core/sdk/server/kobo/Kobo'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
-import {currentProtectionProjects, KoboIndex} from '@infoportal-common'
+import {currentProtectionProjects, KoboIndex, shelterDrcProject} from '@infoportal-common'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {SelectStatus, SelectStatusBy} from '@/shared/customInput/SelectStatus'
 
@@ -20,7 +20,7 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
               enum="ShelterCashStatus"
               disabled={!ctx.canEdit}
               sx={{ maxWidth: 120, mr: 1 }}
-              label={m.project}
+              label={m.status}
               onChange={_ => {
                 ctx.asyncUpdateTag.call({ answerIds: selectedIds, value: _, key: 'status' });
               }}
