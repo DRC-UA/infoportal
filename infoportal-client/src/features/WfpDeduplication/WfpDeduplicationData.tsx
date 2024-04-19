@@ -95,7 +95,7 @@ export const WfpDeduplicationData = () => {
               }
             },
             {
-              id: 'taxId',
+              id: 'taxIdOccurrences',
               head: m.taxIdOccurrences,
               type: 'number',
               renderQuick: _ => taxIdCounter?.[_.taxId!] ?? 0

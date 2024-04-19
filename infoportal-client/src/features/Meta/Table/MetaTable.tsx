@@ -89,6 +89,12 @@ export const MetaTable = () => {
         renderQuick: _ => KoboIndex.searchById(_.formId)?.translation ?? _.formId,
       },
       {
+        id:'ofice',
+        type:'select_one',
+        head:m.office,
+        renderQuick: _=>_.office,
+      },
+      {
         id: 'oblast',
         type: 'select_one',
         head: m.oblast,
