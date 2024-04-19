@@ -53,9 +53,9 @@ export class GlobalCache {
       const cache = getCache()
       if (!cache) this.log.error(`Cannot retrived cache for ${key}.`)
       const cachedValue = cache?.get(index)
-      if (cache && cachedValue === undefined) {
+      if (cachedValue === undefined) {
         const value = await fn(...p)
-        cache.set(index, value)
+        if (cache) cache.set(index, value)
         return value
       }
       return cachedValue
