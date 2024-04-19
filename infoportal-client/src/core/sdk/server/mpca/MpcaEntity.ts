@@ -1,7 +1,7 @@
 import {Bn_Re, DrcDonor, DrcOffice, DrcProject, KoboFormName, KoboTagStatus, OblastISO, OblastName, Person} from '@infoportal-common'
 import {KoboAnswerId, KoboAttachment, KoboBaseTags} from '@/core/sdk/server/kobo/Kobo'
 import {WfpDeduplication} from '@/core/sdk/server/wfpDeduplication/WfpDeduplication'
-import {DeepPartial, Enum} from '@alexandreannic/ts-utils'
+import {Enum} from '@alexandreannic/ts-utils'
 
 export interface MpcaTypeTag extends KoboBaseTags, KoboTagStatus {
   projects?: DrcProject[]
@@ -86,58 +86,36 @@ export interface MpcaEntity {
 
 export class MpcaHelper {
 
-  static readonly budgets: DeepPartial<Record<DrcProject, Record<DrcOffice, number>>> = {
-    [DrcProject['UKR-000345 BHA2']]: {
-      [DrcOffice.Kharkiv]: 15390000,
-      [DrcOffice.Dnipro]: 15390000,
-      [DrcOffice.Mykolaiv]: 15390000,
-    },
-    [DrcProject['UKR-000270 Pooled Funds']]: {
-      [DrcOffice.Kharkiv]: 15431220,
-      [DrcOffice.Dnipro]: 10909080,
-      [DrcOffice.Chernihiv]: 12021300,
-      [DrcOffice.Lviv]: 845820,
-    },
-    [DrcProject['UKR-000270 Pooled Funds Old (MPCA)']]: {
-      [DrcOffice.Kharkiv]: 4500000,
-      [DrcOffice.Dnipro]: 1260000,
-      [DrcOffice.Chernihiv]: 1260000,
-      [DrcOffice.Lviv]: 777000,
-    },
-    [DrcProject['UKR-000340 Augustinus Fonden']]: {
-      [DrcOffice.Dnipro]: 3388421,
-    },
-    [DrcProject['UKR-000341 Hoffmans & Husmans']]: {
-      [DrcOffice.Kharkiv]: 3388421,
-    },
-    [DrcProject['UKR-000342 Pooled Funds']]: {
-      [DrcOffice.Dnipro]: 3727267,
-      [DrcOffice.Kharkiv]: 3727267,
-      [DrcOffice.Lviv]: 3717747,
-      [DrcOffice.Mykolaiv]: 3717747,
-    },
-    [DrcProject['UKR-000306 Dutch II']]: {
-      [DrcOffice.Chernihiv]: 7322400,
-      [DrcOffice.Dnipro]: 7322400,
-      [DrcOffice.Kharkiv]: 7322400,
-    },
-    [DrcProject['UKR-000330 SDC2']]: {
-      [DrcOffice.Sumy]: 21600000,
-      [DrcOffice.Dnipro]: 29808000,
-      [DrcOffice.Kharkiv]: 29808000,
-    },
-    [DrcProject['UKR-000347 DANIDA']]: {
-      [DrcOffice.Sumy]: 3240000,
-      [DrcOffice.Dnipro]: 6480000,
-      [DrcOffice.Kharkiv]: 6480000,
-    },
-    [DrcProject['UKR-000309 OKF']]: {
-      [DrcOffice.Lviv]: 17881148,
-    },
-    [DrcProject['UKR-000298 Novo-Nordisk']]: {
-      [DrcOffice.Mykolaiv]: 28231000,
-    },
-  }
+  static readonly budgets = [
+    {project: 'UKR-000345 BHA2', office: 'Kharkiv', budget: 15390000},
+    {project: 'UKR-000345 BHA2', office: 'Dnipro', budget: 15390000},
+    {project: 'UKR-000345 BHA2', office: 'Mykolaiv', budget: 15390000},
+    {project: 'UKR-000270 Pooled Funds', office: 'Kharkiv', budget: 15431220},
+    {project: 'UKR-000270 Pooled Funds', office: 'Dnipro', budget: 10909080},
+    {project: 'UKR-000270 Pooled Funds', office: 'Chernihiv', budget: 12021300},
+    {project: 'UKR-000270 Pooled Funds', office: 'Lviv', budget: 845820},
+    {project: 'UKR-000270 Pooled Funds Old (MPCA)', office: 'Kharkiv', budget: 4500000},
+    {project: 'UKR-000270 Pooled Funds Old (MPCA)', office: 'Dnipro', budget: 1260000},
+    {project: 'UKR-000270 Pooled Funds Old (MPCA)', office: 'Chernihiv', budget: 1260000},
+    {project: 'UKR-000270 Pooled Funds Old (MPCA)', office: 'Lviv', budget: 777000},
+    {project: 'UKR-000340 Augustinus Fonden', office: 'Dnipro', budget: 3388421},
+    {project: 'UKR-000341 Hoffmans & Husmans', office: 'Kharkiv', budget: 3388421},
+    {project: 'UKR-000342 Pooled Funds', office: 'Dnipro', budget: 3727267},
+    {project: 'UKR-000342 Pooled Funds', office: 'Kharkiv', budget: 3727267},
+    {project: 'UKR-000342 Pooled Funds', office: 'Lviv', budget: 3717747},
+    {project: 'UKR-000342 Pooled Funds', office: 'Mykolaiv', budget: 3717747},
+    {project: 'UKR-000306 Dutch II', office: 'Chernihiv', budget: 7322400},
+    {project: 'UKR-000306 Dutch II', office: 'Dnipro', budget: 7322400},
+    {project: 'UKR-000306 Dutch II', office: 'Kharkiv', budget: 7322400},
+    {project: 'UKR-000330 SDC2', office: 'Sumy', budget: 21600000},
+    {project: 'UKR-000330 SDC2', office: 'Dnipro', budget: 29808000},
+    {project: 'UKR-000330 SDC2', office: 'Kharkiv', budget: 29808000},
+    {project: 'UKR-000347 DANIDA', office: 'Sumy', budget: 3240000},
+    {project: 'UKR-000347 DANIDA', office: 'Dnipro', budget: 6480000},
+    {project: 'UKR-000347 DANIDA', office: 'Kharkiv', budget: 6480000},
+    {project: 'UKR-000309 OKF', office: 'Lviv', budget: 17881148},
+    {project: 'UKR-000298 Novo-Nordisk', office: 'Mykolaiv', budget: 28231000},
+  ]
 
   static readonly projects = Enum.keys({// [DrcProject['Novo-Nordisk (UKR-000274)']]: true,
     [DrcProject['UKR-000322 ECHO2']]: true,

@@ -19,6 +19,7 @@ export class ControllerGroup {
   })
 
   static readonly searchGroupSchema = yup.object({
+    name: yup.string().optional(),
     featureId: yup.string().optional(),
   })
 
@@ -41,10 +42,15 @@ export class ControllerGroup {
     res.send()
   }
 
-  readonly getAllWithItems = async (req: Request, res: Response, next: NextFunction) => {
+  readonly searchWithItems = async (req: Request, res: Response, next: NextFunction) => {
     const filters = await ControllerGroup.searchGroupSchema.validate(req.body)
     const data = await this.service.search(filters)
     res.send(data)
+  }
+
+  readonly getMine = async (req: Request, res: Response, next: NextFunction) => {
+    const groups = await this.service.search({user: req.session.user})
+    res.send(groups)
   }
 
   readonly createItem = async (req: Request, res: Response, next: NextFunction) => {

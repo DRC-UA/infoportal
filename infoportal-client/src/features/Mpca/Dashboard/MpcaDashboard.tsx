@@ -5,7 +5,7 @@ import {useMpcaContext} from '../MpcaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {UseBNREComputed, useBNREComputed} from '../useBNREComputed'
 import {Enum, fnSwitch, Seq, seq} from '@alexandreannic/ts-utils'
-import {chain, DrcOffice, DrcProjectHelper, fnTry, groupBy, koboFormTranslation, KoboIndex, Period, toPercent,} from '@infoportal-common'
+import {chain, DrcOffice, koboFormTranslation, KoboIndex, Period, toPercent,} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
@@ -13,12 +13,11 @@ import {ChartBar} from '@/shared/charts/ChartBar'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld, makeChartData} from '@/shared/charts/chartHelperOld'
 import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
-import {Box, LinearProgress} from '@mui/material'
-import {Sheet} from '@/shared/Sheet/Sheet'
+import {Box} from '@mui/material'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {format} from 'date-fns'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {MpcaEntity, MpcaHelper, MpcaProgram, mpcaRowSources} from '@/core/sdk/server/mpca/MpcaEntity'
+import {MpcaEntity, MpcaProgram, mpcaRowSources} from '@/core/sdk/server/mpca/MpcaEntity'
 import {DashboardFilterLabel} from '@/shared/DashboardLayout/DashboardFilterLabel'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Panel, PanelBody} from '@/shared/Panel'
@@ -35,10 +34,11 @@ import {WfpDeduplicationStatus} from '@/core/sdk/server/wfpDeduplication/WfpDedu
 import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicationData'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {appConfig} from '@/conf/AppConfig'
+import {MpcaBudgetTracker} from '@/features/Mpca/Dashboard/MpcaBudgetTracker'
 
 export const today = new Date()
 
-enum AmountType {
+export enum MpcaAmountType {
   amountUahSupposed = 'amountUahSupposed',
   amountUahDedup = 'amountUahDedup',
   amountUahFinal = 'amountUahFinal',
@@ -55,7 +55,7 @@ export const MpcaDashboard = () => {
   const ctx = useMpcaContext()
   const [periodFilter, setPeriodFilter] = useState<Partial<Period>>({})
   const {m, formatLargeNumber} = useI18n()
-  const [amountType, setAmountType] = usePersistentState<AmountType>(AmountType.amountUahFinal, {storageKey: 'mpca-dashboard-amountType'})
+  const [amountType, setAmountType] = usePersistentState<MpcaAmountType>(MpcaAmountType.amountUahFinal, {storageKey: 'mpca-dashboard-amountType'})
   const [currency, setCurrency] = usePersistentState<Currency>(Currency.USD, {storageKey: 'mpca-dashboard-currency'})
 
   const mappedData = useMemo(() => ctx.data?.map(_ => {
@@ -66,11 +66,6 @@ export const MpcaDashboard = () => {
     if (_.office === undefined) _.office = SheetUtils.blank as any
     return _
   }), [ctx.data])
-
-  // useEffect(() => {
-  //   if (periodFilter.start || periodFilter.end)
-  //     ctx.fetcherData.fetch({force: true}, {filters: periodFilter})
-  // }, [periodFilter])
 
   const filterShape = useMemo(() => {
     const d = mappedData ?? seq([])
@@ -167,10 +162,10 @@ export const MpcaDashboard = () => {
               {() => (
                 <Box sx={{p: 1}}>
                   <ScRadioGroup value={amountType} onChange={setAmountType} dense sx={{mb: 1}}>
-                    <ScRadioGroupItem value={AmountType.amountUahSupposed} title="Estimated" description="Estimated when filling the form"/>
-                    <ScRadioGroupItem value={AmountType.amountUahDedup} title="Deduplicated" description="Amount given after WFP deduplication"/>
-                    <ScRadioGroupItem value={AmountType.amountUahFinal} title="Reel" description="Deduplicated amount or Estimated if none"/>
-                    <ScRadioGroupItem value={AmountType.amountUahCommitted} title="Committed" description="Real amount if committed"/>
+                    <ScRadioGroupItem value={MpcaAmountType.amountUahSupposed} title="Estimated" description="Estimated when filling the form"/>
+                    <ScRadioGroupItem value={MpcaAmountType.amountUahDedup} title="Deduplicated" description="Amount given after WFP deduplication"/>
+                    <ScRadioGroupItem value={MpcaAmountType.amountUahFinal} title="Reel" description="Deduplicated amount or Estimated if none"/>
+                    <ScRadioGroupItem value={MpcaAmountType.amountUahCommitted} title="Committed" description="Real amount if committed"/>
                   </ScRadioGroup>
                   <ScRadioGroup value={currency} onChange={setCurrency} inline dense>
                     <ScRadioGroupItem value={Currency.USD} title="USD" sx={{width: '100%'}}/>
@@ -202,10 +197,10 @@ export const _MPCADashboard = ({
   getAmount,
   amountType,
 }: {
-  getAmount: (_: MpcaEntity) => number | undefined
-  amountType: AmountType
-  currency: Currency
   data: Seq<MpcaEntity>
+  getAmount: (_: MpcaEntity) => number | undefined
+  amountType: MpcaAmountType
+  currency: Currency
   computed: NonNullable<UseBNREComputed>
 }) => {
   const {session} = useSession()
@@ -337,6 +332,13 @@ export const _MPCADashboard = ({
             </SlidePanel>
           </Div>
         </Div>
+        <Div>
+          <Div column>
+            <Panel title="Budget Tracker (UAH)">
+              <MpcaBudgetTracker data={data} getAmount={getAmount} amountType={amountType}/>
+            </Panel>
+          </Div>
+        </Div>
         {(session.admin || session.drcJob === 'Finance Manager') && (
           <Div>
             <Div column>
@@ -344,109 +346,6 @@ export const _MPCADashboard = ({
             </Div>
           </Div>
         )}
-        <Div>
-          <Div column>
-            <Panel title="Budget Tracker (UAH)">
-              <Lazy deps={[data, getAmount]} fn={() => {
-                const gb = groupBy({
-                  data,
-                  groups: [
-                    {by: _ => _.finalProject ?? SheetUtils.blank,},
-                    {by: _ => _.office ?? SheetUtils.blank,},
-                  ],
-                  finalTransform: _ => _,
-                })
-                return [...MpcaHelper.projects, SheetUtils.blank].flatMap(project => {
-                  const donor = project === SheetUtils.blank ? SheetUtils.blank : DrcProjectHelper.donorByProject[project]
-                  const resOffices = seq([...Enum.values(DrcOffice), SheetUtils.blank,]).map(office => {
-                    const d = gb[project]?.[office] ?? seq()
-                    return {
-                      project,
-                      office,
-                      donor,
-                      availableAmount: project !== SheetUtils.blank && office !== SheetUtils.blank
-                        ? MpcaHelper.budgets[project]?.[office]
-                        : undefined,
-                      committedAmount: d.sum(_ => _[amountType] ?? 0),
-                      individuals: d.sum(_ => _.persons?.length ?? 0),
-                      rows: d.length,
-                    }
-                  })
-                  return [
-                    ...resOffices, {
-                      project,
-                      donor,
-                      availableAmount: resOffices.sum(_ => _.availableAmount ?? 0),
-                      office: 'Total',
-                      committedAmount: resOffices.sum(_ => _.committedAmount),
-                      individuals: resOffices.sum(_ => _.individuals),
-                      rows: resOffices.sum(_ => _.rows),
-                    }
-                  ]
-                })
-              }}>
-                {_ =>
-                  <Sheet
-                    id="mpca-dashboard-helper"
-                    defaultLimit={200}
-                    rowsPerPageOptions={[200, 1000]}
-                    data={_}
-                    columns={[
-                      {width: 0, id: 'donor', head: m.donor, type: 'select_one', render: _ => _.donor},
-                      {width: 0, id: 'project', head: m.project, type: 'select_one', render: _ => _.project},
-                      {
-                        width: 0, id: 'office', head: m.office, type: 'select_one',
-                        renderValue: _ => _.office,
-                        render: _ => {
-                          if (_.office === 'Total') return <b>Total</b>
-                          return _.office
-                        }
-                      },
-                      {
-                        width: 0,
-                        id: 'total',
-                        head: 'Committed',
-                        type: 'number',
-                        renderValue: _ => _.committedAmount,
-                        render: _ => formatLargeNumber(_.committedAmount, {maximumFractionDigits: 0})
-                      },
-                      {
-                        width: 0,
-                        id: 'buget',
-                        head: 'Budget available',
-                        type: 'number',
-                        renderValue: _ => _.availableAmount,
-                        render: _ => formatLargeNumber(_.availableAmount, {maximumFractionDigits: 0})
-                      },
-                      {
-                        width: 0,
-                        id: 'target_ratio',
-                        head: 'Rest',
-                        type: 'number',
-                        tooltip: _ => `${formatLargeNumber(_.committedAmount)} / ${formatLargeNumber(_.availableAmount)}`,
-                        renderValue: _ => {
-                          if (_.availableAmount) return _.availableAmount - _.committedAmount
-                          return -_.committedAmount
-                        },
-                        render: _ => {
-                          if (_.availableAmount === undefined || (_.office === 'Total' && _.availableAmount === 0)) return
-                          const percent = fnTry(() => _.committedAmount / _.availableAmount!).fnCatch(() => 0)
-                          return <>
-                            <Box component="span" sx={{display: 'flex', justifyContent: 'space-between'}}>
-                              <span>{formatLargeNumber(_.availableAmount - _.committedAmount, {maximumFractionDigits: 0})}</span>
-                              <span>{toPercent(percent)}</span>
-                            </Box>
-                            <LinearProgress value={percent * 100} variant="determinate"/>
-                          </>
-                        }
-                      },
-                    ]}
-                  />
-                }
-              </Lazy>
-            </Panel>
-          </Div>
-        </Div>
         {/*<Div>*/}
         {/*  <Div column>*/}
         {/*    <SlidePanel title={m.ageGroup}>*/}

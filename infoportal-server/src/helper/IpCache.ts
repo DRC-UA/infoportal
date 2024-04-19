@@ -15,6 +15,7 @@ export interface CacheParams {
 export enum SytemCache {
   Meta = 'Meta',
   KoboAnswers = 'KoboAnswers',
+  WfpDeduplication = 'WfpDeduplication',
 }
 
 export class GlobalCache {

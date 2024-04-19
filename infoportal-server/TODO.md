@@ -4,3 +4,4 @@
 - Run database sync and db builders in threaded worker
 - Multithread servers
 - Harmonize code pattern about yup rest api schema
+- Harmonize endpoint yup schema (all in Service?)

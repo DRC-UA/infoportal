@@ -288,3 +288,12 @@ model MealVerification {
   answers   MealVerificationAnswers[]
   status    MealVerificationStatus?
 }
+
+model JsonStore {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  updatedBy String
+  key       String    @unique
+  value     Json
+}

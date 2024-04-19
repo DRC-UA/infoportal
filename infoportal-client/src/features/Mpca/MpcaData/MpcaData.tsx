@@ -14,7 +14,7 @@ import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicat
 import {formatLargeNumber} from '@/core/i18n/localization/en'
 import {MpcaEntity, MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
-import {SelectDrcProject} from '@/shared/SelectDrcProject'
+import {SelectDrcProject} from '@/shared/customInput/SelectDrcProject'
 import {Box, FormControlLabel, Switch} from '@mui/material'
 import {useAsync} from '@/shared/hook/useAsync'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'

@@ -369,8 +369,8 @@ export const muiTheme = ({
       MuiOutlinedInput: dark ? {} : {
         styleOverrides: {
           root: {
-            '&:hover $notchedOutline': {
-              borderColor: alpha(colorPrimary.main, 0.7),
+            '&:hover fieldset': {
+              borderColor: alpha(colorPrimary.main, 0.5) + ` !important`,
             },
           },
           notchedOutline: {

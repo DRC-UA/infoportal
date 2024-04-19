@@ -13,6 +13,7 @@ enum Env {
   NEXT_PUBLIC_APP_OFF = 'NEXT_PUBLIC_APP_OFF',
   NEXT_PUBLIC_MUI_PRO_LICENSE_KEY = 'NEXT_PUBLIC_MUI_PRO_LICENSE_KEY',
   NEXT_PUBLIC_CHATGPT_APIKEY = 'NEXT_PUBLIC_CHATGPT_APIKEY',
+  NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME = 'NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME',
 }
 
 const persistedTempEnvVariablesForFront: { [key in Env]: string | undefined } = {
@@ -27,6 +28,7 @@ const persistedTempEnvVariablesForFront: { [key in Env]: string | undefined } = 
   NEXT_PUBLIC_APP_OFF: process.env.NEXT_PUBLIC_APP_OFF,
   NEXT_PUBLIC_MUI_PRO_LICENSE_KEY: process.env.NEXT_PUBLIC_MUI_PRO_LICENSE_KEY,
   NEXT_PUBLIC_CHATGPT_APIKEY: process.env.NEXT_PUBLIC_CHATGPT_APIKEY,
+  NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME: process.env.NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME,
 }
 
 const _ = env(persistedTempEnvVariablesForFront)
@@ -61,6 +63,7 @@ export const appConfig = {
     mealReferralMatrix: 'https://drcngo.sharepoint.com/:x:/r/sites/UKRPortal/_layouts/15/Doc.aspx?sourcedoc=%7B401B9D94-94AF-4D88-A85D-BBCCAC7196FE%7D&file=DRC%20Ukraine%20CFM%20Referral%20Matrix_updated.xlsx&action=default&mobileredirect=true',
     metaDashboardReadMe: 'https://drcngo.sharepoint.com/sites/UKRPortal/_layouts/15/doc.aspx?sourcedoc={4acb5576-3be2-4939-8f77-2364e048d321}',
   },
+  mpcaBudgetHolderGroupName: _(defaultValue('MPCA-BudgetHolder'))(Env.NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME),
   icons: {
     sector: 'category',
     program: 'book',

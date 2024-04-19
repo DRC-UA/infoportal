@@ -23,6 +23,7 @@ import {ControllerShelter} from './controller/ControllerShelter'
 import {ControllerMealVerification} from './controller/ControllerMealVerification'
 import {ControllerGroup} from './controller/ControllerGroup'
 import {ControllerKoboMeta} from './controller/ControllerKoboMeta'
+import {ControllerJsonStore} from './controller/ControllerJsonStore'
 
 export interface AuthenticatedRequest extends Request {
   user?: UserSession
@@ -73,6 +74,7 @@ export const getRoutes = (
   const shelter = new ControllerShelter(prisma)
   const mealVerification = new ControllerMealVerification(prisma)
   const koboMeta = new ControllerKoboMeta(prisma)
+  const jsonStore = new ControllerJsonStore(prisma)
 
   const auth = ({adminOnly = false}: {adminOnly?: boolean} = {}) => async (req: Request, res: Response, next: NextFunction) => {
     // req.session.user = {
@@ -116,11 +118,12 @@ export const getRoutes = (
     router.delete('/proxy/:id', auth({adminOnly: true}), errorCatcher(proxy.delete))
     router.get('/proxy', errorCatcher(proxy.search))
 
+    router.get('/group/me', auth(), errorCatcher(accessGroup.getMine))
     router.get('/group/item', auth({adminOnly: true}), errorCatcher(accessGroup.getItems))
     router.post('/group/item/:id', auth({adminOnly: true}), errorCatcher(accessGroup.updateItem))
     router.delete('/group/item/:id', auth({adminOnly: true}), errorCatcher(accessGroup.removeItem))
     router.put('/group/:id/item', auth({adminOnly: true}), errorCatcher(accessGroup.createItem))
-    router.get('/group', auth({adminOnly: true}), errorCatcher(accessGroup.getAllWithItems))
+    router.post('/group', auth({adminOnly: true}), errorCatcher(accessGroup.searchWithItems))
     router.put('/group', auth({adminOnly: true}), errorCatcher(accessGroup.create))
     router.post('/group/:id', auth({adminOnly: true}), errorCatcher(accessGroup.update))
     router.delete('/group/:id', auth({adminOnly: true}), errorCatcher(accessGroup.remove))
@@ -158,6 +161,10 @@ export const getRoutes = (
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
 
     router.post('/shelter/search', errorCatcher(shelter.search))
+
+    router.get('/json-store/:key', auth(), errorCatcher(jsonStore.get))
+    router.put('/json-store', auth(), errorCatcher(jsonStore.set))
+    router.patch('/json-store', auth(), errorCatcher(jsonStore.update))
 
     router.post('/mpca/search', errorCatcher(mpca.search))
     router.post('/mpca/refresh', auth(), errorCatcher(mpca.refresh))
