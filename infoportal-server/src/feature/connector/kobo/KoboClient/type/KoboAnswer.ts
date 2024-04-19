@@ -14,13 +14,13 @@ export interface KoboAnswerStatus {
   SubmittedViaWeb: 'submitted_via_web'
 }
 
-export type KoboAttachment = any
-// export type KoboAttachment = {
-//   download_url: string
-//   filename: string
-//   download_small_url: string
-//   id: string
-// }
+// export type KoboAttachment = any
+export type KoboAttachment = {
+  download_url: string
+  filename: string
+  download_small_url: string
+  id: string
+}
 
 export type KoboAnswerGeolocation = any
 export type KoboAnswerTags = any
@@ -105,7 +105,9 @@ export interface KoboApiList<T> {
 
 export class KoboAnswerUtils {
 
-  static readonly mapAnswersMetaData = (k: ApiPaginate<Record<keyof ApiKoboAnswerMetaData, any>>): ApiPaginate<KoboAnswerMetaData> => {
+  static readonly findFileUrl = (attachments?: KoboAttachment[], fileName?: string) => fileName ? attachments?.find(x => x.filename.includes(fileName))?.download_url : undefined
+
+  readonly mapAnswersMetaData = (k: ApiPaginate<Record<keyof ApiKoboAnswerMetaData, any>>): ApiPaginate<KoboAnswerMetaData> => {
     return {
       ...k,
       data: k.data.map(KoboAnswerUtils.mapAnswer)

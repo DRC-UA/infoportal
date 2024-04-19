@@ -7,6 +7,7 @@ export type KoboMetaOrigin<
 > = {
   formId: KoboAnswerMetaData['id']
   uuid: KoboAnswerMetaData['uuid']
+  attachments: KoboAnswerMetaData['attachments']
   answers: TAnswer
   date: KoboAnswerMetaData['date']
   id: KoboAnswerMetaData['id']

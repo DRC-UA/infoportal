@@ -16,6 +16,7 @@ import {
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {MetaMapped, MetaMapperInsert} from './KoboMetaService'
+import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 
 export class KoboMetaBasicneeds {
 
@@ -117,6 +118,12 @@ export class KoboMetaBasicneeds {
         phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
         status: KoboMetaHelper.mapCashStatus(status),
         lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
+        passportSerie: answer.pay_det_pass_ser,
+        passportNum: answer.pay_det_pass_num,
+        taxIdFileName: answer.pay_det_tax_id_ph,
+        taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+        idFileName: answer.pay_det_id_ph,
+        idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph),
       }
     }
     return activities.map(_ => prepare(
@@ -212,9 +219,15 @@ export class KoboMetaBasicneeds {
         lastName: answer.ben_det_surname_l,
         firstName: answer.ben_det_first_name_l,
         patronymicName: answer.ben_det_pat_name_l,
-        taxId: answer.pay_det_tax_id_num_l,
         phone: answer.ben_det_ph_number_l ? '' + answer.ben_det_ph_number_l : undefined,
         status: KoboMetaHelper.mapCashStatus(status),
+        passportSerie: answer.pay_det_pass_ser ?? answer.pay_det_pass_ser_l,
+        passportNum: answer.pay_det_pass_num ?? answer.pay_det_pass_num_l,
+        taxId: answer.pay_det_tax_id_num ?? answer.pay_det_tax_id_num_l,
+        taxIdFileName: answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l,
+        taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l),
+        idFileName: answer.pay_det_id_ph ?? answer.pay_det_id_ph_l,
+        idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph ?? answer.pay_det_id_ph_l),
         lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
       }
     }
