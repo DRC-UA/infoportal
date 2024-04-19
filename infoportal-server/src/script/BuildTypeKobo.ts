@@ -43,6 +43,9 @@ export class BuildKoboType {
         }
       }
     },
+    Pseah_training_tracker: {
+      formId: KoboIndex.byName('pseah_training_tracker').id,
+    },
     Partnership_assessment: {
       formId: KoboIndex.byName('partnership_assessment').id,
     },

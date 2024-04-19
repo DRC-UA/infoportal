@@ -45,6 +45,7 @@ export const koboIndex = {
       partnership_partnersDatabase: 'aLs32U5Qc9HfQ5mxQtsEML',
       partnership_initialQuestionnaire: 'a6u7CBysEz746Hdx6pVLzp',
       partnership_assessment: 'aLD2Xc9cKSY22c5cAP5utT',
+      pseah_training_tracker: 'aRBEzakmsMPpw8VoJG8Gpk'
       //
       // mealCfmInternal: 'aN3Y8JeH2fU3GthrWAs9FG',
       // mealCfmExternal: 'aJaGLvGEdpYWk5ift8k87y',
@@ -111,6 +112,7 @@ export const koboFormTranslation: Record<KoboFormName, string> = {
   partnership_assessment: '[Partnership] CBP CSO Assessment',
   partnership_initialQuestionnaire: '[Partnership] CBP CSO Initial Questionnaire',
   partnership_partnersDatabase: '[Partnership] DRC Partners Database',
+  pseah_training_tracker:'DRC - PSEAH Training tracker'
 //
 }
 
