@@ -2,6 +2,7 @@ import {ApiClient} from '../ApiClient'
 import {AccessLevel} from '@/core/sdk/server/access/Access'
 import {DrcJob, DrcOffice, UUID} from '@infoportal-common'
 import {Group, GroupHelper} from '@/core/sdk/server/group/GroupItem'
+import {AppFeatureId} from '@/features/appFeatureId'
 
 type GroupCreate = Pick<Group, 'name' | 'desc'>
 
@@ -38,13 +39,19 @@ export class GroupSdk {
     await this.client.delete(`/group/${id}`)
   }
 
-  readonly getAllWithItems = (): Promise<Group[]> => {
-    return this.client.get(`/group`).then(_ => _.map(GroupHelper.map))
+  readonly search = async ({
+    name,
+    featureId,
+  }: {
+    name?: string,
+    featureId?: AppFeatureId
+  } = {}): Promise<Group[]> => {
+    return this.client.post(`/group`, {body: {name, featureId}}).then(_ => _.map(GroupHelper.map))
   }
 
-  // readonly getItems = () => {
-  //   return this.client.get('/group/item')
-  // }
+  readonly getMine = async (): Promise<Group[]> => {
+    return this.client.get(`/group/me`).then(_ => _.map(GroupHelper.map))
+  }
 
   readonly updateItem = (itemId: UUID, body: GroupItemUpdate) => {
     return this.client.post(`/group/item/${itemId}`, {body})

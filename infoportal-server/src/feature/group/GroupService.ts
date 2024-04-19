@@ -4,6 +4,7 @@ import {InferType} from 'yup'
 import {UUID} from '@infoportal-common'
 import {format} from 'date-fns'
 import {AppFeatureId} from '../access/AccessType'
+import {UserSession} from '../session/UserSession'
 
 export type GroupCreateParams = InferType<typeof GroupService.createSchema>
 export type GroupUpdateParams = InferType<typeof GroupService.updateSchema>
@@ -61,15 +62,44 @@ export class GroupService {
     })
   }
 
-  readonly search = ({featureId}: {featureId?: UUID}) => {
+  readonly search = ({
+    featureId,
+    name,
+    user,
+  }: {
+    user?: UserSession
+    name?: string
+    featureId?: UUID
+  }) => {
     return this.prisma.group.findMany({
       include: {
         items: true
       },
       where: {
+        name,
         accesses: {
           every: {featureId}
-        }
+        },
+        ...user ? {
+          items: {
+            some: {
+              OR: [
+                {email: {equals: user.email, mode: 'insensitive' as const,}},
+                {
+                  OR: [
+                    {drcOffice: user.drcOffice},
+                    {drcOffice: null},
+                    {drcOffice: ''},
+                  ],
+                  drcJob: {
+                    equals: user.drcJob,
+                    mode: 'insensitive' as const,
+                  }
+                }
+              ]
+            }
+          }
+        } : {}
       },
       orderBy: {createdAt: 'desc'}
     })

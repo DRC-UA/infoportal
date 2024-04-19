@@ -116,6 +116,7 @@ export class AccessService {
     })
   }
 
+
   // TODO Perf can be optimized using a single SQL query
   // @ts-ignore
   readonly searchForUser: SearchByFeature = async ({featureId, user}: any) => {

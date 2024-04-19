@@ -39,12 +39,6 @@ export const SnapshotProtMonitoringProvider = ({
   })
     .then(_ => _.data.filter(_ => !filters.currentOblast || filters.currentOblast.includes(_.where_are_you_current_living_oblast)))
     .then(seq)
-  // .filter(_ =>
-  //   _.where_are_you_current_living_oblast !== OblastIndex.findISOByName('Dnipropetrovska') &&
-  //   _.where_are_you_current_living_oblast !== OblastIndex.findISOByName('Volynska') &&
-  //   _.where_are_you_current_living_oblast !== OblastIndex.findISOByName('Ivano-Frankivska')
-  // )
-
 
   const _answers = useFetcher(request)
 

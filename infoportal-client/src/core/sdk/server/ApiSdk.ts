@@ -18,6 +18,7 @@ import {ShelterSdk} from '@/core/sdk/server/shelter/ShelterSdk'
 import {MealVerificationClient} from '@/core/sdk/server/mealVerification/MealVerificationClient'
 import {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboMetaSdk} from '@/core/sdk/server/kobo-meta/KoboMetaSdk'
+import {JsonStoreSdk} from '@/core/sdk/server/jsonStore/JsonStoreSdk'
 
 export class ApiSdk {
   constructor(private client: ApiClient) {
@@ -55,4 +56,5 @@ export class ApiSdk {
   readonly user = new UserSdk(this.client)
   readonly proxy = new ProxySdk(this.client)
   readonly shelter = new ShelterSdk(this.client)
+  readonly jsonStore = new JsonStoreSdk(this.client)
 }

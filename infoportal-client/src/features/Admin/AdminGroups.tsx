@@ -31,7 +31,7 @@ export const AdminGroups = () => {
   const groupForm = useForm<GoupForm>()
   const accessForm = useForm<IAccessForm>()
 
-  const fetcher = useFetcher(api.group.getAllWithItems)
+  const fetcher = useFetcher(api.group.search)
   const asyncCreate = useAsync(api.group.create)
   const asyncUpdate = useAsync(api.group.update)
   const asyncRemove = useAsync(api.group.remove, {requestKey: _ => _[0]})

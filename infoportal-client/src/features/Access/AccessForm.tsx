@@ -200,7 +200,7 @@ export const AccessFormInputGroup = ({
 }) => {
   const {m} = useI18n()
   const {api} = useAppSettings()
-  const fetcherGroups = useFetcher(api.group.getAllWithItems)
+  const fetcherGroups = useFetcher(api.group.search)
   const groupIndex = useMemo(() => {
     return seq(fetcherGroups.get).groupByFirst(_ => _.id)
   }, [fetcherGroups.get])

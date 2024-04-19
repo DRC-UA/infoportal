@@ -8,7 +8,7 @@ export const PopoverWrapper = ({
   ...props
 }: {
   children: ReactElement<any>,
-  content: () => ReactNode
+  content: (close: () => void) => ReactNode
   popoverProps?: Omit<PopoverProps, 'children' | 'anchorEl' | 'open' | 'onClose'>
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -23,7 +23,7 @@ export const PopoverWrapper = ({
   const open = Boolean(anchorEl)
 
   const resovledContent = useMemo(() => {
-    if (open) return content()
+    if (open) return content(handleClose)
   }, [content, open])
 
   return (
