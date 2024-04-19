@@ -12,6 +12,8 @@ import React, {useMemo} from 'react'
 import {OptionLabelTypeCompact} from '@/shared/customInput/SelectStatus'
 import {useSession} from '@/core/Session/SessionContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+import {TableImg} from '@/shared/TableImg/TableImg'
+import {getKoboImagePath} from '@/features/Mpca/MpcaData/MpcaData'
 
 type Data = IKoboMeta & {
   duplicatedPhone?: number
@@ -89,10 +91,10 @@ export const MetaTable = () => {
         renderQuick: _ => KoboIndex.searchById(_.formId)?.translation ?? _.formId,
       },
       {
-        id:'ofice',
-        type:'select_one',
-        head:m.office,
-        renderQuick: _=>_.office,
+        id: 'ofice',
+        type: 'select_one',
+        head: m.office,
+        renderQuick: _ => _.office,
       },
       {
         id: 'oblast',
@@ -136,6 +138,38 @@ export const MetaTable = () => {
         id: 'taxId',
         head: m.taxID,
         renderQuick: _ => _.taxId,
+      },
+      {
+        id: 'taxIdImg',
+        align: 'center',
+        head: m.taxID,
+        type: 'string',
+        render: _ => {
+          return {
+            label: _.taxIdFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.taxIdFileUrl)}/>,
+            export: _.taxIdFileUrl,
+            value: _.taxIdFileName,
+          }
+        },
+      },
+      {
+        type: 'string',
+        id: 'passport',
+        head: m.passportNumber,
+        renderQuick: _ => _.passportNum,
+      },
+      {
+        id: 'idImg',
+        align: 'center',
+        head: m.id,
+        type: 'string',
+        render: _ => {
+          return {
+            label: _.idFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.idFileUrl)}/>,
+            export: _.idFileUrl,
+            value: _.idFileName,
+          }
+        },
       },
       {
         type: 'number',

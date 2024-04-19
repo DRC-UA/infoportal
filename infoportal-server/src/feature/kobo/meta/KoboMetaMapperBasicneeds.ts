@@ -1,4 +1,4 @@
-import {fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, seq} from '@alexandreannic/ts-utils'
 import {
   Bn_RapidResponse,
   Bn_Re,
@@ -118,8 +118,7 @@ export class KoboMetaBasicneeds {
         phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
         status: KoboMetaHelper.mapCashStatus(status),
         lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
-        passportSerie: answer.pay_det_pass_ser,
-        passportNum: answer.pay_det_pass_num,
+        passportNum: map(answer.pay_det_pass_ser ?? '' + answer.pay_det_pass_num ?? '', _ => _ === '' ? undefined : _),
         taxIdFileName: answer.pay_det_tax_id_ph,
         taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
         idFileName: answer.pay_det_id_ph,
@@ -221,8 +220,7 @@ export class KoboMetaBasicneeds {
         patronymicName: answer.ben_det_pat_name_l,
         phone: answer.ben_det_ph_number_l ? '' + answer.ben_det_ph_number_l : undefined,
         status: KoboMetaHelper.mapCashStatus(status),
-        passportSerie: answer.pay_det_pass_ser ?? answer.pay_det_pass_ser_l,
-        passportNum: answer.pay_det_pass_num ?? answer.pay_det_pass_num_l,
+        passportNum: map(answer.pay_det_pass_ser ?? answer.pay_det_pass_ser_l ?? '' + answer.pay_det_pass_num ?? answer.pay_det_pass_num_l ?? '', _ => _ === '' ? undefined : _),
         taxId: answer.pay_det_tax_id_num ?? answer.pay_det_tax_id_num_l,
         taxIdFileName: answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l,
         taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l),

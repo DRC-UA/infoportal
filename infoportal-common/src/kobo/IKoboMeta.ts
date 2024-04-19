@@ -28,19 +28,18 @@ export type IKoboMeta<TTag = any> = {
   office?: DrcOffice
   project: DrcProject[]
   donor: DrcDonor[]
+
   persons?: PersonDetails[]
   personsCount?: number
+
   status?: KoboMetaStatus
   lastStatusUpdate?: Date
 
   taxId?: string
   taxIdFileName?: string
   taxIdFileUrl?: string
-
   idFileName?: string
   idFileUrl?: string
-
-  passportSerie?: string
   passportNum?: string
 
   tags?: TTag
