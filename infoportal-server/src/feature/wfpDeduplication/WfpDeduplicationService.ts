@@ -7,7 +7,7 @@ import {AppFeatureId} from '../access/AccessType'
 import {seq} from '@alexandreannic/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../core/conf/AppConf'
-import {WfpDeduplicationHelper} from './WfpDeduplicationType'
+import {getDrcSuggestion, WfpDeduplication} from '@infoportal-common'
 import {GlobalEvent} from '../../core/GlobalEvent'
 import Event = GlobalEvent.Event
 
@@ -68,7 +68,11 @@ export class WfpDeduplicationService {
         }
       }),
     ])
-    return DbHelper.toPaginate(totalSize)(data.map(WfpDeduplicationHelper.map))
+    return DbHelper.toPaginate(totalSize)(data.map((_: any): WfpDeduplication => {
+      _.suggestion = getDrcSuggestion(_)
+      _.taxId = _.beneficiary.taxId
+      return _
+    }))
   }
 
   readonly uploadTaxId = async (filePath: string) => {

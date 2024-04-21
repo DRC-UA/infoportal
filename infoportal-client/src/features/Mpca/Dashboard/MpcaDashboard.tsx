@@ -1,40 +1,38 @@
 import {Page} from '@/shared/Page'
 import React, {useCallback, useMemo, useState} from 'react'
-import {useI18n} from '../../../core/i18n'
+import {useI18n} from '@/core/i18n'
 import {useMpcaContext} from '../MpcaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {UseBNREComputed, useBNREComputed} from '../useBNREComputed'
 import {Enum, fnSwitch, Seq, seq} from '@alexandreannic/ts-utils'
-import {chain, DrcOffice, koboFormTranslation, KoboIndex, Period, toPercent,} from '@infoportal-common'
+import {DrcOffice, KoboIndex, MpcaEntity, OblastIndex, Period, toPercent, WfpDeduplicationStatus,} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {ChartBar} from '@/shared/charts/ChartBar'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelperOld, makeChartData} from '@/shared/charts/chartHelperOld'
+import {makeChartData} from '@/shared/charts/chartHelperOld'
 import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
 import {Box} from '@mui/material'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {format} from 'date-fns'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {MpcaEntity, MpcaProgram, mpcaRowSources} from '@/core/sdk/server/mpca/MpcaEntity'
 import {DashboardFilterLabel} from '@/shared/DashboardLayout/DashboardFilterLabel'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {MpcaDashboardDeduplication} from '@/features/Mpca/Dashboard/MpcaDashboardDeduplication'
-import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
 import {MpcaDuplicatedCheckPanel} from '@/features/Mpca/Dashboard/MpcaDuplicatedCheck'
 import {useSession} from '@/core/Session/SessionContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {appFeaturesIndex} from '@/features/appFeatureId'
-import {WfpDeduplicationStatus} from '@/core/sdk/server/wfpDeduplication/WfpDeduplication'
 import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicationData'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {appConfig} from '@/conf/AppConfig'
 import {MpcaBudgetTracker} from '@/features/Mpca/Dashboard/MpcaBudgetTracker'
+import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 
 export const today = new Date()
 
@@ -58,14 +56,7 @@ export const MpcaDashboard = () => {
   const [amountType, setAmountType] = usePersistentState<MpcaAmountType>(MpcaAmountType.amountUahFinal, {storageKey: 'mpca-dashboard-amountType'})
   const [currency, setCurrency] = usePersistentState<Currency>(Currency.USD, {storageKey: 'mpca-dashboard-currency'})
 
-  const mappedData = useMemo(() => ctx.data?.map(_ => {
-    if (_.finalDonor === undefined) _.finalDonor = SheetUtils.blank as any
-    if (_.finalProject === undefined) _.finalProject = SheetUtils.blank as any
-    if (_.oblastIso === undefined) _.oblastIso = SheetUtils.blank as any
-    if (_.oblast === undefined) _.oblast = SheetUtils.blank as any
-    if (_.office === undefined) _.office = SheetUtils.blank as any
-    return _
-  }), [ctx.data])
+  const mappedData = ctx.data
 
   const filterShape = useMemo(() => {
     const d = mappedData ?? seq([])
@@ -73,27 +64,28 @@ export const MpcaDashboard = () => {
       source: {
         icon: 'assignment_turned_in',
         label: 'Kobo Form',
-        getValue: _ => _.source,
-        getOptions: () => Enum.keys(mpcaRowSources).map(_ => SheetUtils.buildCustomOption(_, KoboIndex.byName(_).parsed.name))
+        getValue: _ => _.formId,
+        getOptions: (get) => get().map(_ => _.formId).distinct(_ => _).map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation))
       },
       finalDonor: {
         icon: appConfig.icons.donor,
         label: 'Donor',
-        getValue: _ => _.finalDonor,
-        getOptions: () => DataFilter.buildOptions(d.map(_ => _.finalDonor!).distinct(_ => _).sort())
+        getValue: _ => _.donor,
+        getOptions: (get) => DataFilter.buildOptions(get().flatMap(_ => _.donor).distinct(_ => _), true),
+        multiple: true,
       },
       finalProject: {
         icon: appConfig.icons.project,
         label: 'Project',
-        getValue: _ => _.finalProject,
-        getOptions: () => DataFilter.buildOptions(d.map(_ => _.finalProject!).distinct(_ => _).sort()),
+        getValue: _ => _.project,
+        getOptions: (get) => DataFilter.buildOptions(get().flatMap(_ => _.project).distinct(_ => _), true),
+        multiple: true,
       },
       prog: {
         icon: 'groups',
         label: 'Prog',
-        getValue: _ => _.prog,
-        getOptions: () => DataFilter.buildOptionsFromObject(MpcaProgram, true),
-        multiple: true,
+        getValue: _ => _.activity,
+        getOptions: (get) => DataFilter.buildOptions(get().map(_ => _.activity!).distinct(_ => _), true),
       },
       oblast: {
         icon: 'location_on',
@@ -215,7 +207,7 @@ export const _MPCADashboard = ({
         <Div responsive>
           <Div sx={{alignItems: 'stretch'}}>
             <SlideWidget sx={{flex: 1}} icon="person" title="Beneficiaries">
-              <Lazy deps={[data]} fn={() => data.sum(_ => _.hhSize ?? 0)}>
+              <Lazy deps={[data]} fn={() => data.sum(_ => _.personsCount ?? 0)}>
                 {_ => formatLargeNumber(_)}
               </Lazy>
             </SlideWidget>
@@ -261,18 +253,12 @@ export const _MPCADashboard = ({
             </SlidePanel>
             <MpcaDashboardDeduplication data={data}/>
             <SlidePanel title={m.form}>
-              <Lazy deps={[data]} fn={() => chain(ChartHelperOld.single({
-                data: data.map(_ => _.source),
-              })).map(ChartHelperOld.setLabel(new Enum(koboFormTranslation).transform((k, v) => [k, KoboFormSdk.parseFormName(v).name]).get() as any)).get()}>
-                {_ => <ChartBar data={_}/>}
+              <Lazy deps={[data]} fn={() => data.map(_ => ({form: KoboIndex.searchById(_.formId)?.translation}))}>
+                {res => <ChartBarSingleBy data={res} by={_ => _.form}/>}
               </Lazy>
             </SlidePanel>
             <SlidePanel title={m.program}>
-              <Lazy deps={[data]} fn={() => ChartHelperOld.multiple({
-                data: data.map(_ => _.prog),
-              })}>
-                {_ => <ChartBar data={_}/>}
-              </Lazy>
+              <ChartBarSingleBy data={data} by={_ => _.activity}/>
             </SlidePanel>
             {/*<SlidePanel title={m.submissionTime}>*/}
             {/*  <KoboLineChartDate*/}
@@ -310,25 +296,17 @@ export const _MPCADashboard = ({
             {/*</SlidePanel>*/}
             <SlidePanel title={`${m.mpca.assistanceByLocation}`}>
               <Lazy deps={[data, currency, getAmount]} fn={() => {
-                const by = data.groupBy(_ => _.oblastIso!)
+                const by = data.groupBy(_ => OblastIndex.byName(_.oblast).iso)
                 return new Enum(by).transform((k, v) => [k, makeChartData({value: seq(v).sum(x => getAmount(x) ?? 0)})]).get()
               }}>
                 {_ => <UkraineMap data={_} sx={{mx: 2}} maximumFractionDigits={0} base={totalAmount}/>}
               </Lazy>
             </SlidePanel>
             <SlidePanel title={m.donor}>
-              <Lazy deps={[data]} fn={() => ChartHelperOld.single({
-                data: data.map(_ => _.finalDonor ?? ''),
-              })}>
-                {_ => <ChartBar data={_}/>}
-              </Lazy>
+              <ChartBarMultipleBy data={data} by={_ => _.donor}/>
             </SlidePanel>
             <SlidePanel title={m.project}>
-              <Lazy deps={[data]} fn={() => ChartHelperOld.single({
-                data: data.map(_ => _.finalProject ?? SheetUtils.blank),
-              })}>
-                {_ => <ChartBar data={_}/>}
-              </Lazy>
+              <ChartBarMultipleBy data={data} by={_ => _.project}/>
             </SlidePanel>
           </Div>
         </Div>

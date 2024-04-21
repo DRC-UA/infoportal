@@ -1,8 +1,6 @@
 import {MpcaDbService} from './MpcaDbService'
 import {PrismaClient} from '@prisma/client'
-import {ApiPaginate, ApiPaginateHelper, KoboIndex, UUID} from '@infoportal-common'
-import {MpcaDataFilter, MpcaEntity} from './MpcaDbType'
-import {Enum} from '@alexandreannic/ts-utils'
+import {ApiPaginate, ApiPaginateHelper, KoboIndex, MpcaEntity, UUID} from '@infoportal-common'
 import {GlobalEvent} from '../../../core/GlobalEvent'
 import {MemoryDatabase, MemoryDatabaseInterface} from '../../../core/MemoryDatabase'
 import Event = GlobalEvent.Event
@@ -56,18 +54,18 @@ export class MpcaCachedDb {
   readonly refresh: typeof this.meme.refresh
   readonly warmUp: typeof this.meme.warmUp
 
-  readonly search = async ({start, end, ...filters}: MpcaDataFilter): Promise<ApiPaginate<MpcaEntity>> => {
-    const definedFilters = Enum.entries(filters).filter(([k, v]) => v !== undefined && v.length > 0).map(_ => _[0])
+  readonly search = async (): Promise<ApiPaginate<MpcaEntity>> => {
+    // const definedFilters = Enum.entries(filters).filter(([k, v]) => v !== undefined && v.length > 0).map(_ => _[0])
     const data = await this.meme.get()
-    const filteredData = data?.filter(_ => {
-      for (let i = 0; i < definedFilters.length; i++) {
-        const key = definedFilters[i]
-        if (!(filters[key]! as any).includes(_[key])) {
-          return false
-        }
-      }
-      return true
-    })
-    return ApiPaginateHelper.make()(filteredData ?? [])
+    // const filteredData = data?.filter(_ => {
+    //   for (let i = 0; i < definedFilters.length; i++) {
+    //     const key = definedFilters[i]
+    //     if (!(filters[key]! as any).includes(_[key])) {
+    //       return false
+    //     }
+    //   }
+    //   return true
+    // })
+    return ApiPaginateHelper.make()(data ?? [])
   }
 }

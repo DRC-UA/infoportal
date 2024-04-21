@@ -5,7 +5,7 @@ export interface ExcelWorksheet {
   text: string[][]
 }
 
-/** @deprecated use WfpDeduplication SDK*/
+/** @deprecated use WfpDeduplication.ts SDK*/
 enum MPCADeduplicationResult {
   Removed = 'Assistance Removed',
   Deduplicated = 'Deduplicated - see deduplication report.',
@@ -14,10 +14,10 @@ enum MPCADeduplicationResult {
   Success = 'Success - loaded using incremental delta option with keep option',
 }
 
-/** @deprecated use WfpDeduplication SDK*/
+/** @deprecated use WfpDeduplication.ts SDK*/
 type MPCADeduplicationOffice = 'HRK' | 'DNK' | 'CEJ'
 
-/** @deprecated use WfpDeduplication SDK*/
+/** @deprecated use WfpDeduplication.ts SDK*/
 interface MPCASheetDeduplication {
   list: string
   taxId: string
@@ -32,7 +32,7 @@ interface MPCASheetDeduplication {
   type: 'HoH Tax ID'
 }
 
-/** @deprecated use WfpDeduplication SDK*/
+/** @deprecated use WfpDeduplication.ts SDK*/
 interface MPCASheetTransaction {
   list: string
   taxId: string
@@ -50,7 +50,7 @@ interface MPCASheetTransaction {
 
 const parseMsDate = (date: string) => date as any//parse(date, 'yyyyMMdd', new Date())
 
-  /** @deprecated use WfpDeduplication SDK*/
+  /** @deprecated use WfpDeduplication.ts SDK*/
 const excelIds = {
   HRK: '01CKP6OHZNTVVLUNB7HNCLMK2FYE7MQ32N',
   DNK: '01CKP6OHZNTVVLUNB7HNCLMK2FYE7MQ32N',
@@ -78,7 +78,7 @@ export class MicrosoftGraphClient {
   }
 
 
-  /** @deprecated use WfpDeduplication SDK*/
+  /** @deprecated use WfpDeduplication.ts SDK*/
   private readonly fetchMPCATransaction = (office: 'HRK' | 'DNK' | 'CEJ', sheetName = 'Trans_Res'): Promise<MPCASheetTransaction[]> => {
     return this.fetchExcelData(excelIds[office], sheetName).then(_ => {
       const z: MPCASheetTransaction[] = _.text.map(row => ({
@@ -100,7 +100,7 @@ export class MicrosoftGraphClient {
     })
   }
 
-  /** @deprecated use WfpDeduplication SDK*/
+  /** @deprecated use WfpDeduplication.ts SDK*/
   private readonly fetchMPCADeduplication = (office: 'HRK' | 'DNK' | 'CEJ', sheetName = 'DeDup_Res'): Promise<MPCASheetDeduplication[]> => {
     return this.fetchExcelData(excelIds[office], sheetName).then(_ => {
       const z: MPCASheetDeduplication[] = _.text.map(row => ({

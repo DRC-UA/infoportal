@@ -1,23 +1,22 @@
 import React, {useEffect, useState} from 'react'
 import {Page} from '@/shared/Page'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {useMpcaContext} from '../MpcaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {map} from '@alexandreannic/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {appConfig} from '@/conf/AppConfig'
-import {koboIndex, KoboIndex} from '@infoportal-common'
+import {koboIndex, KoboIndex, koboMetaStatusLabel, MpcaEntity} from '@infoportal-common'
 import {IpBtn} from '@/shared/Btn'
-import {TableImg} from '@/shared/TableImg/TableImg'
-import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicationData'
 import {formatLargeNumber} from '@/core/i18n/localization/en'
-import {MpcaEntity, MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
 import {SelectDrcProject} from '@/shared/customInput/SelectDrcProject'
-import {Box, FormControlLabel, Switch} from '@mui/material'
+import {Box} from '@mui/material'
 import {useAsync} from '@/shared/hook/useAsync'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {Datatable} from '@/shared/Datatable/Datatable'
+import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicationData'
+import {TableImg} from '@/shared/TableImg/TableImg'
+import {OptionLabelTypeCompact} from '@/shared/customInput/SelectStatus'
 
 export const getKoboImagePath = (url: string): string => {
   return appConfig.apiURL + `/kobo-api/${koboIndex.drcUa.server.prod}/attachment?path=${url.split('api')[1]}`
@@ -39,7 +38,7 @@ export const MpcaData = () => {
   return (
     <Page width="full">
       <Panel sx={{overflow: 'visible'}}>
-        <Sheet<MpcaEntity>
+        <Datatable<MpcaEntity>
           id="mpca"
           title={m.data}
           showExportBtn
@@ -114,124 +113,135 @@ export const MpcaData = () => {
           }}
           columns={[
             {
+              type: 'select_one',
+              id: 'status',
+              head: m.status,
+              width: 0,
+              align: 'center',
+              render: _ => {
+                return {
+                  label: <OptionLabelTypeCompact type={koboMetaStatusLabel[_.status!]}/>,
+                  value: _.status,
+                  option: _.status,
+                }
+              },
+            },
+            {
               id: 'id',
               head: m.koboId,
               type: 'string',
-              render: _ => _.id,
+              renderQuick: _ => _.koboId,
             },
             {
               id: 'source',
               head: m.form,
               type: 'select_one',
-              // options: () => SheetUtils.buildOptions(Enum.keys(MpcaRowSource)),
-              render: _ => KoboIndex.byName(_.source).parsed.name,
+              renderQuick: _ => KoboIndex.searchById(_.formId)?.translation,
             },
             {
               id: 'date',
               head: m.date,
               type: 'date',
-              renderValue: _ => _.date,
-              render: _ => formatDate(_.date),
+              render: _ => {
+                return {
+                  label: formatDate(_.date),
+                  value: _.date,
+                }
+              }
             },
             {
               id: 'donor',
               head: m.donor,
-              type: 'select_one',
-              // options: () => SheetUtils.buildOptions(Enum.keys(DrcDonor), true),
-              render: _ => _.finalDonor ?? '',
+              type: 'select_multiple',
+              options: () => DatatableUtils.buildOptions(ctx.data?.flatMap(_ => _.donor!).distinct(_ => _) ?? [], true),
+              renderQuick: _ => _.donor,
             },
             {
               id: 'project',
               head: m.project,
-              type: 'select_one',
+              type: 'select_multiple',
               width: 160,
-              // options: () => SheetUtils.buildOptions(Enum.keys(DrcProject), true),
-              render: _ => _.project ?? SheetUtils.blank,
-            },
-            {
-              id: 'project_overridden',
-              head: m.mpca.projectOverride,
-              width: 180,
-              type: 'select_one',
-              renderValue: row => row.tags?.projects?.[0] ?? SheetUtils.blank,
-              renderOption: row => row.tags?.projects?.[0] ?? SheetUtils.blank,
-              render: _ => (
-                <SelectDrcProject label={null} options={MpcaHelper.projects} value={_.tags?.projects?.[0]} onChange={p => {
-                  ctx.asyncUpdates.call({
-                    formId: KoboIndex.byName(_.source).id,
-                    answerIds: [_.id],
-                    key: 'projects',
-                    value: p ? [p] : null,
-                  })
-                }}/>
-              )
-            },
-            {
-              id: 'project_final',
-              width: 160,
-              head: m.mpca.projectFinal,
-              type: 'select_one',
-              render: _ => _.finalProject ?? SheetUtils.blank,
+              options: () => DatatableUtils.buildOptions(ctx.data?.flatMap(_ => _.project!).distinct(_ => _) ?? [], true),
+              renderQuick: _ => _.project,
             },
             {
               id: 'prog',
               head: m.program,
-              type: 'select_multiple',
-              // options: () => SheetUtils.buildOptions(Enum.keys(MpcaProgram), true),
-              renderValue: _ => _.prog,
-              render: _ => _.prog?.join(' | '),
-              renderExport: _ => _.prog?.join(' | '),
+              type: 'select_one',
+              renderQuick: _ => _.activity,
             },
             {
               id: 'oblast',
               head: m.oblast,
               type: 'select_one',
-              // options: () => SheetUtils.buildOptions(Enum.values(OblastIndex.oblastByISO), true),
-              render: _ => _.oblast ?? SheetUtils.blank,
+              renderQuick: _ => _.oblast,
+            },
+            {
+              id: 'hromada',
+              head: m.hromada,
+              type: 'select_one',
+              renderQuick: _ => _.hromada,
+            },
+            {
+              id: 'raion',
+              head: m.raion,
+              type: 'select_one',
+              renderQuick: _ => _.raion,
             },
             {
               id: 'office',
               head: m.office,
               type: 'select_one',
-              // options: () => SheetUtils.buildOptions(Enum.values(DrcOffice), true),
-              render: _ => _.office ?? SheetUtils.blank,
+              renderQuick: _ => _.office,
             },
             {
               id: 'enumerator',
               head: m.enumerator,
               type: 'string',
               // options: () => SheetUtils.buildOptions(Enum.values(DrcOffice), true),
-              render: _ => _.enumerator ?? SheetUtils.blank,
+              renderQuick: _ => _.enumerator,
             },
             {
               id: 'hhSize',
               head: m.hhSize,
               type: 'number',
-              render: _ => _.hhSize,
+              renderQuick: _ => _.personsCount,
             },
             {
               id: 'amountUahSupposed',
               align: 'right',
               head: m.amountUAH,
               type: 'number',
-              renderValue: _ => _.amountUahSupposed,
-              render: _ => _.amountUahSupposed ? formatLargeNumber(_.amountUahSupposed) : undefined,
+              render: _ => {
+                return {
+                  value: _.amountUahSupposed,
+                  label: _.amountUahSupposed ? formatLargeNumber(_.amountUahSupposed) : undefined
+                }
+              },
             },
             {
               id: 'amountUahDedup',
               align: 'right',
               head: 'Amount dedup',
               type: 'number',
-              renderValue: _ => _.amountUahDedup,
-              render: _ => _.amountUahDedup ? formatLargeNumber(_.amountUahDedup) : undefined,
+              render: _ => {
+                return {
+                  value: _.amountUahDedup,
+                  label: _.amountUahDedup ? formatLargeNumber(_.amountUahDedup) : undefined
+                }
+              },
             },
             {
               id: 'amountUahFinal',
               align: 'right',
               head: 'Amount final',
               type: 'number',
-              renderValue: _ => _.amountUahFinal,
-              render: _ => _.amountUahFinal ? formatLargeNumber(_.amountUahFinal) : undefined,
+              render: _ => {
+                return {
+                  value: _.amountUahFinal,
+                  label: _.amountUahFinal ? formatLargeNumber(_.amountUahFinal) : undefined,
+                }
+              }
             },
             {
               id: 'deduplication',
@@ -240,102 +250,82 @@ export const MpcaData = () => {
               head: m.deduplication,
               type: 'select_one',
               // options: () => SheetUtils.buildOptions(Enum.keys(WfpDeduplicationStatus), true),
-              tooltip: _ => _.deduplication && m.mpca.status[_.deduplication.status],
-              renderValue: _ => _.deduplication?.status ?? SheetUtils.blank,
-              render: _ => _.deduplication && <DeduplicationStatusIcon status={_.deduplication.status}/>,
+              render: _ => {
+                return {
+                  tooltip: _.deduplication && m.mpca.status[_.deduplication.status],
+                  value: _.deduplication?.status,
+                  option: _.deduplication?.status,
+                  label: _.deduplication && <DeduplicationStatusIcon status={_.deduplication.status}/>
+                }
+              },
             },
-            {
-              id: 'suggestion',
-              head: m.suggestion,
-              type: 'select_one',
-              // options: () => SheetUtils.buildOptions(Enum.keys(DrcSupportSuggestion), true),
-              render: _ => _.deduplication?.suggestion ?? SheetUtils.blank,
-            },            // {
-            //   id: 'deduplicationFile',
-            //   head: 'deduplicationFile',
-            //   type: 'select_one',
-            //   options: () => getAllPossibleValues('deduplicationFile').map(_ => ({value: _, label: _})),
-            //   render: _ => <Txt skeleton={50}/>
-            // },
             // {
-            //   id: 'duplication',
+            //   id: 'suggestion',
+            //   head: m.suggestion,
             //   type: 'select_one',
-            //   head: m.status,
-            //   options: () => Enum.keys(DeduplicationStatus).map(_ => ({value: _, label: _})),
-            //   align: 'center',
-            //   render: _ => fnSwitch(_.duplication!, {
-            //     duplicate: <TableIcon color="warning" children="content_copy"/>,
-            //     no_duplicate: <TableIcon color="success" children="check_circle"/>,
-            //     pending: <TableIcon color="disabled" children="schedule"/>,
-            //   }, () => <Txt skeleton={30}/>)
-            // },
+            //   // options: () => SheetUtils.buildOptions(Enum.keys(DrcSupportSuggestion), true),
+            //   renderQuick: _ => _.deduplication?.suggestion,
+            // },            // {
+            // //   id: 'deduplicationFile',
+            // //   head: 'deduplicationFile',
+            // //   type: 'select_one',
+            // //   options: () => getAllPossibleValues('deduplicationFile').map(_ => ({value: _, label: _})),
+            // //   render: _ => <Txt skeleton={50}/>
+            // // },
+            // // {
+            // //   id: 'duplication',
+            // //   type: 'select_one',
+            // //   head: m.status,
+            // //   options: () => Enum.keys(DeduplicationStatus).map(_ => ({value: _, label: _})),
+            // //   align: 'center',
+            // //   render: _ => fnSwitch(_.duplication!, {
+            // //     duplicate: <TableIcon color="warning" children="content_copy"/>,
+            // //     no_duplicate: <TableIcon color="success" children="check_circle"/>,
+            // //     pending: <TableIcon color="disabled" children="schedule"/>,
+            // //   }, () => <Txt skeleton={30}/>)
+            // // },
             {
               type: 'string',
               id: 'taxId',
               head: m.taxID,
-              render: _ => _.taxId,
+              renderQuick: _ => _.taxId,
             },
             {
               id: 'taxIdImg',
               align: 'center',
               head: m.taxID,
-              renderExport: false,
-              render: _ => map(_.taxIdFileURL, url =>
-                <TableImg tooltipSize={650} url={getKoboImagePath(url.download_small_url)}/>
-              )
-            },
-            {
               type: 'string',
-              id: 'passportSerie',
-              head: m.passportSerie,
-              render: _ => _.passportSerie
+              render: _ => {
+                return {
+                  export: _.taxIdFileUrl,
+                  value: _.taxIdFileName,
+                  label: _.taxIdFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.taxIdFileUrl)}/>
+                }
+              }
             },
             {
               type: 'string',
               id: 'passportNum',
               head: m.passportNumber,
-              render: _ => _.passportNum
+              renderQuick: _ => _.passportNum
             },
             {
-              id: 'idFileImg', head: m.id, align: 'center', render: _ => map(_.idFileURL, url =>
-                <TableImg tooltipSize={650} url={getKoboImagePath(url.download_small_url)}/>
-              )
+              id: 'idFileImg',
+              align: 'center',
+              head: m.taxID,
+              type: 'string',
+              render: _ => {
+                return {
+                  export: _.idFileUrl,
+                  value: _.idFileName,
+                  label: _.idFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.idFileUrl)}/>
+                }
+              }
             },
-            {type: 'string', id: 'lastName', head: m.lastName, render: _ => _.lastName},
-            {type: 'string', id: 'firstName', head: m.firstName, render: _ => _.firstName},
-            {type: 'string', id: 'patronyme', head: m.patronyme, render: _ => _.patronyme},
-            {
-              id: 'displacement',
-              head: m.displacementStatus,
-              render: _ => _.benefStatus,
-              type: 'select_one',
-              // options: () => SheetUtils.buildOptions(Enum.keys(bn_ReOptions.ben_det_res_stat)),
-            },
-            {id: 'phone', type: 'string', head: m.phone, render: _ => _.phone},
-            {
-              id: 'status',
-              type: 'select_one',
-              head: m.status,
-              render: _ => _.tags?.status ?? DatatableUtils.blank,
-            }
-            // {
-            //   id: 'committed',
-            //   type: 'select_one',
-            //   head: m.mpca.committed,
-            //   tooltip: null,
-            //   renderValue: row => row.tags?.committed ? 'true' : 'false',
-            //   renderOption: row => row.tags?.committed ? m.mpca.committed : SheetUtils.blankLabel,
-            //   render: row => (
-            //     <>
-            //       <Switch size="small" checked={!!row.tags?.committed} onChange={(e, checked) => ctx.asyncUpdates.call({
-            //         formId: KoboIndex.byName(row.source).id,
-            //         answerIds: [row.id],
-            //         key: 'committed',
-            //         value: checked ? new Date() : null,
-            //       })}/>
-            //     </>
-            //   )
-            // }
+            {type: 'string', id: 'lastName', head: m.lastName, renderQuick: _ => _.lastName},
+            {type: 'string', id: 'firstName', head: m.firstName, renderQuick: _ => _.firstName},
+            {type: 'string', id: 'patronyme', head: m.patronyme, renderQuick: _ => _.patronymicName},
+            {id: 'phone', type: 'string', head: m.phone, renderQuick: _ => _.phone},
           ]}
         />
       </Panel>

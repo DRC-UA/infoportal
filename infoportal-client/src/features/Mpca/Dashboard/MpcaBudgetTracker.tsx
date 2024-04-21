@@ -1,4 +1,4 @@
-import {MpcaEntity} from '@/core/sdk/server/mpca/MpcaEntity'
+import {MpcaEntity} from '@infoportal-common'
 import {Seq, seq, toPercent} from '@alexandreannic/ts-utils'
 import React, {useEffect, useMemo, useState} from 'react'
 import {DrcOffice, DrcProject, DrcProjectHelper, groupBy} from '@infoportal-common'

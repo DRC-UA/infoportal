@@ -1,7 +1,8 @@
 import {ApiClient} from '../ApiClient'
 import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {ApiPaginate, ApiSdkUtils} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {MpcaEntity, MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
+import { MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
+import {MpcaEntity} from '@infoportal-common'
 
 export class MpcaSdk {
   constructor(private client: ApiClient) {
@@ -14,5 +15,4 @@ export class MpcaSdk {
   readonly refresh = (): Promise<void> => {
     return this.client.post(`/mpca/refresh`)
   }
-
 }
