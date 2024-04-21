@@ -7,6 +7,7 @@ import {WfpDeduplicationService} from '../../wfpDeduplication/WfpDeduplicationSe
 import {appConf} from '../../../core/conf/AppConf'
 import {KoboSyncServer} from '../../kobo/KoboSyncServer'
 import {KoboMetaService} from '../../kobo/meta/KoboMetaService'
+import {addMonths} from 'date-fns'
 
 export class MpcaDbService {
 
@@ -61,10 +62,9 @@ export class MpcaDbService {
     if (!row.taxId) return res
     const dedup = wfpIndex[row.taxId]
     if (!dedup || dedup.length === 0) return res
-    const time = row.date.getTime()
     res.deduplication = wfpIndex[row.taxId].find(_ => _.existingStart && _.existingEnd
-      && time > _.existingStart.getTime()
-      && time < _.existingEnd.getTime()
+      && addMonths(row.date, 3).getTime() > _.existingStart.getTime()
+      && row.date.getTime() < _.existingEnd.getTime()
     ) ?? {
       suggestion: DrcSupportSuggestion.ThreeMonthsNoDuplication,
       amount: res.amountUahSupposed!,
