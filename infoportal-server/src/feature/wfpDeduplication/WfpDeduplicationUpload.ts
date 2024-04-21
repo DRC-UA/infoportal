@@ -48,6 +48,7 @@ export class WfpDeduplicationUpload {
               beneficiaryId: _.beneficiaryId,
               status: WfpDeduplicationStatus.NotDeduplicated,
               validFrom: _.validFrom,
+              category: _.category,
             })
           })
         })
@@ -86,6 +87,7 @@ export class WfpDeduplicationUpload {
               message: _.message,
               status,
               validFrom: _.validFrom,
+              category: _.category,
               ...existing,
             })
           })

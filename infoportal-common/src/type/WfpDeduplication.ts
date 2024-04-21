@@ -8,6 +8,16 @@ export enum WfpDeduplicationStatus {
   Error = 'Error',
 }
 
+export enum WfpCategory {
+  'CASH-MPA' = 'CASH-MPA',
+  'CASH-RENT' = 'CASH-RENT',
+  'CASH-WC' = 'CASH-WC',
+  'CASH-WE' = 'CASH-WE',
+  'CASH-WHA' = 'CASH-WHA',
+  'CASH-WNFI' = 'CASH-WNFI',
+  'CASH-WU' = 'CASH-WU',
+}
+
 export interface WfpDeduplication {
   id: string
   amount: number
@@ -25,6 +35,7 @@ export interface WfpDeduplication {
   existingStart?: Date
   existingEnd?: Date
   existingAmount?: number
+  category: WfpCategory
   suggestion: DrcSupportSuggestion
 }
 

@@ -3,10 +3,9 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import React, {useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {WfpDeduplicationStatus} from '@infoportal-common'
+import {DrcOffice, WfpDeduplicationStatus} from '@infoportal-common'
 import {Enum, fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {Txt} from 'mui-extension'
-import {DrcOffice} from '@infoportal-common'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {format} from 'date-fns'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
@@ -77,6 +76,12 @@ export const WfpDeduplicationData = () => {
               renderQuick: _ => _.office,
               type: 'select_one',
               options: () => Enum.values(DrcOffice).map(_ => ({label: _, value: _}))
+            },
+            {
+              type: 'select_one',
+              id: 'category',
+              head: m.category,
+              renderQuick: _ => _.category,
             },
             // {
             //   id: 'beneficiaryId',

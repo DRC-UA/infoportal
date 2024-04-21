@@ -1,7 +1,18 @@
 import {PrismaClient} from '@prisma/client'
 import {KoboMappedAnswersService} from '../../kobo/KoboMappedAnswersService'
 import {Seq, seq} from '@alexandreannic/ts-utils'
-import {ApiPaginate, ApiPaginateHelper, DrcProgram, DrcSupportSuggestion, IKoboMeta, KoboIndex, MpcaEntity, WfpDeduplication, WfpDeduplicationStatus} from '@infoportal-common'
+import {
+  ApiPaginate,
+  ApiPaginateHelper,
+  DrcProgram,
+  DrcSupportSuggestion,
+  IKoboMeta,
+  KoboIndex,
+  MpcaEntity,
+  WfpCategory,
+  WfpDeduplication,
+  WfpDeduplicationStatus
+} from '@infoportal-common'
 import {KoboAnswerFilter} from '../../kobo/KoboService'
 import {WfpDeduplicationService} from '../../wfpDeduplication/WfpDeduplicationService'
 import {appConf} from '../../../core/conf/AppConf'
@@ -74,6 +85,7 @@ export class MpcaDbService {
       validFrom: row.date,
       wfpId: -1,
       id: '',
+      category: WfpCategory['CASH-MPA'], // TODO Depends!
       status: WfpDeduplicationStatus.NotDeduplicated,
     }
     if (res.deduplication) {

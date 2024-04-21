@@ -178,6 +178,7 @@ model MpcaWfpDeduplication {
   office         String?
   fileName       String?
   fileUpload     DateTime?
+  category       String?
   amount         Int
   wfpId          Int
   createdAt      DateTime
