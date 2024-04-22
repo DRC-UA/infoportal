@@ -15,6 +15,7 @@ import {
 import {KoboMetaOrigin} from './KoboMetaType'
 import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashRegistration'
 import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
+import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 
 export class KoboMetaMapperEcrec {
 
@@ -55,6 +56,11 @@ export class KoboMetaMapperEcrec {
         phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
         status: KoboMetaHelper.mapCashStatus(row.tags?.status),
         lastStatusUpdate: row.tags?.lastStatusUpdate,
+        passportNum: answer.pay_det_pass_num,
+        taxIdFileName: answer.pay_det_tax_id_ph,
+        taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+        idFileName: answer.pay_det_id_ph,
+        idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph),
       })
     })
   }
@@ -98,6 +104,11 @@ export class KoboMetaMapperEcrec {
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
       status: KoboMetaHelper.mapCashStatus(row.tags?.status),
       lastStatusUpdate: row.tags?.lastStatusUpdate,
+      passportNum: answer.pay_det_pass_num,
+      taxIdFileName: answer.pay_det_tax_id_ph,
+      taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+      idFileName: answer.pay_det_id_ph,
+      idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph),
     })
   }
 }

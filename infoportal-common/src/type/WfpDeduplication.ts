@@ -1,11 +1,21 @@
-import {DrcOffice} from '@infoportal-common'
-import {getOverlapMonths} from '../../helper/Utils'
+import {DrcOffice} from './Drc'
+import {getOverlapMonths} from '../utils'
 
 export enum WfpDeduplicationStatus {
   Deduplicated = 'Deduplicated',
   PartiallyDeduplicated = 'PartiallyDeduplicated',
   NotDeduplicated = 'NotDeduplicated',
   Error = 'Error',
+}
+
+export enum WfpCategory {
+  'CASH-MPA' = 'CASH-MPA',
+  'CASH-RENT' = 'CASH-RENT',
+  'CASH-WC' = 'CASH-WC',
+  'CASH-WE' = 'CASH-WE',
+  'CASH-WHA' = 'CASH-WHA',
+  'CASH-WNFI' = 'CASH-WNFI',
+  'CASH-WU' = 'CASH-WU',
 }
 
 export interface WfpDeduplication {
@@ -25,16 +35,8 @@ export interface WfpDeduplication {
   existingStart?: Date
   existingEnd?: Date
   existingAmount?: number
+  category: WfpCategory
   suggestion: DrcSupportSuggestion
-}
-
-export class WfpDeduplicationHelper {
-
-  static readonly map = (_: any): WfpDeduplication => {
-    _.suggestion = getDrcSuggestion(_)
-    _.taxId = _.beneficiary.taxId
-    return _
-  }
 }
 
 export enum DrcSupportSuggestion {
@@ -49,7 +51,13 @@ export enum DrcSupportSuggestion {
   ManualCheck = 'ManualCheck',
 }
 
-const unAgencies = ['FAO', 'IOM', 'UNHCR', 'UNICEF', 'WFP']
+const unAgencies = [
+  'FAO',
+  'IOM',
+  'UNHCR',
+  'UNICEF',
+  'WFP',
+]
 
 export const getDrcSuggestion = (_: WfpDeduplication): DrcSupportSuggestion => {
   if (!_.existingOrga || !_.existingStart || !_.existingEnd) return DrcSupportSuggestion.ThreeMonthsNoDuplication

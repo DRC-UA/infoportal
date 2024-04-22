@@ -77,37 +77,38 @@ model KoboPerson {
 }
 
 model KoboMeta {
-  id                  String      @id @default(uuid())
-  koboId              String
-  uuid                String
-  answer              KoboAnswers @relation(fields: [koboId], references: [id], onDelete: Cascade)
-  formId              String
-  referencedFormId    String?
-  date                DateTime
-  updatedAt           DateTime?
-  oblast              String?
-  raion               String?
-  hromada             String?
-  settlement          String?
-  personsCount        Int?
-  enumerator          String?
-  taxId               String?
-  firstName           String?
-  lastName            String?
-  patronymicName      String?
-  phone               String?
-  activity            String?
-  sector              String?
-  office              String?
-  project             String[]
-  donor               String[]
-  displacement        String?
-  address             String?
-  status              String?
-  amount              Int?
-  deduplicationStatus String?
-  passportSerie       String?
-  passportNum         String?
+  id               String      @id @default(uuid())
+  koboId           String
+  uuid             String
+  answer           KoboAnswers @relation(fields: [koboId], references: [id], onDelete: Cascade)
+  formId           String
+  referencedFormId String?
+  date             DateTime
+  updatedAt        DateTime?
+  oblast           String?
+  raion            String?
+  hromada          String?
+  settlement       String?
+  personsCount     Int?
+  enumerator       String?
+  taxId            String?
+  firstName        String?
+  lastName         String?
+  patronymicName   String?
+  phone            String?
+  activity         String?
+  sector           String?
+  office           String?
+  project          String[]
+  donor            String[]
+  displacement     String?
+  address          String?
+  status           String?
+  taxIdFileName    String?
+  taxIdFileUrl     String?
+  idFileName       String?
+  idFileUrl        String?
+  passportNum      String?
 
   lastStatusUpdate DateTime?
   tags             Json?
@@ -177,6 +178,7 @@ model MpcaWfpDeduplication {
   office         String?
   fileName       String?
   fileUpload     DateTime?
+  category       String?
   amount         Int
   wfpId          Int
   createdAt      DateTime

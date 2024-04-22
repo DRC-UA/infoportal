@@ -23,6 +23,7 @@ import {
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
+import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 
 export namespace KoboMetaMapperShelter {
 
@@ -89,6 +90,11 @@ export namespace KoboMetaMapperShelter {
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
       status,
       lastStatusUpdate: row.tags?.lastStatusUpdate,
+      passportNum: answer.pay_det_pass_num,
+      taxIdFileName: answer.pay_det_tax_id_ph,
+      taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+      idFileName: answer.pay_det_id_ph,
+      idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph),
     })
   }
 
@@ -121,6 +127,11 @@ export namespace KoboMetaMapperShelter {
       phone: answer.bin ? '' + answer.bin : undefined,
       status: KoboMetaHelper.mapCashStatus(row.tags?.status),
       lastStatusUpdate: row.tags?.lastStatusUpdate,
+      passportNum: answer.pay_det_pass_num,
+      taxIdFileName: answer.pay_det_tax_id_ph,
+      taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+      idFileName: answer.pay_det_id_ph,
+      idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph),
     })
   }
 
@@ -153,6 +164,11 @@ export namespace KoboMetaMapperShelter {
       phone: answer.ben_det_ph_number_l ? '' + answer.ben_det_ph_number_l : undefined,
       status: KoboMetaHelper.mapCashStatus(row.tags?.status),
       lastStatusUpdate: row.tags?.lastStatusUpdate,
+      passportNum: answer.pay_det_pass_num,
+      taxIdFileName: answer.pay_det_tax_id_ph,
+      taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+      idFileName: answer.pay_det_id_ph,
+      idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph),
     })
   }
 

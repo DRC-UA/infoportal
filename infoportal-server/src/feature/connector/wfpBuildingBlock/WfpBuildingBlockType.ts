@@ -1,3 +1,5 @@
+import {WfpCategory} from '@infoportal-common'
+
 export interface WfpFilters {
   limit?: number
   offset?: number
@@ -20,6 +22,7 @@ export interface AssistanceProvided {
   expiry: Date
   id: number
   validFrom: Date
+  category: WfpCategory
 }
 
 export class AssistanceProvided {
@@ -44,6 +47,7 @@ export interface AssistancePrevented {
   // "Partially deduplicated - Already assisted by CARITAS from 20221201 to 20221231 for UAH  8,880.00  for CASH-MPA"
   message: string
   validFrom: Date
+  category: WfpCategory
 }
 
 export class AssistancePrevented {

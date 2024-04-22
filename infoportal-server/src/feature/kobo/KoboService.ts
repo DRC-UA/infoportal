@@ -1,6 +1,6 @@
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
 import {ApiPaginate, ApiPaginateHelper, ApiPagination, KoboIndex, UUID} from '@infoportal-common'
-import {DbKoboAnswer, KoboAnswerId, KoboId} from '../connector/kobo/KoboClient/type/KoboAnswer'
+import {DbKoboAnswer, KoboAnswerId, KoboAttachment, KoboId} from '../connector/kobo/KoboClient/type/KoboAnswer'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {filterKoboQuestionType, KoboApiQuestion} from '../connector/kobo/KoboClient/type/KoboApiForm'
 import {duration, Enum, fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
@@ -139,7 +139,7 @@ export class KoboService {
         end: d.end,
         date: d.date,
         version: d.version ?? undefined,
-        attachments: d.attachments,
+        attachments: d.attachments as KoboAttachment[],
         geolocation: d.geolocation,
         submissionTime: d.submissionTime,
         id: d.id,

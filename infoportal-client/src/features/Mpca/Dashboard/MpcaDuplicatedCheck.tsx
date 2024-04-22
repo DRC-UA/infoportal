@@ -1,4 +1,4 @@
-import {MpcaEntity} from '@/core/sdk/server/mpca/MpcaEntity'
+import {MpcaEntity} from '@infoportal-common'
 import {Enum, Seq, seq} from '@alexandreannic/ts-utils'
 import {Sheet} from '@/shared/Sheet/Sheet'
 import React, {ReactNode, useMemo, useState} from 'react'

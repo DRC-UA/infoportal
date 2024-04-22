@@ -26,7 +26,7 @@ export class ControllerMpca {
         end: yup.date(),
       })
     }).validate(req.body)
-    const data = await this.cache.search(body.filters)
+    const data = await this.cache.search()
     res.send(data)
   }
 }

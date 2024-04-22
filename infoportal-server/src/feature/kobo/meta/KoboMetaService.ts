@@ -189,6 +189,7 @@ export class KoboMetaService {
         date: true,
         id: true,
         tags: true,
+        attachments: true,
         updatedAt: true,
       },
       where: {formId}

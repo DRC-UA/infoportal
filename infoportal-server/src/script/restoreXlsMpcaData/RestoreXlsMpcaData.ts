@@ -3,7 +3,7 @@ import fs from 'fs'
 import {appConf} from '../../core/conf/AppConf'
 import {ApiClient} from '../../core/client/ApiClient'
 import {seq} from '@alexandreannic/ts-utils'
-import {MpcaEntity} from '../../feature/mpca/db/MpcaDbType'
+import {MpcaEntity} from '@infoportal-common'
 import {differenceInDays} from 'date-fns'
 
 interface XLSD {

@@ -518,6 +518,7 @@ back_donor_l: {
 	'uhf_hrk': `UHF-4`,
 	'uhf_lwo': `UHF-4`,
 	'uhf_nlv': `UHF-4`,
+	'dnk_bha_345': `BHA2`,
 	'bha_lwo': `BHA`,
 	'bha_chj': `BHA`,
 	'bha_dnk': `BHA`,

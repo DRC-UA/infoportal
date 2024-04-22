@@ -1,11 +1,11 @@
 import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
 import {MicrosoftGraphClient} from '@/core/sdk/microsoftGraph/microsoftGraphClient'
-import {CashStatus, DrcProjectHelper, KoboIndex, NonNullableKey} from '@infoportal-common'
+import {CashStatus, KoboIndex, MpcaEntity, NonNullableKey} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {MpcaPayment} from '@/core/sdk/server/mpcaPaymentTool/MpcaPayment'
 import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
-import {MpcaEntity, MpcaTypeTag} from '@/core/sdk/server/mpca/MpcaEntity'
-import {Enum, map, Seq, seq} from '@alexandreannic/ts-utils'
+import {MpcaTypeTag} from '@/core/sdk/server/mpca/MpcaEntity'
+import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {KoboAnswerId, KoboId} from '@/core/sdk/server/kobo/Kobo'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
@@ -70,8 +70,6 @@ export const MpcaProvider = ({
 
   const mappedData = useMemo(() => {
     return fetcherData.get?.map(_ => {
-      _.finalProject = _.tags?.projects?.[0] ?? _.project
-      _.finalDonor = map(_.tags?.projects?.[0], p => DrcProjectHelper.donorByProject[p]) ?? _.donor
       _.amountUahCommitted = _.tags?.status === CashStatus.Paid ? _.amountUahFinal : 0
       return _
     })
@@ -92,10 +90,10 @@ export const MpcaProvider = ({
       })
     } else {
       const data = answerIds.map(_ => fetcherData.get![dataIndex[_]])
-      const gb = seq(data).groupBy(_ => _.source)
-      await Promise.all(Enum.entries(gb).map(([formName, answers]) => {
+      const gb = seq(data).groupBy(_ => _.formId)
+      await Promise.all(Obj.entries(gb).map(([formId, answers]) => {
         return updateByFormId({
-          formId: KoboIndex.byName(formName).id,
+          formId,
           answerIds: answers.map(_ => _.id),
           key,
           value,

@@ -1,6 +1,6 @@
 import {CartesianGrid, LabelList, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,} from 'recharts'
 import * as React from 'react'
-import {useState} from 'react'
+import {ReactNode, useState} from 'react'
 import {Box, BoxProps, Checkbox, Theme, useTheme} from '@mui/material'
 import {map} from '@alexandreannic/ts-utils'
 import {styleUtils} from '@/core/theme'
@@ -24,6 +24,7 @@ export interface ChartLinePropsBase extends Pick<BoxProps, 'sx'> {
   hideLegend?: boolean
   percent?: boolean
   loading?: boolean
+  children?: ReactNode
 }
 
 export interface ChartLineProps extends ChartLinePropsBase {
@@ -39,11 +40,12 @@ export type ChartLineData = Record<string, number> & {
 export const ChartLine = ({
   data,
   loading,
+  children,
   sx,
   colorsByKey,
   colors = chartConfig.defaultColors,
   translation,
-  hideYTicks,
+  hideYTicks = true,
   hideXTicks,
   hideLegend,
   disableAnimation,
@@ -71,15 +73,16 @@ export const ChartLine = ({
           ))}
         </Box>
       )}
-      <Box sx={{height, ml: -2 - (hideYTicks ? 4 : 0), mb: hideXTicks ? -4 : 0, ...sx}}>
+      <Box sx={{height, ml: hideYTicks ? 0 : -2, mb: hideXTicks ? -4 : 0, ...sx}}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart height={height - 60} data={data}>
-            <CartesianGrid strokeDasharray="3 3" strokeWidth={1}/>
+            <CartesianGrid strokeDasharray="1 1" strokeWidth={.5} vertical={false}/>
             {!hideLegend && (
               <Legend {...commonLegendProps}/>
             )}
             <XAxis dataKey="name"/>
-            <YAxis/>
+            {lines.map(_ => <YAxis hide={hideYTicks} key={_} yAxisId={_} dataKey={_}/>)}
+            <YAxis hide={hideYTicks}/>
             <Tooltip wrapperStyle={{zIndex: 100, borderRadius: 4}} formatter={_ => percent ? `${_}` : formatLargeNumber(_ as any, {maximumFractionDigits: 2})}/>
             {lines.map((line, i) => (
               <Line
@@ -87,6 +90,7 @@ export const ChartLine = ({
                 key={line}
                 name={map(translation, _ => _[line]) ?? line}
                 type="monotone"
+                yAxisId={line}
                 dataKey={line}
                 dot={false}
                 stroke={colorsByKey?.(theme)[line] ?? colors(theme)[i] ?? colors(theme)[0]}
@@ -104,6 +108,7 @@ export const ChartLine = ({
                 )}
               </Line>
             ))}
+            {children}
           </LineChart>
         </ResponsiveContainer>
       </Box>

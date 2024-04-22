@@ -18,7 +18,6 @@ export type IKoboMeta<TTag = any> = {
   raion?: string
   hromada?: string
   settlement?: string
-  taxId?: string
   firstName?: string
   lastName?: string
   patronymicName?: string
@@ -29,10 +28,20 @@ export type IKoboMeta<TTag = any> = {
   office?: DrcOffice
   project: DrcProject[]
   donor: DrcDonor[]
+
   persons?: PersonDetails[]
   personsCount?: number
+
   status?: KoboMetaStatus
   lastStatusUpdate?: Date
+
+  taxId?: string
+  taxIdFileName?: string
+  taxIdFileUrl?: string
+  idFileName?: string
+  idFileUrl?: string
+  passportNum?: string
+
   tags?: TTag
 }
 

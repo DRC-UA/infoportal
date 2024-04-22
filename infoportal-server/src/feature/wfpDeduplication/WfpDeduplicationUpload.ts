@@ -48,6 +48,7 @@ export class WfpDeduplicationUpload {
               beneficiaryId: _.beneficiaryId,
               status: WfpDeduplicationStatus.NotDeduplicated,
               validFrom: _.validFrom,
+              category: _.category,
             })
           })
         })
@@ -86,6 +87,7 @@ export class WfpDeduplicationUpload {
               message: _.message,
               status,
               validFrom: _.validFrom,
+              category: _.category,
               ...existing,
             })
           })
@@ -195,8 +197,6 @@ export class WfpDeduplicationUpload {
               },
             },
             // take: _.additionalInfo.rowCount,
-          }
-          if (_.fileName as any === 'HRK_20230331_Raw.xlsx.gpg') {
           }
           const registedDedupCount = await this.prisma.mpcaWfpDeduplication.count(prismaSearch)
           if (registedDedupCount !== _.additionalInfo.rowCount) {

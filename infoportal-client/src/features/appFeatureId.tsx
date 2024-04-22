@@ -66,15 +66,13 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
   },
   mpca: {
     id: AppFeatureId.mpca,
-    name: 'MPCA & Basic Needs',
+    name: 'Cash Assistance',
     materialIcons: 'savings',
     color: 'green',
     path: '/mpca',
     category: 'programs',
     showIf: (u, accesses) => {
-      return u?.admin || accesses && !!accesses
-        .filter(Access.filterByFeature(AppFeatureId.kobo_database))
-        .find(_ => _.params?.koboFormId === KoboIndex.byName('bn_re').id)
+      return true
       // return u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.mpca)
     }
   },

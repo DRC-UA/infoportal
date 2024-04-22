@@ -79,7 +79,7 @@ export const MetaDashboard = () => {
               <AgeGroupTable tableId="meta-dashboard" persons={ctx.filteredPersons} enableDisplacementStatusFilter/>
             </SlidePanel>
             <SlidePanel title={m.currentOblast}>
-              <UaMapBy sx={{mx: 2}} getOblast={_ => OblastIndex.byName(_.oblast).iso} data={ctx.filteredData} fillBaseOn="value"/>
+              <UaMapBy sx={{mx: 2, maxWidth: 480, margin: 'auto'}} getOblast={_ => OblastIndex.byName(_.oblast).iso} data={ctx.filteredData} fillBaseOn="value"/>
             </SlidePanel>
             <SlidePanel title={m.form}>
               <ChartBarSingleBy data={ctx.filteredData} by={_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId}/>
@@ -106,6 +106,9 @@ export const MetaDashboard = () => {
               </Lazy>
             </SlidePanel>
             <SlidePanel>
+              <ChartLineBy getX={_ => format(_.date, 'yyyy-MM')} getY={_ => 1} label={m.submissions} data={ctx.filteredData}/>
+            </SlidePanel>
+            <SlidePanel>
               <ScRadioGroup value={showProjectsBy} onChange={setShowProjectsBy} inline dense>
                 <ScRadioGroupItem hideRadio value="donoor" title={m.donor}/>
                 <ScRadioGroupItem hideRadio value="project" title={m.project}/>
@@ -115,9 +118,6 @@ export const MetaDashboard = () => {
               ) : (
                 <ChartBarMultipleByKey data={ctx.filteredData} property="donor"/>
               )}
-            </SlidePanel>
-            <SlidePanel>
-              <ChartLineBy getX={_ => format(_.date, 'yyyy-MM')} getY={_ => 1} label={m.submissions} data={ctx.filteredData}/>
             </SlidePanel>
             <SlidePanel title={m.program}><ChartBarSingleBy data={ctx.filteredData} by={_ => _.activity}/></SlidePanel>
           </Div>

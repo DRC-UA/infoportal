@@ -3,7 +3,7 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {DrcProject, IKoboMeta, KoboIndex, KoboMetaStatus, koboMetaStatusLabel} from '@infoportal-common'
+import {DrcProject, IKoboMeta, KoboIndex, koboIndex, KoboMetaStatus, koboMetaStatusLabel} from '@infoportal-common'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {IpIconBtn} from '@/shared/IconBtn'
@@ -12,6 +12,14 @@ import React, {useMemo} from 'react'
 import {OptionLabelTypeCompact} from '@/shared/customInput/SelectStatus'
 import {useSession} from '@/core/Session/SessionContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+import {TableImg} from '@/shared/TableImg/TableImg'
+import {getKoboImagePath} from '@/features/Mpca/MpcaData/MpcaData'
+import Link from 'next/link'
+import {AppFeatureId} from '@/features/appFeatureId'
+import {databaseIndex} from '@/features/Database/databaseIndex'
+import {Txt} from 'mui-extension'
+import {Icon} from '@mui/material'
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 type Data = IKoboMeta & {
   duplicatedPhone?: number
@@ -21,6 +29,7 @@ type Data = IKoboMeta & {
 export const MetaTable = () => {
   const ctx = useMetaContext()
   const {session} = useSession()
+  const {conf} = useAppSettings()
   const {m, formatDate, formatDateTime} = useI18n()
 
   const mappedData: Data[] = useMemo(() => {
@@ -84,15 +93,34 @@ export const MetaTable = () => {
       },
       {
         id: 'formId',
+        head: m.form,
         type: 'select_one',
-        head: m.koboForm,
-        renderQuick: _ => KoboIndex.searchById(_.formId)?.translation ?? _.formId,
+        render: _ => {
+          const f = KoboIndex.searchById(_.formId)
+          if (!f) return {
+            value: undefined,
+            label: ''
+          }
+          return {
+            value: f.translation,
+            option: f.translation,
+            label: (
+              <Link target="_blank" href={conf.linkToFeature(
+                AppFeatureId.kobo_database,
+                databaseIndex.siteMap.database.absolute(koboIndex.drcUa.server.prod, f.id))
+              }>
+                <Txt link>{f.translation}</Txt>
+                <Icon fontSize="inherit" color="primary" style={{marginLeft: 2, verticalAlign: 'middle'}}>open_in_new</Icon>
+              </Link>
+            )
+          }
+        }
       },
       {
-        id:'ofice',
-        type:'select_one',
-        head:m.office,
-        renderQuick: _=>_.office,
+        id: 'ofice',
+        type: 'select_one',
+        head: m.office,
+        renderQuick: _ => _.office,
       },
       {
         id: 'oblast',
@@ -136,6 +164,38 @@ export const MetaTable = () => {
         id: 'taxId',
         head: m.taxID,
         renderQuick: _ => _.taxId,
+      },
+      {
+        id: 'taxIdImg',
+        align: 'center',
+        head: m.taxID,
+        type: 'string',
+        render: _ => {
+          return {
+            label: _.taxIdFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.taxIdFileUrl)}/>,
+            export: _.taxIdFileUrl,
+            value: _.taxIdFileName,
+          }
+        },
+      },
+      {
+        type: 'string',
+        id: 'passport',
+        head: m.passportNumber,
+        renderQuick: _ => _.passportNum,
+      },
+      {
+        id: 'idImg',
+        align: 'center',
+        head: m.id,
+        type: 'string',
+        render: _ => {
+          return {
+            label: _.idFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.idFileUrl)}/>,
+            export: _.idFileUrl,
+            value: _.idFileName,
+          }
+        },
       },
       {
         type: 'number',

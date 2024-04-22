@@ -1,4 +1,4 @@
-import {fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, seq} from '@alexandreannic/ts-utils'
 import {
   Bn_RapidResponse,
   Bn_Re,
@@ -11,11 +11,13 @@ import {
   KoboGeneralMapping,
   KoboMetaHelper,
   KoboTagStatus,
+  MpcaEntityTags,
   OblastIndex,
   safeNumber
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {MetaMapped, MetaMapperInsert} from './KoboMetaService'
+import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 
 export class KoboMetaBasicneeds {
 
@@ -48,11 +50,13 @@ export class KoboMetaBasicneeds {
       echo_nlv: DrcProject['UKR-000269 ECHO1'],
       novo_nlv: DrcProject['UKR-000298 Novo-Nordisk'],
       okf_lwo: DrcProject['UKR-000309 OKF'],
+      '341_hoffman_husmans_hrk': DrcProject['UKR-000341 Hoffmans & Husmans'],
       pool_chj: DrcProject['UKR-000270 Pooled Funds'],
       pool_dnk: DrcProject['UKR-000270 Pooled Funds'],
       pool_hrk: DrcProject['UKR-000270 Pooled Funds'],
       pool_lwo: DrcProject['UKR-000270 Pooled Funds'],
       pool_nlv: DrcProject['UKR-000270 Pooled Funds'],
+      pool_umy: DrcProject['UKR-000270 Pooled Funds'],
       sdc_umy: DrcProject['UKR-000330 SDC2'],
       hrk_umy: DrcProject['UKR-000330 SDC2'],
       uhf6_chj: DrcProject['UKR-000336 UHF6'],
@@ -71,21 +75,21 @@ export class KoboMetaBasicneeds {
     }, _ => _ as DrcProject)
   }
 
-  static readonly bn_re: MetaMapperInsert<KoboMetaOrigin<Bn_Re.T, KoboTagStatus>> = row => {
+  static readonly bn_re: MetaMapperInsert<KoboMetaOrigin<Bn_Re.T, MpcaEntityTags>> = row => {
     const answer = Bn_Re.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
 
     const activities = seq(answer.back_prog_type)?.map(prog => {
       return fnSwitch(prog.split('_')[0], {
-        cfr: {activity: DrcProgram.CashForRent, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfr ?? answer.back_donor?.[0])},
-        cfe: {activity: DrcProgram.CashForEducation, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfe ?? answer.back_donor?.[0])},
-        mpca: {activity: DrcProgram.MPCA, project: KoboMetaBasicneeds.getBnreProject(answer.donor_mpca ?? answer.back_donor?.[0])},
-        csf: {activity: DrcProgram.CashForFuel, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cff ?? answer.back_donor?.[0])},
-        cfu: {activity: DrcProgram.CashForUtilities, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfu ?? answer.back_donor?.[0])},
-        nfi: {activity: DrcProgram.NFI, project: KoboMetaBasicneeds.getBnreProject(answer.donor_nfi ?? answer.back_donor?.[0])},
-        esk: {activity: DrcProgram.ESK, project: KoboMetaBasicneeds.getBnreProject(answer.donor_esk ?? answer.back_donor?.[0])},
-        ihk: {activity: DrcProgram.HygieneKit, project: KoboMetaBasicneeds.getBnreProject(answer.donor_ihk ?? answer.back_donor?.[0])},
+        cfr: {activity: DrcProgram.CashForRent, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_cfr ?? answer.back_donor?.[0])},
+        cfe: {activity: DrcProgram.CashForEducation, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_cfe ?? answer.back_donor?.[0])},
+        mpca: {activity: DrcProgram.MPCA, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_mpca ?? answer.back_donor?.[0])},
+        csf: {activity: DrcProgram.CashForFuel, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_cff ?? answer.back_donor?.[0])},
+        cfu: {activity: DrcProgram.CashForUtilities, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_cfu ?? answer.back_donor?.[0])},
+        nfi: {activity: DrcProgram.NFI, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_nfi ?? answer.back_donor?.[0])},
+        esk: {activity: DrcProgram.ESK, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_esk ?? answer.back_donor?.[0])},
+        ihk: {activity: DrcProgram.HygieneKit, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_ihk ?? answer.back_donor?.[0])},
       }, () => undefined)
     }).compact().distinct(_ => _.activity) ?? []
 
@@ -117,6 +121,11 @@ export class KoboMetaBasicneeds {
         phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
         status: KoboMetaHelper.mapCashStatus(status),
         lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
+        passportNum: map((answer.pay_det_pass_ser ?? '') + (answer.pay_det_pass_num ?? ''), _ => _ === '' ? undefined : _),
+        taxIdFileName: answer.pay_det_tax_id_ph,
+        taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+        idFileName: answer.pay_det_id_ph,
+        idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph),
       }
     }
     return activities.map(_ => prepare(
@@ -153,6 +162,7 @@ export class KoboMetaBasicneeds {
       uhf_hrk: DrcProject[`UKR-000314 UHF4`],
       uhf_lwo: DrcProject[`UKR-000314 UHF4`],
       uhf_nlv: DrcProject[`UKR-000314 UHF4`],
+      dnk_bha_345: DrcProject['UKR-000345 BHA2'],
       bha_lwo: DrcProject[`UKR-000284 BHA`],
       bha_chj: DrcProject[`UKR-000284 BHA`],
       bha_dnk: DrcProject[`UKR-000284 BHA`],
@@ -212,9 +222,17 @@ export class KoboMetaBasicneeds {
         lastName: answer.ben_det_surname_l,
         firstName: answer.ben_det_first_name_l,
         patronymicName: answer.ben_det_pat_name_l,
-        taxId: answer.pay_det_tax_id_num_l,
         phone: answer.ben_det_ph_number_l ? '' + answer.ben_det_ph_number_l : undefined,
         status: KoboMetaHelper.mapCashStatus(status),
+        passportNum: map(
+          (answer.pay_det_pass_ser ?? answer.pay_det_pass_ser_l ?? '') + (answer.pay_det_pass_num ?? answer.pay_det_pass_num_l ?? ''),
+          _ => _ === '' ? undefined : _
+        ),
+        taxId: answer.pay_det_tax_id_num ?? answer.pay_det_tax_id_num_l,
+        taxIdFileName: answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l,
+        taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l),
+        idFileName: answer.pay_det_id_ph ?? answer.pay_det_id_ph_l,
+        idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph ?? answer.pay_det_id_ph_l),
         lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
       }
     }

@@ -108,6 +108,7 @@ export const en = Object.freeze({
       BHA: 'BHA',
       UNHCR: 'UNHCR',
     },
+    kobo: 'Kobo',
     answer: 'Answer',
     calculations: 'Calculations',
     value: 'Value',
