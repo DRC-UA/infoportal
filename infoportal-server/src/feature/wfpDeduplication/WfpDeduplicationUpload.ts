@@ -198,8 +198,6 @@ export class WfpDeduplicationUpload {
             },
             // take: _.additionalInfo.rowCount,
           }
-          if (_.fileName as any === 'HRK_20230331_Raw.xlsx.gpg') {
-          }
           const registedDedupCount = await this.prisma.mpcaWfpDeduplication.count(prismaSearch)
           if (registedDedupCount !== _.additionalInfo.rowCount) {
             console.warn(`Found ${registedDedupCount} rows database but ${_.additionalInfo.rowCount} in in ${_.fileName} at ${_.finishedAt}.`)

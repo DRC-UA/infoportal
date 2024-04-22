@@ -29,6 +29,14 @@ export class AccessSdk {
   constructor(private client: ApiClient) {
   }
 
+  static readonly filterByFeature: {
+    (_: AppFeatureId.kobo_database): (a: Access<any>) => a is Access<KoboDatabaseAccessParams>
+    (_: AppFeatureId.wfp_deduplication): (a: Access<any>) => a is Access<WfpDeduplicationAccessParams>
+    (_?: AppFeatureId): (a: Access<any>) => a is Access<any>
+  } = (featureId): any => (access: Access<any>) => {
+    return !featureId || access.featureId === featureId
+  }
+
   readonly create: AccessCreate = (body) => {
     return this.client.put<Access>(`/access`, {body})
   }

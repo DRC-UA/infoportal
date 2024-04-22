@@ -3,7 +3,7 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {DrcProject, IKoboMeta, KoboIndex, KoboMetaStatus, koboMetaStatusLabel} from '@infoportal-common'
+import {DrcProject, IKoboMeta, KoboIndex, koboIndex, KoboMetaStatus, koboMetaStatusLabel} from '@infoportal-common'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {IpIconBtn} from '@/shared/IconBtn'
@@ -14,6 +14,12 @@ import {useSession} from '@/core/Session/SessionContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {TableImg} from '@/shared/TableImg/TableImg'
 import {getKoboImagePath} from '@/features/Mpca/MpcaData/MpcaData'
+import Link from 'next/link'
+import {AppFeatureId} from '@/features/appFeatureId'
+import {databaseIndex} from '@/features/Database/databaseIndex'
+import {Txt} from 'mui-extension'
+import {Icon} from '@mui/material'
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 type Data = IKoboMeta & {
   duplicatedPhone?: number
@@ -23,6 +29,7 @@ type Data = IKoboMeta & {
 export const MetaTable = () => {
   const ctx = useMetaContext()
   const {session} = useSession()
+  const {conf} = useAppSettings()
   const {m, formatDate, formatDateTime} = useI18n()
 
   const mappedData: Data[] = useMemo(() => {
@@ -86,9 +93,28 @@ export const MetaTable = () => {
       },
       {
         id: 'formId',
+        head: m.form,
         type: 'select_one',
-        head: m.koboForm,
-        renderQuick: _ => KoboIndex.searchById(_.formId)?.translation ?? _.formId,
+        render: _ => {
+          const f = KoboIndex.searchById(_.formId)
+          if (!f) return {
+            value: undefined,
+            label: ''
+          }
+          return {
+            value: f.translation,
+            option: f.translation,
+            label: (
+              <Link target="_blank" href={conf.linkToFeature(
+                AppFeatureId.kobo_database,
+                databaseIndex.siteMap.database.absolute(koboIndex.drcUa.server.prod, f.id))
+              }>
+                <Txt link>{f.translation}</Txt>
+                <Icon fontSize="inherit" color="primary" style={{marginLeft: 2, verticalAlign: 'middle'}}>open_in_new</Icon>
+              </Link>
+            )
+          }
+        }
       },
       {
         id: 'ofice',
