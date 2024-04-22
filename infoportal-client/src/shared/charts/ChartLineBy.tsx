@@ -1,7 +1,6 @@
 import {Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import React, {useMemo} from 'react'
-import {ChartLine, ChartLineData} from '@/shared/charts/ChartLine'
-import {BoxProps} from '@mui/material'
+import {ChartLine, ChartLineData, ChartLineProps} from '@/shared/charts/ChartLine'
 
 export const ChartLineBy = <
   T extends Record<string, any>,
@@ -18,7 +17,7 @@ export const ChartLineBy = <
   getY: (_: T) => number
   label: string
   data: Seq<T>
-} & BoxProps) => {
+} & Pick<ChartLineProps, 'hideLegend' | 'hideLabelToggle' | 'hideXTicks' | 'hideYTicks' | 'sx'>) => {
   const transform = useMemo(() => {
     const gb = data.groupBy(getX)
     const w = new Obj(gb).entries().map(([k, v]) => {
@@ -31,7 +30,7 @@ export const ChartLineBy = <
   }, [data])
   return (
     <ChartLine
-      sx={props.sx}
+      {...props}
       data={transform}
       percent
       height={height}

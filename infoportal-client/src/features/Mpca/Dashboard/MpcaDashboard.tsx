@@ -4,7 +4,7 @@ import {useI18n} from '@/core/i18n'
 import {useMpcaContext} from '../MpcaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {UseBNREComputed, useBNREComputed} from '../useBNREComputed'
-import {Enum, fnSwitch, Seq, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {DrcOffice, KoboIndex, MpcaEntity, OblastIndex, Period, toPercent, WfpDeduplicationStatus,} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
@@ -60,32 +60,33 @@ export const MpcaDashboard = () => {
 
   const filterShape = useMemo(() => {
     const d = mappedData ?? seq([])
+    console.log(d.length)
     return DataFilter.makeShape<MpcaEntity>({
       source: {
         icon: 'assignment_turned_in',
         label: 'Kobo Form',
         getValue: _ => _.formId,
-        getOptions: (get) => get().map(_ => _.formId).distinct(_ => _).map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation))
+        getOptions: () => d.map(_ => _.formId).distinct(_ => _).map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation))
       },
       finalDonor: {
         icon: appConfig.icons.donor,
         label: 'Donor',
         getValue: _ => _.donor,
-        getOptions: (get) => DataFilter.buildOptions(get().flatMap(_ => _.donor).distinct(_ => _), true),
+        getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.donor).distinct(_ => _), true),
         multiple: true,
       },
       finalProject: {
         icon: appConfig.icons.project,
         label: 'Project',
         getValue: _ => _.project,
-        getOptions: (get) => DataFilter.buildOptions(get().flatMap(_ => _.project).distinct(_ => _), true),
+        getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.project).distinct(_ => _), true),
         multiple: true,
       },
       prog: {
         icon: 'groups',
         label: 'Prog',
         getValue: _ => _.activity,
-        getOptions: (get) => DataFilter.buildOptions(get().map(_ => _.activity!).distinct(_ => _), true),
+        getOptions: () => DataFilter.buildOptions(d.map(_ => _.activity!).distinct(_ => _), true),
       },
       oblast: {
         icon: 'location_on',
@@ -103,7 +104,7 @@ export const MpcaDashboard = () => {
         icon: appFeaturesIndex.wfp_deduplication.materialIcons,
         label: m.duplication,
         getValue: _ => _.deduplication?.status ?? SheetUtils.blank,
-        getOptions: () => [DataFilter.blankOption, ...Enum.values(WfpDeduplicationStatus).map(_ => DataFilter.buildOption(_, <><DeduplicationStatusIcon status={_}/>&nbsp;{_}</>))],
+        getOptions: () => [DataFilter.blankOption, ...Obj.values(WfpDeduplicationStatus).map(_ => DataFilter.buildOption(_, <><DeduplicationStatusIcon status={_}/>&nbsp;{_}</>))],
       }
     })
   }, [mappedData])
@@ -197,6 +198,7 @@ export const _MPCADashboard = ({
 }) => {
   const {session} = useSession()
   const {m, formatDate, formatLargeNumber} = useI18n()
+  const [showProjectsBy, setShowProjectsBy] = usePersistentState<'donor' | 'project'>('donor', {storageKey: 'meta-dashboard-showProject'})
 
   const totalAmount = useMemo(() => data.sum(_ => getAmount(_) ?? 0), [data, getAmount])
 
@@ -217,8 +219,8 @@ export const _MPCADashboard = ({
           </Div>
           <Div sx={{alignItems: 'stretch'}}>
             <SlideWidget sx={{flex: 1}} icon="content_copy" title="Multiple time assisted">
-              {formatLargeNumber(Enum.keys(computed.multipleTimeAssisted).length)}
-              <Txt color="hint" sx={{ml: 1}}>{toPercent(Enum.keys(computed.multipleTimeAssisted).length / data.length)}</Txt>
+              {formatLargeNumber(Obj.keys(computed.multipleTimeAssisted).length)}
+              <Txt color="hint" sx={{ml: 1}}>{toPercent(Obj.keys(computed.multipleTimeAssisted).length / data.length)}</Txt>
             </SlideWidget>
             <SlidePanel sx={{flex: 1}}>
               <ChartPieWidget showValue showBase value={computed.preventedAssistance.length} base={computed.deduplications.length} title="Prevented assistances"/>
@@ -236,16 +238,20 @@ export const _MPCADashboard = ({
               </SlideWidget>
               <Lazy deps={[data, getAmount]} fn={() => {
                 const gb = data.groupBy(d => format(d.date, 'yyyy-MM'))
-                return new Enum(gb)
-                  .transform((k, v) => [k, seq(v).sum(_ => (getAmount(_) ?? 0))])
+                return new Obj(gb)
+                  .map((k, v) => [k, {
+                    count: v.length,
+                    amount: seq(v).sum(_ => (getAmount(_) ?? 0))
+                  }])
                   .sort(([ka], [kb]) => ka.localeCompare(kb))
                   .entries()
-                  .map(([k, v]) => ({name: k, [m.amount]: v}))
+                  .map(([k, v]) => ({name: k, [m.submissionTime]: v.count, [m.amount]: v.amount}))
               }}>
                 {_ => (
                   <ChartLine
+                    hideYTicks
+                    height={200}
                     data={_ as any}
-                    height={190}
                     hideLabelToggle
                   />
                 )}
@@ -269,18 +275,13 @@ export const _MPCADashboard = ({
             {/*    }}*/}
             {/*  />*/}
             {/*</SlidePanel>*/}
-            <Panel title={m.disaggregation}>
-              <PanelBody>
-                <AgeGroupTable tableId="mpca-dashboard-ag" persons={computed.persons}/>
-              </PanelBody>
-            </Panel>
           </Div>
           {/*// POFU data Cghernihiv donestk lvivi zapo*/}
           <Div column>
             {/*<SlidePanel title={m.location}>*/}
             {/*  <Lazy deps={[data]} fn={() => ChartTools.byCategory({*/}
             {/*    data,*/}
-            {/*    categories: new Enum(OblastIndex.oblastByISO).transform((k, v) => [k, (_: Mpca) => _.oblastIso === k]).get(),*/}
+            {/*    categories: new Obj(OblastIndex.oblastByISO).map((k, v) => [k, (_: Mpca) => _.oblastIso === k]).get(),*/}
             {/*    filter: _ => true,*/}
             {/*  })}>*/}
             {/*    {_ => <UkraineMap data={_} base={data.length} sx={{mx: 2}}/>}*/}
@@ -289,7 +290,7 @@ export const _MPCADashboard = ({
             {/*<SlidePanel title={`${m.mpca.assistanceByLocation}`}>*/}
             {/*  <Lazy deps={[data, currency, getAmount]} fn={() => {*/}
             {/*    const by = data.groupBy(_ => _.oblastIso)*/}
-            {/*    return new Enum(by).transform((k, v) => [OblastIndex.findByIso(k)!, {value: v.sum(x => getAmount(x) ?? 0)}]).get()*/}
+            {/*    return new Obj(by).map((k, v) => [OblastIndex.findByIso(k)!, {value: v.sum(x => getAmount(x) ?? 0)}]).get()*/}
             {/*  }}>*/}
             {/*    {_ => <HorizontalBarChartGoogle data={_}/>}*/}
             {/*  </Lazy>*/}
@@ -297,16 +298,26 @@ export const _MPCADashboard = ({
             <SlidePanel title={`${m.mpca.assistanceByLocation}`}>
               <Lazy deps={[data, currency, getAmount]} fn={() => {
                 const by = data.groupBy(_ => OblastIndex.byName(_.oblast).iso)
-                return new Enum(by).transform((k, v) => [k, makeChartData({value: seq(v).sum(x => getAmount(x) ?? 0)})]).get()
+                return new Obj(by).map((k, v) => [k, makeChartData({value: seq(v).sum(x => getAmount(x) ?? 0)})]).get()
               }}>
-                {_ => <UkraineMap data={_} sx={{mx: 2}} maximumFractionDigits={0} base={totalAmount}/>}
+                {_ => <UkraineMap data={_} sx={{maxWidth: 480, margin: 'auto'}} maximumFractionDigits={0} base={totalAmount}/>}
               </Lazy>
             </SlidePanel>
-            <SlidePanel title={m.donor}>
-              <ChartBarMultipleBy data={data} by={_ => _.donor}/>
-            </SlidePanel>
-            <SlidePanel title={m.project}>
-              <ChartBarMultipleBy data={data} by={_ => _.project}/>
+            <Panel title={m.disaggregation}>
+              <PanelBody>
+                <AgeGroupTable tableId="mpca-dashboard-ag" persons={computed.persons}/>
+              </PanelBody>
+            </Panel>
+            <SlidePanel>
+              <ScRadioGroup value={showProjectsBy} onChange={setShowProjectsBy} inline dense>
+                <ScRadioGroupItem hideRadio value="donoor" title={m.donor}/>
+                <ScRadioGroupItem hideRadio value="project" title={m.project}/>
+              </ScRadioGroup>
+              {showProjectsBy === 'project' ? (
+                <ChartBarMultipleBy data={data} by={_ => _.project}/>
+              ) : (
+                <ChartBarMultipleBy data={data} by={_ => _.donor}/>
+              )}
             </SlidePanel>
           </Div>
         </Div>
