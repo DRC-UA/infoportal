@@ -45,7 +45,7 @@ export const ChartLine = ({
   colorsByKey,
   colors = chartConfig.defaultColors,
   translation,
-  hideYTicks,
+  hideYTicks = true,
   hideXTicks,
   hideLegend,
   disableAnimation,
@@ -81,7 +81,7 @@ export const ChartLine = ({
               <Legend {...commonLegendProps}/>
             )}
             <XAxis dataKey="name"/>
-            {lines.map(_ => <YAxis hide key={_} yAxisId={_} dataKey={_}/>)}
+            {lines.map(_ => <YAxis hide={hideYTicks} key={_} yAxisId={_} dataKey={_}/>)}
             <YAxis hide={hideYTicks}/>
             <Tooltip wrapperStyle={{zIndex: 100, borderRadius: 4}} formatter={_ => percent ? `${_}` : formatLargeNumber(_ as any, {maximumFractionDigits: 2})}/>
             {lines.map((line, i) => (
