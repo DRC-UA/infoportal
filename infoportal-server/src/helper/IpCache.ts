@@ -63,7 +63,7 @@ export class GlobalCache {
   }
 
   readonly clear = (key: SytemCache, subKey?: string) => {
-    this.log.info(`Reset cache ${key}.`)
+    this.log.info(`Reset cache ${key} ${subKey}.`)
     if (subKey) this.cache.get(key)?.remove(subKey)
     else this.cache.remove(key)
   }
@@ -71,7 +71,7 @@ export class GlobalCache {
 
 export class IpCache<V = undefined> {
 
-  /** @deprecated prefere to use GlobalCache for this app */
+  /** @deprecated prefer to use GlobalCache for this app */
   static readonly request = <T, P extends Array<any>>(fn: ((...p: P) => Promise<T>), params?: CacheParams): (...p: P) => Promise<T> => {
     const cache = new IpCache(params)
     return async (...p: P) => {
