@@ -4,7 +4,7 @@ import {useI18n} from '@/core/i18n'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {KoboAnswerId} from '@/core/sdk/server/kobo/Kobo'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
-import {currentProtectionProjects, KoboIndex} from '@infoportal-common'
+import {currentProtectionProjects, KoboIndex, shelterDrcProject} from '@infoportal-common'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {SelectStatus, SelectStatusBy} from '@/shared/customInput/SelectStatus'
 
@@ -15,15 +15,21 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
     switch (ctx.form.id) {
       case KoboIndex.byName('shelter_cashForShelter').id: {
         return (
-          <SelectStatusBy
-            enum="ShelterCashStatus"
-            disabled={!ctx.canEdit}
-            sx={{maxWidth: 120}}
-            label={m.project}
-            onChange={_ => {
-              ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
-            }}
-          />
+          <>
+            <SelectStatusBy
+              enum="ShelterCashStatus"
+              disabled={!ctx.canEdit}
+              sx={{maxWidth: 120, mr: 1}}
+              label={m.status}
+              onChange={_ => {
+                ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
+              }}
+            />
+            <IpDatepicker
+              label={m.paidOn}
+              onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'lastStatusUpdate'})}
+            />
+          </>
         )
       }
       case KoboIndex.byName('bn_cashForRentRegistration').id: {

@@ -1,4 +1,4 @@
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
   Bn_cashForRentRegistration,
   Bn_Re,
@@ -106,6 +106,7 @@ export namespace KoboMetaMapperShelter {
     const answer = Shelter_cashForShelter.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const project = DrcProjectHelper.search(Shelter_cashForShelter.options.donor[answer.donor!])
     return KoboMetaMapper.make({
       enumerator: Shelter_cashForShelter.options.name_enum[answer.name_enum!],
       office: answer.back_office ? fnSwitch(answer.back_office, {
@@ -116,6 +117,8 @@ export namespace KoboMetaMapperShelter {
         umy: DrcOffice.Sumy,
         // lwo: DrcOffice.Lviv,
       }) : undefined,
+      project: project ? [project] : [],
+      donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
       oblast: oblast.name,
       // displacement: KoboGeneralMapping.mapDisplacementStatus(answer.),
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
