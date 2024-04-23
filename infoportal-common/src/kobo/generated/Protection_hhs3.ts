@@ -2824,7 +2824,7 @@ what_are_your_households_intentions_in_terms_of_place_of_residence: {
 	'return_to_the_area_of_origin': `Return to the place of habitual residence?`,
 	'relocate_to_another_area_in_ukraine': `Relocate to another area in Ukraine`,
 	'relocate_to_a_country_outside_of_ukraine': `Relocate to a country outside of Ukraine`,
-	'integrate_into_the_local_community_of_current_place_of_residence': `Integrate into the local community of current place of residence`,
+	'integrate_into_the_local_community_of_current_place_of_residence': `Integrate into the local community`,
 	'unable_unwilling_to_answer': `Unable/unwilling to answer`
 },
 what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community: {
@@ -3356,9 +3356,9 @@ what_are_the_main_sources_of_income_of_your_household: {
 	'assistance_from_family_friends': `Assistance from Family/Friends`,
 	'debt': `Debt`,
 	'savings': `Savings`,
-	'humanitarian_assistance': `Humanitarian Assistance (Cash or In Kind)`,
+	'humanitarian_assistance': `Humanitarian Assistance`,
 	'business_self_employment': `Business/Self Employment`,
-	'social_protection_payments': `Social protection payments (pensions, allowances, etc.)`,
+	'social_protection_payments': `Social protection payments`,
 	'no_resources_coming_into_the_household': `No resources coming into the household`,
 	'unable_unwilling_to_answer': `Unable/unwilling to answer`,
 	'other_specify': `Other`
@@ -3513,7 +3513,7 @@ do_you_have_access_to_health_care_in_your_current_location: {
 what_are_the_barriers_to_accessing_health_services: {
 	'lack_of_available_health_facility': `Lack of available health facility`,
 	'lack_of_specialized_health_care_services': `Lack of specialized health care services`,
-	'safety_risks_associated_with_access_to_presence_at_health_facility': `Safety risks associated with access to/presence at health facility`,
+	'safety_risks_associated_with_access_to_presence_at_health_facility': `Safety risks linked with access to/presence at facilities`,
 	'distance_lack_of_transportation_means_to_access_facilities': `Distance - lack of transportation means to access facilities`,
 	'cost_associated_with_transportation_to_facilities': `Cost associated with transportation to facilities`,
 	'cost_of_the_services_provided_medication': `Cost of the services provided/medication`,

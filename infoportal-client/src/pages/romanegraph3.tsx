@@ -1,4 +1,4 @@
-import {Box} from '@mui/material'
+import {Box, useTheme} from '@mui/material'
 import React, {ReactNode, useCallback, useEffect, useState} from 'react'
 import {Txt} from 'mui-extension'
 import {PanelFeatures} from '@/shared/Panel/PanelFeatures'
@@ -13,7 +13,7 @@ import {useI18n} from '@/core/i18n'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {Period, Person, Protection_hhs2} from '@infoportal-common'
+import {Period, Person, Protection_hhs3} from '@infoportal-common'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {Page} from '@/shared/Page'
@@ -74,7 +74,7 @@ const ua = {
   // 'Main sources of income': 'Головні джерела доходу переміщених осіб',
 }
 
-const optionsUa: DeepPartial<typeof Protection_hhs2.options> = {
+const optionsUa: DeepPartial<typeof Protection_hhs3.options> = {
   'do_you_identify_as_any_of_the_following': {
     idp: 'Внутрішньо переміщена особа',
     non_displaced: 'Не переміщена особа',
@@ -159,6 +159,7 @@ const optionsUa: DeepPartial<typeof Protection_hhs2.options> = {
 }
 
 export default () => {
+  const t = useTheme()
   const {api} = useAppSettings()
   const {m, currentLang: lang, setLang} = useI18n()
   const [period, setPeriod] = useState<Partial<Period>>({
@@ -189,7 +190,7 @@ export default () => {
   const title = (title: keyof typeof en) => `${lang === 'ua' ? 'Графік' : 'Graph'} ${++index}. ${lang === 'ua' ? ua[title] : en[title]}`
 
   return (
-    <Page loading={fetcher.loading} sx={{background: 'white'}}>
+    <Page loading={fetcher.loading} sx={{background: t.palette.background.paper}}>
       <PeriodPicker
         defaultValue={[period.start, period.end]}
         onChange={([start, end]) => {
@@ -209,7 +210,7 @@ export default () => {
           data={data}
           by={_ => _.do_you_identify_as_any_of_the_following}
           label={{
-            ...Protection_hhs2.options.do_you_identify_as_any_of_the_following,
+            ...Protection_hhs3.options.do_you_identify_as_any_of_the_following,
             ...lang === 'en' ? {} : optionsUa.do_you_identify_as_any_of_the_following,
           }}
         />
@@ -237,7 +238,7 @@ export default () => {
           filter={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence !== 'unable_unwilling_to_answer'}
           by={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence}
           label={{
-            ...Protection_hhs2.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
+            ...Protection_hhs3.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
             ...lang === 'en' ? {} : optionsUa.what_are_your_households_intentions_in_terms_of_place_of_residence,
           }}
         />
@@ -248,7 +249,7 @@ export default () => {
           by={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence}
           label={{
             ...lang === 'en' ? {} : optionsUa.what_are_your_households_intentions_in_terms_of_place_of_residence,
-            ...Protection_hhs2.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
+            ...Protection_hhs3.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
           }}
         />
         <Txt bold block color="hint" size="small" sx={{mt: 3}}>{m.refugeesAndReturnees}</Txt>
@@ -258,7 +259,7 @@ export default () => {
           by={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence}
           label={{
             ...lang === 'en' ? {} : optionsUa.what_are_your_households_intentions_in_terms_of_place_of_residence,
-            ...Protection_hhs2.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
+            ...Protection_hhs3.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
           }}
         />
       </Pan>
@@ -269,7 +270,7 @@ export default () => {
           by={_ => _.what_are_the_main_factors_that_make_this_location_feel_unsafe}
           label={{
             ...lang === 'en' ? {} : optionsUa.what_are_the_main_factors_that_make_this_location_feel_unsafe,
-            ...Protection_hhs2.options.what_are_the_main_factors_that_make_this_location_feel_unsafe,
+            ...Protection_hhs3.options.what_are_the_main_factors_that_make_this_location_feel_unsafe,
           }}
         />
       </Pan>
@@ -280,7 +281,7 @@ export default () => {
           by={_ => _.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
           label={{
             ...lang === 'en' ? {} : optionsUa.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members,
-            ...Protection_hhs2.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members,
+            ...Protection_hhs3.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members,
           }}
         />
       </Pan>
@@ -291,7 +292,7 @@ export default () => {
           by={_ => _.what_are_your_main_concerns_regarding_your_accommodation}
           label={{
             ...lang === 'en' ? {} : optionsUa.what_are_your_main_concerns_regarding_your_accommodation,
-            ...Protection_hhs2.options.what_are_your_main_concerns_regarding_your_accommodation,
+            ...Protection_hhs3.options.what_are_your_main_concerns_regarding_your_accommodation,
           }}
         />
       </Pan>
@@ -302,7 +303,7 @@ export default () => {
           by={_ => _.what_are_the_barriers_to_accessing_health_services}
           label={{
             ...lang === 'en' ? {} : optionsUa.what_are_the_barriers_to_accessing_health_services,
-            ...Protection_hhs2.options.what_are_the_barriers_to_accessing_health_services,
+            ...Protection_hhs3.options.what_are_the_barriers_to_accessing_health_services,
           }}
         />
       </Pan>
@@ -316,7 +317,7 @@ export default () => {
           by={_ => _.what_are_the_main_sources_of_income_of_your_household}
           label={{
             ...lang === 'en' ? {} : optionsUa.what_are_the_main_sources_of_income_of_your_household,
-            ...Protection_hhs2.options.what_are_the_main_sources_of_income_of_your_household,
+            ...Protection_hhs3.options.what_are_the_main_sources_of_income_of_your_household,
           }}
         />
       </Pan>
