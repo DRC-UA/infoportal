@@ -3,12 +3,12 @@ import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInf
 import {Datatable} from '@/shared/Datatable/Datatable'
 import React, {useEffect, useMemo, useState} from 'react'
 import {UseFetcher} from '@/shared/hook/useFetcher'
-import {map, Obj} from '@alexandreannic/ts-utils'
+import {map, Obj, seq} from '@alexandreannic/ts-utils'
 import {AiPreviewActivity, AiPreviewRequest, AiSendBtn, AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
-import {Box} from '@mui/material'
+import {Box, useTheme} from '@mui/material'
 import {IpInput} from '@/shared/Input/Input'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
@@ -44,6 +44,7 @@ export const AiBundleTable = ({
   const {api, conf} = useAppSettings()
   const {toastHttpError} = useIpToast()
   const {m} = useI18n()
+  const t = useTheme()
 
   const [period, setPeriod] = useState(format(subMonths(new Date(), 1), 'yyyy-MM'))
 
@@ -111,9 +112,24 @@ export const AiBundleTable = ({
             }
           },
           {
+            id: 'form',
+            head: m.kobo,
+            width: 220,
+            type: 'select_one',
+            renderQuick: _ => seq(_.data).map(_ => _.formId).distinct(_ => _).compact().join(', '),
+          },
+          {
+            id: 'submissions',
+            head: m.submissions,
+            type: 'number',
+            renderQuick: _ => _.data.length,
+          },
+          {
             id: 'id',
             type: 'select_one',
             head: 'Record ID',
+            style: () => ({borderRight: '3px solid ' + t.palette.divider}),
+            styleHead: {borderRight: '3px solid ' + t.palette.divider},
             renderQuick: _ => _.recordId
           },
           ...map(maybeFirst, first => [

@@ -58,7 +58,7 @@ export class GlobalCache {
       if (!cacheIf?.(...p)) return fn(...p)
       const index = genIndex ? genIndex(...p) : hashArgs(p)
       const cache = getCache()
-      if (!cache) this.log.error(`Cannot retrived cache for ${key}.`)
+      if (!cache) this.log.error(`Cannot retrieved cache for ${key}.`)
       const cachedValue = cache?.get(index)
       if (cachedValue === undefined) {
         const value = await fn(...p)

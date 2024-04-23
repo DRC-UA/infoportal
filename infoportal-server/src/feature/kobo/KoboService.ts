@@ -100,7 +100,6 @@ export class KoboService {
           filters?: KoboAnswersFilters,
           paginate?: Partial<ApiPagination>
         }): Promise<ApiPaginate<DbKoboAnswer>> => {
-          console.log(params)
           const {
             formId,
             filters = {},
