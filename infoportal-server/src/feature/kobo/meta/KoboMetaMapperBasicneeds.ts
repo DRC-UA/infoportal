@@ -154,7 +154,7 @@ export class KoboMetaBasicneeds {
       hh_char_res_dis_select: answer.hh_char_res_dis_select_l,
       ben_det_res_stat: answer.ben_det_res_stat_l,
     })
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast_l!)
     const project = fnSwitch(answer.back_donor_l!, {
       sdc_umy: DrcProject[`UKR-000330 SDC2`],
       uhf_chj: DrcProject[`UKR-000314 UHF4`],
@@ -202,7 +202,7 @@ export class KoboMetaBasicneeds {
       const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
       return {
         enumerator: Bn_RapidResponse.options.back_enum_l[answer.back_enum_l!],
-        office: fnSwitch(answer.back_office!, {
+        office: fnSwitch(answer.back_office ?? answer.back_office_l!, {
           chj: DrcOffice.Chernihiv,
           dnk: DrcOffice.Dnipro,
           hrk: DrcOffice.Kharkiv,
@@ -211,8 +211,8 @@ export class KoboMetaBasicneeds {
           umy: DrcOffice.Sumy,
         }, () => undefined),
         oblast: oblast.name,
-        raion: Bn_RapidResponse.options.ben_det_raion_l[answer.ben_det_raion!],
-        hromada: Bn_RapidResponse.options.ben_det_hromada_l[answer.ben_det_hromada!],
+        raion: Bn_RapidResponse.options.ben_det_raion_l[answer.ben_det_raion_l!],
+        hromada: Bn_RapidResponse.options.ben_det_hromada_l[answer.ben_det_hromada_l!],
         sector: DrcSectorHelper.findByProgram(activity),
         activity: activity,
         personsCount: safeNumber(answer.ben_det_hh_size_l),
