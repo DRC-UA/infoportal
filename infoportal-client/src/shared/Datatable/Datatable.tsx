@@ -34,6 +34,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
   onFiltersChange,
   onDataChange,
   defaultFilters,
+  rowStyle,
   ...props
 }: DatatableTableProps<T>) => {
   const innerColumns = useMemo(() => {
@@ -80,6 +81,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
         defaultLimit={defaultLimit}
         select={select}
         getRenderRowKey={getRenderRowKey}
+        rowStyle={rowStyle}
         onFiltersChange={onFiltersChange}
         onDataChange={onDataChange}
         defaultFilters={defaultFilters}
@@ -237,6 +239,7 @@ const _Datatable = <T extends DatatableRow>({
                   columns={filteredColumns}
                   getRenderRowKey={ctx.getRenderRowKey}
                   selected={ctx.selected}
+                  rowStyle={ctx.rowStyle}
                 />
               ) : (
                 <tr>

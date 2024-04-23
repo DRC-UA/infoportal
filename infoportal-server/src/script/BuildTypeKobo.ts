@@ -230,6 +230,7 @@ export class BuildKoboType {
         },
         what_are_your_households_intentions_in_terms_of_place_of_residence: {
           integrate_into_the_local_community_of_current_place_of_residence: ['Integrate into the local community'],
+          return_to_the_area_of_origin: [`Return to the place of habitual residence`],
         },
         what_are_your_main_concerns_regarding_your_accommodation: {
           'risk_of_eviction': [`Risk of eviction`],

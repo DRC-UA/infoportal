@@ -44,6 +44,7 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   }
   readonly data?: T[]
   getRenderRowKey?: (_: T, index: number) => string
+  rowStyle?: (_: T) => CSSProperties
   onClickRows?: (_: T, event: React.MouseEvent<HTMLElement>) => void
   rowsPerPageOptions?: number[]
   columns: DatatableColumn.Props<T, K>[]

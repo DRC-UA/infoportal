@@ -1,4 +1,4 @@
-import {DrcOffice, DrcProject} from '@infoportal-common'
+import {DrcOffice, DrcProgram, DrcProject} from '@infoportal-common'
 import {ApiClient} from '../ApiClient'
 import {UUID} from 'crypto'
 
@@ -14,6 +14,7 @@ export type JsonStore<T> = {
 export type JsonStoreMpcaBudget = {
   project: DrcProject
   office: DrcOffice
+  activity: DrcProgram
   budget: number
 }[]
 

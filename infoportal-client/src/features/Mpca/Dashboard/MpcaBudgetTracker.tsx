@@ -1,7 +1,6 @@
-import {MpcaEntity} from '@infoportal-common'
+import {DrcOffice, DrcProgram, DrcProject, groupBy, MpcaEntity} from '@infoportal-common'
 import {Seq, seq, toPercent} from '@alexandreannic/ts-utils'
 import React, {useEffect, useMemo, useState} from 'react'
-import {DrcOffice, DrcProject, DrcProjectHelper, groupBy} from '@infoportal-common'
 import {useI18n} from '@/core/i18n'
 import {MpcaAmountType} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {Datatable} from '@/shared/Datatable/Datatable'
@@ -20,10 +19,12 @@ import {JsonStoreKey, JsonStoreMpcaBudget} from '@/core/sdk/server/jsonStore/Jso
 import {useAsync} from '@/shared/hook/useAsync'
 import {appConfig} from '@/conf/AppConfig'
 import {useSession} from '@/core/Session/SessionContext'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 
 interface CreateBudgetForm {
   office: DrcOffice
   project: DrcProject
+  activity: DrcProgram
   budget: number
 }
 
@@ -55,6 +56,8 @@ export const MpcaBudgetTracker = ({
   const fetcherBudget = useFetcher(req)
   const asyncBudgetUpdate = useAsync((json: JsonStoreMpcaBudget) => api.jsonStore.set(JsonStoreKey.MpcaBudget, json))
 
+  const programs = useMemo(() => data.map(_ => _.activity).distinct(_ => _).compact(), [data])
+
   useEffect(() => {
     canEditFetcher.fetch()
     fetcherBudget.fetch()
@@ -67,12 +70,13 @@ export const MpcaBudgetTracker = ({
       data,
       groups: [
         {by: _ => _.project?.[0]!,},
+        {by: _ => _.activity!,},
         {by: _ => _.office!,},
       ],
       finalTransform: _ => _,
     })
     return fetcherBudget.get.map(_ => {
-      const d = gb[_.project]?.[_.office] ?? seq()
+      const d = gb[_.project]?.[_.activity]?.[_.office] ?? seq()
       return {
         ..._,
         committedAmount: d.sum(_ => _[amountType] ?? 0),
@@ -91,9 +95,9 @@ export const MpcaBudgetTracker = ({
         <Modal
           loading={asyncBudgetUpdate.loading}
           title={m.mpca.addTracker}
-          confirmDisabled={!fetcherBudget.get}
+          confirmDisabled={!fetcherBudget.get || !createBudgetForm.formState.isValid}
           onConfirm={createBudgetForm.handleSubmit(form => {
-            const alreadyExists = fetcherBudget.get!.find(_ => _.office === form.office && _.project === form.project)
+            const alreadyExists = fetcherBudget.get!.find(_ => _.office === form.office && _.project === form.project && _.activity === form.activity)
             if (alreadyExists) {
               setErrorFormAlreadyExists(true)
             } else {
@@ -107,6 +111,7 @@ export const MpcaBudgetTracker = ({
               )}
               <Controller
                 control={createBudgetForm.control}
+                rules={{required: true}}
                 name="project"
                 render={({field: {onChange, ...field}}) => (
                   <SelectDrcProject {...field} onChange={e => onChange(e)} sx={{mb: 2}}/>
@@ -114,12 +119,27 @@ export const MpcaBudgetTracker = ({
               />
               <Controller
                 control={createBudgetForm.control}
+                rules={{required: true}}
+                name="activity"
+                render={({field: {onChange, ...field}}) => (
+                  <IpSelectSingle<DrcProgram>
+                    {...field}
+                    hideNullOption
+                    label={m.program}
+                    onChange={e => onChange(e)}
+                    sx={{mb: 2}}
+                    options={programs}/>
+                )}
+              />
+              <Controller
+                control={createBudgetForm.control}
                 name="office"
+                rules={{required: true}}
                 render={({field: {onChange, ...field}}) => (
                   <SelectDrcOffice {...field} onChange={e => onChange(e)} sx={{mb: 2}}/>
                 )}
               />
-              <IpInput {...createBudgetForm.register('budget')} type="number" label={m.budget} endAdornment="UAH"/>
+              <IpInput {...createBudgetForm.register('budget', {required: true})} type="number" label={m.budget} endAdornment="UAH"/>
             </Box>
           )}>
           <IpBtn icon="add" variant="outlined">{m.mpca.addTracker}</IpBtn>
@@ -133,8 +153,9 @@ export const MpcaBudgetTracker = ({
           type: 'select_one',
           renderQuick: _ => _.office
         },
-        {width: 0, id: 'donor', head: m.donor, type: 'select_one', renderQuick: _ => DrcProjectHelper.donorByProject[_.project]},
+        // {width: 0, id: 'donor', head: m.donor, type: 'select_one', renderQuick: _ => DrcProjectHelper.donorByProject[_.project]},
         {width: 0, id: 'project', head: m.project, type: 'select_one', renderQuick: _ => _.project},
+        {width: 0, id: 'program', head: m.program, type: 'select_one', renderQuick: _ => _.activity},
         {
           width: 0,
           id: 'total',
@@ -228,6 +249,28 @@ export const MpcaBudgetTracker = ({
               )
             }
           }
+        },
+        {
+          id: 'actions',
+          head: '',
+          width: 0,
+          align: 'right',
+          renderQuick: row => (
+            <Modal
+              title={m.mpca.deleteTracker}
+              content={m.mpca.deleteTrackerDetails}
+              loading={asyncBudgetUpdate.loading}
+              onConfirm={() => {
+                asyncBudgetUpdate.call(fetcherBudget.get!.filter(_ =>
+                  _.office !== row.office ||
+                  _.project !== row.project ||
+                  _.activity !== row.activity
+                )).then(() => fetcherBudget.fetch())
+              }}
+            >
+              <TableIconBtn color="primary">delete</TableIconBtn>
+            </Modal>
+          )
         }
       ]}
     />

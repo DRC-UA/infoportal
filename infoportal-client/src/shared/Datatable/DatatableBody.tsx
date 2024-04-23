@@ -9,12 +9,14 @@ const DatatableBody_ = <T extends DatatableRow>({
   select,
   columns,
   getRenderRowKey,
+  rowStyle,
   selected,
   onClickRows,
 }: Pick<DatatableTableProps<any>, 'onClickRows'> & Pick<DatatableContext<T>,
   'selected' |
   'select' |
   'columns' |
+  'rowStyle' |
   'getRenderRowKey'
 > & {
   data: T[]
@@ -23,6 +25,7 @@ const DatatableBody_ = <T extends DatatableRow>({
     <>
       {data.map((item, rowI) => (
         <tr
+          style={rowStyle?.(item)}
           className={'tr' + (onClickRows ? ' tr-clickable' : '')}
           key={getRenderRowKey ? getRenderRowKey(item, rowI) : rowI}
           onClick={e => onClickRows?.(item, e)}

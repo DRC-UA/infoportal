@@ -13,6 +13,7 @@ export interface DatatableContext<T extends DatatableRow> {
   select: DatatableTableProps<T>['select']
   columns: DatatableColumn.InnerProps<T>[]
   getRenderRowKey: DatatableTableProps<T>['getRenderRowKey']
+  rowStyle: DatatableTableProps<T>['rowStyle']
   selected: UseSetState<string>
   modal: DatatableModal<T>
   options: UseDatatableOptions<T>
@@ -27,6 +28,7 @@ export const DatatableProvider = <T extends DatatableRow>({
   defaultLimit,
   columns,
   select,
+  rowStyle,
   // sortBy,
   // orderBy,
   onDataChange,
@@ -45,6 +47,7 @@ export const DatatableProvider = <T extends DatatableRow>({
   onFiltersChange: DatatableTableProps<T>['onFiltersChange']
   onDataChange: DatatableTableProps<T>['onDataChange']
   defaultFilters: DatatableTableProps<T>['defaultFilters']
+  rowStyle: DatatableTableProps<T>['rowStyle']
   // sortBy?: KeyOf<T>
   // orderBy?: OrderBy
 
@@ -82,6 +85,7 @@ export const DatatableProvider = <T extends DatatableRow>({
     columnsIndex,
     selected,
     data,
+    rowStyle,
     modal,
     columns,
     select,

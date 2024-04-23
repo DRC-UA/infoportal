@@ -659,6 +659,8 @@ export const en = Object.freeze({
       elderlyLedOrganization: `Focused on elders or PwD`,
     },
     mpca: {
+      deleteTracker: 'Delete tracker?',
+      deleteTrackerDetails: `It won't delete any data and you can recreate the tracker later.`,
       errorFormAlreadyExists: 'This tracked already exists.',
       addTracker: `Add tracker`,
       duplicationCheck: 'Duplication check',
