@@ -23,7 +23,7 @@ export const IpIconBtn = ({
   )
   return tooltip ? (
     <Tooltip title={tooltip}>
-      {props.disabled ? <Box component="span" sx={props.sx}>{content}</Box> : content}
+      {props.disabled ? <Box component="span">{content}</Box> : content}
     </Tooltip>
   ) : content
 }

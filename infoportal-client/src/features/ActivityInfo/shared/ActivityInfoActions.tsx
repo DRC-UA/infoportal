@@ -36,7 +36,7 @@ export const AiViewAnswers = <T extends Record<string, any>, >({
       cancelLabel={m.close}
       content={<AnswerTable answers={answers}/>}
     >
-      <IpIconBtn size="small" tooltip={tooltip ?? "View related Kobo data"} children="table_view" color="primary"/>
+      <IpIconBtn size="small" tooltip={tooltip ?? "View related Kobo data"} children="zoom_in" color="primary"/>
     </Modal>
   )
 }

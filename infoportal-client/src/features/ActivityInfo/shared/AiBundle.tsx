@@ -13,6 +13,7 @@ import {IpInput} from '@/shared/Input/Input'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {format, subMonths} from 'date-fns'
+import {KoboIndex} from '@infoportal-common'
 
 
 export interface AiBundle<
@@ -96,7 +97,13 @@ export const AiBundleTable = ({
                       _submit.call(_.recordId, [_.requestBody]).catch(toastHttpError)
                     }}
                   />
-                  <AiViewAnswers answers={_.data}/>
+                  <AiViewAnswers answers={_.data.map(_ => {
+                    _.formId = KoboIndex.searchById(_.formId)?.translation ?? _.formId
+                    delete _.referencedFormId
+                    delete _.id
+                    delete _.uuid
+                    return _
+                  })}/>
                   <AiPreviewActivity activity={{..._.activity, ..._.subActivity}}/>
                   <AiPreviewRequest request={_.requestBody}/>
                 </>
@@ -110,21 +117,26 @@ export const AiBundleTable = ({
             renderQuick: _ => _.recordId
           },
           ...map(maybeFirst, first => [
-            ...Object.keys(first.activity).map(colId => ({
-              head: colId,
-              id: colId,
-              // type: 'select_one',
-              // type: 'string',
-              type: typeof first.activity[colId] === 'number' ? 'number' : 'select_one' as any,
-              renderQuick: (_: any) => _.activity[colId] as any,
-            })),
-            ...Obj.keys(first.subActivity ?? {}).map(colId => ({
-              head: colId,
-              id: colId,
-              // type: 'string',
-              type: typeof first.activity[colId] === 'number' ? 'number' : 'select_one' as any,
-              renderQuick: (_: any) => _.subActivity[colId] as any,
-            }))]) ?? []
+            ...Object.keys(first.activity).map(colId => {
+              return {
+                head: colId,
+                id: colId,
+                // type: 'select_one',
+                // type: 'string',
+                type: typeof first.activity[colId] === 'number' ? 'number' : 'select_one' as any,
+                renderQuick: (_: any) => _.activity[colId] as any,
+              }
+            }),
+            ...Obj.keys(first.subActivity ?? {}).map(colId => {
+              return {
+                head: colId,
+                id: colId,
+                // type: 'string',
+                type: typeof first.activity[colId] === 'number' ? 'number' : 'select_one' as any,
+                renderQuick: (_: any) => _.subActivity[colId] as any,
+              } as any
+            })
+          ]) ?? []
         ]}
       />
     </>
