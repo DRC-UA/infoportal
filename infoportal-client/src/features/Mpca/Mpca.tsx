@@ -16,20 +16,6 @@ import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
 import {IpBtn} from '@/shared/Btn'
 import {Box, Tooltip} from '@mui/material'
 import {Txt} from 'mui-extension'
-import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
-import {KoboFormName} from '@infoportal-common'
-import {getKoboFormRouteProps, SidebarKoboLink} from '@/features/SidebarKoboLink'
-
-const relatedKoboForms: (KoboFormName)[] = [
-  'bn_re',
-  'bn_rapidResponse',
-  'shelter_cashForRepair',
-  'bn_1_mpcaNfi',
-  'bn_0_mpcaReg',
-  'bn_0_mpcaRegESign',
-  'bn_0_mpcaRegNoSig',
-  'bn_0_mpcaRegNewShort',
-]
 
 export const mpcaIndex = {
   basePath: '/mpca',
@@ -39,7 +25,7 @@ export const mpcaIndex = {
     dashboard: '/',
     paymentTools: '/payment-tools',
     paymentTool: (id = ':id') => '/payment-tool/' + id,
-    form: (id = ':id') => '/form/' + id,
+    // form: (id = ':id') => '/form/' + id,
   }
 }
 
@@ -71,12 +57,6 @@ const MpcaSidebar = () => {
             <SidebarItem icon="table_chart" active={isActive}>{m.data}</SidebarItem>
           )}
         </NavLink>
-        <SidebarHr/>
-        <SidebarSection title={m.koboForms}>
-          {relatedKoboForms.map(_ =>
-            <SidebarKoboLink size="small" key={_} path={path(mpcaIndex.siteMap.form(_))} name={_}/>
-          )}
-        </SidebarSection>
         {/*<NavLink to={path(mpcaModule.siteMap.paymentTools)}>*/}
         {/*  <SidebarItem icon="savings">{m.mpcaDb.paymentTools}</SidebarItem>*/}
         {/*</NavLink>*/}
@@ -111,9 +91,6 @@ export const Mpca = () => {
             <Route path={mpcaIndex.siteMap.data} element={<MpcaData/>}/>
             <Route path={mpcaIndex.siteMap.paymentTools} element={<MpcaPaymentTools/>}/>
             <Route path={mpcaIndex.siteMap.paymentTool()} element={<MpcaPaymentTool/>}/>
-            {relatedKoboForms.map(_ =>
-              <Route key={_} {...getKoboFormRouteProps({path: mpcaIndex.siteMap.form(_), name: _})}/>
-            )}
           </Routes>
         </Layout>
       </MpcaProvider>

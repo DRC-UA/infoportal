@@ -28,6 +28,7 @@ export const protectionIndex = {
   basePath: '/protection',
   siteMap: {
     dashboard: '/dashboard',
+    form: (id = ':id') => '/form/' + id,
   }
 }
 
@@ -47,7 +48,7 @@ export const ProtectionSidebar = () => {
           <Link target="_blank" href={conf.linkToFeature('dashboard/protection-monitoring' as any, '')}>
             <SidebarItem icon="insights" iconEnd="open_in_new">{m.dashboard}</SidebarItem>
           </Link>
-          <SidebarKoboLink size="small" path={path(mpcaIndex.siteMap.form('protection_hhs2_1'))} name="protection_hhs2_1"/>
+          <SidebarKoboLink size="small" path={path(protectionIndex.siteMap.form('protection_hhs2_1'))} name="protection_hhs2_1"/>
         </SidebarSection>
         <SidebarSection title={m.koboForms}>
           {relatedKoboForms.map(_ =>
@@ -83,7 +84,7 @@ export const ProtectionWithContext = () => {
         <Route index element={<Navigate to={protectionIndex.siteMap.dashboard}/>}/>
         <Route path={protectionIndex.siteMap.dashboard} element={<ProtectionOverview/>}/>
         {relatedKoboForms.map(_ =>
-          <Route key={_} {...getKoboFormRouteProps({path: mpcaIndex.siteMap.form(_), name: _})}/>
+          <Route key={_} {...getKoboFormRouteProps({path: protectionIndex.siteMap.form(_), name: _})}/>
         )}
       </Routes>
     </Layout>

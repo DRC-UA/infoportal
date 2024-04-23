@@ -25,6 +25,7 @@ import {useSession} from '@/core/Session/SessionContext'
 import {AccessSdk} from '@/core/sdk/server/access/AccessSdk'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
+import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 
 export const getKoboImagePath = (url: string): string => {
   return appConfig.apiURL + `/kobo-api/${koboIndex.drcUa.server.prod}/attachment?path=${url.split('api')[1]}`
@@ -43,9 +44,12 @@ export const MpcaData = () => {
   const ctx = useMpcaContext()
   const [selected, setSelected] = useState<string[]>([])
   const _payment = useAsync(api.mpcaPayment.create)
+
   useEffect(() => {
     ctx.fetcherData.fetch({force: false})
   }, [])
+
+  const index = useMemoFn(ctx.data, d => d.groupByAndApply(_ => _.taxId!, d => d.length))
 
   const officesAccesses = useMemo(() => {
     const bnreAccesses = accesses.filter(AccessSdk.filterByFeature(AppFeatureId.kobo_database)).find(_ => _.params?.koboFormId === KoboIndex.byName('bn_re').id)
@@ -299,6 +303,12 @@ export const MpcaData = () => {
                   value: undefined,
                 }
               },
+            },
+            {
+              type: 'number',
+              id: m.taxIdOccurrences,
+              head: m.taxIdOccurrences,
+              renderQuick: _ => index?.[_.taxId!]
             },
             {
               id: 'taxIdImg',

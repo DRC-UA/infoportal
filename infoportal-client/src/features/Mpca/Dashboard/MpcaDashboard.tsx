@@ -60,7 +60,6 @@ export const MpcaDashboard = () => {
 
   const filterShape = useMemo(() => {
     const d = mappedData ?? seq([])
-    console.log(d.length)
     return DataFilter.makeShape<MpcaEntity>({
       source: {
         icon: appConfig.icons.koboForm,
@@ -72,19 +71,19 @@ export const MpcaDashboard = () => {
         icon: appConfig.icons.program,
         label: m.program,
         getValue: _ => _.activity,
-        getOptions: () => DataFilter.buildOptions(d.map(_ => _.activity!).distinct(_ => _), true),
+        getOptions: () => DataFilter.buildOptions(d.map(_ => _.activity!).distinct(_ => _), false),
       },
       finalDonor: {
         icon: appConfig.icons.donor,
         label: m.donor,
-        getValue: _ => _.donor,
+        getValue: _ => _.donor ?? DataFilter.blank,
         getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.donor).distinct(_ => _), true),
         multiple: true,
       },
       finalProject: {
         icon: appConfig.icons.project,
         label: m.project,
-        getValue: _ => _.project,
+        getValue: _ => _.project ?? DataFilter.blank,
         getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.project).distinct(_ => _), true),
         multiple: true,
       },
@@ -92,7 +91,7 @@ export const MpcaDashboard = () => {
         icon: 'business',
         label: m.office,
         getValue: _ => _.office,
-        getOptions: () => DataFilter.buildOptionsFromObject(DrcOffice, true),
+        getOptions: () => DataFilter.buildOptionsFromObject(DrcOffice, false),
       },
       deduplication: {
         icon: appFeaturesIndex.wfp_deduplication.materialIcons,

@@ -47,7 +47,7 @@ const PartnershipSidebar = () => {
         <SidebarHr/>
         <SidebarSection title={m.koboForms}>
           {relatedKoboForms.map(_ =>
-            <SidebarKoboLink size="small" key={_} path={path(mpcaIndex.siteMap.form(_))} name={_}/>
+            <SidebarKoboLink size="small" key={_} path={path(partnershipIndex.siteMap.form(_))} name={_}/>
           )}
         </SidebarSection>
       </SidebarBody>

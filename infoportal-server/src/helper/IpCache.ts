@@ -24,6 +24,13 @@ export class GlobalCache {
     private cache: IpCache<IpCache<any>>,
     private log: Logger = logger('GlobalCache')
   ) {
+    // setInterval(() => {
+    //   console.log(this.cache.getAllKeys().map(k =>
+    //     (this.cache.get(k)?.getAllKeys() ?? []).map(k2 =>
+    //       ({k, k2, value: JSON.stringify(this.cache.get(k)?.get(k2))?.length / 1000})
+    //     )
+    //   ))
+    // }, 2000)
   }
 
   readonly request = <T, P extends Array<any>>({
