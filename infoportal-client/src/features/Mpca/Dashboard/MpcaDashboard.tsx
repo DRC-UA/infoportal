@@ -270,6 +270,7 @@ export const _MPCADashboard = ({
                     height={200}
                     data={_ as any}
                     hideLabelToggle
+                    distinctYAxis
                   />
                 )}
               </Lazy>

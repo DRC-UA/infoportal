@@ -24,6 +24,7 @@ export interface ChartLinePropsBase extends Pick<BoxProps, 'sx'> {
   hideLegend?: boolean
   percent?: boolean
   loading?: boolean
+  distinctYAxis?: boolean
   children?: ReactNode
 }
 
@@ -47,6 +48,7 @@ export const ChartLine = ({
   translation,
   hideYTicks = true,
   hideXTicks,
+  distinctYAxis,
   hideLegend,
   disableAnimation,
   hideLabelToggle,
@@ -81,7 +83,10 @@ export const ChartLine = ({
               <Legend {...commonLegendProps}/>
             )}
             <XAxis dataKey="name"/>
-            {lines.map(_ => <YAxis hide={hideYTicks} key={_} yAxisId={_} dataKey={_}/>)}
+            {distinctYAxis
+              ? lines.map(_ => <YAxis hide={hideYTicks} key={_} yAxisId={_} dataKey={_}/>)
+              : <YAxis hide={hideYTicks}/>
+            }
             <YAxis hide={hideYTicks}/>
             <Tooltip wrapperStyle={{zIndex: 100, borderRadius: 4}} formatter={_ => percent ? `${_}` : formatLargeNumber(_ as any, {maximumFractionDigits: 2})}/>
             {lines.map((line, i) => (
@@ -90,7 +95,7 @@ export const ChartLine = ({
                 key={line}
                 name={map(translation, _ => _[line]) ?? line}
                 type="monotone"
-                yAxisId={line}
+                yAxisId={distinctYAxis ? line : undefined}
                 dataKey={line}
                 dot={false}
                 stroke={colorsByKey?.(theme)[line] ?? colors(theme)[i] ?? colors(theme)[0]}
