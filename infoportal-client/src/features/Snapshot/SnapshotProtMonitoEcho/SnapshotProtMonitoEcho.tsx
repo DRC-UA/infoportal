@@ -13,6 +13,7 @@ import {alpha, Box, Theme} from '@mui/material'
 import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Period} from '@infoportal-common'
+import {ChartPieWidgetProps} from '@/shared/charts/ChartPieWidgetBy'
 
 export const snapshotAlternateColor = (t: Theme) => alpha(t.palette.primary.main, .26)//t.palette.grey[500]
 
@@ -23,13 +24,13 @@ export const snapshotColors = (t: Theme) => [
 
 export const snapShotDefaultPieProps: Partial<Pick<ChartPieIndicatorProps, 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'>> & {
   hideEvolution?: boolean
-} = {
+} & Pick<ChartPieWidgetProps<any>, 'compare'> = {
   dense: true,
   evolution: null as any,
   hideEvolution: true,
   showBase: true,
   showValue: true,
-  compare: null,
+  compare: null as any,
   sx: {
     mb: 1,
   }
