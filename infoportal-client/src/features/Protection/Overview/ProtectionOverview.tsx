@@ -4,13 +4,13 @@ import {Panel, PanelBody} from '@/shared/Panel'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import React, {useState} from 'react'
+import React from 'react'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
-import {DisplacementStatus, groupBy, koboFormTranslation, OblastName, Protection_pss} from '@infoportal-common'
+import {DisplacementStatus, groupBy, OblastIndex, KoboIndex, OblastName} from '@infoportal-common'
 import {Sheet} from '@/shared/Sheet/Sheet'
-import {Enum, Obj} from '@alexandreannic/ts-utils'
+import {Enum} from '@alexandreannic/ts-utils'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
@@ -19,14 +19,13 @@ import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {ProtectionOverviewFilterCustom} from '@/features/Protection/Overview/ProtectionOverviewFilterCustom'
-import {IpSelectMultiple, IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
 
 export const ProtectionOverview = () => {
-  const [displacementStatus, setDisplacementStatus] = useState<DisplacementStatus[]>([])
   const ctx = useProtectionContext()
   const {m, formatLargeNumber} = useI18n()
   if (!ctx.data) return
   const data = ctx.data
+  console.log(data)
   return (
     <Page width="lg">
       <DataFilterLayout
@@ -77,24 +76,14 @@ export const ProtectionOverview = () => {
             </Panel>
             <Panel title={m.ageGroup}>
               <PanelBody>
-                <IpSelectMultiple
-                  label={m.displacementStatus}
-                  sx={{maxWidth: 200, mb: 1}}
-                  options={Obj.values(DisplacementStatus).map(_ => IpSelectMultipleHelper.makeOption({value: _, children: _}))}
-                  value={displacementStatus}
-                  onChange={setDisplacementStatus}
-                />
-                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered.filter(_ =>
-                  displacementStatus.length === 0 || displacementStatus.includes(_.hhDisplacementStatus ?? _.displacement!)
-                )}/>
+                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered} enableDisplacementStatusFilter/>
               </PanelBody>
             </Panel>
             <Panel title={m.form}>
               <PanelBody>
                 <ChartBarSingleBy
-                  data={data.flatFiltered}
-                  by={_ => _.koboForm}
-                  label={koboFormTranslation}
+                  data={data.filtered}
+                  by={_ => KoboIndex.searchById(_.formId)?.translation}
                 />
               </PanelBody>
             </Panel>
@@ -102,7 +91,7 @@ export const ProtectionOverview = () => {
               <PanelBody>
                 {data.flatFiltered && (
                   <ChartBarMultipleBy
-                    data={data.flatFiltered}
+                    data={data.filtered}
                     by={_ => _.project!}
                   />
                 )}
@@ -112,7 +101,11 @@ export const ProtectionOverview = () => {
           <Div column>
             <Panel title={m.individuals}>
               <PanelBody>
-                <UaMapBy sx={{mx: 3}} fillBaseOn="value" getOblast={_ => _.oblast?.iso!} data={ctx.data.flatFiltered}/>
+                <UaMapBy
+                  sx={{maxWidth: 480, margin: 'auto'}}
+                  fillBaseOn="value"
+                  getOblast={_ => OblastIndex.byName(_.oblast)?.iso!}
+                  data={ctx.data.flatFiltered}/>
               </PanelBody>
             </Panel>
             <Panel title={m.displacementStatus}>
@@ -146,7 +139,7 @@ export const ProtectionOverview = () => {
           groupBy({
             data: data.flatFiltered,
             groups: [
-              {by: _ => _.oblast.name},
+              {by: _ => _.oblast!},
               {by: _ => _.raion!},
               {by: _ => _.hromada!},
             ],
@@ -155,7 +148,7 @@ export const ProtectionOverview = () => {
               raion,
               hromada
             ]) => {
-              const countByForm = grouped.groupBy(_ => _.koboForm as string)
+              const countByForm = grouped.groupBy(_ => _.formId as string)
               res.push({
                 oblast,
                 raion,

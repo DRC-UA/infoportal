@@ -1,11 +1,10 @@
 import {Seq, seq} from '@alexandreannic/ts-utils'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {ProtectionActivity, ProtectionActivityFlat} from '@/features/Protection/Context/protectionType'
+import {ProtectionActivityFlat} from '@/features/Protection/Context/protectionType'
 import {useI18n} from '@/core/i18n'
 import {useMemo, useState} from 'react'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {hash, KoboIndex, Period, PeriodHelper} from '@infoportal-common'
-import {endOfDay, startOfDay} from 'date-fns'
+import {hash, IKoboMeta, KoboIndex, Period, PeriodHelper} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 
 import {appConfig} from '@/conf/AppConfig'
@@ -17,14 +16,14 @@ export interface ProtectionCustomFilter {
   echoDisability?: boolean
 }
 
-export const useProtectionFilters = (data?: Seq<ProtectionActivity>, flatData?: Seq<ProtectionActivityFlat>) => {
+export const useProtectionFilters = (data?: Seq<IKoboMeta>, flatData?: Seq<ProtectionActivityFlat>) => {
   const {m} = useI18n()
   const {conf} = useAppSettings()
   const [custom, setCustom] = useState<ProtectionCustomFilter>({})
   const [period, setPeriod] = useState<Partial<Period>>({})
   const shape = useMemo(() => {
     const d = data ?? seq([])
-    return DataFilter.makeShape<ProtectionActivity>({
+    return DataFilter.makeShape<IKoboMeta>({
       office: {
         icon: appConfig.icons.office,
         label: m.office,
@@ -34,8 +33,8 @@ export const useProtectionFilters = (data?: Seq<ProtectionActivity>, flatData?: 
       oblast: {
         icon: appConfig.icons.oblast,
         label: m.oblast,
-        getValue: _ => _.oblast.name,
-        getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.oblast.name!).distinct(_ => _).sort())
+        getValue: _ => _.oblast,
+        getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.oblast!).distinct(_ => _).sort())
       },
       raion: {
         label: m.raion,
@@ -64,8 +63,8 @@ export const useProtectionFilters = (data?: Seq<ProtectionActivity>, flatData?: 
       form: {
         icon: appConfig.icons.koboForm,
         label: m.koboForms,
-        getValue: _ => _.koboForm,
-        getOptions: () => d.map(_ => _.koboForm!).distinct(_ => _).sort().map(_ => DataFilter.buildOption(_, KoboIndex.byName(_).translation))
+        getValue: _ => _.formId,
+        getOptions: () => d.map(_ => _.formId!).distinct(_ => _).sort().map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation))
       },
     })
   }, [data])
@@ -78,8 +77,8 @@ export const useProtectionFilters = (data?: Seq<ProtectionActivity>, flatData?: 
       try {
         const isDateIn = PeriodHelper.isDateIn(period, d.date)
         if (!isDateIn) return false
-        if (custom.echo && hash(d.id, 'dedup') % 100 <= conf.other.protection.echoDuplicationEstimationPercent) return false
-        if (custom.echoDisability && hash(d.id, 'disability') % 100 >= conf.other.protection.echoDisabilityEstimationPercent) return false
+        if (custom.echo && hash(d.koboId, 'dedup') % 100 <= conf.other.protection.echoDuplicationEstimationPercent) return false
+        if (custom.echoDisability && hash(d.koboId, 'disability') % 100 >= conf.other.protection.echoDisabilityEstimationPercent) return false
         return true
       } catch (e) {
         console.log(e, d)

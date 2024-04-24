@@ -27,7 +27,7 @@ import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {appConfig} from '@/conf/AppConfig'
-import {KoboValidation} from '../../../../../infoportal-common/src/kobo/mapper/Common'
+import {KoboValidation} from '@infoportal-common'
 
 const today = new Date()
 
