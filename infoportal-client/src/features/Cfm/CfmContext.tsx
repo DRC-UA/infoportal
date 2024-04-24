@@ -215,8 +215,7 @@ export const CfmProvider = ({
         ..._,
       })
     })
-    return seq(res).sort((b, a) => (a.date ?? a.submissionTime).getTime() - (b.date ?? b.submissionTime).getTime())
-
+    return seq(res).sortByNumber(item => item.submissionTime ? new Date(item.submissionTime).getTime() : 0);
   }, [fetcherData])
 
   const visibleData = useMemo(() => {
