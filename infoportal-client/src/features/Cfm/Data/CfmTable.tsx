@@ -300,9 +300,7 @@ export const CfmTable = ({}: any) => {
                   export: row.project,
                   value: row.project,
                   option: row.project,
-                  label: row.form === CfmDataSource.Internal
-                    ? row.project
-                    : <SelectDrcProject
+                  label: <SelectDrcProject
                       label={null}
                       value={row.project}
                       onChange={newValue => {
