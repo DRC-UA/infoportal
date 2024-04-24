@@ -45,6 +45,25 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
           </>
         )
       }
+      case KoboIndex.byName('ecrec_trainingGrants').id: {
+        return (
+          <>
+            <SelectStatusBy
+              enum="CashForEduStatus"
+              sx={{maxWidth: 120, mr: 1}}
+              disabled={!ctx.canEdit}
+              placeholder={m.project}
+              onChange={_ => {
+                ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
+              }}
+            />
+            <IpDatepicker
+              label={m.paidOn}
+              onChange={_ => ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'lastStatusUpdate'})}
+            />
+          </>
+        )
+      }
       case KoboIndex.byName('bn_rapidResponse').id:
       case KoboIndex.byName('bn_re').id:
       case KoboIndex.byName('ecrec_cashRegistrationBha').id:

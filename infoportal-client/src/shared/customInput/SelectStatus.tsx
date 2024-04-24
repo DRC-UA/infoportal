@@ -1,7 +1,7 @@
 import {IpSelectOption, IpSelectSingle, IpSelectSingleNullableProps} from '@/shared/Select/SelectSingle'
 import {fnSwitch, KeyOf, Obj} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
-import {CashForRentStatus, CashStatus, StateStatus} from '@infoportal-common'
+import {CashForEduStatus, CashForRentStatus, CashStatus, StateStatus} from '@infoportal-common'
 import {Box, Icon, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 import {KoboValidation} from '@/core/sdk/server/kobo/Kobo'
@@ -19,6 +19,7 @@ export namespace SelectStatusConfig {
     CashStatus: CashStatus,
     KoboValidation: KoboValidation,
     CashForRentStatus: CashForRentStatus,
+    CashForEduStatus: CashForEduStatus
   }
 
   export type EnumStatus = keyof typeof enumStatus
@@ -51,7 +52,18 @@ export namespace SelectStatusConfig {
       [CashForRentStatus.SecondRejected]: 'error',
       [CashForRentStatus.Selected]: 'info',
       [CashForRentStatus.Referred]: 'disabled',
-    } as Record<CashForRentStatus, StateStatus>
+    } as Record<CashForRentStatus, StateStatus>,
+    CashForEduStatus: {
+      [CashForEduStatus.Rejected]: 'error',
+      [CashForEduStatus.Pending]: 'warning',
+      [CashForEduStatus.Verified]: 'success',
+      [CashForEduStatus.Approved]: 'success',
+      [CashForEduStatus.FirstPending]: 'warning',
+      [CashForEduStatus.FirstPaid]: 'success',
+      [CashForEduStatus.SecondPending]: 'warning',
+      [CashForEduStatus.SecondPaid]: 'success',
+      [CashForEduStatus.Submitted]: 'success',
+    } as Record<CashForEduStatus, StateStatus>
   }
 }
 

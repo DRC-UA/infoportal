@@ -110,6 +110,40 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       ]
     }
 
+    const paymentStatusEcrec = (
+      enumerator: SelectStatusConfig.EnumStatus = 'CashForEduStatus',
+      key: string = 'status'
+    ): DatatableColumn.Props<any>[] => {
+      return [
+        {
+          id: 'custom_status',
+          head: m.status,
+          type: 'select_one',
+          width: 120,
+          options: () => SheetUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
+          render: (row: KoboAnswer<{}, any>) => {
+            return {
+              export: row.tags?.[key],
+              value: row.tags?.[key],
+              label: (
+                <SelectStatusBy
+                  enum={enumerator}
+                  disabled={!ctx.canEdit}
+                  value={row.tags?.[key]}
+                  placeholder={m.project}
+                  onChange={_ => {
+                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key})
+                    // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
+                  }}
+                />
+              )
+            }
+          }
+        },
+        lastStatusUpdate,
+      ]
+    }
+
     const paymentStatusShelter = (): DatatableColumn.Props<any>[] => {
       return [
         {
@@ -216,7 +250,10 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       [KoboIndex.byName('ecrec_cashRegistrationBha').id]: [
         ...paymentStatus(),
         ...individualsBreakdown,
-        ...ecrecScore,
+      ],
+      [KoboIndex.byName('ecrec_trainingGrants').id]: [
+        ...paymentStatusEcrec(),
+        ...individualsBreakdown,
       ],
       [KoboIndex.byName('protection_communityMonitoring').id]: [
         {
