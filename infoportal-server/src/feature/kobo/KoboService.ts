@@ -87,9 +87,10 @@ export class KoboService {
     app.cache.request({
       key: SytemCache.KoboAnswers,
       cacheIf: (params) => {
-        return KoboService.largeForm.has(params.formId)
-          && Object.keys(params.filters ?? {}).length === 0
-          && Object.keys(params.paginate ?? {}).length === 0
+        return false
+        // return KoboService.largeForm.has(params.formId)
+        //   && Object.keys(params.filters ?? {}).length === 0
+        //   && Object.keys(params.paginate ?? {}).length === 0
       },
       genIndex: p => p.formId,
       ttlMs: duration(1, 'day'),
