@@ -40,9 +40,9 @@ export class KoboService {
   }
 
   static readonly largeForm = new Set([
-    KoboIndex.byName('bn_re').id,
-    KoboIndex.byName('ecrec_cashRegistration').id,
-    KoboIndex.byName('ecrec_cashRegistrationBha').id,
+    // KoboIndex.byName('bn_re').id,
+    // KoboIndex.byName('ecrec_cashRegistration').id,
+    // KoboIndex.byName('ecrec_cashRegistrationBha').id,
   ])
 
   readonly getForms = async (): Promise<KoboForm[]> => {
