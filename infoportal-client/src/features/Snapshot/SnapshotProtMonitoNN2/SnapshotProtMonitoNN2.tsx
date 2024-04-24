@@ -19,18 +19,6 @@ export const snapshotColors = (t: Theme) => [
   snapshotAlternateColor(t),
 ]
 
-export const snapShotDefaultPieProps: Partial<Pick<ChartPieIndicatorProps, 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'>> & {
-  hideEvolution?: boolean
-} = {
-  dense: true,
-  hideEvolution: true,
-  evolution: undefined,
-  showBase: true,
-  showValue: true,
-  sx: {
-    mb: 1,
-  }
-}
 export const SnapshotProtMonitoNN2 = () => {
   const [period, setPeriod] = useState<Partial<Period>>({
     start: startOfMonth(new Date(2024, 1, 1)),

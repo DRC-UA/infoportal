@@ -94,7 +94,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
             {/*/>*/}
             {/*<ChartBarMultipleBy*/}
             {/*  by={_ => _.what_are_the_barriers_to_accessing_health_services}*/}
-            {/*  label={Protection_hhs2.options.what_are_the_barriers_to_accessing_health_services}*/}
+            {/*  label={Protection_hhs3.options.what_are_the_barriers_to_accessing_health_services}*/}
             {/*  data={data}*/}
             {/*  filterValue={['unable_unwilling_to_answer']}*/}
             {/*  limit={5}*/}
@@ -114,7 +114,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
             {/*    by={_ => _.why_dont_they_have_status}*/}
             {/*    filter={_ => _.why_dont_they_have_status !== 'unable_unwilling_to_answer'}*/}
             {/*    label={{*/}
-            {/*      ...Protection_hhs2.options.why_dont_they_have_status,*/}
+            {/*      ...Protection_hhs3.options.why_dont_they_have_status,*/}
             {/*      status_registration_not_requested: 'Disability status not applied for',*/}
             {/*      status_registration_rejected_not_meeting_the_criteria_as_per_ukrainian_procedure: 'Status registration rejected',*/}
             {/*    }}*/}
@@ -132,6 +132,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
                 data={data}
                 compare={{before: computed.lastMonth}}
                 sx={{mb: 1}}
+                {...snapShotDefaultPieProps}
               />
               <ChartBarMultipleByKey
                 property="do_you_have_a_household_member_that_has_a_lot_of_difficulty"
@@ -148,12 +149,12 @@ export const SnapshotProtMonitoNN2Needs = () => {
           <Div column>
             <SlidePanel>
               <ChartPieWidgetBy
-                {...snapShotDefaultPieProps}
                 compare={{before: computed.lastMonth}}
                 title={m.protHHS2.mainConcernsRegardingHousing}
                 filter={_ => !_.what_are_your_main_concerns_regarding_your_accommodation?.includes('none')}
                 data={data}
                 sx={{mb: 1}}
+                {...snapShotDefaultPieProps}
               />
               <ChartBarMultipleBy
                 by={_ => _.what_are_your_main_concerns_regarding_your_accommodation}
@@ -167,7 +168,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
               <ChartBarSingleBy
                 data={data}
                 by={_ => _.what_is_the_general_condition_of_your_accommodation}
-                label={Protection_hhs2.options.what_is_the_general_condition_of_your_accommodation}
+                label={Protection_hhs3.options.what_is_the_general_condition_of_your_accommodation}
                 sortBy={ChartHelperOld.sortBy.custom([
                   'sound_condition',
                   'partially_damaged',
@@ -187,6 +188,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
                 filter={_ => _ !== 'yes'}
                 filterBase={_ => _ !== 'unable_unwilling_to_answer'}
                 data={data}
+                {...snapShotDefaultPieProps}
               />
               <ChartBarMultipleBy
                 data={data}

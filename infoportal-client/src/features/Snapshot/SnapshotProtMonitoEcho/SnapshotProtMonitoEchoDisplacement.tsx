@@ -9,7 +9,7 @@ import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/Snapsho
 import {Txt} from 'mui-extension'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Protection_hhs2} from '@infoportal-common'
+import {Protection_hhs3} from '@infoportal-common'
 
 export const SnapshotProtMonitoEchoDisplacement = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -35,7 +35,7 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
                 by={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence}
                 filter={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence !== 'unable_unwilling_to_answer'}
                 label={{
-                  ...Protection_hhs2.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
+                  ...Protection_hhs3.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
                   integrate_into_the_local_community_of_current_place_of_residence: m.snapshotProtMonito.integrateIntoTheLocalCommunity,
                   return_to_the_area_of_origin: m.returnToThePlaceOfHabitualResidence
                 }}
@@ -49,7 +49,7 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
                 filterValue={['unable_unwilling_to_answer']}
                 by={_ => _.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin}
                 label={{
-                  ...Protection_hhs2.options.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin,
+                  ...Protection_hhs3.options.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin,
                   increased_restored_access_to_livelihood_employment_and_economic_opportunities: 'Increased/restored access to livelihood/employment',
                   repaired_housing_compensation_for_destroyedor_damaged_property: 'Repaired housing/compensation for damaged property',
                   improved_security_situation: 'Improved security situation / Cessation of hostilities'
@@ -66,19 +66,20 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
             <SlidePanel BodyProps={{sx: {paddingBottom: t => t.spacing(.25) + ' !important'}}}>
               <SlidePanelTitle>{m.idpPopulationByOblast}</SlidePanelTitle>
               <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <UkraineMap sx={{flex: 1}} data={computed.idpsByOriginOblast} base={computed.idps.length} title={m.originOblast}/>
+                <UkraineMap sx={{flex: 1, mr: 1,}} data={computed.idpsByOriginOblast} base={computed.idps.length} title={m.originOblast}/>
                 {/* <Box sx={{display: 'flex', flexDirection: 'column'}}>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                 </Box> */}
-                <UkraineMap sx={{flex: 1}} data={computed.byCurrentOblast} base={computed.idps.length} legend={false} title={m.currentOblast}/>
+                <UkraineMap sx={{flex: 1, ml: 1,}} data={computed.byCurrentOblast} base={computed.idps.length} legend={false} title={m.currentOblast}/>
               </Box>
             </SlidePanel>
 
             <SlidePanel BodyProps={{sx: {paddingBottom: t => t.spacing(.25) + ' !important'}}}>
               <SlidePanelTitle>{m.displacementAndReturn}</SlidePanelTitle>
               <ChartLineByDate
+                hideYTicks={false}
                 sx={{ml: -5}}
                 colors={snapshotColors}
                 height={188}
@@ -100,7 +101,7 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
                 filterValue={['unable_unwilling_to_answer']}
                 by={_ => _.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community}
                 label={{
-                  ...Protection_hhs2.options.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community,
+                  ...Protection_hhs3.options.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community,
                   access_to_essential_services: 'Access to essential services'
                 }}
                 limit={4}

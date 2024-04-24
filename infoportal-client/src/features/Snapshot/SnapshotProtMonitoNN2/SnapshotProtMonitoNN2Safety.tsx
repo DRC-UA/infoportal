@@ -8,7 +8,7 @@ import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Protection_hhs2, Protection_hhs3, toPercent} from '@infoportal-common'
+import {Protection_hhs3, toPercent} from '@infoportal-common'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 
 export const SnapshotProtMonitoNN2Safety = () => {
@@ -57,7 +57,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
                 data={data}
                 by={_ => _.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
                 label={{
-                  ...Protection_hhs2.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members,
+                  ...Protection_hhs3.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members,
                   other_specify: 'Other'
                 }}
                 filterValue={['unable_unwilling_to_answer']}
@@ -107,7 +107,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
                   '_4_very_safe',
                 ])}
                 by={_ => _.please_rate_your_sense_of_safety_in_this_location}
-                label={Protection_hhs2.options.please_rate_your_sense_of_safety_in_this_location}
+                label={Protection_hhs3.options.please_rate_your_sense_of_safety_in_this_location}
                 filter={_ => _.please_rate_your_sense_of_safety_in_this_location !== 'unable_unwilling_to_answer'}
               />
               <SlidePanelTitle sx={{mt: 3}}>{m.influencingFactors}</SlidePanelTitle>
@@ -121,7 +121,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
                 }}
                 by={_ => _.what_are_the_main_factors_that_make_this_location_feel_unsafe}
                 label={{
-                  ...Protection_hhs2.options.what_are_the_main_factors_that_make_this_location_feel_unsafe,
+                  ...Protection_hhs3.options.what_are_the_main_factors_that_make_this_location_feel_unsafe,
                   other_specify: 'Other'
                 }}
                 filterValue={['unable_unwilling_to_answer']}
@@ -146,7 +146,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
                 }}
                 by={_ => _.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area}
                 label={{
-                  ...Protection_hhs2.options.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area,
+                  ...Protection_hhs3.options.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area,
                   other_specify: 'Other'
                 }}
                 filterValue={['no', 'unable_unwilling_to_answer']}

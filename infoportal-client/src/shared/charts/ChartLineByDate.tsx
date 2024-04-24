@@ -25,7 +25,7 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
   end?: Date
   // @ts-ignore
   // translations?: Partial<Record<T[K], string>>
-} & Pick<ChartLineProps, 'colors' | 'sx'>) => {
+} & Pick<ChartLineProps, 'hideYTicks' | 'colors' | 'sx'>) => {
   const curve = useMemo(() => {
     // const questions = ([question].flat() as K[])
     // const _end = format(end, 'yyyy-MM')

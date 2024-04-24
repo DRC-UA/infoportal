@@ -5,7 +5,7 @@ import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
-import {Protection_hhs2} from '@infoportal-common'
+import {Protection_hhs3} from '@infoportal-common'
 import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 
@@ -49,7 +49,8 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                   {(_, last) => <ChartPieWidget
                     title={m.hhOutOfWork}
                     value={_.value}
-                    base={_.base} evolution={_.percent - last.percent}
+                    base={_.base}
+                    // evolution={_.percent - last.percent}
                     {...snapShotDefaultPieProps}
                     sx={{mb: 0}}
                   />}
@@ -65,7 +66,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                     title={m.hhWithGapMeetingBasicNeeds}
                     value={_.value}
                     base={_.base}
-                    evolution={_.percent - last.percent}
+                    // evolution={_.percent - last.percent}
                     {...snapShotDefaultPieProps}
                     sx={{mb: 0}}
                   />}
@@ -80,8 +81,8 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                   filterValue: ['no_income', 'unable_unwilling_to_answer'],
                   data: data.map(_ => _.what_is_the_average_month_income_per_household).compact(),
                 }))
-                  .map(ChartHelperOld.setLabel(Protection_hhs2.options.what_is_the_average_month_income_per_household))
-                  .map(ChartHelperOld.sortBy.custom(Object.keys(Protection_hhs2.options.what_is_the_average_month_income_per_household)))
+                  .map(ChartHelperOld.setLabel(Protection_hhs3.options.what_is_the_average_month_income_per_household))
+                  .map(ChartHelperOld.sortBy.custom(Object.keys(Protection_hhs3.options.what_is_the_average_month_income_per_household)))
                   .get()
 
                 const hhSize = ChartHelperOld.sumByCategory({
@@ -107,7 +108,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                 data={data}
                 by={_ => _.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges}
                 label={{
-                  ...Protection_hhs2.options.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
+                  ...Protection_hhs3.options.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
                   reducing_consumption_of_food: m.protHHS2.reducing_consumption_of_food,
                 }}
                 filterValue={['unable_unwilling_to_answer']}
@@ -120,7 +121,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
               <ChartBarMultipleBy
                 data={data}
                 by={_ => _.what_are_the_main_sources_of_income_of_your_household}
-                label={Protection_hhs2.options.what_are_the_main_sources_of_income_of_your_household}
+                label={Protection_hhs3.options.what_are_the_main_sources_of_income_of_your_household}
                 filterValue={['unable_unwilling_to_answer']}
                 limit={4}
               />
@@ -130,7 +131,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
               <ChartBarMultipleBy
                 data={data}
                 by={_ => _.what_are_the_reasons_for_being_out_of_work}
-                label={Protection_hhs2.options.what_are_the_reasons_for_being_out_of_work}
+                label={Protection_hhs3.options.what_are_the_reasons_for_being_out_of_work}
                 filterValue={['unable_unwilling_to_answer']}
               />
             </SlidePanel>

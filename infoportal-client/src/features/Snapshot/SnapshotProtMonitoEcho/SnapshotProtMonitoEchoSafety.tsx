@@ -4,7 +4,7 @@ import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, S
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
-import {OblastIndex, Protection_hhs2, Protection_hhs3} from '@infoportal-common'
+import {OblastIndex, Protection_hhs3} from '@infoportal-common'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
@@ -14,13 +14,13 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 
 export const SnapshotProtMonitoEchoSafety = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
-  const {formatLargeNumber, m} = useI18n()
+  const {m} = useI18n()
   const t = useTheme()
   const groupedIndividualsType = useMemo(() => {
     const res = {
-      type: seq() as Seq<Protection_hhs2.T['what_type_of_incidents_took_place_has_any_adult_male_member_experienced_violence']>,
-      when: seq() as Seq<Protection_hhs2.T['when_did_the_incidents_occur_has_any_adult_male_member_experienced_violence']>,
-      who: seq() as Seq<Protection_hhs2.T['who_were_the_perpetrators_of_the_incident_has_any_adult_male_member_experienced_violence']>,
+      type: seq() as Seq<Protection_hhs3.T['what_type_of_incidents_took_place_has_any_adult_male_member_experienced_violence']>,
+      when: seq() as Seq<Protection_hhs3.T['when_did_the_incidents_occur_has_any_adult_male_member_experienced_violence']>,
+      who: seq() as Seq<Protection_hhs3.T['who_were_the_perpetrators_of_the_incident_has_any_adult_male_member_experienced_violence']>,
     }
     data.forEach(_ => {
       res.type.push(...[
@@ -128,7 +128,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
               {/*    filterValue: ['unable_unwilling_to_answer']*/}
               {/*  }))*/}
               {/*    .map(ChartHelperOld.setLabel({*/}
-              {/*      ...Protection_hhs2.options.what_type_of_incidents_took_place_has_any_adult_male_member_experienced_violence,*/}
+              {/*      ...Protection_hhs3.options.what_type_of_incidents_took_place_has_any_adult_male_member_experienced_violence,*/}
               {/*      // TODO TO REMOVE*/}
               {/*      // other_specify: 'Psychological abuse',*/}
               {/*    }))*/}
@@ -147,7 +147,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
                 by={_ => _.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area}
                 limit={5}
                 label={{
-                  ...Protection_hhs2.options.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area,
+                  ...Protection_hhs3.options.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area,
                   lack_of_transportationfinancial_resources_to_pay_transportation: 'Lack of transportation'
                 }}
                 filterValue={['no', 'unable_unwilling_to_answer']}
@@ -178,7 +178,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
                 data={data}
                 by={_ => _.what_are_the_main_factors_that_make_this_location_feel_unsafe}
                 filterValue={['unable_unwilling_to_answer']}
-                label={Protection_hhs2.options.what_are_the_main_factors_that_make_this_location_feel_unsafe}
+                label={Protection_hhs3.options.what_are_the_main_factors_that_make_this_location_feel_unsafe}
                 // mergeOptions={{
                 //   intercommunity_tensions: 'other_specify',
               />

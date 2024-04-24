@@ -6,7 +6,7 @@ import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {getIdpsAnsweringRegistrationQuestion} from '@/features/Protection/DashboardMonito/ProtectionDashboardMonitoDocument'
-import {chain, OblastIndex, Person, Protection_hhs2} from '@infoportal-common'
+import {chain, OblastIndex, Person, Protection_hhs3} from '@infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
@@ -96,7 +96,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
               <ChartBarMultipleBy
                 data={data}
                 by={_ => _.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
-                label={Protection_hhs2.options.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
+                label={Protection_hhs3.options.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
                 mergeOptions={{
                   distrust_of_public_institutions_and_authorities: 'other_specify',
                   discrimination: 'other_specify',
@@ -127,7 +127,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 data: data.flatMap(_ => _.persons).map(_ => _.lackDoc).compact(),
                 filterValue: ['none', 'unable_unwilling_to_answer'],
               }))
-                .map(ChartHelperOld.setLabel(Protection_hhs2.options.does_1_lack_doc))
+                .map(ChartHelperOld.setLabel(Protection_hhs3.options.does_lack_doc))
                 .map(ChartHelperOld.sortBy.value)
                 .get()}>
                 {_ => <ChartBar data={_}/>}
@@ -166,7 +166,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                   inheritance_will: 'other_specify',
                 }}
                 label={{
-                  ...Protection_hhs2.options.what_housing_land_and_property_documents_do_you_lack,
+                  ...Protection_hhs3.options.what_housing_land_and_property_documents_do_you_lack,
                   construction_stage_substituted_with_bti_certificate_following_completion_of_construction: 'Construction stage',
                   document_issues_by_local_self_government_proving_that_the_house_was_damaged_destroyed: 'Document issued by authority',
                   // document_issues_by_local_self_government_proving_that_the_house_was_damaged_destroyed: 'Document issued by local self-government proving a damaged house',

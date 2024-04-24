@@ -12,7 +12,7 @@ import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
 import {Obj, seq} from '@alexandreannic/ts-utils'
-import {OblastIndex, Person, Protection_hhs2} from '@infoportal-common'
+import {OblastIndex, Person, Protection_hhs3} from '@infoportal-common'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 
 export const SnapshotProtMonitoEchoSample = () => {
@@ -50,13 +50,13 @@ export const SnapshotProtMonitoEchoSample = () => {
                   )}
               </ul>
             </SlideTxt>
-            <UkraineMap data={Obj.filter(computed.byCurrentOblast, (k, v) => v.value > 5)} sx={{mx: 1}}/>
-            <SlideTxt>
+            <SlideTxt sx={{mb: 2}}>
               DRC protection monitoring targeted internally displaced persons (IDPs) and people
               directly exposed to and affected by the current armed conflict in order to understand
               the protection needs facing affected populations; informing DRC and the protection
               communities' response.
             </SlideTxt>
+            <UkraineMap data={Obj.filter(computed.byCurrentOblast, (k, v) => v.value > 5)} sx={{mx: 1}}/>
           </Div>
 
           <Div column sx={{flex: 6}}>
@@ -113,7 +113,7 @@ export const SnapshotProtMonitoEchoSample = () => {
                     data={data}
                     by={_ => _.what_is_the_type_of_your_household}
                     label={{
-                      ...Protection_hhs2.options.what_is_the_type_of_your_household,
+                      ...Protection_hhs3.options.what_is_the_type_of_your_household,
                       extended_family: 'Extended family',
                       couple_with_children: 'Couple with children',
                       couple_without_children: 'Couple without children',
@@ -125,7 +125,7 @@ export const SnapshotProtMonitoEchoSample = () => {
                 </SlidePanel>
                 <SlidePanel>
                   <SlidePanelTitle>{m.displacementStatus}</SlidePanelTitle>
-                  <ChartBarSingleBy data={data} by={_ => _.do_you_identify_as_any_of_the_following} label={Protection_hhs2.options.do_you_identify_as_any_of_the_following}/>
+                  <ChartBarSingleBy data={data} by={_ => _.do_you_identify_as_any_of_the_following} label={Protection_hhs3.options.do_you_identify_as_any_of_the_following}/>
                 </SlidePanel>
               </Div>
             </Div>
