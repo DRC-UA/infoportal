@@ -66,15 +66,13 @@ export enum CashForRentStatus {
 }
 
 export enum CashForEduStatus {
-  Rejected = 'Rejected',
-  Pending = 'Pending',
   Verified = 'Verified',
   Approved = 'Approved',
   FirstPending = 'FirstPending',
   FirstPaid = 'FirstPaid',
   SecondPending = 'SecondPending',
   SecondPaid = 'SecondPaid',
-  Submitted = 'Submitted',
+  CertificateSubmitted = 'CertificateSubmitted',
 }
 
 export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {
