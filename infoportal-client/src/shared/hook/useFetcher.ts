@@ -40,48 +40,57 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
   const [error, setError] = useState<E | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
   const [callIndex, setCallIndex] = useState(0)
-  const fetch$ = useRef<Promise<FetcherResult<F>>>()
+  const fetch$ = useRef<{
+    // Needed to prevent competition issue when call2 got overridden by call1 because call1 finish after call 2.
+    queryRef: number,
+    query?: Promise<FetcherResult<F>>
+  }>({queryRef: 0})
 
   const fetch = ({force = true, clean = true}: FetchParams = {}, ...args: any[]): Promise<FetcherResult<F>> => {
+    fetch$.current.queryRef = fetch$.current.queryRef + 1
+    const currQueryRef = fetch$.current.queryRef
+    setCallIndex(_ => _ + 1)
     if (!force) {
-      if (fetch$.current) {
-        return fetch$.current!
+      if (fetch$.current.query) {
+        return fetch$.current.query!
       }
       if (entity) {
         return Promise.resolve(entity)
       }
     } else {
-      fetch$.current = undefined
+      fetch$.current.query = undefined
     }
     if (clean) {
       setError(undefined)
       setEntity(undefined)
     }
     setLoading(true)
-    fetch$.current = fetcher(...args)
-    fetch$.current
+    fetch$.current.query = fetcher(...args)
+    fetch$.current.query
       .then((x: FetcherResult<F>) => {
-        setCallIndex(_ => _ + 1)
-        setLoading(false)
-        setEntity(x)
-        fetch$.current = undefined
+        if (currQueryRef === fetch$.current.queryRef) {
+          setLoading(false)
+          setEntity(x)
+        }
+        fetch$.current.query = undefined
       })
       .catch((e) => {
-        setCallIndex(_ => _ + 1)
-        setLoading(false)
-        fetch$.current = undefined
-        setError(mapError(e))
-        setEntity(undefined)
+        if (currQueryRef === fetch$.current.queryRef) {
+          setEntity(undefined)
+          setError(mapError(e))
+          setLoading(false)
+        }
+        fetch$.current.query = undefined
         // return Promise.reject(e)
         throw e
       })
-    return fetch$.current
+    return fetch$.current.query
   }
 
   const clearCache = () => {
     setEntity(undefined)
     setError(undefined)
-    fetch$.current = undefined
+    fetch$.current.query = undefined
   }
 
   return {
