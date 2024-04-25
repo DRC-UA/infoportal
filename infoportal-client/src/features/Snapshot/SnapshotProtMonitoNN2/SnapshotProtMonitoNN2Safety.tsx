@@ -8,7 +8,7 @@ import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Protection_hhs2, Protection_hhs3, toPercent} from '@infoportal-common'
+import {Protection_hhs3, toPercent} from '@infoportal-common'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 
 export const SnapshotProtMonitoNN2Safety = () => {
@@ -42,10 +42,11 @@ export const SnapshotProtMonitoNN2Safety = () => {
                     //   __html: m.snapshotProtMonito.nn2.safety(_)
                     // }}
                   >
-                    <b>33%</b> of respondents indicated a poor sense of safety mainly due to shelling and UXOs contamination. Reports indicate challenges with the functionality of
-                    the air alert system, particularly in frontline communities. Additionally, the absence of operational and accessible bomb shelters forces residents to seek
-                    refuge in unreliable home basements. There are ongoing reports of considerable stress and deteriorating mental health and well-being, with older individuals and
-                    those with disabilities being particularly vulnerable to experiencing psychological distress.
+                    In addition to the threats posed by shelling attacks and the presence of explosive ordnance, various other factors severely restrict people's freedom of
+                    movement. These include challenges related to the accessibility and affordability of transportation, as well as apprehensions regarding conscription.
+                    Reports persist regarding heightened concerns over active mobilization for conscription, prompting men to limit their movements as a precautionary measure.
+                    Reports persist of substantial stress and declining mental health and well-being, with older individuals and people with disabilities being particularly
+                    susceptible to psychological distress.
                   </p>
                 }
               </Lazy>
@@ -56,7 +57,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
                 data={data}
                 by={_ => _.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
                 label={{
-                  ...Protection_hhs2.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members,
+                  ...Protection_hhs3.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members,
                   other_specify: 'Other'
                 }}
                 filterValue={['unable_unwilling_to_answer']}
@@ -64,6 +65,10 @@ export const SnapshotProtMonitoNN2Safety = () => {
                   lack_of_access_to_employment_opportunities: 'other_specify',
                   missing_family_members: 'other_specify',
                   fear_of_being_sexually_assaulted: 'other_specify',
+                  lack_of_access_to_basic_services: 'other_specify',
+                  lack_of_access_to_specialized_medical_services: 'other_specify',
+                  fear_of_conscription: 'other_specify',
+                  displacement_related_stress: 'other_specify'
                 }}
               />
             </SlidePanel>
@@ -102,14 +107,23 @@ export const SnapshotProtMonitoNN2Safety = () => {
                   '_4_very_safe',
                 ])}
                 by={_ => _.please_rate_your_sense_of_safety_in_this_location}
-                label={Protection_hhs2.options.please_rate_your_sense_of_safety_in_this_location}
+                label={Protection_hhs3.options.please_rate_your_sense_of_safety_in_this_location}
                 filter={_ => _.please_rate_your_sense_of_safety_in_this_location !== 'unable_unwilling_to_answer'}
               />
               <SlidePanelTitle sx={{mt: 3}}>{m.influencingFactors}</SlidePanelTitle>
               <ChartBarMultipleBy
                 data={data}
+                mergeOptions={{
+                  fighting_between_armed_or_security_actors: 'other_specify',
+                  intercommunity_tensions: 'other_specify',
+                  criminality: 'other_specify',
+                  presence_of_armed_or_security_actors: 'other_specify'
+                }}
                 by={_ => _.what_are_the_main_factors_that_make_this_location_feel_unsafe}
-                label={Protection_hhs2.options.what_are_the_main_factors_that_make_this_location_feel_unsafe}
+                label={{
+                  ...Protection_hhs3.options.what_are_the_main_factors_that_make_this_location_feel_unsafe,
+                  other_specify: 'Other'
+                }}
                 filterValue={['unable_unwilling_to_answer']}
               />
             </SlidePanel>
@@ -125,8 +139,16 @@ export const SnapshotProtMonitoNN2Safety = () => {
               />
               <ChartBarMultipleBy
                 data={data}
+                mergeOptions={{
+                  reduced_mobility_linked_with_health_issues_or_disability: 'other_specify',
+                  lack_of_documentation: 'other_specify',
+                  risks_of_sexual_violence_and_exploitation: 'other_specify'
+                }}
                 by={_ => _.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area}
-                label={Protection_hhs2.options.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area}
+                label={{
+                  ...Protection_hhs3.options.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area,
+                  other_specify: 'Other'
+                }}
                 filterValue={['no', 'unable_unwilling_to_answer']}
               />
             </SlidePanel>

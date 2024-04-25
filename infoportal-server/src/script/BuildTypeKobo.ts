@@ -232,6 +232,12 @@ export class BuildKoboType {
           integrate_into_the_local_community_of_current_place_of_residence: ['Integrate into the local community'],
           return_to_the_area_of_origin: [`Return to the place of habitual residence`],
         },
+        what_housing_land_and_property_documents_do_you_lack: {
+          'death_declaration_certificate_by_ambulance_or_police_of_predecessor': [`Death declaration certificate`],
+        },
+        what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges: {
+          'reducing_consumption_of_essential_medicines_or_healthcare_services': [`Reducing healthcare expenses`],
+        },
         what_are_your_main_concerns_regarding_your_accommodation: {
           'risk_of_eviction': [`Risk of eviction`],
           'accommodations_condition': [`Accommodation’s condition`],

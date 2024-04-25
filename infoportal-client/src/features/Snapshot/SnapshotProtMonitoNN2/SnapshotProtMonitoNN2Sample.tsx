@@ -12,7 +12,7 @@ import {ChartPie} from '@/shared/charts/ChartPie'
 import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Person, Protection_hhs2, Protection_hhs3} from '@infoportal-common'
+import {Person, Protection_hhs3} from '@infoportal-common'
 
 export const SnapshotProtMonitoNN2Sample = () => {
   const theme = useTheme()
@@ -25,9 +25,9 @@ export const SnapshotProtMonitoNN2Sample = () => {
         <Div>
           <Div column sx={{flex: 3.6}}>
             <SlideTxt>
-            This snapshot summarizes the findings of protection monitoring (PM) implemented through household surveys in Mykolaiv Oblast between 
-            December 2023 and January 2024. DRC protection monitoring targeted internally displaced persons (IDPs) and people directly exposed to and affected by the 
-            current armed conflict in order to understand the protection needs facing affected populations; informing DRC and the protection communities' response.
+              This snapshot summarizes the findings of protection monitoring (PM) implemented through household surveys in Mykolaiv Oblast between February and March 2024.
+              DRC protection monitoring targeted internally displaced persons (IDPs) and people directly exposed to and affected by the current armed conflict in order to
+              understand the protection needs facing affected populations; informing DRC and the protection communities' response.
             </SlideTxt>
             <Box sx={{height: 316, borderRadius: t => t.shape.borderRadius}}>
               <PanelTitle sx={{mb: 3, mt: 1}}>{m.idpOriginOblast}</PanelTitle>
@@ -95,7 +95,7 @@ export const SnapshotProtMonitoNN2Sample = () => {
                   <ChartBarSingleBy
                     data={data}
                     by={_ => _.do_you_identify_as_any_of_the_following}
-                    label={Protection_hhs2.options.do_you_identify_as_any_of_the_following}
+                    label={Protection_hhs3.options.do_you_identify_as_any_of_the_following}
                   />
                 </SlidePanel>
               </Div>

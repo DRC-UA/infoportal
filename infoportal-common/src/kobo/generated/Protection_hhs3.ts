@@ -2965,7 +2965,7 @@ export namespace Protection_hhs3 {
       'document_issues_by_police_state_emergency_service_proving_that_the_house_was_damaged_destroyedfor_ukrainian_state_control_areas': `Document issued by police/State Emergency Service proving that the house was damaged/destroyed – For Ukrainian state control areas`,
       'document_issues_by_local_self_government_proving_that_the_house_was_damaged_destroyed': `Document issued by local self-government proving that the house was damaged/destroyed`,
       'cost_estimation_certificate_state_commission_issued_when_personal_request_is_made': `Cost estimation certificate - state commission (issued when personal request is made)`,
-      'death_declaration_certificate_by_ambulance_or_police_of_predecessor': `Death declaration certificate by ambulance or police of predecessor`,
+      'death_declaration_certificate_by_ambulance_or_police_of_predecessor': `Death declaration certificate`,
       'informatsiyna_dovidka_informational_extract_on_damaged_property': `Informatsiyna dovidka / Informational extract on damaged property`,
       'unable_unwilling_to_answer': `Unable/unwilling to answer`,
       'other_specify': `Other`
@@ -3438,7 +3438,7 @@ export namespace Protection_hhs3 {
       'engaging_in_dangerous_or_exploitative_work': `Engaging in dangerous or exploitative work`,
       'no_coping_strategy': `No coping strategy`,
       'reducing_consumption_of_food': `Reducing consumption of food (Reducing portion sizes/reducing number of meals consumed per day/replacing food with less healthy cheaper options)`,
-      'reducing_consumption_of_essential_medicines_or_healthcare_services': `Reducing consumption of essential medicines or healthcare services`,
+      'reducing_consumption_of_essential_medicines_or_healthcare_services': `Reducing healthcare expenses`,
       'sending_children_into_employment': `Sending children into employment`,
       'removing_children_from_education': `Removing children from education`,
       'sending_hh_members_to_live_elsewhere': `Sending HH members to live elsewhere`,

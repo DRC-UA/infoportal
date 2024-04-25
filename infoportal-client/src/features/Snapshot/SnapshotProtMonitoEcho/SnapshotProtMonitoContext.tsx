@@ -4,7 +4,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@/core/i18n'
 import {seq, Seq} from '@alexandreannic/ts-utils'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {KoboProtection_hhs3, Period, Protection_hhs2} from '@infoportal-common'
+import {KoboProtection_hhs3, Period, PeriodHelper, Protection_hhs3} from '@infoportal-common'
 
 export interface SnapshotProtMonitoContext {
   computed: NonNullable<UseProtHHS2Data>
@@ -22,8 +22,8 @@ export const SnapshotProtMonitoringProvider = ({
   children,
 }: {
   filters?: {
-    currentOblast?: Protection_hhs2.T['where_are_you_current_living_oblast'][],
-    drcOffice?: Protection_hhs2.T['staff_to_insert_their_DRC_office'][],
+    currentOblast?: Protection_hhs3.T['where_are_you_current_living_oblast'][],
+    drcOffice?: Protection_hhs3.T['staff_to_insert_their_DRC_office'][],
   }
   period: Partial<Period>,
   children: ReactNode
@@ -31,14 +31,18 @@ export const SnapshotProtMonitoringProvider = ({
   const {api} = useAppSettings()
   const {m} = useI18n()
 
-  const request = (filter: Partial<Period>) => api.kobo.typedAnswers.searchProtection_hhs3({
-    filters: {
-      start: filter.start ?? undefined,
-      end: filter.end ?? undefined,
-    }
-  })
-    .then(_ => _.data.filter(_ => !filters.currentOblast || filters.currentOblast.includes(_.where_are_you_current_living_oblast)))
-    .then(seq)
+
+  const request = (filter: Partial<Period>) => {
+    return api.kobo.typedAnswers.searchProtection_hhs3({
+      filters: {
+        start: filter.start ?? undefined,
+        end: filter.end ?? undefined,
+      }
+    })
+      .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.submissionTime)))
+      .then(_ => _.filter(_ => !filters.currentOblast || filters.currentOblast.includes(_.where_are_you_current_living_oblast)))
+      .then(seq)
+  }
 
   const _answers = useFetcher(request)
 
