@@ -2,7 +2,7 @@ import {Box, BoxProps, useTheme} from '@mui/material'
 import React from 'react'
 
 export const EULogo = ({
-  height = 36,
+  height = 30,
   sx,
   ...props
 }: {
@@ -59,7 +59,7 @@ export const DRCLogo = ({
 }
 
 export const UhfLogo = ({
-  height = 36,
+  height = 26,
   ...props
 }: {
   height?: number
@@ -75,7 +75,7 @@ export const UhfLogo = ({
   )
 }
 export const UsaidLogo = ({
-  height = 36,
+  height = 30,
   ...props
 }: {
   height?: number

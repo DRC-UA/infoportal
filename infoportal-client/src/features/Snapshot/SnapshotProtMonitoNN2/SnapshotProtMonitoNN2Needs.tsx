@@ -4,17 +4,18 @@ import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlideTxt} from '@/
 import {useI18n} from '@/core/i18n'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
-import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
+import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {Lazy} from '@/shared/Lazy'
-import {Protection_hhs3, toPercent} from '@infoportal-common'
+import {Protection_hhs3, toPercent, WgDisability} from '@infoportal-common'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartHelper} from '@/shared/charts/chartHelper'
 import {Obj, seq} from '@alexandreannic/ts-utils'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Box} from '@mui/material'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
-import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
 import {Utils} from '@/utils/utils'
+import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
+import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
 
 export const SnapshotProtMonitoNN2Needs = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -33,7 +34,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
 
   return (
     <PdfSlide>
-      <SlideHeader>{m.snapshotProtMonito.basicNeeds}</SlideHeader>
+      <SlideHeader logo={snapshotProtMonitoNn2Logo}>{m.snapshotProtMonito.basicNeeds}</SlideHeader>
       <PdfSlideBody>
         <Div>
           <Div column>
@@ -125,25 +126,34 @@ export const SnapshotProtMonitoNN2Needs = () => {
             {/*  />*/}
             {/*</SlidePanel>*/}
             <SlidePanel>
-              <ChartPieWidgetByKey
-                property="do_you_have_a_household_member_that_has_a_lot_of_difficulty"
-                title={m.protHHS2.hhWithMemberHavingDifficulties}
-                filter={_ => !_.includes('no')}
-                data={data}
-                compare={{before: computed.lastMonth}}
-                sx={{mb: 1}}
-                {...snapShotDefaultPieProps}
-              />
-              <ChartBarMultipleByKey
-                property="do_you_have_a_household_member_that_has_a_lot_of_difficulty"
-                data={data}
-                label={{
-                  ...Protection_hhs3.options.do_you_have_a_household_member_that_has_a_lot_of_difficulty,
-                  wg_using_your_usual_language_have_difficulty_communicating: m.protHHS2.wg_using_your_usual_language_have_difficulty_communicating,
-
-                }}
-                filterValue={['no', 'unable_unwilling_to_answer']}
-              />
+              <Lazy deps={[data]} fn={() => data.flatMap(_ => _.persons)}>
+                {_ =>
+                  <>
+                    <ChartPieWidgetBy
+                      title={m.protHHS2.hhWithMemberHavingDifficulties}
+                      data={_}
+                      filter={_ => _.disability !== undefined}
+                      sx={{mb: 1}}
+                      {...snapShotDefaultPieIndicatorsProps}
+                    />
+                    <ChartBarMultipleByKey
+                      // filter={_ => _.disability !== undefined}
+                      property="disability"
+                      data={_}
+                      label={{
+                        See: `Seeing, even if wearing glasses`,
+                        Hear: `Hearing, even if using a hearing aid`,
+                        Walk: `Walking or climbing steps`,
+                        Rem: `Remembering or concentrating`,
+                        Care: `Self-care, such as washing all over or dressing`,
+                        Comm: `Using your usual language`,
+                        None: '',
+                      }}
+                      filterValue={[WgDisability.None]}
+                    />
+                  </>
+                }
+              </Lazy>
             </SlidePanel>
           </Div>
           <Div column>
@@ -154,7 +164,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
                 filter={_ => !_.what_are_your_main_concerns_regarding_your_accommodation?.includes('none')}
                 data={data}
                 sx={{mb: 1}}
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
               />
               <ChartBarMultipleBy
                 by={_ => _.what_are_your_main_concerns_regarding_your_accommodation}
@@ -188,7 +198,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
                 filter={_ => _ !== 'yes'}
                 filterBase={_ => _ !== 'unable_unwilling_to_answer'}
                 data={data}
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
               />
               <ChartBarMultipleBy
                 data={data}

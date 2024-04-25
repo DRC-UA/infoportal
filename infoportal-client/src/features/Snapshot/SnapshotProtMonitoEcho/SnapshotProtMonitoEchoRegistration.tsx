@@ -8,16 +8,17 @@ import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {getIdpsAnsweringRegistrationQuestion} from '@/features/Protection/DashboardMonito/ProtectionDashboardMonitoDocument'
 import {chain, OblastIndex, Person, Protection_hhs3} from '@infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
-import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
+import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
+import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 
 export const SnapshotProtMonitoEchoRegistration = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
   const {formatLargeNumber, m} = useI18n()
   return (
     <PdfSlide>
-      <SlideHeader>{m.protHHSnapshot.titles.document}</SlideHeader>
+      <SlideHeader logo={snapshotProtMonitoEchoLogo}>{m.protHHSnapshot.titles.document}</SlideHeader>
       <PdfSlideBody>
         <Div>
           <Div column>
@@ -52,9 +53,9 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                       value={d.value}
                       base={d.base}
                       evolution={d.percent - l.percent}
-                      {...snapShotDefaultPieProps}
+                      {...snapShotDefaultPieIndicatorsProps}
                       sx={{
-                        ...snapShotDefaultPieProps.sx,
+                        ...snapShotDefaultPieIndicatorsProps.sx,
                         flex: 1,
                         mb: 0,
                       }}
@@ -71,9 +72,9 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                       value={d.value}
                       base={d.base}
                       evolution={d.percent - l.percent}
-                      {...snapShotDefaultPieProps}
+                      {...snapShotDefaultPieIndicatorsProps}
                       sx={{
-                        ...snapShotDefaultPieProps.sx,
+                        ...snapShotDefaultPieIndicatorsProps.sx,
                         flex: 1,
                         mb: 0,
                       }}
@@ -90,7 +91,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 filter={_ => !_.includes('no')}
                 filterBase={_ => !_.includes('unable_unwilling_to_answer')}
                 data={data}
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
 
               />
               <ChartBarMultipleBy
@@ -120,7 +121,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                   title={m.lackOfPersonalDoc}
                   value={_.value}
                   base={_.base}
-                  {...snapShotDefaultPieProps}
+                  {...snapShotDefaultPieIndicatorsProps}
                 />}
               </Lazy>
               <Lazy deps={[data]} fn={() => chain(ChartHelperOld.multiple({
@@ -142,7 +143,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 filterBase={_ => !_.includes('unable_unwilling_to_answer')}
                 filter={_ => !_.includes('none')}
                 data={data}
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
               />
               {/*<ChartPieWidgetBy*/}
               {/*  hideEvolution*/}

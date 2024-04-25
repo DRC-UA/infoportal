@@ -22,15 +22,21 @@ export const snapshotColors = (t: Theme) => [
   snapshotAlternateColor(t),
 ]
 
-export const snapShotDefaultPieProps: Partial<Pick<ChartPieIndicatorProps, 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'>> & {
-  hideEvolution?: boolean
-} & Pick<ChartPieWidgetProps<any>, 'compare'> = {
+export const snapShotDefaultPieIndicatorsProps: Partial<Pick<ChartPieIndicatorProps, 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'>> = {
   dense: true,
   evolution: null as any,
+  showBase: true,
+  showValue: true,
+  sx: {
+    mb: 1,
+  }
+}
+export const snapShotDefaultPieWidgetProps: Pick<ChartPieWidgetProps<any>, 'compare' | 'hideEvolution' | 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'> = {
+  dense: true,
+  compare: null as any,
   hideEvolution: true,
   showBase: true,
   showValue: true,
-  compare: null as any,
   sx: {
     mb: 1,
   }

@@ -1,6 +1,6 @@
 import {format} from 'date-fns'
 import {NullableKey, Period} from '@infoportal-common'
-import React, {ReactNode} from 'react'
+import React, {ReactNode, useEffect} from 'react'
 import {Box} from '@mui/material'
 import {Txt} from 'mui-extension'
 import {SnapshotPeriod} from '@/features/Snapshot/SnapshotPeriod'
@@ -25,6 +25,9 @@ export const SnapshotHeader = ({
   logo?: ReactNode
 }) => {
   const {m} = useI18n()
+  useEffect(() => {
+    document.title = 'DRC - Protection Monitoring Snapshot'
+  }, [])
   return (
     <Box sx={{
       px: 2,

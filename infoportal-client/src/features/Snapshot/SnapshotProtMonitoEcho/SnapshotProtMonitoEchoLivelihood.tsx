@@ -6,8 +6,9 @@ import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Protection_hhs3} from '@infoportal-common'
-import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
+import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
+import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 
 export const SnapshotProtMonitoEchoLivelihood = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -15,7 +16,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
 
   return (
     <PdfSlide>
-      <SlideHeader>{m.snapshotProtMonito.livelihood}</SlideHeader>
+      <SlideHeader logo={snapshotProtMonitoEchoLogo}>{m.snapshotProtMonito.livelihood}</SlideHeader>
       <PdfSlideBody>
         <Div>
           <Div column>
@@ -51,7 +52,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                     value={_.value}
                     base={_.base}
                     // evolution={_.percent - last.percent}
-                    {...snapShotDefaultPieProps}
+                    {...snapShotDefaultPieIndicatorsProps}
                     sx={{mb: 0}}
                   />}
                 </Lazy>
@@ -67,7 +68,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                     value={_.value}
                     base={_.base}
                     // evolution={_.percent - last.percent}
-                    {...snapShotDefaultPieProps}
+                    {...snapShotDefaultPieIndicatorsProps}
                     sx={{mb: 0}}
                   />}
                 </Lazy>

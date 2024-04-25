@@ -6,12 +6,13 @@ import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {Lazy} from '@/shared/Lazy'
 import {Protection_hhs3, toPercent} from '@infoportal-common'
-import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
+import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {Txt} from 'mui-extension'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {useTheme} from '@mui/material'
+import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 
 export const SnapshotProtMonitoEchoNeeds = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -19,7 +20,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
   const t = useTheme()
   return (
     <PdfSlide>
-      <SlideHeader>{m.snapshotProtMonito.basicNeeds}</SlideHeader>
+      <SlideHeader logo={snapshotProtMonitoEchoLogo}>{m.snapshotProtMonito.basicNeeds}</SlideHeader>
       <PdfSlideBody>
         <Div>
           <Div column>
@@ -80,7 +81,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
             </SlideTxt>
             <SlidePanel>
               <ChartPieWidgetBy
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
                 sx={{mb: 0}}
                 title={m.protHHS2.barriersToAccessHealth}
                 compare={{before: computed.lastMonth}}
@@ -98,7 +99,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
             </SlidePanel>
             <SlidePanel>
               <ChartPieWidgetBy
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
                 sx={{mb: 0}}
                 title={m.protHHS2.unregisteredDisability}
                 filter={_ => _.do_you_or_anyone_in_your_household_have_a_disability_status_from_the_gov !== 'yes_all'}
@@ -129,7 +130,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
           <Div column>
             <SlidePanel>
               <ChartPieWidgetByKey
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
                 compare={{before: computed.lastMonth}}
                 title={m.protHHS2.mainConcernsRegardingHousing}
                 property="what_are_your_main_concerns_regarding_your_accommodation"

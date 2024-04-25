@@ -1,4 +1,4 @@
-import {Bn_RapidResponse, Bn_Re, Ecrec_cashRegistration, Protection_pss} from '../generated'
+import {Bn_RapidResponse, Bn_Re, Ecrec_cashRegistration, Protection_hhs3, Protection_pss} from '../generated'
 import {DrcOffice, DrcProjectHelper} from '../../type/Drc'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex} from '../../location'
@@ -79,6 +79,7 @@ export namespace KoboGeneralMapping {
   export const mapPersonDetails = (p: {
     hh_char_hh_det_gender?: string
     hh_char_hh_det_age?: number
+    hh_char_hh_det_disability?: NonNullable<Protection_hhs3.T['hh_char_hh_det']>[0]['hh_char_hh_det_disability']
     hh_char_hh_det_dis_select?: NonNullable<Bn_Re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_select']
     hh_char_hh_det_dis_level?: NonNullable<Bn_Re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_level']
     hh_char_hh_det_status?: NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status']
@@ -94,6 +95,18 @@ export namespace KoboGeneralMapping {
         ret: DisplacementStatus.Returnee,
         ref_asy: DisplacementStatus.Refugee,
       }, () => undefined)
+    if (p.hh_char_hh_det_disability !== undefined) {
+      res.disability = seq(p.hh_char_hh_det_disability ?? []).map(_ => fnSwitch(_!, {
+        no: WgDisability.None,
+        wg_seeing_even_if_wearing_glasses: WgDisability.See,
+        wg_hearing_even_if_using_a_hearing_aid: WgDisability.Hear,
+        wg_walking_or_climbing_steps: WgDisability.Walk,
+        wg_remembering_or_concentrating: WgDisability.Rem,
+        wg_selfcare_such_as_washing_all_over_or_dressing: WgDisability.Care,
+        wg_using_your_usual_language_have_difficulty_communicating: WgDisability.Comm,
+        unable_unwilling_to_answer: undefined,
+      }, () => undefined)).compact()
+    }
     if (p.hh_char_hh_det_dis_level !== undefined && p.hh_char_hh_det_dis_level !== 'zero')
       res.disability = seq(p.hh_char_hh_det_dis_select ?? []).map(_ => fnSwitch(_!, {
         diff_see: WgDisability.See,

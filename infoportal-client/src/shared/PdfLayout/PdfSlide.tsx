@@ -4,7 +4,6 @@ import React, {ReactNode, useEffect, useRef} from 'react'
 import {usePdfContext} from './PdfLayout'
 import {Panel, PanelBody} from '../Panel'
 import {PanelProps} from '../Panel/Panel'
-import {DRCLogo, EULogo} from '../logo/logo'
 import {uppercaseHandlingAcronyms} from '@infoportal-common'
 import {PanelBodyProps} from '../Panel/PanelBody'
 
@@ -111,7 +110,9 @@ export const Div = ({
   )
 }
 
-export const SlideHeader = ({children}: BoxProps) => {
+export const SlideHeader = ({children, logo}: BoxProps & {
+  logo?: ReactNode
+}) => {
   return (
     <Box sx={{
       px: 2,
@@ -123,8 +124,7 @@ export const SlideHeader = ({children}: BoxProps) => {
     }}>
       <Txt bold sx={{fontSize: '1.42em'}}>{children}</Txt>
       <Box sx={{display: 'flex', alignItems: 'center', marginLeft: 'auto'}}>
-        <EULogo height={30}/>
-        <DRCLogo height={22}/>
+        {logo}
       </Box>
     </Box>
   )

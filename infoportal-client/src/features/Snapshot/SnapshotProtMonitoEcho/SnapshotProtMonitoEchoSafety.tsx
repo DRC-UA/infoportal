@@ -7,10 +7,11 @@ import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {OblastIndex, Protection_hhs3} from '@infoportal-common'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
-import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
+import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {seq, Seq} from '@alexandreannic/ts-utils'
 import {useTheme} from '@mui/material'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
+import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 
 export const SnapshotProtMonitoEchoSafety = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -50,7 +51,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
 
   return (
     <PdfSlide>
-      <SlideHeader>{m.snapshotProtMonito.safetyProtectionIncidents}</SlideHeader>
+      <SlideHeader logo={snapshotProtMonitoEchoLogo}>{m.snapshotProtMonito.safetyProtectionIncidents}</SlideHeader>
       <PdfSlideBody>
         <Div>
           <Div column>
@@ -162,7 +163,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
                 filterBase={_ => _.please_rate_your_sense_of_safety_in_this_location !== 'unable_unwilling_to_answer'}
                 compare={{before: computed.lastMonth}}
                 data={data}
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
               />
               <UaMapBy
                 sx={{mx: 4}}

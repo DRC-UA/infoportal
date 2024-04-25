@@ -11,6 +11,7 @@ import {Box, Theme} from '@mui/material'
 import {OblastIndex, Period} from '@infoportal-common'
 import {endOfMonth, startOfMonth} from 'date-fns'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
+import {DRCLogo, EULogo, UhfLogo, UsaidLogo} from '@/shared/logo/logo'
 
 export const snapshotAlternateColor = (t: Theme) => t.palette.grey[500]
 
@@ -18,6 +19,13 @@ export const snapshotColors = (t: Theme) => [
   t.palette.primary.main,
   snapshotAlternateColor(t),
 ]
+
+export const snapshotProtMonitoNn2Logo = (
+  <>
+    <DRCLogo/>
+  </>
+)
+
 
 export const SnapshotProtMonitoNN2 = () => {
   const [period, setPeriod] = useState<Partial<Period>>({

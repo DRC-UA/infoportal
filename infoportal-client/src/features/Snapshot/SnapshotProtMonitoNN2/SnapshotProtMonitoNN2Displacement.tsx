@@ -7,13 +7,14 @@ import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/Snapsho
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Protection_hhs3} from '@infoportal-common'
+import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
 
 export const SnapshotProtMonitoNN2Displacement = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
   const {formatLargeNumber, m} = useI18n()
   return (
     <PdfSlide>
-      <SlideHeader>{m.displacement}</SlideHeader>
+      <SlideHeader logo={snapshotProtMonitoNn2Logo}>{m.displacement}</SlideHeader>
       <PdfSlideBody>
         <Div>
           <Div column>

@@ -10,6 +10,7 @@ import {Txt} from 'mui-extension'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Protection_hhs3} from '@infoportal-common'
+import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 
 export const SnapshotProtMonitoEchoDisplacement = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -17,7 +18,7 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
   const t = useTheme()
   return (
     <PdfSlide>
-      <SlideHeader>{m.displacement}</SlideHeader>
+      <SlideHeader logo={snapshotProtMonitoEchoLogo}>{m.displacement}</SlideHeader>
       <PdfSlideBody>
         <Div>
           <Div column>

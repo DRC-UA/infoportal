@@ -15,6 +15,15 @@ import {Obj, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex, Person, Protection_hhs3} from '@infoportal-common'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 
+export const snapshotProtMonitoEchoLogo = (
+  <>
+    <UsaidLogo sx={{mr: 1.5}}/>
+    <UhfLogo sx={{mr: 1.5}}/>
+    <EULogo sx={{mr: 1.5}}/>
+    <DRCLogo/>
+  </>
+)
+
 export const SnapshotProtMonitoEchoSample = () => {
   const theme = useTheme()
   const {conf} = useAppSettings()
@@ -23,19 +32,12 @@ export const SnapshotProtMonitoEchoSample = () => {
   const registrationOblasts = Obj.filter(computed.byCurrentOblast, (k, v) => v.value > 5)
   return (
     <PdfSlide>
-      <SnapshotHeader period={period} logo={
-        <>
-          <UsaidLogo sx={{mr: 1.5}}/>
-          <UhfLogo sx={{mr: 1.5}}/>
-          <EULogo sx={{mr: 1.5}}/>
-          <DRCLogo/>
-        </>
-      }/>
+      <SnapshotHeader period={period} logo={snapshotProtMonitoEchoLogo}/>
       <PdfSlideBody>
         <Div>
           <Div column sx={{flex: 4}}>
             <SlideTxt>
-              This snapshot summarizes the findings of <b>protection monitoring</b> (PM)
+              This snapshot summarizes the findings of <b>protection monitoring</b>&nbsp;
               implemented through household surveys in the following oblasts:
               <ul style={{columns: 2}}>
                 {seq(Obj.entries(registrationOblasts))

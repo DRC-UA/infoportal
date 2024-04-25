@@ -5,11 +5,12 @@ import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
-import {snapShotDefaultPieProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
+import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Protection_hhs3, toPercent} from '@infoportal-common'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
+import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
 
 export const SnapshotProtMonitoNN2Safety = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
@@ -17,7 +18,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
 
   return (
     <PdfSlide>
-      <SlideHeader>{m.snapshotProtMonito.MainProtectionNeeds}</SlideHeader>
+      <SlideHeader logo={snapshotProtMonitoNn2Logo}>{m.snapshotProtMonito.MainProtectionNeeds}</SlideHeader>
       <PdfSlideBody>
         <Div>
           <Div column>
@@ -96,7 +97,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
                 filterBase={_ => _.please_rate_your_sense_of_safety_in_this_location !== 'unable_unwilling_to_answer'}
                 compare={{before: computed.lastMonth}}
                 data={data}
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
               />
               <ChartBarSingleBy
                 data={data}
@@ -135,7 +136,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
                   'unable_unwilling_to_answer')}
                 compare={{before: computed.lastMonth}}
                 data={data}
-                {...snapShotDefaultPieProps}
+                {...snapShotDefaultPieIndicatorsProps}
               />
               <ChartBarMultipleBy
                 data={data}
