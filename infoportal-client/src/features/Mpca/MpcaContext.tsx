@@ -6,7 +6,7 @@ import {MpcaPayment} from '@/core/sdk/server/mpcaPaymentTool/MpcaPayment'
 import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {MpcaTypeTag} from '@/core/sdk/server/mpca/MpcaEntity'
 import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
-import {KoboAnswerId, KoboId} from '@/core/sdk/server/kobo/Kobo'
+import {KoboAnswerId, KoboId} from '@infoportal-common'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
 

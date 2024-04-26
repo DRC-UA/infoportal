@@ -9,6 +9,8 @@ export enum KoboValidation {
   Approved = 'Approved',
   Rejected = 'Rejected',
   Pending = 'Pending',
+  UnderReview = 'UnderReview',
+  Flagged = 'Flagged',
 }
 
 export interface KoboBaseTags {

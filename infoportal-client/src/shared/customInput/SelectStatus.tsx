@@ -4,7 +4,7 @@ import React, {ReactNode, useMemo} from 'react'
 import {CashForRentStatus, CashStatus, StateStatus} from '@infoportal-common'
 import {Box, Icon, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
-import {KoboValidation} from '@/core/sdk/server/kobo/Kobo'
+import {KoboValidation} from '@infoportal-common'
 
 export enum ShelterCashStatus {
   Selected = 'Selected',
@@ -40,6 +40,8 @@ export namespace SelectStatusConfig {
     KoboValidation: {
       [KoboValidation.Approved]: 'success',
       [KoboValidation.Pending]: 'warning',
+      [KoboValidation.Rejected]: 'error',
+      [KoboValidation.]: 'error',
       [KoboValidation.Rejected]: 'error',
     } as Record<KoboValidation, StateStatus>,
     CashForRentStatus: {

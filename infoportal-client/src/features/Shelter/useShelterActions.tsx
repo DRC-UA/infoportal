@@ -1,4 +1,4 @@
-import {KoboAnswerId, KoboId} from '@/core/sdk/server/kobo/Kobo'
+import {KoboAnswerId, KoboId} from '@infoportal-common'
 import {Dispatch, SetStateAction} from 'react'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'

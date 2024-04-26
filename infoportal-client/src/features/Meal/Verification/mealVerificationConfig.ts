@@ -1,7 +1,7 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {KeyOf, KoboIndex} from '@infoportal-common'
 import {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import {KoboId} from '@/core/sdk/server/kobo/Kobo'
+import {KoboId} from '@infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 
 export const mealVerificationConf = {

@@ -1,5 +1,5 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboId} from '@/core/sdk/server/kobo/Kobo'
+import {KoboId} from '@infoportal-common'
 import {AppFeatureId} from '@/features/appFeatureId'
 import React, {ReactElement, useCallback, useMemo} from 'react'
 import {Modal, Txt} from 'mui-extension'

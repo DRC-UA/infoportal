@@ -1,6 +1,6 @@
 import {KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
 import {Enum} from '@alexandreannic/ts-utils'
-
+import {KoboAnswerFlat, KoboBaseTags} from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
 /**@deprecated use from common*/
@@ -38,16 +38,6 @@ export type KoboAttachment = {
   filename: string
   download_small_url: string
   id: string
-}
-
-export enum KoboValidation {
-  Approved = 'Approved',
-  Rejected = 'Rejected',
-  Pending = 'Pending',
-}
-
-export interface KoboBaseTags {
-  _validation?: KoboValidation
 }
 
 export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {
@@ -98,11 +88,11 @@ export class Kobo {
   static readonly mapPaginateAnswerMetaData = <
     TKoboAnswer extends Record<string, any>,
     TTags extends KoboBaseTags,
-    TCustomAnswer extends KoboAnswer<TKoboAnswer, TTags>
+    TCustomAnswer extends KoboAnswerFlat<TKoboAnswer, TTags>
   >(
     fnMap: (x: any) => TKoboAnswer,
     fnMapTags: (x: any) => TTags,
-    fnMapCustom?: (x: KoboAnswer<TKoboAnswer, TTags>) => TCustomAnswer
+    fnMapCustom?: (x: KoboAnswerFlat<TKoboAnswer, TTags>) => TCustomAnswer
   ) => (_: ApiPaginate<Record<string, any>>): ApiPaginate<TCustomAnswer> => {
     return ({
       ..._,

@@ -1,4 +1,4 @@
-import {KoboAnswerId, KoboId} from '@/core/sdk/server/kobo/Kobo'
+import {KoboAnswerId, KoboId} from '@infoportal-common'
 import React, {Dispatch, ReactNode, SetStateAction} from 'react'
 import {AaSelect, AaSelectProps} from '@/shared/Select/Select'
 import {useAsync} from '@/shared/hook/useAsync'
