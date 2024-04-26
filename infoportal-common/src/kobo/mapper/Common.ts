@@ -1,4 +1,5 @@
 import {Person} from '../../type/Person'
+import {UUID} from '../../type/Generic'
 
 export type KoboId = string
 
@@ -65,40 +66,44 @@ export enum CashForRentStatus {
   Referred = 'Referred',
 }
 
-export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {
-  start: Date
-  end: Date
-  version: string
+export type KoboAnswerMetaData<TTag extends Record<string, any> | undefined = undefined> = {
+  start: Date,
+  end: Date,
+  version?: string
+  attachments?: KoboAttachment[]
+  geolocation: KoboAnswerGeolocation
+  /** Extracted from question `date` when exists. */
+  date: Date
   submissionTime: Date
-  submittedBy?: string
-  id: string
-  uuid: string
-  validationStatus?: 'validation_status_approved'
+  id: KoboAnswerId
+  uuid: UUID
+  validationStatus?: string//'validation_status_approved'
   validatedBy?: string
+  submittedBy?: string
   lastValidatedTimestamp?: number
-  geolocation?: [number, number]
+  source?: string
+  updatedAt?: Date
   tags?: TTag
-  //
-  // _id: number,
-  // // 'formhub/uuid': string,
-  // start: Date,
-  // end: Date,
-  // // __version__: string,
-  // // 'meta/instanceID': string,
-  // // _xform_id_string: string,
-  // _uuid: UUID,
-  attachments: any[],
-  // // _status: KoboAnswerStatus,
-  // _geolocation: [number, number],
-  // _submission_time: Date,
-  // // _tags: KoboAnswerTags[],
-  // // _notes: KoboAnswerNotes[],
-  // // _validation_status: any,
-  // // _submitted_by: any
+}
+
+export type KoboAnswerGeolocation = [number, number]
+export type KoboAnswerTags = any
+export type KoboAnswerNotes = any
+
+export type KoboAttachment = {
+  download_url: string
+  filename: string
+  download_small_url: string
+  id: string
 }
 
 export type KoboAnswer<
-  TQuestion extends Record<string, any> = Record<string, any>,
-  TTags extends KoboBaseTags = KoboBaseTags
-> = (KoboAnswerMetaData<TTags> & TQuestion)
+  T extends Record<string, any> = Record<string, any>,
+  TTag extends Record<string, any> | undefined = undefined
+> = KoboAnswerMetaData<TTag> & {answers: T}
+
+export type KoboAnswerFlat<
+  T extends Record<string, any> = Record<string, string | undefined>,
+  TTag extends Record<string, any> | undefined = undefined
+> = (KoboAnswerMetaData<TTag> & T)
 

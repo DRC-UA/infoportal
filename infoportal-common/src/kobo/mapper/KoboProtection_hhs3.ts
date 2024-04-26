@@ -1,5 +1,5 @@
 import {Protection_hhs3} from '../generated/Protection_hhs3'
-import {KoboAnswer, KoboBaseTags, PersonDetails} from './Common'
+import {KoboAnswerFlat, KoboBaseTags, PersonDetails} from './Common'
 import {Protection_hhs2} from '../generated/Protection_hhs2'
 import {DrcDonor, DrcProject} from '../../type/Drc'
 import {KoboGeneralMapping} from './KoboMapper'
@@ -11,11 +11,11 @@ export namespace KoboProtection_hhs3 {
     isIdpRegistered: Protection_hhs2.T['is_member_1_registered']
   }
 
-  export type T = KoboAnswer<Omit<Protection_hhs3.T, 'hh_char_hh_det'>, ProtectionHhsTags> & {
+  export type T = KoboAnswerFlat<Omit<Protection_hhs3.T, 'hh_char_hh_det'>, ProtectionHhsTags> & {
     persons: Person[]
   }
 
-  export const map = (d: KoboAnswer<Protection_hhs3.T, ProtectionHhsTags>): KoboAnswer<T, ProtectionHhsTags> => {
+  export const map = (d: KoboAnswerFlat<Protection_hhs3.T, ProtectionHhsTags>): KoboAnswerFlat<T, ProtectionHhsTags> => {
     const r: T = d as unknown as T
     r.persons = d.hh_char_hh_det?.map((_, i) => {
       return {

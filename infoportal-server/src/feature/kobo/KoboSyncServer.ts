@@ -1,5 +1,4 @@
-import {koboIndex, KoboIndex, UUID} from '@infoportal-common'
-import {KoboAnswer, KoboId} from '../connector/kobo/KoboClient/type/KoboAnswer'
+import {KoboAnswer, KoboId, koboIndex, KoboIndex, UUID} from '@infoportal-common'
 import {Prisma, PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {logger, Logger} from '../../helper/Logger'
@@ -8,6 +7,8 @@ import {seq} from '@alexandreannic/ts-utils'
 import {GlobalEvent} from '../../core/GlobalEvent'
 import {app} from '../../index'
 import {SytemCache} from '../../helper/IpCache'
+import {KoboService} from './KoboService'
+import {AppError} from '../../helper/Errors'
 
 export type KoboSyncServerResult = {
   answersIdsDeleted: KoboId[]
@@ -19,11 +20,23 @@ export class KoboSyncServer {
 
   constructor(
     private prisma: PrismaClient,
+    private service = new KoboService(prisma),
     private koboSdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
     private event = GlobalEvent.Class.getInstance(),
     private appCache = app.cache,
     private log: Logger = logger('KoboSyncServer'),
   ) {
+  }
+
+  readonly handleWebhook = async ({formId, answer}: {formId?: KoboId, answer: KoboAnswer}) => {
+    this.log.info(`Handle webhook for form ${formId}, ${answer.id}`)
+    if (!formId)
+      throw new AppError.WrongFormat('missing_form_id')
+    const connectedForm = this.prisma.koboForm.findFirst({where: {id: formId}})
+    if (!connectedForm) {
+      throw new AppError.NotFound('form_not_found')
+    }
+    return this.service.create(formId, answer)
   }
 
   readonly syncAllApiAnswersToDb = async (updatedBy: string = createdBySystem) => {
@@ -93,6 +106,7 @@ export class KoboSyncServer {
     const handleCreate = async () => {
       const notInsertedAnswers = remoteAnswers.filter(_ => !localAnswersIndex.has(_.id))
       this.info(formId, `Handle create (${notInsertedAnswers.length})...`)
+      await this.service.createMany(formId, notInsertedAnswers)
       const inserts = notInsertedAnswers.map(_ => {
         const res: Prisma.KoboAnswersUncheckedCreateInput = {
           formId,

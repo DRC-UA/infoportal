@@ -6,6 +6,8 @@ import {format} from 'date-fns'
 import {KoboSdkGenerator} from '../../../feature/kobo/KoboSdkGenerator'
 import {KoboApiService} from '../../../feature/kobo/KoboApiService'
 import {KoboSyncServer} from '../../../feature/kobo/KoboSyncServer'
+import {KoboAnswerUtils} from '../../../feature/connector/kobo/KoboClient/type/KoboAnswer'
+import {KoboService} from '../../../feature/kobo/KoboService'
 
 const apiAnswersFiltersValidation = yup.object({
   start: yup.date(),
@@ -16,7 +18,7 @@ export class ControllerKoboApi {
 
   constructor(
     private pgClient: PrismaClient,
-    private service = new KoboApiService(pgClient),
+    private apiService = new KoboApiService(pgClient),
     private syncService = new KoboSyncServer(pgClient),
     private koboSdkGenerator = new KoboSdkGenerator(pgClient),
   ) {
@@ -38,6 +40,13 @@ export class ControllerKoboApi {
     const sdk = await this.koboSdkGenerator.get(id)
     const forms = await sdk.getForms()
     res.send(forms)
+  }
+
+  readonly answersWebHook = async (req: Request, res: Response, next: NextFunction) => {
+    const answer = KoboAnswerUtils.mapAnswer(req.body)
+    const formId = req.body._xform_id_string
+    await this.syncService.handleWebhook({formId, answer})
+    res.send({})
   }
 
   readonly getAnswersFromLocalCsv = async (req: Request, res: Response, next: NextFunction) => {
@@ -65,7 +74,7 @@ export class ControllerKoboApi {
   readonly getAnswers = async (req: Request, res: Response, next: NextFunction) => {
     const {id, formId} = await this.extractParams(req)
     const filters = await apiAnswersFiltersValidation.validate(req.query)
-    const answers = await this.service.fetchAnswers(id, formId, filters)
+    const answers = await this.apiService.fetchAnswers(id, formId, filters)
     // .then(res => ({
     // ...res,
     // data: res.data.map(answers => KoboAnswerUtils.removeGroup(answers))

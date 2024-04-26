@@ -3,7 +3,7 @@ import {DrcOffice, DrcProjectHelper} from '../../type/Drc'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex} from '../../location'
 import {Person} from '../../type/Person'
-import {DisplacementStatus, KoboAnswer, KoboBaseTags, KoboTagStatus, PersonDetails, WgDisability} from './Common'
+import {DisplacementStatus, KoboAnswerFlat, KoboBaseTags, KoboTagStatus, PersonDetails, WgDisability} from './Common'
 
 export namespace KoboGeneralMapping {
 
@@ -149,7 +149,7 @@ export namespace KoboGeneralMapping {
     return (row as any)
   }
 
-  export const handleStatus = <T extends KoboAnswer<{}, KoboBaseTags & KoboTagStatus>>(row: T): T => {
+  export const handleStatus = <T extends KoboAnswerFlat<{}, KoboBaseTags & KoboTagStatus>>(row: T): T => {
     if (row.tags?.lastStatusUpdate) row.tags.lastStatusUpdate = new Date(row.tags?.lastStatusUpdate)
     return row
   }

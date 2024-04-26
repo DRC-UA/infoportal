@@ -1,5 +1,4 @@
-import {DrcOffice, OblastISO, OblastName} from '@infoportal-common'
-import {KoboAnswerFlat, KoboAnswerId} from '../../connector/kobo/KoboClient/type/KoboAnswer'
+import {KoboAnswerFlat, KoboAnswerId, DrcOffice, OblastISO, OblastName} from '@infoportal-common'
 import {ShelterNtaTags, ShelterTaTags} from '../../kobo/tags/ShelterTags'
 import {Shelter_TA} from '@infoportal-common'
 import {Shelter_NTA} from '@infoportal-common'

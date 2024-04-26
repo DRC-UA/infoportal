@@ -1,4 +1,4 @@
-import {KoboAnswer, KoboAnswerId, KoboId} from '../feature/connector/kobo/KoboClient/type/KoboAnswer'
+import {KoboAnswer, KoboAnswerId, KoboId} from '@infoportal-common'
 import {EventEmitter} from 'events'
 import {logger} from '../helper/Logger'
 import {KoboSyncServerResult} from '../feature/kobo/KoboSyncServer'

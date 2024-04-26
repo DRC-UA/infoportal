@@ -1,9 +1,9 @@
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
-import {ApiPaginate, ApiPaginateHelper, ApiPagination, KoboIndex, UUID} from '@infoportal-common'
-import {DbKoboAnswer, KoboAnswerId, KoboAttachment, KoboId} from '../connector/kobo/KoboClient/type/KoboAnswer'
+import {ApiPaginate, ApiPaginateHelper, ApiPagination, KoboAnswer, KoboAnswerId, KoboId, KoboIndex, UUID} from '@infoportal-common'
+import {DbKoboAnswer, KoboAttachment} from '../connector/kobo/KoboClient/type/KoboAnswer'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {filterKoboQuestionType, KoboApiQuestion} from '../connector/kobo/KoboClient/type/KoboApiForm'
-import {duration, Enum, fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {duration, Obj, fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {format} from 'date-fns'
 import {KoboAnswersFilters} from '../../server/controller/kobo/ControllerKoboAnswer'
 import {UserSession} from '../session/UserSession'
@@ -62,7 +62,7 @@ export class KoboService {
     if (!user.admin && access.length === 0) return ApiPaginateHelper.make()([])
 
     const accessFilters = seq(access).map(_ => _.params?.filters).compact().reduce<Record<string, string[]>>((acc, x) => {
-      Enum.entries(x).forEach(([k, v]) => {
+      Obj.entries(x).forEach(([k, v]) => {
         if (Array.isArray(x[k])) {
           acc[k] = seq([...acc[k] ?? [], ...x[k] ?? []]).distinct(_ => _)
         } else {
@@ -72,8 +72,8 @@ export class KoboService {
       return acc
     }, {} as const)
 
-    const accessFiltersEntry = Enum.entries(
-      new Enum(accessFilters).transform((k, v) => [k, new Set(v)]).get()
+    const accessFiltersEntry = Obj.entries(
+      new Obj(accessFilters).transform((k, v) => [k, new Set(v)]).get()
     )
     const data = await this.searchAnswers(params)
     if (!user.admin)
@@ -143,7 +143,7 @@ export class KoboService {
             date: d.date,
             version: d.version ?? undefined,
             attachments: d.attachments as KoboAttachment[],
-            geolocation: d.geolocation,
+            geolocation: d.geolocation as any,
             submissionTime: d.submissionTime,
             id: d.id,
             uuid: d.uuid,
@@ -166,6 +166,37 @@ export class KoboService {
             .then(ApiPaginateHelper.make())
         }
     })
+
+  private static readonly mapKoboAnswer = (formId: KoboId, _: KoboAnswer): Prisma.KoboAnswersUncheckedCreateInput => {
+    return {
+      formId,
+      answers: _.answers,
+      id: _.id,
+      uuid: _.uuid,
+      date: _.date,
+      start: _.start,
+      end: _.end,
+      submissionTime: _.submissionTime,
+      validationStatus: _.validationStatus,
+      lastValidatedTimestamp: _.lastValidatedTimestamp,
+      validatedBy: _.validatedBy,
+      version: _.version,
+      // source: serverId,
+      attachments: _.attachments,
+    }
+  }
+
+  readonly create = (formId: KoboId, answer: KoboAnswer) => {
+    return this.prisma.koboAnswers.create({data: KoboService.mapKoboAnswer(formId, answer)})
+  }
+
+  readonly createMany = (formId: KoboId, answers: KoboAnswer[]) => {
+    const inserts = answers.map(_ => KoboService.mapKoboAnswer(formId, _))
+    return this.prisma.koboAnswers.createMany({
+      data: inserts,
+      skipDuplicates: true,
+    })
+  }
 
   // readonly generateXLSForHHS = async ({start, end}: {start?: Date, end?: Date}) => {
   //   const filePattern = (oblast: string) => `drc.ua.prot.hh2.${start ? format(start, 'yyyy-MM') + '.' : ''}${oblast}`
@@ -266,7 +297,7 @@ export class KoboService {
     const indexOptionsLabels = seq(koboFormDetails.content.choices).reduceObject<Record<string, undefined | string>>(_ => [_.name, _.label?.[langIndex]])
     return flatAnswers.map(d => {
       const translated = {} as DbKoboAnswer
-      Enum.keys(d).forEach(k => {
+      Obj.keys(d).forEach(k => {
         const translatedKey = indexLabel[k]?.label?.[langIndex] ?? k
         const translatedValue = (() => {
           if (k === 'submissionTime') {

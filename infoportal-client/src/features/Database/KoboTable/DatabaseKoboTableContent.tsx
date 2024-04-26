@@ -3,6 +3,7 @@ import {IpBtn} from '@/shared/Btn'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
+import {KoboIndex} from '@infoportal-common'
 import {AaSelect} from '@/shared/Select/Select'
 import {DatabaseKoboTableExportBtn, renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
@@ -25,6 +26,7 @@ import {DatatableKoboEditModal} from '@/features/Database/KoboTable/DatatableKob
 import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {Enum, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
+import {IpAlert} from '@/shared/Alert'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -116,6 +118,18 @@ export const DatabaseKoboTableContent = ({
 
   return (
     <>
+      {ctx.form.id === KoboIndex.byName('bn_re').id && (
+        <IpAlert color="info" sx={{mb: 1}} deletable="permanent" id="bn_re webhook">
+          <b>НОВА ФУНКЦІЯ:</b> попрощайтеся з кнопкою ручної SYNC. Відповіді Kobo тепер синхронізуються автоматично після надсилання.
+          Ця функція наразі знаходиться в стадії бета-тестування, виключно для цієї форми.
+          Після успішного тестування його буде поширено на інші форми.
+          <br/>
+          <br/>
+          <b>NEW FEATURE:</b> Say goodbye to manual SYNC button. Kobo responses now synchronize automatically upon submission.
+          This feature is currently in beta testing, exclusive to this form.
+          Pending successful testing, it will be extended to other forms.
+        </IpAlert>
+      )}
       <Datatable
         showExportBtn
         rowsPerPageOptions={[20, 50, 100]}

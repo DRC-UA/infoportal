@@ -1,4 +1,4 @@
-import {CashStatus, KoboAnswer, KoboBaseTags} from './Common'
+import {CashStatus, KoboAnswerFlat, KoboBaseTags} from './Common'
 import {KoboGeneralMapping} from './KoboMapper'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {Ecrec_cashRegistration, Ecrec_cashRegistrationBha} from '../generated'
@@ -18,7 +18,7 @@ export namespace KoboEcrec_cashRegistration {
     program?: Program
   }
 
-  export type T = KoboAnswer<Ecrec_cashRegistrationBha.T | Ecrec_cashRegistration.T, Tags> & {
+  export type T = KoboAnswerFlat<Ecrec_cashRegistrationBha.T | Ecrec_cashRegistration.T, Tags> & {
     custom: KoboGeneralMapping.IndividualBreakdown & {
       eligibility: boolean
       vulnerability: number

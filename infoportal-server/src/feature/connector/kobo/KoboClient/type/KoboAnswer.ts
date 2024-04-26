@@ -1,4 +1,4 @@
-import {ApiPaginate, Period, UUID} from '@infoportal-common'
+import {ApiPaginate, KoboAnswer, KoboAnswerGeolocation, KoboAnswerNotes, KoboAnswerTags, Period, UUID} from '@infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 
 /** @deprecated use from common lib*/
@@ -21,10 +21,6 @@ export type KoboAttachment = {
   download_small_url: string
   id: string
 }
-
-export type KoboAnswerGeolocation = any
-export type KoboAnswerTags = any
-export type KoboAnswerNotes = any
 
 export type KoboAnswerMetaData<TTag extends Record<string, any> | undefined = undefined> = Pick<ApiKoboAnswerMetaData, 'start' | 'end'> & {
   version?: ApiKoboAnswerMetaData['__version__']
@@ -84,16 +80,6 @@ export type ApiKoboAnswer = ApiKoboAnswerMetaData & Record<string, any>
 // export interface KoboAnswer extends KoboAnswerMetaData {
 //   [key: string]: string
 // }
-export type KoboAnswer<
-  T extends Record<string, any> = Record<string, any>,
-  TTag extends Record<string, any> | undefined = undefined
-> = KoboAnswerMetaData<TTag> & {answers: T}
-
-export type KoboAnswerFlat<
-  T extends Record<string, any> = Record<string, string | undefined>,
-  TTag extends Record<string, any> | undefined = undefined
-> = (KoboAnswerMetaData<TTag> & T)
-
 export type DbKoboAnswer<
   T extends Record<string, any> = Record<string, any>,
 > = KoboAnswer<T, any> & {formId: KoboId}
