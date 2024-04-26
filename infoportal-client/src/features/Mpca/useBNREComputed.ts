@@ -1,7 +1,6 @@
 import {Enum, Seq} from '@alexandreannic/ts-utils'
 import {useMemo} from 'react'
-import {DrcSupportSuggestion} from '@infoportal-common'
-import {MpcaEntity} from '@infoportal-common'
+import {DrcSupportSuggestion, MpcaEntity} from '@infoportal-common'
 
 export type UseBNREComputed = ReturnType<typeof useBNREComputed>
 

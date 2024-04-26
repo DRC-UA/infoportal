@@ -1,5 +1,4 @@
-import {KoboAnswerId, KoboId} from '@/core/sdk/server/kobo/Kobo'
-import {UUID} from '@infoportal-common'
+import {KoboAnswerId, KoboId, UUID} from '@infoportal-common'
 
 export class MealVerificationHelper {
 

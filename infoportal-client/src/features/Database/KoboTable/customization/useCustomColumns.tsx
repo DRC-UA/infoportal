@@ -1,5 +1,15 @@
-import {KoboAnswer, KoboBaseTags, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {currentProtectionProjects, DrcProject, Ecrec_cashRegistration, KoboGeneralMapping, KoboIndex, KoboTagStatus, ProtectionHhsTags,} from '@infoportal-common'
+import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {
+  currentProtectionProjects,
+  DrcProject,
+  Ecrec_cashRegistration,
+  KoboAnswerFlat,
+  KoboBaseTags,
+  KoboGeneralMapping,
+  KoboIndex,
+  KoboTagStatus,
+  ProtectionHhsTags,
+} from '@infoportal-common'
 import React, {useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {map, Obj} from '@alexandreannic/ts-utils'
@@ -64,7 +74,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       width: 129,
       head: m.paidOn,
       type: 'date',
-      render: (row: KoboAnswer<{}, KoboBaseTags & KoboTagStatus>) => {
+      render: (row: KoboAnswerFlat<{}, KoboBaseTags & KoboTagStatus>) => {
         return {
           export: row.tags?.lastStatusUpdate,
           value: row.tags?.lastStatusUpdate,
@@ -87,7 +97,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           type: 'select_one',
           width: 120,
           options: () => SheetUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
-          render: (row: KoboAnswer<{}, any>) => {
+          render: (row: KoboAnswerFlat<{}, any>) => {
             return {
               export: row.tags?.[key],
               value: row.tags?.[key],
@@ -193,14 +203,14 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       [KoboIndex.byName('bn_re').id]: [
         ...paymentStatus(),
         ...individualsBreakdown,
-      {
-      id: 'eligibility_summary_esk2',
-      head: 'Eligibility Summary',
-      type: 'number',
-      renderQuick: (row: KoboAnswer<any, any>) => {
-        return row.estimate_sqm_damage !== undefined ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined;
-      }
-    }],
+        {
+          id: 'eligibility_summary_esk2',
+          head: 'Eligibility Summary',
+          type: 'number',
+          renderQuick: (row: KoboAnswerFlat<any, any>) => {
+            return row.estimate_sqm_damage !== undefined ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined
+          }
+        }],
       [KoboIndex.byName('shelter_cashForRepair').id]: [
         ...paymentStatusShelter(),
       ],
@@ -225,7 +235,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           type: 'select_multiple',
           width: 200,
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
-          render: (row: KoboAnswer<any, ProtectionHhsTags>) => {
+          render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             return {
               export: row.tags?.project ?? DatatableUtils.blank,
               tooltip: row.tags?.project,
@@ -251,7 +261,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           type: 'select_one',
           width: 200,
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
-          render: (row: KoboAnswer<any, ProtectionHhsTags>) => {
+          render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             return {
               export: row.tags?.project ?? DatatableUtils.blank,
               tooltip: row.tags?.project,
@@ -277,7 +287,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           type: 'select_multiple',
           width: 200,
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
-          render: (row: KoboAnswer<any, ProtectionHhsTags>) => {
+          render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             return {
               export: row.tags?.projects?.join(' | ') ?? DatatableUtils.blank,
               tooltip: row.tags?.projects,
@@ -301,7 +311,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           type: 'select_multiple',
           width: 200,
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
-          render: (row: KoboAnswer<any, ProtectionHhsTags>) => {
+          render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             return {
               export: row.tags?.projects?.join(' | ') ?? DatatableUtils.blank,
               tooltip: row.tags?.projects,

@@ -2,11 +2,10 @@ import React, {ReactNode, useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useI18n} from '@/core/i18n'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
-import {KoboAnswerId} from '@/core/sdk/server/kobo/Kobo'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
-import {currentProtectionProjects, KoboIndex, shelterDrcProject} from '@infoportal-common'
+import {currentProtectionProjects, KoboAnswerId, KoboIndex} from '@infoportal-common'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
-import {SelectStatus, SelectStatusBy} from '@/shared/customInput/SelectStatus'
+import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 
 export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode => {
   const ctx = useDatabaseKoboTableContext()

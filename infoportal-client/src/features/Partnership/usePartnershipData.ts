@@ -2,8 +2,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {useMemo} from 'react'
 import {PartnershipData} from '@/features/Partnership/PartnershipType'
 import {fnSwitch, seq, Seq} from '@alexandreannic/ts-utils'
-import {DrcSector, OblastIndex, OblastName} from '@infoportal-common'
-import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {DrcSector, KoboAnswerFlat, OblastIndex, OblastName} from '@infoportal-common'
 import {useFetcher} from '@/shared/hook/useFetcher'
 
 export type UsePartnershipData = ReturnType<typeof usePartnershipData>
@@ -19,7 +18,7 @@ export const usePartnershipData = () => {
 
   const mappedData = useMemo(() => {
     if (!fetcherPartnersDb.get) return
-    const res: Seq<KoboAnswer<PartnershipData>> = seq([])
+    const res: Seq<KoboAnswerFlat<PartnershipData>> = seq([])
     fetcherPartnersDb.get.data.forEach(d => {
       const oblast: OblastName[] | undefined = d.Which_oblasts_does_t_t_and_has_experience?.map(_ => fnSwitch(_, {
         cherkasy_oblast: 'Cherkaska',

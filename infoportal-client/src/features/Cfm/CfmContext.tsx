@@ -1,7 +1,6 @@
 import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
-import {KoboAnswer, KoboAnswerId, KoboId} from '@/core/sdk/server/kobo/Kobo'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {
   CfmDataPriority,
@@ -11,6 +10,9 @@ import {
   DrcProject,
   DrcProjectHelper,
   KeyOf,
+  KoboAnswerFlat,
+  KoboAnswerId,
+  KoboId,
   KoboIndex,
   KoboMealCfmHelper,
   KoboMealCfmStatus,
@@ -86,11 +88,11 @@ export type CfmData = {
   // internal_feedback?: Meal_CfmInternal.T['feedback']
   // internal?: Pick<Meal_CfmInternal.T, 'feedback' | 'existing_beneficiary' | 'project_code'>
   // external?: Pick<MealCfmExternal, 'prot_support' | 'thanks_feedback' | 'complaint' | 'consent' | 'feedback_type'>
-} & Pick<KoboAnswer<Meal_CfmInternal.T>,
+} & Pick<KoboAnswerFlat<Meal_CfmInternal.T>,
   // 'ben_det_oblast' |
   'ben_det_raion' |
   'ben_det_hromada'
-> & Pick<KoboAnswer<Meal_CfmInternal.T>,
+> & Pick<KoboAnswerFlat<Meal_CfmInternal.T>,
   'id' |
   'start' |
   'date' |
@@ -124,8 +126,8 @@ export interface CfmContext {
   }) => Promise<void>, KoboId>
   users: UseFetcher<ApiSdk['user']['search']>
   fetcherData: UseFetcher<() => Promise<{
-    [CfmDataSource.Internal]: KoboAnswer<Meal_CfmInternal.T, KoboMealCfmTag>[]
-    [CfmDataSource.External]: KoboAnswer<Meal_CfmExternal.T, KoboMealCfmTag>[]
+    [CfmDataSource.Internal]: KoboAnswerFlat<Meal_CfmInternal.T, KoboMealCfmTag>[]
+    [CfmDataSource.External]: KoboAnswerFlat<Meal_CfmExternal.T, KoboMealCfmTag>[]
   }>>
   mappedData: Seq<CfmData>
   visibleData: Seq<CfmData>

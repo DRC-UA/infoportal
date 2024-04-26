@@ -113,6 +113,8 @@ export const en = Object.freeze({
     calculations: 'Calculations',
     value: 'Value',
     percent: 'Percent',
+    Flagged: 'Flagged',
+    UnderReview: 'UnderReview',
     Pending: 'Pending',
     recap: 'Recap',
     Approved: 'Approved',

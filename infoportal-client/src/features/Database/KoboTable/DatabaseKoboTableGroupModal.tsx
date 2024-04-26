@@ -4,9 +4,9 @@ import React, {useMemo} from 'react'
 import {Popover} from '@mui/material'
 import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
 import {useI18n} from '@/core/i18n'
-import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {KoboAnswerFlat} from '@infoportal-common'
 
 export const DatabaseKoboTableGroupModal = ({
   groupData,
@@ -14,7 +14,7 @@ export const DatabaseKoboTableGroupModal = ({
   onClose,
   anchorEl,
 }: {
-  groupData: KoboAnswer[],
+  groupData: KoboAnswerFlat[],
   name: string
   onClose: () => void
   anchorEl: any,

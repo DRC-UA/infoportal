@@ -1,7 +1,7 @@
 import {Box, Dialog, DialogActions, DialogContent, DialogTitle, Icon, Switch} from '@mui/material'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
-import {KoboAnswer, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {KoboQuestionSchema, KoboSchema} from '@/core/sdk/server/kobo/KoboApi'
 import React, {useMemo, useState} from 'react'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
@@ -11,8 +11,9 @@ import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {KoboAnswerFlat} from '@infoportal-common'
 
-export const useDatabaseKoboAnswerView = <T extends KoboAnswer<any, any> = any>(schema: KoboSchema) => {
+export const useDatabaseKoboAnswerView = <T extends KoboAnswerFlat<any, any> = any>(schema: KoboSchema) => {
   const [open, close] = useModal((answer: T) => (
     <DatabaseKoboAnswerView
       open={true}

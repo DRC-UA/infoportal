@@ -1,4 +1,3 @@
-import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import React, {useEffect, useMemo, useState} from 'react'
@@ -13,7 +12,7 @@ import {IpInput} from '@/shared/Input/Input'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {format, subMonths} from 'date-fns'
-import {KoboIndex} from '@infoportal-common'
+import {KoboAnswerFlat, KoboIndex} from '@infoportal-common'
 
 
 export interface AiBundle<
@@ -23,7 +22,7 @@ export interface AiBundle<
 > {
   submit?: boolean
   recordId: string
-  data: KoboAnswer<TAnswer>[],
+  data: KoboAnswerFlat<TAnswer>[],
   activity: TActivity,
   subActivity?: TSubActivity,
   requestBody: ActiviftyInfoRecords,

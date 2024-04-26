@@ -3,7 +3,6 @@ import React, {useMemo, useState} from 'react'
 import {SnapshotProtMonitoringProvider, useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
 import {useI18n} from '@/core/i18n'
 import {SnapshotProtMonitoNN2Safety} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Safety'
-import {ChartPieIndicatorProps} from '@/shared/charts/ChartPieWidget'
 import {SnapshotProtMonitoNN2Needs} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Needs'
 import {SnapshotProtMonitoNN2Livelihood} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Livelihood'
 import {SnapshotProtMonitoNN2Sample} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Sample'
@@ -11,7 +10,7 @@ import {Box, Theme} from '@mui/material'
 import {OblastIndex, Period} from '@infoportal-common'
 import {endOfMonth, startOfMonth} from 'date-fns'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {DRCLogo, EULogo, UhfLogo, UsaidLogo} from '@/shared/logo/logo'
+import {DRCLogo} from '@/shared/logo/logo'
 
 export const snapshotAlternateColor = (t: Theme) => t.palette.grey[500]
 

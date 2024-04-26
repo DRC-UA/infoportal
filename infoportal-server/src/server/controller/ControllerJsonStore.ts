@@ -1,7 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
-import merge from 'lodash/merge'
+import merge from 'lodash.merge'
 
 export class ControllerJsonStore {
 

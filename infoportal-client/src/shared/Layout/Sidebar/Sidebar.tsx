@@ -10,7 +10,6 @@ import {SidebarHeader} from './SidebarHeader'
 import {stopPropagation} from 'mui-extension'
 import {useI18n} from '../../../core/i18n'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {appConfig} from '@/conf/AppConfig'
 
 let sidebar: HTMLElement | null = null
 let header: HTMLElement | null = null

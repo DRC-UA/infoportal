@@ -31,7 +31,7 @@ export type KoboAnswerMetaData<TTag extends Record<string, any> | undefined = un
   submissionTime: ApiKoboAnswerMetaData['_submission_time']
   id: ApiKoboAnswerMetaData['_id']
   uuid: ApiKoboAnswerMetaData['_uuid']
-  validationStatus?: string//'validation_status_approved'
+  validationStatus?: 'validation_status_approved'//'validation_status_approved'
   validatedBy?: string
   submittedBy?: string
   lastValidatedTimestamp?: number

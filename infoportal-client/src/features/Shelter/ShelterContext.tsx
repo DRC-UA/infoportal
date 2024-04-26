@@ -1,9 +1,8 @@
 import React, {ReactNode, useContext, useState} from 'react'
-import {KoboIndex, Shelter_NTA, ShelterNtaTags, ShelterTaTags} from '@infoportal-common'
+import {KoboAnswerId, KoboIndex, Shelter_NTA, ShelterNtaTags, ShelterTaTags} from '@infoportal-common'
 import {UseShelterData} from '@/features/Shelter/useShelterData'
 import {UseShelterActions, useShelterActions} from '@/features/Shelter/useShelterActions'
 import {AccessSum} from '@/core/sdk/server/access/Access'
-import {KoboAnswerId} from '@/core/sdk/server/kobo/Kobo'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 
 export interface ShelterContext {

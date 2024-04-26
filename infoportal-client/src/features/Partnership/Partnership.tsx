@@ -9,7 +9,6 @@ import {PartnershipProvider} from '@/features/Partnership/PartnershipContext'
 import {PartnershipDashboard} from '@/features/Partnership/Dashboard/PartnershipDashboard'
 import {KoboFormName} from '@infoportal-common'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
-import {mpcaIndex} from '@/features/Mpca/Mpca'
 import {getKoboFormRouteProps, SidebarKoboLink} from '@/features/SidebarKoboLink'
 
 const relatedKoboForms: KoboFormName[] = [

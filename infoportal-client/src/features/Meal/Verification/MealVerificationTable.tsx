@@ -3,14 +3,13 @@ import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useEffect, useMemo, useState} from 'react'
 import {Page, PageTitle} from '@/shared/Page'
 import {alpha, Box, Icon, Tooltip, useTheme} from '@mui/material'
-import {capitalize, KoboIndex, toPercent} from '@infoportal-common'
+import {capitalize, KoboAnswerFlat, KoboIndex, toPercent} from '@infoportal-common'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {DatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
-import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {useParams} from 'react-router'
@@ -36,8 +35,8 @@ export enum MergedDataStatus {
 
 interface MergedData {
   status: MergedDataStatus
-  dataCheck?: KoboAnswer<any>
-  data: KoboAnswer<any>
+  dataCheck?: KoboAnswerFlat<any>
+  data: KoboAnswerFlat<any>
   score: number
 }
 
@@ -165,11 +164,11 @@ const MealVerificationTableContent = <
 
   const indexVerification = useMemo(() => seq(verificationAnswers).groupByFirst(_ => _.koboAnswerId), [verificationAnswers])
 
-  const fetcherDataOrigin = useFetcher(() => api.kobo.typedAnswers[activity.registration.fetch]().then(_ => _.data) as Promise<KoboAnswer<any, any>[]>)
-  const fetcherDataVerified = useFetcher(() => api.kobo.typedAnswers[activity.verification.fetch]().then(_ => _.data) as Promise<KoboAnswer<any, any>[]>)
+  const fetcherDataOrigin = useFetcher(() => api.kobo.typedAnswers[activity.registration.fetch]().then(_ => _.data) as Promise<KoboAnswerFlat<any, any>[]>)
+  const fetcherDataVerified = useFetcher(() => api.kobo.typedAnswers[activity.verification.fetch]().then(_ => _.data) as Promise<KoboAnswerFlat<any, any>[]>)
   const asyncUpdateAnswer = useAsync(api.mealVerification.updateAnswers, {requestKey: _ => _[0]})
 
-  const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswer<any> | undefined>()
+  const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat<any> | undefined>()
   const [display, setDisplay] = useState<'data' | 'dataCheck' | 'all'>('all')
 
   useEffect(() => {

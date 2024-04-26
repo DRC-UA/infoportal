@@ -1,5 +1,4 @@
-import {DrcDonor, DrcSector, OblastISO, OblastName, Partnership_partnersDatabase} from '@infoportal-common'
-import {KoboId} from '@/core/sdk/server/kobo/Kobo'
+import {DrcDonor, DrcSector, KoboId, OblastISO, OblastName, Partnership_partnersDatabase} from '@infoportal-common'
 
 export interface PartnershipData extends Partnership_partnersDatabase.T {
   id: KoboId

@@ -1,16 +1,16 @@
 import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {
+  aiHromadas,
   AILocationHelper,
+  aiOblasts,
+  aiRaions,
+  aiSettlements,
   Bn_Re,
   DisplacementStatus,
   OblastIndex,
   Person,
   PersonDetails,
-  Protection_groupSession,
-  aiHromadas,
-  aiOblasts,
-  aiRaions,
-  aiSettlements
+  Protection_groupSession
 } from '@infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 

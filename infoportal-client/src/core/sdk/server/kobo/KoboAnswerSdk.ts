@@ -1,6 +1,6 @@
 import {ApiClient} from '../ApiClient'
-import {KeyOf, KoboAnswerFlat, KoboIndex, Period, UUID} from '@infoportal-common'
-import {Kobo, KoboAnswer, KoboAnswerId, KoboBaseTags, KoboId} from '@/core/sdk/server/kobo/Kobo'
+import {KeyOf, KoboAnswer, KoboAnswerFlat, KoboAnswerId, KoboBaseTags, KoboId, KoboIndex, Period, UUID} from '@infoportal-common'
+import {Kobo} from '@/core/sdk/server/kobo/Kobo'
 import {AnswersFilters} from '@/core/sdk/server/kobo/KoboApiSdk'
 import {endOfDay, startOfDay} from 'date-fns'
 import {map} from '@alexandreannic/ts-utils'
@@ -38,7 +38,7 @@ interface KoboAnswerSearch {
     readonly fnMapKobo?: (_: Record<string, string | undefined>) => TKoboAnswer
     readonly fnMapTags?: (_?: any) => TTags
     readonly fnMapCustom?: undefined
-  }): Promise<ApiPaginate<KoboAnswer<TKoboAnswer, TTags>>>
+  }): Promise<ApiPaginate<KoboAnswerFlat<TKoboAnswer, TTags>>>
 }
 
 export class KoboAnswerSdk {

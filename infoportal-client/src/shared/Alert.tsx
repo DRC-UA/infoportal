@@ -33,6 +33,7 @@ export const IpAlert = ({
         minHeight: '0 !important',
         height: '0 !important',
         opacity: '0 !important',
+        padding: '0 !important',
         margin: '0 !important',
       },
     }} onClose={deletable ? ((e) => {

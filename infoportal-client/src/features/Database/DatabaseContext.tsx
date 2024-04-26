@@ -6,10 +6,11 @@ import {useIpToast} from '@/core/useToast'
 import {Access} from '@/core/sdk/server/access/Access'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {useSession} from '@/core/Session/SessionContext'
-import {KoboForm, KoboId} from '@/core/sdk/server/kobo/Kobo'
+import {KoboForm} from '@/core/sdk/server/kobo/Kobo'
 import {seq} from '@alexandreannic/ts-utils'
 import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
+import {KoboId} from '@infoportal-common'
 
 export interface DatabaseContext {
   _forms: UseFetcher<ApiSdk['kobo']['form']['getAll']>

@@ -6,7 +6,6 @@ import {Alert, Txt} from 'mui-extension'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {Sheet} from '@/shared/Sheet/Sheet'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboAnswerId} from '@/core/sdk/server/kobo/Kobo'
 import {map} from '@alexandreannic/ts-utils'
 import {getKoboImagePath} from '@/features/Mpca/MpcaData/MpcaData'
 import {MpcaPaymentToolForm} from './MpcaPaymentToolForm'
@@ -17,6 +16,7 @@ import {IpBtn} from '@/shared/Btn'
 import {TableImg} from '@/shared/TableImg/TableImg'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {KoboAnswerId} from '@infoportal-common'
 
 const urlValidation = yup.object({
   id: yup.string().required()

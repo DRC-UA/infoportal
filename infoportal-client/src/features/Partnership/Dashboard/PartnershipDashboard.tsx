@@ -14,7 +14,7 @@ import {ChartBar} from '@/shared/charts/ChartBar'
 import {PartnershipCard} from '@/features/Partnership/Dashboard/PartnershipCard'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 
-import {add, DrcProject, DrcProjectHelper, Partnership_partnersDatabase} from '@infoportal-common'
+import {add, DrcProject, DrcProjectHelper, KoboAnswerFlat, Partnership_partnersDatabase} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {PanershipPanelDonor} from '@/features/Partnership/Dashboard/PanershipPanelDonor'
@@ -23,7 +23,6 @@ import {useSetStateIp} from '@/shared/hook/useSetState'
 import {Box, Checkbox} from '@mui/material'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {ChartBarVertical} from '@/shared/charts/ChartBarVertical'
-import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
@@ -72,7 +71,7 @@ export const _PartnershipDashboard = ({
       .map(_ => ({value: _.name, label: schema.translate.choice(questionName, _.name)}))
   }
 
-  const filterShape = useMemo(() => DataFilter.makeShape<KoboAnswer<PartnershipData>>({
+  const filterShape = useMemo(() => DataFilter.makeShape<KoboAnswerFlat<PartnershipData>>({
     oblast: {
       getValue: _ => _.Which_oblasts_does_t_t_and_has_experience,
       icon: 'location_on',
