@@ -1,5 +1,5 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboId} from '@infoportal-common'
+import {KoboId, nullValuesToUndefined} from '@infoportal-common'
 import {AppFeatureId} from '@/features/appFeatureId'
 import React, {ReactElement, useCallback, useMemo} from 'react'
 import {Modal, Txt} from 'mui-extension'
@@ -16,7 +16,6 @@ import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {AccessForm, IAccessForm} from '@/features/Access/AccessForm'
 import {getKoboLabel} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
 import {AccessFormSection} from '@/features/Access/AccessFormSection'
-import {nullValuesToUndefined} from '@infoportal-common'
 import {useFetcher} from '@/shared/hook/useFetcher'
 
 interface Form extends IAccessForm {

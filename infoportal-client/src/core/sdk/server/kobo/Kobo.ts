@@ -1,13 +1,7 @@
 import {KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
 import {Enum} from '@alexandreannic/ts-utils'
-import {KoboAnswerFlat, KoboBaseTags} from '@infoportal-common'
+import {KoboAnswerFlat, KoboAnswerId, KoboBaseTags, KoboAttachment, KoboId} from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-
-/**@deprecated use from common*/
-export type KoboId = string
-
-/**@deprecated use from common*/
-export type KoboAnswerId = string
 
 export type KoboServer = {
   id: string
@@ -33,18 +27,11 @@ export class KoboFormHelper {
   }
 }
 
-export type KoboAttachment = {
-  download_url: string
-  filename: string
-  download_small_url: string
-  id: string
-}
-
 export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {
   start: Date
   end: Date
   date: Date
-  version: string
+  version?: string
   submissionTime: Date
   submittedBy?: string
   id: KoboAnswerId
@@ -73,13 +60,7 @@ export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {
   // // _submitted_by: any
 }
 
-export type KoboMappedAnswerType = string | string[] | Date | number | undefined | KoboAnswer<any>[]
-
-/** @deprecated Use KoboAnswerFlat from @infoportal-common*/
-export type KoboAnswer<
-  TQuestion extends Record<string, any> = Record<string, any>,
-  TTags extends KoboBaseTags = KoboBaseTags
-> = (KoboAnswerMetaData<TTags> & TQuestion)
+export type KoboMappedAnswerType = string | string[] | Date | number | undefined | KoboAnswerFlat<any>[]
 
 export type KoboMappedAnswer<T extends Record<string, any> = Record<string, KoboMappedAnswerType>> = (KoboAnswerMetaData & T)
 
@@ -106,7 +87,7 @@ export class Kobo {
     })
   }
 
-  static readonly mapAnswerBySchema = (indexedSchema: Record<string, KoboQuestionSchema>, answers: KoboAnswer): KoboMappedAnswer => {
+  static readonly mapAnswerBySchema = (indexedSchema: Record<string, KoboQuestionSchema>, answers: KoboAnswerFlat): KoboMappedAnswer => {
     const mapped: KoboMappedAnswer = {...answers}
     Enum.entries(mapped).forEach(([question, answer]) => {
       const type = indexedSchema[question]?.type
@@ -137,7 +118,7 @@ export class Kobo {
   static readonly mapAnswerMetaData = (
     k: Partial<Record<keyof KoboAnswerMetaData, any>>,
     fnMapTags: (x: any) => any = _ => _
-  ): KoboAnswer<any, KoboBaseTags> => {
+  ): KoboAnswerFlat<any, KoboBaseTags> => {
     delete (k as any)['deviceid']
     return {
       ...k,
@@ -158,7 +139,7 @@ export class Kobo {
   static readonly extraxtAnswerMetaData = (
     k: KoboAnswerMetaData,
     fnMapTags: (x: any) => any = _ => _
-  ): KoboAnswer<any, KoboBaseTags> => {
+  ): KoboAnswerFlat<any, KoboBaseTags> => {
     return {
       start: k.start,
       end: k.end,

@@ -1,6 +1,6 @@
 import {ApiClient} from '../ApiClient'
-import {koboIndex, UUID} from '@infoportal-common'
-import {ApiKoboForm, Kobo, KoboAnswer, KoboAnswerId, KoboId} from './Kobo'
+import {KoboAnswerFlat, KoboAnswerId, KoboId, koboIndex, UUID} from '@infoportal-common'
+import {ApiKoboForm, Kobo} from './Kobo'
 import {KoboSchema} from './KoboApi'
 import {appConfig, AppConfig} from '@/conf/AppConfig'
 import {ApiPaginate, ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
@@ -51,8 +51,8 @@ export class KoboApiSdk {
   }: {
     serverId: UUID,
     formId: UUID,
-  } & FiltersProps & FnMap<T>): Promise<ApiPaginate<KoboAnswer<T>>> => {
-    return this.client.get<ApiPaginate<KoboAnswer<T>>>(`/kobo-api/${serverId}/${formId}/answers`, {qs: filters})
+  } & FiltersProps & FnMap<T>): Promise<ApiPaginate<KoboAnswerFlat<T>>> => {
+    return this.client.get<ApiPaginate<KoboAnswerFlat<T>>>(`/kobo-api/${serverId}/${formId}/answers`, {qs: filters})
       .then(_ => {
           return ({
             ..._,

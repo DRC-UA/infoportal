@@ -1,9 +1,8 @@
-import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {IpBtn} from '@/shared/Btn'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
-import {KoboIndex} from '@infoportal-common'
+import {KoboAnswerFlat, KoboIndex} from '@infoportal-common'
 import {AaSelect} from '@/shared/Select/Select'
 import {DatabaseKoboTableExportBtn, renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
@@ -39,10 +38,10 @@ export const DatabaseKoboTableContent = ({
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [selectedColumn, setSelectedColumn] = useState<string | undefined>()
-  const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswer | undefined>()
+  const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat | undefined>()
   const [groupModalOpen, setOpenGroupModalAnswer] = useState<{
     columnId: string,
-    group: KoboAnswer[],
+    group: KoboAnswerFlat[],
     event: any
   } | undefined>()
 
@@ -86,7 +85,7 @@ export const DatabaseKoboTableContent = ({
       head: m.validation,
       width: 0,
       type: 'select_one',
-      render: (row: KoboAnswer) => {
+      render: (row: KoboAnswerFlat) => {
         const value = row.tags?._validation
         return {
           export: value ? m[value] : DatatableUtils.blank,

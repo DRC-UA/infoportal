@@ -1,10 +1,9 @@
 import {IpSelectOption, IpSelectSingle, IpSelectSingleNullableProps} from '@/shared/Select/SelectSingle'
 import {fnSwitch, KeyOf, Obj} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
-import {CashForRentStatus, CashStatus, StateStatus} from '@infoportal-common'
+import {CashForRentStatus, CashStatus, KoboValidation, StateStatus} from '@infoportal-common'
 import {Box, Icon, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
-import {KoboValidation} from '@infoportal-common'
 
 export enum ShelterCashStatus {
   Selected = 'Selected',
@@ -41,8 +40,8 @@ export namespace SelectStatusConfig {
       [KoboValidation.Approved]: 'success',
       [KoboValidation.Pending]: 'warning',
       [KoboValidation.Rejected]: 'error',
-      [KoboValidation.]: 'error',
-      [KoboValidation.Rejected]: 'error',
+      [KoboValidation.Flagged]: 'info',
+      [KoboValidation.UnderReview]: 'disabled',
     } as Record<KoboValidation, StateStatus>,
     CashForRentStatus: {
       [CashForRentStatus.FirstPending]: 'warning',

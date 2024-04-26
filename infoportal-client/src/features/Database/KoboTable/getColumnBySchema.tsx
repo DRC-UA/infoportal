@@ -1,7 +1,7 @@
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {I18nContextProps} from '@/core/i18n/I18n'
 import {KoboApiColType, KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
-import {KoboAnswer, KoboAnswerId, KoboAnswerMetaData, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {KoboAnswerMetaData, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {SheetHeadTypeIcon} from '@/shared/Sheet/SheetHead'
 import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
 import {mapFor, seq} from '@alexandreannic/ts-utils'
@@ -13,7 +13,7 @@ import React from 'react'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {removeHtml} from '@infoportal-common'
+import {KoboAnswerFlat, KoboAnswerId, removeHtml} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
@@ -68,7 +68,7 @@ interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
   groupSchemas: Record<string, KoboQuestionSchema[]>
   onOpenGroupModal?: (_: {
     columnId: string,
-    group: KoboAnswer[],
+    group: KoboAnswerFlat[],
     event: any
   }) => void,
   groupIndex?: number
@@ -247,7 +247,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           ...common,
           type: 'number',
           render: row => {
-            const group = row[q.name] as KoboAnswer[] | undefined
+            const group = row[q.name] as KoboAnswerFlat[] | undefined
             return {
               export: group?.length,
               value: group?.length,

@@ -1,4 +1,4 @@
-import {Box, capitalize, Grid, useTheme} from '@mui/material'
+import {Box, Grid, useTheme} from '@mui/material'
 import {DRCLogo} from '@/shared/logo/logo'
 import {Txt} from 'mui-extension'
 import {appFeatures} from '@/features/appFeatureId'

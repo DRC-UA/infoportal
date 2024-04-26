@@ -72,14 +72,14 @@ export type KoboAnswerMetaData<TTag extends Record<string, any> | undefined = un
   start: Date,
   end: Date,
   version?: string
-  attachments?: KoboAttachment[]
+  attachments: KoboAttachment[]
   geolocation: KoboAnswerGeolocation
   /** Extracted from question `date` when exists. */
   date: Date
   submissionTime: Date
   id: KoboAnswerId
   uuid: UUID
-  validationStatus?: string//'validation_status_approved'
+  validationStatus?: 'validation_status_approved'//'validation_status_approved'
   validatedBy?: string
   submittedBy?: string
   lastValidatedTimestamp?: number
@@ -106,6 +106,5 @@ export type KoboAnswer<
 
 export type KoboAnswerFlat<
   T extends Record<string, any> = Record<string, string | undefined>,
-  TTag extends Record<string, any> | undefined = undefined
+  TTag extends Record<string, any> | undefined = KoboBaseTags
 > = (KoboAnswerMetaData<TTag> & T)
-

@@ -1,7 +1,7 @@
 import {AppConfig, appConfig} from '@/conf/AppConfig'
 import {koboIndex} from '@infoportal-common'
 import {TableImg} from '@/shared/TableImg/TableImg'
-import {KoboAttachment} from '@/core/sdk/server/kobo/Kobo'
+import {KoboAttachment} from '@infoportal-common'
 import {useMemo} from 'react'
 
 export const proxyKoboImg = ({

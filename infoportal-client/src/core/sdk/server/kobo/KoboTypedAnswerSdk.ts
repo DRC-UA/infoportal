@@ -1,5 +1,4 @@
 import {ApiClient} from '../ApiClient'
-import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
@@ -12,6 +11,7 @@ import {
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   Ecrec_trainingGrants,
+  KoboAnswerFlat,
   KoboEcrec_cashRegistration,
   KoboGeneralMapping,
   KoboIndex,
@@ -261,7 +261,7 @@ export class KoboTypedAnswerSdk {
     }))
   }
 
-  readonly searchSafetyIncident = (filters: KoboAnswerFilter = {}): Promise<ApiPaginate<KoboAnswer<KoboSafetyIncidentHelper.Type>>> => {
+  readonly searchSafetyIncident = (filters: KoboAnswerFilter = {}): Promise<ApiPaginate<KoboAnswerFlat<KoboSafetyIncidentHelper.Type>>> => {
     return this.search({
       formId: KoboIndex.byName('safety_incident').id,
       fnMapKobo: KoboSafetyIncidentHelper.mapData,

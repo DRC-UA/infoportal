@@ -1,6 +1,5 @@
 import {ApiClient} from '../ApiClient'
-import {UUID} from '@infoportal-common'
-import {KoboId} from '../kobo/Kobo'
+import {KoboId, UUID} from '@infoportal-common'
 import {MpcaPayment, MpcaPaymentUpdate} from './MpcaPayment'
 
 export class MpcaPaymentSdk {

@@ -7,7 +7,6 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
-import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {Lazy} from '@/shared/Lazy'
 import {UaMapBy} from '../../DrcUaMap/UaMapBy'
@@ -15,7 +14,7 @@ import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {IpBtn} from '@/shared/Btn'
 import {CommentsPanel} from '@/shared/CommentsPanel'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
-import {Meal_VisitMonitoring, OblastIndex} from '@infoportal-common'
+import {KoboAnswerFlat, Meal_VisitMonitoring, OblastIndex} from '@infoportal-common'
 import {NavLink} from 'react-router-dom'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useMealVisitContext} from '@/features/Meal/Visit/MealVisitContext'
@@ -26,7 +25,7 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 
 export interface DashboardPageProps {
   filters: Record<string, string[]>
-  data: Seq<KoboAnswer<Meal_VisitMonitoring.T>>
+  data: Seq<KoboAnswerFlat<Meal_VisitMonitoring.T>>
 }
 
 const mapOblast = OblastIndex.koboOblastIndexIso
@@ -39,7 +38,7 @@ export const MealVisitDashboard = () => {
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
 
   const filterShape = useMemo(() => {
-    return DataFilter.makeShape<KoboAnswer<Meal_VisitMonitoring.T>>({
+    return DataFilter.makeShape<KoboAnswerFlat<Meal_VisitMonitoring.T>>({
       oblast: {
         icon: 'location_on',
         getOptions: () => schema.schemaHelper.getOptionsByQuestionName('mdro').map(_ => ({value: _.name, label: _.label[langIndex]})),

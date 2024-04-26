@@ -1,12 +1,10 @@
-import {KoboAnswerId, KoboId} from '@infoportal-common'
+import {KeyOf, KoboAnswerId, KoboId} from '@infoportal-common'
 import React, {Dispatch, ReactNode, SetStateAction} from 'react'
 import {AaSelect, AaSelectProps} from '@/shared/Select/Select'
 import {useAsync} from '@/shared/hook/useAsync'
 import {cfmMakeUpdateRequestKey} from '@/features/Cfm/CfmContext'
 import {Enum} from '@alexandreannic/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
-
-import {KeyOf} from '@infoportal-common'
 
 export const KoboSelectTag = <
   TTag extends Record<string, any>,

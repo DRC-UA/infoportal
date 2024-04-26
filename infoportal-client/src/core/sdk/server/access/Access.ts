@@ -1,6 +1,5 @@
 import {AppFeatureId} from '@/features/appFeatureId'
-import {CfmDataProgram, DrcJob, DrcOffice, KoboFormName, KoboIndex, UUID} from '@infoportal-common'
-import {KoboId} from '@infoportal-common'
+import {CfmDataProgram, DrcJob, DrcOffice, KoboFormName, KoboId, KoboIndex, UUID} from '@infoportal-common'
 
 export enum AccessLevel {
   Read = 'Read',

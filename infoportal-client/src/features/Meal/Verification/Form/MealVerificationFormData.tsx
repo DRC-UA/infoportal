@@ -1,4 +1,3 @@
-import {KoboAnswerId} from '@/core/sdk/server/kobo/Kobo'
 import {alpha, Box, useTheme} from '@mui/material'
 import {DatabaseTable} from '@/features/Database/KoboTable/DatabaseKoboTable'
 import {useState} from 'react'
@@ -6,6 +5,7 @@ import {SheetFilterValue} from '@/shared/Sheet/util/sheetType'
 import {MealVerificationForm} from '@/features/Meal/Verification/Form/MealVerificationForm'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {MealVerificationActivity} from '@/features/Meal/Verification/mealVerificationConfig'
+import {KoboAnswerId} from '@infoportal-common'
 
 export const MealVerificationFormData = ({
   activity,

@@ -1,7 +1,7 @@
 import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useRef, useState} from 'react'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
-import {Kobo, KoboAnswer, KoboAnswerId, KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {KeyOf, UUID} from '@infoportal-common'
+import {Kobo, KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {KeyOf, KoboAnswerFlat, KoboAnswerId, UUID} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {useIpToast} from '@/core/useToast'
@@ -39,7 +39,7 @@ export const DatabaseKoboTableProvider = (props: {
   serverId: DatabaseKoboContext['serverId']
   canEdit: DatabaseKoboContext['canEdit']
   form: DatabaseKoboContext['form']
-  data: KoboAnswer[]
+  data: KoboAnswerFlat[]
 }) => {
   const {m} = useI18n()
   const {
@@ -53,7 +53,7 @@ export const DatabaseKoboTableProvider = (props: {
   const {toastError} = useIpToast()
   const refreshRequestedFlag = useRef(false)
 
-  const mapData = (data: KoboAnswer[]) => {
+  const mapData = (data: KoboAnswerFlat[]) => {
     const mapped = data.map(_ => {
       const m = Kobo.mapAnswerBySchema(props.schema.schemaHelper.questionIndex, _)
       if (databaseCustomMapping[form.id]) {

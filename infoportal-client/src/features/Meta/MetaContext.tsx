@@ -1,7 +1,7 @@
 import React, {ReactNode, useContext, useEffect} from 'react'
 import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {UseMetaData, useMetaDashboardData} from '@/features/Meta/useMetaData'
+import {useMetaDashboardData, UseMetaData} from '@/features/Meta/useMetaData'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 

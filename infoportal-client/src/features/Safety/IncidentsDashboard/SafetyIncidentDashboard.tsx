@@ -3,9 +3,8 @@ import {map, seq, Seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {DebouncedInput} from '@/shared/DebouncedInput'
-import {KoboIndex, KoboSafetyIncidentHelper, Period, Safety_incidentTracker} from '@infoportal-common'
+import {KoboAnswerFlat, KoboIndex, KoboSafetyIncidentHelper, Period, Safety_incidentTracker} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
@@ -15,7 +14,7 @@ import {useFetcher} from '@/shared/hook/useFetcher'
 
 export interface DashboardSafetyIncidentsPageProps {
   filters: DataFilter.Filter
-  data: Seq<KoboAnswer<KoboSafetyIncidentHelper.Type>>
+  data: Seq<KoboAnswerFlat<KoboSafetyIncidentHelper.Type>>
   computed: NonNullable<ReturnType<typeof useSafetyIncidentDashboard>>
 }
 
@@ -24,7 +23,7 @@ export const SafetyIncidentDashboard = () => {
   const {m} = useI18n()
   const _period = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('safety_incident').id))
 
-  const filterShape = DataFilter.makeShape<KoboAnswer<Safety_incidentTracker.T>>({
+  const filterShape = DataFilter.makeShape<KoboAnswerFlat<Safety_incidentTracker.T>>({
     oblast: {
       icon: 'location_on',
       getValue: _ => _.oblast,

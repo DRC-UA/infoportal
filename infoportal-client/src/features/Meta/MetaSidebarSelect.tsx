@@ -1,8 +1,8 @@
 import React, {useCallback} from 'react'
-import {Box, BoxProps, Checkbox, FormControlLabel, FormGroup, useTheme} from '@mui/material'
+import {BoxProps, Checkbox, FormControlLabel, FormGroup, useTheme} from '@mui/material'
 import {makeSx, Txt} from 'mui-extension'
 import {useI18n} from '@/core/i18n'
-import {combineSx, styleUtils} from '@/core/theme'
+import {combineSx} from '@/core/theme'
 import {SheetOptions} from '@/shared/Sheet/util/sheetType'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 
