@@ -85,6 +85,7 @@ export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {
 
 export type KoboMappedAnswerType = string | string[] | Date | number | undefined | KoboAnswer<any>[]
 
+/** @deprecated Use KoboAnswerFlat from @infoportal-common*/
 export type KoboAnswer<
   TQuestion extends Record<string, any> = Record<string, any>,
   TTags extends KoboBaseTags = KoboBaseTags

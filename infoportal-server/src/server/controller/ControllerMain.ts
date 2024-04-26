@@ -44,7 +44,7 @@ export class ControllerMain {
     //   start: new Date(2022, 11, 1),
     //   end: new Date(2023, 2, 1)
     // })
-    res.send('Running v5.0')
+    res.send('Running v6.0')
     // res.send('Hello.')
   }
 }

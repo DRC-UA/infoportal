@@ -78,7 +78,7 @@ export const DatabaseAccess = ({
           renderParams={(_: KoboDatabaseAccessParams) => JSON.stringify(_.filters)}
           onRemoved={refresh}
           header={
-            accessSum && (
+            accessSum.admin && (
               <DatabaseAccessForm formId={formId} form={form} onAdded={refresh}>
                 <IpBtn sx={{mr: 1}} variant="contained" icon="person_add">{m.grantAccess}</IpBtn>
               </DatabaseAccessForm>
