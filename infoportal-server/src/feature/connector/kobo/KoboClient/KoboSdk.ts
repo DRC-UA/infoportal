@@ -7,6 +7,7 @@ import axios from 'axios'
 import {appConf} from '../../../../core/conf/AppConf'
 import {KoboForm} from '@prisma/client'
 import {ApiKoboUpdate} from './type/KoboUpdate'
+import {KoboHook} from './type/KoboHook'
 
 const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
   return {
@@ -16,8 +17,10 @@ const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
 }
 
 export class KoboSdk {
-  constructor(private api: ApiClient) {
+  constructor(private api: ApiClient, private conf = appConf) {
   }
+
+  static readonly hookName = 'InfoPortal'
 
   static readonly parseDate = (_: Date) => _.toISOString()
 
@@ -35,6 +38,26 @@ export class KoboSdk {
         q.name = q.$autoname ?? q.name
       })
       return _
+    })
+  }
+
+  readonly getHook = (formId: KoboId): Promise<ApiPaginate<KoboHook>> => {
+    return this.api.get<KoboApiList<KoboHook>>(`/v2/assets/${formId}/hooks/`).then(koboToApiPaginate)
+  }
+
+  readonly createHook = (formId: KoboId) => {
+    return this.api.post(`/v2/assets/${formId}/hooks/`, {
+      body: {
+        'name': KoboSdk.hookName,
+        'endpoint': this.conf.baseUrl + `/kobo-api/webhook`,
+        'active': true,
+        'subset_fields': [],
+        'email_notification': true,
+        'export_type': 'json',
+        'auth_level': 'no_auth',
+        'settings': {'custom_headers': {}},
+        'payload_template': ''
+      }
     })
   }
 

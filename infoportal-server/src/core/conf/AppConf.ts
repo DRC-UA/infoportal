@@ -6,6 +6,7 @@ dotenv.config()
 const e = env(process.env)
 
 export const appConf = {
+  baseUrl: e(defaultValue('https://infoportal-ua-api.drc.ngo'))('BASE_URL'),
   logLevel: e()('LOG_LEVEL'),
   rootProjectDir: e(defaultValue(__dirname))('ROOT_PROJECT_DIR'),
   disableScheduledTask: e(bool, defaultValue(false))('DISABLED_SCHEDULED_TASK'),

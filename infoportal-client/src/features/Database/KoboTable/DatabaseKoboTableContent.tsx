@@ -2,13 +2,13 @@ import {IpBtn} from '@/shared/Btn'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
-import {KoboAnswerFlat, KoboIndex} from '@infoportal-common'
+import {KoboAnswerFlat} from '@infoportal-common'
 import {AaSelect} from '@/shared/Select/Select'
-import {DatabaseKoboTableExportBtn, renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
+import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {DatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
-import {Switch, Theme, useTheme} from '@mui/material'
+import {Switch, Theme} from '@mui/material'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -26,6 +26,7 @@ import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {Enum, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
 import {IpAlert} from '@/shared/Alert'
+import {useSession} from '@/core/Session/SessionContext'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -34,7 +35,7 @@ export const DatabaseKoboTableContent = ({
   const ctx = useDatabaseKoboTableContext()
   const {langIndex, setLangIndex} = useKoboSchemaContext()
   const {m} = useI18n()
-  const theme = useTheme()
+  const session = useSession()
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [selectedColumn, setSelectedColumn] = useState<string | undefined>()
@@ -117,18 +118,12 @@ export const DatabaseKoboTableContent = ({
 
   return (
     <>
-      {ctx.form.id === KoboIndex.byName('bn_re').id && (
-        <IpAlert color="info" sx={{mb: 1}} deletable="permanent" id="bn_re webhook">
-          <b>НОВА ФУНКЦІЯ:</b> попрощайтеся з кнопкою ручної SYNC. Відповіді Kobo тепер синхронізуються автоматично після надсилання.
-          Ця функція наразі знаходиться в стадії бета-тестування, виключно для цієї форми.
-          Після успішного тестування його буде поширено на інші форми.
-          <br/>
-          <br/>
-          <b>NEW FEATURE:</b> Say goodbye to manual SYNC button. Kobo responses now synchronize automatically upon submission.
-          This feature is currently in beta testing, exclusive to this form.
-          Pending successful testing, it will be extended to other forms.
-        </IpAlert>
-      )}
+      <IpAlert color="info" sx={{mb: 1}} deletable="permanent" id="kobo-webhook">
+        <b>НОВА ФУНКЦІЯ:</b> попрощайтеся з кнопкою ручної SYNC. Відповіді Kobo тепер синхронізуються автоматично після надсилання.
+        <br/>
+        <br/>
+        <b>NEW FEATURE:</b> Say goodbye to manual SYNC button. Kobo responses now synchronize automatically upon submission.
+      </IpAlert>
       <Datatable
         showExportBtn
         rowsPerPageOptions={[20, 50, 100]}
@@ -198,18 +193,13 @@ export const DatabaseKoboTableContent = ({
               tooltip={m._koboDatabase.openKoboForm}
               sx={{marginLeft: 'auto'}}
             />
-            <DatabaseKoboSyncBtn
-              loading={ctx.asyncRefresh.loading}
-              tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.pullDataAt(ctx.form.updatedAt)}}/>}
-              onClick={ctx.asyncRefresh.call}
-            />
-            <DatabaseKoboTableExportBtn
-              columns={columns}
-              data={params.filteredAndSortedData}
-              repeatGroupsAsColumns={repeatGroupsAsColumns}
-              tooltip={'Download as XLS (DEPRECATED VERSION - Without calculated columns - Kept in case of bugs with the new button)'}
-              // tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.downloadAsXLS}}/>}
-            />
+            {session.session.admin && (
+              <DatabaseKoboSyncBtn
+                loading={ctx.asyncRefresh.loading}
+                tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.pullDataAt(ctx.form.updatedAt)}}/>}
+                onClick={ctx.asyncRefresh.call}
+              />
+            )}
           </>
         }
       />

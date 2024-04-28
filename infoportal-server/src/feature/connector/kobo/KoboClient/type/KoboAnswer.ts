@@ -126,7 +126,7 @@ export class KoboAnswerUtils {
     } = k
     const submissionTime = KoboAnswerUtils.mapKoboSubmissionTime(_submission_time)
     return {
-      attachments: _attachments,
+      attachments: _attachments ?? [],
       geolocation: _geolocation,
       date: k.date ? new Date(k.date) : submissionTime,
       start: start ? new Date(start) : submissionTime,
