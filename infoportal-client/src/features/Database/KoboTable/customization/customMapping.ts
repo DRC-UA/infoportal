@@ -3,6 +3,7 @@ import {KoboEcrec_cashRegistration, KoboGeneralMapping, KoboIndex} from '@infopo
 export const databaseCustomMapping: Record<any, (_: any) => any> = {
   [KoboIndex.byName('ecrec_cashRegistration').id]: (_: KoboEcrec_cashRegistration.T) => KoboEcrec_cashRegistration.calculateVulnerabilities(_),
   [KoboIndex.byName('ecrec_cashRegistrationBha').id]: (_: KoboEcrec_cashRegistration.T) => KoboEcrec_cashRegistration.calculateVulnerabilities(_),
+  [KoboIndex.byName('ecrec_trainingGrants').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('bn_re').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('bn_rapidResponse').id]: KoboGeneralMapping.addIndividualBreakdownColumnForRrm,
   [KoboIndex.byName('bn_cashForRentRegistration').id]: KoboGeneralMapping.addIndividualBreakdownColumn,

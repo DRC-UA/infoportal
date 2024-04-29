@@ -68,6 +68,15 @@ export enum CashForRentStatus {
   Referred = 'Referred',
 }
 
+export enum CashForEduStatus {
+  Approved = 'Approved',
+  FirstPending = 'FirstPending',
+  FirstPaid = 'FirstPaid',
+  SecondPending = 'SecondPending',
+  SecondPaid = 'SecondPaid',
+  CertificateSubmitted = 'CertificateSubmitted',
+}
+
 export type KoboAnswerMetaData<TTag extends Record<string, any> | undefined = undefined> = {
   start: Date,
   end: Date,
