@@ -2,20 +2,19 @@ import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {I18nContextProps} from '@/core/i18n/I18n'
 import {KoboApiColType, KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
 import {KoboAnswerMetaData, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {SheetHeadTypeIcon} from '@/shared/Sheet/SheetHead'
 import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
 import {mapFor, seq} from '@alexandreannic/ts-utils'
 import {formatDate, formatDateTime} from '@/core/i18n/localization/en'
 import {IpBtn} from '@/shared/Btn'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import React from 'react'
-
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {KoboAnswerFlat, KoboAnswerId, removeHtml} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {DatatableHeadTypeIcon} from '@/shared/Datatable/DatatableHead'
 
 const imageExtension = new Set([
   '.png',
@@ -23,6 +22,13 @@ const imageExtension = new Set([
   '.jpeg',
   '.gif',
 ])
+
+export const keyTypeIcon = <DatatableHeadTypeIcon
+  color="info"
+  tooltip="ID"
+  sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}
+  children="key"
+/>
 
 const ignoredColType: Set<KoboApiColType> = new Set([
   'begin_group',
@@ -129,10 +135,19 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
     head: removeHtml(getHead(translateQuestion(q.name))),
   }
   const res: DatatableColumn.Props<T>[] | DatatableColumn.Props<T> | undefined = (() => {
+    if (q.name === 'id') {
+      return {
+        typeIcon: <DatatableHeadTypeIcon children="key" tooltip={q.type}/>,
+        ...common,
+        type: 'string',
+        className: 'td-id',
+        renderQuick: row => row.id,
+      }
+    }
     switch (q.type) {
       case 'image': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="short_text" tooltip={q.type}/>,
+          typeIcon: <DatatableHeadTypeIcon children="short_text" tooltip={q.type}/>,
           ...common,
           type: 'string',
           render: row => {
@@ -148,7 +163,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'file': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="functions" tooltip="insert_drive_file"/>,
+          typeIcon: <DatatableHeadTypeIcon children="functions" tooltip="insert_drive_file"/>,
           ...common,
           type: 'string',
           render: row => {
@@ -164,7 +179,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'calculate': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="functions" tooltip="calculate"/>,
+          typeIcon: <DatatableHeadTypeIcon children="functions" tooltip="calculate"/>,
           ...common,
           type: 'select_one',
           head: removeHtml(getHead(translateQuestion(q.name))),
@@ -174,7 +189,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'select_one_from_file': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="attach_file" tooltip="select_one_from_file"/>,
+          typeIcon: <DatatableHeadTypeIcon children="attach_file" tooltip="select_one_from_file"/>,
           ...common,
           type: 'string',
           renderQuick: row => getVal(row, q.name) as string
@@ -183,16 +198,17 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       case 'username':
       case 'text': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="short_text" tooltip={q.type}/>,
+          typeIcon: <DatatableHeadTypeIcon children="short_text" tooltip={q.type}/>,
           ...common,
           type: 'string',
+          className: q.name === 'id' ? 'td-id' : undefined,
           renderQuick: row => getVal(row, q.name) as string,
         }
       }
       case 'decimal':
       case 'integer': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="tag" tooltip={q.type}/>,
+          typeIcon: <DatatableHeadTypeIcon children="tag" tooltip={q.type}/>,
           ...common,
           type: 'number',
           renderQuick: row => getVal(row, q.name) as number,
@@ -200,7 +216,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'note': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="info" tooltip="note"/>,
+          typeIcon: <DatatableHeadTypeIcon children="info" tooltip="note"/>,
           ...common,
           type: 'string',
           renderQuick: row => getVal(row, q.name) as string,
@@ -213,7 +229,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       case 'today':
       case 'date': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="event" tooltip={q.type}/>,
+          typeIcon: <DatatableHeadTypeIcon children="event" tooltip={q.type}/>,
           ...common,
           type: 'date',
           render: row => {
@@ -243,7 +259,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           })).flat()
         }
         return {
-          typeIcon: <SheetHeadTypeIcon children="repeat" tooltip="begin_repeat"/>,
+          typeIcon: <DatatableHeadTypeIcon children="repeat" tooltip="begin_repeat"/>,
           ...common,
           type: 'number',
           render: row => {
@@ -262,7 +278,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'select_one': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="radio_button_checked" tooltip={q.type}/>,
+          typeIcon: <DatatableHeadTypeIcon children="radio_button_checked" tooltip={q.type}/>,
           ...common,
           type: 'select_one',
           // options: () => choicesIndex[q.select_from_list_name!].map(_ => ({value: _.name, label: translateChoice(q.name, _.name)})),
@@ -285,7 +301,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'select_multiple': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="check_box" tooltip={q.type}/>,
+          typeIcon: <DatatableHeadTypeIcon children="check_box" tooltip={q.type}/>,
           ...common,
           type: 'select_multiple',
           options: () => choicesIndex[q.select_from_list_name!].map(_ => ({value: _.name, label: translateChoice(q.name, _.name)})),
@@ -313,7 +329,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'geopoint': {
         return {
-          typeIcon: <SheetHeadTypeIcon children="location_on" tooltip="geopoint"/>,
+          typeIcon: <DatatableHeadTypeIcon children="location_on" tooltip="geopoint"/>,
           ...common,
           type: 'string',
           renderQuick: row => JSON.stringify(getVal(row, q.name))
@@ -321,7 +337,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       default: {
         return {
-          typeIcon: <SheetHeadTypeIcon children="short_text" tooltip={q.type}/>,
+          typeIcon: <DatatableHeadTypeIcon children="short_text" tooltip={q.type}/>,
           ...common,
           type: 'string',
           renderQuick: row => JSON.stringify(getVal(row, q.name))

@@ -409,10 +409,16 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     borderSpacing: 0,
   },
   '.table-head-type-icon': {
-    ml: '2px', marginRight: 'auto', color: alpha(t.palette.text.disabled, .18)
+    ml: '2px',
+    marginRight: 'auto',
   },
   '.table .MuiCheckbox-root': {
     padding: '6px',
+  },
+  '.td-id': {
+    color: t.palette.info.main,
+    fontWeight: 'bold',
+    // fontWeight: t.typography.fontWeightBold,
   },
   '.table .MuiInputBase-root, .table .MuiFormControl-root': {
     margin: 0,

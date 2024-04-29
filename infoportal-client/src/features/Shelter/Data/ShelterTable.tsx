@@ -4,7 +4,7 @@ import {fnSwitch, map, Obj, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {AaSelect} from '@/shared/Select/Select'
 import {Panel} from '@/shared/Panel'
-import {Box, useTheme} from '@mui/material'
+import {Box, Icon, useTheme} from '@mui/material'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {add, KoboShelterTa, KoboValidation, safeNumber, Shelter_NTA, ShelterContractorPrices, shelterDrcProject, ShelterProgress, ShelterTaPriceLevel} from '@infoportal-common'
@@ -24,6 +24,7 @@ import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyn
 import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
 
 export const ShelterTable = () => {
   const ctx = useShelterContext()
@@ -76,6 +77,8 @@ export const ShelterTable = () => {
         {
           id: 'Id',
           head: 'ID',
+          typeIcon: keyTypeIcon,
+          className: 'td-id',
           type: 'string',
           renderQuick: _ => _.nta?.id,
         },

@@ -46,6 +46,7 @@ const DatatableBody_ = <T extends DatatableRow>({
                   onClick={_.onClick ? () => _.onClick?.(item) : undefined}
                   className={[
                     'td',
+                    _.className,
                     _.stickyEnd ? 'td-sticky-end' : '',
                     _.type === 'number' ? 'td-right' : '',
                     fnSwitch(_.align!, {

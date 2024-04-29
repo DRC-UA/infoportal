@@ -1,5 +1,5 @@
 import {fnSwitch, map} from '@alexandreannic/ts-utils'
-import {Box, Checkbox} from '@mui/material'
+import {Box, Checkbox, IconProps} from '@mui/material'
 import React from 'react'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
@@ -50,6 +50,7 @@ export const DatatableHead = (() => {
               title={_.head}
               // onClick={() => onSortBy(_.id)}
               className={[
+                _.classHead ?? '',
                 'td th',
                 _.width ? 'th-width-fit-content' : '',
                 _.stickyEnd ? 'td-sticky-end' : '',
@@ -98,8 +99,8 @@ export const DatatableHead = (() => {
 export const DatatableHeadTypeIcon = (props: {
   tooltip: string,
   children: string,
-}) => {
-  return <TableIcon className="table-head-type-icon" fontSize="small" {...props}/>
+} & Pick<IconProps, 'sx' | 'color'>) => {
+  return <TableIcon className="table-head-type-icon" fontSize="small" color="disabled" {...props}/>
 }
 
 export const DatatableHeadContent = ({

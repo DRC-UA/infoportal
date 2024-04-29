@@ -146,7 +146,7 @@ export const ChartBarContent = <K extends string>({
                   </Box>
                   <Box
                     sx={{
-                      transition: t => t.transitions.create('width', {duration: 1200}),
+                      transition: t => t.transitions.create('width', {duration: 800, delay: 0}),
                       width: 0,
                       display: 'flex',
                       alignItems: 'center',

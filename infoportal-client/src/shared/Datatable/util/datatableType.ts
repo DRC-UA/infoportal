@@ -96,6 +96,7 @@ export namespace DatatableColumn {
     alwaysVisible?: boolean
     style?: (_: T) => CSSProperties
     styleHead?: CSSProperties
+    classHead?: string
     typeIcon?: ReactNode
     subHeader?: ReactNode,
     className?: string | ((_: T) => string | undefined)
