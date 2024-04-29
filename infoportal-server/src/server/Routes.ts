@@ -24,6 +24,7 @@ import {ControllerMealVerification} from './controller/ControllerMealVerificatio
 import {ControllerGroup} from './controller/ControllerGroup'
 import {ControllerKoboMeta} from './controller/ControllerKoboMeta'
 import {ControllerJsonStore} from './controller/ControllerJsonStore'
+import {ControllerHdp} from './controller/ControllerHdp'
 
 export interface AuthenticatedRequest extends Request {
   user?: UserSession
@@ -75,6 +76,7 @@ export const getRoutes = (
   const mealVerification = new ControllerMealVerification(prisma)
   const koboMeta = new ControllerKoboMeta(prisma)
   const jsonStore = new ControllerJsonStore(prisma)
+  const hdp = new ControllerHdp()
 
   const auth = ({adminOnly = false}: {adminOnly?: boolean} = {}) => async (req: Request, res: Response, next: NextFunction) => {
     // req.session.user = {
@@ -160,6 +162,8 @@ export const getRoutes = (
     router.patch('/kobo/answer/:formId/tag', auth(), errorCatcher(koboAnswer.updateTag))
     router.patch('/kobo/answer/:formId', auth(), errorCatcher(koboAnswer.updateAnswers))
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
+
+    router.get('/hdp/risk-education', errorCatcher(hdp.fetchRiskEducation))
 
     router.post('/shelter/search', errorCatcher(shelter.search))
 
