@@ -58,7 +58,6 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
               sx={{maxWidth: 120, mr: 1}}
               label={m.status}
               disabled={!ctx.canEdit}
-              placeholder={m.project}
               onChange={_ => {
                 ctx.asyncUpdateTag.call({answerIds: selectedIds, value: _, key: 'status'})
               }}
