@@ -3,7 +3,7 @@ import {ApiPaginate, ApiPaginateHelper, ApiPagination, KoboAnswer, KoboAnswerId,
 import {DbKoboAnswer, KoboAttachment} from '../connector/kobo/KoboClient/type/KoboAnswer'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {filterKoboQuestionType, KoboApiQuestion} from '../connector/kobo/KoboClient/type/KoboApiForm'
-import {duration, Obj, fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {duration, fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {format} from 'date-fns'
 import {KoboAnswersFilters} from '../../server/controller/kobo/ControllerKoboAnswer'
 import {UserSession} from '../session/UserSession'
@@ -13,6 +13,7 @@ import {GlobalEvent} from '../../core/GlobalEvent'
 import {defaultPagination} from '../../core/Type'
 import {SytemCache} from '../../helper/IpCache'
 import {app} from '../../index'
+import {appConf} from '../../core/conf/AppConf'
 import Event = GlobalEvent.Event
 
 export interface KoboAnswerFilter {
@@ -36,6 +37,7 @@ export class KoboService {
     private access = new AccessService(prisma),
     private sdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
     private event: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
+    private conf = appConf,
   ) {
   }
 
@@ -114,9 +116,11 @@ export class KoboService {
               {date: 'desc',},
               {submissionTime: 'desc',},
             ],
-            include: {
-              meta: includeMeta,
-            },
+            ...includeMeta ? {
+              include: {
+                meta: includeMeta,
+              }
+            } : {},
             where: {
               deletedAt: null,
               date: {
@@ -385,30 +389,36 @@ export class KoboService {
   }
 
   readonly updateTags = async ({formId, answerIds, tags}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>}) => {
-    const answers = await this.prisma.koboAnswers.findMany({
-      select: {
-        id: true,
-        tags: true,
-      },
-      where: {
-        formId,
-        id: {
-          in: answerIds
-        }
-      }
-    })
-    await Promise.all(answers.map(answer => {
-      const newTag = {...answer.tags as any, ...tags}
-      return this.prisma.koboAnswers.update({
-        where: {
-          id: answer.id,
-        },
-        data: {
-          updatedAt: new Date(),
-          tags: newTag,
-        }
-      })
-    }))
+    await this.prisma.$executeRawUnsafe(
+      `UPDATE "KoboAnswers"
+       SET ${Obj.keys(tags).map(key => `tags = jsonb_set(tags, '{${key}}', '"${tags[key]}"')`).join(',')},
+           "updatedAt" = NOW()
+       WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
+      `)
+    // const answers = await this.prisma.koboAnswers.findMany({
+    //   select: {
+    //     id: true,
+    //     tags: true,
+    //   },
+    //   where: {
+    //     formId,
+    //     id: {
+    //       in: answerIds
+    //     }
+    //   }
+    // })
+    // await PromisePool.withConcurrency(this.conf.db.maxConcurrency).for(answers).process((answer => {
+    //   const newTag = {...answer.tags as any, ...tags}
+    //   return this.prisma.koboAnswers.update({
+    //     where: {
+    //       id: answer.id,
+    //     },
+    //     data: {
+    //       updatedAt: new Date(),
+    //       tags: newTag,
+    //     }
+    //   })
+    // }))
     this.event.emit(Event.KOBO_TAG_EDITED, {formId, answerIds, tags})
   }
 }

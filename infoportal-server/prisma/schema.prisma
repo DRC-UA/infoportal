@@ -56,7 +56,7 @@ model KoboAnswers {
   meta              KoboMeta[]
 
   @@unique([id, formId])
-  @@index([start, end, submissionTime, formId])
+  @@index([date, formId])
 }
 
 enum Gender {
