@@ -118,6 +118,7 @@ export const en = Object.freeze({
     Pending: 'Pending',
     recap: 'Recap',
     Approved: 'Approved',
+
     Rejected: 'Rejected',
     mykolaiv: 'Mykolaiv',
     lastConnectedAt: 'Last connection',
@@ -590,6 +591,7 @@ export const en = Object.freeze({
       elderlyLedOrganization: `Focused on elders or PwD`,
     },
     mpca: {
+      eskAllowance: 'ESK allowance',
       deleteTracker: 'Delete tracker?',
       deleteTrackerDetails: `It won't delete any data and you can recreate the tracker later.`,
       errorFormAlreadyExists: 'This tracked already exists.',

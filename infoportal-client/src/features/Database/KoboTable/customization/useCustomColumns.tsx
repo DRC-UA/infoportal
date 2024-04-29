@@ -1,8 +1,10 @@
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {
+  Bn_Re,
   currentProtectionProjects,
   DrcProject,
-  Ecrec_cashRegistration, KoboAnswer,
+  Ecrec_cashRegistration,
+  KoboAnswer,
   KoboAnswerFlat,
   KoboBaseTags,
   KoboGeneralMapping,
@@ -243,12 +245,13 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         ...individualsBreakdown,
         {
           id: 'eligibility_summary_esk2',
-          head: 'Eligibility Summary',
+          head: m.mpca.eskAllowance,
           type: 'number',
-          renderQuick: (row: KoboAnswer<any, any>) => {
+          renderQuick: (row: KoboAnswerFlat<Bn_Re.T, any>) => {
             return row.estimate_sqm_damage !== undefined ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined
           }
-        }],
+        }
+      ],
       [KoboIndex.byName('shelter_cashForRepair').id]: [
         ...paymentStatusShelter(),
       ],
