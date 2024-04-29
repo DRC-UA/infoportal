@@ -21,6 +21,9 @@ import {SelectStatusBy, SelectStatusConfig, ShelterCashStatus} from '@/shared/cu
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
+import {startOfMonth, subMonths} from 'date-fns'
+
+const getMinDateForDatePicker = subMonths(startOfMonth(Date.now()), 1)
 
 export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const ctx = useDatabaseKoboTableContext()
@@ -80,6 +83,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           value: row.tags?.lastStatusUpdate,
           label: <IpDatepicker
             value={row.tags?.lastStatusUpdate}
+            min={getMinDateForDatePicker}
             onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'lastStatusUpdate'})}
           />
         }
@@ -207,7 +211,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           id: 'eligibility_summary_esk2',
           head: 'Eligibility Summary',
           type: 'number',
-          renderQuick: (row: KoboAnswerFlat<any, any>) => {
+          renderQuick: (row: KoboAnswer<any, any>) => {
             return row.estimate_sqm_damage !== undefined ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined
           }
         }],
