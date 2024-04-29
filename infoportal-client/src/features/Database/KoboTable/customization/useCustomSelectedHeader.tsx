@@ -51,6 +51,7 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
             <SelectStatusBy
               enum="CashForEduStatus"
               sx={{maxWidth: 120, mr: 1}}
+              label={m.status}
               disabled={!ctx.canEdit}
               placeholder={m.project}
               onChange={_ => {

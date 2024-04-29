@@ -54,11 +54,10 @@ export namespace SelectStatusConfig {
       [CashForRentStatus.Referred]: 'disabled',
     } as Record<CashForRentStatus, StateStatus>,
     CashForEduStatus: {
-      [CashForEduStatus.Verified]: 'success',
-      [CashForEduStatus.Approved]: 'success',
-      [CashForEduStatus.FirstPending]: 'warning',
+      [CashForEduStatus.Approved]: 'disabled',
+      [CashForEduStatus.FirstPending]: 'info',
       [CashForEduStatus.FirstPaid]: 'success',
-      [CashForEduStatus.SecondPending]: 'warning',
+      [CashForEduStatus.SecondPending]: 'info',
       [CashForEduStatus.SecondPaid]: 'success',
       [CashForEduStatus.CertificateSubmitted]: 'success',
     } as Record<CashForEduStatus, StateStatus>

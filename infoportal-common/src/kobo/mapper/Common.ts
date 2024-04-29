@@ -66,7 +66,6 @@ export enum CashForRentStatus {
 }
 
 export enum CashForEduStatus {
-  Verified = 'Verified',
   Approved = 'Approved',
   FirstPending = 'FirstPending',
   FirstPaid = 'FirstPaid',
