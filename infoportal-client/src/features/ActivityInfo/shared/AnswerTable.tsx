@@ -1,27 +1,41 @@
 import {BoxProps} from '@mui/material'
 import React from 'react'
-import {Sheet} from '@/shared/Sheet/Sheet'
+import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
-/** @deprecated*/
+
 export const AnswerTable = <T extends Record<string, any>, >({
   answers,
+  koboKey,
   ...props
 }: {
+  koboKey?: string
   answers: T[]
 } & BoxProps) => {
   return (
-    <Sheet<T>
+    <Datatable<T>
       id="answer-table"
       title=""
       {...props}
       data={answers}
-      columns={Object.keys(answers?.[0] ?? {}).map(k => ({
-        id: k,
-        head: k,
-        render: _ => {
-          return typeof _[k] === 'object' ? JSON.stringify(_[k]) : _[k]
-        },
-      }))}
+      columns={[
+        ...koboKey ? [{
+          id: 'Id',
+          head: 'ID',
+          typeIcon: keyTypeIcon,
+          className: 'td-id',
+          type: 'string' as const,
+          renderQuick: (_: any) => _[koboKey],
+        }] : [],
+        ...Object.keys(answers?.[0] ?? {}).filter(k => !koboKey || koboKey !== k).map(k => ({
+          id: k,
+          type: 'select_one' as const,
+          head: k,
+          renderQuick: (_: any) => {
+            return typeof _[k] === 'object' ? JSON.stringify(_[k]) : _[k]
+          },
+        }))
+      ]}
     />
   )
 }

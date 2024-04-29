@@ -13,6 +13,7 @@ import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {format, subMonths} from 'date-fns'
 import {KoboAnswerFlat, KoboIndex} from '@infoportal-common'
+import {useSession} from '@/core/Session/SessionContext'
 
 
 export interface AiBundle<
@@ -42,6 +43,7 @@ export const AiBundleTable = ({
 }) => {
   const {api, conf} = useAppSettings()
   const {toastHttpError} = useIpToast()
+  const {session} = useSession()
   const {m} = useI18n()
   const t = useTheme()
 
@@ -91,12 +93,18 @@ export const AiBundleTable = ({
             renderQuick: _ => {
               return (
                 <>
-                  <AiSendBtn
-                    disabled={!_.submit}
-                    onClick={() => {
-                      _submit.call(_.recordId, [_.requestBody]).catch(toastHttpError)
-                    }}
-                  />
+                  {session.admin && (
+                    <>
+                      <AiSendBtn
+                        disabled={!_.submit}
+                        onClick={() => {
+                          _submit.call(_.recordId, [_.requestBody]).catch(toastHttpError)
+                        }}
+                      />
+                      <AiPreviewActivity activity={{..._.activity, ..._.subActivity}}/>
+                      <AiPreviewRequest request={_.requestBody}/>
+                    </>
+                  )}
                   <AiViewAnswers answers={_.data.map(_ => {
                     _.formId = KoboIndex.searchById(_.formId)?.translation ?? _.formId
                     delete _.referencedFormId
@@ -104,8 +112,6 @@ export const AiBundleTable = ({
                     delete _.uuid
                     return _
                   })}/>
-                  <AiPreviewActivity activity={{..._.activity, ..._.subActivity}}/>
-                  <AiPreviewRequest request={_.requestBody}/>
                 </>
               )
             }
