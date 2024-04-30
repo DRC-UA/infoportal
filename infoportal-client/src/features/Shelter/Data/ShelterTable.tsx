@@ -4,7 +4,7 @@ import {fnSwitch, map, Obj, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {AaSelect} from '@/shared/Select/Select'
 import {Panel} from '@/shared/Panel'
-import {Box, Icon, useTheme} from '@mui/material'
+import {Box, useTheme} from '@mui/material'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {add, KoboShelterTa, KoboValidation, safeNumber, Shelter_NTA, ShelterContractorPrices, shelterDrcProject, ShelterProgress, ShelterTaPriceLevel} from '@infoportal-common'
@@ -25,9 +25,6 @@ import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
-import {startOfMonth, subMonths} from 'date-fns'
-
-const getMinDateForDatePicker = subMonths(startOfMonth(Date.now()), 1)
 
 export const ShelterTable = () => {
   const ctx = useShelterContext()
@@ -725,7 +722,6 @@ export const ShelterTable = () => {
               label: row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted && map(row.ta, ta => (
                 <IpDatepicker
                   value={row.ta?.tags?.workDoneAt}
-                  min={getMinDateForDatePicker}
                   onChange={_ => ctx.ta.asyncUpdate.call({
                     answerId: ta.id,
                     key: 'workDoneAt',
