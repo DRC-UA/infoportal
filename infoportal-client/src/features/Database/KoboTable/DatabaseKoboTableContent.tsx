@@ -193,13 +193,11 @@ export const DatabaseKoboTableContent = ({
               tooltip={m._koboDatabase.openKoboForm}
               sx={{marginLeft: 'auto'}}
             />
-            {session.session.admin && (
-              <DatabaseKoboSyncBtn
-                loading={ctx.asyncRefresh.loading}
-                tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.pullDataAt(ctx.form.updatedAt)}}/>}
-                onClick={ctx.asyncRefresh.call}
-              />
-            )}
+            <DatabaseKoboSyncBtn
+              loading={ctx.asyncRefresh.loading}
+              tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.pullDataAt(ctx.form.updatedAt)}}/>}
+              onClick={ctx.asyncRefresh.call}
+            />
           </>
         }
       />
