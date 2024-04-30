@@ -108,6 +108,8 @@ export const ShelterWithAccess = () => {
             access={access}
             data={fetcherData}
             allowedOffices={allowedOffices}
+            langIndex={schemaContext.langIndex}
+            setLangIndex={schemaContext.setLangIndex}
             schemaNta={schemaContext.schema.shelter_nta}
             schemaTa={schemaContext.schema.shelter_ta}
           >

@@ -15,7 +15,7 @@ interface KoboSchemaProviderProps {
   children: ReactNode
 }
 
-interface KoboSchemaContext {
+export interface KoboSchemaContext {
   schema: Partial<Record<KoboFormName, KoboSchemaHelper.Bundle>>
   langIndex: number
   setLangIndex: Dispatch<SetStateAction<number>>

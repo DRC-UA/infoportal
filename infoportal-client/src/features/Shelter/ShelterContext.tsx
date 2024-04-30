@@ -1,16 +1,16 @@
-import React, {ReactNode, useContext, useState} from 'react'
+import React, {ReactNode, useContext} from 'react'
 import {KoboAnswerId, KoboIndex, Shelter_NTA, ShelterNtaTags, ShelterTaTags} from '@infoportal-common'
 import {UseShelterData} from '@/features/Shelter/useShelterData'
 import {UseShelterActions, useShelterActions} from '@/features/Shelter/useShelterActions'
 import {AccessSum} from '@/core/sdk/server/access/Access'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import {KoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 
-export interface ShelterContext {
+export type ShelterContext = Pick<KoboSchemaContext, 'langIndex' | 'setLangIndex'> & {
   access: AccessSum
   data: UseShelterData
   nta: UseShelterActions<ShelterNtaTags>
   ta: UseShelterActions<ShelterTaTags>
-  langIndex: number
   allowedOffices: Shelter_NTA.T['back_office'][]
 }
 
@@ -25,6 +25,7 @@ export const ShelterProvider = ({
   allowedOffices,
   access,
   data,
+  ...props
 }: {
   access: AccessSum
   data: UseShelterData
@@ -32,9 +33,7 @@ export const ShelterProvider = ({
   schemaNta: KoboSchemaHelper.Bundle
   children: ReactNode
   allowedOffices: ShelterContext['allowedOffices']
-}) => {
-  const [langIndex, setLangIndex] = useState<number>(0)
-
+} & Pick<KoboSchemaContext, 'langIndex' | 'setLangIndex'>) => {
   const updateTag = (form: 'ta' | 'nta') => ({answerIds, key, value}: {
     answerIds: KoboAnswerId[]
     key: any
@@ -72,8 +71,8 @@ export const ShelterProvider = ({
       data,
       nta: ntaActions,
       ta: taActions,
-      langIndex,
       allowedOffices,
+      ...props,
     }}>
       {children}
     </Context.Provider>

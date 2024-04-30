@@ -88,6 +88,7 @@ export const en = Object.freeze({
     adultMen: 'Adult men',
     adultWomen: 'Adult women',
     boy: 'Boy',
+    modality: 'Modality',
     girl: 'Girl',
     somethingWentWrong: 'Something went wrong',
     yes: 'Yes',
