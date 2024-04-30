@@ -13,8 +13,10 @@ export class HdpSdk {
       server: config.dbAzureHdp.host,
     })
     const sql = await pool.connect()
-    return await sql.query`SELECT *
-                           FROM external_migrate.undp_rmm_re_direct_session`
+    return await sql.query`
+        SELECT *
+        FROM external_migrate.undp_rmm_re_direct_session
+    `
   }
 
   constructor(connector: ConnectionPool) {

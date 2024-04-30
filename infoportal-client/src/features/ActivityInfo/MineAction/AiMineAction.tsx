@@ -5,7 +5,7 @@ import {Panel} from '@/shared/Panel'
 import {AiBundleTable} from '@/features/ActivityInfo/shared/AiBundle'
 import {useFetcher} from '@/shared/hook/useFetcher'
 
-export const AiProtection = () => {
+export const AiMineAction = () => {
   const {api} = useAppSettings()
   const fetcher = useFetcher((period: string) => api.hdp.fetchRiskEducation().then(_ => _))
 
