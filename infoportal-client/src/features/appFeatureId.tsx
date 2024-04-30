@@ -83,7 +83,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#daba00',
     category: 'programs',
     path: '/ecrec',
-    showIf: (u, accesses) => true,
+    showIf: (u, accesses) => false,
   },
   protection: {
     id: AppFeatureId.protection,
