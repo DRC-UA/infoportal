@@ -55,6 +55,7 @@ export const activitiesConfig = {
     id: 'cmnzatklqv1q3s243u',
     name: 'Mine Action',
     path: '/mine-action',
+    subId: 'cegbam4lqv1q3s243v',
     componnent: <AiMineAction/>,
   },
 }

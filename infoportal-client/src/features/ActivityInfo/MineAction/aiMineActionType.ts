@@ -1,4 +1,4 @@
-export namespace AiTypeMineAction {
+export namespace AiMineActionType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
 
   export interface Type {
