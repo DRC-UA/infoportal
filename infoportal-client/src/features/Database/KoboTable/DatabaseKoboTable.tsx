@@ -73,11 +73,7 @@ export const DatabaseTable = ({
   const {accesses, session} = useSession()
   const {toastHttpError} = useIpToast()
   const ctxSchema = useKoboSchemaContext()
-  const fetcherSchemaIfUnknown = useFetcher(() => api.koboApi.getForm({serverId, id: formId}).then(_ => KoboSchemaHelper.buildBundle({
-    m,
-    schema: _,
-    langIndex: ctxSchema.langIndex
-  })))
+  const fetcherSchemaIfUnknown = useFetcher(() => api.koboApi.getForm({serverId, id: formId}))
   const formName = KoboIndex.searchById(formId)?.name
 
   useEffect(function getSchema() {
@@ -86,8 +82,12 @@ export const DatabaseTable = ({
   }, [formId])
 
   const schemaBundle = useMemo(() => {
-    return formName ? ctxSchema.schema[formName] : fetcherSchemaIfUnknown.get
-  }, [fetcherSchemaIfUnknown.get, ctxSchema.schema])
+    return formName ? ctxSchema.schema[formName] : fetcherSchemaIfUnknown.get ? KoboSchemaHelper.buildBundle({
+      m,
+      schema: fetcherSchemaIfUnknown.get,
+      langIndex: ctxSchema.langIndex
+    }) : undefined
+  }, [fetcherSchemaIfUnknown.get, ctxSchema.schema, ctxSchema.langIndex])
 
   const _form = useFetcher(() => form ? Promise.resolve(form) : api.kobo.form.get(formId))
   const _answers = useFetcher(() => api.kobo.answer.searchByAccess({formId}))
