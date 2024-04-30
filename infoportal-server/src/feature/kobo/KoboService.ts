@@ -391,7 +391,7 @@ export class KoboService {
   readonly updateTags = async ({formId, answerIds, tags}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>}) => {
     await this.prisma.$executeRawUnsafe(
       `UPDATE "KoboAnswers"
-       SET ${Obj.keys(tags).map(key => `tags = jsonb_set(tags, '{${key}}', '"${tags[key]}"')`).join(',')},
+       SET ${Obj.keys(tags).map(key => `tags = jsonb_set(COALESCE(tags, '{}'::jsonb), '{${key}}', '"${tags[key]}"')`).join(',')},
            "updatedAt" = NOW()
        WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
       `)
