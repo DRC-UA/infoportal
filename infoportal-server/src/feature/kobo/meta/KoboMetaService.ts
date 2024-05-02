@@ -226,6 +226,9 @@ export class KoboMetaService {
         this.prisma.koboMeta.createMany({
           data: seq(koboAnswers.map(_ => {
             delete _['persons']
+            if (isNaN(new Date(_.lastStatusUpdate ?? '').getTime())) {
+              _.lastStatusUpdate = undefined
+            }
             return _
           })),
           skipDuplicates: true,

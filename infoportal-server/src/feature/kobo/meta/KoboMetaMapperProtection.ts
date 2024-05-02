@@ -5,7 +5,7 @@ import {
   DrcProgram,
   DrcProject,
   DrcProjectHelper,
-  DrcSector,
+  DrcSector, fnTry,
   KoboGeneralMapping,
   KoboMetaStatus,
   KoboTagStatus,
@@ -112,7 +112,7 @@ export class KoboMetaMapperProtection {
       persons,
       personsCount: persons.length,
       project: row.tags?.projects ?? [],
-      donor: row.tags?.projects?.map(_ => DrcProjectHelper.donorByProject[_]),
+      donor: fnTry(() => row.tags?.projects?.map(_ => DrcProjectHelper.donorByProject[_])).fnCatch(() => {console.log(row); return []}),
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
     })
