@@ -2,44 +2,61 @@ import {Page} from '@/shared/Page'
 import React from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Panel} from '@/shared/Panel'
-import {AiBundle, AiBundleTable, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundle, AiBundleTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {AiMineActionType} from '@/features/ActivityInfo/MineAction/aiMineActionType'
-import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
+
 
 type Bundle = AiBundle<AiMineActionType.Type, AiMineActionType.TypeSub>
 
 export const AiMineAction = () => {
   const {api} = useAppSettings()
   const fetcher = useFetcher((periodStr: string) => api.hdp.fetchRiskEducation().then(res => res.map((_, i) => {
+    const addFlagIfNotInList = (value: string, options: Record<string, string>): any => {
+      if (!options[value]) return aiInvalidValueFlag + ' ' + value
+      return value
+    }
+    const rawActivity: AiMineActionType.Type = {
+      'Reporting Organization': 'Danish Refugee Council',
+      'Plan/Project Code': addFlagIfNotInList(_['Plan/Project Code'], AiMineActionType.options['Plan/Project Code']),
+      ...AiMapper.getLocationByMeta(_['Oblast Oblast ENG/UKR'], _['Raion Raion ENG/UKR'], _['Hromada Hromada ENG/PCODE/UKR']),
+      // 'Oblast': addFlagIfNotInList(_['Oblast Oblast ENG/UKR'], AiMineActionType.options['Oblast']),
+      // 'Raion': addFlagIfNotInList(_['Raion Raion ENG/UKR'], AiMineActionType.options['Raion']),
+      // 'Hromada': addFlagIfNotInList(_['Hromada Hromada ENG/PCODE/UKR'], AiMineActionType.options['Hromada']),
+      'Response Theme': addFlagIfNotInList(_['Response Theme'], AiMineActionType.options['Response Theme']),
+    }
+    const rawSubActivity: AiMineActionType.TypeSub = {
+      'Reporting Month': _['Reporting Month'],
+      'Population Group': addFlagIfNotInList(_['Population Group'], AiMineActionType.optionsSub['Population Group']),
+      'Indicators': addFlagIfNotInList(_['Indicator'], AiMineActionType.optionsSub.Indicators),
+      'Total Individuals Reached': _['Total Individuals Reached'],
+      'Girls (0-17)': _['Girls (0-17)'],
+      'Boys (0-17)': _['Boys (0-17)'],
+      'Adult Women (18-59)': _['Adult Women (18-59)'],
+      'Adult Men (18-59)': _['Adult Men (18-59)'],
+      'Older Women (60+)': _['Older Women (60+)'],
+      'Older Men (60+)': _['Older Men (60+)'],
+      'Non-individuals Reached/Quantity': 0,
+      'People with Disability': _['People with Disability'],
+    }
     const request = ActivityInfoSdk.makeRecordRequests({
-      activityIdPrefix: 'drcmine',
+      activityIdPrefix: 'drcma',
       activityYYYYMM: periodStr,
       formId: activitiesConfig.mineAction.id,
-      activity: AiProtectionType.map({
-        'Reporting Organization': _['Reporting Organization'],
-        'Implementing Partner'?: _['Implementing Partner'],
-        'Implementing Partner 2'?: _['Implementing Partner 2'],
-        'Plan/Project Code': _['Plan/Project Code'],
-        'Oblast': _['Oblast'],
-        'Raion': _['Raion'],
-        'Hromada': _['Hromada'],
-        'Settlement': _['Settlement'],
-        'Collective Site'?: _['Collective Site'],
-        'Response Theme': _['Response Theme'],
-      }),
-      subActivities: [AiProtectionType.mapSub(_)],
+      activity: AiMineActionType.map(AiMapper.mapLocationToRecordId(rawActivity)),
+      subActivities: [AiMineActionType.mapSub(rawSubActivity)],
       activityIndex: i,
-      subformId: activitiesConfig.protection_general.subId,
+      subformId: activitiesConfig.mineAction.subId,
     })
     const bundles: Bundle = {
-      submit: checkAiValid(_.Oblast, _.Raion, _.Hromada, _['Plan/Project Code']),
+      submit: checkAiValid(_['Oblast Oblast ENG/UKR'], _['Raion Raion ENG/UKR'], _['Hromada Hromada ENG/PCODE/UKR'], _['Plan/Project Code']),
       recordId: request.changes[0].recordId,
-      activity: _,
-      data: _,
+      activity: rawActivity,
+      subActivity: rawSubActivity,
+      data: [_],
       requestBody: request,
     }
     return bundles
