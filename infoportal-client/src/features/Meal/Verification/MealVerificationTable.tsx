@@ -1,5 +1,5 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, seq} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useEffect, useMemo, useState} from 'react'
 import {Page, PageTitle} from '@/shared/Page'
 import {alpha, Box, Icon, Tooltip, useTheme} from '@mui/material'
@@ -26,7 +26,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import Alert from '@mui/material/Alert'
+import {IpAlert} from '@/shared/Alert'
 
 export enum MergedDataStatus {
   Selected = 'Selected',
@@ -172,8 +172,6 @@ const MealVerificationTableContent = <
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat<any> | undefined>()
   const [display, setDisplay] = useState<'data' | 'dataCheck' | 'all'>('all')
 
-  const [duplicateError, setDuplicateError] = useState<string | null>(null)
-
   useEffect(() => {
     fetcherDataVerified.fetch()
     fetcherDataOrigin.fetch()
@@ -199,14 +197,13 @@ const MealVerificationTableContent = <
   }
 
   const {mergedData, duplicateErrors} = useMemo(() => {
-    const newDuplicateErrors: string[] = []
+    const duplicateErrors = new Set<string>()
     const newMergedData = map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
       const indexDataVerified = seq(verified).groupBy(_ => _[activity.joinColumn] ?? '')
       return seq(origin).filter(_ => indexVerification[_.id]).flatMap(_ => {
         const dataVerified = indexDataVerified[_[activity.joinColumn]]
-        if (dataVerified && dataVerified.length > 1 && !newDuplicateErrors.includes(_[activity.joinColumn])) {
-          console.log('activities:', _[activity.joinColumn])
-          newDuplicateErrors.push(_[activity.joinColumn])
+        if (dataVerified && dataVerified.length > 1 && !duplicateErrors.has(_[activity.joinColumn])) {
+          duplicateErrors.add(_[activity.joinColumn])
         }
         return (dataVerified ?? []).map(dv => {
           const mergedData: Omit<MergedData, 'score'> = {
@@ -230,22 +227,13 @@ const MealVerificationTableContent = <
         [MergedDataStatus.Selected]: 0,
       }))
     })
-    return {mergedData: newMergedData, duplicateErrors: newDuplicateErrors}
+    return {mergedData: newMergedData, duplicateErrors}
   }, [
     fetcherDataVerified.get,
     fetcherDataOrigin.get,
     indexVerification,
     activity
   ])
-
-  useEffect(() => {
-    if (duplicateErrors.length > 0) {
-      setDuplicateError(duplicateErrors.join(', '))
-    } else {
-      setDuplicateError(null)
-    }
-  }, [duplicateErrors])
-
 
   const stats = useMemo(() => {
     if (!mergedData) return
@@ -266,9 +254,9 @@ const MealVerificationTableContent = <
 
   return (
     <>
-      {duplicateErrors.length > 0 && (
+      {duplicateErrors.size > 0 && (
         <Box sx={{mb: 2}}>
-          <Alert severity="error">{m._mealVerif.duplicateErrors(duplicateErrors)}</Alert>
+          <IpAlert severity="error">{m._mealVerif.duplicateErrors(Array.from(duplicateErrors))}</IpAlert>
         </Box>
       )}
       {stats && (
@@ -384,7 +372,7 @@ const MealVerificationTableContent = <
               type: 'string',
               renderQuick: _ => _.data[activity.joinColumn],
               style: (rowData: MergedData) => {
-                if (duplicateErrors && duplicateErrors.includes(rowData.data[activity.joinColumn])) {
+                if (duplicateErrors.has(rowData.data[activity.joinColumn])) {
                   return {color: 'red', fontWeight: 'bold'}
                 }
                 return {}
