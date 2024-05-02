@@ -33,8 +33,8 @@ export const DatabaseKoboTableContent = ({
   onDataChange,
 }: Pick<DatabaseTableProps, 'onFiltersChange' | 'onDataChange'>) => {
   const ctx = useDatabaseKoboTableContext()
-  const {langIndex, setLangIndex} = useKoboSchemaContext()
   const {m} = useI18n()
+  const ctxSchema = useKoboSchemaContext()
   const session = useSession()
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -61,7 +61,7 @@ export const DatabaseKoboTableContent = ({
       onOpenGroupModal: setOpenGroupModalAnswer,
       onSelectColumn: setSelectedColumn,
     })
-  }, [ctx.schema.schemaUnsanitized, langIndex, selectedIds, repeatGroupsAsColumns])
+  }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns])
 
   const columns = useMemo(() => {
     const action: DatatableColumn.Props<any> = {
@@ -165,8 +165,8 @@ export const DatabaseKoboTableContent = ({
           <>
             <AaSelect<number>
               sx={{maxWidth: 128, mr: 1}}
-              defaultValue={langIndex}
-              onChange={setLangIndex}
+              defaultValue={ctxSchema.langIndex}
+              onChange={ctxSchema.setLangIndex}
               options={[
                 {children: 'XML', value: -1},
                 ...ctx.schema.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
