@@ -125,10 +125,11 @@ export class KoboAnswerUtils {
       ...answers
     } = k
     const submissionTime = KoboAnswerUtils.mapKoboSubmissionTime(_submission_time)
+    const answersUngrouped = KoboAnswerUtils.removeGroup(answers)
     return {
       attachments: _attachments ?? [],
       geolocation: _geolocation,
-      date: k.date ? new Date(k.date) : submissionTime,
+      date: answersUngrouped.date ? new Date(answersUngrouped.date) : submissionTime,
       start: start ? new Date(start) : submissionTime,
       end: end ? new Date(end) : submissionTime,
       submissionTime,
@@ -139,7 +140,7 @@ export class KoboAnswerUtils {
       validationStatus: _validation_status?.uid,
       lastValidatedTimestamp: _validation_status?.timestamp,
       validatedBy: _validation_status?.by_whom,
-      answers: KoboAnswerUtils.removeGroup(answers),
+      answers: answersUngrouped,
     }
   }
 
