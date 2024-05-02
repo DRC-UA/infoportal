@@ -1,5 +1,5 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, seq} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useEffect, useMemo, useState} from 'react'
 import {Page, PageTitle} from '@/shared/Page'
 import {alpha, Box, Icon, Tooltip, useTheme} from '@mui/material'
@@ -26,6 +26,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {IpAlert} from '@/shared/Alert'
 
 export enum MergedDataStatus {
   Selected = 'Selected',
@@ -195,39 +196,44 @@ const MealVerificationTableContent = <
     }
   }
 
-  const mergedData: Seq<MergedData> | undefined = useMemo(() => {
-    return map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
+  const {mergedData, duplicateErrors} = useMemo(() => {
+    const duplicateErrors = new Set<string>()
+    const newMergedData = map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
       const indexDataVerified = seq(verified).groupBy(_ => _[activity.joinColumn] ?? '')
-      return seq(origin).filter(_ => indexVerification[_.id]).map(_ => {
+      return seq(origin).filter(_ => indexVerification[_.id]).flatMap(_ => {
         const dataVerified = indexDataVerified[_[activity.joinColumn]]
-        console.log(activity.joinColumn, _[activity.joinColumn], dataVerified)
-        if (dataVerified && dataVerified.length > 1) throw new Error(_[activity.joinColumn] + ' exist ' + dataVerified?.length)
-        const mergedData: Omit<MergedData, 'score'> = {
-          data: _,
-          dataCheck: dataVerified?.[0],
-          status: (() => {
-            if (!!dataVerified) return MergedDataStatus.Completed
-            if (indexVerification[_.id]?.status === MealVerificationAnswersStatus.Selected) return MergedDataStatus.Selected
-            return MergedDataStatus.NotSelected
-          })(),
+        if (dataVerified && dataVerified.length > 1 && !duplicateErrors.has(_[activity.joinColumn])) {
+          duplicateErrors.add(_[activity.joinColumn])
         }
-        const res: MergedData = {
-          ...mergedData,
-          score: seq(activity.verifiedColumns).sum(c => areEquals(c, mergedData) ? 1 : 0),
-        }
-        return res
+        return (dataVerified ?? []).map(dv => {
+          const mergedData: Omit<MergedData, 'score'> = {
+            data: _,
+            dataCheck: dv,
+            status: (() => {
+              if (!!dataVerified) return MergedDataStatus.Completed
+              if (indexVerification[_.id]?.status === MealVerificationAnswersStatus.Selected) return MergedDataStatus.Selected
+              return MergedDataStatus.NotSelected
+            })(),
+          }
+          const res: MergedData = {
+            ...mergedData,
+            score: seq(activity.verifiedColumns).sum(c => areEquals(c, mergedData) ? 1 : 0),
+          }
+          return res
+        })
       }).sortByNumber(_ => fnSwitch(_.status, {
         [MergedDataStatus.Completed]: 1,
         [MergedDataStatus.NotSelected]: 2,
         [MergedDataStatus.Selected]: 0,
       }))
     })
+    return {mergedData: newMergedData, duplicateErrors}
   }, [
     fetcherDataVerified.get,
     fetcherDataOrigin.get,
     indexVerification,
+    activity
   ])
-  // console.log('mergedData', indexVerification, fetcherDataOrigin.get, fetcherDataVerified.get)
 
   const stats = useMemo(() => {
     if (!mergedData) return
@@ -248,6 +254,11 @@ const MealVerificationTableContent = <
 
   return (
     <>
+      {duplicateErrors.size > 0 && (
+        <Box sx={{mb: 2}}>
+          <IpAlert severity="error">{m._mealVerif.duplicateErrors(Array.from(duplicateErrors))}</IpAlert>
+        </Box>
+      )}
       {stats && (
         <Div sx={{mb: 2, alignItems: 'stretch'}}>
           <SlidePanel sx={{flex: 1}}>
@@ -359,7 +370,13 @@ const MealVerificationTableContent = <
               id: 'taxid',
               head: m.taxID,
               type: 'string',
-              renderQuick: _ => _.data[activity.joinColumn]
+              renderQuick: _ => _.data[activity.joinColumn],
+              style: (rowData: MergedData) => {
+                if (duplicateErrors.has(rowData.data[activity.joinColumn])) {
+                  return {color: 'red', fontWeight: 'bold'}
+                }
+                return {}
+              },
             },
             {
               id: 'status',

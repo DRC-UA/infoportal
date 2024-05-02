@@ -415,6 +415,7 @@ export const en = Object.freeze({
       notVerified: 'Not verified',
       requestTitle: 'Meal Verification Request',
       selectedKoboForm: 'Selected Kobo form',
+      duplicateErrors: (ids: string[]) => `Duplicate IDs found: ${ids.join(', ')}.`,
       selectedData: (n: number) => `You selected <b>${n}</b> rows`,
       sampleSizeN: (n: number) => `MEAL team will verify ${n}%`,
       sampleSize: 'Sample size',
