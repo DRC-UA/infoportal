@@ -39,15 +39,17 @@ export class DatatableErrorBoundary extends Component<ErrorBoundaryProps, ErrorB
 
   readonly refreshPage = (hard?: boolean) => {
     if (hard) {
-      const cleanLs = (key: string) => {
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i)
-          if (key && key.includes(key)) {
-            localStorage.removeItem(key)
-          }
-        }
-      }
-      Enum.values(DatatableUtils.localStorageKey).map(cleanLs)
+      // const cleanLs = (prefix: string) => {
+      //   for (let i = 0; i < localStorage.length; i++) {
+      //     const key = localStorage.key(i)
+      //     if (key && key.includes(prefix)) {
+      //       console.log(key)
+      //       localStorage.removeItem(key)
+      //     }
+      //   }
+      // }
+      // Enum.values(DatatableUtils.localStorageKey).map(cleanLs)
+      localStorage.clear()
     }
     location.reload()
   }
