@@ -9,11 +9,12 @@ import {AiMpcaMapper} from '@/features/ActivityInfo/Mpca/aiMpcaMapper'
 export const AiMpca = () => {
   const {api} = useAppSettings()
   const fetcher = useFetcher((period: string) => AiMpcaMapper.reqCashRegistration(api)(period))
+  const {conf} = useAppSettings()
 
   return (
     <Page width="full">
       <Panel>
-        <AiBundleTable fetcher={fetcher} id="mpca"/>
+        <AiBundleTable fetcher={fetcher} id="mpca" header={<>USD to UAH&nbsp;<b>{conf.uahToUsd}</b></>}/>
       </Panel>
     </Page>
   )

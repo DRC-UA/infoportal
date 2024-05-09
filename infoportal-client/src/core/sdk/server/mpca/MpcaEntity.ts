@@ -1,4 +1,4 @@
-import {KoboBaseTags, DrcProject, KoboTagStatus, MpcaEntity} from '@infoportal-common'
+import {DrcProject, KoboBaseTags, KoboTagStatus, MpcaEntity} from '@infoportal-common'
 import {Obj} from '@alexandreannic/ts-utils'
 
 export interface MpcaTypeTag extends KoboBaseTags, KoboTagStatus {
@@ -23,7 +23,7 @@ export class MpcaHelper {
 
   static readonly map = (_: MpcaEntity): MpcaEntity => {
     _.date = new Date(_.date)
-    if (_.tags?.lastStatusUpdate) _.tags.lastStatusUpdate = new Date(_.tags.lastStatusUpdate)
+    if (_?.lastStatusUpdate) _.lastStatusUpdate = new Date(_.lastStatusUpdate)
     return _
   }
 }

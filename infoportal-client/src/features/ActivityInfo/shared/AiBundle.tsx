@@ -1,6 +1,6 @@
 import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {ReactNode, useEffect, useMemo, useState} from 'react'
 import {UseFetcher} from '@/shared/hook/useFetcher'
 import {map, Obj, seq} from '@alexandreannic/ts-utils'
 import {AiPreviewActivity, AiPreviewRequest, AiSendBtn, AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
@@ -36,8 +36,10 @@ export const checkAiValid = (...args: (string | undefined)[]) => {
 
 export const AiBundleTable = ({
   fetcher,
+  header,
   id,
 }: {
+  header?: ReactNode
   id: string
   fetcher: UseFetcher<(period: string) => Promise<AiBundle<any, any, any>[]>>
 }) => {
@@ -72,11 +74,12 @@ export const AiBundleTable = ({
           <Box sx={{display: 'flex', alignItems: 'center', flex: 1,}}>
             <IpInput
               helperText={null}
-              sx={{width: 200}}
+              sx={{width: 200, mr: 1}}
               type="month"
               value={period}
               onChange={e => setPeriod(e.target.value)}
             />
+            {header}
             <IpBtn icon="send" variant="contained" sx={{ml: 'auto'}} onClick={() => {
               if (!fetcher.get) return
               _submit.call('all', fetcher.get.filter(_ => _.submit).map(_ => _.requestBody)).catch(toastHttpError)

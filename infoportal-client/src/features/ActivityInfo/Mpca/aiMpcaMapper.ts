@@ -6,6 +6,7 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {AiMpcaType} from '@/features/ActivityInfo/Mpca/aiMpcaType'
+import {appConfig} from '@/conf/AppConfig'
 
 const averageAssistanceAmount = 445
 export namespace AiMpcaMapper {
@@ -30,11 +31,19 @@ export namespace AiMpcaMapper {
     const period = PeriodHelper.fromYYYYMM(periodStr)
     const bundle: Bundle[] = []
     let i = 0
-    return api.koboMeta.search({
-      activities: [DrcProgram.MPCA],
-      status: [KoboMetaStatus.Committed]
+    return api.mpca.search({
+      // filters: {
+      //   filterBy: [
+      //     {column: 'activity', type: 'array', value: [DrcProgram.MPCA]},
+      //     {column: 'status', value: [KoboMetaStatus.Committed]},
+      //   ],
+      // }
     })
-      .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
+      .then(_ => _.data.filter(_ => {
+        if (_.activity !== DrcProgram.MPCA) return false
+        if (_.status !== KoboMetaStatus.Committed) return false
+        return _.lastStatusUpdate && PeriodHelper.isDateIn(period, _.lastStatusUpdate)
+      }))
       .then(data => {
           groupBy({
             data,
@@ -75,7 +84,7 @@ export namespace AiMpcaMapper {
                 'Number of Covered Months': 'Three months (recommended)',
                 'Financial Service Provider (FSP)': 'Bank Transfer',
                 'Population Group': displacement,
-                'Total amount (USD) distributed through multi-purpose cash assistance': averageAssistanceAmount,
+                'Total amount (USD) distributed through multi-purpose cash assistance': grouped.sum(_ => _.amountUahFinal ?? 0) * appConfig.uahToUsd,
                 'Payments Frequency': 'Multiple payments',
                 'Activity Plan Code': getPlanCode(project) as any,
                 'Indicators - MPCA': '# of individuals assisted with multi-purpose cash assistance',
