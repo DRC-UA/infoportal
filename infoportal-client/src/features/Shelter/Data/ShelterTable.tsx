@@ -7,7 +7,18 @@ import {Panel} from '@/shared/Panel'
 import {Box, useTheme} from '@mui/material'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
-import {add, KoboShelterTa, KoboValidation, safeNumber, Shelter_NTA, ShelterContractorPrices, shelterDrcProject, ShelterProgress, ShelterTaPriceLevel} from '@infoportal-common'
+import {
+  add,
+  DrcProject,
+  KoboShelterTa,
+  KoboValidation,
+  safeNumber,
+  Shelter_NTA,
+  ShelterContractorPrices,
+  shelterDrcProject,
+  ShelterProgress,
+  ShelterTaPriceLevel
+} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {useShelterContext} from '@/features/Shelter/ShelterContext'
 import {IpIconBtn} from '@/shared/IconBtn'
@@ -477,14 +488,22 @@ export const ShelterTable = () => {
         typeIcon: null,
         options: () => DatatableUtils.buildOptions(shelterDrcProject, true),
         render: row => {
+          const projects = row.ta?.tags?.project;
+          const projectArray = Array.isArray(projects) ? projects : projects ? [projects] : [];
           return {
-            value: row.ta?.tags?.project,
+            value: projectArray,
             label: map(row.ta, ta => {
               return (
                 <DebouncedInput
                   debounce={1000}
-                  value={row.ta?.tags?.project ?? []}
-                  onChange={_ => ctx.ta.asyncUpdate.call({answerId: ta.id, key: 'project', value: _})}
+                  value={projectArray}
+                  onChange={(projectChange: DrcProject[] | undefined) => {
+                    ctx.ta.asyncUpdate.call({
+                      answerId: ta.id,
+                      key: 'project',
+                      value: projectChange ?? undefined
+                    })
+                  }}
                 >
                   {(value, onChange) => (
                     <SelectDrcProjects
@@ -495,7 +514,6 @@ export const ShelterTable = () => {
                     />
                   )}
                 </DebouncedInput>
-
               )
             })
           }
