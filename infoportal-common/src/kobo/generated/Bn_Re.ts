@@ -439,7 +439,9 @@ back_donor: {
 	'danida347_hrk': `DANIDA UKR-000347`,
 	'danida347_lwo': `DANIDA UKR-000347`,
 	'danida347_nlv': `DANIDA UKR-000347`,
-	'danida347_umy': `DANIDA UKR-000347`
+	'danida347_umy': `DANIDA UKR-000347`,
+	'340_augustinus_fonden_dnk': `Augustinus Fonden UKR-000340`,
+	'340_02_augustinus_fonden_lwo': `Augustinus Fonden UKR-000340-02`
 },
 back_prog_type: {
 	'mpca_umy': `MPCA`,

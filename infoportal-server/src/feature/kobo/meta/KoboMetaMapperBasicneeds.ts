@@ -51,6 +51,8 @@ export class KoboMetaBasicneeds {
       novo_nlv: DrcProject['UKR-000298 Novo-Nordisk'],
       okf_lwo: DrcProject['UKR-000309 OKF'],
       '341_hoffman_husmans_hrk': DrcProject['UKR-000341 Hoffmans & Husmans'],
+      '340_02_augustinus_fonden_lwo': DrcProject['UKR-000340 Augustinus Fonden'],
+      '340_augustinus_fonden_dnk': DrcProject['UKR-000340 Augustinus Fonden'],
       pool_chj: DrcProject['UKR-000270 Pooled Funds'],
       pool_dnk: DrcProject['UKR-000270 Pooled Funds'],
       pool_hrk: DrcProject['UKR-000270 Pooled Funds'],
@@ -71,7 +73,7 @@ export class KoboMetaBasicneeds {
       uhf7_lwo: DrcProject['UKR-000352 UHF7'],
       uhf7_nlv: DrcProject['UKR-000352 UHF7'],
       uhf7_umy: DrcProject['UKR-000352 UHF7'],
-      umy_danida: DrcProject['UKR-000267 DANIDA'],
+      umy_danida: DrcProject['UKR-000267 DANIDA']
     }, _ => _ as DrcProject)
   }
 
