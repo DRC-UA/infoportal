@@ -1,7 +1,6 @@
 import {AppConfig, appConfig} from '@/conf/AppConfig'
-import {koboIndex} from '@infoportal-common'
+import {KoboAttachment, koboIndex} from '@infoportal-common'
 import {TableImg} from '@/shared/TableImg/TableImg'
-import {KoboAttachment} from '@infoportal-common'
 import {useMemo} from 'react'
 
 export const proxyKoboImg = ({
@@ -18,7 +17,8 @@ export const proxyKoboImg = ({
   const path = url?.split('api')[1]
   return {
     path,
-    fullUrl: path ? conf.apiURL + `/kobo-api/${serverId}/attachment?path=${path}&file=${fileName}` : undefined
+    fullUrl: path ? conf.apiURL + `/kobo-api/${serverId}/attachment?path=${path}` : undefined
+    // fullUrl: path ? conf.apiURL + `/kobo-api/${serverId}/attachment?path=${path}&file=${fileName}` : undefined
   }
 }
 

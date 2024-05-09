@@ -8,7 +8,6 @@ import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {AiMpcaType} from '@/features/ActivityInfo/Mpca/aiMpcaType'
 import {appConfig} from '@/conf/AppConfig'
 
-const averageAssistanceAmount = 445
 export namespace AiMpcaMapper {
 
   type Bundle = AiBundle<AiMpcaType.Type>
