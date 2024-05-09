@@ -119,7 +119,7 @@ export const en = Object.freeze({
     Pending: 'Pending',
     recap: 'Recap',
     Approved: 'Approved',
-
+    Blank: 'Blank',
     Rejected: 'Rejected',
     mykolaiv: 'Mykolaiv',
     lastConnectedAt: 'Last connection',

@@ -49,12 +49,14 @@ export enum KoboMetaStatus {
   Committed = 'Committed',
   Pending = 'Pending',
   Rejected = 'Rejected',
+  Blank = 'Blank'
 }
 
 export const koboMetaStatusLabel: Record<KoboMetaStatus, StateStatus> = {
   Committed: 'success',
   Pending: 'warning',
   Rejected: 'error',
+  Blank: 'info'
 }
 
 export type KoboMetaShelterRepairTags = {

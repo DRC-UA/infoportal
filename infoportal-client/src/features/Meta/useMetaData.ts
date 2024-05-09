@@ -100,25 +100,33 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
   const [customFilters, setCustomFilters] = usePersistentState<MetaDashboardCustomFilter>({}, {storageKey: 'meta-dashboard-custom-filters'})
   const distinctBy = useMemo(() => new Set(customFilters.distinctBy), [customFilters.distinctBy])
 
+  const updatedDataWithBlankStatus = data.map(d => ({
+    ...d,
+    status: d.status ?? KoboMetaStatus.Blank
+  }))
+
   const filteredData = useMemo(() => {
-    const filteredBy_date = data.filter(d => {
-      try {
-        const isDateIn = PeriodHelper.isDateIn(period, d.date)
-        if (!isDateIn) return false
-        const isDateCommitIn = (!periodCommit.start && !periodCommit.end)
-          || PeriodHelper.isDateIn(periodCommit, d.lastStatusUpdate ?? d.date) && d.status === KoboMetaStatus.Committed
-        if (!isDateCommitIn) return false
-        return true
-      } catch (e) {
-        console.log(e, d)
-      }
+    const filteredByDateAndCommit = updatedDataWithBlankStatus.filter(d => {
+      const isDateIn = PeriodHelper.isDateIn(period, d.date)
+      const isDateCommitIn = (!periodCommit.start && !periodCommit.end) ||
+        (PeriodHelper.isDateIn(periodCommit, d.lastStatusUpdate ?? d.date) && d.status === KoboMetaStatus.Committed)
+      return isDateIn && isDateCommitIn
     })
-    const filteredByShape = DataFilter.filterData(filteredBy_date, shape, shapeFilters)
+
+    const filteredByStatus = filteredByDateAndCommit.filter(d => {
+      if (!shapeFilters.status || shapeFilters.status.length === 0) {
+        return true
+      }
+      return shapeFilters.status.includes(d.status)
+    })
+
+    const filteredByShape = DataFilter.filterData(filteredByStatus, shape, shapeFilters)
     return distinctBys(filteredByShape, {
       taxId: !!distinctBy.has('taxId'),
       phone: !!distinctBy.has('phone'),
     })
-  }, [data, shapeFilters, period, shape, customFilters])
+  }, [data, period, periodCommit, shapeFilters, distinctBy])
+
 
   const filteredUniqueData = useMemo(() => filteredData.distinct(_ => _.koboId), [filteredData])
   const filteredPersons = useMemo(() => filteredData.flatMap(_ => _.persons ?? []), [filteredData])
