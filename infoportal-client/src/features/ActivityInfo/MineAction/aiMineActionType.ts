@@ -21,10 +21,10 @@ export namespace AiMineActionType {
     'ct68whplqf3085j4u': a['Implementing Partner'] === undefined ? undefined : a['Implementing Partner'],
     'cz796xnlqf3085j4v': a['Implementing Partner 2'] === undefined ? undefined : a['Implementing Partner 2'],
     'ccn9h61lrkokg015': a['Plan/Project Code'] === undefined ? undefined : 'c9c396nlr6f4i48zv' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
-    'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + options['Oblast'][a['Oblast']!],
-    'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : a['Raion'],
-    'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : a['Hromada'],
-    'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : a['Settlement'],
+    'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
+    'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
+    'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
+    'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
     'ce0zvlllqf3085j52': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
     'c18374vlqf3085j54': a['Response Theme'] === undefined ? undefined : options['Response Theme'][a['Response Theme']!]
   })
