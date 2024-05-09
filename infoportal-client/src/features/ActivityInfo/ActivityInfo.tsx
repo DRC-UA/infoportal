@@ -10,6 +10,7 @@ import {AiProtection} from '@/features/ActivityInfo/Protection/AiProtection'
 import {AiFslc} from '@/features/ActivityInfo/Fslc/AiFslc'
 import {AiGbv} from '@/features/ActivityInfo/Gbv/AiGbv'
 import {appFeaturesIndex} from '@/features/appFeatureId'
+import {AiMineAction} from '@/features/ActivityInfo/MineAction/AiMineAction'
 
 export const activitiesConfig = {
   'protection_general': {
@@ -49,6 +50,13 @@ export const activitiesConfig = {
     name: 'FSLC',
     path: '/fslc',
     componnent: <AiFslc/>,
+  },
+  'mineAction': {
+    id: 'cmnzatklqv1q3s243u',
+    name: 'Mine Action',
+    path: '/mine-action',
+    subId: 'cegbam4lqv1q3s243v',
+    componnent: <AiMineAction/>,
   },
 }
 

@@ -14,6 +14,7 @@ import {PrismaSessionStore} from '@quixo3/prisma-session-store'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import {IpSentry} from '../plugins/Sentry'
+import {duration} from '@alexandreannic/ts-utils'
 // import * as Sentry from '@sentry/node'
 
 // import sessionFileStore from 'session-file-store'
@@ -90,7 +91,7 @@ export class Server {
       // proxy: true,
       unset: 'destroy',
       store: new PrismaSessionStore(this.pgClient, {
-        checkPeriod: 2 * 60 * 1000,  //ms
+        checkPeriod: duration(1, 'day'),
         dbRecordIdIsSessionId: true,
         dbRecordIdFunction: undefined,
         // checkPeriod: duration(1, 'day').toMs,
