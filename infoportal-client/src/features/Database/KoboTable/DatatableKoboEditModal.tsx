@@ -50,6 +50,7 @@ export const DatatableKoboEditModal = ({
       open={!!column}
       onClose={onClose}
       loading={asyncUpdate.loading}
+      confirmDisabled={asyncUpdate.loading}
       onConfirm={() => asyncUpdate.call({formId, answerIds, question: column, answer: value})}
       title={`${m.edit} (${answerIds.length})`}
     >
