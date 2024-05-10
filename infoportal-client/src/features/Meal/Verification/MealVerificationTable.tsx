@@ -1,6 +1,6 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {fnSwitch, map, seq} from '@alexandreannic/ts-utils'
-import React, {ReactNode, useEffect, useMemo, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {Page, PageTitle} from '@/shared/Page'
 import {alpha, Box, Icon, Tooltip, useTheme} from '@mui/material'
 import {capitalize, KoboAnswerFlat, KoboIndex, toPercent} from '@infoportal-common'
@@ -27,6 +27,7 @@ import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {IpAlert} from '@/shared/Alert'
+import {useToast} from 'mui-extension'
 
 export enum MergedDataStatus {
   Selected = 'Selected',
@@ -43,10 +44,6 @@ interface MergedData {
 
 const paramSchema = yup.object({id: yup.string().required()})
 
-function Link(props: {href: string, target: string, children: ReactNode}) {
-  return null
-}
-
 export const MealVerificationTable = () => {
   const {m} = useI18n()
   const t = useTheme()
@@ -56,17 +53,23 @@ export const MealVerificationTable = () => {
   const ctxSchema = useKoboSchemaContext()
   const fetcherVerificationAnswers = useFetcher(api.mealVerification.getAnswers)
   const {dateFromNow} = useI18n()
+  const {toastError} = useToast()
 
   useEffect(() => {
     ctx.fetcherVerifications.fetch({force: true})
   }, [])
 
   const {mealVerification, activity, formName} = useMemo(() => {
-    const mealVerification = ctx.fetcherVerifications.get?.find(_ => _.id === id)
+    if (!ctx.fetcherVerifications.get) return {}
+    const mealVerification = ctx.fetcherVerifications.get.find(_ => _.id === id)
     const activity = mealVerificationActivities.find(_ => _.id === mealVerification?.activity)
-    // if (!activity) throw new Error(`No activity ${mealVerification?.activity}.`)
+    if (!activity) {
+      toastError(`No activity ${mealVerification?.name}.`)
+    }
     const formInfo = activity ? KoboIndex.searchById(activity.registration.koboFormId) : undefined
-    // if (!formInfo) throw new Error(`No form coded for id ${activity.registration.koboFormId}.`)
+    if (!formInfo) {
+      toastError(`No form coded for id ${activity?.registration.koboFormId}.`)
+    }
     return {
       mealVerification,
       activity,
@@ -128,7 +131,10 @@ export const MealVerificationTable = () => {
                 {capitalize(dateFromNow(mealVerification.createdAt))} by <b>{mealVerification.createdBy}</b>
                 <Box>{mealVerification.desc}</Box>
               </Box>
-            }>{mealVerification.name}</PageTitle>
+            }
+          >
+            {mealVerification.activity} {'>'} {mealVerification.name}
+          </PageTitle>
           <MealVerificationTableContent
             schema={ctxSchema.schema[formName]!}
             activity={activity}
@@ -165,8 +171,10 @@ const MealVerificationTableContent = <
 
   const indexVerification = useMemo(() => seq(verificationAnswers).groupByFirst(_ => _.koboAnswerId), [verificationAnswers])
 
-  const fetcherDataOrigin = useFetcher(() => api.kobo.typedAnswers[activity.registration.fetch]().then(_ => _.data) as Promise<KoboAnswerFlat<any, any>[]>)
-  const fetcherDataVerified = useFetcher(() => api.kobo.typedAnswers[activity.verification.fetch]().then(_ => _.data) as Promise<KoboAnswerFlat<any, any>[]>)
+  const reqDataOrigin = () => api.kobo.typedAnswers[activity.registration.fetch]().then(_ => _.data as unknown as KoboAnswerFlat[])
+  const reqDataVerified = () => api.kobo.typedAnswers[activity.verification.fetch]().then(_ => _.data as unknown as KoboAnswerFlat[])
+  const fetcherDataOrigin = useFetcher(reqDataOrigin)
+  const fetcherDataVerified = useFetcher(reqDataVerified)
   const asyncUpdateAnswer = useAsync(api.mealVerification.updateAnswers, {requestKey: _ => _[0]})
 
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat<any> | undefined>()
@@ -199,33 +207,45 @@ const MealVerificationTableContent = <
   const {mergedData, duplicateErrors} = useMemo(() => {
     const duplicateErrors = new Set<string>()
     const newMergedData = map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
-      const indexDataVerified = seq(verified).groupBy(_ => _[activity.joinColumn] ?? '')
-      return seq(origin).filter(_ => indexVerification[_.id]).flatMap(_ => {
-        const dataVerified = indexDataVerified[_[activity.joinColumn]]
-        if (dataVerified && dataVerified.length > 1 && !duplicateErrors.has(_[activity.joinColumn])) {
-          duplicateErrors.add(_[activity.joinColumn])
-        }
-        return (dataVerified ?? []).map(dv => {
-          const mergedData: Omit<MergedData, 'score'> = {
+      const indexDataVerified: Record<any, KoboAnswerFlat[]> = seq(verified).groupBy(_ => _[activity.joinColumn] ?? '')
+      return seq(origin)
+        .filter(_ => indexVerification[_.id])
+        .flatMap((_: any) => {
+          const dataVerified = indexDataVerified[_[activity.joinColumn]]
+          if (dataVerified && dataVerified.length > 1 && !duplicateErrors.has(_[activity.joinColumn])) {
+            duplicateErrors.add(_[activity.joinColumn])
+          }
+          if (dataVerified)
+            return dataVerified.map(dv => {
+              const mergedData: Omit<MergedData, 'score'> = {
+                data: _,
+                dataCheck: dv,
+                status: (() => {
+                  if (!!dataVerified) return MergedDataStatus.Completed
+                  if (indexVerification[_.id]?.status === MealVerificationAnswersStatus.Selected) return MergedDataStatus.Selected
+                  return MergedDataStatus.NotSelected
+                })(),
+              }
+              const res: MergedData = {
+                ...mergedData,
+                score: seq(activity.verifiedColumns).sum(c => areEquals(c, mergedData) ? 1 : 0),
+              }
+              return res
+            })
+          return {
             data: _,
-            dataCheck: dv,
+            dataCheck: undefined,
+            score: 0,
             status: (() => {
-              if (!!dataVerified) return MergedDataStatus.Completed
               if (indexVerification[_.id]?.status === MealVerificationAnswersStatus.Selected) return MergedDataStatus.Selected
               return MergedDataStatus.NotSelected
-            })(),
+            })()
           }
-          const res: MergedData = {
-            ...mergedData,
-            score: seq(activity.verifiedColumns).sum(c => areEquals(c, mergedData) ? 1 : 0),
-          }
-          return res
-        })
-      }).sortByNumber(_ => fnSwitch(_.status, {
-        [MergedDataStatus.Completed]: 1,
-        [MergedDataStatus.NotSelected]: 2,
-        [MergedDataStatus.Selected]: 0,
-      }))
+        }).sortByNumber(_ => fnSwitch(_.status, {
+          [MergedDataStatus.Completed]: 1,
+          [MergedDataStatus.NotSelected]: 2,
+          [MergedDataStatus.Selected]: 0,
+        }))
     })
     return {mergedData: newMergedData, duplicateErrors}
   }, [
@@ -325,7 +345,7 @@ const MealVerificationTableContent = <
               head: '',
               style: _ => ({fontWeight: t.typography.fontWeightBold}),
               renderQuick: _ => {
-                const verif = indexVerification[_.data.id]
+                const verif = indexVerification[_.data.id] ?? {}
                 return (
                   <>
                     <TableIconBtn tooltip={m._mealVerif.viewRegistrationData} children="text_snippet" onClick={() => setOpenModalAnswer(_.data)}/>
