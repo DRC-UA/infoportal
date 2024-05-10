@@ -62,7 +62,7 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
       status: {
         icon: 'check_circle',
         label: m.status,
-        getValue: _ => _.status ?? '',
+        getValue: _ => _.status ?? DataFilter.blank,
         addBlankOption: true,
         getOptions: () => DataFilter.buildOptionsFromObject(KoboMetaStatus),
       },
