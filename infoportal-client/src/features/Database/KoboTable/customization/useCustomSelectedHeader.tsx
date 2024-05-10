@@ -103,7 +103,7 @@ export const useCustomSelectedHeader = (selectedIds: KoboAnswerId[]): ReactNode 
           />
         )
       }
-      case KoboIndex.byName('protection_hhs2_1').id: {
+      case KoboIndex.byName('protection_hhs3').id: {
         return (
           <IpSelectMultiple
             sx={{maxWidth: 200}}

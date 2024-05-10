@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {useI18n} from '@/core/i18n'
 import {Avatar, Box, BoxProps, Icon, useTheme} from '@mui/material'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
@@ -21,6 +20,7 @@ import {MealVerificationStatus} from '@/core/sdk/server/mealVerification/MealVer
 import {mealIndex} from '@/features/Meal/Meal'
 import {useMealVerificationContext} from '@/features/Meal/Verification/MealVerificationContext'
 import {mealVerificationActivitiesIndex} from '@/features/Meal/Verification/mealVerificationConfig'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 export const MealVerificationLinkToForm = ({
   koboFormId,
@@ -56,7 +56,7 @@ export const MealVerificationList = () => {
   return (
     <Page width="full">
       <Panel>
-        <Sheet
+        <Datatable
           header={
             <>
               <NavLink to={mealIndex.siteMap.verification.form}>
@@ -73,84 +73,108 @@ export const MealVerificationList = () => {
               head: m.validation,
               width: 0,
               type: 'select_one',
-              tooltip: null,
-              renderValue: (row) => row.status ?? SheetUtils.blank,
-              renderOption: (row) => row.status ? m[row.status!] : SheetUtils.blank,
-              render: row => (
-                <>
-                  <IpSelectSingle
-                    disabled={!ctx.access.admin}
-                    value={row.status}
-                    options={[
-                      {children: <Icon sx={{color: t.palette.success.main}} title={m.Approved}>check_circle</Icon>, value: MealVerificationStatus.Approved},
-                      {children: <Icon sx={{color: t.palette.error.main}} title={m.Rejected}>error</Icon>, value: MealVerificationStatus.Rejected},
-                      {children: <Icon sx={{color: t.palette.warning.main}} title={m.Pending}>schedule</Icon>, value: MealVerificationStatus.Pending},
-                    ]}
-                    onChange={(e) => {
-                      ctx.asyncUpdate.call(row.id, e ?? undefined)
-                    }}
-                  />
-                </>
-              )
+              render: row => {
+                return {
+                  tooltip: null,
+                  value: row.status ?? SheetUtils.blank,
+                  option: row.status ? m[row.status!] : SheetUtils.blank,
+                  label: (
+                    <>
+                      <IpSelectSingle
+                        disabled={!ctx.access.admin}
+                        value={row.status}
+                        options={[
+                          {children: <Icon sx={{color: t.palette.success.main}} title={m.Approved}>check_circle</Icon>, value: MealVerificationStatus.Approved},
+                          {children: <Icon sx={{color: t.palette.error.main}} title={m.Rejected}>error</Icon>, value: MealVerificationStatus.Rejected},
+                          {children: <Icon sx={{color: t.palette.warning.main}} title={m.Pending}>schedule</Icon>, value: MealVerificationStatus.Pending},
+                        ]}
+                        onChange={(e) => {
+                          ctx.asyncUpdate.call(row.id, e ?? undefined)
+                        }}
+                      />
+                    </>
+                  )
+                }
+              },
             },
             {
               type: 'string',
               id: 'name',
               head: m.name,
               style: () => ({fontWeight: t.typography.fontWeightBold}),
-              render: _ => _.name
+              renderQuick: _ => _.name
             },
             {
               type: 'string',
               id: 'desc',
               head: m.description,
               style: () => ({color: t.palette.text.secondary}),
-              render: _ => _.desc
+              renderQuick: _ => _.desc
             },
             {
               type: 'date',
               id: 'createdAt',
               head: m.createdAt,
-              render: _ => formatDateTime(_.createdAt),
-              renderValue: _ => _.createdAt
+              render: _ => {
+                return {
+                  label: formatDateTime(_.createdAt),
+                  value: _.createdAt,
+                }
+              },
             },
             {
               type: 'select_one',
               id: 'createdBy',
               head: m.createdBy,
-              render: _ => <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <Avatar sx={{width: 22, height: 22, mr: 1}}><Icon fontSize="small">person</Icon></Avatar>
-                {_.createdBy}
-              </Box>
+              render: _ => {
+                return {
+                  option: _.createdBy,
+                  value: _.createdBy,
+                  label: (
+                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                      <Avatar sx={{width: 22, height: 22, mr: 1}}><Icon fontSize="small">person</Icon></Avatar>
+                      {_.createdBy}
+                    </Box>
+                  )
+                }
+              }
             },
             {
               type: 'string',
               id: 'filters',
               head: m.filters,
-              render: _ => JSON.stringify(_.filters)
+              renderQuick: _ => JSON.stringify(_.filters)
             },
             {
               type: 'select_one',
               id: 'activity',
               head: m._mealVerif.activityForm,
-              renderOption: _ => KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)?.translation,
-              renderValue: _ => KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)?.translation,
-              render: _ => <MealVerificationLinkToForm koboFormId={mealVerificationActivitiesIndex[_.activity].registration.koboFormId}/>
+              render: _ => {
+                return {
+                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)?.translation,
+                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)?.translation,
+                  label: <MealVerificationLinkToForm koboFormId={mealVerificationActivitiesIndex[_.activity].registration.koboFormId}/>
+                }
+              }
             },
             {
               type: 'select_one',
               id: 'verification',
               head: m._mealVerif.verificationForm,
-              renderOption: _ => KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)?.translation,
-              renderValue: _ => KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)?.translation,
-              render: _ => <MealVerificationLinkToForm koboFormId={mealVerificationActivitiesIndex[_.activity].verification.koboFormId}/>
+              render: _ => {
+                return {
+                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)?.translation,
+                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)?.translation,
+                  label: <MealVerificationLinkToForm koboFormId={mealVerificationActivitiesIndex[_.activity].verification.koboFormId}/>
+                }
+              }
             },
             {
               id: 'actions',
               head: '',
               width: 1,
               align: 'right',
-              render: _ => (
+              renderQuick: _ => (
                 <>
                   {session.admin && (
                     <Modal
