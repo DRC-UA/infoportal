@@ -66,6 +66,7 @@ export const AiBundleTable = ({
   return (
     <>
       <Datatable
+        defaultLimit={100}
         showExportBtn
         id={`datatable-ai-${id}`}
         loading={fetcher.loading}

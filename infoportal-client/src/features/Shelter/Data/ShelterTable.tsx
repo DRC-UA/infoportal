@@ -36,6 +36,7 @@ import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
+import {Utils} from '@/utils/utils'
 
 export const ShelterTable = () => {
   const ctx = useShelterContext()
@@ -488,8 +489,7 @@ export const ShelterTable = () => {
         typeIcon: null,
         options: () => DatatableUtils.buildOptions(shelterDrcProject, true),
         render: row => {
-          const projects = row.ta?.tags?.project;
-          const projectArray = Array.isArray(projects) ? projects : projects ? [projects] : [];
+          const projectArray = Utils.safeArray(row.ta?.tags?.project)
           return {
             value: projectArray,
             label: map(row.ta, ta => {

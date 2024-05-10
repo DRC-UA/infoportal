@@ -57,7 +57,7 @@ export const MealVerificationTable = () => {
 
   useEffect(() => {
     ctx.fetcherVerifications.fetch({force: true})
-  }, [])
+  }, [id])
 
   const {mealVerification, activity, formName} = useMemo(() => {
     if (!ctx.fetcherVerifications.get) return {}

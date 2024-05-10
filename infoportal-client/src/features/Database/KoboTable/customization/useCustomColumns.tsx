@@ -23,6 +23,7 @@ import {SelectStatusBy, SelectStatusConfig, ShelterCashStatus} from '@/shared/cu
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
+import {Utils} from '@/utils/utils'
 
 export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const ctx = useDatabaseKoboTableContext()
@@ -352,14 +353,15 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           width: 200,
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
+            const safeProjects = Utils.safeArray(row.tags?.projects)
             return {
-              export: row.tags?.projects?.join(' | ') ?? DatatableUtils.blank,
-              tooltip: row.tags?.projects,
-              value: map(row.tags?.projects, p => p.length === 0 ? undefined : p) ?? [SheetUtils.blank],
+              export: safeProjects.join(' | ') ?? DatatableUtils.blank,
+              tooltip: safeProjects,
+              value: safeProjects.length === 0 ? [SheetUtils.blank] : safeProjects,
               label: (
                 <IpSelectMultiple
                   disabled={!ctx.canEdit}
-                  value={row.tags?.projects ?? []}
+                  value={safeProjects}
                   onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'projects'})}
                   options={currentProtectionProjects.map(k => ({value: k, children: k}))}
                 />
