@@ -100,7 +100,7 @@ export const MetaDashboard = () => {
             <SlidePanel>
               <Lazy deps={[ctx.filteredData]} fn={() => {
                 return ChartHelper.single({
-                  data: ctx.filteredData.map(_ => _.status ?? KoboMetaStatus.Blank),
+                  data: ctx.filteredData.map(_ => _.status ?? 'Blank'),
                   percent: true,
                 }).get()
               }}>
