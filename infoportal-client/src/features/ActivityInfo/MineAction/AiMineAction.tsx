@@ -14,7 +14,7 @@ type Bundle = AiBundle<AiMineActionType.Type, AiMineActionType.TypeSub>
 
 export const AiMineAction = () => {
   const {api} = useAppSettings()
-  const fetcher = useFetcher((periodStr: string) => api.hdp.fetchRiskEducation().then(res => res.map((_, i) => {
+  const fetcher = useFetcher((periodStr: string) => api.hdp.fetchRiskEducation().then(res => res.filter(_ => _['Reporting Month'] === periodStr).map((_, i) => {
     const addFlagIfNotInList = (value: string, options: Record<string, string>): any => {
       if (!options[value]) return aiInvalidValueFlag + ' ' + value
       return value

@@ -15,7 +15,7 @@ export namespace AiMpcaMapper {
   const getPlanCode = (_: DrcProject) => {
     return fnSwitch(_ as any, {
       // TODO wrongly set on Kobo answers
-      [DrcProject['UKR-000284 BHA']]: 'MPCA-DRC-00007',
+      [DrcProject['UKR-000340 Augustinus Fonden']]: 'MPCA-DRC-00008',
       [DrcProject['UKR-000345 BHA2']]: 'MPCA-DRC-00007',
       [DrcProject['UKR-000330 SDC2']]: 'MPCA-DRC-00006',
       [DrcProject['UKR-000347 DANIDA']]: 'MPCA-DRC-00005',
