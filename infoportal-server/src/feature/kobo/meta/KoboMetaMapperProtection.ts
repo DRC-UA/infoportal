@@ -5,7 +5,8 @@ import {
   DrcProgram,
   DrcProject,
   DrcProjectHelper,
-  DrcSector, fnTry,
+  DrcSector,
+  fnTry,
   KoboGeneralMapping,
   KoboMetaStatus,
   KoboTagStatus,
@@ -16,7 +17,8 @@ import {
   Protection_hhs3,
   Protection_pss,
   ProtectionCommunityMonitoringTags,
-  ProtectionHhsTags
+  ProtectionHhsTags,
+  safeArray
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
@@ -93,7 +95,7 @@ export class KoboMetaMapperProtection {
   static readonly hhs: MetaMapperInsert<KoboMetaOrigin<Protection_hhs3.T, ProtectionHhsTags>> = row => {
     const answer = Protection_hhs3.map(row.answers)
     const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
-
+    const projects = safeArray(row.tags?.projects)
     if (answer.have_you_filled_out_this_form_before === 'yes' || answer.present_yourself === 'no') return
     return KoboMetaMapper.make({
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
@@ -111,8 +113,8 @@ export class KoboMetaMapperProtection {
       activity: DrcProgram.ProtectionMonitoring,
       persons,
       personsCount: persons.length,
-      project: row.tags?.projects ?? [],
-      donor: fnTry(() => row.tags?.projects?.map(_ => DrcProjectHelper.donorByProject[_])).fnCatch(() => {console.log(row); return []}),
+      project: projects,
+      donor:  projects.map(_ => DrcProjectHelper.donorByProject[_]),
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
     })
@@ -137,7 +139,8 @@ export class KoboMetaMapperProtection {
       uhf4: DrcProject['UKR-000314 UHF4'],
       echo: DrcProject['UKR-000322 ECHO2'],
       bha: DrcProject['UKR-000284 BHA'],
-      bha2: DrcProject['UKR-000345 BHA2']
+      bha2: DrcProject['UKR-000345 BHA2'],
+      uhf8: DrcProject['UKR-000363 UHF8'],
     }) : undefined
     return {
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {

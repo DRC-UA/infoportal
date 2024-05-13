@@ -163,8 +163,8 @@ export class KoboMetaService {
       .withConcurrency(this.conf.db.maxConcurrency)
       .for(updates)
       .process(async ([koboId, {persons, ...update}], i) => {
-        return this.prisma.koboMeta.update({
-          where: {id: koboId},
+        return this.prisma.koboMeta.updateMany({
+          where: {koboId},
           data: update,
         })
       })

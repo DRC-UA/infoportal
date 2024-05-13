@@ -17,11 +17,12 @@ import {
   KoboMetaStatus,
   KoboTagStatus,
   OblastIndex,
+  safeArray,
   safeNumber,
   Shelter_cashForShelter,
   Shelter_NTA,
   Shelter_TA,
-  ShelterTaTags
+  ShelterTaTags,
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
@@ -182,13 +183,13 @@ export namespace KoboMetaMapperShelter {
   export const updateTa: MetaMapperMerge<KoboMetaOrigin<Shelter_TA.T, ShelterTaTags>, KoboMetaShelterRepairTags> = row => {
     const answers = Shelter_TA.map(row.answers)
     if (!row.tags || !answers.nta_id) return
-    const project = row.tags.project
+    const project = safeArray(row.tags.project)
     return [
       answers.nta_id,
       {
         referencedFormId: KoboIndex.byName('shelter_ta').id,
-        project: project ?? [],
-        donor: (project ?? []).map(_ => DrcProjectHelper.donorByProject[_]),
+        project: project,
+        donor: project.map(_ => DrcProjectHelper.donorByProject[_]),
         status: row.tags.workDoneAt ? KoboMetaStatus.Committed : KoboMetaStatus.Pending,
         lastStatusUpdate: row.tags.workDoneAt,
         tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {}
