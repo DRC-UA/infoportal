@@ -183,6 +183,7 @@ export class KoboMetaBasicneeds {
       pool_lwo: DrcProject[`UKR-000270 Pooled Funds`],
       pool_nlv: DrcProject[`UKR-000270 Pooled Funds`],
       nlv_bha_345: DrcProject[`UKR-000345 BHA2`],
+      echo2_dnk: DrcProject['UKR-000322 ECHO2'],
     }, _ => _ as DrcProject)
     const donor = DrcProjectHelper.donorByProject[project]
 
