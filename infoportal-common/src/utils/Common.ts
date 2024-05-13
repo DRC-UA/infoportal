@@ -167,6 +167,12 @@ export const safeNumber: {
   (_: undefined | string | number, defaultValue: number): number
 } = (_, defaultValue) => (isNaN(_ as number) ? defaultValue : +_!) as number
 
+export const safeArray = <T extends string>(value?: T[]): T[] => {
+  if (!value) return []
+  if (Array.isArray(value)) return value
+  return [value]
+}
+
 export const removeHtml: {
   (_: string): string
   (_: undefined): undefined

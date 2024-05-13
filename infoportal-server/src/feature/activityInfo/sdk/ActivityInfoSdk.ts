@@ -1,6 +1,5 @@
 import {AIID, Database, Form, FormDescs} from '../model/ActivityInfo'
 import {appConf} from '../../../core/conf/AppConf'
-import {Obj} from '@alexandreannic/ts-utils'
 
 interface ActicityInfoBody {
   [key: string]: any

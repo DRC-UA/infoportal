@@ -16,8 +16,11 @@ export namespace AiShelterMapper {
     [DrcProject['UKR-000355 Danish MFA']]: 'SNFI-DRC-00004',
     [DrcProject['UKR-000360 Novo-Nordisk']]: 'SNFI-DRC-00005',
     [DrcProject['UKR-000322 ECHO2']]: 'SNFI-DRC-00006',
+    [DrcProject['UKR-000269 ECHO1']]: 'SNFI-DRC-00006',
     [DrcProject['UKR-000308 UNHCR']]: 'SNFI-DRC-00007',
     [DrcProject['UKR-000284 BHA']]: 'SNFI-DRC-00008',
+    [DrcProject['UKR-000270 Pooled Funds']]: 'SNFI-DRC-00010',
+    [DrcProject['UKR-000352 UHF7']]: 'SNFI-DRC-00011',
   }
 
   const getPlanCode = (p: DrcProject): AiSnfiType.Type['Plan/Project Code'] => {

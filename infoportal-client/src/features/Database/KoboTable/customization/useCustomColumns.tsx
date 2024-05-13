@@ -7,6 +7,7 @@ import {
   KoboAnswer,
   KoboAnswerFlat,
   KoboBaseTags,
+  safeArray,
   KoboGeneralMapping,
   KoboIndex,
   KoboTagStatus,
@@ -353,7 +354,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           width: 200,
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
-            const safeProjects = Utils.safeArray(row.tags?.projects)
+            const safeProjects = safeArray(row.tags?.projects)
             return {
               export: safeProjects.join(' | ') ?? DatatableUtils.blank,
               tooltip: safeProjects,

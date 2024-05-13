@@ -167,7 +167,8 @@ export namespace Protection_pss {
       'okf': `UKR-000309 OKF`,
       'uhf4': `UKR-000314 UHF IV`,
       'uhf6': `UKR-000336 UHF VI`,
-      'echo': `UKR-000322 ECHO`
+      'echo': `UKR-000322 ECHO`,
+      'uhf8': `UKR-000363 UHF VIII`,
     },
     location: {
       'logow': `Governmental collective site`,

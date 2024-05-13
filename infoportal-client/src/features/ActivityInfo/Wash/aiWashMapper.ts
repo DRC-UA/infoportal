@@ -10,6 +10,7 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 export namespace AiWashMapper {
 
   const planCodes = {
+    [DrcProject['UKR-000345 BHA2']]: 'WASH-DRC-00005',
     [DrcProject['UKR-000314 UHF4']]: 'WASH-DRC-00001',
     [DrcProject['UKR-000270 Pooled Funds']]: 'WASH-DRC-00002',
     [DrcProject['UKR-000298 Novo-Nordisk']]: 'WASH-DRC-00003',

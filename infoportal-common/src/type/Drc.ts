@@ -167,6 +167,7 @@ export enum DrcProject {
   'UKR-000352 UHF7' = 'UKR-000352 UHF7',
   'UKR-000355 Danish MFA' = 'UKR-000355 Danish MFA',
   'UKR-000360 Novo-Nordisk' = 'UKR-000360 Novo-Nordisk',
+  'UKR-000363 UHF8' = 'UKR-000363 UHF8',
   'SIDA 518-570A' = 'SIDA 518-570A'
 }
 

@@ -17,7 +17,8 @@ import {
   ShelterContractorPrices,
   shelterDrcProject,
   ShelterProgress,
-  ShelterTaPriceLevel
+  ShelterTaPriceLevel,
+  safeArray
 } from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {useShelterContext} from '@/features/Shelter/ShelterContext'
@@ -489,7 +490,7 @@ export const ShelterTable = () => {
         typeIcon: null,
         options: () => DatatableUtils.buildOptions(shelterDrcProject, true),
         render: row => {
-          const projectArray = Utils.safeArray(row.ta?.tags?.project)
+          const projectArray = safeArray(row.ta?.tags?.project)
           return {
             value: projectArray,
             label: map(row.ta, ta => {
