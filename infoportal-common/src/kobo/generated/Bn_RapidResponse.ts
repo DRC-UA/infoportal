@@ -536,7 +536,8 @@ back_donor_l: {
 	'pool_hrk': `Pooled Funds`,
 	'pool_lwo': `Pooled Funds`,
 	'pool_nlv': `Pooled Funds`,
-	'nlv_bha_345': `BHA2`
+	'nlv_bha_345': `BHA2`,
+	'echo2_dnk': `ECHO2`
 },
 back_prog_type_l: {
 	'mpca_umy': `MPCA`,
@@ -2619,7 +2620,7 @@ export const map = (_: Record<keyof T, any>): T => ({
 	hh_char_hh_det_l: _.hh_char_hh_det_l?.map(extractQuestionName).map((_: any) => {
 		_['hh_char_hh_det_age_l'] = _.hh_char_hh_det_age_l ? +_.hh_char_hh_det_age_l : undefined
 		_['hh_char_hh_det_dis_select_l'] = _.hh_char_hh_det_dis_select_l?.split(' ')
-		return _	
+		return _
 }),
 	hh_char_dis_select_l: _.hh_char_dis_select_l?.split(' '),
 	nfi_dist_hkf_l: _.nfi_dist_hkf_l ? +_.nfi_dist_hkf_l : undefined,
