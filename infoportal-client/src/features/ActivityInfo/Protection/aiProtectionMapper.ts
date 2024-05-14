@@ -68,12 +68,12 @@ export namespace AiProtectionMapper {
                   data: grouped,
                   ai: {
                     'Indicators': fnSwitch(activity, {
-                      [DrcProgram.FGD]: '# of interviews conducted with key informants through community level protection monitoring',
+                      // [DrcProgram.FGD]: We don't report '# of interviews conducted with key informants through community level protection monitoring',
                       [DrcProgram.PSS]: '# of individuals who received individual or group-based psychosocial support',
                       [DrcProgram.ProtectionMonitoring]: '# of individuals reached through protection monitoring at the household level',
-                      [DrcProgram.CommunityLevelPm]: '# of key informants reached through community level protection monitoring',
+                      [DrcProgram.CommunityLevelPm]: '# of interviews conducted with key informants through community level protection monitoring',
                       [DrcProgram.AwarenessRaisingSession]: '# of individuals who participated in awareness raising activities on Protection',
-                    }, () => '!!!' as any),
+                    }, () => aiInvalidValueFlag as any),
                     'Population Group': AiMapper.mapPopulationGroup(displacement),
                     'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
                     ...disaggregation,
@@ -99,7 +99,7 @@ export namespace AiProtectionMapper {
             })
             subActivities.forEach((s) => {
               bundles.push({
-                submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Plan/Project Code']),
+                submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Plan/Project Code'], ...subActivities.map(_ => _.ai.Indicators)),
                 recordId: request.changes[0].recordId,
                 activity: ai,
                 subActivity: s.ai,

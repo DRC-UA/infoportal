@@ -46,7 +46,7 @@ export namespace AiGbvMapper {
             'gbva': '# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards',
             'gcva': '# of individuals reached with humanitarian cash and voucher assistance for GBV case management and/or other GBV response',
             'glac': '# of individuals at risk supported with GBV specialized legal assistance and counseling',
-          }, () => 'TODO') as any,
+          }, () => aiInvalidValueFlag) as any,
         })
       })
     })

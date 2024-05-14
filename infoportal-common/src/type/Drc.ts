@@ -190,7 +190,7 @@ export class DrcProjectHelper {
     [DrcDonor.PMRA]: [DrcProject['UKR-000230 PM WRA'],],
     [DrcDonor.PMKA]: [DrcProject['UKR-000231 PM WKA'],],
     [DrcDonor.SIDA]: [DrcProject['SIDA 518-570A'],],
-    [DrcDonor.UHF]: [DrcProject['UKR-000276 UHF3'], DrcProject['UKR-000314 UHF4'], DrcProject['UKR-000336 UHF6'], DrcProject['UKR-000352 UHF7']],
+    [DrcDonor.UHF]: [DrcProject['UKR-000276 UHF3'], DrcProject['UKR-000314 UHF4'], DrcProject['UKR-000336 UHF6'], DrcProject['UKR-000352 UHF7'], DrcProject['UKR-000363 UHF8']],
     [DrcDonor.UNHC]: [DrcProject['UKR-000308 UNHCR'],],
     [DrcDonor.DANI]: [DrcProject['UKR-000267 DANIDA'], DrcProject['UKR-000347 DANIDA']],
     [DrcDonor.DUT]: [DrcProject['UKR-000294 Dutch I'], DrcProject['UKR-000306 Dutch II']],

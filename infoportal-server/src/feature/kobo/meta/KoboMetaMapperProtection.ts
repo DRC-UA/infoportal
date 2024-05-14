@@ -6,11 +6,11 @@ import {
   DrcProject,
   DrcProjectHelper,
   DrcSector,
-  fnTry,
   KoboGeneralMapping,
   KoboMetaStatus,
   KoboTagStatus,
   OblastIndex,
+  Person,
   Protection_communityMonitoring,
   Protection_gbv,
   Protection_groupSession,
@@ -22,12 +22,24 @@ import {
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
+import Gender = Person.Gender
 
 export class KoboMetaMapperProtection {
 
   static readonly communityMonitoring: MetaMapperInsert<KoboMetaOrigin<Protection_communityMonitoring.T, ProtectionCommunityMonitoringTags>> = row => {
     const answer = Protection_communityMonitoring.map(row.answers)
     const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
+    if (answer.informant_gender || answer.informant_age) {
+      persons.push({
+        age: answer.informant_age,
+        gender: fnSwitch(answer.informant_gender!, {
+          female: Gender.Female,
+          male: Gender.Male,
+          other: Gender.Other,
+          unspecified: undefined,
+        }, () => undefined)
+      })
+    }
     return {
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
         chernihiv: DrcOffice.Chernihiv,
@@ -114,7 +126,7 @@ export class KoboMetaMapperProtection {
       persons,
       personsCount: persons.length,
       project: projects,
-      donor:  projects.map(_ => DrcProjectHelper.donorByProject[_]),
+      donor: projects.map(_ => DrcProjectHelper.donorByProject[_]),
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
     })
@@ -175,8 +187,9 @@ export class KoboMetaMapperProtection {
     const project = answer.project ? fnSwitch(answer.project, {
       bha: DrcProject['UKR-000345 BHA2'],
       sdc: DrcProject['UKR-000226 SDC'],
-      danida: DrcProject['UKR-000347 DANIDA']
-    }) : undefined
+      danida: DrcProject['UKR-000347 DANIDA'],
+      uhf8: DrcProject['UKR-000363 UHF8'],
+    }, () => answer.project as DrcProject) : undefined
     return {
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
         chernihiv: DrcOffice.Chernihiv,

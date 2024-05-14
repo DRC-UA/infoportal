@@ -20,8 +20,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   ben_det_raion: undefined | string,
 	  // introduction/ben_det_hromada [select_one] Select hromada
   ben_det_hromada: undefined | string,
-	  // introduction/ben_det_hromada_001 [text] Specify settlement/village/city neighborhood
-  ben_det_hromada_001: string | undefined,
+	  // introduction/ben_det_hromada_001 [select_one_from_file] Specify settlement/village/city neighborhood
+  ben_det_hromada_001: string,
 	  // introduction/location [select_one] Location
   location: undefined | Option<'location'>,
 	  // introduction/location_other [text] If "Other", please specify
@@ -108,7 +108,8 @@ staff_code_001: {
 project: {
 	'sdc': `UKR-000330 (SDC)`,
 	'bha': `UKR-000345 (BHA)`,
-	'danida': `UKR-000347 (Danida)`
+	'danida': `UKR-000347 (Danida)`,
+	'uhf8': `UKR-000363 (UHF VIII)`
 },
 location: {
 	'wgssd': `Women and Girls Safe Space (operated by DRC)`,

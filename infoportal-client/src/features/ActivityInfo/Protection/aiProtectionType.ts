@@ -149,5 +149,4 @@ export namespace AiProtectionType {
       '# of government institutions supported': 'cy4jvntlqmgu66v2a'
     }
   }
-
 }

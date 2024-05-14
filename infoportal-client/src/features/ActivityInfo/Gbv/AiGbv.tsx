@@ -77,7 +77,7 @@ export const AiGbv = () => {
           })
           subActivities.forEach(s => {
             bundles.push({
-              submit: checkAiValid(activity.Oblast, activity.Raion, activity.Hromada, activity['Plan/Project Code']),
+              submit: checkAiValid(activity.Oblast, activity.Raion, activity.Hromada, activity['Plan/Project Code'], ...subActivities.map(_ => _.Indicators)),
               recordId: request.changes[0].recordId,
               activity: activity,
               subActivity: s,
