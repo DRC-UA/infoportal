@@ -11,7 +11,7 @@ import {
   KoboGeneralMapping,
   KoboIndex,
   KoboTagStatus,
-  ProtectionHhsTags,
+  ProtectionHhsTags, Protection_gbv,
 } from '@infoportal-common'
 import React, {useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -72,7 +72,6 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         }
       },
     ]
-
     const lastStatusUpdate: DatatableColumn.Props<any> = {
       id: 'lastStatusUpdate',
       width: 129,
@@ -89,7 +88,6 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         }
       }
     }
-
     const paymentStatus = (
       enumerator: SelectStatusConfig.EnumStatus = 'CashStatus',
       key: string = 'status'
@@ -188,7 +186,23 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         lastStatusUpdate,
       ]
     }
-
+    const beneficiaries:DatatableColumn.Props<any>[] = [
+      {
+        id: 'beneficiaries',
+        head: m.beneficiaries,
+        type: 'number',
+        renderQuick: (row: KoboAnswerFlat<Protection_gbv.T, any>) => {
+          if (row.new_ben === 'yes') {
+            return row.numb_part || 0;
+          } else if (row.new_ben === 'bno' && row.hh_char_hh_det) {
+            return row.hh_char_hh_det.reduce((count, participant) => {
+              return count + (participant.hh_char_hh_new_ben === 'yes' ? 1 : 0);
+            }, 0);
+          }
+          return 0;
+        }
+      }
+]
     const ecrecScore: DatatableColumn.Props<any>[] = [
       {
         id: 'vulnerability_sore',
@@ -249,6 +263,9 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
             return row.estimate_sqm_damage !== undefined ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined
           }
         }
+      ],
+      [KoboIndex.byName('protection_gbv').id]: [
+        ...beneficiaries
       ],
       [KoboIndex.byName('shelter_cashForRepair').id]: [
         ...paymentStatusShelter(),

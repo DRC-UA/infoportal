@@ -768,5 +768,6 @@ export const en = Object.freeze({
     sync: 'Sync',
     pullLast: 'Pull last',
     pullLastTitle: 'Pull last',
+    beneficiaries: 'Beneficiaries',
   },
 })
