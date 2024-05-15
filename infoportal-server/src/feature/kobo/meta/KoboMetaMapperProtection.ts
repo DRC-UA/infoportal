@@ -78,7 +78,7 @@ export class KoboMetaMapperProtection {
       uhf4: DrcProject['UKR-000314 UHF4'],
       uhf6: DrcProject['UKR-000336 UHF6'],
       novo: DrcProject['UKR-000360 Novo-Nordisk'],
-    }) : undefined
+    }, () => answer.project as DrcProject) : undefined
     return {
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
         chernihiv: DrcOffice.Chernihiv,
