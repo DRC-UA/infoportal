@@ -13,6 +13,7 @@ import {AccessFormSection} from '@/features/Access/AccessFormSection'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {DrcJobInputMultiple} from '@/shared/customInput/DrcJobInput'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 export interface IAccessForm {
   selectBy?: 'email' | 'job' | 'group' | null
@@ -252,16 +253,36 @@ export const AccessFormInputGroup = ({
       />
       {map(form.watch('groupId'), groupId => (
         <>
-          <Sheet
+          <Datatable
             sx={{mt: 2, border: t => `1px solid ${t.palette.divider}`, overflow: 'hidden', borderRadius: t => t.shape.borderRadius + 'px'}}
             id="access"
             defaultLimit={5}
             data={groupIndex[groupId!]?.items}
             columns={[
-              {type: 'string', id: 'email', head: m.email, render: _ => _.email},
-              {type: 'select_one', id: 'drcJob', head: m.drcJob, render: _ => _.drcJob},
-              {type: 'select_one', id: 'drcOffice', head: m.drcOffice, render: _ => _.drcOffice},
-              {type: 'select_one', id: 'level', head: m.accessLevel, render: _ => _.level},
+              {
+                id: 'email',
+                head: m.email,
+                type: 'string',
+                renderQuick: _ => _.email
+              },
+              {
+                id: 'drcJob',
+                head: m.drcJob,
+                type: 'select_one',
+                renderQuick: _ => _.drcJob
+              },
+              {
+                id: 'drcOffice',
+                head: m.drcOffice,
+                type: 'select_one',
+                renderQuick: _ => _.drcOffice
+              },
+              {
+                id: 'level',
+                head: m.accessLevel,
+                type: 'select_one',
+                renderQuick: _ => _.level
+              },
             ]}
           />
         </>
