@@ -106,8 +106,9 @@ const _Datatable = <T extends DatatableRow>({
   title,
   onClickRows,
   exportAdditionalSheets,
+  contentProps,
   ...props
-}: Pick<DatatableTableProps<T>, 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
+}: Pick<DatatableTableProps<T>, 'contentProps' | 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
   const ctx = useDatatableContext()
   const _generateXLSFromArray = useAsync(generateXLSFromArray)
   useEffect(() => ctx.select?.onSelect(ctx.selected.toArray), [ctx.selected.get])
@@ -214,9 +215,7 @@ const _Datatable = <T extends DatatableRow>({
         </Box>
       )}
       <Box sx={{overflowX: 'auto'}}>
-        <Box sx={{
-          // width: 'max-coontent'
-        }}>
+        <Box {...contentProps}>
           <Box id={id} component="table" className="borderY table" sx={{minWidth: '100%'}}>
             <DatatableHead
               data={ctx.data.filteredSortedAndPaginatedData?.data}

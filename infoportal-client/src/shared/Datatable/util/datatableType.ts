@@ -34,6 +34,7 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   id: string
   loading?: boolean
   total?: number
+  contentProps?: BoxProps
   defaultFilters?: Record<K, any>
   defaultLimit?: number
   title?: string

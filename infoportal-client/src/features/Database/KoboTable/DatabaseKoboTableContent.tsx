@@ -125,6 +125,7 @@ export const DatabaseKoboTableContent = ({
         <b>NEW FEATURE:</b> Say goodbye to manual SYNC button. Kobo responses now synchronize automatically upon submission.
       </IpAlert>
       <Datatable
+        contentProps={{sx: {maxHeight: 'calc(100vh - 204px)'}}}
         showExportBtn
         rowsPerPageOptions={[20, 50, 100]}
         onFiltersChange={onFiltersChange}
