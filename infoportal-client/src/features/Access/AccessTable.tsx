@@ -10,6 +10,8 @@ import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {UseFetcher} from '@/shared/hook/useFetcher'
+import {Txt} from 'mui-extension'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 export const AccessTable = ({
   isAdmin,
@@ -36,7 +38,7 @@ export const AccessTable = ({
   }, [_update.callIndex])
 
   return (
-    <Sheet<Access>
+    <Datatable<Access>
       defaultLimit={100}
       id="access"
       getRenderRowKey={_ => _.id}
@@ -46,37 +48,40 @@ export const AccessTable = ({
       columns={[
         {
           width: 80,
-          head: m.createdAt,
-          id: 'date',
+          id: 'createdAt',
           type: 'date',
-          render: _ => formatDate(_.createdAt),
-          tooltip: _ => formatDateTime(_.createdAt),
-          renderValue: _ => _.createdAt,
+          head: m.createdAt,
+          render: _ => {
+            return {
+              label: <Txt color="hint">{formatDate(_.createdAt)}</Txt>,
+              value: _.createdAt,
+            }
+          }
         },
         {
           id: 'drcJob',
           head: m.drcJob,
-          render: _ => _.drcJob,
+          renderQuick: _ => _.drcJob,
           type: 'select_one',
           options: () => seq(fetcherData.get?.map(_ => _.drcJob)).distinct(_ => _).compact().map(_ => ({value: _, label: _}))
         },
         {
           id: 'drcOffice',
           head: m.drcOffice,
-          render: _ => _.drcOffice,
+          renderQuick: _ => _.drcOffice,
           type: 'select_one',
           options: () => seq(fetcherData.get?.map(_ => _.drcOffice)).distinct(_ => _).compact().map(_ => ({value: _, label: _}))
         },
         {
           id: 'email',
           head: m.email,
-          render: _ => _.email,
+          renderQuick: _ => _.email,
         },
         {
           id: 'group',
           type: 'select_one',
           head: m.group,
-          render: _ => _.groupName ?? SheetUtils.blank,
+          renderQuick: _ => _.groupName ?? SheetUtils.blank,
         },
         {
           width: 90,
@@ -85,23 +90,26 @@ export const AccessTable = ({
           type: 'select_one',
           options: () => Enum.keys(AccessLevel).map(_ => ({value: _, label: _})),
           render: row => {
-            if (!!row.groupName) return
-            if (isAdmin) return (
-              <IpSelectSingle
-                hideNullOption
-                disabled={!!row.groupName}
-                value={row.level}
-                onChange={_ => _update.call(row.id, {level: _ as AccessLevel})}
-                options={Enum.keys(AccessLevel).map(_ => ({value: _, children: _}))}
-              />
-            )
-            return row.level
-          },
+            if (!!row.groupName) return {value: undefined, label: ''}
+            if (isAdmin)
+              return {
+                value: row.level,
+                label: (
+                  <IpSelectSingle
+                    value={row.level}
+                    onChange={_ => _update.call(row.id, {level: _ as AccessLevel})}
+                    hideNullOption
+                    disabled={!!row.groupName}
+                    options={Enum.keys(AccessLevel).map(_ => ({value: _, children: _}))}/>
+                )
+              }
+            return {value: row.level, label: row.level}
+          }
         },
         {
           id: 'params',
           head: m.filter,
-          render: _ => renderParams(_.params),
+          renderQuick: _ => _.params,
           type: 'string'
         },
         ...isAdmin ? [{
@@ -109,9 +117,14 @@ export const AccessTable = ({
           width: 0,
           head: '',
           align: 'right',
-          render: (_: Access) => (
-            <TableIconBtn loading={asyncRemove.loading[_.id]} onClick={() => asyncRemove.call(_.id).then(() => onRemoved?.(_.id))} children="delete"/>
-          ),
+          renderQuick: (_: Access) => {
+            return (
+              <TableIconBtn
+                loading={asyncRemove.loading[_.id]}
+                onClick={() => asyncRemove.call(_.id).then(() => onRemoved?.(_.id))}
+                children="delete"/>
+            )
+          }
         } as const] : [],
       ]}
     />
