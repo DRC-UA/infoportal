@@ -488,6 +488,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
   [ShelterContractor['Ukrbudtechnologii']]: WAITING_FOR_PRICES,
   [ShelterContractor['NVO ProektStroy']]: WAITING_FOR_PRICES,
   [ShelterContractor['Tribotechnika']]: WAITING_FOR_PRICES,
+  [ShelterContractor['Skytown']]: WAITING_FOR_PRICES,
 }
 const oblasts = {
   mykolaivska: [
