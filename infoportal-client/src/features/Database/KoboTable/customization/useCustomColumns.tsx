@@ -186,6 +186,23 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         lastStatusUpdate,
       ]
     }
+    const beneficiaries: DatatableColumn.Props<any>[] = [
+      {
+        id: 'beneficiaries',
+        head: m.beneficiaries,
+        type: 'number',
+        renderQuick: (row: KoboAnswerFlat<Protection_gbv.T, any>) => {
+          if (row.new_ben === 'yes') {
+            return row.numb_part || 0
+          } else if (row.new_ben === 'bno' && row.hh_char_hh_det) {
+            return row.hh_char_hh_det.reduce((count, participant) => {
+              return count + (participant.hh_char_hh_new_ben === 'yes' ? 1 : 0)
+            }, 0)
+          }
+          return 0
+        }
+      }
+    ]
     const ecrecScore: DatatableColumn.Props<any>[] = [
       {
         id: 'vulnerability_sore',
@@ -248,21 +265,10 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         }
       ],
       [KoboIndex.byName('protection_gbv').id]: [
-        {
-          id: 'beneficiaries',
-          head: m.beneficiaries,
-          type: 'number',
-          renderQuick: (row: KoboAnswerFlat<Protection_gbv.T, any>) => {
-            if (row.new_ben === 'yes') {
-              return row.numb_part || 0
-            } else if (row.new_ben === 'bno' && row.hh_char_hh_det) {
-              return row.hh_char_hh_det.reduce((count, participant) => {
-                return count + (participant.hh_char_hh_new_ben === 'yes' ? 1 : 0)
-              }, 0)
-            }
-            return 0
-          }
-        }
+        ...beneficiaries
+      ],
+      [KoboIndex.byName('protection_pss').id]: [
+        ...beneficiaries
       ],
       [KoboIndex.byName('shelter_cashForRepair').id]: [
         ...paymentStatusShelter(),
