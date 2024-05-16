@@ -15,6 +15,7 @@ import {KoboAnswerFlat, KoboAnswerId, removeHtml} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {DatatableHeadTypeIcon} from '@/shared/Datatable/DatatableHead'
+import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
 
 const imageExtension = new Set([
   '.png',
@@ -67,6 +68,7 @@ const editableColumns: Set<KoboApiColType> = new Set([
 
 interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
   data?: T[]
+  externalFilesIndex?: KoboExternalFilesIndex
   choicesIndex: KoboSchemaHelper.Index['choicesIndex']
   m: I18nContextProps['m']
   translateChoice: KoboTranslateChoice
@@ -91,6 +93,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   groupSchemas,
   translateQuestion,
   translateChoice,
+  externalFilesIndex,
   onOpenGroupModal,
   choicesIndex,
   groupIndex,
@@ -192,7 +195,9 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           typeIcon: <DatatableHeadTypeIcon children="attach_file" tooltip="select_one_from_file"/>,
           ...common,
           type: 'string',
-          renderQuick: row => getVal(row, q.name) as string
+          renderQuick: row => {
+            return externalFilesIndex?.[q.file!]?.[row[q.name]]?.label ?? getVal(row, q.name)
+          }
         }
       }
       case 'username':

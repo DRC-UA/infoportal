@@ -6,6 +6,23 @@ export type KoboQuestionType = KoboQuestionSchema['type']
 
 export type KoboQuestionChoice = KoboSchema['content']['choices'][0]
 
+export type KoboFiles = {
+  asset: string
+  content: string
+  date_created: string
+  description: string
+  file_type: string
+  metadata: {
+    filename: string
+    hash: string
+    mimetype: string
+  }
+  uid: string
+  url: string
+  user: string
+  user__username: string
+}
+
 export interface KoboSchema {
   name: string
   deployment__links: {
@@ -35,6 +52,7 @@ export interface KoboSchema {
       $xpath: string
       label?: string[]
       name: string
+      file?: string
       type:
         'file' |
         'deviceid' |
@@ -63,4 +81,5 @@ export interface KoboSchema {
     translated: ['hint', 'label', 'media::image']
     translations: string[]
   }
+  files: KoboFiles[]
 }

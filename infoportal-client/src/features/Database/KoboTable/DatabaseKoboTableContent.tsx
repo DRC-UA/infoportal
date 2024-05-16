@@ -26,7 +26,6 @@ import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {Enum, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
 import {IpAlert} from '@/shared/Alert'
-import {useSession} from '@/core/Session/SessionContext'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -35,7 +34,6 @@ export const DatabaseKoboTableContent = ({
   const ctx = useDatabaseKoboTableContext()
   const {m} = useI18n()
   const ctxSchema = useKoboSchemaContext()
-  const session = useSession()
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [selectedColumn, setSelectedColumn] = useState<string | undefined>()
@@ -57,11 +55,12 @@ export const DatabaseKoboTableContent = ({
       translateChoice: ctx.schema.translate.choice,
       choicesIndex: ctx.schema.schemaHelper.choicesIndex,
       m,
+      externalFilesIndex: ctx.externalFilesIndex,
       repeatGroupsAsColumn: repeatGroupsAsColumns,
       onOpenGroupModal: setOpenGroupModalAnswer,
       onSelectColumn: setSelectedColumn,
     })
-  }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns])
+  }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns, ctx.externalFilesIndex])
 
   const columns = useMemo(() => {
     const action: DatatableColumn.Props<any> = {
@@ -235,4 +234,3 @@ export const getKoboLabel = (q: {
 }, langIndex?: number): string => {
   return q.label !== undefined ? (q.label as any)[langIndex as any] ?? q.name : q.name
 }
-
