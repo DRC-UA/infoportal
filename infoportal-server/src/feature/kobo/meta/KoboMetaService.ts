@@ -47,7 +47,10 @@ export class KoboMetaMapper {
     [KoboIndex.byName('protection_communityMonitoring').id]: KoboMetaMapperProtection.communityMonitoring,
   }
   static readonly mappersUpdate: Record<KoboId, MetaMapperMerge> = {
-    [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa,
+    [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa
+  }
+  static readonly triggerUpdate = {
+    [KoboIndex.byName('shelter_nta').id]: [KoboIndex.byName('shelter_ta').id]
   }
 }
 
@@ -72,12 +75,19 @@ export class KoboMetaService {
 
   readonly start = () => {
     this.info('', `Start listening to ${Event.KOBO_FORM_SYNCHRONIZED}`)
-    this.event.listen(Event.KOBO_FORM_SYNCHRONIZED, _ => {
+    this.event.listen(Event.KOBO_FORM_SYNCHRONIZED, async _ => {
       const createMapper = KoboMetaMapper.mappersCreate[_.formId]
       const updateMapper = KoboMetaMapper.mappersUpdate[_.formId]
-      if (createMapper) this.syncInsert({formId: _.formId, mapper: createMapper})
-      else if (updateMapper) this.syncMerge({formId: _.formId, mapper: updateMapper})
-      else this.log.error(`No mapper implemented for ${JSON.stringify(_.formId)}`)
+      if (createMapper) {
+        await this.syncInsert({formId: _.formId, mapper: createMapper})
+        ;(KoboMetaMapper.triggerUpdate[_.formId] ?? []).forEach(triggeredFormId => {
+          this.syncMerge({formId: triggeredFormId, mapper: KoboMetaMapper.mappersUpdate[triggeredFormId]})
+        })
+      } else if (updateMapper) {
+        this.syncMerge({formId: _.formId, mapper: updateMapper})
+      } else {
+        this.log.error(`No mapper implemented for ${JSON.stringify(_.formId)}`)
+      }
       setTimeout(() => {
         // Wait for the database to be rebuilt before clearing the cache
         app.cache.clear(SytemCache.Meta)
