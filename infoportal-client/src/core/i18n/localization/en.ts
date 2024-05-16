@@ -1,7 +1,6 @@
 import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
 import {capitalize, OblastIndex, OblastISO} from '@infoportal-common'
-import {appFeaturesIndex} from '@/features/appFeatureId'
 
 const invalidDate = ''
 
@@ -436,7 +435,8 @@ export const en = Object.freeze({
       distinctBySubmission: 'By submission',
       distinctByTaxId: 'By tax ID',
       distinctByPhone: 'By phone number',
-      refresh: 'Sync ' + appFeaturesIndex.metaDashboard.name,
+      refresh: 'Sync',
+      killCache: 'Clear cache',
       refreshLong: 'Refresh started, can takes few minutes.',
       pluggedKobo: 'Plugged Kobo',
     },

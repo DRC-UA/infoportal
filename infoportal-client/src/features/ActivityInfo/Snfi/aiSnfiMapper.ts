@@ -30,18 +30,6 @@ export namespace AiShelterMapper {
 
   export type Bundle = AiBundle<AiSnfiType.Type>
 
-  const mapBnreDonor = (_?: keyof typeof Bn_Re.options.back_donor) => {
-    if (!_) return
-    if (_.includes('uhf_')) return DrcProject['UKR-000314 UHF4']
-    if (_.includes('bha_')) return DrcProject['UKR-000345 BHA2']
-    if (_.includes('echo_')) return DrcProject['UKR-000322 ECHO2']
-    if (_.includes('okf_')) return DrcProject['UKR-000309 OKF']
-    if (_.includes('pool_')) return DrcProject['UKR-000342 Pooled Funds']
-    if (_.includes('sdc_')) return DrcProject['UKR-000330 SDC2']
-    if (_.includes('_danida')) return DrcProject['UKR-000347 DANIDA']
-    if (_.includes('uhf7_')) return DrcProject['UKR-000352 UHF7']
-  }
-
   // static getShelterNorth = () => {
   //   const bundle: Bundle[] = []
   //   let index = 0
@@ -208,7 +196,7 @@ export namespace AiShelterMapper {
           ],
           finalTransform: (grouped, [project, oblast, raion, hromada, damageLevel, status]) => {
             const disagg = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons ?? []))
-            const activity: AiSnfiType.Type = {
+            const ai: AiSnfiType.Type = {
               'Indicators - SNFI': fnSwitch(damageLevel, {
                 [ShelterTaPriceLevel.Light]: '# of individuals supported with light humanitarian repairs',
                 [ShelterTaPriceLevel.Medium]: '# of individuals supported with medium humanitarian repairs',
@@ -217,9 +205,7 @@ export namespace AiShelterMapper {
               'Implementing Partner': 'Danish Refugee Council',
               'Plan/Project Code': getPlanCode(project),
               'Reporting Organization': 'Danish Refugee Council',
-              'Oblast': oblast,
-              'Raion': raion,
-              'Hromada': hromada,
+              ...AiMapper.getLocationByMeta(oblast, raion, hromada),
               'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
               'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
               'Population Group': status,
@@ -238,14 +224,14 @@ export namespace AiShelterMapper {
               activityIdPrefix: 'drcsnfi',
               activityYYYYMM: periodStr,
               formId: activitiesConfig.snfi.id,
-              activity,
+              activity: AiSnfiType.map(AiMapper.mapLocationToRecordId(ai)),
               activityIndex: i++,
             })
 
             bundle.push({
               recordId: request.changes[0].recordId,
               data: grouped,
-              activity,
+              activity: ai,
               requestBody: request,
             })
           },

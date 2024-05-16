@@ -2,14 +2,15 @@ import {PrismaClient} from '@prisma/client'
 import {KoboMetaParams, KoboMetaService} from '../../feature/kobo/meta/KoboMetaService'
 import {NextFunction, Request, Response} from 'express'
 import {DbHelper} from '../../db/DbHelper'
-import {GlobalEvent} from '../../core/GlobalEvent'
-import {KoboIndex} from '@infoportal-common'
+import {app} from '../../index'
+import {SytemCache} from '../../helper/IpCache'
 
 export class ControllerKoboMeta {
 
   constructor(
     private prisma: PrismaClient,
     private service = new KoboMetaService(prisma),
+    private cache = app.cache
   ) {
   }
 
@@ -20,7 +21,12 @@ export class ControllerKoboMeta {
   }
 
   readonly sync = async (req: Request, res: Response, next: NextFunction) => {
-   this.service.sync()
+    this.service.sync()
+    res.send()
+  }
+
+  readonly killCache = async (req: Request, res: Response, next: NextFunction) => {
+    this.cache.clear(SytemCache.Meta)
     res.send()
   }
 }

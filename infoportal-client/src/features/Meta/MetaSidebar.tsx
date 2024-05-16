@@ -46,6 +46,7 @@ export const MetaSidebar = () => {
   const location = useLocation()
   const {api} = useAppSettings()
   const asyncRefresh = useAsync(api.koboMeta.sync)
+  const asyncKillCache = useAsync(api.koboMeta.killCache)
   const {toastInfo} = useIpToast()
   const {session} = useSession()
 
@@ -72,7 +73,22 @@ export const MetaSidebar = () => {
             <IpIconBtn
               color="primary"
               loading={asyncRefresh.loading}
+              sx={{marginLeft: 'auto'}}
               children="cloud_sync"
+            />
+          </SidebarItem>
+        )}
+        {session.admin && (
+          <SidebarItem
+            icon="no_sim"
+            onClick={() => asyncKillCache.call()}
+          >
+            {m._meta.killCache}
+            <IpIconBtn
+              sx={{marginLeft: 'auto'}}
+              color="primary"
+              loading={asyncKillCache.loading}
+              children="refresh"
             />
           </SidebarItem>
         )}
