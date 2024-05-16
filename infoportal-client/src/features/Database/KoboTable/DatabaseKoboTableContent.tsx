@@ -21,7 +21,6 @@ import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
-import {DatatableKoboEditModal} from '@/features/Database/KoboTable/DatatableKoboEditModal'
 import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {Enum, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
@@ -36,7 +35,7 @@ export const DatabaseKoboTableContent = ({
   const ctxSchema = useKoboSchemaContext()
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [selectedColumn, setSelectedColumn] = useState<string | undefined>()
+  const ctxEditKobo = useEditKoboContext()
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat | undefined>()
   const [groupModalOpen, setOpenGroupModalAnswer] = useState<{
     columnId: string,
@@ -58,7 +57,21 @@ export const DatabaseKoboTableContent = ({
       externalFilesIndex: ctx.externalFilesIndex,
       repeatGroupsAsColumn: repeatGroupsAsColumns,
       onOpenGroupModal: setOpenGroupModalAnswer,
-      onSelectColumn: setSelectedColumn,
+      onSelectColumn: (columnName: string) => ctxEditKobo.open({
+        formId: ctx.form.id,
+        type: 'answers',
+        questionName: columnName,
+        answerIds: selectedIds,
+        onSuccess: (params) => {
+          const answerIdsIndex = new Set(params.answerIds)
+          ctx.setData(data => data.map(d => {
+            if (answerIdsIndex.has(d.id)) {
+              d[params.question] = params.answer
+            }
+            return d
+          }))
+        }
+      })
     })
   }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns, ctx.externalFilesIndex])
 
@@ -214,14 +227,6 @@ export const DatabaseKoboTableContent = ({
           anchorEl={groupModalOpen.event.target}
           groupData={groupModalOpen.group}
           onClose={() => setOpenGroupModalAnswer(undefined)}
-        />
-      )}
-      {selectedColumn && (
-        <DatatableKoboEditModal
-          formId={ctx.form.id}
-          column={selectedColumn}
-          answerIds={selectedIds}
-          onClose={() => setSelectedColumn(undefined)}
         />
       )}
     </>

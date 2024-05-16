@@ -19,7 +19,6 @@ export enum ShelterContractor {
   'Kronos' = 'Kronos',
   'Monolit' = 'Monolit',
   'Darwin' = 'Darwin',
-  'Cash' = 'Cash',
   'Ukrbudtechnologii' = 'Ukrbudtechnologii',
   'NVO ProektStroy' = 'NVO ProektStroy',
   'Tribotechnika' = 'Tribotechnika',
@@ -484,7 +483,6 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
   [ShelterContractor['Kronos']]: WAITING_FOR_PRICES,
   [ShelterContractor['Monolit']]: WAITING_FOR_PRICES,
   [ShelterContractor['Darwin']]: WAITING_FOR_PRICES,
-  [ShelterContractor['Cash']]: WAITING_FOR_PRICES,
   [ShelterContractor['Ukrbudtechnologii']]: WAITING_FOR_PRICES,
   [ShelterContractor['NVO ProektStroy']]: WAITING_FOR_PRICES,
   [ShelterContractor['Tribotechnika']]: WAITING_FOR_PRICES,
@@ -500,7 +498,6 @@ const oblasts = {
     ShelterContractor['Kronos'],
     ShelterContractor['Darwin'],
     ShelterContractor['Monolit'],
-    ShelterContractor['Cash'],
     ShelterContractor['Ukrbudtechnologii'],
     ShelterContractor['NVO ProektStroy'],
     ShelterContractor['Tribotechnika'],
@@ -521,6 +518,5 @@ const oblasts = {
     ShelterContractor['Kronos'],
     ShelterContractor['Monolit'],
     ShelterContractor['Darwin'],
-    ShelterContractor['Cash']
   ]
 }

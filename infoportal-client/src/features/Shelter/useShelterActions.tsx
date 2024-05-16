@@ -44,12 +44,30 @@ export const useShelterActions = <T extends Record<string, any>, >({
     })
   })
 
+  const updateAnswer = ({answerIds, key, value}: {
+    answerIds: KoboAnswerId[]
+    key: any
+    value: any
+  }) => setEntity(prev => {
+    if (!prev) return prev
+    const set = new Set(answerIds)
+    return prev.map(_ => {
+      if (set.has(_[form]?.id ?? '!') && _[form]) {
+        _[form]!.tags = {
+          ...(_[form]?.tags ?? {}),
+          [key]: value,
+        }
+      }
+      return _
+    })
+  })
+
   const asyncUpdates = useAsync(async <K extends keyof T>(props: {
     answerIds: KoboAnswerId[],
     key: K,
     value: T[K] | null
   }) => {
-    const loading = toastLoading(m._shelter.updatingTag(props.answerIds.length, props.key as string, props.value as string))
+    const loading = toastLoading(m.updatingTag(props.answerIds.length, props.key as string, props.value as string))
     await api.kobo.answer.updateTag({
       formId,
       answerIds: props.answerIds,
@@ -59,7 +77,7 @@ export const useShelterActions = <T extends Record<string, any>, >({
       updateTag(props)
     }).catch(() => {
       loading.setOpen(false)
-      toastError(m._shelter.cannotUpdateTag(props.answerIds.length, props.key as string, props.value as string))
+      toastError(m.cannotUpdateTag(props.answerIds.length, props.key as string, props.value as string))
     })
   })
 

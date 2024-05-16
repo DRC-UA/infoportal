@@ -46,6 +46,11 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
     query?: Promise<FetcherResult<F>>
   }>({queryRef: 0})
 
+  const clear = () => {
+    setError(undefined)
+    setEntity(undefined)
+  }
+
   const fetch = ({force = true, clean = true}: FetchParams = {}, ...args: any[]): Promise<FetcherResult<F>> => {
     fetch$.current.queryRef = fetch$.current.queryRef + 1
     const currQueryRef = fetch$.current.queryRef
@@ -61,8 +66,7 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
       fetch$.current.query = undefined
     }
     if (clean) {
-      setError(undefined)
-      setEntity(undefined)
+      clear()
     }
     setLoading(true)
     fetch$.current.query = fetcher(...args)
@@ -85,6 +89,10 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
         throw e
       })
     return fetch$.current.query
+  }
+
+  const forceFetch = () => {
+
   }
 
   const clearCache = () => {

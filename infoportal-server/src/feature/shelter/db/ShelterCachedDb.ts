@@ -34,6 +34,11 @@ export class ShelterCachedDb {
         this.meme.clear()
       }
     })
+    this.koboEvent.listen(GlobalEvent.Event.KOBO_ANSWER_EDITED, async (_) => {
+      if ([KoboIndex.byName('shelter_ta').id, KoboIndex.byName('shelter_ta').id].includes(_.formId)) {
+        this.meme.clear()
+      }
+    })
     this.koboEvent.listen(GlobalEvent.Event.KOBO_TAG_EDITED, async (eventParams) => {
       switch (eventParams.formId) {
         case KoboIndex.byName('shelter_ta').id: {

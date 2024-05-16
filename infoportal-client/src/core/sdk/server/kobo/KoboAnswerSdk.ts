@@ -11,7 +11,7 @@ export interface KoboAnswerFilter {
   readonly filters?: AnswersFilters
 }
 
-export type KoboUpdateAnswers<T extends Record<string, any>, K extends KeyOf<T>> = {
+export type KoboUpdateAnswers<T extends Record<string, any> = any, K extends KeyOf<T> = any> = {
   formId: KoboId
   answerIds: KoboAnswerId[]
   question: K

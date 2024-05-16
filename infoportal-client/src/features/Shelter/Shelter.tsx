@@ -74,7 +74,7 @@ export const Shelter = () => {
 
 export const ShelterWithAccess = () => {
   const {session, accesses} = useSession()
-  const schemaContext = useKoboSchemaContext()
+  const ctxSchema = useKoboSchemaContext()
 
   const {access, allowedOffices} = useMemo(() => {
     const dbAccesses = seq(accesses).filter(Access.filterByFeature(AppFeatureId.kobo_database))
@@ -90,28 +90,28 @@ export const ShelterWithAccess = () => {
   const fetcherData = useShelterData()
 
   useEffect(() => {
-    schemaContext.fetchers.fetch({}, 'shelter_ta')
-    schemaContext.fetchers.fetch({}, 'shelter_nta')
+    ctxSchema.fetchByName('shelter_ta')
+    ctxSchema.fetchByName('shelter_nta')
     fetcherData.fetchAll()
   }, [])
 
   return (
     <Router>
       <Layout
-        loading={schemaContext.fetchers.anyLoading}
+        loading={ctxSchema.anyLoading}
         title={appFeaturesIndex.shelter.name}
         sidebar={<ShelterSidebar/>}
         header={<AppHeader id="app-header"/>}
       >
-        {schemaContext.schema.shelter_nta && schemaContext.schema.shelter_ta && (
+        {ctxSchema.byName.shelter_nta.get && ctxSchema.byName.shelter_ta.get && (
           <ShelterProvider
             access={access}
             data={fetcherData}
             allowedOffices={allowedOffices}
-            langIndex={schemaContext.langIndex}
-            setLangIndex={schemaContext.setLangIndex}
-            schemaNta={schemaContext.schema.shelter_nta}
-            schemaTa={schemaContext.schema.shelter_ta}
+            langIndex={ctxSchema.langIndex}
+            setLangIndex={ctxSchema.setLangIndex}
+            schemaNta={ctxSchema.byName.shelter_nta.get}
+            schemaTa={ctxSchema.byName.shelter_ta.get}
           >
             <Routes>
               <Route index element={<Navigate to={shelterIndex.siteMap.data}/>}/>

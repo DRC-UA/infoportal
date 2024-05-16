@@ -10,15 +10,16 @@ import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {
   add,
   DrcProject,
+  KoboIndex,
   KoboShelterTa,
   KoboValidation,
+  safeArray,
   safeNumber,
   Shelter_NTA,
   ShelterContractorPrices,
   shelterDrcProject,
   ShelterProgress,
   ShelterTaPriceLevel,
-  safeArray
 } from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {useShelterContext} from '@/features/Shelter/ShelterContext'
@@ -37,11 +38,14 @@ import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
-import {Utils} from '@/utils/utils'
+import {useEditKoboContext} from '@/core/context/KoboEditAnswersContext'
+import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
+import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
 
 export const ShelterTable = () => {
   const ctx = useShelterContext()
   const theme = useTheme()
+  const ctxEditKobo = useEditKoboContext()
   const {m, formatDate, formatLargeNumber} = useI18n()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -171,9 +175,28 @@ export const ShelterTable = () => {
         id: 'modality',
         type: 'select_one',
         head: m.modality,
+        subHeader: selectedIds.length > 0
+          ? <TableEditCellBtn onClick={() => ctxEditKobo.open({
+            formId: KoboIndex.byName('shelter_nta').id,
+            type: 'answers',
+            answerIds: selectedIds,
+            questionName: 'modality',
+          })}/>
+          : undefined,
         render: _ => {
           return {
-            label: ctx.nta.schema.translate.choice('modality', _.nta?.modality),
+            option: ctx.nta.schema.translate.choice('modality', _.nta?.modality),
+            label: _.nta
+              ? <KoboEditAnswer
+                value={_.nta.modality}
+                columnName="modality"
+                formId={KoboIndex.byName('shelter_nta').id}
+                answerId={_.nta.id}
+                onChange={newValue => {
+                  ctx.data.
+                }}
+              />
+              : <></>,
             value: _.nta?.modality,
           }
         },
@@ -775,7 +798,7 @@ export const ShelterTable = () => {
         }
       },
     ])
-  }, [ctx.data.mappedData, ctx.langIndex])
+  }, [ctx.data.mappedData, ctx.langIndex, selectedIds])
 
   const allowedData = useMemo(() => {
     if (ctx.allowedOffices.length === 0)

@@ -22,6 +22,8 @@ import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns'
 import {LicenseInfo} from '@mui/x-license-pro'
 import {useRouter} from 'next/router'
 import {KoboSchemaProvider} from '@/features/KoboSchema/KoboSchemaContext'
+import {KoboEditAnswersProvider} from '@/core/context/KoboEditAnswersContext'
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
@@ -62,6 +64,8 @@ const App = ({
   )
 }
 
+const queryClient = new QueryClient()
+
 const AppWithConfig = (props: AppProps) => {
   const settings = useAppSettings()
   const msal = useMemo(() => getMsalInstance(settings.conf), [settings.conf])
@@ -76,6 +80,8 @@ const AppWithConfig = (props: AppProps) => {
       _ => <MsalProvider children={_} instance={msal}/>,
       _ => <KoboSchemaProvider children={_}/>,
       _ => <ModalProvider children={_}/>,
+      _ => <KoboEditAnswersProvider children={_}/>,
+      _ => <QueryClientProvider client={queryClient} children={_}/>,
     ]}>
       <AppWithBaseContext {...props}/>
     </Provide>

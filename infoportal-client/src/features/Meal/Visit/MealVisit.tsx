@@ -6,9 +6,9 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 export const MealVisit = () => {
   const ctx = useKoboSchemaContext()
   useEffect(() => {
-    ctx.fetchers.fetch({}, 'meal_visitMonitoring')
+    ctx.fetchByName('meal_visitMonitoring')
   }, [])
-  if (ctx.fetchers.get.meal_visitMonitoring) {
+  if (ctx.byName.meal_visitMonitoring?.get) {
     return (
       <MealVisitProvider>
         <Outlet/>

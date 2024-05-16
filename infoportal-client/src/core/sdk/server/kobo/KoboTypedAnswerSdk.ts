@@ -67,7 +67,6 @@ export class KoboTypedAnswerSdk {
   constructor(private client: ApiClient, private sdk = new KoboAnswerSdk(client)) {
   }
 
-
   private readonly search = this.sdk.search
 
   readonly searchBn_Re = (filters: KoboAnswerFilter = {}) => {
