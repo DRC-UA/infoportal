@@ -23,7 +23,7 @@ import {LicenseInfo} from '@mui/x-license-pro'
 import {useRouter} from 'next/router'
 import {KoboSchemaProvider} from '@/features/KoboSchema/KoboSchemaContext'
 import {KoboEditAnswersProvider} from '@/core/context/KoboEditAnswersContext'
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import {KoboAnswersProvider} from '@/core/context/KoboAnswers'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
@@ -64,7 +64,6 @@ const App = ({
   )
 }
 
-const queryClient = new QueryClient()
 
 const AppWithConfig = (props: AppProps) => {
   const settings = useAppSettings()
@@ -80,8 +79,8 @@ const AppWithConfig = (props: AppProps) => {
       _ => <MsalProvider children={_} instance={msal}/>,
       _ => <KoboSchemaProvider children={_}/>,
       _ => <ModalProvider children={_}/>,
+      _ => <KoboAnswersProvider children={_}/>,
       _ => <KoboEditAnswersProvider children={_}/>,
-      _ => <QueryClientProvider client={queryClient} children={_}/>,
     ]}>
       <AppWithBaseContext {...props}/>
     </Provide>

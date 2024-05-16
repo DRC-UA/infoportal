@@ -2,12 +2,10 @@ import React, {useEffect, useMemo} from 'react'
 import {useDatabaseContext} from '@/features/Database/DatabaseContext'
 import {useParams} from 'react-router'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {map} from '@alexandreannic/ts-utils'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 import {databaseUrlParamsValidation} from '@/features/Database/Database'
-import {useIpToast} from '@/core/useToast'
 import {DatabaseKoboTableContent} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
 import {useSession} from '@/core/Session/SessionContext'
 import {Access, AccessLevel} from '@/core/sdk/server/access/Access'
@@ -21,6 +19,7 @@ import {SheetSkeleton} from '@/shared/Sheet/SheetSkeleton'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 
 export const DatabaseTableRoute = () => {
   const ctx = useDatabaseContext()
@@ -68,15 +67,14 @@ export const DatabaseTable = ({
 }: DatabaseTableProps) => {
   const {api} = useAppSettings()
   const {accesses, session} = useSession()
-  const {toastHttpError} = useIpToast()
   const ctxSchema = useKoboSchemaContext()
+  const ctxAnswers = useKoboAnswersContext()
 
-  useEffect(function getSchema() {
+  useEffect(() => {
     ctxSchema.fetchById(formId)
   }, [formId])
 
   const _form = useFetcher(() => form ? Promise.resolve(form) : api.kobo.form.get(formId))
-  const _answers = useFetcher(() => api.kobo.answer.searchByAccess({formId}))
 
   const access = useMemo(() => {
     const list = accesses.filter(Access.filterByFeature(AppFeatureId.kobo_database)).filter(_ => _.params?.koboFormId === formId)
@@ -87,11 +85,10 @@ export const DatabaseTable = ({
   }, [accesses])
 
   useEffect(() => {
-    _answers.fetch({})
+    ctxAnswers.fetcherById.fetch({}, formId)
     _form.fetch()
   }, [serverId, formId])
 
-  useEffectFn(_answers.error, toastHttpError)
 
   return (
     <>
@@ -101,7 +98,7 @@ export const DatabaseTable = ({
           <SheetSkeleton/>
         </>
       )}
-      {map(_answers.get, _form.get, ctxSchema.byId[formId]?.get, (answers, form, schema) => (
+      {map(ctxAnswers.byId(formId), _form.get, ctxSchema.byId[formId]?.get, (answers, form, schema) => (
         <DatabaseKoboTableProvider
           schema={schema}
           dataFilter={dataFilter}
