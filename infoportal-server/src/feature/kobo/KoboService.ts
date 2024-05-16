@@ -61,28 +61,27 @@ export class KoboService {
     const access = await this.access.searchForUser({featureId: AppFeatureId.kobo_database, user})
       .then(_ => _.filter(_ => _.params?.koboFormId === params.formId))
 
-    if (!user.admin && access.length === 0) return ApiPaginateHelper.make()([])
-
-    const accessFilters = seq(access).map(_ => _.params?.filters).compact().reduce<Record<string, string[]>>((acc, x) => {
-      Obj.entries(x).forEach(([k, v]) => {
-        if (Array.isArray(x[k])) {
-          acc[k] = seq([...acc[k] ?? [], ...x[k] ?? []]).distinct(_ => _)
-        } else {
-          acc[k] = v as any
-        }
+    if (!user.admin) {
+      if (access.length === 0) return ApiPaginateHelper.make()([])
+      const accessFilters = seq(access).map(_ => _.params?.filters).compact().reduce<Record<string, string[]>>((acc, x) => {
+        Obj.entries(x).forEach(([k, v]) => {
+          if (Array.isArray(x[k])) {
+            acc[k] = seq([...acc[k] ?? [], ...x[k] ?? []]).distinct(_ => _)
+          } else {
+            acc[k] = v as any
+          }
+        })
+        return acc
+      }, {} as const)
+      Obj.entries(accessFilters).forEach(([question, answer]) => {
+        if (!params.filters.filterBy) params.filters.filterBy = []
+        params.filters.filterBy?.push({
+          column: question,
+          value: answer
+        })
       })
-      return acc
-    }, {} as const)
-
-    const accessFiltersEntry = Obj.entries(
-      new Obj(accessFilters).transform((k, v) => [k, new Set(v)]).get()
-    )
-    const data = await this.searchAnswers(params)
-    if (!user.admin)
-      data.data = data.data.filter(_ => {
-        return accessFiltersEntry.every(([question, answer]) => answer.has(_.answers[question]))
-      })
-    return data
+    }
+    return this.searchAnswers(params)
   }
 
   readonly searchAnswers =
