@@ -62,8 +62,10 @@ export const DatabaseKoboTableProvider = (props: {
 
   const fetcherExternalFiles = useFetcher(() => {
     return Promise.all(props.schema.schemaUnsanitized.files.map(file =>
-      api.proxyRequest('GET', file.content).then((csv: string) => ({file: file.metadata.filename, csv}))
-    ))
+      api.proxyRequest('GET', file.content)
+        .then((csv: string) => ({file: file.metadata.filename, csv}))
+        .catch(() => console.error(`Cannot get Kobo external files ${file.metadata.filename} from ${file.content}`))
+    )).then(_ => _.filter(_ => _ !== undefined))
   })
 
   useEffect(() => {
