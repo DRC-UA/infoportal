@@ -7,7 +7,7 @@ import {AaSelect} from '@/shared/Select/Select'
 import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {DatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
+import {DatabaseKoboAnswerViewDialog} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {Switch, Theme} from '@mui/material'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
@@ -212,7 +212,7 @@ export const DatabaseKoboTableContent = ({
         }
       />
       {openModalAnswer && (
-        <DatabaseKoboAnswerView
+        <DatabaseKoboAnswerViewDialog
           open={!!openModalAnswer}
           onClose={() => setOpenModalAnswer(undefined)}
           answer={openModalAnswer}

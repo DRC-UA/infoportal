@@ -12,10 +12,13 @@ import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/Databas
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {KoboAnswerFlat} from '@infoportal-common'
+import {Page, PageTitle} from '@/shared/Page'
+import {useParams} from 'react-router'
+import * as yup from 'yup'
 
 export const useDatabaseKoboAnswerView = <T extends KoboAnswerFlat<any, any> = KoboMappedAnswer>(schema: KoboSchema): [(answer: T) => void, () => void] => {
   const [open, close] = useModal((answer: T) => (
-    <DatabaseKoboAnswerView
+    <DatabaseKoboAnswerViewDialog
       open={true}
       onClose={close}
       answer={answer}
@@ -24,7 +27,37 @@ export const useDatabaseKoboAnswerView = <T extends KoboAnswerFlat<any, any> = K
   return [open as any, close]
 }
 
-export const DatabaseKoboAnswerView = ({
+export const databaseUrlParamsValidation = yup.object({
+  serverId: yup.string().required(),
+  formId: yup.string().required(),
+  answerId: yup.string().required(),
+})
+
+export const DatabaseKoboAnswerViewPage = () => {
+  const {serverId, formId, answerId} = databaseUrlParamsValidation.validateSync(useParams())
+  const [showQuestionWithoutAnswer, setShowQuestionWithoutAnswer] = useState(false)
+  const x = useKoboSchemaContext()
+  x.fetchers.fetch({}, )
+  return (
+    <Page>
+      <PageTitle>
+        <Box sx={{display: 'flex', alignItems: 'center'}}>
+          {answerId}
+          <Box sx={{display: 'flex', alignItems: 'center', marginLeft: 'auto'}}>
+            <Txt sx={{fontSize: '1rem'}} color="hint">{m._koboDatabase.showAllQuestions}</Txt>
+            <Switch value={showQuestionWithoutAnswer} onChange={e => setShowQuestionWithoutAnswer(e.target.checked)}/>
+          </Box>
+        </Box>
+      </PageTitle>
+      <KoboAnswerFormView
+        showQuestionWithoutAnswer={showQuestionWithoutAnswer}
+        answer={answer}
+      />
+    </Page>
+  )
+}
+
+export const DatabaseKoboAnswerViewDialog = ({
   onClose,
   answer,
 }: {
