@@ -127,8 +127,8 @@ const _Datatable = <T extends DatatableRow>({
               render: (row: any) => {
                 const rendered = q.render(row)
                 if (rendered.export) return rendered.export
+                if (rendered.value instanceof Date) return format(rendered.value, 'yyyy-MM-dd hh:mm:ss z')
                 let value = rendered.label
-                if (value instanceof Date) value = format(value, 'yyyy-MM-dd hh:mm:ss')
                 if (isValidElement(value)) value = Utils.extractInnerText(value)
                 if (value !== '' && !isNaN(value as any)) value = +(value as number)
                 return value as any

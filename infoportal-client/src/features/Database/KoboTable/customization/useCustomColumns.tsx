@@ -7,11 +7,12 @@ import {
   KoboAnswer,
   KoboAnswerFlat,
   KoboBaseTags,
-  safeArray,
   KoboGeneralMapping,
   KoboIndex,
   KoboTagStatus,
-  ProtectionHhsTags, Protection_gbv,
+  Protection_gbv,
+  ProtectionHhsTags,
+  safeArray,
 } from '@infoportal-common'
 import React, {useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -24,7 +25,6 @@ import {SelectStatusBy, SelectStatusConfig, ShelterCashStatus} from '@/shared/cu
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
-import {Utils} from '@/utils/utils'
 
 export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const ctx = useDatabaseKoboTableContext()
@@ -78,11 +78,11 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       head: m.paidOn,
       type: 'date',
       render: (row: KoboAnswerFlat<{}, KoboBaseTags & KoboTagStatus>) => {
+        const date = row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined
         return {
-          export: row.tags?.lastStatusUpdate,
-          value: row.tags?.lastStatusUpdate,
+          value: date,
           label: <IpDatepicker
-            value={row.tags?.lastStatusUpdate}
+            value={date}
             onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'lastStatusUpdate'})}
           />
         }
