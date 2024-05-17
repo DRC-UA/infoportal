@@ -17,7 +17,6 @@ export const useKoboColumnDef = <T extends Record<string, any>>({
 
   return useMemo(() => {
     const schema = ctx.byId[formId]?.get
-    console.log(formId, columnName, ctx.byId[formId]?.get, schema?.schemaHelper.questionIndex[columnName as string])
     return {
       loading: ctx.byId[formId]?.loading,
       schema,

@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react'
+import React, {useCallback, useEffect, useMemo} from 'react'
 import {useDatabaseContext} from '@/features/Database/DatabaseContext'
 import {useParams} from 'react-router'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -20,6 +20,7 @@ import {useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {FetchParams} from '@/shared/hook/useFetchers'
 
 export const DatabaseTableRoute = () => {
   const ctx = useDatabaseContext()
@@ -90,9 +91,14 @@ export const DatabaseTable = ({
   }, [serverId, formId])
 
 
+  const loading = ctxAnswers.fetcherById.loading[formId]
+  const refetch = useCallback(async (p: FetchParams = {}) => {
+    await ctxAnswers.fetcherById.fetch(p, formId)
+  }, [formId])
+
   return (
     <>
-      {(ctxSchema.anyLoading || _answers.loading) && !_answers.get && (
+      {(ctxSchema.anyLoading || loading) && !ctxAnswers.fetcherById.get[formId] && (
         <>
           <Skeleton sx={{mx: 1, height: 54}}/>
           <SheetSkeleton/>
@@ -104,7 +110,8 @@ export const DatabaseTable = ({
           dataFilter={dataFilter}
           canEdit={overrideEditAccess ?? access.write}
           serverId={serverId}
-          fetcherAnswers={_answers}
+          refetch={refetch}
+          loading={loading}
           data={answers.data}
           form={form}
         >

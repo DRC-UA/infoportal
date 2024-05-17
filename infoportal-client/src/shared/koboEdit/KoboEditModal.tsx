@@ -1,17 +1,15 @@
 import {BasicDialog} from '@/shared/BasicDialog'
-import React, {useState} from 'react'
+import React, {useCallback, useState} from 'react'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {Alert, Box, Collapse, useTheme} from '@mui/material'
+import {Alert, Box, Collapse} from '@mui/material'
 import {useI18n} from '@/core/i18n'
-import {useAppSettings} from '@/core/context/ConfigContext'
 import {KoboAnswerId, KoboId} from '../../../../infoportal-common/src'
 import {IpInput} from '@/shared/Input/Input'
-import {useAsync} from '@/shared/hook/useAsync'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
-import {useIpToast} from '@/core/useToast'
 import {IpBtn} from '@/shared/Btn'
 import {useKoboColumnDef} from '@/shared/koboEdit/KoboSchemaWrapper'
+import {useKoboEditContext} from '@/core/context/KoboEditAnswersContext'
 
 export const KoboEditModal = ({
   formId,
@@ -26,25 +24,22 @@ export const KoboEditModal = ({
   onClose?: () => void,
   onUpdated?: (params: KoboUpdateAnswers<any, any>) => void,
 }) => {
-  const t = useTheme()
   const {m} = useI18n()
-  const {api} = useAppSettings()
-  const {toastError} = useIpToast()
+  const ctxEdit = useKoboEditContext()
   const {columnDef, schema, loading: loadingSchema} = useKoboColumnDef({formId, columnName})
 
   const [updatedSuccessfullyRows, setUpdatedSuccessfullyRows] = useState<number | undefined>()
-
-  const asyncUpdate = useAsync((params: KoboUpdateAnswers<any, any>) => {
-    setUpdatedSuccessfullyRows(undefined)
-    return api.kobo.answer.updateAnswers(params)
-      .then(() => {
-        onUpdated?.(params)
-        setUpdatedSuccessfullyRows(params.answerIds.length)
-      })
-  })
-
   const [value, setValue] = useState<any>()
-  const loading = asyncUpdate.loading || loadingSchema
+  const loading = ctxEdit.asyncUpdate.anyLoading || loadingSchema
+
+  const handleUpdate = useCallback((params: KoboUpdateAnswers) => {
+    setUpdatedSuccessfullyRows(undefined)
+    ctxEdit.asyncUpdate.call(params).then(() => {
+      setUpdatedSuccessfullyRows(params.answerIds.length)
+      onUpdated?.(params)
+    })
+  }, [])
+
 
   return (
     <BasicDialog
@@ -53,10 +48,10 @@ export const KoboEditModal = ({
       loading={loading}
       cancelLabel={m.close}
       confirmDisabled={loading}
-      onConfirm={() => asyncUpdate.call({formId, answerIds, question: columnName, answer: value})}
+      onConfirm={() => handleUpdate({formId, answerIds, question: columnName, answer: value})}
       title={`${m.edit} (${answerIds.length})`}
     >
-      {asyncUpdate.error && (
+      {ctxEdit.asyncUpdate.lastError && (
         <Alert color="error">
           {m.somethingWentWrong}
         </Alert>

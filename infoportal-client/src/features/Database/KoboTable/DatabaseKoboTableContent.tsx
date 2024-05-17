@@ -25,6 +25,7 @@ import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {Enum, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
 import {IpAlert} from '@/shared/Alert'
+import {useKoboEditContext} from '@/core/context/KoboEditAnswersContext'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -35,7 +36,7 @@ export const DatabaseKoboTableContent = ({
   const ctxSchema = useKoboSchemaContext()
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const ctxEditKobo = useEditKoboContext()
+  const ctxEditKobo = useKoboEditContext()
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat | undefined>()
   const [groupModalOpen, setOpenGroupModalAnswer] = useState<{
     columnId: string,
@@ -59,18 +60,8 @@ export const DatabaseKoboTableContent = ({
       onOpenGroupModal: setOpenGroupModalAnswer,
       onSelectColumn: (columnName: string) => ctxEditKobo.open({
         formId: ctx.form.id,
-        type: 'answers',
-        questionName: columnName,
+        question: columnName,
         answerIds: selectedIds,
-        onSuccess: (params) => {
-          const answerIdsIndex = new Set(params.answerIds)
-          ctx.setData(data => data.map(d => {
-            if (answerIdsIndex.has(d.id)) {
-              d[params.question] = params.answer
-            }
-            return d
-          }))
-        }
       })
     })
   }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns, ctx.externalFilesIndex])
@@ -108,7 +99,7 @@ export const DatabaseKoboTableContent = ({
             <SelectStatusBy
               enum="KoboValidation"
               compact
-              disabled={!ctx.canEdit || ctx.fetcherAnswers.loading}
+              disabled={!ctx.canEdit || ctx.loading}
               value={value}
               onChange={(e) => {
                 ctx.asyncUpdateTag.call({

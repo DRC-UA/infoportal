@@ -3,20 +3,20 @@ import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
 import {Kobo, KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {KeyOf, KoboAnswerFlat, KoboAnswerId, UUID} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {useIpToast} from '@/core/useToast'
 import {useI18n} from '@/core/i18n'
-import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
+import {useFetcher} from '@/shared/hook/useFetcher'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 import * as csvToJson from 'csvtojson'
 import {Obj, seq} from '@alexandreannic/ts-utils'
+import {FetchParams} from '@/shared/hook/useFetchers'
 
 export type ExternalFilesChoices = {list_name: string, name: string, label: string}
 export type KoboExternalFilesIndex = Record<string, Record<string, ExternalFilesChoices>>
 
 export interface DatabaseKoboContext {
-  fetcherAnswers: UseFetcher<() => ReturnType<ApiSdk['kobo']['answer']['searchByAccess']>>
+  refetch: (p?: FetchParams) => Promise<void>
   serverId: UUID
   schema: KoboSchemaHelper.Bundle
   canEdit?: boolean
@@ -29,6 +29,7 @@ export interface DatabaseKoboContext {
     value: any
   }) => Promise<void>>
   data: KoboMappedAnswer[]
+  loading?: boolean
   setData: Dispatch<SetStateAction<KoboMappedAnswer[]>>
   externalFilesIndex?: KoboExternalFilesIndex
 }
@@ -41,7 +42,8 @@ export const DatabaseKoboTableProvider = (props: {
   schema: KoboSchemaHelper.Bundle
   dataFilter?: (_: KoboMappedAnswer) => boolean
   children: ReactNode
-  fetcherAnswers: DatabaseKoboContext['fetcherAnswers']
+  loading?: boolean
+  refetch: (p?: FetchParams) => Promise<void>
   serverId: DatabaseKoboContext['serverId']
   canEdit: DatabaseKoboContext['canEdit']
   form: DatabaseKoboContext['form']
@@ -53,7 +55,7 @@ export const DatabaseKoboTableProvider = (props: {
     data,
     serverId,
     children,
-    fetcherAnswers,
+    refetch,
   } = props
   const {api} = useAppSettings()
   const {toastError} = useIpToast()
@@ -94,7 +96,7 @@ export const DatabaseKoboTableProvider = (props: {
   const asyncRefresh = useAsync(async () => {
     refreshRequestedFlag.current = true
     await api.koboApi.synchronizeAnswers(serverId, form.id)
-    await fetcherAnswers.fetch({force: true, clean: false})
+    await refetch({force: true, clean: false})
   })
 
   const asyncEdit = (answerId: KoboAnswerId) => api.koboApi.getEditUrl({serverId, formId: form.id, answerId})
@@ -129,7 +131,7 @@ export const DatabaseKoboTableProvider = (props: {
     }))
     return req.catch(e => {
       toastError(m._koboDatabase.tagNotUpdated)
-      fetcherAnswers.fetch({force: true, clean: false})
+      refetch({force: true, clean: false})
     })
   })
 

@@ -38,14 +38,14 @@ import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
-import {useEditKoboContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditContext} from '@/core/context/KoboEditAnswersContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
 
 export const ShelterTable = () => {
   const ctx = useShelterContext()
   const theme = useTheme()
-  const ctxEditKobo = useEditKoboContext()
+  const ctxEditKobo = useKoboEditContext()
   const {m, formatDate, formatLargeNumber} = useI18n()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -192,9 +192,6 @@ export const ShelterTable = () => {
                 columnName="modality"
                 formId={KoboIndex.byName('shelter_nta').id}
                 answerId={_.nta.id}
-                onChange={newValue => {
-                  ctx.data.
-                }}
               />
               : <></>,
             value: _.nta?.modality,
