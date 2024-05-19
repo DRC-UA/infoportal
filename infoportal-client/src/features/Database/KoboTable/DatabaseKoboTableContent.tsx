@@ -1,6 +1,6 @@
 import {IpBtn} from '@/shared/Btn'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
-import React, {useMemo, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {KoboAnswerFlat} from '@infoportal-common'
 import {AaSelect} from '@/shared/Select/Select'
@@ -24,19 +24,20 @@ import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCu
 import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {Enum, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
-import {IpAlert} from '@/shared/Alert'
-import {useKoboEditContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
   onDataChange,
 }: Pick<DatabaseTableProps, 'onFiltersChange' | 'onDataChange'>) => {
-  const ctx = useDatabaseKoboTableContext()
   const {m} = useI18n()
+  const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
+  const ctxEditKoboAnswer = useKoboEditAnswerContext()
+  const ctxEditKoboTag = useKoboEditTagContext()
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const ctxEditKobo = useKoboEditContext()
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat | undefined>()
   const [groupModalOpen, setOpenGroupModalAnswer] = useState<{
     columnId: string,
@@ -58,7 +59,7 @@ export const DatabaseKoboTableContent = ({
       externalFilesIndex: ctx.externalFilesIndex,
       repeatGroupsAsColumn: repeatGroupsAsColumns,
       onOpenGroupModal: setOpenGroupModalAnswer,
-      onSelectColumn: (columnName: string) => ctxEditKobo.open({
+      onSelectColumn: (columnName: string) => ctxEditKoboAnswer.open({
         formId: ctx.form.id,
         question: columnName,
         answerIds: selectedIds,
@@ -102,9 +103,10 @@ export const DatabaseKoboTableContent = ({
               disabled={!ctx.canEdit || ctx.loading}
               value={value}
               onChange={(e) => {
-                ctx.asyncUpdateTag.call({
+                ctxEditKoboTag.asyncUpdateById.call({
+                  formId: ctx.form.id,
                   answerIds: [row.id],
-                  key: '_validation',
+                  tag: '_validation',
                   value: e,
                 })
               }}
@@ -119,14 +121,14 @@ export const DatabaseKoboTableContent = ({
   const selectedHeader = useCustomSelectedHeader(selectedIds)
   const header = useCustomHeader()
 
+  useEffect(() => {
+    console.log('content.log')
+    console.log(ctx.data?.find(_ => _.id === '556998494'))
+  }, [ctx.data])
+
+
   return (
     <>
-      <IpAlert color="info" sx={{mb: 1}} deletable="permanent" id="kobo-webhook">
-        <b>НОВА ФУНКЦІЯ:</b> попрощайтеся з кнопкою ручної SYNC. Відповіді Kobo тепер синхронізуються автоматично після надсилання.
-        <br/>
-        <br/>
-        <b>NEW FEATURE:</b> Say goodbye to manual SYNC button. Kobo responses now synchronize automatically upon submission.
-      </IpAlert>
       <Datatable
         contentProps={{sx: {maxHeight: 'calc(100vh - 204px)'}}}
         showExportBtn

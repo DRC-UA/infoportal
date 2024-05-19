@@ -25,9 +25,11 @@ import {SelectStatusBy, SelectStatusConfig, ShelterCashStatus} from '@/shared/cu
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 
 export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const ctx = useDatabaseKoboTableContext()
+  const ctxEditTag = useKoboEditTagContext()
   const {m} = useI18n()
   return useMemo(() => {
     const individualsBreakdown: DatatableColumn.Props<any>[] = [
@@ -83,7 +85,14 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           value: date,
           label: <IpDatepicker
             value={date}
-            onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'lastStatusUpdate'})}
+            onChange={_ => {
+              ctxEditTag.asyncUpdateById.call({
+                formId: ctx.form.id,
+                answerIds: [row.id],
+                value: _,
+                tag: 'lastStatusUpdate'
+              })
+            }}
           />
         }
       }
@@ -110,8 +119,12 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
                   value={row.tags?.[key]}
                   placeholder={m.project}
                   onChange={_ => {
-                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key})
-                    // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
+                    ctxEditTag.asyncUpdateById.call({
+                      formId: ctx.form.id,
+                      answerIds: [row.id],
+                      value: _,
+                      tag: key
+                    })
                   }}
                 />
               )
@@ -144,8 +157,12 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
                   value={row.tags?.[key]}
                   placeholder={m.project}
                   onChange={_ => {
-                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key})
-                    // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
+                    ctxEditTag.asyncUpdateById.call({
+                      formId: ctx.form.id,
+                      answerIds: [row.id],
+                      value: _,
+                      tag: key
+                    })
                   }}
                 />
               )

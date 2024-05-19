@@ -1,6 +1,6 @@
 import {KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
 import {Enum} from '@alexandreannic/ts-utils'
-import {KoboAnswerFlat, KoboAnswerId, KoboBaseTags, KoboAttachment, KoboId} from '@infoportal-common'
+import {KoboAnswer, KoboAnswerFlat, KoboAnswerId, KoboAttachment, KoboBaseTags, KoboId} from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
 export type KoboServer = {
@@ -66,7 +66,7 @@ export type KoboMappedAnswer<T extends Record<string, any> = Record<string, Kobo
 
 export class Kobo {
 
-  static readonly mapPaginateAnswerMetaData = <
+  static readonly mapAnswer = <
     TKoboAnswer extends Record<string, any>,
     TTags extends KoboBaseTags,
     TCustomAnswer extends KoboAnswerFlat<TKoboAnswer, TTags>
@@ -74,16 +74,26 @@ export class Kobo {
     fnMap: (x: any) => TKoboAnswer,
     fnMapTags: (x: any) => TTags,
     fnMapCustom?: (x: KoboAnswerFlat<TKoboAnswer, TTags>) => TCustomAnswer
-  ) => (_: ApiPaginate<Record<string, any>>): ApiPaginate<TCustomAnswer> => {
+  ) => ({answers, ...meta}: KoboAnswer): TCustomAnswer => {
+    const r = {
+      ...fnMap(answers),
+      ...Kobo.mapAnswerMetaData(meta, fnMapTags),
+    }
+    return fnMapCustom ? fnMapCustom(r) : r
+  }
+
+  static readonly mapPaginateAnswer = <
+    TKoboAnswer extends Record<string, any>,
+    TTags extends KoboBaseTags,
+    TCustomAnswer extends KoboAnswerFlat<TKoboAnswer, TTags> = KoboAnswerFlat<TKoboAnswer, TTags>
+  >(
+    fnMap: (x: any) => TKoboAnswer,
+    fnMapTags: (x: any) => TTags,
+    fnMapCustom?: (x: KoboAnswerFlat<TKoboAnswer, TTags>) => TCustomAnswer
+  ) => (_: ApiPaginate<KoboAnswer>): ApiPaginate<TCustomAnswer> => {
     return ({
       ..._,
-      data: _.data.map(({answers, ...meta}) => {
-        const r = {
-          ...fnMap(answers),
-          ...Kobo.mapAnswerMetaData(meta, fnMapTags),
-        }
-        return fnMapCustom ? fnMapCustom(r) : r
-      })
+      data: _.data.map(Kobo.mapAnswer(fnMap, fnMapTags, fnMapCustom))
     })
   }
 

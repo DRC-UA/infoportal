@@ -35,6 +35,8 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 
 export interface CfmDataFilters extends KoboAnswerFilter {
 }
@@ -58,6 +60,8 @@ export const CfmPriorityLogo = ({
 
 export const CfmTable = ({}: any) => {
   const ctx = useCfmContext()
+  const ctxAnswers = useKoboAnswersContext()
+  const ctxEditTag = useKoboEditTagContext()
   const {langIndex, setLangIndex} = useKoboSchemaContext()
   const {m, formatDate, formatLargeNumber} = useI18n()
   const {session} = useSession()
@@ -68,7 +72,10 @@ export const CfmTable = ({}: any) => {
       api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('meal_cfmInternal').id),
       api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('meal_cfmExternal').id),
     ])
-    await ctx.fetcherData.fetch({force: true, clean: false})
+    await Promise.all([
+      ctxAnswers.byName.fetch({force: true, clean: false}, 'meal_cfmExternal'),
+      ctxAnswers.byName.fetch({force: true, clean: false}, 'meal_cfmInternal'),
+    ])
   })
   // const {toastHttpError, toastLoading} = useAaToast()
   //
@@ -109,21 +116,19 @@ export const CfmTable = ({}: any) => {
         return {
           value: (row?.tags?.[tag] ?? value) as string,
           label: (
-            <AaSelect
-              showUndefinedOption
+            <IpSelectSingle
               value={(row.tags as any)?.[tag] ?? value ?? ''}
               onChange={(tagChange) => {
-                ctx.updateTag.call({
+                ctxEditTag.asyncUpdateById.call({
                   formId: row.formId,
-                  answerId: row.id,
-                  key: tag,
+                  answerIds: [row.id],
+                  tag,
                   value: tagChange,
                 })
               }}
               options={enumKeys.map(_ => ({
                 value: _, children: translate ? translate[_] : _,
-              }))
-              }
+              }))}
             />
           )
         }
@@ -192,7 +197,7 @@ export const CfmTable = ({}: any) => {
             </>
           }
           data={ctx.visibleData}
-          loading={ctx.fetcherData.loading}
+          loading={ctx.fetching}
           getRenderRowKey={_ => _.form + _.id}
           columns={[
             {
@@ -211,10 +216,10 @@ export const CfmTable = ({}: any) => {
                     <IpSelectSingle
                       value={row.tags?.status ?? KoboMealCfmStatus.Open ?? ''}
                       onChange={(tagChange) => {
-                        ctx.updateTag.call({
+                        ctxEditTag.asyncUpdateById.call({
                           formId: row.formId,
-                          answerId: row.id,
-                          key: 'status',
+                          answerIds: [row.id],
+                          tag: 'status',
                           value: tagChange,
                         })
                       }}
@@ -306,7 +311,7 @@ export const CfmTable = ({}: any) => {
                       label={null}
                       value={row.project}
                       onChange={newValue => {
-                        ctx.updateTag.call({formId: row.formId, answerId: row.id, key: 'project', value: newValue})
+                        ctxEditTag.asyncUpdateById.call({formId: row.formId, answerIds: [row.id], tag: 'project', value: newValue})
                       }}
                     />
                 }
@@ -331,7 +336,7 @@ export const CfmTable = ({}: any) => {
                       value={row.tags?.focalPointEmail}
                       onChange={_ => {
                         if (_ === '' || Regexp.get.drcEmail.test(_))
-                          ctx.updateTag.call({formId: row.formId, answerId: row.id, key: 'focalPointEmail', value: _})
+                          ctxEditTag.asyncUpdateById.call({formId: row.formId, answerIds: [row.id], tag: 'focalPointEmail', value: _})
                       }}
                     >
                       {(value, onChange) => (
@@ -369,10 +374,10 @@ export const CfmTable = ({}: any) => {
                   option: ctx.schemaInternal.translate.choice('feedback_type', row.category),
                   label: row.form === CfmDataSource.Internal
                     ? ctx.schemaInternal.translate.choice('feedback_type', row.category)
-                    : <AaSelect
+                    : <IpSelectSingle
                       defaultValue={row.category}
                       onChange={newValue => {
-                        ctx.updateTag.call({formId: row.formId, answerId: row.id, key: 'feedbackTypeOverride', value: newValue})
+                        ctxEditTag.asyncUpdateById.call({formId: row.formId, answerIds: [row.id], tag: 'feedbackTypeOverride', value: newValue})
                       }}
                       options={Obj.entries(Meal_CfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
                     />

@@ -9,7 +9,7 @@ import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {IpBtn} from '@/shared/Btn'
 import {useKoboColumnDef} from '@/shared/koboEdit/KoboSchemaWrapper'
-import {useKoboEditContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 
 export const KoboEditModal = ({
   formId,
@@ -25,16 +25,16 @@ export const KoboEditModal = ({
   onUpdated?: (params: KoboUpdateAnswers<any, any>) => void,
 }) => {
   const {m} = useI18n()
-  const ctxEdit = useKoboEditContext()
+  const ctxEdit = useKoboEditAnswerContext()
   const {columnDef, schema, loading: loadingSchema} = useKoboColumnDef({formId, columnName})
 
   const [updatedSuccessfullyRows, setUpdatedSuccessfullyRows] = useState<number | undefined>()
   const [value, setValue] = useState<any>()
-  const loading = ctxEdit.asyncUpdate.anyLoading || loadingSchema
+  const loading = ctxEdit.asyncUpdateById.anyLoading || loadingSchema
 
   const handleUpdate = useCallback((params: KoboUpdateAnswers) => {
     setUpdatedSuccessfullyRows(undefined)
-    ctxEdit.asyncUpdate.call(params).then(() => {
+    ctxEdit.asyncUpdateById.call(params).then(() => {
       setUpdatedSuccessfullyRows(params.answerIds.length)
       onUpdated?.(params)
     })
@@ -51,7 +51,7 @@ export const KoboEditModal = ({
       onConfirm={() => handleUpdate({formId, answerIds, question: columnName, answer: value})}
       title={`${m.edit} (${answerIds.length})`}
     >
-      {ctxEdit.asyncUpdate.lastError && (
+      {ctxEdit.asyncUpdateById.lastError && (
         <Alert color="error">
           {m.somethingWentWrong}
         </Alert>

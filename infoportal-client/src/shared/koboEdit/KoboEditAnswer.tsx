@@ -1,31 +1,31 @@
 import {KoboAnswerId, KoboId} from '@infoportal-common'
 import {useKoboColumnDef} from '@/shared/koboEdit/KoboSchemaWrapper'
-import React, {Dispatch, SetStateAction} from 'react'
+import React from 'react'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {Skeleton} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {useI18n} from '@/core/i18n'
 import {KeyOf} from '@alexandreannic/ts-utils'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 
-export const KoboEditAnswer = <T extends Record<string, any>>({
+export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>>({
   value,
   onChange,
   formId,
   columnName,
   answerId,
-  setLocalData,
 }: {
-  value?: T
-  onChange?: (_: T) => void,
+  value?: T[K]
+  onChange?: (_: T[K]) => void,
   formId: KoboId,
-  columnName: KeyOf<T>
+  columnName: K
   answerId: KoboAnswerId
-  setLocalData: Dispatch<SetStateAction<T[]>>
 }) => {
   const {m} = useI18n()
   const {toastError, toastLoading} = useIpToast()
   const {api} = useAppSettings()
+  const ctx = useKoboEditAnswerContext()
 
   const {columnDef, schema, loading} = useKoboColumnDef({formId, columnName})
 
@@ -33,21 +33,11 @@ export const KoboEditAnswer = <T extends Record<string, any>>({
   if (!columnDef || !schema) return <></>
 
   const handleChange = async (newValue: any) => {
-    const loading = toastLoading(m.updatingTag(1, columnName, newValue))
-    const oldValue = value
-    onChange?.(newValue)
-    await api.kobo.answer.updateAnswers({
+    await ctx.asyncUpdateById.call({
       answerIds: [answerId],
-      answer: newValue,
-      formId,
+      answer: columnName,
       question: columnName,
-    }).then(() => {
-      loading.setOpen(false)
-    }).catch(() => {
-      loading.setOpen(false)
-      toastError(m.cannotUpdateTag(1, columnName, newValue))
-      if (oldValue)
-        onChange?.(oldValue)
+      formId,
     })
   }
 

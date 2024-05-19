@@ -5,32 +5,39 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
-import {KoboAnswerId, KoboIndex} from '@infoportal-common'
+import {KoboAnswerId, KoboId, KoboIndex} from '@infoportal-common'
 import {KeyOf} from '@alexandreannic/ts-utils'
 
 interface EditDataParams<T extends Record<string, any> = any> extends Omit<KoboUpdateAnswers<T>, 'answer'> {
   onSuccess?: (params: KoboUpdateAnswers<T>) => void
 }
 
-interface KoboUpdateAnswersByName<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>> {
-  formName: T
+interface KoboUpdateTagByName<T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>> {
+  formName: T,
   answerIds: KoboAnswerId[]
-  question: K
-  answer: InferTypedAnswer<T>[K]
+  tag: K
+  value: NonNullable<InferTypedAnswer<T>['tags']>[K]
+}
+
+interface KoboUpdateTagById {
+  formId: KoboId,
+  answerIds: KoboAnswerId[]
+  tag: string
+  value: any
 }
 
 export interface KoboEditAnswersContext {
-  asyncUpdateByName: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(_: KoboUpdateAnswersByName<T, K>) => Promise<void>>
-  asyncUpdateById: UseAsyncMultiple<(_: KoboUpdateAnswers) => Promise<void>>
+  asyncUpdateById: UseAsyncMultiple<(_: KoboUpdateTagById) => Promise<void>>
+  asyncUpdateByName: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(_: KoboUpdateTagByName<T, K>) => Promise<void>>
   open: Dispatch<SetStateAction<EditDataParams | undefined>>
   close: () => void
 }
 
 const Context = React.createContext({} as KoboEditAnswersContext)
 
-export const useKoboEditAnswerContext = () => useContext<KoboEditAnswersContext>(Context)
+export const useKoboEditTagContext = () => useContext<KoboEditAnswersContext>(Context)
 
-export const KoboEditAnswersProvider = ({
+export const KoboEditTagsProvider = ({
   children,
 }: {
   children: ReactNode
@@ -39,64 +46,50 @@ export const KoboEditAnswersProvider = ({
   const [editPopup, setEditPopup] = useState<EditDataParams | undefined>()
   const ctxAnswers = useKoboAnswersContext()
 
-  const updateCacheById = ({
-    formId,
-    question,
-    answerIds,
-    answer,
-  }: KoboUpdateAnswers) => {
-    const idsIndex = new Set(answerIds)
-    const currentAnswers = ctxAnswers.byId.get(formId)
-    if (!currentAnswers) return
-    ctxAnswers.byId.set(formId, {
-      ...currentAnswers, data: currentAnswers.data.map(a => {
-        if (idsIndex.has(a.id)) {
-          a[question] = answer
-        }
-        return {...a}
-      })
-    })
-  }
-
-  const updateCacheByName = <T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>({
+  const updateCacheByName = <T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>({
     formName,
-    question,
     answerIds,
-    answer,
-  }: KoboUpdateAnswersByName<T, K>) => {
+    tag,
+    value,
+  }: KoboUpdateTagByName<T, K>) => {
     const idsIndex = new Set(answerIds)
     const currentAnswers = ctxAnswers.byName.get(formName)
     if (!currentAnswers) return
     ctxAnswers.byName.set(formName, {
       ...currentAnswers, data: currentAnswers.data.map((a: any) => {
         if (idsIndex.has(a.id)) {
-          a[question] = answer
+          if (!a.tags) a.tags = {}
+          a.tags[tag] = value
+        }
+        return {...a}
+      })
+    })
+  }
+  const updateCacheById = ({
+    formId,
+    answerIds,
+    tag,
+    value,
+  }: KoboUpdateTagById) => {
+    const idsIndex = new Set(answerIds)
+    const currentAnswers = ctxAnswers.byId.get(formId)
+    if (!currentAnswers) return
+    ctxAnswers.byId.set(formId, {
+      ...currentAnswers, data: currentAnswers.data.map((a: any) => {
+        if (idsIndex.has(a.id)) {
+          if (!a.tags) a.tags = {}
+          a.tags[tag] = value
         }
         return {...a}
       })
     })
   }
 
-  const asyncUpdateById = useAsync(async (p: KoboUpdateAnswers) => {
-    await api.kobo.answer.updateAnswers({
+  const asyncUpdateByName = useAsync(async <T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(p: KoboUpdateTagByName<T, K>) => {
+    await api.kobo.answer.updateTag({
       answerIds: p.answerIds,
-      answer: p.answer,
-      formId: p.formId,
-      question: p.question,
-    }).then(() => {
-      updateCacheById(p)
-    }).catch((e) => {
-      ctxAnswers.byId.fetch({force: true, clean: false}, p.formId)
-      return Promise.reject(e)
-    })
-  }, {requestKey: ([_]) => _.formId})
-
-  const asyncUpdateByName = useAsync(async <T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(p: KoboUpdateAnswersByName<T, K>) => {
-    await api.kobo.answer.updateAnswers({
-      answerIds: p.answerIds,
-      answer: p.answer,
       formId: KoboIndex.byName(p.formName).id,
-      question: p.question,
+      tags: {[p.tag]: p.value},
     }).then(() => {
       updateCacheByName(p)
     }).catch((e) => {
@@ -105,10 +98,23 @@ export const KoboEditAnswersProvider = ({
     })
   }, {requestKey: ([_]) => _.formName})
 
+  const asyncUpdateById = useAsync(async (p: KoboUpdateTagById) => {
+    await api.kobo.answer.updateTag({
+      answerIds: p.answerIds,
+      formId: p.formId,
+      tags: {[p.tag]: p.value},
+    }).then(() => {
+      updateCacheById(p)
+    }).catch((e) => {
+      ctxAnswers.byId.fetch({force: true, clean: false}, p.formId)
+      return Promise.reject(e)
+    })
+  }, {requestKey: ([_]) => _.formId})
+
   return (
     <Context.Provider value={{
-      asyncUpdateById,
-      asyncUpdateByName,
+      asyncUpdateById: asyncUpdateById,
+      asyncUpdateByName: asyncUpdateByName,
       open: setEditPopup,
       close: () => setEditPopup(undefined)
     }}>

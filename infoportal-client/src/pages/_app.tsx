@@ -24,6 +24,7 @@ import {useRouter} from 'next/router'
 import {KoboSchemaProvider} from '@/features/KoboSchema/KoboSchemaContext'
 import {KoboEditAnswersProvider} from '@/core/context/KoboEditAnswersContext'
 import {KoboAnswersProvider} from '@/core/context/KoboAnswers'
+import {KoboEditTagsProvider} from '@/core/context/KoboEditTagsContext'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
@@ -81,6 +82,7 @@ const AppWithConfig = (props: AppProps) => {
       _ => <ModalProvider children={_}/>,
       _ => <KoboAnswersProvider children={_}/>,
       _ => <KoboEditAnswersProvider children={_}/>,
+      _ => <KoboEditTagsProvider children={_}/>,
     ]}>
       <AppWithBaseContext {...props}/>
     </Provide>

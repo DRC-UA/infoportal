@@ -4,6 +4,9 @@ import {
   DisplacementStatus,
   KoboFormName,
   KoboIndex,
+  KoboMealCfmHelper,
+  Meal_CfmExternal,
+  Meal_CfmInternal,
   Person,
   PersonDetails,
   Protection_gbv,
@@ -22,9 +25,10 @@ const make = <K extends KoboFormName, T>(key: K,
   return {[key]: params} as any
 }
 
-export type KoboMappedName = keyof KoboTypedAnswerSdk2['search']
 
-export type InferTypedAnswer<N extends KoboMappedName> = Awaited<ReturnType<KoboTypedAnswerSdk2['search'][N]>>['data'][number]
+export type KoboFormNameMapped = keyof KoboTypedAnswerSdk2['search']
+
+export type InferTypedAnswer<N extends KoboFormNameMapped> = Awaited<ReturnType<KoboTypedAnswerSdk2['search'][N]>>['data'][number]
 
 export class KoboTypedAnswerSdk2 {
   constructor(private client: ApiClient, private sdk = new KoboAnswerSdk(client)) {
@@ -33,6 +37,18 @@ export class KoboTypedAnswerSdk2 {
   private readonly buildSearch = (request: 'searchByAccess' | 'search') => {
     const req = this.sdk[request]
     return ({
+      ...make('meal_cfmInternal', (filters: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('meal_cfmInternal').id,
+        fnMapKobo: Meal_CfmInternal.map,
+        fnMapTags: KoboMealCfmHelper.map,
+        ...filters,
+      })),
+      ...make('meal_cfmExternal', (filters: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('meal_cfmExternal').id,
+        fnMapKobo: Meal_CfmExternal.map,
+        fnMapTags: KoboMealCfmHelper.map,
+        ...filters,
+      })),
       ...make('protection_groupSession', (filters: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('protection_groupSession').id,
         fnMapKobo: Protection_groupSession.map,
