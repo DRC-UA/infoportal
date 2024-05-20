@@ -175,7 +175,7 @@ export const KoboEditModal = ({
               }
               case 'select_multiple': {
                 return (
-                  <ScRadioGroup dense multiple value={value?.split(' ')} onChange={_ => setValue(_.join(' '))}>
+                  <ScRadioGroup dense multiple value={value ?? []} onChange={_ => setValue(_)}>
                     {_options}
                   </ScRadioGroup>
                 )

@@ -2,7 +2,6 @@ import React, {useMemo, useState} from 'react'
 import {Page} from '@/shared/Page'
 import {fnSwitch, map, Obj, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
-import {AaSelect} from '@/shared/Select/Select'
 import {Panel} from '@/shared/Panel'
 import {Box, useTheme} from '@mui/material'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
@@ -16,7 +15,6 @@ import {
   safeArray,
   safeNumber,
   Shelter_NTA,
-  ShelterContractorPrices,
   shelterDrcProject,
   ShelterProgress,
   ShelterTaPriceLevel,
@@ -33,7 +31,7 @@ import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableInput} from '@/shared/TableInput'
 import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyncBtn'
-import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
+import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
@@ -41,6 +39,7 @@ import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {ShelterContractor} from '../../../../../infoportal-common/src/kobo/mapper/ShelterContractor'
 
 export const ShelterTable = () => {
   const ctx = useShelterContext()
@@ -53,8 +52,8 @@ export const ShelterTable = () => {
   const {selectedNta, selectedTa} = useMemo(() => {
     const selected = selectedIds.map(_ => ctx.data.mappedData[ctx.data.index![_]])
     return {
-      selectedNta: seq(selected).map(_ => _.nta).compact(),
-      selectedTa: seq(selected).map(_ => _.ta).compact(),
+      selectedNta: seq(selected).map(_ => _.nta?.id).compact(),
+      selectedTa: seq(selected).map(_ => _.ta?.id).compact(),
     }
   }, [ctx.data.index, selectedIds])
 
@@ -385,13 +384,18 @@ export const ShelterTable = () => {
         head: m._shelter.validationStatus,
         width: 0,
         typeIcon: null,
-        options: () => [
-          {value: KoboValidation.Approved, label: <TableIcon color="success">check_circle</TableIcon>},
-          {value: KoboValidation.Rejected, label: <TableIcon color="error">cancel</TableIcon>},
-          {value: KoboValidation.Pending, label: <TableIcon color="warning">schedule</TableIcon>},
-        ],
+        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_nta',
+          answerIds: selectedNta,
+          type: 'select_one',
+          options: Obj.values(KoboValidation).map(_ => ({
+            value: _, label: _, before: <OptionLabelTypeCompact sx={{alignSelf: 'center', mr: 1}} type={SelectStatusConfig.statusType.KoboValidation[_]}/>
+          })),
+          tag: '_validation',
+        })}/>,
         render: (row: ShelterEntity) => {
           return {
+            option: row.nta?.tags?._validation,
             value: row.nta?.tags?._validation,
             label: map(row.nta, nta => (
               <SelectStatusBy
@@ -473,6 +477,12 @@ export const ShelterTable = () => {
         id: 'agreement',
         head: m._shelter.agreement,
         type: 'string',
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_ta',
+          answerIds: selectedTa,
+          type: 'text',
+          tag: 'agreement',
+        })}/>,
         render: row => {
           return {
             value: row.ta?.tags?.agreement,
@@ -496,6 +506,12 @@ export const ShelterTable = () => {
         head: m._shelter.workOrder,
         type: 'select_one',
         typeIcon: null,
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_ta',
+          answerIds: selectedTa,
+          type: 'text',
+          tag: 'workOrder',
+        })}/>,
         render: row => {
           return {
             option: row.ta?.tags?.workOrder ?? DatatableUtils.blank,
@@ -522,6 +538,13 @@ export const ShelterTable = () => {
         type: 'select_multiple',
         typeIcon: null,
         options: () => DatatableUtils.buildOptions(shelterDrcProject, true),
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_ta',
+          answerIds: selectedTa,
+          type: 'select_multiple',
+          options: shelterDrcProject,
+          tag: 'project',
+        })}/>,
         render: row => {
           const projectArray = safeArray(row.ta?.tags?.project)
           return {
@@ -582,6 +605,13 @@ export const ShelterTable = () => {
         head: m._shelter.contractor1,
         type: 'select_one',
         typeIcon: null,
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_ta',
+          answerIds: selectedTa,
+          type: 'select_one',
+          options: Obj.values(ShelterContractor),
+          tag: 'contractor1',
+        })}/>,
         render: row => {
           return {
             option: row.ta?.tags?.contractor1 ?? DatatableUtils.blank,
@@ -632,15 +662,22 @@ export const ShelterTable = () => {
         head: m._shelter.contractor2,
         type: 'select_one',
         typeIcon: null,
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_ta',
+          answerIds: selectedTa,
+          type: 'select_one',
+          options: Obj.values(ShelterContractor),
+          tag: 'contractor2',
+        })}/>,
         render: row => {
           return {
             option: row.ta?.tags?.contractor2 ?? DatatableUtils.blank,
             value: row.ta?.tags?.contractor2,
             label: map(row.ta, ta => (
-              <AaSelect
+              <ShelterSelectContractor
                 disabled={!KoboShelterTa.hasLot2(ta)}
-                showUndefinedOption
                 value={ta.tags?.contractor2}
+                oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
                   ctxEditTag.asyncUpdateByName.call({
                     formName: 'shelter_ta',
@@ -649,9 +686,6 @@ export const ShelterTable = () => {
                     value: tagChange,
                   })
                 }}
-                options={ShelterContractorPrices.findContractor({oblast: ta?.ben_det_oblast, lot: 2}).map(_ => ({
-                  value: _, children: _,
-                }))}
               />
             ))
           }
@@ -664,26 +698,31 @@ export const ShelterTable = () => {
         type: 'select_one',
         options: () => Obj.keys(ShelterTaPriceLevel).map(_ => ({value: _, label: _})),
         typeIcon: null,
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_ta',
+          answerIds: selectedTa,
+          type: 'select_one',
+          options: Obj.values(ShelterTaPriceLevel),
+          tag: 'damageLevel',
+        })}/>,
         render: row => {
           return {
             option: row.ta?.tags?.damageLevel ?? DatatableUtils.blank,
             value: row.ta?.tags?.damageLevel,
             label: map(row.ta, ta => {
               return (
-                <>
-                  <IpSelectSingle<ShelterTaPriceLevel>
-                    value={ta.tags?.damageLevel}
-                    onChange={(tagChange) => {
-                      ctxEditTag.asyncUpdateByName.call({
-                        formName: 'shelter_ta',
-                        answerIds: [ta.id],
-                        tag: 'damageLevel',
-                        value: tagChange,
-                      })
-                    }}
-                    options={Obj.keys(ShelterTaPriceLevel)}
-                  />
-                </>
+                <IpSelectSingle<ShelterTaPriceLevel>
+                  value={ta.tags?.damageLevel}
+                  onChange={(tagChange) => {
+                    ctxEditTag.asyncUpdateByName.call({
+                      formName: 'shelter_ta',
+                      answerIds: [ta.id],
+                      tag: 'damageLevel',
+                      value: tagChange,
+                    })
+                  }}
+                  options={Obj.keys(ShelterTaPriceLevel)}
+                />
               )
             })
           }
@@ -695,6 +734,12 @@ export const ShelterTable = () => {
         head: m.price,
         type: 'number',
         typeIcon: null,
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_ta',
+          answerIds: selectedTa,
+          type: 'decimal',
+          tag: 'price',
+        })}/>,
         render: row => {
           return {
             value: row.ta?.tags?.price,
@@ -765,6 +810,13 @@ export const ShelterTable = () => {
         head: m._shelter.progressStatus,
         width: 190,
         typeIcon: null,
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_ta',
+          answerIds: selectedTa,
+          type: 'select_one',
+          options: Object.keys(ShelterProgress),
+          tag: 'progress',
+        })}/>,
         options: () => Obj.keys(ShelterProgress).map(_ => ({value: _, label: m._shelter.progress[_]})),
         render: (row: ShelterEntity) => {
           return {
@@ -804,6 +856,12 @@ export const ShelterTable = () => {
         head: m._shelter.workDoneAt,
         type: 'date',
         width: 134,
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_ta',
+          answerIds: selectedTa,
+          type: 'datetime',
+          tag: 'workDoneAt',
+        })}/>,
         render: (row: ShelterEntity) => {
           return {
             value: row.ta?.tags?.workDoneAt,
@@ -839,107 +897,6 @@ export const ShelterTable = () => {
           select={{
             onSelect: setSelectedIds,
             getId: _ => _.id + '',
-            selectActions: (
-              <Box sx={{
-                width: '100%',
-                display: 'flex',
-                '& > *': {
-                  marginLeft: t => t.spacing(1) + ' !important',
-                }
-              }}>
-                <SelectStatusBy
-                  compact
-                  enum="KoboValidation"
-                  disabled={selectedNta.length === 0}
-                  sx={{maxWidth: 110}}
-                  label={m._shelter.validationStatus}
-                  onChange={(tagChange) => {
-                    map(selectedNta?.map(_ => _.id), ids => {
-                      ctxEditTag.asyncUpdateByName.call({
-                        formName: 'shelter_nta',
-                        answerIds: ids,
-                        tag: '_validation',
-                        value: tagChange,
-                      })
-                    })
-                  }}
-                />
-                <SelectDrcProjects
-                  sx={{maxWidth: 140}}
-                  defaultValue={[]}
-                  onChange={(tagChange) => {
-                    map(selectedTa.map(_ => _.id), ids => {
-                      ctxEditTag.asyncUpdateByName.call({
-                        formName: 'shelter_ta',
-                        answerIds: ids,
-                        tag: 'project',
-                        value: tagChange,
-                      })
-                    })
-                  }}
-                  options={shelterDrcProject}
-                />
-                <ShelterSelectContractor
-                  disabled={selectedTa.length === 0}
-                  sx={{maxWidth: 140}}
-                  label={m._shelter.contractor1}
-                  onChange={(tagChange) => {
-                    map(selectedTa?.map(_ => _.id), ids => {
-                      ctxEditTag.asyncUpdateByName.call({
-                        formName: 'shelter_ta',
-                        answerIds: ids,
-                        tag: 'contractor1',
-                        value: tagChange,
-                      })
-                    })
-                  }}
-                />
-                <ShelterSelectContractor
-                  disabled={selectedTa.length === 0}
-                  sx={{maxWidth: 140}}
-                  label={m._shelter.contractor2}
-                  onChange={(tagChange) => {
-                    map(selectedTa?.map(_ => _.id), ids => {
-                      ctxEditTag.asyncUpdateByName.call({
-                        formName: 'shelter_ta',
-                        answerIds: ids,
-                        tag: 'contractor2',
-                        value: tagChange,
-                      })
-                    })
-                  }}
-                />
-                <ShelterSelectStatus
-                  disabled={selectedTa.length === 0}
-                  sx={{maxWidth: 140}}
-                  label={m._shelter.progressStatus}
-                  onChange={(tagChange) => {
-                    map(selectedTa?.map(_ => _.id), ids => {
-                      ctxEditTag.asyncUpdateByName.call({
-                        formName: 'shelter_ta',
-                        answerIds: ids,
-                        tag: 'progress',
-                        value: tagChange,
-                      })
-                      if (tagChange === ShelterProgress.RepairWorksCompleted)
-                        ctxEditTag.asyncUpdateByName.call({
-                          formName: 'shelter_ta',
-                          answerIds: ids,
-                          tag: 'workDoneAt',
-                          value: new Date(),
-                        })
-                      else
-                        ctxEditTag.asyncUpdateByName.call({
-                          formName: 'shelter_ta',
-                          answerIds: ids,
-                          tag: 'workDoneAt',
-                          value: null
-                        })
-                    })
-                  }}
-                />
-              </Box>
-            )
           }}
           // showExportBtn
           header={

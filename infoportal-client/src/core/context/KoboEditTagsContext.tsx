@@ -17,6 +17,15 @@ interface EditDataParams<T extends Record<string, any> = any, K extends KeyOf<T>
   onSuccess?: (params: KoboUpdateAnswers<T>) => void
 }
 
+interface EditDataParamsByName<T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>> {
+  tag: K
+  type: KoboEditModalType
+  formName: T
+  options?: KoboEditModalOption[] | string[]
+  answerIds: KoboAnswerId[]
+  onSuccess?: (params: KoboUpdateAnswers<NonNullable<InferTypedAnswer<T>['tags']>>) => void
+}
+
 interface KoboUpdateTagByName<T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>> {
   formName: T,
   answerIds: KoboAnswerId[]
@@ -35,6 +44,7 @@ export interface KoboEditAnswersContext {
   asyncUpdateById: UseAsyncMultiple<(_: KoboUpdateTagById) => Promise<void>>
   asyncUpdateByName: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(_: KoboUpdateTagByName<T, K>) => Promise<void>>
   open: Dispatch<SetStateAction<EditDataParams | undefined>>
+  openByName: <T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(_: EditDataParamsByName<T, K>) => void
   close: () => void
 }
 
@@ -117,11 +127,20 @@ export const KoboEditTagsProvider = ({
     })
   }, {requestKey: ([_]) => _.formId})
 
+  const openByName = <T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>({formName, ...p}: EditDataParamsByName<T, K>) => {
+    setEditPopup({
+      formId: KoboIndex.byName(formName).id,
+      ...p,
+    })
+
+  }
+
   return (
     <Context.Provider value={{
       asyncUpdateById: asyncUpdateById,
       asyncUpdateByName: asyncUpdateByName,
       open: setEditPopup,
+      openByName,
       close: () => setEditPopup(undefined)
     }}>
       {children}
