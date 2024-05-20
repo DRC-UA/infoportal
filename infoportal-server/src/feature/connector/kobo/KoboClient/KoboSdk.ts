@@ -113,17 +113,31 @@ export class KoboSdk {
     formId: KoboId,
     submissionIds: string[],
     data: TData
-  }): Promise<ApiKoboUpdate> => {
-    return this.api.patch(`/v2/assets/${formId}/data/bulk/`, {
-      // qs: {format: 'json'},
-      body: {
-        payload: {
-          submission_ids: submissionIds,
-          data,
+  }): Promise<ApiKoboUpdate[]> => {
+    const chunkSize = 20;
+
+    // Split the submissionIds into chunks
+    const chunkedSubmissions = submissionIds.reduce((chunks, id, index) => {
+      if (index % chunkSize === 0) chunks.push([]);
+      chunks[chunks.length - 1].push(id);
+      return chunks;
+    }, [] as string[][]);
+
+    // Function to update data for a chunk
+    const updateChunk = (chunk: string[]) => {
+      return this.api.patch(`/v2/assets/${formId}/data/bulk/`, {
+        body: {
+          payload: {
+            submission_ids: chunk,
+            data,
+          }
         }
-      }
-    })
-  }
+      });
+    };
+
+    // Update data for all chunks
+    return Promise.all(chunkedSubmissions.map(updateChunk));
+  };
 
   readonly getFormByVersion = (formId: KoboId, versionId: string) => {
     return this.api.get<KoboApiForm>(`/v2/assets/${formId}/versions/${versionId}`)
