@@ -20,7 +20,6 @@ import {
 } from '@infoportal-common'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {TableIcon, TableIconBtn, TableIconProps} from '@/features/Mpca/MpcaData/TableIcon'
-import {AaSelect} from '@/shared/Select/Select'
 import {CfmData, cfmMakeEditRequestKey, CfmStatusIcon, cfmStatusIconIndex, useCfmContext} from '@/features/Cfm/CfmContext'
 import {NavLink} from 'react-router-dom'
 import {cfmIndex} from '@/features/Cfm/Cfm'
@@ -63,6 +62,16 @@ export const CfmTable = ({}: any) => {
   const ctxAnswers = useKoboAnswersContext()
   const ctxEditTag = useKoboEditTagContext()
   const {langIndex, setLangIndex} = useKoboSchemaContext()
+
+  // const [selectedFromId_Ids, setSelectedFromId_Ids] = useState<string[]>([])
+  // const {meal_cfmInternal: selectedIdsInternal, meal_cfmExternal: selectedIdsExternal} = useMemo(() => {
+  //   return selectedFromId_Ids.reduce((acc, _) => {
+  //     const [formId, id] = _.split('_')
+  //     acc[KoboIndex.searchById(formId)?.name as keyof typeof acc].push(id)
+  //     return acc
+  //   }, {} as Record<'meal_cfmInternal' | 'meal_cfmExternal', string[]>)
+  // }, [selectedFromId_Ids])
+
   const {m, formatDate, formatLargeNumber} = useI18n()
   const {session} = useSession()
   const {api} = useAppSettings()
@@ -77,6 +86,7 @@ export const CfmTable = ({}: any) => {
       ctxAnswers.byName.fetch({force: true, clean: false}, 'meal_cfmInternal'),
     ])
   })
+
   // const {toastHttpError, toastLoading} = useAaToast()
   //
   // const _editExternal = useFetchers(async (answerId: KoboAnswerId) => {
@@ -168,6 +178,9 @@ export const CfmTable = ({}: any) => {
     <Page width="full">
       <Panel>
         <Datatable
+          // select={{
+          //   getId: _ => _.formId + '_' + _.id,
+          //   onSelect: _ => setSelectedFromId_Ids(_),
           showExportBtn
           defaultFilters={{
             status: [
@@ -179,7 +192,8 @@ export const CfmTable = ({}: any) => {
           id="cfm"
           header={
             <>
-              <AaSelect<number>
+              <IpSelectSingle
+                hideNullOption
                 sx={{maxWidth: 128, mr: 1}}
                 defaultValue={langIndex}
                 onChange={setLangIndex}
@@ -299,7 +313,6 @@ export const CfmTable = ({}: any) => {
               head: m.project,
               id: 'project',
               width: 180,
-              // options: () => Obj.keys(Meal_CfmInternal.options.feedback_type).map(k => ({value: k, label: ctx.schemaExternal.translate('feedback_type', k)})),
               render: row => {
                 return {
                   export: row.project,

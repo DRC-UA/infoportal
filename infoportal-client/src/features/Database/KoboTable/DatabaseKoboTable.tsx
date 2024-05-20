@@ -86,25 +86,25 @@ export const DatabaseTable = ({
   }, [accesses])
 
   useEffect(() => {
-    ctxAnswers.fetcherById.fetch({}, formId)
+    ctxAnswers.byId.fetch({}, formId)
     _form.fetch()
   }, [serverId, formId])
 
 
-  const loading = ctxAnswers.fetcherById.loading[formId]
+  const loading = ctxAnswers.byId.loading(formId)
   const refetch = useCallback(async (p: FetchParams = {}) => {
-    await ctxAnswers.fetcherById.fetch(p, formId)
+    await ctxAnswers.byId.fetch(p, formId)
   }, [formId])
 
   return (
     <>
-      {(ctxSchema.anyLoading || loading) && !ctxAnswers.fetcherById.get[formId] && (
+      {(ctxSchema.anyLoading || loading) && !ctxAnswers.byId.get(formId) && (
         <>
           <Skeleton sx={{mx: 1, height: 54}}/>
           <SheetSkeleton/>
         </>
       )}
-      {map(ctxAnswers.byId(formId), _form.get, ctxSchema.byId[formId]?.get, (answers, form, schema) => (
+      {map(ctxAnswers.byId.get(formId), _form.get, ctxSchema.byId[formId]?.get, (answers, form, schema) => (
         <DatabaseKoboTableProvider
           schema={schema}
           dataFilter={dataFilter}

@@ -18,7 +18,7 @@ export type KoboAnswersContext = {
     set: (id: KoboId, value: ApiPaginate<KoboMappedAnswer>) => void,
     fetch: (p: FetchParams, id: KoboId) => Promise<ApiPaginate<KoboMappedAnswer>>,
     get: (id: KoboAnswerId) => undefined | ApiPaginate<KoboMappedAnswer>,
-    loading?: (id: KoboAnswerId) => boolean | undefined
+    loading: (id: KoboAnswerId) => boolean | undefined
   },
   byName: {
     set: <T extends KoboFormNameMapped>(name: T, value: ApiPaginate<InferTypedAnswer<T>>) => void,

@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction, useRef, useState} from 'react'
+import {Dispatch, SetStateAction, useMemo, useRef, useState} from 'react'
 
 export type Func<R = any> = (...args: any[]) => R
 
@@ -101,7 +101,7 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
     fetch$.current.query = undefined
   }
 
-  return {
+  return useMemo(() => ({
     get: entity,
     set: setEntity,
     loading,
@@ -110,5 +110,5 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
     // TODO(Alex) not sure the error is legitimate
     fetch: fetch as any,
     clearCache
-  }
+  }), [entity, fetcher, error, loading, callIndex])
 }

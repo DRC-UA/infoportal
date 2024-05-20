@@ -57,7 +57,7 @@ const CfmSidebar = () => {
       coc,
       total: ctx.mappedData?.length
     }
-  }, [ctx.fetcherData])
+  }, [ctx.mappedData])
 
   return (
     <Sidebar>

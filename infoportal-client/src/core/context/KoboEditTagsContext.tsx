@@ -1,5 +1,5 @@
 import React, {Dispatch, ReactNode, SetStateAction, useContext, useState} from 'react'
-import {KoboEditModal} from '@/shared/koboEdit/KoboEditModal'
+import {KoboEditModalOption, KoboEditModalTag, KoboEditModalType} from '@/shared/koboEdit/KoboEditModal'
 import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -8,7 +8,12 @@ import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboT
 import {KoboAnswerId, KoboId, KoboIndex} from '@infoportal-common'
 import {KeyOf} from '@alexandreannic/ts-utils'
 
-interface EditDataParams<T extends Record<string, any> = any> extends Omit<KoboUpdateAnswers<T>, 'answer'> {
+interface EditDataParams<T extends Record<string, any> = any, K extends KeyOf<T> = KeyOf<T>> {
+  tag: K
+  type: KoboEditModalType
+  formId: KoboId
+  options?: KoboEditModalOption[] | string[]
+  answerIds: KoboAnswerId[]
   onSuccess?: (params: KoboUpdateAnswers<T>) => void
 }
 
@@ -65,6 +70,7 @@ export const KoboEditTagsProvider = ({
       })
     })
   }
+
   const updateCacheById = ({
     formId,
     answerIds,
@@ -120,9 +126,11 @@ export const KoboEditTagsProvider = ({
     }}>
       {children}
       {editPopup && (
-        <KoboEditModal
+        <KoboEditModalTag
+          type={editPopup.type}
           formId={editPopup.formId}
-          columnName={editPopup.question}
+          tag={editPopup.tag}
+          options={editPopup.options}
           answerIds={editPopup.answerIds}
           onClose={() => setEditPopup(undefined)}
           onUpdated={editPopup.onSuccess}

@@ -64,7 +64,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
             rendered.value = [DatatableUtils.blank]
           else if (rendered.value === undefined || rendered.value === null)
             rendered.value = DatatableUtils.blank
-          if (rendered.option === undefined) rendered.option = rendered.label
+          if (!Object.hasOwn(rendered, 'option')) rendered.option = rendered.label
           return rendered as any
         }
       }

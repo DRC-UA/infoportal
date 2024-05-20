@@ -1,5 +1,5 @@
 import React, {Dispatch, ReactNode, SetStateAction, useContext, useState} from 'react'
-import {KoboEditModal} from '@/shared/koboEdit/KoboEditModal'
+import {KoboEditModalAnswer} from '@/shared/koboEdit/KoboEditModal'
 import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -114,7 +114,7 @@ export const KoboEditAnswersProvider = ({
     }}>
       {children}
       {editPopup && (
-        <KoboEditModal
+        <KoboEditModalAnswer
           formId={editPopup.formId}
           columnName={editPopup.question}
           answerIds={editPopup.answerIds}

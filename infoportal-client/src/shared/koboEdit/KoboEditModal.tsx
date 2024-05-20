@@ -1,17 +1,35 @@
 import {BasicDialog} from '@/shared/BasicDialog'
-import React, {useCallback, useState} from 'react'
+import React, {ReactNode, useMemo, useState} from 'react'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Alert, Box, Collapse} from '@mui/material'
 import {useI18n} from '@/core/i18n'
-import {KoboAnswerId, KoboId} from '../../../../infoportal-common/src'
+import {KoboAnswerId, KoboId} from '@infoportal-common'
 import {IpInput} from '@/shared/Input/Input'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {IpBtn} from '@/shared/Btn'
 import {useKoboColumnDef} from '@/shared/koboEdit/KoboSchemaWrapper'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {OptionLabelTypeCompact, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 
-export const KoboEditModal = ({
+export type KoboEditModalOption = {
+  value: string,
+  label: string,
+  desc?: string
+  before?: ReactNode
+}
+
+export type KoboEditModalType = 'select_one'
+  | 'select_multiple'
+  | 'text'
+  | 'integer'
+  | 'decimal'
+  | 'datetime'
+  | 'date'
+
+export const KoboEditModalAnswer = ({
   formId,
   columnName,
   answerIds,
@@ -28,62 +46,137 @@ export const KoboEditModal = ({
   const ctxEdit = useKoboEditAnswerContext()
   const {columnDef, schema, loading: loadingSchema} = useKoboColumnDef({formId, columnName})
 
-  const [updatedSuccessfullyRows, setUpdatedSuccessfullyRows] = useState<number | undefined>()
-  const [value, setValue] = useState<any>()
-  const loading = ctxEdit.asyncUpdateById.anyLoading || loadingSchema
-
-  const handleUpdate = useCallback((params: KoboUpdateAnswers) => {
-    setUpdatedSuccessfullyRows(undefined)
-    ctxEdit.asyncUpdateById.call(params).then(() => {
-      setUpdatedSuccessfullyRows(params.answerIds.length)
-      onUpdated?.(params)
+  const fetcherUpdate = useFetcher((value: any) => {
+    const p = {formId, answerIds, question: columnName, answer: value}
+    return ctxEdit.asyncUpdateById.call(p).then(() => {
+      onUpdated?.(p)
+      return answerIds.length
     })
-  }, [])
-
+  })
 
   return (
-    <BasicDialog
-      open={!!columnName}
+    <KoboEditModal
       onClose={onClose}
-      loading={loading}
-      cancelLabel={m.close}
-      confirmDisabled={loading}
-      onConfirm={() => handleUpdate({formId, answerIds, question: columnName, answer: value})}
+      loading={loadingSchema}
+      fetcherUpdate={fetcherUpdate}
       title={`${m.edit} (${answerIds.length})`}
+      type={columnDef?.type as any}
+      options={columnDef ? schema?.schemaHelper.choicesIndex[columnDef.select_from_list_name!]?.map(_ =>
+        ({value: _.name, desc: _.name, label: schema.translate.choice(columnName, _.name)})
+      ) : undefined}
+    />
+  )
+}
+
+export const KoboEditModalTag = ({
+  formId,
+  tag,
+  answerIds,
+  type,
+  options,
+  onClose,
+  onUpdated,
+}: {
+  formId: KoboId,
+  tag: string
+  type: KoboEditModalType
+  answerIds: KoboAnswerId[]
+  options?: string[] | KoboEditModalOption[]
+  onClose?: () => void,
+  onUpdated?: (_: any) => void,
+}) => {
+  const {m} = useI18n()
+  const ctxEdit = useKoboEditTagContext()
+
+  const fetcherUpdate = useFetcher((value: any) => {
+    console.log('selectedIds', answerIds)
+    return ctxEdit.asyncUpdateById.call({formId, answerIds, tag, value}).then(() => {
+      onUpdated?.(value)
+      return answerIds.length
+    })
+  })
+
+  return (
+    <KoboEditModal
+      onClose={onClose}
+      fetcherUpdate={fetcherUpdate}
+      title={`${m.edit} (${answerIds.length})`}
+      type={type}
+      options={options}
+    />
+  )
+}
+
+export const KoboEditModal = ({
+  title,
+  loading,
+  onClose,
+  type,
+  options,
+  fetcherUpdate,
+}: {
+  type?: KoboEditModalType
+  title?: string
+  fetcherUpdate: UseFetcher<(_: any) => Promise<number>>
+  onClose?: () => void,
+  options?: string[] | KoboEditModalOption[]
+  loading?: boolean
+}) => {
+  const [value, setValue] = useState<any>()
+  const {m} = useI18n()
+  const _options = useMemo(() => {
+    const harmonized: KoboEditModalOption[] | undefined = options?.map(x => typeof x === 'string' ? {value: x, label: x,} : x) as any
+    return harmonized?.map(_ =>
+      <ScRadioGroupItem
+        dense
+        key={_.value}
+        value={_.value}
+        before={_.before}
+        description={_.desc}
+        title={_.label}
+      />
+    )
+  }, [options])
+
+  const _loading = loading || fetcherUpdate.loading
+  return (
+    <BasicDialog
+      open={true}
+      onClose={onClose}
+      loading={_loading}
+      cancelLabel={m.close}
+      confirmDisabled={_loading}
+      onConfirm={() => fetcherUpdate.fetch({force: true, clean: true}, value)}
+      title={title}
     >
-      {ctxEdit.asyncUpdateById.lastError && (
+      {fetcherUpdate.error && (
         <Alert color="error">
           {m.somethingWentWrong}
         </Alert>
       )}
-      {updatedSuccessfullyRows && (
+      {fetcherUpdate.get && (
         <Alert color="success" action={
           <>
-            <IpBtn onClick={() => setUpdatedSuccessfullyRows(undefined)}>{m.change}</IpBtn>
+            <IpBtn onClick={() => fetcherUpdate.clearCache()}>{m.change}</IpBtn>
           </>
-        }>{m.successfullyEdited(updatedSuccessfullyRows)}</Alert>
+        }>{m.successfullyEdited(fetcherUpdate.get)}</Alert>
       )}
-      <Collapse in={!updatedSuccessfullyRows}>
+      <Collapse in={!fetcherUpdate.get}>
         <Box>
-          <Box sx={{mb: 1.5, minWidth: 340}}>{schema?.translate.question(columnName)}</Box>
+          <Box sx={{mb: 1.5, minWidth: 340}}>{title}</Box>
           {(() => {
-            if (!columnDef || !schema) return
-            switch (columnDef.type) {
+            switch (type) {
               case 'select_one': {
                 return (
                   <ScRadioGroup dense value={value} onChange={setValue}>
-                    {schema.schemaHelper.choicesIndex[columnDef.select_from_list_name!].map(_ =>
-                      <ScRadioGroupItem dense key={_.name} value={_.name} description={_.name} title={schema.translate.choice(columnName, _.name)}/>
-                    )}
+                    {_options}
                   </ScRadioGroup>
                 )
               }
               case 'select_multiple': {
                 return (
                   <ScRadioGroup dense multiple value={value?.split(' ')} onChange={_ => setValue(_.join(' '))}>
-                    {schema.schemaHelper.choicesIndex[columnDef.select_from_list_name!].map(_ =>
-                      <ScRadioGroupItem dense key={_.name} value={_.name} description={_.name} title={schema.translate.choice(columnName, _.name)}/>
-                    )}
+                    {_options}
                   </ScRadioGroup>
                 )
               }
