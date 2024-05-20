@@ -23,7 +23,6 @@ import {
 } from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {useShelterContext} from '@/features/Shelter/ShelterContext'
-import {IpIconBtn} from '@/shared/IconBtn'
 import {IpInput} from '@/shared/Input/Input'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {ShelterSelectContractor, ShelterSelectStatus} from '@/features/Shelter/Data/ShelterTableInputs'
@@ -41,11 +40,13 @@ import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 
 export const ShelterTable = () => {
   const ctx = useShelterContext()
   const theme = useTheme()
-  const ctxEditKobo = useKoboEditAnswerContext()
+  const ctxEditAnswers = useKoboEditAnswerContext()
+  const ctxEditTag = useKoboEditTagContext()
   const {m, formatDate, formatLargeNumber} = useI18n()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -73,7 +74,7 @@ export const ShelterTable = () => {
                 {map(_.nta, answer =>
                   <>
                     <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctx.nta.openModalAnswer(answer)}/>
-                    <TableIconBtn tooltip={m.edit} href={ctx.nta.asyncEdit(answer.id)} target="_blank" children="edit"/>
+                    <TableIconBtn tooltip={m.edit} href={ctx.asyncEdit(KoboIndex.byName('shelter_nta').id, answer.id)} target="_blank" children="edit"/>
                   </>
                 ) ?? (
                   <>
@@ -176,7 +177,7 @@ export const ShelterTable = () => {
         type: 'select_one',
         head: m.modality,
         subHeader: selectedIds.length > 0
-          ? <TableEditCellBtn onClick={() => ctxEditKobo.open({
+          ? <TableEditCellBtn onClick={() => ctxEditAnswers.open({
             formId: KoboIndex.byName('shelter_nta').id,
             answerIds: selectedIds,
             question: 'modality',
@@ -207,10 +208,11 @@ export const ShelterTable = () => {
           label: <TableInput
             originalValue={nta.interviewee_name}
             value={nta.tags?.interviewee_name ?? nta.interviewee_name}
-            onChange={_ => ctx.nta.asyncUpdate.call({
-              answerId: nta.id,
-              key: 'interviewee_name',
-              value: _
+            onChange={_ => ctxEditAnswers.asyncUpdateByName.call({
+              formName: 'shelter_nta',
+              answerIds: [nta.id],
+              question: 'interviewee_name',
+              answer: _
             })}
           />
         })) ?? {value: DatatableUtils.blank, label: ''}
@@ -228,10 +230,11 @@ export const ShelterTable = () => {
               type="number"
               originalValue={nta.pay_det_tax_id_num}
               value={nta.tags?.pay_det_tax_id_num ?? nta.pay_det_tax_id_num}
-              onChange={_ => ctx.nta.asyncUpdate.call({
-                answerId: nta.id,
-                key: 'pay_det_tax_id_num',
-                value: _
+              onChange={_ => ctxEditAnswers.asyncUpdateByName.call({
+                formName: 'shelter_nta',
+                answerIds: [nta.id],
+                question: 'pay_det_tax_id_num',
+                answer: _
               })}
             />
           }
@@ -396,10 +399,11 @@ export const ShelterTable = () => {
                 compact
                 value={nta.tags?._validation}
                 onChange={(tagChange) => {
-                  ctx.nta.asyncUpdate.call({
-                    answerId: nta.id,
-                    key: '_validation',
-                    value: tagChange,
+                  ctxEditTag.asyncUpdateByName.call({
+                    formName: 'shelter_nta',
+                    answerIds: [nta.id],
+                    tag: '_validation',
+                    value: tagChange ?? undefined,
                   })
                 }}
               />
@@ -422,7 +426,7 @@ export const ShelterTable = () => {
             label: map(_.ta, form =>
               <>
                 <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctx.ta.openModalAnswer(form)}/>
-                <TableIconBtn tooltip={m.edit} href={ctx.ta.asyncEdit(form.id)} target="_blank" children="edit"/>
+                <TableIconBtn tooltip={m.edit} href={ctx.asyncEdit(KoboIndex.byName('shelter_ta').id, form.id)} target="_blank" children="edit"/>
               </>
             )
           }
@@ -476,7 +480,12 @@ export const ShelterTable = () => {
               <TableInput
                 originalValue={null}
                 value={row.ta?.tags?.agreement}
-                onChange={_ => ctx.ta.asyncUpdate.call({answerId: ta.id, key: 'agreement', value: _})}
+                onChange={_ => ctxEditTag.asyncUpdateByName.call({
+                  formName: 'shelter_ta',
+                  answerIds: [ta.id],
+                  tag: 'agreement',
+                  value: _,
+                })}
               />
             ))
           }
@@ -495,7 +504,12 @@ export const ShelterTable = () => {
               <TableInput
                 originalValue={null}
                 value={row.ta?.tags?.workOrder}
-                onChange={_ => ctx.ta.asyncUpdate.call({answerId: ta.id, key: 'workOrder', value: _})}
+                onChange={_ => ctxEditTag.asyncUpdateByName.call({
+                  formName: 'shelter_ta',
+                  answerIds: [ta.id],
+                  tag: 'workOrder',
+                  value: _,
+                })}
               />
             ))
           }
@@ -518,10 +532,11 @@ export const ShelterTable = () => {
                   debounce={1000}
                   value={projectArray}
                   onChange={(projectChange: DrcProject[] | undefined) => {
-                    ctx.ta.asyncUpdate.call({
-                      answerId: ta.id,
-                      key: 'project',
-                      value: projectChange ?? undefined
+                    ctxEditTag.asyncUpdateByName.call({
+                      formName: 'shelter_ta',
+                      answerIds: [ta.id],
+                      tag: 'project',
+                      value: projectChange ?? undefined,
                     })
                   }}
                 >
@@ -577,11 +592,11 @@ export const ShelterTable = () => {
                 value={ta.tags?.contractor1}
                 oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
-                  ctx.ta.asyncUpdate.call({
-                    answerId: ta.id,
-                    key: 'contractor1',
+                  ctxEditTag.asyncUpdateByName.call({
+                    formName: 'shelter_ta',
+                    answerIds: [ta.id],
+                    tag: 'contractor1',
                     value: tagChange,
-                    // value: ShelterContractor[tagChange],
                   })
                 }}
               />
@@ -627,9 +642,10 @@ export const ShelterTable = () => {
                 showUndefinedOption
                 value={ta.tags?.contractor2}
                 onChange={(tagChange) => {
-                  ctx.ta.asyncUpdate.call({
-                    answerId: ta.id,
-                    key: 'contractor2',
+                  ctxEditTag.asyncUpdateByName.call({
+                    formName: 'shelter_ta',
+                    answerIds: [ta.id],
+                    tag: 'contractor2',
                     value: tagChange,
                   })
                 }}
@@ -658,9 +674,10 @@ export const ShelterTable = () => {
                   <IpSelectSingle<ShelterTaPriceLevel>
                     value={ta.tags?.damageLevel}
                     onChange={(tagChange) => {
-                      ctx.ta.asyncUpdate.call({
-                        answerId: ta.id,
-                        key: 'damageLevel',
+                      ctxEditTag.asyncUpdateByName.call({
+                        formName: 'shelter_ta',
+                        answerIds: [ta.id],
+                        tag: 'damageLevel',
                         value: tagChange,
                       })
                     }}
@@ -685,7 +702,14 @@ export const ShelterTable = () => {
               <DebouncedInput<number | undefined>
                 debounce={1250}
                 value={row.ta?.tags?.price}
-                onChange={_ => ctx.ta.asyncUpdate.call({answerId: ta.id, key: 'price', value: _})}
+                onChange={_ => {
+                  ctxEditTag.asyncUpdateByName.call({
+                    formName: 'shelter_ta',
+                    answerIds: [ta.id],
+                    tag: 'price',
+                    value: _,
+                  })
+                }}
               >
                 {(value, onChange) => (
                   <IpInput
@@ -749,21 +773,24 @@ export const ShelterTable = () => {
               <ShelterSelectStatus
                 value={ta.tags?.progress}
                 onChange={(tagChange) => {
-                  ctx.ta.asyncUpdate.call({
-                    answerId: ta.id,
-                    key: 'progress',
+                  ctxEditTag.asyncUpdateByName.call({
+                    formName: 'shelter_ta',
+                    answerIds: [ta.id],
+                    tag: 'progress',
                     value: tagChange,
                   })
                   if (tagChange === ShelterProgress.RepairWorksCompleted)
-                    ctx.ta.asyncUpdate.call({
-                      answerId: ta.id,
-                      key: 'workDoneAt',
+                    ctxEditTag.asyncUpdateByName.call({
+                      formName: 'shelter_ta',
+                      answerIds: [ta.id],
+                      tag: 'workDoneAt',
                       value: new Date(),
                     })
                   else if (ta.tags?.workDoneAt)
-                    ctx.ta.asyncUpdate.call({
-                      answerId: ta.id,
-                      key: 'workDoneAt',
+                    ctxEditTag.asyncUpdateByName.call({
+                      formName: 'shelter_ta',
+                      answerIds: [ta.id],
+                      tag: 'workDoneAt',
                       value: null,
                     })
                 }}
@@ -783,9 +810,10 @@ export const ShelterTable = () => {
             label: row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted && map(row.ta, ta => (
               <IpDatepicker
                 value={row.ta?.tags?.workDoneAt}
-                onChange={_ => ctx.ta.asyncUpdate.call({
-                  answerId: ta.id,
-                  key: 'workDoneAt',
+                onChange={_ => ctxEditTag.asyncUpdateByName.call({
+                  formName: 'shelter_ta',
+                  answerIds: [ta.id],
+                  tag: 'workDoneAt',
                   value: _,
                 })}
               />
@@ -799,7 +827,7 @@ export const ShelterTable = () => {
   const allowedData = useMemo(() => {
     if (ctx.allowedOffices.length === 0)
       return ctx.data.mappedData
-    return ctx.data.mappedData.filter(_ => ctx.allowedOffices.includes(_.nta?.back_office))
+    return ctx.data.mappedData?.filter(_ => ctx.allowedOffices.includes(_.nta?.back_office))
   }, [ctx.data])
 
   return (
@@ -827,9 +855,10 @@ export const ShelterTable = () => {
                   label={m._shelter.validationStatus}
                   onChange={(tagChange) => {
                     map(selectedNta?.map(_ => _.id), ids => {
-                      ctx.nta.asyncUpdates.call({
+                      ctxEditTag.asyncUpdateByName.call({
+                        formName: 'shelter_nta',
                         answerIds: ids,
-                        key: '_validation',
+                        tag: '_validation',
                         value: tagChange,
                       })
                     })
@@ -840,9 +869,10 @@ export const ShelterTable = () => {
                   defaultValue={[]}
                   onChange={(tagChange) => {
                     map(selectedTa.map(_ => _.id), ids => {
-                      ctx.ta.asyncUpdates.call({
+                      ctxEditTag.asyncUpdateByName.call({
+                        formName: 'shelter_ta',
                         answerIds: ids,
-                        key: 'project',
+                        tag: 'project',
                         value: tagChange,
                       })
                     })
@@ -855,9 +885,10 @@ export const ShelterTable = () => {
                   label={m._shelter.contractor1}
                   onChange={(tagChange) => {
                     map(selectedTa?.map(_ => _.id), ids => {
-                      ctx.ta.asyncUpdates.call({
+                      ctxEditTag.asyncUpdateByName.call({
+                        formName: 'shelter_ta',
                         answerIds: ids,
-                        key: 'contractor1',
+                        tag: 'contractor1',
                         value: tagChange,
                       })
                     })
@@ -869,9 +900,10 @@ export const ShelterTable = () => {
                   label={m._shelter.contractor2}
                   onChange={(tagChange) => {
                     map(selectedTa?.map(_ => _.id), ids => {
-                      ctx.ta.asyncUpdates.call({
+                      ctxEditTag.asyncUpdateByName.call({
+                        formName: 'shelter_ta',
                         answerIds: ids,
-                        key: 'contractor2',
+                        tag: 'contractor2',
                         value: tagChange,
                       })
                     })
@@ -883,21 +915,24 @@ export const ShelterTable = () => {
                   label={m._shelter.progressStatus}
                   onChange={(tagChange) => {
                     map(selectedTa?.map(_ => _.id), ids => {
-                      ctx.ta.asyncUpdates.call({
+                      ctxEditTag.asyncUpdateByName.call({
+                        formName: 'shelter_ta',
                         answerIds: ids,
-                        key: 'progress',
+                        tag: 'progress',
                         value: tagChange,
                       })
                       if (tagChange === ShelterProgress.RepairWorksCompleted)
-                        ctx.ta.asyncUpdates.call({
+                        ctxEditTag.asyncUpdateByName.call({
+                          formName: 'shelter_ta',
                           answerIds: ids,
-                          key: 'workDoneAt',
+                          tag: 'workDoneAt',
                           value: new Date(),
                         })
                       else
-                        ctx.ta.asyncUpdates.call({
+                        ctxEditTag.asyncUpdateByName.call({
+                          formName: 'shelter_ta',
                           answerIds: ids,
-                          key: 'workDoneAt',
+                          tag: 'workDoneAt',
                           value: null
                         })
                     })
@@ -909,13 +944,13 @@ export const ShelterTable = () => {
           // showExportBtn
           header={
             <>
-              <IpIconBtn
-                children="refresh"
-                loading={ctx.data.fetcher.get && ctx.data.loading}
-                onClick={() => ctx.data.fetchAll({force: true, clean: true})}
-                tooltip={m.refreshTable}
-                sx={{ml: -1}}
-              />
+              {/*<IpIconBtn*/}
+              {/*  children="refresh"*/}
+              {/*  loading={ctx.data.fetching}*/}
+              {/*  onClick={() => ctx.data.fetchAll({force: true, clean: true})}*/}
+              {/*  tooltip={m.refreshTable}*/}
+              {/*  sx={{ml: -1}}*/}
+              {/*/>*/}
               <IpSelectSingle<number>
                 hideNullOption
                 sx={{maxWidth: 128, mr: 1}}

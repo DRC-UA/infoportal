@@ -21,7 +21,7 @@ interface KoboUpdateTagByName<T extends KoboFormNameMapped, K extends KeyOf<NonN
   formName: T,
   answerIds: KoboAnswerId[]
   tag: K
-  value: NonNullable<InferTypedAnswer<T>['tags']>[K]
+  value: NonNullable<InferTypedAnswer<T>['tags']>[K] | null // TODO ensure null is updating correctly in DB
 }
 
 interface KoboUpdateTagById {

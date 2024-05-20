@@ -76,7 +76,6 @@ export class KoboApiSdk {
     answerId: KoboAnswerId
   }): string => {
     return `${this.conf.apiURL}/kobo-api/${serverId}/${formId}/${answerId}/edit-url`
-
   }
 
   readonly getForms = (serverId: UUID): Promise<ApiKoboForm[]> => {

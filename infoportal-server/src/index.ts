@@ -60,7 +60,7 @@ const startApp = async (conf: AppConf) => {
   // ])
   // return
   const prisma = new PrismaClient({
-    // log: ['query']
+    log: ['query']
   })
 
   const services = initServices(
