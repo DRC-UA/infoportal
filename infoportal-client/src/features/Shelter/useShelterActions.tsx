@@ -1,7 +1,6 @@
 import {KoboAnswerId, KoboId} from '@infoportal-common'
 import {Dispatch, SetStateAction} from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {useDatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 
 import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
@@ -18,10 +17,8 @@ export const useShelterActions = ({
 }) => {
   const {api} = useAppSettings()
   const asyncEdit = (answerId: KoboAnswerId) => api.koboApi.getEditUrl({formId, answerId})
-  const [openModalAnswer] = useDatabaseKoboAnswerView<ShelterEntity['ta']>(schema.schemaUnsanitized)
   return {
     schema,
     asyncEdit,
-    openModalAnswer,
   }
 }

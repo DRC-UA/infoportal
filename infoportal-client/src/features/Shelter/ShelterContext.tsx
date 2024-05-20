@@ -4,8 +4,6 @@ import {UseShelterData} from '@/features/Shelter/useShelterData'
 import {AccessSum} from '@/core/sdk/server/access/Access'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {KoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {useDatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
-import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
 import {useAppSettings} from '@/core/context/ConfigContext'
 
 export type ShelterContext = Pick<KoboSchemaContext, 'langIndex' | 'setLangIndex'> & {
@@ -15,11 +13,9 @@ export type ShelterContext = Pick<KoboSchemaContext, 'langIndex' | 'setLangIndex
   asyncEdit: (formId: KoboId, answerId: KoboAnswerId) => string
   nta: {
     schema: KoboSchemaHelper.Bundle
-    openModalAnswer: (_: ShelterEntity['nta']) => void
   }
   ta: {
     schema: KoboSchemaHelper.Bundle
-    openModalAnswer: (_: ShelterEntity['ta']) => void
   }
 }
 
@@ -44,10 +40,7 @@ export const ShelterProvider = ({
   allowedOffices: ShelterContext['allowedOffices']
 } & Pick<KoboSchemaContext, 'langIndex' | 'setLangIndex'>) => {
   const {api} = useAppSettings()
-
   const asyncEdit = (formId: KoboId, answerId: KoboAnswerId) => api.koboApi.getEditUrl({formId, answerId})
-  const [openModalAnswerNta] = useDatabaseKoboAnswerView<ShelterEntity['nta']>(schemaNta.schemaUnsanitized)
-  const [openModalAnswerTa] = useDatabaseKoboAnswerView<ShelterEntity['ta']>(schemaTa.schemaUnsanitized)
 
   return (
     <Context.Provider value={{
@@ -55,11 +48,9 @@ export const ShelterProvider = ({
       asyncEdit,
       nta: {
         schema: schemaNta,
-        openModalAnswer: openModalAnswerNta,
       },
       ta: {
         schema: schemaTa,
-        openModalAnswer: openModalAnswerTa,
       },
       data,
       allowedOffices,

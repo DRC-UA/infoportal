@@ -74,15 +74,15 @@ const AppWithConfig = (props: AppProps) => {
       // _ => <StyledEngineProvider injectFirst children={_}/>,
       _ => <LocalizationProvider children={_} dateAdapter={AdapterDateFns}/>,
       _ => <ToastProvider children={_}/>,
-      _ => <ThemeProvider theme={muiTheme({dark: process.env.NODE_ENV === 'development' ? false : false})} children={_}/>,
+      _ => <ThemeProvider theme={muiTheme({dark: false})} children={_}/>,
       _ => <CssBaseline children={_}/>,
       _ => <I18nProvider children={_}/>,
       _ => <MsalProvider children={_} instance={msal}/>,
       _ => <KoboSchemaProvider children={_}/>,
-      _ => <ModalProvider children={_}/>,
       _ => <KoboAnswersProvider children={_}/>,
       _ => <KoboEditAnswersProvider children={_}/>,
       _ => <KoboEditTagsProvider children={_}/>,
+      _ => <ModalProvider children={_}/>,
     ]}>
       <AppWithBaseContext {...props}/>
     </Provide>

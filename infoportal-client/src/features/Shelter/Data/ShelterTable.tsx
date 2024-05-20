@@ -40,10 +40,12 @@ import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {ShelterContractor} from '../../../../../infoportal-common/src/kobo/mapper/ShelterContractor'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 
 export const ShelterTable = () => {
-  const ctx = useShelterContext()
   const theme = useTheme()
+  const ctx = useShelterContext()
+  const ctxAnswers = useKoboAnswersContext()
   const ctxEditAnswers = useKoboEditAnswerContext()
   const ctxEditTag = useKoboEditTagContext()
   const {m, formatDate, formatLargeNumber} = useI18n()
@@ -72,7 +74,7 @@ export const ShelterTable = () => {
               <>
                 {map(_.nta, answer =>
                   <>
-                    <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctx.nta.openModalAnswer(answer)}/>
+                    <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctxAnswers.openAnswerModal({answer, formId: KoboIndex.byName('shelter_nta').id})}/>
                     <TableIconBtn tooltip={m.edit} href={ctx.asyncEdit(KoboIndex.byName('shelter_nta').id, answer.id)} target="_blank" children="edit"/>
                   </>
                 ) ?? (
@@ -429,7 +431,7 @@ export const ShelterTable = () => {
             value: _.ta ? 'true' : 'false',
             label: map(_.ta, form =>
               <>
-                <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctx.ta.openModalAnswer(form)}/>
+                <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctxAnswers.openAnswerModal({formId: KoboIndex.byName('shelter_ta').id, answer: form})}/>
                 <TableIconBtn tooltip={m.edit} href={ctx.asyncEdit(KoboIndex.byName('shelter_ta').id, form.id)} target="_blank" children="edit"/>
               </>
             )
@@ -438,7 +440,9 @@ export const ShelterTable = () => {
       },
       {
         id: 'taid',
+        className: 'td-id',
         width: 0,
+        typeIcon: keyTypeIcon,
         head: m.id,
         type: 'string',
         renderQuick: _ => _.ta?.id,
