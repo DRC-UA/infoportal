@@ -376,10 +376,11 @@ export class KoboService {
     answer?: string
   }) => {
     const sdk = await this.sdkGenerator.get()
+    const xpath = await this.getFormDetails(formId).then(_ => _.content.survey.find(_ => _.name === question)?.$xpath)
+    if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)
     const [x] = await Promise.all([
-      this.conf.db.url.includes('localhost')
-        ? () => void 0
-        : sdk.updateData({formId, submissionIds: answerIds, data: {[question]: answer}}),
+      // this.conf.db.url.includes('localhost') ? () => void 0 :
+        sdk.updateData({formId, submissionIds: answerIds, data: {[xpath]: Array.isArray(answer) ? answer.join(' ') : answer}}),
       await this.prisma.$executeRawUnsafe(
         `UPDATE "KoboAnswers"
          SET answers     = jsonb_set(answers, '{${question}}', '"${answer}"'),
