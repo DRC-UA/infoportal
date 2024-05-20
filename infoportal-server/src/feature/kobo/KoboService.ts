@@ -377,7 +377,9 @@ export class KoboService {
   }) => {
     const sdk = await this.sdkGenerator.get()
     const [x] = await Promise.all([
-      sdk.updateData({formId, submissionIds: answerIds, data: {[question]: answer}}),
+      this.conf.db.url.includes('localhost')
+        ? () => void 0
+        : sdk.updateData({formId, submissionIds: answerIds, data: {[question]: answer}}),
       await this.prisma.$executeRawUnsafe(
         `UPDATE "KoboAnswers"
          SET answers     = jsonb_set(answers, '{${question}}', '"${answer}"'),
@@ -390,7 +392,7 @@ export class KoboService {
   readonly updateTags = async ({formId, answerIds, tags}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>}) => {
     await this.prisma.$executeRawUnsafe(
       `UPDATE "KoboAnswers"
-       SET ${Obj.keys(tags).map(key => `tags = jsonb_set(COALESCE(tags, '{}'::jsonb), '{${key}}', '"${tags[key]}"')`).join(',')},
+       SET ${Obj.keys(tags).map(key => `tags = jsonb_set(COALESCE(tags, '{}'::jsonb), '{${key}}', '${JSON.stringify(tags[key])}')`).join(',')},
            "updatedAt" = NOW()
        WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
       `)
