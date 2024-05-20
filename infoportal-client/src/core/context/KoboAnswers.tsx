@@ -21,6 +21,7 @@ export interface OpenModalProps {
 export type KoboAnswersContext = {
   openAnswerModal: (_: OpenModalProps) => void
   byId: {
+    find: (_: {formId: KoboId, answerId: KoboAnswerId}) => KoboMappedAnswer | undefined
     set: (id: KoboId, value: ApiPaginate<KoboMappedAnswer>) => void,
     fetch: (p: FetchParams, id: KoboId) => Promise<ApiPaginate<KoboMappedAnswer>>,
     get: (id: KoboAnswerId) => undefined | ApiPaginate<KoboMappedAnswer>,
@@ -85,6 +86,9 @@ export const KoboAnswersProvider = ({
         },
         fetch: (p: FetchParams = {}, id: KoboAnswerId): Promise<ApiPaginate<KoboMappedAnswer>> => {
           return fetcher.fetch(p, id) as any
+        },
+        find: ({formId, answerId}: {formId: KoboId, answerId: KoboAnswerId,}) => {
+          return byId.get(formId)?.data.find(_ => _.id === answerId)
         },
         loading: (id: KoboAnswerId) => fetcher.loading[id],
       }

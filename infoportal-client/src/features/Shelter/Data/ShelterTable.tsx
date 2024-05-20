@@ -39,7 +39,7 @@ import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
-import {ShelterContractor} from '../../../../../infoportal-common/src/kobo/mapper/ShelterContractor'
+import {ShelterContractor} from '@infoportal-common'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 
 export const ShelterTable = () => {

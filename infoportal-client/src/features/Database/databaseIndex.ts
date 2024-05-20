@@ -1,4 +1,4 @@
-import {KoboAnswerId} from '../../../../infoportal-common/src'
+import {KoboAnswerId} from '@infoportal-common'
 
 const base = (serverId = ':serverId', formId = ':formId') => `/form/${serverId}/${formId}`
 
@@ -17,7 +17,7 @@ export const databaseIndex = {
     },
     answer: {
       relative: (answerId: KoboAnswerId = ':answerId') => `answer/${answerId}`,
-      absolute: (serverId = ':serverId', formId = ':formId', answerId: KoboAnswerId = ':answerId') => base(serverId, formId) + `/database/answer/${answerId}`
+      absolute: (serverId = ':serverId', formId = ':formId', answerId: KoboAnswerId = ':answerId') => base(serverId, formId) + `/answer/${answerId}`
     },
     access: {
       relative: `access`,

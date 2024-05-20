@@ -1,4 +1,4 @@
-import {Box, Dialog, DialogActions, DialogContent, DialogTitle, Icon, Skeleton, Switch} from '@mui/material'
+import {Alert, Box, Dialog, DialogActions, DialogContent, DialogTitle, Icon, Skeleton, Switch} from '@mui/material'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
@@ -9,11 +9,19 @@ import {Txt} from 'mui-extension'
 import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import {KoboId} from '@infoportal-common'
-import {Page, PageTitle} from '@/shared/Page'
+import {KoboId, koboIndex} from '@infoportal-common'
+import {Page} from '@/shared/Page'
 import {useParams} from 'react-router'
 import * as yup from 'yup'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import Link from 'next/link'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {AppFeatureId} from '@/features/appFeatureId'
+import {databaseIndex} from '@/features/Database/databaseIndex'
+import {IpIconBtn} from '@/shared/IconBtn'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
+import {map} from '@alexandreannic/ts-utils'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -25,25 +33,49 @@ export const DatabaseKoboAnswerViewPage = () => {
   const {m} = useI18n()
   const {serverId, formId, answerId} = databaseUrlParamsValidation.validateSync(useParams())
   const [showQuestionWithoutAnswer, setShowQuestionWithoutAnswer] = useState(false)
+  const ctxAnswers = useKoboAnswersContext()
   const ctxSchema = useKoboSchemaContext()
+
   useEffect(() => {
+    ctxAnswers.byId.fetch({}, formId)
     ctxSchema.fetchById(formId)
   }, [formId])
+
+  const answer = useMemo(() => {
+    return ctxAnswers.byId.find({formId, answerId})
+  }, [formId, ctxAnswers.byId.get(formId)])
+
   return (
     <Page>
-      <PageTitle>
-        <Box sx={{display: 'flex', alignItems: 'center'}}>
-          {answerId}
-          <Box sx={{display: 'flex', alignItems: 'center', marginLeft: 'auto'}}>
-            <Txt sx={{fontSize: '1rem'}} color="hint">{m._koboDatabase.showAllQuestions}</Txt>
-            <Switch value={showQuestionWithoutAnswer} onChange={e => setShowQuestionWithoutAnswer(e.target.checked)}/>
-          </Box>
-        </Box>
-      </PageTitle>
-      {/*<KoboAnswerFormView*/}
-      {/*  showQuestionWithoutAnswer={showQuestionWithoutAnswer}*/}
-      {/*  answer={answer}*/}
-      {/*/>*/}
+      {ctxAnswers.byId.loading(formId) || ctxSchema.byId[formId]?.loading ? (
+        <>
+          <Skeleton/>
+          <Skeleton/>
+          <Skeleton/>
+        </>
+      ) : map(answer, ctxSchema.byId[formId]?.get, (a, schema) => (
+        <Panel>
+          <PanelHead action={
+            <Box sx={{display: 'flex', alignItems: 'center', marginLeft: 'auto'}}>
+              <Txt sx={{fontSize: '1em'}} color="hint">{m._koboDatabase.showAllQuestions}</Txt>
+              <Switch size="small" value={showQuestionWithoutAnswer} onChange={e => setShowQuestionWithoutAnswer(e.target.checked)}/>
+            </Box>
+          }>
+            {schema.schemaUnsanitized.name}<br/>
+            <Txt sx={{color: t => t.palette.info.main}}>{answerId}</Txt>
+          </PanelHead>
+          <PanelBody>
+            <KoboAnswerFormView
+              formId={formId}
+              showQuestionWithoutAnswer={showQuestionWithoutAnswer}
+              answer={a}
+              schema={schema}
+            />
+          </PanelBody>
+        </Panel>
+      )) ?? (
+        <Alert color="warning">{m.noDataAtm}</Alert>
+      )}
     </Page>
   )
 }
@@ -59,11 +91,21 @@ export const DatabaseKoboAnswerViewDialog = ({
   open: boolean
 }) => {
   const {m} = useI18n()
+  const {conf} = useAppSettings()
   const [showQuestionWithoutAnswer, setShowQuestionWithoutAnswer] = useState(false)
+  const ctxSchema = useKoboSchemaContext()
+
+  useEffect(() => {
+    ctxSchema.fetchById(formId)
+  }, [formId])
+
   return (
     <Dialog open={true}>
       <DialogTitle>
         <Box sx={{display: 'flex', alignItems: 'center'}}>
+          <Link target="_blank" href={conf.linkToFeature(AppFeatureId.kobo_database, databaseIndex.siteMap.answer.absolute(koboIndex.drcUa.server.prod, formId, answer.id))}>
+            <IpIconBtn color="primary">open_in_new</IpIconBtn>
+          </Link>
           {answer.id}
           <Box sx={{display: 'flex', alignItems: 'center', marginLeft: 'auto'}}>
             <Txt sx={{fontSize: '1rem'}} color="hint">{m._koboDatabase.showAllQuestions}</Txt>
@@ -72,11 +114,14 @@ export const DatabaseKoboAnswerViewDialog = ({
         </Box>
       </DialogTitle>
       <DialogContent>
-        <KoboAnswerFormView
-          formId={formId}
-          showQuestionWithoutAnswer={showQuestionWithoutAnswer}
-          answer={answer}
-        />
+        {map(ctxSchema.byId[formId]?.get, schema => (
+          <KoboAnswerFormView
+            schema={schema}
+            formId={formId}
+            showQuestionWithoutAnswer={showQuestionWithoutAnswer}
+            answer={answer}
+          />
+        ))}
       </DialogContent>
       <DialogActions>
         <IpBtn onClick={onClose}>{m.close}</IpBtn>
@@ -88,25 +133,22 @@ export const DatabaseKoboAnswerViewDialog = ({
 const KoboAnswerFormView = ({
   answer,
   formId,
+  schema,
   showQuestionWithoutAnswer,
 }: {
+  schema: KoboSchemaHelper.Bundle
   showQuestionWithoutAnswer?: boolean
   answer: KoboMappedAnswer<any>
   formId: KoboId
 }) => {
-  const ctx = useKoboSchemaContext()
-  useEffect(() => {
-    ctx.fetchById(formId)
-  }, [formId])
   return (
     <Box>
-      {ctx.byId[formId]?.loading && <Skeleton/>}
-      {ctx.byId[formId]?.get?.schemaHelper.sanitizedSchema.content.survey
+      {schema.schemaHelper.sanitizedSchema.content.survey
         .filter(q => showQuestionWithoutAnswer || q.type === 'begin_group' || (answer[q.name] !== '' && answer[q.name]))
         .map(q => (
           <Box key={q.name} sx={{mb: 1.5}}>
             <KoboAnswerQuestionView
-              schema={ctx.byId[formId]!.get!}
+              schema={schema}
               answer={answer}
               questionSchema={q}
             />

@@ -6,9 +6,9 @@ import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetcher'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
-import {OblastIndex} from '../../../../infoportal-common/src/location/oblastIndex'
-import {DrcOffice} from '../../../../infoportal-common/src/type/Drc'
-import {ShelterContractorPrices} from '../../../../infoportal-common/src/kobo/mapper/ShelterContractor'
+import {OblastIndex} from '@infoportal-common'
+import {DrcOffice} from '@infoportal-common'
+import {ShelterContractorPrices} from '@infoportal-common'
 
 export type UseShelterData = ReturnType<typeof useShelterData>
 
