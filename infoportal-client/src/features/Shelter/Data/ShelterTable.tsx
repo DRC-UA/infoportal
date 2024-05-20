@@ -896,7 +896,7 @@ export const ShelterTable = () => {
           title="Shelter-Assessment_database"
           select={{
             onSelect: setSelectedIds,
-            getId: _ => _.id + '',
+            getId: _ => _.id,
           }}
           // showExportBtn
           header={

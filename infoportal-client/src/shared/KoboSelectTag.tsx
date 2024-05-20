@@ -1,10 +1,9 @@
 import {KeyOf, KoboAnswerId, KoboId} from '@infoportal-common'
 import React, {Dispatch, ReactNode, SetStateAction} from 'react'
-import {AaSelect, AaSelectProps} from '@/shared/Select/Select'
-import {useAsync} from '@/shared/hook/useAsync'
-import {cfmMakeUpdateRequestKey} from '@/features/Cfm/CfmContext'
-import {Enum} from '@alexandreannic/ts-utils'
-import {useAppSettings} from '@/core/context/ConfigContext'
+import {AaSelectProps} from '@/shared/Select/Select'
+import {Obj} from '@alexandreannic/ts-utils'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 
 export const KoboSelectTag = <
   TTag extends Record<string, any>,
@@ -32,33 +31,21 @@ export const KoboSelectTag = <
   translate?: Record<K, ReactNode>
   setData?: Dispatch<SetStateAction<T[] | undefined>>
 } & Pick<AaSelectProps<any>, 'sx'>) => {
-  const {api} = useAppSettings()
-  const enumKeys = Enum.keys(enumerator)
-  const updateTag = useAsync((_: {formId: KoboId, answerId: KoboAnswerId, key: KeyOf<TTag>, value: any}) => api.kobo.answer.updateTag({
-    formId: _.formId,
-    answerIds: [_.answerId],
-    tags: {[_.key]: _.value}
-  }), {
-    requestKey: ([_]) => cfmMakeUpdateRequestKey(_.formId, _.answerId, _.key as any)
-  })
+  const ctxEditTag = useKoboEditTagContext()
+  const enumKeys = Obj.keys(enumerator)
 
   return (
-    <AaSelect
-      showUndefinedOption={showUndefinedOption}
+    <IpSelectSingle
+      hideNullOption={!showUndefinedOption}
       label={label}
       defaultValue={entry.tags?.[tag] ?? ''}
-      onChange={(tagChange) => {
-        updateTag.call({
+      onChange={(tagChange: any) => {
+        ctxEditTag.asyncUpdateById.call({
           formId: formId,
-          answerId,
-          key: tag,
+          answerIds: [answerId],
+          tag,
           value: tagChange,
-        }).then(newTag => setData?.(data => data?.map(d => {
-          if (d?.id === entry.id) {
-            entry.tags = newTag
-          }
-          return d
-        })))
+        })
       }}
       options={enumKeys.map(_ => ({
         value: _, children: translate ? translate[_] : _,
