@@ -14,7 +14,7 @@ import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {IpBtn} from '@/shared/Btn'
 import {CommentsPanel} from '@/shared/CommentsPanel'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
-import {KoboAnswerFlat, Meal_VisitMonitoring, OblastIndex} from '@infoportal-common'
+import {KoboAnswerFlat, KoboFormName, Meal_VisitMonitoring, OblastIndex} from '@infoportal-common'
 import {NavLink} from 'react-router-dom'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useMealVisitContext} from '@/features/Meal/Visit/MealVisitContext'
@@ -22,6 +22,7 @@ import {mealIndex} from '@/features/Meal/Meal'
 import {Page} from '@/shared/Page'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {KoboSchema} from '@/core/sdk/server/kobo/KoboApi'
 
 export interface DashboardPageProps {
   filters: Record<string, string[]>
@@ -32,8 +33,9 @@ const mapOblast = OblastIndex.koboOblastIndexIso
 
 export const MealVisitDashboard = () => {
   const ctx = useMealVisitContext()
-  const {langIndex, schema: schemas} = useKoboSchemaContext()
-  const schema = schemas.meal_visitMonitoring!
+  const ctxSchema = useKoboSchemaContext()
+  const schema = ctxSchema.byName.meal_visitMonitoring.get!
+  const langIndex = ctxSchema.langIndex
   const {m, formatDateTime, formatDate} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
 

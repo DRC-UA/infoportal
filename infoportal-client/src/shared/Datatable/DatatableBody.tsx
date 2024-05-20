@@ -1,6 +1,6 @@
 import {Checkbox} from '@mui/material'
 import {fnSwitch} from '@alexandreannic/ts-utils'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableRow, DatatableTableProps} from '@/shared/Datatable/util/datatableType'
 

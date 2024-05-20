@@ -13,7 +13,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {KoboAnswerFlat} from '@infoportal-common'
 
-export const useDatabaseKoboAnswerView = <T extends KoboAnswerFlat<any, any> = any>(schema: KoboSchema) => {
+export const useDatabaseKoboAnswerView = <T extends KoboAnswerFlat<any, any> = KoboMappedAnswer>(schema: KoboSchema): [(answer: T) => void, () => void] => {
   const [open, close] = useModal((answer: T) => (
     <DatabaseKoboAnswerView
       open={true}
@@ -21,7 +21,7 @@ export const useDatabaseKoboAnswerView = <T extends KoboAnswerFlat<any, any> = a
       answer={answer}
     />
   ), [schema])
-  return [open, close]
+  return [open as any, close]
 }
 
 export const DatabaseKoboAnswerView = ({

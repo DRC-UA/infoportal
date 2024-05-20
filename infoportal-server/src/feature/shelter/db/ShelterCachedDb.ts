@@ -6,6 +6,7 @@ import {ShelterDbService} from './ShelterDbService'
 import {ShelterEntity} from './ShelterDbType'
 import {seq} from '@alexandreannic/ts-utils'
 
+/** @deprecated*/
 export class ShelterCachedDb {
   private static instance: ShelterCachedDb
 
@@ -30,6 +31,11 @@ export class ShelterCachedDb {
     private koboEvent: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
   ) {
     this.koboEvent.listen(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, async (_) => {
+      if ([KoboIndex.byName('shelter_ta').id, KoboIndex.byName('shelter_ta').id].includes(_.formId)) {
+        this.meme.clear()
+      }
+    })
+    this.koboEvent.listen(GlobalEvent.Event.KOBO_ANSWER_EDITED, async (_) => {
       if ([KoboIndex.byName('shelter_ta').id, KoboIndex.byName('shelter_ta').id].includes(_.formId)) {
         this.meme.clear()
       }

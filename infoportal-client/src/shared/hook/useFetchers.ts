@@ -1,5 +1,5 @@
 import {useCallback, useMemo, useRef, useState} from 'react'
-import {useMapIp} from '@/shared/hook/useMap'
+import {UseMap2, useMapIp} from '@/shared/hook/useMap'
 
 export type Func<R = any> = (...args: any[]) => R
 
@@ -19,9 +19,9 @@ type Key = number | string
 export interface UseFetchers<F extends Func<Promise<any>>, K extends Key = any, E = any> {
   fetch: Fetch<F>
   getAsArr: FetcherResult<F>[]
-  getAsObj: Partial<Record<K, FetcherResult<F>>>
-  clearCache: () => void
+  getAsMap: UseMap2<K, FetcherResult<F>>
   get: Partial<Record<K, FetcherResult<F>>>
+  clearCache: () => void
   loading: Partial<Record<K, boolean>>
   error: Partial<Record<K, E>>
   anyLoading: boolean
@@ -94,7 +94,7 @@ export const useFetchers: UseFetchersFn = <F extends Func<Promise<any>>, K exten
 
   return {
     getAsArr: list,
-    getAsObj: entities.toObject,
+    getAsMap: entities,
     get: entities.toObject,
     loading: loadings.toObject,
     error: errors.toObject,

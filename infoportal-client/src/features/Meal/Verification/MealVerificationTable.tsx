@@ -79,14 +79,14 @@ export const MealVerificationTable = () => {
 
   useEffect(() => {
     if (mealVerification && activity && formName) {
-      ctxSchema.fetchers.fetch({}, formName)
+      ctxSchema.fetchByName(formName)
       fetcherVerificationAnswers.fetch({force: false, clean: false}, mealVerification.id)
     }
   }, [mealVerification, activity])
 
   return (
     <Page width="full">
-      {formName && ctxSchema.schema[formName] && fetcherVerificationAnswers.get && activity && mealVerification ? (
+      {formName && ctxSchema.byName[formName].get && fetcherVerificationAnswers.get && activity && mealVerification ? (
         <>
           <PageTitle
             action={
@@ -136,7 +136,7 @@ export const MealVerificationTable = () => {
             {mealVerification.activity} {'>'} {mealVerification.name}
           </PageTitle>
           <MealVerificationTableContent
-            schema={ctxSchema.schema[formName]!}
+            schema={ctxSchema.byName[formName].get!}
             activity={activity}
             verificationAnswers={fetcherVerificationAnswers.get}
             verificationAnswersRefresh={() => fetcherVerificationAnswers.fetch({force: true, clean: false}, mealVerification.id)}

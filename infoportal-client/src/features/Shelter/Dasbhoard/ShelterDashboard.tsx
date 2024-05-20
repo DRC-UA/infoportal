@@ -171,7 +171,7 @@ export const ShelterDashboard = () => {
   const computed = useShelterComputedData({data: filteredData})
 
   return (
-    <Page loading={ctx.data.loading} width="lg">
+    <Page loading={ctx.data.fetching} width="lg">
       <DataFilterLayout
         sx={{mb: 1}}
         filters={filters}

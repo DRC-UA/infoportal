@@ -57,7 +57,7 @@ const CfmSidebar = () => {
       coc,
       total: ctx.mappedData?.length
     }
-  }, [ctx.fetcherData])
+  }, [ctx.mappedData])
 
   return (
     <Sidebar>
@@ -125,8 +125,8 @@ export const Cfm = () => {
   const schemaContext = useKoboSchemaContext()
 
   useEffect(() => {
-    schemaContext.fetchers.fetch({force: false}, 'meal_cfmExternal')
-    schemaContext.fetchers.fetch({force: false}, 'meal_cfmInternal')
+    schemaContext.fetchByName('meal_cfmExternal')
+    schemaContext.fetchByName('meal_cfmInternal')
   }, [])
 
   if (!access) {
@@ -136,10 +136,10 @@ export const Cfm = () => {
   }
   return (
     <>
-      {schemaContext.schema.meal_cfmExternal && schemaContext.schema.meal_cfmInternal ? (
+      {schemaContext.byName.meal_cfmExternal.get && schemaContext.byName.meal_cfmInternal.get ? (
         <CfmProvider
-          schemaExternal={schemaContext.schema.meal_cfmExternal}
-          schemaInternal={schemaContext.schema.meal_cfmInternal}
+          schemaExternal={schemaContext.byName.meal_cfmExternal.get}
+          schemaInternal={schemaContext.byName.meal_cfmInternal.get}
         >
           <Router>
             <Layout
@@ -160,7 +160,7 @@ export const Cfm = () => {
             </Layout>
           </Router>
         </CfmProvider>
-      ) : schemaContext.fetchers.anyLoading && (
+      ) : schemaContext.anyLoading && (
         <LinearProgress/>
       )}
     </>

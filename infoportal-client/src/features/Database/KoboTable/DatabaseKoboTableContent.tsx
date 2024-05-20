@@ -2,7 +2,7 @@ import {IpBtn} from '@/shared/Btn'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
-import {KoboAnswerFlat} from '@infoportal-common'
+import {KoboAnswerFlat, KoboAnswerId, KoboValidation} from '@infoportal-common'
 import {AaSelect} from '@/shared/Select/Select'
 import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
@@ -21,22 +21,24 @@ import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
-import {DatatableKoboEditModal} from '@/features/Database/KoboTable/DatatableKoboEditModal'
-import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
-import {Enum, seq} from '@alexandreannic/ts-utils'
+import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
+import {Enum, Obj, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
-import {IpAlert} from '@/shared/Alert'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
   onDataChange,
 }: Pick<DatabaseTableProps, 'onFiltersChange' | 'onDataChange'>) => {
-  const ctx = useDatabaseKoboTableContext()
   const {m} = useI18n()
+  const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
+  const ctxEditKoboAnswer = useKoboEditAnswerContext()
+  const ctxEditKoboTag = useKoboEditTagContext()
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [selectedColumn, setSelectedColumn] = useState<string | undefined>()
+  const [selectedIds, setSelectedIds] = useState<KoboAnswerId[]>([])
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat | undefined>()
   const [groupModalOpen, setOpenGroupModalAnswer] = useState<{
     columnId: string,
@@ -44,7 +46,7 @@ export const DatabaseKoboTableContent = ({
     event: any
   } | undefined>()
 
-  const extraColumns = useCustomColumns()
+  const extraColumns = useCustomColumns({selectedIds})
   const schemaColumns = useMemo(() => {
     return getColumnBySchema({
       selectedIds: selectedIds,
@@ -58,7 +60,11 @@ export const DatabaseKoboTableContent = ({
       externalFilesIndex: ctx.externalFilesIndex,
       repeatGroupsAsColumn: repeatGroupsAsColumns,
       onOpenGroupModal: setOpenGroupModalAnswer,
-      onSelectColumn: setSelectedColumn,
+      onSelectColumn: (columnName: string) => ctxEditKoboAnswer.open({
+        formId: ctx.form.id,
+        question: columnName,
+        answerIds: selectedIds,
+      })
     })
   }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns, ctx.externalFilesIndex])
 
@@ -83,6 +89,15 @@ export const DatabaseKoboTableContent = ({
     const validation: DatatableColumn.Props<any> = {
       id: 'validation',
       head: m.validation,
+      subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxEditKoboTag.open({
+        formId: ctx.form.id,
+        answerIds: selectedIds,
+        type: 'select_one',
+        options: Obj.values(KoboValidation).map(_ => ({
+          value: _, label: _, before: <OptionLabelTypeCompact sx={{alignSelf: 'center', mr: 1}} type={SelectStatusConfig.statusType.KoboValidation[_]}/>
+        })),
+        tag: '_validation',
+      })}/>,
       width: 0,
       type: 'select_one',
       render: (row: KoboAnswerFlat) => {
@@ -95,12 +110,13 @@ export const DatabaseKoboTableContent = ({
             <SelectStatusBy
               enum="KoboValidation"
               compact
-              disabled={!ctx.canEdit || ctx.fetcherAnswers.loading}
+              disabled={!ctx.canEdit || ctx.loading}
               value={value}
               onChange={(e) => {
-                ctx.asyncUpdateTag.call({
+                ctxEditKoboTag.asyncUpdateById.call({
+                  formId: ctx.form.id,
                   answerIds: [row.id],
-                  key: '_validation',
+                  tag: '_validation',
                   value: e,
                 })
               }}
@@ -117,12 +133,6 @@ export const DatabaseKoboTableContent = ({
 
   return (
     <>
-      <IpAlert color="info" sx={{mb: 1}} deletable="permanent" id="kobo-webhook">
-        <b>НОВА ФУНКЦІЯ:</b> попрощайтеся з кнопкою ручної SYNC. Відповіді Kobo тепер синхронізуються автоматично після надсилання.
-        <br/>
-        <br/>
-        <b>NEW FEATURE:</b> Say goodbye to manual SYNC button. Kobo responses now synchronize automatically upon submission.
-      </IpAlert>
       <Datatable
         contentProps={{sx: {maxHeight: 'calc(100vh - 204px)'}}}
         showExportBtn
@@ -214,14 +224,6 @@ export const DatabaseKoboTableContent = ({
           anchorEl={groupModalOpen.event.target}
           groupData={groupModalOpen.group}
           onClose={() => setOpenGroupModalAnswer(undefined)}
-        />
-      )}
-      {selectedColumn && (
-        <DatatableKoboEditModal
-          formId={ctx.form.id}
-          column={selectedColumn}
-          answerIds={selectedIds}
-          onClose={() => setSelectedColumn(undefined)}
         />
       )}
     </>

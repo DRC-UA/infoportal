@@ -400,6 +400,14 @@ export const muiTheme = ({
 }
 
 const tableTheme = (t: Theme, colorOverOpaque: string) => ({
+  '@keyframes shake': {
+    '0%': {transform: 'rotate(0)'},
+    '20%': {transform: 'rotate(-25deg)'},
+    '40%': {transform: 'rotate(25deg)'},
+    '60%': {transform: 'rotate(-12deg)'},
+    '80%': {transform: 'rotate(12deg)'},
+    '100%': {transform: 'rotate(0)'},
+  },
   '.table': {
     minWidth: '100%',
     width: 'max-content',
@@ -419,6 +427,10 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     color: t.palette.info.main,
     fontWeight: 'bold',
     // fontWeight: t.typography.fontWeightBold,
+  },
+  '.table td:has(.Mui-focused)': {
+    border: `1px double ${t.palette.primary.main} !important`,
+    boxShadow: `inset 0 0 0 1px ${t.palette.primary.main}`,
   },
   '.table .MuiInputBase-root, .table .MuiFormControl-root': {
     margin: 0,
@@ -479,9 +491,6 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     left: 0,
     // background: t.palette.background.paper,
     boxShadow: 'inset -2px 0 1px -1px rgba(0,0,0,0.2), -1px 0px 1px 0px rgba(0,0,0,0.14), -1px 0px 3px 0px rgba(0,0,0,0.12)',
-  },
-  '.table .td-selected': {
-    border: `2px solid blue`,
   },
   '.table .td-sticky-end': {
     paddingTop: '1px',

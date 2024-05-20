@@ -9,7 +9,9 @@ export interface ScRadioGroupItemProps<T> extends Omit<BoxProps, 'title'> {
   value: T
   disabled?: boolean
   icon?: string
+  iconColor?: string
   selected?: boolean
+  before?: ReactNode
   children?: ReactNode
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   dense?: boolean
@@ -24,6 +26,7 @@ export const ScRadioGroupItem = <T, >({
   description,
   error,
   icon,
+  iconColor,
   dense,
   inline,
   disabled,
@@ -33,6 +36,7 @@ export const ScRadioGroupItem = <T, >({
   onClick,
   hideRadio,
   className,
+  before,
   multiple,
   sx,
   ...rest
@@ -131,7 +135,8 @@ export const ScRadioGroupItem = <T, >({
           />
         )
       )}
-      {icon && <Icon sx={{color: t => t.palette.text.disabled, mr: 1, alignSelf: 'center'}}>{icon}</Icon>}
+      {before}
+      {icon && <Icon sx={{color: iconColor ?? (t => t.palette.text.disabled), mr: 1, alignSelf: 'center'}}>{icon}</Icon>}
       <Box
         sx={{
           alignSelf: 'center',

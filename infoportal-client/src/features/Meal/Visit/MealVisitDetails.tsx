@@ -93,7 +93,7 @@ export const MealVisitDetails = () => {
 
 export const _DashboardMealVisitPdf = () => {
   const ctx = useMealVisitContext()
-  const schema = useKoboSchemaContext().schema.meal_visitMonitoring!
+  const schema = useKoboSchemaContext().byName.meal_visitMonitoring.get!
   const {session} = useSession()
   const {m, formatDate} = useI18n()
   const {id} = urlValidation.validateSync(useParams())

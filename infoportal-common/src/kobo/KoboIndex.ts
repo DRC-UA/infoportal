@@ -124,6 +124,8 @@ export namespace KoboIndex {
     donors?: string[]
   }
 
+  export const names = Obj.keys(koboIndex.drcUa.form)
+
   export const parseFormName = (name: string): ParsedForm => {
     const match = name.match(/^\[(.*?)]\s*(?:\{(.*?)})?\s*(.*)$/)
     if (match) {

@@ -11,7 +11,7 @@ export interface KoboAnswerFilter {
   readonly filters?: AnswersFilters
 }
 
-export type KoboUpdateAnswers<T extends Record<string, any>, K extends KeyOf<T>> = {
+export type KoboUpdateAnswers<T extends Record<string, any> = any, K extends KeyOf<T> = any> = {
   formId: KoboId
   answerIds: KoboAnswerId[]
   question: K
@@ -54,8 +54,8 @@ export class KoboAnswerSdk {
     fnMapTags = (_?: any) => _,
     fnMapCustom,
   }: any) => {
-    return this.client.post<ApiPaginate<Record<string, any>>>(`/kobo/answer/${formId}/by-access`, {body: {...KoboAnswerSdk.mapFilters(filters), ...paginate}})
-      .then(Kobo.mapPaginateAnswerMetaData(fnMapKobo, fnMapTags, fnMapCustom))
+    return this.client.post<ApiPaginate<KoboAnswer>>(`/kobo/answer/${formId}/by-access`, {body: {...KoboAnswerSdk.mapFilters(filters), ...paginate}})
+      .then(Kobo.mapPaginateAnswer(fnMapKobo, fnMapTags, fnMapCustom))
   }
 
   readonly search: KoboAnswerSearch = ({
@@ -66,8 +66,8 @@ export class KoboAnswerSdk {
     fnMapTags = (_?: any) => _,
     fnMapCustom,
   }: any) => {
-    return this.client.post<ApiPaginate<Record<string, any>>>(`/kobo/answer/${formId}`, {body: {...KoboAnswerSdk.mapFilters(filters), ...paginate}})
-      .then(Kobo.mapPaginateAnswerMetaData(fnMapKobo, fnMapTags, fnMapCustom))
+    return this.client.post<ApiPaginate<KoboAnswer>>(`/kobo/answer/${formId}`, {body: {...KoboAnswerSdk.mapFilters(filters), ...paginate}})
+      .then(Kobo.mapPaginateAnswer(fnMapKobo, fnMapTags, fnMapCustom))
   }
 
   readonly updateAnswers = <T extends Record<string, any>, K extends KeyOf<T>>({

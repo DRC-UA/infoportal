@@ -4,8 +4,8 @@ import {
   currentProtectionProjects,
   DrcProject,
   Ecrec_cashRegistration,
-  KoboAnswer,
   KoboAnswerFlat,
+  KoboAnswerId,
   KoboBaseTags,
   KoboGeneralMapping,
   KoboIndex,
@@ -21,15 +21,31 @@ import {useI18n} from '@/core/i18n'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
-import {SelectStatusBy, SelectStatusConfig, ShelterCashStatus} from '@/shared/customInput/SelectStatus'
+import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
+import {KoboEditModalOption} from '@/shared/koboEdit/KoboEditModal'
 
-export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] => {
+export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const ctx = useDatabaseKoboTableContext()
+  const ctxEditTag = useKoboEditTagContext()
   const {m} = useI18n()
   return useMemo(() => {
+    const getSelectMultipleTagSubHeader = ({tag, options, type = 'select_one'}: {
+      type?: 'select_one' | 'select_multiple',
+      tag: string,
+      options: string [] | KoboEditModalOption[]
+    }) => selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.open({
+      formId: ctx.form.id,
+      answerIds: selectedIds,
+      type,
+      tag,
+      options,
+    })}/>
+
     const individualsBreakdown: DatatableColumn.Props<any>[] = [
       {
         id: 'custom_children',
@@ -77,41 +93,69 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       width: 129,
       head: m.paidOn,
       type: 'date',
+      subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.open({
+        formId: ctx.form.id,
+        answerIds: selectedIds,
+        type: 'date',
+        tag: 'lastStatusUpdate',
+      })}/>,
       render: (row: KoboAnswerFlat<{}, KoboBaseTags & KoboTagStatus>) => {
         const date = row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined
         return {
           value: date,
           label: <IpDatepicker
             value={date}
-            onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'lastStatusUpdate'})}
+            onChange={_ => {
+              ctxEditTag.asyncUpdateById.call({
+                formId: ctx.form.id,
+                answerIds: [row.id],
+                value: _,
+                tag: 'lastStatusUpdate'
+              })
+            }}
           />
         }
       }
     }
-    const paymentStatus = (
+    const getPaymentStatusByEnum = (
       enumerator: SelectStatusConfig.EnumStatus = 'CashStatus',
-      key: string = 'status'
+      tag: string = 'status'
     ): DatatableColumn.Props<any>[] => {
       return [
         {
-          id: 'custom_status',
+          id: tag,
           head: m.status,
           type: 'select_one',
           width: 120,
+          subHeader: getSelectMultipleTagSubHeader({
+            tag,
+            options: Obj.values(SelectStatusConfig.enumStatus[enumerator]).map(_ => ({
+              value: _,
+              label: _,
+              before: <OptionLabelTypeCompact
+                sx={{alignSelf: 'center', mr: 1}}
+                type={SelectStatusConfig.statusType[enumerator][_]}
+              />
+            })),
+          }),
           options: () => SheetUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
           render: (row: KoboAnswerFlat<{}, any>) => {
             return {
-              export: row.tags?.[key],
-              value: row.tags?.[key],
+              export: row.tags?.[tag],
+              value: row.tags?.[tag],
               label: (
                 <SelectStatusBy
                   enum={enumerator}
                   disabled={!ctx.canEdit}
-                  value={row.tags?.[key]}
+                  value={row.tags?.[tag]}
                   placeholder={m.project}
                   onChange={_ => {
-                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key})
-                    // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
+                    ctxEditTag.asyncUpdateById.call({
+                      formId: ctx.form.id,
+                      answerIds: [row.id],
+                      value: _,
+                      tag: tag
+                    })
                   }}
                 />
               )
@@ -122,70 +166,40 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       ]
     }
 
-    const paymentStatusEcrec = (
-      enumerator: SelectStatusConfig.EnumStatus = 'CashForEduStatus',
-      key: string = 'status'
-    ): DatatableColumn.Props<any>[] => {
-      return [
-        {
-          id: 'custom_status',
-          head: m.status,
-          type: 'select_one',
-          width: 120,
-          options: () => SheetUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
-          render: (row: KoboAnswer<{}, any>) => {
-            return {
-              export: row.tags?.[key],
-              value: row.tags?.[key],
-              label: (
-                <SelectStatusBy
-                  enum={enumerator}
-                  disabled={!ctx.canEdit}
-                  value={row.tags?.[key]}
-                  placeholder={m.project}
-                  onChange={_ => {
-                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key})
-                    // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
-                  }}
-                />
-              )
-            }
-          }
-        },
-        lastStatusUpdate,
-      ]
-    }
-
-    const paymentStatusShelter = (): DatatableColumn.Props<any>[] => {
-      return [
-        {
-          id: 'custom_status',
-          head: m.status,
-          type: 'select_one',
-          width: 120,
-          options: () => SheetUtils.buildOptions(Obj.keys(ShelterCashStatus), true),
-          render: (row: any) => {
-            return {
-              export: row.tags?.status ?? DatatableUtils.blank,
-              value: row.tags?.status,
-              label: (
-                <SelectStatusBy
-                  enum="ShelterCashStatus"
-                  disabled={!ctx.canEdit}
-                  value={row.tags?.status}
-                  placeholder={m.project}
-                  onChange={_ => {
-                    ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'status'})
-                    // ctx.asyncUpdateTag.call({answerIds: [row.id], value: new Date(), key: 'lastStatusUpdate'})
-                  }}
-                />
-              )
-            }
-          }
-        },
-        lastStatusUpdate,
-      ]
-    }
+    // const paymentStatusShelter = (): DatatableColumn.Props<any>[] => {
+    //   return [
+    //     {
+    //       id: 'custom_status',
+    //       head: m.status,
+    //       type: 'select_one',
+    //       width: 120,
+    //       options: () => SheetUtils.buildOptions(Obj.keys(ShelterCashStatus), true),
+    //       render: (row: any) => {
+    //         return {
+    //           export: row.tags?.status ?? DatatableUtils.blank,
+    //           value: row.tags?.status,
+    //           label: (
+    //             <SelectStatusBy
+    //               enum="ShelterCashStatus"
+    //               disabled={!ctx.canEdit}
+    //               value={row.tags?.status}
+    //               placeholder={m.project}
+    //               onChange={_ => {
+    //                 ctxEditTag.asyncUpdateById.call({
+    //                   formId: ctx.form.id,
+    //                   answerIds: [row.id],
+    //                   value: _,
+    //                   tag: 'status'
+    //                 })
+    //               }}
+    //             />
+    //           )
+    //         }
+    //       }
+    //     },
+    //     lastStatusUpdate,
+    //   ]
+    // }
     const beneficiaries: DatatableColumn.Props<any>[] = [
       {
         id: 'beneficiaries',
@@ -242,18 +256,18 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_cashForRentRegistration').id]: [
-        ...paymentStatus('CashForRentStatus'),
+        ...getPaymentStatusByEnum('CashForRentStatus'),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_cashForRentApplication').id]: [
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_rapidResponse').id]: [
-        ...paymentStatus(),
+        ...getPaymentStatusByEnum(),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_re').id]: [
-        ...paymentStatus(),
+        ...getPaymentStatusByEnum(),
         ...individualsBreakdown,
         {
           id: 'eligibility_summary_esk2',
@@ -271,23 +285,25 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
         ...beneficiaries
       ],
       [KoboIndex.byName('shelter_cashForRepair').id]: [
-        ...paymentStatusShelter(),
+        // ...paymentStatusShelter(),
+        ...getPaymentStatusByEnum('ShelterCashStatus'),
       ],
       [KoboIndex.byName('shelter_cashForShelter').id]: [
-        ...paymentStatusShelter(),
+        ...getPaymentStatusByEnum('ShelterCashStatus'),
+        // ...paymentStatusShelter(),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('ecrec_cashRegistration').id]: [
-        ...paymentStatus(),
+        ...getPaymentStatusByEnum(),
         ...individualsBreakdown,
         ...ecrecScore,
       ],
       [KoboIndex.byName('ecrec_cashRegistrationBha').id]: [
-        ...paymentStatus(),
+        ...getPaymentStatusByEnum(),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('ecrec_trainingGrants').id]: [
-        ...paymentStatusEcrec(),
+        ...getPaymentStatusByEnum('CashForEduStatus'),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('protection_communityMonitoring').id]: [
@@ -296,6 +312,13 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           head: m.project,
           type: 'select_multiple',
           width: 200,
+          subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.open({
+            formId: ctx.form.id,
+            answerIds: selectedIds,
+            type: 'select_one',
+            tag: 'project',
+            options: currentProtectionProjects,
+          })}/>,
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             return {
@@ -308,7 +331,14 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
                   hideNullOption
                   value={row.tags?.project}
                   placeholder={m.project}
-                  onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'project'})}
+                  onChange={_ => {
+                    ctxEditTag.asyncUpdateById.call({
+                      formId: ctx.form.id,
+                      answerIds: [row.id],
+                      value: _,
+                      tag: 'project'
+                    })
+                  }}
                   options={currentProtectionProjects.map(k => ({value: k, children: k}))}
                 />
               )
@@ -322,6 +352,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           head: m.project,
           type: 'select_one',
           width: 200,
+          subHeader: getSelectMultipleTagSubHeader({tag: 'project', options: currentProtectionProjects}),
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             return {
@@ -334,31 +365,14 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
                   disabled={!ctx.canEdit}
                   value={row.tags?.project}
                   placeholder={m.project}
-                  onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'project'})}
-                  options={currentProtectionProjects.map(k => ({value: k, children: k}))}
-                />
-              )
-            }
-          }
-        }
-      ],
-      [KoboIndex.byName('protection_hhs2_1').id]: [
-        {
-          id: 'tags_project',
-          head: m.project,
-          type: 'select_multiple',
-          width: 200,
-          options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
-          render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
-            return {
-              export: row.tags?.projects?.join(' | ') ?? DatatableUtils.blank,
-              tooltip: row.tags?.projects,
-              value: map(row.tags?.projects, p => p.length === 0 ? undefined : p) ?? [SheetUtils.blank],
-              label: (
-                <IpSelectMultiple
-                  disabled={!ctx.canEdit}
-                  value={row.tags?.projects ?? []}
-                  onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'projects'})}
+                  onChange={_ => {
+                    ctxEditTag.asyncUpdateById.call({
+                      formId: ctx.form.id,
+                      answerIds: [row.id],
+                      value: _,
+                      tag: 'project'
+                    })
+                  }}
                   options={currentProtectionProjects.map(k => ({value: k, children: k}))}
                 />
               )
@@ -372,6 +386,7 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
           head: m.project,
           type: 'select_multiple',
           width: 200,
+          subHeader: getSelectMultipleTagSubHeader({tag: 'projects', options: currentProtectionProjects}),
           options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             const safeProjects = safeArray(row.tags?.projects)
@@ -383,7 +398,14 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
                 <IpSelectMultiple
                   disabled={!ctx.canEdit}
                   value={safeProjects}
-                  onChange={_ => ctx.asyncUpdateTag.call({answerIds: [row.id], value: _, key: 'projects'})}
+                  onChange={_ => {
+                    ctxEditTag.asyncUpdateById.call({
+                      formId: ctx.form.id,
+                      answerIds: [row.id],
+                      value: _,
+                      tag: 'projects'
+                    })
+                  }}
                   options={currentProtectionProjects.map(k => ({value: k, children: k}))}
                 />
               )
@@ -393,5 +415,5 @@ export const useCustomColumns = (): DatatableColumn.Props<KoboMappedAnswer>[] =>
       ]
     }
     return extra[ctx.form.id] ?? []
-  }, [ctx.form.id])
+  }, [ctx.form.id, selectedIds])
 }

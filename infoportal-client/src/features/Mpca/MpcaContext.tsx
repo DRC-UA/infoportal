@@ -1,5 +1,4 @@
 import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
-import {MicrosoftGraphClient} from '@/core/sdk/microsoftGraph/microsoftGraphClient'
 import {CashStatus, KoboAnswerId, KoboId, MpcaEntity, NonNullableKey} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {MpcaPayment} from '@/core/sdk/server/mpcaPaymentTool/MpcaPayment'
@@ -40,9 +39,7 @@ export const useMpcaContext = () => useContext(Context)
 
 export const MpcaProvider = ({
   children,
-  sdk = new MicrosoftGraphClient(),
 }: {
-  sdk?: MicrosoftGraphClient
   children: ReactNode
 }) => {
   const {api} = useAppSettings()

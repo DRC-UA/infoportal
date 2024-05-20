@@ -38,11 +38,7 @@ export const DatabaseProvider = ({
     const index = seq(_forms.get).reduceObject<Record<KoboId, KoboForm>>(_ => [_.id, _])
     return (_: KoboId) => index[_]
   }, [_forms.get])
-  // const servers = useFetcher(() => api.kobo.server.getAll())
 
-  // useEffect(() => {
-  //   servers.fetch()
-  // }, [])
   useEffect(() => {
     _forms.fetch()
   }, [])

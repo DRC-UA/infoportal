@@ -1,8 +1,8 @@
 import {IpSelectOption, IpSelectSingle, IpSelectSingleNullableProps} from '@/shared/Select/SelectSingle'
 import {fnSwitch, KeyOf, Obj} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
-import {CashForEduStatus, CashForRentStatus, CashStatus, StateStatus, KoboValidation} from '@infoportal-common'
-import {Box, Icon, useTheme} from '@mui/material'
+import {CashForEduStatus, CashForRentStatus, CashStatus, KoboValidation, StateStatus} from '@infoportal-common'
+import {Box, Icon, SxProps, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 
 export enum ShelterCashStatus {
@@ -41,6 +41,8 @@ export namespace SelectStatusConfig {
       [KoboValidation.Approved]: 'success',
       [KoboValidation.Pending]: 'warning',
       [KoboValidation.Rejected]: 'error',
+      [KoboValidation.Flagged]: 'info',
+      [KoboValidation.UnderReview]: 'disabled',
     } as Record<KoboValidation, StateStatus>,
     CashForRentStatus: {
       [CashForRentStatus.FirstPending]: 'warning',
@@ -84,16 +86,18 @@ export const OptionLabelType = ({
 
 export const OptionLabelTypeCompact = ({
   type,
+  sx,
 }: {
   type: StateStatus
+  sx?: SxProps
 }) => {
   const t = useTheme()
   return fnSwitch(type, {
-    'disabled': <Icon sx={{color: t.palette.text.disabled}} title={type}>remove_circle</Icon>,
-    'error': <Icon sx={{color: t.palette.error.main}} title={type}>error</Icon>,
-    'warning': <Icon sx={{color: t.palette.warning.main}} title={type}>schedule</Icon>,
-    'info': <Icon sx={{color: t.palette.info.main}} title={type}>info</Icon>,
-    'success': <Icon sx={{color: t.palette.success.main}} title={type}>check_circle</Icon>,
+    'disabled': <Icon sx={{color: t.palette.text.disabled, ...sx}} title={type}>remove_circle</Icon>,
+    'error': <Icon sx={{color: t.palette.error.main, ...sx}} title={type}>error</Icon>,
+    'warning': <Icon sx={{color: t.palette.warning.main, ...sx}} title={type}>schedule</Icon>,
+    'info': <Icon sx={{color: t.palette.info.main, ...sx}} title={type}>info</Icon>,
+    'success': <Icon sx={{color: t.palette.success.main, ...sx}} title={type}>check_circle</Icon>,
   }, () => undefined)
 }
 

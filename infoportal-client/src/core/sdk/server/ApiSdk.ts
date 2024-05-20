@@ -20,6 +20,7 @@ import {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboMetaSdk} from '@/core/sdk/server/kobo-meta/KoboMetaSdk'
 import {JsonStoreSdk} from '@/core/sdk/server/jsonStore/JsonStoreSdk'
 import {HdpSdk} from '@/core/sdk/server/hdp/HdpSdk'
+import {KoboTypedAnswerSdk2} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
 
 export class ApiSdk {
   constructor(private client: ApiClient) {
@@ -41,6 +42,7 @@ export class ApiSdk {
   readonly nfi = new NfiMPcaSdk(this.client)
   readonly koboMeta = new KoboMetaSdk(this.client)
   readonly kobo = {
+    typedAnswers2: new KoboTypedAnswerSdk2(this.client),
     typedAnswers: new KoboTypedAnswerSdk(this.client),
     answer: new KoboAnswerSdk(this.client),
     server: new KoboServerSdk(this.client),

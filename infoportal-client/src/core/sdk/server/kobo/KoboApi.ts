@@ -23,6 +23,29 @@ export type KoboFiles = {
   user__username: string
 }
 
+export type KoboColumType = 'file'
+  | 'deviceid'
+  | 'end_repeat'
+  | 'begin_repeat'
+  | 'begin_group'
+  | 'select_one'
+  | 'note'
+  | 'datetime'
+  | 'end_group'
+  | 'username'
+  | 'geopoint'
+  | 'image'
+  | 'today'
+  | 'text'
+  | 'calculate'
+  | 'integer'
+  | 'decimal'
+  | 'select_multiple'
+  | 'select_one_from_file'
+  | 'date'
+  | 'start'
+  | 'end'
+
 export interface KoboSchema {
   name: string
   deployment__links: {
@@ -53,29 +76,7 @@ export interface KoboSchema {
       label?: string[]
       name: string
       file?: string
-      type:
-        'file' |
-        'deviceid' |
-        'end_repeat' |
-        'begin_repeat' |
-        'begin_group' |
-        'select_one' |
-        'note' |
-        'datetime' |
-        'end_group' |
-        'username' |
-        'geopoint' |
-        'image' |
-        'today' |
-        'text' |
-        'calculate' |
-        'integer' |
-        'decimal' |
-        'select_multiple' |
-        'select_one_from_file' |
-        'date' |
-        'start' |
-        'end'
+      type: KoboColumType
       select_from_list_name?: string
     }[]
     translated: ['hint', 'label', 'media::image']

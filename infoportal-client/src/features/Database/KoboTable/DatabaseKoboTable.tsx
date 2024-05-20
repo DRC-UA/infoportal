@@ -1,28 +1,26 @@
-import React, {useEffect, useMemo} from 'react'
+import React, {useCallback, useEffect, useMemo} from 'react'
 import {useDatabaseContext} from '@/features/Database/DatabaseContext'
 import {useParams} from 'react-router'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {map} from '@alexandreannic/ts-utils'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 import {databaseUrlParamsValidation} from '@/features/Database/Database'
-import {useIpToast} from '@/core/useToast'
 import {DatabaseKoboTableContent} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
 import {useSession} from '@/core/Session/SessionContext'
 import {Access, AccessLevel} from '@/core/sdk/server/access/Access'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {DatabaseKoboTableProvider} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {KoboId, KoboIndex, koboIndex, UUID} from '@infoportal-common'
+import {KoboId, koboIndex, UUID} from '@infoportal-common'
 import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {Skeleton} from '@mui/material'
 import {SheetFilterValue} from '@/shared/Sheet/util/sheetType'
 import {SheetSkeleton} from '@/shared/Sheet/SheetSkeleton'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
-import {useI18n} from '@/core/i18n'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {FetchParams} from '@/shared/hook/useFetchers'
 
 export const DatabaseTableRoute = () => {
   const ctx = useDatabaseContext()
@@ -69,28 +67,15 @@ export const DatabaseTable = ({
   overrideEditAccess,
 }: DatabaseTableProps) => {
   const {api} = useAppSettings()
-  const {m} = useI18n()
   const {accesses, session} = useSession()
-  const {toastHttpError} = useIpToast()
   const ctxSchema = useKoboSchemaContext()
-  const fetcherSchemaIfUnknown = useFetcher(() => api.koboApi.getForm({serverId, id: formId}))
-  const formName = KoboIndex.searchById(formId)?.name
+  const ctxAnswers = useKoboAnswersContext()
 
-  useEffect(function getSchema() {
-    if (formName) ctxSchema.fetchers.fetch({force: false}, formName)
-    else fetcherSchemaIfUnknown.fetch()
+  useEffect(() => {
+    ctxSchema.fetchById(formId)
   }, [formId])
 
-  const schemaBundle = useMemo(() => {
-    return formName ? ctxSchema.schema[formName] : fetcherSchemaIfUnknown.get ? KoboSchemaHelper.buildBundle({
-      m,
-      schema: fetcherSchemaIfUnknown.get,
-      langIndex: ctxSchema.langIndex
-    }) : undefined
-  }, [fetcherSchemaIfUnknown.get, ctxSchema.schema, ctxSchema.langIndex])
-
   const _form = useFetcher(() => form ? Promise.resolve(form) : api.kobo.form.get(formId))
-  const _answers = useFetcher(() => api.kobo.answer.searchByAccess({formId}))
 
   const access = useMemo(() => {
     const list = accesses.filter(Access.filterByFeature(AppFeatureId.kobo_database)).filter(_ => _.params?.koboFormId === formId)
@@ -101,36 +86,41 @@ export const DatabaseTable = ({
   }, [accesses])
 
   useEffect(() => {
-    _answers.fetch({})
+    ctxAnswers.byId.fetch({}, formId)
     _form.fetch()
   }, [serverId, formId])
 
-  useEffectFn(_answers.error, toastHttpError)
+
+  const loading = ctxAnswers.byId.loading(formId)
+  const refetch = useCallback(async (p: FetchParams = {}) => {
+    await ctxAnswers.byId.fetch(p, formId)
+  }, [formId])
 
   return (
     <>
-      {(ctxSchema.fetchers.anyLoading || fetcherSchemaIfUnknown.loading || _answers.loading) && !_answers.get && (
+      {(ctxSchema.anyLoading || loading) && !ctxAnswers.byId.get(formId) && (
         <>
           <Skeleton sx={{mx: 1, height: 54}}/>
           <SheetSkeleton/>
         </>
       )}
-      {_answers.get && _form.get && schemaBundle && (
+      {map(ctxAnswers.byId.get(formId), _form.get, ctxSchema.byId[formId]?.get, (answers, form, schema) => (
         <DatabaseKoboTableProvider
-          schema={schemaBundle}
+          schema={schema}
           dataFilter={dataFilter}
           canEdit={overrideEditAccess ?? access.write}
           serverId={serverId}
-          fetcherAnswers={_answers}
-          data={_answers.get?.data}
-          form={_form.get!}
+          refetch={refetch}
+          loading={loading}
+          data={answers.data}
+          form={form}
         >
           <DatabaseKoboTableContent
             onFiltersChange={onFiltersChange}
             onDataChange={onDataChange}
           />
         </DatabaseKoboTableProvider>
-      )}
+      ))}
     </>
   )
 }

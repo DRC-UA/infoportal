@@ -1,17 +1,26 @@
 import React, {ReactNode, useContext} from 'react'
-import {KoboAnswerId, KoboIndex, Shelter_NTA, ShelterNtaTags, ShelterTaTags} from '@infoportal-common'
+import {KoboAnswerId, KoboId, Shelter_NTA} from '@infoportal-common'
 import {UseShelterData} from '@/features/Shelter/useShelterData'
-import {UseShelterActions, useShelterActions} from '@/features/Shelter/useShelterActions'
 import {AccessSum} from '@/core/sdk/server/access/Access'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {KoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
+import {useDatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
+import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 export type ShelterContext = Pick<KoboSchemaContext, 'langIndex' | 'setLangIndex'> & {
   access: AccessSum
   data: UseShelterData
-  nta: UseShelterActions<ShelterNtaTags>
-  ta: UseShelterActions<ShelterTaTags>
   allowedOffices: Shelter_NTA.T['back_office'][]
+  asyncEdit: (formId: KoboId, answerId: KoboAnswerId) => string
+  nta: {
+    schema: KoboSchemaHelper.Bundle
+    openModalAnswer: (_: ShelterEntity['nta']) => void
+  }
+  ta: {
+    schema: KoboSchemaHelper.Bundle
+    openModalAnswer: (_: ShelterEntity['ta']) => void
+  }
 }
 
 const Context = React.createContext({} as ShelterContext)
@@ -34,43 +43,25 @@ export const ShelterProvider = ({
   children: ReactNode
   allowedOffices: ShelterContext['allowedOffices']
 } & Pick<KoboSchemaContext, 'langIndex' | 'setLangIndex'>) => {
-  const updateTag = (form: 'ta' | 'nta') => ({answerIds, key, value}: {
-    answerIds: KoboAnswerId[]
-    key: any
-    value: any
-  }) => data.fetcher.set(prev => {
-    if (!data.index || !prev) return prev
-    const set = new Set(answerIds)
-    return prev.map(_ => {
-      if (set.has(_[form]?.id ?? '!') && _[form]) {
-        _[form]!.tags = {
-          ...(_[form]?.tags ?? {}),
-          [key]: value,
-        }
-      }
-      return _
-    })
-  })
+  const {api} = useAppSettings()
 
-  const ntaActions = useShelterActions<ShelterNtaTags>({
-    form: 'nta',
-    formId: KoboIndex.byName('shelter_nta').id,
-    setEntity: data.fetcher.set,
-    schema: schemaNta,
-  })
-  const taActions = useShelterActions<ShelterTaTags>({
-    form: 'ta',
-    formId: KoboIndex.byName('shelter_ta').id,
-    setEntity: data.fetcher.set,
-    schema: schemaTa,
-  })
+  const asyncEdit = (formId: KoboId, answerId: KoboAnswerId) => api.koboApi.getEditUrl({formId, answerId})
+  const [openModalAnswerNta] = useDatabaseKoboAnswerView<ShelterEntity['nta']>(schemaNta.schemaUnsanitized)
+  const [openModalAnswerTa] = useDatabaseKoboAnswerView<ShelterEntity['ta']>(schemaTa.schemaUnsanitized)
 
   return (
     <Context.Provider value={{
       access,
+      asyncEdit,
+      nta: {
+        schema: schemaNta,
+        openModalAnswer: openModalAnswerNta,
+      },
+      ta: {
+        schema: schemaTa,
+        openModalAnswer: openModalAnswerTa,
+      },
       data,
-      nta: ntaActions,
-      ta: taActions,
       allowedOffices,
       ...props,
     }}>

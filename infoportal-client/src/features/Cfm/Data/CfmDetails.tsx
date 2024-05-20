@@ -7,11 +7,10 @@ import {Box, Divider, Grid, Icon} from '@mui/material'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {ListRow} from '@/shared/ListRow'
 import {useI18n} from '@/core/i18n'
-import React from 'react'
+import React, {useMemo} from 'react'
 import {CfmDataProgram, CfmDataSource, DrcOffice, KoboMealCfmArea, KoboMealCfmStatus, KoboMealCfmTag, Meal_CfmInternal, Regexp} from '@infoportal-common'
 import {KoboSelectTag} from '@/shared/KoboSelectTag'
-
-import {Enum, Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {CfmPriorityLogo} from '@/features/Cfm/Data/CfmTable'
 import {IpBtn} from '@/shared/Btn'
 import {cfmIndex} from '@/features/Cfm/Cfm'
@@ -20,6 +19,9 @@ import {Modal} from 'mui-extension/lib/Modal'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {TableInput} from '@/shared/TableInput'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {IpIconBtn} from '@/shared/IconBtn'
+import {NavLink} from 'react-router-dom'
 
 const routeParamsSchema = yup.object({
   formId: yup.string().required(),
@@ -28,7 +30,7 @@ const routeParamsSchema = yup.object({
 export const CfmEntryRoute = () => {
   const {formId, answerId} = routeParamsSchema.validateSync(useParams())
   const ctx = useCfmContext()
-  const entry = ctx.mappedData?.find(_ => _.id === answerId && formId === formId)
+  const entry = useMemo(() => ctx.mappedData?.find(_ => _.id === answerId && formId === formId), [formId, ctx.mappedData])
 
   if (!entry) {
     return (
@@ -49,6 +51,7 @@ export const CfmDetails = ({entry}: {
 }) => {
   const {m, formatDateTime} = useI18n()
   const ctx = useCfmContext()
+  const ctxEditTag = useKoboEditTagContext()
   const navigate = useNavigate()
   const {api} = useAppSettings()
   const {session} = useSession()
@@ -70,12 +73,18 @@ export const CfmDetails = ({entry}: {
               .filter(_ => !ctx.authorizations.sum.admin ? _ !== KoboMealCfmStatus.Archived : true)
               .mapValues(k => (
                 <CfmStatusIconLabel key={k} status={k!} sx={{display: 'flex', alignItems: 'center'}}/>
-              )).get()
+              ))
+              .get()
             }
           />
         </>
       }>
-        <Box>{entry.id} - {m._cfm.formFrom[entry.form]}</Box>
+        <Box sx={{display: 'flex', alignItems: 'center'}}>
+          <NavLink to={cfmIndex.siteMap.data}>
+            <IpIconBtn color="primary" sx={{mr: 1}}>arrow_back</IpIconBtn>
+          </NavLink>
+          {entry.id} - {m._cfm.formFrom[entry.form]}
+        </Box>
       </PageTitle>
       <Grid container spacing={2} alignItems="stretch">
         <Grid item xs={6}>
@@ -142,7 +151,7 @@ export const CfmDetails = ({entry}: {
                   })()}
                   onChange={_ => {
                     if (_ === undefined || Regexp.get.drcEmail.test(_))
-                      ctx.updateTag.call({formId: entry.formId, answerId: entry.id, key: 'focalPointEmail', value: _})
+                      ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'focalPointEmail', value: _})
                   }}
                 />
               </ListRow>
@@ -188,9 +197,9 @@ export const CfmDetails = ({entry}: {
             disabled={entry.form === CfmDataSource.Internal}
             defaultValue={entry.category}
             onChange={newValue => {
-              ctx.updateTag.call({formId: entry.formId, answerId: entry.id, key: 'feedbackTypeOverride', value: newValue})
+              ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'feedbackTypeOverride', value: newValue})
             }}
-            options={Enum.entries(Meal_CfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
+            options={Obj.entries(Meal_CfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
           />
           <Box>{entry.feedback}</Box>
 
@@ -204,7 +213,7 @@ export const CfmDetails = ({entry}: {
             minRows={6}
             maxRows={10}
             onChange={_ => {
-              ctx.updateTag.call({formId: entry.formId, answerId: entry.id, key: 'notes', value: _})
+              ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'notes', value: _})
             }}
           />
         </PanelBody>

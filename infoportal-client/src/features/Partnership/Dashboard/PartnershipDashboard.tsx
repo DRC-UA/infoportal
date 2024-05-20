@@ -32,13 +32,13 @@ export const PartnershipDashboard = ({}: {}) => {
   const ctx = usePartnershipContext()
   const ctxSchema = useKoboSchemaContext()
   useEffect(() => {
-    ctxSchema.fetchers.fetch({}, 'partnership_partnersDatabase')
+    ctxSchema.fetchByName('partnership_partnersDatabase')
   }, [])
 
   return (
     <Page width="lg" loading={ctx.data.fetcherPartnersDb.loading}>
-      {ctx.data.fetcherPartnersDb.get && ctxSchema.schema.partnership_partnersDatabase && (
-        <_PartnershipDashboard schema={ctxSchema.schema.partnership_partnersDatabase}/>
+      {ctx.data.fetcherPartnersDb.get && ctxSchema.byName.partnership_partnersDatabase.get && (
+        <_PartnershipDashboard schema={ctxSchema.byName.partnership_partnersDatabase.get}/>
       )}
     </Page>
   )

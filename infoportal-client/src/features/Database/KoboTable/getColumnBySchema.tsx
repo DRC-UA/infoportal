@@ -6,7 +6,7 @@ import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/Kob
 import {mapFor, seq} from '@alexandreannic/ts-utils'
 import {formatDate, formatDateTime} from '@/core/i18n/localization/en'
 import {IpBtn} from '@/shared/Btn'
-import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
+import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import React from 'react'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
@@ -16,6 +16,7 @@ import {Txt} from 'mui-extension'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {DatatableHeadTypeIcon} from '@/shared/Datatable/DatatableHead'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
+import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 
 const imageExtension = new Set([
   '.png',
@@ -133,7 +134,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
     id: getId(q),
     ...showEditBtn ? {typeIcon: null} : {},
     subHeader: showEditBtn
-      ? <TableIconBtn size="small" color="primary" onClick={() => onSelectColumn(q.name)}>edit</TableIconBtn>
+      ? <TableEditCellBtn onClick={() => onSelectColumn(q.name)}/>
       : undefined,
     head: removeHtml(getHead(translateQuestion(q.name))),
   }
