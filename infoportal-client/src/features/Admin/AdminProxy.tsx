@@ -16,6 +16,7 @@ import {Proxy} from '@/core/sdk/server/proxy/Proxy'
 import {endOfDay} from 'date-fns'
 import {Modal} from 'mui-extension/lib/Modal'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {formatDateTime} from '@/core/i18n/localization/en'
 
 interface CreateForm {
   name: string
@@ -137,7 +138,12 @@ export const AdminProxy = () => {
               type: 'date',
               id: 'createdAt',
               head: m.createdAt,
-              renderQuick: _ => formatDate(_.createdAt),
+              render: _ => {
+                return {
+                  label: formatDateTime(_.createdAt),
+                  value: _.createdAt,
+                }
+              }
             },
             {
               type: 'date',
