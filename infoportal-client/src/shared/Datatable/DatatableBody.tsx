@@ -21,9 +21,6 @@ const DatatableBody_ = <T extends DatatableRow>({
 > & {
   data: T[]
 }) => {
-  useEffect(() => {
-    console.log('data rerender')
-  }, [data])
   return (
     <>
       {data.map((item, rowI) => (

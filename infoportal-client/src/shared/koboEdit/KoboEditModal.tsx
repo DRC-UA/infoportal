@@ -89,7 +89,6 @@ export const KoboEditModalTag = ({
   const ctxEdit = useKoboEditTagContext()
 
   const fetcherUpdate = useFetcher((value: any) => {
-    console.log('selectedIds', answerIds)
     return ctxEdit.asyncUpdateById.call({formId, answerIds, tag, value}).then(() => {
       onUpdated?.(value)
       return answerIds.length
