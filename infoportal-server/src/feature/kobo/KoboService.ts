@@ -375,17 +375,33 @@ export class KoboService {
     question: string,
     answer?: string
   }) => {
-    const sdk = await this.sdkGenerator.get()
-    const [x] = await Promise.all([
-      sdk.updateData({formId, submissionIds: answerIds, data: {[question]: answer}}),
-      await this.prisma.$executeRawUnsafe(
-        `UPDATE "KoboAnswers"
-         SET answers     = jsonb_set(answers, '{${question}}', '"${answer}"'),
-             "updatedAt" = NOW()
-         WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
-        `)
-    ])
-  }
+    const sdk = await this.sdkGenerator.get();
+    const chunkSize = 20;
+
+    const updateChunk = async (chunk: KoboAnswerId[]) => {
+      await sdk.updateData({
+        formId,
+        submissionIds: chunk,
+        data: { [question]: answer }
+      });
+
+      await this.prisma.$executeRawUnsafe(`
+      UPDATE "KoboAnswers"
+      SET answers     = jsonb_set(answers, '{${question}}', '"${answer}"'),
+          "updatedAt" = NOW()
+      WHERE id IN (${chunk.map(id => `'${id}'`).join(',')})
+    `);
+    };
+
+    const chunkedUpdates = answerIds.reduce((chunks, id, index) => {
+      if (index % chunkSize === 0) chunks.push([]);
+      chunks[chunks.length - 1].push(id);
+      return chunks;
+    }, [] as KoboAnswerId[][]);
+
+    await Promise.all(chunkedUpdates.map(updateChunk));
+  };
+
 
   readonly updateTags = async ({formId, answerIds, tags}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>}) => {
     await this.prisma.$executeRawUnsafe(
