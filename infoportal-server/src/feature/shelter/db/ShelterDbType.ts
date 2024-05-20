@@ -3,6 +3,7 @@ import {ShelterNtaTags, ShelterTaTags} from '../../kobo/tags/ShelterTags'
 import {Shelter_TA} from '@infoportal-common'
 import {Shelter_NTA} from '@infoportal-common'
 
+/** @deprecated*/
 export enum ShelterTaPriceLevel {
   Light = 'Light',
   Medium = 'Medium',

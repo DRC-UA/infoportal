@@ -6,6 +6,7 @@ import {ShelterDbService} from './ShelterDbService'
 import {ShelterEntity} from './ShelterDbType'
 import {seq} from '@alexandreannic/ts-utils'
 
+/** @deprecated*/
 export class ShelterCachedDb {
   private static instance: ShelterCachedDb
 

@@ -109,7 +109,6 @@ export class Kobo {
           break
         }
         case 'select_multiple': {
-          console.log(answer)
           mapped[question] = (answer as string).split(' ')
           break
         }

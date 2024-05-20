@@ -8,6 +8,7 @@ import {Enum, fnSwitch, Seq, seq} from '@alexandreannic/ts-utils'
 import {DrcOffice, KoboIndex, OblastIndex} from '@infoportal-common'
 import {ShelterContractorPrices} from '@infoportal-common'
 
+/** @deprecated*/
 export class ShelterDbService {
 
   constructor(
