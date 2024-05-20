@@ -89,7 +89,7 @@ export const OptionLabelTypeCompact = ({
   sx,
 }: {
   type: StateStatus
-  sx: SxProps
+  sx?: SxProps
 }) => {
   const t = useTheme()
   return fnSwitch(type, {

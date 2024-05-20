@@ -76,7 +76,7 @@ export const useShelterData = () => {
           if (!b.nta) return 1
           return a.nta.submissionTime?.getTime() - b.nta?.submissionTime.getTime()
         }) as Seq<ShelterEntity>
-    }) ?? []
+    }) ?? seq([])
   }, [
     ctxAnswers.byName.get('shelter_nta'),
     ctxAnswers.byName.get('shelter_ta'),

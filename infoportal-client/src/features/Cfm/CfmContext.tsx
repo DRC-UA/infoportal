@@ -207,7 +207,7 @@ export const CfmProvider = ({
         })
       })
       return seq(res).sort((b, a) => (a.date ?? a.submissionTime).getTime() - (b.date ?? b.submissionTime).getTime())
-    })
+    }) ?? seq([])
   }, [
     ctxAnswers.byName.get('meal_cfmInternal'),
     ctxAnswers.byName.get('meal_cfmExternal'),
@@ -256,8 +256,8 @@ export const CfmProvider = ({
       asyncRemove,
       fetching: ctxAnswers.byName.loading('meal_cfmInternal') || ctxAnswers.byName.loading('meal_cfmExternal'),
       users,
-      mappedData: mappedData ?? [],
-      visibleData: visibleData ?? [],
+      mappedData: mappedData,
+      visibleData: visibleData,
       schemaInternal,
       schemaExternal,
     }}>

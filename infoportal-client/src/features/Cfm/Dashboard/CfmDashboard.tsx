@@ -94,7 +94,7 @@ export const CfmDashboard = () => {
   }, [filteredByDateData, filters])
 
   return (
-    <Page width="lg" loading={ctx.fetcherData.loading}>
+    <Page width="lg" loading={ctx.fetching}>
       <DataFilterLayout
         filters={filters}
         shapes={shape}

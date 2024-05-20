@@ -35,6 +35,7 @@ export const KoboAnswersProvider = ({
 }) => {
   const {api} = useAppSettings()
   const {m} = useI18n()
+  const {toastHttpError} = useIpToast()
   const ctxSchema = useKoboSchemaContext()
 
   const getMappedRequest = (_?: KoboFormName) => api.kobo.typedAnswers2.searchByAccess[_ as KoboFormNameMapped]
@@ -54,7 +55,6 @@ export const KoboAnswersProvider = ({
       }
     }
   }, {requestKey: _ => _[0]})
-  const {toastHttpError} = useIpToast()
 
   const {byName, byId} = useMemo(() => {
     return {
@@ -85,7 +85,8 @@ export const KoboAnswersProvider = ({
     }
   }, [fetcher.getAsMap])
 
-  useEffectFn(fetcher.error, toastHttpError)
+  console.log(fetcher.error)
+  // useEffectFn(fetcher.error, toastHttpError)
 
   return (
     <Context.Provider value={{

@@ -10,8 +10,7 @@ import {useI18n} from '@/core/i18n'
 import React from 'react'
 import {CfmDataProgram, CfmDataSource, DrcOffice, KoboMealCfmArea, KoboMealCfmStatus, KoboMealCfmTag, Meal_CfmInternal, Regexp} from '@infoportal-common'
 import {KoboSelectTag} from '@/shared/KoboSelectTag'
-
-import {Enum, Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {CfmPriorityLogo} from '@/features/Cfm/Data/CfmTable'
 import {IpBtn} from '@/shared/Btn'
 import {cfmIndex} from '@/features/Cfm/Cfm'
@@ -20,6 +19,7 @@ import {Modal} from 'mui-extension/lib/Modal'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {TableInput} from '@/shared/TableInput'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 
 const routeParamsSchema = yup.object({
   formId: yup.string().required(),
@@ -49,6 +49,7 @@ export const CfmDetails = ({entry}: {
 }) => {
   const {m, formatDateTime} = useI18n()
   const ctx = useCfmContext()
+  const ctxEditTag = useKoboEditTagContext()
   const navigate = useNavigate()
   const {api} = useAppSettings()
   const {session} = useSession()
@@ -142,7 +143,7 @@ export const CfmDetails = ({entry}: {
                   })()}
                   onChange={_ => {
                     if (_ === undefined || Regexp.get.drcEmail.test(_))
-                      ctx.updateTag.call({formId: entry.formId, answerId: entry.id, key: 'focalPointEmail', value: _})
+                      ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'focalPointEmail', value: _})
                   }}
                 />
               </ListRow>
@@ -188,9 +189,9 @@ export const CfmDetails = ({entry}: {
             disabled={entry.form === CfmDataSource.Internal}
             defaultValue={entry.category}
             onChange={newValue => {
-              ctx.updateTag.call({formId: entry.formId, answerId: entry.id, key: 'feedbackTypeOverride', value: newValue})
+              ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'feedbackTypeOverride', value: newValue})
             }}
-            options={Enum.entries(Meal_CfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
+            options={Obj.entries(Meal_CfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
           />
           <Box>{entry.feedback}</Box>
 
@@ -204,7 +205,7 @@ export const CfmDetails = ({entry}: {
             minRows={6}
             maxRows={10}
             onChange={_ => {
-              ctx.updateTag.call({formId: entry.formId, answerId: entry.id, key: 'notes', value: _})
+              ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'notes', value: _})
             }}
           />
         </PanelBody>
