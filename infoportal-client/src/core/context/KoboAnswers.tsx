@@ -85,9 +85,6 @@ export const KoboAnswersProvider = ({
     }
   }, [fetcher.getAsMap])
 
-  console.log(fetcher.error)
-  // useEffectFn(fetcher.error, toastHttpError)
-
   return (
     <Context.Provider value={{
       byName,
