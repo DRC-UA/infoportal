@@ -122,8 +122,6 @@ const CfmContext = React.createContext({} as CfmContext)
 
 export const useCfmContext = () => useContext<CfmContext>(CfmContext)
 
-export const cfmMakeUpdateRequestKey = (form: KoboId, answerId: KoboAnswerId, key: KeyOf<KoboMealCfmTag>) => form + answerId + key
-
 export const cfmMakeEditRequestKey = (form: KoboId, answerId: KoboAnswerId) => form + answerId
 
 export const CfmProvider = ({
@@ -154,18 +152,6 @@ export const CfmProvider = ({
       // seeHisOwn: seeHisOwn,
     }
   }, [session, accesses])
-
-  // const data = useMemo(() => {
-  //   return map(ctxAnswers.byName.get('meal_cfmInternal'), ctxAnswers.byName.get('meal_cfmExternal'), (internal, external) => {
-  //     return {
-  //       [CfmDataSource.External]: external,
-  //       [CfmDataSource.Internal]: internal,
-  //     }
-  //   })
-  // }, [
-  //   ctxAnswers.byName.get('meal_cfmInternal'),
-  //   ctxAnswers.byName.get('meal_cfmExternal'),
-  // ])
 
   const mappedData = useMemo(() => {
     return map(ctxAnswers.byName.get('meal_cfmInternal'), ctxAnswers.byName.get('meal_cfmExternal'), (internal, external) => {
@@ -214,7 +200,9 @@ export const CfmProvider = ({
   ])
 
   const visibleData = useMemo(() => {
+    console.log('>>refresh', session.email, mappedData)
     return mappedData?.filter(_ => {
+      console.log(_.tags?.focalPointEmail)
       if (_.tags?.deletedBy) return false
       if (session.email === _.tags?.focalPointEmail)
         return true

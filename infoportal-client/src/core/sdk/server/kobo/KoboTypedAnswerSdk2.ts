@@ -37,18 +37,22 @@ export class KoboTypedAnswerSdk2 {
   private readonly buildSearch = (request: 'searchByAccess' | 'search') => {
     const req = this.sdk[request]
     return ({
-      ...make('meal_cfmInternal', (filters: KoboAnswerFilter) => req({
-        formId: KoboIndex.byName('meal_cfmInternal').id,
-        fnMapKobo: Meal_CfmInternal.map,
-        fnMapTags: KoboMealCfmHelper.map,
-        ...filters,
-      })),
-      ...make('meal_cfmExternal', (filters: KoboAnswerFilter) => req({
-        formId: KoboIndex.byName('meal_cfmExternal').id,
-        fnMapKobo: Meal_CfmExternal.map,
-        fnMapTags: KoboMealCfmHelper.map,
-        ...filters,
-      })),
+      ...make('meal_cfmInternal', (filters: KoboAnswerFilter) =>
+        // BAD, we should revamp the way access is working for CFM. Add FP should add rule in the access table that will natively work with the standard access filters
+        this.sdk.search({
+          formId: KoboIndex.byName('meal_cfmInternal').id,
+          fnMapKobo: Meal_CfmInternal.map,
+          fnMapTags: KoboMealCfmHelper.map,
+          ...filters,
+        })),
+      ...make('meal_cfmExternal', (filters: KoboAnswerFilter) =>
+        // BAD, we should revamp the way access is working for CFM. Add FP should add rule in the access table that will natively work with the standard access filters
+        this.sdk.search({
+          formId: KoboIndex.byName('meal_cfmExternal').id,
+          fnMapKobo: Meal_CfmExternal.map,
+          fnMapTags: KoboMealCfmHelper.map,
+          ...filters,
+        })),
       ...make('protection_groupSession', (filters: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('protection_groupSession').id,
         fnMapKobo: Protection_groupSession.map,
