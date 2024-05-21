@@ -1,20 +1,27 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboAnswerId, KoboFormName, KoboId, KoboIndex} from '@infoportal-common'
+import {KoboAnswerFlat, KoboAnswerId, KoboFormName, KoboId, KoboIndex} from '@infoportal-common'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
 import {FetchParams, useFetchers} from '@/shared/hook/useFetchers'
-import {useEffectFn} from '@alexandreannic/react-hooks-lib'
-import React, {ReactNode, useContext, useMemo} from 'react'
+import React, {ReactNode, useContext, useMemo, useState} from 'react'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {useIpToast} from '@/core/useToast'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Kobo, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {useI18n} from '@/core/i18n'
+import {DatabaseKoboAnswerViewDialog} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 
 const Context = React.createContext({} as KoboAnswersContext)
 
+export interface OpenModalProps {
+  answer: KoboAnswerFlat<any, any>
+  formId: KoboId
+}
+
 export type KoboAnswersContext = {
+  openAnswerModal: (_: OpenModalProps) => void
   byId: {
+    find: (_: {formId: KoboId, answerId: KoboAnswerId}) => KoboMappedAnswer | undefined
     set: (id: KoboId, value: ApiPaginate<KoboMappedAnswer>) => void,
     fetch: (p: FetchParams, id: KoboId) => Promise<ApiPaginate<KoboMappedAnswer>>,
     get: (id: KoboAnswerId) => undefined | ApiPaginate<KoboMappedAnswer>,
@@ -80,17 +87,31 @@ export const KoboAnswersProvider = ({
         fetch: (p: FetchParams = {}, id: KoboAnswerId): Promise<ApiPaginate<KoboMappedAnswer>> => {
           return fetcher.fetch(p, id) as any
         },
+        find: ({formId, answerId}: {formId: KoboId, answerId: KoboAnswerId,}) => {
+          return byId.get(formId)?.data.find(_ => _.id === answerId)
+        },
         loading: (id: KoboAnswerId) => fetcher.loading[id],
       }
     }
   }, [fetcher.getAsMap])
 
+  const [modalAnswerOpen, setModalAnswerOpen] = useState<OpenModalProps | undefined>()
+
   return (
     <Context.Provider value={{
       byName,
       byId,
+      openAnswerModal: setModalAnswerOpen
     }}>
       {children}
+      {modalAnswerOpen && (
+        <DatabaseKoboAnswerViewDialog
+          open={true}
+          onClose={() => setModalAnswerOpen(undefined)}
+          answer={modalAnswerOpen.answer}
+          formId={modalAnswerOpen.formId}
+        />
+      )}
     </Context.Provider>
   )
 }

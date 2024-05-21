@@ -21,6 +21,7 @@ import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
 import {Enum, seq} from '@alexandreannic/ts-utils'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {DatabaseList} from '@/features/Database/DatabaseList'
+import {DatabaseKoboAnswerViewPage} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -113,6 +114,7 @@ export const DatabaseWithContext = () => {
         <Route index element={<DatabaseList forms={ctx.formAccess}/>}/>
         <Route path={databaseIndex.siteMap.home()} element={<DatabaseHome/>}>
           <Route index element={<Navigate to={databaseIndex.siteMap.database.relative}/>}/>
+          <Route path={databaseIndex.siteMap.answer.relative()} element={<DatabaseKoboAnswerViewPage/>}/>
           <Route path={databaseIndex.siteMap.database.relative} element={<DatabaseTableRoute/>}/>
           <Route path={databaseIndex.siteMap.access.relative} element={<DatabaseAccessRoute/>}/>
           {/*<Route path={databaseModule.siteMap.entry.absolute()} element={<DatabaseKoboAnswerView/>}/>*/}

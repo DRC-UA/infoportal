@@ -7,7 +7,6 @@ import {AaSelect} from '@/shared/Select/Select'
 import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {DatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {Switch, Theme} from '@mui/material'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
@@ -27,6 +26,7 @@ import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -35,11 +35,11 @@ export const DatabaseKoboTableContent = ({
   const {m} = useI18n()
   const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
-  const ctxEditKoboAnswer = useKoboEditAnswerContext()
-  const ctxEditKoboTag = useKoboEditTagContext()
+  const ctxAnswers = useKoboAnswersContext()
+  const ctxEditAnswer = useKoboEditAnswerContext()
+  const ctxEditTag = useKoboEditTagContext()
   const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<KoboAnswerId[]>([])
-  const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat | undefined>()
   const [groupModalOpen, setOpenGroupModalAnswer] = useState<{
     columnId: string,
     group: KoboAnswerFlat[],
@@ -60,7 +60,7 @@ export const DatabaseKoboTableContent = ({
       externalFilesIndex: ctx.externalFilesIndex,
       repeatGroupsAsColumn: repeatGroupsAsColumns,
       onOpenGroupModal: setOpenGroupModalAnswer,
-      onSelectColumn: (columnName: string) => ctxEditKoboAnswer.open({
+      onSelectColumn: (columnName: string) => ctxEditAnswer.open({
         formId: ctx.form.id,
         question: columnName,
         answerIds: selectedIds,
@@ -79,8 +79,8 @@ export const DatabaseKoboTableContent = ({
           value: null as any,
           label: (
             <>
-              <TableIconBtn tooltip={m.view} children="visibility" onClick={() => setOpenModalAnswer(_)}/>
-              <TableIconBtn disabled={!ctx.canEdit} tooltip={m.edit} target="_blank" href={ctx.asyncEdit(_.id)} children="edit"/>
+              <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctxAnswers.openAnswerModal({answer: _, formId: ctx.form.id})}/>
+              <TableIconBtn disabled={!ctx.canEdit} tooltip={m.editKobo} target="_blank" href={ctx.asyncEdit(_.id)} children="edit"/>
             </>
           )
         }
@@ -89,7 +89,7 @@ export const DatabaseKoboTableContent = ({
     const validation: DatatableColumn.Props<any> = {
       id: 'validation',
       head: m.validation,
-      subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxEditKoboTag.open({
+      subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.open({
         formId: ctx.form.id,
         answerIds: selectedIds,
         type: 'select_one',
@@ -113,7 +113,7 @@ export const DatabaseKoboTableContent = ({
               disabled={!ctx.canEdit || ctx.loading}
               value={value}
               onChange={(e) => {
-                ctxEditKoboTag.asyncUpdateById.call({
+                ctxEditTag.asyncUpdateById.call({
                   formId: ctx.form.id,
                   answerIds: [row.id],
                   tag: '_validation',
@@ -211,13 +211,6 @@ export const DatabaseKoboTableContent = ({
           </>
         }
       />
-      {openModalAnswer && (
-        <DatabaseKoboAnswerView
-          open={!!openModalAnswer}
-          onClose={() => setOpenModalAnswer(undefined)}
-          answer={openModalAnswer}
-        />
-      )}
       {groupModalOpen && (
         <DatabaseKoboTableGroupModal
           name={groupModalOpen.columnId}

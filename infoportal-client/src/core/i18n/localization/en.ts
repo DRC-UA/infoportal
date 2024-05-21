@@ -65,6 +65,7 @@ export const en = Object.freeze({
     select3Outcomes: `Please, select 3 outcomes`,
     oblast: 'Oblast',
     edit: 'Edit',
+    editKobo: `Edit (⚠️ This is an unstable feature. Use it only if you have proper permission. It's still useful for viewing data from the Kobo interface).`,
     apply: 'Apply',
     clear: 'Clear',
     custom: 'Custom',

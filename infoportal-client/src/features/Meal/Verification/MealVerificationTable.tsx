@@ -8,7 +8,7 @@ import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {DatabaseKoboAnswerView} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
+import {DatabaseKoboAnswerViewDialog} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
@@ -480,7 +480,8 @@ const MealVerificationTableContent = <
           ]}/>
       </Panel>
       {openModalAnswer && (
-        <DatabaseKoboAnswerView
+        <DatabaseKoboAnswerViewDialog
+          formId={activity.registration.koboFormId}
           open={!!openModalAnswer}
           onClose={() => setOpenModalAnswer(undefined)}
           answer={openModalAnswer}
