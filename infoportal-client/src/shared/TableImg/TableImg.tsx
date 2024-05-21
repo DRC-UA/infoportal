@@ -1,6 +1,6 @@
 import React from 'react'
 import {makeStyles} from 'tss-react/mui'
-import {Tooltip} from '@mui/material'
+import {Icon, Tooltip} from '@mui/material'
 
 const useStyles = makeStyles<{url: string, size: number, tooltipSize?: number}>()((t, {url, size, tooltipSize}) => ({
   common: {
@@ -25,6 +25,11 @@ const useStyles = makeStyles<{url: string, size: number, tooltipSize?: number}>(
     backgroundRepeat: 'no-repeat',
     height: tooltipSize,
     width: tooltipSize,
+  },
+  errorIcon: {
+    height: size,
+    width: size,
+    fontSize: size,
   }
 }))
 
@@ -35,9 +40,9 @@ export const TableImg = ({
 }: {
   tooltipSize?: number | null
   size?: number
-  url: string
+  url?: string
 }) => {
-  const {classes, cx} = useStyles({url, size, tooltipSize: tooltipSize ?? undefined})
+  const {classes, cx} = useStyles({url: url ?? '', size, tooltipSize: tooltipSize ?? undefined})
   return url ? (
     <Tooltip enterDelay={340} placement="bottom" title={tooltipSize && <div className={cx(classes.common, classes.tooltip)}/>}>
       <a href={url} target="_blank">
@@ -45,6 +50,6 @@ export const TableImg = ({
       </a>
     </Tooltip>
   ) : (
-    <></>
+    <Icon color="error" className={classes.errorIcon}>hide_image</Icon>
   )
 }
