@@ -193,7 +193,7 @@ export class WfpDeduplicationUpload {
             where: {
               createdAt: {
                 gt: _.finishedAt,
-                lt: addSeconds(_.finishedAt, 20),
+                lt: addSeconds(_.finishedAt, 30),
               },
             },
             // take: _.additionalInfo.rowCount,

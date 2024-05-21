@@ -24,7 +24,7 @@ export const DeduplicationStatusIcon = ({status}: {status: WfpDeduplicationStatu
 export const WfpDeduplicationData = () => {
   const {api} = useAppSettings()
   const _search = useFetcher(api.wfpDeduplication.search)
-  const {formatDate, formatLargeNumber} = useI18n()
+  const {formatDate, formatDateTime, formatLargeNumber} = useI18n()
   const {m} = useI18n()
 
   const {existingOrga, taxIdCounter} = useMemo(() => {
@@ -66,6 +66,7 @@ export const WfpDeduplicationData = () => {
                 return {
                   label: formatDate(_.createdAt),
                   value: _.createdAt,
+                  tooltip: formatDateTime(_.createdAt),
                 }
               },
               type: 'date'
