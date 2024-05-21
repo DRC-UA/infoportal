@@ -92,7 +92,12 @@ export const MpcaPaymentTool = () => {
                 id: 'date',
                 head: m.date,
                 type: 'date',
-                renderQuick: _ => formatDate(_.date)
+                render: _ => {
+                  return {
+                    value: _.date,
+                    label: formatDate(_.date)
+                  }
+                }
               },
               {
                 id: 'taxId',

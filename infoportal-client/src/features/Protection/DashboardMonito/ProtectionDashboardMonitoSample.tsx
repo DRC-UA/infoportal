@@ -142,22 +142,37 @@ export const ProtectionDashboardMonitoSample = ({
                       width: 0,
                       id: 'Male',
                       head: m.male,
-                      type: 'string',
-                      renderQuick: _ => formatLargeNumber(_.Male)
+                      type: 'number',
+                      render: _ => {
+                        return {
+                          label: formatLargeNumber(_.Male),
+                          value: _.Male
+                        }
+                      }
                     },
                     {
                       width: 0,
                       id: 'Female',
                       head: m.female,
-                      type: 'string',
-                      renderQuick: _ => formatLargeNumber(_.Female)
+                      type: 'number',
+                      render: _ => {
+                        return {
+                          label: formatLargeNumber(_.Female),
+                          value: _.Female
+                        }
+                      }
                     },
                     {
                       width: 0,
                       id: 'Other',
                       head: m.other,
-                      type: 'string',
-                      renderQuick: _ => formatLargeNumber(_.Other ?? 0)
+                      type: 'number',
+                      render: _ => {
+                        return {
+                          label: formatLargeNumber(_.Other ?? 0),
+                          value: _.Other
+                        }
+                      }
                     },
                   ]}
                 />

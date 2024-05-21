@@ -113,7 +113,7 @@ export const AdminProxy = () => {
               head: m.origin,
               render: _ => {
                 return {
-                  value: m.origin,
+                  value: _.slug,
                   label: (
                     <Txt link><a target="_blank" href={Proxy.makeUrl(_)}>{Proxy.makeUrl(_)}</a></Txt>
                   )
@@ -126,7 +126,7 @@ export const AdminProxy = () => {
               head: m.destination,
               render: _ => {
                 return {
-                  value: m.destination,
+                  value: _.url,
                   label: (
                     <Txt link><a target="_blank" href={_.url}>{_.url}</a></Txt>
                   )
@@ -149,7 +149,12 @@ export const AdminProxy = () => {
               id: 'expireAt',
               width: 0,
               head: m.expireAt,
-              renderQuick: _ => _.expireAt && formatDate(_.expireAt),
+              render: _ => {
+                return {
+                  label: formatDateTime(_.expireAt),
+                  value: _.expireAt,
+                }
+              }
             },
             {
               type: 'string',

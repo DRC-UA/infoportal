@@ -108,8 +108,12 @@ export const AccessTable = ({
         {
           id: 'params',
           head: m.filter,
-          renderQuick: _ => _.params,
-          type: 'string'
+          render: _ => {
+            return {
+              label: renderParams(_.params),
+              value: _.params
+            }
+          }
         },
         ...isAdmin ? [{
           id: 'actions',
