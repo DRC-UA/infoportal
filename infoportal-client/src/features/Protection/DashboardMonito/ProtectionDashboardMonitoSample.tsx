@@ -13,10 +13,10 @@ import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Enum} from '@alexandreannic/ts-utils'
 import {makeSx} from 'mui-extension'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 const css = makeSx({
   table: {
@@ -125,16 +125,40 @@ export const ProtectionDashboardMonitoSample = ({
               {_ => agDisplay === 'chart' ? (
                 <ChartBarStacker data={_} height={250}/>
               ) : (
-                <Sheet
+                <Datatable
                   id="prot-dash-population"
                   sx={{border: t => `1px solid ${t.palette.divider}`, overflow: 'hidden', borderRadius: t => t.shape.borderRadius + 'px'}}
                   hidePagination
                   data={_}
                   columns={[
-                    {width: 0, id: 'Group', head: m.ageGroup, type: 'select_one', render: _ => _.key},
-                    {width: 0, id: 'Male', head: m.male, type: 'number', renderValue: _ => _.Male, render: _ => formatLargeNumber(_.Male)},
-                    {width: 0, id: 'Female', head: m.female, type: 'number', renderValue: _ => _.Female, render: _ => formatLargeNumber(_.Female)},
-                    {width: 0, id: 'Other', head: m.other, type: 'number', renderValue: _ => _.Other ?? 0, render: _ => formatLargeNumber(_.Other ?? 0)},
+                    {
+                      width: 0,
+                      id: 'Group',
+                      head: m.ageGroup,
+                      type: 'select_one',
+                      renderQuick: _ => _.key
+                    },
+                    {
+                      width: 0,
+                      id: 'Male',
+                      head: m.male,
+                      type: 'string',
+                      renderQuick: _ => formatLargeNumber(_.Male)
+                    },
+                    {
+                      width: 0,
+                      id: 'Female',
+                      head: m.female,
+                      type: 'string',
+                      renderQuick: _ => formatLargeNumber(_.Female)
+                    },
+                    {
+                      width: 0,
+                      id: 'Other',
+                      head: m.other,
+                      type: 'string',
+                      renderQuick: _ => formatLargeNumber(_.Other ?? 0)
+                    },
                   ]}
                 />
                 // <Box component="table" sx={css.table}>
