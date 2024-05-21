@@ -1,7 +1,6 @@
 import {Page} from '@/shared/Page'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import React, {useEffect, useState} from 'react'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {useI18n} from '@/core/i18n'
 import {IpBtn} from '@/shared/Btn'
 import {Panel} from '@/shared/Panel'

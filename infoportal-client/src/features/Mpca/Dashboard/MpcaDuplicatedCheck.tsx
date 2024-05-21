@@ -1,6 +1,5 @@
 import {MpcaEntity} from '@infoportal-common'
 import {Enum, Seq, seq} from '@alexandreannic/ts-utils'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import React, {ReactNode, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {SlidePanel} from '@/shared/PdfLayout/PdfSlide'

@@ -1,4 +1,3 @@
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {Access, AccessLevel} from '@/core/sdk/server/access/Access'
 import React, {ReactNode, useEffect} from 'react'
 import {useI18n} from '@/core/i18n'
