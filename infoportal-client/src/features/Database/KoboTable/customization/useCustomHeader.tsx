@@ -39,7 +39,6 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
                   tableId="useCustomHeader"
                   enableDisplacementStatusFilter
                   persons={_.filteredData.flatMap(_ => _.custom.persons)}
-                  sx={{p: 1}}
                 />
               )}
             >

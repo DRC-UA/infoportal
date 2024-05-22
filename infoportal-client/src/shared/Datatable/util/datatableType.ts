@@ -37,6 +37,7 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   contentProps?: BoxProps
   defaultFilters?: Record<K, any>
   defaultLimit?: number
+  defaultHiddenColumns?: K[]
   title?: string
   readonly select?: {
     readonly onSelect: (_: string[]) => void
@@ -49,9 +50,8 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   onClickRows?: (_: T, event: React.MouseEvent<HTMLElement>) => void
   rowsPerPageOptions?: number[]
   columns: DatatableColumn.Props<T, K>[]
-  showColumnsToggle?: boolean
+  hideColumnsToggle?: boolean
   hidePagination?: boolean
-  showColumnsToggleBtnTooltip?: string
   showExportBtn?: boolean
   exportAdditionalSheets?: (filteredAndSortedData: T[]) => GenerateXlsFromArrayParams[]
   renderEmptyState?: ReactNode
@@ -90,6 +90,8 @@ export namespace DatatableColumn {
     noSort?: boolean
     width?: number
     head?: string
+    group?: string
+    groupLabel?: ReactNode
     noCsvExport?: boolean
     align?: 'center' | 'right'
     onClick?: (_: T) => void

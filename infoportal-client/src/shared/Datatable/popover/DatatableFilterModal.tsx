@@ -81,15 +81,15 @@ export const DatatableFilterModal = ({
 
   return (
     <Popover open={!!anchorEl} anchorEl={anchorEl} onClose={onClose}>
-      <PanelHead action={
+      <PanelHead sx={{maxWidth: 500}} action={
         <IpIconBtn children="filter_alt_off" color={filterActive ? 'primary' : undefined} onClick={() => {
           onClear?.()
           setInnerValue(undefined)
         }}/>
       }>
-        <Txt block sx={{maxWidth: 340}} truncate>{title}</Txt>
+        <Txt block truncate>{title}</Txt>
       </PanelHead>
-      <PanelBody>
+      <PanelBody sx={{maxWidth: 500}}>
         <Box sx={{display: 'flex', alignItems: 'center', borderBottom: t => `1px solid ${t.palette.divider}`, mb: 1}}>
           <Txt color="hint" sx={{flex: 1}}>{m.sort}</Txt>
           <MenuItem onClick={() => onOrderByChange?.(orderBy === 'desc' ? undefined : 'desc')}>
@@ -179,7 +179,8 @@ export const DatatableFilterDialogSelect = ({
           <Box sx={{maxHeight: 350, overflowY: 'auto'}}>
             {options.map(o =>
               <FormControlLabel
-                sx={{display: 'block'}}
+                title={'' + o.children}
+                sx={{display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
                 key={o.key}
                 control={<Checkbox size="small" name={o.value} checked={o.checked} onChange={o.onChange}/>}
                 label={o.children}

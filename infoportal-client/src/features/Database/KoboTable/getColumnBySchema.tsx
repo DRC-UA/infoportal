@@ -1,9 +1,9 @@
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {I18nContextProps} from '@/core/i18n/I18n'
-import {KoboApiColType, KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
+import {KoboApiColType, KoboQuestionSchema, KoboQuestionType} from '@/core/sdk/server/kobo/KoboApi'
 import {KoboAnswerMetaData, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
-import {mapFor, seq} from '@alexandreannic/ts-utils'
+import {map, mapFor, seq} from '@alexandreannic/ts-utils'
 import {formatDate, formatDateTime} from '@/core/i18n/localization/en'
 import {IpBtn} from '@/shared/Btn'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
@@ -14,9 +14,9 @@ import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {KoboAnswerFlat, KoboAnswerId, removeHtml} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-import {DatatableHeadTypeIcon} from '@/shared/Datatable/DatatableHead'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
+import {DatatableHeadTypeIcon, DatatableHeadTypeIconByKoboType} from '@/shared/Datatable/DatatableHead'
 
 const imageExtension = new Set([
   '.png',
@@ -87,6 +87,10 @@ interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
   onSelectColumn?: (_: string) => void
 }
 
+export type DatabaseColumnProps<T extends Record<string, any | undefined>> = DatatableColumn.Props<T> & {
+  koboType?: KoboQuestionType
+}
+
 export const getColumnByQuestionSchema = <T extends Record<string, any | undefined>>({
   data,
   m,
@@ -105,8 +109,8 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   onSelectColumn,
 }: GetColumnBySchemaProps<T> & {
   q: KoboQuestionSchema,
-  getRow?: (_: T) => KoboMappedAnswer
-}): DatatableColumn.Props<T>[] => {
+  getRow?: (_: T) => KoboMappedAnswer,
+}): DatabaseColumnProps<T>[] => {
   const {
     getId,
     getHead,
@@ -132,16 +136,18 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
 
   const common = {
     id: getId(q),
+    koboType: q.type,
+    typeIcon: <DatatableHeadTypeIconByKoboType children={q.type}/>,
+    ...map(q.$xpath.split('/')[0], value => ({groupLabel: translateQuestion(value), group: value})),
     ...showEditBtn ? {typeIcon: null} : {},
     subHeader: showEditBtn
       ? <TableEditCellBtn onClick={() => onSelectColumn(q.name)}/>
       : undefined,
     head: removeHtml(getHead(translateQuestion(q.name))),
   }
-  const res: DatatableColumn.Props<T>[] | DatatableColumn.Props<T> | undefined = (() => {
+  const res: DatabaseColumnProps<T>[] | DatabaseColumnProps<T> | undefined = (() => {
     if (q.name === 'id') {
       return {
-        typeIcon: <DatatableHeadTypeIcon children="key" tooltip={q.type}/>,
         ...common,
         type: 'string',
         className: 'td-id',
@@ -151,7 +157,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
     switch (q.type) {
       case 'image': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="short_text" tooltip={q.type}/>,
           ...common,
           type: 'string',
           render: row => {
@@ -167,7 +172,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'file': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="functions" tooltip="insert_drive_file"/>,
           ...common,
           type: 'string',
           render: row => {
@@ -183,7 +187,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'calculate': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="functions" tooltip="calculate"/>,
           ...common,
           type: 'select_one',
           head: removeHtml(getHead(translateQuestion(q.name))),
@@ -193,7 +196,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'select_one_from_file': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="attach_file" tooltip="select_one_from_file"/>,
           ...common,
           type: 'string',
           renderQuick: row => {
@@ -204,7 +206,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       case 'username':
       case 'text': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="short_text" tooltip={q.type}/>,
           ...common,
           type: 'string',
           className: q.name === 'id' ? 'td-id' : undefined,
@@ -214,7 +215,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       case 'decimal':
       case 'integer': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="tag" tooltip={q.type}/>,
           ...common,
           type: 'number',
           renderQuick: row => getVal(row, q.name) as number,
@@ -222,7 +222,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'note': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="info" tooltip="note"/>,
           ...common,
           type: 'string',
           renderQuick: row => getVal(row, q.name) as string,
@@ -235,7 +234,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       case 'today':
       case 'date': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="event" tooltip={q.type}/>,
           ...common,
           type: 'date',
           render: row => {
@@ -265,7 +263,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           })).flat()
         }
         return {
-          typeIcon: <DatatableHeadTypeIcon children="repeat" tooltip="begin_repeat"/>,
           ...common,
           type: 'number',
           render: row => {
@@ -284,7 +281,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'select_one': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="radio_button_checked" tooltip={q.type}/>,
           ...common,
           type: 'select_one',
           // options: () => choicesIndex[q.select_from_list_name!].map(_ => ({value: _.name, label: translateChoice(q.name, _.name)})),
@@ -307,7 +303,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'select_multiple': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="check_box" tooltip={q.type}/>,
           ...common,
           type: 'select_multiple',
           options: () => choicesIndex[q.select_from_list_name!].map(_ => ({value: _.name, label: translateChoice(q.name, _.name)})),
@@ -335,7 +330,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       case 'geopoint': {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="location_on" tooltip="geopoint"/>,
           ...common,
           type: 'string',
           renderQuick: row => JSON.stringify(getVal(row, q.name))
@@ -343,7 +337,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
       default: {
         return {
-          typeIcon: <DatatableHeadTypeIcon children="short_text" tooltip={q.type}/>,
           ...common,
           type: 'string',
           renderQuick: row => JSON.stringify(getVal(row, q.name))
@@ -351,7 +344,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       }
     }
   })()
-  return [res].flat().filter(_ => _ !== undefined) as DatatableColumn.Props<T>[]
+  return [res].flat().filter(_ => _ !== undefined) as DatabaseColumnProps<T>[]
 }
 
 
@@ -360,7 +353,7 @@ export const getColumnBySchema = <T extends Record<string, any>>({
   ...props
 }: GetColumnBySchemaProps<T> & {
   schema: KoboQuestionSchema[]
-}): DatatableColumn.Props<T>[] => {
+}): DatabaseColumnProps<T>[] => {
   return schema.filter(_ => !ignoredColType.has(_.type)).flatMap(q => getColumnByQuestionSchema({
     q,
     ...props,

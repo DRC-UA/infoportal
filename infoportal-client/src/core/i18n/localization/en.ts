@@ -65,6 +65,7 @@ export const en = Object.freeze({
     select3Outcomes: `Please, select 3 outcomes`,
     oblast: 'Oblast',
     edit: 'Edit',
+    type: 'Type',
     editKobo: `Edit (⚠️ This is an unstable feature. Use it only if you have proper permission. It's still useful for viewing data from the Kobo interface).`,
     apply: 'Apply',
     clear: 'Clear',
@@ -90,6 +91,7 @@ export const en = Object.freeze({
     boy: 'Boy',
     modality: 'Modality',
     girl: 'Girl',
+    save: 'Save',
     somethingWentWrong: 'Something went wrong',
     yes: 'Yes',
     influencingFactors: 'Influencing factors',
@@ -295,6 +297,8 @@ export const en = Object.freeze({
     daily: 'Daily',
     monthly: 'Monthly',
     createdAt: 'Created at',
+    visible: 'Visible',
+    hidden: 'Hidden',
     updatedAt: 'Updated at',
     returnToThePlaceOfHabitualResidence: 'Return to the place of habitual residence',
     currentStatus: 'Current status',
@@ -650,6 +654,7 @@ export const en = Object.freeze({
       }
     },
     _koboDatabase: {
+      currentlyDisplayed: `columns displayed`,
       tagNotUpdated: 'Failed to update tag. Reloading clean data set...',
       downloadAsXLS: 'Download <b>filtered data</b> as XLS',
       registerNewForm: 'Register new form',

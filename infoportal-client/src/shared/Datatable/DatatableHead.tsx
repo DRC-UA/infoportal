@@ -3,7 +3,8 @@ import {Box, Checkbox, IconProps} from '@mui/material'
 import React from 'react'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
-import {DatatableColumn, DatatableRow} from '@/shared/Datatable/util/datatableType'
+import {DatatableColumn, DatatablePropertyType, DatatableRow} from '@/shared/Datatable/util/datatableType'
+import {KoboColumType} from '@/core/sdk/server/kobo/KoboApi'
 
 export const DatatableHead = (() => {
   const Component = <T extends DatatableRow>({
@@ -95,6 +96,33 @@ export const DatatableHead = (() => {
   }
   return React.memo(Component) as typeof Component
 })()
+
+const koboIconMap = {
+  image: 'short_text',
+  file: 'functions',
+  calculate: 'functions',
+  select_one_from_file: 'attach_file',
+  username: 'short_text',
+  text: 'short_text',
+  decimal: 'tag',
+  integer: 'tag',
+  note: 'info',
+  end: 'event',
+  start: 'event',
+  datetime: 'event',
+  today: 'event',
+  date: 'event',
+  begin_repeat: 'repeat',
+  select_one: 'radio_button_checked',
+  select_multiple: 'check_box',
+  geopoint: 'location_on',
+}
+
+export const DatatableHeadTypeIconByKoboType = ({children, ...props}: {
+  children: KoboColumType,
+} & Pick<IconProps, 'sx' | 'color'>) => {
+  return <DatatableHeadTypeIcon children={fnSwitch(children, koboIconMap, () => 'short_text')} tooltip={children} {...props}/>
+}
 
 export const DatatableHeadTypeIcon = (props: {
   tooltip: string,

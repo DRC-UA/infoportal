@@ -27,8 +27,6 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
   columns,
   getRenderRowKey,
   defaultLimit,
-  showColumnsToggle,
-  showColumnsToggleBtnTooltip,
   rowsPerPageOptions = [20, 50, 100, 500],
   select,
   onFiltersChange,
@@ -104,11 +102,13 @@ const _Datatable = <T extends DatatableRow>({
   hidePagination,
   rowsPerPageOptions,
   title,
+  defaultHiddenColumns,
   onClickRows,
+  hideColumnsToggle,
   exportAdditionalSheets,
   contentProps,
   ...props
-}: Pick<DatatableTableProps<T>, 'contentProps' | 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
+}: Pick<DatatableTableProps<T>, 'defaultHiddenColumns' | 'hideColumnsToggle' | 'contentProps' | 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
   const ctx = useDatatableContext()
   const _generateXLSFromArray = useAsync(generateXLSFromArray)
   useEffect(() => ctx.select?.onSelect(ctx.selected.toArray), [ctx.selected.get])
@@ -142,7 +142,8 @@ const _Datatable = <T extends DatatableRow>({
 
   const filterCount = useMemoFn(ctx.data.filters, _ => Enum.keys(_).length)
 
-  const [hiddenColumns, setHiddenColumns] = usePersistentState<string[]>([], {storageKey: DatatableUtils.localStorageKey.column + id})
+  const [hiddenColumns, setHiddenColumns] = usePersistentState<string[]>(defaultHiddenColumns ?? [], {storageKey: DatatableUtils.localStorageKey.column + id})
+  useEffect(() => setHiddenColumns(defaultHiddenColumns ?? []), [defaultHiddenColumns])
   const filteredColumns = useMemo(() => ctx.columns.filter(_ => !hiddenColumns.includes(_.id)), [ctx.columns, hiddenColumns])
 
   return (
@@ -155,13 +156,15 @@ const _Datatable = <T extends DatatableRow>({
           }}>
             <IpIconBtn children="filter_alt_off" tooltip={m.clearFilter} disabled={!filterCount}/>
           </Badge>
-          <DatatableColumnToggle
-            sx={{mr: 1}}
-            columns={ctx.columns}
-            hiddenColumns={hiddenColumns}
-            onChange={_ => setHiddenColumns(_)}
-            title={m.toggleDatatableColumns}
-          />
+          {!hideColumnsToggle && (
+            <DatatableColumnToggle
+              sx={{mr: 1}}
+              columns={ctx.columns}
+              hiddenColumns={hiddenColumns}
+              onChange={_ => setHiddenColumns(_)}
+              title={m.toggleDatatableColumns}
+            />
+          )}
           {typeof header === 'function' ? header({
             data: ctx.data.data as T[],
             filteredData: ctx.data.filteredData as T[],

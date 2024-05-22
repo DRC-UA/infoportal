@@ -9,7 +9,7 @@ import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/Databas
 import {IpIconBtn} from '@/shared/IconBtn'
 import {Switch, Theme} from '@mui/material'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
+import {DatabaseColumnProps, getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useCustomColumns} from '@/features/Database/KoboTable/customization/useCustomColumns'
 import {DatabaseTableProps} from '@/features/Database/KoboTable/DatabaseKoboTable'
@@ -27,6 +27,8 @@ import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {DatatableColumnToggle} from '@/shared/Datatable/DatatableColumnsToggle'
+import {DatatableHeadTypeIconByKoboType} from '@/shared/Datatable/DatatableHead'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -68,7 +70,7 @@ export const DatabaseKoboTableContent = ({
     })
   }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns, ctx.externalFilesIndex])
 
-  const columns = useMemo(() => {
+  const columns: DatabaseColumnProps<any>[] = useMemo(() => {
     const action: DatatableColumn.Props<any> = {
       id: 'actions',
       head: '',
@@ -128,12 +130,25 @@ export const DatabaseKoboTableContent = ({
     return [action, validation, ...extraColumns, ...schemaColumns]
   }, [schemaColumns])
 
+  const toggleColumns = useMemo(() => {
+    return columns.map(_ => {
+      return {
+        ..._,
+        type: _.koboType,
+        typeLabel: _.koboType && <DatatableHeadTypeIconByKoboType color="disabled" children={_.koboType}/>
+      }
+    })
+  }, [columns])
+
   const selectedHeader = useCustomSelectedHeader(selectedIds)
   const header = useCustomHeader()
+  const [hiddenColumns, setHiddenColumns] = usePersistentState<string[]>([], {storageKey: 'database-' + ctx.form.id})
 
   return (
     <>
       <Datatable
+        defaultHiddenColumns={hiddenColumns}
+        hideColumnsToggle
         contentProps={{sx: {maxHeight: 'calc(100vh - 204px)'}}}
         showExportBtn
         rowsPerPageOptions={[20, 50, 100]}
@@ -173,6 +188,11 @@ export const DatabaseKoboTableContent = ({
         data={ctx.data}
         header={params =>
           <>
+            <DatatableColumnToggle
+              columns={toggleColumns}
+              hiddenColumns={hiddenColumns}
+              onChange={setHiddenColumns}
+            />
             <AaSelect<number>
               sx={{maxWidth: 128, mr: 1}}
               defaultValue={ctxSchema.langIndex}

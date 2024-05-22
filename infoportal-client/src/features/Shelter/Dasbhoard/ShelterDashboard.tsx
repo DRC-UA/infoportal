@@ -113,6 +113,16 @@ export const ShelterDashboard = () => {
         getValue: _ => _.ta?.tags?.progress,
         getOptions: (get) => DataFilter.buildOptionsFromObject(ShelterProgress),
       },
+      modality: {
+        icon: 'attach_money',
+        label: m.modality,
+        getValue: _ => _.nta?.modality,
+        getOptions: (get) => get()
+          .map(_ => _.nta?.modality)
+          .distinct(_ => _)
+          .compact()
+          .map(_ => DataFilter.buildOption(_, ctx.nta.schema.translate.choice('modality', _)))
+      },
       accommodation: {
         icon: 'home',
         label: m._shelter.accommodation,

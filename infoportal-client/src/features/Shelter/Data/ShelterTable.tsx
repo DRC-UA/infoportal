@@ -63,6 +63,8 @@ export const ShelterTable = () => {
     return DatatableUtils.buildColumns<ShelterEntity>([
       {
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m._shelter.ntaForm,
         id: 'ntaForm',
         options: () => [{value: 'exist', label: m._shelter.taRefOk}, {value: 'notexist', label: m._shelter.taRefNok}],
@@ -99,10 +101,14 @@ export const ShelterTable = () => {
         typeIcon: keyTypeIcon,
         className: 'td-id',
         type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         renderQuick: _ => _.nta?.id,
       },
       {
         type: 'date',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         id: 'ntaSubmissionTime',
         head: m.submissionTime,
         render: _ => {
@@ -115,6 +121,8 @@ export const ShelterTable = () => {
       {
         id: 'office',
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m.office,
         render: _ => {
           return {
@@ -126,6 +134,8 @@ export const ShelterTable = () => {
       {
         id: 'oblast',
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         options: () => Obj.entries(Shelter_NTA.options.ben_det_oblast).map(([value, label]) => ({value, label})),
         head: m.oblast,
         render: _ => {
@@ -138,6 +148,8 @@ export const ShelterTable = () => {
       {
         id: 'raion',
         type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m.raion,
         render: _ => {
@@ -150,6 +162,8 @@ export const ShelterTable = () => {
       {
         id: 'hromada',
         type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m.raion,
         render: _ => {
@@ -162,6 +176,8 @@ export const ShelterTable = () => {
       {
         id: 'settelment',
         type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m._shelter.settlement,
         renderQuick: _ => _.nta?.settlement,
@@ -169,6 +185,8 @@ export const ShelterTable = () => {
       {
         id: 'street',
         type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m._shelter.street,
         renderQuick: _ => _.nta?.street,
@@ -176,6 +194,8 @@ export const ShelterTable = () => {
       {
         id: 'modality',
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m.modality,
         subHeader: selectedIds.length > 0
           ? <TableEditCellBtn onClick={() => ctxEditAnswers.open({
@@ -201,6 +221,8 @@ export const ShelterTable = () => {
       },
       {
         type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         id: 'name',
         width: 160,
         head: m.name,
@@ -220,6 +242,8 @@ export const ShelterTable = () => {
       },
       {
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         id: 'taxId',
         width: 160,
         head: m.taxID,
@@ -243,12 +267,16 @@ export const ShelterTable = () => {
       },
       {
         type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         id: 'taxId_org',
         head: m.taxID,
         renderQuick: (row: ShelterEntity) => row.nta?.pay_det_tax_id_num,
       },
       {
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         id: 'displacement',
         head: m.displacement,
         render: _ => {
@@ -262,6 +290,8 @@ export const ShelterTable = () => {
       {
         id: 'owner_tenant_type',
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m._shelter.owner,
         options: () => Obj.entries(Shelter_NTA.options.owner_tenant_type).map(([value, label]) => ({value, label})),
         render: _ => {
@@ -274,12 +304,16 @@ export const ShelterTable = () => {
       {
         id: 'hhSize',
         type: 'number',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m.hhSize,
         renderQuick: _ => _.nta?.ben_det_hh_size,
       },
       {
         id: 'document_type',
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m._shelter.documentType,
         options: () => Obj.entries(Shelter_NTA.options.document_type).map(([value, label]) => ({value, label})),
         render: _ => {
@@ -292,6 +326,8 @@ export const ShelterTable = () => {
       {
         id: 'dwelling_type',
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m._shelter.accommodation,
         options: () => Obj.entries(Shelter_NTA.options.dwelling_type).map(([value, label]) => ({value, label})),
         render: _ => {
@@ -304,6 +340,8 @@ export const ShelterTable = () => {
       {
         id: 'ownership_verification',
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         align: 'center',
         width: 0,
         head: m._shelter.ownershipDocumentExist,
@@ -321,6 +359,8 @@ export const ShelterTable = () => {
       {
         id: 'ownership_verification_doc',
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m._shelter.ownershipDocument,
         options: () => [{value: 'exist', label: m.exist}, {value: 'not_exist', label: m.notExist}],
         render: _ => {
@@ -344,6 +384,8 @@ export const ShelterTable = () => {
         id: 'damage_score',
         typeIcon: null,
         type: 'number',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         width: 0,
         head: m._shelter.scoreDamage,
         renderQuick: _ => add(_.nta?.apt_score, _.nta?.hh_score),
@@ -352,6 +394,8 @@ export const ShelterTable = () => {
         id: 'displ_score',
         typeIcon: null,
         type: 'number',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         width: 0,
         head: m._shelter.scoreDisplacement,
         renderQuick: _ => safeNumber(_.nta?.displ_score),
@@ -360,6 +404,8 @@ export const ShelterTable = () => {
         id: 'socio_score',
         typeIcon: null,
         type: 'number',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         width: 0,
         head: m._shelter.scoreSocio,
         render: _ => {
@@ -373,6 +419,8 @@ export const ShelterTable = () => {
         id: 'total',
         typeIcon: null,
         type: 'number',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         width: 0,
         head: m._shelter.total,
         render: _ => ({
@@ -382,6 +430,8 @@ export const ShelterTable = () => {
       },
       {
         type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
         id: 'validation',
         head: m._shelter.validationStatus,
         width: 0,
@@ -420,6 +470,8 @@ export const ShelterTable = () => {
       {
         id: 'TA',
         width: 0,
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         style: () => ({borderLeft: '4px solid ' + theme.palette.divider}),
         styleHead: {borderLeft: '4px solid ' + theme.palette.divider},
         head: m._shelter.taForm,
@@ -440,6 +492,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'taid',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         className: 'td-id',
         width: 0,
         typeIcon: keyTypeIcon,
@@ -450,6 +504,8 @@ export const ShelterTable = () => {
       {
         type: 'date',
         id: 'taSubmissionTime',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m.submissionTime,
         render: _ => {
           return {
@@ -463,6 +519,8 @@ export const ShelterTable = () => {
         width: 0,
         head: m._shelter.roofSum,
         id: 'roof',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         renderQuick: _ => _.ta ? add(_.ta.roof_shiffer_m, _.ta.roof_metal_sheets_m, _.ta.roof_onduline_sheets_m, _.ta.bitumen_paint_m) : undefined,
       },
       {
@@ -470,6 +528,8 @@ export const ShelterTable = () => {
         width: 0,
         head: m._shelter.windowsSum,
         id: 'windows',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         renderQuick: _ => _.ta ? add(
           _.ta.singleshutter_windowdoubleglazed_pc,
           _.ta.singleshutter_window_tripleglazed_pc,
@@ -479,6 +539,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'agreement',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m._shelter.agreement,
         type: 'string',
         subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
@@ -507,6 +569,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'workOrder',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m._shelter.workOrder,
         type: 'select_one',
         typeIcon: null,
@@ -537,6 +601,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'project',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m.project,
         width: 174,
         type: 'select_multiple',
@@ -583,6 +649,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'hasLot1',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m._shelter.lot1,
         width: 0,
         align: 'center',
@@ -605,6 +673,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'contractor1',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         width: 148,
         head: m._shelter.contractor1,
         type: 'select_one',
@@ -640,6 +710,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'hasLot2',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m._shelter.lot2,
         width: 0,
         align: 'center',
@@ -662,6 +734,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'contractor2',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         width: 148,
         head: m._shelter.contractor2,
         type: 'select_one',
@@ -697,6 +771,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'damageLevel',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         width: 148,
         head: m._shelter.scoreDamage,
         type: 'select_one',
@@ -735,6 +811,8 @@ export const ShelterTable = () => {
       // column.progress,
       {
         id: 'price',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m.price,
         type: 'number',
         typeIcon: null,
@@ -777,6 +855,8 @@ export const ShelterTable = () => {
         type: 'number',
         width: 0,
         id: 'price_deprecated',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: 'Auto ' + m.price + ' (deprecated)',
         render: (row: ShelterEntity) => {
           return {
@@ -788,6 +868,8 @@ export const ShelterTable = () => {
       {
         type: 'select_one',
         id: 'price_level',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m._shelter.priceLevel,
         width: 0,
         align: 'center',
@@ -811,6 +893,8 @@ export const ShelterTable = () => {
       {
         type: 'select_one',
         id: 'progress',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m._shelter.progressStatus,
         width: 190,
         typeIcon: null,
@@ -857,6 +941,8 @@ export const ShelterTable = () => {
       },
       {
         id: 'workDoneAt',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
         head: m._shelter.workDoneAt,
         type: 'date',
         width: 134,
