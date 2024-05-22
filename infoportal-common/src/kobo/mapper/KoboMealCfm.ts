@@ -17,6 +17,7 @@ export enum CfmDataProgram {
   'Humanitarian Disarmament and Peacebuilding' = 'Humanitarian Disarmament and Peacebuilding',
   'Economic Recovery' = 'Economic Recovery',
   'GBV' = 'GBV',
+  'Victim Assistance' = 'Victim Assistance',
   'Other' = 'Other',
 }
 
