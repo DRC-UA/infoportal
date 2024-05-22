@@ -64,7 +64,7 @@ export const KoboAttachedImg = ({
 }) => {
   const file = useMemo(() => koboImgHelper({attachments, fileName}), [attachments, fileName])
   return (
-    <TableImg size={size} tooltipSize={tooltipSize} url={file.fullUrl ?? ''}/>
+    fileName && <TableImg size={size} tooltipSize={tooltipSize} url={file.fullUrl ?? ''}/>
   )
 }
 

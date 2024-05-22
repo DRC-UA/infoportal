@@ -27,9 +27,10 @@ const useStyles = makeStyles<{url: string, size: number, tooltipSize?: number}>(
     width: tooltipSize,
   },
   errorIcon: {
-    height: size,
+    verticalAlign: 'middle',
+    height: size - 4,
     width: size,
-    fontSize: size,
+    fontSize: size - 4,
   }
 }))
 
@@ -50,6 +51,6 @@ export const TableImg = ({
       </a>
     </Tooltip>
   ) : (
-    <Icon color="error" className={classes.errorIcon}>hide_image</Icon>
+    <Icon color="disabled" className={classes.errorIcon}>hide_image</Icon>
   )
 }
