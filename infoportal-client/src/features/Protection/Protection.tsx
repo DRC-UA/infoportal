@@ -1,5 +1,5 @@
 import {KoboFormName} from '@infoportal-common'
-import {HashRouter as Router, Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
 import React from 'react'
 import {Sidebar, SidebarBody, SidebarItem} from '@/shared/Layout/Sidebar'
 import {useI18n} from '@/core/i18n'
@@ -61,11 +61,9 @@ export const ProtectionSidebar = () => {
 
 export const Protection = () => {
   return (
-    <Router>
-      <ProtectionProvider>
-        <ProtectionWithContext/>
-      </ProtectionProvider>
-    </Router>
+    <ProtectionProvider>
+      <ProtectionWithContext/>
+    </ProtectionProvider>
   )
 }
 

@@ -1,4 +1,4 @@
-import {HashRouter as Router, Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -96,35 +96,33 @@ export const ShelterWithAccess = () => {
   }, [])
 
   return (
-    <Router>
-      <Layout
-        loading={ctxSchema.anyLoading}
-        title={appFeaturesIndex.shelter.name}
-        sidebar={<ShelterSidebar/>}
-        header={<AppHeader id="app-header"/>}
-      >
-        {ctxSchema.byName.shelter_nta.get && ctxSchema.byName.shelter_ta.get && (
-          <ShelterProvider
-            access={access}
-            data={fetcherData}
-            allowedOffices={allowedOffices}
-            langIndex={ctxSchema.langIndex}
-            setLangIndex={ctxSchema.setLangIndex}
-            schemaNta={ctxSchema.byName.shelter_nta.get}
-            schemaTa={ctxSchema.byName.shelter_ta.get}
-          >
-            <Routes>
-              <Route index element={<Navigate to={shelterIndex.siteMap.data}/>}/>
-              <Route path={shelterIndex.siteMap.dashboard} element={<ShelterDashboard/>}/>
-              <Route path={shelterIndex.siteMap.data} element={<ShelterTable/>}/>
-              {relatedKoboForms.map(_ =>
-                <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})}/>
-              )}
-            </Routes>
-          </ShelterProvider>
-        )}
-      </Layout>
-    </Router>
+    <Layout
+      loading={ctxSchema.anyLoading}
+      title={appFeaturesIndex.shelter.name}
+      sidebar={<ShelterSidebar/>}
+      header={<AppHeader id="app-header"/>}
+    >
+      {ctxSchema.byName.shelter_nta.get && ctxSchema.byName.shelter_ta.get && (
+        <ShelterProvider
+          access={access}
+          data={fetcherData}
+          allowedOffices={allowedOffices}
+          langIndex={ctxSchema.langIndex}
+          setLangIndex={ctxSchema.setLangIndex}
+          schemaNta={ctxSchema.byName.shelter_nta.get}
+          schemaTa={ctxSchema.byName.shelter_ta.get}
+        >
+          <Routes>
+            <Route index element={<Navigate to={shelterIndex.siteMap.data}/>}/>
+            <Route path={shelterIndex.siteMap.dashboard} element={<ShelterDashboard/>}/>
+            <Route path={shelterIndex.siteMap.data} element={<ShelterTable/>}/>
+            {relatedKoboForms.map(_ =>
+              <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})}/>
+            )}
+          </Routes>
+        </ShelterProvider>
+      )}
+    </Layout>
   )
 }
 

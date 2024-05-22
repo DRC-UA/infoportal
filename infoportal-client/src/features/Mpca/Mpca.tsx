@@ -1,4 +1,4 @@
-import {HashRouter as Router, NavLink, Route, Routes} from 'react-router-dom'
+import {NavLink, Route, Routes} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -78,23 +78,21 @@ export const Mpca = () => {
     )
   }
   return (
-    <Router>
-      <MpcaProvider>
-        <Layout
-          title={appFeaturesIndex.mpca.name}
-          sidebar={<MpcaSidebar/>}
-          header={<AppHeader id="app-header"/>}
-        >
-          <Routes>
-            <Route path={mpcaIndex.siteMap.dashboard} element={<MpcaDashboard/>}/>
-            <Route path={mpcaIndex.siteMap.deduplication} element={<WfpDeduplicationData/>}/>
-            <Route path={mpcaIndex.siteMap.data} element={<MpcaData/>}/>
-            <Route path={mpcaIndex.siteMap.paymentTools} element={<MpcaPaymentTools/>}/>
-            <Route path={mpcaIndex.siteMap.paymentTool()} element={<MpcaPaymentTool/>}/>
-          </Routes>
-        </Layout>
-      </MpcaProvider>
-    </Router>
+    <MpcaProvider>
+      <Layout
+        title={appFeaturesIndex.mpca.name}
+        sidebar={<MpcaSidebar/>}
+        header={<AppHeader id="app-header"/>}
+      >
+        <Routes>
+          <Route path={mpcaIndex.siteMap.dashboard} element={<MpcaDashboard/>}/>
+          <Route path={mpcaIndex.siteMap.deduplication} element={<WfpDeduplicationData/>}/>
+          <Route path={mpcaIndex.siteMap.data} element={<MpcaData/>}/>
+          <Route path={mpcaIndex.siteMap.paymentTools} element={<MpcaPaymentTools/>}/>
+          <Route path={mpcaIndex.siteMap.paymentTool()} element={<MpcaPaymentTool/>}/>
+        </Routes>
+      </Layout>
+    </MpcaProvider>
   )
 }
 

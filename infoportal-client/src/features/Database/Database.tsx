@@ -5,7 +5,7 @@ import {Sidebar, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {useI18n} from '@/core/i18n'
 import * as yup from 'yup'
 import {databaseIndex} from '@/features/Database/databaseIndex'
-import {HashRouter as Router, Navigate, NavLink, Outlet, Route, Routes} from 'react-router-dom'
+import {Navigate, NavLink, Outlet, Route, Routes} from 'react-router-dom'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
 import {Layout} from '@/shared/Layout'
 import {Icon, Skeleton, Tab, Tabs, Tooltip} from '@mui/material'
@@ -31,9 +31,7 @@ export const databaseUrlParamsValidation = yup.object({
 export const Database = () => {
   return (
     <DatabaseProvider>
-      <Router>
-        <DatabaseWithContext/>
-      </Router>
+      <DatabaseWithContext/>
     </DatabaseProvider>
   )
 }

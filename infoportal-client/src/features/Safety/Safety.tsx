@@ -1,4 +1,4 @@
-import {HashRouter as Router, Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -55,21 +55,19 @@ export const Safety = () => {
     )
   }
   return (
-    <Router>
-      <Layout
-        title={appFeaturesIndex.safety.name}
-        sidebar={<MpcaSidebar/>}
-        header={<AppHeader id="app-header"/>}
-      >
-        <Routes>
-          <Route index element={<Navigate to={safetyIndex.siteMap.incidentDashboard}/>}/>
-          <Route index path={safetyIndex.siteMap.incidentDashboard} element={<SafetyIncidentDashboard/>}/>
-          {relatedKoboForms.map(_ =>
-            <Route key={_} {...getKoboFormRouteProps({path: safetyIndex.siteMap.form(_), name: _})}/>
-          )}
-        </Routes>
-      </Layout>
-    </Router>
+    <Layout
+      title={appFeaturesIndex.safety.name}
+      sidebar={<MpcaSidebar/>}
+      header={<AppHeader id="app-header"/>}
+    >
+      <Routes>
+        <Route index element={<Navigate to={safetyIndex.siteMap.incidentDashboard}/>}/>
+        <Route index path={safetyIndex.siteMap.incidentDashboard} element={<SafetyIncidentDashboard/>}/>
+        {relatedKoboForms.map(_ =>
+          <Route key={_} {...getKoboFormRouteProps({path: safetyIndex.siteMap.form(_), name: _})}/>
+        )}
+      </Routes>
+    </Layout>
   )
 }
 

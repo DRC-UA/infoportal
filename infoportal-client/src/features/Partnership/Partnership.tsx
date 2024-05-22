@@ -1,4 +1,4 @@
-import {HashRouter as Router, Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
 import {Layout} from '@/shared/Layout'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
@@ -56,22 +56,20 @@ const PartnershipSidebar = () => {
 
 export const Partnership = () => {
   return (
-    <Router>
-      <Layout
-        title={appFeaturesIndex.partnership.name}
-        sidebar={<PartnershipSidebar/>}
-        header={<AppHeader id="app-header"/>}
-      >
-        <PartnershipProvider>
-          <Routes>
-            <Route index element={<Navigate to={partnershipIndex.siteMap.dashboard}/>}/>
-            <Route path={partnershipIndex.siteMap.dashboard} element={<PartnershipDashboard/>}/>
-            {relatedKoboForms.map(_ =>
-              <Route key={_} {...getKoboFormRouteProps({path: partnershipIndex.siteMap.form(_), name: _})}/>
-            )}
-          </Routes>
-        </PartnershipProvider>
-      </Layout>
-    </Router>
+    <Layout
+      title={appFeaturesIndex.partnership.name}
+      sidebar={<PartnershipSidebar/>}
+      header={<AppHeader id="app-header"/>}
+    >
+      <PartnershipProvider>
+        <Routes>
+          <Route index element={<Navigate to={partnershipIndex.siteMap.dashboard}/>}/>
+          <Route path={partnershipIndex.siteMap.dashboard} element={<PartnershipDashboard/>}/>
+          {relatedKoboForms.map(_ =>
+            <Route key={_} {...getKoboFormRouteProps({path: partnershipIndex.siteMap.form(_), name: _})}/>
+          )}
+        </Routes>
+      </PartnershipProvider>
+    </Layout>
   )
 }

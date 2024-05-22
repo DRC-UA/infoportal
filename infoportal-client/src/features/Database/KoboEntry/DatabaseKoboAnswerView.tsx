@@ -14,14 +14,12 @@ import {Page} from '@/shared/Page'
 import {useParams} from 'react-router'
 import * as yup from 'yup'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
-import Link from 'next/link'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {AppFeatureId} from '@/features/appFeatureId'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {map} from '@alexandreannic/ts-utils'
+import {NavLink} from 'react-router-dom'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -91,21 +89,21 @@ export const DatabaseKoboAnswerViewDialog = ({
   open: boolean
 }) => {
   const {m} = useI18n()
-  const {conf} = useAppSettings()
   const [showQuestionWithoutAnswer, setShowQuestionWithoutAnswer] = useState(false)
   const ctxSchema = useKoboSchemaContext()
 
   useEffect(() => {
     ctxSchema.fetchById(formId)
+    console.info(answer)
   }, [formId])
 
   return (
     <Dialog open={true}>
       <DialogTitle>
         <Box sx={{display: 'flex', alignItems: 'center'}}>
-          <Link target="_blank" href={conf.linkToFeature(AppFeatureId.kobo_database, databaseIndex.siteMap.answer.absolute(koboIndex.drcUa.server.prod, formId, answer.id))}>
+          <NavLink to={databaseIndex.siteMap.answer.absolute(koboIndex.drcUa.server.prod, formId, answer.id)} onClick={onClose}>
             <IpIconBtn color="primary">open_in_new</IpIconBtn>
-          </Link>
+          </NavLink>
           {answer.id}
           <Box sx={{display: 'flex', alignItems: 'center', marginLeft: 'auto'}}>
             <Txt sx={{fontSize: '1rem'}} color="hint">{m._koboDatabase.showAllQuestions}</Txt>

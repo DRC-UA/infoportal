@@ -144,7 +144,7 @@ export const DatatableColumnToggle = ({className, title, columns, hiddenColumns,
       <Tooltip title={title ?? ''}>
         <IconBtn {...props}>
           <Badge
-            color="primary"
+            color={hiddenColumns.length === 0 ? 'info' : 'primary'}
             badgeContent={hiddenColumns.length === 0 ? 'NEW! ' : (columns.length === hiddenColumns.length ? '!' : columns.length - hiddenColumns.length)}
             // invisible={hiddenColumns.length === 0}
           >

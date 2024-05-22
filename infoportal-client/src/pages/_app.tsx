@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import type {AppProps} from 'next/app'
 import {Provide} from '@/shared/Provide'
 import {Box, CssBaseline, Icon, ThemeProvider} from '@mui/material'
@@ -25,6 +25,7 @@ import {KoboSchemaProvider} from '@/features/KoboSchema/KoboSchemaContext'
 import {KoboEditAnswersProvider} from '@/core/context/KoboEditAnswersContext'
 import {KoboAnswersProvider} from '@/core/context/KoboAnswers'
 import {KoboEditTagsProvider} from '@/core/context/KoboEditTagsContext'
+import {HashRouter} from 'react-router-dom'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
@@ -65,10 +66,13 @@ const App = ({
   )
 }
 
-
 const AppWithConfig = (props: AppProps) => {
   const settings = useAppSettings()
   const msal = useMemo(() => getMsalInstance(settings.conf), [settings.conf])
+  const [isServer, setIsServer] = useState(true)
+  useEffect(() => {
+    setIsServer(false)
+  }, [])
   return (
     <Provide providers={[
       // _ => <StyledEngineProvider injectFirst children={_}/>,
@@ -78,6 +82,7 @@ const AppWithConfig = (props: AppProps) => {
       _ => <CssBaseline children={_}/>,
       _ => <I18nProvider children={_}/>,
       _ => <MsalProvider children={_} instance={msal}/>,
+      ...!isServer ? [(_: any) => <HashRouter children={_}/>] : [],
       _ => <KoboSchemaProvider children={_}/>,
       _ => <KoboAnswersProvider children={_}/>,
       _ => <KoboEditAnswersProvider children={_}/>,

@@ -1,4 +1,4 @@
-import {HashRouter as Router, Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
 import React from 'react'
 import {AdminUsers} from '@/features/Admin/AdminUsers'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
@@ -52,7 +52,6 @@ const AdminSidebar = () => {
 
 export const Admin = () => {
   return (
-    <Router>
       <Layout
         title={appFeaturesIndex.admin.name}
         sidebar={<AdminSidebar/>}
@@ -65,6 +64,5 @@ export const Admin = () => {
           <Route path={adminModule.siteMap.group} element={<AdminGroups/>}/>
         </Routes>
       </Layout>
-    </Router>
   )
 }

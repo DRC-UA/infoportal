@@ -1,4 +1,4 @@
-import {HashRouter as Router, Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -141,24 +141,22 @@ export const Cfm = () => {
           schemaExternal={schemaContext.byName.meal_cfmExternal.get}
           schemaInternal={schemaContext.byName.meal_cfmInternal.get}
         >
-          <Router>
-            <Layout
-              title={appFeaturesIndex.cfm.name}
-              sidebar={<CfmSidebar/>}
-              header={<AppHeader id="app-header"/>}
-            >
-              <Routes>
-                <Route index element={<Navigate to={cfmIndex.siteMap.data}/>}/>
-                <Route path={cfmIndex.siteMap.dashboard} element={<CfmDashboard/>}/>
-                <Route path={cfmIndex.siteMap.data} element={<CfmTable/>}/>
-                <Route path={cfmIndex.siteMap.entry()} element={<CfmEntryRoute/>}/>
-                <Route path={cfmIndex.siteMap.access} element={<CfmAccess/>}/>
-                {relatedKoboForms.map(_ =>
-                  <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})}/>
-                )}
-              </Routes>
-            </Layout>
-          </Router>
+          <Layout
+            title={appFeaturesIndex.cfm.name}
+            sidebar={<CfmSidebar/>}
+            header={<AppHeader id="app-header"/>}
+          >
+            <Routes>
+              <Route index element={<Navigate to={cfmIndex.siteMap.data}/>}/>
+              <Route path={cfmIndex.siteMap.dashboard} element={<CfmDashboard/>}/>
+              <Route path={cfmIndex.siteMap.data} element={<CfmTable/>}/>
+              <Route path={cfmIndex.siteMap.entry()} element={<CfmEntryRoute/>}/>
+              <Route path={cfmIndex.siteMap.access} element={<CfmAccess/>}/>
+              {relatedKoboForms.map(_ =>
+                <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})}/>
+              )}
+            </Routes>
+          </Layout>
         </CfmProvider>
       ) : schemaContext.anyLoading && (
         <LinearProgress/>

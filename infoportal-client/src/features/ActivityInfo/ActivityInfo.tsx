@@ -1,5 +1,5 @@
 import {Layout} from '@/shared/Layout'
-import {HashRouter as Router, NavLink, Route, Routes} from 'react-router-dom'
+import {NavLink, Route, Routes} from 'react-router-dom'
 import React from 'react'
 import {AiWash} from '@/features/ActivityInfo/Wash/AiWash'
 import {AiMpca} from '@/features/ActivityInfo/Mpca/AiMpca'
@@ -81,14 +81,12 @@ const ActivityInfoSidebar = () => {
 
 export const ActivityInfo = () => {
   return (
-    <Router>
-      <Layout sidebar={<ActivityInfoSidebar/>} title={appFeaturesIndex.activity_info.name}>
-        <Routes>
-          {Enum.values(activitiesConfig).map(k =>
-            <Route key={k.path} path={k.path} element={k.componnent}/>
-          )}
-        </Routes>
-      </Layout>
-    </Router>
+    <Layout sidebar={<ActivityInfoSidebar/>} title={appFeaturesIndex.activity_info.name}>
+      <Routes>
+        {Enum.values(activitiesConfig).map(k =>
+          <Route key={k.path} path={k.path} element={k.componnent}/>
+        )}
+      </Routes>
+    </Layout>
   )
 }

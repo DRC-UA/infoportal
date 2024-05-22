@@ -11,7 +11,7 @@ import {appFeaturesIndex} from '@/features/appFeatureId'
 import {useSession} from '@/core/Session/SessionContext'
 import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
 import {IpBtn} from '@/shared/Btn'
-import {HashRouter as Router, NavLink, Route, Routes} from 'react-router-dom'
+import {NavLink, Route, Routes} from 'react-router-dom'
 import {WfpDeduplicationAccess} from '@/features/WfpDeduplication/WfpDeduplicationAccess'
 import {useAsync} from '@/shared/hook/useAsync'
 
@@ -94,13 +94,11 @@ export const WfpDeduplicationPage = () => {
     )
   }
   return (
-    <Router>
-      <Layout title={appFeaturesIndex.wfp_deduplication.name} sidebar={<WpfDeduplicationSidebar/>}>
-        <Routes>
-          <Route index element={<WfpDeduplicationData/>}/>
-          <Route path={wfpDeduplicationIndex.siteMap.access} element={<WfpDeduplicationAccess/>}/>
-        </Routes>
-      </Layout>
-    </Router>
+    <Layout title={appFeaturesIndex.wfp_deduplication.name} sidebar={<WpfDeduplicationSidebar/>}>
+      <Routes>
+        <Route index element={<WfpDeduplicationData/>}/>
+        <Route path={wfpDeduplicationIndex.siteMap.access} element={<WfpDeduplicationAccess/>}/>
+      </Routes>
+    </Layout>
   )
 }
