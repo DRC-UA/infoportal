@@ -420,6 +420,7 @@ const MealVerificationTableContent = <
             ...activity.dataColumns?.flatMap(c => {
               const q = schema.schemaHelper.questionIndex[c]
               const w = getColumnByQuestionSchema({
+                formId: activity.registration.koboFormId,
                 data: mergedData,
                 q,
                 groupSchemas: schema.schemaHelper.groupSchemas,

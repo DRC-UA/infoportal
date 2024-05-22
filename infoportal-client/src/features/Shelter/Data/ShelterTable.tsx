@@ -369,11 +369,11 @@ export const ShelterTable = () => {
             label: <Box component="span" sx={{'& > :not(:last-child)': {marginRight: '2px'}}}>
               {_.nta?.attachments && (
                 <>
-                  <KoboAttachedImg attachments={_.nta.attachments} fileName={_.nta.doc_available_yes1}/>
-                  <KoboAttachedImg attachments={_.nta.attachments} fileName={_.nta.doc_available_yes2}/>
-                  <KoboAttachedImg attachments={_.nta.attachments} fileName={_.nta.doc_available_yes3}/>
-                  <KoboAttachedImg attachments={_.nta.attachments} fileName={_.nta.doc_available_yes4}/>
-                  <KoboAttachedImg attachments={_.nta.attachments} fileName={_.nta.doc_available_yes5}/>
+                  <KoboAttachedImg answerId={_.nta.id} formId={KoboIndex.byName('shelter_nta').id} attachments={_.nta.attachments} fileName={_.nta.doc_available_yes1}/>
+                  <KoboAttachedImg answerId={_.nta.id} formId={KoboIndex.byName('shelter_nta').id} attachments={_.nta.attachments} fileName={_.nta.doc_available_yes2}/>
+                  <KoboAttachedImg answerId={_.nta.id} formId={KoboIndex.byName('shelter_nta').id} attachments={_.nta.attachments} fileName={_.nta.doc_available_yes3}/>
+                  <KoboAttachedImg answerId={_.nta.id} formId={KoboIndex.byName('shelter_nta').id} attachments={_.nta.attachments} fileName={_.nta.doc_available_yes4}/>
+                  <KoboAttachedImg answerId={_.nta.id} formId={KoboIndex.byName('shelter_nta').id} attachments={_.nta.attachments} fileName={_.nta.doc_available_yes5}/>
                 </>
               )}
             </Box>,

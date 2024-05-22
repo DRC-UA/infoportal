@@ -1,11 +1,11 @@
 import {generateXLSFromArray, GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
-import {slugify} from '@infoportal-common'
+import {KoboId, slugify} from '@infoportal-common'
 import {Enum, map, mapFor, seq} from '@alexandreannic/ts-utils'
 import {koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
 import React from 'react'
 import {useI18n} from '@/core/i18n'
 import {KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
-import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {Kobo, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {IpIconBtn, IpIconBtnProps} from '@/shared/IconBtn'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useAsync} from '@/shared/hook/useAsync'
@@ -20,6 +20,7 @@ export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
   groupSchemas,
   groupIndex,
   groupName,
+  formId,
 }: {
   repeatGroupsAsColumns?: boolean
   translateQuestion: KoboTranslateQuestion
@@ -27,6 +28,7 @@ export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
   schema: KoboQuestionSchema[],
   groupSchemas: Record<string, KoboQuestionSchema[]>
   groupIndex?: number
+  formId: KoboId
   groupName?: string
 }): GenerateXlsFromArrayParams['schema'] => {
   const getVal = (groupIndex && groupName)
@@ -53,7 +55,7 @@ export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
         return {
           head: groupIndex ? `[${groupIndex}] ${translateQuestion(q.name)}` : translateQuestion(q.name),
           render: (row: T) => {
-            return koboImgHelper({attachments: row.attachments, fileName: getVal(row, q.name)}).fullUrl
+            return koboImgHelper({formId, answerId: row.id, attachments: row.attachments, fileName: getVal(row, q.name)}).fullUrl
           },
         }
       case 'select_one': {
@@ -91,6 +93,7 @@ export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
         if (repeatGroupsAsColumns) {
           return mapFor(17, i => renderExportKoboSchema({
             groupSchemas,
+            formId,
             schema: groupSchemas[q.name],
             translateQuestion,
             translateChoice,
@@ -112,9 +115,11 @@ export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
 export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
   data,
   columns,
+  formId,
   repeatGroupsAsColumns,
   ...props
 }: {
+  formId: KoboId
   columns: DatatableColumn.Props<T, any>[]
   repeatGroupsAsColumns?: boolean
   data: T[] | undefined
@@ -131,6 +136,7 @@ export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
           sheetName: slugify(ctx.schema.schemaUnsanitized.name),
           data: data,
           schema: renderExportKoboSchema({
+            formId,
             schema: ctx.schema.schemaHelper.sanitizedSchema.content.survey,
             groupSchemas: ctx.schema.schemaHelper.groupSchemas,
             translateQuestion: ctx.schema.translate.question,
@@ -149,6 +155,7 @@ export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
               submissionTime: d.submissionTime,
             }))).compact(),
             schema: renderExportKoboSchema({
+              formId,
               schema: [...questionToAddInGroups, ...questions],
               groupSchemas: ctx.schema.schemaHelper.groupSchemas,
               translateQuestion: ctx.schema.translate.question,

@@ -51,6 +51,7 @@ export const DatabaseKoboTableContent = ({
   const extraColumns = useCustomColumns({selectedIds})
   const schemaColumns = useMemo(() => {
     return getColumnBySchema({
+      formId: ctx.form.id,
       selectedIds: selectedIds,
       data: ctx.data,
       schema: ctx.schema.schemaHelper.sanitizedSchema.content.survey,
@@ -172,6 +173,7 @@ export const DatabaseKoboTableContent = ({
                 submissionTime: d.submissionTime,
               }))).compact(),
               schema: renderExportKoboSchema({
+                formId: ctx.form.id,
                 schema: [...questionToAddInGroups, ...questions],
                 groupSchemas: ctx.schema.schemaHelper.groupSchemas,
                 translateQuestion: ctx.schema.translate.question,

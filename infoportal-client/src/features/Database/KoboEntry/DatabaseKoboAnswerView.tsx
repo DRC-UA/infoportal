@@ -146,6 +146,7 @@ const KoboAnswerFormView = ({
         .map(q => (
           <Box key={q.name} sx={{mb: 1.5}}>
             <KoboAnswerQuestionView
+              formId={formId}
               schema={schema}
               answer={answer}
               questionSchema={q}
@@ -160,7 +161,9 @@ const KoboAnswerQuestionView = ({
   schema,
   questionSchema,
   answer: row,
+  formId,
 }: {
+  formId: KoboId
   schema: KoboSchemaHelper.Bundle
   questionSchema: KoboQuestionSchema
   answer: KoboMappedAnswer<any>
@@ -173,6 +176,7 @@ const KoboAnswerQuestionView = ({
       return getColumnBySchema({
         data: row[questionSchema.name],
         m,
+        formId,
         schema: schema.schemaHelper.groupSchemas[questionSchema.name],
         translateQuestion: schema.translate.question,
         translateChoice: schema.translate.choice,
@@ -191,7 +195,7 @@ const KoboAnswerQuestionView = ({
         <KoboQuestionLabelView>{schema.translate.question(questionSchema.name)}</KoboQuestionLabelView>
         <Box>
           <Txt block size="small" color="hint">{row[questionSchema.name]}</Txt>
-          <KoboAttachedImg attachments={row.attachments} size={84} fileName={row[questionSchema.name] as string}/>
+          <KoboAttachedImg formId={formId} answerId={row.id} attachments={row.attachments} size={84} fileName={row[questionSchema.name] as string}/>
         </Box>
       </>
     }

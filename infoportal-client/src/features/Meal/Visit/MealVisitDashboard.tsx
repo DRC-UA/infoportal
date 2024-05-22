@@ -14,7 +14,7 @@ import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {IpBtn} from '@/shared/Btn'
 import {CommentsPanel} from '@/shared/CommentsPanel'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
-import {KoboAnswerFlat, KoboFormName, Meal_VisitMonitoring, OblastIndex} from '@infoportal-common'
+import {KoboAnswerFlat, KoboFormName, KoboIndex, Meal_VisitMonitoring, OblastIndex} from '@infoportal-common'
 import {NavLink} from 'react-router-dom'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useMealVisitContext} from '@/features/Meal/Visit/MealVisitContext'
@@ -235,7 +235,7 @@ export const MealVisitDashboard = () => {
                           </Box>
                         )}
                         {mapFor(10, i =>
-                          <KoboAttachedImg key={i} attachments={row.attachments} size={90} fileName={(row as any)['fcp' + (i + 1)]}/>
+                          <KoboAttachedImg answerId={row.id} formId={KoboIndex.byName('meal_visitMonitoring').id} key={i} attachments={row.attachments} size={90} fileName={(row as any)['fcp' + (i + 1)]}/>
                         )}
                       </Box>
                       <Box sx={{textAlign: 'right'}}>

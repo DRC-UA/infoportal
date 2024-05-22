@@ -1,5 +1,5 @@
 import {AppConfig, appConfig} from '@/conf/AppConfig'
-import {KoboAttachment, koboIndex} from '@infoportal-common'
+import {KoboAnswerId, KoboAttachment, KoboId, koboIndex} from '@infoportal-common'
 import {TableImg} from '@/shared/TableImg/TableImg'
 import {useMemo} from 'react'
 
@@ -22,11 +22,15 @@ export const proxyKoboImg = ({
   }
 }
 
-const parseKoboFileName = (fileName?: string) => fileName ? fileName.replaceAll(' ', '_').replaceAll(/[^0-9a-zA-Z-_.]/g, '') : undefined
+const parseKoboFileName = (fileName?: string) => fileName ? fileName.replaceAll(' ', '_').replaceAll(/[^0-9a-zA-Z-_.\u0400-\u04FF]/g, '') : undefined
 
-export const findFileUrl = ({fileName, attachments}: {fileName?: string, attachments: KoboAttachment[]}) => {
+export const findFileUrl = ({formId, answerId, fileName, attachments}: {formId: KoboId, answerId: KoboAnswerId, fileName?: string, attachments: KoboAttachment[]}) => {
   const parsedFileName = parseKoboFileName(fileName)
-  return parsedFileName ? attachments.find(_ => _.filename.includes(parsedFileName))?.download_small_url : undefined
+  const attachment = parsedFileName ? attachments.find(_ => _.filename.includes(parsedFileName)) : undefined
+  if (attachment) {
+    return `https://eu.kobotoolbox.org/api/v2/assets/${formId}/data/${answerId}/attachments/${attachment.id}/`
+  }
+  // return parsedFileName ? attachments.find(_ => _.filename.includes(parsedFileName))?.download_small_url : undefined
 }
 
 export const koboImgHelper = ({
@@ -34,13 +38,17 @@ export const koboImgHelper = ({
   serverId = koboIndex.drcUa.server.prod,
   attachments,
   conf = appConfig,
+  formId,
+  answerId,
 }: {
+  formId: KoboId
+  answerId: KoboAnswerId
   fileName?: string,
   serverId?: string
   attachments: KoboAttachment[]
   conf?: AppConfig
 }) => {
-  const url = findFileUrl({fileName, attachments})
+  const url = findFileUrl({formId, answerId, fileName, attachments})
   return proxyKoboImg({
     url,
     fileName,
@@ -54,15 +62,19 @@ export const KoboAttachedImg = ({
   serverId,
   attachments,
   size,
+  formId,
+  answerId,
   tooltipSize = 450,
 }: {
+  formId: KoboId
+  answerId: KoboAnswerId
   size?: number
   tooltipSize?: number | null
   fileName?: string
   serverId?: string
   attachments: KoboAttachment[]
 }) => {
-  const file = useMemo(() => koboImgHelper({attachments, fileName}), [attachments, fileName])
+  const file = useMemo(() => koboImgHelper({formId, answerId, attachments, fileName}), [attachments, fileName])
   return (
     fileName && <TableImg size={size} tooltipSize={tooltipSize} url={file.fullUrl ?? ''}/>
   )

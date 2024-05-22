@@ -11,7 +11,7 @@ import React from 'react'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {KoboAnswerFlat, KoboAnswerId, removeHtml} from '@infoportal-common'
+import {KoboAnswerFlat, KoboAnswerId, KoboId, removeHtml} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -68,6 +68,7 @@ const editableColumns: Set<KoboApiColType> = new Set([
 ])
 
 interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
+  formId: KoboId
   data?: T[]
   externalFilesIndex?: KoboExternalFilesIndex
   choicesIndex: KoboSchemaHelper.Index['choicesIndex']
@@ -95,6 +96,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   data,
   m,
   q,
+  formId,
   groupSchemas,
   translateQuestion,
   translateChoice,
@@ -164,8 +166,8 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
             return {
               value,
               tooltip: value,
-              export: koboImgHelper({attachments: row.attachments, fileName: getVal(row, q.name)}).fullUrl,
-              label: <KoboAttachedImg attachments={row.attachments} fileName={value}/>
+              export: koboImgHelper({formId, answerId: row.id, attachments: row.attachments, fileName: getVal(row, q.name)}).fullUrl,
+              label: <KoboAttachedImg answerId={row.id} formId={formId} attachments={row.attachments} fileName={value}/>
             }
           }
         }
@@ -177,9 +179,9 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           render: row => {
             const fileName = getVal(row, q.name)
             return {
-              export: findFileUrl({fileName, attachments: row.attachments}),
+              export: findFileUrl({formId, answerId: row.id, fileName, attachments: row.attachments}),
               value: fileName ?? DatatableUtils.blank,
-              label: <Txt link><a href={findFileUrl({fileName, attachments: row.attachments})} target="_blank">{fileName}</a></Txt>,
+              label: <Txt link><a href={findFileUrl({formId, answerId: row.id, fileName, attachments: row.attachments})} target="_blank">{fileName}</a></Txt>,
               // label: <Txt link><a href={koboImgHelper({fileName, attachments: row.attachments}).fullUrl} target="_blank">{fileName}</a></Txt>
             }
           }
@@ -254,6 +256,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
             groupSchemas,
             schema: groupSchemas[q.name],
             translateQuestion,
+            formId,
             translateChoice,
             choicesIndex,
             m,

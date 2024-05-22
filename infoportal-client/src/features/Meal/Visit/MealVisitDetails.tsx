@@ -6,7 +6,7 @@ import {Txt, TxtProps} from 'mui-extension'
 import {useI18n} from '@/core/i18n'
 import {muiTheme} from '@/core/theme'
 import {DRCLogoLarge} from '@/shared/logo/logo'
-import {capitalize} from '@infoportal-common'
+import {capitalize, KoboAnswerFlat, KoboIndex, Meal_VisitMonitoring} from '@infoportal-common'
 import {useSession} from '@/core/Session/SessionContext'
 import {DrawingCanvas} from '@/shared/DrawingCanvas'
 import {mapFor, seq} from '@alexandreannic/ts-utils'
@@ -97,7 +97,7 @@ export const _DashboardMealVisitPdf = () => {
   const {session} = useSession()
   const {m, formatDate} = useI18n()
   const {id} = urlValidation.validateSync(useParams())
-  const entry = ctx.answersIndex?.[id]
+  const entry: KoboAnswerFlat<Meal_VisitMonitoring.T> | undefined = ctx.answersIndex?.[id]
 
   if (!entry)
     return 'Not found'
@@ -216,7 +216,7 @@ export const _DashboardMealVisitPdf = () => {
             {/*</Box>*/}
             <Box sx={{display: 'grid', mt: 1, mx: -.5, gridTemplateColumns: '1fr 1fr 1fr'}}>
               {seq(mapFor(10, i => (entry as any)['fcp' + (i + 1)]))
-                .map(fileName => koboImgHelper({attachments: entry.attachments, fileName}).fullUrl)
+                .map(fileName => koboImgHelper({formId: KoboIndex.byName('meal_visitMonitoring').id, answerId: entry.id, attachments: entry.attachments, fileName}).fullUrl)
                 .compact()
                 .map(x => <CompressedImg key={x} url={x!} height={600}/>)}
             </Box>

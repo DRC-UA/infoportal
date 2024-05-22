@@ -24,6 +24,7 @@ export const DatabaseKoboTableGroupModal = ({
 
   const columns = useMemo(() => {
     return getColumnBySchema({
+      formId: ctx.form.id,
       data: groupData,
       m,
       schema: ctx.schema.schemaHelper.groupSchemas[name],
