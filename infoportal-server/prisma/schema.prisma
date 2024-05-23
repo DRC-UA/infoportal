@@ -18,15 +18,16 @@ model KoboServer {
 }
 
 model KoboForm {
-  id          String        @id @default(uuid())
-  name        String
-  server      KoboServer    @relation(fields: [serverId], references: [id])
-  serverId    String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime?
-  updatedBy   String?
-  uploadedBy  String?
-  KoboAnswers KoboAnswers[]
+  id                 String               @id @default(uuid())
+  name               String
+  server             KoboServer           @relation(fields: [serverId], references: [id])
+  serverId           String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime?
+  updatedBy          String?
+  uploadedBy         String?
+  KoboAnswers        KoboAnswers[]
+  KoboAnswersHistory KoboAnswersHistory[]
 }
 
 model KoboAnswers {
@@ -51,12 +52,26 @@ model KoboAnswers {
   deletedBy              String?
   tags                   Json?
 
-  mpcaPaymentTools  MpcaPaymentToolAnswers[]
-  mealVerifications MealVerificationAnswers[]
-  meta              KoboMeta[]
+  mpcaPaymentTools   MpcaPaymentToolAnswers[]
+  mealVerifications  MealVerificationAnswers[]
+  meta               KoboMeta[]
+  KoboAnswersHistory KoboAnswersHistory[]
 
   @@unique([id, formId])
   @@index([date, formId])
+}
+
+model KoboAnswersHistory {
+  id       String      @id @default(uuid())
+  form     KoboForm?   @relation(fields: [formId], references: [id])
+  formId   String?
+  answer   KoboAnswers @relation(fields: [answerId], references: [id])
+  answerId String
+  by       String
+  date     DateTime    @default(now())
+  type     String
+  property String
+  newValue Json
 }
 
 enum Gender {

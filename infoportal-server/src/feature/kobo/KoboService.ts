@@ -368,8 +368,10 @@ export class KoboService {
     formId,
     answerIds,
     question,
-    answer
+    answer,
+    authorEmail,
   }: {
+    authorEmail: string,
     formId: KoboId,
     answerIds: KoboAnswerId[],
     question: string,
@@ -388,18 +390,46 @@ export class KoboService {
          SET answers     = jsonb_set(answers, '{${question}}', '"${answer}"'),
              "updatedAt" = NOW()
          WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
-        `)
+        `),
+      this.prisma.koboAnswersHistory.createMany({
+        data: answerIds.map(_ => {
+          return {
+            by: authorEmail,
+            type: 'answer',
+            formId,
+            property: question,
+            newValue: answer as any,
+            answerId: _
+          }
+        })
+      })
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED, {formId, answerIds, answer: {[question]: answer}})
   }
 
-  readonly updateTags = async ({formId, answerIds, tags}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>}) => {
-    await this.prisma.$executeRawUnsafe(
-      `UPDATE "KoboAnswers"
-       SET ${Obj.keys(tags).map(key => `tags = jsonb_set(COALESCE(tags, '{}'::jsonb), '{${key}}', '${JSON.stringify(tags[key])}')`).join(',')},
-           "updatedAt" = NOW()
-       WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
-      `)
+  readonly updateTags = async ({formId, answerIds, tags, authorEmail}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>, authorEmail: string}) => {
+    await Promise.all([
+      this.prisma.koboAnswersHistory.createMany({
+        data: answerIds.flatMap(_ => {
+          return Obj.keys(tags).map(tag => {
+            return {
+              by: authorEmail,
+              type: 'tag',
+              formId,
+              property: tag,
+              newValue: tags[tag] as any,
+              answerId: _,
+            }
+          })
+        })
+      }),
+      await this.prisma.$executeRawUnsafe(
+        `UPDATE "KoboAnswers"
+         SET ${Obj.keys(tags).map(key => `tags = jsonb_set(COALESCE(tags, '{}'::jsonb), '{${key}}', '${JSON.stringify(tags[key])}')`).join(',')},
+             "updatedAt" = NOW()
+         WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
+        `)
+    ])
     // const answers = await this.prisma.koboAnswers.findMany({
     //   select: {
     //     id: true,

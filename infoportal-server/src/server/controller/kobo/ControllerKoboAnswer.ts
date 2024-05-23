@@ -36,6 +36,7 @@ export class ControllerKoboAnswer {
   }
 
   readonly updateAnswers = async (req: Request, res: Response, next: NextFunction) => {
+    const email = req.session.user?.email ?? 'unknown'
     const params = await yup.object({
       formId: yup.string().required(),
     }).validate(req.params)
@@ -44,11 +45,12 @@ export class ControllerKoboAnswer {
       question: yup.string().required(),
       answer: yup.mixed<any>(),
     }).validate(req.body)
-    const data = await this.service.updateAnswers({...params, ...body})
+    const data = await this.service.updateAnswers({...params, ...body, authorEmail: email})
     res.send(data)
   }
 
   readonly updateTag = async (req: Request, res: Response, next: NextFunction) => {
+    const email = req.session.user?.email ?? 'unknown'
     const params = await yup.object({
       formId: yup.string().required(),
     }).validate(req.params)
@@ -57,7 +59,7 @@ export class ControllerKoboAnswer {
       tags: yup.mixed().required(),
     }).validate(req.body)
 
-    const data = await this.service.updateTags({...params, ...body})
+    const data = await this.service.updateTags({...params, ...body, authorEmail: email})
     res.send()
   }
 

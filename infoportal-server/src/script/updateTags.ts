@@ -28,7 +28,8 @@ export const updateTags = async () => {
     await koboService.updateTags({
       answerIds: [id],
       formId: KoboIndex.byName('ecrec_cashRegistration').id,
-      tags: tag
+      tags: tag,
+      authorEmail: 'script'
     })
   }
   novemberDmytro
