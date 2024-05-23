@@ -29,12 +29,15 @@ import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {DatatableColumnToggle} from '@/shared/Datatable/DatatableColumnsToggle'
 import {DatatableHeadTypeIconByKoboType} from '@/shared/Datatable/DatatableHead'
+import {appConfig} from '@/conf/AppConfig'
+import {useSession} from '@/core/Session/SessionContext'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
   onDataChange,
 }: Pick<DatabaseTableProps, 'onFiltersChange' | 'onDataChange'>) => {
   const {m} = useI18n()
+  const {session} = useSession()
   const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
@@ -218,12 +221,20 @@ export const DatabaseKoboTableContent = ({
             )}
             {header?.(params)}
 
+            {session.admin && (
+              <IpIconBtn
+                children="admin_panel_settings"
+                target="_blank"
+                href={appConfig.koboServerUrl + `/#/forms/${ctx.form.id}/landing`}
+                sx={{marginLeft: 'auto'}}
+                tooltip="Open Kobo admin"
+              />
+            )}
             <IpIconBtn
               href={ctx.schema.schemaUnsanitized.deployment__links.url}
               target="_blank"
               children="file_open"
               tooltip={m._koboDatabase.openKoboForm}
-              sx={{marginLeft: 'auto'}}
             />
             <DatabaseKoboSyncBtn
               loading={ctx.asyncRefresh.loading}

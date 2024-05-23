@@ -40,6 +40,7 @@ export const appConfig = {
     const featurePath = appFeaturesIndex[feature]?.path ?? feature
     return featurePath + '/#' + path
   },
+  koboServerUrl: 'https://eu.kobotoolbox.org',
   contact: 'alexandre.annic@drc.ngo',
   apiURL: _(defaultValue('https://infoportal-ua-api.drc.ngo'))(Env.NEXT_PUBLIC_API_BASE_URL),
   baseURL: _(defaultValue('https://infoportal-ua.drc.ngo/'))(Env.NEXT_PUBLIC_BASE_URL),
