@@ -71,6 +71,7 @@ model KoboAnswersHistory {
   date     DateTime    @default(now())
   type     String
   property String
+  oldValue Json?
   newValue Json
 }
 

@@ -7,14 +7,16 @@ import React, {useEffect} from 'react'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {Avatar, Icon} from '@mui/material'
+import {alpha, Avatar, Icon, useTheme} from '@mui/material'
 import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
+import {KoboAnswerHistory} from '@/core/sdk/server/kobo/answerHistory/KoboAnswerHistory'
 
 export const DatabaseHistory = () => {
   const {serverId, formId} = databaseUrlParamsValidation.validateSync(useParams())
+  const t = useTheme()
   const {m, formatDateTime, formatDate} = useI18n()
   const {api} = useAppSettings()
   const fetcher = useFetcher(() => api.kobo.answerHistory.search({formId}))
@@ -26,6 +28,30 @@ export const DatabaseHistory = () => {
     fetcher.fetch()
   }, [])
 
+  const getTranslation = (row: KoboAnswerHistory, fn: (_: KoboAnswerHistory) => string) => {
+    const value: any = fn(row)
+    if (!schema) return value
+    const questionSchema = schema.schemaHelper.questionIndex[row.property]
+    if (!questionSchema) return value
+    switch (questionSchema.type) {
+      case 'select_multiple': {
+        const label = value?.split(' ').map((_: string) => schema.translate.choice(row.property, _)).join(' | ')
+        return label
+      }
+      case 'select_one': {
+        const render = schema.translate.choice(row.property, value)
+        return render ?? (
+          <span title={value}>
+              <TableIcon color="disabled" tooltip={m._koboDatabase.valueNoLongerInOption} sx={{mr: 1}} children="error"/>
+            {value}
+            </span>
+        )
+      }
+      default: {
+        return value
+      }
+    }
+  }
 
   return (
     <Page width="lg">
@@ -44,7 +70,7 @@ export const DatabaseHistory = () => {
             {
               type: 'date',
               id: 'date',
-              width: 0,
+              width: 80,
               head: m.date,
               render: _ => {
                 return {
@@ -59,7 +85,7 @@ export const DatabaseHistory = () => {
               id: 'property',
               typeIcon: keyTypeIcon,
               className: 'td-id',
-              width: 0,
+              width: 80,
               head: m.id,
               render: _ => {
                 return {
@@ -76,7 +102,7 @@ export const DatabaseHistory = () => {
                 return {
                   value: _.by,
                   label: <span style={{display: 'inline-flex', alignItems: 'center'}}>
-                    <Avatar sx={{minWidth: 22, width: 22, height: 22, mr: 1}}><Icon fontSize="small">person</Icon></Avatar>
+                    <Avatar sx={{minWidth: 20, width: 20, height: 20, mr: .5}}><Icon fontSize="small">person</Icon></Avatar>
                     {_.by}
                   </span>,
                 }
@@ -100,75 +126,47 @@ export const DatabaseHistory = () => {
               type: 'select_one',
               id: 'property',
               head: m.column,
+              width: 250,
               render: _ => {
                 return {
                   value: _.property,
-                  label: _.property,
+                  label: schema?.translate.question(_.property),
                 }
               }
             },
             {
-              type: 'string',
+              type: 'select_one',
               id: 'property',
-              head: m._koboDatabase.newValue,
+              head: 'XML',
+              width: 90,
               render: _ => {
                 return {
-                  value: _.newValue,
-                  label: _.newValue,
+                  value: _.property,
+                  label: <code style={{background: t.palette.background.default, color: t.palette.text.secondary}}>{_.property}</code>,
                 }
               }
             },
-            // ...schema ? getColumnByQuestionSchema({
-            //   data: fetcher.get ?? [],
-            //   m,
-            //   q: schema.schemaHelper.questionIndex[_.property],
-            //   groupSchemas: schema.schemaHelper.groupSchemas,
-            //   translateChoice: schema.translate.choice,
-            //   translateQuestion: schema.translate.question,
-            //   choicesIndex: schema.schemaHelper.choicesIndex,
-            //   formId,
-            // }) : []
             {
               type: 'string',
               id: 'translate',
-              head: m._koboDatabase.translation,
+              head: m._koboDatabase.oldValue,
               render: row => {
-                const value: any = row.newValue
-                const defaultValue = {
-                  value: value,
-                  label: value,
+                const label = getTranslation(row, _ => _.oldValue)
+                return {
+                  label: <span style={{background: alpha(t.palette.error.light, .16), color: t.palette.error.main}}>{label}</span>,
+                  value: row.oldValue
                 }
-                if (!schema) return defaultValue
-                const questionSchema = schema.schemaHelper.questionIndex[row.property]
-                if (!questionSchema) return defaultValue
-                switch (questionSchema.type) {
-                  case 'select_multiple': {
-                    console.log(value, row.property, schema.schemaHelper.choicesIndex)
-                    const label = value?.split(' ').map((_: string) => schema.translate.choice(row.property, _)).join(' | ')
-                    return {
-                      label,
-                      export: label,
-                      tooltip: label,
-                      value: value,
-                    }
-                  }
-                  case 'select_one': {
-                    const render = schema.translate.choice(row.property, value)
-                    return {
-                      export: render,
-                      value: value,
-                      tooltip: render ?? m._koboDatabase.valueNoLongerInOption,
-                      label: render ?? (
-                        <span title={value}>
-                          <TableIcon color="disabled" tooltip={m._koboDatabase.valueNoLongerInOption} sx={{mr: 1}} children="error"/>
-                          {value}
-                        </span>
-                      ),
-                    }
-                  }
-                  default: {
-                    return defaultValue
-                  }
+              }
+            },
+            {
+              type: 'string',
+              id: 'translate',
+              head: m._koboDatabase.newValue,
+              render: row => {
+                const label = getTranslation(row, _ => _.newValue)
+                return {
+                  label: <span style={{background: alpha(t.palette.success.light, .16), color: t.palette.success.main}}>{label}</span>,
+                  value: row.newValue
                 }
               }
             }

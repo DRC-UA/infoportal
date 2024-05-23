@@ -659,6 +659,7 @@ export const en = Object.freeze({
     _koboDatabase: {
       translation: 'Translation',
       newValue: 'New value',
+      oldValue: 'Old value',
       koboQuestion: 'Kobo question',
       customColumn: 'Custom column',
       currentlyDisplayed: `columns displayed`,

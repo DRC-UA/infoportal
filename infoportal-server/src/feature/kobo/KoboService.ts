@@ -15,6 +15,7 @@ import {SytemCache} from '../../helper/IpCache'
 import {app} from '../../index'
 import {appConf} from '../../core/conf/AppConf'
 import Event = GlobalEvent.Event
+import {KoboAnswerHistoryService} from './history/KoboAnswerHistoryService'
 
 export interface KoboAnswerFilter {
   filters?: KoboAnswersFilters,
@@ -36,6 +37,7 @@ export class KoboService {
     private prisma: PrismaClient,
     private access = new AccessService(prisma),
     private sdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
+    private history = new KoboAnswerHistoryService(prisma),
     private event: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
     private conf = appConf,
   ) {
@@ -392,17 +394,12 @@ export class KoboService {
              "updatedAt" = NOW()
          WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
         `),
-      this.prisma.koboAnswersHistory.createMany({
-        data: answerIds.map(_ => {
-          return {
-            by: authorEmail,
-            type: 'answer',
-            formId,
-            property: question,
-            newValue: answer as any,
-            answerId: _
-          }
-        })
+      this.history.track({
+        formId,
+        answerIds,
+        property: question,
+        newValue: answer,
+        authorEmail,
       })
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED, {formId, answerIds, answer: {[question]: answer}})

@@ -11,6 +11,7 @@ export interface KoboAnswerHistory {
   date: Date
   type: 'answer' | 'tag'
   property: string
+  oldValue?: any
   newValue: any
 }
 
