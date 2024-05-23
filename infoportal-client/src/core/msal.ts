@@ -14,12 +14,14 @@ export const getMsalInstance = (config: AppConfig) => {
     },
   }
 
-// Add here scopes for id token to be used at MS Identity Platform endpoints.
+  // Add here scopes for id token to be used at MS Identity Platform endpoints.
   const loginRequest: PopupRequest = {
     scopes: ['User.Read']
   }
 
-// Add here the endpoints for MS Graph API services you would like to use.
+  // TO get picture me/photo/$value
+
+  // Add here the endpoints for MS Graph API services you would like to use.
   const graphConfig = {
     graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me'
   }

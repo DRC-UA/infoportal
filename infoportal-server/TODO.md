@@ -5,3 +5,4 @@
 - Multithread servers
 - Harmonize code pattern about yup rest api schema
 - Harmonize endpoint yup schema (all in Service?)
+- Haromize service structure like KoboAnswerHistory (namespace with schema and typ)

@@ -128,6 +128,7 @@ export namespace KoboSchemaHelper {
       },
       translateChoice: (questionName: string, choiceName?: string) => {
         const listName = questionIndex[questionName]?.select_from_list_name
+        console.log({q: questionIndex[questionName], listName, choicesTranslation: choicesTranslation[listName!], choiceName})
         try {
           if (choiceName) return getKoboLabel(choicesTranslation[listName!][choiceName], langIndex)
         } catch (e) {

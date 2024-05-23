@@ -23,7 +23,9 @@ export const databaseIndex = {
       relative: `access`,
       absolute: (serverId = ':serverId', formId = ':formId') => base(serverId, formId) + '/access'
     },
-    // database: (serverId = ':serverId', formId = ':formId') => `form/${serverId}/${formId}/database`,
-    // access: (serverId = ':serverId', formId = ':formId') => `form/${serverId}/${formId}/access`,
+    history: {
+      relative: `history`,
+      absolute: (serverId = ':serverId', formId = ':formId') => base(serverId, formId) + '/history'
+    },
   }
 }

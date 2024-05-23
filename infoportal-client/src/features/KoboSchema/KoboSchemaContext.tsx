@@ -31,6 +31,7 @@ export interface KoboSchemaContext {
   fetchById: (id: KoboId) => Promise<KoboSchema>
   fetchByName: (name: KoboFormName) => Promise<KoboSchema>
   byId: Record<KoboId, SchemaContextRes | undefined>
+  byId2: (_: KoboId) => SchemaContextRes
   byName: Record<KoboFormName, SchemaContextRes>
 }
 
@@ -85,6 +86,7 @@ export const KoboSchemaProvider = ({
       fetchById: (id: KoboId) => fetchers.fetch({force: false, clean: false}, id),
       fetchByName: (name: KoboFormName) => fetchers.fetch({force: false, clean: false}, KoboIndex.byName(name).id),
       byId: by.byId,
+      byId2: (_: KoboId) => by.byId[_] ?? {},
       byName: by.byName,
     }}>
       {children}

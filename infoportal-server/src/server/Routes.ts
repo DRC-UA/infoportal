@@ -25,6 +25,7 @@ import {ControllerGroup} from './controller/ControllerGroup'
 import {ControllerKoboMeta} from './controller/ControllerKoboMeta'
 import {ControllerJsonStore} from './controller/ControllerJsonStore'
 import {ControllerHdp} from './controller/ControllerHdp'
+import {ControllerKoboAnswerHistory} from './controller/kobo/ControllerKoboAnswerHistory'
 
 export interface AuthenticatedRequest extends Request {
   user?: UserSession
@@ -77,6 +78,7 @@ export const getRoutes = (
   const koboMeta = new ControllerKoboMeta(prisma)
   const jsonStore = new ControllerJsonStore(prisma)
   const hdp = new ControllerHdp()
+  const koboAnswerHistory = new ControllerKoboAnswerHistory(prisma)
 
   const auth = ({adminOnly = false}: {adminOnly?: boolean} = {}) => async (req: Request, res: Response, next: NextFunction) => {
     // req.session.user = {
@@ -154,6 +156,8 @@ export const getRoutes = (
     router.get('/kobo-api/:id', auth(), errorCatcher(koboApi.getForms))
     router.get('/kobo-api/:id/:formId', auth(), errorCatcher(cache('24 hour')), errorCatcher(koboApi.getSchema))
     router.get('/kobo-api/:id/:formId/:answerId/edit-url', errorCatcher(koboApi.edit))
+
+    router.post('/kobo-answer-history/search', errorCatcher(koboAnswerHistory.search))
 
     router.get('/kobo/server', auth(), errorCatcher(koboServer.getServers))
     router.get('/kobo/form', auth(), errorCatcher(koboForm.getAll))

@@ -62,6 +62,7 @@ export const makeMeta = <T extends Record<string, any>>(t: T, meta: Meta): WithM
   return t as any
 }
 
+/** @deprecated use v2 */
 export class KoboTypedAnswerSdk {
 
   constructor(private client: ApiClient, private sdk = new KoboAnswerSdk(client)) {

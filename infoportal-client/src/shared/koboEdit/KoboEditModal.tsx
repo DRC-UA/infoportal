@@ -12,7 +12,6 @@ import {useKoboColumnDef} from '@/shared/koboEdit/KoboSchemaWrapper'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
-import {OptionLabelTypeCompact, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 
 export type KoboEditModalOption = {
   value: string,
@@ -144,7 +143,7 @@ export const KoboEditModal = ({
       onClose={onClose}
       loading={_loading}
       cancelLabel={m.close}
-      confirmDisabled={_loading}
+      confirmDisabled={_loading || !!fetcherUpdate.get}
       onConfirm={() => fetcherUpdate.fetch({force: true, clean: true}, value)}
       title={title}
     >
@@ -161,8 +160,7 @@ export const KoboEditModal = ({
         }>{m.successfullyEdited(fetcherUpdate.get)}</Alert>
       )}
       <Collapse in={!fetcherUpdate.get}>
-        <Box>
-          <Box sx={{mb: 1.5, minWidth: 340}}>{title}</Box>
+        <Box sx={{minWidth: 340}}>
           {(() => {
             switch (type) {
               case 'select_one': {

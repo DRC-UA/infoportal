@@ -1,3 +1,3 @@
 export class ProtectionDataHelper {
-  // Temporary keep the file for git history i
+  // Temporary keep the file for git answerHistory i
 }

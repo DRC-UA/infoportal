@@ -22,6 +22,7 @@ import {Enum, seq} from '@alexandreannic/ts-utils'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {DatabaseList} from '@/features/Database/DatabaseList'
 import {DatabaseKoboAnswerViewPage} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
+import {DatabaseHistory} from '@/features/Database/History/DatabaseHistory'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -115,6 +116,7 @@ export const DatabaseWithContext = () => {
           <Route path={databaseIndex.siteMap.answer.relative()} element={<DatabaseKoboAnswerViewPage/>}/>
           <Route path={databaseIndex.siteMap.database.relative} element={<DatabaseTableRoute/>}/>
           <Route path={databaseIndex.siteMap.access.relative} element={<DatabaseAccessRoute/>}/>
+          <Route path={databaseIndex.siteMap.history.relative} element={<DatabaseHistory/>}/>
           {/*<Route path={databaseModule.siteMap.entry.absolute()} element={<DatabaseKoboAnswerView/>}/>*/}
         </Route>
       </Routes>
@@ -150,6 +152,12 @@ export const DatabaseHome = () => {
           value={databaseIndex.siteMap.access.absolute(serverId, formId)}
           to={databaseIndex.siteMap.access.absolute(serverId, formId)}
           label={m.access}
+        />
+        <Tab
+          component={NavLink}
+          value={databaseIndex.siteMap.history.absolute(serverId, formId)}
+          to={databaseIndex.siteMap.history.absolute(serverId, formId)}
+          label={m.history}
         />
       </Tabs>
       <Outlet/>
