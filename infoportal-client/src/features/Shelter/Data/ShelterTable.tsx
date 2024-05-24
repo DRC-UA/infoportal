@@ -350,8 +350,8 @@ export const ShelterTable = () => {
           return {
             value: _.nta?.ownership_verification,
             label: fnSwitch(_.nta?.ownership_verification!, {
-              yes: <TableIcon color="success">check_circle</TableIcon>,
-              no: <TableIcon color="error">cancel</TableIcon>,
+              yes: <TableIcon color="success">check</TableIcon>,
+              no: <TableIcon color="error">close</TableIcon>,
             }, () => undefined)
           }
         }
@@ -468,6 +468,116 @@ export const ShelterTable = () => {
         }
       },
       {
+        id: 'agreement',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        head: m._shelter.agreement,
+        type: 'string',
+        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_nta',
+          answerIds: selectedNta,
+          type: 'text',
+          tag: 'agreement',
+        })}/>,
+        render: row => {
+          return {
+            value: row.nta?.tags?.agreement,
+            label: map(row.nta, nta => (
+              <TableInput
+                originalValue={null}
+                value={row.nta?.tags?.agreement}
+                onChange={_ => ctxEditTag.asyncUpdateByName.call({
+                  formName: 'shelter_nta',
+                  answerIds: [nta.id],
+                  tag: 'agreement',
+                  value: _,
+                })}
+              />
+            ))
+          }
+        }
+      },
+      {
+        id: 'workOrder',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        head: m._shelter.workOrder,
+        type: 'select_one',
+        typeIcon: null,
+        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_nta',
+          answerIds: selectedNta,
+          type: 'text',
+          tag: 'workOrder',
+        })}/>,
+        render: row => {
+          return {
+            option: row.nta?.tags?.workOrder ?? DatatableUtils.blank,
+            value: row.nta?.tags?.workOrder,
+            label: map(row.nta, nta => (
+              <TableInput
+                originalValue={null}
+                value={row.nta?.tags?.workOrder}
+                onChange={_ => ctxEditTag.asyncUpdateByName.call({
+                  formName: 'shelter_nta',
+                  answerIds: [nta.id],
+                  tag: 'workOrder',
+                  value: _,
+                })}
+              />
+            ))
+          }
+        }
+      },
+      {
+        id: 'project',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        head: m.project,
+        width: 174,
+        type: 'select_multiple',
+        typeIcon: null,
+        options: () => DatatableUtils.buildOptions(shelterDrcProject, true),
+        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
+          formName: 'shelter_nta',
+          answerIds: selectedNta,
+          type: 'select_multiple',
+          options: shelterDrcProject,
+          tag: 'project',
+        })}/>,
+        render: row => {
+          const projectArray = safeArray(row.nta?.tags?.project)
+          return {
+            value: projectArray,
+            label: map(row.nta, nta => {
+              return (
+                <DebouncedInput
+                  debounce={1000}
+                  value={projectArray}
+                  onChange={(projectChange: DrcProject[] | undefined) => {
+                    ctxEditTag.asyncUpdateByName.call({
+                      formName: 'shelter_nta',
+                      answerIds: [nta.id],
+                      tag: 'project',
+                      value: projectChange ?? undefined,
+                    })
+                  }}
+                >
+                  {(value, onChange) => (
+                    <SelectDrcProjects
+                      label={null}
+                      value={value}
+                      onChange={onChange}
+                      options={shelterDrcProject}
+                    />
+                  )}
+                </DebouncedInput>
+              )
+            })
+          }
+        }
+      },
+      {
         id: 'TA',
         width: 0,
         group: 'ta',
@@ -538,116 +648,6 @@ export const ShelterTable = () => {
         ) : undefined,
       },
       {
-        id: 'agreement',
-        group: 'ta',
-        groupLabel: KoboIndex.byName('shelter_ta').translation,
-        head: m._shelter.agreement,
-        type: 'string',
-        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
-          formName: 'shelter_ta',
-          answerIds: selectedTa,
-          type: 'text',
-          tag: 'agreement',
-        })}/>,
-        render: row => {
-          return {
-            value: row.ta?.tags?.agreement,
-            label: map(row.ta, ta => (
-              <TableInput
-                originalValue={null}
-                value={row.ta?.tags?.agreement}
-                onChange={_ => ctxEditTag.asyncUpdateByName.call({
-                  formName: 'shelter_ta',
-                  answerIds: [ta.id],
-                  tag: 'agreement',
-                  value: _,
-                })}
-              />
-            ))
-          }
-        }
-      },
-      {
-        id: 'workOrder',
-        group: 'ta',
-        groupLabel: KoboIndex.byName('shelter_ta').translation,
-        head: m._shelter.workOrder,
-        type: 'select_one',
-        typeIcon: null,
-        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
-          formName: 'shelter_ta',
-          answerIds: selectedTa,
-          type: 'text',
-          tag: 'workOrder',
-        })}/>,
-        render: row => {
-          return {
-            option: row.ta?.tags?.workOrder ?? DatatableUtils.blank,
-            value: row.ta?.tags?.workOrder,
-            label: map(row.ta, ta => (
-              <TableInput
-                originalValue={null}
-                value={row.ta?.tags?.workOrder}
-                onChange={_ => ctxEditTag.asyncUpdateByName.call({
-                  formName: 'shelter_ta',
-                  answerIds: [ta.id],
-                  tag: 'workOrder',
-                  value: _,
-                })}
-              />
-            ))
-          }
-        }
-      },
-      {
-        id: 'project',
-        group: 'ta',
-        groupLabel: KoboIndex.byName('shelter_ta').translation,
-        head: m.project,
-        width: 174,
-        type: 'select_multiple',
-        typeIcon: null,
-        options: () => DatatableUtils.buildOptions(shelterDrcProject, true),
-        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.openByName({
-          formName: 'shelter_ta',
-          answerIds: selectedTa,
-          type: 'select_multiple',
-          options: shelterDrcProject,
-          tag: 'project',
-        })}/>,
-        render: row => {
-          const projectArray = safeArray(row.ta?.tags?.project)
-          return {
-            value: projectArray,
-            label: map(row.ta, ta => {
-              return (
-                <DebouncedInput
-                  debounce={1000}
-                  value={projectArray}
-                  onChange={(projectChange: DrcProject[] | undefined) => {
-                    ctxEditTag.asyncUpdateByName.call({
-                      formName: 'shelter_ta',
-                      answerIds: [ta.id],
-                      tag: 'project',
-                      value: projectChange ?? undefined,
-                    })
-                  }}
-                >
-                  {(value, onChange) => (
-                    <SelectDrcProjects
-                      label={null}
-                      value={value}
-                      onChange={onChange}
-                      options={shelterDrcProject}
-                    />
-                  )}
-                </DebouncedInput>
-              )
-            })
-          }
-        }
-      },
-      {
         id: 'hasLot1',
         group: 'ta',
         groupLabel: KoboIndex.byName('shelter_ta').translation,
@@ -665,7 +665,7 @@ export const ShelterTable = () => {
               false: 'No',
             }, () => 'None'),
             label: fnSwitch(KoboShelterTa.hasLot1(row.ta) + '', {
-              true: <TableIcon color="success">task_alt</TableIcon>,
+              true: <TableIcon color="success">check</TableIcon>,
               false: <TableIcon color="disabled">block</TableIcon>,
             }, () => <></>)
           }
@@ -726,7 +726,7 @@ export const ShelterTable = () => {
               false: 'No',
             }, () => 'None'),
             label: fnSwitch(KoboShelterTa.hasLot2(row.ta) + '', {
-              true: <TableIcon color="success">task_alt</TableIcon>,
+              true: <TableIcon color="success">check</TableIcon>,
               false: <TableIcon color="disabled">block</TableIcon>,
             }, () => <></>),
           }

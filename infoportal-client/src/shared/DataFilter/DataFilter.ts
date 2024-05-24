@@ -70,7 +70,10 @@ export namespace DataFilter {
       if (shape.customFilter) return _ => shape.customFilter!(filterValue, _)
       if (!shape.getValue) throw new Error('Either getValue or customFilter should be defined for ' + filterName)
       if (shape.multiple)
-        return _ => !!filterValue.find(f => shape.getValue!(_)?.includes(f as any))
+        return _ => !!filterValue.find(f => {
+          const v = shape.getValue!(_)
+          return (f === DataFilter.blank && (v ?? []).length === 0) || v?.includes(f as any)
+        })
       return _ => filterValue.includes(shape.getValue!(_) as any)
     })) as Seq<TData>
   }

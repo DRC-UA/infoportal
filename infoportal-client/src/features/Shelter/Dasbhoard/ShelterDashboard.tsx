@@ -98,8 +98,8 @@ export const ShelterDashboard = () => {
         multiple: true,
         icon: appConfig.icons.project,
         label: m.project,
-        getValue: _ => _.ta?.tags?.project,
-        getOptions: (get) => [...shelterDrcProject, ''].sort().map(_ => ({value: _, label: _}))
+        getValue: _ => _.nta?.tags?.project,
+        getOptions: (get) => DataFilter.buildOptions(shelterDrcProject, true)
       },
       validationStatus: {
         icon: 'check',
@@ -262,7 +262,7 @@ export const _ShelterDashboard = ({
           <PanelBody>
             <ChartBarMultipleBy
               data={data}
-              by={_ => _.ta?.tags?.project!}
+              by={_ => _.nta?.tags?.project!}
             />
           </PanelBody>
         </Panel>

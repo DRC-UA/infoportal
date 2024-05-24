@@ -2,7 +2,7 @@ import {ShelterContractor} from './ShelterContractor'
 import {Shelter_TA} from '../generated/Shelter_TA'
 import {map} from '@alexandreannic/ts-utils'
 import {NumberKeys} from '../../type/Generic'
-import {KoboBaseTags} from './Common'
+import {KoboBaseTags, KoboTagStatus} from './Common'
 import {DrcProject} from '../../type/Drc'
 
 export namespace KoboShelterTa {
@@ -89,9 +89,12 @@ export enum ShelterProgress {
   InvoicePaymentProcessed = 'InvoicePaymentProcessed',
 }
 
-export interface ShelterNtaTags extends KoboBaseTags {
+export interface ShelterNtaTags extends KoboTagStatus, KoboBaseTags {
   interviewee_name?: string
   pay_det_tax_id_num?: string
+  agreement?: string
+  workOrder?: string
+  project?: DrcProject[]
 }
 
 export enum ShelterTaPriceLevel {
@@ -104,17 +107,12 @@ export interface ShelterTaTags extends KoboBaseTags {
   progress?: ShelterProgress
   contractor1?: ShelterContractor
   contractor2?: ShelterContractor
-  agreement?: string
-  workOrder?: string
-  // donor?: string
-  project?: DrcProject[]
   workDoneAt?: Date
   price?: number
   damageLevel: ShelterTaPriceLevel
 }
 
 export class ShelterTaTagsHelper {
-
   static readonly mapTags = (_: any): ShelterTaTags => {
     return {
       ..._,

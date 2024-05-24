@@ -120,6 +120,7 @@ export namespace KoboSchemaHelper {
 
     return {
       translateQuestion: (questionName: string) => {
+        // TODO try catch slow down perf
         try {
           return getKoboLabel(questionIndex[questionName], langIndex)
         } catch (e) {
@@ -128,7 +129,7 @@ export namespace KoboSchemaHelper {
       },
       translateChoice: (questionName: string, choiceName?: string) => {
         const listName = questionIndex[questionName]?.select_from_list_name
-        console.log({q: questionIndex[questionName], listName, choicesTranslation: choicesTranslation[listName!], choiceName})
+        // TODO try catch slow down perf
         try {
           if (choiceName) return getKoboLabel(choicesTranslation[listName!][choiceName], langIndex)
         } catch (e) {

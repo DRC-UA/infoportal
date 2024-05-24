@@ -22,6 +22,7 @@ import {
   Shelter_cashForShelter,
   Shelter_NTA,
   Shelter_TA,
+  ShelterNtaTags,
   ShelterTaTags,
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
@@ -143,10 +144,11 @@ export namespace KoboMetaMapperShelter {
     })
   }
 
-  export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_NTA.T, KoboTagStatus>> = row => {
+  export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_NTA.T, ShelterNtaTags>> = row => {
     const answer = Shelter_NTA.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(harmonizeNtaDisabilityAll(answer)).map(KoboGeneralMapping.mapPerson)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const project = safeArray(row.tags?.project)
     const isCfRepair = answer.modality === 'cash_for_repair'
     return KoboMetaMapper.make({
       enumerator: Shelter_NTA.options.enum_name[answer.enum_name!],
@@ -166,6 +168,8 @@ export namespace KoboMetaMapperShelter {
       personsCount: safeNumber(answer.ben_det_hh_size),
       persons: group,
       lastName: answer.ben_det_surname_l,
+      project: project,
+      donor: project.map(_ => DrcProjectHelper.donorByProject[_]),
       firstName: answer.ben_det_first_name_l,
       patronymicName: answer.ben_det_pat_name_l,
       taxId: answer.pay_det_tax_id_num,
@@ -183,13 +187,10 @@ export namespace KoboMetaMapperShelter {
   export const updateTa: MetaMapperMerge<KoboMetaOrigin<Shelter_TA.T, ShelterTaTags>, KoboMetaShelterRepairTags> = row => {
     const answers = Shelter_TA.map(row.answers)
     if (!row.tags || !answers.nta_id) return
-    const project = safeArray(row.tags.project)
     return [
       answers.nta_id,
       {
         referencedFormId: KoboIndex.byName('shelter_ta').id,
-        project: project,
-        donor: project.map(_ => DrcProjectHelper.donorByProject[_]),
         status: row.tags.workDoneAt ? KoboMetaStatus.Committed : KoboMetaStatus.Pending,
         lastStatusUpdate: row.tags.workDoneAt,
         tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {}

@@ -1,12 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build & Deploy CLIENT end to Azure - drc-imaa-ukr-tools
+name: "[Client] Build & Deploy to Azure - drc-imaa-ukr-tools"
 
 on:
-#  push:
-#    branches:
-#      - main
+  #  push:
+  #    branches:
+  #      - main
   workflow_dispatch:
 
 env:
@@ -24,9 +24,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        working-directory: ./infoportal-client
+    #    defaults:
+    #      run:
+    #        working-directory: ./infoportal-client
 
     steps:
       - uses: actions/checkout@v4

@@ -12,6 +12,8 @@ import {useKoboColumnDef} from '@/shared/koboEdit/KoboSchemaWrapper'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
+import {Txt} from 'mui-extension'
 
 export type KoboEditModalOption = {
   value: string,
@@ -59,6 +61,7 @@ export const KoboEditModalAnswer = ({
       loading={loadingSchema}
       fetcherUpdate={fetcherUpdate}
       title={`${m.edit} (${answerIds.length})`}
+      subTitle={schema?.schemaUnsanitized.name}
       type={columnDef?.type as any}
       options={columnDef ? schema?.schemaHelper.choicesIndex[columnDef.select_from_list_name!]?.map(_ =>
         ({value: _.name, desc: _.name, label: schema.translate.choice(columnName, _.name)})
@@ -86,6 +89,7 @@ export const KoboEditModalTag = ({
 }) => {
   const {m} = useI18n()
   const ctxEdit = useKoboEditTagContext()
+  const ctxSchema = useKoboSchemaContext()
 
   const fetcherUpdate = useFetcher((value: any) => {
     return ctxEdit.asyncUpdateById.call({formId, answerIds, tag, value}).then(() => {
@@ -99,6 +103,7 @@ export const KoboEditModalTag = ({
       onClose={onClose}
       fetcherUpdate={fetcherUpdate}
       title={`${m.edit} (${answerIds.length})`}
+      subTitle={ctxSchema.byId2(formId).get?.schemaUnsanitized.name}
       type={type}
       options={options}
     />
@@ -112,8 +117,10 @@ export const KoboEditModal = ({
   type,
   options,
   fetcherUpdate,
+  subTitle,
 }: {
   type?: KoboEditModalType
+  subTitle?: string
   title?: string
   fetcherUpdate: UseFetcher<(_: any) => Promise<number>>
   onClose?: () => void,
@@ -147,6 +154,7 @@ export const KoboEditModal = ({
       onConfirm={() => fetcherUpdate.fetch({force: true, clean: true}, value)}
       title={title}
     >
+      <Txt truncate color="hint" block sx={{mb: 1, maxWidth: 400}}>{subTitle}</Txt>
       {fetcherUpdate.error && (
         <Alert color="error">
           {m.somethingWentWrong}

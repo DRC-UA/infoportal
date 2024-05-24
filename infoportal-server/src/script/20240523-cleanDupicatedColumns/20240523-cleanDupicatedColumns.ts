@@ -9,16 +9,6 @@ export const run = async () => {
     server: 'prod',
     importConcurrency: 200,
   } as const
-  const serverConfig = {
-    dev: {
-      formId: 'a89UuhpXnPusPbK3SwQzBU',
-      newFormId: 'a5Q6vAMXRpv859ZUP3gDHR',
-    },
-    prod: {
-      formId: KoboIndex.byName('protection_hhs2_1').id,
-      newFormId: KoboIndex.byName('protection_hhs3').id,
-    }
-  }[config.server]
   const formId = KoboIndex.byName('ecrec_cashRegistrationBha').id
   const sdk = await new KoboSdkGenerator(prisma).get(scriptConf.kobo[config.server].serverId)
   const answers = await sdk.getAnswersRaw(formId)

@@ -14,8 +14,8 @@ import {defaultPagination} from '../../core/Type'
 import {SytemCache} from '../../helper/IpCache'
 import {app} from '../../index'
 import {appConf} from '../../core/conf/AppConf'
-import Event = GlobalEvent.Event
 import {KoboAnswerHistoryService} from './history/KoboAnswerHistoryService'
+import Event = GlobalEvent.Event
 
 export interface KoboAnswerFilter {
   filters?: KoboAnswersFilters,
@@ -371,9 +371,9 @@ export class KoboService {
     answerIds,
     question,
     answer,
-    authorEmail,
+    authorEmail = 'system',
   }: {
-    authorEmail: string,
+    authorEmail?: string,
     formId: KoboId,
     answerIds: KoboAnswerId[],
     question: string,
@@ -387,7 +387,7 @@ export class KoboService {
     if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)
     const [x] = await Promise.all([
       // this.conf.db.url.includes('localhost') ? () => void 0 :
-      sdk.updateData({formId, submissionIds: answerIds, data: {[xpath]: answer}}),
+        sdk.updateData({formId, submissionIds: answerIds, data: {[xpath]: answer}}),
       await this.prisma.$executeRawUnsafe(
         `UPDATE "KoboAnswers"
          SET answers     = jsonb_set(answers, '{${question}}', '"${answer}"'),

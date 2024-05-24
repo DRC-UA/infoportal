@@ -42,9 +42,9 @@ export const DatabaseHistory = () => {
         const render = schema.translate.choice(row.property, value)
         return render ?? (
           <span title={value}>
-              <TableIcon color="disabled" tooltip={m._koboDatabase.valueNoLongerInOption} sx={{mr: 1}} children="error"/>
+            <TableIcon color="disabled" tooltip={m._koboDatabase.valueNoLongerInOption} sx={{mr: 1}} children="error"/>
             {value}
-            </span>
+          </span>
         )
       }
       default: {

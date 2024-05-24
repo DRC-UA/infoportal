@@ -260,6 +260,5 @@ export const getKoboLabel = (q: {
   name: string,
   label?: string[]
 }, langIndex?: number): string => {
-  console.log('===', q.label, langIndex)
   return q.label !== undefined ? (q.label as any)[langIndex as any] ?? q.name : q.name
 }
