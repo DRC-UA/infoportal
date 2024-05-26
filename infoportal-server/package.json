@@ -10,7 +10,7 @@
     "dev": "npm run build && npm start",
     "debug": "npm run build && node --inspect-brk lib/index.js",
     "migration": "npx prisma migrate dev",
-    "migration-force": "npx prisma db push --preview-feature",
+    "migration-force": "prisma db push",
     "update-kobo-tags": "node src/script/RefactoProjectForHhs.ts",
     "build-ai-type": "ts-node src/script/BuildTypeActivityInfo.ts",
     "build-kobo-type": "ts-node src/script/BuildTypeKobo.ts"

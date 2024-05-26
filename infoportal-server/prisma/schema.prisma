@@ -87,9 +87,8 @@ model KoboPerson {
   gender       Gender?
   disability   String[]
   displacement String?
-  koboAnswerId String
-
-  @@index([koboAnswerId])
+  meta         KoboMeta @relation(fields: [metaId], references: [id], onDelete: Cascade)
+  metaId       String
 }
 
 model KoboMeta {
@@ -128,6 +127,7 @@ model KoboMeta {
 
   lastStatusUpdate DateTime?
   tags             Json?
+  persons          KoboPerson[]
 
   @@index([koboId, project, oblast, taxId, phone, activity, office])
 }
