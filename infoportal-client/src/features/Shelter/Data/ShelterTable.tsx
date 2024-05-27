@@ -12,11 +12,14 @@ import {
   KoboIndex,
   KoboShelterTa,
   KoboValidation,
+  objectToQueryString,
+  safeArray,
   safeArray,
   safeNumber,
   Shelter_NTA,
   shelterDrcProject,
   ShelterProgress,
+  ShelterTaPriceLevel
   ShelterTaPriceLevel,
 } from '@infoportal-common'
 import {Txt} from 'mui-extension'
@@ -189,7 +192,7 @@ export const ShelterTable = () => {
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m._shelter.street,
-        renderQuick: _ => _.nta?.street,
+        renderQuick: _ => _.nta ? (_.nta.street ?? '') + ' ' + (_.nta.house_number ?? '') + ' ' + (_.nta.building_number ?? '') : '',
       },
       {
         id: 'modality',
@@ -466,6 +469,86 @@ export const ShelterTable = () => {
             ))
           }
         }
+      },
+      {
+        id: 'TA',
+        width: 0,
+        style: () => ({borderLeft: '4px solid ' + theme.palette.divider}),
+        styleHead: {borderLeft: '4px solid ' + theme.palette.divider},
+        head: m._shelter.taForm,
+        type: 'select_one',
+        options: () => [{value: 'true', label: m._shelter.taFilled}, {value: 'false', label: m._shelter.taNotFilled}],
+        render: _ => {
+          return {
+            tooltip: null,
+            value: _.ta ? 'true' : 'false',
+            label: map(_.ta, form =>
+              <>
+                <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctx.ta.openModalAnswer(form)}/>
+                <TableIconBtn tooltip={m.edit} href={ctx.ta.asyncEdit(form.id)} target="_blank" children="edit"/>
+              </>
+            ) ?? (
+              <TableIconBtn color="primary" target="_blank" href={ctx.ta.schema.schemaUnsanitized.deployment__links.url + '?' + objectToQueryString({
+                'd[nta_id]': _.nta!.id,
+                'd[interwiever_name]': ctx.nta.schema.translate.choice('enum_name', _.nta?.enum_name).replaceAll(' ', '_'),
+                'd[ben_det_oblast]': _.nta!.ben_det_oblast,
+                'd[ben_det_raion]': _.nta!.ben_det_raion,
+                'd[ben_det_hromada]': _.nta!.ben_det_hromada,
+                'd[ben_det_settlement]': _.nta?.settlement,
+                'd[ben_det_addres]': _.nta ? ((_.nta.street ?? '') + ' ' + (_.nta.house_number ?? '') + ' ' + (_.nta.building_number ?? '')).trim().replaceAll(' ', '_') : '',
+                'd[house_or_apartment]': _.nta!.dwelling_type,
+
+              })}>add</TableIconBtn>
+            )
+          }
+        }
+      },
+      {
+        id: 'taid',
+        width: 0,
+        head: m.id,
+        type: 'string',
+        renderQuick: _ => _.ta?.id,
+      },
+      {
+        type: 'date',
+        id: 'taSubmissionTime',
+        head: m.submissionTime,
+        render: _ => {
+          return {
+            value: _.ta?.submissionTime,
+            label: formatDate(_.ta?.submissionTime),
+          }
+        },
+      },
+      {
+        type: 'number',
+        width: 0,
+        head: m._shelter.windowsSum,
+        id: 'windows',
+        renderQuick: _ => _.ta ? add(
+          _.ta.singleshutter_windowdoubleglazed_pc,
+          _.ta.singleshutter_window_tripleglazed_pc,
+          _.ta.doubleshutter_window_tripleglazed_pc,
+          _.ta.glass_replacement_tripleglazed_pc
+        ) : undefined,
+      },
+      {
+        type: 'number',
+        width: 0,
+        head: m._shelter.roofSum,
+        id: 'roof',
+        renderQuick: _ => _.ta ? add(_.ta.roof_shiffer_m, _.ta.roof_metal_sheets_m, _.ta.roof_onduline_sheets_m, _.ta.bitumen_paint_m) : undefined,
+      },
+      {
+        type: 'number',
+        width: 0,
+        head: m._shelter.doorsSum,
+        id: 'doors',
+        renderQuick: _ => _.ta ? add(
+          _.ta.external_doors_pc,
+          _.ta.internal_wooden_doors_pc
+        ) : undefined,
       },
       {
         id: 'agreement',
@@ -764,6 +847,58 @@ export const ShelterTable = () => {
                     value: tagChange,
                   })
                 }}
+              />
+            ))
+          }
+        }
+      },
+      {
+        id: 'hasLot3',
+        head: m._shelter.lot3,
+        width: 0,
+        align: 'center',
+        type: 'select_one',
+        typeIcon: null,
+        options: () => ['Yes', 'No', 'None'].map(SheetUtils.buildOption),
+        render: row => {
+          return {
+            tooltip: null,
+            value: fnSwitch(KoboShelterTa.hasLot3(row.ta) + '', {
+              true: 'Yes',
+              false: 'No',
+            }, () => 'None'),
+            label: fnSwitch(KoboShelterTa.hasLot3(row.ta) + '', {
+              true: <TableIcon color="success">task_alt</TableIcon>,
+              false: <TableIcon color="disabled">block</TableIcon>,
+            }, () => <></>),
+          }
+        }
+      },
+      {
+        id: 'contractor3',
+        width: 148,
+        head: m._shelter.contractor3,
+        type: 'select_one',
+        typeIcon: null,
+        render: row => {
+          return {
+            option: row.ta?.tags?.contractor3 ?? DatatableUtils.blank,
+            value: row.ta?.tags?.contractor3,
+            label: map(row.ta, ta => (
+              <AaSelect
+                disabled={!KoboShelterTa.hasLot3(ta)}
+                showUndefinedOption
+                value={ta.tags?.contractor3}
+                onChange={(tagChange) => {
+                  ctx.ta.asyncUpdate.call({
+                    answerId: ta.id,
+                    key: 'contractor3',
+                    value: tagChange,
+                  })
+                }}
+                options={ShelterContractorPrices.findContractor({oblast: ta?.ben_det_oblast, lot: 3}).map(_ => ({
+                  value: _, children: _,
+                }))}
               />
             ))
           }
