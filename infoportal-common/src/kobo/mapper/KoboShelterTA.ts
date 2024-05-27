@@ -47,8 +47,6 @@ export namespace KoboShelterTa {
     'gypsum_boards_for_ceiling_m',
     'waterproofing_barrier_sheet_m',
     'steam_vapor_barrier_sheet_m',
-    'external_doors_pc',
-    'internal_wooden_doors_pc',
     'electrical_wiring_lm',
     'double_electrical_sockets_pc',
     'double_switches_pc',
@@ -68,12 +66,19 @@ export namespace KoboShelterTa {
     'wall_mountes_cable_wiring_lm',
   ]
 
+  const lot3: NumberKeys<Shelter_TA.T>[] = [
+    'external_doors_pc',
+    'internal_wooden_doors_pc',
+  ]
+
   export const hasLot1 = (row?: Shelter_TA.T): boolean | undefined => {
     if (row) return !!lot1.find(k => map(row[k], _ => _ > 0) ?? false)
   }
-
   export const hasLot2 = (row?: Shelter_TA.T): boolean | undefined => {
     if (row) return !!lot2.find(k => map(row[k], _ => _ > 0) ?? false)
+  }
+  export const hasLot3 = (row?: Shelter_TA.T): boolean | undefined => {
+    if (row) return !!lot3.find(k => map(row[k], _ => _ > 0) ?? false)
   }
 }
 
@@ -107,6 +112,8 @@ export interface ShelterTaTags extends KoboBaseTags {
   progress?: ShelterProgress
   contractor1?: ShelterContractor
   contractor2?: ShelterContractor
+  contractor3?: ShelterContractor
+  contractor4?: ShelterContractor
   workDoneAt?: Date
   price?: number
   damageLevel: ShelterTaPriceLevel

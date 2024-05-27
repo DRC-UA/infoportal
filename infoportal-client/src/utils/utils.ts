@@ -1,11 +1,12 @@
 import {addMonths, differenceInMonths, isAfter, isBefore, startOfMonth} from 'date-fns'
-import {isValidElement, ReactNode} from 'react'
+import {isValidElement, ReactElement, ReactNode} from 'react'
 
 export namespace Utils {
 
   export const clearParenthesis = (_: string) => _.replaceAll(/(.*)\([^(]*\)/g, '$1')
 
-  export const extractInnerText = (node: ReactNode): string => {
+  export const extractInnerText = (node: ReactNode | ReactElement): string => {
+    if ((node as ReactElement)?.props?.value) return (node as ReactElement).props.value
     if (typeof node === 'string') {
       return node
     }

@@ -10,11 +10,12 @@ import {
   add,
   DrcProject,
   KoboIndex,
-  KoboShelterTa,
   KoboValidation,
+  objectToQueryString,
   safeArray,
   safeNumber,
   Shelter_NTA,
+  ShelterContractor,
   shelterDrcProject,
   ShelterProgress,
   ShelterTaPriceLevel,
@@ -39,7 +40,6 @@ import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
-import {ShelterContractor} from '@infoportal-common'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 
 export const ShelterTable = () => {
@@ -189,7 +189,7 @@ export const ShelterTable = () => {
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m._shelter.street,
-        renderQuick: _ => _.nta?.street,
+        renderQuick: _ => _.nta ? (_.nta.street ?? '') + ' ' + (_.nta.house_number ?? '') + ' ' + (_.nta.building_number ?? '') : '',
       },
       {
         id: 'modality',
@@ -223,9 +223,9 @@ export const ShelterTable = () => {
         type: 'string',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
-        id: 'name',
+        id: 'interviewee_name',
         width: 160,
-        head: m.name,
+        head: m.drcStaff,
         render: (row: ShelterEntity) => map(row.nta, nta => ({
           value: nta.tags?.interviewee_name ?? nta.interviewee_name,
           label: <TableInput
@@ -281,7 +281,7 @@ export const ShelterTable = () => {
         head: m.displacement,
         render: _ => {
           return {
-            option: _.nta?.ben_det_res_stat ?? DatatableUtils.blank,
+            option: _.nta?.ben_det_res_stat,
             value: _.nta?.ben_det_res_stat,
             label: ctx.nta.schema.translate.choice('ben_det_res_stat', _.nta?.ben_det_res_stat)
           }
@@ -300,6 +300,31 @@ export const ShelterTable = () => {
             label: ctx.nta.schema.translate.choice('owner_tenant_type', _.nta?.owner_tenant_type)
           }
         },
+      },
+      {
+        id: 'name',
+        type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        head: m.name,
+        renderQuick: _ => {
+          if (!_.nta) return
+          const items = seq([
+            _.nta.ben_det_surname_l,
+            _.nta.ben_det_first_name_l,
+            _.nta.ben_det_pat_name_l,
+          ]).compact()
+          if (items.length === 0) return
+          return items.join(' ')
+        }
+      },
+      {
+        id: 'phone',
+        type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        head: m.phone,
+        renderQuick: _ => _.nta?.ben_det_ph_number_l ? '' + _.nta?.ben_det_ph_number_l : undefined,
       },
       {
         id: 'hhSize',
@@ -512,7 +537,7 @@ export const ShelterTable = () => {
         })}/>,
         render: row => {
           return {
-            option: row.nta?.tags?.workOrder ?? DatatableUtils.blank,
+            option: row.nta?.tags?.workOrder,
             value: row.nta?.tags?.workOrder,
             label: map(row.nta, nta => (
               <TableInput
@@ -596,6 +621,17 @@ export const ShelterTable = () => {
                 <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctxAnswers.openAnswerModal({formId: KoboIndex.byName('shelter_ta').id, answer: form})}/>
                 <TableIconBtn tooltip={m.edit} href={ctx.asyncEdit(KoboIndex.byName('shelter_ta').id, form.id)} target="_blank" children="edit"/>
               </>
+            ) ?? (
+              <TableIconBtn color="primary" target="_blank" href={ctx.ta.schema.schemaUnsanitized.deployment__links.url + '?' + objectToQueryString({
+                'd[nta_id]': _.nta!.id,
+                'd[interwiever_name]': ctx.nta.schema.translate.choice('enum_name', _.nta?.enum_name).replaceAll(' ', '_'),
+                'd[ben_det_oblast]': _.nta!.ben_det_oblast,
+                'd[ben_det_raion]': _.nta!.ben_det_raion,
+                'd[ben_det_hromada]': _.nta!.ben_det_hromada,
+                'd[ben_det_settlement]': _.nta?.settlement,
+                'd[ben_det_addres]': _.nta ? ((_.nta.street ?? '') + ' ' + (_.nta.house_number ?? '') + ' ' + (_.nta.building_number ?? '')).trim().replaceAll(' ', '_') : '',
+                'd[house_or_apartment]': _.nta!.dwelling_type,
+              })}>add</TableIconBtn>
             )
           }
         }
@@ -633,6 +669,30 @@ export const ShelterTable = () => {
         groupLabel: KoboIndex.byName('shelter_ta').translation,
         renderQuick: _ => _.ta ? add(_.ta.roof_shiffer_m, _.ta.roof_metal_sheets_m, _.ta.roof_onduline_sheets_m, _.ta.bitumen_paint_m) : undefined,
       },
+      // {
+      //   id: 'hasLot1',
+      //   group: 'ta',
+      //   groupLabel: KoboIndex.byName('shelter_ta').translation,
+      //   head: m._shelter.lot1,
+      //   width: 0,
+      //   align: 'center',
+      //   type: 'select_one',
+      //   typeIcon: null,
+      //   options: () => ['Yes', 'No', 'None'].map(SheetUtils.buildOption),
+      //   render: row => {
+      //     return {
+      //       tooltip: null,
+      //       value: fnSwitch(KoboShelterTa.hasLot1(row.ta) + '', {
+      //         true: 'Yes',
+      //         false: 'No',
+      //       }, () => 'None'),
+      //       label: fnSwitch(KoboShelterTa.hasLot1(row.ta) + '', {
+      //         true: <TableIcon color="success">check</TableIcon>,
+      //         false: <TableIcon color="disabled">block</TableIcon>,
+      //       }, () => <></>)
+      //     }
+      //   },
+      // },
       {
         type: 'number',
         width: 0,
@@ -648,29 +708,42 @@ export const ShelterTable = () => {
         ) : undefined,
       },
       {
-        id: 'hasLot1',
+        type: 'number',
+        width: 0,
+        head: m._shelter.doorsSum,
+        id: 'doors',
         group: 'ta',
         groupLabel: KoboIndex.byName('shelter_ta').translation,
-        head: m._shelter.lot1,
-        width: 0,
-        align: 'center',
-        type: 'select_one',
-        typeIcon: null,
-        options: () => ['Yes', 'No', 'None'].map(SheetUtils.buildOption),
-        render: row => {
-          return {
-            tooltip: null,
-            value: fnSwitch(KoboShelterTa.hasLot1(row.ta) + '', {
-              true: 'Yes',
-              false: 'No',
-            }, () => 'None'),
-            label: fnSwitch(KoboShelterTa.hasLot1(row.ta) + '', {
-              true: <TableIcon color="success">check</TableIcon>,
-              false: <TableIcon color="disabled">block</TableIcon>,
-            }, () => <></>)
-          }
-        },
+        renderQuick: _ => _.ta ? add(
+          _.ta.doubleglazed_upvc_door_pc,
+          _.ta.external_doors_pc,
+          _.ta.internal_wooden_doors_pc,
+        ) : undefined,
       },
+      // {
+      //   id: 'hasLot2',
+      //   group: 'ta',
+      //   groupLabel: KoboIndex.byName('shelter_ta').translation,
+      //   head: m._shelter.lot2,
+      //   width: 0,
+      //   align: 'center',
+      //   type: 'select_one',
+      //   typeIcon: null,
+      //   options: () => ['Yes', 'No', 'None'].map(SheetUtils.buildOption),
+      //   render: row => {
+      //     return {
+      //       tooltip: null,
+      //       value: fnSwitch(KoboShelterTa.hasLot2(row.ta) + '', {
+      //         true: 'Yes',
+      //         false: 'No',
+      //       }, () => 'None'),
+      //       label: fnSwitch(KoboShelterTa.hasLot2(row.ta) + '', {
+      //         true: <TableIcon color="success">check</TableIcon>,
+      //         false: <TableIcon color="disabled">block</TableIcon>,
+      //       }, () => <></>),
+      //     }
+      //   }
+      // },
       {
         id: 'contractor1',
         group: 'ta',
@@ -688,11 +761,10 @@ export const ShelterTable = () => {
         })}/>,
         render: row => {
           return {
-            option: row.ta?.tags?.contractor1 ?? DatatableUtils.blank,
+            option: row.ta?.tags?.contractor1,
             value: row.ta?.tags?.contractor1,
             label: map(row.ta, ta => (
               <ShelterSelectContractor
-                disabled={!KoboShelterTa.hasLot1(ta)}
                 value={ta.tags?.contractor1}
                 oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
@@ -705,30 +777,6 @@ export const ShelterTable = () => {
                 }}
               />
             ))
-          }
-        }
-      },
-      {
-        id: 'hasLot2',
-        group: 'ta',
-        groupLabel: KoboIndex.byName('shelter_ta').translation,
-        head: m._shelter.lot2,
-        width: 0,
-        align: 'center',
-        type: 'select_one',
-        typeIcon: null,
-        options: () => ['Yes', 'No', 'None'].map(SheetUtils.buildOption),
-        render: row => {
-          return {
-            tooltip: null,
-            value: fnSwitch(KoboShelterTa.hasLot2(row.ta) + '', {
-              true: 'Yes',
-              false: 'No',
-            }, () => 'None'),
-            label: fnSwitch(KoboShelterTa.hasLot2(row.ta) + '', {
-              true: <TableIcon color="success">check</TableIcon>,
-              false: <TableIcon color="disabled">block</TableIcon>,
-            }, () => <></>),
           }
         }
       },
@@ -749,11 +797,10 @@ export const ShelterTable = () => {
         })}/>,
         render: row => {
           return {
-            option: row.ta?.tags?.contractor2 ?? DatatableUtils.blank,
+            option: row.ta?.tags?.contractor2,
             value: row.ta?.tags?.contractor2,
             label: map(row.ta, ta => (
               <ShelterSelectContractor
-                disabled={!KoboShelterTa.hasLot2(ta)}
                 value={ta.tags?.contractor2}
                 oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
@@ -761,6 +808,58 @@ export const ShelterTable = () => {
                     formName: 'shelter_ta',
                     answerIds: [ta.id],
                     tag: 'contractor2',
+                    value: tagChange,
+                  })
+                }}
+              />
+            ))
+          }
+        }
+      },
+      {
+        id: 'contractor3',
+        width: 148,
+        head: m._shelter.contractor3,
+        type: 'select_one',
+        typeIcon: null,
+        render: row => {
+          return {
+            option: row.ta?.tags?.contractor3,
+            value: row.ta?.tags?.contractor3,
+            label: map(row.ta, ta => (
+              <ShelterSelectContractor
+                value={ta.tags?.contractor3}
+                onChange={(tagChange) => {
+                  ctxEditTag.asyncUpdateByName.call({
+                    formName: 'shelter_ta',
+                    answerIds: [ta.id],
+                    tag: 'contractor3',
+                    value: tagChange,
+                  })
+                }}
+              />
+            ))
+          }
+        }
+      },
+      {
+        id: 'contractor4',
+        width: 148,
+        head: m._shelter.contractor4,
+        type: 'select_one',
+        typeIcon: null,
+        render: row => {
+          return {
+            option: row.ta?.tags?.contractor4,
+            value: row.ta?.tags?.contractor4,
+            label: map(row.ta, ta => (
+              <ShelterSelectContractor
+                value={ta.tags?.contractor4}
+                onChange={(tagChange) => {
+                  ctxEditTag.asyncUpdateByName.call({
+                    formName: 'shelter_ta',
+                    answerIds: [ta.id],
+                    tag: 'contractor4',
                     value: tagChange,
                   })
                 }}
@@ -787,7 +886,7 @@ export const ShelterTable = () => {
         })}/>,
         render: row => {
           return {
-            option: row.ta?.tags?.damageLevel ?? DatatableUtils.blank,
+            option: row.ta?.tags?.damageLevel,
             value: row.ta?.tags?.damageLevel,
             label: map(row.ta, ta => {
               return (

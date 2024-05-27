@@ -1,4 +1,5 @@
 export namespace Shelter_NTA {
+
 export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	// Form id: aL8oHMzJJ9soPepvK6YU9E
 	export interface T {

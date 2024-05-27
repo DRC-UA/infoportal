@@ -31,25 +31,28 @@ export class ShelterContractorPrices {
     lot
   }: {
     oblast?: keyof typeof Shelter_TA.options['ben_det_oblast']
-    lot: 1 | 2
+    lot: 1 | 2 | 3
   }): ShelterContractor[] => {
     const contractors = oblasts[oblast as keyof typeof oblasts] ?? Enum.values(ShelterContractor)
     return contractors.filter(_ => {
       return (pricesCents[_]?.dismantling_of_structures && lot === 1)
-        || pricesCents[_]?.dismantling_of_structures2 && lot === 2
+        || (pricesCents[_]?.dismantling_of_structures2 && lot === 2)
+        || (pricesCents[_]?.external_doors_pc && lot === 3)
     })
   }
 
   static readonly compute = ({
     answer,
     contractor1,
-    contractor2
+    contractor2,
+    contractor3,
   }: {
     contractor1?: ShelterContractor
     contractor2?: ShelterContractor
+    contractor3?: ShelterContractor
     answer?: Shelter_TA.T
   }): number | undefined | null => {
-    if (!answer || (!contractor1 && !contractor2)) return undefined
+    if (!answer || (!contractor1 && !contractor2 && !contractor3)) return undefined
     try {
       let total = 0
       if (KoboShelterTa.hasLot1(answer) && contractor1)
@@ -63,6 +66,13 @@ export class ShelterContractorPrices {
         lot2.map(question => {
           const quantity = answer[question] as number ?? 0
           const price = pricesCents[contractor2]![question]!
+          if (price === undefined) throw new Error()
+          total += quantity * price
+        })
+      if (KoboShelterTa.hasLot3(answer) && contractor3)
+        lot1.map(question => {
+          const quantity = answer[question] as number ?? 0
+          const price = pricesCents[contractor3]![question]!
           if (price === undefined) throw new Error()
           total += quantity * price
         })
@@ -108,8 +118,6 @@ const lot2: (keyof Shelter_TA.T)[] = [
   'gypsum_boards_for_ceiling_m',
   'waterproofing_barrier_sheet_m',
   'steam_vapor_barrier_sheet_m',
-  'external_doors_pc',
-  'internal_wooden_doors_pc',
   'electrical_wiring_lm',
   'double_electrical_sockets_pc',
   'double_switches_pc',
@@ -128,66 +136,71 @@ const lot2: (keyof Shelter_TA.T)[] = [
   'bimetallic_radiator_sections_length_mm_pc',
   'wall_mountes_cable_wiring_lm'
 ]
+const lot3: (keyof Shelter_TA.T)[] = [
+  'external_doors_pc',
+  'internal_wooden_doors_pc',
+]
 
-const WAITING_FOR_PRICES_LOT1: Partial<Record<keyof Shelter_TA.T, number>> = {
-  dismantling_of_structures: -1,
-  singleshutter_window_tripleglazed_m: -1,
-  singleshutter_windowdoubleglazed_m: -1,
-  doubleshutter_window_tripleglazed_m: -1,
-  doubleshutter_window_doubleglazed_m: -1,
-  glass_replacement_doubleglazed_m: -1,
-  glass_replacement_tripleglazed_m: -1,
-  outer_seels_galvanized_with_pvc_coating_lm: -1,
-  window_slopes_m: -1,
-  minor_window_repairs_pc: -1,
-  doubleglazed_upvc_door_m: -1
-}
+const WAITING_FOR_PRICES_LOT: Partial<Record<keyof Shelter_TA.T, number>>[] = [
+  {
+    dismantling_of_structures: -1,
+    singleshutter_window_tripleglazed_m: -1,
+    singleshutter_windowdoubleglazed_m: -1,
+    doubleshutter_window_tripleglazed_m: -1,
+    doubleshutter_window_doubleglazed_m: -1,
+    glass_replacement_doubleglazed_m: -1,
+    glass_replacement_tripleglazed_m: -1,
+    outer_seels_galvanized_with_pvc_coating_lm: -1,
+    window_slopes_m: -1,
+    minor_window_repairs_pc: -1,
+    doubleglazed_upvc_door_m: -1
+  },
+  {
+    dismantling_of_structures2: -1,
+    wall_repair_clay_bricks_m: -1,
+    wall_repair_concrete_blocks_m: -1,
+    reinforced_concrete_lintels_foundations_columns_ring_beam_m: -1,
+    reinforced_floor_screed_m: -1,
+    floor_base_m: -1,
+    minor_welding_works_kg: -1,
+    mineral_wool_for_external_walls_m: -1,
+    mineral_wool_for_the_ceiling_m: -1,
+    plaster_primer_and_finishing_painting_m: -1,
+    wooden_lathing__mm_x__mm_ml: -1,
+    wooden_beams__mm_x__mm_ml: -1,
+    roof_shiffer_m: -1,
+    roof_metal_sheets_m: -1,
+    roof_onduline_sheets_m: -1,
+    bitumen_paint_m: -1,
+    gypsum_boards_for_ceiling_m: -1,
+    waterproofing_barrier_sheet_m: -1,
+    steam_vapor_barrier_sheet_m: -1,
+    electrical_wiring_lm: -1,
+    double_electrical_sockets_pc: -1,
+    double_switches_pc: -1,
+    circuit_breaker_box_pc: -1,
+    ppr_pipes_cold_and_hot_water_supply_lm: -1,
+    ppr_heating_pipes_lm: -1,
+    kitchen_sink_pc: -1,
+    washing_basin_with_mixer_and_sifon_pc: -1,
+    steel_bathtub_pc: -1,
+    compact_toilet_bowl_including_seat_and_lid_pc: -1,
+    water_heater_of_up_to__liters_dry_ten_pc: -1,
+    steel_radiator_600mm: -1,
+    steel_radiator_800mm: -1,
+    steel_radiator_1000: -1,
+    steel_radiator_2000: -1,
+    bimetallic_radiator_sections_length_mm_pc: -1,
+    wall_mountes_cable_wiring_lm: -1
+  },
+  {
+    external_doors_pc: -1,
+    internal_wooden_doors_pc: -1,
+  }
+]
 
-const WAITING_FOR_PRICES_LOT2: Partial<Record<keyof Shelter_TA.T, number>> = {
-  dismantling_of_structures2: -1,
-  wall_repair_clay_bricks_m: -1,
-  wall_repair_concrete_blocks_m: -1,
-  reinforced_concrete_lintels_foundations_columns_ring_beam_m: -1,
-  reinforced_floor_screed_m: -1,
-  floor_base_m: -1,
-  minor_welding_works_kg: -1,
-  mineral_wool_for_external_walls_m: -1,
-  mineral_wool_for_the_ceiling_m: -1,
-  plaster_primer_and_finishing_painting_m: -1,
-  wooden_lathing__mm_x__mm_ml: -1,
-  wooden_beams__mm_x__mm_ml: -1,
-  roof_shiffer_m: -1,
-  roof_metal_sheets_m: -1,
-  roof_onduline_sheets_m: -1,
-  bitumen_paint_m: -1,
-  gypsum_boards_for_ceiling_m: -1,
-  waterproofing_barrier_sheet_m: -1,
-  steam_vapor_barrier_sheet_m: -1,
-  external_doors_pc: -1,
-  internal_wooden_doors_pc: -1,
-  electrical_wiring_lm: -1,
-  double_electrical_sockets_pc: -1,
-  double_switches_pc: -1,
-  circuit_breaker_box_pc: -1,
-  ppr_pipes_cold_and_hot_water_supply_lm: -1,
-  ppr_heating_pipes_lm: -1,
-  kitchen_sink_pc: -1,
-  washing_basin_with_mixer_and_sifon_pc: -1,
-  steel_bathtub_pc: -1,
-  compact_toilet_bowl_including_seat_and_lid_pc: -1,
-  water_heater_of_up_to__liters_dry_ten_pc: -1,
-  steel_radiator_600mm: -1,
-  steel_radiator_800mm: -1,
-  steel_radiator_1000: -1,
-  steel_radiator_2000: -1,
-  bimetallic_radiator_sections_length_mm_pc: -1,
-  wall_mountes_cable_wiring_lm: -1
-}
 
-const WAITING_FOR_PRICES = {
-  ...WAITING_FOR_PRICES_LOT1,
-  ...WAITING_FOR_PRICES_LOT2
-}
+const WAITING_FOR_PRICES = WAITING_FOR_PRICES_LOT.reduce((acc, _) => ({...acc, ..._}), {})
 
 const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelter_TA.T, number>>>> = {
   [ShelterContractor['Zhilvest']]: {
@@ -437,7 +450,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_2000: 2213400,
     bimetallic_radiator_sections_length_mm_pc: 1699962,
     wall_mountes_cable_wiring_lm: 42839,
-    ...WAITING_FOR_PRICES_LOT1
+    ...WAITING_FOR_PRICES_LOT[1]
   },
   [ShelterContractor['Framplus']]: {
     dismantling_of_structures2: 113855,
