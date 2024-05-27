@@ -36,6 +36,23 @@ export const SafetyIncidentDashboard = () => {
       getOptions: () => DataFilter.buildOptionsFromObject(Safety_incidentTracker.options.attack_type),
       label: m.safety.attackTypes,
       multiple: true,
+    },
+    alertType: {
+      icon: 'notifications_active',
+      getValue: _ => {
+        const alertTypes = [];
+        if (_.alert_blue_num ?? 0 > 0) alertTypes.push('blue');
+        if (_.alert_yellow_num ?? 0 > 0) alertTypes.push('yellow');
+        if (_.alert_red_num ?? 0 > 0) alertTypes.push('red');
+        return alertTypes;
+      },
+      getOptions: () => [
+        { value: 'blue', label: m.safety.blue },
+        { value: 'yellow', label: m.safety.yellow },
+        { value: 'red', label: m.safety.red }
+      ],
+      label: 'Alert Type',
+      multiple: true,
     }
   })
 
@@ -66,6 +83,10 @@ export const SafetyIncidentDashboard = () => {
 
   const computed = useSafetyIncidentDashboard({data: _answers.get, period: periodFilter})
 
+  const totalAlerts = useMemo(() => {
+    return data?.sum(_ => (+(_.alert_blue_num ?? 0)) + (+(_.alert_yellow_num ?? 0)) + (+(_.alert_red_num ?? 0))) ?? 0
+  }, [data])
+
   return (
     <Page
       width="lg"
@@ -93,7 +114,7 @@ export const SafetyIncidentDashboard = () => {
       />
       {data && computed && (
         <>
-          <SafetyIncidentDashboardBody data={data} computed={computed}/>
+          <SafetyIncidentDashboardBody data={data} computed={computed} totalAlerts={totalAlerts}/>
           {/*<DashboardSafetyIncidentAgravatingFactors data={data} computed={computed}/>*/}
         </>
       )}

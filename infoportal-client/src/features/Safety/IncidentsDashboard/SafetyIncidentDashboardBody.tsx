@@ -1,4 +1,3 @@
-import React, {useState} from 'react'
 import {Enum, fnSwitch} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
@@ -14,16 +13,26 @@ import {MinusRusChartPanel} from '@/features/Safety/IncidentsDashboard/MinusRusC
 import {CommentsPanel, CommentsPanelProps} from '@/shared/CommentsPanel'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Safety_incidentTracker} from '@infoportal-common'
+import {Theme} from '@mui/material'
+import {useState} from 'react'
+
+const colors = (t: Theme) => ({
+  blue: '#5249CD',
+  yellow: '#F2E866',
+  red: '#C62222',
+})
 
 export const SafetyIncidentDashboardBody = ({
   data,
   computed,
+  totalAlerts
 }: {
   data: DashboardSafetyIncidentsPageProps['data']
   computed: DashboardSafetyIncidentsPageProps['computed']
+  totalAlerts: number
 }) => {
   const {m, formatLargeNumber} = useI18n()
-  const [mapType, setMapType] = useState<'incident' | 'attack'>('incident')
+  const [mapType, setMapType] = useState<'incident' | 'attack' | 'alerts'>('incident')
   const {session} = useSession()
   return (
     <Div sx={{alignItems: 'flex-start'}} responsive>
@@ -47,6 +56,7 @@ export const SafetyIncidentDashboardBody = ({
           <ScRadioGroup value={mapType} onChange={setMapType} dense inline sx={{mb: 2}}>
             <ScRadioGroupItem dense hideRadio value="incident" title={m.safety.incidents}/>
             <ScRadioGroupItem dense hideRadio value="attack" title={m.safety.attacks}/>
+            <ScRadioGroupItem dense hideRadio value="alerts" title={m.safety.alerts}/>
           </ScRadioGroup>
           {fnSwitch(mapType, {
             'incident': (
@@ -68,7 +78,16 @@ export const SafetyIncidentDashboardBody = ({
                 value={_ => _.attack === 'yes'}
                 base={_ => _.oblastISO !== undefined}
               />
-            )
+            ),
+            'alerts': (
+              <UaMapBy
+                sx={{mx: 3}}
+                fillBaseOn="value"
+                data={data}
+                getOblast={(_) => _.oblastISO}
+                value={(_) => !!_.alert_blue_num || !!_.alert_yellow_num || !!_.alert_red_num}
+              />
+            ),
           })}
         </SlidePanel>
         <SlidePanel title={m.safety.attackTypes}>
@@ -95,6 +114,13 @@ export const SafetyIncidentDashboardBody = ({
       </Div>
       <Div column>
         <Div sx={{alignItems: 'stretch'}}>
+          <Lazy deps={[data]} fn={() => totalAlerts}>
+            {(_) => (
+              <SlideWidget sx={{flex: 1}} title={m.safety.alerts}>
+                {formatLargeNumber(_)}
+              </SlideWidget>
+            )}
+          </Lazy>totalAlerts
           <Lazy deps={[data]} fn={() => data?.sum(_ => _.dead ?? 0)}>
             {_ => (
               <SlideWidget sx={{flex: 1}} title={m.safety.dead}>
@@ -110,6 +136,34 @@ export const SafetyIncidentDashboardBody = ({
             )}
           </Lazy>
         </Div>
+        <SlidePanel>
+          <Lazy deps={[data]} fn={() => {
+            const x = data?.groupBy(_ => _.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date')
+            return new Enum(x)
+              .transform((k, v) => [k, {
+                blue: v.sum(_ => +(_.alert_blue_num ?? 0)),
+                yellow: v.sum(_ => +(_.alert_yellow_num ?? 0)),
+                red: v.sum(_ => +(_.alert_red_num ?? 0)),
+              }])
+              .sort(([bk], [ak]) => bk.localeCompare(ak))
+              .entries()
+              .filter(([k]) => k !== 'no_date')
+              .map(([k, v]) => ({name: k, ...v}))
+          }}>
+            {_ => (
+              <ChartLine
+                height={280}
+                data={_ as any}
+                translation={{
+                  blue: m.safety.blue,
+                  yellow: m.safety.yellow,
+                  red: m.safety.red,
+                } as any}
+                colorsByKey={colors}
+              />
+            )}
+          </Lazy>
+        </SlidePanel>
         <SlidePanel>
           <Lazy deps={[data]} fn={() => {
             const x = data?.groupBy(_ => _.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date')
