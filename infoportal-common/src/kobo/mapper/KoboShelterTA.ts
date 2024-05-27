@@ -113,6 +113,7 @@ export interface ShelterTaTags extends KoboBaseTags {
   contractor1?: ShelterContractor
   contractor2?: ShelterContractor
   contractor3?: ShelterContractor
+  contractor4?: ShelterContractor
   workDoneAt?: Date
   price?: number
   damageLevel: ShelterTaPriceLevel
