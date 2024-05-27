@@ -31,8 +31,8 @@ export class KoboFormService {
 
   private createHookIfNotExists = async (sdk: KoboSdk, formId: KoboId) => {
     const hooks = await sdk.getHook(formId)
-    if (hooks.data.find(_ => _.name === KoboSdk.hookName)) return
-    return sdk.createHook(formId)
+    if (hooks.data.find(_ => _.name === KoboSdk.webHookName)) return
+    return sdk.createWebHook(formId)
   }
 
   readonly registerHooksForAll = async () => {

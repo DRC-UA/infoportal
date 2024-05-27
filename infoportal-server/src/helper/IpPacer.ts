@@ -1,6 +1,6 @@
 import {logger, Logger} from './Logger'
 
-export class IpQueue {
+export class IpPacer {
   constructor(private log: Logger = logger('IpQueue')) {
   }
 

@@ -6,8 +6,8 @@ import {map} from '@alexandreannic/ts-utils'
 import axios from 'axios'
 import {appConf} from '../../../../core/conf/AppConf'
 import {KoboForm} from '@prisma/client'
-import {ApiKoboUpdate} from './type/KoboUpdate'
 import {KoboHook} from './type/KoboHook'
+import {KoboSdkFixedUpdated, KoboUpdateDataParams} from '../KoboSdkFixedUpdated'
 
 const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
   return {
@@ -17,10 +17,14 @@ const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
 }
 
 export class KoboSdk {
-  constructor(private api: ApiClient, private conf = appConf) {
+  constructor(
+    private api: ApiClient,
+    private editSdk = new KoboSdkFixedUpdated(api),
+    private conf = appConf
+  ) {
   }
 
-  static readonly hookName = 'InfoPortal'
+  static readonly webHookName = 'InfoPortal'
 
   static readonly parseDate = (_: Date) => _.toISOString()
 
@@ -45,10 +49,10 @@ export class KoboSdk {
     return this.api.get<KoboApiList<KoboHook>>(`/v2/assets/${formId}/hooks/`).then(koboToApiPaginate)
   }
 
-  readonly createHook = (formId: KoboId) => {
+  readonly createWebHook = (formId: KoboId) => {
     return this.api.post(`/v2/assets/${formId}/hooks/`, {
       body: {
-        'name': KoboSdk.hookName,
+        'name': KoboSdk.webHookName,
         'endpoint': this.conf.baseUrl + `/kobo-api/webhook`,
         'active': true,
         'subset_fields': [],
@@ -105,39 +109,9 @@ export class KoboSdk {
     })
   }
 
-  readonly updateData = <TData extends any>({
-    formId,
-    submissionIds,
-    data,
-  }: {
-    formId: KoboId,
-    submissionIds: string[],
-    data: TData
-  }): Promise<ApiKoboUpdate[]> => {
-    const chunkSize = 20;
-
-    // Split the submissionIds into chunks
-    const chunkedSubmissions = submissionIds.reduce((chunks, id, index) => {
-      if (index % chunkSize === 0) chunks.push([]);
-      chunks[chunks.length - 1].push(id);
-      return chunks;
-    }, [] as string[][]);
-
-    // Function to update data for a chunk
-    const updateChunk = (chunk: string[]) => {
-      return this.api.patch(`/v2/assets/${formId}/data/bulk/`, {
-        body: {
-          payload: {
-            submission_ids: chunk,
-            data,
-          }
-        }
-      });
-    };
-
-    // Update data for all chunks
-    return Promise.all(chunkedSubmissions.map(updateChunk));
-  };
+  readonly updateData = <TData extends any>(p: KoboUpdateDataParams<TData>): Promise<void> => {
+    return this.editSdk.enqueue(p)
+  }
 
   readonly getFormByVersion = (formId: KoboId, versionId: string) => {
     return this.api.get<KoboApiForm>(`/v2/assets/${formId}/versions/${versionId}`)

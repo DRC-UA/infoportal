@@ -2,7 +2,6 @@ import {v4} from 'uuid'
 import {addMonths, differenceInMonths, format, isAfter, isBefore, startOfMonth} from 'date-fns'
 import * as _yup from 'yup'
 import {Obj} from '@alexandreannic/ts-utils'
-import {log} from 'winston'
 
 export const getObj = <K extends string, V extends any>(o: Record<K, V>, key: string): V | undefined => {
   // @ts-ignore
@@ -17,6 +16,23 @@ export const toYYYYMMDD = (_: Date) => format(_, 'yyyy-MM-dd')//_.toString().sub
 
 export type MappedColumn<T, O = string> = {
   [P in keyof T]: T[P] extends undefined | Date | string | number | boolean | any[] ? O : MappedColumn<T[P], O>
+}
+
+export const chunkify = <T, R>({
+  size,
+  data,
+  fn,
+}: {
+  size: number,
+  data: T[]
+  fn: (_: T[]) => Promise<R>
+}): Promise<R[]> => {
+  const chunkedSubmissions = data.reduce((chunks, id, index) => {
+    if (index % size === 0) chunks.push([])
+    chunks[chunks.length - 1].push(id)
+    return chunks
+  }, [] as T[][])
+  return Promise.all(chunkedSubmissions.map(fn))
 }
 
 export const renameObjectProperties = <O>(propsMap: Partial<MappedColumn<O>>) => (input: any): O => {
