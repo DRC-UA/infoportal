@@ -20,7 +20,7 @@ const isStupidMicrosoftBrowser = typeof window !== 'undefined' && (
 
 export default function MyDocument({emotionStyleTags}: MyDocumentProps) {
   return (
-    <Html lang="fr">
+    <Html lang="en">
       <Head>
         <meta charSet="utf-8"/>
         <base href="/"/>
