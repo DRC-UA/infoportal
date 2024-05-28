@@ -18,7 +18,8 @@ export class KoboAnswerHistoryService {
     return this.prisma.koboAnswersHistory.findMany({
       where: {
         formId: params.formId,
-      }
+      },
+      orderBy: {date: 'desc'},
     }).then(DbHelper.toPaginate())
   }
 

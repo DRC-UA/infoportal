@@ -150,10 +150,15 @@ export const DatabaseHistory = () => {
               type: 'string',
               id: 'translate',
               head: m._koboDatabase.oldValue,
+              styleHead: ({borderRight: 0}),
+              style: () => ({borderRight: 0}),
               render: row => {
                 const label = getTranslation(row, _ => _.oldValue)
                 return {
-                  label: <span style={{background: alpha(t.palette.error.light, .16), color: t.palette.error.main}}>{label}</span>,
+                  label: label && <>
+                    <span style={{borderRadius: 4, padding: '0 4px', background: alpha(t.palette.error.light, .16), color: t.palette.error.main}}>{label}</span>
+                    <Icon color="disabled" style={{float: 'right'}}>arrow_forward</Icon>
+                  </>,
                   value: row.oldValue
                 }
               }
@@ -165,7 +170,7 @@ export const DatabaseHistory = () => {
               render: row => {
                 const label = getTranslation(row, _ => _.newValue)
                 return {
-                  label: <span style={{background: alpha(t.palette.success.light, .16), color: t.palette.success.main}}>{label}</span>,
+                  label: <span style={{borderRadius: 4, padding: '0 4px', background: alpha(t.palette.success.light, .16), color: t.palette.success.main}}>{label}</span>,
                   value: row.newValue
                 }
               }
