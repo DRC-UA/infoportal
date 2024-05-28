@@ -519,7 +519,8 @@ const oblasts = {
     ShelterContractor['Dosvid 2002'],
     ShelterContractor['Osnova-R'],
     // ShelterContractor['Kramelitbud'],
-    ShelterContractor['Zhilvest']
+    ShelterContractor['Zhilvest'],
+    ShelterContractor['Donmegastroy'],
   ],
   kharkivska: [
     ShelterContractor['Dosvid 2002'],
