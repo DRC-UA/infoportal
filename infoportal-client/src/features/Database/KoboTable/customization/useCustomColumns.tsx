@@ -1,5 +1,6 @@
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {
+  Bn_rapidResponse,
   Bn_re,
   currentProtectionProjects,
   DrcProject,
@@ -16,7 +17,7 @@ import {
 } from '@infoportal-common'
 import React, {useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {map, Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
@@ -88,7 +89,11 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
         }
       },
     ]
-    const lastStatusUpdate: DatatableColumn.Props<any> = {
+    const lastStatusUpdate = ({
+      showIf
+    }: {
+      showIf?: (_: KoboAnswerFlat<any, any>) => boolean
+    } = {}): DatatableColumn.Props<any> => ({
       id: 'lastStatusUpdate',
       width: 129,
       head: m.paidOn,
@@ -100,6 +105,7 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
         tag: 'lastStatusUpdate',
       })}/>,
       render: (row: KoboAnswerFlat<{}, KoboBaseTags & KoboTagStatus>) => {
+        if (showIf && !showIf(row)) return {label: '', value: undefined}
         const date = row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined
         return {
           value: date,
@@ -116,11 +122,16 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
           />
         }
       }
-    }
-    const getPaymentStatusByEnum = (
-      enumerator: SelectStatusConfig.EnumStatus = 'CashStatus',
-      tag: string = 'status'
-    ): DatatableColumn.Props<any>[] => {
+    })
+    const getPaymentStatusByEnum = ({
+      enumerator = 'CashStatus',
+      tag = 'status',
+      showIf,
+    }: {
+      enumerator?: SelectStatusConfig.EnumStatus
+      tag?: string
+      showIf?: (_: KoboAnswerFlat<any, any>) => boolean
+    } = {}): DatatableColumn.Props<any>[] => {
       return [
         {
           id: tag,
@@ -140,6 +151,7 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
           }),
           options: () => SheetUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
           render: (row: KoboAnswerFlat<{}, any>) => {
+            if (showIf && !showIf(row)) return {label: '', value: undefined}
             return {
               export: row.tags?.[tag],
               value: row.tags?.[tag],
@@ -162,7 +174,7 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
             }
           }
         },
-        lastStatusUpdate,
+        lastStatusUpdate({showIf}),
       ]
     }
 
@@ -256,18 +268,22 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_cashForRentRegistration').id]: [
-        ...getPaymentStatusByEnum('CashForRentStatus'),
+        ...getPaymentStatusByEnum({enumerator: 'CashForRentStatus'}),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_cashForRentApplication').id]: [
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_rapidResponse').id]: [
-        ...getPaymentStatusByEnum(),
+        ...getPaymentStatusByEnum({
+          showIf: (_: KoboAnswerFlat<Bn_rapidResponse.T>) => !!(_.back_prog_type ?? _.back_prog_type_l)?.find(_ => /mpca|cf|csf/.test(_))
+        }),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('bn_re').id]: [
-        ...getPaymentStatusByEnum(),
+        ...getPaymentStatusByEnum({
+          showIf: (_: KoboAnswerFlat<Bn_re.T>) => !!_.back_prog_type?.find(_ => /mpca|cf|csf/.test(_))
+        }),
         ...individualsBreakdown,
         {
           id: 'eligibility_summary_esk2',
@@ -286,10 +302,10 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
       ],
       [KoboIndex.byName('shelter_cashForRepair').id]: [
         // ...paymentStatusShelter(),
-        ...getPaymentStatusByEnum('ShelterCashStatus'),
+        ...getPaymentStatusByEnum({enumerator: 'ShelterCashStatus'}),
       ],
       [KoboIndex.byName('shelter_cashForShelter').id]: [
-        ...getPaymentStatusByEnum('ShelterCashStatus'),
+        ...getPaymentStatusByEnum({enumerator: 'ShelterCashStatus'}),
         // ...paymentStatusShelter(),
         ...individualsBreakdown,
       ],
@@ -303,7 +319,7 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('ecrec_trainingGrants').id]: [
-        ...getPaymentStatusByEnum('CashForEduStatus'),
+        ...getPaymentStatusByEnum({enumerator: 'CashForEduStatus'}),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('protection_communityMonitoring').id]: [
