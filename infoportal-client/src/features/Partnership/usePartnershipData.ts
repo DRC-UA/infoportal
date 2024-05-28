@@ -3,7 +3,7 @@ import {useMemo} from 'react'
 import {fnSwitch, seq, Seq} from '@alexandreannic/ts-utils'
 import {DrcSector, OblastIndex, OblastName} from '@infoportal-common'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import { PartnershipData } from './PartnershipType'
 
 export type UsePartnershipData = ReturnType<typeof usePartnershipData>
@@ -15,7 +15,7 @@ const mapYN = (_?: 'yes' | 'no') => fnSwitch(_!, {
 
 export const usePartnershipData = () => {
   const {api} = useAppSettings()
-  const fetcherPartnersDb = useFetcher(api.kobo.typedAnswers2.search.partnership_partnersDatabase)
+  const fetcherPartnersDb = useFetcher(api.kobo.typedAnswers.search.partnership_partnersDatabase)
 
   const mappedData = useMemo(() => {
     if (!fetcherPartnersDb.get) return

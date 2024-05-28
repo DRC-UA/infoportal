@@ -3,7 +3,7 @@ import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {aiInvalidValueFlag} from '@/features/ActivityInfo/shared/AiBundle'
-import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
 export namespace AiGbvMapper {

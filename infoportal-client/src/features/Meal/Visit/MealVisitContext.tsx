@@ -24,7 +24,7 @@ export const MealVisitProvider = ({
   const {api} = useAppSettings()
   const [periodFilter, setPeriodFilter] = useState<Partial<Period>>({})
 
-  const request = (filter: Partial<Period>) => api.kobo.typedAnswers2.search.meal_visitMonitoring({
+  const request = (filter: Partial<Period>) => api.kobo.typedAnswers.search.meal_visitMonitoring({
     filters: {
       start: filter.start,
       end: filter.end,

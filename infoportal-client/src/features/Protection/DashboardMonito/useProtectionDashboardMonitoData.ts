@@ -4,7 +4,7 @@ import {chain, KoboProtection_hhs3, OblastISO, Person} from '@infoportal-common'
 import {Enum, Seq} from '@alexandreannic/ts-utils'
 import {ukraineSvgPath} from '@/shared/UkraineMap/ukraineSvgPath'
 import {subDays} from 'date-fns'
-import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
 export type UseProtHHS2Data = ReturnType<typeof useProtectionDashboardMonitoData>
 

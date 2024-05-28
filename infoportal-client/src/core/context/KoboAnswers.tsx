@@ -1,6 +1,6 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {KoboAnswerFlat, KoboAnswerId, KoboFormName, KoboId, KoboIndex} from '@infoportal-common'
-import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {FetchParams, useFetchers} from '@/shared/hook/useFetchers'
 import React, {ReactNode, useContext, useMemo, useState} from 'react'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
@@ -45,7 +45,7 @@ export const KoboAnswersProvider = ({
   const {toastHttpError} = useIpToast()
   const ctxSchema = useKoboSchemaContext()
 
-  const getMappedRequest = (_?: KoboFormName) => api.kobo.typedAnswers2.searchByAccess[_ as KoboFormNameMapped]
+  const getMappedRequest = (_?: KoboFormName) => api.kobo.typedAnswers.searchByAccess[_ as KoboFormNameMapped]
 
   const fetcher = useFetchers(async (id: KoboAnswerId) => {
     const mappedReq = getMappedRequest(KoboIndex.searchById(id)?.name)

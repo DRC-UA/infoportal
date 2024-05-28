@@ -1,7 +1,7 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {KeyOf, KoboId, KoboIndex} from '@infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
-import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
 export const mealVerificationConf = {
   sampleSizeRatioDefault: .2,

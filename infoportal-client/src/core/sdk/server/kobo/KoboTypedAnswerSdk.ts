@@ -56,11 +56,11 @@ const make = <K extends KoboFormName, T>(key: K,
 }
 
 
-export type KoboFormNameMapped = keyof KoboTypedAnswerSdk2['search']
+export type KoboFormNameMapped = keyof KoboTypedAnswerSdk['search']
 
-export type InferTypedAnswer<N extends KoboFormNameMapped> = Awaited<ReturnType<KoboTypedAnswerSdk2['search'][N]>>['data'][number]
+export type InferTypedAnswer<N extends KoboFormNameMapped> = Awaited<ReturnType<KoboTypedAnswerSdk['search'][N]>>['data'][number]
 
-export class KoboTypedAnswerSdk2 {
+export class KoboTypedAnswerSdk {
   constructor(private client: ApiClient, private sdk = new KoboAnswerSdk(client)) {
   }
 

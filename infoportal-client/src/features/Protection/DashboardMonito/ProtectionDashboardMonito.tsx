@@ -22,7 +22,7 @@ import {DashboardFilterOptions} from '@/shared/DashboardLayout/DashboardFilterOp
 import {Messages} from '@/core/i18n/localization/en'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
 const ProtectionDashboardMonitoPN: any = lazy(() => import('./ProtectionDashboardMonitoPN')
   .then(module => ({
@@ -48,7 +48,7 @@ export const ProtectionDashboardMonito = () => {
   const _period = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('protection_hhs3').id))
   const [periodFilter, setPeriodFilter] = useState<Partial<Period>>({})
 
-  const req = (filter?: Partial<Period>) => api.kobo.typedAnswers2.search.protection_hhs3({
+  const req = (filter?: Partial<Period>) => api.kobo.typedAnswers.search.protection_hhs3({
     filters: {
       start: filter?.start,
       end: filter?.end,

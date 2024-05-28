@@ -4,7 +4,7 @@ import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
-import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboAnswerId, KoboIndex} from '@infoportal-common'
 import {KeyOf} from '@alexandreannic/ts-utils'
 

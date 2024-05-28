@@ -19,7 +19,7 @@ import {MealVerificationClient} from '@/core/sdk/server/mealVerification/MealVer
 import {KoboMetaSdk} from '@/core/sdk/server/kobo-meta/KoboMetaSdk'
 import {JsonStoreSdk} from '@/core/sdk/server/jsonStore/JsonStoreSdk'
 import {HdpSdk} from '@/core/sdk/server/hdp/HdpSdk'
-import {KoboTypedAnswerSdk2} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboAnswerHistorySdk} from '@/core/sdk/server/kobo/answerHistory/KoboAnswerHistorySdk'
 
 export class ApiSdk {
@@ -43,7 +43,7 @@ export class ApiSdk {
   readonly koboMeta = new KoboMetaSdk(this.client)
   readonly kobo = {
     answerHistory: new KoboAnswerHistorySdk(this.client),
-    typedAnswers2: new KoboTypedAnswerSdk2(this.client),
+    typedAnswers: new KoboTypedAnswerSdk(this.client),
     answer: new KoboAnswerSdk(this.client),
     server: new KoboServerSdk(this.client),
     form: new KoboFormSdk(this.client),

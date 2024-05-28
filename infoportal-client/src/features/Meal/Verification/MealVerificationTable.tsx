@@ -27,7 +27,7 @@ import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {IpAlert} from '@/shared/Alert'
 import {useToast} from 'mui-extension'
-import {KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
 export enum MergedDataStatus {
   Selected = 'Selected',
@@ -171,8 +171,8 @@ const MealVerificationTableContent = <
 
   const indexVerification = useMemo(() => seq(verificationAnswers).groupByFirst(_ => _.koboAnswerId), [verificationAnswers])
 
-  const reqDataOrigin = () => api.kobo.typedAnswers2.searchByAccess[activity.registration.fetch]({}).then(_ => _.data as unknown as KoboAnswerFlat[])
-  const reqDataVerified = () => api.kobo.typedAnswers2.searchByAccess[activity.verification.fetch]({}).then(_ => _.data as unknown as KoboAnswerFlat[])
+  const reqDataOrigin = () => api.kobo.typedAnswers.searchByAccess[activity.registration.fetch]({}).then(_ => _.data as unknown as KoboAnswerFlat[])
+  const reqDataVerified = () => api.kobo.typedAnswers.searchByAccess[activity.verification.fetch]({}).then(_ => _.data as unknown as KoboAnswerFlat[])
   const fetcherDataOrigin = useFetcher(reqDataOrigin)
   const fetcherDataVerified = useFetcher(reqDataVerified)
   const asyncUpdateAnswer = useAsync(api.mealVerification.updateAnswers, {requestKey: _ => _[0]})
