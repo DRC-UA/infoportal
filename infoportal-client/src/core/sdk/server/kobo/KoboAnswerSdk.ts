@@ -15,7 +15,7 @@ export type KoboUpdateAnswers<T extends Record<string, any> = any, K extends Key
   formId: KoboId
   answerIds: KoboAnswerId[]
   question: K
-  answer: T[K]
+  answer: T[K] | null
 }
 
 interface KoboAnswerSearch {

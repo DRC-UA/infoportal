@@ -27,7 +27,7 @@ export class BuildKoboType {
         }
       })
     ),
-    private outDir: string = conf.rootProjectDir + '/src/script/output/kobo'
+    private outDir: string = conf.rootProjectDir + '/../infoportal-common/src/kobo/generated'
   ) {
   }
 

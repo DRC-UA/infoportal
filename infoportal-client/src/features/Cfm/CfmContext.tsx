@@ -200,9 +200,7 @@ export const CfmProvider = ({
   ])
 
   const visibleData = useMemo(() => {
-    console.log('>>refresh', session.email, mappedData)
     return mappedData?.filter(_ => {
-      console.log(_.tags?.focalPointEmail)
       if (_.tags?.deletedBy) return false
       if (session.email === _.tags?.focalPointEmail)
         return true

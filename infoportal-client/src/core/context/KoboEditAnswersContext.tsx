@@ -16,7 +16,7 @@ interface KoboUpdateAnswersByName<T extends KoboFormNameMapped, K extends KeyOf<
   formName: T
   answerIds: KoboAnswerId[]
   question: K
-  answer: InferTypedAnswer<T>[K]
+  answer: InferTypedAnswer<T>[K] | null
 }
 
 export interface KoboEditAnswersContext {
