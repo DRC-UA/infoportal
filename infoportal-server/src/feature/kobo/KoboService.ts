@@ -385,6 +385,13 @@ export class KoboService {
       this.getFormDetails(formId).then(_ => _.content.survey.find(_ => _.name === question)?.$xpath),
     ])
     if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)
+    this.history.create({
+      formId,
+      answerIds,
+      property: question,
+      newValue: answer,
+      authorEmail,
+    })
     const [x] = await Promise.all([
       // this.conf.db.url.includes('localhost') ? () => void 0 :
         sdk.updateData({formId, submissionIds: answerIds, data: {[xpath]: answer}}),
@@ -394,13 +401,6 @@ export class KoboService {
              "updatedAt" = NOW()
          WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
         `),
-      this.history.create({
-        formId,
-        answerIds,
-        property: question,
-        newValue: answer,
-        authorEmail,
-      })
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED, {formId, answerIds, answer: {[question]: answer}})
   }
