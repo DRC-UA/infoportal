@@ -394,7 +394,7 @@ export class KoboService {
              "updatedAt" = NOW()
          WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
         `),
-      this.history.track({
+      this.history.create({
         formId,
         answerIds,
         property: question,

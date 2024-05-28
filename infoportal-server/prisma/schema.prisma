@@ -72,7 +72,7 @@ model KoboAnswersHistory {
   type     String
   property String
   oldValue Json?
-  newValue Json
+  newValue Json?
 }
 
 enum Gender {

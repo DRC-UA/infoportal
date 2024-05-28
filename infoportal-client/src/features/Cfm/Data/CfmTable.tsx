@@ -1,7 +1,7 @@
 import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import React, {ReactNode, useCallback, useMemo} from 'react'
 import {Page} from '@/shared/Page'
-import {fnSwitch, map, Obj} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {IpInput} from '@/shared/Input/Input'
@@ -318,34 +318,30 @@ export const CfmTable = ({}: any) => {
               id: 'project',
               width: 180,
               render: row => {
-                const koboOptions = ctx.schemaInternal.schemaHelper.getOptionsByQuestionName('project_code')
                 return {
                   export: row.project,
                   value: row.project,
                   option: row.project,
                   label: row.form === CfmDataSource.Internal
-                    ? <>
-                      {row.project}
-                      <IpSelectSingle
-                        label={null}
-                        options={koboOptions.map(_ => {
-                          const label = ctx.schemaInternal.translate.choice('project_code', _.name) as DrcProject
-                          return IpSelectMultipleHelper.makeOption({
-                            value: _.name,
-                            // children: _.name.replaceAll(/[^\d]/g, ''),
-                            children: DrcProject[label] ?? label + '⚠️',
-                          })
-                        })}
-                        value={map(ctx.schemaInternal.translate.choice('project_code', row.project) as DrcProject, label => DrcProject[label] ?? label + '⚠️')}
-                        onChange={newValue => {
-                          ctxEditAnswer.asyncUpdateByName.call({
-                            answerIds: [row.id],
-                            formName: 'meal_cfmInternal',
-                            question: 'project_code',
-                            answer: newValue as any
-                          })
-                        }}
-                      /></>
+                    ? <IpSelectSingle
+                      label={null}
+                      options={ctx.schemaInternal.schemaHelper.getOptionsByQuestionName('project_code').map(_ => {
+                        const label = ctx.schemaInternal.translate.choice('project_code', _.name) as DrcProject
+                        return IpSelectMultipleHelper.makeOption({
+                          value: DrcProject[label] ?? label + '⚠️',
+                          children: DrcProject[label] ?? label + '⚠️',
+                        })
+                      })}
+                      value={DrcProject[row.project as DrcProject] ?? row.project + '⚠️'}
+                      onChange={newValue => {
+                        ctxEditAnswer.asyncUpdateByName.call({
+                          answerIds: [row.id],
+                          formName: 'meal_cfmInternal',
+                          question: 'project_code',
+                          answer: newValue as any
+                        })
+                      }}
+                    />
                     : <SelectDrcProject
                       label={null}
                       value={row.project}

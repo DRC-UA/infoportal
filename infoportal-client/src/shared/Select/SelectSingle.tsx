@@ -75,6 +75,9 @@ export const IpSelectSingle = <T extends TType>({
         id={id}
         value={value ?? defaultValue ?? IGNORED_VALUE_EMPTY}
         defaultValue={defaultValue}
+        //<div style={{minWidth: 20}}>
+        //  <CircularProgress size={20}/>
+        //</div>
         multiple={false}
         onChange={e => {
           const value = e.target.value as T

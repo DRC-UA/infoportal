@@ -43,7 +43,7 @@ export class ControllerKoboAnswer {
     const body = await yup.object({
       answerIds: yup.array().of(yup.string().required()).required(),
       question: yup.string().required(),
-      answer: yup.mixed<any>(),
+      answer: yup.mixed<any>().nullable(),
     }).validate(req.body)
     const data = await this.service.updateAnswers({...params, ...body, authorEmail: email})
     res.send(data)

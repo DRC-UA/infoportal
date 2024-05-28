@@ -1,4 +1,4 @@
-import {PrismaClient} from '@prisma/client'
+import {Prisma, PrismaClient} from '@prisma/client'
 import {logger, Logger} from '../../../helper/Logger'
 import {KoboAnswerHistory} from './KoboAnswerHistoryType'
 import {DbHelper} from '../../../db/DbHelper'
@@ -22,7 +22,7 @@ export class KoboAnswerHistoryService {
     }).then(DbHelper.toPaginate())
   }
 
-  readonly track = async ({
+  readonly create = async ({
     authorEmail,
     formId,
     answerIds,
@@ -47,7 +47,7 @@ export class KoboAnswerHistoryService {
           type: 'answer',
           formId,
           property,
-          newValue,
+          newValue: newValue ?? Prisma.JsonNull,
           oldValue: (currentAnswers[_].answers as any)[property] as any,
           answerId: _
         }
