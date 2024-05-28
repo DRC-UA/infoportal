@@ -41,7 +41,7 @@ export const SafetyIncidentDashboard = () => {
 
   const [optionFilter, setOptionFilters] = useState<DataFilter.InferShape<typeof filterShape>>({})
   const [periodFilter, setPeriodFilter] = useState<Partial<Period>>({})
-  const _answers = useFetcher((filter: Partial<Period>) => api.kobo.typedAnswers.searchSafetyIncident({
+  const _answers = useFetcher((filter: Partial<Period>) => api.kobo.typedAnswers2.search.safety_incident({
     filters: {
       start: filter.start,
       end: filter.end,

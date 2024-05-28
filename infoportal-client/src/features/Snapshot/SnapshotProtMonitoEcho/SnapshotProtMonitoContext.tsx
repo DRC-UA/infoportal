@@ -4,11 +4,12 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@/core/i18n'
 import {seq, Seq} from '@alexandreannic/ts-utils'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {KoboProtection_hhs3, Period, PeriodHelper, Protection_hhs3} from '@infoportal-common'
+import {Period, PeriodHelper, Protection_hhs3} from '@infoportal-common'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
 
 export interface SnapshotProtMonitoContext {
   computed: NonNullable<UseProtHHS2Data>
-  data: Seq<KoboProtection_hhs3.T>
+  data: Seq<InferTypedAnswer<'protection_hhs3'>>
   period: Partial<Period>
 }
 
@@ -33,7 +34,7 @@ export const SnapshotProtMonitoringProvider = ({
 
 
   const request = (filter: Partial<Period>) => {
-    return api.kobo.typedAnswers.searchProtection_hhs3({
+    return api.kobo.typedAnswers2.search.protection_hhs3({
       filters: {
         start: filter.start ?? undefined,
         end: filter.end ?? undefined,

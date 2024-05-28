@@ -1,7 +1,7 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {KeyOf, KoboId, KoboIndex} from '@infoportal-common'
-import {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {seq} from '@alexandreannic/ts-utils'
+import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
 
 export const mealVerificationConf = {
   sampleSizeRatioDefault: .2,
@@ -9,8 +9,8 @@ export const mealVerificationConf = {
 }
 
 export type MealVerificationActivity<
-  TData extends keyof ApiSdk['kobo']['typedAnswers'] = any,
-  TCheck extends keyof ApiSdk['kobo']['typedAnswers'] = any,
+  TData extends KoboFormNameMapped = any,
+  TCheck extends KoboFormNameMapped = any,
 > = {
   sampleSizeRatio: number,
   label: string
@@ -18,20 +18,20 @@ export type MealVerificationActivity<
   registration: {
     koboFormId: KoboId,
     fetch: TData
-    filters?: (_: Awaited<ReturnType<KoboTypedAnswerSdk[TData]>>['data'][0]) => boolean
+    filters?: (_: InferTypedAnswer<TData>) => boolean
   }
   verification: {
     fetch: TCheck
     koboFormId: KoboId,
   },
-  verifiedColumns: (KeyOf<Awaited<ReturnType<KoboTypedAnswerSdk[TCheck]>>['data'][0]> & KeyOf<Awaited<ReturnType<KoboTypedAnswerSdk[TData]>>['data'][0]>)[]
-  joinColumn: (KeyOf<Awaited<ReturnType<KoboTypedAnswerSdk[TCheck]>>['data'][0]> & KeyOf<Awaited<ReturnType<KoboTypedAnswerSdk[TData]>>['data'][0]>)
-  dataColumns?: KeyOf<Awaited<ReturnType<KoboTypedAnswerSdk[TData]>>['data'][0]>[]
+  verifiedColumns: (KeyOf<InferTypedAnswer<TCheck>> & KeyOf<InferTypedAnswer<TData>>)[]
+  joinColumn: (KeyOf<InferTypedAnswer<TCheck>> & KeyOf<InferTypedAnswer<TData>>)
+  dataColumns?: KeyOf<InferTypedAnswer<TData>>[]
 }
 
 const registerActivity = <
-  TData extends keyof ApiSdk['kobo']['typedAnswers'],
-  TCheck extends keyof ApiSdk['kobo']['typedAnswers'],
+  TData extends KoboFormNameMapped,
+  TCheck extends KoboFormNameMapped,
 >(_: MealVerificationActivity<TData, TCheck>) => {
   return _
 }
@@ -43,11 +43,11 @@ export const mealVerificationActivities = seq([
     id: 'Training grants',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_trainingGrants').id,
-      fetch: 'searchEcrec_trainingGrants',
+      fetch: 'ecrec_trainingGrants',
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
-      fetch: 'searchMeal_verificationEcrec',
+      fetch: 'meal_verificationEcrec',
     },
     joinColumn: 'ben_det_ph_number',
     dataColumns: [],
@@ -80,12 +80,12 @@ export const mealVerificationActivities = seq([
     id: 'Cash for Fuel & Cash for Utilities',
     registration: {
       koboFormId: KoboIndex.byName('bn_re').id,
-      fetch: 'searchBn_Re',
+      fetch: 'bn_re',
       filters: _ => !!(_.back_prog_type && [_.back_prog_type].flat().find(_ => /^c(sf|fu)/.test(_))),
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationWinterization').id,
-      fetch: 'searchMeal_verificationWinterization',
+      fetch: 'meal_verificationWinterization',
     },
     joinColumn: 'pay_det_tax_id_num',
     dataColumns: [
@@ -123,11 +123,11 @@ export const mealVerificationActivities = seq([
     id: 'ECREC Cash Registration',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_cashRegistration').id,
-      fetch: 'searchEcrec_cashRegistration',
+      fetch: 'ecrec_cashRegistration',
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
-      fetch: 'searchMeal_verificationEcrec',
+      fetch: 'meal_verificationEcrec',
     },
     joinColumn: 'pay_det_tax_id_num',
     verifiedColumns: [
@@ -164,11 +164,11 @@ export const mealVerificationActivities = seq([
     id: 'ECREC Cash Registration BHA',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
-      fetch: 'searchEcrec_cashRegistrationBha',
+      fetch: 'ecrec_cashRegistrationBha',
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
-      fetch: 'searchMeal_verificationEcrec',
+      fetch: 'meal_verificationEcrec',
     },
     joinColumn: 'pay_det_tax_id_num',
     verifiedColumns: [

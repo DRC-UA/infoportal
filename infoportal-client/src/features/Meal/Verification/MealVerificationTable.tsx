@@ -16,7 +16,6 @@ import {useParams} from 'react-router'
 import * as yup from 'yup'
 import {MealVerificationAnsers, MealVerificationAnswersStatus, MealVerificationStatus} from '@/core/sdk/server/mealVerification/MealVerification'
 import {mealVerificationActivities, MealVerificationActivity, mealVerificationConf} from '@/features/Meal/Verification/mealVerificationConfig'
-import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {useAsync} from '@/shared/hook/useAsync'
 import {getColumnByQuestionSchema} from '@/features/Database/KoboTable/getColumnBySchema'
 import {useMealVerificationContext} from '@/features/Meal/Verification/MealVerificationContext'
@@ -28,6 +27,7 @@ import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {IpAlert} from '@/shared/Alert'
 import {useToast} from 'mui-extension'
+import {KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
 
 export enum MergedDataStatus {
   Selected = 'Selected',
@@ -82,7 +82,7 @@ export const MealVerificationTable = () => {
       ctxSchema.fetchByName(formName)
       fetcherVerificationAnswers.fetch({force: false, clean: false}, mealVerification.id)
     }
-  }, [mealVerification, activity])
+  }, [id, mealVerification, activity])
 
   return (
     <Page width="full">
@@ -150,8 +150,8 @@ export const MealVerificationTable = () => {
 }
 
 const MealVerificationTableContent = <
-  TData extends keyof ApiSdk['kobo']['typedAnswers'] = any,
-  TCheck extends keyof ApiSdk['kobo']['typedAnswers'] = any,
+  TData extends KoboFormNameMapped = any,
+  TCheck extends KoboFormNameMapped = any,
 >({
   schema,
   activity,
@@ -171,8 +171,8 @@ const MealVerificationTableContent = <
 
   const indexVerification = useMemo(() => seq(verificationAnswers).groupByFirst(_ => _.koboAnswerId), [verificationAnswers])
 
-  const reqDataOrigin = () => api.kobo.typedAnswers[activity.registration.fetch]().then(_ => _.data as unknown as KoboAnswerFlat[])
-  const reqDataVerified = () => api.kobo.typedAnswers[activity.verification.fetch]().then(_ => _.data as unknown as KoboAnswerFlat[])
+  const reqDataOrigin = () => api.kobo.typedAnswers2.searchByAccess[activity.registration.fetch]({}).then(_ => _.data as unknown as KoboAnswerFlat[])
+  const reqDataVerified = () => api.kobo.typedAnswers2.searchByAccess[activity.verification.fetch]({}).then(_ => _.data as unknown as KoboAnswerFlat[])
   const fetcherDataOrigin = useFetcher(reqDataOrigin)
   const fetcherDataVerified = useFetcher(reqDataVerified)
   const asyncUpdateAnswer = useAsync(api.mealVerification.updateAnswers, {requestKey: _ => _[0]})

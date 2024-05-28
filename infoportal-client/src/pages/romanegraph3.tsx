@@ -167,7 +167,7 @@ export default () => {
     end: endOfMonth(new Date(2023, 8)),
   })
   // const [lang, setLang] = usePersistentState('en', {storageKey: 'romanegraph3'})
-  const req = (period: Partial<Period>) => api.kobo.typedAnswers.searchProtection_hhs3({
+  const req = (period: Partial<Period>) => api.kobo.typedAnswers2.search.protection_hhs3({
     filters: period
   }).then(_ => seq(_.data))
 

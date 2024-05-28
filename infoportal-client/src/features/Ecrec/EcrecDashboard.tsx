@@ -24,7 +24,7 @@ export const EcrecDashboard = ({data}: {data: Seq<EcrecData>}) => {
       <Div column>
         <SlidePanel title="Project"><ChartBarSingleBy data={data} by={_ => _.back_donor} label={labels.back_donor}/></SlidePanel>
         <SlidePanel title="Office"><ChartBarSingleBy data={data} by={_ => _.back_office} label={labels.back_office}/></SlidePanel>
-        <AgeGroupTable tableId="" persons={data.flatMap(_ => _.custom.persons)}/>
+        {/*<AgeGroupTable tableId="" persons={data.flatMap(_ => _.custom.persons)}/>*/}
       </Div>
       <Div column>
         <SlidePanel>

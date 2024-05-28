@@ -16,7 +16,6 @@ import {MpcaSdk} from '@/core/sdk/server/mpca/MpcaSdk'
 import {GroupSdk} from '@/core/sdk/server/group/GroupSdk'
 import {ShelterSdk} from '@/core/sdk/server/shelter/ShelterSdk'
 import {MealVerificationClient} from '@/core/sdk/server/mealVerification/MealVerificationClient'
-import {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboMetaSdk} from '@/core/sdk/server/kobo-meta/KoboMetaSdk'
 import {JsonStoreSdk} from '@/core/sdk/server/jsonStore/JsonStoreSdk'
 import {HdpSdk} from '@/core/sdk/server/hdp/HdpSdk'
@@ -45,7 +44,6 @@ export class ApiSdk {
   readonly kobo = {
     answerHistory: new KoboAnswerHistorySdk(this.client),
     typedAnswers2: new KoboTypedAnswerSdk2(this.client),
-    typedAnswers: new KoboTypedAnswerSdk(this.client),
     answer: new KoboAnswerSdk(this.client),
     server: new KoboServerSdk(this.client),
     form: new KoboFormSdk(this.client),

@@ -13,7 +13,6 @@ import {Enum, Seq, seq} from '@alexandreannic/ts-utils'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {PartnershipCard} from '@/features/Partnership/Dashboard/PartnershipCard'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-
 import {add, DrcProject, DrcProjectHelper, KoboAnswerFlat, Partnership_partnersDatabase} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
@@ -71,7 +70,7 @@ export const _PartnershipDashboard = ({
       .map(_ => ({value: _.name, label: schema.translate.choice(questionName, _.name)}))
   }
 
-  const filterShape = useMemo(() => DataFilter.makeShape<KoboAnswerFlat<PartnershipData>>({
+  const filterShape = useMemo(() => DataFilter.makeShape<PartnershipData>({
     oblast: {
       getValue: _ => _.Which_oblasts_does_t_t_and_has_experience,
       icon: 'location_on',

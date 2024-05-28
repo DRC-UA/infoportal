@@ -18,7 +18,7 @@ export const AiGbv = () => {
 
   const req = (period: string) => {
     const filters = PeriodHelper.fromYYYYMM(period)
-    return api.kobo.typedAnswers.searchProtection_gbv({filters}).then(AiGbvMapper.mapGbvActivity(period)).then(data => {
+    return api.kobo.typedAnswers2.search.protection_gbv({filters}).then(AiGbvMapper.mapGbvActivity(period)).then(data => {
       const bundles: AiGbvBundle[] = []
       let i = 0
       groupBy({

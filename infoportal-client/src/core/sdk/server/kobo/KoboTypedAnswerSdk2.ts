@@ -1,16 +1,29 @@
 import {ApiClient} from '@/core/sdk/server/ApiClient'
 import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {
+  Bn_re,
   DisplacementStatus,
+  Ecrec_cashRegistration,
+  Ecrec_cashRegistrationBha,
+  Ecrec_trainingGrants,
+  KoboEcrec_cashRegistration,
   KoboFormName,
   KoboIndex,
   KoboMealCfmHelper,
+  KoboProtection_hhs3,
+  KoboSafetyIncidentHelper,
   Meal_cfmExternal,
   Meal_cfmInternal,
+  Meal_VerificationEcrec,
+  Meal_VerificationWinterization,
+  Meal_VisitMonitoring,
+  Partnership_partnersDatabase,
   Person,
   PersonDetails,
   Protection_gbv,
   Protection_groupSession,
+  Protection_hhs3,
+  ProtectionHhsTags,
   Shelter_NTA,
   Shelter_TA,
   ShelterNtaTags,
@@ -18,10 +31,27 @@ import {
 } from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
-import {makeMeta} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+
+/** @deprecated should be coming from the unified database */
+type Meta = {
+  persons: PersonDetails[]
+}
+
+/** @deprecated should be coming from the unified database */
+type WithMeta<T extends Record<string, any>> = T & {
+  meta: {
+    persons: PersonDetails[]
+  }
+}
+
+/** @deprecated should be coming from the unified database */
+export const makeMeta = <T extends Record<string, any>>(t: T, meta: Meta): WithMeta<T> => {
+  (t as any).meta = meta
+  return t as any
+}
 
 const make = <K extends KoboFormName, T>(key: K,
-  params: (filters: KoboAnswerFilter) => Promise<ApiPaginate<T>>): Record<K, (filters: KoboAnswerFilter) => Promise<ApiPaginate<T>>> => {
+  params: (filters?: KoboAnswerFilter) => Promise<ApiPaginate<T>>): Record<K, (filters?: KoboAnswerFilter) => Promise<ApiPaginate<T>>> => {
   return {[key]: params} as any
 }
 
@@ -37,7 +67,7 @@ export class KoboTypedAnswerSdk2 {
   private readonly buildSearch = (request: 'searchByAccess' | 'search') => {
     const req = this.sdk[request]
     return ({
-      ...make('meal_cfmInternal', (filters: KoboAnswerFilter) =>
+      ...make('meal_cfmInternal', (filters?: KoboAnswerFilter) =>
         // BAD, we should revamp the way access is working for CFM. Add FP should add rule in the access table that will natively work with the standard access filters
         this.sdk.search({
           formId: KoboIndex.byName('meal_cfmInternal').id,
@@ -45,7 +75,7 @@ export class KoboTypedAnswerSdk2 {
           fnMapTags: KoboMealCfmHelper.map,
           ...filters,
         })),
-      ...make('meal_cfmExternal', (filters: KoboAnswerFilter) =>
+      ...make('meal_cfmExternal', (filters?: KoboAnswerFilter) =>
         // BAD, we should revamp the way access is working for CFM. Add FP should add rule in the access table that will natively work with the standard access filters
         this.sdk.search({
           formId: KoboIndex.byName('meal_cfmExternal').id,
@@ -53,18 +83,18 @@ export class KoboTypedAnswerSdk2 {
           fnMapTags: KoboMealCfmHelper.map,
           ...filters,
         })),
-      ...make('protection_groupSession', (filters: KoboAnswerFilter) => req({
+      ...make('protection_groupSession', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('protection_groupSession').id,
         fnMapKobo: Protection_groupSession.map,
         ...filters,
       })),
-      ...make('shelter_nta', (filters: KoboAnswerFilter) => req({
+      ...make('shelter_nta', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('shelter_nta').id,
         fnMapKobo: Shelter_NTA.map,
         fnMapTags: _ => _ as ShelterNtaTags,
         ...filters,
       })),
-      ...make('protection_gbv', (filters: KoboAnswerFilter) => req({
+      ...make('protection_gbv', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('protection_gbv').id,
         fnMapKobo: Protection_gbv.map,
         fnMapCustom: _ => {
@@ -93,10 +123,64 @@ export class KoboTypedAnswerSdk2 {
         ..._,
         data: seq(_.data).compact(),
       }))),
-      ...make('shelter_ta', (filters: KoboAnswerFilter) => req({
+      ...make('shelter_ta', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('shelter_ta').id,
         fnMapKobo: Shelter_TA.map,
         fnMapTags: ShelterTaTagsHelper.mapTags,
+        ...filters,
+      })),
+      ...make('ecrec_trainingGrants', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('ecrec_trainingGrants').id,
+        fnMapKobo: Ecrec_trainingGrants.map,
+        ...filters,
+      })),
+      ...make('meal_verificationEcrec', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('meal_verificationEcrec').id,
+        fnMapKobo: Meal_VerificationEcrec.map,
+        ...filters,
+      })),
+      ...make('meal_verificationWinterization', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('meal_verificationWinterization').id,
+        fnMapKobo: Meal_VerificationWinterization.map,
+        ...filters,
+      })),
+      ...make('bn_re', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('bn_re').id,
+        fnMapKobo: Bn_re.map,
+        ...filters,
+      })),
+      ...make('ecrec_cashRegistration', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('ecrec_cashRegistration').id,
+        fnMapKobo: Ecrec_cashRegistration.map,
+        fnMapTags: _ => _ as KoboEcrec_cashRegistration.Tags,
+        ...filters,
+      })),
+      ...make('ecrec_cashRegistrationBha', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
+        fnMapKobo: Ecrec_cashRegistrationBha.map,
+        fnMapTags: _ => _ as KoboEcrec_cashRegistration.Tags,
+        ...filters,
+      })),
+      ...make('meal_visitMonitoring', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('meal_visitMonitoring').id,
+        fnMapKobo: Meal_VisitMonitoring.map,
+        ...filters,
+      })),
+      ...make('protection_hhs3', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('protection_hhs3').id,
+        fnMapKobo: Protection_hhs3.map,
+        fnMapTags: _ => _ as ProtectionHhsTags,
+        fnMapCustom: KoboProtection_hhs3.map,
+        ...filters,
+      })),
+      ...make('safety_incident', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('safety_incident').id,
+        fnMapKobo: KoboSafetyIncidentHelper.mapData,
+        ...filters,
+      })),
+      ...make('partnership_partnersDatabase', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('partnership_partnersDatabase').id,
+        fnMapKobo: Partnership_partnersDatabase.map,
         ...filters,
       })),
     })

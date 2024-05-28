@@ -4,6 +4,7 @@ import {chain, KoboProtection_hhs3, OblastISO, Person} from '@infoportal-common'
 import {Enum, Seq} from '@alexandreannic/ts-utils'
 import {ukraineSvgPath} from '@/shared/UkraineMap/ukraineSvgPath'
 import {subDays} from 'date-fns'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
 
 export type UseProtHHS2Data = ReturnType<typeof useProtectionDashboardMonitoData>
 
@@ -12,7 +13,7 @@ export const protectionDashboardMonitoPreviousPeriodDeltaDays = 90
 export const useProtectionDashboardMonitoData = ({
   data,
 }: {
-  data?: Seq<KoboProtection_hhs3.T>
+  data?: Seq<InferTypedAnswer<'protection_hhs3'>>
 }) => {
   const ageGroup = useCallback((ageGroup: Person.AgeGroup, hideOther?: boolean) => {
     const gb = Person.groupByGenderAndGroup(ageGroup)(data?.flatMap(_ => _.persons)!)

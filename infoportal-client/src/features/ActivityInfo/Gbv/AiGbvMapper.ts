@@ -2,8 +2,9 @@ import {DrcProject, DrcProjectHelper, Protection_gbv} from '@infoportal-common'
 import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
-import {KoboUnwrapResult} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {aiInvalidValueFlag} from '@/features/ActivityInfo/shared/AiBundle'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
+import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
 export namespace AiGbvMapper {
 
@@ -22,7 +23,7 @@ export namespace AiGbvMapper {
     [DrcProject['UKR-000304 PSPU']]: 'GBV-DRC-00005',
   } as const
 
-  export const mapGbvActivity = (reportingMonth: string) => (res: KoboUnwrapResult<'searchProtection_gbv'>) => {
+  export const mapGbvActivity = (reportingMonth: string) => (res: ApiPaginate<InferTypedAnswer<'protection_gbv'>>) => {
     const data: Type[] = []
     res.data.filter(_ => _.new_ben !== 'no').forEach(d => {
       d.meta.persons!.forEach(ind => {

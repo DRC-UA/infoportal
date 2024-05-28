@@ -22,6 +22,7 @@ import {DashboardFilterOptions} from '@/shared/DashboardLayout/DashboardFilterOp
 import {Messages} from '@/core/i18n/localization/en'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk2'
 
 const ProtectionDashboardMonitoPN: any = lazy(() => import('./ProtectionDashboardMonitoPN')
   .then(module => ({
@@ -32,10 +33,12 @@ type CustomFilterOptionFilters = {
   hhComposition?: (keyof Messages['protHHS2']['_hhComposition'])[]
 }
 
+type Data = InferTypedAnswer<'protection_hhs3'>
+
 export interface DashboardPageProps {
   periodFilter: Partial<Period>
   optionFilter: CustomFilterOptionFilters & DataFilter.Filter
-  data: Seq<KoboProtection_hhs3.T>
+  data: Seq<Data>
   computed: NonNullable<ReturnType<typeof useProtectionDashboardMonitoData>>
 }
 
@@ -45,7 +48,7 @@ export const ProtectionDashboardMonito = () => {
   const _period = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('protection_hhs3').id))
   const [periodFilter, setPeriodFilter] = useState<Partial<Period>>({})
 
-  const req = (filter?: Partial<Period>) => api.kobo.typedAnswers.searchProtection_hhs3({
+  const req = (filter?: Partial<Period>) => api.kobo.typedAnswers2.search.protection_hhs3({
     filters: {
       start: filter?.start,
       end: filter?.end,
@@ -68,7 +71,7 @@ export const ProtectionDashboardMonito = () => {
       _answers.fetch({force: true, clean: false}, periodFilter)
   }, [periodFilter])
 
-  const getOption = (p: keyof KoboProtection_hhs3.T, option: keyof typeof Protection_hhs3.options = p as any) => () => {
+  const getOption = (p: keyof Data, option: keyof typeof Protection_hhs3.options = p as any) => () => {
     return _answers.get
       ?.flatMap(_ => _[p] as any)
       .distinct(_ => _)
@@ -78,7 +81,7 @@ export const ProtectionDashboardMonito = () => {
   }
 
   const filterShape = useMemo(() => {
-    return DataFilter.makeShape<KoboProtection_hhs3.T>({
+    return DataFilter.makeShape<Data>({
       staff_to_insert_their_DRC_office: {
         getValue: _ => _.staff_to_insert_their_DRC_office,
         icon: 'business',
@@ -134,10 +137,10 @@ export const ProtectionDashboardMonito = () => {
 
   const [optionFilter, setOptionFilters] = useState<DataFilter.InferShape<typeof filterShape> & CustomFilterOptionFilters>({})
 
-  const data: Seq<KoboProtection_hhs3.T> | undefined = useMemo(() => {
+  const data: Seq<Data> | undefined = useMemo(() => {
     if (!_answers.get) return
     const {hhComposition, ...basicFilters} = optionFilter
-    const filtered = seq(DataFilter.filterData(_answers.get, filterShape, basicFilters as any)) as Seq<KoboProtection_hhs3.T>
+    const filtered = seq(DataFilter.filterData(_answers.get!, filterShape, basicFilters as any)) as Seq<Data>
     if (hhComposition && hhComposition.length > 0)
       return filtered.filter(d => !!d.persons?.find(p => {
         if (!p.age) return false
