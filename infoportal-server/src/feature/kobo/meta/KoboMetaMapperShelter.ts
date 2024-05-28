@@ -1,7 +1,7 @@
 import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
   Bn_cashForRentRegistration,
-  Bn_Re,
+  Bn_re,
   CashForRentStatus,
   DrcDonor,
   DrcOffice,
@@ -31,7 +31,7 @@ import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 
 export namespace KoboMetaMapperShelter {
 
-  const harmonizeNtaDisability = (disabilities: Shelter_NTA.T['hh_char_hhh_dis_select']): Bn_Re.T['hh_char_dis_select'] => {
+  const harmonizeNtaDisability = (disabilities: Shelter_NTA.T['hh_char_hhh_dis_select']): Bn_re.T['hh_char_dis_select'] => {
     return disabilities?.map(_ => {
       return fnSwitch(_!, {
         diff_medical: 'diff_care',

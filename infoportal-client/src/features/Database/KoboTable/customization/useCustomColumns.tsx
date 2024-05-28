@@ -1,6 +1,6 @@
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {
-  Bn_Re,
+  Bn_re,
   currentProtectionProjects,
   DrcProject,
   Ecrec_cashRegistration,
@@ -273,7 +273,7 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
           id: 'eligibility_summary_esk2',
           head: m.mpca.eskAllowance,
           type: 'number',
-          renderQuick: (row: KoboAnswerFlat<Bn_Re.T, any>) => {
+          renderQuick: (row: KoboAnswerFlat<Bn_re.T, any>) => {
             return row.estimate_sqm_damage !== undefined ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined
           }
         }

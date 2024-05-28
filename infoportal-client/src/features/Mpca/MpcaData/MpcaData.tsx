@@ -5,7 +5,7 @@ import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {appConfig} from '@/conf/AppConfig'
-import {Bn_Re, DrcOffice, KoboIndex, koboIndex, koboMetaStatusLabel, MpcaEntity} from '@infoportal-common'
+import {Bn_re, DrcOffice, KoboIndex, koboIndex, koboMetaStatusLabel, MpcaEntity} from '@infoportal-common'
 import {IpBtn} from '@/shared/Btn'
 import {formatLargeNumber} from '@/core/i18n/localization/en'
 import {MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
@@ -54,7 +54,7 @@ export const MpcaData = () => {
 
   const officesAccesses = useMemo(() => {
     const bnreAccesses = accesses.filter(AccessSdk.filterByFeature(AppFeatureId.kobo_database)).find(_ => _.params?.koboFormId === KoboIndex.byName('bn_re').id)
-    const offices = bnreAccesses?.params?.filters?.back_office as Bn_Re.T['back_office'][] | undefined
+    const offices = bnreAccesses?.params?.filters?.back_office as Bn_re.T['back_office'][] | undefined
     return new Set(seq(offices ?? []).map(_ => fnSwitch(_!, {
       lwo: DrcOffice['Lviv'],
       chj: DrcOffice['Chernihiv'],

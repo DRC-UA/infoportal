@@ -1,7 +1,7 @@
 import {fnSwitch, map, seq} from '@alexandreannic/ts-utils'
 import {
-  Bn_RapidResponse,
-  Bn_Re,
+  Bn_rapidResponse,
+  Bn_re,
   CashStatus,
   DrcOffice,
   DrcProgram,
@@ -21,7 +21,7 @@ import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 
 export class KoboMetaBasicneeds {
 
-  private static readonly getBnreProject = (back_donor?: Bn_Re.Option<'back_donor'> | Bn_RapidResponse.Option<'back_donor_l'>) => {
+  private static readonly getBnreProject = (back_donor?: Bn_re.Option<'back_donor'> | Bn_rapidResponse.Option<'back_donor_l'>) => {
     return fnSwitch(back_donor!, {
       uhf_chj: DrcProject['UKR-000314 UHF4'],
       uhf_dnk: DrcProject['UKR-000314 UHF4'],
@@ -77,8 +77,8 @@ export class KoboMetaBasicneeds {
     }, _ => _ as DrcProject)
   }
 
-  static readonly bn_re: MetaMapperInsert<KoboMetaOrigin<Bn_Re.T, MpcaEntityTags>> = row => {
-    const answer = Bn_Re.map(row.answers)
+  static readonly bn_re: MetaMapperInsert<KoboMetaOrigin<Bn_re.T, MpcaEntityTags>> = row => {
+    const answer = Bn_re.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
 
@@ -98,7 +98,7 @@ export class KoboMetaBasicneeds {
     const prepare = (activity: DrcProgram, project: DrcProject): MetaMapped => {
       const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
       return {
-        enumerator: Bn_Re.options.back_enum[answer.back_enum!],
+        enumerator: Bn_re.options.back_enum[answer.back_enum!],
         office: fnSwitch(answer.back_office!, {
           chj: DrcOffice.Chernihiv,
           dnk: DrcOffice.Dnipro,
@@ -108,8 +108,8 @@ export class KoboMetaBasicneeds {
           umy: DrcOffice.Sumy,
         }, () => undefined),
         oblast: oblast.name,
-        raion: Bn_Re.options.ben_det_raion[answer.ben_det_raion!],
-        hromada: Bn_Re.options.ben_det_hromada[answer.ben_det_hromada!],
+        raion: Bn_re.options.ben_det_raion[answer.ben_det_raion!],
+        hromada: Bn_re.options.ben_det_hromada[answer.ben_det_hromada!],
         sector: DrcSectorHelper.findByProgram(activity),
         activity,
         personsCount: safeNumber(answer.ben_det_hh_size),
@@ -136,8 +136,8 @@ export class KoboMetaBasicneeds {
     ))
   }
 
-  static readonly bn_rrm: MetaMapperInsert<KoboMetaOrigin<Bn_RapidResponse.T, KoboTagStatus>> = (row) => {
-    const answer = Bn_RapidResponse.map(row.answers)
+  static readonly bn_rrm: MetaMapperInsert<KoboMetaOrigin<Bn_rapidResponse.T, KoboTagStatus>> = (row) => {
+    const answer = Bn_rapidResponse.map(row.answers)
     if (answer.form_length === 'short') return
     const group = KoboGeneralMapping.collectXlsKoboIndividuals({
       hh_char_hh_det: answer.hh_char_hh_det_l?.map(_ => ({
@@ -204,7 +204,7 @@ export class KoboMetaBasicneeds {
     const prepare = (activity: DrcProgram): MetaMapped => {
       const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
       return {
-        enumerator: Bn_RapidResponse.options.back_enum_l[answer.back_enum_l!],
+        enumerator: Bn_rapidResponse.options.back_enum_l[answer.back_enum_l!],
         office: fnSwitch(answer.back_office ?? answer.back_office_l!, {
           chj: DrcOffice.Chernihiv,
           dnk: DrcOffice.Dnipro,
@@ -214,8 +214,8 @@ export class KoboMetaBasicneeds {
           umy: DrcOffice.Sumy,
         }, () => undefined),
         oblast: oblast.name,
-        raion: Bn_RapidResponse.options.ben_det_raion_l[answer.ben_det_raion_l!],
-        hromada: Bn_RapidResponse.options.ben_det_hromada_l[answer.ben_det_hromada_l!],
+        raion: Bn_rapidResponse.options.ben_det_raion_l[answer.ben_det_raion_l!],
+        hromada: Bn_rapidResponse.options.ben_det_hromada_l[answer.ben_det_hromada_l!],
         sector: DrcSectorHelper.findByProgram(activity),
         activity: activity,
         personsCount: safeNumber(answer.ben_det_hh_size_l),

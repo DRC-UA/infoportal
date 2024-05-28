@@ -1,4 +1,4 @@
-export namespace Meal_CfmExternal {
+export namespace Meal_cfmExternal {
 export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	// Form id: aJaGLvGEdpYWk5ift8k87y
 	export interface T {

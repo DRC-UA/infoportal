@@ -1,4 +1,4 @@
-import {Bn_RapidResponse, Bn_Re, Ecrec_cashRegistration, Protection_hhs3, Protection_pss} from '../generated'
+import {Bn_rapidResponse, Bn_re, Ecrec_cashRegistration, Protection_hhs3, Protection_pss} from '../generated'
 import {DrcOffice, DrcProjectHelper} from '../../type/Drc'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex} from '../../location'
@@ -42,7 +42,7 @@ export namespace KoboGeneralMapping {
     mykolaiv: DrcOffice.Mykolaiv,
   }, () => undefined)
 
-  type XlsDisplacementStatus = NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status'] | Bn_Re.T['ben_det_res_stat']
+  type XlsDisplacementStatus = NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status'] | Bn_re.T['ben_det_res_stat']
 
   export const mapDisplacementStatus = (_?: XlsDisplacementStatus): DisplacementStatus | undefined => {
     return fnSwitch(_!, {
@@ -64,26 +64,26 @@ export namespace KoboGeneralMapping {
 
   export const mapOblast = OblastIndex.byKoboName
 
-  export const mapRaion = (_?: Bn_Re.T['ben_det_raion']) => _
+  export const mapRaion = (_?: Bn_re.T['ben_det_raion']) => _
 
-  export const mapHromada = (_?: Bn_Re.T['ben_det_hromada']) => _
+  export const mapHromada = (_?: Bn_re.T['ben_det_hromada']) => _
 
-  export const searchRaion = (_?: string) => (Bn_Re.options.ben_det_raion as any)[_!]
+  export const searchRaion = (_?: string) => (Bn_re.options.ben_det_raion as any)[_!]
 
-  export const searchHromada = (_?: string) => (Bn_Re.options.ben_det_hromada as any)[_!]
+  export const searchHromada = (_?: string) => (Bn_re.options.ben_det_hromada as any)[_!]
 
-  export const getRaionLabel = (_?: Bn_Re.T['ben_det_raion']) => (Bn_Re.options.ben_det_raion as any)[_!]
+  export const getRaionLabel = (_?: Bn_re.T['ben_det_raion']) => (Bn_re.options.ben_det_raion as any)[_!]
 
-  export const getHromadaLabel = (_?: Bn_Re.T['ben_det_hromada']) => (Bn_Re.options.ben_det_hromada as any)[_!]
+  export const getHromadaLabel = (_?: Bn_re.T['ben_det_hromada']) => (Bn_re.options.ben_det_hromada as any)[_!]
 
   export const mapPersonDetails = (p: {
     hh_char_hh_det_gender?: string
     hh_char_hh_det_age?: number
     hh_char_hh_det_disability?: NonNullable<Protection_hhs3.T['hh_char_hh_det']>[0]['hh_char_hh_det_disability']
-    hh_char_hh_det_dis_select?: NonNullable<Bn_Re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_select']
-    hh_char_hh_det_dis_level?: NonNullable<Bn_Re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_level']
+    hh_char_hh_det_dis_select?: NonNullable<Bn_re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_select']
+    hh_char_hh_det_dis_level?: NonNullable<Bn_re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_level']
     hh_char_hh_det_status?: NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status']
-    ben_det_res_stat?: NonNullable<Bn_Re.T['ben_det_res_stat']>
+    ben_det_res_stat?: NonNullable<Bn_re.T['ben_det_res_stat']>
   }): PersonDetails => {
     const res: PersonDetails = KoboGeneralMapping.mapPerson(p as any)
     if (p.hh_char_hh_det_status)
@@ -154,7 +154,7 @@ export namespace KoboGeneralMapping {
     return row
   }
 
-  export const addIndividualBreakdownColumnForRrm = (row: Bn_RapidResponse.T): Bn_RapidResponse.T & {custom: IndividualBreakdown} => {
+  export const addIndividualBreakdownColumnForRrm = (row: Bn_rapidResponse.T): Bn_rapidResponse.T & {custom: IndividualBreakdown} => {
     const p = KoboGeneralMapping.collectXlsKoboIndividualsForRrm(row).map(mapPersonDetails)
     const custom = KoboGeneralMapping.getIndividualBreakdown(p)
     ;(row as any).custom = custom
@@ -212,7 +212,7 @@ export namespace KoboGeneralMapping {
     }) ?? []
   }
 
-  export const collectXlsKoboIndividualsForRrm = (d: Bn_RapidResponse.T): XlsKoboIndividual[] => {
+  export const collectXlsKoboIndividualsForRrm = (d: Bn_rapidResponse.T): XlsKoboIndividual[] => {
     return [
       ...collectXlsKoboIndividualsFromStandardizedKoboForm({
         ben_det_res_stat: d.ben_det_res_stat_l,

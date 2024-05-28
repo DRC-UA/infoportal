@@ -1,452 +1,312 @@
-export namespace Bn_RapidResponse {
+export namespace Bn_re {
 export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-	// Form id: aMJL9DG8qEcULqTZTKQbrq
+	// Form id: aKgX4MNs6gCemDQKPeXxY8
 	export interface T {
 	    start: string,
 	    end: string,
-	  // form_length [select_one] Select the form length
-  form_length: undefined | Option<'form_length'>,
-	  // form_approval [select_one] Do you have approval to use the short tool?
-  form_approval: undefined | Option<'pay_det_tax_exempt_l'>,
 	  // background/back_un_id [note] **Unique ID/Case Number**
   back_un_id: string,
-	  // background/shock [select_one] 1.1 Please select the shock(s)
-  shock: undefined | Option<'shock'>,
-	  // background/back_office [select_one] 1.2 Select Office
-  back_office: undefined | Option<'back_office_l'>,
-	  // background/back_enum [select_one] 1.3 Enumerator
-  back_enum: undefined | Option<'back_enum_l'>,
-	  // background/back_prog_type [select_multiple] 1.4 Programme Type
+	  // background/back_office [select_one] 1.1 Select Office
+  back_office: undefined | Option<'back_office'>,
+	  // background/back_enum [select_one] 1.2 Enumerator
+  back_enum: undefined | Option<'back_enum'>,
+	  // background/back_prog_type [select_multiple] 1.3 Programme Type
   back_prog_type: undefined | Option<'back_prog_type'>[],
-	  // background/back_donor [select_one] 1.5 Project & Donor
-  back_donor: undefined | Option<'back_donor'>,
-	  // bio/ben_det_surname [text] What is your surname name (as shown in personal ID)?
+	  // background/donor_mpca [select_one] 1.3.1 Which donor for MPCA
+  donor_mpca: undefined | Option<'back_donor'>,
+	  // background/donor_nfi [select_one] 1.3.2 Which donor for NFI
+  donor_nfi: undefined | Option<'back_donor'>,
+	  // background/donor_esk [select_one] 1.3.3 Which donor for Emergency Shelter Kit
+  donor_esk: undefined | Option<'back_donor'>,
+	  // background/donor_cfr [select_one] 1.3.4 Which donor for Cash for Rent
+  donor_cfr: undefined | Option<'back_donor'>,
+	  // background/donor_cff [select_one] 1.3.5 Which donor for Cash for Fuel
+  donor_cff: undefined | Option<'back_donor'>,
+	  // background/donor_cfe [select_one] 1.3.6 Which donor for Cash for Education
+  donor_cfe: undefined | Option<'back_donor'>,
+	  // background/donor_iwk [select_one] 1.3.7 Which donor for Infant Winterclothing Kit
+  donor_iwk: undefined | Option<'back_donor'>,
+	  // background/donor_ihk [select_one] 1.3.8 Which donor for Infant Hygiene Kit
+  donor_ihk: undefined | Option<'back_donor'>,
+	  // background/donor_cfu [select_one] 1.3.9 Which donor for Cash for Utilities
+  donor_cfu: undefined | Option<'back_donor'>,
+	  // background/back_donor [select_multiple] 1.4 Selected Project & Donor
+  back_donor: undefined | Option<'back_donor'>[],
+	    calc_prog_type_mpca: string,
+	    calc_prog_type_cfr: string,
+	    calc_prog_type_nfi: string,
+	    calc_prog_type_cfe: string,
+	    calc_prog_type_esk: string,
+	    calc_prog_type_iwk: string,
+	  // background/calc_prog_type_iwk_001 [calculate] type_ihk
+  calc_prog_type_iwk_001: string,
+	    calc_prog_type_csf: string,
+	    calc_prog_type_cfu: string,
+	  // background/back_refer [select_one] 1.5.1 Was this case an internal DRC referral?
+  back_refer: undefined | Option<'pay_det_tax_exempt'>,
+	  // background/back_refer_who [select_one] 1.5.2 From which Department was the referral?
+  back_refer_who: undefined | Option<'back_refer_who'>,
+	  // background/back_consent [select_one] 1.6.1 Consent
+  back_consent: undefined | Option<'pay_det_tax_exempt'>,
+	  // background/back_consen_no_reas [text] 1.6.2 Can you please give the reason for why you do not wish to consent to the questionnaire?
+  back_consen_no_reas: string | undefined,
+	  // background/back_consent_no_note [note] Thank you very much for your time, we will not proceed with the questionnaire without your consent.
+  back_consent_no_note: string,
+	  // ben_det/ben_det_surname [text] 2.1 What is your surname name (as shown in personal ID)?
   ben_det_surname: string | undefined,
-	  // bio/ben_det_first_name [text] What is your first name (as shown in personal ID)?
+	  // ben_det/ben_det_first_name [text] 2.2 What is your first name (as shown in personal ID)?
   ben_det_first_name: string | undefined,
-	  // bio/ben_det_pat_name [text] What is your patronymic name?
+	  // ben_det/ben_det_pat_name [text] 2.3 What is your patronymic name?
   ben_det_pat_name: string | undefined,
-	  // bio/ben_det_ph_number [integer] What is your phone number?
+	  // ben_det/ben_det_ph_number [integer] 2.4 What is your phone number?
   ben_det_ph_number: number | undefined,
-	  // bio/consent_contact [select_one] Do you give permission to contact you in the future for any additional questions?
-  consent_contact: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // bio/ben_det_oblast [select_one] Select oblast where registration is taking place
-  ben_det_oblast: undefined | Option<'ben_det_prev_oblast_l'>,
-	  // bio/ben_det_raion [select_one] Select raion where registration is taking place
-  ben_det_raion: undefined | Option<'ben_det_raion_l'>,
-	  // bio/ben_det_hromada [select_one] Select hromada where registration is taking place
-  ben_det_hromada: undefined | Option<'ben_det_hromada_l'>,
-	  // bio/ben_det_street [text] Street
-  ben_det_street: string | undefined,
-	  // bio/ben_det_ba_number [text] Building and apartment number
-  ben_det_ba_number: string | undefined,
-	  // bio/gps_coordinates [geopoint] GPS Coordinates
-  gps_coordinates: string,
-	  // bio/ben_det_hh_size [integer] Indicate the total number of people in your household, including the HHH
+	  // ben_det/ben_det_oblast [select_one] 2.5.1 Select oblast where registration is taking place
+  ben_det_oblast: undefined | Option<'ben_det_prev_oblast'>,
+	  // ben_det/ben_det_raion [select_one] 2.5.2 Select raion where registration is taking place
+  ben_det_raion: undefined | Option<'ben_det_raion'>,
+	  // ben_det/ben_det_hromada [select_one] 2.5.3 Select hromada where registration is taking place
+  ben_det_hromada: undefined | Option<'ben_det_hromada'>,
+	  // ben_det/ben_det_settlement [select_one_from_file] 2.5.4 Select settlement where registration is taking place
+  ben_det_settlement: string,
+	  // ben_det/ben_det_res_stat [select_one] 2.5.5 Select residential status
+  ben_det_res_stat: undefined | Option<'ben_det_res_stat'>,
+	  // ben_det/ben_det_prev_oblast [select_one] 2.5.6 What is your area of origin prior to displacement? (Select Oblast)
+  ben_det_prev_oblast: undefined | Option<'ben_det_prev_oblast'>,
+	  // ben_det/ben_det_income [integer] 2.6 What was the total value in UAH of all the resources your household received in the last one month?
+  ben_det_income: number | undefined,
+	  // ben_det/ben_det_hh_size [integer] 2.7.1 Indicate the total number of people in your household, including the HHH
   ben_det_hh_size: number | undefined,
-	  // shelter/level_damage [select_one] What is the level of damage?
-  level_damage: undefined | Option<'level_damage'>,
-	  // shelter/windows [integer] What is the number of broken/ damaged windows?
-  windows: number | undefined,
-	  // shelter/doors [integer] What is the number of broken/ damaged doors?
-  doors: number | undefined,
-	  // shelter/estimation_roof [integer] Estimation of the area of damaged roof?
-  estimation_roof: number | undefined,
-	  // shelter/estimation_walls [integer] Estimation of the area of damaged walls?
-  estimation_walls: number | undefined,
-	  // shelter/img_dmg [image] Photo of damage
-  img_dmg: string,
-	  // shelter/img_act_of_dmg [image] Photo of act of damage
-  img_act_of_dmg: string,
-	  // shelter/shelter_comment [text] Comment
-  shelter_comment: string | undefined,
-	  // pay_det/pay_det_id_type [select_one] What form of ID do you have?
-  pay_det_id_type: undefined | Option<'pay_det_id_type'>,
-	  // pay_det/pay_det_pass_ser [text] Input Passport Series
-  pay_det_pass_ser: string | undefined,
-	  // pay_det/pay_det_pass_num [text] Number of ID
-  pay_det_pass_num: string | undefined,
-	  // pay_det/pay_det_id_ph [image] Take a photo of the ID
-  pay_det_id_ph: string,
-	  // pay_det/pay_det_tax_id_num [text] What is your individual tax number?
-  pay_det_tax_id_num: string | undefined,
-	  // pay_det/pay_det_tax_id_ph [image] Take a photo of the Tax ID
-  pay_det_tax_id_ph: string,
-	  // pay_det/pay_det_pay_meth [select_one] What is your preferred payment method?
-  pay_det_pay_meth: undefined | Option<'pay_det_pay_meth'>,
-	  // pay_det/pay_det_iban [text] What is your IBAN number?
-  pay_det_iban: string | undefined,
-	  // pay_det/pay_det_iban_im [image] Take a picture of IBAN number if available
-  pay_det_iban_im: string,
-	  // pay_det/pay_address [text] Your address
-  pay_address: string | undefined,
-	  // pay_det/pay_zip [text] Your ZIP code
-  pay_zip: string | undefined,
-	  // pay_det/pay_det_add_im [image] Take a picture of the address page of passport
-  pay_det_add_im: string,
-	  // pay_det/pay_det_pay_meth_oth [text] What other Payment methods do you prefer?
-  pay_det_pay_meth_oth: string | undefined,
-	  // pay_det/pay_det_pay_meth_none [text] Can you highlight the main reason that none of these payment methods are suitable to you?
-  pay_det_pay_meth_none: string | undefined,
-	    hkf_count: string,
-	    hkmv_count: string,
-	  // nfi/nfi_dist_label [note] **How many of the following kits have been distributed?**
+	  // hh_char/hh_char_hhh [select_one] 3.1 Are you the head of your household?
+  hh_char_hhh: undefined | Option<'pay_det_tax_exempt'>,
+	  // hh_char/hh_char_res_gender [select_one] 3.1.1 Select gender of respondent?
+  hh_char_res_gender: undefined | Option<'hh_char_hh_det_gender'>,
+	  // hh_char/hh_char_res_age [integer] 3.1.2 Age of Respondent
+  hh_char_res_age: number | undefined,
+	  // hh_char/hh_char_res_dis_select [select_multiple] 3.1.3 Please select any of the below that apply to respondent
+  hh_char_res_dis_select: undefined | Option<'hh_char_dis_select'>[],
+	  // hh_char/hh_char_res_dis_level [select_one] 3.1.4 What is the level of difficulty for the selected options in the previous questions?
+  hh_char_res_dis_level: undefined | Option<'hh_char_dis_level'>,
+	  // hh_char/hh_char_hhh_gender [select_one] 3.2.1 What is the gender of Head of household?
+  hh_char_hhh_gender: undefined | Option<'hh_char_hh_det_gender'>,
+	  // hh_char/hh_char_hhh_age [integer] 3.2.2 What is the age of the Head of Household?
+  hh_char_hhh_age: number | undefined,
+	  // hh_char/hh_char_hhh_dis_select [select_multiple] 3.2.3 Please select any of the below that apply to Head of household
+  hh_char_hhh_dis_select: undefined | Option<'hh_char_dis_select'>[],
+	  // hh_char/hh_char_hhh_dis_level [select_one] 3.2.4 What is the level of difficulty for the selected options in the previous questions?
+  hh_char_hhh_dis_level: undefined | Option<'hh_char_dis_level'>,
+	  // hh_char/hh_char_civ_stat [select_one] 3.2.5 What is the civil status of the Head of Household?
+  hh_char_civ_stat: undefined | Option<'hh_char_civ_stat'>,
+	  // hh_char/hh_char_pensioner [select_one] 3.1.5 Is there anyone in the household who receives a pension?
+  hh_char_pensioner: undefined | Option<'pay_det_tax_exempt'>,
+	    calc_hhh_res_dis_level: string,
+	    calc_char_civ_stat: string,
+	  // hh_char/hh_char_chh [note] This is a child headed household (high risk protection case), please refer immediately to a DRC Protection colleague and complete internal referral form.
+  hh_char_chh: string,
+	  // hh_char/hh_char_hh_det [begin_repeat] 3.1.7 HH Members
+  hh_char_hh_det: {hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined,hh_char_hh_det_age: number | undefined | undefined,hh_char_hh_det_dis_select: undefined | Option<'hh_char_dis_select'>[] | undefined,hh_char_hh_det_dis_level: undefined | Option<'hh_char_dis_level'> | undefined,calc_u18: string | undefined,calc_o60: string | undefined,calc_ed_age: string | undefined,calc_baby_age: string | undefined,calc_preg: string | undefined,calc_det_dis_level: string | undefined}[] | undefined,
+	    calc_tot_chi: string,
+	    calc_tot_ed_age: string,
+	    calc_tot_eld: string,
+	  // hh_char/hh_char_preg [select_one] 3.3 Are any of the females in the household pregnat or lactating?
+  hh_char_preg: undefined | Option<'pay_det_tax_exempt'>,
+	  // hh_char/hh_char_dis_note [note] **3.4 The next set of questions ask about difficulties you or members of your household may have doing certain activities. These questions only relates to household members over the age of 5 years old.**
+  hh_char_dis_note: string,
+	  // hh_char/hh_char_dis_select [select_multiple] 3.4.1 Please select any of the below that apply to you or a member of your household
+  hh_char_dis_select: undefined | Option<'hh_char_dis_select'>[],
+	  // hh_char/hh_char_dis_level [select_one] 3.4.2 What is the level of difficulty for the selected options in the previous questions?
+  hh_char_dis_level: undefined | Option<'hh_char_dis_level'>,
+	    calc_dis_level: string,
+	  // hh_char/receive_financial_assistance [select_one] 3.5 Do you or anyone in your household receive financial assistance from the government or other agencies?
+  receive_financial_assistance: undefined | Option<'pay_det_tax_exempt'>,
+	  // nfi/eligibility_summary_nfi [note] **Based on minimum standards this house is eligible for:**
+  eligibility_summary_nfi: string,
+	  // nfi/nfi_fam_hy_1 [note] **1** Family Hygiene Kit (HKMV)
+  nfi_fam_hy_1: string,
+	  // nfi/nfi_fam_hy_2 [note] **2** Family Hygiene Kits (HKMV)
+  nfi_fam_hy_2: string,
+	  // nfi/nfi_fam_hy_3 [note] **3** Family Hygiene Kits (HKMV)
+  nfi_fam_hy_3: string,
+	  // nfi/nfi_fam_nfi_1 [note] **1** Family NFI Kit (NFKF + KS)
+  nfi_fam_nfi_1: string,
+	  // nfi/nfi_fam_nfi_2 [note] **2** Family NFI Kits (NFKF + KS)
+  nfi_fam_nfi_2: string,
+	  // nfi/nfi_fam_nfi_3 [note] **3** Family NFI Kits (NFKF + KS)
+  nfi_fam_nfi_3: string,
+	  // nfi/ihk_nfi [note] **1** Baby Hygiene Kit (BK)
+  ihk_nfi: string,
+	  // nfi/iwk_nfi [note] **1** Baby Winter Kit (WKB)
+  iwk_nfi: string,
+	  // nfi/nfi_kit_disitrbuted [select_one] Did you distribute the NFI Kits at the point of registration
+  nfi_kit_disitrbuted: undefined | Option<'pay_det_tax_exempt'>,
+	  // nfi/begin_group_LF3jyHrmq/nfi_dist_label [note] **How many of the following kits have been distributed?**
   nfi_dist_label: string,
-	  // nfi/nfi_dist_hkf [integer] Family Hygiene Kits (HKF)
+	  // nfi/begin_group_LF3jyHrmq/nfi_dist_hkf [integer] Family Hygiene Kits (HKF)
   nfi_dist_hkf: number | undefined,
-	  // nfi/nfi_dist_hkmv [integer] Family Hygiene Kits for IDPs on the Move distributed (HKMV)
+	  // nfi/begin_group_LF3jyHrmq/nfi_dist_hkmv [integer] Family Hygiene Kits for IDPs on the Move distributed (HKMV)
   nfi_dist_hkmv: number | undefined,
-	  // nfi/nfi_dist_hkf_001 [integer] Family NFI Kit (including Kitchen Set)
+	  // nfi/begin_group_LF3jyHrmq/nfi_dist_hkf_001 [integer] Family NFI kits distributed (NFKF + KS)
   nfi_dist_hkf_001: number | undefined,
-	  // background_l/back_un_id_l [note] **Unique ID/Case Number**
-  back_un_id_l: string,
-	  // background_l/back_office_l [select_one] 1.1 Select Office
-  back_office_l: undefined | Option<'back_office_l'>,
-	  // background_l/back_enum_l [select_one] 1.2 Enumerator
-  back_enum_l: undefined | Option<'back_enum_l'>,
-	  // background_l/back_donor_l [select_one] 1.3 Project & Donor
-  back_donor_l: undefined | Option<'back_donor_l'>,
-	  // background_l/back_prog_type_l [select_multiple] 1.4 Programme Type
-  back_prog_type_l: undefined | Option<'back_prog_type_l'>[],
-	    calc_prog_type_mpca_l: string,
-	    calc_prog_type_cfr_l: string,
-	    calc_prog_type_nfi_l: string,
-	    calc_prog_type_cfe_l: string,
-	    calc_prog_type_esk_l: string,
-	    calc_prog_type_iwk_l: string,
-	  // background_l/calc_prog_type_iwk_001_l [calculate] type_ihk
-  calc_prog_type_iwk_001_l: string,
-	  // background_l/back_refer_l [select_one] 1.5.1 Was this case an internal DRC referral?
-  back_refer_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // background_l/back_refer_who_l [select_one] 1.5.2 From which Department was the referral?
-  back_refer_who_l: undefined | Option<'back_refer_who_l'>,
-	  // background_l/back_consent_l [select_one] 1.6.1 Consent
-  back_consent_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // background_l/back_consen_no_reas_l [text] 1.6.2 Can you please give the reason for why you do not wish to consent to the questionnaire?
-  back_consen_no_reas_l: string | undefined,
-	  // background_l/back_consent_no_note_l [note] Thank you very much for your time, we will not proceed with the questionnaire without your consent.
-  back_consent_no_note_l: string,
-	  // ben_det_l/ben_det_surname_l [text] 2.1 What is your surname name (as shown in personal ID)?
-  ben_det_surname_l: string | undefined,
-	  // ben_det_l/ben_det_first_name_l [text] 2.2 What is your first name (as shown in personal ID)?
-  ben_det_first_name_l: string | undefined,
-	  // ben_det_l/ben_det_pat_name_l [text] 2.3 What is your patronymic name?
-  ben_det_pat_name_l: string | undefined,
-	  // ben_det_l/ben_det_ph_number_l [integer] 2.4 What is your phone number?
-  ben_det_ph_number_l: number | undefined,
-	  // ben_det_l/ben_det_oblast_l [select_one] 2.5.1 Select oblast where registration is taking place
-  ben_det_oblast_l: undefined | Option<'ben_det_prev_oblast_l'>,
-	  // ben_det_l/ben_det_raion_l [select_one] 2.5.2 Select raion where registration is taking place
-  ben_det_raion_l: undefined | Option<'ben_det_raion_l'>,
-	  // ben_det_l/ben_det_hromada_l [select_one] 2.5.3 Select hromada where registration is taking place
-  ben_det_hromada_l: undefined | Option<'ben_det_hromada_l'>,
-	  // ben_det_l/ben_det_settlement_l [select_one_from_file] 2.5.4 Select settlement where registration is taking place
-  ben_det_settlement_l: string,
-	  // ben_det_l/ben_det_res_stat_l [select_one] 2.5.5 Select residential status
-  ben_det_res_stat_l: undefined | Option<'ben_det_res_stat_l'>,
-	  // ben_det_l/ben_det_prev_oblast_l [select_one] 2.5.6 What is your area of origin prior to displacement? (Select Oblast)
-  ben_det_prev_oblast_l: undefined | Option<'ben_det_prev_oblast_l'>,
-	  // ben_det_l/ben_det_income_l [integer] 2.6 What was the total value in UAH of all the resources your household received in the last one month?
-  ben_det_income_l: number | undefined,
-	  // ben_det_l/ben_det_hh_size_l [integer] 2.7.1 Indicate the total number of people in your household, including the HHH
-  ben_det_hh_size_l: number | undefined,
-	  // hh_char_l/hh_char_hhh_l [select_one] 3.1 Are you the head of your household?
-  hh_char_hhh_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // hh_char_l/hh_char_res_gender_l [select_one] 3.1.1 Select gender of respondent?
-  hh_char_res_gender_l: undefined | Option<'hh_char_hh_det_gender_l'>,
-	  // hh_char_l/hh_char_res_age_l [integer] 3.1.2 Age of Respondent
-  hh_char_res_age_l: number | undefined,
-	  // hh_char_l/hh_char_res_dis_select_l [select_multiple] 3.1.3 Please select any of the below that apply to respondent
-  hh_char_res_dis_select_l: undefined | Option<'hh_char_dis_select_l'>[],
-	  // hh_char_l/hh_char_res_dis_level_l [select_one] 3.1.4 What is the level of difficulty for the selected options in the previous questions?
-  hh_char_res_dis_level_l: undefined | Option<'hh_char_dis_level_l'>,
-	  // hh_char_l/hh_char_hhh_gender_l [select_one] 3.2.1 What is the gender of Head of household?
-  hh_char_hhh_gender_l: undefined | Option<'hh_char_hh_det_gender_l'>,
-	  // hh_char_l/hh_char_hhh_age_l [integer] 3.2.2 What is the age of the Head of Household?
-  hh_char_hhh_age_l: number | undefined,
-	  // hh_char_l/hh_char_hhh_dis_select_l [select_multiple] 3.2.3 Please select any of the below that apply to Head of household
-  hh_char_hhh_dis_select_l: undefined | Option<'hh_char_dis_select_l'>[],
-	  // hh_char_l/hh_char_hhh_dis_level_l [select_one] 3.2.4 What is the level of difficulty for the selected options in the previous questions?
-  hh_char_hhh_dis_level_l: undefined | Option<'hh_char_dis_level_l'>,
-	  // hh_char_l/hh_char_civ_stat_l [select_one] 3.2.5 What is the civil status of the Head of Household?
-  hh_char_civ_stat_l: undefined | Option<'hh_char_civ_stat_l'>,
-	    calc_hhh_res_dis_level_l: string,
-	    calc_char_civ_stat_l: string,
-	  // hh_char_l/hh_char_chh_l [note] This is a child headed household (high risk protection case), please refer immediately to a DRC Protection colleague and complete internal referral form.
-  hh_char_chh_l: string,
-	  // hh_char_l/hh_char_hh_det_l [begin_repeat] 3.1.5 HH Members
-  hh_char_hh_det_l: {hh_char_hh_det_gender_l: undefined | Option<'hh_char_hh_det_gender_l'> | undefined,hh_char_hh_det_age_l: number | undefined | undefined,hh_char_hh_det_dis_select_l: undefined | Option<'hh_char_dis_select_l'>[] | undefined,hh_char_hh_det_dis_level_l: undefined | Option<'hh_char_dis_level_l'> | undefined,calc_u18_l: string | undefined,calc_o60_l: string | undefined,calc_ed_age_l: string | undefined,calc_baby_age_l: string | undefined,calc_preg_l: string | undefined,calc_det_dis_level_l: string | undefined}[] | undefined,
-	    calc_tot_chi_l: string,
-	    calc_tot_ed_age_l: string,
-	    calc_tot_eld_l: string,
-	  // hh_char_l/hh_char_preg_l [select_one] 3.3 Are any of the females in the household pregnat or lactating?
-  hh_char_preg_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // hh_char_l/hh_char_dis_note_l [note] **3.4 The next set of questions ask about difficulties you or members of your household may have doing certain activities. These questions only relates to household members over the age of 5 years old.**
-  hh_char_dis_note_l: string,
-	  // hh_char_l/hh_char_dis_select_l [select_multiple] 3.4.1 Please select any of the below that apply to you or a member of your household
-  hh_char_dis_select_l: undefined | Option<'hh_char_dis_select_l'>[],
-	  // hh_char_l/hh_char_dis_level_l [select_one] 3.4.2 What is the level of difficulty for the selected options in the previous questions?
-  hh_char_dis_level_l: undefined | Option<'hh_char_dis_level_l'>,
-	    calc_dis_level_l: string,
-	  // nfi_l/eligibility_summary_nfi_l [note] **Based on minimum standards this house is eligible for:**
-  eligibility_summary_nfi_l: string,
-	  // nfi_l/nfi_fam_hy_1_l [note] **1** Family Hygiene Kit (HKMV)
-  nfi_fam_hy_1_l: string,
-	  // nfi_l/nfi_fam_hy_2_l [note] **2** Family Hygiene Kits (HKMV)
-  nfi_fam_hy_2_l: string,
-	  // nfi_l/nfi_fam_hy_3_l [note] **3** Family Hygiene Kits (HKMV)
-  nfi_fam_hy_3_l: string,
-	  // nfi_l/nfi_fam_nfi_1_l [note] **1** Family NFI Kit (NFKF + KS)
-  nfi_fam_nfi_1_l: string,
-	  // nfi_l/nfi_fam_nfi_2_l [note] **2** Family NFI Kits (NFKF + KS)
-  nfi_fam_nfi_2_l: string,
-	  // nfi_l/nfi_fam_nfi_3_l [note] **3** Family NFI Kits (NFKF + KS)
-  nfi_fam_nfi_3_l: string,
-	  // nfi_l/ihk_nfi_l [note] **1** Baby Hygiene Kit (BK)
-  ihk_nfi_l: string,
-	  // nfi_l/iwk_nfi_l [note] **1** Baby Winter Kit (WKB)
-  iwk_nfi_l: string,
-	  // nfi_l/nfi_kit_disitrbuted_l [select_one] Did you distribute the NFI Kits at the point of registration
-  nfi_kit_disitrbuted_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_dist_label_l [note] **How many of the following kits have been distributed?**
-  nfi_dist_label_l: string,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_dist_hkf_l [integer] Family Hygiene Kits (HKF)
-  nfi_dist_hkf_l: number | undefined,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_dist_hkmv_l [integer] Family Hygiene Kits for IDPs on the Move distributed (HKMV)
-  nfi_dist_hkmv_l: number | undefined,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_dist_hkf_001_l [integer] Family NFI kits distributed (NFKF + KS)
-  nfi_dist_hkf_001_l: number | undefined,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_dist_bk_l [integer] Baby Kits distributed (BK)
-  nfi_dist_bk_l: number | undefined,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_dist_wkb1_l [integer] Baby Winter Kits S distributed (WKB1)
-  nfi_dist_wkb1_l: number | undefined,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_dist_wkb2_l [integer] Baby Winter Kits M distributed (WKB2)
-  nfi_dist_wkb2_l: number | undefined,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_dist_wkb3_l [integer] Baby Winter Kits L distributed (WKB3)
-  nfi_dist_wkb3_l: number | undefined,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_dist_wkb4_l [integer] Baby Winter Kits XL distributed (WKB4)
-  nfi_dist_wkb4_l: number | undefined,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_kit_cc [integer] NFI Kit for Collective Center distributed
+	  // nfi/begin_group_LF3jyHrmq/nfi_dist_bk [integer] Baby Kits distributed (BK)
+  nfi_dist_bk: number | undefined,
+	  // nfi/begin_group_LF3jyHrmq/nfi_dist_wkb1 [integer] Baby Winter Kits S distributed (WKB1)
+  nfi_dist_wkb1: number | undefined,
+	  // nfi/begin_group_LF3jyHrmq/nfi_dist_wkb2 [integer] Baby Winter Kits M distributed (WKB2)
+  nfi_dist_wkb2: number | undefined,
+	  // nfi/begin_group_LF3jyHrmq/nfi_dist_wkb3 [integer] Baby Winter Kits L distributed (WKB3)
+  nfi_dist_wkb3: number | undefined,
+	  // nfi/begin_group_LF3jyHrmq/nfi_dist_wkb4 [integer] Baby Winter Kits XL distributed (WKB4)
+  nfi_dist_wkb4: number | undefined,
+	  // nfi/begin_group_LF3jyHrmq/nfi_kit_cc [integer] NFI Kit for Collective Center distributed
   nfi_kit_cc: number | undefined,
-	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_bed [integer] Folding Beds distributed
+	  // nfi/begin_group_LF3jyHrmq/nfi_bed [integer] Folding Beds distributed
   nfi_bed: number | undefined,
-	  // Section_4a_ESK_l/shelter_damage_l [select_one] 4.1 Is there damage to your current shelter?
-  shelter_damage_l: undefined | Option<'shelter_damage_l'>,
-	  // Section_4a_ESK_l/note_heavy_damage_l [note] If there is heavy damage to this property, please refer to the shelter team immediately
-  note_heavy_damage_l: string,
-	  // Section_4a_ESK_l/estimate_sqm_damage_l [integer] 4.2 Can you estimate the square meter or roof or window that is damaged?
-  estimate_sqm_damage_l: number | undefined,
-	  // Section_4a_ESK_l/eligibility_summary_esk_l [note] Based upon the answers above, the household is eligible for the following:
-  eligibility_summary_esk_l: string,
-	    calc_eligible: string,
-	  // Section_4a_ESK_l/note_eligible_1_l [note] This household is eligble for One Emergency Shelter kit
-  note_eligible_1_l: string,
-	  // Section_4a_ESK_l/note_eligible_2_l [note] This household is eligble for Two Emergency Shelter Kits
-  note_eligible_2_l: string,
-	  // cfr_l/cfr_curr_accom_l [select_one] 5.1 What is your current accommodation status?
-  cfr_curr_accom_l: undefined | Option<'cfr_curr_accom_l'>,
-	  // cfr_l/cfr_rent_int_l [select_one] 5.2 Do you intend to continue renting your current accommodation?
-  cfr_rent_int_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // cfr_l/cfr_rent_stat_l [select_one] 5.3 What is the status of your current rental accommodation?
-  cfr_rent_stat_l: undefined | Option<'cfr_rent_stat_l'>,
-	  // cfr_l/cfr_accom_int_l [select_one] 5.4 What is your future accomodation intentions?
-  cfr_accom_int_l: undefined | Option<'cfr_accom_int_l'>,
-	  // cfr_l/cfr_prev_ass_l [select_one] 5.5 Are you currently receiving rent support from another organisation?
-  cfr_prev_ass_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_occ_rat_l [integer] 5.6.1 In square metres, what is the total space of your accommodation?
-  cfr_accom_cond_occ_rat_l: number | undefined,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_wat_pr_l [select_one] 5.6.2 Is your dwelling water proof?
-  cfr_accom_cond_wat_pr_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_run_wat_l [select_one] 5.6.3 Do you have access to running water
-  cfr_accom_cond_run_wat_l: undefined | Option<'cfr_accom_cond_heat_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_hot_wat_l [select_one] 5.6.4 Do you have access to hot water
-  cfr_accom_cond_hot_wat_l: undefined | Option<'cfr_accom_cond_heat_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_wash_l [select_one] 5.6.5 Do you have access to adequate washing facilities?
-  cfr_accom_cond_wash_l: undefined | Option<'cfr_accom_cond_heat_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_san_l [select_one] 5.6.6 Do you have access to adequate sanitation facilities?
-  cfr_accom_cond_san_l: undefined | Option<'cfr_accom_cond_heat_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_heat_l [select_one] 5.6.7 Do you have access to adequate heating?
-  cfr_accom_cond_heat_l: undefined | Option<'cfr_accom_cond_heat_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_draft_l [select_one] 5.6.8 Does your property have draft proofing?
-  cfr_accom_cond_draft_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_insul_l [select_one] 5.6.9 Is your property adequately insulated?
-  cfr_accom_cond_insul_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_glaz_l [select_one] 5.6.10 Does your property have double-glazed windows?
-  cfr_accom_cond_glaz_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_ten_l [select_one] 5.6.11 Does you have formal written agreement of tenancy with your landlord?
-  cfr_accom_cond_ten_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_lock_doors_l [select_one] 5.6.12 Do you have access to external locked doors on your property?
-  cfr_accom_cond_lock_doors_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // cfr_l/cfr_accom_cond_l/cfr_accom_cond_pri_sp_l [select_one] 5.6.13 Does your houeshold have access to private space (space you don’t share with other households)
-  cfr_accom_cond_pri_sp_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // ass_inc_l/ass_inc_note_l [note] **Based upon your previous answers you will now be informed of your inclusion/exclusion in any cash based programs you have been assessed for.**
-  ass_inc_note_l: string,
-	    calc_vulnerability_l: string,
-	    calc_gen_mpca_inc_l: string,
-	  // ass_inc_l/ass_inc_mpca_l/ass_inc_mpca_inc_l [note] **You have met the critera for inclusion in the cash assistance programme. We will conduct further internal checks and revert to you with a final result.** <span style="color: red">Do not read this out to the household</span>
-  ass_inc_mpca_inc_l: string,
-	  // ass_inc_l/ass_inc_mpca_l/ass_inc_mpca_ben_l [note] The provisional calculated total benefit for this household (HH Size × UAH 3,600 × 3 Months) will be UAH <span style="color: red">Do not read this out to the household</span>
-  ass_inc_mpca_ben_l: string,
-	  // ass_inc_l/ass_inc_mpca_l/ass_inc_mpca_not_vul_l [note] **Unfortunately based upon our criteria, you do not qualify for the cash assistance program as you do not meet the threshold for vulnerability.**
-  ass_inc_mpca_not_vul_l: string,
-	  // ass_inc_l/ass_inc_cfe_l/ass_inc_cfe_inc_l [note] Based upon your answers above, you are entitled to Cash for Education grant
-  ass_inc_cfe_inc_l: string,
-	  // ass_inc_l/ass_inc_cfe_l/ass_inc_cfe_ben_l [note] You are entitled a Cash for Education Grant of UAH:
-  ass_inc_cfe_ben_l: string,
-	  // ass_inc_l/ass_inc_cfe_l/ass_inc_cfe_not_inc_l [note] You are not entitled to a Cash for Education Grant.
-  ass_inc_cfe_not_inc_l: string,
-	    calc_gen_cfr_vul_l: string,
-	    calc_gen_cfr_inc_l: string,
-	  // ass_inc_l/ass_inc_cfr_l/ass_inc_cfr_inc_l [note] You have met the criteria for inclusion in the cash for rent program
-  ass_inc_cfr_inc_l: string,
-	  // ass_inc_l/ass_inc_cfr_l/ass_inc_cfr_ben_l [note] Your provisional cash for rent benefit will be a monthly payment of UAH:
-  ass_inc_cfr_ben_l: string,
-	  // ass_inc_l/ass_inc_cfr_l/ass_inc_cfr_top_up_l [note] You will also receive an additional one-off top-up grant of UAH:
-  ass_inc_cfr_top_up_l: string,
-	  // ass_inc_l/ass_inc_cfr_l/ass_inc_cfr_not_inc_l [note] Unfortunatley based upon our criteria, you not not meet the requirements for cash for rent support
-  ass_inc_cfr_not_inc_l: string,
-	  // pay_det_l/pay_consent_l [select_one] 7.0 Thank you for answering the questions above, are you willing to provide your payment details?
-  pay_consent_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // pay_det_l/pay_det_s_l/pay_det_id_type_l [select_one] 7.1 What form of ID do you have?
-  pay_det_id_type_l: undefined | Option<'pay_det_id_type_l'>,
-	  // pay_det_l/pay_det_s_l/pay_det_id_type_oth_l [text] 7.1.1 What other form of ID do you have?
-  pay_det_id_type_oth_l: string | undefined,
-	  // pay_det_l/pay_det_s_l/pay_det_pass_ser_l [text] 7.2.1 Input Passport Series
-  pay_det_pass_ser_l: string | undefined,
-	  // pay_det_l/pay_det_s_l/pay_det_pass_num_l [text] 7.2.2 Number of ID
-  pay_det_pass_num_l: string | undefined,
-	  // pay_det_l/pay_det_s_l/pay_det_id_ph_l [image] 7.2.3 Take a photo of the ID
-  pay_det_id_ph_l: string,
-	  // pay_det_l/pay_det_s_l/begin_group_vdIM9ogQb_l/pay_det_tax_id_yn_l [select_one] 7.3.1 Do you have an individual tax number (TIN)?
-  pay_det_tax_id_yn_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // pay_det_l/pay_det_s_l/begin_group_vdIM9ogQb_l/pay_det_tax_id_num_l [text] 7.3.2 What is your individual tax number?
-  pay_det_tax_id_num_l: string | undefined,
-	  // pay_det_l/pay_det_s_l/begin_group_vdIM9ogQb_l/pay_det_tax_id_ph_l [image] 7.3.3 Take a photo of the Tax ID
-  pay_det_tax_id_ph_l: string,
-	  // pay_det_l/pay_det_s_l/begin_group_vdIM9ogQb_l/pay_det_tax_exempt_l [select_one] 7.3.4 Do you have a tax exemptions?
-  pay_det_tax_exempt_l: undefined | Option<'pay_det_tax_exempt_l'>,
-	  // pay_det_l/pay_det_s_l/begin_group_vdIM9ogQb_l/pay_det_tax_exempt_im_l [image] 7.3.5 Take a photo of the proof of the tax of exemptions
-  pay_det_tax_exempt_im_l: string,
-	  // pay_det_l/pay_det_s_l/pay_det_pay_meth_l [select_one] 7.4.1 What is your preferred payment method?
-  pay_det_pay_meth_l: undefined | Option<'pay_det_pay_meth_l'>,
-	  // pay_det_l/pay_det_s_l/pay_det_iban_l [text] 7.4.2 What is your IBAN number?
-  pay_det_iban_l: string | undefined,
-	  // pay_det_l/pay_det_s_l/pay_det_iban_im_l [image] 7.4.3 Take a picture of IBAN number if available
-  pay_det_iban_im_l: string,
-	  // pay_det_l/pay_det_s_l/pay_address_l [text] 7.4.4 Your address
-  pay_address_l: string | undefined,
-	  // pay_det_l/pay_det_s_l/pay_zip_l [text] 7.4.5 Your ZIP code
-  pay_zip_l: string | undefined,
-	  // pay_det_l/pay_det_s_l/pay_det_add_im_l [image] 7.4.6 Take a picture of the address page of passport
-  pay_det_add_im_l: string,
-	  // pay_det_l/pay_det_s_l/pay_det_pay_meth_oth_l [text] 7.4.7 What other Payment methods do you prefer?
-  pay_det_pay_meth_oth_l: string | undefined,
-	  // pay_det_l/pay_det_s_l/pay_det_pay_meth_none_l [text] 7.4.8 Can you highlight the main reason that none of these payment methods are suitable to you?
-  pay_det_pay_meth_none_l: string | undefined,
-	  // fin_det_l/fin_det_res_l [text] 8.1 Other Comments from Respondent
-  fin_det_res_l: string | undefined,
-	  // fin_det_l/fin_det_enum_l [text] 8.2 Other Comments from Enumerator
-  fin_det_enum_l: string | undefined,
-	  // fin_det_l/fin_det_oth_doc_im_l [image] 8.3 Please take picture of any other relevant document
-  fin_det_oth_doc_im_l: string,
+	  // Section_4a_ESK/shelter_damage [select_one] 4.1 Is there damage to your current shelter?
+  shelter_damage: undefined | Option<'shelter_damage'>,
+	  // Section_4a_ESK/note_heavy_damage [note] If there is heavy damage to this property, please refer to the shelter team immediately
+  note_heavy_damage: string,
+	  // Section_4a_ESK/estimate_sqm_damage [integer] 4.2 Can you estimate the square meter or roof or window that is damaged?
+  estimate_sqm_damage: number | undefined,
+	  // Section_4a_ESK/eligibility_summary_esk [note] Based upon the answers above, the household is eligible for the following:
+  eligibility_summary_esk: string,
+	  // Section_4a_ESK/note_eligible_1 [note] This household is eligble for One Emergency Shelter kit
+  note_eligible_1: string,
+	  // Section_4a_ESK/note_eligible_2 [note] This household is eligble for Two Emergency Shelter Kits
+  note_eligible_2: string,
+	  // casf_utilities_fuel/current_gov_assist_cff [select_one] Are you currently receiving Government financial assistance to cover your fuel/utilities payment needs?
+  current_gov_assist_cff: undefined | Option<'current_gov_assist_cff'>,
+	  // casf_utilities_fuel/utilities_fuel [select_one] This year, is your primary source of heating from mains utilities (e.g. Piped gas, electric, community heating) or solid fuel (Wood, pellets, charcoal, coal etc)
+  utilities_fuel: undefined | Option<'utilities_fuel'>,
+	  // casf_utilities_fuel/mains_utilities [select_multiple] What is your main source of heating from mains utilities?
+  mains_utilities: undefined | Option<'mains_utilities'>[],
+	  // casf_utilities_fuel/mains_utilities_other [text] If "Other", please specify
+  mains_utilities_other: string | undefined,
+	  // casf_utilities_fuel/mains_fuel [select_multiple] What is your primary source of solid fuel heating?
+  mains_fuel: undefined | Option<'mains_fuel'>[],
+	  // casf_utilities_fuel/mains_fuel_other [text] If "Other", please specify
+  mains_fuel_other: string | undefined,
+	  // casf_utilities_fuel/functioning_fuel_delivery [select_one] Is there a functioning fuel delivery/supplier in your area?
+  functioning_fuel_delivery: undefined | Option<'functioning_fuel_delivery'>,
+	  // cfr/cfr_curr_accom [select_one] 5.1 What is your current accommodation status?
+  cfr_curr_accom: undefined | Option<'cfr_curr_accom'>,
+	  // cfr/cfr_rent_int [select_one] 5.2 Do you intend to continue renting your current accommodation?
+  cfr_rent_int: undefined | Option<'pay_det_tax_exempt'>,
+	  // cfr/cfr_rent_stat [select_one] 5.3 What is the status of your current rental accommodation?
+  cfr_rent_stat: undefined | Option<'cfr_rent_stat'>,
+	  // cfr/cfr_accom_int [select_one] 5.4 What is your future accomodation intentions?
+  cfr_accom_int: undefined | Option<'cfr_accom_int'>,
+	  // cfr/cfr_prev_ass [select_one] 5.5 Are you currently receiving rent support from another organisation?
+  cfr_prev_ass: undefined | Option<'pay_det_tax_exempt'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_occ_rat [integer] 5.6.1 In square metres, what is the total space of your accommodation?
+  cfr_accom_cond_occ_rat: number | undefined,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_wat_pr [select_one] 5.6.2 Is your dwelling water proof?
+  cfr_accom_cond_wat_pr: undefined | Option<'pay_det_tax_exempt'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_run_wat [select_one] 5.6.3 Do you have access to running water
+  cfr_accom_cond_run_wat: undefined | Option<'cfr_accom_cond_heat'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_hot_wat [select_one] 5.6.4 Do you have access to hot water
+  cfr_accom_cond_hot_wat: undefined | Option<'cfr_accom_cond_heat'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_wash [select_one] 5.6.5 Do you have access to adequate washing facilities?
+  cfr_accom_cond_wash: undefined | Option<'cfr_accom_cond_heat'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_san [select_one] 5.6.6 Do you have access to adequate sanitation facilities?
+  cfr_accom_cond_san: undefined | Option<'cfr_accom_cond_heat'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_heat [select_one] 5.6.7 Do you have access to adequate heating?
+  cfr_accom_cond_heat: undefined | Option<'cfr_accom_cond_heat'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_draft [select_one] 5.6.8 Does your property have draft proofing?
+  cfr_accom_cond_draft: undefined | Option<'pay_det_tax_exempt'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_insul [select_one] 5.6.9 Is your property adequately insulated?
+  cfr_accom_cond_insul: undefined | Option<'pay_det_tax_exempt'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_glaz [select_one] 5.6.10 Does your property have double-glazed windows?
+  cfr_accom_cond_glaz: undefined | Option<'pay_det_tax_exempt'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_ten [select_one] 5.6.11 Does you have formal written agreement of tenancy with your landlord?
+  cfr_accom_cond_ten: undefined | Option<'pay_det_tax_exempt'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_lock_doors [select_one] 5.6.12 Do you have access to external locked doors on your property?
+  cfr_accom_cond_lock_doors: undefined | Option<'pay_det_tax_exempt'>,
+	  // cfr/cfr_accom_cond/cfr_accom_cond_pri_sp [select_one] 5.6.13 Does your houeshold have access to private space (space you don’t share with other households)
+  cfr_accom_cond_pri_sp: undefined | Option<'pay_det_tax_exempt'>,
+	  // ass_inc/ass_inc_note [note] **Based upon your previous answers you will now be informed of your inclusion/exclusion in any cash based programs you have been assessed for.**
+  ass_inc_note: string,
+	    calc_vulnerability: string,
+	    calc_gen_mpca_inc: string,
+	  // ass_inc/ass_inc_mpca/ass_inc_mpca_inc [note] **You have met the critera for inclusion in the cash assistance programme. We will conduct further internal checks and revert to you with a final result.** <span style="color: red">Do not read this out to the household</span>
+  ass_inc_mpca_inc: string,
+	  // ass_inc/ass_inc_mpca/ass_inc_mpca_ben [note] The provisional calculated total benefit for this household (HH Size × UAH 3,600 × 3 Months) will be UAH <span style="color: red">Do not read this out to the household</span>
+  ass_inc_mpca_ben: string,
+	  // ass_inc/ass_inc_mpca/ass_inc_mpca_not_vul [note] **Unfortunately based upon our criteria, you do not qualify for the cash assistance program as you do not meet the threshold for vulnerability.**
+  ass_inc_mpca_not_vul: string,
+	  // ass_inc/ass_inc_cfe/ass_inc_cfe_inc [note] Based upon your answers above, you are entitled to Cash for Education grant
+  ass_inc_cfe_inc: string,
+	  // ass_inc/ass_inc_cfe/ass_inc_cfe_ben [note] You are entitled a Cash for Education Grant of UAH:
+  ass_inc_cfe_ben: string,
+	  // ass_inc/ass_inc_cfe/ass_inc_cfe_not_inc [note] You are not entitled to a Cash for Education Grant.
+  ass_inc_cfe_not_inc: string,
+	    calc_gen_cfr_vul: string,
+	    calc_gen_cfr_inc: string,
+	  // ass_inc/ass_inc_cfr/ass_inc_cfr_inc [note] You have met the criteria for inclusion in the cash for rent program
+  ass_inc_cfr_inc: string,
+	  // ass_inc/ass_inc_cfr/ass_inc_cfr_ben [note] Your provisional cash for rent benefit will be a monthly payment of UAH:
+  ass_inc_cfr_ben: string,
+	  // ass_inc/ass_inc_cfr/ass_inc_cfr_top_up [note] You will also receive an additional one-off top-up grant of UAH:
+  ass_inc_cfr_top_up: string,
+	  // ass_inc/ass_inc_cfr/ass_inc_cfr_not_inc [note] Unfortunatley based upon our criteria, you not not meet the requirements for cash for rent support
+  ass_inc_cfr_not_inc: string,
+	    calc_vulnerability_cff: string,
+	    calc_gen_cff_inc: string,
+	  // ass_inc/ass_inc_cff/ass_inc_cff_inc [note] **You have met the critera for inclusion in the cash for fuel assistance programme. We will conduct further internal checks and revert to you with a final result.** <span style="color: red">Do not read this out to the household</span>
+  ass_inc_cff_inc: string,
+	  // ass_inc/ass_inc_cff/ass_inc_cff_not_vul [note] **Unfortunately based upon our criteria, you do not qualify for the cash for fuel assistance program as you do not meet the threshold for vulnerability.**
+  ass_inc_cff_not_vul: string,
+	    calc_vulnerability_cfu: string,
+	    calc_gen_cfu_inc: string,
+	  // ass_inc/ass_inc_cfu/ass_inc_cfu_inc [note] **You have met the critera for inclusion in the cash for utilities assistance programme. We will conduct further internal checks and revert to you with a final result.** <span style="color: red">Do not read this out to the household</span>
+  ass_inc_cfu_inc: string,
+	  // ass_inc/ass_inc_cfu/ass_inc_cfu_not_vul [note] **Unfortunately based upon our criteria, you do not qualify for the cash for utilitie assistance program as you do not meet the threshold for vulnerability.**
+  ass_inc_cfu_not_vul: string,
+	  // pay_det/pay_consent [select_one] 7.0 Thank you for answering the questions above, are you willing to provide your payment details?
+  pay_consent: undefined | Option<'pay_det_tax_exempt'>,
+	  // pay_det/pay_det_s/pay_det_id_type [select_one] 7.1 What form of ID do you have?
+  pay_det_id_type: undefined | Option<'pay_det_id_type'>,
+	  // pay_det/pay_det_s/pay_det_id_type_oth [text] 7.1.1 What other form of ID do you have?
+  pay_det_id_type_oth: string | undefined,
+	  // pay_det/pay_det_s/pay_det_pass_ser [text] 7.2.1 Input Passport Series
+  pay_det_pass_ser: string | undefined,
+	  // pay_det/pay_det_s/pay_det_pass_num [text] 7.2.2 Number of ID
+  pay_det_pass_num: string | undefined,
+	  // pay_det/pay_det_s/pay_det_id_ph [image] 7.2.3 Take a photo of the ID
+  pay_det_id_ph: string,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_yn [select_one] 7.3.1 Do you have an individual tax number (TIN)?
+  pay_det_tax_id_yn: undefined | Option<'pay_det_tax_exempt'>,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_num [text] 7.3.2 What is your individual tax number?
+  pay_det_tax_id_num: string | undefined,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_ph [image] 7.3.3 Take a photo of the Tax ID
+  pay_det_tax_id_ph: string,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt [select_one] 7.3.4 Do you have a tax exemptions?
+  pay_det_tax_exempt: undefined | Option<'pay_det_tax_exempt'>,
+	  // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt_im [image] 7.3.5 Take a photo of the proof of the tax of exemptions
+  pay_det_tax_exempt_im: string,
+	  // pay_det/pay_det_s/pay_det_pay_meth [select_one] 7.4.1 What is your preferred payment method?
+  pay_det_pay_meth: undefined | Option<'pay_det_pay_meth'>,
+	  // pay_det/pay_det_s/pay_det_iban [text] 7.4.2 What is your IBAN number?
+  pay_det_iban: string | undefined,
+	  // pay_det/pay_det_s/pay_det_iban_im [image] 7.4.3 Take a picture of IBAN number if available
+  pay_det_iban_im: string,
+	  // pay_det/pay_det_s/pay_address [text] 7.4.4 Your address
+  pay_address: string | undefined,
+	  // pay_det/pay_det_s/pay_zip [text] 7.4.5 Your ZIP code
+  pay_zip: string | undefined,
+	  // pay_det/pay_det_s/pay_det_add_im [image] 7.4.6 Take a picture of the address page of passport
+  pay_det_add_im: string,
+	  // pay_det/pay_det_s/pay_det_pay_meth_oth [text] 7.4.7 What other Payment methods do you prefer?
+  pay_det_pay_meth_oth: string | undefined,
+	  // pay_det/pay_det_s/pay_det_pay_meth_none [text] 7.4.8 Can you highlight the main reason that none of these payment methods are suitable to you?
+  pay_det_pay_meth_none: string | undefined,
+	  // fin_det/fin_det_res [text] 8.1 Other Comments from Respondent
+  fin_det_res: string | undefined,
+	  // fin_det/fin_det_enum [text] 8.2 Other Comments from Enumerator
+  fin_det_enum: string | undefined,
+	  // fin_det/fin_det_oth_doc_im [image] 8.3 Please take picture of any other relevant document
+  fin_det_oth_doc_im: string,
 	}
 export const options = {
-back_donor: {
-	'echo': `ECHO`,
-	'uhf_4': `UHF 4`,
-	'bha': `BHA`,
-	'novo': `NovoNordisk`,
-	'pooled': `Pool Funds`,
-	'sdc': `SDC`
-},
-shock: {
-	'strike_infrastructure': `Strike on Civilian/ Community Infrastructure`,
-	'evacuation _frontline': `Evacuation from Frontlines`,
-	'evacuation_shelling': `Evacuation/ Displacement due to Shelling`,
-	'natural_disaster': `Natural Disaster`,
-	'No_shock': `No shock but regular programming in red zone`
-},
-form_length: {
-	'long': `Long`,
-	'short': `Short`
-},
-level_damage: {
-	'one': `1 (no damage)`,
-	'two': `2 (windows and/or door damage)`,
-	'three': `3 (windows and/or door damage and/or roof damage)`,
-	'four': `4 (highly damaged or fully destroyed)`
-},
-back_prog_type: {
-	'mpca': `MPCA`,
-	'nfi': `NFI`,
-	'shelter': `Shelter (ask BNF if their apartment has been damaged)`
-},
-pay_det_id_type: {
-	'nat_pass_card': `A = National Passport (card)`,
-	'nat_pass_book': `B = National Passport (book)`,
-	'nat_pass_diia': `C = National Passport (Diia app)`,
-	'pass_ussr_red': `D = Passport (USSR red book)`,
-	'pass_int': `E = Passport for international travel`,
-	'birth_certificate': `F = Birth certificate`,
-	'driver_lic': `G = Driver’s license`,
-	'pen_cert': `H = Pensioner certificate`,
-	'oth_id': `I = Other Form of ID`,
-	'no_id': `J = No ID`
-},
-pay_det_pay_meth: {
-	'raiff_trans': `A = Remittance Raiffaisen AVAL`,
-	'ukrpost': `B = Ukrposhta`,
-	'bank_card': `C = Bank card`,
-	'other_pay': `D = Other Payment Method`,
-	'none_pay': `E = None of the above fit my needs`
-},
-undefined: {
-	'idp': `A = Internally Displaced Person (IDP)`,
-	'long_res': `B = Long - Term Resident`,
-	'ret': `C = Returnee`,
-	'ref_asy': `D = Refugee/asylum seeker`,
-	'male': `A = Male`,
-	'female': `B = Female`,
-	'single': `A = Single (Never Married)`,
-	'dom_part': `B = Not Married but Living in Domestic Partnership`,
-	'married': `C = Married`,
-	'div_sep': `D = Divorced/Seperated`,
-	'widow': `E = Widowed`,
-	'abandoned': `F = Abandoned`,
-	'diff_see': `A = Have difficulty seeing, even if wearing glasses`,
-	'diff_hear': `B = Have difficulty hearing, even if using a hearing aid`,
-	'diff_walk': `C = Have difficulty walking or climbing steps`,
-	'diff_rem': `D = Have difficulty remembering or concentrating`,
-	'diff_care': `E = Have difficulty with self-care such as washing all over or dressing`,
-	'diff_comm': `F = Have difficulty communicating, for example understanding or being understood`,
-	'diff_none': `G = None of the above apply`,
-	'zero': `A = No, no difficulty`,
-	'one': `B = Yes, some difficulty`,
-	'two': `C = Yes, a lot of difficulty`,
-	'fri': `D = Cannot do at all`,
-	'no_damage': `No Structural Damage`,
-	'minor_damage': `Minor Damage (light or medium damages such as broken windows and doors, minor roof damage)`,
-	'heavy_damage': `Heavy Damage`,
-	'rent': `B = Find Rental Accommodation`,
-	'host': `B = Living with Friends/Family/Host`,
-	'own_prop': `C = Living in Own Property`,
-	'coll_cen': `D = Living in Collective Center`,
-	'homeless': `E = Homeless`,
-	'other_accom': `F = Other`,
-	'secure': `A = Secure for Medium/Long Term`,
-	'unable_pay': `B = Currently Unable to Pay Rent/Contribute to Collective Costs`,
-	'dan_unable_pay': `C = In Danger of Being Unable to Pay Rent/Contribute to Collective Costs`,
-	'unsuit_accom': `D = Accommodation Unsuitable for my needs`,
-	'eviction': `E = Eviction/Removal for Other Reasons`,
-	'remain': `A = Remain in Current Place`,
-	'not_sure': `C = Not Sure/Don’t Know`,
-	'always': `A = Always`,
-	'not_always': `B = Not always on but comes daily`,
-	'intermittent': `C = Comes on intermittent days`,
-	'rarely': `D = Rarely`,
-	'never': `E = Never`
-},
-back_office_l: {
+back_office: {
 	'lwo': `Lviv (LWO)`,
 	'chj': `Chernihiv (CHJ)`,
 	'dnk': `Dnipro (DNK)`,
@@ -454,22 +314,26 @@ back_office_l: {
 	'nlv': `Mykloaiv (NLV)`,
 	'umy': `Sumy (UMY)`
 },
-back_enum_l: {
+back_enum: {
 	'anna_artiukh': `Anna Artiukh`,
-	'oksana_podolianko': `Oksana Podolianko`,
+	'yevhenii_musiienko': `Yevhenii Musiienko`,
+	'vitaliy_grinenko': `Vitaliy Grinenko`,
 	'oleksandr_havrylov': `Oleksandr Havrylov`,
 	'ievgen_kylymenniy': `Ievgen Kylymenniy`,
 	'oleksandr_shmunk': `Oleksandr Shmunk`,
 	'inna_kovalchuk': `Inna Kovalchuk`,
-	'dmytro_ivanov': `Dmytro Ivanov`,
+	'anna_pastushenko': `Anna Pastushenko`,
+	'maksym_savchenko': `Maksym Savchenko`,
 	'henadii_petrychenko': `Henadii Petrychenko`,
-	'nadiia_yudaieva': `Nadiia Yudaieva`,
-	'dmytro_tsaruk': `Dmytro Tsaruk`,
+	'vasyl_voitsikhovskyi': `Vasyl Voitsikhovskyi`,
+	'lesya_tsaruk': `Lesya Tsaruk`,
+	'irina_gobchuk': `Irina Gobchuk`,
+	'irina_klimashevskaya': `Irina Klimashevskaya`,
+	'julia_bilyansk': `Julia Bilyansk`,
+	'danylo_zyrianov': `Danylo Zyrianov`,
 	'viktoria_ushan': `Viktoria Ushan`,
-	'kostiantyn_yefimchuk': `Kostiantyn Yefimchuk`,
 	'viktoriia_lytvynova': `Viktoriia Lytvynova`,
 	'valerii_vietrov': `Valerii Vietrov`,
-	'daria_kokalia': `Daria Kokalia`,
 	'artem_chernukha_1': `Artem Chernukha`,
 	'lwo_ex1': `Extra 1`,
 	'lwo_ex2': `Extra 2`,
@@ -496,6 +360,9 @@ back_enum_l: {
 	'svitlana_smyrnova': `Svitlana Smyrnova`,
 	'tetiana_konovshii': `Tetiana Konovshii`,
 	'bohdan_taranushchenko': `Bohdan Taranushchenko`,
+	'olena_sotnychenko': `Olena Sotnychenko`,
+	'vitalii_shapoval': `Vitalii Shapoval`,
+	'olena_buglo': `Olena Buglo`,
 	'hrk_ex1': `Extra 1`,
 	'hrk_ex2': `Extra 2`,
 	'dmytro_chernukha': `Dmytro Chernukha`,
@@ -506,19 +373,28 @@ back_enum_l: {
 	'tetiana_kolot': `Tetiana Kolot`,
 	'katerina_severin': `Katerina Severin`,
 	'maksim_sedun': `Maksim Sedun`,
-	'ivan_volynkin': `Ivan Volynkin`,
 	'surzhyk_oleksandr': `Surzhyk Oleksandr`,
 	'chj_ex1': `Extra 1`,
-	'chj_ex2': `Extra 2`
+	'chj_ex2': `Extra 2`,
+	'oksana_podolianko': `Oksana Podolianko`,
+	'ivan_volynkin': `Ivan Volynkin`,
+	'nadiia_yudaieva': `Nadiia Yudaieva`,
+	'dmytro_ivanov': `Dmytro Ivanov`,
+	'kostiantyn_yefimchuk': `Kostiantyn Yefimchuk`,
+	'daria_kokalia': `Daria Kokalia`
 },
-back_donor_l: {
-	'sdc_umy': `SDC`,
+back_donor: {
+	'chj_360_novonordisk': `UKR-000360 Novo Nordisk`,
+	'dnk_360_novonordisk': `UKR-000360 Novo Nordisk`,
+	'hrk_360_novonordisk': `UKR-000360 Novo Nordisk`,
+	'lwo_360_novonordisk': `UKR-000360 Novo Nordisk`,
+	'341_hoffman_husmans_hrk': `UKR-000341 Hoffmans & Husmans`,
+	'nlv_360_novonordisk': `UKR-000360 Novo Nordisk`,
 	'uhf_chj': `UHF-4`,
 	'uhf_dnk': `UHF-4`,
 	'uhf_hrk': `UHF-4`,
 	'uhf_lwo': `UHF-4`,
 	'uhf_nlv': `UHF-4`,
-	'dnk_bha_345': `BHA2`,
 	'bha_lwo': `BHA`,
 	'bha_chj': `BHA`,
 	'bha_dnk': `BHA`,
@@ -529,18 +405,47 @@ back_donor_l: {
 	'echo_hrk': `ECHO`,
 	'echo_lwo': `ECHO`,
 	'echo_nlv': `ECHO`,
+	'echo322_chj': `ECHO 322`,
+	'echo322_dnk': `ECHO 322`,
+	'echo322_hrk': `ECHO 322`,
+	'echo322_lwo': `ECHO 322`,
+	'echo322_nlv': `ECHO 322`,
+	'echo322_umy': `ECHO 322`,
 	'novo_nlv': `Novo Nordisk`,
 	'okf_lwo': `OKF`,
+	'pool_umy': `Pooled Funds`,
 	'pool_chj': `Pooled Funds`,
 	'pool_dnk': `Pooled Funds`,
 	'pool_hrk': `Pooled Funds`,
 	'pool_lwo': `Pooled Funds`,
 	'pool_nlv': `Pooled Funds`,
-	'nlv_bha_345': `BHA2`,
-	'echo2_dnk': `ECHO2`
+	'sdc_umy': `SDC`,
+	'hrk_umy': `SDC`,
+	'umy_danida': `Danida`,
+	'uhf6_chj': `UHF-6`,
+	'uhf6_dnk': `UHF-6`,
+	'uhf6_hrk': `UHF-6`,
+	'uhf6_lwo': `UHF-6`,
+	'uhf6_nlv': `UHF-6`,
+	'uhf6_umy': `UHF-6`,
+	'uhf7_chj': `UHF-7`,
+	'uhf7_dnk': `UHF-7`,
+	'uhf7_hrk': `UHF-7`,
+	'uhf7_lwo': `UHF-7`,
+	'uhf7_nlv': `UHF-7`,
+	'uhf7_umy': `UHF-7`,
+	'danida347_chj': `DANIDA UKR-000347`,
+	'danida347_dnk': `DANIDA UKR-000347`,
+	'danida347_hrk': `DANIDA UKR-000347`,
+	'danida347_lwo': `DANIDA UKR-000347`,
+	'danida347_nlv': `DANIDA UKR-000347`,
+	'danida347_umy': `DANIDA UKR-000347`,
+	'340_augustinus_fonden_dnk': `Augustinus Fonden UKR-000340`,
+	'340_02_augustinus_fonden_lwo': `Augustinus Fonden UKR-000340-02`
 },
-back_prog_type_l: {
+back_prog_type: {
 	'mpca_umy': `MPCA`,
+	'csf_umy': `Cash for Fuel`,
 	'mpca_lwo': `MPCA`,
 	'nfi_lwo': `NFI`,
 	'cfr_lwo': `Cash for Rent`,
@@ -548,31 +453,67 @@ back_prog_type_l: {
 	'iwk_lwo': `Infant Winterclothing Kit`,
 	'ihk_lwo': `Infant Hygiene Kit`,
 	'esk_lwo': `Emergency Shelter Kit`,
+	'csf_lwo': `Cash for Fuel`,
+	'cfu_lwo': `Cash for Utilities`,
 	'mpca_nlv': `MPCA`,
 	'nfi_nlv': `NFI`,
 	'esk_nlv': `Emergency Shelter Kit`,
+	'csf_nlv': `Cash for Fuel`,
 	'mpca_dnk': `MPCA`,
 	'nfi_dnk': `NFI`,
 	'cfr_dnk': `Cash for Rent`,
 	'esk_dnk': `Emergency Shelter Kit`,
+	'csf_dnk': `Cash for Fuel`,
 	'mpca_hrk': `MPCA`,
 	'nfi_hrk': `NFI`,
 	'esk_hrk': `Emergency Shelter Kit`,
+	'csf_hrk': `Cash for Fuel`,
 	'mpca_chj': `MPCA`,
 	'nfi_chj': `NFI`,
 	'cfr_chj': `Cash for Rent`,
-	'esk_chj': `Emergency Shelter Kit`
+	'esk_chj': `Emergency Shelter Kit`,
+	'cfu_chj': `Cash for Utilities`,
+	'csf_chj': `Cash for Fuel`
 },
-pay_det_tax_exempt_l: {
+pay_det_tax_exempt: {
 	'yes': `A = Yes`,
 	'no': `B = No`
 },
-back_refer_who_l: {
+back_refer_who: {
 	'prot': `A = Protection`,
 	'legal': `B = Legal`,
-	'shelter': `C = Shelter`
+	'shelter': `C = Shelter`,
+	'ecrec': `D = Economic Recovery (EcRec)`
 },
-ben_det_prev_oblast_l: {
+utilities_fuel: {
+	'utilities': `A = Mains utilities`,
+	'fuel': `B = Solid Fuel`
+},
+mains_utilities: {
+	'electric': `Electric`,
+	'gas': `Gas`,
+	'cohs': `Community heating system`,
+	'other': `Other`
+},
+mains_fuel: {
+	'wood': `Wood`,
+	'coal': `Coal`,
+	'charcoal': `Charcoal`,
+	'pellets': `Pellets`,
+	'ofmf': `Oil fed or multi fuel boiler`,
+	'other': `Other`
+},
+functioning_fuel_delivery: {
+	'yes': `A = Yes`,
+	'no': `B = No`,
+	'dk': `C = Don’t know`
+},
+current_gov_assist_cff: {
+	'yes': `Yes`,
+	'yes_but': `Yes but not sufficient to cover needs`,
+	'no': `No`
+},
+ben_det_prev_oblast: {
 	'cherkaska': `Cherkaska`,
 	'chernihivska': `Chernihivska`,
 	'chernivetska': `Chernivetska`,
@@ -599,7 +540,7 @@ ben_det_prev_oblast_l: {
 	'zaporizka': `Zaporizka`,
 	'zhytomyrska': `Zhytomyrska`
 },
-ben_det_raion_l: {
+ben_det_raion: {
 	'zvenyhorodskyi': `Zvenyhorodskyi`,
 	'zolotoniskyi': `Zolotoniskyi`,
 	'umanskyi': `Umanskyi`,
@@ -730,7 +671,7 @@ ben_det_raion_l: {
 	'korostenskyi': `Korostenskyi`,
 	'novohrad-volynskyi': `Novohrad-Volynskyi`
 },
-ben_det_hromada_l: {
+ben_det_hromada: {
 	'abrykosivska': `Abrykosivska`,
 	'abrykosivska_2': `Abrykosivska`,
 	'adzhamska': `Adzhamska`,
@@ -2502,17 +2443,17 @@ ben_det_hromada_l: {
 	'zymohirivska': `Zymohirivska`,
 	'zymynska': `Zymynska`
 },
-ben_det_res_stat_l: {
+ben_det_res_stat: {
 	'idp': `A = Internally Displaced Person (IDP)`,
 	'long_res': `B = Long - Term Resident`,
 	'ret': `C = Returnee`,
 	'ref_asy': `D = Refugee/asylum seeker`
 },
-hh_char_hh_det_gender_l: {
+hh_char_hh_det_gender: {
 	'male': `A = Male`,
 	'female': `B = Female`
 },
-hh_char_civ_stat_l: {
+hh_char_civ_stat: {
 	'single': `A = Single (Never Married)`,
 	'dom_part': `B = Not Married but Living in Domestic Partnership`,
 	'married': `C = Married`,
@@ -2520,7 +2461,7 @@ hh_char_civ_stat_l: {
 	'widow': `E = Widowed`,
 	'abandoned': `F = Abandoned`
 },
-hh_char_dis_select_l: {
+hh_char_dis_select: {
 	'diff_see': `A = Have difficulty seeing, even if wearing glasses`,
 	'diff_hear': `B = Have difficulty hearing, even if using a hearing aid`,
 	'diff_walk': `C = Have difficulty walking or climbing steps`,
@@ -2529,18 +2470,18 @@ hh_char_dis_select_l: {
 	'diff_comm': `F = Have difficulty communicating, for example understanding or being understood`,
 	'diff_none': `G = None of the above apply`
 },
-hh_char_dis_level_l: {
+hh_char_dis_level: {
 	'zero': `A = No, no difficulty`,
 	'one': `B = Yes, some difficulty`,
 	'two': `C = Yes, a lot of difficulty`,
 	'fri': `D = Cannot do at all`
 },
-shelter_damage_l: {
+shelter_damage: {
 	'no_damage': `No Structural Damage`,
 	'minor_damage': `Minor Damage (light or medium damages such as broken windows and doors, minor roof damage)`,
 	'heavy_damage': `Heavy Damage`
 },
-cfr_curr_accom_l: {
+cfr_curr_accom: {
 	'rent': `A = Renting Accommodation`,
 	'host': `B = Living with Friends/Family/Host`,
 	'own_prop': `C = Living in Own Property`,
@@ -2548,26 +2489,26 @@ cfr_curr_accom_l: {
 	'homeless': `E = Homeless`,
 	'other_accom': `F = Other`
 },
-cfr_rent_stat_l: {
+cfr_rent_stat: {
 	'secure': `A = Secure for Medium/Long Term`,
 	'unable_pay': `B = Currently Unable to Pay Rent/Contribute to Collective Costs`,
 	'dan_unable_pay': `C = In Danger of Being Unable to Pay Rent/Contribute to Collective Costs`,
 	'unsuit_accom': `D = Accommodation Unsuitable for my needs`,
 	'eviction': `E = Eviction/Removal for Other Reasons`
 },
-cfr_accom_int_l: {
+cfr_accom_int: {
 	'remain': `A = Remain in Current Place`,
 	'rent': `B = Find Rental Accommodation`,
 	'not_sure': `C = Not Sure/Don’t Know`
 },
-cfr_accom_cond_heat_l: {
+cfr_accom_cond_heat: {
 	'always': `A = Always`,
 	'not_always': `B = Not always on but comes daily`,
 	'intermittent': `C = Comes on intermittent days`,
 	'rarely': `D = Rarely`,
 	'never': `E = Never`
 },
-pay_det_id_type_l: {
+pay_det_id_type: {
 	'nat_pass_card': `A = National Passport (card)`,
 	'nat_pass_book': `B = National Passport (book)`,
 	'nat_pass_diia': `C = National Passport (Diia app)`,
@@ -2579,7 +2520,7 @@ pay_det_id_type_l: {
 	'oth_id': `I = Other Form of ID`,
 	'no_id': `J = No ID`
 },
-pay_det_pay_meth_l: {
+pay_det_pay_meth: {
 	'raiff_trans': `A = Remittance Raiffaisen AVAL`,
 	'ukrpost': `B = Ukrposhta`,
 	'bank_card': `C = Bank card`,
@@ -2600,40 +2541,33 @@ const extractQuestionName = (_: Record<string, any>) => {
 export const map = (_: Record<keyof T, any>): T => ({
 	..._,
 	back_prog_type: _.back_prog_type?.split(' '),
+	back_donor: _.back_donor?.split(' '),
 	ben_det_ph_number: _.ben_det_ph_number ? +_.ben_det_ph_number : undefined,
+	ben_det_income: _.ben_det_income ? +_.ben_det_income : undefined,
 	ben_det_hh_size: _.ben_det_hh_size ? +_.ben_det_hh_size : undefined,
-	windows: _.windows ? +_.windows : undefined,
-	doors: _.doors ? +_.doors : undefined,
-	estimation_roof: _.estimation_roof ? +_.estimation_roof : undefined,
-	estimation_walls: _.estimation_walls ? +_.estimation_walls : undefined,
+	hh_char_res_age: _.hh_char_res_age ? +_.hh_char_res_age : undefined,
+	hh_char_res_dis_select: _.hh_char_res_dis_select?.split(' '),
+	hh_char_hhh_age: _.hh_char_hhh_age ? +_.hh_char_hhh_age : undefined,
+	hh_char_hhh_dis_select: _.hh_char_hhh_dis_select?.split(' '),
+	hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName).map((_: any) => {
+		_['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
+		_['hh_char_hh_det_dis_select'] = _.hh_char_hh_det_dis_select?.split(' ')
+		return _	
+}),
+	hh_char_dis_select: _.hh_char_dis_select?.split(' '),
 	nfi_dist_hkf: _.nfi_dist_hkf ? +_.nfi_dist_hkf : undefined,
 	nfi_dist_hkmv: _.nfi_dist_hkmv ? +_.nfi_dist_hkmv : undefined,
 	nfi_dist_hkf_001: _.nfi_dist_hkf_001 ? +_.nfi_dist_hkf_001 : undefined,
-	back_prog_type_l: _.back_prog_type_l?.split(' '),
-	ben_det_ph_number_l: _.ben_det_ph_number_l ? +_.ben_det_ph_number_l : undefined,
-	ben_det_income_l: _.ben_det_income_l ? +_.ben_det_income_l : undefined,
-	ben_det_hh_size_l: _.ben_det_hh_size_l ? +_.ben_det_hh_size_l : undefined,
-	hh_char_res_age_l: _.hh_char_res_age_l ? +_.hh_char_res_age_l : undefined,
-	hh_char_res_dis_select_l: _.hh_char_res_dis_select_l?.split(' '),
-	hh_char_hhh_age_l: _.hh_char_hhh_age_l ? +_.hh_char_hhh_age_l : undefined,
-	hh_char_hhh_dis_select_l: _.hh_char_hhh_dis_select_l?.split(' '),
-	hh_char_hh_det_l: _.hh_char_hh_det_l?.map(extractQuestionName).map((_: any) => {
-		_['hh_char_hh_det_age_l'] = _.hh_char_hh_det_age_l ? +_.hh_char_hh_det_age_l : undefined
-		_['hh_char_hh_det_dis_select_l'] = _.hh_char_hh_det_dis_select_l?.split(' ')
-		return _
-}),
-	hh_char_dis_select_l: _.hh_char_dis_select_l?.split(' '),
-	nfi_dist_hkf_l: _.nfi_dist_hkf_l ? +_.nfi_dist_hkf_l : undefined,
-	nfi_dist_hkmv_l: _.nfi_dist_hkmv_l ? +_.nfi_dist_hkmv_l : undefined,
-	nfi_dist_hkf_001_l: _.nfi_dist_hkf_001_l ? +_.nfi_dist_hkf_001_l : undefined,
-	nfi_dist_bk_l: _.nfi_dist_bk_l ? +_.nfi_dist_bk_l : undefined,
-	nfi_dist_wkb1_l: _.nfi_dist_wkb1_l ? +_.nfi_dist_wkb1_l : undefined,
-	nfi_dist_wkb2_l: _.nfi_dist_wkb2_l ? +_.nfi_dist_wkb2_l : undefined,
-	nfi_dist_wkb3_l: _.nfi_dist_wkb3_l ? +_.nfi_dist_wkb3_l : undefined,
-	nfi_dist_wkb4_l: _.nfi_dist_wkb4_l ? +_.nfi_dist_wkb4_l : undefined,
+	nfi_dist_bk: _.nfi_dist_bk ? +_.nfi_dist_bk : undefined,
+	nfi_dist_wkb1: _.nfi_dist_wkb1 ? +_.nfi_dist_wkb1 : undefined,
+	nfi_dist_wkb2: _.nfi_dist_wkb2 ? +_.nfi_dist_wkb2 : undefined,
+	nfi_dist_wkb3: _.nfi_dist_wkb3 ? +_.nfi_dist_wkb3 : undefined,
+	nfi_dist_wkb4: _.nfi_dist_wkb4 ? +_.nfi_dist_wkb4 : undefined,
 	nfi_kit_cc: _.nfi_kit_cc ? +_.nfi_kit_cc : undefined,
 	nfi_bed: _.nfi_bed ? +_.nfi_bed : undefined,
-	estimate_sqm_damage_l: _.estimate_sqm_damage_l ? +_.estimate_sqm_damage_l : undefined,
-	cfr_accom_cond_occ_rat_l: _.cfr_accom_cond_occ_rat_l ? +_.cfr_accom_cond_occ_rat_l : undefined,
+	estimate_sqm_damage: _.estimate_sqm_damage ? +_.estimate_sqm_damage : undefined,
+	mains_utilities: _.mains_utilities?.split(' '),
+	mains_fuel: _.mains_fuel?.split(' '),
+	cfr_accom_cond_occ_rat: _.cfr_accom_cond_occ_rat ? +_.cfr_accom_cond_occ_rat : undefined,
 }) as T
 }

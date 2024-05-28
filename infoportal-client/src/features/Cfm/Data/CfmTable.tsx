@@ -1,7 +1,7 @@
 import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import React, {ReactNode, useCallback, useMemo} from 'react'
 import {Page} from '@/shared/Page'
-import {fnSwitch, Obj} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {IpInput} from '@/shared/Input/Input'
@@ -10,13 +10,14 @@ import {
   CfmDataProgram,
   CfmDataSource,
   DrcOffice,
+  DrcProject,
   koboIndex,
   KoboIndex,
   KoboMealCfmStatus,
   KoboMealCfmTag,
-  Meal_CfmInternal,
+  Meal_cfmInternal,
   OblastIndex,
-  Regexp
+  Regexp,
 } from '@infoportal-common'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {TableIcon, TableIconBtn, TableIconProps} from '@/features/Mpca/MpcaData/TableIcon'
@@ -36,6 +37,8 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 
 export interface CfmDataFilters extends KoboAnswerFilter {
 }
@@ -61,6 +64,7 @@ export const CfmTable = ({}: any) => {
   const ctx = useCfmContext()
   const ctxAnswers = useKoboAnswersContext()
   const ctxEditTag = useKoboEditTagContext()
+  const ctxEditAnswer = useKoboEditAnswerContext()
   const {langIndex, setLangIndex} = useKoboSchemaContext()
 
   // const [selectedFromId_Ids, setSelectedFromId_Ids] = useState<string[]>([])
@@ -314,12 +318,34 @@ export const CfmTable = ({}: any) => {
               id: 'project',
               width: 180,
               render: row => {
+                const koboOptions = ctx.schemaInternal.schemaHelper.getOptionsByQuestionName('project_code')
                 return {
                   export: row.project,
                   value: row.project,
                   option: row.project,
                   label: row.form === CfmDataSource.Internal
-                    ? row.project
+                    ? <>
+                      {row.project}
+                      <IpSelectSingle
+                        label={null}
+                        options={koboOptions.map(_ => {
+                          const label = ctx.schemaInternal.translate.choice('project_code', _.name) as DrcProject
+                          return IpSelectMultipleHelper.makeOption({
+                            value: _.name,
+                            // children: _.name.replaceAll(/[^\d]/g, ''),
+                            children: DrcProject[label] ?? label + '⚠️',
+                          })
+                        })}
+                        value={map(ctx.schemaInternal.translate.choice('project_code', row.project) as DrcProject, label => DrcProject[label] ?? label + '⚠️')}
+                        onChange={newValue => {
+                          ctxEditAnswer.asyncUpdateByName.call({
+                            answerIds: [row.id],
+                            formName: 'meal_cfmInternal',
+                            question: 'project_code',
+                            answer: newValue as any
+                          })
+                        }}
+                      /></>
                     : <SelectDrcProject
                       label={null}
                       value={row.project}
@@ -392,7 +418,7 @@ export const CfmTable = ({}: any) => {
                       onChange={newValue => {
                         ctxEditTag.asyncUpdateById.call({formId: row.formId, answerIds: [row.id], tag: 'feedbackTypeOverride', value: newValue})
                       }}
-                      options={Obj.entries(Meal_CfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
+                      options={Obj.entries(Meal_cfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
                     />
                 }
               }
@@ -432,7 +458,7 @@ export const CfmTable = ({}: any) => {
               head: m.gender,
               width: 80,
               id: 'gender',
-              options: () => Obj.keys(Meal_CfmInternal.options.gender).map(value => ({value, label: ctx.schemaExternal.translate.choice('gender', value)})),
+              options: () => Obj.keys(Meal_cfmInternal.options.gender).map(value => ({value, label: ctx.schemaExternal.translate.choice('gender', value)})),
               render: _ => {
                 return {
                   value: _.gender,

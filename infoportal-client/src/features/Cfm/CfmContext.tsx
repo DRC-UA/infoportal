@@ -17,8 +17,8 @@ import {
   KoboMealCfmHelper,
   KoboMealCfmStatus,
   KoboMealCfmTag,
-  Meal_CfmExternal,
-  Meal_CfmInternal,
+  Meal_cfmExternal,
+  Meal_cfmInternal,
   OblastIndex,
   OblastISO,
   OblastName
@@ -71,22 +71,22 @@ export type CfmData = {
   readonly project?: DrcProject
   readonly oblast: OblastName
   readonly oblastIso: OblastISO
-  readonly category?: Meal_CfmInternal.T['feedback_type']
-  readonly external_prot_support?: Meal_CfmExternal.T['prot_support']
-  readonly internal_existing_beneficiary?: Meal_CfmInternal.T['existing_beneficiary']
+  readonly category?: Meal_cfmInternal.T['feedback_type']
+  readonly external_prot_support?: Meal_cfmExternal.T['prot_support']
+  readonly internal_existing_beneficiary?: Meal_cfmInternal.T['existing_beneficiary']
   // internal_project_code?: Meal_CfmInternal.T['project_code']
   // external_thanks_feedback?: MealCfmExternal['thanks_feedback']
   // external_complaint?: MealCfmExternal['complaint']
-  external_consent?: Meal_CfmExternal.T['consent']
-  external_feedback_type?: Meal_CfmExternal.T['feedback_type']
+  external_consent?: Meal_cfmExternal.T['consent']
+  external_feedback_type?: Meal_cfmExternal.T['feedback_type']
   // internal_feedback?: Meal_CfmInternal.T['feedback']
   // internal?: Pick<Meal_CfmInternal.T, 'feedback' | 'existing_beneficiary' | 'project_code'>
   // external?: Pick<MealCfmExternal, 'prot_support' | 'thanks_feedback' | 'complaint' | 'consent' | 'feedback_type'>
-} & Pick<KoboAnswerFlat<Meal_CfmInternal.T>,
+} & Pick<KoboAnswerFlat<Meal_cfmInternal.T>,
   // 'ben_det_oblast' |
   'ben_det_raion' |
   'ben_det_hromada'
-> & Pick<KoboAnswerFlat<Meal_CfmInternal.T>,
+> & Pick<KoboAnswerFlat<Meal_cfmInternal.T>,
   'id' |
   'start' |
   'date' |

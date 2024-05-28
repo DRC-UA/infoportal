@@ -1,5 +1,5 @@
 import {fnSwitch} from '@alexandreannic/ts-utils'
-import {Meal_CfmInternal} from '../generated/Meal_CfmInternal'
+import {Meal_cfmInternal} from '../generated/Meal_cfmInternal'
 import {KoboBaseTags} from './Common'
 import {DrcOffice, DrcProject} from '../../type/Drc'
 
@@ -49,13 +49,13 @@ export interface KoboMealCfmTag extends KoboBaseTags {
   notes?: string
   focalPointEmail?: string
   status?: KoboMealCfmStatus
-  feedbackTypeOverride?: Meal_CfmInternal.T['feedback_type']
+  feedbackTypeOverride?: Meal_cfmInternal.T['feedback_type']
   project?: DrcProject
 }
 
 export class KoboMealCfmHelper {
 
-  static readonly feedbackType2priority = (_?: Meal_CfmInternal.T['feedback_type']) => {
+  static readonly feedbackType2priority = (_?: Meal_cfmInternal.T['feedback_type']) => {
     return fnSwitch(_!, {
       apprec_com: CfmDataPriority.Low,
       request_info: CfmDataPriority.Medium,

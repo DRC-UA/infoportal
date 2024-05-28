@@ -11,8 +11,8 @@ import {Shelter_TA} from '@infoportal-common'
 import {Shelter_NTA} from '@infoportal-common'
 import {Shelter_north} from '@infoportal-common'
 import {Shelter_cashForRepair} from '@infoportal-common'
-import {Bn_Re} from '@infoportal-common'
-import {Bn_RapidResponse} from '@infoportal-common'
+import {Bn_re} from '@infoportal-common'
+import {Bn_rapidResponse} from '@infoportal-common'
 import {Bn_OldMpcaNfi} from '@infoportal-common'
 import {Bn_0_mpcaRegNewShort} from '@infoportal-common'
 import {Bn_0_mpcaReg} from '@infoportal-common'
@@ -66,8 +66,8 @@ export class KoboMappedAnswersService {
   readonly searchShelter_Nta = this.buildMappedSearch(KoboIndex.byName('shelter_nta').id, Shelter_NTA.map, _ => _ as ShelterNtaTags)
   readonly searchShelter_north = this.buildMappedSearch(KoboIndex.byName('shelter_north').id, Shelter_north.map, _ => _ as ShelterNtaTags & ShelterTaTags)
   readonly searchShelter_cashForRepair = this.buildMappedSearch(KoboIndex.byName('shelter_cashForRepair').id, Shelter_cashForRepair.map)
-  readonly searchBn_re = this.buildMappedSearch(KoboIndex.byName('bn_re').id, Bn_Re.map)
-  readonly searchBn_RapidResponseMechanism = this.buildMappedSearch(KoboIndex.byName('bn_rapidResponse').id, Bn_RapidResponse.map)
+  readonly searchBn_re = this.buildMappedSearch(KoboIndex.byName('bn_re').id, Bn_re.map)
+  readonly searchBn_RapidResponseMechanism = this.buildMappedSearch(KoboIndex.byName('bn_rapidResponse').id, Bn_rapidResponse.map)
   readonly searchBn_1_mpcaNfi = this.buildMappedSearch(KoboIndex.byName('bn_1_mpcaNfi').id, Bn_OldMpcaNfi.map)
   readonly searchBn_0_mpcaRegNewShort = this.buildMappedSearch(KoboIndex.byName('bn_0_mpcaRegNewShort').id, Bn_0_mpcaRegNewShort.map)
   readonly searchBn_0_mpcaReg = this.buildMappedSearch(KoboIndex.byName('bn_0_mpcaReg').id, Bn_0_mpcaReg.map)

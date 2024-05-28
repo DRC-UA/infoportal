@@ -5,8 +5,8 @@ import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {
   Bn_cashForRentApplication,
   Bn_OldMpcaNfi,
-  Bn_RapidResponse,
-  Bn_Re,
+  Bn_rapidResponse,
+  Bn_re,
   DisplacementStatus,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
@@ -18,8 +18,8 @@ import {
   KoboMealCfmHelper,
   KoboProtection_hhs3,
   KoboSafetyIncidentHelper,
-  Meal_CfmExternal,
-  Meal_CfmInternal,
+  Meal_cfmExternal,
+  Meal_cfmInternal,
   Meal_VerificationEcrec,
   Meal_VerificationWinterization,
   Meal_VisitMonitoring,
@@ -71,9 +71,9 @@ export class KoboTypedAnswerSdk {
   private readonly search = this.sdk.search
 
   readonly searchBn_Re = (filters: KoboAnswerFilter = {}) => {
-    return this.search<Bn_Re.T>({
+    return this.search<Bn_re.T>({
       formId: KoboIndex.byName('bn_re').id,
-      fnMapKobo: Bn_Re.map,
+      fnMapKobo: Bn_re.map,
       ...filters,
     })
   }
@@ -102,9 +102,9 @@ export class KoboTypedAnswerSdk {
     })
   }
   readonly searchBn_RapidResponseMechanism = (filters: KoboAnswerFilter = {}) => {
-    return this.search<Bn_RapidResponse.T>({
+    return this.search<Bn_rapidResponse.T>({
       formId: KoboIndex.byName('bn_rapidResponse').id,
-      fnMapKobo: Bn_RapidResponse.map,
+      fnMapKobo: Bn_rapidResponse.map,
       ...filters,
     })
   }
@@ -146,7 +146,7 @@ export class KoboTypedAnswerSdk {
   readonly searchMealCfmInternal = (filters: KoboAnswerFilter = {}) => {
     return this.search({
       formId: KoboIndex.byName('meal_cfmInternal').id,
-      fnMapKobo: Meal_CfmInternal.map,
+      fnMapKobo: Meal_cfmInternal.map,
       fnMapTags: KoboMealCfmHelper.map,
       ...filters,
     })
@@ -155,7 +155,7 @@ export class KoboTypedAnswerSdk {
   readonly searchMealCfmExternal = (filters: KoboAnswerFilter = {}) => {
     return this.search({
       formId: KoboIndex.byName('meal_cfmExternal').id,
-      fnMapKobo: Meal_CfmExternal.map,
+      fnMapKobo: Meal_cfmExternal.map,
       fnMapTags: KoboMealCfmHelper.map,
       ...filters,
     })

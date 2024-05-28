@@ -5,8 +5,8 @@ import {
   KoboFormName,
   KoboIndex,
   KoboMealCfmHelper,
-  Meal_CfmExternal,
-  Meal_CfmInternal,
+  Meal_cfmExternal,
+  Meal_cfmInternal,
   Person,
   PersonDetails,
   Protection_gbv,
@@ -41,7 +41,7 @@ export class KoboTypedAnswerSdk2 {
         // BAD, we should revamp the way access is working for CFM. Add FP should add rule in the access table that will natively work with the standard access filters
         this.sdk.search({
           formId: KoboIndex.byName('meal_cfmInternal').id,
-          fnMapKobo: Meal_CfmInternal.map,
+          fnMapKobo: Meal_cfmInternal.map,
           fnMapTags: KoboMealCfmHelper.map,
           ...filters,
         })),
@@ -49,7 +49,7 @@ export class KoboTypedAnswerSdk2 {
         // BAD, we should revamp the way access is working for CFM. Add FP should add rule in the access table that will natively work with the standard access filters
         this.sdk.search({
           formId: KoboIndex.byName('meal_cfmExternal').id,
-          fnMapKobo: Meal_CfmExternal.map,
+          fnMapKobo: Meal_cfmExternal.map,
           fnMapTags: KoboMealCfmHelper.map,
           ...filters,
         })),

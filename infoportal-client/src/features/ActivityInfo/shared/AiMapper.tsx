@@ -5,7 +5,7 @@ import {
   aiOblasts,
   aiRaions,
   aiSettlements,
-  Bn_Re,
+  Bn_re,
   DisplacementStatus,
   OblastIndex,
   Person,
@@ -44,10 +44,10 @@ export namespace AiMapper {
 
   export const getLocationByKobo = (d: Pick<Protection_groupSession.T, 'ben_det_oblast' | 'ben_det_hromada' | 'ben_det_raion'>): Location => {
     const oblast = OblastIndex.byKoboName(d.ben_det_oblast!).name
-    const raion = AILocationHelper.findRaion(oblast, Bn_Re.options.ben_det_raion[d.ben_det_raion as keyof typeof Bn_Re.options.ben_det_raion] ?? d.ben_det_raion)!
+    const raion = AILocationHelper.findRaion(oblast, Bn_re.options.ben_det_raion[d.ben_det_raion as keyof typeof Bn_re.options.ben_det_raion] ?? d.ben_det_raion)!
     const hromada = AILocationHelper.findHromada(oblast,
       raion?.en,
-      Bn_Re.options.ben_det_hromada[d.ben_det_hromada as keyof typeof Bn_Re.options.ben_det_hromada] ?? d.ben_det_hromada)
+      Bn_re.options.ben_det_hromada[d.ben_det_hromada as keyof typeof Bn_re.options.ben_det_hromada] ?? d.ben_det_hromada)
     return {
       Oblast: AILocationHelper.findOblast(oblast)! as any, //  @FIXME
       Raion: raion?._5w as any,

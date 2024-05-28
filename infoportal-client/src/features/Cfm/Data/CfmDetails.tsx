@@ -8,7 +8,7 @@ import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {ListRow} from '@/shared/ListRow'
 import {useI18n} from '@/core/i18n'
 import React, {useMemo} from 'react'
-import {CfmDataProgram, CfmDataSource, DrcOffice, KoboMealCfmArea, KoboMealCfmStatus, KoboMealCfmTag, Meal_CfmInternal, Regexp} from '@infoportal-common'
+import {CfmDataProgram, CfmDataSource, DrcOffice, KoboMealCfmArea, KoboMealCfmStatus, KoboMealCfmTag, Meal_cfmInternal, Regexp} from '@infoportal-common'
 import {KoboSelectTag} from '@/shared/KoboSelectTag'
 import {Obj} from '@alexandreannic/ts-utils'
 import {CfmPriorityLogo} from '@/features/Cfm/Data/CfmTable'
@@ -199,7 +199,7 @@ export const CfmDetails = ({entry}: {
             onChange={newValue => {
               ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'feedbackTypeOverride', value: newValue})
             }}
-            options={Obj.entries(Meal_CfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
+            options={Obj.entries(Meal_cfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
           />
           <Box>{entry.feedback}</Box>
 
