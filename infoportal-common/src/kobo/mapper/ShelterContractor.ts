@@ -412,6 +412,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     wall_mountes_cable_wiring_lm: 37700
   },
   [ShelterContractor['Donmegastroy']]: {
+    ...WAITING_FOR_PRICES,
     dismantling_of_structures2: 113855,
     wall_repair_clay_bricks_m: 856776,
     wall_repair_concrete_blocks_m: 808767,
@@ -450,7 +451,6 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_2000: 2213400,
     bimetallic_radiator_sections_length_mm_pc: 1699962,
     wall_mountes_cable_wiring_lm: 42839,
-    ...WAITING_FOR_PRICES_LOT[1]
   },
   [ShelterContractor['Framplus']]: {
     dismantling_of_structures2: 113855,
