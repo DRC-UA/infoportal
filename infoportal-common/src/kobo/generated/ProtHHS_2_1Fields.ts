@@ -1,4 +1,4 @@
-export const protHHS_2_1Fields  = [
+export const protHHS_2_1Fields = [
   'start',
   'end',
   'deviceid',
