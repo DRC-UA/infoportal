@@ -511,6 +511,21 @@ export const en = Object.freeze({
       HHs: 'HHs',
       AvgHHSize: 'AvgHHSize',
     },
+    protection_gbv_survey: {
+      priorityNeeds: 'Priority training needs',
+      respondents: 'Interest in training on working w/ families at risk of gbv',
+      topic: 'Topic that would be useful for trainings',
+      yes: 'yes',
+      no: 'no',
+      pna: 'prefer not to say',
+      npn: 'Training needs',
+      preferences: 'Preferences on the training model',
+      modality: 'Preferences on modality',
+      believe: 'Need for MH & psychosocial support',
+      overwhelm: 'Feeling overwhelmed/stressed due to workload',
+      departments: 'Number of respondents by departments',
+      community: 'Number of respondents by hromada',
+    },
     safety: {
       minusRusLabel: {
         prisoners: 'Prisoners',

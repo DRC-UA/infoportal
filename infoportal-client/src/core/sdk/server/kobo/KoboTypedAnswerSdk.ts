@@ -21,6 +21,7 @@ import {
   Person,
   PersonDetails,
   Protection_gbv,
+  Protection_gbvSocialProviders,
   Protection_groupSession,
   Protection_hhs3,
   ProtectionHhsTags,
@@ -181,6 +182,11 @@ export class KoboTypedAnswerSdk {
       ...make('partnership_partnersDatabase', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('partnership_partnersDatabase').id,
         fnMapKobo: Partnership_partnersDatabase.map,
+        ...filters,
+      })),
+      ...make('protection_gbvSocialProviders', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('protection_gbvSocialProviders').id,
+        fnMapKobo: Protection_gbvSocialProviders.map,
         ...filters,
       })),
     })

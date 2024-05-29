@@ -119,7 +119,7 @@ export const ChartBarContent = <K extends string>({
                     }
                   }
                 }}>
-                  <Box sx={{mt: .5, pt: .5, pb: 0, display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: barHeight + 'px',}}>
+                  <Box sx={{mt: .25, pt: .25, pb: 0, display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: barHeight + 'px',}}>
                     <Txt sx={{p: 0, pr: .5, flex: 1}} truncate>
                       <Txt block truncate>
                         {(labels && labels[k]) ?? ''}

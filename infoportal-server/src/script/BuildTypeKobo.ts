@@ -64,6 +64,12 @@ export class BuildKoboType {
         'ben_det_raion',
       ]
     },
+    protection_gbvSocialProviders: {
+      formId: KoboIndex.byName('protection_gbvSocialProviders').id, skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
+    },
     protection_groupSession: {
       formId: KoboIndex.byName('protection_groupSession').id, skipQuestionTyping: [
         'ben_det_hromada',
