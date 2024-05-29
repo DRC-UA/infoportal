@@ -297,6 +297,9 @@ export class BuildKoboType {
         health_1_2: ['Health'],
       },
     },
+    legal_alert_mailing:{
+      formId: KoboIndex.byName('legal_alert_mailing').id
+    },
     safety_incident: {
       formId: KoboIndex.byName('safety_incident').id
     },
