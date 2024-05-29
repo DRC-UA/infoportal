@@ -22,6 +22,11 @@ const Index = () => {
               <ListItemText primary="Protection Monitoring NN 2"/>
             </Link>
           </ListItem>
+          <ListItem>
+            <Link href={path('protection-monitoring-gbv-survey')}>
+              <ListItemText primary="Protection Monitoring GBV Survey"/>
+            </Link>
+          </ListItem>
         </List>
       </Page>
     </Layout>

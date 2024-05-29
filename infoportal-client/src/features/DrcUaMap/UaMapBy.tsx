@@ -18,6 +18,7 @@ export const UaMapBy = <D extends Record<string, any>>({
   base?: (_: D) => boolean
   getOblast: (_: D) => OblastISO
   data: Seq<D>
+  legend?: boolean
 } & Pick<BoxProps, 'sx'>) => {
   const res = useMemo(() => {
     return ChartHelperOld.groupBy({
