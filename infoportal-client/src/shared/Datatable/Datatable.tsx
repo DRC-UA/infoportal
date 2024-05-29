@@ -143,7 +143,7 @@ const _Datatable = <T extends DatatableRow>({
   const filterCount = useMemoFn(ctx.data.filters, _ => Enum.keys(_).length)
 
   const [hiddenColumns, setHiddenColumns] = usePersistentState<string[]>(defaultHiddenColumns ?? [], {storageKey: DatatableUtils.localStorageKey.column + id})
-  useEffect(() => setHiddenColumns(defaultHiddenColumns ?? []), [defaultHiddenColumns])
+  useEffect(() => defaultHiddenColumns && setHiddenColumns(defaultHiddenColumns ?? []), [defaultHiddenColumns])
   const filteredColumns = useMemo(() => ctx.columns.filter(_ => !hiddenColumns.includes(_.id)), [ctx.columns, hiddenColumns])
 
   return (

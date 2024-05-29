@@ -1,7 +1,7 @@
 import {IpSelectOption, IpSelectSingle, IpSelectSingleNullableProps} from '@/shared/Select/SelectSingle'
 import {fnSwitch, KeyOf, Obj} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
-import {CashForEduStatus, CashForRentStatus, CashStatus, KoboValidation, StateStatus} from '@infoportal-common'
+import {CashForRentStatus, CashStatus, KoboValidation, StateStatus, VetApplicationStatus} from '@infoportal-common'
 import {Box, Icon, SxProps, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 
@@ -18,7 +18,7 @@ export namespace SelectStatusConfig {
     CashStatus: CashStatus,
     KoboValidation: KoboValidation,
     CashForRentStatus: CashForRentStatus,
-    CashForEduStatus: CashForEduStatus
+    VetApplicationStatus: VetApplicationStatus
   }
 
   export type EnumStatus = keyof typeof enumStatus
@@ -54,14 +54,14 @@ export namespace SelectStatusConfig {
       [CashForRentStatus.Selected]: 'info',
       [CashForRentStatus.Referred]: 'disabled',
     } as Record<CashForRentStatus, StateStatus>,
-    CashForEduStatus: {
-      [CashForEduStatus.Approved]: 'disabled',
-      [CashForEduStatus.FirstPending]: 'info',
-      [CashForEduStatus.FirstPaid]: 'success',
-      [CashForEduStatus.SecondPending]: 'info',
-      [CashForEduStatus.SecondPaid]: 'success',
-      [CashForEduStatus.CertificateSubmitted]: 'success',
-    } as Record<CashForEduStatus, StateStatus>
+    VetApplicationStatus: {
+      [VetApplicationStatus.Approved]: 'disabled',
+      [VetApplicationStatus.FirstPending]: 'warning',
+      [VetApplicationStatus.FirstPaid]: 'info',
+      [VetApplicationStatus.SecondPending]: 'warning',
+      [VetApplicationStatus.SecondPaid]: 'info',
+      [VetApplicationStatus.CertificateSubmitted]: 'success',
+    } as Record<VetApplicationStatus, StateStatus>
   }
 }
 

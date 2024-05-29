@@ -39,11 +39,11 @@ const registerActivity = <
 export const mealVerificationActivities = seq([
   registerActivity({
     sampleSizeRatio: .1,
-    label: 'Training grants',
+    label: 'VET - Training grants',
     id: 'Training grants',
     registration: {
-      koboFormId: KoboIndex.byName('ecrec_trainingGrants').id,
-      fetch: 'ecrec_trainingGrants',
+      koboFormId: KoboIndex.byName('ecrec_vetApplication').id,
+      fetch: 'ecrec_vetApplication',
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,

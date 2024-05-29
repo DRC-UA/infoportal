@@ -1,6 +1,7 @@
 import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
 import {capitalize, OblastIndex, OblastISO} from '@infoportal-common'
+import {WgDisability} from '@infoportal-common'
 
 const invalidDate = ''
 
@@ -805,5 +806,14 @@ export const en = Object.freeze({
     pullLast: 'Pull last',
     pullLastTitle: 'Pull last',
     beneficiaries: 'Beneficiaries',
+    disability_: {
+      [WgDisability.See]: 'Seeing',
+      [WgDisability.Hear]: 'Hearing',
+      [WgDisability.Walk]: 'Walking/Climbing steps',
+      [WgDisability.Rem]: 'Remembering or concentrating',
+      [WgDisability.Care]: 'With self-care',
+      [WgDisability.Comm]: 'Communicating',
+      [WgDisability.None]: 'None',
+    }
   },
 })

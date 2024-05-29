@@ -1,4 +1,4 @@
-import {Badge, Chip, Icon, IconButtonProps, Switch, Tooltip} from '@mui/material'
+import {Badge, Chip, Icon, IconButtonProps, Switch, Tooltip, useTheme} from '@mui/material'
 import React, {ReactNode, useEffect, useMemo} from 'react'
 import {IconBtn, Txt} from 'mui-extension'
 import {useI18n} from '@/core/i18n'
@@ -31,6 +31,7 @@ interface Props extends Omit<IconButtonProps, 'onChange'> {
 
 export const DatatableColumnToggle = ({className, title, columns, hiddenColumns, onChange, ...props}: Props) => {
   const {m} = useI18n()
+  const t = useTheme()
   const set = useSetState(hiddenColumns)
   const hasGroup = useMemo(() => !!columns.find(_ => _.group), [columns])
 
@@ -108,7 +109,7 @@ export const DatatableColumnToggle = ({className, title, columns, hiddenColumns,
                 render: _ => {
                   return {
                     option: <>{_.typeLabel} {_.type}</>,
-                    label: _.typeLabel ?? _.type,
+                    label: _.typeLabel ?? <span style={{color: t.palette.text.secondary}}>{_.type}</span>,
                     value: _.type,
                   }
                 },

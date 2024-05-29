@@ -68,7 +68,7 @@ export enum CashForRentStatus {
   Referred = 'Referred',
 }
 
-export enum CashForEduStatus {
+export enum VetApplicationStatus {
   Approved = 'Approved',
   FirstPending = 'FirstPending',
   FirstPaid = 'FirstPaid',

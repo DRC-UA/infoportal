@@ -167,6 +167,15 @@ export const safeNumber: {
   (_: undefined | string | number, defaultValue: number): number
 } = (_, defaultValue) => (isNaN(_ as number) ? defaultValue : +_!) as number
 
+export const safeInt32: {
+  (_: undefined | string | number, defaultValue?: undefined): number | undefined
+  (_: undefined | string | number, defaultValue: number): number
+} = (_, defaultValue) => {
+  const num = safeNumber(_, defaultValue!)
+  if (num > 2147483647) return defaultValue
+  return num as any
+}
+
 export const safeArray = <T extends string>(value?: T[]): T[] => {
   if (!value) return []
   if (Array.isArray(value)) return value

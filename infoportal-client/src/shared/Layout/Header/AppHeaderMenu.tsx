@@ -19,7 +19,7 @@ const Row = ({
       display: 'flex',
       alignItems: 'center',
     }}>
-      <Icon sx={{mr: 1, color: t => t.palette.text.secondary}} fontSize="small">{icon}</Icon>
+      <Icon sx={{mr: 1, my: .25, color: t => t.palette.text.secondary}}>{icon}</Icon>
       <Txt block color="hint">{children}</Txt>
     </Box>
   )
