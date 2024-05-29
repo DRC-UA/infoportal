@@ -14,7 +14,7 @@ import {CommentsPanel, CommentsPanelProps} from '@/shared/CommentsPanel'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Safety_incidentTracker} from '@infoportal-common'
 import {Theme} from '@mui/material'
-import {useState} from 'react'
+import {useMemo, useState} from 'react'
 
 const colors = (t: Theme) => ({
   blue: '#5249CD',
@@ -24,16 +24,17 @@ const colors = (t: Theme) => ({
 
 export const SafetyIncidentDashboardBody = ({
   data,
-  computed,
-  totalAlerts
+  computed
 }: {
   data: DashboardSafetyIncidentsPageProps['data']
   computed: DashboardSafetyIncidentsPageProps['computed']
-  totalAlerts: number
 }) => {
   const {m, formatLargeNumber} = useI18n()
   const [mapType, setMapType] = useState<'incident' | 'attack' | 'alerts'>('incident')
   const {session} = useSession()
+  const totalAlerts = useMemo(() => {
+    return data?.sum(_ => (_.alert_blue_num ?? 0) + (_.alert_yellow_num ?? 0) + (_.alert_red_num ?? 0)) ?? 0
+  }, [data])
   return (
     <Div sx={{alignItems: 'flex-start'}} responsive>
       <Div column>
@@ -85,7 +86,7 @@ export const SafetyIncidentDashboardBody = ({
                 fillBaseOn="value"
                 data={data}
                 getOblast={(_) => _.oblastISO}
-                value={(_) => !!_.alert_blue_num || !!_.alert_yellow_num || !!_.alert_red_num}
+                value={(_) => totalAlerts > 0}
               />
             ),
           })}
@@ -114,13 +115,9 @@ export const SafetyIncidentDashboardBody = ({
       </Div>
       <Div column>
         <Div sx={{alignItems: 'stretch'}}>
-          <Lazy deps={[data]} fn={() => totalAlerts}>
-            {(_) => (
-              <SlideWidget sx={{flex: 1}} title={m.safety.alerts}>
-                {formatLargeNumber(_)}
-              </SlideWidget>
-            )}
-          </Lazy>totalAlerts
+          <SlideWidget sx={{flex: 1}} title={m.safety.alerts}>
+            {formatLargeNumber(totalAlerts)}
+          </SlideWidget>
           <Lazy deps={[data]} fn={() => data?.sum(_ => _.dead ?? 0)}>
             {_ => (
               <SlideWidget sx={{flex: 1}} title={m.safety.dead}>
