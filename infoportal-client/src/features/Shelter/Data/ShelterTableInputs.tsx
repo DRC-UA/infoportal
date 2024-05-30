@@ -23,7 +23,10 @@ export const ShelterSelectContractor = ({
 }) => {
   return (
     <IpSelectSingle
-      options={ShelterContractorPrices.findContractor({oblast, lot: 1})}
+      options={ShelterContractorPrices.findContractor({
+        // oblast, Return all to make our life easier
+        lot: 1
+      })}
       {...props}
     />
   )

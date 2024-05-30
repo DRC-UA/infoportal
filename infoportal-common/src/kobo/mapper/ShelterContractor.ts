@@ -4,24 +4,24 @@ import {KoboShelterTa} from './KoboShelterTA'
 
 export enum ShelterContractor {
   'Artbudservice' = 'Artbudservice',
+  'Darwin' = 'Darwin',
   'Dom 2007' = 'Dom 2007',
-  'Dosvid 2002' = 'Dosvid 2002',
   'Donmegastroy' = 'Donmegastroy',
+  'Dosvid 2002' = 'Dosvid 2002',
+  'Framplus' = 'Framplus',
   'Interbud' = 'Interbud',
   'Kramelitbud' = 'Kramelitbud',
+  'Kronos' = 'Kronos',
   'Megalit' = 'Megalit',
+  'Monolit' = 'Monolit',
+  'NVO ProektStroy' = 'NVO ProektStroy',
   'Osnova-R' = 'Osnova-R',
   'PGS Group' = 'PGS Group',
-  'Ukr Bud Tekhnolohiyi' = 'Ukr Bud Tekhnolohiyi',
   'Skytown' = 'Skytown',
-  'Zhilvest' = 'Zhilvest',
-  'Framplus' = 'Framplus',
-  'Kronos' = 'Kronos',
-  'Monolit' = 'Monolit',
-  'Darwin' = 'Darwin',
-  'Ukrbudtechnologii' = 'Ukrbudtechnologii',
-  'NVO ProektStroy' = 'NVO ProektStroy',
   'Tribotechnika' = 'Tribotechnika',
+  'Ukr Bud Tekhnolohiyi' = 'Ukr Bud Tekhnolohiyi',
+  'Ukrbudtechnologii' = 'Ukrbudtechnologii',
+  'Zhilvest' = 'Zhilvest',
 }
 
 export class ShelterContractorPrices {
