@@ -82,54 +82,6 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'report_summary': string | undefined,
 	}
 export const options = {
-zie_visit_person: {
-	'yes': `Yes`,
-	'no': `No`
-},
-incident_type: {
-	'alert': `Alert`,
-	'attack': `Attack`,
-	'other': `Other`
-},
-attack_type: {
-	'drone': `Drone`,
-	'missile': `Missile`,
-	'hypersonic': `Hypersonic`,
-	'artillery': `Artillery`,
-	'other': `Other`
-},
-what_destroyed: {
-	'dtcr': `Critical national infrastructure (bridge; power grid; school; hospital; etc.`,
-	'dtgb': `Government building`,
-	'dtmt': `Military target`,
-	'dtca': `Residential civilian area`,
-	'dtcc': `City center`,
-	'dtho': `Hotel`,
-	'other': `Other`
-},
-type_casualties: {
-	'clmi': `Military`,
-	'clci': `Civilian`,
-	'clgo': `Government`,
-	'clin': `International (journalist; humanitarian; foreign fighter)`
-},
-zie_visit_person_rep: {
-	'socialmedia': `Social media`,
-	'international': `International`,
-	'nationalmedia': `National`
-},
-drone_attack_activity: {
-	'yes': `Yes`,
-	'no': `No`,
-	'not': `Not Specified`
-},
-level_confidence: {
-	'1': `1`,
-	'2': `2`,
-	'3': `3`,
-	'4': `4`,
-	'5': `5`
-},
 oblast: {
 	'aroc': `Autonomous Republic of Crimea`,
 	'vinnytska': `Vinnytsia`,
@@ -158,6 +110,54 @@ oblast: {
 	'chernihivska': `Chernihiv`,
 	'citykyiv': `City Kyiv`,
 	'sevastopilska': `Sevastopil`
+},
+incident_type: {
+	'alert': `Alert`,
+	'attack': `Incident`,
+	'other': `Other`
+},
+zie_visit_person: {
+	'yes': `Yes`,
+	'no': `No`
+},
+attack_type: {
+	'drone': `Drone`,
+	'missile': `Missile`,
+	'hypersonic': `Hypersonic`,
+	'artillery': `Artillery`,
+	'other': `Other`
+},
+what_destroyed: {
+	'dtcr': `Critical national infrastructure (bridge; power grid; school; hospital; etc.`,
+	'dtgb': `Government building`,
+	'dtmt': `Military target`,
+	'dtca': `Residential civilian area`,
+	'dtcc': `City center`,
+	'dtho': `Hotel`,
+	'other': `Other`
+},
+type_casualties: {
+	'clmi': `Military`,
+	'clci': `Civilian`,
+	'clgo': `Government`,
+	'clin': `International (journalist; humanitarian; foreign fighter)`
+},
+drone_attack_activity: {
+	'yes': `Yes`,
+	'no': `No`,
+	'not': `Not Specified`
+},
+zie_visit_person_rep: {
+	'socialmedia': `Social media`,
+	'international': `International`,
+	'nationalmedia': `National`
+},
+level_confidence: {
+	'1': `1`,
+	'2': `2`,
+	'3': `3`,
+	'4': `4`,
+	'5': `5`
 }}
 
 const extractQuestionName = (_: Record<string, any>) => {

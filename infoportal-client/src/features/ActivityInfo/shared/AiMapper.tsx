@@ -24,7 +24,10 @@ export namespace AiMapper {
       'Oblast': AILocationHelper.findOblast(oblast) ?? '⚠️' + oblast as any,
       'Raion': AILocationHelper.findRaion(oblast, raion)?._5w ?? '⚠️' + raion as any,
       'Hromada': hromadaLoc ? (hromadaLoc.en + '_' + hromadaLoc.iso) : '⚠️' + hromada as any,
-      'Settlement': await AILocationHelper.findSettlement(oblast, raion, hromada, settlement).then(_ => _?._5w ?? '⚠️' + settlement),
+      'Settlement': await AILocationHelper.findSettlementByIso(settlement).then(res => {
+        if (!res) return AILocationHelper.findSettlement(oblast, raion, hromada, settlement).then(_ => _?._5w ?? '⚠️' + settlement)
+        return Promise.resolve(res._5w)
+      }),
     }
   }
 
