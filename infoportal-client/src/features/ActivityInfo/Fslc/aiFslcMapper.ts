@@ -40,6 +40,7 @@ export namespace AiFslcMapper {
             {by: _ => _.oblast!},
             {by: _ => _.raion!},
             {by: _ => _.hromada!},
+            {by: _ => _.settlement!},
             {
               by: _ => fnSwitch(_.displacement!, {
                 Idp: 'Internally Displaced',
@@ -49,7 +50,7 @@ export namespace AiFslcMapper {
               }, () => 'Non-Displaced')
             },
           ],
-          finalTransform: (grouped, [activity, project, oblast, raion, hromada, displacement]) => {
+          finalTransform: async (grouped, [activity, project, oblast, raion, hromada, settlment, displacement]) => {
             const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
             const ai: AiFslcType.Type = {
               'Reporting Month': fnSwitch(periodStr, {
@@ -60,7 +61,7 @@ export namespace AiFslcMapper {
               'Activity and indicator': activity as any,
               'Implementing Partner': 'Danish Refugee Council',
               'Activity Plan Code': getPlanCode(project) as never,
-              ...AiMapper.getLocationByMeta(oblast, raion, hromada),
+              ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlment),
               'Population Group': displacement,
               'New beneficiaries (same activity)': disaggregation['Total Individuals Reached'] ?? 0,
               'Number of people reached': disaggregation['Total Individuals Reached'] ?? 0,

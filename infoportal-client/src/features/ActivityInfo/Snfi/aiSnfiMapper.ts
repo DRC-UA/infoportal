@@ -96,6 +96,7 @@ export namespace AiShelterMapper {
             {by: _ => _.oblast!},
             {by: _ => _.raion!},
             {by: _ => _.hromada!},
+            {by: _ => _.settlement!},
             {
               by: _ => fnSwitch(_.displacement!, {
                 Idp: 'Internally Displaced',
@@ -106,7 +107,7 @@ export namespace AiShelterMapper {
             },
             {by: _ => _.activity!}
           ],
-          finalTransform: (grouped, [project, oblast, raion, hromada, displacement, activity]) => {
+          finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, displacement, activity]) => {
             const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
             const ai: AiSnfiType.Type = {
               'Indicators - SNFI': fnSwitch(activity, {
@@ -119,7 +120,7 @@ export namespace AiShelterMapper {
               'Implementing Partner': 'Danish Refugee Council',
               'Plan/Project Code': getPlanCode(project),
               'Reporting Organization': 'Danish Refugee Council',
-              ...AiMapper.getLocationByMeta(oblast, raion, hromada),
+              ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
               'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
               'Reporting Month': fnSwitch(periodStr, {
                 '2024-01': '2024-03',
@@ -178,6 +179,7 @@ export namespace AiShelterMapper {
             {by: _ => _.oblast!},
             {by: _ => _.raion!},
             {by: _ => _.hromada!},
+            {by: _ => _.settlement!},
             {
               by: _ => {
                 return fnSwitch(_.tags?.damageLevel!, {
@@ -194,7 +196,7 @@ export namespace AiShelterMapper {
               }, () => 'Non-Displaced') as AiSnfiType.Type['Population Group']
             }
           ],
-          finalTransform: (grouped, [project, oblast, raion, hromada, damageLevel, status]) => {
+          finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
             const disagg = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons ?? []))
             const ai: AiSnfiType.Type = {
               'Indicators - SNFI': fnSwitch(damageLevel, {
@@ -205,7 +207,7 @@ export namespace AiShelterMapper {
               'Implementing Partner': 'Danish Refugee Council',
               'Plan/Project Code': getPlanCode(project),
               'Reporting Organization': 'Danish Refugee Council',
-              ...AiMapper.getLocationByMeta(oblast, raion, hromada),
+              ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
               'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
               'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
               'Population Group': status,

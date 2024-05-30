@@ -46,11 +46,12 @@ export namespace AiProtectionMapper {
             {by: _ => _.oblast!},
             {by: _ => _.raion!},
             {by: _ => _.hromada!},
+            {by: _ => _.settlement!},
             {by: _ => _.project?.[0]!},
           ],
-          finalTransform: (grouped, [oblast, raion, hromada, project]) => {
+          finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
             const ai: AiProtectionType.Type = {
-              ...AiMapper.getLocationByMeta(oblast, raion, hromada),
+              ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
               'Plan/Project Code': getPlanCode(project),
               'Reporting Organization': 'Danish Refugee Council',
               'Response Theme': 'No specific theme',

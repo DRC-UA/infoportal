@@ -16,14 +16,15 @@ import {fnSwitch} from '@alexandreannic/ts-utils'
 
 export namespace AiMapper {
 
-  export type Location = Pick<AiProtectionType.Type, 'Oblast' | 'Raion' | 'Hromada'>
+  export type Location = Pick<AiProtectionType.Type, 'Oblast' | 'Raion' | 'Hromada' | 'Settlement'>
 
-  export const getLocationByMeta = (oblast: string, raion: string, hromada: string): Location => {
+  export const getLocationByMeta = async (oblast: string, raion: string, hromada: string, settlement: string): Promise<Location> => {
     const hromadaLoc = AILocationHelper.findHromada(oblast, raion, hromada)
     return {
       'Oblast': AILocationHelper.findOblast(oblast) ?? '⚠️' + oblast as any,
       'Raion': AILocationHelper.findRaion(oblast, raion)?._5w ?? '⚠️' + raion as any,
       'Hromada': hromadaLoc ? (hromadaLoc.en + '_' + hromadaLoc.iso) : '⚠️' + hromada as any,
+      'Settlement': await AILocationHelper.findSettlement(oblast, raion, hromada, settlement).then(_ => _?._5w ?? '⚠️' + settlement),
     }
   }
 
