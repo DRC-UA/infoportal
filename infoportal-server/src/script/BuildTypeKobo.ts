@@ -293,7 +293,6 @@ export class BuildKoboType {
     },
     bn_cashForRentRegistration: {
       formId: KoboIndex.byName('bn_cashForRentRegistration').id,
-      skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion',]
     },
     protection_hhs2: {
       formId: KoboIndex.byName('protection_hhs2').id,
@@ -356,6 +355,7 @@ class KoboInterfaceGenerator {
 
   readonly generate = async () => {
     const form = await this.sdk.getForm(this.options.formId)
+    console.log(form.content.survey)
     const survey = this.fixDuplicateName(form.content.survey)
     const mainInterface = this.generateInterface({survey, formId: this.options.formId,})
     const options = this.generateOptionsType({survey, choices: form.content.choices,})
