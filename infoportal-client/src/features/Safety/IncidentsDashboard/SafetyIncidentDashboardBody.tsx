@@ -1,4 +1,4 @@
-import {Enum, fnSwitch} from '@alexandreannic/ts-utils'
+import {Enum, fnSwitch, Seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {UaMapBy} from '../../DrcUaMap/UaMapBy'
@@ -8,48 +8,50 @@ import {ChartLine} from '@/shared/charts/ChartLine'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {useSession} from '@/core/Session/SessionContext'
-import {DashboardSafetyIncidentsPageProps} from '@/features/Safety/IncidentsDashboard/SafetyIncidentDashboard'
 import {MinusRusChartPanel} from '@/features/Safety/IncidentsDashboard/MinusRusChartPanel'
 import {CommentsPanel, CommentsPanelProps} from '@/shared/CommentsPanel'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {Safety_incidentTracker} from '@infoportal-common'
-import {Theme} from '@mui/material'
-import {useMemo, useState} from 'react'
-
-const colors = (t: Theme) => ({
-  blue: '#5249CD',
-  yellow: '#F2E866',
-  red: '#C62222',
-})
+import {Safety_incident} from '@infoportal-common'
+import {useState} from 'react'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {SafetyIncidentDashboardAlert} from '@/features/Safety/IncidentsDashboard/SafetyIncidentDashboardAlert'
 
 export const SafetyIncidentDashboardBody = ({
-  data,
-  computed
+  data: {
+    data,
+    dataAlert,
+    dataIncident,
+    dataIncidentFiltered,
+    dataIncidentFilteredLastPeriod,
+  }
 }: {
-  data: DashboardSafetyIncidentsPageProps['data']
-  computed: DashboardSafetyIncidentsPageProps['computed']
+  data: {
+    data: Seq<InferTypedAnswer<'safety_incident'>>
+    dataAlert: Seq<InferTypedAnswer<'safety_incident'>>
+    dataIncident: Seq<InferTypedAnswer<'safety_incident'>>
+    dataIncidentFiltered: Seq<InferTypedAnswer<'safety_incident'>>
+    dataIncidentFilteredLastPeriod?: Seq<InferTypedAnswer<'safety_incident'>>
+  }
 }) => {
   const {m, formatLargeNumber} = useI18n()
-  const [mapType, setMapType] = useState<'incident' | 'attack' | 'alerts'>('incident')
+  const [mapType, setMapType] = useState<'incident' | 'attack'>('incident')
   const {session} = useSession()
-  const totalAlerts = useMemo(() => {
-    return data?.sum(_ => (_.alert_blue_num ?? 0) + (_.alert_yellow_num ?? 0) + (_.alert_red_num ?? 0)) ?? 0
-  }, [data])
+  console.log(dataIncidentFiltered)
   return (
     <Div sx={{alignItems: 'flex-start'}} responsive>
       <Div column>
         <Div sx={{alignItems: 'stretch'}}>
           <SlideWidget sx={{flex: 1}} icon="report" title={m.safety.incidents}>
-            {formatLargeNumber(data.length)}
+            {formatLargeNumber(dataIncidentFiltered.length)}
           </SlideWidget>
           <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <ChartPieWidgetBy
               title={m.safety.attacks}
               filter={_ => _.attack === 'yes'}
               showValue
-              compare={{before: computed.lastMonth}}
+              compare={dataIncidentFilteredLastPeriod ? {before: dataIncidentFilteredLastPeriod} : undefined}
               filterBase={_ => _.attack !== undefined}
-              data={data}
+              data={dataIncidentFiltered}
             />
           </SlidePanel>
         </Div>
@@ -57,14 +59,13 @@ export const SafetyIncidentDashboardBody = ({
           <ScRadioGroup value={mapType} onChange={setMapType} dense inline sx={{mb: 2}}>
             <ScRadioGroupItem dense hideRadio value="incident" title={m.safety.incidents}/>
             <ScRadioGroupItem dense hideRadio value="attack" title={m.safety.attacks}/>
-            <ScRadioGroupItem dense hideRadio value="alerts" title={m.safety.alerts}/>
           </ScRadioGroup>
           {fnSwitch(mapType, {
             'incident': (
               <UaMapBy
-                sx={{mx: 3}}
+                sx={{maxWidth: 480}}
                 fillBaseOn="value"
-                data={data}
+                data={dataIncidentFiltered}
                 getOblast={_ => _.oblastISO!}
                 value={_ => true}
                 base={_ => _.oblastISO !== undefined}
@@ -72,98 +73,62 @@ export const SafetyIncidentDashboardBody = ({
             ),
             'attack': (
               <UaMapBy
-                sx={{mx: 3}}
+                sx={{maxWidth: 480}}
                 fillBaseOn="value"
-                data={data}
+                data={dataIncidentFiltered}
                 getOblast={_ => _.oblastISO}
                 value={_ => _.attack === 'yes'}
                 base={_ => _.oblastISO !== undefined}
-              />
-            ),
-            'alerts': (
-              <UaMapBy
-                sx={{mx: 3}}
-                fillBaseOn="value"
-                data={data}
-                getOblast={(_) => _.oblastISO}
-                value={(_) => totalAlerts > 0}
               />
             ),
           })}
         </SlidePanel>
         <SlidePanel title={m.safety.attackTypes}>
           <ChartBarMultipleBy
-            data={data}
+            data={dataIncidentFiltered}
             by={_ => _.attack_type}
-            label={Safety_incidentTracker.options.attack_type}
+            label={Safety_incident.options.attack_type}
           />
         </SlidePanel>
         <SlidePanel title={m.safety.target}>
           <ChartBarMultipleBy
-            data={data}
+            data={dataIncidentFiltered}
             by={_ => _.what_destroyed}
-            label={Safety_incidentTracker.options.what_destroyed}
+            label={Safety_incident.options.what_destroyed}
           />
         </SlidePanel>
         <SlidePanel title={m.safety.typeOfCasualties}>
           <ChartBarMultipleBy
-            data={data}
+            data={dataIncidentFiltered}
             by={_ => _.type_casualties}
-            label={Safety_incidentTracker.options.type_casualties}
+            label={Safety_incident.options.type_casualties}
           />
         </SlidePanel>
       </Div>
       <Div column>
-        <Div sx={{alignItems: 'stretch'}}>
-          <SlideWidget sx={{flex: 1}} title={m.safety.alerts}>
-            {formatLargeNumber(totalAlerts)}
-          </SlideWidget>
-          <Lazy deps={[data]} fn={() => data?.sum(_ => _.dead ?? 0)}>
-            {_ => (
-              <SlideWidget sx={{flex: 1}} title={m.safety.dead}>
-                {formatLargeNumber(_)}
-              </SlideWidget>
-            )}
-          </Lazy>
-          <Lazy deps={[data]} fn={() => data?.sum(_ => _.injured ?? 0)}>
-            {_ => (
-              <SlideWidget sx={{flex: 1}} title={m.safety.injured}>
-                {formatLargeNumber(_)}
-              </SlideWidget>
-            )}
-          </Lazy>
-        </Div>
-        <SlidePanel>
-          <Lazy deps={[data]} fn={() => {
-            const x = data?.groupBy(_ => _.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date')
-            return new Enum(x)
-              .transform((k, v) => [k, {
-                blue: v.sum(_ => +(_.alert_blue_num ?? 0)),
-                yellow: v.sum(_ => +(_.alert_yellow_num ?? 0)),
-                red: v.sum(_ => +(_.alert_red_num ?? 0)),
-              }])
-              .sort(([bk], [ak]) => bk.localeCompare(ak))
-              .entries()
-              .filter(([k]) => k !== 'no_date')
-              .map(([k, v]) => ({name: k, ...v}))
-          }}>
-            {_ => (
-              <ChartLine
-                height={280}
-                data={_ as any}
-                translation={{
-                  blue: m.safety.blue,
-                  yellow: m.safety.yellow,
-                  red: m.safety.red,
-                } as any}
-                colorsByKey={colors}
-              />
-            )}
-          </Lazy>
-        </SlidePanel>
-        <SlidePanel>
-          <Lazy deps={[data]} fn={() => {
-            const x = data?.groupBy(_ => _.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date')
+        <SafetyIncidentDashboardAlert data={{
+          data: dataIncidentFiltered,
+          dataAlert,
+        }}/>
+        <SlidePanel title={m.safety.casualties}>
+          <Div sx={{mt: -2}}>
+            <Lazy deps={[dataIncidentFiltered]} fn={() => dataIncidentFiltered?.sum(_ => _.dead ?? 0)}>
+              {_ => (
+                <SlideWidget sx={{minHeight: 'auto', flex: 1}} title={m.safety.dead}>
+                  {formatLargeNumber(_)}
+                </SlideWidget>
+              )}
+            </Lazy>
+            <Lazy deps={[dataIncidentFiltered]} fn={() => dataIncidentFiltered?.sum(_ => _.injured ?? 0)}>
+              {_ => (
+                <SlideWidget sx={{minHeight: 'auto', flex: 1}} title={m.safety.injured}>
+                  {formatLargeNumber(_)}
+                </SlideWidget>
+              )}
+            </Lazy>
+          </Div>
+          <Lazy deps={[dataIncidentFiltered]} fn={() => {
+            const x = dataIncidentFiltered?.groupBy(_ => _.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date')
             return new Enum(x)
               .transform((k, v) => [k, {
                 total: v.length,
@@ -176,7 +141,7 @@ export const SafetyIncidentDashboardBody = ({
               .map(([k, v]) => ({name: k, ...v}))
           }}>
             {_ => (
-              <ChartLine height={280} data={_ as any} translation={{
+              <ChartLine height={200} data={_ as any} translation={{
                 total: m.safety.incidents,
                 dead: m.safety.dead,
                 injured: m.safety.injured,
@@ -188,7 +153,7 @@ export const SafetyIncidentDashboardBody = ({
           <MinusRusChartPanel/>
         )}
         <SlidePanel title={m.safety.lastAttacks}>
-          <Lazy deps={[data]} fn={() => data?.filter(_ => _.attack === 'yes').map(_ => ({
+          <Lazy deps={[dataIncidentFiltered]} fn={() => dataIncidentFiltered?.filter(_ => _.attack === 'yes').map(_ => ({
             id: _.id,
             title: m.safety.attackOfOn(_.oblastISO, _.attack_type),
             date: _.date_time,

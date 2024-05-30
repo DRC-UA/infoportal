@@ -1,106 +1,98 @@
 import React, {useEffect, useMemo, useState} from 'react'
-import {map, seq, Seq} from '@alexandreannic/ts-utils'
+import {map, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {DebouncedInput} from '@/shared/DebouncedInput'
-import {KoboAnswerFlat, KoboIndex, KoboSafetyIncidentHelper, Period, Safety_incidentTracker} from '@infoportal-common'
+import {KoboIndex, Period, PeriodHelper, Safety_incident} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
-import {useSafetyIncidentDashboard} from '@/features/Safety/IncidentsDashboard/useSafetyIncidentDashboard'
 import {SafetyIncidentDashboardBody} from '@/features/Safety/IncidentsDashboard/SafetyIncidentDashboardBody'
 import {useFetcher} from '@/shared/hook/useFetcher'
-
-export interface DashboardSafetyIncidentsPageProps {
-  filters: DataFilter.Filter
-  data: Seq<KoboAnswerFlat<KoboSafetyIncidentHelper.Type>>
-  computed: NonNullable<ReturnType<typeof useSafetyIncidentDashboard>>
-}
+import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {differenceInDays, subDays} from 'date-fns'
+import {protectionDashboardMonitoPreviousPeriodDeltaDays} from '@/features/Protection/DashboardMonito/useProtectionDashboardMonitoData'
 
 export const SafetyIncidentDashboard = () => {
   const {api} = useAppSettings()
   const {m} = useI18n()
   const _period = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('safety_incident').id))
-
-  const filterShape = DataFilter.makeShape<KoboAnswerFlat<Safety_incidentTracker.T>>({
+  const ctxAnswers = useKoboAnswersContext()
+  const filterShape = useMemo(() => DataFilter.makeShape<InferTypedAnswer<'safety_incident'>>({
     oblast: {
       icon: 'location_on',
       getValue: _ => _.oblast,
-      getOptions: () => DataFilter.buildOptionsFromObject(Safety_incidentTracker.options.oblast),
+      getOptions: () => DataFilter.buildOptionsFromObject(Safety_incident.options.oblast),
       label: m.oblast,
     },
     attackType: {
       icon: 'rocket_launch',
       getValue: _ => _.attack_type,
-      getOptions: () => DataFilter.buildOptionsFromObject(Safety_incidentTracker.options.attack_type),
+      getOptions: () => DataFilter.buildOptionsFromObject(Safety_incident.options.attack_type),
       label: m.safety.attackTypes,
       multiple: true,
     },
-    alertType: {
-      icon: 'notifications_active',
-      getValue: _ => {
-        const alertTypes = []
-        if (_.alert_blue_num ?? 0 > 0) alertTypes.push('blue')
-        if (_.alert_yellow_num ?? 0 > 0) alertTypes.push('yellow')
-        if (_.alert_red_num ?? 0 > 0) alertTypes.push('red')
-        return alertTypes
-      },
-      getOptions: () => [
-        {value: 'blue', label: m.safety.blue},
-        {value: 'yellow', label: m.safety.yellow},
-        {value: 'red', label: m.safety.red}
-      ],
-      label: 'Alert Type',
-      multiple: true,
-    }
-  })
-
-  const [optionFilter, setOptionFilters] = useState<DataFilter.InferShape<typeof filterShape>>({})
-  const [periodFilter, setPeriodFilter] = useState<Partial<Period>>({})
-  const _answers = useFetcher((filter: Partial<Period>) => api.kobo.typedAnswers.search.safety_incident({
-    filters: {
-      start: filter.start,
-      end: filter.end,
-    }
-  }).then(_ => seq(_.data)) as Promise<DashboardSafetyIncidentsPageProps['data']>)
+  }), [])
 
   useEffect(() => {
+    ctxAnswers.byName.fetch({}, 'safety_incident')
     _period.fetch()
   }, [])
 
+  const [optionFilter, setOptionFilters] = useState<DataFilter.InferShape<typeof filterShape>>({})
+  const [period, setPeriod] = useState<Partial<Period>>({})
+
   useEffect(() => {
-    map(_period.get, setPeriodFilter)
+    map(_period.get, setPeriod)
   }, [_period.get])
 
-  useEffect(() => {
-    _answers.fetch({force: true, clean: false}, periodFilter)
-  }, [periodFilter])
+  const data = seq(ctxAnswers.byName.get('safety_incident')?.data) ?? []
+  const {dataIncident, dataAlert} = useMemo(() => {
+    return {
+      dataIncident: data.filter(_ => !_.incident_type?.includes('alert')),
+      dataAlert: data.filter(_ => _.incident_type?.includes('alert')),
+    }
+  }, [data])
 
-  const data: DashboardSafetyIncidentsPageProps['data'] | undefined = useMemo(() => {
-    return map(_answers.get, _ => seq(DataFilter.filterData(_, filterShape, optionFilter)))
-  }, [_answers.get, optionFilter])
-
-  const computed = useSafetyIncidentDashboard({data: _answers.get, period: periodFilter})
+  const {dataIncidentFiltered, dataIncidentFilteredLastPeriod} = useMemo(() => {
+    const filtered = DataFilter.filterData(dataIncident, filterShape, optionFilter)
+    return {
+      dataIncidentFiltered: filtered.filter(_ => PeriodHelper.isDateIn(period, _.date)),
+      dataIncidentFilteredLastPeriod: map(period.start, period.end, (start, end) => {
+        const lastPeriod = {
+          start: start,
+          end: subDays(end, protectionDashboardMonitoPreviousPeriodDeltaDays)
+        }
+        if (differenceInDays(end, start) <= protectionDashboardMonitoPreviousPeriodDeltaDays) return
+        return filtered.filter(_ => PeriodHelper.isDateIn(lastPeriod, _.date))
+      })
+    }
+  }, [dataIncident, optionFilter])
 
   return (
     <Page
       width="lg"
-      loading={_answers.loading}
+      loading={ctxAnswers.byName.loading('safety_incident')}
     >
       <DataFilterLayout
         shapes={filterShape}
         filters={optionFilter}
+        onClear={() => {
+          setOptionFilters({})
+          setPeriod(_period.get ?? {})
+        }}
         setFilters={setOptionFilters}
         before={
           <DebouncedInput<[Date | undefined, Date | undefined]>
             debounce={400}
-            value={[periodFilter.start, periodFilter.end]}
-            onChange={([start, end]) => setPeriodFilter(prev => ({...prev, start, end}))}
+            value={[period.start, period.end]}
+            onChange={([start, end]) => setPeriod(prev => ({...prev, start, end}))}
           >
             {(value, onChange) => <PeriodPicker
               sx={{marginTop: '-6px'}}
-              defaultValue={value ?? [undefined, undefined]}
+              value={value ?? [undefined, undefined]}
               onChange={onChange}
               min={_period.get?.start}
               max={_period.get?.end}
@@ -108,12 +100,16 @@ export const SafetyIncidentDashboard = () => {
           </DebouncedInput>
         }
       />
-      {data && computed && (
-        <>
-          <SafetyIncidentDashboardBody data={data} computed={computed}/>
-          {/*<DashboardSafetyIncidentAgravatingFactors data={data} computed={computed}/>*/}
-        </>
-      )}
+      <>
+        <SafetyIncidentDashboardBody data={{
+          data,
+          dataAlert,
+          dataIncident,
+          dataIncidentFiltered,
+          dataIncidentFilteredLastPeriod,
+        }}/>
+        {/*<DashboardSafetyIncidentAgravatingFactors data={data} computed={computed}/>*/}
+      </>
     </Page>
   )
 }

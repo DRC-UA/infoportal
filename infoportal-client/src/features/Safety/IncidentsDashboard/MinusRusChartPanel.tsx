@@ -83,7 +83,7 @@ export const MinusRusChartPanel = () => {
   const {toastError} = useIpToast()
   const {m} = useI18n()
   const fetcherMinusRus = useFetcher(() => api.proxyRequest('GET', 'https://russialoses-dev.herokuapp.com')
-    .then(parseMinusRus) as Promise<Seq<MinusRusData>>)
+    .then(parseMinusRus).catch(console.error) as Promise<Seq<MinusRusData>>)
 
   const [minusRusDateFormat, setMinusRusDateFormat] = useState<string>('yyyy-MM-dd')
   const [minusRusCurveType, setMinusRusCurveType] = useState<'relative' | 'cumulative'>('relative')
