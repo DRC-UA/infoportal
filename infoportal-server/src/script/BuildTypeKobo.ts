@@ -160,10 +160,8 @@ export class BuildKoboType {
       ]
     },
     shelter_ta: {
-      formId: KoboIndex.byName('shelter_ta').id, skipQuestionTyping: [
-        'ben_det_hromada',
-        'ben_det_raion',
-      ]
+      formId: KoboIndex.byName('shelter_ta').id,
+      skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion',]
     },
     bn_rapidResponseSida: {
       formId: KoboIndex.byName('bn_rapidResponseSida').id,
@@ -308,7 +306,8 @@ export class BuildKoboType {
       },
     },
     safety_incident: {
-      formId: KoboIndex.byName('safety_incident').id
+      formId: KoboIndex.byName('safety_incident').id,
+      skipQuestionTyping: ['hromada', 'raion',],
     },
   }, (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>])
 

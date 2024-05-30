@@ -8,6 +8,7 @@ import {OblastISO} from '@infoportal-common'
 export const UaMapBy = <D extends Record<string, any>>({
   data,
   getOblast,
+  total,
   value = () => true,
   base = () => true,
   fillBaseOn = 'percent',
@@ -16,6 +17,7 @@ export const UaMapBy = <D extends Record<string, any>>({
   fillBaseOn?: 'percent' | 'value'
   value?: (_: D) => boolean
   base?: (_: D) => boolean
+  total?: number
   getOblast: (_: D) => OblastISO
   data: Seq<D>
   legend?: boolean
@@ -29,6 +31,6 @@ export const UaMapBy = <D extends Record<string, any>>({
     })
   }, [data, value, getOblast])
   return (
-    <UkraineMap data={res} fillBaseOn={fillBaseOn} {...props}/>
+    <UkraineMap data={res} fillBaseOn={fillBaseOn} base={total} {...props}/>
   )
 }

@@ -1,4 +1,4 @@
-import {CartesianGrid, LabelList, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,} from 'recharts'
+import {CartesianGrid, LabelList, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts'
 import * as React from 'react'
 import {ReactNode, useState} from 'react'
 import {Box, BoxProps, Checkbox, Theme, useTheme} from '@mui/material'
@@ -64,14 +64,16 @@ export const ChartLine = ({
       {!hideLabelToggle && (
         <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
           {lines.map((c, i) => (
-            <>
-              <Checkbox
-                key={c}
-                checked={showCurves[i]}
-                onChange={e => setShowCurves(prev => prev.map((_, index) => (i === index ? e.currentTarget.checked : _)))}
-                sx={{'& svg': {fill: colors(theme)[i] ?? colors(theme)[0] + ' !important'}}}
-              />
-            </>
+            <Checkbox
+              key={c}
+              checked={showCurves[i]}
+              onChange={e => setShowCurves(prev => prev.map((_, index) => (i === index ? e.currentTarget.checked : _)))}
+              sx={{
+                '& svg': {
+                  fill: colorsByKey ? colorsByKey(theme)[c] : colors(theme)[i] ?? colors(theme)[0] + ' !important'
+                },
+              }}
+            />
           ))}
         </Box>
       )}

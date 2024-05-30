@@ -1,7 +1,6 @@
 import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
-import {capitalize, OblastIndex, OblastISO} from '@infoportal-common'
-import {WgDisability} from '@infoportal-common'
+import {capitalize, OblastIndex, OblastISO, WgDisability} from '@infoportal-common'
 
 const invalidDate = ''
 
@@ -528,6 +527,7 @@ export const en = Object.freeze({
       community: 'Number of respondents by hromada',
     },
     safety: {
+      alerts: 'Alerts',
       minusRusLabel: {
         prisoners: 'Prisoners',
         killed: 'Killed',
@@ -539,6 +539,7 @@ export const en = Object.freeze({
         ships_boats: 'Ships boats',
         tanks: 'Tanks',
       },
+      casualties: 'Casualties of War',
       minusRusTitle: 'Intensity Proxy',
       dataTakenFromMinusRus: 'Data extracted in real-time from <a class="link" target="_blank" href="https://www.minusrus.com/en">https://www.minusrus.com/en</a>.',
       aggravatingFactors: 'Aggravating factors',
@@ -551,6 +552,9 @@ export const en = Object.freeze({
       attackTypes: 'Attack type',
       attacks: 'Attacks',
       attack: 'Attack',
+      blue: 'Blue',
+      yellow: 'Yellow',
+      red: 'Red',
       dead: 'Dead',
       injured: 'Injured',
       typeOfCasualties: 'Type of casualties',
