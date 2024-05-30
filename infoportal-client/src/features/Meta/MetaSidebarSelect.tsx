@@ -10,8 +10,10 @@ const css = makeSx({
   optionSelectAll: {
     display: 'block',
     borderBottom: t => `1px solid ${t.palette.divider}`,
+    height: 30,
   },
   option: {
+    height: 28,
     whiteSpace: 'nowrap',
     px: 1,
     mr: 0,
@@ -64,7 +66,7 @@ export const MetaSidebarSelect = ({
         control={<Checkbox size="small" checked={allChecked()} indeterminate={!allChecked() && someChecked()}/>}
         label={
           // <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-          <Txt bold sx={{mr: 1.5}}>{m.selectAll}</Txt>
+          <Txt bold size="small" sx={{mr: 1.5}}>{m.selectAll}</Txt>
           // <AAIconBtn icon="clear" size="small" sx={{ml: 1.5}}/>
           // </Box>
         }

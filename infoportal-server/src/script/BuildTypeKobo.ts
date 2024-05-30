@@ -109,9 +109,19 @@ export class BuildKoboType {
         'ben_det_raion',
       ]
     },
-    ecrec_trainingGrants: {
+    ecrec_vetApplication: {
       langIndex: 1,
-      formId: KoboIndex.byName('ecrec_trainingGrants').id, skipQuestionTyping: ['hromada', 'raion']
+      formId: KoboIndex.byName('ecrec_vetApplication').id, skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
+    },
+    ecrec_vetEvaluation: {
+      langIndex: 1,
+      formId: KoboIndex.byName('ecrec_vetEvaluation').id, skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
     },
     meal_verificationEcrec: {
       formId: KoboIndex.byName('meal_verificationEcrec').id, skipQuestionTyping: [
@@ -406,7 +416,7 @@ const extractQuestionName = (_: Record<string, any>) => {
             // select_multiple: `_.${name}?.split(' ')`,
             begin_repeat: () => {
               const groupedQuestions = survey.filter(_ => _.name !== x.name && _.$qpath?.includes(x.name + '-'))
-              return `_.${name}?.map(extractQuestionName).map((_: any) => {\n`
+              return `_['${name}']?.map(extractQuestionName).map((_: any) => {\n`
                 + groupedQuestions.map(_ => {
                   const sname = _.name ?? _.$autoname
                   return [
@@ -474,13 +484,13 @@ const extractQuestionName = (_: Record<string, any>) => {
             const groupedQuestions = survey.filter(_ => _.name !== x.name && _.$qpath?.includes(x.name + '-'))
             return '{' + groupedQuestions.map(_ => {
               const lastQuestionNameHavingOptionId = seq(indexOptionId[_.select_from_list_name ?? '']).last()?.name
-              return `${_.$autoname}: ${fnSwitch(_.type, basicQuestionTypeMapping(lastQuestionNameHavingOptionId), _ => 'string')} | undefined`
+              return `'${_.$autoname}': ${fnSwitch(_.type, basicQuestionTypeMapping(lastQuestionNameHavingOptionId), _ => 'string')} | undefined`
             }).join(',') + '}[] | undefined'
 
           }
         }, () => 'string')
         return (x.label ? `// ${x.$xpath} [${x.type}] ${x.label[this.langIndex]?.replace(/\s/g, ' ')}\n` : '')
-          + `  ${x.name ?? x.$autoname}: ${type},`
+          + `  '${x.name ?? x.$autoname}': ${type},`
       })
     return [
       `export type Option<T extends keyof typeof options> = keyof (typeof options)[T]`,

@@ -46,6 +46,7 @@ export enum DrcProgram {
   InfantWinterClothing = 'InfantWinterClothing',
   HygieneKit = 'HygieneKit',
   SectoralCashForAgriculture = 'SectoralCashForAgriculture',
+  VET = 'VET',
   SectoralCashForAnimalShelterRepair = 'SectoralCashForAnimalShelterRepair',
   SectoralCashForAnimalFeed = 'SectoralCashForAnimalFeed',
   PSS = 'PSS',

@@ -126,8 +126,10 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
     const getPaymentStatusByEnum = ({
       enumerator = 'CashStatus',
       tag = 'status',
+      width = 120,
       showIf,
     }: {
+      width?: number
       enumerator?: SelectStatusConfig.EnumStatus
       tag?: string
       showIf?: (_: KoboAnswerFlat<any, any>) => boolean
@@ -137,7 +139,7 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
           id: tag,
           head: m.status,
           type: 'select_one',
-          width: 120,
+          width,
           subHeader: getSelectMultipleTagSubHeader({
             tag,
             options: Obj.values(SelectStatusConfig.enumStatus[enumerator]).map(_ => ({
@@ -318,8 +320,8 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
         ...getPaymentStatusByEnum(),
         ...individualsBreakdown,
       ],
-      [KoboIndex.byName('ecrec_trainingGrants').id]: [
-        ...getPaymentStatusByEnum({enumerator: 'CashForEduStatus'}),
+      [KoboIndex.byName('ecrec_vetApplication').id]: [
+        ...getPaymentStatusByEnum({width: 188, enumerator: 'VetApplicationStatus'}),
         ...individualsBreakdown,
       ],
       [KoboIndex.byName('protection_communityMonitoring').id]: [

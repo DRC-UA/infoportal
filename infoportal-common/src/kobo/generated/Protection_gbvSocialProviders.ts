@@ -80,6 +80,7 @@ export namespace Protection_gbvSocialProviders {
       'voznesenskyi': `Voznesenskyi`,
       'mykolaivskyi': `Mykolaivskyi`,
       'pervomaiskyi': `Pervomaiskyi`
+
     },
     hromada_mykolaiv_working: {
       'bashtanska': `Bashtanska`,

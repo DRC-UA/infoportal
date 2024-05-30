@@ -3,7 +3,7 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {DrcProject, IKoboMeta, KoboIndex, koboIndex, KoboMetaStatus, koboMetaStatusLabel} from '@infoportal-common'
+import {DrcProject, IKoboMeta, KoboIndex, koboIndex, KoboMetaStatus, koboMetaStatusLabel, PersonDetails} from '@infoportal-common'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {IpIconBtn} from '@/shared/IconBtn'
@@ -21,6 +21,7 @@ import {Txt} from 'mui-extension'
 import {Icon} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
+import {IpBtn} from '@/shared/Btn'
 
 type Data = IKoboMeta & {
   duplicatedPhone?: number
@@ -230,6 +231,37 @@ export const MetaTable = () => {
         head: m.individuals,
         renderQuick: _ => _.personsCount,
       },
+      {
+        type: 'number',
+        id: 'individuals-details',
+        head: m.individuals,
+        render: _ => {
+          return {
+            label: (
+              <PopoverWrapper
+                content={close => _.persons ? (
+                  <Datatable<PersonDetails>
+                    header={<IpIconBtn style={{marginLeft: 'auto'}} onClick={close}>close</IpIconBtn>}
+                    hideColumnsToggle
+                    hidePagination
+                    defaultLimit={200}
+                    id="meta-table-persons"
+                    data={_.persons}
+                    columns={[
+                      {type: 'number', id: 'age', head: m.age, renderQuick: _ => _.age},
+                      {type: 'select_one', id: 'gender', head: m.gender, renderQuick: _ => _.gender},
+                      {width: 120, type: 'select_one', id: 'displacement', head: m.displacementStatus, renderQuick: _ => _.displacement},
+                      {width: 220, type: 'select_one', id: 'disability', head: m.disability, renderQuick: _ => _.disability?.map(d => m.disability_[d]).join(', ')},
+                    ]}
+                  />
+                ) : undefined}>
+                <IpBtn>{_.persons?.length ?? 0}</IpBtn>
+              </PopoverWrapper>
+            ),
+            value: _.persons?.length ?? 0,
+          }
+        },
+      },
     ]
     return x
   }, [session, mappedData])
@@ -238,6 +270,7 @@ export const MetaTable = () => {
     <Page width="full">
       <Panel>
         <Datatable
+          showExportBtn
           header={props => (
             <PopoverWrapper
               popoverProps={{

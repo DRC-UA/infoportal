@@ -1,7 +1,7 @@
 import {StateStatus, UUID} from '../type/Generic'
 import {OblastName} from '../location'
 import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc'
-import {CashStatus, DisplacementStatus, KoboId, PersonDetails, ShelterTaPriceLevel} from './mapper'
+import {CashStatus, DisplacementStatus, KoboId, KoboValidation, PersonDetails, ShelterTaPriceLevel} from './mapper'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 
 export type IKoboMeta<TTag = any> = {
@@ -70,7 +70,19 @@ export namespace KoboMetaHelper {
     Rejected: KoboMetaStatus.Rejected,
   }
 
+  const validationStatus: Partial<Record<KoboValidation, KoboMetaStatus>> = {
+    [KoboValidation.Approved]: KoboMetaStatus.Committed,
+    [KoboValidation.Rejected]: KoboMetaStatus.Rejected,
+    [KoboValidation.Pending]: KoboMetaStatus.Pending,
+    [KoboValidation.UnderReview]: KoboMetaStatus.Pending,
+    [KoboValidation.Flagged]: KoboMetaStatus.Pending,
+  }
+
   export const mapCashStatus = (_?: CashStatus): KoboMetaStatus | undefined => {
     return fnSwitch(_!, cashStatus, () => undefined)
+  }
+
+  export const mapValidationStatus = (_?: KoboValidation): KoboMetaStatus | undefined => {
+    return fnSwitch(_!, validationStatus, () => undefined)
   }
 }

@@ -1,5 +1,6 @@
 import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
+  DrcDonor,
   DrcOffice,
   DrcProgram,
   DrcProject,
@@ -7,15 +8,21 @@ import {
   DrcSector,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
+  Ecrec_vetApplication,
+  Ecrec_vetEvaluation,
+  KoboBaseTags,
   KoboGeneralMapping,
   KoboMetaHelper,
+  KoboMetaStatus,
+  KoboValidation,
   OblastIndex,
-  safeNumber
+  safeNumber,
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashRegistration'
-import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
+import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
 import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
+import {appConf} from '../../../core/conf/AppConf'
 
 export class KoboMetaMapperEcrec {
 
@@ -65,6 +72,50 @@ export class KoboMetaMapperEcrec {
     })
   }
 
+  static readonly vetApplication: MetaMapperInsert<KoboMetaOrigin<Ecrec_vetApplication.T, KoboBaseTags>> = row => {
+    if (!appConf.db.url.includes('localhost') && row.tags?._validation !== KoboValidation.Approved) return
+    const answer = Ecrec_vetApplication.map(row.answers)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
+    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    return KoboMetaMapper.make({
+      oblast: oblast.name,
+      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
+      personsCount: safeNumber(answer.ben_det_hh_size),
+      persons: group.map(KoboGeneralMapping.mapPersonDetails),
+      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      sector: DrcSector.Livelihoods,
+      activity: DrcProgram.VET,
+      project: [DrcProject['UKR-000348 BHA3']],
+      donor: [DrcDonor.BHA],
+      lastName: answer.ben_det_surname,
+      firstName: answer.ben_det_first_name,
+      patronymicName: answer.ben_det_pat_name,
+      phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+    })
+  }
+
+  static readonly vetEvaluation: MetaMapperMerge<KoboMetaOrigin<Ecrec_vetEvaluation.T, KoboBaseTags>> = row => {
+    if (!row.answers.id_form_vet) return
+    const answer = Ecrec_vetEvaluation.map(row.answers)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
+    return [
+      row.answers.id_form_vet,
+      {
+        office: fnSwitch(answer.back_office!, {
+          dnk: DrcOffice.Dnipro,
+          nlv: DrcOffice.Mykolaiv,
+        }, () => undefined),
+        personsCount: safeNumber(answer.ben_det_hh_size),
+        persons: group.map(KoboGeneralMapping.mapPersonDetails),
+        sector: DrcSector.Livelihoods,
+        activity: DrcProgram.VET,
+        taxId: answer.tax_id ? ('' + answer.tax_id) : undefined,
+        status: KoboMetaHelper.mapValidationStatus(row.tags?._validation) ?? KoboMetaStatus.Pending,
+        lastStatusUpdate: row.date,
+      }
+    ]
+  }
+
   static readonly cashRegistrationBha: MetaMapperInsert<KoboMetaOrigin<Ecrec_cashRegistrationBha.T, EcrecCashRegistrationTags>> = row => {
     const answer = Ecrec_cashRegistrationBha.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
@@ -88,13 +139,6 @@ export class KoboMetaMapperEcrec {
       activity: DrcProgram.SectoralCashForAgriculture,
       personsCount: safeNumber(answer.ben_det_hh_size),
       persons: group.map(KoboGeneralMapping.mapPersonDetails),
-      // group.map(p => ({
-      //   age: safeNumber(p.hh_char_hh_det_age),
-      //   gender: fnSwitch(p.hh_char_hh_det_gender!, {
-      //     female: Person.Gender.Female,
-      //     male: Person.Gender.Male,
-      //   }, () => void 0)
-      // })),
       project: project ? [project] : [],
       donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
       lastName: answer.ben_det_surname,

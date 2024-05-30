@@ -5,7 +5,7 @@ import {
   DisplacementStatus,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
-  Ecrec_trainingGrants,
+  Ecrec_vetApplication,
   KoboEcrec_cashRegistration,
   KoboFormName,
   KoboIndex,
@@ -130,9 +130,9 @@ export class KoboTypedAnswerSdk {
         fnMapTags: ShelterTaTagsHelper.mapTags,
         ...filters,
       })),
-      ...make('ecrec_trainingGrants', (filters?: KoboAnswerFilter) => req({
-        formId: KoboIndex.byName('ecrec_trainingGrants').id,
-        fnMapKobo: Ecrec_trainingGrants.map,
+      ...make('ecrec_vetApplication', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('ecrec_vetApplication').id,
+        fnMapKobo: Ecrec_vetApplication.map,
         ...filters,
       })),
       ...make('meal_verificationEcrec', (filters?: KoboAnswerFilter) => req({

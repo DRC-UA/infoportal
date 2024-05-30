@@ -45,12 +45,15 @@ export class KoboMetaMapper {
     [KoboIndex.byName('protection_hhs3').id]: KoboMetaMapperProtection.hhs,
     [KoboIndex.byName('protection_groupSession').id]: KoboMetaMapperProtection.groupSession,
     [KoboIndex.byName('protection_communityMonitoring').id]: KoboMetaMapperProtection.communityMonitoring,
+    [KoboIndex.byName('ecrec_vetApplication').id]: KoboMetaMapperEcrec.vetApplication,
   }
   static readonly mappersUpdate: Record<KoboId, MetaMapperMerge> = {
-    [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa
+    [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa,
+    [KoboIndex.byName('ecrec_vetEvaluation').id]: KoboMetaMapperEcrec.vetEvaluation,
   }
   static readonly triggerUpdate = {
-    [KoboIndex.byName('shelter_nta').id]: [KoboIndex.byName('shelter_ta').id]
+    [KoboIndex.byName('shelter_nta').id]: [KoboIndex.byName('shelter_ta').id],
+    [KoboIndex.byName('ecrec_vetApplication').id]: [KoboIndex.byName('ecrec_vetEvaluation').id],
   }
 }
 
@@ -136,22 +139,29 @@ export class KoboMetaService {
     this.info(formId, `Fetch Kobo answers...`)
     const updates = await this.prisma.koboAnswers.findMany({
       where: {formId},
-      // include: {
-      //   meta: {
-      //     select: {
-      //       uuid: true,
-      //       updatedAt: true,
-      //       id: true,
-      //     }
-      //   }
-      // }
-    }).then(res => {
-      return seq(res)
-        // .filter(_ => _.meta?.uuid === undefined || _.uuid !== _.meta.uuid || _.updatedAt?.getTime() !== _.meta.updatedAt?.getTime())
-        .map(mapper)
-        .compact()
+    }).then(_ => seq(_).map(mapper).compact())
+    const metaIdIndex = await this.prisma.koboMeta.findMany({
+      select: {
+        id: true,
+        koboId: true,
+      },
+      where: {
+        koboId: {in: updates.map(_ => _[0])}
+      }
+    }).then(_ => seq(_).groupByAndApply(_ => _.koboId, _ => _.map(_ => _.id)))
+
+    await this.prisma.koboPerson.deleteMany({where: {metaId: {in: Object.values(metaIdIndex).flat()}}})
+
+    const createPersonInput = updates.flatMap(([koboId, mapped]) => {
+      return (metaIdIndex[koboId] ?? []).flatMap(metaId => {
+        const res: Prisma.KoboPersonCreateManyInput[] = (mapped.persons ?? []).map(_ => ({..._, metaId}))
+        return res
+      })
     })
 
+    await this.prisma.koboPerson.createMany({
+      data: createPersonInput,
+    })
     this.info(formId, `Update ${updates.length}...`)
     // await Promise.all(updates.map(async ([koboId, {persons, ...update}], i) => {
     //   return this.prisma.koboMeta.updateMany({

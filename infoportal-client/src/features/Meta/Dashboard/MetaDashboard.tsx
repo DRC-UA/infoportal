@@ -20,7 +20,6 @@ import {Panel, PanelBody} from '@/shared/Panel'
 import {Obj} from '@alexandreannic/ts-utils'
 import {ChartLine} from '@/shared/charts/ChartLine'
 
-
 export const MetaDashboard = () => {
   const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
@@ -51,31 +50,35 @@ export const MetaDashboard = () => {
       {/*  }*/}
       {/*/>*/}
       <Div column>
-        <Div>
-          <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
-            <Lazy deps={[ctx.filteredData]} fn={() => {
-              return ctx.filteredData.distinct(_ => _.formId).length
-            }}>
-              {_ => formatLargeNumber(_)}
-            </Lazy>
-          </SlideWidget>
-          <SlideWidget sx={{flex: 1}} icon="storage" title={m.submissions}>
-            {formatLargeNumber(ctx.filteredData.length)}
-          </SlideWidget>
-          <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
-            {formatLargeNumber(ctx.filteredUniqueData.length)}
-          </SlideWidget>
-          <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
-            {(ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)}
-          </SlideWidget>
-          <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
-            {formatLargeNumber(ctx.filteredPersons.length)}
-          </SlideWidget>
-          <SlideWidget sx={{flex: 1}} icon="person" title={m.uniqIndividuals}>
-            {formatLargeNumber(ctx.filteredUniquePersons.length)}
-          </SlideWidget>
+        <Div column responsive>
+          <Div>
+            <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
+              <Lazy deps={[ctx.filteredData]} fn={() => {
+                return ctx.filteredData.distinct(_ => _.formId).length
+              }}>
+                {_ => formatLargeNumber(_)}
+              </Lazy>
+            </SlideWidget>
+            <SlideWidget sx={{flex: 1}} icon="storage" title={m.submissions}>
+              {formatLargeNumber(ctx.filteredData.length)}
+            </SlideWidget>
+            <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
+              {formatLargeNumber(ctx.filteredUniqueData.length)}
+            </SlideWidget>
+          </Div>
+          <Div>
+            <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
+              {(ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)}
+            </SlideWidget>
+            <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
+              {formatLargeNumber(ctx.filteredPersons.length)}
+            </SlideWidget>
+            <SlideWidget sx={{flex: 1}} icon="person" title={m.uniqIndividuals}>
+              {formatLargeNumber(ctx.filteredUniquePersons.length)}
+            </SlideWidget>
+          </Div>
         </Div>
-        <Div>
+        <Div responsive>
           <Div column>
             <SlidePanel title={m.ageGroup}>
               <AgeGroupTable tableId="meta-dashboard" persons={ctx.filteredPersons} enableDisplacementStatusFilter/>
@@ -107,10 +110,17 @@ export const MetaDashboard = () => {
                 {_ => (
                   <Box>
                     <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                      <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.committed}</Txt>} value={_.Committed?.value ?? 0} base={1} color={t.palette.success.main}/>
-                      <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.pending}</Txt>} value={_.Pending?.value ?? 0} base={1} color={t.palette.warning.main}/>
-                      <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.rejected}</Txt>} value={_.Rejected?.value ?? 0} base={1} color={t.palette.error.main}/>
-                      <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.blank}</Txt>} value={_.Blank?.value ?? 0} base={1} color={t.palette.info.main}/>
+                      <Div column responsive>
+                        <Div>
+                          <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.committed}</Txt>} value={_.Committed?.value ?? 0} base={1}
+                                          color={t.palette.success.main}/>
+                          <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.pending}</Txt>} value={_.Pending?.value ?? 0} base={1} color={t.palette.warning.main}/>
+                        </Div>
+                        <Div>
+                          <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.rejected}</Txt>} value={_.Rejected?.value ?? 0} base={1} color={t.palette.error.main}/>
+                          <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.blank}</Txt>} value={_.Blank?.value ?? 0} base={1} color={t.palette.info.main}/>
+                        </Div>
+                      </Div>
                     </Box>
                   </Box>
                 )}

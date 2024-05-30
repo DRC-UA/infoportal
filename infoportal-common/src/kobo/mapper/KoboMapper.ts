@@ -4,6 +4,7 @@ import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex} from '../../location'
 import {Person} from '../../type/Person'
 import {DisplacementStatus, KoboAnswerFlat, KoboBaseTags, KoboTagStatus, PersonDetails, WgDisability} from './Common'
+import {safeInt32} from '../../utils'
 
 export namespace KoboGeneralMapping {
 
@@ -11,10 +12,11 @@ export namespace KoboGeneralMapping {
   export type XlsKoboIndividual = {
     'hh_char_hh_det_gender'?: 'male' | 'female' | 'other' | 'unspecified' | 'unable_unwilling_to_answer'
     'hh_char_hh_det_age'?: number
+    ben_det_res_stat?: XlsDisplacementStatus
   } & Partial<Pick<XlsIndividualBase,
     'hh_char_hh_det_dis_select' |
     'hh_char_hh_det_dis_level'
-  >> & Partial<Pick<Ecrec_cashRegistration.T, 'ben_det_res_stat'>>
+  >>
 
   export type XlsKoboIndividuals = Partial<Pick<Ecrec_cashRegistration.T,
     'hh_char_dis_select' |
@@ -27,9 +29,9 @@ export namespace KoboGeneralMapping {
     'hh_char_res_dis_level' |
     'hh_char_res_dis_select' |
     'hh_char_res_age' |
-    'ben_det_res_stat' |
     'hh_char_res_gender'
   >> & {
+    ben_det_res_stat?: XlsDisplacementStatus
     hh_char_hh_det?: XlsKoboIndividual[]
   }
 
@@ -42,7 +44,16 @@ export namespace KoboGeneralMapping {
     mykolaiv: DrcOffice.Mykolaiv,
   }, () => undefined)
 
-  type XlsDisplacementStatus = NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status'] | Bn_re.T['ben_det_res_stat']
+  // type XlsDisplacementStatus = NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status'] | Bn_re.T['ben_det_res_stat']
+  export type XlsDisplacementStatus = 'idp'
+    | 'returnee'
+    | 'non-displaced'
+    | 'unspec'
+    | 'other'
+    | 'long_res'
+    | 'ret'
+    | 'ref_asy'
+
 
   export const mapDisplacementStatus = (_?: XlsDisplacementStatus): DisplacementStatus | undefined => {
     return fnSwitch(_!, {
@@ -83,7 +94,7 @@ export namespace KoboGeneralMapping {
     hh_char_hh_det_dis_select?: NonNullable<Bn_re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_select']
     hh_char_hh_det_dis_level?: NonNullable<Bn_re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_level']
     hh_char_hh_det_status?: NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status']
-    ben_det_res_stat?: NonNullable<Bn_re.T['ben_det_res_stat']>
+    ben_det_res_stat?: XlsDisplacementStatus
   }): PersonDetails => {
     const res: PersonDetails = KoboGeneralMapping.mapPerson(p as any)
     if (p.hh_char_hh_det_status)
@@ -125,7 +136,7 @@ export namespace KoboGeneralMapping {
     hh_char_hh_det_age?: number
   }): Person.Person => {
     return {
-      age: _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined,
+      age: _.hh_char_hh_det_age ? safeInt32(_.hh_char_hh_det_age) : undefined,
       gender: fnSwitch(_.hh_char_hh_det_gender!, {
         'male': Person.Gender.Male,
         'female': Person.Gender.Female,
@@ -183,6 +194,10 @@ export namespace KoboGeneralMapping {
       disabilitiesCount: pwdCount,
       disabilities: Array.from(disabilities),
     }
+  }
+
+  export const isValidKoboId = (_: number) => {
+    return _ > 0 && _ < 1562136443
   }
 
   export const collectXlsKoboIndividuals = (d: XlsKoboIndividuals): XlsKoboIndividual[] => {
