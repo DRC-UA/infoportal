@@ -7,7 +7,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {appConfig} from '@/conf/AppConfig'
 import {Bn_re, DrcOffice, KoboIndex, koboIndex, koboMetaStatusLabel, MpcaEntity} from '@infoportal-common'
 import {IpBtn} from '@/shared/Btn'
-import {formatLargeNumber} from '@/core/i18n/localization/en'
+import {formatDateTime, formatLargeNumber} from '@/core/i18n/localization/en'
 import {MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
 import {SelectDrcProject} from '@/shared/customInput/SelectDrcProject'
 import {Box, Icon} from '@mui/material'
@@ -157,6 +157,18 @@ export const MpcaData = () => {
                   label: <OptionLabelTypeCompact type={koboMetaStatusLabel[_.status!]}/>,
                   value: _.status,
                   option: _.status,
+                }
+              },
+            },
+            {
+              type: 'date',
+              id: 'paidon',
+              head: m.paidOn,
+              render: _ => {
+                return {
+                  label: formatDateTime(_.lastStatusUpdate),
+                  tooltip: formatDate(_.lastStatusUpdate),
+                  value: _.lastStatusUpdate,
                 }
               },
             },
