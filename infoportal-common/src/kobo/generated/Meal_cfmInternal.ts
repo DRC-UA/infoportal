@@ -3,42 +3,44 @@ export namespace Meal_cfmInternal {
 
   // Form id: aN3Y8JeH2fU3GthrWAs9FG
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // begin_group_8qtQfwiWw/existing_beneficiary [select_one] Is this an existing beneficiary of DRC?
-    existing_beneficiary: undefined | Option<'existing_beneficiary'>,
+    'existing_beneficiary': undefined | Option<'existing_beneficiary'>,
     // begin_group_8qtQfwiWw/project_code [select_one] If yes, please enter the project code
-    project_code: undefined | Option<'project_code'>,
+    'project_code': undefined | Option<'project_code'>,
     // begin_group_8qtQfwiWw/project_code_specify [text] Please specify
-    project_code_specify: string | undefined,
+    'project_code_specify': string | undefined,
     // begin_group_8qtQfwiWw/name [text] Name
-    name: string | undefined,
+    'name': string | undefined,
     // begin_group_8qtQfwiWw/gender [select_one] Gender
-    gender: undefined | Option<'gender'>,
+    'gender': undefined | Option<'gender'>,
     // begin_group_8qtQfwiWw/date [date] Date
-    date: Date | undefined,
+    'date': Date | undefined,
     // begin_group_8qtQfwiWw/phone [text] Phone
-    phone: string | undefined,
+    'phone': string | undefined,
     // begin_group_8qtQfwiWw/email [text] Email
-    email: string | undefined,
+    'email': string | undefined,
     // begin_group_8qtQfwiWw/validation_at_least_one_contact [note] <span style="border-radius: 3px; padding: 4px; color: #a94442; font-weight: bold; background: rgb(242, 222, 222)">Please fill email or phone number</span>
-    validation_at_least_one_contact: string,
+    'validation_at_least_one_contact': string,
     // begin_group_8qtQfwiWw/ben_det_oblast [select_one] Select the oblast of residence
-    ben_det_oblast: undefined | Option<'ben_det_oblast'>,
+    'ben_det_oblast': undefined | Option<'ben_det_oblast'>,
     // begin_group_8qtQfwiWw/ben_det_raion [select_one] Select the raion of residence
-    ben_det_raion: undefined | string,
+    'ben_det_raion': undefined | string,
     // begin_group_8qtQfwiWw/ben_det_hromada [select_one] Select the Hromada of residence
-    ben_det_hromada: undefined | string,
+    'ben_det_hromada': undefined | string,
+    // begin_group_8qtQfwiWw/ben_det_settlement [text] Your Settlement of residence
+    'ben_det_settlement': string | undefined,
     // begin_group_UTzxDVd8w/feedback_method [select_one] What is the method for submitting feedback?
-    feedback_method: undefined | Option<'feedback_method'>,
+    'feedback_method': undefined | Option<'feedback_method'>,
     // begin_group_UTzxDVd8w/feedback_method_other [text] Please specify
-    feedback_method_other: string | undefined,
+    'feedback_method_other': string | undefined,
     // begin_group_UTzxDVd8w/feedback_type [select_one] What is the Feedback Category?
-    feedback_type: undefined | Option<'feedback_type'>,
+    'feedback_type': undefined | Option<'feedback_type'>,
     // begin_group_UTzxDVd8w/feedback_coc_type [note] ⚠️ Please ensure this is flagged through the appropriate CoC focal point
-    feedback_coc_type: string,
+    'feedback_coc_type': string,
     // begin_group_UTzxDVd8w/feedback [text] Please enter the feedback
-    feedback: string | undefined,
+    'feedback': string | undefined,
   }
 
   export const options = {
@@ -61,6 +63,34 @@ export namespace Meal_cfmInternal {
       'UKR-000348': `UKR-000348 BHA3`,
       'UKR-000360': `UKR-000360 Novo-Nordisk`,
       'UKR-000336': `UKR-000336 UHF6`,
+      'UKR-000352': `UKR-000352 UHF7`,
+      'UKR-000226': `UKR-000226 SDC`,
+      'UKR-000230': `UKR-000230 PM WRA`,
+      'UKR-000231': `UKR-000231 PM WKA`,
+      'UKR-000247': `UKR-000247 FCDO`,
+      'UKR-000249': `UKR-000249 Finnish MFA`,
+      'UKR-000255': `UKR-000255 EU IcSP`,
+      'UKR-000267': `UKR-000267 DANIDA`,
+      'UKR-000269': `UKR-000269 ECHO1`,
+      'UKR-000270': `UKR-000270 Pooled Funds Old (MPCA)`,
+      'UKR-000276': `UKR-000276 UHF3`,
+      'UKR-000284': `UKR-000284 BHA`,
+      'UKR-000290': `UKR-000290 SDC Shelter`,
+      'UKR-000293': `UKR-000293 French MFA`,
+      'UKR-000294': `UKR-000294 Dutch I`,
+      'UKR-000304': `UKR-000304 PSPU`,
+      'UKR-000306': `UKR-000306 Dutch II`,
+      'UKR-000309': `UKR-000309 OKF`,
+      'UKR-000322': `UKR-000322 ECHO2`,
+      'UKR-000330': `UKR-000330 SDC2`,
+      'UKR-000340': `UKR-000340 Augustinus Fonden`,
+      'UKR-000341': `UKR-000341 Hoffmans & Husmans`,
+      'UKR-000342': `UKR-000342 Pooled Funds`,
+      'UKR-000347': `UKR-000347 DANIDA`,
+      'UKR-000363': `UKR-000363 UHF8`,
+      'UKR-000355': `UKR-000355 Danish MFA`,
+      'UKR-000372': `UKR-000372 ECHO3`,
+      'SIDA 518-570A': `SIDA 518-570A`,
       'Other': `Other`
     },
     gender: {
