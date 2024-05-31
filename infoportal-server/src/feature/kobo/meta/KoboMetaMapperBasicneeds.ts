@@ -244,5 +244,3 @@ export class KoboMetaBasicneeds {
     return programs.map(prepare)
   }
 }
-
-.then(_ => _.json()).then(console.log)

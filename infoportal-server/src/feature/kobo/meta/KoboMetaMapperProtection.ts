@@ -201,6 +201,7 @@ export class KoboMetaMapperProtection {
       oblast: oblast.name,
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      settlement: answer.ben_det_hromada_001,
       sector: DrcSector.Protection,
       activity: DrcProgram.GBV,
       personsCount: persons.length,
