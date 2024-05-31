@@ -98,13 +98,17 @@ export const DatabaseTable = ({
 
   return (
     <>
-      {(ctxSchema.anyLoading || loading) && !ctxAnswers.byId.get(formId) && (
+      {ctxSchema.anyLoading && loading && (
         <>
           <Skeleton sx={{mx: 1, height: 54}}/>
           <SheetSkeleton/>
         </>
       )}
-      {map(ctxAnswers.byId.get(formId), _form.get, ctxSchema.byId[formId]?.get, (answers, form, schema) => (
+      {/*{(ctxSchema.anyLoading || loading) && !ctxAnswers.byId.get(formId) && (*/}
+      {/*  <>*/}
+      {/*  </>*/}
+      {/*)}*/}
+      {map(_form.get, ctxSchema.byId[formId]?.get, (form, schema) => (
         <DatabaseKoboTableProvider
           schema={schema}
           dataFilter={dataFilter}
@@ -112,7 +116,7 @@ export const DatabaseTable = ({
           serverId={serverId}
           refetch={refetch}
           loading={loading}
-          data={answers.data}
+          data={ctxAnswers.byId.get(formId)?.data}
           form={form}
         >
           <DatabaseKoboTableContent

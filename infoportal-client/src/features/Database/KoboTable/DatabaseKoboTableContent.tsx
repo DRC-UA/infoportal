@@ -151,6 +151,7 @@ export const DatabaseKoboTableContent = ({
   return (
     <>
       <Datatable
+        loading={ctx.loading}
         defaultHiddenColumns={hiddenColumns}
         hideColumnsToggle
         contentProps={{sx: {maxHeight: 'calc(100vh - 204px)'}}}

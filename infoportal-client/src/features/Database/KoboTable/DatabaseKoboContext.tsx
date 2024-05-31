@@ -1,7 +1,7 @@
-import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useRef, useState} from 'react'
+import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from 'react'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
 import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {KoboAnswerFlat, KoboAnswerId, UUID} from '@infoportal-common'
+import {KoboAnswerId, UUID} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
@@ -21,7 +21,7 @@ export interface DatabaseKoboContext {
   form: KoboForm
   asyncRefresh: UseAsyncSimple<() => Promise<void>>
   asyncEdit: (answerId: KoboAnswerId) => string
-  data: KoboMappedAnswer[]
+  data?: KoboMappedAnswer[]
   loading?: boolean
   setData: Dispatch<SetStateAction<KoboMappedAnswer[]>>
   externalFilesIndex?: KoboExternalFilesIndex
@@ -40,7 +40,7 @@ export const DatabaseKoboTableProvider = (props: {
   serverId: DatabaseKoboContext['serverId']
   canEdit: DatabaseKoboContext['canEdit']
   form: DatabaseKoboContext['form']
-  data: KoboMappedAnswer[]
+  data?: KoboMappedAnswer[]
 }) => {
   const {
     form,
@@ -50,7 +50,6 @@ export const DatabaseKoboTableProvider = (props: {
     refetch,
   } = props
   const {api} = useAppSettings()
-  const isFirstDataChange = useRef(true)
   const [indexExternalFiles, setIndexExternalFiles] = useState<KoboExternalFilesIndex>()
 
   const fetcherExternalFiles = useFetcher<() => Promise<{file: string, csv: string}[]>>(() => {
@@ -74,8 +73,8 @@ export const DatabaseKoboTableProvider = (props: {
   }, [props.schema.schemaUnsanitized])
 
   const mapData = (data: KoboMappedAnswer[]) => {
-    const mapped = databaseCustomMapping[form.id] ? data.map(_ => {
-        return databaseCustomMapping[form.id](_)
+    const mapped = databaseCustomMapping[form.id] ? data?.map(_ => {
+      return databaseCustomMapping[form.id](_)
     }) : data
     // const mapped = data.map(_ => {
     //   const m = Kobo.mapAnswerBySchema(props.schema.schemaHelper.questionIndex, _)
@@ -94,15 +93,11 @@ export const DatabaseKoboTableProvider = (props: {
 
   const asyncEdit = (answerId: KoboAnswerId) => api.koboApi.getEditUrl({serverId, formId: form.id, answerId})
 
-  const [mappedData, setMappedData] = useState<KoboMappedAnswer[]>(mapData(data))
+  const [mappedData, setMappedData] = useState<KoboMappedAnswer[] | undefined>(undefined)
 
   useEffect(() => {
-    if (!isFirstDataChange.current) {
-      setMappedData(mapData(data))
-    }
-    isFirstDataChange.current = false
+    if (data) setMappedData(mapData(data))
   }, [data])
-
 
   return (
     <Context.Provider value={{
@@ -111,7 +106,7 @@ export const DatabaseKoboTableProvider = (props: {
       asyncRefresh,
       asyncEdit,
       data: mappedData,
-      setData: setMappedData,
+      setData: setMappedData as Dispatch<SetStateAction<KoboMappedAnswer[]>>,
     }}>
       {children}
     </Context.Provider>
