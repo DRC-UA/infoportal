@@ -14,7 +14,7 @@ type Bundle = AiBundle<AiMineActionType.Type, AiMineActionType.TypeSub>
 
 export const AiMineAction = () => {
   const {api} = useAppSettings()
-  const fetcher = useFetcher(async (periodStr: string) => api.hdp.fetchRiskEducation().then(res => res.filter(_ => _['Reporting Month'] === periodStr).map((_, i) => {
+  const fetcher = useFetcher(async (periodStr: string) => api.hdp.fetchRiskEducation().then(res => Promise.all(res.filter(_ => _['Reporting Month'] === periodStr).map(async (_, i) => {
     const addFlagIfNotInList = (value: string, options: Record<string, string>): any => {
       if (!options[value]) return aiInvalidValueFlag + ' ' + value
       return value
@@ -22,10 +22,10 @@ export const AiMineAction = () => {
     const rawActivity: AiMineActionType.Type = {
       'Reporting Organization': 'Danish Refugee Council',
       'Plan/Project Code': addFlagIfNotInList(_['Plan/Project Code'], AiMineActionType.options['Plan/Project Code']),
-      // ...AiMapper.getLocationByMeta(_['Oblast Oblast ENG/UKR'], _['Raion Raion ENG/UKR'], _['Hromada Hromada ENG/PCODE/UKR'], aiInvalidValueFlag),
+      ...await AiMapper.getLocationByMeta(_['Oblast Oblast ENG/UKR'], _['Raion Raion ENG/UKR'], _['Hromada Hromada ENG/PCODE/UKR'], undefined),
       // 'Oblast': addFlagIfNotInList(_['Oblast Oblast ENG/UKR'], AiMineActionType.options['Oblast']),
-      // 'Raion': addFlagIfNotInList(_['Raion Raion ENG/UKR'], AiMineActionType.options['Raion']),
-      // 'Hromada': addFlagIfNotInList(_['Hromada Hromada ENG/PCODE/UKR'], AiMineActionType.options['Hromada']),
+      // 'Raion': _['Raion Raion ENG/UKR'],
+      // 'Hromada': _['Hromada Hromada ENG/PCODE/UKR'],
       'Response Theme': addFlagIfNotInList(_['Response Theme'], AiMineActionType.options['Response Theme']),
     }
     const rawSubActivity: AiMineActionType.TypeSub = {
@@ -60,7 +60,7 @@ export const AiMineAction = () => {
       requestBody: request,
     }
     return bundles
-  })))
+  }))))
 
   return (
     <Page width="full">

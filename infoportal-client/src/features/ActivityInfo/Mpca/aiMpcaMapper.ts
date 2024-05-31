@@ -67,6 +67,7 @@ export namespace AiMpcaMapper {
                 'Implementing Partner': 'Danish Refugee Council',
                 'Raion': loc.Raion,
                 'Hromada': loc.Hromada,
+                'Settlement': loc.Settlement,
                 'Donor': fnSwitch(DrcProjectHelper.donorByProject[project], {
                   UHF: 'Ukraine Humanitarian Fund (UHF)',
                   NovoNordisk: 'Novo Nordisk (NN)',

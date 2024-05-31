@@ -136,6 +136,7 @@ export class KoboMetaMapperEcrec {
       oblast: oblast.name,
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      settlement: answer.ben_det_settlement,
       sector: DrcSector.Livelihoods,
       activity: DrcProgram.SectoralCashForAgriculture,
       personsCount: safeNumber(answer.ben_det_hh_size),
