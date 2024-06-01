@@ -1,6 +1,5 @@
-import {KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
+import {KoboAnswer, KoboAnswerFlat, KoboAnswerMetaData, KoboApiQuestionSchema, KoboBaseTags, KoboId} from '@infoportal-common'
 import {Enum} from '@alexandreannic/ts-utils'
-import {KoboAnswer, KoboAnswerFlat, KoboAnswerId, KoboAttachment, KoboBaseTags, KoboId} from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
 export type KoboServer = {
@@ -27,42 +26,11 @@ export class KoboFormHelper {
   }
 }
 
-export type KoboAnswerMetaData<TTag extends KoboBaseTags = KoboBaseTags> = {
-  start: Date
-  end: Date
-  date: Date
-  version?: string
-  submissionTime: Date
-  submittedBy?: string
-  id: KoboAnswerId
-  uuid: string
-  validationStatus?: 'validation_status_approved'
-  validatedBy?: string
-  lastValidatedTimestamp?: number
-  geolocation?: [number, number]
-  tags?: TTag
-  //
-  // _id: number,
-  // // 'formhub/uuid': string,
-  // start: Date,
-  // end: Date,
-  // // __version__: string,
-  // // 'meta/instanceID': string,
-  // // _xform_id_string: string,
-  // _uuid: UUID,
-  attachments: KoboAttachment[],
-  // // _status: KoboAnswerStatus,
-  // _geolocation: [number, number],
-  // _submission_time: Date,
-  // // _tags: KoboAnswerTags[],
-  // // _notes: KoboAnswerNotes[],
-  // // _validation_status: any,
-  // // _submitted_by: any
-}
-
 export type KoboMappedAnswerType = string | string[] | Date | number | undefined | KoboAnswerFlat<any>[]
 
-export type KoboMappedAnswer<T extends Record<string, any> = Record<string, KoboMappedAnswerType>> = (KoboAnswerMetaData & T)
+export type KoboMappedAnswer<
+  T extends Record<string, any> = Record<string, KoboMappedAnswerType>
+> = (KoboAnswerMetaData<KoboBaseTags> & T)
 
 export class Kobo {
 
@@ -97,7 +65,7 @@ export class Kobo {
     })
   }
 
-  static readonly mapAnswerBySchema = (indexedSchema: Record<string, KoboQuestionSchema>, answers: KoboAnswerFlat): KoboMappedAnswer => {
+  static readonly mapAnswerBySchema = (indexedSchema: Record<string, KoboApiQuestionSchema>, answers: KoboAnswerFlat): KoboMappedAnswer => {
     const mapped: KoboMappedAnswer = {...answers}
     Enum.entries(mapped).forEach(([question, answer]) => {
       const type = indexedSchema[question]?.type

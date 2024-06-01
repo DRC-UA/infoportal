@@ -3,8 +3,7 @@ import {useMemo} from 'react'
 import {fnSwitch, seq, Seq} from '@alexandreannic/ts-utils'
 import {DrcSector, OblastIndex, OblastName} from '@infoportal-common'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import { PartnershipData } from './PartnershipType'
+import {PartnershipData} from './PartnershipType'
 
 export type UsePartnershipData = ReturnType<typeof usePartnershipData>
 

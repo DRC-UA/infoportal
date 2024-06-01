@@ -1,6 +1,5 @@
 import {AppConf, appConf} from './core/conf/AppConf'
 import {Server} from './server/Server'
-import {ServiceStats} from './server/services/ServiceStats'
 import {Services} from './server/services'
 import {PrismaClient} from '@prisma/client'
 import {MpcaPaymentService} from './feature/mpca/mpcaPayment/MpcaPaymentService'
@@ -12,7 +11,6 @@ import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 import {GlobalCache, IpCache} from './helper/IpCache'
 import {duration} from '@alexandreannic/ts-utils'
-import {BuildKoboType} from './script/BuildTypeKobo'
 
 export const app = {
   cache: new GlobalCache(new IpCache<IpCache<any>>({
@@ -22,7 +20,7 @@ export const app = {
 }
 
 const initServices = (
-  // koboClient: KoboSdk,
+  // koboClient: v2,
   // ecrecSdk: EcrecSdk,
   // legalaidSdk: LegalaidSdk,
   prisma: PrismaClient
@@ -31,21 +29,17 @@ const initServices = (
   // const legalAid = new ServiceLegalAid(legalaidSdk)
   // const nfi = new ServiceNfi(koboClient)
   const mpcaPayment = new MpcaPaymentService(prisma)
-  const stats = new ServiceStats(
-    // ecrec,
-    // legalAid,
-    // nfi,
-  )
   return {
     // ecrec,
     // legalAid,
     // nfi,
-    stats,
     mpcaPayment,
   }
 }
 
 const startApp = async (conf: AppConf) => {
+  // await migrateSettlement()
+  // return
   // await new BuildKoboType().build('safety_incident')
   // return
   // await migrateHhsTags()

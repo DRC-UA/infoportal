@@ -44,8 +44,12 @@ export class AILocationHelper {
 
   static get5w = (label5w: string) => label5w.split('_')[0] ?? label5w
 
+  static readonly getSettlement = lazy((): Promise<Record<SettlementIso, Settlement>> => {
+    return settlements$.then(_ => _ as unknown as Record<SettlementIso, Settlement>)
+  })
+
   private static getSettlementsByHromadaIso = async (hromadaIso: string) => {
-    const settlements = await settlements$.then(_ => _ as unknown as Record<SettlementIso, Settlement>)
+    const settlements = await AILocationHelper.getSettlement().then(_ => _ as unknown as Record<SettlementIso, Settlement>)
     const index = AILocationHelper.settlementsIndex(settlements)
     const isos = index[hromadaIso]
     return isos.map(_ => settlements[_])
@@ -86,6 +90,11 @@ export class AILocationHelper {
     const raionIso = AILocationHelper.findRaion(oblastName, raionName)?.iso
     const list = Enum.values(hromadas).filter(_ => _.parent === raionIso)
     return list.find(_ => _.en.toLowerCase() === hromadaName?.toLowerCase())
+  }
+
+  static readonly findSettlementByIso = async (iso: string): Promise<Settlement | undefined> => {
+    const settlements = await AILocationHelper.getSettlement().then(_ => _ as unknown as Record<SettlementIso, Settlement>)
+    return settlements[iso!]
   }
 
   static readonly findSettlement = async (oblastName: string, raionName: string, hromadaName: string, settlementName?: string): Promise<Settlement | undefined> => {

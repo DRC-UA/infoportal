@@ -13,7 +13,6 @@ import {AppError} from '../helper/Errors'
 import {PrismaSessionStore} from '@quixo3/prisma-session-store'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import {IpSentry} from '../plugins/Sentry'
 import {duration} from '@alexandreannic/ts-utils'
 // import * as Sentry from '@sentry/node'
 

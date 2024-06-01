@@ -2,14 +2,13 @@ import {Alert, Box, Dialog, DialogActions, DialogContent, DialogTitle, Icon, Ske
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
+import {KoboApiQuestionSchema, KoboId, koboIndex} from '@infoportal-common'
 import React, {useEffect, useMemo, useState} from 'react'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {Txt} from 'mui-extension'
 import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import {KoboId, koboIndex} from '@infoportal-common'
 import {Page} from '@/shared/Page'
 import {useParams} from 'react-router'
 import * as yup from 'yup'
@@ -165,7 +164,7 @@ const KoboAnswerQuestionView = ({
 }: {
   formId: KoboId
   schema: KoboSchemaHelper.Bundle
-  questionSchema: KoboQuestionSchema
+  questionSchema: KoboApiQuestionSchema
   answer: KoboMappedAnswer<any>
 }) => {
   const langIndex = useKoboSchemaContext()

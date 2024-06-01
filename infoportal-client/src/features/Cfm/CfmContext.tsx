@@ -9,7 +9,6 @@ import {
   DrcOffice,
   DrcProject,
   DrcProjectHelper,
-  KeyOf,
   KoboAnswerFlat,
   KoboAnswerId,
   KoboId,

@@ -1,5 +1,5 @@
 import {Person} from '../../type/Person'
-import {UUID} from '../../type/Generic'
+import {KoboAnswerMetaData} from '../sdk'
 
 export type KoboId = string
 
@@ -75,37 +75,6 @@ export enum VetApplicationStatus {
   SecondPending = 'SecondPending',
   SecondPaid = 'SecondPaid',
   CertificateSubmitted = 'CertificateSubmitted',
-}
-
-export type KoboAnswerMetaData<TTag extends Record<string, any> | undefined = undefined> = {
-  start: Date,
-  end: Date,
-  version?: string
-  attachments: KoboAttachment[]
-  geolocation: KoboAnswerGeolocation
-  /** Extracted from question `date` when exists. */
-  date: Date
-  submissionTime: Date
-  id: KoboAnswerId
-  uuid: UUID
-  validationStatus?: 'validation_status_approved'//'validation_status_approved'
-  validatedBy?: string
-  submittedBy?: string
-  lastValidatedTimestamp?: number
-  source?: string
-  updatedAt?: Date
-  tags?: TTag
-}
-
-export type KoboAnswerGeolocation = [number, number]
-export type KoboAnswerTags = any
-export type KoboAnswerNotes = any
-
-export type KoboAttachment = {
-  download_url: string
-  filename: string
-  download_small_url: string
-  id: string
 }
 
 export type KoboAnswer<

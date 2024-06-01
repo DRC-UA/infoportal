@@ -1,8 +1,19 @@
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
-import {ApiPaginate, ApiPaginateHelper, ApiPagination, KoboAnswer, KoboAnswerId, KoboId, KoboIndex, UUID} from '@infoportal-common'
-import {DbKoboAnswer, KoboAttachment} from '../connector/kobo/KoboClient/type/KoboAnswer'
+import {
+  ApiPaginate,
+  ApiPaginateHelper,
+  ApiPagination,
+  KoboAnswer,
+  KoboAnswerId,
+  KoboApiColumType,
+  KoboApiQuestionSchema,
+  KoboApiSchema,
+  KoboAttachment,
+  KoboId,
+  KoboIndex,
+  UUID
+} from '@infoportal-common'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
-import {filterKoboQuestionType, KoboApiQuestion} from '../connector/kobo/KoboClient/type/KoboApiForm'
 import {duration, fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {format} from 'date-fns'
 import {KoboAnswersFilters} from '../../server/controller/kobo/ControllerKoboAnswer'
@@ -16,6 +27,11 @@ import {app} from '../../index'
 import {appConf} from '../../core/conf/AppConf'
 import {KoboAnswerHistoryService} from './history/KoboAnswerHistoryService'
 import Event = GlobalEvent.Event
+
+export type DbKoboAnswer<
+  T extends Record<string, any> = Record<string, any>,
+> = KoboAnswer<T, any> & {formId: KoboId}
+
 
 export interface KoboAnswerFilter {
   filters?: KoboAnswersFilters,
@@ -281,10 +297,10 @@ export class KoboService {
   //   })
   // }
 
-  readonly getFormDetails = async (formId: KoboId) => {
+  readonly getFormDetails = async (formId: KoboId): Promise<KoboApiSchema> => {
     const dbForm = await this.prisma.koboForm.findFirstOrThrow({where: {id: formId}})
     const sdk = await this.sdkGenerator.get(dbForm.serverId)
-    return sdk.getForm(dbForm.id)
+    return sdk.v2.getForm(dbForm.id)
   }
 
   readonly translateForm = async ({
@@ -296,9 +312,18 @@ export class KoboService {
     langIndex: number,
     data: DbKoboAnswer[],
   }) => {
+    const koboQuestionType: KoboApiColumType[] = [
+      'text',
+      'start',
+      'end',
+      'integer',
+      'select_one',
+      'select_multiple',
+      'date',
+    ]
     const flatAnswers = data.map(({answers, ...meta}) => ({...meta, ...answers}))
     const koboFormDetails = await this.getFormDetails(formId)
-    const indexLabel = seq(koboFormDetails.content.survey).filter(filterKoboQuestionType).reduceObject<Record<string, KoboApiQuestion>>(_ => [_.name, _])
+    const indexLabel = seq(koboFormDetails.content.survey).filter(_ => koboQuestionType.includes(_.type)).reduceObject<Record<string, KoboApiQuestionSchema>>(_ => [_.name, _])
     const indexOptionsLabels = seq(koboFormDetails.content.choices).reduceObject<Record<string, undefined | string>>(_ => [_.name, _.label?.[langIndex]])
     return flatAnswers.map(d => {
       const translated = {} as DbKoboAnswer
@@ -394,7 +419,7 @@ export class KoboService {
     })
     const [x] = await Promise.all([
       // this.conf.db.url.includes('localhost') ? () => void 0 :
-        sdk.updateData({formId, submissionIds: answerIds, data: {[xpath]: answer}}),
+      sdk.v2.updateData({formId, submissionIds: answerIds, data: {[xpath]: answer}}),
       await this.prisma.$executeRawUnsafe(
         `UPDATE "KoboAnswers"
          SET answers     = jsonb_set(answers, '{${question}}', '"${answer}"'),

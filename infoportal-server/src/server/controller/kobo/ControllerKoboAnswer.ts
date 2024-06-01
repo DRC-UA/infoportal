@@ -3,8 +3,7 @@ import * as yup from 'yup'
 import {ObjectSchema} from 'yup'
 import {PrismaClient} from '@prisma/client'
 import {KoboService} from '../../../feature/kobo/KoboService'
-import {Period} from '@infoportal-common'
-import {KoboId} from '../../../feature/connector/kobo/KoboClient/type/KoboAnswer'
+import {KoboId, Period} from '@infoportal-common'
 import {validateApiPaginate} from '../../../core/Type'
 
 export interface KoboAnswersFilters extends Partial<Period> {

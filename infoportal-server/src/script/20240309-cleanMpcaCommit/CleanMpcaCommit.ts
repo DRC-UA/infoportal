@@ -3,7 +3,6 @@ import {PromisePool} from '@supercharge/promise-pool'
 import {CashStatus, KoboAnswerId} from '@infoportal-common'
 import {appConf} from '../../core/conf/AppConf'
 import {processBatches} from '../../helper/Utils'
-import {sleep} from '@alexandreannic/ts-utils'
 
 export const migrateHhsTags = async () => {
   // v2 id 529987478 = OKF => v3 Empty

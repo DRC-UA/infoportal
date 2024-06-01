@@ -10,6 +10,7 @@ import {
   Ecrec_cashRegistrationBha,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
+  KoboAnswerUtils,
   KoboBaseTags,
   KoboGeneralMapping,
   KoboMetaHelper,
@@ -21,7 +22,6 @@ import {
 import {KoboMetaOrigin} from './KoboMetaType'
 import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashRegistration'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
-import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 import {appConf} from '../../../core/conf/AppConf'
 
 export class KoboMetaMapperEcrec {

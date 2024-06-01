@@ -3,10 +3,8 @@ import {KoboMappedAnswersService} from '../../kobo/KoboMappedAnswersService'
 import {appConf} from '../../../core/conf/AppConf'
 import {KoboSyncServer} from '../../kobo/KoboSyncServer'
 import {ShelterEntity, ShelterTaPriceLevel} from './ShelterDbType'
-import {KoboAnswerId} from '../../connector/kobo/KoboClient/type/KoboAnswer'
+import {DrcOffice, KoboAnswerId, KoboIndex, OblastIndex, ShelterContractorPrices} from '@infoportal-common'
 import {Enum, fnSwitch, Seq, seq} from '@alexandreannic/ts-utils'
-import {DrcOffice, KoboIndex, OblastIndex} from '@infoportal-common'
-import {ShelterContractorPrices} from '@infoportal-common'
 
 /** @deprecated*/
 export class ShelterDbService {

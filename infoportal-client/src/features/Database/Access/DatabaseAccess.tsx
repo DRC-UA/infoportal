@@ -1,5 +1,5 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboId} from '@infoportal-common'
+import {KoboApiSchema, KoboId} from '@infoportal-common'
 import {AppFeatureId} from '@/features/appFeatureId'
 import React, {useEffect, useMemo} from 'react'
 import {Box} from '@mui/material'
@@ -8,7 +8,6 @@ import {useI18n} from '@/core/i18n'
 import {useFetchers} from '@/shared/hook/useFetchers'
 import {useParams} from 'react-router'
 import {databaseUrlParamsValidation} from '@/features/Database/Database'
-import {KoboSchema} from '@/core/sdk/server/kobo/KoboApi'
 import {Page} from '@/shared/Page'
 import {IpBtn} from '@/shared/Btn'
 import {useAsync} from '@/shared/hook/useAsync'
@@ -42,7 +41,7 @@ export const DatabaseAccess = ({
   form,
 }: {
   formId: KoboId,
-  form: KoboSchema
+  form: KoboApiSchema
 }) => {
   const {m} = useI18n()
   const {api} = useAppSettings()

@@ -94,11 +94,6 @@ export class KoboAnswerSdk {
     return this.client.patch(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: answerIds}})
   }
 
-  readonly getAllFromLocalForm = (filters: AnswersFilters = {}) => {
-    return this.client.get<KoboAnswer[]>(`/kobo/local-form`, {qs: filters})
-      .then(_ => _.map(x => Kobo.mapAnswerMetaData(x)))
-  }
-
   readonly getPeriod = (formId: KoboId): Promise<Period> => {
     switch (formId) {
       case KoboIndex.byName('protection_hhs3').id:

@@ -287,7 +287,7 @@ const rrmKoboIdsToMigrate = [
     },
   })[config.server]
   const prisma = new PrismaClient()
-  const sdkv1 = await new KoboSdkGenerator(prisma).getV1(scriptConf.kobo[config.server].serverId)
+  const sdk = await new KoboSdkGenerator(prisma).get(scriptConf.kobo[config.server].serverId)
   const data = await new KoboMappedAnswersService(prisma).searchBn_RapidResponseMechanism()
     .then(res => {
       return res.data.filter(_ => {
@@ -335,7 +335,7 @@ const rrmKoboIdsToMigrate = [
   })
   await PromisePool.withConcurrency(config.importConcurrency).for(res).process(async (j, i) => {
     try {
-      const res = await sdkv1.submit({
+      const res = await sdk.v1.submit({
         formId: serverConfig.sida,
         data: j,
       })

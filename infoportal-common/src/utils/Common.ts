@@ -258,3 +258,20 @@ export const getOverlapMonths = (startDate1: Date, endDate1: Date, startDate2: D
 
   return overlapMonths > 0 ? overlapMonths : 0
 }
+
+export const chunkify = <T, R>({
+  size,
+  data,
+  fn,
+}: {
+  size: number,
+  data: T[]
+  fn: (_: T[]) => Promise<R>
+}): Promise<R[]> => {
+  const chunkedSubmissions = data.reduce((chunks, id, index) => {
+    if (index % size === 0) chunks.push([])
+    chunks[chunks.length - 1].push(id)
+    return chunks
+  }, [] as T[][])
+  return Promise.all(chunkedSubmissions.map(fn))
+}

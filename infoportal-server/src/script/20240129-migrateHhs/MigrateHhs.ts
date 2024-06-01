@@ -1,13 +1,9 @@
 import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from '../../feature/kobo/KoboSdkGenerator'
 import {PromisePool} from '@supercharge/promise-pool'
-import {ApiKoboAnswerMetaData} from '../../feature/connector/kobo/KoboClient/type/KoboAnswer'
-import {KoboAnswer} from '@infoportal-common'
+import {ApiKoboAnswerMetaData, KoboAnswer, KoboIndex, Protection_hhs, Protection_hhs3Create} from '@infoportal-common'
 import {scriptConf} from '../ScriptConf'
-import {Protection_hhs} from '@infoportal-common'
 import {mapFor} from '@alexandreannic/ts-utils'
-import {KoboIndex} from '@infoportal-common'
-import {Protection_hhs3Create} from '@infoportal-common'
 
 const retryIds = []
 const problemId = [
@@ -33,7 +29,6 @@ const problemId = [
 
   const prisma = new PrismaClient()
   const sdk = await new KoboSdkGenerator(prisma).get(scriptConf.kobo[config.server].serverId)
-  const sdkv1 = await new KoboSdkGenerator(prisma).getV1(scriptConf.kobo[config.server].serverId)
 
   // const getAllIds = await sdk
   //   .getAnswersRaw(serverConfig.formId)
@@ -45,7 +40,7 @@ const problemId = [
   // console.log(getAllIds)
 
   const getAllIds: KoboAnswer<Protection_hhs.T>[] = await sdk
-    .getAnswers(serverConfig.formId)
+    .v2.getAnswers(serverConfig.formId)
     .then(x => x.data
       // .filter(_ => retryIds.includes(+_.id))
       .map(a => {
@@ -55,12 +50,12 @@ const problemId = [
         }
       }))
 
-  const newFromUuid = await sdkv1.getForms().then(_ => _.find(f => f.id_string === serverConfig.newFormId)?.uuid)
+  const newFromUuid = await sdk.v1.getForms().then(_ => _.find(f => f.id_string === serverConfig.newFormId)?.uuid)
 
   await PromisePool.withConcurrency(config.importConcurrency).for(getAllIds).process(async (row, i) => {
     try {
       const d = row.answers
-      const res = await sdkv1.submit<ApiKoboAnswerMetaData & Protection_hhs3Create.T>({
+      const res = await sdk.v1.submit<ApiKoboAnswerMetaData & Protection_hhs3Create.T>({
         formId: serverConfig.newFormId,
         uuid: newFromUuid,
         data: {

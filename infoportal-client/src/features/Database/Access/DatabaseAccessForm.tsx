@@ -1,5 +1,5 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboId, nullValuesToUndefined} from '@infoportal-common'
+import {KoboApiSchema, KoboId, nullValuesToUndefined} from '@infoportal-common'
 import {AppFeatureId} from '@/features/appFeatureId'
 import React, {ReactElement, useCallback, useMemo} from 'react'
 import {Modal, Txt} from 'mui-extension'
@@ -9,14 +9,13 @@ import {Controller, useForm} from 'react-hook-form'
 import {KoboDatabaseAccessParams} from '@/core/sdk/server/access/Access'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
-import {KoboSchema} from '@/core/sdk/server/kobo/KoboApi'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useIpToast} from '@/core/useToast'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {AccessForm, IAccessForm} from '@/features/Access/AccessForm'
-import {getKoboLabel} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
 import {AccessFormSection} from '@/features/Access/AccessFormSection'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 
 interface Form extends IAccessForm {
   question?: string
@@ -32,7 +31,7 @@ export const DatabaseAccessForm = ({
   onAdded?: () => void,
   children: ReactElement,
   formId: KoboId,
-  form: KoboSchema
+  form: KoboApiSchema
 }) => {
   const langIndex = 0
   const survey = form.content.survey
@@ -75,7 +74,7 @@ export const DatabaseAccessForm = ({
     name: string,
     label?: string[]
   }[]>) => createFilterOptions({
-    stringify: (optionName: string) => getKoboLabel(index[optionName][0], langIndex)
+    stringify: (optionName: string) => KoboSchemaHelper.getLabel(index[optionName][0], langIndex)
   }), [form])
 
   const submit = ({selectBy, question, questionAnswer, ...f}: Form) => {
@@ -134,7 +133,7 @@ export const DatabaseAccessForm = ({
                   renderOption={(props, option) => (
                     <Box component="li" key={option} {...props}>
                       <div>
-                        <Txt block>{getKoboLabel(indexQuestion[option][0], langIndex).replace(/<[^>]+>/g, '') ?? option}</Txt>
+                        <Txt block>{KoboSchemaHelper.getLabel(indexQuestion[option][0], langIndex).replace(/<[^>]+>/g, '') ?? option}</Txt>
                         <Txt color="disabled">{option}</Txt>
                       </div>
                     </Box>
@@ -163,7 +162,7 @@ export const DatabaseAccessForm = ({
                       loading={!questions}
                       disableCloseOnSelect
                       options={options?.map(_ => _.name) ?? []}
-                      // options={options?.map(_ => ({children: getKoboLabel(_, langIndex), value: _.name}))}
+                      // options={options?.map(_ => ({children: KoboSchemaHelper.getLabel(_, langIndex), value: _.name}))}
                       renderInput={({InputProps, ...props}) => <IpInput
                         {...InputProps}
                         {...props}
@@ -185,7 +184,7 @@ export const DatabaseAccessForm = ({
                       renderOption={(props, option) => (
                         <Box component="li" key={option} {...props}>
                           <div>
-                            <Txt block>{getKoboLabel(indexOptionsByName[option][0], langIndex).replace(/<[^>]+>/g, '') ?? option}</Txt>
+                            <Txt block>{KoboSchemaHelper.getLabel(indexOptionsByName[option][0], langIndex).replace(/<[^>]+>/g, '') ?? option}</Txt>
                             <Txt color="disabled">{option}</Txt>
                           </div>
                         </Box>

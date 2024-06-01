@@ -1,8 +1,7 @@
-import {KoboIndex} from '@infoportal-common'
+import {KoboId, KoboIndex} from '@infoportal-common'
 import {KoboSdkGenerator} from '../../feature/kobo/KoboSdkGenerator'
 import {PrismaClient} from '@prisma/client'
 import {scriptConf} from '../ScriptConf'
-import {KoboId} from '../../feature/connector/kobo/KoboClient/type/KoboAnswer'
 
 (async () => {
   const config = {
@@ -17,8 +16,8 @@ import {KoboId} from '../../feature/connector/kobo/KoboClient/type/KoboAnswer'
   const prisma = new PrismaClient()
   const sdk = await new KoboSdkGenerator(prisma).get(scriptConf.kobo.prod.serverId)
   const [answersA, answersB] = await Promise.all([
-    sdk.getAnswers(config.formId).then(_ => _.data),
-    sdk.getAnswers(config.newFormId).then(_ => _.data),
+    sdk.v2.getAnswers(config.formId).then(_ => _.data),
+    sdk.v2.getAnswers(config.newFormId).then(_ => _.data),
   ])
   const answersBIndex = answersB.reduce((m, curr) => {
     m.set(config.linkId(curr.answers), curr.answers)

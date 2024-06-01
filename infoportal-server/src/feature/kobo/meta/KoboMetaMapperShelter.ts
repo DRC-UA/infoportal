@@ -10,6 +10,7 @@ import {
   DrcProjectHelper,
   DrcSector,
   DrcSectorHelper,
+  KoboAnswerUtils,
   KoboGeneralMapping,
   KoboIndex,
   KoboMetaHelper,
@@ -27,7 +28,6 @@ import {
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
-import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
 
 export namespace KoboMetaMapperShelter {
 

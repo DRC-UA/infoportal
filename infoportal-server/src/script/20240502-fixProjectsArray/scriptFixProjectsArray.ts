@@ -1,5 +1,4 @@
 import {PrismaClient} from '@prisma/client'
-import {PromisePool} from '@supercharge/promise-pool'
 
 export const runFixProjectsArray = async (prisma: PrismaClient) => {
   const answers = await prisma.koboAnswers.findMany({where: {formId: 'aTP5nwZjpyR7oy7bdMZktC'}})

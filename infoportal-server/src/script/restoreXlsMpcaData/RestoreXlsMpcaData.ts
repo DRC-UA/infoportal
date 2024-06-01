@@ -1,9 +1,8 @@
 import * as csvToJson from 'csvtojson'
 import fs from 'fs'
 import {appConf} from '../../core/conf/AppConf'
-import {ApiClient} from '../../core/client/ApiClient'
+import {ApiClient, MpcaEntity} from '@infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
-import {MpcaEntity} from '@infoportal-common'
 import {differenceInDays} from 'date-fns'
 
 interface XLSD {

@@ -1,9 +1,7 @@
-import {DbKoboAnswer, KoboAnswerMetaData, KoboId} from '../connector/kobo/KoboClient/type/KoboAnswer'
-import {filterKoboQuestionType} from '../connector/kobo/KoboClient/type/KoboApiForm'
+import {convertNumberIndexToLetter, KoboAnswerMetaData, KoboApiColumType, KoboId} from '@infoportal-common'
 import XlsxPopulate from 'xlsx-populate'
-import {convertNumberIndexToLetter} from '@infoportal-common'
 import {PrismaClient} from '@prisma/client'
-import {KoboService} from './KoboService'
+import {DbKoboAnswer, KoboService} from './KoboService'
 import {appConf} from '../../core/conf/AppConf'
 
 /** @deprecated??*/
@@ -29,12 +27,21 @@ export class KoboToXLS {
     langIndex?: number
     password?: string
   }) => {
+    const koboQuestionType: KoboApiColumType[] = [
+      'text',
+      'start',
+      'end',
+      'integer',
+      'select_one',
+      'select_multiple',
+      'date',
+    ]
     const koboFormDetails = await this.service.getFormDetails(formId)
     const translated = langIndex !== undefined ? await this.service.translateForm({formId, langIndex, data}) : data
     const flatTranslated = translated.map(({answers, ...meta}) => ({...meta, ...answers}))
     const columns = (() => {
       const metaColumns: (keyof KoboAnswerMetaData)[] = ['id', 'submissionTime', 'version']
-      const schemaColumns = koboFormDetails.content.survey.filter(filterKoboQuestionType)
+      const schemaColumns = koboFormDetails.content.survey.filter(_ => koboQuestionType.includes(_.type))
         .map(_ => langIndex !== undefined && _.label
           ? _.label[langIndex]?.replace(/(<([^>]+)>)/gi, '') ?? _.name
           : _.name)

@@ -3,8 +3,8 @@ import {Box, Checkbox, IconProps} from '@mui/material'
 import React from 'react'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
-import {DatatableColumn, DatatablePropertyType, DatatableRow} from '@/shared/Datatable/util/datatableType'
-import {KoboColumType} from '@/core/sdk/server/kobo/KoboApi'
+import {DatatableColumn, DatatableRow} from '@/shared/Datatable/util/datatableType'
+import {KoboApiColumType} from '@infoportal-common'
 
 export const DatatableHead = (() => {
   const Component = <T extends DatatableRow>({
@@ -119,7 +119,7 @@ const koboIconMap = {
 }
 
 export const DatatableHeadTypeIconByKoboType = ({children, ...props}: {
-  children: KoboColumType,
+  children: KoboApiColumType,
 } & Pick<IconProps, 'sx' | 'color'>) => {
   return <DatatableHeadTypeIcon children={fnSwitch(children, koboIconMap, () => 'short_text')} tooltip={children} {...props}/>
 }

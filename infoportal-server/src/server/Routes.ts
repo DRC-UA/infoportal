@@ -61,7 +61,7 @@ export const getRoutes = (
   // )
   const mpcaPayment = new ControllerMpcaPayment(services.mpcaPayment)
   const mpca = new ControllerMpca(prisma)
-  const main = new ControllerMain(services.stats)
+  const main = new ControllerMain()
   const koboForm = new ControllerKoboForm(prisma)
   const koboServer = new ControllerKoboServer(prisma)
   const koboAnswer = new ControllerKoboAnswer(prisma)
@@ -105,7 +105,7 @@ export const getRoutes = (
   }
 
   try {
-    router.get('/', errorCatcher(main.htmlStats))
+    router.get('/', errorCatcher(main.ping))
 
     router.post('/session/track', errorCatcher(session.track))
     router.post('/session/login', errorCatcher(session.login))
@@ -148,7 +148,6 @@ export const getRoutes = (
     router.post('/proxy-request', errorCatcher(main.proxy))
 
     router.post('/kobo-api/webhook', errorCatcher(koboApi.answersWebHook))
-    router.get('/kobo-api/local-form', auth(), errorCatcher(koboApi.getAnswersFromLocalCsv))
     router.post('/kobo-api/sync', auth({adminOnly: true}), errorCatcher(koboApi.synchronizeAllAnswersFromKoboServer))
     router.post('/kobo-api/:id/:formId/sync', auth(), errorCatcher(koboApi.synchronizeAnswersFromKoboServer))
     router.get('/kobo-api/:id/attachment', errorCatcher(koboApi.getAttachementsWithoutAuth))

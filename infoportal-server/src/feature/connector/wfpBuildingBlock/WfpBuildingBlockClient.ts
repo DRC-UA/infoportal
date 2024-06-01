@@ -1,5 +1,5 @@
 import {TOTP, URI} from 'otpauth'
-import {ApiClient} from '../../../core/client/ApiClient'
+import {ApiClient} from '@infoportal-common'
 import fetch from 'node-fetch'
 
 export class WfpBuildingBlockClient {

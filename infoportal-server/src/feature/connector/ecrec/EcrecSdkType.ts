@@ -5,8 +5,6 @@ export interface EcrecGetDataResponse<T> {
   data: T[]
 }
 
-// 3390303229
-
 export interface EcrecGetDataFilters<Status extends StandardEnum<unknown>> {
   funded?: boolean
   fundingDateStart?: Date

@@ -1,5 +1,4 @@
-import {Period, UUID} from '@infoportal-common'
-import {ApiClient} from '../../../core/client/ApiClient'
+import {ApiClient, Period, UUID} from '@infoportal-common'
 import {Legalaid} from './Legalaid'
 import {Cache, duration, Enum, seq, throwIf} from '@alexandreannic/ts-utils'
 import {toYYYYMMDD} from '../../../helper/Utils'
