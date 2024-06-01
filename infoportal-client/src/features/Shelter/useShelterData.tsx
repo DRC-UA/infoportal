@@ -1,14 +1,11 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useMemo} from 'react'
 import {useAsync} from '@/shared/hook/useAsync'
-import {KoboAnswerId, KoboIndex, koboIndex, ShelterTaPriceLevel} from '@infoportal-common'
+import {DrcOffice, KoboAnswerId, koboIndex, KoboIndex, OblastIndex, ShelterContractorPrices, ShelterTaPriceLevel} from '@infoportal-common'
 import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetcher'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
-import {OblastIndex} from '@infoportal-common'
-import {DrcOffice} from '@infoportal-common'
-import {ShelterContractorPrices} from '@infoportal-common'
 
 export type UseShelterData = ReturnType<typeof useShelterData>
 

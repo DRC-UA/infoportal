@@ -1,6 +1,5 @@
 import {mapFor, seq} from '@alexandreannic/ts-utils'
-import {KoboApiQuestionChoice, KoboApiQuestionSchema} from '@infoportal-common'
-import {KoboApiSchema, removeHtml} from '@infoportal-common'
+import {KoboApiQuestionChoice, KoboApiQuestionSchema, KoboApiSchema, removeHtml} from '@infoportal-common'
 import {Messages} from '@/core/i18n/localization/en'
 import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
 

@@ -1,7 +1,5 @@
-import {KoboAnswerFlat, KoboAnswerId, DrcOffice, OblastISO, OblastName} from '@infoportal-common'
+import {DrcOffice, KoboAnswerFlat, KoboAnswerId, OblastISO, OblastName, Shelter_NTA, Shelter_TA} from '@infoportal-common'
 import {ShelterNtaTags, ShelterTaTags} from '../../kobo/tags/ShelterTags'
-import {Shelter_TA} from '@infoportal-common'
-import {Shelter_NTA} from '@infoportal-common'
 
 /** @deprecated*/
 export enum ShelterTaPriceLevel {

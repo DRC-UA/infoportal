@@ -1,5 +1,4 @@
-import {IKoboMeta} from '@infoportal-common'
-import {KoboAnswerMetaData} from '@infoportal-common'
+import {IKoboMeta, KoboAnswerMetaData} from '@infoportal-common'
 
 export type KoboMetaOrigin<
   TAnswer extends Record<string, any> = any,

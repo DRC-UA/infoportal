@@ -1,8 +1,7 @@
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import * as fs from 'fs'
-import {KoboId, KoboSdkv2, ApiClient, KoboSdk} from '@infoportal-common'
+import {ApiClient, capitalize, KoboApiSchema, KoboId, KoboIndex, KoboSdk, KoboSdkv2} from '@infoportal-common'
 import {appConf} from '../core/conf/AppConf'
-import {capitalize, KoboApiSchema, KoboIndex} from '@infoportal-common'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string,

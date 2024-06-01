@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import {Box} from '@mui/material'
 import {Txt} from 'mui-extension'
 import {IpBtn} from '@/shared/Btn'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-import {Enum} from '@alexandreannic/ts-utils'
 import {appConfig} from '@/conf/AppConfig'
 import {en} from '@/core/i18n/localization/en'
 

@@ -1,4 +1,4 @@
-import {CashStatus, KoboTagStatus} from '@infoportal-common'
+import {KoboTagStatus} from '@infoportal-common'
 
 export enum EcrecCashRegistrationProgram {
   CashforAnimalFeed = 'CashforAnimalFeed',

@@ -1,7 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {logger, Logger} from '../../helper/Logger'
-import {KoboSdk, KoboAnswerParams} from '@infoportal-common'
+import {KoboAnswerParams, KoboSdk} from '@infoportal-common'
 
 export class KoboApiService {
 

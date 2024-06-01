@@ -1,6 +1,5 @@
-import {ApiClient} from '@infoportal-common'
+import {ApiClient, ApiPaginate} from '@infoportal-common'
 import {AssistancePrevented, AssistanceProvided, WfpFilters, WfpImport, WfpPaginate} from './WfpBuildingBlockType'
-import {ApiPaginate} from '@infoportal-common'
 
 export class WFPBuildingBlockSdk {
 

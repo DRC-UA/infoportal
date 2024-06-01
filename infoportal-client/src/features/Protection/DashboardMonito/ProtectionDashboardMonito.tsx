@@ -15,7 +15,7 @@ import {ProtectionDashboardMonitoSafety} from './ProtectionDashboardMonitoSafety
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {ProtectionDashboardMonitoViolence} from './ProtectionDashboardMonitoViolence'
 import {ProtectionDashboardMonitoDisability} from '@/features/Protection/DashboardMonito/ProtectionDashboardMonitoDisability'
-import {KoboIndex, KoboProtection_hhs3, Period, Person, Protection_hhs3} from '@infoportal-common'
+import {KoboIndex, Period, Person, Protection_hhs3} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {DashboardFilterOptions} from '@/shared/DashboardLayout/DashboardFilterOptions'

@@ -1,7 +1,5 @@
 import {Enum, Obj, seq} from '@alexandreannic/ts-utils'
 import {KeyOf, NonNullableKeys} from './Generic'
-import {Bn_re} from '../kobo/generated/Bn_re'
-import {DisplacementStatus} from '../kobo/mapper'
 
 export namespace Person {
 

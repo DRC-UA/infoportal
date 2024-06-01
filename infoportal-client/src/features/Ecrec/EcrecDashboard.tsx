@@ -6,7 +6,6 @@
 // import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 // import {format} from 'date-fns'
 import {EcrecData} from '@/features/Ecrec/useEcrecData'
-import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Seq} from '@alexandreannic/ts-utils'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'

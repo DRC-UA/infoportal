@@ -14,7 +14,7 @@ import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {IpBtn} from '@/shared/Btn'
 import {CommentsPanel} from '@/shared/CommentsPanel'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
-import {KoboAnswerFlat, KoboFormName, KoboIndex, Meal_VisitMonitoring, OblastIndex} from '@infoportal-common'
+import {KoboAnswerFlat, KoboIndex, Meal_VisitMonitoring, OblastIndex} from '@infoportal-common'
 import {NavLink} from 'react-router-dom'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useMealVisitContext} from '@/features/Meal/Visit/MealVisitContext'
@@ -22,7 +22,6 @@ import {mealIndex} from '@/features/Meal/Meal'
 import {Page} from '@/shared/Page'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {KoboApiSchema} from '@infoportal-common'
 
 export interface DashboardPageProps {
   filters: Record<string, string[]>
