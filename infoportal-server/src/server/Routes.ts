@@ -61,7 +61,7 @@ export const getRoutes = (
   // )
   const mpcaPayment = new ControllerMpcaPayment(services.mpcaPayment)
   const mpca = new ControllerMpca(prisma)
-  const main = new ControllerMain(services.stats)
+  const main = new ControllerMain()
   const koboForm = new ControllerKoboForm(prisma)
   const koboServer = new ControllerKoboServer(prisma)
   const koboAnswer = new ControllerKoboAnswer(prisma)
@@ -105,7 +105,7 @@ export const getRoutes = (
   }
 
   try {
-    router.get('/', errorCatcher(main.htmlStats))
+    router.get('/', errorCatcher(main.ping))
 
     router.post('/session/track', errorCatcher(session.track))
     router.post('/session/login', errorCatcher(session.login))

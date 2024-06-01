@@ -1,17 +1,10 @@
 import {NextFunction, Request, Response} from 'express'
-import {ServiceStats} from '../services/ServiceStats'
 import * as yup from 'yup'
 import axios, {AxiosError} from 'axios'
 
 export class ControllerMain {
 
-  constructor(
-    private stats: ServiceStats
-  ) {
-  }
-
-  readonly proxyImg = async (req: Request, res: Response, next: NextFunction) => {
-
+  constructor() {
   }
 
   readonly proxy = async (req: Request, res: Response, next: NextFunction) => {
@@ -39,7 +32,7 @@ export class ControllerMain {
     }
   }
 
-  readonly htmlStats = async (req: Request, res: Response, next: NextFunction) => {
+  readonly ping = async (req: Request, res: Response, next: NextFunction) => {
     // const html = await this.stats.getAll({
     //   start: new Date(2022, 11, 1),
     //   end: new Date(2023, 2, 1)
