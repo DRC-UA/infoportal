@@ -1,5 +1,5 @@
 import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
-import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import {KoboSchemaHelper} from '@infoportal-common'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {

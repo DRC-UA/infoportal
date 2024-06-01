@@ -7,7 +7,7 @@ import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {useIpToast} from '@/core/useToast'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Kobo, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import {KoboSchemaHelper} from '@infoportal-common'
 import {useI18n} from '@/core/i18n'
 import {DatabaseKoboAnswerViewDialog} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 
@@ -53,7 +53,7 @@ export const KoboAnswersProvider = ({
       return mappedReq({})
     } else {
       const [schema, answers] = await Promise.all([
-        ctxSchema.fetchById(id).then(_ => KoboSchemaHelper.buildIndex({schema: _, m})),
+        ctxSchema.fetchById(id).then(_ => KoboSchemaHelper.buildIndex({schema: _})),
         api.kobo.answer.searchByAccess({formId: id}),
       ])
       return {

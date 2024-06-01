@@ -22,7 +22,7 @@ import {useMealVerificationContext} from '@/features/Meal/Verification/MealVerif
 import {MealVerificationLinkToForm} from '@/features/Meal/Verification/MealVerificationList'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import {KoboSchemaHelper} from '@infoportal-common'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {IpAlert} from '@/shared/Alert'

@@ -1,14 +1,11 @@
 import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState} from 'react'
-import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import {KoboSchemaHelper} from '@infoportal-common'
 import {KoboApiSchema, KoboFormName, KoboId, KoboIndex} from '@infoportal-common'
 import {useI18n} from '@/core/i18n'
 import {useFetchers} from '@/shared/hook/useFetchers'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {Obj} from '@alexandreannic/ts-utils'
-
-export type KoboTranslateQuestion = (key: string) => string
-export type KoboTranslateChoice = (key: string, choice?: string) => string
 
 interface KoboSchemaProviderProps {
   defaultLangIndex?: number
@@ -61,7 +58,7 @@ export const KoboSchemaProvider = ({
     } = {byId: {}, byName: {} as any}
     Obj.entries(fetchers.get).forEach(([id, schema]) => {
       const r = {
-        get: KoboSchemaHelper.buildBundle({schema, langIndex, m}),
+        get: KoboSchemaHelper.buildBundle({schema, langIndex}),
         loading: fetchers.loading[id],
         error: fetchers.error[id],
       }

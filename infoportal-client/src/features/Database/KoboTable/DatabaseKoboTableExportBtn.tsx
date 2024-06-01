@@ -8,8 +8,8 @@ import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {IpIconBtn, IpIconBtnProps} from '@/shared/IconBtn'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useAsync} from '@/shared/hook/useAsync'
-import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+import {KoboTranslateChoice, KoboTranslateQuestion} from '@infoportal-common'
 
 export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
   schema,

@@ -1,4 +1,4 @@
-import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import {KoboSchemaHelper, KoboTranslateChoice, KoboTranslateQuestion} from '@infoportal-common'
 import {I18nContextProps} from '@/core/i18n/I18n'
 import {KoboAnswerFlat, KoboAnswerId, KoboAnswerMetaData, KoboApiColType, KoboApiQuestionSchema, KoboApiQuestionType, KoboId, removeHtml} from '@infoportal-common'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
@@ -9,7 +9,6 @@ import {IpBtn} from '@/shared/Btn'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import React from 'react'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
-import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {Txt} from 'mui-extension'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
@@ -45,9 +44,6 @@ const noEditableColumnsId = new Set<keyof KoboAnswerMetaData>([
   'end',
   'version',
   'date',
-  'submissionTime',
-  'submittedBy',
-  'id',
   'uuid',
   'validationStatus',
   'validatedBy',
@@ -240,7 +236,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           render: row => {
             const _ = getVal(row, q.name) as Date | undefined
             return {
-              label: _ && <span title={formatDateTime(_)}>{formatDate(_)}</span>,
+              label: formatDate(_),
               value: _,
               tooltip: formatDateTime(_),
               export: formatDateTime(_),
@@ -356,8 +352,30 @@ export const getColumnBySchema = <T extends Record<string, any>>({
 }: GetColumnBySchemaProps<T> & {
   schema: KoboApiQuestionSchema[]
 }): DatabaseColumnProps<T>[] => {
-  return schema.filter(_ => !ignoredColType.has(_.type)).flatMap(q => getColumnByQuestionSchema({
-    q,
-    ...props,
-  }))
+  return [
+    {
+      type: 'string',
+      id: 'id',
+      head: 'ID',
+      className: 'td-id',
+      renderQuick: row => row.id,
+    },
+    {
+      head: props.m.submissionTime,
+      id: 'submissionTime',
+      type: 'date',
+      render: _ => {
+        return {
+          label: formatDate(_.submissionTime),
+          value: _.submissionTime,
+          tooltip: formatDateTime(_.submissionTime),
+          export: formatDateTime(_.submissionTime),
+        }
+      }
+    },
+    ...schema.filter(_ => !ignoredColType.has(_.type)).flatMap(q => getColumnByQuestionSchema({
+      q,
+      ...props,
+    }))
+  ]
 }

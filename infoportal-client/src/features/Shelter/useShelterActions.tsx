@@ -1,7 +1,7 @@
 import {KoboAnswerId, KoboId} from '@infoportal-common'
 import {Dispatch, SetStateAction} from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import {KoboSchemaHelper} from '@infoportal-common'
 
 import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
 

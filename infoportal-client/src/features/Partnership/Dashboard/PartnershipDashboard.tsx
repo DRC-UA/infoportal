@@ -24,7 +24,7 @@ import {IpIconBtn} from '@/shared/IconBtn'
 import {ChartBarVertical} from '@/shared/charts/ChartBarVertical'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import {KoboSchemaHelper} from '@infoportal-common'
 import {appConfig} from '@/conf/AppConfig'
 
 export const PartnershipDashboard = ({}: {}) => {

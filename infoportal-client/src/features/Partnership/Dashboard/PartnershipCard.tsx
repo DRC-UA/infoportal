@@ -3,7 +3,7 @@ import {PartnershipData} from '@/features/Partnership/PartnershipType'
 import {Txt} from 'mui-extension'
 import {UseSetState} from '@/shared/hook/useSetState'
 
-import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
+import {KoboSchemaHelper} from '@infoportal-common'
 
 export const PartnershipCard = ({
   schema,
