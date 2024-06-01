@@ -1,8 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
-import {KoboAnswerParams} from '../connector/kobo/KoboClient/type/KoboAnswer'
 import {logger, Logger} from '../../helper/Logger'
-import {KoboSdk} from '../connector/kobo/KoboClient/KoboSdk'
+import {KoboSdk, KoboAnswerParams} from '@infoportal-common'
 
 export class KoboApiService {
 
@@ -17,6 +16,6 @@ export class KoboApiService {
 
   readonly fetchAnswers = async (serverId: string, formId: string, params: KoboAnswerParams = {}) => {
     const sdk = await this.koboSdkGenerator.get(serverId)
-    return sdk.getAnswers(formId, params)
+    return sdk.v2.getAnswers(formId, params)
   }
 }

@@ -76,7 +76,7 @@ export class KoboSyncServer {
 
   private readonly syncApiFormInfo = async (serverId: UUID, formId: KoboId) => {
     const sdk = await this.koboSdkGenerator.get(serverId)
-    const form = await sdk.getForm(formId)
+    const form = await sdk.v2.getForm(formId)
     return this.prisma.koboForm.update({
       where: {id: formId},
       data: {name: form.name}
@@ -86,7 +86,7 @@ export class KoboSyncServer {
   private readonly syncApiFormAnswers = async (serverId: UUID, formId: KoboId): Promise<KoboSyncServerResult> => {
     const sdk = await this.koboSdkGenerator.get(serverId)
     this.info(formId, `Fetch remote answers...`)
-    const remoteAnswers = await sdk.getAnswers(formId).then(_ => _.data)
+    const remoteAnswers = await sdk.v2.getAnswers(formId).then(_ => _.data)
     const remoteIdsIndex: Map<KoboId, KoboAnswer> = remoteAnswers.reduce((map, curr) => map.set(curr.id, curr), new Map<KoboId, KoboAnswer>)//new Map(remoteAnswers.map(_ => _.id))
     this.info(formId, `Fetch remote answers... ${remoteAnswers.length} fetched.`)
 

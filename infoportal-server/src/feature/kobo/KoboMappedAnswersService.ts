@@ -1,7 +1,6 @@
-import {KoboAnswerFilter, KoboService} from './KoboService'
+import {DbKoboAnswer, KoboAnswerFilter, KoboService} from './KoboService'
 import {PrismaClient} from '@prisma/client'
 import {ApiPaginate, KoboIndex} from '@infoportal-common'
-import {DbKoboAnswer} from '../connector/kobo/KoboClient/type/KoboAnswer'
 import {KoboAnswerFlat, KoboId} from '@infoportal-common'
 import {map} from '@alexandreannic/ts-utils'
 import {ShelterNtaTags, ShelterTaTags} from './tags/ShelterTags'

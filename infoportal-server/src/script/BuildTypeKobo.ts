@@ -1,11 +1,8 @@
-import {KoboSdk} from '../feature/connector/kobo/KoboClient/KoboSdk'
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
-import {KoboApiForm} from '../feature/connector/kobo/KoboClient/type/KoboApiForm'
 import * as fs from 'fs'
-import {ApiClient} from '../core/client/ApiClient'
+import {KoboId, KoboSdkv2, ApiClient, KoboSdk} from '@infoportal-common'
 import {appConf} from '../core/conf/AppConf'
-import {KoboId} from '../feature/connector/kobo/KoboClient/type/KoboAnswer'
-import {capitalize, KoboIndex} from '@infoportal-common'
+import {capitalize, KoboApiSchema, KoboIndex} from '@infoportal-common'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string,
@@ -20,7 +17,7 @@ interface KoboInterfaceGeneratorParams {
 export class BuildKoboType {
   constructor(
     private conf = appConf,
-    private sdk = new KoboSdk(new ApiClient({
+    private sdk = new KoboSdkv2(new ApiClient({
         baseUrl: conf.kobo.url + '/api',
         headers: {
           Authorization: KoboSdk.makeAuthorizationHeader(conf.kobo.token),
@@ -323,7 +320,7 @@ export class BuildKoboType {
   }
 }
 
-const ignoredQuestionTypes: KoboApiForm['content']['survey'][0]['type'][] = [
+const ignoredQuestionTypes: KoboApiSchema['content']['survey'][0]['type'][] = [
   // 'calculate',
   'begin_group',
   'end_group',
@@ -334,7 +331,7 @@ const ignoredQuestionTypes: KoboApiForm['content']['survey'][0]['type'][] = [
 class KoboInterfaceGenerator {
 
   constructor(
-    private sdk: KoboSdk,
+    private sdk: KoboSdkv2,
     private options: KoboInterfaceGeneratorParams
   ) {
   }
@@ -344,7 +341,7 @@ class KoboInterfaceGenerator {
     'end'
   ]
 
-  readonly fixDuplicateName = (survey: KoboApiForm['content']['survey']): KoboApiForm['content']['survey'] => {
+  readonly fixDuplicateName = (survey: KoboApiSchema['content']['survey']): KoboApiSchema['content']['survey'] => {
     const duplicate: Record<string, number> = {}
     return survey.map(q => {
       if (!q.name) return q
@@ -388,7 +385,7 @@ const extractQuestionName = (_: Record<string, any>) => {
   return output
 }`
 
-  readonly generateFunctionMapping = (survey: KoboApiForm['content']['survey']) => {
+  readonly generateFunctionMapping = (survey: KoboApiSchema['content']['survey']) => {
     const repeatItems = this.getBeginRepeatQuestion(survey)
     const basicMapping = (name: string) => {
       return {
@@ -437,14 +434,14 @@ const extractQuestionName = (_: Record<string, any>) => {
       + `}) as T`
   }
 
-  // readonly skipQuestionInBeginRepeat = (survey: KoboApiForm['content']['survey']) => (_: KoboApiForm['content']['survey'][lang]) => {
+  // readonly skipQuestionInBeginRepeat = (survey: KoboApiForm.ts['content']['survey']) => (_: KoboApiForm.ts['content']['survey'][lang]) => {
   //   const repeatItem = this.getBeginRepeatQuestion(survey)
   //   return _ => repeatItem.every(r => {
   //     return !_.$qpath.includes(r.name + '-')
   //   })
   // }
 
-  readonly getBeginRepeatQuestion = (survey: KoboApiForm['content']['survey']) => {
+  readonly getBeginRepeatQuestion = (survey: KoboApiSchema['content']['survey']) => {
     return survey.filter(_ => _.type === 'begin_repeat')
   }
 
@@ -456,7 +453,7 @@ const extractQuestionName = (_: Record<string, any>) => {
     survey,
     formId,
   }: {
-    survey: KoboApiForm['content']['survey'],
+    survey: KoboApiSchema['content']['survey'],
     formId: KoboId
   }): string[] => {
     const indexOptionId = seq(survey).groupBy(_ => _.select_from_list_name!)
@@ -504,8 +501,8 @@ const extractQuestionName = (_: Record<string, any>) => {
     survey,
     choices,
   }: {
-    survey: KoboApiForm['content']['survey'],
-    choices: KoboApiForm['content']['choices']
+    survey: KoboApiSchema['content']['survey'],
+    choices: KoboApiSchema['content']['choices']
   }) => {
     const indexOptionId = seq(survey).reduceObject<Record<string, string>>(_ => [_.select_from_list_name ?? '', _.name])
     const res: Record<string, Record<string, string>> = {}

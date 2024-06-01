@@ -256,10 +256,3 @@ export const DatabaseKoboTableContent = ({
     </>
   )
 }
-
-export const getKoboLabel = (q: {
-  name: string,
-  label?: string[]
-}, langIndex?: number): string => {
-  return q.label !== undefined ? (q.label as any)[langIndex as any] ?? q.name : q.name
-}

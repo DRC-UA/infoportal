@@ -1,4 +1,3 @@
-import {KoboAnswerId} from '../feature/connector/kobo/KoboClient/type/KoboAnswer'
 import {logger, Logger} from '../helper/Logger'
 import {map} from '@alexandreannic/ts-utils'
 
@@ -24,7 +23,7 @@ export class MemoryDatabase {
   }
 
   private cache = new Map<string, Promise<any>>()
-  private index = new Map<string, Map<KoboAnswerId, number> | undefined>()
+  private index = new Map<string, Map<string, number> | undefined>()
 
   readonly register = <T, TID extends string = string>(params: {
     name: string
@@ -36,7 +35,7 @@ export class MemoryDatabase {
       this.log.info(`Rebuild '${params.name} memory database...`)
       const res$ = params.fetch()
       this.cache.set(params.name, res$)
-      const index = new Map<KoboAnswerId, number>()
+      const index = new Map<string, number>()
       ;(await res$).forEach((d, i) => {
         [params.getId(d)].flatMap(_ => _).forEach(id => {
           if (index.has(id)) throw new Error(`Why ${params.getId(d)} ${id} exists twice?`)

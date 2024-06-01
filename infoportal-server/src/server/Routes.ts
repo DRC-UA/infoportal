@@ -148,7 +148,6 @@ export const getRoutes = (
     router.post('/proxy-request', errorCatcher(main.proxy))
 
     router.post('/kobo-api/webhook', errorCatcher(koboApi.answersWebHook))
-    router.get('/kobo-api/local-form', auth(), errorCatcher(koboApi.getAnswersFromLocalCsv))
     router.post('/kobo-api/sync', auth({adminOnly: true}), errorCatcher(koboApi.synchronizeAllAnswersFromKoboServer))
     router.post('/kobo-api/:id/:formId/sync', auth(), errorCatcher(koboApi.synchronizeAnswersFromKoboServer))
     router.get('/kobo-api/:id/attachment', errorCatcher(koboApi.getAttachementsWithoutAuth))

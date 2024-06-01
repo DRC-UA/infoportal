@@ -36,7 +36,7 @@ import {scriptConf} from '../ScriptConf'
 
   const prisma = new PrismaClient()
 
-  const sdk = await new KoboSdkGenerator(prisma).getV1(scriptConf.kobo[config.server].serverId)
+  const sdk = await new KoboSdkGenerator(prisma).get(scriptConf.kobo[config.server].serverId)
 
   const submit = async <TCsv, TCsvTransform = any>({
     formId,
@@ -56,7 +56,7 @@ import {scriptConf} from '../ScriptConf'
     })
     await PromisePool.withConcurrency(config.importConcurrency).for(json).process(async (j, i) => {
       try {
-        const res = await sdk.submit({
+        const res = await sdk.v1.submit({
           formId,
           data: activity(j, i),
         })

@@ -17,7 +17,7 @@ import {
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {MetaMapped, MetaMapperInsert} from './KoboMetaService'
-import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
+import {KoboAnswerUtils} from '@infoportal-common'
 
 export class KoboMetaBasicneeds {
 

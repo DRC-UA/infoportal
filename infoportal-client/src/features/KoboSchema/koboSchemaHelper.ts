@@ -1,11 +1,17 @@
 import {mapFor, seq} from '@alexandreannic/ts-utils'
-import {KoboQuestionChoice, KoboQuestionSchema, KoboSchema} from '@/core/sdk/server/kobo/KoboApi'
-import {removeHtml} from '@infoportal-common'
+import {KoboApiQuestionChoice, KoboApiQuestionSchema} from '@infoportal-common'
+import {KoboApiSchema, removeHtml} from '@infoportal-common'
 import {Messages} from '@/core/i18n/localization/en'
-import {getKoboLabel} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
 import {KoboTranslateChoice, KoboTranslateQuestion} from '@/features/KoboSchema/KoboSchemaContext'
 
 export namespace KoboSchemaHelper {
+
+  export const getLabel = (q: {
+    name: string,
+    label?: string[]
+  }, langIndex?: number): string => {
+    return q.label !== undefined ? (q.label as any)[langIndex as any] ?? q.name : q.name
+  }
 
   export type Translation = ReturnType<typeof buildTranslation>
 
@@ -13,7 +19,7 @@ export namespace KoboSchemaHelper {
 
   export interface Bundle {
     schemaHelper: Index
-    schemaUnsanitized: KoboSchema
+    schemaUnsanitized: KoboApiSchema
     translate: {
       question: KoboTranslateQuestion
       choice: KoboTranslateChoice
@@ -24,7 +30,7 @@ export namespace KoboSchemaHelper {
     schema,
     m
   }: {
-    schema: KoboSchema,
+    schema: KoboApiSchema,
     m: Messages
   }) => {
     const customSchema = {
@@ -58,7 +64,7 @@ export namespace KoboSchemaHelper {
     }
     const {groupSchemas, surveyCleaned} = isolateGroups(schema.content.survey)
 
-    const sanitizedForm: KoboSchema = {
+    const sanitizedForm: KoboApiSchema = {
       ...schema,
       content: {
         ...schema.content,
@@ -82,7 +88,7 @@ export namespace KoboSchemaHelper {
       customSchema.submissionTime,
       ...schema.content.survey,
       customSchema.submittedBy,
-    ]).reduceObject<Record<string, KoboQuestionSchema>>(_ => [_.name, _])
+    ]).reduceObject<Record<string, KoboApiQuestionSchema>>(_ => [_.name, _])
 
     const getOptionsByQuestionName = (qName: string) => {
       const listName = questionIndex[qName].select_from_list_name
@@ -105,14 +111,14 @@ export namespace KoboSchemaHelper {
     langIndex,
     questionIndex,
   }: {
-    schema: KoboSchema,
+    schema: KoboApiSchema,
     langIndex: number
     questionIndex: Index['questionIndex']
   }): {
     translateQuestion: KoboTranslateQuestion
     translateChoice: KoboTranslateChoice,
   } => {
-    const choicesTranslation: Record<string, Record<string, KoboQuestionChoice>> = {}
+    const choicesTranslation: Record<string, Record<string, KoboApiQuestionChoice>> = {}
     schema.content.choices.forEach(choice => {
       if (!choicesTranslation[choice.list_name]) choicesTranslation[choice.list_name] = {}
       choicesTranslation[choice.list_name][choice.name] = choice
@@ -122,7 +128,7 @@ export namespace KoboSchemaHelper {
       translateQuestion: (questionName: string) => {
         // TODO try catch slow down perf
         try {
-          return getKoboLabel(questionIndex[questionName], langIndex)
+          return getLabel(questionIndex[questionName], langIndex)
         } catch (e) {
           return questionName
         }
@@ -131,7 +137,7 @@ export namespace KoboSchemaHelper {
         const listName = questionIndex[questionName]?.select_from_list_name
         // TODO try catch slow down perf
         try {
-          if (choiceName) return getKoboLabel(choicesTranslation[listName!][choiceName], langIndex)
+          if (choiceName) return getLabel(choicesTranslation[listName!][choiceName], langIndex)
         } catch (e) {
           // console.warn(
           //   'Cannot translate this options. Maybe the question type has changed?',
@@ -143,7 +149,7 @@ export namespace KoboSchemaHelper {
     }
   }
 
-  export const buildBundle = ({m, schema, langIndex = 0}: {m: Messages, schema: KoboSchema, langIndex?: number}) => {
+  export const buildBundle = ({m, schema, langIndex = 0}: {m: Messages, schema: KoboApiSchema, langIndex?: number}) => {
     const schemaHelper = KoboSchemaHelper.buildIndex({schema: schema, m})
     const {translateQuestion, translateChoice} = buildTranslation({
       schema: schema,
@@ -160,9 +166,9 @@ export namespace KoboSchemaHelper {
     }
   }
 
-  const isolateGroups = (survey: KoboSchema['content']['survey']) => {
-    const surveyCleaned: KoboQuestionSchema[] = []
-    const groupSchemas: Record<string, KoboQuestionSchema[]> = {}
+  const isolateGroups = (survey: KoboApiSchema['content']['survey']) => {
+    const surveyCleaned: KoboApiQuestionSchema[] = []
+    const groupSchemas: Record<string, KoboApiQuestionSchema[]> = {}
     for (let i = 0; i < survey.length; i++) {
       surveyCleaned.push(survey[i])
       if (survey[i].type === 'begin_repeat') {

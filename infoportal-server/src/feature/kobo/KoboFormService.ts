@@ -1,8 +1,8 @@
 import {KoboForm, PrismaClient} from '@prisma/client'
-import {KoboId, UUID} from '@infoportal-common'
+import {KoboId, KoboSdk, KoboSdkv2, UUID} from '@infoportal-common'
 import {KoboApiService} from './KoboApiService'
-import {KoboSdk} from '../connector/kobo/KoboClient/KoboSdk'
 import {seq} from '@alexandreannic/ts-utils'
+import {appConf} from '../../core/conf/AppConf'
 
 export interface KoboFormCreate {
   id: string
@@ -16,6 +16,7 @@ export class KoboFormService {
   constructor(
     private prisma: PrismaClient,
     private service = new KoboApiService(prisma),
+    private conf = appConf,
   ) {
 
   }
@@ -30,9 +31,9 @@ export class KoboFormService {
   }
 
   private createHookIfNotExists = async (sdk: KoboSdk, formId: KoboId) => {
-    const hooks = await sdk.getHook(formId)
-    if (hooks.data.find(_ => _.name === KoboSdk.webHookName)) return
-    return sdk.createWebHook(formId)
+    const hooks = await sdk.v2.getHook(formId)
+    if (hooks.data.find(_ => _.name === KoboSdkv2.webHookName)) return
+    return sdk.v2.createWebHook(formId, this.conf.baseUrl + `/kobo-api/webhook`)
   }
 
   readonly registerHooksForAll = async () => {

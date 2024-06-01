@@ -18,23 +18,6 @@ export type MappedColumn<T, O = string> = {
   [P in keyof T]: T[P] extends undefined | Date | string | number | boolean | any[] ? O : MappedColumn<T[P], O>
 }
 
-export const chunkify = <T, R>({
-  size,
-  data,
-  fn,
-}: {
-  size: number,
-  data: T[]
-  fn: (_: T[]) => Promise<R>
-}): Promise<R[]> => {
-  const chunkedSubmissions = data.reduce((chunks, id, index) => {
-    if (index % size === 0) chunks.push([])
-    chunks[chunks.length - 1].push(id)
-    return chunks
-  }, [] as T[][])
-  return Promise.all(chunkedSubmissions.map(fn))
-}
-
 export const renameObjectProperties = <O>(propsMap: Partial<MappedColumn<O>>) => (input: any): O => {
   return Obj.keys(propsMap).reduce((acc, key) => {
     if (typeof propsMap[key] === 'object') {

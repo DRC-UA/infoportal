@@ -8,7 +8,6 @@ import {useI18n} from '@/core/i18n'
 import {useFetchers} from '@/shared/hook/useFetchers'
 import {useParams} from 'react-router'
 import {databaseUrlParamsValidation} from '@/features/Database/Database'
-import {KoboSchema} from '@/core/sdk/server/kobo/KoboApi'
 import {Page} from '@/shared/Page'
 import {IpBtn} from '@/shared/Btn'
 import {useAsync} from '@/shared/hook/useAsync'
@@ -17,6 +16,7 @@ import {Panel} from '@/shared/Panel'
 import {useSession} from '@/core/Session/SessionContext'
 import {AccessTable} from '@/features/Access/AccessTable'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {KoboApiSchema} from '@infoportal-common'
 
 export const DatabaseAccessRoute = () => {
   const {api} = useAppSettings()
@@ -42,7 +42,7 @@ export const DatabaseAccess = ({
   form,
 }: {
   formId: KoboId,
-  form: KoboSchema
+  form: KoboApiSchema
 }) => {
   const {m} = useI18n()
   const {api} = useAppSettings()

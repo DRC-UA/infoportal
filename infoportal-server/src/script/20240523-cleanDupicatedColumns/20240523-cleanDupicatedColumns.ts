@@ -11,9 +11,9 @@ export const run = async () => {
   } as const
   const formId = KoboIndex.byName('ecrec_cashRegistrationBha').id
   const sdk = await new KoboSdkGenerator(prisma).get(scriptConf.kobo[config.server].serverId)
-  const answers = await sdk.getAnswersRaw(formId)
+  const answers = await sdk.v2.getAnswersRaw(formId)
   const toUpdate = answers.results.filter(_ => !!_.back_office).map(_ => _._id)
-  await sdk.updateData({
+  await sdk.v2.updateData({
     formId: formId,
     data: {
       back_office: null,

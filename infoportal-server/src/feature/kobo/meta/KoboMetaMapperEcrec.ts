@@ -21,7 +21,7 @@ import {
 import {KoboMetaOrigin} from './KoboMetaType'
 import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashRegistration'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
-import {KoboAnswerUtils} from '../../connector/kobo/KoboClient/type/KoboAnswer'
+import {KoboAnswerUtils} from '@infoportal-common'
 import {appConf} from '../../../core/conf/AppConf'
 
 export class KoboMetaMapperEcrec {

@@ -1,7 +1,7 @@
 import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {I18nContextProps} from '@/core/i18n/I18n'
-import {KoboApiColType, KoboQuestionSchema, KoboQuestionType} from '@/core/sdk/server/kobo/KoboApi'
-import {KoboAnswerMetaData, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {KoboApiColType, KoboAnswerMetaData, KoboApiQuestionSchema, KoboApiQuestionType} from '@infoportal-common'
+import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
 import {map, mapFor, seq} from '@alexandreannic/ts-utils'
 import {formatDate, formatDateTime} from '@/core/i18n/localization/en'
@@ -75,7 +75,7 @@ interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
   m: I18nContextProps['m']
   translateChoice: KoboTranslateChoice
   translateQuestion: KoboTranslateQuestion
-  groupSchemas: Record<string, KoboQuestionSchema[]>
+  groupSchemas: Record<string, KoboApiQuestionSchema[]>
   onOpenGroupModal?: (_: {
     columnId: string,
     group: KoboAnswerFlat[],
@@ -89,7 +89,7 @@ interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
 }
 
 export type DatabaseColumnProps<T extends Record<string, any | undefined>> = DatatableColumn.Props<T> & {
-  koboType?: KoboQuestionType
+  koboType?: KoboApiQuestionType
 }
 
 export const getColumnByQuestionSchema = <T extends Record<string, any | undefined>>({
@@ -110,7 +110,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   selectedIds,
   onSelectColumn,
 }: GetColumnBySchemaProps<T> & {
-  q: KoboQuestionSchema,
+  q: KoboApiQuestionSchema,
   getRow?: (_: T) => KoboMappedAnswer,
 }): DatabaseColumnProps<T>[] => {
   const {
@@ -120,12 +120,12 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   } = (() => {
     if (groupIndex !== undefined && groupName)
       return {
-        getId: (q: KoboQuestionSchema) => `${groupIndex}_${q.name}`,
+        getId: (q: KoboApiQuestionSchema) => `${groupIndex}_${q.name}`,
         getHead: (name: string) => `[${groupIndex}] ${name}`,
         getVal: (row: T, name: string) => (getRow(row) as any)[groupName]?.[groupIndex]?.[name]
       }
     return {
-      getId: (q: KoboQuestionSchema) => q.name,
+      getId: (q: KoboApiQuestionSchema) => q.name,
       getHead: (name: string) => name,
       getVal: (row: T, name: string) => getRow(row)[name],
     }
@@ -355,7 +355,7 @@ export const getColumnBySchema = <T extends Record<string, any>>({
   schema,
   ...props
 }: GetColumnBySchemaProps<T> & {
-  schema: KoboQuestionSchema[]
+  schema: KoboApiQuestionSchema[]
 }): DatabaseColumnProps<T>[] => {
   return schema.filter(_ => !ignoredColType.has(_.type)).flatMap(q => getColumnByQuestionSchema({
     q,

@@ -3,7 +3,7 @@ import {KoboSchemaHelper} from '@/features/KoboSchema/koboSchemaHelper'
 import {KoboFormName, KoboId, KoboIndex} from '@infoportal-common'
 import {useI18n} from '@/core/i18n'
 import {useFetchers} from '@/shared/hook/useFetchers'
-import {KoboSchema} from '@/core/sdk/server/kobo/KoboApi'
+import {KoboApiSchema} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {Obj} from '@alexandreannic/ts-utils'
@@ -28,8 +28,8 @@ export interface KoboSchemaContext {
   clearCache: () => void
   langIndex: number
   setLangIndex: Dispatch<SetStateAction<number>>
-  fetchById: (id: KoboId) => Promise<KoboSchema>
-  fetchByName: (name: KoboFormName) => Promise<KoboSchema>
+  fetchById: (id: KoboId) => Promise<KoboApiSchema>
+  fetchByName: (name: KoboFormName) => Promise<KoboApiSchema>
   byId: Record<KoboId, SchemaContextRes | undefined>
   byId2: (_: KoboId) => SchemaContextRes
   byName: Record<KoboFormName, SchemaContextRes>

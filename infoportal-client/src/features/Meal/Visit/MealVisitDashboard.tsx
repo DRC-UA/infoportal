@@ -22,7 +22,7 @@ import {mealIndex} from '@/features/Meal/Meal'
 import {Page} from '@/shared/Page'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {KoboSchema} from '@/core/sdk/server/kobo/KoboApi'
+import {KoboApiSchema} from '@infoportal-common'
 
 export interface DashboardPageProps {
   filters: Record<string, string[]>

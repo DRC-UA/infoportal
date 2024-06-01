@@ -1,11 +1,10 @@
 import {generateXLSFromArray, GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
-import {KoboId, slugify} from '@infoportal-common'
+import {KoboApiQuestionSchema, KoboId, slugify} from '@infoportal-common'
 import {Enum, map, mapFor, seq} from '@alexandreannic/ts-utils'
 import {koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
 import React from 'react'
 import {useI18n} from '@/core/i18n'
-import {KoboQuestionSchema} from '@/core/sdk/server/kobo/KoboApi'
-import {Kobo, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {IpIconBtn, IpIconBtnProps} from '@/shared/IconBtn'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useAsync} from '@/shared/hook/useAsync'
@@ -25,8 +24,8 @@ export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
   repeatGroupsAsColumns?: boolean
   translateQuestion: KoboTranslateQuestion
   translateChoice: KoboTranslateChoice
-  schema: KoboQuestionSchema[],
-  groupSchemas: Record<string, KoboQuestionSchema[]>
+  schema: KoboApiQuestionSchema[],
+  groupSchemas: Record<string, KoboApiQuestionSchema[]>
   groupIndex?: number
   formId: KoboId
   groupName?: string

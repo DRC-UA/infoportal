@@ -1,4 +1,4 @@
-import {KoboId} from '../../connector/kobo/KoboClient/type/KoboAnswer'
+import {KoboId} from '@infoportal-common'
 
 export interface MpcaPaymentEntity {
   id: string

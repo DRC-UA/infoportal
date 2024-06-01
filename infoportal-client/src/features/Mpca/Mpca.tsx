@@ -1,4 +1,4 @@
-import {NavLink, Route, Routes} from 'react-router-dom'
+import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -85,6 +85,7 @@ export const Mpca = () => {
         header={<AppHeader id="app-header"/>}
       >
         <Routes>
+          <Route index element={<Navigate to={mpcaIndex.siteMap.dashboard}/>}/>
           <Route path={mpcaIndex.siteMap.dashboard} element={<MpcaDashboard/>}/>
           <Route path={mpcaIndex.siteMap.deduplication} element={<WfpDeduplicationData/>}/>
           <Route path={mpcaIndex.siteMap.data} element={<MpcaData/>}/>
