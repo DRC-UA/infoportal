@@ -1,4 +1,4 @@
-import {DrcProject, DrcProjectHelper, Protection_gbv} from '@infoportal-common'
+import {AILocationHelper, DrcProject, DrcProjectHelper, Protection_gbv} from '@infoportal-common'
 import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
@@ -23,13 +23,13 @@ export namespace AiGbvMapper {
     [DrcProject['UKR-000304 PSPU']]: 'GBV-DRC-00005',
   } as const
 
-  export const mapGbvActivity = (reportingMonth: string) => (res: ApiPaginate<InferTypedAnswer<'protection_gbv'>>) => {
-    const data: Type[] = []
-    res.data.filter(_ => _.new_ben !== 'no').forEach(d => {
-      d.meta.persons!.forEach(ind => {
-        data.push({
+  export const mapGbvActivity = (reportingMonth: string) => async (res: ApiPaginate<InferTypedAnswer<'protection_gbv'>>) => {
+    const data: Type[] = await Promise.all(res.data.filter(_ => _.new_ben !== 'no').flatMap(d => {
+      return d.meta.persons!.map(async ind => {
+        return ({
           answer: d,
           ...AiMapper.getLocationByKobo(d),
+          'Settlement': await AILocationHelper.findSettlementByIso(d.ben_det_hromada_001).then(_ => _?._5w ?? aiInvalidValueFlag + d.ben_det_hromada_001),
           ...AiMapper.disaggregatePersons([ind]),
           'Reporting Month': reportingMonth,
           'Plan/Project Code': fnSwitch(
@@ -50,7 +50,7 @@ export namespace AiGbvMapper {
           }, () => aiInvalidValueFlag) as any,
         })
       })
-    })
+    }))
     return data
   }
 }

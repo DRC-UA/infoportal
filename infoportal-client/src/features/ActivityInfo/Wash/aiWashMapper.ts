@@ -1,4 +1,4 @@
-import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
+import {AILocationHelper, DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
 import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {AiWashType} from '@/features/ActivityInfo/Wash/aiWashType'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
@@ -64,7 +64,7 @@ export namespace AiWashMapper {
                 'Reporting Organization': 'Danish Refugee Council',
                 'WASH': '# of individuals benefiting from hygiene kit/items distribution (in-kind)',
                 'Response Theme': 'No specific theme',
-                ...AiMapper.getLocationByMeta(oblast, raion, hromada),
+                ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
                 'Settlement': await AILocationHelper.findSettlement(oblast, raion, hromada, settlement).then(_ => _?._5w ?? '⚠️' + settlement),
                 'Location Type': 'Individuals/households',
                 'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,

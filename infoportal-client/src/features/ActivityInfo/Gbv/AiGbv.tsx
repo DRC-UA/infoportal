@@ -27,12 +27,13 @@ export const AiGbv = () => {
           {by: _ => _.Oblast!},
           {by: _ => _.Raion!},
           {by: _ => _.Hromada!},
+          {by: _ => _.Settlement!},
           {by: _ => _['Plan/Project Code']!},
 
         ],
-        finalTransform: (grouped, [Oblast, Raion, Hromada, PlanCode]) => {
+        finalTransform: (grouped, [Oblast, Raion, Hromada, Settlement, PlanCode]) => {
           const activity: AiGbvType.Type = {
-            Oblast, Raion, Hromada,
+            Oblast, Raion, Hromada, Settlement,
             'Reporting Organization': 'Danish Refugee Council',
             'Response Theme': 'No specific theme',
             'Plan/Project Code': PlanCode,

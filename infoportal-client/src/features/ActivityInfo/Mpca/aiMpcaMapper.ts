@@ -53,19 +53,21 @@ export namespace AiMpcaMapper {
               {by: _ => _.oblast},
               {by: _ => _.raion!},
               {by: _ => _.hromada!},
+              {by: _ => _.settlement!},
               {by: _ => _.project?.[0]!},
               {
                 by: _ => AiMapper.mapPopulationGroup(_.displacement)
               },
             ],
-            finalTransform: (grouped, [oblast, raion, hromada, project, displacement]) => {
+            finalTransform: async (grouped, [oblast, raion, hromada, settlement, project, displacement]) => {
               const disag = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
-              const loc = AiMapper.getLocationByMeta(oblast, raion, hromada)
+              const loc = await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement)
               const ai: AiMpcaType.Type = {
                 'Reporting Organization': 'Danish Refugee Council',
                 'Implementing Partner': 'Danish Refugee Council',
                 'Raion': loc.Raion,
                 'Hromada': loc.Hromada,
+                'Settlement': loc.Settlement,
                 'Donor': fnSwitch(DrcProjectHelper.donorByProject[project], {
                   UHF: 'Ukraine Humanitarian Fund (UHF)',
                   NovoNordisk: 'Novo Nordisk (NN)',

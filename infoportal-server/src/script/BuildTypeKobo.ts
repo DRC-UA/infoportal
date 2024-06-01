@@ -293,7 +293,6 @@ export class BuildKoboType {
     },
     bn_cashForRentRegistration: {
       formId: KoboIndex.byName('bn_cashForRentRegistration').id,
-      skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion',]
     },
     protection_hhs2: {
       formId: KoboIndex.byName('protection_hhs2').id,

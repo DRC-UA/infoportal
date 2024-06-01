@@ -164,6 +164,12 @@ export const MetaTable = () => {
         renderQuick: _ => _.hromada,
       },
       {
+        id: 'settlement',
+        type: 'select_one',
+        head: m.settlement,
+        renderQuick: _ => _.settlement,
+      },
+      {
         type: 'string',
         id: 'taxId',
         head: m.taxID,

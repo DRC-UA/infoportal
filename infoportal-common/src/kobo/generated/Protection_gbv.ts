@@ -3,51 +3,51 @@ export namespace Protection_gbv {
 
   // Form id: a5Noq6Wf9a8aE2cmi74FyS
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // introduction/date [date] Date of activity
-    date: Date | undefined,
+    'date': Date | undefined,
     // introduction/staff_to_insert_their_DRC_office [select_one] DRC office
-    staff_to_insert_their_DRC_office: undefined | Option<'staff_to_insert_their_DRC_office'>,
+    'staff_to_insert_their_DRC_office': undefined | Option<'staff_to_insert_their_DRC_office'>,
     // introduction/staff_code [select_one] Staff code (facilitator 1)
-    staff_code: undefined | Option<'staff_code_001'>,
+    'staff_code': undefined | Option<'staff_code_001'>,
     // introduction/staff_code_001 [select_one] Staff code (facilitator 2)
-    staff_code_001: undefined | Option<'staff_code_001'>,
+    'staff_code_001': undefined | Option<'staff_code_001'>,
     // introduction/project [select_one] Project code
-    project: undefined | Option<'project'>,
+    'project': undefined | Option<'project'>,
     // introduction/ben_det_oblast [select_one] Select oblast
-    ben_det_oblast: undefined | Option<'ben_det_oblast'>,
+    'ben_det_oblast': undefined | Option<'ben_det_oblast'>,
     // introduction/ben_det_raion [select_one] Select raion
-    ben_det_raion: undefined | string,
+    'ben_det_raion': undefined | string,
     // introduction/ben_det_hromada [select_one] Select hromada
-    ben_det_hromada: undefined | string,
+    'ben_det_hromada': undefined | string,
     // introduction/ben_det_hromada_001 [select_one_from_file] Specify settlement/village/city neighborhood
-    ben_det_hromada_001: string,
+    'ben_det_hromada_001': string,
     // introduction/location [select_one] Location
-    location: undefined | Option<'location'>,
+    'location': undefined | Option<'location'>,
     // introduction/location_other [text] If "Other", please specify
-    location_other: string | undefined,
+    'location_other': string | undefined,
     // gi/activity [select_one] Which activity have you conducted?
-    activity: undefined | Option<'activity'>,
+    'activity': undefined | Option<'activity'>,
     // gi/activity_other [text] If "Other", please specify
-    activity_other: string | undefined,
+    'activity_other': string | undefined,
     // gi/new_ben [select_one] Are there new beneficiaries in the group activity?
-    new_ben: undefined | Option<'new_ben'>,
+    'new_ben': undefined | Option<'new_ben'>,
     // gi/new_ben_yes [integer] If yes there are new beneficairies, how many new beneficiaries in the session?
-    new_ben_yes: number | undefined,
+    'new_ben_yes': number | undefined,
     // gi/numb_part [integer] Number of participants
-    numb_part: number | undefined,
+    'numb_part': number | undefined,
     // gi/hh_char_hh_det [begin_repeat] Participant
-    hh_char_hh_det: {
-      hh_char_hh_new_ben: undefined | Option<'hh_char_hh_new_ben'> | undefined,
-      hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined,
-      hh_char_hh_det_age: number | undefined | undefined,
-      hh_char_hh_det_status: undefined | Option<'hh_char_hh_det_status'> | undefined
+    'hh_char_hh_det': {
+      'hh_char_hh_new_ben': undefined | Option<'hh_char_hh_new_ben'> | undefined,
+      'hh_char_hh_det_gender': undefined | Option<'hh_char_hh_det_gender'> | undefined,
+      'hh_char_hh_det_age': number | undefined | undefined,
+      'hh_char_hh_det_status': undefined | Option<'hh_char_hh_det_status'> | undefined
     }[] | undefined,
     // gi/topic_activity [text] Topic/Type of activity
-    topic_activity: string | undefined,
+    'topic_activity': string | undefined,
     // gi/comments [text] Comments
-    comments: string | undefined,
+    'comments': string | undefined,
   }
 
   export const options = {
@@ -150,6 +150,7 @@ export namespace Protection_gbv {
       'gbva': `GBV actors trained in GBV`,
       'gcva': `GBV survivors and those at risk supported with cash/voucher assistance.`,
       'glac': `GBV survivors and those at risk supported with legal assistance and counselling.`,
+      'girl_shine': `Girl Shine`,
       'other': `Other`
     },
     hh_char_hh_new_ben: {
@@ -207,7 +208,7 @@ export namespace Protection_gbv {
     date: _.date ? new Date(_.date) : undefined,
     new_ben_yes: _.new_ben_yes ? +_.new_ben_yes : undefined,
     numb_part: _.numb_part ? +_.numb_part : undefined,
-    hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName).map((_: any) => {
+    hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {
       _['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
       return _
     }),
