@@ -1,6 +1,17 @@
-import {KoboSchemaHelper, KoboTranslateChoice, KoboTranslateQuestion} from '@infoportal-common'
-import {I18nContextProps} from '@/core/i18n/I18n'
-import {KoboAnswerFlat, KoboAnswerId, KoboAnswerMetaData, KoboApiColType, KoboApiQuestionSchema, KoboApiQuestionType, KoboId, removeHtml} from '@infoportal-common'
+import {
+  KoboAnswerFlat,
+  KoboAnswerId,
+  KoboAnswerMetaData,
+  KoboApiColType,
+  KoboApiQuestionSchema,
+  KoboApiQuestionType,
+  KoboId,
+  KoboSchemaHelper,
+  KoboTranslateChoice,
+  KoboTranslateQuestion,
+  removeHtml
+} from '@infoportal-common'
+import {I18nContextProps, useI18n} from '@/core/i18n/I18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
 import {map, mapFor, seq} from '@alexandreannic/ts-utils'
@@ -8,7 +19,6 @@ import {formatDate, formatDateTime} from '@/core/i18n/localization/en'
 import {IpBtn} from '@/shared/Btn'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import React from 'react'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {Txt} from 'mui-extension'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
@@ -23,6 +33,15 @@ const imageExtension = new Set([
   '.gif',
 ])
 
+export const MissingOption = ({value}: {value?: string}) => {
+  const {m} = useI18n()
+  return (
+    <span title={value}>
+      <TableIcon color="disabled" tooltip={m._koboDatabase.valueNoLongerInOption} sx={{mr: 1}} children="error"/>
+      {value}
+    </span>
+  )
+}
 export const keyTypeIcon = <DatatableHeadTypeIcon
   color="info"
   tooltip="ID"
@@ -140,7 +159,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
     subHeader: showEditBtn
       ? <TableEditCellBtn onClick={() => onSelectColumn(q.name)}/>
       : undefined,
-    head: removeHtml(getHead(translateQuestion(q.name))),
+    head: getHead(translateQuestion(q.name)),
   }
   const res: DatabaseColumnProps<T>[] | DatabaseColumnProps<T> | undefined = (() => {
     if (q.name === 'id') {
@@ -186,9 +205,9 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
         return {
           ...common,
           type: 'select_one',
-          head: removeHtml(getHead(translateQuestion(q.name))),
+          head: getHead(translateQuestion(q.name)),
+          options: () => seq(data).map(_ => getRow(_)[q.name]).distinct(_ => _).map(_ => ({label: _ as string, value: _ as string})),
           renderQuick: row => getVal(row, q.name) as string,
-          options: () => seq(data).map(_ => getRow(_)[q.name] ?? SheetUtils.blank).distinct(_ => _).map(_ => ({label: _ as string, value: _ as string})),
         }
       }
       case 'select_one_from_file': {
@@ -235,11 +254,12 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           type: 'date',
           render: row => {
             const _ = getVal(row, q.name) as Date | undefined
+            const time = formatDateTime(_)
             return {
               label: formatDate(_),
               value: _,
-              tooltip: formatDateTime(_),
-              export: formatDateTime(_),
+              tooltip: time,
+              export: time,
             }
           }
         }
@@ -268,7 +288,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
             return {
               export: group?.length,
               value: group?.length,
-              label: group && <IpBtn sx={{py: '4px'}} onClick={(event) => onOpenGroupModal?.({
+              label: group && <IpBtn style={{padding: '0 4px'}} onClick={(event) => onOpenGroupModal?.({
                 columnId: q.name,
                 group,
                 event,
@@ -287,14 +307,9 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
             const render = translateChoice(q.name, v)
             return {
               export: render,
-              value: v ?? SheetUtils.blank,
+              value: v,
               tooltip: render ?? m._koboDatabase.valueNoLongerInOption,
-              label: render ?? (
-                <span title={v}>
-                  <TableIcon color="disabled" tooltip={m._koboDatabase.valueNoLongerInOption} sx={{mr: 1}} children="error"/>
-                  {v}
-                </span>
-              ),
+              label: render ?? <MissingOption value={v}/>,
             }
           }
         }
@@ -304,7 +319,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
           ...common,
           type: 'select_multiple',
           options: () => choicesIndex[q.select_from_list_name!].map(_ => ({value: _.name, label: translateChoice(q.name, _.name)})),
-          // renderOption: row => translateChoice(q.name, getVal(row, q.name)) ?? SheetUtils.blank,
+          // renderOption: row => translateChoice(q.name, getVal(row, q.name)),
           render: row => {
             const v = getVal(row, q.name) as string[] | undefined
             try {
@@ -365,11 +380,12 @@ export const getColumnBySchema = <T extends Record<string, any>>({
       id: 'submissionTime',
       type: 'date',
       render: _ => {
+        const time = formatDateTime(_.submissionTime)
         return {
           label: formatDate(_.submissionTime),
           value: _.submissionTime,
-          tooltip: formatDateTime(_.submissionTime),
-          export: formatDateTime(_.submissionTime),
+          tooltip: time,
+          export: time,
         }
       }
     },

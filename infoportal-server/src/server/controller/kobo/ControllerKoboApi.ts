@@ -103,7 +103,8 @@ export class ControllerKoboApi {
       }
       res.send(img)
     } catch (e) {
-      next(e)
+      res.send(undefined)
+      // next(e)
     }
   }
 }

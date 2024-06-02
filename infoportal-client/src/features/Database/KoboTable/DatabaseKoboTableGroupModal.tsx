@@ -1,5 +1,5 @@
 import {PanelHead} from '@/shared/Panel'
-import {PanelBody, Txt} from 'mui-extension'
+import {Txt} from 'mui-extension'
 import React, {useMemo} from 'react'
 import {Popover} from '@mui/material'
 import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
@@ -40,9 +40,7 @@ export const DatabaseKoboTableGroupModal = ({
       <PanelHead>
         <Txt block sx={{maxWidth: 400}} truncate>{ctx.schema.translate.question(name)}</Txt>
       </PanelHead>
-      <PanelBody>
-        <Datatable columns={columns} data={groupData} id={name}/>
-      </PanelBody>
+      <Datatable columns={columns} data={groupData} id={name}/>
     </Popover>
   )
 }

@@ -1,5 +1,5 @@
 import {seq} from '@alexandreannic/ts-utils'
-import {KoboApiQuestionChoice, KoboApiQuestionSchema, KoboApiSchema, removeHtml} from './../../index'
+import {KoboApiQuestionSchema, KoboApiSchema, removeHtml} from './../../index'
 
 export type KoboTranslateQuestion = (key: string) => string
 export type KoboTranslateChoice = (key: string, choice?: string) => string
@@ -78,33 +78,22 @@ export namespace KoboSchemaHelper {
     question: KoboTranslateQuestion
     choice: KoboTranslateChoice,
   } => {
-    const choicesTranslation: Record<string, Record<string, KoboApiQuestionChoice>> = {}
+    const questionsTranslation: Record<string, string> = {}
+    const choicesTranslation: Record<string, Record<string, string>> = {}
+    schema.content.survey.forEach(_ => {
+      questionsTranslation[_.name] = _.label?.[langIndex] ?? _.name
+    })
     schema.content.choices.forEach(choice => {
       if (!choicesTranslation[choice.list_name]) choicesTranslation[choice.list_name] = {}
-      choicesTranslation[choice.list_name][choice.name] = choice
+      choicesTranslation[choice.list_name][choice.name] = choice.label?.[langIndex] ?? choice.name
     })
-
     return {
       question: (questionName: string) => {
-        // TODO try catch slow down perf
-        try {
-          return getLabel(questionIndex[questionName], langIndex)
-        } catch (e) {
-          return questionName
-        }
+        return questionsTranslation[questionName]
       },
       choice: (questionName: string, choiceName?: string) => {
-        const listName = questionIndex[questionName]?.select_from_list_name
-        // TODO try catch slow down perf
-        try {
-          if (choiceName) return getLabel(choicesTranslation[listName!][choiceName], langIndex)
-        } catch (e) {
-          // console.warn(
-          //   'Cannot translate this options. Maybe the question type has changed?',
-          //   {question: questionIndex[questionName], listName, choiceName, choicesTranslation}
-          // )
-        }
-        return ''
+        if (!choiceName) return ''
+        return choicesTranslation[questionIndex[questionName]?.select_from_list_name!][choiceName]
       },
     }
   }

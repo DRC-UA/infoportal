@@ -156,7 +156,7 @@ export const DatabaseKoboTableContent = ({
         hideColumnsToggle
         contentProps={{sx: {maxHeight: 'calc(100vh - 204px)'}}}
         showExportBtn
-        rowsPerPageOptions={[20, 50, 100]}
+        rowsPerPageOptions={[20, 50, 100, 200]}
         onFiltersChange={onFiltersChange}
         onDataChange={onDataChange}
         select={ctx.canEdit ? {
@@ -222,26 +222,27 @@ export const DatabaseKoboTableContent = ({
             )}
             {header?.(params)}
 
-            {session.admin && (
+            <div style={{marginLeft: 'auto'}}>
+              {session.admin && (
+                <IpIconBtn
+                  children="admin_panel_settings"
+                  target="_blank"
+                  href={appConfig.koboServerUrl + `/#/forms/${ctx.form.id}/landing`}
+                  tooltip="Open Kobo admin"
+                />
+              )}
               <IpIconBtn
-                children="admin_panel_settings"
+                href={ctx.schema.schemaUnsanitized.deployment__links.url}
                 target="_blank"
-                href={appConfig.koboServerUrl + `/#/forms/${ctx.form.id}/landing`}
-                sx={{marginLeft: 'auto'}}
-                tooltip="Open Kobo admin"
+                children="file_open"
+                tooltip={m._koboDatabase.openKoboForm}
               />
-            )}
-            <IpIconBtn
-              href={ctx.schema.schemaUnsanitized.deployment__links.url}
-              target="_blank"
-              children="file_open"
-              tooltip={m._koboDatabase.openKoboForm}
-            />
-            <DatabaseKoboSyncBtn
-              loading={ctx.asyncRefresh.loading}
-              tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.pullDataAt(ctx.form.updatedAt)}}/>}
-              onClick={ctx.asyncRefresh.call}
-            />
+              <DatabaseKoboSyncBtn
+                loading={ctx.asyncRefresh.loading}
+                tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.pullDataAt(ctx.form.updatedAt)}}/>}
+                onClick={ctx.asyncRefresh.call}
+              />
+            </div>
           </>
         }
       />
