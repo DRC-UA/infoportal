@@ -99,25 +99,25 @@ export class KoboTypedAnswerSdk {
         formId: KoboIndex.byName('protection_gbv').id,
         fnMapKobo: Protection_gbv.map,
         fnMapCustom: _ => {
-          if (_.new_ben === 'no') return
-          const persons: PersonDetails[] | undefined = (_.hh_char_hh_det ?? [])
-            .filter(_ => _.hh_char_hh_new_ben !== 'no')
-            .map(p => {
-              return {
-                gender: fnSwitch(p.hh_char_hh_det_gender!, {
-                  male: Person.Gender.Male,
-                  female: Person.Gender.Female,
-                  other: Person.Gender.Other
-                }, () => undefined),
-                age: p.hh_char_hh_det_age,
-                displacement: fnSwitch(p.hh_char_hh_det_status!, {
-                  idp: DisplacementStatus.Idp,
-                  returnee: DisplacementStatus.Idp,
-                  'non-displaced': DisplacementStatus.NonDisplaced,
-                }, () => undefined),
-              }
-            })
-          return makeMeta(_, {persons})
+          const persons: PersonDetails[] | undefined = (_.new_ben === 'no' || !_.hh_char_hh_det) ? [] :
+            _.hh_char_hh_det
+              .filter(_ => _.hh_char_hh_new_ben !== 'no')
+              .map(p => {
+                return {
+                  gender: fnSwitch(p.hh_char_hh_det_gender!, {
+                    male: Person.Gender.Male,
+                    female: Person.Gender.Female,
+                    other: Person.Gender.Other
+                  }, () => undefined),
+                  age: p.hh_char_hh_det_age,
+                  displacement: fnSwitch(p.hh_char_hh_det_status!, {
+                    idp: DisplacementStatus.Idp,
+                    returnee: DisplacementStatus.Idp,
+                    'non-displaced': DisplacementStatus.NonDisplaced,
+                  }, () => undefined),
+                }
+              })
+          return {..._, custom: {persons}}
         },
         ...filters,
       }).then(_ => ({
