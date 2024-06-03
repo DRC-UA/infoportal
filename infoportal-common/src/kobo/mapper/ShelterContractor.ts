@@ -34,11 +34,12 @@ export class ShelterContractorPrices {
     lot: 1 | 2 | 3
   }): ShelterContractor[] => {
     const contractors = oblasts[oblast as keyof typeof oblasts] ?? Enum.values(ShelterContractor)
-    return contractors.filter(_ => {
-      return (pricesCents[_]?.dismantling_of_structures && lot === 1)
-        || (pricesCents[_]?.dismantling_of_structures2 && lot === 2)
-        || (pricesCents[_]?.external_doors_pc && lot === 3)
-    })
+    return contractors
+    // .filter(_ => {
+    // return (pricesCents[_]?.dismantling_of_structures && lot === 1)
+    //   || (pricesCents[_]?.dismantling_of_structures2 && lot === 2)
+    //   || (pricesCents[_]?.external_doors_pc && lot === 3)
+    // })
   }
 
   static readonly compute = ({

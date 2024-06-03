@@ -25,7 +25,7 @@ export namespace AiGbvMapper {
 
   export const mapGbvActivity = (reportingMonth: string) => async (res: ApiPaginate<InferTypedAnswer<'protection_gbv'>>) => {
     const data: Type[] = await Promise.all(res.data.filter(_ => _.new_ben !== 'no').flatMap(d => {
-      return d.meta.persons!.map(async ind => {
+      return d.custom.persons!.map(async ind => {
         return ({
           answer: d,
           ...AiMapper.getLocationByKobo(d),

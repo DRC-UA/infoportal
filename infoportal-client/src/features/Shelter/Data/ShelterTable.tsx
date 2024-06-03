@@ -624,7 +624,7 @@ export const ShelterTable = () => {
             ) ?? (
               <TableIconBtn color="primary" target="_blank" href={ctx.ta.schema.schemaUnsanitized.deployment__links.url + '?' + objectToQueryString({
                 'd[nta_id]': _.nta!.id,
-                'd[interwiever_name]': ctx.nta.schema.translate.choice('enum_name', _.nta?.enum_name).replaceAll(' ', '_'),
+                'd[interwiever_name]': ctx.nta.schema.translate.choice('enum_name', _.nta?.enum_name)?.replaceAll(' ', '_'),
                 'd[ben_det_oblast]': _.nta!.ben_det_oblast,
                 'd[ben_det_raion]': _.nta!.ben_det_raion,
                 'd[ben_det_hromada]': _.nta!.ben_det_hromada,
