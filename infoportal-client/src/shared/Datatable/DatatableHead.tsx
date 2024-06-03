@@ -98,7 +98,7 @@ export const DatatableHead = (() => {
 })()
 
 const koboIconMap = {
-  image: 'short_text',
+  image: 'image',
   file: 'functions',
   calculate: 'functions',
   select_one_from_file: 'attach_file',

@@ -145,7 +145,7 @@ export class KoboSdkv2 {
 
   readonly getAttachement = (path: string) => {
     return axios.create().request({
-      url: this.api.params.baseUrl + '/api' + path,
+      url: this.api.params.baseUrl + path,
       method: 'GET',
       headers: this.api.params.headers,
       responseType: 'arraybuffer',
