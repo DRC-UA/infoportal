@@ -109,9 +109,11 @@ export class KoboMetaService {
   readonly search = app.cache.request({
     key: SytemCache.Meta,
     cacheIf: (params) => {
+      this.log.info('CHECK META CACHE IF ' + (params === undefined || Object.keys(params).length === 0))
       return params === undefined || Object.keys(params).length === 0
     },
     fn: async (params: KoboMetaParams.SearchFilter = {}) => {
+      this.log.info('CALL META SEARCH!!!')
       return await this.prisma.koboMeta.findMany({
         include: {
           persons: true,

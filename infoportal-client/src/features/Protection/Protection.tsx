@@ -47,7 +47,7 @@ export const ProtectionSidebar = () => {
           <Link target="_blank" href={conf.linkToFeature('dashboard/protection-monitoring' as any, '')}>
             <SidebarItem icon="insights" iconEnd="open_in_new">{m.dashboard}</SidebarItem>
           </Link>
-          <SidebarKoboLink size="small" path={path(protectionIndex.siteMap.form('protection_hhs2_1'))} name="protection_hhs2_1"/>
+          <SidebarKoboLink size="small" path={path(protectionIndex.siteMap.form('protection_hhs3'))} name="protection_hhs3"/>
         </SidebarSection>
         <SidebarSection title={m.koboForms}>
           {relatedKoboForms.map(_ =>

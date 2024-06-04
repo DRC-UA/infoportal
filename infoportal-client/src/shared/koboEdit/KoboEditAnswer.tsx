@@ -22,9 +22,6 @@ export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>
   columnName: K
   answerId: KoboAnswerId
 }) => {
-  const {m} = useI18n()
-  const {toastError, toastLoading} = useIpToast()
-  const {api} = useAppSettings()
   const ctx = useKoboEditAnswerContext()
 
   const {columnDef, schema, loading} = useKoboColumnDef({formId, columnName})
@@ -35,7 +32,7 @@ export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>
   const handleChange = async (newValue: any) => {
     await ctx.asyncUpdateById.call({
       answerIds: [answerId],
-      answer: columnName,
+      answer: newValue,
       question: columnName,
       formId,
     })

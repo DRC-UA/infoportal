@@ -142,8 +142,9 @@ export class KoboMetaMapperProtection {
     if (answer.new_ben === 'no') return
     const persons = answer.hh_char_hh_det
       ?.filter(_ => {
+        if (_.hh_char_hh_new_ben === 'no') return false
         if (answer.activity !== 'pgs') return true
-        if (_.hh_char_hh_new_ben === 'no' || !_.hh_char_hh_session) return false
+        if (!_.hh_char_hh_session) return false
         if (answer.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
         if (answer.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
         return false
