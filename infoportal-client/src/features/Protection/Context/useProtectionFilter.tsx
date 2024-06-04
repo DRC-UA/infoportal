@@ -60,6 +60,12 @@ export const useProtectionFilters = (data?: Seq<IKoboMeta>, flatData?: Seq<Prote
         getValue: _ => _.project,
         getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.project!).distinct(_ => _).sort())
       },
+      activity: {
+        icon: appConfig.icons.program,
+        label: m.activity,
+        getValue: _ => _.activity,
+        getOptions: () => d.map(_ => _.activity!).distinct(_ => _).sort().map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation))
+      },
       form: {
         icon: appConfig.icons.koboForm,
         label: m.koboForms,

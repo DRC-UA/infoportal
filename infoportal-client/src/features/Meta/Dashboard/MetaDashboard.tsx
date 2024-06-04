@@ -50,7 +50,7 @@ export const MetaDashboard = () => {
       {/*  }*/}
       {/*/>*/}
       <Div column>
-        <Div column responsive>
+        <Div responsive>
           <Div>
             <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
               <Lazy deps={[ctx.filteredData]} fn={() => {
@@ -110,15 +110,30 @@ export const MetaDashboard = () => {
                 {_ => (
                   <Box>
                     <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                      <Div column responsive>
+                      <Div responsive>
                         <Div>
-                          <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.committed}</Txt>} value={_.Committed?.value ?? 0} base={1}
-                                          color={t.palette.success.main}/>
-                          <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.pending}</Txt>} value={_.Pending?.value ?? 0} base={1} color={t.palette.warning.main}/>
+                          <ChartPieWidget
+                            dense sx={{flex: 1}} color={t.palette.success.main}
+                            title={<Txt size="small">{m.committed}</Txt>}
+                            value={_.Committed?.value ?? 0} base={1}
+                          />
+                          <ChartPieWidget
+                            dense sx={{flex: 1}} color={t.palette.warning.main}
+                            title={<Txt size="small">{m.pending}</Txt>}
+                            value={_.Pending?.value ?? 0} base={1}
+                          />
                         </Div>
                         <Div>
-                          <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.rejected}</Txt>} value={_.Rejected?.value ?? 0} base={1} color={t.palette.error.main}/>
-                          <ChartPieWidget dense sx={{flex: 1}} title={<Txt size="small">{m.blank}</Txt>} value={_.Blank?.value ?? 0} base={1} color={t.palette.info.main}/>
+                          <ChartPieWidget
+                            dense sx={{flex: 1}} color={t.palette.error.main}
+                            title={<Txt size="small">{m.rejected}</Txt>}
+                            value={_.Rejected?.value ?? 0} base={1}
+                          />
+                          <ChartPieWidget
+                            dense sx={{flex: 1}} color={t.palette.info.main}
+                            title={<Txt size="small">{m.blank}</Txt>}
+                            value={_.Blank?.value ?? 0} base={1}
+                          />
                         </Div>
                       </Div>
                     </Box>

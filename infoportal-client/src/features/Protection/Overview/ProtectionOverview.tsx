@@ -1,6 +1,6 @@
 import {useProtectionContext} from '@/features/Protection/Context/ProtectionContext'
 import {Page} from '@/shared/Page'
-import {Panel, PanelBody} from '@/shared/Panel'
+import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
@@ -19,6 +19,7 @@ import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {ProtectionOverviewFilterCustom} from '@/features/Protection/Overview/ProtectionOverviewFilterCustom'
+import {Divider} from '@mui/material'
 
 export const ProtectionOverview = () => {
   const ctx = useProtectionContext()
@@ -74,17 +75,22 @@ export const ProtectionOverview = () => {
                 label={m.count}
               />
             </Panel>
-            <Panel title={m.ageGroup}>
-              <PanelBody>
-                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered} enableDisplacementStatusFilter/>
-              </PanelBody>
-            </Panel>
             <Panel title={m.form}>
               <PanelBody>
                 <ChartBarSingleBy
                   data={data.filtered}
                   by={_ => KoboIndex.searchById(_.formId)?.translation}
                 />
+              </PanelBody>
+              <Divider/>
+              <PanelHead>{m.activity}</PanelHead>
+              <PanelBody>
+                {data.flatFiltered && (
+                  <ChartBarSingleBy
+                    data={data.filtered}
+                    by={_ => _.activity!}
+                  />
+                )}
               </PanelBody>
             </Panel>
             <Panel title={m.project}>
@@ -106,6 +112,11 @@ export const ProtectionOverview = () => {
                   fillBaseOn="value"
                   getOblast={_ => OblastIndex.byName(_.oblast)?.iso!}
                   data={ctx.data.flatFiltered}/>
+              </PanelBody>
+            </Panel>
+            <Panel title={m.ageGroup}>
+              <PanelBody>
+                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered} enableDisplacementStatusFilter/>
               </PanelBody>
             </Panel>
             <Panel title={m.displacementStatus}>

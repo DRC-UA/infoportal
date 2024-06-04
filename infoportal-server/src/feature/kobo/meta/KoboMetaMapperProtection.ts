@@ -69,7 +69,13 @@ export class KoboMetaMapperProtection {
 
   static readonly groupSession: MetaMapperInsert<KoboMetaOrigin<Protection_groupSession.T>> = row => {
     const answer = Protection_groupSession.map(row.answers)
-    if (answer.activity as any === 'gbv' || answer.activity === 'pss' || answer.activity === 'other' || answer.activity === 'let') return
+    const activity = fnSwitch(answer.activity!, {
+      gpt: DrcProgram.AwarenessRaisingSession,
+      pss: DrcProgram.AwarenessRaisingSession,
+      // let:
+    }, () => undefined)
+    if (!activity) return
+    // if (answer.activity as any === 'gbv' || answer.activity === 'pss' || answer.activity === 'other' || answer.activity === 'let') return
     const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
     const project = answer.project ? fnSwitch(answer.project, {
       bha: DrcProject['UKR-000345 BHA2'],
@@ -92,9 +98,7 @@ export class KoboMetaMapperProtection {
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Protection,
-      activity: fnSwitch(answer.activity!, {
-        gpt: DrcProgram.AwarenessRaisingSession,
-      }),
+      activity: activity,
       persons,
       personsCount: persons.length,
       project: project ? [project] : [],
