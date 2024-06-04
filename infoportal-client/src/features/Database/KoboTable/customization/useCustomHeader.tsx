@@ -21,6 +21,8 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('shelter_nta').id:
       case KoboIndex.byName('bn_cashForRentRegistration').id:
       case KoboIndex.byName('bn_cashForRentApplication').id:
+      case KoboIndex.byName('ecrec_vetApplication').id:
+      case KoboIndex.byName('ecrec_vetEvaluation').id:
       case KoboIndex.byName('shelter_cashForShelter').id: {
         return (_: HeaderParams<{custom: KoboGeneralMapping.IndividualBreakdown}>) => {
           return (

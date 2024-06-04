@@ -49,7 +49,7 @@ export const AiBundleTable = ({
   const {m} = useI18n()
   const t = useTheme()
 
-  const [period, setPeriod] = useState(format(subMonths(new Date(), 0), 'yyyy-MM'))
+  const [period, setPeriod] = useState(format(subMonths(new Date(), 1), 'yyyy-MM'))
 
   useEffect(() => {
     fetcher.fetch({clean: false}, period)

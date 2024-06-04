@@ -320,6 +320,9 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
         ...getPaymentStatusByEnum(),
         ...individualsBreakdown,
       ],
+      [KoboIndex.byName('ecrec_vetEvaluation').id]: [
+        ...individualsBreakdown,
+      ],
       [KoboIndex.byName('ecrec_vetApplication').id]: [
         ...getPaymentStatusByEnum({width: 188, enumerator: 'VetApplicationStatus'}),
         ...individualsBreakdown,

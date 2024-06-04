@@ -46,6 +46,7 @@ export const currentProtectionProjects = [
   DrcProject['UKR-000336 UHF6'],
   DrcProject['UKR-000226 SDC'],
   DrcProject['UKR-000309 OKF'],
+  DrcProject['UKR-000372 ECHO3'],
 ]
 
 
