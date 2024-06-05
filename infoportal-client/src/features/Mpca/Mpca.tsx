@@ -22,7 +22,7 @@ export const mpcaIndex = {
   siteMap: {
     deduplication: '/deduplication',
     data: '/data',
-    dashboard: '/',
+    dashboard: '/dashboard',
     paymentTools: '/payment-tools',
     paymentTool: (id = ':id') => '/payment-tool/' + id,
     // form: (id = ':id') => '/form/' + id,

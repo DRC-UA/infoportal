@@ -116,7 +116,7 @@ export const DatabaseKoboTableContent = ({
             <SelectStatusBy
               enum="KoboValidation"
               compact
-              disabled={!ctx.canEdit || ctx.loading}
+              disabled={!ctx.canEdit}
               value={value}
               onChange={(e) => {
                 ctxEditTag.asyncUpdateById.call({
