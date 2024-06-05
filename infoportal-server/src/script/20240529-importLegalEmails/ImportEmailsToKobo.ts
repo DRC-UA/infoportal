@@ -9,13 +9,13 @@ import {scriptConf} from '../ScriptConf'
 
 export const ImportEmailsToKobo = (async () => {
   const config = {
-    server: 'dev',
+    server: 'prod',
     importConcurrency: 2,
     baseFilePath: '/src/script/20240529-importLegalEmails/files/',
     fileNames: [
       'alerts.csv',
       'alertsExpansion',
-      'distribution.csv',
+      'distribution',
     ],
     importComment: (i: number) => `Imported programmatically from CSV tracker. Index: ${i}`
   } as const
