@@ -1,4 +1,4 @@
-import {DrcOffice, KoboAnswerFlat, KoboAnswerId, OblastISO, OblastName, Shelter_NTA, Shelter_TA, ShelterNtaTags, ShelterTaPriceLevel, ShelterTaTags} from '@infoportal-common'
+import {DrcOffice, KoboAnswerFlat, KoboAnswerId, OblastISO, OblastName, Person, Shelter_NTA, Shelter_TA, ShelterNtaTags, ShelterTaPriceLevel, ShelterTaTags} from '@infoportal-common'
 
 export interface ShelterEntity {
   ta?: KoboAnswerFlat<Shelter_TA.T, ShelterTaTags> & {
@@ -10,6 +10,7 @@ export interface ShelterEntity {
   oblast?: OblastName | ''
   office?: DrcOffice | ''
   id: KoboAnswerId
+  persons?: Person.Person[]
 }
 
 export class ShelterEntityHelper {
