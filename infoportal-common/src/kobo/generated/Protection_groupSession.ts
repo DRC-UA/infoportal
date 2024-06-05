@@ -3,50 +3,50 @@ export namespace Protection_groupSession {
 
   // Form id: a8Tn94arrSaH2FQBhUa9Zo
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // introduction/date [date] Date
-    date: Date | undefined,
+    'date': Date | undefined,
     // introduction/staff_to_insert_their_DRC_office [select_one] DRC office
-    staff_to_insert_their_DRC_office: undefined | Option<'staff_to_insert_their_DRC_office'>,
+    'staff_to_insert_their_DRC_office': undefined | Option<'staff_to_insert_their_DRC_office'>,
     // introduction/staff_code [select_one] Staff code (facilitator)
-    staff_code: undefined | Option<'staff_code_001'>,
+    'staff_code': undefined | Option<'staff_code_001'>,
     // introduction/staff_code_001 [select_one] Staff code (facilitator)
-    staff_code_001: undefined | Option<'staff_code_001'>,
+    'staff_code_001': undefined | Option<'staff_code_001'>,
     // introduction/project [select_one] Project code
-    project: undefined | Option<'project'>,
+    'project': undefined | Option<'project'>,
     // introduction/ben_det_oblast [select_one] Select oblast
-    ben_det_oblast: undefined | Option<'ben_det_oblast'>,
+    'ben_det_oblast': undefined | Option<'ben_det_oblast'>,
     // introduction/ben_det_raion [select_one] Select raion
-    ben_det_raion: undefined | string,
+    'ben_det_raion': undefined | string,
     // introduction/ben_det_hromada [select_one] Select hromada
-    ben_det_hromada: undefined | string,
-    // introduction/ben_det_hromada_001 [text] Specify settlement/village/city neighborhood
-    ben_det_hromada_001: string | undefined,
+    'ben_det_hromada': undefined | string,
+    // introduction/ben_det_hromada_001 [select_one_from_file] Specify settlement/village/city neighborhood
+    'ben_det_hromada_001': string,
     // introduction/location [select_one] Location
-    location: undefined | Option<'location'>,
+    'location': undefined | Option<'location'>,
     // introduction/location_other [text] If "Other", please specify
-    location_other: string | undefined,
+    'location_other': string | undefined,
     // gi/activity [select_one] Which topic was the group information session about?
-    activity: undefined | Option<'activity'>,
+    'activity': undefined | Option<'activity'>,
     // gi/activity_other [text] If "Other", please specify
-    activity_other: string | undefined,
+    'activity_other': string | undefined,
     // gi/activity_topic [text] Precise topic
-    activity_topic: string | undefined,
+    'activity_topic': string | undefined,
     // gi/new_ben [select_one] Are they new beneficiaries?
-    new_ben: undefined | Option<'new_ben'>,
+    'new_ben': undefined | Option<'new_ben'>,
     // gi/new_ben_no [integer] If no new beneficiaries, session number
-    new_ben_no: number | undefined,
+    'new_ben_no': number | undefined,
     // gi/numb_part [integer] Number of participants
-    numb_part: number | undefined,
+    'numb_part': number | undefined,
     // gi/hh_char_hh_det [begin_repeat] Participant
-    hh_char_hh_det: {
-      hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined,
-      hh_char_hh_det_age: number | undefined | undefined,
-      hh_char_hh_det_status: undefined | Option<'hh_char_hh_det_status'> | undefined
+    'hh_char_hh_det': {
+      'hh_char_hh_det_gender': undefined | Option<'hh_char_hh_det_gender'> | undefined,
+      'hh_char_hh_det_age': number | undefined | undefined,
+      'hh_char_hh_det_status': undefined | Option<'hh_char_hh_det_status'> | undefined
     }[] | undefined,
     // gi/comments [text] Comments
-    comments: string | undefined,
+    'comments': string | undefined,
   }
 
   export const options = {
@@ -74,6 +74,7 @@ export namespace Protection_groupSession {
       'CEJ013': `CEJ013`,
       'CEJ014': `CEJ014`,
       'CEJ015': `CEJ015`,
+      'CEJ016': `CEJ016`,
       'UMY001': `UMY001`,
       'UMY002': `UMY002`,
       'UMY003': `UMY003`,
@@ -156,7 +157,9 @@ export namespace Protection_groupSession {
       'okf': `UKR-000309 OKF`,
       'uhf4': `UKR-000314 UHF IV`,
       'echo': `UKR-000322 ECHO`,
-      'uhf6': `UKR-000336 UHF VI`
+      'uhf6': `UKR-000336 UHF VI`,
+      'uhf8': `UKR-000363 UHF8`,
+      '372_echo': `UKR-000372 ECHO3`
     },
     ben_det_oblast: {
       'cherkaska': `Cherkaska`,
@@ -201,8 +204,6 @@ export namespace Protection_groupSession {
     },
     activity: {
       'gpt': `General protection topic`,
-      'let': `Legal topic`,
-      'pss': `PSS topic`,
       'other': `Other`
     },
     new_ben: {
@@ -239,7 +240,7 @@ export namespace Protection_groupSession {
     date: _.date ? new Date(_.date) : undefined,
     new_ben_no: _.new_ben_no ? +_.new_ben_no : undefined,
     numb_part: _.numb_part ? +_.numb_part : undefined,
-    hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName).map((_: any) => {
+    hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {
       _['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
       return _
     }),

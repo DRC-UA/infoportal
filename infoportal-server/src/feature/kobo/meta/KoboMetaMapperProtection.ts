@@ -69,7 +69,7 @@ export class KoboMetaMapperProtection {
 
   static readonly groupSession: MetaMapperInsert<KoboMetaOrigin<Protection_groupSession.T>> = row => {
     const answer = Protection_groupSession.map(row.answers)
-    const activity = fnSwitch(answer.activity!, {
+    const activity = fnSwitch(answer.activity as any, {
       gpt: DrcProgram.AwarenessRaisingSession,
       pss: DrcProgram.AwarenessRaisingSession,
       // let:
@@ -84,6 +84,8 @@ export class KoboMetaMapperProtection {
       uhf4: DrcProject['UKR-000314 UHF4'],
       uhf6: DrcProject['UKR-000336 UHF6'],
       novo: DrcProject['UKR-000360 Novo-Nordisk'],
+      uhf8: DrcProject['UKR-000363 UHF8'],
+      '372_echo': DrcProject['UKR-000372 ECHO3'],
     }, () => answer.project as DrcProject) : undefined
     return {
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
