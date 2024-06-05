@@ -9,8 +9,8 @@ export class PeriodHelper {
 
   static readonly isDateIn = (period: Partial<Period>, date?: Date) => {
     if (date) {
-      if (period?.start && period.start.getTime() >= date.getTime()) return false
-      if (period?.end && endOfDay(period.end).getTime() <= date.getTime()) return false
+      if (period?.start && period.start.getTime() > date.getTime()) return false
+      if (period?.end && endOfDay(period.end).getTime() < date.getTime()) return false
       return true
     }
     return !period.start && !period.end
