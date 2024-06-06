@@ -87,9 +87,8 @@ export namespace AiShelterMapper {
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       .then(data => {
-        const bundle: Bundle[] = []
         let i = 0
-        groupBy({
+        return Promise.all(groupBy({
           data,
           groups: [
             {by: _ => _.project?.[0]!,},
@@ -148,16 +147,15 @@ export namespace AiShelterMapper {
               activityIndex: i++,
             })
 
-            bundle.push({
+            return {
               submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Plan/Project Code']),
               recordId: request.changes[0].recordId,
               data: grouped,
               activity: ai,
               requestBody: request,
-            })
+            }
           }
-        })
-        return bundle
+        }).transforms)
       })
   }
 
@@ -169,10 +167,9 @@ export namespace AiShelterMapper {
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       // .then(_ => _.data.flatMap(({persons, ...row}) => (persons ?? []).map(_ => ({...row, ..._}))))
-      .then(data => {
-        const bundle: Bundle[] = []
+      .then(async data => {
         let i = 0
-        groupBy({
+        return Promise.all(groupBy({
           data: data,
           groups: [
             {by: _ => _.project?.[0]!},
@@ -230,15 +227,14 @@ export namespace AiShelterMapper {
               activityIndex: i++,
             })
 
-            bundle.push({
+            return {
               recordId: request.changes[0].recordId,
               data: grouped,
               activity: ai,
               requestBody: request,
-            })
+            }
           },
-        })
-        return bundle
+        }).transforms)
       })
   }
 }

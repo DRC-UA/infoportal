@@ -31,7 +31,6 @@ export namespace AiMpcaMapper {
 
   export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
     const period = PeriodHelper.fromYYYYMM(periodStr)
-    const bundle: Bundle[] = []
     let i = 0
     return api.mpca.search({
       // filters: {
@@ -47,7 +46,7 @@ export namespace AiMpcaMapper {
         return _.lastStatusUpdate && PeriodHelper.isDateIn(period, _.lastStatusUpdate)
       }))
       .then(data => {
-          groupBy({
+          return Promise.all(groupBy({
             data,
             groups: [
               {by: _ => _.oblast},
@@ -116,16 +115,15 @@ export namespace AiMpcaMapper {
                 activity: AiMpcaType.map(AiMapper.mapLocationToRecordId(ai)),
                 activityIndex: i++,
               })
-              bundle.push({
+              return {
                 submit: checkAiValid(ai.Raion, ai.Hromada, ai['Activity Plan Code']),
                 recordId: request.changes[0].recordId,
                 data: grouped,
                 activity: ai,
                 requestBody: request,
-              })
+              }
             }
-          })
-          return bundle
+          }).transforms)
         }
       )
   }

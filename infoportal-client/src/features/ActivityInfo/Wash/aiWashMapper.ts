@@ -36,9 +36,8 @@ export namespace AiWashMapper {
       })
         .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
         .then(data => {
-          const bundle: Bundle[] = []
           let i = 0
-          groupBy({
+          return Promise.all(groupBy({
             data,
             groups: [
               {by: _ => _.project?.[0]!,},
@@ -87,16 +86,15 @@ export namespace AiWashMapper {
                 activityIndex: i++,
               })
 
-              bundle.push({
+              return {
                 submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Settlement'], ai['Activity Plan Code']),
                 recordId: request.changes[0].recordId,
                 data: grouped,
                 activity: ai,
                 requestBody: request,
-              })
+              }
             }
-          })
-          return bundle
+          }).transforms)
         })
     }
   }

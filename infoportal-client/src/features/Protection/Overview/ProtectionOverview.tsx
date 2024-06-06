@@ -168,7 +168,7 @@ export const ProtectionOverview = () => {
                 data: countByForm,
               })
             }
-          })
+          }).groups
           return res
         }}>
           {res => (

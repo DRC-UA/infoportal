@@ -74,7 +74,7 @@ export const MpcaBudgetTracker = ({
         {by: _ => _.office!,},
       ],
       finalTransform: _ => _,
-    })
+    }).groups
     return fetcherBudget.get.map(_ => {
       const d = gb[_.project]?.[_.activity]?.[_.office] ?? seq()
       return {

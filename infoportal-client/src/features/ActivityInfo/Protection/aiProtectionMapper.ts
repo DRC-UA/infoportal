@@ -38,9 +38,8 @@ export namespace AiProtectionMapper {
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       .then(data => {
-        const bundles: Bundle[] = []
         let i = 0
-        groupBy({
+        return Promise.all(groupBy({
           data,
           groups: [
             {by: _ => _.oblast!},
@@ -98,19 +97,18 @@ export namespace AiProtectionMapper {
               activityIndex: i++,
               subformId: activitiesConfig.protection_general.subId,
             })
-            subActivities.forEach((s) => {
-              bundles.push({
+            return subActivities.flatMap((s) => {
+              return {
                 submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Plan/Project Code'], ...subActivities.map(_ => _.ai.Indicators)),
                 recordId: request.changes[0].recordId,
                 activity: ai,
                 subActivity: s.ai,
                 data: s.data,
                 requestBody: request,
-              })
+              }
             })
           }
-        })
-        return bundles
+        }).transforms).then(_ => _.flat())
       })
   }
 }

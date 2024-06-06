@@ -20,7 +20,6 @@ export namespace AiFslcMapper {
 
   export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
     const period = PeriodHelper.fromYYYYMM(periodStr)
-    const bundle: Bundle[] = []
     let i = 0
     return api.koboMeta.search({
       activities: [
@@ -32,7 +31,7 @@ export namespace AiFslcMapper {
     })
       .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
       .then(data => {
-        groupBy({
+        return Promise.all(groupBy({
           data,
           groups: [
             {by: _ => _.activity!},
@@ -85,16 +84,15 @@ export namespace AiFslcMapper {
               activityIndex: i++,
             })
 
-            bundle.push({
+            return {
               submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Activity Plan Code']),
               recordId: request.changes[0].recordId,
               data: grouped,
               activity: ai,
               requestBody: request,
-            })
+            }
           }
-        })
-        return bundle
+        }).transforms)
       })
   }
 }
