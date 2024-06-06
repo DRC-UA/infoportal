@@ -43,6 +43,7 @@ export const koboIndex = {
       protection_pss: 'a52hN5iiCW73mxqqfmEAfp',
       protection_gbv: 'a5Noq6Wf9a8aE2cmi74FyS',
       protection_hhs1: 'aFU8x6tHksveU2c3hK7RUG' as const,
+      protection_referral: 'a62ZpworuN4nFLznsUej8r',
       protection_gbvSocialProviders: 'aKrbJdapRxfdPgXb3KqzHd',
       partnership_partnersDatabase: 'aLs32U5Qc9HfQ5mxQtsEML',
       partnership_initialQuestionnaire: 'a6u7CBysEz746Hdx6pVLzp',
@@ -113,10 +114,11 @@ export const koboFormTranslation: Record<KoboFormName, string> = {
   protection_hhs1: '[Protection] HHS (old v1)',
   protection_gbv: '[Protection] GBV',
   protection_gbvSocialProviders: '[Protection] GBV Survey for social service providers',
+  protection_referral: '[Protection] Referral Tracking Form',
   partnership_assessment: '[Partnership] CBP CSO Assessment',
   partnership_initialQuestionnaire: '[Partnership] CBP CSO Initial Questionnaire',
   partnership_partnersDatabase: '[Partnership] DRC Partners Database',
-  pseah_training_tracker:'DRC - PSEAH Training tracker'
+  pseah_training_tracker: 'DRC - PSEAH Training tracker'
 //
 }
 

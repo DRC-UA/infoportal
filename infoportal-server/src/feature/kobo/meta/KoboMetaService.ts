@@ -44,6 +44,7 @@ export class KoboMetaMapper {
     [KoboIndex.byName('protection_gbv').id]: KoboMetaMapperProtection.gbv,
     [KoboIndex.byName('protection_hhs3').id]: KoboMetaMapperProtection.hhs,
     [KoboIndex.byName('protection_groupSession').id]: KoboMetaMapperProtection.groupSession,
+    [KoboIndex.byName('protection_referral').id]: KoboMetaMapperProtection.referral,
     [KoboIndex.byName('protection_communityMonitoring').id]: KoboMetaMapperProtection.communityMonitoring,
     [KoboIndex.byName('ecrec_vetApplication').id]: KoboMetaMapperEcrec.vetApplication,
   }

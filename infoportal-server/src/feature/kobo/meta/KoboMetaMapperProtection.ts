@@ -16,6 +16,7 @@ import {
   Protection_groupSession,
   Protection_hhs3,
   Protection_pss,
+  Protection_referral,
   ProtectionCommunityMonitoringTags,
   ProtectionHhsTags,
   safeArray
@@ -108,6 +109,45 @@ export class KoboMetaMapperProtection {
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
     }
+  }
+
+  static readonly referral: MetaMapperInsert<KoboMetaOrigin<Protection_referral.T, ProtectionHhsTags>> = row => {
+    const answer = Protection_referral.map(row.answers)
+    const project = DrcProjectHelper.searchByCode(answer.project_code?.replaceAll(/[^\d]/g, ''))
+    const projects = project ? [project] : []
+    return KoboMetaMapper.make({
+      office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
+        chernihiv: DrcOffice.Chernihiv,
+        dnipro: DrcOffice.Dnipro,
+        kharkiv: DrcOffice.Kharkiv,
+        lviv: DrcOffice.Lviv,
+        mykolaiv: DrcOffice.Mykolaiv,
+        sumy: DrcOffice.Sumy,
+      }, () => undefined),
+      project: projects,
+      donor: projects.map(_ => DrcProjectHelper.donorByProject[_]),
+      oblast: OblastIndex.byKoboName(answer.oblast)?.name!,
+      raion: KoboGeneralMapping.searchRaion(answer.raion),
+      hromada: KoboGeneralMapping.searchHromada(answer.hromada),
+      settlement: answer.settement,
+      sector: DrcSector.Protection,
+      activity: DrcProgram.Referral,
+      status: KoboMetaStatus.Committed,
+      lastStatusUpdate: answer.date_closure,
+      personsCount: 1,
+      persons: [{
+        age: answer.age,
+        gender: fnSwitch(answer.gender!, {
+          boy: Gender.Male,
+          man: Gender.Male,
+          girl: Gender.Female,
+          woman: Gender.Female,
+          other: Gender.Other,
+          unspecified: undefined,
+        }, () => undefined)
+      }],
+      enumerator: answer.staff_code,
+    })
   }
 
   static readonly hhs: MetaMapperInsert<KoboMetaOrigin<Protection_hhs3.T, ProtectionHhsTags>> = row => {

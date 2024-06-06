@@ -33,6 +33,7 @@ export namespace AiProtectionMapper {
         DrcProgram.ProtectionMonitoring,
         DrcProgram.CommunityLevelPm,
         DrcProgram.AwarenessRaisingSession,
+        DrcProgram.Referral,
       ],
       status: [KoboMetaStatus.Committed],
     })
@@ -73,6 +74,7 @@ export namespace AiProtectionMapper {
                       [DrcProgram.ProtectionMonitoring]: '# of individuals reached through protection monitoring at the household level',
                       [DrcProgram.CommunityLevelPm]: '# of interviews conducted with key informants through community level protection monitoring',
                       [DrcProgram.AwarenessRaisingSession]: '# of individuals who participated in awareness raising activities on Protection',
+                      [DrcProgram.Referral]: '# of individuals who received protection counselling',
                     }, () => aiInvalidValueFlag as any),
                     'Population Group': AiMapper.mapPopulationGroup(displacement),
                     'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,

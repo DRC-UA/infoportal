@@ -42,6 +42,7 @@ export enum DrcProgram {
   MPCA = 'MPCA',
   NFI = 'NFI',
   ShelterRepair = 'ShelterRepair',
+  Referral = 'Referral',
   ESK = 'ESK',
   InfantWinterClothing = 'InfantWinterClothing',
   HygieneKit = 'HygieneKit',
