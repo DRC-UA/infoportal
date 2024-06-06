@@ -20,6 +20,9 @@ export namespace AiProtectionMapper {
       [DrcProject['UKR-000345 BHA2']]: 'PRT-DRC-00005',
       [DrcProject['UKR-000336 UHF6']]: 'PRT-DRC-00006',
       [DrcProject['UKR-000330 SDC2']]: 'PRT-DRC-00007',
+      [DrcProject['UKR-000304 PSPU']]: 'PRT-DRC-00008',
+      [DrcProject['UKR-000372 ECHO3']]: 'PRT-DRC-00009',
+      [DrcProject['UKR-000363 UHF8']]: 'PRT-DRC-00010',
     })
     // @ts-ignore
     return planCode[_] ?? `${aiInvalidValueFlag} ${_}`

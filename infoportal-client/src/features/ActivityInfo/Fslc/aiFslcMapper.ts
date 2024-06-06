@@ -26,6 +26,7 @@ export namespace AiFslcMapper {
         DrcProgram.SectoralCashForAgriculture,
         DrcProgram.SectoralCashForAnimalShelterRepair,
         DrcProgram.SectoralCashForAnimalFeed,
+        DrcProgram.VET,
       ],
       status: [KoboMetaStatus.Committed]
     })

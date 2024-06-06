@@ -10,10 +10,10 @@ export enum DrcOffice {
   Dnipro = 'Dnipro',
   Poltava = 'Poltava',
   Chernivtsi = 'Chernivtsi',
-  Sloviansk ='Sloviansk',
+  Sloviansk = 'Sloviansk',
   Ivankiv = 'Ivankiv',
   Ichna = 'Ichna',
-  Kherson= 'Kherson'
+  Kherson = 'Kherson'
 }
 
 export const drcOffices = Obj.values(DrcOffice)
@@ -102,10 +102,10 @@ export const drcOfficeShort: Record<DrcOffice, string> = {
   [DrcOffice.Dnipro]: 'DNK',
   [DrcOffice.Poltava]: 'Poltava',
   [DrcOffice.Chernivtsi]: 'Chernivtsi',
-  [DrcOffice.Sloviansk]:'Sloviansk',
+  [DrcOffice.Sloviansk]: 'Sloviansk',
   [DrcOffice.Ivankiv]: 'Ivankiv',
   [DrcOffice.Ichna]: 'Ichna',
-  [DrcOffice.Kherson]:'Kherson'
+  [DrcOffice.Kherson]: 'Kherson'
 }
 
 export enum DrcDonor {
@@ -237,6 +237,7 @@ export class DrcProjectHelper {
 
 
 export enum DrcJob {
+  'Economic Recovery Specialist' = 'Economic Recovery Specialist',
   'Deminer' = 'Deminer',
   'Livelihoods Assistant' = 'Livelihoods Assistant',
   'Livelihoods Officer' = 'Livelihoods Officer',
