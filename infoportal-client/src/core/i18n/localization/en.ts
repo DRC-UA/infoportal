@@ -785,9 +785,9 @@ export const en = Object.freeze({
         WorkOrderDone: 'Work Order Done',
         RepairWorksStarted: 'Repair works Started',
         RepairWorksCompleted: 'Repair works completed',
-        ContractorInvoiceReceived: 'Contractor invoice received',
-        HandoverCertificateOfCompletionSigned: 'Handover/Certificate of completion signed',
-        InvoicePaymentProcessed: 'Invoice payment processed',
+        // ContractorInvoiceReceived: 'Contractor invoice received',
+        // HandoverCertificateOfCompletionSigned: 'Handover/Certificate of completion signed',
+        // InvoicePaymentProcessed: 'Invoice payment processed',
       }
     },
     note: 'Note',

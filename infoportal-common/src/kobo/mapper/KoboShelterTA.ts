@@ -89,9 +89,9 @@ export enum ShelterProgress {
   WorkOrderDone = 'WorkOrderDone',
   RepairWorksStarted = 'RepairWorksStarted',
   RepairWorksCompleted = 'RepairWorksCompleted',
-  ContractorInvoiceReceived = 'ContractorInvoiceReceived',
-  HandoverCertificateOfCompletionSigned = 'HandoverCertificateOfCompletionSigned',
-  InvoicePaymentProcessed = 'InvoicePaymentProcessed',
+  // ContractorInvoiceReceived = 'ContractorInvoiceReceived',
+  // HandoverCertificateOfCompletionSigned = 'HandoverCertificateOfCompletionSigned',
+  // InvoicePaymentProcessed = 'InvoicePaymentProcessed',
 }
 
 export interface ShelterNtaTags extends KoboTagStatus, KoboBaseTags {
