@@ -14,6 +14,7 @@ import {useI18n} from '@/core/i18n'
 import {format, subMonths} from 'date-fns'
 import {KoboAnswerFlat, KoboIndex} from '@infoportal-common'
 import {useSession} from '@/core/Session/SessionContext'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
 
 export interface AiBundle<
@@ -110,11 +111,12 @@ export const AiBundleTable = ({
                     </>
                   )}
                   <AiViewAnswers answers={_.data.map(_ => {
-                    _.formId = KoboIndex.searchById(_.formId)?.translation ?? _.formId
-                    delete _.referencedFormId
-                    delete _.id
-                    delete _.uuid
-                    return _
+                    const copy = {..._}
+                    copy.formId = KoboIndex.searchById(copy.formId)?.translation ?? copy.formId
+                    delete copy.referencedFormId
+                    delete copy.id
+                    delete copy.uuid
+                    return copy
                   })}/>
                 </>
               )
@@ -124,8 +126,17 @@ export const AiBundleTable = ({
             id: 'form',
             head: m.kobo,
             width: 220,
-            type: 'select_one',
-            renderQuick: _ => seq(_.data).map(_ => _.formId).distinct(_ => _).compact().join(', '),
+            type: 'select_multiple',
+            options: () => {
+              return DatatableUtils.buildOptions(seq(fetcher.get).flatMap(_ => _.data).map(_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId).distinct(_ => _).compact())
+            },
+            render: _ => {
+              const formIds = seq(_.data).map(_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId).distinct(_ => _).compact()
+              return {
+                value: formIds,
+                label: formIds.join(', '),
+              }
+            },
           },
           {
             id: 'submissions',

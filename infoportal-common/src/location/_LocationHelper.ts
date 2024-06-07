@@ -97,6 +97,31 @@ export class AILocationHelper {
     return settlements[iso!]
   }
 
+  static readonly sanitizeManuallyTypedSettlement = (settlementName: string): string => {
+    settlementName = settlementName?.trim().replaceAll(/\s+/g, ' ').replaceAll('=', '')
+    const settlementFixes: Record<string, string> = {
+      'Kamianets-Podilsk': 'Kamianets-Podilskyi',
+      'Synelnykovo': 'Synelnykove',
+      'Liski': 'Lisky',
+      'Vosdvyzhivka': 'Vozdvyzhivka'
+    }
+    settlementName = (settlementFixes[settlementName] ?? settlementName).toLowerCase()
+    map(settlementName.match(/([\s\w]+),/) ?? undefined, matches => {
+      settlementName = matches[1]
+    })
+    if (settlementName.startsWith('м.')) settlementName = settlementName.replace('м.', '').trim()
+    else if (settlementName.startsWith('С.')) settlementName = settlementName.replace('С.', '').trim()
+    else if (settlementName.startsWith('с.')) settlementName = settlementName.replace('с.', '').trim()
+    if (settlementName.endsWith('village council')) settlementName = settlementName.replace('village council', '').trim()
+    else if (settlementName.endsWith('village')) settlementName = settlementName.replace('village', '').trim()
+    else if (settlementName.endsWith('селище')) settlementName = settlementName.replace('селище', '').trim()
+    if (settlementName.endsWith('tsa')) settlementName = settlementName.replace(/tsa$/, 'tsia')
+    else if (settlementName.endsWith('yii')) settlementName = settlementName.replace(/yii$/, 'yi')
+    else if (settlementName.endsWith(`'s`)) settlementName = settlementName.replace(`'s`, '')
+    settlementName = settlementName.replaceAll(`'`, '')
+    return settlementName
+  }
+
   static readonly findSettlement = async (oblastName: string, raionName: string, hromadaName: string, settlementName?: string): Promise<Settlement | undefined> => {
     const hromada = AILocationHelper.findHromada(oblastName, raionName, hromadaName)
     if (!hromada) return
@@ -110,8 +135,18 @@ export class AILocationHelper {
       'Liski': 'Lisky',
       'Budy village': 'Budy'
     }
-    settlementName = settlementFixes[settlementName] ?? settlementName
-    const match = settlements.find(_ => _.en.toLowerCase() === settlementName!.toLowerCase())
+    settlementName = (settlementFixes[settlementName] ?? settlementName).toLowerCase()
+    let match = settlements.find(_ =>
+      _.ua.toLowerCase() === settlementName ||
+      _.en.toLowerCase() === settlementName
+    )
+    if (!match) {
+      const sanitizedSettlementName = this.sanitizeManuallyTypedSettlement(settlementName)
+      match = settlements.find(_ =>
+        _.ua.toLowerCase() === sanitizedSettlementName ||
+        _.en.toLowerCase() === sanitizedSettlementName
+      )
+    }
     if (match) return match
     // return {
     //   'Chernihivska': settlements.find(_ => _.en === 'Chernihiv')
