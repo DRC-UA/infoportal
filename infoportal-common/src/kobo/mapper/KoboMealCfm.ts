@@ -18,6 +18,7 @@ export enum CfmDataProgram {
   'Economic Recovery' = 'Economic Recovery',
   'GBV' = 'GBV',
   'Victim Assistance' = 'Victim Assistance',
+  'EORE' = 'EORE',
   'Other' = 'Other',
 }
 

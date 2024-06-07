@@ -1,4 +1,4 @@
-import {Enum, lazy} from '@alexandreannic/ts-utils'
+import {Enum, lazy, map} from '@alexandreannic/ts-utils'
 import {OblastIndex} from './oblastIndex'
 import {AiOblast, aiOblasts} from './aiOblasts'
 import {hromadas} from './hromadas'
