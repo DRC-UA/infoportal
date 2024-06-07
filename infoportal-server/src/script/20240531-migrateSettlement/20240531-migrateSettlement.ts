@@ -1,7 +1,7 @@
 import {KoboSdkGenerator} from '../../feature/kobo/KoboSdkGenerator'
 import {scriptConf} from '../ScriptConf'
 import {PrismaClient} from '@prisma/client'
-import {AILocationHelper, KeyOf, KoboIndex, KoboSchemaHelper, OblastIndex, Protection_gbv} from '@infoportal-common'
+import {AILocationHelper, Ecrec_cashRegistration, Ecrec_cashRegistrationBha, KeyOf, KoboIndex, KoboSchemaHelper, OblastIndex} from '@infoportal-common'
 import {KoboService} from '../../feature/kobo/KoboService'
 import {map, Obj, seq} from '@alexandreannic/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'
@@ -48,24 +48,33 @@ export const migrateSettlement = async () => {
   //   settlementKey: 'ben_det_hromada_001',
   //   settlementGroup: 'introduction',
   // })
-  await run<Protection_gbv.T>({
-    formId: KoboIndex.byName('protection_gbv').id,
-    oblastKey: 'ben_det_oblast',
-    raionKey: 'ben_det_raion',
-    hromadaKey: 'ben_det_hromada',
-    settlementKey: 'ben_det_hromada_001',
-    settlementGroup: 'introduction',
-    // debug: true,
-  })
-  // await run<Ecrec_cashRegistrationBha.T>({
+  // await run<Protection_gbv.T>({
   //   formId: KoboIndex.byName('protection_gbv').id,
   //   oblastKey: 'ben_det_oblast',
   //   raionKey: 'ben_det_raion',
   //   hromadaKey: 'ben_det_hromada',
-  //   settlementKey: 'ben_det_settlement',
+  //   settlementKey: 'ben_det_hromada_001',
   //   settlementGroup: 'introduction',
   //   // debug: true,
   // })
+  // await run<Ecrec_cashRegistrationBha.T>({
+  //   formId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
+  //   oblastKey: 'ben_det_oblast',
+  //   raionKey: 'ben_det_raion',
+  //   hromadaKey: 'ben_det_hromada',
+  //   settlementKey: 'ben_det_settlement',
+  //   settlementGroup: 'ben_det',
+  //   // debug: true,
+  // })
+  await run<Ecrec_cashRegistration.T>({
+    formId: KoboIndex.byName('ecrec_cashRegistration').id,
+    oblastKey: 'ben_det_oblast',
+    raionKey: 'ben_det_raion',
+    hromadaKey: 'ben_det_hromada',
+    settlementKey: 'ben_det_settlement',
+    settlementGroup: 'ben_det',
+    // debug: true,
+  })
 }
 
 const run = async <T extends Record<string, any> = Record<string, any>>({
