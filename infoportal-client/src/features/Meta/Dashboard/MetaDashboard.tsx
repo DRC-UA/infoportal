@@ -1,5 +1,5 @@
-import React from 'react'
-import {DisplacementStatus, KoboIndex, KoboMetaStatus, OblastIndex} from '@infoportal-common'
+import React, {useEffect} from 'react'
+import {AILocationHelper, DisplacementStatus, KoboIndex, KoboMetaStatus, OblastIndex} from '@infoportal-common'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared/Page'
@@ -19,12 +19,42 @@ import {useMetaContext} from '@/features/Meta/MetaContext'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {Obj} from '@alexandreannic/ts-utils'
 import {ChartLine} from '@/shared/charts/ChartLine'
+import {initGoogleMaps} from '@/core/initGoogleMaps'
+import {useFetcher} from '@/shared/hook/useFetcher'
 
 export const MetaDashboard = () => {
   const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
   const [showProjectsBy, setShowProjectsBy] = usePersistentState<'donor' | 'project'>('donor', {storageKey: 'meta-dashboard-showProject'})
   const {data: ctx, fetcher} = useMetaContext()
+  const fetcherGeoLoc = useFetcher(AILocationHelper.getSettlementGeoLoc)
+  useEffect(() => {
+    fetcherGeoLoc.fetch()
+  }, [])
+  useEffect(() => {
+    const maxBubbleSize = 1
+    if (!ctx.filteredData || !fetcherGeoLoc.get) return
+    const res = Obj.entries(ctx.filteredData
+      .filter(_ => _.settlement && _.settlement.startsWith('UA'))
+      .groupByAndApply(_ => _.settlement!, _ => _.length))
+      .map(([iso, count]) => {
+        return {
+          loc: fetcherGeoLoc.get![iso],
+          size: count
+        }
+      })
+    const max = Math.max(...res.map(_ => _.size))
+    const flatted = res.map(_ => {
+      _.size = _.size / max * maxBubbleSize
+      _.size = .5 + _.size
+      return _
+    })
+    initGoogleMaps({
+      domSelector: '#google-maps',
+      color: t.palette.primary.main,
+      bubbles: flatted
+    })
+  }, [fetcherGeoLoc.get, ctx.data])
   return (
     <Page width="lg" loading={fetcher.loading}>
       {/*<DataFilterLayout*/}
@@ -80,6 +110,9 @@ export const MetaDashboard = () => {
         </Div>
         <Div responsive>
           <Div column>
+            <Box id="google-maps" sx={{minHeight: 300}}>
+
+            </Box>
             <SlidePanel title={m.ageGroup}>
               <AgeGroupTable tableId="meta-dashboard" persons={ctx.filteredPersons} enableDisplacementStatusFilter/>
             </SlidePanel>

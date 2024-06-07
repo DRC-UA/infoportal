@@ -39,6 +39,7 @@ export class KoboMetaBasicneeds {
       hrk_360_novonordisk: DrcProject['UKR-000360 Novo-Nordisk'],
       danida347_lwo: DrcProject['UKR-000347 DANIDA'],
       danida347_hrk: DrcProject['UKR-000347 DANIDA'],
+      danida347_chj: DrcProject['UKR-000347 DANIDA'],
       echo322_umy: DrcProject['UKR-000322 ECHO2'],
       echo322_chj: DrcProject['UKR-000322 ECHO2'],
       echo322_dnk: DrcProject['UKR-000322 ECHO2'],

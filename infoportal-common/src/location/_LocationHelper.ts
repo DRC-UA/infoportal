@@ -6,6 +6,7 @@ import {raions} from './raions'
 import {Settlement, SettlementIso} from './settlements'
 // @ts-ignore
 const settlements$ = import('../../ressources/settlements.json').then(_ => _ as Record<SettlementIso, Settlement>)
+const settlementsGeoLoc$ = import('../../ressources/settlementsGeoLoc.json').then(_ => _ as unknown as Record<SettlementIso, [number, number]>)
 // const aiSettlements$ = import('../../ressources/aiSettlements.ts').then(_ => _ as Record<string, string>)
 
 // const settlements = _settlements as any
@@ -50,6 +51,10 @@ export class AILocationHelper {
   static readonly getSettlement = lazy(async (): Promise<Record<SettlementIso, Settlement>> => {
     const res = await settlements$.then(_ => _ as unknown as Record<SettlementIso, Settlement>)
     return res
+  })
+
+  static readonly getSettlementGeoLoc = lazy(async (): Promise<Record<SettlementIso, [number, number]>> => {
+    return settlementsGeoLoc$
   })
 
   static getSettlementsByHromadaIso = async (hromadaIso: string) => {
