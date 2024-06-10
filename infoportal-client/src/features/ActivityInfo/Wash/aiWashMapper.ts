@@ -63,6 +63,7 @@ export namespace AiWashMapper {
                 'Reporting Organization': 'Danish Refugee Council',
                 'WASH': '# of individuals benefiting from hygiene kit/items distribution (in-kind)',
                 'Response Theme': 'No specific theme',
+                'Settlement': aiInvalidValueFlag,
                 ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
                 'Settlement': await AILocationHelper.findSettlement(oblast, raion, hromada, settlement).then(_ => _?._5w ?? '⚠️' + settlement),
                 'Location Type': 'Individuals/households',
