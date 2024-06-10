@@ -1,4 +1,4 @@
-import {AILocationHelper, DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
+import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from '@infoportal-common'
 import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
 import {AiWashType} from '@/features/ActivityInfo/Wash/aiWashType'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'

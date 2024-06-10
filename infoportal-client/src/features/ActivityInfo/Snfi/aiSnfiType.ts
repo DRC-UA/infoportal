@@ -41,7 +41,7 @@ export namespace AiSnfiType {
     // 'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
     // 'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
     // 'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
-    'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
+    'cpkkgd9lr960f8d49': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
     'cy26vp3lr960f8e4a': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
     'cq4oobolr960f8e4d': a['Reporting Date (YYYY-MM-DD)'] === undefined ? undefined : a['Reporting Date (YYYY-MM-DD)'],
     'cpljznblr960f8f4e': a['Reporting Month'] === undefined ? undefined : a['Reporting Month'],

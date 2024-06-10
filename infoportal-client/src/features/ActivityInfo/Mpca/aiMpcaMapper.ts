@@ -116,7 +116,7 @@ export namespace AiMpcaMapper {
                 activityIndex: i++,
               })
               return {
-                submit: checkAiValid(ai.Raion, ai.Hromada, ai['Activity Plan Code']),
+                submit: checkAiValid(ai.Raion, ai.Hromada, ai.Settlement, ai['Activity Plan Code']),
                 recordId: request.changes[0].recordId,
                 data: grouped,
                 activity: ai,

@@ -48,7 +48,7 @@ export namespace AiMpcaType {
     'cb7ml4clqnt87pf3': a['Response Theme'] === undefined ? undefined : options['Response Theme'][a['Response Theme']!],
     // 'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
     'cshl0i7lq6so74qp': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
-    'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
+    'c2o66c6lq6so74qq': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
     'cf2masdlq6so74qr': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
     'cmol4qhlq6so74qv': a['Reporting Month'] === undefined ? undefined : a['Reporting Month'],
     'c4t8d0xlqz50e1e2': a['Activity Start Month'] === undefined ? undefined : a['Activity Start Month'],

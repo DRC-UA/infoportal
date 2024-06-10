@@ -148,7 +148,7 @@ export namespace AiShelterMapper {
             })
 
             return {
-              submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Plan/Project Code']),
+              submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
               recordId: request.changes[0].recordId,
               data: grouped,
               activity: ai,
@@ -232,6 +232,7 @@ export namespace AiShelterMapper {
               data: grouped,
               activity: ai,
               requestBody: request,
+              submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
             }
           },
         }).transforms)

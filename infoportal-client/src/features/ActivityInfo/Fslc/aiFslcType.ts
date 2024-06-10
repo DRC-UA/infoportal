@@ -158,7 +158,7 @@ export namespace AiFslcType {
     'cddimyllqc7p5vdk': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
     'cgzvhgwlqc7zjuvl': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
     'cluq8u7lqc81x2bm': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
-    'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
+    'cn8bos4lqc84hi0n': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
     'c1m3xohls2786wqk': a['Location type'] === undefined ? undefined : options['Location type'][a['Location type']!],
     'c68n3qzlqc981m410': a['Population Group'] === undefined ? undefined : 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!],
     'cdhyf9tlqcab8261z': a['Number of people reached'] === undefined ? undefined : a['Number of people reached'],

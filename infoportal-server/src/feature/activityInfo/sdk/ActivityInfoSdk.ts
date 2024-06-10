@@ -126,16 +126,16 @@ export class ActivityInfoSdk {
   }
 
   readonly fetchColumnsFree = async (body: any): Promise<Record<AIID, {values: string[]}>> => {
-    return this.api.post(`/resources/query/columns`, {body}).then(_ => _.columns)
-    // .then(_ => {
-    // const {id, value} = _.columns
-    // const res = (id.values as string[]).reduce((acc, id, i) => {
-    //   @ts-ignore
-    // acc[value.values[i]] = id
-    // return acc
-    // }, {})
-    // return res
-    // })
+    return this.api.post(`/resources/query/columns`, {body})//.then(_ => _.columns)
+      .then(_ => {
+        const {id, value} = _.columns
+        const res = (id.values as string[]).reduce((acc, id, i) => {
+          // @ts-ignore
+          acc[value.values[i]] = id
+          return acc
+        }, {})
+        return res
+      })
   }
 
   readonly fetchColumnsDemoFslc = async () => {

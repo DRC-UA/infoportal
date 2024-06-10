@@ -104,7 +104,7 @@ export namespace AiProtectionMapper {
             })
             return subActivities.flatMap((s) => {
               return {
-                submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Plan/Project Code'], ...subActivities.map(_ => _.ai.Indicators)),
+                submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code'], ...subActivities.map(_ => _.ai.Indicators)),
                 recordId: request.changes[0].recordId,
                 activity: ai,
                 subActivity: s.ai,
