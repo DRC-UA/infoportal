@@ -136,11 +136,11 @@ export namespace KoboGeneralMapping {
     hh_char_hh_det_age?: number
   }): Person.Person => {
     return {
-      age: _.hh_char_hh_det_age ? safeInt32(_.hh_char_hh_det_age) : undefined,
+      age: _.hh_char_hh_det_age !== undefined ? safeInt32(_.hh_char_hh_det_age) : undefined,
       gender: fnSwitch(_.hh_char_hh_det_gender!, {
         'male': Person.Gender.Male,
         'female': Person.Gender.Female,
-      }, () => Person.Gender.Other)
+      }, () => undefined)
     }
   }
 

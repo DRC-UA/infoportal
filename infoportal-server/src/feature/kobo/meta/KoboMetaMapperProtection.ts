@@ -53,6 +53,7 @@ export class KoboMetaMapperProtection {
       oblast: OblastIndex.byKoboName(answer.ben_det_oblast)?.name!,
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      settlement: KoboGeneralMapping.searchHromada(answer.ben_det_hromada_001),
       sector: DrcSector.Protection,
       activity: answer.activity ? fnSwitch(answer.activity, {
         fgd: DrcProgram.FGD,
@@ -86,8 +87,7 @@ export class KoboMetaMapperProtection {
       uhf6: DrcProject['UKR-000336 UHF6'],
       novo: DrcProject['UKR-000360 Novo-Nordisk'],
       uhf8: DrcProject['UKR-000363 UHF8'],
-      '372_echo': DrcProject['UKR-000372 ECHO3'],
-    }, () => answer.project as DrcProject) : undefined
+    }, () => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project))) : undefined
     return {
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
         chernihiv: DrcOffice.Chernihiv,
@@ -100,6 +100,7 @@ export class KoboMetaMapperProtection {
       oblast: OblastIndex.byKoboName(answer.ben_det_oblast)?.name!,
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      settlement: KoboGeneralMapping.searchHromada(answer.ben_det_hromada_001),
       sector: DrcSector.Protection,
       activity: activity,
       persons,
@@ -113,7 +114,7 @@ export class KoboMetaMapperProtection {
 
   static readonly referral: MetaMapperInsert<KoboMetaOrigin<Protection_referral.T, ProtectionHhsTags>> = row => {
     const answer = Protection_referral.map(row.answers)
-    const project = DrcProjectHelper.searchByCode(answer.project_code?.replaceAll(/[^\d]/g, ''))
+    const project = DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project_code))
     const projects = project ? [project] : []
     return KoboMetaMapper.make({
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
@@ -214,6 +215,7 @@ export class KoboMetaMapperProtection {
       oblast: oblast.name,
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      settlement: KoboGeneralMapping.searchHromada(answer.ben_det_hromada_001),
       sector: DrcSector.Protection,
       activity: DrcProgram.PSS,
       personsCount: persons.length,

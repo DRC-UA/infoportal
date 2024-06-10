@@ -219,6 +219,10 @@ export class DrcProjectHelper {
     return str?.match(/UKR.(000\d\d\d)/)?.[1]
   }
 
+  static readonly searchCode = (value?: string): string | undefined => {
+    if (value) return value.match(/(000)?(\d\d\d)/)?.[2]
+  }
+
   static readonly search = (str?: string): DrcProject | undefined => {
     return DrcProjectHelper.searchByCode(DrcProjectHelper.extractCode(str))
   }

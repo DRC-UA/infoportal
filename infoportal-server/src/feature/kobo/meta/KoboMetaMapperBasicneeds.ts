@@ -74,7 +74,7 @@ export class KoboMetaBasicneeds {
       uhf7_nlv: DrcProject['UKR-000352 UHF7'],
       uhf7_umy: DrcProject['UKR-000352 UHF7'],
       umy_danida: DrcProject['UKR-000267 DANIDA']
-    }, _ => _ as DrcProject)
+    }, _ => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(_)))
   }
 
   static readonly bn_re: MetaMapperInsert<KoboMetaOrigin<Bn_re.T, MpcaEntityTags>> = row => {
@@ -95,7 +95,7 @@ export class KoboMetaBasicneeds {
       }, () => undefined)
     }).compact().distinct(_ => _.activity) ?? []
 
-    const prepare = (activity: DrcProgram, project: DrcProject): MetaMapped => {
+    const prepare = (activity: DrcProgram, project?: DrcProject): MetaMapped => {
       const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
       return {
         enumerator: Bn_re.options.back_enum[answer.back_enum!],
@@ -115,8 +115,8 @@ export class KoboMetaBasicneeds {
         activity,
         personsCount: safeNumber(answer.ben_det_hh_size),
         persons: group.map(KoboGeneralMapping.mapPersonDetails),
-        project: [project],
-        donor: [DrcProjectHelper.donorByProject[project]],
+        project: project ? [project] : [],
+        donor: project ? [DrcProjectHelper.donorByProject[project]] : [],
         lastName: answer.ben_det_surname,
         firstName: answer.ben_det_first_name,
         patronymicName: answer.ben_det_pat_name,
