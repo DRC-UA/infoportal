@@ -57,17 +57,8 @@ export const migrateSettlement = async () => {
   //   settlementGroup: 'introduction',
   //   // debug: true,
   // })
-  // await run<Ecrec_cashRegistrationBha.T>({
-  //   formId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
-  //   oblastKey: 'ben_det_oblast',
-  //   raionKey: 'ben_det_raion',
-  //   hromadaKey: 'ben_det_hromada',
-  //   settlementKey: 'ben_det_settlement',
-  //   settlementGroup: 'ben_det',
-  //   // debug: true,
-  // })
-  await run<Ecrec_cashRegistration.T>({
-    formId: KoboIndex.byName('ecrec_cashRegistration').id,
+  await run<Ecrec_cashRegistrationBha.T>({
+    formId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
     oblastKey: 'ben_det_oblast',
     raionKey: 'ben_det_raion',
     hromadaKey: 'ben_det_hromada',
@@ -75,6 +66,15 @@ export const migrateSettlement = async () => {
     settlementGroup: 'ben_det',
     // debug: true,
   })
+  // await run<Ecrec_cashRegistration.T>({
+  //   formId: KoboIndex.byName('ecrec_cashRegistration').id,
+  //   oblastKey: 'ben_det_oblast',
+  //   raionKey: 'ben_det_raion',
+  //   hromadaKey: 'ben_det_hromada',
+  //   settlementKey: 'ben_det_settlement',
+  //   settlementGroup: 'ben_det',
+  //   // debug: true,
+  // })
 }
 
 const run = async <T extends Record<string, any> = Record<string, any>>({
