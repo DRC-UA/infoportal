@@ -14,9 +14,9 @@ export const initGoogleMaps = async ({
   mapId?: string,
   color: string,
   bubbles: {
-    opacity?: number
     loc: [number, number]
-    size: number | undefined
+    size: number
+    label: string
   }[]
 }) => {
   // return;
@@ -31,35 +31,43 @@ export const initGoogleMaps = async ({
     mapId: mapId,
     center: ukraineCenter,
     zoom: 5.1,
+    controlSize: 32,
   })
-  bubbles.forEach(_ => {
+  const max = Math.max(...bubbles.map(_ => _.size))
+  const flatted = bubbles.map((_: any) => {
+    _.opacity = _.size / max * 0.7
+    return _
+  })
+  flatted.forEach(_ => {
     if (!_.loc?.[0]) return
-    // const circle = new google.maps.Marker({
-    //   position: new google.maps.LatLng(_.loc[0], _.loc[1]),
-    //   icon: {
-    //     path: google.maps.SymbolPath.CIRCLE,
-    //     fillOpacity: 0.5,
-    //     fillColor: color,
-    //     strokeOpacity: 1.0,
-    //     strokeColor: color,
-    //     strokeWeight: 3.0,
-    //     scale: 20 //pixels
-    //   }
-    // })
-    const circle = new google.maps.Circle({
-      clickable: true,
-      strokeColor: color,
-      strokeOpacity: _.opacity ?? 1,
-      strokeWeight: .25,
-      fillColor: color,
-      fillOpacity: 0.2,
+    new google.maps.Marker({
+      position: new google.maps.LatLng(_.loc[0], _.loc[1]),
       map,
-      scale: 20,
-      center: {lat: _.loc[0], lng: _.loc[1]},
-      radius: Math.sqrt(_.size ?? 1) * 1000,
+      title: `${_.label} (${_.size})`,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillOpacity: 0.3 + _.opacity,
+        fillColor: color,
+        // strokeOpacity: 1.0,
+        // strokeColor: olor,
+        strokeWeight: 0,
+        scale: 5 //pixels
+      }
     })
-    google.maps.event.addListener(circle, 'mouseover', function () {
-      map.getDiv().setAttribute('title', _.size + '')
-    })
+    // const circle = new google.maps.Circle({
+    //   clickable: true,
+    //   strokeColor: color,
+    //   strokeOpacity: _.opacity ?? 1,
+    //   strokeWeight: .25,
+    //   fillColor: color,
+    //   fillOpacity: 0.2,
+    //   map,
+    //   scale: 20,
+    //   center: {lat: _.loc[0], lng: _.loc[1]},
+    //   radius: Math.sqrt(_.size ?? 1) * 1000,
+    // })
+    // google.maps.event.addListener(circle, 'mouseover', function () {
+    //   map.getDiv().setAttribute('title', (_.opacity ?? _.size) + '')
+    // })
   })
 }
