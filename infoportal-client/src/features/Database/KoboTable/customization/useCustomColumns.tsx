@@ -176,7 +176,9 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
             }
           }
         },
-        lastStatusUpdate({showIf}),
+        lastStatusUpdate({
+          // showIf Always show because for BNRE, teams submit submission after having delivered the kits. So this is needed to report correct date.
+        }),
       ]
     }
 
