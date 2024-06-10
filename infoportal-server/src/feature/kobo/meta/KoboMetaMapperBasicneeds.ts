@@ -19,6 +19,8 @@ import {
 import {KoboMetaOrigin} from './KoboMetaType'
 import {MetaMapped, MetaMapperInsert} from './KoboMetaService'
 
+const nfisPrograms = [DrcProgram.NFI, DrcProgram.ESK, DrcProgram.InfantWinterClothing, DrcProgram.InfantWinterClothing]
+
 export class KoboMetaBasicneeds {
 
   private static readonly getBnreProject = (back_donor?: Bn_re.Option<'back_donor'> | Bn_rapidResponse.Option<'back_donor_l'>) => {
@@ -123,7 +125,7 @@ export class KoboMetaBasicneeds {
         taxId: answer.pay_det_tax_id_num,
         phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
         status: KoboMetaHelper.mapCashStatus(status),
-        lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
+        lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid || nfisPrograms.includes(activity) ? row.date : undefined),
         passportNum: map((answer.pay_det_pass_ser ?? '') + (answer.pay_det_pass_num ?? ''), _ => _ === '' ? undefined : _),
         taxIdFileName: answer.pay_det_tax_id_ph,
         taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),

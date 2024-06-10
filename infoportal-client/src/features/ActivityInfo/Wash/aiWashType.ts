@@ -71,6 +71,8 @@ export namespace AiWashType {type Opt<T extends keyof typeof options> = keyof (t
       'WASH-DRC-00003': 'c9p2whmltn67fg34',
       'WASH-DRC-00004': 'cpjbps1ltn67yl05',
       'WASH-DRC-00005': 'cb9qznjlw0rzyj53',
+      "WASH-DRC-00006": 'cqjr9vylx8w17f54',
+      "WASH-DRC-00007": 'cmzsxamlx8w468x5',
     },
     'Reporting Organization': {
       "Danish Refugee Council": 'cloyih3lpwhjdsu2r0'

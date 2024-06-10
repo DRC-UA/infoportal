@@ -110,7 +110,7 @@ export class KoboMetaService {
   readonly search = app.cache.request({
     key: SytemCache.Meta,
     cacheIf: (params) => {
-      this.log.info('CHECK META CACHE IF 2', JSON.stringify(params), (params === undefined || Object.keys(params).length === 0))
+      this.log.info('CHECK META CACHE IF3 ' + JSON.stringify(params) + ' ' + (params === undefined || Object.keys(params).length === 0))
       return params === undefined || Object.keys(params).length === 0
     },
     fn: async (params: KoboMetaParams.SearchFilter = {}) => {
@@ -226,7 +226,6 @@ export class KoboMetaService {
     this.info(formId, `Fetch Kobo answers... ${koboAnswers.length} fetched.`)
 
     const handleCreate = async () => {
-      this.info(formId, `Handle create (${koboAnswers.length})...`)
       const koboAnswersWithId = (koboAnswers as Seq<Omit<IKoboMeta, 'persons'> & {persons: Prisma.KoboPersonUncheckedCreateInput[]}>).map(p => {
         const genId = genUUID()
         p.id = genId
@@ -245,7 +244,9 @@ export class KoboMetaService {
       return koboAnswersWithId
     }
 
+    this.info(formId, `Deleting KoboMeta ${koboAnswers.length}...`)
     await this.prisma.koboMeta.deleteMany({where: {formId}})
+    this.info(formId, `Handle create (${koboAnswers.length})...`)
     await handleCreate()
     this.info(formId, `Handle create (${koboAnswers.length})... CREATED!`)
     return {}

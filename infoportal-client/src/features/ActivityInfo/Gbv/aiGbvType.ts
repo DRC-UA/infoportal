@@ -42,7 +42,7 @@ export const options = {
     "GBV-DRC-00002": 'co0svlsls2x3ndr3',
     "GBV-DRC-00003": 'cftn5bgls2xbfl14',
     "GBV-DRC-00004": 'cqr8n0hls2xh58h5',
-    "GBV-DRC-00005": 'c3xqrqfls2xll546'
+    "GBV-DRC-00005": 'c3xqrqfls2xll546',
   },
   'Oblast': {
     "Autonomous Republic of Crimea_Автономна Республіка Крим": 'c5c2sr3lq3kjj6gd',

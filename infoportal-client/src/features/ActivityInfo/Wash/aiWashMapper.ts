@@ -10,11 +10,13 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 export namespace AiWashMapper {
 
   const planCodes = {
-    [DrcProject['UKR-000345 BHA2']]: 'WASH-DRC-00005',
     [DrcProject['UKR-000314 UHF4']]: 'WASH-DRC-00001',
     [DrcProject['UKR-000270 Pooled Funds']]: 'WASH-DRC-00002',
     [DrcProject['UKR-000298 Novo-Nordisk']]: 'WASH-DRC-00003',
     [DrcProject['UKR-000309 OKF']]: 'WASH-DRC-00004',
+    [DrcProject['UKR-000345 BHA2']]: 'WASH-DRC-00005',
+    [DrcProject['UKR-000330 SDC2']]: 'WASH-DRC-00006',
+    [DrcProject['UKR-000347 DANIDA']]: 'WASH-DRC-00007',
   }
 
   const getPlanCode = (p: DrcProject): AiWashType.Type['Activity Plan Code'] => {
@@ -65,7 +67,6 @@ export namespace AiWashMapper {
                 'Response Theme': 'No specific theme',
                 'Settlement': aiInvalidValueFlag,
                 ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
-                'Settlement': await AILocationHelper.findSettlement(oblast, raion, hromada, settlement).then(_ => _?._5w ?? '⚠️' + settlement),
                 'Location Type': 'Individuals/households',
                 'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
                 'Disaggregation by population group and/or gender and age known?': 'Yes',
