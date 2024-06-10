@@ -98,6 +98,7 @@ export class Server {
         // dbRecordIdFunction: undefined,
       }),
       cookie: {
+        domain: appConf.production ? '.drc.ngo' : undefined,
         secure: appConf.production,
         // httpOnly: true,
         sameSite: appConf.production ? 'none' : undefined,
