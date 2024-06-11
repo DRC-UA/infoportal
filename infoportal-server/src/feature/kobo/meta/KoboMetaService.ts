@@ -7,7 +7,7 @@ import {KoboService} from '../KoboService'
 import {duration, map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
-import {DrcDonor, DrcProgram, DrcProject, IKoboMeta, KoboId, KoboIndex, KoboMetaStatus, PersonDetails} from '@infoportal-common'
+import {DrcDonor, DrcProgram, DrcProject, IKoboMeta, KoboAnswerId, KoboId, KoboIndex, KoboMetaStatus, PersonDetails, UUID} from '@infoportal-common'
 import {appConf} from '../../../core/conf/AppConf'
 import {genUUID, yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
@@ -143,7 +143,7 @@ export class KoboMetaService {
     const updates = await this.prisma.koboAnswers.findMany({
       where: {formId},
     }).then(_ => seq(_).map(mapper).compact())
-    const metaIdIndex = await this.prisma.koboMeta.findMany({
+    const koboIdToMetaId: Record<KoboAnswerId, Seq<UUID>> = await this.prisma.koboMeta.findMany({
       select: {
         id: true,
         koboId: true,
@@ -153,10 +153,11 @@ export class KoboMetaService {
       }
     }).then(_ => seq(_).groupByAndApply(_ => _.koboId, _ => _.map(_ => _.id)))
 
-    await this.prisma.koboPerson.deleteMany({where: {metaId: {in: Object.values(metaIdIndex).flat()}}})
+    const metaIdsWithNewPersons = updates.filter(_ => !!_[1].persons).flatMap(_ => koboIdToMetaId[_[0]])
+    await this.prisma.koboPerson.deleteMany({where: {metaId: {in: metaIdsWithNewPersons}}})
 
     const createPersonInput = updates.flatMap(([koboId, mapped]) => {
-      return (metaIdIndex[koboId] ?? []).flatMap(metaId => {
+      return (koboIdToMetaId[koboId] ?? []).flatMap(metaId => {
         const res: Prisma.KoboPersonCreateManyInput[] = (mapped.persons ?? []).map(_ => ({..._, metaId}))
         return res
       })
