@@ -39,8 +39,8 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  await migrateSettlement()
-  return
+  // await migrateSettlement()
+  // return
   // return
   // await new BuildKoboType().build('safety_incident')
   // return
