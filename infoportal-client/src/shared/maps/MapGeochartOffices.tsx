@@ -176,7 +176,7 @@ const drawOfficeMarkers = (selector: string, theme: Theme) => {
 
 }
 
-export const UaMap = () => {
+export const MapGeochartOffices = () => {
   const theme = useTheme()
   const {conf} = useAppSettings()
   useEffect(() => {

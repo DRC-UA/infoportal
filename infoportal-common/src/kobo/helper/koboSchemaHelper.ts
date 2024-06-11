@@ -13,6 +13,16 @@ export namespace KoboSchemaHelper {
     return q.label !== undefined ? (q.label as any)[langIndex as any] ?? q.name : q.name
   }
 
+  // export type Index = {
+  //   groupsCount: number
+  //   groupSchemas: Record<string, KoboApiQuestionSchema[]>
+  //   schema: KoboApiSchema
+  //   sanitizedSchema: KoboApiSchema,
+  //   choicesIndex: Record<string, KoboApiQuestionChoice>
+  //   questionIndex: Record<string, KoboApiQuestionSchema>
+  //   getOptionsByQuestionName: (_:string) => KoboApiQuestionChoice
+  // }
+
   export type Translation = ReturnType<typeof buildTranslation>
 
   export type Index = ReturnType<typeof buildIndex>
@@ -20,10 +30,7 @@ export namespace KoboSchemaHelper {
   export interface Bundle {
     schemaHelper: Index
     schemaUnsanitized: KoboApiSchema
-    translate: {
-      question: KoboTranslateQuestion
-      choice: KoboTranslateChoice
-    }
+    translate: Translation
   }
 
   export const buildIndex = ({
@@ -98,7 +105,7 @@ export namespace KoboSchemaHelper {
     }
   }
 
-  export const buildBundle = ({schema, langIndex = 0}: {schema: KoboApiSchema, langIndex?: number}) => {
+  export const buildBundle = ({schema, langIndex = 0}: {schema: KoboApiSchema, langIndex?: number}): Bundle => {
     const schemaHelper = KoboSchemaHelper.buildIndex({schema: schema})
     const translate = buildTranslation({
       schema: schema,

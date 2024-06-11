@@ -5,7 +5,7 @@ import {Div, PdfSlide, PdfSlideBody, SlidePanel, SlidePanelTitle, SlideTxt, Slid
 import {useI18n} from '@/core/i18n'
 import {DRCLogo, EULogo, UhfLogo, UsaidLogo} from '@/shared/logo/logo'
 import {ChartBarStacker, commonLegendProps} from '@/shared/charts/ChartBarStacked'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import {Legend} from 'recharts'
 import {ChartPie} from '@/shared/charts/ChartPie'
 import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
@@ -58,7 +58,7 @@ export const SnapshotProtMonitoEchoSample = () => {
               the protection needs facing affected populations; informing DRC and the protection
               communities' response.
             </SlideTxt>
-            <UkraineMap data={Obj.filter(computed.byCurrentOblast, (k, v) => v.value > 5)} sx={{mx: 1}}/>
+            <MapSvg data={Obj.filter(computed.byCurrentOblast, (k, v) => v.value > 5)} sx={{mx: 1}}/>
           </Div>
 
           <Div column sx={{flex: 6}}>

@@ -4,7 +4,7 @@ import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProt
 import {Div, PdfSlide, PdfSlideBody, SlidePanel, SlidePanelTitle, SlideTxt, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {ChartBarStacker, commonLegendProps} from '@/shared/charts/ChartBarStacked'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import {PanelTitle} from '@/shared/Panel'
 import {Legend} from 'recharts'
 import {ChartPie} from '@/shared/charts/ChartPie'
@@ -31,7 +31,7 @@ export const SnapshotProtMonitoNN2Sample = () => {
             </SlideTxt>
             <Box sx={{height: 316, borderRadius: t => t.shape.borderRadius}}>
               <PanelTitle sx={{mb: 3, mt: 1}}>{m.idpOriginOblast}</PanelTitle>
-              <UkraineMap data={computed.byOriginOblast}/>
+              <MapSvg data={computed.byOriginOblast}/>
             </Box>
           </Div>
 

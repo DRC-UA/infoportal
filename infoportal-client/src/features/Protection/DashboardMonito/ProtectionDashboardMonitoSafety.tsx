@@ -2,7 +2,7 @@ import {Div, SlidePanel, SlidePanelTitle} from '@/shared/PdfLayout/PdfSlide'
 import React from 'react'
 import {useI18n} from '@/core/i18n'
 import {DashboardPageProps} from './ProtectionDashboardMonito'
-import {UaMapBy} from '../../DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
@@ -27,7 +27,7 @@ export const ProtectionDashboardMonitoSafety = ({
             compare={{before: computed.lastMonth}}
             data={data}
           />
-          <UaMapBy
+          <MapSvgByOblast
             sx={{mx: 2}}
             data={data}
             getOblast={_ => _.where_are_you_current_living_oblast as any}
@@ -69,7 +69,7 @@ export const ProtectionDashboardMonitoSafety = ({
             compare={{before: computed.lastMonth}}
             data={data}
           />
-          <UaMapBy
+          <MapSvgByOblast
             sx={{mx: 2}}
             data={data}
             getOblast={_ => _.where_are_you_current_living_oblast as any}

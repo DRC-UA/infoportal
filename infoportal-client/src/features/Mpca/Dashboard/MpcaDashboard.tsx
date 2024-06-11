@@ -11,7 +11,7 @@ import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Lazy} from '@/shared/Lazy'
 import {makeChartData} from '@/shared/charts/chartHelperOld'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import {Box} from '@mui/material'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {format} from 'date-fns'
@@ -302,7 +302,7 @@ export const _MPCADashboard = ({
             {/*    categories: new Obj(OblastIndex.oblastByISO).map((k, v) => [k, (_: Mpca) => _.oblastIso === k]).get(),*/}
             {/*    filter: _ => true,*/}
             {/*  })}>*/}
-            {/*    {_ => <UkraineMap data={_} base={data.length} sx={{mx: 2}}/>}*/}
+            {/*    {_ => <MapSvg data={_} base={data.length} sx={{mx: 2}}/>}*/}
             {/*  </Lazy>*/}
             {/*</SlidePanel>*/}
             {/*<SlidePanel title={`${m.mpca.assistanceByLocation}`}>*/}
@@ -318,7 +318,7 @@ export const _MPCADashboard = ({
                 const by = data.groupBy(_ => OblastIndex.byName(_.oblast).iso)
                 return new Obj(by).map((k, v) => [k, makeChartData({value: seq(v).sum(x => getAmount(x) ?? 0)})]).get()
               }}>
-                {_ => <UkraineMap data={_} sx={{maxWidth: 480, margin: 'auto'}} maximumFractionDigits={0} base={totalAmount}/>}
+                {_ => <MapSvg data={_} sx={{maxWidth: 480, margin: 'auto'}} maximumFractionDigits={0} base={totalAmount}/>}
               </Lazy>
             </SlidePanel>
             <Panel title={m.disaggregation}>
@@ -384,7 +384,7 @@ export const _MPCADashboard = ({
         {/*      groupBy: _ => _.ben_det_oblast ? BNREOblastToISO[_.ben_det_oblast] : undefined,*/}
         {/*      filter: _ => true*/}
         {/*    })}>*/}
-        {/*      {_ => <UkraineMap data={_}/>}*/}
+        {/*      {_ => <MapSvg data={_}/>}*/}
         {/*    </Lazy>*/}
         {/*  </SlidePanel>*/}
         {/*</Div>*/}

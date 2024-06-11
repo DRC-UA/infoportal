@@ -9,7 +9,7 @@ import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {Lazy} from '@/shared/Lazy'
-import {UaMapBy} from '../../DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {IpBtn} from '@/shared/Btn'
 import {CommentsPanel} from '@/shared/CommentsPanel'
@@ -140,7 +140,7 @@ export const MealVisitDashboard = () => {
           <Div responsive>
             <Div column>
               <SlidePanel>
-                <UaMapBy
+                <MapSvgByOblast
                   fillBaseOn="value"
                   data={data}
                   getOblast={_ => mapOblast[_.md_det_oblast!]}

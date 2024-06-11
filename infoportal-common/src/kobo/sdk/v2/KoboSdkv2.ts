@@ -4,7 +4,7 @@ import {ApiKoboAnswerMetaData, KoboAnswerParams, KoboAnswerUtils, KoboApiList, K
 import {map} from '@alexandreannic/ts-utils'
 import axios from 'axios'
 import {KoboHook} from './type/KoboHook'
-import {KoboSdkv2FixedUpdated, KoboUpdateDataParams} from './KoboSdkv2FixedUpdated'
+import {KoboSdkv2FixedUpdated, KoboUpdateDataParams, KoboUpdateDataParamsData} from './KoboSdkv2FixedUpdated'
 
 const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
   return {
@@ -102,7 +102,7 @@ export class KoboSdkv2 {
     })
   }
 
-  readonly updateData = <TData extends any>(p: KoboUpdateDataParams<TData>): Promise<void> => {
+  readonly updateData = <TData extends KoboUpdateDataParamsData>(p: KoboUpdateDataParams<TData>): Promise<void> => {
     return this.editSdk.enqueue(p)
   }
 

@@ -17,7 +17,7 @@ import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {format} from 'date-fns'
 import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ProtectionOverviewFilterCustom} from '@/features/Protection/Overview/ProtectionOverviewFilterCustom'
 import {Divider} from '@mui/material'
 
@@ -107,7 +107,7 @@ export const ProtectionOverview = () => {
           <Div column>
             <Panel title={m.individuals}>
               <PanelBody>
-                <UaMapBy
+                <MapSvgByOblast
                   sx={{maxWidth: 480, margin: 'auto'}}
                   fillBaseOn="value"
                   getOblast={_ => OblastIndex.byName(_.oblast)?.iso!}

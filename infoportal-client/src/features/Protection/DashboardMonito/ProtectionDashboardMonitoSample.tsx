@@ -1,6 +1,6 @@
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {ChartBar} from '@/shared/charts/ChartBar'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import React, {useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {DashboardPageProps} from './ProtectionDashboardMonito'
@@ -103,7 +103,7 @@ export const ProtectionDashboardMonitoSample = ({
       <Div alignItems="flex-start" responsive>
         <Div column>
           <SlidePanel title={m.HHsLocation}>
-            <UkraineMap data={computed.byCurrentOblast} sx={{mx: 1}} base={data.length}/>
+            <MapSvg data={computed.byCurrentOblast} sx={{mx: 1}} base={data.length}/>
           </SlidePanel>
           <SlidePanel title={m.ageGroup}>
             <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>

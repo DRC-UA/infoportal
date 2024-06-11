@@ -5,7 +5,7 @@ import {Box, Theme} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
 import {format} from 'date-fns'
 import {useI18n} from '@/core/i18n'
-import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {formatLargeNumber} from '@/core/i18n/localization/en'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
@@ -99,7 +99,7 @@ export const SafetyIncidentDashboardAlert = ({
         </PanelHead>
 
         <PanelBody>
-          <UaMapBy
+          <MapSvgByOblast
             sx={{maxWidth: 420, mt: 1, margin: 'auto'}}
             fillBaseOn="value"
             data={flatAlertData?.filter(_ => filterType.length === 0 || filterType.includes(_.alertType))}

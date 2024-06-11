@@ -3,7 +3,7 @@ import {Box, useTheme} from '@mui/material'
 import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
 import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {Txt} from 'mui-extension'
@@ -67,13 +67,13 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
             <SlidePanel BodyProps={{sx: {paddingBottom: t => t.spacing(.25) + ' !important'}}}>
               <SlidePanelTitle>{m.idpPopulationByOblast}</SlidePanelTitle>
               <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <UkraineMap sx={{flex: 1, mr: 1,}} data={computed.idpsByOriginOblast} base={computed.idps.length} title={m.originOblast}/>
+                <MapSvg sx={{flex: 1, mr: 1,}} data={computed.idpsByOriginOblast} base={computed.idps.length} title={m.originOblast}/>
                 {/* <Box sx={{display: 'flex', flexDirection: 'column'}}>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                 </Box> */}
-                <UkraineMap sx={{flex: 1, ml: 1,}} data={computed.byCurrentOblast} base={computed.idps.length} legend={false} title={m.currentOblast}/>
+                <MapSvg sx={{flex: 1, ml: 1,}} data={computed.byCurrentOblast} base={computed.idps.length} legend={false} title={m.currentOblast}/>
               </Box>
             </SlidePanel>
 

@@ -9,7 +9,7 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import GbvSurveyHeader from '@/features/Snapshot/SnapshotGbvSurvey/GbvSurveyHeader'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {seq} from '@alexandreannic/ts-utils'
-import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 
 export const snapshotGbvMonitoLogo = (
@@ -56,7 +56,7 @@ export const SnapshotMonitoSample = () => {
           </Div>
           <Div column>
             <SlidePanel>
-              <UaMapBy sx={{mx: 2, mb: 2, mt: 1}} legend={false} getOblast={_ => OblastIndex.byName('Mykolaivska').iso} data={data}/>
+              <MapSvgByOblast sx={{mx: 2, mb: 2, mt: 1}} legend={false} getOblast={_ => OblastIndex.byName('Mykolaivska').iso} data={data}/>
               <SlidePanelTitle>{m.protection_gbv_survey.community}</SlidePanelTitle>
               <ChartBarSingleBy
                 data={data}

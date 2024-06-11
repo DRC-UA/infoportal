@@ -20,7 +20,7 @@ import {
   ShelterTaPriceLevel
 } from '@infoportal-common'
 import {ChartHelperOld, makeChartData} from '@/shared/charts/chartHelperOld'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import {Currency} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {DashboardFilterLabel} from '@/shared/DashboardLayout/DashboardFilterLabel'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -319,7 +319,7 @@ export const _ShelterDashboard = ({
               const gb = seq(data).groupBy(_ => OblastIndex.byKoboName(_.nta?.ben_det_oblast)?.iso!)
               return new Enum(gb).transform((k, v) => [k, makeChartData({value: v.length})]).get()
             }}>
-              {_ => <UkraineMap data={_} sx={{mx: 1}} maximumFractionDigits={0} base={data.length}/>}
+              {_ => <MapSvg data={_} sx={{mx: 1}} maximumFractionDigits={0} base={data.length}/>}
             </Lazy>
           </PanelBody>
         </Panel>

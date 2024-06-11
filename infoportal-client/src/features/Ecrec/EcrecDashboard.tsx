@@ -1,6 +1,6 @@
 // import {AgeGroupTable} from '@/shared/AgeGroupTable'
 // import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-// import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
+// import {MapSvgByOblast} from '@/features/DrcUaMap/MapSvgByOblast'
 // import {OblastIndex} from '@infoportal-common'
 // import {SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 // import {ChartLineBy} from '@/shared/charts/ChartLineBy'
@@ -8,7 +8,7 @@
 import {EcrecData} from '@/features/Ecrec/useEcrecData'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Seq} from '@alexandreannic/ts-utils'
-import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Ecrec_cashRegistration, OblastIndex} from '@infoportal-common'
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ChartLineBy} from '@/shared/charts/ChartLineBy'
@@ -29,7 +29,7 @@ export const EcrecDashboard = ({data}: {data: Seq<EcrecData>}) => {
         <SlidePanel>
           <ChartLineBy getX={_ => format(_.submissionTime, 'yyyy-MM')} getY={_ => 1} label="Submissions" data={data}/>
         </SlidePanel>
-        <SlidePanel title="Oblast"><UaMapBy getOblast={_ => OblastIndex.byKoboName(_.ben_det_oblast!).iso} data={data} fillBaseOn="value"/></SlidePanel>
+        <SlidePanel title="Oblast"><MapSvgByOblast getOblast={_ => OblastIndex.byKoboName(_.ben_det_oblast!).iso} data={data} fillBaseOn="value"/></SlidePanel>
       </Div>
     </Div>
   )

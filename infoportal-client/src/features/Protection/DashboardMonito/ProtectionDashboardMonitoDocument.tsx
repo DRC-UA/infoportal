@@ -7,7 +7,7 @@ import {Box, Icon} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import {Enum, Seq} from '@alexandreannic/ts-utils'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
@@ -80,7 +80,7 @@ export const ProtectionDashboardMonitoDocument = ({
           })}>
             {_ =>
               <SlidePanel title={m.protHHS2.missingDocumentationByOblastPopulation}>
-                <UkraineMap data={_} fillBaseOn="percent" sx={{mx: 2}}/>
+                <MapSvg data={_} fillBaseOn="percent" sx={{mx: 2}}/>
               </SlidePanel>
             }
           </Lazy>

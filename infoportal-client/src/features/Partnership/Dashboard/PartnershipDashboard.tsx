@@ -1,7 +1,7 @@
 import {Page} from '@/shared/Page'
 import {usePartnershipContext} from '@/features/Partnership/PartnershipContext'
 import React, {useEffect, useMemo, useState} from 'react'
-import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {usePartnershipDashboard} from '@/features/Partnership/Dashboard/usePartnershipDashboard'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
@@ -334,7 +334,7 @@ export const _PartnershipDashboard = ({
           <Panel>
             <PanelHead>{m._partner.workingOblast}</PanelHead>
             <PanelBody>
-              <UaMapBy
+              <MapSvgByOblast
                 fillBaseOn="value"
                 data={computed.oblastIso.map(_ => ({oblast: _}))}
                 getOblast={_ => _.oblast}

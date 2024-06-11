@@ -138,7 +138,7 @@ const drawUA = (selector: string, theme: Theme) => {
   })
 }
 
-export const IsaUaMap = () => {
+export const MapGeochartIsa = () => {
   const theme = useTheme()
   const {conf} = useAppSettings()
   useEffect(() => {

@@ -1,6 +1,6 @@
 import {OblastIndex, OblastISO, toPercent} from '@infoportal-common'
 import {Enum, map, seq} from '@alexandreannic/ts-utils'
-import {UkraineSvgPath, ukraineSvgPath} from './ukraineSvgPath'
+import {MapSvgPaths, ukraineSvgPath} from './mapSvgPaths'
 import {alpha, Box, BoxProps, darken, useTheme} from '@mui/material'
 import {useMemo} from 'react'
 import {Txt} from 'mui-extension'
@@ -19,7 +19,7 @@ const computeFill = (value: number, min: number, max: number) => {
   return value > 0 ? (maxAlpha - minAlpha) * (value - min) / (max - min) + minAlpha : undefined
 }
 
-export const UkraineMap = ({
+export const MapSvg = ({
   data = {} as any,
   omitValueLt = 0,
   base,
@@ -37,7 +37,7 @@ export const UkraineMap = ({
   onSelect?: (oblast: OblastISO) => void
   base?: number
   fillBaseOn?: 'percent' | 'value'
-  data?: Partial<{ [key in keyof UkraineSvgPath]: {value: number, base?: number} }>
+  data?: Partial<{ [key in keyof MapSvgPaths]: {value: number, base?: number} }>
 } & Pick<BoxProps, 'sx'>) => {
   const theme = useTheme()
 

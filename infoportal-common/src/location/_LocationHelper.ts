@@ -6,6 +6,7 @@ import {raions} from './raions'
 import {Settlement, SettlementIso} from './settlements'
 // @ts-ignore
 const settlements$ = import('../../ressources/settlements.json').then(_ => _ as Record<SettlementIso, Settlement>)
+const settlementsGeoLoc$ = import('../../ressources/settlementsGeoLoc.json').then(_ => _ as unknown as Record<SettlementIso, [number, number]>)
 // const aiSettlements$ = import('../../ressources/aiSettlements.ts').then(_ => _ as Record<string, string>)
 
 // const settlements = _settlements as any
@@ -32,7 +33,8 @@ export class AILocationHelper {
     return res
   }
 
-  private static readonly settlementsIndex = lazy((settlements: Record<string, Settlement>) => {
+  private static readonly settlements = settlements$.then(_ => _ as unknown as Record<SettlementIso, Settlement>)
+  private static readonly settlementsIsoByParentIso: Promise<Record<string, string[]>> = this.settlements.then(settlements => {
     const index: Record<string, string[]> = {}
     for (var k in settlements) {
       const obj = settlements[k]
@@ -44,13 +46,18 @@ export class AILocationHelper {
 
   static get5w = (label5w: string) => label5w.split('_')[0] ?? label5w
 
-  static readonly getSettlement = lazy((): Promise<Record<SettlementIso, Settlement>> => {
-    return settlements$.then(_ => _ as unknown as Record<SettlementIso, Settlement>)
+  static readonly getSettlement = lazy(async (): Promise<Record<SettlementIso, Settlement>> => {
+    const res = await settlements$.then(_ => _ as unknown as Record<SettlementIso, Settlement>)
+    return res
   })
 
-  private static getSettlementsByHromadaIso = async (hromadaIso: string) => {
-    const settlements = await AILocationHelper.getSettlement().then(_ => _ as unknown as Record<SettlementIso, Settlement>)
-    const index = AILocationHelper.settlementsIndex(settlements)
+  static readonly getSettlementGeoLoc = lazy(async (): Promise<Record<SettlementIso, [number, number]>> => {
+    return settlementsGeoLoc$
+  })
+
+  static getSettlementsByHromadaIso = async (hromadaIso: string) => {
+    const settlements = await this.settlements
+    const index = await AILocationHelper.settlementsIsoByParentIso
     const isos = index[hromadaIso]
     return isos.map(_ => settlements[_])
   }
@@ -133,7 +140,7 @@ export class AILocationHelper {
       'Kamianets-Podilsk': 'Kamianets-Podilskyi',
       'Synelnykovo': 'Synelnykove',
       'Liski': 'Lisky',
-      'Budy village': 'Budy'
+      'Vosdvyzhivka': 'Vozdvyzhivka'
     }
     settlementName = (settlementFixes[settlementName] ?? settlementName).toLowerCase()
     let match = settlements.find(_ =>

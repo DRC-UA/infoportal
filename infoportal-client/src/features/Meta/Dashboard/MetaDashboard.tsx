@@ -4,7 +4,6 @@ import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared/Page'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
 import {format} from 'date-fns'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
@@ -19,6 +18,7 @@ import {useMetaContext} from '@/features/Meta/MetaContext'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {Obj} from '@alexandreannic/ts-utils'
 import {ChartLine} from '@/shared/charts/ChartLine'
+import {Map} from '@/shared/maps/Map'
 
 export const MetaDashboard = () => {
   const t = useTheme()
@@ -80,11 +80,13 @@ export const MetaDashboard = () => {
         </Div>
         <Div responsive>
           <Div column>
+            <Map
+              data={ctx.filteredData}
+              getSettlement={_ => _.settlement}
+              getOblast={_ => OblastIndex.byName(_.oblast).iso}
+            />
             <SlidePanel title={m.ageGroup}>
               <AgeGroupTable tableId="meta-dashboard" persons={ctx.filteredPersons} enableDisplacementStatusFilter/>
-            </SlidePanel>
-            <SlidePanel title={m.currentOblast}>
-              <UaMapBy sx={{mx: 2, maxWidth: 480, margin: 'auto'}} getOblast={_ => OblastIndex.byName(_.oblast).iso} data={ctx.filteredData} fillBaseOn="value"/>
             </SlidePanel>
             <Panel title={m.displacementStatus}>
               <PanelBody>

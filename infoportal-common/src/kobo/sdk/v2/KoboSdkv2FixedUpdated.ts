@@ -3,7 +3,8 @@ import {KoboAnswerId, KoboId} from '../../mapper'
 import {ApiKoboUpdate} from './type/KoboUpdate'
 import {chunkify} from '../../..'
 
-export type KoboUpdateDataParams<TData extends any = any> = {
+export type KoboUpdateDataParamsData = Record<string, string | string[] | number | null | undefined>
+export type KoboUpdateDataParams<TData extends KoboUpdateDataParamsData = any> = {
   formId: KoboId,
   submissionIds: KoboAnswerId[],
   data: TData
@@ -51,13 +52,16 @@ export class KoboSdkv2FixedUpdated {
   }
 
   private readonly apiCall = ({formId, data, submissionIds}: KoboUpdateDataParams): Promise<ApiKoboUpdate> => {
-    return this.api.patch(`/v2/assets/${formId}/data/bulk/`, {
+    return this.api.patch<ApiKoboUpdate>(`/v2/assets/${formId}/data/bulk/`, {
       body: {
         payload: {
           submission_ids: submissionIds,
           data,
         }
       }
+    }).then(_ => {
+      console.log(_.successes, _.failures)
+      return _
     })
   }
 }
