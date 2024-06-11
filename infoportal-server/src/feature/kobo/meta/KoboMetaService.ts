@@ -92,10 +92,10 @@ export class KoboMetaService {
       } else {
         this.log.error(`No mapper implemented for ${JSON.stringify(_.formId)}`)
       }
-      setTimeout(() => {
-        // Wait for the database to be rebuilt before clearing the cache
-        app.cache.clear(SytemCache.Meta)
-      }, duration(10, 'minute'))
+      // setTimeout(() => {
+      //   // Wait for the database to be rebuilt before clearing the cache
+      //   app.cache.clear(SytemCache.Meta)
+      // }, duration(10, 'minute'))
     })
     this.event.listen(Event.WFP_DEDUPLICATION_SYNCHRONIZED, () => {
       this.syncWfpDeduplication()
