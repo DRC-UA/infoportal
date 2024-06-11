@@ -5,7 +5,7 @@ import {DashboardPageProps} from './ProtectionDashboardMonito'
 import {Box, Divider, Icon} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
 import {Protection_hhs3} from '@infoportal-common'
@@ -28,13 +28,13 @@ export const ProtectionDashboardMonitoDisplacement = ({
       <Div column>
         <SlidePanel title={m.idpPopulationByOblast}>
           <Box sx={{display: 'flex', alignItems: 'center'}}>
-            <UkraineMap sx={{flex: 1}} data={computed.idpsByOriginOblast} base={computed.idps.length} title={m.originOblast}/>
+            <MapSvg sx={{flex: 1}} data={computed.idpsByOriginOblast} base={computed.idps.length} title={m.originOblast}/>
             <Box sx={{display: 'flex', flexDirection: 'column'}}>
               <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
               <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
               <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
             </Box>
-            <UkraineMap sx={{flex: 1}} data={computed.byCurrentOblast} base={computed.idps.length} legend={false} title={m.currentOblast}/>
+            <MapSvg sx={{flex: 1}} data={computed.byCurrentOblast} base={computed.idps.length} legend={false} title={m.currentOblast}/>
           </Box>
         </SlidePanel>
         <SlidePanel title={m.displacementAndReturn}>
@@ -68,7 +68,7 @@ export const ProtectionDashboardMonitoDisplacement = ({
             filterBase: _ => _.have_you_been_displaced_prior_to_your_current_displacement && _.have_you_been_displaced_prior_to_your_current_displacement !== 'unable_unwilling_to_answer'
           }).get()
           }>
-            {_ => <UkraineMap omitValueLt={5} data={_} sx={{mx: 2}} fillBaseOn="percent"/>}
+            {_ => <MapSvg omitValueLt={5} data={_} sx={{mx: 2}} fillBaseOn="percent"/>}
           </Lazy>
         </SlidePanel>
         <SlidePanel title={m.protHHS2.reasonForLeaving}>

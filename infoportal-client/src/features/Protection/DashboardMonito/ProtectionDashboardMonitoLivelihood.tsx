@@ -7,7 +7,7 @@ import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {chain, Protection_hhs3} from '@infoportal-common'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import {ChartLineByKey} from '@/shared/charts/ChartLineByKey'
 import {Divider} from '@mui/material'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
@@ -81,7 +81,7 @@ export const ProtectionDashboardMonitoLivelihood = ({
               data,
               filter: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes'
             })}>
-              {_ => <UkraineMap data={_} fillBaseOn="percent" sx={{mx: 3}}/>}
+              {_ => <MapSvg data={_} fillBaseOn="percent" sx={{mx: 3}}/>}
             </Lazy>
           </SlidePanel>
           <SlidePanel title={m.protHHS2.unemploymentFactors}>

@@ -4,7 +4,7 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import React, {useMemo, useState} from 'react'
 import {KoboGeneralMapping, KoboMealCfmStatus, Period, PeriodHelper} from '@infoportal-common'
 import {Panel, PanelBody} from '@/shared/Panel'
-import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
@@ -130,7 +130,7 @@ export const CfmDashboard = () => {
           </Panel>
           <Panel savableAsImg expendable title={m._cfm.requestByOblast}>
             <PanelBody>
-              <UaMapBy
+              <MapSvgByOblast
                 sx={{ml: 1, mt: 2}}
                 fillBaseOn="value"
                 data={filteredData}

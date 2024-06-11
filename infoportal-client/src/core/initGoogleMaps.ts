@@ -17,6 +17,7 @@ export const initGoogleMaps = async ({
     loc: [number, number]
     size: number
     label: string
+    desc: string
   }[]
 }) => {
   // return;
@@ -40,10 +41,10 @@ export const initGoogleMaps = async ({
   })
   flatted.forEach(_ => {
     if (!_.loc?.[0]) return
-    new google.maps.Marker({
+    const marker = new google.maps.Marker({
       position: new google.maps.LatLng(_.loc[0], _.loc[1]),
       map,
-      title: `${_.label} (${_.size})`,
+      // title: `${_.label} (${_.size})`,
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
         fillOpacity: 0.3 + _.opacity,
@@ -53,6 +54,15 @@ export const initGoogleMaps = async ({
         strokeWeight: 0,
         scale: 5 //pixels
       }
+    })
+    marker.addListener('click', () => {
+      new google.maps.InfoWindow({
+        content: `<h1 style="margin: 0; line-height: 1; padding: 0; margin-top: -3px">${_.size}</h1><b>${_.label}</b><br/>${_.desc ?? ''}`,
+        // ariaLabel: "Uluru",
+      }).open({
+        anchor: marker,
+        map
+      })
     })
     // const circle = new google.maps.Circle({
     //   clickable: true,

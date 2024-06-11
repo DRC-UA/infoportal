@@ -4,7 +4,7 @@ import {Box, GlobalStyles, Icon, useTheme} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Theme} from '@mui/material/styles'
 import {Txt} from 'mui-extension'
-import {OblastIndex} from '@infoportal-common'
+import {OblastIndex} from '../../../../infoportal-common/src'
 import {Panel} from '@/shared/Panel'
 import {getGoogle} from '@/core/google'
 
@@ -176,7 +176,7 @@ const drawOfficeMarkers = (selector: string, theme: Theme) => {
 
 }
 
-export const UaMap = () => {
+export const MapGeochartOffices = () => {
   const theme = useTheme()
   const {conf} = useAppSettings()
   useEffect(() => {

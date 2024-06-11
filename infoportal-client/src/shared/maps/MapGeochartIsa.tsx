@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import {Box, GlobalStyles, useTheme} from '@mui/material'
 import {useAppSettings} from '../../core/context/ConfigContext'
 import {Theme} from '@mui/material/styles'
-import {OblastIndex} from '@infoportal-common'
+import {OblastIndex} from '../../../../infoportal-common/src'
 import {getGoogle} from '@/core/google'
 
 const generalStyles = <GlobalStyles styles={{
@@ -138,7 +138,7 @@ const drawUA = (selector: string, theme: Theme) => {
   })
 }
 
-export const IsaUaMap = () => {
+export const MapGeochartIsa = () => {
   const theme = useTheme()
   const {conf} = useAppSettings()
   useEffect(() => {

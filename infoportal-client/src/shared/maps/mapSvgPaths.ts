@@ -1,4 +1,4 @@
-export type UkraineSvgPath = typeof ukraineSvgPath
+export type MapSvgPaths = typeof ukraineSvgPath
 
 export const ukraineSvgPath = {
   'UA85': {

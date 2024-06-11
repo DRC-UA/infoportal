@@ -6,7 +6,7 @@ import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {OblastIndex, Protection_hhs3} from '@infoportal-common'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
-import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {seq, Seq} from '@alexandreannic/ts-utils'
 import {useTheme} from '@mui/material'
@@ -165,7 +165,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
                 data={data}
                 {...snapShotDefaultPieIndicatorsProps}
               />
-              <UaMapBy
+              <MapSvgByOblast
                 sx={{mx: 4}}
                 data={data}
                 getOblast={_ => _.where_are_you_current_living_oblast as any}

@@ -1,8 +1,8 @@
-import {UaMap} from '@/features/DrcUaMap/UaMap'
+import {MapGeochartOffices} from '@/shared/maps/MapGeochartOffices'
 
 const uaMap = () => {
   return (
-    <UaMap/>
+    <MapGeochartOffices/>
   )
 }
 

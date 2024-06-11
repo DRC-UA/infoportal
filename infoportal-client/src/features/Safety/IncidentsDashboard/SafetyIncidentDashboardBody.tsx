@@ -1,7 +1,7 @@
 import {Enum, fnSwitch, map, Obj, Seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {UaMapBy} from '../../DrcUaMap/UaMapBy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Lazy} from '@/shared/Lazy'
 import {differenceInDays, format, subDays} from 'date-fns'
 import {ChartLine} from '@/shared/charts/ChartLine'
@@ -92,7 +92,7 @@ export const SafetyIncidentDashboardBody = ({
             </ScRadioGroup>
             {fnSwitch(mapType, {
               'incident': (
-                <UaMapBy
+                <MapSvgByOblast
                   sx={{maxWidth: 480}}
                   fillBaseOn="value"
                   data={filteredData}
@@ -102,7 +102,7 @@ export const SafetyIncidentDashboardBody = ({
                 />
               ),
               'attack': (
-                <UaMapBy
+                <MapSvgByOblast
                   sx={{maxWidth: 480}}
                   fillBaseOn="value"
                   data={filteredData}

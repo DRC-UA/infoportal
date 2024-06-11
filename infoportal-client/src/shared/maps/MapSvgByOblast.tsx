@@ -1,11 +1,11 @@
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
-import {UkraineMap} from '@/shared/UkraineMap/UkraineMap'
+import {MapSvg} from '@/shared/maps/MapSvg'
 import React, {useMemo} from 'react'
 import {Seq} from '@alexandreannic/ts-utils'
 import {BoxProps} from '@mui/material'
-import {OblastISO} from '@infoportal-common'
+import {OblastISO} from '../../../../infoportal-common/src'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
-export const UaMapBy = <D extends Record<string, any>>({
+export const MapSvgByOblast = <D extends Record<string, any>>({
   data,
   getOblast,
   total,
@@ -23,7 +23,7 @@ export const UaMapBy = <D extends Record<string, any>>({
   legend?: boolean
 } & Pick<BoxProps, 'sx'>) => {
   const res = useMemo(() => {
-    return ChartHelperOld.groupBy({
+    return ChartHelper.groupBy({
       data: data,
       groupBy: _ => getOblast(_),
       filter: value,
@@ -31,6 +31,6 @@ export const UaMapBy = <D extends Record<string, any>>({
     })
   }, [data, value, getOblast])
   return (
-    <UkraineMap data={res} fillBaseOn={fillBaseOn} base={total} {...props}/>
+    <MapSvg data={res} fillBaseOn={fillBaseOn} base={total} {...props}/>
   )
 }

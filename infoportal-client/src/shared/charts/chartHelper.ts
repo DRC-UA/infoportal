@@ -166,7 +166,7 @@ export class ChartHelper<K extends string = string> {
     }
   }
 
-  readonly groupBy = <A extends Record<string, any>, K extends string>({
+  static readonly groupBy = <A extends Record<string, any>, K extends string>({
     data,
     filter,
     filterBase,
