@@ -28,7 +28,7 @@ export const Map = <D extends Record<string, any>>({
   return (
     <Panel sx={{...sx, height,}}>
       <PanelHead action={
-        <ScRadioGroup inline dense onChange={setType} sx={{fontSize: 'inherit'}}>
+        <ScRadioGroup inline dense onChange={setType} value={type} sx={{fontSize: 'inherit'}}>
           <ScRadioGroupItem hideRadio value="oblast">{m.oblast}</ScRadioGroupItem>
           <ScRadioGroupItem hideRadio value="settlement">{m.settlement}</ScRadioGroupItem>
         </ScRadioGroup>

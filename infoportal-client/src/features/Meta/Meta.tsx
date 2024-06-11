@@ -4,7 +4,7 @@ import {MetaDashboard} from '@/features/Meta/Dashboard/MetaDashboard'
 import {Layout} from '@/shared/Layout'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {MetaSidebar} from '@/features/Meta/MetaSidebar'
-import {Route, Routes} from 'react-router-dom'
+import {Navigate, Route, Routes} from 'react-router-dom'
 import {MetaTable} from '@/features/Meta/Table/MetaTable'
 
 export const Meta = () => {
@@ -18,7 +18,7 @@ export const Meta = () => {
 export const metaSiteMap = {
   basePath: 'meta-dashboard',
   routes: {
-    dashboard: '/',
+    dashboard: '/dashboard',
     data: '/data',
   },
 }
@@ -33,6 +33,7 @@ const _Meta = () => {
     >
       {ctx.fetcher.get && (
         <Routes>
+          <Route index element={<Navigate to={metaSiteMap.routes.dashboard}/>}/>
           <Route path={metaSiteMap.routes.dashboard} element={<MetaDashboard/>}/>
           <Route path={metaSiteMap.routes.data} element={<MetaTable/>}/>
         </Routes>
