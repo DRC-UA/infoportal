@@ -25,8 +25,8 @@ const DatatableBody_ = <T extends DatatableRow>({
     columns.forEach(_ => {
       let className = 'td ' + _.className
       if (_.stickyEnd) className += ' td-sticky-end'
-      if (_.type === 'number') className += 'td-right'
-      if (_.align) className += 'td-' + _.align
+      if (_.type === 'number') className += ' td-right'
+      if (_.align) className += ' td-' + _.align
       classNameTdIndex[_.id] = className
     })
     return {

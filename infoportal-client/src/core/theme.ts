@@ -33,7 +33,7 @@ export const sxUtils = makeSx({
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-  },
+  } as const,
   inlineIcon: {
     display: 'inline !important',
     fontSize: 'inherit',
@@ -44,7 +44,7 @@ export const sxUtils = makeSx({
     mt: 2,
     mb: 2,
   },
-})
+} as const)
 
 export const styleUtils = (t: Theme) => ({
   gridSpacing: 3 as any,

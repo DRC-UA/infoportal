@@ -82,7 +82,7 @@ export const DatabaseHistory = () => {
             },
             {
               type: 'select_one',
-              id: 'property',
+              id: 'answerId',
               typeIcon: keyTypeIcon,
               className: 'td-id',
               width: 80,
@@ -124,7 +124,7 @@ export const DatabaseHistory = () => {
             },
             {
               type: 'select_one',
-              id: 'property',
+              id: 'question',
               head: m.column,
               width: 250,
               render: _ => {
@@ -136,7 +136,7 @@ export const DatabaseHistory = () => {
             },
             {
               type: 'select_one',
-              id: 'property',
+              id: 'xml',
               head: 'XML',
               width: 90,
               render: _ => {
@@ -148,24 +148,38 @@ export const DatabaseHistory = () => {
             },
             {
               type: 'string',
-              id: 'translate',
+              id: 'oldValue',
               head: m._koboDatabase.oldValue,
               styleHead: ({borderRight: 0}),
               style: () => ({borderRight: 0}),
               render: row => {
                 const label = getTranslation(row, _ => _.oldValue)
                 return {
-                  label: label && <>
-                    <span style={{borderRadius: 4, padding: '0 4px', background: alpha(t.palette.error.light, .16), color: t.palette.error.main}}>{label}</span>
-                    <Icon color="disabled" style={{float: 'right'}}>arrow_forward</Icon>
-                  </>,
+                  label: label && (
+                    <span style={{
+                      borderRadius: 4,
+                      padding: '0 4px',
+                      background: alpha(t.palette.error.light, .16),
+                      color: t.palette.error.main,
+                    }}>
+                      {label}
+                    </span>
+                  ),
                   value: row.oldValue
                 }
               }
             },
             {
+              id: 'arrow_icon',
+              width: 0,
+              align: 'center',
+              styleHead: ({borderRight: 0}),
+              style: () => ({borderRight: 0}),
+              renderQuick: _ => _.oldValue && <Icon color="disabled">arrow_forward</Icon>,
+            },
+            {
               type: 'string',
-              id: 'translate',
+              id: 'newVranslate',
               head: m._koboDatabase.newValue,
               render: row => {
                 const label = getTranslation(row, _ => _.newValue)
