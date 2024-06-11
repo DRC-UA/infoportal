@@ -47,18 +47,22 @@ export class GlobalCache {
   }): (...p: P) => Promise<T> => {
     this.log.info(`Initialize cache ${key}.`)
     if (!this.cache.has(key)) {
+      this.log.info(`Cache for ${key} not found. Initializing new cache.`)
       //   throw new Error(`Already registered cash ` + key)
       // TODO Is called twice by some black magic
       this.cache.set(key, new IpCache(params))
     }
     const getCache = () => {
-      return this.cache.get(key)!
+      if (!this.cache.get(key)) this.cache.set(key, new IpCache(params))
+      return this.cache.get(key)
     }
     return async (...p: P) => {
       if (!cacheIf?.(...p)) return fn(...p)
       const index = genIndex ? genIndex(...p) : hashArgs(p)
       const cache = getCache()
-      if (!cache) this.log.error(`Cannot retrieved cache for ${key}.`)
+      if (!cache) {
+        this.log.error(`Cannot retrieved cache for ${key}.`)
+      }
       const cachedValue = cache?.get(index)
       if (cachedValue === undefined) {
         const value = await fn(...p)
