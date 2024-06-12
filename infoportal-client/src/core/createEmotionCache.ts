@@ -14,5 +14,5 @@ export default function createEmotionCache() {
     insertionPoint = emotionInsertionPoint ?? undefined
   }
 
-  return createCache({key: 'mui-style', insertionPoint, prepend: false})
+  return createCache({key: 'ip-mui-style', insertionPoint, prepend: true})
 }

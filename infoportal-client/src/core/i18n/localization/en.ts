@@ -56,6 +56,11 @@ export const en = Object.freeze({
     notExist: 'Not exist',
     area: 'Area',
     men: 'Men',
+    lightTheme: {
+      light: 'Light',
+      dark: 'Dark',
+      auto: 'Device default',
+    },
     activities: 'Activities',
     noComment: 'No comment',
     answers: 'Answers',

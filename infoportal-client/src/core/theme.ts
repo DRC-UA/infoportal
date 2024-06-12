@@ -117,7 +117,6 @@ export const muiTheme = ({
       error: red,
       mode: dark ? 'dark' : 'light',
       background: {
-        // default: dark ? 'black' : 'white',
         default: backgroundDefault ?? (dark ? '#031525' : '#f6f8fc'/*'#f8f9fa'*/),
         paper: backgroundPaper ?? (dark ? '#0d2136' : '#fff'),
       }
@@ -203,11 +202,9 @@ export const muiTheme = ({
             display: 'none',
           },
           body: {
-            color: baseTheme.palette.text.primary,
+            margin: 0,
             fontSize: '1rem',
             lineHeight: '1.5',
-            background: baseTheme.palette.background.default,
-            margin: 0,
             boxSizing: 'border-box',
           },
           ul: {

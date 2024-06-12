@@ -43,7 +43,7 @@ export const Sidebar = ({
 }) => {
   const {isMobileWidth, sidebarOpen, setSidebarOpen, sidebarPinned, setSidebarPinned} = useLayoutContext()
   const {m} = useI18n()
-  const {darkTheme, setDarkTheme} = useAppSettings()
+  const {lightTheme, setLightTheme} = useAppSettings()
 
   useEffect(() => {
     // Element has been re-created by SwipeableDrawer, thus variable point to nothing.

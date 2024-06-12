@@ -7,6 +7,7 @@ import {AppType} from 'next/app'
 import {MyAppProps} from '@/pages/_app'
 import {Alert, Txt} from 'mui-extension'
 import {Box} from '@mui/material'
+import {CacheProvider} from '@emotion/react'
 
 interface MyDocumentProps extends DocumentProps {
   emotionStyleTags: React.JSX.Element[];
@@ -76,7 +77,6 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
   // 2. page.getInitialProps
   // 3. app.render
   // 4. page.render
-
   const originalRenderPage = ctx.renderPage
 
   // You can consider sharing the same Emotion cache between all the SSR requests to speed up performance.
@@ -88,7 +88,9 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
     originalRenderPage({
       enhanceApp: (App: React.ComponentType<React.ComponentProps<AppType> & MyAppProps>) =>
         function EnhanceApp(props) {
-          return <App emotionCache={cache} {...props} />
+          return <CacheProvider value={cache}>
+            <App emotionCache={cache} {...props} />
+          </CacheProvider>
         },
     })
 

@@ -31,40 +31,41 @@ const persistedTempEnvVariablesForFront: { [key in Env]: string | undefined } = 
   NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME: process.env.NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME,
 }
 
-const _ = env(persistedTempEnvVariablesForFront)
+const e = env(persistedTempEnvVariablesForFront)
 
 export const appConfig = {
+  production: e(_ => _?.toLowerCase() === 'production', defaultValue(true))('NODE_ENV'),
   uahToUsd: .027,
-  muiProLicenseKey: _()(Env.NEXT_PUBLIC_MUI_PRO_LICENSE_KEY),
+  muiProLicenseKey: e()(Env.NEXT_PUBLIC_MUI_PRO_LICENSE_KEY),
   linkToFeature: (feature: AppFeatureId, path: string) => {
     const featurePath = appFeaturesIndex[feature]?.path ?? feature
     return featurePath + '/#' + path
   },
   koboServerUrl: 'https://eu.kobotoolbox.org',
   contact: 'alexandre.annic@drc.ngo',
-  apiURL: _(defaultValue('https://infoportal-ua-api.drc.ngo'))(Env.NEXT_PUBLIC_API_BASE_URL),
-  baseURL: _(defaultValue('https://infoportal-ua.drc.ngo/'))(Env.NEXT_PUBLIC_BASE_URL),
+  apiURL: e(defaultValue('https://infoportal-ua-api.drc.ngo'))(Env.NEXT_PUBLIC_API_BASE_URL),
+  baseURL: e(defaultValue('https://infoportal-ua.drc.ngo/'))(Env.NEXT_PUBLIC_BASE_URL),
   sentry: {
-    dsn: _()(Env.NEXT_PUBLIC_SENTRY_DNS)
+    dsn: e()(Env.NEXT_PUBLIC_SENTRY_DNS)
   },
   gooogle: {
-    apiKey: _(required)(Env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY),
-    mapId: _(required)(Env.NEXT_PUBLIC_GOOGLE_MAPS_ID),
+    apiKey: e(required)(Env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY),
+    mapId: e(required)(Env.NEXT_PUBLIC_GOOGLE_MAPS_ID),
   },
   microsoft: {
     // To find it go to https://developer.microsoft.com/en-us/graph/graph-explorer,
     // Login and inspect Network
-    bearerToken: _(required)(Env.NEXT_PUBLIC_MS_BEARER_TOKEN),
-    clientId: _(required)(Env.NEXT_PUBLIC_MS_CLIENT_ID),
-    authority: _(required)(Env.NEXT_PUBLIC_MS_AUTHORITY),
+    bearerToken: e(required)(Env.NEXT_PUBLIC_MS_BEARER_TOKEN),
+    clientId: e(required)(Env.NEXT_PUBLIC_MS_CLIENT_ID),
+    authority: e(required)(Env.NEXT_PUBLIC_MS_AUTHORITY),
   },
-  chatGptApiKey: _()(Env.NEXT_PUBLIC_CHATGPT_APIKEY),
-  appOff: _(bool, defaultValue(false))(Env.NEXT_PUBLIC_APP_OFF),
+  chatGptApiKey: e()(Env.NEXT_PUBLIC_CHATGPT_APIKEY),
+  appOff: e(bool, defaultValue(false))(Env.NEXT_PUBLIC_APP_OFF),
   externalLink: {
     mealReferralMatrix: 'https://drcngo.sharepoint.com/:x:/r/sites/UKRPortal/_layouts/15/Doc.aspx?sourcedoc=%7B401B9D94-94AF-4D88-A85D-BBCCAC7196FE%7D&file=DRC%20Ukraine%20CFM%20Referral%20Matrix_updated.xlsx&action=default&mobileredirect=true',
     metaDashboardReadMe: 'https://drcngo.sharepoint.com/sites/UKRPortal/_layouts/15/doc.aspx?sourcedoc={4acb5576-3be2-4939-8f77-2364e048d321}',
   },
-  mpcaBudgetHolderGroupName: _(defaultValue('MPCA-BudgetHolder'))(Env.NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME),
+  mpcaBudgetHolderGroupName: e(defaultValue('MPCA-BudgetHolder'))(Env.NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME),
   icons: {
     sector: 'category',
     program: 'book',

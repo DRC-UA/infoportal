@@ -1,4 +1,4 @@
-import {alpha, BoxProps, Icon} from '@mui/material'
+import {alpha, BoxProps, Icon, MenuItem} from '@mui/material'
 import {IconBtn, Txt} from 'mui-extension'
 import {layoutConfig} from '../index'
 import React from 'react'
@@ -8,14 +8,24 @@ import {AppHeaderFeatures} from '@/shared/Layout/Header/AppHeaderFeatures'
 import {IpIconBtn} from '@/shared/IconBtn'
 import Link from 'next/link'
 import {AppHeaderContainer} from '@/shared/Layout/Header/AppHeaderContainer'
+import {PopoverWrapper} from '@/shared/PopoverWrapper'
+import {useI18n} from '@/core/i18n'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {Obj} from '@alexandreannic/ts-utils'
 
 interface Props extends BoxProps {
 }
 
+const lightThemeIcons = {
+  light: 'light_mode',
+  dark: 'dark_mode',
+  auto: 'brightness_medium',
+} as const
 
 export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) => {
   const {sidebarOpen, showSidebarButton, setSidebarOpen, title} = useLayoutContext()
-
+  const {m} = useI18n()
+  const {lightTheme, setLightTheme} = useAppSettings()
   return (
     <AppHeaderContainer
       component="header"
@@ -64,6 +74,18 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) 
         <Txt sx={{ml: 1}} size="title" bold dangerouslySetInnerHTML={{__html: title ?? ''}}/>
         {children}
       </div>
+      <PopoverWrapper content={close => (
+        Obj.entries(lightThemeIcons).map(([theme, icon]) =>
+          <MenuItem key={theme} selected={lightTheme === theme} onClick={() => {
+            setLightTheme(theme)
+            close()
+          }}>
+            <Icon sx={{mr: 1}}>{icon}</Icon>{m.lightTheme[theme]}
+          </MenuItem>
+        )
+      )}>
+        <IpIconBtn children={lightThemeIcons[lightTheme ?? 'auto']}/>
+      </PopoverWrapper>
       <Link href="/">
         <IpIconBtn children="home"/>
       </Link>
@@ -72,3 +94,5 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) 
     </AppHeaderContainer>
   )
 }
+
+

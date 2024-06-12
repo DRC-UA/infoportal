@@ -52,7 +52,7 @@ const App = ({
 
   return (
     <Provide providers={[
-      _ => <CacheProvider value={emotionCache} children={_}/>,
+      ...appConfig.production ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
       _ => <AppSettingsProvider api={api} children={_}/>,
     ]}>
       <>
@@ -78,7 +78,7 @@ const AppWithConfig = (props: AppProps) => {
       // _ => <StyledEngineProvider injectFirst children={_}/>,
       _ => <LocalizationProvider children={_} dateAdapter={AdapterDateFns}/>,
       _ => <ToastProvider children={_}/>,
-      _ => <ThemeProvider theme={muiTheme({dark: false})} children={_}/>,
+      _ => <ThemeProvider theme={muiTheme({dark: settings.isDarkTheme})} children={_}/>,
       _ => <CssBaseline children={_}/>,
       _ => <I18nProvider children={_}/>,
       _ => <MsalProvider children={_} instance={msal}/>,
