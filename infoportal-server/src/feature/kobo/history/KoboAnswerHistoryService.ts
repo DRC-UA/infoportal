@@ -29,7 +29,9 @@ export class KoboAnswerHistoryService {
     answerIds,
     property,
     newValue,
+    type,
   }: {
+    type: 'answer' | 'tag'
     authorEmail: string,
     formId: KoboId,
     answerIds: KoboAnswerId[],
@@ -45,11 +47,11 @@ export class KoboAnswerHistoryService {
       data: answerIds.map(_ => {
         return {
           by: authorEmail,
-          type: 'answer',
+          type: type,
           formId,
           property,
           newValue: newValue ?? Prisma.JsonNull,
-          oldValue: (currentAnswers[_].answers as any)[property] as any,
+          oldValue: (currentAnswers[_][type === 'tag' ? 'tags' : 'answers'] as any)[property] as any,
           answerId: _
         }
       })
