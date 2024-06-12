@@ -418,6 +418,7 @@ export const en = Object.freeze({
       openTracker: 'Open Excel tracker',
       visitMonitoring: 'Visit Monitoring',
       verification: 'Verification',
+      pdm: 'PDM'
     },
     _protection: {
       cocCasesDashboard: 'CoC PowerBi Dashboard',
@@ -445,6 +446,27 @@ export const en = Object.freeze({
       concerns: 'Concerns',
       securityConcerns: 'Security concerns',
       hasPriorityQueuesForVulnerableIndividuals: 'Priority queues for vulnerable individuals',
+    },
+    mealMonitoringPdm: {
+      pdmType: 'PDM Type',
+      officeResponsible: 'Office responsible',
+      priorityNeeds: 'Priority needs',
+      assistancePrefer: 'Preferred method of receiving assistance',
+      assistanceReceive: 'Method of delivering assistance',
+      idpConflict: 'IDP/conflict-affected person',
+      satisfiedAmount: 'Satisfied with cash amount',
+      feedback: 'Feedback',
+      satisfiedProcess: 'Satisfied with process',
+      timeToTake: 'How much time did it take from the registration till receiving',
+      provideInfo: 'Provided all needed info',
+      assistanceRegister: 'Registered',
+      problems: 'Experienced problems',
+      betterInform: 'Steps for improvement',
+      assistanceEnough: 'Enough to cover the expenditures',
+      assistance: 'Who assisted',
+      stay: 'Plan to stay in a repaired accommodation for a long time',
+      treated: 'Treated with respect',
+      interview: 'Type of interview'
     },
     _mealVerif: {
       numericToleranceMargin: 'Tolerance margin',

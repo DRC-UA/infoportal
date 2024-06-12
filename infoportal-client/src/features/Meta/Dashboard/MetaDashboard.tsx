@@ -86,6 +86,63 @@ export const MetaDashboard = () => {
             <ChartBarSingleBy data={ctx.filteredData} by={_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId}/>
           </SlidePanel>
         </Div>
+        <Div responsive>
+          <Div column>
+            <SlidePanel title={m.ageGroup}>
+              <AgeGroupTable tableId="meta-dashboard" persons={ctx.filteredPersons} enableDisplacementStatusFilter enableOnlyPwdFilter/>
+            </SlidePanel>
+            <SlidePanel title={m.currentOblast}>
+              <UaMapBy sx={{mx: 2, maxWidth: 480, margin: 'auto'}} getOblast={_ => OblastIndex.byName(_.oblast).iso} data={ctx.filteredData} fillBaseOn="value"/>
+            </SlidePanel>
+            <Panel title={m.displacementStatus}>
+              <PanelBody>
+                <ChartBarSingleBy
+                  data={ctx.filteredPersons}
+                  by={_ => _.displacement}
+                  label={DisplacementStatus}
+                />
+              </PanelBody>
+            </Panel>
+            <SlidePanel title={m.form}>
+              <ChartBarSingleBy data={ctx.filteredData} by={_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId}/>
+            </SlidePanel>
+          </Div>
+          <Div column>
+            <SlidePanel>
+              <Lazy deps={[ctx.filteredData]} fn={() => {
+                return ChartHelper.single({
+                  data: ctx.filteredData.map(_ => _.status ?? 'Blank'),
+                  percent: true,
+                }).get()
+              }}>
+                {_ => (
+                  <Box>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                      <Div responsive>
+                        <Div>
+                          <ChartPieWidget
+                            dense sx={{flex: 1}} color={t.palette.success.main}
+                            title={<Txt size="small">{m.committed}</Txt>}
+                            value={_.Committed?.value ?? 0} base={1}
+                          />
+                          <ChartPieWidget
+                            dense sx={{flex: 1}} color={t.palette.warning.main}
+                            title={<Txt size="small">{m.pending}</Txt>}
+                            value={_.Pending?.value ?? 0} base={1}
+                          />
+                        </Div>
+                        <Div>
+                          <ChartPieWidget
+                            dense sx={{flex: 1}} color={t.palette.error.main}
+                            title={<Txt size="small">{m.rejected}</Txt>}
+                            value={_.Rejected?.value ?? 0} base={1}
+                          />
+                          <ChartPieWidget
+                            dense sx={{flex: 1}} color={t.palette.info.main}
+                            title={<Txt size="small">{m.blank}</Txt>}
+                            value={_.Blank?.value ?? 0} base={1}
+                          />
+                        </Div>
         <Div column>
           <SlidePanel>
             <Lazy deps={[ctx.filteredData]} fn={() => {

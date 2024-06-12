@@ -13,6 +13,7 @@ import {
   KoboFormName,
   KoboIndex,
   KoboMealCfmHelper,
+  KoboMealPdmDasbhoard,
   KoboProtection_hhs3,
   KoboSafetyIncidentHelper,
   Meal_cfmExternal,
@@ -20,6 +21,8 @@ import {
   Meal_verificationEcrec,
   Meal_verificationWinterization,
   Meal_visitMonitoring,
+  Meal_pdmStandardised,
+  Meal_VerificationEcrec,
   Partnership_partnersDatabase,
   Person,
   PersonDetails,
@@ -184,6 +187,12 @@ export class KoboTypedAnswerSdk {
       ...make('meal_visitMonitoring', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('meal_visitMonitoring').id,
         fnMapKobo: Meal_visitMonitoring.map,
+        ...filters,
+      })),
+      ...make('meal_pdmStandardised', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('meal_pdmStandardised').id,
+        fnMapKobo: Meal_pdmStandardised.map,
+        fnMapCustom: KoboMealPdmDasbhoard.map,
         ...filters,
       })),
       ...make('protection_hhs3', (filters?: KoboAnswerFilter) => req({

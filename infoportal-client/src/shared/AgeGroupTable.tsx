@@ -17,12 +17,14 @@ export const AgeGroupTable = ({
   persons,
   hideHeader,
   enableDisplacementStatusFilter,
+  enableOnlyPwdFilter,
   ...sx
 }: {
   hideHeader?: boolean
   enableDisplacementStatusFilter?: boolean
   tableId: string
   persons?: PersonDetails[]
+  enableOnlyPwdFilter?: boolean;
 } & BoxProps) => {
   const [displacementStatus, setDisplacementStatus] = useState<DisplacementStatus[]>([])
   const [onlyPwd, setOnlyPwd] = useState<boolean>(false)
@@ -31,14 +33,14 @@ export const AgeGroupTable = ({
 
   const data = useMemo(() => {
     if (!persons) return
-    const filteredPersons = enableDisplacementStatusFilter ? persons.filter(_ => {
-      if (displacementStatus.length > 0 && !displacementStatus.includes(_.displacement!)) return false
-      if (onlyPwd && (_.disability === undefined || _.disability.includes(WgDisability.None) || _.disability.length === 0)) return false
+    const filteredPersons = persons.filter(_ => {
+      if (enableDisplacementStatusFilter && displacementStatus.length > 0 && !displacementStatus.includes(_.displacement!)) return false
+      if (enableOnlyPwdFilter && onlyPwd && (_.disability === undefined || _.disability.includes(WgDisability.None) || _.disability.length === 0)) return false
       return true
-    }) : persons
+    })
     const gb = Person.groupByGenderAndGroup(Person.getAgeGroup(tableAgeGroup))(filteredPersons)
     return Enum.entries(gb).map(([k, v]) => ({ageGroup: k, ...v}))
-  }, [persons, tableAgeGroup, onlyPwd, displacementStatus])
+  }, [persons, tableAgeGroup, onlyPwd, displacementStatus, enableDisplacementStatusFilter, enableOnlyPwdFilter])
 
   return (
     <Box {...sx}>
@@ -50,25 +52,25 @@ export const AgeGroupTable = ({
           <>
             <IpSelectSingle label={m.ageGroup} sx={{maxWidth: 100}} options={Person.ageGroups} hideNullOption onChange={setTableAgeGroup} value={tableAgeGroup}/>
             {enableDisplacementStatusFilter && (
-              <>
-                <IpSelectMultiple
-                  label={m.displacementStatus}
-                  sx={{maxWidth: 160, ml: 1}}
-                  options={displacementStatusOptions}
-                  value={displacementStatus}
-                  onChange={setDisplacementStatus}
-                />
-                <IpBtn
-                  variant="outlined"
-                  iconSx={{color: (t: Theme) => t.palette.text.disabled, transform: 'rotate(90deg)'}}
-                  onClick={() => setOnlyPwd(_ => !_)}
-                  tooltip={m.consideredAsPwd}
-                  sx={{textTransform: 'initial', ml: 1, whiteSpace: 'nowrap', fontWeight: 400, color: t => t.palette.text.secondary}}
-                >
-                  {m.onlyPwds}
-                  <Switch size="small" sx={{mr: -1}} checked={onlyPwd}/>
-                </IpBtn>
-              </>
+              <IpSelectMultiple
+                label={m.displacementStatus}
+                sx={{maxWidth: 160, ml: 1}}
+                options={displacementStatusOptions}
+                value={displacementStatus}
+                onChange={setDisplacementStatus}
+              />
+            )}
+            {enableOnlyPwdFilter && (
+              <IpBtn
+                variant="outlined"
+                iconSx={{color: (t: Theme) => t.palette.text.disabled, transform: 'rotate(90deg)'}}
+                onClick={() => setOnlyPwd(prev => !prev)}
+                tooltip={m.consideredAsPwd}
+                sx={{textTransform: 'initial', ml: 1, whiteSpace: 'nowrap', fontWeight: 400, color: t => t.palette.text.secondary}}
+              >
+                {m.onlyPwds}
+                <Switch size="small" sx={{mr: -1}} checked={onlyPwd}/>
+              </IpBtn>
             )}
             {/*<ScRadioGroup value={tableAgeGroup} onChange={setTableAgeGroup} dense inline>*/}
             {/*  {Person.ageGroups.map(_ =>*/}
