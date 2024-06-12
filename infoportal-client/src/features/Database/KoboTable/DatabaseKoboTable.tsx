@@ -15,12 +15,12 @@ import {KoboId, koboIndex, UUID} from '@infoportal-common'
 import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {Skeleton} from '@mui/material'
 import {SheetFilterValue} from '@/shared/Sheet/util/sheetType'
-import {SheetSkeleton} from '@/shared/Sheet/SheetSkeleton'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {FetchParams} from '@/shared/hook/useFetchers'
+import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 
 export const DatabaseTableRoute = () => {
   const ctx = useDatabaseContext()
@@ -101,7 +101,7 @@ export const DatabaseTable = ({
       {ctxSchema.anyLoading && loading && (
         <>
           <Skeleton sx={{mx: 1, height: 54}}/>
-          <SheetSkeleton/>
+          <DatatableSkeleton/>
         </>
       )}
       {/*{(ctxSchema.anyLoading || loading) && !ctxAnswers.byId.get(formId) && (*/}

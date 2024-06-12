@@ -7,8 +7,8 @@ import {ChartHelper} from '@/shared/charts/chartHelper'
 import {Obj, seq} from '@alexandreannic/ts-utils'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Panel, PanelBody} from '@/shared/Panel'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {Txt} from 'mui-extension'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 export const ProtectionDashboardMonitoPN = ({
   data,
@@ -72,7 +72,7 @@ export const ProtectionDashboardMonitoPN = ({
       </Div>
       <Div>
         <Panel sx={{flex: 1}}>
-          <Sheet
+          <Datatable
             id="prot-pm-dashboard-pn"
             data={table}
             columns={[
@@ -80,48 +80,67 @@ export const ProtectionDashboardMonitoPN = ({
                 type: 'select_one',
                 id: 'need',
                 head: m.priorityNeeds,
-                render: _ => <Txt bold>{Protection_hhs3.options.what_is_your_1_priority[_.need] ?? _.need}</Txt>,
-                renderValue: _ => Protection_hhs3.options.what_is_your_1_priority[_.need] ?? _.need,
-                renderOption: _ => Protection_hhs3.options.what_is_your_1_priority[_.need] ?? _.need,
+                render: _ => {
+                  const value = Protection_hhs3.options.what_is_your_1_priority[_.need] ?? _.need
+                  return {
+                    label: <Txt bold>{value}</Txt>,
+                    value: value,
+                    option: value,
+                  }
+                }
               },
               {
                 type: 'number',
                 id: 'need1',
                 head: m.firstPriorityNeed,
-                render: _ => _.need1
+                renderQuick: _ => _.need1
               },
               {
-                width: 0, type: 'number',
+                width: 0,
+                type: 'number',
                 id: 'need1_percent',
                 head: '%',
-                render: _ => <Txt bold color="primary">{toPercent(_.need1 / _.totalNeed1)}</Txt>,
-                renderValue: _ => Math.round(_.need1 / _.totalNeed1 * 1000) / 10
+                render: _ => {
+                  return {
+                    value: Math.round(_.need1 / _.totalNeed1 * 1000) / 10,
+                    label: <Txt bold color="primary">{toPercent(_.need1 / _.totalNeed1)}</Txt>
+                  }
+                }
               },
               {
                 type: 'number',
                 id: 'need2',
                 head: m.secondPriorityNeed,
-                render: _ => _.need2
+                renderQuick: _ => _.need2
               },
               {
-                width: 0, type: 'number',
+                width: 0,
+                type: 'number',
                 id: 'need2_percent',
                 head: '%',
-                render: _ => <Txt bold color="primary">{toPercent(_.need2 / _.totalNeed2)}</Txt>,
-                renderValue: _ => Math.round(_.need2 / _.totalNeed2 * 1000) / 10
+                render: _ => {
+                  return {
+                    value: Math.round(_.need2 / _.totalNeed2 * 1000) / 10,
+                    label: <Txt bold color="primary">{toPercent(_.need2 / _.totalNeed2)}</Txt>
+                  }
+                }
               },
               {
                 type: 'number',
                 id: 'need3',
                 head: m.thirdPriorityNeed,
-                render: _ => _.need3
+                renderQuick: _ => _.need3
               },
               {
                 width: 0, type: 'number',
                 id: 'need3_percent',
                 head: '%',
-                render: _ => <Txt bold color="primary">{toPercent(_.need3 / _.totalNeed3)}</Txt>,
-                renderValue: _ => Math.round(_.need3 / _.totalNeed3 * 1000) / 10
+                render: _ => {
+                  return {
+                    value: Math.round(_.need3 / _.totalNeed3 * 1000) / 10,
+                    label: <Txt bold color="primary">{toPercent(_.need3 / _.totalNeed3)}</Txt>
+                  }
+                }
               },
             ]}
           />

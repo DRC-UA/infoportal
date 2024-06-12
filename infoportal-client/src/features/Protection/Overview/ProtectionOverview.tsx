@@ -9,7 +9,6 @@ import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {DisplacementStatus, groupBy, KoboIndex, OblastIndex, OblastName} from '@infoportal-common'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {Enum} from '@alexandreannic/ts-utils'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
@@ -20,6 +19,7 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ProtectionOverviewFilterCustom} from '@/features/Protection/Overview/ProtectionOverviewFilterCustom'
 import {Divider} from '@mui/material'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 export const ProtectionOverview = () => {
   const ctx = useProtectionContext()
@@ -173,35 +173,59 @@ export const ProtectionOverview = () => {
         }}>
           {res => (
             <Panel>
-              <Sheet
+              <Datatable
                 showExportBtn
                 defaultLimit={500}
                 id="protection-by-loc"
                 data={res}
                 columns={[
-                  {type: 'select_one', id: 'oblast', head: 'oblast', renderExport: _ => _.oblast, render: _ => _.oblast, renderValue: _ => _.oblast},
-                  {type: 'select_one', id: 'raion', head: 'raion', renderExport: _ => _.raion, render: _ => _.raion, renderValue: _ => _.raion},
-                  {type: 'select_one', id: 'hromada', head: 'hromada', renderExport: _ => _.hromada, render: _ => _.hromada, renderValue: _ => _.hromada},
-                  {type: 'number', id: 'protection_gbv', head: 'gbv', renderExport: _ => _.protection_gbv, render: _ => _.protection_gbv, renderValue: _ => _.protection_gbv},
-                  {type: 'number', id: 'protection_pss', head: 'pss', renderExport: _ => _.protection_pss, render: _ => _.protection_pss, renderValue: _ => _.protection_pss},
+                  {
+                    type: 'select_one',
+                    id: 'oblast',
+                    head: 'oblast',
+                    renderQuick: _ => _.oblast,
+                  },
+                  {
+                    type: 'select_one',
+                    id: 'raion',
+                    head: 'raion',
+                    renderQuick: _ => _.raion
+                  },
+                  {
+                    type: 'select_one',
+                    id: 'hromada',
+                    head: 'hromada',
+                    renderQuick: _ => _.hromada,
+                  },
+                  {
+                    type: 'number',
+                    id: 'protection_gbv',
+                    head: 'gbv',
+                    renderQuick: _ => _.protection_gbv,
+                  },
+                  {
+                    type: 'number',
+                    id: 'protection_pss',
+                    head: 'pss',
+                    renderQuick: _ => _.protection_pss,
+                  },
                   {
                     type: 'number',
                     id: 'protection_hhs2_1',
                     head: 'hhs',
-                    renderExport: _ => _.protection_hhs2_1,
-                    render: _ => _.protection_hhs2_1,
-                    renderValue: _ => _.protection_hhs2_1
+                    renderQuick: _ => _.protection_hhs2_1,
                   },
                   {
                     type: 'number',
                     id: 'protection_groupSession',
                     head: 'groupSession',
-                    renderExport: _ => _.protection_groupSession,
-                    render: _ => _.protection_groupSession,
-                    renderValue: _ => _.protection_groupSession
+                    renderQuick: _ => _.protection_groupSession,
                   },
                   {
-                    id: 'actions', head: '', width: 120, renderExport: false, render: _ => (
+                    id: 'actions',
+                    head: '',
+                    width: 120,
+                    renderQuick: _ => (
                       <>
                         <AiViewAnswers answers={_.data.protection_gbv ?? []}/>
                         <AiViewAnswers answers={_.data.protection_pss ?? []}/>

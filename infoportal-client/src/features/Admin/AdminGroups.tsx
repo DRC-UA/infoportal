@@ -1,7 +1,6 @@
 import {Page} from '@/shared/Page'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import React, {useEffect, useState} from 'react'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {useI18n} from '@/core/i18n'
 import {IpBtn} from '@/shared/Btn'
 import {Panel} from '@/shared/Panel'
@@ -18,6 +17,7 @@ import {BasicDialog} from '@/shared/BasicDialog'
 import {nullValuesToUndefined, UUID} from '@infoportal-common'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {Group} from '@/core/sdk/server/group/GroupItem'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 interface GoupForm {
   name: string
@@ -75,7 +75,7 @@ export const AdminGroups = () => {
   return (
     <Page width="lg">
       <Panel>
-        <Sheet
+        <Datatable
           data={fetcher.get}
           loading={fetcher.loading}
           id="group"
@@ -99,11 +99,37 @@ export const AdminGroups = () => {
             </>
           }
           columns={[
-            {type: 'select_one', id: 'drcJob', width: 150, head: m.name, render: _ => _.name},
-            {type: 'string', id: 'desc', width: 120, head: m.desc, render: _ => _.desc},
-            {type: 'date', id: 'createdAt', width: 80, head: m.createdAt, tooltip: _ => formatDateTime(_.createdAt), render: _ => formatDate(_.createdAt), renderValue: _ => _.createdAt},
             {
-              id: 'items', style: () => ({whiteSpace: 'normal'}), head: m.accesses, render: _ => (
+              type: 'select_one',
+              id: 'drcJob',
+              width: 150,
+              head: m.name,
+              renderQuick: _ => _.name
+            },
+            {
+              type: 'string',
+              id: 'desc',
+              width: 120,
+              head: m.desc,
+              renderQuick: _ => _.desc
+            },
+            {
+              type: 'date',
+              id: 'createdAt',
+              width: 80, head:
+              m.createdAt,
+              render: _ => {
+                return {
+                  label: formatDateTime(_.createdAt),
+                  value: _.createdAt,
+                }
+              }
+            },
+            {
+              id: 'items',
+              style: () => ({whiteSpace: 'normal'}),
+              head: m.accesses,
+              renderQuick: _ => (
                 <>
                   {_.items.map(item =>
                     <Chip
@@ -140,26 +166,31 @@ export const AdminGroups = () => {
               )
             },
             {
-              id: 'actions', width: 84, align: 'right', render: _ => <>
-                <Modal
-                  onOpen={groupForm.reset}
-                  onConfirm={(e, close) => groupForm.handleSubmit(form => {
-                    asyncUpdate.call(_.id, form).then(close)
-                  })()}
-                  title={m._admin.createGroup}
-                  confirmLabel={m.edit}
-                  content={
-                    <>
-                      <IpInput sx={{mt: 2}} label={m.name} defaultValue={_.name} autoFocus {...groupForm.register('name')}/>
-                      <IpInput multiline minRows={3} maxRows={6} defaultValue={_.desc} label={m.desc} {...groupForm.register('desc')}/>
-                    </>
-                  }
-                >
-                  <IpIconBtn size="small">edit</IpIconBtn>
-                </Modal>
-                <IpIconBtn size="small" tooltip={m.duplicate} onClick={() => asyncDuplicate.call(_)} loading={asyncDuplicate.loading[_.id]}>content_copy</IpIconBtn>
-                <IpIconBtn size="small" tooltip={m.remove} onClick={() => asyncRemove.call(_.id)} loading={asyncRemove.loading[_.id]}>delete</IpIconBtn>
-              </>
+              id: 'actions',
+              width: 84,
+              align: 'right',
+              renderQuick: _ => (
+                <>
+                  <Modal
+                    onOpen={groupForm.reset}
+                    onConfirm={(e, close) => groupForm.handleSubmit(form => {
+                      asyncUpdate.call(_.id, form).then(close)
+                    })()}
+                    title={m._admin.createGroup}
+                    confirmLabel={m.edit}
+                    content={
+                      <>
+                        <IpInput sx={{mt: 2}} label={m.name} defaultValue={_.name} autoFocus {...groupForm.register('name')}/>
+                        <IpInput multiline minRows={3} maxRows={6} defaultValue={_.desc} label={m.desc} {...groupForm.register('desc')}/>
+                      </>
+                    }
+                  >
+                    <IpIconBtn size="small">edit</IpIconBtn>
+                  </Modal>
+                  <IpIconBtn size="small" tooltip={m.duplicate} onClick={() => asyncDuplicate.call(_)} loading={asyncDuplicate.loading[_.id]}>content_copy</IpIconBtn>
+                  <IpIconBtn size="small" tooltip={m.remove} onClick={() => asyncRemove.call(_.id)} loading={asyncRemove.loading[_.id]}>delete</IpIconBtn>
+                </>
+              )
             },
           ]}
         />

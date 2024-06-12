@@ -4,7 +4,6 @@ import React, {useEffect} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Alert, Txt} from 'mui-extension'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {map} from '@alexandreannic/ts-utils'
 import {getKoboImagePath} from '@/features/Mpca/MpcaData/MpcaData'
@@ -17,6 +16,7 @@ import {TableImg} from '@/shared/TableImg/TableImg'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {KoboAnswerId} from '@infoportal-common'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 const urlValidation = yup.object({
   id: yup.string().required()
@@ -87,27 +87,55 @@ export const MpcaPaymentTool = () => {
           </Grid>
 
           <Panel>
-            <Sheet id="mpca-payment" data={_answers.get} loading={_answers.loading} columns={[
-              {id: 'date', head: m.date, type: 'date', render: _ => formatDate(_.date)},
-              {id: 'taxId', head: m.taxID, render: _ => _.taxId},
+            <Datatable id="mpca-payment" data={_answers.get} loading={_answers.loading} columns={[
               {
-                id: 'taxIdImg', align: 'center', head: m.taxID, render: _ => map(_.taxIdFileURL, url =>
+                id: 'date',
+                head: m.date,
+                type: 'date',
+                render: _ => {
+                  return {
+                    value: _.date,
+                    label: formatDate(_.date)
+                  }
+                }
+              },
+              {
+                id: 'taxId',
+                head: m.taxID,
+                renderQuick: _ => _.taxId
+              },
+              {
+                id: 'taxIdImg',
+                align: 'center',
+                head: m.taxID,
+                renderQuick: _ => map(_.taxIdFileURL, url =>
                   <TableImg url={getKoboImagePath(url.download_small_url)}/>
                 )
               },
-              {id: 'passportSerie', head: m.passportSerie, render: _ => _.passportSerie},
-              {id: 'passportNum', head: m.passportNumber, render: _ => _.passportNum},
               {
-                id: 'idFileImg', head: m.id, align: 'center', render: _ => map(_.idFileURL, url =>
+                id: 'passportSerie',
+                head: m.passportSerie,
+                renderQuick: _ => _.passportSerie
+              },
+              {
+                id: 'passportNum',
+                head: m.passportNumber,
+                renderQuick: _ => _.passportNum
+              },
+              {
+                id: 'idFileImg',
+                head: m.id,
+                align: 'center',
+                renderQuick: _ => map(_.idFileURL, url =>
                   <TableImg url={getKoboImagePath(url.download_small_url)}/>
                 )
               },
-              {id: 'status', head: m.status, render: _ => _.status},
-              {id: 'lastName', head: m.lastName, render: _ => _.lastName},
-              {id: 'firstName', head: m.firstName, render: _ => _.firstName},
-              {id: 'patronyme', head: m.patronyme, render: _ => _.patronyme},
-              {id: 'hhSize', head: m.hhSize, render: _ => _.hhSize},
-              {id: 'phone', head: m.phone, render: _ => _.phone},
+              {id: 'status', head: m.status, renderQuick: _ => _.status},
+              {id: 'lastName', head: m.lastName, renderQuick: _ => _.lastName},
+              {id: 'firstName', head: m.firstName, renderQuick: _ => _.firstName},
+              {id: 'patronyme', head: m.patronyme, renderQuick: _ => _.patronyme},
+              {id: 'hhSize', head: m.hhSize, renderQuick: _ => _.hhSize},
+              {id: 'phone', head: m.phone, renderQuick: _ => _.phone},
             ]}/>
           </Panel>
         </>

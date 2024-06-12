@@ -1,12 +1,12 @@
 import {MpcaEntity} from '@infoportal-common'
 import {Enum, Seq, seq} from '@alexandreannic/ts-utils'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import React, {ReactNode, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Tooltip} from '@mui/material'
 import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {Datatable} from '@/shared/Datatable/Datatable'
 
 enum Type {
   'phone' = 'phone',
@@ -71,28 +71,39 @@ export const MpcaDuplicatedCheck = ({
       })
   }, [property, data])
   return (
-    <Sheet
+    <Datatable
       className="ip-border"
       header={header}
       id={'mpca-duplicate-' + property}
       data={res}
       columns={[
-        {type: 'select_one', id: property, head: property, render: _ => _.key, width: 80,},
-        {type: 'number', id: 'count', head: m.count, render: _ => _.count, width: 10,},
+        {
+          type: 'select_one',
+          id: property,
+          head: property,
+          renderQuick: _ => _.key,
+          width: 80,
+        },
+        {
+          type: 'number',
+          id: 'count',
+          head: m.count,
+          renderQuick: _ => _.count,
+          width: 10,
+        },
         {
           id: 'oblast',
           type: 'select_multiple',
           head: m.oblast,
           options: () => SheetUtils.buildOptions(res.flatMap(_ => _.list.map(_ => _.oblast)).distinct(_ => _).compact()),
-          renderValue: _ => _.list?.map(x => x.oblast) as string[],
           render: _ => {
             const offices = _.list?.map(_ => _.oblast).distinct(_ => _) ?? []
-            return (
-              <Tooltip title={<>{offices.map(_ => <>{_}<br/></>)}</>}>
-                <div>{offices.map(_ => [null, undefined, 'null', 'undefined', ''].includes(_) ? '""' : _).join(', ')}</div>
-              </Tooltip>
-            )
-          },
+            return {
+              label: offices,
+              value: offices,
+              tooltip: offices.map(_ => [null, undefined, 'null', 'undefined', ''].includes(_) ? '""' : _).join(', ')
+            }
+          }
         },
         {
           id: 'enumerator',
@@ -100,17 +111,18 @@ export const MpcaDuplicatedCheck = ({
           head: m.enumerator,
           render: _ => {
             const enumerators = _.list?.map(_ => _.enumerator).distinct(_ => _) ?? []
-            return (
-              <Tooltip title={<>{enumerators.map(_ => <>{_}<br/></>)}</>}>
-                <div>{enumerators.map(_ => [null, undefined, 'null', 'undefined', ''].includes(_) ? '""' : _).join(', ')}</div>
-              </Tooltip>
-            )
-          },
+            const enumeratorString = enumerators.join(', ')
+            return {
+              label: enumeratorString,
+              value: enumeratorString,
+              tooltip: enumerators.map(_ => _).join(', ')
+            }
+          }
         },
         {
           id: 'date',
           head: m.date,
-          render: _ => {
+          renderQuick: _ => {
             const dates = _.list.map(_ => formatDate(_.date))
             return (
               <Tooltip title={<>{dates.map(_ => <>{_}<br/></>)}</>}>

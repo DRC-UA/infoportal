@@ -3,7 +3,6 @@ import {Panel} from '@/shared/Panel'
 import {useEffect} from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useCrudList} from '@alexandreannic/react-hooks-lib'
-import {Sheet} from '@/shared/Sheet/Sheet'
 import {useI18n} from '@/core/i18n'
 import {Switch} from '@mui/material'
 import {IpIconBtn} from '@/shared/IconBtn'
@@ -15,6 +14,8 @@ import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {Proxy} from '@/core/sdk/server/proxy/Proxy'
 import {endOfDay} from 'date-fns'
 import {Modal} from 'mui-extension/lib/Modal'
+import {Datatable} from '@/shared/Datatable/Datatable'
+import {formatDateTime} from '@/core/i18n/localization/en'
 
 interface CreateForm {
   name: string
@@ -46,7 +47,7 @@ export const AdminProxy = () => {
   return (
     <Page width="lg">
       <Panel>
-        <Sheet
+        <Datatable
           id="proxy"
           header={
             <>
@@ -104,54 +105,81 @@ export const AdminProxy = () => {
               type: 'string',
               id: 'name',
               head: m.name,
-              renderValue: _ => _.name,
-              render: _ => _.name,
+              renderQuick: _ => _.name,
             },
             {
               type: 'string',
               id: 'origin',
               head: m.origin,
-              renderValue: _ => _.slug,
-              render: _ => <Txt link><a target="_blank" href={Proxy.makeUrl(_)}>{Proxy.makeUrl(_)}</a></Txt>,
+              render: _ => {
+                return {
+                  value: _.slug,
+                  label: (
+                    <Txt link><a target="_blank" href={Proxy.makeUrl(_)}>{Proxy.makeUrl(_)}</a></Txt>
+                  )
+                }
+              }
             },
             {
               type: 'string',
               id: 'destination',
               head: m.destination,
-              renderValue: _ => _.url,
-              render: _ => <Txt link><a target="_blank" href={_.url}>{_.url}</a></Txt>,
+              render: _ => {
+                return {
+                  value: _.url,
+                  label: (
+                    <Txt link><a target="_blank" href={_.url}>{_.url}</a></Txt>
+                  )
+                }
+              }
             },
             {
               type: 'date',
               id: 'createdAt',
               head: m.createdAt,
-              renderValue: _ => _.createdAt,
-              render: _ => formatDate(_.createdAt),
+              render: _ => {
+                return {
+                  label: formatDateTime(_.createdAt),
+                  value: _.createdAt,
+                }
+              }
             },
             {
               type: 'date',
               id: 'expireAt',
               width: 0,
               head: m.expireAt,
-              renderValue: _ => _.expireAt,
-              render: _ => _.expireAt && formatDate(_.expireAt),
+              render: _ => {
+                return {
+                  label: formatDateTime(_.expireAt),
+                  value: _.expireAt,
+                }
+              }
             },
             {
               type: 'string',
               id: 'enabled',
               align: 'center',
               head: m.enabled,
-              renderValue: _ => _.disabled ? 'false' : 'true',
-              render: _ => (
-                <Switch checked={!_.disabled} onChange={e => _search.update(_.id, {disabled: !e.currentTarget.checked})}/>
-              ),
+              render: _ => {
+                return {
+                  label: (
+                    <Switch
+                      checked={!_.disabled}
+                      onChange={e => _search.update(_.id, {disabled: !e.currentTarget.checked})}
+                    />
+                  ),
+                  value: !_.disabled ? 'Enabled' : 'Disabled',
+                  option: !_.disabled,
+                }
+              }
             },
             {
               id: 'actions',
               head: '',
               width: 0,
               align: 'right',
-              render: _ => (
+              renderQuick: _ => (
                 <TableIconBtn onClick={() => _search.remove(_.id)} loading={_search.removing(_.id)}>delete</TableIconBtn>
               ),
             },
