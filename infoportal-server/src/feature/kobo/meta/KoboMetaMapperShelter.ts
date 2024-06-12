@@ -160,7 +160,7 @@ export namespace KoboMetaMapperShelter {
         nlv: DrcOffice.Mykolaiv,
         umy: DrcOffice.Sumy,
       }, () => undefined),
-      oblast: oblast.name,
+      oblast: oblast?.name!,
       displacement: KoboGeneralMapping.mapDisplacementStatus(answer.ben_det_res_stat),
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),

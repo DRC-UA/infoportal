@@ -80,8 +80,6 @@ export class KoboMetaBasicneeds {
       umy_danida: DrcProject['UKR-000267 DANIDA'],
       '330_sdc_dnk': DrcProject['UKR-000330 SDC2'],
       dnk_danida_347: DrcProject['UKR-000347 DANIDA'],
-
-
     }, _ => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(_)))
   }
 
@@ -166,35 +164,8 @@ export class KoboMetaBasicneeds {
       ben_det_res_stat: answer.ben_det_res_stat_l,
     })
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast_l!)
-    const project = fnSwitch(answer.back_donor_l!, {
-      sdc_umy: DrcProject[`UKR-000330 SDC2`],
-      uhf_chj: DrcProject[`UKR-000314 UHF4`],
-      uhf_dnk: DrcProject[`UKR-000314 UHF4`],
-      uhf_hrk: DrcProject[`UKR-000314 UHF4`],
-      uhf_lwo: DrcProject[`UKR-000314 UHF4`],
-      uhf_nlv: DrcProject[`UKR-000314 UHF4`],
-      dnk_bha_345: DrcProject['UKR-000345 BHA2'],
-      bha_lwo: DrcProject[`UKR-000284 BHA`],
-      bha_chj: DrcProject[`UKR-000284 BHA`],
-      bha_dnk: DrcProject[`UKR-000284 BHA`],
-      bha_hrk: DrcProject[`UKR-000284 BHA`],
-      bha_nlv: DrcProject[`UKR-000284 BHA`],
-      echo_chj: DrcProject[`UKR-000269 ECHO1`],
-      echo_dnk: DrcProject[`UKR-000269 ECHO1`],
-      echo_hrk: DrcProject[`UKR-000269 ECHO1`],
-      echo_lwo: DrcProject[`UKR-000269 ECHO1`],
-      echo_nlv: DrcProject[`UKR-000269 ECHO1`],
-      novo_nlv: DrcProject[`UKR-000360 Novo-Nordisk`],
-      okf_lwo: DrcProject[`UKR-000309 OKF`],
-      pool_chj: DrcProject[`UKR-000270 Pooled Funds`],
-      pool_dnk: DrcProject[`UKR-000270 Pooled Funds`],
-      pool_hrk: DrcProject[`UKR-000270 Pooled Funds`],
-      pool_lwo: DrcProject[`UKR-000270 Pooled Funds`],
-      pool_nlv: DrcProject[`UKR-000270 Pooled Funds`],
-      nlv_bha_345: DrcProject[`UKR-000345 BHA2`],
-      echo2_dnk: DrcProject['UKR-000322 ECHO2'],
-    }, _ => _ as DrcProject)
-    const donor = DrcProjectHelper.donorByProject[project]
+    const project = this.getBnreProject(answer.back_donor_l)
+    const donor = project ? DrcProjectHelper.donorByProject[project] : undefined
 
     const programs = seq(answer.back_prog_type_l)
       .map(_ => _.split('_')[0])
