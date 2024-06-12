@@ -12,15 +12,17 @@ import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {ChartLine} from '@/shared/charts/ChartLine'
 
 enum AlertType {
+  green = 'green',
   blue = 'blue',
   yellow = 'yellow',
   red = 'red',
 }
 
 const colors = (t: Theme) => ({
-  blue: '#5249CD',
+  green: '#99ff99',
+  blue: '#4db8ff',
   yellow: '#F2E866',
-  red: '#C62222',
+  red: '#ff3333',
 })
 
 export const SafetyIncidentDashboardAlert = ({
@@ -39,6 +41,7 @@ export const SafetyIncidentDashboardAlert = ({
   const flatAlertData = useMemo(() => {
     return dataAlert?.flatMap(_ => {
       const res = [
+        ..._.alert_green_num ? mapFor(_.alert_green_num ?? 0, () => ({..._, alertType: AlertType.green})) : [],
         ..._.alert_blue_num ? mapFor(_.alert_blue_num ?? 0, () => ({..._, alertType: AlertType.blue})) : [],
         ..._.alert_yellow_num ? mapFor(_.alert_yellow_num ?? 0, () => ({..._, alertType: AlertType.yellow})) : [],
         ..._.alert_red_num ? mapFor(_.alert_red_num ?? 0, () => ({..._, alertType: AlertType.red})) : [],
@@ -49,6 +52,7 @@ export const SafetyIncidentDashboardAlert = ({
 
   const sum = useMemo(() => {
     return {
+      green: flatAlertData?.count(_ => _.alertType === AlertType.green),
       blue: flatAlertData?.count(_ => _.alertType === AlertType.blue),
       yellow: flatAlertData?.count(_ => _.alertType === AlertType.yellow),
       red: flatAlertData?.count(_ => _.alertType === AlertType.red),
@@ -60,6 +64,17 @@ export const SafetyIncidentDashboardAlert = ({
       <Panel>
         <PanelHead action={
           <ScRadioGroup<AlertType> multiple value={filterType} onChange={_ => setFilterType(_)} dense inline sx={{width: '100%'}}>
+            <ScRadioGroupItem
+              hideRadio
+              title={
+                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                  <Box sx={{lineHeight: 1, fontSize: 18, mr: 1.5}}>✅</Box>
+                  <Box>{formatLargeNumber(sum.green)}</Box>
+                </Box>
+              }
+              value={AlertType.green}
+            >
+            </ScRadioGroupItem>
             <ScRadioGroupItem
               hideRadio
               title={
@@ -115,6 +130,7 @@ export const SafetyIncidentDashboardAlert = ({
                 red: v.count(_ => _.alertType === AlertType.red),
                 yellow: v.count(_ => _.alertType === AlertType.yellow),
                 blue: v.count(_ => _.alertType === AlertType.blue),
+                green: v.count(_ => _.alertType === AlertType.green),
               }])
               .sort(([ka], [kb]) => ka.localeCompare(kb))
               .entries()
@@ -123,6 +139,7 @@ export const SafetyIncidentDashboardAlert = ({
                 red: v.red,
                 yellow: v.yellow,
                 blue: v.blue,
+                green: v.green
               }) as {name: string, red: number, yellow: number, blue: number})
           }}>
             {_ => (
@@ -130,6 +147,7 @@ export const SafetyIncidentDashboardAlert = ({
                 height={200}
                 data={_ as any}
                 translation={{
+                  green: m.safety.green,
                   blue: m.safety.blue,
                   yellow: m.safety.yellow,
                   red: m.safety.red,
