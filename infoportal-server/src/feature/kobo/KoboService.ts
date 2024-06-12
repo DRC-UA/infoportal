@@ -411,6 +411,7 @@ export class KoboService {
     ])
     if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)
     this.history.create({
+      type: 'answer',
       formId,
       answerIds,
       property: question,
@@ -432,17 +433,15 @@ export class KoboService {
 
   readonly updateTags = async ({formId, answerIds, tags, authorEmail}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>, authorEmail: string}) => {
     await Promise.all([
-      this.prisma.koboAnswersHistory.createMany({
-        data: answerIds.flatMap(_ => {
-          return Obj.keys(tags).map(tag => {
-            return {
-              by: authorEmail,
-              type: 'tag',
-              formId,
-              property: tag,
-              newValue: tags[tag] as any,
-              answerId: _,
-            }
+      answerIds.flatMap(_ => {
+        return Obj.keys(tags).map(tag => {
+          this.history.create({
+            type: 'tag',
+            formId,
+            answerIds,
+            property: tag,
+            newValue: tags[tag],
+            authorEmail,
           })
         })
       }),
