@@ -36,6 +36,7 @@ export const useShelterData = () => {
           hrk: DrcOffice.Kharkiv,
           umy: DrcOffice.Sumy,
           nlv: DrcOffice.Mykolaiv,
+          slo: DrcOffice.Sloviansk,
         }, () => undefined) ?? ''
       })
       ta.data.forEach(d => {

@@ -23,6 +23,7 @@ import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {NavLink} from 'react-router-dom'
 import {IpInput} from '@/shared/Input/Input'
+import {useIpToast} from '@/core/useToast'
 
 const routeParamsSchema = yup.object({
   formId: yup.string().required(),
@@ -33,7 +34,7 @@ export const CfmEntryRoute = () => {
   const ctx = useCfmContext()
   const entry = useMemo(() => ctx.mappedData?.find(_ => _.id === answerId && formId === formId), [formId, ctx.mappedData])
 
-  if (!entry) {
+  if (!entry && !ctx.fetching) {
     return (
       <Fender type="error">
         {formId}, {answerId}
@@ -41,8 +42,10 @@ export const CfmEntryRoute = () => {
     )
   }
   return (
-    <Page>
-      <CfmDetails entry={entry}/>
+    <Page loading={ctx.fetching}>
+      {entry && (
+        <CfmDetails entry={entry}/>
+      )}
     </Page>
   )
 }
@@ -59,6 +62,7 @@ export const CfmDetails = ({entry}: {
   const canEdit = ctx.authorizations.sum.write || session.email === entry.tags?.focalPointEmail
   const [isEditing, setIsEditing] = useState(false)
   const [comment, setComment] = useState('')
+  const {toastHttpError} = useIpToast()
 
   useEffect(() => {
     setComment(entry.tags?.notes ?? '')
@@ -234,7 +238,7 @@ export const CfmDetails = ({entry}: {
                 variant="outlined"
                 loading={ctxEditTag.asyncUpdateById.anyLoading}
                 onClick={async () => {
-                  await ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'notes', value: comment})
+                  await ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'notes', value: comment}).catch(toastHttpError)
                   setIsEditing(false)
                 }}
                 sx={{marginLeft: 'auto', mr: 1}}
