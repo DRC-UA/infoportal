@@ -40,6 +40,7 @@ export class KoboMetaBasicneeds {
       danida347_lwo: DrcProject['UKR-000347 DANIDA'],
       danida347_hrk: DrcProject['UKR-000347 DANIDA'],
       danida347_chj: DrcProject['UKR-000347 DANIDA'],
+      danida347_dnk: DrcProject['UKR-000347 DANIDA'],
       echo322_umy: DrcProject['UKR-000322 ECHO2'],
       echo322_chj: DrcProject['UKR-000322 ECHO2'],
       echo322_dnk: DrcProject['UKR-000322 ECHO2'],
@@ -76,7 +77,11 @@ export class KoboMetaBasicneeds {
       uhf7_lwo: DrcProject['UKR-000352 UHF7'],
       uhf7_nlv: DrcProject['UKR-000352 UHF7'],
       uhf7_umy: DrcProject['UKR-000352 UHF7'],
-      umy_danida: DrcProject['UKR-000267 DANIDA']
+      umy_danida: DrcProject['UKR-000267 DANIDA'],
+      '330_sdc_dnk': DrcProject['UKR-000330 SDC2'],
+      dnk_danida_347: DrcProject['UKR-000347 DANIDA'],
+
+
     }, _ => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(_)))
   }
 
