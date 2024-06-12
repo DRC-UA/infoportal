@@ -64,18 +64,19 @@ export const ProtectionDashboardMonitoSample = ({
                 {_ => _.toFixed(1)}
               </Lazy>
             </SlideWidget>
-            <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', pl: 2,}}>
               <Lazy deps={[data]} fn={() => ChartHelperOld.percentage({
                 data: computed.flatData,
                 value: _ => _.gender === 'Female'
               })}>
                 {_ => (
-                  <ChartPieWidget value={_.value} base={_.base} title={m.females}/>
+                  <ChartPieWidget dense value={_.value} base={_.base} title={m.females}/>
                 )}
               </Lazy>
             </SlidePanel>
-            <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', pl: 2,}}>
               <ChartPieWidgetByKey
+                dense
                 title={m.uaCitizen}
                 data={data}
                 property="if_ukrainian_do_you_or_your_household_members_identify_as_member_of_a_minority_group"

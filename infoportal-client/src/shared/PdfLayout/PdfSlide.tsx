@@ -186,11 +186,13 @@ export const SlideWidget = ({
       savableAsImg={false}
       BodyProps={{
         sx: {
+          px: .25,
           pb: t => t.spacing(1) + ' !important',
         }
       }}
       sx={{
-        minHeight: 82.52,
+        minHeight: 76,
+        // minHeight: 82.52,
         width: '100%',
         textAlign: 'center',
         '&:last-child': {
@@ -198,7 +200,7 @@ export const SlideWidget = ({
         },
         ...sx,
       }}>
-      <Txt block color="hint" bold sx={{lineHeight: 1, mb: .5}}>
+      <Txt block color="hint" bold sx={{lineHeight: 1, mb: .5, mt: -.5,}}>
         {uppercaseHandlingAcronyms(title)}
       </Txt>
       <Box sx={{

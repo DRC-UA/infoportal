@@ -41,7 +41,7 @@ export default function MyDocument({emotionStyleTags}: MyDocumentProps) {
         </Alert>
       )}
       {process.env.NODE_ENV === 'development' && (
-        <Box sx={{'@media print': {display: 'none'}, zIndex: 1000, height: 4, background: 'blue', position: 'fixed', top: 0, right: 0, left: 0}}/>
+        <Box sx={{'@media print': {display: 'none'}, zIndex: 1000, height: 2, background: 'blue', position: 'fixed', top: 0, right: 0, left: 0}}/>
       )}
       <Main/>
       <NextScript/>
