@@ -51,7 +51,7 @@ export class KoboAnswerHistoryService {
           formId,
           property,
           newValue: newValue ?? Prisma.JsonNull,
-          oldValue: (currentAnswers[_][type === 'tag' ? 'tags' : 'answers'] as any)[property] as any,
+          oldValue: (currentAnswers[_][type === 'tag' ? 'tags' : 'answers'] as any)?.[property] as any,
           answerId: _
         }
       })
