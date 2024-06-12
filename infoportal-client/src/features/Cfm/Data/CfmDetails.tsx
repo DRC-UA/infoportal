@@ -7,7 +7,7 @@ import {Box, Divider, Grid, Icon} from '@mui/material'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {ListRow} from '@/shared/ListRow'
 import {useI18n} from '@/core/i18n'
-import React, {useMemo} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {CfmDataProgram, CfmDataSource, DrcOffice, KoboMealCfmArea, KoboMealCfmStatus, KoboMealCfmTag, Meal_cfmInternal, Regexp} from '@infoportal-common'
 import {KoboSelectTag} from '@/shared/KoboSelectTag'
 import {Obj} from '@alexandreannic/ts-utils'
@@ -22,6 +22,7 @@ import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {NavLink} from 'react-router-dom'
+import {IpInput} from '@/shared/Input/Input'
 
 const routeParamsSchema = yup.object({
   formId: yup.string().required(),
@@ -56,6 +57,13 @@ export const CfmDetails = ({entry}: {
   const {api} = useAppSettings()
   const {session} = useSession()
   const canEdit = ctx.authorizations.sum.write || session.email === entry.tags?.focalPointEmail
+  const [isEditing, setIsEditing] = useState(false)
+  const [comment, setComment] = useState('')
+
+  useEffect(() => {
+    setComment(entry.tags?.notes ?? '')
+  }, [entry])
+
   return (
     <Page>
       <PageTitle subTitle={formatDateTime(entry.date)} action={
@@ -206,16 +214,38 @@ export const CfmDetails = ({entry}: {
           {entry.comments && <Txt block sx={{mt: 2}} bold size="big">{m.comments}</Txt>}
           {entry.comments}
 
-          <Txt block sx={{mt: 2}} bold size="big">{m.note}</Txt>
-          <TableInput
-            value={entry.tags?.notes}
+          <Txt block sx={{mt: 2,}} bold size="big">{m.note}</Txt>
+          <IpInput
+            disabled={!isEditing}
+            value={comment}
             multiline
             minRows={6}
+            sx={{mb: 1}}
+            helperText={null}
             maxRows={10}
-            onChange={_ => {
-              ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'notes', value: _})
-            }}
+            onChange={_ => setComment(_.target.value)}
           />
+          {isEditing ? (
+            <Box sx={{textAlign: 'right'}}>
+              <IpBtn
+                color="success"
+                icon="check"
+                size="small"
+                variant="outlined"
+                loading={ctxEditTag.asyncUpdateById.anyLoading}
+                onClick={async () => {
+                  await ctxEditTag.asyncUpdateById.call({formId: entry.formId, answerIds: [entry.id], tag: 'notes', value: comment})
+                  setIsEditing(false)
+                }}
+                sx={{marginLeft: 'auto', mr: 1}}
+              >
+                {m.save}
+              </IpBtn>
+              <IpBtn color="error" icon="cancel" size="small" variant="outlined" onClick={() => setIsEditing(false)}>{m.cancel}</IpBtn>
+            </Box>
+          ) : (
+            <IpBtn icon="edit" size="small" variant="outlined" onClick={() => setIsEditing(true)}>{m.edit}</IpBtn>
+          )}
         </PanelBody>
       </Panel>
       {ctx.authorizations.sum.admin && (

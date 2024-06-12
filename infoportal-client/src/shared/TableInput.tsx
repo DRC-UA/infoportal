@@ -41,6 +41,7 @@ export const TableInput = ({
               )}
               {value !== originalValue && originalValue !== null &&
                 <IpIconBtn
+                  disabled={props.disabled}
                   size="small"
                   sx={{mr: -2, mt: .25}}
                   onClick={() => onChange(originalValue ?? '')}
