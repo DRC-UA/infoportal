@@ -105,10 +105,28 @@ export namespace Bn_rapidResponse {
     'back_office_l': undefined | Option<'back_office_l'>,
     // background_l/back_enum_l [select_one] 1.2 Enumerator
     'back_enum_l': undefined | Option<'back_enum_l'>,
-    // background_l/back_donor_l [select_one] 1.3 Project & Donor
-    'back_donor_l': undefined | Option<'back_donor_l'>,
     // background_l/back_prog_type_l [select_multiple] 1.4 Programme Type
     'back_prog_type_l': undefined | Option<'back_prog_type_l'>[],
+    // background_l/donor_mpca [select_one] 1.3.1 Which donor for MPCA
+    'donor_mpca': undefined | Option<'back_donor_l'>,
+    // background_l/donor_nfi [select_one] 1.3.2 Which donor for NFI
+    'donor_nfi': undefined | Option<'back_donor_l'>,
+    // background_l/donor_esk [select_one] 1.3.3 Which donor for Emergency Shelter Kit
+    'donor_esk': undefined | Option<'back_donor_l'>,
+    // background_l/donor_cfr [select_one] 1.3.4 Which donor for Cash for Rent
+    'donor_cfr': undefined | Option<'back_donor_l'>,
+    // background_l/donor_cff [select_one] 1.3.5 Which donor for Cash for Fuel
+    'donor_cff': undefined | Option<'back_donor_l'>,
+    // background_l/donor_cfe [select_one] 1.3.6 Which donor for Cash for Education
+    'donor_cfe': undefined | Option<'back_donor_l'>,
+    // background_l/donor_iwk [select_one] 1.3.7 Which donor for Infant Winterclothing Kit
+    'donor_iwk': undefined | Option<'back_donor_l'>,
+    // background_l/donor_ihk [select_one] 1.3.8 Which donor for Infant Hygiene Kit
+    'donor_ihk': undefined | Option<'back_donor_l'>,
+    // background_l/donor_cfu [select_one] 1.3.9 Which donor for Cash for Utilities
+    'donor_cfu': undefined | Option<'back_donor_l'>,
+    // background_l/back_donor_l [select_multiple] 1.4 Selected Project & Donor
+    'back_donor_l': undefined | Option<'back_donor_l'>[],
     'calc_prog_type_mpca_l': string,
     'calc_prog_type_cfr_l': string,
     'calc_prog_type_nfi_l': string,
@@ -2746,6 +2764,7 @@ export namespace Bn_rapidResponse {
     nfi_dist_hkmv: _.nfi_dist_hkmv ? +_.nfi_dist_hkmv : undefined,
     nfi_dist_hkf_001: _.nfi_dist_hkf_001 ? +_.nfi_dist_hkf_001 : undefined,
     back_prog_type_l: _.back_prog_type_l?.split(' '),
+    back_donor_l: _.back_donor_l?.split(' '),
     ben_det_ph_number_l: _.ben_det_ph_number_l ? +_.ben_det_ph_number_l : undefined,
     ben_det_income_l: _.ben_det_income_l ? +_.ben_det_income_l : undefined,
     ben_det_hh_size_l: _.ben_det_hh_size_l ? +_.ben_det_hh_size_l : undefined,

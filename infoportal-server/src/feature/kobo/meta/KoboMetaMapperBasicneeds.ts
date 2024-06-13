@@ -23,7 +23,7 @@ const nfisPrograms = [DrcProgram.NFI, DrcProgram.ESK, DrcProgram.InfantWinterClo
 
 export class KoboMetaBasicneeds {
 
-  private static readonly getBnreProject = (back_donor?: Bn_re.Option<'back_donor'> | Bn_rapidResponse.Option<'back_donor_l'>) => {
+  private static readonly getBnreProject = (back_donor?: Bn_re.Option<'back_donor'> | Bn_rapidResponse.Option<'back_donor'> | Bn_rapidResponse.Option<'back_donor_l'>[0]) => {
     return fnSwitch(back_donor!, {
       uhf_chj: DrcProject['UKR-000314 UHF4'],
       uhf_dnk: DrcProject['UKR-000314 UHF4'],
@@ -164,24 +164,39 @@ export class KoboMetaBasicneeds {
       ben_det_res_stat: answer.ben_det_res_stat_l,
     })
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast_l!)
-    const project = this.getBnreProject(answer.back_donor_l)
-    const donor = project ? DrcProjectHelper.donorByProject[project] : undefined
 
-    const programs = seq(answer.back_prog_type_l)
-      .map(_ => _.split('_')[0])
-      .distinct(_ => _)
-      .map(prog => fnSwitch(prog, {
-        mpca: DrcProgram.MPCA,
-        nfi: DrcProgram.NFI,
-        cfr: DrcProgram.CashForRent,
-        cfe: DrcProgram.CashForEducation,
-        iwk: DrcProgram.InfantWinterClothing,
-        ihk: DrcProgram.HygieneKit,
-        esk: DrcProgram.ESK,
-      }, () => undefined))
-      .compact()
+    const activities = seq(answer.back_prog_type)?.map(prog => {
+      const defaultProject = answer.back_donor_l?.[0] ?? answer.back_donor
+      return fnSwitch(prog.split('_')[0], {
+        cfr: {activity: DrcProgram.CashForRent, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfr ?? defaultProject)},
+        cfe: {activity: DrcProgram.CashForEducation, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfe ?? defaultProject)},
+        mpca: {activity: DrcProgram.MPCA, project: KoboMetaBasicneeds.getBnreProject(answer.donor_mpca ?? defaultProject)},
+        csf: {activity: DrcProgram.CashForFuel, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cff ?? defaultProject)},
+        cfu: {activity: DrcProgram.CashForUtilities, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfu ?? defaultProject)},
+        nfi: {activity: DrcProgram.NFI, project: KoboMetaBasicneeds.getBnreProject(answer.donor_nfi ?? defaultProject)},
+        esk: {activity: DrcProgram.ESK, project: KoboMetaBasicneeds.getBnreProject(answer.donor_esk ?? defaultProject)},
+        iwk: {activity: DrcProgram.ESK, project: KoboMetaBasicneeds.getBnreProject(defaultProject)},
+        ihk: {activity: DrcProgram.HygieneKit, project: KoboMetaBasicneeds.getBnreProject(answer.donor_ihk ?? defaultProject)},
+      }, () => undefined)
+    }).compact().distinct(_ => _.activity) ?? []
 
-    const prepare = (activity: DrcProgram): MetaMapped => {
+    // const project = this.getBnreProject(answer.back_donor_l)
+    // const donor = project ? DrcProjectHelper.donorByProject[project] : undefined
+    // const programs = seq(answer.back_prog_type_l)
+    //   .map(_ => _.split('_')[0])
+    //   .distinct(_ => _)
+    //   .map(prog => fnSwitch(prog, {
+    //     mpca: DrcProgram.MPCA,
+    //     nfi: DrcProgram.NFI,
+    //     cfr: DrcProgram.CashForRent,
+    //     cfe: DrcProgram.CashForEducation,
+    //     iwk: DrcProgram.InfantWinterClothing,
+    //     ihk: DrcProgram.HygieneKit,
+    //     esk: DrcProgram.ESK,
+    //   }, () => undefined))
+    //   .compact()
+
+    const prepare = (activity: DrcProgram, project?: DrcProject): MetaMapped => {
       const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
       return {
         enumerator: Bn_rapidResponse.options.back_enum_l[answer.back_enum_l!],
@@ -202,7 +217,7 @@ export class KoboMetaBasicneeds {
         personsCount: safeNumber(answer.ben_det_hh_size_l),
         persons: group.map(KoboGeneralMapping.mapPersonDetails),
         project: project ? [project] : [],
-        donor: donor ? [donor] : [],
+        donor: project ? [DrcProjectHelper.donorByProject[project]] : [],
         lastName: answer.ben_det_surname_l,
         firstName: answer.ben_det_first_name_l,
         patronymicName: answer.ben_det_pat_name_l,
@@ -220,6 +235,6 @@ export class KoboMetaBasicneeds {
         lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
       }
     }
-    return programs.map(prepare)
+    return activities.map(_ => prepare(_.activity, _.project))
   }
 }

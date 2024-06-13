@@ -26,9 +26,12 @@ export class ControllerUser {
       email: yup.string().optional()
     }).validate(req.params)
     const avatar = await this.service.getUserByEmail(email ?? req.session.user?.email!).then(_ => _?.avatar ?? undefined)
-    if (!avatar) throw new AppError.NotFound('user_not_found')
-    res.setHeader('Content-Type', 'image/jpeg')
-    res.send(avatar)
+    if (!avatar) {
+      throw new AppError.NotFound('user_not_found')
+    } else {
+      res.setHeader('Content-Type', 'image/jpeg')
+      res.send(avatar)
+    }
   }
 
   readonly updateMe = async (req: Request, res: Response, next: NextFunction) => {
