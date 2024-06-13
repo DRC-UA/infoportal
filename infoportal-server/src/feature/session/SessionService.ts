@@ -42,7 +42,9 @@ export class SessionService {
       authProvider: new MyCustomAuthenticationProvider()
     })
     const msUser: User = await msGraphSdk.api('/me').get()
-    const avatar = await msGraphSdk.api('/me/photo/$value').get().then((_: Blob) => _.arrayBuffer())
+    const avatar = await msGraphSdk.api('/me/photo/$value').get().then((_: Blob) => _.arrayBuffer()).catch(() => {
+      this.log.info(`No profile picture for ${msUser.mail}.`)
+    })
 
     if (msUser.mail === undefined || msUser.jobTitle === undefined) {
       throw new SessionError.UserNotFound
@@ -52,7 +54,7 @@ export class SessionService {
       drcJob: msUser.jobTitle?.trim().replace(/\s+/g, ' '),
       accessToken: userBody.accessToken,
       name: userBody.name,
-      avatar: Buffer.from(avatar),
+      avatar: avatar ? Buffer.from(avatar) : undefined,
     })
     this.log.info(`${connectedUser.email} connected.`)
     return connectedUser
@@ -60,7 +62,7 @@ export class SessionService {
 
   readonly syncUserInDb = async ({email, drcJob, accessToken, avatar, name}: {
     accessToken: string,
-    avatar: Buffer,
+    avatar?: Buffer,
     name: string,
     email: string,
     drcJob: string

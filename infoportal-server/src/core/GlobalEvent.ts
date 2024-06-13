@@ -68,7 +68,7 @@ export namespace GlobalEvent {
 
     readonly emit: Emit = (event, params): void => {
       this.emitter.emit(event, params)
-      this.log.info(`Emitted ${event}`, JSON.stringify(params))
+      this.log.info(`Emitted ${event} ` + JSON.stringify(params))
     }
 
     readonly listen: Listen
