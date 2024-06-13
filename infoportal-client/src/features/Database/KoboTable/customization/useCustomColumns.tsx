@@ -3,11 +3,13 @@ import {
   Bn_rapidResponse,
   Bn_re,
   currentProtectionProjects,
+  DrcProgram,
   DrcProject,
   Ecrec_cashRegistration,
   KoboAnswerFlat,
   KoboAnswerId,
   KoboBaseTags,
+  KoboEcrec_cashRegistration,
   KoboGeneralMapping,
   KoboIndex,
   KoboTagStatus,
@@ -317,6 +319,24 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
         ...getPaymentStatusByEnum(),
         ...individualsBreakdown,
         ...ecrecScore,
+        {
+          id: 'program',
+          head: m.program,
+          type: 'select_multiple',
+          options: () => DatatableUtils.buildOptions([
+            DrcProgram.SectoralCashForAgriculture,
+            DrcProgram.SectoralCashForAnimalFeed,
+            DrcProgram.SectoralCashForAnimalShelterRepair,
+          ], true),
+          render: _ => {
+            const programs = KoboEcrec_cashRegistration.getProgram(_)
+            return {
+              value: programs,
+              label: programs.join(' | '),
+              title: programs.join(' | '),
+            }
+          }
+        },
       ],
       [KoboIndex.byName('ecrec_cashRegistrationBha').id]: [
         ...getPaymentStatusByEnum(),

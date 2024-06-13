@@ -12,6 +12,7 @@ import {
   Ecrec_vetEvaluation,
   KoboAnswerUtils,
   KoboBaseTags,
+  KoboEcrec_cashRegistration,
   KoboGeneralMapping,
   KoboMetaHelper,
   KoboMetaStatus,
@@ -31,10 +32,7 @@ export class KoboMetaMapperEcrec {
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = DrcProjectHelper.search(Ecrec_cashRegistration.options.back_donor[answer.back_donor!])
-    const activities = project === DrcProject['UKR-000336 UHF6']
-      ? [DrcProgram.SectoralCashForAgriculture]
-      : [DrcProgram.SectoralCashForAnimalFeed]
-    if (answer.animal_shelter_need === 'yes') activities.push(DrcProgram.SectoralCashForAnimalShelterRepair)
+    const activities = KoboEcrec_cashRegistration.getProgram(answer)
 
     return activities.map(activity => {
       return KoboMetaMapper.make({

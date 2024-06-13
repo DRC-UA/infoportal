@@ -2,10 +2,20 @@ import {CashStatus, KoboAnswerFlat, KoboBaseTags} from './Common'
 import {KoboGeneralMapping} from './KoboMapper'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {Ecrec_cashRegistration, Ecrec_cashRegistrationBha} from '../generated'
+import {DrcProgram, DrcProject, DrcProjectHelper} from '../../type/Drc'
 
 const minimumWageUah = 7100
 
 export namespace KoboEcrec_cashRegistration {
+
+  export const getProgram = (_: Ecrec_cashRegistration.T): DrcProgram[] => {
+    const project = DrcProjectHelper.search(Ecrec_cashRegistration.options.back_donor[_.back_donor!])
+    const activities = project === DrcProject['UKR-000336 UHF6']
+      ? [DrcProgram.SectoralCashForAgriculture]
+      : [DrcProgram.SectoralCashForAnimalFeed]
+    if (_.animal_shelter_need === 'yes') activities.push(DrcProgram.SectoralCashForAnimalShelterRepair)
+    return activities
+  }
 
   export enum Program {
     CashforAnimalFeed = 'CashforAnimalFeed',
