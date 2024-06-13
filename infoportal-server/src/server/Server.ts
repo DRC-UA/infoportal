@@ -110,6 +110,7 @@ export class Server {
       if (req.sessionID) {
         try {
           const sessionExists = await sessionStore.get(req.sessionID)
+          console.log('Session exists? ', req.sessionID, !!sessionExists)
           if (!sessionExists) {
             res.clearCookie('connect.sid')
           }
