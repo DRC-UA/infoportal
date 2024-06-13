@@ -12,6 +12,7 @@ import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 import {GlobalCache, IpCache} from './helper/IpCache'
 import {duration} from '@alexandreannic/ts-utils'
 import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
+import EmailService from './core/EmailService'
 
 export const app = {
   cache: new GlobalCache(new IpCache<IpCache<any>>({
@@ -120,6 +121,7 @@ const startApp = async (conf: AppConf) => {
       MpcaCachedDb.constructSingleton(prisma).warmUp()
       ShelterCachedDb.constructSingleton(prisma).warmUp()
     }
+    new EmailService()
   }
 
   const start = () => {
