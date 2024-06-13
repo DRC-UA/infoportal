@@ -141,7 +141,7 @@ export namespace AiShelterMapper {
               'Distribution through inter-agency convoy (HOPC)': 'No',
             }
             const request = ActivityInfoSdk.makeRecordRequests({
-              activityIdPrefix: 'drcsnfi',
+              activityIdPrefix: 'drcsnfie',
               activityYYYYMM: periodStr,
               formId: activitiesConfig.snfi.id,
               activity: AiSnfiType.map(AiMapper.mapLocationToRecordId(ai)),
@@ -189,9 +189,9 @@ export namespace AiShelterMapper {
             },
             {
               by: row => fnSwitch(row.displacement!, {
-                [DisplacementStatus.Idp]: 'IDPs',
+                [DisplacementStatus.Idp]: 'Internally Displaced',
                 [DisplacementStatus.Returnee]: 'Returnees',
-              }, () => 'Non-Displaced') as AiSnfiType.Type['Population Group']
+              }, () => 'Non-Displaced')
             }
           ],
           finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
@@ -221,7 +221,7 @@ export namespace AiShelterMapper {
               'Distribution through inter-agency convoy (HOPC)': 'No',
             }
             const request = ActivityInfoSdk.makeRecordRequests({
-              activityIdPrefix: 'drcsnfi',
+              activityIdPrefix: 'drcsnfir',
               activityYYYYMM: periodStr,
               formId: activitiesConfig.snfi.id,
               activity: AiSnfiType.map(AiMapper.mapLocationToRecordId(ai)),

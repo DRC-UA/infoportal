@@ -134,9 +134,9 @@ export namespace AiSnfiType {
       'No': 'cuf5onjls03nuejl'
     },
     'Population Group': {
-      'Internally Displaced': 'cvw4on6lq6dgcoj5',
-      'Non-Displaced': 'ck6ulx8lq6dgcok6',
-      'Returnees': 'cuz9qi9lq6dgcok7'
+      "Internally Displaced": 'cvw4on6lq6dgcoj5',
+      "Non-Displaced": 'ck6ulx8lq6dgcok6',
+      "Returnees": 'cuz9qi9lq6dgcok7'
     }
   }
 
