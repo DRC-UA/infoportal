@@ -70,6 +70,14 @@ export class Server {
   }
 
   readonly start = () => {
+    const sessionStore = new PrismaSessionStore(this.pgClient, {
+      checkPeriod: duration(1, 'day'),
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+      // checkPeriod: duration(1, 'day').toMs,
+      // dbRecordIdIsSessionId: true,
+      // dbRecordIdFunction: undefined,
+    })
     const app = express()
     // new IpSentry(this.conf, app,)
     // app.use(Sentry.Handlers.requestHandler())
@@ -89,14 +97,7 @@ export class Server {
       name: 'infoportal-session2',
       // proxy: true,
       unset: 'destroy',
-      store: new PrismaSessionStore(this.pgClient, {
-        checkPeriod: duration(1, 'day'),
-        dbRecordIdIsSessionId: true,
-        dbRecordIdFunction: undefined,
-        // checkPeriod: duration(1, 'day').toMs,
-        // dbRecordIdIsSessionId: true,
-        // dbRecordIdFunction: undefined,
-      }),
+      store: sessionStore,
       cookie: {
         domain: appConf.production ? '.drc.ngo' : undefined,
         secure: appConf.production,
@@ -105,6 +106,20 @@ export class Server {
         maxAge: duration(30, 'day').toMs
       },
     }))
+    app.use(async (req, res, next) => {
+      if (req.sessionID) {
+        try {
+          const sessionExists = await sessionStore.get(req.sessionID)
+          if (!sessionExists) {
+            res.clearCookie('connect.sid')
+          }
+        } catch (error) {
+          console.error('Error checking session:', error)
+          res.clearCookie('connect.sid')
+        }
+      }
+      next()
+    })
     app.use(bodyParser.json({limit: '50mb'}))
     app.use(bodyParser.urlencoded({extended: false}))
     app.use(getRoutes(
