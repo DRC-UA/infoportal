@@ -107,10 +107,11 @@ export class Server {
       },
     }))
     app.use(async (req, res, next) => {
+      this.log.warning('Session: ' + req.session.user?.email + ' ' + req.sessionID)
       if (req.sessionID) {
         try {
           const sessionExists = await sessionStore.get(req.sessionID)
-          console.log('Session exists? ', req.sessionID, !!sessionExists)
+          this.log.warning('Session exists? ' + sessionExists)
           if (!sessionExists) {
             res.clearCookie('connect.sid')
           }
