@@ -42,6 +42,7 @@ export class SessionService {
       authProvider: new MyCustomAuthenticationProvider()
     })
     const msUser: User = await msGraphSdk.api('/me').get()
+    const avatar = await msGraphSdk.api('/me/photo/$value').get().then((_: Blob) => _.arrayBuffer())
 
     if (msUser.mail === undefined || msUser.jobTitle === undefined) {
       throw new SessionError.UserNotFound
@@ -51,12 +52,19 @@ export class SessionService {
       drcJob: msUser.jobTitle?.trim().replace(/\s+/g, ' '),
       accessToken: userBody.accessToken,
       name: userBody.name,
+      avatar: Buffer.from(avatar),
     })
     this.log.info(`${connectedUser.email} connected.`)
     return connectedUser
   }
 
-  readonly syncUserInDb = async ({email, drcJob, accessToken, name}: {accessToken: string, name: string, email: string, drcJob: string}): Promise<PUser> => {
+  readonly syncUserInDb = async ({email, drcJob, accessToken, avatar, name}: {
+    accessToken: string,
+    avatar: Buffer,
+    name: string,
+    email: string,
+    drcJob: string
+  }): Promise<PUser> => {
     const user = await this.prisma.user.findFirst({where: {email}})
     if (!user) {
       this.log.info(`Create account ${email}.`)
@@ -66,6 +74,7 @@ export class SessionService {
           name,
           accessToken,
           drcJob: drcJob,
+          avatar,
           lastConnectedAt: new Date()
         }
       })
@@ -75,6 +84,7 @@ export class SessionService {
         data: {
           accessToken,
           name,
+          avatar,
           drcJob: drcJob,
           lastConnectedAt: new Date()
         }

@@ -167,6 +167,7 @@ model User {
   accessToken     String?
   name            String?
   drcJob          String?
+  avatar          Bytes?         @db.ByteA
   drcOffice       String?
   admin           Boolean        @default(false)
   officer         String?

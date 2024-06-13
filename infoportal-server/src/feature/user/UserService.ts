@@ -14,6 +14,12 @@ export class UserService {
     return this.prisma.user.findMany({orderBy: {lastConnectedAt: 'desc'}})
   }
 
+  readonly getUserByEmail = (email: string) => {
+    return this.prisma.user.findFirst({
+      where: {email},
+    })
+  }
+
   readonly update = ({
     email,
     drcOffice,

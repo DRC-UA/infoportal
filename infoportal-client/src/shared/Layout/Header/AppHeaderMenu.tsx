@@ -1,11 +1,11 @@
-import {IpIconBtn, IpIconBtnProps} from '@/shared/IconBtn'
 import React, {ReactNode} from 'react'
 import {useSession} from '@/core/Session/SessionContext'
-import {Box, Icon, Popover} from '@mui/material'
+import {Box, BoxProps, Icon, Popover} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 import {Txt} from 'mui-extension'
 import {IpBtn} from '@/shared/Btn'
-import {alpha} from '@mui/material/styles'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {AppAvatar} from '@/shared/AppAvatar'
 
 const Row = ({
   icon,
@@ -25,9 +25,9 @@ const Row = ({
   )
 }
 
-export const AppHeaderMenu = ({sx, ...props}: Partial<IpIconBtnProps>) => {
+export const AppHeaderMenu = ({sx, ...props}: Partial<BoxProps>) => {
   const session = useSession()
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
   const open = (!!anchorEl)
   const {m} = useI18n()
   if (!session.session) {
@@ -35,17 +35,10 @@ export const AppHeaderMenu = ({sx, ...props}: Partial<IpIconBtnProps>) => {
   }
   return (
     <>
-      <IpIconBtn
-        children="person"
+      <AppAvatar
+        size={36}
+        email={session.session.email}
         onClick={(e) => setAnchorEl(e.currentTarget)}
-        sx={{
-          '&:hover': {
-            background: t => alpha(t.palette.primary.main, .6),
-          },
-          background: t => t.palette.primary.main,
-          color: t => t.palette.primary.contrastText,
-          ...sx,
-        }}
         {...props}
       />
       <Popover

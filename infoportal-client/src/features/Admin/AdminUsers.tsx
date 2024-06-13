@@ -12,6 +12,7 @@ import {useRouter} from 'next/router'
 import {seq} from '@alexandreannic/ts-utils'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {AppAvatar} from '@/shared/AppAvatar'
 
 export const AdminUsers = () => {
   const {api, conf} = useAppSettings()
@@ -50,6 +51,12 @@ export const AdminUsers = () => {
           defaultLimit={100}
           data={filteredData}
           columns={[
+            {
+              width: 0,
+              id: 'avatar',
+              head: '',
+              renderQuick: _ => <AppAvatar size={24} email={_.email}/>,
+            },
             {
               type: 'string',
               id: 'name',

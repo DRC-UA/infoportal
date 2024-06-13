@@ -9,6 +9,10 @@ export class UserSdk {
     return this.client.post<User>(`/user/me`, {body: user})
   }
 
+  readonly avatarUrl = (email: string) => {
+    return `${this.client.baseUrl}/user/avatar/${email}`
+  }
+
   readonly search = ({includeDummy}: {includeDummy?: boolean} = {}) => {
     return this.client.get<any[]>(`/user`)
       .then(res => res.map(User.map))

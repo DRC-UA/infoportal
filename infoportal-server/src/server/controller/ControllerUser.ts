@@ -6,6 +6,7 @@ import {DrcOffice} from '@infoportal-common'
 import {Enum} from '@alexandreannic/ts-utils'
 import {SessionError} from '../../feature/session/SessionErrors'
 import {Util} from '../../helper/Utils'
+import {AppError} from '../../helper/Errors'
 
 export class ControllerUser {
 
@@ -18,6 +19,16 @@ export class ControllerUser {
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
     const data = await this.service.getAll()
     res.send(data)
+  }
+
+  readonly avatar = async (req: Request, res: Response, next: NextFunction) => {
+    const {email} = await yup.object({
+      email: yup.string().optional()
+    }).validate(req.params)
+    const avatar = await this.service.getUserByEmail(email ?? req.session.user?.email!).then(_ => _?.avatar ?? undefined)
+    if (!avatar) throw new AppError.NotFound('user_not_found')
+    res.setHeader('Content-Type', 'image/jpeg')
+    res.send(avatar)
   }
 
   readonly updateMe = async (req: Request, res: Response, next: NextFunction) => {
