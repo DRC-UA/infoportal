@@ -100,7 +100,7 @@ export namespace KoboSchemaHelper {
       },
       choice: (questionName: string, choiceName?: string) => {
         if (!choiceName) return ''
-        return choicesTranslation[questionIndex[questionName]?.select_from_list_name!][choiceName]
+        return choicesTranslation[questionIndex[questionName]?.select_from_list_name!]?.[choiceName] ?? choiceName
       },
     }
   }
