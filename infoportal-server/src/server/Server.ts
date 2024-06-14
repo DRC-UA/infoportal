@@ -86,7 +86,7 @@ export class Server {
       secret: '669d73f2-fc68-4b75-88ac-c2da4af60aa3',
       resave: false,
       saveUninitialized: false,
-      name: 'infoportal-session',
+      name: 'infoportal-session2',
       // proxy: true,
       unset: 'destroy',
       store: new PrismaSessionStore(this.pgClient, {
@@ -102,8 +102,7 @@ export class Server {
         secure: appConf.production,
         // httpOnly: true,
         sameSite: appConf.production ? 'none' : undefined,
-        maxAge: 2 * 1000 * 60 * 60 * 24
-        // duration(365, 'day').toMs,
+        maxAge: duration(30, 'day').toMs
       },
     }))
     app.use(bodyParser.json({limit: '50mb'}))
