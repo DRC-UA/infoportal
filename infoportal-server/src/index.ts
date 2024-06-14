@@ -1,6 +1,5 @@
 import {AppConf, appConf} from './core/conf/AppConf'
 import {Server} from './server/Server'
-import {Services} from './server/services'
 import {PrismaClient} from '@prisma/client'
 import {MpcaPaymentService} from './feature/mpca/mpcaPayment/MpcaPaymentService'
 import {DbInit} from './db/DbInit'
@@ -11,8 +10,9 @@ import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 import {GlobalCache, IpCache} from './helper/IpCache'
 import {duration} from '@alexandreannic/ts-utils'
-import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
 import EmailService from './core/EmailService'
+import EmailHelper from './core/EmailHelper'
+import {GlobalEvent} from './core/GlobalEvent'
 
 export const app = {
   cache: new GlobalCache(new IpCache<IpCache<any>>({
@@ -25,8 +25,9 @@ const initServices = (
   // koboClient: v2,
   // ecrecSdk: EcrecSdk,
   // legalaidSdk: LegalaidSdk,
-  prisma: PrismaClient
-): Services => {
+  prisma: PrismaClient,
+  emailService: EmailService
+): {mpcaPayment: MpcaPaymentService; emailService: EmailService} => {
   // const ecrec = new ServiceEcrec(ecrecSdk)
   // const legalAid = new ServiceLegalAid(legalaidSdk)
   // const nfi = new ServiceNfi(koboClient)
@@ -36,6 +37,7 @@ const initServices = (
     // legalAid,
     // nfi,
     mpcaPayment,
+    emailService
   }
 }
 
@@ -60,12 +62,15 @@ const startApp = async (conf: AppConf) => {
   const prisma = new PrismaClient({
     // log: ['query']
   })
+  const emailHelper = new EmailHelper()
+  const emailService = new EmailService(GlobalEvent.Class.getInstance(), emailHelper)
 
   const services = initServices(
     // koboSdk,
     // ecrecAppSdk,
     // legalAidSdk,
     prisma,
+    emailService
   )
   const init = async () => {
     const log = logger('')
@@ -121,7 +126,6 @@ const startApp = async (conf: AppConf) => {
       MpcaCachedDb.constructSingleton(prisma).warmUp()
       ShelterCachedDb.constructSingleton(prisma).warmUp()
     }
-    new EmailService()
   }
 
   const start = () => {

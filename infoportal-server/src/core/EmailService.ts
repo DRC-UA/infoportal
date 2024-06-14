@@ -1,11 +1,17 @@
-import {logger} from '../helper/Logger'
+import {logger, Logger} from '../helper/Logger'
 import {GlobalEvent} from './GlobalEvent'
-import sendEmail from './EmailHelper'
-
-const log = logger('EmailService')
+import EmailHelper from './EmailHelper'
+import {KoboIndex} from '@infoportal-common'
 
 class EmailService {
-  constructor(private event = GlobalEvent.Class.getInstance()) {
+
+  private log: Logger
+
+  constructor(
+    private event = GlobalEvent.Class.getInstance(),
+    private emailHelper: EmailHelper,
+  ) {
+    this.log = logger('EmailService')
     this.initializeListeners()
   }
 
@@ -16,17 +22,29 @@ class EmailService {
   private handleTagEdited = async (params: GlobalEvent.KoboTagEditedParams) => {
     const {formId, answerIds, tags} = params
 
-    if (tags.focalPointEmail) {
-      try {
-        await sendEmail(
-          tags.focalPointEmail,
-          'New CFM Request',
-          'A new request has been added with you as the focal point.'
-        )
-        log.info(`Email sent to ${tags.focalPointEmail} for form ${formId} and answers ${answerIds.join(', ')}`)
-      } catch (error) {
-        log.error(`Failed to send email to ${tags.focalPointEmail} for form ${formId} and answers ${answerIds.join(', ')}`, error)
-      }
+    if (this.isCfmForm(formId) && tags.focalPointEmail) {
+      await this.sendCfmNotification(tags.focalPointEmail, formId, answerIds)
+    }
+  }
+
+  private isCfmForm(formId: string): boolean {
+    const cfmFormIds = [
+      KoboIndex.byName('meal_cfmInternal').id,
+      KoboIndex.byName('meal_cfmExternal').id,
+    ]
+    return cfmFormIds.includes(formId)
+  }
+
+  private async sendCfmNotification(email: string, formId: string, answerIds: string[]) {
+    try {
+      await this.emailHelper.send(
+        email,
+        'New CFM Request',
+        'A new request has been added with you as the focal point.'
+      )
+      this.log.info(`Email sent to ${email} for form ${formId} and answers ${answerIds.join(', ')}`)
+    } catch (error) {
+      this.log.error(`Failed to send email to ${email} for form ${formId} and answers ${answerIds.join(', ')}`, error)
     }
   }
 }

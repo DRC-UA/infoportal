@@ -1,26 +1,35 @@
 import nodemailer = require('nodemailer')
-import dotenv from 'dotenv'
+import {appConf} from './conf/AppConf'
 
-dotenv.config()
-const sendEmail = async (to: string, subject: string, text: string) => {
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.ukr.net',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.UKR_NET_EMAIL,
-      pass: process.env.UKR_NET_PASSWORD,
-    },
-  })
+class EmailHelper {
+  private transporter: nodemailer.Transporter
 
-  const mailOptions = {
-    from: process.env.UKR_NET_EMAIL,
-    to,
-    subject,
-    text,
+  constructor() {
+    this.transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: appConf.email.user,
+        pass: appConf.email.password,
+      },
+    })
   }
 
-  return transporter.sendMail(mailOptions)
+  public async send(to: string, subject: string, text: string): Promise<void> {
+    const mailOptions = {
+      from: appConf.email.user,
+      to,
+      subject,
+      text,
+    }
+
+    try {
+      await this.transporter.sendMail(mailOptions)
+      console.log(`Email sent to ${to}`)
+    } catch (error) {
+      console.error('Failed to send email:', error)
+      throw error
+    }
+  }
 }
 
-export default sendEmail
+export default EmailHelper
