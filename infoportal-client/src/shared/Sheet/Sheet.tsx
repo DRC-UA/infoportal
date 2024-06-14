@@ -142,7 +142,7 @@ const _Sheet = <T extends SheetRow>({
             columns={ctx.columns}
             hiddenColumns={hiddenColumns}
             onChange={_ => setHiddenColumns(_)}
-            title={m.toggleDatatableColumns}
+            title={m._datatable.toggleColumns}
           />
           {typeof header === 'function' ? header({
             data: ctx.data.data as T[],

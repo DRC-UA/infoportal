@@ -14,7 +14,7 @@ export namespace KoboEcrec_cashRegistration {
     if (project === DrcProject['UKR-000336 UHF6']) activities.push(DrcProgram.SectoralCashForAgriculture)
     else {
       if (_.animal_shelter_need === 'yes') activities.push(DrcProgram.SectoralCashForAnimalShelterRepair)
-      if (_.barriers_providing_sufficient === 'yes') activities.push(DrcProgram.SectoralCashForAnimalShelterRepair)
+      if (_.barriers_providing_sufficient === 'yes') activities.push(DrcProgram.SectoralCashForAnimalFeed)
     }
     return activities
   }
