@@ -26,6 +26,7 @@ import {SytemCache} from '../../helper/IpCache'
 import {app} from '../../index'
 import {appConf} from '../../core/conf/AppConf'
 import {KoboAnswerHistoryService} from './history/KoboAnswerHistoryService'
+import {AppError} from '../../helper/Errors'
 import Event = GlobalEvent.Event
 
 export type DbKoboAnswer<
@@ -391,6 +392,15 @@ export class KoboService {
   //   workbook.toFileAsync(appConf.rootProjectDir + `/${fileName}.xlsx`, {password})
   // }
 
+  private static readonly safeJsonValue = (_: string): string => _.replace(/'/g, '\'\'')
+
+  private static readonly safeIds = (ids: string[]): string[] => {
+    return ids.map(_ => {
+      if (!/^\d+$/.test(_)) throw new AppError.WrongFormat(`Invalid id ${_}`)
+      return `'${_}'`
+    })
+  }
+
   readonly updateAnswers = async ({
     formId,
     answerIds,
@@ -423,15 +433,20 @@ export class KoboService {
       sdk.v2.updateData({formId, submissionIds: answerIds, data: {[xpath]: answer}}),
       await this.prisma.$executeRawUnsafe(
         `UPDATE "KoboAnswers"
-         SET answers     = jsonb_set(answers, '{${question}}', '"${answer}"'),
+         SET answers     = jsonb_set(answers, '{${question}}', '"${KoboService.safeJsonValue(answer ?? '')}"'),
              "updatedAt" = NOW()
-         WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
+         WHERE id IN (${KoboService.safeIds(answerIds).join(',')})
         `),
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED, {formId, answerIds, answer: {[question]: answer}})
   }
 
   readonly updateTags = async ({formId, answerIds, tags, authorEmail}: {formId: KoboId, answerIds: KoboAnswerId[], tags: Record<string, any>, authorEmail: string}) => {
+    const safeTags = Obj.keys(tags)
+      .map(key => {
+        if (/[{}'"]/.test(key)) throw new AppError.WrongFormat(`Invalid key ${key}`)
+        return `tags = jsonb_set(COALESCE(tags, '{}'::jsonb), '{${key}}', '${KoboService.safeJsonValue(JSON.stringify(tags[key]))}')`
+      }).join(',')
     await Promise.all([
       answerIds.flatMap(_ => {
         return Obj.keys(tags).map(tag => {
@@ -447,9 +462,9 @@ export class KoboService {
       }),
       await this.prisma.$executeRawUnsafe(
         `UPDATE "KoboAnswers"
-         SET ${Obj.keys(tags).map(key => `tags = jsonb_set(COALESCE(tags, '{}'::jsonb), '{${key}}', '${JSON.stringify(tags[key])}')`).join(',')},
+         SET ${safeTags},
              "updatedAt" = NOW()
-         WHERE id IN (${answerIds.map(_ => `'${_}'`).join(',')})
+         WHERE id IN (${KoboService.safeIds(answerIds).join(',')})
         `)
     ])
     // const answers = await this.prisma.koboAnswers.findMany({
