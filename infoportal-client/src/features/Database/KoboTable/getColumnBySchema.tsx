@@ -8,8 +8,7 @@ import {
   KoboId,
   KoboSchemaHelper,
   KoboTranslateChoice,
-  KoboTranslateQuestion,
-  removeHtml
+  KoboTranslateQuestion
 } from '@infoportal-common'
 import {I18nContextProps, useI18n} from '@/core/i18n/I18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'

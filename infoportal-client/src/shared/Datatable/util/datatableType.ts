@@ -2,7 +2,7 @@ import React, {CSSProperties, ReactNode} from 'react'
 import {BoxProps} from '@mui/material'
 import {KeyOf} from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
+import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
 
 export type DatatablePropertyType = 'id' | 'date' | 'number' | 'string' | 'select_one' | 'select_multiple'
 

@@ -1,7 +1,7 @@
 import {alpha, Box, useTheme} from '@mui/material'
 import {DatabaseTable} from '@/features/Database/KoboTable/DatabaseKoboTable'
 import {useState} from 'react'
-import {SheetFilterValue} from '@/shared/Sheet/util/sheetType'
+import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
 import {MealVerificationForm} from '@/features/Meal/Verification/Form/MealVerificationForm'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {MealVerificationActivity} from '@/features/Meal/Verification/mealVerificationConfig'
@@ -17,7 +17,7 @@ export const MealVerificationFormData = ({
   activity: MealVerificationActivity
 }) => {
   const [selectedIds, setSelectedIds] = useState<KoboAnswerId[] | undefined>()
-  const [selectedFilters, setSelectedFilters] = useState<Record<string, SheetFilterValue> | undefined>()
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, DatatableFilterValue> | undefined>()
   const t = useTheme()
 
   useEffectFn(selectedIds, _ => _ && onDataChange(_))

@@ -234,7 +234,7 @@ export const MpcaData = () => {
               width: 0,
               head: m.deduplication,
               type: 'select_one',
-              // options: () => SheetUtils.buildOptions(Enum.keys(WfpDeduplicationStatus), true),
+              // options: () => DatatableUtils.buildOptions(Enum.keys(WfpDeduplicationStatus), true),
               render: _ => {
                 return {
                   tooltip: _.deduplication && m.mpca.status[_.deduplication.status],
@@ -272,7 +272,7 @@ export const MpcaData = () => {
             //   id: 'suggestion',
             //   head: m.suggestion,
             //   type: 'select_one',
-            //   // options: () => SheetUtils.buildOptions(Enum.keys(DrcSupportSuggestion), true),
+            //   // options: () => DatatableUtils.buildOptions(Enum.keys(DrcSupportSuggestion), true),
             //   renderQuick: _ => _.deduplication?.suggestion,
             // },            // {
             // //   id: 'deduplicationFile',
@@ -385,7 +385,7 @@ export const MpcaData = () => {
               id: 'enumerator',
               head: m.enumerator,
               type: 'string',
-              // options: () => SheetUtils.buildOptions(Enum.values(DrcOffice), true),
+              // options: () => DatatableUtils.buildOptions(Enum.values(DrcOffice), true),
               renderQuick: _ => _.enumerator,
             },
             {

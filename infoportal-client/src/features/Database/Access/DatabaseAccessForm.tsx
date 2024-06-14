@@ -1,5 +1,5 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboApiSchema, KoboId, nullValuesToUndefined} from '@infoportal-common'
+import {KoboApiSchema, KoboId, KoboSchemaHelper, nullValuesToUndefined} from '@infoportal-common'
 import {AppFeatureId} from '@/features/appFeatureId'
 import React, {ReactElement, useCallback, useMemo} from 'react'
 import {Modal, Txt} from 'mui-extension'
@@ -15,7 +15,6 @@ import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {AccessForm, IAccessForm} from '@/features/Access/AccessForm'
 import {AccessFormSection} from '@/features/Access/AccessFormSection'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {KoboSchemaHelper} from '@infoportal-common'
 
 interface Form extends IAccessForm {
   question?: string

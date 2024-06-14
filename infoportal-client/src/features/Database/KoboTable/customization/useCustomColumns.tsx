@@ -23,10 +23,9 @@ import {Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
@@ -153,7 +152,7 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
               />
             })),
           }),
-          options: () => SheetUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
+          options: () => DatatableUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
           render: (row: KoboAnswerFlat<{}, any>) => {
             if (showIf && !showIf(row)) return {label: '', value: undefined}
             return {
@@ -191,7 +190,7 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
     //       head: m.status,
     //       type: 'select_one',
     //       width: 120,
-    //       options: () => SheetUtils.buildOptions(Obj.keys(ShelterCashStatus), true),
+    //       options: () => DatatableUtils.buildOptions(Obj.keys(ShelterCashStatus), true),
     //       render: (row: any) => {
     //         return {
     //           export: row.tags?.status ?? DatatableUtils.blank,
@@ -362,12 +361,12 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
             tag: 'project',
             options: currentProtectionProjects,
           })}/>,
-          options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
+          options: () => DatatableUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             return {
               export: row.tags?.project ?? DatatableUtils.blank,
               tooltip: row.tags?.project,
-              value: row.tags?.project ?? SheetUtils.blank,
+              value: row.tags?.project ?? DatatableUtils.blank,
               label: (
                 <IpSelectSingle
                   disabled={!ctx.canEdit}
@@ -396,12 +395,12 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
           type: 'select_one',
           width: 200,
           subHeader: getSelectMultipleTagSubHeader({tag: 'project', options: currentProtectionProjects}),
-          options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
+          options: () => DatatableUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             return {
               export: row.tags?.project ?? DatatableUtils.blank,
               tooltip: row.tags?.project,
-              value: row.tags?.project ?? SheetUtils.blank,
+              value: row.tags?.project ?? DatatableUtils.blank,
               label: (
                 <IpSelectSingle
                   hideNullOption
@@ -430,13 +429,13 @@ export const useCustomColumns = ({selectedIds}: {selectedIds: KoboAnswerId[]}): 
           type: 'select_multiple',
           width: 200,
           subHeader: getSelectMultipleTagSubHeader({tag: 'projects', options: currentProtectionProjects}),
-          options: () => SheetUtils.buildOptions(Obj.keys(DrcProject), true),
+          options: () => DatatableUtils.buildOptions(Obj.keys(DrcProject), true),
           render: (row: KoboAnswerFlat<any, ProtectionHhsTags>) => {
             const safeProjects = safeArray(row.tags?.projects)
             return {
               export: safeProjects.join(' | ') ?? DatatableUtils.blank,
               tooltip: safeProjects,
-              value: safeProjects.length === 0 ? [SheetUtils.blank] : safeProjects,
+              value: safeProjects.length === 0 ? [DatatableUtils.blank] : safeProjects,
               label: (
                 <IpSelectMultiple
                   disabled={!ctx.canEdit}

@@ -14,7 +14,7 @@ import {DatabaseKoboTableProvider} from '@/features/Database/KoboTable/DatabaseK
 import {KoboId, koboIndex, UUID} from '@infoportal-common'
 import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {Skeleton} from '@mui/material'
-import {SheetFilterValue} from '@/shared/Sheet/util/sheetType'
+import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
@@ -47,7 +47,7 @@ export interface DatabaseTableProps {
   serverId?: UUID
   formId: KoboId
   dataFilter?: (_: KoboMappedAnswer) => boolean
-  onFiltersChange?: (_: Record<string, SheetFilterValue>) => void
+  onFiltersChange?: (_: Record<string, DatatableFilterValue>) => void
   onDataChange?: (_: {
     data?: KoboMappedAnswer[]
     filteredData?: KoboMappedAnswer[]

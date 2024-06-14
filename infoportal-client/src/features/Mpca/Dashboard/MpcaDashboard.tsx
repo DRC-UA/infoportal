@@ -19,7 +19,7 @@ import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {DashboardFilterLabel} from '@/shared/DashboardLayout/DashboardFilterLabel'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Panel, PanelBody} from '@/shared/Panel'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {MpcaDashboardDeduplication} from '@/features/Mpca/Dashboard/MpcaDashboardDeduplication'
 import {MpcaDuplicatedCheckPanel} from '@/features/Mpca/Dashboard/MpcaDuplicatedCheck'
@@ -96,7 +96,7 @@ export const MpcaDashboard = () => {
       deduplication: {
         icon: appFeaturesIndex.wfp_deduplication.materialIcons,
         label: m.duplication,
-        getValue: _ => _.deduplication?.status ?? SheetUtils.blank,
+        getValue: _ => _.deduplication?.status ?? DatatableUtils.blank,
         getOptions: () => [DataFilter.blankOption, ...Obj.values(WfpDeduplicationStatus).map(_ => DataFilter.buildOption(_, <><DeduplicationStatusIcon status={_}/>&nbsp;{_}</>))],
       },
       oblast: {

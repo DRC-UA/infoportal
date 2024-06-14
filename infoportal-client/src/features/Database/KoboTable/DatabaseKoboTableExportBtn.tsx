@@ -1,5 +1,5 @@
-import {generateXLSFromArray, GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
-import {KoboApiQuestionSchema, KoboId, slugify} from '@infoportal-common'
+import {generateXLSFromArray, GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
+import {KoboApiQuestionSchema, KoboId, KoboTranslateChoice, KoboTranslateQuestion, slugify} from '@infoportal-common'
 import {Enum, map, mapFor, seq} from '@alexandreannic/ts-utils'
 import {koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
 import React from 'react'
@@ -9,7 +9,6 @@ import {IpIconBtn, IpIconBtnProps} from '@/shared/IconBtn'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {useAsync} from '@/shared/hook/useAsync'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {KoboTranslateChoice, KoboTranslateQuestion} from '@infoportal-common'
 
 export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
   schema,

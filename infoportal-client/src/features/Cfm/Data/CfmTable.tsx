@@ -357,7 +357,7 @@ export const CfmTable = ({}: any) => {
             {
               width: 170,
               type: 'select_one',
-              // options: () => seq(ctx.visibleData).map(_ => _.tags?.focalPointEmail).compact().distinct(_ => _).map(SheetUtils.buildOption),
+              // options: () => seq(ctx.visibleData).map(_ => _.tags?.focalPointEmail).compact().distinct(_ => _).map(DatatableUtils.buildOption),
               head: m.focalPoint,
               id: 'focalPoint',
               render: row => {

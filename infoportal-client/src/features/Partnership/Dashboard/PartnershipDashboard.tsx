@@ -13,7 +13,7 @@ import {Enum, Seq, seq} from '@alexandreannic/ts-utils'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {PartnershipCard} from '@/features/Partnership/Dashboard/PartnershipCard'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {add, DrcProject, DrcProjectHelper, Partnership_partnersDatabase} from '@infoportal-common'
+import {add, DrcProject, DrcProjectHelper, KoboSchemaHelper, Partnership_partnersDatabase} from '@infoportal-common'
 import {Txt} from 'mui-extension'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {PanershipPanelDonor} from '@/features/Partnership/Dashboard/PanershipPanelDonor'
@@ -24,7 +24,6 @@ import {IpIconBtn} from '@/shared/IconBtn'
 import {ChartBarVertical} from '@/shared/charts/ChartBarVertical'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {KoboSchemaHelper} from '@infoportal-common'
 import {appConfig} from '@/conf/AppConfig'
 
 export const PartnershipDashboard = ({}: {}) => {
@@ -198,7 +197,7 @@ export const _PartnershipDashboard = ({
         {/*  icon="today"*/}
         {/*  value={optionFilter.year ?? []}*/}
         {/*  label={m.year}*/}
-        {/*  options={allYears.map(SheetUtils.buildOption)}*/}
+        {/*  options={allYears.map(DatatableUtils.buildOption)}*/}
         {/*  onChange={_ => setOptionFilters(prev => ({...prev, year: _}))}*/}
         {/*/>*/}
       </Box>

@@ -4,7 +4,6 @@ import {Box, BoxProps, Icon, Popover} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 import {Txt} from 'mui-extension'
 import {IpBtn} from '@/shared/Btn'
-import {useAppSettings} from '@/core/context/ConfigContext'
 import {AppAvatar} from '@/shared/AppAvatar'
 
 const Row = ({

@@ -7,7 +7,7 @@ import {Enum, seq} from '@alexandreannic/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {UseFetcher} from '@/shared/hook/useFetcher'
 import {Txt} from 'mui-extension'
 import {Datatable} from '@/shared/Datatable/Datatable'
@@ -80,7 +80,7 @@ export const AccessTable = ({
           id: 'group',
           type: 'select_one',
           head: m.group,
-          renderQuick: _ => _.groupName ?? SheetUtils.blank,
+          renderQuick: _ => _.groupName ?? DatatableUtils.blank,
         },
         {
           width: 90,

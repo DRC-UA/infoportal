@@ -8,7 +8,7 @@ import {Enum, fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {Txt} from 'mui-extension'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {format} from 'date-fns'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {Datatable} from '@/shared/Datatable/Datatable'
 
@@ -36,7 +36,7 @@ export const WfpDeduplicationData = () => {
         .map(_ => _.existingOrga)
         .distinct(_ => _)
         .compact()
-        .map(SheetUtils.buildOption)
+        .map(DatatableUtils.buildOption)
     }
   }, [_search.get])
 
@@ -154,12 +154,12 @@ export const WfpDeduplicationData = () => {
               head: m.status,
               width: 0,
               type: 'select_one',
-              options: () => SheetUtils.buildOptions(Enum.keys(WfpDeduplicationStatus), true),
+              options: () => DatatableUtils.buildOptions(Enum.keys(WfpDeduplicationStatus), true),
               render: _ => {
                 return {
                   tooltip: m.mpca.status[_.status],
                   label: <DeduplicationStatusIcon status={_.status}/>,
-                  value: _.status ?? SheetUtils.blank,
+                  value: _.status ?? DatatableUtils.blank,
                 }
               },
             },

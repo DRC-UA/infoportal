@@ -1,6 +1,6 @@
 import {multipleFilters} from '@infoportal-common'
 import {Enum, Seq} from '@alexandreannic/ts-utils'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {ReactNode} from 'react'
 
 export namespace DataFilter {
@@ -22,8 +22,8 @@ export namespace DataFilter {
     skipOption?: string[]
   }
 
-  export const blank = SheetUtils.blank
-  export const blankOption = SheetUtils.blankOption
+  export const blank = DatatableUtils.blank
+  export const blankOption = DatatableUtils.blankOption
 
   export interface ShapeMultiple<TData, TOption extends string = string> extends ShapeBase<TData, TOption> {
     multiple: true

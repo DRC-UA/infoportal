@@ -4,8 +4,8 @@ import {makeSx, Txt} from 'mui-extension'
 import {DashboardFilterLabel} from './DashboardFilterLabel'
 import {useI18n} from '@/core/i18n'
 import {combineSx} from '@/core/theme'
-import {SheetOptions} from '@/shared/Sheet/util/sheetType'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {DatatableOptions} from '@/shared/Datatable/util/datatableType'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
 const css = makeSx({
   optionSelectAll: {
@@ -35,7 +35,7 @@ export const DashboardFilterOptions = ({
   icon?: string
   value: string[]
   label: string
-  options: () => undefined | SheetOptions[]// {value: string, label?: string}[]
+  options: () => undefined | DatatableOptions[]// {value: string, label?: string}[]
   onChange?: (_: string[]) => void
 } & Pick<BoxProps, 'sx'>) => {
   const {m} = useI18n()
@@ -87,8 +87,8 @@ export const DashboardFilterOptions = ({
           }}>
             {addBlankOption && (
               <FormControlLabel
-                control={<Checkbox name={SheetUtils.blank} checked={value.includes(SheetUtils.blank)}/>}
-                label={SheetUtils.blankLabel}
+                control={<Checkbox name={DatatableUtils.blank} checked={value.includes(DatatableUtils.blank)}/>}
+                label={DatatableUtils.blankLabel}
                 sx={css.option}
               />
             )}

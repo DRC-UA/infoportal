@@ -22,7 +22,7 @@ import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customizati
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
 import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 import {Enum, Obj, seq} from '@alexandreannic/ts-utils'
-import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
+import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'

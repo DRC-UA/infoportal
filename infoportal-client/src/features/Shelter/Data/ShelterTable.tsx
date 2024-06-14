@@ -25,7 +25,7 @@ import {useShelterContext} from '@/features/Shelter/ShelterContext'
 import {IpInput} from '@/shared/Input/Input'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {ShelterSelectContractor, ShelterSelectStatus} from '@/features/Shelter/Data/ShelterTableInputs'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {SelectDrcProjects} from '@/shared/customInput/SelectDrcProject'
 import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
@@ -33,7 +33,6 @@ import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableInput} from '@/shared/TableInput'
 import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyncBtn'
 import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
@@ -678,7 +677,7 @@ export const ShelterTable = () => {
       //   align: 'center',
       //   type: 'select_one',
       //   typeIcon: null,
-      //   options: () => ['Yes', 'No', 'None'].map(SheetUtils.buildOption),
+      //   options: () => ['Yes', 'No', 'None'].map(DatatableUtils.buildOption),
       //   render: row => {
       //     return {
       //       tooltip: null,
@@ -729,7 +728,7 @@ export const ShelterTable = () => {
       //   align: 'center',
       //   type: 'select_one',
       //   typeIcon: null,
-      //   options: () => ['Yes', 'No', 'None'].map(SheetUtils.buildOption),
+      //   options: () => ['Yes', 'No', 'None'].map(DatatableUtils.buildOption),
       //   render: row => {
       //     return {
       //       tooltip: null,
@@ -974,9 +973,9 @@ export const ShelterTable = () => {
         align: 'center',
         typeIcon: null,
         options: () => [
-          SheetUtils.buildCustomOption(ShelterTaPriceLevel.Light, <><TableIcon color="success">looks_one</TableIcon> {ShelterTaPriceLevel.Light}</>),
-          SheetUtils.buildCustomOption(ShelterTaPriceLevel.Medium, <><TableIcon color="warning">looks_two</TableIcon> {ShelterTaPriceLevel.Medium}</>),
-          SheetUtils.buildCustomOption(ShelterTaPriceLevel.Heavy, <><TableIcon color="error">looks_3</TableIcon> {ShelterTaPriceLevel.Heavy}</>),
+          DatatableUtils.buildCustomOption(ShelterTaPriceLevel.Light, <><TableIcon color="success">looks_one</TableIcon> {ShelterTaPriceLevel.Light}</>),
+          DatatableUtils.buildCustomOption(ShelterTaPriceLevel.Medium, <><TableIcon color="warning">looks_two</TableIcon> {ShelterTaPriceLevel.Medium}</>),
+          DatatableUtils.buildCustomOption(ShelterTaPriceLevel.Heavy, <><TableIcon color="error">looks_3</TableIcon> {ShelterTaPriceLevel.Heavy}</>),
         ],
         render: (row: ShelterEntity) => {
           return {

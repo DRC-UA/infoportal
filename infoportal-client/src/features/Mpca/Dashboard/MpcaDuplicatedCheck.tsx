@@ -5,7 +5,7 @@ import {useI18n} from '@/core/i18n'
 import {SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Tooltip} from '@mui/material'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 
 enum Type {
@@ -95,7 +95,7 @@ export const MpcaDuplicatedCheck = ({
           id: 'oblast',
           type: 'select_multiple',
           head: m.oblast,
-          options: () => SheetUtils.buildOptions(res.flatMap(_ => _.list.map(_ => _.oblast)).distinct(_ => _).compact()),
+          options: () => DatatableUtils.buildOptions(res.flatMap(_ => _.list.map(_ => _.oblast)).distinct(_ => _).compact()),
           render: _ => {
             const offices = _.list?.map(_ => _.oblast).distinct(_ => _) ?? []
             return {

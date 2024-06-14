@@ -14,7 +14,7 @@ import {KoboId, KoboIndex, koboIndex} from '@infoportal-common'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import Link from 'next/link'
-import {SheetUtils} from '@/shared/Sheet/util/sheetUtils'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {MealVerificationStatus} from '@/core/sdk/server/mealVerification/MealVerification'
 import {mealIndex} from '@/features/Meal/Meal'
@@ -76,8 +76,8 @@ export const MealVerificationList = () => {
               render: row => {
                 return {
                   tooltip: null,
-                  value: row.status ?? SheetUtils.blank,
-                  option: row.status ? m[row.status!] : SheetUtils.blank,
+                  value: row.status ?? DatatableUtils.blank,
+                  option: row.status ? m[row.status!] : DatatableUtils.blank,
                   label: (
                     <>
                       <IpSelectSingle

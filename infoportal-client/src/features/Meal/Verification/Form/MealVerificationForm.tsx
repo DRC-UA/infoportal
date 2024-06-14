@@ -10,7 +10,7 @@ import {MealVerificationFormData} from '@/features/Meal/Verification/Form/MealVe
 import {IpBtn, IpBtnProps} from '@/shared/Btn'
 import {IpInput} from '@/shared/Input/Input'
 import {Panel, PanelBody} from '@/shared/Panel'
-import {SheetFilterValue} from '@/shared/Sheet/util/sheetType'
+import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
 import {Txt} from 'mui-extension'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useEffectFn, useMemoFn} from '@alexandreannic/react-hooks-lib'
@@ -25,7 +25,7 @@ export interface MealVerificationForm {
   activity: string
   name: string
   desc?: string
-  filters: Record<KoboAnswerId, SheetFilterValue>
+  filters: Record<KoboAnswerId, DatatableFilterValue>
   answerIds: KoboAnswerId[]
 }
 
