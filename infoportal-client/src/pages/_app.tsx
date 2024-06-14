@@ -52,13 +52,12 @@ const App = ({
 
   return (
     <Provide providers={[
-      // ...appConfig.production ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
+      ...appConfig.production ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
       _ => <AppSettingsProvider api={api} children={_}/>,
     ]}>
       <>
         <Head>
           <meta name="viewport" content="initial-scale=1, width=device-width"/>
-          {/*<meta name="viewport" content="width=device-width, initial-scale=1"/>*/}
         </Head>
         <AppWithConfig {...props}/>
       </>

@@ -448,16 +448,14 @@ export class KoboService {
         return `tags = jsonb_set(COALESCE(tags, '{}'::jsonb), '{${key}}', '${KoboService.safeJsonValue(JSON.stringify(tags[key]))}')`
       }).join(',')
     await Promise.all([
-      answerIds.flatMap(_ => {
-        return Obj.keys(tags).map(tag => {
-          this.history.create({
-            type: 'tag',
-            formId,
-            answerIds,
-            property: tag,
-            newValue: tags[tag],
-            authorEmail,
-          })
+      Obj.keys(tags).map(tag => {
+        this.history.create({
+          type: 'tag',
+          formId,
+          answerIds,
+          property: tag,
+          newValue: tags[tag],
+          authorEmail,
         })
       }),
       await this.prisma.$executeRawUnsafe(
