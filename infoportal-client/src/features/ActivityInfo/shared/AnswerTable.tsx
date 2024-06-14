@@ -24,7 +24,7 @@ export const AnswerTable = <T extends Record<string, any>, >({
           head: 'ID',
           typeIcon: keyTypeIcon,
           className: 'td-id',
-          type: 'string' as const,
+          type: 'id' as const,
           renderQuick: (_: any) => _[koboKey],
         }] : [],
         ...Object.keys(answers?.[0] ?? {}).filter(k => !koboKey || koboKey !== k).map(k => ({

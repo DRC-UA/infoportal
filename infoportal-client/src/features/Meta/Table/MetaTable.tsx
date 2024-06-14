@@ -64,7 +64,7 @@ export const MetaTable = () => {
         },
       },
       {
-        type: 'string',
+        type: 'id',
         id: 'id',
         head: m.koboId,
         typeIcon: keyTypeIcon,

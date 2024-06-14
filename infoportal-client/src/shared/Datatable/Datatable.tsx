@@ -1,4 +1,4 @@
-import {Badge, Box, Icon, LinearProgress, TablePagination,} from '@mui/material'
+import {Badge, Box, Icon, LinearProgress, TablePagination, useTheme,} from '@mui/material'
 import React, {isValidElement, useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Txt} from 'mui-extension'
@@ -109,6 +109,7 @@ const _Datatable = <T extends DatatableRow>({
   contentProps,
   ...props
 }: Pick<DatatableTableProps<T>, 'defaultHiddenColumns' | 'hideColumnsToggle' | 'contentProps' | 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
+  const t = useTheme()
   const ctx = useDatatableContext()
   const _generateXLSFromArray = useAsync(generateXLSFromArray)
   useEffect(() => ctx.select?.onSelect(ctx.selected.toArray), [ctx.selected.get])
@@ -162,7 +163,7 @@ const _Datatable = <T extends DatatableRow>({
               columns={ctx.columns}
               hiddenColumns={hiddenColumns}
               onChange={_ => setHiddenColumns(_)}
-              title={m.toggleDatatableColumns}
+              title={m._datatable.toggleColumns}
             />
           )}
           {typeof header === 'function' ? header({
@@ -185,8 +186,8 @@ const _Datatable = <T extends DatatableRow>({
               right: 0,
               left: 0,
               bottom: 0,
-              borderRadius: t => t.shape.borderRadius + 'px',
-              background: t => t.palette.background.paper,
+              borderRadius: t.shape.borderRadius + 'px',
+              background: t.palette.background.paper,
             }}>
               <Box sx={{
                 position: 'absolute',
@@ -196,16 +197,16 @@ const _Datatable = <T extends DatatableRow>({
                 bottom: 0,
                 display: 'flex',
                 alignItems: 'center',
-                fontWeight: t => t.typography.fontWeightBold,
-                background: t => t.palette.action.focus,
+                fontWeight: t.typography.fontWeightBold,
+                background: t.palette.action.focus,
                 pl: 1,
                 pr: 2,
-                border: t => `2px solid ${t.palette.primary.main}`,
-                borderTopLeftRadius: t => t.shape.borderRadius + 'px',
-                borderTopRightRadius: t => t.shape.borderRadius + 'px',
+                border: `2px solid ${t.palette.primary.main}`,
+                borderTopLeftRadius: t.shape.borderRadius + 'px',
+                borderTopRightRadius: t.shape.borderRadius + 'px',
                 // margin: .75,
-                // color: t => t.palette.primary.main,
-                // borderRadius: t => t.shape.borderRadius + 'px',
+                // color: t.palette.primary.main,
+                // borderRadius: t.shape.borderRadius + 'px',
               }}>
                 <IpIconBtn color="primary" children="clear" onClick={ctx.selected.clear}/>
                 <Box sx={{mr: 1, whiteSpace: 'nowrap'}}>

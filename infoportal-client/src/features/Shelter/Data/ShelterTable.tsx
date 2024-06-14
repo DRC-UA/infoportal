@@ -100,7 +100,7 @@ export const ShelterTable = () => {
         head: 'ID',
         typeIcon: keyTypeIcon,
         className: 'td-id',
-        type: 'string',
+        type: 'id',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         renderQuick: _ => _.nta?.id,

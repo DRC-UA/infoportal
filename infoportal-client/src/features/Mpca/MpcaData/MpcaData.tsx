@@ -177,7 +177,7 @@ export const MpcaData = () => {
               head: m.koboId,
               typeIcon: keyTypeIcon,
               className: 'td-id',
-              type: 'string',
+              type: 'id',
               renderQuick: _ => _.koboId,
             },
             {

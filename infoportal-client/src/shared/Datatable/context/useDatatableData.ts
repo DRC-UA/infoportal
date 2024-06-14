@@ -5,6 +5,7 @@ import {
   DatatableColumn,
   DatatableFilterValue,
   DatatableFilterValueDate,
+  DatatableFilterValueId,
   DatatableFilterValueNumber,
   DatatableFilterValueSelect,
   DatatableFilterValueString,
@@ -123,9 +124,20 @@ const filterBy = <T extends DatatableRow>({
     if (filter === undefined) return
     const col = columnsIndex[k]
     switch (col.type) {
-      case 'date': {
+      case 'id': {
+        const typedFilter = filter as DatatableFilterValueId
+        const filteredIds = typedFilter.split(/\s/)
         return row => {
-          const typedFilter = filter as DatatableFilterValueDate
+          let v = col.render(row).value as string | undefined
+          if (v === undefined) return false
+          if (filteredIds.length === 1) return v.includes(filteredIds[0])
+          if (filteredIds.length > 1) return filteredIds.includes(v)
+          return false
+        }
+      }
+      case 'date': {
+        const typedFilter = filter as DatatableFilterValueDate
+        return row => {
           let v = col.render(row).value as Date | undefined
           if (v === undefined) return false
           if (!((v as any) instanceof Date)) {
@@ -138,16 +150,16 @@ const filterBy = <T extends DatatableRow>({
         }
       }
       case 'select_one': {
+        const typedFilter = filter as DatatableFilterValueSelect
         return row => {
-          const typedFilter = filter as DatatableFilterValueSelect
           const v = col.render(row).value as string
           if (v === undefined) return false
           return (typedFilter).includes(v)
         }
       }
       case 'select_multiple': {
+        const typedFilter = filter as DatatableFilterValueSelect
         return row => {
-          const typedFilter = filter as DatatableFilterValueSelect
           const v = col.render(row).value as string[]
           const vArray = Array.isArray(v) ? v : [v]
           if (typedFilter.length === 1 && typedFilter[0] === DatatableUtils.blank) {
@@ -157,8 +169,8 @@ const filterBy = <T extends DatatableRow>({
         }
       }
       case 'number': {
+        const typedFilter = filter as DatatableFilterValueNumber
         return row => {
-          const typedFilter = filter as DatatableFilterValueNumber
           const v = col.render(row).value as number | undefined
           const min = typedFilter[0] as number | undefined
           const max = typedFilter[1] as number | undefined
@@ -167,8 +179,8 @@ const filterBy = <T extends DatatableRow>({
       }
       default: {
         if (!col.type) return
+        const typedFilter = filter as DatatableFilterValueString
         return row => {
-          const typedFilter = filter as DatatableFilterValueString
           const v = col.render(row).value
           if ((v === DatatableUtils.blank) && typedFilter?.filterBlank !== false) return false
           if (typedFilter?.value === undefined) return true

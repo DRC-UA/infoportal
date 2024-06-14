@@ -1,4 +1,4 @@
-import {Box, Checkbox, Divider, FormControlLabel, Icon, MenuItem, Popover, PopoverProps, Slider, Switch} from '@mui/material'
+import {Alert, Box, Checkbox, Divider, FormControlLabel, Icon, MenuItem, Popover, PopoverProps, Slider, Switch} from '@mui/material'
 import {IpBtn} from '../../Btn'
 import {useI18n} from '../../../core/i18n'
 import React, {Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useState} from 'react'
@@ -53,7 +53,7 @@ export type DatatableFilterDialogProps = Pick<PopoverProps, 'anchorEl'> & {
   renderValue: any
   onChange?: (columnName: string, value: DatatableFilterValueString) => void
   value: DatatableFilterValueString
-  type: 'string'
+  type: 'string' | 'id'
 })
 
 export const DatatableFilterModal = ({
@@ -109,6 +109,18 @@ export const DatatableFilterModal = ({
         </Box>
         {type && (() => {
           switch (type) {
+            case 'id': {
+              return (
+                <>
+                  <Alert color="info" sx={{py: 0, mb: 1}}>{m._datatable.idFilterInfo}</Alert>
+                  <IpInput
+                    value={innerValue}
+                    onChange={e => setInnerValue(e.target.value)}
+                    placeholder={m._datatable.idFilterPlaceholder}
+                  />
+                </>
+              )
+            }
             case 'date':
               return <PeriodPicker value={innerValue} onChange={_ => {
                 if (_[1]) _[1] = endOfDay(_[1])

@@ -4,7 +4,7 @@ import {KeyOf} from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {GenerateXlsFromArrayParams} from '@/shared/Sheet/util/generateXLSFile'
 
-export type DatatablePropertyType = 'date' | 'number' | 'string' | 'select_one' | 'select_multiple'
+export type DatatablePropertyType = 'id' | 'date' | 'number' | 'string' | 'select_one' | 'select_multiple'
 
 export type OrderBy = 'asc' | 'desc'
 
@@ -159,7 +159,7 @@ export namespace DatatableColumn {
     export type RenderQuick<T extends DatatableRow> = (_: T) => string | undefined
     export type Render<T extends DatatableRow> = (_: T) => RenderT<string | undefined>
     export type BaseType = {
-      type: 'string'
+      type: 'string' | 'id'
     }
     export type TypeInner<T extends DatatableRow> = BaseType & {
       render: Render<T>
@@ -234,6 +234,7 @@ export namespace DatatableColumn {
 }
 
 
+export type DatatableFilterValueId = string
 export type DatatableFilterValueString = {
   filterBlank?: boolean,
   value?: string
@@ -241,7 +242,7 @@ export type DatatableFilterValueString = {
 export type DatatableFilterValueSelect = string[]
 export type DatatableFilterValueDate = [Date | undefined, Date | undefined]
 export type DatatableFilterValueNumber = [number | undefined, number | undefined]
-export type DatatableFilterValue = DatatableFilterValueString | DatatableFilterValueSelect | DatatableFilterValueDate | DatatableFilterValueNumber
+export type DatatableFilterValue = DatatableFilterValueId | DatatableFilterValueString | DatatableFilterValueSelect | DatatableFilterValueDate | DatatableFilterValueNumber
 export type DatatableBlankValue = ''
 
 // type SchemaItem = {

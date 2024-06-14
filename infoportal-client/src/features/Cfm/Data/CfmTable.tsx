@@ -274,7 +274,7 @@ export const CfmTable = ({}: any) => {
               },
             },
             {
-              type: 'string',
+              type: 'id',
               head: m.id,
               id: 'id',
               width: 78,

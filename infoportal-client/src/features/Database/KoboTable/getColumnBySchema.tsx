@@ -162,14 +162,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
     head: getHead(translateQuestion(q.name)),
   }
   const res: DatabaseColumnProps<T>[] | DatabaseColumnProps<T> | undefined = (() => {
-    if (q.name === 'id') {
-      return {
-        ...common,
-        type: 'string',
-        className: 'td-id',
-        renderQuick: row => row.id,
-      }
-    }
     switch (q.type) {
       case 'image': {
         return {
@@ -224,7 +216,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
         return {
           ...common,
           type: 'string',
-          className: q.name === 'id' ? 'td-id' : undefined,
           renderQuick: row => getVal(row, q.name) as string,
         }
       }
@@ -369,7 +360,7 @@ export const getColumnBySchema = <T extends Record<string, any>>({
 }): DatabaseColumnProps<T>[] => {
   return [
     {
-      type: 'string',
+      type: 'id',
       id: 'id',
       head: 'ID',
       className: 'td-id',

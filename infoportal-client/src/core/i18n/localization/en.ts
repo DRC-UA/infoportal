@@ -194,7 +194,11 @@ export const en = Object.freeze({
     downloadAsPdf: 'Download as PDF',
     all: 'All',
     details: 'Details',
-    toggleDatatableColumns: 'Show/hide columns',
+    _datatable: {
+      idFilterInfo: 'You can filter by multiple IDs by separating each with a space',
+      idFilterPlaceholder: 'ID1 ID2 ID3 [...]',
+      toggleColumns: 'Show/hide columns',
+    },
     areas: {
       north: 'North',
       east: 'East',

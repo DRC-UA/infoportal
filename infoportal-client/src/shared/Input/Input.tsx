@@ -28,7 +28,7 @@ export const IpInput = React.forwardRef(({
       <InputLabel {...InputLabelProps} htmlFor={id}>{label}</InputLabel>
       <OutlinedInput error={error} label={label} inputRef={inputElement} id={id} {...props} ref={ref} size="small" margin="dense"/>
       {helperText !== null && (
-        <FormHelperText>{helperText}&nbsp;</FormHelperText>
+        <FormHelperText placeholder={props.placeholder}>{helperText}&nbsp;</FormHelperText>
       )}
     </FormControl>
   )
