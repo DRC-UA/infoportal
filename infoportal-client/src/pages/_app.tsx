@@ -52,7 +52,7 @@ const App = ({
 
   return (
     <Provide providers={[
-      ...appConfig.production ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
+      // ...appConfig.production ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
       _ => <AppSettingsProvider api={api} children={_}/>,
     ]}>
       <>
