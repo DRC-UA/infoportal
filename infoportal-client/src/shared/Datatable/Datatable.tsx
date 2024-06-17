@@ -131,7 +131,7 @@ const _Datatable = <T extends DatatableRow>({
                 if (rendered.value instanceof Date && !isNaN(rendered.value as any)) return format(rendered.value, 'yyyy-MM-dd hh:mm:ss z')
                 let value = rendered.label
                 if (isValidElement(value)) value = Utils.extractInnerText(value)
-                if (value !== '' && !isNaN(value as any)) value = +(value as number)
+                if (q.type !== 'string' && value !== '' && !isNaN(value as any)) value = +(value as number)
                 return value as any
               }
             })),
