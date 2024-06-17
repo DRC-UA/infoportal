@@ -102,6 +102,14 @@ export class KoboSdkv2 {
     })
   }
 
+  readonly delete = (formId: KoboId, ids: KoboAnswerId[]): Promise<{detail: string}> => {
+    return this.api.delete(`/v2/assets/${formId}/data/bulk/`, {
+      body: {
+        payload: {submission_ids: ids}
+      }
+    })
+  }
+
   readonly updateData = <TData extends KoboUpdateDataParamsData>(p: KoboUpdateDataParams<TData>): Promise<void> => {
     return this.editSdk.enqueue(p)
   }
