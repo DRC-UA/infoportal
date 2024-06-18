@@ -28,8 +28,8 @@ export const DatabaseTableRoute = () => {
   return (
     <>
       {map(ctx.getForm(formId), form =>
-        <Page width="full" sx={{p: 0}}>
-          <Panel>
+        <Page width="full" sx={{p: 0, pb: 0, mb: 0,}}>
+          <Panel sx={{mb: 0}}>
             <DatabaseTable
               serverId={serverId}
               form={form}

@@ -154,7 +154,7 @@ export const DatabaseKoboTableContent = ({
         loading={ctx.loading}
         defaultHiddenColumns={hiddenColumns}
         hideColumnsToggle
-        contentProps={{sx: {maxHeight: 'calc(100vh - 204px)'}}}
+        contentProps={{sx: {maxHeight: 'calc(100vh - 206px)'}}}
         showExportBtn
         rowsPerPageOptions={[20, 50, 100, 200]}
         onFiltersChange={onFiltersChange}
