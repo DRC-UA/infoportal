@@ -30,7 +30,7 @@ export const useShelterData = () => {
         index[d.id].nta = d
         index[d.id].oblastIso = oblast?.iso
         index[d.id].oblast = oblast?.name
-        index[d.id].persons = KoboGeneralMapping.collectXlsKoboIndividuals(d as any).map(KoboGeneralMapping.mapPerson)
+        index[d.id].persons = KoboGeneralMapping.collectXlsKoboIndividuals(d as any).map(KoboGeneralMapping.mapPersonDetails)
         index[d.id].office = fnSwitch(d.back_office!, {
           cej: DrcOffice.Chernihiv,
           dnk: DrcOffice.Dnipro,
