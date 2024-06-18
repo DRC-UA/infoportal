@@ -9,11 +9,13 @@ import {Protection_hhs3} from '@infoportal-common'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
+import {useTheme} from '@mui/material'
+import {Txt} from 'mui-extension'
 
 export const SnapshotProtMonitoEchoLivelihood = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
   const {formatLargeNumber, m} = useI18n()
-
+  const t = useTheme()
   return (
     <PdfSlide>
       <SlideHeader logo={snapshotProtMonitoEchoLogo}>{m.snapshotProtMonito.livelihood}</SlideHeader>
@@ -32,9 +34,9 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                     // __html: m.snapshotProtMonito.echo.livelihood({
                     //   outOfWork: toPercent(_.percent, 0),
                   >
-                    The primary reasons for unemployment remain unchanged from previous reports, with a shortage of job opportunities identified as the key factor.
-                    To address gaps in meeting basic needs, individuals are resorting to depleting savings and cutting back on expenses related to food and healthcare, a situation
-                    that may be exacerbated by Resolution 332.
+                    Following the changes in the housing assistance system for IDPs under Resolution No. 332, a substantially higher number of IDPs have reported gaps in meeting
+                    their basic needs, with a <Txt bold style={{color: t.palette.success.main}}>37%</Txt> increase compared to March. The limited availability of job opportunities continues to be reported as the primary factor affecting
+                    employment.
                   </p>
                 }
               </Lazy>

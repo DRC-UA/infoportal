@@ -6,7 +6,6 @@ import {useI18n} from '@/core/i18n'
 import {MapSvg} from '@/shared/maps/MapSvg'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
 import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
-import {Txt} from 'mui-extension'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Protection_hhs3} from '@infoportal-common'
@@ -23,10 +22,9 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
         <Div>
           <Div column>
             <SlideTxt sx={{mb: .5}} block>
-              Compared to the previous monitoring month, a substantially higher proportion of IDPs have indicated their intention to return
-              <Txt bold sx={{color: t.palette.success.main}}> (+12%)</Txt>.
-              This can be linked with Resolution 332 that introduced changes in payment of IDP benefits, with a substantial number of IDPs who lost their eligibility or need to
-              re-apply, possibly influencing decisions regarding their place of residence.
+              In the eastern and southern oblasts, the primary motive for returning is the financial strain experienced by IDPs, driven by high rental costs and limited income
+              opportunities. This demonstrates that some return movements are a negative coping mechanism resulting from the lack of employment opportunities and insufficient state
+              or humanitarian support in displacement areas, a situation that may worsen following the enactment of Government Resolution No. 332.
             </SlideTxt>
 
             <SlidePanel>

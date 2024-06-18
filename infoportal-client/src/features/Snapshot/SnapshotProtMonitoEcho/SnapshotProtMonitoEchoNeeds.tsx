@@ -7,7 +7,6 @@ import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {Lazy} from '@/shared/Lazy'
 import {Protection_hhs3, toPercent} from '@infoportal-common'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
-import {Txt} from 'mui-extension'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
@@ -72,9 +71,8 @@ export const SnapshotProtMonitoEchoNeeds = () => {
               }}>
                 {_ =>
                   <p>
-                    Compared to the previous monitoring month, a substantially higher percentage of respondents indicated facing barriers to accessing healthcare
-                    <Txt bold sx={{color: t.palette.success.main}}> (+19%)</Txt>.
-                    Residents in rural areas are significantly more affected, with <b>56%</b> of respondents indicating barriers to accessing healthcare.
+                    Barriers to accessing healthcare, including specialized mental health services, continue to be significantly reported, particularly affecting persons with
+                    reduced mobility, in a context where the ongoing and long-lasting conflict is having profound consequences on the psychological well-being of Ukrainians.
                   </p>
                 }
               </Lazy>
@@ -120,9 +118,9 @@ export const SnapshotProtMonitoEchoNeeds = () => {
                 mergeOptions={{
                   inability_to_access_registration_costly_andor_lengthy_procedure: 'inability_to_access_registration_safety_risks',
                   inability_to_access_registration_distance_andor_lack_of_transportation: 'inability_to_access_registration_safety_risks',
-                  delays_in_registration_process: 'other_specify',
-                  unaware_ofnot_familiar_with_the_procedure: 'other_specify',
-                  status_renewal_rejected: 'other_specify',
+                  // delays_in_registration_process: 'other_specify',
+                  // unaware_ofnot_familiar_with_the_procedure: 'other_specify',
+                  // status_renewal_rejected: 'other_specify',
                 }}
               />
             </SlidePanel>

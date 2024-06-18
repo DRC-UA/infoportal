@@ -26,8 +26,8 @@ export const SnapshotHeader = ({
 }) => {
   const {m} = useI18n()
   useEffect(() => {
-    document.title = 'DRC - Protection Monitoring Snapshot'
-  }, [])
+    document.title = 'DRC - Protection Monitoring Snapshot - ' + format(period.start!, 'yyyy-MM')
+  }, [period])
   return (
     <Box sx={{
       px: 2,

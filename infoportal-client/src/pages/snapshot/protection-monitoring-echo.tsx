@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import {SnapshotProtMonitoEcho} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {GlobalStyles, useTheme} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
+import {defaultAppThemeParams} from '@/core/theme'
 
 const generalStyles = <GlobalStyles styles={{
   body: {
@@ -14,9 +15,9 @@ const SnapshotProtectionMonitoringPage = () => {
   const t = useTheme()
   useEffect(() => {
     theme.setAppThemeParams({
-      dark: true,
-      backgroundDefault: t.palette.background.paper,
-      backgroundPaper: t.palette.background.default,
+      dark: false,
+      backgroundDefault: defaultAppThemeParams.light.backgroundPaper,
+      backgroundPaper: defaultAppThemeParams.light.backgroundDefault,
       fontSize: 14,
       cardElevation: 1,
     })

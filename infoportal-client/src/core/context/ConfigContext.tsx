@@ -49,7 +49,6 @@ export const AppSettingsProvider = ({
     })
   }, [])
 
-
   return (
     <_ConfigContext.Provider value={{
       api,

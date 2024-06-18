@@ -12,10 +12,13 @@ import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotPro
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
+import { Txt } from 'mui-extension'
+import {useTheme} from '@mui/material'
 
 export const SnapshotProtMonitoEchoRegistration = () => {
   const {data, computed, period} = useSnapshotProtMonitoringContext()
   const {formatLargeNumber, m} = useI18n()
+  const t = useTheme()
   return (
     <PdfSlide>
       <SlideHeader logo={snapshotProtMonitoEchoLogo}>{m.protHHSnapshot.titles.document}</SlideHeader>
@@ -32,11 +35,10 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             }}>
               {_ =>
                 <SlideTxt>
-                  Access to compensation mechanisms for damaged and destroyed property continues to pose challenges. While persons of concern can apply for the housing recovery
-                  programme on the Diya online platform, the application process is complex, especially for applicants lacking ownership documents, technical certificates or facing
-                  inheritance issues.
-                  In addition, following Resolution 332, there has been a significant number of requests for legal information and support concerning the cancellation of payments
-                  and the entitlement to ongoing assistance.
+                  The proportion of displaced individuals not formally registered as IDPs has increased significantly compared to the previous month (<Txt bold sx={{color: t.palette.success.main}}>+11%</Txt>). This rise can be
+                  attributed to the implementation of Resolution No. 332, which substantially changes the provision of accommodation assistance to IDPs. The increase in
+                  unregistered adult males (<Txt bold sx={{color: t.palette.success.main}}>+15%</Txt>) can be linked to the enforcement of the new mobilization law on May 18th. This law aims to bolster male mobilization by lowering
+                  the conscription age, narrowing the grounds for exemptions, and heightening penalties for failing to update military records.
                 </SlideTxt>
               }
             </Lazy>
@@ -114,7 +116,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
           <Div column>
             <SlidePanel>
               <Lazy deps={[data, computed.lastMonth]} fn={(x) => ChartHelperOld.percentage({
-                data: x.flatMap(_ => _.persons).map(_ => _.lackDoc).compact(),
+                data: x.flatMap(_ => _.persons).map(_ => _.lackDoc).compact().filter(_ => !_.includes('unable_unwilling_to_answer')),
                 value: _ => !_.includes('none')
               })}>
                 {(_, last) => <ChartPieWidget
@@ -159,12 +161,12 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 by={_ => _.what_housing_land_and_property_documents_do_you_lack}
                 filterValue={['unable_unwilling_to_answer', 'none']}
                 mergeOptions={{
-                  cost_estimation_certificate_state_commission_issued_when_personal_request_is_made: 'other_specify',
+                  // cost_estimation_certificate_state_commission_issued_when_personal_request_is_made: 'other_specify',
                   // death_certificate_of_predecessor: 'other_specify',
-                  document_issues_by_police_state_emergency_service_proving_that_the_house_was_damaged_destroyedfor_ukrainian_state_control_areas: 'document_issues_by_local_self_government_proving_that_the_house_was_damaged_destroyed',
-                  informatsiyna_dovidka_informational_extract_on_damaged_property: 'other_specify',
-                  construction_stage_substituted_with_bti_certificate_following_completion_of_construction: 'other_specify',
-                  inheritance_will: 'other_specify',
+                  // document_issues_by_police_state_emergency_service_proving_that_the_house_was_damaged_destroyedfor_ukrainian_state_control_areas: 'document_issues_by_local_self_government_proving_that_the_house_was_damaged_destroyed',
+                  // informatsiyna_dovidka_informational_extract_on_damaged_property: 'other_specify',
+                  // construction_stage_substituted_with_bti_certificate_following_completion_of_construction: 'other_specify',
+                  // inheritance_will: 'other_specify',
                 }}
                 label={{
                   ...Protection_hhs3.options.what_housing_land_and_property_documents_do_you_lack,

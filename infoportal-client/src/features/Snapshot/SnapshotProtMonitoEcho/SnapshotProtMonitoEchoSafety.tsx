@@ -106,9 +106,9 @@ export const SnapshotProtMonitoEchoSafety = () => {
                     //   })
                     // }}
                   >
-                    Reports persist of substantial stress and declining mental health and well-being across Ukraine.
-                    Older individuals and people with disabilities are particularly susceptible to psychological distress, often triggered by feelings of heightened loneliness,
-                    reduced social interaction, and a shortage of communal spaces for social engagement and connection.
+                    Contamination by unexploded ordnance (UXOs) continues to be a significant safety concern. In areas formerly under non-government control, the necessity of
+                    demining remains critical, with many residents expressing fear of using the main roads and paths due to the risk of encountering mines. Fortunately, most
+                    communities report receiving information about mines and their associated hazards.
                   </p>
                 }
               </Lazy>
