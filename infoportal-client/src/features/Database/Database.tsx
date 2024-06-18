@@ -23,6 +23,7 @@ import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {DatabaseList} from '@/features/Database/DatabaseList'
 import {DatabaseKoboAnswerViewPage} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {DatabaseHistory} from '@/features/Database/History/DatabaseHistory'
+import {customForms, DatabaseTableCustomRoute} from '@/features/Database/KoboTableCustom/DatabaseKoboTableCustom'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -66,6 +67,15 @@ export const DatabaseWithContext = () => {
               </SidebarItem>
             )}
           </NavLink>
+          <SidebarSection dense title={m.custom}>
+            {customForms.map(_ => (
+              <NavLink to={databaseIndex.siteMap.custom(_.id)} key={_.id}>
+                <SidebarItem>
+                  {_.name}
+                </SidebarItem>
+              </NavLink>
+            ))}
+          </SidebarSection>
           <SidebarHr/>
           {ctx._forms.loading ? (
             <>
@@ -111,6 +121,7 @@ export const DatabaseWithContext = () => {
       )}
       <Routes>
         <Route index element={<DatabaseList forms={ctx.formAccess}/>}/>
+        <Route path={databaseIndex.siteMap.custom()} element={<DatabaseTableCustomRoute/>}/>
         <Route path={databaseIndex.siteMap.home()} element={<DatabaseHome/>}>
           <Route index element={<Navigate to={databaseIndex.siteMap.database.relative}/>}/>
           <Route path={databaseIndex.siteMap.answer.relative()} element={<DatabaseKoboAnswerViewPage/>}/>

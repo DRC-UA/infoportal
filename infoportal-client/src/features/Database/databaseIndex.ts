@@ -7,6 +7,7 @@ export const databaseIndex = {
   siteMap: {
     index: '/',
     home: base,
+    custom: (id = ':id') => `/custom/${id}`,
     entry: {
       relative: `:id`,
       absolute: (serverId = ':serverId', formId = ':formId') => base(serverId, formId) + `/:id`
