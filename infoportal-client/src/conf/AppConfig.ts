@@ -34,6 +34,7 @@ const persistedTempEnvVariablesForFront: { [key in Env]: string | undefined } = 
 const e = env(persistedTempEnvVariablesForFront)
 
 export const appConfig = {
+  /** @deprecated not working*/
   production: e(_ => _?.toLowerCase() === 'production', defaultValue(true))('NODE_ENV'),
   uahToUsd: .027,
   muiProLicenseKey: e()(Env.NEXT_PUBLIC_MUI_PRO_LICENSE_KEY),

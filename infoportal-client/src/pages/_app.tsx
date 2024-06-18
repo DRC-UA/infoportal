@@ -25,7 +25,6 @@ import {KoboEditAnswersProvider} from '@/core/context/KoboEditAnswersContext'
 import {KoboAnswersProvider} from '@/core/context/KoboAnswers'
 import {KoboEditTagsProvider} from '@/core/context/KoboEditTagsContext'
 import {HashRouter} from 'react-router-dom'
-import {muiTheme} from '@/core/theme'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
@@ -52,7 +51,7 @@ const App = ({
 
   return (
     <Provide providers={[
-      ...appConfig.production ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
+      ...process.env.NODE_ENV === 'production' ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
       _ => <AppSettingsProvider api={api} children={_}/>,
     ]}>
       <>
