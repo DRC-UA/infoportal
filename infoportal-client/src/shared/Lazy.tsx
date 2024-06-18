@@ -13,6 +13,5 @@ export const Lazy: Type = ({
   fn,
   children,
 }) => {
-  const res = useMemo(() => deps.map(fn), deps)
-  return children(...res)
+  return useMemo(() => children(...deps.map(fn)), deps)
 }

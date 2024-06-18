@@ -81,7 +81,7 @@ export const koboFormTranslation: Record<KoboFormName, string> = {
   safety_incident: '[Safety] Incident tracker',
   ecrec_vetApplication: `[Ecrec] VET - Training grants - we are now accepting applications / Гранти на навчання — відкриваємо прийом заявок`,
   ecrec_vetEvaluation: `[Ecrec] VET - Candidate evaluation`,
-  ecrec_cashRegistration: '[Ecrec] Sectoral Cash Registration',
+  ecrec_cashRegistration: '[Ecrec] Cash Registration Improve Agricultural Production (BHA)',
   ecrec_cashRegistrationBha: '[Ecrec] Sectoral Cash Registration BHA',
   bn_rapidResponse: '[Basic Needs] Rapid Response Mechanism',
   bn_cashForRentApplication: '[Basic Needs] Cash for Rent Application',
