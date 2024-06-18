@@ -1,6 +1,7 @@
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {
   AILocationHelper,
+  DisplacementStatus,
   DrcOffice,
   DrcProgram,
   DrcProject,
@@ -153,7 +154,13 @@ export class KoboMetaMapperProtection {
 
   static readonly hhs: MetaMapperInsert<KoboMetaOrigin<Protection_hhs3.T, ProtectionHhsTags>> = row => {
     const answer = Protection_hhs3.map(row.answers)
-    const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
+    const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
+    const displacement = fnSwitch(answer.do_you_identify_as_any_of_the_following!, {
+      idp: DisplacementStatus.Idp,
+      non_displaced: DisplacementStatus.NonDisplaced,
+      refugee: DisplacementStatus.Refugee,
+      returnee: DisplacementStatus.Returnee
+    }, () => undefined)
     const projects = safeArray(row.tags?.projects)
     if (answer.have_you_filled_out_this_form_before === 'yes' || answer.present_yourself === 'no') return
     return KoboMetaMapper.make({
@@ -171,7 +178,10 @@ export class KoboMetaMapperProtection {
       settlement: answer.settlement,
       sector: DrcSector.Protection,
       activity: DrcProgram.ProtectionMonitoring,
-      persons,
+      persons: persons.map(_ => {
+        _.displacement = displacement
+        return _
+      }),
       personsCount: persons.length,
       project: projects,
       donor: projects.map(_ => DrcProjectHelper.donorByProject[_]),
