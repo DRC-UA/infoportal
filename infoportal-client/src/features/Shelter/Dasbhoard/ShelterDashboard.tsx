@@ -1,5 +1,4 @@
 import {Page} from '@/shared/Page'
-import {UseShelterComputedData, useShelterComputedData} from '@/features/Shelter/Dasbhoard/useShelterComputedData'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {Lazy} from '@/shared/Lazy'
 import React, {useMemo, useState} from 'react'
@@ -155,12 +154,12 @@ export const ShelterDashboard = () => {
         getOptions: (get) => ctx.nta.schema.schemaHelper.getOptionsByQuestionName('hh_char_dis_select').map(_ => ({value: _.name, label: _.label[ctx.langIndex]})),
         multiple: true,
       },
-      displacementStatus: {
-        icon: appConfig.icons.displacementStatus,
-        label: m.displacement,
-        getValue: _ => _.nta?.ben_det_res_stat,
-        getOptions: (get) => ctx.nta.schema.schemaHelper.getOptionsByQuestionName('ben_det_res_stat').map(_ => ({value: _.name, label: _.label[ctx.langIndex]}))
-      },
+      // displacementStatus: {
+      //   icon: appConfig.icons.displacementStatus,
+      //   label: m.displacement,
+      //   getValue: _ => _.nta?.ben_det_res_stat,
+      //   getOptions: (get) => ctx.nta.schema.schemaHelper.getOptionsByQuestionName('ben_det_res_stat').map(_ => ({value: _.name, label: _.label[ctx.langIndex]}))
+      // },
     })
   }, [ctx.data.mappedData])
 
@@ -177,8 +176,6 @@ export const ShelterDashboard = () => {
     if (!filteredByDate) return
     return DataFilter.filterData(filteredByDate, filterShape, filters)
   }, [filteredByDate, filters, filterShape,])
-
-  const computed = useShelterComputedData({data: filteredData})
 
   return (
     <Page loading={ctx.data.fetching} width="lg">
@@ -221,10 +218,9 @@ export const ShelterDashboard = () => {
         }
       />
 
-      {filteredData && computed && (
+      {filteredData && (
         <_ShelterDashboard
           data={filteredData}
-          computed={computed}
           currency={currency}
         />
       )}
@@ -235,14 +231,13 @@ export const ShelterDashboard = () => {
 export const _ShelterDashboard = ({
   data,
   currency,
-  computed,
 }: {
   currency: Currency
   data: Seq<ShelterEntity>
-  computed: NonNullable<UseShelterComputedData>
 }) => {
   const {m, formatLargeNumber} = useI18n()
   const {conf} = useAppSettings()
+  const persons = useMemo(() => data.flatMap(_ => _.persons ?? []), [data])
 
   return (
     <Div responsive>
@@ -252,10 +247,10 @@ export const _ShelterDashboard = ({
             {formatLargeNumber(data.length)}
           </SlideWidget>
           <SlideWidget title={m.individuals} icon="person">
-            {formatLargeNumber(computed.persons.length)}
+            {formatLargeNumber(persons.length)}
           </SlideWidget>
           <SlideWidget title={m.hhSize} icon="person">
-            {formatLargeNumber(computed.persons.length / data.length, {maximumFractionDigits: 2})}
+            {formatLargeNumber(persons.length / data.length, {maximumFractionDigits: 2})}
           </SlideWidget>
         </Div>
         <Panel title={m.project}>
@@ -268,7 +263,7 @@ export const _ShelterDashboard = ({
         </Panel>
         <Panel title={m.ageGroup}>
           <PanelBody>
-            <AgeGroupTable tableId="shelter-dashboard-ag" persons={computed.persons}/>
+            <AgeGroupTable tableId="shelter-dashboard-ag" persons={persons} enableDisplacementStatusFilter/>
           </PanelBody>
         </Panel>
         <SlidePanel>

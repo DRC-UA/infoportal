@@ -1,7 +1,7 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useMemo} from 'react'
 import {useAsync} from '@/shared/hook/useAsync'
-import {DrcOffice, KoboAnswerId, koboIndex, KoboIndex, OblastIndex, ShelterContractorPrices, ShelterTaPriceLevel} from '@infoportal-common'
+import {DrcOffice, KoboAnswerId, KoboGeneralMapping, koboIndex, KoboIndex, OblastIndex, ShelterContractorPrices, ShelterTaPriceLevel} from '@infoportal-common'
 import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetcher'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
@@ -30,6 +30,7 @@ export const useShelterData = () => {
         index[d.id].nta = d
         index[d.id].oblastIso = oblast?.iso
         index[d.id].oblast = oblast?.name
+        index[d.id].persons = KoboGeneralMapping.collectXlsKoboIndividuals(d as any).map(KoboGeneralMapping.mapPersonDetails)
         index[d.id].office = fnSwitch(d.back_office!, {
           cej: DrcOffice.Chernihiv,
           dnk: DrcOffice.Dnipro,
