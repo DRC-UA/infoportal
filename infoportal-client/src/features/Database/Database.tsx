@@ -142,18 +142,21 @@ export const DatabaseHome = () => {
         }}
       >
         <Tab
+          sx={{minHeight: 34, py: 1}}
           component={NavLink}
           value={databaseIndex.siteMap.database.absolute(serverId, formId)}
           to={databaseIndex.siteMap.database.absolute(serverId, formId)}
           label={m.data}
         />
         <Tab
+          sx={{minHeight: 34, py: 1}}
           component={NavLink}
           value={databaseIndex.siteMap.access.absolute(serverId, formId)}
           to={databaseIndex.siteMap.access.absolute(serverId, formId)}
           label={m.access}
         />
         <Tab
+          sx={{minHeight: 34, py: 1}}
           component={NavLink}
           value={databaseIndex.siteMap.history.absolute(serverId, formId)}
           to={databaseIndex.siteMap.history.absolute(serverId, formId)}
