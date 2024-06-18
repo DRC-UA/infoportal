@@ -25,7 +25,7 @@ const lightThemeIcons = {
 export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) => {
   const {sidebarOpen, showSidebarButton, setSidebarOpen, title} = useLayoutContext()
   const {m} = useI18n()
-  const {lightTheme, setLightTheme} = useAppSettings()
+  const {theme: {brightness, setBrightness}} = useAppSettings()
   return (
     <AppHeaderContainer
       component="header"
@@ -76,15 +76,15 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) 
       </div>
       <PopoverWrapper content={close => (
         Obj.entries(lightThemeIcons).map(([theme, icon]) =>
-          <MenuItem key={theme} selected={lightTheme === theme} onClick={() => {
-            setLightTheme(theme)
+          <MenuItem key={theme} selected={brightness === theme} onClick={() => {
+            setBrightness(theme)
             close()
           }}>
             <Icon sx={{mr: 1}}>{icon}</Icon>{m.lightTheme[theme]}
           </MenuItem>
         )
       )}>
-        <IpIconBtn children={lightThemeIcons[lightTheme ?? 'auto']}/>
+        <IpIconBtn children={lightThemeIcons[brightness ?? 'auto']}/>
       </PopoverWrapper>
       <Link href="/">
         <IpIconBtn children="home"/>

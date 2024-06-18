@@ -75,6 +75,26 @@ export const styleUtils = (t: Theme) => ({
 
 export const defaultSpacing = 8
 
+export type AppThemeParams = {
+  mainColor?: string
+  fontSize?: number
+  backgroundPaper?: string
+  backgroundDefault?: string
+  cardElevation?: number
+  dark?: boolean
+}
+
+export const defaultAppThemeParams = {
+  light: {
+    backgroundDefault: '#f6f8fc',
+    backgroundPaper: '#fff',
+  },
+  dark: {
+    backgroundDefault: '#031525',
+    backgroundPaper: '#0d2136',
+  },
+}
+
 export const muiTheme = ({
   dark,
   mainColor = '#c9000a',
@@ -82,14 +102,7 @@ export const muiTheme = ({
   backgroundDefault,
   cardElevation,
   fontSize = 14,
-}: {
-  mainColor?: string
-  fontSize?: number
-  backgroundPaper?: string
-  backgroundDefault?: string
-  cardElevation?: number
-  dark?: boolean
-}): Theme => {
+}: AppThemeParams = {}): Theme => {
   const colorOverOpaque = dark ? '#070707' : '#fafafa'
   const defaultRadius = 12
   const fontFamily = '"Open Sans", sans-serif'
@@ -117,8 +130,8 @@ export const muiTheme = ({
       error: red,
       mode: dark ? 'dark' : 'light',
       background: {
-        default: backgroundDefault ?? (dark ? '#031525' : '#f6f8fc'/*'#f8f9fa'*/),
-        paper: backgroundPaper ?? (dark ? '#0d2136' : '#fff'),
+        default: backgroundDefault ?? (dark ? defaultAppThemeParams.dark.backgroundDefault : defaultAppThemeParams.light.backgroundDefault),
+        paper: backgroundPaper ?? (dark ? defaultAppThemeParams.dark.backgroundPaper : defaultAppThemeParams.light.backgroundPaper),
       }
     },
     shape: {

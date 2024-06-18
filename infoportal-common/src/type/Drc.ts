@@ -330,6 +330,7 @@ export enum DrcJob {
   'HMA NTS Officer/ Team Lead' = 'HMA NTS Officer/ Team Lead',
   'HMA NTS Operator' = 'HMA NTS Operator',
   'HMA NTS Operator/Surveyor' = 'HMA NTS Operator/Surveyor',
+  'MEAL Operations Manager' = 'MEAL Operations Manager',
   'HMA Officer' = 'HMA Officer',
   'HMA Programme Manager (Capacity Building)' = 'HMA Programme Manager (Capacity Building)',
   'HR and Administration Assistant' = 'HR and Administration Assistant',

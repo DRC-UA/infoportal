@@ -2,7 +2,6 @@ import React, {useEffect, useMemo, useState} from 'react'
 import type {AppProps} from 'next/app'
 import {Provide} from '@/shared/Provide'
 import {Box, CssBaseline, Icon, ThemeProvider} from '@mui/material'
-import {muiTheme} from '@/core/theme'
 import {I18nProvider, useI18n} from '@/core/i18n'
 import {ToastProvider, Txt} from 'mui-extension'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
@@ -26,6 +25,7 @@ import {KoboEditAnswersProvider} from '@/core/context/KoboEditAnswersContext'
 import {KoboAnswersProvider} from '@/core/context/KoboAnswers'
 import {KoboEditTagsProvider} from '@/core/context/KoboEditTagsContext'
 import {HashRouter} from 'react-router-dom'
+import {muiTheme} from '@/core/theme'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
@@ -52,7 +52,7 @@ const App = ({
 
   return (
     <Provide providers={[
-      // ...appConfig.production ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
+      ...appConfig.production ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
       _ => <AppSettingsProvider api={api} children={_}/>,
     ]}>
       <>
@@ -77,7 +77,7 @@ const AppWithConfig = (props: AppProps) => {
       // _ => <StyledEngineProvider injectFirst children={_}/>,
       _ => <LocalizationProvider children={_} dateAdapter={AdapterDateFns}/>,
       _ => <ToastProvider children={_}/>,
-      _ => <ThemeProvider theme={muiTheme({dark: settings.isDarkTheme})} children={_}/>,
+      _ => <ThemeProvider theme={settings.theme.theme} children={_}/>,
       _ => <CssBaseline children={_}/>,
       _ => <I18nProvider children={_}/>,
       _ => <MsalProvider children={_} instance={msal}/>,

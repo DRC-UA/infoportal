@@ -9,7 +9,6 @@ import {SidebarBody} from './SidebarBody'
 import {SidebarHeader} from './SidebarHeader'
 import {stopPropagation} from 'mui-extension'
 import {useI18n} from '../../../core/i18n'
-import {useAppSettings} from '@/core/context/ConfigContext'
 
 let sidebar: HTMLElement | null = null
 let header: HTMLElement | null = null
@@ -25,10 +24,10 @@ const stickSidebarToHeader = (sidebarId: string, headerId: string) => {
     header = document.getElementById(headerId)
   }
   // setTimeout(() => {
-    if (sidebar && header) {
-      sidebar.style.top = (header.getBoundingClientRect().y + header.getBoundingClientRect().height) + 'px'
-      //Math.max(header.offsetHeight < window.scrollY ? header.offsetHeight : header.offsetHeight - window.scrollY, 0) + 'px'
-    }
+  if (sidebar && header) {
+    sidebar.style.top = (header.getBoundingClientRect().y + header.getBoundingClientRect().height) + 'px'
+    //Math.max(header.offsetHeight < window.scrollY ? header.offsetHeight : header.offsetHeight - window.scrollY, 0) + 'px'
+  }
   // }, 0)
 }
 
@@ -43,7 +42,6 @@ export const Sidebar = ({
 }) => {
   const {isMobileWidth, sidebarOpen, setSidebarOpen, sidebarPinned, setSidebarPinned} = useLayoutContext()
   const {m} = useI18n()
-  const {lightTheme, setLightTheme} = useAppSettings()
 
   useEffect(() => {
     // Element has been re-created by SwipeableDrawer, thus variable point to nothing.

@@ -1,27 +1,31 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {SnapshotProtMonitoEcho} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
-import {GlobalStyles, ThemeProvider} from '@mui/material'
-import {muiTheme} from '@/core/theme'
+import {GlobalStyles, useTheme} from '@mui/material'
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 const generalStyles = <GlobalStyles styles={{
   body: {
-    background: '#fff',
+    // background: '#fff',
   }
 }}/>
 
 const SnapshotProtectionMonitoringPage = () => {
-  return (
-    <ThemeProvider theme={muiTheme({
-      dark: false,
+  const {theme} = useAppSettings()
+  const t = useTheme()
+  useEffect(() => {
+    theme.setAppThemeParams({
+      dark: true,
+      backgroundDefault: t.palette.background.paper,
+      backgroundPaper: t.palette.background.default,
       fontSize: 14,
-      mainColor: '#af161e',
-      backgroundDefault: '#fff',
-      backgroundPaper: '#f6f7f9',
       cardElevation: 1,
-    })}>
+    })
+  }, [])
+  return (
+    <>
       {generalStyles}
       <SnapshotProtMonitoEcho/>
-    </ThemeProvider>
+    </>
   )
 }
 
