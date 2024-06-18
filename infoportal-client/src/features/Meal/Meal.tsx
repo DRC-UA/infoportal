@@ -62,7 +62,7 @@ const MealSidebar = ({
               <SidebarItem icon="assignment_turned_in" active={isActive}>{m.dashboard}</SidebarItem>
             )}
           </NavLink>
-          <a href="https://drcngo.sharepoint.com/:x:/s/UKRPortal/EUYPiMkl4n1GqaWinv2OgUoByXCmeVtmsgIINesDzZo66w?e=zrOdMh&wdOrigin=TEAMS-MAGLEV.p2p_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1718710409577&web=1" target="_blank">
+          <a href="https://drcngo.sharepoint.com/:x:/s/UKRPortal/EUYPiMkl4n1GqaWinv2OgUoByXCmeVtmsgIINesDzZo66w?e=zrOdMh" target="_blank">
             <SidebarItem icon={appConfig.icons.matrix} iconEnd="open_in_new">{m._meal.openTracker}</SidebarItem>
           </a>
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_visitMonitoring'))} name="meal_visitMonitoring"/>
