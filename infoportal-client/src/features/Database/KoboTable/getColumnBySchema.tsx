@@ -215,6 +215,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
         return {
           ...common,
           type: 'string',
+          width: q.appearance === 'multiline' ? 240 : undefined,
           renderQuick: row => getVal(row, q.name) as string,
         }
       }

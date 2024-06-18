@@ -514,7 +514,7 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
   },
   '.table tbody td': {
     background: t.palette.background.paper,
-    maxWidth: 80,
+    maxWidth: 102,
   },
   '.table thead td, .table thead th': {
     background: darken(t.palette.background.default, .01),

@@ -74,6 +74,7 @@ export interface KoboApiSchema {
       $qpath: string
       $xpath: string
       label?: string[]
+      appearance?: 'multiline',
       name: string
       file?: string
       type: KoboApiColumType
