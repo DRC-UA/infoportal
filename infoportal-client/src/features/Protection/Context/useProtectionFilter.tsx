@@ -83,7 +83,11 @@ export const useProtectionFilters = (data?: Seq<IKoboMeta>, flatData?: Seq<Prote
       try {
         const isDateIn = PeriodHelper.isDateIn(period, d.date)
         if (!isDateIn) return false
-        if (custom.echo && hash(d.koboId, 'dedup') % 100 <= conf.other.protection.echoDuplicationEstimationPercent) return false
+        if (
+          custom.echo &&
+          d.formId === KoboIndex.byName('protection_hhs3').id &&
+          hash(d.koboId, 'dedup') % 100 <= conf.other.protection.echoDuplicationEstimationPercent
+        ) return false
         if (custom.echoDisability && hash(d.koboId, 'disability') % 100 >= conf.other.protection.echoDisabilityEstimationPercent) return false
         return true
       } catch (e) {

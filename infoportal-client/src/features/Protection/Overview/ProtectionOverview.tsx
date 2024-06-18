@@ -26,7 +26,6 @@ export const ProtectionOverview = () => {
   const {m, formatLargeNumber} = useI18n()
   if (!ctx.data) return
   const data = ctx.data
-  console.log(data)
   return (
     <Page width="lg">
       <DataFilterLayout
