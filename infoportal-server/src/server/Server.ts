@@ -112,7 +112,6 @@ export class Server {
       // this.ecrecSdk,
       // this.legalaidSdk,
       this.services,
-      this.log,
     ))
     // app.use(Sentry.Handlers.errorHandler())
     app.use(this.errorHandler)

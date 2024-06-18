@@ -1,5 +1,5 @@
 import express, {NextFunction, Request, Response} from 'express'
-import {AppLogger} from '../index'
+import {app, AppLogger} from '../index'
 import {ControllerMain} from './controller/ControllerMain'
 import {Services} from './services'
 import {PrismaClient} from '@prisma/client'
@@ -31,25 +31,25 @@ export interface AuthenticatedRequest extends Request {
   user?: UserSession
 }
 
-export const errorCatcher = (handler: (req: Request, res: Response, next: NextFunction) => Promise<void>) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await handler(req, res, next)
-    } catch (err) {
-      console.error('[errorCatcher()]', req.url, req.session.user?.email)
-      next(err)
-    }
-  }
-}
-
 export const getRoutes = (
   prisma: PrismaClient,
   // ecrecSdk: EcrecSdk,
   // legalAidSdk: LegalaidSdk,
   services: Services,
-  logger: AppLogger,
+  log: AppLogger = app.logger('Routes'),
 ) => {
   const cache = apicache.middleware
+
+  const errorCatcher = (handler: (req: Request, res: Response, next: NextFunction) => Promise<void>) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        await handler(req, res, next)
+      } catch (err) {
+        log.error(req.url + '' + req.session.user?.email)
+        next(err)
+      }
+    }
+  }
 
   const router = express.Router()
   // const ecrec = new ControllerEcrec(
@@ -197,7 +197,10 @@ export const getRoutes = (
     // router.get('/ecrec', auth(), errorCatcher(ecrec.index))
     // router.get('/*', errorCatcher(ecrec.index))
   } catch (e) {
-    logger.error('Error caught in Routes.')
+    if (e instanceof Error) {
+      log.error(e.toString())
+    }
+    log.error(e)
     console.error(e)
   }
   return router

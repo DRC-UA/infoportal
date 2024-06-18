@@ -92,6 +92,7 @@ const startApp = async (conf: AppConf) => {
   //   }
   // }))
 
+  const log = app.logger('')
   const prisma = new PrismaClient({
     // log: ['query']
   })
@@ -102,7 +103,6 @@ const startApp = async (conf: AppConf) => {
     prisma,
   )
   const init = async () => {
-    const log = app.logger('')
     log.info(`Starting... v5.0`)
 
     log.info(`Initialize database ${conf.db.url.split('@')[1]}...`)
@@ -136,8 +136,14 @@ const startApp = async (conf: AppConf) => {
   init()
   // } else {
   start()
-  // }
+
+  process.on('uncaughtException', (err) => {
+    log.error('Uncaught Exception:', err)
+    // process.exit(1)
+  })
+  process.on('unhandledRejection', (reason, promise) => {
+    log.error('Unhandled Rejection at:', promise, 'reason:', reason)
+  })
 }
 
-// runAi.washRMM()
 startApp(appConf)
