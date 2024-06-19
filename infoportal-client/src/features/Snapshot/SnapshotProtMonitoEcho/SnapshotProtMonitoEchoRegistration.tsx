@@ -102,7 +102,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 label={Protection_hhs3.options.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
                 mergeOptions={{
                   distrust_of_public_institutions_and_authorities: 'other_specify',
-                  discrimination: 'other_specify',
+                  // discrimination: 'other_specify',
                   lack_of_devices_or_internet_connectivity_to_access_online_procedure: 'other_specify',
                   // distance_or_cost_of_transportation: 'other_specify',
                 }}
