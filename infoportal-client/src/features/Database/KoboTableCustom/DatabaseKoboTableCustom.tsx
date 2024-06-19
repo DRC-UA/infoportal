@@ -7,7 +7,6 @@ import {useParams} from 'react-router'
 import * as yup from 'yup'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {seq} from '@alexandreannic/ts-utils'
-import {KoboAnswerId, KoboId} from '@infoportal-common'
 
 export const customForms = [{
   id: '1',
@@ -28,6 +27,7 @@ export const DatabaseTableCustomRoute = () => {
   const formIds = useMemo(() => customForm!.forms.map(_ => _.id), [id])
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
+  if (!customForm) return
   useEffect(() => {
     formIds.forEach(_ => {
       ctxAnswers.byId.fetch({}, _)
@@ -37,6 +37,13 @@ export const DatabaseTableCustomRoute = () => {
 
   const data = useMemoFn(formIds.map(_ => ctxAnswers.byId.get(_)), dataSets => {
     if (dataSets.find(_ => !_)) return
+    const indexesParams = seq(customForm.forms)
+      .compactBy('join')
+      .flatMap(_ => [
+        {formId: _.id, colName: _.join.colName},
+        {formId: _.join.originId, colName: _.join.originColName},
+      ])
+      .distinct(_ => _.formId)
     // const indexes: Record<KoboId, Record<KoboAnswerId, any[]>> = {} as any
     // seq(dataSets).compact().forEach((_, i) => {
     //   if (i === 0) return
