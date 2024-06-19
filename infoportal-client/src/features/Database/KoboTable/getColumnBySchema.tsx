@@ -98,6 +98,7 @@ interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
   groupName?: string
   repeatGroupsAsColumn?: boolean
   selectedIds?: KoboAnswerId[]
+  getRow?: (_: T) => KoboMappedAnswer,
   onSelectColumn?: (_: string) => void
 }
 
@@ -124,7 +125,6 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   onSelectColumn,
 }: GetColumnBySchemaProps<T> & {
   q: KoboApiQuestionSchema,
-  getRow?: (_: T) => KoboMappedAnswer,
 }): DatabaseColumnProps<T>[] => {
   const {
     getId,
