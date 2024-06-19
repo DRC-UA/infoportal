@@ -34,6 +34,13 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
 
   const shape = useMemo(() => {
     return DataFilter.makeShape<IKoboMeta>({
+      status: {
+        icon: 'check_circle',
+        label: m.status,
+        getValue: _ => _.status ?? DataFilter.blank,
+        addBlankOption: true,
+        getOptions: () => DataFilter.buildOptionsFromObject(KoboMetaStatus),
+      },
       sector: {
         icon: 'category',
         label: m.sector,
@@ -58,13 +65,6 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
         label: m.project,
         getValue: _ => _.project,
         getOptions: () => DataFilter.buildOptions(data.flatMap(_ => _.project!).distinct(_ => _).sort())
-      },
-      status: {
-        icon: 'check_circle',
-        label: m.status,
-        getValue: _ => _.status ?? DataFilter.blank,
-        addBlankOption: true,
-        getOptions: () => DataFilter.buildOptionsFromObject(KoboMetaStatus),
       },
       form: {
         icon: appConfig.icons.koboForm,

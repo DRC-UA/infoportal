@@ -12,9 +12,9 @@ import {KoboAnswerId, KoboId} from '@infoportal-common'
 export const customForms = [{
   id: '1',
   name: '[ECREC] VET',
-  horizontalJoin: [
-    {id: 'aGGGapARnC2ek7sA6SuHmu', colName: 'id'},
-    {id: 'aNRJbxkYEH2yogyeNowXzS', colName: 'id_form_vet'},
+  forms: [
+    {id: 'aGGGapARnC2ek7sA6SuHmu'},
+    {id: 'aNRJbxkYEH2yogyeNowXzS', join: {originId: 'aGGGapARnC2ek7sA6SuHmu', originColName: 'id', colName: 'id_form_vet'}},
   ]
 }]
 
@@ -25,7 +25,7 @@ const urlValidation = yup.object({
 export const DatabaseTableCustomRoute = () => {
   const {id} = urlValidation.validateSync(useParams())
   const customForm = useMemo(() => customForms.find(_ => _.id === id), [id])
-  const formIds = useMemo(() => customForm!.horizontalJoin.map(_ => _.id), [id])
+  const formIds = useMemo(() => customForm!.forms.map(_ => _.id), [id])
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
   useEffect(() => {
@@ -37,13 +37,13 @@ export const DatabaseTableCustomRoute = () => {
 
   const data = useMemoFn(formIds.map(_ => ctxAnswers.byId.get(_)), dataSets => {
     if (dataSets.find(_ => !_)) return
-    const indexes: Record<KoboId, Record<KoboAnswerId, any[]>> = {} as any
-    seq(dataSets).compact().forEach((_, i) => {
-      if (i === 0) return
-      const join = customForm!.horizontalJoin?.[i]
-      if (!join) return
-      indexes[formIds[i]] = seq(_.data).groupBy(_ => (_ as any)[join.colName])
-    })
+    // const indexes: Record<KoboId, Record<KoboAnswerId, any[]>> = {} as any
+    // seq(dataSets).compact().forEach((_, i) => {
+    //   if (i === 0) return
+    //   const join = customForm!.forms?.[i]
+    //   if (!join) return
+    //   indexes[formIds[i]] = seq(_.data).groupBy(_ => (_ as any)[join.colName])
+    // })
     return dataSets[0]!.data.map(_ => {
       return {
         [formIds[0]]: _,
