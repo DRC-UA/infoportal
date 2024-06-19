@@ -165,7 +165,7 @@ export class KoboMetaBasicneeds {
     })
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast_l!)
 
-    const activities = seq(answer.back_prog_type)?.map(prog => {
+    const activities = seq(answer.back_prog_type_l)?.map(prog => {
       const defaultProject = answer.back_donor_l?.[0] ?? answer.back_donor
       return fnSwitch(prog.split('_')[0], {
         cfr: {activity: DrcProgram.CashForRent, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfr ?? defaultProject)},
