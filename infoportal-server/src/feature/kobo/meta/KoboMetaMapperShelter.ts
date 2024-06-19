@@ -57,7 +57,7 @@ export namespace KoboMetaMapperShelter {
 
   export const createCfRent: MetaMapperInsert<KoboMetaOrigin<Bn_cashForRentRegistration.T, KoboTagStatus<CashForRentStatus>>> = row => {
     const answer = Bn_cashForRentRegistration.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const status = fnSwitch(row.tags?.status!, {
       FirstPending: KoboMetaStatus.Pending,
@@ -106,7 +106,7 @@ export namespace KoboMetaMapperShelter {
 
   export const createCfShelter: MetaMapperInsert<KoboMetaOrigin<Shelter_cashForShelter.T, KoboTagStatus>> = row => {
     const answer = Shelter_cashForShelter.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = DrcProjectHelper.search(Shelter_cashForShelter.options.donor[answer.donor!])
     return KoboMetaMapper.make({
@@ -147,7 +147,7 @@ export namespace KoboMetaMapperShelter {
 
   export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_NTA.T, ShelterNtaTags>> = row => {
     const answer = Shelter_NTA.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(harmonizeNtaDisabilityAll(answer)).map(KoboGeneralMapping.mapPerson)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(harmonizeNtaDisabilityAll(answer)).map(KoboGeneralMapping.mapPersonDetails)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = safeArray(row.tags?.project)
     const isCfRepair = answer.modality === 'cash_for_repair'
