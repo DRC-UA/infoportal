@@ -20,7 +20,7 @@ import {databaseIndex} from '@/features/Database/databaseIndex'
 import {Txt} from 'mui-extension'
 import {Icon} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
+import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {IpBtn} from '@/shared/Btn'
 
 type Data = IKoboMeta & {

@@ -81,7 +81,7 @@ export const DatatableFilterModal = ({
 
   return (
     <Popover open={!!anchorEl} anchorEl={anchorEl} onClose={onClose}>
-      <PanelHead sx={{maxWidth: 500}} action={
+      <PanelHead PanelTitleProps={{overflow: 'hidden'}} sx={{maxWidth: 500}} action={
         <IpIconBtn children="filter_alt_off" color={filterActive ? 'primary' : undefined} onClick={() => {
           onClear?.()
           setInnerValue(undefined)

@@ -40,7 +40,7 @@ interface KoboUpdateTagById {
   value: any
 }
 
-export interface KoboEditAnswersContext {
+export interface KoboEditTagsContext {
   asyncUpdateById: UseAsyncMultiple<(_: KoboUpdateTagById) => Promise<void>>
   asyncUpdateByName: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(_: KoboUpdateTagByName<T, K>) => Promise<void>>
   open: Dispatch<SetStateAction<EditDataParams | undefined>>
@@ -48,9 +48,9 @@ export interface KoboEditAnswersContext {
   close: () => void
 }
 
-const Context = React.createContext({} as KoboEditAnswersContext)
+const Context = React.createContext({} as KoboEditTagsContext)
 
-export const useKoboEditTagContext = () => useContext<KoboEditAnswersContext>(Context)
+export const useKoboEditTagContext = () => useContext<KoboEditTagsContext>(Context)
 
 export const KoboEditTagsProvider = ({
   children,

@@ -9,7 +9,7 @@ import {
   KoboSchemaHelper,
   KoboTranslateChoice,
   KoboTranslateQuestion
-} from '@infoportal-common'
+} from '../../../../../../infoportal-common/src'
 import {I18nContextProps, useI18n} from '@/core/i18n/I18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
@@ -354,6 +354,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
 
 export const getColumnBySchema = <T extends Record<string, any>>({
   schema,
+  getRow = _ => _ as unknown as KoboMappedAnswer,
   ...props
 }: GetColumnBySchemaProps<T> & {
   schema: KoboApiQuestionSchema[]
@@ -364,13 +365,14 @@ export const getColumnBySchema = <T extends Record<string, any>>({
       id: 'id',
       head: 'ID',
       className: 'td-id',
-      renderQuick: row => row.id,
+      renderQuick: row => getRow(row).id,
     },
     {
       head: props.m.submissionTime,
       id: 'submissionTime',
       type: 'date',
-      render: _ => {
+      render: row => {
+        const _ = getRow(row)
         const time = formatDateTime(_.submissionTime)
         return {
           label: formatDate(_.submissionTime),
@@ -382,6 +384,7 @@ export const getColumnBySchema = <T extends Record<string, any>>({
     },
     ...schema.filter(_ => !ignoredColType.has(_.type)).flatMap(q => getColumnByQuestionSchema({
       q,
+      getRow,
       ...props,
     }))
   ]

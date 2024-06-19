@@ -1,11 +1,11 @@
 import {Box, Typography, TypographyProps} from '@mui/material'
 import {ReactNode} from 'react'
 
-interface Props extends TypographyProps {
+export interface PanelTitleProps extends TypographyProps {
   action?: ReactNode
 }
 
-export const PanelTitle = ({sx, children, action, ...props}: Props) => {
+export const PanelTitle = ({sx, children, action, ...props}: PanelTitleProps) => {
   return (
     <Typography
       variant="h3"

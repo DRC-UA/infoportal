@@ -7,16 +7,20 @@ import {useParams} from 'react-router'
 import * as yup from 'yup'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {seq} from '@alexandreannic/ts-utils'
-import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
+import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useI18n} from '@/core/i18n'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {useTheme} from '@mui/material'
+import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumnsCustom'
+import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 
 export const customForms = [{
   id: '1',
   name: '[ECREC] VET',
   forms: [
     {id: 'aGGGapARnC2ek7sA6SuHmu'},
-    {id: 'aNRJbxkYEH2yogyeNowXzS', join: {originId: 'aGGGapARnC2ek7sA6SuHmu', originColName: 'id', colName: 'id_form_vet'}},
+    {id: 'a4iDDoLpUJHbu6cwsn2fnG', join: {originId: 'aGGGapARnC2ek7sA6SuHmu', originColName: 'id', colName: 'id_form_vet'}},
   ]
 }]
 
@@ -25,7 +29,9 @@ const urlValidation = yup.object({
 })
 
 export const DatabaseTableCustomRoute = () => {
+  const ctxEditTag = useKoboEditTagContext()
   const {m} = useI18n()
+  const t = useTheme()
   const {id} = urlValidation.validateSync(useParams())
   const customForm = useMemo(() => customForms.find(_ => _.id === id), [id])
   const formIds = useMemo(() => customForm!.forms.map(_ => _.id), [id])
@@ -50,14 +56,14 @@ export const DatabaseTableCustomRoute = () => {
       .distinct(_ => _.formId)
     const indexes = indexesParams.groupByAndApply(
       _ => _.formId,
-      group => seq(ctxAnswers.byId.get(group[0].formId)?.data!).groupBy(_ => (_ as any)[group[0].colName])
+      group => seq(ctxAnswers.byId.get(group[0].formId)?.data!).groupByFirst(_ => (_ as any)[group[0].colName])
     )
     return dataSets[0]!.map((row, i) => {
       return {
-        [customForm.forms[0].id]: row,
+        [customForm.forms[0].id]: (databaseCustomMapping[customForm.forms[0].id] ?? (_ => _))(row),
         ...seq(customForm.forms).compactBy('join').reduceObject(_ => {
-          console.log(_.id, _.join.originColName, (row as any)[_.join.originColName])
-          return [_.id, indexes[_.id][(row as any)[_.join.originColName]]]
+          const refRow = indexes[_.id][(row as any)[_.join.originColName]]
+          return [_.id, refRow ? (databaseCustomMapping[_.id] ?? (_ => _))(refRow) : undefined]
         })
       }
     })
@@ -67,7 +73,7 @@ export const DatabaseTableCustomRoute = () => {
     return customForm.forms.map(_ => _.id).flatMap(formId => {
       const schema = ctxSchema.byId[formId]?.get
       if (!schema) return []
-      return getColumnBySchema({
+      const cols = getColumnBySchema({
         formId,
         data: data,
         schema: schema.schemaHelper.sanitizedSchema.content.survey,
@@ -76,28 +82,39 @@ export const DatabaseTableCustomRoute = () => {
         translateChoice: schema.translate.choice,
         choicesIndex: schema.schemaHelper.choicesIndex,
         m,
-        getRow: _ => _[formId] ?? {} as any,
+        getRow: _ => (_[formId] ?? {}) as any,
         // externalFilesIndex: externalFilesIndex,
         // repeatGroupsAsColumn: repeatGroupsAsColumns,
         // onOpenGroupModal: setOpenGroupModalAnswer,
+      }).map(_ => {
+        _.id = formId + '_' + _.id
+        _.group = formId
+        _.groupLabel = schema.schemaUnsanitized.name
+        return _
       })
+      cols[cols.length - 1].style = () => ({borderRight: '3px solid ' + t.palette.divider})
+      cols[cols.length - 1].styleHead = {borderRight: '3px solid ' + t.palette.divider}
+      return [
+        ...getColumnsCustom({
+          getRow: _ => _[formId] ?? {},
+          selectedIds: [],
+          formId: formId,
+          canEdit: true,
+          m,
+          asyncUpdateTagById: ctxEditTag.asyncUpdateById,
+          openEditTag: ctxEditTag.open,
+        }),
+        ...cols
+      ]
     })
   }, customForm.forms.map(_ => ctxSchema.byId[_.id]?.get))
 
-  console.log(columns)
-
-  console.log(data?.filter(_ => Object.values(_).every(_ => _ !== undefined)))
-
-  // const data = useMemo(() => {
-  //
-  // }, formIds.map(_ => ctxAnswers.byId.get(_)))
   const loading = ctxSchema.anyLoading || !!formIds.find(_ => ctxAnswers.byId.loading(_))
   return (
     <>
       <Page width="full" sx={{p: 0}} loading={loading}>
         <Panel>
-          <Datatable id="test" columns={columns} data={data}/>
-          Test
+          <Datatable id="test" columns={columns} data={data as any} showExportBtn/>
         </Panel>
       </Page>
     </>

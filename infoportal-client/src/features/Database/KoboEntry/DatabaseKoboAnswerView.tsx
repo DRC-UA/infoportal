@@ -6,7 +6,7 @@ import {KoboApiQuestionSchema, KoboId, koboIndex, KoboSchemaHelper} from '@infop
 import React, {useEffect, useMemo, useState} from 'react'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {Txt} from 'mui-extension'
-import {getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
+import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {Page} from '@/shared/Page'
