@@ -14,15 +14,29 @@ import {useTheme} from '@mui/material'
 import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumnsCustom'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
+import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
+import {KoboAnswerId} from '@infoportal-common'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 
-export const customForms = [{
-  id: '1',
-  name: '[ECREC] VET',
-  forms: [
-    {id: 'aGGGapARnC2ek7sA6SuHmu'},
-    {id: 'a4iDDoLpUJHbu6cwsn2fnG', join: {originId: 'aGGGapARnC2ek7sA6SuHmu', originColName: 'id', colName: 'id_form_vet'}},
-  ]
-}]
+export const customForms = [
+  {
+    id: '1',
+    name: '[ECREC] VET',
+    forms: [
+      {id: 'aGGGapARnC2ek7sA6SuHmu'},
+      {id: 'a4iDDoLpUJHbu6cwsn2fnG', join: {originId: 'aGGGapARnC2ek7sA6SuHmu', originColName: 'id', colName: 'id_form_vet'}},
+    ]
+  },
+  {
+    id: '2',
+    name: '[ECREC] MSNE',
+    forms: [
+      {id: 'awYf9G3sZB4grG8S4w3Wt8'},
+      {id: 'a4iDDoLpUJHbu6cwsn2fnG', join: {originId: 'awYf9G3sZB4grG8S4w3Wt8', originColName: 'ben_det_tax_id_num', colName: 'tax_id'}},
+    ]
+  }
+]
 
 const urlValidation = yup.object({
   id: yup.string().required()
@@ -30,6 +44,7 @@ const urlValidation = yup.object({
 
 export const DatabaseTableCustomRoute = () => {
   const ctxEditTag = useKoboEditTagContext()
+  const {api} = useAppSettings()
   const {m} = useI18n()
   const t = useTheme()
   const {id} = urlValidation.validateSync(useParams())
@@ -88,13 +103,23 @@ export const DatabaseTableCustomRoute = () => {
         // onOpenGroupModal: setOpenGroupModalAnswer,
       }).map(_ => {
         _.id = formId + '_' + _.id
-        _.group = formId
-        _.groupLabel = schema.schemaUnsanitized.name
+        _.group = formId + _.group
+        _.groupLabel = schema.schemaUnsanitized.name + '/' + _.groupLabel
         return _
       })
       cols[cols.length - 1].style = () => ({borderRight: '3px solid ' + t.palette.divider})
       cols[cols.length - 1].styleHead = {borderRight: '3px solid ' + t.palette.divider}
       return [
+        ...getColumnsBase({
+          selectedIds: [],
+          formId,
+          canEdit: true,
+          m,
+          openAnswerModal: ctxAnswers.openAnswerModal,
+          asyncEdit: (answerId: KoboAnswerId) => api.koboApi.getEditUrl({formId: formId, answerId}),
+          asyncUpdateTagById: ctxEditTag.asyncUpdateById,
+          openEditTag: ctxEditTag.open,
+        }),
         ...getColumnsCustom({
           getRow: _ => _[formId] ?? {},
           selectedIds: [],
@@ -107,14 +132,34 @@ export const DatabaseTableCustomRoute = () => {
         ...cols
       ]
     })
-  }, customForm.forms.map(_ => ctxSchema.byId[_.id]?.get))
+  }, [...customForm.forms.map(_ => ctxSchema.byId[_.id]?.get), ctxSchema.langIndex])
 
   const loading = ctxSchema.anyLoading || !!formIds.find(_ => ctxAnswers.byId.loading(_))
   return (
     <>
       <Page width="full" sx={{p: 0}} loading={loading}>
         <Panel>
-          <Datatable id="test" columns={columns} data={data as any} showExportBtn/>
+          <Datatable
+            id={customForm.id}
+            columns={columns}
+            data={data as any}
+            showExportBtn
+            header={
+              <>
+                <IpSelectSingle<number>
+                  hideNullOption
+                  sx={{maxWidth: 128, mr: 1}}
+                  defaultValue={ctxSchema.langIndex}
+                  onChange={ctxSchema.setLangIndex}
+                  options={[
+                    {children: 'XML', value: -1},
+                    ...ctxSchema.byId[customForm.forms[0].id]?.get?.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i})) ?? [],
+                    // ...ctx.schema.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
+                  ]}
+                />
+              </>
+            }
+          />
         </Panel>
       </Page>
     </>
