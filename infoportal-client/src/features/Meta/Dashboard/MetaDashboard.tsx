@@ -8,7 +8,6 @@ import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
 import {format} from 'date-fns'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelper} from '@/shared/charts/chartHelper'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Box, Grid, useTheme} from '@mui/material'
 import {Txt} from 'mui-extension'
@@ -16,7 +15,7 @@ import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {Panel, PanelBody} from '@/shared/Panel'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@alexandreannic/ts-utils'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {Map} from '@/shared/maps/Map'
 
@@ -89,10 +88,11 @@ export const MetaDashboard = () => {
         <Div column>
           <SlidePanel>
             <Lazy deps={[ctx.filteredData]} fn={() => {
-              return ChartHelper.single({
-                data: ctx.filteredData.map(_ => _.status ?? 'Blank'),
-                percent: true,
-              }).get()
+              const group = ctx.filteredData.groupByAndApply(_ => _.status ?? 'Blank', _ => _.length)
+              return {
+                group,
+                total: seq(Obj.values(group)).sum(),
+              }
             }}>
               {_ => (
                 <Box>
@@ -102,24 +102,24 @@ export const MetaDashboard = () => {
                         <ChartPieWidget
                           dense sx={{flex: 1}} color={t.palette.success.main}
                           title={<Txt size="small">{m.committed}</Txt>}
-                          value={_.Committed?.value ?? 0} base={1}
+                          value={_.group.Committed ?? 0} base={_.total}
                         />
                         <ChartPieWidget
                           dense sx={{flex: 1}} color={t.palette.warning.main}
                           title={<Txt size="small">{m.pending}</Txt>}
-                          value={_.Pending?.value ?? 0} base={1}
+                          value={_.group.Pending ?? 0} base={_.total}
                         />
                       </Div>
                       <Div>
                         <ChartPieWidget
                           dense sx={{flex: 1}} color={t.palette.error.main}
                           title={<Txt size="small">{m.rejected}</Txt>}
-                          value={_.Rejected?.value ?? 0} base={1}
+                          value={_.group.Rejected ?? 0} base={_.total}
                         />
                         <ChartPieWidget
                           dense sx={{flex: 1}} color={t.palette.info.main}
                           title={<Txt size="small">{m.blank}</Txt>}
-                          value={_.Blank?.value ?? 0} base={1}
+                          value={_.group.Blank ?? 0} base={_.total}
                         />
                       </Div>
                     </Div>
