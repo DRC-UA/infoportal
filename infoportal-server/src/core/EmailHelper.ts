@@ -1,39 +1,47 @@
-import nodemailer = require('nodemailer')
+import nodemailer from 'nodemailer'
 import {appConf} from './conf/AppConf'
-import {generateEntryLink} from './LinkGenerator'
+import {SiteMap} from './LinkGenerator'
+import {app} from '../index'
 
-class EmailHelper {
-  private transporter: nodemailer.Transporter
+export class EmailHelper {
 
-  constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: 'smtp.ukr.net',
-      port: 465,
+  constructor(
+    private conf = appConf,
+    private siteMap = new SiteMap(),
+    private log = app.logger('EmailHelper'),
+    private transporter = nodemailer.createTransport({
+      host: conf.email.host,
+      port: conf.email.port,
       secure: true,
       auth: {
-        user: appConf.email.user,
-        pass: appConf.email.password,
+        user: conf.email.address,
+        pass: conf.email.password,
       },
     })
+  ) {
   }
 
-  public async send(to: string, subject: string, formId: string, answerId: string): Promise<void> {
-    const link = generateEntryLink(formId, answerId)
+  public async send({
+    to,
+    subject,
+    html,
+  }: {
+    html: string,
+    to: string,
+    subject: string,
+  }): Promise<void> {
     const mailOptions = {
-      from: appConf.email.user,
+      from: appConf.email.address,
       to,
       subject,
-      html: `A new <a href="${link}">request</a> has been added with you as the focal point.`,
+      html,
     }
-
     try {
       await this.transporter.sendMail(mailOptions)
-      console.log(`Email sent to ${to}`)
+      // this.log.info(`Email sent to ${to}`)
     } catch (error) {
-      console.error('Failed to send email:', error)
+      this.log.error('Failed to send email:', error)
       throw error
     }
   }
 }
-
-export default EmailHelper

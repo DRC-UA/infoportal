@@ -1,17 +1,22 @@
-import {logger, Logger} from '../helper/Logger'
 import {GlobalEvent} from './GlobalEvent'
-import EmailHelper from './EmailHelper'
+import {EmailHelper} from './EmailHelper'
 import {KoboIndex} from '@infoportal-common'
+import {app} from '../index'
+import {UserService} from '../feature/user/UserService'
+import {PrismaClient} from '@prisma/client'
+import {SiteMap} from './LinkGenerator'
 
-class EmailService {
+export class EmailService {
 
-  private log: Logger
 
   constructor(
+    private prisma = new PrismaClient(),
+    private users = new UserService(prisma),
     private event = GlobalEvent.Class.getInstance(),
-    private emailHelper: EmailHelper,
+    private emailHelper = new EmailHelper(),
+    private siteMap = new SiteMap(),
+    private log = app.logger('EmailService'),
   ) {
-    this.log = logger('EmailService')
     this.initializeListeners()
   }
 
@@ -38,18 +43,24 @@ class EmailService {
   private async sendCfmNotification(email: string, formId: string, answerIds: string[]) {
     try {
       for (const answerId of answerIds) {
-        await this.emailHelper.send(
-          email,
-          'New CFM Request',
-          formId,
-          answerId
-        )
-        this.log.info(`Email sent to ${email} for form ${formId} and answer ${answerId}`)
+        const link = this.siteMap.openCfmEntry(formId, answerId)
+        const userName = await this.users.getUserByEmail(email).then(_ => _?.name)
+        await this.emailHelper.send({
+          to: email,
+          subject: 'New CFM Request!',
+          html: `
+            Hi ${userName ?? ''},<br/><br/>
+            A new CFM request has been assigned to you as the focal point in InfoPortal.
+            <br/>   
+            <a href="${link}">Link to request</a>
+            <br/><br/> 
+            Thank you!
+          `
+        })
+        this.log.info(`sendCfmNotification sent to ${email} for form ${formId} and answer ${answerId}`)
       }
     } catch (error) {
       this.log.error(`Failed to send email to ${email} for form ${formId} and answers ${answerIds.join(', ')}`, error)
     }
   }
 }
-
-export default EmailService

@@ -15,8 +15,8 @@ import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {BuildKoboType} from './script/BuildTypeKobo'
 import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
-import EmailService from './core/EmailService'
-import EmailHelper from './core/EmailHelper'
+import {EmailService} from './core/EmailService'
+import {EmailHelper} from './core/EmailHelper'
 import {GlobalEvent} from './core/GlobalEvent'
 
 export type AppLogger = WinstonLogger;
@@ -103,8 +103,7 @@ const startApp = async (conf: AppConf) => {
   const prisma = new PrismaClient({
     // log: ['query']
   })
-  const emailHelper = new EmailHelper()
-  const emailService = new EmailService(GlobalEvent.Class.getInstance(), emailHelper)
+  const emailService = new EmailService()
 
   const services = initServices(
     // koboSdk,
