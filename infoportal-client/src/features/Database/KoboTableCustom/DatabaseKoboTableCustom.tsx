@@ -14,25 +14,56 @@ import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumns
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
-import {KoboAnswerId} from '@infoportal-common'
+import {KoboAnswerId, KoboId} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {useLayoutContext} from '@/shared/Layout/LayoutContext'
 
-export const customForms = [
+interface CustomForm {
+  id: string
+  name: string
+  // langs: string[]
+  forms: {
+    id: string
+    // langIndexes?: number[]
+    join?: {
+      originId: KoboId, originColName: string, colName: string
+    }
+  }[]
+}
+
+export const customForms: CustomForm[] = [
   {
-    id: '1',
+    id: 'vet',
+    // langs: ['English (en)', 'Ukrainian (ua)'],
     name: '[ECREC] VET',
     forms: [
-      {id: 'aGGGapARnC2ek7sA6SuHmu'},
-      {id: 'a4iDDoLpUJHbu6cwsn2fnG', join: {originId: 'aGGGapARnC2ek7sA6SuHmu', originColName: 'id', colName: 'id_form_vet'}},
+      {
+        id: 'aGGGapARnC2ek7sA6SuHmu',
+        // langIndexes: [1, 0],
+      },
+      {
+        // langIndexes: [1, 0],
+        id: 'a4iDDoLpUJHbu6cwsn2fnG',
+        join: {originId: 'aGGGapARnC2ek7sA6SuHmu', originColName: 'id', colName: 'id_form_vet'}
+
+      },
     ]
   },
   {
-    id: '2',
-    name: '[ECREC] MSNE',
+    id: 'msme',
+    // langs: ['English (en)', 'Ukrainian (ua)'],
+    name: '[ECREC] MSME',
     forms: [
-      {id: 'awYf9G3sZB4grG8S4w3Wt8'},
-      {id: 'a4iDDoLpUJHbu6cwsn2fnG', join: {originId: 'awYf9G3sZB4grG8S4w3Wt8', originColName: 'ben_det_tax_id_num', colName: 'tax_id'}},
+      {
+        id: 'awYf9G3sZB4grG8S4w3Wt8',
+        // langIndexes: [1, 0],
+      },
+      {
+        id: 'a4iDDoLpUJHbu6cwsn2fnG',
+        // langIndexes: [0, 1],
+        join: {originId: 'awYf9G3sZB4grG8S4w3Wt8', originColName: 'ben_det_tax_id_num', colName: 'tax_id'}
+      },
     ]
   }
 ]
@@ -50,14 +81,22 @@ export const DatabaseTableCustomRoute = () => {
   const customForm = useMemo(() => customForms.find(_ => _.id === id), [id])
   const formIds = useMemo(() => customForm!.forms.map(_ => _.id), [id])
   const ctxSchema = useKoboSchemaContext()
+  const {setTitle} = useLayoutContext()
   const ctxAnswers = useKoboAnswersContext()
   if (!customForm) return
+
   useEffect(() => {
     formIds.forEach(_ => {
       ctxAnswers.byId.fetch({}, _)
       ctxSchema.fetchById(_)
     })
   }, [formIds])
+
+  const schemas = customForm.forms.map(_ => ({formId: _.id, schema: ctxSchema.byId[_.id]?.get}))
+
+  useEffect(() => {
+    setTitle(schemas.map(_ => _.schema?.schemaUnsanitized.name ?? '').join(' + '))
+  }, [schemas])
 
   const data = useMemo(() => {
     const dataSets = formIds.map(_ => ctxAnswers.byId.get(_)?.data)
@@ -85,8 +124,7 @@ export const DatabaseTableCustomRoute = () => {
   }, [...formIds.map(_ => ctxAnswers.byId.get(_)?.data), ctxSchema.langIndex])
 
   const columns = useMemo(() => {
-    return customForm.forms.map(_ => _.id).flatMap(formId => {
-      const schema = ctxSchema.byId[formId]?.get
+    return schemas.flatMap(({formId, schema}) => {
       if (!schema) return []
       const cols = getColumnBySchema({
         formId,
@@ -132,7 +170,7 @@ export const DatabaseTableCustomRoute = () => {
         ...cols
       ]
     })
-  }, [...customForm.forms.map(_ => ctxSchema.byId[_.id]?.get), ctxSchema.langIndex])
+  }, [...schemas, ctxSchema.langIndex])
 
   const loading = ctxSchema.anyLoading || !!formIds.find(_ => ctxAnswers.byId.loading(_))
   return (
@@ -146,7 +184,6 @@ export const DatabaseTableCustomRoute = () => {
             showExportBtn
             header={
               <>
-                {ctxSchema.langIndex}
                 <IpSelectSingle<number>
                   hideNullOption
                   sx={{maxWidth: 128, mr: 1}}
@@ -154,6 +191,7 @@ export const DatabaseTableCustomRoute = () => {
                   onChange={ctxSchema.setLangIndex}
                   options={[
                     {children: 'XML', value: -1},
+                    // ...customForm.langs.map((l, i) => ({children: l, value: i})),
                     ...ctxSchema.byId[customForm.forms[0].id]?.get?.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i})) ?? [],
                     // ...ctx.schema.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
                   ]}
