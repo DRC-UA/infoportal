@@ -1,6 +1,6 @@
 import {BoxProps} from '@mui/material'
 import React from 'react'
-import {keyTypeIcon} from '@/features/Database/KoboTable/getColumnBySchema'
+import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {Datatable} from '@/shared/Datatable/Datatable'
 
 

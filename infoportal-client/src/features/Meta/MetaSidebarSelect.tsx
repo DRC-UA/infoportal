@@ -13,7 +13,7 @@ const css = makeSx({
     height: 30,
   },
   option: {
-    height: 28,
+    height: 26,
     whiteSpace: 'nowrap',
     px: 1,
     mr: 0,

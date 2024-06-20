@@ -76,6 +76,7 @@ export const en = Object.freeze({
     clear: 'Clear',
     cancel: 'Cancel',
     custom: 'Custom',
+    customDb: 'Custom databases',
     close: 'Close',
     reinitialize: 'Reinitialize',
     connectAs: 'Connect as',

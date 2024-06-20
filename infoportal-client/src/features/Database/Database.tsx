@@ -18,11 +18,12 @@ import {DatabaseTableRoute} from '@/features/Database/KoboTable/DatabaseKoboTabl
 import {Fender, Txt} from 'mui-extension'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
 import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
-import {Enum, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@alexandreannic/ts-utils'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {DatabaseList} from '@/features/Database/DatabaseList'
 import {DatabaseKoboAnswerViewPage} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {DatabaseHistory} from '@/features/Database/History/DatabaseHistory'
+import {customForms, DatabaseTableCustomRoute} from '@/features/Database/KoboTableCustom/DatabaseKoboTableCustom'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -44,7 +45,7 @@ export const DatabaseWithContext = () => {
 
   const parsedFormNames = useMemo(() => {
     const grouped = seq(ctx.formAccess)?.map(_ => ({..._, parsedName: KoboFormSdk.parseFormName(_.name)})).groupBy(_ => _.parsedName.program ?? m.others)
-    return new Enum(grouped).transform((k, v) => [k, v.sort((a, b) => a.name.localeCompare(b.name))]).sort(([ak], [bk]) => ak.localeCompare(bk)).get()
+    return new Obj(grouped).map((k, v) => [k, v.sort((a, b) => a.name.localeCompare(b.name))]).sort(([ak], [bk]) => ak.localeCompare(bk)).get()
   }, [ctx.formAccess])
 
   return (
@@ -66,7 +67,15 @@ export const DatabaseWithContext = () => {
               </SidebarItem>
             )}
           </NavLink>
-          <SidebarHr/>
+          <SidebarSection dense title={m.customDb}>
+            {customForms.map(_ => (
+              <NavLink to={databaseIndex.siteMap.custom(_.id)} key={_.id}>
+                <SidebarItem icon="join_inner" size="small">
+                  {_.name}
+                </SidebarItem>
+              </NavLink>
+            ))}
+          </SidebarSection>
           {ctx._forms.loading ? (
             <>
               <SidebarItem>
@@ -79,7 +88,7 @@ export const DatabaseWithContext = () => {
                 <Skeleton sx={{width: 160, height: 30}}/>
               </SidebarItem>
             </>
-          ) : Enum.entries(parsedFormNames)?.map(([category, forms]) => (
+          ) : Obj.entries(parsedFormNames)?.map(([category, forms]) => (
             <SidebarSection dense title={category} key={category}>
               {forms.map(_ =>
                 <Tooltip key={_.id} title={_.parsedName.name} placement="right-end">
@@ -111,6 +120,7 @@ export const DatabaseWithContext = () => {
       )}
       <Routes>
         <Route index element={<DatabaseList forms={ctx.formAccess}/>}/>
+        <Route path={databaseIndex.siteMap.custom()} element={<DatabaseTableCustomRoute/>}/>
         <Route path={databaseIndex.siteMap.home()} element={<DatabaseHome/>}>
           <Route index element={<Navigate to={databaseIndex.siteMap.database.relative}/>}/>
           <Route path={databaseIndex.siteMap.answer.relative()} element={<DatabaseKoboAnswerViewPage/>}/>

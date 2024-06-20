@@ -1,36 +1,32 @@
 import {IpBtn} from '@/shared/Btn'
-import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
-import {KoboAnswerFlat, KoboAnswerId, KoboValidation} from '@infoportal-common'
+import {KoboAnswerFlat, KoboAnswerId} from '@infoportal-common'
 import {AaSelect} from '@/shared/Select/Select'
 import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {Switch, Theme} from '@mui/material'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {DatabaseColumnProps, getColumnBySchema} from '@/features/Database/KoboTable/getColumnBySchema'
+import {DatabaseColumnProps, getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {useCustomColumns} from '@/features/Database/KoboTable/customization/useCustomColumns'
+import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumnsCustom'
 import {DatabaseTableProps} from '@/features/Database/KoboTable/DatabaseKoboTable'
 import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyncBtn'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
-import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
-import {Enum, Obj, seq} from '@alexandreannic/ts-utils'
+import {Enum, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
-import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {DatatableColumnToggle} from '@/shared/Datatable/DatatableColumnsToggle'
 import {DatatableHeadTypeIconByKoboType} from '@/shared/Datatable/DatatableHead'
 import {appConfig} from '@/conf/AppConfig'
 import {useSession} from '@/core/Session/SessionContext'
+import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -51,7 +47,15 @@ export const DatabaseKoboTableContent = ({
     event: any
   } | undefined>()
 
-  const extraColumns = useCustomColumns({selectedIds})
+  const extraColumns = useMemo(() => getColumnsCustom({
+    selectedIds,
+    formId: ctx.form.id,
+    canEdit: ctx.canEdit,
+    m,
+    asyncUpdateTagById: ctxEditTag.asyncUpdateById,
+    openEditTag: ctxEditTag.open,
+  }), [selectedIds, ctx.form.id])
+
   const schemaColumns = useMemo(() => {
     return getColumnBySchema({
       formId: ctx.form.id,
@@ -75,63 +79,17 @@ export const DatabaseKoboTableContent = ({
   }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns, ctx.externalFilesIndex])
 
   const columns: DatabaseColumnProps<any>[] = useMemo(() => {
-    const action: DatatableColumn.Props<any> = {
-      id: 'actions',
-      head: '',
-      width: 0,
-      noCsvExport: true,
-      render: _ => {
-        return {
-          value: null as any,
-          label: (
-            <>
-              <TableIconBtn tooltip={m.view} children="visibility" onClick={() => ctxAnswers.openAnswerModal({answer: _, formId: ctx.form.id})}/>
-              <TableIconBtn disabled={!ctx.canEdit} tooltip={m.editKobo} target="_blank" href={ctx.asyncEdit(_.id)} children="edit"/>
-            </>
-          )
-        }
-      }
-    }
-    const validation: DatatableColumn.Props<any> = {
-      id: 'validation',
-      head: m.validation,
-      subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxEditTag.open({
-        formId: ctx.form.id,
-        answerIds: selectedIds,
-        type: 'select_one',
-        options: Obj.values(KoboValidation).map(_ => ({
-          value: _, label: _, before: <OptionLabelTypeCompact sx={{alignSelf: 'center', mr: 1}} type={SelectStatusConfig.statusType.KoboValidation[_]}/>
-        })),
-        tag: '_validation',
-      })}/>,
-      width: 0,
-      type: 'select_one',
-      render: (row: KoboAnswerFlat) => {
-        const value = row.tags?._validation
-        return {
-          export: value ? m[value] : DatatableUtils.blank,
-          value: value ?? DatatableUtils.blank,
-          option: value ? m[value] : DatatableUtils.blank,
-          label: (
-            <SelectStatusBy
-              enum="KoboValidation"
-              compact
-              disabled={!ctx.canEdit}
-              value={value}
-              onChange={(e) => {
-                ctxEditTag.asyncUpdateById.call({
-                  formId: ctx.form.id,
-                  answerIds: [row.id],
-                  tag: '_validation',
-                  value: e,
-                })
-              }}
-            />
-          )
-        }
-      }
-    }
-    return [action, validation, ...extraColumns, ...schemaColumns]
+    const base = getColumnsBase({
+      selectedIds,
+      formId: ctx.form.id,
+      canEdit: ctx.canEdit,
+      m,
+      openAnswerModal: ctxAnswers.openAnswerModal,
+      asyncEdit: ctx.asyncEdit,
+      asyncUpdateTagById: ctxEditTag.asyncUpdateById,
+      openEditTag: ctxEditTag.open,
+    })
+    return [...base, ...extraColumns, ...schemaColumns]
   }, [schemaColumns])
 
   const toggleColumns = useMemo(() => {
@@ -257,3 +215,4 @@ export const DatabaseKoboTableContent = ({
     </>
   )
 }
+
