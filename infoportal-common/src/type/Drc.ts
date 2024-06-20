@@ -174,7 +174,10 @@ export enum DrcProject {
   'UKR-000360 Novo-Nordisk' = 'UKR-000360 Novo-Nordisk',
   'UKR-000363 UHF8' = 'UKR-000363 UHF8',
   'UKR-000372 ECHO3' = 'UKR-000372 ECHO3',
-  'SIDA 518-570A' = 'SIDA 518-570A'
+  'SIDA 518-570A' = 'SIDA 518-570A',
+  'UKR-000316 UHF5' = 'UKR-000316 UHF5',
+  'UKR-000350 SIDA' = 'UKR-000350 SIDA',
+  'UKR-000291_292 UNHCR' = 'UKR-000291_292 UNHCR',
 }
 
 export const allProjects = Obj.values(DrcProject)
