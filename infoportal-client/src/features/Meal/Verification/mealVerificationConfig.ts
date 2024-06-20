@@ -40,7 +40,7 @@ const registerActivity = <
 export const mealVerificationActivities = seq([
   registerActivity({
     sampleSizeRatio: .1,
-    label: 'MSME',
+    label: 'EC-REC Sectoral Cash for Businesses BHA',
     id: 'MSME',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_msmeGrantSelection').id,

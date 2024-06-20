@@ -5,7 +5,6 @@ import {map} from '@alexandreannic/ts-utils'
 import axios from 'axios'
 import {KoboHook} from './type/KoboHook'
 import {KoboSdkv2FixedUpdated, KoboUpdateDataParams, KoboUpdateDataParamsData} from './KoboSdkv2FixedUpdated'
-import {subYears} from 'date-fns'
 
 const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
   return {
@@ -124,14 +123,14 @@ export class KoboSdkv2 {
   }
 
   readonly getAnswersRaw = (form: KoboId, params: KoboAnswerParams = {}) => {
-    const start = map(params.start ?? subYears(new Date(), 1), _ => KoboSdkv2.makeDateFilter('start', 'gte', _))
+    const start = map(params.start, _ => KoboSdkv2.makeDateFilter('start', 'gte', _))
     const end = map(params.end, _ => KoboSdkv2.makeDateFilter('start', 'lte', _))
     const query = start && end ? {'$and': [start, end]} : start ?? end
     return this.api.get<KoboApiList<ApiKoboAnswerMetaData & Record<string, any>>>(`/v2/assets/${form}/data`, {qs: {query: query ? JSON.stringify(query) : undefined}})
   }
 
-  readonly getAnswers = (form: KoboId, params: KoboAnswerParams = {}): Promise<ApiPaginate<KoboAnswer>> => {
-    return this.getAnswersRaw(form, params)
+  readonly getAnswers = async (form: KoboId, params: KoboAnswerParams = {}): Promise<ApiPaginate<KoboAnswer>> => {
+    const answers = await this.getAnswersRaw(form, params)
       .then(res => {
         return ({
           ...res,
@@ -141,6 +140,11 @@ export class KoboSdkv2 {
         })
       })
       .then(koboToApiPaginate)
+    if (answers.data.length < answers.total) {
+      const rest = await this.getAnswers(form, ({...params, start: answers.data[answers.data.length - 1]?.submissionTime}))
+      answers.data = [...answers.data, ...rest.data]
+    }
+    return answers
   }
 
   private readonly removeGroup = () => {
