@@ -14,7 +14,6 @@ import {UserSdk} from '@/core/sdk/server/user/UserSdk'
 import {ProxySdk} from '@/core/sdk/server/proxy/ProxySdk'
 import {MpcaSdk} from '@/core/sdk/server/mpca/MpcaSdk'
 import {GroupSdk} from '@/core/sdk/server/group/GroupSdk'
-import {ShelterSdk} from '@/core/sdk/server/shelter/ShelterSdk'
 import {MealVerificationClient} from '@/core/sdk/server/mealVerification/MealVerificationClient'
 import {KoboMetaSdk} from '@/core/sdk/server/kobo-meta/KoboMetaSdk'
 import {JsonStoreSdk} from '@/core/sdk/server/jsonStore/JsonStoreSdk'
@@ -58,7 +57,6 @@ export class ApiSdk {
   readonly group = new GroupSdk(this.client)
   readonly user = new UserSdk(this.client)
   readonly proxy = new ProxySdk(this.client)
-  readonly shelter = new ShelterSdk(this.client)
   readonly jsonStore = new JsonStoreSdk(this.client)
   readonly hdp = new HdpSdk(this.client)
 }

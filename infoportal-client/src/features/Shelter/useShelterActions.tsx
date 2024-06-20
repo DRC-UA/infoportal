@@ -2,7 +2,7 @@ import {KoboAnswerId, KoboId, KoboSchemaHelper} from '@infoportal-common'
 import {Dispatch, SetStateAction} from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
 
-import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
+import {ShelterEntity} from '@/features/Shelter/shelterEntity'
 
 export type UseShelterActions = ReturnType<typeof useShelterActions>
 

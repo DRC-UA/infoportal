@@ -5,7 +5,7 @@ import {DrcOffice, KoboAnswerId, KoboGeneralMapping, koboIndex, KoboIndex, Oblas
 import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetcher'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
-import {ShelterEntity} from '@/core/sdk/server/shelter/ShelterEntity'
+import {ShelterEntity} from '@/features/Shelter/shelterEntity'
 
 export type UseShelterData = ReturnType<typeof useShelterData>
 

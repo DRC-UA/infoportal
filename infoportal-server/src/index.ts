@@ -5,7 +5,6 @@ import {MpcaPaymentService} from './feature/mpca/mpcaPayment/MpcaPaymentService'
 import {DbInit} from './db/DbInit'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
-import {ShelterCachedDb} from './feature/shelter/db/ShelterCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 import {GlobalCache, IpCache} from './helper/IpCache'
 import {duration} from '@alexandreannic/ts-utils'
@@ -13,11 +12,7 @@ import * as winston from 'winston'
 import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
-import {BuildKoboType} from './script/BuildTypeKobo'
-import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
 import {EmailService} from './core/EmailService'
-import {EmailHelper} from './core/EmailHelper'
-import {GlobalEvent} from './core/GlobalEvent'
 
 export type AppLogger = WinstonLogger;
 
@@ -127,7 +122,6 @@ const startApp = async (conf: AppConf) => {
       new EmailService().initializeListeners()
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
-      ShelterCachedDb.constructSingleton(prisma).warmUp()
     }
   }
 

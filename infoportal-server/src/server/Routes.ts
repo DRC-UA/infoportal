@@ -19,7 +19,6 @@ import {AppError} from '../helper/Errors'
 import apicache from 'apicache'
 import {ControllerProxy} from './controller/ControllerProxy'
 import {ControllerMpca} from './controller/ControllerMpca'
-import {ControllerShelter} from './controller/ControllerShelter'
 import {ControllerMealVerification} from './controller/ControllerMealVerification'
 import {ControllerGroup} from './controller/ControllerGroup'
 import {ControllerKoboMeta} from './controller/ControllerKoboMeta'
@@ -73,7 +72,6 @@ export const getRoutes = (
   const accessGroup = new ControllerGroup(prisma)
   const user = new ControllerUser(prisma)
   const proxy = new ControllerProxy(prisma)
-  const shelter = new ControllerShelter(prisma)
   const mealVerification = new ControllerMealVerification(prisma)
   const koboMeta = new ControllerKoboMeta(prisma)
   const jsonStore = new ControllerJsonStore(prisma)
@@ -169,8 +167,6 @@ export const getRoutes = (
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
 
     router.get('/hdp/risk-education', errorCatcher(hdp.fetchRiskEducation))
-
-    router.post('/shelter/search', errorCatcher(shelter.search))
 
     router.get('/json-store/:key', auth(), errorCatcher(jsonStore.get))
     router.put('/json-store', auth(), errorCatcher(jsonStore.set))
