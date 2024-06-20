@@ -58,7 +58,11 @@ export const appConf = {
   },
   params: {
     assistanceAmountUAH: (d: Date) => d.getTime() > new Date(2023, 9, 1).getTime() ? 3600 : 2220
-  }
+  },
+  email: {
+    user: e(required)('UKR_NET_EMAIL'),
+    password: e(required)('UKR_NET_PASSWORD'),
+  },
 }
 
 export type AppConf = typeof appConf

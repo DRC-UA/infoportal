@@ -4,7 +4,7 @@ import {app} from '../index'
 
 export namespace GlobalEvent {
 
-  interface KoboTagEditedParams {
+  export interface KoboTagEditedParams {
     formId: KoboId,
     answerIds: KoboAnswerId[],
     tags: Record<string, any>,
