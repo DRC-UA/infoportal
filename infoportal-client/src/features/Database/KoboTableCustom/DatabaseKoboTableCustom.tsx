@@ -5,7 +5,6 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {useParams} from 'react-router'
 import * as yup from 'yup'
-import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {seq} from '@alexandreannic/ts-utils'
 import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useI18n} from '@/core/i18n'
@@ -60,7 +59,8 @@ export const DatabaseTableCustomRoute = () => {
     })
   }, [formIds])
 
-  const data = useMemoFn(formIds.map(_ => ctxAnswers.byId.get(_)?.data), dataSets => {
+  const data = useMemo(() => {
+    const dataSets = formIds.map(_ => ctxAnswers.byId.get(_)?.data)
     if (!dataSets.every(_ => _ !== undefined)) return
     const indexesParams = seq(customForm.forms)
       .compactBy('join')
@@ -82,7 +82,7 @@ export const DatabaseTableCustomRoute = () => {
         })
       }
     })
-  })
+  }, [...formIds.map(_ => ctxAnswers.byId.get(_)?.data), ctxSchema.langIndex])
 
   const columns = useMemo(() => {
     return customForm.forms.map(_ => _.id).flatMap(formId => {
@@ -146,6 +146,7 @@ export const DatabaseTableCustomRoute = () => {
             showExportBtn
             header={
               <>
+                {ctxSchema.langIndex}
                 <IpSelectSingle<number>
                   hideNullOption
                   sx={{maxWidth: 128, mr: 1}}
