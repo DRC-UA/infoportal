@@ -7,7 +7,7 @@ import {
   DrcProjectHelper,
   DrcSector,
   Ecrec_cashRegistration,
-  Ecrec_cashRegistrationBha,
+  Ecrec_cashRegistrationBha, Ecrec_msmeGrantSelection,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
   KoboAnswerUtils,
@@ -114,6 +114,14 @@ export class KoboMetaMapperEcrec {
       }
     ]
   }
+
+  // static readonly livelihoodRestoration: MetaMapperInsert<KoboMetaOrigin<Ecrec_livelihoodRestoration.T, EcrecCashRegistrationTags>> = row => {
+  //   const answer = Ecrec_livelihoodRestoration.map(row.answers)
+  //   const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
+  //   return KoboMetaMapper.make({
+  //
+  //   })
+  // }
 
   static readonly cashRegistrationBha: MetaMapperInsert<KoboMetaOrigin<Ecrec_cashRegistrationBha.T, EcrecCashRegistrationTags>> = row => {
     const answer = Ecrec_cashRegistrationBha.map(row.answers)

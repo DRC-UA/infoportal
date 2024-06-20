@@ -3,8 +3,10 @@ import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswer
 import {
   Bn_re,
   DisplacementStatus,
+  Ecrec_msmeGrantEoi,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
+  Ecrec_msmeGrantSelection,
   Ecrec_vetApplication,
   KoboEcrec_cashRegistration,
   KoboFormName,
@@ -14,7 +16,6 @@ import {
   KoboSafetyIncidentHelper,
   Meal_cfmExternal,
   Meal_cfmInternal,
-  Meal_VerificationEcrec,
   Meal_VerificationWinterization,
   Meal_VisitMonitoring,
   Partnership_partnersDatabase,
@@ -28,7 +29,8 @@ import {
   Shelter_NTA,
   Shelter_TA,
   ShelterNtaTags,
-  ShelterTaTagsHelper
+  Meal_verificationEcrec,
+  ShelterTaTagsHelper,
 } from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
@@ -137,7 +139,7 @@ export class KoboTypedAnswerSdk {
       })),
       ...make('meal_verificationEcrec', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('meal_verificationEcrec').id,
-        fnMapKobo: Meal_VerificationEcrec.map,
+        fnMapKobo: Meal_verificationEcrec.map,
         ...filters,
       })),
       ...make('meal_verificationWinterization', (filters?: KoboAnswerFilter) => req({
@@ -148,6 +150,16 @@ export class KoboTypedAnswerSdk {
       ...make('bn_re', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('bn_re').id,
         fnMapKobo: Bn_re.map,
+        ...filters,
+      })),
+      ...make('ecrec_msmeGrantSelection', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('ecrec_msmeGrantSelection').id,
+        fnMapKobo: Ecrec_msmeGrantSelection.map,
+        ...filters,
+      })),
+      ...make('ecrec_msmeGrantEol', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('ecrec_msmeGrantEol').id,
+        fnMapKobo: Ecrec_msmeGrantEoi.map,
         ...filters,
       })),
       ...make('ecrec_cashRegistration', (filters?: KoboAnswerFilter) => req({

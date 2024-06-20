@@ -93,6 +93,18 @@ export class BuildKoboType {
     shelter_cashForRepair: {
       formId: KoboIndex.byName('shelter_cashForRepair').id
     },
+    ecrec_msmeGrantSelection: {
+      formId: KoboIndex.byName('ecrec_msmeGrantSelection').id, skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
+    },
+    ecrec_msmeGrantEol: {
+      formId: KoboIndex.byName('ecrec_msmeGrantEol').id, skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
+    },
     ecrec_cashRegistration: {
       formId: KoboIndex.byName('ecrec_cashRegistration').id, skipQuestionTyping: [
         'ben_det_hromada',

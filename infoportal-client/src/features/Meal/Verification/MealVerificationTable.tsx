@@ -206,13 +206,13 @@ const MealVerificationTableContent = <
   const {mergedData, duplicateErrors} = useMemo(() => {
     const duplicateErrors = new Set<string>()
     const newMergedData = map(fetcherDataOrigin.get, fetcherDataVerified.get, (origin, verified) => {
-      const indexDataVerified: Record<any, KoboAnswerFlat[]> = seq(verified).groupBy(_ => _[activity.joinColumn] ?? '')
+      const indexDataVerified: Record<any, KoboAnswerFlat[]> = seq(verified).groupBy(_ => _[activity.verification.joinColumn] ?? '')
       return seq(origin)
         .filter(_ => indexVerification[_.id])
         .flatMap((_: any) => {
-          const dataVerified = indexDataVerified[_[activity.joinColumn]]
-          if (dataVerified && dataVerified.length > 1 && !duplicateErrors.has(_[activity.joinColumn])) {
-            duplicateErrors.add(_[activity.joinColumn])
+          const dataVerified = indexDataVerified[_[activity.registration.joinColumn]]
+          if (dataVerified && dataVerified.length > 1 && !duplicateErrors.has(_[activity.registration.joinColumn])) {
+            duplicateErrors.add(_[activity.registration.joinColumn])
           }
           if (dataVerified)
             return dataVerified.map(dv => {
@@ -389,9 +389,9 @@ const MealVerificationTableContent = <
               id: 'taxid',
               head: m.taxID,
               type: 'string',
-              renderQuick: _ => _.data[activity.joinColumn],
+              renderQuick: _ => _.data[activity.registration.joinColumn],
               style: (rowData: MergedData) => {
-                if (duplicateErrors.has(rowData.data[activity.joinColumn])) {
+                if (duplicateErrors.has(rowData.data[activity.registration.joinColumn])) {
                   return {color: 'red', fontWeight: 'bold'}
                 }
                 return {}

@@ -18,13 +18,15 @@ export type MealVerificationActivity<
     koboFormId: KoboId,
     fetch: TData
     filters?: (_: InferTypedAnswer<TData>) => boolean
+    joinColumn: (KeyOf<InferTypedAnswer<TData>>)
   }
   verification: {
     fetch: TCheck
     koboFormId: KoboId,
+    joinColumn: (KeyOf<InferTypedAnswer<TCheck>>)
   },
   verifiedColumns: (KeyOf<InferTypedAnswer<TCheck>> & KeyOf<InferTypedAnswer<TData>>)[]
-  joinColumn: (KeyOf<InferTypedAnswer<TCheck>> & KeyOf<InferTypedAnswer<TData>>)
+  // joinColumn: (KeyOf<InferTypedAnswer<TCheck>> & KeyOf<InferTypedAnswer<TData>>)
   dataColumns?: KeyOf<InferTypedAnswer<TData>>[]
 }
 
@@ -38,17 +40,49 @@ const registerActivity = <
 export const mealVerificationActivities = seq([
   registerActivity({
     sampleSizeRatio: .1,
+    label: 'MSME',
+    id: 'MSME',
+    registration: {
+      koboFormId: KoboIndex.byName('ecrec_msmeGrantSelection').id,
+      fetch: 'ecrec_msmeGrantSelection',
+      joinColumn: 'ben_det_tax_id_num',
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
+      joinColumn: 'pay_det_tax_id_num',
+      fetch: 'meal_verificationEcrec',
+    },
+    dataColumns: [],
+    verifiedColumns: [
+      'back_consent',
+      'back_consen_no_reas',
+      'ben_det_surname',
+      'ben_det_first_name',
+      'ben_det_pat_name',
+      'ben_det_ph_number',
+      'ben_det_oblast',
+      'ben_det_raion',
+      'ben_det_hromada',
+      // 'ben_det_settlement',
+      'ben_det_res_stat',
+      'ben_det_income',
+      'ben_det_hh_size',
+    ]
+  }),
+  registerActivity({
+    sampleSizeRatio: .1,
     label: 'VET - Training grants',
     id: 'Training grants',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_vetApplication').id,
       fetch: 'ecrec_vetApplication',
+      joinColumn: 'ben_det_ph_number',
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
       fetch: 'meal_verificationEcrec',
+      joinColumn: 'ben_det_ph_number',
     },
-    joinColumn: 'ben_det_ph_number',
     dataColumns: [],
     verifiedColumns: [
       'back_consent',
@@ -81,12 +115,13 @@ export const mealVerificationActivities = seq([
       koboFormId: KoboIndex.byName('bn_re').id,
       fetch: 'bn_re',
       filters: _ => !!(_.back_prog_type && [_.back_prog_type].flat().find(_ => /^c(sf|fu)/.test(_))),
+      joinColumn: 'pay_det_tax_id_num',
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationWinterization').id,
       fetch: 'meal_verificationWinterization',
+      joinColumn: 'pay_det_tax_id_num',
     },
-    joinColumn: 'pay_det_tax_id_num',
     dataColumns: [
       'back_enum',
       'back_donor',
@@ -123,12 +158,13 @@ export const mealVerificationActivities = seq([
     registration: {
       koboFormId: KoboIndex.byName('ecrec_cashRegistration').id,
       fetch: 'ecrec_cashRegistration',
+      joinColumn: 'pay_det_tax_id_num',
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
       fetch: 'meal_verificationEcrec',
+      joinColumn: 'pay_det_tax_id_num',
     },
-    joinColumn: 'pay_det_tax_id_num',
     verifiedColumns: [
       // 'back_donor',
       'back_consent',
@@ -164,12 +200,13 @@ export const mealVerificationActivities = seq([
     registration: {
       koboFormId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
       fetch: 'ecrec_cashRegistrationBha',
+      joinColumn: 'pay_det_tax_id_num',
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
       fetch: 'meal_verificationEcrec',
+      joinColumn: 'pay_det_tax_id_num',
     },
-    joinColumn: 'pay_det_tax_id_num',
     verifiedColumns: [
       'back_consent',
       'ben_det_surname',

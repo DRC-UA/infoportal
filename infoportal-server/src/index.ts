@@ -14,6 +14,7 @@ import * as winston from 'winston'
 import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
+import {BuildKoboType} from './script/BuildTypeKobo'
 
 export type AppLogger = WinstonLogger;
 
@@ -77,7 +78,8 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  // await new BuildKoboType().build('safety_incident')
+  // await new BuildKoboType().build('ecrec_livelihoodRestoration')
+  // return
   // await ActivityInfoBuildType.fslc()
   // await KoboMigrateHHS2({
   //   prisma,

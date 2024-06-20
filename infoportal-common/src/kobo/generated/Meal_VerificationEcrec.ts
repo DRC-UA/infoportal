@@ -1,114 +1,136 @@
-export namespace Meal_VerificationEcrec {
+export namespace Meal_verificationEcrec {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 
   // Form id: aEN2tkQhpsfX4G3i6Re7bi
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // background/back_office [select_one] 1.1 Select Office
-    back_office: undefined | Option<'back_office'>,
+    'back_office': undefined | Option<'back_office'>,
     // background/back_enum [text] 1.2 Enumerator
-    back_enum: string | undefined,
-    calc_city: string,
-    calc_nlv: string,
+    'back_enum': string | undefined,
+    'calc_city': string,
+    'calc_nlv': string,
     // background/back_donor [select_one] 1.3 Project
-    back_donor: undefined | Option<'back_donor'>,
+    'back_donor': undefined | Option<'back_donor'>,
     // background/reg_drc [select_one] 1.4 Where you registered by DRC for a cash transfer for livelihoods?
-    reg_drc: undefined | Option<'training_activities_support_yes_consequence'>,
-    calc_vet: string,
-    calc_vet_llh: string,
+    'reg_drc': undefined | Option<'received_any_assistance_ngo'>,
+    'calc_vet': string,
+    'calc_vet_llh': string,
     // background/which_support_registered [select_one] 1.4. For which support were you registered for?
-    which_support_registered: undefined | Option<'which_support_registered'>,
+    'which_support_registered': undefined | Option<'which_support_registered'>,
     // background/back_consent [select_one] 1.5.1 Consent
-    back_consent: undefined | Option<'training_activities_support_yes_consequence'>,
+    'back_consent': undefined | Option<'received_any_assistance_ngo'>,
     // background/back_consen_no_reas [text] 1.5.2 Can you please give the reason for why you do not wish to consent to the questionnaire?
-    back_consen_no_reas: string | undefined,
+    'back_consen_no_reas': string | undefined,
     // background/pay_det_tax_id_num [text] 1.6 What is your individual tax number?
-    pay_det_tax_id_num: string | undefined,
+    'pay_det_tax_id_num': string | undefined,
     // background/back_consent_no_note [note] Thank you very much for your time, we will not proceed with the questionnaire without your consent.
-    back_consent_no_note: string,
+    'back_consent_no_note': string,
     // ben_det/ben_det_surname [text] 2.1 What is your surname name (as shown in personal ID)?
-    ben_det_surname: string | undefined,
+    'ben_det_surname': string | undefined,
     // ben_det/ben_det_first_name [text] 2.2 What is your first name (as shown in personal ID)?
-    ben_det_first_name: string | undefined,
+    'ben_det_first_name': string | undefined,
     // ben_det/ben_det_pat_name [text] 2.3 What is your patronymic name?
-    ben_det_pat_name: string | undefined,
+    'ben_det_pat_name': string | undefined,
     // ben_det/ben_det_ph_number [integer] 2.4 What is your phone number?
-    ben_det_ph_number: number | undefined,
+    'ben_det_ph_number': number | undefined,
     // ben_det/ben_det_age [integer] 2.4.1 What is your age?
-    ben_det_age: number | undefined,
+    'ben_det_age': number | undefined,
     // ben_det/ben_det_oblast [select_one] 2.5.1 Select oblast where registration is taking place
-    ben_det_oblast: undefined | Option<'ben_det_oblast'>,
+    'ben_det_oblast': undefined | Option<'ben_det_oblast'>,
     // ben_det/ben_det_raion [select_one] 2.5.2 Select raion where registration is taking place
-    ben_det_raion: undefined | string,
+    'ben_det_raion': undefined | string,
     // ben_det/ben_det_hromada [select_one] 2.5.3 Select hromada where registration is taking place
-    ben_det_hromada: undefined | string,
+    'ben_det_hromada': undefined | string,
     // ben_det/ben_det_settlement [select_one_from_file] 2.5.4 Select settlement where registration is taking place
-    ben_det_settlement: string,
+    'ben_det_settlement': string,
     // ben_det/ben_det_settlement_other [text] 2.5.4.1 If "Other", please specify
-    ben_det_settlement_other: string | undefined,
+    'ben_det_settlement_other': string | undefined,
     // ben_det/ben_det_res_stat [select_one] 2.5.5 Select residential status
-    ben_det_res_stat: undefined | Option<'ben_det_res_stat'>,
+    'ben_det_res_stat': undefined | Option<'ben_det_res_stat'>,
     // ben_det/ben_det_income [integer] 2.6 What was the total value in UAH of all the resources your household received in the last one month?
-    ben_det_income: number | undefined,
+    'ben_det_income': number | undefined,
     // ben_det/ben_det_hh_size [integer] 2.7 Indicate the total number of people in your household, including the HHH
-    ben_det_hh_size: number | undefined,
+    'ben_det_hh_size': number | undefined,
     // cash_farmers/land_own [decimal] How much land do you own:
-    land_own: number | undefined,
+    'land_own': number | undefined,
     // cash_farmers/has_agriculture_exp [select_one] Is agriculture or farming the primary source of livelihood in your household?
-    has_agriculture_exp: undefined | Option<'training_activities_support_yes_consequence'>,
+    'has_agriculture_exp': undefined | Option<'received_any_assistance_ngo'>,
     // cash_farmers/depend_basic_needs [select_one] Do you depend on farming to meet your basic needs?
-    depend_basic_needs: undefined | Option<'training_activities_support_yes_consequence'>,
+    'depend_basic_needs': undefined | Option<'received_any_assistance_ngo'>,
     // cash_farmers/consume_majority [select_one] Do you consume a majority of the crops you produce / livestock that you manage
-    consume_majority: undefined | Option<'training_activities_support_yes_consequence'>,
+    'consume_majority': undefined | Option<'received_any_assistance_ngo'>,
     // cash_farmers/land_cultivate [decimal] How much land do you cultivate or manage for crops and/or livestock (in hectares) :
-    land_cultivate: number | undefined,
+    'land_cultivate': number | undefined,
     // cash_farmers/not_many_livestock [note] #### 🔘 How many of the following livestock do you have:
-    not_many_livestock: string,
+    'not_many_livestock': string,
     // cash_farmers/many_sheep_goat [integer] Sheep/goat:
-    many_sheep_goat: number | undefined,
+    'many_sheep_goat': number | undefined,
     // cash_farmers/many_milking [integer] Milking/lactating cow:
-    many_milking: number | undefined,
+    'many_milking': number | undefined,
     // cash_farmers/many_cow [integer] Dry cow:
-    many_cow: number | undefined,
+    'many_cow': number | undefined,
     // cash_farmers/many_pig [integer] Pig:
-    many_pig: number | undefined,
+    'many_pig': number | undefined,
     // cash_farmers/many_poultry [integer] Poultry:
-    many_poultry: number | undefined,
+    'many_poultry': number | undefined,
     // cash_farmers/type_assistance [select_multiple] Please indicate what support you received:
-    type_assistance: undefined | Option<'type_assistance'>[],
+    'type_assistance': undefined | Option<'type_assistance'>[],
     // cash_businesses/organization_business [select_one] Organization form of business
-    organization_business: undefined | Option<'organization_business'>,
+    'organization_business': undefined | Option<'organization_business_001'>,
     // cash_businesses/organization_business_other [text] If "Other", please specify
-    organization_business_other: string | undefined,
+    'organization_business_other': string | undefined,
     // cash_businesses/main_business_activities [select_multiple] State the main business activities of the household to date
-    main_business_activities: undefined | Option<'main_business_activities'>[],
+    'main_business_activities': undefined | Option<'main_business_activities'>[],
     // cash_businesses/main_business_activities_other [text] If "Other", please specify
-    main_business_activities_other: string | undefined,
+    'main_business_activities_other': string | undefined,
     // cash_businesses/long_business_operational [select_one] How long has your business been operational?
-    long_business_operational: undefined | Option<'long_business_operational'>,
+    'long_business_operational': undefined | Option<'long_business_operational'>,
     // cash_businesses/committed_one_person_idp [select_one] Are you committed to hiring at least one person one person who has been affected by the war such as an IDP or returnee?
-    committed_one_person_idp: undefined | Option<'training_activities_support_yes_consequence'>,
+    'committed_one_person_idp': undefined | Option<'received_any_assistance_ngo'>,
     // vet_training/you_currently_employed [select_one] 5.1 Are you currently employed:
-    you_currently_employed: undefined | Option<'training_activities_support_yes_consequence'>,
+    'you_currently_employed': undefined | Option<'received_any_assistance_ngo'>,
     // vet_training/you_currently_employed_no [select_one] 5.1.1 How long have you been unemployed?
-    you_currently_employed_no: undefined | Option<'you_currently_employed_no'>,
+    'you_currently_employed_no': undefined | Option<'you_currently_employed_no'>,
     // vet_training/registered_training_facility [select_one] 5.2 Are you aware of a registered/official training facility that is currently operating and could provide this training?
-    registered_training_facility: undefined | Option<'training_activities_support_yes_consequence'>,
+    'registered_training_facility': undefined | Option<'received_any_assistance_ngo'>,
     // vet_training/registered_training_facility_yes [text] 5.2.1 If yes, input the information of the training center here:
-    registered_training_facility_yes: string | undefined,
+    'registered_training_facility_yes': string | undefined,
     // vet_training/training_activities_support [select_one] 5.3 In the last 2 years, have you engaged in any training activities to support re-training or movement into another sector of work?
-    training_activities_support: undefined | Option<'training_activities_support_yes_consequence'>,
+    'training_activities_support': undefined | Option<'received_any_assistance_ngo'>,
     // vet_training/training_activities_support_yes_paid [select_one] 5.3.1 Who paid for this training?
-    training_activities_support_yes_paid: undefined | Option<'training_activities_support_yes_paid'>,
+    'training_activities_support_yes_paid': undefined | Option<'training_activities_support_yes_paid'>,
     // vet_training/training_activities_support_yes_consequence [select_one] 5.3.2 Did you obtain employement as a consequence of this training?
-    training_activities_support_yes_consequence: undefined | Option<'training_activities_support_yes_consequence'>,
-    // fin_det/fin_det_res [text] 6.1 Other Comments from Respondent
-    fin_det_res: string | undefined,
-    // fin_det/fin_det_enum [text] 6.2 Other Comments from Enumerator
-    fin_det_enum: string | undefined,
-    // fin_det/fin_det_oth_doc_im [image] 6.3 Please take picture of any other relevant document
-    fin_det_oth_doc_im: string,
+    'training_activities_support_yes_consequence': undefined | Option<'received_any_assistance_ngo'>,
+    // msme/name_business_entrepreneur [text] 6.1 Name of business or entrepreneur
+    'name_business_entrepreneur': string | undefined,
+    // msme/address_business [text] 6.2 Address of the business
+    'address_business': string | undefined,
+    // msme/business_owned_you [select_one] 6.3 Is this business solely owned by you?
+    'business_owned_you': undefined | Option<'received_any_assistance_ngo'>,
+    // msme/date_registration [date] 6.4 Date of registration
+    'date_registration': Date | undefined,
+    // msme/experience_business [select_one] 6.5.1 How much experience do you have in this business activity?
+    'experience_business': undefined | Option<'experience_business'>,
+    // msme/organization_business [select_one] 6.5.2 Organization form of business
+    'organization_business_001': undefined | Option<'organization_business_001'>,
+    // msme/many_people_employ [select_one] 6.6 How many people do you employ?
+    'many_people_employ': undefined | Option<'many_people_employ'>,
+    // msme/business_currently_operational [select_one] 6.7 Is your business currently operational?
+    'business_currently_operational': undefined | Option<'received_any_assistance_ngo'>,
+    // msme/business_main_income_household [select_one] 6.8 Is this business being your main source of income for your household?
+    'business_main_income_household': undefined | Option<'received_any_assistance_ngo'>,
+    // msme/recruiting_idp_6mout [select_one] 6.9 As a condition for receiving the grant to restore and/or expand your business operations, would you be willing to commit to recruiting someone affected by the conflict (for instance an IDP or returnee) for a minimum period of 6 months after receiving the grant?
+    'recruiting_idp_6mout': undefined | Option<'received_any_assistance_ngo'>,
+    // msme/received_any_assistance_ngo [select_one] 6.10 Has your business received any assistance from an NGO or the government in the past two years?
+    'received_any_assistance_ngo': undefined | Option<'received_any_assistance_ngo'>,
+    // fin_det/fin_det_res [text] 7.1 Other Comments from Respondent
+    'fin_det_res': string | undefined,
+    // fin_det/fin_det_enum [text] 7.2 Other Comments from Enumerator
+    'fin_det_enum': string | undefined,
+    // fin_det/fin_det_oth_doc_im [image] 7.3 Please take picture of any other relevant document
+    'fin_det_oth_doc_im': string,
   }
 
   export const options = {
@@ -309,9 +331,10 @@ export namespace Meal_VerificationEcrec {
     which_support_registered: {
       'scf_iap': `Sectoral Cash for Farmers [Improving Agricultural Production]`,
       'scfb_lr': `Sectoral Cash for Businesses [Livelihood Restoration]`,
-      'vet_training': `VET training for New Livelihood Development`
+      'vet_training': `VET training for New Livelihood Development`,
+      'msme': `MSME Sectoral Cash for Businesses [Livelihood Restoration]`
     },
-    training_activities_support_yes_consequence: {
+    received_any_assistance_ngo: {
       'yes': `Yes`,
       'no': `No`
     },
@@ -319,7 +342,7 @@ export namespace Meal_VerificationEcrec {
       'cfas': `Cash for Animal Shelter`,
       'cfaf': `Cash for Animal Feed`
     },
-    organization_business: {
+    organization_business_001: {
       'private_entrepreneur': `Private entrepreneur`,
       'private_enterprise': `Private enterprise`,
       'limited_company': `Limited Liability Company (LLC)`,
@@ -359,6 +382,18 @@ export namespace Meal_VerificationEcrec {
       'non_international': `Non-Governmental Organisation [international]`,
       'non_national': `Non-Governmental Organisation [national]`,
       'private_actor': `Private Sector Actor`
+    },
+    experience_business: {
+      'one_two_years': `1-2 years`,
+      'three_five_years': `3-5 years`,
+      'more_five_years': `5+ years`
+    },
+    many_people_employ: {
+      '0_5_people': `0-5 people`,
+      '5_10_people': `5-10 people`,
+      '10_15_people': `10-15 people`,
+      '15_20_people': `15-20 people`,
+      '20_more_people': `20+ people`
     },
     ben_det_oblast: {
       'cherkaska': `Cherkaska`,
@@ -418,5 +453,6 @@ export namespace Meal_VerificationEcrec {
     many_poultry: _.many_poultry ? +_.many_poultry : undefined,
     type_assistance: _.type_assistance?.split(' '),
     main_business_activities: _.main_business_activities?.split(' '),
+    date_registration: _.date_registration ? new Date(_.date_registration) : undefined,
   }) as T
 }
