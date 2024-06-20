@@ -1,6 +1,5 @@
 import {AppConf, appConf} from './core/conf/AppConf'
 import {Server} from './server/Server'
-import {Services} from './server/services'
 import {PrismaClient} from '@prisma/client'
 import {MpcaPaymentService} from './feature/mpca/mpcaPayment/MpcaPaymentService'
 import {DbInit} from './db/DbInit'
@@ -15,6 +14,10 @@ import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {BuildKoboType} from './script/BuildTypeKobo'
+import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
+import {EmailService} from './core/EmailService'
+import {EmailHelper} from './core/EmailHelper'
+import {GlobalEvent} from './core/GlobalEvent'
 
 export type AppLogger = WinstonLogger;
 
@@ -63,8 +66,8 @@ const initServices = (
   // koboClient: v2,
   // ecrecSdk: EcrecSdk,
   // legalaidSdk: LegalaidSdk,
-  prisma: PrismaClient
-): Services => {
+  prisma: PrismaClient,
+): {mpcaPayment: MpcaPaymentService} => {
   // const ecrec = new ServiceEcrec(ecrecSdk)
   // const legalAid = new ServiceLegalAid(legalaidSdk)
   // const nfi = new ServiceNfi(koboClient)
@@ -121,6 +124,7 @@ const startApp = async (conf: AppConf) => {
     // })
     new KoboMetaService(prisma).start()
     if (conf.production) {
+      new EmailService().initializeListeners()
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
       ShelterCachedDb.constructSingleton(prisma).warmUp()

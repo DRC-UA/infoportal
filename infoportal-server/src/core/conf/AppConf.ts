@@ -7,6 +7,7 @@ const e = env(process.env)
 
 export const appConf = {
   baseUrl: e(defaultValue('https://infoportal-ua-api.drc.ngo'))('BASE_URL'),
+  frontEndBaseUrl: e(defaultValue(`https://infoportal-ua.drc.ngo`))('FRONTEND_BASE_URL'),
   logLevel: e()('LOG_LEVEL'),
   rootProjectDir: e(defaultValue(__dirname))('ROOT_PROJECT_DIR'),
   disableScheduledTask: e(bool, defaultValue(false))('DISABLED_SCHEDULED_TASK'),
@@ -58,7 +59,13 @@ export const appConf = {
   },
   params: {
     assistanceAmountUAH: (d: Date) => d.getTime() > new Date(2023, 9, 1).getTime() ? 3600 : 2220
-  }
+  },
+  email: {
+    address: e(required)('EMAIL_ADDRESS'),
+    password: e(required)('EMAIL_PASSWORD'),
+    host: e(required)('EMAIL_HOST'),
+    port: e(required, int)('EMAIL_PORT'),
+  },
 }
 
 export type AppConf = typeof appConf

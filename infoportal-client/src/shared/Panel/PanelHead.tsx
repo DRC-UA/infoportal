@@ -8,7 +8,7 @@ interface Props extends BoxProps {
   children: ReactNode
   action?: ReactNode
   icon?: string
-  PanelTitleProps: PanelTitleProps
+  PanelTitleProps?: PanelTitleProps
 }
 
 export const PanelHead = ({icon, children, action, sx, PanelTitleProps, ...other}: Props) => {
