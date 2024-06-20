@@ -5,7 +5,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {useParams} from 'react-router'
 import * as yup from 'yup'
-import {seq} from '@alexandreannic/ts-utils'
+import {Enum, Obj, seq} from '@alexandreannic/ts-utils'
 import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useI18n} from '@/core/i18n'
 import {Datatable} from '@/shared/Datatable/Datatable'
@@ -14,10 +14,12 @@ import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumns
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
-import {KoboAnswerId, KoboId} from '@infoportal-common'
+import {KoboAnswerId, KoboId, KoboSchemaHelper} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
+import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
+import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 
 interface CustomForm {
   id: string
@@ -92,10 +94,10 @@ export const DatabaseTableCustomRoute = () => {
     })
   }, [formIds])
 
-  const schemas = customForm.forms.map(_ => ({formId: _.id, schema: ctxSchema.byId[_.id]?.get}))
+  const schemas = customForm.forms.map(_ => ({formId: _.id, schema: ctxSchema.byId[_.id]?.get})).filter(_ => !!_.schema) as {formId: KoboId, schema: KoboSchemaHelper.Bundle}[]
 
   useEffect(() => {
-    setTitle(schemas.map(_ => _.schema?.schemaUnsanitized.name ?? '').join(' + '))
+    setTitle(schemas.map(_ => _.schema.schemaUnsanitized.name).join(' + '))
   }, [schemas])
 
   const data = useMemo(() => {
@@ -125,7 +127,6 @@ export const DatabaseTableCustomRoute = () => {
 
   const columns = useMemo(() => {
     return schemas.flatMap(({formId, schema}) => {
-      if (!schema) return []
       const cols = getColumnBySchema({
         formId,
         data: data,
@@ -182,6 +183,33 @@ export const DatabaseTableCustomRoute = () => {
             columns={columns}
             data={data as any}
             showExportBtn
+            // exportAdditionalSheets={data => {
+            //   const questionToAddInGroups = schemas.flatMap(({schema, formId}) => {
+            //     return schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name))
+            //   })
+            //   return schemas.map(({formId, schema}) => {
+            //
+            //   })
+            //   return Obj.entries(schemas.flatMap(_ => _.schema.schemaHelper.groupSchemas)).map(([groupName, questions]) => {
+            //     const _: GenerateXlsFromArrayParams<any> = {
+            //       sheetName: groupName as string,
+            //       data: seq(data).flatMap(d => (d[groupName] as any[])?.map(_ => ({
+            //         ..._,
+            //         id: d.id,
+            //         start: d.start,
+            //         end: d.end,
+            //         submissionTime: d.submissionTime,
+            //       }))).compact(),
+            //       schema: renderExportKoboSchema({
+            //         formId: ctx.form.id,
+            //         schema: [...questionToAddInGroups, ...questions],
+            //         groupSchemas: ctx.schema.schemaHelper.groupSchemas,
+            //         translateQuestion: ctx.schema.translate.question,
+            //         translateChoice: ctx.schema.translate.choice,
+            //       })
+            //     }
+            //     return _
+            //   })
             header={
               <>
                 <IpSelectSingle<number>
