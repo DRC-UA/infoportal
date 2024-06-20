@@ -1,13 +1,13 @@
 import nodemailer from 'nodemailer'
 import {appConf} from './conf/AppConf'
-import {SiteMap} from './LinkGenerator'
+import {FrontEndSiteMap} from './FrontEndSiteMap'
 import {app} from '../index'
 
 export class EmailHelper {
 
   constructor(
     private conf = appConf,
-    private siteMap = new SiteMap(),
+    private siteMap = new FrontEndSiteMap(),
     private log = app.logger('EmailHelper'),
     private transporter = nodemailer.createTransport({
       host: conf.email.host,

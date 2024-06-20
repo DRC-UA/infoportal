@@ -4,23 +4,22 @@ import {KoboIndex} from '@infoportal-common'
 import {app} from '../index'
 import {UserService} from '../feature/user/UserService'
 import {PrismaClient} from '@prisma/client'
-import {SiteMap} from './LinkGenerator'
+import {FrontEndSiteMap} from './FrontEndSiteMap'
 
 export class EmailService {
-
 
   constructor(
     private prisma = new PrismaClient(),
     private users = new UserService(prisma),
     private event = GlobalEvent.Class.getInstance(),
     private emailHelper = new EmailHelper(),
-    private siteMap = new SiteMap(),
+    private siteMap = new FrontEndSiteMap(),
     private log = app.logger('EmailService'),
   ) {
-    this.initializeListeners()
   }
 
-  private initializeListeners() {
+  initializeListeners() {
+    this.log.info(`Start listening to KOBO_TAG_EDITED`)
     this.event.listen(GlobalEvent.Event.KOBO_TAG_EDITED, this.handleTagEdited)
   }
 

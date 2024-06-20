@@ -67,8 +67,7 @@ const initServices = (
   // ecrecSdk: EcrecSdk,
   // legalaidSdk: LegalaidSdk,
   prisma: PrismaClient,
-  emailService: EmailService
-): {mpcaPayment: MpcaPaymentService; emailService: EmailService} => {
+): {mpcaPayment: MpcaPaymentService} => {
   // const ecrec = new ServiceEcrec(ecrecSdk)
   // const legalAid = new ServiceLegalAid(legalaidSdk)
   // const nfi = new ServiceNfi(koboClient)
@@ -78,7 +77,6 @@ const initServices = (
     // legalAid,
     // nfi,
     mpcaPayment,
-    emailService
   }
 }
 
@@ -103,14 +101,11 @@ const startApp = async (conf: AppConf) => {
   const prisma = new PrismaClient({
     // log: ['query']
   })
-  const emailService = new EmailService()
-
   const services = initServices(
     // koboSdk,
     // ecrecAppSdk,
     // legalAidSdk,
     prisma,
-    emailService
   )
   const init = async () => {
     log.info(`Starting... v5.0`)
@@ -129,6 +124,7 @@ const startApp = async (conf: AppConf) => {
     // })
     new KoboMetaService(prisma).start()
     if (conf.production) {
+      new EmailService().initializeListeners()
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
       ShelterCachedDb.constructSingleton(prisma).warmUp()
