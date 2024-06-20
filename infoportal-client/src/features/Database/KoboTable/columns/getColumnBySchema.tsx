@@ -9,7 +9,7 @@ import {
   KoboSchemaHelper,
   KoboTranslateChoice,
   KoboTranslateQuestion
-} from '../../../../../../infoportal-common/src'
+} from '@infoportal-common'
 import {I18nContextProps, useI18n} from '@/core/i18n/I18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'

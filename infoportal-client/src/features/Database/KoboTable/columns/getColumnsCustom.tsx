@@ -17,7 +17,7 @@ import {
   Protection_gbv,
   ProtectionHhsTags,
   safeArray,
-} from '../../../../../../infoportal-common/src'
+} from '@infoportal-common'
 import React from 'react'
 import {Obj} from '@alexandreannic/ts-utils'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
