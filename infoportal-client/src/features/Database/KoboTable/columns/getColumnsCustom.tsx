@@ -5,7 +5,7 @@ import {
   currentProtectionProjects,
   DrcProgram,
   DrcProject,
-  Ecrec_cashRegistration,
+  Ecrec_cashRegistration, Ecrec_msmeGrantSelection,
   KoboAnswerFlat,
   KoboAnswerId,
   KoboBaseTags,
@@ -18,8 +18,8 @@ import {
   ProtectionHhsTags,
   safeArray,
 } from '@infoportal-common'
-import React from 'react'
-import {Obj} from '@alexandreannic/ts-utils'
+import React, {useEffect, useState} from 'react'
+import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
@@ -30,6 +30,8 @@ import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditModalOption} from '@/shared/koboEdit/KoboEditModal'
 import {Messages} from '@/core/i18n/localization/en'
 import {KoboEditTagsContext} from '@/core/context/KoboEditTagsContext'
+import {IconButton, Tooltip} from '@mui/material'
+import InfoIcon from '@mui/icons-material/Info'
 
 export const getColumnsCustom = ({
   selectedIds,
@@ -370,6 +372,157 @@ export const getColumnsCustom = ({
     [KoboIndex.byName('ecrec_vetApplication').id]: [
       ...getPaymentStatusByEnum({width: 188, enumerator: 'VetApplicationStatus'}),
       ...individualsBreakdown,
+    ],
+    [KoboIndex.byName('ecrec_msmeGrantSelection').id]: [
+      {
+        id: 'vulnerability',
+        head: m.vulnerability,
+        type: 'number',
+        render: (row: KoboAnswerFlat<Ecrec_msmeGrantSelection.T, any> & {custom: KoboGeneralMapping.IndividualBreakdown}) => {
+          const minimumWageUah = 7100
+
+          const scoring = {
+            householdSize: 0,
+            residenceStatus: 0,
+            pwd: 0,
+            singleParent: 0,
+            elderly: 0,
+            pregnantLactating: 0,
+            income: 0
+          }
+          scoring.householdSize += fnSwitch(row.ben_det_hh_size!, {
+            1: 2,
+            2: 0,
+            3: 2,
+            4: 3,
+            5: 5
+          }, () => 0)
+
+          if (row.ben_det_res_stat === 'idp') {
+            scoring.residenceStatus += 3
+          }
+
+          const disabilitiesCount = row.hh_char_hh_det?.filter(member => member.hh_char_hh_det_dis_select?.includes('diff_none')).length || 0
+          scoring.pwd += disabilitiesCount === 1 ? 1 : disabilitiesCount >= 2 ? 3 : 0
+
+          if (['single', 'widow', 'div_sep'].includes(row.ben_det_res_stat!) && row.custom.childrenCount > 0) {
+            scoring.singleParent += 2
+          }
+
+          const elderlyCount = row.hh_char_hh_det?.filter(member => member.calc_o60 === 'yes').length || 0
+          scoring.elderly += elderlyCount === 1 ? 1 : elderlyCount >= 2 ? 3 : 0
+
+          const pregnantOrLactatingCount = row.hh_char_hh_det?.filter(member => member.calc_preg === 'yes').length || 0
+          scoring.pregnantLactating += pregnantOrLactatingCount === 1 ? 1 : pregnantOrLactatingCount >= 2 ? 3 : 0
+
+          if (row.ben_det_income !== undefined) {
+            if (row.ben_det_income < minimumWageUah) scoring.income += 5
+            else if (row.ben_det_income < minimumWageUah * 2) scoring.income += 3
+          }
+
+          const total = seq(Obj.values(scoring)).sum()
+          return {
+            value: total,
+            label: (
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <span style={{display: 'inline-block', width: '100%'}}>{total}</span>
+                <Tooltip title={
+                  <ul>
+                    <li>Size of household: {scoring.householdSize}</li>
+                    <li>Residence Status: {scoring.residenceStatus}</li>
+                    <li>PWD: {scoring.pwd}</li>
+                    <li>Single Parent: {scoring.singleParent}</li>
+                    <li>Elderly: {scoring.elderly}</li>
+                    <li>Pregnant/Lactating woman: {scoring.pregnantLactating}</li>
+                    <li>Income: {scoring.income}</li>
+                  </ul>
+                }>
+                  <IconButton>
+                    <InfoIcon/>
+                  </IconButton>
+                </Tooltip>
+              </div>
+            )
+          }
+        }
+      },
+      {
+        id: 'Eligibility',
+        head: m.eligibility,
+        type: 'select_one',
+        width: 125,
+        subHeader: selectedIds.length > 0 && (
+          <TableEditCellBtn
+            onClick={() => openEditTag({
+              formId: formId,
+              answerIds: selectedIds,
+              type: 'select_one',
+              options: [
+                {value: 'yes', label: 'Yes'},
+                {value: 'no', label: 'No'},
+              ],
+              tag: 'eligibility',
+            })}
+          />
+        ),
+        options: () => DatatableUtils.buildOptions(['yes', 'no']),
+        render: (row: KoboAnswerFlat<any, any>) => {
+          const eligibilityCriteria = [
+            {label: 'Employing up to 20 people', condition: row.many_people_employ === '20_more_people'},
+            {label: 'Minimum 3 years experience', condition: row.experience_business === 'more_five_years'},
+            {label: 'Commitment to recruit for 6 months', condition: row.recruiting_idp_6mout === 'yes'},
+            {label: 'Business plan informed by market research', condition: row.plan_inoformed_market_research === 'yes'},
+            {label: 'No other livelihoods support in the last 2 years', condition: row.received_any_assistance_ngo === 'no'}
+          ]
+
+          const allCriteriaMet = eligibilityCriteria.every(criteria => criteria.condition)
+          const initialEligibilityValue = row.tags?.eligibility ?? (allCriteriaMet ? 'yes' : 'no')
+          const [eligibilityValue, setEligibilityValue] = useState<string>(initialEligibilityValue)
+
+          useEffect(() => {
+            setEligibilityValue(initialEligibilityValue)
+          }, [row.tags?.eligibility])
+
+          return {
+            value: eligibilityValue,
+            label: (
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <IpSelectSingle
+                  value={eligibilityValue}
+                  options={[
+                    {value: 'yes', children: 'Yes'},
+                    {value: 'no', children: 'No'},
+                  ]}
+                  onChange={(value, event) => {
+                    const newValue = value || ''
+                    setEligibilityValue(newValue)
+                    asyncUpdateTagById.call({
+                      formId: formId,
+                      answerIds: [row.id],
+                      tag: 'eligibility',
+                      value: newValue,
+                    }).then(() => {
+                      // Update the state with the new value if necessary
+                      setEligibilityValue(newValue)
+                    })
+                  }}
+                />
+                <Tooltip title={
+                  <ul>
+                    {eligibilityCriteria.map(criteria => (
+                      <li key={criteria.label}>{criteria.label}: {criteria.condition ? 'Yes' : 'No'}</li>
+                    ))}
+                  </ul>
+                }>
+                  <IconButton>
+                    <InfoIcon/>
+                  </IconButton>
+                </Tooltip>
+              </div>
+            )
+          }
+        }
+      }
     ],
     [KoboIndex.byName('protection_communityMonitoring').id]: [
       {
