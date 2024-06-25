@@ -1,4 +1,4 @@
-export namespace Ecrec_msmeGrantEoi {
+export namespace Ecrec_msmeGrantEol {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 
   // Form id: aQkWZkWjVpJsqZ3tYtuwFZ
@@ -9,6 +9,12 @@ export namespace Ecrec_msmeGrantEoi {
     'not_beginning': string,
     // date [date] Дата
     'date': Date | undefined,
+    // ben_first_name [text] First name
+    'ben_first_name': string | undefined,
+    // ben_first_patr [text] Patronymic name
+    'ben_first_patr': string | undefined,
+    // ben_last_name [text] Last name
+    'ben_last_name': string | undefined,
     // lh_restoration_id [text] Livelihoods Restoration / Програма екстреної підтримки малого та середнього бізнесу  ID
     'lh_restoration_id': string | undefined,
     // business_details/interest_number [text] Номер форми вираження зацікавленості

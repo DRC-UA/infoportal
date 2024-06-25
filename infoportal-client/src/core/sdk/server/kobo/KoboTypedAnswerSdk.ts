@@ -3,7 +3,7 @@ import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswer
 import {
   Bn_re,
   DisplacementStatus,
-  Ecrec_msmeGrantEoi,
+  Ecrec_msmeGrantEol,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   Ecrec_msmeGrantSelection,
@@ -159,7 +159,7 @@ export class KoboTypedAnswerSdk {
       })),
       ...make('ecrec_msmeGrantEol', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('ecrec_msmeGrantEol').id,
-        fnMapKobo: Ecrec_msmeGrantEoi.map,
+        fnMapKobo: Ecrec_msmeGrantEol.map,
         ...filters,
       })),
       ...make('ecrec_cashRegistration', (filters?: KoboAnswerFilter) => req({
