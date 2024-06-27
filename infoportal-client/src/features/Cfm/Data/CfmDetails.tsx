@@ -88,6 +88,7 @@ export const CfmDetails = ({entry}: {
               ))
               .get()
             }
+            disabled={!entry.tags?.notes || entry.tags?.notes.trim() === ''}
           />
         </>
       }>
