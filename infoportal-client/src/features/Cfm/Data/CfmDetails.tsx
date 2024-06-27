@@ -73,22 +73,25 @@ export const CfmDetails = ({entry}: {
       <PageTitle subTitle={formatDateTime(entry.date)} action={
         <>
           <CfmPriorityLogo fontSize="large" priority={entry.priority} sx={{mr: 2}}/>
-          <KoboSelectTag<KoboMealCfmTag, CfmData>
-            sx={{width: 200,}}
-            label={m.status}
-            entry={entry}
-            tag="status"
-            formId={entry.formId}
-            answerId={entry.id}
-            enumerator={KoboMealCfmStatus}
-            translate={new Obj(KoboMealCfmStatus)
-              .filter(_ => !ctx.authorizations.sum.admin ? _ !== KoboMealCfmStatus.Archived : true)
-              .mapValues(k => (
-                <CfmStatusIconLabel key={k} status={k!} sx={{display: 'flex', alignItems: 'center'}}/>
-              ))
-              .get()
-            }
-          />
+          <div title={!entry.tags?.notes || entry.tags?.notes.trim() === '' ? 'Notes section is empty!' : ''} style={{width: '200px'}}>
+            <KoboSelectTag<KoboMealCfmTag, CfmData>
+              sx={{width: '100%'}}
+              label={m.status}
+              entry={entry}
+              tag="status"
+              formId={entry.formId}
+              answerId={entry.id}
+              enumerator={KoboMealCfmStatus}
+              translate={new Obj(KoboMealCfmStatus)
+                .filter(_ => !ctx.authorizations.sum.admin ? _ !== KoboMealCfmStatus.Archived : true)
+                .mapValues(k => (
+                  <CfmStatusIconLabel key={k} status={k!} sx={{display: 'flex', alignItems: 'center'}}/>
+                ))
+                .get()
+              }
+              disabled={!entry.tags?.notes || entry.tags?.notes.trim() === ''}
+            />
+          </div>
         </>
       }>
         <Box sx={{display: 'flex', alignItems: 'center'}}>

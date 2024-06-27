@@ -19,6 +19,7 @@ export const KoboSelectTag = <
   translate,
   setData,
   showUndefinedOption,
+  disabled,
   ...props
 }: {
   entry: T,
@@ -30,6 +31,7 @@ export const KoboSelectTag = <
   enumerator: Record<K, string>
   translate?: Record<K, ReactNode>
   setData?: Dispatch<SetStateAction<T[] | undefined>>
+  disabled?: boolean
 } & Pick<AaSelectProps<any>, 'sx'>) => {
   const ctxEditTag = useKoboEditTagContext()
   const enumKeys = Obj.keys(enumerator)
@@ -50,6 +52,7 @@ export const KoboSelectTag = <
       options={enumKeys.map(_ => ({
         value: _, children: translate ? translate[_] : _,
       }) as any)}
+      disabled={disabled}
       {...props}
     />
   )

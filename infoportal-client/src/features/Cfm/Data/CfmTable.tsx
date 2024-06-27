@@ -227,19 +227,24 @@ export const CfmTable = ({}: any) => {
               width: 0,
               options: () => Obj.keys(KoboMealCfmStatus).map(_ => ({value: _, label: _})),
               render: row => {
+                const isNotesEmpty = !row?.tags?.notes || row?.tags?.notes.trim() === ''
+
                 return {
                   export: row?.tags?.status ?? KoboMealCfmStatus.Open,
                   value: row?.tags?.status ?? KoboMealCfmStatus.Open,
+                  tooltip: isNotesEmpty ? 'Notes section is empty!' : '',
                   label: (
                     <IpSelectSingle
                       value={row.tags?.status ?? KoboMealCfmStatus.Open ?? ''}
                       onChange={(tagChange) => {
-                        ctxEditTag.asyncUpdateById.call({
-                          formId: row.formId,
-                          answerIds: [row.id],
-                          tag: 'status',
-                          value: tagChange,
-                        })
+                        if (!isNotesEmpty) {
+                          ctxEditTag.asyncUpdateById.call({
+                            formId: row.formId,
+                            answerIds: [row.id],
+                            tag: 'status',
+                            value: tagChange,
+                          })
+                        }
                       }}
                       options={Obj.keys(KoboMealCfmStatus)
                         .filter(_ => !ctx.authorizations.sum.admin ? _ !== KoboMealCfmStatus.Archived : true)
@@ -247,6 +252,8 @@ export const CfmTable = ({}: any) => {
                           value: _, children: <CfmStatusIcon status={KoboMealCfmStatus[_]}/>,
                         }))
                       }
+                      disabled={isNotesEmpty}
+                      sx={{width: '100%'}}
                     />
                   )
                 }
