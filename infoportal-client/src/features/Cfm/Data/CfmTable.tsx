@@ -253,7 +253,7 @@ export const CfmTable = ({}: any) => {
                         }))
                       }
                       disabled={isNotesEmpty}
-                      sx={{ width: '100%' }}
+                      sx={{width: '100%'}}
                     />
                   )
                 }
