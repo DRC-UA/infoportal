@@ -159,7 +159,7 @@ export namespace Protection_groupSession {
       'echo': `UKR-000322 ECHO`,
       'uhf6': `UKR-000336 UHF VI`,
       'uhf8': `UKR-000363 UHF8`,
-      '372_echo': `UKR-000372 ECHO3`
+      '372_echo': `UKR-000372 ECHO 3`
     },
     ben_det_oblast: {
       'cherkaska': `Cherkaska`,

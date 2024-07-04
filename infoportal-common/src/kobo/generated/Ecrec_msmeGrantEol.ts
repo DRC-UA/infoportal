@@ -9,11 +9,11 @@ export namespace Ecrec_msmeGrantEol {
     'not_beginning': string,
     // date [date] Дата
     'date': Date | undefined,
-    // ben_first_name [text] First name
+    // ben_first_name [text] Ім'я
     'ben_first_name': string | undefined,
-    // ben_first_patr [text] Patronymic name
+    // ben_first_patr [text] По батькові
     'ben_first_patr': string | undefined,
-    // ben_last_name [text] Last name
+    // ben_last_name [text] Прізвище
     'ben_last_name': string | undefined,
     // lh_restoration_id [text] Livelihoods Restoration / Програма екстреної підтримки малого та середнього бізнесу  ID
     'lh_restoration_id': string | undefined,

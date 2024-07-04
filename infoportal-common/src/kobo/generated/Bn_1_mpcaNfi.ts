@@ -1,340 +1,361 @@
-export namespace Protection_referral {
+export namespace Bn_1_mpcaNfi {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 
-  // Form id: a62ZpworuN4nFLznsUej8r
+  // Form id: a4Sx3PrFMDAMZEGsyzgJJg
   export interface T {
     'start': string,
     'end': string,
-    // date [date] Date
-    'date': Date | undefined,
-    // introduction/staff_to_insert_their_DRC_office [select_one] 1.1 DRC office
-    'staff_to_insert_their_DRC_office': undefined | Option<'staff_to_insert_their_DRC_office'>,
-    // introduction/staff_code [select_one] 1.2 Staff code (facilitator)
-    'staff_code': undefined | Option<'staff_code'>,
-    // introduction/incoming_outgoing_referral [select_one] 1.3 Incoming or outgoing referral?
-    'incoming_outgoing_referral': undefined | Option<'incoming_outgoing_referral'>,
-    // introduction/project_code [select_one] 1.4 Project code
-    'project_code': undefined | Option<'project_code'>,
-    // introduction/referral_numb [text] 1.5 Referral #
-    'referral_numb': string | undefined,
-    // introduction/calc_ref_numb [calculate] Fully Referral number
-    'calc_ref_numb': string,
-    // introduction/person_successfully_referred_drc [select_one] 1.6 Has the person already been successfully referred by DRC protection team?
-    'person_successfully_referred_drc': undefined | Option<'referral_closed'>,
-    // introduction/date_referral [date] 1.7 Date of referral
-    'date_referral': Date | undefined,
-    // introduction/priority_level [select_one] 1.8 Priority level
-    'priority_level': undefined | Option<'priority_level'>,
-    // introduction/specific_need [select_multiple] 1.9 Specific need
-    'specific_need': undefined | Option<'specific_need'>[],
-    // introduction/specific_need_other [text] 1.9.1 If other specific need, please specify
-    'specific_need_other': string | undefined,
-    // referral_details/referral_type [select_one] 2.1 Referral type
-    'referral_type': undefined | Option<'referral_type'>,
-    // referral_details/service_requested [select_multiple] 2.2 Service requested
-    'service_requested': undefined | Option<'service_requested'>[],
-    // referral_details/service_requested_other [text] 2.2.1 If other service requested, please specify
-    'service_requested_other': string | undefined,
-    // referral_details/receiving_department_out_inc [text] 2.3 Receiving department
-    'receiving_department_out_inc': string | undefined,
-    // referral_details/receiving_staff_out_inc [text] 2.4 Receiving staff
-    'receiving_staff_out_inc': string | undefined,
-    // referral_details/service_requested_prot [select_one] 2.5 Service requested
-    'service_requested_prot': undefined | Option<'service_requested_prot'>,
-    // referral_details/service_requested_prot_other [text] 2.5.1 If other service requested, please specify
-    'service_requested_prot_other': string | undefined,
-    // referral_details/sending_department_inc_inc [text] 2.6 Sending department
-    'sending_department_inc_inc': string | undefined,
-    // referral_details/sending_staff_inc_inc [text] 2.7 Sending staff
-    'sending_staff_inc_inc': string | undefined,
-    // referral_details/name_receiving_agency_out [select_one] 2.8 Receiving agency: name of the agency
-    'name_receiving_agency_out': undefined | Option<'name_receiving_agency_inc'>,
-    // referral_details/name_receiving_agency_out_other [text] 2.8.1 If other receiving agency, please specify
-    'name_receiving_agency_out_other': string | undefined,
-    // referral_details/rec_agency_fp_name_out [text] 2.9 Receiving agency: focal point's name
-    'rec_agency_fp_name_out': string | undefined,
-    // referral_details/rec_agency_fp_contact_details_out [text] 2.10 Receiving agency: focal point's contact details
-    'rec_agency_fp_contact_details_out': string | undefined,
-    // referral_details/name_receiving_agency_inc [select_one] 2.11 Sending agency: name of the agency
-    'name_receiving_agency_inc': undefined | Option<'name_receiving_agency_inc'>,
-    // referral_details/name_receiving_agency_inc_other [text] 2.11.1 If other sending agency, please specify
-    'name_receiving_agency_inc_other': string | undefined,
-    // referral_details/sen_agency_fp_name_inc [text] 2.12 Sending agency: focal point's name
-    'sen_agency_fp_name_inc': string | undefined,
-    // referral_details/sen_agency_fp_contact_details_inc [text] 2.13 Sending agency: focal point's contact details
-    'sen_agency_fp_contact_details_inc': string | undefined,
-    // biodata/name [text] 3.1 Name
-    'name': string | undefined,
-    // biodata/surname [text] 3.2 Surname
-    'surname': string | undefined,
-    // biodata/gender [select_one] 3.2 Gender
-    'gender': undefined | Option<'gender'>,
-    // biodata/age [integer] 3.3 Age
-    'age': number | undefined,
-    // biodata/displacement_status [select_one] 3.4 Displacement status
-    'displacement_status': undefined | Option<'displacement_status'>,
-    // biodata/oblast [select_one] 3.5 Oblast
+    'today': string,
+    'ID': string,
+    // group_xp17b32/unique_id_view [note] Unique ID ${ID}
+    'unique_id_view': string,
+    // group_xp17b32/Programme [select_one] Programme
+    'Programme': undefined | Option<'Programme'>,
+    // module1/DRC_project [select_one] Please select DRC project and donor that the MPCA registration is for
+    'DRC_project': undefined | Option<'DRC_project'>,
+    // module1/drc_base [select_one] Office in charge of distribution/registration
+    'drc_base': undefined | Option<'drc_base'>,
+    // module1/location_geopoint [geopoint] Record your current location
+    'location_geopoint': string,
+    // module1/staff_names [select_one] Select DRC staff name
+    'staff_names': undefined | Option<'staff_names'>,
+    // module1/BHA_area [select_one] Select BHA Consortium geographical area
+    'BHA_area': undefined | Option<'BHA_area'>,
+    // module_consent/__021 [note] In order to register your application, we'd need to ask you a few questions to understand the composition of your household and how to best transfer financial assistance to you if you are eligible. These questions will take between 10-15 minutes. If you are eligible, we’ll need to share some basic details with the bank in order to make the payment. We are also required to share Tax ID numbers of people we provide assistance to with other humanitarian agencies implementing financial assistance programs, to ensure we are not duplicating assistance. All the other information will be stored safely, in accordance with the Law on protection of personal data, and will not be shared outside of DRC and its partners.
+    '__021': string,
+    // module_consent/consent_mod_1 [select_one] Are you happy to proceed with the questionnaire?
+    'consent_mod_1': undefined | Option<'confirm_truth'>,
+    // module_eligibility_screening/oblast [select_one] Select oblast where registration is taking place
     'oblast': undefined | Option<'oblast'>,
-    // biodata/raion [select_one] 3.5.1 Raion
+    // module_eligibility_screening/raion [select_one] Select raion where registration is taking place
     'raion': undefined | Option<'raion'>,
-    // biodata/hromada [select_one] 3.5.2 Hromada
+    // module_eligibility_screening/hromada [select_one] Select hromada where registration is taking place
     'hromada': undefined | Option<'hromada'>,
-    // biodata/settement [select_one_from_file] 3.5.3 Settlement/village/city neighborhood
-    'settement': string,
-    // biodata/contact_number [integer] 3.6 Contact number
-    'contact_number': number | undefined,
-    // biodata/details_related_referral [text] 3.7 Notes / Details related to the referral
-    'details_related_referral': string | undefined,
-    // follow_up/follow_up_session1 [text] 4.1 Follow-up session 1: date & remarks
-    'follow_up_session1': string | undefined,
-    // follow_up/follow_up_session2 [text] 4.2 Follow-up session 2: date & remarks
-    'follow_up_session2': string | undefined,
-    // follow_up/follow_up_session3 [text] 4.3 Follow-up session 3: date & remarks
-    'follow_up_session3': string | undefined,
-    // follow_up/service_provided [select_one] 4.4 Service provided?
-    'service_provided': undefined | Option<'service_provided'>,
-    // follow_up/not_service_provided_out [select_one] 4.4.1 If service was not provided, explain why
-    'not_service_provided_out': undefined | Option<'not_service_provided_out'>,
-    // follow_up/not_service_provided_other [text] 4.4.2 If other reason, please explain
-    'not_service_provided_other': string | undefined,
-    // follow_up/not_service_provided_inc [text] 4.4.3 If service was not provided, explain why
-    'not_service_provided_inc': string | undefined,
-    // follow_up/month_provision [date] 4.4.4 If service was provided, month of provision
-    'month_provision': Date | undefined,
-    // follow_up/referral_closed [select_one] Is the referral closed?
-    'referral_closed': undefined | Option<'referral_closed'>,
-    // follow_up/date_closure [date] 4.5 Date of closure
-    'date_closure': Date | undefined,
-    // follow_up/comments [text] 4.6 Comments
-    'comments': string | undefined,
+    // module_eligibility_screening/patron [text] What is your surname name (as shown in personal ID)?
+    'patron': string | undefined,
+    // module_eligibility_screening/name_resp [text] What is your first name (as shown in personal ID)?
+    'name_resp': string | undefined,
+    // module_eligibility_screening/last_resp [text] What is your patronymic name?
+    'last_resp': string | undefined,
+    // module_eligibility_screening/status [select_one] Select status
+    'status': undefined | Option<'status'>,
+    // module_eligibility_screening/phone [integer] What is your phone number?
+    'phone': number | undefined,
+    // module_eligibility_screening/group_jy7pa23/Does_the_beneficiary_have_an_i [select_one] Does the beneficiary have an individual tax number (ITN)?
+    'Does_the_beneficiary_have_an_i': undefined | Option<'Does_the_beneficiary_have_an_i'>,
+    // module_eligibility_screening/group_jy7pa23/Other_ID_identification [select_one] Other ID identification
+    'Other_ID_identification': undefined | Option<'Other_ID_identification'>,
+    // module_eligibility_screening/group_jy7pa23/Number_of_ID [text] Number of ID
+    'Number_of_ID': string | undefined,
+    // module_eligibility_screening/group_jy7pa23/ITN [text] Individual tax number (ITN) of the HHH
+    'ITN': string | undefined,
+    // module_eligibility_screening/group_kj9wg97/gender_respondent [select_one] Select gender of respondent
+    'gender_respondent': undefined | Option<'gender_respondent'>,
+    // module_eligibility_screening/group_kj9wg97/Are_you_the_head_of_your_house [select_one] Are you the head of your household?
+    'Are_you_the_head_of_your_house': undefined | Option<'Are_you_the_head_of_your_house'>,
+    // module_eligibility_screening/group_kj9wg97/sex [select_one] If no, what is the gender of head of household?
+    'sex': undefined | Option<'sex'>,
+    // module_eligibility_screening/group_kj9wg97/hh_elderly_check [integer] How old is the head of household?
+    'hh_elderly_check': number | undefined,
+    // module_eligibility_screening/group_kj9wg97/agex [integer] How old are you?
+    'agex': number | undefined,
+    // module_eligibility_screening/group_kj9wg97/child_hhh_confirm [select_one] You have stated you are under 18 years, can you confirm you are the head of household?
+    'child_hhh_confirm': undefined | Option<'child_hhh_confirm'>,
+    // module_eligibility_screening/group_kj9wg97/child_hhh [note] This is a child headed household (high risk protection case), please refer immediately to a DRC Protection and complete internal referral form.
+    'child_hhh': string,
+    // module_eligibility_screening/group_kj9wg97/Total_Family [integer] Indicate the total number of people in your household, including the HHH
+    'Total_Family': number | undefined,
+    // module_eligibility_screening/group_kj9wg97/group_in3fh72 [begin_repeat] HH members (excluding HHH)
+    'group_in3fh72': {'AgeHH': number | undefined | undefined, 'GenderHH': undefined | Option<'GenderHH'> | undefined}[] | undefined,
+    // module_eligibility_screening/group_py7qe21/Does_anyone_in_your_elect_all_that_apply [select_multiple] Does anyone in your family present with any disability? Select all that apply.
+    'Does_anyone_in_your_elect_all_that_apply': undefined | Option<'Does_anyone_in_your_elect_all_that_apply'>[],
+    // module_eligibility_screening_001/group_un9ff13_header/Kits_to_be_provided [select_multiple] Kits to be provided
+    'Kits_to_be_provided': undefined | Option<'Kits_to_be_provided'>[],
+    // module_eligibility_screening_001/group_un9ff13_header/HKMV_ [integer] HKMV Family hygiene kit for IDPs on the move: How many?
+    'HKMV_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/HKF_ [integer] HKF Hygiene kit: How many?
+    'HKF_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/NFKF_NFI_ [integer] NFKF Family NFI Kit: How many?
+    'NFKF_NFI_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/KS_ [integer] KS Family kitchen set: How many?
+    'KS_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/BK_Baby_Kit_ [integer] BK1 Baby Hygiene Kit 1: How many?
+    'BK_Baby_Kit_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/BK_Baby_Kit [integer] BK2 Baby Hygiene Kit 2: How many?
+    'BK_Baby_Kit': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/BK_Baby_Kit_001 [integer] BK3 Baby Hygiene Kit 3: How many?
+    'BK_Baby_Kit_001': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/BK_Baby_Kit_002 [integer] BK4 Baby Hygiene Kit 4: How many?
+    'BK_Baby_Kit_002': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/WKB1_1_ [integer] WKB1 Baby Winterization Kit 1: How many?
+    'WKB1_1_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/WKB2_2_ [integer] WKB1 Baby Winterization Kit 2: How many?
+    'WKB2_2_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/WKB3_3_ [integer] WKB1 Baby Winterization Kit 3: How many?
+    'WKB3_3_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/WKB4_4_ [integer] WKB1 Baby Winterization Kit 4: How many?
+    'WKB4_4_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/BLN_ [integer] BLN High Thermal Blankets: How many?
+    'BLN_': number | undefined,
+    // module_eligibility_screening_001/group_un9ff13_header/BLN [integer] Solar lamps: How many?
+    'BLN': number | undefined,
+    'Total_Kits': string,
+    'Total_BBKits': string,
+    'Total_BBKits_Hygiene': string,
+    'Total_BBKits_Winter': string,
+    'Total_Cost_HKMV': string,
+    'Total_Cost_HKF': string,
+    'Total_Cost_NFKF': string,
+    'Total_Cost_KS': string,
+    'Total_Cost_BK': string,
+    'Total_Cost_WKB1': string,
+    'Total_Cost_WKB2': string,
+    'Total_Cost_WKB3': string,
+    'Total_Cost_WKB4': string,
+    'Total_Cost_BLN': string,
+    'Total_Cost_Allkits': string,
+    // module_eligibility_screening_001/group_checks/Kits_Check [acknowledge] There are ${Total_Kits} planned for this family.
+    'Kits_Check': string,
+    // module_eligibility_screening_001/group_checks/group_kits_toomanybb_kitstotal_002 [note] The total benefit equals ${Total_Cost_Allkits} UAH.
+    'group_kits_toomanybb_kitstotal_002': string,
+    // inclusion_exclusion_group/inclusion_exclusion_group_001/ingo [select_one] Are you registered to receive cash from an NGO?
+    'ingo': undefined | Option<'confirm_truth'>,
+    // inclusion_exclusion_group/inclusion_exclusion_group_001/income_month [integer] What was the income of your household in the last 30 days in UAH?
+    'income_month': number | undefined,
+    'calculation_average_income': string,
+    // inclusion_exclusion_group/inclusion_exclusion_group_001/The_average_income_o_per_month_per_person [note] The average income of this household is ${calculation_average_income} per month per person
+    'The_average_income_o_per_month_per_person': string,
+    // inclusion_exclusion_group/inclusion_exclusion_group_001/exclusion_1 [select_one] This household is not eligible for cash assistance because they are receiving or due to receive cash from an NGO.
+    'exclusion_1': undefined | Option<'exclusion_1'>,
+    // inclusion_exclusion_group/inclusion_exclusion_group_001/exclusion_2 [select_one] This household is not eligible for cash assistance because they earn more than 5,400 UAH per person per month
+    'exclusion_2': undefined | Option<'exclusion_2'>,
+    // inclusion_exclusion_group/vul_screen [select_one] This household has passed the exclusion criteria and can be screened for inclusion and vulnerability criteria - proceed to next step
+    'vul_screen': undefined | Option<'vul_screen'>,
+    // inclusion_exclusion_group/group_inclusion_area/east_evacuation/recent_displacement [select_one] Has your household been displaced within in the last 3 days?
+    'recent_displacement': undefined | Option<'confirm_truth'>,
+    // inclusion_exclusion_group/group_inclusion_area/idp_host/safe_shelter_001 [select_one] Where are you currently staying?
+    'safe_shelter_001': undefined | Option<'safe_shelter_001'>,
+    // inclusion_exclusion_group/group_inclusion_area/idp_host/Has_this_location_been_damaged [select_one] Has this location been damaged or shelled by the conflict since February 2022?
+    'Has_this_location_been_damaged': undefined | Option<'Has_this_location_been_damaged'>,
+    // inclusion_exclusion_group/group_inclusion_area/idp_host/idp_host_shelter_damaged [select_one] Was your house damaged or destroyed since Feb. 2022?
+    'idp_host_shelter_damaged': undefined | Option<'idp_host_shelter_damaged'>,
+    // inclusion_exclusion_group/group_inclusion_area/idp_host/main_reason_damaged_shelter [select_one] Is this the main reason you are not currently living in your house?
+    'main_reason_damaged_shelter': undefined | Option<'main_reason_damaged_shelter'>,
+    // inclusion_exclusion_group/group_inclusion_area/center/occupation [select_one] Has your family lived under occupation?
+    'occupation': undefined | Option<'confirm_truth'>,
+    // inclusion_exclusion_group/group_inclusion_area/center/returnee [select_one] Have you been displaced due to the occupation and are now returning to your place of residency?
+    'returnee': undefined | Option<'confirm_truth'>,
+    // inclusion_exclusion_group/group_inclusion_area/center/safe_shelter [select_one] Was your home impacted or destroyed by the conflict?
+    'safe_shelter': undefined | Option<'confirm_truth'>,
+    'ctr_vuln': string,
+    // inclusion_exclusion_group/group_inclusion_area/east_conflict_location/displaced_ngca [select_one] Has your home been damaged or destroyed by shelling?
+    'displaced_ngca': undefined | Option<'displaced_ngca'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/For_DRC_staff_only_Was_this_ [select_one] For DRC staff only - Was this household referred by DRC Protection?
+    'For_DRC_staff_only_Was_this_': undefined | Option<'For_DRC_staff_only_Was_this_'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/Is_this_household_female_heade [select_one] Is this household female-headed?
+    'Is_this_household_female_heade': undefined | Option<'Is_this_household_female_heade'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/single_PWD [select_one] Is this person living alone and have a chronic illness/disease/disability/temporary impairment?
+    'single_PWD': undefined | Option<'single_PWD'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/large_hh [select_one] Does this household have 2 or more children?
+    'large_hh': undefined | Option<'large_hh'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/child_elderly [select_one] Does this household have at least 1 child (under 18 years) and 1 elderly (60+ years) person?
+    'child_elderly': undefined | Option<'child_elderly'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/child_pwd [select_one] Does this household have at least 1 child (under 18 years) and 1 member with a chronic illness/disease/disability/temporary impairment?
+    'child_pwd': undefined | Option<'child_pwd'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/plw [select_one] Is there any pregnant or lactating women in your household?
+    'plw': undefined | Option<'plw'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/displaced_30days [select_one] Has this household been displaced in the last 30 days?
+    'displaced_30days': undefined | Option<'displaced_30days'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/child_custody [select_one] Is this household caring for other children (guardianship or custody)?
+    'child_custody': undefined | Option<'child_custody'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/damaged_inclusion_criteria [select_one] Is this household affected by sudden shelling including those where people have lost family member, houses, livelihoods (damaged shop/lost, farm, livestock)?
+    'damaged_inclusion_criteria': undefined | Option<'damaged_inclusion_criteria'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/internal_referral [select_one] Should this household be referred to another DRC department?
+    'internal_referral': undefined | Option<'internal_referral'>,
+    // inclusion_exclusion_group/mpca_targeting_criteria/internal_referral_specific [select_multiple] Select to which DRC department
+    'internal_referral_specific': undefined | Option<'internal_referral_specific'>[],
+    // inclusion_exclusion_group/mpca_targeting_criteria/additional_specific_needs [text] For DRC staff - Please enter any additional comments regarding specific needs of this household?
+    'additional_specific_needs': string | undefined,
+    // inclusion_exclusion_group/mpca_eligible_inclusion_area [select_one] This household is eligible for MPCA because they satisfy the inclusion criteria for the category of area
+    'mpca_eligible_inclusion_area': undefined | Option<'mpca_eligible_inclusion_area'>,
+    // inclusion_exclusion_group/protection_referral [select_one] This household is eligible for MPCA because they were referred to from DRC Protection and pass the exclusion criteria
+    'protection_referral': undefined | Option<'protection_referral'>,
+    // inclusion_exclusion_group/mpca_yes_ehh [select_one] This household is eligible for MPCA because they are elderly-headed.
+    'mpca_yes_ehh': undefined | Option<'mpca_yes_ehh'>,
+    // inclusion_exclusion_group/mpca_eligible_vul [select_one] This household is eligible for MPCA because they meet at least one of the vulnerability targeting criteria.
+    'mpca_eligible_vul': undefined | Option<'mpca_eligible_vul'>,
+    // inclusion_exclusion_group/group_kk0ko83/Is_this_household_currently_re [select_one] Is this household currently renting or planning to rent an apartment/home?
+    'Is_this_household_currently_re': undefined | Option<'Is_this_household_currently_re'>,
+    // inclusion_exclusion_group/group_kk0ko83/The_household_is_to_WITH_start_up_grant [note] The household is to be considered to receive cash-for-rent (WITH start-up grant).
+    'The_household_is_to_WITH_start_up_grant': string,
+    // inclusion_exclusion_group/group_kk0ko83/The_household_is_to_t_NO_start_up_grant [note] The household is to be considered to receive cash-for-rent (NO start-up grant).
+    'The_household_is_to_t_NO_start_up_grant': string,
+    // inclusion_exclusion_group/cash_yes/mpca_tot_transfer_value [calculate] undefined
+    'mpca_tot_transfer_value': string,
+    // inclusion_exclusion_group/cash_yes/eligible_mpca_tv [note] You are eligible for cash assistance and according to the information provided, your household will receive a total transfer of ${mpca_tot_transfer_value} UAH (total number of people in HH * 2220 UAH * 3 months). We will now ask you some detailed questions about yourself.
+    'eligible_mpca_tv': string,
+    // inclusion_exclusion_group/cash_yes/idp_certificate [select_one] Do you have an IDP certificate?
+    'idp_certificate': undefined | Option<'idp_certificate'>,
+    // inclusion_exclusion_group/cash_yes/reason_no_idp_certificate [text] Please state main reason why you do not have an IDP certificate
+    'reason_no_idp_certificate': string | undefined,
+    // inclusion_exclusion_group/cash_yes/resident_permit [select_one] Do you have a resident permit from a conflict-affected location?
+    'resident_permit': undefined | Option<'resident_permit'>,
+    // inclusion_exclusion_group/cash_yes/For_staff_member_ONL_cabinet_of_ministers [select_one] For staff member ONLY - is this person from a recognized conflict-affected area? (within the decree of cabinet of ministers)
+    'For_staff_member_ONL_cabinet_of_ministers': undefined | Option<'For_staff_member_ONL_cabinet_of_ministers'>,
+    // inclusion_exclusion_group/cash_yes/no_resident_permit [text] If no, what is the main reason for not having a resident permit?
+    'no_resident_permit': string | undefined,
+    // inclusion_exclusion_group/cash_yes/passport_serial [text] Enter passport series
+    'passport_serial': string | undefined,
+    // inclusion_exclusion_group/cash_yes/passport_number [text] Enter passport number
+    'passport_number': string | undefined,
+    // inclusion_exclusion_group/cash_yes/your_id [text] What is your Tax ID?
+    'your_id': string | undefined,
+    // inclusion_exclusion_group/cash_yes/registration_address [text] Enter registration address
+    'registration_address': string | undefined,
+    // inclusion_exclusion_group/cash_yes/confirm_phone [text] Confirm phone number of person receiving MPCA
+    'confirm_phone': string | undefined,
+    // inclusion_exclusion_group/cash_yes/area_of_origin [select_one] What is your area of origin prior to displacement? (Select Oblast)
+    'area_of_origin': undefined | Option<'area_of_origin'>,
+    // inclusion_exclusion_group/delivery_mechanisms/What_is_your_preferred_payment [select_one] What is your preferred payment method?
+    'What_is_your_preferred_payment': undefined | Option<'What_is_your_preferred_payment'>,
+    // inclusion_exclusion_group/delivery_mechanisms/reason [select_multiple] If banks are not an option, for what reason?
+    'reason': undefined | Option<'reason'>[],
+    // inclusion_exclusion_group/delivery_mechanisms/specify [text] If none of the options are available, please specify the reason
+    'specify': string | undefined,
+    // inclusion_exclusion_group/social_protection/Are_you_currently_enrolled_in_ [select_one] Are you currently enrolled in any social protection assistance?
+    'Are_you_currently_enrolled_in_': undefined | Option<'Are_you_currently_enrolled_in_'>,
+    // inclusion_exclusion_group/social_protection/Have_you_received_yo_in_the_last_3_months [select_one] Have you received your social protection benefits in the last 3 months?
+    'Have_you_received_yo_in_the_last_3_months': undefined | Option<'Have_you_received_yo_in_the_last_3_months'>,
+    // inclusion_exclusion_group/social_protection/Are_you_able_to_provide_inform [select_one] Are you able to provide information on which social protection assistance programe you are enrolled in?
+    'Are_you_able_to_provide_inform': undefined | Option<'Are_you_able_to_provide_inform'>,
+    // inclusion_exclusion_group/social_protection/Please_select_all_th_urrently_enrolled_in [select_multiple] Please select all the social protection assistance programs you are currently enrolled in
+    'Please_select_all_th_urrently_enrolled_in': undefined | Option<'Please_select_all_th_urrently_enrolled_in'>[],
+    // inclusion_exclusion_group/social_protection/Were_you_enrolled_to_before_February_2022 [select_one] Were you enrolled to these social assistance benefits before February 2022?
+    'Were_you_enrolled_to_before_February_2022': undefined | Option<'Were_you_enrolled_to_before_February_2022'>,
+    // inclusion_exclusion_group/multisector_questions/We_would_now_like_to_ask_you_s [select_one] We would now like to ask you some questions about shelter, NFI and protection. Do you agree to proceed with the additional questions?
+    'We_would_now_like_to_ask_you_s': undefined | Option<'We_would_now_like_to_ask_you_s'>,
+    // inclusion_exclusion_group/multisector_questions/group_shelter/rent [select_one] Are you currently paying for rent?
+    'rent': undefined | Option<'confirm_truth'>,
+    // inclusion_exclusion_group/multisector_questions/group_shelter/rent_2 [select_one] Do you anticipate that your household will need to pay rent next month?
+    'rent_2': undefined | Option<'confirm_truth'>,
+    // inclusion_exclusion_group/multisector_questions/group_shelter/repairs [select_one] Are you currently paying for any shelter repairs?
+    'repairs': undefined | Option<'confirm_truth'>,
+    // inclusion_exclusion_group/multisector_questions/group_shelter/repairs_2 [select_one] Do you anticipate that you need to pay for shelter repairs in the next month?
+    'repairs_2': undefined | Option<'confirm_truth'>,
+    // group_5_document_collection/consent_document [select_one] Do you provide DRC consent to take photos or copies of your personal documentation at this time? Following DRC Data Protection Protocols and Ukraine Law on Data Protection, we will not share copies or photos of your documents with anyone outside DRC and these will only be used for the sole purpose of processing your information in order to provide you with cash assistance. You can decide to say no at this time and we will need to collect your documents at a later point in time.
+    'consent_document': undefined | Option<'consent_document'>,
+    // group_5_document_collection/Does_the_respondent_have_perso [select_one] Does the respondent have personal documentation? (passport or IDP certificate)
+    'Does_the_respondent_have_perso': undefined | Option<'Does_the_respondent_have_perso'>,
+    // group_5_document_collection/no_documents_refer [note] For DRC Staff: Proceed to completing internal referral form after completion of this registration and refer to DRC Protection
+    'no_documents_refer': string,
+    // group_5_document_collection/DRC_Staff_take_phot_rt_registration_page [note] DRC Staff: take photo of IDP certificate only. If person does not have IDP certificate, take photo ONLY of passport registration page.
+    'DRC_Staff_take_phot_rt_registration_page': string,
+    // group_5_document_collection/Photo_of_IDP_Certificate [image] Photo of IDP Certificate
+    'Photo_of_IDP_Certificate': string,
+    // group_5_document_collection/Photo_of_IDP_Certificate_001 [image] Photo of ITN Certificate
+    'Photo_of_IDP_Certificate_001': string,
+    // group_5_document_collection/Photo_of_IBAN [image] Photo of IBAN
+    'Photo_of_IBAN': string,
+    // group_5_document_collection/photo_reg_passport [image] Photo of Passport 1st page
+    'photo_reg_passport': string,
+    // group_5_document_collection/photo_reg_passport_001 [image] Photo of Registration Page in Passport
+    'photo_reg_passport_001': string,
+    // not_eligible_note [select_one] Unfortunately, due to our targeting criteria you are not eligible to receive cash assistance from DRC. However, we would like to ask you some questions about shelter and protection in order to see if you are eligible for other type of assistance, and proceed with the NFI distribution. Do you agree to proceed with the additional questions?
+    'not_eligible_note': undefined | Option<'not_eligible_note'>,
+    // not_eligible_note2 [select_one] Unfortunately, due to our targeting criteria you are not eligible to receive cash assistance from DRC. However, we would like to ask you some questions about shelter and protection in order to see if you are eligible for other type of assistance, and proceed with the NFI distribution. Do you agree to proceed with the additional questions?
+    'not_eligible_note2': undefined | Option<'not_eligible_note2'>,
+    // group_MS_not_eligible/group_shelter_no_mpca/cfr_no_mpca [select_one] Are you currently paying for rent?
+    'cfr_no_mpca': undefined | Option<'cfr_no_mpca'>,
+    // group_MS_not_eligible/group_shelter_no_mpca/cfr_no_mpca_2 [select_one] Do you anticipate that your household will need to pay rent next month?
+    'cfr_no_mpca_2': undefined | Option<'cfr_no_mpca_2'>,
+    // group_MS_not_eligible/group_shelter_no_mpca/Are_you_currently_pa_any_shelter_repairs [select_one] Are you currently paying any shelter repairs?
+    'Are_you_currently_pa_any_shelter_repairs': undefined | Option<'Are_you_currently_pa_any_shelter_repairs'>,
+    // group_MS_not_eligible/group_shelter_no_mpca/Do_you_anticipate_th_r_repairs_next_month [select_one] Do you anticipate that your household will need to pay for shelter repairs next month?
+    'Do_you_anticipate_th_r_repairs_next_month': undefined | Option<'Do_you_anticipate_th_r_repairs_next_month'>,
+    // no_consent_note [note] Thank you very much for talking to DRC today. We appreciate your time.
+    'no_consent_note': string,
+    // confirm_truth [select_one] Do you confirm that all of the information you have provided is true and accurate?
+    'confirm_truth': undefined | Option<'confirm_truth'>,
+    // consent_to_esign [select_one] DRC staff member ONLY - Can this person provide an e-signature?
+    'consent_to_esign': undefined | Option<'consent_to_esign'>,
+    // consent_signature_payment [image] In accordance with the Law of Ukraine "On the Protection of Personal Data" No. 2297-IV of June 1, 2010, we will need your consent for the following statement: "I give consent to the Representative Office of the Danish Refugee Council in Ukraine for the processing, use, access, distribution and transfer of my personal data to third parties that I provide about myself. The purpose of processing personal data to ensure the implementation of Assistance Programs.
+    'consent_signature_payment': string,
+    // paper_consent [note] You have stated this person cannot provide an e-signature. Please have them complete a paper consent form.
+    'paper_consent': string,
+    // eligible_end_note [note] Thank you so much for agreeing to answer the questions. DRC will be reviewing the application and might contact for additional clarification and request for personal documents..
+    'eligible_end_note': string,
   }
 
   export const options = {
-    incoming_outgoing_referral: {
-      'incoming': `Incoming referral`,
-      'outgoing': `Outgoing referral`
-    },
-    project_code: {
-      '297_novo': `UKR-000298 Novo Nordisk`,
-      '330_sdc': `UKR-000330 SDC`,
-      '336_uhf_iv': `UKR-000336 UHF VI`,
-      '345_bha': `UKR-000345 BHA`,
-      '363_uhf8': `UKR-000363 UHF VIII`,
-      '372_echo': `UKR-000372 ECHO`
-    },
-    referral_closed: {
-      'yes': `Yes`,
-      'no': `No`
-    },
-    priority_level: {
-      'high': `High`,
-      'medium': `Medium`,
-      'low': `Low`
-    },
-    specific_need: {
-      'older_person': `Older person at risk`,
-      'person_disability': `Person with disability`,
-      'person_serious_medical': `Person with serious medical condition`,
-      'child_risk': `Child at risk`,
-      'unaccompanied': `Unaccompanied or separated child`,
-      'woman_risk': `Woman at risk`,
-      'multiple_displacements': `Multiple displacements`,
-      'no_legal_documentation': `No legal documentation`,
-      'discrimination_marginalization': `Discrimination/marginalization`,
-      'survivor_violence': `Survivor of violence`,
-      'other': `Other`
-    },
-    referral_type: {
-      'internal': `Internal`,
-      'external': `External`
-    },
-    service_requested: {
+    Programme: {
       'mpca': `MPCA`,
-      'nfi': `Non-Food Items`,
-      'shelter_rehabilitation': `Shelter rehabilitation`,
-      'cash_rent': `Cash for rent`,
-      'cash_repair': `Cash for repair`,
-      'emergency_shelter_kit': `Emergency shelter kit`,
-      'employment_support': `Employment support`,
-      'agricultural_livelihood_support': `Agricultural livelihood support`,
-      'business_support': `Business support`,
-      'vocational_training': `Vocational training`,
-      'victim_assistance': `Victim assistance`,
-      'legal_aid': `Legal aid`,
-      'psychosocial_support': `Psychosocial support`,
-      'protection_case_management': `Protection case management`,
-      'ipa': `IPA`,
-      'gbv': `GBV`,
-      'child_protection': `Child protection`,
-      'education': `Education`,
-      'other': `Other`
+      'mpca___nfi': `MPCA + NFI`,
+      'nfi': `NFI`,
+      'cash_for_rent': `Cash-for-rent`,
+      'mpca___cash_for_rent': `MPCA + Cash-for-rent`
     },
-    service_requested_prot: {
-      'legal_aid': `Legal aid`,
-      'psychosocial_support': `Psychosocial support`,
-      'protection_management': `Protection case management`,
-      'ipa': `IPA`,
-      'gbv': `GBV`,
-      'other': `Other`
+    DRC_project: {
+      'bha_project': `BHA - UKR-000284`
     },
-    name_receiving_agency_inc: {
-      'social_protection_services': `Social Protection Services`,
-      'humanity_inclusion': `Humanity & Inclusion (HI)`,
-      'icrc': `ICRC`,
-      'intersos': `Intersos`,
-      'iom': `IOM`,
-      'nrc': `NRC`,
-      'r2p': `R2P`,
-      'rokada': `Rokada`,
-      'tenth_april': `Tenth of April`,
-      'tgh': `TGH`,
-      'unhcr': `UNHCR`,
-      'other': `Other`
+    drc_base: {
+      'lwo': `Lviv (LWO)`,
+      'cwc': `Chernivtsi (CWC)`,
+      'chj': `Chernihiv (CEJ)`,
+      'plv': `Poltava (PLV)`,
+      'dnk': `Dnipro (DNK)`,
+      'iev': `Kyiv (IEV)`,
+      'hrk': `Kharkiv (HRK)`
     },
-    gender: {
-      'man': `Man`,
-      'woman': `Woman`,
-      'boy': `Boy`,
-      'girl': `Girl`,
-      'other': `Other`,
-      'unspecified': `Unspecified`
+    staff_names: {
+      'dmytro_ivanov': `Dmytro Ivanov`,
+      'henadii_petrychenko': `Henadii Petrychenko`,
+      'nadiia_yudaieva': `Nadiia Yudaieva`,
+      'dmytro_tsaruk': `Dmytro Tsaruk`,
+      'viktoria_ushan': `Viktoria Ushan`,
+      'kostiantyn_yefimchuk': `Kostiantyn Yefimchuk`,
+      'viktoriia_lytvynova': `Viktoriia Lytvynova`,
+      'valerii_vietrov': `Valerii Vietrov`,
+      'daria_kokalia': `Daria Kokalia`,
+      'oleks_havrylov': `Oleks Havrylov`,
+      'vlad_zhukov': `Vlad Zhukov`,
+      'artem_chernukha': `Artem Chernukha`,
+      'maryna_dullovska': `Maryna Dullovska`,
+      'oleh_vyshnevskyi': `Oleh Vyshevskyi`,
+      'alina_bondarenko': `Alina Bondarenko`,
+      'danylo_palagno': `Danylo Palagno`,
+      'serhii_dolzhenko': `Serhii Dolzhenko`,
+      'viktoria_klymenko': `Viktoria Klymenko`,
+      'andrii_zahoruyev': `Andrii Zahoruyev`,
+      'oleh_Ivanov': `Oleh Ivanov`,
+      'karina_korzh': `Karina Korzh`,
+      'serhii_nevmyvaka': `Serhii Nevmyvaka`,
+      'olha_osmukha': `Olha Osmukha`,
+      'halyna_diachenko': `Halyna Diachenko`,
+      'mariia_kozachko': `Mariia Kozachko`,
+      'yurii_volkov': `Yurii Volkov`,
+      'andrii_zagoruiev': `Andrii Zagoruiev`,
+      'olena_sydorenko': `Olena Sydorenko`,
+      'svitlana_smyrnova': `Svitlana Smyrnova`,
+      'hennadii_kotsar': `Hennadii Kotsar`,
+      'dmytro_chernukha': `Dmytro Chernukha`,
+      'anastasiia_reshynska': `Anastasiia Reshynska`,
+      'nataliia_pushenko': `Nataliia Pushenko`,
+      'tetiana_gorbatiuk': `Tetiana Gorbatiuk`,
+      'oleksandr_lukomets': `Oleksandr Lukomets`,
+      'tetiana_kolot': `Tetiana Kolot`,
+      'katerina_severin': `Katerina Severin`,
+      'maksim_sedun': `Maksim Sedun`,
+      'ivan_volynkin': `Ivan Volynkin`
     },
-    service_provided: {
-      'yes': `Yes - service provided`,
-      'no': `No - service not provided`
+    BHA_area: {
+      'bha_area_idp': `IDP Host or Other Locations - high concentration of IDPs or conflict-affected persons.`,
+      'bha_area_conflict': `Conflict-Affected location - within 40KM of contact line.`,
+      'bha_area_formally': `Formally Occupied Area - formally occupied area since Feb. 2022.`,
+      'bha_area_evacuee': `Evacuee Hotspot - primary location of arrival from NGCA's.`
     },
-    not_service_provided_out: {
-      'no_feedback': `No feedback received from the service provider`,
-      'referral_not_accepted': `Referral not accepted`,
-      'lost_contact': `Lost contact with the referred person`,
-      'other': `Other`
-    },
-    displacement_status: {
-      'idp': `IDP`,
-      'idp_returnee': `IDP returnee`,
-      'refugee_retuenee': `Refugee returnee`,
-      'non_peenisplaced': `Non-displaced person`,
-      'refugee_Refenee': `Refugee`,
-      'unspecified_Unspeciencified': `Unspecified`
-    },
-    staff_to_insert_their_DRC_office: {
-      'chernihiv': `Chernihiv`,
-      'dnipro': `Dnipro`,
-      'kharkiv': `Kharkiv`,
-      'lviv': `Lviv`,
-      'mykolaiv': `Mykolaiv`,
-      'sumy': `Sumy`
-    },
-    staff_code: {
-      'CEJ001': `CEJ001`,
-      'CEJ002': `CEJ002`,
-      'CEJ003': `CEJ003`,
-      'CEJ004': `CEJ004`,
-      'CEJ005': `CEJ005`,
-      'CEJ006': `CEJ006`,
-      'CEJ007': `CEJ007`,
-      'CEJ008': `CEJ008`,
-      'CEJ009': `CEJ009`,
-      'CEJ010': `CEJ010`,
-      'CEJ011': `CEJ011`,
-      'CEJ012': `CEJ012`,
-      'CEJ013': `CEJ013`,
-      'CEJ014': `CEJ014`,
-      'CEJ015': `CEJ015`,
-      'CEJ016': `CEJ016`,
-      'CEJ_A': `CEJ-A`,
-      'CEJ_B': `CEJ-B`,
-      'CEJ_C': `CEJ-C`,
-      'CEJ_D': `CEJ-D`,
-      'UMY001': `UMY001`,
-      'UMY002': `UMY002`,
-      'UMY003': `UMY003`,
-      'UMY004': `UMY004`,
-      'UMY005': `UMY005`,
-      'UMY006': `UMY006`,
-      'UMY007': `UMY007`,
-      'UMY008': `UMY008`,
-      'UMY009': `UMY009`,
-      'UMY010': `UMY010`,
-      'UMY011': `UMY011`,
-      'UMY012': `UMY012`,
-      'UMY013': `UMY013`,
-      'UMY014': `UMY014`,
-      'UMY015': `UMY015`,
-      'HRK001': `HRK001`,
-      'HRK002': `HRK002`,
-      'HRK003': `HRK003`,
-      'HRK004': `HRK004`,
-      'HRK005': `HRK005`,
-      'HRK006': `HRK006`,
-      'HRK007': `HRK007`,
-      'HRK008': `HRK008`,
-      'HRK009': `HRK009`,
-      'HRK010': `HRK010`,
-      'HRK011': `HRK011`,
-      'HRK012': `HRK012`,
-      'HRK013': `HRK013`,
-      'HRK014': `HRK014`,
-      'HRK015': `HRK015`,
-      'HRK_A': `HRK-A`,
-      'HRK_B': `HRK-B`,
-      'HRK_C': `HRK-C`,
-      'HRK_D': `HRK-D`,
-      'HRK_E': `HRK-E`,
-      'HRK_F': `HRK-F`,
-      'DNK001': `DNK001`,
-      'DNK002': `DNK002`,
-      'DNK003': `DNK003`,
-      'DNK004': `DNK004`,
-      'DNK005': `DNK005`,
-      'DNK006': `DNK006`,
-      'DNK007': `DNK007`,
-      'DNK008': `DNK008`,
-      'DNK009': `DNK009`,
-      'DNK010': `DNK010`,
-      'DNK011': `DNK011`,
-      'DNK012': `DNK012`,
-      'DNK013': `DNK013`,
-      'DNK014': `DNK014`,
-      'DNK015': `DNK015`,
-      'DNK_A': `DNK-A`,
-      'DNK_B': `DNK-B`,
-      'DNK_C': `DNK-C`,
-      'DNK_D': `DNK-D`,
-      'LWO001': `LWO001`,
-      'LWO002': `LWO002`,
-      'LWO003': `LWO003`,
-      'LWO004': `LWO004`,
-      'LWO005': `LWO005`,
-      'LWO006': `LWO006`,
-      'LWO007': `LWO007`,
-      'LWO008': `LWO008`,
-      'LWO009': `LWO009`,
-      'LWO010': `LWO010`,
-      'LWO011': `LWO011`,
-      'LWO012': `LWO012`,
-      'LWO013': `LWO013`,
-      'LWO014': `LWO014`,
-      'LWO015': `LWO015`,
-      'NVL001': `NLV001`,
-      'NVL002': `NLV002`,
-      'NVL003': `NLV003`,
-      'NVL004': `NLV004`,
-      'NVL005': `NLV005`,
-      'NVL006': `NLV006`,
-      'NVL007': `NLV007`,
-      'NVL008': `NLV008`,
-      'NVL009': `NLV009`,
-      'NVL010': `NLV010`,
-      'NVL011': `NLV011`,
-      'NVL012': `NLV012`,
-      'NVL013': `NLV013`,
-      'NVL014': `NLV014`,
-      'NVL015': `NLV015`,
-      'NLV_A': `NLV-A`,
-      'NLV_B': `NLV-B`,
-      'NLV_C': `NLV-C`,
-      'NLV_D': `NLV-D`
+    confirm_truth: {
+      '1': `Yes`,
+      '2': `No`
     },
     oblast: {
       'cherkaska': `Cherkaska`,
@@ -2265,6 +2286,310 @@ export namespace Protection_referral {
       'zymnovodivska': `Zymnovodivska`,
       'zymohirivska': `Zymohirivska`,
       'zymynska': `Zymynska`
+    },
+    status: {
+      'status_idp': `Internally Displaced Person (IDP)`,
+      'status_conflict': `Conflict-Affected person`,
+      'status_returnee': `Returnee`,
+      'status_refugee': `Refugee/asylum seeker`
+    },
+    Does_the_beneficiary_have_an_i: {
+      'yes': `Yes`,
+      'no': `No`
+    },
+    Other_ID_identification: {
+      'national_passport__book': `National Passport (book)`,
+      'national_passport__card': `National Passport (card)`,
+      'national_passport__diia_app': `National Passport (Diia app)`,
+      'passport__ussr_red_book': `Passport (USSR red book)`,
+      'passport_for_international_travel': `Passport for international travel`,
+      'certificate_issued_on_birth': `Certificate issued on birth`,
+      'birth_certificate': `Birth certificate`,
+      'driver_s_license': `Driver’s license`,
+      'pensioner_certificate': `Pensioner certificate`,
+      'other': `Other`
+    },
+    gender_respondent: {
+      '1': `Female`,
+      '2': `Male`
+    },
+    Are_you_the_head_of_your_house: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    sex: {
+      '1': `Male`,
+      '2': `Female`
+    },
+    child_hhh_confirm: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    GenderHH: {
+      'female': `Female`,
+      'male': `Male`,
+      'nogender': `Does not wish to identify`
+    },
+    Does_anyone_in_your_elect_all_that_apply: {
+      'eyesight': `Eyesight`,
+      'hearing': `Hearing`,
+      'mobility': `Mobility`,
+      'difficulty_to_carry_heavy_weights': `Difficulty to carry heavy weights`,
+      'memory_and_concentration': `Memory and concentration`,
+      'self_care__such_as_washing_all_over_or_d': `Self-care, such as washing all over or dressing`,
+      'communication': `Communication`
+    },
+    Kits_to_be_provided: {
+      'hkmv_____________': `HKMV Family hygiene kit for IDPs on the move`,
+      'hkf_______________': `HKF Hygiene kit`,
+      'nfkf_______nfi': `NFKF Family NFI Kit`,
+      'ks_____': `KS Family kitchen set`,
+      'bk_baby_kit1': `BK1 Baby Hygiene Kit 1`,
+      'bk_baby_kit2': `BK2 Baby Hygiene Kit 2`,
+      'bk_baby_kit3': `BK3 Baby Hygiene Kit 3`,
+      'bk_baby_kit4': `BK4 Baby Hygiene Kit 4`,
+      'wkb1___________1': `WKB1 Baby Winterization Kit 1`,
+      'wkb2___________2': `WKB2 Baby Winterization Kit 2`,
+      'wkb3___________3': `WKB3 Baby Winterization Kit 3`,
+      'wkb4___________4': `WKB4 Baby Winterization Kit 4`,
+      'bln_': `BLN High Thermal Blankets`,
+      '__': `Solar lamps`
+    },
+    exclusion_1: {
+      '1': `Proceed to next step`
+    },
+    exclusion_2: {
+      '1': `Proceed to next step`
+    },
+    vul_screen: {
+      '1': `Proceed to next step`
+    },
+    safe_shelter_001: {
+      '1': `At a collective/transit center`,
+      '2': `I'm hosted by relatives or friends`,
+      '3': `I'm hosted by people I didn’t know before`,
+      '4': `I'm renting an apartment`,
+      '5': `I'm at hotel/hostel`,
+      '6': `I'm at my own house`,
+      '7': `I don’t have housing yet - I don't know where I'll be living`
+    },
+    Has_this_location_been_damaged: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    idp_host_shelter_damaged: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    main_reason_damaged_shelter: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    displaced_ngca: {
+      '1': `Yes, totally or partially damaged`,
+      '2': `Not damaged`
+    },
+    For_DRC_staff_only_Was_this_: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    Is_this_household_female_heade: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    single_PWD: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    large_hh: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    child_elderly: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    child_pwd: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    plw: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    displaced_30days: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    child_custody: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    damaged_inclusion_criteria: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    internal_referral: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    internal_referral_specific: {
+      '1': `DRC Protection`,
+      '2': `DRC NFI`,
+      '3': `DRC Legal`,
+      '4': `DRC Shelter`
+    },
+    mpca_eligible_inclusion_area: {
+      '1': `Proceed to next step`
+    },
+    protection_referral: {
+      '1': `Proceed to next step`
+    },
+    mpca_yes_ehh: {
+      '1': `Proceed to next step`
+    },
+    mpca_eligible_vul: {
+      '1': `Proceed to next step`
+    },
+    Is_this_household_currently_re: {
+      'renting': `Renting`,
+      'planning': `Planning to rent`,
+      'no_support': `No support`
+    },
+    idp_certificate: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    resident_permit: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    For_staff_member_ONL_cabinet_of_ministers: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    area_of_origin: {
+      'cherkaska': `Cherkaska`,
+      'chernihivska': `Chernihivska`,
+      'chernivetska': `Chernivetska`,
+      'dnipropetrovska': `Dnipropetrovska`,
+      'donetska': `Donetska`,
+      'ivano_frankivska': `Ivano-Frankivska`,
+      'kharkivska': `Kharkivska`,
+      'khersonska': `Khersonska`,
+      'khmelnytska': `Khmelnytska`,
+      'kirovohradska': `Kirovohradska`,
+      'kyivska': `Kyivska`,
+      'luhanska': `Luhanska`,
+      'lvivska': `Lvivska`,
+      'mykolaivska': `Mykolaivska`,
+      'odeska': `Odeska`,
+      'poltavska': `Poltavska`,
+      'rivnenska': `Rivnenska`,
+      'sevastopilska': `Sevastopilska`,
+      'sumska': `Sumska`,
+      'ternopilska': `Ternopilska`,
+      'vinnytska': `Vinnytska`,
+      'volynska': `Volynska`,
+      'zakarpatska': `Zakarpatska`,
+      'zaporizka': `Zaporizka`,
+      'zhytomyrska': `Zhytomyrska`
+    },
+    What_is_your_preferred_payment: {
+      'raiffaisen_1': `Remittance Raiffaisen AVAL`,
+      'ukrposhta': `Ukrposhta`,
+      'bank_card': `Bank card`,
+      'none': `None of the above fit my needs`
+    },
+    reason: {
+      '1': `No ATMs/Banks in the locality`,
+      '2': `No physical ability to get to an ATM/bank branch (for health reasons)`,
+      '3': `No transport possibilities to get to ATM/bank branch (no public transport)`,
+      '4': `No financial possibility to reach ATM / bank branch`,
+      'other': `Other`
+    },
+    Are_you_currently_enrolled_in_: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    Have_you_received_yo_in_the_last_3_months: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    Are_you_able_to_provide_inform: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    Please_select_all_th_urrently_enrolled_in: {
+      'sp_edopomoga': `IDP and conflict-affected people Emergency Support Programme (e-Dopomoga)`,
+      'sp_epidtrymka': `ePidtrymka`,
+      'sp_entrepreneur_idps': `Compensation to entrepreneur for the employment of idps`,
+      'sp_idp_shelter': `IDP Shelter support programe`,
+      'sp_prykhystok': `Host Shelter Subsidy and Rent support (Prykhystok)`,
+      'sp_unicef': `Emergency Hot Spot Payment Programe`,
+      'sp_returnees': `Cash Support for Returnees`,
+      'sp2_meb': `Guaranteed Minimum Income`,
+      'sp2_pensions': `Pensions`,
+      'sp2_hus': `The Housing and Utility Subsidy program (HUS)`,
+      'sp2_child_birth': `Universal Child Birth Grant`,
+      'sp2_child_support': `Child Support`,
+      'sp2_child_pwd': `Assistance for children with severe disabilities and/or other health issues`,
+      'sp2_child_guardian': `Assistance for children over whom guardianship or guardianship is established`,
+      'sp2_health': `Sickness Benefit`,
+      'sp2_unemployment': `Unemployment`,
+      'sp2_caregiver': `Caregiver's allowance (old age)`,
+      'sp2_social_pension': `Social Pension (old age)`,
+      'sp2_pwd': `Disability person`,
+      'sp2_funeral_grant': `Funeral Grant`,
+      'sp2_maternity_benefits': `Maternity benefits`,
+      'sp2_childcare': `Childcare Benefit (non-contributory)`,
+      'sp2_educational_social': `Educational social benefits`,
+      'sp2_survivors_pension': `Survivor's pension`,
+      'sp2_state_social': `State social assistance (support to the pension fund)`
+    },
+    Were_you_enrolled_to_before_February_2022: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    We_would_now_like_to_ask_you_s: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    consent_document: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    Does_the_respondent_have_perso: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    not_eligible_note: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    not_eligible_note2: {
+      '1': `Yes`,
+      'no': `No`
+    },
+    cfr_no_mpca: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    cfr_no_mpca_2: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    Are_you_currently_pa_any_shelter_repairs: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    Do_you_anticipate_th_r_repairs_next_month: {
+      '1': `Yes`,
+      '2': `No`
+    },
+    consent_to_esign: {
+      '1': `Yes`,
+      '2': `No`
     }
   }
 
@@ -2280,13 +2605,33 @@ export namespace Protection_referral {
 
   export const map = (_: Record<keyof T, any>): T => ({
     ..._,
-    date: _.date ? new Date(_.date) : undefined,
-    date_referral: _.date_referral ? new Date(_.date_referral) : undefined,
-    specific_need: _.specific_need?.split(' '),
-    service_requested: _.service_requested?.split(' '),
-    age: _.age ? +_.age : undefined,
-    contact_number: _.contact_number ? +_.contact_number : undefined,
-    month_provision: _.month_provision ? new Date(_.month_provision) : undefined,
-    date_closure: _.date_closure ? new Date(_.date_closure) : undefined,
+    phone: _.phone ? +_.phone : undefined,
+    hh_elderly_check: _.hh_elderly_check ? +_.hh_elderly_check : undefined,
+    agex: _.agex ? +_.agex : undefined,
+    Total_Family: _.Total_Family ? +_.Total_Family : undefined,
+    group_in3fh72: _['group_in3fh72']?.map(extractQuestionName).map((_: any) => {
+      _['AgeHH'] = _.AgeHH ? +_.AgeHH : undefined
+      return _
+    }),
+    Does_anyone_in_your_elect_all_that_apply: _.Does_anyone_in_your_elect_all_that_apply?.split(' '),
+    Kits_to_be_provided: _.Kits_to_be_provided?.split(' '),
+    HKMV_: _.HKMV_ ? +_.HKMV_ : undefined,
+    HKF_: _.HKF_ ? +_.HKF_ : undefined,
+    NFKF_NFI_: _.NFKF_NFI_ ? +_.NFKF_NFI_ : undefined,
+    KS_: _.KS_ ? +_.KS_ : undefined,
+    BK_Baby_Kit_: _.BK_Baby_Kit_ ? +_.BK_Baby_Kit_ : undefined,
+    BK_Baby_Kit: _.BK_Baby_Kit ? +_.BK_Baby_Kit : undefined,
+    BK_Baby_Kit_001: _.BK_Baby_Kit_001 ? +_.BK_Baby_Kit_001 : undefined,
+    BK_Baby_Kit_002: _.BK_Baby_Kit_002 ? +_.BK_Baby_Kit_002 : undefined,
+    WKB1_1_: _.WKB1_1_ ? +_.WKB1_1_ : undefined,
+    WKB2_2_: _.WKB2_2_ ? +_.WKB2_2_ : undefined,
+    WKB3_3_: _.WKB3_3_ ? +_.WKB3_3_ : undefined,
+    WKB4_4_: _.WKB4_4_ ? +_.WKB4_4_ : undefined,
+    BLN_: _.BLN_ ? +_.BLN_ : undefined,
+    BLN: _.BLN ? +_.BLN : undefined,
+    income_month: _.income_month ? +_.income_month : undefined,
+    internal_referral_specific: _.internal_referral_specific?.split(' '),
+    reason: _.reason?.split(' '),
+    Please_select_all_th_urrently_enrolled_in: _.Please_select_all_th_urrently_enrolled_in?.split(' '),
   }) as T
 }

@@ -21,8 +21,8 @@ import {
   safeArray,
   safeNumber,
   Shelter_cashForShelter,
-  Shelter_NTA,
-  Shelter_TA,
+  Shelter_nta,
+  Shelter_ta,
   ShelterNtaTags,
   ShelterTaTags,
 } from '@infoportal-common'
@@ -31,7 +31,7 @@ import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaServi
 
 export namespace KoboMetaMapperShelter {
 
-  const harmonizeNtaDisability = (disabilities: Shelter_NTA.T['hh_char_hhh_dis_select']): Bn_re.T['hh_char_dis_select'] => {
+  const harmonizeNtaDisability = (disabilities: Shelter_nta.T['hh_char_hhh_dis_select']): Bn_re.T['hh_char_dis_select'] => {
     return disabilities?.map(_ => {
       return fnSwitch(_!, {
         diff_medical: 'diff_care',
@@ -40,7 +40,7 @@ export namespace KoboMetaMapperShelter {
     })
   }
 
-  const harmonizeNtaDisabilityAll = (row: Shelter_NTA.T): any => {
+  const harmonizeNtaDisabilityAll = (row: Shelter_nta.T): any => {
     // @ts-ignore
     row.hh_char_hhh_dis_select = harmonizeNtaDisability(row.hh_char_hhh_dis_select)
     // @ts-ignore
@@ -145,14 +145,14 @@ export namespace KoboMetaMapperShelter {
     })
   }
 
-  export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_NTA.T, ShelterNtaTags>> = row => {
-    const answer = Shelter_NTA.map(row.answers)
+  export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_nta.T, ShelterNtaTags>> = row => {
+    const answer = Shelter_nta.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(harmonizeNtaDisabilityAll(answer)).map(KoboGeneralMapping.mapPersonDetails)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = safeArray(row.tags?.project)
     const isCfRepair = answer.modality === 'cash_for_repair'
     return KoboMetaMapper.make({
-      enumerator: Shelter_NTA.options.enum_name[answer.enum_name!],
+      enumerator: Shelter_nta.options.enum_name[answer.enum_name!],
       office: fnSwitch(answer.back_office!, {
         cej: DrcOffice.Chernihiv,
         dnk: DrcOffice.Dnipro,
@@ -186,8 +186,8 @@ export namespace KoboMetaMapperShelter {
     })
   }
 
-  export const updateTa: MetaMapperMerge<KoboMetaOrigin<Shelter_TA.T, ShelterTaTags>, KoboMetaShelterRepairTags> = row => {
-    const answers = Shelter_TA.map(row.answers)
+  export const updateTa: MetaMapperMerge<KoboMetaOrigin<Shelter_ta.T, ShelterTaTags>, KoboMetaShelterRepairTags> = row => {
+    const answers = Shelter_ta.map(row.answers)
     if (!row.tags || !answers.nta_id) return
     return [
       answers.nta_id,

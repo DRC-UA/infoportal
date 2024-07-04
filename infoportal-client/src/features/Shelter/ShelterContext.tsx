@@ -1,5 +1,5 @@
 import React, {ReactNode, useContext} from 'react'
-import {KoboAnswerId, KoboId, KoboSchemaHelper, Shelter_NTA} from '@infoportal-common'
+import {KoboAnswerId, KoboId, KoboSchemaHelper, Shelter_nta} from '@infoportal-common'
 import {UseShelterData} from '@/features/Shelter/useShelterData'
 import {AccessSum} from '@/core/sdk/server/access/Access'
 import {KoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
@@ -8,7 +8,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 export type ShelterContext = Pick<KoboSchemaContext, 'langIndex' | 'setLangIndex'> & {
   access: AccessSum
   data: UseShelterData
-  allowedOffices: Shelter_NTA.T['back_office'][]
+  allowedOffices: Shelter_nta.T['back_office'][]
   asyncEdit: (formId: KoboId, answerId: KoboAnswerId) => string
   nta: {
     schema: KoboSchemaHelper.Bundle

@@ -1,72 +1,72 @@
-export namespace Meal_VerificationWinterization {
+export namespace Meal_verificationWinterization {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 
   // Form id: aAWVLi8bSb2S8bHc5CcL8i
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // background/back_office [select_one] 1.1 Select Office
-    back_office: undefined | Option<'back_office'>,
+    'back_office': undefined | Option<'back_office'>,
     // background/back_enum [text] 1.2 Enumerator
-    back_enum: string | undefined,
+    'back_enum': string | undefined,
     // background/back_donor [select_one] 1.3 Project
-    back_donor: undefined | Option<'back_donor'>,
+    'back_donor': undefined | Option<'back_donor'>,
     // background/back_prog_type [select_multiple] 1.4 Programme Type
-    back_prog_type: undefined | Option<'back_prog_type'>[],
+    'back_prog_type': undefined | Option<'back_prog_type'>[],
     // background/reg_drc [select_one] 1.5 Where you registered by DRC for a cash transfer for livelihoods?
-    reg_drc: undefined | Option<'back_consent'>,
+    'reg_drc': undefined | Option<'back_consent'>,
     // background/back_consent [select_one] 1.6.1 Consent
-    back_consent: undefined | Option<'back_consent'>,
+    'back_consent': undefined | Option<'back_consent'>,
     // background/back_consen_no_reas [text] 1.6.2 Can you please give the reason for why you do not wish to consent to the questionnaire?
-    back_consen_no_reas: string | undefined,
+    'back_consen_no_reas': string | undefined,
     // background/pay_det_tax_id_num [text] 1.7 What is your individual tax number?
-    pay_det_tax_id_num: string | undefined,
+    'pay_det_tax_id_num': string | undefined,
     // background/back_consent_no_note [note] Thank you very much for your time, we will not proceed with the questionnaire without your consent.
-    back_consent_no_note: string,
+    'back_consent_no_note': string,
     // ben_det/ben_det_surname [text] 2.1 What is your surname name (as shown in personal ID)?
-    ben_det_surname: string | undefined,
+    'ben_det_surname': string | undefined,
     // ben_det/ben_det_first_name [text] 2.2 What is your first name (as shown in personal ID)?
-    ben_det_first_name: string | undefined,
+    'ben_det_first_name': string | undefined,
     // ben_det/ben_det_pat_name [text] 2.3 What is your patronymic name?
-    ben_det_pat_name: string | undefined,
+    'ben_det_pat_name': string | undefined,
     // ben_det/ben_det_ph_number [integer] 2.4 What is your phone number?
-    ben_det_ph_number: number | undefined,
+    'ben_det_ph_number': number | undefined,
     // ben_det/ben_det_oblast [select_one] 2.5.1 Select oblast where registration is taking place
-    ben_det_oblast: undefined | Option<'ben_det_prev_oblast'>,
+    'ben_det_oblast': undefined | Option<'ben_det_prev_oblast'>,
     // ben_det/ben_det_raion [select_one] 2.5.2 Select raion where registration is taking place
-    ben_det_raion: undefined | string,
+    'ben_det_raion': undefined | string,
     // ben_det/ben_det_hromada [select_one] 2.5.3 Select hromada where registration is taking place
-    ben_det_hromada: undefined | string,
+    'ben_det_hromada': undefined | string,
     // ben_det/ben_det_settlement [select_one_from_file] 2.5.4 Select settlement where registration is taking place
-    ben_det_settlement: string,
+    'ben_det_settlement': string,
     // ben_det/ben_det_res_stat [select_one] 2.5.5 Select residential status
-    ben_det_res_stat: undefined | Option<'ben_det_res_stat'>,
+    'ben_det_res_stat': undefined | Option<'ben_det_res_stat'>,
     // ben_det/ben_det_prev_oblast [select_one] 2.5.6 What is your area of origin prior to displacement? (Select Oblast)
-    ben_det_prev_oblast: undefined | Option<'ben_det_prev_oblast'>,
+    'ben_det_prev_oblast': undefined | Option<'ben_det_prev_oblast'>,
     // ben_det/ben_det_income [integer] 2.6 What was the total value in UAH of all the resources your household received in the last one month?
-    ben_det_income: number | undefined,
+    'ben_det_income': number | undefined,
     // ben_det/ben_det_hh_size [integer] 2.7 Indicate the total number of people in your household, including the HHH
-    ben_det_hh_size: number | undefined,
+    'ben_det_hh_size': number | undefined,
     // casf_utilities_fuel/current_gov_assist_cff [select_one] Are you currently receiving Government financial assistance to cover your fuel/utilities payment needs?
-    current_gov_assist_cff: undefined | Option<'current_gov_assist_cff'>,
+    'current_gov_assist_cff': undefined | Option<'current_gov_assist_cff'>,
     // casf_utilities_fuel/utilities_fuel [select_one] This year, is your primary source of heating from mains utilities (e.g. Piped gas, electric, community heating) or solid fuel (Wood, pellets, charcoal, coal etc)
-    utilities_fuel: undefined | Option<'utilities_fuel'>,
+    'utilities_fuel': undefined | Option<'utilities_fuel'>,
     // casf_utilities_fuel/mains_utilities [select_multiple] What is your main source of heating from mains utilities?
-    mains_utilities: undefined | Option<'mains_utilities'>[],
+    'mains_utilities': undefined | Option<'mains_utilities'>[],
     // casf_utilities_fuel/mains_utilities_other [text] If "Other", please specify
-    mains_utilities_other: string | undefined,
+    'mains_utilities_other': string | undefined,
     // casf_utilities_fuel/mains_fuel [select_multiple] What is your primary source of solid fuel heating?
-    mains_fuel: undefined | Option<'mains_fuel'>[],
+    'mains_fuel': undefined | Option<'mains_fuel'>[],
     // casf_utilities_fuel/mains_fuel_other [text] If "Other", please specify
-    mains_fuel_other: string | undefined,
+    'mains_fuel_other': string | undefined,
     // casf_utilities_fuel/functioning_fuel_delivery [select_one] Is there a functioning fuel delivery/supplier in your area?
-    functioning_fuel_delivery: undefined | Option<'functioning_fuel_delivery'>,
+    'functioning_fuel_delivery': undefined | Option<'functioning_fuel_delivery'>,
     // fin_det/fin_det_res [text] 4.1 Other Comments from Respondent
-    fin_det_res: string | undefined,
+    'fin_det_res': string | undefined,
     // fin_det/fin_det_enum [text] 4.2 Other Comments from Enumerator
-    fin_det_enum: string | undefined,
+    'fin_det_enum': string | undefined,
     // fin_det/fin_det_oth_doc_im [image] 4.3 Please take picture of any other relevant document
-    fin_det_oth_doc_im: string,
+    'fin_det_oth_doc_im': string,
   }
 
   export const options = {

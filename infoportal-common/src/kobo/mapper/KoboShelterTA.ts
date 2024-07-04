@@ -1,12 +1,12 @@
 import {ShelterContractor} from './ShelterContractor'
-import {Shelter_TA} from '../generated/Shelter_TA'
+import {Shelter_ta} from '../generated/Shelter_TA'
 import {map} from '@alexandreannic/ts-utils'
 import {NumberKeys} from '../../type/Generic'
 import {KoboBaseTags, KoboTagStatus} from './Common'
 import {DrcProject} from '../../type/Drc'
 
 export namespace KoboShelterTa {
-  const lot1: NumberKeys<Shelter_TA.T>[] = [
+  const lot1: NumberKeys<Shelter_ta.T>[] = [
     'dismantling_of_structures',
     'singleshutter_window_tripleglazed_pc',
     'singleshutter_window_tripleglazed_m',
@@ -27,7 +27,7 @@ export namespace KoboShelterTa {
     'doubleglazed_upvc_door_m',
   ]
 
-  const lot2: NumberKeys<Shelter_TA.T>[] = [
+  const lot2: NumberKeys<Shelter_ta.T>[] = [
     'dismantling_of_structures2',
     'wall_repair_clay_bricks_m',
     'wall_repair_concrete_blocks_m',
@@ -66,18 +66,18 @@ export namespace KoboShelterTa {
     'wall_mountes_cable_wiring_lm',
   ]
 
-  const lot3: NumberKeys<Shelter_TA.T>[] = [
+  const lot3: NumberKeys<Shelter_ta.T>[] = [
     'external_doors_pc',
     'internal_wooden_doors_pc',
   ]
 
-  export const hasLot1 = (row?: Shelter_TA.T): boolean | undefined => {
+  export const hasLot1 = (row?: Shelter_ta.T): boolean | undefined => {
     if (row) return !!lot1.find(k => map(row[k], _ => _ > 0) ?? false)
   }
-  export const hasLot2 = (row?: Shelter_TA.T): boolean | undefined => {
+  export const hasLot2 = (row?: Shelter_ta.T): boolean | undefined => {
     if (row) return !!lot2.find(k => map(row[k], _ => _ > 0) ?? false)
   }
-  export const hasLot3 = (row?: Shelter_TA.T): boolean | undefined => {
+  export const hasLot3 = (row?: Shelter_ta.T): boolean | undefined => {
     if (row) return !!lot3.find(k => map(row[k], _ => _ > 0) ?? false)
   }
 }

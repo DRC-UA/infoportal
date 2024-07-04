@@ -3,61 +3,64 @@ export namespace Protection_pss {
 
   // Form id: a52hN5iiCW73mxqqfmEAfp
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // introduction/date [date] Date
-    date: Date | undefined,
+    'date': Date | undefined,
     // introduction/staff_to_insert_their_DRC_office [select_one] DRC office
-    staff_to_insert_their_DRC_office: undefined | Option<'staff_to_insert_their_DRC_office'>,
+    'staff_to_insert_their_DRC_office': undefined | Option<'staff_to_insert_their_DRC_office'>,
     // introduction/staff_code [select_one] Staff code (facilitator)
-    staff_code: undefined | Option<'staff_code_001'>,
+    'staff_code': undefined | Option<'staff_code_001'>,
     // introduction/staff_code_001 [select_one] Staff code (facilitator)
-    staff_code_001: undefined | Option<'staff_code_001'>,
+    'staff_code_001': undefined | Option<'staff_code_001'>,
     // introduction/project [select_one] Project code
-    project: undefined | Option<'project'>,
+    'project': undefined | Option<'project'>,
     // introduction/ben_det_oblast [select_one] Select oblast
-    ben_det_oblast: undefined | Option<'ben_det_oblast'>,
+    'ben_det_oblast': undefined | Option<'ben_det_oblast'>,
     // introduction/ben_det_raion [select_one] Select raion
-    ben_det_raion: undefined | string,
+    'ben_det_raion': undefined | string,
     // introduction/ben_det_hromada [select_one] Select hromada
-    ben_det_hromada: undefined | string,
-    // introduction/ben_det_hromada_001 [text] Specify settlement/village/city neighborhood
-    ben_det_hromada_001: string | undefined,
+    'ben_det_hromada': undefined | string,
+    // introduction/ben_det_hromada_001 [select_one_from_file] Specify settlement/village/city neighborhood
+    'ben_det_hromada_001': string,
     // introduction/location [select_one] Location
-    location: undefined | Option<'location'>,
+    'location': undefined | Option<'location'>,
     // introduction/location_other [text] If "Other", please specify
-    location_other: string | undefined,
+    'location_other': string | undefined,
     // gi/activity [select_one] Which activity have you conducted?
-    activity: undefined | Option<'activity'>,
+    'activity': undefined | Option<'activity'>,
     // gi/activity_other [text] If "Other", please specify
-    activity_other: string | undefined,
+    'activity_other': string | undefined,
     // gi/activity_other_001 [select_one] What is this session?
-    activity_other_001: undefined | Option<'activity_other_001'>,
+    'activity_other_001': undefined | Option<'activity_other_001'>,
     // gi/cycle_code [text] Group code
-    cycle_code: string | undefined,
+    'cycle_code': string | undefined,
     // gi/new_ben [select_one] Are they new beneficiaries?
-    new_ben: undefined | Option<'new_ben'>,
+    'new_ben': undefined | Option<'new_ben'>,
     // gi/new_ben_no [integer] Session number
-    new_ben_no: number | undefined,
+    'new_ben_no': number | undefined,
     // gi/cycle_type [select_one] Cycle duration
-    cycle_type: undefined | Option<'cycle_type'>,
+    'cycle_type': undefined | Option<'cycle_type'>,
     // gi/cycle_finished_at [date] Cycle finish date
-    cycle_finished_at: Date | undefined,
+    'cycle_finished_at': Date | undefined,
     // gi/numb_part [integer] Number of participants
-    numb_part: number | undefined,
+    'numb_part': number | undefined,
     // gi/hh_char_hh_det [begin_repeat] Participant
-    hh_char_hh_det: {
-      hh_char_hh_name: string | undefined | undefined,
-      hh_char_hh_new_ben: undefined | Option<'hh_char_hh_new_ben'> | undefined,
-      hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined,
-      hh_char_hh_det_age: number | undefined | undefined,
-      hh_char_hh_det_status: undefined | Option<'hh_char_hh_det_status'> | undefined,
-      hh_char_hh_session: undefined | Option<'hh_char_hh_session'>[] | undefined
+    'hh_char_hh_det': {
+      'hh_char_hh_name': string | undefined | undefined,
+      'hh_char_hh_new_ben': undefined | Option<'hh_char_hh_new_ben'> | undefined,
+      'hh_char_hh_det_gender': undefined | Option<'hh_char_hh_det_gender'> | undefined,
+      'hh_char_hh_det_age': number | undefined | undefined,
+      'hh_char_hh_det_status': undefined | Option<'hh_char_hh_det_status'> | undefined,
+      'hh_char_hh_session': undefined | Option<'hh_char_hh_session'>[] | undefined,
+      'calc_session_comp': string | undefined
     }[] | undefined,
+    // gi/calc_sum_session_comp [calculate] Number of people who attended 60% of the sessions
+    'calc_sum_session_comp': string,
     // gi/top_type_act [text] Topic/Type of activity
-    top_type_act: string | undefined,
+    'top_type_act': string | undefined,
     // gi/comments [text] Comments
-    comments: string | undefined,
+    'comments': string | undefined,
   }
 
   export const options = {
@@ -85,6 +88,7 @@ export namespace Protection_pss {
       'CEJ013': `CEJ013`,
       'CEJ014': `CEJ014`,
       'CEJ015': `CEJ015`,
+      'CEJ016': `CEJ016`,
       'UMY001': `UMY001`,
       'UMY002': `UMY002`,
       'UMY003': `UMY003`,
@@ -162,13 +166,15 @@ export namespace Protection_pss {
       'NVL015': `NVL015`
     },
     project: {
+      'sida h2r': `UKR-000329 SIDA H2R`,
       'bha': `UKR-000284 BHA`,
-      'bha2': `UKR-000345 BHA`,
       'okf': `UKR-000309 OKF`,
       'uhf4': `UKR-000314 UHF IV`,
-      'uhf6': `UKR-000336 UHF VI`,
       'echo': `UKR-000322 ECHO`,
+      'uhf6': `UKR-000336 UHF VI`,
+      'bha2': `UKR-000345 BHA`,
       'uhf8': `UKR-000363 UHF VIII`,
+      '372_echo': `UKR-000372 ECHO`
     },
     location: {
       'logow': `Governmental collective site`,
@@ -221,10 +227,10 @@ export namespace Protection_pss {
     activity_other_001: {
       'fise': `First session`,
       'fose': `Follow session`,
-      'BOFI': `Both first session and follow session`
+      'bofi': `Both first session and follow session`
     },
     ben_det_oblast: {
-      'Cherkaska': `Cherkaska`,
+      'cherkaska': `Cherkaska`,
       'chernihivska': `Chernihivska`,
       'chernivetska': `Chernivetska`,
       'dnipropetrovska': `Dnipropetrovska`,
@@ -278,7 +284,7 @@ export namespace Protection_pss {
     new_ben_no: _.new_ben_no ? +_.new_ben_no : undefined,
     cycle_finished_at: _.cycle_finished_at ? new Date(_.cycle_finished_at) : undefined,
     numb_part: _.numb_part ? +_.numb_part : undefined,
-    hh_char_hh_det: _.hh_char_hh_det?.map(extractQuestionName).map((_: any) => {
+    hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {
       _['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
       _['hh_char_hh_session'] = _.hh_char_hh_session?.split(' ')
       return _

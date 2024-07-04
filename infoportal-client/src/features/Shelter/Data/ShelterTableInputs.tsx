@@ -1,4 +1,4 @@
-import {Shelter_TA, ShelterContractor, ShelterContractorPrices, ShelterProgress} from '@infoportal-common'
+import {Shelter_ta, ShelterContractor, ShelterContractorPrices, ShelterProgress} from '@infoportal-common'
 import {AaSelectBase} from '@/shared/Select/Select'
 import React from 'react'
 import {Obj} from '@alexandreannic/ts-utils'
@@ -19,7 +19,7 @@ export const ShelterSelectContractor = ({
   oblast,
   ...props
 }: Pick<IpSelectSingleNullableProps<ShelterContractor>, 'value' | 'defaultValue' | 'onChange'> & Pick<AaSelectBase, 'disabled' | 'sx' | 'label'> & {
-  oblast?: keyof typeof Shelter_TA.options['ben_det_oblast']
+  oblast?: keyof typeof Shelter_ta.options['ben_det_oblast']
 }) => {
   return (
     <IpSelectSingle

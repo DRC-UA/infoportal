@@ -27,8 +27,8 @@ export namespace Protection_gbv {
     'location': undefined | Option<'location'>,
     // introduction/location_other [text] If "Other", please specify
     'location_other': string | undefined,
-    // gi/activity [select_one] Which activity have you conducted?
-    'activity': undefined | Option<'activity'>,
+    // gi/activity [select_multiple] Which activity have you conducted?
+    'activity': undefined | Option<'activity'>[],
     // gi/activity_other [text] If "Other", please specify
     'activity_other': string | undefined,
     // gi/new_ben [select_one] Are there new beneficiaries in the group activity?
@@ -113,10 +113,13 @@ export namespace Protection_gbv {
       'NVL012': `NLV-L`
     },
     project: {
+      '284_bha': `UKR-000284 (BHA)`,
       'sdc': `UKR-000330 (SDC)`,
       'bha': `UKR-000345 (BHA)`,
       'danida': `UKR-000347 (Danida)`,
-      'uhf8': `UKR-000363 (UHF VIII)`
+      '355_dfma': `UKR-000355 (DFMA)`,
+      'uhf8': `UKR-000363 (UHF VIII)`,
+      '371_echo': `UKR-000371 (ECHO)`
     },
     location: {
       'wgssd': `Women and Girls Safe Space (operated by DRC)`,
@@ -151,6 +154,12 @@ export namespace Protection_gbv {
       'gcva': `GBV survivors and those at risk supported with cash/voucher assistance.`,
       'glac': `GBV survivors and those at risk supported with legal assistance and counselling.`,
       'girl_shine': `Girl Shine`,
+      'awareness_raising': `GBV awareness raising, risk mitigation and dissemination of life-saving information on GBV services and referrals`,
+      'psychosocial_support': `Psychosocial support services (mobile and static) for GBV survivors and those at-risk (individual and group)- including Girl Shine`,
+      'education_sessions': `Recreational and livelihood skills including vocational education sessions in women and girls safe space`,
+      'training_actors': `Training of Humanitarian Actors on GBV Risk Prevention and Mitigation`,
+      'training_providers': `Training of GBV Service Providers to Meet GBViE Minimum Standards`,
+      'dignity_kits': `Distribution of dignity kits`,
       'other': `Other`
     },
     hh_char_hh_new_ben: {
@@ -206,6 +215,7 @@ export namespace Protection_gbv {
   export const map = (_: Record<keyof T, any>): T => ({
     ..._,
     date: _.date ? new Date(_.date) : undefined,
+    activity: _.activity?.split(' '),
     new_ben_yes: _.new_ben_yes ? +_.new_ben_yes : undefined,
     numb_part: _.numb_part ? +_.numb_part : undefined,
     hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {

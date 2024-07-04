@@ -1,367 +1,330 @@
-export namespace Protection_referral {
+export namespace Bn_rapidResponseSida {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 
-  // Form id: a62ZpworuN4nFLznsUej8r
+  // Form id: aTJRd5zLdPHcEhGDovh9dW
   export interface T {
     'start': string,
     'end': string,
-    // date [date] Date
-    'date': Date | undefined,
-    // introduction/staff_to_insert_their_DRC_office [select_one] 1.1 DRC office
-    'staff_to_insert_their_DRC_office': undefined | Option<'staff_to_insert_their_DRC_office'>,
-    // introduction/staff_code [select_one] 1.2 Staff code (facilitator)
-    'staff_code': undefined | Option<'staff_code'>,
-    // introduction/incoming_outgoing_referral [select_one] 1.3 Incoming or outgoing referral?
-    'incoming_outgoing_referral': undefined | Option<'incoming_outgoing_referral'>,
-    // introduction/project_code [select_one] 1.4 Project code
-    'project_code': undefined | Option<'project_code'>,
-    // introduction/referral_numb [text] 1.5 Referral #
-    'referral_numb': string | undefined,
-    // introduction/calc_ref_numb [calculate] Fully Referral number
-    'calc_ref_numb': string,
-    // introduction/person_successfully_referred_drc [select_one] 1.6 Has the person already been successfully referred by DRC protection team?
-    'person_successfully_referred_drc': undefined | Option<'referral_closed'>,
-    // introduction/date_referral [date] 1.7 Date of referral
-    'date_referral': Date | undefined,
-    // introduction/priority_level [select_one] 1.8 Priority level
-    'priority_level': undefined | Option<'priority_level'>,
-    // introduction/specific_need [select_multiple] 1.9 Specific need
-    'specific_need': undefined | Option<'specific_need'>[],
-    // introduction/specific_need_other [text] 1.9.1 If other specific need, please specify
-    'specific_need_other': string | undefined,
-    // referral_details/referral_type [select_one] 2.1 Referral type
-    'referral_type': undefined | Option<'referral_type'>,
-    // referral_details/service_requested [select_multiple] 2.2 Service requested
-    'service_requested': undefined | Option<'service_requested'>[],
-    // referral_details/service_requested_other [text] 2.2.1 If other service requested, please specify
-    'service_requested_other': string | undefined,
-    // referral_details/receiving_department_out_inc [text] 2.3 Receiving department
-    'receiving_department_out_inc': string | undefined,
-    // referral_details/receiving_staff_out_inc [text] 2.4 Receiving staff
-    'receiving_staff_out_inc': string | undefined,
-    // referral_details/service_requested_prot [select_one] 2.5 Service requested
-    'service_requested_prot': undefined | Option<'service_requested_prot'>,
-    // referral_details/service_requested_prot_other [text] 2.5.1 If other service requested, please specify
-    'service_requested_prot_other': string | undefined,
-    // referral_details/sending_department_inc_inc [text] 2.6 Sending department
-    'sending_department_inc_inc': string | undefined,
-    // referral_details/sending_staff_inc_inc [text] 2.7 Sending staff
-    'sending_staff_inc_inc': string | undefined,
-    // referral_details/name_receiving_agency_out [select_one] 2.8 Receiving agency: name of the agency
-    'name_receiving_agency_out': undefined | Option<'name_receiving_agency_inc'>,
-    // referral_details/name_receiving_agency_out_other [text] 2.8.1 If other receiving agency, please specify
-    'name_receiving_agency_out_other': string | undefined,
-    // referral_details/rec_agency_fp_name_out [text] 2.9 Receiving agency: focal point's name
-    'rec_agency_fp_name_out': string | undefined,
-    // referral_details/rec_agency_fp_contact_details_out [text] 2.10 Receiving agency: focal point's contact details
-    'rec_agency_fp_contact_details_out': string | undefined,
-    // referral_details/name_receiving_agency_inc [select_one] 2.11 Sending agency: name of the agency
-    'name_receiving_agency_inc': undefined | Option<'name_receiving_agency_inc'>,
-    // referral_details/name_receiving_agency_inc_other [text] 2.11.1 If other sending agency, please specify
-    'name_receiving_agency_inc_other': string | undefined,
-    // referral_details/sen_agency_fp_name_inc [text] 2.12 Sending agency: focal point's name
-    'sen_agency_fp_name_inc': string | undefined,
-    // referral_details/sen_agency_fp_contact_details_inc [text] 2.13 Sending agency: focal point's contact details
-    'sen_agency_fp_contact_details_inc': string | undefined,
-    // biodata/name [text] 3.1 Name
-    'name': string | undefined,
-    // biodata/surname [text] 3.2 Surname
-    'surname': string | undefined,
-    // biodata/gender [select_one] 3.2 Gender
-    'gender': undefined | Option<'gender'>,
-    // biodata/age [integer] 3.3 Age
-    'age': number | undefined,
-    // biodata/displacement_status [select_one] 3.4 Displacement status
-    'displacement_status': undefined | Option<'displacement_status'>,
-    // biodata/oblast [select_one] 3.5 Oblast
+    // greetings/not_hello [note] Hello, my name is [insert name] I am from [organization name].We want to ask you some questions to obtain information about the NFI assistance that your center/you personally has received from us. Your participation is voluntary and the questions will take around 10-15 minutes to answer. If you accept to participate, you have the option to stop answering or to not answer any question that you don't want to. This information will help us to understand what has been done appropriately in the process, what hasn't worked that good and what we should be doing differently. We want to hear your thoughts, so we can improve the way that we are doing our job in the future.
+    'not_hello': string,
+    // greetings/not_information_collect [note] The information we collect about your personal identity will only be used to identify you for follow up questions if necessary, and will not be shared wider than with internal staff as well as  DRC Staff. Finally, please know that if you provide negative feedback about our work, this will not have any negative consequences to your permanence in this or future activities of this project.
+    'not_information_collect': string,
+    // greetings/interwiever_name [text] Interwiever name
+    'interwiever_name': string | undefined,
+    // greetings/type_interview [select_one] Type of interview
+    'type_interview': undefined | Option<'type_interview'>,
+    // greetings/interview_date [date] Interview date
+    'interview_date': Date | undefined,
+    // greetings/agree_interviewed [select_one] Do you agree to be interviewed?
+    'agree_interviewed': undefined | Option<'complaint_response'>,
+    // metadata/donor [select_one] Donor
+    'donor': undefined | Option<'donor'>,
+    // metadata/oblast [select_one] Oblast
     'oblast': undefined | Option<'oblast'>,
-    // biodata/raion [select_one] 3.5.1 Raion
+    // metadata/raion [select_one] Raion
     'raion': undefined | Option<'raion'>,
-    // biodata/hromada [select_one] 3.5.2 Hromada
+    // metadata/hromada [select_one] Hromada
     'hromada': undefined | Option<'hromada'>,
-    // biodata/settement [select_one_from_file] 3.5.3 Settlement/village/city neighborhood
-    'settement': string,
-    // biodata/contact_number [integer] 3.6 Contact number
-    'contact_number': number | undefined,
-    // biodata/details_related_referral [text] 3.7 Notes / Details related to the referral
-    'details_related_referral': string | undefined,
-    // follow_up/follow_up_session1 [text] 4.1 Follow-up session 1: date & remarks
-    'follow_up_session1': string | undefined,
-    // follow_up/follow_up_session2 [text] 4.2 Follow-up session 2: date & remarks
-    'follow_up_session2': string | undefined,
-    // follow_up/follow_up_session3 [text] 4.3 Follow-up session 3: date & remarks
-    'follow_up_session3': string | undefined,
-    // follow_up/service_provided [select_one] 4.4 Service provided?
-    'service_provided': undefined | Option<'service_provided'>,
-    // follow_up/not_service_provided_out [select_one] 4.4.1 If service was not provided, explain why
-    'not_service_provided_out': undefined | Option<'not_service_provided_out'>,
-    // follow_up/not_service_provided_other [text] 4.4.2 If other reason, please explain
-    'not_service_provided_other': string | undefined,
-    // follow_up/not_service_provided_inc [text] 4.4.3 If service was not provided, explain why
-    'not_service_provided_inc': string | undefined,
-    // follow_up/month_provision [date] 4.4.4 If service was provided, month of provision
-    'month_provision': Date | undefined,
-    // follow_up/referral_closed [select_one] Is the referral closed?
-    'referral_closed': undefined | Option<'referral_closed'>,
-    // follow_up/date_closure [date] 4.5 Date of closure
-    'date_closure': Date | undefined,
-    // follow_up/comments [text] 4.6 Comments
-    'comments': string | undefined,
+    // metadata/ben_det_surname_l [text] What is your surname name (as shown in personal ID)?
+    'ben_det_surname_l': string | undefined,
+    // metadata/ben_det_first_name_l [text] What is your first name (as shown in personal ID)?
+    'ben_det_first_name_l': string | undefined,
+    // metadata/ben_det_pat_name_l [text] What is your patronymic name?
+    'ben_det_pat_name_l': string | undefined,
+    // metadata/taxid [text] What is your individual tax number?
+    'taxid': string | undefined,
+    // metadata/phonenumber [integer] What is your mobile number?
+    'phonenumber': number | undefined,
+    // metadata/age [integer] What is your age?
+    'age': number | undefined,
+    // metadata/sex [select_one] What is your sex?
+    'sex': undefined | Option<'sex'>,
+    // metadata/you_receive_kit [select_one] Did you receive the kit(s)?
+    'you_receive_kit': undefined | Option<'you_receive_kit'>,
+    // metadata/you_receive_kit_no [note] If "I receive no kits" In instances of reporting that the center has not received the kits, the following must take place:   • Apologise to the individual you are speaking to and the absence of the promised kits   • Explain that you will follow up on the status of the distribution, and get back to them with information as soon as possible   • End the interview, and return to conduct the interview once the kits have been received
+    'you_receive_kit_no': string,
+    // metadata/you_receive_kit_yes [select_multiple] If Yes  - What type of NFI kit you have received?
+    'you_receive_kit_yes': undefined | Option<'you_receive_kit_yes'>[],
+    // metadata/specify [text] If other, please specify:
+    'specify': string | undefined,
+    // metadata/selected_other [note] Kindly note that this interview is only intended for your feedback on the Family kit (including Kitchen kit) and/or the Hygiene kit
+    'selected_other': string,
+    // metadata/family_supported_kit [integer] How many people in your household were supported by the kit(s) including you?
+    'family_supported_kit': number | undefined,
+    // metadata/family_categories [select_multiple] Does any person in your household, which also benefitted from the kit(s) , fall under any of these categories?
+    'family_categories': undefined | Option<'family_categories'>[],
+    // metadata/family_categories_other [text] If "Other" Please specify:
+    'family_categories_other': string | undefined,
+    // satisfaction/satisfied_kit_contents [select_one] Are you satisfied with the kit contents?
+    'satisfied_kit_contents': undefined | Option<'satisfied_kit_contents'>,
+    // satisfaction/satisfied_kit_contents_bad_hkf [text] If "neither satisfied not dissatisfied" or "somewhat dissatisfied" or "very dissatisfied", please explain why:
+    'satisfied_kit_contents_bad_hkf': string | undefined,
+    // satisfaction/you_quantity_given [select_one] Do you think the quantity given for each item in the Hygiene kit is enough to last for 3 months?
+    'you_quantity_given': undefined | Option<'complaint_response'>,
+    // satisfaction/you_quantity_given_no_hkf [text] If No, which items do you consider insufficient?
+    'you_quantity_given_no_hkf': string | undefined,
+    // satisfaction/quantity_bwk_sufficient [select_one] Do you think the quality given for each item is sufficient?
+    'quantity_bwk_sufficient': undefined | Option<'complaint_response'>,
+    // satisfaction/quantity_bwk_sufficient_no [text] If No, which items do you consider insufficient?
+    'quantity_bwk_sufficient_no': string | undefined,
+    // coping_strategies/consider_selling_kit [select_one] Did you consider selling the kit/part of the kit and use the money in another way? If you did, it is ok to say so now - it will help us adapt our activities.
+    'consider_selling_kit': undefined | Option<'consider_selling_kit'>,
+    // coping_strategies/consider_selling_kit_yes [select_multiple] If answer is 'Yes, and I sold it' then - What did you use the money from the kit sale for (which was more useful for you)?
+    'consider_selling_kit_yes': undefined | Option<'consider_selling_kit_yes'>[],
+    // coping_strategies/consider_selling_kit_yes_other [text] If "Other" Please specify:
+    'consider_selling_kit_yes_other': string | undefined,
+    // coping_strategies/particular_item_wish [select_one] Is there a particular item(s) you would wish to have included in the kit(s)?
+    'particular_item_wish': undefined | Option<'complaint_response'>,
+    // coping_strategies/particular_item_wish_yes [text] If "Yes", please state which one
+    'particular_item_wish_yes': string | undefined,
+    // effectiveness/provided_assistance_family [select_one] In your opinion, has the provided Hygiene Kit improved the hygiene conditions of your household?
+    'provided_assistance_family': undefined | Option<'complaint_response'>,
+    // effectiveness/provided_assistance_family_comments [text] Comment
+    'provided_assistance_family_comments': string | undefined,
+    // effectiveness/provided_assistance_nfkf [select_one] In your opinion, has the provided NFI Family kit and Kitchen kit improved living conditions in your family?
+    'provided_assistance_nfkf': undefined | Option<'complaint_response'>,
+    // effectiveness/provided_assistance_nfkf_comments [text] Comment
+    'provided_assistance_nfkf_comments': string | undefined,
+    // delivery_process/receive_kit [select_one] How did you receive the kit(s)?
+    'receive_kit': undefined | Option<'receive_kit'>,
+    // delivery_process/easy_difficul_distribution [select_one] How easy or difficult for you was it to get to the distribution site?
+    'easy_difficul_distribution': undefined | Option<'easy_difficul_distribution'>,
+    // delivery_process/easy_difficul_distribution_comments [text] Access [comments]
+    'easy_difficul_distribution_comments': string | undefined,
+    // delivery_process/process_assistance_delivery [select_one] Overall, how would you evaluate the process of assistance delivery and distribution of the kit(s)?
+    'process_assistance_delivery': undefined | Option<'process_assistance_delivery'>,
+    // delivery_process/process_assistance_delivery_bad [text] If "Very Bad"or "Bad" or "Satisfactory" , Please explain further
+    'process_assistance_delivery_bad': string | undefined,
+    // delivery_process/requested_return_assistance [select_one] Were you requested anything in return for the assistance provided, apart from documentation?
+    'requested_return_assistance': undefined | Option<'complaint_response'>,
+    // delivery_process/requested_return_assistance_yes [text] If "Yes", please clarify
+    'requested_return_assistance_yes': string | undefined,
+    // delivery_process/not_remind_line [note] #### 🔘 Please ensure to remind the individual that they can apply to the Code of Conduct Line. Remind them of the number if they did not receive the CFM leaflet, or they are not aware or the CFM line.
+    'not_remind_line': string,
+    // delivery_process/treated_respect_staff [select_one] Did you feel you were treated with respect by the staff during the process?
+    'treated_respect_staff': undefined | Option<'complaint_response'>,
+    // delivery_process/treated_respect_staff_no [text] If "No", Please explain further
+    'treated_respect_staff_no': string | undefined,
+    // accountability/know_your_suggestions [select_one] Do you know how and where you could address your suggestions, comments or complaints related to the assistance, if any?
+    'know_your_suggestions': undefined | Option<'complaint_response'>,
+    // accountability/know_your_suggestions_yes [select_one] If "Yes", have you provided any feedback/ suggestions, complaints, or questions?
+    'know_your_suggestions_yes': undefined | Option<'know_your_suggestions_yes'>,
+    // accountability/complaint_response [select_one] If yes, have you received an answer or response?
+    'complaint_response': undefined | Option<'complaint_response'>,
+    // accountability/know_your_suggestions_yes_nd [select_one] If "No did not provide any", why?
+    'know_your_suggestions_yes_nd': undefined | Option<'know_your_suggestions_yes_nd'>,
+    // accountability/know_your_suggestions_yes_nd_other [text] If "Other" Please specify:
+    'know_your_suggestions_yes_nd_other': string | undefined,
+    // accountability/know_your_suggestions_no [select_one] If "No", why?
+    'know_your_suggestions_no': undefined | Option<'know_your_suggestions_no'>,
+    // accountability/know_your_suggestions_no_other [text] If "Other" Please specify:
+    'know_your_suggestions_no_other': string | undefined,
+    // outstanding_needs/types_humanitarian_assistance [select_multiple] What types of humanitarian assistance do you currently need?
+    'types_humanitarian_assistance': undefined | Option<'types_humanitarian_assistance'>[],
+    // outstanding_needs/types_humanitarian_assistance_other [text] If "Other" please detail
+    'types_humanitarian_assistance_other': string | undefined,
+    // your_comments [text] Please, leave your comments, reviews and suggestions (if any)
+    'your_comments': string | undefined,
+    // comments/interviewer_comments [text] Interviewer’s comments
+    'interviewer_comments': string | undefined,
+    // comments/not_thank [note] Thank you for your support and participating in this interview.
+    'not_thank': string,
   }
 
   export const options = {
-    incoming_outgoing_referral: {
-      'incoming': `Incoming referral`,
-      'outgoing': `Outgoing referral`
+    type_interview: {
+      'inperson': `In-person`,
+      'remote': `Remote`
     },
-    project_code: {
-      '297_novo': `UKR-000298 Novo Nordisk`,
-      '330_sdc': `UKR-000330 SDC`,
-      '336_uhf_iv': `UKR-000336 UHF VI`,
-      '345_bha': `UKR-000345 BHA`,
-      '363_uhf8': `UKR-000363 UHF VIII`,
-      '372_echo': `UKR-000372 ECHO`
-    },
-    referral_closed: {
+    complaint_response: {
       'yes': `Yes`,
       'no': `No`
     },
-    priority_level: {
-      'high': `High`,
-      'medium': `Medium`,
-      'low': `Low`
+    you_receive_kit: {
+      'yes': `Yes`,
+      'recnk': `I receive no kits`
     },
-    specific_need: {
-      'older_person': `Older person at risk`,
-      'person_disability': `Person with disability`,
-      'person_serious_medical': `Person with serious medical condition`,
-      'child_risk': `Child at risk`,
-      'unaccompanied': `Unaccompanied or separated child`,
-      'woman_risk': `Woman at risk`,
-      'multiple_displacements': `Multiple displacements`,
-      'no_legal_documentation': `No legal documentation`,
-      'discrimination_marginalization': `Discrimination/marginalization`,
-      'survivor_violence': `Survivor of violence`,
+    sex: {
+      'male': `Male`,
+      'female': `Female`,
+      'pnd': `Prefer not to disclose`
+    },
+    you_receive_kit_yes: {
+      'hkf': `Hygiene kit`,
+      'nfkf': `NFI Family kit (with Kitchen kit)`,
       'other': `Other`
     },
-    referral_type: {
-      'internal': `Internal`,
-      'external': `External`
-    },
-    service_requested: {
-      'mpca': `MPCA`,
-      'nfi': `Non-Food Items`,
-      'shelter_rehabilitation': `Shelter rehabilitation`,
-      'cash_rent': `Cash for rent`,
-      'cash_repair': `Cash for repair`,
-      'emergency_shelter_kit': `Emergency shelter kit`,
-      'employment_support': `Employment support`,
-      'agricultural_livelihood_support': `Agricultural livelihood support`,
-      'business_support': `Business support`,
-      'vocational_training': `Vocational training`,
-      'victim_assistance': `Victim assistance`,
-      'legal_aid': `Legal aid`,
-      'psychosocial_support': `Psychosocial support`,
-      'protection_case_management': `Protection case management`,
-      'ipa': `IPA`,
-      'gbv': `GBV`,
-      'child_protection': `Child protection`,
-      'education': `Education`,
+    family_categories: {
+      'fcin': `Infant (under the age of 2)`,
+      'fcep': `Elderly person (over the age of 65)`,
+      'fcpd': `Person with a disability`,
+      'fcpl': `Pregnant or lactating woman`,
       'other': `Other`
     },
-    service_requested_prot: {
-      'legal_aid': `Legal aid`,
-      'psychosocial_support': `Psychosocial support`,
-      'protection_management': `Protection case management`,
-      'ipa': `IPA`,
-      'gbv': `GBV`,
-      'other': `Other`
-    },
-    name_receiving_agency_inc: {
-      'social_protection_services': `Social Protection Services`,
-      'humanity_inclusion': `Humanity & Inclusion (HI)`,
-      'icrc': `ICRC`,
-      'intersos': `Intersos`,
-      'iom': `IOM`,
-      'nrc': `NRC`,
-      'r2p': `R2P`,
-      'rokada': `Rokada`,
-      'tenth_april': `Tenth of April`,
-      'tgh': `TGH`,
-      'unhcr': `UNHCR`,
-      'other': `Other`
-    },
-    gender: {
-      'man': `Man`,
-      'woman': `Woman`,
-      'boy': `Boy`,
-      'girl': `Girl`,
+    undefined: {
+      'yes': `Yes`,
+      'no': `No`,
+      'nbp': `No, but plan to use it`,
+      'ybyc': `Yes, as cover for sleeping`,
+      'ybys': `Yes, as sleeping mat`,
+      'ybyp': `Yes, as a partition within the house/space`,
+      'ybed': `Yes, as a curtain/door`,
       'other': `Other`,
-      'unspecified': `Unspecified`
+      'ybyn': `Yes, non-specific`,
+      'nbis': `I sold it`,
+      'nbil': `I lost it`,
+      'nbpq': `Poor quality`,
+      'nbts': `Too small`,
+      'nbtw': `Too warm`,
+      'nbne': `Not warm enough`,
+      'nbin': `I have more than I need`,
+      'nbps': `The place where I sleep it warm enough`,
+      'nbdn': `Donated it to someone that needed it more`,
+      'yesn': `Yes for now, but not for the entire winter`,
+      'toothbrush': `Toothbrush (3)`,
+      'toothpaste': `Toothpaste (3 x 75 ml)`,
+      'soapbars': `Soap bars (6 x 125 g soap, 750g total)`,
+      'shampooml': `Shampoo (800 ml, 2 bottle total)`,
+      'toiletpaper': `Toilet paper (12 rolls)`,
+      'packsof': `Packs of hygiene pads (3 pack, 20 pieces each)`,
+      'washingsoap': `Washing soap for clothes (6 bars, 125gr each)`,
+      'handsanitizer': `Hand sanitizer (150ml within 3 bottle of 50ml each)`,
+      'dishwashinggel': `Dishwashing gel / washing-up liquid (1500ml within 3 bottle of 500ml each)`,
+      'cleaningliquid': `Cleaning liquid (common house disinfectant, 1L)`,
+      'plasticbucket': `Plastic bucket 1 pcs`,
+      'towel': `Towel 3sets`,
+      'blankets': `Blankets 3 pcs`,
+      'bedlinen': `Bedlinen 4 sets`,
+      'pillow': `Pillows 3 pcs`,
+      'solar': `Solar lamp/power banks`,
+      'jerry': `Jerry cans 2 pcs`,
+      'folding_bed': `Folding bed`,
+      'mattress': `Mattress`,
+      'cookingpots': `2 cooking pots (5 and 7L),`,
+      'fryingpan': `1 frying pan,`,
+      'bowl': `1 bowl,`,
+      'tablespoons': `5 tablespoons,`,
+      'forks': `5 forks,`,
+      'knives': `5 knives,`,
+      'plates': `5 plates,`,
+      'cups': `5 cups,`,
+      'kitchenknife': `1 kitchen knife,`,
+      'stirringspoon': `1 wooden stirring spoon,`,
+      'servingspoon': `1 serving spoon,`,
+      'ladle': `1 ladle,`,
+      'scouringpad': `1 scouring pad`,
+      'acf': `Action Against Hunger (ACF)`,
+      'care': `CARE`,
+      'caritas': `Caritas`,
+      'fca': `Finn Church Aid`,
+      'bedcross': `Red Cross`,
+      'genevacall': `Geneva Call`,
+      'giz': `GIZ`,
+      'goal': `GOAL`,
+      'hfh': `Habitat for Humanity`,
+      'mdm': `Doctors of the World (MDM)`,
+      'hi': `Humanity & Inclusion (HI)`,
+      'helpage': `HelpAge`,
+      'imc': `International Medical Corps (IMC)`,
+      'intersos': `Intersos`,
+      'acted': `ACTED`,
+      'malteser': `Malteser`,
+      'msf': `Doctors without Borders (MSF)`,
+      'mercycorps': `Mercy Corps`,
+      'nrc': `Norwegian Refugee Council (NRC)`,
+      'oxfam': `Oxfam`,
+      'pin': `People in Need (PIN)`,
+      'pah': `Polish Humanitarian Action (PAH)`,
+      'proliska': `Proliska`,
+      'rtp': `Right to Protection`,
+      'reach': `REACH`,
+      'stc': `Save the Children`,
+      'tdh': `Terre des Hommes (TDH)`,
+      'pui': `Premiere Urgence Internationale (PUI)`,
+      'unhcr': `UNHCR`,
+      'unicef': `UNICEF`,
+      'wfp': `WFP`,
+      'wck': `World Central Kitchen`,
+      'zoa': `ZOA`,
+      'noan': `No answer`
     },
-    service_provided: {
-      'yes': `Yes - service provided`,
-      'no': `No - service not provided`
+    easy_difficul_distribution: {
+      '1': `1`,
+      '2': `2`,
+      '3': `3`,
+      '4': `4`,
+      '5': `5`
     },
-    not_service_provided_out: {
-      'no_feedback': `No feedback received from the service provider`,
-      'referral_not_accepted': `Referral not accepted`,
-      'lost_contact': `Lost contact with the referred person`,
+    satisfied_kit_contents: {
+      'savs': `Very Satisfied`,
+      'sasa': `Satisfied`,
+      'sane': `Neither satisfied not dissatisfied`,
+      'saso': `Somewhat dissatisfied`,
+      'savd': `Very dissatisfied`
+    },
+    consider_selling_kit: {
+      'yesa': `Yes, and I sold it`,
+      'yesb': `Yes, but I did not sell it`,
+      'no': `No`
+    },
+    consider_selling_kit_yes: {
+      'dnwa': `Does not wish to answer`,
+      'food': `Food and water`,
+      'rent': `Rent`,
+      'electricity': `Electricity and other utility bills`,
+      'otherhyg': `Other hygiene items that were not in the kit`,
+      'transportation': `Transportation`,
+      'communication': `Communication`,
+      'education': `Education`,
+      'health': `Health`,
+      'clothes': `Clothes`,
+      'household': `Household items (furniture, etc)`,
       'other': `Other`
     },
-    displacement_status: {
-      'idp': `IDP`,
-      'idp_returnee': `IDP returnee`,
-      'refugee_retuenee': `Refugee returnee`,
-      'non_peenisplaced': `Non-displaced person`,
-      'refugee_Refenee': `Refugee`,
-      'unspecified_Unspeciencified': `Unspecified`
+    process_assistance_delivery: {
+      'vbad': `Very Bad`,
+      'bad': `Bad`,
+      'satisfactory': `Satisfactory`,
+      'good': `Good`,
+      'excellent': `Excellent`
     },
-    staff_to_insert_their_DRC_office: {
-      'chernihiv': `Chernihiv`,
-      'dnipro': `Dnipro`,
-      'kharkiv': `Kharkiv`,
-      'lviv': `Lviv`,
-      'mykolaiv': `Mykolaiv`,
-      'sumy': `Sumy`
+    know_your_suggestions_yes: {
+      'ywc': `Yes, with a complaint`,
+      'ywf': `Yes, with feedback`,
+      'ywq': `Yes, with a question`,
+      'no': `No did not provide any`
     },
-    staff_code: {
-      'CEJ001': `CEJ001`,
-      'CEJ002': `CEJ002`,
-      'CEJ003': `CEJ003`,
-      'CEJ004': `CEJ004`,
-      'CEJ005': `CEJ005`,
-      'CEJ006': `CEJ006`,
-      'CEJ007': `CEJ007`,
-      'CEJ008': `CEJ008`,
-      'CEJ009': `CEJ009`,
-      'CEJ010': `CEJ010`,
-      'CEJ011': `CEJ011`,
-      'CEJ012': `CEJ012`,
-      'CEJ013': `CEJ013`,
-      'CEJ014': `CEJ014`,
-      'CEJ015': `CEJ015`,
-      'CEJ016': `CEJ016`,
-      'CEJ_A': `CEJ-A`,
-      'CEJ_B': `CEJ-B`,
-      'CEJ_C': `CEJ-C`,
-      'CEJ_D': `CEJ-D`,
-      'UMY001': `UMY001`,
-      'UMY002': `UMY002`,
-      'UMY003': `UMY003`,
-      'UMY004': `UMY004`,
-      'UMY005': `UMY005`,
-      'UMY006': `UMY006`,
-      'UMY007': `UMY007`,
-      'UMY008': `UMY008`,
-      'UMY009': `UMY009`,
-      'UMY010': `UMY010`,
-      'UMY011': `UMY011`,
-      'UMY012': `UMY012`,
-      'UMY013': `UMY013`,
-      'UMY014': `UMY014`,
-      'UMY015': `UMY015`,
-      'HRK001': `HRK001`,
-      'HRK002': `HRK002`,
-      'HRK003': `HRK003`,
-      'HRK004': `HRK004`,
-      'HRK005': `HRK005`,
-      'HRK006': `HRK006`,
-      'HRK007': `HRK007`,
-      'HRK008': `HRK008`,
-      'HRK009': `HRK009`,
-      'HRK010': `HRK010`,
-      'HRK011': `HRK011`,
-      'HRK012': `HRK012`,
-      'HRK013': `HRK013`,
-      'HRK014': `HRK014`,
-      'HRK015': `HRK015`,
-      'HRK_A': `HRK-A`,
-      'HRK_B': `HRK-B`,
-      'HRK_C': `HRK-C`,
-      'HRK_D': `HRK-D`,
-      'HRK_E': `HRK-E`,
-      'HRK_F': `HRK-F`,
-      'DNK001': `DNK001`,
-      'DNK002': `DNK002`,
-      'DNK003': `DNK003`,
-      'DNK004': `DNK004`,
-      'DNK005': `DNK005`,
-      'DNK006': `DNK006`,
-      'DNK007': `DNK007`,
-      'DNK008': `DNK008`,
-      'DNK009': `DNK009`,
-      'DNK010': `DNK010`,
-      'DNK011': `DNK011`,
-      'DNK012': `DNK012`,
-      'DNK013': `DNK013`,
-      'DNK014': `DNK014`,
-      'DNK015': `DNK015`,
-      'DNK_A': `DNK-A`,
-      'DNK_B': `DNK-B`,
-      'DNK_C': `DNK-C`,
-      'DNK_D': `DNK-D`,
-      'LWO001': `LWO001`,
-      'LWO002': `LWO002`,
-      'LWO003': `LWO003`,
-      'LWO004': `LWO004`,
-      'LWO005': `LWO005`,
-      'LWO006': `LWO006`,
-      'LWO007': `LWO007`,
-      'LWO008': `LWO008`,
-      'LWO009': `LWO009`,
-      'LWO010': `LWO010`,
-      'LWO011': `LWO011`,
-      'LWO012': `LWO012`,
-      'LWO013': `LWO013`,
-      'LWO014': `LWO014`,
-      'LWO015': `LWO015`,
-      'NVL001': `NLV001`,
-      'NVL002': `NLV002`,
-      'NVL003': `NLV003`,
-      'NVL004': `NLV004`,
-      'NVL005': `NLV005`,
-      'NVL006': `NLV006`,
-      'NVL007': `NLV007`,
-      'NVL008': `NLV008`,
-      'NVL009': `NLV009`,
-      'NVL010': `NLV010`,
-      'NVL011': `NLV011`,
-      'NVL012': `NLV012`,
-      'NVL013': `NLV013`,
-      'NVL014': `NLV014`,
-      'NVL015': `NLV015`,
-      'NLV_A': `NLV-A`,
-      'NLV_B': `NLV-B`,
-      'NLV_C': `NLV-C`,
-      'NLV_D': `NLV-D`
+    know_your_suggestions_yes_nd: {
+      'ifpf': `I did not need to provide feedback`,
+      'ifcp': `I do not feel comfortable providing feedback/ suggestions, complaints, or questions`,
+      'ifps': `I have provided feedback/ suggestions, complaints, or questions in the past and I was never responded to.`,
+      'other': `Other`
+    },
+    know_your_suggestions_no: {
+      'nths': `The helpline has not been shared with me before`,
+      'nthn': `I do not know where to find the helpline number`,
+      'other': `Other`
+    },
+    types_humanitarian_assistance: {
+      'tafi': `Food items/kits`,
+      'takp': `Hygiene kits (personal)`,
+      'taki': `Hygiene kits (institutional)`,
+      'tani': `Basic needs items (clothes, furniture, household items)`,
+      'tacr': `Multipurpose cash for residents`,
+      'tala': `Legal aid`,
+      'tarb': `Rehabilitation (building)`,
+      'taaw': `Access to water`,
+      'tanc': `All needs are covered`,
+      'other': `Other`
+    },
+    donor: {
+      'sida': `SIDA (UKR-000343)`
     },
     oblast: {
-      'cherkaska': `Cherkaska`,
-      'chernihivska': `Chernihivska`,
-      'chernivetska': `Chernivetska`,
-      'dnipropetrovska': `Dnipropetrovska`,
-      'donetska': `Donetska`,
-      'ivano-frankivska': `Ivano-Frankivska`,
-      'kharkivska': `Kharkivska`,
-      'khersonska': `Khersonska`,
-      'khmelnytska': `Khmelnytska`,
-      'kirovohradska': `Kirovohradska`,
-      'kyivska': `Kyivska`,
-      'luhanska': `Luhanska`,
-      'lvivska': `Lvivska`,
-      'mykolaivska': `Mykolaivska`,
-      'odeska': `Odeska`,
-      'poltavska': `Poltavska`,
-      'rivnenska': `Rivnenska`,
-      'sevastopilska': `Sevastopilska`,
-      'sumska': `Sumska`,
-      'ternopilska': `Ternopilska`,
-      'vinnytska': `Vinnytska`,
-      'volynska': `Volynska`,
-      'zakarpatska': `Zakarpatska`,
-      'zaporizka': `Zaporizka`,
-      'zhytomyrska': `Zhytomyrska`
+      'dnipropetrovska': `Dnipropetrovsk`,
+      'mykolaivska': `Mykolaiv`,
+      'kharkivska': `Kharkiv`,
+      'khersonska': `Kherson`
     },
     raion: {
       'zvenyhorodskyi': `Zvenyhorodskyi`,
@@ -459,7 +422,6 @@ export namespace Protection_referral {
       'dubenskyi': `Dubenskyi`,
       'rivnenskyi': `Rivnenskyi`,
       'sarnenskyi': `Sarnenskyi`,
-      'sevastopilska': `Sevastopilska`,
       'konotopskyi': `Konotopskyi`,
       'okhtyrskyi': `Okhtyrskyi`,
       'romenskyi': `Romenskyi`,
@@ -2265,6 +2227,10 @@ export namespace Protection_referral {
       'zymnovodivska': `Zymnovodivska`,
       'zymohirivska': `Zymohirivska`,
       'zymynska': `Zymynska`
+    },
+    receive_kit: {
+      'deliver1': `The Kit(s) was delivered to my address.`,
+      'deliver2': `I collected the kit from the distribution site.`
     }
   }
 
@@ -2280,13 +2246,13 @@ export namespace Protection_referral {
 
   export const map = (_: Record<keyof T, any>): T => ({
     ..._,
-    date: _.date ? new Date(_.date) : undefined,
-    date_referral: _.date_referral ? new Date(_.date_referral) : undefined,
-    specific_need: _.specific_need?.split(' '),
-    service_requested: _.service_requested?.split(' '),
+    interview_date: _.interview_date ? new Date(_.interview_date) : undefined,
+    phonenumber: _.phonenumber ? +_.phonenumber : undefined,
     age: _.age ? +_.age : undefined,
-    contact_number: _.contact_number ? +_.contact_number : undefined,
-    month_provision: _.month_provision ? new Date(_.month_provision) : undefined,
-    date_closure: _.date_closure ? new Date(_.date_closure) : undefined,
+    you_receive_kit_yes: _.you_receive_kit_yes?.split(' '),
+    family_supported_kit: _.family_supported_kit ? +_.family_supported_kit : undefined,
+    family_categories: _.family_categories?.split(' '),
+    consider_selling_kit_yes: _.consider_selling_kit_yes?.split(' '),
+    types_humanitarian_assistance: _.types_humanitarian_assistance?.split(' '),
   }) as T
 }

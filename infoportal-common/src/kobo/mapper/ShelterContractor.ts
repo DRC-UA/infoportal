@@ -1,5 +1,5 @@
 import {Enum} from '@alexandreannic/ts-utils'
-import {Shelter_TA} from '../generated'
+import {Shelter_ta} from '../generated'
 import {KoboShelterTa} from './KoboShelterTA'
 
 export enum ShelterContractor {
@@ -30,7 +30,7 @@ export class ShelterContractorPrices {
     oblast,
     lot
   }: {
-    oblast?: keyof typeof Shelter_TA.options['ben_det_oblast']
+    oblast?: keyof typeof Shelter_ta.options['ben_det_oblast']
     lot: 1 | 2 | 3
   }): ShelterContractor[] => {
     const contractors = oblasts[oblast as keyof typeof oblasts] ?? Enum.values(ShelterContractor)
@@ -51,7 +51,7 @@ export class ShelterContractorPrices {
     contractor1?: ShelterContractor
     contractor2?: ShelterContractor
     contractor3?: ShelterContractor
-    answer?: Shelter_TA.T
+    answer?: Shelter_ta.T
   }): number | undefined | null => {
     if (!answer || (!contractor1 && !contractor2 && !contractor3)) return undefined
     try {
@@ -84,8 +84,8 @@ export class ShelterContractorPrices {
   }
 }
 
-const lot1: (keyof Shelter_TA.T)[] = [
-// const lot1: NumberKeys<keyof Shelter_TA.T>[] = [
+const lot1: (keyof Shelter_ta.T)[] = [
+// const lot1: NumberKeys<keyof Shelter_ta.T>[] = [
   'dismantling_of_structures',
   'singleshutter_window_tripleglazed_m',
   'singleshutter_windowdoubleglazed_m',
@@ -99,7 +99,7 @@ const lot1: (keyof Shelter_TA.T)[] = [
   'doubleglazed_upvc_door_m'
 ]
 
-const lot2: (keyof Shelter_TA.T)[] = [
+const lot2: (keyof Shelter_ta.T)[] = [
   'dismantling_of_structures2',
   'wall_repair_clay_bricks_m',
   'wall_repair_concrete_blocks_m',
@@ -137,12 +137,12 @@ const lot2: (keyof Shelter_TA.T)[] = [
   'bimetallic_radiator_sections_length_mm_pc',
   'wall_mountes_cable_wiring_lm'
 ]
-const lot3: (keyof Shelter_TA.T)[] = [
+const lot3: (keyof Shelter_ta.T)[] = [
   'external_doors_pc',
   'internal_wooden_doors_pc',
 ]
 
-const WAITING_FOR_PRICES_LOT: Partial<Record<keyof Shelter_TA.T, number>>[] = [
+const WAITING_FOR_PRICES_LOT: Partial<Record<keyof Shelter_ta.T, number>>[] = [
   {
     dismantling_of_structures: -1,
     singleshutter_window_tripleglazed_m: -1,
@@ -203,7 +203,7 @@ const WAITING_FOR_PRICES_LOT: Partial<Record<keyof Shelter_TA.T, number>>[] = [
 
 const WAITING_FOR_PRICES = WAITING_FOR_PRICES_LOT.reduce((acc, _) => ({...acc, ..._}), {})
 
-const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelter_TA.T, number>>>> = {
+const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelter_ta.T, number>>>> = {
   [ShelterContractor['Zhilvest']]: {
     dismantling_of_structures2: 140000,
     wall_repair_clay_bricks_m: 1284000,

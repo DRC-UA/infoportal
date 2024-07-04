@@ -3,48 +3,48 @@ export namespace Protection_gbvSocialProviders {
 
   // Form id: aKrbJdapRxfdPgXb3KqzHd
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // introduction [note] This is survey is being conducted by the Danish Refugee Council, an International NGO, working in Ukraine. The purpose of the survey is to understand the main training needs related to gender based violence, protection and psychosocial support of social service providers working in the Mykolaiv oblast. Participation in this survey is voluntary and confidential. You will not receive any benefit from participating in this discussion. However, the information that you give may be used to inform the humanitarian response. If at any time you wish to end your participation, or you wish to abstain from answering particular questions you are free to do so. The information you give will not be attributed to you, nor will DRC use your name in reporting.
-    introduction: string,
+    'introduction': string,
     // introduction/date [date] Date
-    date: Date | undefined,
+    'date': Date | undefined,
     // introduction/position [select_one] What is your position?
-    position: undefined | Option<'position'>,
+    'position': undefined | Option<'position'>,
     // introduction/position_other [text] Other- please specify
-    position_other: string | undefined,
+    'position_other': string | undefined,
     // introduction/manage_supervise_staff [select_one] Do you line manage or supervise any staff?
-    manage_supervise_staff: undefined | Option<'interested_training_families_gbv'>,
+    'manage_supervise_staff': undefined | Option<'interested_training_families_gbv'>,
     // introduction/department [select_one] What department do you work for?
-    department: undefined | Option<'department'>,
+    'department': undefined | Option<'department'>,
     // introduction/department_other [text] Other- please specify
-    department_other: string | undefined,
+    'department_other': string | undefined,
     // introduction/raion_mykolaiv_working [select_one] What raion in Mykolaiv are you working in?
-    raion_mykolaiv_working: undefined | Option<'raion_mykolaiv_working'>,
+    'raion_mykolaiv_working': undefined | Option<'raion_mykolaiv_working'>,
     // introduction/hromada_mykolaiv_working [select_multiple] What hromada are you working in?
-    hromada_mykolaiv_working: undefined | Option<'hromada_mykolaiv_working'>[],
+    'hromada_mykolaiv_working': undefined | Option<'hromada_mykolaiv_working'>[],
     // introduction/priority_training_needs [select_multiple] What are your priority training needs
-    priority_training_needs: undefined | Option<'priority_training_needs'>[],
+    'priority_training_needs': undefined | Option<'priority_training_needs'>[],
     // introduction/priority_training_needs_other [text] Other- please specify
-    priority_training_needs_other: string | undefined,
+    'priority_training_needs_other': string | undefined,
     // introduction/interested_training_families_gbv [select_one] Are you interested in a training on working with families at risk of GBV?
-    interested_training_families_gbv: undefined | Option<'interested_training_families_gbv'>,
+    'interested_training_families_gbv': undefined | Option<'interested_training_families_gbv'>,
     // introduction/interested_training_families_gbv_yes [select_multiple] What type of topics would be useful for this training ?
-    interested_training_families_gbv_yes: undefined | Option<'interested_training_families_gbv_yes'>[],
+    'interested_training_families_gbv_yes': undefined | Option<'interested_training_families_gbv_yes'>[],
     // introduction/interested_training_families_gbv_yes_other [text] Other- please specify
-    interested_training_families_gbv_yes_other: string | undefined,
+    'interested_training_families_gbv_yes_other': string | undefined,
     // introduction/training_model [select_one] Which training model do you prefer?
-    training_model: undefined | Option<'training_model'>,
+    'training_model': undefined | Option<'training_model'>,
     // introduction/preferred_modality_training [select_one] What is your preferred modality for training?
-    preferred_modality_training: undefined | Option<'preferred_modality_training'>,
+    'preferred_modality_training': undefined | Option<'preferred_modality_training'>,
     // introduction/preferred_modality_training_other [text] Other- please specify
-    preferred_modality_training_other: string | undefined,
+    'preferred_modality_training_other': string | undefined,
     // introduction/consider_mental_health [select_one] Do you consider that is the mental health and psychosocial support is necessary among the people that you provide support to?
-    consider_mental_health: undefined | Option<'consider_mental_health'>,
+    'consider_mental_health': undefined | Option<'consider_mental_health'>,
     // introduction/part_responsibilities_psychosocial [select_one] Is part of your responsibilities is provide psychosocial support to people in need ?
-    part_responsibilities_psychosocial: undefined | Option<'part_responsibilities_psychosocial'>,
+    'part_responsibilities_psychosocial': undefined | Option<'part_responsibilities_psychosocial'>,
     // introduction/feel_overwhelmed_workload [select_one] Do you feel overwhelmed or stressed due to workload?
-    feel_overwhelmed_workload: undefined | Option<'feel_overwhelmed_workload'>,
+    'feel_overwhelmed_workload': undefined | Option<'feel_overwhelmed_workload'>,
   }
 
   export const options = {
@@ -80,7 +80,6 @@ export namespace Protection_gbvSocialProviders {
       'voznesenskyi': `Voznesenskyi`,
       'mykolaivskyi': `Mykolaivskyi`,
       'pervomaiskyi': `Pervomaiskyi`
-
     },
     hromada_mykolaiv_working: {
       'bashtanska': `Bashtanska`,

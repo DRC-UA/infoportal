@@ -23,7 +23,7 @@ const nfisPrograms = [DrcProgram.NFI, DrcProgram.ESK, DrcProgram.InfantWinterClo
 
 export class KoboMetaBasicneeds {
 
-  private static readonly getBnreProject = (back_donor?: Bn_re.Option<'back_donor'> | Bn_rapidResponse.Option<'back_donor'> | Bn_rapidResponse.Option<'back_donor_l'>[0]) => {
+  private static readonly getBnreProject = (back_donor?: Bn_re.Option<'nfi_dist_hkf_001_donor'> | Bn_rapidResponse.Option<'back_donor'> | Bn_rapidResponse.Option<'back_donor_l'>[0]) => {
     return fnSwitch(back_donor!, {
       uhf_chj: DrcProject['UKR-000314 UHF4'],
       uhf_dnk: DrcProject['UKR-000314 UHF4'],

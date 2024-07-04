@@ -16,8 +16,8 @@ import {
   KoboSafetyIncidentHelper,
   Meal_cfmExternal,
   Meal_cfmInternal,
-  Meal_VerificationWinterization,
-  Meal_VisitMonitoring,
+  Meal_verificationWinterization,
+  Meal_visitMonitoring,
   Partnership_partnersDatabase,
   Person,
   PersonDetails,
@@ -26,8 +26,8 @@ import {
   Protection_groupSession,
   Protection_hhs3,
   ProtectionHhsTags,
-  Shelter_NTA,
-  Shelter_TA,
+  Shelter_nta,
+  Shelter_ta,
   ShelterNtaTags,
   Meal_verificationEcrec,
   ShelterTaTagsHelper,
@@ -93,7 +93,7 @@ export class KoboTypedAnswerSdk {
       })),
       ...make('shelter_nta', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('shelter_nta').id,
-        fnMapKobo: Shelter_NTA.map,
+        fnMapKobo: Shelter_nta.map,
         fnMapTags: _ => _ as ShelterNtaTags,
         ...filters,
       })),
@@ -128,7 +128,7 @@ export class KoboTypedAnswerSdk {
       }))),
       ...make('shelter_ta', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('shelter_ta').id,
-        fnMapKobo: Shelter_TA.map,
+        fnMapKobo: Shelter_ta.map,
         fnMapTags: ShelterTaTagsHelper.mapTags,
         ...filters,
       })),
@@ -144,7 +144,7 @@ export class KoboTypedAnswerSdk {
       })),
       ...make('meal_verificationWinterization', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('meal_verificationWinterization').id,
-        fnMapKobo: Meal_VerificationWinterization.map,
+        fnMapKobo: Meal_verificationWinterization.map,
         ...filters,
       })),
       ...make('bn_re', (filters?: KoboAnswerFilter) => req({
@@ -176,7 +176,7 @@ export class KoboTypedAnswerSdk {
       })),
       ...make('meal_visitMonitoring', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('meal_visitMonitoring').id,
-        fnMapKobo: Meal_VisitMonitoring.map,
+        fnMapKobo: Meal_visitMonitoring.map,
         ...filters,
       })),
       ...make('protection_hhs3', (filters?: KoboAnswerFilter) => req({

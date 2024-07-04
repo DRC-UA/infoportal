@@ -1,5 +1,6 @@
 export namespace Safety_incident {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
+
   // Form id: aAJNkn7v9fRL2XqQCgEkXf
   export interface T {
     'start': string,

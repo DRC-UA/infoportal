@@ -14,7 +14,7 @@ import {
   objectToQueryString,
   safeArray,
   safeNumber,
-  Shelter_NTA,
+  Shelter_nta,
   ShelterContractor,
   shelterDrcProject,
   ShelterProgress,
@@ -135,7 +135,7 @@ export const ShelterTable = () => {
         type: 'select_one',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
-        options: () => Obj.entries(Shelter_NTA.options.ben_det_oblast).map(([value, label]) => ({value, label})),
+        options: () => Obj.entries(Shelter_nta.options.ben_det_oblast).map(([value, label]) => ({value, label})),
         head: m.oblast,
         render: _ => {
           return {
@@ -149,7 +149,7 @@ export const ShelterTable = () => {
         type: 'string',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
-        // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
+        // options: () => Obj.entries(Shelter_nta.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m.raion,
         render: _ => {
           return {
@@ -163,7 +163,7 @@ export const ShelterTable = () => {
         type: 'string',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
-        // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
+        // options: () => Obj.entries(Shelter_nta.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m.raion,
         render: _ => {
           return {
@@ -177,7 +177,7 @@ export const ShelterTable = () => {
         type: 'string',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
-        // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
+        // options: () => Obj.entries(Shelter_nta.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m._shelter.settlement,
         renderQuick: _ => _.nta?.settlement,
       },
@@ -186,7 +186,7 @@ export const ShelterTable = () => {
         type: 'string',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
-        // options: () => Obj.entries(Shelter_NTA.options.ben_det_raion).map(([value, label]) => ({value, label})),
+        // options: () => Obj.entries(Shelter_nta.options.ben_det_raion).map(([value, label]) => ({value, label})),
         head: m._shelter.street,
         renderQuick: _ => _.nta ? (_.nta.street ?? '') + ' ' + (_.nta.house_number ?? '') + ' ' + (_.nta.building_number ?? '') : '',
       },
@@ -292,7 +292,7 @@ export const ShelterTable = () => {
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m._shelter.owner,
-        options: () => Obj.entries(Shelter_NTA.options.owner_tenant_type).map(([value, label]) => ({value, label})),
+        options: () => Obj.entries(Shelter_nta.options.owner_tenant_type).map(([value, label]) => ({value, label})),
         render: _ => {
           return {
             value: _.nta?.owner_tenant_type,
@@ -339,7 +339,7 @@ export const ShelterTable = () => {
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m._shelter.documentType,
-        options: () => Obj.entries(Shelter_NTA.options.document_type).map(([value, label]) => ({value, label})),
+        options: () => Obj.entries(Shelter_nta.options.document_type).map(([value, label]) => ({value, label})),
         render: _ => {
           return {
             value: _.nta?.document_type,
@@ -353,7 +353,7 @@ export const ShelterTable = () => {
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m._shelter.accommodation,
-        options: () => Obj.entries(Shelter_NTA.options.dwelling_type).map(([value, label]) => ({value, label})),
+        options: () => Obj.entries(Shelter_nta.options.dwelling_type).map(([value, label]) => ({value, label})),
         render: _ => {
           return {
             label: ctx.nta.schema.translate.choice('dwelling_type', _.nta?.dwelling_type),
@@ -369,7 +369,7 @@ export const ShelterTable = () => {
         align: 'center',
         width: 0,
         head: m._shelter.ownershipDocumentExist,
-        options: () => Obj.entries(Shelter_NTA.options.pregnant_lac).map(([value, label]) => ({value, label})),
+        options: () => Obj.entries(Shelter_nta.options.pregnant_lac).map(([value, label]) => ({value, label})),
         render: _ => {
           return {
             value: _.nta?.ownership_verification,

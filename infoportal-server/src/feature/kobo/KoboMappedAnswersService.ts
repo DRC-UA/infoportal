@@ -16,8 +16,8 @@ import {
   Protection_hhs,
   Shelter_cashForRepair,
   Shelter_north,
-  Shelter_NTA,
-  Shelter_TA
+  Shelter_nta,
+  Shelter_ta
 } from '@infoportal-common'
 import {map} from '@alexandreannic/ts-utils'
 import {ShelterNtaTags, ShelterTaTags} from './tags/ShelterTags'
@@ -65,8 +65,8 @@ export class KoboMappedAnswersService {
   }
 
   readonly searchProtectionHss = this.buildMappedSearch(KoboIndex.byName('protection_hhs2_1').id, Protection_hhs.map, _ => _ as ProtectionHhsTags)
-  readonly searchShelter_Ta = this.buildMappedSearch(KoboIndex.byName('shelter_ta').id, Shelter_TA.map, _ => _ as ShelterTaTags)
-  readonly searchShelter_Nta = this.buildMappedSearch(KoboIndex.byName('shelter_nta').id, Shelter_NTA.map, _ => _ as ShelterNtaTags)
+  readonly searchShelter_Ta = this.buildMappedSearch(KoboIndex.byName('shelter_ta').id, Shelter_ta.map, _ => _ as ShelterTaTags)
+  readonly searchShelter_Nta = this.buildMappedSearch(KoboIndex.byName('shelter_nta').id, Shelter_nta.map, _ => _ as ShelterNtaTags)
   readonly searchShelter_north = this.buildMappedSearch(KoboIndex.byName('shelter_north').id, Shelter_north.map, _ => _ as ShelterNtaTags & ShelterTaTags)
   readonly searchShelter_cashForRepair = this.buildMappedSearch(KoboIndex.byName('shelter_cashForRepair').id, Shelter_cashForRepair.map)
   readonly searchBn_re = this.buildMappedSearch(KoboIndex.byName('bn_re').id, Bn_re.map)

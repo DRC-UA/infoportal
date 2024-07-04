@@ -3,296 +3,296 @@ export namespace Shelter_north {
 
   // Form id: aCPdwVnnsYeReynJ7YnLGH
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // group_cp32s44/back_office [select_one] Офіс
-    back_office: undefined | Option<'back_office'>,
+    'back_office': undefined | Option<'back_office'>,
     // group_cp32s44/__007 [select_one] Ім'я регістратора
-    __007: undefined | Option<'__007'>,
+    '__007': undefined | Option<'__007'>,
     // group_cp32s44/there_contract [select_one] Чи заключений договорі для відновлення житла?
-    there_contract: undefined | Option<'physical_family'>,
+    'there_contract': undefined | Option<'physical_family'>,
     // group_cp32s44/donor_repair [select_one] Якій донор проводить допомогу по відновленню житла ?
-    donor_repair: undefined | Option<'donor_repair'>,
+    'donor_repair': undefined | Option<'donor_repair'>,
     // group_cp32s44/group_va3uo30/fp1 [image] Фото пошкоджень (1)
-    fp1: string,
+    'fp1': string,
     // group_cp32s44/group_va3uo30/fp2 [image] Фото пошкоджень (2)
-    fp2: string,
+    'fp2': string,
     // group_cp32s44/group_va3uo30/fp3 [image] Фото пошкоджень (3)
-    fp3: string,
+    'fp3': string,
     // group_cp32s44/group_va3uo30/fp4 [image] Фото пошкоджень (4)
-    fp4: string,
+    'fp4': string,
     // group_cp32s44/group_va3uo30/fp5 [image] Фото пошкоджень (5)
-    fp5: string,
+    'fp5': string,
     // group_cp32s44/group_va3uo30/fp6 [image] Фото пошкоджень (6)
-    fp6: string,
+    'fp6': string,
     // group_cp32s44/group_va3uo30/fp7 [image] Фото пошкоджень (7)
-    fp7: string,
+    'fp7': string,
     // group_cp32s44/group_va3uo30/fp8 [image] Фото пошкоджень (8)
-    fp8: string,
+    'fp8': string,
     // group_cp32s44/group_va3uo30/fp9 [image] Фото пошкоджень (9)
-    fp9: string,
+    'fp9': string,
     // group_cp32s44/group_va3uo30/fp10 [image] Фото пошкоджень (10)
-    fp10: string,
+    'fp10': string,
     // group_cp32s44/group_va3uo30/fp11 [image] Фото пошкоджень (11)
-    fp11: string,
+    'fp11': string,
     // group_cp32s44/group_va3uo30/fp12 [image] Фото пошкоджень (12)
-    fp12: string,
+    'fp12': string,
     // group_cp32s44/group_va3uo30/fp13 [image] Фото пошкоджень (13)
-    fp13: string,
+    'fp13': string,
     // group_cp32s44/group_va3uo30/fp14 [image] Фото пошкоджень (14)
-    fp14: string,
+    'fp14': string,
     // group_cp32s44/group_va3uo30/fp15 [image] Фото пошкоджень (15)
-    fp15: string,
+    'fp15': string,
     // group_sk5ss08/group_xf3tq10/_Number_of_damaged_windows [integer] Кількість пошкоджених вікон
-    _Number_of_damaged_windows: number | undefined,
+    '_Number_of_damaged_windows': number | undefined,
     // group_sk5ss08/group_xf3tq10/ppvi [text] Площа пошкоджень вікон
-    ppvi: string | undefined,
+    'ppvi': string | undefined,
     // group_sk5ss08/group_xf3tq10/__027 [integer] Кількість пошкоджених склопакетів
-    __027: number | undefined,
+    '__027': number | undefined,
     // group_sk5ss08/group_xf3tq10/ppskv [text] Площа пошкоджень склопакетів
-    ppskv: string | undefined,
+    'ppskv': string | undefined,
     // group_sk5ss08/group_uc1cp22/_Number_of_damaged_balcony [integer] Кількість пошкоджених балконів
-    _Number_of_damaged_balcony: number | undefined,
+    '_Number_of_damaged_balcony': number | undefined,
     // group_sk5ss08/group_uc1cp22/opbal [text] Об'єм пошкоджень балконів
-    opbal: string | undefined,
+    'opbal': string | undefined,
     // group_sk5ss08/group_uc1cp22/__028 [integer] Кількість пошкоджених склопакетів балконів
-    __028: number | undefined,
+    '__028': number | undefined,
     // group_sk5ss08/group_uc1cp22/ppsb [text] Площа пошкоджених склопакетів балконів
-    ppsb: string | undefined,
+    'ppsb': string | undefined,
     // group_sk5ss08/group_mn8qs18/Nodd [integer] Кількість пошкоджених дверей
-    Nodd: number | undefined,
+    'Nodd': number | undefined,
     // group_sk5ss08/group_mn8qs18/kpd [text] Коментар до пошкоджених дверей
-    kpd: string | undefined,
+    'kpd': string | undefined,
     // group_sk5ss08/group_lb53s88/_Is_there_damage_to_the_ [select_one] Чи є пошкодження даху
-    _Is_there_damage_to_the_: undefined | Option<'physical_family'>,
+    '_Is_there_damage_to_the_': undefined | Option<'physical_family'>,
     // group_sk5ss08/group_lb53s88/kpos [integer] Кількість пошкоджених скатів
-    kpos: number | undefined,
+    'kpos': number | undefined,
     // group_sk5ss08/group_lb53s88/kpbd [integer] Кількість пошкоджених балок даху
-    kpbd: number | undefined,
+    'kpbd': number | undefined,
     // group_sk5ss08/group_lb53s88/ppda [integer] Площа пошкоджень даху
-    ppda: number | undefined,
+    'ppda': number | undefined,
     // group_sk5ss08/group_lb53s88/tm [select_one] Тип матеріала
-    tm: undefined | Option<'tm'>,
+    'tm': undefined | Option<'tm'>,
     // group_sk5ss08/group_ds2kc34/_Is_there_damage_water_p [select_one] Чи потрібне відновлення водопроводу
-    _Is_there_damage_water_p: undefined | Option<'physical_family'>,
+    '_Is_there_damage_water_p': undefined | Option<'physical_family'>,
     // group_sk5ss08/group_ds2kc34/kdv [text] Коментар до водопроводу
-    kdv: string | undefined,
+    'kdv': string | undefined,
     // group_sk5ss08/group_hh6un87/_Is_there_damage_electri [select_one] Чи потрібне відновлення електромережі
-    _Is_there_damage_electri: undefined | Option<'physical_family'>,
+    '_Is_there_damage_electri': undefined | Option<'physical_family'>,
     // group_sk5ss08/group_hh6un87/kde [text] Коментар до електромережі
-    kde: string | undefined,
+    'kde': string | undefined,
     // group_sk5ss08/group_as7hj54/__006 [select_one] Чи потрібне відновлення опалення
-    __006: undefined | Option<'physical_family'>,
+    '__006': undefined | Option<'physical_family'>,
     // group_sk5ss08/group_as7hj54/__023 [text] Коментар до опалення
-    __023: string | undefined,
+    '__023': string | undefined,
     // group_sk5ss08/group_ex5kv65/__004 [select_one] Чи є незначні неструктурні пошкодження стін
-    __004: undefined | Option<'physical_family'>,
+    '__004': undefined | Option<'physical_family'>,
     // group_sk5ss08/group_ex5kv65/kdnnps [text] Коментар до незначних неструктурних пошкоджень стін
-    kdnnps: string | undefined,
+    'kdnnps': string | undefined,
     // group_sk5ss08/group_ko3fd97/__005 [select_one] Чи потрібен незначний ремонт тріщин у зовнішніх цегляних стінах
-    __005: undefined | Option<'physical_family'>,
+    '__005': undefined | Option<'physical_family'>,
     // group_sk5ss08/group_ko3fd97/kdnt [text] Коментар до незначних тріщин у зовнішніх цегляних стінах
-    kdnt: string | undefined,
+    'kdnt': string | undefined,
     // group_nq8ia42/__009 [text] ПІБ Бенефіціара(Заявник)
-    __009: string | undefined,
+    '__009': string | undefined,
     // group_nq8ia42/__008 [select_one] Вкажіть ваш статус
-    __008: undefined | Option<'__008'>,
+    '__008': undefined | Option<'__008'>,
     // group_nq8ia42/stv [select_one] Стать заявника(ВПО)
-    stv: undefined | Option<'sph10k'>,
+    'stv': undefined | Option<'sph10k'>,
     // group_nq8ia42/vtv [integer] Вік заявника (ВПО)
-    vtv: number | undefined,
+    'vtv': number | undefined,
     // group_nq8ia42/stb [select_one] Стать заявника(що постраждав від конфлікту)
-    stb: undefined | Option<'sph10k'>,
+    'stb': undefined | Option<'sph10k'>,
     // group_nq8ia42/vtb [integer] Вік заявника(що постраждав від конфлікту)
-    vtb: number | undefined,
+    'vtb': number | undefined,
     // group_nq8ia42/__016 [integer] Номер телефону
-    __016: number | undefined,
+    '__016': number | undefined,
     // group_nq8ia42/aph [integer] Додатковий номер телефону
-    aph: number | undefined,
+    'aph': number | undefined,
     // group_nq8ia42/ben_det_oblast [select_one] Виберіть область, де буде проходити реєстрація
-    ben_det_oblast: undefined | Option<'ben_det_oblast'>,
+    'ben_det_oblast': undefined | Option<'ben_det_oblast'>,
     // group_nq8ia42/ben_det_raion [select_one] Виберіть район, де буде проходити реєстрація
-    ben_det_raion: undefined | Option<'ben_det_raion'>,
+    'ben_det_raion': undefined | Option<'ben_det_raion'>,
     // group_nq8ia42/ben_det_hromada [select_one] Виберіть громаду, де відбувається реєстрація
-    ben_det_hromada: undefined | Option<'ben_det_hromada'>,
+    'ben_det_hromada': undefined | Option<'ben_det_hromada'>,
     // group_nq8ia42/ben_det_city [select_one] Виберіть місто, де відбувається реєстрація
-    ben_det_city: undefined | Option<'ben_det_city'>,
+    'ben_det_city': undefined | Option<'ben_det_city'>,
     // group_nq8ia42/__012 [text] Адреса пошкодження(вулиця)
-    __012: string | undefined,
+    '__012': string | undefined,
     // group_nq8ia42/__013 [text] Номер будинку і корпус
-    __013: string | undefined,
+    '__013': string | undefined,
     // group_nq8ia42/__014 [text] Номер квартири
-    __014: string | undefined,
+    '__014': string | undefined,
     // group_nq8ia42/pas [text] Паспорт
-    pas: string | undefined,
+    'pas': string | undefined,
     // group_nq8ia42/ipn [text] ІПН
-    ipn: string | undefined,
+    'ipn': string | undefined,
     // group_nq8ia42/__017 [text] Адреса за реєстрацією
-    __017: string | undefined,
+    '__017': string | undefined,
     // group_nq8ia42/fd1 [image] Фото документів
-    fd1: string,
+    'fd1': string,
     // group_nq8ia42/fd2 [image] Фото документів
-    fd2: string,
+    'fd2': string,
     // group_nq8ia42/fd3 [image] Фото документів
-    fd3: string,
+    'fd3': string,
     // group_nq8ia42/fd4 [image] Фото документів
-    fd4: string,
+    'fd4': string,
     // group_nq8ia42/fd5 [image] Фото документів
-    fd5: string,
+    'fd5': string,
     // group_nq8ia42/fd6 [image] Фото документів
-    fd6: string,
+    'fd6': string,
     // group_nq8ia42/fd7 [image] Фото документів
-    fd7: string,
+    'fd7': string,
     // group_nq8ia42/fd8 [image] Фото документів
-    fd8: string,
+    'fd8': string,
     // group_nq8ia42/fd9 [image] Фото документів
-    fd9: string,
+    'fd9': string,
     // group_nq8ia42/fd10 [image] Фото документів
-    fd10: string,
+    'fd10': string,
     // group_nq8ia42/__018 [select_one] Тип об'єкту
-    __018: undefined | Option<'__018'>,
+    '__018': undefined | Option<'__018'>,
     // group_nq8ia42/_ [select_one] Ви були тимчасово переміщені і повернулися до свого приміщення?
-    _: undefined | Option<'physical_family'>,
+    '_': undefined | Option<'physical_family'>,
     // group_nq8ia42/__019 [select_one] Скільки часу пройшло з вашого повернення
-    __019: undefined | Option<'__019'>,
+    '__019': undefined | Option<'__019'>,
     // group_nq8ia42/__001 [select_one] Чи є ви законним власником приміщення
-    __001: undefined | Option<'physical_family'>,
+    '__001': undefined | Option<'physical_family'>,
     // group_nq8ia42/kspp1 [image] Копія свідоцтва про право власності, договір купівлі-продажу, свідоцтво про право на спадщину (1)
-    kspp1: string,
+    'kspp1': string,
     // group_nq8ia42/kspp2 [image] Копія свідоцтва про право власності, договір купівлі-продажу, свідоцтво про право на спадщину (2)
-    kspp2: string,
+    'kspp2': string,
     // group_nq8ia42/kspp3 [image] Копія свідоцтва про право власності, договір купівлі-продажу, свідоцтво про право на спадщину (3)
-    kspp3: string,
+    'kspp3': string,
     // group_nq8ia42/__002 [select_one] Чи є у вас договір оренди з орендодавцем
-    __002: undefined | Option<'physical_family'>,
+    '__002': undefined | Option<'physical_family'>,
     // group_nq8ia42/kdo1 [image] Копія договору оренди (1)
-    kdo1: string,
+    'kdo1': string,
     // group_nq8ia42/kdo2 [image] Копія договору оренди (2)
-    kdo2: string,
+    'kdo2': string,
     // group_nq8ia42/__021 [text] Ім'я, адреса, контакт (телефон/пошта) законного орендаря
-    __021: string | undefined,
+    '__021': string | undefined,
     // group_nq8ia42/__010 [select_one] Чи є довіреність представляти власника
-    __010: undefined | Option<'physical_family'>,
+    '__010': undefined | Option<'physical_family'>,
     // group_nq8ia42/kdov1 [image] Копія довіреності (1)
-    kdov1: string,
+    'kdov1': string,
     // group_nq8ia42/kdov2 [image] Копія довіреності (2)
-    kdov2: string,
+    'kdov2': string,
     // group_nq8ia42/__020 [text] Ім'я, адреса, контакт (телефон/пошта) законного орендаря
-    __020: string | undefined,
+    '__020': string | undefined,
     // group_nq8ia42/ovd [select_one] Отримували ви допомогу від іншої ГО за останні 3 місяці
-    ovd: undefined | Option<'physical_family'>,
+    'ovd': undefined | Option<'physical_family'>,
     // group_nq8ia42/kovd [text] Коментар стосовно допомоги від іншої ГО за останні 3 місяці
-    kovd: string | undefined,
+    'kovd': string | undefined,
     // vpo/__022 [integer] Кількість людей в сім'ї, без  врахування заявника(ВПО)
-    __022: number | undefined,
+    '__022': number | undefined,
     // vpo/sph1 [select_one] Стать першого члена сім'ї(ВПО)
-    sph1: undefined | Option<'sph10k'>,
+    'sph1': undefined | Option<'sph10k'>,
     // vpo/vph1 [integer] Вік (кількість повних років) першого члена сім'ї(ВПО)
-    vph1: number | undefined,
+    'vph1': number | undefined,
     // vpo/sph2 [select_one] Стать другого члена сім'ї(ВПО)
-    sph2: undefined | Option<'sph10k'>,
+    'sph2': undefined | Option<'sph10k'>,
     // vpo/vph2 [integer] Вік (кількість повних років) другого члена сім'ї(ВПО)
-    vph2: number | undefined,
+    'vph2': number | undefined,
     // vpo/sph3 [select_one] Стать третього члена сім'ї(ВПО)
-    sph3: undefined | Option<'sph10k'>,
+    'sph3': undefined | Option<'sph10k'>,
     // vpo/vph3 [integer] Вік (кількість повних років) третього члена сім'ї(ВПО)
-    vph3: number | undefined,
+    'vph3': number | undefined,
     // vpo/sph4 [select_one] Стать четвертого члена сім'ї(ВПО)
-    sph4: undefined | Option<'sph10k'>,
+    'sph4': undefined | Option<'sph10k'>,
     // vpo/vph4 [integer] Вік (кількість повних років) четвертого члена сім'ї(ВПО)
-    vph4: number | undefined,
+    'vph4': number | undefined,
     // vpo/sph5 [select_one] Стать п'ятого члена сім'ї(ВПО)
-    sph5: undefined | Option<'sph10k'>,
+    'sph5': undefined | Option<'sph10k'>,
     // vpo/vph5 [integer] Вік (кількість повних років) п'ятого члена сім'ї(ВПО)
-    vph5: number | undefined,
+    'vph5': number | undefined,
     // vpo/sph6 [select_one] Стать шостого члена сім'ї(ВПО)
-    sph6: undefined | Option<'sph10k'>,
+    'sph6': undefined | Option<'sph10k'>,
     // vpo/vph6 [integer] Вік (кількість повних років) шостого члена сім'ї(ВПО)
-    vph6: number | undefined,
+    'vph6': number | undefined,
     // vpo/sph7 [select_one] Стать сьомого члена сім'ї(ВПО)
-    sph7: undefined | Option<'sph10k'>,
+    'sph7': undefined | Option<'sph10k'>,
     // vpo/vph7 [integer] Вік (кількість повних років) сьомого члена сім'ї(ВПО)
-    vph7: number | undefined,
+    'vph7': number | undefined,
     // vpo/sph8 [select_one] Стать восьмого члена сім'ї(ВПО)
-    sph8: undefined | Option<'sph10k'>,
+    'sph8': undefined | Option<'sph10k'>,
     // vpo/vph8 [integer] Вік (кількість повних років) восьмого члена сім'ї(ВПО)
-    vph8: number | undefined,
+    'vph8': number | undefined,
     // vpo/sph9 [select_one] Стать дев'ятого члена сім'ї(ВПО)
-    sph9: undefined | Option<'sph10k'>,
+    'sph9': undefined | Option<'sph10k'>,
     // vpo/vph9 [integer] Вік (кількість повних років) дев'ятого члена сім'ї(ВПО)
-    vph9: number | undefined,
+    'vph9': number | undefined,
     // vpo/sph10 [select_one] Стать деcятого члена сім'ї(ВПО)
-    sph10: undefined | Option<'sph10k'>,
+    'sph10': undefined | Option<'sph10k'>,
     // vpo/vph10 [integer] Вік (кількість повних років) деcятого члена сім'ї(ВПО)
-    vph10: number | undefined,
+    'vph10': number | undefined,
     // conflict/__026 [integer] Кількість людей в сім'ї, без  врахування заявника(що постраждали від конфлікту)
-    __026: number | undefined,
+    '__026': number | undefined,
     // conflict/sph1k [select_one] Стать першого члена сім'ї(що постраждали від конфлікту)
-    sph1k: undefined | Option<'sph10k'>,
+    'sph1k': undefined | Option<'sph10k'>,
     // conflict/vph1k [integer] Вік (кількість повних років) першого члена сім'ї(що постраждали від конфлікту)
-    vph1k: number | undefined,
+    'vph1k': number | undefined,
     // conflict/sph2k [select_one] Стать другого члена сім'ї(що постраждали від конфлікту)
-    sph2k: undefined | Option<'sph10k'>,
+    'sph2k': undefined | Option<'sph10k'>,
     // conflict/vph2k [integer] Вік (кількість повних років) другого члена сім'ї(що постраждали від конфлікту)
-    vph2k: number | undefined,
+    'vph2k': number | undefined,
     // conflict/sph3k [select_one] Стать третього члена сім'ї(що постраждали від конфлікту)
-    sph3k: undefined | Option<'sph10k'>,
+    'sph3k': undefined | Option<'sph10k'>,
     // conflict/vph3k [integer] Вік (кількість повних років) третього члена сім'ї(що постраждали від конфлікту)
-    vph3k: number | undefined,
+    'vph3k': number | undefined,
     // conflict/sph4k [select_one] Стать четвертого члена сім'ї(що постраждали від конфлікту)
-    sph4k: undefined | Option<'sph10k'>,
+    'sph4k': undefined | Option<'sph10k'>,
     // conflict/vph4k [integer] Вік (кількість повних років) четвертого члена сім'ї(що постраждали від конфлікту)
-    vph4k: number | undefined,
+    'vph4k': number | undefined,
     // conflict/sph5k [select_one] Стать п'ятого члена сім'ї(що постраждали від конфлікту)
-    sph5k: undefined | Option<'sph10k'>,
+    'sph5k': undefined | Option<'sph10k'>,
     // conflict/vph5k [integer] Вік (кількість повних років) п'ятого члена сім'ї(що постраждали від конфлікту)
-    vph5k: number | undefined,
+    'vph5k': number | undefined,
     // conflict/sph6k [select_one] Стать шостого члена сім'ї(що постраждали від конфлікту)
-    sph6k: undefined | Option<'sph10k'>,
+    'sph6k': undefined | Option<'sph10k'>,
     // conflict/vph6k [integer] Вік (кількість повних років) шостого члена сім'ї(що постраждали від конфлікту)
-    vph6k: number | undefined,
+    'vph6k': number | undefined,
     // conflict/sph7k [select_one] Стать сьомого члена сім'ї(що постраждали від конфлікту)
-    sph7k: undefined | Option<'sph10k'>,
+    'sph7k': undefined | Option<'sph10k'>,
     // conflict/vph7k [integer] Вік (кількість повних років) сьомого члена сім'ї(що постраждали від конфлікту)
-    vph7k: number | undefined,
+    'vph7k': number | undefined,
     // conflict/sph8k [select_one] Стать восьмого члена сім'ї(що постраждали від конфлікту)
-    sph8k: undefined | Option<'sph10k'>,
+    'sph8k': undefined | Option<'sph10k'>,
     // conflict/vph8k [integer] Вік (кількість повних років) восьмого члена сім'ї(що постраждали від конфлікту)
-    vph8k: number | undefined,
+    'vph8k': number | undefined,
     // conflict/sph9k [select_one] Стать дев'ятого члена сім'ї(що постраждали від конфлікту)
-    sph9k: undefined | Option<'sph10k'>,
+    'sph9k': undefined | Option<'sph10k'>,
     // conflict/vph9k [integer] Вік (кількість повних років) дев'ятого члена сім'ї(що постраждали від конфлікту)
-    vph9k: number | undefined,
+    'vph9k': number | undefined,
     // conflict/sph10k [select_one] Стать десятого члена сім'ї(що постраждали від конфлікту)
-    sph10k: undefined | Option<'sph10k'>,
+    'sph10k': undefined | Option<'sph10k'>,
     // conflict/vph10k [integer] Вік (кількість повних років) десятого члена сім'ї(що постраждали від конфлікту)
-    vph10k: number | undefined,
+    'vph10k': number | undefined,
     // criteria_scoring/cs_sh [select_multiple] Пов'язані з прихистком
-    cs_sh: undefined | Option<'cs_sh'>[],
+    'cs_sh': undefined | Option<'cs_sh'>[],
     // criteria_scoring/cs_se [select_multiple] Соціально-економічні
-    cs_se: undefined | Option<'cs_se'>[],
+    'cs_se': undefined | Option<'cs_se'>[],
     // criteria_scoring/cs_val [select_multiple] Вразливості
-    cs_val: undefined | Option<'cs_val'>[],
-    cal_sh: string,
-    cal_se: string,
-    cal_val: string,
-    cal_tol: string,
+    'cs_val': undefined | Option<'cs_val'>[],
+    'cal_sh': string,
+    'cal_se': string,
+    'cal_val': string,
+    'cal_tol': string,
     // criteria_scoring/ncal [note] Кількість критеріїв: ${cal_tol}
-    ncal: string,
+    'ncal': string,
     // result/cs_prot [select_one] У домогосподарства є ризики, пов`язані з соціально-правовим захистом
-    cs_prot: undefined | Option<'physical_family'>,
+    'cs_prot': undefined | Option<'physical_family'>,
     // result/cs_prye [select_one] Ви надаєте свою згоду для передачі інформації іншим відділам
-    cs_prye: undefined | Option<'physical_family'>,
+    'cs_prye': undefined | Option<'physical_family'>,
     // result/physical_family [select_one] Чи є фізично постраждалі в сім’ї в наслідок ракетного удару 19 серпня?
-    physical_family: undefined | Option<'physical_family'>,
+    'physical_family': undefined | Option<'physical_family'>,
     // result/form_help [select_one] В який формі вам більш приємливо отримати допомогу (на ланий час розглядається на дання коштів на ремонт)?
-    form_help: undefined | Option<'form_help'>,
+    'form_help': undefined | Option<'form_help'>,
     // result/__024 [date] Дата заповнення анкети
-    __024: Date | undefined,
+    '__024': Date | undefined,
     // result/__025 [text] Коментарі
-    __025: string | undefined,
+    '__025': string | undefined,
     // result/__029 [geopoint] Мітка геолокації
-    __029: string,
+    '__029': string,
   }
 
   export const options = {

@@ -9,7 +9,7 @@ import {AppFeatureId, appFeaturesIndex} from '@/features/appFeatureId'
 import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
 import {ShelterTable} from '@/features/Shelter/Data/ShelterTable'
 import {ShelterProvider} from '@/features/Shelter/ShelterContext'
-import {KoboFormName, koboIndex, KoboIndex, Shelter_NTA} from '@infoportal-common'
+import {KoboFormName, koboIndex, KoboIndex, Shelter_nta} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import Link from 'next/link'
 import {databaseIndex} from '@/features/Database/databaseIndex'
@@ -79,7 +79,7 @@ export const ShelterWithAccess = () => {
   const {access, allowedOffices} = useMemo(() => {
     const dbAccesses = seq(accesses).filter(Access.filterByFeature(AppFeatureId.kobo_database))
     const allowedOffices = dbAccesses.flatMap(_ => {
-      return _.params?.filters?.back_office as Shelter_NTA.T['back_office'][] | undefined
+      return _.params?.filters?.back_office as Shelter_nta.T['back_office'][] | undefined
     }).compact()
     return {
       access: Access.toSum(dbAccesses, session.admin),

@@ -212,6 +212,9 @@ export class KoboMetaMapperProtection {
       bha: DrcProject['UKR-000284 BHA'],
       bha2: DrcProject['UKR-000345 BHA2'],
       uhf8: DrcProject['UKR-000363 UHF8'],
+      '372_echo': DrcProject['UKR-000372 ECHO3'],
+      // TODO Check correct?
+      'sida h2r': DrcProject['UKR-000350 SIDA'],
     }) : undefined
     return {
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {

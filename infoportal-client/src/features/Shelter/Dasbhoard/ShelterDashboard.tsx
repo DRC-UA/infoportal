@@ -12,7 +12,7 @@ import {
   OblastIndex,
   Period,
   PeriodHelper,
-  Shelter_NTA,
+  Shelter_nta,
   ShelterContractor,
   shelterDrcProject,
   ShelterProgress,
@@ -276,14 +276,14 @@ export const _ShelterDashboard = ({
           <ChartBarMultipleBy
             data={data.filter(_ => !!_.nta?.hh_char_dis_select)}
             by={_ => _.nta?.hh_char_dis_select ?? []}
-            label={Shelter_NTA.options.hh_char_dis_select}
+            label={Shelter_nta.options.hh_char_dis_select}
           />
         </SlidePanel>
         <SlidePanel title={m.status}>
           <ChartBarSingleBy
             data={data.filter(_ => !!_.nta?.ben_det_res_stat)}
             by={_ => _.nta?.ben_det_res_stat}
-            label={Shelter_NTA.options.ben_det_res_stat}
+            label={Shelter_nta.options.ben_det_res_stat}
           />
         </SlidePanel>
       </Div>

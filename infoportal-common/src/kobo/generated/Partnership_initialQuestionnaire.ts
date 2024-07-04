@@ -3,60 +3,60 @@ export namespace Partnership_initialQuestionnaire {
 
   // Form id: a6u7CBysEz746Hdx6pVLzp
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // rd/rdc [text] Name of the organization
-    rdc: string | undefined,
+    'rdc': string | undefined,
     // rd/rdn [text] Name of the respondent
-    rdn: string | undefined,
+    'rdn': string | undefined,
     // rd/rdp [text] Title, role at the organization
-    rdp: string | undefined,
+    'rdp': string | undefined,
     // rd/rdcc [integer] Contact details(cell):
-    rdcc: number | undefined,
+    'rdcc': number | undefined,
     // rd/rdce [text] Contact details(e-mail):
-    rdce: string | undefined,
+    'rdce': string | undefined,
     // rd/rdr [select_one] Respondent’s consent to be contacted:
-    rdr: undefined | Option<'hcc'>,
+    'rdr': undefined | Option<'hcc'>,
     // cce/idd [date] Date of creation/registration of CSO:
-    idd: Date | undefined,
+    'idd': Date | undefined,
     // cce/ccerho [select_multiple] Type of humanitarian activities:
-    ccerho: undefined | Option<'ccerho'>[],
+    'ccerho': undefined | Option<'ccerho'>[],
     // cce/other_examples [text] Examples of projects with other interventions (if possible with beneficiary number):
-    other_examples: string | undefined,
+    'other_examples': string | undefined,
     // ola/hmo [integer] How many offices do you have
-    hmo: number | undefined,
+    'hmo': number | undefined,
     // ola/oflo [begin_repeat] Office locations
-    oflo: {oblast: undefined | Option<'oblast_aop'> | undefined, settlement: string | undefined | undefined}[] | undefined,
+    'oflo': {'oblast': undefined | Option<'oblast_aop'> | undefined, 'settlement': string | undefined | undefined}[] | undefined,
     // ola/aop [integer] How many locations do you operate in?
-    aop: number | undefined,
+    'aop': number | undefined,
     // ola/loop [begin_repeat] Locations of Operation
-    loop: {oblast_aop: undefined | Option<'oblast_aop'> | undefined, settlement_aop: string | undefined | undefined}[] | undefined,
+    'loop': {'oblast_aop': undefined | Option<'oblast_aop'> | undefined, 'settlement_aop': string | undefined | undefined}[] | undefined,
     // sc/scs [integer] of staff in total
-    scs: number | undefined,
+    'scs': number | undefined,
     // sc/scf [integer] of staff with contract
-    scf: number | undefined,
+    'scf': number | undefined,
     // sc/scv [integer] of volunteers
-    scv: number | undefined,
+    'scv': number | undefined,
     // wa/wayn [select_one] Does the CSO have their own warehouse (belonging to the CSO)?
-    wayn: undefined | Option<'hcc'>,
+    'wayn': undefined | Option<'hcc'>,
     // wa/was [select_multiple] If not, how are items stored?
-    was: undefined | Option<'was'>[],
+    'was': undefined | Option<'was'>[],
     // wa/waso [text] Other:
-    waso: string | undefined,
+    'waso': string | undefined,
     // nft/nftw [select_multiple] Which (technical) assistance would the CSO require to increase its efficiency in the provision of urgent humanitarian assistance?
-    nftw: undefined | Option<'nftw'>[],
+    'nftw': undefined | Option<'nftw'>[],
     // nft/nfto [text] Other
-    nfto: string | undefined,
+    'nfto': string | undefined,
     // cc/ccp [select_one] Permission to access hard-to-reach areas:
-    ccp: undefined | Option<'hcc'>,
+    'ccp': undefined | Option<'hcc'>,
     // cc/ccpy [text] If yes, from whom:
-    ccpy: string | undefined,
+    'ccpy': string | undefined,
     // hc/hcc [select_one] Cooperation with UN Agencies and INGOs:
-    hcc: undefined | Option<'hcc'>,
+    'hcc': undefined | Option<'hcc'>,
     // hc/hcy [select_multiple] If yes, which
-    hcy: undefined | Option<'hcy'>[],
+    'hcy': undefined | Option<'hcy'>[],
     // hc/hco [text] Other
-    hco: string | undefined,
+    'hco': string | undefined,
   }
 
   export const options = {
@@ -212,12 +212,12 @@ export namespace Partnership_initialQuestionnaire {
     idd: _.idd ? new Date(_.idd) : undefined,
     ccerho: _.ccerho?.split(' '),
     hmo: _.hmo ? +_.hmo : undefined,
-    oflo: _.oflo?.map(extractQuestionName).map((_: any) => {
+    oflo: _['oflo']?.map(extractQuestionName).map((_: any) => {
 
       return _
     }),
     aop: _.aop ? +_.aop : undefined,
-    loop: _.loop?.map(extractQuestionName).map((_: any) => {
+    loop: _['loop']?.map(extractQuestionName).map((_: any) => {
 
       return _
     }),

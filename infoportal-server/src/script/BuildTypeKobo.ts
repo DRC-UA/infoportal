@@ -85,7 +85,11 @@ export class BuildKoboType {
       ]
     },
     bn_cashForRentApplication: {
-      formId: KoboIndex.byName('bn_cashForRentApplication').id
+      formId: KoboIndex.byName('bn_cashForRentApplication').id,
+      skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
     },
     bn_rapidResponse: {
       formId: KoboIndex.byName('bn_rapidResponse').id
@@ -186,6 +190,10 @@ export class BuildKoboType {
         other_specify: ['Other'],
         health_1_2: ['Health'],
       },
+      skipQuestionTyping: [
+        'what_is_your_area_of_origin_raion',
+        'what_is_your_area_of_origin_hromada',
+      ],
       overrideOptionsByQuestion: {
         what_are_the_barriers_to_accessing_health_services: {
           safety_risks_associated_with_access_to_presence_at_health_facility: ['Safety risks associated with access to/presence at health facility'],

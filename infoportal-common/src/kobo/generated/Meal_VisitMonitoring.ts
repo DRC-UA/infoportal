@@ -1,142 +1,144 @@
-export namespace Meal_VisitMonitoring {
+export namespace Meal_visitMonitoring {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 
   // Form id: a8GkjWBQDfxVADGHWJDrUw
   export interface T {
-    start: string,
-    end: string,
+    'start': string,
+    'end': string,
     // md/mda [select_one] Area
-    mda: undefined | Option<'mda'>,
+    'mda': undefined | Option<'mda'>,
     // md/mdro [select_one] Responsible office:
-    mdro: undefined | Option<'mdro'>,
+    'mdro': undefined | Option<'mdro'>,
     // md/mdd [date] Date of visit
-    mdd: Date | undefined,
+    'mdd': Date | undefined,
     // md/md_det_oblast [select_one] Oblast
-    md_det_oblast: undefined | Option<'md_det_oblast'>,
+    'md_det_oblast': undefined | Option<'md_det_oblast'>,
     // md/md_det_raion [select_one] Raion
-    md_det_raion: undefined | Option<'md_det_raion'>,
+    'md_det_raion': undefined | Option<'md_det_raion'>,
     // md/md_det_hromada [select_one] Hromada
-    md_det_hromada: undefined | Option<'md_det_hromada'>,
+    'md_det_hromada': undefined | Option<'md_det_hromada'>,
     // md/mds [text] Settlement
-    mds: string | undefined,
+    'mds': string | undefined,
     // md/location_details [text] Location details
-    location_details: string | undefined,
+    'location_details': string | undefined,
     // md/mdp [select_one] MEAL Focal Point
-    mdp: undefined | Option<'mdp'>,
+    'mdp': undefined | Option<'mdp'>,
+    // md/mdp_other [text] Other:
+    'mdp_other': string | undefined,
     // md/mdd_001 [select_multiple] DONOR:
-    mdd_001: undefined | Option<'mdd_001'>[],
+    'mdd_001': undefined | Option<'mdd_001'>[],
     // md/mdt [select_multiple] With which team was conducted visit?
-    mdt: undefined | Option<'mdt'>[],
+    'mdt': undefined | Option<'mdt'>[],
     // md/whom [text] With whom?
-    whom: string | undefined,
+    'whom': string | undefined,
     // md/visit_type [select_one] Visit type?
-    visit_type: undefined | Option<'visit_type'>,
+    'visit_type': undefined | Option<'visit_type'>,
     // md/visit_type_specify [text] Please specify
-    visit_type_specify: string | undefined,
+    'visit_type_specify': string | undefined,
     // md/mdc [text] Name of collective center?
-    mdc: string | undefined,
+    'mdc': string | undefined,
     // md/mdo [text] Other:
-    mdo: string | undefined,
+    'mdo': string | undefined,
     // pa/pan [select_multiple] If NFI distribution, then:
-    pan: undefined | Option<'pan'>[],
+    'pan': undefined | Option<'pan'>[],
     // pa/pae [select_one] If EcRec:
-    pae: undefined | Option<'pae'>,
+    'pae': undefined | Option<'pae'>,
     // pa/pas [select_one] If Shelter:
-    pas: undefined | Option<'pas'>,
+    'pas': undefined | Option<'pas'>,
     // pa/pal [select_one] If LAU:
-    pal: undefined | Option<'pal'>,
+    'pal': undefined | Option<'pal'>,
     // pa/pap [select_one] If Protection:
-    pap: undefined | Option<'pap'>,
+    'pap': undefined | Option<'pap'>,
     // pa/pao [select_one] If EORE:
-    pao: undefined | Option<'pao'>,
+    'pao': undefined | Option<'pao'>,
     // pa/paoth [text] Other:
-    paoth: string | undefined,
+    'paoth': string | undefined,
     // sem [integer] What percentage of beneficiaries for this activity are male?
-    sem: number | undefined,
+    'sem': number | undefined,
     // sew [integer] What percentage of beneficiaries for this activity are female?
-    sew: number | undefined,
+    'sew': number | undefined,
     // sey [select_one] If a NFI distribution: Are there priority queues for vulnerable individuals?
-    sey: undefined | Option<'visf'>,
+    'sey': undefined | Option<'visf'>,
     // set [text] If no, please explain why:
-    set: string | undefined,
+    'set': string | undefined,
     // sef [select_one] Any concerns to flag?
-    sef: undefined | Option<'visf'>,
+    'sef': undefined | Option<'visf'>,
     // sei [select_multiple] If YES – Details to be provided
-    sei: undefined | Option<'sei'>[],
+    'sei': undefined | Option<'sei'>[],
     // ssc/ssy [select_one] Were there any security concerns during this activity?
-    ssy: undefined | Option<'visf'>,
+    'ssy': undefined | Option<'visf'>,
     // ssc/sst [select_multiple] If yes, please select the type of situation:
-    sst: undefined | Option<'sst'>[],
+    'sst': undefined | Option<'sst'>[],
     // ssc/sso [text] Other:
-    sso: string | undefined,
+    'sso': string | undefined,
     // cca/ccm [select_one] Did DRC staff inform beneficiaries of how they can provide feedback through the CFM mechanism?
-    ccm: undefined | Option<'visf'>,
+    'ccm': undefined | Option<'visf'>,
     // cca/ccn [text] If no, please explain why:
-    ccn: string | undefined,
+    'ccn': string | undefined,
     // cca/ccs [select_one] Was DRC staff behaviour in line with DRC Code of Conduct standards?
-    ccs: undefined | Option<'visf'>,
+    'ccs': undefined | Option<'visf'>,
     // cca/ccsn [text] If no, please explain why:
-    ccsn: string | undefined,
+    'ccsn': string | undefined,
     // cca/ccd [select_one] Did any beneficiaries report of not feeling safe around DRC staff?
-    ccd: undefined | Option<'visf'>,
+    'ccd': undefined | Option<'visf'>,
     // cca/ccdn [text] If no, please explain why:
-    ccdn: string | undefined,
+    'ccdn': string | undefined,
     // cca/ccc [select_one] Were CFM flyers distributed?
-    ccc: undefined | Option<'visf'>,
+    'ccc': undefined | Option<'visf'>,
     // cca/cccn [text] If no, please explain why:
-    cccn: string | undefined,
+    'cccn': string | undefined,
     // pmi/pmid [select_one] Have you been asked for permission to collect your data?
-    pmid: undefined | Option<'visf'>,
+    'pmid': undefined | Option<'visf'>,
     // pmi/pmidn [text] If no, please explain why:
-    pmidn: string | undefined,
+    'pmidn': string | undefined,
     // pmi/pmic [select_one] For vulnerable staff, were issues handled with care and confidentiality?
-    pmic: undefined | Option<'visf'>,
+    'pmic': undefined | Option<'visf'>,
     // pmi/pmicn [text] If no, please explain why:
-    pmicn: string | undefined,
+    'pmicn': string | undefined,
     // qti/qtip [select_one] Was the assistance from DRC timely for people?
-    qtip: undefined | Option<'visf'>,
+    'qtip': undefined | Option<'visf'>,
     // qti/qtipn [text] If no, please explain why:
-    qtipn: string | undefined,
+    'qtipn': string | undefined,
     // qti/qtia [select_one] Was the activity of quality and in line with the planned activity?
-    qtia: undefined | Option<'visf'>,
+    'qtia': undefined | Option<'visf'>,
     // qti/qtian [text] If no, please explain why:
-    qtian: string | undefined,
+    'qtian': string | undefined,
     // vis/visb [select_one] Were all DRC staff in visibility and easily identified by beneficiaries?
-    visb: undefined | Option<'visf'>,
+    'visb': undefined | Option<'visf'>,
     // vis/visbn [text] If no, please explain why:
-    visbn: string | undefined,
+    'visbn': string | undefined,
     // vis/visf [select_one] Any critical concerns to flag?
-    visf: undefined | Option<'visf'>,
+    'visf': undefined | Option<'visf'>,
     // vis/visp [select_multiple] If YES, ‘’any details to be provided’’
-    visp: undefined | Option<'visp'>[],
+    'visp': undefined | Option<'visp'>[],
     // vis/vispo [text] Other:
-    vispo: string | undefined,
+    'vispo': string | undefined,
     // fcp/fcpc [text] Comments
-    fcpc: string | undefined,
+    'fcpc': string | undefined,
     // fcp/fspp [note] Photos of the visit
-    fspp: string,
+    'fspp': string,
     // fcp/fcp1 [image] The photo of the visit
-    fcp1: string,
+    'fcp1': string,
     // fcp/fcp2 [image] The photo of the visit
-    fcp2: string,
+    'fcp2': string,
     // fcp/fcp3 [image] The photo of the visit
-    fcp3: string,
+    'fcp3': string,
     // fcp/fcp4 [image] The photo of the visit
-    fcp4: string,
+    'fcp4': string,
     // fcp/fcp5 [image] The photo of the visit
-    fcp5: string,
+    'fcp5': string,
     // fcp/fcp6 [image] The photo of the visit
-    fcp6: string,
+    'fcp6': string,
     // fcp/fcp7 [image] The photo of the visit
-    fcp7: string,
+    'fcp7': string,
     // fcp/fcp8 [image] The photo of the visit
-    fcp8: string,
+    'fcp8': string,
     // fcp/fcp9 [image] The photo of the visit
-    fcp9: string,
+    'fcp9': string,
     // fcp/fcp10 [image] The photo of the visit
-    fcp10: string,
+    'fcp10': string,
     // fcp/fcpl [text] Link to the folder with photos
-    fcpl: string | undefined,
+    'fcpl': string | undefined,
   }
 
   export const options = {
@@ -2099,6 +2101,8 @@ export namespace Meal_VisitMonitoring {
       'OR': `Oleksii Reshetnikov`,
       'VD': `Viktor Denysenko`,
       'AK': `Artem Koniev`,
+      'svitlana_shershnieva': `Svitlana Shershnieva`,
+      'olha_derlicka': `Olha Derlicka`,
       'ISM': `Isabel Mary Pearson`,
       'PI': `Polina Isechko`,
       'ANC': `Anna Chupryna`,
@@ -2106,19 +2110,24 @@ export namespace Meal_VisitMonitoring {
       'KC': `Kateryna Chulska`,
       'OD': `Olesya Dantseva`,
       'LA': `Liliia Antonova`,
+      'liubov_yefremova': `Liubov Yefremova`,
       'ISMA': `Isabel Mary Pearson`,
       'AC': `Anna Chuprina`,
       'OO': `Oleksandr Oleksandrov`,
+      'natalia_baryshevska': `Natalia Baryshevska`,
       'ANNC': `Anna Chupryna`,
-      'KAC': `Kateryna Chulska`
+      'KAC': `Kateryna Chulska`,
+      'other': `Other`
     },
     mdd_001: {
       'bha': `UKR-000284 BHA`,
+      'bha_348': `UKR-000348 BHA`,
       'ech1': `UKR-000223 ECHO`,
       'ech2': `UKR-000250 ECHO`,
       'echo1': `UKR-000269 ECHO`,
       'echo2': `UKR-000322 ECHO`,
       'sdc': `UKR-000226 SDC`,
+      'sdc_330': `UKR-000330 SDC`,
       'fcdo': `UKR-000247 FCDO`,
       'fcd': `UKR-000285 FCDO`,
       'okf': `UKR-000309 OKF`,
@@ -2142,6 +2151,7 @@ export namespace Meal_VisitMonitoring {
       'uhf5': `UKR-000316 UHF5`,
       'uhf6': `UKR-000336 UHF6`,
       'uhf7': `UKR-000352 UHF7`,
+      'uhf8': `UKR-000363 UHF 8`,
       'unhcr': `UKR-000291_292 UNHCR`,
       'unhc': `UKR-000308 UNHCR`,
       'danid': `UKR-000266 DANIDA`,
@@ -2194,7 +2204,8 @@ export namespace Meal_VisitMonitoring {
       'mmg': `Monitoring Micro grants`,
       'msg': `Monitoring SME grants`,
       'mag': `Monitoring Agro grants`,
-      'mvg': `Monitoring VET grant`
+      'mvg': `Monitoring VET grant`,
+      'entrepreneurship_training': `Entrepreneurship Training`
     },
     pas: {
       'har': `House/ apartment repair (mid-term assessment of the repair work)`,

@@ -38,7 +38,7 @@ export namespace AiGbvMapper {
             () => aiInvalidValueFlag + Protection_gbv.options.project[d.project!] as any
           )!,
           'Population Group': AiMapper.mapPopulationGroup(ind.displacement),
-          'Indicators': fnSwitch(d.activity!, {
+          'Indicators': d.activity?.map(a => fnSwitch(a!, {
             'pssac': '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)',
             'wgss': '# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces',
             'ddk': '# of women and girls at risk who received dignity kits',
@@ -48,7 +48,7 @@ export namespace AiGbvMapper {
             'gcva': '# of individuals reached with humanitarian cash and voucher assistance for GBV case management and/or other GBV response',
             'glac': '# of individuals at risk supported with GBV specialized legal assistance and counseling',
             'girl_shine': '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)',
-          }, () => aiInvalidValueFlag) as any,
+          }, () => aiInvalidValueFlag)) as any,
         })
       })
     }))
