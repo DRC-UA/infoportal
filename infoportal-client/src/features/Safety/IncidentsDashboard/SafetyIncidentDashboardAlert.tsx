@@ -41,10 +41,10 @@ export const SafetyIncidentDashboardAlert = ({
   const flatAlertData = useMemo(() => {
     return dataAlert?.flatMap(_ => {
       const res = [
-        ..._.alert_green_num ? mapFor(_.alert_green_num ?? 0, () => ({..._, alertType: AlertType.green})) : [],
-        ..._.alert_blue_num ? mapFor(_.alert_blue_num ?? 0, () => ({..._, alertType: AlertType.blue})) : [],
-        ..._.alert_yellow_num ? mapFor(_.alert_yellow_num ?? 0, () => ({..._, alertType: AlertType.yellow})) : [],
-        ..._.alert_red_num ? mapFor(_.alert_red_num ?? 0, () => ({..._, alertType: AlertType.red})) : [],
+        ..._.alert_green_num ? mapFor(Math.abs(_.alert_green_num ?? 0), () => ({..._, alertType: AlertType.green})) : [],
+        ..._.alert_blue_num ? mapFor(Math.abs(_.alert_blue_num ?? 0), () => ({..._, alertType: AlertType.blue})) : [],
+        ..._.alert_yellow_num ? mapFor(Math.abs(_.alert_yellow_num ?? 0), () => ({..._, alertType: AlertType.yellow})) : [],
+        ..._.alert_red_num ? mapFor(Math.abs(_.alert_red_num ?? 0), () => ({..._, alertType: AlertType.red})) : [],
       ]
       return res
     })
