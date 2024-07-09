@@ -123,8 +123,8 @@ export class KoboSdkv2 {
   }
 
   readonly getAnswersRaw = (form: KoboId, params: KoboAnswerParams = {}) => {
-    const start = map(params.start, _ => KoboSdkv2.makeDateFilter('start', 'gte', _))
-    const end = map(params.end, _ => KoboSdkv2.makeDateFilter('start', 'lte', _))
+    const start = map(params.start, _ => KoboSdkv2.makeDateFilter('_submission_time', 'gte', _))
+    const end = map(params.end, _ => KoboSdkv2.makeDateFilter('_submission_time', 'lte', _))
     const query = start && end ? {'$and': [start, end]} : start ?? end
     return this.api.get<KoboApiList<ApiKoboAnswerMetaData & Record<string, any>>>(`/v2/assets/${form}/data`, {qs: {query: query ? JSON.stringify(query) : undefined}})
   }
