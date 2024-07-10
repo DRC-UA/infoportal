@@ -15,7 +15,7 @@ import {format, subMonths} from 'date-fns'
 import {KoboAnswerFlat, KoboIndex} from '@infoportal-common'
 import {useSession} from '@/core/Session/SessionContext'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-
+import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 
 export interface AiBundle<
   TActivity = any,
@@ -143,6 +143,23 @@ export const AiBundleTable = ({
             head: m.submissions,
             type: 'number',
             renderQuick: _ => _.data.length,
+          },
+          {
+            id:'koboId',
+            type: 'string',
+            head: m.koboId,
+            typeIcon: keyTypeIcon,
+            className: 'td-id',
+            renderQuick: _ => _.data.map(_ => _.koboId).join(' '),
+            // options: () => DatatableUtils.buildOptions(fetcher.get?.flatMap(_ => _.data.map(_ => _.koboId)) ?? []),
+            // render: _ => {
+            //   // console.log(_)
+            //   const ids = _.data.map(_ => _.koboId)
+            //   return {
+            //     label: ids.join(' '),
+            //     value: ids,
+            //   }
+            // }
           },
           {
             id: 'id',
