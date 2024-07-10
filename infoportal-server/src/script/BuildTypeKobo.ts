@@ -54,6 +54,12 @@ export class BuildKoboType {
         'ben_det_raion',
       ]
     },
+    protection_counselling: {
+      formId: KoboIndex.byName('protection_counselling').id, skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
+    },
     protection_referral: {
       formId: KoboIndex.byName('protection_referral').id, skipQuestionTyping: [
         'ben_det_hromada',

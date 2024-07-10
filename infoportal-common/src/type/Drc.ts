@@ -51,6 +51,7 @@ export enum DrcProgram {
   MSME = 'MSME',
   SectoralCashForAnimalShelterRepair = 'SectoralCashForAnimalShelterRepair',
   SectoralCashForAnimalFeed = 'SectoralCashForAnimalFeed',
+  Counselling = 'Counselling',
   PSS = 'PSS',
   GBV = 'GBV',
   ProtectionMonitoring = 'ProtectionMonitoring',

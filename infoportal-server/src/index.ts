@@ -76,7 +76,6 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  // await new BuildKoboType().build('ecrec_livelihoodRestoration')
   // return
   // await ActivityInfoBuildType.fslc()
   // await KoboMigrateHHS2({
@@ -122,6 +121,8 @@ const startApp = async (conf: AppConf) => {
       new EmailService().initializeListeners()
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
+    } else {
+      // await new BuildKoboType().buildAll()
     }
   }
 

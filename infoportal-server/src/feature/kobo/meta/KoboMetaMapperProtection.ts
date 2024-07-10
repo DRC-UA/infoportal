@@ -13,6 +13,7 @@ import {
   OblastIndex,
   Person,
   Protection_communityMonitoring,
+  Protection_counselling,
   Protection_gbv,
   Protection_groupSession,
   Protection_hhs3,
@@ -20,11 +21,13 @@ import {
   Protection_referral,
   ProtectionCommunityMonitoringTags,
   ProtectionHhsTags,
-  safeArray
+  safeArray,
+  WgDisability
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
 import Gender = Person.Gender
+import {ro} from 'date-fns/locale'
 
 export class KoboMetaMapperProtection {
 
@@ -187,6 +190,64 @@ export class KoboMetaMapperProtection {
       donor: projects.map(_ => DrcProjectHelper.donorByProject[_]),
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
+    })
+  }
+
+
+  static readonly counselling: MetaMapperInsert<KoboMetaOrigin<Protection_counselling.T, KoboTagStatus>> = row => {
+    const answer = Protection_counselling.map(row.answers)
+    const wDis = [
+      'yes_some',
+      'yes_lot',
+      'cannot_all',
+    ]
+    const displacement = fnSwitch(answer.disp_status!, {
+      idp: DisplacementStatus.Idp,
+      non_displaced: DisplacementStatus.NonDisplaced,
+      refugee: DisplacementStatus.Refugee,
+      idp_retuenee: DisplacementStatus.Returnee,
+      refugee_returnee: DisplacementStatus.Refugee,
+    }, () => undefined)
+    const project = DrcProjectHelper.search(Protection_counselling.options.project_code[answer.project_code!])
+    return KoboMetaMapper.make({
+      office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
+        chernihiv: DrcOffice.Chernihiv,
+        dnipro: DrcOffice.Dnipro,
+        kharkiv: DrcOffice.Kharkiv,
+        lviv: DrcOffice.Lviv,
+        mykolaiv: DrcOffice.Mykolaiv,
+        sumy: DrcOffice.Sumy,
+      }, () => undefined),
+      oblast: OblastIndex.byKoboName(answer.ben_det_oblast!).name,
+      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
+      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      settlement: answer.ben_det_hromada_001,
+      sector: DrcSector.Protection,
+      activity: DrcProgram.Counselling,
+      persons: [{
+        age: answer.age,
+        disability: [
+          ...wDis.includes(answer.difficulty_hearing!) ? [WgDisability.Hear] : [],
+          ...wDis.includes(answer.difficulty_washing!) ? [WgDisability.Care] : [],
+          ...wDis.includes(answer.difficulty_walking!) ? [WgDisability.Walk] : [],
+          ...wDis.includes(answer.difficulty_remembering!) ? [WgDisability.Rem] : [],
+          ...wDis.includes(answer.difficulty_usual_language!) ? [WgDisability.Comm] : [],
+          ...wDis.includes(answer.difficulty_seeing!) ? [WgDisability.See] : [],
+        ],
+        gender: fnSwitch(answer.gender!, {
+          man: Gender.Male,
+          woman: Gender.Female,
+          other: Gender.Other,
+        }, () => undefined),
+        displacement,
+      }],
+      displacement,
+      personsCount: 1,
+      project: project ? [project] : [],
+      donor: project ? [DrcProjectHelper.donorByProject[project]] : [],
+      status: KoboMetaStatus.Committed,
+      lastStatusUpdate: row.date,
+      enumerator: answer.staff_code,
     })
   }
 

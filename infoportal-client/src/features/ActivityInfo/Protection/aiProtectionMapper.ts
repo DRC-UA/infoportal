@@ -32,6 +32,7 @@ export namespace AiProtectionMapper {
     const period = PeriodHelper.fromYYYYMM(periodStr)
     return api.koboMeta.search({
       activities: [
+        DrcProgram.Counselling,
         DrcProgram.PSS,
         DrcProgram.ProtectionMonitoring,
         DrcProgram.CommunityLevelPm,
@@ -72,12 +73,13 @@ export namespace AiProtectionMapper {
                   data: grouped,
                   ai: {
                     'Indicators': fnSwitch(activity, {
+                      [DrcProgram.Counselling]: '# of individuals who received protection counselling',
                       // [DrcProgram.FGD]: We don't report '# of interviews conducted with key informants through community level protection monitoring',
                       [DrcProgram.PSS]: '# of individuals who received individual or group-based psychosocial support',
                       [DrcProgram.ProtectionMonitoring]: '# of individuals reached through protection monitoring at the household level',
                       [DrcProgram.CommunityLevelPm]: '# of interviews conducted with key informants through community level protection monitoring',
                       [DrcProgram.AwarenessRaisingSession]: '# of individuals who participated in awareness raising activities on Protection',
-                      [DrcProgram.Referral]: '# of individuals who received protection counselling',
+                      [DrcProgram.Referral]: '# of individuals with specific needs referred to specialized services and assistance',
                     }, () => aiInvalidValueFlag as any),
                     'Population Group': AiMapper.mapPopulationGroup(displacement),
                     'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
