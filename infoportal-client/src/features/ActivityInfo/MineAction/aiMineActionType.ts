@@ -44,7 +44,11 @@ export namespace AiMineActionType {
       'MA-DRC-00008': 'c4dqoqzlsoi8e4m7',
       'MA-DRC-00009': 'cbq4ql1lsojygo38',
       'MA-DRC-00010': 'cvnl97qlsok0t9m9',
-      'MA-DRC-00011': 'c4bck8ylssrdvtb2'
+      'MA-DRC-00011': 'c4bck8ylssrdvtb2',
+      'MA-DRC-00012': 'cxmz8zyly7c04mi2',
+      'MA-DRC-00013': 'cytsa31ly7c6dm43',
+      'MA-DRC-00014': 'cc4w1sily7c9xva4',
+      'MA-DRC-00015': 'c26rv9dly7cdl9g5',
     },
     'Oblast': {
       'Autonomous Republic of Crimea_Автономна Республіка Крим': 'c5c2sr3lq3kjj6gd',
