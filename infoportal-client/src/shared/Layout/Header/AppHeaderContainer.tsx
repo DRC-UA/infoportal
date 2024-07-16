@@ -1,4 +1,4 @@
-import {alpha, Box, BoxProps, GlobalStyles} from '@mui/material'
+import {alpha, Box, BoxProps, GlobalStyles, useTheme} from '@mui/material'
 import React, {useEffect} from 'react'
 import {layoutConfig} from '@/shared/Layout'
 import {map} from '@alexandreannic/ts-utils'
@@ -31,7 +31,7 @@ export const AppHeaderContainer = ({
   sx,
   ...props
 }: BoxProps) => {
-
+  const t = useTheme()
   useEffect(() => {
     header$ = null
     map(props.id, id => {
@@ -54,6 +54,8 @@ export const AppHeaderContainer = ({
         display: 'flex',
         backdropFilter: 'blur(12px)',
         alignItems: 'center',
+        // Because on Windows, sticky-header is not working properly
+        boxShadow: t.shadows[3],
         // mb: 2,
         pl: 2,
         borderBottom: t => `1px solid ${t.palette.divider}`,
