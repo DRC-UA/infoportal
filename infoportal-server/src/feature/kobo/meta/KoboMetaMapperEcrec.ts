@@ -7,7 +7,7 @@ import {
   DrcProjectHelper,
   DrcSector,
   Ecrec_cashRegistration,
-  Ecrec_cashRegistrationBha, Ecrec_msmeGrantSelection,
+  Ecrec_cashRegistrationBha,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
   KoboAnswerUtils,
@@ -16,9 +16,11 @@ import {
   KoboGeneralMapping,
   KoboMetaHelper,
   KoboMetaStatus,
+  KoboTagStatus,
   KoboValidation,
   OblastIndex,
   safeNumber,
+  VetApplicationStatus,
 } from '@infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashRegistration'
@@ -71,11 +73,17 @@ export class KoboMetaMapperEcrec {
     })
   }
 
-  static readonly vetApplication: MetaMapperInsert<KoboMetaOrigin<Ecrec_vetApplication.T, KoboBaseTags>> = row => {
+  static readonly vetApplication: MetaMapperInsert<KoboMetaOrigin<Ecrec_vetApplication.T, KoboBaseTags & KoboTagStatus<VetApplicationStatus>>> = row => {
     if (!appConf.db.url.includes('localhost') && row.tags?._validation !== KoboValidation.Approved) return
     const answer = Ecrec_vetApplication.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const status = row.tags
+      ? row.tags.status === VetApplicationStatus.CertificateSubmitted || row.tags?.status === VetApplicationStatus.SecondPaid
+        ? KoboMetaStatus.Committed
+        : row.tags._validation === KoboValidation.Rejected ? KoboMetaStatus.Rejected : KoboMetaStatus.Pending
+      : undefined
+
     return KoboMetaMapper.make({
       oblast: oblast.name,
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
@@ -90,6 +98,8 @@ export class KoboMetaMapperEcrec {
       firstName: answer.ben_det_first_name,
       patronymicName: answer.ben_det_pat_name,
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+      status: status,
+      lastStatusUpdate: row.tags?.lastStatusUpdate,
     })
   }
 
@@ -109,8 +119,8 @@ export class KoboMetaMapperEcrec {
         sector: DrcSector.Livelihoods,
         activity: DrcProgram.VET,
         taxId: answer.tax_id ? ('' + answer.tax_id) : undefined,
-        status: KoboMetaHelper.mapValidationStatus(row.tags?._validation) ?? KoboMetaStatus.Pending,
-        lastStatusUpdate: row.date,
+        // status: KoboMetaHelper.mapValidationStatus(row.tags?._validation) ?? KoboMetaStatus.Pending,
+        // lastStatusUpdate: row.date,
       }
     ]
   }
