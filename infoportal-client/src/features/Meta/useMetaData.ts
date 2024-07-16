@@ -107,7 +107,7 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
         const isDateIn = PeriodHelper.isDateIn(period, d.date)
         if (!isDateIn) return false
         const isDateCommitIn = (!periodCommit.start && !periodCommit.end)
-          || PeriodHelper.isDateIn(periodCommit, d.lastStatusUpdate ?? d.date) && d.status === KoboMetaStatus.Committed
+          || PeriodHelper.isDateIn(periodCommit, d.lastStatusUpdate) && d.status === KoboMetaStatus.Committed
         if (!isDateCommitIn) return false
         return true
       } catch (e) {
