@@ -25,6 +25,10 @@ export namespace Person {
   export const isElderly = (age: number | string) => +age >= elderlyLimitIncluded
 
   export const ageGroup = Object.freeze({
+    SuperQuick: {
+      '0 - 17': [0, 17] as [number, number],
+      '18+': [18, Infinity] as [number, number],
+    },
     Quick: {
       '0 - 17': [0, 17] as [number, number],
       '18 - 49': [18, 49] as [number, number],
