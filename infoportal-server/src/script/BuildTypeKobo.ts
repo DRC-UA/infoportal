@@ -199,6 +199,8 @@ export class BuildKoboType {
       skipQuestionTyping: [
         'what_is_your_area_of_origin_raion',
         'what_is_your_area_of_origin_hromada',
+        'where_are_you_current_living_hromada',
+        'where_are_you_current_living_raion',
       ],
       overrideOptionsByQuestion: {
         what_are_the_barriers_to_accessing_health_services: {

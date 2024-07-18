@@ -2162,8 +2162,9 @@ mdd_001: {
 	'mofa': `UKR-000301 DANISH MoFA`,
 	'nadn': `Needs assessment (DRC/NRC)`,
 	'bha2': `UKR-000345 BHA SCI`,
-	'347danida': `UKR-000347-DANIDA`,
-	'sida_350': `UKR-000350 SIDA`
+	'347danida': `UKR-000347 DANIDA`,
+	'sida_350': `UKR-000350 SIDA`,
+	'dmfa355': `UKR-000355 DANISH MoFA`
 },
 mdt: {
 	'nfi': `NFI`,

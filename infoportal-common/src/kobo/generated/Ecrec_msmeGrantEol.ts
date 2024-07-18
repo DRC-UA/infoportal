@@ -149,7 +149,8 @@ ben_det_oblast: {
 	'dnipropetrovska': `Дніпропетровська`,
 	'khersonska': `Херсонська`,
 	'mykolaivska': `Миколаївська`,
-	'zaporizka': `Запорізька`
+	'zaporizka': `Запорізька`,
+	'lvivska': `Львівська`
 }}
 
 const extractQuestionName = (_: Record<string, any>) => {

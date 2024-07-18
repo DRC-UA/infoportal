@@ -4,6 +4,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	export interface T {
 	    'start': string,
 	    'end': string,
+	  // benef_origin [select_one] Beneficiary origin
+  'benef_origin': undefined | Option<'benef_origin'>,
 	  // consent [note] Зверніть увагу, що ви збираєтеся поділитися своїми особистими контактними даними, щоб фахівці DRC мали змогу відповісти на ваш запит.
   'consent': string,
 	  // begin_group_QpVWZ8qgD/not_before [note] Перед заповненням даної он-лайн форми просимо ознайомитися з найбільш поширеними питаннями та відповідями стосовно діяльності Данської Ради у справах біженців:
@@ -66,6 +68,11 @@ gender: {
 	'male': `Чоловік`,
 	'female': `Жінка`,
 	'other': `Інше`
+},
+benef_origin: {
+	'drc': `DRC`,
+	'partner': `Partner`,
+	'none': `None`
 },
 no_phone: {
 	'dont_want': `Я не надаю свій номер телефону`

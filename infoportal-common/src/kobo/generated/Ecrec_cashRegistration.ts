@@ -217,8 +217,10 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'lcs_reason': undefined | Option<'lcs_reason_001'>[],
 	  // livelihoods_score/lcs_reason_other [text] If other, specify
   'lcs_reason_other': string | undefined,
-	  // livelihoods_score/lost_breadwiner [select_one] Did the household lose their breadwinner as a result of the conflict (since 2014)?
+	  // livelihoods_score/lost_breadwiner [select_one] Did the household lose their breadwinner?
   'lost_breadwiner': undefined | Option<'Breadwiner'>,
+	  // livelihoods_score/lost_breadwiner_conflict [select_one] Did the household lose their breadwinner as a result of the conflict (since 2014)?
+  'lost_breadwiner_conflict': undefined | Option<'pay_det_tax_exempt'>,
 	  // Documented_loss_Assets [select_one] Do you have documented lost of productive assets?
   'Documented_loss_Assets': undefined | Option<'pay_det_tax_exempt'>,
 	  // livelihoods_score2/income_spent_food_001 [integer] In the last 7 days, what proportion of the overall household income was spent on food (human consumption)?
