@@ -72,7 +72,7 @@ export type CfmData = {
   readonly oblastIso: OblastISO
   readonly category?: Meal_cfmInternal.T['feedback_type']
   readonly external_prot_support?: Meal_cfmExternal.T['prot_support']
-  readonly internal_existing_beneficiary?: Meal_cfmInternal.T['existing_beneficiary']
+  readonly benef_origin?: Meal_cfmInternal.T['benef_origin']
   // internal_project_code?: Meal_CfmInternal.T['project_code']
   // external_thanks_feedback?: MealCfmExternal['thanks_feedback']
   // external_complaint?: MealCfmExternal['complaint']
@@ -184,7 +184,6 @@ export const CfmProvider = ({
           formId: KoboIndex.byName('meal_cfmInternal').id,
           origin: CfmDataOrigin.Internal,
           form: CfmDataSource.Internal,
-          internal_existing_beneficiary: _.existing_beneficiary,
           // internal_project_code: _.project_code,
           oblast: OblastIndex.byKoboName(_.ben_det_oblast!).name,
           oblastIso: OblastIndex.byKoboName(_.ben_det_oblast!).iso,

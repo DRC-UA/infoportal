@@ -120,7 +120,6 @@ const CfmSidebar = () => {
 
 export const Cfm = () => {
   const {session, accesses} = useSession()
-  const {toastHttpError} = useIpToast()
   const access = useMemo(() => !!appFeaturesIndex.cfm.showIf?.(session, accesses), [accesses])
   const schemaContext = useKoboSchemaContext()
 
