@@ -20,6 +20,7 @@ import {JsonStoreSdk} from '@/core/sdk/server/jsonStore/JsonStoreSdk'
 import {HdpSdk} from '@/core/sdk/server/hdp/HdpSdk'
 import {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboAnswerHistorySdk} from '@/core/sdk/server/kobo/answerHistory/KoboAnswerHistorySdk'
+import {CacheSdk} from '@/core/sdk/server/cache/CacheSdk'
 
 export class ApiSdk {
   constructor(private client: ApiClient) {
@@ -59,4 +60,5 @@ export class ApiSdk {
   readonly proxy = new ProxySdk(this.client)
   readonly jsonStore = new JsonStoreSdk(this.client)
   readonly hdp = new HdpSdk(this.client)
+  readonly cache = new CacheSdk(this.client)
 }

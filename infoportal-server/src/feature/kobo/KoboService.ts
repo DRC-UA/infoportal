@@ -22,8 +22,7 @@ import {AccessService} from '../access/AccessService'
 import {AppFeatureId} from '../access/AccessType'
 import {GlobalEvent} from '../../core/GlobalEvent'
 import {defaultPagination} from '../../core/Type'
-import {SytemCache} from '../../helper/IpCache'
-import {app} from '../../index'
+import {app, AppCacheKey} from '../../index'
 import {appConf} from '../../core/conf/AppConf'
 import {KoboAnswerHistoryService} from './history/KoboAnswerHistoryService'
 import {AppError} from '../../helper/Errors'
@@ -105,7 +104,7 @@ export class KoboService {
 
   readonly searchAnswers =
     app.cache.request({
-      key: SytemCache.KoboAnswers,
+      key: AppCacheKey.KoboAnswers,
       cacheIf: (params) => {
         return false
         // return KoboService.largeForm.has(params.formId)
@@ -113,7 +112,7 @@ export class KoboService {
         //   && Object.keys(params.paginate ?? {}).length === 0
       },
       genIndex: p => p.formId,
-      ttlMs: duration(1, 'day'),
+      ttlMs: duration(1, 'day').toMs,
       fn:
         (params: {
           includeMeta?: boolean

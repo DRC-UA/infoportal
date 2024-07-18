@@ -6,7 +6,7 @@ import {DbInit} from './db/DbInit'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
-import {GlobalCache, IpCache} from './helper/IpCache'
+import {IpCacheApp, IpCache} from '@infoportal-common'
 import {duration} from '@alexandreannic/ts-utils'
 import * as winston from 'winston'
 import {format, Logger as WinstonLogger} from 'winston'
@@ -15,6 +15,13 @@ import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
 
 export type AppLogger = WinstonLogger;
+
+export enum AppCacheKey {
+  Meta = 'Meta',
+  KoboAnswers = 'KoboAnswers',
+  KoboSchema = 'KoboSchema',
+  WfpDeduplication = 'WfpDeduplication',
+}
 
 export const App = (config: AppConf = appConf) => {
 
@@ -45,9 +52,9 @@ export const App = (config: AppConf = appConf) => {
     })
   }
 
-  const cache = new GlobalCache(
-    new IpCache<IpCache<any>>({
-      ttlMs: duration(20, 'day'),
+  const cache = new IpCacheApp(
+    new IpCache<Record<string, any>>({
+      ttlMs: duration(20, 'day').toMs,
       cleaningCheckupInterval: duration(20, 'day',)
     }),
     logger('GlobalCache')

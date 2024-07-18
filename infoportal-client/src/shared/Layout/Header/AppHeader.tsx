@@ -1,4 +1,4 @@
-import {alpha, BoxProps, Icon, MenuItem} from '@mui/material'
+import {alpha, BoxProps, Icon, MenuItem, useTheme} from '@mui/material'
 import {IconBtn, Txt} from 'mui-extension'
 import {layoutConfig} from '../index'
 import React from 'react'
@@ -12,6 +12,7 @@ import {PopoverWrapper} from '@/shared/PopoverWrapper'
 import {useI18n} from '@/core/i18n'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Obj} from '@alexandreannic/ts-utils'
+import {styleUtils} from '@/core/theme'
 
 interface Props extends BoxProps {
 }
@@ -25,6 +26,7 @@ const lightThemeIcons = {
 export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) => {
   const {sidebarOpen, showSidebarButton, setSidebarOpen, title} = useLayoutContext()
   const {m} = useI18n()
+  const t = useTheme()
   const {theme: {brightness, setBrightness}} = useAppSettings()
   return (
     <AppHeaderContainer
@@ -71,7 +73,7 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) 
             <Icon>menu</Icon>
           </IconBtn>
         )}
-        <Txt sx={{ml: 1}} size="title" bold dangerouslySetInnerHTML={{__html: title ?? ''}}/>
+        <Txt sx={{ml: 1, ...styleUtils(t).truncate}} size="title" bold dangerouslySetInnerHTML={{__html: title ?? ''}}/>
         {children}
       </div>
       <PopoverWrapper content={close => (

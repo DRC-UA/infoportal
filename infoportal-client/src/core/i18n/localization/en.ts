@@ -74,6 +74,8 @@ export const en = Object.freeze({
     editKobo: `Edit (⚠️ This is an unstable feature. Use it only if you have proper permission. It's still useful for viewing data from the Kobo interface).`,
     apply: 'Apply',
     clear: 'Clear',
+    cache: 'Cache',
+    serverCache: 'Server cache',
     cancel: 'Cancel',
     custom: 'Custom',
     customDb: 'Custom databases',

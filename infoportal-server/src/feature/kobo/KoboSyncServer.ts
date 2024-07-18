@@ -1,11 +1,10 @@
 import {KoboAnswer, KoboId, koboIndex, KoboIndex, UUID} from '@infoportal-common'
 import {Prisma, PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
-import {app, AppLogger} from '../../index'
+import {app, AppCacheKey, AppLogger} from '../../index'
 import {createdBySystem} from '../../db/DbInit'
 import {seq} from '@alexandreannic/ts-utils'
 import {GlobalEvent} from '../../core/GlobalEvent'
-import {SytemCache} from '../../helper/IpCache'
 import {KoboService} from './KoboService'
 import {AppError} from '../../helper/Errors'
 
@@ -67,6 +66,8 @@ export class KoboSyncServer {
       })
       this.log.info(formId, `Synchronizing by ${updatedBy}... COMPLETED.`)
       this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId})
+      this.appCache.clear(AppCacheKey.KoboAnswers, formId)
+      this.appCache.clear(AppCacheKey.KoboSchema, formId)
     } catch (e) {
       this.log.info(formId, `Synchronizing by ${updatedBy}... FAILED.`)
       throw e
@@ -162,7 +163,7 @@ export class KoboSyncServer {
     const answersIdsDeleted = await handleDelete()
     const answersCreated = await handleCreate()
     const answersUpdated = await handleUpdate()
-    this.appCache.clear(SytemCache.KoboAnswers, formId)
+
     return {
       answersIdsDeleted,
       answersCreated,

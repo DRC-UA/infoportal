@@ -11,6 +11,7 @@ import {appFeaturesIndex} from '@/features/appFeatureId'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {useAsync} from '@/shared/hook/useAsync'
+import {AdminCache} from '@/features/Admin/AdminCache'
 
 export const adminModule = {
   basePath: '/admin',
@@ -18,6 +19,7 @@ export const adminModule = {
     users: '/users',
     proxy: '/proxy',
     group: '/group',
+    cache: '/cache',
   }
 }
 
@@ -45,6 +47,11 @@ const AdminSidebar = () => {
             <SidebarItem icon="settings_input_antenna" active={isActive}>{m.proxy}</SidebarItem>
           }
         </NavLink>
+        <NavLink to={path(adminModule.siteMap.cache)}>
+          {({isActive}) =>
+            <SidebarItem icon="memory" active={isActive}>{m.serverCache}</SidebarItem>
+          }
+        </NavLink>
       </SidebarBody>
     </Sidebar>
   )
@@ -62,6 +69,7 @@ export const Admin = () => {
           <Route path={adminModule.siteMap.users} element={<AdminUsers/>}/>
           <Route path={adminModule.siteMap.proxy} element={<AdminProxy/>}/>
           <Route path={adminModule.siteMap.group} element={<AdminGroups/>}/>
+          <Route path={adminModule.siteMap.cache} element={<AdminCache/>}/>
         </Routes>
       </Layout>
   )

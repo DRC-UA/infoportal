@@ -25,6 +25,7 @@ import {ControllerKoboMeta} from './controller/ControllerKoboMeta'
 import {ControllerJsonStore} from './controller/ControllerJsonStore'
 import {ControllerHdp} from './controller/ControllerHdp'
 import {ControllerKoboAnswerHistory} from './controller/kobo/ControllerKoboAnswerHistory'
+import {ControllerCache} from './controller/ControllerCache'
 
 export interface AuthenticatedRequest extends Request {
   user?: UserSession
@@ -77,6 +78,7 @@ export const getRoutes = (
   const jsonStore = new ControllerJsonStore(prisma)
   const hdp = new ControllerHdp()
   const koboAnswerHistory = new ControllerKoboAnswerHistory(prisma)
+  const cacheController = new ControllerCache()
 
   const auth = ({adminOnly = false}: {adminOnly?: boolean} = {}) => async (req: Request, res: Response, next: NextFunction) => {
     // req.session.user = {
@@ -152,7 +154,7 @@ export const getRoutes = (
     router.get('/kobo-api/:id/attachment', errorCatcher(koboApi.getAttachementsWithoutAuth))
     router.get('/kobo-api/:id/:formId/answers', auth(), errorCatcher(koboApi.getAnswers))
     router.get('/kobo-api/:id', auth(), errorCatcher(koboApi.getForms))
-    router.get('/kobo-api/:id/:formId', auth(), errorCatcher(cache('24 hour')), errorCatcher(koboApi.getSchema))
+    router.get('/kobo-api/:id/:formId', auth(), errorCatcher(koboApi.getSchema))
     router.get('/kobo-api/:id/:formId/:answerId/edit-url', errorCatcher(koboApi.edit))
 
     router.post('/kobo-answer-history/search', errorCatcher(koboAnswerHistory.search))
@@ -188,6 +190,9 @@ export const getRoutes = (
     router.delete('/meal-verification/:id', auth(), errorCatcher(mealVerification.remove))
     router.post('/meal-verification/:id', auth(), errorCatcher(mealVerification.update))
     router.post('/meal-verification/answer/:id', auth(), errorCatcher(mealVerification.updateAnswerStatus))
+
+    router.get('/cache', cacheController.get)
+    router.post('/cache/clear', cacheController.clear)
 
     // router.get('/legalaid', auth(), errorCatcher(legalaid.index))
     // router.get('/ecrec', auth(), errorCatcher(ecrec.index))

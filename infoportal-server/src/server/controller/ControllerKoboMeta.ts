@@ -2,8 +2,7 @@ import {PrismaClient} from '@prisma/client'
 import {KoboMetaParams, KoboMetaService} from '../../feature/kobo/meta/KoboMetaService'
 import {NextFunction, Request, Response} from 'express'
 import {DbHelper} from '../../db/DbHelper'
-import {app} from '../../index'
-import {SytemCache} from '../../helper/IpCache'
+import {app, AppCacheKey} from '../../index'
 
 export class ControllerKoboMeta {
 
@@ -26,7 +25,7 @@ export class ControllerKoboMeta {
   }
 
   readonly killCache = async (req: Request, res: Response, next: NextFunction) => {
-    this.cache.clear(SytemCache.Meta)
+    this.cache.clear(AppCacheKey.Meta)
     res.send()
   }
 }

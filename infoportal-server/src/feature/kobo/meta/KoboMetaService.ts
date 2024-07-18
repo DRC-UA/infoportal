@@ -2,7 +2,7 @@ import {Prisma, PrismaClient} from '@prisma/client'
 import {GlobalEvent} from '../../../core/GlobalEvent'
 import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds'
 import {KoboMetaCreate} from './KoboMetaType'
-import {app, AppLogger} from '../../../index'
+import {app, AppCacheKey, AppLogger} from '../../../index'
 import {KoboService} from '../KoboService'
 import {map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
@@ -12,7 +12,6 @@ import {appConf} from '../../../core/conf/AppConf'
 import {genUUID, yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
-import {SytemCache} from '../../../helper/IpCache'
 import {PromisePool} from '@supercharge/promise-pool'
 import Event = GlobalEvent.Event
 
@@ -108,7 +107,7 @@ export class KoboMetaService {
   }
 
   readonly search = app.cache.request({
-    key: SytemCache.Meta,
+    key: AppCacheKey.Meta,
     cacheIf: (params) => {
       this.log.info('Check `cacheIf` condition: ' + ' ' + (params === undefined || Object.keys(params).length === 0) + ' ' + JSON.stringify(params))
       return params === undefined || Object.keys(params).length === 0

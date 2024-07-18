@@ -90,7 +90,7 @@ export class Server {
       // proxy: true,
       unset: 'destroy',
       store: new PrismaSessionStore(this.pgClient, {
-        checkPeriod: duration(1, 'day'),
+        checkPeriod: duration(1, 'day').toMs,
         dbRecordIdIsSessionId: true,
         dbRecordIdFunction: undefined,
         // checkPeriod: duration(1, 'day').toMs,

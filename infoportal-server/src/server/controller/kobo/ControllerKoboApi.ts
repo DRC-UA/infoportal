@@ -5,6 +5,8 @@ import {KoboSdkGenerator} from '../../../feature/kobo/KoboSdkGenerator'
 import {KoboApiService} from '../../../feature/kobo/KoboApiService'
 import {KoboSyncServer} from '../../../feature/kobo/KoboSyncServer'
 import {KoboAnswerUtils} from '@infoportal-common'
+import {app, AppCacheKey} from '../../../index'
+import {duration} from '@alexandreannic/ts-utils'
 
 const apiAnswersFiltersValidation = yup.object({
   start: yup.date(),
@@ -81,10 +83,19 @@ export class ControllerKoboApi {
 
   readonly getSchema = async (req: Request, res: Response, next: NextFunction) => {
     const {id, formId} = await this.extractParams(req)
-    const sdk = await this.koboSdkGenerator.get(id)
-    const form = await sdk.v2.getForm(formId)
+    const form = await this.getSchemaCached(id, formId)
     res.send(form)
   }
+
+  private readonly getSchemaCached = app.cache.request({
+    key: AppCacheKey.KoboSchema,
+    genIndex: (serverId, formId) => formId,
+    ttlMs: duration(2, 'day').toMs,
+    fn: async (serverId, formId) => {
+      const sdk = await this.koboSdkGenerator.get(serverId)
+      return await sdk.v2.getForm(formId)
+    }
+  })
 
   readonly getAttachementsWithoutAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
