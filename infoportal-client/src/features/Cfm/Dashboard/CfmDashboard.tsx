@@ -2,7 +2,7 @@ import {Page} from '@/shared/Page'
 import {CfmData, CfmDataOrigin, CfmStatusIconLabel, useCfmContext} from '@/features/Cfm/CfmContext'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import React, {useMemo, useState} from 'react'
-import {KoboGeneralMapping, KoboMealCfmStatus, Period, PeriodHelper} from '@infoportal-common'
+import {KoboGeneralMapping, KoboIndex, KoboMealCfmStatus, Meal_cfmInternal, Period, PeriodHelper} from '@infoportal-common'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Div} from '@/shared/PdfLayout/PdfSlide'
@@ -16,6 +16,9 @@ import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {appConfig} from '@/conf/AppConfig'
 import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {format} from 'date-fns'
+import {Txt} from 'mui-extension'
+import {AppAvatar} from '@/shared/AppAvatar'
+import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 
 const feedbacTypeLabel = {
   'apprec_com': `Appreciation or compliments`,
@@ -31,7 +34,7 @@ const feedbacTypeLabel = {
 export const CfmDashboard = () => {
   const ctx = useCfmContext()
   const [period, setPeriod] = useState<Partial<Period>>({})
-  const {m} = useI18n()
+  const {m, formatLargeNumber} = useI18n()
 
   const shape = useMemo(() => {
     const d = ctx.mappedData ?? seq([])
@@ -56,6 +59,12 @@ export const CfmDashboard = () => {
           _,
           <CfmStatusIconLabel status={KoboMealCfmStatus[_]}/>
         ))
+      },
+      benefOrigin: {
+        icon: 'person',
+        label: m._cfm.benefOrigin,
+        getValue: _ => _.benef_origin,
+        getOptions: (d) => DataFilter.buildOptions(d().map(_ => _.benef_origin).distinct(_ => _).compact().get(), true)
       },
       oblast: {
         icon: appConfig.icons.oblast,
@@ -119,7 +128,7 @@ export const CfmDashboard = () => {
       />
       <Div responsive>
         <Div column>
-          <Panel title={m.submissions}>
+          <Panel title={`${m.data} (${formatLargeNumber(filteredData.length)})`}>
             <ChartLineBy
               sx={{mt: 1}}
               data={filteredData}
@@ -131,7 +140,7 @@ export const CfmDashboard = () => {
           <Panel savableAsImg expendable title={m._cfm.requestByOblast}>
             <PanelBody>
               <MapSvgByOblast
-                sx={{ml: 1, mt: 2}}
+                sx={{maxWidth: 480, margin: 'auto'}}
                 fillBaseOn="value"
                 data={filteredData}
                 value={_ => true}
@@ -140,8 +149,40 @@ export const CfmDashboard = () => {
               />
             </PanelBody>
           </Panel>
+          <Panel savableAsImg expendable title={m._cfm.benefOrigin}>
+            <PanelBody>
+              <ChartBarSingleBy data={filteredData} by={_ => _.benef_origin} label={Meal_cfmInternal.options.benef_origin}/>
+            </PanelBody>
+          </Panel>
+          <Panel savableAsImg expendable title={m._cfm.mainFp}>
+            <PanelBody>
+              <ChartBarSingleBy
+                data={filteredData}
+                by={_ => _.tags?.focalPointEmail}
+                limit={10}
+                label={filteredData.reduceObject(_ => [
+                  _.tags?.focalPointEmail,
+                  <>
+                    <AppAvatar size={24} sx={{verticalAlign: 'middle', mr: .5}} email={_.tags?.focalPointEmail}/>
+                    {_.tags?.focalPointEmail}
+                  </>
+                ])}
+              />
+              <Txt sx={{mt: 1}} block color="hint">[...]</Txt>
+            </PanelBody>
+          </Panel>
         </Div>
         <Div column>
+          <Panel>
+            <PanelBody>
+              <ChartPieWidgetBy
+                title={m._cfm.dataComingFromExternalForm}
+                showBase
+                showValue
+                data={filteredData} filter={_ => _.formId === KoboIndex.byName('meal_cfmExternal').id}
+              />
+            </PanelBody>
+          </Panel>
           <Panel savableAsImg expendable title={m.category}>
             <PanelBody>
               <ChartBarSingleBy

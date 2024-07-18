@@ -711,6 +711,9 @@ export const en = Object.freeze({
       openKoboForm: 'Open Kobo form',
     },
     _cfm: {
+      dataComingFromExternalForm: 'Data coming from external form',
+      mainFp: 'Main focal points',
+      benefOrigin: 'Beneficiary origin',
       requestByOblast: 'Requests by Oblast',
       additionalInformation: 'Details',
       deleteWarning: `In case of mistake, you can still recover deleted data by contacting ${appConfig.contact}.`,

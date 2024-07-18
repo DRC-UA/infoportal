@@ -11,7 +11,7 @@ const useStyles = makeStyles<{url?: string, size: number, tooltipSize?: number}>
     borderRadius: 5000,
     backgroundImage: `url(${url})`,
     backgroundColor: t.palette.grey['400'],
-    display: 'flex',
+    display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
   }
