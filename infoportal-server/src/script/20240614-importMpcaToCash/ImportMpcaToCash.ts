@@ -2,11 +2,12 @@ import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from '../../feature/kobo/KoboSdkGenerator'
 import {scriptConf} from '../ScriptConf'
 import {ImportMpca} from './ImporterMpca'
-import {KoboAnswer, Meal_cashPdm, Meal_pdmStandardised} from '@infoportal-common'
+import {KoboAnswer, Meal_pdmStandardised} from '@infoportal-common'
+import * as process from 'process'
 import dataMap = ImportMpca.dataMap
 
 
-export const ImportMpcaToCash = (async () => {
+export const importMpcaToCash = (async () => {
   const config = {
     server: 'dev',
     importComment: (i: number) => `Imported programmatically from tracker. Index: ${i}`
@@ -57,11 +58,12 @@ export const ImportMpcaToCash = (async () => {
       } catch (e: any) {
         console.error(`Error with record ${i}:`, e, activity(item, i))
       }
+      if (i === 1) process.exit(0)
     }
     console.log('Data submission completed.')
   }
 
-  await submit<Meal_cashPdm.T>({
+  await submit<Record<string, any>>({
     formId: serverConfig.cashId,
     data: mappedData,
     activity: (item, i) => ({
@@ -71,4 +73,4 @@ export const ImportMpcaToCash = (async () => {
   })
 
   console.log('Import process completed.')
-})()
+})
