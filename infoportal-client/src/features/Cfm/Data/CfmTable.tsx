@@ -359,6 +359,26 @@ export const CfmTable = ({}: any) => {
                 }
               }
             },
+            {
+              type: 'select_one',
+              head: ctx.schemaExternal.translate.question('benef_origin'),
+              id: 'benef_origin',
+              render: row => {
+                return {
+                  value: row.benef_origin,
+                  option: ctx.schemaInternal.translate.choice('benef_origin', row.benef_origin),
+                  label: (
+                    <IpSelectSingle
+                      defaultValue={row.benef_origin}
+                      onChange={newValue => {
+                        ctxEditAnswer.asyncUpdateById.call({formId: row.formId, answerIds: [row.id], question: 'benef_origin', answer: newValue})
+                      }}
+                      options={Obj.entries(Meal_cfmInternal.options.benef_origin).map(([k, v]) => ({value: k, children: v}))}
+                    />
+                  )
+                }
+              },
+            },
             column.office,
             column.program,
             {
@@ -443,26 +463,6 @@ export const CfmTable = ({}: any) => {
               head: m._cfm.feedback,
               id: 'feedback',
               renderQuick: _ => _.feedback,
-            },
-            {
-              type: 'select_one',
-              head: ctx.schemaExternal.translate.question('benef_origin'),
-              id: 'benef_origin',
-              render: row => {
-                return {
-                  value: row.benef_origin,
-                  option: ctx.schemaInternal.translate.choice('benef_origin', row.benef_origin),
-                  label: (
-                    <IpSelectSingle
-                      defaultValue={row.benef_origin}
-                      onChange={newValue => {
-                        ctxEditAnswer.asyncUpdateById.call({formId: row.formId, answerIds: [row.id], question: 'benef_origin', answer: newValue})
-                      }}
-                      options={Obj.entries(Meal_cfmInternal.options.benef_origin).map(([k, v]) => ({value: k, children: v}))}
-                    />
-                  )
-                }
-              },
             },
             {
               type: 'string',
