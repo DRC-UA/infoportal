@@ -127,9 +127,7 @@ export const CfmDetails = ({entry}: {
               {entry.form === CfmDataSource.Internal ? (
                 <>
                   <Divider/>
-                  <ListRow icon="bookmark" label={m._cfm.existingDrcBeneficiary}>{entry.internal_existing_beneficiary && (
-                    <Icon color="success">check_circle</Icon>
-                  )}</ListRow>
+                  <ListRow icon="bookmark" label={m._cfm.existingDrcBeneficiary}>{entry.benef_origin}</ListRow>
                   <ListRow icon="" label={m.projectCode}>{entry.project}</ListRow>
                 </>
               ) : entry.external_feedback_type === 'complaint' && (
