@@ -1,5 +1,5 @@
 export const scriptConf = {
-  rootDir: '/Users/alexandreannic/Documents/workspace/im-tools-server/src/script',
+  rootDir: '/Users/alexandreannic/Documents/workspace/infoportal/infoportal-server/src/script',
   kobo: {
     prod: {
       serverId: '4820279f-6c3d-47ba-8afe-47f86b16ab5d',

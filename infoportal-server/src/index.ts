@@ -6,7 +6,7 @@ import {DbInit} from './db/DbInit'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
-import {IpCacheApp, IpCache} from '@infoportal-common'
+import {IpCache, IpCacheApp} from '@infoportal-common'
 import {duration} from '@alexandreannic/ts-utils'
 import * as winston from 'winston'
 import {format, Logger as WinstonLogger} from 'winston'
@@ -14,6 +14,7 @@ import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
 import {BuildKoboType} from './script/BuildTypeKobo'
+import {runUpdateEcrecSettlements} from './script/20240718-ecrecSettlements/ecrecSettlements'
 
 export type AppLogger = WinstonLogger;
 
@@ -84,6 +85,8 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
+  await runUpdateEcrecSettlements()
+  return
   // return
   // await ActivityInfoBuildType.fslc()
   // await KoboMigrateHHS2({
