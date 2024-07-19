@@ -18,7 +18,12 @@ export class KoboSdkv1 {
     data: Partial<T>
     formId: KoboId
   }): Promise<SubmitResponse> => {
-    const _uuid = uuid ?? await this.getForms().then(_ => _.find(f => f.id_string === formId)?.uuid)
+    const _uuid = uuid ?? await this.getForms().then(forms => {
+      if (Array.isArray(forms)) {
+        return forms.find(f => f.id_string === formId)?.uuid
+      }
+      throw new Error('Expected an array of forms but got: ' + JSON.stringify(forms))
+    })
     if (!_uuid) throw new Error(`Kobo form id ${formId} not found.`)
     return retry((retry, number) => {
       return this.api.post<SubmitResponse>(`/submissions.json`, {
@@ -33,8 +38,16 @@ export class KoboSdkv1 {
     }, {retries})
   }
 
-  readonly getForms = () => {
-    return this.api.get<KoboV1Form[]>(`/forms`)
+  readonly getForms = async (): Promise<KoboV1Form[]> => {
+    const formUrlResponse = await this.api.get<{ forms: string }>(`/v1`);
+    if (!formUrlResponse || !formUrlResponse.forms) {
+      throw new Error('Forms URL not found in the response');
+    }
+    const formsResponse = await this.api.get<KoboV1Form[]>(formUrlResponse.forms);
+    if (!Array.isArray(formsResponse)) {
+      throw new Error(`Expected an array of forms but got: ${JSON.stringify(formsResponse)}`);
+    }
+    return formsResponse;
   }
   // static readonly parseDate = (_: Date) => _.toISOString()
   //

@@ -9,7 +9,7 @@ export class KoboSdkGenerator {
   constructor(
     private pgClient: PrismaClient,
     private conf = appConf,
-    private log = app.logger('KoboSdkGenerator')
+    // private log = app.logger('KoboSdkGenerator')
   ) {
   }
 

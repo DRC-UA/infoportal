@@ -12,6 +12,8 @@ import * as winston from 'winston'
 import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
+import {ImportMpca} from './script/20240614-importMpcaToCash/ImporterMpca'
+import {ImportMpcaToCash} from './script/20240614-importMpcaToCash/ImportMpcaToCash'
 import {EmailService} from './core/EmailService'
 
 export type AppLogger = WinstonLogger
@@ -77,8 +79,9 @@ const startApp = async (conf: AppConf) => {
   // await ecrecClearDuplicateSection()
   // return
   // return
-  // await ActivityInfoBuildType.snfi()
-  // return
+  await ImportMpcaToCash
+  // await new BuildKoboType().build('safety_incident')
+  // await ActivityInfoBuildType.fslc()
   // await KoboMigrateHHS2({
   //   prisma,
   //   serverId: koboServerId.prod,
@@ -100,6 +103,7 @@ const startApp = async (conf: AppConf) => {
     prisma,
   )
   const init = async () => {
+    const log = app.logger('')
     log.info(`Starting... v5.0`)
 
     log.info(`Initialize database ${conf.db.url.split('@')[1]}...`)
