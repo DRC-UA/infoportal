@@ -13,8 +13,9 @@ import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
-import {BuildKoboType} from './script/BuildTypeKobo'
+import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
 import {ecrecClearDuplicateSection} from './script/20240719-ecrecClearDuplicateSection/ecrecClearDuplicateSection'
+import {BuildKoboType} from './script/BuildTypeKobo'
 
 export type AppLogger = WinstonLogger
 
@@ -88,7 +89,8 @@ const startApp = async (conf: AppConf) => {
   await ecrecClearDuplicateSection()
   return
   // return
-  // await ActivityInfoBuildType.fslc()
+  // await ActivityInfoBuildType.snfi()
+  // return
   // await KoboMigrateHHS2({
   //   prisma,
   //   serverId: koboServerId.prod,
@@ -133,7 +135,7 @@ const startApp = async (conf: AppConf) => {
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
     } else {
-      await new BuildKoboType().buildAll()
+      // await new BuildKoboType().buildAll()
     }
   }
 

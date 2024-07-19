@@ -64,7 +64,7 @@ export const customForms: CustomForm[] = [
       {
         id: 'aQkWZkWjVpJsqZ3tYtuwFZ',
         // langIndexes: [0, 1],
-        join: {originId: 'awYf9G3sZB4grG8S4w3Wt8', originColName: 'ben_det_tax_id_num', colName: 'tax_id_num'}
+        join: {originId: 'awYf9G3sZB4grG8S4w3Wt8', originColName: 'id', colName: 'lh_restoration_id'}
       },
     ]
   }
