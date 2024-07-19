@@ -1,6 +1,7 @@
 import {ApiClient, ApiClientParams} from '../../api-client/ApiClient'
 import {KoboSdkv2} from './v2/KoboSdkv2'
 import {KoboSdkv1} from './v1/KoboSdkv1'
+import {Logger} from '../../types'
 
 export class KoboSdk {
 
@@ -9,11 +10,13 @@ export class KoboSdk {
     urlv2,
     token,
     ApiClientClass = ApiClient,
+    log,
   }: {
     urlv1: string,
     urlv2: string,
     token: string,
     ApiClientClass?: new (_: ApiClientParams) => ApiClient
+    log: Logger
   }) {
     this.v1 = new KoboSdkv1(new ApiClientClass({
       baseUrl: urlv1,
@@ -25,8 +28,8 @@ export class KoboSdk {
       baseUrl: urlv2,
       headers: {
         Authorization: KoboSdk.makeAuthorizationHeader(token),
-      }
-    }))
+      },
+    }), log)
   }
 
   readonly v1: KoboSdkv1

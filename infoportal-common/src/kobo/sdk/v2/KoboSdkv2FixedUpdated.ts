@@ -2,6 +2,7 @@ import {ApiClient} from '../../../api-client/ApiClient'
 import {KoboAnswerId, KoboId} from '../../mapper'
 import {ApiKoboUpdate} from './type/KoboUpdate'
 import {chunkify} from '../../..'
+import {Logger} from '../../../types'
 
 export type KoboUpdateDataParamsData = Record<string, string | string[] | number | null | undefined>
 export type KoboUpdateDataParams<TData extends KoboUpdateDataParamsData = any> = {
@@ -14,6 +15,7 @@ export class KoboSdkv2FixedUpdated {
 
   constructor(
     private api: ApiClient,
+    private log: Logger
   ) {
   }
 
@@ -51,7 +53,8 @@ export class KoboSdkv2FixedUpdated {
     this.locks.delete(formId)
   }
 
-  private readonly apiCall = ({formId, data, submissionIds}: KoboUpdateDataParams): Promise<ApiKoboUpdate> => {
+  private readonly apiCall = (params: KoboUpdateDataParams): Promise<ApiKoboUpdate> => {
+    const {formId, data, submissionIds} = params
     return this.api.patch<ApiKoboUpdate>(`/v2/assets/${formId}/data/bulk/`, {
       body: {
         payload: {
@@ -60,8 +63,11 @@ export class KoboSdkv2FixedUpdated {
         }
       }
     }).then(_ => {
-      console.log(_.successes, _.failures)
+      this.log.info(`Success ${_.successes}, Failure: ${_.failures} ${JSON.stringify(params)}`)
       return _
+    }).catch(e => {
+      this.log.error(`Failed to update  ${JSON.stringify(params)}  ${JSON.stringify(e)}`)
+      throw e
     })
   }
 }

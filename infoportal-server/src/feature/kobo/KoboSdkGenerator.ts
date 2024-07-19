@@ -21,6 +21,7 @@ export class KoboSdkGenerator {
       urlv1: k.urlV1 + '/api',
       urlv2: k.url + '/api',
       token: k.token,
+      log: app.logger('KoboSdk'),
     })
   })
 }

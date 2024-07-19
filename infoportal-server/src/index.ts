@@ -14,9 +14,9 @@ import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
 import {BuildKoboType} from './script/BuildTypeKobo'
-import {runUpdateEcrecSettlements} from './script/20240718-ecrecSettlements/ecrecSettlements'
+import {ecrecClearDuplicateSection} from './script/20240719-ecrecClearDuplicateSection/ecrecClearDuplicateSection'
 
-export type AppLogger = WinstonLogger;
+export type AppLogger = WinstonLogger
 
 export enum AppCacheKey {
   Meta = 'Meta',
@@ -85,7 +85,7 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  await runUpdateEcrecSettlements()
+  await ecrecClearDuplicateSection()
   return
   // return
   // await ActivityInfoBuildType.fslc()

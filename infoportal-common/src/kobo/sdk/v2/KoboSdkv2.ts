@@ -5,6 +5,7 @@ import {map} from '@alexandreannic/ts-utils'
 import axios from 'axios'
 import {KoboHook} from './type/KoboHook'
 import {KoboSdkv2FixedUpdated, KoboUpdateDataParams, KoboUpdateDataParamsData} from './KoboSdkv2FixedUpdated'
+import {Logger} from '../../../types'
 
 const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
   return {
@@ -16,7 +17,8 @@ const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
 export class KoboSdkv2 {
   constructor(
     private api: ApiClient,
-    private editSdk = new KoboSdkv2FixedUpdated(api),
+    private logger: Logger,
+    private editSdk = new KoboSdkv2FixedUpdated(api, logger),
   ) {
   }
 

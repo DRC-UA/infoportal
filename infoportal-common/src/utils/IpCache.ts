@@ -1,4 +1,5 @@
 import {duration, Duration, filterUndefined, hashArgs} from '@alexandreannic/ts-utils'
+import {Logger} from '../types'
 
 export interface IpCacheData<V> {
   lastUpdate: Date;
@@ -15,10 +16,7 @@ export class IpCacheApp<Key extends string = string> {
 
   constructor(
     private cache: IpCache<Record<string, any>>,
-    private log: {
-      info: (_: string) => void
-      error: (_: string) => void
-    }
+    private log: Logger
   ) {
     // setInterval(() => {
     //   console.log(this.cache.getAllKeys().map(k =>
@@ -55,8 +53,6 @@ export class IpCacheApp<Key extends string = string> {
       return this.cache.get(key)
     }
     return async (...p: P) => {
-      console.log()
-      console.log(key, '---', cacheIf, cacheIf?.(...p))
       if (cacheIf && !cacheIf?.(...p)) return fn(...p)
       const index = genIndex ? genIndex(...p) : hashArgs(p)
       const cache = getCache()
@@ -67,7 +63,6 @@ export class IpCacheApp<Key extends string = string> {
       if (cachedValue === undefined) {
         const value = await fn(...p)
         if (cache) {
-          console.log(key, '4- set', key, index, JSON.stringify(value ?? '').slice(0, 10))
           cache[index] = value
         }
         return value

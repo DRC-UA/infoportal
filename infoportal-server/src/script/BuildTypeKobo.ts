@@ -2,6 +2,7 @@ import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import * as fs from 'fs'
 import {ApiClient, capitalize, KoboApiSchema, KoboId, KoboIndex, KoboSdk, KoboSdkv2} from '@infoportal-common'
 import {appConf} from '../core/conf/AppConf'
+import {app} from '../index'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string,
@@ -21,7 +22,8 @@ export class BuildKoboType {
         headers: {
           Authorization: KoboSdk.makeAuthorizationHeader(conf.kobo.token),
         }
-      })
+      }),
+      app.logger('KoboSdkv2'),
     ),
     private outDir: string = conf.rootProjectDir + '/../infoportal-common/src/kobo/generated'
   ) {
