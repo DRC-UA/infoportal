@@ -38,12 +38,12 @@ export namespace KoboSchemaHelper {
   }: {
     schema: KoboApiSchema,
   }) => {
-    const {groupSchemas, surveyCleaned} = isolateGroups(schema.content.survey)
+    const {groupSchemas, surveySanitized} = isolateGroups(schema.content.survey)
     const sanitizedForm: KoboApiSchema = {
       ...schema,
       content: {
         ...schema.content,
-        survey: surveyCleaned.map(_ => {
+        survey: surveySanitized.filter(_ => !(_.type === 'note' && !_.calculation)).map(_ => {
           return {
             ..._,
             label: _.label?.map(_ => removeHtml(_))
@@ -134,7 +134,7 @@ export namespace KoboSchemaHelper {
       }
     }
     return {
-      surveyCleaned,
+      surveySanitized: surveyCleaned,
       groupSchemas,
     }
   }

@@ -8,7 +8,7 @@ import {
   KoboId,
   KoboSchemaHelper,
   KoboTranslateChoice,
-  KoboTranslateQuestion
+  KoboTranslateQuestion, removeHtml
 } from '@infoportal-common'
 import {I18nContextProps, useI18n} from '@/core/i18n/I18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
@@ -158,7 +158,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
     subHeader: showEditBtn
       ? <TableEditCellBtn onClick={() => onSelectColumn(q.name)}/>
       : undefined,
-    head: getHead(translateQuestion(q.name)),
+    head: removeHtml(getHead(translateQuestion(q.name)))?.replace(/^#*/, ''),
   }
   const res: DatabaseColumnProps<T>[] | DatabaseColumnProps<T> | undefined = (() => {
     switch (q.type) {

@@ -78,6 +78,7 @@ export interface KoboApiSchema {
       name: string
       file?: string
       type: KoboApiColumType
+      calculation: KoboApiColumType
       select_from_list_name?: string
     }[]
     translated: ['hint', 'label', 'media::image']

@@ -9,7 +9,7 @@ export const SidebarSection = ({
   title,
   children,
   dense,
-  defaultOpen,
+  defaultOpen = true,
 }: {
   id?: string
   defaultOpen?: boolean
