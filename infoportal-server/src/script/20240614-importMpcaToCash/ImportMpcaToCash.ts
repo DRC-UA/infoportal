@@ -30,13 +30,6 @@ export const importMpcaToCash = (async () => {
   const oldData = await sdk.v2.getAnswers(serverConfig.mpcaId).then(_ => _.data as KoboAnswer<Meal_pdmStandardised.T>[])
   const mappedData = oldData.map(_ => dataMap(_.answers))
 
-  const newFormUuid = await sdk.v1.getForms()
-    .then(forms => {
-      const form = forms.find(f => f.id_string === serverConfig.cashId)
-      if (!form) throw new Error(`Form with id_string ${serverConfig.cashId} not found`)
-      return form.uuid
-    })
-
   const submit = async <TData>({
     formId,
     data,
@@ -51,7 +44,6 @@ export const importMpcaToCash = (async () => {
       try {
         const res = await sdk.v1.submit({
           formId,
-          uuid: newFormUuid,
           data: activity(item, i),
         })
         console.log(`Record ${i}:`, res.message ?? res.error)
@@ -67,8 +59,9 @@ export const importMpcaToCash = (async () => {
     formId: serverConfig.cashId,
     data: mappedData,
     activity: (item, i) => ({
-      ...item,
-      comment: config.importComment(i),
+      // ...item,
+      'metadata/ben_det_raion': 'zolochivskyi',
+      // 'aap/comment': config.importComment(i),
     }),
   })
 
