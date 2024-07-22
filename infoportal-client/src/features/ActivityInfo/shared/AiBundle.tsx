@@ -7,7 +7,7 @@ import {AiPreviewActivity, AiPreviewRequest, AiSendBtn, AiViewAnswers} from '@/f
 import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
-import {Box, useTheme} from '@mui/material'
+import {Badge, Box, useTheme} from '@mui/material'
 import {IpInput} from '@/shared/Input/Input'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
@@ -101,13 +101,15 @@ export const AiBundleTable = ({
                   {session.admin && (
                     <>
                       <AiSendBtn
-                        disabled={!_.submit}
+                        disabled={!_.submit || JSON.stringify(_.requestBody).includes('undefined')}
                         onClick={() => {
                           _submit.call(_.recordId, [_.requestBody]).catch(toastHttpError)
                         }}
                       />
                       <AiPreviewActivity activity={{..._.activity, ..._.subActivity}}/>
-                      <AiPreviewRequest request={_.requestBody}/>
+                      <Badge variant="dot" color="primary" overlap="circular" badgeContent="!" invisible={!JSON.stringify(_.requestBody).includes('undefined')}>
+                        <AiPreviewRequest request={_.requestBody}/>
+                      </Badge>
                     </>
                   )}
                   <AiViewAnswers answers={_.data.map(_ => {
@@ -145,7 +147,7 @@ export const AiBundleTable = ({
             renderQuick: _ => _.data.length,
           },
           {
-            id:'koboId',
+            id: 'koboId',
             type: 'string',
             head: m.koboId,
             typeIcon: keyTypeIcon,

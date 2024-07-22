@@ -25,41 +25,44 @@ export namespace AiGbvMapper {
   } as const
 
   export const mapGbvActivity = (reportingMonth: string) => async (res: ApiPaginate<InferTypedAnswer<'protection_gbv'>>) => {
-    const data: Type[] = await Promise.all(res.data.filter(_ => _.new_ben !== 'no').flatMap(d => {
-      return d.custom.persons!.map(async ind => {
-        return ({
-          answer: d,
-          ...AiMapper.getLocationByKobo(d),
-          'Settlement': await AILocationHelper.findSettlementByIso(d.ben_det_hromada_001).then(_ => _?._5w ?? aiInvalidValueFlag + d.ben_det_hromada_001),
-          ...AiMapper.disaggregatePersons([ind]),
-          'Reporting Month': reportingMonth,
-          'Plan/Project Code': fnSwitch(
-            DrcProjectHelper.search(Protection_gbv.options.project[d.project!])!,
-            planCode,
-            () => aiInvalidValueFlag + Protection_gbv.options.project[d.project!] as any
-          )!,
-          'Population Group': AiMapper.mapPopulationGroup(ind.displacement),
-          'Indicators': d.activity?.map(a => fnSwitch(a!, {
-            'pssac': '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)',
-            'wgss': '# of operational women and girls\' safe spaces',
-            // 'wgss': '# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces',
-            'ddk': '# of women and girls at risk who received dignity kits',
-            'gbvis': '# of individuals reached with awareness-raising activities and GBV-life-saving information',
-            'ngbv': '# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards',
-            'gbva': '# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards',
-            'gcva': '# of individuals reached with humanitarian cash and voucher assistance for GBV case management and/or other GBV response',
-            'glac': '# of individuals at risk supported with GBV specialized legal assistance and counseling',
-            'girl_shine': '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)',
-            'awareness_raising': `# of individuals reached with awareness-raising activities and GBV-life-saving information`,
-            'psychosocial_support': `# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)`,
-            'education_sessions': `# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces`,
-            'training_actors': `# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards`,
-            'training_providers': `# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards`,
-            'dignity_kits': `# of women and girls at risk who received dignity kits`,
-          }, () => aiInvalidValueFlag)) as any,
+    const data: Type[] = await Promise.all(res.data
+      .filter(_ => _.new_ben !== 'no')
+      .filter(_ => !!_.activity && !(_.activity.includes('other') && _.activity.length === 1))
+      .flatMap(d => {
+        return d.custom.persons!.map(async ind => {
+          return ({
+            answer: d,
+            ...AiMapper.getLocationByKobo(d),
+            'Settlement': await AILocationHelper.findSettlementByIso(d.ben_det_hromada_001).then(_ => _?._5w ?? aiInvalidValueFlag + d.ben_det_hromada_001),
+            ...AiMapper.disaggregatePersons([ind]),
+            'Reporting Month': reportingMonth,
+            'Plan/Project Code': fnSwitch(
+              DrcProjectHelper.search(Protection_gbv.options.project[d.project!])!,
+              planCode,
+              () => aiInvalidValueFlag + Protection_gbv.options.project[d.project!] as any
+            )!,
+            'Population Group': AiMapper.mapPopulationGroup(ind.displacement),
+            'Indicators': d.activity?.map(a => fnSwitch(a!, {
+              'pssac': '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)',
+              'wgss': '# of operational women and girls\' safe spaces',
+              // 'wgss': '# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces',
+              'ddk': '# of women and girls at risk who received dignity kits',
+              'gbvis': '# of individuals reached with awareness-raising activities and GBV-life-saving information',
+              'ngbv': '# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards',
+              'gbva': '# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards',
+              'gcva': '# of individuals reached with humanitarian cash and voucher assistance for GBV case management and/or other GBV response',
+              'glac': '# of individuals at risk supported with GBV specialized legal assistance and counseling',
+              'girl_shine': '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)',
+              'awareness_raising': `# of individuals reached with awareness-raising activities and GBV-life-saving information`,
+              'psychosocial_support': `# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)`,
+              'education_sessions': `# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces`,
+              'training_actors': `# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards`,
+              'training_providers': `# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards`,
+              'dignity_kits': `# of women and girls at risk who received dignity kits`,
+            }, () => aiInvalidValueFlag)) as any,
+          })
         })
-      })
-    }))
+      }))
     return data
   }
 }

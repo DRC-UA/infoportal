@@ -24,7 +24,7 @@ export const activitiesConfig = {
     id: 'c6mrp6dlqv1q7q243w',
     subId: 'cdgpehzlqv1q7q243x',
     name: 'GBV',
-    path: '/gbc',
+    path: '/gbv',
     componnent: <AiGbv/>,
   },
   'wash': {
