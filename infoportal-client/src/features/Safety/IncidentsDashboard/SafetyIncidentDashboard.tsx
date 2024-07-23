@@ -29,13 +29,13 @@ export const SafetyIncidentDashboard = () => {
   const filterShape = useMemo(() => DataFilter.makeShape<InferTypedAnswer<'safety_incident'>>({
     oblast: {
       icon: 'location_on',
-      getValue: (_) => _.oblast,
+      getValue: _ => _.oblast,
       getOptions: () => DataFilter.buildOptionsFromObject(Safety_incident.options.oblast),
       label: m.oblast,
     },
     alertType: {
       icon: 'notifications',
-      getValue: (_) => {
+      getValue: _ => {
         const alertTypes: AlertType[] = []
         if (_.alert_green_num) alertTypes.push(AlertType.green)
         if (_.alert_blue_num) alertTypes.push(AlertType.blue)
@@ -69,8 +69,8 @@ export const SafetyIncidentDashboard = () => {
   const data = seq(ctxAnswers.byName.get('safety_incident')?.data) ?? []
   const {dataIncident, dataAlert} = useMemo(() => {
     return {
-      dataIncident: data.filter((_) => !_.incident_type || _.incident_type.includes('other') || _.incident_type.includes('attack')),
-      dataAlert: data.filter((_) => _.incident_type?.includes('alert')),
+      dataIncident: data.filter(_ => !_.incident_type || _.incident_type.includes('other') || _.incident_type.includes('attack')),
+      dataAlert: data.filter(_ => _.incident_type?.includes('alert')),
     }
   }, [data])
 
@@ -79,8 +79,8 @@ export const SafetyIncidentDashboard = () => {
     dataAlertFiltered,
   } = useMemo(() => {
     return {
-      dataIncidentFiltered: DataFilter.filterData(dataIncident, filterShape, optionFilter), //.filter(_ => PeriodHelper.isDateIn(period, _.date)),
-      dataAlertFiltered: DataFilter.filterData(dataAlert, filterShape, optionFilter), //.filter(_ => PeriodHelper.isDateIn(period, _.date)),
+      dataIncidentFiltered: DataFilter.filterData(dataIncident, filterShape, optionFilter),//.filter(_ => PeriodHelper.isDateIn(period, _.date)),
+      dataAlertFiltered: DataFilter.filterData(dataAlert, filterShape, optionFilter),//.filter(_ => PeriodHelper.isDateIn(period, _.date)),
     }
   }, [data, period, optionFilter])
 
@@ -94,7 +94,10 @@ export const SafetyIncidentDashboard = () => {
   }, [optionFilter.alertType])
 
   return (
-    <Page width="lg" loading={ctxAnswers.byName.loading('safety_incident')}>
+    <Page
+      width="lg"
+      loading={ctxAnswers.byName.loading('safety_incident')}
+    >
       <DataFilterLayout
         shapes={filterShape}
         filters={optionFilter}
@@ -107,7 +110,7 @@ export const SafetyIncidentDashboard = () => {
           <DebouncedInput<[Date | undefined, Date | undefined]>
             debounce={400}
             value={[period.start, period.end]}
-            onChange={([start, end]) => setPeriod((prev) => ({...prev, start, end}))}
+            onChange={([start, end]) => setPeriod(prev => ({...prev, start, end}))}
           >
             {(value, onChange) => (
               <PeriodPicker
