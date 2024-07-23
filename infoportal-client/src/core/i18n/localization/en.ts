@@ -539,6 +539,7 @@ export const en = Object.freeze({
     },
     safety: {
       alerts: 'Alerts',
+      alertType: 'Alert',
       minusRusLabel: {
         prisoners: 'Prisoners',
         killed: 'Killed',

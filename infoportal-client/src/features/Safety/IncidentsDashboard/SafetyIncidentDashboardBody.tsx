@@ -12,13 +12,20 @@ import {MinusRusChartPanel} from '@/features/Safety/IncidentsDashboard/MinusRusC
 import {CommentsPanel, CommentsPanelProps} from '@/shared/CommentsPanel'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Period, PeriodHelper, Safety_incident} from '@infoportal-common'
-import {useMemo, useState} from 'react'
+import {Dispatch, SetStateAction, useMemo, useState} from 'react'
 import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {SafetyIncidentDashboardAlert} from '@/features/Safety/IncidentsDashboard/SafetyIncidentDashboardAlert'
 import {Panel, PanelBody, PanelHead, PanelTitle} from '@/shared/Panel'
 import {Divider} from '@mui/material'
 import {IpSelectMultiple, IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
 import {protectionDashboardMonitoPreviousPeriodDeltaDays} from '@/features/Protection/DashboardMonito/useProtectionDashboardMonitoData'
+
+export enum AlertType {
+  green = 'green',
+  blue = 'blue',
+  yellow = 'yellow',
+  red = 'red',
+}
 
 export const SafetyIncidentDashboardBody = ({
   period,
@@ -28,7 +35,9 @@ export const SafetyIncidentDashboardBody = ({
     dataAlert,
     dataIncident,
     dataIncidentFiltered,
-  }
+  },
+  optionFilter,
+  setOptionFilters,
 }: {
   period: Partial<Period>
   data: {
@@ -38,15 +47,36 @@ export const SafetyIncidentDashboardBody = ({
     dataIncident: Seq<InferTypedAnswer<'safety_incident'>>
     dataIncidentFiltered: Seq<InferTypedAnswer<'safety_incident'>>
   }
+  optionFilter: Record<string, string[] | undefined>
+  setOptionFilters: Dispatch<SetStateAction<Record<string, string[] | undefined>>>
 }) => {
   const {m, formatLargeNumber} = useI18n()
   const [mapType, setMapType] = useState<'incident' | 'attack'>('incident')
   const {session} = useSession()
   const [filterAttack, setFilterAttack] = useState<string[]>([])
 
-  const filteredData = useMemo(() => {
-    return dataIncidentFiltered.filter(_ => filterAttack.length === 0 || _.attack_type?.find(x => filterAttack.includes(x)))
-  }, [dataIncidentFiltered, filterAttack])
+  const dataIncidentWithAlertType = useMemo(() => {
+    return dataIncidentFiltered.map(item => {
+      const alertItem = dataAlertFiltered.find(alert => alert.id === item.id)
+      const alertTypes: AlertType[] = []
+      if (alertItem?.alert_green_num) alertTypes.push(AlertType.green)
+      if (alertItem?.alert_blue_num) alertTypes.push(AlertType.blue)
+      if (alertItem?.alert_yellow_num) alertTypes.push(AlertType.yellow)
+      if (alertItem?.alert_red_num) alertTypes.push(AlertType.red)
+      return {
+        ...item,
+        alertType: alertTypes,
+      }
+    })
+  }, [dataIncidentFiltered, dataAlertFiltered])
+
+  const finalFilteredData = useMemo(() => {
+    return dataIncidentWithAlertType.filter(_ => {
+      const matchesAttackType = filterAttack.length === 0 || _.attack_type?.some(x => filterAttack.includes(x))
+      const matchesAlertType = optionFilter.alertType?.length === 0 || optionFilter.alertType?.some(alertType => _.alertType?.includes(alertType as AlertType))
+      return matchesAttackType && matchesAlertType
+    })
+  }, [dataIncidentWithAlertType, filterAttack, optionFilter.alertType])
 
   const dataIncidentFilteredLastPeriod = useMemo(() => map(period.start, period.end, (start, end) => {
     const lastPeriod = {
@@ -54,8 +84,8 @@ export const SafetyIncidentDashboardBody = ({
       end: subDays(end, protectionDashboardMonitoPreviousPeriodDeltaDays)
     }
     if (differenceInDays(end, start) <= protectionDashboardMonitoPreviousPeriodDeltaDays) return
-    return filteredData.filter(_ => PeriodHelper.isDateIn(lastPeriod, _.date))
-  }), [dataIncident])
+    return finalFilteredData.filter(_ => PeriodHelper.isDateIn(lastPeriod, _.date))
+  }), [finalFilteredData])
 
   return (
     <Div sx={{alignItems: 'flex-start'}} responsive>
@@ -81,7 +111,7 @@ export const SafetyIncidentDashboardBody = ({
               showValue
               compare={dataIncidentFilteredLastPeriod ? {before: dataIncidentFilteredLastPeriod} : undefined}
               filterBase={_ => _.attack !== undefined}
-              data={filteredData}
+              data={finalFilteredData}
             />
           </PanelBody>
           <Divider/>
@@ -95,7 +125,7 @@ export const SafetyIncidentDashboardBody = ({
                 <MapSvgByOblast
                   sx={{maxWidth: 480}}
                   fillBaseOn="value"
-                  data={filteredData}
+                  data={finalFilteredData}
                   getOblast={_ => _.oblastISO!}
                   value={_ => true}
                   base={_ => _.oblastISO !== undefined}
@@ -105,7 +135,7 @@ export const SafetyIncidentDashboardBody = ({
                 <MapSvgByOblast
                   sx={{maxWidth: 480}}
                   fillBaseOn="value"
-                  data={filteredData}
+                  data={finalFilteredData}
                   getOblast={_ => _.oblastISO}
                   value={_ => _.attack === 'yes'}
                   base={_ => _.oblastISO !== undefined}
@@ -117,7 +147,7 @@ export const SafetyIncidentDashboardBody = ({
           <PanelBody>
             <PanelTitle sx={{mb: 1}}>{m.safety.attackTypes}</PanelTitle>
             <ChartBarMultipleBy
-              data={filteredData}
+              data={finalFilteredData}
               by={_ => _.attack_type}
               label={Safety_incident.options.attack_type}
             />
@@ -126,7 +156,7 @@ export const SafetyIncidentDashboardBody = ({
           <PanelBody>
             <PanelTitle sx={{mb: 1}}>{m.safety.target}</PanelTitle>
             <ChartBarMultipleBy
-              data={filteredData}
+              data={finalFilteredData}
               by={_ => _.what_destroyed}
               label={Safety_incident.options.what_destroyed}
             />
@@ -135,7 +165,7 @@ export const SafetyIncidentDashboardBody = ({
           <PanelBody>
             <PanelTitle sx={{mb: 1}}>{m.safety.typeOfCasualties}</PanelTitle>
             <ChartBarMultipleBy
-              data={filteredData}
+              data={finalFilteredData}
               by={_ => _.type_casualties}
               label={Safety_incident.options.type_casualties}
             />
@@ -143,7 +173,7 @@ export const SafetyIncidentDashboardBody = ({
           <Divider/>
           <PanelBody>
             <PanelTitle sx={{mb: 1}}>{m.safety.lastAttacks}</PanelTitle>
-            <Lazy deps={[filteredData]} fn={() => filteredData?.filter(_ => _.attack === 'yes').map(_ => ({
+            <Lazy deps={[finalFilteredData]} fn={() => finalFilteredData?.filter(_ => _.attack === 'yes').map(_ => ({
               id: _.id,
               title: m.safety.attackOfOn(_.oblastISO, _.attack_type),
               date: _.date_time,
@@ -158,17 +188,17 @@ export const SafetyIncidentDashboardBody = ({
         <SafetyIncidentDashboardAlert data={{
           data,
           dataAlert: dataAlertFiltered,
-        }}/>
+        }} optionFilter={optionFilter} setOptionFilters={setOptionFilters}/>
         <SlidePanel title={m.safety.casualties}>
           <Div sx={{mt: -2}}>
-            <Lazy deps={[filteredData]} fn={() => filteredData?.sum(_ => _.dead ?? 0)}>
+            <Lazy deps={[finalFilteredData]} fn={() => finalFilteredData?.sum(_ => _.dead ?? 0)}>
               {_ => (
                 <SlideWidget sx={{minHeight: 'auto', flex: 1}} title={m.safety.dead}>
                   {formatLargeNumber(_)}
                 </SlideWidget>
               )}
             </Lazy>
-            <Lazy deps={[filteredData]} fn={() => filteredData?.sum(_ => _.injured ?? 0)}>
+            <Lazy deps={[finalFilteredData]} fn={() => finalFilteredData?.sum(_ => _.injured ?? 0)}>
               {_ => (
                 <SlideWidget sx={{minHeight: 'auto', flex: 1}} title={m.safety.injured}>
                   {formatLargeNumber(_)}
@@ -176,8 +206,8 @@ export const SafetyIncidentDashboardBody = ({
               )}
             </Lazy>
           </Div>
-          <Lazy deps={[filteredData]} fn={() => {
-            const x = filteredData?.groupBy(_ => _.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date')
+          <Lazy deps={[finalFilteredData]} fn={() => {
+            const x = finalFilteredData?.groupBy(_ => _.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date')
             return new Enum(x)
               .transform((k, v) => [k, {
                 total: v.length,
