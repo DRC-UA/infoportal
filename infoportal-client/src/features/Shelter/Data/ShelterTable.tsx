@@ -305,7 +305,7 @@ export const ShelterTable = () => {
         type: 'string',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
-        head: m.name,
+        head: m.payName,
         renderQuick: _ => {
           if (!_.nta) return
           const items = seq([
@@ -318,20 +318,20 @@ export const ShelterTable = () => {
         }
       },
       {
+        id: 'phone',
+        type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        head: m.payPhone,
+        renderQuick: _ => _.nta?.ben_det_ph_number_l ? '' + _.nta?.ben_det_ph_number_l : undefined,
+      },
+      {
         id: 'hhName',
         type: 'string',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m.hhName,
         renderQuick: _ => _.nta?.interviewee_name ? '' + _.nta?.interviewee_name : undefined,
-      },
-      {
-        id: 'phone',
-        type: 'string',
-        group: 'nta',
-        groupLabel: KoboIndex.byName('shelter_nta').translation,
-        head: m.phone,
-        renderQuick: _ => _.nta?.ben_det_ph_number_l ? '' + _.nta?.ben_det_ph_number_l : undefined,
       },
       {
         id: 'hhPhone',

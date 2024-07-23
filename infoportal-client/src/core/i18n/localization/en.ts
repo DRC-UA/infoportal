@@ -264,6 +264,8 @@ export const en = Object.freeze({
     thirdPriorityNeed: '3rd Priority needs',
     selected: 'Selected',
     phone: 'Phone',
+    payName: 'Payment contact name',
+    payPhone: 'Payment contact phone',
     hhPhone: 'HH Phone',
     drcEmail: 'DRC Email',
     finance: 'Finance',
