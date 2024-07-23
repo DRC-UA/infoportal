@@ -68,6 +68,12 @@ export class BuildKoboType {
         'ben_det_raion',
       ]
     },
+    protection_coc: {
+      formId: KoboIndex.byName('protection_coc').id, skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
+    },
     protection_gbv: {
       formId: KoboIndex.byName('protection_gbv').id, skipQuestionTyping: [
         'ben_det_hromada',

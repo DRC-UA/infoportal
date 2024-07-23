@@ -31,6 +31,7 @@ import {
   ShelterNtaTags,
   Meal_verificationEcrec,
   ShelterTaTagsHelper,
+  Protection_coc,
 } from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
@@ -194,6 +195,11 @@ export class KoboTypedAnswerSdk {
       ...make('partnership_partnersDatabase', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('partnership_partnersDatabase').id,
         fnMapKobo: Partnership_partnersDatabase.map,
+        ...filters,
+      })),
+      ...make('protection_coc', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('protection_coc').id,
+        fnMapKobo: Protection_coc.map,
         ...filters,
       })),
       ...make('protection_gbvSocialProviders', (filters?: KoboAnswerFilter) => req({

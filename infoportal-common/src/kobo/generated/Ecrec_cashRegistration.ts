@@ -107,7 +107,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'disease_higher_expenditures': undefined | Option<'pay_det_tax_exempt'>,
 	  // hh_char/disease_does_working [select_one] 3.3.2.1 If yes, does the presense of a person with a chornic disease in the household prevent someone in the household from working as a result of taking on caregiver duties?
   'disease_does_working': undefined | Option<'pay_det_tax_exempt'>,
-	  // hh_char/household_agricultural_activities [select_one] 3.3.3 Does the Household have the physical ability to engage in light agricultural activities?
+	  // hh_char/household_agricultural_activities [select_one] 3.3.3 Does the Household have the physical ability or resource to s engage in light agricultural activities?
   'household_agricultural_activities': undefined | Option<'pay_det_tax_exempt'>,
 	  // hh_char/financial_manage_livestock [select_one] 3.3.3.1 If no, does the household have the financial or social resources they can use to cultivate their land or manage their livestock?
   'financial_manage_livestock': undefined | Option<'pay_det_tax_exempt'>,

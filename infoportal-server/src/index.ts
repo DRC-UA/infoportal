@@ -120,7 +120,7 @@ const startApp = async (conf: AppConf) => {
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
     } else {
-      // await new BuildKoboType().buildAll()
+      await new BuildKoboType().buildAll()
     }
   }
 

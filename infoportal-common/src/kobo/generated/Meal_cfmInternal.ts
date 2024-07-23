@@ -6,8 +6,6 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	    'end': string,
 	  // begin_group_8qtQfwiWw/benef_origin [select_one] Beneficiary origin
   'benef_origin': undefined | Option<'benef_origin'>,
-	  // begin_group_8qtQfwiWw/existing_beneficiary [select_one] Is this an existing beneficiary of DRC?
-  'existing_beneficiary': undefined | Option<'existing_beneficiary'>,
 	  // begin_group_8qtQfwiWw/project_code [select_one] Please enter the project code
   'project_code': undefined | Option<'project_code'>,
 	  // begin_group_8qtQfwiWw/project_code_specify [text] Please specify
@@ -44,7 +42,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'feedback': string | undefined,
 	}
 export const options = {
-existing_beneficiary: {
+undefined: {
 	'yes': `Yes`,
 	'no': `No`
 },
