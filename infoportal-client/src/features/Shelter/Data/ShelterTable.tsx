@@ -318,12 +318,28 @@ export const ShelterTable = () => {
         }
       },
       {
+        id: 'hhName',
+        type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        head: m.hhName,
+        renderQuick: _ => _.nta?.interviewee_name ? '' + _.nta?.interviewee_name : undefined,
+      },
+      {
         id: 'phone',
         type: 'string',
         group: 'nta',
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m.phone,
         renderQuick: _ => _.nta?.ben_det_ph_number_l ? '' + _.nta?.ben_det_ph_number_l : undefined,
+      },
+      {
+        id: 'hhPhone',
+        type: 'string',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        head: m.hhPhone,
+        renderQuick: _ => _.nta?.hh_yes_mobile ? '' + _.nta?.hh_yes_mobile : undefined,
       },
       {
         id: 'hhSize',
