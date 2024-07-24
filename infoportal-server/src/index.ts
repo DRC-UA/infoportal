@@ -13,9 +13,6 @@ import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
-import {ActivityInfoBuildType} from './feature/activityInfo/databaseInterface/ActivityInfoBuildType'
-import {ecrecClearDuplicateSection} from './script/20240719-ecrecClearDuplicateSection/ecrecClearDuplicateSection'
-import {BuildKoboType} from './script/BuildTypeKobo'
 
 export type AppLogger = WinstonLogger
 
@@ -68,26 +65,17 @@ export const App = (config: AppConf = appConf) => {
 export const app = App()
 
 const initServices = (
-  // koboClient: v2,
-  // ecrecSdk: EcrecSdk,
-  // legalaidSdk: LegalaidSdk,
   prisma: PrismaClient,
 ): {mpcaPayment: MpcaPaymentService} => {
-  // const ecrec = new ServiceEcrec(ecrecSdk)
-  // const legalAid = new ServiceLegalAid(legalaidSdk)
-  // const nfi = new ServiceNfi(koboClient)
   const mpcaPayment = new MpcaPaymentService(prisma)
   return {
-    // ecrec,
-    // legalAid,
-    // nfi,
     mpcaPayment,
   }
 }
 
 const startApp = async (conf: AppConf) => {
-  await ecrecClearDuplicateSection()
-  return
+  // await ecrecClearDuplicateSection()
+  // return
   // return
   // await ActivityInfoBuildType.snfi()
   // return
@@ -109,9 +97,6 @@ const startApp = async (conf: AppConf) => {
     // log: ['query']
   })
   const services = initServices(
-    // koboSdk,
-    // ecrecAppSdk,
-    // legalAidSdk,
     prisma,
   )
   const init = async () => {

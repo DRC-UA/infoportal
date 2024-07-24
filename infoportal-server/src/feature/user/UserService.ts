@@ -20,6 +20,13 @@ export class UserService {
     })
   }
 
+  readonly getUserAvatarByEmail = (email: string): Promise<Buffer | undefined> => {
+    return this.prisma.user.findFirst({
+      where: {email},
+      select: {avatar: true}
+    }).then(_ => _?.avatar ?? undefined)
+  }
+
   readonly update = ({
     email,
     drcOffice,

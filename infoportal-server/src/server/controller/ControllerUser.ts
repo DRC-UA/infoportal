@@ -25,7 +25,7 @@ export class ControllerUser {
     const {email} = await yup.object({
       email: yup.string().optional()
     }).validate(req.params)
-    const avatar = await this.service.getUserByEmail(email ?? req.session.user?.email!).then(_ => _?.avatar ?? undefined)
+    const avatar = await this.service.getUserAvatarByEmail(email ?? req.session.user?.email!)
     if (!avatar) {
       throw new AppError.NotFound('user_not_found')
     } else {
