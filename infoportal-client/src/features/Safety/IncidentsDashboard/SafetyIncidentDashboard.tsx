@@ -2,7 +2,6 @@ import React, {useEffect, useMemo, useState} from 'react'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {DebouncedInput} from '@/shared/DebouncedInput'
 import {KoboIndex, Period, Safety_incident} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
@@ -52,6 +51,13 @@ export const SafetyIncidentDashboard = () => {
       multiple: true,
       label: m.safety.alertType,
     },
+    attackType: {
+      icon: 'warning',
+      getValue: _ => _.attack_type,
+      getOptions: () => DataFilter.buildOptionsFromObject(Safety_incident.options.attack_type),
+      multiple: true,
+      label: m.safety.attack,
+    },
   }), [m])
 
   useEffect(() => {
@@ -78,11 +84,22 @@ export const SafetyIncidentDashboard = () => {
     dataIncidentFiltered,
     dataAlertFiltered,
   } = useMemo(() => {
-    return {
-      dataIncidentFiltered: DataFilter.filterData(dataIncident, filterShape, optionFilter),//.filter(_ => PeriodHelper.isDateIn(period, _.date)),
-      dataAlertFiltered: DataFilter.filterData(dataAlert, filterShape, optionFilter),//.filter(_ => PeriodHelper.isDateIn(period, _.date)),
+    const filteredData = DataFilter.filterData(data, filterShape, optionFilter)
+    const isDateInPeriod = (date: Date | undefined) => {
+      if (!date) return false
+      if (period.start && date < period.start) return false
+      if (period.end && date > period.end) return false
+      return true
     }
-  }, [data, period, optionFilter])
+    return {
+      dataIncidentFiltered: filteredData.filter(_ =>
+        (!_.incident_type || _.incident_type.includes('other') || _.incident_type.includes('attack')) && isDateInPeriod(new Date(_.date))
+      ),
+      dataAlertFiltered: filteredData.filter(_ =>
+        (_.incident_type?.includes('alert')) && isDateInPeriod(new Date(_.date))
+      ),
+    }
+  }, [data, filterShape, optionFilter, period])
 
   useEffect(() => {
     if (optionFilter.alertType === undefined) {
@@ -91,7 +108,13 @@ export const SafetyIncidentDashboard = () => {
         alertType: [],
       }))
     }
-  }, [optionFilter.alertType])
+    if (optionFilter.attackType === undefined) {
+      setOptionFilters((prev) => ({
+        ...prev,
+        attackType: [],
+      }))
+    }
+  }, [optionFilter.alertType, optionFilter.attackType])
 
   return (
     <Page
@@ -107,21 +130,16 @@ export const SafetyIncidentDashboard = () => {
         }}
         setFilters={setOptionFilters}
         before={
-          <DebouncedInput<[Date | undefined, Date | undefined]>
-            debounce={400}
+          <PeriodPicker
+            sx={{marginTop: '-6px'}}
             value={[period.start, period.end]}
-            onChange={([start, end]) => setPeriod(prev => ({...prev, start, end}))}
-          >
-            {(value, onChange) => (
-              <PeriodPicker
-                sx={{marginTop: '-6px'}}
-                value={value ?? [undefined, undefined]}
-                onChange={onChange}
-                min={_period.get?.start}
-                max={_period.get?.end}
-              />
-            )}
-          </DebouncedInput>
+            onChange={([start, end]) => {
+              setPeriod(prev => ({...prev, start: start ?? undefined, end: end ?? undefined}))
+            }}
+            label={[m.start, m.endIncluded]}
+            min={_period.get?.start}
+            max={_period.get?.end}
+          />
         }
       />
       <>

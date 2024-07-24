@@ -91,17 +91,6 @@ export const SafetyIncidentDashboardBody = ({
     <Div sx={{alignItems: 'flex-start'}} responsive>
       <Div column>
         <Panel>
-          <PanelHead action={
-            <IpSelectMultiple
-              sx={{minWidth: 140}}
-              label={m.safety.attackTypes}
-              value={filterAttack}
-              onChange={setFilterAttack}
-              options={Obj.entries(Safety_incident.options.attack_type).map(([k, v]) => IpSelectMultipleHelper.makeOption({value: k, children: v}))}
-            />
-          }>
-            {m.safety.incidents + ` (${formatLargeNumber(dataIncidentFiltered.length)})`}
-          </PanelHead>
           <Div sx={{alignItems: 'stretch'}}>
           </Div>
           <PanelBody>
