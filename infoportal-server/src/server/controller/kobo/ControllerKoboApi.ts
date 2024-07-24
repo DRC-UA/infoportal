@@ -75,9 +75,35 @@ export class ControllerKoboApi {
     const answerId = await yup.string().required().validate(req.params.answerId)
     const sdk = await this.koboSdkGenerator.get(id)
     const link = await sdk.v2.edit(formId, answerId)
-    // TODO Find a way to authenticate
-    // res.header('Authorization', v2.makeAuthorizationHeader(appConf.kobo.token))
-    // res.cookie('kobonaut__eu_kobotoolbox_org', '')
+
+    //   res.send(`
+    //   <!DOCTYPE html>
+    //   <html>
+    //   <head>
+    //     <title>Set Cookie and Redirect</title>
+    //     <script>
+    //       document.addEventListener("DOMContentLoaded", function() {
+    //         document.cookie = "kobonaut__eu_kobotoolbox_org=9qjoc9o3ck2c8hkgldp4brz6iviqw8xt; domain=.kobotoolbox.org; path=/; SameSite=Lax; Secure"
+    //         window.location.href = '${link.url}'
+    //       })
+    //     </script>
+    //   </head>
+    //   <body>
+    //     <p>Setting cookie and redirecting...</p>
+    //   </body>
+    //   </html>
+    // `);
+
+    // // TODO Find a way to authenticate
+    // // res.header('Authorization', v2.makeAuthorizationHeader(appConf.kobo.token))
+    res.cookie('kobonaut__eu_kobotoolbox_org', '9qjoc9o3ck2c8hkgldp4brz6iviqw8xt', {
+      domain: '.kobotoolbox.org',
+      expires: new Date('2025-07-26T12:04:26.655Z'),
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+    })
     res.redirect(link.url)
   }
 
