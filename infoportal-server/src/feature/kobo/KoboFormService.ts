@@ -1,5 +1,5 @@
 import {KoboForm, PrismaClient} from '@prisma/client'
-import {KoboId, KoboSdk, KoboSdkv2, UUID} from '@infoportal-common'
+import {DeploymentStatus, KoboId, KoboSdk, KoboSdkv2, UUID} from '@infoportal-common'
 import {KoboApiService} from './KoboApiService'
 import {seq} from '@alexandreannic/ts-utils'
 import {appConf} from '../../core/conf/AppConf'
@@ -9,6 +9,7 @@ export interface KoboFormCreate {
   name: string
   serverId: UUID
   uploadedBy: string
+  deploymentStatus: DeploymentStatus
 }
 
 export class KoboFormService {

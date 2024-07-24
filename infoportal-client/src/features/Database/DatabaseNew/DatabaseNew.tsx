@@ -74,6 +74,7 @@ export const DatabaseNew = ({
                       name: form.name,
                       uid: form.uid,
                       serverId: server.id,
+                      deploymentStatus: form.deployment_status,
                     })}
                     title={form.name}
                     description={
