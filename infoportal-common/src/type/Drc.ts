@@ -250,6 +250,7 @@ export enum DrcJob {
   'Economic Recovery Specialist' = 'Economic Recovery Specialist',
   'Deminer' = 'Deminer',
   'Livelihoods Assistant' = 'Livelihoods Assistant',
+  'Shelter and Settlement Specialist' = 'Shelter and Settlement Specialist',
   'Livelihoods Officer' = 'Livelihoods Officer',
   'Accountant' = 'Accountant',
   'Accountant Officer' = 'Accountant Officer',

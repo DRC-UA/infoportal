@@ -43,7 +43,10 @@ export namespace KoboSchemaHelper {
       ...schema,
       content: {
         ...schema.content,
-        survey: surveySanitized.filter(_ => !(_.type === 'note' && !_.calculation)).map(_ => {
+        survey: surveySanitized.filter(_ => !(
+          _.type === 'note' && !_.calculation ||
+          _.type === 'calculate' && !_.label
+        )).map(_ => {
           return {
             ..._,
             label: _.label?.map(_ => removeHtml(_))
