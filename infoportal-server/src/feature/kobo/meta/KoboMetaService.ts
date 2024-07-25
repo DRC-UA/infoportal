@@ -153,7 +153,7 @@ export class KoboMetaService {
     }).then(_ => seq(_).groupByAndApply(_ => _.koboId, _ => _.map(_ => _.id)))
 
     const metaIdsWithNewPersons = updates.filter(_ => !!_[1].persons).flatMap(_ => koboIdToMetaId[_[0]])
-    await this.prisma.koboPerson.deleteMany({where: {metaId: {in: metaIdsWithNewPersons}}})
+    await this.prisma.koboPerson.deleteMany({where: {metaId: {in: metaIdsWithNewPersons.filter(_ => _ !== undefined)}}})
 
     const createPersonInput = updates.flatMap(([koboId, mapped]) => {
       return (koboIdToMetaId[koboId] ?? []).flatMap(metaId => {

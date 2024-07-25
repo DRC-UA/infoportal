@@ -103,6 +103,8 @@ export class KoboMetaBasicneeds {
     }).compact().distinct(_ => _.activity) ?? []
 
     const prepare = (activity: DrcProgram, project?: DrcProject): MetaMapped => {
+      if (!project) throw new Error(`[${row.id}] No project for ${JSON.stringify(answer.back_donor)}`)
+      if (!DrcProjectHelper.donorByProject[project]) throw new Error(`[${row.id}] No donor for ${project}`)
       const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
       return {
         enumerator: Bn_re.options.back_enum[answer.back_enum!],

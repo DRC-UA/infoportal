@@ -1,4 +1,4 @@
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@alexandreannic/ts-utils'
 
 export enum DrcOffice {
   Kyiv = 'Kyiv',
@@ -111,6 +111,9 @@ export const drcOfficeShort: Record<DrcOffice, string> = {
 }
 
 export enum DrcDonor {
+  PFRU = 'PFRU',
+  GFFO = 'GFFO',
+  DMFA = 'DMFA',
   BHA = 'BHA',
   ECHO = 'ECHO',
   SDC = 'SDC',
@@ -181,6 +184,7 @@ export enum DrcProject {
   'UKR-000316 UHF5' = 'UKR-000316 UHF5',
   'UKR-000329 SIDA H2R' = 'UKR-000329 SIDA H2R',
   'UKR-000291_292 UNHCR' = 'UKR-000291_292 UNHCR',
+  'UKR-000xxx DANIDA' = 'UKR-000xxx DANIDA',
 }
 
 export const allProjects = Obj.values(DrcProject)
@@ -188,38 +192,56 @@ export const allProjects = Obj.values(DrcProject)
 export class DrcProjectHelper {
   static readonly list = Obj.keys(DrcProject)
 
-  static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = {
-    [DrcDonor.BHA]: [DrcProject['UKR-000284 BHA'], DrcProject['UKR-000345 BHA2'], DrcProject['UKR-000348 BHA3']],
-    [DrcDonor.ECHO]: [DrcProject['UKR-000269 ECHO1'], DrcProject['UKR-000322 ECHO2']],
-    [DrcDonor.SDC]: [DrcProject['UKR-000226 SDC'], DrcProject['UKR-000330 SDC2']],
-    [DrcDonor.FCDO]: [DrcProject['UKR-000247 FCDO'],],
-    [DrcDonor.OKF]: [DrcProject['UKR-000309 OKF'],],
-    [DrcDonor.PSPU]: [DrcProject['UKR-000304 PSPU'],],
-    [DrcDonor.PoolFunds]: [DrcProject['UKR-000270 Pooled Funds'], DrcProject['UKR-000342 Pooled Funds']],
-    [DrcDonor.FINM]: [DrcProject['UKR-000249 Finnish MFA'],],
-    [DrcDonor.FREM]: [DrcProject['UKR-000293 French MFA'],],
-    [DrcDonor.EUIC]: [DrcProject['UKR-000255 EU IcSP'],],
-    [DrcDonor.PMRA]: [DrcProject['UKR-000230 PM WRA'],],
-    [DrcDonor.PMKA]: [DrcProject['UKR-000231 PM WKA'],],
-    [DrcDonor.SIDA]: [DrcProject['SIDA 518-570A'],],
-    [DrcDonor.UHF]: [DrcProject['UKR-000276 UHF3'], DrcProject['UKR-000314 UHF4'], DrcProject['UKR-000336 UHF6'], DrcProject['UKR-000352 UHF7'], DrcProject['UKR-000363 UHF8']],
-    [DrcDonor.UNHC]: [DrcProject['UKR-000308 UNHCR'],],
-    [DrcDonor.DANI]: [DrcProject['UKR-000267 DANIDA'], DrcProject['UKR-000347 DANIDA']],
-    [DrcDonor.DUT]: [DrcProject['UKR-000294 Dutch I'], DrcProject['UKR-000306 Dutch II']],
-    [DrcDonor.NovoNordisk]: [DrcProject['UKR-000274 Novo-Nordisk'], DrcProject['UKR-000298 Novo-Nordisk'], DrcProject['UKR-000360 Novo-Nordisk']],
-    [DrcDonor.SDCS]: [DrcProject['UKR-000290 SDC Shelter'],],
-    [DrcDonor.MOFA]: [DrcProject['UKR-000301 DANISH MoFA']],
-    [DrcDonor.AugustinusFonden]: [DrcProject['UKR-000340 Augustinus Fonden']],
-    [DrcDonor.HoffmansAndHusmans]: [DrcProject['UKR-000341 Hoffmans & Husmans']],
+  static readonly donorByProject: Record<DrcProject, DrcDonor> = {
+    'UKR-000226 SDC': DrcDonor.SDC,
+    'UKR-000230 PM WRA': DrcDonor.PMRA,
+    'UKR-000231 PM WKA': DrcDonor.PMKA,
+    'UKR-000247 FCDO': DrcDonor.FCDO,
+    'UKR-000249 Finnish MFA': DrcDonor.FINM,
+    'UKR-000255 EU IcSP': DrcDonor.EUIC,
+    'UKR-000267 DANIDA': DrcDonor.DANI,
+    'UKR-000269 ECHO1': DrcDonor.ECHO,
+    'UKR-000270 Pooled Funds': DrcDonor.PoolFunds,
+    'UKR-000270 Pooled Funds Old (MPCA)': DrcDonor.PoolFunds,
+    'UKR-000274 Novo-Nordisk': DrcDonor.NovoNordisk,
+    'UKR-000276 UHF3': DrcDonor.UHF,
+    'UKR-000284 BHA': DrcDonor.BHA,
+    'UKR-000286 DMFA': DrcDonor.DMFA,
+    'UKR-000290 SDC Shelter': DrcDonor.SDCS,
+    'UKR-000293 French MFA': DrcDonor.FREM,
+    'UKR-000294 Dutch I': DrcDonor.DUT,
+    'UKR-000298 Novo-Nordisk': DrcDonor.NovoNordisk,
+    'UKR-000301 DANISH MoFA': DrcDonor.MOFA,
+    'UKR-000304 PSPU': DrcDonor.PSPU,
+    'UKR-000306 Dutch II': DrcDonor.DUT,
+    'UKR-000308 UNHCR': DrcDonor.UNHC,
+    'UKR-000309 OKF': DrcDonor.OKF,
+    'UKR-000331 GFFO': DrcDonor.GFFO,
+    'UKR-000314 UHF4': DrcDonor.UHF,
+    'UKR-000322 ECHO2': DrcDonor.ECHO,
+    'UKR-000323 PFRU': DrcDonor.PFRU,
+    'UKR-000330 SDC2': DrcDonor.SDC,
+    'UKR-000336 UHF6': DrcDonor.UHF,
+    'UKR-000340 Augustinus Fonden': DrcDonor.AugustinusFonden,
+    'UKR-000341 Hoffmans & Husmans': DrcDonor.HoffmansAndHusmans,
+    'UKR-000342 Pooled Funds': DrcDonor.PoolFunds,
+    'UKR-000345 BHA2': DrcDonor.BHA,
+    'UKR-000347 DANIDA': DrcDonor.DANI,
+    'UKR-000348 BHA3': DrcDonor.BHA,
+    'UKR-000350 SIDA': DrcDonor.SIDA,
+    'UKR-000352 UHF7': DrcDonor.UHF,
+    'UKR-000355 Danish MFA': DrcDonor.DMFA,
+    'UKR-000360 Novo-Nordisk': DrcDonor.NovoNordisk,
+    'UKR-000363 UHF8': DrcDonor.UHF,
+    'UKR-000372 ECHO3': DrcDonor.ECHO,
+    'SIDA 518-570A': DrcDonor.SIDA,
+    'UKR-000316 UHF5': DrcDonor.UHF,
+    'UKR-000329 SIDA H2R': DrcDonor.SIDA,
+    'UKR-000291_292 UNHCR': DrcDonor.UNHC,
+    'UKR-000xxx DANIDA': DrcDonor.DANI,
   }
 
-  static readonly donorByProject: Record<DrcProject, DrcDonor> = Obj.entries(DrcProjectHelper.projectByDonor)
-    .reduce((acc, [donor, projects]) => {
-      projects.forEach(project => {
-        acc[project] = donor
-      })
-      return acc
-    }, {} as Record<DrcProject, DrcDonor>)
+  static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = seq(Obj.entries(DrcProjectHelper.donorByProject)).groupByAndApply(_ => _[1], _ => _.map(_ => _[0]))
 
   static readonly extractCode = (str?: string): string | undefined => {
     return str?.match(/UKR.(000\d\d\d)/)?.[1]
