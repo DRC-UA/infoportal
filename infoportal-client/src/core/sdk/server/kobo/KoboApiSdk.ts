@@ -1,8 +1,9 @@
-import {ApiClient} from '../ApiClient'
+import {ApiClient, RequestOption} from '../ApiClient'
 import {KoboAnswerFlat, KoboAnswerId, KoboApiSchema, KoboId, koboIndex, UUID} from '@infoportal-common'
 import {ApiKoboForm, Kobo} from './Kobo'
 import {appConfig, AppConfig} from '@/conf/AppConfig'
 import {ApiPaginate, ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
+import {Method} from 'axios'
 
 
 export interface FilterBy {
@@ -89,6 +90,20 @@ export class KoboApiSdk {
 
   readonly getAttachement = (serverId: UUID, filepath: string) => {
     return this.client.get<ApiKoboForm[]>(`/kobo-api/${serverId}/attachment/${filepath}`)
+  }
+
+  readonly proxy = <T = any>({serverId, url, method, options}: {serverId: UUID, method: Method, url: string, options?: RequestOption}) => {
+    return this.client.post<T>(`/kobo-api/proxy`, {
+      // responseType: 'blob',
+      body: {
+        serverId,
+        method,
+        url,
+        body: options?.body,
+        headers: options?.headers,
+        mapData: (_: any) => _
+      }
+    })
   }
 
 }

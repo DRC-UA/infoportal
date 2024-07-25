@@ -156,6 +156,7 @@ export const getRoutes = (
     router.get('/kobo-api/:id', auth(), errorCatcher(koboApi.getForms))
     router.get('/kobo-api/:id/:formId', auth(), errorCatcher(koboApi.getSchema))
     router.get('/kobo-api/:id/:formId/:answerId/edit-url', errorCatcher(koboApi.edit))
+    router.post('/kobo-api/proxy', errorCatcher(koboApi.proxy))
 
     router.post('/kobo-answer-history/search', errorCatcher(koboAnswerHistory.search))
 

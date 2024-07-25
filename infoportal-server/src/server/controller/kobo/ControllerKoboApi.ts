@@ -7,6 +7,8 @@ import {KoboSyncServer} from '../../../feature/kobo/KoboSyncServer'
 import {KoboAnswerUtils} from '@infoportal-common'
 import {app, AppCacheKey} from '../../../index'
 import {duration} from '@alexandreannic/ts-utils'
+import axios, {AxiosError} from 'axios'
+import {appConf} from '../../../core/conf/AppConf'
 
 const apiAnswersFiltersValidation = yup.object({
   start: yup.date(),
@@ -20,6 +22,7 @@ export class ControllerKoboApi {
     private apiService = new KoboApiService(pgClient),
     private syncService = new KoboSyncServer(pgClient),
     private koboSdkGenerator = new KoboSdkGenerator(pgClient),
+    private conf = appConf
   ) {
 
   }
@@ -144,4 +147,31 @@ export class ControllerKoboApi {
       // next(e)
     }
   }
+
+  readonly proxy = async (req: Request, res: Response, next: NextFunction) => {
+    const body = await yup.object({
+      serverId: yup.string().required(),
+      url: yup.string().required(),
+      method: yup.string().required(),
+      body: yup.mixed<any>().optional(),
+      headers: yup.mixed<any>().optional(),
+    }).validate(req.body)
+    const server = await this.koboSdkGenerator.getServer(body.serverId)
+    try {
+      const request = await axios.create().request({
+        url: body.url,
+        method: body.method,
+        headers: {
+          ...body.headers,
+          Authorization: 'Token ' + server.token,
+        },
+        params: body.body,
+      })
+      res.send(request.data)
+    } catch (e) {
+      console.log((e as AxiosError).code)
+      next(e)
+    }
+  }
+
 }
