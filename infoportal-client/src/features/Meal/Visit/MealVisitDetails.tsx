@@ -188,7 +188,7 @@ export const _DashboardMealVisitPdf = () => {
               </Row>
             </Box>
             <Title sx={{mb: .5}} size="big">General Observation</Title>
-            <Box sx={{textAlign: 'justify'}}>
+            <Box sx={{textAlign: 'justify', whiteSpace: 'pre-line'}}>
               {entry.fcpc}
             </Box>
 
