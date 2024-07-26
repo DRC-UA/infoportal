@@ -1,5 +1,5 @@
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
-import {DeploymentStatus, KoboApiSchema, KoboId, KoboSdk, KoboSdkv2, UUID} from '@infoportal-common'
+import {KoboApiSchema, KoboId, KoboSdk, KoboSdkv2, UUID} from '@infoportal-common'
 import {KoboApiService} from './KoboApiService'
 import {seq} from '@alexandreannic/ts-utils'
 import {appConf} from '../../core/conf/AppConf'
@@ -102,15 +102,6 @@ export class KoboFormService {
       .process(form => {
         const schema = apiFormsIndex[form.id]
         const db = KoboFormService.apiToDb({schema, ...params})
-        // if (schema?.content?.survey) {
-        //   const isManuallyClosed = schema.content.survey.length === 1 && schema.content.survey[0].name === 'fender'
-        //   if (isManuallyClosed) db.deploymentStatus = DeploymentStatus.archived
-        // } else {
-        //   console.log(form.name, schema)
-        // }
-        // if (form.id === 'aEwY33SAtdayNTeHoiJfdg') {
-        //   console.log(schema.name, db.deploymentStatus)
-        // }
         return this.prisma.koboForm.update({
           data: db,
           where: {
@@ -119,14 +110,4 @@ export class KoboFormService {
         })
       })
   }
-
-  // readonly updateForm = (parans) => {
-  //   const db = KoboFormService.apiToDb({schema, ...params})
-  //   return this.prisma.koboForm.update({
-  //     data: db,
-  //     where: {
-  //       id: form.id
-  //     }
-  //   })
-  // }
 }

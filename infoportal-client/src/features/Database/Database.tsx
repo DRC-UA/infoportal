@@ -67,6 +67,8 @@ export const DatabaseWithContext = () => {
               <SidebarItem icon="home">
                 All forms
                 <IpIconBtn
+                  sx={{ml: 'auto'}}
+                  color="primary"
                   loading={asyncSyncAll.loading}
                   onClick={() => asyncSyncAll.call({serverId: koboIndex.drcUa.server.prod})}
                 >
@@ -74,7 +76,7 @@ export const DatabaseWithContext = () => {
                 </IpIconBtn>
                 {ctx.isAdmin && (
                   <DatabaseNew onAdded={() => ctx._forms.fetch({force: true, clean: false})}>
-                    <IpBtn size="small" sx={{ml: 'auto', my: '3px'}} variant="contained" tooltip={m._koboDatabase.registerNewForm}>
+                    <IpBtn size="small" sx={{my: '1px'}} variant="contained" tooltip={m._koboDatabase.registerNewForm}>
                       <Icon>add</Icon>
                     </IpBtn>
                   </DatabaseNew>
@@ -115,11 +117,11 @@ export const DatabaseWithContext = () => {
                         onClick={() => undefined}
                         key={_.id}
                         active={isActive}
-                        icon={_.deploymentStatus === 'archived' ? (
+                        iconEnd={_.deploymentStatus === 'archived' ? (
                           <Icon
                             fontSize="small"
                             color="disabled"
-                            sx={{marginLeft: '-3px', marginRight: '-4px', verticalAlign: 'middle'}}
+                            sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
                           >archive</Icon>
                         ) : undefined}
                       >
