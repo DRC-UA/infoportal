@@ -4,7 +4,13 @@ export type KoboApiQuestionSchema = KoboApiSchema['content']['survey'][0]
 
 export type KoboApiQuestionType = KoboApiQuestionSchema['type']
 
-export type KoboApiQuestionChoice = KoboApiSchema['content']['choices'][0]
+export type KoboApiQuestionChoice = {
+  $autovalue: string,
+  $kuid: string,
+  label: string[],
+  list_name: string,
+  name: string,
+}
 
 export type KoboApiFiles = {
   asset: string
@@ -59,13 +65,7 @@ export interface KoboApiSchema {
     url: string
   }
   content: {
-    choices: {
-      $autovalue: string,
-      $kuid: string,
-      label: string[],
-      list_name: string,
-      name: string,
-    }[]
+    choices?: KoboApiQuestionChoice[]
     schema: string
     settings: {version: string, default_language: string}
     survey: {

@@ -540,7 +540,7 @@ const extractQuestionName = (_: Record<string, any>) => {
   }) => {
     const indexOptionId = seq(survey).reduceObject<Record<string, string>>(_ => [_.select_from_list_name ?? '', _.name])
     const res: Record<string, Record<string, string>> = {}
-    choices.forEach(choice => {
+    choices?.forEach(choice => {
       if (this.options.skipQuestionTyping?.includes(indexOptionId[choice.list_name])) return
       const questionName = indexOptionId[choice.list_name]
       if (!res[questionName]) {

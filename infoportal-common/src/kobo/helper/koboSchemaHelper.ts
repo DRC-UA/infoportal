@@ -93,7 +93,7 @@ export namespace KoboSchemaHelper {
     schema.content.survey.forEach(_ => {
       questionsTranslation[_.name] = _.label?.[langIndex] ?? _.name
     })
-    schema.content.choices.forEach(choice => {
+    ;(schema.content.choices ?? []).forEach(choice => {
       if (!choicesTranslation[choice.list_name]) choicesTranslation[choice.list_name] = {}
       choicesTranslation[choice.list_name][choice.name] = choice.label?.[langIndex] ?? choice.name
     })
