@@ -21,14 +21,14 @@ export const DatabaseNew = ({
   const {api} = useAppSettings()
   const _server = useFetcher(api.kobo.server.getAll)
   const _form = useFetchers(api.koboApi.getForms, {requestKey: ([serverId]) => serverId})
-  const _create = useAsync(api.kobo.form.create)
+  const _add = useAsync(api.kobo.form.add)
   const {m, formatDate} = useI18n()
-  const [selectedForm, setSelectedForm] = useState<KoboFormCreate & {uid: string} | undefined>()
+  const [selectedForm, setSelectedForm] = useState<KoboFormCreate | undefined>()
   const {toastHttpError} = useIpToast()
 
   useEffectFn(_server.error, toastHttpError)
   // useEffectFn(_form.error, toastHttpError)
-  useEffectFn(_create.error, toastHttpError)
+  useEffectFn(_add.error, toastHttpError)
 
   useEffect(() => {
     _server.fetch()
@@ -42,12 +42,12 @@ export const DatabaseNew = ({
 
   return (
     <Modal
-      loading={_server.loading || _form.anyLoading || _create.loading}
+      loading={_server.loading || _form.anyLoading || _add.loading}
       title={m._koboDatabase.registerNewForm}
       confirmLabel={m.register}
       onConfirm={(event, close) => {
         if (selectedForm) {
-          _create.call(selectedForm).then(onAdded)
+          _add.call(selectedForm).then(onAdded)
           setSelectedForm(undefined)
           close()
         }
@@ -71,7 +71,6 @@ export const DatabaseNew = ({
                     key={form.uid}
                     value={form.uid}
                     onClick={() => setSelectedForm({
-                      name: form.name,
                       uid: form.uid,
                       serverId: server.id,
                     })}

@@ -12,6 +12,12 @@ export type KoboApiQuestionChoice = {
   name: string,
 }
 
+export enum DeploymentStatus {
+  deployed = 'deployed',
+  archived = 'archived',
+  draft = 'draft',
+}
+
 export type KoboApiFiles = {
   asset: string
   content: string
@@ -84,5 +90,28 @@ export interface KoboApiSchema {
     translated: ['hint', 'label', 'media::image']
     translations: string[]
   }
+  deployment_status: DeploymentStatus
+  has_deployment: boolean
+  date_created: Date
+  date_modified: Date
+  deployed_version_id: string
+  deployment__active: boolean
+  // deployment__identifier: "https://kc.humanitarianresponse.info/alexandre_annic_drc/forms/aRHsewShwZhXiy8jrBj9zf"
+  deployment__submission_count: 0
+  // downloads: [,…]
+  // export_settings: []
+  // kind: "asset"
+  // owner: "https://kobo.humanitarianresponse.info/api/v2/users/alexandre_annic_drc/"
+  owner__username: string
+  // parent: null
+  // permissions: [{,…}, {,…}, {,…}, {,…}, {,…}, {,…}, {,…}, {,…}]
+  // settings: {sector: {label: "Humanitarian - Coordination / Information Management",…},…}
+  // status: "private"
+  subscribers_count: 0
+  // summary: {geo: false,…}
+  // tag_string: ""
+  uid: string
+  // url: "https://kobo.humanitarianresponse.info/api/v2/assets/aRHsewShwZhXiy8jrBj9zf/"
+  version_id: string
   files: KoboApiFiles[]
 }

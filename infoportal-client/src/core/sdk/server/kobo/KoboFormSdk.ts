@@ -3,7 +3,6 @@ import {KoboForm, KoboFormHelper} from './Kobo'
 import {KoboId, UUID} from '@infoportal-common'
 
 export interface KoboFormCreate {
-  name: string
   serverId: UUID
   uid: KoboId
 }
@@ -35,7 +34,11 @@ export class KoboFormSdk {
     }
   }
 
-  readonly create = (body: KoboFormCreate): Promise<KoboForm> => {
+  readonly refreshAll = (body: {serverId: UUID}): Promise<KoboForm> => {
+    return this.client.post(`kobo/form/refresh`, {body})
+  }
+
+  readonly add = (body: KoboFormCreate): Promise<KoboForm> => {
     return this.client.put(`/kobo/form`, {body})
   }
 

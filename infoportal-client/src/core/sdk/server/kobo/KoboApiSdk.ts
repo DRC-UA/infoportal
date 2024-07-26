@@ -1,6 +1,6 @@
 import {ApiClient, RequestOption} from '../ApiClient'
 import {KoboAnswerFlat, KoboAnswerId, KoboApiSchema, KoboId, koboIndex, UUID} from '@infoportal-common'
-import {ApiKoboForm, Kobo} from './Kobo'
+import {Kobo} from './Kobo'
 import {appConfig, AppConfig} from '@/conf/AppConfig'
 import {ApiPaginate, ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {Method} from 'axios'
@@ -78,8 +78,8 @@ export class KoboApiSdk {
     return `${this.conf.apiURL}/kobo-api/${serverId}/${formId}/${answerId}/edit-url`
   }
 
-  readonly getForms = (serverId: UUID): Promise<ApiKoboForm[]> => {
-    return this.client.get(`/kobo-api/${serverId}`).then(_ => _.results.map((_: Record<keyof ApiKoboForm, any>): ApiKoboForm => {
+  readonly getForms = (serverId: UUID): Promise<KoboApiSchema[]> => {
+    return this.client.get(`/kobo-api/${serverId}`).then(_ => _.results.map((_: Record<keyof KoboApiSchema, any>): KoboApiSchema => {
       return {
         ..._,
         date_created: new Date(_.date_created),
@@ -89,7 +89,7 @@ export class KoboApiSdk {
   }
 
   readonly getAttachement = (serverId: UUID, filepath: string) => {
-    return this.client.get<ApiKoboForm[]>(`/kobo-api/${serverId}/attachment/${filepath}`)
+    return this.client.get<KoboApiSchema[]>(`/kobo-api/${serverId}/attachment/${filepath}`)
   }
 
   readonly proxy = <T = any>({serverId, url, method, options}: {serverId: UUID, method: Method, url: string, options?: RequestOption}) => {

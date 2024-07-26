@@ -162,8 +162,9 @@ export const getRoutes = (
 
     router.get('/kobo/server', auth(), errorCatcher(koboServer.getServers))
     router.get('/kobo/form', auth(), errorCatcher(koboForm.getAll))
+    router.post('/kobo/form/refresh', auth(), errorCatcher(koboForm.refreshAll))
     router.get('/kobo/form/:id', auth(), errorCatcher(koboForm.get))
-    router.put('/kobo/form', auth(), errorCatcher(koboForm.create))
+    router.put('/kobo/form', auth(), errorCatcher(koboForm.add))
     router.post('/kobo/answer/:formId/by-access', auth(), errorCatcher(koboAnswer.searchByUserAccess))
     router.patch('/kobo/answer/:formId/tag', auth(), errorCatcher(koboAnswer.updateTag))
     router.patch('/kobo/answer/:formId', auth(), errorCatcher(koboAnswer.updateAnswers))

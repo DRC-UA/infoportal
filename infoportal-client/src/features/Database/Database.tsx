@@ -1,14 +1,14 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import React, {useMemo} from 'react'
-import {Sidebar, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
+import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 import {useI18n} from '@/core/i18n'
 import * as yup from 'yup'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {Navigate, NavLink, Outlet, Route, Routes} from 'react-router-dom'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
 import {Layout} from '@/shared/Layout'
-import {Icon, Skeleton, Tab, Tabs, Tooltip} from '@mui/material'
+import {Icon, Skeleton, Tab, Tabs, Tooltip, useTheme} from '@mui/material'
 import {useLocation, useParams} from 'react-router'
 import {IpBtn} from '@/shared/Btn'
 import {DatabaseNew} from '@/features/Database/DatabaseNew/DatabaseNew'
@@ -17,13 +17,16 @@ import {DatabaseAccessRoute} from '@/features/Database/Access/DatabaseAccess'
 import {DatabaseTableRoute} from '@/features/Database/KoboTable/DatabaseKoboTable'
 import {Fender, Txt} from 'mui-extension'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
-import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {DatabaseList} from '@/features/Database/DatabaseList'
 import {DatabaseKoboAnswerViewPage} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {DatabaseHistory} from '@/features/Database/History/DatabaseHistory'
 import {customForms, DatabaseTableCustomRoute} from '@/features/Database/KoboTableCustom/DatabaseKoboTableCustom'
+import {IpIconBtn} from '@/shared/IconBtn'
+import {useAsync} from '@/shared/hook/useAsync'
+import {KoboIndex, koboIndex} from '@infoportal-common'
+import {KoboForm} from '@/core/sdk/server/kobo/Kobo'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -38,15 +41,21 @@ export const Database = () => {
   )
 }
 
+type Form = KoboForm & {
+  parsedName: KoboIndex.ParsedForm
+}
+
 export const DatabaseWithContext = () => {
   const {m} = useI18n()
-  const {conf} = useAppSettings()
+  const {conf, api} = useAppSettings()
   const ctx = useDatabaseContext()
-
-  const parsedFormNames = useMemo(() => {
-    const grouped = seq(ctx.formAccess)?.map(_ => ({..._, parsedName: KoboFormSdk.parseFormName(_.name)})).groupBy(_ => _.parsedName.program ?? m.others)
+  const t = useTheme()
+  const parsedFormNames: Record<string, Seq<Form>> = useMemo(() => {
+    const grouped = seq(ctx.formAccess)?.map(_ => ({..._, parsedName: KoboIndex.parseFormName(_.name)})).groupBy(_ => _.parsedName.program ?? m.others)
     return new Obj(grouped).map((k, v) => [k, v.sort((a, b) => a.name.localeCompare(b.name))]).sort(([ak], [bk]) => ak.localeCompare(bk)).get()
   }, [ctx.formAccess])
+
+  const asyncSyncAll = useAsync(api.kobo.form.refreshAll)
 
   return (
     <Layout
@@ -57,9 +66,17 @@ export const DatabaseWithContext = () => {
             {({isActive, isPending}) => (
               <SidebarItem icon="home">
                 All forms
+                <IpIconBtn
+                  sx={{ml: 'auto'}}
+                  color="primary"
+                  loading={asyncSyncAll.loading}
+                  onClick={() => asyncSyncAll.call({serverId: koboIndex.drcUa.server.prod})}
+                >
+                  refresh
+                </IpIconBtn>
                 {ctx.isAdmin && (
                   <DatabaseNew onAdded={() => ctx._forms.fetch({force: true, clean: false})}>
-                    <IpBtn size="small" sx={{ml: 'auto', my: '3px'}} variant="contained" tooltip={m._koboDatabase.registerNewForm}>
+                    <IpBtn size="small" sx={{my: '1px'}} variant="contained" tooltip={m._koboDatabase.registerNewForm}>
                       <Icon>add</Icon>
                     </IpBtn>
                   </DatabaseNew>
@@ -90,17 +107,25 @@ export const DatabaseWithContext = () => {
             </>
           ) : Obj.entries(parsedFormNames)?.map(([category, forms]) => (
             <SidebarSection dense title={category} key={category}>
-              {forms.map(_ =>
+              {forms.map((_: Form) =>
                 <Tooltip key={_.id} title={_.parsedName.name} placement="right-end">
                   <NavLink to={databaseIndex.siteMap.home(_.serverId, _.id)}>
                     {({isActive, isPending}) => (
                       <SidebarItem
                         size={forms.length > 30 ? 'tiny' : 'small'}
-                        sx={{height: 26}} onClick={() => undefined}
+                        sx={{height: 26}}
+                        onClick={() => undefined}
                         key={_.id}
                         active={isActive}
+                        iconEnd={_.deploymentStatus === 'archived' ? (
+                          <Icon
+                            fontSize="small"
+                            color="disabled"
+                            sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
+                          >archive</Icon>
+                        ) : undefined}
                       >
-                        {_.parsedName.name}
+                        <Txt color={_.deploymentStatus === 'archived' ? 'disabled' : undefined}>{_.parsedName.name}</Txt>
                       </SidebarItem>
                     )}
                   </NavLink>

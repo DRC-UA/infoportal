@@ -6,7 +6,7 @@ import {AaSelect} from '@/shared/Select/Select'
 import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {Switch, Theme} from '@mui/material'
+import {Alert, Icon, Switch, Theme, useTheme} from '@mui/material'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {DatabaseColumnProps, getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -27,12 +27,14 @@ import {DatatableHeadTypeIconByKoboType} from '@/shared/Datatable/DatatableHead'
 import {appConfig} from '@/conf/AppConfig'
 import {useSession} from '@/core/Session/SessionContext'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
+// import { Alert } from 'mui-extension'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
   onDataChange,
 }: Pick<DatabaseTableProps, 'onFiltersChange' | 'onDataChange'>) => {
   const {m} = useI18n()
+  const t = useTheme()
   const {session} = useSession()
   const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
@@ -180,6 +182,12 @@ export const DatabaseKoboTableContent = ({
             )}
             {header?.(params)}
 
+            {ctx.form.deploymentStatus === 'archived' && (
+              <Alert color="info" icon={<Icon sx={{mr: -1}}>archive</Icon>} sx={{pr: t.spacing(1), pl: t.spacing(.5), pt: 0, pb: 0}}>
+                {m._koboDatabase.isArchived}
+              </Alert>
+            )}
+
             <div style={{marginLeft: 'auto'}}>
               {session.admin && (
                 <IpIconBtn
@@ -190,6 +198,7 @@ export const DatabaseKoboTableContent = ({
                 />
               )}
               <IpIconBtn
+                disabled={ctx.form.deploymentStatus === 'archived'}
                 href={ctx.schema.schemaUnsanitized.deployment__links.url}
                 target="_blank"
                 children="file_open"
