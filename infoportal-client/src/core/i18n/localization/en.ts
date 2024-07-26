@@ -696,6 +696,7 @@ export const en = Object.freeze({
       }
     },
     _koboDatabase: {
+      isArchived: 'This form is archived.',
       translation: 'Translation',
       newValue: 'New value',
       oldValue: 'Old value',

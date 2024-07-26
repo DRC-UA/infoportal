@@ -17,8 +17,7 @@ import {DatabaseAccessRoute} from '@/features/Database/Access/DatabaseAccess'
 import {DatabaseTableRoute} from '@/features/Database/KoboTable/DatabaseKoboTable'
 import {Fender, Txt} from 'mui-extension'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
-import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
-import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {DatabaseList} from '@/features/Database/DatabaseList'
 import {DatabaseKoboAnswerViewPage} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
@@ -26,7 +25,8 @@ import {DatabaseHistory} from '@/features/Database/History/DatabaseHistory'
 import {customForms, DatabaseTableCustomRoute} from '@/features/Database/KoboTableCustom/DatabaseKoboTableCustom'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {useAsync} from '@/shared/hook/useAsync'
-import {koboIndex} from '../../../../infoportal-common/src/kobo/KoboIndex'
+import {KoboIndex, koboIndex} from '@infoportal-common'
+import {KoboForm} from '@/core/sdk/server/kobo/Kobo'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -41,13 +41,17 @@ export const Database = () => {
   )
 }
 
+type Form = KoboForm & {
+  parsedName: KoboIndex.ParsedForm
+}
+
 export const DatabaseWithContext = () => {
   const {m} = useI18n()
   const {conf, api} = useAppSettings()
   const ctx = useDatabaseContext()
   const t = useTheme()
-  const parsedFormNames = useMemo(() => {
-    const grouped = seq(ctx.formAccess)?.map(_ => ({..._, parsedName: KoboFormSdk.parseFormName(_.name)})).groupBy(_ => _.parsedName.program ?? m.others)
+  const parsedFormNames: Record<string, Seq<Form>> = useMemo(() => {
+    const grouped = seq(ctx.formAccess)?.map(_ => ({..._, parsedName: KoboIndex.parseFormName(_.name)})).groupBy(_ => _.parsedName.program ?? m.others)
     return new Obj(grouped).map((k, v) => [k, v.sort((a, b) => a.name.localeCompare(b.name))]).sort(([ak], [bk]) => ak.localeCompare(bk)).get()
   }, [ctx.formAccess])
 
@@ -101,31 +105,25 @@ export const DatabaseWithContext = () => {
             </>
           ) : Obj.entries(parsedFormNames)?.map(([category, forms]) => (
             <SidebarSection dense title={category} key={category}>
-              {forms.map(_ =>
+              {forms.map((_: Form) =>
                 <Tooltip key={_.id} title={_.parsedName.name} placement="right-end">
                   <NavLink to={databaseIndex.siteMap.home(_.serverId, _.id)}>
                     {({isActive, isPending}) => (
                       <SidebarItem
                         size={forms.length > 30 ? 'tiny' : 'small'}
-                        sx={{height: 26}} onClick={() => undefined}
+                        sx={{height: 26}}
+                        onClick={() => undefined}
                         key={_.id}
                         active={isActive}
+                        icon={_.deploymentStatus === 'archived' ? (
+                          <Icon
+                            fontSize="small"
+                            color="disabled"
+                            sx={{marginLeft: '-3px', marginRight: '-4px', verticalAlign: 'middle'}}
+                          >archive</Icon>
+                        ) : undefined}
                       >
-                        {fnSwitch(_.deploymentStatus!, {
-                          deployed: <Icon
-                            fontSize="small"
-                            sx={{marginLeft: '-3px', marginRight: '2px', verticalAlign: 'middle', color: t.palette.success.light}}
-                          >fiber_manual_record</Icon>,
-                          archived: <Icon
-                            fontSize="small"
-                            sx={{marginLeft: '-3px', marginRight: '2px', verticalAlign: 'middle'}}
-                          >archive</Icon>,
-                        }, () => <Icon
-                          sx={{marginLeft: '-3px', marginRight: '2px', verticalAlign: 'middle'}}
-                          fontSize="small"
-                          color="disabled"
-                        >fiber_manual_record</Icon>)}
-                        {_.parsedName.name}
+                        <Txt color={_.deploymentStatus === 'archived' ? 'disabled' : undefined}>{_.parsedName.name}</Txt>
                       </SidebarItem>
                     )}
                   </NavLink>
