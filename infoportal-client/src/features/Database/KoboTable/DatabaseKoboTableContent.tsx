@@ -152,6 +152,7 @@ export const DatabaseKoboTableContent = ({
         data={ctx.data}
         header={params =>
           <>
+            {sc}
             <DatatableColumnToggle
               columns={toggleColumns}
               hiddenColumns={hiddenColumns}

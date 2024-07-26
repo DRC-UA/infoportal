@@ -1,14 +1,14 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import React, {useMemo} from 'react'
-import {Sidebar, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
+import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 import {useI18n} from '@/core/i18n'
 import * as yup from 'yup'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {Navigate, NavLink, Outlet, Route, Routes} from 'react-router-dom'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
 import {Layout} from '@/shared/Layout'
-import {Icon, Skeleton, Tab, Tabs, Tooltip} from '@mui/material'
+import {Icon, Skeleton, Tab, Tabs, Tooltip, useTheme} from '@mui/material'
 import {useLocation, useParams} from 'react-router'
 import {IpBtn} from '@/shared/Btn'
 import {DatabaseNew} from '@/features/Database/DatabaseNew/DatabaseNew'
@@ -18,12 +18,15 @@ import {DatabaseTableRoute} from '@/features/Database/KoboTable/DatabaseKoboTabl
 import {Fender, Txt} from 'mui-extension'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
 import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {DatabaseList} from '@/features/Database/DatabaseList'
 import {DatabaseKoboAnswerViewPage} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {DatabaseHistory} from '@/features/Database/History/DatabaseHistory'
 import {customForms, DatabaseTableCustomRoute} from '@/features/Database/KoboTableCustom/DatabaseKoboTableCustom'
+import {IpIconBtn} from '@/shared/IconBtn'
+import {useAsync} from '@/shared/hook/useAsync'
+import {koboIndex} from '../../../../infoportal-common/src/kobo/KoboIndex'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -40,13 +43,15 @@ export const Database = () => {
 
 export const DatabaseWithContext = () => {
   const {m} = useI18n()
-  const {conf} = useAppSettings()
+  const {conf, api} = useAppSettings()
   const ctx = useDatabaseContext()
-
+  const t = useTheme()
   const parsedFormNames = useMemo(() => {
     const grouped = seq(ctx.formAccess)?.map(_ => ({..._, parsedName: KoboFormSdk.parseFormName(_.name)})).groupBy(_ => _.parsedName.program ?? m.others)
     return new Obj(grouped).map((k, v) => [k, v.sort((a, b) => a.name.localeCompare(b.name))]).sort(([ak], [bk]) => ak.localeCompare(bk)).get()
   }, [ctx.formAccess])
+
+  const asyncSyncAll = useAsync(api.kobo.form.refreshAll)
 
   return (
     <Layout
@@ -57,6 +62,12 @@ export const DatabaseWithContext = () => {
             {({isActive, isPending}) => (
               <SidebarItem icon="home">
                 All forms
+                <IpIconBtn
+                  loading={asyncSyncAll.loading}
+                  onClick={() => asyncSyncAll.call({serverId: koboIndex.drcUa.server.prod})}
+                >
+                  refresh
+                </IpIconBtn>
                 {ctx.isAdmin && (
                   <DatabaseNew onAdded={() => ctx._forms.fetch({force: true, clean: false})}>
                     <IpBtn size="small" sx={{ml: 'auto', my: '3px'}} variant="contained" tooltip={m._koboDatabase.registerNewForm}>
@@ -100,6 +111,20 @@ export const DatabaseWithContext = () => {
                         key={_.id}
                         active={isActive}
                       >
+                        {fnSwitch(_.deploymentStatus!, {
+                          deployed: <Icon
+                            fontSize="small"
+                            sx={{marginLeft: '-3px', marginRight: '2px', verticalAlign: 'middle', color: t.palette.success.light}}
+                          >fiber_manual_record</Icon>,
+                          archived: <Icon
+                            fontSize="small"
+                            sx={{marginLeft: '-3px', marginRight: '2px', verticalAlign: 'middle'}}
+                          >archive</Icon>,
+                        }, () => <Icon
+                          sx={{marginLeft: '-3px', marginRight: '2px', verticalAlign: 'middle'}}
+                          fontSize="small"
+                          color="disabled"
+                        >fiber_manual_record</Icon>)}
                         {_.parsedName.name}
                       </SidebarItem>
                     )}

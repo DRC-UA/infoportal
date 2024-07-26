@@ -1,4 +1,4 @@
-import {KoboAnswer, KoboAnswerFlat, KoboAnswerMetaData, KoboApiQuestionSchema, KoboBaseTags, KoboId} from '@infoportal-common'
+import {DeploymentStatus, KoboAnswer, KoboAnswerFlat, KoboAnswerMetaData, KoboApiQuestionSchema, KoboBaseTags, KoboId} from '@infoportal-common'
 import {Enum} from '@alexandreannic/ts-utils'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
@@ -16,6 +16,7 @@ export interface KoboForm {
   name: string
   serverId: string
   uploadedBy?: string
+  deploymentStatus?: DeploymentStatus
 }
 
 export class KoboFormHelper {
