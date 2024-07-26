@@ -1,5 +1,4 @@
-import {mapFor, Obj, Seq} from '@alexandreannic/ts-utils'
-import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {mapFor, Obj} from '@alexandreannic/ts-utils'
 import {useMemo} from 'react'
 import {Box, Theme} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
@@ -11,6 +10,7 @@ import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {AlertType} from '@/features/Safety/IncidentsDashboard/SafetyIncidentDashboardBody'
+import {useSafetyIncidentContext} from '@/features/Safety/IncidentsDashboard/SafetyIncidentContext'
 
 const colors = (t: Theme) => ({
   green: '#99ff99',
@@ -19,24 +19,15 @@ const colors = (t: Theme) => ({
   red: '#ff3333',
 })
 
-export const SafetyIncidentDashboardAlert = ({
-  data: {
-    data,
-    dataAlert,
-  },
-  optionFilter,
-  setOptionFilters,
-}: {
-  data: {
-    data: Seq<InferTypedAnswer<'safety_incident'>>
-    dataAlert: Seq<InferTypedAnswer<'safety_incident'>>
-  },
-  optionFilter: Record<string, string[] | undefined>
-  setOptionFilters: React.Dispatch<React.SetStateAction<Record<string, string[] | undefined>>>
-}) => {
+export const SafetyIncidentDashboardAlert = () => {
   const {m} = useI18n()
+  const {
+    dataFiltered,
+    optionFilter,
+    setOptionFilters,
+  } = useSafetyIncidentContext()
   const flatAlertData = useMemo(() => {
-    return dataAlert?.flatMap(_ => {
+    return dataFiltered.flatMap(_ => {
       const res = [
         ..._.alert_green_num ? mapFor(Math.abs(_.alert_green_num ?? 0), () => ({..._, alertType: AlertType.green})) : [],
         ..._.alert_blue_num ? mapFor(Math.abs(_.alert_blue_num ?? 0), () => ({..._, alertType: AlertType.blue})) : [],
@@ -45,7 +36,7 @@ export const SafetyIncidentDashboardAlert = ({
       ]
       return res
     })
-  }, [dataAlert])
+  }, [dataFiltered])
 
   const sum = useMemo(() => {
     return {

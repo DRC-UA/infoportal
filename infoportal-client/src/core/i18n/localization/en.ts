@@ -564,6 +564,7 @@ export const en = Object.freeze({
       attackTypes: 'Attack type',
       attacks: 'Attacks',
       attack: 'Attack',
+      attackType: 'Attack type',
       green: 'Green',
       blue: 'Blue',
       yellow: 'Yellow',
