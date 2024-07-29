@@ -1,4 +1,4 @@
-import {useProtectionContext} from '@/features/Protection/Context/ProtectionContext'
+import {ProtectionProvider, useProtectionContext} from '@/features/Protection/Context/ProtectionContext'
 import {Page} from '@/shared/Page'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
@@ -22,9 +22,17 @@ import {Divider} from '@mui/material'
 import {Datatable} from '@/shared/Datatable/Datatable'
 
 export const ProtectionOverview = () => {
+  return (
+    <ProtectionProvider>
+      <ProtectionOverviewWithContext/>
+    </ProtectionProvider>
+  )
+}
+
+const ProtectionOverviewWithContext = () => {
   const ctx = useProtectionContext()
   const {m, formatLargeNumber} = useI18n()
-  if (!ctx.data) return
+  if (!ctx.data) return <></>
   const data = ctx.data
   return (
     <Page width="lg">
