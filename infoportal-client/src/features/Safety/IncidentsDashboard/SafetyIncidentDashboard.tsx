@@ -1,99 +1,50 @@
-import React, {useEffect, useMemo, useState} from 'react'
-import {map, seq} from '@alexandreannic/ts-utils'
+import React from 'react'
 import {useI18n} from '@/core/i18n'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {DebouncedInput} from '@/shared/DebouncedInput'
-import {KoboIndex, Period, Safety_incident} from '@infoportal-common'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
 import {SafetyIncidentDashboardBody} from '@/features/Safety/IncidentsDashboard/SafetyIncidentDashboardBody'
-import {useFetcher} from '@/shared/hook/useFetcher'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
-import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {SafetyIncidentProvider, useSafetyIncidentContext} from '@/features/Safety/IncidentsDashboard/SafetyIncidentContext'
 
 export const SafetyIncidentDashboard = () => {
-  const {api} = useAppSettings()
+  return (
+    <SafetyIncidentProvider>
+      <SafetyIncidentDashboardWithContext/>
+    </SafetyIncidentProvider>
+  )
+}
+
+const SafetyIncidentDashboardWithContext = () => {
   const {m} = useI18n()
-  const _period = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('safety_incident').id))
-  const ctxAnswers = useKoboAnswersContext()
-  const filterShape = useMemo(() => DataFilter.makeShape<InferTypedAnswer<'safety_incident'>>({
-    oblast: {
-      icon: 'location_on',
-      getValue: _ => _.oblast,
-      getOptions: () => DataFilter.buildOptionsFromObject(Safety_incident.options.oblast),
-      label: m.oblast,
-    },
-  }), [])
-
-  useEffect(() => {
-    ctxAnswers.byName.fetch({}, 'safety_incident')
-    _period.fetch()
-  }, [])
-
-  const [optionFilter, setOptionFilters] = useState<DataFilter.InferShape<typeof filterShape>>({})
-  const [period, setPeriod] = useState<Partial<Period>>({})
-
-  useEffect(() => {
-    map(_period.get, setPeriod)
-  }, [_period.get])
-
-  const data = seq(ctxAnswers.byName.get('safety_incident')?.data) ?? []
-  const {dataIncident, dataAlert} = useMemo(() => {
-    return {
-      dataIncident: data.filter(_ => !_.incident_type || _.incident_type.includes('other') || _.incident_type.includes('attack')),
-      dataAlert: data.filter(_ => _.incident_type?.includes('alert')),
-    }
-  }, [data])
-
-  const {
-    dataIncidentFiltered,
-    dataAlertFiltered,
-  } = useMemo(() => {
-    return {
-      dataIncidentFiltered: DataFilter.filterData(dataIncident, filterShape, optionFilter),//.filter(_ => PeriodHelper.isDateIn(period, _.date)),
-      dataAlertFiltered: DataFilter.filterData(dataAlert, filterShape, optionFilter),//.filter(_ => PeriodHelper.isDateIn(period, _.date)),
-    }
-  }, [data, period, optionFilter])
-
+  const ctx = useSafetyIncidentContext()
   return (
     <Page
       width="lg"
-      loading={ctxAnswers.byName.loading('safety_incident')}
+      loading={ctx.fetcherAnswer.loading()}
     >
       <DataFilterLayout
-        shapes={filterShape}
-        filters={optionFilter}
+        shapes={ctx.filterShape}
+        filters={ctx.optionFilter}
         onClear={() => {
-          setOptionFilters({})
-          setPeriod(_period.get ?? {})
+          ctx.setOptionFilters({})
+          ctx.setPeriod(ctx.fetcherPeriod.get ?? {})
         }}
-        setFilters={setOptionFilters}
+        setFilters={ctx.setOptionFilters}
         before={
-          <DebouncedInput<[Date | undefined, Date | undefined]>
-            debounce={400}
-            value={[period.start, period.end]}
-            onChange={([start, end]) => setPeriod(prev => ({...prev, start, end}))}
-          >
-            {(value, onChange) => <PeriodPicker
-              sx={{marginTop: '-6px'}}
-              value={value ?? [undefined, undefined]}
-              onChange={onChange}
-              min={_period.get?.start}
-              max={_period.get?.end}
-            />}
-          </DebouncedInput>
+          <PeriodPicker
+            sx={{marginTop: '-6px'}}
+            value={[ctx.period.start, ctx.period.end]}
+            onChange={([start, end]) => {
+              ctx.setPeriod(prev => ({...prev, start: start ?? undefined, end: end ?? undefined}))
+            }}
+            label={[m.start, m.endIncluded]}
+            min={ctx.fetcherPeriod.get?.start}
+            max={ctx.fetcherPeriod.get?.end}
+          />
         }
       />
       <>
-        <SafetyIncidentDashboardBody period={period} data={{
-          data,
-          dataAlert,
-          dataAlertFiltered,
-          dataIncident,
-          dataIncidentFiltered,
-        }}/>
+        <SafetyIncidentDashboardBody/>
         {/*<DashboardSafetyIncidentAgravatingFactors data={data} computed={computed}/>*/}
       </>
     </Page>

@@ -4,10 +4,8 @@ import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboT
 import {FetchParams, useFetchers} from '@/shared/hook/useFetchers'
 import React, {ReactNode, useContext, useMemo, useState} from 'react'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {useIpToast} from '@/core/useToast'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Kobo, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {useI18n} from '@/core/i18n'
 import {DatabaseKoboAnswerViewDialog} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 
 const Context = React.createContext({} as KoboAnswersContext)
@@ -26,6 +24,14 @@ export type KoboAnswersContext = {
     get: (id: KoboAnswerId) => undefined | ApiPaginate<KoboMappedAnswer>,
     loading: (id: KoboAnswerId) => boolean | undefined
   },
+  byName2: <T extends KoboFormNameMapped>(name: T) => {
+    set: (value: ApiPaginate<InferTypedAnswer<T>>) => void,
+    fetch: (p: FetchParams) => Promise<ApiPaginate<InferTypedAnswer<T>>>
+    get: () => undefined | ApiPaginate<InferTypedAnswer<T>>
+    loading: () => boolean | undefined
+
+  }
+  /** @deprecated*/
   byName: {
     set: <T extends KoboFormNameMapped>(name: T, value: ApiPaginate<InferTypedAnswer<T>>) => void,
     fetch: <T extends KoboFormNameMapped>(p: FetchParams, name: T) => Promise<ApiPaginate<InferTypedAnswer<T>>>
@@ -40,8 +46,6 @@ export const KoboAnswersProvider = ({
   children: ReactNode
 }) => {
   const {api} = useAppSettings()
-  const {m} = useI18n()
-  const {toastHttpError} = useIpToast()
   const ctxSchema = useKoboSchemaContext()
 
   const getMappedRequest = (_?: KoboFormName) => api.kobo.typedAnswers.searchByAccess[_ as KoboFormNameMapped]
@@ -62,8 +66,20 @@ export const KoboAnswersProvider = ({
     }
   }, {requestKey: _ => _[0]})
 
-  const {byName, byId} = useMemo(() => {
+  const {byName2, byName, byId} = useMemo(() => {
     return {
+      byName2: <T extends KoboFormNameMapped>(name: T) => ({
+        set: (value: ApiPaginate<InferTypedAnswer<T>>) => {
+          fetcher.getAsMap.set(KoboIndex.byName(name).id, value as any)
+        },
+        get: (): undefined | ApiPaginate<InferTypedAnswer<T>> => {
+          return fetcher.get[KoboIndex.byName(name).id] as any
+        },
+        fetch: (p: FetchParams = {}): Promise<ApiPaginate<InferTypedAnswer<T>>> => {
+          return fetcher.fetch(p, KoboIndex.byName(name).id) as any
+        },
+        loading: () => fetcher.loading[KoboIndex.byName(name).id]
+      }),
       byName: {
         set: <T extends KoboFormNameMapped>(name: T, value: ApiPaginate<InferTypedAnswer<T>>) => {
           fetcher.getAsMap.set(KoboIndex.byName(name).id, value as any)
@@ -100,6 +116,7 @@ export const KoboAnswersProvider = ({
     <Context.Provider value={{
       byName,
       byId,
+      byName2,
       openAnswerModal: setModalAnswerOpen
     }}>
       {children}

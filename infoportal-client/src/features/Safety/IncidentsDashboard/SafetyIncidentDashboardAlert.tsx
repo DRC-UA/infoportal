@@ -1,6 +1,5 @@
-import {mapFor, Obj, Seq} from '@alexandreannic/ts-utils'
-import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import {useMemo, useState} from 'react'
+import {mapFor, Obj} from '@alexandreannic/ts-utils'
+import {useMemo} from 'react'
 import {Box, Theme} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
 import {format} from 'date-fns'
@@ -10,13 +9,8 @@ import {formatLargeNumber} from '@/core/i18n/localization/en'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {ChartLine} from '@/shared/charts/ChartLine'
-
-enum AlertType {
-  green = 'green',
-  blue = 'blue',
-  yellow = 'yellow',
-  red = 'red',
-}
+import {AlertType} from '@/features/Safety/IncidentsDashboard/SafetyIncidentDashboardBody'
+import {useSafetyIncidentContext} from '@/features/Safety/IncidentsDashboard/SafetyIncidentContext'
 
 const colors = (t: Theme) => ({
   green: '#99ff99',
@@ -25,21 +19,15 @@ const colors = (t: Theme) => ({
   red: '#ff3333',
 })
 
-export const SafetyIncidentDashboardAlert = ({
-  data: {
-    data,
-    dataAlert,
-  },
-}: {
-  data: {
-    data: Seq<InferTypedAnswer<'safety_incident'>>
-    dataAlert: Seq<InferTypedAnswer<'safety_incident'>>
-  }
-}) => {
+export const SafetyIncidentDashboardAlert = () => {
   const {m} = useI18n()
-  const [filterType, setFilterType] = useState<AlertType[]>([])
+  const {
+    dataFiltered,
+    optionFilter,
+    setOptionFilters,
+  } = useSafetyIncidentContext()
   const flatAlertData = useMemo(() => {
-    return dataAlert?.flatMap(_ => {
+    return dataFiltered.flatMap(_ => {
       const res = [
         ..._.alert_green_num ? mapFor(Math.abs(_.alert_green_num ?? 0), () => ({..._, alertType: AlertType.green})) : [],
         ..._.alert_blue_num ? mapFor(Math.abs(_.alert_blue_num ?? 0), () => ({..._, alertType: AlertType.blue})) : [],
@@ -48,7 +36,7 @@ export const SafetyIncidentDashboardAlert = ({
       ]
       return res
     })
-  }, [dataAlert])
+  }, [dataFiltered])
 
   const sum = useMemo(() => {
     return {
@@ -59,11 +47,21 @@ export const SafetyIncidentDashboardAlert = ({
     }
   }, [flatAlertData])
 
+  const handleFilterChange = (alertTypes: AlertType[]) => {
+    setOptionFilters((prev) => {
+      const newAlertTypes = alertTypes.map(String)
+      if (JSON.stringify(prev.alertType) !== JSON.stringify(newAlertTypes)) {
+        return {...prev, alertType: newAlertTypes}
+      }
+      return prev
+    })
+  }
+
   return (
     <>
       <Panel>
         <PanelHead action={
-          <ScRadioGroup<AlertType> multiple value={filterType} onChange={_ => setFilterType(_)} dense inline sx={{width: '100%'}}>
+          <ScRadioGroup<AlertType> multiple value={(optionFilter.alertType as AlertType[]) || []} onChange={handleFilterChange} dense inline sx={{width: '100%'}}>
             <ScRadioGroupItem
               hideRadio
               title={
@@ -117,7 +115,7 @@ export const SafetyIncidentDashboardAlert = ({
           <MapSvgByOblast
             sx={{maxWidth: 420, mt: 1, margin: 'auto'}}
             fillBaseOn="value"
-            data={flatAlertData?.filter(_ => filterType.length === 0 || filterType.includes(_.alertType))}
+            data={flatAlertData?.filter(_ => (optionFilter.alertType || []).length === 0 || (optionFilter.alertType as AlertType[]).includes(_.alertType))}
             total={flatAlertData?.length}
             getOblast={_ => _.oblastISO}
             value={_ => true}
@@ -140,7 +138,7 @@ export const SafetyIncidentDashboardAlert = ({
                 yellow: v.yellow,
                 blue: v.blue,
                 green: v.green
-              }) as {name: string, red: number, yellow: number, blue: number})
+              }) as {name: string, red: number, yellow: number, blue: number, green: number})
           }}>
             {_ => (
               <ChartLine
