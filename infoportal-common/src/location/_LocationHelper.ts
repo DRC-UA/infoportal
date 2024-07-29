@@ -33,8 +33,8 @@ export class AILocationHelper {
     return res
   }
 
-  private static readonly settlements = settlements$.then(_ => _ as unknown as Record<SettlementIso, Settlement>)
-  private static readonly settlementsIsoByParentIso: Promise<Record<string, string[]>> = this.settlements.then(settlements => {
+  static readonly settlements = settlements$.then(_ => _ as unknown as Record<SettlementIso, Settlement>)
+  static readonly settlementsIsoByParentIso: Promise<Record<string, string[]>> = this.settlements.then(settlements => {
     const index: Record<string, string[]> = {}
     for (var k in settlements) {
       const obj = settlements[k]

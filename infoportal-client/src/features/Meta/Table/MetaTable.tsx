@@ -3,12 +3,12 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {DrcProject, IKoboMeta, KoboIndex, koboIndex, KoboMetaStatus, koboMetaStatusLabel, PersonDetails} from '@infoportal-common'
+import {AILocationHelper, DrcProject, IKoboMeta, KoboIndex, koboIndex, KoboMetaStatus, koboMetaStatusLabel, PersonDetails} from '@infoportal-common'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {PopoverWrapper} from '@/shared/PopoverWrapper'
-import React, {useMemo} from 'react'
+import React, {useEffect, useMemo} from 'react'
 import {OptionLabelTypeCompact} from '@/shared/customInput/SelectStatus'
 import {useSession} from '@/core/Session/SessionContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
@@ -18,10 +18,11 @@ import Link from 'next/link'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {Txt} from 'mui-extension'
-import {Icon} from '@mui/material'
+import {Icon, Skeleton} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {IpBtn} from '@/shared/Btn'
+import {useFetcher} from '@/shared/hook/useFetcher'
 
 type Data = IKoboMeta & {
   duplicatedPhone?: number
@@ -33,6 +34,11 @@ export const MetaTable = () => {
   const {session} = useSession()
   const {conf} = useAppSettings()
   const {m, formatDate, formatDateTime} = useI18n()
+  const fetcherSettlement = useFetcher(() => AILocationHelper.settlements)
+
+  useEffect(() => {
+    fetcherSettlement.fetch()
+  }, [])
 
   const mappedData: Data[] = useMemo(() => {
     const source = ctx.data.data.filter(_ => _.status !== KoboMetaStatus.Rejected)
@@ -167,7 +173,13 @@ export const MetaTable = () => {
         id: 'settlement',
         type: 'select_one',
         head: m.settlement,
-        renderQuick: _ => _.settlement,
+        render: _ => {
+          const value = fetcherSettlement.get ? fetcherSettlement.get[_.settlement!]?.en : _.settlement
+          return {
+            label: fetcherSettlement.loading ? <Skeleton/> : value,
+            value,
+          }
+        },
       },
       {
         type: 'string',
