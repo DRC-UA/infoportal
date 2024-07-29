@@ -66,14 +66,16 @@ export const DatabaseWithContext = () => {
             {({isActive, isPending}) => (
               <SidebarItem icon="home">
                 All forms
-                <IpIconBtn
-                  sx={{ml: 'auto'}}
-                  color="primary"
-                  loading={asyncSyncAll.loading}
-                  onClick={() => asyncSyncAll.call({serverId: koboIndex.drcUa.server.prod})}
-                >
-                  refresh
-                </IpIconBtn>
+                {ctx.isAdmin && (
+                  <IpIconBtn
+                    sx={{ml: 'auto'}}
+                    color="primary"
+                    loading={asyncSyncAll.loading}
+                    onClick={() => asyncSyncAll.call({serverId: koboIndex.drcUa.server.prod})}
+                  >
+                    refresh
+                  </IpIconBtn>
+                )}
                 {ctx.isAdmin && (
                   <DatabaseNew onAdded={() => ctx._forms.fetch({force: true, clean: false})}>
                     <IpBtn size="small" sx={{my: '1px'}} variant="contained" tooltip={m._koboDatabase.registerNewForm}>
