@@ -527,6 +527,7 @@ export const en = Object.freeze({
       safetyOrSecurityConcernsDuringDisplacement: 'HHs reporting security concerns during displacement',
       HHs: 'HHs',
       AvgHHSize: 'AvgHHSize',
+      None: 'None',
     },
     protection_gbv_survey: {
       priorityNeeds: 'Priority training needs',

@@ -31,6 +31,7 @@ export const ProtectionDashboardMonitoDisability = ({
             label={{
               ...Protection_hhs3.options.do_you_have_a_household_member_that_has_a_lot_of_difficulty,
               wg_using_your_usual_language_have_difficulty_communicating: m.protHHS2.wg_using_your_usual_language_have_difficulty_communicating,
+              '': m.protHHS2.None
             }}
             filterValue={['no', 'unable_unwilling_to_answer']}
           />
