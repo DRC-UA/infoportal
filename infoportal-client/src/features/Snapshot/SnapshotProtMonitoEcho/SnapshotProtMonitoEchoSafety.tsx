@@ -106,9 +106,8 @@ export const SnapshotProtMonitoEchoSafety = () => {
                     //   })
                     // }}
                   >
-                    Contamination by unexploded ordnance (UXOs) continues to be a significant safety concern. In areas formerly under non-government control, the necessity of
-                    demining remains critical, with many residents expressing fear of using the main roads and paths due to the risk of encountering mines. Fortunately, most
-                    communities report receiving information about mines and their associated hazards.
+                    Following the enactment of the new mobilization law on May 18th, men are increasingly avoiding public places due to fear of conscription, limiting their movements and primarily staying at home. 
+                    Conscripts have reportedly a low level of legal awareness and understanding of legislative norms, including the grounds for deferment from military service. Increased mobilization measures, coupled with insufficient communication and clarification from the authorities, have heightened public anxiety and increased risks for conscripts. 
                   </p>
                 }
               </Lazy>

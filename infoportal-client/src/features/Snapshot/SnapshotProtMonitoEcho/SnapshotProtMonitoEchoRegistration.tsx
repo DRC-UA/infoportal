@@ -35,10 +35,12 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             }}>
               {_ =>
                 <SlideTxt>
-                  The proportion of displaced individuals not formally registered as IDPs has increased significantly compared to the previous month (<Txt bold sx={{color: t.palette.success.main}}>+11%</Txt>). This rise can be
+                  {/* The proportion of displaced individuals not formally registered as IDPs has increased significantly compared to the previous month (<Txt bold sx={{color: t.palette.success.main}}>+11%</Txt>). This rise can be
                   attributed to the implementation of Resolution No. 332, which substantially changes the provision of accommodation assistance to IDPs. The increase in
                   unregistered adult males (<Txt bold sx={{color: t.palette.success.main}}>+15%</Txt>) can be linked to the enforcement of the new mobilization law on May 18th. This law aims to bolster male mobilization by lowering
-                  the conscription age, narrowing the grounds for exemptions, and heightening penalties for failing to update military records.
+                  the conscription age, narrowing the grounds for exemptions, and heightening penalties for failing to update military records. */}
+                  The re-registration procedure for IDP benefits, in line with Resolution #332, has been complex and time-consuming, with issues such as long queues, unclear documentation requirements, online system disruptions, and lost documents causing frustrations and delays in benefit disbursements. 
+                  Many IDPs, especially the elderly, prefer in-person registration due to difficulties with the online system, while local authorities and social protection departments struggle with high workloads and staffing shortages, highlighting the need for additional support.
                 </SlideTxt>
               }
             </Lazy>
@@ -102,6 +104,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 label={Protection_hhs3.options.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
                 mergeOptions={{
                   distrust_of_public_institutions_and_authorities: 'other_specify',
+                  discrimination:'other_specify',
                   // discrimination: 'other_specify',
                   lack_of_devices_or_internet_connectivity_to_access_online_procedure: 'other_specify',
                   // distance_or_cost_of_transportation: 'other_specify',
@@ -161,12 +164,12 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 by={_ => _.what_housing_land_and_property_documents_do_you_lack}
                 filterValue={['unable_unwilling_to_answer', 'none']}
                 mergeOptions={{
-                  // cost_estimation_certificate_state_commission_issued_when_personal_request_is_made: 'other_specify',
-                  // death_certificate_of_predecessor: 'other_specify',
-                  // document_issues_by_police_state_emergency_service_proving_that_the_house_was_damaged_destroyedfor_ukrainian_state_control_areas: 'document_issues_by_local_self_government_proving_that_the_house_was_damaged_destroyed',
-                  // informatsiyna_dovidka_informational_extract_on_damaged_property: 'other_specify',
-                  // construction_stage_substituted_with_bti_certificate_following_completion_of_construction: 'other_specify',
-                  // inheritance_will: 'other_specify',
+                  cost_estimation_certificate_state_commission_issued_when_personal_request_is_made: 'other_specify',
+                  death_certificate_of_predecessor: 'other_specify',
+                  document_issues_by_police_state_emergency_service_proving_that_the_house_was_damaged_destroyedfor_ukrainian_state_control_areas: 'document_issues_by_local_self_government_proving_that_the_house_was_damaged_destroyed',
+                  informatsiyna_dovidka_informational_extract_on_damaged_property: 'other_specify',
+                  construction_stage_substituted_with_bti_certificate_following_completion_of_construction: 'other_specify',
+                  inheritance_will: 'other_specify',
                 }}
                 label={{
                   ...Protection_hhs3.options.what_housing_land_and_property_documents_do_you_lack,

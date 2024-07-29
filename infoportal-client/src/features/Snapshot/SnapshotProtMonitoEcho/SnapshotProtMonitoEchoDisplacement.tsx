@@ -22,9 +22,8 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
         <Div>
           <Div column>
             <SlideTxt sx={{mb: .5}} block>
-              In the eastern and southern oblasts, the primary motive for returning is the financial strain experienced by IDPs, driven by high rental costs and limited income
-              opportunities. This demonstrates that some return movements are a negative coping mechanism resulting from the lack of employment opportunities and insufficient state
-              or humanitarian support in displacement areas, a situation that may worsen following the enactment of Government Resolution No. 332.
+            Intentions to return home remain primarily influenced by improved security and cessation of hostilities. However, barriers such as damaged housing, lack of employment, and mined agricultural land deter returns. 
+            The discontinuation of IDP allowances, combined with rising living expenses, has heightened concerns about financial instability and increasingly pressured IDPs to consider returning to their areas of origin or relocating to rural areas where rental costs are lower.
             </SlideTxt>
 
             <SlidePanel>

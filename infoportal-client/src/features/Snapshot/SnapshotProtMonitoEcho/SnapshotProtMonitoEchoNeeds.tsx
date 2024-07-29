@@ -71,8 +71,8 @@ export const SnapshotProtMonitoEchoNeeds = () => {
               }}>
                 {_ =>
                   <p>
-                    Barriers to accessing healthcare, including specialized mental health services, continue to be significantly reported, particularly affecting persons with
-                    reduced mobility, in a context where the ongoing and long-lasting conflict is having profound consequences on the psychological well-being of Ukrainians.
+                    Consistent with previous months, the risk of eviction remains the predominant concern among IDPs due to the closure of collective sites, discontinuation of allowances, and high rental costs. 
+                    Additionally, IDPs struggle to cover utility costs in their new residences as they continue to be charged for utilities in their places of origin.
                   </p>
                 }
               </Lazy>
@@ -119,7 +119,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
                   inability_to_access_registration_costly_andor_lengthy_procedure: 'inability_to_access_registration_safety_risks',
                   inability_to_access_registration_distance_andor_lack_of_transportation: 'inability_to_access_registration_safety_risks',
                   // delays_in_registration_process: 'other_specify',
-                  // unaware_ofnot_familiar_with_the_procedure: 'other_specify',
+                  unaware_ofnot_familiar_with_the_procedure: 'other_specify',
                   // status_renewal_rejected: 'other_specify',
                 }}
               />
