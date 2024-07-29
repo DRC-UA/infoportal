@@ -155,7 +155,7 @@ export class KoboSdkv2 {
 
   readonly getForms = () => {
     // return this.api.get(`/v2/assets/`)
-    return this.api.get<KoboApiList<KoboApiSchema>>(`/v2/assets/?q=asset_type%3Asurvey&limit=200`)
+    return this.api.get<KoboApiList<KoboApiSchema>>(`/v2/assets/?q=asset_type%3Asurvey&limit=1000`)
   }
 
   readonly getAttachement = (path: string) => {

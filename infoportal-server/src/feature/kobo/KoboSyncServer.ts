@@ -76,10 +76,13 @@ export class KoboSyncServer {
 
   private readonly syncApiFormInfo = async (serverId: UUID, formId: KoboId) => {
     const sdk = await this.koboSdkGenerator.get(serverId)
-    const form = await sdk.v2.getForm(formId)
+    const schema = await sdk.v2.getForm(formId)
     return this.prisma.koboForm.update({
       where: {id: formId},
-      data: {name: form.name}
+      data: {
+        name: schema.name,
+        deploymentStatus: schema.deployment_status
+      }
     })
   }
 

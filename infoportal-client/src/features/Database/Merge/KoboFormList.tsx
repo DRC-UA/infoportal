@@ -1,6 +1,5 @@
-import {ApiKoboForm} from '../../../core/sdk/server/kobo/Kobo'
 import {ScRadioGroup, ScRadioGroupItem} from '../../../shared/RadioGroup'
-import {UUID} from '@infoportal-common'
+import {KoboApiSchema, UUID} from '@infoportal-common'
 import {Dialog, DialogActions, DialogContent, DialogTitle} from '@mui/material'
 import {useI18n} from '../../../core/i18n'
 import {IpBtn, IpBtnProps} from '../../../shared/Btn'
@@ -51,7 +50,7 @@ export const KoboFormListDialog = ({
 interface KoboFormListProps {
   value?: UUID,
   onChange?: (e: UUID) => void
-  forms: ApiKoboForm[]
+  forms: KoboApiSchema[]
 }
 
 export const KoboFormList = ({

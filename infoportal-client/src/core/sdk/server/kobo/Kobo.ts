@@ -1,4 +1,4 @@
-import {KoboAnswer, KoboAnswerFlat, KoboAnswerMetaData, KoboApiQuestionSchema, KoboBaseTags, KoboId} from '@infoportal-common'
+import {DeploymentStatus, KoboAnswer, KoboAnswerFlat, KoboAnswerMetaData, KoboApiQuestionSchema, KoboBaseTags, KoboId} from '@infoportal-common'
 import {Enum} from '@alexandreannic/ts-utils'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
@@ -16,6 +16,7 @@ export interface KoboForm {
   name: string
   serverId: string
   uploadedBy?: string
+  deploymentStatus?: DeploymentStatus
 }
 
 export class KoboFormHelper {
@@ -113,53 +114,4 @@ export class Kobo {
       tags: fnMapTags(k.tags) ?? {},
     }
   }
-
-  static readonly extraxtAnswerMetaData = (
-    k: KoboAnswerMetaData,
-    fnMapTags: (x: any) => any = _ => _
-  ): KoboAnswerFlat<any, KoboBaseTags> => {
-    return {
-      start: k.start,
-      end: k.end,
-      submissionTime: k.submissionTime,
-      version: k.version,
-      id: k.id,
-      validationStatus: k.validationStatus,
-      validatedBy: k.validatedBy,
-      lastValidatedTimestamp: k.lastValidatedTimestamp,
-      geolocation: k.geolocation,
-      tags: fnMapTags(k.tags) ?? {},
-    }
-  }
-}
-
-export interface ApiKoboForm {
-  // access_types: null
-  // asset_type: "survey"
-  // children: {count: 0}
-  // data: "https://kobo.humanitarianresponse.info/api/v2/assets/aRHsewShwZhXiy8jrBj9zf/data/"
-  // data_sharing: {}
-  date_created: Date
-  date_modified: Date
-  deployed_version_id: string
-  deployment__active: boolean
-  // deployment__identifier: "https://kc.humanitarianresponse.info/alexandre_annic_drc/forms/aRHsewShwZhXiy8jrBj9zf"
-  deployment__submission_count: 0
-  // downloads: [,…]
-  // export_settings: []
-  has_deployment: boolean
-  // kind: "asset"
-  name: string
-  // owner: "https://kobo.humanitarianresponse.info/api/v2/users/alexandre_annic_drc/"
-  owner__username: string
-  // parent: null
-  // permissions: [{,…}, {,…}, {,…}, {,…}, {,…}, {,…}, {,…}, {,…}]
-  // settings: {sector: {label: "Humanitarian - Coordination / Information Management",…},…}
-  // status: "private"
-  subscribers_count: 0
-  // summary: {geo: false,…}
-  // tag_string: ""
-  uid: string
-  // url: "https://kobo.humanitarianresponse.info/api/v2/assets/aRHsewShwZhXiy8jrBj9zf/"
-  version_id: string
 }

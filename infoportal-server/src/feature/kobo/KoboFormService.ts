@@ -1,12 +1,13 @@
-import {KoboForm, PrismaClient} from '@prisma/client'
-import {KoboId, KoboSdk, KoboSdkv2, UUID} from '@infoportal-common'
+import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
+import {KoboApiSchema, KoboId, KoboSdk, KoboSdkv2, UUID} from '@infoportal-common'
 import {KoboApiService} from './KoboApiService'
 import {seq} from '@alexandreannic/ts-utils'
 import {appConf} from '../../core/conf/AppConf'
+import {KoboSdkGenerator} from './KoboSdkGenerator'
+import {PromisePool} from '@supercharge/promise-pool'
 
 export interface KoboFormCreate {
-  id: string
-  name: string
+  uid: string
   serverId: UUID
   uploadedBy: string
 }
@@ -16,18 +17,44 @@ export class KoboFormService {
   constructor(
     private prisma: PrismaClient,
     private service = new KoboApiService(prisma),
+    private koboSdk = new KoboSdkGenerator(prisma),
     private conf = appConf,
   ) {
 
   }
 
-  readonly create = async (payload: KoboFormCreate) => {
+  static readonly apiToDb = ({
+    schema,
+    serverId,
+    uploadedBy,
+  }: {
+    schema: KoboApiSchema,
+    serverId: UUID
+    uploadedBy: string
+  }): Prisma.KoboFormUncheckedCreateInput => {
+    return {
+      name: schema.name,
+      id: schema.uid,
+      serverId: serverId,
+      deploymentStatus: schema.deployment_status,
+      uploadedBy: uploadedBy,
+    }
+  }
+
+  readonly add = async (payload: KoboFormCreate) => {
+    const sdk = await this.koboSdk.get()
+    const schema = await sdk.v2.getForm(payload.uid)
     const [newFrom,] = await Promise.all([
       this.prisma.koboForm.create({
-        data: payload
+        data: KoboFormService.apiToDb({
+          schema,
+          serverId: payload.serverId,
+          uploadedBy: payload.uploadedBy,
+        })
       }),
-      this.service.constructSdk(payload.serverId).then(sdk => this.createHookIfNotExists(sdk, payload.id))
+      this.service.constructSdk(payload.serverId).then(sdk => this.createHookIfNotExists(sdk, payload.uid))
     ])
+    return newFrom
   }
 
   private createHookIfNotExists = async (sdk: KoboSdk, formId: KoboId) => {
@@ -57,5 +84,30 @@ export class KoboFormService {
         server: true
       }
     })
+  }
+
+  readonly refreshAll = async (params: Omit<KoboFormCreate, 'uid'>) => {
+    const sdk = await this.koboSdk.get(params.serverId)
+    const [forms, apiFormsIndex] = await Promise.all([
+      this.getAll(),
+      sdk.v2.getForms().then(_ => _.results).then(_ => {
+        console.log(_.length)
+        return seq(_).groupByFirst(_ => _.uid)
+      }),
+    ])
+    await PromisePool.withConcurrency(this.conf.db.maxConcurrency).for(forms)
+      .handleError(async error => {
+        throw error
+      })
+      .process(form => {
+        const schema = apiFormsIndex[form.id]
+        const db = KoboFormService.apiToDb({schema, ...params})
+        return this.prisma.koboForm.update({
+          data: db,
+          where: {
+            id: form.id
+          }
+        })
+      })
   }
 }

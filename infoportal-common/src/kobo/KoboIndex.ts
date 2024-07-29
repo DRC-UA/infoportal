@@ -130,7 +130,7 @@ export const koboFormTranslation: Record<KoboFormName, string> = {
 
 export namespace KoboIndex {
 
-  interface ParsedForm {
+  export interface ParsedForm {
     name: string
     program?: string
     donors?: string[]
