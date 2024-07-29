@@ -9,6 +9,7 @@ export type KoboMetaOrigin<
   attachments: KoboAnswerMetaData['attachments']
   answers: TAnswer
   date: KoboAnswerMetaData['date']
+  submissionTime: KoboAnswerMetaData['submissionTime']
   id: KoboAnswerMetaData['id']
   updatedAt?: KoboAnswerMetaData['updatedAt']
   tags?: TTag | null
