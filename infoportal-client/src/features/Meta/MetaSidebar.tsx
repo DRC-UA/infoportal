@@ -111,26 +111,36 @@ export const MetaSidebar = () => {
             </SidebarTitle>
             <SidebarSubSection title={m.submittedAt} keepOpen>
               <Box sx={{px: 1, mt: 1}}>
-                <PeriodPicker
+                <DebouncedInput<[Date | undefined, Date | undefined]>
                   defaultValue={[ctx.period.start, ctx.period.end]}
                   onChange={([start, end]) => {
                     ctx.setPeriod(prev => ({...prev, start, end}))
                   }}
-                  label={[m.start, m.endIncluded]}
-                  max={today}
-                />
+                >
+                  {(value, onChange) => <PeriodPicker
+                    value={value}
+                    onChange={onChange}
+                    label={[m.start, m.endIncluded]}
+                    max={today}
+                  />}
+                </DebouncedInput>
               </Box>
             </SidebarSubSection>
             <SidebarSubSection title={m.committedAt} keepOpen>
               <Box sx={{px: 1, mt: 1}}>
-                <PeriodPicker
+                <DebouncedInput<[Date | undefined, Date | undefined]>
                   defaultValue={[ctx.periodCommit.start, ctx.period.end]}
                   onChange={([start, end]) => {
                     ctx.setPeriodCommit(prev => ({...prev, start, end}))
                   }}
-                  label={[m.start, m.endIncluded]}
-                  max={today}
-                />
+                >
+                  {(value, onChange) => <PeriodPicker
+                    value={value}
+                    onChange={onChange}
+                    label={[m.start, m.endIncluded]}
+                    max={today}
+                  />}
+                </DebouncedInput>
               </Box>
             </SidebarSubSection>
             <SidebarSubSection title={m.distinct} icon="join_inner">

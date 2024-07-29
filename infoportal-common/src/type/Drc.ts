@@ -269,6 +269,7 @@ export class DrcProjectHelper {
 
 
 export enum DrcJob {
+  'GBV Officer' = 'GBV Officer',
   'Economic Recovery Specialist' = 'Economic Recovery Specialist',
   'Deminer' = 'Deminer',
   'Livelihoods Assistant' = 'Livelihoods Assistant',
