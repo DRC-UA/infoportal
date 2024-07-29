@@ -10,7 +10,6 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {ProtectionOverview} from '@/features/Protection/Overview/ProtectionOverview'
 import Link from 'next/link'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
-import {ProtectionProvider, useProtectionContext} from '@/features/Protection/Context/ProtectionContext'
 import {shelterIndex} from '@/features/Shelter/Shelter'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {appConfig} from '@/conf/AppConfig'
@@ -23,6 +22,7 @@ const relatedKoboForms: (KoboFormName)[] = [
   'protection_pss',
   // 'protection_hhs1',
   'protection_gbv',
+  'protection_coc',
 ]
 
 export const protectionIndex = {
@@ -63,6 +63,8 @@ export const ProtectionSidebar = () => {
               <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>{m.dashboard}</SidebarItem>
             )}
           </NavLink>
+          <SidebarItem href={appConfig.externalLink.cocDashboard} icon="open_in_new" target="_blank">{m._protection.cocCasesDashboard}</SidebarItem>
+          <SidebarKoboLink size="tiny" path={path(protectionIndex.siteMap.form('protection_coc'))} name="protection_coc"/>
         </SidebarSection>
       </SidebarBody>
     </Sidebar>
@@ -71,19 +73,8 @@ export const ProtectionSidebar = () => {
 
 export const Protection = () => {
   return (
-    <ProtectionProvider>
-      <ProtectionWithContext/>
-    </ProtectionProvider>
-  )
-}
-
-export const ProtectionWithContext = () => {
-  const ctx = useProtectionContext()
-
-  return (
     <Layout
       title={appFeaturesIndex.protection.name}
-      loading={ctx.fetching}
       sidebar={<ProtectionSidebar/>}
       header={<AppHeader id="app-header"/>}
     >
