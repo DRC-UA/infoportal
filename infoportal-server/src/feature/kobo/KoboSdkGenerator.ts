@@ -22,7 +22,7 @@ export class KoboSdkGenerator {
   readonly get = async (koboServerId?: UUID): Promise<KoboSdk> => {
     const k = await this.getServer(koboServerId)
     return new KoboSdk({
-      urlv1: k.urlV1 + '/api',
+      urlv1: k.urlV1 + '/api/v1',
       urlv2: k.url + '/api',
       token: k.token,
       log: app.logger('KoboSdk'),
