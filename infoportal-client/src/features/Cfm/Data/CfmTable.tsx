@@ -86,8 +86,8 @@ export const CfmTable = ({}: any) => {
       api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('meal_cfmExternal').id),
     ])
     await Promise.all([
-      ctxAnswers.byName.fetch({force: true, clean: false}, 'meal_cfmExternal'),
-      ctxAnswers.byName.fetch({force: true, clean: false}, 'meal_cfmInternal'),
+      ctxAnswers.byName2('meal_cfmExternal').fetch({force: true, clean: false}),
+      ctxAnswers.byName2('meal_cfmInternal').fetch({force: true, clean: false}),
     ])
   })
 

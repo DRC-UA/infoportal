@@ -68,7 +68,7 @@ export const useSafetyIncidentData = () => {
   const [optionFilter, setOptionFilters] = useState<DataFilter.InferShape<typeof filterShape>>({})
   const [period, setPeriod] = useState<Partial<Period>>({})
 
-  const data = seq(fetcherAnswer.get()?.data) ?? []
+  const data = seq(fetcherAnswer.get?.data) ?? []
   const dataFiltered = useMemo(() => {
     return DataFilter.filterData(data, filterShape, optionFilter).filter(_ => PeriodHelper.isDateIn(period, _.date))
   }, [data, filterShape, optionFilter, period])

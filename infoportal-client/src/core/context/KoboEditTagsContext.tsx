@@ -68,9 +68,9 @@ export const KoboEditTagsProvider = ({
     value,
   }: KoboUpdateTagByName<T, K>) => {
     const idsIndex = new Set(answerIds)
-    const currentAnswers = ctxAnswers.byName.get(formName)
+    const currentAnswers = ctxAnswers.byName2(formName).get
     if (!currentAnswers) return
-    ctxAnswers.byName.set(formName, {
+    ctxAnswers.byName2(formName).set({
       ...currentAnswers, data: currentAnswers.data.map((a: any) => {
         if (idsIndex.has(a.id)) {
           if (!a.tags) a.tags = {}
@@ -88,9 +88,9 @@ export const KoboEditTagsProvider = ({
     value,
   }: KoboUpdateTagById) => {
     const idsIndex = new Set(answerIds)
-    const currentAnswers = ctxAnswers.byId.get(formId)
+    const currentAnswers = ctxAnswers.byId2(formId).get
     if (!currentAnswers) return
-    ctxAnswers.byId.set(formId, {
+    ctxAnswers.byId2(formId).set({
       ...currentAnswers, data: currentAnswers.data.map((a: any) => {
         if (idsIndex.has(a.id)) {
           if (!a.tags) a.tags = {}
@@ -109,7 +109,7 @@ export const KoboEditTagsProvider = ({
     }).then(() => {
       updateCacheByName(p)
     }).catch((e) => {
-      ctxAnswers.byName.fetch({force: true, clean: false}, p.formName)
+      ctxAnswers.byName2(p.formName).fetch({force: true, clean: false})
       return Promise.reject(e)
     })
   }, {requestKey: ([_]) => _.formName})
@@ -122,7 +122,7 @@ export const KoboEditTagsProvider = ({
     }).then(() => {
       updateCacheById(p)
     }).catch((e) => {
-      ctxAnswers.byId.fetch({force: true, clean: false}, p.formId)
+      ctxAnswers.byId2(p.formId).fetch({force: true, clean: false})
       return Promise.reject(e)
     })
   }, {requestKey: ([_]) => _.formId})
