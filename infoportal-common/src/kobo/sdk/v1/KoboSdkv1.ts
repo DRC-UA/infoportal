@@ -36,12 +36,6 @@ export class KoboSdkv1 {
     const _uuid = uuid ?? await this.getForms().then(_ => _.find(f => f.id_string === formId)?.uuid)
     if (!_uuid) throw new Error(`Kobo form id ${formId} not found.`)
     return retry((retry, number) => {
-      console.log('api call')
-      console.log({
-          formhub: {uuid: _uuid},
-          ...KoboSdkv1.parseBody(data),
-        }
-      )
       return this.api.post<SubmitResponse>(`/submissions.json`, {
         body: {
           id: formId,

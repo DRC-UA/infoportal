@@ -3,7 +3,6 @@ import {KoboSdkGenerator} from '../../feature/kobo/KoboSdkGenerator'
 import {scriptConf} from '../ScriptConf'
 import {ImportMpca} from './ImporterMpca'
 import {KoboAnswer, Meal_pdmStandardised} from '@infoportal-common'
-import * as process from 'process'
 import dataMap = ImportMpca.dataMap
 
 
@@ -28,42 +27,17 @@ export const importMpcaToCash = (async () => {
   const sdk = await new KoboSdkGenerator(prisma).get(scriptConf.kobo[config.server].serverId)
 
   const oldData = await sdk.v2.getAnswers(serverConfig.mpcaId).then(_ => _.data as KoboAnswer<Meal_pdmStandardised.T>[])
-  const mappedData = oldData.map(_ => dataMap(_.answers))
-
-  const submit = async <TData>({
-    formId,
-    data,
-    activity,
-  }: {
-    formId: string;
-    data: TData[];
-    activity: (item: TData, i: number) => any;
-  }): Promise<void> => {
-    console.log(`Submitting data to formId ${formId}`)
-    for (const [i, item] of data.entries()) {
-      try {
-        const res = await sdk.v1.submit({
-          formId,
-          data: activity(item, i),
-        })
-        console.log(`Record ${i}:`, res.message ?? res.error)
-      } catch (e: any) {
-        console.error(`Error with record ${i}:`, e, activity(item, i))
-      }
-      if (i === 1) process.exit(0)
-    }
-    console.log('Data submission completed.')
+  const mappedData = oldData.map(_ => dataMap(_))
+  let done = 0
+  for (let i = 0; i < mappedData.length; i++) {
+    done++
+    console.log(done.toString().padStart(4, '') + ' / ' + mappedData.length)
+    await sdk.v1.submit({
+      formId: serverConfig.cashId,
+      data: mappedData[i],
+    })
   }
-
-  await submit<Record<string, any>>({
-    formId: serverConfig.cashId,
-    data: mappedData,
-    activity: (item, i) => ({
-      // ...item,
-      'metadata/ben_det_raion': 'zolochivskyi',
-      // 'aap/comment': config.importComment(i),
-    }),
-  })
-
-  console.log('Import process completed.')
+  // await PromisePool.withConcurrency(20).for(mappedData).process(async (data, i) => {
+  //   done++
+  // })
 })

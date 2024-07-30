@@ -14,6 +14,7 @@ import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {importMpcaToCash} from './script/20240614-importMpcaToCash/ImportMpcaToCash'
 import {EmailService} from './core/EmailService'
+import {BuildKoboType} from './script/BuildTypeKobo'
 
 export type AppLogger = WinstonLogger
 
@@ -75,6 +76,7 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
+  // await new BuildKoboType().buildAll()
   await importMpcaToCash()
   return
   // await new BuildKoboType().build('safety_incident')
@@ -121,7 +123,7 @@ const startApp = async (conf: AppConf) => {
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
     } else {
-      await new BuildKoboType().buildAll()
+      // await new BuildKoboType().buildAll()
     }
   }
 
