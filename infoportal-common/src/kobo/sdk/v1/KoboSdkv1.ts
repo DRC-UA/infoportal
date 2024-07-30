@@ -2,6 +2,7 @@ import {ApiClient} from '../../../api-client/ApiClient'
 import retry from 'promise-retry'
 import {KoboId} from '../../mapper'
 import {KoboV1Form, SubmitResponse} from './KoboSdkv1Type'
+import {AxiosError} from 'axios'
 
 export class KoboSdkv1 {
   constructor(private api: ApiClient) {
@@ -44,8 +45,8 @@ export class KoboSdkv1 {
             ...KoboSdkv1.parseBody(data),
           }
         }
-      }).catch(e => {
-        console.log(e)
+      }).catch((e: AxiosError) => {
+        console.log(e.code, e.cause, e.message)
         return retry(e)
       })
     }, {retries})
