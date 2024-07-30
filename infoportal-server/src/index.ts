@@ -12,7 +12,7 @@ import * as winston from 'winston'
 import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
-import {importMpcaToCash} from './script/20240614-importMpcaToCash/ImportMpcaToCash'
+import {migratePdmCash} from './script/20240614-migratePdmCash/MigratePdmCash'
 import {EmailService} from './core/EmailService'
 import {BuildKoboType} from './script/BuildTypeKobo'
 
@@ -77,7 +77,7 @@ const initServices = (
 
 const startApp = async (conf: AppConf) => {
   // await new BuildKoboType().buildAll()
-  await importMpcaToCash()
+  await migratePdmCash()
   return
   // await new BuildKoboType().build('safety_incident')
   // await ActivityInfoBuildType.fslc()
