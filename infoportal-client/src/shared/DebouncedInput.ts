@@ -15,12 +15,12 @@ export const DebouncedInput = <V>({debounce: debounceTime = 450, defaultValue, v
   const debounced = useCallback(debounce(onChange, debounceTime), [debounceTime, onChange])
 
   useEffect(() => {
-    setInnerValue(value)
-  }, [value])
+    if (defaultValue) setInnerValue(defaultValue)
+  }, [])
 
   useEffect(() => {
-    setInnerValue(defaultValue)
-  }, [])
+    setInnerValue(value)
+  }, [value])
 
   const innerOnChange = (newValue: V) => {
     setInnerValue(newValue)
