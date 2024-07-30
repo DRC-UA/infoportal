@@ -71,7 +71,7 @@ export const ProtectionDashboardMonitoViolence = ({
   return (
     <Div responsive>
       <Div column>
-        <Lazy deps={[data]} fn={() => {
+        <Lazy deps={[data, category]} fn={() => {
           const questions = forceArrayStringInference([
             'has_any_adult_male_member_experienced_violence',
             'has_any_adult_female_member_experienced_violence',
@@ -122,7 +122,7 @@ export const ProtectionDashboardMonitoViolence = ({
               <ChartBar
                 data={_}
                 labels={{
-                  total: <Checkbox indeterminate={!allChecked && oneChecked} checked={allChecked} onClick={() => {
+                  total: <Checkbox indeterminate={!allChecked && oneChecked} checked={allChecked} onChange={() => {
                     updateAll(!allChecked)
                   }}/>,
                   has_any_adult_male_member_experienced_violence: <Checkbox

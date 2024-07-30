@@ -66,12 +66,12 @@ export const ProtectionDashboardMonitoFamilyUnity = ({
               data={data}
             />
             <Box sx={{display: 'flex', alignItems: 'center'}}>
-              <Checkbox indeterminate={!allChecked && oneChecked} checked={allChecked} onClick={() => {
+              <Checkbox indeterminate={!allChecked && oneChecked} checked={allChecked} onChange={() => {
                 updateAll(!allChecked)
               }}/>
               <Txt bold size="big">{m.selectAll}</Txt>
             </Box>
-            <Lazy deps={[data]} fn={() =>
+            <Lazy deps={[data, category]} fn={() =>
               chain(ChartHelperOld.multiple({
                 filterValue: ['unable_unwilling_to_answer', 'no'],
                 data: data.map(_ => _.are_you_separated_from_any_of_your_households_members).compact()

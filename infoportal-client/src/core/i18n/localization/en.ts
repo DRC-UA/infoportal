@@ -154,7 +154,7 @@ export const en = Object.freeze({
     filter: 'Filter',
     distinct: 'Distinct',
     noneFormatted: '<i>None</i>',
-    none: '<i>None</i>',
+    none: 'None',
     filterPlaceholder: 'Filter...',
     count: 'Count',
     sum: 'Sum',
