@@ -46,32 +46,13 @@ export class KoboSdkv1 {
           }
         }
       }).catch((e: AxiosError) => {
-        console.log(e.code, e.cause, e.message)
+        // console.log(`Retry ${number}: `, e.code, e.cause, e.message)
         return retry(e)
       })
     }, {retries})
   }
 
   readonly getForms = async (): Promise<KoboV1Form[]> => {
-    const formUrlResponse = await this.api.get<{forms: string}>(`/v1`)
-    if (!formUrlResponse || !formUrlResponse.forms) {
-      throw new Error('Forms URL not found in the response')
-    }
-    const formsResponse = await this.api.get<KoboV1Form[]>(formUrlResponse.forms)
-    if (!Array.isArray(formsResponse)) {
-      throw new Error(`Expected an array of forms but got: ${JSON.stringify(formsResponse)}`)
-    }
-    return formsResponse
+    return this.api.get(`/forms`)
   }
-  // static readonly parseDate = (_: Date) => _.toISOString()
-  //
-  // static readonly makeDateFilter = (name: string, operator: 'gte' | 'lte', date: Date) => {
-  //   return {[name]: {['$' + operator]: v2.parseDate(date)}}
-  // }
-  //
-  // // static readonly parseDate = toYYYYMMDD
-  //
-  // static readonly makeAuthorizationHeader = (token: string) => `Token ${token}`
-
-
 }

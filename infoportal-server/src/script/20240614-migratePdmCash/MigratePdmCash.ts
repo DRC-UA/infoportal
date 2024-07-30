@@ -17,13 +17,13 @@ export const migratePdmCash = (async () => {
   const oldData = await sdk.v2.getAnswers(config.mpcaId).then(_ => _.data as KoboAnswer<Meal_pdmStandardised.T>[])
   const mappedData = oldData.map(_ => dataMap(_))
   let done = 0
-  await PromisePool.withConcurrency(1).for(mappedData).process(async (data, i) => {
+  await PromisePool.withConcurrency(50).for(mappedData).process(async (data, i) => {
     done++
-    console.log(done.toString().padStart(4, ' ') + ' / ' + mappedData.length)
-    await sdk.v1.submit({
+    const res = await sdk.v1.submit({
       formId: config.cashId,
       data: mappedData[i],
     })
+    console.log(done.toString().padStart(4, ' ') + ' / ' + mappedData.length, res)
   })
 })
 
