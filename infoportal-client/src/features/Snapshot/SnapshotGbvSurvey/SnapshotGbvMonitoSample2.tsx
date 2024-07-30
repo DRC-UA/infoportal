@@ -16,14 +16,15 @@ export const SnapshotMonitoSample2 = () => {
   const {conf} = useAppSettings()
   const {formatLargeNumber, m} = useI18n()
   const ctxAnswers = useKoboAnswersContext()
+  const fetcher = ctxAnswers.byName('protection_gbvSocialProviders')
 
   useEffect(() => {
-    ctxAnswers.byName.fetch({}, 'protection_gbvSocialProviders')
+    fetcher.fetch()
   }, [])
 
   const data = useMemo(() => {
-    return seq(ctxAnswers.byName.get('protection_gbvSocialProviders')?.data ?? [])
-  }, [ctxAnswers.byName])
+    return seq(fetcher.get?.data ?? [])
+  }, [fetcher.get])
 
   return (
     <PdfSlide>

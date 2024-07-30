@@ -69,7 +69,7 @@ export const DatabaseTable = ({
   const {api} = useAppSettings()
   const {accesses, session} = useSession()
   const ctxSchema = useKoboSchemaContext()
-  const ctxAnswers = useKoboAnswersContext()
+  const fetcher = useKoboAnswersContext().byId(formId)
 
   useEffect(() => {
     ctxSchema.fetchById(formId)
@@ -86,14 +86,14 @@ export const DatabaseTable = ({
   }, [accesses])
 
   useEffect(() => {
-    ctxAnswers.byId.fetch({}, formId)
+    fetcher.fetch({})
     _form.fetch()
   }, [serverId, formId])
 
 
-  const loading = ctxAnswers.byId.loading(formId)
+  const loading = fetcher.loading
   const refetch = useCallback(async (p: FetchParams = {}) => {
-    await ctxAnswers.byId.fetch(p, formId)
+    await fetcher.fetch(p)
   }, [formId])
 
   return (
@@ -116,7 +116,7 @@ export const DatabaseTable = ({
           serverId={serverId}
           refetch={refetch}
           loading={loading}
-          data={ctxAnswers.byId.get(formId)?.data}
+          data={fetcher.get?.data}
           form={form}
         >
           <DatabaseKoboTableContent

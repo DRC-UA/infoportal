@@ -29,21 +29,21 @@ export const DatabaseKoboAnswerViewPage = () => {
   const {m} = useI18n()
   const {serverId, formId, answerId} = databaseUrlParamsValidation.validateSync(useParams())
   const [showQuestionWithoutAnswer, setShowQuestionWithoutAnswer] = useState(false)
-  const ctxAnswers = useKoboAnswersContext()
+  const ctxAnswers = useKoboAnswersContext().byId(formId)
   const ctxSchema = useKoboSchemaContext()
 
   useEffect(() => {
-    ctxAnswers.byId.fetch({}, formId)
+    ctxAnswers.fetch({})
     ctxSchema.fetchById(formId)
   }, [formId])
 
   const answer = useMemo(() => {
-    return ctxAnswers.byId.find({formId, answerId})
-  }, [formId, ctxAnswers.byId.get(formId)])
+    return ctxAnswers.find(answerId)
+  }, [formId, ctxAnswers.get])
 
   return (
     <Page>
-      {ctxAnswers.byId.loading(formId) || ctxSchema.byId[formId]?.loading ? (
+      {ctxAnswers.loading || ctxSchema.byId[formId]?.loading ? (
         <>
           <Skeleton/>
           <Skeleton/>

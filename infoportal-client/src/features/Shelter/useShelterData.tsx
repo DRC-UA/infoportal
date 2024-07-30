@@ -14,15 +14,17 @@ export const useShelterData = () => {
   const ctxAnswers = useKoboAnswersContext()
   // const req = () => api.shelter.search().then(_ => _.data)
   // const fetcher = useFetcher(req)
+  const fetcherNta = ctxAnswers.byName('shelter_nta')
+  const fetcherTa = ctxAnswers.byName('shelter_ta')
 
 
   const fetchAll = (p: FetchParams = {}) => {
-    ctxAnswers.byName.fetch(p, 'shelter_nta')
-    ctxAnswers.byName.fetch(p, 'shelter_ta')
+    fetcherNta.fetch()
+    fetcherTa.fetch()
   }
 
   const mappedData = useMemo(() => {
-    return map(ctxAnswers.byName.get('shelter_nta'), ctxAnswers.byName.get('shelter_ta'), (nta, ta) => {
+    return map(fetcherNta.get, fetcherTa.get, (nta, ta) => {
       const index: Record<KoboAnswerId, Omit<ShelterEntity, 'id'>> = {} as any
       nta.data.forEach(d => {
         if (!index[d.id]) index[d.id] = {}
@@ -76,10 +78,7 @@ export const useShelterData = () => {
           return a.nta.submissionTime?.getTime() - b.nta?.submissionTime.getTime()
         }) as Seq<ShelterEntity>
     }) ?? seq([])
-  }, [
-    ctxAnswers.byName.get('shelter_nta'),
-    ctxAnswers.byName.get('shelter_ta'),
-  ])
+  }, [fetcherNta.get, fetcherTa.get])
 
   const index: undefined | Record<KoboAnswerId, number> = useMemo(() => {
     if (!mappedData) return
@@ -111,7 +110,7 @@ export const useShelterData = () => {
   return {
     fetchAll,
     asyncSyncAnswers,
-    fetching: ctxAnswers.byName.loading('shelter_nta') || ctxAnswers.byName.loading('shelter_ta'),
+    fetching: fetcherNta.loading || fetcherTa.loading,
     mappedData,
     index,
   } as const

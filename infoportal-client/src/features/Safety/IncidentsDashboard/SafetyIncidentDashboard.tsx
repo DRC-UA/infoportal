@@ -20,7 +20,7 @@ const SafetyIncidentDashboardWithContext = () => {
   return (
     <Page
       width="lg"
-      loading={ctx.fetcherAnswer.loading()}
+      loading={ctx.fetcherAnswer.loading}
     >
       <DataFilterLayout
         shapes={ctx.filterShape}

@@ -89,7 +89,7 @@ export const DatabaseTableCustomRoute = () => {
 
   useEffect(() => {
     formIds.forEach(_ => {
-      ctxAnswers.byId.fetch({}, _)
+      ctxAnswers.byId(_).fetch()
       ctxSchema.fetchById(_)
     })
   }, [formIds])
@@ -101,7 +101,7 @@ export const DatabaseTableCustomRoute = () => {
   }, [schemas])
 
   const data = useMemo(() => {
-    const dataSets = formIds.map(_ => ctxAnswers.byId.get(_)?.data)
+    const dataSets = formIds.map(_ => ctxAnswers.byId(_).get?.data)
     if (!dataSets.every(_ => _ !== undefined)) return
     const indexesParams = seq(customForm.forms)
       .compactBy('join')
@@ -112,7 +112,7 @@ export const DatabaseTableCustomRoute = () => {
       .distinct(_ => _.formId)
     const indexes = indexesParams.groupByAndApply(
       _ => _.formId,
-      group => seq(ctxAnswers.byId.get(group[0].formId)?.data!).groupByFirst(_ => (_ as any)[group[0].colName])
+      group => seq(ctxAnswers.byId(group[0].formId).get?.data!).groupByFirst(_ => (_ as any)[group[0].colName])
     )
     return dataSets[0]!.map((row, i) => {
       return {
@@ -123,7 +123,7 @@ export const DatabaseTableCustomRoute = () => {
         })
       }
     })
-  }, [...formIds.map(_ => ctxAnswers.byId.get(_)?.data), ctxSchema.langIndex])
+  }, [...formIds.map(_ => ctxAnswers.byId(_).get?.data), ctxSchema.langIndex])
 
   const columns = useMemo(() => {
     return schemas.flatMap(({formId, schema}) => {
@@ -173,7 +173,7 @@ export const DatabaseTableCustomRoute = () => {
     })
   }, [...schemas, ctxSchema.langIndex])
 
-  const loading = ctxSchema.anyLoading || !!formIds.find(_ => ctxAnswers.byId.loading(_))
+  const loading = ctxSchema.anyLoading || !!formIds.find(_ => ctxAnswers.byId(_).loading)
   return (
     <>
       <Page width="full" sx={{p: 0}} loading={loading}>

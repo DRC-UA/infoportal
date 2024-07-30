@@ -137,6 +137,8 @@ export const CfmProvider = ({
   const ctxAnswers = useKoboAnswersContext()
   const ctxEditTag = useKoboEditTagContext()
   const users = useFetcher(() => api.user.search())
+  const fetcherInternal = ctxAnswers.byName('meal_cfmInternal')
+  const fetcherExternal = ctxAnswers.byName('meal_cfmExternal')
 
   const authorizations: CfmContext['authorizations'] = useMemo(() => {
     const cfmAccesses = seq(accesses).filter(Access.filterByFeature(AppFeatureId.cfm))
@@ -153,7 +155,7 @@ export const CfmProvider = ({
   }, [session, accesses])
 
   const mappedData = useMemo(() => {
-    return map(ctxAnswers.byName.get('meal_cfmInternal'), ctxAnswers.byName.get('meal_cfmExternal'), (internal, external) => {
+    return map(fetcherInternal.get, fetcherExternal.get, (internal, external) => {
       const res: CfmData[] = []
       external.data.forEach(_ => {
         const category = _.tags?.feedbackTypeOverride
@@ -193,8 +195,8 @@ export const CfmProvider = ({
       return seq(res).sort((b, a) => (a.date ?? a.submissionTime).getTime() - (b.date ?? b.submissionTime).getTime())
     }) ?? seq([])
   }, [
-    ctxAnswers.byName.get('meal_cfmInternal'),
-    ctxAnswers.byName.get('meal_cfmExternal'),
+    fetcherInternal.get,
+    fetcherExternal.get,
   ])
 
   const visibleData = useMemo(() => {
@@ -229,8 +231,8 @@ export const CfmProvider = ({
   })
 
   useEffect(() => {
-    ctxAnswers.byName.fetch({}, 'meal_cfmExternal')
-    ctxAnswers.byName.fetch({}, 'meal_cfmInternal')
+    fetcherExternal.fetch({})
+    fetcherInternal.fetch({})
     users.fetch()
   }, [])
 
@@ -238,7 +240,7 @@ export const CfmProvider = ({
     <CfmContext.Provider value={{
       authorizations,
       asyncRemove,
-      fetching: ctxAnswers.byName.loading('meal_cfmInternal') || ctxAnswers.byName.loading('meal_cfmExternal'),
+      fetching: fetcherInternal.loading || fetcherExternal.loading,
       users,
       mappedData: mappedData,
       visibleData: visibleData,

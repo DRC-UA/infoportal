@@ -115,7 +115,7 @@ export const DatabaseList = ({
                   renderQuick: _ =>
                     <TableIconBtn
                       color="primary"
-                      onClickRows={_ => navigate(databaseIndex.siteMap.database.absolute(_.serverId, _.id))}
+                      onClick={() => navigate(databaseIndex.siteMap.database.absolute(_.serverId, _.id))}
                       children="chevron_right"
                     />
                 },

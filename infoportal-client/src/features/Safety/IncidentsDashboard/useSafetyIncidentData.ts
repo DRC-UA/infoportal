@@ -22,7 +22,7 @@ export type UseSafetyIncidentData = ReturnType<typeof useSafetyIncidentData>
 export const useSafetyIncidentData = () => {
   const {m} = useI18n()
   const {api} = useAppSettings()
-  const fetcherAnswer = useKoboAnswersContext().byName2('safety_incident')
+  const fetcherAnswer = useKoboAnswersContext().byName('safety_incident')
   const fetcherPeriod = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('safety_incident').id))
 
   const filterShape = useMemo(() => DataFilter.makeShape<InferTypedAnswer<'safety_incident'>>({
@@ -68,7 +68,7 @@ export const useSafetyIncidentData = () => {
   const [optionFilter, setOptionFilters] = useState<DataFilter.InferShape<typeof filterShape>>({})
   const [period, setPeriod] = useState<Partial<Period>>({})
 
-  const data = seq(fetcherAnswer.get()?.data) ?? []
+  const data = seq(fetcherAnswer.get?.data) ?? []
   const dataFiltered = useMemo(() => {
     return DataFilter.filterData(data, filterShape, optionFilter).filter(_ => PeriodHelper.isDateIn(period, _.date))
   }, [data, filterShape, optionFilter, period])
