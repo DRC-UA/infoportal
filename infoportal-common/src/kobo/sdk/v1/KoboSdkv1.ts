@@ -2,9 +2,25 @@ import {ApiClient} from '../../../api-client/ApiClient'
 import retry from 'promise-retry'
 import {KoboId} from '../../mapper'
 import {KoboV1Form, SubmitResponse} from './KoboSdkv1Type'
+import {AxiosError} from 'axios'
 
 export class KoboSdkv1 {
   constructor(private api: ApiClient) {
+  }
+
+  static readonly parseBody = (obj: Record<string, undefined | string | string[] | number>): Record<string, string> => {
+    for (const i in obj) {
+      if (obj[i] === undefined || obj[i] === null) {
+        delete obj[i]
+      }
+      if (Array.isArray(obj[i])) {
+        obj[i] = (obj[i] as any).join(' ')
+      }
+      if (typeof obj[i] === 'number') {
+        obj[i] = '' + obj[i]
+      }
+    }
+    return obj as any
   }
 
   readonly submit = async <T extends Record<string, any>>({
@@ -26,25 +42,17 @@ export class KoboSdkv1 {
           id: formId,
           submission: {
             formhub: {uuid: _uuid},
-            ...data,
+            ...KoboSdkv1.parseBody(data),
           }
         }
-      }).catch(retry)
+      }).catch((e: AxiosError) => {
+        // console.log(`Retry ${number}: `, e.code, e.cause, e.message)
+        return retry(e)
+      })
     }, {retries})
   }
 
-  readonly getForms = () => {
-    return this.api.get<KoboV1Form[]>(`/forms`)
+  readonly getForms = async (): Promise<KoboV1Form[]> => {
+    return this.api.get(`/forms`)
   }
-  // static readonly parseDate = (_: Date) => _.toISOString()
-  //
-  // static readonly makeDateFilter = (name: string, operator: 'gte' | 'lte', date: Date) => {
-  //   return {[name]: {['$' + operator]: v2.parseDate(date)}}
-  // }
-  //
-  // // static readonly parseDate = toYYYYMMDD
-  //
-  // static readonly makeAuthorizationHeader = (token: string) => `Token ${token}`
-
-
 }

@@ -74,11 +74,8 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  // await ecrecClearDuplicateSection()
-  // return
-  // return
-  // await ActivityInfoBuildType.snfi()
-  // return
+  // await new BuildKoboType().build('safety_incident')
+  // await ActivityInfoBuildType.fslc()
   // await KoboMigrateHHS2({
   //   prisma,
   //   serverId: koboServerId.prod,
@@ -100,6 +97,7 @@ const startApp = async (conf: AppConf) => {
     prisma,
   )
   const init = async () => {
+    const log = app.logger('')
     log.info(`Starting... v5.0`)
 
     log.info(`Initialize database ${conf.db.url.split('@')[1]}...`)
