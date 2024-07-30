@@ -16,7 +16,7 @@ export const SnapshotMonitoSample2 = () => {
   const {conf} = useAppSettings()
   const {formatLargeNumber, m} = useI18n()
   const ctxAnswers = useKoboAnswersContext()
-  const fetcher = ctxAnswers.byName2('protection_gbvSocialProviders')
+  const fetcher = ctxAnswers.byName('protection_gbvSocialProviders')
 
   useEffect(() => {
     fetcher.fetch()

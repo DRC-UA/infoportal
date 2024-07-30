@@ -69,7 +69,7 @@ export const DatabaseTable = ({
   const {api} = useAppSettings()
   const {accesses, session} = useSession()
   const ctxSchema = useKoboSchemaContext()
-  const fetcher = useKoboAnswersContext().byId2(formId)
+  const fetcher = useKoboAnswersContext().byId(formId)
 
   useEffect(() => {
     ctxSchema.fetchById(formId)

@@ -14,8 +14,8 @@ export const useShelterData = () => {
   const ctxAnswers = useKoboAnswersContext()
   // const req = () => api.shelter.search().then(_ => _.data)
   // const fetcher = useFetcher(req)
-  const fetcherNta = ctxAnswers.byName2('shelter_nta')
-  const fetcherTa = ctxAnswers.byName2('shelter_ta')
+  const fetcherNta = ctxAnswers.byName('shelter_nta')
+  const fetcherTa = ctxAnswers.byName('shelter_ta')
 
 
   const fetchAll = (p: FetchParams = {}) => {

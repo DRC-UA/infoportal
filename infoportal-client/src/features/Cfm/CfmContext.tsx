@@ -137,8 +137,8 @@ export const CfmProvider = ({
   const ctxAnswers = useKoboAnswersContext()
   const ctxEditTag = useKoboEditTagContext()
   const users = useFetcher(() => api.user.search())
-  const fetcherInternal = ctxAnswers.byName2('meal_cfmInternal')
-  const fetcherExternal = ctxAnswers.byName2('meal_cfmExternal')
+  const fetcherInternal = ctxAnswers.byName('meal_cfmInternal')
+  const fetcherExternal = ctxAnswers.byName('meal_cfmExternal')
 
   const authorizations: CfmContext['authorizations'] = useMemo(() => {
     const cfmAccesses = seq(accesses).filter(Access.filterByFeature(AppFeatureId.cfm))

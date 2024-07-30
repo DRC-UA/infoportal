@@ -17,14 +17,14 @@ export interface OpenModalProps {
 
 export type KoboAnswersContext = {
   openAnswerModal: (_: OpenModalProps) => void
-  byId2: (id: KoboId) => {
+  byId: (id: KoboId) => {
     find: (_: KoboAnswerId) => KoboMappedAnswer | undefined
     set: (value: ApiPaginate<KoboMappedAnswer>) => void,
     fetch: (p?: FetchParams,) => Promise<ApiPaginate<KoboMappedAnswer>>,
     get: undefined | ApiPaginate<KoboMappedAnswer>,
     loading: boolean | undefined
   },
-  byName2: <T extends KoboFormNameMapped>(name: T) => {
+  byName: <T extends KoboFormNameMapped>(name: T) => {
     set: (value: ApiPaginate<InferTypedAnswer<T>>) => void,
     fetch: (p?: FetchParams) => Promise<ApiPaginate<InferTypedAnswer<T>>>
     get: undefined | ApiPaginate<InferTypedAnswer<T>>
@@ -58,9 +58,9 @@ export const KoboAnswersProvider = ({
     }
   }, {requestKey: _ => _[0]})
 
-  const {byName2, byId2} = useMemo(() => {
+  const {byName, byId} = useMemo(() => {
     return {
-      byName2: <T extends KoboFormNameMapped>(name: T) => ({
+      byName: <T extends KoboFormNameMapped>(name: T) => ({
         get: fetcher.get[KoboIndex.byName(name).id] as undefined | ApiPaginate<InferTypedAnswer<T>>,
         loading: fetcher.loading[KoboIndex.byName(name).id],
         set: (value: ApiPaginate<InferTypedAnswer<T>>) => {
@@ -70,7 +70,7 @@ export const KoboAnswersProvider = ({
           return fetcher.fetch(p, KoboIndex.byName(name).id) as any
         },
       }),
-      byId2: (id: KoboAnswerId) => ({
+      byId: (id: KoboAnswerId) => ({
         set: (value: ApiPaginate<KoboMappedAnswer>) => {
           fetcher.getAsMap.set(id, value as any)
         },
@@ -90,14 +90,8 @@ export const KoboAnswersProvider = ({
 
   return (
     <Context.Provider value={{
-      byId2: (id: string) => ({
-        fetch: byId2(id).fetch,
-        set: byId2(id).set,
-        find: byId2(id).find,
-        get: byId2(id).get,
-        loading: byId2(id).loading,
-      }),
-      byName2,
+      byId,
+      byName,
       openAnswerModal: setModalAnswerOpen
     }}>
       {children}

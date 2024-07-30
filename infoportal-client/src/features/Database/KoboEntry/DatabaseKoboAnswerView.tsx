@@ -29,7 +29,7 @@ export const DatabaseKoboAnswerViewPage = () => {
   const {m} = useI18n()
   const {serverId, formId, answerId} = databaseUrlParamsValidation.validateSync(useParams())
   const [showQuestionWithoutAnswer, setShowQuestionWithoutAnswer] = useState(false)
-  const ctxAnswers = useKoboAnswersContext().byId2(formId)
+  const ctxAnswers = useKoboAnswersContext().byId(formId)
   const ctxSchema = useKoboSchemaContext()
 
   useEffect(() => {

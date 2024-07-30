@@ -46,9 +46,9 @@ export const KoboEditAnswersProvider = ({
     answer,
   }: KoboUpdateAnswers) => {
     const idsIndex = new Set(answerIds)
-    const currentAnswers = ctxAnswers.byId2(formId).get
+    const currentAnswers = ctxAnswers.byId(formId).get
     if (!currentAnswers) return
-    ctxAnswers.byId2(formId).set({
+    ctxAnswers.byId(formId).set({
       ...currentAnswers, data: currentAnswers.data.map(a => {
         if (idsIndex.has(a.id)) {
           a[question] = answer
@@ -65,9 +65,9 @@ export const KoboEditAnswersProvider = ({
     answer,
   }: KoboUpdateAnswersByName<T, K>) => {
     const idsIndex = new Set(answerIds)
-    const currentAnswers = ctxAnswers.byName2(formName).get
+    const currentAnswers = ctxAnswers.byName(formName).get
     if (!currentAnswers) return
-    ctxAnswers.byName2(formName).set({
+    ctxAnswers.byName(formName).set({
       ...currentAnswers, data: currentAnswers.data.map((a: any) => {
         if (idsIndex.has(a.id)) {
           a[question] = answer
@@ -86,7 +86,7 @@ export const KoboEditAnswersProvider = ({
     }).then(() => {
       updateCacheById(p)
     }).catch((e) => {
-      ctxAnswers.byId2(p.formId).fetch({force: true, clean: false})
+      ctxAnswers.byId(p.formId).fetch({force: true, clean: false})
       return Promise.reject(e)
     })
   }, {requestKey: ([_]) => _.formId})
@@ -100,7 +100,7 @@ export const KoboEditAnswersProvider = ({
     }).then(() => {
       updateCacheByName(p)
     }).catch((e) => {
-      ctxAnswers.byName2(p.formName).fetch({force: true, clean: false})
+      ctxAnswers.byName(p.formName).fetch({force: true, clean: false})
       return Promise.reject(e)
     })
   }, {requestKey: ([_]) => _.formName})
