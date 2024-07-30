@@ -158,20 +158,19 @@ export const mealVerificationActivities = seq([
     registration: {
       koboFormId: KoboIndex.byName('ecrec_cashRegistration').id,
       fetch: 'ecrec_cashRegistration',
-      joinColumn: 'ben_det_ph_number',
+      joinColumn: 'pay_det_tax_id_num',
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
       fetch: 'meal_verificationEcrec',
-      // joinColumn: 'pay_det_tax_id_num',
-      joinColumn: 'ben_det_ph_number',
+      joinColumn: 'pay_det_tax_id_num',
     },
     verifiedColumns: [
-      'pay_det_tax_id_num',
       // 'back_donor',
       'back_consent',
       // 'back_consent_no_note',
       'ben_det_surname',
+      'ben_det_ph_number',
       'ben_det_first_name',
       'ben_det_pat_name',
       'ben_det_oblast',
