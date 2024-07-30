@@ -9,6 +9,7 @@ import React from 'react'
 import {Txt} from 'mui-extension'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {Icon, useTheme} from '@mui/material'
+import {databaseIndex} from '@/features/Database/databaseIndex'
 
 export const DatabaseList = ({
   forms,
@@ -63,7 +64,7 @@ export const DatabaseList = ({
                 },
                 {
                   id: 'name',
-                  type: 'string',
+                  type: 'select_one',
                   head: m.name,
                   render: _ => {
                     return {
@@ -111,7 +112,12 @@ export const DatabaseList = ({
                   styleHead: {maxWidth: 0,},
                   align: 'right',
                   head: '',
-                  renderQuick: _ => <><TableIconBtn color="primary">chevron_right</TableIconBtn></>
+                  renderQuick: _ =>
+                    <TableIconBtn
+                      color="primary"
+                      onClickRows={_ => navigate(databaseIndex.siteMap.database.absolute(_.serverId, _.id))}
+                      children="chevron_right"
+                    />
                 },
               ]}/>
           </Panel>
