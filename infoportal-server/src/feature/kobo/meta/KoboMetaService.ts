@@ -4,7 +4,7 @@ import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds'
 import {KoboMetaCreate} from './KoboMetaType'
 import {app, AppCacheKey, AppLogger} from '../../../index'
 import {KoboService} from '../KoboService'
-import {map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {duration, map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
 import {DrcDonor, DrcProgram, DrcProject, IKoboMeta, KoboAnswerId, KoboId, KoboIndex, KoboMetaStatus, PersonDetails, UUID} from '@infoportal-common'
@@ -245,11 +245,14 @@ export class KoboMetaService {
       return koboAnswersWithId
     }
 
+    let t0 = performance.now()
     this.info(formId, `Deleting KoboMeta ${koboAnswers.length}...`)
     await this.prisma.koboMeta.deleteMany({where: {formId}})
+    this.info(formId, `Deleting KoboMeta ${koboAnswers.length}... Done in ${duration(performance.now() - t0)}`)
     this.info(formId, `Handle create (${koboAnswers.length})...`)
+    t0 = performance.now()
     await handleCreate()
-    this.info(formId, `Handle create (${koboAnswers.length})... CREATED!`)
+    this.info(formId, `Handle create (${koboAnswers.length})... Done in ${duration(performance.now() - t0)}`)
     return {}
   }
 

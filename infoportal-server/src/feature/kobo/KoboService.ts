@@ -115,7 +115,7 @@ export class KoboService {
       ttlMs: duration(1, 'day').toMs,
       fn:
         (params: {
-          includeMeta?: boolean
+          // includeMeta?: boolean
           formId: string,
           filters?: KoboAnswersFilters,
           paginate?: Partial<ApiPagination>
@@ -124,7 +124,7 @@ export class KoboService {
             formId,
             filters = {},
             paginate = defaultPagination,
-            includeMeta,
+            // includeMeta,
           } = params
           return this.prisma.koboAnswers.findMany({
             take: paginate.limit,
@@ -133,11 +133,11 @@ export class KoboService {
               {date: 'desc',},
               {submissionTime: 'desc',},
             ],
-            ...includeMeta ? {
-              include: {
-                meta: includeMeta,
-              }
-            } : {},
+            // ...includeMeta ? {
+            //   include: {
+            //     meta: includeMeta,
+            //   }
+            // } : {},
             where: {
               deletedAt: null,
               date: {

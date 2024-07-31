@@ -55,11 +55,12 @@ model KoboAnswers {
 
   mpcaPaymentTools  MpcaPaymentToolAnswers[]
   mealVerifications MealVerificationAnswers[]
-  meta              KoboMeta[]
+  // meta              KoboMeta[]
   history           KoboAnswersHistory[]
 
   @@unique([id, formId])
-  @@index([date, formId])
+  @@index([date])
+  @@index([formId])
 }
 
 model KoboAnswersHistory {
@@ -74,6 +75,8 @@ model KoboAnswersHistory {
   property String
   oldValue Json?
   newValue Json?
+
+  @@index([formId])
 }
 
 enum Gender {
@@ -93,10 +96,10 @@ model KoboPerson {
 }
 
 model KoboMeta {
-  id               String      @id @default(uuid())
+  id               String    @id @default(uuid())
   koboId           String
   uuid             String
-  answer           KoboAnswers @relation(fields: [koboId], references: [id], onDelete: Cascade)
+  // answer           KoboAnswers @relation(fields: [koboId], references: [id], onDelete: Cascade)
   formId           String
   referencedFormId String?
   date             DateTime
@@ -130,7 +133,8 @@ model KoboMeta {
   tags             Json?
   persons          KoboPerson[]
 
-  @@index([koboId, project, oblast, taxId, phone, activity, office])
+  @@index([formId])
+  @@index([koboId])
 }
 
 model MpcaPaymentTool {
