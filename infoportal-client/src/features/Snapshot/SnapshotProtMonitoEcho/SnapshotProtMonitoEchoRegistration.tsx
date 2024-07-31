@@ -6,17 +6,16 @@ import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {getIdpsAnsweringRegistrationQuestion} from '@/features/Protection/DashboardMonito/ProtectionDashboardMonitoDocument'
-import {chain, OblastIndex, Person, Protection_hhs3} from '@infoportal-common'
+import {chain, Person, Protection_hhs3} from '@infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
-import { Txt } from 'mui-extension'
 import {useTheme} from '@mui/material'
 
 export const SnapshotProtMonitoEchoRegistration = () => {
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
+  const {dataFiltered, dataPreviousPeriod} = useSnapshotProtMonitoringContext()
   const {formatLargeNumber, m} = useI18n()
   const t = useTheme()
   return (
@@ -25,29 +24,20 @@ export const SnapshotProtMonitoEchoRegistration = () => {
       <PdfSlideBody>
         <Div>
           <Div column>
-            <Lazy deps={[data]} fn={() => {
-              const z = ChartHelperOld.byCategory({
-                categories: computed.categoryOblasts('where_are_you_current_living_oblast'),
-                data: computed.flatData,
-                filter: _ => !!_.lackDoc && (_.lackDoc.includes('passport') || _.lackDoc.includes('tin')),
-              })
-              return z[OblastIndex.byName('Kharkivska').iso]
-            }}>
-              {_ =>
-                <SlideTxt>
-                  {/* The proportion of displaced individuals not formally registered as IDPs has increased significantly compared to the previous month (<Txt bold sx={{color: t.palette.success.main}}>+11%</Txt>). This rise can be
+            <SlideTxt>
+              {/* The proportion of displaced individuals not formally registered as IDPs has increased significantly compared to the previous month (<Txt bold sx={{color: t.palette.success.main}}>+11%</Txt>). This rise can be
                   attributed to the implementation of Resolution No. 332, which substantially changes the provision of accommodation assistance to IDPs. The increase in
                   unregistered adult males (<Txt bold sx={{color: t.palette.success.main}}>+15%</Txt>) can be linked to the enforcement of the new mobilization law on May 18th. This law aims to bolster male mobilization by lowering
                   the conscription age, narrowing the grounds for exemptions, and heightening penalties for failing to update military records. */}
-                  The re-registration procedure for IDP benefits, in line with Resolution #332, has been complex and time-consuming, with issues such as long queues, unclear documentation requirements, online system disruptions, and lost documents causing frustrations and delays in benefit disbursements. 
-                  Many IDPs, especially the elderly, prefer in-person registration due to difficulties with the online system, while local authorities and social protection departments struggle with high workloads and staffing shortages, highlighting the need for additional support.
-                </SlideTxt>
-              }
-            </Lazy>
+              The re-registration procedure for IDP benefits, in line with Resolution #332, has been complex and time-consuming, with issues such as long queues, unclear
+              documentation requirements, online system disruptions, and lost documents causing frustrations and delays in benefit disbursements.
+              Many IDPs, especially the elderly, prefer in-person registration due to difficulties with the online system, while local authorities and social protection
+              departments struggle with high workloads and staffing shortages, highlighting the need for additional support.
+            </SlideTxt>
             <SlidePanel>
               <SlidePanelTitle sx={{mb: 1}}>{m.protHHSnapshot.maleWithoutIDPCert}</SlidePanelTitle>
               <Div>
-                <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[dataFiltered, dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                   data: getIdpsAnsweringRegistrationQuestion(d),
                   value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
                 })}>
@@ -66,7 +56,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                     />
                   )}
                 </Lazy>
-                <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[dataFiltered, dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                   data: getIdpsAnsweringRegistrationQuestion(d).filter(_ => _.age && _.age >= 18 && _.age <= 60 && _.gender && _.gender === Person.Gender.Male),
                   value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
                 })}>
@@ -89,22 +79,22 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             </SlidePanel>
             <SlidePanel>
               <ChartPieWidgetByKey
-                compare={{before: computed.lastMonth}}
+                compare={{before: dataPreviousPeriod}}
                 title={m.protHHS2.accessBarriersToObtainDocumentation}
                 property="have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation"
                 filter={_ => !_.includes('no')}
                 filterBase={_ => !_.includes('unable_unwilling_to_answer')}
-                data={data}
+                data={dataFiltered}
                 {...snapShotDefaultPieIndicatorsProps}
 
               />
               <ChartBarMultipleBy
-                data={data}
+                data={dataFiltered}
                 by={_ => _.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
                 label={Protection_hhs3.options.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
                 mergeOptions={{
                   distrust_of_public_institutions_and_authorities: 'other_specify',
-                  discrimination:'other_specify',
+                  discrimination: 'other_specify',
                   // discrimination: 'other_specify',
                   lack_of_devices_or_internet_connectivity_to_access_online_procedure: 'other_specify',
                   // distance_or_cost_of_transportation: 'other_specify',
@@ -118,7 +108,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
           </Div>
           <Div column>
             <SlidePanel>
-              <Lazy deps={[data, computed.lastMonth]} fn={(x) => ChartHelperOld.percentage({
+              <Lazy deps={[dataFiltered, dataPreviousPeriod]} fn={(x) => ChartHelperOld.percentage({
                 data: x.flatMap(_ => _.persons).map(_ => _.lackDoc).compact().filter(_ => !_.includes('unable_unwilling_to_answer')),
                 value: _ => !_.includes('none')
               })}>
@@ -126,11 +116,12 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                   title={m.lackOfPersonalDoc}
                   value={_.value}
                   base={_.base}
+                  evolution={_.percent - last.percent}
                   {...snapShotDefaultPieIndicatorsProps}
                 />}
               </Lazy>
-              <Lazy deps={[data]} fn={() => chain(ChartHelperOld.multiple({
-                data: data.flatMap(_ => _.persons).map(_ => _.lackDoc).compact(),
+              <Lazy deps={[dataFiltered]} fn={() => chain(ChartHelperOld.multiple({
+                data: dataFiltered.flatMap(_ => _.persons).map(_ => _.lackDoc).compact(),
                 filterValue: ['none', 'unable_unwilling_to_answer'],
               }))
                 .map(ChartHelperOld.setLabel(Protection_hhs3.options.does_lack_doc))
@@ -142,17 +133,17 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             <SlidePanel>
               <ChartPieWidgetByKey
                 hideEvolution
-                compare={{before: computed.lastMonth}}
+                compare={{before: dataPreviousPeriod}}
                 title={m.lackOfHousingDoc}
                 property="what_housing_land_and_property_documents_do_you_lack"
                 filterBase={_ => !_.includes('unable_unwilling_to_answer')}
                 filter={_ => !_.includes('none')}
-                data={data}
+                data={dataFiltered}
                 {...snapShotDefaultPieIndicatorsProps}
               />
               {/*<ChartPieWidgetBy*/}
               {/*  hideEvolution*/}
-              {/*  compare={{before: computed.lastMonth}}*/}
+              {/*  compare={{before: dataPreviousPeriod}}*/}
               {/*  title={m.lackOfHousingDoc}*/}
               {/*  filterBase={_ => !_.what_housing_land_and_property_documents_do_you_lack.includes('unable_unwilling_to_answer')}*/}
               {/*  filter={_ => !_.what_housing_land_and_property_documents_do_you_lack.includes('none')}*/}
@@ -160,7 +151,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
               {/*  {...snapShotDefaultPieProps}*/}
               {/*/>*/}
               <ChartBarMultipleBy
-                data={data}
+                data={dataFiltered}
                 by={_ => _.what_housing_land_and_property_documents_do_you_lack}
                 filterValue={['unable_unwilling_to_answer', 'none']}
                 mergeOptions={{

@@ -12,7 +12,7 @@ import {Protection_hhs3} from '@infoportal-common'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 
 export const SnapshotProtMonitoEchoDisplacement = () => {
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
+  const {dataFiltered, computed, period} = useSnapshotProtMonitoringContext()
   const {formatLargeNumber, m} = useI18n()
   const t = useTheme()
   return (
@@ -22,8 +22,10 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
         <Div>
           <Div column>
             <SlideTxt sx={{mb: .5}} block>
-            Intentions to return home remain primarily influenced by improved security and cessation of hostilities. However, barriers such as damaged housing, lack of employment, and mined agricultural land deter returns. 
-            The discontinuation of IDP allowances, combined with rising living expenses, has heightened concerns about financial instability and increasingly pressured IDPs to consider returning to their areas of origin or relocating to rural areas where rental costs are lower.
+              Intentions to return home remain primarily influenced by improved security and cessation of hostilities. However, barriers such as damaged housing, lack of
+              employment, and mined agricultural land deter returns.
+              The discontinuation of IDP allowances, combined with rising living expenses, has heightened concerns about financial instability and increasingly pressured IDPs to
+              consider returning to their areas of origin or relocating to rural areas where rental costs are lower.
             </SlideTxt>
 
             <SlidePanel>
@@ -81,7 +83,7 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
                 sx={{ml: -5}}
                 colors={snapshotColors}
                 height={188}
-                data={data}
+                data={dataFiltered}
                 start={new Date(2022, 0, 1)}
                 curves={{
                   [m.departureFromAreaOfOrigin]: _ => _.when_did_you_leave_your_area_of_origin,

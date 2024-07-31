@@ -26,8 +26,7 @@ export const snapshotProtMonitoEchoLogo = (
 
 export const SnapshotProtMonitoEchoSample = () => {
   const theme = useTheme()
-  const {conf} = useAppSettings()
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
+  const {dataFiltered, computed, period} = useSnapshotProtMonitoringContext()
   const {formatLargeNumber, m} = useI18n()
   const registrationOblasts = Obj.filter(computed.byCurrentOblast, (k, v) => v.value > 5)
   return (
@@ -64,13 +63,13 @@ export const SnapshotProtMonitoEchoSample = () => {
           <Div column sx={{flex: 6}}>
             <Div sx={{flex: 0}}>
               <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
-                {formatLargeNumber(data.length)}
+                {formatLargeNumber(dataFiltered.length)}
               </SlideWidget>
               <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
                 {formatLargeNumber(computed.individualsCount)}
               </SlideWidget>
               <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
-                {(computed.individualsCount / data.length).toFixed(1)}
+                {(computed.individualsCount / dataFiltered.length).toFixed(1)}
               </SlideWidget>
             </Div>
 
@@ -112,7 +111,7 @@ export const SnapshotProtMonitoEchoSample = () => {
                 <SlidePanel>
                   <SlidePanelTitle>{m.protHHS2.hhTypes}</SlidePanelTitle>
                   <ChartBarSingleBy
-                    data={data}
+                    data={dataFiltered}
                     by={_ => _.what_is_the_type_of_your_household}
                     label={{
                       ...Protection_hhs3.options.what_is_the_type_of_your_household,
@@ -127,7 +126,7 @@ export const SnapshotProtMonitoEchoSample = () => {
                 </SlidePanel>
                 <SlidePanel>
                   <SlidePanelTitle>{m.displacementStatus}</SlidePanelTitle>
-                  <ChartBarSingleBy data={data} by={_ => _.do_you_identify_as_any_of_the_following} label={Protection_hhs3.options.do_you_identify_as_any_of_the_following}/>
+                  <ChartBarSingleBy data={dataFiltered} by={_ => _.do_you_identify_as_any_of_the_following} label={Protection_hhs3.options.do_you_identify_as_any_of_the_following}/>
                 </SlidePanel>
               </Div>
             </Div>

@@ -10,10 +10,9 @@ import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotPro
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 import {useTheme} from '@mui/material'
-import {Txt} from 'mui-extension'
 
 export const SnapshotProtMonitoEchoLivelihood = () => {
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
+  const {dataFiltered, computed, period} = useSnapshotProtMonitoringContext()
   const {formatLargeNumber, m} = useI18n()
   const t = useTheme()
   return (
@@ -23,7 +22,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
         <Div>
           <Div column>
             <SlideTxt>
-              <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[dataFiltered, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
                 value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
                 data: d,
                 base: _ => _ !== undefined,
@@ -46,7 +45,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
 
             <Div>
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[dataFiltered, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
                   value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
                   data: d,
                   base: _ => _ !== undefined,
@@ -63,7 +62,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
               </SlidePanel>
 
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[dataFiltered, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
                   value: _ => _.are_there_gaps_in_meeting_your_basic_needs === 'yes_somewhat' || _.are_there_gaps_in_meeting_your_basic_needs === 'yes_a_lot',
                   data: d,
                 })}>
@@ -110,7 +109,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
             </SlidePanel> */}
             <SlidePanel title={m.copyingMechanisms}>
               <ChartBarMultipleBy
-                data={data}
+                data={dataFiltered}
                 by={_ => _.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges}
                 label={{
                   ...Protection_hhs3.options.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
@@ -124,7 +123,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.mainSourceOfIncome}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={data}
+                data={dataFiltered}
                 by={_ => _.what_are_the_main_sources_of_income_of_your_household}
                 label={Protection_hhs3.options.what_are_the_main_sources_of_income_of_your_household}
                 filterValue={['unable_unwilling_to_answer']}
@@ -134,7 +133,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.unemploymentFactors}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={data}
+                data={dataFiltered}
                 by={_ => _.what_are_the_reasons_for_being_out_of_work}
                 label={Protection_hhs3.options.what_are_the_reasons_for_being_out_of_work}
                 filterValue={['unable_unwilling_to_answer']}

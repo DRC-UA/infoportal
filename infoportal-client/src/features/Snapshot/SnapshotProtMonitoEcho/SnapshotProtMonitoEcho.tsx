@@ -1,7 +1,6 @@
 import {Pdf} from '@/shared/PdfLayout/PdfLayout'
 import React, {useMemo, useState} from 'react'
-import {SnapshotProtMonitoringProvider, useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
-import {useI18n} from '@/core/i18n'
+import {SnapshotProtMonitoringProvider} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
 import {SnapshotProtMonitoEchoSafety} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSafety'
 import {ChartPieIndicatorProps} from '@/shared/charts/ChartPieWidget'
 import {SnapshotProtMonitoEchoNeeds} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoNeeds'
@@ -13,7 +12,6 @@ import {alpha, Box, Theme} from '@mui/material'
 import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Period} from '@infoportal-common'
-import {ChartPieWidgetProps} from '@/shared/charts/ChartPieWidgetBy'
 
 export const snapshotAlternateColor = (t: Theme) => alpha(t.palette.primary.main, .26)//t.palette.grey[500]
 
@@ -22,19 +20,9 @@ export const snapshotColors = (t: Theme) => [
   snapshotAlternateColor(t),
 ]
 
-export const snapShotDefaultPieIndicatorsProps: Partial<Pick<ChartPieIndicatorProps, 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'>> = {
+export const snapShotDefaultPieIndicatorsProps: Partial<Pick<ChartPieIndicatorProps, 'hideIndicatorTooltip' | 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'>> = {
   dense: true,
-  evolution: null as any,
-  showBase: true,
-  showValue: true,
-  sx: {
-    mb: 1,
-  }
-}
-export const snapShotDefaultPieWidgetProps: Pick<ChartPieWidgetProps<any>, 'compare' | 'hideEvolution' | 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'> = {
-  dense: true,
-  compare: null as any,
-  hideEvolution: true,
+  hideIndicatorTooltip: true,
   showBase: true,
   showValue: true,
   sx: {
@@ -53,7 +41,7 @@ export const SnapshotProtMonitoEcho = () => {
       <Box sx={{'@media print': {display: 'none'}}}>
         <PeriodPicker value={value} onChange={_ => setPeriod({start: _[0], end: _[1]})}/>
       </Box>
-      <SnapshotProtMonitoringProvider period={period}>
+      <SnapshotProtMonitoringProvider period={{start: period.start ?? new Date(2023, 0, 1), end: period.end ?? new Date()}}>
         <_SnapshotProtMonitoring/>
       </SnapshotProtMonitoringProvider>
     </>
@@ -61,9 +49,6 @@ export const SnapshotProtMonitoEcho = () => {
 }
 
 const _SnapshotProtMonitoring = () => {
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
-  const {formatLargeNumber, m} = useI18n()
-  if (!data || !computed) return <>...</>
   return (
     <Pdf>
       <SnapshotProtMonitoEchoSample/>
