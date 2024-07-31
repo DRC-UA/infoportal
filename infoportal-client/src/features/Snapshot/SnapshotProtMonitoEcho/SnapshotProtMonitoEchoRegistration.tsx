@@ -141,15 +141,6 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 data={dataFiltered}
                 {...snapShotDefaultPieIndicatorsProps}
               />
-              {/*<ChartPieWidgetBy*/}
-              {/*  hideEvolution*/}
-              {/*  compare={{before: dataPreviousPeriod}}*/}
-              {/*  title={m.lackOfHousingDoc}*/}
-              {/*  filterBase={_ => !_.what_housing_land_and_property_documents_do_you_lack.includes('unable_unwilling_to_answer')}*/}
-              {/*  filter={_ => !_.what_housing_land_and_property_documents_do_you_lack.includes('none')}*/}
-              {/*  data={data}*/}
-              {/*  {...snapShotDefaultPieProps}*/}
-              {/*/>*/}
               <ChartBarMultipleBy
                 data={dataFiltered}
                 by={_ => _.what_housing_land_and_property_documents_do_you_lack}
