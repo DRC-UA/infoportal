@@ -20,8 +20,8 @@ export class SessionSdk {
     return this.client.delete(`/session`)
   }
 
-  readonly get = () => {
-    return this.client.get<UserSession>(`/session`)
+  readonly get = (): Promise<UserSession> => {
+    return this.client.get(`/session`)
   }
 
   readonly connectAs = (email: string) => {

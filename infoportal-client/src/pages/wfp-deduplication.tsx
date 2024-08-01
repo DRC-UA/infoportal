@@ -1,12 +1,12 @@
 import React from 'react'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 import {WfpDeduplicationPage} from '@/features/WfpDeduplication/WfpDeduplicationPage'
 
 const WfpDeduplicationRoute = () => {
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <WfpDeduplicationPage/>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

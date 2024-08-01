@@ -1,12 +1,12 @@
 import React from 'react'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 import {EcrecRoot} from '@/features/Ecrec/Ecrec'
 
 const EcrecPage = () => {
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <EcrecRoot/>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

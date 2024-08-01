@@ -1,13 +1,13 @@
 import React from 'react'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 import {Shelter} from '@/features/Shelter/Shelter'
 
 const ShelterPage = () => {
 
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <Shelter/>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

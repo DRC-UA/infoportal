@@ -1,12 +1,12 @@
 import React from 'react'
 import {Home} from '@/features/Home/Home'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 
 const Index = () => {
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <Home/>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

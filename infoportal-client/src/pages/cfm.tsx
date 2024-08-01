@@ -1,13 +1,13 @@
 import React from 'react'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 import {Cfm} from '@/features/Cfm/Cfm'
 
 const CfmPage = () => {
 
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <Cfm/>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

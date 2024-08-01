@@ -1,13 +1,13 @@
 import React from 'react'
 import {Partnership} from '@/features/Partnership/Partnership'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 
 const PartnershipPage = () => {
 
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <Partnership/>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

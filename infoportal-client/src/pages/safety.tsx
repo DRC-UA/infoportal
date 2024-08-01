@@ -1,12 +1,12 @@
 import React from 'react'
 import {Safety} from '@/features/Safety/Safety'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 
 const SafetyPage = () => {
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <Safety/>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

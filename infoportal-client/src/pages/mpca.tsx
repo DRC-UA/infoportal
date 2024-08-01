@@ -1,13 +1,13 @@
 import {Mpca} from '@/features/Mpca/Mpca'
 import React from 'react'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 
 const MpcaPage = () => {
 
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <Mpca/>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

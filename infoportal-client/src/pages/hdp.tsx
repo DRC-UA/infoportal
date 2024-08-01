@@ -1,11 +1,11 @@
 import React from 'react'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 
 const HdpPage = () => {
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <div>In dev</div>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

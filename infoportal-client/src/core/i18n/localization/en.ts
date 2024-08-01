@@ -175,7 +175,7 @@ export const en = Object.freeze({
     refresh: 'Refresh',
     refreshTable: 'Refresh current data',
     grantAccess: 'Grant access',
-    title: 'Information Management Portal',
+    title: 'InfoPortal (IP)',
     noDataAtm: 'No data at the moment',
     fileName: 'File name',
     subTitle: 'Ukraine',

@@ -1,4 +1,4 @@
-import {Box, Grid, useTheme} from '@mui/material'
+import {Box, BoxProps, Grid, useTheme} from '@mui/material'
 import {DRCLogo} from '@/shared/logo/logo'
 import {Txt} from 'mui-extension'
 import {appFeatures} from '@/features/appFeatureId'
@@ -21,6 +21,17 @@ export const Home = () => {
   )
 }
 
+export const HomeTitle = ({sx, ...props}: BoxProps) => {
+  const {m} = useI18n()
+  return (
+    <Box {...props} sx={{textAlign: 'center', ...sx}}>
+      <DRCLogo/>
+      <Txt sx={{textAlign: 'center'}} size="title" block>{m.title}</Txt>
+      <Txt sx={{textAlign: 'center'}} size="big" color="hint" block>{m.subTitle}</Txt>
+    </Box>
+  )
+}
+
 const _Home = () => {
   const {m} = useI18n()
   const {session, accesses} = useSession()
@@ -28,10 +39,8 @@ const _Home = () => {
   const t = useTheme()
   return (
     <Page>
-      <Box sx={{textAlign: 'center'}}>
-        <DRCLogo/>
-        <Txt sx={{textAlign: 'center'}} size="title" block>{m.title}</Txt>
-        <Txt sx={{textAlign: 'center', mb: 4}} size="big" color="hint" block>{m.subTitle}</Txt>
+      <Box>
+        <HomeTitle sx={{mt: 2, mb: 2}}/>
       </Box>
       {new Obj(seq(appFeatures).groupBy(_ => _.category!))
         .mapValues(features => features.filter(_ => !_.showIf || _.showIf(session, accesses)))

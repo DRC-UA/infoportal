@@ -1,12 +1,12 @@
 import React from 'react'
-import {SessionProvider} from '@/core/Session/SessionContext'
+import {ProtectRoute} from '@/core/Session/SessionContext'
 import {Protection} from '@/features/Protection/Protection'
 
 const Page = () => {
   return (
-    <SessionProvider>
+    <ProtectRoute>
       <Protection/>
-    </SessionProvider>
+    </ProtectRoute>
   )
 }
 

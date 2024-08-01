@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {useEffect, useMemo} from 'react'
 import type {AppProps} from 'next/app'
 import {Provide} from '@/shared/Provide'
 import {Box, CssBaseline, Icon, ThemeProvider} from '@mui/material'
@@ -25,6 +25,7 @@ import {KoboEditAnswersProvider} from '@/core/context/KoboEditAnswersContext'
 import {KoboAnswersProvider} from '@/core/context/KoboAnswers'
 import {KoboEditTagsProvider} from '@/core/context/KoboEditTagsContext'
 import {HashRouter} from 'react-router-dom'
+import {SessionProvider} from '@/core/Session/SessionContext'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
@@ -67,10 +68,7 @@ const App = ({
 const AppWithConfig = (props: AppProps) => {
   const settings = useAppSettings()
   const msal = useMemo(() => getMsalInstance(settings.conf), [settings.conf])
-  const [isServer, setIsServer] = useState(true)
-  useEffect(() => {
-    setIsServer(false)
-  }, [])
+  const isServer = typeof window === 'undefined'
   return (
     <Provide providers={[
       // _ => <StyledEngineProvider injectFirst children={_}/>,
@@ -86,6 +84,7 @@ const AppWithConfig = (props: AppProps) => {
       _ => <KoboEditAnswersProvider children={_}/>,
       _ => <KoboEditTagsProvider children={_}/>,
       _ => <ModalProvider children={_}/>,
+      _ => <SessionProvider children={_}/>,
     ]}>
       <AppWithBaseContext {...props}/>
     </Provide>
