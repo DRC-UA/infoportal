@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react'
-import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
@@ -14,7 +14,7 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 
 export const SnapshotProtMonitoEchoSafety = () => {
-  const {dataFiltered, computed, period} = useSnapshotProtMonitoringContext()
+  const ctx = ProtectionMonito.useContext()
   const {m} = useI18n()
   const t = useTheme()
   const groupedIndividualsType = useMemo(() => {
@@ -23,7 +23,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
       when: seq() as Seq<Protection_hhs3.T['when_did_the_incidents_occur_has_any_adult_male_member_experienced_violence']>,
       who: seq() as Seq<Protection_hhs3.T['who_were_the_perpetrators_of_the_incident_has_any_adult_male_member_experienced_violence']>,
     }
-    dataFiltered.forEach(_ => {
+    ctx.dataFiltered.forEach(_ => {
       res.type.push(...[
         _.what_type_of_incidents_took_place_has_any_adult_male_member_experienced_violence,
         _.what_type_of_incidents_took_place_has_any_adult_female_member_experienced_violence,
@@ -47,7 +47,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
       ])
     })
     return res
-  }, [dataFiltered])
+  }, [ctx.dataFiltered])
 
   return (
     <PdfSlide>
@@ -56,35 +56,35 @@ export const SnapshotProtMonitoEchoSafety = () => {
         <Div>
           <Div column>
             <SlideTxt sx={{marginBottom: t.spacing() + ' !important'}}>
-              <Lazy deps={[dataFiltered]} fn={() => {
+              <Lazy deps={[ctx.dataFiltered]} fn={() => {
                 return {
                   senseOfSafety: ChartHelperOld.percentage({
-                    data: dataFiltered.map(_ => _.please_rate_your_sense_of_safety_in_this_location),
+                    data: ctx.dataFiltered.map(_ => _.please_rate_your_sense_of_safety_in_this_location),
                     value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
                     base: _ => _ !== 'unable_unwilling_to_answer',
                   }),
                   poorSafetyChernihiv: ChartHelperOld.percentage({
-                    data: dataFiltered.filter(_ => _.where_are_you_current_living_oblast === OblastIndex.byName('Chernihivska').iso).map(_ => _.please_rate_your_sense_of_safety_in_this_location),
+                    data: ctx.dataFiltered.filter(_ => _.where_are_you_current_living_oblast === OblastIndex.byName('Chernihivska').iso).map(_ => _.please_rate_your_sense_of_safety_in_this_location),
                     value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
                     base: _ => _ !== 'unable_unwilling_to_answer',
                   }),
                   poorSafetySumy: ChartHelperOld.percentage({
-                    data: dataFiltered.filter(_ => _.where_are_you_current_living_oblast === OblastIndex.byName('Sumska').iso).map(_ => _.please_rate_your_sense_of_safety_in_this_location),
+                    data: ctx.dataFiltered.filter(_ => _.where_are_you_current_living_oblast === OblastIndex.byName('Sumska').iso).map(_ => _.please_rate_your_sense_of_safety_in_this_location),
                     value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
                     base: _ => _ !== 'unable_unwilling_to_answer',
                   }),
                   senseOfSafetyUrban: ChartHelperOld.percentage({
-                    data: dataFiltered.filter(_ => _.type_of_site === 'urban_area').map(_ => _.please_rate_your_sense_of_safety_in_this_location),
+                    data: ctx.dataFiltered.filter(_ => _.type_of_site === 'urban_area').map(_ => _.please_rate_your_sense_of_safety_in_this_location),
                     value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
                     base: _ => _ !== 'unable_unwilling_to_answer',
                   }),
                   senseOfSafetyRural: ChartHelperOld.percentage({
-                    data: dataFiltered.filter(_ => _.type_of_site === 'rural_area').map(_ => _.please_rate_your_sense_of_safety_in_this_location),
+                    data: ctx.dataFiltered.filter(_ => _.type_of_site === 'rural_area').map(_ => _.please_rate_your_sense_of_safety_in_this_location),
                     value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
                     base: _ => _ !== 'unable_unwilling_to_answer',
                   }),
                   incidents: ChartHelperOld.percentage({
-                    data: dataFiltered,
+                    data: ctx.dataFiltered,
                     value: _ => _.has_any_adult_male_member_experienced_violence === 'yes'
                       || _.has_any_adult_female_member_experienced_violence === 'yes'
                       || _.has_any_boy_member_experienced_violence === 'yes'
@@ -115,7 +115,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.majorStressFactors}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 filterValue={['unable_unwilling_to_answer']}
                 by={_ => _.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
                 label={Protection_hhs3.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
@@ -143,7 +143,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.freedomOfMovement}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 by={_ => _.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area}
                 limit={5}
                 label={{
@@ -160,13 +160,13 @@ export const SnapshotProtMonitoEchoSafety = () => {
                 title={m.protHHS2.poorSenseOfSafety}
                 filter={_ => _.please_rate_your_sense_of_safety_in_this_location === '_2_unsafe' || _.please_rate_your_sense_of_safety_in_this_location === '_1_very_unsafe'}
                 filterBase={_ => _.please_rate_your_sense_of_safety_in_this_location !== 'unable_unwilling_to_answer'}
-                compare={{before: computed.lastMonth}}
-                data={dataFiltered}
+                compare={{before: ctx.dataPreviousPeriod}}
+                data={ctx.dataFiltered}
                 {...snapShotDefaultPieIndicatorsProps}
               />
               <MapSvgByOblast
                 sx={{mx: 4}}
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 getOblast={_ => _.where_are_you_current_living_oblast as any}
                 value={_ => _.please_rate_your_sense_of_safety_in_this_location === '_1_very_unsafe'
                   || _.please_rate_your_sense_of_safety_in_this_location === '_2_unsafe'}
@@ -175,7 +175,7 @@ export const SnapshotProtMonitoEchoSafety = () => {
               />
               <SlidePanelTitle sx={{mt: 2}}>{m.influencingFactors}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 by={_ => _.what_are_the_main_factors_that_make_this_location_feel_unsafe}
                 filterValue={['unable_unwilling_to_answer']}
                 label={Protection_hhs3.options.what_are_the_main_factors_that_make_this_location_feel_unsafe}

@@ -2,7 +2,6 @@ import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
-import {DashboardPageProps} from './ProtectionDashboardMonito'
 import {Box, Icon} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
@@ -14,6 +13,7 @@ import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {KoboProtection_hhs3, Person, Protection_hhs3} from '@infoportal-common'
 import {ChartHelper} from '@/shared/charts/chartHelper'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 
 export const getIdpsAnsweringRegistrationQuestion = (base: Seq<KoboProtection_hhs3.T>) => {
   return base
@@ -25,10 +25,8 @@ export const getIdpsAnsweringRegistrationQuestion = (base: Seq<KoboProtection_hh
     )
 }
 
-export const ProtectionDashboardMonitoDocument = ({
-  data,
-  computed,
-}: DashboardPageProps) => {
+export const ProtectionDashboardMonitoDocument = () => {
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   const [gender, setGender] = useState<Person.Gender[]>([])
   const [ageGroup, setAgeGroup] = useState<(keyof typeof Person.ageGroup.Quick)[]>([])
@@ -40,12 +38,12 @@ export const ProtectionDashboardMonitoDocument = ({
     })
 
   const filteredPersons = useMemo(() => {
-    return filterPerson(data.flatMap(_ => _.persons))
-  }, [gender, data, ageGroup])
+    return filterPerson(ctx.dataFiltered.flatMap(_ => _.persons))
+  }, [gender, ctx.dataFiltered, ageGroup])
 
   const filteredPersonsLastMonth = useMemo(() => {
-    return filterPerson(computed.lastMonth.flatMap(_ => _.persons))
-  }, [gender, computed.lastMonth, ageGroup])
+    return filterPerson(ctx.dataPreviousPeriod.flatMap(_ => _.persons))
+  }, [gender, ctx.dataPreviousPeriod, ageGroup])
 
   return (
     <>
@@ -53,7 +51,7 @@ export const ProtectionDashboardMonitoDocument = ({
         <Div column sx={{flex: 1}}>
           <SlidePanel title={m.protHHSnapshot.maleWithoutIDPCert}>
             <Div>
-              <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                 data: getIdpsAnsweringRegistrationQuestion(d),
                 value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
               })}>
@@ -61,7 +59,7 @@ export const ProtectionDashboardMonitoDocument = ({
                   <ChartPieWidget sx={{flex: 1}} title={m.all} value={d.value} base={d.base} evolution={d.percent - l.percent}/>
                 )}
               </Lazy>
-              <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                 data: getIdpsAnsweringRegistrationQuestion(d).filter(_ => _.age && _.age >= 18 && _.age <= 60 && _.gender && _.gender === Person.Gender.Male),
                 value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
               })}>
@@ -71,9 +69,9 @@ export const ProtectionDashboardMonitoDocument = ({
               </Lazy>
             </Div>
           </SlidePanel>
-          <Lazy deps={[computed.flatData]} fn={() => ChartHelperOld.byCategory({
-            data: computed.flatData,
-            categories: computed.categoryOblasts('where_are_you_current_living_oblast'),
+          <Lazy deps={[ctx.dataFlat]} fn={() => ChartHelperOld.byCategory({
+            data: ctx.dataFlat,
+            categories: ctx.categoryOblasts('where_are_you_current_living_oblast'),
             filter: _ => !_.lackDoc?.includes('none'),
             filterBase: _ => _.lackDoc !== undefined,
             filterZeroCategory: true,
@@ -86,8 +84,8 @@ export const ProtectionDashboardMonitoDocument = ({
           </Lazy>
           <SlidePanel>
             <ChartPieWidgetByKey
-              data={data}
-              compare={{before: computed.lastMonth}}
+              data={ctx.dataFiltered}
+              compare={{before: ctx.dataPreviousPeriod}}
               property="have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation"
               title={m.protHHS2.accessBarriersToObtainDocumentation}
               filter={_ => !_.includes('no')}
@@ -95,7 +93,7 @@ export const ProtectionDashboardMonitoDocument = ({
               sx={{mb: 2}}
             />
             <ChartBarMultipleBy
-              data={data}
+              data={ctx.dataFiltered}
               by={_ => _.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
               label={Protection_hhs3.options.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
               filterValue={[
@@ -137,16 +135,16 @@ export const ProtectionDashboardMonitoDocument = ({
           </SlidePanel>
           <SlidePanel>
             <ChartPieWidgetByKey
-              compare={{before: computed.lastMonth}}
+              compare={{before: ctx.dataPreviousPeriod}}
               title={m.lackOfHousingDoc}
               property="what_housing_land_and_property_documents_do_you_lack"
               filterBase={_ => !_.includes('unable_unwilling_to_answer')}
               filter={_ => !_.includes('none')}
-              data={data}
+              data={ctx.dataFiltered}
               sx={{mb: 2}}
             />
             <ChartBarMultipleBy
-              data={data}
+              data={ctx.dataFiltered}
               by={_ => _.what_housing_land_and_property_documents_do_you_lack}
               filterValue={['unable_unwilling_to_answer', 'none']}
               label={{

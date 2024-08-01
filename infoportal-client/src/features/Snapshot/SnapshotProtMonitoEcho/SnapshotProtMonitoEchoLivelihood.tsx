@@ -1,5 +1,5 @@
 import React from 'react'
-import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
@@ -12,7 +12,7 @@ import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonito
 import {useTheme} from '@mui/material'
 
 export const SnapshotProtMonitoEchoLivelihood = () => {
-  const {dataFiltered, computed, period} = useSnapshotProtMonitoringContext()
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   const t = useTheme()
   return (
@@ -22,7 +22,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
         <Div>
           <Div column>
             <SlideTxt>
-              <Lazy deps={[dataFiltered, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                 value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
                 data: d,
                 base: _ => _ !== undefined,
@@ -36,8 +36,10 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                     {/* Following the changes in the housing assistance system for IDPs under Resolution No. 332, a substantially higher number of IDPs have reported gaps in meeting
                     their basic needs, with a <Txt bold style={{color: t.palette.success.main}}>37%</Txt> increase compared to March. The limited availability of job opportunities continues to be reported as the primary factor affecting
                     employment. */}
-                    The implementation of Resolution #332 requires IDPs to register with local employment centers, which are struggling with high demand and a shortage of available jobs. 
-                    This, combined with the cancellation of IDP allowances, has intensified job market competition, resulting in many IDPs facing underemployment or unemployment due to mismatches between their skills and available job opportunities.
+                    The implementation of Resolution #332 requires IDPs to register with local employment centers, which are struggling with high demand and a shortage of available
+                    jobs.
+                    This, combined with the cancellation of IDP allowances, has intensified job market competition, resulting in many IDPs facing underemployment or unemployment
+                    due to mismatches between their skills and available job opportunities.
                   </p>
                 }
               </Lazy>
@@ -45,7 +47,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
 
             <Div>
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[dataFiltered, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                   value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
                   data: d,
                   base: _ => _ !== undefined,
@@ -54,15 +56,16 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                     title={m.hhOutOfWork}
                     value={_.value}
                     base={_.base}
-                    // evolution={_.percent - last.percent}
+                    evolution={_.percent - last.percent}
                     {...snapShotDefaultPieIndicatorsProps}
+                    showBase={false}
                     sx={{mb: 0}}
                   />}
                 </Lazy>
               </SlidePanel>
 
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[dataFiltered, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                   value: _ => _.are_there_gaps_in_meeting_your_basic_needs === 'yes_somewhat' || _.are_there_gaps_in_meeting_your_basic_needs === 'yes_a_lot',
                   data: d,
                 })}>
@@ -70,8 +73,9 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
                     title={m.hhWithGapMeetingBasicNeeds}
                     value={_.value}
                     base={_.base}
-                    // evolution={_.percent - last.percent}
+                    evolution={_.percent - last.percent}
                     {...snapShotDefaultPieIndicatorsProps}
+                    showBase={false}
                     sx={{mb: 0}}
                   />}
                 </Lazy>
@@ -109,7 +113,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
             </SlidePanel> */}
             <SlidePanel title={m.copyingMechanisms}>
               <ChartBarMultipleBy
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 by={_ => _.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges}
                 label={{
                   ...Protection_hhs3.options.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
@@ -123,7 +127,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.mainSourceOfIncome}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 by={_ => _.what_are_the_main_sources_of_income_of_your_household}
                 label={Protection_hhs3.options.what_are_the_main_sources_of_income_of_your_household}
                 filterValue={['unable_unwilling_to_answer']}
@@ -133,7 +137,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.unemploymentFactors}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 by={_ => _.what_are_the_reasons_for_being_out_of_work}
                 label={Protection_hhs3.options.what_are_the_reasons_for_being_out_of_work}
                 filterValue={['unable_unwilling_to_answer']}

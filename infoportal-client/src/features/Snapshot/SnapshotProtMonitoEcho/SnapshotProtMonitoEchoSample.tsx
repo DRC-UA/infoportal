@@ -1,6 +1,6 @@
 import React from 'react'
 import {darken, useTheme} from '@mui/material'
-import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlidePanel, SlidePanelTitle, SlideTxt, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {DRCLogo, EULogo, UhfLogo, UsaidLogo} from '@/shared/logo/logo'
@@ -9,7 +9,6 @@ import {MapSvg} from '@/shared/maps/MapSvg'
 import {Legend} from 'recharts'
 import {ChartPie} from '@/shared/charts/ChartPie'
 import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
-import {useAppSettings} from '@/core/context/ConfigContext'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
 import {Obj, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex, Person, Protection_hhs3} from '@infoportal-common'
@@ -26,12 +25,12 @@ export const snapshotProtMonitoEchoLogo = (
 
 export const SnapshotProtMonitoEchoSample = () => {
   const theme = useTheme()
-  const {dataFiltered, computed, period} = useSnapshotProtMonitoringContext()
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
-  const registrationOblasts = Obj.filter(computed.byCurrentOblast, (k, v) => v.value > 5)
+  const registrationOblasts = Obj.filter(ctx.byCurrentOblast, (k, v) => v.value > 5)
   return (
     <PdfSlide>
-      <SnapshotHeader period={period} logo={snapshotProtMonitoEchoLogo}/>
+      <SnapshotHeader period={ctx.period} logo={snapshotProtMonitoEchoLogo}/>
       <PdfSlideBody>
         <Div>
           <Div column sx={{flex: 4}}>
@@ -57,19 +56,19 @@ export const SnapshotProtMonitoEchoSample = () => {
               the protection needs facing affected populations; informing DRC and the protection
               communities' response.
             </SlideTxt>
-            <MapSvg data={Obj.filter(computed.byCurrentOblast, (k, v) => v.value > 5)} sx={{mx: 1}}/>
+            <MapSvg data={Obj.filter(ctx.byCurrentOblast, (k, v) => v.value > 5)} sx={{mx: 1}}/>
           </Div>
 
           <Div column sx={{flex: 6}}>
             <Div sx={{flex: 0}}>
               <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
-                {formatLargeNumber(dataFiltered.length)}
+                {formatLargeNumber(ctx.dataFiltered.length)}
               </SlideWidget>
               <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
-                {formatLargeNumber(computed.individualsCount)}
+                {formatLargeNumber(ctx.dataFlatFiltered.length)}
               </SlideWidget>
               <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
-                {(computed.individualsCount / dataFiltered.length).toFixed(1)}
+                {(ctx.dataFlatFiltered.length / ctx.dataFiltered.length).toFixed(1)}
               </SlideWidget>
             </Div>
 
@@ -86,8 +85,8 @@ export const SnapshotProtMonitoEchoSample = () => {
                       // other: m.other,
                     }}
                     data={{
-                      female: computed.byGender.Female,
-                      male: computed.byGender.Male,
+                      female: ctx.dataByGender.Female,
+                      male: ctx.dataByGender.Male,
                     }}
                     colors={{
                       female: theme.palette.primary.main,
@@ -100,7 +99,7 @@ export const SnapshotProtMonitoEchoSample = () => {
                 </SlidePanel>
                 <SlidePanel>
                   <SlidePanelTitle>{m.ageGroup}</SlidePanelTitle>
-                  <ChartBarStacker data={computed.ageGroup(Person.ageGroup['DRC'], true)} sx={{mt: 2}} height={300} colors={t => [
+                  <ChartBarStacker data={ctx.ageGroup(Person.ageGroup['DRC'], true)} sx={{mt: 2}} height={300} colors={t => [
                     t.palette.primary.main,
                     snapshotAlternateColor(t),
                     darken(t.palette.primary.main, .5),
@@ -111,7 +110,7 @@ export const SnapshotProtMonitoEchoSample = () => {
                 <SlidePanel>
                   <SlidePanelTitle>{m.protHHS2.hhTypes}</SlidePanelTitle>
                   <ChartBarSingleBy
-                    data={dataFiltered}
+                    data={ctx.dataFiltered}
                     by={_ => _.what_is_the_type_of_your_household}
                     label={{
                       ...Protection_hhs3.options.what_is_the_type_of_your_household,
@@ -126,7 +125,8 @@ export const SnapshotProtMonitoEchoSample = () => {
                 </SlidePanel>
                 <SlidePanel>
                   <SlidePanelTitle>{m.displacementStatus}</SlidePanelTitle>
-                  <ChartBarSingleBy data={dataFiltered} by={_ => _.do_you_identify_as_any_of_the_following} label={Protection_hhs3.options.do_you_identify_as_any_of_the_following}/>
+                  <ChartBarSingleBy data={ctx.dataFiltered} by={_ => _.do_you_identify_as_any_of_the_following}
+                                    label={Protection_hhs3.options.do_you_identify_as_any_of_the_following}/>
                 </SlidePanel>
               </Div>
             </Div>

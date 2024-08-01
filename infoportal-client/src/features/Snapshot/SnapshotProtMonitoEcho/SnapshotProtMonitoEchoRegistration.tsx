@@ -1,5 +1,5 @@
 import React from 'react'
-import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
@@ -15,7 +15,7 @@ import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonito
 import {useTheme} from '@mui/material'
 
 export const SnapshotProtMonitoEchoRegistration = () => {
-  const {dataFiltered, dataPreviousPeriod} = useSnapshotProtMonitoringContext()
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   const t = useTheme()
   return (
@@ -37,7 +37,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             <SlidePanel>
               <SlidePanelTitle sx={{mb: 1}}>{m.protHHSnapshot.maleWithoutIDPCert}</SlidePanelTitle>
               <Div>
-                <Lazy deps={[dataFiltered, dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                   data: getIdpsAnsweringRegistrationQuestion(d),
                   value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
                 })}>
@@ -56,7 +56,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                     />
                   )}
                 </Lazy>
-                <Lazy deps={[dataFiltered, dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                   data: getIdpsAnsweringRegistrationQuestion(d).filter(_ => _.age && _.age >= 18 && _.age <= 60 && _.gender && _.gender === Person.Gender.Male),
                   value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
                 })}>
@@ -79,17 +79,17 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             </SlidePanel>
             <SlidePanel>
               <ChartPieWidgetByKey
-                compare={{before: dataPreviousPeriod}}
+                compare={{before: ctx.dataPreviousPeriod}}
                 title={m.protHHS2.accessBarriersToObtainDocumentation}
                 property="have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation"
                 filter={_ => !_.includes('no')}
                 filterBase={_ => !_.includes('unable_unwilling_to_answer')}
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 {...snapShotDefaultPieIndicatorsProps}
 
               />
               <ChartBarMultipleBy
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 by={_ => _.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
                 label={Protection_hhs3.options.have_you_experienced_any_barriers_in_obtaining_or_accessing_identity_documentation_and_or_hlp_documentation}
                 mergeOptions={{
@@ -108,7 +108,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
           </Div>
           <Div column>
             <SlidePanel>
-              <Lazy deps={[dataFiltered, dataPreviousPeriod]} fn={(x) => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(x) => ChartHelperOld.percentage({
                 data: x.flatMap(_ => _.persons).map(_ => _.lackDoc).compact().filter(_ => !_.includes('unable_unwilling_to_answer')),
                 value: _ => !_.includes('none')
               })}>
@@ -120,8 +120,8 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                   {...snapShotDefaultPieIndicatorsProps}
                 />}
               </Lazy>
-              <Lazy deps={[dataFiltered]} fn={() => chain(ChartHelperOld.multiple({
-                data: dataFiltered.flatMap(_ => _.persons).map(_ => _.lackDoc).compact(),
+              <Lazy deps={[ctx.dataFiltered]} fn={() => chain(ChartHelperOld.multiple({
+                data: ctx.dataFiltered.flatMap(_ => _.persons).map(_ => _.lackDoc).compact(),
                 filterValue: ['none', 'unable_unwilling_to_answer'],
               }))
                 .map(ChartHelperOld.setLabel(Protection_hhs3.options.does_lack_doc))
@@ -132,17 +132,16 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             </SlidePanel>
             <SlidePanel>
               <ChartPieWidgetByKey
-                hideEvolution
-                compare={{before: dataPreviousPeriod}}
+                compare={{before: ctx.dataPreviousPeriod}}
                 title={m.lackOfHousingDoc}
                 property="what_housing_land_and_property_documents_do_you_lack"
                 filterBase={_ => !_.includes('unable_unwilling_to_answer')}
                 filter={_ => !_.includes('none')}
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 {...snapShotDefaultPieIndicatorsProps}
               />
               <ChartBarMultipleBy
-                data={dataFiltered}
+                data={ctx.dataFiltered}
                 by={_ => _.what_housing_land_and_property_documents_do_you_lack}
                 filterValue={['unable_unwilling_to_answer', 'none']}
                 mergeOptions={{

@@ -1,18 +1,16 @@
 import {Div, SlidePanel, SlidePanelTitle} from '@/shared/PdfLayout/PdfSlide'
 import React from 'react'
 import {useI18n} from '@/core/i18n'
-import {DashboardPageProps} from './ProtectionDashboardMonito'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Protection_hhs3} from '@infoportal-common'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 
-export const ProtectionDashboardMonitoSafety = ({
-  data,
-  computed,
-}: DashboardPageProps) => {
+export const ProtectionDashboardMonitoSafety = () => {
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   return (
     <Div responsive>
@@ -24,12 +22,12 @@ export const ProtectionDashboardMonitoSafety = ({
             property="please_rate_your_sense_of_safety_in_this_location"
             filter={_ => _ === '_2_unsafe' || _ === '_1_very_unsafe'}
             filterBase={_ => _ !== 'unable_unwilling_to_answer'}
-            compare={{before: computed.lastMonth}}
-            data={data}
+            compare={{before: ctx.dataPreviousPeriod}}
+            data={ctx.dataFiltered}
           />
           <MapSvgByOblast
             sx={{mx: 2}}
-            data={data}
+            data={ctx.dataFiltered}
             getOblast={_ => _.where_are_you_current_living_oblast as any}
             value={_ => _.please_rate_your_sense_of_safety_in_this_location === '_1_very_unsafe'
               || _.please_rate_your_sense_of_safety_in_this_location === '_2_unsafe'}
@@ -38,7 +36,7 @@ export const ProtectionDashboardMonitoSafety = ({
           />
           <SlidePanelTitle>{m.details}</SlidePanelTitle>
           <ChartBarSingleBy
-            data={data}
+            data={ctx.dataFiltered}
             sortBy={ChartHelperOld.sortBy.custom([
               '_1_very_unsafe',
               '_2_unsafe',
@@ -51,7 +49,7 @@ export const ProtectionDashboardMonitoSafety = ({
           />
           <SlidePanelTitle sx={{mt: 4}}>{m.influencingFactors}</SlidePanelTitle>
           <ChartBarMultipleBy
-            data={data}
+            data={ctx.dataFiltered}
             label={Protection_hhs3.options.what_are_the_main_factors_that_make_this_location_feel_unsafe}
             by={_ => _.what_are_the_main_factors_that_make_this_location_feel_unsafe}
             filterValue={['unable_unwilling_to_answer']}
@@ -66,12 +64,12 @@ export const ProtectionDashboardMonitoSafety = ({
             property="how_would_you_describe_the_relationship_between_member_of_the_host_community"
             filter={_ => _ === '_2_bad' || _ === '_1_very_bad'}
             filterBase={_ => _ !== 'unable_unwilling_to_answer'}
-            compare={{before: computed.lastMonth}}
-            data={data}
+            compare={{before: ctx.dataPreviousPeriod}}
+            data={ctx.dataFiltered}
           />
           <MapSvgByOblast
             sx={{mx: 2}}
-            data={data}
+            data={ctx.dataFiltered}
             getOblast={_ => _.where_are_you_current_living_oblast as any}
             value={_ => _.how_would_you_describe_the_relationship_between_member_of_the_host_community === '_2_bad'
               || _.how_would_you_describe_the_relationship_between_member_of_the_host_community === '_1_very_bad'}
@@ -80,7 +78,7 @@ export const ProtectionDashboardMonitoSafety = ({
           />
           <SlidePanelTitle>{m.details}</SlidePanelTitle>
           <ChartBarSingleBy
-            data={data}
+            data={ctx.dataFiltered}
             sortBy={ChartHelperOld.sortBy.custom([
               '_1_very_bad',
               '_2_bad',
@@ -94,7 +92,7 @@ export const ProtectionDashboardMonitoSafety = ({
           />
           <SlidePanelTitle sx={{mt: 4}}>{m.influencingFactors}</SlidePanelTitle>
           <ChartBarMultipleBy
-            data={data}
+            data={ctx.dataFiltered}
             by={_ => _.what_factors_are_affecting_the_relationship_between_communities_in_this_location}
             filterValue={['unable_unwilling_to_answer']}
             label={Protection_hhs3.options.what_factors_are_affecting_the_relationship_between_communities_in_this_location}
@@ -107,11 +105,11 @@ export const ProtectionDashboardMonitoSafety = ({
             property="do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area"
             filter={_ => !_.includes('no')}
             filterBase={_ => !_.includes('unable_unwilling_to_answer')}
-            compare={{before: computed.lastMonth}}
-            data={data}
+            compare={{before: ctx.dataPreviousPeriod}}
+            data={ctx.dataFiltered}
           />
           <ChartBarMultipleBy
-            data={data}
+            data={ctx.dataFiltered}
             by={_ => _.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area}
             filterValue={['no', 'unable_unwilling_to_answer']}
             label={Protection_hhs3.options.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area}
