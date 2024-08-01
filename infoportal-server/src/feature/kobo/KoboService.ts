@@ -11,6 +11,7 @@ import {
   KoboAttachment,
   KoboId,
   KoboIndex,
+  logPerformance,
   UUID
 } from '@infoportal-common'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
@@ -55,6 +56,7 @@ export class KoboService {
     private sdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
     private history = new KoboAnswerHistoryService(prisma),
     private event: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
+    private log = app.logger('KoboService'),
     private conf = appConf,
   ) {
   }
@@ -69,38 +71,42 @@ export class KoboService {
     return this.prisma.koboForm.findMany()
   }
 
-  readonly searchAnswersByUsersAccess = async ({user, ...params}: {
-    formId: string,
-    filters: KoboAnswersFilters,
-    paginate?: Partial<ApiPagination>
-    user?: UserSession
-  }) => {
-    if (!user) return ApiPaginateHelper.make()([])
-    const access = await this.access.searchForUser({featureId: AppFeatureId.kobo_database, user})
-      .then(_ => _.filter(_ => _.params?.koboFormId === params.formId))
+  readonly searchAnswersByUsersAccess = logPerformance({
+    message: (p) => `Fetch ${KoboIndex.searchById(p.formId)?.name ?? p.formId} by ${p.user?.email}`,
+    logger: (m: string) => this.log.info(m),
+    fn: async ({user, ...params}: {
+      formId: string,
+      filters: KoboAnswersFilters,
+      paginate?: Partial<ApiPagination>
+      user?: UserSession
+    }) => {
+      if (!user) return ApiPaginateHelper.make()([])
+      const access = await this.access.searchForUser({featureId: AppFeatureId.kobo_database, user})
+        .then(_ => _.filter(_ => _.params?.koboFormId === params.formId))
 
-    if (!user.admin) {
-      if (access.length === 0) return ApiPaginateHelper.make()([])
-      const accessFilters = seq(access).map(_ => _.params?.filters).compact().reduce<Record<string, string[]>>((acc, x) => {
-        Obj.entries(x).forEach(([k, v]) => {
-          if (Array.isArray(x[k])) {
-            acc[k] = seq([...acc[k] ?? [], ...x[k] ?? []]).distinct(_ => _)
-          } else {
-            acc[k] = v as any
-          }
+      if (!user.admin) {
+        if (access.length === 0) return ApiPaginateHelper.make()([])
+        const accessFilters = seq(access).map(_ => _.params?.filters).compact().reduce<Record<string, string[]>>((acc, x) => {
+          Obj.entries(x).forEach(([k, v]) => {
+            if (Array.isArray(x[k])) {
+              acc[k] = seq([...acc[k] ?? [], ...x[k] ?? []]).distinct(_ => _)
+            } else {
+              acc[k] = v as any
+            }
+          })
+          return acc
+        }, {} as const)
+        Obj.entries(accessFilters).forEach(([question, answer]) => {
+          if (!params.filters.filterBy) params.filters.filterBy = []
+          params.filters.filterBy?.push({
+            column: question,
+            value: answer
+          })
         })
-        return acc
-      }, {} as const)
-      Obj.entries(accessFilters).forEach(([question, answer]) => {
-        if (!params.filters.filterBy) params.filters.filterBy = []
-        params.filters.filterBy?.push({
-          column: question,
-          value: answer
-        })
-      })
+      }
+      return this.searchAnswers(params)
     }
-    return this.searchAnswers(params)
-  }
+  })
 
   readonly searchAnswers =
     app.cache.request({

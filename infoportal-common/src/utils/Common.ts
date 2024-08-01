@@ -1,4 +1,4 @@
-import {Enum} from '@alexandreannic/ts-utils'
+import {duration, Enum} from '@alexandreannic/ts-utils'
 import {NonNullableKeys} from '../type/Generic'
 import {addMonths, differenceInMonths, isAfter, isBefore, startOfMonth} from 'date-fns'
 
@@ -274,4 +274,22 @@ export const chunkify = <T, R>({
     return chunks
   }, [] as T[][])
   return Promise.all(chunkedSubmissions.map(fn))
+}
+
+export const logPerformance = <T, P extends Array<any>>({
+  message,
+  logger,
+  fn,
+}: {
+  message: (...p: P) => string,
+  logger: (m: string) => void,
+  fn: ((...p: P) => Promise<T>)
+}): (...p: P) => Promise<T> => {
+  return async (...p: P) => {
+    const start = performance.now()
+    const m = message(...p) + '... '
+    const res = await fn(...p)
+    logger(m + duration(performance.now() - start).toString())
+    return res
+  }
 }

@@ -133,14 +133,13 @@ const startApp = async (conf: AppConf) => {
   init()
   // } else {
   start()
-
-  process.on('uncaughtException', (err) => {
-    log.error('Uncaught Exception:', err)
-    // process.exit(1)
-  })
-  process.on('unhandledRejection', (reason, promise) => {
-    log.error('Unhandled Rejection at:', promise, 'reason:', reason)
-  })
+  // process.on('uncaughtException', (err) => {
+  //   log.error('Uncaught Exception:', err)
+  //   // process.exit(1)
+  // })
+  // process.on('unhandledRejection', (reason, promise) => {
+  //   log.error('Unhandled Rejection at:', promise, 'reason:', reason)
+  // })
 }
 
 startApp(appConf)
