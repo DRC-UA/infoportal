@@ -108,6 +108,13 @@ export class BuildKoboType {
     bn_rapidResponse: {
       formId: KoboIndex.byName('bn_rapidResponse').id
     },
+    bn_rapidResponse2: {
+      formId: KoboIndex.byName('bn_rapidResponse2').id,
+      skipQuestionTyping: [
+        'ben_det_hromada',
+        'ben_det_raion',
+      ]
+    },
     shelter_cashForRepair: {
       formId: KoboIndex.byName('shelter_cashForRepair').id
     },
