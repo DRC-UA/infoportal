@@ -130,6 +130,7 @@ export class KoboMetaService {
   })
 
   private info = (formId: KoboId, message: string) => this.log.info(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
+  private debug = (formId: KoboId, message: string) => this.log.debug(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
 
   private syncMerge = async ({
     formId,
@@ -138,7 +139,7 @@ export class KoboMetaService {
     formId: KoboId
     mapper: MetaMapperMerge,
   }) => {
-    this.info(formId, `Fetch Kobo answers...`)
+    this.debug(formId, `Fetch Kobo answers...`)
     const updates = await this.prisma.koboAnswers.findMany({
       where: {formId},
     }).then(_ => seq(_).map(mapper).compact())
@@ -165,7 +166,7 @@ export class KoboMetaService {
     await this.prisma.koboPerson.createMany({
       data: createPersonInput,
     })
-    this.info(formId, `Update ${updates.length}...`)
+    this.debug(formId, `Update ${updates.length}...`)
     // await Promise.all(updates.map(async ([koboId, {persons, ...update}], i) => {
     //   return this.prisma.koboMeta.updateMany({
     //     where: {koboId: {in: [koboId]}},
@@ -193,7 +194,7 @@ export class KoboMetaService {
     formId: KoboId
     mapper: MetaMapperInsert,
   }) => {
-    this.info(formId, `Fetch Kobo answers...`)
+    this.debug(formId, `Fetch Kobo answers...`)
     const koboAnswers: Seq<KoboMetaCreate> = await this.prisma.koboAnswers.findMany({
       select: {
         formId: true,
@@ -246,10 +247,10 @@ export class KoboMetaService {
     }
 
     let t0 = performance.now()
-    this.info(formId, `Deleting KoboMeta ${koboAnswers.length}...`)
+    this.debug(formId, `Deleting KoboMeta ${koboAnswers.length}...`)
     await this.prisma.koboMeta.deleteMany({where: {formId}})
     this.info(formId, `Deleting KoboMeta ${koboAnswers.length}... Done in ${duration(performance.now() - t0)}`)
-    this.info(formId, `Handle create (${koboAnswers.length})...`)
+    this.debug(formId, `Handle create (${koboAnswers.length})...`)
     t0 = performance.now()
     await handleCreate()
     this.info(formId, `Handle create (${koboAnswers.length})... Done in ${duration(performance.now() - t0)}`)

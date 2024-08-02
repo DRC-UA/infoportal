@@ -51,10 +51,11 @@ export class KoboSyncServer {
   }
 
   private info = (formId: string, message: string) => this.log.info(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
+  private debug = (formId: string, message: string) => this.log.debug(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
 
   readonly syncApiForm = async ({serverId = koboIndex.drcUa.server.prod, formId, updatedBy}: {serverId?: UUID, formId: KoboId, updatedBy?: string}) => {
     try {
-      this.info(formId, `Synchronizing by ${updatedBy}...`)
+      this.debug(formId, `Synchronizing by ${updatedBy}...`)
       await this.syncApiFormInfo(serverId, formId)
       await this.syncApiFormAnswers(serverId, formId)
       await this.prisma.koboForm.update({
@@ -88,12 +89,12 @@ export class KoboSyncServer {
 
   private readonly syncApiFormAnswers = async (serverId: UUID, formId: KoboId): Promise<KoboSyncServerResult> => {
     const sdk = await this.koboSdkGenerator.get(serverId)
-    this.info(formId, `Fetch remote answers...`)
+    this.debug(formId, `Fetch remote answers...`)
     const remoteAnswers = await sdk.v2.getAnswers(formId).then(_ => _.data)
     const remoteIdsIndex: Map<KoboId, KoboAnswer> = remoteAnswers.reduce((map, curr) => map.set(curr.id, curr), new Map<KoboId, KoboAnswer>)//new Map(remoteAnswers.map(_ => _.id))
     this.info(formId, `Fetch remote answers... ${remoteAnswers.length} fetched.`)
 
-    this.info(formId, `Fetch local answers...`)
+    this.debug(formId, `Fetch local answers...`)
     const localAnswersIndex = await this.prisma.koboAnswers.findMany({where: {formId}, select: {id: true, uuid: true}}).then(_ => {
       return _.reduce((map, curr) => map.set(curr.id, curr.uuid), new Map<KoboId, UUID>())
     })
@@ -101,7 +102,7 @@ export class KoboSyncServer {
 
     const handleDelete = async () => {
       const idsToDelete = [...localAnswersIndex.keys()].filter(_ => !remoteIdsIndex.has(_))
-      this.info(formId, `Handle delete (${idsToDelete.length})...`)
+      this.debug(formId, `Handle delete (${idsToDelete.length})...`)
       await this.prisma.koboAnswers.deleteMany({where: {source: null, formId, id: {in: idsToDelete}}})
       return idsToDelete
     }

@@ -9,7 +9,7 @@ import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 import {IpCache, IpCacheApp} from '@infoportal-common'
 import {duration} from '@alexandreannic/ts-utils'
 import * as winston from 'winston'
-import {format, Logger as WinstonLogger} from 'winston'
+import {format, level, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
@@ -47,7 +47,7 @@ export const App = (config: AppConf = appConf) => {
           eol: '\n',
         })] : [],
         new winston.transports.Console({
-          level: (!config.production) ? 'debug' : undefined
+          level: appConf.logLevel
         })
       ],
     })
