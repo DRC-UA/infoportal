@@ -81,28 +81,30 @@ export class KoboService {
       user?: UserSession
     }) => {
       if (!user) return ApiPaginateHelper.make()([])
-      const access = await this.access.searchForUser({featureId: AppFeatureId.kobo_database, user})
-        .then(_ => _.filter(_ => _.params?.koboFormId === params.formId))
-
       if (!user.admin) {
+        const access = await this.access.searchForUser({featureId: AppFeatureId.kobo_database, user})
+          .then(_ => seq(_).filter(_ => _.params?.koboFormId === params.formId))
         if (access.length === 0) return ApiPaginateHelper.make()([])
-        const accessFilters = seq(access).map(_ => _.params?.filters).compact().reduce<Record<string, string[]>>((acc, x) => {
-          Obj.entries(x).forEach(([k, v]) => {
-            if (Array.isArray(x[k])) {
-              acc[k] = seq([...acc[k] ?? [], ...x[k] ?? []]).distinct(_ => _)
-            } else {
-              acc[k] = v as any
-            }
+        const hasEmptyFilter = access.some(_ => !_.params?.filters || Object.keys(_.params.filters).length === 0)
+        if (!hasEmptyFilter) {
+          const accessFilters = access.map(_ => _.params?.filters).compact().reduce<Record<string, string[]>>((acc, x) => {
+            Obj.entries(x).forEach(([k, v]) => {
+              if (Array.isArray(x[k])) {
+                acc[k] = seq([...acc[k] ?? [], ...x[k] ?? []]).distinct(_ => _)
+              } else {
+                acc[k] = v as any
+              }
+            })
+            return acc
+          }, {} as const)
+          Obj.entries(accessFilters).forEach(([question, answer]) => {
+            if (!params.filters.filterBy) params.filters.filterBy = []
+            params.filters.filterBy?.push({
+              column: question,
+              value: answer
+            })
           })
-          return acc
-        }, {} as const)
-        Obj.entries(accessFilters).forEach(([question, answer]) => {
-          if (!params.filters.filterBy) params.filters.filterBy = []
-          params.filters.filterBy?.push({
-            column: question,
-            value: answer
-          })
-        })
+        }
       }
       return this.searchAnswers(params)
     }
