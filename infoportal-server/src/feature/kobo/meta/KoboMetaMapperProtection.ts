@@ -27,7 +27,6 @@ import {
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
 import Gender = Person.Gender
-import {ro} from 'date-fns/locale'
 
 export class KoboMetaMapperProtection {
 
@@ -118,6 +117,11 @@ export class KoboMetaMapperProtection {
 
   static readonly referral: MetaMapperInsert<KoboMetaOrigin<Protection_referral.T, ProtectionHhsTags>> = row => {
     const answer = Protection_referral.map(row.answers)
+    if (!(
+      answer.person_successfully_referred_drc === 'no' &&
+      answer.incoming_outgoing_referral === 'outgoing' &&
+      answer.service_provided === 'yes'
+    )) return
     const project = DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project_code))
     const projects = project ? [project] : []
     return KoboMetaMapper.make({
@@ -138,7 +142,7 @@ export class KoboMetaMapperProtection {
       sector: DrcSector.Protection,
       activity: DrcProgram.Referral,
       status: KoboMetaStatus.Committed,
-      lastStatusUpdate: answer.date_closure,
+      lastStatusUpdate: answer.month_provision,
       personsCount: 1,
       persons: [{
         age: answer.age,

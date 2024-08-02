@@ -75,7 +75,7 @@ export namespace AiProtectionMapper {
                   ai: {
                     'Indicators': fnSwitch(activity, {
                       [DrcProgram.Counselling]: '# of individuals who received protection counselling',
-                      // [DrcProgram.FGD]: We don't report '# of interviews conducted with key informants through community level protection monitoring',
+                      [DrcProgram.FGD]: '# of interviews conducted with key informants through community level protection monitoring',
                       [DrcProgram.PSS]: '# of individuals who received individual or group-based psychosocial support',
                       [DrcProgram.ProtectionMonitoring]: '# of individuals reached through protection monitoring at the household level',
                       [DrcProgram.CommunityLevelPm]: '# of interviews conducted with key informants through community level protection monitoring',
@@ -84,7 +84,8 @@ export namespace AiProtectionMapper {
                     }, () => aiInvalidValueFlag as any),
                     'Population Group': AiMapper.mapPopulationGroup(displacement),
                     'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
-                    ...disaggregation,
+                    'Non-individuals Reached/Quantity': DrcProgram.FGD ? 1 : undefined,
+                    ...DrcProgram.FGD ? {} : disaggregation,
                     // 'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
                     // 'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
                     // 'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
