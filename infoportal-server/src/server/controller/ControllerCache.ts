@@ -11,7 +11,7 @@ export class ControllerCache {
 
   readonly get = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const cache = this.appCache.get()
+      const cache = this.appCache.getAll()
       res.send(cache.getInfo())
     } catch (e) {
       console.log(e)

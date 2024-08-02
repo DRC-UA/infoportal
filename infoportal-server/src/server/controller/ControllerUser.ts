@@ -12,7 +12,7 @@ export class ControllerUser {
 
   constructor(
     private pgClient: PrismaClient,
-    private service = new UserService(pgClient)
+    private service = UserService.getInstance(pgClient)
   ) {
   }
 
@@ -27,7 +27,7 @@ export class ControllerUser {
     }).validate(req.params)
     const avatar = await this.service.getUserAvatarByEmail(email ?? req.session.user?.email!)
     if (!avatar) {
-      throw new AppError.NotFound('user_not_found')
+      // throw new AppError.NotFound('user_not_found')
     } else {
       res.setHeader('Content-Type', 'image/jpeg')
       res.send(avatar)

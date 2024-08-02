@@ -33,7 +33,6 @@ export class KoboMetaMapper {
   static readonly mappersCreate: Record<KoboId, MetaMapperInsert> = {
     [KoboIndex.byName('bn_re').id]: KoboMetaBasicneeds.bn_re,
     [KoboIndex.byName('bn_rapidResponse').id]: KoboMetaBasicneeds.bn_rrm,
-    [KoboIndex.byName('bn_rapidResponse2').id]: KoboMetaBasicneeds.bn_rrm2,
     [KoboIndex.byName('ecrec_cashRegistration').id]: KoboMetaMapperEcrec.cashRegistration,
     [KoboIndex.byName('ecrec_cashRegistrationBha').id]: KoboMetaMapperEcrec.cashRegistrationBha,
     [KoboIndex.byName('shelter_nta').id]: KoboMetaMapperShelter.createNta,

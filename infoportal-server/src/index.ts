@@ -17,6 +17,7 @@ import {EmailService} from './core/EmailService'
 export type AppLogger = WinstonLogger
 
 export enum AppCacheKey {
+  Users = 'Users',
   Meta = 'Meta',
   KoboAnswers = 'KoboAnswers',
   KoboSchema = 'KoboSchema',
