@@ -27,7 +27,9 @@ export class IpCacheApp<Key extends string = string> {
     // }, 2000)
   }
 
-  readonly get = () => this.cache
+  readonly getAll = () => this.cache
+
+  readonly get = (key: Key) => this.cache.get(key)
 
   readonly request = <T, P extends Array<any>>({
     key,
@@ -68,6 +70,17 @@ export class IpCacheApp<Key extends string = string> {
         return value
       }
       return cachedValue
+    }
+  }
+
+  readonly set = ({key, subKey, value}: {key: Key, subKey?: string, value: any}) => {
+    this.log.info(`Set cache ${key} ${subKey ? '/' + subKey : ''}`)
+    if (subKey) {
+      if (!this.cache.get(key)) this.cache.set(key, {})
+      const subCache = this.cache.get(key)!
+      subCache.set(subKey, value)
+    } else {
+      this.cache.set(key, value)
     }
   }
 

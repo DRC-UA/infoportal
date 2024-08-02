@@ -26,6 +26,7 @@ import {ControllerJsonStore} from './controller/ControllerJsonStore'
 import {ControllerHdp} from './controller/ControllerHdp'
 import {ControllerKoboAnswerHistory} from './controller/kobo/ControllerKoboAnswerHistory'
 import {ControllerCache} from './controller/ControllerCache'
+import {UserService} from '../feature/user/UserService'
 
 export interface AuthenticatedRequest extends Request {
   user?: UserSession
@@ -91,7 +92,7 @@ export const getRoutes = (
       if (!email) {
         throw new AppError.Forbidden('auth_user_not_connected')
       }
-      const user = await prisma.user.findFirst({where: {email}})
+      const user = await UserService.getInstance(prisma).getUserByEmail(email)
       if (!user) {
         throw new AppError.Forbidden('user_not_allowed')
       }

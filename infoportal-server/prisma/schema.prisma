@@ -93,6 +93,8 @@ model KoboPerson {
   displacement String?
   meta         KoboMeta @relation(fields: [metaId], references: [id], onDelete: Cascade)
   metaId       String
+
+  @@index([metaId])
 }
 
 model KoboMeta {
@@ -177,6 +179,8 @@ model User {
   admin           Boolean        @default(false)
   officer         String?
   activities      UserActivity[]
+
+  @@index([email])
 }
 
 model UserActivity {

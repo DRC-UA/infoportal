@@ -10,7 +10,7 @@ export class EmailService {
 
   constructor(
     private prisma = new PrismaClient(),
-    private users = new UserService(prisma),
+    private users = UserService.getInstance(prisma),
     private event = GlobalEvent.Class.getInstance(),
     private emailHelper = new EmailHelper(),
     private siteMap = new FrontEndSiteMap(),
