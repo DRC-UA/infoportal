@@ -16,22 +16,7 @@ import cors from 'cors'
 import {duration} from '@alexandreannic/ts-utils'
 import * as console from 'console'
 // import * as Sentry from '@sentry/node'
-
 // import sessionFileStore from 'session-file-store'
-//
-// class PrismaSessionStore2 extends Store {
-//
-//   get = async (sid: string, callback?: ((err?: unknown, val?: SessionData) => void) | undefined) => {
-//     console.log('gett')
-//     return super.get(sid, callback)
-//   }
-//
-//   destroy(sid: string, callback?: (err?: any) => void): void {
-//   }
-//
-//   set(sid: string, session: session.SessionData, callback?: (err?: any) => void): void {
-//   }
-// }
 
 export class Server {
 
@@ -108,7 +93,6 @@ export class Server {
         checkPeriod: duration(1, 'day').toMs,
         dbRecordIdIsSessionId: true,
         dbRecordIdFunction: undefined,
-        loggerLevel: 'log',
       }),
       cookie: {
         domain: appConf.production ? '.drc.ngo' : undefined,
