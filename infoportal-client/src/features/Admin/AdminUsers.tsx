@@ -40,6 +40,7 @@ export const AdminUsers = () => {
     <Page width="lg">
       <Panel>
         <Datatable
+          loading={_users.loading}
           id="users"
           showExportBtn
           header={

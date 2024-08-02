@@ -6,7 +6,6 @@ import {DrcOffice} from '@infoportal-common'
 import {Enum} from '@alexandreannic/ts-utils'
 import {SessionError} from '../../feature/session/SessionErrors'
 import {Util} from '../../helper/Utils'
-import {AppError} from '../../helper/Errors'
 
 export class ControllerUser {
 
@@ -27,6 +26,7 @@ export class ControllerUser {
     }).validate(req.params)
     const avatar = await this.service.getUserAvatarByEmail(email ?? req.session.user?.email!)
     if (!avatar) {
+      res.send()
       // throw new AppError.NotFound('user_not_found')
     } else {
       res.setHeader('Content-Type', 'image/jpeg')

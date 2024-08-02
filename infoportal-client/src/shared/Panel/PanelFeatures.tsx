@@ -20,6 +20,7 @@ export const PanelFeatures = ({
   const t = useTheme()
   const saveAsImg = () => {
     html2canvas(content.current!, {
+      useCORS: true,
       allowTaint: true,
       backgroundColor: 'transparent',
       // backgroundColor: t.palette.background.default,
