@@ -1,4 +1,3 @@
-import {DashboardPageProps} from './ProtectionDashboardMonito'
 import {useI18n} from '@/core/i18n'
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 import {Protection_hhs3, toPercent} from '@infoportal-common'
@@ -9,15 +8,13 @@ import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {Txt} from 'mui-extension'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 
-export const ProtectionDashboardMonitoPN = ({
-  data,
-  computed,
-}: DashboardPageProps) => {
+export const ProtectionDashboardMonitoPN = () => {
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
-
   const fixedData = useMemo(() => {
-    return data.map(_ => {
+    return ctx.dataFiltered.map(_ => {
       return {
         ..._,
         what_is_your_1_priority: _.what_is_your_1_priority === 'livelihood_support vocational_training' as any ? 'livelihood_support' : _.what_is_your_1_priority,
@@ -25,7 +22,7 @@ export const ProtectionDashboardMonitoPN = ({
         what_is_your_3_priority: _.what_is_your_3_priority === 'livelihood_support vocational_training' as any ? 'livelihood_support' : _.what_is_your_3_priority,
       }
     })
-  }, [data])
+  }, [ctx.dataFiltered])
 
   const mostSelected = useMemo(() => {
     const byCategory = ChartHelper.single({
@@ -36,7 +33,7 @@ export const ProtectionDashboardMonitoPN = ({
       byCategory: sorted,
       total: seq(Obj.values(byCategory)).sum(_ => _.value)
     }
-  }, [data])
+  }, [ctx.dataFiltered])
 
   const table = useMemo(() => {
     const pn1 = ChartHelper.single({

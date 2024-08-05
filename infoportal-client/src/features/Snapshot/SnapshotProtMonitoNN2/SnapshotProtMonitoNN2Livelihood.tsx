@@ -1,5 +1,5 @@
 import React from 'react'
-import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
@@ -13,9 +13,9 @@ import {Enum} from '@alexandreannic/ts-utils'
 import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
 
 export const SnapshotProtMonitoNN2Livelihood = () => {
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
-
+  
   return (
     <PdfSlide>
       <SlideHeader logo={snapshotProtMonitoNn2Logo}>{m.snapshotProtMonito.livelihood}</SlideHeader>
@@ -23,7 +23,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
         <Div>
           <Div column>
             <SlideTxt>
-              <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                 value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
                 data: d,
                 base: _ => _ !== undefined,
@@ -39,7 +39,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
             </SlideTxt>
             <Div>
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                   value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
                   data: d,
                   base: _ => _ !== undefined,
@@ -55,7 +55,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
               </SlidePanel>
 
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[data, computed.lastMonth]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
                   value: _ => _.are_there_gaps_in_meeting_your_basic_needs === 'yes_somewhat' || _.are_there_gaps_in_meeting_your_basic_needs === 'yes_a_lot',
                   data: d,
                 })}>
@@ -72,17 +72,17 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
             </Div>
             <SlidePanel>
               <SlidePanelTitle>{m.monthlyIncomePerHH}</SlidePanelTitle>
-              <Lazy deps={[data]} fn={() => {
+              <Lazy deps={[ctx.dataFiltered]} fn={() => {
                 const income = chain(ChartHelperOld.single({
                   filterValue: ['no_income', 'unable_unwilling_to_answer'],
-                  data: data.map(_ => _.what_is_the_average_month_income_per_household).compact(),
+                  data: ctx.dataFiltered.map(_ => _.what_is_the_average_month_income_per_household).compact(),
                 }))
                   .map(ChartHelperOld.setLabel(Protection_hhs3.options.what_is_the_average_month_income_per_household))
                   .map(ChartHelperOld.sortBy.custom(Object.keys(Protection_hhs3.options.what_is_the_average_month_income_per_household)))
                   .get()
 
                 const hhSize = ChartHelperOld.sumByCategory({
-                  data,
+                  data: ctx.dataFiltered,
                   categories: {
                     // no_income: _ => _.what_is_the_average_month_income_per_household === 'no_income',
                     up_to_3000_UAH: _ => _.what_is_the_average_month_income_per_household === 'up_to_3000_UAH',
@@ -108,7 +108,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
               <ChartBarMultipleBy
                 by={_ => _.what_are_the_main_sources_of_income_of_your_household}
                 label={Protection_hhs3.options.what_are_the_main_sources_of_income_of_your_household}
-                data={data}
+                data={ctx.dataFiltered}
                 filterValue={['unable_unwilling_to_answer']}
                 limit={4}
               />
@@ -121,7 +121,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
                   ...Protection_hhs3.options.what_are_the_reasons_for_being_out_of_work,
                   other_specify: 'Other'
                 }}
-                data={data}
+                data={ctx.dataFiltered}
                 mergeOptions={{
                   lack_of_information_about_job_market: 'other_specify',
                   lack_of_experience: 'other_specify',
@@ -135,7 +135,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.copyingMechanisms}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={data}
+                data={ctx.dataFiltered}
                 mergeOptions={{
                   selling_off_household_productive_assets: 'other_specify',
                   no_coping_strategy: 'other_specify',

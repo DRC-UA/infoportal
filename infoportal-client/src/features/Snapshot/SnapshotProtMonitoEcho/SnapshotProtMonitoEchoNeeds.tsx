@@ -1,5 +1,5 @@
 import React from 'react'
-import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
@@ -14,7 +14,7 @@ import {useTheme} from '@mui/material'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 
 export const SnapshotProtMonitoEchoNeeds = () => {
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   const t = useTheme()
   return (
@@ -24,21 +24,21 @@ export const SnapshotProtMonitoEchoNeeds = () => {
         <Div>
           <Div column>
             <SlideTxt>
-              <Lazy deps={[data]} fn={() => {
+              <Lazy deps={[ctx.dataFiltered]} fn={() => {
                 return {
                   barriersRural: toPercent(ChartHelperOld.percentage({
-                    data: data.filter(_ => _.type_of_site === 'rural_area'),
+                    data: ctx.dataFiltered.filter(_ => _.type_of_site === 'rural_area'),
                     value: _ => _.do_you_have_access_to_health_care_in_your_current_location !== 'yes',
                   }).percent, 1),
                   barriersUrban: toPercent(ChartHelperOld.percentage({
-                    data: data.filter(_ => _.type_of_site === 'urban_area'),
+                    data: ctx.dataFiltered.filter(_ => _.type_of_site === 'urban_area'),
                     value: _ => _.do_you_have_access_to_health_care_in_your_current_location !== 'yes',
                   }).percent, 1),
-                  healthPnCount: data.filter(_ => _.what_is_your_1_priority?.includes('health_1_2') ||
+                  healthPnCount: ctx.dataFiltered.filter(_ => _.what_is_your_1_priority?.includes('health_1_2') ||
                     _.what_is_your_2_priority?.includes('health_1_2') ||
                     _.what_is_your_3_priority?.includes('health_1_2')).length,
                   healthPn: toPercent(ChartHelperOld.percentage({
-                    data: data
+                    data: ctx.dataFiltered
                     // .filter(_ => _.what_is_your_1_priority !== 'unable_unwilling_to_answer')
                     ,
                     value: _ => !!(
@@ -48,7 +48,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
                     ),
                   }).percent, 1),
                   healthPnUrban: toPercent(ChartHelperOld.percentage({
-                    data: data.filter(_ => _.type_of_site === 'urban_area')
+                    data: ctx.dataFiltered.filter(_ => _.type_of_site === 'urban_area')
                     // .filter(_ => _.what_is_your_1_priority !== 'unable_unwilling_to_answer')
                     ,
                     value: _ => !!(
@@ -58,7 +58,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
                     ),
                   }).percent, 1),
                   healthPnRural: toPercent(ChartHelperOld.percentage({
-                    data: data.filter(_ => _.type_of_site === 'rural_area')
+                    data: ctx.dataFiltered.filter(_ => _.type_of_site === 'rural_area')
                     // .filter(_ => _.what_is_your_1_priority !== 'unable_unwilling_to_answer')
                     ,
                     value: _ => !!(
@@ -82,13 +82,13 @@ export const SnapshotProtMonitoEchoNeeds = () => {
                 {...snapShotDefaultPieIndicatorsProps}
                 sx={{mb: 0}}
                 title={m.protHHS2.barriersToAccessHealth}
-                compare={{before: computed.lastMonth}}
+                compare={{before: ctx.dataPreviousPeriod}}
                 filter={_ => _.do_you_have_access_to_health_care_in_your_current_location !== 'yes'}
                 filterBase={_ => _.do_you_have_access_to_health_care_in_your_current_location !== 'unable_unwilling_to_answer'}
-                data={data}
+                data={ctx.dataFiltered}
               />
               <ChartBarMultipleBy
-                data={data}
+                data={ctx.dataFiltered}
                 by={_ => _.what_are_the_barriers_to_accessing_health_services}
                 label={Protection_hhs3.options.what_are_the_barriers_to_accessing_health_services}
                 filterValue={['unable_unwilling_to_answer']}
@@ -102,11 +102,11 @@ export const SnapshotProtMonitoEchoNeeds = () => {
                 title={m.protHHS2.unregisteredDisability}
                 filter={_ => _.do_you_or_anyone_in_your_household_have_a_disability_status_from_the_gov !== 'yes_all'}
                 filterBase={_ => _.do_you_or_anyone_in_your_household_have_a_disability_status_from_the_gov !== 'unable_unwilling_to_answer'}
-                compare={{before: computed.lastMonth}}
-                data={data}
+                compare={{before: ctx.dataPreviousPeriod}}
+                data={ctx.dataFiltered}
               />
               <ChartBarSingleBy
-                data={data}
+                data={ctx.dataFiltered}
                 by={_ => _.why_dont_they_have_status}
                 filter={_ => _.why_dont_they_have_status !== 'unable_unwilling_to_answer'}
                 label={{
@@ -129,15 +129,15 @@ export const SnapshotProtMonitoEchoNeeds = () => {
             <SlidePanel>
               <ChartPieWidgetByKey
                 {...snapShotDefaultPieIndicatorsProps}
-                compare={{before: computed.lastMonth}}
+                compare={{before: ctx.dataPreviousPeriod}}
                 title={m.protHHS2.mainConcernsRegardingHousing}
                 property="what_are_your_main_concerns_regarding_your_accommodation"
                 filter={_ => !_.includes('none')}
-                data={data}
+                data={ctx.dataFiltered}
                 sx={{mb: 0}}
               />
               <ChartBarMultipleBy
-                data={data}
+                data={ctx.dataFiltered}
                 by={_ => _.what_are_your_main_concerns_regarding_your_accommodation}
                 label={Protection_hhs3.options.what_are_your_main_concerns_regarding_your_accommodation}
                 filterValue={['unable_unwilling_to_answer', 'none']}
@@ -146,7 +146,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.accommodationCondition}</SlidePanelTitle>
               <ChartBarSingleBy
-                data={data}
+                data={ctx.dataFiltered}
                 by={_ => _.what_is_the_general_condition_of_your_accommodation}
                 sortBy={ChartHelperOld.sortBy.custom([
                   'sound_condition',

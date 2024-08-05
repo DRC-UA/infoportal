@@ -3,6 +3,8 @@
 - Harmonize files component names like MpcaData or MpcaTable.
 - Find consistent name for types over component
 - Remove deprecated AaSelect
+- Delete chartHelperOld
+- Harmonize dashboards
 
 Started
 

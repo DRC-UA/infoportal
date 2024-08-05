@@ -1,6 +1,6 @@
 import React from 'react'
 import {Box, useTheme} from '@mui/material'
-import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlidePanel, SlidePanelTitle, SlideTxt, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {ChartBarStacker, commonLegendProps} from '@/shared/charts/ChartBarStacked'
@@ -16,11 +16,11 @@ import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoN
 
 export const SnapshotProtMonitoNN2Sample = () => {
   const theme = useTheme()
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   return (
     <PdfSlide>
-      <SnapshotHeader subTitle="Mykolaiv oblast" period={period} logo={snapshotProtMonitoNn2Logo}/>
+      <SnapshotHeader subTitle="Mykolaiv oblast" period={ctx.period} logo={snapshotProtMonitoNn2Logo}/>
       <PdfSlideBody>
         <Div>
           <Div column sx={{flex: 3.6}}>
@@ -31,20 +31,20 @@ export const SnapshotProtMonitoNN2Sample = () => {
             </SlideTxt>
             <Box sx={{height: 316, borderRadius: t => t.shape.borderRadius}}>
               <PanelTitle sx={{mb: 3, mt: 1}}>{m.idpOriginOblast}</PanelTitle>
-              <MapSvg data={computed.byOriginOblast}/>
+              <MapSvg data={ctx.byOriginOblast}/>
             </Box>
           </Div>
 
           <Div column sx={{flex: 6}}>
             <Div sx={{flex: 0}}>
               <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
-                {formatLargeNumber(data.length)}
+                {formatLargeNumber(ctx.dataFiltered.length)}
               </SlideWidget>
               <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
-                {formatLargeNumber(computed.individualsCount)}
+                {formatLargeNumber(ctx.dataFlatFiltered.length)}
               </SlideWidget>
               <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
-                {(computed.individualsCount / data.length).toFixed(1)}
+                {(ctx.dataFlatFiltered.length / ctx.dataFiltered.length).toFixed(1)}
               </SlideWidget>
             </Div>
 
@@ -61,8 +61,8 @@ export const SnapshotProtMonitoNN2Sample = () => {
                       // other: m.other,
                     }}
                     data={{
-                      female: computed.byGender.Female,
-                      male: computed.byGender.Male,
+                      female: ctx.dataByGender.Female,
+                      male: ctx.dataByGender.Male,
                     }}
                     colors={{
                       female: theme.palette.primary.main,
@@ -76,7 +76,7 @@ export const SnapshotProtMonitoNN2Sample = () => {
                 <SlidePanel>
                   <SlidePanelTitle>{m.protHHS2.hhTypes}</SlidePanelTitle>
                   <ChartBarSingleBy
-                    data={data}
+                    data={ctx.dataFiltered}
                     by={_ => _.what_is_the_type_of_your_household}
                     label={Protection_hhs3.options.what_is_the_type_of_your_household}
                   />
@@ -85,7 +85,7 @@ export const SnapshotProtMonitoNN2Sample = () => {
               <Div column>
                 <SlidePanel>
                   <SlidePanelTitle>{m.ageGroup}</SlidePanelTitle>
-                  <ChartBarStacker data={computed.ageGroup(Person.ageGroup['DRC'], true)} height={250} colors={t => [
+                  <ChartBarStacker data={ctx.ageGroup(Person.ageGroup['DRC'], true)} height={250} colors={t => [
                     snapshotAlternateColor(t),
                     t.palette.primary.main,
                   ]}/>
@@ -93,7 +93,7 @@ export const SnapshotProtMonitoNN2Sample = () => {
                 <SlidePanel>
                   <SlidePanelTitle>{m.displacementStatus}</SlidePanelTitle>
                   <ChartBarSingleBy
-                    data={data}
+                    data={ctx.dataFiltered}
                     by={_ => _.do_you_identify_as_any_of_the_following}
                     label={Protection_hhs3.options.do_you_identify_as_any_of_the_following}
                   />

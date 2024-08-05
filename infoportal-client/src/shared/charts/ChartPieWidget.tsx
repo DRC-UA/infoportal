@@ -7,7 +7,7 @@ import {PanelProps} from '../Panel/Panel'
 import {useI18n} from '@/core/i18n'
 import {LightTooltip, TooltipRow} from '@/shared/LightTooltip'
 import {toPercent} from '@infoportal-common'
-import {protectionDashboardMonitoPreviousPeriodDeltaDays} from '@/features/Protection/DashboardMonito/useProtectionDashboardMonitoData'
+import { previousPeriodDeltaDays } from '@/features/Safety/IncidentsDashboard/useSafetyIncidentData'
 
 export interface ChartPieIndicatorProps extends Omit<PanelProps, 'title'> {
   fractionDigits?: number
@@ -22,6 +22,7 @@ export interface ChartPieIndicatorProps extends Omit<PanelProps, 'title'> {
   evolution?: number
   tooltip?: string
   color?: string
+  hideIndicatorTooltip?: boolean
 }
 
 export const ChartPieWidget = ({
@@ -35,13 +36,15 @@ export const ChartPieWidget = ({
   showValue,
   showBase,
   base,
-  tooltip,
+  hideIndicatorTooltip,
+  tooltip = `Compare to ${previousPeriodDeltaDays} days ago`,
   fractionDigits = 0,
   sx,
   color,
   ...props
 }: ChartPieIndicatorProps) => {
   const {m, formatLargeNumber} = useI18n()
+  const fontSize = dense ? '1.6em' : '1.7em'
   return (
     <LightTooltip title={
       <>
@@ -64,35 +67,37 @@ export const ChartPieWidget = ({
             {title}
           </SlidePanelTitle>
           <Box sx={{display: 'inline-flex', lineHeight: 1, alignItems: 'flex-start'}}>
-            <Txt bold sx={{fontSize: dense ? '1.6em' : '1.7em', letterSpacing: '1px'}}>{renderPercent(value / base, true, fractionDigits)}</Txt>
-            {showValue !== undefined && (
-              <Txt color="disabled" sx={{ml: .5, fontWeight: '400'}}>
-              <span style={{fontWeight: '400', fontSize: '1.6em'}}>
-                &nbsp;{formatLargeNumber(value)}
-              </span>
-                {showBase !== undefined && (
-                  <span style={{fontWeight: '400', fontSize: '1.2em'}}>/{formatLargeNumber(base)}</span>
-                )}
-                {/*<Txt color="disabled" sx={{fontSize: '1.4em', fontWeight: 'lighter'}}>)</Txt>*/}
-              </Txt>
-            )}
+            <Txt bold sx={{fontSize, letterSpacing: '1px'}}>{renderPercent(value / base, true, fractionDigits)}</Txt>
             {evolution && (
               <>
                 <Txt sx={{
-                  fontSize: '1.7em',
+                  fontSize,
                   color: t => evolution > 0 ? t.palette.success.main : t.palette.error.main,
                   display: 'inline-flex', alignItems: 'center'
                 }}>
-                  <Icon sx={{ml: 1.5}} fontSize="inherit">{evolution > 0 ? 'north' : 'south'}</Icon>
+                  <Icon sx={{ml: 1}} fontSize="inherit">{evolution > 0 ? 'north' : 'south'}</Icon>
                   <Box sx={{ml: .25}}>
                     {evolution >= 0 && '+'}{(evolution * 100).toFixed(Math.abs(evolution) > 0.1 ? fractionDigits : 1)}
                   </Box>
                   {children}
                 </Txt>
-                <Tooltip title={tooltip ?? m.comparedToPreviousMonth(protectionDashboardMonitoPreviousPeriodDeltaDays)}>
-                  <Icon sx={{fontSize: '15px !important'}} color="disabled">info</Icon>
-                </Tooltip>
+                {!hideIndicatorTooltip && (
+                  <Tooltip title={tooltip}>
+                    <Icon sx={{fontSize: '15px !important'}} color="disabled">info</Icon>
+                  </Tooltip>
+                )}
               </>
+            )}
+            {!!showValue && (
+              <Txt color="disabled" sx={{ml: .5, fontWeight: '400'}}>
+              <span style={{fontWeight: '400', fontSize}}>
+                &nbsp;{formatLargeNumber(value)}
+              </span>
+                {!!showBase && (
+                  <span style={{fontWeight: '400', fontSize: '1.2em'}}>/{formatLargeNumber(base)}</span>
+                )}
+                {/*<Txt color="disabled" sx={{fontSize: '1.4em', fontWeight: 'lighter'}}>)</Txt>*/}
+              </Txt>
             )}
           </Box>
         </Box>

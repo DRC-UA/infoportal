@@ -3,7 +3,6 @@ import {ChartBar} from '@/shared/charts/ChartBar'
 import {MapSvg} from '@/shared/maps/MapSvg'
 import React, {useState} from 'react'
 import {useI18n} from '@/core/i18n'
-import {DashboardPageProps} from './ProtectionDashboardMonito'
 import {Box, Icon, useTheme} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
@@ -12,31 +11,14 @@ import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Enum} from '@alexandreannic/ts-utils'
-import {makeSx} from 'mui-extension'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 
-const css = makeSx({
-  table: {
-    borderRadius: t => t.shape.borderRadius + 'px',
-    border: t => `1px solid ${t.palette.divider}`,
-    width: '100%',
-    '& > tr:not(:last-of-type) > td': {
-      borderBottom: t => `1px solid ${t.palette.divider}`,
-    },
-    '& td': {
-      padding: .5,
-    },
-    '& > tr': {}
-  },
-})
-
-export const ProtectionDashboardMonitoSample = ({
-  data,
-  computed
-}: DashboardPageProps) => {
+export const ProtectionDashboardMonitoSample = () => {
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   const theme = useTheme()
   const [ag, setAg] = useState<keyof (typeof Person.ageGroup)>('DRC')
@@ -47,26 +29,26 @@ export const ProtectionDashboardMonitoSample = ({
         <Div column>
           <Div sx={{alignItems: 'stretch'}}>
             <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
-              {formatLargeNumber(data.length)}
+              {formatLargeNumber(ctx.dataFiltered.length)}
             </SlideWidget>
             <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
-              {formatLargeNumber(computed.individualsCount)}
+              {formatLargeNumber(ctx.dataFlatFiltered.length)}
             </SlideWidget>
             <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
-              {(computed.individualsCount / data.length).toFixed(1)}
+              {(ctx.dataFlatFiltered.length / ctx.dataFiltered.length).toFixed(1)}
             </SlideWidget>
           </Div>
         </Div>
         <Div column>
           <Div sx={{alignItems: 'stretch'}}>
             <SlideWidget sx={{flex: 1}} icon="elderly" title={m.avgAge}>
-              <Lazy deps={[data]} fn={() => computed.flatData.map(_ => _.age).compact().sum() / computed.flatData.length}>
+              <Lazy deps={[ctx.dataFiltered]} fn={() => ctx.dataFlat.map(_ => _.age).compact().sum() / ctx.dataFlat.length}>
                 {_ => _.toFixed(1)}
               </Lazy>
             </SlideWidget>
             <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', pl: 2,}}>
-              <Lazy deps={[data]} fn={() => ChartHelperOld.percentage({
-                data: computed.flatData,
+              <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelperOld.percentage({
+                data: ctx.dataFlat,
                 value: _ => _.gender === 'Female'
               })}>
                 {_ => (
@@ -78,7 +60,7 @@ export const ProtectionDashboardMonitoSample = ({
               <ChartPieWidgetByKey
                 dense
                 title={m.uaCitizen}
-                data={data}
+                data={ctx.dataFiltered}
                 property="if_ukrainian_do_you_or_your_household_members_identify_as_member_of_a_minority_group"
                 filterBase={_ => _ !== 'unable_unwilling_to_answer'}
                 filter={_ => _ === 'no'}
@@ -94,7 +76,7 @@ export const ProtectionDashboardMonitoSample = ({
             </SlidePanel>
 
             {/*<SlideWidget sx={{flex: 1}} icon="my_location" title={m.coveredOblasts}>*/}
-            {/*  <Lazy deps={[data]} fn={() => data.distinct(_ => _.where_are_you_current_living_oblast).length}>*/}
+            {/*  <Lazy deps={[data]} fn={() => ctx.dataFiltered.distinct(_ => _.where_are_you_current_living_oblast).length}>*/}
             {/*    {_ => _}*/}
             {/*  </Lazy>*/}
             {/*</SlideWidget>*/}
@@ -104,7 +86,7 @@ export const ProtectionDashboardMonitoSample = ({
       <Div alignItems="flex-start" responsive>
         <Div column>
           <SlidePanel title={m.HHsLocation}>
-            <MapSvg data={computed.byCurrentOblast} sx={{mx: 1}} base={data.length}/>
+            <MapSvg data={ctx.byCurrentOblast} sx={{mx: 1}} base={ctx.dataFiltered.length}/>
           </SlidePanel>
           <SlidePanel title={m.ageGroup}>
             <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
@@ -122,7 +104,7 @@ export const ProtectionDashboardMonitoSample = ({
                 />
               </ScRadioGroup>
             </Box>
-            <Lazy deps={[ag, data]} fn={() => computed.ageGroup(Person.ageGroup[ag])}>
+            <Lazy deps={[ag, ctx.dataFiltered]} fn={() => ctx.ageGroup(Person.ageGroup[ag])}>
               {_ => agDisplay === 'chart' ? (
                 <ChartBarStacker data={_} height={250}/>
               ) : (
@@ -206,9 +188,9 @@ export const ProtectionDashboardMonitoSample = ({
         <Div column>
           <SlidePanel title={m.poc}>
             <Lazy
-              deps={[data]}
+              deps={[ctx.dataFiltered]}
               fn={() => chain(ChartHelperOld.single({
-                data: data.map(_ => _.do_you_identify_as_any_of_the_following).compact(),
+                data: ctx.dataFiltered.map(_ => _.do_you_identify_as_any_of_the_following).compact(),
               }))
                 .map(ChartHelperOld.sortBy.value)
                 .map(ChartHelperOld.setLabel(Protection_hhs3.options.do_you_identify_as_any_of_the_following))
@@ -218,7 +200,7 @@ export const ProtectionDashboardMonitoSample = ({
             </Lazy>
           </SlidePanel>
           <SlidePanel>
-            <Lazy deps={[data, computed.lastMonth]} fn={(d) => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(d) => ChartHelperOld.percentage({
               data: d
                 .map(_ => _.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household)
                 .compact()
@@ -228,7 +210,7 @@ export const ProtectionDashboardMonitoSample = ({
               {(_, last) => <ChartPieWidget sx={{mb: 2}} title={m.protHHS2.HHSwSN} value={_.value} base={_.base} evolution={_.percent - last.percent}/>}
             </Lazy>
             <ChartBarMultipleBy
-              data={data}
+              data={ctx.dataFiltered}
               by={_ => _.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household}
               filterValue={['no_specific_needs', 'unable_unwilling_to_answer', 'other_specify']}
               label={Protection_hhs3.options.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household}
@@ -236,7 +218,7 @@ export const ProtectionDashboardMonitoSample = ({
           </SlidePanel>
           <SlidePanel title={m.protHHS2.hhTypes}>
             <ChartBarSingleBy
-              data={data}
+              data={ctx.dataFiltered}
               by={_ => _.what_is_the_type_of_your_household}
               label={Protection_hhs3.options.what_is_the_type_of_your_household}
             />
@@ -244,7 +226,7 @@ export const ProtectionDashboardMonitoSample = ({
 
           {/*<SlidePanel title={m.protHHS2.ethnicMinorities}>*/}
           {/*<DashboardProtHHS2BarChart*/}
-          {/*  data={data}*/}
+          {/*  data={ctx.dataFiltered}*/}
           {/*  question="if_ukrainian_do_you_or_your_household_members_identify_as_member_of_a_minority_group"*/}
           {/*  filterValue={[*/}
           {/*    'no',*/}
