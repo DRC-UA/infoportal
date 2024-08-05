@@ -113,8 +113,9 @@ export class KoboMetaService {
       return params === undefined || Object.keys(params).length === 0
     },
     fn: async (params: KoboMetaParams.SearchFilter = {}) => {
-      this.log.info('Fetch Meta from database')
-      return await this.prisma.koboMeta.findMany({
+      const t0 = performance.now()
+      this.log.debug('Fetch Meta from database...')
+      const res = await this.prisma.koboMeta.findMany({
         include: {
           persons: true,
         },
@@ -126,6 +127,8 @@ export class KoboMetaService {
           date: 'desc',
         }
       }) as IKoboMeta[]
+      this.log.info(`Fetch Meta from database... ${res.length} fetched in ${duration(performance.now() - t0)}`)
+      return res
     }
   })
 
