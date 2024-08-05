@@ -9,7 +9,7 @@ import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 import {IpCache, IpCacheApp} from '@infoportal-common'
 import {duration} from '@alexandreannic/ts-utils'
 import * as winston from 'winston'
-import {format, level, Logger as WinstonLogger} from 'winston'
+import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
@@ -134,13 +134,14 @@ const startApp = async (conf: AppConf) => {
   init()
   // } else {
   start()
-  // process.on('uncaughtException', (err) => {
-  //   log.error('Uncaught Exception:', err)
-  //   // process.exit(1)
-  // })
-  // process.on('unhandledRejection', (reason, promise) => {
-  //   log.error('Unhandled Rejection at:', promise, 'reason:', reason)
-  // })
+  process.on('uncaughtException', (err) => {
+    log.error('Uncaught Exception:', err)
+    process.exit(1)
+  })
+  process.on('unhandledRejection', (reason, promise) => {
+    log.error('Unhandled Rejection at:', promise, 'reason:', reason)
+    process.exit(1)
+  })
 }
 
 startApp(appConf)

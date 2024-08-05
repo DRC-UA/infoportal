@@ -15,7 +15,7 @@ import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
 import {PromisePool} from '@supercharge/promise-pool'
 import Event = GlobalEvent.Event
 
-export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'koboId' | 'id' | 'uuid' | 'date' | 'updatedAt' | 'formId'> & {overrideDate?: Date}
+export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'koboId' | 'id' | 'uuid' | 'updatedAt' | 'formId' | 'date'> & {date?: Date}
 export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => [KoboId, Partial<MetaMapped<TTag>>] | undefined
 export type MetaMapperInsert<T extends Record<string, any> = any> = (_: T) => MetaMapped | MetaMapped[] | undefined
 
