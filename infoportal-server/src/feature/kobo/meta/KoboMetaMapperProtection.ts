@@ -316,7 +316,7 @@ export class KoboMetaMapperProtection {
       sdc: DrcProject['UKR-000226 SDC'],
       danida: DrcProject['UKR-000347 DANIDA'],
       uhf8: DrcProject['UKR-000363 UHF8'],
-    }, () => answer.project as DrcProject) : undefined
+    }, () => DrcProjectHelper.search(Protection_gbv.options.project[answer.project!] ?? answer.project)) : undefined
     return {
       office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
         chernihiv: DrcOffice.Chernihiv,
