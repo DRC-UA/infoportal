@@ -1,9 +1,9 @@
 import {Icon, IconProps, Tooltip} from '@mui/material'
-import React from 'react'
+import React, {ReactNode} from 'react'
 import {IpIconBtn, IpIconBtnProps} from '@/shared/IconBtn'
 
 export interface TableIconProps extends IconProps {
-  tooltip?: string
+  tooltip?: ReactNode
   children: string
 }
 
