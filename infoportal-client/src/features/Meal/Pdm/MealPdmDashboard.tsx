@@ -5,22 +5,22 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {KoboAnswerFlat, Meal_pdmStandardised, OblastIndex} from '@infoportal-common'
+import {KoboAnswerFlat, Meal_cashPdm, OblastIndex} from '@infoportal-common'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {useMealPdmContext} from '@/features/Meal/Pdm/MealPdmContext'
-import {UaMapBy} from '@/features/DrcUaMap/UaMapBy'
 import {appConfig} from '@/conf/AppConfig'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {Panel, PanelBody} from '@/shared/Panel'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 
 export interface DashboardPageProps {
   filters: Record<string, string[]>
-  data: Seq<KoboAnswerFlat<Meal_pdmStandardised.T>>
+  data: Seq<KoboAnswerFlat<Meal_cashPdm.T>>
 }
 
 const mapOblast = OblastIndex.koboOblastIndexIso
@@ -28,13 +28,13 @@ const mapOblast = OblastIndex.koboOblastIndexIso
 export const MealPdmDashboard = () => {
   const ctx = useMealPdmContext()
   const ctxSchema = useKoboSchemaContext()
-  const schema = ctxSchema.byName.meal_pdmStandardised.get!
+  const schema = ctxSchema.byName.meal_cashPdm.get!
   const langIndex = ctxSchema.langIndex
   const {m, formatDateTime, formatDate} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
 
   const filterShape = useMemo(() => {
-    return DataFilter.makeShape<KoboAnswerFlat<Meal_pdmStandardised.T>>({
+    return DataFilter.makeShape<KoboAnswerFlat<Meal_cashPdm.T>>({
       oblast: {
         icon: 'location_on',
         getOptions: () => schema.schemaHelper.getOptionsByQuestionName('ben_det_oblast').map(_ => ({value: _.name, label: _.label[langIndex]})),
@@ -47,11 +47,17 @@ export const MealPdmDashboard = () => {
         label: m.office,
         getValue: _ => _.office,
       },
+      projects: {
+        icon: appConfig.icons.sector,
+        getOptions: () => schema.schemaHelper.getOptionsByQuestionName('donor').map(_ => ({value: _.name, label: _.label[langIndex]})),
+        label: m.donor,
+        getValue: _ => _.donor
+      },
       pdmtype: {
         icon: appConfig.icons.project,
         getOptions: () => schema.schemaHelper.getOptionsByQuestionName('pdmtype').map(_ => ({value: _.name, label: _.label[langIndex]})),
-        label: m.activity,
-        getValue: _ => _.pdmtype,
+        label: m.mealMonitoringPdm.pdmType,
+        getValue: _ => (_.pdmtype && _.pdmtype.length > 0) ? _.pdmtype[0] : undefined,
       },
     })
   }, [schema])
@@ -90,50 +96,12 @@ export const MealPdmDashboard = () => {
         <>
           <Div responsive>
             <Div column sx={{maxHeight: '50%'}}>
-              <SlidePanel>
-                <UaMapBy
-                  fillBaseOn="value"
-                  data={data}
-                  getOblast={_ => mapOblast[_.ben_det_oblast!]}
-                  value={_ => true}
-                  base={_ => _.ben_det_oblast !== undefined}
-                />
-              </SlidePanel>
-              <SlidePanel>
-                <ChartPieWidgetBy title={m.mealMonitoringPdm.pdmType} filter={_ => _.pdmtype === 'carep'} data={data} sx={{mb: 1}}/>
-                <ChartBarSingleBy data={data} by={_ => _.pdmtype} label={Meal_pdmStandardised.options.pdmtype}/>
-              </SlidePanel>
-              <SlidePanel>
-                <ChartPieWidgetBy title={m.mealMonitoringPdm.officeResponsible} filter={_ => _.office === 'mykolaiv'} data={data} sx={{mb: 1}}/>
-                <ChartBarSingleBy data={data} by={_ => _.office} label={Meal_pdmStandardised.options.office}/>
-              </SlidePanel>
-              <SlidePanel>
-                <ChartPieWidgetBy title={m.mealMonitoringPdm.interview} filter={_ => _.type_interview === 'remote'} data={data} sx={{mb: 1}}/>
-                <ChartBarSingleBy data={data} by={_ => _.type_interview} label={Meal_pdmStandardised.options.type_interview}/>
-              </SlidePanel>
-              <Panel title={m.ageGroup}>
-                <PanelBody>
-                  <AgeGroupTable tableId="pdm-dashboard" persons={data.flatMap(_ => _.persons)} enableDisplacementStatusFilter enableOnlyPwdFilter/>
-                </PanelBody>
-              </Panel>
               <SlidePanel title={m.mealMonitoringPdm.feedback}>
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.satisfiedAmount}
                   data={data}
                   filter={_ => _.satisfied_cash_amount === 'yes' || _.satisfied_cash_amount === 'no'}
-                />
-                <ChartPieWidgetBy
-                  dense
-                  title={m.mealMonitoringPdm.assistanceEnough}
-                  data={data}
-                  filter={_ => _.assistance_enough === 'yes'}
-                />
-                <ChartPieWidgetBy
-                  dense
-                  title={m.mealMonitoringPdm.satisfiedProcess}
-                  data={data}
-                  filter={_ => _.rate_quality_assistance === 'rtvs' || _.rate_quality_assistance === 'rtds'}
                 />
                 <ChartPieWidgetBy
                   dense
@@ -149,31 +117,59 @@ export const MealPdmDashboard = () => {
                 />
                 <ChartPieWidgetBy
                   dense
+                  title={m.mealMonitoringPdm.satisfiedProcess}
+                  data={data}
+                  filter={_ => _.satisfied_process === 'ndyl' || _.satisfied_process === 'ndna'}
+                />
+                <ChartPieWidgetBy
+                  dense
+                  title={m.mealMonitoringPdm.correspond}
+                  data={data}
+                  filter={_ => _.amount_cash_received_correspond === 'yes'}
+                />
+                <ChartPieWidgetBy
+                  dense
                   title={m.mealMonitoringPdm.problems}
                   data={data}
                   filter={_ => _.experience_problems === 'yes'}
                 />
               </SlidePanel>
+              <Panel savableAsImg expendable title={m.location}>
+                <PanelBody>
+                <MapSvgByOblast
+                  sx={{maxWidth: 480, margin: 'auto'}}
+                  fillBaseOn="value"
+                  data={data}
+                  getOblast={_ => mapOblast[_.ben_det_oblast!]}
+                  value={_ => true}
+                  base={_ => _.ben_det_oblast !== undefined}
+                />
+                </PanelBody>
+              </Panel>
+              <Panel title={m.ageGroup}>
+                <PanelBody>
+                  <AgeGroupTable tableId="pdm-dashboard" persons={data.flatMap(_ => _.persons)} enableDisplacementStatusFilter enableOnlyPwdFilter/>
+                </PanelBody>
+              </Panel>
+              <SlidePanel title={m.mealMonitoringPdm.pdmType}>
+                <ChartBarMultipleBy data={data} by={_ => _.pdmtype} label={Meal_cashPdm.options.pdmtype}/>
+              </SlidePanel>
             </Div>
             <Div column sx={{maxHeight: '50%'}}>
-              <SlidePanel>
-                <ChartPieWidgetBy title={m.mealMonitoringPdm.stay} filter={_ => _.planning_staying_repaired === 'yes'} data={data} sx={{mb: 1}}/>
-                <ChartBarSingleBy data={data} by={_ => _.planning_staying_repaired} label={Meal_pdmStandardised.options.planning_staying_repaired}/>
+              <SlidePanel title={m.mealMonitoringPdm.betterInform}>
+                <ChartBarMultipleBy data={data} by={_ => _.better_inform_distribution} label={Meal_cashPdm.options.better_inform_distribution}/>
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.priorityNeeds}>
-                <ChartBarMultipleBy data={data} by={_ => _.needs_community_currently} label={Meal_pdmStandardised.options.needs_community_currently}/>
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.assistanceReceive}>
-                <ChartBarSingleBy data={data} by={_ => _.assistance_delivered} label={Meal_pdmStandardised.options.assistance_delivered}/>
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.assistancePrefer}>
-                <ChartBarSingleBy data={data} by={_ => _.receive_shelter_assistance} label={Meal_pdmStandardised.options.receive_shelter_assistance}/>
+              <SlidePanel title={m.project}>
+                <ChartBarSingleBy data={data} by={_ => _.donor} label={Meal_cashPdm.options.donor}/>
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.timeToTake}>
-                <ChartBarSingleBy data={data} by={_ => _.time_registered_assistance} label={Meal_pdmStandardised.options.time_registered_assistance}/>
+                <ChartBarSingleBy data={data} by={_ => _.time_registered_assistance} label={Meal_cashPdm.options.time_registered_assistance}/>
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.betterInform}>
-                <ChartBarSingleBy data={data} by={_ => _.better_inform_distribution} label={Meal_pdmStandardised.options.better_inform_distribution}/>
+              <SlidePanel title={m.mealMonitoringPdm.assistanceReceive}>
+                <ChartBarSingleBy data={data} by={_ => _.assistance_delivered} label={Meal_cashPdm.options.assistance_delivered}/>
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.priorityNeeds}>
+                <ChartBarMultipleBy data={data} by={_ => _.needs_community_currently} label={Meal_cashPdm.options.needs_community_currently}/>
               </SlidePanel>
             </Div>
           </Div>

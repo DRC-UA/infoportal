@@ -103,8 +103,8 @@ export class KoboAnswerSdk {
         return Promise.resolve({start: new Date(2023, 5, 15), end: startOfDay(new Date())})
       case KoboIndex.byName('safety_incident').id:
         return Promise.resolve({start: new Date(2023, 8, 19), end: startOfDay(new Date())})
-      case KoboIndex.byName('meal_pdmStandardised').id:
-        return Promise.resolve({start: new Date(2023, 8, 12), end: startOfDay(new Date())})
+      case KoboIndex.byName('meal_cashPdm').id:
+        return Promise.resolve({start: new Date(2024, 4, 9), end: startOfDay(new Date())})
       default:
         throw new Error('To implement')
     }

@@ -26,7 +26,7 @@ const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
   'meal_verificationEcrec',
   'meal_visitMonitoring',
-  'meal_pdmStandardised'
+  'meal_cashPdm'
 ]
 
 export const mealIndex = {
@@ -66,7 +66,7 @@ const MealSidebar = ({
         <SidebarSection title={m._meal.visitMonitoring}>
           <NavLink to={path(mealIndex.siteMap.visit._)}>
             {({isActive, isPending}) => (
-              <SidebarItem icon="assignment_turned_in" active={isActive}>{m.dashboard}</SidebarItem>
+              <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>{m.dashboard}</SidebarItem>
             )}
           </NavLink>
           <a href="https://drcngo.sharepoint.com/:x:/s/UKRPortal/EUYPiMkl4n1GqaWinv2OgUoByXCmeVtmsgIINesDzZo66w?e=zrOdMh" target="_blank">
@@ -93,10 +93,10 @@ const MealSidebar = ({
         <SidebarSection title={m._meal.pdm}>
           <NavLink to={path(mealIndex.siteMap.pdm._)}>
             {({isActive, isPending}) => (
-              <SidebarItem icon="assignment_turned_in" active={isActive}>{m.dashboard}</SidebarItem>
+              <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>{m.dashboard}</SidebarItem>
             )}
           </NavLink>
-          <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_pdmStandardised'))} name="meal_pdmStandardised"/>
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_cashPdm'))} name="meal_cashPdm"/>
         </SidebarSection>
       </SidebarBody>
     </Sidebar>
@@ -114,7 +114,7 @@ export const Meal = () => {
           return _.params?.koboFormId === KoboIndex.byName('bn_re').id ||
             _.params?.koboFormId === KoboIndex.byName('ecrec_cashRegistration').id ||
             _.params?.koboFormId === KoboIndex.byName('meal_visitMonitoring').id ||
-            _.params?.koboFormId === KoboIndex.byName('meal_pdmStandardised').id
+            _.params?.koboFormId === KoboIndex.byName('meal_cashPdm').id
         })
     }
   }, [accesses, session])

@@ -6,9 +6,9 @@ import {MealPdmProvider} from '@/features/Meal/Pdm/MealPdmContext'
 export const MealPdm = () => {
   const ctx = useKoboSchemaContext()
   useEffect(() => {
-    ctx.fetchByName('meal_pdmStandardised')
+    ctx.fetchByName('meal_cashPdm')
   }, [])
-  if (ctx.byName.meal_pdmStandardised?.get) {
+  if (ctx.byName.meal_cashPdm?.get) {
     return (
       <MealPdmProvider>
         <Outlet/>

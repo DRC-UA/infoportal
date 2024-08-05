@@ -457,6 +457,7 @@ export const en = Object.freeze({
       satisfiedAmount: 'Satisfied with cash amount',
       feedback: 'Feedback',
       satisfiedProcess: 'Satisfied with process',
+      correspond: 'Cash received correspond to the amount was told',
       timeToTake: 'How much time did it take from the registration till receiving',
       provideInfo: 'Provided all needed info',
       assistanceRegister: 'Registered',
@@ -464,9 +465,11 @@ export const en = Object.freeze({
       betterInform: 'Steps for improvement',
       assistanceEnough: 'Enough to cover the expenditures',
       assistance: 'Who assisted',
-      stay: 'Plan to stay in a repaired accommodation for a long time',
+      stay: 'Have access to adequate housing after receiving the cash assistance',
       treated: 'Treated with respect',
-      interview: 'Type of interview'
+      interview: 'Type of interview',
+      spentCash: 'Spent the cash assistance received yet',
+      whoAssisted: 'Who assisted with the house repairs',
     },
     _mealVerif: {
       numericToleranceMargin: 'Tolerance margin',
