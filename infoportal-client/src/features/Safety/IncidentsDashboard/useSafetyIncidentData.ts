@@ -16,7 +16,7 @@ enum AlertType {
   red = 'red',
 }
 
-const previousPeriodDeltaDays = 90
+export const previousPeriodDeltaDays = 90
 
 export type UseSafetyIncidentData = ReturnType<typeof useSafetyIncidentData>
 

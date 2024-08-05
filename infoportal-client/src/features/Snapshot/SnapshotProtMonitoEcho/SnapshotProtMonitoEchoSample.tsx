@@ -16,9 +16,9 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 
 export const snapshotProtMonitoEchoLogo = (
   <>
-    <UsaidLogo sx={{mr: 1.5}}/>
-    <UhfLogo sx={{mr: 1.5}}/>
-    <EULogo sx={{mr: 1.5}}/>
+    <UsaidLogo sx={{mr: 2.5}}/>
+    <UhfLogo sx={{mr: 2.5}}/>
+    <EULogo sx={{mr: 2.5}}/>
     <DRCLogo/>
   </>
 )
@@ -28,6 +28,7 @@ export const SnapshotProtMonitoEchoSample = () => {
   const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   const registrationOblasts = Obj.filter(ctx.byCurrentOblast, (k, v) => v.value > 5)
+  console.log(ctx.dataPreviousPeriod)
   return (
     <PdfSlide>
       <SnapshotHeader period={ctx.period} logo={snapshotProtMonitoEchoLogo}/>
@@ -125,8 +126,11 @@ export const SnapshotProtMonitoEchoSample = () => {
                 </SlidePanel>
                 <SlidePanel>
                   <SlidePanelTitle>{m.displacementStatus}</SlidePanelTitle>
-                  <ChartBarSingleBy data={ctx.dataFiltered} by={_ => _.do_you_identify_as_any_of_the_following}
-                                    label={Protection_hhs3.options.do_you_identify_as_any_of_the_following}/>
+                  <ChartBarSingleBy
+                    data={ctx.dataFiltered}
+                    by={_ => _.do_you_identify_as_any_of_the_following}
+                    label={Protection_hhs3.options.do_you_identify_as_any_of_the_following}
+                  />
                 </SlidePanel>
               </Div>
             </Div>

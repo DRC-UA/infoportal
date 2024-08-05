@@ -10,7 +10,6 @@ import {Messages} from '@/core/i18n/localization/en'
 import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {subDays} from 'date-fns'
 
 export namespace ProtectionMonito {
   export type HookParams = ReturnType<typeof useData>
@@ -89,25 +88,27 @@ export namespace ProtectionMonito {
     })
   }
 
+  type UseData = {
+    data?: Seq<InferTypedAnswer<'protection_hhs3'>>
+    filterDefault?: Filters,
+    periodDefault?: Partial<Period>
+    periodCompare?: (p: Period) => Period | undefined
+  }
+
   const useData = ({
     data = seq(),
     periodDefault = {},
     periodCompare,
-    defaultFilter = {},
-  }: {
-    defaultFilter?: Filters,
-    data?: Seq<InferTypedAnswer<'protection_hhs3'>>
-    periodDefault?: Partial<Period>
-    periodCompare?: (p: Period) => Period | undefined
-  }) => {
+    filterDefault = {},
+  }: UseData) => {
     const {m} = useI18n()
-    const [filterOptions, setFilterOptions] = useState<Filters>(defaultFilter)
+    const [filterOptions, setFilterOptions] = useState<Filters>(filterDefault)
     const [period, setPeriod] = useState<Partial<Period>>(periodDefault)
     const filterShape = getFilterShape(m)
 
     useEffect(() => {
       if (!period.start && !period.end) setPeriod(periodDefault)
-    }, [defaultFilter])
+    }, [filterDefault])
 
     const ageGroup = useCallback((ageGroup: Person.AgeGroup, hideOther?: boolean) => {
       const gb = Person.groupByGenderAndGroup(ageGroup)(data?.flatMap(_ => _.persons)!)
@@ -143,12 +144,12 @@ export namespace ProtectionMonito {
       const dataPreviousPeriod = map(period.start, period.end, periodCompare, (start, end, compareFn) => {
         const compare = compareFn({start, end})
         if (compare && compare.start.getDate() < compare.end.getDate())
-          return dataFiltered.filter(_ => PeriodHelper.isDateIn(compare, _.date))
+          return data.filter(_ => PeriodHelper.isDateIn(compare, _.date))
       }) ?? seq()
       const dataFlat = data.flatMap(_ => _.persons.map(p => ({..._, ...p})))
       const dataFlatFiltered = dataFiltered.flatMap(_ => _.persons.map(p => ({..._, ...p})))
       const dataFlatPreviousPeriod = dataPreviousPeriod.flatMap(_ => _.persons.map(p => ({..._, ...p})))
-      const dataIdps = data.filter(_ => _.do_you_identify_as_any_of_the_following === 'idp')
+      const dataIdps = dataFiltered.filter(_ => _.do_you_identify_as_any_of_the_following === 'idp')
 
       const categoryOblasts = (
         column: 'where_are_you_current_living_oblast' | 'what_is_your_area_of_origin_oblast' = 'where_are_you_current_living_oblast'
@@ -160,13 +161,13 @@ export namespace ProtectionMonito {
 
       const byCurrentOblast = ChartHelper.byCategory({
         categories: categoryOblasts('where_are_you_current_living_oblast'),
-        data: data,
+        data: dataFiltered,
         filter: _ => true,
       }).get()
 
       const byOriginOblast = ChartHelper.byCategory({
         categories: categoryOblasts('what_is_your_area_of_origin_oblast'),
-        data: data,
+        data: dataFiltered,
         filter: _ => true,
       }).get()
 
@@ -188,11 +189,11 @@ export namespace ProtectionMonito {
         period, setPeriod,
         periodDefault,
         periodCompare,
-        data: dataFiltered,
+        data,
         dataFiltered,
         dataPreviousPeriod,
         dataFlat,
-        dataByGender: dataFlat.groupBy(_ => _.gender ?? 'Other'),
+        dataByGender: dataFlat.groupByAndApply(_ => _.gender ?? Person.Gender.Other, _ => _.length),
         dataIdps: dataIdps,
         categoryOblasts,
         ageGroup,
@@ -211,12 +212,11 @@ export namespace ProtectionMonito {
   export const useContext = () => reactUseContext<ProviderParams>(Context)
 
   export const Provider = ({
-    defaultFilter,
-    period,
+    filterDefault,
+    periodDefault,
+    periodCompare,
     children,
-  }: {
-    defaultFilter?: Filters
-    period?: Period,
+  }: Omit<UseData, 'data'> & {
     children: ReactNode
   }) => {
     const {api} = useAppSettings()
@@ -225,16 +225,16 @@ export namespace ProtectionMonito {
 
     useEffect(() => {
       fetcherData.fetch()
-      if (!period) fetcherPeriod.fetch()
     }, [])
+    useEffect(() => {
+      if (!periodDefault) fetcherPeriod.fetch()
+    }, [periodDefault])
 
     const ctx = useData({
-      defaultFilter,
+      filterDefault,
+      periodCompare,
+      periodDefault: periodDefault ?? fetcherPeriod.get,
       data: seq(fetcherData.get?.data),
-      periodDefault: fetcherPeriod.get,
-      periodCompare: p => {
-        return {start: p.start, end: subDays(p.end, 90)}
-      },
     })
 
     return (

@@ -20,7 +20,7 @@ export const snapshotProtMonitoNn2Logo = (
 export const SnapshotProtMonitoNN2 = () => {
   return (
     <ProtectionMonito.Provider
-      defaultFilter={{
+      filterDefault={{
         oblast: [OblastIndex.byName('Mykolaivska').iso]
       }}
       period={{

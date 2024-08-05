@@ -17,6 +17,8 @@ import {ProtectionDashboardMonitoViolence} from './ProtectionDashboardMonitoViol
 import {ProtectionDashboardMonitoDisability} from '@/features/Protection/DashboardMonito/ProtectionDashboardMonitoDisability'
 import {DashboardFilterOptions} from '@/shared/DashboardLayout/DashboardFilterOptions'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
+import {subDays} from 'date-fns'
+import { previousPeriodDeltaDays } from '@/features/Safety/IncidentsDashboard/useSafetyIncidentData'
 
 const ProtectionDashboardMonitoPN: any = lazy(() => import('./ProtectionDashboardMonitoPN')
   .then(module => ({
@@ -25,7 +27,10 @@ const ProtectionDashboardMonitoPN: any = lazy(() => import('./ProtectionDashboar
 
 export const ProtectionDashboardMonito = () => {
   return (
-    <ProtectionMonito.Provider>
+    <ProtectionMonito.Provider periodCompare={p => ({
+      start: p.start,
+      end: subDays(p.end, previousPeriodDeltaDays)
+    })}>
       <ProtectionDashboardMonitoWCtx/>
     </ProtectionMonito.Provider>
   )

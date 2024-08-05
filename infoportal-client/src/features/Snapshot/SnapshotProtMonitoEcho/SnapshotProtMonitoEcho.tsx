@@ -32,10 +32,16 @@ export const snapShotDefaultPieIndicatorsProps: Partial<Pick<ChartPieIndicatorPr
 export const SnapshotProtMonitoEcho = () => {
   return (
     <>
-      <ProtectionMonito.Provider period={{
-        start: startOfMonth(subMonths(new Date(), 1)),
-        end: endOfMonth(subMonths(new Date(), 1)),
-      }}>
+      <ProtectionMonito.Provider
+        periodDefault={{
+          start: startOfMonth(subMonths(new Date(), 1)),
+          end: endOfMonth(subMonths(new Date(), 1)),
+        }}
+        periodCompare={p => ({
+          start: subMonths(p.start, 1),
+          end: subMonths(p.end, 1),
+        })}
+      >
         <_SnapshotProtMonitoring/>
       </ProtectionMonito.Provider>
     </>

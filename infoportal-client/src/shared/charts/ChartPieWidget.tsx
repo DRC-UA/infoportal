@@ -7,6 +7,7 @@ import {PanelProps} from '../Panel/Panel'
 import {useI18n} from '@/core/i18n'
 import {LightTooltip, TooltipRow} from '@/shared/LightTooltip'
 import {toPercent} from '@infoportal-common'
+import { previousPeriodDeltaDays } from '@/features/Safety/IncidentsDashboard/useSafetyIncidentData'
 
 export interface ChartPieIndicatorProps extends Omit<PanelProps, 'title'> {
   fractionDigits?: number
@@ -36,7 +37,7 @@ export const ChartPieWidget = ({
   showBase,
   base,
   hideIndicatorTooltip,
-  tooltip,
+  tooltip = `Compare to ${previousPeriodDeltaDays} days ago`,
   fractionDigits = 0,
   sx,
   color,

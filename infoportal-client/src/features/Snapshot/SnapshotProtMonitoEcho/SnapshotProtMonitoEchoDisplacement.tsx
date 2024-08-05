@@ -1,19 +1,23 @@
 import React from 'react'
-import {Box, useTheme} from '@mui/material'
+import {Box, Icon, useTheme} from '@mui/material'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {MapSvg} from '@/shared/maps/MapSvg'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
-import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
+import {snapshotColors, snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Protection_hhs3} from '@infoportal-common'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
+import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
+import {subMonths} from 'date-fns'
+import {Txt} from 'mui-extension'
+import {format} from 'date-fns-tz'
 
 export const SnapshotProtMonitoEchoDisplacement = () => {
   const ctx = ProtectionMonito.useContext()
-  const {formatLargeNumber, m} = useI18n()
+  const {formatLargeNumber, formatDate, m} = useI18n()
   const t = useTheme()
   return (
     <PdfSlide>
@@ -28,6 +32,18 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
               consider returning to their areas of origin or relocating to rural areas where rental costs are lower.
             </SlideTxt>
 
+            <SlidePanel>
+              <ChartPieWidgetBy
+                title={m.idps}
+                data={ctx.dataFiltered}
+                filter={_ => _.do_you_identify_as_any_of_the_following === 'idp'}
+                showValue
+                showBase
+                compare={{before: ctx.dataPreviousPeriod, now: ctx.dataFiltered}}
+                {...snapShotDefaultPieIndicatorsProps}
+                hideIndicatorTooltip={false}
+              />
+            </SlidePanel>
             <SlidePanel>
               <SlidePanelTitle>{m.intentions}</SlidePanelTitle>
               <ChartBarSingleBy
@@ -59,6 +75,16 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
                 }}
               />
             </SlidePanel>
+
+            {ctx.period.start && ctx.period.end && (
+              <Txt color="disabled">
+                <Icon sx={{mr: 1, fontSize: '15px !important'}} color="disabled">info</Icon>
+                {'Compare to previous Snapshot for the period from '}
+                {format(subMonths(ctx.period.start, 1), 'd MMMM yyyy')}
+                {' to '}
+                {format(subMonths(ctx.period.end, 1), 'dd MMMM yyyy')}
+              </Txt>
+            )}
           </Div>
 
           <Div column>
@@ -67,8 +93,8 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
               <SlidePanelTitle>{m.idpPopulationByOblast}</SlidePanelTitle>
               <Box sx={{display: 'flex', alignItems: 'center'}}>
                 <MapSvg sx={{flex: 1, mr: 1,}} data={ctx.idpsByOriginOblast} base={ctx.dataIdps.length} title={m.originOblast}/>
+                <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                 {/* <Box sx={{display: 'flex', flexDirection: 'column'}}>
-                  <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                 </Box> */}
@@ -94,7 +120,7 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
               />
             </SlidePanel>
 
-            <SlidePanel sx={{flex: 1}} BodyProps={{sx: {paddingBottom: t => t.spacing(.5) + ' !important'}}}>
+            <SlidePanel sx={{flex: 1}}>
               <SlidePanelTitle>{m.protHHS2.factorToHelpIntegration}</SlidePanelTitle>
               <ChartBarMultipleBy
                 data={ctx.dataIdps}
