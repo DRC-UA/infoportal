@@ -1,11 +1,11 @@
 import {ChartPieIndicatorProps, ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import * as React from 'react'
-import {useMemo} from 'react'
+import {ReactNode, useMemo} from 'react'
 import {Seq} from '@alexandreannic/ts-utils'
 
 export type ChartPieWidgetProps<T> = {
   compare?: {before: Seq<T>, now?: Seq<T>}
-  title?: string
+  title?: ReactNode
   data: Seq<T>
   showValue?: boolean
   showBase?: boolean

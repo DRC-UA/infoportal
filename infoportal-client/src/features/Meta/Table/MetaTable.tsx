@@ -154,8 +154,8 @@ export const MetaTable = () => {
         id: 'project',
         type: 'select_multiple',
         head: m.project,
-        options: () => DatatableUtils.buildOptionByEnum(DrcProject),
-        renderQuick: _ => _.project ?? [],
+        options: () => [...DatatableUtils.buildOptionByEnum(DrcProject), DatatableUtils.blankOption],
+        renderQuick: _ => _.project,
       },
       {
         id: 'raion',

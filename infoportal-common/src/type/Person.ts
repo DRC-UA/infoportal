@@ -102,10 +102,11 @@ export namespace Person {
   // TODO Can improve perf if needed
   export const groupByGenderAndGroup = <AG extends AgeGroup>(
     ag: AG = Person.ageGroup.BHA as unknown as AG,
+    skipOther?: boolean
   ) => (
     data: Person[]
   ): Record<KeyOf<AG>, Record<Gender, number>> => {
-    const res = seq(data).groupBy(_ => _.gender ?? Gender.Other)
+    const res = seq(skipOther ? data.filter(_ => [Gender.Female, Gender.Male].includes(_.gender!)) : data).groupBy(_ => _.gender ?? Gender.Other)
     // const order = [
     //   Person.Gender.Female,
     //   Person.Gender.Male,

@@ -31,6 +31,7 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
   const {m} = useI18n()
   const [periodCommit, setPeriodCommit] = useState<Partial<Period>>({})
   const [period, setPeriod] = useState<Partial<Period>>({})
+  const [periodCompare, setPeriodCompare] = useState<Period | undefined>()
 
   const shape = useMemo(() => {
     return DataFilter.makeShape<IKoboMeta>({
@@ -63,8 +64,8 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
         multiple: true,
         icon: appConfig.icons.project,
         label: m.project,
-        getValue: _ => _.project,
-        getOptions: () => DataFilter.buildOptions(data.flatMap(_ => _.project!).distinct(_ => _).sort())
+        getValue: _ => _.project ?? DataFilter.blank,
+        getOptions: () => DataFilter.buildOptions(data.flatMap(_ => _.project!).distinct(_ => _).sort(), true),
       },
       form: {
         icon: appConfig.icons.koboForm,

@@ -4,7 +4,7 @@ import {Box, Icon} from '@mui/material'
 import {Txt} from 'mui-extension'
 import {Period} from '@infoportal-common'
 
-const periodToString = (period: Partial<Period>) => {
+export const periodToString = (period: Partial<Period>) => {
   return {
     start: period.start ? format(period.start, 'LLLL yyyy') : undefined,
     end: period.end ? format(period.end, 'LLLL yyyy') : undefined,

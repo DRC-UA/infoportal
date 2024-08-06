@@ -16,8 +16,8 @@ export const commonLegendProps = {
 
 export const ChartBarStacker = ({
   data,
-  height,
-  width,
+  height: _height,
+  width: _width,
   sx,
   colors = chartConfig.defaultColors,
   ...props
@@ -29,8 +29,8 @@ export const ChartBarStacker = ({
 } & BoxProps) => {
   const theme = useTheme()
   const {key, ...first} = data[0] ?? {key: undefined}
-  height = height ?? width ?? 340
-  width = width ?? '100%'
+  const height = _height ?? _width ?? 340
+  const width = _width ?? '100%'
   return (
     <Box sx={{position: 'relative', height, width, ...sx}} {...props}>
       <ResponsiveContainer width="100%" height="100%">

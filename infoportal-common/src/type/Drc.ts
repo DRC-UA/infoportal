@@ -151,6 +151,34 @@ export enum DrcDonor {
   HoffmansAndHusmans = 'HoffmansAndHusmans',
 }
 
+export const drcDonorTranlate: Record<DrcDonor, string> = {
+  PFRU: 'PFRU',
+  GFFO: 'GFFO',
+  DMFA: 'DMFA',
+  BHA: 'BHA',
+  ECHO: 'ECHO',
+  SDC: 'SDC',
+  FCDO: 'FCDO',
+  OKF: 'OKF',
+  PSPU: 'PSPU',
+  PoolFunds: 'Pooled Funds',
+  FINM: 'FINM',
+  FREM: 'FREM',
+  EUIC: 'EUIC',
+  PMRA: 'PMRA',
+  PMKA: 'PMKA',
+  SIDA: 'SIDA',
+  UHF: 'UHF',
+  UNHC: 'UNHC',
+  DANI: 'Danida',
+  DUT: 'DUT',
+  NovoNordisk: 'Novo Nordisk',
+  SDCS: 'SDCS',
+  MOFA: 'MOFA',
+  AugustinusFonden: 'Augustinus Fonden',
+  HoffmansAndHusmans: 'Hoffmans & Husmans',
+}
+
 export enum DrcProject {
   'UKR-000226 SDC' = 'UKR-000226 SDC',
   'UKR-000230 PM WRA' = 'UKR-000230 PM WRA',

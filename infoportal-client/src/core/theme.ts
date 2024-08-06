@@ -82,6 +82,7 @@ export type AppThemeParams = {
   backgroundDefault?: string
   cardElevation?: number
   dark?: boolean
+  spacing?: number
 }
 
 export const defaultAppThemeParams = {
@@ -101,6 +102,7 @@ export const muiTheme = ({
   backgroundPaper,
   backgroundDefault,
   cardElevation,
+  spacing = defaultSpacing,
   fontSize = 14,
 }: AppThemeParams = {}): Theme => {
   const colorOverOpaque = dark ? '#070707' : '#fafafa'
@@ -118,7 +120,7 @@ export const muiTheme = ({
     dark: darken('#1a73e8', 0.3),
   }
   const baseTheme = createTheme({
-    spacing: defaultSpacing,
+    spacing,
     palette: {
       action: {
         focus: alpha(mainColor, .1),

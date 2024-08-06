@@ -15,9 +15,11 @@ const disabilitiesOptions = Obj.values(WgDisability)
 export const AgeGroupTable = ({
   tableId,
   persons,
+  hideHeader,
   enableDisplacementStatusFilter,
   ...sx
 }: {
+  hideHeader?: boolean
   enableDisplacementStatusFilter?: boolean
   tableId: string
   persons?: PersonDetails[]
@@ -44,7 +46,7 @@ export const AgeGroupTable = ({
         id={tableId}
         className="ip-border"
         hidePagination
-        header={
+        header={hideHeader ? null :
           <>
             <IpSelectSingle label={m.ageGroup} sx={{maxWidth: 100}} options={Person.ageGroups} hideNullOption onChange={setTableAgeGroup} value={tableAgeGroup}/>
             {enableDisplacementStatusFilter && (

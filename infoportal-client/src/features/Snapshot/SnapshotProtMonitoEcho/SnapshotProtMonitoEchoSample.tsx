@@ -28,7 +28,6 @@ export const SnapshotProtMonitoEchoSample = () => {
   const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   const registrationOblasts = Obj.filter(ctx.byCurrentOblast, (k, v) => v.value > 5)
-  console.log(ctx.dataPreviousPeriod)
   return (
     <PdfSlide>
       <SnapshotHeader period={ctx.period} logo={snapshotProtMonitoEchoLogo}/>
