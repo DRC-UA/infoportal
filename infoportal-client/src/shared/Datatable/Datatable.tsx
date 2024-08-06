@@ -54,19 +54,24 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
             }
           }
         }
-      } else if (DatatableColumn.isInner(col)) {
-        const render = col.render
-        col.render = (_: T) => {
-          const rendered = render(_)
-          if (col.type === 'select_multiple' && (rendered.value === undefined || rendered.value === null || (rendered.value as any)?.length === 0))
-            rendered.value = [DatatableUtils.blank]
-          else if (rendered.value === undefined || rendered.value === null)
-            rendered.value = DatatableUtils.blank
-          if (!Object.hasOwn(rendered, 'option')) rendered.option = rendered.label
-          return rendered as any
-        }
       }
-      return col as DatatableColumn.InnerProps<T>
+      return col as unknown as DatatableColumn.InnerProps<T>
+    }).map(col => {
+      const render = col.render
+      col.render = (_: T) => {
+        const rendered = render(_)
+        if (col.type === 'select_multiple') {
+          if (!Array.isArray(rendered.value)) {
+            rendered.value = [rendered.value as string]
+          }
+          if (rendered.value.length === 0) rendered.value = [DatatableUtils.blank]
+          rendered.value.map(_ => _ ?? DatatableUtils.blank)
+        } else if (rendered.value === undefined || rendered.value === null)
+          rendered.value = DatatableUtils.blank
+        if (!Object.hasOwn(rendered, 'option')) rendered.option = rendered.label
+        return rendered as any
+      }
+      return col
     })
   }, [columns])
 
