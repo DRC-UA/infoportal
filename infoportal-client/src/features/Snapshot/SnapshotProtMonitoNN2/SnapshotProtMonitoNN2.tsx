@@ -23,7 +23,7 @@ export const SnapshotProtMonitoNN2 = () => {
       filterDefault={{
         oblast: [OblastIndex.byName('Mykolaivska').iso]
       }}
-      period={{
+      periodDefault={{
         start: startOfMonth(new Date(2024, 1, 1)),
         end: endOfMonth(new Date(2024, 2, 31)),
       }}
