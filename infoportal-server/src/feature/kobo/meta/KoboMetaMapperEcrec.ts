@@ -85,7 +85,7 @@ export class KoboMetaMapperEcrec {
       : undefined
 
     return KoboMetaMapper.make({
-      overrideDate: row.submissionTime,
+      date: row.submissionTime,
       oblast: oblast.name,
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       personsCount: safeNumber(answer.ben_det_hh_size),

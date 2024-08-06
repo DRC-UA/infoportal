@@ -1,7 +1,6 @@
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
-import {DashboardPageProps} from './ProtectionDashboardMonito'
 import {Lazy} from '@/shared/Lazy'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {forceArrayStringInference, Person, Protection_hhs3} from '@infoportal-common'
@@ -9,11 +8,10 @@ import {Enum, seq, Seq} from '@alexandreannic/ts-utils'
 import {Checkbox} from '@mui/material'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartHelper} from '@/shared/charts/chartHelper'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 
-export const ProtectionDashboardMonitoViolence = ({
-  data,
-  computed,
-}: DashboardPageProps) => {
+export const ProtectionDashboardMonitoViolence = () => {
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
 
   const [category, setCategory] = useState({
@@ -43,7 +41,7 @@ export const ProtectionDashboardMonitoViolence = ({
       when: seq() as Seq<Protection_hhs3.T['when_did_the_incidents_occur_has_any_adult_male_member_experienced_violence']>,
       who: seq() as Seq<Protection_hhs3.T['who_were_the_perpetrators_of_the_incident_has_any_adult_male_member_experienced_violence']>,
     }
-    data.forEach(_ => {
+    ctx.dataFiltered.forEach(_ => {
       res.type.push(...[
         ...category.has_any_adult_male_member_experienced_violence ? [_.what_type_of_incidents_took_place_has_any_adult_male_member_experienced_violence] : [],
         ...category.has_any_adult_female_member_experienced_violence ? [_.what_type_of_incidents_took_place_has_any_adult_female_member_experienced_violence] : [],
@@ -67,11 +65,11 @@ export const ProtectionDashboardMonitoViolence = ({
       ])
     })
     return res
-  }, [data, category])
+  }, [ctx.dataFiltered, category])
   return (
     <Div responsive>
       <Div column>
-        <Lazy deps={[data, category]} fn={() => {
+        <Lazy deps={[ctx.dataFiltered, category]} fn={() => {
           const questions = forceArrayStringInference([
             'has_any_adult_male_member_experienced_violence',
             'has_any_adult_female_member_experienced_violence',
@@ -84,7 +82,7 @@ export const ProtectionDashboardMonitoViolence = ({
             res[q] = {value: 0, base: 0}
           })
           const total = {value: 0, base: 0,}
-          data.forEach(row => {
+          ctx.dataFiltered.forEach(row => {
             row.persons.forEach(_ => {
               if (_.age) {
                 if (_.gender === Person.Gender.Male) {
@@ -157,7 +155,7 @@ export const ProtectionDashboardMonitoViolence = ({
         </Lazy>
         <SlidePanel title={m.majorStressFactors}>
           <ChartBarMultipleBy
-            data={data}
+            data={ctx.dataFiltered}
             filterValue={['unable_unwilling_to_answer']}
             by={_ => _.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}
             label={Protection_hhs3.options.what_do_you_think_feel_are_the_major_stress_factors_for_you_and_your_household_members}

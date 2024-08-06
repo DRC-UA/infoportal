@@ -1,6 +1,5 @@
 import React from 'react'
-import {Box, useTheme} from '@mui/material'
-import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
+import {Box, Icon, useTheme} from '@mui/material'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {MapSvg} from '@/shared/maps/MapSvg'
@@ -10,10 +9,11 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Protection_hhs3} from '@infoportal-common'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 
 export const SnapshotProtMonitoEchoDisplacement = () => {
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
-  const {formatLargeNumber, m} = useI18n()
+  const ctx = ProtectionMonito.useContext()
+  const {formatLargeNumber, formatDate, m} = useI18n()
   const t = useTheme()
   return (
     <PdfSlide>
@@ -22,14 +22,16 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
         <Div>
           <Div column>
             <SlideTxt sx={{mb: .5}} block>
-            Intentions to return home remain primarily influenced by improved security and cessation of hostilities. However, barriers such as damaged housing, lack of employment, and mined agricultural land deter returns. 
-            The discontinuation of IDP allowances, combined with rising living expenses, has heightened concerns about financial instability and increasingly pressured IDPs to consider returning to their areas of origin or relocating to rural areas where rental costs are lower.
+              Intentions to return home remain primarily influenced by improved security and cessation of hostilities. However, barriers such as damaged housing, lack of
+              employment, and mined agricultural land deter returns.
+              The discontinuation of IDP allowances, combined with rising living expenses, has heightened concerns about financial instability and increasingly pressured IDPs to
+              consider returning to their areas of origin or relocating to rural areas where rental costs are lower.
             </SlideTxt>
 
             <SlidePanel>
               <SlidePanelTitle>{m.intentions}</SlidePanelTitle>
               <ChartBarSingleBy
-                data={computed.idps}
+                data={ctx.dataIdps}
                 by={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence}
                 filter={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence !== 'unable_unwilling_to_answer'}
                 label={{
@@ -43,7 +45,7 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
             <SlidePanel sx={{flex: 1}}>
               <SlidePanelTitle>{m.protHHS2.factorToReturn}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={computed.idps}
+                data={ctx.dataIdps}
                 filterValue={['unable_unwilling_to_answer']}
                 by={_ => _.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin}
                 label={{
@@ -64,13 +66,13 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
             <SlidePanel BodyProps={{sx: {paddingBottom: t => t.spacing(.25) + ' !important'}}}>
               <SlidePanelTitle>{m.idpPopulationByOblast}</SlidePanelTitle>
               <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <MapSvg sx={{flex: 1, mr: 1,}} data={computed.idpsByOriginOblast} base={computed.idps.length} title={m.originOblast}/>
+                <MapSvg sx={{flex: 1, mr: 1,}} data={ctx.idpsByOriginOblast} base={ctx.dataIdps.length} title={m.originOblast}/>
+                <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                 {/* <Box sx={{display: 'flex', flexDirection: 'column'}}>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                   <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
-                  <Icon color="disabled" fontSize="large" sx={{mx: 1}}>arrow_forward</Icon>
                 </Box> */}
-                <MapSvg sx={{flex: 1, ml: 1,}} data={computed.byCurrentOblast} base={computed.idps.length} legend={false} title={m.currentOblast}/>
+                <MapSvg sx={{flex: 1, ml: 1,}} data={ctx.byCurrentOblast} base={ctx.dataIdps.length} legend={false} title={m.currentOblast}/>
               </Box>
             </SlidePanel>
 
@@ -81,21 +83,21 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
                 sx={{ml: -5}}
                 colors={snapshotColors}
                 height={188}
-                data={data}
+                data={ctx.dataFiltered}
                 start={new Date(2022, 0, 1)}
                 curves={{
                   [m.departureFromAreaOfOrigin]: _ => _.when_did_you_leave_your_area_of_origin,
                   [m.returnToOrigin]: _ => _.when_did_you_return_to_your_area_of_origin,
                 }}
                 label={[m.departureFromAreaOfOrigin, m.returnToOrigin]}
-                end={computed.end}
+                end={ctx.period.end}
               />
             </SlidePanel>
 
-            <SlidePanel sx={{flex: 1}} BodyProps={{sx: {paddingBottom: t => t.spacing(.5) + ' !important'}}}>
+            <SlidePanel sx={{flex: 1}}>
               <SlidePanelTitle>{m.protHHS2.factorToHelpIntegration}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={computed.idps}
+                data={ctx.dataIdps}
                 filterValue={['unable_unwilling_to_answer']}
                 by={_ => _.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community}
                 label={{
@@ -112,7 +114,7 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
         {/*  <SlidePanel sx={{flex: 1}}>*/}
         {/*    <SlidePanelTitle>{m.protHHS2.factorToReturn}</SlidePanelTitle>*/}
         {/*    <ProtHHS2BarChart*/}
-        {/*      data={computed.idps}*/}
+        {/*      data={ctx.idps}*/}
         {/*      filterValue={['unable_unwilling_to_answer']}*/}
         {/*      questionType="multiple"*/}
         {/*      question="what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin"*/}
@@ -129,7 +131,7 @@ export const SnapshotProtMonitoEchoDisplacement = () => {
         {/*  <SlidePanel sx={{flex: 1}}>*/}
         {/*    <SlidePanelTitle>{m.protHHS2.factorToHelpIntegration}</SlidePanelTitle>*/}
         {/*    <ProtHHS2BarChart*/}
-        {/*      data={computed.idps}*/}
+        {/*      data={ctx.idps}*/}
         {/*      filterValue={['unable_unwilling_to_answer']}*/}
         {/*      questionType="multiple"*/}
         {/*      question="what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community"*/}

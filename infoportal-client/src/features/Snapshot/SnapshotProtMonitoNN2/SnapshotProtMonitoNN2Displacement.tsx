@@ -1,5 +1,5 @@
 import React from 'react'
-import {useSnapshotProtMonitoringContext} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoContext'
+import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
@@ -10,7 +10,7 @@ import {Protection_hhs3} from '@infoportal-common'
 import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
 
 export const SnapshotProtMonitoNN2Displacement = () => {
-  const {data, computed, period} = useSnapshotProtMonitoringContext()
+  const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   return (
     <PdfSlide>
@@ -32,14 +32,14 @@ export const SnapshotProtMonitoNN2Displacement = () => {
                 colors={snapshotColors}
                 hideYTicks={false}
                 height={258}
-                data={data}
+                data={ctx.dataFiltered}
                 start={new Date(2022, 0, 1)}
                 curves={{
                   [m.departureFromAreaOfOrigin]: _ => _.when_did_you_leave_your_area_of_origin,
                   [m.returnToOrigin]: _ => _.when_did_you_return_to_your_area_of_origin,
                 }}
                 label={[m.departureFromAreaOfOrigin, m.returnToOrigin]}
-                end={computed.end}
+                end={ctx.period.end}
               />
             </SlidePanel>
           </Div>
@@ -49,7 +49,7 @@ export const SnapshotProtMonitoNN2Displacement = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.intentions}</SlidePanelTitle>
               <ChartBarSingleBy
-                data={computed.idps}
+                data={ctx.dataIdps}
                 by={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence}
                 filter={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence !== 'unable_unwilling_to_answer'}
                 label={{
@@ -63,7 +63,7 @@ export const SnapshotProtMonitoNN2Displacement = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.factorToReturn}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={computed.idps}
+                data={ctx.dataIdps}
                 filterValue={['unable_unwilling_to_answer']}
                 by={_ => _.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin}
                 label={{
@@ -79,7 +79,7 @@ export const SnapshotProtMonitoNN2Displacement = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.protHHS2.factorToHelpIntegration}</SlidePanelTitle>
               <ChartBarMultipleBy
-                data={computed.idps}
+                data={ctx.dataIdps}
                 filterValue={['unable_unwilling_to_answer']}
                 by={_ => _.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community}
                 label={{
@@ -95,7 +95,7 @@ export const SnapshotProtMonitoNN2Displacement = () => {
         {/*  <SlidePanel sx={{flex: 1}}>*/}
         {/*    <SlidePanelTitle>{m.protHHS2.factorToReturn}</SlidePanelTitle>*/}
         {/*    <ProtHHS2BarChart*/}
-        {/*      data={computed.idps}*/}
+        {/*      data={ctx.idps}*/}
         {/*      filterValue={['unable_unwilling_to_answer']}*/}
         {/*      questionType="multiple"*/}
         {/*      question="what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin"*/}
@@ -112,7 +112,7 @@ export const SnapshotProtMonitoNN2Displacement = () => {
         {/*  <SlidePanel sx={{flex: 1}}>*/}
         {/*    <SlidePanelTitle>{m.protHHS2.factorToHelpIntegration}</SlidePanelTitle>*/}
         {/*    <ProtHHS2BarChart*/}
-        {/*      data={computed.idps}*/}
+        {/*      data={ctx.idps}*/}
         {/*      filterValue={['unable_unwilling_to_answer']}*/}
         {/*      questionType="multiple"*/}
         {/*      question="what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community"*/}

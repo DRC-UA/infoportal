@@ -5,7 +5,6 @@ import {useI18n} from '@/core/i18n'
 import {KoboIndex, Period, PeriodHelper, Safety_incident} from '@infoportal-common'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {differenceInDays, subDays} from 'date-fns'
-import {protectionDashboardMonitoPreviousPeriodDeltaDays} from '@/features/Protection/DashboardMonito/useProtectionDashboardMonitoData'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -16,6 +15,8 @@ enum AlertType {
   yellow = 'yellow',
   red = 'red',
 }
+
+export const previousPeriodDeltaDays = 90
 
 export type UseSafetyIncidentData = ReturnType<typeof useSafetyIncidentData>
 
@@ -76,9 +77,9 @@ export const useSafetyIncidentData = () => {
   const dataFilteredLastPeriod = useMemo(() => map(period.start, period.end, (start, end) => {
     const lastPeriod = {
       start: start,
-      end: subDays(end, protectionDashboardMonitoPreviousPeriodDeltaDays)
+      end: subDays(end, previousPeriodDeltaDays)
     }
-    if (differenceInDays(end, start) <= protectionDashboardMonitoPreviousPeriodDeltaDays) return
+    if (differenceInDays(end, start) <= previousPeriodDeltaDays) return
     return data.filter(_ => PeriodHelper.isDateIn(lastPeriod, _.date))
   }), [dataFiltered])
 

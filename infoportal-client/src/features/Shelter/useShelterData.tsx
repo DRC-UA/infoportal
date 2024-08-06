@@ -75,7 +75,7 @@ export const useShelterData = () => {
         .sort((a, b) => {
           if (!a.nta) return -1
           if (!b.nta) return 1
-          return a.nta.submissionTime?.getTime() - b.nta?.submissionTime.getTime()
+          return a.nta.date?.getTime() - b.nta?.date.getTime()
         }) as Seq<ShelterEntity>
     }) ?? seq([])
   }, [fetcherNta.get, fetcherTa.get])

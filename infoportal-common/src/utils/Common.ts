@@ -276,20 +276,24 @@ export const chunkify = <T, R>({
   return Promise.all(chunkedSubmissions.map(fn))
 }
 
-export const logPerformance = <T, P extends Array<any>>({
+export const logPerformance = <R, P extends Array<any>>({
   message,
+  showResult,
   logger,
   fn,
 }: {
-  message: (...p: P) => string,
-  logger: (m: string) => void,
-  fn: ((...p: P) => Promise<T>)
-}): (...p: P) => Promise<T> => {
+  message: (...p: P) => string
+  showResult?: (t: R) => string
+  logger: (m: string) => void
+  fn: (...p: P) => Promise<R>
+}): ((...p: P) => Promise<R>) => {
+// }) => ({fn}: {fn: ((...p: P) => Promise<R>)}):((...p: P): Promise<R>) => {
   return async (...p: P) => {
     const start = performance.now()
     const m = message(...p) + '... '
-    const res = await fn(...p)
-    logger(m + duration(performance.now() - start).toString())
-    return res
+    logger(m)
+    const r = await fn(...p)
+    logger(m + (showResult ? showResult(r) : '') + ' ' + duration(performance.now() - start).toString())
+    return r
   }
 }

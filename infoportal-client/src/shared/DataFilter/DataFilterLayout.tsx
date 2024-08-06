@@ -1,5 +1,5 @@
 import {themeLightScrollbar} from '@/core/theme'
-import React, {Dispatch, ReactNode, SetStateAction} from 'react'
+import React, {Dispatch, ReactNode, SetStateAction, useCallback} from 'react'
 import {Box, BoxProps} from '@mui/material'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
@@ -27,13 +27,6 @@ export const DataFilterLayout = ({
   hidePopup?: boolean
 }) => {
   const {m} = useI18n()
-
-  const getFilteredOptions = (name: string) => {
-    const filtersCopy = {...filters}
-    delete filtersCopy[name]
-    return DataFilter.filterData(data ?? seq([]), shapes, filtersCopy)
-  }
-
   const {
     before,
     after,
@@ -43,6 +36,14 @@ export const DataFilterLayout = ({
     data,
     onClear,
   } = props
+
+  const getFilteredOptions = useCallback((name: string) => {
+    const filtersCopy = {...filters}
+    delete filtersCopy[name]
+    console.log('>>filtersCopy', name, filtersCopy)
+    return DataFilter.filterData(data ?? seq([]), shapes, filtersCopy)
+  }, [filters, shapes, data])
+
   return (
     <Box sx={{
       maxWidth: '100%',

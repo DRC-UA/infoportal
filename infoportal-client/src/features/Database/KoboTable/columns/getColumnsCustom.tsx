@@ -5,7 +5,8 @@ import {
   currentProtectionProjects,
   DrcProgram,
   DrcProject,
-  Ecrec_cashRegistration, Ecrec_msmeGrantSelection,
+  Ecrec_cashRegistration,
+  Ecrec_msmeGrantSelection,
   KoboAnswerFlat,
   KoboAnswerId,
   KoboBaseTags,
@@ -18,7 +19,7 @@ import {
   ProtectionHhsTags,
   safeArray,
 } from '@infoportal-common'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
@@ -30,8 +31,7 @@ import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditModalOption} from '@/shared/koboEdit/KoboEditModal'
 import {Messages} from '@/core/i18n/localization/en'
 import {KoboEditTagsContext} from '@/core/context/KoboEditTagsContext'
-import {IconButton, Tooltip} from '@mui/material'
-import InfoIcon from '@mui/icons-material/Info'
+import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 
 export const getColumnsCustom = ({
   selectedIds,
@@ -426,7 +426,7 @@ export const getColumnsCustom = ({
             label: (
               <div style={{display: 'flex', alignItems: 'center'}}>
                 <span style={{display: 'inline-block', width: '100%'}}>{total}</span>
-                <Tooltip title={
+                <TableIcon color="disabled" sx={{ml: .5}} tooltip={
                   <ul>
                     <li>Size of household: {scoring.householdSize}</li>
                     <li>Residence Status: {scoring.residenceStatus}</li>
@@ -436,11 +436,7 @@ export const getColumnsCustom = ({
                     <li>Pregnant/Lactating woman: {scoring.pregnantLactating}</li>
                     <li>Income: {scoring.income}</li>
                   </ul>
-                }>
-                  <IconButton>
-                    <InfoIcon/>
-                  </IconButton>
-                </Tooltip>
+                }>help</TableIcon>
               </div>
             )
           }
