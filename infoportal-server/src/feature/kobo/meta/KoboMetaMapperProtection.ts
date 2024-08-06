@@ -1,4 +1,4 @@
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
   AILocationHelper,
   DisplacementStatus,
@@ -109,7 +109,7 @@ export class KoboMetaMapperProtection {
       persons,
       personsCount: persons.length,
       project: project ? [project] : [],
-      donor: project ? [DrcProjectHelper.donorByProject[project]] : [],
+      donor: map(DrcProjectHelper.donorByProject[project!], _ => [_]) ?? [],
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
     }
@@ -248,7 +248,7 @@ export class KoboMetaMapperProtection {
       displacement,
       personsCount: 1,
       project: project ? [project] : [],
-      donor: project ? [DrcProjectHelper.donorByProject[project]] : [],
+      donor: map(DrcProjectHelper.donorByProject[project!], _ => [_]) ?? [],
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
       enumerator: answer.staff_code,
@@ -298,7 +298,7 @@ export class KoboMetaMapperProtection {
       personsCount: persons.length,
       persons,
       project: project ? [project] : [],
-      donor: project ? [DrcProjectHelper.donorByProject[project]] : [],
+      donor: map(DrcProjectHelper.donorByProject[project!], _ => [_]) ?? [],
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: answer.cycle_finished_at ?? row.date,
     }
@@ -333,7 +333,7 @@ export class KoboMetaMapperProtection {
       personsCount: persons.length,
       persons,
       project: project ? [project] : [],
-      donor: project ? [DrcProjectHelper.donorByProject[project]] : [],
+      donor: map(DrcProjectHelper.donorByProject[project!], _ => [_]) ?? [],
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
     }
