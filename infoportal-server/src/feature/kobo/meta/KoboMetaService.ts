@@ -47,6 +47,7 @@ export class KoboMetaMapper {
     [KoboIndex.byName('protection_referral').id]: KoboMetaMapperProtection.referral,
     [KoboIndex.byName('protection_communityMonitoring').id]: KoboMetaMapperProtection.communityMonitoring,
     [KoboIndex.byName('ecrec_vetApplication').id]: KoboMetaMapperEcrec.vetApplication,
+    [KoboIndex.byName('ecrec_msmeGrantSelection').id]: KoboMetaMapperEcrec.msme,
   }
   static readonly mappersUpdate: Record<KoboId, MetaMapperMerge> = {
     [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa,

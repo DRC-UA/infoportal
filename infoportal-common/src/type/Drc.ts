@@ -1,4 +1,5 @@
 import {Obj, seq} from '@alexandreannic/ts-utils'
+import {OblastName} from '../location'
 
 export enum DrcOffice {
   Kyiv = 'Kyiv',
@@ -14,6 +15,22 @@ export enum DrcOffice {
   Ivankiv = 'Ivankiv',
   Ichna = 'Ichna',
   Kherson = 'Kherson'
+}
+
+export const oblastByDrcOffice: Record<DrcOffice, OblastName> = {
+  Kyiv: 'Kyivska',
+  Sumy: 'Sumska',
+  Mykolaiv: 'Mykolaivska',
+  Lviv: 'Lvivska',
+  Chernihiv: 'Chernihivska',
+  Kharkiv: 'Kharkivska',
+  Dnipro: 'Dnipropetrovska',
+  Poltava: 'Poltavska',
+  Chernivtsi: 'Chernihivska',
+  Sloviansk: 'Donetska',
+  Ivankiv: 'Ivano-Frankivska',
+  Ichna: 'Chernihivska',
+  Kherson: 'Khersonska'
 }
 
 export const drcOffices = Obj.values(DrcOffice)
@@ -69,7 +86,7 @@ export class DrcSectorHelper {
     CashForUtilities: DrcSector.Shelter,
     CashForRent: DrcSector.Shelter,
     CashForRepair: DrcSector.Shelter,
-    CashForEducation: DrcSector.Shelter,
+    CashForEducation: DrcSector.Education,
     MPCA: DrcSector.MPCA,
     NFI: DrcSector.NFI,
     ShelterRepair: DrcSector.Shelter,

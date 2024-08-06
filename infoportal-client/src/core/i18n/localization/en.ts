@@ -1,6 +1,6 @@
 import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
-import {capitalize, OblastIndex, OblastISO, WgDisability} from '@infoportal-common'
+import {capitalize, DrcProgram, OblastIndex, OblastISO, WgDisability} from '@infoportal-common'
 
 const invalidDate = ''
 
@@ -855,6 +855,66 @@ export const en = Object.freeze({
       [WgDisability.Care]: 'With self-care',
       [WgDisability.Comm]: 'Communicating',
       [WgDisability.None]: 'None',
-    }
+    },
+    activities_: ((): Record<DrcProgram, string> => {
+      return {
+        CashForFuel: 'Cash for Fuel',
+        CashForUtilities: 'Cash for Utilities',
+        CashForRent: 'Cash for Rent',
+        CashForRepair: 'Cash for Repair',
+        CashForEducation: 'Cash for Education',
+        MPCA: 'MPCA',
+        NFI: 'NFI',
+        ShelterRepair: 'Shelter Repair',
+        Referral: 'Referral',
+        ESK: 'ESK',
+        InfantWinterClothing: 'Infant winter clothing',
+        HygieneKit: 'Hygiene kit',
+        SectoralCashForAgriculture: 'Sectoral Cash for Agriculture',
+        VET: 'VET',
+        MSME: 'MSME',
+        SectoralCashForAnimalShelterRepair: 'Sectoral Cash for Animal shelter repair',
+        SectoralCashForAnimalFeed: 'Sectoral Cash for Animal feed',
+        Counselling: 'Counselling',
+        PSS: 'PSS',
+        GBV: 'GBV',
+        ProtectionMonitoring: 'Protection Monitoring',
+        AwarenessRaisingSession: 'Awareness Raising Session',
+        CommunityLevelPm: 'Community Level PM',
+        Legal: 'Legal',
+        FGD: 'FGD',
+        Observation: 'Observation',
+      }
+    })(),
+    activitiesMerged_: ((): Record<DrcProgram, string> => {
+      return {
+        CashForFuel: 'Cash for Fuel',
+        CashForUtilities: 'Cash for Utilities',
+        CashForRent: 'Cash for Rent',
+        CashForRepair: 'Cash for Repair',
+        CashForEducation: 'Cash for Education',
+        MPCA: 'MPCA',
+        NFI: 'NFI',
+        ShelterRepair: 'Shelter Repair',
+        Referral: 'Referral',
+        ESK: 'ESK',
+        InfantWinterClothing: 'NFI',
+        HygieneKit: 'NFI',
+        SectoralCashForAgriculture: 'Sectoral Cash',
+        VET: 'VET',
+        MSME: 'MSME',
+        SectoralCashForAnimalShelterRepair: 'Sectoral Cash',
+        SectoralCashForAnimalFeed: 'Sectoral Cash',
+        Counselling: 'Counselling',
+        PSS: 'PSS',
+        GBV: 'GBV',
+        ProtectionMonitoring: 'Protection Monitoring',
+        AwarenessRaisingSession: 'Awareness Raising Session',
+        CommunityLevelPm: 'Protection Monitoring',
+        Legal: 'Legal',
+        FGD: 'Protection Monitoring',
+        Observation: 'Protection Monitoring',
+      }
+    })(),
   },
 })

@@ -2,8 +2,7 @@ import React, {useEffect} from 'react'
 import {GlobalStyles, useTheme} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {defaultAppThemeParams} from '@/core/theme'
-import {MetaDashboardProvider} from '@/features/Meta/MetaContext'
-import {MetaSnapshotVert} from '@/features/Meta/Snapshot/MetaSnapshotVert'
+import {MetaSnapshot} from '@/features/Meta/Snapshot/MetaSnapshot'
 
 const generalStyles = <GlobalStyles styles={{
   body: {
@@ -28,9 +27,7 @@ const Meta = () => {
   return (
     <>
       {generalStyles}
-      <MetaDashboardProvider>
-        <MetaSnapshotVert/>
-      </MetaDashboardProvider>
+      <MetaSnapshot/>
     </>
   )
 }

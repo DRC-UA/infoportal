@@ -8,6 +8,7 @@ import {
   DrcSector,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
+  Ecrec_msmeGrantSelection,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
   KoboAnswerUtils,
@@ -17,7 +18,7 @@ import {
   KoboMetaHelper,
   KoboMetaStatus,
   KoboTagStatus,
-  KoboValidation,
+  KoboValidation, oblastByDrcOffice,
   OblastIndex,
   safeNumber,
   VetApplicationStatus,
@@ -133,6 +134,37 @@ export class KoboMetaMapperEcrec {
   //
   //   })
   // }
+
+  static readonly msme: MetaMapperInsert<KoboMetaOrigin<Ecrec_msmeGrantSelection.T>> = row => {
+    const answer = Ecrec_msmeGrantSelection.map(row.answers)
+    if (answer.back_consent === 'yes' || answer.back_consent_lviv === 'yes') return
+    const office = fnSwitch(answer.oblast_business!, {
+      dnipropetrovska: DrcOffice.Dnipro,
+      zaporizka: DrcOffice.Dnipro,
+      mykolaivska: DrcOffice.Dnipro,
+      khersonska: DrcOffice.Dnipro,
+      lvivska: DrcOffice.Dnipro,
+    }, () => undefined)
+    if (!office) return
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
+    return KoboMetaMapper.make({
+      sector: DrcSector.Livelihoods,
+      activity: DrcProgram.MSME,
+      office,
+      donor: [DrcDonor.BHA],
+      project: [DrcProject['UKR-000348 BHA3']],
+      oblast: oblastByDrcOffice[office],
+      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
+      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      personsCount: safeNumber(answer.ben_det_hh_size),
+      persons: group.map(KoboGeneralMapping.mapPersonDetails),
+      phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : '',
+      taxId: answer.ben_det_tax_id_num,
+      firstName: answer.ben_det_first_name,
+      lastName: answer.ben_det_surname,
+      patronymicName: answer.ben_det_pat_name,
+    })
+  }
 
   static readonly cashRegistrationBha: MetaMapperInsert<KoboMetaOrigin<Ecrec_cashRegistrationBha.T, EcrecCashRegistrationTags>> = row => {
     const answer = Ecrec_cashRegistrationBha.map(row.answers)

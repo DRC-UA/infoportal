@@ -13,8 +13,6 @@ import {Lazy} from '@/shared/Lazy'
 import {makeChartData} from '@/shared/charts/chartHelperOld'
 import {MapSvg} from '@/shared/maps/MapSvg'
 import {Box} from '@mui/material'
-import {ChartLine} from '@/shared/charts/ChartLine'
-import {format} from 'date-fns'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {DashboardFilterLabel} from '@/shared/DashboardLayout/DashboardFilterLabel'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -33,6 +31,7 @@ import {appConfig} from '@/conf/AppConfig'
 import {MpcaBudgetTracker} from '@/features/Mpca/Dashboard/MpcaBudgetTracker'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
+import {MpcaDashboardAmountLine} from '@/features/Mpca/Dashboard/MpcaDashboardAmountLine'
 
 export const today = new Date()
 
@@ -137,7 +136,7 @@ export const MpcaDashboard = () => {
     return DataFilter.filterData(filteredBy_date, filterShape, filters)
   }, [mappedData, filters, periodFilter, filterShape])
 
-  const computed = useBNREComputed({data: filteredData})
+  const computed = useBNREComputed({data: filteredData ?? seq()})
 
   const getAmount = useCallback((_: MpcaEntity) => {
     const amount = _[amountType]
@@ -253,27 +252,7 @@ export const _MPCADashboard = ({
               <SlideWidget title="Total amount">
                 {displayAmount(totalAmount)}
               </SlideWidget>
-              <Lazy deps={[data, getAmount]} fn={() => {
-                const gb = data.groupBy(d => format(d.date, 'yyyy-MM'))
-                return new Obj(gb)
-                  .map((k, v) => [k, {
-                    count: v.length,
-                    amount: seq(v).sum(_ => (getAmount(_) ?? 0))
-                  }])
-                  .sort(([ka], [kb]) => ka.localeCompare(kb))
-                  .entries()
-                  .map(([k, v]) => ({name: k, [m.submissionTime]: v.count, [m.amount]: v.amount}))
-              }}>
-                {_ => (
-                  <ChartLine
-                    hideYTicks
-                    height={200}
-                    data={_ as any}
-                    hideLabelToggle
-                    distinctYAxis
-                  />
-                )}
-              </Lazy>
+              <MpcaDashboardAmountLine data={data} getAmount={getAmount}/>
             </SlidePanel>
             <MpcaDashboardDeduplication data={data}/>
             <SlidePanel title={m.form}>

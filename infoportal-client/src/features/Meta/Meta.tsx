@@ -1,5 +1,5 @@
 import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {MetaDashboard} from '@/features/Meta/Dashboard/MetaDashboard'
 import {Layout} from '@/shared/Layout'
 import {appFeaturesIndex} from '@/features/appFeatureId'
@@ -25,6 +25,9 @@ export const metaSiteMap = {
 
 const _Meta = () => {
   const ctx = useMetaContext()
+  useEffect(() => {
+    ctx.fetcher.fetch()
+  }, [])
   return (
     <Layout
       title={appFeaturesIndex.metaDashboard.name}
