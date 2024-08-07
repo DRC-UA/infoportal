@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react'
-import {drcDonorTranlate, DrcSector, OblastIndex, Period, Person, WgDisability} from '@infoportal-common'
+import {drcDonorTranlate, DrcSector, OblastIndex, Period, Person} from '@infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {format} from 'date-fns'
-import {useTheme} from '@mui/material'
+import {ThemeProvider, useTheme} from '@mui/material'
 import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
@@ -16,19 +16,30 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {MetaSnapshotHeader, MetaSnapshotProps} from './MetaSnapshot'
+import {appFeaturesIndex} from '@/features/appFeatureId'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {muiTheme} from '@/core/theme'
 
 export const MetaSnapshotProtection = (p: MetaSnapshotProps) => {
+  const {theme} = useAppSettings()
   return (
-    <MetaDashboardProvider storageKeyPrefix="ss-prot">
-      <Cp {...p}/>
-    </MetaDashboardProvider>
+    <ThemeProvider theme={muiTheme({...theme.appThemeParams, mainColor: '#1357d0'})}>
+      <MetaDashboardProvider storageKeyPrefix="ss-prot">
+        <Cp {...p}/>
+      </MetaDashboardProvider>
+    </ThemeProvider>
   )
 }
 
 export const Cp = ({period}: MetaSnapshotProps) => {
   const {data: ctx, fetcher} = useMetaContext()
   useEffect(() => {
-    ctx.setShapeFilters({sector: [DrcSector.Protection]})
+    ctx.setShapeFilters({
+      sector: [
+        DrcSector.Protection,
+        DrcSector.GBV
+      ]
+    })
     ctx.setPeriod(period)
   }, [])
   const t = useTheme()
@@ -41,7 +52,12 @@ export const Cp = ({period}: MetaSnapshotProps) => {
   const dataFilteredActivitiesIndividuals = dataFilteredActivities.flatMap(_ => _.persons ?? [])
   return (
     <PdfSlide format="vertical">
-      <MetaSnapshotHeader period={ctx.period as Period}/>
+      <MetaSnapshotHeader
+        period={ctx.period as Period}
+        color={appFeaturesIndex.protection.color}
+        icon={appFeaturesIndex.protection.materialIcons}
+        subTitle="Protection"
+      />
       <PdfSlideBody>
         <Div column>
           <Div column>
@@ -151,7 +167,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                 <ChartBarSingleBy
                   data={dataFilteredFlat}
                   by={_ => m.activitiesMerged_[_.activity!]}
-                  limit={5}
+                  // limit={5}
                 />
               </PanelWBody>
               <PanelWBody title="Individuals by donors">

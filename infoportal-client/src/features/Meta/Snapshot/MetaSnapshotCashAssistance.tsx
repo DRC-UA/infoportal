@@ -20,6 +20,7 @@ import {ChartLine} from '@/shared/charts/ChartLine'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {DisplacementStatus} from '@infoportal-common'
+import {appFeaturesIndex} from '@/features/appFeatureId'
 
 export const MetaSnapshotCashAssistance = (p: MetaSnapshotProps) => {
   return (
@@ -42,7 +43,12 @@ const Cp = ({period}: MetaSnapshotProps) => {
 
   return (
     <PdfSlide format="vertical">
-      <MetaSnapshotHeader period={period as Period}/>
+      <MetaSnapshotHeader
+        period={period as Period}
+        color={appFeaturesIndex.mpca.color}
+        icon={appFeaturesIndex.mpca.materialIcons}
+        subTitle="MPCA"
+      />
       <PdfSlideBody>
         <Div column>
           <Div column>

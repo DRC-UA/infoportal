@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react'
-import {drcDonorTranlate, OblastIndex, Period, Person, WgDisability} from '@infoportal-common'
+import React, {useEffect, useMemo} from 'react'
+import {drcDonorTranlate, DrcSector, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person, WgDisability} from '@infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {format} from 'date-fns'
-import {useTheme} from '@mui/material'
+import {ThemeProvider, useTheme} from '@mui/material'
 import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
@@ -16,28 +16,64 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {MetaSnapshotHeader, MetaSnapshotProps} from './MetaSnapshot'
+import {appFeaturesIndex} from '@/features/appFeatureId'
+import {useShelterData} from '@/features/Shelter/useShelterData'
+import {muiTheme} from '@/core/theme'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import { Txt } from 'mui-extension'
 
-export const MetaSnapshotOverview = (p: MetaSnapshotProps) => {
+export const MetaSnapshotSnfi = (p: MetaSnapshotProps) => {
+  const {theme} = useAppSettings()
   return (
-    <MetaDashboardProvider storageKeyPrefix="ss">
-      <Cp {...p}/>
-    </MetaDashboardProvider>
+    <ThemeProvider theme={muiTheme({...theme.appThemeParams, mainColor: '#ff9100'})}>
+      <MetaDashboardProvider storageKeyPrefix="ss">
+        <Cp {...p}/>
+      </MetaDashboardProvider>
+    </ThemeProvider>
   )
 }
 
 export const Cp = ({period}: MetaSnapshotProps) => {
-  const {data: ctx, fetcher} = useMetaContext()
-  useEffect(() => {
-    ctx.clearAllFilter()
-    ctx.setPeriod(period)
-  }, [])
   const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
+  const fetcherShelterData = useShelterData()
+  useEffect(() => {
+    fetcherShelterData.fetchAll()
+  }, [])
+  const {
+    filteredDataRepair,
+    filterDataRepairHouse,
+    filteredDataRepairDone,
+    filteredDataRepairPlanned,
+    filterDataRepairApt,
+  } = useMemo(() => {
+    const filteredDataRepair = fetcherShelterData.mappedData.filter(_ => _.nta?.modality === 'contractor' && PeriodHelper.isDateIn(period, _.ta?.date))
+    return {
+      filteredDataRepair,
+      filteredDataRepairDone: filteredDataRepair.groupByAndApply(_ => _.nta?.dwelling_type!, _ => _.length),
+      filteredDataRepairPlanned: filteredDataRepair.filter(_ => !!_.ta?.tags?.workDoneAt).groupByAndApply(_ => _.nta?.dwelling_type!, _ => _.length),
+      filterDataRepairHouse: filteredDataRepair.filter(_ => _.nta?.dwelling_type === 'house'),
+      filterDataRepairApt: filteredDataRepair.filter(_ => _.nta?.dwelling_type === 'apartment'),
+    }
+  }, [fetcherShelterData.mappedData])
+
+  const {data: ctx, fetcher} = useMetaContext()
+  useEffect(() => {
+    ctx.setShapeFilters({sector: [DrcSector.Shelter, DrcSector.NFI]})
+    ctx.setPeriod(period)
+  }, [])
+
   if (!ctx.period.start || !ctx.period.end) return 'Set a period'
   const flatData = ctx.filteredData.flatMap(_ => _.persons?.map(p => ({...p, ..._})) ?? [])
+
   return (
     <PdfSlide format="vertical">
-      <MetaSnapshotHeader period={ctx.period as Period} icon="language" subTitle="Overview"/>
+      <MetaSnapshotHeader
+        period={ctx.period as Period}
+        color={appFeaturesIndex.shelter.color}
+        icon={appFeaturesIndex.shelter.materialIcons}
+        subTitle="Shelter & NFI"
+      />
       <PdfSlideBody>
         <Div column>
           <Div column>
@@ -122,26 +158,21 @@ export const Cp = ({period}: MetaSnapshotProps) => {
             </Div>
             <Div column>
               <PanelWBody>
-                <Lazy deps={[ctx.filteredData]} fn={() => {
-                  const gb = ctx.filteredData.groupBy(d => format(d.date, 'yyyy-MM'))
-                  const gbByCommittedDate = ctx.filteredData.groupBy(d => d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '')
+                <Lazy deps={[ctx.filteredData]} fn={(d) => {
+                  const gb = d.groupBy(d => format(d.date, 'yyyy-MM'))
+                  const gbByCommittedDate = d.groupBy(d => d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '')
                   return new Obj(gb)
                     .map((k, v) => [k, {
                       count: v.length,
-                      // committed: gbByCommittedDate[k]?.filter(_ => _.status === KoboMetaStatus.Committed).length
+                      committed: gbByCommittedDate[k]?.filter(_ => _.status === KoboMetaStatus.Committed).length
                     }])
                     .sort(([ka], [kb]) => ka.localeCompare(kb))
                     .entries()
-                    .map(([k, v]) => ({
-                      name: k,
-                      'Registration': v.count,
-                      // 'Assistance': v.committed,
-                    }))
+                    .map(([k, v]) => ({'Assistance': v.committed, name: k, 'Registration': v.count,}))
                 }}>
                   {_ => (
                     <ChartLine
-                      height={200}
-                      sx={{mb: -1.5}}
+                      height={180}
                       hideYTicks={true}
                       data={_ as any}
                       colors={() => snapshotColors(t)}
@@ -150,12 +181,51 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   )}
                 </Lazy>
               </PanelWBody>
-              <PanelWBody title="Programs">
+              <PanelWBody title="HHs by activities">
                 <ChartBarSingleBy
-                  data={flatData}
-                  by={_ => _.sector}
+                  data={ctx.filteredData}
+                  by={_ => m.activitiesMerged_[_.activity!]}
+                  limit={5}
                 />
               </PanelWBody>
+              {/*filteredDataRepairDone*/}
+              {/*filteredDataRepairPlanned*/}
+              <Div>
+                <Div column>
+                  <SlideWidget sx={{flex: 1}} icon="home" title="Houses repaired">
+                    {formatLargeNumber(filteredDataRepairDone.house)}
+                    <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlanned.house)}</Txt>
+                  </SlideWidget>
+                </Div>
+                <Div column>
+                  <SlideWidget sx={{flex: 1}} icon="business" title="Apartments repaired">
+                    {formatLargeNumber(filteredDataRepairDone.apartment)}
+                    <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlanned.apartment)}</Txt>
+                  </SlideWidget>
+                </Div>
+              </Div>
+              {/*<Div>*/}
+              {/*  <Div column>*/}
+              {/*    <PanelWBody sx={{mb: 0}}>*/}
+              {/*      <ChartPieWidgetBy*/}
+              {/*        dense*/}
+              {/*        title="Houses repaired"*/}
+              {/*        data={filterDataRepairHouse}*/}
+              {/*        filter={_ => !!_.ta?.tags?.workDoneAt}*/}
+              {/*      />*/}
+              {/*    </PanelWBody>*/}
+              {/*  </Div>*/}
+              {/*  <Div column>*/}
+              {/*    <PanelWBody sx={{mb: 0}}>*/}
+              {/*      <ChartPieWidgetBy*/}
+              {/*        dense*/}
+              {/*        title="Appartments repaired"*/}
+              {/*        data={filterDataRepairApt}*/}
+              {/*        filter={_ => !!_.ta?.tags?.workDoneAt}*/}
+              {/*      />*/}
+              {/*    </PanelWBody>w*/}
+              {/*  </Div>*/}
+              {/*</Div>*/}
               <PanelWBody title="Donors">
                 <ChartBarMultipleBy
                   data={flatData}

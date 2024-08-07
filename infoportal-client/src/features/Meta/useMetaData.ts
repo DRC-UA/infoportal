@@ -103,7 +103,6 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
   const distinctBy = useMemo(() => new Set(customFilters.distinctBy), [customFilters.distinctBy])
 
   const filteredData = useMemo(() => {
-    console.log(shapeFilters)
     const filteredBy_date = data.filter(d => {
       try {
         const isDateIn = PeriodHelper.isDateIn(period, d.date)

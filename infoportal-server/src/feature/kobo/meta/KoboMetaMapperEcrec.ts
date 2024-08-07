@@ -137,7 +137,7 @@ export class KoboMetaMapperEcrec {
 
   static readonly msme: MetaMapperInsert<KoboMetaOrigin<Ecrec_msmeGrantSelection.T>> = row => {
     const answer = Ecrec_msmeGrantSelection.map(row.answers)
-    if (answer.back_consent === 'yes' || answer.back_consent_lviv === 'yes') return
+    if (answer.back_consent !== 'yes' && answer.back_consent_lviv !== 'yes') return
     const office = fnSwitch(answer.oblast_business!, {
       dnipropetrovska: DrcOffice.Dnipro,
       zaporizka: DrcOffice.Dnipro,

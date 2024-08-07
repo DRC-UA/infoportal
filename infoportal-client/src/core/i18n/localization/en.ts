@@ -856,8 +856,8 @@ export const en = Object.freeze({
       [WgDisability.Comm]: 'Communicating',
       [WgDisability.None]: 'None',
     },
-    activities_: ((): Record<DrcProgram, string> => {
-      return {
+    ...(() => {
+      const activities_: Record<DrcProgram, string> = {
         CashForFuel: 'Cash for Fuel',
         CashForUtilities: 'Cash for Utilities',
         CashForRent: 'Cash for Rent',
@@ -877,44 +877,36 @@ export const en = Object.freeze({
         SectoralCashForAnimalFeed: 'Sectoral Cash for Animal feed',
         Counselling: 'Counselling',
         PSS: 'PSS',
-        GBV: 'GBV',
         ProtectionMonitoring: 'Protection Monitoring',
         AwarenessRaisingSession: 'Awareness Raising Session',
         CommunityLevelPm: 'Community Level PM',
         Legal: 'Legal',
         FGD: 'FGD',
         Observation: 'Observation',
+        WGSS: 'WGSS Activities',
+        DignityKits: 'Distribution of dignity kits',
+        CapacityBuilding: 'Capacity-building',
+        CaseManagement: 'Case Management',
+        GbvAwarenessRaisingSession: 'Awareness raising sessions',
+        PssActivities: 'GBV PSS Activities',
+        GbvLegalAid: 'GBV Legal Aid',
       }
-    })(),
-    activitiesMerged_: ((): Record<DrcProgram, string> => {
-      return {
-        CashForFuel: 'Cash for Fuel',
-        CashForUtilities: 'Cash for Utilities',
-        CashForRent: 'Cash for Rent',
-        CashForRepair: 'Cash for Repair',
-        CashForEducation: 'Cash for Education',
-        MPCA: 'MPCA',
-        NFI: 'NFI',
+      const activitiesMerged_: Partial<Record<DrcProgram, string>> = {
+        ...activities_,
         ShelterRepair: 'Shelter Repair',
         Referral: 'Referral',
         ESK: 'ESK',
         InfantWinterClothing: 'NFI',
         HygieneKit: 'NFI',
-        SectoralCashForAgriculture: 'Sectoral Cash',
-        VET: 'VET',
-        MSME: 'MSME',
-        SectoralCashForAnimalShelterRepair: 'Sectoral Cash',
-        SectoralCashForAnimalFeed: 'Sectoral Cash',
-        Counselling: 'Counselling',
-        PSS: 'PSS',
-        GBV: 'GBV',
-        ProtectionMonitoring: 'Protection Monitoring',
-        AwarenessRaisingSession: 'Awareness Raising Session',
+        SectoralCashForAgriculture: 'Sectoral Cash for Agriculture',
+        SectoralCashForAnimalShelterRepair: 'Sectoral Cash for Agriculture',
+        SectoralCashForAnimalFeed: 'Sectoral Cash for Agriculture',
         CommunityLevelPm: 'Protection Monitoring',
-        Legal: 'Legal',
         FGD: 'Protection Monitoring',
         Observation: 'Protection Monitoring',
+        GbvAwarenessRaisingSession: 'Awareness Raising Session'
       }
+      return {activities_, activitiesMerged_}
     })(),
   },
 })

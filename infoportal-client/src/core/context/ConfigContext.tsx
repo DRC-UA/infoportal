@@ -43,6 +43,7 @@ export const AppSettingsProvider = ({
   const [appThemeParams, setAppThemeParams] = useState<AppThemeParams>({})
   const theme = useMemo(() => muiTheme({...appThemeParams, dark: isDark}), [appThemeParams, isDark])
 
+  console.log(theme.palette.primary.main)
   useEffect(() => {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event: any) => {
       setIsSystemDark(!!event.matches)
