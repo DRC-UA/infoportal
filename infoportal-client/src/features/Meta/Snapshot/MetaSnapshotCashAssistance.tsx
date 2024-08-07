@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react'
-import {drcDonorTranlate, DrcSector, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person, WgDisability} from '@infoportal-common'
+import {DisplacementStatus, drcDonorTranlate, DrcSector, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person} from '@infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {Divider, useTheme} from '@mui/material'
+import {Divider, ThemeProvider, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Lazy} from '@/shared/Lazy'
@@ -19,14 +19,22 @@ import {format} from 'date-fns'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
-import {DisplacementStatus} from '@infoportal-common'
 import {appFeaturesIndex} from '@/features/appFeatureId'
+import {muiTheme} from '@/core/theme'
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 export const MetaSnapshotCashAssistance = (p: MetaSnapshotProps) => {
+  const {theme} = useAppSettings()
   return (
-    <MpcaProvider>
-      <Cp {...p}/>
-    </MpcaProvider>
+    <ThemeProvider theme={muiTheme({
+      ...theme.appThemeParams,
+      mainColor: '#3700b3'
+      // mainColor: '#6200ee'
+    })}>
+      <MpcaProvider>
+        <Cp {...p}/>
+      </MpcaProvider>
+    </ThemeProvider>
   )
 }
 
@@ -47,7 +55,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
         period={period as Period}
         color={appFeaturesIndex.mpca.color}
         icon={appFeaturesIndex.mpca.materialIcons}
-        subTitle="MPCA"
+        subTitle="Cash assistances"
       />
       <PdfSlideBody>
         <Div column>
@@ -196,7 +204,6 @@ const Cp = ({period}: MetaSnapshotProps) => {
                         height={180}
                         data={_ as any}
                         hideLabelToggle
-                        distinctYAxis
                       />
                     )}
                   </Lazy>

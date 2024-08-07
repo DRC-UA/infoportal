@@ -3,11 +3,12 @@ import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswer
 import {
   Bn_re,
   DisplacementStatus,
-  Ecrec_msmeGrantEol,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
+  Ecrec_msmeGrantEol,
   Ecrec_msmeGrantSelection,
   Ecrec_vetApplication,
+  Ecrec_vetEvaluation,
   KoboEcrec_cashRegistration,
   KoboFormName,
   KoboIndex,
@@ -16,11 +17,13 @@ import {
   KoboSafetyIncidentHelper,
   Meal_cfmExternal,
   Meal_cfmInternal,
+  Meal_verificationEcrec,
   Meal_verificationWinterization,
   Meal_visitMonitoring,
   Partnership_partnersDatabase,
   Person,
   PersonDetails,
+  Protection_coc,
   Protection_gbv,
   Protection_gbvSocialProviders,
   Protection_groupSession,
@@ -29,9 +32,7 @@ import {
   Shelter_nta,
   Shelter_ta,
   ShelterNtaTags,
-  Meal_verificationEcrec,
   ShelterTaTagsHelper,
-  Protection_coc,
 } from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
@@ -136,6 +137,11 @@ export class KoboTypedAnswerSdk {
       ...make('ecrec_vetApplication', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('ecrec_vetApplication').id,
         fnMapKobo: Ecrec_vetApplication.map,
+        ...filters,
+      })),
+      ...make('ecrec_vetEvaluation', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('ecrec_vetEvaluation').id,
+        fnMapKobo: Ecrec_vetEvaluation.map,
         ...filters,
       })),
       ...make('meal_verificationEcrec', (filters?: KoboAnswerFilter) => req({

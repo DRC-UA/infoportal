@@ -871,14 +871,14 @@ export const en = Object.freeze({
         InfantWinterClothing: 'Infant winter clothing',
         HygieneKit: 'Hygiene kit',
         SectoralCashForAgriculture: 'Sectoral Cash for Agriculture',
-        VET: 'VET',
-        MSME: 'MSME',
+        VET: 'Vocational training (VET)',
+        MSME: 'MSME Grant & Coaching',
         SectoralCashForAnimalShelterRepair: 'Sectoral Cash for Animal shelter repair',
         SectoralCashForAnimalFeed: 'Sectoral Cash for Animal feed',
         Counselling: 'Counselling',
         PSS: 'PSS',
         ProtectionMonitoring: 'Protection Monitoring',
-        AwarenessRaisingSession: 'Awareness Raising Session',
+        AwarenessRaisingSession: 'Awareness Raising',
         CommunityLevelPm: 'Community Level PM',
         Legal: 'Legal',
         FGD: 'FGD',
@@ -887,7 +887,7 @@ export const en = Object.freeze({
         DignityKits: 'Distribution of dignity kits',
         CapacityBuilding: 'Capacity-building',
         CaseManagement: 'Case Management',
-        GbvAwarenessRaisingSession: 'Awareness raising sessions',
+        GbvAwarenessRaisingSession: 'Awareness raising',
         PssActivities: 'GBV PSS Activities',
         GbvLegalAid: 'GBV Legal Aid',
       }
@@ -904,7 +904,7 @@ export const en = Object.freeze({
         CommunityLevelPm: 'Protection Monitoring',
         FGD: 'Protection Monitoring',
         Observation: 'Protection Monitoring',
-        GbvAwarenessRaisingSession: 'Awareness Raising Session'
+        GbvAwarenessRaisingSession: 'Awareness Raising'
       }
       return {activities_, activitiesMerged_}
     })(),

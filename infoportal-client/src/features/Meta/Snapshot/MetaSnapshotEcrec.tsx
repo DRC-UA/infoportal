@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react'
-import {drcDonorTranlate, DrcProgram, DrcSector, IKoboMeta, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person} from '@infoportal-common'
+import {drcDonorTranlate, DrcProgram, DrcSector, IKoboMeta, KoboMetaStatus, KoboValidation, OblastIndex, Period, PeriodHelper, Person} from '@infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {format} from 'date-fns'
-import {useTheme} from '@mui/material'
+import {addMonths, differenceInMonths, format} from 'date-fns'
+import {ThemeProvider, useTheme} from '@mui/material'
 import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
@@ -18,21 +18,30 @@ import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {MetaSnapshotHeader, MetaSnapshotProps} from './MetaSnapshot'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {muiTheme} from '@/core/theme'
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 export const MetaSnapshotEcrec = (p: MetaSnapshotProps) => {
+  const {theme} = useAppSettings()
   return (
-    <MetaDashboardProvider storageKeyPrefix="ss">
-      <Cp {...p}/>
-    </MetaDashboardProvider>
+    <ThemeProvider theme={muiTheme({...theme.appThemeParams, mainColor: '#00c5b2'})}>
+      <MetaDashboardProvider storageKeyPrefix="ss">
+        <Cp {...p}/>
+      </MetaDashboardProvider>
+    </ThemeProvider>
   )
 }
 
 const estimatedSectoralCashAssistanceUsd = 221
 
 export const Cp = ({period}: MetaSnapshotProps) => {
+  const monthsList = Array.from({length: differenceInMonths(new Date(period.end), new Date(period.start)) + 1}, (_, i) =>
+    format(addMonths(new Date(period.start), i), 'yyyy-MM')
+  )
+
   const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
-  const fetcherVet = useKoboAnswersContext().byName('ecrec_vetApplication')
+  const fetcherVet = useKoboAnswersContext().byName('ecrec_vetEvaluation')
   const {data: ctx, fetcher} = useMetaContext()
   useEffect(() => {
     fetcherVet.fetch()
@@ -171,7 +180,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
               </PanelWBody>
 
               <PanelWBody>
-                <SlideWidget title="Estimated Sectoral Cash Provided " sx={{mt: 0, pt: 0}}>
+                <SlideWidget title="Estimated Sectoral Cash Provided " sx={{mt: 0, pt: 0, mb: -1}}>
                   ~ ${formatLargeNumber(filteredCashData.filter(_ => _.status === KoboMetaStatus.Committed).length * estimatedSectoralCashAssistanceUsd)}
                 </SlideWidget>
                 <Lazy deps={[filteredCashData]} fn={(d) => {
@@ -180,17 +189,12 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                     .filter((_: IKoboMeta) => _.status === KoboMetaStatus.Committed)
                     .compactBy('lastStatusUpdate')
                     .groupBy((_: IKoboMeta) => format(_.lastStatusUpdate!, 'yyyy-MM'))
-                  return new Obj(supposed)
-                    .map((k, v) => [k, {
-                      final: seq(v).filter(_ => _.status === KoboMetaStatus.Committed).length * estimatedSectoralCashAssistanceUsd,
-                      supposed: final[k].length * estimatedSectoralCashAssistanceUsd,
-                    }])
-                    .sort(([ka], [kb]) => ka.localeCompare(kb))
-                    .entries()
-                    .map(([k, v]) => ({
-                      name: k,
-                      'Estimated amount': v.supposed,
-                      'Amount provided': v.final,
+
+                  return monthsList
+                    .map(m => ({
+                      name: m,
+                      'Amount provided': (final[m]?.length ?? 0) * estimatedSectoralCashAssistanceUsd,
+                      'Estimated amount': (supposed[m]?.length ?? 0) * estimatedSectoralCashAssistanceUsd,
                     }))
                 }}>
                   {_ => (
@@ -198,14 +202,32 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                       height={180}
                       data={_ as any}
                       hideLabelToggle
-                      distinctYAxis
                     />
                   )}
                 </Lazy>
               </PanelWBody>
-              <SlideWidget title="">
-
-              </SlideWidget>
+              <PanelWBody>
+                <SlideWidget title="Estimated Cash Provided for VET" sx={{mt: 0, pt: 0, mb: -1}}>
+                  ~ ${formatLargeNumber(filteredVet.filter(_ => _.tags?._validation === KoboValidation.Approved).sum(_ => _.grant_amount ?? 0))}
+                </SlideWidget>
+                <Lazy deps={[filteredVet]} fn={(d) => {
+                  const all = d.groupBy(d => format(d.date, 'yyyy-MM'))
+                  return monthsList
+                    .map(m => ({
+                      name: m,
+                      'Amount provided': seq(all[m]).filter(_ => _.tags?._validation === KoboValidation.Approved).sum(_ => _.grant_amount ?? 0),
+                      'Estimated amount': seq(all[m]).sum(_ => _.grant_amount ?? 0),
+                    }))
+                }}>
+                  {_ => (
+                    <ChartLine
+                      height={180}
+                      data={_ as any}
+                      hideLabelToggle
+                    />
+                  )}
+                </Lazy>
+              </PanelWBody>
             </Div>
           </Div>
         </Div>

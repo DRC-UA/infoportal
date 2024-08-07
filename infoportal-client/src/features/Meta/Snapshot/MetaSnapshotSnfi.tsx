@@ -20,7 +20,7 @@ import {appFeaturesIndex} from '@/features/appFeatureId'
 import {useShelterData} from '@/features/Shelter/useShelterData'
 import {muiTheme} from '@/core/theme'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import { Txt } from 'mui-extension'
+import {Txt} from 'mui-extension'
 
 export const MetaSnapshotSnfi = (p: MetaSnapshotProps) => {
   const {theme} = useAppSettings()
@@ -42,16 +42,18 @@ export const Cp = ({period}: MetaSnapshotProps) => {
   }, [])
   const {
     filteredDataRepair,
-    filterDataRepairHouse,
     filteredDataRepairDone,
-    filteredDataRepairPlanned,
+    filterDataRepairHouse,
+    filteredDataRepairDoneByAcc,
+    filteredDataRepairPlannedByAcc,
     filterDataRepairApt,
   } = useMemo(() => {
     const filteredDataRepair = fetcherShelterData.mappedData.filter(_ => _.nta?.modality === 'contractor' && PeriodHelper.isDateIn(period, _.ta?.date))
     return {
       filteredDataRepair,
-      filteredDataRepairDone: filteredDataRepair.groupByAndApply(_ => _.nta?.dwelling_type!, _ => _.length),
-      filteredDataRepairPlanned: filteredDataRepair.filter(_ => !!_.ta?.tags?.workDoneAt).groupByAndApply(_ => _.nta?.dwelling_type!, _ => _.length),
+      filteredDataRepairDone: filteredDataRepair.filter(_ => !!_.ta?.tags?.workDoneAt),
+      filteredDataRepairPlannedByAcc: filteredDataRepair.groupByAndApply(_ => _.nta?.dwelling_type!, _ => _.length),
+      filteredDataRepairDoneByAcc: filteredDataRepair.filter(_ => !!_.ta?.tags?.workDoneAt).groupByAndApply(_ => _.nta?.dwelling_type!, _ => _.length),
       filterDataRepairHouse: filteredDataRepair.filter(_ => _.nta?.dwelling_type === 'house'),
       filterDataRepairApt: filteredDataRepair.filter(_ => _.nta?.dwelling_type === 'apartment'),
     }
@@ -188,22 +190,23 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   limit={5}
                 />
               </PanelWBody>
-              {/*filteredDataRepairDone*/}
-              {/*filteredDataRepairPlanned*/}
               <Div>
                 <Div column>
                   <SlideWidget sx={{flex: 1}} icon="home" title="Houses repaired">
-                    {formatLargeNumber(filteredDataRepairDone.house)}
-                    <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlanned.house)}</Txt>
+                    {formatLargeNumber(filteredDataRepairDoneByAcc.house)}
+                    <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlannedByAcc.house)}</Txt>
                   </SlideWidget>
                 </Div>
                 <Div column>
                   <SlideWidget sx={{flex: 1}} icon="business" title="Apartments repaired">
-                    {formatLargeNumber(filteredDataRepairDone.apartment)}
-                    <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlanned.apartment)}</Txt>
+                    {formatLargeNumber(filteredDataRepairDoneByAcc.apartment)}
+                    <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlannedByAcc.apartment)}</Txt>
                   </SlideWidget>
                 </Div>
               </Div>
+              <PanelWBody>
+                <ChartBarSingleBy data={filteredDataRepairDone} by={_ => _.ta?.tags.damageLevel}/>
+              </PanelWBody>
               {/*<Div>*/}
               {/*  <Div column>*/}
               {/*    <PanelWBody sx={{mb: 0}}>*/}

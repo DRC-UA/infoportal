@@ -1,4 +1,4 @@
-import {Enum, fnSwitch, seq, Seq} from '@alexandreannic/ts-utils'
+import {Enum, fnSwitch, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {ReactNode} from 'react'
 import {NonNullableKey} from '@infoportal-common'
 
@@ -108,6 +108,15 @@ export class ChartHelper<K extends string = string> {
   }
 
   readonly get = () => this.value
+
+  static readonly filterValue = <K extends string>(fn: (_: ChartDataVal) => boolean) => (obj: ChartData<K>): ChartData<K> => {
+    return Obj.filterValue(obj, fn) as any
+  }
+
+  readonly filterValue = (fn: (_: ChartDataVal) => boolean) => {
+    this.value = ChartHelper.filterValue(fn)(this.value)
+    return this
+  }
 
   static readonly take = <K extends string>(n?: number) => (obj: Record<K, ChartDataVal>): ChartData<K> => {
     if (n)

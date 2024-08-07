@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import {drcDonorTranlate, DrcSector, OblastIndex, Period, Person} from '@infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {format} from 'date-fns'
-import {ThemeProvider, useTheme} from '@mui/material'
+import {Box, Icon, ThemeProvider, useTheme} from '@mui/material'
 import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
@@ -19,6 +19,7 @@ import {MetaSnapshotHeader, MetaSnapshotProps} from './MetaSnapshot'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {muiTheme} from '@/core/theme'
+import {Txt} from 'mui-extension'
 
 export const MetaSnapshotProtection = (p: MetaSnapshotProps) => {
   const {theme} = useAppSettings()
@@ -30,6 +31,15 @@ export const MetaSnapshotProtection = (p: MetaSnapshotProps) => {
     </ThemeProvider>
   )
 }
+
+const products = [
+  {label: 'Monthly protection monitoring snapshots', icon: 'photo'},
+  {label: 'Quarterly protection analysis reports', icon: 'trending_up'},
+  {label: 'Rapid protection & GBV assessments', icon: 'travel_explore'},
+  {label: 'Monthly legal alerts', icon: 'update'},
+  {label: 'Protection monitoring dashboard', icon: 'query_stats'},
+  {label: 'Legal aid platform', icon: 'hub'},
+]
 
 export const Cp = ({period}: MetaSnapshotProps) => {
   const {data: ctx, fetcher} = useMetaContext()
@@ -80,7 +90,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
           </Div>
           <Div>
             <Div column>
-              <PanelWBody title="PoCs reached by Oblast">
+              <PanelWBody title="Individuals reached by Oblast">
                 <MapSvgByOblast
                   sx={{mx: 1.5, mt: -1, mb: -1.5}}
                   getOblast={_ => OblastIndex.byName(_.oblast).iso}
@@ -90,10 +100,10 @@ export const Cp = ({period}: MetaSnapshotProps) => {
               </PanelWBody>
               <PanelWBody title={m.ageGroup}>
                 <Lazy deps={[ctx.filteredData]} fn={(d) => {
-                  const gb = Person.groupByGenderAndGroup(Person.ageGroup.ECHO)(d?.flatMap(_ => _.persons ?? [])!)
+                  const gb = Person.groupByGenderAndGroup(Person.ageGroup.Quick)(d?.flatMap(_ => _.persons ?? [])!)
                   return new Obj(gb).entries().map(([k, v]) => ({key: k, ...v}))
                 }}>
-                  {_ => <ChartBarStacker data={_} height={156} sx={{mb: -1, mr: -2}}/>}
+                  {_ => <ChartBarStacker data={_} height={130} sx={{mb: -1, mr: -2}}/>}
                 </Lazy>
               </PanelWBody>
               <Div>
@@ -122,6 +132,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                 <ChartBarSingleBy
                   data={ctx.filteredPersons}
                   by={_ => _.displacement}
+                  limit={3}
                   label={{
                     Idp: 'IDP',
                     Returnee: 'Returnee',
@@ -129,6 +140,14 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                     NonDisplaced: 'Non-displaced',
                   }}
                 />
+              </PanelWBody>
+              <PanelWBody title="PIM Products">
+                {products.map(_ =>
+                  <Box key={_.label} sx={{display: 'flex', alignItems: 'center', '&:not(:last-of-type)': {pb: 1}}}>
+                    <Icon sx={{mr: 1.5}} color="primary">{_.icon}</Icon>
+                    {_.label}
+                  </Box>
+                )}
               </PanelWBody>
             </Div>
             <Div column>
@@ -163,18 +182,43 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   )}
                 </Lazy>
               </PanelWBody>
-              <PanelWBody title="Individuals by activities">
+              <PanelWBody title="Activities">
                 <ChartBarSingleBy
                   data={dataFilteredFlat}
                   by={_ => m.activitiesMerged_[_.activity!]}
-                  // limit={5}
+                  min={10}
                 />
+                <Txt color="hint" block sx={{mt: 2, textAlign: 'justify'}}>
+                  <Icon sx={{mr: 1, fontSize: '15px !important'}} color="disabled">info</Icon>
+                  Not included in the above breakdown:
+                  <Box sx={{display: 'flex'}}>
+                    <ul style={{margin: 0}}>
+                      <li>Legal awareness</li>
+                      <li>Legal counsellig</li>
+                      <li>Legal assistance</li>
+                      <li>IPA</li>
+                    </ul>
+                    <ul style={{margin: 0}}>
+                      <li>Prot. Case Management</li>
+                      <li>GBV Case Management</li>
+                      <li>CBP activities</li>
+                    </ul>
+                  </Box>
+                </Txt>
               </PanelWBody>
-              <PanelWBody title="Individuals by donors">
+              <PanelWBody title="Donors">
                 <ChartBarMultipleBy
                   data={dataFilteredFlat}
-                  label={drcDonorTranlate}
+                  label={{
+                    ...drcDonorTranlate,
+                    OKF: 'OKF / SDC / SIDA',
+                  }}
                   by={_ => _.donor ?? []}
+                  mergeOptions={{
+                    OKF: 'OKF',
+                    SDC: 'OKF',
+                    SIDA: 'OKF',
+                  }}
                 />
               </PanelWBody>
             </Div>
