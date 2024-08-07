@@ -311,8 +311,9 @@ export const getColumnsCustom = ({
       ...individualsBreakdown,
     ],
     [KoboIndex.byName('bn_rapidResponse2').id]: [
-      ...getPaymentStatusByEnum(),
-      ...individualsBreakdown,
+      ...getPaymentStatusByEnum({
+        showIf: (_: KoboAnswerFlat<Bn_rapidResponse2.T>) => !!(_.back_prog_type)
+      })
     ],
     [KoboIndex.byName('bn_re').id]: [
       ...getPaymentStatusByEnum({
