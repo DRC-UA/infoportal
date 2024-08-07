@@ -6,6 +6,8 @@ export const databaseCustomMapping: Record<any, (_: any) => any> = {
   [KoboIndex.byName('ecrec_msmeGrantSelection').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('ecrec_vetApplication').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('ecrec_vetEvaluation').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
+  [KoboIndex.byName('ecrec_msmeGrantEol').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
+  [KoboIndex.byName('ecrec_msmeGrantSelection').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('bn_re').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('bn_rapidResponse').id]: KoboGeneralMapping.addIndividualBreakdownColumnForRrm,
   [KoboIndex.byName('bn_rapidResponse2').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
