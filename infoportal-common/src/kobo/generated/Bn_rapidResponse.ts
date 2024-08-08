@@ -107,25 +107,25 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // background_l/back_prog_type_l [select_multiple] 1.4 Programme Type
   'back_prog_type_l': undefined | Option<'back_prog_type_l'>[],
 	  // background_l/donor_mpca [select_one] 1.3.1 Which donor for MPCA
-  'donor_mpca': undefined | Option<'back_donor_l'>,
+  'donor_mpca': undefined | Option<'donor_nfi_fks'>,
 	  // background_l/donor_nfi [select_one] 1.3.2 Which donor for NFI
-  'donor_nfi': undefined | Option<'back_donor_l'>,
+  'donor_nfi': undefined | Option<'donor_nfi_fks'>,
 	  // background_l/donor_esk [select_one] 1.3.3 Which donor for Emergency Shelter Kit
-  'donor_esk': undefined | Option<'back_donor_l'>,
+  'donor_esk': undefined | Option<'donor_nfi_fks'>,
 	  // background_l/donor_cfr [select_one] 1.3.4 Which donor for Cash for Rent
-  'donor_cfr': undefined | Option<'back_donor_l'>,
+  'donor_cfr': undefined | Option<'donor_nfi_fks'>,
 	  // background_l/donor_cff [select_one] 1.3.5 Which donor for Cash for Fuel
-  'donor_cff': undefined | Option<'back_donor_l'>,
+  'donor_cff': undefined | Option<'donor_nfi_fks'>,
 	  // background_l/donor_cfe [select_one] 1.3.6 Which donor for Cash for Education
-  'donor_cfe': undefined | Option<'back_donor_l'>,
+  'donor_cfe': undefined | Option<'donor_nfi_fks'>,
 	  // background_l/donor_iwk [select_one] 1.3.7 Which donor for Infant Winterclothing Kit
-  'donor_iwk': undefined | Option<'back_donor_l'>,
+  'donor_iwk': undefined | Option<'donor_nfi_fks'>,
 	  // background_l/donor_ihk [select_one] 1.3.8 Which donor for Infant Hygiene Kit
-  'donor_ihk': undefined | Option<'back_donor_l'>,
+  'donor_ihk': undefined | Option<'donor_nfi_fks'>,
 	  // background_l/donor_cfu [select_one] 1.3.9 Which donor for Cash for Utilities
-  'donor_cfu': undefined | Option<'back_donor_l'>,
+  'donor_cfu': undefined | Option<'donor_nfi_fks'>,
 	  // background_l/back_donor_l [select_multiple] 1.4 Selected Project & Donor
-  'back_donor_l': undefined | Option<'back_donor_l'>[],
+  'back_donor_l': undefined | Option<'donor_nfi_fks'>[],
 	    'calc_prog_type_mpca_l': string,
 	    'calc_prog_type_cfr_l': string,
 	    'calc_prog_type_nfi_l': string,
@@ -266,6 +266,10 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'nfi_kit_cc': number | undefined,
 	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_bed [integer] Folding Beds distributed
   'nfi_bed': number | undefined,
+	  // nfi_l/begin_group_LF3jyHrmq_l/nfi_fks [integer] Family kitchen set (FKS)
+  'nfi_fks': number | undefined,
+	  // nfi_l/begin_group_LF3jyHrmq_l/donor_nfi_fks [select_one] Donor Family kitchen set (FKS)
+  'donor_nfi_fks': undefined | Option<'donor_nfi_fks'>,
 	  // esk_bha_345_m04/where_staying [select_one] M04. Where are you staying?
   'where_staying': undefined | Option<'where_staying'>,
 	  // esk_bha_345_m04/where_staying_other [text] M04.1 Where are you staying, if other?
@@ -573,7 +577,7 @@ back_enum_l: {
 	'chj_ex1': `Extra 1`,
 	'chj_ex2': `Extra 2`
 },
-back_donor_l: {
+donor_nfi_fks: {
 	'sdc_umy': `SDC`,
 	'uhf_chj': `UHF-4`,
 	'uhf_dnk': `UHF-4`,
@@ -2777,6 +2781,7 @@ export const map = (_: Record<keyof T, any>): T => ({
 	nfi_dist_wkb4_l: _.nfi_dist_wkb4_l ? +_.nfi_dist_wkb4_l : undefined,
 	nfi_kit_cc: _.nfi_kit_cc ? +_.nfi_kit_cc : undefined,
 	nfi_bed: _.nfi_bed ? +_.nfi_bed : undefined,
+	nfi_fks: _.nfi_fks ? +_.nfi_fks : undefined,
 	estimate_sqm_damage_l: _.estimate_sqm_damage_l ? +_.estimate_sqm_damage_l : undefined,
 	cfr_accom_cond_occ_rat_l: _.cfr_accom_cond_occ_rat_l ? +_.cfr_accom_cond_occ_rat_l : undefined,
 }) as T

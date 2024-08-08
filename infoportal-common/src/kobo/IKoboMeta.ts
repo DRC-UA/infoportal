@@ -4,7 +4,7 @@ import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Dr
 import {CashStatus, DisplacementStatus, KoboId, KoboValidation, PersonDetails, ShelterTaPriceLevel} from './mapper'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 
-export type IKoboMeta<TTag = any> = {
+export type IKoboMeta<TTag = KoboMetaTag> = {
   id: UUID
   uuid: UUID
   koboId: KoboId
@@ -57,8 +57,21 @@ export const koboMetaStatusLabel: Record<KoboMetaStatus, StateStatus> = {
   Rejected: 'error',
 }
 
+export type KoboMetaTag = KoboMetaShelterRepairTags & KoboMetaTagNfi
 export type KoboMetaShelterRepairTags = {
   damageLevel?: ShelterTaPriceLevel
+}
+
+export type KoboMetaTagNfi = {
+  HKF?: number
+  NFKF_KS?: number
+  FoldingBed?: number
+  FKS?: number
+  CollectiveCenterKits?: number
+  BK?: number
+  WKB?: number
+  HKMV?: number
+  ESK?: number
 }
 
 export namespace KoboMetaHelper {

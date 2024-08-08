@@ -7,6 +7,7 @@ import {seq} from '@alexandreannic/ts-utils'
 import {GlobalEvent} from '../../core/GlobalEvent'
 import {KoboService} from './KoboService'
 import {AppError} from '../../helper/Errors'
+import {appConf} from '../../core/conf/AppConf'
 
 export type KoboSyncServerResult = {
   answersIdsDeleted: KoboId[]
@@ -22,6 +23,7 @@ export class KoboSyncServer {
     private koboSdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
     private event = GlobalEvent.Class.getInstance(),
     private appCache = app.cache,
+    private conf = appConf,
     private log: AppLogger = app.logger('KoboSyncServer'),
   ) {
   }
@@ -66,7 +68,7 @@ export class KoboSyncServer {
         }
       })
       this.log.info(formId, `Synchronizing by ${updatedBy}... COMPLETED.`)
-      if (res.answersIdsDeleted.length + res.answersUpdated.length + res.answersIdsDeleted.length > 0) {
+      if (!this.conf.production || res.answersIdsDeleted.length + res.answersUpdated.length + res.answersIdsDeleted.length > 0) {
         this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId})
       }
       this.appCache.clear(AppCacheKey.KoboAnswers, formId)
