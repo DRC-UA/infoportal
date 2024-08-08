@@ -62,10 +62,10 @@ const Cp = ({period}: MetaSnapshotProps) => {
           <Div column>
             <Div column>
               <Div>
-                <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
+                <SlideWidget sx={{flex: 1}} icon="home" title={m.households}>
                   {formatLargeNumber(data.length)}
                 </SlideWidget>
-                <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
+                <SlideWidget sx={{flex: 1}} icon="group" title="Household size">
                   {(persons.length / data.length).toFixed(2)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
@@ -185,19 +185,23 @@ const Cp = ({period}: MetaSnapshotProps) => {
                     {formatLargeNumber(totalAmount)} UAH
                   </SlideWidget>
                   <Lazy deps={[dataMpca]} fn={(d) => {
-                    const gb = d.groupBy(d => format(d.date, 'yyyy-MM'))
-                    return new Obj(gb)
-                      .map((k, v) => [k, {
-                        supposed: seq(v).sum(_ => _.amountUahSupposed ?? 0),
-                        final: seq(v).filter(_ => _.status === KoboMetaStatus.Committed).sum(_ => _.amountUahFinal ?? 0),
-                      }])
-                      .sort(([ka], [kb]) => ka.localeCompare(kb))
-                      .entries()
-                      .map(([k, v]) => ({
-                        name: k,
-                        'Estimated amount': v.supposed,
-                        'Amount provided': v.final,
-                      }))
+                    const all = d.groupBy(d => format(d.date, 'yyyy-MM'))
+                    return Obj.keys(all).sort().map(m => ({
+                      name: m,
+                      'Amount provided': seq(all[m]).filter(_ => _.status === KoboMetaStatus.Committed).sum(_ => _.amountUahFinal ?? 0),
+                      'Estimated amount': seq(all[m]).sum(_ => _.amountUahSupposed ?? 0),
+                    }))
+                    // .map((k, v) => [k, {
+                    //   supposed: seq(v).sum(_ => _.amountUahSupposed ?? 0),
+                    //   final: seq(v).filter(_ => _.status === KoboMetaStatus.Committed).sum(_ => _.amountUahFinal ?? 0),
+                    // }])
+                    // .sort(([ka], [kb]) => ka.localeCompare(kb))
+                    // .entries()
+                    // .map(([k, v]) => ({
+                    //   name: k,
+                    //   'Estimated amount': v.supposed,
+                    //   'Amount provided': v.final,
+                    // }))
                   }}>
                     {_ => (
                       <ChartLine

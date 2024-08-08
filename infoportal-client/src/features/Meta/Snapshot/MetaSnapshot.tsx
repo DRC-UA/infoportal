@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react'
+import React, {useMemo} from 'react'
 import {Period} from '@infoportal-common'
 import {Pdf} from '@/shared/PdfLayout/PdfLayout'
 import {Box, Icon, useTheme} from '@mui/material'
@@ -11,7 +11,6 @@ import {MetaSnapshotSnfi} from './MetaSnapshotSnfi'
 import {MetaSnapshotProtection} from './MetaSnapshotProtection'
 import {MetaSnapshotCashAssistance} from './MetaSnapshotCashAssistance'
 import {MetaSnapshotOverview} from './MetaSnapshotOverview'
-import {useAppSettings} from '@/core/context/ConfigContext'
 
 export const MetaSnapshotHeader = ({
   period,
@@ -99,11 +98,11 @@ export const MetaSnapshot = () => {
   }
   return (
     <Pdf>
-      {/*<MetaSnapshotOverview period={period}/>*/}
-      {/*<MetaSnapshotProtection period={period}/>*/}
+      <MetaSnapshotOverview period={period}/>
+      <MetaSnapshotProtection period={period}/>
       <MetaSnapshotSnfi period={period}/>
-      {/*<MetaSnapshotEcrec period={period}/>*/}
-      {/*<MetaSnapshotCashAssistance period={period}/>*/}
+      <MetaSnapshotEcrec period={period}/>
+      <MetaSnapshotCashAssistance period={period}/>
     </Pdf>
   )
 }

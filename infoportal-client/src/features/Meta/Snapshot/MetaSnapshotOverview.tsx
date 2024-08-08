@@ -43,10 +43,10 @@ export const Cp = ({period}: MetaSnapshotProps) => {
           <Div column>
             <Div column>
               <Div>
-                <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
+                <SlideWidget sx={{flex: 1}} icon="home" title={m.households}>
                   {formatLargeNumber(ctx.filteredUniqueData.length)}
                 </SlideWidget>
-                <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
+                <SlideWidget sx={{flex: 1}} icon="group" title="Household size">
                   {(ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>

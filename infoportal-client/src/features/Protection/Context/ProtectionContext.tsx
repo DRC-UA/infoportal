@@ -31,7 +31,6 @@ export const ProtectionProvider = ({
   const reqProtection = () => api.koboMeta.search({
     activities: [
       DrcProgram.ProtectionMonitoring,
-      DrcProgram.GBV,
       DrcProgram.PSS,
       DrcProgram.FGD,
       DrcProgram.AwarenessRaisingSession,

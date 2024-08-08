@@ -7,14 +7,15 @@ import {Txt} from 'mui-extension'
 import {Enum} from '@alexandreannic/ts-utils'
 import {LightTooltip, TooltipRow} from '@/shared/LightTooltip'
 import {toPercent} from '@infoportal-common'
+import {ChartDataVal} from '@/shared/charts/chartHelper'
 
-export interface BarChartData {
-  label?: ReactNode
-  value: number
-  base?: number
+export interface BarChartData extends ChartDataVal {
+  // label?: ReactNode
+  // value: number
+  // base?: number
+  // desc?: string
   color?: string
   disabled?: boolean
-  desc?: string
 }
 
 interface Props<K extends string> {

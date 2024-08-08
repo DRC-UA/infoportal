@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react'
-import {drcDonorTranlate, DrcSector, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person} from '@infoportal-common'
+import {add, DisplacementStatus, drcDonorTranlate, DrcSector, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person} from '@infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {format} from 'date-fns'
 import {ThemeProvider, useTheme} from '@mui/material'
@@ -22,6 +22,7 @@ import {muiTheme} from '@/core/theme'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Txt} from 'mui-extension'
 import {Panel} from '@/shared/Panel/Panel'
+import {ChartBar} from '@/shared/charts/ChartBar'
 
 export const MetaSnapshotSnfi = (p: MetaSnapshotProps) => {
   const {theme} = useAppSettings()
@@ -82,10 +83,10 @@ export const Cp = ({period}: MetaSnapshotProps) => {
           <Div column>
             <Div column>
               <Div>
-                <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
+                <SlideWidget sx={{flex: 1}} icon="home" title={m.households}>
                   {formatLargeNumber(ctx.filteredUniqueData.length)}
                 </SlideWidget>
-                <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
+                <SlideWidget sx={{flex: 1}} icon="group" title="Household size">
                   {(ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
@@ -130,9 +131,9 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   <PanelWBody sx={{mb: 0}}>
                     <ChartPieWidgetBy
                       dense
-                      title={<span style={{textTransform: 'none'}}>PwDs</span>}
+                      title={<span style={{textTransform: 'none'}}>IDPs</span>}
                       data={ctx.filteredUniquePersons}
-                      filter={_ => (_.disability ?? []).length > 0}
+                      filter={_ => _.displacement === DisplacementStatus.Idp}
                     />
                   </PanelWBody>
                 </Div>
@@ -182,7 +183,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   )}
                 </Lazy>
               </PanelWBody>
-              <PanelWBody title="HHs by activities">
+              <PanelWBody title="Activities">
                 <ChartBarSingleBy
                   data={ctx.filteredData}
                   by={_ => m.activitiesMerged_[_.activity!]}
@@ -192,19 +193,19 @@ export const Cp = ({period}: MetaSnapshotProps) => {
               <Panel>
                 <Div>
                   <Div column>
-                    <SlideWidget sx={{mb: -1, flex: 1}} icon="home" title="Houses repaired">
+                    <SlideWidget sx={{flex: 1}} icon="home" title="Houses repaired">
                       {formatLargeNumber(filteredDataRepairDoneByAcc.house)}
                       <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlannedByAcc.house)}</Txt>
                     </SlideWidget>
                   </Div>
                   <Div column>
-                    <SlideWidget sx={{mb: -1, flex: 1}} icon="business" title="Apartments repaired">
+                    <SlideWidget sx={{flex: 1}} icon="business" title="Apartments repaired">
                       {formatLargeNumber(filteredDataRepairDoneByAcc.apartment)}
                       <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlannedByAcc.apartment)}</Txt>
                     </SlideWidget>
                   </Div>
                 </Div>
-                <PanelWBody title="Level of damages">
+                <PanelWBody title="Level of damages" sx={{mt: -2}}>
                   <ChartBarSingleBy data={filteredDataRepairDone} by={_ => _.ta?.tags?.damageLevel}/>
                   {/*<Lazy deps={[filteredDataRepairDone]} fn={d => {*/}
                   {/*  return Obj.entries(d.map(_ => _.ta?.tags?.damageLevel).compact().groupByAndApply(_ => _, _ => _.length)).map(([level, count]) => {*/}
@@ -218,6 +219,42 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   {/*</Lazy>*/}
                 </PanelWBody>
               </Panel>
+              <Lazy deps={[filteredDataRepairDone]} fn={() => {
+                const d = ctx.filteredData.map(_ => _.tags).compact()
+                const total = d.sum(_ => {
+                  return add(
+                    _.HKF,
+                    _.NFKF_KS,
+                    _.FoldingBed,
+                    _.FKS,
+                    _.CollectiveCenterKits,
+                    _.BK,
+                    _.WKB,
+                    _.HKMV,
+                    _.ESK,
+                  )
+                })
+                return {
+                  total,
+                  data: new Obj({
+                    HKF: {value: d.sum(_ => _.HKF ?? 0)},
+                    NFKF_KS: {value: d.sum(_ => _.NFKF_KS ?? 0)},
+                    FoldingBed: {value: d.sum(_ => _.FoldingBed ?? 0)},
+                    // FKS: {value: d.sum(_ => _.FKS ?? 0)},
+                    // CollectiveCenterKits: {value: d.sum(_ => _.CollectiveCenterKits ?? 0)},
+                    BK: {value: d.sum(_ => _.BK ?? 0)},
+                    // WKB: {value: d.sum(_ => _.WKB ?? 0)},
+                    HKMV: {value: d.sum(_ => _.HKMV ?? 0)},
+                    ESK: {value: d.sum(_ => _.ESK ?? 0)},
+                  }).sort(([, a], [, b]) => b.value - a.value).get()
+                }
+              }}>
+                {_ => (
+                  <PanelWBody title={`Most distributed NFIs (${formatLargeNumber(_.total)} kits)`}>
+                    <ChartBar data={_.data}/>
+                  </PanelWBody>
+                )}
+              </Lazy>
               {/*<Div>*/}
               {/*  <Div column>*/}
               {/*    <PanelWBody sx={{mb: 0}}>*/}
