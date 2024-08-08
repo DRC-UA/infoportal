@@ -53,8 +53,6 @@ const Cp = ({period}: MetaSnapshotProps) => {
     <PdfSlide format="vertical">
       <MetaSnapshotHeader
         period={period as Period}
-        color={appFeaturesIndex.mpca.color}
-        icon={appFeaturesIndex.mpca.materialIcons}
         subTitle="Cash assistances"
       />
       <PdfSlideBody>

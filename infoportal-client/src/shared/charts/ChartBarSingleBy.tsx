@@ -49,11 +49,6 @@ export const ChartBarSingleBy = <
       .filterValue(_ => min ? _.value > min : true)
       .take(limit)
       .get() as Record<K, ChartDataVal>
-    // const chart = ChartHelperOld.single({data: source})
-    // return chain(chart).map(label ? ChartHelperOld.setLabel(label) : _ => _)
-    //   .map(sortBy ?? ChartHelperOld.sortBy.value)
-    //   .map(limit ? ChartHelperOld.take(limit) : _ => _)
-    //   .get() as Record<K, ChartDataVal>
   }, [data, by, label])
   return (
     <ChartBar

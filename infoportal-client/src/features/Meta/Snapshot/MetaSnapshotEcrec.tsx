@@ -62,8 +62,6 @@ export const Cp = ({period}: MetaSnapshotProps) => {
     <PdfSlide format="vertical">
       <MetaSnapshotHeader
         period={ctx.period as Period}
-        color={appFeaturesIndex.ecrec.color}
-        icon={appFeaturesIndex.ecrec.materialIcons}
         subTitle="Livelihoods"
       />
       <PdfSlideBody>

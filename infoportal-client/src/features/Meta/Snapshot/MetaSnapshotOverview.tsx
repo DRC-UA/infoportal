@@ -37,7 +37,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
   const flatData = ctx.filteredData.flatMap(_ => _.persons?.map(p => ({...p, ..._})) ?? [])
   return (
     <PdfSlide format="vertical">
-      <MetaSnapshotHeader period={ctx.period as Period} icon="language" subTitle="Overview"/>
+      <MetaSnapshotHeader period={ctx.period as Period} subTitle="Overview"/>
       <PdfSlideBody>
         <Div column>
           <Div column>

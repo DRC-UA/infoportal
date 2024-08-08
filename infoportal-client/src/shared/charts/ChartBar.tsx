@@ -10,10 +10,6 @@ import {toPercent} from '@infoportal-common'
 import {ChartDataVal} from '@/shared/charts/chartHelper'
 
 export interface BarChartData extends ChartDataVal {
-  // label?: ReactNode
-  // value: number
-  // base?: number
-  // desc?: string
   color?: string
   disabled?: boolean
 }
