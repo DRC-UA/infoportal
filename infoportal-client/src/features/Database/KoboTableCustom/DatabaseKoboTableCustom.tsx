@@ -5,7 +5,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {useParams} from 'react-router'
 import * as yup from 'yup'
-import {Enum, Obj, seq} from '@alexandreannic/ts-utils'
+import {seq} from '@alexandreannic/ts-utils'
 import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useI18n} from '@/core/i18n'
 import {Datatable} from '@/shared/Datatable/Datatable'
@@ -14,12 +14,10 @@ import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumns
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
-import {KoboAnswerId, KoboId, KoboSchemaHelper} from '@infoportal-common'
+import {KoboAnswerId, KoboId, KoboIndex, KoboSchemaHelper, KoboValidation} from '@infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
-import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
-import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 
 interface CustomForm {
   id: string
@@ -58,13 +56,13 @@ export const customForms: CustomForm[] = [
     name: '[ECREC] MSME',
     forms: [
       {
-        id: 'awYf9G3sZB4grG8S4w3Wt8',
+        id: KoboIndex.byName('ecrec_msmeGrantSelection').id,
         // langIndexes: [1, 0],
       },
       {
-        id: 'aQkWZkWjVpJsqZ3tYtuwFZ',
+        id: KoboIndex.byName('ecrec_msmeGrantEol').id,
         // langIndexes: [0, 1],
-        join: {originId: 'awYf9G3sZB4grG8S4w3Wt8', originColName: 'id', colName: 'lh_restoration_id'}
+        join: {originId: KoboIndex.byName('ecrec_msmeGrantSelection').id, originColName: 'ben_det_tax_id_num', colName: 'tax_id_num'}
       },
     ]
   }
@@ -112,7 +110,7 @@ export const DatabaseTableCustomRoute = () => {
       .distinct(_ => _.formId)
     const indexes = indexesParams.groupByAndApply(
       _ => _.formId,
-      group => seq(ctxAnswers.byId(group[0].formId).get?.data!).groupByFirst(_ => (_ as any)[group[0].colName])
+      group => seq(ctxAnswers.byId(group[0].formId).get?.data.filter(_ => !_.tags || _.tags._validation !== KoboValidation.Rejected)!).groupByFirst(_ => (_ as any)[group[0].colName])
     )
     return dataSets[0]!.map((row, i) => {
       return {
