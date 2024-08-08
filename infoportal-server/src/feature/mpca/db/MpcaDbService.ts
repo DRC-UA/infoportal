@@ -47,8 +47,8 @@ export class MpcaDbService {
       this.meta.search({
         activities: [
           DrcProgram.MPCA,
+          DrcProgram.SectoralCashForAgriculture,
           DrcProgram.SectoralCashForAnimalShelterRepair,
-          DrcProgram.SectoralCashForAnimalFeed,
           DrcProgram.SectoralCashForAnimalFeed,
           DrcProgram.CashForRepair,
           DrcProgram.CashForRent,

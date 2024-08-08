@@ -9,11 +9,15 @@ export interface ChartBarVerticalProps extends BoxProps {
   height?: number | string
   width?: number | string
   data: ({name: string} | Record<string, number>)[]
+  hideYTicks?: boolean
+  hideLegends?: boolean
 }
 
 export const ChartBarVertical = ({
   width,
   height,
+  hideYTicks,
+  hideLegends,
   sx,
   data,
   colors = chartConfig.defaultColors,
@@ -39,9 +43,11 @@ export const ChartBarVertical = ({
         >
           {/*<CartesianGrid strokeDasharray="3 3"/>*/}
           <XAxis dataKey="name"/>
-          <YAxis/>
+          <YAxis hide={hideYTicks}/>
           <Tooltip/>
-          <Legend {...commonLegendProps}/>
+          {!hideLegends && (
+            <Legend {...commonLegendProps}/>
+          )}
           {bars.map((_, i) =>
             <Bar key={_} dataKey={_} fill={colors(theme)[i]}/>
           )}

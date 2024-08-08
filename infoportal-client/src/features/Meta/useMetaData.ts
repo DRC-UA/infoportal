@@ -27,7 +27,7 @@ export const distinctBys = <T extends Record<string, any>, K extends keyof T, >(
 
 export type UseMetaData = ReturnType<typeof useMetaDashboardData>
 
-export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
+export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix?: string, data: Seq<IKoboMeta>}) => {
   const {m} = useI18n()
   const [periodCommit, setPeriodCommit] = useState<Partial<Period>>({})
   const [period, setPeriod] = useState<Partial<Period>>({})
@@ -98,8 +98,8 @@ export const useMetaDashboardData = (data: Seq<IKoboMeta>) => {
       },
     })
   }, [data])
-  const [shapeFilters, setShapeFilters] = usePersistentState<DataFilter.InferShape<typeof shape>>({}, {storageKey: 'meta-dashboard-filters'})
-  const [customFilters, setCustomFilters] = usePersistentState<MetaDashboardCustomFilter>({}, {storageKey: 'meta-dashboard-custom-filters'})
+  const [shapeFilters, setShapeFilters] = usePersistentState<DataFilter.InferShape<typeof shape>>({}, {storageKey: storageKeyPrefix + 'meta-dashboard-filters'})
+  const [customFilters, setCustomFilters] = usePersistentState<MetaDashboardCustomFilter>({}, {storageKey: storageKeyPrefix + 'meta-dashboard-custom-filters'})
   const distinctBy = useMemo(() => new Set(customFilters.distinctBy), [customFilters.distinctBy])
 
   const filteredData = useMemo(() => {

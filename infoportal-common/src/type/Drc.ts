@@ -1,4 +1,5 @@
 import {Obj, seq} from '@alexandreannic/ts-utils'
+import {OblastName} from '../location'
 
 export enum DrcOffice {
   Kyiv = 'Kyiv',
@@ -16,6 +17,22 @@ export enum DrcOffice {
   Kherson = 'Kherson'
 }
 
+export const oblastByDrcOffice: Record<DrcOffice, OblastName> = {
+  Kyiv: 'Kyivska',
+  Sumy: 'Sumska',
+  Mykolaiv: 'Mykolaivska',
+  Lviv: 'Lvivska',
+  Chernihiv: 'Chernihivska',
+  Kharkiv: 'Kharkivska',
+  Dnipro: 'Dnipropetrovska',
+  Poltava: 'Poltavska',
+  Chernivtsi: 'Chernihivska',
+  Sloviansk: 'Donetska',
+  Ivankiv: 'Ivano-Frankivska',
+  Ichna: 'Chernihivska',
+  Kherson: 'Khersonska'
+}
+
 export const drcOffices = Obj.values(DrcOffice)
 
 export enum DrcSector {
@@ -23,6 +40,7 @@ export enum DrcSector {
   WaSH = 'WaSH',
   Education = 'Education',
   Protection = 'Protection',
+  DrcSector = 'DrcSector',
   Livelihoods = 'Livelihoods',
   FoodSecurity = 'FoodSecurity',
   MPCA = 'MPCA',
@@ -30,6 +48,7 @@ export enum DrcSector {
   Nutrition = 'Nutrition',
   Shelter = 'Shelter',
   Evacuations = 'Evacuations',
+  GBV = 'GBV',
   EORE = 'EORE',
 }
 
@@ -53,13 +72,20 @@ export enum DrcProgram {
   SectoralCashForAnimalFeed = 'SectoralCashForAnimalFeed',
   Counselling = 'Counselling',
   PSS = 'PSS',
-  GBV = 'GBV',
+  // GBV = 'GBV',
   ProtectionMonitoring = 'ProtectionMonitoring',
   AwarenessRaisingSession = 'AwarenessRaisingSession',
   CommunityLevelPm = 'CommunityLevelPm',
   Legal = 'Legal',
   FGD = 'FGD',
   Observation = 'Observation',
+  WGSS = 'WGSS',
+  DignityKits = 'DignityKits',
+  CaseManagement = 'CaseManagement',
+  GbvAwarenessRaisingSession = 'GbvAwarenessRaisingSession',
+  PssActivities = 'PssActivities',
+  GbvLegalAid = 'GbvLegalAid',
+  CapacityBuilding = 'CapacityBuilding',
 }
 
 export class DrcSectorHelper {
@@ -69,7 +95,7 @@ export class DrcSectorHelper {
     CashForUtilities: DrcSector.Shelter,
     CashForRent: DrcSector.Shelter,
     CashForRepair: DrcSector.Shelter,
-    CashForEducation: DrcSector.Shelter,
+    CashForEducation: DrcSector.Education,
     MPCA: DrcSector.MPCA,
     NFI: DrcSector.NFI,
     ShelterRepair: DrcSector.Shelter,
@@ -84,13 +110,21 @@ export class DrcSectorHelper {
     SectoralCashForAnimalFeed: DrcSector.Livelihoods,
     Counselling: DrcSector.Protection,
     PSS: DrcSector.Protection,
-    GBV: DrcSector.Protection,
     ProtectionMonitoring: DrcSector.Protection,
     AwarenessRaisingSession: DrcSector.Protection,
     CommunityLevelPm: DrcSector.Protection,
     Legal: DrcSector.Protection,
     FGD: DrcSector.Protection,
     Observation: DrcSector.Protection,
+    WGSS: DrcSector.GBV,	//	# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces
+    DignityKits: DrcSector.GBV,	//	# of women and girls at risk who received dignity kits
+    CapacityBuilding: DrcSector.GBV,	//	# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards
+    CaseManagement: DrcSector.GBV,	//	# of individuals reached with humanitarian cash and voucher assistance for GBV case management and
+    GbvAwarenessRaisingSession: DrcSector.GBV,	//	# of individuals reached with awareness-raising activities and GBV-life-saving information
+    PssActivities: DrcSector.GBV,	//	# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)
+    GbvLegalAid: DrcSector.GBV,	//	# of individuals at risk supported with GBV specialized legal assistance and counseling
+    //	# of operational women and girls\' safe spaces
+    // CapacityBuilding: DrcSector.GBV,	//	# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards
   } as const
 
   private static readonly autoValidatedActivity = new Set([

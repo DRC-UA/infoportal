@@ -16,13 +16,15 @@ export const useMetaContext = () => useContext<MetaContext>(Context)
 
 export const MetaDashboardProvider = ({
   children,
+  storageKeyPrefix,
 }: {
   children: ReactNode
+  storageKeyPrefix?: string
 }) => {
   const {api} = useAppSettings()
   const fetcher = useFetcher(api.koboMeta.search)
   const data = map(fetcher.get, _ => seq(_.data))
-  const ctx = useMetaDashboardData(data ?? seq())
+  const ctx = useMetaDashboardData({data: data ?? seq(), storageKeyPrefix})
 
   useEffect(() => {
     fetcher.fetch()

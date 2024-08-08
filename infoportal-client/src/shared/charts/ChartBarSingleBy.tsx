@@ -4,6 +4,7 @@ import React, {ReactNode, useMemo} from 'react'
 import {chain, KeyOf} from '@infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {Checkbox} from '@mui/material'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const ChartBarSingleBy = <
   D extends Record<string, any>,
@@ -20,6 +21,7 @@ export const ChartBarSingleBy = <
   label,
   filter,
   mergeOptions,
+  min,
   debug
 }: {
   debug?: boolean
@@ -29,6 +31,7 @@ export const ChartBarSingleBy = <
   data: Seq<D>,
   mergeOptions?: Partial<Record<KeyOf<O>, KeyOf<O>>>
   label?: O
+  min?: number
   by: (_: D) => K | undefined,
   filter?: (_: D) => boolean,
   checked?: Record<K, boolean>
@@ -40,10 +43,11 @@ export const ChartBarSingleBy = <
       if (mergeOptions) return (mergeOptions as any)[by(d)] ?? by(d)
       return by(d)
     }).compact()
-    const chart = ChartHelperOld.single({data: source})
-    return chain(chart).map(label ? ChartHelperOld.setLabel(label) : _ => _)
-      .map(sortBy ?? ChartHelperOld.sortBy.value)
-      .map(limit ? ChartHelperOld.take(limit) : _ => _)
+    return ChartHelper.single({data: source})
+      .setLabel(label)
+      .sortBy.value()
+      .filterValue(_ => min ? _.value > min : true)
+      .take(limit)
       .get() as Record<K, ChartDataVal>
   }, [data, by, label])
   return (

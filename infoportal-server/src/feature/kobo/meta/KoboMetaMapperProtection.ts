@@ -307,9 +307,26 @@ export class KoboMetaMapperProtection {
   static readonly gbv: MetaMapperInsert<KoboMetaOrigin<Protection_gbv.T, KoboTagStatus>> = row => {
     const answer = Protection_gbv.map(row.answers)
     if (answer.new_ben === 'no') return
-    const persons = answer.hh_char_hh_det
-      ?.filter(_ => _.hh_char_hh_new_ben !== 'no')
-      .map(KoboGeneralMapping.mapPersonDetails) ?? []
+    const activities = answer.activity?.map(_ => fnSwitch(_!, {
+      // https://docs.google.com/spreadsheets/d/1SbRr4rRTL3Heap_8XUzZnBBx08Cx9XX5bmtr0CLSQ4w/edit?gid=0#gid=0
+      // pssac: DrcProject.,
+      wgss: DrcProgram.WGSS,
+      ddk: DrcProgram.DignityKits,
+      gbvis: DrcProgram.GbvAwarenessRaisingSession,
+      ngbv: DrcProgram.CapacityBuilding,
+      gbva: DrcProgram.CapacityBuilding,
+      // gcva: DrcProgram.,
+      // glac: DrcProgram.,
+      // girl_shine: DrcProgram.,
+      education_sessions: DrcProgram.WGSS,
+      dignity_kits: DrcProgram.DignityKits,
+      awareness_raising: DrcProgram.GbvAwarenessRaisingSession,
+      // psychosocial_support: DrcProgram.,
+      training_actors: DrcProgram.CapacityBuilding,
+      training_providers: DrcProgram.CapacityBuilding,
+    }, () => undefined)).filter(_ => _ !== undefined) ?? []
+    if (activities.length === 0) return
+    const persons = answer.hh_char_hh_det?.filter(_ => _.hh_char_hh_new_ben !== 'no').map(KoboGeneralMapping.mapPersonDetails) ?? []
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = answer.project ? fnSwitch(answer.project, {
       bha: DrcProject['UKR-000345 BHA2'],
@@ -317,25 +334,27 @@ export class KoboMetaMapperProtection {
       danida: DrcProject['UKR-000347 DANIDA'],
       uhf8: DrcProject['UKR-000363 UHF8'],
     }, () => DrcProjectHelper.search(Protection_gbv.options.project[answer.project!] ?? answer.project)) : undefined
-    return {
-      office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
-        chernihiv: DrcOffice.Chernihiv,
-        dnipro: DrcOffice.Dnipro,
-        kharkiv: DrcOffice.Kharkiv,
-        mykolaiv: DrcOffice.Mykolaiv,
-      }, () => undefined),
-      oblast: oblast.name,
-      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
-      settlement: answer.ben_det_hromada_001,
-      sector: DrcSector.Protection,
-      activity: DrcProgram.GBV,
-      personsCount: persons.length,
-      persons,
-      project: project ? [project] : [],
-      donor: map(DrcProjectHelper.donorByProject[project!], _ => [_]) ?? [],
-      status: KoboMetaStatus.Committed,
-      lastStatusUpdate: row.date,
-    }
+    return activities.map(activity => {
+      return {
+        office: fnSwitch(answer.staff_to_insert_their_DRC_office!, {
+          chernihiv: DrcOffice.Chernihiv,
+          dnipro: DrcOffice.Dnipro,
+          kharkiv: DrcOffice.Kharkiv,
+          mykolaiv: DrcOffice.Mykolaiv,
+        }, () => undefined),
+        oblast: oblast.name,
+        raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
+        hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+        settlement: answer.ben_det_hromada_001,
+        sector: DrcSector.GBV,
+        activity,
+        personsCount: persons.length,
+        persons,
+        project: project ? [project] : [],
+        donor: map(DrcProjectHelper.donorByProject[project!], _ => [_]) ?? [],
+        status: KoboMetaStatus.Committed,
+        lastStatusUpdate: row.date,
+      }
+    })
   }
 }

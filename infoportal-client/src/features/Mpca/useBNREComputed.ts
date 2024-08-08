@@ -7,9 +7,8 @@ export type UseBNREComputed = ReturnType<typeof useBNREComputed>
 export const useBNREComputed = ({
   data,
 }: {
-  data?: Seq<MpcaEntity> | undefined
+  data: Seq<MpcaEntity>
 }) => useMemo(() => {
-  if (!data) return
   // const flatData = data.flatM()
   const deduplications = data.map(_ => _.deduplication).compact()
   return {

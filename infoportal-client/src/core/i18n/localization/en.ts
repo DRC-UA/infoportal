@@ -1,6 +1,6 @@
 import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
-import {capitalize, OblastIndex, OblastISO, WgDisability} from '@infoportal-common'
+import {capitalize, DrcProgram, OblastIndex, OblastISO, WgDisability} from '@infoportal-common'
 
 const invalidDate = ''
 
@@ -855,6 +855,69 @@ export const en = Object.freeze({
       [WgDisability.Care]: 'With self-care',
       [WgDisability.Comm]: 'Communicating',
       [WgDisability.None]: 'None',
+    },
+    ...(() => {
+      const activities_: Record<DrcProgram, string> = {
+        CashForFuel: 'Cash for Fuel',
+        CashForUtilities: 'Cash for Utilities',
+        CashForRent: 'Cash for Rent',
+        CashForRepair: 'Cash for Repair',
+        CashForEducation: 'Cash for Education',
+        MPCA: 'MPCA',
+        NFI: 'NFI',
+        ShelterRepair: 'Shelter Repair',
+        Referral: 'Referral',
+        ESK: 'ESK',
+        InfantWinterClothing: 'Infant winter clothing',
+        HygieneKit: 'Hygiene kit',
+        SectoralCashForAgriculture: 'Sectoral Cash for Agriculture',
+        VET: 'Vocational training (VET)',
+        MSME: 'MSME Grant & Coaching',
+        SectoralCashForAnimalShelterRepair: 'Sectoral Cash for Animal shelter repair',
+        SectoralCashForAnimalFeed: 'Sectoral Cash for Animal feed',
+        Counselling: 'Counselling',
+        PSS: 'PSS',
+        ProtectionMonitoring: 'Protection Monitoring',
+        AwarenessRaisingSession: 'Awareness Raising',
+        CommunityLevelPm: 'Community Level PM',
+        Legal: 'Legal',
+        FGD: 'FGD',
+        Observation: 'Observation',
+        WGSS: 'WGSS Activities',
+        DignityKits: 'Distribution of dignity kits',
+        CapacityBuilding: 'Capacity-building',
+        CaseManagement: 'Case Management',
+        GbvAwarenessRaisingSession: 'Awareness raising',
+        PssActivities: 'GBV PSS Activities',
+        GbvLegalAid: 'GBV Legal Aid',
+      }
+      const activitiesMerged_: Partial<Record<DrcProgram, string>> = {
+        ...activities_,
+        ShelterRepair: 'Shelter Repair',
+        Referral: 'Referral',
+        ESK: 'ESK',
+        InfantWinterClothing: 'NFI',
+        HygieneKit: 'NFI',
+        SectoralCashForAgriculture: 'Sectoral Cash for Agriculture',
+        SectoralCashForAnimalShelterRepair: 'Sectoral Cash for Agriculture',
+        SectoralCashForAnimalFeed: 'Sectoral Cash for Agriculture',
+        CommunityLevelPm: 'Protection Monitoring',
+        FGD: 'Protection Monitoring',
+        Observation: 'Protection Monitoring',
+        GbvAwarenessRaisingSession: 'Awareness Raising'
+      }
+      return {activities_, activitiesMerged_}
+    })(),
+    nfi_: {
+      HKF: 'Family Hygiene Kits',
+      NFKF_KS: 'Family NFI kits',
+      FoldingBed: 'Folding Bed',
+      FKS: 'Family Kitchen Set',
+      CollectiveCenterKits: 'Collective Center kit',
+      BK: 'Baby Kit',
+      WKB: 'Baby Winter Kits',
+      HKMV: 'Family Hygiene Kits for IDPs on the Move',
+      ESK: 'Emergency Shelter Kit'
     }
   },
 })

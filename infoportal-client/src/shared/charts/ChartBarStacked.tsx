@@ -20,8 +20,16 @@ export const ChartBarStacker = ({
   width: _width,
   sx,
   colors = chartConfig.defaultColors,
+  layout = 'vertical',
+  hideLegend,
+  hideYTicks,
+  hideXTicks,
   ...props
 }: {
+  hideLegend?: boolean
+  hideYTicks?: boolean
+  hideXTicks?: boolean
+  layout?: 'horizontal' | 'vertical'
   colors?: (t: Theme) => string[]
   height?: number | string
   width?: number | string
@@ -35,22 +43,34 @@ export const ChartBarStacker = ({
     <Box sx={{position: 'relative', height, width, ...sx}} {...props}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          layout="vertical"
+          layout={layout}
           // width={width}
           // height={height}
           data={data}
           margin={{
             // top: 20,
             // right: 30,
-            left: -40,
+            left: layout === 'vertical' ? -40 : undefined,
             // bottom: 5,
           }}
         >
           {/*<CartesianGrid strokeDasharray="3 3"/>*/}
-          <XAxis type="number" domain={[0, 10]}/>
-          <YAxis dataKey="key" type="category" width={110}/>
+          {layout === 'vertical' ? (
+            <>
+              <XAxis type="number" domain={[0, 10]} hide={hideXTicks}/>
+              <YAxis dataKey="key" type="category" width={110} hide={hideYTicks}/>
+            </>
+          ) : (
+            <>
+              <YAxis type="number" domain={[0, 10]} hide={hideYTicks}/>
+              <XAxis dataKey="key" type="category" width={110} hide={hideXTicks}/>
+            </>
+
+          )}
           <Tooltip/>
-          <Legend {...commonLegendProps}/>
+          {!hideLegend && (
+            <Legend {...commonLegendProps}/>
+          )}
           {Object.keys(first).map((k, i) =>
             <Bar key={k} dataKey={k} stackId="a" fill={colors(theme)[i]}/>
           )}

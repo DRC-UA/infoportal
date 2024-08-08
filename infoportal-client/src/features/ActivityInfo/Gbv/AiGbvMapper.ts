@@ -43,9 +43,9 @@ export namespace AiGbvMapper {
             )!,
             'Population Group': AiMapper.mapPopulationGroup(ind.displacement),
             'Indicators': d.activity?.map(a => fnSwitch(a!, {
+              // 'wgss': '# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces',
               'pssac': '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)',
               'wgss': '# of operational women and girls\' safe spaces',
-              // 'wgss': '# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces',
               'ddk': '# of women and girls at risk who received dignity kits',
               'gbvis': '# of individuals reached with awareness-raising activities and GBV-life-saving information',
               'ngbv': '# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards',

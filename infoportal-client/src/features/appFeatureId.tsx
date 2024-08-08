@@ -68,7 +68,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     id: AppFeatureId.mpca,
     name: 'Cash Assistance',
     materialIcons: 'savings',
-    color: 'green',
+    color: '#00d82e',
     path: '/mpca',
     category: 'programs',
     showIf: (u, accesses) => {
@@ -126,7 +126,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     id: AppFeatureId.wfp_deduplication,
     name: 'WFP Deduplication',
     materialIcons: 'join_left',
-    color: 'orange',
+    color: '#f1a100',
     path: '/wfp-deduplication',
     category: 'general',
     showIf: (u, accesses) => {
@@ -199,7 +199,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
   },
   sandbox: {
     id: AppFeatureId.sandbox,
-    color: 'black',
+    color: '#c0c0c0',
     materialIcons: 'api',
     name: 'Sandbox',
     path: '/sandbox',

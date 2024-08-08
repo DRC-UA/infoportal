@@ -4,7 +4,7 @@ import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Dr
 import {CashStatus, DisplacementStatus, KoboId, KoboValidation, PersonDetails, ShelterTaPriceLevel} from './mapper'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 
-export type IKoboMeta<TTag = KoboMetaTag> = {
+export type IKoboMeta<TTag = any> = {
   id: UUID
   uuid: UUID
   koboId: KoboId
