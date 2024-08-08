@@ -63,7 +63,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                 <SlideWidget sx={{flex: 1}} icon="home" title={m.households}>
                   {formatLargeNumber(data.length)}
                 </SlideWidget>
-                <SlideWidget sx={{flex: 1}} icon="group" title="Household size">
+                <SlideWidget sx={{flex: 1}} icon="group" title="Average HH size">
                   {(persons.length / data.length).toFixed(2)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>

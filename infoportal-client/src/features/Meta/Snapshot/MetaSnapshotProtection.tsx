@@ -74,7 +74,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                 <SlideWidget sx={{flex: 1}} icon="group_work" title="Sessions">
                   {formatLargeNumber(dataFilteredActivities.length)}
                 </SlideWidget>
-                <SlideWidget sx={{flex: 1}} icon="groups" title="Group size">
+                <SlideWidget sx={{flex: 1}} icon="groups" title="Average group size">
                   {(dataFilteredActivitiesIndividuals.length / dataFilteredActivities.length).toFixed(2)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>

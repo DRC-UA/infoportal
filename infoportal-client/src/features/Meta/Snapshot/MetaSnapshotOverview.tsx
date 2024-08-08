@@ -46,7 +46,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                 <SlideWidget sx={{flex: 1}} icon="home" title={m.households}>
                   {formatLargeNumber(ctx.filteredUniqueData.length)}
                 </SlideWidget>
-                <SlideWidget sx={{flex: 1}} icon="group" title="Household size">
+                <SlideWidget sx={{flex: 1}} icon="group" title="Average HH size">
                   {(ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
@@ -98,7 +98,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   </PanelWBody>
                 </Div>
               </Div>
-              <PanelWBody title="Main difficulties">
+              <PanelWBody title="Most Reported Access Issues">
                 <ChartBarMultipleBy
                   data={ctx.filteredPersons}
                   filterValue={[WgDisability.None]}

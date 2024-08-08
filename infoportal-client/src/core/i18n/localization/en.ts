@@ -916,7 +916,7 @@ export const en = Object.freeze({
       CollectiveCenterKits: 'Collective Center kit',
       BK: 'Baby Kit',
       WKB: 'Baby Winter Kits',
-      HKMV: 'Family Hygiene Kits for IDPs on the Move',
+      HKMV: 'Family Hygiene Kits for moving IDPs',
       ESK: 'Emergency Shelter Kit'
     }
   },
