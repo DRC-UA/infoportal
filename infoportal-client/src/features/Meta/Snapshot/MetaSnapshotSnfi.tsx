@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react'
-import {drcDonorTranlate, DrcSector, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person, WgDisability} from '@infoportal-common'
+import {drcDonorTranlate, DrcSector, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person} from '@infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {format} from 'date-fns'
 import {ThemeProvider, useTheme} from '@mui/material'
@@ -21,6 +21,7 @@ import {useShelterData} from '@/features/Shelter/useShelterData'
 import {muiTheme} from '@/core/theme'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Txt} from 'mui-extension'
+import {Panel} from '@/shared/Panel/Panel'
 
 export const MetaSnapshotSnfi = (p: MetaSnapshotProps) => {
   const {theme} = useAppSettings()
@@ -98,7 +99,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
           </Div>
           <Div>
             <Div column>
-              <PanelWBody title="PoCs reached by Oblast">
+              <PanelWBody title="Households reached by Oblast">
                 <MapSvgByOblast
                   sx={{mx: 1.5, mt: -1, mb: -1.5}}
                   getOblast={_ => OblastIndex.byName(_.oblast).iso}
@@ -136,27 +137,25 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   </PanelWBody>
                 </Div>
               </Div>
-              <PanelWBody title="Main difficulties">
+              <PanelWBody title="Donors">
                 <ChartBarMultipleBy
-                  data={ctx.filteredPersons}
-                  filterValue={[WgDisability.None]}
-                  by={_ => _.disability}
-                  limit={3}
-                  label={m.disability_}
+                  data={flatData}
+                  label={drcDonorTranlate}
+                  by={_ => _.donor ?? []}
                 />
               </PanelWBody>
-              <PanelWBody title={m.displacementStatus}>
-                <ChartBarSingleBy
-                  data={ctx.filteredPersons}
-                  by={_ => _.displacement}
-                  label={{
-                    Idp: 'IDP',
-                    Returnee: 'Returnee',
-                    Refugee: 'Refugee',
-                    NonDisplaced: 'Non-displaced',
-                  }}
-                />
-              </PanelWBody>
+              {/*<PanelWBody title={m.displacementStatus}>*/}
+              {/*  <ChartBarSingleBy*/}
+              {/*    data={ctx.filteredPersons}*/}
+              {/*    by={_ => _.displacement}*/}
+              {/*    label={{*/}
+              {/*      Idp: 'IDP',*/}
+              {/*      Returnee: 'Returnee',*/}
+              {/*      Refugee: 'Refugee',*/}
+              {/*      NonDisplaced: 'Non-displaced',*/}
+              {/*    }}*/}
+              {/*  />*/}
+              {/*</PanelWBody>*/}
             </Div>
             <Div column>
               <PanelWBody>
@@ -190,23 +189,35 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   limit={5}
                 />
               </PanelWBody>
-              <Div>
-                <Div column>
-                  <SlideWidget sx={{flex: 1}} icon="home" title="Houses repaired">
-                    {formatLargeNumber(filteredDataRepairDoneByAcc.house)}
-                    <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlannedByAcc.house)}</Txt>
-                  </SlideWidget>
+              <Panel>
+                <Div>
+                  <Div column>
+                    <SlideWidget sx={{mb: -1, flex: 1}} icon="home" title="Houses repaired">
+                      {formatLargeNumber(filteredDataRepairDoneByAcc.house)}
+                      <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlannedByAcc.house)}</Txt>
+                    </SlideWidget>
+                  </Div>
+                  <Div column>
+                    <SlideWidget sx={{mb: -1, flex: 1}} icon="business" title="Apartments repaired">
+                      {formatLargeNumber(filteredDataRepairDoneByAcc.apartment)}
+                      <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlannedByAcc.apartment)}</Txt>
+                    </SlideWidget>
+                  </Div>
                 </Div>
-                <Div column>
-                  <SlideWidget sx={{flex: 1}} icon="business" title="Apartments repaired">
-                    {formatLargeNumber(filteredDataRepairDoneByAcc.apartment)}
-                    <Txt color="disabled" sx={{fontWeight: 400}}>&nbsp;+{formatLargeNumber(filteredDataRepairPlannedByAcc.apartment)}</Txt>
-                  </SlideWidget>
-                </Div>
-              </Div>
-              <PanelWBody>
-                <ChartBarSingleBy data={filteredDataRepairDone} by={_ => _.ta?.tags.damageLevel}/>
-              </PanelWBody>
+                <PanelWBody title="Level of damages">
+                  <ChartBarSingleBy data={filteredDataRepairDone} by={_ => _.ta?.tags?.damageLevel}/>
+                  {/*<Lazy deps={[filteredDataRepairDone]} fn={d => {*/}
+                  {/*  return Obj.entries(d.map(_ => _.ta?.tags?.damageLevel).compact().groupByAndApply(_ => _, _ => _.length)).map(([level, count]) => {*/}
+                  {/*    return {*/}
+                  {/*      key: level,*/}
+                  {/*      count,*/}
+                  {/*    }*/}
+                  {/*  })*/}
+                  {/*}}>*/}
+                  {/*  {_ => <ChartBarStacker layout="horizontal" data={_} height={100} hideLegend hideYTicks/>}*/}
+                  {/*</Lazy>*/}
+                </PanelWBody>
+              </Panel>
               {/*<Div>*/}
               {/*  <Div column>*/}
               {/*    <PanelWBody sx={{mb: 0}}>*/}
@@ -229,13 +240,6 @@ export const Cp = ({period}: MetaSnapshotProps) => {
               {/*    </PanelWBody>w*/}
               {/*  </Div>*/}
               {/*</Div>*/}
-              <PanelWBody title="Donors">
-                <ChartBarMultipleBy
-                  data={flatData}
-                  label={drcDonorTranlate}
-                  by={_ => _.donor ?? []}
-                />
-              </PanelWBody>
             </Div>
           </Div>
         </Div>

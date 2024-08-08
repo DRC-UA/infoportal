@@ -99,11 +99,11 @@ export const MetaSnapshot = () => {
   }
   return (
     <Pdf>
-      <MetaSnapshotOverview period={period}/>
-      <MetaSnapshotProtection period={period}/>
+      {/*<MetaSnapshotOverview period={period}/>*/}
+      {/*<MetaSnapshotProtection period={period}/>*/}
       <MetaSnapshotSnfi period={period}/>
-      <MetaSnapshotEcrec period={period}/>
-      <MetaSnapshotCashAssistance period={period}/>
+      {/*<MetaSnapshotEcrec period={period}/>*/}
+      {/*<MetaSnapshotCashAssistance period={period}/>*/}
     </Pdf>
   )
 }

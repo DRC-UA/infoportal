@@ -60,11 +60,11 @@ export const Cp = ({period}: MetaSnapshotProps) => {
           </Div>
           <Div>
             <Div column>
-              <PanelWBody title="PoCs reached by Oblast">
+              <PanelWBody title="Individuals reached by Oblast">
                 <MapSvgByOblast
                   sx={{mx: 1.5, mt: -1, mb: -1.5}}
                   getOblast={_ => OblastIndex.byName(_.oblast).iso}
-                  data={ctx.filteredData}
+                  data={flatData}
                   fillBaseOn="value"
                 />
               </PanelWBody>
