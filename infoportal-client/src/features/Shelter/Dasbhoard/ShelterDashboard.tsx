@@ -263,7 +263,7 @@ export const _ShelterDashboard = ({
         </Panel>
         <Panel title={m.ageGroup}>
           <PanelBody>
-            <AgeGroupTable tableId="shelter-dashboard-ag" persons={persons} enableDisplacementStatusFilter/>
+            <AgeGroupTable tableId="shelter-dashboard-ag" persons={persons} enableDisplacementStatusFilter enablePwdFilter/>
           </PanelBody>
         </Panel>
         <SlidePanel>

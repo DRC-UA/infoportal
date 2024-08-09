@@ -33,6 +33,7 @@ import {
   Shelter_ta,
   ShelterNtaTags,
   ShelterTaTagsHelper,
+  Meal_cashPdm, KoboMealPdmDashboard,
 } from '@infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
@@ -184,6 +185,12 @@ export class KoboTypedAnswerSdk {
       ...make('meal_visitMonitoring', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('meal_visitMonitoring').id,
         fnMapKobo: Meal_visitMonitoring.map,
+        ...filters,
+      })),
+      ...make('meal_cashPdm', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('meal_cashPdm').id,
+        fnMapKobo: Meal_cashPdm.map,
+        fnMapCustom: KoboMealPdmDashboard.map,
         ...filters,
       })),
       ...make('protection_hhs3', (filters?: KoboAnswerFilter) => req({

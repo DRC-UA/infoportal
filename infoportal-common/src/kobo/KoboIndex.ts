@@ -107,7 +107,7 @@ export const koboFormTranslation: Record<KoboFormName, string> = {
   bn_rapidResponseSida: '[Basic Needs] RRM SIDA',
   meal_visitMonitoring: '[MEAL] Field Visit Monitoring',
   meal_pdmStandardised: '[MEAL] MPCA Standardised PDM',
-  meal_cashPdm: '[MEAL] Cash PDM',
+  meal_cashPdm: '[MEAL] Cash PDM {Master tool}',
   meal_cfmInternal: '[MEAL] Cfm Internal',
   meal_cfmExternal: '[MEAL] Cfm External',
   meal_verificationEcrec: '[MEAL] Verification EcRec',

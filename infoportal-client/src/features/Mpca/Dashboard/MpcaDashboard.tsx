@@ -302,7 +302,7 @@ export const _MPCADashboard = ({
             </SlidePanel>
             <Panel title={m.disaggregation}>
               <PanelBody>
-                <AgeGroupTable tableId="mpca-dashboard-ag" persons={computed.persons}/>
+                <AgeGroupTable tableId="mpca-dashboard-ag" persons={computed.persons} enablePwdFilter/>
               </PanelBody>
             </Panel>
             <SlidePanel>
