@@ -148,7 +148,7 @@ export const MealPdmDashboard = () => {
               </Panel>
               <Panel title={m.ageGroup}>
                 <PanelBody>
-                  <AgeGroupTable tableId="pdm-dashboard" persons={data.flatMap(_ => _.persons)} enableDisplacementStatusFilter enableOnlyPwdFilter/>
+                  <AgeGroupTable tableId="pdm-dashboard" persons={data.flatMap(_ => _.persons)} enableDisplacementStatusFilter enablePwdFilter/>
                 </PanelBody>
               </Panel>
               <SlidePanel title={m.mealMonitoringPdm.pdmType}>

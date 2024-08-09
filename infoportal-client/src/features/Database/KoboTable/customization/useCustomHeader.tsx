@@ -43,7 +43,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
                 <AgeGroupTable
                   tableId="useCustomHeader"
                   enableDisplacementStatusFilter
-                  enableOnlyPwdFilter
+                  enablePwdFilter
                   persons={_.filteredData.flatMap(_ => _.custom.persons)}
                 />
               )}
