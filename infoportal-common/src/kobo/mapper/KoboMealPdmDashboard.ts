@@ -4,7 +4,7 @@ import {fnSwitch} from '@alexandreannic/ts-utils'
 import {DisplacementStatus, KoboAnswerFlat, KoboBaseTags, PersonDetails} from './Common'
 import {KoboAnswerTags} from '../sdk'
 
-export namespace KoboMealPdmDasbhoard {
+export namespace KoboMealPdmDashboard {
 
   export type Person = PersonDetails
 

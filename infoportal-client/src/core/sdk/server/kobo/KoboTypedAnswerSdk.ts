@@ -13,7 +13,6 @@ import {
   KoboFormName,
   KoboIndex,
   KoboMealCfmHelper,
-  KoboMealPdmDasbhoard,
   KoboProtection_hhs3,
   KoboSafetyIncidentHelper,
   Meal_cfmExternal,
@@ -193,7 +192,7 @@ export class KoboTypedAnswerSdk {
       ...make('meal_cashPdm', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('meal_cashPdm').id,
         fnMapKobo: Meal_cashPdm.map,
-        fnMapCustom: KoboMealPdmDasbhoard.map,
+        fnMapCustom: KoboMealPdmDashboard.map,
         ...filters,
       })),
       ...make('protection_hhs3', (filters?: KoboAnswerFilter) => req({
