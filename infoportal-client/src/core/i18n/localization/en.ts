@@ -190,6 +190,7 @@ export const en = Object.freeze({
     information: 'Information',
     koboData: `Kobo data`,
     activity: 'Activity',
+    nfis: 'NFIs',
     previewActivity: `Preview activity`,
     previewRequestBody: `Preview request body code`,
     nLines: (n: number) => `<b>${n}</b> lignes`,

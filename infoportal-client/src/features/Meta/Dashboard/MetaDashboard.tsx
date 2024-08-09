@@ -1,5 +1,5 @@
 import React from 'react'
-import {add, DisplacementStatus, KoboIndex, KoboMetaStatus, OblastIndex} from '@infoportal-common'
+import {DisplacementStatus, KoboIndex, KoboMetaStatus, OblastIndex} from '@infoportal-common'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared/Page'
@@ -18,8 +18,7 @@ import {Panel, PanelBody} from '@/shared/Panel'
 import {Obj, seq} from '@alexandreannic/ts-utils'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {Map} from '@/shared/maps/Map'
-import {PanelWBody} from '@/shared/Panel/PanelWBody'
-import {ChartBar} from '@/shared/charts/ChartBar'
+import {MetaDashboardActivityPanel} from '@/features/Meta/Dashboard/MetaDashboardActivityPanel'
 
 export const MetaDashboard = () => {
   const t = useTheme()
@@ -165,43 +164,7 @@ export const MetaDashboard = () => {
               <ChartBarMultipleByKey data={ctx.filteredData} property="donor"/>
             )}
           </SlidePanel>
-          <SlidePanel title={m.program}><ChartBarSingleBy data={ctx.filteredData} by={_ => _.activity}/></SlidePanel>
-          <Lazy deps={[ctx.filteredData]} fn={() => {
-            const d = ctx.filteredData.map(_ => _.tags).compact()
-            const total = d.sum(_ => {
-              return add(
-                _.HKF,
-                _.NFKF_KS,
-                _.FoldingBed,
-                _.FKS,
-                _.CollectiveCenterKits,
-                _.BK,
-                _.WKB,
-                _.HKMV,
-                _.ESK,
-              )
-            })
-            return {
-              total,
-              data: new Obj({
-                [m.nfi_.HKF]: {desc: 'HKF', value: d.sum(_ => _.HKF ?? 0)},
-                [m.nfi_.NFKF_KS]: {desc: 'NFKF_KS', value: d.sum(_ => _.NFKF_KS ?? 0)},
-                [m.nfi_.FoldingBed]: {desc: 'FoldingBed', value: d.sum(_ => _.FoldingBed ?? 0)},
-                [m.nfi_.FKS]: {desc: 'FKS', value: d.sum(_ => _.FKS ?? 0)},
-                [m.nfi_.CollectiveCenterKits]: {desc: 'CollectiveCenterKits', value: d.sum(_ => _.CollectiveCenterKits ?? 0)},
-                [m.nfi_.BK]: {desc: 'BK', value: d.sum(_ => _.BK ?? 0)},
-                [m.nfi_.WKB]: {desc: 'WKB', value: d.sum(_ => _.WKB ?? 0)},
-                [m.nfi_.HKMV]: {desc: 'HKMV', value: d.sum(_ => _.HKMV ?? 0)},
-                [m.nfi_.ESK]: {desc: 'ESK', value: d.sum(_ => _.ESK ?? 0)},
-              }).sort(([, a], [, b]) => b.value - a.value).get()
-            }
-          }}>
-            {_ => (
-              <PanelWBody title={`Most distributed NFIs (${formatLargeNumber(_.total)} kits)`}>
-                <ChartBar data={_.data}/>
-              </PanelWBody>
-            )}
-          </Lazy>
+          <MetaDashboardActivityPanel/>
         </Div>
       </Div>
     </Page>
