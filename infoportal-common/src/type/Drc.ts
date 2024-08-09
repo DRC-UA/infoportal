@@ -254,6 +254,8 @@ export enum DrcProject {
   'UKR-000355 Danish MFA' = 'UKR-000355 Danish MFA',
   'UKR-000360 Novo-Nordisk' = 'UKR-000360 Novo-Nordisk',
   'UKR-000363 UHF8' = 'UKR-000363 UHF8',
+  // @deprecated wrong code 371, it should be 372
+  'UKR-000371 ECHO3' = 'UKR-000371 ECHO3',
   'UKR-000372 ECHO3' = 'UKR-000372 ECHO3',
   'UKR-000380 Danida' = 'UKR-000380 Danida',
   'SIDA 518-570A' = 'SIDA 518-570A',
@@ -309,6 +311,7 @@ export class DrcProjectHelper {
     'UKR-000355 Danish MFA': DrcDonor.DMFA,
     'UKR-000360 Novo-Nordisk': DrcDonor.NovoNordisk,
     'UKR-000363 UHF8': DrcDonor.UHF,
+    'UKR-000371 ECHO3': DrcDonor.ECHO,
     'UKR-000372 ECHO3': DrcDonor.ECHO,
     'UKR-000380 Danida': DrcDonor.DANI,
     'SIDA 518-570A': DrcDonor.SIDA,

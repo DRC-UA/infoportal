@@ -78,6 +78,8 @@ export namespace AiSnfiType {
       'SNFI-DRC-00011': 'cxykpi1lw0stqa2pu',
       'SNFI-DRC-00012': 'cbdzwpglycyal8w2',
       'SNFI-DRC-00013': 'c2cv6j1lyfxsykic8',
+      'SNFI-DRC-00014': 'c2k6vo4lyoggj6x2',
+      'SNFI-DRC-00015': 'c79tdivlzju0vuv2',
     },
     'Indicators - SNFI': {
       '# of individuals supported with emergency shelter support': 'cqbiyfslrke6ze93',

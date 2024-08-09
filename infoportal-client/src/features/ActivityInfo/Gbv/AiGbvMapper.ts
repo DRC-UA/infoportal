@@ -21,6 +21,8 @@ export namespace AiGbvMapper {
     [DrcProject['UKR-000355 Danish MFA']]: 'GBV-DRC-00003',
     [DrcProject['UKR-000330 SDC2']]: 'GBV-DRC-00004',
     [DrcProject['UKR-000304 PSPU']]: 'GBV-DRC-00005',
+    [DrcProject['UKR-000371 ECHO3']]: 'GBV-DRC-00006',
+    [DrcProject['UKR-000372 ECHO3']]: 'GBV-DRC-00006',
     [DrcProject['UKR-000363 UHF8']]: 'GBV-DRC-00007',
   } as const
 
