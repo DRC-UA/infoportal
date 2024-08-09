@@ -19,11 +19,14 @@ import {MealVisitDetails} from '@/features/Meal/Visit/MealVisitDetails'
 import {MealVerification} from '@/features/Meal/Verification/MealVerification'
 import {Access} from '@/core/sdk/server/access/Access'
 import {appConfig} from '@/conf/AppConfig'
+import {MealPdm} from '@/features/Meal/Pdm/MealPdm'
+import {MealPdmDashboard} from '@/features/Meal/Pdm/MealPdmDashboard'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
   'meal_verificationEcrec',
-  'meal_visitMonitoring'
+  'meal_visitMonitoring',
+  'meal_cashPdm'
 ]
 
 export const mealIndex = {
@@ -31,7 +34,7 @@ export const mealIndex = {
   siteMap: {
     visit: {
       _: '/visit',
-      dashboard: `/visit/dashobard`,
+      dashboard: `/visit/dashboard`,
       details: (koboAnswerId = ':id') => `/visit/details/${koboAnswerId}`,
     },
     verification: {
@@ -40,8 +43,12 @@ export const mealIndex = {
       form: '/verification/form',
       data: (_: string = '/:id') => `/verification/${_}`,
     },
+    pdm: {
+      _: '/pdm',
+      dashboard: `/pdm/dashboard`,
+    },
     form: (id: KoboFormName = ':id' as any) => '/form/' + id,
-  }
+  },
 }
 
 const MealSidebar = ({
@@ -59,7 +66,7 @@ const MealSidebar = ({
         <SidebarSection title={m._meal.visitMonitoring}>
           <NavLink to={path(mealIndex.siteMap.visit._)}>
             {({isActive, isPending}) => (
-              <SidebarItem icon="assignment_turned_in" active={isActive}>{m.dashboard}</SidebarItem>
+              <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>{m.dashboard}</SidebarItem>
             )}
           </NavLink>
           <a href="https://drcngo.sharepoint.com/:x:/s/UKRPortal/EUYPiMkl4n1GqaWinv2OgUoByXCmeVtmsgIINesDzZo66w?e=zrOdMh" target="_blank">
@@ -83,6 +90,14 @@ const MealSidebar = ({
             <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_verificationWinterization'))} name="meal_verificationWinterization"/>
           </SidebarSection>
         )}
+        <SidebarSection title={m._meal.pdm}>
+          <NavLink to={path(mealIndex.siteMap.pdm._)}>
+            {({isActive, isPending}) => (
+              <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>{m.dashboard}</SidebarItem>
+            )}
+          </NavLink>
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_cashPdm'))} name="meal_cashPdm"/>
+        </SidebarSection>
       </SidebarBody>
     </Sidebar>
   )
@@ -98,7 +113,8 @@ export const Meal = () => {
         .find(_ => {
           return _.params?.koboFormId === KoboIndex.byName('bn_re').id ||
             _.params?.koboFormId === KoboIndex.byName('ecrec_cashRegistration').id ||
-            _.params?.koboFormId === KoboIndex.byName('meal_visitMonitoring').id
+            _.params?.koboFormId === KoboIndex.byName('meal_visitMonitoring').id ||
+            _.params?.koboFormId === KoboIndex.byName('meal_cashPdm').id
         })
     }
   }, [accesses, session])
@@ -129,6 +145,10 @@ export const Meal = () => {
             <Route path={mealIndex.siteMap.verification.data()} element={<MealVerificationTable/>}/>
           </Route>
         )}
+        <Route path={mealIndex.siteMap.pdm._} element={<MealPdm/>}>
+          <Route index element={<Navigate to={mealIndex.siteMap.pdm.dashboard}/>}/>
+          <Route path={mealIndex.siteMap.pdm.dashboard} element={<MealPdmDashboard/>}/>
+        </Route>
         <Route index element={<Navigate to={mealIndex.siteMap.visit.dashboard}/>}/>
         {relatedKoboForms.map(_ =>
           <Route key={_} {...getKoboFormRouteProps({path: mealIndex.siteMap.form(_), name: _})}/>

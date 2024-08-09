@@ -302,6 +302,7 @@ export const MetaTable = () => {
                 <AgeGroupTable
                   tableId="useCustomHeader"
                   enableDisplacementStatusFilter
+                  enablePwdFilter
                   persons={props.filteredData.flatMap(_ => _.persons ?? [])}
                   sx={{p: 1}}
                 />

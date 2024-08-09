@@ -123,7 +123,7 @@ const ProtectionOverviewWithContext = () => {
             </Panel>
             <Panel title={m.ageGroup}>
               <PanelBody>
-                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered} enableDisplacementStatusFilter/>
+                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered} enableDisplacementStatusFilter enablePwdFilter/>
               </PanelBody>
             </Panel>
             <Panel title={m.displacementStatus}>
