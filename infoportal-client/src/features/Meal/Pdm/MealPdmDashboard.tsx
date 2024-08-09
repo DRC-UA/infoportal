@@ -63,7 +63,6 @@ export const MealPdmDashboard = () => {
   }, [schema])
 
   const data = useMemo(() => {
-    console.log('ctx', ctx.fetcherAnswers.get)
     return map(ctx.fetcherAnswers.get, _ => seq(DataFilter.filterData(_, filterShape, optionFilter)))
   }, [ctx.fetcherAnswers.get, optionFilter, filterShape])
 
