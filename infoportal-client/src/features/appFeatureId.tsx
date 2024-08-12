@@ -144,7 +144,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     path: '/hdp',
     category: 'programs',
     showIf: (u, accesses) => {
-      return u?.admin
+      return false
     }
   },
   cfm: {

@@ -10,12 +10,13 @@ import {chain, Person, Protection_hhs3} from '@infoportal-common'
 import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 
 export const ProtectionDashboardMonitoSample = () => {
   const ctx = ProtectionMonito.useContext()
@@ -88,13 +89,9 @@ export const ProtectionDashboardMonitoSample = () => {
           <SlidePanel title={m.HHsLocation}>
             <MapSvg data={ctx.byCurrentOblast} sx={{mx: 1}} base={ctx.dataFiltered.length}/>
           </SlidePanel>
-          <SlidePanel title={m.ageGroup}>
+          <SlidePanel title={m.disaggregation}>
             <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
-              <ScRadioGroup value={ag} onChange={setAg} dense inline sx={{mr: 1}}>
-                {Enum.keys(Person.ageGroup).map(_ =>
-                  <ScRadioGroupItem dense hideRadio key={_} value={_} title={_}/>
-                )}
-              </ScRadioGroup>
+              <IpSelectSingle placeholder={m.ageGroup} sx={{mr: 1}} hideNullOption value={ag} options={Obj.keys(Person.ageGroup)} onChange={e => setAg(e)}/>
               <ScRadioGroup value={agDisplay} onChange={setAgDisplay} dense inline>
                 <ScRadioGroupItem dense hideRadio value="table"
                                   title={<Icon color="disabled" sx={{marginBottom: '-5px', fontSize: '20px !important'}}>calendar_view_month</Icon>}/>
