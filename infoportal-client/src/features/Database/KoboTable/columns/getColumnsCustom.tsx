@@ -276,22 +276,6 @@ export const getColumnsCustom = ({
     },
   ]
 
-  // const validatedAt: DatatableColumn.Props<any> = () => {
-  //   return {
-  //     id: 'Paid on',
-  //     head: m.paidOn,
-  //     type: 'date',
-  //     render: (_: KoboAnswer<any, KoboBaseTags & TagWithStatus>) => {
-  //       return {
-  //         value: _.tags?.validatedAt,
-  //         label: <DatePicker
-  //           value={_.tags?.validatedAt}
-  //           onChange={_ => ctx.asyncUpdateTag.call({answerIds: [_.id], value: _, key: 'validatedAt'})}
-  //         />
-  //       }
-  //     }
-  //   }
-  // }
 
   const extra: Record<string, DatatableColumn.Props<any>[]> = {
     [KoboIndex.byName('shelter_nta').id]: [
@@ -370,6 +354,7 @@ export const getColumnsCustom = ({
     [KoboIndex.byName('ecrec_cashRegistrationBha').id]: [
       ...getPaymentStatusByEnum(),
       ...individualsBreakdown,
+      ...ecrecScore,
     ],
     [KoboIndex.byName('ecrec_vetEvaluation').id]: [
       ...individualsBreakdown,

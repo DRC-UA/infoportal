@@ -59,7 +59,7 @@ export namespace AiFslcMapper {
                 'Adult Women (18-59)': safeNumber(disaggregation['Adult Women (18-59)']),
                 'Total Individuals Reached': total,
                 'People with Disability': Math.min(total, disaggregation['People with Disability']),
-              }
+              } as any
             }
             const ai: AiFslcType.Type = {
               'Reporting Month': fnSwitch(periodStr, {
