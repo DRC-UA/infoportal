@@ -85,7 +85,7 @@ export const SnapshotProtMonitoNN2Sample = () => {
               <Div column>
                 <SlidePanel>
                   <SlidePanelTitle>{m.ageGroup}</SlidePanelTitle>
-                  <ChartBarStacker data={ctx.ageGroup(Person.ageGroup['DRC'], true)} height={250} colors={t => [
+                  <ChartBarStacker data={ctx.ageGroup(ctx.dataFiltered, Person.ageGroup['DRC'], true)} height={250} colors={t => [
                     snapshotAlternateColor(t),
                     t.palette.primary.main,
                   ]}/>

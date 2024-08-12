@@ -60,7 +60,6 @@ export const SessionProvider = ({
   const session = fetcherSession.get
 
   const logout = useCallback(() => {
-    console.log('init')
     api.session.logout()
     fetcherSession.set(undefined)
   }, [])

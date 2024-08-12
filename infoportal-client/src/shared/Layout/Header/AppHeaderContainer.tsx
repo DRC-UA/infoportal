@@ -55,7 +55,7 @@ export const AppHeaderContainer = ({
         backdropFilter: 'blur(12px)',
         alignItems: 'center',
         // Because on Windows, sticky-header is not working properly
-        boxShadow: t.shadows[3],
+        // boxShadow: t.shadows[3],
         // mb: 2,
         pl: 2,
         borderBottom: t => `1px solid ${t.palette.divider}`,

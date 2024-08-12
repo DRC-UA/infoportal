@@ -110,7 +110,7 @@ export namespace ProtectionMonito {
       if (!period.start && !period.end) setPeriod(periodDefault)
     }, [filterDefault])
 
-    const ageGroup = useCallback((ageGroup: Person.AgeGroup, hideOther?: boolean) => {
+    const ageGroup = useCallback((data: Seq<InferTypedAnswer<'protection_hhs3'>>, ageGroup: Person.AgeGroup, hideOther?: boolean) => {
       const gb = Person.groupByGenderAndGroup(ageGroup)(data?.flatMap(_ => _.persons)!)
       return new Obj(gb).entries().map(([k, v]) => ({key: k, ...v}))
     }, [data])

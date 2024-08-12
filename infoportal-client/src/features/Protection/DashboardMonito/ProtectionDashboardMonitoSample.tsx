@@ -101,7 +101,7 @@ export const ProtectionDashboardMonitoSample = () => {
                 />
               </ScRadioGroup>
             </Box>
-            <Lazy deps={[ag, ctx.dataFiltered]} fn={() => ctx.ageGroup(Person.ageGroup[ag])}>
+            <Lazy deps={[ctx.dataFiltered, agDisplay, ag]} fn={() => ctx.ageGroup(ctx.dataFiltered, Person.ageGroup['DRC'])}>
               {_ => agDisplay === 'chart' ? (
                 <ChartBarStacker data={_} height={250}/>
               ) : (

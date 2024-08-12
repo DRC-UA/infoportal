@@ -99,7 +99,7 @@ export const SnapshotProtMonitoEchoSample = () => {
                 </SlidePanel>
                 <SlidePanel>
                   <SlidePanelTitle>{m.ageGroup}</SlidePanelTitle>
-                  <ChartBarStacker data={ctx.ageGroup(Person.ageGroup['DRC'], true)} sx={{mt: 2}} height={300} colors={t => [
+                  <ChartBarStacker data={ctx.ageGroup(ctx.dataFiltered, Person.ageGroup['DRC'], true)} sx={{mt: 2}} height={300} colors={t => [
                     t.palette.primary.main,
                     snapshotAlternateColor(t),
                     darken(t.palette.primary.main, .5),

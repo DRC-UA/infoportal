@@ -40,7 +40,6 @@ export const DataFilterLayout = ({
   const getFilteredOptions = useCallback((name: string) => {
     const filtersCopy = {...filters}
     delete filtersCopy[name]
-    console.log('>>filtersCopy', name, filtersCopy)
     return DataFilter.filterData(data ?? seq([]), shapes, filtersCopy)
   }, [filters, shapes, data])
 
