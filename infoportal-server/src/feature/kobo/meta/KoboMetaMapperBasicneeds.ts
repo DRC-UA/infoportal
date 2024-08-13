@@ -170,7 +170,6 @@ export class KoboMetaBasicneeds {
       _.project ?? KoboMetaBasicneeds.getBnreProject(answer.back_donor?.[0]),
     ))
   }
-
   static readonly bn_rrm: MetaMapperInsert<KoboMetaOrigin<Bn_rapidResponse.T, KoboTagStatus>> = (row) => {
     const answer = Bn_rapidResponse.map(row.answers)
     if (answer.form_length === 'short') return
@@ -285,6 +284,7 @@ export class KoboMetaBasicneeds {
     }
     return activities.map(_ => prepare(_.activity, _.project))
   }
+
 
   static readonly bn_rrm2: MetaMapperInsert<KoboMetaOrigin<Bn_rapidResponse2.T, KoboTagStatus>> = (row) => {
     const answer = Bn_rapidResponse2.map(row.answers)

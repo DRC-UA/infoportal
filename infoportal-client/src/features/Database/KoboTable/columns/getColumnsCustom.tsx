@@ -1,6 +1,7 @@
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {
-  Bn_rapidResponse, Bn_rapidResponse2,
+  Bn_rapidResponse,
+  Bn_rapidResponse2,
   Bn_re,
   currentProtectionProjects,
   DrcProgram,
