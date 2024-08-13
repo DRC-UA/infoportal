@@ -13,6 +13,7 @@ import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
+import {updateBnreShits} from './script/20249813-updateBnreShits/UpdateBnreShits'
 
 export type AppLogger = WinstonLogger
 
@@ -75,6 +76,8 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
+  await updateBnreShits()
+  return
   // await new BuildKoboType().build('safety_incident')
   // await ActivityInfoBuildType.fslc()
   // await KoboMigrateHHS2({
