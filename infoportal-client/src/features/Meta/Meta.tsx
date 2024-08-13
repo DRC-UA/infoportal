@@ -25,9 +25,6 @@ export const metaSiteMap = {
 
 const _Meta = () => {
   const ctx = useMetaContext()
-  useEffect(() => {
-    ctx.fetcher.fetch()
-  }, [])
   return (
     <Layout
       title={appFeaturesIndex.metaDashboard.name}
