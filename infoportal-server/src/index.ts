@@ -14,6 +14,8 @@ import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
 import {updateBnreShits} from './script/20249813-updateBnreShits/UpdateBnreShits'
+import {cleanDuplicatedColumns} from './script/20249813-updateBnreShits/CleanDuplicatedColumns'
+import {updateBnreShits2} from './script/20249813-updateBnreShits/UpdateBnreShits2'
 
 export type AppLogger = WinstonLogger
 
@@ -76,7 +78,7 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  await updateBnreShits()
+  await updateBnreShits2()
   return
   // await new BuildKoboType().build('safety_incident')
   // await ActivityInfoBuildType.fslc()
