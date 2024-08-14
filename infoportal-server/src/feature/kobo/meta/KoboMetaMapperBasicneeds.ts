@@ -26,67 +26,6 @@ const nfisPrograms = [DrcProgram.NFI, DrcProgram.ESK, DrcProgram.InfantWinterClo
 
 export class KoboMetaBasicneeds {
 
-  private static readonly getBnreProject = (back_donor?: Bn_re.Option<'nfi_dist_hkf_001_donor'> | Bn_rapidResponse.Option<'back_donor'> | Bn_rapidResponse.Option<'donor_nfi_fks'>[0]) => {
-    return fnSwitch(back_donor!, {
-      uhf_chj: DrcProject['UKR-000314 UHF4'],
-      uhf_dnk: DrcProject['UKR-000314 UHF4'],
-      uhf_hrk: DrcProject['UKR-000314 UHF4'],
-      uhf_lwo: DrcProject['UKR-000314 UHF4'],
-      uhf_nlv: DrcProject['UKR-000314 UHF4'],
-      bha_lwo: DrcProject['UKR-000284 BHA'],
-      bha_chj: DrcProject['UKR-000284 BHA'],
-      bha_dnk: DrcProject['UKR-000284 BHA'],
-      bha_hrk: DrcProject['UKR-000284 BHA'],
-      bha_nlv: DrcProject['UKR-000284 BHA'],
-      lwo_360_novonordisk: DrcProject['UKR-000360 Novo-Nordisk'],
-      hrk_360_novonordisk: DrcProject['UKR-000360 Novo-Nordisk'],
-      danida347_lwo: DrcProject['UKR-000347 DANIDA'],
-      danida347_hrk: DrcProject['UKR-000347 DANIDA'],
-      danida347_chj: DrcProject['UKR-000347 DANIDA'],
-      danida347_dnk: DrcProject['UKR-000347 DANIDA'],
-      echo322_umy: DrcProject['UKR-000322 ECHO2'],
-      echo322_chj: DrcProject['UKR-000322 ECHO2'],
-      echo322_dnk: DrcProject['UKR-000322 ECHO2'],
-      echo322_lwo: DrcProject['UKR-000322 ECHO2'],
-      echo322_hrk: DrcProject['UKR-000322 ECHO2'],
-      echo322_nlv: DrcProject['UKR-000322 ECHO2'],
-      echo_chj: DrcProject['UKR-000269 ECHO1'],
-      echo_dnk: DrcProject['UKR-000269 ECHO1'],
-      echo_hrk: DrcProject['UKR-000269 ECHO1'],
-      echo_lwo: DrcProject['UKR-000269 ECHO1'],
-      echo_nlv: DrcProject['UKR-000269 ECHO1'],
-      novo_nlv: DrcProject['UKR-000298 Novo-Nordisk'],
-      okf_lwo: DrcProject['UKR-000309 OKF'],
-      '341_hoffman_husmans_hrk': DrcProject['UKR-000341 Hoffmans & Husmans'],
-      '340_02_augustinus_fonden_lwo': DrcProject['UKR-000340 Augustinus Fonden'],
-      '340_augustinus_fonden_dnk': DrcProject['UKR-000340 Augustinus Fonden'],
-      pool_chj: DrcProject['UKR-000270 Pooled Funds'],
-      pool_dnk: DrcProject['UKR-000270 Pooled Funds'],
-      pool_hrk: DrcProject['UKR-000270 Pooled Funds'],
-      pool_lwo: DrcProject['UKR-000270 Pooled Funds'],
-      pool_nlv: DrcProject['UKR-000270 Pooled Funds'],
-      pool_umy: DrcProject['UKR-000270 Pooled Funds'],
-      sdc_umy: DrcProject['UKR-000330 SDC2'],
-      hrk_umy: DrcProject['UKR-000330 SDC2'],
-      uhf6_chj: DrcProject['UKR-000336 UHF6'],
-      uhf6_dnk: DrcProject['UKR-000336 UHF6'],
-      uhf6_hrk: DrcProject['UKR-000336 UHF6'],
-      uhf6_lwo: DrcProject['UKR-000336 UHF6'],
-      uhf6_nlv: DrcProject['UKR-000336 UHF6'],
-      uhf6_umy: DrcProject['UKR-000336 UHF6'],
-      uhf7_chj: DrcProject['UKR-000352 UHF7'],
-      uhf7_dnk: DrcProject['UKR-000352 UHF7'],
-      uhf7_hrk: DrcProject['UKR-000352 UHF7'],
-      uhf7_lwo: DrcProject['UKR-000352 UHF7'],
-      uhf7_nlv: DrcProject['UKR-000352 UHF7'],
-      uhf7_umy: DrcProject['UKR-000352 UHF7'],
-      umy_danida: DrcProject['UKR-000267 DANIDA'],
-      '330_sdc_dnk': DrcProject['UKR-000330 SDC2'],
-      dnk_danida_347: DrcProject['UKR-000347 DANIDA'],
-      echo2_dnk: DrcProject['UKR-000322 ECHO2']
-    }, _ => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(_)))
-  }
-
   static readonly bn_re: MetaMapperInsert<KoboMetaOrigin<Bn_re.T, MpcaEntityTags>> = row => {
     const answer = Bn_re.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
@@ -94,14 +33,14 @@ export class KoboMetaBasicneeds {
 
     const activities = seq(answer.back_prog_type)?.map(prog => {
       return fnSwitch(prog.split('_')[0], {
-        cfr: {activity: DrcProgram.CashForRent, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_cfr ?? answer.back_donor?.[0])},
-        cfe: {activity: DrcProgram.CashForEducation, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_cfe ?? answer.back_donor?.[0])},
-        mpca: {activity: DrcProgram.MPCA, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_mpca ?? answer.back_donor?.[0])},
-        csf: {activity: DrcProgram.CashForFuel, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_cff ?? answer.back_donor?.[0])},
-        cfu: {activity: DrcProgram.CashForUtilities, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_cfu ?? answer.back_donor?.[0])},
-        nfi: {activity: DrcProgram.NFI, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_nfi ?? answer.back_donor?.[0])},
-        esk: {activity: DrcProgram.ESK, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_esk ?? answer.back_donor?.[0])},
-        ihk: {activity: DrcProgram.HygieneKit, project: row.tags?.projects?.[0] ?? KoboMetaBasicneeds.getBnreProject(answer.donor_ihk ?? answer.back_donor?.[0])},
+        cfr: {activity: DrcProgram.CashForRent, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfr ?? answer.back_donor?.[0])},
+        cfe: {activity: DrcProgram.CashForEducation, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfe ?? answer.back_donor?.[0])},
+        mpca: {activity: DrcProgram.MPCA, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_mpca ?? answer.back_donor?.[0])},
+        csf: {activity: DrcProgram.CashForFuel, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cff ?? answer.back_donor?.[0])},
+        cfu: {activity: DrcProgram.CashForUtilities, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfu ?? answer.back_donor?.[0])},
+        nfi: {activity: DrcProgram.NFI, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_nfi ?? answer.back_donor?.[0])},
+        esk: {activity: DrcProgram.ESK, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_esk ?? answer.back_donor?.[0])},
+        ihk: {activity: DrcProgram.HygieneKit, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_ihk ?? answer.back_donor?.[0])},
       }, () => undefined)
     }).compact().distinct(_ => _.activity) ?? []
 
@@ -167,12 +106,74 @@ export class KoboMetaBasicneeds {
     }
     return activities.map(_ => prepare(
       _.activity,
-      _.project ?? KoboMetaBasicneeds.getBnreProject(answer.back_donor?.[0]),
+      _.project ?? DrcProjectHelper.search(answer.back_donor?.[0]),
     ))
   }
+
   static readonly bn_rrm: MetaMapperInsert<KoboMetaOrigin<Bn_rapidResponse.T, KoboTagStatus>> = (row) => {
     const answer = Bn_rapidResponse.map(row.answers)
     if (answer.form_length === 'short') return
+    const getBnreProject = (back_donor?: Bn_re.Option<'nfi_dist_hkf_001_donor'> | Bn_rapidResponse.Option<'back_donor'> | Bn_rapidResponse.Option<'donor_nfi_fks'>[0]) => {
+      return fnSwitch(back_donor!, {
+        uhf_chj: DrcProject['UKR-000314 UHF4'],
+        uhf_dnk: DrcProject['UKR-000314 UHF4'],
+        uhf_hrk: DrcProject['UKR-000314 UHF4'],
+        uhf_lwo: DrcProject['UKR-000314 UHF4'],
+        uhf_nlv: DrcProject['UKR-000314 UHF4'],
+        bha_lwo: DrcProject['UKR-000284 BHA'],
+        bha_chj: DrcProject['UKR-000284 BHA'],
+        bha_dnk: DrcProject['UKR-000284 BHA'],
+        bha_hrk: DrcProject['UKR-000284 BHA'],
+        bha_nlv: DrcProject['UKR-000284 BHA'],
+        lwo_360_novonordisk: DrcProject['UKR-000360 Novo-Nordisk'],
+        hrk_360_novonordisk: DrcProject['UKR-000360 Novo-Nordisk'],
+        danida347_lwo: DrcProject['UKR-000347 DANIDA'],
+        danida347_hrk: DrcProject['UKR-000347 DANIDA'],
+        danida347_chj: DrcProject['UKR-000347 DANIDA'],
+        danida347_dnk: DrcProject['UKR-000347 DANIDA'],
+        echo322_umy: DrcProject['UKR-000322 ECHO2'],
+        echo322_chj: DrcProject['UKR-000322 ECHO2'],
+        echo322_dnk: DrcProject['UKR-000322 ECHO2'],
+        echo322_lwo: DrcProject['UKR-000322 ECHO2'],
+        echo322_hrk: DrcProject['UKR-000322 ECHO2'],
+        echo322_nlv: DrcProject['UKR-000322 ECHO2'],
+        echo_chj: DrcProject['UKR-000269 ECHO1'],
+        echo_dnk: DrcProject['UKR-000269 ECHO1'],
+        echo_hrk: DrcProject['UKR-000269 ECHO1'],
+        echo_lwo: DrcProject['UKR-000269 ECHO1'],
+        echo_nlv: DrcProject['UKR-000269 ECHO1'],
+        novo_nlv: DrcProject['UKR-000298 Novo-Nordisk'],
+        okf_lwo: DrcProject['UKR-000309 OKF'],
+        '341_hoffman_husmans_hrk': DrcProject['UKR-000341 Hoffmans & Husmans'],
+        '340_02_augustinus_fonden_lwo': DrcProject['UKR-000340 Augustinus Fonden'],
+        '340_augustinus_fonden_dnk': DrcProject['UKR-000340 Augustinus Fonden'],
+        pool_chj: DrcProject['UKR-000270 Pooled Funds'],
+        pool_dnk: DrcProject['UKR-000270 Pooled Funds'],
+        pool_hrk: DrcProject['UKR-000270 Pooled Funds'],
+        pool_lwo: DrcProject['UKR-000270 Pooled Funds'],
+        pool_nlv: DrcProject['UKR-000270 Pooled Funds'],
+        pool_umy: DrcProject['UKR-000270 Pooled Funds'],
+        sdc_umy: DrcProject['UKR-000330 SDC2'],
+        hrk_umy: DrcProject['UKR-000330 SDC2'],
+        uhf6_chj: DrcProject['UKR-000336 UHF6'],
+        uhf6_dnk: DrcProject['UKR-000336 UHF6'],
+        uhf6_hrk: DrcProject['UKR-000336 UHF6'],
+        uhf6_lwo: DrcProject['UKR-000336 UHF6'],
+        uhf6_nlv: DrcProject['UKR-000336 UHF6'],
+        uhf6_umy: DrcProject['UKR-000336 UHF6'],
+        uhf7_chj: DrcProject['UKR-000352 UHF7'],
+        uhf7_dnk: DrcProject['UKR-000352 UHF7'],
+        uhf7_hrk: DrcProject['UKR-000352 UHF7'],
+        uhf7_lwo: DrcProject['UKR-000352 UHF7'],
+        uhf7_nlv: DrcProject['UKR-000352 UHF7'],
+        uhf7_umy: DrcProject['UKR-000352 UHF7'],
+        umy_danida: DrcProject['UKR-000267 DANIDA'],
+        '330_sdc_dnk': DrcProject['UKR-000330 SDC2'],
+        dnk_danida_347: DrcProject['UKR-000347 DANIDA'],
+        echo2_dnk: DrcProject['UKR-000322 ECHO2']
+      }, _ => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(_)))
+    }
+
     const group = KoboGeneralMapping.collectXlsKoboIndividuals({
       hh_char_hh_det: answer.hh_char_hh_det_l?.map(_ => ({
         hh_char_hh_det_age: _.hh_char_hh_det_age_l,
@@ -195,15 +196,15 @@ export class KoboMetaBasicneeds {
     const activities = seq(answer.back_prog_type_l)?.map(prog => {
       const defaultProject = answer.back_donor_l?.[0] ?? answer.back_donor
       return fnSwitch(prog.split('_')[0], {
-        cfr: {activity: DrcProgram.CashForRent, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfr ?? defaultProject)},
-        cfe: {activity: DrcProgram.CashForEducation, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfe ?? defaultProject)},
-        mpca: {activity: DrcProgram.MPCA, project: KoboMetaBasicneeds.getBnreProject(answer.donor_mpca ?? defaultProject)},
-        csf: {activity: DrcProgram.CashForFuel, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cff ?? defaultProject)},
-        cfu: {activity: DrcProgram.CashForUtilities, project: KoboMetaBasicneeds.getBnreProject(answer.donor_cfu ?? defaultProject)},
-        nfi: {activity: DrcProgram.NFI, project: KoboMetaBasicneeds.getBnreProject(answer.donor_nfi ?? defaultProject)},
-        esk: {activity: DrcProgram.ESK, project: KoboMetaBasicneeds.getBnreProject(answer.donor_esk ?? defaultProject)},
-        iwk: {activity: DrcProgram.ESK, project: KoboMetaBasicneeds.getBnreProject(defaultProject)},
-        ihk: {activity: DrcProgram.HygieneKit, project: KoboMetaBasicneeds.getBnreProject(answer.donor_ihk ?? defaultProject)},
+        cfr: {activity: DrcProgram.CashForRent, project: getBnreProject(answer.donor_cfr ?? defaultProject)},
+        cfe: {activity: DrcProgram.CashForEducation, project: getBnreProject(answer.donor_cfe ?? defaultProject)},
+        mpca: {activity: DrcProgram.MPCA, project: getBnreProject(answer.donor_mpca ?? defaultProject)},
+        csf: {activity: DrcProgram.CashForFuel, project: getBnreProject(answer.donor_cff ?? defaultProject)},
+        cfu: {activity: DrcProgram.CashForUtilities, project: getBnreProject(answer.donor_cfu ?? defaultProject)},
+        nfi: {activity: DrcProgram.NFI, project: getBnreProject(answer.donor_nfi ?? defaultProject)},
+        esk: {activity: DrcProgram.ESK, project: getBnreProject(answer.donor_esk ?? defaultProject)},
+        iwk: {activity: DrcProgram.ESK, project: getBnreProject(defaultProject)},
+        ihk: {activity: DrcProgram.HygieneKit, project: getBnreProject(answer.donor_ihk ?? defaultProject)},
       }, () => undefined)
     }).compact().distinct(_ => _.activity) ?? []
 

@@ -78,8 +78,6 @@ const initServices = (
 }
 
 const startApp = async (conf: AppConf) => {
-  await updateBnreShits2()
-  return
   // await new BuildKoboType().build('safety_incident')
   // await ActivityInfoBuildType.fslc()
   // await KoboMigrateHHS2({
