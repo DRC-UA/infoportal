@@ -8,7 +8,7 @@ export class KoboSdkv1 {
   constructor(private api: ApiClient) {
   }
 
-  static readonly parseBody = (obj: Record<string, undefined | string | string[] | number>): Record<string, string> => {
+  static readonly parseBody = (obj: Record<string, undefined | string | (string | undefined)[] | number>): Record<string, string> => {
     for (const i in obj) {
       if (obj[i] === undefined || obj[i] === null) {
         delete obj[i]
