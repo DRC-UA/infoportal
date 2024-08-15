@@ -33,20 +33,26 @@ export class KoboMetaBasicneeds {
 
     const activities = seq(answer.back_prog_type)?.map(prog => {
       return fnSwitch(prog.split('_')[0], {
-        cfr: {activity: DrcProgram.CashForRent, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfr ?? answer.back_donor?.[0])},
-        cfe: {activity: DrcProgram.CashForEducation, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfe ?? answer.back_donor?.[0])},
         mpca: {activity: DrcProgram.MPCA, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_mpca ?? answer.back_donor?.[0])},
-        csf: {activity: DrcProgram.CashForFuel, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cff ?? answer.back_donor?.[0])},
-        cfu: {activity: DrcProgram.CashForUtilities, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfu ?? answer.back_donor?.[0])},
         nfi: {activity: DrcProgram.NFI, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_nfi ?? answer.back_donor?.[0])},
         esk: {activity: DrcProgram.ESK, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_esk ?? answer.back_donor?.[0])},
+        cfr: {activity: DrcProgram.CashForRent, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfr ?? answer.back_donor?.[0])},
+        cfe: {activity: DrcProgram.CashForEducation, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfe ?? answer.back_donor?.[0])},
+        csf: {activity: DrcProgram.CashForFuel, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cff ?? answer.back_donor?.[0])},
+        cfu: {activity: DrcProgram.CashForUtilities, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfu ?? answer.back_donor?.[0])},
         ihk: {activity: DrcProgram.HygieneKit, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_ihk ?? answer.back_donor?.[0])},
       }, () => undefined)
     }).compact().distinct(_ => _.activity) ?? []
 
-    const prepare = (activity: DrcProgram, project?: DrcProject): MetaMapped => {
-      if (!project) throw new Error(`[${row.id}] No project for ${JSON.stringify(answer.back_donor)}`)
-      if (!DrcProjectHelper.donorByProject[project]) throw new Error(`[${row.id}] No donor for ${project}`)
+    const prepare = (activity: DrcProgram, project?: DrcProject): MetaMapped | undefined => {
+      if (!project) {
+        console.error(`[${row.id}] No project for ${JSON.stringify(answer.back_donor)}`)
+        return
+      }
+      if (!DrcProjectHelper.donorByProject[project]) {
+        console.error(`[${row.id}] No donor for ${project}`)
+        return
+      }
       const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
       return {
         enumerator: Bn_re.options.back_enum[answer.back_enum!],
@@ -107,7 +113,7 @@ export class KoboMetaBasicneeds {
     return activities.map(_ => prepare(
       _.activity,
       _.project ?? DrcProjectHelper.search(answer.back_donor?.[0]),
-    ))
+    )).compact()
   }
 
   static readonly bn_rrm: MetaMapperInsert<KoboMetaOrigin<Bn_rapidResponse.T, KoboTagStatus>> = (row) => {

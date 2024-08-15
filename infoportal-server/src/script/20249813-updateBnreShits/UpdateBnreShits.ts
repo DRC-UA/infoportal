@@ -2,10 +2,11 @@ import {PrismaClient} from '@prisma/client'
 import {KoboMappedAnswersService} from '../../feature/kobo/KoboMappedAnswersService'
 import {KoboSdkGenerator} from '../../feature/kobo/KoboSdkGenerator'
 import {scriptConf} from '../ScriptConf'
-import {Bn_re, KoboAnswerFlat, KoboIndex, KoboSdkv1} from '@infoportal-common'
+import {Bn_re, KoboAnswerFlat, KoboIndex, KoboSdkv1, PeriodHelper} from '@infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import PromiseRetry from 'promise-retry'
 import PromisePool from '@supercharge/promise-pool'
+import {addDays, subDays} from 'date-fns'
 
 export const updateBnreShits = async () => {
   const flag = '[migration_sucessful]'
@@ -13,11 +14,13 @@ export const updateBnreShits = async () => {
   const service = new KoboMappedAnswersService(prisma)
   console.log('Fetch...')
   const answers = await service.searchBn_re().then(_ => _.data
-    // .filter(_ => _.id === '572171839')
+    .filter(_ => PeriodHelper.isDateIn(
+      {start: subDays(new Date(), 2), end: addDays(new Date(), 10)},
+      _.date,
+    ))
     .filter(_ => !_.fin_det_enum || !_.fin_det_enum.includes(flag))
   )
   const sdk = await new KoboSdkGenerator(prisma).get(scriptConf.kobo.prod.serverId)
-  console.log('Fetch... Done ' + answers.length)
   const update = (answer: KoboAnswerFlat<Bn_re.T>, index: number) => {
     console.log(`${(index + '').padStart(5, ' ')}/${answers.length} ${answer.id}...`)
     return PromiseRetry((retry, number) => {
@@ -26,6 +29,7 @@ export const updateBnreShits = async () => {
           formId: KoboIndex.byName('bn_re').id,
           submissionIds: [answer.id],
           data: KoboSdkv1.parseBody({
+            'background/donor_cff': fnSwitch(answer.donor_mpca!, updateBnreShitsDonorMap, () => undefined),
             'background/donor_mpca': fnSwitch(answer.donor_mpca!, updateBnreShitsDonorMap, () => undefined),
             'background/donor_nfi': fnSwitch(answer.donor_nfi!, updateBnreShitsDonorMap, () => undefined),
             'background/donor_esk': fnSwitch(answer.donor_esk!, updateBnreShitsDonorMap, () => undefined),

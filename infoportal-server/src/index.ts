@@ -13,9 +13,6 @@ import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './core/EmailService'
-import {updateBnreShits} from './script/20249813-updateBnreShits/UpdateBnreShits'
-import {cleanDuplicatedColumns} from './script/20249813-updateBnreShits/CleanDuplicatedColumns'
-import {updateBnreShits2} from './script/20249813-updateBnreShits/UpdateBnreShits2'
 
 export type AppLogger = WinstonLogger
 
@@ -137,14 +134,16 @@ const startApp = async (conf: AppConf) => {
   init()
   // } else {
   start()
-  process.on('uncaughtException', (err) => {
-    log.error('Uncaught Exception:', err)
-    process.exit(1)
-  })
-  process.on('unhandledRejection', (reason, promise) => {
-    log.error('Unhandled Rejection at:', promise, 'reason:', reason)
-    process.exit(1)
-  })
+  if (appConf.production) {
+    process.on('uncaughtException', (err) => {
+      log.error('Uncaught Exception:', err)
+      process.exit(1)
+    })
+    process.on('unhandledRejection', (reason, promise) => {
+      log.error('Unhandled Rejection at:', promise, 'reason:', reason)
+      process.exit(1)
+    })
+  }
 }
 
 startApp(appConf)
