@@ -1,8 +1,9 @@
 import {ApiClient} from '../../../api-client/ApiClient'
 import {KoboAnswerId, KoboId} from '../../mapper'
 import {ApiKoboUpdate} from './type/KoboUpdate'
-import {chunkify} from '../../..'
+import {chunkify, KoboIndex} from '../../..'
 import {Logger} from '../../../types'
+import {AxiosError} from 'axios'
 
 export type KoboUpdateDataParamsData = Record<string, string | string[] | number | null | undefined>
 export type KoboUpdateDataParams<TData extends KoboUpdateDataParamsData = any> = {
@@ -12,6 +13,9 @@ export type KoboUpdateDataParams<TData extends KoboUpdateDataParamsData = any> =
 }
 
 export class KoboSdkv2FixedUpdated {
+
+  static readonly BATCH_SIZE = 20
+  static readonly CONCURRENCY = 15
 
   constructor(
     private api: ApiClient,
@@ -39,8 +43,9 @@ export class KoboSdkv2FixedUpdated {
         const params = this.queues.get(formId)!.shift()!
         try {
           await chunkify({
+            concurrency: KoboSdkv2FixedUpdated.CONCURRENCY,
+            size: KoboSdkv2FixedUpdated.BATCH_SIZE,
             data: params.submissionIds,
-            size: 20,
             fn: ids => this.apiCall({...params, submissionIds: ids}),
           })
         } catch (e) {
@@ -54,6 +59,11 @@ export class KoboSdkv2FixedUpdated {
   }
 
   private readonly apiCall = (params: KoboUpdateDataParams): Promise<ApiKoboUpdate> => {
+    const message = (status: 'Failed' | 'Success', e?: AxiosError) => {
+      const name = KoboIndex.searchById(params.formId)?.name ?? params.formId
+      const ids = `[${params.submissionIds[0]}, +${params.submissionIds.length - 1}]`
+      return `${KoboIndex} to update ${name} ${ids} ${JSON.stringify(params.data)}.` + (e ? ` ERR ${e.status}` : '')
+    }
     const {formId, data, submissionIds} = params
     return this.api.patch<ApiKoboUpdate>(`/v2/assets/${formId}/data/bulk/`, {
       body: {
@@ -63,10 +73,10 @@ export class KoboSdkv2FixedUpdated {
         }
       }
     }).then(_ => {
-      this.log.info(`Success ${_.successes}, Failure: ${_.failures} ${JSON.stringify(params)}`)
+      this.log.info(message('Success'))
       return _
-    }).catch(e => {
-      this.log.error(`Failed to update  ${JSON.stringify(params)}  ${JSON.stringify(e)}`)
+    }).catch((e: AxiosError) => {
+      this.log.error(message('Failed', e))
       throw e
     })
   }
