@@ -1,6 +1,7 @@
 import {Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, LinearProgress, PaperProps} from '@mui/material'
 import {IpBtn} from '@/shared/Btn'
 import {EventHandler, ReactNode, SyntheticEvent} from 'react'
+import {Txt} from 'mui-extension'
 
 export type BasicDialogProps = Omit<DialogProps, 'children' | 'onClick'> & {
   disabled?: boolean
@@ -43,7 +44,7 @@ export const BasicDialog = ({
           left: 0,
         }}/>
       )}
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle><Txt truncate>{title}</Txt></DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         {overrideActions ? overrideActions : (

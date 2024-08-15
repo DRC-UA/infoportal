@@ -16,7 +16,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Txt} from 'mui-extension'
 
 export type KoboEditModalOption = {
-  value: string,
+  value: string | null,
   label: string,
   desc?: string
   before?: ReactNode
@@ -60,8 +60,8 @@ export const KoboEditModalAnswer = ({
       onClose={onClose}
       loading={loadingSchema}
       fetcherUpdate={fetcherUpdate}
-      title={`${m.edit} (${answerIds.length})`}
-      subTitle={schema?.schemaUnsanitized.name}
+      title={`${m.edit} (${answerIds.length}) - ${schema?.schemaUnsanitized.name}`}
+      subTitle={schema?.translate.question(columnName)}
       type={columnDef?.type as any}
       options={columnDef ? schema?.schemaHelper.choicesIndex[columnDef.select_from_list_name!]?.map(_ =>
         ({value: _.name, desc: _.name, label: schema.translate.choice(columnName, _.name)})
@@ -131,9 +131,11 @@ export const KoboEditModal = ({
   const {m} = useI18n()
   const _options = useMemo(() => {
     const harmonized: KoboEditModalOption[] | undefined = options?.map(x => typeof x === 'string' ? {value: x, label: x,} : x) as any
-    return harmonized?.map(_ =>
+    const resetOption: KoboEditModalOption = {value: null, label: 'BLANK', desc: ' '}
+    return [resetOption, ...harmonized ?? []].map(_ =>
       <ScRadioGroupItem
         dense
+        disabled={type === 'select_multiple' && _.value !== null && ((value ?? []) as KoboEditModalOption[]).some(_ => _ === null)}
         key={_.value}
         value={_.value}
         before={_.before}
@@ -141,11 +143,12 @@ export const KoboEditModal = ({
         title={_.label}
       />
     )
-  }, [options])
+  }, [options, value])
 
   const _loading = loading || fetcherUpdate.loading
   return (
     <BasicDialog
+      maxWidth="xs"
       open={true}
       onClose={onClose}
       loading={_loading}
@@ -169,18 +172,29 @@ export const KoboEditModal = ({
       )}
       <Collapse in={!fetcherUpdate.get}>
         <Box sx={{minWidth: 340}}>
+          {/*<Checkbox/>Delete answer and set as BLANK*/}
           {(() => {
             switch (type) {
               case 'select_one': {
                 return (
-                  <ScRadioGroup dense value={value} onChange={setValue}>
+                  <ScRadioGroup
+                    dense
+                    value={value}
+                    onChange={setValue}
+                    disabled={(value as KoboEditModalOption['value']) === null}
+                  >
                     {_options}
                   </ScRadioGroup>
                 )
               }
               case 'select_multiple': {
                 return (
-                  <ScRadioGroup dense multiple value={value ?? []} onChange={_ => setValue(_)}>
+                  <ScRadioGroup
+                    dense
+                    multiple
+                    value={value ?? []}
+                    onChange={_ => setValue(_)}
+                  >
                     {_options}
                   </ScRadioGroup>
                 )
