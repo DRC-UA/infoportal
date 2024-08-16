@@ -15,7 +15,7 @@ export type KoboUpdateDataParams<TData extends KoboUpdateDataParamsData = any> =
 export class KoboSdkv2FixedUpdated {
 
   static readonly BATCH_SIZE = 20
-  static readonly CONCURRENCY = 15
+  static readonly CONCURRENCY = 12
 
   constructor(
     private api: ApiClient,
