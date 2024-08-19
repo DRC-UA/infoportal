@@ -1,0 +1,3 @@
+git mv infoportal-common/ packages/infoportal-common
+git mv infoportal-scripts/ packages/infoportal-scripts
+git mv infoportal-server/ packages/infoportal-server

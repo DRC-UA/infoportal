@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "ES2021.String"
+    ],
+    "baseUrl": "./",
+    "rootDir": "./src",
+    "strict": true,
+    "outDir": "./lib",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/typings"
+    ]
+  },
+  "ts-node": {
+    "files": true
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../infoportal-common"
+    }
+  ]
+}

@@ -37,14 +37,14 @@ jobs:
           node-version: '18.x'
 
       - name: npm install, build, and test (library)
-        working-directory: ./infoportal-common
+        working-directory: ./packages/infoportal-common
         run: |
           npm ci --production
           npm run build --if-present
           npm run test --if-present
 
       - name: npm install, build, and test (library)
-        working-directory: ./infoportal-client
+        working-directory: ./packages/infoportal-client
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ vars.NEXT_PUBLIC_API_BASE_URL }}
           NEXT_PUBLIC_APP_OFF: ${{ vars.NEXT_PUBLIC_APP_OFF }}
@@ -62,14 +62,14 @@ jobs:
           npm run test --if-present
 
       - name: Zip artifact for deployment
-        working-directory: ./infoportal-client
-        run: zip release.zip package.json .next/standalone -r
+        working-directory: ./packages/infoportal-client
+        run: zip release.zip package.json .next/standalone ./next/static -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: ./infoportal-client/release.zip
+          path: ./packages/infoportal-client/release.zip
 
   deploy:
     runs-on: ubuntu-latest

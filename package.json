@@ -1,0 +1,7 @@
+{
+  "name": "infoportal",
+  "requires": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}

@@ -1,5 +1,11 @@
 .env
 */.idea
+node_modules
+packages/*/node_modules
+packages/*/lib
+packages/*/dist
+packages/infoportal-client/.next
+.next/
 
 # Logs
 logs
