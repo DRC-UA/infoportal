@@ -1,5 +1,10 @@
-.env
 */.idea
+node_modules
+packages/*/node_modules
+packages/*/lib
+packages/*/dist
+packages/infoportal-client/.next
+.next/
 
 # Logs
 logs
@@ -62,8 +67,11 @@ bower_components
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+packages/infoportal-server/.env
+packages/infoportal-client/.env
 .env.test
+infoportal-client/.env.local
+.env
 
 # FuseBox cache
 .fusebox/
@@ -81,4 +89,3 @@ sessions/
 .idea/
 
 .DS_Store
-infoportal-client/.env.local
