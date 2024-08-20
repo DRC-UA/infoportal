@@ -34,7 +34,8 @@ export namespace AiProtectionMapper {
     return api.koboMeta.search({
       activities: [
         DrcProgram.Counselling,
-        DrcProgram.PSS,
+        DrcProgram.MHPSSActivities,
+        DrcProgram.PGS,
         DrcProgram.ProtectionMonitoring,
         DrcProgram.CommunityLevelPm,
         DrcProgram.AwarenessRaisingSession,
@@ -76,7 +77,8 @@ export namespace AiProtectionMapper {
                     'Indicators': fnSwitch(activity, {
                       [DrcProgram.Counselling]: '# of individuals who received protection counselling',
                       [DrcProgram.FGD]: '# of interviews conducted with key informants through community level protection monitoring',
-                      [DrcProgram.PSS]: '# of individuals who received individual or group-based psychosocial support',
+                      [DrcProgram.PGS]: '# of individuals who received individual or group-based psychosocial support',
+                      [DrcProgram.MHPSSActivities]: '# of individuals who received individual or group-based psychosocial support',
                       [DrcProgram.ProtectionMonitoring]: '# of individuals reached through protection monitoring at the household level',
                       [DrcProgram.CommunityLevelPm]: '# of interviews conducted with key informants through community level protection monitoring',
                       [DrcProgram.AwarenessRaisingSession]: '# of individuals who participated in awareness raising activities on Protection',
