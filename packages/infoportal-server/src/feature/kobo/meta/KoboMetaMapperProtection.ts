@@ -57,7 +57,7 @@ export class KoboMetaMapperProtection {
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
-      sector: DrcSector.Protection,
+      sector: DrcSector.GeneralProtection,
       activity: answer.activity ? fnSwitch(answer.activity, {
         fgd: DrcProgram.FGD,
         kll: DrcProgram.CommunityLevelPm,
@@ -104,7 +104,7 @@ export class KoboMetaMapperProtection {
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
-      sector: DrcSector.Protection,
+      sector: DrcSector.GeneralProtection,
       activity: activity,
       persons,
       personsCount: persons.length,
@@ -139,7 +139,7 @@ export class KoboMetaMapperProtection {
       raion: KoboGeneralMapping.searchRaion(answer.raion),
       hromada: KoboGeneralMapping.searchHromada(answer.hromada),
       settlement: answer.settement,
-      sector: DrcSector.Protection,
+      sector: DrcSector.GeneralProtection,
       activity: DrcProgram.Referral,
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: answer.month_provision,
@@ -183,7 +183,7 @@ export class KoboMetaMapperProtection {
       raion: AILocationHelper.findRaionByIso(answer.where_are_you_current_living_raion)?.en,
       hromada: AILocationHelper.findHromadaByIso(answer.where_are_you_current_living_hromada!)?.en,
       settlement: answer.settlement,
-      sector: DrcSector.Protection,
+      sector: DrcSector.GeneralProtection,
       activity: DrcProgram.ProtectionMonitoring,
       persons: persons.map(_ => {
         _.displacement = displacement
@@ -226,7 +226,7 @@ export class KoboMetaMapperProtection {
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
-      sector: DrcSector.Protection,
+      sector: DrcSector.GeneralProtection,
       activity: DrcProgram.Counselling,
       persons: [{
         age: answer.age,
@@ -293,8 +293,11 @@ export class KoboMetaMapperProtection {
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
       hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
-      sector: DrcSector.Protection,
-      activity: DrcProgram.PSS,
+      sector: DrcSector.PSS,
+      activity: fnSwitch(answer.activity!, {
+        mhpss: DrcProgram.MHPSSActivities,
+        pgs: DrcProgram.PGS,
+      }, () => undefined),
       personsCount: persons.length,
       persons,
       project: project ? [project] : [],
