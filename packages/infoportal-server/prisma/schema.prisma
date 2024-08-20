@@ -329,36 +329,3 @@ model JsonStore {
   key       String    @unique
   value     Json
 }
-
-enum DatabaseViewVisibility {
-  Public
-  Private
-}
-
-enum DatabaseViewColVisibility {
-  Hidden
-  Visible
-}
-
-model DatabaseViewCol {
-  id         String                    @id @default(uuid())
-  name       String
-  view       DatabaseView?             @relation(fields: [viewId], references: [id])
-  viewId     String
-  width      Int
-  visibility DatabaseViewColVisibility @default(Visible)
-
-  @@index([name, viewId])
-}
-
-model DatabaseView {
-  id         String                 @id @default(uuid())
-  name       String                 @unique
-  createdAt  DateTime               @default(now())
-  updatedAt  DateTime?
-  updatedBy  String
-  visibility DatabaseViewVisibility @default(Private)
-  details    DatabaseViewCol[]
-
-  @@index([name])
-}

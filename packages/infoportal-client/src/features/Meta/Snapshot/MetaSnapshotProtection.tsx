@@ -46,7 +46,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
   useEffect(() => {
     ctx.setShapeFilters({
       sector: [
-        DrcSector.GeneralProtection,
+        DrcSector.Protection,
         DrcSector.GBV
       ]
     })

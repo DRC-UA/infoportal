@@ -429,8 +429,6 @@ export const en = Object.freeze({
       participantsBySector: 'Participants by sector',
       psea: 'PSEA',
       training: 'Training',
-      pss: 'PSS Activity',
-      pssFilter: 'Filter data by specific PSS activities.',
       filterEchoReporting: 'Filter duplication',
       filterEchoReportingDetails: (n: number) => `Skip ${n}% of HHS data to limit double counting.`,
       filterEchoReportingDisability: 'Filter with disability',
@@ -918,8 +916,6 @@ export const en = Object.freeze({
         GbvAwarenessRaisingSession: 'Awareness raising',
         PssActivities: 'GBV PSS Activities',
         GbvLegalAid: 'GBV Legal Aid',
-        MHPSSActivities: 'MHPSS awareness session',
-        PsychosocialGroupSession: 'Psychosocial group session',
       }
       const activitiesMerged_: Partial<Record<DrcProgram, string>> = {
         ...activities_,

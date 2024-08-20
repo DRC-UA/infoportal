@@ -31,11 +31,10 @@ export const ProtectionProvider = ({
   const reqProtection = () => api.koboMeta.search({
     activities: [
       DrcProgram.ProtectionMonitoring,
+      DrcProgram.PSS,
       DrcProgram.FGD,
       DrcProgram.AwarenessRaisingSession,
       DrcProgram.CommunityLevelPm,
-      DrcProgram.MHPSSActivities,
-      DrcProgram.PGS,
     ]
   }).then(_ => seq(_.data))
   const fetcher = useFetcher(reqProtection)

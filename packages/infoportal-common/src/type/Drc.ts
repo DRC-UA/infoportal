@@ -39,7 +39,7 @@ export enum DrcSector {
   NFI = 'NFI',
   WaSH = 'WaSH',
   Education = 'Education',
-  GeneralProtection = 'GeneralProtection',
+  Protection = 'Protection',
   DrcSector = 'DrcSector',
   Livelihoods = 'Livelihoods',
   FoodSecurity = 'FoodSecurity',
@@ -50,7 +50,6 @@ export enum DrcSector {
   Evacuations = 'Evacuations',
   GBV = 'GBV',
   EORE = 'EORE',
-  PSS = 'PSS'
 }
 
 export enum DrcProgram {
@@ -87,8 +86,6 @@ export enum DrcProgram {
   PssActivities = 'PssActivities',
   GbvLegalAid = 'GbvLegalAid',
   CapacityBuilding = 'CapacityBuilding',
-  MHPSSActivities = 'MHPSSActivities',
-  PGS = 'PsychosocialGroupSession',
 }
 
 export class DrcSectorHelper {
@@ -105,25 +102,23 @@ export class DrcSectorHelper {
     ESK: DrcSector.Shelter,
     InfantWinterClothing: DrcSector.NFI,
     HygieneKit: DrcSector.NFI,
-    Referral: DrcSector.GeneralProtection,
+    Referral: DrcSector.Protection,
     SectoralCashForAgriculture: DrcSector.Livelihoods,
     VET: DrcSector.Livelihoods,
     MSME: DrcSector.Livelihoods,
     SectoralCashForAnimalShelterRepair: DrcSector.Livelihoods,
     SectoralCashForAnimalFeed: DrcSector.Livelihoods,
-    Counselling: DrcSector.GeneralProtection,
-    PSS: DrcSector.GeneralProtection,
-    ProtectionMonitoring: DrcSector.GeneralProtection,
-    AwarenessRaisingSession: DrcSector.GeneralProtection,
-    CommunityLevelPm: DrcSector.GeneralProtection,
-    Legal: DrcSector.GeneralProtection,
-    FGD: DrcSector.GeneralProtection,
-    Observation: DrcSector.GeneralProtection,
+    Counselling: DrcSector.Protection,
+    PSS: DrcSector.Protection,
+    ProtectionMonitoring: DrcSector.Protection,
+    AwarenessRaisingSession: DrcSector.Protection,
+    CommunityLevelPm: DrcSector.Protection,
+    Legal: DrcSector.Protection,
+    FGD: DrcSector.Protection,
+    Observation: DrcSector.Protection,
     WGSS: DrcSector.GBV,	//	# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces
     DignityKits: DrcSector.GBV,	//	# of women and girls at risk who received dignity kits
     CapacityBuilding: DrcSector.GBV,	//	# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards
-    MHPSSActivities: DrcSector.PSS,
-    PsychosocialGroupSession: DrcSector.PSS,
     CaseManagement: DrcSector.GBV,	//	# of individuals reached with humanitarian cash and voucher assistance for GBV case management and
     GbvAwarenessRaisingSession: DrcSector.GBV,	//	# of individuals reached with awareness-raising activities and GBV-life-saving information
     PssActivities: DrcSector.GBV,	//	# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)
