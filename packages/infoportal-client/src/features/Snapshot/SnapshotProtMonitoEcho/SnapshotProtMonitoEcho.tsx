@@ -24,6 +24,7 @@ export const snapShotDefaultPieIndicatorsProps: Partial<Pick<ChartPieIndicatorPr
   hideIndicatorTooltip: true,
   showBase: true,
   showValue: true,
+  evolution: undefined,
   sx: {
     mb: 1,
   }

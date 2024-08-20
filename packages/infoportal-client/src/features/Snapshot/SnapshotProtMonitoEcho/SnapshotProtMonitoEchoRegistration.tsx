@@ -107,7 +107,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 ]}
               />
             </SlidePanel>
-            <SnapshotProtMonitoEvolutionNote sx={{mt: -1}}/>
+            {/*<SnapshotProtMonitoEvolutionNote sx={{mt: -1}}/>*/}
           </Div>
           <Div column>
             <SlidePanel>
