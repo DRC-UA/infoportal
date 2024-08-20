@@ -183,6 +183,7 @@ export enum DrcDonor {
   MOFA = 'MOFA',
   AugustinusFonden = 'AugustinusFonden',
   HoffmansAndHusmans = 'HoffmansAndHusmans',
+  None = 'None',
 }
 
 export const drcDonorTranlate: Record<DrcDonor, string> = {
@@ -211,6 +212,7 @@ export const drcDonorTranlate: Record<DrcDonor, string> = {
   MOFA: 'MOFA',
   AugustinusFonden: 'Augustinus Fonden',
   HoffmansAndHusmans: 'Hoffmans & Husmans',
+  None: 'None',
 }
 
 export enum DrcProject {
@@ -263,6 +265,7 @@ export enum DrcProject {
   'UKR-000329 SIDA H2R' = 'UKR-000329 SIDA H2R',
   'UKR-000291_292 UNHCR' = 'UKR-000291_292 UNHCR',
   'UKR-000xxx DANIDA' = 'UKR-000xxx DANIDA',
+  'None' = 'None',
 }
 
 export const allProjects = Obj.values(DrcProject)
@@ -319,6 +322,7 @@ export class DrcProjectHelper {
     'UKR-000329 SIDA H2R': DrcDonor.SIDA,
     'UKR-000291_292 UNHCR': DrcDonor.UNHC,
     'UKR-000xxx DANIDA': DrcDonor.DANI,
+    'None': DrcDonor.None
   }
 
   static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = seq(Obj.entries(DrcProjectHelper.donorByProject)).groupByAndApply(_ => _[1], _ => _.map(_ => _[0]))
