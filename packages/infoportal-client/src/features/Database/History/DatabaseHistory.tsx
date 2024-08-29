@@ -58,6 +58,7 @@ export const DatabaseHistory = () => {
     <Page width="lg">
       <Panel>
         <Datatable
+          showExportBtn
           loading={fetcher.loading}
           data={fetcher.get?.data}
           id={`kobo-answer-history${formId}`}

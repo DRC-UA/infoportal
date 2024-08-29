@@ -199,7 +199,7 @@ export const DatabaseKoboTableContent = ({
               )}
               <IpIconBtn
                 disabled={ctx.form.deploymentStatus === 'archived'}
-                href={ctx.schema.schemaUnsanitized.deployment__links.url}
+                href={ctx.schema.schemaUnsanitized.deployment__links.offline_url}
                 target="_blank"
                 children="file_open"
                 tooltip={m._koboDatabase.openKoboForm}
