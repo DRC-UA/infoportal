@@ -1,6 +1,9 @@
+const path = require('path')
+
 /** @type {import('next').NextConfig} */
 module.exports = {
-  swcMinify: true,
+  outputFileTracingRoot: path.join(__dirname, '../../'),
+  externalDir: true, swcMinify: true,
   productionBrowserSourceMaps: true,
   reactStrictMode: true,
   staticPageGenerationTimeout: 200,
