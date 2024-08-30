@@ -915,9 +915,7 @@ export const en = Object.freeze({
         DignityKits: 'Distribution of dignity kits',
         CapacityBuilding: 'Capacity-building',
         CaseManagement: 'Case Management',
-        GbvAwarenessRaisingSession: 'Awareness raising',
-        PssActivities: 'GBV PSS Activities',
-        GbvLegalAid: 'GBV Legal Aid',
+        LegalAid: 'GBV Legal Aid',
         MHPSSActivities: 'MHPSS awareness session',
         PsychosocialGroupSession: 'Psychosocial group session',
       }
@@ -934,7 +932,6 @@ export const en = Object.freeze({
         CommunityLevelPm: 'Protection Monitoring',
         FGD: 'Protection Monitoring',
         Observation: 'Protection Monitoring',
-        GbvAwarenessRaisingSession: 'Awareness Raising'
       }
       return {activities_, activitiesMerged_}
     })(),

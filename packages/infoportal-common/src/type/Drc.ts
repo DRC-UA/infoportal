@@ -83,9 +83,7 @@ export enum DrcProgram {
   WGSS = 'WGSS',
   DignityKits = 'DignityKits',
   CaseManagement = 'CaseManagement',
-  GbvAwarenessRaisingSession = 'GbvAwarenessRaisingSession',
-  PssActivities = 'PssActivities',
-  GbvLegalAid = 'GbvLegalAid',
+  LegalAid = 'LegalAid',
   CapacityBuilding = 'CapacityBuilding',
   MHPSSActivities = 'MHPSSActivities',
   PGS = 'PsychosocialGroupSession',
@@ -93,41 +91,39 @@ export enum DrcProgram {
 
 export class DrcSectorHelper {
 
-  private static readonly byProgram: Record<DrcProgram, DrcSector> = {
-    CashForFuel: DrcSector.Shelter,
-    CashForUtilities: DrcSector.Shelter,
-    CashForRent: DrcSector.Shelter,
-    CashForRepair: DrcSector.Shelter,
-    CashForEducation: DrcSector.Education,
-    MPCA: DrcSector.MPCA,
-    NFI: DrcSector.NFI,
-    ShelterRepair: DrcSector.Shelter,
-    ESK: DrcSector.Shelter,
-    InfantWinterClothing: DrcSector.NFI,
-    HygieneKit: DrcSector.NFI,
-    Referral: DrcSector.GeneralProtection,
-    SectoralCashForAgriculture: DrcSector.Livelihoods,
-    VET: DrcSector.Livelihoods,
-    MSME: DrcSector.Livelihoods,
-    SectoralCashForAnimalShelterRepair: DrcSector.Livelihoods,
-    SectoralCashForAnimalFeed: DrcSector.Livelihoods,
-    Counselling: DrcSector.GeneralProtection,
-    PSS: DrcSector.GeneralProtection,
-    ProtectionMonitoring: DrcSector.GeneralProtection,
-    AwarenessRaisingSession: DrcSector.GeneralProtection,
-    CommunityLevelPm: DrcSector.GeneralProtection,
-    Legal: DrcSector.GeneralProtection,
-    FGD: DrcSector.GeneralProtection,
-    Observation: DrcSector.GeneralProtection,
-    WGSS: DrcSector.GBV,	//	# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces
-    DignityKits: DrcSector.GBV,	//	# of women and girls at risk who received dignity kits
-    CapacityBuilding: DrcSector.GBV,	//	# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards
-    MHPSSActivities: DrcSector.PSS,
-    PsychosocialGroupSession: DrcSector.PSS,
-    CaseManagement: DrcSector.GBV,	//	# of individuals reached with humanitarian cash and voucher assistance for GBV case management and
-    GbvAwarenessRaisingSession: DrcSector.GBV,	//	# of individuals reached with awareness-raising activities and GBV-life-saving information
-    PssActivities: DrcSector.GBV,	//	# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)
-    GbvLegalAid: DrcSector.GBV,	//	# of individuals at risk supported with GBV specialized legal assistance and counseling
+  private static readonly byProgram: Record<DrcProgram, DrcSector[]> = {
+    CashForFuel: [DrcSector.Shelter],
+    CashForUtilities: [DrcSector.Shelter],
+    CashForRent: [DrcSector.Shelter],
+    CashForRepair: [DrcSector.Shelter],
+    CashForEducation: [DrcSector.Education],
+    MPCA: [DrcSector.MPCA],
+    NFI: [DrcSector.NFI],
+    ShelterRepair: [DrcSector.Shelter],
+    ESK: [DrcSector.Shelter],
+    InfantWinterClothing: [DrcSector.NFI],
+    HygieneKit: [DrcSector.NFI],
+    Referral: [DrcSector.GeneralProtection],
+    SectoralCashForAgriculture: [DrcSector.Livelihoods],
+    VET: [DrcSector.Livelihoods],
+    MSME: [DrcSector.Livelihoods],
+    SectoralCashForAnimalShelterRepair: [DrcSector.Livelihoods],
+    SectoralCashForAnimalFeed: [DrcSector.Livelihoods],
+    Counselling: [DrcSector.GeneralProtection],
+    PSS: [DrcSector.GeneralProtection],
+    ProtectionMonitoring: [DrcSector.GeneralProtection],
+    CommunityLevelPm: [DrcSector.GeneralProtection],
+    Legal: [DrcSector.GeneralProtection],
+    FGD: [DrcSector.GeneralProtection],
+    Observation: [DrcSector.GeneralProtection],
+    WGSS: [DrcSector.GBV],	//	# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces
+    DignityKits: [DrcSector.GBV],	//	# of women and girls at risk who received dignity kits
+    CapacityBuilding: [DrcSector.GBV],	//	# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards
+    MHPSSActivities: [DrcSector.PSS],
+    PsychosocialGroupSession: [DrcSector.PSS],
+    CaseManagement: [DrcSector.GBV],	//	# of individuals reached with humanitarian cash and voucher assistance for GBV case management and
+    AwarenessRaisingSession: [DrcSector.GeneralProtection, DrcSector.GBV],	//	# of individuals reached with awareness-raising activities and GBV-life-saving information
+    LegalAid: [DrcSector.GBV],	//	# of individuals at risk supported with GBV specialized legal assistance and counseling
     //	# of operational women and girls\' safe spaces
     // CapacityBuilding: DrcSector.GBV,	//	# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards
   } as const
@@ -140,9 +136,9 @@ export class DrcSectorHelper {
   ])
   static readonly isAutoValidatedActivity = (_: DrcProgram) => DrcSectorHelper.autoValidatedActivity.has(_)
 
-  static readonly findByProgram = (p: DrcProgram): DrcSector => {
+  static readonly findFirstByProgram = (p: DrcProgram): DrcSector => {
     // @ts-ignore
-    return DrcSectorHelper.byProgram[p]
+    return DrcSectorHelper.byProgram[p][0]
   }
 }
 
