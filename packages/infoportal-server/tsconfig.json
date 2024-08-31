@@ -20,8 +20,18 @@
       "../../node_modules/@types",
       "./node_modules/@types",
       "./src/typings"
-    ]
+    ],
+    "paths": {
+      "infoportal-common/*": [
+        "../infoportal-common/src/*"
+      ]
+    }
   },
+  "references": [
+    {
+      "path": "../infoportal-common"
+    }
+  ],
   "ts-node": {
     "files": true
   },
