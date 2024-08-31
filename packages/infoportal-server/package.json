@@ -12,8 +12,7 @@
     "migration": "npx prisma migrate dev",
     "migration-force": "prisma db push",
     "update-kobo-tags": "node src/script/RefactoProjectForHhs.ts",
-    "build-ai-type": "ts-node src/script/BuildTypeActivityInfo.ts",
-    "build-kobo-type": "ts-node src/script/BuildTypeKobo.ts"
+    "ln": "ln -s ../../node_modules/* node_modules/"
   },
   "keywords": [],
   "author": "",

@@ -25,6 +25,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
   total,
   data,
   columns,
+  onResizeColumn,
   getRenderRowKey,
   defaultLimit,
   rowsPerPageOptions = [20, 50, 100, 500],
@@ -80,6 +81,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
       <DatatableProvider
         id={props.id}
         columns={innerColumns}
+        onResizeColumn={onResizeColumn}
         data={data}
         defaultLimit={defaultLimit}
         select={select}
@@ -227,6 +229,7 @@ const _Datatable = <T extends DatatableRow>({
         <Box {...contentProps}>
           <Box id={id} component="table" className="borderY table" sx={{minWidth: '100%'}}>
             <DatatableHead
+              onResizeColumn={ctx.onResizeColumn}
               data={ctx.data.filteredSortedAndPaginatedData?.data}
               search={ctx.data.search}
               filters={ctx.data.filters}

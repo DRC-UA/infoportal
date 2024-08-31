@@ -4,8 +4,9 @@ import {UseDatatableData, useDatatableData} from '@/shared/Datatable/context/use
 import {DatatableModal, useDatatableModal} from '@/shared/Datatable/context/useDatatableModal'
 import {useSetStateIp} from '@/shared/hook/useSetState'
 import {seq} from '@alexandreannic/ts-utils'
-import {DatatableColumn, DatatableRow, DatatableTableProps} from '@/shared/Datatable/util/datatableType'
+import {DatatableColumn, DatatableRow, DatatableTableProps, OrderBy} from '@/shared/Datatable/util/datatableType'
 import {UseDatatableOptions, useDatatableOptions} from '@/shared/Datatable/context/useDatatableOptions'
+import { KeyOf } from 'infoportal-common'
 
 export interface DatatableContext<T extends DatatableRow> {
   data: UseDatatableData<T>
@@ -13,6 +14,7 @@ export interface DatatableContext<T extends DatatableRow> {
   select: DatatableTableProps<T>['select']
   columns: DatatableColumn.InnerProps<T>[]
   getRenderRowKey: DatatableTableProps<T>['getRenderRowKey']
+  onResizeColumn: DatatableTableProps<T>['onResizeColumn']
   rowStyle: DatatableTableProps<T>['rowStyle']
   selected: UseSetState<string>
   modal: DatatableModal<T>
@@ -29,6 +31,7 @@ export const DatatableProvider = <T extends DatatableRow>({
   columns,
   select,
   rowStyle,
+  onResizeColumn,
   // sortBy,
   // orderBy,
   onDataChange,
@@ -40,17 +43,17 @@ export const DatatableProvider = <T extends DatatableRow>({
 }: {
   id: string
   defaultLimit?: number
+  onFiltersChange: DatatableTableProps<T>['onFiltersChange']
+  onDataChange: DatatableTableProps<T>['onDataChange']
+  defaultFilters: DatatableTableProps<T>['defaultFilters']
   columns: DatatableColumn.InnerProps<T>[]
   data: DatatableTableProps<T>['data']
   getRenderRowKey: DatatableTableProps<T>['getRenderRowKey']
   select: DatatableTableProps<T>['select']
-  onFiltersChange: DatatableTableProps<T>['onFiltersChange']
-  onDataChange: DatatableTableProps<T>['onDataChange']
-  defaultFilters: DatatableTableProps<T>['defaultFilters']
   rowStyle: DatatableTableProps<T>['rowStyle']
-  // sortBy?: KeyOf<T>
-  // orderBy?: OrderBy
-
+  sortBy?: KeyOf<T>
+  orderBy?: OrderBy
+  onResizeColumn: DatatableTableProps<T>['onResizeColumn']
   children: ReactNode
 }) => {
   const selected = useSetStateIp<string>()
@@ -90,6 +93,7 @@ export const DatatableProvider = <T extends DatatableRow>({
     columns,
     select,
     options,
+    onResizeColumn,
     getRenderRowKey,
   }
 

@@ -12,12 +12,13 @@ export interface IpIconBtnProps extends IconButtonProps {
 
 export const IpIconBtn = ({
   tooltip,
+  size,
   children,
   ...props
 }: IpIconBtnProps) => {
   const content = (
-    <IconButton {...props}>
-      <Icon>{children}</Icon>
+    <IconButton {...props} size={size}>
+      <Icon fontSize={size}>{children}</Icon>
     </IconButton>
   )
   return tooltip ? (

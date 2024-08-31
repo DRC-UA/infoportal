@@ -5,6 +5,7 @@
 - Remove deprecated AaSelect
 - Delete chartHelperOld
 - Harmonize dashboards
+- Rename ScRadioGroupItem
 
 Started
 

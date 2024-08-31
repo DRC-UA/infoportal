@@ -1,7 +1,8 @@
-import {FormControl, InputLabel, MenuItem, OutlinedInput, Select, SxProps, Theme} from '@mui/material'
+import {Box, FormControl, Icon, InputLabel, MenuItem, OutlinedInput, Select, SelectProps, SxProps, Theme, useTheme} from '@mui/material'
 import React, {ReactNode, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {makeSx} from '@/core/theme'
+import {Txt} from '@/shared'
 
 export type IpSelectOption<T extends string | number = string> = {
   value: T,
@@ -22,6 +23,7 @@ export type IpSelectSingleBaseProps<T extends TType = string> = {
   value?: T | null
   multiple?: false
   hideNullOption?: boolean
+  renderValue?: SelectProps<T>['renderValue']
 }
 
 export type IpSelectSingleNullableProps<T extends TType = string> = IpSelectSingleBaseProps<T> & {
@@ -44,6 +46,34 @@ const style = makeSx({
 })
 
 const IGNORED_VALUE_EMPTY = ''
+
+export const ipSelectItem = <T extends any>({
+  icon,
+  desc,
+  value,
+  title,
+}: {
+  icon?: string
+  desc: string
+  title: string
+  value: T
+}) => {
+  const t = useTheme()
+  return {
+    value,
+    children: (
+      <Box sx={{display: 'flex', py: .5}}>
+        {icon && (
+          <Icon sx={{mr: 1, color: t.palette.text.secondary}}>{icon}</Icon>
+        )}
+        <Box>
+          <Box>{title}</Box>
+          <Txt color="hint" size="small" sx={{lineHeight: 1}}>{desc}</Txt>
+        </Box>
+      </Box>
+    )
+  }
+}
 
 export const IpSelectSingle = <T extends TType>({
   defaultValue,

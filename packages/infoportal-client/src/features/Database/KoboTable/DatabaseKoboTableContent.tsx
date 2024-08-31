@@ -2,7 +2,6 @@ import {IpBtn} from '@/shared/Btn'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {KoboAnswerFlat, KoboAnswerId} from 'infoportal-common'
-import {AaSelect} from '@/shared/Select/Select'
 import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
 import {IpIconBtn} from '@/shared/IconBtn'
@@ -27,7 +26,8 @@ import {DatatableHeadTypeIconByKoboType} from '@/shared/Datatable/DatatableHead'
 import {appConfig} from '@/conf/AppConfig'
 import {useSession} from '@/core/Session/SessionContext'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
-// import { Alert } from '@/shared'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -91,8 +91,11 @@ export const DatabaseKoboTableContent = ({
       asyncUpdateTagById: ctxEditTag.asyncUpdateById,
       openEditTag: ctxEditTag.open,
     })
-    return [...base, ...extraColumns, ...schemaColumns]
-  }, [schemaColumns])
+    return [...base, ...extraColumns, ...schemaColumns].map(_ => ({
+      ..._,
+      width: ctx.view.colsById[_.id]?.width ?? null as any,
+    }))
+  }, [schemaColumns, ctx.view.fetcherViews.get, ctx.view.currentView?.id])
 
   const toggleColumns = useMemo(() => {
     return columns.map(_ => {
@@ -106,13 +109,13 @@ export const DatabaseKoboTableContent = ({
 
   const selectedHeader = useCustomSelectedHeader(selectedIds)
   const header = useCustomHeader()
-  const [hiddenColumns, setHiddenColumns] = usePersistentState<string[]>([], {storageKey: 'database-' + ctx.form.id})
 
   return (
     <>
       <Datatable
+        onResizeColumn={ctx.view.onResizeColumn}
         loading={ctx.loading}
-        defaultHiddenColumns={hiddenColumns}
+        defaultHiddenColumns={ctx.view.hiddenColumns}
         hideColumnsToggle
         contentProps={{sx: {maxHeight: 'calc(100vh - 211px)'}}}
         showExportBtn
@@ -156,10 +159,12 @@ export const DatabaseKoboTableContent = ({
           <>
             <DatatableColumnToggle
               columns={toggleColumns}
-              hiddenColumns={hiddenColumns}
-              onChange={setHiddenColumns}
+              hiddenColumns={ctx.view.hiddenColumns}
+              onChange={ctx.view.setHiddenColumns}
             />
-            <AaSelect<number>
+            <DatabaseViewInput sx={{mr: 1}}/>
+            <IpSelectSingle<number>
+              hideNullOption
               sx={{maxWidth: 128, mr: 1}}
               defaultValue={ctxSchema.langIndex}
               onChange={ctxSchema.setLangIndex}
@@ -224,4 +229,3 @@ export const DatabaseKoboTableContent = ({
     </>
   )
 }
-

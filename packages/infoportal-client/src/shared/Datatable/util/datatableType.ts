@@ -48,6 +48,7 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   getRenderRowKey?: (_: T, index: number) => string
   rowStyle?: (_: T) => CSSProperties
   onClickRows?: (_: T, event: React.MouseEvent<HTMLElement>) => void
+  onResizeColumn?: (_: K, size: number) => void
   rowsPerPageOptions?: number[]
   columns: DatatableColumn.Props<T, K>[]
   hideColumnsToggle?: boolean
@@ -96,7 +97,6 @@ export namespace DatatableColumn {
     align?: 'center' | 'right'
     onClick?: (_: T) => void
     hidden?: boolean
-    alwaysVisible?: boolean
     style?: (_: T) => CSSProperties
     styleHead?: CSSProperties
     classHead?: string

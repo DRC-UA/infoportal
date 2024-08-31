@@ -12,5 +12,6 @@ export const koboSdk = new KoboSdk({
 
 (async () => {
   const prisma = new PrismaClient()
-  const users = await prisma.user.findMany()
+  const users = await prisma.user.findMany({where: {name: ''}})
+  users.map(_ => _.name)
 })()
