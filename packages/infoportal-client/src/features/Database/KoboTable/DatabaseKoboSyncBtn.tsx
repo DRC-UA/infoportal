@@ -6,7 +6,7 @@ export const DatabaseKoboSyncBtn = (props: IpBtnProps) => {
   const {m} = useI18n()
   return (
     <IpBtn
-      variant="outlined"
+      variant="light"
       icon="cloud_sync"
       tooltip={props.tooltip ?? m._koboDatabase.pullData}
       {...props}

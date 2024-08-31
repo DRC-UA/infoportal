@@ -17,6 +17,7 @@
     "esModuleInterop": true,
     "allowJs": true,
     "typeRoots": [
+      "../../node_modules/@types",
       "./node_modules/@types",
       "./src/typings"
     ]
@@ -26,10 +27,5 @@
   },
   "include": [
     "src"
-  ],
-  "references": [
-    {
-      "path": "../infoportal-common"
-    }
   ]
 }

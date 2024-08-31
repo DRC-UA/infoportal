@@ -27,6 +27,7 @@ import {ControllerHdp} from './controller/ControllerHdp'
 import {ControllerKoboAnswerHistory} from './controller/kobo/ControllerKoboAnswerHistory'
 import {ControllerCache} from './controller/ControllerCache'
 import {UserService} from '../feature/user/UserService'
+import {ControllerDatabaseView} from './controller/ControllerDatabaseView'
 
 export interface AuthenticatedRequest extends Request {
   user?: UserSession
@@ -79,6 +80,7 @@ export const getRoutes = (
   const jsonStore = new ControllerJsonStore(prisma)
   const hdp = new ControllerHdp()
   const koboAnswerHistory = new ControllerKoboAnswerHistory(prisma)
+  const databaseView = new ControllerDatabaseView(prisma)
   const cacheController = new ControllerCache()
 
   const auth = ({adminOnly = false}: {adminOnly?: boolean} = {}) => async (req: Request, res: Response, next: NextFunction) => {
@@ -172,6 +174,12 @@ export const getRoutes = (
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
 
     router.get('/hdp/risk-education', errorCatcher(hdp.fetchRiskEducation))
+
+    router.post(`/database-view`, auth(), errorCatcher(databaseView.search))
+    router.put(`/database-view/:databaseId`, auth(), errorCatcher(databaseView.create))
+    router.post(`/database-view/:id`, auth(), errorCatcher(databaseView.update))
+    router.delete(`/database-view/:viewId`, auth(), errorCatcher(databaseView.delete))
+    router.post(`/database-view/:viewId/col/:colName`, auth(), errorCatcher(databaseView.updateCol))
 
     router.get('/json-store/:key', auth(), errorCatcher(jsonStore.get))
     router.put('/json-store', auth(), errorCatcher(jsonStore.set))

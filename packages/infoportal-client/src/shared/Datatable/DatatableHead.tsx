@@ -1,10 +1,11 @@
 import {fnSwitch, map} from '@alexandreannic/ts-utils'
-import {Box, Checkbox, IconProps} from '@mui/material'
+import {Checkbox, IconProps} from '@mui/material'
 import React from 'react'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumn, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {KoboApiColumType} from 'infoportal-common'
+import {ResizableDiv} from '@/shared/Datatable/ResizableDiv'
 
 export const DatatableHead = (() => {
   const Component = <T extends DatatableRow>({
@@ -14,12 +15,13 @@ export const DatatableHead = (() => {
     select,
     columns,
     filters,
+    onResizeColumn,
     search,
     onOpenFilter,
   }: {
     onOpenFilter: (columnId: string, event: any) => void
     onOpenStats: (columnId: string, event: any) => void
-  } & Pick<DatatableContext<T>, 'selected' | 'columns' | 'columnsIndex' | 'select'> & {
+  } & Pick<DatatableContext<T>, 'onResizeColumn' | 'selected' | 'columns' | 'columnsIndex' | 'select'> & {
     data?: T[]
     search: DatatableContext<T>['data']['search']
     filters: DatatableContext<T>['data']['filters']
@@ -41,30 +43,30 @@ export const DatatableHead = (() => {
             />
           </th>
         ))}
-        {columns.map((_, i) => {
-          const sortedByThis = search?.sortBy === _.id ?? true
-          const active = sortedByThis || filters[_.id]
+        {columns.map((c, i) => {
+          const sortedByThis = search?.sortBy === c.id ?? true
+          const active = sortedByThis || filters[c.id]
           return (
             <th
-              style={_.styleHead}
-              key={_.id}
-              title={_.head}
-              // onClick={() => onSortBy(_.id)}
+              style={c.styleHead}
+              key={c.id}
+              title={c.head}
+              // onClick={() => onSortBy(c.id)}
               className={[
-                _.classHead ?? '',
+                c.classHead ?? '',
                 'td th',
-                _.width ? 'th-width-fit-content' : '',
-                _.stickyEnd ? 'td-sticky-end' : '',
+                c.width ? 'th-width-fit-content' : '',
+                c.stickyEnd ? 'td-sticky-end' : '',
                 active ? 'th-active' : '',
-                fnSwitch(_.align!, {
+                fnSwitch(c.align!, {
                   'center': 'td-center',
                   'right': 'td-right'
                 }, _ => '')
               ].join(' ')}
             >
-              <Box className="th-resize" style={{width: _.width}}>
-                {_.head}
-              </Box>
+              <ResizableDiv id={c.id} initialWidth={c.width} onResize={onResizeColumn}>
+                {c.head}
+              </ResizableDiv>
             </th>
           )
         })}

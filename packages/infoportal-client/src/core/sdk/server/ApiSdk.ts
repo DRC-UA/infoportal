@@ -21,6 +21,7 @@ import {HdpSdk} from '@/core/sdk/server/hdp/HdpSdk'
 import {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboAnswerHistorySdk} from '@/core/sdk/server/kobo/answerHistory/KoboAnswerHistorySdk'
 import {CacheSdk} from '@/core/sdk/server/cache/CacheSdk'
+import {DatabaseViewSdk} from '@/core/sdk/server/databaseView/DatabaseViewSdk'
 
 export class ApiSdk {
   constructor(private client: ApiClient) {
@@ -57,6 +58,7 @@ export class ApiSdk {
   readonly access = new AccessSdk(this.client)
   readonly group = new GroupSdk(this.client)
   readonly user = new UserSdk(this.client)
+  readonly databaseView = new DatabaseViewSdk(this.client)
   readonly proxy = new ProxySdk(this.client)
   readonly jsonStore = new JsonStoreSdk(this.client)
   readonly hdp = new HdpSdk(this.client)
