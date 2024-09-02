@@ -8,7 +8,8 @@ import {
   KoboId,
   KoboSchemaHelper,
   KoboTranslateChoice,
-  KoboTranslateQuestion, removeHtml
+  KoboTranslateQuestion,
+  removeHtml
 } from 'infoportal-common'
 import {I18nContextProps, useI18n} from '@/core/i18n/I18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
@@ -100,6 +101,7 @@ interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
   selectedIds?: KoboAnswerId[]
   getRow?: (_: T) => KoboMappedAnswer,
   onSelectColumn?: (_: string) => void
+  onHideColumn?: (_: string) => void
 }
 
 export type DatabaseColumnProps<T extends Record<string, any | undefined>> = DatatableColumn.Props<T> & {
@@ -123,6 +125,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   repeatGroupsAsColumn,
   selectedIds,
   onSelectColumn,
+  onHideColumn,
 }: GetColumnBySchemaProps<T> & {
   q: KoboApiQuestionSchema,
 }): DatabaseColumnProps<T>[] => {

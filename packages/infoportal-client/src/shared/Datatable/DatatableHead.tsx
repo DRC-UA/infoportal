@@ -6,6 +6,7 @@ import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumn, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {KoboApiColumType} from 'infoportal-common'
 import {ResizableDiv} from '@/shared/Datatable/ResizableDiv'
+import {DatabaseHeadCell} from '@/shared/Datatable/DatatableHeadCell'
 
 const colors = [
   '#2196F3',
@@ -30,12 +31,13 @@ export const DatatableHead = (() => {
     columns,
     filters,
     onResizeColumn,
+    onHideColumn,
     search,
     onOpenFilter,
   }: {
     onOpenFilter: (columnId: string, event: any) => void
     onOpenStats: (columnId: string, event: any) => void
-  } & Pick<DatatableContext<T>, 'onResizeColumn' | 'selected' | 'columns' | 'columnsIndex' | 'select'> & {
+  } & Pick<DatatableContext<T>, 'on' | 'onResizeColumn' | 'selected' | 'columns' | 'columnsIndex' | 'select'> & {
     data?: T[]
     search: DatatableContext<T>['data']['search']
     filters: DatatableContext<T>['data']['filters']
@@ -86,7 +88,9 @@ export const DatatableHead = (() => {
               ].join(' ')}
             >
               <ResizableDiv id={c.id} initialWidth={c.width} onResize={onResizeColumn}>
-                {c.head}
+                <DatabaseHeadCell onClick={}>
+                  {c.head}
+                </DatabaseHeadCell>
               </ResizableDiv>
             </th>
           )
