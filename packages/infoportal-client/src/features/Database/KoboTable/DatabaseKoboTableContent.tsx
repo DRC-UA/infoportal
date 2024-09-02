@@ -97,7 +97,7 @@ export const DatabaseKoboTableContent = ({
     }))
   }, [schemaColumns, ctx.view.currentView])
 
-  const toggleColumns = useMemo(() => {
+  const toggledColumns = useMemo(() => {
     return columns.map(_ => {
       return {
         ..._,
@@ -158,7 +158,7 @@ export const DatabaseKoboTableContent = ({
         header={params =>
           <>
             <DatatableColumnToggle
-              columns={toggleColumns}
+              columns={toggledColumns}
               hiddenColumns={ctx.view.hiddenColumns}
               onChange={ctx.view.setHiddenColumns}
             />

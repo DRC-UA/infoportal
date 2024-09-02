@@ -348,7 +348,7 @@ model DatabaseView {
 
 model DatabaseViewCol {
   name       String
-  view       DatabaseView?              @relation(fields: [viewId], references: [id])
+  view       DatabaseView?              @relation(fields: [viewId], references: [id], onDelete: Cascade)
   viewId     String
   width      Int?
   visibility DatabaseViewColVisibility? @default(Visible)
