@@ -1,11 +1,25 @@
-import {fnSwitch, map} from '@alexandreannic/ts-utils'
-import {Checkbox, IconProps} from '@mui/material'
+import {fnSwitch, map, Obj, seq} from '@alexandreannic/ts-utils'
+import {Checkbox, IconProps, Tooltip} from '@mui/material'
 import React from 'react'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumn, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {KoboApiColumType} from 'infoportal-common'
 import {ResizableDiv} from '@/shared/Datatable/ResizableDiv'
+
+const colors = [
+  '#2196F3',
+  '#FF9800',
+  '#673AB7',
+  '#009688',
+  '#F44336',
+  '#00BCD4',
+  '#F44336',
+  '#FFEE58',
+  '#9C27B0',
+  '#CDDC39',
+  '#E91E63',
+]
 
 export const DatatableHead = (() => {
   const Component = <T extends DatatableRow>({
@@ -28,6 +42,13 @@ export const DatatableHead = (() => {
   }) => {
     return (
       <thead>
+      <tr className="tr trh trh-first">
+        {map(Obj.entries(seq(columns).groupByAndApply(_ => _.groupLabel ?? 'None', _ => _.length)), groups => groups.length > 1 && groups.map(([group, size], i) =>
+          <Tooltip title={group} placement="top">
+            <th colSpan={size} style={{background: colors[i % colors.length]}}/>
+          </Tooltip>
+        ))}
+      </tr>
       <tr className="tr trh">
         {map(select?.getId, getId => (
           <th className="td th td-center td-width0 td-sticky-start">

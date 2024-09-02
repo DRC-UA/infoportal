@@ -92,7 +92,7 @@ export namespace DatatableColumn {
     width?: number
     head?: string
     group?: string
-    groupLabel?: ReactNode
+    groupLabel?: string
     noCsvExport?: boolean
     align?: 'center' | 'right'
     onClick?: (_: T) => void

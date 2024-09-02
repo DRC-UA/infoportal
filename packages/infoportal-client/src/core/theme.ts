@@ -428,6 +428,12 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     borderCollapse: 'collapse',
     borderSpacing: 0,
   },
+  '.table .trh-first th': {
+    cursor: 'pointer',
+    height: 6,
+    fontSize: styleUtils(t).fontSize.small,
+    borderBottom: '1px solid ' + t.palette.divider,
+  },
   '.table-head-type-icon': {
     ml: '2px',
     marginRight: 'auto',
