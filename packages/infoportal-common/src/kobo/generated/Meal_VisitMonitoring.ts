@@ -2164,7 +2164,8 @@ mdd_001: {
 	'bha2': `UKR-000345 BHA SCI`,
 	'347danida': `UKR-000347 DANIDA`,
 	'sida_350': `UKR-000350 SIDA`,
-	'dmfa355': `UKR-000355 DANISH MoFA`
+	'dmfa355': `UKR-000355 DANISH MoFA`,
+	'IOMppln': `IOM NFI Pipeline`
 },
 mdt: {
 	'nfi': `NFI`,
@@ -2199,7 +2200,8 @@ pan: {
 	'nficc': `NFICC (NFI kit for the Collective Center)`,
 	'esk': `ESK (Emergency Shelter kit)`,
 	'hkcc': `HKCC (Insitutional Hygiene kit for Collective Center)`,
-	'cff': `CFF (Cash for Fuel)`
+	'cff': `CFF (Cash for Fuel)`,
+	'wsk': `WSK (Winterization Supplies Kit - Ukraine, IOM)`
 },
 pae: {
 	'mmg': `Monitoring Micro grants`,

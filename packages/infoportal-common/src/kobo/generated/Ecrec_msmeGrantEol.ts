@@ -4,6 +4,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	export interface T {
 	    'start': string,
 	    'end': string,
+	  // date_payment [date] Дата оплати
+  'date_payment': Date | undefined,
 	  // not_beginning [note] Дякуємо за інтерес до нашої програмі, що реалізується за підтримки Бюро з гуманітарної допомоги (BHA) Агентства США з міжнародного розвитку (USAID). Ця анкета допоможе нам оцінити ваш бізнес-план та визначити його відповідність критеріям грантової програми підтримки малого і середнього бізнесу. Заповнення анкети займе декілька хвилин. Будь ласка, надайте вичерпні та достовірні відповіді на всі питання. Дякуємо за ваш час!
   'not_beginning': string,
 	  // date [date] Дата
@@ -165,6 +167,7 @@ const extractQuestionName = (_: Record<string, any>) => {
 
 export const map = (_: Record<keyof T, any>): T => ({
 	..._,
+	date_payment: _.date_payment ? new Date(_.date_payment) : undefined,
 	date: _.date ? new Date(_.date) : undefined,
 	ben_enterprise_tax_id: _.ben_enterprise_tax_id ? +_.ben_enterprise_tax_id : undefined,
 	much_need_grant: _.much_need_grant ? +_.much_need_grant : undefined,

@@ -55,7 +55,7 @@ export const useSafetyIncidentData = () => {
     attack: {
       icon: 'warning',
       getValue: _ => _.attack,
-      getOptions: () => DataFilter.buildOptionsFromObject(Safety_incident.options.zie_visit_person, true),
+      getOptions: () => DataFilter.buildOptionsFromObject(Safety_incident.options.attack, true),
       label: m.safety.attack,
     },
     attackType: {

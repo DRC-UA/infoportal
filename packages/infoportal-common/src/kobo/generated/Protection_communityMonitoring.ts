@@ -46,6 +46,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'hh_char_hh_det': {'hh_char_hh_det_gender': undefined | Option<'hh_char_hh_det_gender'> | undefined,'hh_char_hh_det_age': number | undefined | undefined,'hh_char_hh_det_status': undefined | Option<'hh_char_hh_det_status'> | undefined}[] | undefined,
 	  // gi/category_topic [select_multiple] Category of topics
   'category_topic': undefined | Option<'category_topic'>[],
+	    'calc_type_activity': string,
 	    'calc_essential_services': string,
 	    'calc_protection_concerns': string,
 	    'calc_persons_specific_needs': string,
@@ -75,26 +76,26 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'specific_types_equipment_need_q': string | undefined,
 	  // gi/challenges_faced_PwDs/specific_types_equipment_need_a [text] Answer 5: (challenges faced PwDs)
   'specific_types_equipment_need_a': string | undefined,
-	  // gi/challenges_faced_PwDs/suffering_forms_discrimination_stigmatization_q [text] Question 6: (challenges faced PwDs)
+	  // gi/challenges_faced_PwDs/types_rehabilitation_services_q [text] Question 6: (challenges faced PwDs)
+  'types_rehabilitation_services_q': string | undefined,
+	  // gi/challenges_faced_PwDs/types_rehabilitation_services_a [text] Answer 6: (challenges faced PwDs)
+  'types_rehabilitation_services_a': string | undefined,
+	  // gi/challenges_faced_PwDs/specialized_institutions_disabilities_q [text] Question 7: (challenges faced PwDs)
+  'specialized_institutions_disabilities_q': string | undefined,
+	  // gi/challenges_faced_PwDs/specialized_institutions_disabilities_a [text] Answer 7: (challenges faced PwDs)
+  'specialized_institutions_disabilities_a': string | undefined,
+	  // gi/challenges_faced_PwDs/suffering_forms_discrimination_stigmatization_q [text] Question 8: (challenges faced PwDs)
   'suffering_forms_discrimination_stigmatization_q': string | undefined,
-	  // gi/challenges_faced_PwDs/suffering_forms_discrimination_stigmatization_a [text] Answer 6: (challenges faced PwDs)
+	  // gi/challenges_faced_PwDs/suffering_forms_discrimination_stigmatization_a [text] Answer 8: (challenges faced PwDs)
   'suffering_forms_discrimination_stigmatization_a': string | undefined,
-	  // gi/challenges_faced_PwDs/other_issues_concerns_disability_q [text] Question 7: (challenges faced PwDs)
+	  // gi/challenges_faced_PwDs/legal_help_support_q [text] Question 9: (challenges faced PwDs)
+  'legal_help_support_q': string | undefined,
+	  // gi/challenges_faced_PwDs/legal_help_support_a [text] Answer 9: (challenges faced PwDs)
+  'legal_help_support_a': string | undefined,
+	  // gi/challenges_faced_PwDs/other_issues_concerns_disability_q [text] Question 10: (challenges faced PwDs)
   'other_issues_concerns_disability_q': string | undefined,
-	  // gi/challenges_faced_PwDs/other_issues_concerns_disability_a [text] Answer 7: (challenges faced PwDs)
+	  // gi/challenges_faced_PwDs/other_issues_concerns_disability_a [text] Answer 10: (challenges faced PwDs)
   'other_issues_concerns_disability_a': string | undefined,
-	  // gi/challenges_faced_PwDs/question8_challenges_faced_PwDs [text] Question 8: (challenges faced PwDs)
-  'question8_challenges_faced_PwDs': string | undefined,
-	  // gi/challenges_faced_PwDs/answer8_challenges_faced_PwDs [text] Answer 8: (challenges faced PwDs)
-  'answer8_challenges_faced_PwDs': string | undefined,
-	  // gi/challenges_faced_PwDs/question9_challenges_faced_PwDs [text] Question 9: (challenges faced PwDs)
-  'question9_challenges_faced_PwDs': string | undefined,
-	  // gi/challenges_faced_PwDs/answer9_challenges_faced_PwDs [text] Answer 9: (challenges faced PwDs)
-  'answer9_challenges_faced_PwDs': string | undefined,
-	  // gi/challenges_faced_PwDs/question10_challenges_faced_PwDs [text] Question 10: (challenges faced PwDs)
-  'question10_challenges_faced_PwDs': string | undefined,
-	  // gi/challenges_faced_PwDs/answer10_challenges_faced_PwDs [text] Answer 10: (challenges faced PwDs)
-  'answer10_challenges_faced_PwDs': string | undefined,
 	  // gi/social_cohesion_kii/experience_dynamics_between_communities_q [text] Question 1: (social cohesion kii)
   'experience_dynamics_between_communities_q': string | undefined,
 	  // gi/social_cohesion_kii/experience_dynamics_between_communities_a [text] Answer 1: (social cohesion kii)
@@ -579,6 +580,74 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'question8_changes_mobilization_law_kii': string | undefined,
 	  // gi/changes_mobilization_law_kii/answer8_changes_mobilization_law_kii [text] Answer 8: (changes mobilization law kii)
   'answer8_changes_mobilization_law_kii': string | undefined,
+	  // gi/changes_mobilization_law_iwg/question1_changes_mobilization_law_iwg_fgd [text] Question 1: (changes mobilization law iwg fgd)
+  'question1_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/answer1_changes_mobilization_law_iwg_fgd [text] Answer 1: (changes mobilization law iwg fgd)
+  'answer1_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/question2_changes_mobilization_law_iwg_fgd [text] Question 2: (changes mobilization law iwg fgd)
+  'question2_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/answer2_changes_mobilization_law_iwg_fgd [text] Answer 2: (changes mobilization law iwg fgd)
+  'answer2_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/question3_changes_mobilization_law_iwg_fgd [text] Question 3: (changes mobilization law iwg fgd)
+  'question3_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/answer3_changes_mobilization_law_iwg_fgd [text] Answer 3: (changes mobilization law iwg fgd)
+  'answer3_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/question4_changes_mobilization_law_iwg_fgd [text] Question 4: (changes mobilization law iwg fgd)
+  'question4_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/answer4_changes_mobilization_law_iwg_fgd [text] Answer 4: (changes mobilization law iwg fgd)
+  'answer4_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/question5_changes_mobilization_law_iwg_fgd [text] Question 5: (changes mobilization law iwg fgd)
+  'question5_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/answer5_changes_mobilization_law_iwg_fgd [text] Answer 5: (changes mobilization law iwg fgd)
+  'answer5_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/question6_changes_mobilization_law_iwg_fgd [text] Question 6: (changes mobilization law iwg fgd)
+  'question6_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/answer6_changes_mobilization_law_iwg_fgd [text] Answer 6: (changes mobilization law iwg fgd)
+  'answer6_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/question7_changes_mobilization_law_iwg_fgd [text] Question 7: (changes mobilization law iwg fgd)
+  'question7_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/changes_mobilization_law_iwg/answer7_changes_mobilization_law_iwg_fgd [text] Answer 7: (changes mobilization law iwg fgd)
+  'answer7_changes_mobilization_law_iwg_fgd': string | undefined,
+	  // gi/women_roles_armed_conflic/typical_roles_women_q [text] Question 1 (women_roles_armed_conflic)
+  'typical_roles_women_q': string | undefined,
+	  // gi/women_roles_armed_conflic/typical_roles_women_a [text] Answer 1 (women_roles_armed_conflic)
+  'typical_roles_women_a': string | undefined,
+	  // gi/women_roles_armed_conflic/conflict_changed_role_q [text] Question 2 (women_roles_armed_conflic)
+  'conflict_changed_role_q': string | undefined,
+	  // gi/women_roles_armed_conflic/conflict_changed_role_a [text] Answer 2 (women_roles_armed_conflic)
+  'conflict_changed_role_a': string | undefined,
+	  // gi/women_roles_armed_conflic/learn_new_professions_q [text] Question 3 (women_roles_armed_conflic)
+  'learn_new_professions_q': string | undefined,
+	  // gi/women_roles_armed_conflic/learn_new_professions_a [text] Answer 3 (women_roles_armed_conflic)
+  'learn_new_professions_a': string | undefined,
+	  // gi/women_roles_armed_conflic/change_household_task_q [text] Question 4 (women_roles_armed_conflic)
+  'change_household_task_q': string | undefined,
+	  // gi/women_roles_armed_conflic/change_household_task_a [text] Answer 4 (women_roles_armed_conflic)
+  'change_household_task_a': string | undefined,
+	  // gi/women_roles_armed_conflic/different_coping_strategies_q [text] Question 5 (women_roles_armed_conflic)
+  'different_coping_strategies_q': string | undefined,
+	  // gi/women_roles_armed_conflic/different_coping_strategies_a [text] Answer 5 (women_roles_armed_conflic)
+  'different_coping_strategies_a': string | undefined,
+	  // gi/women_roles_armed_conflic/women_cope_challenges_q [text] Question 6 (women_roles_armed_conflic)
+  'women_cope_challenges_q': string | undefined,
+	  // gi/women_roles_armed_conflic/women_cope_challenges_a [text] Answer 6 (women_roles_armed_conflic)
+  'women_cope_challenges_a': string | undefined,
+	  // gi/women_roles_armed_conflic/different_resources_support_q [text] Question 7 (women_roles_armed_conflic)
+  'different_resources_support_q': string | undefined,
+	  // gi/women_roles_armed_conflic/different_resources_support_a [text] Answer 7 (women_roles_armed_conflic)
+  'different_resources_support_a': string | undefined,
+	  // gi/women_roles_armed_conflic/role_women_making_q [text] Question 8 (women_roles_armed_conflic)
+  'role_women_making_q': string | undefined,
+	  // gi/women_roles_armed_conflic/role_women_making_a [text] Answer 8 (women_roles_armed_conflic)
+  'role_women_making_a': string | undefined,
+	  // gi/women_roles_armed_conflic/initiatives_women_propose_q [text] Question 9 (women_roles_armed_conflic)
+  'initiatives_women_propose_q': string | undefined,
+	  // gi/women_roles_armed_conflic/initiatives_women_propose_a [text] Answer 9 (women_roles_armed_conflic)
+  'initiatives_women_propose_a': string | undefined,
+	  // gi/women_roles_armed_conflic/government_initiatives_women_q [text] Question 10 (women_roles_armed_conflic)
+  'government_initiatives_women_q': string | undefined,
+	  // gi/women_roles_armed_conflic/government_initiatives_women_a [text] Answer 10 (women_roles_armed_conflic)
+  'government_initiatives_women_a': string | undefined,
 	  // gi/topic_all/main_healthcare_available_area_q_all [text] Question 1: (other topic)
   'main_healthcare_available_area_q_all': string | undefined,
 	  // gi/topic_all/main_healthcare_available_area_a_all [text] Answer 1: (other topic)
@@ -800,6 +869,7 @@ topic: {
 	'social_cohesion': `Social cohesion`,
 	'idp_allowance_cuts': `IDP Allowance Cuts`,
 	'changes_mobilization_law': `Changes in Mobilization Law`,
+	'changes_mobilization_law_iwg': `Changes in mobilization law – Impact on women and girls`,
 	'access_protection_service': `Access to social protection services`,
 	'access_healthcare': `Access to Healthcare services`,
 	'access_social': `Civil status and access to social services and benefits`,
@@ -819,6 +889,7 @@ topic: {
 	'employment_challenges': `Employment challenges for men subjected to military conscription`,
 	'existing_risks_online_education': `Existing risks in online education of children`,
 	'access_rehabilitation': `Issues in ensuring access to rehabilitation resources for PwDs`,
+	'women_roles_armed_conflic': `Women Roles During Armed Conflict`,
 	'other': `Other`
 },
 key_informant_difficulty: {

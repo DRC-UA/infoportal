@@ -91,7 +91,6 @@ export type CfmData = {
   'date' |
   'end' |
   'submissionTime' |
-  'existing_beneficiary' |
   'name' |
   'gender' |
   'phone' |

@@ -38,7 +38,7 @@ export namespace KoboEcrec_cashRegistration {
   }
 
   const isBha = (res: any): res is Ecrec_cashRegistrationBha.T => res.known_contamination_your !== undefined
-  const isUhf = (res: any): res is Ecrec_cashRegistration.T => res.Breadwiner !== undefined
+  const isUhf = (res: any): res is Ecrec_cashRegistration.T => res.lost_breadwiner !== undefined
 
   const breadWinerMapper = <T>(row: T, q: keyof T, yes: number, exhausted: number) => {
     if (row[q] === 'yes') return yes
@@ -62,7 +62,7 @@ export namespace KoboEcrec_cashRegistration {
     res.custom.vulnerability += res.custom.disabilitiesCount === 1 ? 2 : res.custom.disabilitiesCount > 1 ? 3 : 0
     res.custom.vulnerability += res.custom.elderlyCount === 1 ? 1 : res.custom.disabilitiesCount > 1 ? 3 : 0
     if (['single', 'widow', 'div_sep'].includes(res.hh_char_civ_stat!) && res.custom.childrenCount > 0) res.custom.vulnerability += 2
-    if (isUhf(res) && res.Breadwiner === 'yes') res.custom.vulnerability += 2
+    if (isUhf(res) && res.lost_breadwiner === 'yes') res.custom.vulnerability += 2
     if (isUhf(res) && res.Documented_loss_Assets === 'yes') res.custom.vulnerability += 3
     if (res.ben_det_income) {
       if (res.ben_det_income < minimumWageUah) res.custom.vulnerability += 5
