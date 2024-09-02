@@ -15,7 +15,7 @@ export class DatabaseViewSdk {
     return this.client.put(`/database-view/${body.databaseId}`, {body})
   }
 
-  readonly update = ({id, ...body}: Partial<Omit<DatabaseView, 'details'>>): Promise<DatabaseView[]> => {
+  readonly update = ({id, ...body}: Partial<Omit<DatabaseView, 'id' | 'details'>> & {id: UUID}): Promise<DatabaseView> => {
     return this.client.post(`/database-view/${id}`, {body})
   }
 
@@ -23,7 +23,7 @@ export class DatabaseViewSdk {
     return this.client.delete(`/database-view/${viewId}`)
   }
 
-  readonly updateCol = (viewId: UUID, body: Partial<Pick<DatabaseViewCol, 'name' | 'width' | 'visibility'>>): Promise<DatabaseView[]> => {
+  readonly updateCol = (viewId: UUID, body: Partial<Pick<DatabaseViewCol, 'name' | 'width' | 'visibility'>>): Promise<DatabaseView> => {
     return this.client.post(`/database-view/${viewId}/col/${body.name}`, {body})
   }
 }

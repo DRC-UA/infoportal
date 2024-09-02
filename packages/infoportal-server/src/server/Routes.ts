@@ -175,11 +175,11 @@ export const getRoutes = (
 
     router.get('/hdp/risk-education', errorCatcher(hdp.fetchRiskEducation))
 
+    router.post(`/database-view/:viewId/col/:colName`, auth(), errorCatcher(databaseView.updateCol))
     router.post(`/database-view`, auth(), errorCatcher(databaseView.search))
     router.put(`/database-view/:databaseId`, auth(), errorCatcher(databaseView.create))
     router.post(`/database-view/:id`, auth(), errorCatcher(databaseView.update))
     router.delete(`/database-view/:viewId`, auth(), errorCatcher(databaseView.delete))
-    router.post(`/database-view/:viewId/col/:colName`, auth(), errorCatcher(databaseView.updateCol))
 
     router.get('/json-store/:key', auth(), errorCatcher(jsonStore.get))
     router.put('/json-store', auth(), errorCatcher(jsonStore.set))

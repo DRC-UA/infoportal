@@ -9,7 +9,8 @@ import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/Databas
 import {DatabaseViewVisibility} from '@/core/sdk/server/databaseView/DatabaseView'
 import {PanelTitle} from '@/shared/Panel'
 import {IpAlert} from '@/shared'
-import {DatabaseViewDefaultName, DatabaseViewInputRow} from '@/features/Database/KoboTable/view/DatabaseViewInputRow'
+import {DatabaseViewInputRow} from '@/features/Database/KoboTable/view/DatabaseViewInputRow'
+import {DatabaseViewDefaultName} from '@/features/Database/KoboTable/useDatabaseView'
 
 interface FormCreate {
   name: string
@@ -38,7 +39,7 @@ export const DatabaseViewInput = ({sx}: {
             open={open === view.id}
             onDelete={() => ctx.asyncViewDelete.call(view.id)}
             onOpen={() => setOpen(open === view.id ? undefined : view.id)}
-            onUpdate={(_) => ctx.asyncViewUpdate.call({id: view.id, ..._})}
+            onUpdate={_ => ctx.currentView && ctx.asyncViewUpdate.call(ctx.currentView, _)}
             checked={ctx.currentView?.id === view.id}
             view={view}
             onClick={() => ctx.setCurrentViewId(view.id)}
@@ -76,7 +77,7 @@ export const DatabaseViewInput = ({sx}: {
           color="primary"
           variant="light"
           endIcon={<Icon sx={{color: t.palette.text.secondary}}>arrow_drop_down</Icon>}
-          children={ctx.currentView?.name ?? DatabaseViewDefaultName}
+          children={ctx.currentView?.name ?? '-'}
           sx={{
             // fontWeight: 400,
             ...sx,

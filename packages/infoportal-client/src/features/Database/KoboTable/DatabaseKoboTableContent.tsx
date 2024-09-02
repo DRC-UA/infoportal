@@ -93,9 +93,9 @@ export const DatabaseKoboTableContent = ({
     })
     return [...base, ...extraColumns, ...schemaColumns].map(_ => ({
       ..._,
-      width: ctx.view.colsById[_.id]?.width ?? null as any,
+      width: ctx.view.colsById[_.id]?.width ?? _.width ?? 90,
     }))
-  }, [schemaColumns, ctx.view.fetcherViews.get, ctx.view.currentView?.id])
+  }, [schemaColumns, ctx.view.currentView])
 
   const toggleColumns = useMemo(() => {
     return columns.map(_ => {

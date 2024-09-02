@@ -32,8 +32,6 @@ const useStyles = makeStyles<{open?: boolean}>()((t, {open}) => ({
   }
 }))
 
-export const DatabaseViewDefaultName = 'Default'
-
 export const DatabaseViewInputRow = ({
   checked,
   onClick,

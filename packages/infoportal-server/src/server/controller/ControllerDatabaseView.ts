@@ -71,11 +71,11 @@ export class ControllerDatabaseView {
       width: schema.viewCol.width.optional(),
       visibility: schema.viewCol.visibility.optional(),
     }).validate(req.body)
-    await this.service.updateCol({
+    const data = await this.service.updateCol({
       viewId: params.viewId,
       updatedBy: req.session.user?.email,
       body: {...body, name: params.colName}
     })
-    res.send()
+    res.send(data)
   }
 }

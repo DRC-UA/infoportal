@@ -81,5 +81,6 @@ export class DatabaseView {
         }
       })
     ])
+    return this.prisma.databaseView.findFirstOrThrow({include: {details: true}, where: {id: viewId}})
   }
 }
