@@ -312,19 +312,10 @@ export class KoboMetaMapperProtection {
     if (answer.new_ben === 'no') return
     const activities = answer.activity?.map(_ => fnSwitch(_!, {
       // https://docs.google.com/spreadsheets/d/1SbRr4rRTL3Heap_8XUzZnBBx08Cx9XX5bmtr0CLSQ4w/edit?gid=0#gid=0
-      pssac: DrcProgram.PSS,
-      wgss: DrcProgram.WGSS,
-      ddk: DrcProgram.DignityKits,
-      gbvis: DrcProgram.AwarenessRaisingSession,
-      ngbv: DrcProgram.CapacityBuilding,
-      gbva: DrcProgram.CapacityBuilding,
-      // gcva: DrcProgram.,
-      // glac: DrcProgram.,
-      // girl_shine: DrcProgram.,
       education_sessions: DrcProgram.WGSS,
       dignity_kits: DrcProgram.DignityKits,
       awareness_raising: DrcProgram.AwarenessRaisingSession,
-      // psychosocial_support: DrcProgram.,
+      psychosocial_support: DrcProgram.PSS,
       training_actors: DrcProgram.CapacityBuilding,
       training_providers: DrcProgram.CapacityBuilding,
     }, () => undefined)).filter(_ => _ !== undefined) ?? []

@@ -9,9 +9,11 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // introduction/staff_to_insert_their_DRC_office [select_one] DRC office
   'staff_to_insert_their_DRC_office': undefined | Option<'staff_to_insert_their_DRC_office'>,
 	  // introduction/staff_code [select_one] Staff code (facilitator 1)
-  'staff_code': undefined | Option<'staff_code_001'>,
+  'staff_code': undefined | Option<'extra_staff_code'>,
 	  // introduction/staff_code_001 [select_one] Staff code (facilitator 2)
-  'staff_code_001': undefined | Option<'staff_code_001'>,
+  'staff_code_001': undefined | Option<'extra_staff_code'>,
+	  // introduction/extra_staff_code [select_multiple] Additional staff codes
+  'extra_staff_code': undefined | Option<'extra_staff_code'>[],
 	  // introduction/project [select_one] Project code
   'project': undefined | Option<'project'>,
 	  // introduction/ben_det_oblast [select_one] Select oblast
@@ -30,6 +32,20 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'activity': undefined | Option<'activity'>[],
 	  // gi/activity_other [text] If "Other", please specify
   'activity_other': string | undefined,
+	  // gi/basic [text] Basic/Essential dignity kits
+  'basic': string | undefined,
+	  // gi/elderly [text] Elderly dignity kits
+  'elderly': string | undefined,
+	  // gi/winter [text] Winter dignity kits
+  'winter': string | undefined,
+	  // gi/kit_other [text] Other dignity kits
+  'kit_other': string | undefined,
+	  // gi/distribute [select_one] Type of distribution
+  'distribute': undefined | Option<'distribute'>,
+	  // gi/distributor [select_one] Who distributed the kits?
+  'distributor': undefined | Option<'distributor'>,
+	  // gi/feedback [select_one] Any assessment/feedback done/collected on post distribution of kits?
+  'feedback': undefined | Option<'feedback'>,
 	  // gi/new_ben [select_one] Are there new beneficiaries in the group activity?
   'new_ben': undefined | Option<'new_ben'>,
 	  // gi/new_ben_yes [integer] If yes there are new beneficairies, how many new beneficiaries in the session?
@@ -55,7 +71,7 @@ new_ben: {
 	'no': `No`,
 	'bno': `Both new and old beneficiaries`
 },
-staff_code_001: {
+extra_staff_code: {
 	'CEJ001': `CEJ-A`,
 	'CEJ002': `CEJ-B`,
 	'CEJ003': `CEJ-C`,
@@ -138,15 +154,6 @@ hh_char_hh_det_gender: {
 	'unspecified': `Unspecified`
 },
 activity: {
-	'pssac': `PSS activiities provided outside the WGSS`,
-	'wgss': `Activities provided in the WGSS, including recreational, livelihoods, vocational, information sessions`,
-	'ddk': `Distribution of dignity kits (in-kind, vouchers)`,
-	'gbvis': `GBV information sesssions outside the WGSS`,
-	'ngbv': `Non-GBV actors trained on GBV`,
-	'gbva': `GBV actors trained in GBV`,
-	'gcva': `GBV survivors and those at risk supported with cash/voucher assistance.`,
-	'glac': `GBV survivors and those at risk supported with legal assistance and counselling.`,
-	'girl_shine': `Girl Shine`,
 	'awareness_raising': `GBV awareness raising, risk mitigation and dissemination of life-saving information on GBV services and referrals`,
 	'psychosocial_support': `Psychosocial support services (mobile and static) for GBV survivors and those at-risk (individual and group)- including Girl Shine`,
 	'education_sessions': `Recreational and livelihood skills including vocational education sessions in women and girls safe space`,
@@ -154,6 +161,23 @@ activity: {
 	'training_providers': `Training of GBV Service Providers to Meet GBViE Minimum Standards`,
 	'dignity_kits': `Distribution of dignity kits`,
 	'other': `Other`
+},
+distribute: {
+	'convoy': `Via convoys`,
+	'static': `Through static centers`,
+	'mobile': `Through mobile teams or door-to-door`
+},
+distributor: {
+	'report': `Employees/staff/volunteers of the reporting organization`,
+	'implement': `Employees/staff/volunteers of the implementing organization`,
+	'volunteer': `Community volunteers`,
+	'authority': `Local authority`
+},
+feedback: {
+	'no': `No assessments planned/done`,
+	'planned': `An assessment is planned or ongoing`,
+	'drafted': `Assessment completed – report currently being drafted/finalized`,
+	'ready': `Assessment completed – report is ready (please share with GBV AoR team)`
 },
 hh_char_hh_new_ben: {
 	'yes': `Yes`,
@@ -207,6 +231,7 @@ const extractQuestionName = (_: Record<string, any>) => {
 export const map = (_: Record<keyof T, any>): T => ({
 	..._,
 	date: _.date ? new Date(_.date) : undefined,
+	extra_staff_code: _.extra_staff_code?.split(' '),
 	activity: _.activity?.split(' '),
 	new_ben_yes: _.new_ben_yes ? +_.new_ben_yes : undefined,
 	numb_part: _.numb_part ? +_.numb_part : undefined,

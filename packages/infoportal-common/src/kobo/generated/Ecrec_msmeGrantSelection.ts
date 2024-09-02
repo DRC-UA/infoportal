@@ -6,6 +6,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	    'end': string,
 	  // background/date [date] Дата
   'date': Date | undefined,
+	  // background/coaching_completed_date [date] Дата завершення тренування
+  'coaching_completed_date': Date | undefined,
 	  // background/oblast_business [select_one] Область, де розташований ваш бізнес
   'oblast_business': undefined | Option<'ben_det_prev_oblast'>,
 	  // background/not_induc_lviv [note] Данська рада у справах біженців (DRC) є однією з найбільших міжнародних гуманітарних організацій Європи. Представництво в Україні було відкрите у 2014 році, а у 2022-му DRC значно масштабувала свою діяльність у відповідь на гуманітарну кризу, викликану війною. Нині DRC надає допомогу постраждалим від війни та переміщення по всій країні.  Щоб підтримати створення нових бізнесів, додаткових робочих місць та покращити можливості працевлаштування внутрішньо переміщених осіб у Дрогобицькому та Стрийському районах Львівської області, DRC запускає нову програму підтримки для бізнесів та підприємців.    Програма передбачає надання бізнес-грантів для створення або відновлення бізнесу (до 5000 євро).   #####Хто може отримати допомогу:  Приймаємо заявки від діючих та майбутніх підприємців, які планують розпочати власну справу, маючи чітку бізнес-- ідею. Програма діє лише у Дрогобицькому та Стрийському районах Львівської області.   У пріоритеті підприємства та ФОПи, які відчули негативні наслідки війни та планують реалізовувати чи виробляти товари або надавати послуги для покриття базових потреб населення.   #####Грант може піти на покриття різноманітних витрат:    придбання обладнання;   оплата оренди приміщення;  відновлення раніше діючого бізнесу;  інші актуальні потреби бізнесу.   #####Початкові критерії відбору:  місцеві та внутрішньо переміщені особи, які проживають та планують розвивати свій бізнес у Дрогобицькому та Стрийському районі;  особи, які вже мають діючий бізнес та планують його розширювати відкриваючи нові робочі місця для внутрішньо переміщених осіб;  особи, які планують створювати власну справу маючи чіткі бізнес-ідеї;  особи, які досягли 18-річного віку;  взяти участь у проєкті від однієї сім’ї може лише одна особа.   #####Умови участі:    Потрібно заповнити аплікаційну форму.  Після подання заявниками аплікаційної форми, команда DRC розгляне їх та відбере осіб, що відповідають критеріям відбору.  Переможцям відбору буде запропоновано укласти з DRC угоду про надання бізнес-гранту.  У встановлені терміни вам потрібно надати звіт про те, як отримані кошти були використані на цілі, визначені програмою та відповідним договором.   ####КІНЦЕВИЙ ТЕРМІН ПОДАННЯ АПЛІКАЦІЙНОЇ ФОРМИ: 05 липня 2024 р.   Ваші звернення та скарги направляйте на пошту: UKR-feedback@drc.ngo або телефонуйте 0 800 33 95 18 (пн-пт 9:00-17:00).
@@ -50,8 +52,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'ben_det_email': string | undefined,
 	  // ben_det/ben_det_tax_id_num [text] 2.10 Ваш ідентифікаційний номер (ІПН)
   'ben_det_tax_id_num': string | undefined,
-	  // ben_det/ben_enterprise_tax_id [integer] 2.11 Код ЄДРПОУ / або ІПН якщо ви ФОП
-  'ben_enterprise_tax_id': number | undefined,
+	  // ben_det/ben_enterprise_tax_id [text] 2.11 Код ЄДРПОУ / або ІПН якщо ви ФОП
+  'ben_enterprise_tax_id': string | undefined,
 	  // ben_det/ben_det_hh_size [integer] 2.12 Кількість членів домогосподарства (включно з вами)
   'ben_det_hh_size': number | undefined,
 	  // hh_char/info [note] Інформація про першого члена домогосподарства має бути власником бізнесу
@@ -143,9 +145,9 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'source_hear_programme': undefined | Option<'source_hear_programme'>,
 	  // fin_det/source_hear_programme_other [text] 5.2.1 Якщо "Інше", будь ласка, вкажіть
   'source_hear_programme_other': string | undefined,
-	  // fin_det/business_plan_submitted [select_one] 5.3 Business plan submitted?
+	  // fin_det/business_plan_submitted [select_one] 5.3 Поданий бізнес-план?
   'business_plan_submitted': undefined | Option<'business_plan_submitted'>,
-	  // fin_det/business_plan_submitted_comment [text] 5.3.1 Comments
+	  // fin_det/business_plan_submitted_comment [text] 5.3.1 Коментарі
   'business_plan_submitted_comment': string | undefined,
 	}
 export const options = {
@@ -392,9 +394,9 @@ const extractQuestionName = (_: Record<string, any>) => {
 export const map = (_: Record<keyof T, any>): T => ({
 	..._,
 	date: _.date ? new Date(_.date) : undefined,
+	coaching_completed_date: _.coaching_completed_date ? new Date(_.coaching_completed_date) : undefined,
 	ben_det_age: _.ben_det_age ? +_.ben_det_age : undefined,
 	ben_det_ph_number: _.ben_det_ph_number ? +_.ben_det_ph_number : undefined,
-	ben_enterprise_tax_id: _.ben_enterprise_tax_id ? +_.ben_enterprise_tax_id : undefined,
 	ben_det_hh_size: _.ben_det_hh_size ? +_.ben_det_hh_size : undefined,
 	hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {
 		_['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined

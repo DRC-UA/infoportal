@@ -107,7 +107,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'disease_higher_expenditures': undefined | Option<'pay_det_tax_exempt'>,
 	  // hh_char/disease_does_working [select_one] 3.3.2.1 If yes, does the presense of a person with a chornic disease in the household prevent someone in the household from working as a result of taking on caregiver duties?
   'disease_does_working': undefined | Option<'pay_det_tax_exempt'>,
-	  // hh_char/household_agricultural_activities [select_one] 3.3.3 Does the Household have the physical ability or resource to s engage in light agricultural activities?
+	  // hh_char/household_agricultural_activities [select_one] 3.3.3 Does the household have the physical ability to engage in light agricultural activities?
   'household_agricultural_activities': undefined | Option<'pay_det_tax_exempt'>,
 	  // hh_char/financial_manage_livestock [select_one] 3.3.3.1 If no, does the household have the financial or social resources they can use to cultivate their land or manage their livestock?
   'financial_manage_livestock': undefined | Option<'pay_det_tax_exempt'>,
@@ -190,69 +190,39 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // livelihoods_score/income_spent_nonfood [integer] In the last 7 days, what proportion of the overall household income was spent on non-food items and services such as health and education related services?
   'income_spent_nonfood': number | undefined,
 	  // livelihoods_score/lcs_sell_hh_assets [select_one] In the last 30 days, did your household sell household assets/goods (furniture/household appliances (i.e. TV, radio, washing machine, etc.) smart phone/jewellery,...) due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_sell_hh_assets': undefined | Option<'Breadwiner'>,
+  'lcs_sell_hh_assets': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_spent_savings [select_one] In the last 30 days, did your household spend savings or сonsumed stocks "for a rainy day" due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_spent_savings': undefined | Option<'Breadwiner'>,
+  'lcs_spent_savings': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_forrowed_food [select_one] In the last 30 days, did your household purchase food on credit or borrowed food  due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_forrowed_food': undefined | Option<'Breadwiner'>,
+  'lcs_forrowed_food': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_eat_elsewhere [select_one] In the last 30 days, did your household send household members to eat/live with another family or friends or eat at a food bank/soup kitchen/collective centre distributing food due to a lack of resources to cover to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_eat_elsewhere': undefined | Option<'Breadwiner'>,
+  'lcs_eat_elsewhere': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_sell_productive_assets [select_one] In the last 30 days, did your household sell productive assets or means of transport (sewing machine, bicycle, car, etc.) due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_sell_productive_assets': undefined | Option<'Breadwiner'>,
+  'lcs_sell_productive_assets': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_reduce_health_expenditures [select_one] In the last 30 days, did your household reduce essential health expenditures (including drugs,) due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities,  fuel for heating, drinking water, etc.)?
-  'lcs_reduce_health_expenditures': undefined | Option<'Breadwiner'>,
+  'lcs_reduce_health_expenditures': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_decrease_fertilizer [select_one] In the last 30 days, did anyone in your household have to decrease expenditures on fertilizer, pesticide, fodder, animal feed, veterinary care, etc. due to a lack of food or money to buy it?
-  'lcs_decrease_fertilizer': undefined | Option<'Breadwiner'>,
+  'lcs_decrease_fertilizer': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_reduce_education_expenditures [select_one] In the last 30 days, did your household reduce essential education expenditures due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water,  etc.)?
-  'lcs_reduce_education_expenditures': undefined | Option<'Breadwiner'>,
+  'lcs_reduce_education_expenditures': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_sell_house [select_one] In the last 30 days, did your household sell house or land due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_sell_house': undefined | Option<'Breadwiner'>,
+  'lcs_sell_house': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_move_elsewhere [select_one] In the last 30 days, did your HH member(-s) move elsewhere in search of work due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_move_elsewhere': undefined | Option<'Breadwiner'>,
+  'lcs_move_elsewhere': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_degrading_income_source [select_one] In the last 30 days, did your household use degrading sources of income, illegal work, or high risk jobs due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_degrading_income_source': undefined | Option<'Breadwiner'>,
+  'lcs_degrading_income_source': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_ask_stranger [select_one] In the last 30 days, did your household have to ask strangers for money to cover essential needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_ask_stranger': undefined | Option<'Breadwiner'>,
+  'lcs_ask_stranger': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lcs_reason [select_multiple] What were the main reasons why your household decided to use these strategies?
-  'lcs_reason': undefined | Option<'lcs_reason_001'>[],
+  'lcs_reason': undefined | Option<'lcs_reason'>[],
 	  // livelihoods_score/lcs_reason_other [text] If other, specify
   'lcs_reason_other': string | undefined,
 	  // livelihoods_score/lost_breadwiner [select_one] Did the household lose their breadwinner?
-  'lost_breadwiner': undefined | Option<'Breadwiner'>,
+  'lost_breadwiner': undefined | Option<'lost_breadwiner'>,
 	  // livelihoods_score/lost_breadwiner_conflict [select_one] Did the household lose their breadwinner as a result of the conflict (since 2014)?
   'lost_breadwiner_conflict': undefined | Option<'pay_det_tax_exempt'>,
 	  // Documented_loss_Assets [select_one] Do you have documented lost of productive assets?
   'Documented_loss_Assets': undefined | Option<'pay_det_tax_exempt'>,
-	  // livelihoods_score2/income_spent_food_001 [integer] In the last 7 days, what proportion of the overall household income was spent on food (human consumption)?
-  'income_spent_food_001': number | undefined,
-	  // livelihoods_score2/income_spent_nonfood_001 [integer] In the last 7 days, what proportion of the overall household income was spent on non-food items and services such as health and education related services?
-  'income_spent_nonfood_001': number | undefined,
-	  // livelihoods_score2/lcs_sell_hh_assets_001 [select_one] In the last 30 days, did your household sell household assets/goods (furniture/household appliances (i.e. TV, radio, washing machine, etc.) smart phone/jewellery,...) due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_sell_hh_assets_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_spent_savings_001 [select_one] In the last 30 days, did your household spend savings or сonsumed stocks "for a rainy day" due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_spent_savings_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_forrowed_food_001 [select_one] In the last 30 days, did your household purchase food on credit or borrowed food  due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_forrowed_food_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_eat_elsewhere_001 [select_one] In the last 30 days, did your household send household members to eat/live with another family or friends or eat at a food bank/soup kitchen/collective centre distributing food due to a lack of resources to cover to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_eat_elsewhere_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_sell_productive_assets_001 [select_one] In the last 30 days, did your household sell productive assets or means of transport (sewing machine, bicycle, car, etc.) due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_sell_productive_assets_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_reduce_health_expenditures_001 [select_one] In the last 30 days, did your household reduce essential health expenditures (including drugs,) due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities,  fuel for heating, drinking water, etc.)?
-  'lcs_reduce_health_expenditures_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_reduce_education_expenditures_001 [select_one] In the last 30 days, did your household reduce essential education expenditures due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water,  etc.)?
-  'lcs_reduce_education_expenditures_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_sell_house_001 [select_one] In the last 30 days, did your household sell house or land due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_sell_house_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_move_elsewhere_001 [select_one] In the last 30 days, did your HH member(-s) move elsewhere in search of work due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_move_elsewhere_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_degrading_income_source_001 [select_one] In the last 30 days, did your household use degrading sources of income, illegal work, or high risk jobs due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_degrading_income_source_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_ask_stranger_001 [select_one] In the last 30 days, did your household have to ask strangers for money to cover essential needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
-  'lcs_ask_stranger_001': undefined | Option<'Breadwiner'>,
-	  // livelihoods_score2/lcs_reason_001 [select_multiple] What were the main reasons why your household decided to use these strategies?
-  'lcs_reason_001': undefined | Option<'lcs_reason_001'>[],
-	  // livelihoods_score2/Breadwiner [select_one] Did the households lost their breadwinner?
-  'Breadwiner': undefined | Option<'Breadwiner'>,
 	  // baseline_indicator/basic_needs_prioritize [select_one] To what extent is your household able to meet its basic needs as you define and prioritize them?
   'basic_needs_prioritize': undefined | Option<'basic_needs_prioritize'>,
 	  // baseline_indicator/basic_needs_unable_fulfil [select_multiple] Which basic needs is your household currently unable to fulfil?
@@ -546,14 +516,14 @@ hh_char_hh_how_idp: {
 	'less_1y': `Less 1 year`,
 	'more_1y': `More 1 year`
 },
-Breadwiner: {
+lost_breadwiner: {
 	'yes': `Yes`,
 	'no_had_no_need_to_use_this_coping_strategy': `No, had no need to use this coping strategy`,
 	'no_have_already_exhausted_this_coping_strategy_and_cannot_use_it_again': `No, have already exhausted this coping strategy and cannot use it again`,
 	'not_applicable_this_coping_strategy_is_not_available_to_me': `Not applicable / This coping strategy is not available to me`,
 	'prefer_not_to_answer': `Prefer not to answer`
 },
-lcs_reason_001: {
+lcs_reason: {
 	'to_access_or_pay_for_food': `To access or pay for food`,
 	'to_access_or_pay_for_healthcare': `To access or pay for healthcare`,
 	'to_access_or_pay_for_shelter': `To access or pay for shelter`,
@@ -794,9 +764,6 @@ export const map = (_: Record<keyof T, any>): T => ({
 	income_spent_food: _.income_spent_food ? +_.income_spent_food : undefined,
 	income_spent_nonfood: _.income_spent_nonfood ? +_.income_spent_nonfood : undefined,
 	lcs_reason: _.lcs_reason?.split(' '),
-	income_spent_food_001: _.income_spent_food_001 ? +_.income_spent_food_001 : undefined,
-	income_spent_nonfood_001: _.income_spent_nonfood_001 ? +_.income_spent_nonfood_001 : undefined,
-	lcs_reason_001: _.lcs_reason_001?.split(' '),
 	basic_needs_unable_fulfil: _.basic_needs_unable_fulfil?.split(' '),
 }) as T
 }

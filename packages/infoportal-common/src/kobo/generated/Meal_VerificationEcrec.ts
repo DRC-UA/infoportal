@@ -52,16 +52,24 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'ben_det_income': number | undefined,
 	  // ben_det/ben_det_hh_size [integer] 2.7 Indicate the total number of people in your household, including the HHH
   'ben_det_hh_size': number | undefined,
-	  // cash_farmers/land_own [decimal] How much land do you own:
-  'land_own': number | undefined,
+	  // cash_farmers/know_contamination_farming [select_one] Do you know of any contamination (e.g. unexploded ordnance) on the land which you are farming on?
+  'know_contamination_farming': undefined | Option<'know_contamination_neighbour'>,
+	  // cash_farmers/know_contamination_neighbour [select_one] Do you know of any contamination (e.g. unexploded ordnance) on land of a neighbour or a small-scale farmer close by?
+  'know_contamination_neighbour': undefined | Option<'know_contamination_neighbour'>,
+	  // cash_farmers/know_contamination_neighbour_yes [select_one] Do you know if this/these indivudual(s) still continue to farm their land?
+  'know_contamination_neighbour_yes': undefined | Option<'know_contamination_neighbour_yes'>,
 	  // cash_farmers/has_agriculture_exp [select_one] Is agriculture or farming the primary source of livelihood in your household?
   'has_agriculture_exp': undefined | Option<'received_any_assistance_ngo'>,
-	  // cash_farmers/depend_basic_needs [select_one] Do you depend on farming to meet your basic needs?
-  'depend_basic_needs': undefined | Option<'received_any_assistance_ngo'>,
 	  // cash_farmers/consume_majority [select_one] Do you consume a majority of the crops you produce / livestock that you manage
   'consume_majority': undefined | Option<'received_any_assistance_ngo'>,
+	  // cash_farmers/land_own [decimal] How much land do you own:
+  'land_own': number | undefined,
 	  // cash_farmers/land_cultivate [decimal] How much land do you cultivate or manage for crops and/or livestock (in hectares) :
   'land_cultivate': number | undefined,
+	  // cash_farmers/depend_basic_needs [select_one] Do you depend on farming to meet your basic needs?
+  'depend_basic_needs': undefined | Option<'received_any_assistance_ngo'>,
+	  // cash_farmers/depend_basic_needs_uhf [select_one] Does agriculture and/or livestock management significantly contribute to the household being able to meet its basic needs?
+  'depend_basic_needs_uhf': undefined | Option<'received_any_assistance_ngo'>,
 	  // cash_farmers/not_many_livestock [note] #### 🔘 How many of the following livestock do you have:
   'not_many_livestock': string,
 	  // cash_farmers/many_sheep_goat [integer] Sheep/goat:
@@ -70,12 +78,18 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'many_milking': number | undefined,
 	  // cash_farmers/many_cow [integer] Dry cow:
   'many_cow': number | undefined,
+	  // cash_farmers/many_cattle [integer] Cattle
+  'many_cattle': number | undefined,
 	  // cash_farmers/many_pig [integer] Pig:
   'many_pig': number | undefined,
 	  // cash_farmers/many_poultry [integer] Poultry:
   'many_poultry': number | undefined,
 	  // cash_farmers/type_assistance [select_multiple] Please indicate what support you received:
   'type_assistance': undefined | Option<'type_assistance'>[],
+	  // cash_farmers/barriers_providing_sufficient [select_one] Do you face barriers in providing sufficient quality and quantity of feed to your livestock?
+  'barriers_providing_sufficient': undefined | Option<'received_any_assistance_ngo'>,
+	  // cash_farmers/barriers_providing_sufficient_yes [text] If "Yes", please specify
+  'barriers_providing_sufficient_yes': string | undefined,
 	  // cash_businesses/organization_business [select_one] Organization form of business
   'organization_business': undefined | Option<'organization_business_001'>,
 	  // cash_businesses/organization_business_other [text] If "Other", please specify
@@ -112,7 +126,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'date_registration': Date | undefined,
 	  // msme/experience_business [select_one] 6.5.1 How much experience do you have in this business activity?
   'experience_business': undefined | Option<'experience_business'>,
-	  // msme/organization_business [select_one] 6.5.2 Organization form of business
+	  // msme/organization_business_001 [select_one] 6.5.2 Organization form of business
   'organization_business_001': undefined | Option<'organization_business_001'>,
 	  // msme/many_people_employ [select_one] 6.6 How many people do you employ?
   'many_people_employ': undefined | Option<'many_people_employ'>,
@@ -323,6 +337,7 @@ undefined: {
 back_donor: {
 	'uhf6': `UHF-6`,
 	'uhf7': `UHF-7`,
+	'uhf8': `UHF-8`,
 	'bha_llh_348': `BHA – LLH 348`,
 	'danish_mfa_355': `Danish MFA 355`
 },
@@ -335,6 +350,11 @@ which_support_registered: {
 received_any_assistance_ngo: {
 	'yes': `Yes`,
 	'no': `No`
+},
+know_contamination_neighbour: {
+	'yes': `Yes`,
+	'no': `No`,
+	'unwilling': `Unwilling or unable to answer`
 },
 type_assistance: {
 	'cfas': `Cash for Animal Shelter`,
@@ -393,6 +413,12 @@ many_people_employ: {
 	'15_20_people': `15-20 people`,
 	'20_more_people': `20+ people`
 },
+know_contamination_neighbour_yes: {
+	'still': `Still farm all the land`,
+	'partially': `Partially farm the land`,
+	'stopped': `Stopped farming all togehter`,
+	'uu': `Unable/unwilling to answer`
+},
 ben_det_oblast: {
 	'cherkaska': `Cherkaska`,
 	'chernihivska': `Chernihivska`,
@@ -446,6 +472,7 @@ export const map = (_: Record<keyof T, any>): T => ({
 	many_sheep_goat: _.many_sheep_goat ? +_.many_sheep_goat : undefined,
 	many_milking: _.many_milking ? +_.many_milking : undefined,
 	many_cow: _.many_cow ? +_.many_cow : undefined,
+	many_cattle: _.many_cattle ? +_.many_cattle : undefined,
 	many_pig: _.many_pig ? +_.many_pig : undefined,
 	many_poultry: _.many_poultry ? +_.many_poultry : undefined,
 	type_assistance: _.type_assistance?.split(' '),

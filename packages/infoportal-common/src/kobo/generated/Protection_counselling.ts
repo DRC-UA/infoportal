@@ -12,8 +12,14 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'staff_code': undefined | Option<'staff_code'>,
 	  // general_information/project_code [select_one] Project Code
   'project_code': undefined | Option<'project_code'>,
+	  // general_information/modality [select_one] Modality
+  'modality': undefined | Option<'modality'>,
 	  // general_information/consent [select_one] Consent
   'consent': undefined | Option<'registered_person_disability'>,
+	  // general_information/new_beneficiary [select_one] New Protection Counselling Beneficiary?
+  'new_beneficiary': undefined | Option<'registered_person_disability'>,
+	  // general_information/not_new_beneficiary [select_one] If not a new beneficiary, is this:
+  'not_new_beneficiary': undefined | Option<'not_new_beneficiary'>,
 	  // personal_data/age [integer] Age
   'age': number | undefined,
 	  // personal_data/gender [select_one] Gender
@@ -120,8 +126,10 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'intake_notes': string | undefined,
 	  // services_support/actions_taken [select_multiple] Actions Taken
   'actions_taken': undefined | Option<'actions_taken'>[],
-	  // services_support/actions_taken_referral [select_one] Referral – using the referral form (upon written informed consent)
+	  // services_support/actions_taken_referral [select_one] Referral - using the referral form (upon informed consent)
   'actions_taken_referral': undefined | Option<'actions_taken_referral'>,
+	  // services_support/Provision_of_direct_assistance [select_one] Provision of direct assistance
+  'Provision_of_direct_assistance': undefined | Option<'Provision_of_direct_assistance'>,
 	  // services_support/actions_taken_other [text] If "Other", please specify
   'actions_taken_other': string | undefined,
 	  // services_support/services_support_notes [text] Notes:
@@ -153,6 +161,10 @@ staff_code: {
 	'CEJ014': `CEJ014`,
 	'CEJ015': `CEJ015`,
 	'CEJ016': `CEJ016`,
+	'CEJ_A': `CEJ-A`,
+	'CEJ_B': `CEJ-B`,
+	'CEJ_C': `CEJ-C`,
+	'CEJ_D': `CEJ-D`,
 	'UMY001': `UMY001`,
 	'UMY002': `UMY002`,
 	'UMY003': `UMY003`,
@@ -183,6 +195,12 @@ staff_code: {
 	'HRK013': `HRK013`,
 	'HRK014': `HRK014`,
 	'HRK015': `HRK015`,
+	'HRK_A': `HRK-A`,
+	'HRK_B': `HRK-B`,
+	'HRK_C': `HRK-C`,
+	'HRK_D': `HRK-D`,
+	'HRK_E': `HRK-E`,
+	'HRK_F': `HRK-F`,
 	'DNK001': `DNK001`,
 	'DNK002': `DNK002`,
 	'DNK003': `DNK003`,
@@ -198,6 +216,10 @@ staff_code: {
 	'DNK013': `DNK013`,
 	'DNK014': `DNK014`,
 	'DNK015': `DNK015`,
+	'DNK_A': `DNK-A`,
+	'DNK_B': `DNK-B`,
+	'DNK_C': `DNK-C`,
+	'DNK_D': `DNK-D`,
 	'LWO001': `LWO001`,
 	'LWO002': `LWO002`,
 	'LWO003': `LWO003`,
@@ -227,10 +249,19 @@ staff_code: {
 	'NVL012': `NLV012`,
 	'NVL013': `NLV013`,
 	'NVL014': `NLV014`,
-	'NVL015': `NLV015`
+	'NVL015': `NLV015`,
+	'NLV_A': `NLV-A`,
+	'NLV_B': `NLV-B`,
+	'NLV_C': `NLV-C`,
+	'NLV_D': `NLV-D`
 },
 project_code: {
-	'363_uhf8': `UKR-000363 UHF VIII`
+	'363_uhf8': `UKR-000363 UHF VIII`,
+	'na': `N/A`
+},
+modality: {
+	'inperson': `In-person`,
+	'phone': `Via phone`
 },
 registered_person_disability: {
 	'yes': `Yes`,
@@ -249,6 +280,10 @@ disp_status: {
 	'non_displaced': `Non-displaced`,
 	'refugee': `Refugee`,
 	'pnd': `Prefers not to disclose`
+},
+not_new_beneficiary: {
+	'followup_session': `A follow-up protection counselling session`,
+	'different_topic': `A new session addressing a different topic`
 },
 difficulty_usual_language: {
 	'no': `NO – no difficulty`,
@@ -324,11 +359,18 @@ incident_occurrence: {
 	'both': `Both`
 },
 actions_taken: {
-	'counselling': `Counselling (“Linking”) – provision of information on available services`,
+	'counselling': `Information Provision (Linking) - provision of individualized information on available services`,
 	're_direction': `Re-direction – transfer of the person’s basic information to a service provider via phone (upon verbal informed consent)`,
-	'referral': `Referral – using the referral form (upon written informed consent)`,
+	'referral': `Referral - using the referral form (upon informed consent)`,
 	'accompaniment': `Accompaniment – extra assistance provided to ensure the individual can access the necessary service efficiently`,
-	'other': `Other (specify):`
+	'direct_assistance': `Provision of direct assistance`,
+	'followup_session_scheduled': `Follow-up session scheduled`,
+	'other': `Other`
+},
+Provision_of_direct_assistance: {
+	'ipa': `IPA`,
+	'protection_case_management': `Protection Case Management`,
+	'other': `Other`
 },
 actions_taken_referral: {
 	'internal_protection': `Internal referral to DRC protection`,

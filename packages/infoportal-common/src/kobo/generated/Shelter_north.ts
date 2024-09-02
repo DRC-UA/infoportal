@@ -6,6 +6,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	    'end': string,
 	  // group_cp32s44/back_office [select_one] Офіс
   'back_office': undefined | Option<'back_office'>,
+	  // group_cp32s44/damage_level [select_one] Рівень пошкодження
+  'damage_level': undefined | Option<'damage_level'>,
 	  // group_cp32s44/__007 [select_one] Ім'я регістратора
   '__007': undefined | Option<'__007'>,
 	  // group_cp32s44/there_contract [select_one] Чи заключений договорі для відновлення житла?
@@ -298,6 +300,11 @@ back_office: {
 	'cej': `Чернігів(CEJ)`,
 	'umy': `Суми(UMY)`
 },
+damage_level: {
+	'light': `Light`,
+	'medium': `Medium`,
+	'heavy': `Heavy`
+},
 __007: {
 	'MM': `Максим Мордовець`,
 	'AG': `Анастасія Железко`,
@@ -315,6 +322,32 @@ __007: {
 	'dp': `Dmytro Prokopenko`,
 	'AS': `Andrii Stovpchenko`,
 	'VS': `Viktoriia Stepanenko`
+},
+physical_family: {
+	'yes': `Так`,
+	'no': `Ні`
+},
+donor_repair: {
+	'unhcr': `UNHCR 2023`,
+	'echo': `ECHO`,
+	'bha': `BHA`,
+	'uhf6': `UHF 6`
+},
+tm: {
+	'm1': `Шифер`,
+	'm2': `Металочерепиця`,
+	'm3': `Профнастил`,
+	'm4': `Ондулін`,
+	'm5': `М'яка (бітумна) черепиця`,
+	'm6': `Фальцева`
+},
+__008: {
+	'idp': `ВПО`,
+	'conflict': `Людина, що постраждала від конфлікту`
+},
+sph10k: {
+	'male': `Чоловіча`,
+	'female': `Жіноча`
 },
 ben_det_oblast: {
 	'chernihivska': `Чернігівська`,
@@ -524,34 +557,14 @@ ben_det_city: {
 	'pidhirne': `Підгірне`,
 	'chernihiv': `Чернігів`
 },
-__008: {
-	'idp': `ВПО`,
-	'conflict': `Людина, що постраждала від конфлікту`
-},
-sph10k: {
-	'male': `Чоловіча`,
-	'female': `Жіноча`
-},
 __018: {
 	'appa': `Квартира`,
 	'ph': `Будинок`
-},
-physical_family: {
-	'yes': `Так`,
-	'no': `Ні`
 },
 __019: {
 	'3_m': `Повернувся за останні 3 місяці`,
 	'3-6_m': `Повернувся через 3-6 місяців`,
 	'6_m': `Повернувся більше 6 місяців`
-},
-tm: {
-	'm1': `Шифер`,
-	'm2': `Металочерепиця`,
-	'm3': `Профнастил`,
-	'm4': `Ондулін`,
-	'm5': `М'яка (бітумна) черепиця`,
-	'm6': `Фальцева`
 },
 cs_sh: {
 	'lm': `Легкий, середній, тяжкий тип пошкоджень`,
@@ -575,12 +588,6 @@ cs_val: {
 form_help: {
 	'hco': `Підрядник`,
 	'hfu': `Кошти`
-},
-donor_repair: {
-	'unhcr': `UNHCR 2023`,
-	'echo': `ECHO`,
-	'bha': `BHA`,
-	'uhf6': `UHF 6`
 }}
 
 const extractQuestionName = (_: Record<string, any>) => {
