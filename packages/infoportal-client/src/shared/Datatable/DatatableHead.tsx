@@ -6,6 +6,7 @@ import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumn, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {ResizableDiv} from '@/shared/Datatable/ResizableDiv'
 import {DatabaseHeadCell} from '@/shared/Datatable/DatatableHeadCell'
+import {IpBtn} from '../Btn'
 
 const colors = [
   '#2196F3',
@@ -30,7 +31,7 @@ export const DatatableHead = (() => {
     columns,
     filters,
     onResizeColumn,
-    // onHideColumn,
+    onHideColumns,
     search,
     onOpenFilter,
   }: {
@@ -38,15 +39,24 @@ export const DatatableHead = (() => {
     onOpenStats: (columnId: string, event: any) => void
   } & Pick<DatatableContext<T>, 'onResizeColumn' | 'selected' | 'columns' | 'columnsIndex' | 'select'> & {
     data?: T[]
+    onHideColumns: (_: string[]) => void,
     search: DatatableContext<T>['data']['search']
     filters: DatatableContext<T>['data']['filters']
   }) => {
     return (
       <thead>
       <tr className="tr trh trh-first">
-        {map(Obj.entries(seq(columns).groupByAndApply(_ => _.groupLabel ?? 'None', _ => _.length)), groups => groups.length > 1 && groups.map(([group, size], i) =>
-          <Tooltip title={group} placement="top">
-            <th colSpan={size} style={{background: colors[i % colors.length]}}/>
+        {map(Obj.entries(seq(columns).groupBy(_ => _.groupLabel ?? 'None')), groups => groups.length > 1 && groups.map(([group, cols], i) =>
+          <Tooltip
+            placement="top"
+            leaveDelay={200}
+            title={
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                {group}&nbsp;
+                <IpBtn size="small" variant="contained" color="primary" onClick={() => onHideColumns(cols.map(_ => _.id))} icon="visibility_off">Hide</IpBtn>
+              </div>
+            }>
+            <th colSpan={i === 0 ? cols.length + (select?.getId ? 1 : 0) : cols.length} style={{background: colors[i % colors.length]}}/>
           </Tooltip>
         ))}
       </tr>
@@ -87,7 +97,7 @@ export const DatatableHead = (() => {
               ].join(' ')}
             >
               <ResizableDiv id={c.id} initialWidth={c.width} onResize={onResizeColumn}>
-                <DatabaseHeadCell>
+                <DatabaseHeadCell onClick={() => onHideColumns([c.id])}>
                   {c.head}
                 </DatabaseHeadCell>
               </ResizableDiv>

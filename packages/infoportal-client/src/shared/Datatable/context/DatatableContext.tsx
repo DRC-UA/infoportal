@@ -7,6 +7,7 @@ import {seq} from '@alexandreannic/ts-utils'
 import {DatatableColumn, DatatableRow, DatatableTableProps, OrderBy} from '@/shared/Datatable/util/datatableType'
 import {UseDatatableOptions, useDatatableOptions} from '@/shared/Datatable/context/useDatatableOptions'
 import {KeyOf} from 'infoportal-common'
+import {UseDatabaseColVisibility, useDatabaseColVisibility} from '@/shared/Datatable/context/useDatabaseColVisibility'
 
 export interface DatatableContext<T extends DatatableRow> {
   data: UseDatatableData<T>
@@ -15,7 +16,7 @@ export interface DatatableContext<T extends DatatableRow> {
   columns: DatatableColumn.InnerProps<T>[]
   getRenderRowKey: DatatableTableProps<T>['getRenderRowKey']
   onResizeColumn: DatatableTableProps<T>['onResizeColumn']
-  columnsToggle: NonNullable<DatatableTableProps<T>['columnsToggle']>
+  columnsToggle: UseDatabaseColVisibility<T>
   rowStyle: DatatableTableProps<T>['rowStyle']
   selected: UseSetState<string>
   modal: DatatableModal<T>
@@ -36,7 +37,7 @@ export const DatatableProvider = <T extends DatatableRow>({
   // sortBy,
   // orderBy,
   onDataChange,
-  columnsToggle,
+  columnsToggle: _columnsToggle,
   onFiltersChange,
   getRenderRowKey,
   defaultFilters,
@@ -85,6 +86,12 @@ export const DatatableProvider = <T extends DatatableRow>({
     columnsIndex,
   })
 
+  const columnsToggle = useDatabaseColVisibility({
+    columns,
+    id,
+    ..._columnsToggle,
+  })
+
   const modal = useDatatableModal<T>({data})
 
   const typeSafeContext: DatatableContext<T> = {
@@ -95,7 +102,7 @@ export const DatatableProvider = <T extends DatatableRow>({
     modal,
     columns,
     select,
-    columnsToggle: columnsToggle ?? {},
+    columnsToggle,
     options,
     onResizeColumn,
     getRenderRowKey,

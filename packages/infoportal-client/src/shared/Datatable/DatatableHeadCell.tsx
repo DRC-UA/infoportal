@@ -1,7 +1,7 @@
 import {styleUtils} from '@/core/theme'
 import {makeStyles} from 'tss-react/mui'
-import {IpIconBtn} from '@/shared'
-import {BoxProps} from '@mui/material'
+import {IpIconBtn, IpIconBtnProps} from '@/shared'
+import {ReactNode} from 'react'
 
 const useStyles = makeStyles()((t) => ({
   root: {
@@ -20,13 +20,20 @@ const useStyles = makeStyles()((t) => ({
   }
 }))
 
-export const DatabaseHeadCell = ({children}: Pick<BoxProps, 'onClick' | 'children'>) => {
+export const DatabaseHeadCell = ({
+  children,
+  onClick
+}: {
+  onClick: IpIconBtnProps['onClick']
+  children: ReactNode
+}) => {
   const {classes, cx} = useStyles()
   return (
     <div className={classes.root}>
       {children}
       <div className={cx(classes.icon, '--db-th-icon')}>
         <IpIconBtn
+          onClick={onClick}
           color="primary"
           size="small"
           children="visibility_off"

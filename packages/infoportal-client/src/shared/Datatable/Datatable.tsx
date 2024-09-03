@@ -1,9 +1,9 @@
 import {Badge, Box, Icon, LinearProgress, TablePagination, useTheme,} from '@mui/material'
-import React, {isValidElement, useEffect, useMemo, useState} from 'react'
+import React, {isValidElement, useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Txt} from '@/shared/Txt'
 import {Enum, map} from '@alexandreannic/ts-utils'
-import {IpIconBtn} from '../IconBtn'
+import {IpIconBtn} from '@/shared'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {generateXLSFromArray} from '@/shared/Datatable/util/generateXLSFile'
 import {DatatableBody} from './DatatableBody'
@@ -19,7 +19,6 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {format} from 'date-fns'
 import {Utils} from '@/utils/utils'
 import {slugify} from 'infoportal-common'
-import {isServerSide} from '@/pages/_app'
 
 export const Datatable = <T extends DatatableRow = DatatableRow>({
   total,
@@ -150,21 +149,6 @@ const _Datatable = <T extends DatatableRow>({
 
   const filterCount = useMemoFn(ctx.data.filters, _ => Enum.keys(_).length)
 
-  const {onHide, defaultHidden, hidden, disableAutoSave} = ctx.columnsToggle
-  const [hiddenColumns, setHiddenColumns] = useState<string[]>(() => {
-    const saved = isServerSide || disableAutoSave ? undefined : localStorage.getItem(DatatableUtils.localStorageKey.column + id)
-    return saved ? JSON.parse(saved) as string[] : hidden ?? defaultHidden ?? []
-  })
-  useEffect(() => {
-    onHide?.(hiddenColumns)
-    if (!disableAutoSave)
-      localStorage.setItem(DatatableUtils.localStorageKey.column + id, JSON.stringify(hiddenColumns))
-  }, [hiddenColumns])
-  useEffect(() => {
-    if (hidden) setHiddenColumns(hidden)
-  }, [hidden])
-  const filteredColumns = useMemo(() => ctx.columns.filter(_ => !hiddenColumns.includes(_.id)), [ctx.columns, hiddenColumns])
-
   return (
     <Box {...props}>
       {header !== null && (
@@ -179,8 +163,8 @@ const _Datatable = <T extends DatatableRow>({
             <DatatableColumnToggle
               sx={{mr: 1}}
               columns={ctx.columns}
-              hiddenColumns={hiddenColumns}
-              onChange={_ => setHiddenColumns(_)}
+              hiddenColumns={ctx.columnsToggle.hiddenColumns}
+              onChange={_ => ctx.columnsToggle.setHiddenColumns(_)}
               title={m._datatable.toggleColumns}
             />
           )}
@@ -244,7 +228,8 @@ const _Datatable = <T extends DatatableRow>({
               data={ctx.data.filteredSortedAndPaginatedData?.data}
               search={ctx.data.search}
               filters={ctx.data.filters}
-              columns={filteredColumns}
+              onHideColumns={ctx.columnsToggle.handleHide}
+              columns={ctx.columnsToggle.filteredColumns}
               columnsIndex={ctx.columnsIndex}
               select={ctx.select}
               selected={ctx.selected}
@@ -258,7 +243,7 @@ const _Datatable = <T extends DatatableRow>({
                   onClickRows={onClickRows}
                   data={data.data}
                   select={ctx.select}
-                  columns={filteredColumns}
+                  columns={ctx.columnsToggle.filteredColumns}
                   getRenderRowKey={ctx.getRenderRowKey}
                   selected={ctx.selected}
                   rowStyle={ctx.rowStyle}
