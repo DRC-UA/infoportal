@@ -1,5 +1,5 @@
 import {fnSwitch, map, Obj, seq} from '@alexandreannic/ts-utils'
-import {Checkbox, IconProps, Tooltip} from '@mui/material'
+import {Checkbox, Icon, IconProps, Tooltip} from '@mui/material'
 import React from 'react'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
@@ -15,7 +15,6 @@ const colors = [
   '#009688',
   '#F44336',
   '#00BCD4',
-  '#F44336',
   '#FFEE58',
   '#9C27B0',
   '#CDDC39',
@@ -53,7 +52,9 @@ export const DatatableHead = (() => {
             title={
               <div style={{display: 'flex', alignItems: 'center'}}>
                 {group}&nbsp;
-                <IpBtn size="small" variant="contained" color="primary" onClick={() => onHideColumns(cols.map(_ => _.id))} icon="visibility_off">Hide</IpBtn>
+                <IpBtn sx={{minWidth: 30}} size="small" variant="contained" color="primary" onClick={() => onHideColumns(cols.map(_ => _.id))}>
+                  <Icon fontSize="small">visibility_off</Icon>
+                </IpBtn>
               </div>
             }>
             <th colSpan={i === 0 ? cols.length + (select?.getId ? 1 : 0) : cols.length} style={{background: colors[i % colors.length]}}/>
