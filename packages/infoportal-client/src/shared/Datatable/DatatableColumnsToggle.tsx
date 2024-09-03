@@ -33,7 +33,6 @@ interface Props extends Omit<IconButtonProps, 'onChange'> {
 
 export const DatatableColumnToggle = ({className, title, columns, hiddenColumns, onChange, children, ...props}: Props) => {
   const {m} = useI18n()
-  const t = useTheme()
   const set = useSetState(hiddenColumns)
   const hasGroup = useMemo(() => !!columns.find(_ => _.group), [columns])
 

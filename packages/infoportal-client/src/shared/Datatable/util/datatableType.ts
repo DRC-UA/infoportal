@@ -37,21 +37,8 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   contentProps?: BoxProps
   defaultFilters?: Record<K, any>
   defaultLimit?: number
-  // columnToggle: ({
-  //   hidden,
-  //   onToggle,
-  // }: {
-  //   hidden: string[]
-  //   onToggle: (_: string[]) => void
-  // }) => ReactNode
-  defaultHiddenColumns?: K[]
+  data?: T[]
   title?: string
-  readonly select?: {
-    readonly onSelect: (_: string[]) => void
-    readonly getId: (_: T) => string
-    readonly selectActions?: ReactNode
-  }
-  readonly data?: T[]
   getRenderRowKey?: (_: T, index: number) => string
   rowStyle?: (_: T) => CSSProperties
   onClickRows?: (_: T, event: React.MouseEvent<HTMLElement>) => void
@@ -78,6 +65,18 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
       sortBy?: KeyOf<T>;
       orderBy?: OrderBy
     }) => void
+  }
+  columnsToggle?: {
+    defaultHidden?: K[]
+    hidden?: K[]
+    onHide?: (_: K[]) => void
+    hideButton?: boolean
+    disableAutoSave?: boolean
+  }
+  select?: {
+    onSelect: (_: string[]) => void
+    getId: (_: T) => string
+    selectActions?: ReactNode
   }
 }
 

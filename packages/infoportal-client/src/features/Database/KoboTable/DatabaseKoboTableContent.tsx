@@ -108,8 +108,11 @@ export const DatabaseKoboTableContent = ({
       <Datatable
         onResizeColumn={ctx.view.onResizeColumn}
         loading={ctx.loading}
-        defaultHiddenColumns={ctx.view.hiddenColumns}
-        // ctx.view.setHiddenColumns
+        columnsToggle={{
+          disableAutoSave: true,
+          hidden: ctx.view.hiddenColumns,
+          onHide: ctx.view.setHiddenColumns,
+        }}
         contentProps={{sx: {maxHeight: 'calc(100vh - 211px)'}}}
         showExportBtn
         rowsPerPageOptions={[20, 50, 100, 200]}

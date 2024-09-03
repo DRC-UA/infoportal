@@ -27,6 +27,7 @@ export const DatabaseHeadCell = ({children}: Pick<BoxProps, 'onClick' | 'childre
       {children}
       <div className={cx(classes.icon, '--db-th-icon')}>
         <IpIconBtn
+          color="primary"
           size="small"
           children="visibility_off"
         />

@@ -12,11 +12,11 @@ const useStyles = makeStyles()((t) => ({
     height: '100%',
     alignItems: 'center',
     display: 'flex',
-    borderRight: `2px solid transparent`,
     '&:after': {
+      borderRadius: 2,
       transition: 'background-color 0.3s ease, box-shadow 0.3s ease, top 0.3s ease, bottom 0.3s ease' as any,
       content: '" "',
-      width: 1,
+      width: 3,
       display: 'block',
       position: 'absolute',
       top: 4,
@@ -28,7 +28,7 @@ const useStyles = makeStyles()((t) => ({
       top: 0,
       bottom: 0,
       background: t.palette.primary.main,
-      boxShadow: `0 0px 3px 1px ${t.palette.primary.main}`,
+      // boxShadow: `0 0px 3px 1px ${t.palette.primary.main}`,
     },
   },
 }))

@@ -66,10 +66,11 @@ const App = ({
   )
 }
 
+export const isServerSide = typeof window === 'undefined'
+
 const AppWithConfig = (props: AppProps) => {
   const settings = useAppSettings()
   const msal = useMemo(() => getMsalInstance(settings.conf), [settings.conf])
-  const isServer = typeof window === 'undefined'
   return (
     <Provide providers={[
       // _ => <StyledEngineProvider injectFirst children={_}/>,
@@ -79,7 +80,7 @@ const AppWithConfig = (props: AppProps) => {
       _ => <CssBaseline children={_}/>,
       _ => <I18nProvider children={_}/>,
       _ => <MsalProvider children={_} instance={msal}/>,
-      ...!isServer ? [(_: any) => <HashRouter children={_}/>] : [],
+      ...!isServerSide ? [(_: any) => <HashRouter children={_}/>] : [],
       _ => <KoboSchemaProvider children={_}/>,
       _ => <KoboAnswersProvider children={_}/>,
       _ => <KoboEditAnswersProvider children={_}/>,

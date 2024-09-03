@@ -1,5 +1,5 @@
 import {Badge, Box, Icon, LinearProgress, TablePagination, useTheme,} from '@mui/material'
-import React, {isValidElement, useEffect, useMemo} from 'react'
+import React, {isValidElement, useEffect, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Txt} from '@/shared/Txt'
 import {Enum, map} from '@alexandreannic/ts-utils'
@@ -11,7 +11,6 @@ import {DatatableHead} from './DatatableHead'
 import {DatatableColumn, DatatableRow, DatatableTableProps} from '@/shared/Datatable/util/datatableType'
 import {DatatableProvider, useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumnToggle} from '@/shared/Datatable/DatatableColumnsToggle'
-import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {DatatableModal} from '@/shared/Datatable/DatatableModal'
 import {DatatableErrorBoundary} from '@/shared/Datatable/DatatableErrorBundary'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
@@ -20,6 +19,7 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {format} from 'date-fns'
 import {Utils} from '@/utils/utils'
 import {slugify} from 'infoportal-common'
+import {isServerSide} from '@/pages/_app'
 
 export const Datatable = <T extends DatatableRow = DatatableRow>({
   total,
@@ -34,6 +34,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
   onDataChange,
   defaultFilters,
   rowStyle,
+  columnsToggle,
   ...props
 }: DatatableTableProps<T>) => {
   const innerColumns = useMemo(() => {
@@ -88,6 +89,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
         getRenderRowKey={getRenderRowKey}
         rowStyle={rowStyle}
         onFiltersChange={onFiltersChange}
+        columnsToggle={columnsToggle}
         onDataChange={onDataChange}
         defaultFilters={defaultFilters}
       >
@@ -109,13 +111,11 @@ const _Datatable = <T extends DatatableRow>({
   hidePagination,
   rowsPerPageOptions,
   title,
-  defaultHiddenColumns,
   onClickRows,
-  hideColumnsToggle,
   exportAdditionalSheets,
   contentProps,
   ...props
-}: Pick<DatatableTableProps<T>, 'defaultHiddenColumns' | 'hideColumnsToggle' | 'contentProps' | 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
+}: Pick<DatatableTableProps<T>, 'contentProps' | 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
   const t = useTheme()
   const ctx = useDatatableContext()
   const _generateXLSFromArray = useAsync(generateXLSFromArray)
@@ -150,8 +150,19 @@ const _Datatable = <T extends DatatableRow>({
 
   const filterCount = useMemoFn(ctx.data.filters, _ => Enum.keys(_).length)
 
-  const [hiddenColumns, setHiddenColumns] = usePersistentState<string[]>(defaultHiddenColumns ?? [], {storageKey: DatatableUtils.localStorageKey.column + id})
-  useEffect(() => defaultHiddenColumns && setHiddenColumns(defaultHiddenColumns ?? []), [defaultHiddenColumns])
+  const {onHide, defaultHidden, hidden, disableAutoSave} = ctx.columnsToggle
+  const [hiddenColumns, setHiddenColumns] = useState<string[]>(() => {
+    const saved = isServerSide || disableAutoSave ? undefined : localStorage.getItem(DatatableUtils.localStorageKey.column + id)
+    return saved ? JSON.parse(saved) as string[] : hidden ?? defaultHidden ?? []
+  })
+  useEffect(() => {
+    onHide?.(hiddenColumns)
+    if (!disableAutoSave)
+      localStorage.setItem(DatatableUtils.localStorageKey.column + id, JSON.stringify(hiddenColumns))
+  }, [hiddenColumns])
+  useEffect(() => {
+    if (hidden) setHiddenColumns(hidden)
+  }, [hidden])
   const filteredColumns = useMemo(() => ctx.columns.filter(_ => !hiddenColumns.includes(_.id)), [ctx.columns, hiddenColumns])
 
   return (
@@ -164,7 +175,7 @@ const _Datatable = <T extends DatatableRow>({
           }}>
             <IpIconBtn children="filter_alt_off" tooltip={m.clearFilter} disabled={!filterCount}/>
           </Badge>
-          {!hideColumnsToggle && (
+          {!ctx.columnsToggle.hideButton && (
             <DatatableColumnToggle
               sx={{mr: 1}}
               columns={ctx.columns}
