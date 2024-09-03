@@ -423,7 +423,7 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
   '.table': {
     minWidth: '100%',
     width: 'max-content',
-    borderTop: '1px solid ' + t.palette.divider,
+    // borderTop: '1px solid ' + t.palette.divider,
     tableLayout: 'fixed',
     borderCollapse: 'collapse',
     borderSpacing: 0,
