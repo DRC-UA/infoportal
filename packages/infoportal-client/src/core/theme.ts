@@ -432,7 +432,7 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     cursor: 'pointer',
     height: 6,
     fontSize: styleUtils(t).fontSize.small,
-    borderBottom: '1px solid ' + t.palette.divider,
+    // borderBottom: '1px solid ' + t.palette.divider,
   },
   '.table-head-type-icon': {
     ml: '2px',

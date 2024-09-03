@@ -34,12 +34,12 @@ import {TableInput} from '@/shared/TableInput'
 import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyncBtn'
 import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
 export const ShelterTable = () => {
   const theme = useTheme()
@@ -97,7 +97,7 @@ export const ShelterTable = () => {
       {
         id: 'Id',
         head: 'ID',
-        typeIcon: keyTypeIcon,
+        typeIcon: <DatatableHeadIconByType type="id"/>,
         className: 'td-id',
         type: 'id',
         group: 'nta',
@@ -657,7 +657,7 @@ export const ShelterTable = () => {
         groupLabel: KoboIndex.byName('shelter_ta').translation,
         className: 'td-id',
         width: 0,
-        typeIcon: keyTypeIcon,
+        typeIcon: <DatatableHeadIconByType type="id"/>,
         head: m.id,
         type: 'string',
         renderQuick: _ => _.ta?.id,

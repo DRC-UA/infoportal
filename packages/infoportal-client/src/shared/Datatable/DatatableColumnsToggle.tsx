@@ -1,5 +1,5 @@
 import {Badge, Chip, Icon, IconButton, IconButtonProps, Switch, Tooltip, useTheme} from '@mui/material'
-import React, {ReactNode, useEffect, useMemo} from 'react'
+import React, {useEffect, useMemo} from 'react'
 import {Txt} from '@/shared'
 import {useI18n} from '@/core/i18n'
 import {PopoverWrapper} from '@/shared/PopoverWrapper'
@@ -7,23 +7,25 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {IpBtn} from '@/shared/Btn'
 import {useSetState} from '@alexandreannic/react-hooks-lib'
-import {DatatableHeadTypeIconByKoboType} from '@/shared/Datatable/DatatableHead'
 import {IpAlert} from '@/shared/Alert'
+import {DatatableHeadTypeIconByKoboType} from '@/features/Database/KoboTable/columns/getColumnBySchema'
+import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
-interface DatatableColumnFlexible extends Pick<DatatableColumn.Props<any>,
+interface DatatableColumnToggleProps extends Pick<DatatableColumn.Props<any>,
   'group' |
   'groupLabel' |
   'id' |
+  'typeLabel' |
+  'typeIcon' |
+  'type' |
   'head'
 > {
-  type?: string
-  typeLabel?: ReactNode
 }
 
 interface Props extends Omit<IconButtonProps, 'onChange'> {
   // Hack because there is no way to make TS understand that the key of an object can
   // only be a string ({[key: string]: string} does not work...)
-  columns: DatatableColumnFlexible[]
+  columns: DatatableColumnToggleProps[]
   hiddenColumns: string[]
   onChange: (_: string[]) => void
   title?: string
@@ -108,9 +110,9 @@ export const DatatableColumnToggle = ({className, title, columns, hiddenColumns,
                 head: m.type,
                 render: _ => {
                   return {
-                    option: <>{_.typeLabel} {_.type}</>,
-                    label: _.typeLabel ?? <span style={{color: t.palette.text.secondary}}>{_.type}</span>,
-                    value: _.type,
+                    option: <>{_.typeIcon} {_.typeLabel ?? _.type}</>,
+                    label: _.typeIcon ?? <DatatableHeadIconByType type={_.type}/>,
+                    value: _.typeLabel ?? _.type ?? '',
                   }
                 },
               },
@@ -119,7 +121,7 @@ export const DatatableColumnToggle = ({className, title, columns, hiddenColumns,
                 head: m.group,
                 id: 'group',
                 width: 150,
-                render: (_: DatatableColumnFlexible) => {
+                render: (_: DatatableColumnToggleProps) => {
                   return {
                     value: _.group,
                     label: _.groupLabel,

@@ -37,6 +37,13 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   contentProps?: BoxProps
   defaultFilters?: Record<K, any>
   defaultLimit?: number
+  // columnToggle: ({
+  //   hidden,
+  //   onToggle,
+  // }: {
+  //   hidden: string[]
+  //   onToggle: (_: string[]) => void
+  // }) => ReactNode
   defaultHiddenColumns?: K[]
   title?: string
   readonly select?: {
@@ -101,6 +108,7 @@ export namespace DatatableColumn {
     styleHead?: CSSProperties
     classHead?: string
     typeIcon?: ReactNode
+    typeLabel?: string
     subHeader?: ReactNode,
     className?: string | ((_: T) => string | undefined)
     stickyEnd?: boolean

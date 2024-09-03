@@ -26,7 +26,7 @@ import {AccessSdk} from '@/core/sdk/server/access/AccessSdk'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
-import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
+import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
 export const getKoboImagePath = (url: string): string => {
   return appConfig.apiURL + `/kobo-api/${koboIndex.drcUa.server.prod}/attachment?path=${url.split('api')[1]}`
@@ -175,7 +175,7 @@ export const MpcaData = () => {
             {
               id: 'id',
               head: m.koboId,
-              typeIcon: keyTypeIcon,
+              typeIcon: <DatatableHeadIconByType type="id"/>,
               className: 'td-id',
               type: 'id',
               renderQuick: _ => _.koboId,
