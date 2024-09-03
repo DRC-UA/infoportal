@@ -153,24 +153,6 @@ export const DatatableHeadIconByType = ({
   }
 }
 
-// const defaultIconType = (type: ) => (() => {
-//   if (column.typeIcon) return column.typeIcon
-//   switch (column.type) {
-//     case 'date':
-//       return <DatatableHeadTypeIcon children="event" tooltip={column.type}/>
-//     case 'select_multiple':
-//       return <DatatableHeadTypeIcon children="check_box" tooltip={column.type}/>
-//     case 'select_one':
-//       return <DatatableHeadTypeIcon children="radio_button_checked" tooltip={column.type}/>
-//     case 'number':
-//       return <DatatableHeadTypeIcon children="tag" tooltip={column.type}/>
-//     case 'string':
-//       return <DatatableHeadTypeIcon children="short_text" tooltip={column.type}/>
-//     default:
-//       return column.type
-//   }
-// })
-
 const DatatableHeadTdBody = ({
   active,
   column,
