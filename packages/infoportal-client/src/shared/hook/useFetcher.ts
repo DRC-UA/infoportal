@@ -91,10 +91,6 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
     return fetch$.current.query
   }
 
-  const forceFetch = () => {
-
-  }
-
   const clearCache = () => {
     setEntity(undefined)
     setError(undefined)

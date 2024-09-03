@@ -2,6 +2,7 @@ import {isServerSide} from '@/pages/_app'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {DatatableColumn, DatatableRow, DatatableTableProps} from '@/shared/Datatable/util/datatableType'
+import {seq} from '@alexandreannic/ts-utils'
 
 export type UseDatabaseColVisibility<T extends DatatableRow> = ReturnType<typeof useDatabaseColVisibility<T>>
 
@@ -29,6 +30,7 @@ export const useDatabaseColVisibility = <T extends DatatableRow>({
   }, [hiddenColumns])
 
   useEffect(() => {
+    // if (seq(hidden).difference(hiddenColumns).length === 0) return
     if (hidden) setHiddenColumns(hidden)
   }, [hidden])
 
