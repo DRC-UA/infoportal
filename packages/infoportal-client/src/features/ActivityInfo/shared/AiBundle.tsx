@@ -15,7 +15,7 @@ import {format, subMonths} from 'date-fns'
 import {KoboAnswerFlat, KoboIndex} from 'infoportal-common'
 import {useSession} from '@/core/Session/SessionContext'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
+import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
 export interface AiBundle<
   TActivity = any,
@@ -150,7 +150,7 @@ export const AiBundleTable = ({
             id: 'koboId',
             type: 'string',
             head: m.koboId,
-            typeIcon: keyTypeIcon,
+            typeIcon: <DatatableHeadIconByType type="id"/>,
             className: 'td-id',
             renderQuick: _ => _.data.map(_ => _.koboId).join(' '),
             // options: () => DatatableUtils.buildOptions(fetcher.get?.flatMap(_ => _.data.map(_ => _.koboId)) ?? []),

@@ -7,7 +7,7 @@ import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/Databas
 import {IpIconBtn} from '@/shared/IconBtn'
 import {Alert, Icon, Switch, Theme, useTheme} from '@mui/material'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {DatabaseColumnProps, getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
+import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumnsCustom'
 import {DatabaseTableProps} from '@/features/Database/KoboTable/DatabaseKoboTable'
@@ -21,13 +21,13 @@ import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFil
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
-import {DatatableColumnToggle} from '@/shared/Datatable/DatatableColumnsToggle'
-import {DatatableHeadTypeIconByKoboType} from '@/shared/Datatable/DatatableHead'
 import {appConfig} from '@/conf/AppConfig'
 import {useSession} from '@/core/Session/SessionContext'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
+import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -49,14 +49,17 @@ export const DatabaseKoboTableContent = ({
     event: any
   } | undefined>()
 
-  const extraColumns = useMemo(() => getColumnsCustom({
+  const extraColumns: DatatableColumn.Props<any>[] = useMemo(() => getColumnsCustom({
     selectedIds,
     formId: ctx.form.id,
     canEdit: ctx.canEdit,
     m,
     asyncUpdateTagById: ctxEditTag.asyncUpdateById,
     openEditTag: ctxEditTag.open,
-  }), [selectedIds, ctx.form.id])
+  }).map(_ => ({
+    ..._,
+    typeIcon: <DatatableHeadIconByType type={_.type}/>
+  })), [selectedIds, ctx.form.id])
 
   const schemaColumns = useMemo(() => {
     return getColumnBySchema({
@@ -80,7 +83,7 @@ export const DatabaseKoboTableContent = ({
     })
   }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns, ctx.externalFilesIndex])
 
-  const columns: DatabaseColumnProps<any>[] = useMemo(() => {
+  const columns: DatatableColumn.Props<any>[] = useMemo(() => {
     const base = getColumnsBase({
       selectedIds,
       formId: ctx.form.id,
@@ -97,16 +100,6 @@ export const DatabaseKoboTableContent = ({
     }))
   }, [schemaColumns, ctx.view.currentView])
 
-  const toggledColumns = useMemo(() => {
-    return columns.map(_ => {
-      return {
-        ..._,
-        type: _.koboType,
-        typeLabel: _.koboType && <DatatableHeadTypeIconByKoboType color="disabled" children={_.koboType}/>
-      }
-    })
-  }, [columns])
-
   const selectedHeader = useCustomSelectedHeader(selectedIds)
   const header = useCustomHeader()
 
@@ -115,8 +108,11 @@ export const DatabaseKoboTableContent = ({
       <Datatable
         onResizeColumn={ctx.view.onResizeColumn}
         loading={ctx.loading}
-        defaultHiddenColumns={ctx.view.hiddenColumns}
-        hideColumnsToggle
+        columnsToggle={{
+          disableAutoSave: true,
+          hidden: ctx.view.hiddenColumns,
+          onHide: ctx.view.setHiddenColumns,
+        }}
         contentProps={{sx: {maxHeight: 'calc(100vh - 211px)'}}}
         showExportBtn
         rowsPerPageOptions={[20, 50, 100, 200]}
@@ -157,11 +153,6 @@ export const DatabaseKoboTableContent = ({
         data={ctx.data}
         header={params =>
           <>
-            <DatatableColumnToggle
-              columns={toggledColumns}
-              hiddenColumns={ctx.view.hiddenColumns}
-              onChange={ctx.view.setHiddenColumns}
-            />
             <DatabaseViewInput sx={{mr: 1}}/>
             <IpSelectSingle<number>
               hideNullOption

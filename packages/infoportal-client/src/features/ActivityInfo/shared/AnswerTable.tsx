@@ -1,7 +1,7 @@
 import {BoxProps} from '@mui/material'
 import React from 'react'
-import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
 
 export const AnswerTable = <T extends Record<string, any>, >({
@@ -22,7 +22,7 @@ export const AnswerTable = <T extends Record<string, any>, >({
         ...koboKey ? [{
           id: 'Id',
           head: 'ID',
-          typeIcon: keyTypeIcon,
+          typeIcon: <DatatableHeadIconByType type="id"/>,
           className: 'td-id',
           type: 'id' as const,
           renderQuick: (_: any) => _[koboKey],

@@ -60,7 +60,7 @@ export const styleUtils = (t: Theme) => ({
     return `${t.spacing(top)} ${t.spacing(right)} ${t.spacing(bottom)} ${t.spacing(left)}`
   },
   color: {
-    toolbar: t.palette.mode === 'dark' ? t.palette.background.paper : '#e9eef6',
+    toolbar: t.palette.mode === 'dark' ? t.palette.background.paper : darken(t.palette.background.default, .01),//'#e9eef6',
     success: '#00b79f',
     error: '#cf0040',
     warning: '#ff9800',
@@ -423,7 +423,7 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
   '.table': {
     minWidth: '100%',
     width: 'max-content',
-    borderTop: '1px solid ' + t.palette.divider,
+    // borderTop: '1px solid ' + t.palette.divider,
     tableLayout: 'fixed',
     borderCollapse: 'collapse',
     borderSpacing: 0,
@@ -432,7 +432,6 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     cursor: 'pointer',
     height: 6,
     fontSize: styleUtils(t).fontSize.small,
-    borderBottom: '1px solid ' + t.palette.divider,
   },
   '.table-head-type-icon': {
     ml: '2px',
@@ -525,7 +524,7 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     maxWidth: 102,
   },
   '.table thead td, .table thead th': {
-    background: darken(t.palette.background.default, .01),
+    background: styleUtils(t).color.toolbar,
   },
   '.td-center': {
     textAlign: 'center !important',
@@ -548,7 +547,7 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     alignItems: 'left',
     textAlign: 'left',
     height: 30,
-    padding: '0 1px 0 4px',
+    padding: '0 0px 0 4px',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',

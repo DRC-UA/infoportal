@@ -8,12 +8,12 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {alpha, Icon, useTheme} from '@mui/material'
-import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {KoboAnswerHistory} from '@/core/sdk/server/kobo/answerHistory/KoboAnswerHistory'
 import {AppAvatar} from '@/shared/AppAvatar'
+import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
 export const DatabaseHistory = () => {
   const {serverId, formId} = databaseUrlParamsValidation.validateSync(useParams())
@@ -85,7 +85,7 @@ export const DatabaseHistory = () => {
             {
               type: 'select_one',
               id: 'answerId',
-              typeIcon: keyTypeIcon,
+              typeIcon: <DatatableHeadIconByType type="id"/>,
               className: 'td-id',
               width: 80,
               head: m.id,

@@ -20,9 +20,9 @@ import {databaseIndex} from '@/features/Database/databaseIndex'
 import {Txt} from '@/shared/Txt'
 import {Icon, Skeleton} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {keyTypeIcon} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {IpBtn} from '@/shared/Btn'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
 type Data = IKoboMeta & {
   duplicatedPhone?: number
@@ -73,7 +73,7 @@ export const MetaTable = () => {
         type: 'id',
         id: 'id',
         head: m.koboId,
-        typeIcon: keyTypeIcon,
+        typeIcon: <DatatableHeadIconByType type="id"/>,
         className: 'td-id',
         renderQuick: _ => _.koboId,
       },

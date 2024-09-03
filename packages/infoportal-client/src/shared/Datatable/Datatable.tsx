@@ -3,7 +3,7 @@ import React, {isValidElement, useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Txt} from '@/shared/Txt'
 import {Enum, map} from '@alexandreannic/ts-utils'
-import {IpIconBtn} from '../IconBtn'
+import {IpIconBtn} from '@/shared'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {generateXLSFromArray} from '@/shared/Datatable/util/generateXLSFile'
 import {DatatableBody} from './DatatableBody'
@@ -11,7 +11,6 @@ import {DatatableHead} from './DatatableHead'
 import {DatatableColumn, DatatableRow, DatatableTableProps} from '@/shared/Datatable/util/datatableType'
 import {DatatableProvider, useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumnToggle} from '@/shared/Datatable/DatatableColumnsToggle'
-import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {DatatableModal} from '@/shared/Datatable/DatatableModal'
 import {DatatableErrorBoundary} from '@/shared/Datatable/DatatableErrorBundary'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
@@ -34,6 +33,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
   onDataChange,
   defaultFilters,
   rowStyle,
+  columnsToggle,
   ...props
 }: DatatableTableProps<T>) => {
   const innerColumns = useMemo(() => {
@@ -88,6 +88,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
         getRenderRowKey={getRenderRowKey}
         rowStyle={rowStyle}
         onFiltersChange={onFiltersChange}
+        columnsToggle={columnsToggle}
         onDataChange={onDataChange}
         defaultFilters={defaultFilters}
       >
@@ -109,13 +110,11 @@ const _Datatable = <T extends DatatableRow>({
   hidePagination,
   rowsPerPageOptions,
   title,
-  defaultHiddenColumns,
   onClickRows,
-  hideColumnsToggle,
   exportAdditionalSheets,
   contentProps,
   ...props
-}: Pick<DatatableTableProps<T>, 'defaultHiddenColumns' | 'hideColumnsToggle' | 'contentProps' | 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
+}: Pick<DatatableTableProps<T>, 'contentProps' | 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
   const t = useTheme()
   const ctx = useDatatableContext()
   const _generateXLSFromArray = useAsync(generateXLSFromArray)
@@ -150,10 +149,6 @@ const _Datatable = <T extends DatatableRow>({
 
   const filterCount = useMemoFn(ctx.data.filters, _ => Enum.keys(_).length)
 
-  const [hiddenColumns, setHiddenColumns] = usePersistentState<string[]>(defaultHiddenColumns ?? [], {storageKey: DatatableUtils.localStorageKey.column + id})
-  useEffect(() => defaultHiddenColumns && setHiddenColumns(defaultHiddenColumns ?? []), [defaultHiddenColumns])
-  const filteredColumns = useMemo(() => ctx.columns.filter(_ => !hiddenColumns.includes(_.id)), [ctx.columns, hiddenColumns])
-
   return (
     <Box {...props}>
       {header !== null && (
@@ -164,12 +159,12 @@ const _Datatable = <T extends DatatableRow>({
           }}>
             <IpIconBtn children="filter_alt_off" tooltip={m.clearFilter} disabled={!filterCount}/>
           </Badge>
-          {!hideColumnsToggle && (
+          {!ctx.columnsToggle.hideButton && (
             <DatatableColumnToggle
               sx={{mr: 1}}
               columns={ctx.columns}
-              hiddenColumns={hiddenColumns}
-              onChange={_ => setHiddenColumns(_)}
+              hiddenColumns={ctx.columnsToggle.hiddenColumns}
+              onChange={_ => ctx.columnsToggle.setHiddenColumns(_)}
               title={m._datatable.toggleColumns}
             />
           )}
@@ -233,7 +228,8 @@ const _Datatable = <T extends DatatableRow>({
               data={ctx.data.filteredSortedAndPaginatedData?.data}
               search={ctx.data.search}
               filters={ctx.data.filters}
-              columns={filteredColumns}
+              onHideColumns={ctx.columnsToggle.handleHide}
+              columns={ctx.columnsToggle.filteredColumns}
               columnsIndex={ctx.columnsIndex}
               select={ctx.select}
               selected={ctx.selected}
@@ -247,7 +243,7 @@ const _Datatable = <T extends DatatableRow>({
                   onClickRows={onClickRows}
                   data={data.data}
                   select={ctx.select}
-                  columns={filteredColumns}
+                  columns={ctx.columnsToggle.filteredColumns}
                   getRenderRowKey={ctx.getRenderRowKey}
                   selected={ctx.selected}
                   rowStyle={ctx.rowStyle}
