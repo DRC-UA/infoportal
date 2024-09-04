@@ -15,6 +15,7 @@ import {
   KoboBaseTags,
   KoboEcrec_cashRegistration,
   KoboGeneralMapping,
+  KoboMetaEcrecTags,
   KoboMetaHelper,
   KoboMetaStatus,
   KoboTagStatus,
@@ -136,7 +137,7 @@ export class KoboMetaMapperEcrec {
   //   })
   // }
 
-  static readonly msme: MetaMapperInsert<KoboMetaOrigin<Ecrec_msmeGrantSelection.T>> = row => {
+  static readonly msme: MetaMapperInsert<KoboMetaOrigin<Ecrec_msmeGrantSelection.T>, KoboMetaEcrecTags> = row => {
     const answer = Ecrec_msmeGrantSelection.map(row.answers)
     if (answer.back_consent !== 'yes' && answer.back_consent_lviv !== 'yes') return
     const office = fnSwitch(answer.oblast_business!, {
@@ -148,7 +149,7 @@ export class KoboMetaMapperEcrec {
     }, () => undefined)
     if (!office) return
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
-    return KoboMetaMapper.make({
+    return KoboMetaMapper.make<KoboMetaEcrecTags>({
       sector: DrcSector.Livelihoods,
       activity: DrcProgram.MSME,
       office,
@@ -164,6 +165,15 @@ export class KoboMetaMapperEcrec {
       firstName: answer.ben_det_first_name,
       lastName: answer.ben_det_surname,
       patronymicName: answer.ben_det_pat_name,
+      tags: {
+        employeesCount: fnSwitch(answer.many_people_employ!, {
+          '0_5_people': 3,
+          '5_10_people': 8,
+          '10_15_people': 13,
+          '15_20_people': 18,
+          '20_more_people': 23,
+        }, () => 0)
+      }
     })
   }
 

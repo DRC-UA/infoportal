@@ -17,10 +17,10 @@ import Event = GlobalEvent.Event
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'koboId' | 'id' | 'uuid' | 'updatedAt' | 'formId' | 'date'> & {date?: Date}
 export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => [KoboId, Partial<MetaMapped<TTag>>] | undefined
-export type MetaMapperInsert<T extends Record<string, any> = any> = (_: T) => MetaMapped | MetaMapped[] | undefined
+export type MetaMapperInsert<T extends Record<string, any> = any, TMeta extends Record<string, any> = any> = (_: T) => MetaMapped<TMeta> | MetaMapped<TMeta>[] | undefined
 
 export class KoboMetaMapper {
-  static readonly make = (_: Omit<MetaMapped, 'project' | 'donor'> & {
+  static readonly make = <T extends Record<string, any>>(_: Omit<MetaMapped<T>, 'project' | 'donor'> & {
     project?: DrcProject[]
     donor?: DrcDonor[]
     persons?: PersonDetails[]
