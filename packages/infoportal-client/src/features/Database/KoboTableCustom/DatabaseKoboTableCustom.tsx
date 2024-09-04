@@ -60,7 +60,7 @@ export const customForms: CustomForm[] = [
         // langIndexes: [1, 0],
       },
       {
-        id: KoboIndex.byName('ecrec_msmeGrantEol').id,
+        id: KoboIndex.byName('ecrec_msmeGrantEoi').id,
         // langIndexes: [0, 1],
         join: {originId: KoboIndex.byName('ecrec_msmeGrantSelection').id, originColName: 'ben_det_tax_id_num', colName: 'tax_id_num'}
       },
