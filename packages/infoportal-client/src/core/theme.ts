@@ -60,7 +60,8 @@ export const styleUtils = (t: Theme) => ({
     return `${t.spacing(top)} ${t.spacing(right)} ${t.spacing(bottom)} ${t.spacing(left)}`
   },
   color: {
-    toolbar: t.palette.mode === 'dark' ? t.palette.background.paper : darken(t.palette.background.default, .01),//'#e9eef6',
+    toolbar: t.palette.mode === 'dark' ? t.palette.background.paper : 'rgb(237, 242, 250)',//'#e9eef6',
+    // toolbar: t.palette.mode === 'dark' ? t.palette.background.paper :'#ebf1f9',//'#e9eef6',
     success: '#00b79f',
     error: '#cf0040',
     warning: '#ff9800',
@@ -432,6 +433,12 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     cursor: 'pointer',
     height: 6,
     fontSize: styleUtils(t).fontSize.small,
+  },
+  '.table .trh-group': {
+    transition: t.transitions.create('all'),
+  },
+  '.table .trh-group:hover': {
+    opacity: .65,
   },
   '.table-head-type-icon': {
     ml: '2px',

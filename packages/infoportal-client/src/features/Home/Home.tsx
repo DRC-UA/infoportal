@@ -1,4 +1,4 @@
-import {Box, BoxProps, Grid, useTheme} from '@mui/material'
+import {Box, BoxProps, darken, Grid, useTheme} from '@mui/material'
 import {DRCLogo} from '@/shared/logo/logo'
 import {Txt} from '@/shared/Txt'
 import {appFeatures} from '@/features/appFeatureId'
@@ -47,7 +47,7 @@ const _Home = () => {
         .filter((_, features) => features.length > 0)
         .entries()
         .map(([category, features]) => (
-          <Box key={category} sx={{p: 1, background: styleUtils(t).color.toolbar, mb: 1, borderRadius: (t.shape.borderRadius * 2) + 'px'}}>
+          <Box key={category} sx={{p: 1, background: darken(styleUtils(t).color.toolbar, .02), mb: 1, borderRadius: (t.shape.borderRadius * 2) + 'px'}}>
             <Txt bold uppercase color="hint" sx={{fontWeight: '600', ml: 1}}>{category}</Txt>
             <Grid container spacing={1}>
               {features!.map(feature => (

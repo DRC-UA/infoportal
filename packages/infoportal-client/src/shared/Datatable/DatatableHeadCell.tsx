@@ -14,7 +14,7 @@ const useStyles = makeStyles()((t) => ({
     transition: t.transitions.create('opacity'),
     opacity: 0,
     position: 'absolute',
-    left: -2,
+    left: 'calc(50% - 15px)',
     top: 3,
     background: styleUtils(t).color.toolbar,
   }

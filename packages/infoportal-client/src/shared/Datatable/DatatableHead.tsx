@@ -57,7 +57,7 @@ export const DatatableHead = (() => {
                 </IpBtn>
               </div>
             }>
-            <th colSpan={i === 0 ? cols.length + (select?.getId ? 1 : 0) : cols.length} style={{background: colors[i % colors.length]}}/>
+            <th colSpan={i === 0 ? cols.length + (select?.getId ? 1 : 0) : cols.length} className="trh-group" style={{background: colors[i % colors.length]}}/>
           </Tooltip>
         ))}
       </tr>

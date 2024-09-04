@@ -152,7 +152,7 @@ const _Datatable = <T extends DatatableRow>({
   return (
     <Box {...props}>
       {header !== null && (
-        <Box sx={{position: 'relative', p: 1, display: 'flex', alignItems: 'center', width: '100%'}}>
+        <Box sx={{position: 'relative', p: 1, display: 'flex', flexWrap: 'wrap', alignItems: 'center', width: '100%'}}>
           <Badge badgeContent={filterCount} color="primary" overlap="circular" onClick={() => {
             ctx.data.setFilters({})
             ctx.data.resetSearch()
