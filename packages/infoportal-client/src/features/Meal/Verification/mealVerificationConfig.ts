@@ -43,8 +43,8 @@ export const mealVerificationActivities = seq([
     label: 'EC-REC Sectoral Cash for Businesses BHA',
     id: 'MSME',
     registration: {
-      koboFormId: KoboIndex.byName('ecrec_msmeGrantSelection').id,
-      fetch: 'ecrec_msmeGrantSelection',
+      koboFormId: KoboIndex.byName('ecrec_msmeGrantEoi').id,
+      fetch: 'ecrec_msmeGrantEoi',
       joinColumn: 'ben_det_tax_id_num',
     },
     verification: {
