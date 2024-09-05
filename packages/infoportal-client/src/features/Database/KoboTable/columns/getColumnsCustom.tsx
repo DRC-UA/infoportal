@@ -7,7 +7,7 @@ import {
   DrcProgram,
   DrcProject,
   Ecrec_cashRegistration,
-  Ecrec_msmeGrantSelection,
+  Ecrec_msmeGrantEoi,
   KoboAnswerFlat,
   KoboAnswerId,
   KoboBaseTags,
@@ -364,14 +364,13 @@ export const getColumnsCustom = ({
       ...getPaymentStatusByEnum({width: 188, enumerator: 'VetApplicationStatus'}),
       ...individualsBreakdown,
     ],
-    [KoboIndex.byName('ecrec_msmeGrantSelection').id]: [
+    [KoboIndex.byName('ecrec_msmeGrantEoi').id]: [
       {
         id: 'vulnerability',
         head: m.vulnerability,
         type: 'number',
-        render: (row: KoboAnswerFlat<Ecrec_msmeGrantSelection.T, any> & {custom: KoboGeneralMapping.IndividualBreakdown}) => {
+        render: (row: KoboAnswerFlat<Ecrec_msmeGrantEoi.T, any> & {custom: KoboGeneralMapping.IndividualBreakdown}) => {
           const minimumWageUah = 7100
-
           const scoring = {
             householdSize: 0,
             residenceStatus: 0,
