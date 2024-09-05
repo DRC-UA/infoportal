@@ -1,3 +1,4 @@
+export * from './activityinfo'
 export * from './api-client/ApiClient'
 export * from './api-client/ApiClientMock'
 export * from './type/Drc'

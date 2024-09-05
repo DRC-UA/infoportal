@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express'
-import {ActivityInfoSdk} from '../../feature/activityInfo/sdk/ActivityInfoSdk'
+import {ActivityInfoSdk} from 'infoportal-common'
 import {app, AppLogger} from '../../index'
 import {appConf} from '../../core/conf/AppConf'
 import {AppError} from '../../helper/Errors'
