@@ -1,7 +1,7 @@
 import {KoboSdk} from 'infoportal-common'
 import {appConf} from './appConf'
 import winston from 'winston'
-import {PrismaClient} from '@prisma/client'
+import {BuildKoboType} from './kobo/BuildTypeKobo'
 
 export const koboSdk = new KoboSdk({
   urlv1: appConf.kobo.urlV1 + '/api/v1',
@@ -11,7 +11,5 @@ export const koboSdk = new KoboSdk({
 });
 
 (async () => {
-  const prisma = new PrismaClient()
-  const users = await prisma.user.findMany({where: {name: ''}})
-  users.map(_ => _.name)
+  await new BuildKoboType().buildAll()
 })()

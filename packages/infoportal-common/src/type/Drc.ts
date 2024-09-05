@@ -329,7 +329,7 @@ export class DrcProjectHelper {
   static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = seq(Obj.entries(DrcProjectHelper.donorByProject)).groupByAndApply(_ => _[1], _ => _.map(_ => _[0]))
 
   static readonly extractCode = (str?: string): string | undefined => {
-    return str?.match(/UKR.(000\d\d\d)/)?.[1]
+    return str?.match(/UKR.?(000\d\d\d)/i)?.[1]
   }
 
   static readonly searchCode = (value?: string): string | undefined => {

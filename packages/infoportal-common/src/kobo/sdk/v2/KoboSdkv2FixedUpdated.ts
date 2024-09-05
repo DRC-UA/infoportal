@@ -61,8 +61,8 @@ export class KoboSdkv2FixedUpdated {
   private readonly apiCall = (params: KoboUpdateDataParams): Promise<ApiKoboUpdate> => {
     const message = (status: 'Failed' | 'Success', e?: AxiosError) => {
       const name = KoboIndex.searchById(params.formId)?.name ?? params.formId
-      const ids = `[${params.submissionIds[0]}, +${params.submissionIds.length - 1}]`
-      return `${KoboIndex} to update ${name} ${ids} ${JSON.stringify(params.data)}.` + (e ? ` ERR ${e.status}` : '')
+      const ids = `[${params.submissionIds[0]}]` + (params.submissionIds.length > 1) ? ` +${params.submissionIds.length - 1}]` : ''
+      return `Update ${name} ${ids} ${JSON.stringify(params.data)}.` + (e ? ` ERR ${e.status}` : '')
     }
     const {formId, data, submissionIds} = params
     return this.api.patch<ApiKoboUpdate>(`/v2/assets/${formId}/data/bulk/`, {

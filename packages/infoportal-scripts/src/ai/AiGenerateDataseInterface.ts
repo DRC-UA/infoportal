@@ -1,8 +1,6 @@
-import {ActivityInfoSdk} from 'infoportal-server/src/feature/activityInfo/sdk/ActivityInfoSdk'
-import {AIID, FormDesc, FormDescs} from 'infoportal-server/src/feature/activityInfo/model/ActivityInfo'
+import {ActivityInfoSdk, AIID, capitalize, FormDesc, FormDescs} from 'infoportal-common'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import fs from 'fs'
-import {capitalize} from 'infoportal-common'
 import {appConf} from '../appConf'
 
 interface AiFormOption {

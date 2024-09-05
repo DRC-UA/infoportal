@@ -57,8 +57,11 @@ export const koboMetaStatusLabel: Record<KoboMetaStatus, StateStatus> = {
   Rejected: 'error',
 }
 
-export type KoboMetaTag = KoboMetaShelterRepairTags & KoboMetaTagNfi
+export type KoboMetaTag = KoboMetaShelterRepairTags & KoboMetaTagNfi & KoboMetaEcrecTags
 
+export type KoboMetaEcrecTags = {
+  employeesCount?: number
+}
 export type KoboMetaShelterRepairTags = {
   damageLevel?: ShelterTaPriceLevel
 }

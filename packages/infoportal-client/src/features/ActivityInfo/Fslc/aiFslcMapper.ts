@@ -26,6 +26,7 @@ export namespace AiFslcMapper {
         DrcProgram.SectoralCashForAgriculture,
         DrcProgram.SectoralCashForAnimalShelterRepair,
         DrcProgram.SectoralCashForAnimalFeed,
+        DrcProgram.MSME,
         DrcProgram.VET,
       ],
       status: [KoboMetaStatus.Committed]
@@ -85,6 +86,9 @@ export namespace AiFslcMapper {
               'Implementation Status': 'Completed',
               'Modality': 'Cash',
               'Were these people reached in 2024 by another FSL sub-activity?': 'No',
+              ...(activity === DrcProgram.VET) && {
+
+              }
             }
             const request = ActivityInfoSdk.makeRecordRequests({
               activityIdPrefix: 'drcflsc',

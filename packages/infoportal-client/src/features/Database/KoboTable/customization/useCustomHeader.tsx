@@ -23,7 +23,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('bn_cashForRentApplication').id:
       case KoboIndex.byName('ecrec_vetApplication').id:
       case KoboIndex.byName('ecrec_vetEvaluation').id:
-      case KoboIndex.byName('ecrec_msmeGrantEol').id:
+      case KoboIndex.byName('ecrec_msmeGrantEoi').id:
       case KoboIndex.byName('ecrec_msmeGrantSelection').id:
       case KoboIndex.byName('shelter_cashForShelter').id:
       case KoboIndex.byName('bn_rapidResponse2').id: {

@@ -7,7 +7,7 @@ import {KoboService} from '../KoboService'
 import {duration, map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
-import {DrcDonor, DrcProgram, DrcProject, IKoboMeta, KoboAnswerId, KoboId, KoboIndex, KoboMetaStatus, PersonDetails, UUID} from 'infoportal-common'
+import {DrcDonor, DrcProgram, DrcProject, IKoboMeta, KeyOf, KoboId, KoboIndex, KoboMetaStatus, PersonDetails, UUID} from 'infoportal-common'
 import {appConf} from '../../../core/conf/AppConf'
 import {genUUID, yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
@@ -16,11 +16,15 @@ import {PromisePool} from '@supercharge/promise-pool'
 import Event = GlobalEvent.Event
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'koboId' | 'id' | 'uuid' | 'updatedAt' | 'formId' | 'date'> & {date?: Date}
-export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => [KoboId, Partial<MetaMapped<TTag>>] | undefined
-export type MetaMapperInsert<T extends Record<string, any> = any> = (_: T) => MetaMapped | MetaMapped[] | undefined
+export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => {
+  originMetaKey: Extract<KeyOf<IKoboMeta>, 'koboId' | 'taxId'>,
+  value: number | string,
+  changes: Partial<MetaMapped<TTag>>
+} | undefined
+export type MetaMapperInsert<T extends Record<string, any> = any, TMeta extends Record<string, any> = any> = (_: T) => MetaMapped<TMeta> | MetaMapped<TMeta>[] | undefined
 
 export class KoboMetaMapper {
-  static readonly make = (_: Omit<MetaMapped, 'project' | 'donor'> & {
+  static readonly make = <T extends Record<string, any>>(_: Omit<MetaMapped<T>, 'project' | 'donor'> & {
     project?: DrcProject[]
     donor?: DrcDonor[]
     persons?: PersonDetails[]
@@ -47,15 +51,17 @@ export class KoboMetaMapper {
     [KoboIndex.byName('protection_referral').id]: KoboMetaMapperProtection.referral,
     [KoboIndex.byName('protection_communityMonitoring').id]: KoboMetaMapperProtection.communityMonitoring,
     [KoboIndex.byName('ecrec_vetApplication').id]: KoboMetaMapperEcrec.vetApplication,
-    [KoboIndex.byName('ecrec_msmeGrantSelection').id]: KoboMetaMapperEcrec.msme,
+    [KoboIndex.byName('ecrec_msmeGrantEoi').id]: KoboMetaMapperEcrec.msmeEoi,
   }
   static readonly mappersUpdate: Record<KoboId, MetaMapperMerge> = {
     [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa,
     [KoboIndex.byName('ecrec_vetEvaluation').id]: KoboMetaMapperEcrec.vetEvaluation,
+    [KoboIndex.byName('ecrec_msmeGrantSelection').id]: KoboMetaMapperEcrec.msmeSelection,
   }
   static readonly triggerUpdate = {
     [KoboIndex.byName('shelter_nta').id]: [KoboIndex.byName('shelter_ta').id],
     [KoboIndex.byName('ecrec_vetApplication').id]: [KoboIndex.byName('ecrec_vetEvaluation').id],
+    [KoboIndex.byName('ecrec_msmeGrantEoi').id]: [KoboIndex.byName('ecrec_msmeGrantSelection').id],
   }
 }
 
@@ -148,22 +154,26 @@ export class KoboMetaService {
     const updates = await this.prisma.koboAnswers.findMany({
       where: {formId},
     }).then(_ => seq(_).map(mapper).compact())
-    const koboIdToMetaId: Record<KoboAnswerId, Seq<UUID>> = await this.prisma.koboMeta.findMany({
+    const JOIN_COL = updates[0].originMetaKey // Assume it never changes for other updates
+    const joinToMetaId: Record<string, Seq<UUID>> = await this.prisma.koboMeta.findMany({
       select: {
         id: true,
-        koboId: true,
+        [JOIN_COL]: true,
       },
       where: {
-        koboId: {in: updates.map(_ => _[0])}
+        [JOIN_COL]: {in: updates.map(_ => _.value)}
       }
-    }).then(_ => seq(_).groupByAndApply(_ => _.koboId, _ => _.map(_ => _.id)))
+    }).then(_ => seq(_).groupByAndApply(
+      _ => (_ as any)[JOIN_COL] as string,
+      _ => (_ as unknown as Seq<{id: string}>).map(_ => _.id))
+    )
 
-    const metaIdsWithNewPersons = updates.filter(_ => !!_[1].persons).flatMap(_ => koboIdToMetaId[_[0]])
+    const metaIdsWithNewPersons = updates.filter(_ => !!_.changes.persons).flatMap(_ => joinToMetaId[_.value])
     await this.prisma.koboPerson.deleteMany({where: {metaId: {in: metaIdsWithNewPersons.filter(_ => _ !== undefined)}}})
 
-    const createPersonInput = updates.flatMap(([koboId, mapped]) => {
-      return (koboIdToMetaId[koboId] ?? []).flatMap(metaId => {
-        const res: Prisma.KoboPersonCreateManyInput[] = (mapped.persons ?? []).map(_ => ({..._, metaId}))
+    const createPersonInput = updates.flatMap(updates => {
+      return (joinToMetaId[updates.value] ?? []).flatMap(metaId => {
+        const res: Prisma.KoboPersonCreateManyInput[] = (updates.changes.persons ?? []).map(_ => ({..._, metaId}))
         return res
       })
     })
@@ -181,16 +191,14 @@ export class KoboMetaService {
     await PromisePool
       .withConcurrency(this.conf.db.maxConcurrency)
       .for(updates)
-      .process(async ([koboId, {persons, ...update}], i) => {
+      .process(async ({value, changes: {persons, ...update}}, i) => {
         return this.prisma.koboMeta.updateMany({
-          where: {koboId},
+          where: {[JOIN_COL]: value},
           data: update,
         })
       })
     this.info(formId, `Update ${updates.length}... COMPLETED`)
   }
-
-  static readonly makeMetaId = (koboId: KoboId, activity: DrcProgram) => koboId + activity
 
   private syncInsert = async ({
     formId,

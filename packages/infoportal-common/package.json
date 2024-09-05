@@ -4,8 +4,8 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "dev": "rm tsconfig.tsbuildinfo; tsc -w",
-    "build": "rm tsconfig.tsbuildinfo; tsc"
+    "dev": "tsc -w",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
