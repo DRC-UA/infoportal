@@ -190,7 +190,7 @@ export const MetaTable = () => {
       {
         id: 'taxIdImg',
         align: 'center',
-        head: m.taxID,
+        head: m.taxIdPhoto,
         type: 'string',
         render: _ => {
           return {
@@ -209,7 +209,7 @@ export const MetaTable = () => {
       {
         id: 'idImg',
         align: 'center',
-        head: m.id,
+        head: m.idPhoto,
         type: 'string',
         render: _ => {
           return {

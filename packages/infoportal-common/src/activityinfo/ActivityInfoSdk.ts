@@ -1,4 +1,4 @@
-import {AIID, Database, Form, FormDescs} from '../model/ActivityInfo'
+import {AIID, Database, Form, FormDescs} from './ActivityInfo'
 
 interface ActicityInfoBody {
   [key: string]: any
