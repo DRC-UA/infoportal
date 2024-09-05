@@ -5,7 +5,7 @@ import {
   DisplacementStatus,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
-  ecrec_msmeGrantEoi,
+  Ecrec_msmeGrantEoi,
   Ecrec_msmeGrantSelection,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
@@ -167,7 +167,7 @@ export class KoboTypedAnswerSdk {
       })),
       ...make('ecrec_msmeGrantEoi', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('ecrec_msmeGrantEoi').id,
-        fnMapKobo: ecrec_msmeGrantEoi.map,
+        fnMapKobo: Ecrec_msmeGrantEoi.map,
         ...filters,
       })),
       ...make('ecrec_cashRegistration', (filters?: KoboAnswerFilter) => req({

@@ -8,6 +8,7 @@ import {
   DrcSector,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
+  Ecrec_msmeGrantEoi,
   Ecrec_msmeGrantSelection,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
@@ -91,9 +92,9 @@ export class KoboMetaMapperEcrec {
       date: row.submissionTime,
       oblast: oblast.name,
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
+      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       personsCount: safeNumber(answer.ben_det_hh_size),
       persons: group.map(KoboGeneralMapping.mapPersonDetails),
-      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
       sector: DrcSector.Livelihoods,
       activity: DrcProgram.VET,
       project: [DrcProject['UKR-000348 BHA3']],
@@ -111,9 +112,10 @@ export class KoboMetaMapperEcrec {
     if (!row.answers.id_form_vet) return
     const answer = Ecrec_vetEvaluation.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
-    return [
-      row.answers.id_form_vet,
-      {
+    return {
+      originMetaKey: 'koboId',
+      value: row.answers.id_form_vet,
+      changes: {
         office: fnSwitch(answer.back_office!, {
           dnk: DrcOffice.Dnipro,
           nlv: DrcOffice.Mykolaiv,
@@ -126,21 +128,51 @@ export class KoboMetaMapperEcrec {
         // status: KoboMetaHelper.mapValidationStatus(row.tags?._validation) ?? KoboMetaStatus.Pending,
         // lastStatusUpdate: row.date,
       }
-    ]
+    }
   }
 
-  // static readonly livelihoodRestoration: MetaMapperInsert<KoboMetaOrigin<Ecrec_livelihoodRestoration.T, EcrecCashRegistrationTags>> = row => {
-  //   const answer = Ecrec_livelihoodRestoration.map(row.answers)
-  //   const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
-  //   return KoboMetaMapper.make({
-  //
-  //   })
-  // }
-
-  static readonly msme: MetaMapperInsert<KoboMetaOrigin<Ecrec_msmeGrantSelection.T>, KoboMetaEcrecTags> = row => {
+  static readonly msmeSelection: MetaMapperMerge<KoboMetaOrigin<Ecrec_msmeGrantSelection.T, KoboBaseTags>, KoboMetaEcrecTags> = row => {
     const answer = Ecrec_msmeGrantSelection.map(row.answers)
+    const taxId = answer.tax_id_num ?? answer.ben_enterprise_tax_id
+    if (!taxId) return
+    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    return {
+      originMetaKey: 'taxId',
+      value: taxId,
+      changes: {
+        oblast: oblast.name,
+        raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
+        hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+        office: fnSwitch(answer.ben_det_oblast!, {
+          dnipropetrovska: DrcOffice.Dnipro,
+          khersonska: DrcOffice.Kherson,
+          mykolaivska: DrcOffice.Mykolaiv,
+          zaporizka: DrcOffice.Dnipro,
+          lvivska: DrcOffice.Lviv,
+        }, () => undefined),
+        taxId: map(answer.ben_enterprise_tax_id ?? answer.tax_id_num, _ => '' + _),
+        firstName: answer.ben_first_name,
+        lastName: answer.ben_last_name,
+        patronymicName: answer.ben_first_patr,
+        status: KoboMetaHelper.mapValidationStatus(row.tags?._validation),
+        lastStatusUpdate: answer.date_payment,
+        tags: {
+          employeesCount: fnSwitch(answer.there_paid_employees_quantity!, {
+            '0_5_people': 3,
+            '5_10_people': 8,
+            '10_15_people': 13,
+            '15_20_people': 18,
+            '20_more_people': 23,
+          }, () => 0)
+        }
+      }
+    }
+  }
+
+  static readonly msmeEoi: MetaMapperInsert<KoboMetaOrigin<Ecrec_msmeGrantEoi.T, KoboBaseTags>, KoboMetaEcrecTags> = row => {
+    const answer = Ecrec_msmeGrantEoi.map(row.answers)
     if (answer.back_consent !== 'yes' && answer.back_consent_lviv !== 'yes') return
-    const office = fnSwitch(answer.oblast_business!, {
+    const office = fnSwitch(answer.ben_det_oblast!, {
       dnipropetrovska: DrcOffice.Dnipro,
       zaporizka: DrcOffice.Dnipro,
       mykolaivska: DrcOffice.Dnipro,
@@ -165,6 +197,7 @@ export class KoboMetaMapperEcrec {
       firstName: answer.ben_det_first_name,
       lastName: answer.ben_det_surname,
       patronymicName: answer.ben_det_pat_name,
+      status: row.tags?._validation === KoboValidation.Rejected ? KoboMetaStatus.Rejected : KoboMetaStatus.Pending,
       tags: {
         employeesCount: fnSwitch(answer.many_people_employ!, {
           '0_5_people': 3,

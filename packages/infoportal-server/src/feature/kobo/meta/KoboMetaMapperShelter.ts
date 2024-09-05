@@ -189,14 +189,15 @@ export namespace KoboMetaMapperShelter {
   export const updateTa: MetaMapperMerge<KoboMetaOrigin<Shelter_ta.T, ShelterTaTags>, KoboMetaShelterRepairTags> = row => {
     const answers = Shelter_ta.map(row.answers)
     if (!row.tags || !answers.nta_id) return
-    return [
-      answers.nta_id,
-      {
+    return {
+      value: answers.nta_id,
+      originMetaKey: 'koboId',
+      changes: {
         referencedFormId: KoboIndex.byName('shelter_ta').id,
         status: row.tags.workDoneAt ? KoboMetaStatus.Committed : KoboMetaStatus.Pending,
         lastStatusUpdate: row.tags.workDoneAt,
         tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {}
       }
-    ]
+    }
   }
 }

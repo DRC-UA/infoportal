@@ -56,14 +56,23 @@ export const customForms: CustomForm[] = [
     name: '[ECREC] MSME',
     forms: [
       {
-        id: KoboIndex.byName('ecrec_msmeGrantSelection').id,
+        id: KoboIndex.byName('ecrec_msmeGrantEoi').id,
         // langIndexes: [1, 0],
       },
       {
-        id: KoboIndex.byName('ecrec_msmeGrantEoi').id,
+        id: KoboIndex.byName('ecrec_msmeGrantSelection').id,
         // langIndexes: [0, 1],
-        join: {originId: KoboIndex.byName('ecrec_msmeGrantSelection').id, originColName: 'ben_det_tax_id_num', colName: 'tax_id_num'}
+        join: {originId: KoboIndex.byName('ecrec_msmeGrantEoi').id, originColName: 'ben_det_tax_id_num', colName: 'tax_id_num'}
       },
+      // {
+      //   id: KoboIndex.byName('ecrec_msmeGrantSelection').id,
+      //   // langIndexes: [1, 0],
+      // },
+      // {
+      //   id: KoboIndex.byName('ecrec_msmeGrantEoi').id,
+      //   // langIndexes: [0, 1],
+      //   join: {originId: KoboIndex.byName('ecrec_msmeGrantSelection').id, originColName: 'ben_det_tax_id_num', colName: 'tax_id_num'}
+      // },
     ]
   }
 ]
