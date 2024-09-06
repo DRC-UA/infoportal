@@ -1,25 +1,12 @@
-import {fnSwitch, map, Obj, seq} from '@alexandreannic/ts-utils'
-import {Checkbox, Icon, IconProps, Tooltip} from '@mui/material'
+import {fnSwitch, map} from '@alexandreannic/ts-utils'
+import {Checkbox, IconProps} from '@mui/material'
 import React from 'react'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumn, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {ResizableDiv} from '@/shared/Datatable/ResizableDiv'
 import {DatabaseHeadCell} from '@/shared/Datatable/DatatableHeadCell'
-import {IpBtn} from '../Btn'
-
-const colors = [
-  '#2196F3',
-  '#FF9800',
-  '#673AB7',
-  '#009688',
-  '#F44336',
-  '#00BCD4',
-  '#FFEE58',
-  '#9C27B0',
-  '#CDDC39',
-  '#E91E63',
-]
+import {TableHeadSectionCell} from '@/shared/Datatable/TableHeadSectionCell'
 
 export const DatatableHead = (() => {
   const Component = <T extends DatatableRow>({
@@ -44,24 +31,12 @@ export const DatatableHead = (() => {
   }) => {
     return (
       <thead>
-      <tr className="tr trh trh-first">
-        {map(Obj.entries(seq(columns).groupBy(_ => _.groupLabel ?? 'None')), groups => groups.length > 1 && groups.map(([group, cols], i) =>
-          <Tooltip
-            placement="top"
-            leaveDelay={200}
-            title={
-              <div style={{display: 'flex', alignItems: 'center'}}>
-                {group}&nbsp;
-                <IpBtn sx={{minWidth: 30}} size="small" variant="contained" color="primary" onClick={() => onHideColumns(cols.map(_ => _.id))}>
-                  <Icon fontSize="small">visibility_off</Icon>
-                </IpBtn>
-              </div>
-            }>
-            <th colSpan={i === 0 ? cols.length + (select?.getId ? 1 : 0) : cols.length} className="trh-group" style={{background: colors[i % colors.length]}}/>
-          </Tooltip>
-        ))}
-      </tr>
-      <tr className="tr trh">
+      <TableHeadSectionCell
+        hasCheckboxColumn={!!select?.getId}
+        columns={columns}
+        onHideColumns={onHideColumns}
+      />
+      <tr className="tr">
         {map(select?.getId, getId => (
           <th className="td th td-center td-width0 td-sticky-start">
             <Checkbox
@@ -115,6 +90,7 @@ export const DatatableHead = (() => {
           const active = sortedByThis || !!filters[c.id]
           return (
             <td key={c.id} style={c.styleHead} className={[
+              'td',
               'td-sub-head',
               c.stickyEnd ? 'td-sticky-end' : ''
             ].join(' ')}>

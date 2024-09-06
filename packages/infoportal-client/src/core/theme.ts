@@ -429,17 +429,6 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     borderCollapse: 'collapse',
     borderSpacing: 0,
   },
-  '.table .trh-first th': {
-    cursor: 'pointer',
-    height: 6,
-    fontSize: styleUtils(t).fontSize.small,
-  },
-  '.table .trh-group': {
-    transition: t.transitions.create('all'),
-  },
-  '.table .trh-group:hover': {
-    opacity: .65,
-  },
   '.table-head-type-icon': {
     ml: '2px',
     marginRight: 'auto',
@@ -530,7 +519,7 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     background: t.palette.background.paper,
     maxWidth: 102,
   },
-  '.table thead td, .table thead th': {
+  '.table thead .td, .table thead .th': {
     background: styleUtils(t).color.toolbar,
   },
   '.td-center': {

@@ -1,23 +1,15 @@
-import {styleUtils} from '@/core/theme'
 import {makeStyles} from 'tss-react/mui'
-import {IpIconBtn, IpIconBtnProps} from '@/shared'
+import {IpBtn, IpIconBtnProps} from '@/shared'
 import {ReactNode} from 'react'
+import {Icon, Tooltip} from '@mui/material'
 
 const useStyles = makeStyles()((t) => ({
   root: {
     width: '100%',
-    '&:hover .--db-th-icon': {
-      opacity: 1,
-    }
   },
-  icon: {
-    transition: t.transitions.create('opacity'),
-    opacity: 0,
-    position: 'absolute',
-    left: 'calc(50% - 15px)',
-    top: 3,
-    background: styleUtils(t).color.toolbar,
-  }
+  btn: {
+    minWidth: 30
+  },
 }))
 
 export const DatabaseHeadCell = ({
@@ -27,18 +19,16 @@ export const DatabaseHeadCell = ({
   onClick: IpIconBtnProps['onClick']
   children: ReactNode
 }) => {
-  const {classes, cx} = useStyles()
+  const {classes} = useStyles()
   return (
-    <div className={classes.root}>
-      {children}
-      <div className={cx(classes.icon, '--db-th-icon')}>
-        <IpIconBtn
-          onClick={onClick}
-          color="primary"
-          size="small"
-          children="visibility_off"
-        />
+    <Tooltip title={
+      <IpBtn className={classes.btn} size="small" variant="contained" color="primary" onClick={onClick}>
+        <Icon fontSize="small">visibility_off</Icon>
+      </IpBtn>
+    }>
+      <div className={classes.root}>
+        {children}
       </div>
-    </div>
+    </Tooltip>
   )
 }
