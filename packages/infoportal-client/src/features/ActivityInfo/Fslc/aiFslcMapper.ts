@@ -4,11 +4,11 @@ import {add, DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper, safe
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
-import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 
 export namespace AiFslcMapper {
-  export type Bundle = AiBundle<AiFslcType.Type>
+  export type Bundle = AiTable<AiFslcType.Type>
 
   const getPlanCode = (_: DrcProject) => {
     return fnSwitch(_, {

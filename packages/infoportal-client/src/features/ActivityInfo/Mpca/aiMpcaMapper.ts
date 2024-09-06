@@ -1,7 +1,7 @@
 import {DrcProgram, DrcProject, DrcProjectHelper, groupBy, KoboMetaStatus, PeriodHelper} from 'infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
@@ -10,7 +10,7 @@ import {appConfig} from '@/conf/AppConfig'
 
 export namespace AiMpcaMapper {
 
-  type Bundle = AiBundle<AiMpcaType.Type>
+  type Bundle = AiTable<AiMpcaType.Type>
 
   const getPlanCode = (_: DrcProject) => {
     return fnSwitch(_ as any, {

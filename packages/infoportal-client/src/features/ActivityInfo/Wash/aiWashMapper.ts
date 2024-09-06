@@ -1,5 +1,5 @@
 import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from 'infoportal-common'
-import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiWashType} from '@/features/ActivityInfo/Wash/aiWashType'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {fnSwitch} from '@alexandreannic/ts-utils'
@@ -26,7 +26,7 @@ export namespace AiWashMapper {
     return planCodes[p] ?? `${aiInvalidValueFlag} ${p}`
   }
 
-  export type Bundle = AiBundle<AiWashType.Type>
+  export type Bundle = AiTable<AiWashType.Type>
 
   export const req = (api: ApiSdk) => {
     return (periodStr: string): Promise<Bundle[]> => {

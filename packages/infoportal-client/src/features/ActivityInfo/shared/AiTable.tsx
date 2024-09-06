@@ -17,7 +17,7 @@ import {useSession} from '@/core/Session/SessionContext'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
-export interface AiBundle<
+export interface AiTable<
   TActivity = any,
   TSubActivity extends any = undefined,
   TAnswer extends Record<string, any> = any
@@ -42,7 +42,7 @@ export const AiBundleTable = ({
 }: {
   header?: ReactNode
   id: string
-  fetcher: UseFetcher<(period: string) => Promise<AiBundle<any, any, any>[]>>
+  fetcher: UseFetcher<(period: string) => Promise<AiTable<any, any, any>[]>>
 }) => {
   const {api, conf} = useAppSettings()
   const {toastHttpError} = useIpToast()

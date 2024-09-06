@@ -4,7 +4,7 @@ import {Panel} from '@/shared/Panel'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {AiFslcMapper} from '@/features/ActivityInfo/Fslc/aiFslcMapper'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {AiBundleTable} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundleTable} from '@/features/ActivityInfo/shared/AiTable'
 
 export const AiFslc = () => {
   const {api} = useAppSettings()

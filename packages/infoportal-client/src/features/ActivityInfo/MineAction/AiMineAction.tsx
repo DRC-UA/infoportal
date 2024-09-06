@@ -2,7 +2,7 @@ import {Page} from '@/shared/Page'
 import React from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Panel} from '@/shared/Panel'
-import {AiBundle, AiBundleTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiTable, AiBundleTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {AiMineActionType} from '@/features/ActivityInfo/MineAction/aiMineActionType'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
@@ -10,7 +10,7 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 
 
-type Bundle = AiBundle<AiMineActionType.Type, AiMineActionType.TypeSub>
+type Bundle = AiTable<AiMineActionType.Type, AiMineActionType.TypeSub>
 
 export const AiMineAction = () => {
   const {api} = useAppSettings()

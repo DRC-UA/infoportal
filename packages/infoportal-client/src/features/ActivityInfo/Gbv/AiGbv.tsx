@@ -1,6 +1,6 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import React from 'react'
-import {AiBundle, AiBundleTable, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiBundleTable, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {add, groupBy, PeriodHelper} from 'infoportal-common'
 import {Panel} from '@/shared/Panel'
 import {Page} from '@/shared/Page'
@@ -11,7 +11,7 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 
-type AiGbvBundle = AiBundle<AiGbvType.Type, AiGbvType.TypeSub>
+type AiGbvBundle = AiTable<AiGbvType.Type, AiGbvType.TypeSub>
 
 export const AiGbv = () => {
   const {api} = useAppSettings()
@@ -46,8 +46,15 @@ export const AiGbv = () => {
               groups: [
                 {by: _ => _['Indicators']!},
                 {by: _ => _['Population Group']!},
+                {by: _ => _['Type of distribution']!},
+                {by: _ => _['Who distributed the kits?']!},
               ],
-              finalTransform: (grouped, [Indicators, PopulationGroup]) => {
+              finalTransform: (grouped, [
+                Indicators,
+                PopulationGroup,
+                DistributionType,
+                DistributionWho,
+              ]) => {
                 subActivities.push({
                   'Reporting Month': period,
                   'Population Group': PopulationGroup,
@@ -60,6 +67,26 @@ export const AiGbv = () => {
                     _['Older Women (60+)'],
                     _['Older Men (60+)'],
                   )),
+                  ...Indicators === '# of women and girls at risk who received dignity kits' ? {
+                    'Type of distribution': DistributionType,
+                    'Who distributed the kits?': DistributionWho,
+                    'Dignity kits in stock?': 'No',
+                    'Non-individuals Reached/Quantity': grouped.sum(_ => add(_['Non-individuals Reached/Quantity'])),
+                    'Basic/Essential': grouped.sum(_ => add(_['Basic/Essential'])),
+                    'Elderly': grouped.sum(_ => add(_['Elderly'])),
+                    'Winter': grouped.sum(_ => add(_['Winter'])),
+                    'Other': grouped.sum(_ => add(_['Other'])),
+                  } : {
+                    'Type of distribution': undefined,
+                    'Who distributed the kits?': undefined,
+                    'Non-individuals Reached/Quantity': undefined,
+                    'Basic/Essential': undefined,
+                    'Elderly': undefined,
+                    'Winter': undefined,
+                    'Other': undefined,
+                    'Dignity kits in stock?': undefined,
+                    'Any assessment/feedback done/collected on post distribution of kits?': undefined,
+                  },
                   'Girls (0-17)': grouped.sum(_ => add(_['Girls (0-17)'])),
                   'Boys (0-17)': grouped.sum(_ => add(_['Boys (0-17)'])),
                   'Adult Women (18-59)': grouped.sum(_ => add(_['Adult Women (18-59)'])),

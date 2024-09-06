@@ -3,14 +3,14 @@ import {AnswerTable} from './AnswerTable'
 import {Modal} from '@/shared'
 import {useI18n} from '@/core/i18n'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {AiBundle} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiTable} from '@/features/ActivityInfo/shared/AiTable'
 import {IpBtnProps} from '@/shared/Btn'
 
 export const ActivityInfoActions = ({
   data,
   activity,
   requestBody,
-}: AiBundle) => {
+}: AiTable) => {
   return (
     <>
       <AiViewAnswers answers={data}/>

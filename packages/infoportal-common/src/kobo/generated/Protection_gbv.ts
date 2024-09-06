@@ -33,13 +33,13 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // gi/activity_other [text] If "Other", please specify
   'activity_other': string | undefined,
 	  // gi/basic [text] Basic/Essential dignity kits
-  'basic': string | undefined,
+  'basic': number | undefined,
 	  // gi/elderly [text] Elderly dignity kits
-  'elderly': string | undefined,
+  'elderly': number | undefined,
 	  // gi/winter [text] Winter dignity kits
-  'winter': string | undefined,
+  'winter': number | undefined,
 	  // gi/kit_other [text] Other dignity kits
-  'kit_other': string | undefined,
+  'kit_other': number | undefined,
 	  // gi/distribute [select_one] Type of distribution
   'distribute': undefined | Option<'distribute'>,
 	  // gi/distributor [select_one] Who distributed the kits?
@@ -216,7 +216,7 @@ ben_det_oblast: {
 	'zakarpatska': `Zakarpatska`,
 	'zaporizka': `Zaporizka`,
 	'zhytomyrska': `Zhytomyrska`
-}}
+}} as const
 
 const extractQuestionName = (_: Record<string, any>) => {
   const output: any = {}

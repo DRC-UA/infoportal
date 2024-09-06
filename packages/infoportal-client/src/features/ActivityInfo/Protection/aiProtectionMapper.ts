@@ -1,5 +1,5 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiBundle, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiBundle'
+import {AiTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from 'infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
@@ -9,7 +9,7 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 
 export namespace AiProtectionMapper {
 
-  type Bundle = AiBundle<AiProtectionType.Type, AiProtectionType.TypeSub>
+  type Bundle = AiTable<AiProtectionType.Type, AiProtectionType.TypeSub>
 
   const getPlanCode = (_?: DrcProject): AiProtectionType.Type['Plan/Project Code'] => {
     const planCode = Object.freeze({

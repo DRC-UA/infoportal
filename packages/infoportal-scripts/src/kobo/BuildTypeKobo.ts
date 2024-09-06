@@ -578,6 +578,6 @@ const extractQuestionName = (_: Record<string, any>) => {
           .map(sk => `\t'${sk.replaceAll(`'`, `\\'`)}': \`${v[sk]?.replace('`', '')}\``)
           .join(',\n')
       ).join('\n},\n')
-      + '\n}}'
+      + '\n}} as const'
   }
 }
