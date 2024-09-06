@@ -11,11 +11,17 @@ export namespace KoboEcrec_cashRegistration {
   export const getProgram = (_: Ecrec_cashRegistration.T): DrcProgram[] => {
     const project = DrcProjectHelper.search(Ecrec_cashRegistration.options.back_donor[_.back_donor!])
     const activities = []
-    if ([DrcProject['UKR-000336 UHF6'], DrcProject['UKR-000363 UHF8'], DrcProject['UKR-000322 ECHO2']].includes(project!)) activities.push(DrcProgram.SectoralCashForAgriculture)
+    if ([
+      DrcProject['UKR-000336 UHF6'],
+      DrcProject['UKR-000363 UHF8'],
+      DrcProject['UKR-000322 ECHO2'],
+      DrcProject['UKR-000372 ECHO3'],
+    ].includes(project!)) activities.push(DrcProgram.SectoralCashForAgriculture)
     else {
       if (_.animal_shelter_need === 'yes') activities.push(DrcProgram.SectoralCashForAnimalShelterRepair)
       if (_.barriers_providing_sufficient === 'yes' && _.back_donor === 'uhf7') activities.push(DrcProgram.SectoralCashForAnimalFeed)
     }
+    if (activities.length === 0) activities.push(DrcProgram.SectoralCashForAgriculture)
     return activities
   }
 
