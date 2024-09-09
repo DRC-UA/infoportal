@@ -193,7 +193,7 @@ export class KoboMetaMapperEcrec {
       personsCount: safeNumber(answer.ben_det_hh_size),
       persons: group.map(KoboGeneralMapping.mapPersonDetails),
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : '',
-      taxId: answer.ben_det_tax_id_num,
+      taxId: answer.ben_enterprise_tax_id ?? answer.ben_det_tax_id_num,
       firstName: answer.ben_det_first_name,
       lastName: answer.ben_det_surname,
       patronymicName: answer.ben_det_pat_name,

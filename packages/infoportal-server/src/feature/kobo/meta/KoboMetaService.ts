@@ -150,6 +150,7 @@ export class KoboMetaService {
     formId: KoboId
     mapper: MetaMapperMerge,
   }) => {
+    const destinationFormId = Obj.entries(KoboMetaMapper.triggerUpdate).find(_ => _[1].includes(formId))![0]
     this.debug(formId, `Fetch Kobo answers...`)
     const updates = await this.prisma.koboAnswers.findMany({
       where: {formId},
@@ -161,6 +162,7 @@ export class KoboMetaService {
         [JOIN_COL]: true,
       },
       where: {
+        formId: destinationFormId,
         [JOIN_COL]: {in: updates.map(_ => _.value)}
       }
     }).then(_ => seq(_).groupByAndApply(
@@ -182,18 +184,12 @@ export class KoboMetaService {
       data: createPersonInput,
     })
     this.debug(formId, `Update ${updates.length}...`)
-    // await Promise.all(updates.map(async ([koboId, {persons, ...update}], i) => {
-    //   return this.prisma.koboMeta.updateMany({
-    //     where: {koboId: {in: [koboId]}},
-    //     data: update,
-    //   })
-    // }))
     await PromisePool
       .withConcurrency(this.conf.db.maxConcurrency)
       .for(updates)
       .process(async ({value, changes: {persons, ...update}}, i) => {
         return this.prisma.koboMeta.updateMany({
-          where: {[JOIN_COL]: value},
+          where: {[JOIN_COL]: value, formId: destinationFormId},
           data: update,
         })
       })
