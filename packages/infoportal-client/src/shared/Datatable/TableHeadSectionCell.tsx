@@ -63,6 +63,7 @@ export const TableHeadSectionCell = ({
     <tr className={cx('tr', classes.tr)}>
       {map(Obj.entries(seq(columns).groupBy(_ => _.groupLabel ?? 'None')), groups => groups.length > 1 && groups.map(([group, cols], i) =>
         <th
+          key={group}
           style={{
             color: t.palette.getContrastText(colors[i % colors.length]),
             background: colors[i % colors.length]

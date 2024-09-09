@@ -10,7 +10,7 @@ import {DatabaseViewVisibility} from '@/core/sdk/server/databaseView/DatabaseVie
 import {PanelTitle} from '@/shared/Panel'
 import {IpAlert} from '@/shared'
 import {DatabaseViewInputRow} from '@/features/Database/KoboTable/view/DatabaseViewInputRow'
-import {DatabaseViewDefaultName} from '@/features/Database/KoboTable/useDatabaseView'
+import {DatabaseViewDefaultName} from '@/features/Database/KoboTable/view/useDatabaseView'
 
 interface FormCreate {
   name: string
@@ -74,8 +74,8 @@ export const DatabaseViewInput = ({sx}: {
       <Badge color="info" badgeContent="NEW!">
         <IpBtn
           icon="visibility"
-          color="primary"
-          variant="light"
+          color="inherit"
+          variant="input"
           endIcon={<Icon sx={{color: t.palette.text.secondary}}>arrow_drop_down</Icon>}
           children={ctx.currentView?.name ?? '-'}
           sx={{

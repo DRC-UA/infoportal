@@ -426,6 +426,7 @@ const MealVerificationTableContent = <
                 translateChoice: schema.translate.choice,
                 translateQuestion: schema.translate.question,
                 m,
+                theme: t,
                 getRow: _ => _.data,
                 choicesIndex: schema.schemaHelper.choicesIndex,
               })

@@ -83,7 +83,7 @@ export const DatatableHead = (() => {
       </tr>
       <tr>
         {select?.getId && (
-          <td className="td-sticky-start"/>
+          <td className="td-sticky-start td"/>
         )}
         {columns.map(c => {
           const sortedByThis = search.sortBy === c.id ?? false

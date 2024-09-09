@@ -1,4 +1,4 @@
-import {Alert, Box, Dialog, DialogActions, DialogContent, DialogTitle, Icon, Skeleton, Switch} from '@mui/material'
+import {Alert, Box, Dialog, DialogActions, DialogContent, DialogTitle, Icon, Skeleton, Switch, useTheme} from '@mui/material'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
@@ -169,12 +169,14 @@ const KoboAnswerQuestionView = ({
   const langIndex = useKoboSchemaContext()
   const {formatDateTime} = useI18n()
   const {m} = useI18n()
+  const t = useTheme()
   const columns = useMemo(() => {
     if (questionSchema.type === 'begin_repeat')
       return getColumnBySchema({
         data: row[questionSchema.name],
         m,
         formId,
+        theme: t,
         schema: schema.schemaHelper.groupSchemas[questionSchema.name],
         translateQuestion: schema.translate.question,
         translateChoice: schema.translate.choice,

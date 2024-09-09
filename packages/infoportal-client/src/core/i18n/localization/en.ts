@@ -764,7 +764,13 @@ export const en = Object.freeze({
       tagNotUpdated: 'Failed to update tag. Reloading clean data set...',
       downloadAsXLS: 'Download <b>filtered data</b> as XLS',
       registerNewForm: 'Register new form',
-      repeatGroupsAsColumns: `Display repeat groups as new columns (also visible in XLS exports).`,
+      repeatAs: 'Show Grouped questions as',
+      repeatAsColumn: 'New columns',
+      // repeatAsColumnDesc: 'Display each group question in a dedicated column.',
+      repeatAsRows: 'New rows',
+      repeatDont: `Squashed in 1 column`,
+      repeatAsQuestionName: 'Select group to repeat',
+      // repeatAsRowDesc: '',
       title: (form?: string) => `Kobo Database${form ? `: <b>${form}</b>` : ``}`,
       showAllQuestions: 'Show unanswered questions',
       pullData: `Synchronize last Kobo data.`,
@@ -815,7 +821,7 @@ export const en = Object.freeze({
       }
     },
     _admin: {
-      createGroup: 'Create group',
+      createGroup: 'Create groupDisplay',
     },
     _shelter: {
       assignedContractor: 'Assigned contractors',
@@ -932,7 +938,7 @@ export const en = Object.freeze({
         CaseManagement: 'Case Management',
         LegalAid: 'GBV Legal Aid',
         MHPSSActivities: 'MHPSS awareness session',
-        PsychosocialGroupSession: 'Psychosocial group session',
+        PsychosocialGroupSession: 'Psychosocial groupDisplay session',
       }
       const activitiesMerged_: Partial<Record<DrcProgram, string>> = {
         ...activities_,

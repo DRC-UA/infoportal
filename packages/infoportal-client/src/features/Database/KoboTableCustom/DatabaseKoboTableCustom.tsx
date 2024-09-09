@@ -143,6 +143,7 @@ export const DatabaseTableCustomRoute = () => {
         translateChoice: schema.translate.choice,
         choicesIndex: schema.schemaHelper.choicesIndex,
         m,
+        theme: t,
         getRow: _ => (_[formId] ?? {}) as any,
         // externalFilesIndex: externalFilesIndex,
         // repeatGroupsAsColumn: repeatGroupsAsColumns,

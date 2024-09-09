@@ -8,7 +8,8 @@ import {databaseCustomMapping} from '@/features/Database/KoboTable/customization
 import * as csvToJson from 'csvtojson'
 import {Obj, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetchers'
-import {UseDatabaseView, useDatabaseView} from '@/features/Database/KoboTable/useDatabaseView'
+import {UseDatabaseView, useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
+import {UseDatabaseGroupDisplay, useDatabaseGroupDisplay} from '@/features/Database/KoboTable/groupDisplay/useDatabaseGroupDisplay'
 
 export type ExternalFilesChoices = {list_name: string, name: string, label: string}
 export type KoboExternalFilesIndex = Record<string, Record<string, ExternalFilesChoices>>
@@ -26,6 +27,7 @@ export interface DatabaseKoboContext {
   setData: Dispatch<SetStateAction<KoboMappedAnswer[]>>
   externalFilesIndex?: KoboExternalFilesIndex
   view: UseDatabaseView
+  groupDisplay: UseDatabaseGroupDisplay
 }
 
 const Context = React.createContext({} as DatabaseKoboContext)
@@ -101,6 +103,7 @@ export const DatabaseKoboTableProvider = (props: {
   }, [data])
 
   const view = useDatabaseView(form.id)
+  const groupDisplay = useDatabaseGroupDisplay(Object.keys(props.schema.schemaHelper.groupSchemas)[0])
 
   return (
     <Context.Provider value={{
@@ -109,6 +112,7 @@ export const DatabaseKoboTableProvider = (props: {
       asyncRefresh,
       asyncEdit,
       view,
+      groupDisplay,
       data: mappedData,
       setData: setMappedData as Dispatch<SetStateAction<KoboMappedAnswer[]>>,
     }}>

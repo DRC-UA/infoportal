@@ -3,7 +3,7 @@ import React, {useCallback, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {useMpcaContext} from '../MpcaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {UseBNREComputed, useBNREComputed} from '../useBNREComputed'
+import {UseMpcaComputed, useMpcaComputed} from '../useMpcaComputed'
 import {fnSwitch, Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {DrcOffice, KoboIndex, MpcaEntity, OblastIndex, Period, toPercent, WfpDeduplicationStatus,} from 'infoportal-common'
 import {Txt} from '@/shared/Txt'
@@ -136,7 +136,7 @@ export const MpcaDashboard = () => {
     return DataFilter.filterData(filteredBy_date, filterShape, filters)
   }, [mappedData, filters, periodFilter, filterShape])
 
-  const computed = useBNREComputed({data: filteredData ?? seq()})
+  const computed = useMpcaComputed({data: filteredData ?? seq()})
 
   const getAmount = useCallback((_: MpcaEntity) => {
     const amount = _[amountType]
@@ -210,7 +210,7 @@ export const _MPCADashboard = ({
   getAmount: (_: MpcaEntity) => number | undefined
   amountType: MpcaAmountType
   currency: Currency
-  computed: NonNullable<UseBNREComputed>
+  computed: NonNullable<UseMpcaComputed>
 }) => {
   const {session} = useSession()
   const {m, formatDate, formatLargeNumber} = useI18n()

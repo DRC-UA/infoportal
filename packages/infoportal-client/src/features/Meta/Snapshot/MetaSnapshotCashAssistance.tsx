@@ -13,7 +13,7 @@ import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {MetaSnapshotHeader, MetaSnapshotProps} from './MetaSnapshot'
 import {MpcaProvider, useMpcaContext} from '@/features/Mpca/MpcaContext'
-import {useBNREComputed} from '@/features/Mpca/useBNREComputed'
+import {useMpcaComputed} from '@/features/Mpca/useMpcaComputed'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {format} from 'date-fns'
 import {ChartLine} from '@/shared/charts/ChartLine'
@@ -46,7 +46,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
   const data = useMemo(() => ctx.data?.filter(_ => PeriodHelper.isDateIn(period, _.date)) ?? seq([]), [ctx.data])
   const dataMpca = data.filter(_ => _.sector === DrcSector.MPCA)
   const persons = data.flatMap(_ => _.persons ?? [])
-  const computed = useBNREComputed({data: dataMpca})
+  const computed = useMpcaComputed({data: dataMpca})
   const totalAmount = useMemo(() => data.sum(_ => _.amountUahFinal ?? 0), [data])
 
   return (

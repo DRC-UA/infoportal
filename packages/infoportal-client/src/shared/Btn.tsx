@@ -3,8 +3,10 @@ import {forwardRef, ReactNode} from 'react'
 import {alpha, Button, CircularProgress, Icon, Tooltip} from '@mui/material'
 import {ButtonProps} from '@mui/material/Button'
 import {makeStyles} from 'tss-react/mui'
+import {fnSwitch} from '@alexandreannic/ts-utils'
+import {styleUtils} from '@/core/theme'
 
-const useStyles = makeStyles<{loading?: boolean, light?: boolean}>()((t, {loading, light}) => ({
+const useStyles = makeStyles<{loading?: boolean, variant?: IpBtnVariant}>()((t, {loading, variant}) => ({
   icon: {
     height: '22px !important',
     lineHeight: '22px !important',
@@ -12,14 +14,26 @@ const useStyles = makeStyles<{loading?: boolean, light?: boolean}>()((t, {loadin
     marginRight: t.spacing(1),
   },
   root: {
-    ...light && {
-      fontWeight: 500,
-      background: alpha(t.palette.primary.main, .12),
-      textTransform: 'inherit',
-      '&:hover': {
-        background: alpha(t.palette.primary.main, .2),
+    ...fnSwitch(variant!, {
+      light: {
+        fontWeight: 500,
+        background: alpha(t.palette.primary.main, .12),
+        textTransform: 'inherit',
+        '&:hover': {
+          background: alpha(t.palette.primary.main, .2),
+        }
+      },
+      input: {
+        borderRadius: t.shape.borderRadius + 'px',
+        fontWeight: 500,
+        background: styleUtils(t).color.input,
+        border: '1px solid ' + styleUtils(t).color.inputBorder,
+        textTransform: 'inherit',
+        '&:hover': {
+          background: alpha(t.palette.primary.main, .2),
+        }
       }
-    },
+    }, () => undefined),
   },
   content: {
     display: 'flex',
@@ -41,11 +55,14 @@ const useStyles = makeStyles<{loading?: boolean, light?: boolean}>()((t, {loadin
   }
 }))
 
+export type IpBtnVariant = ButtonProps['variant'] | 'light' | 'input'
+
 export interface IpBtnProps extends Omit<ButtonProps, 'variant'> {
-  variant?: ButtonProps['variant'] | 'light'
+  variant?: IpBtnVariant
   tooltip?: ReactNode
   loading?: boolean
   icon?: string
+  /** @deprecated use native endIcon props */
   iconAfter?: string
   before?: ReactNode
   iconSx?: ButtonProps['sx']
@@ -66,11 +83,11 @@ export const IpBtn = forwardRef(({
   iconSx,
   ...props
 }: IpBtnProps, ref: any) => {
-  const {classes, cx} = useStyles({loading, light: variant === 'light'})
+  const {classes, cx} = useStyles({loading, variant})
   const btn = (
     <Button
       {...props}
-      variant={variant === 'light' ? undefined : variant}
+      variant={variant === 'light' || variant === 'input' ? undefined : variant}
       color={color}
       disabled={disabled || loading}
       ref={ref}

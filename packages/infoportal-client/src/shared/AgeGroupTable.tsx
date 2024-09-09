@@ -63,7 +63,7 @@ export const AgeGroupTable = ({
             )}
             {enablePwdFilter && (
               <IpBtn
-                variant="outlined"
+                variant="input"
                 iconSx={{
                   color: (t: Theme) => t.palette.text.disabled,
                   transform: 'rotate(90deg)'

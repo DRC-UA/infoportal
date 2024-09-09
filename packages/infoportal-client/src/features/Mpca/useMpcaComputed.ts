@@ -2,9 +2,9 @@ import {Enum, Seq} from '@alexandreannic/ts-utils'
 import {useMemo} from 'react'
 import {DrcSupportSuggestion, MpcaEntity} from 'infoportal-common'
 
-export type UseBNREComputed = ReturnType<typeof useBNREComputed>
+export type UseMpcaComputed = ReturnType<typeof useMpcaComputed>
 
-export const useBNREComputed = ({
+export const useMpcaComputed = ({
   data,
 }: {
   data: Seq<MpcaEntity>
@@ -32,16 +32,5 @@ export const useBNREComputed = ({
         .filter((k, v) => v > 1)
         .get()
     })(),
-    // ageGroup: chain(flatData.filter(_ => _?.hh_char_hh_det_age !== undefined).groupBy(_ => Person.groupByAgeGroup()(_, p => +p?.hh_char_hh_det_age!)))
-    //   .map(_ => Enum.entries(_).map(([group, v]) => ({
-    //       key: group,
-    //       Male: v.filter(_ => _.hh_char_hh_det_gender === 'male').length,
-    //       Female: v.filter(_ => _.hh_char_hh_det_gender === 'female').length,
-    //       Other: v.filter(_ => _.hh_char_hh_det_gender === undefined).length,
-    //     })
-    //   ))
-    //   .map(_ => _.sort((a, b) => Object.keys(Person.ageGroup.DRC).indexOf(b.key) - Object.keys(Person.ageGroup.DRC).indexOf(a.key)))
-    //   .get
-    // ,
   }
 }, [data])

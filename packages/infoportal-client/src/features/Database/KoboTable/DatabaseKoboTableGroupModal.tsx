@@ -1,7 +1,7 @@
 import {PanelHead} from '@/shared/Panel'
 import {Txt} from '@/shared/Txt'
 import React, {useMemo} from 'react'
-import {Popover} from '@mui/material'
+import {Popover, useTheme} from '@mui/material'
 import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useI18n} from '@/core/i18n'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -20,6 +20,7 @@ export const DatabaseKoboTableGroupModal = ({
   anchorEl: any,
 }) => {
   const {m} = useI18n()
+  const t = useTheme()
   const ctx = useDatabaseKoboTableContext()
 
   const columns = useMemo(() => {
@@ -27,6 +28,7 @@ export const DatabaseKoboTableGroupModal = ({
       formId: ctx.form.id,
       data: groupData,
       m,
+      theme: t,
       schema: ctx.schema.schemaHelper.groupSchemas[name],
       translateQuestion: ctx.schema.translate.question,
       translateChoice: ctx.schema.translate.choice,

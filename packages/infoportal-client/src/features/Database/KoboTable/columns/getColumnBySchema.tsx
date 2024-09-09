@@ -9,7 +9,7 @@ import {
   KoboSchemaHelper,
   KoboTranslateChoice,
   KoboTranslateQuestion,
-  removeHtml
+  removeHtml,
 } from 'infoportal-common'
 import {I18nContextProps, useI18n} from '@/core/i18n/I18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
@@ -25,14 +25,8 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
-import {IconProps} from '@mui/material'
-
-const imageExtension = new Set([
-  '.png',
-  '.jpg',
-  '.jpeg',
-  '.gif',
-])
+import {alpha, IconProps, Theme} from '@mui/material'
+import {UseDatabaseGroupDisplay} from '@/features/Database/KoboTable/groupDisplay/useDatabaseGroupDisplay'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()
@@ -76,12 +70,13 @@ const editableColumns: Set<KoboApiColType> = new Set([
   'datetime',
 ])
 
-interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
+type GetColumnBySchemaProps<T extends Record<string, any> = any> = {
   formId: KoboId
   data?: T[]
   externalFilesIndex?: KoboExternalFilesIndex
   choicesIndex: KoboSchemaHelper.Index['choicesIndex']
   m: I18nContextProps['m']
+  theme: Theme
   translateChoice: KoboTranslateChoice
   translateQuestion: KoboTranslateQuestion
   groupSchemas: Record<string, KoboApiQuestionSchema[]>
@@ -92,11 +87,11 @@ interface GetColumnBySchemaProps<T extends Record<string, any> = any> {
   }) => void,
   groupIndex?: number
   groupName?: string
-  repeatGroupsAsColumn?: boolean
   selectedIds?: KoboAnswerId[]
   getRow?: (_: T) => KoboMappedAnswer,
   onSelectColumn?: (_: string) => void
-  onHideColumn?: (_: string) => void
+  repeatAs?: UseDatabaseGroupDisplay['repeatAs']
+  repeatedQuestion?: UseDatabaseGroupDisplay['repeatedQuestion']
 }
 
 export const DatatableHeadTypeIconByKoboType = ({children, ...props}: {
@@ -126,6 +121,8 @@ const koboIconMap = {
   geopoint: 'location_on',
 }
 
+const colorRepeatedQuestionHeader = (t: Theme) => alpha(t.palette.info.light, .22)
+
 export const getColumnByQuestionSchema = <T extends Record<string, any | undefined>>({
   data,
   m,
@@ -140,10 +137,11 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   groupIndex,
   getRow = _ => _ as unknown as KoboMappedAnswer,
   groupName,
-  repeatGroupsAsColumn,
   selectedIds,
   onSelectColumn,
-  onHideColumn,
+  repeatedQuestion,
+  repeatAs,
+  theme,
 }: GetColumnBySchemaProps<T> & {
   q: KoboApiQuestionSchema,
 }): DatatableColumn.Props<T>[] => {
@@ -277,20 +275,39 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
         }
       }
       case 'begin_repeat': {
-        if (repeatGroupsAsColumn) {
-          return mapFor(17, i => getColumnBySchema({
-            data: data?.map(_ => getRow(_)[q.name]) as any,
-            groupSchemas,
-            schema: groupSchemas[q.name],
-            translateQuestion,
-            formId,
-            translateChoice,
-            choicesIndex,
-            m,
-            onOpenGroupModal,
-            groupIndex: i,
-            groupName: q.name,
-          })).flat()
+        if (repeatAs === 'columns') {
+          return mapFor(17, i => {
+            return groupSchemas[q.name]
+              .filter(subQ => !ignoredColType.has(subQ.type))
+              .flatMap(subQ => {
+                return getColumnByQuestionSchema({
+                  q: subQ,
+                  data: data?.map(_ => getRow(_)[q.name]) as any,
+                  groupSchemas,
+                  translateQuestion,
+                  formId,
+                  translateChoice,
+                  choicesIndex,
+                  repeatedQuestion,
+                  repeatAs,
+                  theme,
+                  m,
+                  onOpenGroupModal,
+                  groupIndex: i,
+                  groupName: q.name,
+                })
+              })
+              .map((_, i) => {
+                _.styleHead = {
+                  background: colorRepeatedQuestionHeader(theme),
+                }
+                if (i === 0) {
+                  _.styleHead.borderLeft = '2px solid ' + theme.palette.divider
+                  _.style = () => ({borderLeft: '2px solid ' + theme.palette.divider})
+                }
+                return _
+              })
+          }).flat()
         }
         return {
           ...common,
@@ -405,10 +422,29 @@ export const getColumnBySchema = <T extends Record<string, any>>({
         }
       }
     },
-    ...schema.filter(_ => !ignoredColType.has(_.type)).flatMap(q => getColumnByQuestionSchema({
-      q,
-      getRow,
-      ...props,
-    }))
+    ...schema
+      .filter(_ => !ignoredColType.has(_.type))
+      .flatMap(_ => {
+        if (props.repeatAs === 'rows' && props.repeatedQuestion === _.name && _.type === 'begin_repeat') {
+          return props.groupSchemas[_.name].map(_ => ({..._, isRepeated: true}))
+        }
+        return _
+      })
+      .flatMap(q => {
+        const res = getColumnByQuestionSchema({
+          q,
+          getRow,
+          ...props,
+        })
+        if ((q as any).isRepeated) {
+          res.map(_ => {
+            _.styleHead = {
+              background: colorRepeatedQuestionHeader(props.theme)
+            }
+            return _
+          })
+        }
+        return res
+      })
   ]
 }

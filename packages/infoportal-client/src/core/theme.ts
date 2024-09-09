@@ -60,6 +60,9 @@ export const styleUtils = (t: Theme) => ({
     return `${t.spacing(top)} ${t.spacing(right)} ${t.spacing(bottom)} ${t.spacing(left)}`
   },
   color: {
+    input: 'rgba(100,100,220,.04)',
+    // inputBorder: 'rgba(0,0,0,0)',// 'rgba(0, 0, 0, 0.12)',
+    inputBorder: 'rgba(0, 0, 0, 0.11)',
     toolbar: t.palette.mode === 'dark' ? t.palette.background.paper : 'rgb(237, 242, 250)',//'#e9eef6',
     // toolbar: t.palette.mode === 'dark' ? t.palette.background.paper :'#ebf1f9',//'#e9eef6',
     success: '#00b79f',
@@ -388,8 +391,8 @@ export const muiTheme = ({
           },
           notchedOutline: {
             transition: 'border-color 140ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-            background: 'rgba(0,0,0,.02)',
-            borderColor: 'rgba(0, 0, 0, 0.12)',
+            background: styleUtils(baseTheme).color.input,
+            borderColor: styleUtils(baseTheme).color.inputBorder,
           },
         },
       },

@@ -1,12 +1,10 @@
-import {IpBtn} from '@/shared/Btn'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {KoboAnswerFlat, KoboAnswerId} from 'infoportal-common'
 import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
 import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {Alert, Icon, Switch, Theme, useTheme} from '@mui/material'
-import {usePersistentState} from '@/shared/hook/usePersistantState'
+import {Alert, Icon, useTheme} from '@mui/material'
 import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumnsCustom'
@@ -28,6 +26,8 @@ import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
+import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {DatabaseGroupDisplayInput} from '@/features/Database/KoboTable/groupDisplay/DatabaseGroupDisplayInput'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -41,13 +41,25 @@ export const DatabaseKoboTableContent = ({
   const ctxAnswers = useKoboAnswersContext()
   const ctxEditAnswer = useKoboEditAnswerContext()
   const ctxEditTag = useKoboEditTagContext()
-  const [repeatGroupsAsColumns, setRepeatGroupAsColumns] = usePersistentState<boolean>(false, {storageKey: `database-${ctx.form.id}-repeat-groups`})
   const [selectedIds, setSelectedIds] = useState<KoboAnswerId[]>([])
   const [groupModalOpen, setOpenGroupModalAnswer] = useState<{
     columnId: string,
     group: KoboAnswerFlat[],
     event: any
   } | undefined>()
+
+  const flatData = useMemo(() => {
+    if (ctx.groupDisplay.repeatAs !== 'rows' || ctx.groupDisplay.repeatedQuestion === 'undefined') return ctx.data
+    return ctx.data?.flatMap(answer => {
+      if (answer[ctx.groupDisplay.repeatedQuestion!])
+        return (answer[ctx.groupDisplay.repeatedQuestion!] as KoboMappedAnswer[]).map((_, i) => ({
+          ..._,
+          ...answer,
+          id: answer.id + '-' + i,
+        }) as KoboMappedAnswer)
+      return answer
+    })
+  }, [ctx.data, ctx.groupDisplay.repeatAs, ctx.groupDisplay.repeatedQuestion])
 
   const extraColumns: DatatableColumn.Props<any>[] = useMemo(() => getColumnsCustom({
     selectedIds,
@@ -66,6 +78,7 @@ export const DatabaseKoboTableContent = ({
       formId: ctx.form.id,
       selectedIds: selectedIds,
       data: ctx.data,
+      theme: t,
       schema: ctx.schema.schemaHelper.sanitizedSchema.content.survey,
       groupSchemas: ctx.schema.schemaHelper.groupSchemas,
       translateQuestion: ctx.schema.translate.question,
@@ -73,7 +86,8 @@ export const DatabaseKoboTableContent = ({
       choicesIndex: ctx.schema.schemaHelper.choicesIndex,
       m,
       externalFilesIndex: ctx.externalFilesIndex,
-      repeatGroupsAsColumn: repeatGroupsAsColumns,
+      repeatAs: ctx.groupDisplay.repeatAs,
+      repeatedQuestion: ctx.groupDisplay.repeatedQuestion,
       onOpenGroupModal: setOpenGroupModalAnswer,
       onSelectColumn: (columnName: string) => ctxEditAnswer.open({
         formId: ctx.form.id,
@@ -81,7 +95,15 @@ export const DatabaseKoboTableContent = ({
         answerIds: selectedIds,
       })
     })
-  }, [ctx.schema.schemaUnsanitized, ctxSchema.langIndex, selectedIds, repeatGroupsAsColumns, ctx.externalFilesIndex])
+  }, [
+    ctx.schema.schemaUnsanitized,
+    ctxSchema.langIndex,
+    selectedIds,
+    ctx.groupDisplay.repeatAs,
+    ctx.groupDisplay.repeatedQuestion,
+    ctx.externalFilesIndex,
+    t
+  ])
 
   const columns: DatatableColumn.Props<any>[] = useMemo(() => {
     const base = getColumnsBase({
@@ -150,7 +172,7 @@ export const DatabaseKoboTableContent = ({
         id={ctx.form.id}
         getRenderRowKey={_ => _.id}
         columns={columns}
-        data={ctx.data}
+        data={flatData}
         header={params =>
           <>
             <DatabaseViewInput sx={{mr: 1}}/>
@@ -164,20 +186,8 @@ export const DatabaseKoboTableContent = ({
                 ...ctx.schema.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
               ]}
             />
-            {ctx.schema.schemaHelper.groupsCount > 0 && (
-              <IpBtn
-                icon="move_up"
-                variant="outlined"
-                sx={{mr: 1}}
-                iconSx={{color: (t: Theme) => t.palette.text.disabled, transform: 'rotate(90deg)'}}
-                onClick={() => setRepeatGroupAsColumns(_ => !_)}
-                tooltip={m._koboDatabase.repeatGroupsAsColumns}
-              >
-                <Switch size="small" sx={{mr: -1}} checked={repeatGroupsAsColumns}/>
-              </IpBtn>
-            )}
+            <DatabaseGroupDisplayInput sx={{mr: 1}}/>
             {header?.(params)}
-
             {ctx.form.deploymentStatus === 'archived' && (
               <Alert color="info" icon={<Icon sx={{mr: -1}}>archive</Icon>} sx={{pr: t.spacing(1), pl: t.spacing(.5), pt: 0, pb: 0}}>
                 {m._koboDatabase.isArchived}

@@ -129,10 +129,11 @@ export namespace KoboSchemaHelper {
       surveyCleaned.push(survey[i])
       if (survey[i].type === 'begin_repeat') {
         const groupname = survey[i].name
+        i++
         groupSchemas[groupname] = []
         while (survey[i].type !== 'end_repeat') {
-          i++
           groupSchemas[groupname].push(survey[i])
+          i++
         }
       }
     }
