@@ -21,7 +21,7 @@ export const DatabaseHeadCell = ({
 }) => {
   const {classes} = useStyles()
   return (
-    <Tooltip title={
+    <Tooltip placement="top" title={
       <IpBtn className={classes.btn} size="small" variant="contained" color="primary" onClick={onClick}>
         <Icon fontSize="small">visibility_off</Icon>
       </IpBtn>
