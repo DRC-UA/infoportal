@@ -1,6 +1,6 @@
-import {add, AILocationHelper, DrcProject, DrcProjectHelper, Protection_gbv} from 'infoportal-common'
+import {AILocationHelper, DrcProject, DrcProjectHelper, Protection_gbv} from 'infoportal-common'
 import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {aiInvalidValueFlag} from '@/features/ActivityInfo/shared/AiTable'
 import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
@@ -26,12 +26,18 @@ export namespace AiGbvMapper {
     [DrcProject['UKR-000363 UHF8']]: 'GBV-DRC-00007',
   } as const
 
-  export const mapGbvActivity = (reportingMonth: string) => async (res: ApiPaginate<InferTypedAnswer<'protection_gbv'>>) => {
-    const data: Type[] = await Promise.all(res.data
+  export const mapGbvActivity = (reportingMonth: string) => async (res: ApiPaginate<InferTypedAnswer<'protection_gbv'>>['data']) => {
+    const data: Type[] = await Promise.all(res
       .filter(_ => _.new_ben !== 'no')
       .filter(_ => !!_.activity && !(_.activity.includes('other') && _.activity.length === 1))
       .flatMap(d => {
-        return d.custom.persons!.flatMap(ind => {
+        const kitAssigned = {
+          elderly: d.elderly ?? 0,
+          kit_other: d.kit_other ?? 0,
+          winter: d.winter ?? 0,
+          basic: d.basic ?? 0,
+        }
+        return seq(d.custom.persons!).compactBy('age').sortByNumber(_ => _.age, '9-0').flatMap((ind, index) => {
           return (d.activity ?? []).map(async activity => {
             const res: Type = {
               answer: d,
@@ -53,18 +59,36 @@ export namespace AiGbvMapper {
                 'training_providers': `# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards`,
                 'dignity_kits': `# of women and girls at risk who received dignity kits`,
               }, () => aiInvalidValueFlag as any),
-              ...activity === 'dignity_kits' && {
-                'Type of distribution': fnSwitch(d.distribute!, Protection_gbv.options.distribute, () => aiInvalidValueFlag as any),
-                'Who distributed the kits?': fnSwitch(d.distributor!, Protection_gbv.options.distributor, () => aiInvalidValueFlag as any),
-                'Non-individuals Reached/Quantity': add(d.basic, d.elderly, d.winter, d.kit_other),
-                'Basic/Essential': d.basic ?? 0,
-                'Elderly': d.elderly ?? 0,
-                'Winter': d.winter ?? 0,
-                'Other': d.kit_other ?? 0,
-                'Dignity kits in stock?': 'No',
-                // 'Any assessment/feedback done/collected on post distribution of kits?': fnSwitch(d.feedback!, Protection_gbv.options.feedback, () => 'No assessments planned/done'),
-                'Any assessment/feedback done/collected on post distribution of kits?': 'No assessments planned/done',
-              }
+              ...activity === 'dignity_kits' && (() => {
+                const toDistribute = {
+                  elderly: 0,
+                  winter: 0,
+                  basic: 0,
+                  kit_other: 0,
+                }
+                Obj.keys(kitAssigned).some(kit => {
+                  if (kitAssigned[kit] > 0) {
+                    kitAssigned[kit] = kitAssigned[kit] - 1
+                    toDistribute[kit] = 1
+                    return true
+                  }
+                  return false
+                })
+                if (Obj.values(toDistribute).every(_ => _ === 0)) {
+                  throw new Error('Kit count issue for ' + d.id)
+                }
+                return {
+                  'Type of distribution': fnSwitch(d.distribute!, Protection_gbv.options.distribute, () => aiInvalidValueFlag as any),
+                  'Who distributed the kits?': fnSwitch(d.distributor!, Protection_gbv.options.distributor, () => aiInvalidValueFlag as any),
+                  'Basic/Essential': toDistribute.basic,
+                  'Elderly': toDistribute.elderly,
+                  'Winter': toDistribute.winter,
+                  'Other': toDistribute.kit_other,
+                  'Dignity kits in stock?': 'No',
+                  // 'Any assessment/feedback done/collected on post distribution of kits?': fnSwitch(d.feedback!, Protection_gbv.options.feedback, () => 'No assessments planned/done'),
+                  'Any assessment/feedback done/collected on post distribution of kits?': 'No assessments planned/done',
+                }
+              })()
             }
             return res
           })
