@@ -18,7 +18,8 @@ export const AiGbv = () => {
 
   const req = (period: string) => {
     const filters = PeriodHelper.fromYYYYMM(period)
-    return api.kobo.typedAnswers.search.protection_gbv({filters})
+    return api.kobo.typedAnswers.search.protection_gbv()
+      .then(data => data.data.filter(_ => PeriodHelper.isDateIn(filters, _.date)))
       .then(AiGbvMapper.mapGbvActivity(period))
       .then(data => {
         const bundles: AiGbvBundle[] = []
@@ -71,7 +72,6 @@ export const AiGbv = () => {
                     'Type of distribution': DistributionType,
                     'Who distributed the kits?': DistributionWho,
                     'Dignity kits in stock?': 'No',
-                    'Non-individuals Reached/Quantity': grouped.sum(_ => add(_['Non-individuals Reached/Quantity'])),
                     'Basic/Essential': grouped.sum(_ => add(_['Basic/Essential'])),
                     'Elderly': grouped.sum(_ => add(_['Elderly'])),
                     'Winter': grouped.sum(_ => add(_['Winter'])),

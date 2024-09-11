@@ -62,16 +62,15 @@ export const AiBundleTable = ({
   } = useMemo(() => {
     return {
       activityCols: seq(fetcher.get ?? [])
-        .flatMap(row => Object.keys(row.activity ?? {}).map(_ => ({key: _, type: typeof row.activity[_] === 'number' ? 'number' : 'select_one' as any})))
-        .distinct(_ => _.key),
+        .flatMap(row => Object.keys(row.activity ?? {}))
+        .distinct(_ => _)
+        .map(key => ({key, type: fetcher.get?.some(_ => typeof _.activity[key] === 'number') ? 'number' : 'select_one'})),
       subActivityCols: seq(fetcher.get ?? [])
-        .flatMap(row => Object.keys(row.subActivity ?? {}).map(_ => ({key: _, type: typeof row.subActivity[_] === 'number' ? 'number' : 'select_one' as any})))
-        .distinct(_ => _.key),
+        .flatMap(row => Object.keys(row.subActivity ?? {}))
+        .distinct(_ => _)
+        .map(key => ({key, type: fetcher.get?.some(_ => typeof _.subActivity[key] === 'number') ? 'number' : 'select_one'})),
     }
   }, [fetcher.get])
-
-  console.log(activityCols)
-  console.log(fetcher.get)
 
   const _submit = useAsync((id: string, p: any) => api.activityInfo.submitActivity(p), {
     requestKey: ([i]) => i
@@ -184,24 +183,26 @@ export const AiBundleTable = ({
             styleHead: {borderRight: '3px solid ' + t.palette.divider},
             renderQuick: _ => _.recordId
           },
-          ...activityCols.map(colId => {
+          // @ts-ignore enforce `col.type` type
+          ...activityCols.map(col => {
             return {
-              head: colId.key,
-              id: colId.key,
+              head: col.key,
+              id: col.key,
               // type: 'select_one',
               // type: 'string',
-              type: colId.type,
-              renderQuick: (_: any) => _.activity[colId.key] as any,
+              type: col.type,
+              renderQuick: (_: any) => _.activity[col.key] as any,
             }
           }),
-          ...subActivityCols.map(colId => {
+          // @ts-ignore enforce `col.type` type
+          ...subActivityCols.map(col => {
             return {
-              head: colId.key,
-              id: colId.key,
+              head: col.key,
+              id: col.key,
               // type: 'select_one',
               // type: 'string',
-              type: colId.type,
-              renderQuick: (_: any) => _.subActivity[colId.key] as any,
+              type: col.type,
+              renderQuick: (_: any) => _.subActivity[col.key] as any,
             }
           }),
         ]}

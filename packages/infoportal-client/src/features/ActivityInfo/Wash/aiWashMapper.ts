@@ -1,5 +1,5 @@
 import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from 'infoportal-common'
-import {AiTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiWashType} from '@/features/ActivityInfo/Wash/aiWashType'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {fnSwitch} from '@alexandreannic/ts-utils'
@@ -19,6 +19,8 @@ export namespace AiWashMapper {
     [DrcProject['UKR-000345 BHA2']]: 'WASH-DRC-00005',
     [DrcProject['UKR-000330 SDC2']]: 'WASH-DRC-00006',
     [DrcProject['UKR-000347 DANIDA']]: 'WASH-DRC-00007',
+    [DrcProject['UKR-000329 SIDA H2R']]: 'WASH-DRC-00009',
+    [DrcProject['UKR-000342 Pooled Funds']]: 'WASH-DRC-00009',
   }
 
   const getPlanCode = (p: DrcProject): AiWashType.Type['Activity Plan Code'] => {
