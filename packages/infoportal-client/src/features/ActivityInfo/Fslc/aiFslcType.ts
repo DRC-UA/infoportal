@@ -125,12 +125,12 @@ export namespace AiFslcType {
     'Location type'?: Opt<'Location type'>,
     'Population Group': Opt<'Population Group'>,
     'Number of people reached': number,
-    'Girls (0-17)': number,
-    'Boys (0-17)': number,
+    'Girls (0-17)'?: number,
+    'Boys (0-17)'?: number,
     'Adult Women (18-59)': number,
     'Adult Men (18-59)': number,
-    'Older Women (60+)': number,
-    'Older Men (60+)': number,
+    'Older Women (60+)'?: number,
+    'Older Men (60+)'?: number,
     'Number of people with disability'?: number,
     'Number of reached households'?: number,
     'New beneficiaries (same activity)': number,
@@ -188,13 +188,15 @@ export namespace AiFslcType {
       'FSLC-DRC-00001': 'csp3fvaltn0j3ou2',
       'FSLC-DRC-00002': 'cbcn08hltn0lsg03',
       'FSLC-DRC-00003': 'cex9iwdltn0pa1y4',
+      'FSLC-DRC-00004': 'c9fdyl6m0wi6rxz15j',
+      'FSLC-DRC-00005': 'c8ds712m0wibuyo15k',
     },
     'Activity and indicator': {
       [DrcProgram.SectoralCashForAgriculture]: 'cv58tzkluclbdwv3',
       [DrcProgram.SectoralCashForAnimalFeed]: 'cx8imqaluclbdwv7',
       [DrcProgram.SectoralCashForAnimalShelterRepair]: 'cy77eh2luclbdwvb',
       [DrcProgram.VET]: 'ca0kvknluclbdwvy', // Found manually from AI
-      [DrcProgram.MSME]: '<TODO>', // Found manually from AI
+      [DrcProgram.MSME]: 'cwf5wugluclbdwvc', // Found manually from AI
       // [DrcProgram.SectoralCashForAgriculture]: activities['Agriculture and livestock inputs (cash)']['Agricultural grants']['# of individuals receiving sectoral cash to contributing to household food security'],
       // [DrcProgram.SectoralCashForAnimalFeed]: activities['Agriculture and livestock inputs (cash)']['Sectoral cash for animal feed']['# of individuals receiving sectoral cash to contributing to household food security'],
       // [DrcProgram.SectoralCashForAnimalShelterRepair]: activities['Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain']['Temporary repair of livestock shelter/barns']['# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage'],

@@ -157,7 +157,8 @@ export class KoboMetaMapperEcrec {
         status: KoboMetaHelper.mapValidationStatus(row.tags?._validation),
         lastStatusUpdate: answer.date_payment,
         tags: {
-          employeesCount: fnSwitch(answer.there_paid_employees_quantity!, {
+          amount: answer.much_need_grant,
+          employeesCount: 1 + fnSwitch(answer.there_paid_employees_quantity!, {
             '0_5_people': 3,
             '5_10_people': 8,
             '10_15_people': 13,

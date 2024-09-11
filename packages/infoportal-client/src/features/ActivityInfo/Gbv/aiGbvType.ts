@@ -1,4 +1,5 @@
-export namespace AiGbvType {type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
+export namespace AiGbvType {
+  type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
 
   export interface Type {
     'ID'?: string,
@@ -14,64 +15,66 @@ export namespace AiGbvType {type Opt<T extends keyof typeof options> = keyof (ty
     'Response Theme': Opt<'Response Theme'>
   }
 
-  export const map = (a: Type) => ({
-    'cvb0gcplqf3085j4s': a['ID'] === undefined ? undefined : a['ID'],
-    'c1g03yllqf3085j4t': a['Reporting Organization'] === undefined ? undefined : 'czbgrslpwg36j52' + ':' + options['Reporting Organization'][a['Reporting Organization']!],
-    'ct68whplqf3085j4u': a['Implementing Partner'] === undefined ? undefined : a['Implementing Partner'],
-    'cz796xnlqf3085j4v': a['Implementing Partner 2'] === undefined ? undefined : a['Implementing Partner 2'],
-    'cokrtv7lrixjgcd9': a['Plan/Project Code'] === undefined ? undefined : 'cqfsgcblr6f4hbpzu' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
-    'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + options['Oblast'][a['Oblast']!],
-    'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : a['Raion'],
-    'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : a['Hromada'],
-    'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : a['Settlement'],
-    'ce0zvlllqf3085j52': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
-    'c18374vlqf3085j54': a['Response Theme'] === undefined ? undefined : options['Response Theme'][a['Response Theme']!]
-  })
+  export const map = (a: Type) => {
+    return ({
+      'cvb0gcplqf3085j4s': a['ID'] === undefined ? undefined : a['ID'],
+      'c1g03yllqf3085j4t': a['Reporting Organization'] === undefined ? undefined : 'czbgrslpwg36j52' + ':' + options['Reporting Organization'][a['Reporting Organization']!],
+      'ct68whplqf3085j4u': a['Implementing Partner'] === undefined ? undefined : a['Implementing Partner'],
+      'cz796xnlqf3085j4v': a['Implementing Partner 2'] === undefined ? undefined : a['Implementing Partner 2'],
+      'cokrtv7lrixjgcd9': a['Plan/Project Code'] === undefined ? undefined : 'cqfsgcblr6f4hbpzu' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
+      'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast']!,
+      'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : a['Raion'],
+      'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : a['Hromada'],
+      'cn43jajlqf3085j51': a['Settlement'] === undefined ? undefined : a['Settlement'],
+      'ce0zvlllqf3085j52': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
+      'c18374vlqf3085j54': a['Response Theme'] === undefined ? undefined : options['Response Theme'][a['Response Theme']!]
+    })
+  }
 
   export const options = {
     'Reporting Organization': {
-      "Danish Refugee Council": 'cloyih3lpwhjdsu2r0'
+      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'
     },
     'Plan/Project Code': {
-      "GBV-DRC-00001": 'c10nfqbls2wqyvg2',
-      "GBV-DRC-00002": 'co0svlsls2x3ndr3',
-      "GBV-DRC-00003": 'cftn5bgls2xbfl14',
-      "GBV-DRC-00004": 'cqr8n0hls2xh58h5',
-      "GBV-DRC-00005": 'c3xqrqfls2xll546',
-      "GBV-DRC-00006": 'cujyq82lx8vzpq17',
-      "GBV-DRC-00007": 'cd2wcsflx8w67gb8'
+      'GBV-DRC-00001': 'c10nfqbls2wqyvg2',
+      'GBV-DRC-00002': 'co0svlsls2x3ndr3',
+      'GBV-DRC-00003': 'cftn5bgls2xbfl14',
+      'GBV-DRC-00004': 'cqr8n0hls2xh58h5',
+      'GBV-DRC-00005': 'c3xqrqfls2xll546',
+      'GBV-DRC-00006': 'cujyq82lx8vzpq17',
+      'GBV-DRC-00007': 'cd2wcsflx8w67gb8'
     },
     'Oblast': {
-      "Autonomous Republic of Crimea_Автономна Республіка Крим": 'c5c2sr3lq3kjj6gd',
-      "Cherkaska_Черкаська": 'clbgltvlq3kjj6he',
-      "Chernihivska_Чернігівська": 'c7jz1shlq3kjj6hf',
-      "Chernivetska_Чернівецька": 'c78zq2rlq3kjj6hg',
-      "Dnipropetrovska_Дніпропетровська": 'c6l0fjylq3kjj6hh',
-      "Donetska_Донецька": 'c3memjqlq3kjj6hi',
-      "Ivano-Frankivska_Івано-Франківська": 'cy93k5lq3kjj6hj',
-      "Kharkivska_Харківська": 'cbbcx5ylq3kjj6hk',
-      "Khersonska_Херсонська": 'cq8k2oylq3kjj6hl',
-      "Khmelnytska_Хмельницька": 'cliunu3lq3kjj6hm',
-      "Kirovohradska_Кіровоградська": 'cxvw276lq3kjj6hn',
-      "Kyiv_Київ": 'cwe11jplq3kjj6ho',
-      "Kyivska_Київська": 'cnp046mlq3kjj6hp',
-      "Luhanska_Луганська": 'ctu8ahklq3kjj6hq',
-      "Lvivska_Львівська": 'cmpyidslq3kjj6hr',
-      "Mykolaivska_Миколаївська": 'ccqvlallq3kjj6hs',
-      "Odeska_Одеська": 'c2uwqqqlq3kjj6ht',
-      "Poltavska_Полтавська": 'cwq2uuxlq3kjj6hu',
-      "Rivnenska_Рівненська": 'c2j0t0flq3kjj6hv',
-      "Sevastopol_Севастополь": 'cjvbpkplq3kjj6hw',
-      "Sumska_Сумська": 'cb4nm4xlq3kjj6hx',
-      "Ternopilska_Тернопільська": 'clrrzfslq3kjj6hy',
-      "Vinnytska_Вінницька": 'cvx17yllq3kjj6hz',
-      "Volynska_Волинська": 'cdzklrblq3kjj6h10',
-      "Zakarpatska_Закарпатська": 'cfqiux5lq3kjj6h11',
-      "Zaporizka_Запорізька": 'cmqvx7elq3kjj6h12',
-      "Zhytomyrska_Житомирська": 'c51dllnlq3kjj6h13'
+      'Autonomous Republic of Crimea_Автономна Республіка Крим': 'c5c2sr3lq3kjj6gd',
+      'Cherkaska_Черкаська': 'clbgltvlq3kjj6he',
+      'Chernihivska_Чернігівська': 'c7jz1shlq3kjj6hf',
+      'Chernivetska_Чернівецька': 'c78zq2rlq3kjj6hg',
+      'Dnipropetrovska_Дніпропетровська': 'c6l0fjylq3kjj6hh',
+      'Donetska_Донецька': 'c3memjqlq3kjj6hi',
+      'Ivano-Frankivska_Івано-Франківська': 'cy93k5lq3kjj6hj',
+      'Kharkivska_Харківська': 'cbbcx5ylq3kjj6hk',
+      'Khersonska_Херсонська': 'cq8k2oylq3kjj6hl',
+      'Khmelnytska_Хмельницька': 'cliunu3lq3kjj6hm',
+      'Kirovohradska_Кіровоградська': 'cxvw276lq3kjj6hn',
+      'Kyiv_Київ': 'cwe11jplq3kjj6ho',
+      'Kyivska_Київська': 'cnp046mlq3kjj6hp',
+      'Luhanska_Луганська': 'ctu8ahklq3kjj6hq',
+      'Lvivska_Львівська': 'cmpyidslq3kjj6hr',
+      'Mykolaivska_Миколаївська': 'ccqvlallq3kjj6hs',
+      'Odeska_Одеська': 'c2uwqqqlq3kjj6ht',
+      'Poltavska_Полтавська': 'cwq2uuxlq3kjj6hu',
+      'Rivnenska_Рівненська': 'c2j0t0flq3kjj6hv',
+      'Sevastopol_Севастополь': 'cjvbpkplq3kjj6hw',
+      'Sumska_Сумська': 'cb4nm4xlq3kjj6hx',
+      'Ternopilska_Тернопільська': 'clrrzfslq3kjj6hy',
+      'Vinnytska_Вінницька': 'cvx17yllq3kjj6hz',
+      'Volynska_Волинська': 'cdzklrblq3kjj6h10',
+      'Zakarpatska_Закарпатська': 'cfqiux5lq3kjj6h11',
+      'Zaporizka_Запорізька': 'cmqvx7elq3kjj6h12',
+      'Zhytomyrska_Житомирська': 'c51dllnlq3kjj6h13'
     },
     'Response Theme': {
-      "No specific theme": 'c40c4vklqf3085j55'
+      'No specific theme': 'c40c4vklqf3085j55'
     }
   }
 
@@ -145,76 +148,76 @@ export namespace AiGbvType {type Opt<T extends keyof typeof options> = keyof (ty
 
   export const optionsSub = {
     'Population Group': {
-      "Internally Displaced": 'cvw4on6lq6dgcoj5',
-      "Non-Displaced": 'ck6ulx8lq6dgcok6',
-      "Returnees": 'cuz9qi9lq6dgcok7'
+      'Internally Displaced': 'cvw4on6lq6dgcoj5',
+      'Non-Displaced': 'ck6ulx8lq6dgcok6',
+      'Returnees': 'cuz9qi9lq6dgcok7'
     },
     'Type of beneficiaries': {
-      "New beneficiaries": 'clxysqflslppffd5',
-      "Repeated beneficiaries": 'cv19gg2lslpptjy7'
+      'New beneficiaries': 'clxysqflslppffd5',
+      'Repeated beneficiaries': 'cv19gg2lslpptjy7'
     },
     'Indicators': {
-      "# of individuals supported with GBV case management that meet GBViE minimum standards": 'c296s26lqmgu66ul',
-      "# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)": 'c5q9o3xlqmgu66um',
-      "# of GBV hotlines operational": 'c6rdt1clqmgu66un',
-      "# of individuals who received services in GBV crisis rooms": 'citub83lqmgu66uo',
-      "# of operational GBV crisis rooms": 'c2d0f3ulqmgu66up',
-      "# of individuals who received services in GBV day care centers": 'cjeproolqmgu66uq',
-      "# of operational GBV day care center": 'cm844hglqmgu66ur',
-      "# of individuals who received services in shelters": 'c72si1ylqmgu66us',
-      "# of operational GBV shelters": 'cv5v0z7lqmgu66ut',
-      "# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces": 'c5x9amllqmgu66uu',
-      "# of operational women and girls' safe spaces": 'cagbueslqmgu66uv',
-      "# of individuals at risk supported with GBV specialized legal assistance and counseling": 'c6g3oerlqmgu66uw',
-      "# of individuals reached with humanitarian cash and voucher assistance for GBV case management and/or other GBV response": 'cn8myhdlqmgu66ux',
-      "# of women and girls at risk who received dignity kits": 'chyifk6lqmgu66uy',
-      "# of individuals reached with awareness-raising activities and GBV-life-saving information": 'cvauilxlqmgu66uz',
-      "# of GBV awareness campaigns through social media, websites, TV and radio": 'ctrecbblqmgu66u10',
-      "# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards": 'c8wzmoylqmgu66u11',
-      "# of GBV assessments conducted": 'cdycodllqmgu66u12',
-      "# of GBV safety audits conducted in collective sites and selected public areas": 'cduyu4slqmgu66u13',
-      "# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards": 'c5zjdi5lqmgu66u14',
-      "# of GBV advocacy interventions undertaken with decision-makers and communities": 'c3ufluolqmgu66u15'
+      '# of individuals supported with GBV case management that meet GBViE minimum standards': 'c296s26lqmgu66ul',
+      '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)': 'c5q9o3xlqmgu66um',
+      '# of GBV hotlines operational': 'c6rdt1clqmgu66un',
+      '# of individuals who received services in GBV crisis rooms': 'citub83lqmgu66uo',
+      '# of operational GBV crisis rooms': 'c2d0f3ulqmgu66up',
+      '# of individuals who received services in GBV day care centers': 'cjeproolqmgu66uq',
+      '# of operational GBV day care center': 'cm844hglqmgu66ur',
+      '# of individuals who received services in shelters': 'c72si1ylqmgu66us',
+      '# of operational GBV shelters': 'cv5v0z7lqmgu66ut',
+      '# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces': 'c5x9amllqmgu66uu',
+      '# of operational women and girls\' safe spaces': 'cagbueslqmgu66uv',
+      '# of individuals at risk supported with GBV specialized legal assistance and counseling': 'c6g3oerlqmgu66uw',
+      '# of individuals reached with humanitarian cash and voucher assistance for GBV case management and/or other GBV response': 'cn8myhdlqmgu66ux',
+      '# of women and girls at risk who received dignity kits': 'chyifk6lqmgu66uy',
+      '# of individuals reached with awareness-raising activities and GBV-life-saving information': 'cvauilxlqmgu66uz',
+      '# of GBV awareness campaigns through social media, websites, TV and radio': 'ctrecbblqmgu66u10',
+      '# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards': 'c8wzmoylqmgu66u11',
+      '# of GBV assessments conducted': 'cdycodllqmgu66u12',
+      '# of GBV safety audits conducted in collective sites and selected public areas': 'cduyu4slqmgu66u13',
+      '# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards': 'c5zjdi5lqmgu66u14',
+      '# of GBV advocacy interventions undertaken with decision-makers and communities': 'c3ufluolqmgu66u15'
     },
     'Type of distribution': {
-      "Via convoys": 'csct9jvlz6vk00d2',
-      "Through static centers": 'cenbkqlz6vlilq4',
-      "Through mobile teams or door-to-door": 'cw0jeaclz6vluuk5'
+      'Via convoys': 'csct9jvlz6vk00d2',
+      'Through static centers': 'cenbkqlz6vlilq4',
+      'Through mobile teams or door-to-door': 'cw0jeaclz6vluuk5'
     },
     'Who distributed the kits?': {
-      "Employees/staff/volunteers of the reporting organization": 'crm2lwdlz6voilh6',
-      "Employees/staff/volunteers of the implementing organization": 'cspb9mblz6vpwbb8',
-      "Community volunteers": 'ck9eujklz6vqqik9',
-      "Local authority": 'crbln39lz6vqw1ca'
+      'Employees/staff/volunteers of the reporting organization': 'crm2lwdlz6voilh6',
+      'Employees/staff/volunteers of the implementing organization': 'cspb9mblz6vpwbb8',
+      'Community volunteers': 'ck9eujklz6vqqik9',
+      'Local authority': 'crbln39lz6vqw1ca'
     },
     'Dignity kits in stock?': {
-      "Yes": 'c9z4jlglz9rrvop2',
-      "No": 'c10f080lz9rteeo4'
+      'Yes': 'c9z4jlglz9rrvop2',
+      'No': 'c10f080lz9rteeo4'
     },
     'Current status of stock': {
-      "Procured": 'cnvgyiolz9s9v7ce',
-      "Outside of country": 'c9n9kmhlz9scej7g',
-      "Currently in transit to Ukraine": 'c5l0hsolz9scn45h',
-      "In location in Ukraine": 'cciatn6lz9sczv5i'
+      'Procured': 'cnvgyiolz9s9v7ce',
+      'Outside of country': 'c9n9kmhlz9scej7g',
+      'Currently in transit to Ukraine': 'c5l0hsolz9scn45h',
+      'In location in Ukraine': 'cciatn6lz9sczv5i'
     },
     'Any assessment/feedback done/collected on post distribution of kits?': {
-      "No assessments planned/done": 'cbw8wg8lz9sg86uj',
-      "An assessment is planned or ongoing": 'ceijherlz9sjt21l',
-      "Assessment completed – report currently being drafted/finalized": 'cfa27folz9sk1olm',
-      "Assessment completed – report is ready (please share with GBV AoR team)": 'cwy2y3wlz9sk7hzn'
+      'No assessments planned/done': 'cbw8wg8lz9sg86uj',
+      'An assessment is planned or ongoing': 'ceijherlz9sjt21l',
+      'Assessment completed – report currently being drafted/finalized': 'cfa27folz9sk1olm',
+      'Assessment completed – report is ready (please share with GBV AoR team)': 'cwy2y3wlz9sk7hzn'
     },
     'Was the service provided to evacuees?': {
-      "Yes": 'cuieqxklt6ysqm62',
-      "No": 'cw6e6s4lt6z214r4'
+      'Yes': 'cuieqxklt6ysqm62',
+      'No': 'cw6e6s4lt6z214r4'
     },
     'HNRP Scope': {
-      "Outside HNRP Scope": 'c8fdrbqlw6fmedx2'
+      'Outside HNRP Scope': 'c8fdrbqlw6fmedx2'
     },
     'Outside HNRP Scope sub-categories': {
-      "Outside priority areas": 'cvf0ba4lw6fucqv4',
-      "Funding not reported in FTS​": 'c7cah40lw6fula95',
-      "Delivered outside HNRP​ mechanism": 'cj4y1s3lw6furva6',
-      "Not aligned to guidance": 'c8mycj4lw6fv7477'
+      'Outside priority areas': 'cvf0ba4lw6fucqv4',
+      'Funding not reported in FTS​': 'c7cah40lw6fula95',
+      'Delivered outside HNRP​ mechanism': 'cj4y1s3lw6furva6',
+      'Not aligned to guidance': 'c8mycj4lw6fv7477'
     }
   }
 

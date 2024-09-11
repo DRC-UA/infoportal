@@ -1,5 +1,5 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from 'infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
@@ -86,15 +86,21 @@ export namespace AiProtectionMapper {
                     }, () => aiInvalidValueFlag as any),
                     'Population Group': AiMapper.mapPopulationGroup(displacement),
                     'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
-                    'Non-individuals Reached/Quantity': DrcProgram.FGD ? 1 : undefined,
-                    ...DrcProgram.FGD ? {} : disaggregation,
-                    // 'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
-                    // 'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
-                    // 'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
-                    // 'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
-                    // 'Adult Men (18-59)': disaggregation['Adult Men (18-59)'] ?? 0,
-                    // 'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
-                    // 'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
+                    ...fnSwitch<DrcProgram, Partial<AiProtectionType.TypeSub>>(activity, {
+                      [DrcProgram.FGD]: {
+                        'Non-individuals Reached/Quantity': 1,
+                      },
+                    }, () => {
+                      return {
+                        'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
+                        'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
+                        'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
+                        'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
+                        'Adult Men (18-59)': disaggregation['Adult Men (18-59)'] ?? 0,
+                        'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
+                        'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
+                      }
+                    })
                   }
                 })
               }

@@ -1,11 +1,12 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiFslcType} from '@/features/ActivityInfo/Fslc/aiFslcType'
 import {add, DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper, safeNumber} from 'infoportal-common'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch, Seq} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
-import {AiTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
+import {IKoboMeta, KoboMetaEcrecTags} from 'infoportal-common/kobo'
 
 export namespace AiFslcMapper {
   export type Bundle = AiTable<AiFslcType.Type>
@@ -15,6 +16,8 @@ export namespace AiFslcMapper {
       [DrcProject['UKR-000348 BHA3']]: 'FSLC-DRC-00001',
       [DrcProject['UKR-000336 UHF6']]: 'FSLC-DRC-00002',
       [DrcProject['UKR-000352 UHF7']]: 'FSLC-DRC-00003',
+      [DrcProject['UKR-000363 UHF8']]: 'FSLC-DRC-00004',
+      [DrcProject['UKR-000372 ECHO3']]: 'FSLC-DRC-00005',
     }, () => aiInvalidValueFlag + _)
   }
 
@@ -51,7 +54,7 @@ export namespace AiFslcMapper {
               }, () => 'Non-Displaced')
             },
           ],
-          finalTransform: async (grouped, [activity, project, oblast, raion, hromada, settlment, displacement]) => {
+          finalTransform: async (grouped: Seq<IKoboMeta<KoboMetaEcrecTags>>, [activity, project, oblast, raion, hromada, settlment, displacement]) => {
             let disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
             if (activity === DrcProgram.VET) {
               const total = add(disaggregation['Adult Men (18-59)'] + disaggregation['Adult Women (18-59)'])
@@ -73,22 +76,46 @@ export namespace AiFslcMapper {
               'Activity Plan Code': getPlanCode(project) as never,
               ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlment),
               'Population Group': displacement,
-              'New beneficiaries (same activity)': disaggregation['Total Individuals Reached'] ?? 0,
-              'Number of people reached': disaggregation['Total Individuals Reached'] ?? 0,
-              'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
-              'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
-              'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
-              'Adult Men (18-59)': disaggregation['Adult Men (18-59)'] ?? 0,
-              'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
-              'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
-              'Number of people with disability': disaggregation['People with Disability'],
-              'Number of reached households': grouped.length,
+              ...(() => {
+                if (activity === DrcProgram.MSME) {
+                  const total = Math.round(grouped.sum(_ => _.tags?.employeesCount ?? 0) * 2.6)
+                  const women = Math.floor(total / 2)
+                  return {
+                    'New beneficiaries (same activity)': total,
+                    'Number of reached households': grouped.length,
+                    'Number of people reached': total,
+                    'Adult Women (18-59)': women,
+                    'Adult Men (18-59)': total - women,
+                    'Frequency': 'One-off',
+                    'Total Value (local currency)': grouped.sum(_ => _.tags?.amount ?? 0),
+                    'Currency': 'UAH',
+                    'Cash delivery mechanism': 'Bank Transfer',
+                    'Were these people reached in 2024 by another FSL sub-activity?': 'No',
+                    // 'If yes, which sub-activity': 'c68psfcls348s0bw' as any,
+                    // 'If yes, how many people received from both sub-activities': 0,
+                  }
+                }
+                return {
+                  'New beneficiaries (same activity)': disaggregation['Total Individuals Reached'] ?? 0,
+                  'Number of people reached': disaggregation['Total Individuals Reached'] ?? 0,
+                  'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
+                  'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
+                  'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
+                  'Adult Men (18-59)': disaggregation['Adult Men (18-59)'] ?? 0,
+                  'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
+                  'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
+                  'Number of people with disability': disaggregation['People with Disability'],
+                  'Number of reached households': grouped.length,
+                }
+              })(),
               'Implementation Status': 'Completed',
               'Modality': 'Cash',
               'Were these people reached in 2024 by another FSL sub-activity?': 'No',
-              ...(activity === DrcProgram.VET) && {
-
-              }
+              // ...fnSwitch(activity, {
+              //   [DrcProgram.MSME]: () => {
+              //
+              //   },
+              // }, () => undefined)
             }
             const request = ActivityInfoSdk.makeRecordRequests({
               activityIdPrefix: 'drcflsc',

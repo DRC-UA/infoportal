@@ -2,7 +2,7 @@ import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInf
 import {Datatable} from '@/shared/Datatable/Datatable'
 import React, {ReactNode, useEffect, useMemo, useState} from 'react'
 import {UseFetcher} from '@/shared/hook/useFetcher'
-import {map, Obj, seq} from '@alexandreannic/ts-utils'
+import {seq} from '@alexandreannic/ts-utils'
 import {AiPreviewActivity, AiPreviewRequest, AiSendBtn, AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -56,9 +56,22 @@ export const AiBundleTable = ({
     fetcher.fetch({clean: false}, period)
   }, [period])
 
-  const maybeFirst = useMemo(() => {
-    return fetcher.get?.[0]
-  }, [fetcher])
+  const {
+    activityCols,
+    subActivityCols,
+  } = useMemo(() => {
+    return {
+      activityCols: seq(fetcher.get ?? [])
+        .flatMap(row => Object.keys(row.activity ?? {}).map(_ => ({key: _, type: typeof row.activity[_] === 'number' ? 'number' : 'select_one' as any})))
+        .distinct(_ => _.key),
+      subActivityCols: seq(fetcher.get ?? [])
+        .flatMap(row => Object.keys(row.subActivity ?? {}).map(_ => ({key: _, type: typeof row.subActivity[_] === 'number' ? 'number' : 'select_one' as any})))
+        .distinct(_ => _.key),
+    }
+  }, [fetcher.get])
+
+  console.log(activityCols)
+  console.log(fetcher.get)
 
   const _submit = useAsync((id: string, p: any) => api.activityInfo.submitActivity(p), {
     requestKey: ([i]) => i
@@ -171,27 +184,26 @@ export const AiBundleTable = ({
             styleHead: {borderRight: '3px solid ' + t.palette.divider},
             renderQuick: _ => _.recordId
           },
-          ...map(maybeFirst, first => [
-            ...Object.keys(first.activity).map(colId => {
-              return {
-                head: colId,
-                id: colId,
-                // type: 'select_one',
-                // type: 'string',
-                type: typeof first.activity[colId] === 'number' ? 'number' : 'select_one' as any,
-                renderQuick: (_: any) => _.activity[colId] as any,
-              }
-            }),
-            ...Obj.keys(first.subActivity ?? {}).map(colId => {
-              return {
-                head: colId,
-                id: colId,
-                // type: 'string',
-                type: typeof first.activity[colId] === 'number' ? 'number' : 'select_one' as any,
-                renderQuick: (_: any) => _.subActivity[colId] as any,
-              } as any
-            })
-          ]) ?? []
+          ...activityCols.map(colId => {
+            return {
+              head: colId.key,
+              id: colId.key,
+              // type: 'select_one',
+              // type: 'string',
+              type: colId.type,
+              renderQuick: (_: any) => _.activity[colId.key] as any,
+            }
+          }),
+          ...subActivityCols.map(colId => {
+            return {
+              head: colId.key,
+              id: colId.key,
+              // type: 'select_one',
+              // type: 'string',
+              type: colId.type,
+              renderQuick: (_: any) => _.subActivity[colId.key] as any,
+            }
+          }),
         ]}
       />
     </>
