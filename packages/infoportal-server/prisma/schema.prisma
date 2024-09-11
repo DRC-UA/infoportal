@@ -64,15 +64,15 @@ model KoboAnswers {
 }
 
 model KoboAnswersHistory {
-  id       String      @id @default(uuid())
-  form     KoboForm?   @relation(fields: [formId], references: [id])
+  id       String       @id @default(uuid())
+  form     KoboForm?    @relation(fields: [formId], references: [id])
   formId   String?
-  answer   KoboAnswers @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId String
+  answer   KoboAnswers? @relation(fields: [answerId], references: [id])
+  answerId String?
   by       String
-  date     DateTime    @default(now())
-  type     String
-  property String
+  date     DateTime     @default(now())
+  type     String?
+  property String?
   oldValue Json?
   newValue Json?
 

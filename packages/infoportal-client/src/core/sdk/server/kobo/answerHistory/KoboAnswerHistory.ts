@@ -9,10 +9,10 @@ export interface KoboAnswerHistory {
   answerId: string
   by: string
   date: Date
-  type: 'answer' | 'tag'
-  property: string
+  type: 'answer' | 'tag' | 'delete'
+  property?: string
   oldValue?: any
-  newValue: any
+  newValue?: any
 }
 
 export class KoboAnswerHistory {

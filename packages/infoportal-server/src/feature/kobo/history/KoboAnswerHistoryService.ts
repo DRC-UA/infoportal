@@ -5,6 +5,19 @@ import {DbHelper} from '../../../db/DbHelper'
 import {KoboAnswerId, KoboId} from 'infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 
+type Create = {
+  authorEmail: string
+  formId: KoboId
+  answerIds: KoboAnswerId[]
+} & ({
+  type: 'answer' | 'tag'
+  newValue: any
+  property: string
+} | {
+  type: 'delete'
+  newValue?: undefined
+  property?: undefined
+})
 
 export class KoboAnswerHistoryService {
 
@@ -30,14 +43,7 @@ export class KoboAnswerHistoryService {
     property,
     newValue,
     type,
-  }: {
-    type: 'answer' | 'tag'
-    authorEmail: string,
-    formId: KoboId,
-    answerIds: KoboAnswerId[],
-    property: string,
-    newValue?: any
-  }) => {
+  }: Create) => {
     const currentAnswers = await this.prisma.koboAnswers.findMany({
       where: {
         id: {in: answerIds,}
@@ -49,10 +55,12 @@ export class KoboAnswerHistoryService {
           by: authorEmail,
           type: type,
           formId,
-          property,
-          newValue: newValue ?? Prisma.JsonNull,
-          oldValue: (currentAnswers[_][type === 'tag' ? 'tags' : 'answers'] as any)?.[property] as any,
-          answerId: _
+          answerId: _,
+          ...type !== 'delete' && {
+            property,
+            newValue: newValue ?? Prisma.JsonNull,
+            oldValue: (currentAnswers[_][type === 'tag' ? 'tags' : 'answers'] as any)?.[property] as any,
+          }
         }
       })
     })

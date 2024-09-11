@@ -412,6 +412,32 @@ export class KoboService {
     })
   }
 
+  readonly deleteAnswers = async ({
+    answerIds,
+    formId,
+    authorEmail = 'system',
+  }: {
+    answerIds: KoboAnswerId[]
+    formId: KoboId
+    authorEmail?: string
+  }) => {
+    await Promise.all([
+      this.prisma.koboAnswers.deleteMany({
+        where: {
+          formId,
+          id: {in: answerIds}
+        }
+      }),
+      this.sdkGenerator.get().then(_ => _.v2.delete(formId, answerIds)),
+    ])
+    this.history.create({
+      type: 'delete',
+      formId,
+      answerIds,
+      authorEmail,
+    })
+  }
+
   readonly updateAnswers = async ({
     formId,
     answerIds,

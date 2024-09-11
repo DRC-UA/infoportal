@@ -1,4 +1,4 @@
-import React, {Dispatch, ReactNode, SetStateAction, useContext, useState} from 'react'
+import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from 'react'
 import {KoboEditModalAnswer} from '@/shared/koboEdit/KoboEditModal'
 import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
@@ -7,6 +7,7 @@ import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboAnswerId, KoboIndex} from 'infoportal-common'
 import {KeyOf} from '@alexandreannic/ts-utils'
+import {useIpToast} from '@/core/useToast'
 
 interface EditDataParams<T extends Record<string, any> = any> extends Omit<KoboUpdateAnswers<T>, 'answer'> {
   onSuccess?: (params: KoboUpdateAnswers<T>) => void
@@ -22,6 +23,7 @@ interface KoboUpdateAnswersByName<T extends KoboFormNameMapped, K extends KeyOf<
 export interface KoboEditAnswersContext {
   asyncUpdateByName: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(_: KoboUpdateAnswersByName<T, K>) => Promise<void>>
   asyncUpdateById: UseAsyncMultiple<(_: KoboUpdateAnswers) => Promise<void>>
+  asyncDeleteById: UseAsyncMultiple<(_: Pick<KoboUpdateAnswers, 'formId' | 'answerIds'>) => Promise<void>>
   open: Dispatch<SetStateAction<EditDataParams | undefined>>
   close: () => void
 }
@@ -36,6 +38,7 @@ export const KoboEditAnswersProvider = ({
   children: ReactNode
 }) => {
   const {api} = useAppSettings()
+  const {toastHttpError} = useIpToast()
   const [editPopup, setEditPopup] = useState<EditDataParams | undefined>()
   const ctxAnswers = useKoboAnswersContext()
 
@@ -86,6 +89,7 @@ export const KoboEditAnswersProvider = ({
     }).then(() => {
       updateCacheById(p)
     }).catch((e) => {
+      toastHttpError(e)
       ctxAnswers.byId(p.formId).fetch({force: true, clean: false})
       return Promise.reject(e)
     })
@@ -100,13 +104,33 @@ export const KoboEditAnswersProvider = ({
     }).then(() => {
       updateCacheByName(p)
     }).catch((e) => {
+      toastHttpError(e)
       ctxAnswers.byName(p.formName).fetch({force: true, clean: false})
       return Promise.reject(e)
     })
   }, {requestKey: ([_]) => _.formName})
 
+  const asyncDeleteById = useAsync(async ({answerIds, formId}: Pick<KoboUpdateAnswers, 'answerIds' | 'formId'>) => {
+    await api.kobo.answer.delete({
+      answerIds: answerIds,
+      formId: formId,
+    }).then(() => {
+      const idsIndex = new Set(answerIds)
+      const currentAnswers = ctxAnswers.byId(formId).get
+      if (!currentAnswers) return
+      ctxAnswers.byId(formId).set({
+        ...currentAnswers, data: currentAnswers.data.filter(a => !idsIndex.has(a.id))
+      })
+    }).catch((e) => {
+      toastHttpError(e)
+      ctxAnswers.byId(formId).fetch({force: true, clean: false})
+      return Promise.reject(e)
+    })
+  }, {requestKey: ([_]) => _.formId})
+
   return (
     <Context.Provider value={{
+      asyncDeleteById,
       asyncUpdateById,
       asyncUpdateByName,
       open: setEditPopup,

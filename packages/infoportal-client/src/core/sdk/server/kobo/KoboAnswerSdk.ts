@@ -70,6 +70,16 @@ export class KoboAnswerSdk {
       .then(Kobo.mapPaginateAnswer(fnMapKobo, fnMapTags, fnMapCustom))
   }
 
+  readonly delete = async ({
+    answerIds,
+    formId,
+  }: {
+    answerIds: KoboAnswerId[]
+    formId: KoboId
+  }) => {
+    await this.client.delete(`/kobo/answer/${formId}`, {body: {answerIds}})
+  }
+
   readonly updateAnswers = <T extends Record<string, any>, K extends KeyOf<T>>({
     formId,
     answerIds,

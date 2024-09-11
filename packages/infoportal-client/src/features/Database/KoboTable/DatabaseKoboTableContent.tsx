@@ -122,7 +122,7 @@ export const DatabaseKoboTableContent = ({
     }))
   }, [schemaColumns, ctx.view.currentView])
 
-  const selectedHeader = useCustomSelectedHeader(selectedIds)
+  const selectedHeader = useCustomSelectedHeader({session, formId: ctx.form.id, selectedIds})
   const header = useCustomHeader()
 
   return (
