@@ -62,7 +62,8 @@ export namespace AiGbvMapper {
                 'Winter': d.winter ?? 0,
                 'Other': d.kit_other ?? 0,
                 'Dignity kits in stock?': 'No',
-                'Any assessment/feedback done/collected on post distribution of kits?': fnSwitch(d.feedback!, Protection_gbv.options.feedback, () => aiInvalidValueFlag as any),
+                // 'Any assessment/feedback done/collected on post distribution of kits?': fnSwitch(d.feedback!, Protection_gbv.options.feedback, () => 'No assessments planned/done'),
+                'Any assessment/feedback done/collected on post distribution of kits?': 'No assessments planned/done',
               }
             }
             return res

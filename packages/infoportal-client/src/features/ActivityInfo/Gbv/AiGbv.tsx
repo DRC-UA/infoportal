@@ -76,6 +76,7 @@ export const AiGbv = () => {
                     'Elderly': grouped.sum(_ => add(_['Elderly'])),
                     'Winter': grouped.sum(_ => add(_['Winter'])),
                     'Other': grouped.sum(_ => add(_['Other'])),
+                    'Any assessment/feedback done/collected on post distribution of kits?': 'No assessments planned/done',
                   } : {
                     'Type of distribution': undefined,
                     'Who distributed the kits?': undefined,
@@ -107,7 +108,8 @@ export const AiGbv = () => {
             })
             subActivities.forEach(s => {
               bundles.push({
-                submit: checkAiValid(activity.Oblast,
+                submit: checkAiValid(
+                  activity.Oblast,
                   activity.Raion,
                   activity.Hromada,
                   activity.Settlement,

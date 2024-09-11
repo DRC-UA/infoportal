@@ -60,6 +60,7 @@ export const koboMetaStatusLabel: Record<KoboMetaStatus, StateStatus> = {
 export type KoboMetaTag = KoboMetaShelterRepairTags & KoboMetaTagNfi & KoboMetaEcrecTags
 
 export type KoboMetaEcrecTags = {
+  amount?: number
   employeesCount?: number
 }
 export type KoboMetaShelterRepairTags = {
