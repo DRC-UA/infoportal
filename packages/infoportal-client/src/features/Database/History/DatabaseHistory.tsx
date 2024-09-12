@@ -30,7 +30,7 @@ export const DatabaseHistory = () => {
     fetcher.fetch()
   }, [])
 
-  const getTranslation = (row: KoboAnswerHistory, fn: (_: KoboAnswerHistory) => string) => map(row.property, property => {
+  const getAnswerTranslation = (row: KoboAnswerHistory, fn: (_: KoboAnswerHistory) => string) => map(row.property, property => {
     const value: any = fn(row)
     if (!schema) return value
     const questionSchema = schema.schemaHelper.questionIndex[property]
@@ -137,7 +137,7 @@ export const DatabaseHistory = () => {
               render: _ => {
                 return {
                   value: _.property,
-                  label: schema?.translate.question(_.property),
+                  label: _.property ? schema?.translate.question(_.property) : undefined,
                 }
               }
             },
@@ -160,7 +160,7 @@ export const DatabaseHistory = () => {
               styleHead: ({borderRight: 0}),
               style: () => ({borderRight: 0}),
               render: row => {
-                const label = getTranslation(row, _ => _.oldValue)
+                const label = getAnswerTranslation(row, _ => _.oldValue)
                 return {
                   label: label && (
                     <span style={{
@@ -189,7 +189,7 @@ export const DatabaseHistory = () => {
               id: 'newVranslate',
               head: m._koboDatabase.newValue,
               render: row => {
-                const label = getTranslation(row, _ => _.newValue)
+                const label = getAnswerTranslation(row, _ => _.newValue)
                 return {
                   label: <span style={{borderRadius: 4, padding: '0 4px', background: alpha(t.palette.success.light, .16), color: t.palette.success.main}}>{label}</span>,
                   value: row.newValue
