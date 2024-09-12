@@ -62,6 +62,16 @@ export class ControllerKoboAnswer {
     res.send()
   }
 
+  readonly deleteAnswers = async (req: Request, res: Response, next: NextFunction) => {
+    const email = req.session.user?.email ?? 'unknown'
+    const {formId} = await yup.object({
+      formId: yup.string().required(),
+    }).validate(req.params)
+    const answerIds = await yup.array().of(yup.string().required()).required().validate(req.body.answerIds)
+    await this.service.deleteAnswers({formId, answerIds, authorEmail: email})
+    res.send()
+  }
+
   /** TODO need to handle public access */
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
     const {formId} = req.params

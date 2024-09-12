@@ -153,7 +153,7 @@ export class KoboMetaService {
     const destinationFormId = Obj.entries(KoboMetaMapper.triggerUpdate).find(_ => _[1].includes(formId))![0]
     this.debug(formId, `Fetch Kobo answers...`)
     const updates = await this.prisma.koboAnswers.findMany({
-      where: {formId},
+      where: {formId, deletedAt: null},
     }).then(_ => seq(_).map(mapper).compact())
     const JOIN_COL = updates[0].originMetaKey // Assume it never changes for other updates
     const joinToMetaId: Record<string, Seq<UUID>> = await this.prisma.koboMeta.findMany({
@@ -216,7 +216,7 @@ export class KoboMetaService {
         attachments: true,
         updatedAt: true,
       },
-      where: {formId}
+      where: {formId, deletedAt: null}
     }).then(res => {
       return seq(res).flatMap(r => {
         const m = [mapper(r)].flat()

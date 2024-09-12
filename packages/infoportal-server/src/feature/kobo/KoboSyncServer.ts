@@ -99,7 +99,7 @@ export class KoboSyncServer {
     this.debug(formId, `Fetch remote answers... ${remoteAnswers.length} fetched.`)
 
     this.debug(formId, `Fetch local answers...`)
-    const localAnswersIndex = await this.prisma.koboAnswers.findMany({where: {formId}, select: {id: true, uuid: true}}).then(_ => {
+    const localAnswersIndex = await this.prisma.koboAnswers.findMany({where: {formId, deletedAt: null}, select: {id: true, uuid: true}}).then(_ => {
       return _.reduce((map, curr) => map.set(curr.id, curr.uuid), new Map<KoboId, UUID>())
     })
     this.debug(formId, `Fetch local answers... ${localAnswersIndex.size} fetched.`)
@@ -107,7 +107,13 @@ export class KoboSyncServer {
     const handleDelete = async () => {
       const idsToDelete = [...localAnswersIndex.keys()].filter(_ => !remoteIdsIndex.has(_))
       this.debug(formId, `Handle delete (${idsToDelete.length})...`)
-      await this.prisma.koboAnswers.deleteMany({where: {source: null, formId, id: {in: idsToDelete}}})
+      await this.prisma.koboAnswers.updateMany({
+        data: {
+          deletedAt: new Date(),
+          deletedBy: 'system',
+        },
+        where: {source: null, formId, id: {in: idsToDelete}}
+      })
       return idsToDelete
     }
 

@@ -92,6 +92,10 @@ export class KoboApiSdk {
     return this.client.get<KoboApiSchema[]>(`/kobo-api/${serverId}/attachment/${filepath}`)
   }
 
+  readonly removeAnswers = ({serverId, formId, answerIds}: {serverId: UUID, formId: KoboId, answerIds: KoboAnswerId[]}) => {
+    return this.client.post(`/kobo-api/${serverId}/${formId}`, {body: {answerIds}})
+  }
+
   readonly proxy = <T = any>({serverId, url, method, options}: {serverId: UUID, method: Method, url: string, options?: RequestOption}) => {
     return this.client.post<T>(`/kobo-api/proxy`, {
       // responseType: 'blob',

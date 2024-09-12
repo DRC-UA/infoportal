@@ -59,6 +59,7 @@ model KoboAnswers {
   history           KoboAnswersHistory[]
 
   @@unique([id, formId])
+  @@index([deletedAt])
   @@index([date])
   @@index([formId])
 }
@@ -71,8 +72,8 @@ model KoboAnswersHistory {
   answerId String
   by       String
   date     DateTime    @default(now())
-  type     String
-  property String
+  type     String?
+  property String?
   oldValue Json?
   newValue Json?
 

@@ -10,6 +10,7 @@ import {Obj, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetchers'
 import {UseDatabaseView, useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
 import {UseDatabaseGroupDisplay, useDatabaseGroupDisplay} from '@/features/Database/KoboTable/groupDisplay/useDatabaseGroupDisplay'
+import {AccessSum} from '@/core/sdk/server/access/Access'
 
 export type ExternalFilesChoices = {list_name: string, name: string, label: string}
 export type KoboExternalFilesIndex = Record<string, Record<string, ExternalFilesChoices>>
@@ -18,7 +19,8 @@ export interface DatabaseKoboContext {
   refetch: (p?: FetchParams) => Promise<void>
   serverId: UUID
   schema: KoboSchemaHelper.Bundle
-  canEdit?: boolean
+  canEdit?: AccessSum
+  access: AccessSum
   form: KoboForm
   asyncRefresh: UseAsyncSimple<() => Promise<void>>
   asyncEdit: (answerId: KoboAnswerId) => string
@@ -41,7 +43,7 @@ export const DatabaseKoboTableProvider = (props: {
   loading?: boolean
   refetch: (p?: FetchParams) => Promise<void>
   serverId: DatabaseKoboContext['serverId']
-  canEdit: DatabaseKoboContext['canEdit']
+  access: DatabaseKoboContext['access']
   form: DatabaseKoboContext['form']
   data?: KoboMappedAnswer[]
 }) => {

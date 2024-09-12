@@ -171,6 +171,7 @@ export const getRoutes = (
     router.post('/kobo/answer/:formId/by-access', auth(), errorCatcher(koboAnswer.searchByUserAccess))
     router.patch('/kobo/answer/:formId/tag', auth(), errorCatcher(koboAnswer.updateTag))
     router.patch('/kobo/answer/:formId', auth(), errorCatcher(koboAnswer.updateAnswers))
+    router.delete('/kobo/answer/:formId', auth({adminOnly: true}), errorCatcher(koboAnswer.deleteAnswers))
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
 
     router.get('/hdp/risk-education', errorCatcher(hdp.fetchRiskEducation))
