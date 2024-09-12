@@ -4,14 +4,14 @@ import {IpBtn, Modal, Txt} from '@/shared'
 import {useI18n} from '@/core/i18n'
 import {KoboId} from 'infoportal-common/kobo'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
-import {UserSession} from '@/core/sdk/server/session/Session'
+import {AccessSum} from '@/core/sdk/server/access/Access'
 
 export const useCustomSelectedHeader = ({
   formId,
-  session,
+  access,
   selectedIds
 }: {
-  session: UserSession
+  access: AccessSum
   formId: KoboId,
   selectedIds: KoboAnswerId[]
 }): ReactNode => {
@@ -20,7 +20,7 @@ export const useCustomSelectedHeader = ({
 
   return (
     <>
-      {session.admin && (
+      {access.write && (
         <Modal
           loading={ctx.asyncDeleteById.anyLoading}
           onConfirm={(event, close) => ctx.asyncDeleteById.call({

@@ -112,7 +112,7 @@ export const DatabaseTable = ({
         <DatabaseKoboTableProvider
           schema={schema}
           dataFilter={dataFilter}
-          canEdit={overrideEditAccess ?? access.write}
+          access={access}
           serverId={serverId}
           refetch={refetch}
           loading={loading}

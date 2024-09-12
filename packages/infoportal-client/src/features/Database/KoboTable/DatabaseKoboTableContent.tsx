@@ -35,7 +35,6 @@ export const DatabaseKoboTableContent = ({
 }: Pick<DatabaseTableProps, 'onFiltersChange' | 'onDataChange'>) => {
   const {m} = useI18n()
   const t = useTheme()
-  const {session} = useSession()
   const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
@@ -64,7 +63,7 @@ export const DatabaseKoboTableContent = ({
   const extraColumns: DatatableColumn.Props<any>[] = useMemo(() => getColumnsCustom({
     selectedIds,
     formId: ctx.form.id,
-    canEdit: ctx.canEdit,
+    canEdit: ctx.access.write,
     m,
     asyncUpdateTagById: ctxEditTag.asyncUpdateById,
     openEditTag: ctxEditTag.open,
@@ -109,7 +108,7 @@ export const DatabaseKoboTableContent = ({
     const base = getColumnsBase({
       selectedIds,
       formId: ctx.form.id,
-      canEdit: ctx.canEdit,
+      canEdit: ctx.access.write,
       m,
       openAnswerModal: ctxAnswers.openAnswerModal,
       asyncEdit: ctx.asyncEdit,
@@ -122,7 +121,7 @@ export const DatabaseKoboTableContent = ({
     }))
   }, [schemaColumns, ctx.view.currentView])
 
-  const selectedHeader = useCustomSelectedHeader({session, formId: ctx.form.id, selectedIds})
+  const selectedHeader = useCustomSelectedHeader({access, formId: ctx.form.id, selectedIds})
   const header = useCustomHeader()
 
   return (
@@ -140,7 +139,7 @@ export const DatabaseKoboTableContent = ({
         rowsPerPageOptions={[20, 50, 100, 200]}
         onFiltersChange={onFiltersChange}
         onDataChange={onDataChange}
-        select={ctx.canEdit ? {
+        select={ctx.access.write ? {
           onSelect: setSelectedIds,
           selectActions: selectedHeader,
           getId: _ => _.id,
@@ -195,7 +194,7 @@ export const DatabaseKoboTableContent = ({
             )}
 
             <div style={{marginLeft: 'auto'}}>
-              {session.admin && (
+              {ctx.access.admin && (
                 <IpIconBtn
                   children="admin_panel_settings"
                   target="_blank"
