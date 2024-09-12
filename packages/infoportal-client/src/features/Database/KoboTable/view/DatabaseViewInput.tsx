@@ -10,18 +10,21 @@ import {DatabaseViewVisibility} from '@/core/sdk/server/databaseView/DatabaseVie
 import {PanelTitle} from '@/shared/Panel'
 import {IpAlert} from '@/shared'
 import {DatabaseViewInputRow} from '@/features/Database/KoboTable/view/DatabaseViewInputRow'
-import {DatabaseViewDefaultName} from '@/features/Database/KoboTable/view/useDatabaseView'
+import {DatabaseViewDefaultName, UseDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
 
 interface FormCreate {
   name: string
 }
 
-export const DatabaseViewInput = ({sx}: {
+export const DatabaseViewInput = ({
+  sx,
+  view: ctx,
+}: {
+  view: UseDatabaseView
   sx?: SxProps<Theme>,
 }) => {
   const {m, formatDate} = useI18n()
   const t = useTheme()
-  const ctx = useDatabaseKoboTableContext().view
   const [open, setOpen] = useState<string | undefined>(undefined)
 
   const formCreate = useForm<FormCreate>()

@@ -173,7 +173,7 @@ export const DatabaseKoboTableContent = ({
         data={flatData}
         header={params =>
           <>
-            <DatabaseViewInput sx={{mr: 1}}/>
+            <DatabaseViewInput sx={{mr: 1}} view={ctx.view}/>
             <IpSelectSingle<number>
               hideNullOption
               sx={{maxWidth: 128, mr: 1}}

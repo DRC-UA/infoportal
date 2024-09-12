@@ -18,6 +18,8 @@ import {KoboAnswerId, KoboId, KoboIndex, KoboSchemaHelper, KoboValidation} from 
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
+import {useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
+import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
 
 interface CustomForm {
   id: string
@@ -94,6 +96,8 @@ export const DatabaseTableCustomRoute = () => {
   const ctxAnswers = useKoboAnswersContext()
   if (!customForm) return
 
+  const view = useDatabaseView('custom-db-' + customForm.id)
+
   useEffect(() => {
     formIds.forEach(_ => {
       ctxAnswers.byId(_).fetch()
@@ -148,11 +152,6 @@ export const DatabaseTableCustomRoute = () => {
         // externalFilesIndex: externalFilesIndex,
         // repeatGroupsAsColumn: repeatGroupsAsColumns,
         // onOpenGroupModal: setOpenGroupModalAnswer,
-      }).map(_ => {
-        _.id = formId + '_' + _.id
-        _.group = formId + _.group
-        _.groupLabel = schema.schemaUnsanitized.name + '/' + _.groupLabel
-        return _
       })
       cols[cols.length - 1].style = () => ({borderRight: '3px solid ' + t.palette.divider})
       cols[cols.length - 1].styleHead = {borderRight: '3px solid ' + t.palette.divider}
@@ -177,9 +176,17 @@ export const DatabaseTableCustomRoute = () => {
           openEditTag: ctxEditTag.open,
         }),
         ...cols
-      ]
+      ].map(_ => {
+        return {
+          ..._,
+          id: formId + '_' + _.id,
+          group: formId + _.group,
+          groupLabel: schema.schemaUnsanitized.name + '/' + _.groupLabel,
+          width: view.colsById[formId + '_' + _.id]?.width ?? _.width ?? 90,
+        }
+      })
     })
-  }, [...schemas, ctxSchema.langIndex])
+  }, [...schemas, ctxSchema.langIndex, view.currentView])
 
   const loading = ctxSchema.anyLoading || !!formIds.find(_ => ctxAnswers.byId(_).loading)
   return (
@@ -187,10 +194,16 @@ export const DatabaseTableCustomRoute = () => {
       <Page width="full" sx={{p: 0}} loading={loading}>
         <Panel>
           <Datatable
+            onResizeColumn={view.onResizeColumn}
             id={customForm.id}
             columns={columns}
             data={data as any}
             showExportBtn
+            columnsToggle={{
+              disableAutoSave: true,
+              hidden: view.hiddenColumns,
+              onHide: view.setHiddenColumns,
+            }}
             // exportAdditionalSheets={data => {
             //   const questionToAddInGroups = schemas.flatMap(({schema, formId}) => {
             //     return schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name))
@@ -220,6 +233,7 @@ export const DatabaseTableCustomRoute = () => {
             //   })
             header={
               <>
+                <DatabaseViewInput sx={{mr: 1}} view={view}/>
                 <IpSelectSingle<number>
                   hideNullOption
                   sx={{maxWidth: 128, mr: 1}}
