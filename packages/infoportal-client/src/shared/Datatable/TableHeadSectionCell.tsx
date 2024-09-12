@@ -30,6 +30,7 @@ const useStyles = makeStyles()((t) => ({
   th: {
     padding: '0 !important',
     height: '6px !important',
+    maxWidth: 0,
   },
   content: {
     display: 'flex',

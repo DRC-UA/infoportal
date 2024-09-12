@@ -99,7 +99,7 @@ export const useDatabaseView = (formId: KoboId) => {
 
   useEffect(() => {
     fetcherViews.fetch()
-  }, [])
+  }, [formId])
 
   return {
     fetcherViews,

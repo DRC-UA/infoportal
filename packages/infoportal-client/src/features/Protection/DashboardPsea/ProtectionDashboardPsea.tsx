@@ -7,7 +7,7 @@ import {OblastIndex, Period, PeriodHelper, Protection_coc} from 'infoportal-comm
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Panel, PanelBody, PanelTitle} from '@/shared/Panel'
-import {Divider, Grid, useTheme} from '@mui/material'
+import {Divider, Grid, Icon, useTheme} from '@mui/material'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {Legend} from 'recharts'
@@ -21,7 +21,10 @@ import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {appConfig} from '@/conf/AppConfig'
-import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
+import {Datatable} from '@/shared/Datatable/Datatable'
+import {drcUaStaffs} from '@/features/Protection/DashboardPsea/drcUaStaffs'
+import {drcUaStaffsEmailCompleted} from '@/features/Protection/DashboardPsea/drcUaStaffsEmailCompleted'
+import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 
 export const ProtectionDashboardPsea = () => {
   const {api, conf} = useAppSettings()
@@ -40,25 +43,25 @@ export const ProtectionDashboardPsea = () => {
     office: {
       icon: conf.icons.oblast,
       getValue: _ => _.office_staff_trained,
-      getOptions: () => Obj.entries(Protection_coc.options.office_staff_trained).map(([k,v]) => DataFilter.buildOption(k ,v)),
+      getOptions: () => Obj.entries(Protection_coc.options.office_staff_trained).map(([k, v]) => DataFilter.buildOption(k, v)),
       label: m.office,
     },
     modality: {
       icon: 'desktop_windows',
       getValue: _ => _.modality_training,
-      getOptions: () => Obj.entries(Protection_coc.options.modality_training).map(([k,v]) => DataFilter.buildOption(k ,v)),
+      getOptions: () => Obj.entries(Protection_coc.options.modality_training).map(([k, v]) => DataFilter.buildOption(k, v)),
       label: m.modality,
     },
     category: {
       icon: appConfig.icons.program,
       getValue: _ => _.training_topic,
-      getOptions: () => Obj.entries(Protection_coc.options.training_topic).map(([k,v]) => DataFilter.buildOption(k ,v)),
+      getOptions: () => Obj.entries(Protection_coc.options.training_topic).map(([k, v]) => DataFilter.buildOption(k, v)),
       label: m.category,
     },
     duration: {
       icon: 'schedule',
       getValue: _ => _.duration_training,
-      getOptions: () => Obj.entries(Protection_coc.options.duration_training).map(([k,v]) => DataFilter.buildOption(k ,v)),
+      getOptions: () => Obj.entries(Protection_coc.options.duration_training).map(([k, v]) => DataFilter.buildOption(k, v)),
       label: m.duration,
     },
   }), [m])
@@ -68,6 +71,25 @@ export const ProtectionDashboardPsea = () => {
     return DataFilter.filterData(data, filterShape, optionFilter).filter(_ => PeriodHelper.isDateIn(period, _.date_training))
   }, [data, filterShape, optionFilter, period])
   const participants = useMemo(() => dataFiltered.flatMap(_ => _.training_participants ?? []), [data])
+
+  const {listDone, listNotIdentified} = useMemo(() => {
+    let listNotIdentified: string[] = []
+    const arr = [
+      ...drcUaStaffsEmailCompleted,
+      ...dataFiltered.flatMap(_ => _.training_participants?.map(participants => {
+        if (participants.staff_email) return participants.staff_email
+        if (participants.staff_name) {
+          const match = drcUaStaffs.find(_ => _.fullName.replaceAll(/\s/g, '').toLowerCase() === participants.staff_name?.replaceAll(/\s/g, '').toLowerCase())?.email
+          if (!match) listNotIdentified.push(participants.staff_name)
+          return match
+        }
+      })).filter(_ => _ !== undefined)
+    ]
+    return {
+      listDone: new Set(arr),
+      listNotIdentified,
+    }
+  }, [dataFiltered])
 
   return (
     <Page loading={fetcherCoc.loading}>
@@ -103,14 +125,14 @@ export const ProtectionDashboardPsea = () => {
           </SlideWidget>
         </Grid>
         <Grid item xs={6} md={3}>
+          <Panel sx={{height: '100%', mb: 0, display: 'flex', alignItems: 'center', pl: 2}}>
+            <ChartPieWidget title="Participation rate" value={listDone.size} base={drcUaStaffs.length} showValue showBase/>
+          </Panel>
+        </Grid>
+        <Grid item xs={6} md={3}>
           <SlideWidget sx={{flex: 1}} icon="home" title={m._protection.avgParticipants}>
             {(participants.length / dataFiltered.length).toFixed(1)}
           </SlideWidget>
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <Panel sx={{height: '100%', mb: 0, display: 'flex', alignItems: 'center', pl: 2}}>
-            <ChartPieWidgetBy title="# Women" data={participants} filter={_ => _.staff_gender === 'female'}/>
-          </Panel>
         </Grid>
       </Grid>
       <Div>
@@ -118,8 +140,64 @@ export const ProtectionDashboardPsea = () => {
           <PanelWBody title={m._protection.training}>
             <ChartLineByDate curves={{[m.date]: _ => _.date_training}} data={dataFiltered} height={188}/>
           </PanelWBody>
+          <Panel>
+            <Datatable id="psea-staffs" data={drcUaStaffs} columns={[
+              {
+                id: 'status',
+                head: m.status,
+                width: 0,
+                type: 'select_one',
+                render: _ => {
+                  if (listDone.has(_.email)) {
+                    return {
+                      label: <Icon color="success">check_circle</Icon>,
+                      tooltip: m._protection.pseaTrainingDone,
+                      value: m._protection.pseaTrainingDone,
+                      option: <><Icon color="success">check_circle</Icon> {m._protection.pseaTrainingDone}</>,
+                    }
+                  }
+                  return {
+                    label: <Icon color="disabled">schedule</Icon>,
+                    tooltip: m._protection.pseaTrainingWaiting,
+                    value: m._protection.pseaTrainingWaiting,
+                    option: <><Icon color="disabled">schedule</Icon> {m._protection.pseaTrainingWaiting}</>,
+                  }
+                },
+              },
+              {
+                type: 'string',
+                id: 'fullName',
+                head: m.name,
+                renderQuick: _ => _.fullName,
+              },
+              {
+                type: 'string',
+                id: 'email',
+                head: m.email,
+                renderQuick: _ => _.email,
+              },
+              {
+                type: 'select_one',
+                id: 'job',
+                head: m.drcJob,
+                renderQuick: _ => _.job,
+              },
+              {
+                type: 'select_one',
+                id: 'office',
+                head: m.office,
+                renderQuick: _ => _.office,
+              },
+            ]}/>
+          </Panel>
+          <PanelWBody>
+            {listNotIdentified.length} staffs have not be automatically identified by their name. Better to update Kobo submissions and set their email.
+            <ul>
+              {listNotIdentified.map(_ => <li>{_}</li>)}
+            </ul>
+          </PanelWBody>
         </Div>
-        <Div column sx={{maxWidth: 260}}>
+        <Div column sx={{maxWidth: 360}}>
           <Panel title={m.modality}>
             <ChartPie
               outerRadius={80}
@@ -139,17 +217,14 @@ export const ProtectionDashboardPsea = () => {
                 online: snapshotAlternateColor(t),
               }}
             >
-              <Legend {...commonLegendProps} layout="horizontal" verticalAlign="bottom" align="center"/>
+              <Legend {...commonLegendProps} layout="vertical" verticalAlign="middle" align="right" style={{marginLeft: '10px'}}/>
             </ChartPie>
           </Panel>
-        </Div>
-      </Div>
-      <Div>
-        <Div column>
-          <PanelWBody>
+
+          <Panel>
             <MapSvgByOblast
+              sx={{mx: 2}}
               data={dataFiltered}
-              sx={{mb: 2}}
               fillBaseOn="value"
               getOblast={_ => {
                 return OblastIndex.byName(fnSwitch(_.office_staff_trained!, {
@@ -167,14 +242,7 @@ export const ProtectionDashboardPsea = () => {
                 }, () => undefined))!.iso
               }}
             />
-            <ChartBarSingleBy
-              data={dataFiltered}
-              by={_ => _.office_staff_trained}
-              label={Protection_coc.options.office_staff_trained}
-            />
-          </PanelWBody>
-        </Div>
-        <Div column>
+          </Panel>
           <PanelWBody title={m.category}>
             <ChartBarSingleBy data={dataFiltered} by={_ => _.training_topic} label={Protection_coc.options.training_topic}/>
           </PanelWBody>

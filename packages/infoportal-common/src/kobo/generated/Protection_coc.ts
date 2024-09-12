@@ -31,7 +31,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // begin_group_qS00qeNhn/num_part [integer] Number of training participants
   'num_part': number | undefined,
 	  // training_participants [begin_repeat] Training participants
-  'training_participants': {'staff_name': string | undefined | undefined,'staff_position': string | undefined | undefined,'staff_gender': undefined | Option<'staff_gender'> | undefined}[] | undefined,
+  'training_participants': {'staff_email': string | undefined, 'staff_name': string | undefined | undefined,'staff_position': string | undefined | undefined,'staff_gender': undefined | Option<'staff_gender'> | undefined}[] | undefined,
 	}
 export const options = {
 office_staff_trained: {
