@@ -133,24 +133,30 @@ export const MetaDashboard = () => {
             <Lazy deps={[ctx.filteredData]} fn={() => {
               const gb = ctx.filteredData.groupBy(d => format(d.date, 'yyyy-MM'))
               const gbByCommittedDate = ctx.filteredData.groupBy(d => d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '')
-              return new Obj(gb)
-                .map((k, v) => [k, {
-                  count: v.length,
-                  committed: gbByCommittedDate[k]?.filter(_ => _.status === KoboMetaStatus.Committed).length
-                }])
-                .sort(([ka], [kb]) => ka.localeCompare(kb))
-                .entries()
-                .map(([k, v]) => ({name: k, [m.submissionTime]: v.count, [m.committed]: v.committed}))
+              const months = seq([...Obj.keys(gb), ...Obj.keys(gbByCommittedDate)]).distinct(_ => _).sort()
+              return months.map(month => ({
+                name: month,
+                [m.submissionTime]: gb[month]?.length ?? 0,
+                [m.committed]: gbByCommittedDate[month]?.filter(_ => _.status === KoboMetaStatus.Committed).length ?? 0
+              }))
+                // .map((k, v) => [k, {
+                //   count: v.length,
+                //   committed: gbByCommittedDate[k]?.filter(_ => _.status === KoboMetaStatus.Committed).length
+                // }])
+                // .sort(([ka], [kb]) => ka.localeCompare(kb))
+                // .entries()
+                // .map(([k, v]) => ({name: k, [m.submissionTime]: v.count, [m.committed]: v.committed}))
             }}>
-              {_ => (
+              {_ =>
                 <ChartLine
+                  fixMissingMonths
                   hideYTicks
                   height={200}
                   data={_ as any}
                   colors={() => [t.palette.primary.main, t.palette.success.main]}
                   hideLabelToggle
                 />
-              )}
+              }
             </Lazy>
           </SlidePanel>
           <SlidePanel>

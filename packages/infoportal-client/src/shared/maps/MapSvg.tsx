@@ -15,7 +15,7 @@ const maxAlpha = .8
 const medianAlpha = minAlpha + (maxAlpha - minAlpha) / 2
 
 const computeFill = (value: number, min: number, max: number) => {
-  if (max - min === 0) return
+  if (max - min === 0) return 1
   return value > 0 ? (maxAlpha - minAlpha) * (value - min) / (max - min) + minAlpha : undefined
 }
 

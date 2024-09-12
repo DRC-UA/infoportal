@@ -2,13 +2,14 @@ import {CartesianGrid, LabelList, Legend, Line, LineChart, ResponsiveContainer, 
 import * as React from 'react'
 import {ReactNode, useState} from 'react'
 import {Box, BoxProps, Checkbox, Theme, useTheme} from '@mui/material'
-import {map} from '@alexandreannic/ts-utils'
+import {map, Obj} from '@alexandreannic/ts-utils'
 import {styleUtils} from '@/core/theme'
 import {chartConfig} from '@/shared/charts/chartConfig'
 import {formatLargeNumber} from '@/core/i18n/localization/en'
 import {commonLegendProps} from '@/shared/charts/ChartBarStacked'
+import {addMonths, format, isBefore, parse} from 'date-fns'
 
-export interface ChartLinePropsBase extends Pick<BoxProps, 'sx'> {
+export interface ChartLineProps extends Pick<BoxProps, 'sx'> {
   colorsByKey?: (t: Theme) => Record<string, string>
   colors?: (t: Theme) => string[]
   /**
@@ -26,17 +27,38 @@ export interface ChartLinePropsBase extends Pick<BoxProps, 'sx'> {
   loading?: boolean
   distinctYAxis?: boolean
   children?: ReactNode
-}
-
-export interface ChartLineProps extends ChartLinePropsBase {
   data?: ChartLineData[]
+  fixMissingMonths?: boolean
 }
 
-export type ChartLineData = Record<string, number> & {
+export type ChartLineData = {
   name: string
-}
+} & Record<string, number>
 
-// const colors = chartConfig.defaultColors
+const addMissingKeyMonths = <T extends ChartLineData[]>(arr: T): T => {
+  // const monthsList = Array.from({length: differenceInMonths(new Date(period.end), new Date(period.start)) + 1}, (_, i) =>
+  //   format(addMonths(new Date(period.start), i), 'yyyy-MM')
+  // )
+  const result: ChartLineData[] = []
+  const otherKeys = Obj.keys(arr[0] ?? {}).filter(_ => _ !== 'name')
+  for (let i = 0; i < arr.length; i++) {
+    result.push(arr[i])
+    if (i < arr.length - 1) {
+      let currentDate = parse(arr[i].name, 'yyyy-MM', new Date())
+      let nextDate = parse(arr[i + 1].name, 'yyyy-MM', new Date())
+
+      while (isBefore(addMonths(currentDate, 1), nextDate)) {
+        currentDate = addMonths(currentDate, 1)
+        const newItem: any = {name: format(currentDate, 'yyyy-MM')}
+        otherKeys.forEach(k => {
+          newItem[k] = 0
+        })
+        result.push(newItem)
+      }
+    }
+  }
+  return result as T
+}
 
 export const ChartLine = ({
   data,
@@ -50,6 +72,7 @@ export const ChartLine = ({
   hideXTicks,
   distinctYAxis,
   hideLegend,
+  fixMissingMonths,
   disableAnimation,
   hideLabelToggle,
   percent,
@@ -59,6 +82,11 @@ export const ChartLine = ({
   const lines = Object.keys(data?.[0] ?? {}).filter(_ => _ !== 'name')
   const [showCurves, setShowCurves] = useState<boolean[]>(new Array(lines.length).fill(false))
 
+  const cleanedData = React.useMemo(() => {
+    if (fixMissingMonths && data)
+      return addMissingKeyMonths(data)
+    return data
+  }, [data, fixMissingMonths])
   return (
     <>
       {!hideLabelToggle && (
@@ -79,7 +107,7 @@ export const ChartLine = ({
       )}
       <Box sx={{height, ml: hideYTicks ? 0 : -2, mb: hideXTicks ? -4 : 0, ...sx}}>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart height={height - 60} data={data}>
+          <LineChart height={height - 60} data={cleanedData}>
             <CartesianGrid strokeDasharray="1 1" strokeWidth={.5} vertical={false}/>
             {!hideLegend && (
               <Legend {...commonLegendProps}/>
