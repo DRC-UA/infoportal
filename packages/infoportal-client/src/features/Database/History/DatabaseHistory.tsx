@@ -8,12 +8,13 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {alpha, Icon, useTheme} from '@mui/material'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {KoboAnswerHistory} from '@/core/sdk/server/kobo/answerHistory/KoboAnswerHistory'
 import {AppAvatar} from '@/shared/AppAvatar'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
+import {Txt} from '@/shared'
 
 export const DatabaseHistory = () => {
   const {serverId, formId} = databaseUrlParamsValidation.validateSync(useParams())
@@ -29,18 +30,18 @@ export const DatabaseHistory = () => {
     fetcher.fetch()
   }, [])
 
-  const getTranslation = (row: KoboAnswerHistory, fn: (_: KoboAnswerHistory) => string) => {
+  const getTranslation = (row: KoboAnswerHistory, fn: (_: KoboAnswerHistory) => string) => map(row.property, property => {
     const value: any = fn(row)
     if (!schema) return value
-    const questionSchema = schema.schemaHelper.questionIndex[row.property]
+    const questionSchema = schema.schemaHelper.questionIndex[property]
     if (!questionSchema) return value
     switch (questionSchema.type) {
       case 'select_multiple': {
-        const label = value?.split(' ').map((_: string) => schema.translate.choice(row.property, _)).join(' | ')
+        const label = value?.split(' ').map((_: string) => schema.translate.choice(property, _)).join(' | ')
         return label
       }
       case 'select_one': {
-        const render = schema.translate.choice(row.property, value)
+        const render = schema.translate.choice(property, value)
         return render ?? (
           <span title={value}>
             <TableIcon color="disabled" tooltip={m._koboDatabase.valueNoLongerInOption} sx={{mr: 1}} children="error"/>
@@ -52,7 +53,7 @@ export const DatabaseHistory = () => {
         return value
       }
     }
-  }
+  })
 
   return (
     <Page width="lg">
@@ -121,6 +122,7 @@ export const DatabaseHistory = () => {
                 return {
                   value: _.type,
                   label: fnSwitch(_.type, {
+                    delete: <Txt color="error" bold>{m._koboDatabase.deleted}</Txt>,
                     answer: m._koboDatabase.koboQuestion,
                     tag: m._koboDatabase.customColumn,
                   })

@@ -761,6 +761,7 @@ export const en = Object.freeze({
       newValue: 'New value',
       oldValue: 'Old value',
       koboQuestion: 'Kobo question',
+      deleted: 'Deleted',
       customColumn: 'Custom column',
       currentlyDisplayed: `columns displayed`,
       tagNotUpdated: 'Failed to update tag. Reloading clean data set...',
