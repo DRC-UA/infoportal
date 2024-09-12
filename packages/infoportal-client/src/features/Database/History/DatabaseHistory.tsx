@@ -189,6 +189,7 @@ export const DatabaseHistory = () => {
               id: 'newVranslate',
               head: m._koboDatabase.newValue,
               render: row => {
+                if (!row.newValue) return {label: undefined, value: undefined}
                 const label = getAnswerTranslation(row, _ => _.newValue)
                 return {
                   label: <span style={{borderRadius: 4, padding: '0 4px', background: alpha(t.palette.success.light, .16), color: t.palette.success.main}}>{label}</span>,

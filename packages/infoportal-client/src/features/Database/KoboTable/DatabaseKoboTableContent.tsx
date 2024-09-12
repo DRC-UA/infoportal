@@ -20,7 +20,6 @@ import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {appConfig} from '@/conf/AppConfig'
-import {useSession} from '@/core/Session/SessionContext'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
@@ -121,7 +120,7 @@ export const DatabaseKoboTableContent = ({
     }))
   }, [schemaColumns, ctx.view.currentView])
 
-  const selectedHeader = useCustomSelectedHeader({access, formId: ctx.form.id, selectedIds})
+  const selectedHeader = useCustomSelectedHeader({access: ctx.access, formId: ctx.form.id, selectedIds})
   const header = useCustomHeader()
 
   return (
