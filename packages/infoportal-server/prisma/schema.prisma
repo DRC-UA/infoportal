@@ -59,6 +59,7 @@ model KoboAnswers {
   history           KoboAnswersHistory[]
 
   @@unique([id, formId])
+  @@index([deletedAt])
   @@index([date])
   @@index([formId])
 }
@@ -67,7 +68,7 @@ model KoboAnswersHistory {
   id       String       @id @default(uuid())
   form     KoboForm?    @relation(fields: [formId], references: [id])
   formId   String?
-  answer   KoboAnswers? @relation(fields: [answerId], references: [id])
+  answer   KoboAnswers? @relation(fields: [answerId], references: [id], onDelete: Cascade)
   answerId String?
   by       String
   date     DateTime     @default(now())

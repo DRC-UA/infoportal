@@ -422,7 +422,11 @@ export class KoboService {
     authorEmail?: string
   }) => {
     await Promise.all([
-      this.prisma.koboAnswers.deleteMany({
+      this.prisma.koboAnswers.updateMany({
+        data: {
+          deletedAt: new Date(),
+          deletedBy: authorEmail,
+        },
         where: {
           formId,
           id: {in: answerIds}
