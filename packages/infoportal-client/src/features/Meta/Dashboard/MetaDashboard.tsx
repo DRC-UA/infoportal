@@ -139,13 +139,6 @@ export const MetaDashboard = () => {
                 [m.submissionTime]: gb[month]?.length ?? 0,
                 [m.committed]: gbByCommittedDate[month]?.filter(_ => _.status === KoboMetaStatus.Committed).length ?? 0
               }))
-                // .map((k, v) => [k, {
-                //   count: v.length,
-                //   committed: gbByCommittedDate[k]?.filter(_ => _.status === KoboMetaStatus.Committed).length
-                // }])
-                // .sort(([ka], [kb]) => ka.localeCompare(kb))
-                // .entries()
-                // .map(([k, v]) => ({name: k, [m.submissionTime]: v.count, [m.committed]: v.committed}))
             }}>
               {_ =>
                 <ChartLine

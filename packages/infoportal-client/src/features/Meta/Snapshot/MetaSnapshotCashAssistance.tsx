@@ -151,17 +151,16 @@ const Cp = ({period}: MetaSnapshotProps) => {
                 <Lazy deps={[data]} fn={() => {
                   const gb = data.groupBy(d => format(d.date, 'yyyy-MM'))
                   const gbByCommittedDate = data.groupBy(d => d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '')
-                  return new Obj(gb)
-                    .map((k, v) => [k, {
-                      count: v.length,
-                      committed: gbByCommittedDate[k]?.filter(_ => _.status === KoboMetaStatus.Committed).length
-                    }])
-                    .sort(([ka], [kb]) => ka.localeCompare(kb))
-                    .entries()
-                    .map(([k, v]) => ({'Assistance': v.committed, name: k, 'Registration': v.count,}))
+                  const months = seq([...Obj.keys(gb), ...Obj.keys(gbByCommittedDate)]).distinct(_ => _).sort()
+                  return months.map(month => ({
+                    name: month,
+                    'Registration': gb[month].length,
+                    'Assistance': gbByCommittedDate[month]?.filter(_ => _.status === KoboMetaStatus.Committed).length
+                  }))
                 }}>
                   {_ => (
                     <ChartLine
+                      fixMissingMonths
                       height={180}
                       hideYTicks={true}
                       data={_ as any}
@@ -207,6 +206,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                   }}>
                     {_ => (
                       <ChartLine
+                        fixMissingMonths
                         height={180}
                         data={_ as any}
                         hideLabelToggle

@@ -140,6 +140,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                 }}>
                   {_ => (
                     <ChartLine
+                      fixMissingMonths
                       height={200}
                       sx={{mb: -1.5}}
                       hideYTicks={true}

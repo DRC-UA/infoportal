@@ -152,7 +152,7 @@ export const SafetyIncidentDashboardBody = () => {
               .map(([k, v]) => ({name: k, ...v}))
           }}>
             {_ => (
-              <ChartLine height={200} data={_ as any} translation={{
+              <ChartLine fixMissingMonths height={200} data={_ as any} translation={{
                 total: m.safety.incidents,
                 dead: m.safety.dead,
                 injured: m.safety.injured,

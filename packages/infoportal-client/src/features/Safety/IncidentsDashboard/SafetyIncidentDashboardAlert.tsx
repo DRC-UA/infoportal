@@ -143,6 +143,7 @@ export const SafetyIncidentDashboardAlert = () => {
             {_ => (
               <ChartLine
                 height={200}
+                fixMissingMonths
                 data={_ as any}
                 translation={{
                   green: m.safety.green,

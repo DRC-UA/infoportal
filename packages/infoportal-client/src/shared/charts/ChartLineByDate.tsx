@@ -60,6 +60,7 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
     <>
       <ChartLine
         {...props}
+        fixMissingMonths
         hideLabelToggle={true}
         height={height ?? 220}
         data={curve}

@@ -78,6 +78,7 @@ export const MpcaDashboardDeduplication = ({
         }}>
           {_ => (
             <ChartLine
+              fixMissingMonths
               hideYTicks
               colorsByKey={colors}
               data={_ as any}

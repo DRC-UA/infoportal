@@ -28,6 +28,7 @@ export const MpcaDashboardAmountLine = ({
     }}>
       {_ => (
         <ChartLine
+          fixMissingMonths
           hideYTicks
           height={200}
           data={_ as any}
