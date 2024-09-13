@@ -93,15 +93,18 @@ export const ProtectionDashboardMonitoSample = () => {
             <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
               <IpSelectSingle placeholder={m.ageGroup} sx={{mr: 1}} hideNullOption value={ag} options={Obj.keys(Person.ageGroup)} onChange={e => setAg(e)}/>
               <ScRadioGroup value={agDisplay} onChange={setAgDisplay} dense inline>
-                <ScRadioGroupItem dense hideRadio value="table"
-                                  title={<Icon color="disabled" sx={{marginBottom: '-5px', fontSize: '20px !important'}}>calendar_view_month</Icon>}/>
+                <ScRadioGroupItem
+                  dense hideRadio
+                  value="table"
+                  title={<Icon color="disabled" sx={{marginBottom: '-5px', fontSize: '20px !important'}}>calendar_view_month</Icon>}
+                />
                 <ScRadioGroupItem
                   dense hideRadio value="chart"
                   title={<Icon color="disabled" sx={{marginBottom: '-5px', fontSize: '20px !important'}}>align_horizontal_left</Icon>}
                 />
               </ScRadioGroup>
             </Box>
-            <Lazy deps={[ctx.dataFiltered, agDisplay, ag]} fn={() => ctx.ageGroup(ctx.dataFiltered, Person.ageGroup['DRC'])}>
+            <Lazy deps={[ctx.dataFiltered, agDisplay, ag]} fn={() => ctx.ageGroup(ctx.dataFiltered, Person.ageGroup[ag])}>
               {_ => agDisplay === 'chart' ? (
                 <ChartBarStacker data={_} height={250}/>
               ) : (

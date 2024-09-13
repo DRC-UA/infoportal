@@ -522,6 +522,9 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     background: t.palette.background.paper,
     maxWidth: 102,
   },
+  '.table thead': {
+    borderTop: `1px solid ${t.palette.divider}`,
+  },
   '.table thead .td, .table thead .th': {
     background: styleUtils(t).color.toolbar,
   },
