@@ -4,6 +4,7 @@ import {format, sub} from 'date-fns'
 import {seq} from '@alexandreannic/ts-utils'
 import {StandardEnum} from '../../../helper/HelperType'
 
+/** @deprecated Ecrec App does not exist anymore. Keep the code since it can be helpful*/
 export class EcrecSdk {
 
   constructor(private client: EcrecClient) {
@@ -33,7 +34,7 @@ export class EcrecSdk {
   readonly fetchSme = async (filters: EcrecGetDataFilters<typeof EcrecSmeStatus>) => {
     return this.fetch<typeof EcrecSmeStatus>('sme', filters)
   }
-  
+
   readonly fetchMicro = async (filters: EcrecGetDataFilters<typeof EcrecSmeStatus>) => {
     return this.fetch<typeof EcrecSmeStatus>('micro', filters)
   }

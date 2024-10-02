@@ -27,13 +27,12 @@ import {
   VetApplicationStatus,
 } from 'infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
-import {EcrecCashRegistrationTags} from '../../../db/koboForm/DbHelperEcrecCashRegistration'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
 import {appConf} from '../../../core/conf/AppConf'
 
 export class KoboMetaMapperEcrec {
 
-  static readonly cashRegistration: MetaMapperInsert<KoboMetaOrigin<Ecrec_cashRegistration.T, EcrecCashRegistrationTags>> = row => {
+  static readonly cashRegistration: MetaMapperInsert<KoboMetaOrigin<Ecrec_cashRegistration.T, KoboBaseTags & KoboTagStatus>> = row => {
     const answer = Ecrec_cashRegistration.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
@@ -211,7 +210,7 @@ export class KoboMetaMapperEcrec {
     })
   }
 
-  static readonly cashRegistrationBha: MetaMapperInsert<KoboMetaOrigin<Ecrec_cashRegistrationBha.T, EcrecCashRegistrationTags>> = row => {
+  static readonly cashRegistrationBha: MetaMapperInsert<KoboMetaOrigin<Ecrec_cashRegistrationBha.T, KoboBaseTags & KoboTagStatus>> = row => {
     const answer = Ecrec_cashRegistrationBha.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)

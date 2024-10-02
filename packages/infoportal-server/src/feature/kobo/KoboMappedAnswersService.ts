@@ -17,11 +17,11 @@ import {
   Shelter_cashForRepair,
   Shelter_north,
   Shelter_nta,
-  Shelter_ta
+  Shelter_ta,
+  ProtectionHhsTags
 } from 'infoportal-common'
 import {map} from '@alexandreannic/ts-utils'
 import {ShelterNtaTags, ShelterTaTags} from './tags/ShelterTags'
-import {ProtectionHhsTags} from '../../db/koboForm/DbHelperProtectionHhs'
 
 export class KoboMappedAnswersService {
 

@@ -407,6 +407,7 @@ export enum DrcJob {
   'EconomicRecovery Assistant' = 'EconomicRecovery Assistant',
   'Emergency Distribution officer' = 'Emergency Distribution officer',
   'Emergency Officer' = 'Emergency Officer',
+  'Emergency Manager' = 'Emergency Manager',
   'Emergency Team Officer' = 'Emergency Team Officer',
   'EORE Assistant' = 'EORE Assistant',
   'EORE Facilitator' = 'EORE Facilitator',

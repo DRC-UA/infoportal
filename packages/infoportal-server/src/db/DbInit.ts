@@ -2,7 +2,6 @@ import {FeatureAccessLevel, Prisma, PrismaClient} from '@prisma/client'
 import {appConf, AppConf} from '../core/conf/AppConf'
 import {AppFeatureId, KoboDatabaseFeatureParams} from '../feature/access/AccessType'
 import {DrcJob, DrcOffice, koboIndex, KoboIndex} from 'infoportal-common'
-import {DbHelperProtectionHhs} from './koboForm/DbHelperProtectionHhs'
 
 export const createdBySystem = 'SYSTEM'
 
@@ -25,13 +24,6 @@ export class DbInit {
     //   this.createServer(),
     //   this.createAccess(),
     // ])
-  }
-
-  private readonly fixKoboForms = async () => {
-    return Promise.all([
-      // new DbHelperBNRE(this.prisma).assignMissingSettlement(),
-      new DbHelperProtectionHhs(this.prisma).assignDonorsForHhs(),
-    ])
   }
 
   private readonly createAccTest = async () => {

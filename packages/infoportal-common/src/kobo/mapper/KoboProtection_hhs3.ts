@@ -34,8 +34,6 @@ export interface ProtectionCommunityMonitoringTags extends KoboBaseTags {
 
 export interface ProtectionHhsTags extends KoboBaseTags {
   projects?: DrcProject[]
-  ai: DrcDonor,
-  ipt: DrcDonor[]
 }
 
 export const currentProtectionProjects = [
