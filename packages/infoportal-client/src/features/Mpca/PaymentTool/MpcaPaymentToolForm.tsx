@@ -1,11 +1,11 @@
 import {MpcaPayment, MpcaPaymentUpdate} from '../../../core/sdk/server/mpcaPaymentTool/MpcaPayment'
 import {Controller, useForm} from 'react-hook-form'
-import {AaSelect} from '@/shared/Select/Select'
 import React, {useEffect} from 'react'
 import {useI18n} from '../../../core/i18n'
 import {ListRow} from '@/shared/ListRow'
 import {IpInput} from '@/shared/Input/Input'
 import {IpIconBtn} from '@/shared/IconBtn'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 
 const budgetLines = [
   {value: '', children: ''},
@@ -63,7 +63,7 @@ export const MpcaPaymentToolForm = ({
           name="city"
           defaultValue={tool.city}
           control={control}
-          render={({field}) => <AaSelect defaultValue={field.value ?? ''} onChange={_ => field.onChange({target: {value: _}} as any)} options={[
+          render={({field}) => <IpSelectSingle hideNullOption defaultValue={field.value ?? ''} onChange={_ => field.onChange({target: {value: _}} as any)} options={[
             {value: '', children: ''},
             {value: 'Kyiv', children: m.kyiv},
             {value: 'Mykolaiv', children: m.mykolaiv},
@@ -75,7 +75,7 @@ export const MpcaPaymentToolForm = ({
           name="budgetLineCFR"
           defaultValue={tool.budgetLineCFR}
           control={control}
-          render={({field}) => <AaSelect defaultValue={field.value ?? ''} onChange={_ => field.onChange({target: {value: _}} as any)} options={budgetLines}/>}
+          render={({field}) => <IpSelectSingle hideNullOption defaultValue={field.value ?? ''} onChange={_ => field.onChange({target: {value: _}} as any)} options={budgetLines}/>}
         />
       </ListRow>
       <ListRow icon={''} border label={m.mpca.budgetLineMPCA}>
@@ -83,7 +83,7 @@ export const MpcaPaymentToolForm = ({
           name="budgetLineMPCA"
           defaultValue={tool.budgetLineMPCA}
           control={control}
-          render={({field}) => <AaSelect defaultValue={field.value ?? ''} onChange={_ => field.onChange({target: {value: _}} as any)} options={budgetLines}/>}
+          render={({field}) => <IpSelectSingle hideNullOption defaultValue={field.value ?? ''} onChange={_ => field.onChange({target: {value: _}} as any)} options={budgetLines}/>}
         />
       </ListRow>
       <ListRow icon={''} label={m.mpca.budgetLineStartUp}>
@@ -91,7 +91,7 @@ export const MpcaPaymentToolForm = ({
           name="budgetLineStartUp"
           defaultValue={tool.budgetLineStartUp}
           control={control}
-          render={({field}) => <AaSelect defaultValue={field.value ?? ''} onChange={_ => field.onChange({target: {value: _}} as any)} options={budgetLines}/>}
+          render={({field}) => <IpSelectSingle hideNullOption defaultValue={field.value ?? ''} onChange={_ => field.onChange({target: {value: _}} as any)} options={budgetLines}/>}
         />
       </ListRow>
     </>

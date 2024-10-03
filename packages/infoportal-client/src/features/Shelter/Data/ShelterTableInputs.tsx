@@ -1,11 +1,10 @@
 import {Shelter_ta, ShelterContractor, ShelterContractorPrices, ShelterProgress} from 'infoportal-common'
-import {AaSelectBase} from '@/shared/Select/Select'
 import React from 'react'
 import {Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
-import {IpSelectSingle, IpSelectSingleNullableProps} from '@/shared/Select/SelectSingle'
+import {IpSelectSingle, IpSelectSingleNullableProps, IpSelectSingleProps} from '@/shared/Select/SelectSingle'
 
-export const ShelterSelectStatus = (props: Pick<IpSelectSingleNullableProps<ShelterProgress>, 'value' | 'defaultValue' | 'onChange'> & Pick<AaSelectBase, 'disabled' | 'sx' | 'label'>) => {
+export const ShelterSelectStatus = (props: Pick<IpSelectSingleNullableProps<ShelterProgress>, 'value' | 'defaultValue' | 'onChange'> & Pick<IpSelectSingleProps, 'disabled' | 'sx' | 'label'>) => {
   const {m} = useI18n()
   return (
     <IpSelectSingle<ShelterProgress>
@@ -18,7 +17,7 @@ export const ShelterSelectStatus = (props: Pick<IpSelectSingleNullableProps<Shel
 export const ShelterSelectContractor = ({
   oblast,
   ...props
-}: Pick<IpSelectSingleNullableProps<ShelterContractor>, 'value' | 'defaultValue' | 'onChange'> & Pick<AaSelectBase, 'disabled' | 'sx' | 'label'> & {
+}: Pick<IpSelectSingleNullableProps<ShelterContractor>, 'value' | 'defaultValue' | 'onChange'> & Pick<IpSelectSingleProps, 'disabled' | 'sx' | 'label'> & {
   oblast?: keyof typeof Shelter_ta.options['ben_det_oblast']
 }) => {
   return (

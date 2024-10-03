@@ -1,9 +1,8 @@
 import {KeyOf, KoboAnswerId, KoboId} from 'infoportal-common'
 import React, {Dispatch, ReactNode, SetStateAction} from 'react'
-import {AaSelectProps} from '@/shared/Select/Select'
 import {Obj} from '@alexandreannic/ts-utils'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
-import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {IpSelectSingle, IpSelectSingleProps} from '@/shared/Select/SelectSingle'
 
 export const KoboSelectTag = <
   TTag extends Record<string, any>,
@@ -32,7 +31,7 @@ export const KoboSelectTag = <
   translate?: Record<K, ReactNode>
   setData?: Dispatch<SetStateAction<T[] | undefined>>
   disabled?: boolean
-} & Pick<AaSelectProps<any>, 'sx'>) => {
+} & Pick<IpSelectSingleProps<any>, 'sx'>) => {
   const ctxEditTag = useKoboEditTagContext()
   const enumKeys = Obj.keys(enumerator)
 

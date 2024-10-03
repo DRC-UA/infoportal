@@ -11,11 +11,10 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {useIpToast} from '@/core/useToast'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {AccessForm, IAccessForm} from '@/features/Access/AccessForm'
-import {AaSelect} from '@/shared/Select/Select'
 import {useCfmContext} from '@/features/Cfm/CfmContext'
 import {AccessFormSection} from '@/features/Access/AccessFormSection'
-
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 
 interface Form extends IAccessForm {
   office: DrcOffice[]
@@ -72,10 +71,9 @@ export const CfmAccessForm = ({
                 required: !!ctx.authorizations.accessibleOffices
               }}
               render={({field: {onChange, ...field}}) => (
-                <AaSelect<DrcOffice>
+                <IpSelectMultiple<DrcOffice>
                   {...field}
                   defaultValue={[]}
-                  multiple={true}
                   label={m.drcOffice}
                   onChange={_ => onChange(_)}
                   options={ctx.authorizations.accessibleOffices ?? Enum.keys(DrcOffice)}
@@ -90,10 +88,10 @@ export const CfmAccessForm = ({
               name="program"
               control={accessForm.control}
               render={({field: {onChange, ...field}}) => (
-                <AaSelect<CfmDataProgram>
+                <IpSelectMultiple<CfmDataProgram>
                   {...field}
+                  showUndefinedOption
                   defaultValue={[]}
-                  multiple={true}
                   label={m.program}
                   onChange={_ => onChange(_)}
                   options={ctx.authorizations.accessiblePrograms ?? Enum.keys(CfmDataProgram)}
