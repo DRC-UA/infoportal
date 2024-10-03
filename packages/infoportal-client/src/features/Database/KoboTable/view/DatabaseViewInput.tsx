@@ -1,16 +1,16 @@
-import {Badge, Box, Icon, SxProps, Theme, useTheme} from '@mui/material'
+import {Box, Icon, SxProps, Theme, useTheme} from '@mui/material'
 import {IpInput} from '@/shared/Input/Input'
 import {IpBtn} from '@/shared/Btn'
 import {PopoverWrapper} from '@/shared/PopoverWrapper'
 import React, {useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {useForm} from 'react-hook-form'
-import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {DatabaseViewVisibility} from '@/core/sdk/server/databaseView/DatabaseView'
 import {PanelTitle} from '@/shared/Panel'
 import {IpAlert} from '@/shared'
 import {DatabaseViewInputRow} from '@/features/Database/KoboTable/view/DatabaseViewInputRow'
 import {DatabaseViewDefaultName, UseDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
+import {useSession} from '@/core/Session/SessionContext'
 
 interface FormCreate {
   name: string
@@ -26,6 +26,7 @@ export const DatabaseViewInput = ({
   const {m, formatDate} = useI18n()
   const t = useTheme()
   const [open, setOpen] = useState<string | undefined>(undefined)
+  const {session} = useSession()
 
   const formCreate = useForm<FormCreate>()
   return (
@@ -38,7 +39,10 @@ export const DatabaseViewInput = ({
         {ctx.fetcherViews.get?.map(view =>
           <DatabaseViewInputRow
             key={view.id}
-            readOnly={view.name === DatabaseViewDefaultName}
+            readOnly={
+              view.name === DatabaseViewDefaultName ||
+              (view.visibility === DatabaseViewVisibility.Sealed && view.createdBy !== session.email && !session.admin)
+            }
             open={open === view.id}
             onDelete={() => ctx.asyncViewDelete.call(view.id)}
             onOpen={() => setOpen(open === view.id ? undefined : view.id)}
@@ -74,19 +78,17 @@ export const DatabaseViewInput = ({
         </Box>
       </Box>
     )}>
-      <Badge color="info" badgeContent="NEW!">
-        <IpBtn
-          icon="visibility"
-          color="inherit"
-          variant="input"
-          endIcon={<Icon sx={{color: t.palette.text.secondary}}>arrow_drop_down</Icon>}
-          children={ctx.currentView?.name ?? '-'}
-          sx={{
-            // fontWeight: 400,
-            ...sx,
-          }}
-        />
-      </Badge>
+      <IpBtn
+        icon="visibility"
+        color="inherit"
+        variant="input"
+        endIcon={<Icon sx={{color: t.palette.text.secondary}}>arrow_drop_down</Icon>}
+        children={ctx.currentView?.name ?? '-'}
+        sx={{
+          // fontWeight: 400,
+          ...sx,
+        }}
+      />
     </PopoverWrapper>
   )
 }

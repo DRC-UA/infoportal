@@ -1,6 +1,6 @@
 import {IpBtn, IpBtnProps, PopoverWrapper, Txt} from '@/shared'
 import React from 'react'
-import {Badge, Box, Icon, useTheme} from '@mui/material'
+import {Box, Icon, useTheme} from '@mui/material'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {ipSelectItem, IpSelectSingle} from '@/shared/Select/SelectSingle'
@@ -39,15 +39,13 @@ export const DatabaseGroupDisplayInput = (props: IpBtnProps) => {
         )}
       </Box>
     )}>
-      <Badge color="info" badgeContent="NEW!">
-        <IpBtn
-          variant="input"
-          color="inherit"
-          children={<Icon sx={{transform: 'rotate(180deg)', marginRight: '-8px'}}>move_up</Icon>}
-          endIcon={<Icon sx={{color: t.palette.text.secondary}}>arrow_drop_down</Icon>}
-          {...props}
-        />
-      </Badge>
+      <IpBtn
+        variant="input"
+        color="inherit"
+        children={<Icon sx={{transform: 'rotate(180deg)', marginRight: '-8px'}}>move_up</Icon>}
+        endIcon={<Icon sx={{color: t.palette.text.secondary}}>arrow_drop_down</Icon>}
+        {...props}
+      />
     </PopoverWrapper>
   )
 }

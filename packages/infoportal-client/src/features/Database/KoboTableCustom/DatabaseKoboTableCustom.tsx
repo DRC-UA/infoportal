@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
@@ -94,6 +94,7 @@ export const DatabaseTableCustomRoute = () => {
   const ctxSchema = useKoboSchemaContext()
   const {setTitle} = useLayoutContext()
   const ctxAnswers = useKoboAnswersContext()
+  const [selectedIds, setSelectedIds] = useState<KoboAnswerId[]>([])
   if (!customForm) return
 
   const view = useDatabaseView('custom-db-' + customForm.id)
@@ -197,6 +198,10 @@ export const DatabaseTableCustomRoute = () => {
             onResizeColumn={view.onResizeColumn}
             id={customForm.id}
             columns={columns}
+            select={{
+              onSelect: setSelectedIds,
+              getId: _ => _.id,
+            }}
             data={data as any}
             showExportBtn
             columnsToggle={{
