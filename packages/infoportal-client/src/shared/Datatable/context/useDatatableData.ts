@@ -81,8 +81,8 @@ export const useDatatableData = <T extends DatatableRow>({
           }
         },
       }, () => (a: T, b: T) => {
-        const av = ('' + col.render(a).value) ?? ''
-        const bv = ('' + col.render(b).value) ?? ''
+        const av = (col.render(a).value ?? '') + ''
+        const bv = (col.render(b).value ?? '') + ''
         return av.localeCompare(bv) * (search.orderBy === 'asc' ? -1 : 1)
       }))
       return [...sorted]

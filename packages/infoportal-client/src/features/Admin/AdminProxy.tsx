@@ -77,7 +77,7 @@ export const AdminProxy = () => {
                       sx={{mb: 2}}
                       label={m.url}
                       error={!!_createForm.formState.errors.url}
-                      helperText={!!_createForm.formState.errors.name?.message ?? m.error}
+                      helperText={_createForm.formState.errors.name?.message ?? m.error}
                       {..._createForm.register('url', {
                         required: {value: true, message: m.required},
                         pattern: {value: Regexp.get.url, message: m.invalidUrl},
