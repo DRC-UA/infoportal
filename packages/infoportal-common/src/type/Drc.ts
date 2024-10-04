@@ -257,6 +257,7 @@ export enum DrcProject {
   'UKR-000355 Danish MFA' = 'UKR-000355 Danish MFA',
   'UKR-000360 Novo-Nordisk' = 'UKR-000360 Novo-Nordisk',
   'UKR-000363 UHF8' = 'UKR-000363 UHF8',
+  'UKR-000390 UHF9' = 'UKR-000390 UHF9',
   // @deprecated wrong code 371, it should be 372
   'UKR-000371 ECHO3' = 'UKR-000371 ECHO3',
   'UKR-000372 ECHO3' = 'UKR-000372 ECHO3',

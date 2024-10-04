@@ -53,7 +53,10 @@ export class KoboMetaBasicneeds {
         console.error(`[${row.id}] No donor for ${project}`)
         return
       }
-      const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
+      const status = DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : row.tags?.status
+      if (row.id === '569556546') {
+        console.log(activity, DrcSectorHelper.isAutoValidatedActivity(activity), status)
+      }
       return {
         enumerator: Bn_re.options.back_enum[answer.back_enum!],
         office: fnSwitch(answer.back_office!, {
@@ -231,7 +234,7 @@ export class KoboMetaBasicneeds {
     //   .compact()
 
     const prepare = (activity: DrcProgram, project?: DrcProject): MetaMapped => {
-      const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : undefined)
+      const status = DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : row.tags?.status
       return {
         enumerator: Bn_rapidResponse.options.back_enum_l[answer.back_enum_l!],
         office: fnSwitch(answer.back_office ?? answer.back_office_l!, {
@@ -314,7 +317,7 @@ export class KoboMetaBasicneeds {
       })
     })
     return activities.map(activity => {
-      const status = row.tags?.status ?? (DrcSectorHelper.isAutoValidatedActivity(activity.program) ? CashStatus.Paid : undefined)
+      const status = DrcSectorHelper.isAutoValidatedActivity(activity.program) ? CashStatus.Paid : row.tags?.status
       return KoboMetaMapper.make({
         enumerator: Bn_rapidResponse2.options.back_enum[answer.back_enum!],
         office,
