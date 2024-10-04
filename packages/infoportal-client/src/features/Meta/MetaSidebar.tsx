@@ -9,7 +9,6 @@ import {useI18n} from '@/core/i18n'
 import {FilterLayoutProps} from '@/shared/DataFilter/DataFilterLayout'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {Badge, Box, capitalize, Switch, Typography, useTheme} from '@mui/material'
-import {MetaSidebarSelect} from '@/features/Meta/MetaSidebarSelect'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {SidebarSubSection} from '@/shared/Layout/Sidebar/SidebarSubSection'
 import {IpBtn} from '@/shared/Btn'
@@ -21,6 +20,8 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {useSession} from '@/core/Session/SessionContext'
+import {MultipleChoices} from '@/shared'
+import { color } from 'html2canvas/dist/types/css/types/color'
 
 export const Item = ({
   label,
@@ -219,42 +220,42 @@ export const MetaDashboardSidebarBody = (
   return (
     <>
       {Obj.entries(shapes).map(([name, shape]) =>
-        <SidebarSubSection icon={shape.icon} title={
-          <Box sx={{display: 'flex', alignItems: 'center'}}>
-            {capitalize(name)}
-            <Badge
-              color="primary"
-              // anchorOrigin={{
-              //   vertical: 'top',
-              //   horizontal: 'left',
-              variant={filters[name]?.length ?? 0 > 0 ? 'dot' : undefined}
-              // badgeContent={filters[name]?.length}
-              sx={{color: t.palette.text.secondary, marginLeft: 'auto', mr: .25}}
+        <DebouncedInput<string[]>
+          key={name}
+          debounce={50}
+          value={filters[name] ?? []}
+          onChange={_ => setFilters((prev: any) => ({...prev, [name]: _}))}
+        >
+          {(value, onChange) =>
+            <MultipleChoices
+              value={value}
+              onChange={onChange}
+              options={shapes[name].getOptions(() => getFilteredOptions(name))?.map(_ => ({value: _.value, children: _.label})) ?? []}
             >
-              <IpIconBtn children="clear" size="small" onClick={() => onClear?.(name)}/>
-            </Badge>
-          </Box>
-        } key={name} defaultOpen={filters[name] !== undefined}>
-          {filters[name] !== undefined}
-          <DebouncedInput<string[]>
-            key={name}
-            debounce={50}
-            value={filters[name]}
-            onChange={_ => setFilters((prev: any) => ({...prev, [name]: _}))}
-          >
-            {(value, onChange) =>
-              <MetaSidebarSelect
-                icon={shape.icon}
-                value={value ?? []}
-                label={shape.label}
-                addBlankOption={shape.addBlankOption}
-                options={() => shapes[name].getOptions(() => getFilteredOptions(name))}
-                onChange={onChange}
-                sx={{mb: .5}}
-              />
-            }
-          </DebouncedInput>
-        </SidebarSubSection>
+              {({options, toggleAll, allChecked, someChecked}) => (
+                <>
+                  <SidebarSubSection icon={shape.icon} title={
+                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                      {capitalize(name)}
+                      <Badge
+                        color="primary"
+                        // anchorOrigin={{
+                        //   vertical: 'top',
+                        //   horizontal: 'left',
+                        variant={filters[name]?.length ?? 0 > 0 ? 'dot' : undefined}
+                        // badgeContent={filters[name]?.length}
+                        sx={{color: t.palette.text.secondary, marginLeft: 'auto', mr: .25}}
+                      >
+                        <IpIconBtn children="clear" size="small" onClick={() => onClear?.(name)}/>
+                      </Badge>
+                    </Box>
+                  } key={name} defaultOpen={filters[name] !== undefined}>
+                  </SidebarSubSection>
+                </>
+              )}
+            </MultipleChoices>
+          }
+        </DebouncedInput>
       )}
     </>
   )

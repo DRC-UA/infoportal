@@ -20,7 +20,7 @@ export const SidebarSubSection = ({
   defaultOpen?: boolean
   dense?: boolean
   title: ReactNode
-  children: ReactNode
+  children?: ReactNode
 }) => {
   const t = useTheme()
   const [open, setOpen] = usePersistentState(defaultOpen ?? false, {storageKey: 'sidebar-section-' + (id ?? '') + title})
@@ -36,15 +36,17 @@ export const SidebarSubSection = ({
       <Box sx={{pl: keepOpen ? 1 : .5, mb: 0, display: 'flex', alignItems: 'center'}}>
         <Icon fontSize="small" sx={{visibility: icon ? 'inherit' : 'hidden', color: t.palette.text.secondary, mr: 1}}>{icon}</Icon>
         <Txt bold color="hint" sx={{fontSize: '.825em', flex: 1}}>{title}</Txt>
-        {!keepOpen && (
+        {children && !keepOpen && (
           <IpIconBtn onClick={() => setOpen(_ => !_)} size="small" sx={{mr: 1}}>
             {open ? 'expand_less' : 'expand_more'}
           </IpIconBtn>
         )}
       </Box>
-      <Collapse in={keepOpen || open}>
-        {children}
-      </Collapse>
+      {children && (
+        <Collapse in={keepOpen || open}>
+          {children}
+        </Collapse>
+      )}
     </Box>
   )
 }

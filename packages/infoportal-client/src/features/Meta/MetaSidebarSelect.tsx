@@ -5,6 +5,7 @@ import {useI18n} from '@/core/i18n'
 import {combineSx, makeSx} from '@/core/theme'
 import {DatatableOptions} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 
 const css = makeSx({
   optionSelectAll: {
@@ -40,7 +41,6 @@ export const MetaSidebarSelect = ({
   onChange?: (_: string[]) => void
 } & Pick<BoxProps, 'sx'>) => {
   const {m} = useI18n()
-  const t = useTheme()
   const options = useCallback(() => props.options(), [props.options])
 
   const valuesLabel = useCallback(() => {
@@ -55,6 +55,9 @@ export const MetaSidebarSelect = ({
 
   const toggleAll = useCallback(() => onChange?.(value?.length === 0 ? allValues() : []), [onChange, allValues])
 
+  // return (
+  //   <IpSelectMultiple value={value} onChange={_ => onChange?.(_)} options={options()?.map(_ => ({value: _.value, children: _.label})) ?? []}/>
+  // )
   return (
     <>
       {/*< sx={{borderRadius: t.shape.borderRadius + 'px', background: styleUtils(t).color.toolbar, p: .5, ...props.sx}}>*/}
