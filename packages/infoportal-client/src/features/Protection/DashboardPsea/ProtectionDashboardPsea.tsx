@@ -79,7 +79,14 @@ export const ProtectionDashboardPsea = () => {
       ...dataFiltered.flatMap(_ => _.training_participants?.map(participants => {
         if (participants.staff_email) return participants.staff_email
         if (participants.staff_name) {
-          const match = drcUaStaffs.find(_ => _.fullName.replaceAll(/\s/g, '').toLowerCase() === participants.staff_name?.replaceAll(/\s/g, '').toLowerCase())?.email
+          let match = drcUaStaffs.find(_ => _.fullName.replaceAll(/\s/g, '').toLowerCase() === participants.staff_name?.replaceAll(/\s/g, '').toLowerCase())?.email
+          if (!match) {
+            const names = participants.staff_name.split(' ').map(_ => _.toLowerCase())
+            match = drcUaStaffs.find(_ => {
+              const sanitizedName = _.fullName.replaceAll(/\s/g, '').toLowerCase()
+              return names.every(_ => sanitizedName.includes(_))
+            })?.email
+          }
           if (!match) listNotIdentified.push(participants.staff_name)
           return match
         }
