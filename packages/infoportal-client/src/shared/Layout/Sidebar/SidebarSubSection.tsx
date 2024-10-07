@@ -62,7 +62,7 @@ export const SidebarSubSection = ({
           onClick?.(e)
           if (children) setOpen(_ => !_)
         }}
-        sx={{minHeight: 30, pl: keepOpen ? 1 : .5, mb: 0, display: 'flex', alignItems: 'center'}}
+        sx={{minHeight: dense ? 26 : 30, pl: keepOpen ? 1 : .5, mb: 0, display: 'flex', alignItems: 'center'}}
       >
         <Icon fontSize="small" sx={{visibility: icon ? 'inherit' : 'hidden', mr: 1}}>{icon}</Icon>
         <Txt bold sx={{fontSize: '.825em', flex: 1}}>{title}</Txt>

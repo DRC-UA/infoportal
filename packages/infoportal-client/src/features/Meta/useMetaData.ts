@@ -101,7 +101,6 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
   const [customFilters, setCustomFilters] = usePersistentState<MetaDashboardCustomFilter>({}, {storageKey: storageKeyPrefix + 'meta-dashboard-custom-filters'})
   const distinctBy = useMemo(() => new Set(customFilters.distinctBy), [customFilters.distinctBy])
 
-  console.log('shapeFilters', shapeFilters)
   const filteredData = useMemo(() => {
     const filteredBy_date = data.filter(d => {
       try {
@@ -117,8 +116,8 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
     })
     const filteredByShape = DataFilter.filterData(filteredBy_date, shape, shapeFilters)
     return distinctBys(filteredByShape, {
-      taxId: !!distinctBy.has('taxId'),
-      phone: !!distinctBy.has('phone'),
+      taxId: distinctBy.has('taxId'),
+      phone: distinctBy.has('phone'),
     })
   }, [data, shapeFilters, period, shape, customFilters])
 

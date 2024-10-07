@@ -149,7 +149,7 @@ export const MetaSidebar = () => {
                 </DebouncedInput>
               </Box>
             </SidebarSubSection>
-            <SidebarSubSection dense title={m.distinct} icon="join_inner">
+            <SidebarSubSection title={m.distinct} icon="join_inner">
               <Item label={m._meta.distinctBySubmission}>
                 <Switch
                   sx={{marginLeft: 'auto'}}
@@ -213,7 +213,6 @@ export const MetaSidebarFilter = ({
       {(value, onChange) =>
         <PopoverWrapper content={() => (
           <DashboardFilterOptionsContent
-            dense
             value={value ?? []}
             onChange={onChange}
             addBlankOption={shape.addBlankOption}
