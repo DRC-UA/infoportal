@@ -224,16 +224,6 @@ export const openCanvasInNewTab = (canvas: HTMLCanvasElement, name: string) => {
   }, 1000)
 }
 
-export const compareArray = <T extends string | number>(a?: T[], b?: T[]) => {
-  if (a === undefined || b === undefined) {
-    return a === b
-  }
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] === b[i]) return false
-  }
-  return true
-}
-
 export const fnTry = <T>(fn: () => T) => {
   return {
     fnCatch: <C>(fnCatch: (e: Error) => C): T | C => {

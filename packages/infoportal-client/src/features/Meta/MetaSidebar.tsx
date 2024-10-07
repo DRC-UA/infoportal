@@ -6,10 +6,8 @@ import React, {ReactNode} from 'react'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {useI18n} from '@/core/i18n'
-import {FilterLayoutProps} from '@/shared/DataFilter/DataFilterLayout'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {Badge, Box, capitalize, Switch, Typography, useTheme} from '@mui/material'
-import {MetaSidebarSelect} from '@/features/Meta/MetaSidebarSelect'
+import {Box, Switch, Typography} from '@mui/material'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {SidebarSubSection} from '@/shared/Layout/Sidebar/SidebarSubSection'
 import {IpBtn} from '@/shared/Btn'
@@ -21,6 +19,9 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {useSession} from '@/core/Session/SessionContext'
+import {DashboardFilterOptionsContent} from '@/shared/DashboardLayout/DashboardFilterOptions'
+import {IKoboMeta} from 'infoportal-common/kobo'
+import {PopoverWrapper, Txt} from '@/shared'
 
 export const Item = ({
   label,
@@ -29,10 +30,9 @@ export const Item = ({
   label: ReactNode
   children: ReactNode
 }) => {
-  const {m} = useI18n()
   return (
-    <Box sx={{display: 'flex', alignItems: 'center', px: 1, py: .25}}>
-      {label}
+    <Box sx={{display: 'flex', alignItems: 'center', px: 1, py: .125}}>
+      <Txt size="small">{label}</Txt>
       {children}
     </Box>
   )
@@ -115,8 +115,8 @@ export const MetaSidebar = () => {
                 />
               </Box>
             </Typography>
-            <SidebarSubSection title={m.submittedAt} keepOpen>
-              <Box sx={{px: 1, mt: 1}}>
+            <SidebarSubSection dense title={m.submittedAt} keepOpen>
+              <Box sx={{px: 1}}>
                 <DebouncedInput<[Date | undefined, Date | undefined]>
                   defaultValue={[ctx.period.start, ctx.period.end]}
                   onChange={([start, end]) => {
@@ -132,8 +132,8 @@ export const MetaSidebar = () => {
                 </DebouncedInput>
               </Box>
             </SidebarSubSection>
-            <SidebarSubSection title={m.committedAt} keepOpen>
-              <Box sx={{px: 1, mt: 1}}>
+            <SidebarSubSection dense title={m.committedAt} keepOpen>
+              <Box sx={{px: 1}}>
                 <DebouncedInput<[Date | undefined, Date | undefined]>
                   defaultValue={[ctx.periodCommit.start, ctx.period.end]}
                   onChange={([start, end]) => {
@@ -175,23 +175,13 @@ export const MetaSidebar = () => {
                 />
               </Item>
             </SidebarSubSection>
-            <MetaDashboardSidebarBody
-              data={ctx.data}
-              filters={ctx.shapeFilters}
-              shapes={ctx.shape}
-              setFilters={ctx.setShapeFilters}
-              onClear={(name?: string) => {
-                if (name) {
-                  ctx.setShapeFilters(_ => ({
-                    ..._,
-                    [name]: []
-                  }))
-                } else {
-                  ctx.setShapeFilters({})
-                  ctx.setPeriod({})
-                }
-              }}
-            />
+            {Obj.entries(ctx.shape).map(([name, shape]) =>
+              <MetaSidebarFilter
+                key={name}
+                name={name}
+                shape={shape}
+              />
+            )}
           </Box>
         )}
       </SidebarBody>
@@ -199,63 +189,50 @@ export const MetaSidebar = () => {
   )
 }
 
-export const MetaDashboardSidebarBody = (
-  props: FilterLayoutProps
-) => {
-  const t = useTheme()
+export const MetaSidebarFilter = ({
+  name,
+  shape,
+}: {
+  name: string
+  shape: DataFilter.Shape<IKoboMeta>
+}) => {
+  const {data: ctx} = useMetaContext()
   const getFilteredOptions = (name: string) => {
-    const filtersCopy = {...filters}
+    const filtersCopy = {...ctx.shapeFilters}
     delete filtersCopy[name]
-    return DataFilter.filterData(data ?? seq([]), shapes, filtersCopy)
+    return DataFilter.filterData(ctx.data ?? seq([]), ctx.shape, filtersCopy)
   }
-
-  const {
-    shapes,
-    filters,
-    setFilters,
-    data,
-    onClear,
-  } = props
+  const active = ctx.shapeFilters[name] && ctx.shapeFilters[name]!.length > 0
   return (
-    <>
-      {Obj.entries(shapes).map(([name, shape]) =>
-        <SidebarSubSection icon={shape.icon} title={
-          <Box sx={{display: 'flex', alignItems: 'center'}}>
-            {capitalize(name)}
-            <Badge
-              color="primary"
-              // anchorOrigin={{
-              //   vertical: 'top',
-              //   horizontal: 'left',
-              variant={filters[name]?.length ?? 0 > 0 ? 'dot' : undefined}
-              // badgeContent={filters[name]?.length}
-              sx={{color: t.palette.text.secondary, marginLeft: 'auto', mr: .25}}
-            >
-              <IpIconBtn children="clear" size="small" onClick={() => onClear?.(name)}/>
-            </Badge>
-          </Box>
-        } key={name} defaultOpen={filters[name] !== undefined}>
-          {filters[name] !== undefined}
-          <DebouncedInput<string[]>
-            key={name}
-            debounce={50}
-            value={filters[name]}
-            onChange={_ => setFilters((prev: any) => ({...prev, [name]: _}))}
-          >
-            {(value, onChange) =>
-              <MetaSidebarSelect
-                icon={shape.icon}
-                value={value ?? []}
-                label={shape.label}
-                addBlankOption={shape.addBlankOption}
-                options={() => shapes[name].getOptions(() => getFilteredOptions(name))}
-                onChange={onChange}
-                sx={{mb: .5}}
-              />
-            }
-          </DebouncedInput>
-        </SidebarSubSection>
-      )}
-    </>
+    <DebouncedInput<string[]>
+      key={name}
+      debounce={50}
+      value={ctx.shapeFilters[name]}
+      onChange={_ => ctx.setShapeFilters((prev: any) => ({...prev, [name]: _}))}
+    >
+      {(value, onChange) =>
+        <PopoverWrapper content={() => (
+          <DashboardFilterOptionsContent
+            value={value ?? []}
+            onChange={onChange}
+            addBlankOption={shape.addBlankOption}
+            options={() => shape.getOptions(() => getFilteredOptions(name))}
+          />
+        )}>
+          <SidebarSubSection
+            active={active}
+            dense
+            icon={shape.icon}
+            title={shape.label + (active ? ` (${ctx.shapeFilters[name]!.length})` : '')}
+            onClear={active ? (() => {
+              ctx.setShapeFilters(_ => ({
+                ..._,
+                [name]: []
+              }))
+            }) : undefined}
+          />
+        </PopoverWrapper>
+      }
+    </DebouncedInput>
   )
 }

@@ -31,7 +31,6 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
   const {m} = useI18n()
   const [periodCommit, setPeriodCommit] = useState<Partial<Period>>({})
   const [period, setPeriod] = useState<Partial<Period>>({})
-  const [periodCompare, setPeriodCompare] = useState<Period | undefined>()
 
   const shape = useMemo(() => {
     return DataFilter.makeShape<IKoboMeta>({
@@ -117,8 +116,8 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
     })
     const filteredByShape = DataFilter.filterData(filteredBy_date, shape, shapeFilters)
     return distinctBys(filteredByShape, {
-      taxId: !!distinctBy.has('taxId'),
-      phone: !!distinctBy.has('phone'),
+      taxId: distinctBy.has('taxId'),
+      phone: distinctBy.has('phone'),
     })
   }, [data, shapeFilters, period, shape, customFilters])
 

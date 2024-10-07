@@ -1,42 +1,47 @@
 import React, {ReactNode, useEffect, useMemo, useState} from 'react'
-import {SxProps, Theme} from '@mui/material'
-import {compareArray} from 'infoportal-common'
+import {seq} from '@alexandreannic/ts-utils'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
-interface MultipleChoicesBase<T, V> {
-  label?: ReactNode
-  options: {value: T, children: ReactNode, key?: number | string}[]
-  sx?: SxProps<Theme>
+export type MultipleChoicesChoice<T extends string> = {
+  value: T,
+  label?: ReactNode,
+  key?: number | string
 }
 
-interface MultipleChoicesMultiple<T extends string, V> extends MultipleChoicesBase<T, V> {
+export type UseMultipleChoicesProps<T extends string> = {
+  options?: MultipleChoicesChoice<T>[]
   initialValue?: T[]
+  addBlankOption?: boolean
   value?: T[]
   onChange: (t: T[], e?: any) => void
-  children: (_: {
-    allChecked?: boolean,
-    someChecked?: boolean,
-    toggleAll?: () => void,
-    options: {
-      value: T
-      checked?: boolean
-      children?: ReactNode
-      key?: string | number
-      onChange: () => void
-    }[]
-  }) => React.JSX.Element
 }
 
-type MultipleChoices<T extends string, V> = MultipleChoicesMultiple<T, V> //| MultipleChoicesSimple<T, V>
+export type UseMultipleChoicesRes<T extends string> = {
+  allChecked: boolean,
+  someChecked: boolean,
+  onClick: (_: T) => void,
+  toggleAll: () => void,
+  options: {
+    value: T
+    checked?: boolean
+    label?: ReactNode
+    key?: string | number
+    onChange: () => void
+  }[]
+}
 
-export const MultipleChoices = <T extends string, V extends string = string>({
+type MultipleChoicesMultiple<T extends string> = UseMultipleChoicesProps<T> & {
+  label?: ReactNode
+  children: (_: UseMultipleChoicesRes<T>) => React.JSX.Element
+}
+
+export const useMultipleChoices = <T extends string>({
   initialValue,
   value,
   onChange,
-  options,
-  children,
-  sx
-}: MultipleChoices<T, V>) => {
-
+  addBlankOption,
+  options = [],
+}: UseMultipleChoicesProps<T>): UseMultipleChoicesRes<T> => {
   const [innerValue, setInnerValue] = useState<T[]>(value ?? initialValue ?? [])
 
   const allValues = useMemo(() => options.map(_ => _.value), [options])
@@ -56,24 +61,33 @@ export const MultipleChoices = <T extends string, V extends string = string>({
   }
 
   useEffect(() => {
-    if (!compareArray(value, innerValue))
+    if (!seq(value).equals(innerValue))
       setInnerValue(value ?? [])
   }, [value])
 
   useEffect(() => {
-    if (!compareArray(innerValue, initialValue))
+    if (!seq(innerValue).equals(initialValue))
       onChange(innerValue)
   }, [innerValue])
 
-  return children({
+  return {
     someChecked,
     allChecked,
     toggleAll,
-    options: options.map(_ => ({
+    onClick,
+    options: [
+      ...addBlankOption ? [{value: DatatableUtils.blank, label: DatatableUtils.blankLabel} as MultipleChoicesChoice<any>] : [],
+      ...options
+    ].map(_ => ({
       ..._,
       key: _.key ?? _.value,
       checked: innerValue.includes(_.value),
       onChange: () => onClick(_.value)
     }))
-  })
+  }
+}
+
+export const MultipleChoices = <T extends string>({children, ...props}: MultipleChoicesMultiple<T>) => {
+  const res = useMultipleChoices(props)
+  return children(res)
 }

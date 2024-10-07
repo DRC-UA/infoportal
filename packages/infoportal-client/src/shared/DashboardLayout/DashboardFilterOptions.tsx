@@ -1,58 +1,53 @@
 import React, {useCallback} from 'react'
 import {BoxProps, Checkbox, FormControlLabel, FormGroup} from '@mui/material'
-import {Txt} from '@/shared'
+import {Txt, useMultipleChoices} from '@/shared'
 import {DashboardFilterLabel} from './DashboardFilterLabel'
 import {useI18n} from '@/core/i18n'
-import {combineSx, makeSx} from '@/core/theme'
 import {DatatableOptions} from '@/shared/Datatable/util/datatableType'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {makeStyles} from 'tss-react/mui'
 
-const css = makeSx({
+const useStyles = makeStyles<{dense?: boolean}>()((t, {dense}) => ({
   optionSelectAll: {
     display: 'block',
-    borderBottom: t => `1px solid ${t.palette.divider}`,
+    borderBottom: `1px solid ${t.palette.divider}`,
+    height: dense ? 32 : undefined,
   },
   option: {
     whiteSpace: 'nowrap',
-    px: 1,
-    mr: 0,
-    transition: t => t.transitions.create('all'),
+    paddingRight: t.spacing(1),
+    paddingLeft: t.spacing(1),
+    marginRight: 0,
+    fontSize: dense ? '.825em' : undefined,
+    transition: t.transitions.create('all'),
+    height: dense ? 28 : undefined,
     '&:hover': {
-      background: t => t.palette.action.hover,
+      background: t.palette.action.hover,
     }
-  }
-})
+  },
+}))
+
+type SelectProps = {
+  onChange: (_: string[]) => void
+  value: string[]
+  addBlankOption?: boolean
+  options: () => undefined | DatatableOptions[]
+}
 
 export const DashboardFilterOptions = ({
   value = [],
   label,
-  addBlankOption,
   icon,
   onChange,
   ...props
 }: {
-  addBlankOption?: boolean
   icon?: string
-  value: string[]
   label: string
-  options: () => undefined | DatatableOptions[]// {value: string, label?: string}[]
-  onChange?: (_: string[]) => void
-} & Pick<BoxProps, 'sx'>) => {
-  const {m} = useI18n()
-
+  dense?: boolean
+} & SelectProps & Pick<BoxProps, 'sx'>) => {
   const options = useCallback(() => props.options(), [props.options])
-
   const valuesLabel = useCallback(() => {
     return value.map(_ => (options() ?? []).find(o => o.value === _)?.label)
   }, [value, options])
-
-  const allValues = useCallback(() => (options() ?? []).map(_ => _.value), [options])
-
-  const someChecked = useCallback(() => !!allValues().find(_ => value?.includes(_ as any)), [value, allValues])
-
-  const allChecked = useCallback(() => allValues().length === value?.length, [value, allValues])
-
-  const toggleAll = useCallback(() => onChange?.(value?.length === 0 ? allValues() : []), [onChange, allValues])
 
   return (
     <DashboardFilterLabel
@@ -64,46 +59,54 @@ export const DashboardFilterOptions = ({
           {value.length > 1 && <>&nbsp;+ {value.length - 1}</>}
         </>
       }
-      children={open => open && (
-        <>
-          <FormControlLabel
-            onClick={toggleAll}
-            control={<Checkbox checked={allChecked()} indeterminate={!allChecked() && someChecked()}/>}
-            label={
-              // <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-              <Txt bold sx={{mr: 1.5}}>{m.selectAll}</Txt>
-              // <AAIconBtn icon="clear" size="small" sx={{ml: 1.5}}/>
-              // </Box>
-            }
-            sx={combineSx(css.option, css.optionSelectAll)}
-          />
-          <FormGroup onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            if (!onChange) return
-            if (e.target.checked) {
-              onChange([...value, e.target.name])
-            } else {
-              onChange(value.filter(_ => _ !== e.target.name))
-            }
-          }}>
-            {addBlankOption && (
-              <FormControlLabel
-                control={<Checkbox name={DatatableUtils.blank} checked={value.includes(DatatableUtils.blank)}/>}
-                label={DatatableUtils.blankLabel}
-                sx={css.option}
-              />
-            )}
-            {(options() ?? []).map(o =>
-              <FormControlLabel
-                key={o.value}
-                control={<Checkbox name={o.value ?? undefined} checked={value.includes(o.value as any)}/>}
-                label={o.label}
-                sx={css.option}
-              />
-            )}
-          </FormGroup>
-        </>
-      )}
+      children={open => open && <DashboardFilterOptionsContent {...props} value={value} onChange={onChange}/>}
       {...props}
     />
+  )
+}
+
+export const DashboardFilterOptionsContent = ({
+  addBlankOption,
+  onChange,
+  value,
+  options,
+  dense,
+}: SelectProps & {
+  dense?: boolean
+}) => {
+  const {classes, cx} = useStyles({dense})
+  const {m} = useI18n()
+  const choices = useMultipleChoices({
+    addBlankOption,
+    value,
+    options: options(),
+    onChange,
+  })
+  return (
+    <>
+      <FormControlLabel
+        onClick={choices.toggleAll}
+        control={<Checkbox size="small" checked={choices.allChecked} indeterminate={choices.allChecked && choices.someChecked}/>}
+        label={
+          // <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
+          <Txt bold sx={{mr: 1.5}} fontSize={dense ? 'small' : undefined}>{m.selectAll}</Txt>
+          // <AAIconBtn icon="clear" size="small" sx={{ml: 1.5}}/>
+          // </Box>
+        }
+        className={cx(classes.option, classes.optionSelectAll)}
+      />
+      <FormGroup onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        choices.onClick(e.target.name)
+      }}>
+        {(choices.options).map(o =>
+          <FormControlLabel
+            key={o.value}
+            control={<Checkbox size="small" name={o.value ?? undefined} checked={o.checked}/>}
+            label={<Txt fontSize={dense ? 'small' : undefined}>{o.label}</Txt>}
+            className={classes.option}
+          />
+        )}
+      </FormGroup>
+    </>
   )
 }
