@@ -6,9 +6,8 @@ import React, {ReactNode} from 'react'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {useI18n} from '@/core/i18n'
-import {FilterLayoutProps} from '@/shared/DataFilter/DataFilterLayout'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {Badge, Box, capitalize, Switch, Typography, useTheme} from '@mui/material'
+import {Box, Switch, Typography, useTheme} from '@mui/material'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {SidebarSubSection} from '@/shared/Layout/Sidebar/SidebarSubSection'
 import {IpBtn} from '@/shared/Btn'
@@ -20,8 +19,8 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {useSession} from '@/core/Session/SessionContext'
-import {MultipleChoices} from '@/shared'
 import {DashboardFilterOptionsContent} from '@/shared/DashboardLayout/DashboardFilterOptions'
+import {IKoboMeta} from 'infoportal-common/kobo'
 
 export const Item = ({
   label,
@@ -184,23 +183,6 @@ export const MetaSidebar = () => {
                 shape={shape}
               />
             )}
-            {/*<MetaSidebarBody*/}
-            {/*  data={ctx.data}*/}
-            {/*  filters={ctx.shapeFilters}*/}
-            {/*  shapes={ctx.shape}*/}
-            {/*  setFilters={ctx.setShapeFilters}*/}
-            {/*  onClear={(name?: string) => {*/}
-            {/*    if (name) {*/}
-            {/*      ctx.setShapeFilters(_ => ({*/}
-            {/*        ..._,*/}
-            {/*        [name]: []*/}
-            {/*      }))*/}
-            {/*    } else {*/}
-            {/*      ctx.setShapeFilters({})*/}
-            {/*      ctx.setPeriod({})*/}
-            {/*    }*/}
-            {/*  }}*/}
-            {/*/>*/}
           </Box>
         )}
       </SidebarBody>
@@ -213,7 +195,7 @@ export const XX = ({
   shape,
 }: {
   name: string
-  shape: DataFilter.Shape<string[]>
+  shape: DataFilter.Shape<IKoboMeta>
 }) => {
   const {data: ctx} = useMetaContext()
   const getFilteredOptions = (name: string) => {
@@ -229,83 +211,15 @@ export const XX = ({
       onChange={_ => ctx.setShapeFilters((prev: any) => ({...prev, [name]: _}))}
     >
       {(value, onChange) =>
-        <Box>
+        <SidebarSubSection icon={shape.icon} title={shape.label}>
           <DashboardFilterOptionsContent
             value={value ?? []}
             onChange={onChange}
-            icon={shape.icon}
-            label={shape.label}
             addBlankOption={shape.addBlankOption}
             options={() => shape.getOptions(() => getFilteredOptions(name))}
           />
-        </Box>
+        </SidebarSubSection>
       }
     </DebouncedInput>
-  )
-}
-
-export const MetaSidebarBody = (
-  props: FilterLayoutProps
-) => {
-  const t = useTheme()
-  const getFilteredOptions = (name: string) => {
-    const filtersCopy = {...filters}
-    delete filtersCopy[name]
-    return DataFilter.filterData(data ?? seq([]), shapes, filtersCopy)
-  }
-
-  const {
-    shapes,
-    filters,
-    setFilters,
-    data,
-    onClear,
-  } = props
-  return (
-    <>
-      {Obj.entries(shapes).map(([name, shape]) =>
-        <DebouncedInput<string[]>
-          key={name}
-          debounce={50}
-          value={filters[name] ?? []}
-          onChange={_ => setFilters((prev: any) => ({...prev, [name]: _}))}
-        >
-          {(value, onChange) =>
-            <MultipleChoices
-              value={value}
-              onChange={onChange}
-              options={shapes[name].getOptions(() => getFilteredOptions(name)) ?? []}
-            >
-              {({options, toggleAll, allChecked, someChecked}) => (
-                <>
-                  <SidebarSubSection
-                    icon={shape.icon}
-                    title={
-                      <Box sx={{display: 'flex', alignItems: 'center'}}>
-                        {capitalize(name)}
-                        <Badge
-                          color="primary"
-                          // anchorOrigin={{
-                          //   vertical: 'top',
-                          //   horizontal: 'left',
-                          variant={filters[name]?.length ?? 0 > 0 ? 'dot' : undefined}
-                          // badgeContent={filters[name]?.length}
-                          sx={{color: t.palette.text.secondary, marginLeft: 'auto', mr: .25}}
-                        >
-                          <IpIconBtn children="clear" size="small" onClick={() => onClear?.(name)}/>
-                        </Badge>
-                      </Box>
-                    }
-                    key={name}
-                    defaultOpen={filters[name] !== undefined}
-                  >
-                  </SidebarSubSection>
-                </>
-              )}
-            </MultipleChoices>
-          }
-        </DebouncedInput>
-      )}
-    </>
   )
 }
