@@ -78,7 +78,7 @@ export const DataFilterLayout = ({
                 value={value ?? []}
                 label={shape.label}
                 addBlankOption={shape.addBlankOption}
-                options={() => shapes[name].getOptions(() => getFilteredOptions(name))}
+                options={() => shape.getOptions(() => getFilteredOptions(name))}
                 onChange={onChange}
               />
             }

@@ -168,13 +168,7 @@ export const DatatableFilterDialogSelect = ({
   const [filter, setFilter] = useState<string>('')
   return (
     <MultipleChoices
-      options={options
-        ?.filter(_ => filter === '' || ((typeof _.label === 'string' ? _.label : _.value).toLowerCase() ?? '').includes(filter.toLowerCase()))
-        .map((_, i) => ({
-          key: i,
-          value: _.value ?? '',
-          children: _.label
-        })) ?? []}
+      options={options?.filter(_ => filter === '' || ((typeof _.label === 'string' ? _.label : _.value).toLowerCase() ?? '').includes(filter.toLowerCase())) ?? []}
       value={value as any}
       onChange={onChange}
     >
@@ -191,11 +185,11 @@ export const DatatableFilterDialogSelect = ({
           <Box sx={{maxHeight: 350, overflowY: 'auto'}}>
             {options.map(o =>
               <FormControlLabel
-                title={'' + o.children}
+                title={'' + o.label}
                 sx={{display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
                 key={o.key}
                 control={<Checkbox size="small" name={o.value} checked={o.checked} onChange={o.onChange}/>}
-                label={o.children}
+                label={o.label}
               />
             )}
           </Box>

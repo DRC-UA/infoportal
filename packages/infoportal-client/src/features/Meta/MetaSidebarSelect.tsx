@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react'
 import {BoxProps, Checkbox, FormControlLabel, FormGroup, useTheme} from '@mui/material'
-import {Txt} from '@/shared'
+import {Txt, useMultipleChoices} from '@/shared'
 import {useI18n} from '@/core/i18n'
 import {combineSx, makeSx} from '@/core/theme'
 import {DatatableOptions} from '@/shared/Datatable/util/datatableType'
@@ -38,22 +38,17 @@ export const MetaSidebarSelect = ({
   value: string[]
   label: string
   options: () => undefined | DatatableOptions[]// {value: string, label?: string}[]
-  onChange?: (_: string[]) => void
+  onChange: (_: string[]) => void
 } & Pick<BoxProps, 'sx'>) => {
   const {m} = useI18n()
-  const options = useCallback(() => props.options(), [props.options])
+  // const options = useCallback(() => props.options(), [props.options])
+  const choices = useMultipleChoices({
+    addBlankOption,
+    value,
+    options: props.options(),
+    onChange,
+  })
 
-  const valuesLabel = useCallback(() => {
-    return value.map(_ => (options() ?? []).find(o => o.value === _)?.label)
-  }, [value, options])
-
-  const allValues = useCallback(() => (options() ?? []).map(_ => _.value), [options])
-
-  const someChecked = useCallback(() => !!allValues().find(_ => value?.includes(_ as any)), [value, allValues])
-
-  const allChecked = useCallback(() => allValues().length === value?.length, [value, allValues])
-
-  const toggleAll = useCallback(() => onChange?.(value?.length === 0 ? allValues() : []), [onChange, allValues])
 
   // return (
   //   <IpSelectMultiple value={value} onChange={_ => onChange?.(_)} options={options()?.map(_ => ({value: _.value, children: _.label})) ?? []}/>
@@ -65,8 +60,8 @@ export const MetaSidebarSelect = ({
       {/*    {label}*/}
       {/*  </Txt>*/}
       <FormControlLabel
-        onClick={toggleAll}
-        control={<Checkbox size="small" checked={allChecked()} indeterminate={!allChecked() && someChecked()}/>}
+        onClick={choices.toggleAll}
+        control={<Checkbox size="small" checked={choices.allChecked} indeterminate={!choices.allChecked && choices.someChecked}/>}
         label={
           // <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
           <Txt bold size="small" sx={{mr: 1.5}}>{m.selectAll}</Txt>
@@ -90,11 +85,11 @@ export const MetaSidebarSelect = ({
             sx={css.option}
           />
         )}
-        {(options() ?? []).map(o =>
+        {(choices.options).map(o =>
           <FormControlLabel
             key={o.value}
             title={o.label as string}
-            control={<Checkbox size="small" name={o.value ?? undefined} checked={value.includes(o.value as any)}/>}
+            control={<Checkbox size="small" name={o.value ?? undefined} checked={o.checked}/>}
             label={<Txt size="small">{o.label}</Txt>}
             sx={css.option}
           />

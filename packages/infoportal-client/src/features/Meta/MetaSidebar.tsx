@@ -21,7 +21,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {useSession} from '@/core/Session/SessionContext'
 import {MultipleChoices} from '@/shared'
-import { color } from 'html2canvas/dist/types/css/types/color'
+import {DashboardFilterOptionsContent} from '@/shared/DashboardLayout/DashboardFilterOptions'
 
 export const Item = ({
   label,
@@ -40,6 +40,7 @@ export const Item = ({
 }
 
 export const MetaSidebar = () => {
+  const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
   const path = (page: string) => '' + page
   const {data: ctx} = useMetaContext()
@@ -176,23 +177,30 @@ export const MetaSidebar = () => {
                 />
               </Item>
             </SidebarSubSection>
-            <MetaDashboardSidebarBody
-              data={ctx.data}
-              filters={ctx.shapeFilters}
-              shapes={ctx.shape}
-              setFilters={ctx.setShapeFilters}
-              onClear={(name?: string) => {
-                if (name) {
-                  ctx.setShapeFilters(_ => ({
-                    ..._,
-                    [name]: []
-                  }))
-                } else {
-                  ctx.setShapeFilters({})
-                  ctx.setPeriod({})
-                }
-              }}
-            />
+            {Obj.entries(ctx.shape).map(([name, shape]) =>
+              <XX
+                key={name}
+                name={name}
+                shape={shape}
+              />
+            )}
+            {/*<MetaSidebarBody*/}
+            {/*  data={ctx.data}*/}
+            {/*  filters={ctx.shapeFilters}*/}
+            {/*  shapes={ctx.shape}*/}
+            {/*  setFilters={ctx.setShapeFilters}*/}
+            {/*  onClear={(name?: string) => {*/}
+            {/*    if (name) {*/}
+            {/*      ctx.setShapeFilters(_ => ({*/}
+            {/*        ..._,*/}
+            {/*        [name]: []*/}
+            {/*      }))*/}
+            {/*    } else {*/}
+            {/*      ctx.setShapeFilters({})*/}
+            {/*      ctx.setPeriod({})*/}
+            {/*    }*/}
+            {/*  }}*/}
+            {/*/>*/}
           </Box>
         )}
       </SidebarBody>
@@ -200,7 +208,43 @@ export const MetaSidebar = () => {
   )
 }
 
-export const MetaDashboardSidebarBody = (
+export const XX = ({
+  name,
+  shape,
+}: {
+  name: string
+  shape: DataFilter.Shape<string[]>
+}) => {
+  const {data: ctx} = useMetaContext()
+  const getFilteredOptions = (name: string) => {
+    const filtersCopy = {...ctx.shapeFilters}
+    delete filtersCopy[name]
+    return DataFilter.filterData(ctx.data ?? seq([]), ctx.shape, filtersCopy)
+  }
+  return (
+    <DebouncedInput<string[]>
+      key={name}
+      debounce={50}
+      value={ctx.shapeFilters[name]}
+      onChange={_ => ctx.setShapeFilters((prev: any) => ({...prev, [name]: _}))}
+    >
+      {(value, onChange) =>
+        <Box>
+          <DashboardFilterOptionsContent
+            value={value ?? []}
+            onChange={onChange}
+            icon={shape.icon}
+            label={shape.label}
+            addBlankOption={shape.addBlankOption}
+            options={() => shape.getOptions(() => getFilteredOptions(name))}
+          />
+        </Box>
+      }
+    </DebouncedInput>
+  )
+}
+
+export const MetaSidebarBody = (
   props: FilterLayoutProps
 ) => {
   const t = useTheme()
@@ -230,26 +274,31 @@ export const MetaDashboardSidebarBody = (
             <MultipleChoices
               value={value}
               onChange={onChange}
-              options={shapes[name].getOptions(() => getFilteredOptions(name))?.map(_ => ({value: _.value, children: _.label})) ?? []}
+              options={shapes[name].getOptions(() => getFilteredOptions(name)) ?? []}
             >
               {({options, toggleAll, allChecked, someChecked}) => (
                 <>
-                  <SidebarSubSection icon={shape.icon} title={
-                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                      {capitalize(name)}
-                      <Badge
-                        color="primary"
-                        // anchorOrigin={{
-                        //   vertical: 'top',
-                        //   horizontal: 'left',
-                        variant={filters[name]?.length ?? 0 > 0 ? 'dot' : undefined}
-                        // badgeContent={filters[name]?.length}
-                        sx={{color: t.palette.text.secondary, marginLeft: 'auto', mr: .25}}
-                      >
-                        <IpIconBtn children="clear" size="small" onClick={() => onClear?.(name)}/>
-                      </Badge>
-                    </Box>
-                  } key={name} defaultOpen={filters[name] !== undefined}>
+                  <SidebarSubSection
+                    icon={shape.icon}
+                    title={
+                      <Box sx={{display: 'flex', alignItems: 'center'}}>
+                        {capitalize(name)}
+                        <Badge
+                          color="primary"
+                          // anchorOrigin={{
+                          //   vertical: 'top',
+                          //   horizontal: 'left',
+                          variant={filters[name]?.length ?? 0 > 0 ? 'dot' : undefined}
+                          // badgeContent={filters[name]?.length}
+                          sx={{color: t.palette.text.secondary, marginLeft: 'auto', mr: .25}}
+                        >
+                          <IpIconBtn children="clear" size="small" onClick={() => onClear?.(name)}/>
+                        </Badge>
+                      </Box>
+                    }
+                    key={name}
+                    defaultOpen={filters[name] !== undefined}
+                  >
                   </SidebarSubSection>
                 </>
               )}
