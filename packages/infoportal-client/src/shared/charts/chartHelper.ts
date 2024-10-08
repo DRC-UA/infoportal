@@ -200,7 +200,7 @@ export class ChartHelper<K extends string = string> {
     return res
   }
 
-  readonly sumByCategory = <A extends Record<string, any>, K extends string>({
+  static readonly sumByCategory = <A extends Record<string, any>, K extends string>({
     data,
     filter,
     sumBase,

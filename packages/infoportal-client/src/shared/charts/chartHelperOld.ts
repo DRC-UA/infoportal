@@ -51,38 +51,4 @@ export namespace ChartHelperOld {
       }).get()
     }
   }
-  
-  export const sumByCategory = <A extends Record<string, any>, K extends string>({
-    data,
-    filter,
-    sumBase,
-    categories,
-  }: {
-    data: A[]
-    filter: (_: A) => number
-    sumBase?: (_: A) => number
-    categories: Record<K, (_: A) => boolean>
-  }): Record<K, ChartDataVal> => {
-    const res = Obj.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0}}), {} as Record<K, {value: number, base: 0}>)
-    data.forEach(x => {
-      Obj.entries(categories).forEach(([category, isCategory]) => {
-        if (!isCategory(x)) return
-        const base = sumBase ? sumBase(x) : 1
-        if (base) {
-          res[category].base += base
-          res[category].value += filter(x) ?? 0
-        }
-      })
-    })
-    return res
-  }
-
-  export const setLabel = <A extends string>(m: Record<A, ReactNode>) => (data: ChartData<A>): ChartData<A> => {
-    Obj.keys(data).forEach(k => {
-      data[k].label = m[k]
-    })
-    return data
-  }
-
-
-}
+ }

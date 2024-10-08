@@ -101,7 +101,7 @@ export const ProtectionDashboardMonitoLivelihood = () => {
                 .sortBy.custom(Obj.keys(Protection_hhs3.options.what_is_the_average_month_income_per_household))
                 .get()
 
-              const hhSize = ChartHelperOld.sumByCategory({
+              const hhSize = ChartHelper.sumByCategory({
                 data: ctx.dataFiltered,
                 categories: {
                   // no_income: _ => _.what_is_the_average_month_income_per_household === 'no_income',
