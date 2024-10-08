@@ -11,6 +11,7 @@ import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotPro
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Obj} from '@alexandreannic/ts-utils'
 import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const SnapshotProtMonitoNN2Livelihood = () => {
   const ctx = ProtectionMonito.useContext()
@@ -23,7 +24,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
         <Div>
           <Div column>
             <SlideTxt>
-              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                 value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
                 data: d,
                 base: _ => _ !== undefined,
@@ -39,7 +40,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
             </SlideTxt>
             <Div>
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                   value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
                   data: d,
                   base: _ => _ !== undefined,
@@ -55,7 +56,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
               </SlidePanel>
 
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                   value: _ => _.are_there_gaps_in_meeting_your_basic_needs === 'yes_somewhat' || _.are_there_gaps_in_meeting_your_basic_needs === 'yes_a_lot',
                   data: d,
                 })}>

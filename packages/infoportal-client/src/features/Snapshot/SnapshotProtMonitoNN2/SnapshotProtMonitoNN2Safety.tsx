@@ -11,6 +11,7 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Protection_hhs3, toPercent} from 'infoportal-common'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const SnapshotProtMonitoNN2Safety = () => {
   const ctx = ProtectionMonito.useContext()
@@ -25,12 +26,12 @@ export const SnapshotProtMonitoNN2Safety = () => {
             <SlideTxt>
               <Lazy deps={[ctx.dataFiltered]} fn={() => {
                 return {
-                  fearOfShelling: toPercent(ChartHelperOld.percentage({
+                  fearOfShelling: toPercent(ChartHelper.percentage({
                     data: ctx.dataFiltered.map(_ => _.what_are_the_main_factors_that_make_this_location_feel_unsafe).compact(),
                     value: _ => _.includes('bombardment_shelling_or_threat_of_shelling'),
                     base: _ => !_.includes('unable_unwilling_to_answer'),
                   }).percent, 0),
-                  barrierToMovement: toPercent(ChartHelperOld.percentage({
+                  barrierToMovement: toPercent(ChartHelper.percentage({
                     data: ctx.dataFiltered.map(_ => _.do_you_or_your_household_members_experience_any_barriers_to_movements_in_and_around_the_area).compact(),
                     value: _ => !_.includes('no'),
                     base: _ => !_.includes('unable_unwilling_to_answer'),
@@ -74,7 +75,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
               />
             </SlidePanel>
             <SlidePanel>
-              <Lazy deps={[ctx.dataFiltered.flatMap(p => p.persons)]} fn={(x) => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered.flatMap(p => p.persons)]} fn={(x) => ChartHelper.percentage({
                 data: x.map(_ => _.lackDoc).compact().filter(_ => !_.includes('unable_unwilling_to_answer')),
                 value: _ => !_.includes('none'),
               })}>

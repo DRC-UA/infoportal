@@ -12,6 +12,7 @@ import {Divider} from '@mui/material'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Obj} from '@alexandreannic/ts-utils'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const ProtectionDashboardMonitoLivelihood = () => {
   const ctx = ProtectionMonito.useContext()
@@ -21,7 +22,7 @@ export const ProtectionDashboardMonitoLivelihood = () => {
       <Div responsive>
         <Div>
           <SlidePanel sx={{flex: 1}}>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
               value: _ => _.what_is_the_average_month_income_per_household === 'no_income',
               data: d,
               base: _ => _ !== undefined,
@@ -33,7 +34,7 @@ export const ProtectionDashboardMonitoLivelihood = () => {
             </Lazy>
           </SlidePanel>
           <SlidePanel sx={{flex: 1}}>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
               value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
               data: d,
               base: _ => _ !== undefined,
@@ -44,7 +45,7 @@ export const ProtectionDashboardMonitoLivelihood = () => {
         </Div>
         <Div>
           <SlidePanel sx={{flex: 1}}>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
               value: _ => _.do_you_and_your_hh_members_receive_the_idp_allowance === 'yes',
               data: d,
               base: _ => _.do_you_identify_as_any_of_the_following === 'idp',
@@ -53,7 +54,7 @@ export const ProtectionDashboardMonitoLivelihood = () => {
             </Lazy>
           </SlidePanel>
           <SlidePanel sx={{flex: 1}}>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
               value: _ => _.are_there_gaps_in_meeting_your_basic_needs === 'yes_somewhat' || _.are_there_gaps_in_meeting_your_basic_needs === 'yes_a_lot',
               data: d,
             })}>

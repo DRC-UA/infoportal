@@ -12,6 +12,7 @@ import {seq, Seq} from '@alexandreannic/ts-utils'
 import {useTheme} from '@mui/material'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const SnapshotProtMonitoEchoSafety = () => {
   const ctx = ProtectionMonito.useContext()
@@ -58,32 +59,32 @@ export const SnapshotProtMonitoEchoSafety = () => {
             <SlideTxt sx={{marginBottom: t.spacing() + ' !important'}}>
               <Lazy deps={[ctx.dataFiltered]} fn={() => {
                 return {
-                  senseOfSafety: ChartHelperOld.percentage({
+                  senseOfSafety: ChartHelper.percentage({
                     data: ctx.dataFiltered.map(_ => _.please_rate_your_sense_of_safety_in_this_location),
                     value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
                     base: _ => _ !== 'unable_unwilling_to_answer',
                   }),
-                  poorSafetyChernihiv: ChartHelperOld.percentage({
+                  poorSafetyChernihiv: ChartHelper.percentage({
                     data: ctx.dataFiltered.filter(_ => _.where_are_you_current_living_oblast === OblastIndex.byName('Chernihivska').iso).map(_ => _.please_rate_your_sense_of_safety_in_this_location),
                     value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
                     base: _ => _ !== 'unable_unwilling_to_answer',
                   }),
-                  poorSafetySumy: ChartHelperOld.percentage({
+                  poorSafetySumy: ChartHelper.percentage({
                     data: ctx.dataFiltered.filter(_ => _.where_are_you_current_living_oblast === OblastIndex.byName('Sumska').iso).map(_ => _.please_rate_your_sense_of_safety_in_this_location),
                     value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
                     base: _ => _ !== 'unable_unwilling_to_answer',
                   }),
-                  senseOfSafetyUrban: ChartHelperOld.percentage({
-                    data: ctx.dataFiltered.filter(_ => _.type_of_site === 'urban_area').map(_ => _.please_rate_your_sense_of_safety_in_this_location),
-                    value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
-                    base: _ => _ !== 'unable_unwilling_to_answer',
-                  }),
-                  senseOfSafetyRural: ChartHelperOld.percentage({
+                  senseOfSafetyRural: ChartHelper.percentage({
                     data: ctx.dataFiltered.filter(_ => _.type_of_site === 'rural_area').map(_ => _.please_rate_your_sense_of_safety_in_this_location),
                     value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
                     base: _ => _ !== 'unable_unwilling_to_answer',
                   }),
-                  incidents: ChartHelperOld.percentage({
+                  senseOfSafetyUrban: ChartHelper.percentage({
+                    data: ctx.dataFiltered.filter(_ => _.type_of_site === 'urban_area').map(_ => _.please_rate_your_sense_of_safety_in_this_location),
+                    value: _ => _ === '_2_unsafe' || _ === '_1_very_unsafe',
+                    base: _ => _ !== 'unable_unwilling_to_answer',
+                  }),
+                  incidents: ChartHelper.percentage({
                     data: ctx.dataFiltered,
                     value: _ => _.has_any_adult_male_member_experienced_violence === 'yes'
                       || _.has_any_adult_female_member_experienced_violence === 'yes'

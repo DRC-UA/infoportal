@@ -241,7 +241,7 @@ export class ChartHelper<K extends string = string> {
     return data
   }
 
-  readonly percentage = <A>({
+  static readonly percentage = <A>({
     data,
     value,
     base

@@ -51,7 +51,7 @@ export const ProtectionDashboardMonitoDocument = () => {
         <Div column sx={{flex: 1}}>
           <SlidePanel title={m.protHHSnapshot.maleWithoutIDPCert}>
             <Div>
-              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                 data: getIdpsAnsweringRegistrationQuestion(d),
                 value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
               })}>
@@ -59,7 +59,7 @@ export const ProtectionDashboardMonitoDocument = () => {
                   <ChartPieWidget sx={{flex: 1}} title={m.all} value={d.value} base={d.base} evolution={d.percent - l.percent}/>
                 )}
               </Lazy>
-              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                 data: getIdpsAnsweringRegistrationQuestion(d).filter(_ => _.age && _.age >= 18 && _.age <= 60 && _.gender && _.gender === Person.Gender.Male),
                 value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
               })}>
@@ -120,7 +120,7 @@ export const ProtectionDashboardMonitoDocument = () => {
                 )}
               </ScRadioGroup>
             </Box>
-            <Lazy deps={[filteredPersons, filteredPersonsLastMonth]} fn={(x) => ChartHelperOld.percentage({
+            <Lazy deps={[filteredPersons, filteredPersonsLastMonth]} fn={(x) => ChartHelper.percentage({
               data: x.map(_ => _.lackDoc).compact().filter(_ => !_.includes('unable_unwilling_to_answer')),
               value: _ => !_.includes('none'),
             })}>

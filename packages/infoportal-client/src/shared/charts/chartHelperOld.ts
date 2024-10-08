@@ -25,10 +25,6 @@ export type ChartData<K extends string = string> = Record<K, ChartDataVal>
 /** @deprecated */
 export namespace ChartHelperOld {
 
-  export const take = <T extends string>(n: number) => (obj: Record<T, ChartDataVal>): Record<T, ChartDataVal> => {
-    return seq(Obj.entries(obj).splice(0, n)).reduceObject(_ => _)
-  }
-
   export const sortBy = {
     custom: <T extends string>(order: T[]) => <V>(obj: Record<T, V>): Record<T, V> => {
       return new Obj(obj as Record<T, V>).sort(([aK, aV], [bK, bV]) => {
@@ -191,53 +187,5 @@ export namespace ChartHelperOld {
     return data
   }
 
-  export const setDesc = (m: Record<string, string>) => (data: ChartData): ChartData => {
-    Object.keys(data).forEach(k => {
-      data[k].desc = m[k]
-    })
-    return data
-  }
 
-  export const percentage = <A>({
-    data,
-    value,
-    base
-  }: {
-    data: A[],
-    value: (a: A) => boolean,
-    base?: (a: A) => boolean,
-  }): ChartDataValPercent => {
-    const v = seq(data).count(value)
-    const b = (base ? seq(data).count(base) : data.length) || 1
-    return {value: v, base: b, percent: v / b}
-  }
-
-  export const groupByDate = <F extends string>({
-    data,
-    getDate,
-    percentageOf,
-  }: {
-    data: F[]
-    getDate: (_: F) => string | undefined
-    percentageOf?: (_: F) => boolean
-  }): ChartData<F> => {
-    const obj = seq(data).reduceObject<Record<string, {filter: number, total: number}>>((x, acc) => {
-      const date = getDate(x) ?? 'undefined'
-      let value = acc[date]
-      if (!value) value = {filter: 0, total: 0}
-      if (percentageOf) {
-        value.filter += percentageOf(x) ? 1 : 0
-      }
-      value.total += 1
-      return [date, value]
-    })
-    const res: ChartData = {}
-    Object.entries(obj).forEach(([k, v]) => {
-      res[k] = {
-        label: k,
-        value: percentageOf ? v.filter / v.total : v.total,
-      }
-    })
-    return res
-  }
 }

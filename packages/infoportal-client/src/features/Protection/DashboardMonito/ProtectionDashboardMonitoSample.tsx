@@ -17,6 +17,7 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const ProtectionDashboardMonitoSample = () => {
   const ctx = ProtectionMonito.useContext()
@@ -48,7 +49,7 @@ export const ProtectionDashboardMonitoSample = () => {
               </Lazy>
             </SlideWidget>
             <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', pl: 2,}}>
-              <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelper.percentage({
                 data: ctx.dataFlat,
                 value: _ => _.gender === 'Female'
               })}>
@@ -200,7 +201,7 @@ export const ProtectionDashboardMonitoSample = () => {
             </Lazy>
           </SlidePanel>
           <SlidePanel>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(d) => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(d) => ChartHelper.percentage({
               data: d
                 .map(_ => _.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household)
                 .compact()

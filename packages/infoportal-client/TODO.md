@@ -1,7 +1,6 @@
 - Remove sortObject and others since new Enum()
 - Harmonize files component names like MpcaData or MpcaTable.
 - Find consistent name for types over component
-- Remove deprecated AaSelect
 - Delete chartHelperOld
 - Harmonize dashboards
 - Rename ScRadioGroupItem
@@ -12,6 +11,7 @@ Started
 
 DONE:
 
+- Remove deprecated AaSelect
 - Remove ScLineChart2?
 - Harmonize all fetchAll to getAll in SDK
 - Harmonize useFetcher, useAsync, useMap, ...

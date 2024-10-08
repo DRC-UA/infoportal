@@ -14,6 +14,7 @@ import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 import {useTheme} from '@mui/material'
 import {SnapshotProtMonitoEvolutionNote} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEvolutionNote'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const SnapshotProtMonitoEchoRegistration = () => {
   const ctx = ProtectionMonito.useContext()
@@ -38,7 +39,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             <SlidePanel>
               <SlidePanelTitle sx={{mb: 1}}>{m.protHHSnapshot.maleWithoutIDPCert}</SlidePanelTitle>
               <Div>
-                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                   data: getIdpsAnsweringRegistrationQuestion(d),
                   value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
                 })}>
@@ -58,7 +59,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                     />
                   )}
                 </Lazy>
-                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                   data: getIdpsAnsweringRegistrationQuestion(d).filter(_ => _.age && _.age >= 18 && _.age <= 60 && _.gender && _.gender === Person.Gender.Male),
                   value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
                 })}>
@@ -111,7 +112,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
           </Div>
           <Div column>
             <SlidePanel>
-              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(x) => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(x) => ChartHelper.percentage({
                 data: x.flatMap(_ => _.persons).map(_ => _.lackDoc).compact().filter(_ => !_.includes('unable_unwilling_to_answer')),
                 value: _ => !_.includes('none')
               })}>
