@@ -5,8 +5,7 @@ import React, {useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Box, Icon, useTheme} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
-import {chain, Person, Protection_hhs3} from 'infoportal-common'
+import {Person, Protection_hhs3} from 'infoportal-common'
 import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
@@ -190,12 +189,13 @@ export const ProtectionDashboardMonitoSample = () => {
           <SlidePanel title={m.poc}>
             <Lazy
               deps={[ctx.dataFiltered]}
-              fn={() => chain(ChartHelperOld.single({
+              fn={() => ChartHelper.single({
                 data: ctx.dataFiltered.map(_ => _.do_you_identify_as_any_of_the_following).compact(),
-              }))
-                .map(ChartHelperOld.sortBy.value)
-                .map(ChartHelperOld.setLabel(Protection_hhs3.options.do_you_identify_as_any_of_the_following))
-                .get()}
+              })
+                .sortBy.value()
+                .setLabel(Protection_hhs3.options.do_you_identify_as_any_of_the_following)
+                .get()
+              }
             >
               {_ => <ChartBar data={_}/>}
             </Lazy>

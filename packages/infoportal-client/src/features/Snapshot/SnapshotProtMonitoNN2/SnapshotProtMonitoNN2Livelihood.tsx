@@ -74,12 +74,12 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
             <SlidePanel>
               <SlidePanelTitle>{m.monthlyIncomePerHH}</SlidePanelTitle>
               <Lazy deps={[ctx.dataFiltered]} fn={() => {
-                const income = chain(ChartHelperOld.single({
+                const income = ChartHelper.single({
                   filterValue: ['no_income', 'unable_unwilling_to_answer'],
                   data: ctx.dataFiltered.map(_ => _.what_is_the_average_month_income_per_household).compact(),
-                }))
-                  .map(ChartHelperOld.setLabel(Protection_hhs3.options.what_is_the_average_month_income_per_household))
-                  .map(ChartHelperOld.sortBy.custom(Object.keys(Protection_hhs3.options.what_is_the_average_month_income_per_household)))
+                })
+                  .setLabel(Protection_hhs3.options.what_is_the_average_month_income_per_household)
+                  .sortBy.custom(Obj.keys(Protection_hhs3.options.what_is_the_average_month_income_per_household))
                   .get()
 
                 const hhSize = ChartHelperOld.sumByCategory({

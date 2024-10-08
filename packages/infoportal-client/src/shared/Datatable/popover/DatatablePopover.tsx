@@ -1,6 +1,5 @@
 import {Box, Popover, PopoverProps} from '@mui/material'
 import React, {ReactNode, useMemo} from 'react'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {PanelBody, PanelHead} from '@/shared/Panel'
 import {IpBtn} from '@/shared/Btn'
@@ -11,6 +10,7 @@ import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
 import {DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {seq} from '@alexandreannic/ts-utils'
 import {KeyOf} from 'infoportal-common'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 const RenderRow = ({label, value}: {
   label: ReactNode
@@ -91,15 +91,13 @@ export const MultipleChoicesPopover = <T extends DatatableRow, >({
     const chart = (() => {
       if (multiple) {
         const mapped = seq(data).map(getValue).compact()
-        return ChartHelperOld.multiple({data: mapped})
+        return ChartHelper.multiple({data: mapped})
       } else {
         const mapped = seq(data).map(getValue).compact()
-        return ChartHelperOld.single({data: mapped})
+        return ChartHelper.single({data: mapped})
       }
     })()
-    return translations
-      ? ChartHelperOld.setLabel(seq(translations).reduceObject<Record<string, ReactNode>>(_ => [_.value!, _.label!]))(ChartHelperOld.sortBy.value(chart))
-      : ChartHelperOld.sortBy.value(chart)
+    return chart.setLabel(seq(translations).reduceObject<Record<string, ReactNode>>(_ => [_.value!, _.label!])).sortBy.value().get()
   }, [getValue, data, translations])
   return (
     <Popover open={!!anchorEl} anchorEl={anchorEl} onClose={onClose} slotProps={{paper: {sx: {minWidth: 400, maxWidth: 500}}}}>

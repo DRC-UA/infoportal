@@ -69,13 +69,13 @@ export const ProtectionDashboardMonitoDocument = () => {
               </Lazy>
             </Div>
           </SlidePanel>
-          <Lazy deps={[ctx.dataFlat]} fn={() => ChartHelperOld.byCategory({
+          <Lazy deps={[ctx.dataFlat]} fn={() => ChartHelper.byCategory({
             data: ctx.dataFlat,
             categories: ctx.categoryOblasts('where_are_you_current_living_oblast'),
             filter: _ => !_.lackDoc?.includes('none'),
             filterBase: _ => _.lackDoc !== undefined,
             filterZeroCategory: true,
-          })}>
+          }).get()}>
             {_ =>
               <SlidePanel title={m.protHHS2.missingDocumentationByOblastPopulation}>
                 <MapSvg data={_} fillBaseOn="percent" sx={{mx: 2}}/>

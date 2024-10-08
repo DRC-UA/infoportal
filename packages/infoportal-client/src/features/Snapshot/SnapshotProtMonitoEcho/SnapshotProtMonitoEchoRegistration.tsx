@@ -3,17 +3,15 @@ import {ProtectionMonito} from '@/features/Protection/DashboardMonito/Protection
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {getIdpsAnsweringRegistrationQuestion} from '@/features/Protection/DashboardMonito/ProtectionDashboardMonitoDocument'
-import {chain, Person, Protection_hhs3} from 'infoportal-common'
+import {Person, Protection_hhs3} from 'infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 import {useTheme} from '@mui/material'
-import {SnapshotProtMonitoEvolutionNote} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEvolutionNote'
 import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const SnapshotProtMonitoEchoRegistration = () => {
@@ -124,13 +122,13 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                   {...snapShotDefaultPieIndicatorsProps}
                 />}
               </Lazy>
-              <Lazy deps={[ctx.dataFiltered]} fn={() => chain(ChartHelperOld.multiple({
+              <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelper.multiple({
                 data: ctx.dataFiltered.flatMap(_ => _.persons).map(_ => _.lackDoc).compact(),
                 filterValue: ['none', 'unable_unwilling_to_answer'],
-              }))
-                .map(ChartHelperOld.setLabel(Protection_hhs3.options.does_lack_doc))
-                .map(ChartHelperOld.sortBy.value)
-                .get()}>
+              }).setLabel(Protection_hhs3.options.does_lack_doc)
+                .sortBy.value()
+                .get()
+              }>
                 {_ => <ChartBar data={_}/>}
               </Lazy>
             </SlidePanel>
