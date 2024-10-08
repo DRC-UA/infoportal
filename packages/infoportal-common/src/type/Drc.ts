@@ -316,6 +316,7 @@ export class DrcProjectHelper {
     'UKR-000355 Danish MFA': DrcDonor.DMFA,
     'UKR-000360 Novo-Nordisk': DrcDonor.NovoNordisk,
     'UKR-000363 UHF8': DrcDonor.UHF,
+    'UKR-000390 UHF9': DrcDonor.UHF,
     'UKR-000371 ECHO3': DrcDonor.ECHO,
     'UKR-000372 ECHO3': DrcDonor.ECHO,
     'UKR-000380 Danida': DrcDonor.DANI,

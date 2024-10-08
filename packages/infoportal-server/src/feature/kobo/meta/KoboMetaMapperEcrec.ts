@@ -182,6 +182,7 @@ export class KoboMetaMapperEcrec {
     if (!office) return
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
     return KoboMetaMapper.make<KoboMetaEcrecTags>({
+      date: row.submissionTime,
       sector: DrcSector.Livelihoods,
       activity: DrcProgram.MSME,
       office,

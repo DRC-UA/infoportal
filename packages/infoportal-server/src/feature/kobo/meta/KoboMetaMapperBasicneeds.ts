@@ -33,14 +33,14 @@ export class KoboMetaBasicneeds {
 
     const activities = seq(answer.back_prog_type)?.map(prog => {
       return fnSwitch(prog.split('_')[0], {
-        mpca: {activity: DrcProgram.MPCA, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_mpca ?? answer.back_donor?.[0])},
-        nfi: {activity: DrcProgram.NFI, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_nfi ?? answer.back_donor?.[0])},
-        esk: {activity: DrcProgram.ESK, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_esk ?? answer.back_donor?.[0])},
-        cfr: {activity: DrcProgram.CashForRent, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfr ?? answer.back_donor?.[0])},
-        cfe: {activity: DrcProgram.CashForEducation, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfe ?? answer.back_donor?.[0])},
-        csf: {activity: DrcProgram.CashForFuel, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cff ?? answer.back_donor?.[0])},
-        cfu: {activity: DrcProgram.CashForUtilities, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_cfu ?? answer.back_donor?.[0])},
-        ihk: {activity: DrcProgram.HygieneKit, project: row.tags?.projects?.[0] ?? DrcProjectHelper.search(answer.donor_ihk ?? answer.back_donor?.[0])},
+        mpca: {activity: DrcProgram.MPCA, project: DrcProjectHelper.search(answer.donor_mpca ?? answer.back_donor?.[0])},
+        nfi: {activity: DrcProgram.NFI, project: DrcProjectHelper.search(answer.donor_nfi ?? answer.back_donor?.[0])},
+        esk: {activity: DrcProgram.ESK, project: DrcProjectHelper.search(answer.donor_esk ?? answer.back_donor?.[0])},
+        cfr: {activity: DrcProgram.CashForRent, project: DrcProjectHelper.search(answer.donor_cfr ?? answer.back_donor?.[0])},
+        cfe: {activity: DrcProgram.CashForEducation, project: DrcProjectHelper.search(answer.donor_cfe ?? answer.back_donor?.[0])},
+        csf: {activity: DrcProgram.CashForFuel, project: DrcProjectHelper.search(answer.donor_cff ?? answer.back_donor?.[0])},
+        cfu: {activity: DrcProgram.CashForUtilities, project: DrcProjectHelper.search(answer.donor_cfu ?? answer.back_donor?.[0])},
+        ihk: {activity: DrcProgram.HygieneKit, project: DrcProjectHelper.search(answer.donor_ihk ?? answer.back_donor?.[0])},
       }, () => undefined)
     }).compact().distinct(_ => _.activity) ?? []
 
@@ -54,9 +54,6 @@ export class KoboMetaBasicneeds {
         return
       }
       const status = DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : row.tags?.status
-      if (row.id === '569556546') {
-        console.log(activity, DrcSectorHelper.isAutoValidatedActivity(activity), status)
-      }
       return {
         enumerator: Bn_re.options.back_enum[answer.back_enum!],
         office: fnSwitch(answer.back_office!, {
