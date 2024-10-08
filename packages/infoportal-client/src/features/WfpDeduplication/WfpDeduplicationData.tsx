@@ -4,7 +4,7 @@ import React, {useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
-import {Obj, fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {Txt} from '@/shared/Txt'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {format} from 'date-fns'
@@ -147,6 +147,17 @@ export const WfpDeduplicationData = () => {
               width: 246,
               type: 'select_one',
               // options: () => Obj.keys(DrcSupportSuggestion).map(_ => ({label: m.mpca.drcSupportSuggestion[_], value: _})),
+            },
+            {
+              id: 'suggestionDuration',
+              head: m.mpca.suggestionDurationInMonths,
+              type: 'number',
+              render: _ => {
+                return {
+                  value: _.suggestionDurationInMonths,
+                  label: _.suggestionDurationInMonths + ' ' + m.months,
+                }
+              },
             },
             {
               id: 'status',

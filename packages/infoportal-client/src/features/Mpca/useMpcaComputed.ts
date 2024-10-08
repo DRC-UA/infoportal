@@ -22,8 +22,8 @@ export const useMpcaComputed = ({
     ].includes(_.suggestion)),
     multipleTimeAssisted: (() => {
       const grouped = data.filter(_ => [
-          DrcSupportSuggestion.ThreeMonthsNoDuplication,
-          DrcSupportSuggestion.ThreeMonthsUnAgency,
+          DrcSupportSuggestion.FullNoDuplication,
+          DrcSupportSuggestion.FullNoDuplication,
           undefined
         ].includes(_.deduplication?.suggestion)
       ).groupBy(_ => _.taxId!)

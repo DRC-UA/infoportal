@@ -38,7 +38,9 @@ export class WfpDeduplicationSdk {
     _.existingStart = _.existingStart ? new Date(_.existingStart) : undefined
     _.existingEnd = _.existingEnd ? new Date(_.existingEnd) : undefined
     _.taxId = _.beneficiary?.taxId
-    _.suggestion = getDrcSuggestion(_)
+    const {suggestion, suggestionDurationInMonths} = getDrcSuggestion(_)
+    _.suggestion = suggestion
+    _.suggestionDurationInMonths = suggestionDurationInMonths
     return _
   }
 }

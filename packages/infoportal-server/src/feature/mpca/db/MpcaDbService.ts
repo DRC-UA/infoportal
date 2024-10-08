@@ -73,11 +73,9 @@ export class MpcaDbService {
     if (!row.taxId) return res
     const dedup = wfpIndex[row.taxId]
     if (!dedup || dedup.length === 0) return res
-    res.deduplication = wfpIndex[row.taxId].find(_ => _.existingStart && _.existingEnd
-      && addMonths(row.date, 3).getTime() > _.existingStart.getTime()
-      && row.date.getTime() < _.existingEnd.getTime()
-    ) ?? {
-      suggestion: DrcSupportSuggestion.ThreeMonthsNoDuplication,
+    const defaultResultIfNotFound = {
+      suggestion: DrcSupportSuggestion.FullNoDuplication,
+      suggestionDurationInMonths: -1,
       amount: res.amountUahSupposed!,
       beneficiaryId: '',
       createdAt: row.date,
@@ -88,6 +86,10 @@ export class MpcaDbService {
       category: WfpCategory['CASH-MPA'], // TODO Depends!
       status: WfpDeduplicationStatus.NotDeduplicated,
     }
+    res.deduplication = wfpIndex[row.taxId].find(_ => _.existingStart && _.existingEnd
+      && addMonths(row.date, 3).getTime() > _.existingStart.getTime()
+      && row.date.getTime() < _.existingEnd.getTime()
+    ) ?? defaultResultIfNotFound
     if (res.deduplication) {
       res.amountUahDedup = res.deduplication.amount
       res.amountUahFinal = res.amountUahDedup

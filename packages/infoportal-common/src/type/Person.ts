@@ -1,4 +1,4 @@
-import {Obj, Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@alexandreannic/ts-utils'
 import {KeyOf, NonNullableKeys} from './Generic'
 
 export namespace Person {
