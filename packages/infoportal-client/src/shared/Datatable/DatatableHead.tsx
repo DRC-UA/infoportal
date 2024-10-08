@@ -52,7 +52,7 @@ export const DatatableHead = (() => {
           </th>
         ))}
         {columns.map((c, i) => {
-          const sortedByThis = search?.sortBy === c.id ?? true
+          const sortedByThis = search?.sortBy === c.id
           const active = sortedByThis || filters[c.id]
           return (
             <th
@@ -86,7 +86,7 @@ export const DatatableHead = (() => {
           <td className="td-sticky-start td"/>
         )}
         {columns.map(c => {
-          const sortedByThis = search.sortBy === c.id ?? false
+          const sortedByThis = search.sortBy === c.id
           const active = sortedByThis || !!filters[c.id]
           return (
             <td key={c.id} style={c.styleHead} className={[
