@@ -9,7 +9,7 @@ import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {ChartData, ChartHelperOld, makeChartData} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
-import {Enum, Seq, seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {PartnershipCard} from '@/features/Partnership/Dashboard/PartnershipCard'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
@@ -47,7 +47,7 @@ const mapSga = (data: Seq<PartnershipData>) => {
     .compact()
     .map(sga => ({
       ...sga,
-      project: Enum.values(DrcProject).find(_ => _.includes('' + sga.Project_code)),
+      project: Obj.values(DrcProject).find(_ => _.includes('' + sga.Project_code)),
       year: sga.SGA_start_date?.getFullYear().toString()
     }))
 }
@@ -240,8 +240,8 @@ export const _PartnershipDashboard = ({
           <PanershipPanelDonor data={filteredAndPickedData}/>
           <Lazy deps={[filteredAndPickedData]} fn={() => {
             const gb = filteredAndPickedSgas.compactBy('Project_code').groupBy(_ => _.Project_code!)
-            return new Enum(gb).transform((k, v) => {
-              const project: DrcProject = Enum.values(DrcProject).find(_ => _.includes('' + k))!
+            return new Obj(gb).transform((k, v) => {
+              const project: DrcProject = Obj.values(DrcProject).find(_ => _.includes('' + k))!
               return [
                 project,
                 makeChartData({
@@ -254,8 +254,8 @@ export const _PartnershipDashboard = ({
             {res => <Panel>
               <PanelBody>
                 <Txt uppercase color="hint" bold>{m._partner.totalBudget}</Txt>
-                <Txt sx={{fontSize: '2em', mb: 2, lineHeight: 1}} bold block>${formatLargeNumber(seq(Enum.values(res)).sum(_ => _.value))}</Txt>
-                {Enum.entries(res).map(([project, budget]) => (
+                <Txt sx={{fontSize: '2em', mb: 2, lineHeight: 1}} bold block>${formatLargeNumber(seq(Obj.values(res)).sum(_ => _.value))}</Txt>
+                {Obj.entries(res).map(([project, budget]) => (
                   <ChartPieWidget dense sx={{mb: 2}} key={project} value={budget.value} base={budget.base ?? 1} showValue showBase title={project}/>
                 ))}
               </PanelBody>
@@ -287,7 +287,7 @@ export const _PartnershipDashboard = ({
           <Panel title={m._partner.percentByTypeOfOrg}>
             <PanelBody>
               <Lazy deps={[filteredAndPickedData]} fn={() => {
-                const res = Enum.entries(filteredAndPickedSgas.groupBy(_ => _.year!)).filter(([year]) => year !== 'undefined').map(([year, d]) => {
+                const res = Obj.entries(filteredAndPickedSgas.groupBy(_ => _.year!)).filter(([year]) => year !== 'undefined').map(([year, d]) => {
                   const distincted = d.distinct(_ => _.Partner_name_Ukrainian)
                   return {
                     name: year,

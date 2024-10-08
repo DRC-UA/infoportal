@@ -1,5 +1,5 @@
 import {multipleFilters} from 'infoportal-common'
-import {Enum, Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@alexandreannic/ts-utils'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {ReactNode} from 'react'
 
@@ -64,7 +64,7 @@ export namespace DataFilter {
     shapes: Partial<Record<TName, Shape<TData, TValue>>>,
     filters: Record<TName, string[] | undefined>
   ): Seq<TData> => {
-    return multipleFilters(d, Enum.entries(filters).filter(([k]) => shapes[k] !== undefined).map(([filterName, filterValue]) => {
+    return multipleFilters(d, Obj.entries(filters).filter(([k]) => shapes[k] !== undefined).map(([filterName, filterValue]) => {
       if (!filterValue || filterValue.length <= 0) return
       const shape = shapes[filterName]!
       if (shape.customFilter) return _ => shape.customFilter!(filterValue, _)

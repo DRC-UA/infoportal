@@ -1,6 +1,6 @@
 import {ApiClient, Period, UUID} from 'infoportal-common'
 import {Legalaid} from './Legalaid'
-import {Cache, duration, Enum, seq, throwIf} from '@alexandreannic/ts-utils'
+import {Cache, duration, Obj, seq, throwIf} from '@alexandreannic/ts-utils'
 import {toYYYYMMDD} from '../../../helper/Utils'
 import Poll = Legalaid.Poll
 import PaginateRequest = Legalaid.PaginateRequest
@@ -118,7 +118,7 @@ export class LegalaidSdk {
     return this.fetchBeneficiaries(filters).then(_ => ({
       ..._,
       data: _.data.map(benef => {
-        const ageGroups = Enum.entries(colsUUID).reduce<Gender<number>>((acc, [k, v]) => {
+        const ageGroups = Obj.entries(colsUUID).reduce<Gender<number>>((acc, [k, v]) => {
           return ({
             ...acc, [k]: seq(v.map(_ => (benef as any)[_])).sum((_?: number) => isNaN(_!) ? 0 : +_!)
           })

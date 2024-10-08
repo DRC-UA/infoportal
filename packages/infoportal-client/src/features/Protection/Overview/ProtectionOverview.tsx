@@ -9,7 +9,7 @@ import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {DisplacementStatus, groupBy, KoboIndex, OblastIndex, OblastName} from 'infoportal-common'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
@@ -171,7 +171,7 @@ const ProtectionOverviewWithContext = () => {
                 oblast,
                 raion,
                 hromada,
-                ...Enum.mapValues(countByForm, _ => _.length),
+                ...Obj.mapValues(countByForm, _ => _.length),
                 data: countByForm,
               })
             }

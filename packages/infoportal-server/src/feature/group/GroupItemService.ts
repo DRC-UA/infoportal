@@ -1,6 +1,6 @@
 import {FeatureAccessLevel, PrismaClient} from '@prisma/client'
 import {yup} from '../../helper/Utils'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {UUID} from 'infoportal-common'
 import {InferType} from 'yup'
 import {AccessService} from '../access/AccessService'
@@ -21,7 +21,7 @@ export class GroupItemService {
   })
 
   static readonly updateSchema = yup.object({
-    level: yup.mixed<FeatureAccessLevel>().oneOf(Enum.values(FeatureAccessLevel)).optional(),
+    level: yup.mixed<FeatureAccessLevel>().oneOf(Obj.values(FeatureAccessLevel)).optional(),
     drcJob: AccessService.drcJobSchema.optional().nullable(),
     drcOffice: AccessService.drcOfficeSchema.optional().nullable(),
     email: yup.string().optional().nullable(),

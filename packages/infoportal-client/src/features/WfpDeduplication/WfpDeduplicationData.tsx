@@ -4,7 +4,7 @@ import React, {useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
-import {Enum, fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {Obj, fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {Txt} from '@/shared/Txt'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {format} from 'date-fns'
@@ -76,7 +76,7 @@ export const WfpDeduplicationData = () => {
               head: m.office,
               renderQuick: _ => _.office,
               type: 'select_one',
-              options: () => Enum.values(DrcOffice).map(_ => ({label: _, value: _}))
+              options: () => Obj.values(DrcOffice).map(_ => ({label: _, value: _}))
             },
             {
               type: 'select_one',
@@ -146,7 +146,7 @@ export const WfpDeduplicationData = () => {
               renderQuick: _ => m.mpca.drcSupportSuggestion[_.suggestion],
               width: 246,
               type: 'select_one',
-              // options: () => Enum.keys(DrcSupportSuggestion).map(_ => ({label: m.mpca.drcSupportSuggestion[_], value: _})),
+              // options: () => Obj.keys(DrcSupportSuggestion).map(_ => ({label: m.mpca.drcSupportSuggestion[_], value: _})),
             },
             {
               id: 'status',
@@ -154,7 +154,7 @@ export const WfpDeduplicationData = () => {
               head: m.status,
               width: 0,
               type: 'select_one',
-              options: () => DatatableUtils.buildOptions(Enum.keys(WfpDeduplicationStatus), true),
+              options: () => DatatableUtils.buildOptions(Obj.keys(WfpDeduplicationStatus), true),
               render: _ => {
                 return {
                   tooltip: m.mpca.status[_.status],

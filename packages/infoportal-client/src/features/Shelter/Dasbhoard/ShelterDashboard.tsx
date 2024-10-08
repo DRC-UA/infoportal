@@ -5,7 +5,7 @@ import React, {useMemo, useState} from 'react'
 import {Box} from '@mui/material'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {useI18n} from '@/core/i18n'
-import {Enum, fnSwitch, seq, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {
   DrcOffice,
   KoboValidation,
@@ -312,7 +312,7 @@ export const _ShelterDashboard = ({
           <PanelBody>
             <Lazy deps={[data]} fn={() => {
               const gb = seq(data).groupBy(_ => OblastIndex.byKoboName(_.nta?.ben_det_oblast)?.iso!)
-              return new Enum(gb).transform((k, v) => [k, makeChartData({value: v.length})]).get()
+              return new Obj(gb).transform((k, v) => [k, makeChartData({value: v.length})]).get()
             }}>
               {_ => <MapSvg data={_} sx={{mx: 1}} maximumFractionDigits={0} base={data.length}/>}
             </Lazy>

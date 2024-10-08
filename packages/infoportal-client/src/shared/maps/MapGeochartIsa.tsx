@@ -93,7 +93,7 @@ const drawOffices = (selector: string) => {
 
   const data = google.visualization.arrayToDataTable([
     ['State', 'Population'],
-    // ...Enum.keys(OblastIndex.oblastByISO).map(_ => [_.replace('UA', 'UA-'), occupiedOblasts.includes(_) ? 100 : 0]),
+    // ...Obj.keys(OblastIndex.oblastByISO).map(_ => [_.replace('UA', 'UA-'), occupiedOblasts.includes(_) ? 100 : 0]),
   ])
 
   const chart = new google.visualization.GeoChart(document.querySelector(selector)!)

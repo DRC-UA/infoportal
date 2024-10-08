@@ -9,7 +9,7 @@ import {chain, Protection_hhs3} from 'infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
 
 export const SnapshotProtMonitoNN2Livelihood = () => {
@@ -96,7 +96,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
                 })
                 return {income, hhSize}
               }}>
-                {res => <ChartBar data={res.income} descs={Enum.transform(res.hhSize, (k, _) => [k, m.protHHSnapshot.avgHhSize(_.value / (_.base ?? 1))])}/>}
+                {res => <ChartBar data={res.income} descs={Obj.transform(res.hhSize, (k, _) => [k, m.protHHSnapshot.avgHhSize(_.value / (_.base ?? 1))])}/>}
               </Lazy>
             </SlidePanel>
           </Div>

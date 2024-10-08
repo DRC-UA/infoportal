@@ -4,7 +4,7 @@ import {Txt} from '@/shared/Txt'
 import {PanelFeatures} from '@/shared/Panel/PanelFeatures'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {endOfMonth, startOfMonth} from 'date-fns'
-import {DeepPartial, Enum, seq} from '@alexandreannic/ts-utils'
+import {DeepPartial, Obj, seq} from '@alexandreannic/ts-utils'
 import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
@@ -181,7 +181,7 @@ export default () => {
 
   const ageGroup = useCallback((ageGroup: Person.AgeGroup, hideOther?: boolean) => {
     const gb = Person.groupByGenderAndGroup(ageGroup)(data?.flatMap(_ => _.persons)!)
-    return new Enum(gb).entries().map(([k, v]) => ({key: k, ...v}))
+    return new Obj(gb).entries().map(([k, v]) => ({key: k, ...v}))
   }, [data])
 
   if (!data) return

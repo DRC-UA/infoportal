@@ -1,4 +1,4 @@
-import {Enum, Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@alexandreannic/ts-utils'
 import {useMemo} from 'react'
 import {DrcSupportSuggestion, MpcaEntity} from 'infoportal-common'
 
@@ -27,8 +27,8 @@ export const useMpcaComputed = ({
           undefined
         ].includes(_.deduplication?.suggestion)
       ).groupBy(_ => _.taxId!)
-      return new Enum(grouped)
-        .transform((k, v) => [k, v.length])
+      return new Obj(grouped)
+        .map((k, v) => [k, v.length])
         .filter((k, v) => v > 1)
         .get()
     })(),

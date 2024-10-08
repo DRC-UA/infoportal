@@ -4,7 +4,7 @@ import {alpha, Box, Icon, TooltipProps} from '@mui/material'
 import {useTimeout} from '@alexandreannic/react-hooks-lib'
 import {useI18n} from '@/core/i18n'
 import {Txt} from '@/shared/Txt'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {LightTooltip, TooltipRow} from '@/shared/LightTooltip'
 import {toPercent} from 'infoportal-common'
 import {ChartDataVal} from '@/shared/charts/chartHelper'
@@ -61,7 +61,7 @@ export const ChartBarContent = <K extends string>({
     // base,
     percents,
   } = useMemo(() => {
-    const values = Enum.values(data) as BarChartData[]
+    const values = Obj.values(data) as BarChartData[]
     const maxValue = Math.max(...values.map(_ => _.value))
     const sumValue = values.reduce((sum, _) => _.value + sum, 0)
     // const base = values[0]?.base ?? sumValue
@@ -74,7 +74,7 @@ export const ChartBarContent = <K extends string>({
       percents,
     }
   }, [data])
-  // const values: HorizontalBarChartGoogleData[] = useMemo(() => Enum.values(data), [data])
+  // const values: HorizontalBarChartGoogleData[] = useMemo(() => Obj.values(data), [data])
   // const maxValue = useMemo(() => Math.max(...values.map(_ => _.value)), [data])
   // const sumValue = useMemo(() => values.reduce((sum, _) => _.value + sum, 0), [data])
   // const percents = useMemo(() => values.map(_ => _.value / ((base ?? _.base) || sumValue) * 100), [data])
@@ -87,13 +87,13 @@ export const ChartBarContent = <K extends string>({
 
   return (
     <Box sx={{overflow: 'hidden'}}>
-      {Enum.keys(data).length === 0 && (
+      {Obj.keys(data).length === 0 && (
         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <Icon color="disabled" sx={{fontSize: 40, mb: 1}}>block</Icon>
           <Txt block color="disabled">{m.noDataAtm}</Txt>
         </Box>
       )}
-      {Enum.entries(data).map(([k, item], i) => {
+      {Obj.entries(data).map(([k, item], i) => {
         const percentOfMax = 100 * (item.base ? percents[i] / maxPercent : item.value / maxValue)
         return (
           <TooltipWrapper item={item} base={item.base ?? sumValue} sumValue={sumValue} key={i}>

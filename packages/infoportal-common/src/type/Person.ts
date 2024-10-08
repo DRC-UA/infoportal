@@ -1,4 +1,4 @@
-import {Enum, Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, Obj, seq} from '@alexandreannic/ts-utils'
 import {KeyOf, NonNullableKeys} from './Generic'
 
 export namespace Person {
@@ -76,10 +76,10 @@ export namespace Person {
     return ageGroup[str] as unknown as AgeGroup
   }
 
-  export const ageGroups = Enum.keys(ageGroup)
+  export const ageGroups = Obj.keys(ageGroup)
 
   export const ageToAgeGroup = <AG extends AgeGroup>(age: number | undefined, ag: AG): keyof AG | undefined => {
-    for (const [k, [min, max]] of Enum.entries(ag)) {
+    for (const [k, [min, max]] of Obj.entries(ag)) {
       if (age !== undefined && age >= min && age <= max) return k as any
     }
     return undefined

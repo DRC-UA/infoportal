@@ -1,5 +1,5 @@
 import React, {lazy} from 'react'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {ProtectionMonito} from './ProtectionMonitoContext'
 import {ProtectionDashboardMonitoSample} from './ProtectionDashboardMonitoSample'
@@ -86,7 +86,7 @@ export const ProtectionDashboardMonitoWCtx = () => {
                   icon="wc"
                   value={value ?? []}
                   label={m.protHHS2.hhComposition}
-                  options={() => Enum.entries(m.protHHS2._hhComposition).map(([k, v]) => ({value: k, label: v}))}
+                  options={() => Obj.entries(m.protHHS2._hhComposition).map(([k, v]) => ({value: k, label: v}))}
                   onChange={onChange as any}
                 />
               }

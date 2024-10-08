@@ -7,7 +7,7 @@ import {ChartBar} from '@/shared/charts/ChartBar'
 import {chain, Protection_hhs3} from 'infoportal-common'
 import {Box, Checkbox} from '@mui/material'
 import {Txt} from '@/shared/Txt'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 
@@ -34,8 +34,8 @@ export const ProtectionDashboardMonitoFamilyUnity = () => {
     other_relative: true,
   })
 
-  const allChecked = useMemo(() => Enum.values(category).every(_ => _), [category])
-  const oneChecked = useMemo(() => !!Enum.values(category).find(_ => _), [category])
+  const allChecked = useMemo(() => Obj.values(category).every(_ => _), [category])
+  const oneChecked = useMemo(() => !!Obj.values(category).find(_ => _), [category])
 
   const updateAll = (checked: boolean) => {
     setCategory({

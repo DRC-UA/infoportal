@@ -1,5 +1,5 @@
 import {MpcaEntity} from 'infoportal-common'
-import {Enum, Seq, seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {SlidePanel} from '@/shared/PdfLayout/PdfSlide'
@@ -26,7 +26,7 @@ export const MpcaDuplicatedCheckPanel = ({
       <MpcaDuplicatedCheck
         header={
           <ScRadioGroup value={type} onChange={setType} inline dense>
-            {Enum.values(Type).map(_ =>
+            {Obj.values(Type).map(_ =>
               <ScRadioGroupItem hideRadio value={_} key={_} title={_}/>
             )}
           </ScRadioGroup>
@@ -59,7 +59,7 @@ export const MpcaDuplicatedCheck = ({
       // .compactBy(property)
       // .groupBy(_ => (_ as any)[property])
       .groupBy(fn)
-    return seq(Enum.entries(gb)).map(([k, v]) => ({
+    return seq(Obj.entries(gb)).map(([k, v]) => ({
       key: k,
       count: v.length,
       list: v,

@@ -1,6 +1,6 @@
 import {useCallback, useMemo, useState} from 'react'
 import {ApiPaginateHelper, KeyOf, multipleFilters, safeNumber} from 'infoportal-common'
-import {Enum, fnSwitch, map} from '@alexandreannic/ts-utils'
+import {Obj, fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
   DatatableColumn,
   DatatableFilterValue,
@@ -119,7 +119,7 @@ const filterBy = <T extends DatatableRow>({
   columnsIndex: Record<KeyOf<T>, DatatableColumn.InnerProps<T>>
 }) => {
   if (!data) return
-  return multipleFilters(data, Enum.keys(filters).map((k, i) => {
+  return multipleFilters(data, Obj.keys(filters).map((k, i) => {
     const filter = filters[k]
     if (filter === undefined) return
     const col = columnsIndex[k]

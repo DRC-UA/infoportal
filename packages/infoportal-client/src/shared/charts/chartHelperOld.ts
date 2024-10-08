@@ -1,4 +1,4 @@
-import {Enum, fnSwitch, Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {ReactNode} from 'react'
 import {NonNullableKey} from 'infoportal-common'
 
@@ -26,7 +26,7 @@ export type ChartData<K extends string = string> = Record<K, ChartDataVal>
 export namespace ChartHelperOld {
 
   export const take = <T extends string>(n: number) => (obj: Record<T, ChartDataVal>): Record<T, ChartDataVal> => {
-    return seq(Enum.entries(obj).splice(0, n)).reduceObject(_ => _)
+    return seq(Obj.entries(obj).splice(0, n)).reduceObject(_ => _)
   }
 
   export const sortBy = {
@@ -69,7 +69,7 @@ export namespace ChartHelperOld {
       return [curr, (acc[curr] ?? 0) + 1]
     })
     const res = {} as ChartData<A>
-    Enum.keys(obj).forEach(k => {
+    Obj.keys(obj).forEach(k => {
       res[k] = {value: obj[k] / (percent ? data.length : 1)}
     })
     return ChartHelperOld.sortBy.value(res)
@@ -92,7 +92,7 @@ export namespace ChartHelperOld {
       percentOfTotalChoices: flatData.length,
     }, _ => undefined)
     const res = {} as ChartData<A>
-    Enum.keys(obj).forEach(k => {
+    Obj.keys(obj).forEach(k => {
       if (!res[k]) res[k] = {value: 0, base: 0}
       res[k].value = obj[k]
       res[k].base = baseCount
@@ -138,9 +138,9 @@ export namespace ChartHelperOld {
     filterZeroCategory?: boolean
     categories: Record<K, (_: A) => boolean>
   }): Record<K, ChartDataValPercent> => {
-    const res = Enum.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0, percent: 0}}), {} as Record<K, ChartDataValPercent>)
+    const res = Obj.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0, percent: 0}}), {} as Record<K, ChartDataValPercent>)
     data.forEach(x => {
-      Enum.entries(categories).forEach(([category, isCategory]) => {
+      Obj.entries(categories).forEach(([category, isCategory]) => {
         if (!isCategory(x)) return
         if (filterBase && !filterBase(x)) return
         const r = res[category]
@@ -152,7 +152,7 @@ export namespace ChartHelperOld {
       })
     })
     if (filterZeroCategory) {
-      Enum.keys(res).forEach(k => {
+      Obj.keys(res).forEach(k => {
         if (res[k].value === 0) delete res[k]
       })
     }
@@ -170,9 +170,9 @@ export namespace ChartHelperOld {
     sumBase?: (_: A) => number
     categories: Record<K, (_: A) => boolean>
   }): Record<K, ChartDataVal> => {
-    const res = Enum.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0}}), {} as Record<K, {value: number, base: 0}>)
+    const res = Obj.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0}}), {} as Record<K, {value: number, base: 0}>)
     data.forEach(x => {
-      Enum.entries(categories).forEach(([category, isCategory]) => {
+      Obj.entries(categories).forEach(([category, isCategory]) => {
         if (!isCategory(x)) return
         const base = sumBase ? sumBase(x) : 1
         if (base) {
@@ -185,7 +185,7 @@ export namespace ChartHelperOld {
   }
 
   export const setLabel = <A extends string>(m: Record<A, ReactNode>) => (data: ChartData<A>): ChartData<A> => {
-    Enum.keys(data).forEach(k => {
+    Obj.keys(data).forEach(k => {
       data[k].label = m[k]
     })
     return data

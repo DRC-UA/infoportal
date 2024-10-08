@@ -1,14 +1,14 @@
 import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {MealVerificationAnswersStatus} from '../../feature/mealVerfication/MealVerificationType'
 import {MealVerificationStatus, PrismaClient} from '@prisma/client'
 import {MealVerificationService} from '../../feature/mealVerfication/MealVerificationService'
 
 export class MealVerificationSchema {
 
-  static readonly yupAnswerStatus = yup.mixed<MealVerificationAnswersStatus>().oneOf(Enum.values(MealVerificationAnswersStatus))
-  static readonly yupStatus = yup.mixed<MealVerificationStatus>().oneOf(Enum.values(MealVerificationStatus))
+  static readonly yupAnswerStatus = yup.mixed<MealVerificationAnswersStatus>().oneOf(Obj.values(MealVerificationAnswersStatus))
+  static readonly yupStatus = yup.mixed<MealVerificationStatus>().oneOf(Obj.values(MealVerificationStatus))
 
   static readonly id = yup.object({
     id: yup.string().required()

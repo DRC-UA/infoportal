@@ -1,6 +1,6 @@
 import {generateXLSFromArray, GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
 import {KoboApiQuestionSchema, KoboId, KoboTranslateChoice, KoboTranslateQuestion, slugify} from 'infoportal-common'
-import {Enum, map, mapFor, seq} from '@alexandreannic/ts-utils'
+import {map, mapFor, Obj, seq} from '@alexandreannic/ts-utils'
 import {koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
 import React from 'react'
 import {useI18n} from '@/core/i18n'
@@ -143,7 +143,7 @@ export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
             repeatGroupsAsColumns,
           })
         },
-        ...Enum.entries(ctx.schema.schemaHelper.groupSchemas).map(([groupName, questions]) => {
+        ...Obj.entries(ctx.schema.schemaHelper.groupSchemas).map(([groupName, questions]) => {
           const _: GenerateXlsFromArrayParams<any> = {
             sheetName: groupName as string,
             data: seq(data).flatMap(d => (d[groupName] as any[])?.map(_ => ({

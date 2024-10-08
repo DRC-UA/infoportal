@@ -1,7 +1,7 @@
 import {Box, Icon, Popover} from '@mui/material'
 import React, {useEffect, useState} from 'react'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {Enum, Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@alexandreannic/ts-utils'
 import {FilterLayoutProps} from '@/shared/DataFilter/DataFilterLayout'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
@@ -74,7 +74,7 @@ export const DataFilterLayoutPopup = ({
           // maxHeight: '50vh',
         }}>
           <Box sx={{mb: 1}}>{before}</Box>
-          {Enum.entries(shapes).map(([name, shape]) =>
+          {Obj.entries(shapes).map(([name, shape]) =>
             <Box key={name} sx={{display: 'flex', alignItems: 'center', mb: 2}}>
               <Icon color="disabled" sx={{minWidth: 22}}>{shape.icon}</Icon>
               <Txt truncate sx={{mx: 1, width: 140, maxWidth: 140}}>{shape.label}</Txt>

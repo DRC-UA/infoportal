@@ -1,4 +1,4 @@
-import {Enum, lazy, map} from '@alexandreannic/ts-utils'
+import {Obj, lazy, map} from '@alexandreannic/ts-utils'
 import {OblastIndex} from './oblastIndex'
 import {AiOblast, aiOblasts} from './aiOblasts'
 import {hromadas} from './hromadas'
@@ -26,7 +26,7 @@ export type AILocation = {
 export class AILocationHelper {
 
   private static readonly findLocation = <K extends string>(loc: Record<K, string>, name: string, type: string): K | undefined => {
-    const res = Enum.keys(loc).find(_ => _.includes(name))
+    const res = Obj.keys(loc).find(_ => _.includes(name))
     if (!res) {
       console.error(`Cannot find ${type} ${name}`)
     }
@@ -71,7 +71,7 @@ export class AILocationHelper {
       'Volodymyr-Volynskyi': 'Volodymyrskyi',
     }[raionName] ?? raionName
     const oblastIso = OblastIndex.byName(oblastName)?.iso
-    const list = Enum.values(raions).filter(_ => _.parent === oblastIso)
+    const list = Obj.values(raions).filter(_ => _.parent === oblastIso)
     return list.find(_ => _.en.toLowerCase() === fixedRaion.toLowerCase())
   }
 
@@ -95,7 +95,7 @@ export class AILocationHelper {
       hromadaName = 'Chernivetskyi'
     }
     const raionIso = AILocationHelper.findRaion(oblastName, raionName)?.iso
-    const list = Enum.values(hromadas).filter(_ => _.parent === raionIso)
+    const list = Obj.values(hromadas).filter(_ => _.parent === raionIso)
     return list.find(_ => _.en.toLowerCase() === hromadaName?.toLowerCase())
   }
 

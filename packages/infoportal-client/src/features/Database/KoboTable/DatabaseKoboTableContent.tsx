@@ -14,7 +14,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
-import {Enum, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@alexandreannic/ts-utils'
 import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
@@ -145,7 +145,7 @@ export const DatabaseKoboTableContent = ({
         } : undefined}
         exportAdditionalSheets={data => {
           const questionToAddInGroups = ctx.schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name))
-          return Enum.entries(ctx.schema.schemaHelper.groupSchemas).map(([groupName, questions]) => {
+          return Obj.entries(ctx.schema.schemaHelper.groupSchemas).map(([groupName, questions]) => {
             const _: GenerateXlsFromArrayParams<any> = {
               sheetName: groupName as string,
               data: seq(data).flatMap(d => (d[groupName] as any[])?.map(_ => ({

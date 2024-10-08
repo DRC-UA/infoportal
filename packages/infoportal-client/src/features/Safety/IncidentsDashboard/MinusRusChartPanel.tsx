@@ -1,4 +1,4 @@
-import {Enum, Seq, seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {Box} from '@mui/material'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
@@ -133,7 +133,7 @@ export const MinusRusChartPanel = () => {
           value={minusResKeys.filter(_ => minusRusCurves[_])}
           onChange={e => {
             setMinusRusCurves(prev => {
-              Enum.keys(prev).forEach(_ => {
+              Obj.keys(prev).forEach(_ => {
                 if (e.includes(_)) prev[_] = true
                 else prev[_] = false
               })
@@ -146,10 +146,10 @@ export const MinusRusChartPanel = () => {
       <Lazy deps={[fetcherMinusRus.get, minusRusDateFormat, minusRusCurveType, minusRusCurves]} fn={() => {
         if (!fetcherMinusRus.get) return
         const gb = fetcherMinusRus.get?.sortByNumber(_ => _.date.getTime()).groupBy(_ => format(_.date, minusRusDateFormat))
-        const res = Enum.entries(gb).map(([k, v]) => {
+        const res = Obj.entries(gb).map(([k, v]) => {
           return {
             name: k,
-            ...Enum.entries(minusRusCurves).filter(([curveK, isEnabled]) => isEnabled).reduce((acc, [curveK]) => ({
+            ...Obj.entries(minusRusCurves).filter(([curveK, isEnabled]) => isEnabled).reduce((acc, [curveK]) => ({
               ...acc,
               [curveK]: v.sum(_ => _[curveK])
             }), {}),
@@ -158,7 +158,7 @@ export const MinusRusChartPanel = () => {
         if (minusRusCurveType === 'cumulative') return res
         return res.filter((_, i) => i > 0).map((_, i) => ({
           ..._,
-          ...Enum.entries(minusRusCurves).filter(([k, v]) => v).reduce((acc, [k]) => ({
+          ...Obj.entries(minusRusCurves).filter(([k, v]) => v).reduce((acc, [k]) => ({
             ...acc,
             // @ts-ignore
             [k]: _[k] - res[i][k]

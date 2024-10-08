@@ -3,7 +3,7 @@ import React, {ReactNode, useEffect} from 'react'
 import {useI18n} from '@/core/i18n'
 import {UUID} from 'infoportal-common'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
-import {Enum, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@alexandreannic/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
@@ -87,7 +87,7 @@ export const AccessTable = ({
           id: 'level',
           head: m.accessLevel,
           type: 'select_one',
-          options: () => Enum.keys(AccessLevel).map(_ => ({value: _, label: _})),
+          options: () => Obj.keys(AccessLevel).map(_ => ({value: _, label: _})),
           render: row => {
             if (!!row.groupName) return {value: undefined, label: ''}
             if (isAdmin)
@@ -100,7 +100,7 @@ export const AccessTable = ({
                     onChange={_ => _update.call(row.id, {level: _ as AccessLevel})}
                     hideNullOption
                     disabled={!!row.groupName}
-                    options={Enum.keys(AccessLevel)}/>
+                    options={Obj.keys(AccessLevel)}/>
                 )
               }
             return {value: row.level, label: row.level}

@@ -1,4 +1,4 @@
-import {Enum, fnSwitch} from '@alexandreannic/ts-utils'
+import {Obj, fnSwitch} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
@@ -140,7 +140,7 @@ export const SafetyIncidentDashboardBody = () => {
           </Div>
           <Lazy deps={[dataFiltered]} fn={() => {
             const x = dataFiltered?.groupBy(_ => _.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date')
-            return new Enum(x)
+            return new Obj(x)
               .transform((k, v) => [k, {
                 total: v.length,
                 dead: v.sum(_ => _.dead ?? 0),

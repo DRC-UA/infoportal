@@ -1,4 +1,4 @@
-import {Enum, fnSwitch, Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {ReactNode} from 'react'
 import {NonNullableKey} from 'infoportal-common'
 
@@ -37,7 +37,7 @@ export class ChartHelper<K extends string = string> {
       return [curr, (acc[curr] ?? 0) + 1]
     })
     const res = {} as ChartData<K>
-    Enum.keys(obj).forEach(k => {
+    Obj.keys(obj).forEach(k => {
       res[k] = {value: obj[k] / (percent ? data.length : 1)}
     })
     return new ChartHelper(res).sortBy.value()
@@ -62,7 +62,7 @@ export class ChartHelper<K extends string = string> {
       percentOfTotalChoices: flatData.length,
     }, _ => undefined)
     const res = {} as ChartData<K>
-    Enum.keys(obj).forEach(k => {
+    Obj.keys(obj).forEach(k => {
       if (!res[k]) res[k] = {value: 0, base: 0}
       res[k].value = obj[k]
       res[k].base = baseCount
@@ -83,9 +83,9 @@ export class ChartHelper<K extends string = string> {
     filterZeroCategory?: boolean
     categories: Record<K, (_: A) => boolean>
   }): ChartHelper<K> => {
-    const res = Enum.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0, percent: 0}}), {} as Record<K, ChartDataValPercent>)
+    const res = Obj.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0, percent: 0}}), {} as Record<K, ChartDataValPercent>)
     data.forEach(x => {
-      Enum.entries(categories).forEach(([category, isCategory]) => {
+      Obj.entries(categories).forEach(([category, isCategory]) => {
         if (!isCategory(x)) return
         if (filterBase && !filterBase(x)) return
         const r = res[category]
@@ -97,7 +97,7 @@ export class ChartHelper<K extends string = string> {
       })
     })
     if (filterZeroCategory) {
-      Enum.keys(res).forEach(k => {
+      Obj.keys(res).forEach(k => {
         if (res[k].value === 0) delete res[k]
       })
     }
@@ -120,7 +120,7 @@ export class ChartHelper<K extends string = string> {
 
   static readonly take = <K extends string>(n?: number) => (obj: Record<K, ChartDataVal>): ChartData<K> => {
     if (n)
-      return seq(Enum.entries(obj).splice(0, n)).reduceObject(_ => _)
+      return seq(Obj.entries(obj).splice(0, n)).reduceObject(_ => _)
     return obj
   }
 
@@ -131,12 +131,12 @@ export class ChartHelper<K extends string = string> {
 
   static readonly sortBy = {
     custom: <T extends string>(order: T[]) => <V>(obj: ChartData<T>): ChartData<T> => {
-      return new Enum(obj).sort(([aK, aV], [bK, bV]) => {
+      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
         return order.indexOf(aK) - order.indexOf(bK)
       }).get()
     },
     percent: <T extends string>(obj: ChartData<T>): ChartData<T> => {
-      return new Enum(obj).sort(([aK, aV], [bK, bV]) => {
+      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
         try {
           return bV.value / (bV.base ?? 1) - aV.value / (aV.base ?? 1)
         } catch (e) {
@@ -145,12 +145,12 @@ export class ChartHelper<K extends string = string> {
       }).get()
     },
     value: <T extends string>(obj: ChartData<T>): ChartData<T> => {
-      return new Enum(obj).sort(([aK, aV], [bK, bV]) => {
+      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
         return bV.value - aV.value
       }).get()
     },
     label: <T extends string>(obj: ChartData<T>): ChartData<T> => {
-      return new Enum(obj).sort(([aK, aV], [bK, bV]) => {
+      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
         return (bV.label as string ?? '').localeCompare(aV.label as string ?? '')
       }).get()
     }
@@ -211,9 +211,9 @@ export class ChartHelper<K extends string = string> {
     sumBase?: (_: A) => number
     categories: Record<K, (_: A) => boolean>
   }): Record<K, ChartDataVal> => {
-    const res = Enum.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0}}), {} as Record<K, {value: number, base: 0}>)
+    const res = Obj.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0}}), {} as Record<K, {value: number, base: 0}>)
     data.forEach(x => {
-      Enum.entries(categories).forEach(([category, isCategory]) => {
+      Obj.entries(categories).forEach(([category, isCategory]) => {
         if (!isCategory(x)) return
         const base = sumBase ? sumBase(x) : 1
         if (base) {
@@ -227,7 +227,7 @@ export class ChartHelper<K extends string = string> {
 
   readonly setLabel = (m?: Record<K, ReactNode>): ChartHelper<K> => {
     if (m) {
-      Enum.keys(this.value).forEach(k => {
+      Obj.keys(this.value).forEach(k => {
         this.value[k].label = m[k]
       })
     }

@@ -1,4 +1,4 @@
-import {Enum, fnSwitch} from '@alexandreannic/ts-utils'
+import {Obj, fnSwitch} from '@alexandreannic/ts-utils'
 import React, {useEffect} from 'react'
 import {Box, GlobalStyles, Icon, useTheme} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -200,7 +200,7 @@ export const MapGeochartOffices = () => {
             </Box>
             <Box sx={{ml: 3}}>
               <Txt block color="hint" size="big" sx={{mb: 1}}>Legend</Txt>
-              {Enum.values(officeStyle(theme)).map(t =>
+              {Obj.values(officeStyle(theme)).map(t =>
                 <Box key={t.label} sx={{display: 'flex', alignItems: 'center', mb: 2}}>
                   <Icon sx={{color: t.color, mr: 1}}>{t.icon}</Icon>
                   {t.label}

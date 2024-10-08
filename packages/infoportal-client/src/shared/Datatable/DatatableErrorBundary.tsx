@@ -46,7 +46,7 @@ export class DatatableErrorBoundary extends Component<ErrorBoundaryProps, ErrorB
       //     }
       //   }
       // }
-      // Enum.values(DatatableUtils.localStorageKey).map(cleanLs)
+      // Obj.values(DatatableUtils.localStorageKey).map(cleanLs)
       localStorage.clear()
     }
     location.reload()

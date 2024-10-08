@@ -5,7 +5,7 @@ import React, {ReactElement} from 'react'
 import {Modal} from '@/shared/Modal'
 import {Box} from '@mui/material'
 import {Controller, useForm} from 'react-hook-form'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useIpToast} from '@/core/useToast'
@@ -76,7 +76,7 @@ export const CfmAccessForm = ({
                   defaultValue={[]}
                   label={m.drcOffice}
                   onChange={_ => onChange(_)}
-                  options={ctx.authorizations.accessibleOffices ?? Enum.keys(DrcOffice)}
+                  options={ctx.authorizations.accessibleOffices ?? Obj.keys(DrcOffice)}
                   sx={{mb: 2.5}}
                 />
               )}
@@ -94,7 +94,7 @@ export const CfmAccessForm = ({
                   defaultValue={[]}
                   label={m.program}
                   onChange={_ => onChange(_)}
-                  options={ctx.authorizations.accessiblePrograms ?? Enum.keys(CfmDataProgram)}
+                  options={ctx.authorizations.accessiblePrograms ?? Obj.keys(CfmDataProgram)}
                 />
               )}
             />

@@ -4,7 +4,7 @@ import React from 'react'
 import {AiWash} from '@/features/ActivityInfo/Wash/AiWash'
 import {AiMpca} from '@/features/ActivityInfo/Mpca/AiMpca'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {AiSnfi} from '@/features/ActivityInfo/Snfi/AiSnfi'
 import {AiProtection} from '@/features/ActivityInfo/Protection/AiProtection'
 import {AiFslc} from '@/features/ActivityInfo/Fslc/AiFslc'
@@ -62,13 +62,13 @@ export const activitiesConfig = {
 
 export const activityInfoIndex = {
   basePath: '/activity-info',
-  siteMap: new Enum(activitiesConfig).transform((k, v) => [k, v.path]).get()
+  siteMap: new Obj(activitiesConfig).transform((k, v) => [k, v.path]).get()
 }
 
 const ActivityInfoSidebar = () => {
   return (
     <Sidebar>
-      {Enum.keys(activitiesConfig).map(k =>
+      {Obj.keys(activitiesConfig).map(k =>
         <NavLink to={activitiesConfig[k].path} key={k}>
           {({isActive, isPending}) => (
             <SidebarItem key={k} active={isActive}>{activitiesConfig[k].name}</SidebarItem>
@@ -83,7 +83,7 @@ export const ActivityInfo = () => {
   return (
     <Layout sidebar={<ActivityInfoSidebar/>} title={appFeaturesIndex.activity_info.name}>
       <Routes>
-        {Enum.values(activitiesConfig).map(k =>
+        {Obj.values(activitiesConfig).map(k =>
           <Route key={k.path} path={k.path} element={k.componnent}/>
         )}
       </Routes>

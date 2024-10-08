@@ -1,4 +1,4 @@
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {Shelter_ta} from '../generated'
 import {KoboShelterTa} from './KoboShelterTA'
 
@@ -33,7 +33,7 @@ export class ShelterContractorPrices {
     oblast?: keyof typeof Shelter_ta.options['ben_det_oblast']
     lot: 1 | 2 | 3
   }): ShelterContractor[] => {
-    const contractors = oblasts[oblast as keyof typeof oblasts] ?? Enum.values(ShelterContractor)
+    const contractors = oblasts[oblast as keyof typeof oblasts] ?? Obj.values(ShelterContractor)
     return contractors
     // .filter(_ => {
     // return (pricesCents[_]?.dismantling_of_structures && lot === 1)

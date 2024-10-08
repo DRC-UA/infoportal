@@ -1,5 +1,5 @@
 import {format} from 'date-fns'
-import {Enum, map} from '@alexandreannic/ts-utils'
+import {Obj, map} from '@alexandreannic/ts-utils'
 import React, {useMemo} from 'react'
 import {ChartLine, ChartLineProps} from '@/shared/charts/ChartLine'
 
@@ -31,7 +31,7 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
     // const _end = format(end, 'yyyy-MM')
     const res: Record<string, Record<string, number>> = {}
     data.forEach(d => {
-      Enum.entries(curves).map(([q, fn]) => {
+      Obj.entries(curves).map(([q, fn]) => {
         const date = map(fn(d), d => typeof d === 'string' ? new Date(d) : d) as Date | undefined
         try {
           if (!date) return
@@ -45,9 +45,9 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
         }
       }).filter(_ => _ !== undefined)
     })
-    return Enum.entries(res)
+    return Obj.entries(res)
       .map(([date, v]) => {
-        Enum.keys(curves).forEach(q => {
+        Obj.keys(curves).forEach(q => {
           if (!v[q]) v[q] = 0
         })
         return [date, v] as [string, Record<K, number>]

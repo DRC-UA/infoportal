@@ -1,7 +1,6 @@
 import {KoboSdk} from 'infoportal-common'
 import {appConf} from './appConf'
 import winston from 'winston'
-import {ActivityInfoBuildType} from './ai/BuildTypeActivityInfo'
 import {BuildKoboType} from './kobo/BuildTypeKobo'
 
 export const koboSdk = new KoboSdk({
@@ -12,8 +11,8 @@ export const koboSdk = new KoboSdk({
 });
 
 (async () => {
-  await ActivityInfoBuildType.fslc()
-  // await new BuildKoboType().buildAll()
+  // await ActivityInfoBuildType.fslc()
+  await new BuildKoboType().build('bn_re')
 })()
 
 // With the release of RAIS+, it has been asked to collect Tax ID for each HH individual. Should we then submit them all to BB?

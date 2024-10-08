@@ -55,7 +55,7 @@ export class MpcaCachedDb {
   readonly warmUp: typeof this.meme.warmUp
 
   readonly search = async (): Promise<ApiPaginate<MpcaEntity>> => {
-    // const definedFilters = Enum.entries(filters).filter(([k, v]) => v !== undefined && v.length > 0).map(_ => _[0])
+    // const definedFilters = Obj.entries(filters).filter(([k, v]) => v !== undefined && v.length > 0).map(_ => _[0])
     const data = await this.meme.get()
     // const filteredData = data?.filter(_ => {
     //   for (let i = 0; i < definedFilters.length; i++) {

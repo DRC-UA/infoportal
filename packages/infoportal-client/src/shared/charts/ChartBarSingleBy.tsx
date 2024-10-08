@@ -1,5 +1,5 @@
 import {ChartDataVal, ChartHelperOld} from '@/shared/charts/chartHelperOld'
-import {Enum, seq, Seq} from '@alexandreannic/ts-utils'
+import {Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
 import {KeyOf} from 'infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
@@ -55,7 +55,7 @@ export const ChartBarSingleBy = <
       data={res}
       onClickData={_ => onClickData?.(_ as K)}
       labels={!onToggle ? undefined :
-        seq(Enum.keys(res)).reduceObject((option => [
+        seq(Obj.keys(res)).reduceObject((option => [
             option,
             <Checkbox
               key={option as string}

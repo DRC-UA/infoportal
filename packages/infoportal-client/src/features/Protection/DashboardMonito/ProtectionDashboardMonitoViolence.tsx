@@ -4,7 +4,7 @@ import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {forceArrayStringInference, Person, Protection_hhs3} from 'infoportal-common'
-import {Enum, seq, Seq} from '@alexandreannic/ts-utils'
+import {Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import {Checkbox} from '@mui/material'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartHelper} from '@/shared/charts/chartHelper'
@@ -21,8 +21,8 @@ export const ProtectionDashboardMonitoViolence = () => {
     has_any_girl_member_experienced_violence: true,
     has_any_other_member_experienced_violence: true,
   })
-  const allChecked = useMemo(() => Enum.values(category).every(_ => _), [category])
-  const oneChecked = useMemo(() => !!Enum.values(category).find(_ => _), [category])
+  const allChecked = useMemo(() => Obj.values(category).every(_ => _), [category])
+  const oneChecked = useMemo(() => !!Obj.values(category).find(_ => _), [category])
 
   const updateAll = (checked: boolean) => {
     setCategory({

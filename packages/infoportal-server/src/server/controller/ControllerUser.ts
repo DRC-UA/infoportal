@@ -3,7 +3,7 @@ import * as yup from 'yup'
 import {PrismaClient} from '@prisma/client'
 import {UserService} from '../../feature/user/UserService'
 import {DrcOffice} from 'infoportal-common'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {SessionError} from '../../feature/session/SessionErrors'
 import {Util} from '../../helper/Utils'
 
@@ -36,7 +36,7 @@ export class ControllerUser {
 
   readonly updateMe = async (req: Request, res: Response, next: NextFunction) => {
     const user = await yup.object({
-      drcOffice: yup.mixed<DrcOffice>().oneOf(Enum.values(DrcOffice)),
+      drcOffice: yup.mixed<DrcOffice>().oneOf(Obj.values(DrcOffice)),
     }).validate(req.body)
 
     const email = req.session.user?.email

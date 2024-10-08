@@ -1,5 +1,5 @@
 import {SlidePanel} from '@/shared/PdfLayout/PdfSlide'
-import {Enum, fnSwitch, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, Seq} from '@alexandreannic/ts-utils'
 import {DrcProject, Partnership_partnersDatabase} from 'infoportal-common'
 import React, {useState} from 'react'
 import {PartnershipData} from '@/features/Partnership/PartnershipType'
@@ -27,7 +27,7 @@ export const PanershipPanelDonor = ({
         project: (
           <ChartBarSingleBy
             data={data.flatMap(_ => _.group_vi2hh32).compact()}
-            by={_ => Enum.values(DrcProject).find(p => p.includes('' + _.Project_code!))!}
+            by={_ => Obj.values(DrcProject).find(p => p.includes('' + _.Project_code!))!}
           />
         )
       })}

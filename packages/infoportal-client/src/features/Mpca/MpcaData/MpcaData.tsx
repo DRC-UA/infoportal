@@ -234,7 +234,7 @@ export const MpcaData = () => {
               width: 0,
               head: m.deduplication,
               type: 'select_one',
-              // options: () => DatatableUtils.buildOptions(Enum.keys(WfpDeduplicationStatus), true),
+              // options: () => DatatableUtils.buildOptions(Obj.keys(WfpDeduplicationStatus), true),
               render: _ => {
                 return {
                   tooltip: _.deduplication && m.mpca.status[_.deduplication.status],
@@ -272,7 +272,7 @@ export const MpcaData = () => {
             //   id: 'suggestion',
             //   head: m.suggestion,
             //   type: 'select_one',
-            //   // options: () => DatatableUtils.buildOptions(Enum.keys(DrcSupportSuggestion), true),
+            //   // options: () => DatatableUtils.buildOptions(Obj.keys(DrcSupportSuggestion), true),
             //   renderQuick: _ => _.deduplication?.suggestion,
             // },            // {
             // //   id: 'deduplicationFile',
@@ -285,7 +285,7 @@ export const MpcaData = () => {
             // //   id: 'duplication',
             // //   type: 'select_one',
             // //   head: m.status,
-            // //   options: () => Enum.keys(DeduplicationStatus).map(_ => ({value: _, label: _})),
+            // //   options: () => Obj.keys(DeduplicationStatus).map(_ => ({value: _, label: _})),
             // //   align: 'center',
             // //   render: _ => fnSwitch(_.duplication!, {
             // //     duplicate: <TableIcon color="warning" children="content_copy"/>,
@@ -385,7 +385,7 @@ export const MpcaData = () => {
               id: 'enumerator',
               head: m.enumerator,
               type: 'string',
-              // options: () => DatatableUtils.buildOptions(Enum.values(DrcOffice), true),
+              // options: () => DatatableUtils.buildOptions(Obj.values(DrcOffice), true),
               renderQuick: _ => _.enumerator,
             },
             {

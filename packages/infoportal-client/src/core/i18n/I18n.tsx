@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {ReactNode, useContext, useEffect, useMemo, useState} from 'react'
 import {en} from './localization/en'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {ua} from '@/core/i18n/localization/ua'
 
 export interface I18nContextProps {
@@ -58,7 +58,7 @@ export const I18nProvider = ({
       value={{
         currentLang: lang,
         setLang,
-        availableLangs: Enum.keys(appLangs),
+        availableLangs: Obj.keys(appLangs),
         m,
         ...others,
       }}

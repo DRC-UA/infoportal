@@ -5,7 +5,7 @@ import React, {ReactElement} from 'react'
 import {Modal} from '@/shared/Modal'
 import {Box} from '@mui/material'
 import {Controller, useForm} from 'react-hook-form'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useIpToast} from '@/core/useToast'
@@ -71,7 +71,7 @@ export const WfpDeduplicationAccessForm = ({
                   defaultValue={[]}
                   label={m.drcOffice}
                   onChange={_ => onChange(_)}
-                  options={Enum.values(DrcOffice)}
+                  options={Obj.values(DrcOffice)}
                   sx={{mb: 2.5}}
                 />
               )}

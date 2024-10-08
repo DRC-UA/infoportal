@@ -1,4 +1,4 @@
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 
 export interface Oblast {
   name: OblastName
@@ -133,9 +133,9 @@ export namespace OblastIndex {
     'UA18': `Zhytomyrska`
   })
 
-  export const isos = Enum.keys(OblastIndex.oblastByISO)
+  export const isos = Obj.keys(OblastIndex.oblastByISO)
 
-  const oblastIsoByName = Enum.transform(OblastIndex.oblastByISO, (k, v) => [v, k])
+  const oblastIsoByName = Obj.transform(OblastIndex.oblastByISO, (k, v) => [v, k])
 
   export const koboOblastIndexIso = {
     aroc: 'UA01' as OblastISO, //'UA43'

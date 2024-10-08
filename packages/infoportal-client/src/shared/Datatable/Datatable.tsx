@@ -2,7 +2,7 @@ import {Badge, Box, Icon, LinearProgress, TablePagination, useTheme,} from '@mui
 import React, {isValidElement, useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Txt} from '@/shared/Txt'
-import {Enum, map} from '@alexandreannic/ts-utils'
+import {map, Obj} from '@alexandreannic/ts-utils'
 import {IpIconBtn} from '@/shared'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {generateXLSFromArray} from '@/shared/Datatable/util/generateXLSFile'
@@ -147,7 +147,7 @@ const _Datatable = <T extends DatatableRow>({
     }
   }
 
-  const filterCount = useMemoFn(ctx.data.filters, _ => Enum.keys(_).length)
+  const filterCount = useMemoFn(ctx.data.filters, _ => Obj.keys(_).length)
 
   return (
     <Box {...props}>

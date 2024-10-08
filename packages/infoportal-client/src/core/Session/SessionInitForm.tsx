@@ -1,5 +1,5 @@
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {Enum, map} from '@alexandreannic/ts-utils'
+import {Obj, map} from '@alexandreannic/ts-utils'
 import {UserSession} from '@/core/sdk/server/session/Session'
 import {Txt} from '@/shared/Txt'
 import {useI18n} from '@/core/i18n'
@@ -50,7 +50,7 @@ export const SessionInitForm = ({
       <Box sx={{width: '100%', maxWidth: 400}}>
         <Txt block sx={{fontSize: '1.2em', mb: 1}}>{m.welcomePleaseSelectOffice}</Txt>
         <ScRadioGroup onChange={setDrcOffice}>
-          {Enum.keys(DrcOffice).map(k =>
+          {Obj.keys(DrcOffice).map(k =>
             <ScRadioGroupItem key={k} value={k} title={k}/>
           )}
         </ScRadioGroup>

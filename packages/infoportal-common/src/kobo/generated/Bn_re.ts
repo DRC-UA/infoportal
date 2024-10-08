@@ -66,7 +66,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'ben_det_prev_oblast': undefined | Option<'ben_det_prev_oblast'>,
 	  // ben_det/ben_det_idp_time [select_one] 2.5.7 Internally Displaced Person(s) in Household
   'ben_det_idp_time': undefined | Option<'ben_det_idp_time'>,
-	  // ben_det/ben_det_income [integer] 2.6 Total Value of Resources Received (UAH)
+	  // ben_det/ben_det_income [integer] 2.6 Total Value of Resources Received (UAH) per month
   'ben_det_income': number | undefined,
 	  // ben_det/ben_det_hh_size [integer] 2.7 Household Size
   'ben_det_hh_size': number | undefined,
@@ -88,21 +88,27 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'hh_char_hhh_dis_select': undefined | Option<'hh_char_dis_select'>[],
 	  // hh_char/hh_char_hhh_dis_level [select_one] 3.2.4 Difficulty Level of Head of Household Characteristics
   'hh_char_hhh_dis_level': undefined | Option<'hh_char_dis_level'>,
-	  // hh_char/hh_char_civ_stat [select_one] 3.2.5 Civil Status of Head of Household
-  'hh_char_civ_stat': undefined | Option<'hh_char_civ_stat'>,
-	  // hh_char/hh_char_pensioner [select_one] 3.1.5 Pension Receiver in Household?
-  'hh_char_pensioner': undefined | Option<'pay_det_tax_exempt'>,
 	    'calc_hhh_res_dis_level': string,
+	  // hh_char/hh_char_civ_stat [select_one] 3.1 Civil Status of Head of Household
+  'hh_char_civ_stat': undefined | Option<'hh_char_civ_stat'>,
+	  // hh_char/hh_char_pensioner [select_one] 3.1.1 Pension Receiver in Household?
+  'hh_char_pensioner': undefined | Option<'pay_det_tax_exempt'>,
+	  // hh_char/hh_char_preg [select_one] 3.1.2 Pregnant/Lactating Females in Household?
+  'hh_char_preg': undefined | Option<'pay_det_tax_exempt'>,
+	  // hh_char/hh_char_preg_number [integer] 3.1.2.1 How many Pregnant/Lactating Females in Household?
+  'hh_char_preg_number': number | undefined,
 	    'calc_char_civ_stat': string,
+	  // hh_char/hh_char_hh_det [begin_repeat] 3.2 HH Members
+  'hh_char_hh_det': {'hh_char_hh_det_gender': undefined | Option<'hh_char_hh_det_gender'> | undefined,'hh_char_date_birth': Date | undefined | undefined,'hh_char_hh_det_age': number | undefined | undefined,'hh_char_tax_id_yn': undefined | Option<'pay_det_tax_exempt'> | undefined,'hh_char_tax_id_num': string | undefined | undefined,'correct_tax_id': string | undefined,'hh_char_student': undefined | Option<'pay_det_tax_exempt'> | undefined,'hh_char_hh_det_dis_select': undefined | Option<'hh_char_dis_select'>[] | undefined,'hh_char_hh_det_dis_level': undefined | Option<'hh_char_dis_level'> | undefined,'calc_u5': string | undefined,'calc_u18': string | undefined,'calc_o60': string | undefined,'calc_ed_age': string | undefined,'calc_baby_age': string | undefined,'calc_preg': string | undefined,'calc_det_dis_level': string | undefined,'cal_student': string | undefined,'cal_scoring_difficulty_level': string | undefined}[] | undefined,
 	  // hh_char/hh_char_chh [note] This is a child headed household (high risk protection case), please refer immediately to a DRC Protection colleague and complete internal referral form.
   'hh_char_chh': string,
-	  // hh_char/hh_char_hh_det [begin_repeat] 3.1.7 HH Members
-  'hh_char_hh_det': {'hh_char_hh_det_gender': undefined | Option<'hh_char_hh_det_gender'> | undefined,'hh_char_hh_det_age': number | undefined | undefined,'hh_char_hh_det_dis_select': undefined | Option<'hh_char_dis_select'>[] | undefined,'hh_char_hh_det_dis_level': undefined | Option<'hh_char_dis_level'> | undefined,'calc_u18': string | undefined,'calc_o60': string | undefined,'calc_ed_age': string | undefined,'calc_baby_age': string | undefined,'calc_preg': string | undefined,'calc_det_dis_level': string | undefined}[] | undefined,
+	    'calc_tot_baby_age': string,
+	    'calc_tot_calc_u5': string,
 	    'calc_tot_chi': string,
 	    'calc_tot_ed_age': string,
 	    'calc_tot_eld': string,
-	  // hh_char/hh_char_preg [select_one] 3.3 Pregnant/Lactating Females in Household?
-  'hh_char_preg': undefined | Option<'pay_det_tax_exempt'>,
+	    'calc_tot_student': string,
+	    'cal_tot_scoring_difficulty_level': string,
 	  // hh_char/hh_char_dis_note [note] **3.4 Activities Difficulty (Members over 5)**
   'hh_char_dis_note': string,
 	  // hh_char/hh_char_dis_select [select_multiple] 3.4.1 Activities Difficulty
@@ -114,20 +120,13 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'receive_financial_assistance': undefined | Option<'pay_det_tax_exempt'>,
 	  // hh_char/households_damaged [select_one] 3.6 Housing Damage from Hostilities
   'households_damaged': undefined | Option<'pay_det_tax_exempt'>,
+	    'nfi_fam': string,
 	  // nfi/eligibility_summary_nfi [note] **Based on minimum standards this house is eligible for:**
   'eligibility_summary_nfi': string,
-	  // nfi/nfi_fam_hy_1 [note] **1** Family Hygiene Kit (HKMV)
-  'nfi_fam_hy_1': string,
-	  // nfi/nfi_fam_hy_2 [note] **2** Family Hygiene Kits (HKMV)
-  'nfi_fam_hy_2': string,
-	  // nfi/nfi_fam_hy_3 [note] **3** Family Hygiene Kits (HKMV)
-  'nfi_fam_hy_3': string,
-	  // nfi/nfi_fam_nfi_1 [note] **1** Family NFI Kit (NFKF + KS)
-  'nfi_fam_nfi_1': string,
-	  // nfi/nfi_fam_nfi_2 [note] **2** Family NFI Kits (NFKF + KS)
-  'nfi_fam_nfi_2': string,
-	  // nfi/nfi_fam_nfi_3 [note] **3** Family NFI Kits (NFKF + KS)
-  'nfi_fam_nfi_3': string,
+	  // nfi/nfi_fam_hy [note] **${nfi_fam}** Family Hygiene Kit (HKMV)
+  'nfi_fam_hy': string,
+	  // nfi/nfi_fam_nfi [note] **${nfi_fam}** Family NFI Kit (NFKF + KS)
+  'nfi_fam_nfi': string,
 	  // nfi/ihk_nfi [note] **1** Baby Hygiene Kit (BK)
   'ihk_nfi': string,
 	  // nfi/iwk_nfi [note] **1** Baby Winter Kit (WKB)
@@ -186,10 +185,20 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'add_photo_esk2': string,
 	  // Section_4a_ESK/add_photo_esk3 [image] Additional photos of esk activity
   'add_photo_esk3': string,
-	  // casf_utilities_fuel/current_gov_assist_cff [select_one] Are you currently receiving Government financial assistance to cover your fuel/utilities payment needs?
+	  // casf_utilities_fuel/current_gov_assist_cff [select_one] Are you currently receiving or expecting to receive financial assistance to cover your fuel/utilities payment needs?
   'current_gov_assist_cff': undefined | Option<'current_gov_assist_cff'>,
-	  // casf_utilities_fuel/utilities_fuel [select_one] This year, is your primary source of heating from mains utilities (e.g. Piped gas, electric, community heating) or solid fuel (Wood, pellets, charcoal, coal etc)
+	  // casf_utilities_fuel/gap_assistance_received [integer] What is the gap (UAH) between assistance received/ expected to receive and the amount to cover needs?
+  'gap_assistance_received': number | undefined,
+	  // casf_utilities_fuel/type_property_living [select_one] What type of property are you living in?
+  'type_property_living': undefined | Option<'type_property_living'>,
+	  // casf_utilities_fuel/utilities_fuel [select_one] This year, what is your primary source of heating (e.g. Piped gas, electric, community heating) or solid fuel (Wood, pellets, charcoal, coal etc)
   'utilities_fuel': undefined | Option<'utilities_fuel'>,
+	  // casf_utilities_fuel/utilities_fuel_other [text] If "Other", please specify
+  'utilities_fuel_other': string | undefined,
+	  // casf_utilities_fuel/utilities_fuel_portable_plug_heater [image] Please provide a photo of this portable plug in heater or woodburner
+  'utilities_fuel_portable_plug_heater': string,
+	  // casf_utilities_fuel/functioning_fuel_delivery [select_one] Is there a functioning fuel delivery/supplier in your area?
+  'functioning_fuel_delivery': undefined | Option<'functioning_fuel_delivery'>,
 	  // casf_utilities_fuel/mains_utilities [select_multiple] What is your main source of heating from mains utilities?
   'mains_utilities': undefined | Option<'mains_utilities'>[],
 	  // casf_utilities_fuel/mains_utilities_other [text] If "Other", please specify
@@ -198,8 +207,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'mains_fuel': undefined | Option<'mains_fuel'>[],
 	  // casf_utilities_fuel/mains_fuel_other [text] If "Other", please specify
   'mains_fuel_other': string | undefined,
-	  // casf_utilities_fuel/functioning_fuel_delivery [select_one] Is there a functioning fuel delivery/supplier in your area?
-  'functioning_fuel_delivery': undefined | Option<'functioning_fuel_delivery'>,
+	  // casf_utilities_fuel/cal_scoring_sfu [calculate] Calculation Scoring System
+  'cal_scoring_sfu': string,
 	  // cfr/cfr_curr_accom [select_one] 5.1 What is your current accommodation status?
   'cfr_curr_accom': undefined | Option<'cfr_curr_accom'>,
 	  // cfr/cfr_rent_int [select_one] 5.2 Do you intend to continue renting your current accommodation?
@@ -266,12 +275,16 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	    'calc_gen_cff_inc': string,
 	  // ass_inc/ass_inc_cff/ass_inc_cff_inc [note] **You have met the critera for inclusion in the cash for fuel assistance programme. We will conduct further internal checks and revert to you with a final result.** <span style="color: red">Do not read this out to the household</span>
   'ass_inc_cff_inc': string,
+	  // ass_inc/ass_inc_cff/ass_inc_cff_ben [note] The provisional calculated total benefit for this household <span style="color: red">Do not read this out to the household</span>
+  'ass_inc_cff_ben': string,
 	  // ass_inc/ass_inc_cff/ass_inc_cff_not_vul [note] **Unfortunately based upon our criteria, you do not qualify for the cash for fuel assistance program as you do not meet the threshold for vulnerability.**
   'ass_inc_cff_not_vul': string,
 	    'calc_vulnerability_cfu': string,
 	    'calc_gen_cfu_inc': string,
 	  // ass_inc/ass_inc_cfu/ass_inc_cfu_inc [note] **You have met the critera for inclusion in the cash for utilities assistance programme. We will conduct further internal checks and revert to you with a final result.** <span style="color: red">Do not read this out to the household</span>
   'ass_inc_cfu_inc': string,
+	  // ass_inc/ass_inc_cfu/ass_inc_cfu_ben [note] The provisional calculated total benefit for this household <span style="color: red">Do not read this out to the household</span>
+  'ass_inc_cfu_ben': string,
 	  // ass_inc/ass_inc_cfu/ass_inc_cfu_not_vul [note] **Unfortunately based upon our criteria, you do not qualify for the cash for utilitie assistance program as you do not meet the threshold for vulnerability.**
   'ass_inc_cfu_not_vul': string,
 	  // pay_det/pay_consent [select_one] 7.0 Thank you for answering the questions above, are you willing to provide your payment details?
@@ -312,6 +325,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'pay_det_pay_meth_oth': string | undefined,
 	  // pay_det/pay_det_s/pay_det_pay_meth_none [text] 7.4.8 Reason for Unsuitability of Payment Methods
   'pay_det_pay_meth_none': string | undefined,
+	  // fin_det/not_thank_sfu [note] **Thank you for answering our questions.  We will confirm the details of your registration, and confirm you are not receiving assistance from other parties, please note this could take up to 5-working days.  Once successfully registered, we will confirm if we are able to support you and what level of support you may expect to receive**
+  'not_thank_sfu': string,
 	  // fin_det/fin_det_res [text] 8.1 Other Comments from Respondent
   'fin_det_res': string | undefined,
 	  // fin_det/fin_det_enum [text] 8.2 Other Comments from Enumerator
@@ -332,6 +347,8 @@ back_enum: {
 	'anna_artiukh': `Anna Artiukh`,
 	'yevhenii_musiienko': `Yevhenii Musiienko`,
 	'vitaliy_grinenko': `Vitaliy Grinenko`,
+	'umy_enum1': `Enumerator 1`,
+	'umy_enum2': `Enumerator 2`,
 	'oleksandr_havrylov': `Oleksandr Havrylov`,
 	'ievgen_kylymenniy': `Ievgen Kylymenniy`,
 	'oleksandr_shmunk': `Oleksandr Shmunk`,
@@ -391,6 +408,12 @@ back_enum: {
 	'surzhyk_oleksandr': `Surzhyk Oleksandr`,
 	'chj_ex1': `Extra 1`,
 	'chj_ex2': `Extra 2`,
+	'chj_enum1': `Enumerator 1`,
+	'chj_enum2': `Enumerator 2`,
+	'chj_enum3': `Enumerator 3`,
+	'chj_enum4': `Enumerator 4`,
+	'chj_enum5': `Enumerator 5`,
+	'chj_enum6': `Enumerator 6`,
 	'viktoriia_lytvynova': `Viktoriia Lytvynova`,
 	'valerii_vietrov': `Valerii Vietrov`,
 	'lesya_tsaruk': `Lesya Tsaruk`,
@@ -425,7 +448,8 @@ nfi_dist_hkf_001_donor: {
 	'ukr000341_hoff': `UKR-000341 Hoffmans & Husmans`,
 	'ukr000340_aug': `UKR-000340 Augustinus Fonden`,
 	'ukr000329_sida': `UKR-000329 SIDA H2R`,
-	'ukr000380_danida': `UKR-000380 DANIDA`
+	'ukr000380_danida': `UKR-000380 DANIDA`,
+	'ukr000390_uhf9': `UKR-000390 UHF9`
 },
 ben_det_idp_time: {
 	'zero_one': `0-1 month`,
@@ -454,8 +478,13 @@ back_refer_who: {
 	'ecrec': `D = Economic Recovery (EcRec)`
 },
 utilities_fuel: {
-	'utilities': `A = Mains utilities`,
-	'fuel': `B = Solid Fuel`
+	'mains_piped_gas': `Mains/piped gas`,
+	'community_heating': `Community heating`,
+	'portable_plug_heater': `Portable plug-in heater`,
+	'mains_electricity': `Mains Electricity`,
+	'fuel': `Solid Fuel`,
+	'other': `Other`,
+	'utilities': `Mains utilities`
 },
 mains_utilities: {
 	'electric': `Electric`,
@@ -477,7 +506,8 @@ functioning_fuel_delivery: {
 	'dk': `C = Don’t know`
 },
 current_gov_assist_cff: {
-	'yes': `Yes`,
+	'yes': `Yes government support`,
+	'yes_another_agency': `Yes, from another humanitarian agency or similar`,
 	'yes_but': `Yes but not sufficient to cover needs`,
 	'no': `No`
 },
@@ -2494,7 +2524,18 @@ pay_det_pay_meth: {
 	'bank_card': `C = Bank card`,
 	'other_pay': `D = Other Payment Method`,
 	'none_pay': `E = None of the above fit my needs`
-}}
+},
+undefined: {
+	'cash_fuel': `Cash for Fuel`,
+	'cash_utilities': `Cash for Utilities`
+},
+type_property_living: {
+	'external_walls': `Property with external  walls made of wood or compressed soil block/adobe/wattle houses (may include a combination of these)`,
+	'damaged_windows': `Property with single glazed or damaged windows`,
+	'poor_insulation': `Property with poor insulation, damaged roof or walls`,
+	'substantial_repairs': `Property in need of substantial repairs, such as cracked or damaged walls, poor insulation and ineffective thermal envelope.`,
+	'none': `None of the above`
+}} as const
 
 const extractQuestionName = (_: Record<string, any>) => {
   const output: any = {}
@@ -2518,7 +2559,9 @@ export const map = (_: Record<keyof T, any>): T => ({
 	hh_char_res_dis_select: _.hh_char_res_dis_select?.split(' '),
 	hh_char_hhh_age: _.hh_char_hhh_age ? +_.hh_char_hhh_age : undefined,
 	hh_char_hhh_dis_select: _.hh_char_hhh_dis_select?.split(' '),
+	hh_char_preg_number: _.hh_char_preg_number ? +_.hh_char_preg_number : undefined,
 	hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {
+		_['hh_char_date_birth'] = _.hh_char_date_birth ? new Date(_.hh_char_date_birth) : undefined
 		_['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
 		_['hh_char_hh_det_dis_select'] = _.hh_char_hh_det_dis_select?.split(' ')
 		return _	
@@ -2535,6 +2578,7 @@ export const map = (_: Record<keyof T, any>): T => ({
 	nfi_kit_cc: _.nfi_kit_cc ? +_.nfi_kit_cc : undefined,
 	nfi_bed: _.nfi_bed ? +_.nfi_bed : undefined,
 	estimate_sqm_damage: _.estimate_sqm_damage ? +_.estimate_sqm_damage : undefined,
+	gap_assistance_received: _.gap_assistance_received ? +_.gap_assistance_received : undefined,
 	mains_utilities: _.mains_utilities?.split(' '),
 	mains_fuel: _.mains_fuel?.split(' '),
 	cfr_accom_cond_occ_rat: _.cfr_accom_cond_occ_rat ? +_.cfr_accom_cond_occ_rat : undefined,

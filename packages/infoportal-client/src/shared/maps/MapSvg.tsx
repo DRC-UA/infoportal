@@ -1,5 +1,5 @@
 import {OblastIndex, OblastISO, toPercent} from 'infoportal-common'
-import {Enum, map, seq} from '@alexandreannic/ts-utils'
+import {map, Obj, seq} from '@alexandreannic/ts-utils'
 import {MapSvgPaths, ukraineSvgPath} from './mapSvgPaths'
 import {alpha, Box, BoxProps, darken, useTheme} from '@mui/material'
 import {useMemo} from 'react'
@@ -42,12 +42,12 @@ export const MapSvg = ({
   const theme = useTheme()
 
   const filteredData = useMemo(() => {
-    return omitValueLt ? new Enum(data).filter((k, v) => !!v && v.value >= omitValueLt).get() : data
+    return omitValueLt ? new Obj(data).filter((k, v) => !!v && v.value >= omitValueLt).get() : data
   }, [data])
 
 
   const {max, min, maxPercent, minPercent} = useMemo(() => {
-    const _data = seq(Enum.values(filteredData)).compact().get()
+    const _data = seq(Obj.values(filteredData)).compact().get()
     const values = _data.map(_ => _!.value ?? 0)
     // TODO _data.map create invalid array length
     const percents = ((_data[0] && _data[0].base !== undefined) || base !== undefined) ? _data.map(_ => {
@@ -91,7 +91,7 @@ export const MapSvg = ({
         viewBox="0 0 612 408"
       >
         <g stroke={theme.palette.background.paper} strokeWidth="1">
-          {Enum.keys(ukraineSvgPath).map(iso => {
+          {Obj.keys(ukraineSvgPath).map(iso => {
             const res = filteredData[iso] ? (() => {
               const value = filteredData[iso]!.value
               const _base = base ?? filteredData[iso]!.base

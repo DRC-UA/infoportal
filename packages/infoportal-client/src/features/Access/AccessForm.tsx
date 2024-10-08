@@ -3,7 +3,7 @@ import {DrcJob, DrcOffice, UUID} from 'infoportal-common'
 import {AccessLevel, accessLevelIcon} from '@/core/sdk/server/access/Access'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Autocomplete, autocompleteClasses, Box, SxProps, Theme} from '@mui/material'
-import {Enum, fnSwitch, map, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, Obj, seq} from '@alexandreannic/ts-utils'
 import {IpInput} from '@/shared/Input/Input'
 import React, {useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
@@ -134,7 +134,7 @@ export const AccessFormInputDrcOffice = ({
           {...field}
           label={m.drcOffice}
           onChange={_ => onChange(_)}
-          options={Enum.values(DrcOffice)}
+          options={Obj.values(DrcOffice)}
         />
       )}
     />
@@ -158,7 +158,7 @@ export const AccessFormInputAccessLevel = ({
           {...field}
           // onChange={_ => field.onChange({target: {value: _}} as any)}
         >
-          {Enum.values(AccessLevel).map(level =>
+          {Obj.values(AccessLevel).map(level =>
             <ScRadioGroupItem icon={accessLevelIcon[level]} value={level} key={level} title={level}/>
           )}
         </ScRadioGroup>

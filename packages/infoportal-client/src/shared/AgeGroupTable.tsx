@@ -2,7 +2,7 @@ import {add, DisplacementStatus, Person, PersonDetails, WgDisability} from 'info
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {Enum, Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {Box, BoxProps, Switch, Theme} from '@mui/material'
@@ -39,7 +39,7 @@ export const AgeGroupTable = ({
       return true
     })
     const gb = Person.groupByGenderAndGroup(Person.getAgeGroup(tableAgeGroup))(filteredPersons)
-    return Enum.entries(gb).map(([k, v]) => ({ageGroup: k, ...v}))
+    return Obj.entries(gb).map(([k, v]) => ({ageGroup: k, ...v}))
   }, [persons, tableAgeGroup, onlyPwd, displacementStatus, enableDisplacementStatusFilter, enablePwdFilter])
 
   return (

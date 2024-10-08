@@ -7,7 +7,7 @@ import {Lazy} from '@/shared/Lazy'
 import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {MapSvg} from '@/shared/maps/MapSvg'
-import {Enum, Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@alexandreannic/ts-utils'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
@@ -109,13 +109,13 @@ export const ProtectionDashboardMonitoDocument = () => {
               <Box sx={{mb: 1, display: 'flex', alignItems: 'center'}}>
                 <Icon color="disabled" sx={{mr: 1}}>filter_alt</Icon>
                 <ScRadioGroup<Person.Gender> value={gender} onChange={_ => setGender(_)} multiple inline dense>
-                  {Enum.values(Person.Gender).map(_ =>
+                  {Obj.values(Person.Gender).map(_ =>
                     <ScRadioGroupItem hideRadio key={_} value={_} title={_}/>
                   )}
                 </ScRadioGroup>
               </Box>
               <ScRadioGroup<any> value={ageGroup} onChange={_ => setAgeGroup(_)} multiple inline dense sx={{mb: 1}}>
-                {Enum.keys(Person.ageGroup.Quick).map(_ =>
+                {Obj.keys(Person.ageGroup.Quick).map(_ =>
                   <ScRadioGroupItem hideRadio key={_} value={_} title={_}/>
                 )}
               </ScRadioGroup>

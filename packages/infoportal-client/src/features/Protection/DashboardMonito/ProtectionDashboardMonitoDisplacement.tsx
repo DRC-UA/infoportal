@@ -8,7 +8,7 @@ import {MapSvg} from '@/shared/maps/MapSvg'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
 import {Protection_hhs3} from 'infoportal-common'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
@@ -111,7 +111,7 @@ export const ProtectionDashboardMonitoDisplacement = () => {
           />
           <Lazy deps={[ctx.dataFiltered, intentionFilters]} fn={() => {
             return ctx.dataFiltered.filter(_ => {
-              const checked = Enum.entries(intentionFilters).filter(([, v]) => !!v).map(([k]) => k)
+              const checked = Obj.entries(intentionFilters).filter(([, v]) => !!v).map(([k]) => k)
               return checked.length === 0 || checked.includes(_.what_are_your_households_intentions_in_terms_of_place_of_residence!)
             })
           }}>

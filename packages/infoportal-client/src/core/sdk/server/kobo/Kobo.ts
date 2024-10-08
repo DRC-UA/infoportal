@@ -1,5 +1,5 @@
 import {DeploymentStatus, KoboAnswer, KoboAnswerFlat, KoboAnswerMetaData, KoboApiQuestionSchema, KoboBaseTags, KoboId} from 'infoportal-common'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
 export type KoboServer = {
@@ -68,7 +68,7 @@ export class Kobo {
 
   static readonly mapAnswerBySchema = (indexedSchema: Record<string, KoboApiQuestionSchema>, answers: KoboAnswerFlat): KoboMappedAnswer => {
     const mapped: KoboMappedAnswer = {...answers}
-    Enum.entries(mapped).forEach(([question, answer]) => {
+    Obj.entries(mapped).forEach(([question, answer]) => {
       const type = indexedSchema[question]?.type
       if (!type || !answer) return
       switch (type) {

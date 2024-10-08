@@ -1,7 +1,7 @@
 import {FeatureAccess, FeatureAccessLevel, Prisma, PrismaClient} from '@prisma/client'
 import {Access, AppFeatureId, KoboDatabaseFeatureParams, WfpDeduplicationAccessParams} from './AccessType'
 import {yup} from '../../helper/Utils'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Obj} from '@alexandreannic/ts-utils'
 import {InferType} from 'yup'
 import {DrcOffice, UUID} from 'infoportal-common'
 import {UserSession} from '../session/UserSession'
@@ -31,10 +31,10 @@ export class AccessService {
     id: yup.string().required(),
   })
 
-  static readonly drcOfficeSchema = yup.mixed<DrcOffice>().oneOf(Enum.values(DrcOffice))
-  static readonly drcJobSchema = yup.string().required()//yup.mixed<DrcJob>().oneOf(Enum.values(DrcJob)),
-  static readonly levelSchema = yup.mixed<FeatureAccessLevel>().oneOf(Enum.values(FeatureAccessLevel)).required()
-  static readonly featureIdSchema = yup.mixed<AppFeatureId>().oneOf(Enum.values(AppFeatureId))
+  static readonly drcOfficeSchema = yup.mixed<DrcOffice>().oneOf(Obj.values(DrcOffice))
+  static readonly drcJobSchema = yup.string().required()//yup.mixed<DrcJob>().oneOf(Obj.values(DrcJob)),
+  static readonly levelSchema = yup.mixed<FeatureAccessLevel>().oneOf(Obj.values(FeatureAccessLevel)).required()
+  static readonly featureIdSchema = yup.mixed<AppFeatureId>().oneOf(Obj.values(AppFeatureId))
 
   static readonly createSchema = yup.object({
     featureId: AccessService.featureIdSchema,
@@ -47,13 +47,13 @@ export class AccessService {
   })
 
   static readonly updateSchema = yup.object({
-    level: yup.mixed<FeatureAccessLevel>().oneOf(Enum.values(FeatureAccessLevel)),
-    drcJob: yup.string(),//yup.mixed<DrcJob>().oneOf(Enum.values(DrcJob)),
-    drcOffice: yup.mixed<DrcOffice>().oneOf(Enum.values(DrcOffice)),
+    level: yup.mixed<FeatureAccessLevel>().oneOf(Obj.values(FeatureAccessLevel)),
+    drcJob: yup.string(),//yup.mixed<DrcJob>().oneOf(Obj.values(DrcJob)),
+    drcOffice: yup.mixed<DrcOffice>().oneOf(Obj.values(DrcOffice)),
   })
 
   static readonly searchSchema = yup.object({
-    featureId: yup.mixed<AppFeatureId>().oneOf(Enum.values(AppFeatureId))
+    featureId: yup.mixed<AppFeatureId>().oneOf(Obj.values(AppFeatureId))
   })
 
   private readonly searchFromAccess = async ({featureId, user}: {featureId?: AppFeatureId, user?: UserSession}) => {

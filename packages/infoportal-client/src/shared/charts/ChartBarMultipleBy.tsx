@@ -1,4 +1,4 @@
-import {Enum, seq, Seq} from '@alexandreannic/ts-utils'
+import {Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {Checkbox} from '@mui/material'
@@ -60,7 +60,7 @@ export const ChartBarMultipleBy = <
       data={res}
       onClickData={_ => onClickData?.(_ as K)}
       labels={!onToggle ? undefined :
-        seq(Enum.keys(res)).reduceObject<Record<string, ReactNode>>((option => [
+        seq(Obj.keys(res)).reduceObject<Record<string, ReactNode>>((option => [
             option,
             <Checkbox
               key={option as string}
