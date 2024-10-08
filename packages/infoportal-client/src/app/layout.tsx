@@ -1,5 +1,6 @@
 import {Inter} from 'next/font/google'
 import MuiXLicense from '@/core/MuiXLicense'
+import React from 'react'
 
 const inter = Inter({subsets: ['latin']})
 

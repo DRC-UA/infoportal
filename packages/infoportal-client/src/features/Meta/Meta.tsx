@@ -1,5 +1,5 @@
 import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
-import React, {useEffect} from 'react'
+import React from 'react'
 import {MetaDashboard} from '@/features/Meta/Dashboard/MetaDashboard'
 import {Layout} from '@/shared/Layout'
 import {appFeaturesIndex} from '@/features/appFeatureId'

@@ -1,6 +1,5 @@
 import {addMonths, differenceInMonths, isAfter, isBefore, startOfMonth} from 'date-fns'
 import {isValidElement, ReactElement, ReactNode} from 'react'
-import {SxProps, Theme} from '@mui/material'
 
 export namespace Utils {
 

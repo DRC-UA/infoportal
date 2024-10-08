@@ -27,7 +27,7 @@ import {IpIconBtn} from '@/shared/IconBtn'
 import {useAsync} from '@/shared/hook/useAsync'
 import {KoboIndex, koboIndex} from 'infoportal-common'
 import {KoboForm} from '@/core/sdk/server/kobo/Kobo'
-import { Fender } from '@/shared/Fender'
+import {Fender} from '@/shared/Fender'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),

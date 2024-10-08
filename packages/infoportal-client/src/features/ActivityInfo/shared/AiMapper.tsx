@@ -13,7 +13,6 @@ import {
   Protection_groupSession
 } from 'infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
-import _ from '@/pages/activity-info'
 
 export namespace AiMapper {
 

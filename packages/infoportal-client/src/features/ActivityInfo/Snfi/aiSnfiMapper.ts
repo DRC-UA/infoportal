@@ -2,7 +2,7 @@ import {DisplacementStatus, DrcProgram, DrcProject, groupBy, KoboMetaShelterRepa
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiTable, aiInvalidValueFlag, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiSnfiType} from '@/features/ActivityInfo/Snfi/aiSnfiType'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
