@@ -2,7 +2,6 @@ import React from 'react'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {Lazy} from '@/shared/Lazy'
 import {Protection_hhs3, toPercent} from 'infoportal-common'
@@ -149,7 +148,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
               <ChartBarSingleBy
                 data={ctx.dataFiltered}
                 by={_ => _.what_is_the_general_condition_of_your_accommodation}
-                sortBy={ChartHelperOld.sortBy.custom([
+                finalTransform={_ => Obj.sortManual(_, [
                   'sound_condition',
                   'partially_damaged',
                   'severely_damaged',

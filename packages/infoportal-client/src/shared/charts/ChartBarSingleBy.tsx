@@ -1,10 +1,10 @@
-import {ChartDataVal, ChartHelperOld} from '@/shared/charts/chartHelperOld'
+import {ChartDataVal} from '@/shared/charts/chartHelperOld'
 import {Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
 import {KeyOf} from 'infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {Checkbox} from '@mui/material'
-import {ChartHelper} from '@/shared/charts/chartHelper'
+import {ChartData, ChartHelper} from '@/shared/charts/chartHelper'
 
 export const ChartBarSingleBy = <
   D extends Record<string, any>,
@@ -14,8 +14,8 @@ export const ChartBarSingleBy = <
   by,
   data,
   limit,
+  finalTransform = _ => _,
   onClickData,
-  sortBy,
   checked,
   onToggle,
   label,
@@ -27,7 +27,7 @@ export const ChartBarSingleBy = <
   debug?: boolean
   onClickData?: (_: K) => void
   limit?: number
-  sortBy?: typeof ChartHelperOld.sortBy.value
+  finalTransform?: (_: ChartData<K>) => ChartData<K>
   data: Seq<D>,
   mergeOptions?: Partial<Record<KeyOf<O>, KeyOf<O>>>
   label?: O
@@ -48,6 +48,7 @@ export const ChartBarSingleBy = <
       .sortBy.value()
       .filterValue(_ => min ? _.value > min : true)
       .take(limit)
+      .map(finalTransform)
       .get() as Record<K, ChartDataVal>
   }, [data, by, label])
   return (

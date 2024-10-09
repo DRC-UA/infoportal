@@ -1,12 +1,12 @@
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import React from 'react'
 import {useI18n} from '@/core/i18n'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Protection_hhs3} from 'infoportal-common'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
+import {Obj} from '@alexandreannic/ts-utils'
 
 export const ProtectionDashboardMonitoHousing = () => {
   const ctx = ProtectionMonito.useContext()
@@ -63,7 +63,7 @@ export const ProtectionDashboardMonitoHousing = () => {
               data={ctx.dataFiltered}
               by={_ => _.what_is_the_general_condition_of_your_accommodation}
               label={Protection_hhs3.options.what_is_the_general_condition_of_your_accommodation}
-              sortBy={ChartHelperOld.sortBy.custom([
+              finalTransform={_ => Obj.sortManual(_, [
                 'sound_condition',
                 'partially_damaged',
                 'severely_damaged',

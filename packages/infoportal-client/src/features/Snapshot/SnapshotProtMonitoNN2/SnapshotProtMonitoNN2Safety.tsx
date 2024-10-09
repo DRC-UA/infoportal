@@ -3,7 +3,6 @@ import {ProtectionMonito} from '@/features/Protection/DashboardMonito/Protection
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
@@ -102,7 +101,7 @@ export const SnapshotProtMonitoNN2Safety = () => {
               />
               <ChartBarSingleBy
                 data={ctx.dataFiltered}
-                sortBy={ChartHelperOld.sortBy.custom([
+                finalTransform={_ => Obj.sortManual(_, [
                   '_1_very_unsafe',
                   '_2_unsafe',
                   '_3_safe',

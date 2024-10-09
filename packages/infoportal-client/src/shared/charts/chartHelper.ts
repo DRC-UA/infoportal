@@ -13,12 +13,6 @@ export interface ChartDataVal {
   desc?: string
 }
 
-export const makeChartData: {
-  (_: ChartDataValPercent): ChartDataValPercent
-  (_: ChartDataVal): ChartDataVal
-} = (_) => {
-  return _ as any
-}
 
 export type ChartData<K extends string = string> = Record<K, ChartDataVal>
 
@@ -122,6 +116,12 @@ export class ChartHelper<K extends string = string> {
     if (n)
       return seq(Obj.entries(obj).splice(0, n)).reduceObject(_ => _)
     return obj
+  }
+
+  readonly map = (fn?: (_: ChartData<K>) => ChartData<K>) => {
+    if (fn)
+      this.value = fn(this.value)
+    return this
   }
 
   readonly take = (n?: number) => {
