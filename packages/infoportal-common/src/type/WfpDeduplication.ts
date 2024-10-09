@@ -1,6 +1,5 @@
 import {DrcOffice} from './Drc'
 import {getOverlapMonths} from '../utils'
-import {differenceInMonths} from 'date-fns/differenceInMonths'
 import {differenceInDays} from 'date-fns'
 
 export enum WfpDeduplicationStatus {

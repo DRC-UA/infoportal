@@ -60,6 +60,12 @@ export const useProtectionFilters = (data?: Seq<IKoboMeta>, flatData?: Seq<Prote
         getValue: _ => _.project,
         getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.project!).distinct(_ => _).sort())
       },
+      sector: {
+        icon: appConfig.icons.sector,
+        label: m.sector,
+        getValue: _ => _.sector,
+        getOptions: () => d.map(_ => _.sector!).distinct(_ => _).sort().map(_ => DataFilter.buildOption(_))
+      },
       activity: {
         icon: appConfig.icons.program,
         label: m.activity,
