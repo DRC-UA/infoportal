@@ -26,7 +26,7 @@ export const ChartBarSingleBy = <
   debug?: boolean
   onClickData?: (_: K) => void
   limit?: number
-  finalTransform?: (_: ChartData<K>) => ChartData<K>
+  finalTransform?: (_: ChartData<KeyOf<O>>) => ChartData<any>
   data: Seq<D>,
   mergeOptions?: Partial<Record<KeyOf<O>, KeyOf<O>>>
   label?: O

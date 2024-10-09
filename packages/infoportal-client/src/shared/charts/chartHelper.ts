@@ -13,7 +13,6 @@ export interface ChartDataVal {
   desc?: string
 }
 
-
 export type ChartData<K extends string = string> = Record<K, ChartDataVal>
 
 export const makeChartData: {
@@ -138,28 +137,28 @@ export class ChartHelper<K extends string = string> {
 
   static readonly sortBy = {
     custom: <T extends string>(order: T[]) => <V>(obj: ChartData<T>): ChartData<T> => {
-      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
+      return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
         return order.indexOf(aK) - order.indexOf(bK)
-      }).get()
+      })
     },
     percent: <T extends string>(obj: ChartData<T>): ChartData<T> => {
-      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
+      return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
         try {
           return bV.value / (bV.base ?? 1) - aV.value / (aV.base ?? 1)
         } catch (e) {
           return 0
         }
-      }).get()
+      })
     },
     value: <T extends string>(obj: ChartData<T>): ChartData<T> => {
-      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
+      return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
         return bV.value - aV.value
-      }).get()
+      })
     },
     label: <T extends string>(obj: ChartData<T>): ChartData<T> => {
-      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
+      return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
         return (bV.label as string ?? '').localeCompare(aV.label as string ?? '')
-      }).get()
+      })
     }
   }
 

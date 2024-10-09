@@ -11,6 +11,7 @@ import {Protection_hhs3, toPercent} from 'infoportal-common'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
 import {ChartHelper} from '@/shared/charts/chartHelper'
+import {Obj} from '@alexandreannic/ts-utils'
 
 export const SnapshotProtMonitoNN2Safety = () => {
   const ctx = ProtectionMonito.useContext()

@@ -12,6 +12,7 @@ import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {useTheme} from '@mui/material'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 import {ChartHelper} from '@/shared/charts/chartHelper'
+import {Obj} from '@alexandreannic/ts-utils'
 
 export const SnapshotProtMonitoEchoNeeds = () => {
   const ctx = ProtectionMonito.useContext()
