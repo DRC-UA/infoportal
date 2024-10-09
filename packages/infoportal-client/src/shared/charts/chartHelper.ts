@@ -16,6 +16,13 @@ export interface ChartDataVal {
 
 export type ChartData<K extends string = string> = Record<K, ChartDataVal>
 
+export const makeChartData: {
+  (_: ChartDataValPercent): ChartDataValPercent
+  (_: ChartDataVal): ChartDataVal
+} = (_) => {
+  return _ as any
+}
+
 export class ChartHelper<K extends string = string> {
 
   static readonly single = <K extends string>({

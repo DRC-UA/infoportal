@@ -1,10 +1,9 @@
-import {ChartDataVal} from '@/shared/charts/chartHelperOld'
+import {ChartData, ChartDataVal, ChartHelper} from '@/shared/charts/chartHelper'
 import {Obj, seq, Seq} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
 import {KeyOf} from 'infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {Checkbox} from '@mui/material'
-import {ChartData, ChartHelper} from '@/shared/charts/chartHelper'
 
 export const ChartBarSingleBy = <
   D extends Record<string, any>,

@@ -7,7 +7,7 @@ import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
-import {ChartData, makeChartData} from '@/shared/charts/chartHelperOld'
+import {ChartData, ChartHelper, makeChartData} from '@/shared/charts/chartHelper'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {ChartBar} from '@/shared/charts/ChartBar'
@@ -25,7 +25,6 @@ import {ChartBarVertical} from '@/shared/charts/ChartBarVertical'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {appConfig} from '@/conf/AppConfig'
-import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const PartnershipDashboard = ({}: {}) => {
   const ctx = usePartnershipContext()
