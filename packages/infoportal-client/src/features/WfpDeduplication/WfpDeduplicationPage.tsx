@@ -13,7 +13,7 @@ import {IpBtn} from '@/shared/Btn'
 import {NavLink, Route, Routes} from 'react-router-dom'
 import {WfpDeduplicationAccess} from '@/features/WfpDeduplication/WfpDeduplicationAccess'
 import {useAsync} from '@/shared/hook/useAsync'
-import { BtnUploader } from '@/shared/BtnUploader'
+import {BtnUploader} from '@/shared/BtnUploader'
 
 export const wfpDeduplicationIndex = {
   basePath: '/wfp-deduplication',

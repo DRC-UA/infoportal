@@ -4,7 +4,7 @@ import {SnapshotProtMonitoNN2Safety} from '@/features/Snapshot/SnapshotProtMonit
 import {SnapshotProtMonitoNN2Needs} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Needs'
 import {SnapshotProtMonitoNN2Livelihood} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Livelihood'
 import {SnapshotProtMonitoNN2Sample} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2Sample'
-import {Box, Theme} from '@mui/material'
+import {Box} from '@mui/material'
 import {OblastIndex} from 'infoportal-common'
 import {endOfMonth, startOfMonth} from 'date-fns'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'

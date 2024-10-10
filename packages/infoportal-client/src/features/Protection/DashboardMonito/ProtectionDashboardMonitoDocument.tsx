@@ -4,7 +4,6 @@ import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Box, Icon} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {MapSvg} from '@/shared/maps/MapSvg'
 import {Obj, Seq} from '@alexandreannic/ts-utils'
@@ -51,7 +50,7 @@ export const ProtectionDashboardMonitoDocument = () => {
         <Div column sx={{flex: 1}}>
           <SlidePanel title={m.protHHSnapshot.maleWithoutIDPCert}>
             <Div>
-              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                 data: getIdpsAnsweringRegistrationQuestion(d),
                 value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
               })}>
@@ -59,7 +58,7 @@ export const ProtectionDashboardMonitoDocument = () => {
                   <ChartPieWidget sx={{flex: 1}} title={m.all} value={d.value} base={d.base} evolution={d.percent - l.percent}/>
                 )}
               </Lazy>
-              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                 data: getIdpsAnsweringRegistrationQuestion(d).filter(_ => _.age && _.age >= 18 && _.age <= 60 && _.gender && _.gender === Person.Gender.Male),
                 value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
               })}>
@@ -69,13 +68,13 @@ export const ProtectionDashboardMonitoDocument = () => {
               </Lazy>
             </Div>
           </SlidePanel>
-          <Lazy deps={[ctx.dataFlat]} fn={() => ChartHelperOld.byCategory({
+          <Lazy deps={[ctx.dataFlat]} fn={() => ChartHelper.byCategory({
             data: ctx.dataFlat,
             categories: ctx.categoryOblasts('where_are_you_current_living_oblast'),
             filter: _ => !_.lackDoc?.includes('none'),
             filterBase: _ => _.lackDoc !== undefined,
             filterZeroCategory: true,
-          })}>
+          }).get()}>
             {_ =>
               <SlidePanel title={m.protHHS2.missingDocumentationByOblastPopulation}>
                 <MapSvg data={_} fillBaseOn="percent" sx={{mx: 2}}/>
@@ -120,7 +119,7 @@ export const ProtectionDashboardMonitoDocument = () => {
                 )}
               </ScRadioGroup>
             </Box>
-            <Lazy deps={[filteredPersons, filteredPersonsLastMonth]} fn={(x) => ChartHelperOld.percentage({
+            <Lazy deps={[filteredPersons, filteredPersonsLastMonth]} fn={(x) => ChartHelper.percentage({
               data: x.map(_ => _.lackDoc).compact().filter(_ => !_.includes('unable_unwilling_to_answer')),
               value: _ => !_.includes('none'),
             })}>

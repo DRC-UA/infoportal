@@ -3,7 +3,6 @@ import React, {useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Box, Divider, Icon} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {MapSvg} from '@/shared/maps/MapSvg'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
@@ -80,7 +79,7 @@ export const ProtectionDashboardMonitoDisplacement = () => {
       </Div>
       <Div column>
         <SlidePanel>
-          <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(d) => ChartHelperOld.percentage({
+          <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(d) => ChartHelper.percentage({
             value: _ => _.did_you_or_any_member_of_your_household_on_your_displacement_journey_experience_safety_or_security_concerns?.includes('none') === false,
             data: d,
             base: _ => _.did_you_or_any_member_of_your_household_on_your_displacement_journey_experience_safety_or_security_concerns !== undefined

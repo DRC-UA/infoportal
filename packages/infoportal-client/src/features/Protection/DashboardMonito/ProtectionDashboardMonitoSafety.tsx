@@ -2,12 +2,12 @@ import {Div, SlidePanel, SlidePanelTitle} from '@/shared/PdfLayout/PdfSlide'
 import React from 'react'
 import {useI18n} from '@/core/i18n'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Protection_hhs3} from 'infoportal-common'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
+import {Obj} from '@alexandreannic/ts-utils'
 
 export const ProtectionDashboardMonitoSafety = () => {
   const ctx = ProtectionMonito.useContext()
@@ -37,7 +37,7 @@ export const ProtectionDashboardMonitoSafety = () => {
           <SlidePanelTitle>{m.details}</SlidePanelTitle>
           <ChartBarSingleBy
             data={ctx.dataFiltered}
-            sortBy={ChartHelperOld.sortBy.custom([
+            finalTransform={_ => Obj.sortManual(_, [
               '_1_very_unsafe',
               '_2_unsafe',
               '_3_safe',
@@ -79,7 +79,7 @@ export const ProtectionDashboardMonitoSafety = () => {
           <SlidePanelTitle>{m.details}</SlidePanelTitle>
           <ChartBarSingleBy
             data={ctx.dataFiltered}
-            sortBy={ChartHelperOld.sortBy.custom([
+            finalTransform={_ => Obj.sortManual(_, [
               '_1_very_bad',
               '_2_bad',
               '_3_acceptable',

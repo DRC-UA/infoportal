@@ -7,7 +7,7 @@ import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
-import {ChartData, ChartHelperOld, makeChartData} from '@/shared/charts/chartHelperOld'
+import {ChartData, ChartHelper, makeChartData} from '@/shared/charts/chartHelper'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {ChartBar} from '@/shared/charts/ChartBar'
@@ -265,7 +265,7 @@ export const _PartnershipDashboard = ({
           <Panel>
             <PanelBody>
               <Lazy deps={[filteredAndPickedData]} fn={() => {
-                return ChartHelperOld.percentage({
+                return ChartHelper.percentage({
                   data: filteredAndPickedSgas,
                   base: _ => true,
                   value: _ => (_.Partnership_type === 'strategic_partnership' || _.Partnership_type === 'project_based_partnership') && _.Is_it_an_equitable_partnership === 'yes',
@@ -274,7 +274,7 @@ export const _PartnershipDashboard = ({
                 {_ => <ChartPieWidget showValue dense title={m._partner.equitable} value={_.value} base={_.base} sx={{mb: 2}}/>}
               </Lazy>
               <Lazy deps={[filteredAndPickedData]} fn={() => {
-                return ChartHelperOld.percentage({
+                return ChartHelper.percentage({
                   data: filteredAndPickedSgas,
                   base: _ => true,
                   value: _ => (_.Partnership_type === 'strategic_partnership' || _.Partnership_type === 'project_based_partnership') && _.Is_it_an_equitable_partnership === 'partially',

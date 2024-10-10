@@ -5,8 +5,7 @@ import React, {useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Box, Icon, useTheme} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
-import {chain, Person, Protection_hhs3} from 'infoportal-common'
+import {Person, Protection_hhs3} from 'infoportal-common'
 import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
@@ -17,6 +16,7 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const ProtectionDashboardMonitoSample = () => {
   const ctx = ProtectionMonito.useContext()
@@ -48,7 +48,7 @@ export const ProtectionDashboardMonitoSample = () => {
               </Lazy>
             </SlideWidget>
             <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', pl: 2,}}>
-              <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelper.percentage({
                 data: ctx.dataFlat,
                 value: _ => _.gender === 'Female'
               })}>
@@ -189,18 +189,19 @@ export const ProtectionDashboardMonitoSample = () => {
           <SlidePanel title={m.poc}>
             <Lazy
               deps={[ctx.dataFiltered]}
-              fn={() => chain(ChartHelperOld.single({
+              fn={() => ChartHelper.single({
                 data: ctx.dataFiltered.map(_ => _.do_you_identify_as_any_of_the_following).compact(),
-              }))
-                .map(ChartHelperOld.sortBy.value)
-                .map(ChartHelperOld.setLabel(Protection_hhs3.options.do_you_identify_as_any_of_the_following))
-                .get()}
+              })
+                .sortBy.value()
+                .setLabel(Protection_hhs3.options.do_you_identify_as_any_of_the_following)
+                .get()
+              }
             >
               {_ => <ChartBar data={_}/>}
             </Lazy>
           </SlidePanel>
           <SlidePanel>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(d) => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(d) => ChartHelper.percentage({
               data: d
                 .map(_ => _.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household)
                 .compact()

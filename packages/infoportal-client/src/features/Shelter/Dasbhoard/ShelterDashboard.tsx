@@ -18,7 +18,6 @@ import {
   ShelterProgress,
   ShelterTaPriceLevel
 } from 'infoportal-common'
-import {ChartHelperOld, makeChartData} from '@/shared/charts/chartHelperOld'
 import {MapSvg} from '@/shared/maps/MapSvg'
 import {Currency} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {DashboardFilterLabel} from '@/shared/DashboardLayout/DashboardFilterLabel'
@@ -37,6 +36,7 @@ import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {appConfig} from '@/conf/AppConfig'
+import {ChartHelper, makeChartData} from '@/shared/charts/chartHelper'
 
 const today = new Date()
 
@@ -322,11 +322,11 @@ export const _ShelterDashboard = ({
           const contractors = data.map(_ => seq([_.ta?.tags?.contractor1 ?? undefined, _.ta?.tags?.contractor2 ?? undefined]).compact()).filter(_ => _.length > 0)
           return {
             count: contractors.length,
-            contractors: ChartHelperOld.multiple({
+            contractors: ChartHelper.multiple({
               data: contractors,
               base: 'percentOfTotalChoices',
               filterValue: [undefined as any]
-            })
+            }).get()
           }
         }}>
           {_ => (

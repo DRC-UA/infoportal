@@ -1,4 +1,4 @@
-import {Checkbox, FormControl, FormControlProps, InputLabel, MenuItem, OutlinedInput, Select, SxProps, Theme} from '@mui/material'
+import {Checkbox, FormControl, InputLabel, MenuItem, OutlinedInput, Select, SxProps, Theme} from '@mui/material'
 import React, {ReactNode, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {makeSx} from '@/core/theme'

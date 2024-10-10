@@ -2,7 +2,6 @@ import React from 'react'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {Lazy} from '@/shared/Lazy'
 import {Protection_hhs3, toPercent} from 'infoportal-common'
@@ -12,6 +11,8 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {useTheme} from '@mui/material'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
+import {ChartHelper} from '@/shared/charts/chartHelper'
+import {Obj} from '@alexandreannic/ts-utils'
 
 export const SnapshotProtMonitoEchoNeeds = () => {
   const ctx = ProtectionMonito.useContext()
@@ -26,18 +27,18 @@ export const SnapshotProtMonitoEchoNeeds = () => {
             <SlideTxt>
               <Lazy deps={[ctx.dataFiltered]} fn={() => {
                 return {
-                  barriersRural: toPercent(ChartHelperOld.percentage({
+                  barriersRural: toPercent(ChartHelper.percentage({
                     data: ctx.dataFiltered.filter(_ => _.type_of_site === 'rural_area'),
                     value: _ => _.do_you_have_access_to_health_care_in_your_current_location !== 'yes',
                   }).percent, 1),
-                  barriersUrban: toPercent(ChartHelperOld.percentage({
+                  barriersUrban: toPercent(ChartHelper.percentage({
                     data: ctx.dataFiltered.filter(_ => _.type_of_site === 'urban_area'),
                     value: _ => _.do_you_have_access_to_health_care_in_your_current_location !== 'yes',
                   }).percent, 1),
                   healthPnCount: ctx.dataFiltered.filter(_ => _.what_is_your_1_priority?.includes('health_1_2') ||
                     _.what_is_your_2_priority?.includes('health_1_2') ||
                     _.what_is_your_3_priority?.includes('health_1_2')).length,
-                  healthPn: toPercent(ChartHelperOld.percentage({
+                  healthPn: toPercent(ChartHelper.percentage({
                     data: ctx.dataFiltered
                     // .filter(_ => _.what_is_your_1_priority !== 'unable_unwilling_to_answer')
                     ,
@@ -47,7 +48,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
                       _.what_is_your_3_priority?.includes('health_1_2')
                     ),
                   }).percent, 1),
-                  healthPnUrban: toPercent(ChartHelperOld.percentage({
+                  healthPnUrban: toPercent(ChartHelper.percentage({
                     data: ctx.dataFiltered.filter(_ => _.type_of_site === 'urban_area')
                     // .filter(_ => _.what_is_your_1_priority !== 'unable_unwilling_to_answer')
                     ,
@@ -57,7 +58,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
                       _.what_is_your_3_priority?.includes('health_1_2')
                     ),
                   }).percent, 1),
-                  healthPnRural: toPercent(ChartHelperOld.percentage({
+                  healthPnRural: toPercent(ChartHelper.percentage({
                     data: ctx.dataFiltered.filter(_ => _.type_of_site === 'rural_area')
                     // .filter(_ => _.what_is_your_1_priority !== 'unable_unwilling_to_answer')
                     ,
@@ -148,7 +149,7 @@ export const SnapshotProtMonitoEchoNeeds = () => {
               <ChartBarSingleBy
                 data={ctx.dataFiltered}
                 by={_ => _.what_is_the_general_condition_of_your_accommodation}
-                sortBy={ChartHelperOld.sortBy.custom([
+                finalTransform={_ => Obj.sortManual(_, [
                   'sound_condition',
                   'partially_damaged',
                   'severely_damaged',

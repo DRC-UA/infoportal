@@ -13,14 +13,14 @@ export interface ChartDataVal {
   desc?: string
 }
 
+export type ChartData<K extends string = string> = Record<K, ChartDataVal>
+
 export const makeChartData: {
   (_: ChartDataValPercent): ChartDataValPercent
   (_: ChartDataVal): ChartDataVal
 } = (_) => {
   return _ as any
 }
-
-export type ChartData<K extends string = string> = Record<K, ChartDataVal>
 
 export class ChartHelper<K extends string = string> {
 
@@ -124,6 +124,12 @@ export class ChartHelper<K extends string = string> {
     return obj
   }
 
+  readonly map = (fn?: (_: ChartData<K>) => ChartData<K>) => {
+    if (fn)
+      this.value = fn(this.value)
+    return this
+  }
+
   readonly take = (n?: number) => {
     this.value = ChartHelper.take(n)(this.value)
     return this
@@ -131,28 +137,28 @@ export class ChartHelper<K extends string = string> {
 
   static readonly sortBy = {
     custom: <T extends string>(order: T[]) => <V>(obj: ChartData<T>): ChartData<T> => {
-      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
+      return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
         return order.indexOf(aK) - order.indexOf(bK)
-      }).get()
+      })
     },
     percent: <T extends string>(obj: ChartData<T>): ChartData<T> => {
-      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
+      return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
         try {
           return bV.value / (bV.base ?? 1) - aV.value / (aV.base ?? 1)
         } catch (e) {
           return 0
         }
-      }).get()
+      })
     },
     value: <T extends string>(obj: ChartData<T>): ChartData<T> => {
-      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
+      return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
         return bV.value - aV.value
-      }).get()
+      })
     },
     label: <T extends string>(obj: ChartData<T>): ChartData<T> => {
-      return new Obj(obj).sort(([aK, aV], [bK, bV]) => {
+      return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
         return (bV.label as string ?? '').localeCompare(aV.label as string ?? '')
-      }).get()
+      })
     }
   }
 
@@ -200,7 +206,7 @@ export class ChartHelper<K extends string = string> {
     return res
   }
 
-  readonly sumByCategory = <A extends Record<string, any>, K extends string>({
+  static readonly sumByCategory = <A extends Record<string, any>, K extends string>({
     data,
     filter,
     sumBase,
@@ -241,7 +247,7 @@ export class ChartHelper<K extends string = string> {
     return data
   }
 
-  readonly percentage = <A>({
+  static readonly percentage = <A>({
     data,
     value,
     base

@@ -2,7 +2,6 @@ import React, {useMemo} from 'react'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {Lazy} from '@/shared/Lazy'
@@ -41,13 +40,13 @@ export const SnapshotProtMonitoNN2Needs = () => {
             <SlideTxt>
               <Lazy deps={[ctx.dataFiltered]} fn={() => {
                 return {
-                  healthPn: toPercent(ChartHelperOld.percentage({
+                  healthPn: toPercent(ChartHelper.percentage({
                     data: ctx.dataFiltered,
                     value: _ => !!(_.what_is_your_1_priority?.includes('health_1_2')
                       || _.what_is_your_2_priority?.includes('health_1_2')
                       || _.what_is_your_3_priority?.includes('health_1_2')),
                   }).percent, 0),
-                  damagedAcc: toPercent(ChartHelperOld.percentage({
+                  damagedAcc: toPercent(ChartHelper.percentage({
                     data: ctx.dataFiltered.map(_ => _.what_is_the_general_condition_of_your_accommodation).compact(),
                     value: _ => _ !== 'sound_condition',
                     base: _ => _ !== 'unable_unwilling_to_answer',

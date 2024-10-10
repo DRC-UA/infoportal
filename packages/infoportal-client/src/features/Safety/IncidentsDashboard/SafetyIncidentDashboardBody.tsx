@@ -1,4 +1,4 @@
-import {Obj, fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'

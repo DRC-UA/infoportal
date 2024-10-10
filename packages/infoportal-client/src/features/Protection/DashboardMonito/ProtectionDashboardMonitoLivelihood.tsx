@@ -3,8 +3,7 @@ import {ChartBar} from '@/shared/charts/ChartBar'
 import React from 'react'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
-import {chain, Protection_hhs3} from 'infoportal-common'
+import {Protection_hhs3} from 'infoportal-common'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {MapSvg} from '@/shared/maps/MapSvg'
 import {ChartLineByKey} from '@/shared/charts/ChartLineByKey'
@@ -12,6 +11,7 @@ import {Divider} from '@mui/material'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Obj} from '@alexandreannic/ts-utils'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const ProtectionDashboardMonitoLivelihood = () => {
   const ctx = ProtectionMonito.useContext()
@@ -21,7 +21,7 @@ export const ProtectionDashboardMonitoLivelihood = () => {
       <Div responsive>
         <Div>
           <SlidePanel sx={{flex: 1}}>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
               value: _ => _.what_is_the_average_month_income_per_household === 'no_income',
               data: d,
               base: _ => _ !== undefined,
@@ -33,7 +33,7 @@ export const ProtectionDashboardMonitoLivelihood = () => {
             </Lazy>
           </SlidePanel>
           <SlidePanel sx={{flex: 1}}>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
               value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
               data: d,
               base: _ => _ !== undefined,
@@ -44,7 +44,7 @@ export const ProtectionDashboardMonitoLivelihood = () => {
         </Div>
         <Div>
           <SlidePanel sx={{flex: 1}}>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
               value: _ => _.do_you_and_your_hh_members_receive_the_idp_allowance === 'yes',
               data: d,
               base: _ => _.do_you_identify_as_any_of_the_following === 'idp',
@@ -53,7 +53,7 @@ export const ProtectionDashboardMonitoLivelihood = () => {
             </Lazy>
           </SlidePanel>
           <SlidePanel sx={{flex: 1}}>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
               value: _ => _.are_there_gaps_in_meeting_your_basic_needs === 'yes_somewhat' || _.are_there_gaps_in_meeting_your_basic_needs === 'yes_a_lot',
               data: d,
             })}>
@@ -73,11 +73,11 @@ export const ProtectionDashboardMonitoLivelihood = () => {
             />
             <Divider sx={{mb: 3, mt: 2}}/>
             <SlidePanelTitle>{m.unemployedMemberByOblast}</SlidePanelTitle>
-            <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelperOld.byCategory({
+            <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelper.byCategory({
               categories: ctx.categoryOblasts('where_are_you_current_living_oblast'),
               data: ctx.dataFiltered,
               filter: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes'
-            })}>
+            }).get()}>
               {_ => <MapSvg data={_} fillBaseOn="percent" sx={{mx: 3}}/>}
             </Lazy>
           </SlidePanel>
@@ -93,15 +93,14 @@ export const ProtectionDashboardMonitoLivelihood = () => {
         <Div column sx={{flex: 1}}>
           <SlidePanel title={m.monthlyIncomePerHH}>
             <Lazy deps={[ctx.dataFiltered]} fn={() => {
-              const income = chain(ChartHelperOld.single({
+              const income = ChartHelper.single({
                 filterValue: ['no_income', 'unable_unwilling_to_answer'],
                 data: ctx.dataFiltered.map(_ => _.what_is_the_average_month_income_per_household).compact(),
-              }))
-                .map(ChartHelperOld.setLabel(Protection_hhs3.options.what_is_the_average_month_income_per_household))
-                .map(ChartHelperOld.sortBy.custom(Object.keys(Protection_hhs3.options.what_is_the_average_month_income_per_household)))
+              }).setLabel(Protection_hhs3.options.what_is_the_average_month_income_per_household)
+                .sortBy.custom(Obj.keys(Protection_hhs3.options.what_is_the_average_month_income_per_household))
                 .get()
 
-              const hhSize = ChartHelperOld.sumByCategory({
+              const hhSize = ChartHelper.sumByCategory({
                 data: ctx.dataFiltered,
                 categories: {
                   // no_income: _ => _.what_is_the_average_month_income_per_household === 'no_income',

@@ -3,17 +3,16 @@ import {ProtectionMonito} from '@/features/Protection/DashboardMonito/Protection
 import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
-import {ChartHelperOld} from '@/shared/charts/chartHelperOld'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {getIdpsAnsweringRegistrationQuestion} from '@/features/Protection/DashboardMonito/ProtectionDashboardMonitoDocument'
-import {chain, Person, Protection_hhs3} from 'infoportal-common'
+import {Person, Protection_hhs3} from 'infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartPieWidgetByKey} from '@/shared/charts/ChartPieWidgetByKey'
 import {snapshotProtMonitoEchoLogo} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEchoSample'
 import {useTheme} from '@mui/material'
-import {SnapshotProtMonitoEvolutionNote} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEvolutionNote'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export const SnapshotProtMonitoEchoRegistration = () => {
   const ctx = ProtectionMonito.useContext()
@@ -38,7 +37,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
             <SlidePanel>
               <SlidePanelTitle sx={{mb: 1}}>{m.protHHSnapshot.maleWithoutIDPCert}</SlidePanelTitle>
               <Div>
-                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                   data: getIdpsAnsweringRegistrationQuestion(d),
                   value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
                 })}>
@@ -58,7 +57,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                     />
                   )}
                 </Lazy>
-                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelperOld.percentage({
+                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
                   data: getIdpsAnsweringRegistrationQuestion(d).filter(_ => _.age && _.age >= 18 && _.age <= 60 && _.gender && _.gender === Person.Gender.Male),
                   value: _ => _.isIdpRegistered !== 'yes' && _.are_you_and_your_hh_members_registered_as_idps !== 'yes_all'
                 })}>
@@ -111,7 +110,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
           </Div>
           <Div column>
             <SlidePanel>
-              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(x) => ChartHelperOld.percentage({
+              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(x) => ChartHelper.percentage({
                 data: x.flatMap(_ => _.persons).map(_ => _.lackDoc).compact().filter(_ => !_.includes('unable_unwilling_to_answer')),
                 value: _ => !_.includes('none')
               })}>
@@ -123,13 +122,13 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                   {...snapShotDefaultPieIndicatorsProps}
                 />}
               </Lazy>
-              <Lazy deps={[ctx.dataFiltered]} fn={() => chain(ChartHelperOld.multiple({
+              <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelper.multiple({
                 data: ctx.dataFiltered.flatMap(_ => _.persons).map(_ => _.lackDoc).compact(),
                 filterValue: ['none', 'unable_unwilling_to_answer'],
-              }))
-                .map(ChartHelperOld.setLabel(Protection_hhs3.options.does_lack_doc))
-                .map(ChartHelperOld.sortBy.value)
-                .get()}>
+              }).setLabel(Protection_hhs3.options.does_lack_doc)
+                .sortBy.value()
+                .get()
+              }>
                 {_ => <ChartBar data={_}/>}
               </Lazy>
             </SlidePanel>

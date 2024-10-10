@@ -10,7 +10,6 @@ import {Txt} from '@/shared/Txt'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Lazy} from '@/shared/Lazy'
-import {makeChartData} from '@/shared/charts/chartHelperOld'
 import {MapSvg} from '@/shared/maps/MapSvg'
 import {Box} from '@mui/material'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
@@ -32,6 +31,7 @@ import {MpcaBudgetTracker} from '@/features/Mpca/Dashboard/MpcaBudgetTracker'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {MpcaDashboardAmountLine} from '@/features/Mpca/Dashboard/MpcaDashboardAmountLine'
+import {makeChartData} from '@/shared/charts/chartHelper'
 
 export const today = new Date()
 

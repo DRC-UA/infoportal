@@ -1,5 +1,5 @@
 import {format} from 'date-fns'
-import {Obj, map} from '@alexandreannic/ts-utils'
+import {map, Obj} from '@alexandreannic/ts-utils'
 import React, {useMemo} from 'react'
 import {ChartLine, ChartLineProps} from '@/shared/charts/ChartLine'
 
