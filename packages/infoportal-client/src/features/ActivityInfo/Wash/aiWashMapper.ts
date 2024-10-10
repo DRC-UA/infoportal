@@ -75,7 +75,7 @@ export namespace AiWashMapper {
                 'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
                 'Disaggregation by population group and/or gender and age known?': 'Yes',
                 'Population Group': displacement,
-                'Total Reached (No Disaggregation)': disaggregation['Total Individuals Reached'] ?? 0,
+                'Total Reached (No Disaggregation)': 0, //disaggregation['Total Individuals Reached']
                 'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
                 'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
                 'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
