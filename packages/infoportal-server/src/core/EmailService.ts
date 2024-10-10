@@ -6,6 +6,10 @@ import {UserService} from '../feature/user/UserService'
 import {PrismaClient} from '@prisma/client'
 import {FrontEndSiteMap} from './FrontEndSiteMap'
 
+export enum EmailContext {
+  Cfm = 'Cfm',
+}
+
 export class EmailService {
 
   constructor(
@@ -45,6 +49,7 @@ export class EmailService {
         const link = this.siteMap.openCfmEntry(formId, answerId)
         const userName = await this.users.getUserByEmail(email).then(_ => _?.name)
         await this.emailHelper.send({
+          context: EmailContext.Cfm,
           to: email,
           subject: 'New CFM Request!',
           html: `

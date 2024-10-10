@@ -368,3 +368,14 @@ enum DatabaseViewColVisibility {
   Hidden
   Visible
 }
+
+model EmailOutBox {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  createdBy   String?
+  context     String
+  to          String
+  subject     String
+  content     String?
+  deliveredAt DateTime?
+}
