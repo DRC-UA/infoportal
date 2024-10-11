@@ -92,6 +92,7 @@ export namespace AiProtectionMapper {
                       },
                     }, () => {
                       return {
+                        'Non-individuals Reached/Quantity': null,
                         'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
                         'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
                         'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,

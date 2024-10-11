@@ -33,9 +33,9 @@ export class WfpDeduplicationUpload {
     await this.prisma.mpcaWfpDeduplication.deleteMany()
     this.log.info('AssistanceProvided...')
     // await Promise.all([
-    await this.runOnAll({
-      req: _ => this.wfpSdk.getAssistanceProvided(_),
-      fn: async (res: AssistanceProvided[]) => {
+    await this.throttledFetchAndRun({
+      fetch: _ => this.wfpSdk.getAssistanceProvided(_),
+      runOnBatchedResult: async (res: AssistanceProvided[]) => {
         await this.upsertMappingId(res.map(_ => _.beneficiaryId))
         await this.prisma.mpcaWfpDeduplication.createMany({
           data: res.map(_ => {
@@ -54,9 +54,9 @@ export class WfpDeduplicationUpload {
       }
     })
     this.log.info('AssistancePrevented...')
-    await this.runOnAll({
-      req: _ => this.wfpSdk.getAssistancePrevented(_),
-      fn: async (res: AssistancePrevented[]) => {
+    await this.throttledFetchAndRun({
+      fetch: _ => this.wfpSdk.getAssistancePrevented(_),
+      runOnBatchedResult: async (res: AssistancePrevented[]) => {
         await this.upsertMappingId(res.map(_ => _.beneficiaryId))
         await this.prisma.mpcaWfpDeduplication.createMany({
           data: res.map(_ => {
@@ -69,7 +69,11 @@ export class WfpDeduplicationUpload {
               return WfpDeduplicationStatus.Error
             })()
             const existing = (() => {
-              const match = _.message.match(/\-\s+Already\s+assisted\s+by\s+(.*?)\s+from\s+(\d{8})\s+to\s+(\d{8})\s+for\s+UAH\s+([\d,\.]+)\s+for\s+CASH-MP/)
+              const match = _.message.match(/\-\s+Already\s+assisted\s+by\s+(.*?)\s+from\s+(\d{8})\s+to\s+(\d{8})\s+for\s+UAH\s+([\d,\.]+)\s+for\s+(CASH-\w+)/)
+              if (!match) {
+                console.warn(_)
+                return {}
+              }
               return {
                 existingOrga: match![1],
                 existingStart: parse(match![2], 'yyyyMMdd', new Date()),
@@ -139,15 +143,15 @@ export class WfpDeduplicationUpload {
     }))
   }
 
-  private readonly runOnAll = async <T>({
-    req,
-    fn
+  private readonly throttledFetchAndRun = async <T>({
+    fetch,
+    runOnBatchedResult
   }: {
-    req: (_: WfpFilters) => Promise<ApiPaginate<T>>,
-    fn: (batch: T[]) => Promise<void>
+    fetch: (_: WfpFilters) => Promise<ApiPaginate<T>>,
+    runOnBatchedResult: (batch: T[]) => Promise<void>
   }) => {
     const requests: (() => Promise<ApiPaginate<T>>)[] = [
-      () => req({limit: 1000, offset: 0})
+      () => fetch({limit: 1000, offset: 0})
     ]
     const initialRequest = await requests[0]()
     const limit = initialRequest.data.length
@@ -155,10 +159,11 @@ export class WfpDeduplicationUpload {
       throw new AppError.InternalServerError('Initial request returned 0 data.')
     }
     for (let i = limit; i < initialRequest.total; i = i + limit) {
-      requests.push(() => req({limit, offset: i}))
+      requests.push(() => fetch({limit, offset: i}))
     }
     for (const r of requests) {
-      await r().then(_ => fn(_.data))
+      await r().then(_ => runOnBatchedResult(_.data))
+      this.log.debug(`Run`)
     }
     // await Promise.all(requests.map(r => r.then(_ => fn(_.data))))
   }
@@ -182,9 +187,9 @@ export class WfpDeduplicationUpload {
       'CHJ': DrcOffice.Chernihiv,
       'UMY': DrcOffice.Sumy,
     }
-    await this.runOnAll({
-      req: this.wfpSdk.getImportFiles,
-      fn: async (imports) => {
+    await this.throttledFetchAndRun({
+      fetch: this.wfpSdk.getImportFiles,
+      runOnBatchedResult: async (imports) => {
         const updates$ = imports.map(async (_) => {
           const office = possibleOffices.find(oblastCode => _.fileName.includes(oblastCode))
           if (!office) console.warn(`Oblast not found for filename ${_.fileName}`)
