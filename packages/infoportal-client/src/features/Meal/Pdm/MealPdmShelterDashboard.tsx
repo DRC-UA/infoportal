@@ -29,7 +29,7 @@ export const MealPdmShelterDashboard = () => {
   const ctx = useMealPdmContext()
   const ctxSchema = useKoboSchemaContext()
   const schema = ctxSchema.byName.meal_shelterPdm.get!
-  const {shape: commonShape, filters, setFilters} = usePdmFilters(ctx.fetcherAnswers.get)
+  const {shape: commonShape} = usePdmFilters(ctx.fetcherAnswers.get)
   const langIndex = ctxSchema.langIndex
   const {m, formatDateTime, formatDate} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
@@ -131,7 +131,7 @@ export const MealPdmShelterDashboard = () => {
               </Panel>
               <Panel title={m.ageGroup}>
                 <PanelBody>
-                  <AgeGroupTable tableId="pdm-dashboard" persons={ctx.fetcherAnswers.get?.flatMap(_ => _.persons)} enableDisplacementStatusFilter enablePwdFilter/>
+                  <AgeGroupTable tableId="pdm-dashboard" persons={data.flatMap(_ => _.persons)} enableDisplacementStatusFilter enablePwdFilter/>
                 </PanelBody>
               </Panel>
               <SlidePanel title={m.mealMonitoringPdm.assistanceReceived}>

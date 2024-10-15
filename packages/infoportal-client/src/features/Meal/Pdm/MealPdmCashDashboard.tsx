@@ -32,10 +32,10 @@ export const MealPdmCashDashboard = () => {
   const schema = ctxSchema.byName.meal_cashPdm.get!
   const langIndex = ctxSchema.langIndex
   const {m, formatDateTime, formatDate} = useI18n()
-  const {shape: commonShape, filters, setFilters} = usePdmFilters(ctx.fetcherAnswers.get)
+  const {shape: commonShape} = usePdmFilters(ctx.fetcherAnswers.get)
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
   const filterShape = useMemo(() => {
-    return DataFilter.makeShape({
+    return DataFilter.makeShape<PdmData<Meal_cashPdm.T>>({
       ...commonShape,
       pdmtype: {
         icon: appConfig.icons.project,
@@ -93,11 +93,7 @@ export const MealPdmCashDashboard = () => {
                   dense
                   title={m.mealMonitoringPdm.satisfiedAmount}
                   data={data}
-                  filter={_ => {
-                    console.log('=======', _)
-                    return _.answers.satisfied_cash_amount === 'yes' || _.answers.satisfied_cash_amount === 'no'
-                  }
-                  }
+                  filter={_ => _.answers.satisfied_cash_amount === 'yes' || _.answers.satisfied_cash_amount === 'no'}
                 />
                 <ChartPieWidgetBy
                   dense
@@ -144,7 +140,7 @@ export const MealPdmCashDashboard = () => {
               </Panel>
               <Panel title={m.ageGroup}>
                 <PanelBody>
-                  <AgeGroupTable tableId="pdm-dashboard" persons={ctx.fetcherAnswers.get?.flatMap(_ => _.persons)} enableDisplacementStatusFilter enablePwdFilter/>
+                  <AgeGroupTable tableId="pdm-dashboard" persons={data.flatMap(_ => _.persons)} enableDisplacementStatusFilter enablePwdFilter/>
                 </PanelBody>
               </Panel>
               <SlidePanel title={m.mealMonitoringPdm.pdmType}>
