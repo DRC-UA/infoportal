@@ -7,6 +7,7 @@ import {appConf, AppConf} from '../../core/conf/AppConf'
 import {WfpBuildingBlockClient} from '../connector/wfpBuildingBlock/WfpBuildingBlockClient'
 import {app, AppLogger} from '../../index'
 import {AppError} from '../../helper/Errors'
+import promiseRetry from 'promise-retry'
 
 export class WfpDeduplicationUpload {
 
@@ -34,7 +35,9 @@ export class WfpDeduplicationUpload {
     this.log.info('AssistanceProvided...')
     // await Promise.all([
     await this.throttledFetchAndRun({
-      fetch: _ => this.wfpSdk.getAssistanceProvided(_),
+      fetch: _ => promiseRetry((retry, number) => {
+        return this.wfpSdk.getAssistanceProvided(_).catch(retry)
+      }),
       runOnBatchedResult: async (res: AssistanceProvided[]) => {
         await this.upsertMappingId(res.map(_ => _.beneficiaryId))
         await this.prisma.mpcaWfpDeduplication.createMany({
