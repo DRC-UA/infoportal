@@ -29,7 +29,8 @@ const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
   'meal_verificationEcrec',
   'meal_visitMonitoring',
-  'meal_cashPdm'
+  'meal_cashPdm',
+  'meal_shelterPdm'
 ]
 
 export const mealIndex = {
@@ -101,6 +102,7 @@ const MealSidebar = ({
             )}
           </NavLink>
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_cashPdm'))} name="meal_cashPdm"/>
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_shelterPdm'))} name="meal_shelterPdm"/>
         </SidebarSection>
       </SidebarBody>
     </Sidebar>
@@ -119,7 +121,8 @@ export const Meal = () => {
           return _.params?.koboFormId === KoboIndex.byName('bn_re').id ||
             _.params?.koboFormId === KoboIndex.byName('ecrec_cashRegistration').id ||
             _.params?.koboFormId === KoboIndex.byName('meal_visitMonitoring').id ||
-            _.params?.koboFormId === KoboIndex.byName('meal_cashPdm').id
+            _.params?.koboFormId === KoboIndex.byName('meal_cashPdm').id ||
+            _.params?.koboFormId === KoboIndex.byName('meal_shelterPdm').id
         })
     }
   }, [accesses, session])
