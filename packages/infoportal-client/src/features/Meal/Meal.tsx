@@ -19,9 +19,11 @@ import {MealVerification} from '@/features/Meal/Verification/MealVerification'
 import {Access} from '@/core/sdk/server/access/Access'
 import {appConfig} from '@/conf/AppConfig'
 import {MealPdm} from '@/features/Meal/Pdm/MealPdm'
-import {MealPdmDashboard} from '@/features/Meal/Pdm/MealPdmDashboard'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {MealVerificationData} from '@/features/Meal/Verification/MealVerificationData'
+import {MealPdmDashboard} from '@/features/Meal/Pdm/MealPdmDashboard'
+import {MealPdmCashDashboard} from '@/features/Meal/Pdm/MealPdmCashDashboard'
+import {MealPdmShelterDashboard} from '@/features/Meal/Pdm/MealPdmShelterDashboard'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -46,7 +48,8 @@ export const mealIndex = {
     },
     pdm: {
       _: '/pdm',
-      dashboard: `/pdm/dashboard`,
+      cashPdmDashboard: `/pdm/cash/dashboard`,
+      shelterPdmDashboard: `/pdm/shelter/dashboard`,
     },
     form: (id: KoboFormName = ':id' as any) => '/form/' + id,
   },
@@ -146,9 +149,10 @@ export const Meal = () => {
             <Route path={mealIndex.siteMap.verification.data()} element={<MealVerificationData/>}/>
           </Route>
         )}
-        <Route path={mealIndex.siteMap.pdm._} element={<MealPdm/>}>
-          <Route index element={<Navigate to={mealIndex.siteMap.pdm.dashboard}/>}/>
-          <Route path={mealIndex.siteMap.pdm.dashboard} element={<MealPdmDashboard/>}/>
+        <Route path={mealIndex.siteMap.pdm._} element={<MealPdm formName="meal_cashPdm"/>}>
+          <Route index element={<Navigate to={mealIndex.siteMap.pdm.cashPdmDashboard} replace/>}/>
+          <Route path={mealIndex.siteMap.pdm.cashPdmDashboard} element={<MealPdmCashDashboard/>}/>
+          <Route path={mealIndex.siteMap.pdm.shelterPdmDashboard} element={<MealPdmShelterDashboard/>}/>
         </Route>
         <Route index element={<Navigate to={mealIndex.siteMap.visit.dashboard}/>}/>
         {relatedKoboForms.map(_ =>
