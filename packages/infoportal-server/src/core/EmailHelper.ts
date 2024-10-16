@@ -26,9 +26,11 @@ export class EmailHelper {
     to,
     subject,
     html,
+    cc,
     createdBy,
     context,
   }: {
+    cc?: string[]
     createdBy?: string
     context: string
     html: string,
@@ -38,14 +40,16 @@ export class EmailHelper {
     try {
       await this.transporter.sendMail({
         from: appConf.email.address,
+        cc,
         to,
         subject,
         html,
       })
-      this.prisma.emailOutBox.create({
+      await this.prisma.emailOutBox.create({
         data: {
           to, subject, content: html,
           createdBy, context,
+          cc,
           deliveredAt: new Date(),
         }
       })
@@ -53,6 +57,7 @@ export class EmailHelper {
       this.log.error('Failed to send email:', error)
       await this.prisma.emailOutBox.create({
         data: {
+          cc,
           to, subject, content: html,
           createdBy, context,
         },

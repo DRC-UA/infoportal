@@ -5,6 +5,7 @@ import {app} from '../index'
 import {UserService} from '../feature/user/UserService'
 import {PrismaClient} from '@prisma/client'
 import {FrontEndSiteMap} from './FrontEndSiteMap'
+import {appConf} from './conf/AppConf'
 
 export enum EmailContext {
   Cfm = 'Cfm',
@@ -14,6 +15,7 @@ export class EmailService {
 
   constructor(
     private prisma = new PrismaClient(),
+    private conf = appConf,
     private users = UserService.getInstance(prisma),
     private event = GlobalEvent.Class.getInstance(),
     private emailHelper = new EmailHelper(),
@@ -50,11 +52,13 @@ export class EmailService {
         const userName = await this.users.getUserByEmail(email).then(_ => _?.name)
         await this.emailHelper.send({
           context: EmailContext.Cfm,
+          cc: this.conf.cfmLadies,
           to: email,
           subject: 'New CFM Request!',
           html: `
-            Hi ${userName ?? ''},<br/><br/>
-            A new CFM request has been assigned to you as the focal point in InfoPortal.
+            Hello ${userName ?? ''},<br/><br/>
+            A new CFM request has been assigned to you as the focal point in InfoPortal.<br/>
+            <i>This email is an automatic notification send from InfoPortal.</i>
             <br/>   
             <a href="${link}">Link to request</a>
             <br/><br/> 
