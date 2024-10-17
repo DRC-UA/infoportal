@@ -6,6 +6,7 @@ import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetcher'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {ShelterEntity} from '@/features/Shelter/shelterEntity'
+import {KoboShelterTa} from 'infoportal-common/kobo'
 
 export type UseShelterData = ReturnType<typeof useShelterData>
 
@@ -32,7 +33,7 @@ export const useShelterData = () => {
         index[d.id].nta = d
         index[d.id].oblastIso = oblast?.iso
         index[d.id].oblast = oblast?.name
-        index[d.id].persons = KoboGeneralMapping.collectXlsKoboIndividuals(d as any).map(KoboGeneralMapping.mapPersonDetails)
+        index[d.id].persons = KoboGeneralMapping.collectXlsKoboIndividuals(KoboShelterTa.harmonizeNtaDisabilityAll(d as any)).map(KoboGeneralMapping.mapPersonDetails)
         index[d.id].office = fnSwitch(d.back_office!, {
           cej: DrcOffice.Chernihiv,
           dnk: DrcOffice.Dnipro,

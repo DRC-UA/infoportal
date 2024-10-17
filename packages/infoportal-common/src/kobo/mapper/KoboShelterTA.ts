@@ -1,11 +1,36 @@
 import {ShelterContractor} from './ShelterContractor'
 import {Shelter_ta} from '../generated/Shelter_TA'
-import {map} from '@alexandreannic/ts-utils'
+import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {NumberKeys} from '../../type/Generic'
 import {KoboBaseTags, KoboTagStatus} from './Common'
 import {DrcProject} from '../../type/Drc'
+import {Bn_re, Shelter_nta} from '../generated'
 
 export namespace KoboShelterTa {
+  const harmonizeNtaDisability = (disabilities: Shelter_nta.T['hh_char_hhh_dis_select']): Bn_re.T['hh_char_dis_select'] => {
+    return disabilities?.map(_ => {
+      return fnSwitch(_!, {
+        diff_medical: 'diff_care',
+        diff_mental: 'diff_rem',
+      }, () => _! as any)
+    })
+  }
+
+  export const harmonizeNtaDisabilityAll = (row: Shelter_nta.T): any => {
+    // @ts-ignore
+    row.hh_char_hhh_dis_select = harmonizeNtaDisability(row.hh_char_hhh_dis_select)
+    // @ts-ignore
+    row.hh_char_res_dis_select = harmonizeNtaDisability(row.hh_char_res_dis_select)
+    // @ts-ignore
+    row.hh_char_hh_det = row.hh_char_hh_det?.map(_ => {
+      return {
+        ..._,
+        hh_char_hh_det_dis_select: harmonizeNtaDisability(_.hh_char_hh_det_dis_select)
+      }
+    })
+    return row
+  }
+
   const lot1: NumberKeys<Shelter_ta.T>[] = [
     'dismantling_of_structures',
     'singleshutter_window_tripleglazed_pc',

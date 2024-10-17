@@ -1,7 +1,6 @@
 import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
   Bn_cashForRentRegistration,
-  Bn_re,
   CashForRentStatus,
   DrcDonor,
   DrcOffice,
@@ -16,6 +15,7 @@ import {
   KoboMetaHelper,
   KoboMetaShelterRepairTags,
   KoboMetaStatus,
+  KoboShelterTa,
   KoboTagStatus,
   OblastIndex,
   safeArray,
@@ -30,30 +30,6 @@ import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
 
 export namespace KoboMetaMapperShelter {
-
-  const harmonizeNtaDisability = (disabilities: Shelter_nta.T['hh_char_hhh_dis_select']): Bn_re.T['hh_char_dis_select'] => {
-    return disabilities?.map(_ => {
-      return fnSwitch(_!, {
-        diff_medical: 'diff_care',
-        diff_mental: 'diff_rem',
-      }, () => _! as any)
-    })
-  }
-
-  const harmonizeNtaDisabilityAll = (row: Shelter_nta.T): any => {
-    // @ts-ignore
-    row.hh_char_hhh_dis_select = harmonizeNtaDisability(row.hh_char_hhh_dis_select)
-    // @ts-ignore
-    row.hh_char_res_dis_select = harmonizeNtaDisability(row.hh_char_res_dis_select)
-    // @ts-ignore
-    row.hh_char_hh_det = row.hh_char_hh_det?.map(_ => {
-      return {
-        ..._,
-        hh_char_hh_det_dis_select: harmonizeNtaDisability(_.hh_char_hh_det_dis_select)
-      }
-    })
-    return row
-  }
 
   export const createCfRent: MetaMapperInsert<KoboMetaOrigin<Bn_cashForRentRegistration.T, KoboTagStatus<CashForRentStatus>>> = row => {
     const answer = Bn_cashForRentRegistration.map(row.answers)
@@ -147,7 +123,7 @@ export namespace KoboMetaMapperShelter {
 
   export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_nta.T, ShelterNtaTags>> = row => {
     const answer = Shelter_nta.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(harmonizeNtaDisabilityAll(answer)).map(KoboGeneralMapping.mapPersonDetails)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(KoboShelterTa.harmonizeNtaDisabilityAll(answer)).map(KoboGeneralMapping.mapPersonDetails)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = safeArray(row.tags?.project)
     const isCfRepair = answer.modality === 'cash_for_repair'
