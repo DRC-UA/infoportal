@@ -52,13 +52,12 @@ export class EmailService {
         const userName = await this.users.getUserByEmail(email).then(_ => _?.name)
         await this.emailHelper.send({
           context: EmailContext.Cfm,
-          cc: this.conf.cfmLadies,
           to: email,
           subject: 'New CFM Request!',
           html: `
             Hello ${userName ?? ''},<br/><br/>
             A new CFM request has been assigned to you as the focal point in InfoPortal.<br/>
-            <i>This email is an automatic notification send from InfoPortal.</i>
+            <i>This email is an automatic notification sent from InfoPortal.</i>
             <br/>   
             <a href="${link}">Link to request</a>
             <br/><br/> 

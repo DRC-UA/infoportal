@@ -6,7 +6,7 @@ import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetcher'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {ShelterEntity} from '@/features/Shelter/shelterEntity'
-import {KoboShelterTa} from 'infoportal-common/kobo'
+import {KoboShelterTa} from 'infoportal-common'
 
 export type UseShelterData = ReturnType<typeof useShelterData>
 

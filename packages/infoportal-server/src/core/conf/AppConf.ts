@@ -32,7 +32,6 @@ export const appConf = {
     port: e(required, int)('DBAZUREHDP_PORT'),
     schema: 'hdp',
   },
-  cfmLadies: ['tetiana.vorona@drc.ngo', 'alona.serebrianska@drc.ngo', 'alexandre.annic@drc.ngo'],
   db: {
     maxConcurrency: e(int, defaultValue(50))('DATABASE_MAX_CONCURRENCY'),
     url: e(required)('DATABASE_URL')
