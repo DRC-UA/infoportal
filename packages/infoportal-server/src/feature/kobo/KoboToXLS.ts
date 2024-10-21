@@ -36,7 +36,7 @@ export class KoboToXLS {
       'select_multiple',
       'date',
     ]
-    const koboFormDetails = await this.service.getFormDetails(formId)
+    const koboFormDetails = await this.service.getSchema({formId})
     const translated = langIndex !== undefined ? await this.service.translateForm({formId, langIndex, data}) : data
     const flatTranslated = translated.map(({answers, ...meta}) => ({...meta, ...answers}))
     const columns = (() => {

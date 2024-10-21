@@ -9,6 +9,7 @@ import {app, AppCacheKey} from '../../../index'
 import {duration} from '@alexandreannic/ts-utils'
 import axios, {AxiosError} from 'axios'
 import {appConf} from '../../../core/conf/AppConf'
+import {KoboService} from '../../../feature/kobo/KoboService'
 
 const apiAnswersFiltersValidation = yup.object({
   start: yup.date(),
@@ -20,6 +21,7 @@ export class ControllerKoboApi {
   constructor(
     private pgClient: PrismaClient,
     private apiService = new KoboApiService(pgClient),
+    private koboService = new KoboService(pgClient),
     private syncService = new KoboSyncServer(pgClient),
     private koboSdkGenerator = new KoboSdkGenerator(pgClient),
     private conf = appConf
@@ -112,19 +114,9 @@ export class ControllerKoboApi {
 
   readonly getSchema = async (req: Request, res: Response, next: NextFunction) => {
     const {id, formId} = await this.extractParams(req)
-    const form = await this.getSchemaCached(id, formId)
+    const form = await this.koboService.getSchema({serverId: id, formId})
     res.send(form)
   }
-
-  private readonly getSchemaCached = app.cache.request({
-    key: AppCacheKey.KoboSchema,
-    genIndex: (serverId, formId) => formId,
-    ttlMs: duration(2, 'day').toMs,
-    fn: async (serverId, formId) => {
-      const sdk = await this.koboSdkGenerator.get(serverId)
-      return await sdk.v2.getForm(formId)
-    }
-  })
 
   readonly getAttachementsWithoutAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {

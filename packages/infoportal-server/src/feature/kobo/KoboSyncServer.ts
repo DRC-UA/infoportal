@@ -37,6 +37,11 @@ export class KoboSyncServer {
     if (!connectedForm) {
       throw new AppError.NotFound('form_not_found')
     }
+    this.event.emit(GlobalEvent.Event.KOBO_ANSWER_NEW, {
+      formId,
+      answerIds: [answer.id],
+      answer: answer.answers,
+    })
     return this.service.create(formId, answer)
   }
 
@@ -139,6 +144,11 @@ export class KoboSyncServer {
           // source: serverId,
           attachments: _.attachments,
         }
+        this.event.emit(GlobalEvent.Event.KOBO_ANSWER_NEW, {
+          formId,
+          answerIds: [_.id],
+          answer: _.answers,
+        })
         return res
       })
       await this.prisma.koboAnswers.createMany({
@@ -163,7 +173,11 @@ export class KoboSyncServer {
         this.event.emit(GlobalEvent.Event.KOBO_ANSWER_EDITED_FROM_KOBO, {
           formId,
           answerIds: [a.id],
-          answer: Util.getObjectDiff({before: previewsAnswersById[a.id], after: a.answers, skipProperties: ['instanceID', 'rootUuid', 'deprecatedID']})
+          answer: Util.getObjectDiff({
+            before: previewsAnswersById[a.id],
+            after: a.answers,
+            skipProperties: ['instanceID', 'rootUuid', 'deprecatedID']
+          })
         })
         return this.prisma.koboAnswers.update({
           where: {

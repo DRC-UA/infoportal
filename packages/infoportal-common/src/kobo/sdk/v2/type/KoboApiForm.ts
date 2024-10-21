@@ -80,6 +80,7 @@ export interface KoboApiSchema {
       $qpath: string
       $xpath: string
       label?: string[]
+      hint?: string[]
       appearance?: 'multiline',
       name: string
       file?: string

@@ -8,4 +8,7 @@
     - WFP
     - HDP SQL
     - Legal
-- 
+
+# Cache
+
+Some functions are cached globally. Cache can be manually managed from Frontside

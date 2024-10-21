@@ -309,11 +309,16 @@ export class KoboService {
   //   })
   // }
 
-  readonly getFormDetails = async (formId: KoboId): Promise<KoboApiSchema> => {
-    const dbForm = await this.prisma.koboForm.findFirstOrThrow({where: {id: formId}})
-    const sdk = await this.sdkGenerator.get(dbForm.serverId)
-    return sdk.v2.getForm(dbForm.id)
-  }
+  readonly getSchema = app.cache.request({
+    key: AppCacheKey.KoboSchema,
+    genIndex: _ => _.serverId + _.formId,
+    ttlMs: duration(2, 'day').toMs,
+    fn: async ({serverId, formId}: {serverId?: UUID, formId: KoboId}): Promise<KoboApiSchema> => {
+      const sId = serverId ?? (await this.prisma.koboForm.findFirstOrThrow({where: {id: formId}}).then(_ => _.serverId))
+      const sdk = await this.sdkGenerator.get(sId)
+      return sdk.v2.getForm(formId)
+    },
+  })
 
   readonly translateForm = async ({
     formId,
@@ -334,7 +339,7 @@ export class KoboService {
       'date',
     ]
     const flatAnswers = data.map(({answers, ...meta}) => ({...meta, ...answers}))
-    const koboFormDetails = await this.getFormDetails(formId)
+    const koboFormDetails = await this.getSchema({formId})
     const indexLabel = seq(koboFormDetails.content.survey).filter(_ => koboQuestionType.includes(_.type)).reduceObject<Record<string, KoboApiQuestionSchema>>(_ => [_.name, _])
     const indexOptionsLabels = seq(koboFormDetails.content.choices).reduceObject<Record<string, undefined | string>>(_ => [_.name, _.label?.[langIndex]])
     return flatAnswers.map(d => {
@@ -458,7 +463,7 @@ export class KoboService {
     answer = Array.isArray(answer) ? answer.join(' ') : answer
     const [sdk, xpath] = await Promise.all([
       this.sdkGenerator.get(),
-      this.getFormDetails(formId).then(_ => _.content.survey.find(_ => _.name === question)?.$xpath),
+      this.getSchema({formId}).then(_ => _.content.survey.find(_ => _.name === question)?.$xpath),
     ])
     if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)
     this.history.create({
