@@ -259,9 +259,15 @@ export enum DrcProject {
   'UKR-000363 UHF8' = 'UKR-000363 UHF8',
   'UKR-000390 UHF9' = 'UKR-000390 UHF9',
   // @deprecated wrong code 371, it should be 372
+  'UKR-000370 SIDA' = 'UKR-000370 SIDA',
   'UKR-000371 ECHO3' = 'UKR-000371 ECHO3',
   'UKR-000372 ECHO3' = 'UKR-000372 ECHO3',
+  'UKR-000378 Danish MFA' = 'UKR-000378 Danish MFA',
   'UKR-000380 Danida' = 'UKR-000380 Danida',
+  'UKR-000385 Pooled Funds' = 'UKR-000385 Pooled Funds',
+  'UKR-000388 BHA' = 'UKR-000388 BHA',
+  'UKR-000396 Danish MFA' = 'UKR-000396 Danish MFA',
+  'UKR-000397 GFFO' = 'UKR-000397 GFFO',
   'SIDA 518-570A' = 'SIDA 518-570A',
   'UKR-000316 UHF5' = 'UKR-000316 UHF5',
   'UKR-000329 SIDA H2R' = 'UKR-000329 SIDA H2R',
@@ -325,6 +331,12 @@ export class DrcProjectHelper {
     'UKR-000329 SIDA H2R': DrcDonor.SIDA,
     'UKR-000291_292 UNHCR': DrcDonor.UNHC,
     'UKR-000xxx DANIDA': DrcDonor.DANI,
+    'UKR-000370 SIDA': DrcDonor.SIDA,
+    'UKR-000385 Pooled Funds': DrcDonor.PoolFunds,
+    'UKR-000388 BHA': DrcDonor.BHA,
+    'UKR-000396 Danish MFA': DrcDonor.DMFA,
+    'UKR-000397 GFFO': DrcDonor.GFFO,
+    'UKR-000378 Danish MFA': DrcDonor.DMFA,
     'None': DrcDonor.None
   }
 
