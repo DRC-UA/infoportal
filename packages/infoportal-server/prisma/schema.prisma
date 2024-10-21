@@ -379,4 +379,5 @@ model EmailOutBox {
   subject     String
   content     String?
   deliveredAt DateTime?
+  tags        Json?
 }

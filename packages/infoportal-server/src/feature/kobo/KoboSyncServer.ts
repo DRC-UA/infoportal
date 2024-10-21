@@ -8,6 +8,7 @@ import {GlobalEvent} from '../../core/GlobalEvent'
 import {KoboService} from './KoboService'
 import {AppError} from '../../helper/Errors'
 import {appConf} from '../../core/conf/AppConf'
+import {Util} from '../../helper/Utils'
 
 export type KoboSyncServerResult = {
   answersIdsDeleted: KoboId[]
@@ -36,6 +37,11 @@ export class KoboSyncServer {
     if (!connectedForm) {
       throw new AppError.NotFound('form_not_found')
     }
+    this.event.emit(GlobalEvent.Event.KOBO_ANSWER_NEW, {
+      formId,
+      answerIds: [answer.id],
+      answer: answer.answers,
+    })
     return this.service.create(formId, answer)
   }
 
@@ -138,6 +144,11 @@ export class KoboSyncServer {
           // source: serverId,
           attachments: _.attachments,
         }
+        this.event.emit(GlobalEvent.Event.KOBO_ANSWER_NEW, {
+          formId,
+          answerIds: [_.id],
+          answer: _.answers,
+        })
         return res
       })
       await this.prisma.koboAnswers.createMany({
@@ -154,7 +165,20 @@ export class KoboSyncServer {
         return hasBeenUpdated ? match : undefined
       }).compact()
       this.debug(formId, `Handle update (${answersToUpdate.length})...`)
+      const previewsAnswersById = await this.prisma.koboAnswers.findMany({
+        select: {id: true, answers: true},
+        where: {id: {in: answersToUpdate.map(_ => _.id)}}
+      }).then(_ => seq(_).groupByAndApply(_ => _.id, _ => _[0].answers as Record<string, any>))
       await Promise.all(answersToUpdate.map(a => {
+        this.event.emit(GlobalEvent.Event.KOBO_ANSWER_EDITED_FROM_KOBO, {
+          formId,
+          answerIds: [a.id],
+          answer: Util.getObjectDiff({
+            before: previewsAnswersById[a.id],
+            after: a.answers,
+            skipProperties: ['instanceID', 'rootUuid', 'deprecatedID']
+          })
+        })
         return this.prisma.koboAnswers.update({
           where: {
             id: a.id,
@@ -173,7 +197,6 @@ export class KoboSyncServer {
       }))
       return answersToUpdate
     }
-
 
     const answersIdsDeleted = await handleDelete()
     const answersCreated = await handleCreate()

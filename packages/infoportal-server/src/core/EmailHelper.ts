@@ -29,14 +29,17 @@ export class EmailHelper {
     cc,
     createdBy,
     context,
+    tags,
   }: {
     cc?: string[]
     createdBy?: string
     context: string
     html: string,
-    to: string,
+    to: string | string[],
     subject: string,
+    tags?: any
   }): Promise<void> {
+    const ensureStr = (_: string | string[]): string => Array.isArray(_) ? _.join(' ') : _
     try {
       await this.transporter.sendMail({
         from: appConf.email.address,
@@ -45,11 +48,16 @@ export class EmailHelper {
         subject,
         html,
       })
+      this.log.info(`Send email [${context}] ${JSON.stringify({subject, to: ensureStr(to), tags})}.`)
       await this.prisma.emailOutBox.create({
         data: {
-          to, subject, content: html,
-          createdBy, context,
+          to: ensureStr(to),
+          subject,
+          content: html,
+          createdBy,
+          context,
           cc,
+          tags,
           deliveredAt: new Date(),
         }
       })
@@ -58,11 +66,14 @@ export class EmailHelper {
       await this.prisma.emailOutBox.create({
         data: {
           cc,
-          to, subject, content: html,
-          createdBy, context,
+          to: ensureStr(to),
+          subject,
+          content: html,
+          createdBy,
+          context,
+          tags,
         },
       })
-      throw error
     }
   }
 }

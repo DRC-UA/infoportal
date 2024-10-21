@@ -114,8 +114,8 @@ const startApp = async (conf: AppConf) => {
     //   console.log(`Worker ${worker.process.pid} died`)
     // })
     new KoboMetaService(prisma).start()
+    new EmailService().initializeListeners()
     if (conf.production) {
-      new EmailService().initializeListeners()
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
     } else {

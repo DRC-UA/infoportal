@@ -6,9 +6,12 @@ import {UserService} from '../feature/user/UserService'
 import {PrismaClient} from '@prisma/client'
 import {FrontEndSiteMap} from './FrontEndSiteMap'
 import {appConf} from './conf/AppConf'
+import {getKoboCustomDirectives, KoboCustomDirectives} from '../feature/kobo/KoboCustomDirectives'
+import {KoboService} from '../feature/kobo/KoboService'
 
 export enum EmailContext {
   Cfm = 'Cfm',
+  Kobo = 'Kobo',
 }
 
 export class EmailService {
@@ -20,13 +23,43 @@ export class EmailService {
     private event = GlobalEvent.Class.getInstance(),
     private emailHelper = new EmailHelper(),
     private siteMap = new FrontEndSiteMap(),
+    private koboService = new KoboService(prisma),
     private log = app.logger('EmailService'),
   ) {
   }
 
   initializeListeners() {
-    this.log.info(`Start listening to KOBO_TAG_EDITED`)
+    this.log.info(`Start listening to Email triggers.`)
     this.event.listen(GlobalEvent.Event.KOBO_TAG_EDITED, this.handleTagEdited)
+    this.event.listen(GlobalEvent.Event.KOBO_ANSWER_EDITED_FROM_KOBO, this.sendEmailIfNeeded)
+    this.event.listen(GlobalEvent.Event.KOBO_ANSWER_EDITED_FROM_IP, this.sendEmailIfNeeded)
+    this.event.listen(GlobalEvent.Event.KOBO_ANSWER_NEW, this.sendEmailIfNeeded)
+  }
+
+  readonly sendEmailIfNeeded = async (p: GlobalEvent.KoboAnswerEditedParams) => {
+    const schema = await this.koboService.getSchema({formId: p.formId})
+    const {question} = getKoboCustomDirectives(schema).find(_ => _.directive === KoboCustomDirectives.TRIGGER_EMAIL) ?? {}
+    if (!question) return
+    if (!p.answer[question.name]) return
+    const html = question.hint?.[0]
+    const subject = question.label?.[0]
+    if (!html || !subject) {
+      this.log.error(`Missing hint or label in directive ${KoboCustomDirectives.TRIGGER_EMAIL} of form ${KoboIndex.searchById(p.formId) ?? p.formId}`)
+    } else {
+      await this.emailHelper.send({
+        to: p.answer[question.name].replaceAll(/\s+/g, ' ').split(' '),
+        context: EmailContext.Kobo,
+        html: this.setVariables(html, p.answer),
+        subject: this.setVariables(subject, p.answer),
+        tags: {formId: p.formId}
+      })
+    }
+  }
+
+  private readonly setVariables = (html: string, variables: Record<string, string>) => {
+    return html.replace(/\$\{(\w+)}/g, (_, key) => {
+      return key in variables ? variables[key] : `\${${key}}` // Keeps placeholder if not found
+    })
   }
 
   private handleTagEdited = async (params: GlobalEvent.KoboTagEditedParams) => {

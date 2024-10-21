@@ -12,7 +12,7 @@ export namespace GlobalEvent {
     total?: number
   }
 
-  interface KoboAnswerEditedParams {
+  export interface KoboAnswerEditedParams {
     formId: KoboId,
     answerIds: KoboAnswerId[],
     answer: Record<string, any>,
@@ -30,20 +30,26 @@ export namespace GlobalEvent {
 
   export enum Event {
     KOBO_FORM_SYNCHRONIZED = 'KOBO_FORM_SYNCHRONIZED',
-    KOBO_ANSWER_EDITED = 'KOBO_ANSWER_EDITED',
+    KOBO_ANSWER_EDITED_FROM_KOBO = 'KOBO_ANSWER_EDITED_FROM_KOBO',
+    KOBO_ANSWER_EDITED_FROM_IP = 'KOBO_ANSWER_EDITED_FROM_IP',
+    KOBO_ANSWER_NEW = 'KOBO_ANSWER_NEW',
     KOBO_TAG_EDITED = 'KOBO_TAG_EDITED',
     WFP_DEDUPLICATION_SYNCHRONIZED = 'WFP_DEDUPLICATION_SYNCHRONIZED',
   }
 
   type Emit = {
-    (event: Event.KOBO_ANSWER_EDITED, params: KoboAnswerEditedParams): void
+    (event: Event.KOBO_ANSWER_EDITED_FROM_IP, params: KoboAnswerEditedParams): void
+    (event: Event.KOBO_ANSWER_EDITED_FROM_KOBO, params: KoboAnswerEditedParams): void
+    (event: Event.KOBO_ANSWER_NEW, params: KoboAnswerEditedParams): void
     (event: Event.KOBO_TAG_EDITED, params: KoboTagEditedParams): void
     (event: Event.KOBO_FORM_SYNCHRONIZED, params: KoboFormSyncParams): void
     (event: Event.WFP_DEDUPLICATION_SYNCHRONIZED, params: void): void
   }
 
   type Listen = {
-    (event: Event.KOBO_ANSWER_EDITED, cb: (params: KoboAnswerEditedParams) => void): void
+    (event: Event.KOBO_ANSWER_EDITED_FROM_IP, cb: (params: KoboAnswerEditedParams) => void): void
+    (event: Event.KOBO_ANSWER_EDITED_FROM_KOBO, cb: (params: KoboAnswerEditedParams) => void): void
+    (event: Event.KOBO_ANSWER_NEW, cb: (params: KoboAnswerEditedParams) => void): void
     (event: Event.KOBO_TAG_EDITED, cb: (params: KoboTagEditedParams) => void): void
     (event: Event.KOBO_FORM_SYNCHRONIZED, cb: (params: KoboFormSyncParams) => void): void
     (event: Event.WFP_DEDUPLICATION_SYNCHRONIZED, cb: () => void): void
