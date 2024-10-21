@@ -94,6 +94,12 @@ project_code: {
 	'UKR-000355': `UKR-000355 Danish MFA`,
 	'UKR-000372': `UKR-000372 ECHO3`,
 	'SIDA 518-570A': `SIDA 518-570A`,
+	'UKR-000370': `UKR-000370 SIDA`,
+	'UKR-000378': `UKR-000378 Danish MFA`,
+	'UKR-000385': `UKR-000385 Pooled Funds`,
+	'UKR-000388': `UKR-000388 BHA`,
+	'UKR-000396': `UKR-000396 Danish MFA`,
+	'UKR-000397': `UKR-000397 GFFO`,
 	'Other': `Other`
 },
 gender: {
@@ -146,7 +152,7 @@ feedback_type: {
 	'coc': `5. Sensitive CoC violation by DRC staff and representatives.`,
 	'violation_other': `6. Sensitive- seriously violation by other humanitarian actor (non-drc staff)`,
 	'sen_safety': `7. sensitive- safety and security threat.`
-}}
+}} as const
 
 const extractQuestionName = (_: Record<string, any>) => {
   const output: any = {}
