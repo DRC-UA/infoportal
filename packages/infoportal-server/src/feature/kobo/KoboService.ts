@@ -340,7 +340,7 @@ export class KoboService {
     ]
     const flatAnswers = data.map(({answers, ...meta}) => ({...meta, ...answers}))
     const koboFormDetails = await this.getSchema({formId})
-    const indexLabel = seq(koboFormDetails.content.survey).filter(_ => koboQuestionType.includes(_.type)).reduceObject<Record<string, KoboApiQuestionSchema>>(_ => [_.name, _])
+    const indexLabel = seq(koboFormDetails.content.survey).compactBy('name').filter(_ => koboQuestionType.includes(_.type)).reduceObject<Record<string, KoboApiQuestionSchema>>(_ => [_.name, _])
     const indexOptionsLabels = seq(koboFormDetails.content.choices).reduceObject<Record<string, undefined | string>>(_ => [_.name, _.label?.[langIndex]])
     return flatAnswers.map(d => {
       const translated = {} as DbKoboAnswer

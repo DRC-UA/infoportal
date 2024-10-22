@@ -27,6 +27,7 @@ import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {alpha, IconProps, Theme} from '@mui/material'
 import {UseDatabaseGroupDisplay} from '@/features/Database/KoboTable/groupDisplay/useDatabaseGroupDisplay'
+import {NonNullableKey} from 'infoportal-common/type/Generic'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()
@@ -143,7 +144,7 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   repeatAs,
   theme,
 }: GetColumnBySchemaProps<T> & {
-  q: KoboApiQuestionSchema,
+  q: NonNullableKey<KoboApiQuestionSchema, 'name'>,
 }): DatatableColumn.Props<T>[] => {
   const {
     getId,
@@ -152,12 +153,12 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
   } = (() => {
     if (groupIndex !== undefined && groupName)
       return {
-        getId: (q: KoboApiQuestionSchema) => `${groupIndex}_${q.name}`,
+        getId: (q: NonNullableKey<KoboApiQuestionSchema, 'name'>) => `${groupIndex}_${q.name}`,
         getHead: (name: string) => `[${groupIndex}] ${name}`,
         getVal: (row: T, name: string) => (getRow(row) as any)[groupName]?.[groupIndex]?.[name]
       }
     return {
-      getId: (q: KoboApiQuestionSchema) => q.name,
+      getId: (q: NonNullableKey<KoboApiQuestionSchema, 'name'>) => q.name,
       getHead: (name: string) => name,
       getVal: (row: T, name: string) => getRow(row)[name],
     }
@@ -277,8 +278,9 @@ export const getColumnByQuestionSchema = <T extends Record<string, any | undefin
       case 'begin_repeat': {
         if (repeatAs === 'columns') {
           return mapFor(17, i => {
-            return groupSchemas[q.name]
+            return seq(groupSchemas[q.name])
               .filter(subQ => !ignoredColType.has(subQ.type))
+              .compactBy('name')
               .flatMap(subQ => {
                 return getColumnByQuestionSchema({
                   q: subQ,
@@ -422,14 +424,15 @@ export const getColumnBySchema = <T extends Record<string, any>>({
         }
       }
     },
-    ...schema
+    ...seq(schema)
       .filter(_ => !ignoredColType.has(_.type))
       .flatMap(_ => {
         if (props.repeatAs === 'rows' && props.repeatedQuestion === _.name && _.type === 'begin_repeat') {
-          return props.groupSchemas[_.name].map(_ => ({..._, isRepeated: true}))
+          return props.groupSchemas[_.name!].map(_ => ({..._, isRepeated: true}))
         }
         return _
       })
+      .compactBy('name')
       .flatMap(q => {
         const res = getColumnByQuestionSchema({
           q,

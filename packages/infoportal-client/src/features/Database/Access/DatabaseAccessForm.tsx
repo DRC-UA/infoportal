@@ -55,7 +55,7 @@ export const DatabaseAccessForm = ({
     indexOptionsByName,
   } = useMemo(() => {
     return {
-      indexQuestion: seq(survey).groupBy(_ => _.name),
+      indexQuestion: seq(survey).compactBy('name').groupBy(_ => _.name),
       indexOptionsByListName: seq(form.content.choices).groupBy(_ => _.list_name),
       indexOptionsByName: seq(form.content.choices).groupBy(_ => _.name),
     }
@@ -121,7 +121,7 @@ export const DatabaseAccessForm = ({
                     }
                   }}
                   loading={!questions}
-                  options={questions?.map(_ => _.name) ?? []}
+                  options={questions?.map(_ => _.name!) ?? []}
                   renderInput={({InputProps, ...props}) => <IpInput
                     {...InputProps}
                     {...props}

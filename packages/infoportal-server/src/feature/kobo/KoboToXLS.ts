@@ -51,7 +51,7 @@ export class KoboToXLS {
     const sheet = workbook.sheet('Sheet1')
     sheet.cell('A1').value([columns] as any)
     sheet.cell('A2').value(flatTranslated.map(a =>
-      columns.map(_ => (a as any)[_])
+      columns.map(_ => (a as any)[_!])
     ) as any)
 
 

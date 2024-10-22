@@ -32,7 +32,7 @@ export const renderExportKoboSchema = <T extends KoboMappedAnswer>({
   const getVal = (groupIndex && groupName)
     ? (row: KoboMappedAnswer, name: string) => (row as any)[groupName]?.[groupIndex]?.[name]
     : (row: KoboMappedAnswer, name: string) => row[name]
-  return schema.flatMap(q => {
+  return seq(schema).compactBy('name').flatMap(q => {
     switch (q.type) {
       case 'start':
         return {
@@ -129,7 +129,7 @@ export const DatabaseKoboTableExportBtn = <T extends KoboMappedAnswer, >({
 
   const exportToCSV = () => {
     if (data) {
-      const questionToAddInGroups = ctx.schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name))
+      const questionToAddInGroups = ctx.schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name!))
       _generateXLSFromArray.call(slugify(ctx.schema.schemaUnsanitized.name) + '_' + formatDateTime(new Date()), [
         {
           sheetName: slugify(ctx.schema.schemaUnsanitized.name),

@@ -58,7 +58,7 @@ export namespace KoboSchemaHelper {
     const choicesIndex = seq(schema.content.choices).groupBy(_ => _.list_name)
     const questionIndex = seq([
       ...schema.content.survey,
-    ]).reduceObject<Record<string, KoboApiQuestionSchema>>(_ => [_.name, _])
+    ]).compactBy('name').reduceObject<Record<string, KoboApiQuestionSchema>>(_ => [_.name, _])
 
     const getOptionsByQuestionName = (qName: string) => {
       const listName = questionIndex[qName].select_from_list_name
@@ -90,7 +90,7 @@ export namespace KoboSchemaHelper {
   } => {
     const questionsTranslation: Record<string, string> = {}
     const choicesTranslation: Record<string, Record<string, string>> = {}
-    schema.content.survey.forEach(_ => {
+    seq(schema.content.survey).compactBy('name').forEach(_ => {
       questionsTranslation[_.name] = _.label?.[langIndex] ?? _.name
     })
     ;(schema.content.choices ?? []).forEach(choice => {
@@ -130,9 +130,9 @@ export namespace KoboSchemaHelper {
       if (survey[i].type === 'begin_repeat') {
         const groupname = survey[i].name
         i++
-        groupSchemas[groupname] = []
+        groupSchemas[groupname!] = []
         while (survey[i].type !== 'end_repeat') {
-          groupSchemas[groupname].push(survey[i])
+          groupSchemas[groupname!].push(survey[i])
           i++
         }
       }

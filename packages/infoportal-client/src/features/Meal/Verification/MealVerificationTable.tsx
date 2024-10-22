@@ -27,6 +27,8 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {IpAlert} from '@/shared/Alert'
 import {KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {useToast} from '@/shared/Toast'
+import {KoboApiQuestionSchema} from 'infoportal-common/kobo'
+import {NonNullableKey} from 'infoportal-common/type/Generic'
 
 export enum MergedDataStatus {
   Selected = 'Selected',
@@ -417,7 +419,8 @@ const MealVerificationTableContent = <
               },
             },
             ...activity.dataColumns?.flatMap(c => {
-              const q = schema.schemaHelper.questionIndex[c]
+              const q = schema.schemaHelper.questionIndex[c] as NonNullableKey<KoboApiQuestionSchema, 'name'>
+              if(!q.name) return []
               const w = getColumnByQuestionSchema({
                 formId: activity.registration.koboFormId,
                 data: mergedData,

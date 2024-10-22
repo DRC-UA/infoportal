@@ -144,7 +144,7 @@ export const DatabaseKoboTableContent = ({
           getId: _ => _.id,
         } : undefined}
         exportAdditionalSheets={data => {
-          const questionToAddInGroups = ctx.schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name))
+          const questionToAddInGroups = ctx.schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name!))
           return Obj.entries(ctx.schema.schemaHelper.groupSchemas).map(([groupName, questions]) => {
             const _: GenerateXlsFromArrayParams<any> = {
               sheetName: groupName as string,

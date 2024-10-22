@@ -16,8 +16,9 @@ import {databaseIndex} from '@/features/Database/databaseIndex'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
-import {map} from '@alexandreannic/ts-utils'
+import {map, seq} from '@alexandreannic/ts-utils'
 import {NavLink} from 'react-router-dom'
+import {NonNullableKey} from 'infoportal-common/type/Generic'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -139,7 +140,8 @@ const KoboAnswerFormView = ({
 }) => {
   return (
     <Box>
-      {schema.schemaHelper.sanitizedSchema.content.survey
+      {seq(schema.schemaHelper.sanitizedSchema.content.survey)
+        .compactBy('name')
         .filter(q => showQuestionWithoutAnswer || q.type === 'begin_group' || (answer[q.name] !== '' && answer[q.name]))
         .map(q => (
           <Box key={q.name} sx={{mb: 1.5}}>
@@ -163,7 +165,7 @@ const KoboAnswerQuestionView = ({
 }: {
   formId: KoboId
   schema: KoboSchemaHelper.Bundle
-  questionSchema: KoboApiQuestionSchema
+  questionSchema: NonNullableKey<KoboApiQuestionSchema, 'name'>
   answer: KoboMappedAnswer<any>
 }) => {
   const langIndex = useKoboSchemaContext()
