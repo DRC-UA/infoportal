@@ -1,4 +1,4 @@
-import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {NavLink, Route, Routes} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -11,6 +11,7 @@ import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {KoboFormName} from 'infoportal-common'
 import {SafetyIncidentDashboard} from '@/features/Safety/IncidentsDashboard/SafetyIncidentDashboard'
 import {getKoboFormRouteProps, SidebarKoboLink} from '@/features/SidebarKoboLink'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 const relatedKoboForms: (KoboFormName)[] = [
   'safety_incident',
@@ -47,6 +48,7 @@ const MpcaSidebar = () => {
 }
 
 export const Safety = () => {
+  useReactRouterDefaultRoute(safetyIndex.siteMap.incidentDashboard)
   const {session, accesses} = useSession()
   const access = useMemo(() => !!appFeaturesIndex.safety.showIf?.(session, accesses), [accesses])
   if (!access) {
@@ -61,8 +63,7 @@ export const Safety = () => {
       header={<AppHeader id="app-header"/>}
     >
       <Routes>
-        <Route index element={<Navigate to={safetyIndex.siteMap.incidentDashboard}/>}/>
-        <Route index path={safetyIndex.siteMap.incidentDashboard} element={<SafetyIncidentDashboard/>}/>
+        <Route path={safetyIndex.siteMap.incidentDashboard} element={<SafetyIncidentDashboard/>}/>
         {relatedKoboForms.map(_ =>
           <Route key={_} {...getKoboFormRouteProps({path: safetyIndex.siteMap.form(_), name: _})}/>
         )}

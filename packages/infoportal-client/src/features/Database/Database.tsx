@@ -28,6 +28,7 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {KoboIndex, koboIndex} from 'infoportal-common'
 import {KoboForm} from '@/core/sdk/server/kobo/Kobo'
 import {Fender} from '@/shared/Fender'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -50,7 +51,7 @@ export const DatabaseWithContext = () => {
   const {m} = useI18n()
   const {conf, api} = useAppSettings()
   const ctx = useDatabaseContext()
-  const t = useTheme()
+  useReactRouterDefaultRoute(databaseIndex.siteMap.index)
   const parsedFormNames: Record<string, Seq<Form>> = useMemo(() => {
     const grouped = seq(ctx.formAccess)?.map(_ => ({..._, parsedName: KoboIndex.parseFormName(_.name)})).groupBy(_ => _.parsedName.program ?? m.others)
     return new Obj(grouped).map((k, v) => [k, v.sort((a, b) => a.name.localeCompare(b.name))]).sort(([ak], [bk]) => ak.localeCompare(bk)).get()
@@ -147,7 +148,7 @@ export const DatabaseWithContext = () => {
         </Fender>
       )}
       <Routes>
-        <Route index element={<DatabaseList forms={ctx.formAccess}/>}/>
+        <Route path={databaseIndex.siteMap.index} element={<DatabaseList forms={ctx.formAccess}/>}/>
         <Route path={databaseIndex.siteMap.custom()} element={<DatabaseTableCustomRoute/>}/>
         <Route path={databaseIndex.siteMap.home()} element={<DatabaseHome/>}>
           <Route index element={<Navigate to={databaseIndex.siteMap.database.relative}/>}/>

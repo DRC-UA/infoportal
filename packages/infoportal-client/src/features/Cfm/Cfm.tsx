@@ -1,4 +1,4 @@
-import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {NavLink, Route, Routes} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -21,6 +21,7 @@ import {shelterIndex} from '@/features/Shelter/Shelter'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {CfmDashboard} from '@/features/Cfm/Dashboard/CfmDashboard'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_cfmInternal',
@@ -126,6 +127,7 @@ export const Cfm = () => {
     schemaContext.fetchByName('meal_cfmExternal')
     schemaContext.fetchByName('meal_cfmInternal')
   }, [])
+  useReactRouterDefaultRoute(cfmIndex.siteMap.data)
 
   if (!access) {
     return (
@@ -145,7 +147,6 @@ export const Cfm = () => {
             header={<AppHeader id="app-header"/>}
           >
             <Routes>
-              <Route index element={<Navigate to={cfmIndex.siteMap.data}/>}/>
               <Route path={cfmIndex.siteMap.dashboard} element={<CfmDashboard/>}/>
               <Route path={cfmIndex.siteMap.data} element={<CfmTable/>}/>
               <Route path={cfmIndex.siteMap.entry()} element={<CfmEntryRoute/>}/>

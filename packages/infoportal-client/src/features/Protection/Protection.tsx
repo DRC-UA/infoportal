@@ -14,6 +14,7 @@ import {shelterIndex} from '@/features/Shelter/Shelter'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {appConfig} from '@/conf/AppConfig'
 import {ProtectionDashboardPsea} from '@/features/Protection/DashboardPsea/ProtectionDashboardPsea'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 const relatedKoboForms: (KoboFormName)[] = [
   // 'protection_hhs2_1',
@@ -72,6 +73,7 @@ export const ProtectionSidebar = () => {
 }
 
 export const Protection = () => {
+  useReactRouterDefaultRoute(protectionIndex.siteMap.dashboard)
   return (
     <Layout
       title={appFeaturesIndex.protection.name}
@@ -79,7 +81,6 @@ export const Protection = () => {
       header={<AppHeader id="app-header"/>}
     >
       <Routes>
-        <Route index element={<Navigate to={protectionIndex.siteMap.dashboard}/>}/>
         <Route path={protectionIndex.siteMap.dashboard} element={<ProtectionOverview/>}/>
         <Route path={protectionIndex.siteMap.dashboardPsea} element={<ProtectionDashboardPsea/>}/>
         {relatedKoboForms.map(_ =>

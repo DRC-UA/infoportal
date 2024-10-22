@@ -14,6 +14,7 @@ import {NavLink, Route, Routes} from 'react-router-dom'
 import {WfpDeduplicationAccess} from '@/features/WfpDeduplication/WfpDeduplicationAccess'
 import {useAsync} from '@/shared/hook/useAsync'
 import {BtnUploader} from '@/shared/BtnUploader'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 export const wfpDeduplicationIndex = {
   basePath: '/wfp-deduplication',
@@ -88,6 +89,7 @@ const WpfDeduplicationSidebar = () => {
 export const WfpDeduplicationPage = () => {
   const {accesses, session} = useSession()
   const access = useMemo(() => appFeaturesIndex.wfp_deduplication.showIf?.(session, accesses), [session, accesses])
+  useReactRouterDefaultRoute(wfpDeduplicationIndex.siteMap.data)
   if (!access) {
     return (
       <NoFeatureAccessPage/>
@@ -96,7 +98,7 @@ export const WfpDeduplicationPage = () => {
   return (
     <Layout title={appFeaturesIndex.wfp_deduplication.name} sidebar={<WpfDeduplicationSidebar/>}>
       <Routes>
-        <Route index element={<WfpDeduplicationData/>}/>
+        <Route path={wfpDeduplicationIndex.siteMap.data} element={<WfpDeduplicationData/>}/>
         <Route path={wfpDeduplicationIndex.siteMap.access} element={<WfpDeduplicationAccess/>}/>
       </Routes>
     </Layout>

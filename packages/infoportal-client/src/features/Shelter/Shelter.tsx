@@ -1,4 +1,4 @@
-import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {NavLink, Route, Routes} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -20,6 +20,7 @@ import {Access} from '@/core/sdk/server/access/Access'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {getKoboFormRouteProps, SidebarKoboLink} from '@/features/SidebarKoboLink'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 const relatedKoboForms: KoboFormName[] = [
   'shelter_nta',
@@ -75,7 +76,7 @@ export const Shelter = () => {
 export const ShelterWithAccess = () => {
   const {session, accesses} = useSession()
   const ctxSchema = useKoboSchemaContext()
-
+  useReactRouterDefaultRoute(shelterIndex.siteMap.data)
   const {access, allowedOffices} = useMemo(() => {
     const dbAccesses = seq(accesses).filter(Access.filterByFeature(AppFeatureId.kobo_database))
     const allowedOffices = dbAccesses.flatMap(_ => {
@@ -113,7 +114,6 @@ export const ShelterWithAccess = () => {
           schemaTa={ctxSchema.byName.shelter_ta.get}
         >
           <Routes>
-            <Route index element={<Navigate to={shelterIndex.siteMap.data}/>}/>
             <Route path={shelterIndex.siteMap.dashboard} element={<ShelterDashboard/>}/>
             <Route path={shelterIndex.siteMap.data} element={<ShelterTable/>}/>
             {relatedKoboForms.map(_ =>

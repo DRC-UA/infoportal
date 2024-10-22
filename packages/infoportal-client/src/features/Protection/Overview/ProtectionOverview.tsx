@@ -35,7 +35,7 @@ const ProtectionOverviewWithContext = () => {
   if (!ctx.data) return <></>
   const data = ctx.data
   return (
-    <Page width="lg">
+    <Page width="lg" loading={ctx.fetcher.loading}>
       <DataFilterLayout
         data={data.filtered}
         filters={ctx.filters.filters}

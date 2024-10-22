@@ -21,6 +21,7 @@ import {Access} from '@/core/sdk/server/access/Access'
 import {appConfig} from '@/conf/AppConfig'
 import {MealPdm} from '@/features/Meal/Pdm/MealPdm'
 import {MealPdmDashboard} from '@/features/Meal/Pdm/MealPdmDashboard'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -105,6 +106,7 @@ const MealSidebar = ({
 
 export const Meal = () => {
   const {session, accesses} = useSession()
+  useReactRouterDefaultRoute(mealIndex.siteMap.visit.dashboard)
   const access = useMemo(() => {
     return {
       _: !!appFeaturesIndex.meal.showIf?.(session, accesses),
@@ -133,7 +135,6 @@ export const Meal = () => {
     >
       <Routes>
         <Route path={mealIndex.siteMap.visit._} element={<MealVisit/>}>
-          <Route index element={<Navigate to={mealIndex.siteMap.visit.dashboard}/>}/>
           <Route path={mealIndex.siteMap.visit.dashboard} element={<MealVisitDashboard/>}/>
           <Route path={mealIndex.siteMap.visit.details()} element={<MealVisitDetails/>}/>
         </Route>

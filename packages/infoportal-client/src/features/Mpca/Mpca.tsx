@@ -1,4 +1,4 @@
-import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {NavLink, Route, Routes} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -16,6 +16,7 @@ import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
 import {IpBtn} from '@/shared/Btn'
 import {Box, Tooltip} from '@mui/material'
 import {Txt} from '@/shared/Txt'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 export const mpcaIndex = {
   basePath: '/mpca',
@@ -69,7 +70,7 @@ const MpcaSidebar = () => {
 }
 
 export const Mpca = () => {
-  const {m} = useI18n()
+  useReactRouterDefaultRoute(mpcaIndex.siteMap.dashboard)
   const {session, accesses} = useSession()
   const access = useMemo(() => !!appFeaturesIndex.mpca.showIf?.(session, accesses), [accesses])
   if (!access) {
@@ -85,7 +86,6 @@ export const Mpca = () => {
         header={<AppHeader id="app-header"/>}
       >
         <Routes>
-          <Route index element={<Navigate to={mpcaIndex.siteMap.dashboard}/>}/>
           <Route path={mpcaIndex.siteMap.dashboard} element={<MpcaDashboard/>}/>
           <Route path={mpcaIndex.siteMap.deduplication} element={<WfpDeduplicationData/>}/>
           <Route path={mpcaIndex.siteMap.data} element={<MpcaData/>}/>

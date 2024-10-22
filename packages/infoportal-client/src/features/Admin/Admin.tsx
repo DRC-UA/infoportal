@@ -12,6 +12,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {useAsync} from '@/shared/hook/useAsync'
 import {AdminCache} from '@/features/Admin/AdminCache'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 export const adminModule = {
   basePath: '/admin',
@@ -58,6 +59,7 @@ const AdminSidebar = () => {
 }
 
 export const Admin = () => {
+  useReactRouterDefaultRoute(adminModule.siteMap.users)
   return (
       <Layout
         title={appFeaturesIndex.admin.name}
@@ -65,7 +67,6 @@ export const Admin = () => {
         header={<AppHeader id="app-header"/>}
       >
         <Routes>
-          <Route index element={<Navigate to={adminModule.siteMap.users}/>}/>
           <Route path={adminModule.siteMap.users} element={<AdminUsers/>}/>
           <Route path={adminModule.siteMap.proxy} element={<AdminProxy/>}/>
           <Route path={adminModule.siteMap.group} element={<AdminGroups/>}/>
