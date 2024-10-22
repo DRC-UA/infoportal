@@ -81,7 +81,7 @@ export class KoboMetaMapperProtection {
     }, () => undefined)
     if (!activity) return
     // if (answer.activity as any === 'gbv' || answer.activity === 'pss' || answer.activity === 'other' || answer.activity === 'let') return
-    const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
+    const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
     const project = answer.project ? fnSwitch(answer.project, {
       bha: DrcProject['UKR-000345 BHA2'],
       echo: DrcProject['UKR-000322 ECHO2'],
