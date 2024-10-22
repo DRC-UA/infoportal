@@ -12,3 +12,8 @@
 # Cache
 
 Some functions are cached globally. Cache can be manually managed from Frontside
+
+#  
+
+- [Papertrail](https://my.papertrailapp.com/groups/39251744/events)
+- [Azure cloud](https://portal.azure.com/) 

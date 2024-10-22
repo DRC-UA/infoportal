@@ -1,6 +1,6 @@
 import {GlobalEvent} from './GlobalEvent'
 import {EmailHelper} from './EmailHelper'
-import {KoboIndex} from 'infoportal-common'
+import {KoboIndex, Regexp} from 'infoportal-common'
 import {app} from '../index'
 import {UserService} from '../feature/user/UserService'
 import {PrismaClient} from '@prisma/client'
@@ -8,6 +8,7 @@ import {FrontEndSiteMap} from './FrontEndSiteMap'
 import {appConf} from './conf/AppConf'
 import {getKoboCustomDirectives, KoboCustomDirectives} from '../feature/kobo/KoboCustomDirectives'
 import {KoboService} from '../feature/kobo/KoboService'
+import {seq} from '@alexandreannic/ts-utils'
 
 export enum EmailContext {
   Cfm = 'Cfm',
@@ -40,14 +41,16 @@ export class EmailService {
     const schema = await this.koboService.getSchema({formId: p.formId})
     const {question} = getKoboCustomDirectives(schema).find(_ => _.directive === KoboCustomDirectives.TRIGGER_EMAIL) ?? {}
     if (!question) return
-    if (!p.answer[question.name]) return
+    if (!question.name || !p.answer[question.name]) return
     const html = question.hint?.[0]
     const subject = question.label?.[0]
     if (!html || !subject) {
       this.log.error(`Missing hint or label in directive ${KoboCustomDirectives.TRIGGER_EMAIL} of form ${KoboIndex.searchById(p.formId) ?? p.formId}`)
     } else {
       await this.emailHelper.send({
-        to: p.answer[question.name].replaceAll(/\s+/g, ' ').split(' '),
+        to: seq((p.answer[question.name] as string).replaceAll(/\s+/g, ' ').split(' '))
+          .distinct(_ => _)
+          .filter(_ => Regexp.get.email.test(_)),
         context: EmailContext.Kobo,
         html: this.setVariables(html, p.answer),
         subject: this.setVariables(subject, p.answer),
@@ -58,7 +61,7 @@ export class EmailService {
 
   private readonly setVariables = (html: string, variables: Record<string, string>) => {
     return html.replace(/\$\{(\w+)}/g, (_, key) => {
-      return key in variables ? variables[key] : `\${${key}}` // Keeps placeholder if not found
+      return key in variables ? variables[key] : `\${${key}}`
     })
   }
 

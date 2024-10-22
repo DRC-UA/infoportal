@@ -82,7 +82,7 @@ export interface KoboApiSchema {
       label?: string[]
       hint?: string[]
       appearance?: 'multiline',
-      name: string
+      name?: string
       file?: string
       type: KoboApiColumType
       calculation: KoboApiColumType
