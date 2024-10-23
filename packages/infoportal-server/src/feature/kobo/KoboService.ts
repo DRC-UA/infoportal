@@ -28,6 +28,7 @@ import {appConf} from '../../core/conf/AppConf'
 import {KoboAnswerHistoryService} from './history/KoboAnswerHistoryService'
 import {AppError} from '../../helper/Errors'
 import Event = GlobalEvent.Event
+import {Util} from '../../helper/Utils'
 
 export type DbKoboAnswer<
   T extends Record<string, any> = Record<string, any>,
@@ -158,7 +159,7 @@ export class KoboService {
               },
               formId,
               AND: filters.filterBy?.map((filter) => ({
-                OR: filter.value.map(v => ({
+                OR: Util.ensureArr(filter.value).map(v => ({
                   answers: {
                     path: [filter.column],
                     ...v ? {

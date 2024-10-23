@@ -63,6 +63,10 @@ export async function processBatches<T>({
 
 export namespace Util {
 
+  export const ensureArr = <T>(_: T | T[]): T[] => {
+    return Array.isArray(_) ? _ : [_]
+  }
+
   export const getObjectDiff = ({
     skipProperties = [],
     before,

@@ -3,7 +3,7 @@ import {KoboApiSchema, KoboId, KoboSchemaHelper, nullValuesToUndefined} from 'in
 import {AppFeatureId} from '@/features/appFeatureId'
 import React, {ReactElement, useCallback, useMemo} from 'react'
 import {Modal, Txt} from '@/shared'
-import {Autocomplete, Box, Chip, createFilterOptions} from '@mui/material'
+import {Autocomplete, Box, Chip, createFilterOptions, Icon, TextField} from '@mui/material'
 import {IpInput} from '@/shared/Input/Input'
 import {Controller, useForm} from 'react-hook-form'
 import {KoboDatabaseAccessParams} from '@/core/sdk/server/access/Access'
@@ -15,6 +15,7 @@ import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {AccessForm, IAccessForm} from '@/features/Access/AccessForm'
 import {AccessFormSection} from '@/features/Access/AccessFormSection'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {koboIconMap} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 
 interface Form extends IAccessForm {
   question?: string
@@ -55,14 +56,15 @@ export const DatabaseAccessForm = ({
     indexOptionsByName,
   } = useMemo(() => {
     return {
-      indexQuestion: seq(survey).compactBy('name').groupBy(_ => _.name),
+      indexQuestion: seq(survey).compactBy('name').groupByFirst(_ => _.name),
       indexOptionsByListName: seq(form.content.choices).groupBy(_ => _.list_name),
-      indexOptionsByName: seq(form.content.choices).groupBy(_ => _.name),
+      indexOptionsByName: seq(form.content.choices).groupByFirst(_ => _.name),
     }
   }, [form])
 
   const questions = useMemo(() => {
     return map(survey, schema => schema.filter(_ =>
+      _.type === 'calculate' ||
       _.type === 'text' ||
       _.type === 'select_multiple' ||
       _.type === 'select_one'
@@ -72,8 +74,8 @@ export const DatabaseAccessForm = ({
   const filterOptions = useCallback((index: Record<string, {
     name: string,
     label?: string[]
-  }[]>) => createFilterOptions({
-    stringify: (optionName: string) => KoboSchemaHelper.getLabel(index[optionName][0], langIndex)
+  }>) => createFilterOptions({
+    stringify: (optionName: string) => KoboSchemaHelper.getLabel(index[optionName], langIndex)
   }), [form])
 
   const submit = ({selectBy, question, questionAnswer, ...f}: Form) => {
@@ -131,8 +133,9 @@ export const DatabaseAccessForm = ({
                   />}
                   renderOption={(props, option) => (
                     <Box component="li" {...props} key={option}>
+                      <Icon color="disabled" sx={{mr: 1}}>{koboIconMap[indexQuestion[option].type]}</Icon>
                       <div>
-                        <Txt block>{KoboSchemaHelper.getLabel(indexQuestion[option][0], langIndex).replace(/<[^>]+>/g, '') ?? option}</Txt>
+                        <Txt block>{KoboSchemaHelper.getLabel(indexQuestion[option], langIndex).replace(/<[^>]+>/g, '') ?? option}</Txt>
                         <Txt color="disabled">{option}</Txt>
                       </div>
                     </Box>
@@ -140,58 +143,73 @@ export const DatabaseAccessForm = ({
                 />
               )}
             />
-            {map(accessForm.watch('question'), question => {
-              if (question === '') return
-              const listName = indexQuestion[question]?.[0]?.select_from_list_name
-              const options = indexOptionsByListName[listName!]
-              return (
-                <Controller
-                  name="questionAnswer"
-                  // rules={{
-                  //   required: accessForm.watch('question') !== undefined && accessForm.watch('question') === '',
-                  control={accessForm.control}
-                  render={({field}) => (
-                    <Autocomplete
-                      {...field}
-                      onReset={() => accessForm.setValue('questionAnswer', [])}
-                      freeSolo
-                      filterOptions={filterOptions(indexOptionsByName)}
-                      multiple
-                      onChange={(e, _) => _ && field.onChange(_)}
-                      loading={!questions}
-                      disableCloseOnSelect
-                      options={options?.map(_ => _.name) ?? []}
-                      // options={options?.map(_ => ({children: KoboSchemaHelper.getLabel(_, langIndex), value: _.name}))}
-                      renderInput={({InputProps, ...props}) => <IpInput
-                        {...InputProps}
-                        {...props}
-                        label={m.answer}
-                        error={!!accessForm.formState.errors.questionAnswer}
-                        helperText={accessForm.formState.errors.questionAnswer && m.required}
-                      />}
-                      renderTags={(value: string[], getTagProps) =>
-                        value.map((option: string, index: number) => (
-                          // eslint-disable-next-line react/jsx-key
-                          <Chip
-                            size="small"
-                            variant="outlined"
-                            label={option}
-                            {...getTagProps({index})}
-                          />
-                        ))
-                      }
-                      renderOption={(props, option) => (
-                        <Box component="li" {...props} key={option}>
-                          <div>
-                            <Txt block>{KoboSchemaHelper.getLabel(indexOptionsByName[option][0], langIndex).replace(/<[^>]+>/g, '') ?? option}</Txt>
-                            <Txt color="disabled">{option}</Txt>
-                          </div>
-                        </Box>
+            {map(accessForm.watch('question'), questionName => {
+              if (questionName === '') return
+              const question = indexQuestion[questionName]
+              switch (question.type) {
+                case 'select_one':
+                case 'select_multiple': {
+                  const listName = question?.select_from_list_name
+                  const options = indexOptionsByListName[listName!]
+                  return (
+                    <Controller
+                      name="questionAnswer"
+                      control={accessForm.control}
+                      render={({field}) => (
+                        <Autocomplete
+                          {...field}
+                          onReset={() => accessForm.setValue('questionAnswer', [])}
+                          freeSolo
+                          filterOptions={filterOptions(indexOptionsByName)}
+                          multiple
+                          onChange={(e, _) => _ && field.onChange(_)}
+                          loading={!questions}
+                          disableCloseOnSelect
+                          options={options?.map(_ => _.name) ?? []}
+                          // options={options?.map(_ => ({children: KoboSchemaHelper.getLabel(_, langIndex), value: _.name}))}
+                          renderInput={({InputProps, ...props}) => <IpInput
+                            {...InputProps}
+                            {...props}
+                            label={m.answer}
+                            error={!!accessForm.formState.errors.questionAnswer}
+                            helperText={accessForm.formState.errors.questionAnswer && m.required}
+                          />}
+                          renderTags={(value: string[], getTagProps) =>
+                            value.map((option: string, index: number) => (
+                              // eslint-disable-next-line react/jsx-key
+                              <Chip
+                                size="small"
+                                variant="outlined"
+                                label={option}
+                                {...getTagProps({index})}
+                              />
+                            ))
+                          }
+                          renderOption={(props, option) => (
+                            <Box component="li" {...props} key={option}>
+                              <div>
+                                <Txt block>{KoboSchemaHelper.getLabel(indexOptionsByName[option], langIndex).replace(/<[^>]+>/g, '') ?? option}</Txt>
+                                <Txt color="disabled">{option}</Txt>
+                              </div>
+                            </Box>
+                          )}
+                        />
                       )}
                     />
-                  )}
-                />
-              )
+                  )
+                }
+                default: {
+                  return (
+                    <Controller
+                      name="questionAnswer"
+                      control={accessForm.control}
+                      render={({field}) => (
+                        <IpInput {...field}/>
+                      )}
+                    />
+                  )
+                }
+              }
             })}
           </AccessFormSection>
         </Box>

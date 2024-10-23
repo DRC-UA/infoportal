@@ -28,6 +28,7 @@ import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/Dat
 import {alpha, IconProps, Theme} from '@mui/material'
 import {UseDatabaseGroupDisplay} from '@/features/Database/KoboTable/groupDisplay/useDatabaseGroupDisplay'
 import {NonNullableKey} from 'infoportal-common/type/Generic'
+import {KoboApiQuestionType} from 'infoportal-common/kobo'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()
@@ -101,7 +102,7 @@ export const DatatableHeadTypeIconByKoboType = ({children, ...props}: {
   return <DatatableHeadIcon children={fnSwitch(children, koboIconMap, () => 'short_text')} tooltip={children} {...props}/>
 }
 
-const koboIconMap = {
+export const koboIconMap: Record<KoboApiQuestionType, string> = {
   image: 'image',
   file: 'functions',
   calculate: 'functions',
@@ -120,6 +121,10 @@ const koboIconMap = {
   select_one: 'radio_button_checked',
   select_multiple: 'check_box',
   geopoint: 'location_on',
+  begin_group: '',
+  deviceid: '',
+  end_group: '',
+  end_repeat: '',
 }
 
 const colorRepeatedQuestionHeader = (t: Theme) => alpha(t.palette.info.light, .22)
