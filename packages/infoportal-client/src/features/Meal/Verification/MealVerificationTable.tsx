@@ -20,7 +20,7 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {getColumnByQuestionSchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useMealVerificationContext} from '@/features/Meal/Verification/MealVerificationContext'
 import {MealVerificationLinkToForm} from '@/features/Meal/Verification/MealVerificationList'
-import {useFetcher} from '@/shared/hook/useFetcher'
+import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {Datatable} from '@/shared/Datatable/Datatable'
@@ -30,17 +30,10 @@ import {useToast} from '@/shared/Toast'
 import {KoboApiQuestionSchema} from 'infoportal-common/kobo'
 import {NonNullableKey} from 'infoportal-common/type/Generic'
 
-export enum MergedDataStatus {
+enum Status {
   Selected = 'Selected',
   Completed = 'Completed',
   NotSelected = 'NotSelected'
-}
-
-interface MergedData {
-  status: MergedDataStatus
-  dataCheck?: KoboAnswerFlat<any>
-  data: KoboAnswerFlat<any>
-  score: number
 }
 
 interface ComputedCell {
@@ -55,10 +48,26 @@ interface ComputedRow {
   rowReg: KoboAnswerFlat<any>
   rowVerif: KoboAnswerFlat<any>
   verifiedData: ComputedCell[]
-  status: MergedDataStatus
+  status: Status
 }
 
 const paramSchema = yup.object({id: yup.string().required()})
+
+const areEquals = (a: any, b: any): boolean => {
+  if (typeof a !== typeof b) false
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a === undefined || b === undefined) return a === b
+    return a.every(c => (b.find(d => c === d)))
+  }
+  switch (typeof a) {
+    case 'number':
+      return Math.abs(a - b) <= b * mealVerificationConf.numericToleranceMargin
+    case 'string':
+      return a?.trim() === b?.trim()
+    default:
+      return a === b
+  }
+}
 
 export const MealVerificationTable = () => {
   const {m} = useI18n()
@@ -165,22 +174,6 @@ export const MealVerificationTable = () => {
   )
 }
 
-const areEquals = (a: any, b: any): boolean => {
-  if (typeof a !== typeof b) false
-  if (Array.isArray(a) && Array.isArray(b)) {
-    if (a === undefined || b === undefined) return a === b
-    return a.every(c => (b.find(d => c === d)))
-  }
-  switch (typeof a) {
-    case 'number':
-      return Math.abs(a - b) <= b * mealVerificationConf.numericToleranceMargin
-    case 'string':
-      return a?.trim() === b?.trim()
-    default:
-      return a === b
-  }
-}
-
 const MealVerificationTableContent = <
   TReg extends KoboFormNameMapped = any,
   TVerif extends KoboFormNameMapped = any,
@@ -203,10 +196,12 @@ const MealVerificationTableContent = <
 
   const indexVerification = useMemo(() => seq(verificationAnswers).groupByFirst(_ => _.koboAnswerId), [verificationAnswers])
 
-  const reqDataReg = () => api.kobo.typedAnswers.searchByAccess[activity.registration.fetch]({}).then(_ => _.data as unknown as InferTypedAnswer<TReg>[])
-  const reqDataVerif = () => api.kobo.typedAnswers.searchByAccess[activity.verification.fetch]({}).then(_ => _.data as unknown as InferTypedAnswer<TVerif>[])
-  const fetcherDataReg = useFetcher(reqDataReg)
-  const fetcherDataVerif = useFetcher(reqDataVerif)
+  const fetcherDataReg: UseFetcher<() => Promise<InferTypedAnswer<TReg>[]>> = useFetcher(() =>
+    api.kobo.typedAnswers.searchByAccess[activity.registration.fetch]({}).then(_ => _.data)
+  )
+  const fetcherDataVerif: UseFetcher<() => Promise<InferTypedAnswer<TVerif>[]>> = useFetcher(() =>
+    api.kobo.typedAnswers.searchByAccess[activity.verification.fetch]({}).then(_ => _.data)
+  )
   const asyncUpdateAnswer = useAsync(api.mealVerification.updateAnswers, {requestKey: _ => _[0]})
 
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat<any> | undefined>()
@@ -216,23 +211,6 @@ const MealVerificationTableContent = <
     fetcherDataVerif.fetch()
     fetcherDataReg.fetch()
   }, [])
-
-  // const areEquals = (type: KoboApiQuestionType, c: string) => {
-  //   switch (type) {
-  //     case 'select_multiple':
-  //       const checkArr = [_.dataCheck[c]].flat() as string[]
-  //       const dataArr = [_.data?.[c]].flat() as string[]
-  //       if (_.dataCheck[c] === undefined || _.data?.[c] === undefined) return _.dataCheck[c] === _.data?.[c]
-  //       return checkArr.every(c => (dataArr.find(d => c === d)))
-  //     case 'decimal':
-  //     case 'integer':
-  //       return Math.abs(_.dataCheck[c] - _.data?.[c]) <= _.data?.[c] * mealVerificationConf.numericToleranceMargin
-  //     case 'text':
-  //       return _.dataCheck[c]?.trim() === _.data?.[c]?.trim()
-  //     default:
-  //       return _.dataCheck[c] === _.data?.[c]
-  //   }
-  // }
 
   const {mergedData, duplicateErrors} = useMemo(() => {
     const duplicateErrors = new Set<string>()
@@ -257,9 +235,9 @@ const MealVerificationTableContent = <
                   return {name, valueReg, valueVerif, equals: areEquals(valueVerif, valueReg)}
                 }),
                 status: (() => {
-                  if (!!rowVerif) return MergedDataStatus.Completed
-                  if (indexVerification[rowReg.id]?.status === MealVerificationAnswersStatus.Selected) return MergedDataStatus.Selected
-                  return MergedDataStatus.NotSelected
+                  if (!!rowVerif) return Status.Completed
+                  if (indexVerification[rowReg.id]?.status === MealVerificationAnswersStatus.Selected) return Status.Selected
+                  return Status.NotSelected
                 })(),
               }
               const res: ComputedRow = {
@@ -274,15 +252,15 @@ const MealVerificationTableContent = <
             rowVerif: undefined,
             score: 0,
             status: (() => {
-              if (indexVerification[rowReg.id]?.status === MealVerificationAnswersStatus.Selected) return MergedDataStatus.Selected
-              return MergedDataStatus.NotSelected
+              if (indexVerification[rowReg.id]?.status === MealVerificationAnswersStatus.Selected) return Status.Selected
+              return Status.NotSelected
             })()
           }
           return res
         }).sortByNumber(_ => fnSwitch(_.status, {
-          [MergedDataStatus.Completed]: 1,
-          [MergedDataStatus.NotSelected]: 2,
-          [MergedDataStatus.Selected]: 0,
+          [Status.Completed]: 1,
+          [Status.NotSelected]: 2,
+          [Status.Selected]: 0,
         }))
     })
     return {mergedData: newMergedData, duplicateErrors}
@@ -295,8 +273,8 @@ const MealVerificationTableContent = <
 
   const stats = useMemo(() => {
     if (!mergedData) return
-    const verifiedRows = mergedData.filter(_ => _.status === MergedDataStatus.Completed)
-    const selectedRows = mergedData?.filter(_ => _.status !== MergedDataStatus.NotSelected)
+    const verifiedRows = mergedData.filter(_ => _.status === Status.Completed)
+    const selectedRows = mergedData?.filter(_ => _.status !== Status.NotSelected)
     return {
       selectedRows,
       verifiedRows,
@@ -383,21 +361,19 @@ const MealVerificationTableContent = <
               head: '',
               style: _ => ({fontWeight: t.typography.fontWeightBold}),
               renderQuick: _ => {
-                const verif = indexVerification[_.data.id] ?? {}
+                const verif = indexVerification[_.rowReg.id] ?? {}
                 return (
                   <>
-                    <TableIconBtn tooltip={m._mealVerif.viewRegistrationData} children="text_snippet" onClick={() => setOpenModalAnswer(_.data)}/>
-                    <TableIconBtn tooltip={m._mealVerif.viewDataCheck} disabled={!_.dataCheck} children="fact_check" onClick={() => setOpenModalAnswer(_.dataCheck)}/>
+                    <TableIconBtn tooltip={m._mealVerif.viewRegistrationData} children="text_snippet" onClick={() => setOpenModalAnswer(_.rowReg)}/>
+                    <TableIconBtn tooltip={m._mealVerif.viewDataCheck} disabled={!_.rowVerif} children="fact_check" onClick={() => setOpenModalAnswer(_.rowVerif)}/>
                     {ctx.access.write && fnSwitch(_.status, {
                       NotSelected: (
-                        <>
-                          <TableIconBtn
-                            color="primary"
-                            loading={asyncUpdateAnswer.loading[verif.id]}
-                            children="add"
-                            onClick={() => asyncUpdateAnswer.call(verif.id, MealVerificationAnswersStatus.Selected).then(verificationAnswersRefresh)}
-                          />
-                        </>
+                        <TableIconBtn
+                          color="primary"
+                          loading={asyncUpdateAnswer.loading[verif.id]}
+                          children="add"
+                          onClick={() => asyncUpdateAnswer.call(verif.id, MealVerificationAnswersStatus.Selected).then(verificationAnswersRefresh)}
+                        />
                       ),
                       Selected: (
                         <>
@@ -428,9 +404,9 @@ const MealVerificationTableContent = <
               id: 'taxid',
               head: m.taxID,
               type: 'string',
-              renderQuick: _ => _.data[activity.registration.joinColumn],
-              style: (rowData: MergedData) => {
-                if (duplicateErrors.has(rowData.data[activity.registration.joinColumn])) {
+              renderQuick: _ => activity.registration2.joinBy(_.rowReg),
+              style: (_: ComputedRow) => {
+                if (duplicateErrors.has(activity.registration2.joinBy(_.rowReg))) {
                   return {color: 'red', fontWeight: 'bold'}
                 }
                 return {}
@@ -467,7 +443,7 @@ const MealVerificationTableContent = <
                 translateQuestion: schema.translate.question,
                 m,
                 theme: t,
-                getRow: _ => _.data,
+                getRow: _ => _.rowReg,
                 choicesIndex: schema.schemaHelper.choicesIndex,
               })
               return w as any
@@ -477,7 +453,7 @@ const MealVerificationTableContent = <
                 id,
                 type: 'select_one',
                 head: schema.translate.question(c),
-                style: (_: MergedData) => {
+                style: (_: ComputedRow) => {
                   if (areEquals(c, _)) {
                     return {}
                   } else
@@ -486,7 +462,7 @@ const MealVerificationTableContent = <
                       background: alpha(t.palette.error.main, .08)
                     }
                 },
-                render: (_: MergedData) => {
+                render: (_: ComputedRow) => {
                   const isOption = schema.schemaHelper.questionIndex[c].type === 'select_one' || schema.schemaHelper.questionIndex[c].type === 'select_multiple'
                   const dataCheck = _.dataCheck && isOption ? schema.translate.choice(c, _.dataCheck?.[c] as string) : _.dataCheck?.[c]
                   const data = isOption ? schema.translate.choice(c, _.data?.[c] as string) : _.data?.[c]
