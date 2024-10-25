@@ -106,7 +106,7 @@ const MealSidebar = ({
 
 export const Meal = () => {
   const {session, accesses} = useSession()
-  useReactRouterDefaultRoute(mealIndex.siteMap.visit.dashboard)
+  // useReactRouterDefaultRoute(mealIndex.siteMap.visit.dashboard)
   const access = useMemo(() => {
     return {
       _: !!appFeaturesIndex.meal.showIf?.(session, accesses),
