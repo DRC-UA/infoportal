@@ -95,6 +95,7 @@ export const en = Object.freeze({
     settlement: 'Settlement',
     by: 'By',
     hhs: 'HHs',
+    hohhAge: 'HoHH age',
     createdByAt: (by: string, at: string) => `Created by ${by} at ${at}`,
     updatedByAt: (by: string, at: string) => `Updated by ${by} at ${at}`,
     accessLevel: 'Access level',

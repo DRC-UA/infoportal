@@ -202,7 +202,6 @@ export namespace KoboGeneralMapping {
 
   export const collectXlsKoboIndividuals = (d: XlsKoboIndividuals): XlsKoboIndividual[] => {
     return [
-      ...collectXlsKoboIndividualsFromStandardizedKoboForm(d),
       {
         hh_char_hh_det_dis_level: d.hh_char_hhh_dis_level,
         hh_char_hh_det_dis_select: d.hh_char_hhh_dis_select,
@@ -217,6 +216,7 @@ export namespace KoboGeneralMapping {
         hh_char_hh_det_gender: d.hh_char_res_gender,
         ben_det_res_stat: d.ben_det_res_stat,
       },
+      ...collectXlsKoboIndividualsFromStandardizedKoboForm(d),
     ].filter(_ => _.hh_char_hh_det_age !== undefined || _.hh_char_hh_det_gender !== undefined)
   }
 

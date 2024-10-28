@@ -112,6 +112,13 @@ export const getColumnsCustom = ({
         }
       }
     },
+    {
+      id: 'hohh_age',
+      width: 0,
+      head: m.hohhAge,
+      type: 'number',
+      renderQuick: (row: any) => (getRow(row) as {custom: KoboGeneralMapping.IndividualBreakdown}).custom?.persons[0].age,
+    }
   ]
   const lastStatusUpdate = ({
     showIf
@@ -298,7 +305,8 @@ export const getColumnsCustom = ({
     [KoboIndex.byName('bn_rapidResponse2').id]: [
       ...getPaymentStatusByEnum({
         showIf: (_: KoboAnswerFlat<Bn_rapidResponse2.T>) => !!(_.back_prog_type)?.includes('mpca')
-      })
+      }),
+      ...individualsBreakdown,
     ],
     [KoboIndex.byName('bn_re').id]: [
       ...getPaymentStatusByEnum({
