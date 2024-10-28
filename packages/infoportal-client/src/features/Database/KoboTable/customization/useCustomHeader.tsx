@@ -48,7 +48,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
                 />
               )}
             >
-              <IpIconBtn children="group"/>
+              <IpIconBtn children="group" disabled={!_.filteredData}/>
             </PopoverWrapper>
           )
         }

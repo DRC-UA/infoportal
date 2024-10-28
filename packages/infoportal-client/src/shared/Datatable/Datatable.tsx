@@ -169,9 +169,9 @@ const _Datatable = <T extends DatatableRow>({
             />
           )}
           {typeof header === 'function' ? header({
-            data: ctx.data.data as T[],
-            filteredData: ctx.data.filteredData as T[],
-            filteredAndSortedData: ctx.data.filteredAndSortedData as T[],
+            data: (ctx.data.data ?? []) as T[],
+            filteredData: (ctx.data.filteredData ?? []) as T[],
+            filteredAndSortedData: (ctx.data.filteredAndSortedData ?? []) as T[],
           }) : header}
           {showExportBtn && (
             <IpIconBtn
