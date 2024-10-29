@@ -52,18 +52,23 @@ interface ComputedRow {
 const paramSchema = yup.object({id: yup.string().required()})
 
 const areEquals = (a: any, b: any): boolean => {
-  if (typeof a !== typeof b) false
-  if (Array.isArray(a) && Array.isArray(b)) {
-    if (a === undefined || b === undefined) return a === b
-    return a.every(c => (b.find(d => c === d)))
-  }
-  switch (typeof a) {
-    case 'number':
-      return Math.abs(a - b) <= b * mealVerificationConf.numericToleranceMargin
-    case 'string':
-      return a?.trim() === b?.trim()
-    default:
-      return a === b
+  try {
+    if (typeof a !== typeof b) false
+    if (Array.isArray(a) && Array.isArray(b)) {
+      if (a === undefined || b === undefined) return a === b
+      return a.every(c => (b.find(d => c === d)))
+    }
+    switch (typeof a) {
+      case 'number':
+        return Math.abs(a - b) <= b * mealVerificationConf.numericToleranceMargin
+      case 'string':
+        return a?.trim() === b?.trim()
+      default:
+        return a === b
+    }
+  } catch (e) {
+    console.error(`Failed to check ${JSON.stringify(a)} ${JSON.stringify(b)}`)
+    return false
   }
 }
 
@@ -248,7 +253,10 @@ export const MealVerificationTable = () => {
 const MealVerificationTableContent = <
   TReg extends KoboFormNameMapped = any,
   TVerif extends KoboFormNameMapped = any,
->({refreshToVerify, ...bundle}: Bundle<TReg, TVerif> & {refreshToVerify: () => void}) => {
+>({
+  refreshToVerify,
+  ...bundle
+}: Bundle<TReg, TVerif> & {refreshToVerify: () => void}) => {
   const {
     mealVerification,
     activity,
@@ -266,7 +274,7 @@ const MealVerificationTableContent = <
   const asyncUpdateAnswer = useAsync(api.mealVerification.updateAnswers, {requestKey: _ => _[0]})
 
   const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat<any> | undefined>()
-  const [display, setDisplay] = useState<'data' | 'dataCheck' | 'all'>('all')
+  const [display, setDisplay] = useState<'reg' | 'verif' | 'both'>('both')
 
   const {schemaReg, schemaVerif} = useMemo(() => {
     return {
@@ -274,6 +282,19 @@ const MealVerificationTableContent = <
       schemaVerif: KoboSchemaHelper.buildBundle({schema: bundle.schemaVerif, langIndex}),
     }
   }, [bundle, langIndex])
+
+  const harmonizedVerifiedColumns = useMemo(() => {
+    return Obj.mapValues(activity.verifiedColumns as any, ((_, col) => {
+      return {
+        reg: (_: InferTypedAnswer<TReg>, schema: KoboSchemaHelper.Bundle) => {
+          return schema.translate.choice(col as any, (_ as any)[col])
+        },
+        verif: (_: InferTypedAnswer<TVerif>, schema: KoboSchemaHelper.Bundle) => {
+          return schema.translate.choice(col as any, (_ as any)[col])
+        },
+      }
+    }))
+  }, [schemaReg, schemaVerif, activity.verifiedColumns])
 
   const {
     mergedData,
@@ -294,9 +315,9 @@ const MealVerificationTableContent = <
           const mergedData: Omit<ComputedRow, 'score'> = {
             rowReg,
             rowVerif,
-            verifiedData: Obj.mapValues(activity.verifiedColumns, (x, name) => {
-              const valueReg = x.reg(rowReg)
-              const valueVerif = rowVerif ? x.verif(rowVerif) : undefined
+            verifiedData: Obj.mapValues(harmonizedVerifiedColumns, (x, name) => {
+              const valueReg = x.reg(rowReg, schemaReg)
+              const valueVerif = rowVerif ? x.verif(rowVerif, schemaVerif) : undefined
               return {name, valueReg, valueVerif, equals: areEquals(valueVerif, valueReg)}
             }),
             status: (() => {
@@ -321,7 +342,7 @@ const MealVerificationTableContent = <
       duplicateErrors,
       unselectedAnswers: bundle.toVerify.filter(_ => _.status !== MealVerificationAnswersStatus.Selected).sort(() => Math.random() - .5),
     }
-  }, [bundle])
+  }, [bundle, schemaVerif, schemaReg])
 
   const stats = useMemo(() => {
     if (!mergedData) return
@@ -331,11 +352,10 @@ const MealVerificationTableContent = <
       selectedRows,
       verifiedRows,
       globalScore: verifiedRows.sum(_ => _.score ?? 0),
-      indicatorsCount: selectedRows.length * Obj.keys(activity.verifiedColumns).length,
+      indicatorsCount: selectedRows.length * Obj.keys(harmonizedVerifiedColumns).length,
     }
   }, [mergedData])
 
-  console.log(mergedData)
   return (
     <>
       {duplicateErrors.size > 0 && (
@@ -382,17 +402,17 @@ const MealVerificationTableContent = <
                 ]}
               />
               <ScRadioGroup inline dense value={display} onChange={setDisplay} sx={{mr: 1}}>
-                <ScRadioGroupItem hideRadio value="all" title={
+                <ScRadioGroupItem hideRadio value="both" title={
                   <Tooltip title={m._mealVerif.showBoth}>
                     <Icon sx={{verticalAlign: 'middle', transform: 'rotate(90deg)'}}>hourglass_full</Icon>
                   </Tooltip>
                 }/>
-                <ScRadioGroupItem hideRadio value="data" title={
+                <ScRadioGroupItem hideRadio value="reg" title={
                   <Tooltip title={m._mealVerif.activityForm}>
                     <Icon sx={{verticalAlign: 'middle', transform: 'rotate(90deg)'}}>hourglass_bottom</Icon>
                   </Tooltip>
                 }/>
-                <ScRadioGroupItem hideRadio value="dataCheck" title={
+                <ScRadioGroupItem hideRadio value="verif" title={
                   <Tooltip title={m._mealVerif.verificationForm}>
                     <Icon sx={{verticalAlign: 'middle', transform: 'rotate(90deg)'}}>hourglass_top</Icon>
                   </Tooltip>
@@ -495,7 +515,7 @@ const MealVerificationTableContent = <
               })
               return w as any
             }) ?? [],
-            ...Obj.entries(activity.verifiedColumns).map(([id, c]) => {
+            ...Obj.entries(harmonizedVerifiedColumns).map(([id, c]) => {
               return {
                 id,
                 type: 'select_one',
@@ -511,27 +531,16 @@ const MealVerificationTableContent = <
                   }
                 },
                 render: (_: ComputedRow) => {
+                  const reg = _.verifiedData[id]?.valueReg
+                  const verif = _.verifiedData[id]?.valueVerif ?? <TableIcon color="disabled">block</TableIcon>
                   return {
                     value: _.verifiedData[id].equals ? '1' : '0',
-                    label: _.verifiedData[id]?.valueReg + ' = ' + (_.verifiedData[id]?.valueVerif ?? ''),
+                    label: fnSwitch(display, {
+                      reg,
+                      verif,
+                      both: <>{reg} <TableIcon color="disabled" sx={{transform: 'rotate(90deg)'}}>height</TableIcon> {verif}</>,
+                    })
                   }
-                  // const isOption = schema.schemaHelper.questionIndex[c].type === 'select_one' || schema.schemaHelper.questionIndex[c].type === 'select_multiple'
-                  // const dataCheck = _.dataCheck && isOption ? schema.translate.choice(c, _.dataCheck?.[c] as string) : _.dataCheck?.[c]
-                  // const data = isOption ? schema.translate.choice(c, _.data?.[c] as string) : _.data?.[c]
-                  // return {
-                  //   option: _.dataCheck ? areEquals(c, _) ? <Icon color="success">check</Icon> : <Icon color="error">close</Icon> : '',
-                  //   value: _.dataCheck ? areEquals(c, _) ? '1' : '0' : '',
-                  //   label: fnSwitch(display, {
-                  //     'data': data,
-                  //     'dataCheck': dataCheck ?? <TableIcon color="disabled">schedule</TableIcon>,
-                  //     'all': <>{data ?? '""'} = {_.dataCheck ? dataCheck ?? '""' : <TableIcon color="disabled">schedule</TableIcon>}</>,
-                  //   }),
-                  //   export: fnSwitch(display, {
-                  //     'data': data,
-                  //     'dataCheck': dataCheck ?? '???',
-                  //     'all': (data ?? '""') + ' = ' + (dataCheck ?? '???'),
-                  //   }),
-                  // }
                 },
               } as const
             }),
@@ -543,7 +552,7 @@ const MealVerificationTableContent = <
               align: 'right',
               style: _ => ({fontWeight: t.typography.fontWeightBold}),
               renderQuick: _ => (
-                _.rowVerif ? toPercent(_.score / Object.keys(activity.verifiedColumns).length) : ''
+                _.rowVerif ? toPercent(_.score / Object.keys(harmonizedVerifiedColumns).length) : ''
               )
             }
           ]}/>

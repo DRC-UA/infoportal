@@ -1,7 +1,6 @@
 import {ShelterContractor} from './ShelterContractor'
 import {Shelter_ta} from '../generated/Shelter_TA'
-import {fnSwitch, map} from '@alexandreannic/ts-utils'
-import {NumberKeys} from '../../type/Generic'
+import {fnSwitch, KeyOfType, map} from '@alexandreannic/ts-utils'
 import {KoboBaseTags, KoboTagStatus} from './Common'
 import {DrcProject} from '../../type/Drc'
 import {Bn_re, Shelter_nta} from '../generated'
@@ -31,7 +30,7 @@ export namespace KoboShelterTa {
     return row
   }
 
-  const lot1: NumberKeys<Shelter_ta.T>[] = [
+  const lot1: KeyOfType<Shelter_ta.T, undefined | number>[] = [
     'dismantling_of_structures',
     'singleshutter_window_tripleglazed_pc',
     'singleshutter_window_tripleglazed_m',
@@ -52,7 +51,7 @@ export namespace KoboShelterTa {
     'doubleglazed_upvc_door_m',
   ]
 
-  const lot2: NumberKeys<Shelter_ta.T>[] = [
+  const lot2: KeyOfType<Shelter_ta.T, number | undefined>[] = [
     'dismantling_of_structures2',
     'wall_repair_clay_bricks_m',
     'wall_repair_concrete_blocks_m',
@@ -91,7 +90,7 @@ export namespace KoboShelterTa {
     'wall_mountes_cable_wiring_lm',
   ]
 
-  const lot3: NumberKeys<Shelter_ta.T>[] = [
+  const lot3: KeyOfType<Shelter_ta.T, number | undefined>[] = [
     'external_doors_pc',
     'internal_wooden_doors_pc',
   ]

@@ -1,11 +1,22 @@
 import {KeyOf, KoboId, KoboIndex} from 'infoportal-common'
-import {seq} from '@alexandreannic/ts-utils'
+import {KeyOfType, seq} from '@alexandreannic/ts-utils'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {KoboSchemaHelper} from 'infoportal-common/kobo'
 
 export const mealVerificationConf = {
   sampleSizeRatioDefault: .2,
   numericToleranceMargin: .1,
 }
+
+export type VerifiedColumnsMapping<
+  TReg extends KoboFormNameMapped = any,
+  TVerif extends KoboFormNameMapped = any,
+> = {
+  reg: (_: InferTypedAnswer<TReg>, schema: KoboSchemaHelper.Bundle) => any,
+  verif: (_: InferTypedAnswer<TVerif>, schema: KoboSchemaHelper.Bundle) => any
+}
+
+export const MEAL_VERIF_AUTO_MAPPING = 'AUTO_MAPPING'
 
 export type MealVerificationActivity<
   TReg extends KoboFormNameMapped = any,
@@ -14,19 +25,6 @@ export type MealVerificationActivity<
   sampleSizeRatio: number,
   label: string
   id: string
-  // /** @deprecated*/
-  // registration: {
-  //   koboFormId: KoboId,
-  //   fetch: TReg
-  //   filters?: (_: InferTypedAnswer<TReg>) => boolean
-  //   joinColumn: (KeyOf<InferTypedAnswer<TReg>>)
-  // }
-  // /** @deprecated*/
-  // verification: {
-  //   fetch: TVerif
-  //   koboFormId: KoboId,
-  //   joinColumn: (KeyOf<InferTypedAnswer<TVerif>>)
-  // },
   registration: {
     koboFormId: KoboId,
     fetch: TReg
@@ -38,10 +36,10 @@ export type MealVerificationActivity<
     koboFormId: KoboId,
     joinBy: (_: InferTypedAnswer<TVerif>) => string | number
   },
-  verifiedColumns: Record<string, {reg: (_: InferTypedAnswer<TReg>) => any, verif: (_: InferTypedAnswer<TVerif>) => any}>
-  // verifiedColumns: (KeyOf<InferTypedAnswer<TVerif>> & KeyOf<InferTypedAnswer<TReg>>)[]
-  // joinColumn: (KeyOf<InferTypedAnswer<TCheck>> & KeyOf<InferTypedAnswer<TData>>)
   dataColumns?: KeyOf<InferTypedAnswer<TReg>>[]
+  verifiedColumns: {
+    [K in KeyOf<InferTypedAnswer<TVerif>>]?: VerifiedColumnsMapping<TReg, TVerif> | typeof MEAL_VERIF_AUTO_MAPPING;
+  }
 }
 
 const registerActivity = <
@@ -49,6 +47,12 @@ const registerActivity = <
   TCheck extends KoboFormNameMapped,
 >(_: MealVerificationActivity<TData, TCheck>) => {
   return _
+}
+
+const handleMultiSelect = <T>(_: T, key: KeyOfType<T, string[] | undefined>, sch: KoboSchemaHelper.Bundle) => {
+  return (_[key] as string[] | undefined)?.map(opt => sch.translate.choice(key as string, opt))
+    .sort()
+    .join(' ')
 }
 
 export const mealVerificationActivities = seq([
@@ -67,21 +71,21 @@ export const mealVerificationActivities = seq([
       fetch: 'meal_verificationEcrec',
     },
     dataColumns: [],
-    verifiedColumns: {},
-    //   'back_consent',
-    //   'back_consen_no_reas',
-    //   'ben_det_surname',
-    //   'ben_det_first_name',
-    //   'ben_det_pat_name',
-    //   'ben_det_ph_number',
-    //   'ben_det_oblast',
-    //   'ben_det_raion',
-    //   'ben_det_hromada',
-    //   // 'ben_det_settlement',
-    //   'ben_det_res_stat',
-    //   'ben_det_income',
-    //   'ben_det_hh_size',
-    // ]
+    verifiedColumns: {
+      back_consent: 'AUTO_MAPPING',
+      back_consen_no_reas: 'AUTO_MAPPING',
+      ben_det_surname: 'AUTO_MAPPING',
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
+      // 'ben_det_settlement': 'MEAL_VERIF_AUTO_MAPPING
+    }
   }),
   registerActivity({
     sampleSizeRatio: .1,
@@ -98,28 +102,28 @@ export const mealVerificationActivities = seq([
       joinBy: _ => _.ben_det_ph_number!,
     },
     dataColumns: [],
-    verifiedColumns: {},
-    //   'back_consent',
-    //   'back_consen_no_reas',
-    //   'ben_det_surname',
-    //   'ben_det_first_name',
-    //   'ben_det_pat_name',
-    //   'ben_det_ph_number',
-    //   'ben_det_oblast',
-    //   'ben_det_raion',
-    //   'ben_det_hromada',
-    //   // 'ben_det_settlement',
-    //   'ben_det_res_stat',
-    //   'ben_det_income',
-    //   'ben_det_hh_size',
-    //   'you_currently_employed',
-    //   'you_currently_employed_no',
-    //   'registered_training_facility',
-    //   'registered_training_facility_yes',
-    //   'training_activities_support',
-    //   'training_activities_support_yes_paid',
-    //   'training_activities_support_yes_consequence',
-    // ]
+    verifiedColumns: {
+      back_consent: 'AUTO_MAPPING',
+      back_consen_no_reas: 'AUTO_MAPPING',
+      ben_det_surname: 'AUTO_MAPPING',
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
+      you_currently_employed: 'AUTO_MAPPING',
+      you_currently_employed_no: 'AUTO_MAPPING',
+      registered_training_facility: 'AUTO_MAPPING',
+      registered_training_facility_yes: 'AUTO_MAPPING',
+      training_activities_support: 'AUTO_MAPPING',
+      training_activities_support_yes_paid: 'AUTO_MAPPING',
+      training_activities_support_yes_consequence: 'AUTO_MAPPING',
+      // 'ben_det_settlement',
+    }
   }),
   registerActivity({
     sampleSizeRatio: .2,
@@ -142,51 +146,30 @@ export const mealVerificationActivities = seq([
       'back_prog_type',
     ],
     verifiedColumns: {
-      back_consent: {reg: _ => _.back_consent, verif: _ => _.back_consent},
-      back_consen_no_reas: {reg: _ => _.back_consen_no_reas, verif: _ => _.back_consen_no_reas},
-      ben_det_surname: {reg: _ => _.ben_det_surname, verif: _ => _.ben_det_surname},
-      ben_det_first_name: {reg: _ => _.ben_det_first_name, verif: _ => _.ben_det_first_name},
-      ben_det_pat_name: {reg: _ => _.ben_det_pat_name, verif: _ => _.ben_det_pat_name},
-      ben_det_ph_number: {reg: _ => _.ben_det_ph_number, verif: _ => _.ben_det_ph_number},
-      ben_det_oblast: {reg: _ => _.ben_det_oblast, verif: _ => _.ben_det_oblast},
-      ben_det_raion: {reg: _ => _.ben_det_raion, verif: _ => _.ben_det_raion},
-      ben_det_hromada: {reg: _ => _.ben_det_hromada, verif: _ => _.ben_det_hromada},
-      ben_det_settlement: {reg: _ => _.ben_det_settlement, verif: _ => _.ben_det_settlement},
-      ben_det_res_stat: {reg: _ => _.ben_det_res_stat, verif: _ => _.ben_det_res_stat},
-      ben_det_prev_oblast: {reg: _ => _.ben_det_prev_oblast, verif: _ => _.ben_det_prev_oblast},
-      ben_det_income: {reg: _ => _.ben_det_income, verif: _ => _.ben_det_income},
-      ben_det_hh_size: {reg: _ => _.ben_det_hh_size, verif: _ => _.ben_det_hh_size},
-      current_gov_assist_cff: {reg: _ => _.current_gov_assist_cff, verif: _ => _.current_gov_assist_cff},
-      utilities_fuel: {reg: _ => _.utilities_fuel, verif: _ => _.utilities_fuel},
-      mains_utilities: {reg: _ => _.mains_utilities, verif: _ => _.mains_utilities},
-      mains_utilities_other: {reg: _ => _.mains_utilities_other, verif: _ => _.mains_utilities_other},
-      mains_fuel: {reg: _ => _.mains_fuel, verif: _ => _.mains_fuel},
-      mains_fuel_other: {reg: _ => _.mains_fuel_other, verif: _ => _.mains_fuel_other},
-      functioning_fuel_delivery: {reg: _ => _.functioning_fuel_delivery, verif: _ => _.functioning_fuel_delivery},
+      back_consent: 'AUTO_MAPPING',
+      back_consen_no_reas: 'AUTO_MAPPING',
+      ben_det_surname: 'AUTO_MAPPING',
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_settlement: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
+      ben_det_prev_oblast: 'AUTO_MAPPING',
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
+      current_gov_assist_cff: 'AUTO_MAPPING',
+      utilities_fuel: 'AUTO_MAPPING',
+      mains_utilities: 'AUTO_MAPPING',
+      mains_utilities_other: 'AUTO_MAPPING',
+      mains_fuel: {
+        reg: (_, sch) => handleMultiSelect(_, 'mains_fuel', sch),
+        verif: (_, sch) => handleMultiSelect(_, 'mains_fuel', sch)
+      },
+      mains_fuel_other: 'AUTO_MAPPING',
     },
-    // verifiedColumns: [
-    //   'back_consent',
-    //   'back_consen_no_reas',
-    //   'ben_det_surname',
-    //   'ben_det_first_name',
-    //   'ben_det_pat_name',
-    //   'ben_det_ph_number',
-    //   'ben_det_oblast',
-    //   'ben_det_raion',
-    //   'ben_det_hromada',
-    //   'ben_det_settlement',
-    //   'ben_det_res_stat',
-    //   'ben_det_prev_oblast',
-    //   'ben_det_income',
-    //   'ben_det_hh_size',
-    //   'current_gov_assist_cff',
-    //   'utilities_fuel',
-    //   'mains_utilities',
-    //   'mains_utilities_other',
-    //   'mains_fuel',
-    //   'mains_fuel_other',
-    //   'functioning_fuel_delivery',
-    // ]
   }),
   registerActivity({
     sampleSizeRatio: .2,
@@ -202,28 +185,28 @@ export const mealVerificationActivities = seq([
       fetch: 'meal_verificationEcrec',
       joinBy: _ => _.pay_det_tax_id_num!,
     },
-    verifiedColumns: {},
-    // 'back_consent',
-    // 'ben_det_surname',
-    // 'ben_det_ph_number',
-    // 'ben_det_first_name',
-    // 'ben_det_pat_name',
-    // 'ben_det_oblast',
-    // 'ben_det_raion',
-    // 'ben_det_hromada',
-    // 'ben_det_settlement',
-    // 'ben_det_res_stat',
-    // 'ben_det_income',
-    // 'ben_det_hh_size',
-    // 'land_own',
-    // 'land_cultivate',
-    // 'not_many_livestock',
-    // 'many_sheep_goat',
-    // 'many_milking',
-    // 'many_cow',
-    // 'many_pig',
-    // 'many_poultry',
-    // ],
+    verifiedColumns: {
+      back_consent: 'AUTO_MAPPING',
+      ben_det_surname: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_settlement: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
+      land_own: 'AUTO_MAPPING',
+      land_cultivate: 'AUTO_MAPPING',
+      not_many_livestock: 'AUTO_MAPPING',
+      many_sheep_goat: 'AUTO_MAPPING',
+      many_milking: 'AUTO_MAPPING',
+      many_cow: 'AUTO_MAPPING',
+      many_pig: 'AUTO_MAPPING',
+      many_poultry: 'AUTO_MAPPING',
+    },
     dataColumns: [
       'back_donor',
     ]
@@ -242,24 +225,24 @@ export const mealVerificationActivities = seq([
       fetch: 'meal_verificationEcrec',
       joinBy: _ => _.pay_det_tax_id_num!,
     },
-    verifiedColumns: {},
-    //   'back_consent',
-    //   'ben_det_surname',
-    //   'ben_det_first_name',
-    //   'ben_det_pat_name',
-    //   'ben_det_ph_number',
-    //   'ben_det_oblast',
-    //   'ben_det_raion',
-    //   'ben_det_hromada',
-    //   'ben_det_settlement',
-    //   'ben_det_res_stat',
-    //   'ben_det_income',
-    //   'ben_det_hh_size',
-    //   'has_agriculture_exp',
-    //   'depend_basic_needs',
-    //   'consume_majority',
-    //   'land_cultivate',
-    // ]
+    verifiedColumns: {
+      back_consent: 'AUTO_MAPPING',
+      ben_det_surname: 'AUTO_MAPPING',
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_settlement: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
+      has_agriculture_exp: 'AUTO_MAPPING',
+      depend_basic_needs: 'AUTO_MAPPING',
+      consume_majority: 'AUTO_MAPPING',
+      land_cultivate: 'AUTO_MAPPING',
+    },
   }),
 ])
 

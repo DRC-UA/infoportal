@@ -85,7 +85,6 @@ export class ShelterContractorPrices {
 }
 
 const lot1: (keyof Shelter_ta.T)[] = [
-// const lot1: NumberKeys<keyof Shelter_ta.T>[] = [
   'dismantling_of_structures',
   'singleshutter_window_tripleglazed_m',
   'singleshutter_windowdoubleglazed_m',
