@@ -315,7 +315,7 @@ const MealVerificationTableContent = <
           const mergedData: Omit<ComputedRow, 'score'> = {
             rowReg,
             rowVerif,
-            verifiedData: Obj.mapValues(harmonizedVerifiedColumns, (x, name) => {
+            verifiedData: Obj.mapValues(harmonizedVerifiedColumns, (x, name: string) => {
               const valueReg = x.reg(rowReg, schemaReg)
               const valueVerif = rowVerif ? x.verif(rowVerif, schemaVerif) : undefined
               return {name, valueReg, valueVerif, equals: areEquals(valueVerif, valueReg)}
