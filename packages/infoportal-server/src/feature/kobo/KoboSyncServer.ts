@@ -29,7 +29,7 @@ export class KoboSyncServer {
   ) {
   }
 
-  readonly handleWebhook = async ({formId, answer}: {formId?: KoboId, answer: KoboAnswer}) => {
+  readonly handleWebhookNewAnswers = async ({formId, answer}: {formId?: KoboId, answer: KoboAnswer}) => {
     this.log.info(`Handle webhook for form ${formId}, ${answer.id}`)
     if (!formId)
       throw new AppError.WrongFormat('missing_form_id')
@@ -45,12 +45,12 @@ export class KoboSyncServer {
     return this.service.create(formId, answer)
   }
 
-  readonly syncAllApiAnswersToDb = async (updatedBy: string = createdBySystem) => {
+  readonly syncApiAnswersToDbAll = async (updatedBy: string = createdBySystem) => {
     const allForms = await this.prisma.koboForm.findMany()
     this.log.info(`Synchronize kobo forms:`)
     for (const form of allForms) {
       try {
-        await this.syncApiForm({serverId: form.serverId, formId: form.id, updatedBy})
+        await this.syncApiAnswersToDbByForm({serverId: form.serverId, formId: form.id, updatedBy})
       } catch (e) {
         console.error(e)
       }
@@ -61,7 +61,7 @@ export class KoboSyncServer {
   private info = (formId: string, message: string) => this.log.info(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
   private debug = (formId: string, message: string) => this.log.debug(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
 
-  readonly syncApiForm = async ({serverId = koboIndex.drcUa.server.prod, formId, updatedBy}: {serverId?: UUID, formId: KoboId, updatedBy?: string}) => {
+  readonly syncApiAnswersToDbByForm = async ({serverId, formId, updatedBy}: {serverId: UUID, formId: KoboId, updatedBy?: string}) => {
     try {
       this.debug(formId, `Synchronizing by ${updatedBy}...`)
       await this.syncApiFormInfo(serverId, formId)

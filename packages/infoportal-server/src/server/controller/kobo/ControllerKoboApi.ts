@@ -46,21 +46,21 @@ export class ControllerKoboApi {
     res.send(forms)
   }
 
-  readonly answersWebHook = async (req: Request, res: Response, next: NextFunction) => {
+  readonly handleWebhookNewAnswers = async (req: Request, res: Response, next: NextFunction) => {
     const answer = KoboAnswerUtils.mapAnswer(req.body)
     const formId = req.body._xform_id_string
-    await this.syncService.handleWebhook({formId, answer})
+    await this.syncService.handleWebhookNewAnswers({formId, answer})
     res.send({})
   }
 
-  readonly synchronizeAllAnswersFromKoboServer = async (req: Request, res: Response, next: NextFunction) => {
-    await this.syncService.syncAllApiAnswersToDb(req.session.user?.email)
+  readonly syncAnswersAll = async (req: Request, res: Response, next: NextFunction) => {
+    await this.syncService.syncApiAnswersToDbAll(req.session.user?.email)
     res.send()
   }
 
-  readonly synchronizeAnswersFromKoboServer = async (req: Request, res: Response, next: NextFunction) => {
+  readonly syncAnswersByForm = async (req: Request, res: Response, next: NextFunction) => {
     const {id, formId} = await this.extractParams(req)
-    await this.syncService.syncApiForm({serverId: id, formId, updatedBy: req.session.user?.email})
+    await this.syncService.syncApiAnswersToDbByForm({serverId: id, formId, updatedBy: req.session.user?.email})
     res.send()
   }
 
