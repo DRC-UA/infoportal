@@ -10,7 +10,7 @@ import {
   ShelterNtaTags,
   ShelterTaPriceLevel,
   ShelterTaTags
-} from '../../../../infoportal-common/src'
+} from 'infoportal-common'
 
 export interface ShelterEntity {
   ta?: KoboAnswerFlat<Shelter_ta.T, ShelterTaTags> & {

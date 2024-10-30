@@ -11,7 +11,6 @@ import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {KoboFormName, KoboIndex} from 'infoportal-common'
 import {MealVerificationList} from '@/features/Meal/Verification/MealVerificationList'
 import {MealVerificationForm} from '@/features/Meal/Verification/Form/MealVerificationForm'
-import {MealVerificationTable} from '@/features/Meal/Verification/MealVerificationTable'
 import {getKoboFormRouteProps, SidebarKoboLink} from '@/features/SidebarKoboLink'
 import {MealVisit} from '@/features/Meal/Visit/MealVisit'
 import {MealVisitDashboard} from '@/features/Meal/Visit/MealVisitDashboard'
@@ -22,6 +21,7 @@ import {appConfig} from '@/conf/AppConfig'
 import {MealPdm} from '@/features/Meal/Pdm/MealPdm'
 import {MealPdmDashboard} from '@/features/Meal/Pdm/MealPdmDashboard'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
+import {MealVerificationData} from '@/features/Meal/Verification/MealVerificationData'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -143,7 +143,7 @@ export const Meal = () => {
             <Route index element={<Navigate to={mealIndex.siteMap.verification.list}/>}/>
             <Route path={mealIndex.siteMap.verification.list} element={<MealVerificationList/>}/>
             <Route path={mealIndex.siteMap.verification.form} element={<MealVerificationForm/>}/>
-            <Route path={mealIndex.siteMap.verification.data()} element={<MealVerificationTable/>}/>
+            <Route path={mealIndex.siteMap.verification.data()} element={<MealVerificationData/>}/>
           </Route>
         )}
         <Route path={mealIndex.siteMap.pdm._} element={<MealPdm/>}>

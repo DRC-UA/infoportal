@@ -1,5 +1,5 @@
 import {KeyOf, KoboId, KoboIndex} from 'infoportal-common'
-import {KeyOfType, seq} from '@alexandreannic/ts-utils'
+import {seq} from '@alexandreannic/ts-utils'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboSchemaHelper} from 'infoportal-common/kobo'
 
@@ -47,12 +47,6 @@ const registerActivity = <
   TCheck extends KoboFormNameMapped,
 >(_: MealVerificationActivity<TData, TCheck>) => {
   return _
-}
-
-const handleMultiSelect = <T>(_: T, key: KeyOfType<T, string[] | undefined>, sch: KoboSchemaHelper.Bundle) => {
-  return (_[key] as string[] | undefined)?.map(opt => sch.translate.choice(key as string, opt))
-    .sort()
-    .join(' ')
 }
 
 export const mealVerificationActivities = seq([
@@ -164,10 +158,11 @@ export const mealVerificationActivities = seq([
       utilities_fuel: 'AUTO_MAPPING',
       mains_utilities: 'AUTO_MAPPING',
       mains_utilities_other: 'AUTO_MAPPING',
-      mains_fuel: {
-        reg: (_, sch) => handleMultiSelect(_, 'mains_fuel', sch),
-        verif: (_, sch) => handleMultiSelect(_, 'mains_fuel', sch)
-      },
+      mains_fuel: 'AUTO_MAPPING',
+      // mains_fuel: {
+      //   reg: (_, sch) => handleMultiSelect(_, 'mains_fuel', sch),
+      //   verif: (_, sch) => handleMultiSelect(_, 'mains_fuel', sch)
+      // },
       mains_fuel_other: 'AUTO_MAPPING',
     },
   }),
