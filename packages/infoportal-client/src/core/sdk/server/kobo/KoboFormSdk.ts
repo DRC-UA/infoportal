@@ -34,8 +34,8 @@ export class KoboFormSdk {
     }
   }
 
-  readonly refreshAll = (body: {serverId: UUID}): Promise<KoboForm> => {
-    return this.client.post(`kobo/form/refresh`, {body})
+  readonly refreshAll = (): Promise<KoboForm> => {
+    return this.client.post(`kobo/form/refresh`)
   }
 
   readonly add = (body: KoboFormCreate): Promise<KoboForm> => {

@@ -73,7 +73,7 @@ export const DatabaseWithContext = () => {
                     sx={{ml: 'auto'}}
                     color="primary"
                     loading={asyncSyncAll.loading}
-                    onClick={() => asyncSyncAll.call({serverId: koboIndex.drcUa.server.prod})}
+                    onClick={asyncSyncAll.call}
                   >
                     refresh
                   </IpIconBtn>

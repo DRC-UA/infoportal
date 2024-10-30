@@ -42,7 +42,7 @@ export class KoboFormService {
   }
 
   readonly add = async (payload: KoboFormCreate) => {
-    const sdk = await this.koboSdk.get()
+    const sdk = await this.koboSdk.get(payload.serverId)
     const schema = await sdk.v2.getForm(payload.uid)
     const [newFrom,] = await Promise.all([
       this.prisma.koboForm.create({
@@ -86,22 +86,21 @@ export class KoboFormService {
     })
   }
 
-  readonly refreshAll = async (params: Omit<KoboFormCreate, 'uid'>) => {
-    const sdk = await this.koboSdk.get(params.serverId)
-    const [forms, apiFormsIndex] = await Promise.all([
-      this.getAll(),
-      sdk.v2.getForms().then(_ => _.results).then(_ => {
-        console.log(_.length)
-        return seq(_).groupByFirst(_ => _.uid)
-      }),
-    ])
+  readonly refreshAll = async (params: Omit<KoboFormCreate, 'serverId' | 'uid'>) => {
+    const forms = await this.getAll().then(seq)
+    const sdks = await Promise.all(forms.map(_ => _.serverId).distinct(_ => _).map(_ => this.koboSdk.get(_)).get())
+    const indexForm = seq(forms).groupByFirst(_ => _.id)
+    const indexSchema = await Promise.all(sdks.map(_ => _.v2.getForms())).then(_ => _.flatMap(_ => _.results)).then(_ => seq(_).groupByFirst(_ => _.uid))
     await PromisePool.withConcurrency(this.conf.db.maxConcurrency).for(forms)
       .handleError(async error => {
         throw error
       })
       .process(form => {
-        const schema = apiFormsIndex[form.id]
-        const db = KoboFormService.apiToDb({schema, ...params})
+        const db = KoboFormService.apiToDb({
+          schema: indexSchema[form.id],
+          serverId: indexForm[form.id].serverId,
+          ...params
+        })
         return this.prisma.koboForm.update({
           data: db,
           where: {

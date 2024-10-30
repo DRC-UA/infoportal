@@ -323,6 +323,8 @@ export const en = Object.freeze({
     patronyme: 'Patronyme',
     data: 'Data',
     duplicate: 'Duplicate',
+    serverId: 'Server ID',
+    server: 'Server',
     duplication: 'Duplication',
     deduplication: 'Deduplication',
     wfpDeduplication: 'WFP Deduplication',
