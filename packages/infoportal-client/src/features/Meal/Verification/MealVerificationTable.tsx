@@ -58,16 +58,12 @@ const areEquals = (a: any, b: any): boolean => {
       if (a === undefined || b === undefined) return a === b
       return a.every(c => (b.find(d => c === d)))
     }
-    switch (typeof a) {
-      case 'number':
-        return Math.abs(a - b) <= b * mealVerificationConf.numericToleranceMargin
-      case 'string':
-        return a?.trim() === b?.trim()
-      default:
-        return a === b
-    }
+    if (typeof a === 'number' || !isNaN(a) && !isNaN(b))
+      return Math.abs(+a - +b) <= +b * mealVerificationConf.numericToleranceMargin
+    if (typeof a === 'string')
+      return a?.trim() === b?.trim()
+    return a === b
   } catch (e) {
-    console.error(`Failed to check ${JSON.stringify(a)} ${JSON.stringify(b)}`)
     return false
   }
 }
@@ -181,6 +177,7 @@ export const MealVerificationTable = () => {
   if (!bundle) {
     return (
       <Page width="xs">
+        <PageTitle>{m.loading}...</PageTitle>
         {placeholder?.map(_ =>
           <Box key={_.name} sx={{display: 'flex', alignItems: 'center', mt: 1, mb: 2}}>
             <Box sx={{display: 'flex', width: 32}}>
