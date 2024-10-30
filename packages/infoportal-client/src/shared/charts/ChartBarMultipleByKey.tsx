@@ -1,11 +1,11 @@
 import {ChartBarMultipleBy, ChartBarMultipleByProps} from '@/shared/charts/ChartBarMultipleBy'
-import {NullableStringArrayKeys} from 'infoportal-common'
+import {KeyOfType} from '@alexandreannic/ts-utils'
 
 export const ChartBarMultipleByKey = <
   D extends Record<string, any>,
   R extends string | undefined,
   O extends Record<NonNullable<R>, string>,
-  K extends NullableStringArrayKeys<D>,
+  K extends KeyOfType<D, string[] | undefined>,
 >({
   property,
   by,

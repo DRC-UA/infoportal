@@ -117,7 +117,7 @@ export const getColumnsCustom = ({
       width: 0,
       head: m.hohhAge,
       type: 'number',
-      renderQuick: (row: any) => (getRow(row) as {custom: KoboGeneralMapping.IndividualBreakdown}).custom?.persons[0].age,
+      renderQuick: (row: any) => (getRow(row) as {custom: KoboGeneralMapping.IndividualBreakdown}).custom?.persons[0]?.age,
     }
   ]
   const lastStatusUpdate = ({

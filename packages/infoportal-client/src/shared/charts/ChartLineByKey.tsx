@@ -1,10 +1,10 @@
 import {Obj, Seq} from '@alexandreannic/ts-utils'
 import {format} from 'date-fns'
 import React, {useMemo} from 'react'
-import {StringKeys} from 'infoportal-common'
+import {KeyOfType} from '@alexandreannic/ts-utils'
 import {ChartLine, ChartLineData} from '@/shared/charts/ChartLine'
 
-export const ChartLineByKey = <T extends {end: Date}, K extends StringKeys<T>, V extends T[K]>({
+export const ChartLineByKey = <T extends {end: Date}, K extends KeyOfType<T, undefined | string>, V extends T[K]>({
   data,
   question,
   getDate,
