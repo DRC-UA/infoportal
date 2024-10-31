@@ -153,7 +153,7 @@ export class KoboSdkv2 {
 
   }
 
-  readonly getForms = () => {
+  readonly getSchemas = () => {
     // return this.api.get(`/v2/assets/`)
     return this.api.get<KoboApiList<KoboApiSchema>>(`/v2/assets/?q=asset_type%3Asurvey&limit=1000`)
   }

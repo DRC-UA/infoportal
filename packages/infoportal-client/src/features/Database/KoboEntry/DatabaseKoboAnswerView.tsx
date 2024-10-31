@@ -2,7 +2,7 @@ import {Alert, Box, Dialog, DialogActions, DialogContent, DialogTitle, Icon, Ske
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {KoboApiQuestionSchema, KoboId, koboIndex, KoboSchemaHelper} from 'infoportal-common'
+import {KoboApiQuestionSchema, KoboId, KoboSchemaHelper, NonNullableKey} from 'infoportal-common'
 import React, {useEffect, useMemo, useState} from 'react'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {Txt} from '@/shared/Txt'
@@ -18,7 +18,6 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {NavLink} from 'react-router-dom'
-import {NonNullableKey} from 'infoportal-common/type/Generic'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),
@@ -28,7 +27,7 @@ export const databaseUrlParamsValidation = yup.object({
 
 export const DatabaseKoboAnswerViewPage = () => {
   const {m} = useI18n()
-  const {serverId, formId, answerId} = databaseUrlParamsValidation.validateSync(useParams())
+  const {formId, answerId} = databaseUrlParamsValidation.validateSync(useParams())
   const [showQuestionWithoutAnswer, setShowQuestionWithoutAnswer] = useState(false)
   const ctxAnswers = useKoboAnswersContext().byId(formId)
   const ctxSchema = useKoboSchemaContext()
@@ -93,14 +92,13 @@ export const DatabaseKoboAnswerViewDialog = ({
 
   useEffect(() => {
     ctxSchema.fetchById(formId)
-    console.info(answer)
   }, [formId])
 
   return (
     <Dialog open={true}>
       <DialogTitle>
         <Box sx={{display: 'flex', alignItems: 'center'}}>
-          <NavLink to={databaseIndex.siteMap.answer.absolute(koboIndex.drcUa.server.prod, formId, answer.id)} onClick={onClose}>
+          <NavLink to={databaseIndex.siteMap.answer.absolute(formId, answer.id)} onClick={onClose}>
             <IpIconBtn color="primary">open_in_new</IpIconBtn>
           </NavLink>
           {answer.id}

@@ -21,6 +21,8 @@ export enum AppCacheKey {
   Meta = 'Meta',
   KoboAnswers = 'KoboAnswers',
   KoboSchema = 'KoboSchema',
+  KoboServerIndex = 'KoboServerIndex',
+  KoboSdk = 'KoboSdk',
   WfpDeduplication = 'WfpDeduplication',
 }
 

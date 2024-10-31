@@ -8,7 +8,7 @@ import {databaseIndex} from '@/features/Database/databaseIndex'
 import {Navigate, NavLink, Outlet, Route, Routes} from 'react-router-dom'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
 import {Layout} from '@/shared/Layout'
-import {Icon, Skeleton, Tab, Tabs, Tooltip, useTheme} from '@mui/material'
+import {Icon, Skeleton, Tab, Tabs, Tooltip} from '@mui/material'
 import {useLocation, useParams} from 'react-router'
 import {IpBtn} from '@/shared/Btn'
 import {DatabaseNew} from '@/features/Database/DatabaseNew/DatabaseNew'
@@ -25,13 +25,12 @@ import {DatabaseHistory} from '@/features/Database/History/DatabaseHistory'
 import {customForms, DatabaseTableCustomRoute} from '@/features/Database/KoboTableCustom/DatabaseKoboTableCustom'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {useAsync} from '@/shared/hook/useAsync'
-import {KoboIndex, koboIndex} from 'infoportal-common'
+import {KoboIndex} from 'infoportal-common'
 import {KoboForm} from '@/core/sdk/server/kobo/Kobo'
 import {Fender} from '@/shared/Fender'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 export const databaseUrlParamsValidation = yup.object({
-  serverId: yup.string().required(),
   formId: yup.string().required(),
 })
 
@@ -73,7 +72,7 @@ export const DatabaseWithContext = () => {
                     sx={{ml: 'auto'}}
                     color="primary"
                     loading={asyncSyncAll.loading}
-                    onClick={() => asyncSyncAll.call({serverId: koboIndex.drcUa.server.prod})}
+                    onClick={asyncSyncAll.call}
                   >
                     refresh
                   </IpIconBtn>
@@ -113,7 +112,7 @@ export const DatabaseWithContext = () => {
             <SidebarSection dense title={category} key={category}>
               {forms.map((_: Form) =>
                 <Tooltip key={_.id} title={_.parsedName.name} placement="right-end">
-                  <NavLink to={databaseIndex.siteMap.home(_.serverId, _.id)}>
+                  <NavLink to={databaseIndex.siteMap.home(_.id)}>
                     {({isActive, isPending}) => (
                       <SidebarItem
                         size={forms.length > 30 ? 'tiny' : 'small'}
@@ -164,7 +163,7 @@ export const DatabaseWithContext = () => {
 }
 
 export const DatabaseHome = () => {
-  const {serverId, formId} = databaseUrlParamsValidation.validateSync(useParams())
+  const {formId} = databaseUrlParamsValidation.validateSync(useParams())
   const {m} = useI18n()
   const {pathname} = useLocation()
   const ctx = useDatabaseContext()
@@ -183,22 +182,22 @@ export const DatabaseHome = () => {
         <Tab
           sx={{minHeight: 34, py: 1}}
           component={NavLink}
-          value={databaseIndex.siteMap.database.absolute(serverId, formId)}
-          to={databaseIndex.siteMap.database.absolute(serverId, formId)}
+          value={databaseIndex.siteMap.database.absolute(formId)}
+          to={databaseIndex.siteMap.database.absolute(formId)}
           label={m.data}
         />
         <Tab
           sx={{minHeight: 34, py: 1}}
           component={NavLink}
-          value={databaseIndex.siteMap.access.absolute(serverId, formId)}
-          to={databaseIndex.siteMap.access.absolute(serverId, formId)}
+          value={databaseIndex.siteMap.access.absolute(formId)}
+          to={databaseIndex.siteMap.access.absolute(formId)}
           label={m.access}
         />
         <Tab
           sx={{minHeight: 34, py: 1}}
           component={NavLink}
-          value={databaseIndex.siteMap.history.absolute(serverId, formId)}
-          to={databaseIndex.siteMap.history.absolute(serverId, formId)}
+          value={databaseIndex.siteMap.history.absolute(formId)}
+          to={databaseIndex.siteMap.history.absolute(formId)}
           label={m.history}
         />
       </Tabs>

@@ -5,28 +5,41 @@ import {Page, PageTitle} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
-import React from 'react'
+import React, {useEffect, useMemo} from 'react'
 import {Txt} from '@/shared/Txt'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {Icon, useTheme} from '@mui/material'
 import {databaseIndex} from '@/features/Database/databaseIndex'
+import {useFetcher} from '@/shared/hook/useFetcher'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {seq} from '@alexandreannic/ts-utils'
 
 export const DatabaseList = ({
   forms,
 }: {
   forms?: KoboForm[]
 }) => {
+  const {api} = useAppSettings()
+  const fetcherServers = useFetcher(api.kobo.server.getAll)
   const {formatDate, m} = useI18n()
   const navigate = useNavigate()
   const t = useTheme()
+
+  useEffect(() => {
+    fetcherServers.fetch()
+  }, [])
+  const indexServers = useMemo(() => {
+    return seq(fetcherServers.get).groupByFirst(_ => _.id)
+  }, [fetcherServers.get])
+
   return (
-    <Page width="md">
+    <Page width="lg">
       {forms && forms.length > 0 && (
         <>
           <PageTitle>{m.selectADatabase}</PageTitle>
           <Panel>
             <Datatable
-              defaultLimit={200}
+              defaultLimit={500}
               id="kobo-index"
               data={forms}
               columns={[
@@ -63,6 +76,27 @@ export const DatabaseList = ({
                   renderQuick: _ => _.id,
                 },
                 {
+                  id: 'serverId',
+                  type: 'select_one',
+                  head: m.serverId,
+                  renderQuick: _ => _.serverId,
+                },
+                {
+                  id: 'serverUrl',
+                  type: 'select_one',
+                  head: m.server,
+                  render: _ => {
+                    const url = indexServers[_.serverId]?.url
+                    if (url) {
+                      return {
+                        value: url,
+                        label: <a className="link" href={url}>{url.replace(/https?:\/\//, '')}</a>
+                      }
+                    }
+                    return {value: undefined, label: ''}
+                  },
+                },
+                {
                   id: 'name',
                   type: 'select_one',
                   head: m.name,
@@ -88,6 +122,7 @@ export const DatabaseList = ({
                   id: 'createdAt',
                   type: 'date',
                   head: m.createdAt,
+                  width: 0,
                   render: _ => {
                     return {
                       label: <Txt color="hint">{formatDate(_.createdAt)}</Txt>,
@@ -98,6 +133,7 @@ export const DatabaseList = ({
                 {
                   id: 'updatedAt',
                   type: 'date',
+                  width: 0,
                   head: m.updatedAt,
                   render: _ => {
                     return {
@@ -115,7 +151,7 @@ export const DatabaseList = ({
                   renderQuick: _ =>
                     <TableIconBtn
                       color="primary"
-                      onClick={() => navigate(databaseIndex.siteMap.database.absolute(_.serverId, _.id))}
+                      onClick={() => navigate(databaseIndex.siteMap.database.absolute(_.id))}
                       children="chevron_right"
                     />
                 },

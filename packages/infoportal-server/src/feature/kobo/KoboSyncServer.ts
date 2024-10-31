@@ -1,4 +1,4 @@
-import {KoboAnswer, KoboId, koboIndex, KoboIndex, logPerformance, UUID} from 'infoportal-common'
+import {KoboAnswer, KoboId, KoboIndex, logPerformance, UUID} from 'infoportal-common'
 import {Prisma, PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {app, AppCacheKey, AppLogger} from '../../index'
@@ -21,7 +21,7 @@ export class KoboSyncServer {
   constructor(
     private prisma: PrismaClient,
     private service = new KoboService(prisma),
-    private koboSdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
+    private koboSdkGenerator: KoboSdkGenerator = KoboSdkGenerator.getSingleton(prisma),
     private event = GlobalEvent.Class.getInstance(),
     private appCache = app.cache,
     private conf = appConf,
@@ -29,7 +29,7 @@ export class KoboSyncServer {
   ) {
   }
 
-  readonly handleWebhook = async ({formId, answer}: {formId?: KoboId, answer: KoboAnswer}) => {
+  readonly handleWebhookNewAnswers = async ({formId, answer}: {formId?: KoboId, answer: KoboAnswer}) => {
     this.log.info(`Handle webhook for form ${formId}, ${answer.id}`)
     if (!formId)
       throw new AppError.WrongFormat('missing_form_id')
@@ -45,12 +45,12 @@ export class KoboSyncServer {
     return this.service.create(formId, answer)
   }
 
-  readonly syncAllApiAnswersToDb = async (updatedBy: string = createdBySystem) => {
+  readonly syncApiAnswersToDbAll = async (updatedBy: string = createdBySystem) => {
     const allForms = await this.prisma.koboForm.findMany()
     this.log.info(`Synchronize kobo forms:`)
     for (const form of allForms) {
       try {
-        await this.syncApiForm({serverId: form.serverId, formId: form.id, updatedBy})
+        await this.syncApiAnswersToDbByForm({formId: form.id, updatedBy})
       } catch (e) {
         console.error(e)
       }
@@ -61,11 +61,11 @@ export class KoboSyncServer {
   private info = (formId: string, message: string) => this.log.info(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
   private debug = (formId: string, message: string) => this.log.debug(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
 
-  readonly syncApiForm = async ({serverId = koboIndex.drcUa.server.prod, formId, updatedBy}: {serverId?: UUID, formId: KoboId, updatedBy?: string}) => {
+  readonly syncApiAnswersToDbByForm = async ({formId, updatedBy}: {formId: KoboId, updatedBy?: string}) => {
     try {
       this.debug(formId, `Synchronizing by ${updatedBy}...`)
-      await this.syncApiFormInfo(serverId, formId)
-      const res = await this.syncApiFormAnswers(serverId, formId)
+      await this.syncApiFormInfo(formId)
+      const res = await this.syncApiFormAnswers(formId)
       await this.prisma.koboForm.update({
         where: {id: formId},
         data: {
@@ -85,8 +85,8 @@ export class KoboSyncServer {
     }
   }
 
-  private readonly syncApiFormInfo = async (serverId: UUID, formId: KoboId) => {
-    const sdk = await this.koboSdkGenerator.get(serverId)
+  private readonly syncApiFormInfo = async (formId: KoboId) => {
+    const sdk = await this.koboSdkGenerator.getByFormId(formId)
     const schema = await sdk.v2.getForm(formId)
     return this.prisma.koboForm.update({
       where: {id: formId},
@@ -97,8 +97,8 @@ export class KoboSyncServer {
     })
   }
 
-  private readonly _syncApiFormAnswers = async (serverId: UUID, formId: KoboId): Promise<KoboSyncServerResult> => {
-    const sdk = await this.koboSdkGenerator.get(serverId)
+  private readonly _syncApiFormAnswers = async (formId: KoboId): Promise<KoboSyncServerResult> => {
+    const sdk = await this.koboSdkGenerator.getByFormId(formId)
     this.debug(formId, `Fetch remote answers...`)
     const remoteAnswers = await sdk.v2.getAnswers(formId).then(_ => _.data)
     const remoteIdsIndex: Map<KoboId, KoboAnswer> = remoteAnswers.reduce((map, curr) => map.set(curr.id, curr), new Map<KoboId, KoboAnswer>)//new Map(remoteAnswers.map(_ => _.id))
@@ -211,7 +211,7 @@ export class KoboSyncServer {
 
   private readonly syncApiFormAnswers = logPerformance({
     logger: _ => this.log.info(_),
-    message: (serverId, formId) => `Sync answers for ${KoboIndex.searchById(formId)?.translation ?? formId}.`,
+    message: (formId) => `Sync answers for ${KoboIndex.searchById(formId)?.translation ?? formId}.`,
     showResult: r => `${r.answersCreated.length} created, ${r.answersUpdated.length} updated, ${r.answersIdsDeleted.length} deleted.`,
     fn: this._syncApiFormAnswers,
   })

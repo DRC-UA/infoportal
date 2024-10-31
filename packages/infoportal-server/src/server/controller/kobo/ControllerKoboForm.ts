@@ -13,8 +13,8 @@ export class ControllerKoboForm {
 
   readonly add = async (req: Request, res: Response, next: NextFunction) => {
     const body = await yup.object({
-      serverId: yup.string().required(),
       uid: yup.string().required(),
+      serverId: yup.string().required(),
     }).validate(req.body)
     const data = await this.service.add({
       ...body,
@@ -24,11 +24,7 @@ export class ControllerKoboForm {
   }
 
   readonly refreshAll = async (req: Request, res: Response, next: NextFunction) => {
-    const body = await yup.object({
-      serverId: yup.string().required(),
-    }).validate(req.body)
     await this.service.refreshAll({
-      serverId: body.serverId,
       uploadedBy: req.session.user?.email!
     })
     res.send()

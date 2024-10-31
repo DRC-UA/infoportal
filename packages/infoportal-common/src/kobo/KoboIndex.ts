@@ -1,90 +1,59 @@
 import {Obj, seq} from '@alexandreannic/ts-utils'
 
-/** @deprecated Only use it to access server */
-export const koboIndex = {
-  drcUa: {
-    server: {
-      prod: '4820279f-6c3d-47ba-8afe-47f86b16ab5d' as const,
-      dev: 'b90ec4b4-4426-48f3-a924-f6a1866ee698'
-    },
-    form: {
-      safety_incident: 'aAJNkn7v9fRL2XqQCgEkXf',
-      ecrec_cashRegistration: 'aE5md7RfHiy4LJmddoFAQH',
-      ecrec_cashRegistrationBha: 'aQCGR2fESUNFMYKVHMyAET',
-      ecrec_vetApplication: 'aGGGapARnC2ek7sA6SuHmu',
-      ecrec_vetEvaluation: 'a4iDDoLpUJHbu6cwsn2fnG',
-      ecrec_msmeGrantSelection: 'aQkWZkWjVpJsqZ3tYtuwFZ',
-      ecrec_msmeGrantEoi: 'awYf9G3sZB4grG8S4w3Wt8',
-      bn_rapidResponse: 'aMJL9DG8qEcULqTZTKQbrq',
-      bn_rapidResponse2: 'adpuqZypnqHb8LNfX49iA5',
-      bn_cashForRentApplication: 'aBupWbhtUmA7so3532tYLa',
-      bn_cashForRentRegistration: 'ajNzDaUuLkcEvjQhVsAmao',
-      shelter_cashForRepair: 'a9CjhyhTKVojCdArKmw9yM',
-      bn_1_mpcaNfi: 'a4Sx3PrFMDAMZEGsyzgJJg',
-      bn_1_mpcaNfiMyko: 'a8WAWB9Yxu2jkgk4Ei8GTk',
-      bn_1_mpcaNfiNaa: 'aBGVXW2N26DaLehmKneuyB',
-      bn_0_mpcaRegNewShort: 'a5kgQdqZLLNTLSmC8DK7Eq',
-      bn_0_mpcaReg: 'aEwY33SAtdayNTeHoiJfdg',
-      bn_0_mpcaRegNoSig: 'aHuWQPkrC43qBfTmJvoLqg',
-      bn_0_mpcaRegESign: 'a8JXohrBDqTdCc86Ysz26r',
-      bn_re: 'aKgX4MNs6gCemDQKPeXxY8',
-      bn_rapidResponseSida: 'aTJRd5zLdPHcEhGDovh9dW',
-      meal_verificationEcrec: 'aEN2tkQhpsfX4G3i6Re7bi',
-      meal_verificationWinterization: 'aAWVLi8bSb2S8bHc5CcL8i',
-      meal_visitMonitoring: 'a8GkjWBQDfxVADGHWJDrUw',
-      meal_pdmStandardised: 'aCWKwfvJ6F48HxUZTrr9L7',
-      meal_cashPdm: 'aEKoPVd36PLRrmqWgk42DG',
-      meal_cfmInternal: 'aN3Y8JeH2fU3GthrWAs9FG',
-      meal_cfmExternal: 'aJaGLvGEdpYWk5ift8k87y',
-      shelter_nta: 'aL8oHMzJJ9soPepvK6YU9E',
-      shelter_ta: 'aTP5nwZjpyR7oy7bdMZktC',
-      shelter_north: 'aCPdwVnnsYeReynJ7YnLGH',
-      shelter_cashForShelter: 'aQgRrYdwHuvWbj23LpywPF',
-      protection_hhs2: 'aRHsewShwZhXiy8jrBj9zf',
-      protection_hhs2_1: 'aQDZ2xhPUnNd43XzuQucVR',
-      protection_hhs3: 'aDmHHT6QzBSwwy9WZcTRrM',
-      protection_communityMonitoring: 'aQHBhYgevdzw8TR2Vq2ZdR',
-      protection_groupSession: 'a8Tn94arrSaH2FQBhUa9Zo',
-      protection_pss: 'a52hN5iiCW73mxqqfmEAfp',
-      protection_gbv: 'a5Noq6Wf9a8aE2cmi74FyS',
-      protection_coc: 'aRBEzakmsMPpw8VoJG8Gpk',
-      protection_hhs1: 'aFU8x6tHksveU2c3hK7RUG' as const,
-      protection_referral: 'a62ZpworuN4nFLznsUej8r',
-      protection_counselling: 'a2ck63vPA7hkk8aEhNTSUJ',
-      protection_gbvSocialProviders: 'aKrbJdapRxfdPgXb3KqzHd',
-      partnership_partnersDatabase: 'aLs32U5Qc9HfQ5mxQtsEML',
-      partnership_initialQuestionnaire: 'a6u7CBysEz746Hdx6pVLzp',
-      partnership_assessment: 'aLD2Xc9cKSY22c5cAP5utT',
-      pseah_training_tracker: 'aRBEzakmsMPpw8VoJG8Gpk'
-      //
-      // mealCfmInternal: 'aN3Y8JeH2fU3GthrWAs9FG',
-      // mealCfmExternal: 'aJaGLvGEdpYWk5ift8k87y',
-      // shelter_cashForRepair: 'a9CjhyhTKVojCdArKmw9yM',
-      // shelter_NTA: 'aL8oHMzJJ9soPepvK6YU9E',
-      // shelter_TA: 'aTP5nwZjpyR7oy7bdMZktC',
-      // bn_Re: 'aKgX4MNs6gCemDQKPeXxY8',
-      // bn_RapidResponse: 'aMJL9DG8qEcULqTZTKQbrq',
-      // bn_OldMpcaNfi: 'a4Sx3PrFMDAMZEGsyzgJJg',
-      // bn_OldMpcaNfiNaa: 'aBGVXW2N26DaLehmKneuyB',
-      // bn_OldMpcaNfiMyko: 'a8WAWB9Yxu2jkgk4Ei8GTk',
-      // meal_VisitMonitoring: 'a8GkjWBQDfxVADGHWJDrUw',
-      // protection_Hhs2_1: 'aQDZ2xhPUnNd43XzuQucVR',
-      // protection_Hhs2: 'aRHsewShwZhXiy8jrBj9zf',
-      // protection_Hhs1: 'aFU8x6tHksveU2c3hK7RUG',
-      // protection_communityMonitoring: 'aQHBhYgevdzw8TR2Vq2ZdR',
-      // protection_groupSession: 'a8Tn94arrSaH2FQBhUa9Zo',
-      // protection_pss: 'a52hN5iiCW73mxqqfmEAfp',
-    }
-  }
+const koboIndex = {
+  safety_incident: 'aAJNkn7v9fRL2XqQCgEkXf',
+  ecrec_cashRegistration: 'aE5md7RfHiy4LJmddoFAQH',
+  ecrec_cashRegistrationBha: 'aQCGR2fESUNFMYKVHMyAET',
+  ecrec_vetApplication: 'aGGGapARnC2ek7sA6SuHmu',
+  ecrec_vetEvaluation: 'a4iDDoLpUJHbu6cwsn2fnG',
+  ecrec_msmeGrantSelection: 'aQkWZkWjVpJsqZ3tYtuwFZ',
+  ecrec_msmeGrantEoi: 'awYf9G3sZB4grG8S4w3Wt8',
+  bn_rapidResponse: 'aMJL9DG8qEcULqTZTKQbrq',
+  bn_rapidResponse2: 'adpuqZypnqHb8LNfX49iA5',
+  bn_cashForRentApplication: 'aBupWbhtUmA7so3532tYLa',
+  bn_cashForRentRegistration: 'ajNzDaUuLkcEvjQhVsAmao',
+  shelter_cashForRepair: 'a9CjhyhTKVojCdArKmw9yM',
+  bn_1_mpcaNfi: 'a4Sx3PrFMDAMZEGsyzgJJg',
+  bn_1_mpcaNfiMyko: 'a8WAWB9Yxu2jkgk4Ei8GTk',
+  bn_1_mpcaNfiNaa: 'aBGVXW2N26DaLehmKneuyB',
+  bn_0_mpcaRegNewShort: 'a5kgQdqZLLNTLSmC8DK7Eq',
+  bn_0_mpcaReg: 'aEwY33SAtdayNTeHoiJfdg',
+  bn_0_mpcaRegNoSig: 'aHuWQPkrC43qBfTmJvoLqg',
+  bn_0_mpcaRegESign: 'a8JXohrBDqTdCc86Ysz26r',
+  bn_re: 'aKgX4MNs6gCemDQKPeXxY8',
+  bn_rapidResponseSida: 'aTJRd5zLdPHcEhGDovh9dW',
+  meal_verificationEcrec: 'aEN2tkQhpsfX4G3i6Re7bi',
+  meal_verificationWinterization: 'aAWVLi8bSb2S8bHc5CcL8i',
+  meal_visitMonitoring: 'a8GkjWBQDfxVADGHWJDrUw',
+  meal_pdmStandardised: 'aCWKwfvJ6F48HxUZTrr9L7',
+  meal_cashPdm: 'aEKoPVd36PLRrmqWgk42DG',
+  meal_cfmInternal: 'aN3Y8JeH2fU3GthrWAs9FG',
+  meal_cfmExternal: 'aJaGLvGEdpYWk5ift8k87y',
+  shelter_nta: 'aL8oHMzJJ9soPepvK6YU9E',
+  shelter_ta: 'aTP5nwZjpyR7oy7bdMZktC',
+  shelter_north: 'aCPdwVnnsYeReynJ7YnLGH',
+  shelter_cashForShelter: 'aQgRrYdwHuvWbj23LpywPF',
+  protection_hhs2: 'aRHsewShwZhXiy8jrBj9zf',
+  protection_hhs2_1: 'aQDZ2xhPUnNd43XzuQucVR',
+  protection_hhs3: 'aDmHHT6QzBSwwy9WZcTRrM',
+  protection_communityMonitoring: 'aQHBhYgevdzw8TR2Vq2ZdR',
+  protection_groupSession: 'a8Tn94arrSaH2FQBhUa9Zo',
+  protection_pss: 'a52hN5iiCW73mxqqfmEAfp',
+  protection_gbv: 'a5Noq6Wf9a8aE2cmi74FyS',
+  protection_coc: 'aRBEzakmsMPpw8VoJG8Gpk',
+  protection_hhs1: 'aFU8x6tHksveU2c3hK7RUG' as const,
+  protection_referral: 'a62ZpworuN4nFLznsUej8r',
+  protection_counselling: 'a2ck63vPA7hkk8aEhNTSUJ',
+  protection_gbvSocialProviders: 'aKrbJdapRxfdPgXb3KqzHd',
+  partnership_partnersDatabase: 'aLs32U5Qc9HfQ5mxQtsEML',
+  partnership_initialQuestionnaire: 'a6u7CBysEz746Hdx6pVLzp',
+  partnership_assessment: 'aLD2Xc9cKSY22c5cAP5utT',
+  pseah_training_tracker: 'aRBEzakmsMPpw8VoJG8Gpk'
 }
 
-export type KoboFormName = keyof typeof koboIndex.drcUa.form
+const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex)).reduceObject(([k, v]) => [v, k])
 
-/** @deprecated*/
-export const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex.drcUa.form)).reduceObject(([k, v]) => [v, k])
-
-/** @deprecated*/
-export const koboFormTranslation: Record<KoboFormName, string> = {
+const koboFormTranslation: Record<KoboFormName, string> = {
   safety_incident: '[Safety] Incident tracker',
   ecrec_vetApplication: `[Ecrec] VET - Training grants - we are now accepting applications / Гранти на навчання — відкриваємо прийом заявок`,
   ecrec_vetEvaluation: `[Ecrec] VET - Candidate evaluation`,
@@ -93,7 +62,7 @@ export const koboFormTranslation: Record<KoboFormName, string> = {
   ecrec_msmeGrantSelection: '[Ecrec] MSME Grant Selection',
   ecrec_msmeGrantEoi: '[Ecrec] MSME EOI',
   bn_rapidResponse: '[Basic Needs] Rapid Response Mechanism',
-  bn_rapidResponse2:'[Basic Needs] Rapid Response Mechanism v2',
+  bn_rapidResponse2: '[Basic Needs] Rapid Response Mechanism v2',
   bn_cashForRentApplication: '[Basic Needs] Cash for Rent Application',
   bn_cashForRentRegistration: '[Basic Needs] Cash for Rent Registration',
   bn_1_mpcaNfi: '[Basic Needs] v1 Joint MPCA-NFI Registration',
@@ -133,8 +102,9 @@ export const koboFormTranslation: Record<KoboFormName, string> = {
   partnership_initialQuestionnaire: '[Partnership] CBP CSO Initial Questionnaire',
   partnership_partnersDatabase: '[Partnership] DRC Partners Database',
   pseah_training_tracker: 'DRC - PSEAH Training tracker'
-//
 }
+
+export type KoboFormName = keyof typeof koboIndex
 
 export namespace KoboIndex {
 
@@ -144,7 +114,7 @@ export namespace KoboIndex {
     donors?: string[]
   }
 
-  export const names = Obj.keys(koboIndex.drcUa.form)
+  export const names = Obj.keys(koboIndex)
 
   export const parseFormName = (name: string): ParsedForm => {
     const match = name.match(/^\[(.*?)]\s*(?:\{(.*?)})?\s*(.*)$/)
@@ -161,8 +131,8 @@ export namespace KoboIndex {
     }
   }
 
-  export const byName = (name: keyof typeof koboIndex.drcUa.form) => {
-    const id = koboIndex.drcUa.form[name]
+  export const byName = (name: keyof typeof koboIndex) => {
+    const id = koboIndex[name]
     const translation = koboFormTranslation[name]
     return {
       name,

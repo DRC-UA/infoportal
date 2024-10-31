@@ -2,6 +2,7 @@ import {ApiClient, ApiClientParams} from '../../api-client/ApiClient'
 import {KoboSdkv2} from './v2/KoboSdkv2'
 import {KoboSdkv1} from './v1/KoboSdkv1'
 import {Logger} from '../../types'
+import {Obj} from '@alexandreannic/ts-utils'
 
 export class KoboSdk {
 

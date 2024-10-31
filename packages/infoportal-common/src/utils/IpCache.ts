@@ -1,4 +1,4 @@
-import {duration, Duration, filterUndefined, hashArgs} from '@alexandreannic/ts-utils'
+import {duration, Duration, filterUndefined, hashArgs, Obj} from '@alexandreannic/ts-utils'
 import {Logger} from '../types'
 
 export interface IpCacheData<V> {
@@ -150,7 +150,21 @@ export class IpCache<V = undefined> {
 
   readonly getInfo = () => {
     this.cleanCheckup()
-    return Object.fromEntries(this.cache)
+    return Obj.mapValues(Object.fromEntries(this.cache), v => {
+      if (typeof v.value === 'object') {
+        return {
+          ...v, value: Obj.mapValues(v.value as any, v2 => {
+            try {
+              const canStringfy = JSON.stringify(v2)
+              return v2
+            } catch (e) {
+              return 'Cannot stringify'
+            }
+          })
+        }
+      }
+      return v
+    })
     // return seq(this.getAllKeys()).reduceObject(key => {
     //   console.log('-----', this.cache.get(key))
     //   const x = this.cache.get(key)

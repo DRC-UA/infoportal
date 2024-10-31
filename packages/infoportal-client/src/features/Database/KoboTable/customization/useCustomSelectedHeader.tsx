@@ -2,7 +2,7 @@ import {ReactNode} from 'react'
 import {KoboAnswerId} from 'infoportal-common'
 import {IpBtn, Modal, Txt} from '@/shared'
 import {useI18n} from '@/core/i18n'
-import {KoboId} from 'infoportal-common/kobo'
+import {KoboId} from 'infoportal-common'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {AccessSum} from '@/core/sdk/server/access/Access'
 

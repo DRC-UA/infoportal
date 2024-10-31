@@ -1,12 +1,11 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useMemo} from 'react'
 import {useAsync} from '@/shared/hook/useAsync'
-import {DrcOffice, KoboAnswerId, KoboGeneralMapping, koboIndex, KoboIndex, OblastIndex, ShelterContractorPrices, ShelterTaPriceLevel} from 'infoportal-common'
+import {DrcOffice, KoboAnswerId, KoboGeneralMapping, KoboIndex, KoboShelterTa, OblastIndex, ShelterContractorPrices, ShelterTaPriceLevel} from 'infoportal-common'
 import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetcher'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {ShelterEntity} from '@/features/Shelter/shelterEntity'
-import {KoboShelterTa} from 'infoportal-common'
 
 export type UseShelterData = ReturnType<typeof useShelterData>
 
@@ -102,8 +101,8 @@ export const useShelterData = () => {
 
   const asyncSyncAnswers = useAsync(async () => {
     await Promise.all([
-      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('shelter_ta').id),
-      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('shelter_nta').id),
+      api.koboApi.synchronizeAnswers(KoboIndex.byName('shelter_ta').id),
+      api.koboApi.synchronizeAnswers(KoboIndex.byName('shelter_nta').id),
     ])
     await fetchAll({clean: false, force: true})
   })

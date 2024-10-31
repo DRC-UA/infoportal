@@ -1,5 +1,8 @@
 import {KoboApiQuestionSchema, KoboApiSchema} from 'infoportal-common'
 
+/**
+ * Track question name from Kobo submissions and trigger specific actions accordingly
+ */
 export enum KoboCustomDirectives {
   TRIGGER_EMAIL = 'TRIGGER_EMAIL',
 }

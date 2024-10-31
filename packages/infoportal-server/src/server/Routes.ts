@@ -151,14 +151,13 @@ export const getRoutes = (
 
     router.post('/proxy-request', errorCatcher(main.proxy))
 
-    router.post('/kobo-api/webhook', errorCatcher(koboApi.answersWebHook))
-    router.post('/kobo-api/sync', auth({adminOnly: true}), errorCatcher(koboApi.synchronizeAllAnswersFromKoboServer))
-    router.post('/kobo-api/:id/:formId/sync', auth(), errorCatcher(koboApi.synchronizeAnswersFromKoboServer))
-    router.get('/kobo-api/:id/attachment', errorCatcher(koboApi.getAttachementsWithoutAuth))
-    router.get('/kobo-api/:id/:formId/answers', auth(), errorCatcher(koboApi.getAnswers))
-    router.get('/kobo-api/:id', auth(), errorCatcher(koboApi.getForms))
-    router.get('/kobo-api/:id/:formId', auth(), errorCatcher(koboApi.getSchema))
-    router.get('/kobo-api/:id/:formId/:answerId/edit-url', errorCatcher(koboApi.edit))
+    router.post('/kobo-api/webhook', errorCatcher(koboApi.handleWebhookNewAnswers))
+    router.post('/kobo-api/sync', auth({adminOnly: true}), errorCatcher(koboApi.syncAnswersAll))
+    router.post('/kobo-api/schema', auth(), errorCatcher(koboApi.searchSchemas))
+    router.post('/kobo-api/:formId/sync', auth(), errorCatcher(koboApi.syncAnswersByForm))
+    router.get('/kobo-api/:formId/attachment', auth(), errorCatcher(koboApi.getAttachementsWithoutAuth))
+    router.get('/kobo-api/:formId/schema', auth(), errorCatcher(koboApi.getSchema))
+    router.get('/kobo-api/:formId/edit-url/:answerId', errorCatcher(koboApi.edit))
     router.post('/kobo-api/proxy', errorCatcher(koboApi.proxy))
 
     router.post('/kobo-answer-history/search', errorCatcher(koboAnswerHistory.search))
@@ -205,10 +204,6 @@ export const getRoutes = (
 
     router.get('/cache', cacheController.get)
     router.post('/cache/clear', cacheController.clear)
-
-    // router.get('/legalaid', auth(), errorCatcher(legalaid.index))
-    // router.get('/ecrec', auth(), errorCatcher(ecrec.index))
-    // router.get('/*', errorCatcher(ecrec.index))
   } catch (e) {
     if (e instanceof Error) {
       log.error(e.toString())

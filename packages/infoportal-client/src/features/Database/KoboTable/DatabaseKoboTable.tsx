@@ -11,7 +11,7 @@ import {useSession} from '@/core/Session/SessionContext'
 import {Access, AccessLevel} from '@/core/sdk/server/access/Access'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {DatabaseKoboTableProvider} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {KoboId, koboIndex, UUID} from 'infoportal-common'
+import {KoboId} from 'infoportal-common'
 import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
 import {Skeleton} from '@mui/material'
 import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
@@ -24,14 +24,13 @@ import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 
 export const DatabaseTableRoute = () => {
   const ctx = useDatabaseContext()
-  const {serverId, formId} = databaseUrlParamsValidation.validateSync(useParams())
+  const {formId} = databaseUrlParamsValidation.validateSync(useParams())
   return (
     <>
       {map(ctx.getForm(formId), form =>
         <Page width="full" sx={{p: 0, pb: 0, mb: 0,}}>
           <Panel sx={{mb: 0}}>
             <DatabaseTable
-              serverId={serverId}
               form={form}
               formId={formId}
             />
@@ -44,7 +43,6 @@ export const DatabaseTableRoute = () => {
 
 export interface DatabaseTableProps {
   form?: KoboForm
-  serverId?: UUID
   formId: KoboId
   dataFilter?: (_: KoboMappedAnswer) => boolean
   onFiltersChange?: (_: Record<string, DatatableFilterValue>) => void
@@ -58,7 +56,6 @@ export interface DatabaseTableProps {
 }
 
 export const DatabaseTable = ({
-  serverId = koboIndex.drcUa.server.prod,
   form,
   formId,
   onFiltersChange,
@@ -88,7 +85,7 @@ export const DatabaseTable = ({
   useEffect(() => {
     fetcher.fetch({})
     _form.fetch()
-  }, [serverId, formId])
+  }, [formId])
 
 
   const loading = fetcher.loading
@@ -113,7 +110,6 @@ export const DatabaseTable = ({
           schema={schema}
           dataFilter={dataFilter}
           access={access}
-          serverId={serverId}
           refetch={refetch}
           loading={loading}
           data={fetcher.get?.data}

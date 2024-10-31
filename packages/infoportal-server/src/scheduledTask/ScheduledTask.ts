@@ -29,7 +29,7 @@ export class ScheduledTask {
   }
 
   private readonly run = async () => {
-    await this.koboApiService.syncAllApiAnswersToDb()
+    await this.koboApiService.syncApiAnswersToDbAll()
     await this.memMpcaDb.refresh()
   }
 }

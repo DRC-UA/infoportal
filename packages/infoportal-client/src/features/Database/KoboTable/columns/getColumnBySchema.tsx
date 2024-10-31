@@ -27,8 +27,8 @@ import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {alpha, IconProps, Theme} from '@mui/material'
 import {UseDatabaseGroupDisplay} from '@/features/Database/KoboTable/groupDisplay/useDatabaseGroupDisplay'
-import {NonNullableKey} from 'infoportal-common/type/Generic'
-import {KoboApiQuestionType} from 'infoportal-common/kobo'
+import {NonNullableKey} from 'infoportal-common'
+import {KoboApiQuestionType} from 'infoportal-common'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()

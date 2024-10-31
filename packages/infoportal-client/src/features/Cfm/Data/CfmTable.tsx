@@ -11,7 +11,6 @@ import {
   CfmDataSource,
   DrcOffice,
   DrcProject,
-  koboIndex,
   KoboIndex,
   KoboMealCfmStatus,
   KoboMealCfmTag,
@@ -82,8 +81,8 @@ export const CfmTable = ({}: any) => {
 
   const _refresh = useAsync(async () => {
     await Promise.all([
-      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('meal_cfmInternal').id),
-      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('meal_cfmExternal').id),
+      api.koboApi.synchronizeAnswers(KoboIndex.byName('meal_cfmInternal').id),
+      api.koboApi.synchronizeAnswers(KoboIndex.byName('meal_cfmExternal').id),
     ])
     await Promise.all([
       ctxAnswers.byName('meal_cfmExternal').fetch({force: true, clean: false}),

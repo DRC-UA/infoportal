@@ -42,7 +42,7 @@ export const KoboSchemaProvider = ({
   const {toastHttpError} = useIpToast()
 
   const {anyLoading, anyError, clearCache, ...fetchers} = useFetchers((id: KoboId) => {
-    return api.koboApi.getForm({id}).catch(e => {
+    return api.koboApi.getSchema({id}).catch(e => {
       toastHttpError(e)
       throw e
     })

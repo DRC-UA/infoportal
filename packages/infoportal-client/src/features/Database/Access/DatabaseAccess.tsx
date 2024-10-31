@@ -19,13 +19,13 @@ import {useFetcher} from '@/shared/hook/useFetcher'
 
 export const DatabaseAccessRoute = () => {
   const {api} = useAppSettings()
-  const _formSchemas = useFetchers(api.koboApi.getForm, {requestKey: ([p]) => p.id})
-  const {serverId, formId} = databaseUrlParamsValidation.validateSync(useParams())
+  const _formSchemas = useFetchers(api.koboApi.getSchema, {requestKey: ([p]) => p.id})
+  const {formId} = databaseUrlParamsValidation.validateSync(useParams())
   const form = _formSchemas.get[formId]
 
   useEffect(() => {
-    _formSchemas.fetch({force: true}, {serverId, id: formId})
-  }, [serverId, formId])
+    _formSchemas.fetch({force: true}, {id: formId})
+  }, [formId])
 
   return (
     <Page width="lg" loading={_formSchemas.loading[formId]}>

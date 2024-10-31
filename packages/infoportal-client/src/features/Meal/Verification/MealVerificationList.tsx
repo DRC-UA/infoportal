@@ -10,7 +10,7 @@ import {Modal, Txt} from '@/shared'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useSession} from '@/core/Session/SessionContext'
-import {KoboId, KoboIndex, koboIndex} from 'infoportal-common'
+import {KoboId, KoboIndex} from 'infoportal-common'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import Link from 'next/link'
@@ -32,7 +32,7 @@ export const MealVerificationLinkToForm = ({
   return (
     <Link target="_blank" href={conf.linkToFeature(
       AppFeatureId.kobo_database,
-      databaseIndex.siteMap.database.absolute(koboIndex.drcUa.server.prod, koboFormId)
+      databaseIndex.siteMap.database.absolute(koboFormId)
     )}>
       <Txt link sx={{display: 'flex', alignItems: 'center', ...sx}}>
         <Icon fontSize="inherit" sx={{mr: .5}}>open_in_new</Icon>

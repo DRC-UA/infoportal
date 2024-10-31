@@ -110,7 +110,7 @@ export const MpcaPaymentTool = () => {
                 align: 'center',
                 head: m.taxID,
                 renderQuick: _ => map(_.taxIdFileURL, url =>
-                  <TableImg url={getKoboImagePath(url.download_small_url)}/>
+                  <TableImg url={getKoboImagePath({baseUrl: '', formId: '', url: url.download_small_url})}/>
                 )
               },
               {
@@ -128,7 +128,7 @@ export const MpcaPaymentTool = () => {
                 head: m.id,
                 align: 'center',
                 renderQuick: _ => map(_.idFileURL, url =>
-                  <TableImg url={getKoboImagePath(url.download_small_url)}/>
+                  <TableImg url={getKoboImagePath({baseUrl: '', formId: '', url: url.download_small_url})}/>
                 )
               },
               {id: 'status', head: m.status, renderQuick: _ => _.status},

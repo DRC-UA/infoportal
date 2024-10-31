@@ -1,6 +1,6 @@
 import {KoboAnswerId} from 'infoportal-common'
 
-const base = (serverId = ':serverId', formId = ':formId') => `/form/${serverId}/${formId}`
+const base = (formId = ':formId') => `/form/${formId}`
 
 export const databaseIndex = {
   basePath: '/database',
@@ -10,23 +10,23 @@ export const databaseIndex = {
     custom: (id = ':id') => `/custom/${id}`,
     entry: {
       relative: `:id`,
-      absolute: (serverId = ':serverId', formId = ':formId') => base(serverId, formId) + `/:id`
+      absolute: (formId = ':formId') => base(formId) + `/:id`
     },
     database: {
       relative: `database`,
-      absolute: (serverId = ':serverId', formId = ':formId') => base(serverId, formId) + '/database'
+      absolute: (formId = ':formId') => base(formId) + '/database'
     },
     answer: {
       relative: (answerId: KoboAnswerId = ':answerId') => `answer/${answerId}`,
-      absolute: (serverId = ':serverId', formId = ':formId', answerId: KoboAnswerId = ':answerId') => base(serverId, formId) + `/answer/${answerId}`
+      absolute: (formId = ':formId', answerId: KoboAnswerId = ':answerId') => base(formId) + `/answer/${answerId}`
     },
     access: {
       relative: `access`,
-      absolute: (serverId = ':serverId', formId = ':formId') => base(serverId, formId) + '/access'
+      absolute: (formId = ':formId') => base(formId) + '/access'
     },
     history: {
       relative: `history`,
-      absolute: (serverId = ':serverId', formId = ':formId') => base(serverId, formId) + '/history'
+      absolute: (formId = ':formId') => base(formId) + '/history'
     },
   }
 }

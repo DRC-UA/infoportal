@@ -17,7 +17,7 @@ import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {Txt} from '@/shared'
 
 export const DatabaseHistory = () => {
-  const {serverId, formId} = databaseUrlParamsValidation.validateSync(useParams())
+  const {formId} = databaseUrlParamsValidation.validateSync(useParams())
   const t = useTheme()
   const {m, formatDateTime, formatDate} = useI18n()
   const {api} = useAppSettings()

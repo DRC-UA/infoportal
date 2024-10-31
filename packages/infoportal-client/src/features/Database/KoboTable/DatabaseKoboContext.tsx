@@ -17,7 +17,6 @@ export type KoboExternalFilesIndex = Record<string, Record<string, ExternalFiles
 
 export interface DatabaseKoboContext {
   refetch: (p?: FetchParams) => Promise<void>
-  serverId: UUID
   schema: KoboSchemaHelper.Bundle
   canEdit?: AccessSum
   access: AccessSum
@@ -42,7 +41,6 @@ export const DatabaseKoboTableProvider = (props: {
   children: ReactNode
   loading?: boolean
   refetch: (p?: FetchParams) => Promise<void>
-  serverId: DatabaseKoboContext['serverId']
   access: DatabaseKoboContext['access']
   form: DatabaseKoboContext['form']
   data?: KoboMappedAnswer[]
@@ -50,7 +48,6 @@ export const DatabaseKoboTableProvider = (props: {
   const {
     form,
     data,
-    serverId,
     children,
     refetch,
   } = props
@@ -59,7 +56,7 @@ export const DatabaseKoboTableProvider = (props: {
 
   const fetcherExternalFiles = useFetcher<() => Promise<{file: string, csv: string}[]>>(() => {
     return Promise.all(props.schema.schemaUnsanitized.files.map(file =>
-      api.koboApi.proxy({method: 'GET', url: file.content, serverId})
+      api.koboApi.proxy({method: 'GET', url: file.content})
         .then((csv: string) => ({file: file.metadata.filename, csv}))
         .catch(() => {
           console.error(`Cannot get Kobo external files ${file.metadata.filename} from ${file.content}`)
@@ -92,11 +89,11 @@ export const DatabaseKoboTableProvider = (props: {
   }
 
   const asyncRefresh = useAsync(async () => {
-    await api.koboApi.synchronizeAnswers(serverId, form.id)
+    await api.koboApi.synchronizeAnswers(form.id)
     await refetch({force: true, clean: false})
   })
 
-  const asyncEdit = (answerId: KoboAnswerId) => api.koboApi.getEditUrl({serverId, formId: form.id, answerId})
+  const asyncEdit = (answerId: KoboAnswerId) => api.koboApi.getEditUrl({formId: form.id, answerId})
 
   const [mappedData, setMappedData] = useState<KoboMappedAnswer[] | undefined>(undefined)
 
