@@ -27,8 +27,8 @@ import {app, AppCacheKey} from '../../index'
 import {appConf} from '../../core/conf/AppConf'
 import {KoboAnswerHistoryService} from './history/KoboAnswerHistoryService'
 import {AppError} from '../../helper/Errors'
-import Event = GlobalEvent.Event
 import {Util} from '../../helper/Utils'
+import Event = GlobalEvent.Event
 
 export type DbKoboAnswer<
   T extends Record<string, any> = Record<string, any>,
@@ -54,7 +54,7 @@ export class KoboService {
   constructor(
     private prisma: PrismaClient,
     private access = new AccessService(prisma),
-    private sdkGenerator: KoboSdkGenerator = new KoboSdkGenerator(prisma),
+    private sdkGenerator: KoboSdkGenerator = KoboSdkGenerator.getSingleton(prisma),
     private history = new KoboAnswerHistoryService(prisma),
     private event: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
     private log = app.logger('KoboService'),
@@ -312,11 +312,10 @@ export class KoboService {
 
   readonly getSchema = app.cache.request({
     key: AppCacheKey.KoboSchema,
-    genIndex: _ => _.serverId + _.formId,
+    genIndex: _ => _.formId,
     ttlMs: duration(2, 'day').toMs,
-    fn: async ({serverId, formId}: {serverId?: UUID, formId: KoboId}): Promise<KoboApiSchema> => {
-      const sId = serverId ?? (await this.prisma.koboForm.findFirstOrThrow({where: {id: formId}}).then(_ => _.serverId))
-      const sdk = await this.sdkGenerator.get(sId)
+    fn: async ({formId}: {formId: KoboId}): Promise<KoboApiSchema> => {
+      const sdk = await this.sdkGenerator.getByFormId(formId)
       return sdk.v2.getForm(formId)
     },
   })
@@ -438,7 +437,7 @@ export class KoboService {
           id: {in: answerIds}
         }
       }),
-      this.sdkGenerator.get().then(_ => _.v2.delete(formId, answerIds)),
+      this.sdkGenerator.getByFormId(formId).then(_ => _.v2.delete(formId, answerIds)),
     ])
     this.history.create({
       type: 'delete',
@@ -463,7 +462,7 @@ export class KoboService {
   }) => {
     answer = Array.isArray(answer) ? answer.join(' ') : answer
     const [sdk, xpath] = await Promise.all([
-      this.sdkGenerator.get(),
+      this.sdkGenerator.getByFormId(formId),
       this.getSchema({formId}).then(_ => _.content.survey.find(_ => _.name === question)?.$xpath),
     ])
     if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)

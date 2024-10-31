@@ -146,59 +146,7 @@ export namespace KoboIndex {
   }
 
   export const names = Obj.keys(koboIndex.drcUa.form)
-
-  export const serverByName: Record<KoboFormName, UUID> = {
-    safety_incident: koboIndex.drcUa.server.prod,
-    ecrec_vetApplication: koboIndex.drcUa.server.prod,
-    ecrec_vetEvaluation: koboIndex.drcUa.server.prod,
-    ecrec_cashRegistration: koboIndex.drcUa.server.prod,
-    ecrec_cashRegistrationBha: koboIndex.drcUa.server.prod,
-    ecrec_msmeGrantSelection: koboIndex.drcUa.server.prod,
-    ecrec_msmeGrantEoi: koboIndex.drcUa.server.prod,
-    bn_rapidResponse: koboIndex.drcUa.server.prod,
-    bn_rapidResponse2: koboIndex.drcUa.server.prod,
-    bn_cashForRentApplication: koboIndex.drcUa.server.prod,
-    bn_cashForRentRegistration: koboIndex.drcUa.server.prod,
-    bn_1_mpcaNfi: koboIndex.drcUa.server.prod,
-    bn_1_mpcaNfiMyko: koboIndex.drcUa.server.prod,
-    bn_1_mpcaNfiNaa: koboIndex.drcUa.server.prod,
-    bn_0_mpcaRegNewShort: koboIndex.drcUa.server.prod,
-    bn_0_mpcaReg: koboIndex.drcUa.server.prod,
-    bn_0_mpcaRegNoSig: koboIndex.drcUa.server.prod,
-    bn_0_mpcaRegESign: koboIndex.drcUa.server.prod,
-    bn_re: koboIndex.drcUa.server.prod,
-    bn_rapidResponseSida: koboIndex.drcUa.server.prod,
-    meal_visitMonitoring: koboIndex.drcUa.server.prod,
-    meal_pdmStandardised: koboIndex.drcUa.server.prod,
-    meal_cashPdm: koboIndex.drcUa.server.prod,
-    meal_shelterPdm: koboIndex.drcUa.server.prod,
-    meal_cfmInternal: koboIndex.drcUa.server.prod,
-    meal_cfmExternal: koboIndex.drcUa.server.prod,
-    meal_verificationEcrec: koboIndex.drcUa.server.prod,
-    meal_verificationWinterization: koboIndex.drcUa.server.prod,
-    shelter_cashForRepair: koboIndex.drcUa.server.prod,
-    shelter_nta: koboIndex.drcUa.server.prod,
-    shelter_ta: koboIndex.drcUa.server.prod,
-    shelter_north: koboIndex.drcUa.server.prod,
-    shelter_cashForShelter: koboIndex.drcUa.server.prod,
-    protection_hhs3: koboIndex.drcUa.server.prod,
-    protection_hhs2: koboIndex.drcUa.server.prod,
-    protection_hhs2_1: koboIndex.drcUa.server.prod,
-    protection_counselling: koboIndex.drcUa.server.prod,
-    protection_communityMonitoring: koboIndex.drcUa.server.prod,
-    protection_groupSession: koboIndex.drcUa.server.prod,
-    protection_pss: koboIndex.drcUa.server.prod,
-    protection_hhs1: koboIndex.drcUa.server.prod,
-    protection_gbv: koboIndex.drcUa.server.prod,
-    protection_gbvSocialProviders: koboIndex.drcUa.server.prod,
-    protection_coc: koboIndex.drcUa.server.prod,
-    protection_referral: koboIndex.drcUa.server.prod,
-    partnership_assessment: koboIndex.drcUa.server.prod,
-    partnership_initialQuestionnaire: koboIndex.drcUa.server.prod,
-    partnership_partnersDatabase: koboIndex.drcUa.server.prod,
-    pseah_training_tracker: koboIndex.drcUa.server.prod,
-  }
-
+  
   export const parseFormName = (name: string): ParsedForm => {
     const match = name.match(/^\[(.*?)]\s*(?:\{(.*?)})?\s*(.*)$/)
     if (match) {

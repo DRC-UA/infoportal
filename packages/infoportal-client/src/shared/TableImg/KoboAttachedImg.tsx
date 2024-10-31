@@ -1,23 +1,24 @@
 import {AppConfig, appConfig} from '@/conf/AppConfig'
-import {KoboAnswerId, KoboAttachment, KoboId, koboIndex} from 'infoportal-common'
+import {KoboAnswerId, KoboAttachment, KoboId} from 'infoportal-common'
 import {TableImg} from '@/shared/TableImg/TableImg'
 import {useMemo} from 'react'
+import {KoboApiSdk} from '@/core/sdk/server/kobo/KoboApiSdk'
 
 export const proxyKoboImg = ({
+  formId,
   url,
   fileName,
-  serverId = koboIndex.drcUa.server.prod,
   conf = appConfig,
 }: {
+  formId: KoboId
   url?: string
   fileName?: string
-  serverId?: string
   conf?: AppConfig
 }) => {
   const path = url?.split('api')[1]
   return {
     path,
-    fullUrl: path ? conf.apiURL + `/kobo-api/${serverId}/attachment?path=${path}` : undefined
+    fullUrl: path ? KoboApiSdk.getAttachementUrl({formId, path, baseUrl: conf.baseURL}) : undefined
     // fullUrl: path ? conf.apiURL + `/kobo-api/${serverId}/attachment?path=${path}&file=${fileName}` : undefined
   }
 }
@@ -35,7 +36,6 @@ export const findFileUrl = ({formId, answerId, fileName, attachments}: {formId: 
 
 export const koboImgHelper = ({
   fileName,
-  serverId = koboIndex.drcUa.server.prod,
   attachments,
   conf = appConfig,
   formId,
@@ -44,22 +44,20 @@ export const koboImgHelper = ({
   formId: KoboId
   answerId: KoboAnswerId
   fileName?: string,
-  serverId?: string
   attachments: KoboAttachment[]
   conf?: AppConfig
 }) => {
   const url = findFileUrl({formId, answerId, fileName, attachments})
   return proxyKoboImg({
+    formId,
     url,
     fileName,
-    serverId,
     conf,
   })
 }
 
 export const KoboAttachedImg = ({
   fileName,
-  serverId,
   attachments,
   size,
   formId,
@@ -71,7 +69,6 @@ export const KoboAttachedImg = ({
   size?: number
   tooltipSize?: number | null
   fileName?: string
-  serverId?: string
   attachments: KoboAttachment[]
 }) => {
   const file = useMemo(() => koboImgHelper({formId, answerId, attachments, fileName}), [attachments, fileName])
@@ -82,10 +79,12 @@ export const KoboAttachedImg = ({
 
 export const AllAttachements = ({
   attachments,
+  formId,
 }: {
+  formId: KoboId
   attachments: KoboAttachment[]
 }) => {
   return attachments?.map((a: KoboAttachment, i: number) =>
-    <TableImg key={i} size={100} tooltipSize={100} url={proxyKoboImg({url: a.download_url}).fullUrl ?? ''}/>
+    <TableImg key={i} size={100} tooltipSize={100} url={proxyKoboImg({formId, url: a.download_url}).fullUrl ?? ''}/>
   )
 }

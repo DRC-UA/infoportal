@@ -54,7 +54,7 @@ const ShelterSidebar = () => {
             <SidebarItem icon="table_chart" active={isActive}>{m.data}</SidebarItem>
           )}
         </NavLink>
-        <Link href={conf.linkToFeature(AppFeatureId.kobo_database, databaseIndex.siteMap.access.absolute(koboIndex.drcUa.server.prod, KoboIndex.byName('shelter_nta').id))}>
+        <Link href={conf.linkToFeature(AppFeatureId.kobo_database, databaseIndex.siteMap.access.absolute(KoboIndex.byName('shelter_nta').id))}>
           <SidebarItem icon="person_add" iconEnd="open_in_new">{m.accesses}</SidebarItem>
         </Link>
         <SidebarSection title={m.koboForms}>

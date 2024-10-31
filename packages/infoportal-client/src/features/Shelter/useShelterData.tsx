@@ -102,8 +102,8 @@ export const useShelterData = () => {
 
   const asyncSyncAnswers = useAsync(async () => {
     await Promise.all([
-      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('shelter_ta').id),
-      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('shelter_nta').id),
+      api.koboApi.synchronizeAnswers(KoboIndex.byName('shelter_ta').id),
+      api.koboApi.synchronizeAnswers(KoboIndex.byName('shelter_nta').id),
     ])
     await fetchAll({clean: false, force: true})
   })

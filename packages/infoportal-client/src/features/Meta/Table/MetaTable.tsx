@@ -3,7 +3,7 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {AILocationHelper, DrcProject, IKoboMeta, KoboIndex, koboIndex, KoboMetaStatus, koboMetaStatusLabel, PersonDetails} from 'infoportal-common'
+import {AILocationHelper, DrcProject, IKoboMeta, KoboIndex, KoboMetaStatus, koboMetaStatusLabel, PersonDetails} from 'infoportal-common'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {IpIconBtn} from '@/shared/IconBtn'
@@ -117,7 +117,7 @@ export const MetaTable = () => {
             label: (
               <Link target="_blank" href={conf.linkToFeature(
                 AppFeatureId.kobo_database,
-                databaseIndex.siteMap.database.absolute(koboIndex.drcUa.server.prod, f.id))
+                databaseIndex.siteMap.database.absolute(f.id))
               }>
                 <Txt link>{f.translation}</Txt>
                 <Icon fontSize="inherit" color="primary" style={{marginLeft: 2, verticalAlign: 'middle'}}>open_in_new</Icon>
@@ -194,7 +194,7 @@ export const MetaTable = () => {
         type: 'string',
         render: _ => {
           return {
-            label: _.taxIdFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.taxIdFileUrl)}/>,
+            label: _.taxIdFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath({baseUrl: conf.apiURL, formId: _.formId, url: _.taxIdFileUrl})}/>,
             export: _.taxIdFileUrl,
             value: _.taxIdFileName,
           }
@@ -213,7 +213,7 @@ export const MetaTable = () => {
         type: 'string',
         render: _ => {
           return {
-            label: _.idFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.idFileUrl)}/>,
+            label: _.idFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath({baseUrl: conf.apiURL, formId: _.formId, url: _.idFileUrl})}/>,
             export: _.idFileUrl,
             value: _.idFileName,
           }

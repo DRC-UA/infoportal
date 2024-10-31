@@ -20,7 +20,7 @@ export const DatabaseNew = ({
 }) => {
   const {api} = useAppSettings()
   const _server = useFetcher(api.kobo.server.getAll)
-  const _form = useFetchers(api.koboApi.getForms, {requestKey: ([serverId]) => serverId})
+  const _form = useFetchers(api.koboApi.searchSchemas, {requestKey: ([_]) => _.serverId})
   const _add = useAsync(api.kobo.form.add)
   const {m, formatDate} = useI18n()
   const [selectedForm, setSelectedForm] = useState<KoboFormCreate | undefined>()
@@ -36,7 +36,7 @@ export const DatabaseNew = ({
 
   useEffect(() => {
     if (_server.get) {
-      _server.get.forEach(_ => _form.fetch({}, _.id))
+      _server.get.forEach(_ => _form.fetch({}, {serverId: _.id}))
     }
   }, [_server.get])
 
@@ -63,7 +63,7 @@ export const DatabaseNew = ({
                 }
               }}
             >
-              < Txt size="big" bold sx={{mb: .5}}>{server.url.replace('https://', '')}</Txt>
+              <Txt size="big" bold sx={{mb: .5}}>{server.url.replace('https://', '')}</Txt>
               <ScRadioGroup dense value={selectedForm?.uid}>
                 {_form.get[server.id]?.filter(_ => _.has_deployment).map(form =>
                   <ScRadioGroupItem

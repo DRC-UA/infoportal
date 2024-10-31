@@ -31,7 +31,6 @@ import {Fender} from '@/shared/Fender'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 export const databaseUrlParamsValidation = yup.object({
-  serverId: yup.string().required(),
   formId: yup.string().required(),
 })
 
@@ -113,7 +112,7 @@ export const DatabaseWithContext = () => {
             <SidebarSection dense title={category} key={category}>
               {forms.map((_: Form) =>
                 <Tooltip key={_.id} title={_.parsedName.name} placement="right-end">
-                  <NavLink to={databaseIndex.siteMap.home(_.serverId, _.id)}>
+                  <NavLink to={databaseIndex.siteMap.home(_.id)}>
                     {({isActive, isPending}) => (
                       <SidebarItem
                         size={forms.length > 30 ? 'tiny' : 'small'}
@@ -164,7 +163,7 @@ export const DatabaseWithContext = () => {
 }
 
 export const DatabaseHome = () => {
-  const {serverId, formId} = databaseUrlParamsValidation.validateSync(useParams())
+  const {formId} = databaseUrlParamsValidation.validateSync(useParams())
   const {m} = useI18n()
   const {pathname} = useLocation()
   const ctx = useDatabaseContext()
@@ -183,22 +182,22 @@ export const DatabaseHome = () => {
         <Tab
           sx={{minHeight: 34, py: 1}}
           component={NavLink}
-          value={databaseIndex.siteMap.database.absolute(serverId, formId)}
-          to={databaseIndex.siteMap.database.absolute(serverId, formId)}
+          value={databaseIndex.siteMap.database.absolute(formId)}
+          to={databaseIndex.siteMap.database.absolute(formId)}
           label={m.data}
         />
         <Tab
           sx={{minHeight: 34, py: 1}}
           component={NavLink}
-          value={databaseIndex.siteMap.access.absolute(serverId, formId)}
-          to={databaseIndex.siteMap.access.absolute(serverId, formId)}
+          value={databaseIndex.siteMap.access.absolute(formId)}
+          to={databaseIndex.siteMap.access.absolute(formId)}
           label={m.access}
         />
         <Tab
           sx={{minHeight: 34, py: 1}}
           component={NavLink}
-          value={databaseIndex.siteMap.history.absolute(serverId, formId)}
-          to={databaseIndex.siteMap.history.absolute(serverId, formId)}
+          value={databaseIndex.siteMap.history.absolute(formId)}
+          to={databaseIndex.siteMap.history.absolute(formId)}
           label={m.history}
         />
       </Tabs>

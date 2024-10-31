@@ -4,8 +4,7 @@ import {useMpcaContext} from '../MpcaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {appConfig} from '@/conf/AppConfig'
-import {Bn_re, DrcOffice, KoboIndex, koboIndex, koboMetaStatusLabel, MpcaEntity} from 'infoportal-common'
+import {Bn_re, DrcOffice, KoboIndex, koboMetaStatusLabel, MpcaEntity} from 'infoportal-common'
 import {IpBtn} from '@/shared/Btn'
 import {formatDateTime, formatLargeNumber} from '@/core/i18n/localization/en'
 import {MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
@@ -27,9 +26,10 @@ import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
+import {KoboApiSdk} from '@/core/sdk/server/kobo/KoboApiSdk'
 
-export const getKoboImagePath = (url: string): string => {
-  return appConfig.apiURL + `/kobo-api/${koboIndex.drcUa.server.prod}/attachment?path=${url.split('api')[1]}`
+export const getKoboImagePath = ({baseUrl, url, formId}: {formId: string, baseUrl: string, url: string}): string => {
+  return KoboApiSdk.getAttachementUrl({baseUrl, formId, path: url.split('api')[1]})
 }
 
 const PrivateCell = () => {
@@ -196,7 +196,7 @@ export const MpcaData = () => {
                   label: (
                     <Link target="_blank" href={conf.linkToFeature(
                       AppFeatureId.kobo_database,
-                      databaseIndex.siteMap.database.absolute(koboIndex.drcUa.server.prod, f.id))
+                      databaseIndex.siteMap.database.absolute(f.id))
                     }>
                       <Txt link>{f.translation}</Txt>
                       <Icon fontSize="inherit" color="primary" style={{marginLeft: 2, verticalAlign: 'middle'}}>open_in_new</Icon>
@@ -335,7 +335,7 @@ export const MpcaData = () => {
                 return canSee(_.office) ? {
                   export: _.taxIdFileUrl,
                   value: _.taxIdFileName,
-                  label: _.taxIdFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.taxIdFileUrl)}/>
+                  label: _.taxIdFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath({url: _.taxIdFileUrl, baseUrl: conf.apiURL, formId: _.formId})}/>
                 } : {
                   label: <PrivateCell/>,
                   value: undefined,
@@ -416,7 +416,7 @@ export const MpcaData = () => {
                 return canSee(_.office) ? {
                   export: _.idFileUrl,
                   value: _.idFileName,
-                  label: _.idFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath(_.idFileUrl)}/>
+                  label: _.idFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath({url: _.idFileUrl, baseUrl: conf.apiURL, formId: _.formId})}/>
                 } : {
                   label: <PrivateCell/>,
                   value: undefined

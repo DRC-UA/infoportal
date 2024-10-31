@@ -39,6 +39,7 @@ import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {Kobo} from '@/core/sdk/server/kobo/Kobo'
 
 export interface CfmDataFilters extends KoboAnswerFilter {
 }
@@ -82,8 +83,8 @@ export const CfmTable = ({}: any) => {
 
   const _refresh = useAsync(async () => {
     await Promise.all([
-      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('meal_cfmInternal').id),
-      api.koboApi.synchronizeAnswers(koboIndex.drcUa.server.prod, KoboIndex.byName('meal_cfmExternal').id),
+      api.koboApi.synchronizeAnswers(KoboIndex.byName('meal_cfmInternal').id),
+      api.koboApi.synchronizeAnswers(KoboIndex.byName('meal_cfmExternal').id),
     ])
     await Promise.all([
       ctxAnswers.byName('meal_cfmExternal').fetch({force: true, clean: false}),

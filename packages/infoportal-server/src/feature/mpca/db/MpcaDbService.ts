@@ -38,7 +38,7 @@ export class MpcaDbService {
       KoboIndex.byName('bn_rapidResponse').id,
       KoboIndex.byName('shelter_cashForRepair').id,
     ]
-    await Promise.all(forms.map(formId => this.koboSync.syncApiForm({formId})))
+    await Promise.all(forms.map(formId => this.koboSync.syncApiAnswersToDbByForm({formId})))
   }
 
   readonly search = async (filters: KoboAnswerFilter): Promise<ApiPaginate<MpcaEntity>> => {

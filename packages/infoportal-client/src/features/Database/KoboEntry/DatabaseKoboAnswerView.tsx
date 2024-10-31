@@ -28,7 +28,7 @@ export const databaseUrlParamsValidation = yup.object({
 
 export const DatabaseKoboAnswerViewPage = () => {
   const {m} = useI18n()
-  const {serverId, formId, answerId} = databaseUrlParamsValidation.validateSync(useParams())
+  const {formId, answerId} = databaseUrlParamsValidation.validateSync(useParams())
   const [showQuestionWithoutAnswer, setShowQuestionWithoutAnswer] = useState(false)
   const ctxAnswers = useKoboAnswersContext().byId(formId)
   const ctxSchema = useKoboSchemaContext()
@@ -93,14 +93,13 @@ export const DatabaseKoboAnswerViewDialog = ({
 
   useEffect(() => {
     ctxSchema.fetchById(formId)
-    console.info(answer)
   }, [formId])
 
   return (
     <Dialog open={true}>
       <DialogTitle>
         <Box sx={{display: 'flex', alignItems: 'center'}}>
-          <NavLink to={databaseIndex.siteMap.answer.absolute(koboIndex.drcUa.server.prod, formId, answer.id)} onClick={onClose}>
+          <NavLink to={databaseIndex.siteMap.answer.absolute(formId, answer.id)} onClick={onClose}>
             <IpIconBtn color="primary">open_in_new</IpIconBtn>
           </NavLink>
           {answer.id}
