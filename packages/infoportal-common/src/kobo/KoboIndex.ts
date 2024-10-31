@@ -49,27 +49,7 @@ const koboIndex = {
   partnership_initialQuestionnaire: 'a6u7CBysEz746Hdx6pVLzp',
   partnership_assessment: 'aLD2Xc9cKSY22c5cAP5utT',
   pseah_training_tracker: 'aRBEzakmsMPpw8VoJG8Gpk'
-  //
-  // mealCfmInternal: 'aN3Y8JeH2fU3GthrWAs9FG',
-  // mealCfmExternal: 'aJaGLvGEdpYWk5ift8k87y',
-  // shelter_cashForRepair: 'a9CjhyhTKVojCdArKmw9yM',
-  // shelter_NTA: 'aL8oHMzJJ9soPepvK6YU9E',
-  // shelter_TA: 'aTP5nwZjpyR7oy7bdMZktC',
-  // bn_Re: 'aKgX4MNs6gCemDQKPeXxY8',
-  // bn_RapidResponse: 'aMJL9DG8qEcULqTZTKQbrq',
-  // bn_OldMpcaNfi: 'a4Sx3PrFMDAMZEGsyzgJJg',
-  // bn_OldMpcaNfiNaa: 'aBGVXW2N26DaLehmKneuyB',
-  // bn_OldMpcaNfiMyko: 'a8WAWB9Yxu2jkgk4Ei8GTk',
-  // meal_VisitMonitoring: 'a8GkjWBQDfxVADGHWJDrUw',
-  // protection_Hhs2_1: 'aQDZ2xhPUnNd43XzuQucVR',
-  // protection_Hhs2: 'aRHsewShwZhXiy8jrBj9zf',
-  // protection_Hhs1: 'aFU8x6tHksveU2c3hK7RUG',
-  // protection_communityMonitoring: 'aQHBhYgevdzw8TR2Vq2ZdR',
-  // protection_groupSession: 'a8Tn94arrSaH2FQBhUa9Zo',
-  // protection_pss: 'a52hN5iiCW73mxqqfmEAfp',
 }
-
-export type KoboFormName = keyof typeof koboIndex
 
 const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex)).reduceObject(([k, v]) => [v, k])
 
@@ -122,8 +102,9 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   partnership_initialQuestionnaire: '[Partnership] CBP CSO Initial Questionnaire',
   partnership_partnersDatabase: '[Partnership] DRC Partners Database',
   pseah_training_tracker: 'DRC - PSEAH Training tracker'
-//
 }
+
+export type KoboFormName = keyof typeof koboIndex
 
 export namespace KoboIndex {
 
@@ -133,7 +114,7 @@ export namespace KoboIndex {
     donors?: string[]
   }
 
-  export const names = Obj.keys(koboIndex.form)
+  export const names = Obj.keys(koboIndex)
 
   export const parseFormName = (name: string): ParsedForm => {
     const match = name.match(/^\[(.*?)]\s*(?:\{(.*?)})?\s*(.*)$/)
