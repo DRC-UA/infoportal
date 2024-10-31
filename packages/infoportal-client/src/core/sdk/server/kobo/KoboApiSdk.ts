@@ -59,7 +59,7 @@ export class KoboApiSdk {
     }))
   }
 
-  static readonly getAttachementUrl = ({baseUrl = appConfig.apiURL, path, formId}: {baseUrl: string, formId: KoboId, path: string}) => {
+  static readonly getAttachementUrl = ({baseUrl, path, formId}: {baseUrl: string, formId: KoboId, path: string}) => {
     return baseUrl + `/kobo-api/${formId}/attachment?path=${path}`
   }
 

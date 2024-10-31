@@ -18,7 +18,7 @@ export const proxyKoboImg = ({
   const path = url?.split('api')[1]
   return {
     path,
-    fullUrl: path ? KoboApiSdk.getAttachementUrl({formId, path, baseUrl: conf.baseURL}) : undefined
+    fullUrl: path ? KoboApiSdk.getAttachementUrl({formId, path, baseUrl: conf.apiURL}) : undefined
     // fullUrl: path ? conf.apiURL + `/kobo-api/${serverId}/attachment?path=${path}&file=${fileName}` : undefined
   }
 }
