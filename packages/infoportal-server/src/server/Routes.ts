@@ -204,10 +204,6 @@ export const getRoutes = (
 
     router.get('/cache', cacheController.get)
     router.post('/cache/clear', cacheController.clear)
-
-    // router.get('/legalaid', auth(), errorCatcher(legalaid.index))
-    // router.get('/ecrec', auth(), errorCatcher(ecrec.index))
-    // router.get('/*', errorCatcher(ecrec.index))
   } catch (e) {
     if (e instanceof Error) {
       log.error(e.toString())
