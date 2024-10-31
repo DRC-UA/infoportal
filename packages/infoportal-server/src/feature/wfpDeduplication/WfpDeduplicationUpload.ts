@@ -8,6 +8,7 @@ import {WfpBuildingBlockClient} from '../connector/wfpBuildingBlock/WfpBuildingB
 import {app, AppLogger} from '../../index'
 import {AppError} from '../../helper/Errors'
 import promiseRetry from 'promise-retry'
+import {Obj} from '@alexandreannic/ts-utils'
 
 export class WfpDeduplicationUpload {
 
@@ -178,7 +179,6 @@ export class WfpDeduplicationUpload {
   }
 
   private setOblast = async () => {
-    const possibleOffices = ['HRK', 'NLV', 'CEJ', 'DNK', 'CWC', 'NLK', 'LWO', 'CHJ', 'UMY']
     const officeMapping: Record<string, DrcOffice> = {
       'HRK': DrcOffice.Kharkiv,
       'NLV': DrcOffice.Mykolaiv,
@@ -189,7 +189,9 @@ export class WfpDeduplicationUpload {
       'LWO': DrcOffice.Lviv,
       'CHJ': DrcOffice.Chernihiv,
       'UMY': DrcOffice.Sumy,
+      'SLO': DrcOffice.Sloviansk,
     }
+    const possibleOffices = Obj.keys(officeMapping)
     await this.throttledFetchAndRun({
       fetch: this.wfpSdk.getImportFiles,
       runOnBatchedResult: async (imports) => {
