@@ -2,22 +2,15 @@ import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
 import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from '../../../feature/kobo/KoboSdkGenerator'
-import {KoboApiService} from '../../../feature/kobo/KoboApiService'
 import {KoboSyncServer} from '../../../feature/kobo/KoboSyncServer'
 import {KoboAnswerUtils} from 'infoportal-common'
 import axios, {AxiosError} from 'axios'
 import {KoboService} from '../../../feature/kobo/KoboService'
 
-const apiAnswersFiltersValidation = yup.object({
-  start: yup.date(),
-  end: yup.date(),
-})
-
 export class ControllerKoboApi {
 
   constructor(
     private pgClient: PrismaClient,
-    private apiService = new KoboApiService(pgClient),
     private koboService = new KoboService(pgClient),
     private syncService = new KoboSyncServer(pgClient),
     private koboSdkGenerator = KoboSdkGenerator.getSingleton(pgClient),
@@ -56,17 +49,6 @@ export class ControllerKoboApi {
     const {formId} = await this.extractParams(req)
     await this.syncService.syncApiAnswersToDbByForm({formId, updatedBy: req.session.user?.email})
     res.send()
-  }
-
-  readonly getAnswers = async (req: Request, res: Response, next: NextFunction) => {
-    const {formId} = await this.extractParams(req)
-    const filters = await apiAnswersFiltersValidation.validate(req.query)
-    const answers = await this.apiService.fetchAnswers(formId, filters)
-    // .then(res => ({
-    // ...res,
-    // data: res.data.map(answers => KoboAnswerUtils.removeGroup(answers))
-    // }))
-    res.send(answers)
   }
 
   readonly edit = async (req: Request, res: Response, next: NextFunction) => {

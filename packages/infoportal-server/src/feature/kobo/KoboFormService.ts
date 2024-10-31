@@ -1,6 +1,5 @@
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
 import {KoboApiSchema, KoboId, KoboSdk, KoboSdkv2, UUID} from 'infoportal-common'
-import {KoboApiService} from './KoboApiService'
 import {seq} from '@alexandreannic/ts-utils'
 import {appConf} from '../../core/conf/AppConf'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
@@ -16,7 +15,6 @@ export class KoboFormService {
 
   constructor(
     private prisma: PrismaClient,
-    private service = new KoboApiService(prisma),
     private koboSdk = KoboSdkGenerator.getSingleton(prisma),
     private conf = appConf,
   ) {
