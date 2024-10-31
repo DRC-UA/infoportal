@@ -1,7 +1,7 @@
 import {FeatureAccessLevel, Prisma, PrismaClient} from '@prisma/client'
 import {appConf, AppConf} from '../core/conf/AppConf'
 import {AppFeatureId, KoboDatabaseFeatureParams} from '../feature/access/AccessType'
-import {DrcJob, DrcOffice, koboIndex, KoboIndex} from 'infoportal-common'
+import {DrcJob, DrcOffice, KoboIndex} from 'infoportal-common'
 
 export const createdBySystem = 'SYSTEM'
 
@@ -129,7 +129,6 @@ export class DbInit {
       return Promise.all([
         this.prisma.koboServer.create({
           data: {
-            id: koboIndex.drcUa.server.prod,
             url: 'https://kobo.humanitarianresponse.info',
             urlV1: 'https://kc-eu.kobotoolbox.org',
             token: appConf.kobo.token,
@@ -137,7 +136,6 @@ export class DbInit {
         }),
         this.prisma.koboServer.create({
           data: {
-            id: koboIndex.drcUa.server.dev,
             url: 'https://kf.kobotoolbox.org',
             urlV1: 'https://kc.kobotoolbox.org',
             token: 'TODO',
