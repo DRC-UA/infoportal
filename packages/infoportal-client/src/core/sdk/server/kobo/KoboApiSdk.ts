@@ -3,7 +3,7 @@ import {KoboAnswerId, KoboApiSchema, KoboId} from 'infoportal-common'
 import {appConfig, AppConfig} from '@/conf/AppConfig'
 import {ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {Method} from 'axios'
-import {UUID} from 'infoportal-common/type/Generic'
+import {UUID} from 'infoportal-common'
 
 
 export interface FilterBy {

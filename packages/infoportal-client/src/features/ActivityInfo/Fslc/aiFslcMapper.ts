@@ -6,7 +6,7 @@ import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
-import {IKoboMeta, KoboMetaEcrecTags} from 'infoportal-common/kobo'
+import {IKoboMeta, KoboMetaEcrecTags} from 'infoportal-common'
 
 export namespace AiFslcMapper {
   export type Bundle = AiTable<AiFslcType.Type>

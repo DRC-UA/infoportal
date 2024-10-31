@@ -2,7 +2,7 @@ import {Alert, Box, Dialog, DialogActions, DialogContent, DialogTitle, Icon, Ske
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {KoboApiQuestionSchema, KoboId, koboIndex, KoboSchemaHelper} from 'infoportal-common'
+import {KoboApiQuestionSchema, KoboId, KoboSchemaHelper, NonNullableKey} from 'infoportal-common'
 import React, {useEffect, useMemo, useState} from 'react'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {Txt} from '@/shared/Txt'
@@ -18,7 +18,6 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {NavLink} from 'react-router-dom'
-import {NonNullableKey} from 'infoportal-common/type/Generic'
 
 export const databaseUrlParamsValidation = yup.object({
   serverId: yup.string().required(),

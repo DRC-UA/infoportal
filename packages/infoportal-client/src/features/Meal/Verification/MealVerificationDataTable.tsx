@@ -20,8 +20,8 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {IpAlert} from '@/shared/Alert'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import {KoboApiQuestionSchema, KoboApiSchema} from 'infoportal-common/kobo'
-import {NonNullableKey} from 'infoportal-common/type/Generic'
+import {KoboApiQuestionSchema, KoboApiSchema} from 'infoportal-common'
+import {NonNullableKey} from 'infoportal-common'
 
 enum Status {
   Selected = 'Selected',

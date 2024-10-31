@@ -20,7 +20,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {useSession} from '@/core/Session/SessionContext'
 import {DashboardFilterOptionsContent} from '@/shared/DashboardLayout/DashboardFilterOptions'
-import {IKoboMeta} from 'infoportal-common/kobo'
+import {IKoboMeta} from 'infoportal-common'
 import {PopoverWrapper, Txt} from '@/shared'
 
 export const Item = ({

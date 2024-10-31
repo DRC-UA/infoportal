@@ -11,7 +11,6 @@ import {
   CfmDataSource,
   DrcOffice,
   DrcProject,
-  koboIndex,
   KoboIndex,
   KoboMealCfmStatus,
   KoboMealCfmTag,
@@ -39,7 +38,6 @@ import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
 import {IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
-import {Kobo} from '@/core/sdk/server/kobo/Kobo'
 
 export interface CfmDataFilters extends KoboAnswerFilter {
 }

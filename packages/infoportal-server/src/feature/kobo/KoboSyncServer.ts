@@ -1,4 +1,4 @@
-import {KoboAnswer, KoboId, koboIndex, KoboIndex, logPerformance, UUID} from 'infoportal-common'
+import {KoboAnswer, KoboId, KoboIndex, logPerformance, UUID} from 'infoportal-common'
 import {Prisma, PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {app, AppCacheKey, AppLogger} from '../../index'
