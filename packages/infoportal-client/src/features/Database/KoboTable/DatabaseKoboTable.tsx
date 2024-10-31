@@ -18,7 +18,7 @@ import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {FetchParams} from '@/shared/hook/useFetchers'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 

@@ -6,6 +6,11 @@ export namespace AppError {
     }
   }
 
+  export const throwNotFoundIfUndefined = (message: string) => <T>(t: T | undefined): T => {
+    if (t) return t
+    throw new NotFound(message)
+  }
+
   export const throwError = (error: {new(): Base}) => (e?: Error) => {
     return Promise.reject(new error())
   }

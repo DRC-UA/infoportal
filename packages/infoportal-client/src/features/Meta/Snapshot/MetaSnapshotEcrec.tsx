@@ -16,7 +16,7 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {MetaSnapshotHeader, MetaSnapshotProps} from './MetaSnapshot'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {muiTheme} from '@/core/theme'
 import {useAppSettings} from '@/core/context/ConfigContext'
 

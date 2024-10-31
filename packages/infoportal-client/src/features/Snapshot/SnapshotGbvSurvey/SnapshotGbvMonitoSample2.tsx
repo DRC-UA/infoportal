@@ -4,7 +4,7 @@ import {Div, PdfSlide, PdfSlideBody, SlidePanel, SlidePanelTitle} from '@/shared
 import {useI18n} from '@/core/i18n'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Protection_gbvSocialProviders} from 'infoportal-common'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {seq} from '@alexandreannic/ts-utils'

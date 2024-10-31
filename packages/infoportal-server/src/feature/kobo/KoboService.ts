@@ -315,7 +315,7 @@ export class KoboService {
     genIndex: _ => _.formId,
     ttlMs: duration(2, 'day').toMs,
     fn: async ({formId}: {formId: KoboId}): Promise<KoboApiSchema> => {
-      const sdk = await this.sdkGenerator.getByFormId(formId)
+      const sdk = await this.sdkGenerator.getBy.formId(formId)
       return sdk.v2.getForm(formId)
     },
   })
@@ -437,7 +437,7 @@ export class KoboService {
           id: {in: answerIds}
         }
       }),
-      this.sdkGenerator.getByFormId(formId).then(_ => _.v2.delete(formId, answerIds)),
+      this.sdkGenerator.getBy.formId(formId).then(_ => _.v2.delete(formId, answerIds)),
     ])
     this.history.create({
       type: 'delete',
@@ -462,7 +462,7 @@ export class KoboService {
   }) => {
     answer = Array.isArray(answer) ? answer.join(' ') : answer
     const [sdk, xpath] = await Promise.all([
-      this.sdkGenerator.getByFormId(formId),
+      this.sdkGenerator.getBy.formId(formId),
       this.getSchema({formId}).then(_ => _.content.survey.find(_ => _.name === question)?.$xpath),
     ])
     if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)

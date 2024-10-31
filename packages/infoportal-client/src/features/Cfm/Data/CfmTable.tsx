@@ -35,7 +35,7 @@ import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 

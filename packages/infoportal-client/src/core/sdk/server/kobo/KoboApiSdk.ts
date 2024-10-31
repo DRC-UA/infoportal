@@ -1,9 +1,8 @@
 import {ApiClient, RequestOption} from '../ApiClient'
-import {KoboAnswerId, KoboApiSchema, KoboId} from 'infoportal-common'
+import {KoboAnswerId, KoboApiSchema, KoboId, UUID} from 'infoportal-common'
 import {appConfig, AppConfig} from '@/conf/AppConfig'
 import {ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {Method} from 'axios'
-import {UUID} from 'infoportal-common'
 
 
 export interface FilterBy {
@@ -63,10 +62,11 @@ export class KoboApiSdk {
     return baseUrl + `/kobo-api/${formId}/attachment?path=${path}`
   }
 
-  readonly proxy = <T = any>({url, method, options}: {method: Method, url: string, options?: RequestOption}) => {
+  readonly proxy = <T = any>({url, method, formId, options}: {formId: KoboId, method: Method, url: string, options?: RequestOption}) => {
     return this.client.post<T>(`/kobo-api/proxy`, {
       // responseType: 'blob',
       body: {
+        formId,
         method,
         url,
         body: options?.body,

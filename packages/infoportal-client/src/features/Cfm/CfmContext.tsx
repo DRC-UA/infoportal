@@ -31,7 +31,7 @@ import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 import {TableIcon, TableIconProps} from '@/features/Mpca/MpcaData/TableIcon'
 import {Box, BoxProps} from '@mui/material'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 
 export enum CfmDataOrigin {
   Internal = 'Internal',

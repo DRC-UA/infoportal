@@ -40,7 +40,7 @@ export class KoboFormService {
   }
 
   readonly add = async (payload: KoboFormCreate) => {
-    const sdk = await this.koboSdk.getByServerId(payload.serverId)
+    const sdk = await this.koboSdk.getBy.serverId(payload.serverId)
     const schema = await sdk.v2.getForm(payload.uid)
     const [newFrom,] = await Promise.all([
       this.prisma.koboForm.create({
@@ -65,7 +65,7 @@ export class KoboFormService {
     const forms = await this.prisma.koboForm.findMany()
     const sdks = await Promise.all(
       seq(forms).distinct(_ => _.serverId).get()
-        .map(server => this.koboSdk.getByServerId(server.serverId).then(_ => ({
+        .map(server => this.koboSdk.getBy.serverId(server.serverId).then(_ => ({
           serverId: server.serverId, sdk: _
         })))
     ).then(_ => seq(_).reduceObject<Record<string, KoboSdk>>(_ => [_.serverId!, _.sdk]))
@@ -86,7 +86,7 @@ export class KoboFormService {
 
   readonly refreshAll = async (params: Omit<KoboFormCreate, 'serverId' | 'uid'>) => {
     const forms = await this.getAll().then(seq)
-    const sdks = await Promise.all(forms.map(_ => _.serverId).distinct(_ => _).map(_ => this.koboSdk.getByServerId(_)).get())
+    const sdks = await Promise.all(forms.map(_ => _.serverId).distinct(_ => _).map(_ => this.koboSdk.getBy.serverId(_)).get())
     const indexForm = seq(forms).groupByFirst(_ => _.id)
     const indexSchema = await Promise.all(sdks.map(_ => _.v2.getSchemas())).then(_ => _.flatMap(_ => _.results)).then(_ => seq(_).groupByFirst(_ => _.uid))
     await PromisePool.withConcurrency(this.conf.db.maxConcurrency).for(forms)

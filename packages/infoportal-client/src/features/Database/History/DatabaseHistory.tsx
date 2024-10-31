@@ -84,7 +84,7 @@ export const DatabaseHistory = () => {
               }
             },
             {
-              type: 'select_one',
+              type: 'id',
               id: 'answerId',
               typeIcon: <DatatableHeadIconByType type="id"/>,
               className: 'td-id',

@@ -8,7 +8,7 @@ import React from 'react'
 import {Messages} from '@/core/i18n/localization/en'
 import {KoboAnswerFlat, KoboAnswerId, KoboId, KoboValidation} from 'infoportal-common'
 import {KoboEditTagsContext} from '@/core/context/KoboEditTagsContext'
-import {KoboAnswersContext} from '@/core/context/KoboAnswers'
+import {KoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatabaseKoboContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 
 export const getColumnsBase = ({

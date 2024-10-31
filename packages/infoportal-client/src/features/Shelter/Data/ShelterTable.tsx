@@ -38,7 +38,7 @@ import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswers'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
 export const ShelterTable = () => {

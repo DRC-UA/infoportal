@@ -28,7 +28,7 @@ export class ControllerKoboApi {
     const {serverId} = await yup.object({
       serverId: yup.string().required(),
     }).validate(req.body)
-    const sdk = await this.koboSdkGenerator.getByServerId(serverId)
+    const sdk = await this.koboSdkGenerator.getBy.serverId(serverId)
     const forms = await sdk.v2.getSchemas()
     res.send(forms)
   }
@@ -54,7 +54,7 @@ export class ControllerKoboApi {
   readonly edit = async (req: Request, res: Response, next: NextFunction) => {
     const {formId} = await this.extractParams(req)
     const answerId = await yup.string().required().validate(req.params.answerId)
-    const sdk = await this.koboSdkGenerator.getByFormId(formId)
+    const sdk = await this.koboSdkGenerator.getBy.formId(formId)
     const link = await sdk.v2.edit(formId, answerId)
 
     //   res.send(`
@@ -101,7 +101,7 @@ export class ControllerKoboApi {
         path: yup.string().required(),
         fileName: yup.string().optional(),
       }).validate(req.query)
-      const sdk = await this.koboSdkGenerator.getByFormId(formId)
+      const sdk = await this.koboSdkGenerator.getBy.formId(formId)
       const img = await sdk.v2.getAttachement(path)
       if (!fileName) {
         res.set('Content-Type', 'image/jpeg')
@@ -118,13 +118,13 @@ export class ControllerKoboApi {
 
   readonly proxy = async (req: Request, res: Response, next: NextFunction) => {
     const body = await yup.object({
-      serverId: yup.string().required(),
+      formId: yup.string().required(),
       url: yup.string().required(),
       method: yup.string().required(),
       body: yup.mixed<any>().optional(),
       headers: yup.mixed<any>().optional(),
     }).validate(req.body)
-    const server = await this.koboSdkGenerator.getServerById(body.serverId)
+    const server = await this.koboSdkGenerator.getServerBy.formId(body.formId)
     try {
       const request = await axios.create().request({
         url: body.url,
