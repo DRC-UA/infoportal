@@ -50,6 +50,7 @@ export enum CashStatus {
   Paid = 'Paid',
   Rejected = 'Rejected',
   Referred = 'Referred',
+  PaymentRejected = 'PaymentRejected',
 
   // Paid = 'Paid',
   // Rejected = 'Rejected',

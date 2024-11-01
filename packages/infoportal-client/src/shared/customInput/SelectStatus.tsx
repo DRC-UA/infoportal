@@ -35,7 +35,8 @@ export namespace SelectStatusConfig {
       Rejected: 'error',
       Referred: 'disabled',
       Pending: 'warning',
-      Selected: 'info'
+      Selected: 'info',
+      PaymentRejected: 'error',
     } as Record<CashStatus, StateStatus>,
     KoboValidation: {
       [KoboValidation.Approved]: 'success',
