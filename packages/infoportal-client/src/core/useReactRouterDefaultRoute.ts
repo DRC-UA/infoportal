@@ -9,6 +9,7 @@ export const useReactRouterDefaultRoute = (route: string) => {
   const loc = useLocation()
   const navigate = useNavigate()
   useEffect(() => {
-    if (loc.pathname === '/') navigate(route)
+    console.log('useReactRouterDefaultRoute', loc.pathname)
+    if (loc.pathname === '/' || loc.pathname === '' || !loc.pathname) navigate(route)
   }, [])
 }
