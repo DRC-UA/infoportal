@@ -158,8 +158,8 @@ export class KoboService {
                 lt: filters.end,
               },
               formId,
-              AND: filters.filterBy?.map((filter) => ({
-                OR: Util.ensureArr(filter.value).map(v => ({
+              AND: {
+                OR: filters.filterBy?.flatMap((filter) => Util.ensureArr(filter.value).map(v => ({
                   answers: {
                     path: [filter.column],
                     ...v ? {
@@ -168,8 +168,8 @@ export class KoboService {
                       equals: Prisma.DbNull,
                     }
                   }
-                }))
-              })),
+                })))
+              }
             }
           }).then(_ => _.map(d => ({
             start: d.start,
