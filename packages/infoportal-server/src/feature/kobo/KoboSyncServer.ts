@@ -2,7 +2,7 @@ import {KoboAnswer, KoboId, KoboIndex, logPerformance, UUID} from 'infoportal-co
 import {Prisma, PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {app, AppCacheKey, AppLogger} from '../../index'
-import {createdBySystem} from '../../db/DbInit'
+import {createdBySystem} from '../../core/DbInit'
 import {seq} from '@alexandreannic/ts-utils'
 import {GlobalEvent} from '../../core/GlobalEvent'
 import {KoboService} from './KoboService'

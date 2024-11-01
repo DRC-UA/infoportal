@@ -1,5 +1,5 @@
 import {FeatureAccessLevel, Prisma, PrismaClient} from '@prisma/client'
-import {appConf, AppConf} from '../core/conf/AppConf'
+import {appConf, AppConf} from './conf/AppConf'
 import {AppFeatureId, KoboDatabaseFeatureParams} from '../feature/access/AccessType'
 import {DrcJob, DrcOffice, KoboIndex} from 'infoportal-common'
 

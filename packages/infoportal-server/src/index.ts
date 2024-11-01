@@ -1,7 +1,6 @@
 import {AppConf, appConf} from './core/conf/AppConf'
 import {Server} from './server/Server'
 import {PrismaClient} from '@prisma/client'
-import {DbInit} from './db/DbInit'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'
 import {MpcaCachedDb} from './feature/mpca/MpcaCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
@@ -12,6 +11,7 @@ import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './feature/email/EmailService'
+import {DbInit} from './core/DbInit'
 
 export type AppLogger = WinstonLogger
 

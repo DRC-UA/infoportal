@@ -1,13 +1,12 @@
 import {PrismaClient} from '@prisma/client'
 import XlsxPopulate from 'xlsx-populate'
-import {DbHelper} from '../../db/DbHelper'
 import {UserSession} from '../session/UserSession'
 import {AccessService} from '../access/AccessService'
 import {AppFeatureId} from '../access/AccessType'
 import {seq} from '@alexandreannic/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../core/conf/AppConf'
-import {getDrcSuggestion, WfpDeduplication} from 'infoportal-common'
+import {ApiPaginateHelper, getDrcSuggestion, WfpDeduplication} from 'infoportal-common'
 import {GlobalEvent} from '../../core/GlobalEvent'
 import Event = GlobalEvent.Event
 
@@ -68,7 +67,7 @@ export class WfpDeduplicationService {
         }
       }),
     ])
-    return DbHelper.toPaginate(totalSize)(data.map((_: any): WfpDeduplication => {
+    return ApiPaginateHelper.wrap(totalSize)(data.map((_: any): WfpDeduplication => {
       _.suggestion = getDrcSuggestion(_)
       _.taxId = _.beneficiary.taxId
       return _

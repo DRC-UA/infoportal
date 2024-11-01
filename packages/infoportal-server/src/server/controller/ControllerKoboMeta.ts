@@ -1,8 +1,8 @@
 import {PrismaClient} from '@prisma/client'
 import {KoboMetaParams, KoboMetaService} from '../../feature/kobo/meta/KoboMetaService'
 import {NextFunction, Request, Response} from 'express'
-import {DbHelper} from '../../db/DbHelper'
 import {app, AppCacheKey} from '../../index'
+import {ApiPaginateHelper} from 'infoportal-common'
 
 export class ControllerKoboMeta {
 
@@ -16,7 +16,7 @@ export class ControllerKoboMeta {
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
     const body = await KoboMetaParams.schemaSearchFilter.validate(req.body)
     const data = await this.service.search(body)
-    res.send(DbHelper.toPaginate()(data))
+    res.send(ApiPaginateHelper.wrap()(data))
   }
 
   readonly sync = async (req: Request, res: Response, next: NextFunction) => {

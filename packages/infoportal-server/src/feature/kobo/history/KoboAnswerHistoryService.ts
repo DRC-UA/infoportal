@@ -1,8 +1,7 @@
 import {Prisma, PrismaClient} from '@prisma/client'
 import {app, AppLogger} from '../../../index'
 import {KoboAnswerHistory} from './KoboAnswerHistoryType'
-import {DbHelper} from '../../../db/DbHelper'
-import {KoboAnswerId, KoboId} from 'infoportal-common'
+import {ApiPaginateHelper, KoboAnswerId, KoboId} from 'infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 
 type Create = {
@@ -33,7 +32,7 @@ export class KoboAnswerHistoryService {
         formId: params.formId,
       },
       orderBy: {date: 'desc'},
-    }).then(DbHelper.toPaginate())
+    }).then(ApiPaginateHelper.wrap())
   }
 
   readonly create = async ({
