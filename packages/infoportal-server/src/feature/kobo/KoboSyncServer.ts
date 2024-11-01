@@ -8,7 +8,7 @@ import {GlobalEvent} from '../../core/GlobalEvent'
 import {KoboService} from './KoboService'
 import {AppError} from '../../helper/Errors'
 import {appConf} from '../../core/conf/AppConf'
-import {Util} from '../../helper/Utils'
+import {genUUID, Util} from '../../helper/Utils'
 
 export type KoboSyncServerResult = {
   answersIdsDeleted: KoboId[]
@@ -112,11 +112,18 @@ export class KoboSyncServer {
 
     const handleDelete = async () => {
       const idsToDelete = [...localAnswersIndex.keys()].filter(_ => !remoteIdsIndex.has(_))
-      this.debug(formId, `Handle delete (${idsToDelete.length})...`)
+      const tracker = genUUID().slice(0, 5)
+      this.info(formId, `Handle delete ${tracker} (${idsToDelete.length})...`)
+      if (idsToDelete.length) {
+        this.info(formId, `Handle delete ${tracker} - localAnswersIndex: ${localAnswersIndex.size} - remoteIdsIndex: ${remoteIdsIndex.size}`)
+        this.info(formId, `Handle delete ${tracker} - idsToDelete: ${idsToDelete.join(',')}`)
+        this.info(formId, `Handle delete ${tracker} - remoteIdsIndex: ${[...remoteIdsIndex.keys()].join(',')}`)
+      }
+
       await this.prisma.koboAnswers.updateMany({
         data: {
           deletedAt: new Date(),
-          deletedBy: 'system',
+          deletedBy: 'system-sync-' + tracker,
         },
         where: {source: null, formId, id: {in: idsToDelete}}
       })
