@@ -1,4 +1,4 @@
-import {LegalaidSdk} from '../../feature/connector/legalaid/LegalaidSdk'
+import {LegalaidSdk} from '../../core/externalSdk/legalaid/LegalaidSdk'
 import {seq} from '@alexandreannic/ts-utils'
 import {Period} from 'infoportal-common'
 

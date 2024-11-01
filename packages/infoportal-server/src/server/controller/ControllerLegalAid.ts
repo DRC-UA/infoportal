@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express'
-import {LegalaidSdk} from '../../feature/connector/legalaid/LegalaidSdk'
+import {LegalaidSdk} from '../../core/externalSdk/legalaid/LegalaidSdk'
 import {Controller} from './Controller'
 import {AppLogger} from '../../index'
 

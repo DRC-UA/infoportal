@@ -1,6 +1,6 @@
 import * as mssql from 'mssql'
 import {ConnectionPool} from 'mssql'
-import {appConf, AppConf} from '../../../core/conf/AppConf'
+import {appConf, AppConf} from '../../conf/AppConf'
 
 export class HdpSdk {
 
