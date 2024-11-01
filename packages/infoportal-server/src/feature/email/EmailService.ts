@@ -1,13 +1,13 @@
-import {GlobalEvent} from './GlobalEvent'
-import {EmailHelper} from './EmailHelper'
+import {GlobalEvent} from '../../core/GlobalEvent'
+import {EmailClient} from './EmailClient'
 import {KoboIndex, Regexp} from 'infoportal-common'
-import {app} from '../index'
-import {UserService} from '../feature/user/UserService'
+import {app} from '../../index'
+import {UserService} from '../user/UserService'
 import {PrismaClient} from '@prisma/client'
-import {FrontEndSiteMap} from './FrontEndSiteMap'
-import {appConf} from './conf/AppConf'
-import {getKoboCustomDirectives, KoboCustomDirectives} from '../feature/kobo/KoboCustomDirectives'
-import {KoboService} from '../feature/kobo/KoboService'
+import {FrontEndSiteMap} from '../../core/FrontEndSiteMap'
+import {appConf} from '../../core/conf/AppConf'
+import {getKoboCustomDirectives, KoboCustomDirectives} from '../kobo/KoboCustomDirectives'
+import {KoboService} from '../kobo/KoboService'
 import {seq} from '@alexandreannic/ts-utils'
 
 export enum EmailContext {
@@ -22,7 +22,7 @@ export class EmailService {
     private conf = appConf,
     private users = UserService.getInstance(prisma),
     private event = GlobalEvent.Class.getInstance(),
-    private emailHelper = new EmailHelper(),
+    private emailHelper = new EmailClient(),
     private siteMap = new FrontEndSiteMap(),
     private koboService = new KoboService(prisma),
     private log = app.logger('EmailService'),

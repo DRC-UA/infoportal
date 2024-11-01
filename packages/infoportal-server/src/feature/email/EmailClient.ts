@@ -1,14 +1,14 @@
 import nodemailer from 'nodemailer'
-import {appConf} from './conf/AppConf'
-import {app} from '../index'
+import {appConf} from '../../core/conf/AppConf'
+import {app} from '../../index'
 import {PrismaClient} from '@prisma/client'
 
-export class EmailHelper {
+export class EmailClient {
 
   constructor(
     private prisma = new PrismaClient(),
     private conf = appConf,
-    private log = app.logger('EmailHelper'),
+    private log = app.logger('EmailClient'),
     private transporter = nodemailer.createTransport({
       host: conf.email.host,
       port: conf.email.port,
@@ -41,13 +41,15 @@ export class EmailHelper {
   }): Promise<void> {
     const ensureStr = (_: string | string[]): string => Array.isArray(_) ? _.join(' ') : _
     try {
-      await this.transporter.sendMail({
+      const params = {
         from: appConf.email.address,
         cc,
         to,
         subject,
         html,
-      })
+      }
+      if (this.conf.production)
+        await this.transporter.sendMail(params)
       this.log.info(`Send email [${context}] ${JSON.stringify({subject, to: ensureStr(to), tags})}.`)
       await this.prisma.emailOutBox.create({
         data: {
@@ -56,7 +58,7 @@ export class EmailHelper {
           content: html,
           createdBy,
           context,
-          cc,
+          cc: cc ? ensureStr(cc) : undefined,
           tags,
           deliveredAt: new Date(),
         }
@@ -65,7 +67,7 @@ export class EmailHelper {
       this.log.error('Failed to send email:', error)
       await this.prisma.emailOutBox.create({
         data: {
-          cc,
+          cc: cc ? ensureStr(cc) : undefined,
           to: ensureStr(to),
           subject,
           content: html,

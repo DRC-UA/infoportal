@@ -348,7 +348,7 @@ model EmailOutBox {
   createdBy   String?
   context     String
   to          String
-  cc          String[]
+  cc          String?
   subject     String
   content     String?
   deliveredAt DateTime?

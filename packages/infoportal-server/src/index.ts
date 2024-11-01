@@ -11,7 +11,7 @@ import * as winston from 'winston'
 import {format, Logger as WinstonLogger} from 'winston'
 import * as os from 'os'
 import {Syslog} from 'winston-syslog'
-import {EmailService} from './core/EmailService'
+import {EmailService} from './feature/email/EmailService'
 
 export type AppLogger = WinstonLogger
 
