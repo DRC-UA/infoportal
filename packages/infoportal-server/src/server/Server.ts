@@ -5,7 +5,6 @@ import {app} from '../index'
 import {appConf, AppConf} from '../core/conf/AppConf'
 import {genUUID} from '../helper/Utils'
 import {HttpError} from './controller/Controller'
-import {Services} from './services'
 import {PrismaClient} from '@prisma/client'
 import session from 'express-session'
 import multer from 'multer'
@@ -25,7 +24,6 @@ export class Server {
     private pgClient: PrismaClient,
     // private ecrecSdk: EcrecSdk,
     // private legalaidSdk: LegalaidSdk,
-    private services: Services,
     private log = app.logger('Server'),
   ) {
   }
@@ -108,7 +106,6 @@ export class Server {
       this.pgClient,
       // this.ecrecSdk,
       // this.legalaidSdk,
-      this.services,
     ))
     // app.use(Sentry.Handlers.errorHandler())
     app.use(this.errorHandler)

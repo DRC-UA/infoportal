@@ -3,7 +3,7 @@ import {PrismaClient} from '@prisma/client'
 import {KoboSyncServer} from '../feature/kobo/KoboSyncServer'
 import {app} from '../index'
 import {appConf} from '../core/conf/AppConf'
-import {MpcaCachedDb} from '../feature/mpca/db/MpcaCachedDb'
+import {MpcaCachedDb} from '../feature/mpca/MpcaCachedDb'
 
 export class ScheduledTask {
 

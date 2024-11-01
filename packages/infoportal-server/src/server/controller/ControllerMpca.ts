@@ -1,8 +1,8 @@
 import {PrismaClient} from '@prisma/client'
-import {MpcaDbService} from '../../feature/mpca/db/MpcaDbService'
+import {MpcaDbService} from '../../feature/mpca/MpcaDbService'
 import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
-import {MpcaCachedDb} from '../../feature/mpca/db/MpcaCachedDb'
+import {MpcaCachedDb} from '../../feature/mpca/MpcaCachedDb'
 
 export class ControllerMpca {
 

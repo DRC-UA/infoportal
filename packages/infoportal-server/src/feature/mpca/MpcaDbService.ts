@@ -1,5 +1,5 @@
 import {PrismaClient} from '@prisma/client'
-import {KoboMappedAnswersService} from '../../kobo/KoboMappedAnswersService'
+import {KoboMappedAnswersService} from '../kobo/KoboMappedAnswersService'
 import {Seq, seq} from '@alexandreannic/ts-utils'
 import {
   ApiPaginate,
@@ -13,11 +13,11 @@ import {
   WfpDeduplication,
   WfpDeduplicationStatus
 } from 'infoportal-common'
-import {KoboAnswerFilter} from '../../kobo/KoboService'
-import {WfpDeduplicationService} from '../../wfpDeduplication/WfpDeduplicationService'
-import {appConf} from '../../../core/conf/AppConf'
-import {KoboSyncServer} from '../../kobo/KoboSyncServer'
-import {KoboMetaService} from '../../kobo/meta/KoboMetaService'
+import {KoboAnswerFilter} from '../kobo/KoboService'
+import {WfpDeduplicationService} from '../wfpDeduplication/WfpDeduplicationService'
+import {appConf} from '../../core/conf/AppConf'
+import {KoboSyncServer} from '../kobo/KoboSyncServer'
+import {KoboMetaService} from '../kobo/meta/KoboMetaService'
 import {addMonths} from 'date-fns'
 
 export class MpcaDbService {

@@ -1,10 +1,9 @@
 import {AppConf, appConf} from './core/conf/AppConf'
 import {Server} from './server/Server'
 import {PrismaClient} from '@prisma/client'
-import {MpcaPaymentService} from './feature/mpca/mpcaPayment/MpcaPaymentService'
 import {DbInit} from './db/DbInit'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'
-import {MpcaCachedDb} from './feature/mpca/db/MpcaCachedDb'
+import {MpcaCachedDb} from './feature/mpca/MpcaCachedDb'
 import {KoboMetaService} from './feature/kobo/meta/KoboMetaService'
 import {IpCache, IpCacheApp} from 'infoportal-common'
 import {duration} from '@alexandreannic/ts-utils'
@@ -67,15 +66,6 @@ export const App = (config: AppConf = appConf) => {
 
 export const app = App()
 
-const initServices = (
-  prisma: PrismaClient,
-): {mpcaPayment: MpcaPaymentService} => {
-  const mpcaPayment = new MpcaPaymentService(prisma)
-  return {
-    mpcaPayment,
-  }
-}
-
 const startApp = async (conf: AppConf) => {
   // await new BuildKoboType().build('safety_incident')
   // await ActivityInfoBuildType.fslc()
@@ -96,9 +86,6 @@ const startApp = async (conf: AppConf) => {
   const prisma = new PrismaClient({
     // log: ['query']
   })
-  const services = initServices(
-    prisma,
-  )
   const init = async () => {
     const log = app.logger('')
     log.info(`Starting... v5.0`)
@@ -129,7 +116,6 @@ const startApp = async (conf: AppConf) => {
     new Server(
       conf,
       prisma,
-      services,
     ).start()
   }
   // if (cluster.isPrimary) {
