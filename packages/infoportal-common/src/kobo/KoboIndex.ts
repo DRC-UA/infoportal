@@ -27,6 +27,7 @@ const koboIndex = {
   meal_visitMonitoring: 'a8GkjWBQDfxVADGHWJDrUw',
   meal_pdmStandardised: 'aCWKwfvJ6F48HxUZTrr9L7',
   meal_cashPdm: 'aEKoPVd36PLRrmqWgk42DG',
+  meal_shelterPdm: 'a7iHZCW28ncZY7iDcqVF49',
   meal_cfmInternal: 'aN3Y8JeH2fU3GthrWAs9FG',
   meal_cfmExternal: 'aJaGLvGEdpYWk5ift8k87y',
   shelter_nta: 'aL8oHMzJJ9soPepvK6YU9E',

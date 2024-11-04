@@ -21,7 +21,6 @@ import {appConfig} from '@/conf/AppConfig'
 import {MealPdm} from '@/features/Meal/Pdm/MealPdm'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {MealVerificationData} from '@/features/Meal/Verification/MealVerificationData'
-import {MealPdmDashboard} from '@/features/Meal/Pdm/MealPdmDashboard'
 import {MealPdmCashDashboard} from '@/features/Meal/Pdm/MealPdmCashDashboard'
 import {MealPdmShelterDashboard} from '@/features/Meal/Pdm/MealPdmShelterDashboard'
 
