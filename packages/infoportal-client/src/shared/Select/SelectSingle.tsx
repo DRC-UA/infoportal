@@ -58,13 +58,12 @@ export const ipSelectItem = <T extends any>({
   title: string
   value: T
 }) => {
-  const t = useTheme()
   return {
     value,
     children: (
       <Box sx={{display: 'flex', py: .5}}>
         {icon && (
-          <Icon sx={{mr: 1, color: t.palette.text.secondary}}>{icon}</Icon>
+          <Icon sx={{mr: 1, color: t => t.palette.text.secondary}}>{icon}</Icon>
         )}
         <Box>
           <Box>{title}</Box>

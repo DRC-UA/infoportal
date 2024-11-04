@@ -90,7 +90,7 @@ export const DatabaseWithContext = () => {
           <SidebarSection dense title={m.customDb}>
             {customForms.map(_ => (
               <NavLink to={databaseIndex.siteMap.custom(_.id)} key={_.id}>
-                <SidebarItem icon="join_inner" size="small">
+                <SidebarItem onClick={() => undefined} icon="join_inner" size="small">
                   {_.name}
                 </SidebarItem>
               </NavLink>

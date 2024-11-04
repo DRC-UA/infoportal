@@ -12,11 +12,6 @@ const css = makeSx({
   },
 })
 
-const styleActive = (t: Theme) => ({
-  color: t.palette.primary.main,
-  background: alpha(t.palette.primary.main, 0.16),
-})
-
 export interface SidebarItemProps extends ButtonBaseProps {
   icon?: string | ReactNode
   iconEnd?: string | ReactNode
@@ -40,10 +35,9 @@ export const SidebarItem = ({
   sx,
   ...props
 }: SidebarItemProps) => {
-  const theme = useTheme()
   return (
     <ButtonBase
-      disableRipple={!props.onClick || !props.href}
+      disableRipple={!props.onClick && !props.href}
       sx={{
         width: '100%',
         transition: t => t.transitions.create('all'),
