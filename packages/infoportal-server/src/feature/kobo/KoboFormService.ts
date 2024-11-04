@@ -4,6 +4,7 @@ import {seq} from '@alexandreannic/ts-utils'
 import {appConf} from '../../core/conf/AppConf'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {PromisePool} from '@supercharge/promise-pool'
+import {app, AppCacheKey} from '../../index'
 
 export interface KoboFormCreate {
   uid: string
@@ -16,6 +17,7 @@ export class KoboFormService {
   constructor(
     private prisma: PrismaClient,
     private koboSdk = KoboSdkGenerator.getSingleton(prisma),
+    private cache = app.cache,
     private conf = appConf,
   ) {
 
@@ -52,6 +54,8 @@ export class KoboFormService {
       }),
       this.createHookIfNotExists(sdk, payload.uid)
     ])
+    this.cache.clear(AppCacheKey.KoboServerIndex)
+    this.cache.clear(AppCacheKey.KoboSdk)
     return newFrom
   }
 
