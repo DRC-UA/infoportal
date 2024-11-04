@@ -117,7 +117,6 @@ export class KoboSyncServer {
       if (idsToDelete.length) {
         this.info(formId, `Handle delete ${tracker} - localAnswersIndex: ${localAnswersIndex.size} - remoteIdsIndex: ${remoteIdsIndex.size}`)
         this.info(formId, `Handle delete ${tracker} - idsToDelete: ${idsToDelete.join(',')}`)
-        this.info(formId, `Handle delete ${tracker} - remoteIdsIndex: ${[...remoteIdsIndex.keys()].join(',')}`)
       }
 
       await this.prisma.koboAnswers.updateMany({
