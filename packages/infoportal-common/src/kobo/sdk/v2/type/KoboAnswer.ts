@@ -2,6 +2,8 @@ import {ApiPaginate, KoboAnswer, Period, UUID} from './../../../../index'
 import {seq} from '@alexandreannic/ts-utils'
 
 export interface KoboAnswerParams extends Partial<Period> {
+  limit?: number
+  offset?: number
 }
 
 export interface KoboAnswerStatus {

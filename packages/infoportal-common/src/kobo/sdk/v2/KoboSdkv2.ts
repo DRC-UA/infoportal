@@ -124,15 +124,40 @@ export class KoboSdkv2 {
     return this.api.get<KoboApiSchema>(`/v2/assets/${formId}/versions/${versionId}/data.json`)
   }
 
-  readonly getAnswersRaw = (form: KoboId, params: KoboAnswerParams = {}) => {
-    const start = map(params.start, _ => KoboSdkv2.makeDateFilter('_submission_time', 'gte', _))
-    const end = map(params.end, _ => KoboSdkv2.makeDateFilter('_submission_time', 'lte', _))
-    const query = start && end ? {'$and': [start, end]} : start ?? end
-    return this.api.get<KoboApiList<ApiKoboAnswerMetaData & Record<string, any>>>(`/v2/assets/${form}/data`, {qs: {query: query ? JSON.stringify(query) : undefined}})
+  /**
+   * It's 30k but use 20k is for safety
+   */
+  private static readonly MAX_KOBO_PAGESIZE = 2e4
+
+  readonly getAnswersRaw = (form: KoboId, {limit, offset, ...params}: KoboAnswerParams = {}) => {
+    const fetchPage = async ({
+      limit = KoboSdkv2.MAX_KOBO_PAGESIZE,
+      offset = 0,
+      accumulated = []
+    }: {
+      limit?: number,
+      offset?: number,
+      accumulated?: Array<ApiKoboAnswerMetaData & Record<string, any>>
+    }): Promise<KoboApiList<ApiKoboAnswerMetaData & Record<string, any>>> => {
+      const start = map(params.start, _ => KoboSdkv2.makeDateFilter('_submission_time', 'gte', _))
+      const end = map(params.end, _ => KoboSdkv2.makeDateFilter('_submission_time', 'lte', _))
+      const query = start && end ? {'$and': [start, end]} : start ?? end
+      const response = await this.api.get<KoboApiList<ApiKoboAnswerMetaData & Record<string, any>>>(`/v2/assets/${form}/data`, {
+        qs: {
+          limit: limit,
+          start: offset,
+          query: query ? JSON.stringify(query) : undefined
+        }
+      })
+      const results = [...accumulated, ...response.results]
+      console.log({offset, limit, response: {count: response.count, results: results.length}})
+      return results.length >= response.count ? {count: response.count, results} : fetchPage({offset: offset + response.results.length, accumulated: results})
+    }
+    return fetchPage({limit, offset})
   }
 
   readonly getAnswers = async (form: KoboId, params: KoboAnswerParams = {}): Promise<ApiPaginate<KoboAnswer>> => {
-    const answers = await this.getAnswersRaw(form, params)
+    return await this.getAnswersRaw(form, params)
       .then(res => {
         return ({
           ...res,
@@ -142,15 +167,6 @@ export class KoboSdkv2 {
         })
       })
       .then(koboToApiPaginate)
-    if (answers.data.length < answers.total) {
-      const rest = await this.getAnswers(form, ({...params, start: answers.data[answers.data.length - 1]?.submissionTime}))
-      answers.data = [...answers.data, ...rest.data]
-    }
-    return answers
-  }
-
-  private readonly removeGroup = () => {
-
   }
 
   readonly getSchemas = () => {
