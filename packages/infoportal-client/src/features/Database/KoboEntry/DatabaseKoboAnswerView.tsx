@@ -19,8 +19,7 @@ import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {NavLink} from 'react-router-dom'
 
-export const databaseUrlParamsValidation = yup.object({
-  serverId: yup.string().required(),
+const databaseUrlParamsValidation = yup.object({
   formId: yup.string().required(),
   answerId: yup.string().required(),
 })

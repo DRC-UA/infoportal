@@ -66,13 +66,8 @@ export const DatabaseTable = ({
   const {api} = useAppSettings()
   const {accesses, session} = useSession()
   const ctxSchema = useKoboSchemaContext()
-  const fetcher = useKoboAnswersContext().byId(formId)
-
-  useEffect(() => {
-    ctxSchema.fetchById(formId)
-  }, [formId])
-
-  const _form = useFetcher(() => form ? Promise.resolve(form) : api.kobo.form.get(formId))
+  const fetcherAnswers = useKoboAnswersContext().byId(formId)
+  const fetcherForm = useFetcher(() => form ? Promise.resolve(form) : api.kobo.form.get(formId))
 
   const access = useMemo(() => {
     const list = accesses.filter(Access.filterByFeature(AppFeatureId.kobo_database)).filter(_ => _.params?.koboFormId === formId)
@@ -83,14 +78,15 @@ export const DatabaseTable = ({
   }, [accesses])
 
   useEffect(() => {
-    fetcher.fetch({})
-    _form.fetch()
+    ctxSchema.fetchById(formId)
+    fetcherAnswers.fetch({})
+    fetcherForm.fetch()
   }, [formId])
 
 
-  const loading = fetcher.loading
+  const loading = fetcherAnswers.loading
   const refetch = useCallback(async (p: FetchParams = {}) => {
-    await fetcher.fetch(p)
+    await fetcherAnswers.fetch(p)
   }, [formId])
 
   return (
@@ -105,14 +101,14 @@ export const DatabaseTable = ({
       {/*  <>*/}
       {/*  </>*/}
       {/*)}*/}
-      {map(_form.get, ctxSchema.byId[formId]?.get, (form, schema) => (
+      {map(fetcherForm.get, ctxSchema.byId[formId]?.get, (form, schema) => (
         <DatabaseKoboTableProvider
           schema={schema}
           dataFilter={dataFilter}
           access={access}
           refetch={refetch}
           loading={loading}
-          data={fetcher.get?.data}
+          data={fetcherAnswers.get?.data}
           form={form}
         >
           <DatabaseKoboTableContent

@@ -2,10 +2,11 @@ import * as React from 'react'
 import {ReactNode, useEffect, useState} from 'react'
 import {Box, BoxProps, LinearProgress, Skeleton} from '@mui/material'
 import {Txt} from '@/shared'
+import {fnSwitch} from '@alexandreannic/ts-utils'
 
 export interface PageProps extends BoxProps {
   width?: number | 'xs' | 'md' | 'lg' | 'full'
-  animated?: boolean
+  animation?: 'none' | 'default' | 'translateLeft'
   className?: any
   style?: object
   loading?: boolean
@@ -15,22 +16,6 @@ export interface PageProps extends BoxProps {
 
 let timeout: NodeJS.Timeout | undefined
 
-export const PageHeader = ({
-  children,
-  action,
-  ...props
-}: {
-  action?: ReactNode
-} & BoxProps) => {
-  return (
-    <Box {...props} sx={{display: 'flex', alignItems: 'center',}}>
-      <PageTitle>{children}</PageTitle>
-      {action && (
-        <Box sx={{marginLeft: 'auto'}}>{action}</Box>
-      )}
-    </Box>
-  )
-}
 export const PageTitle = ({
   action,
   children,
@@ -74,7 +59,7 @@ export const PagePlaceholder = (props: Pick<PageProps, 'width'>) => {
 }
 
 
-export const Page = ({children, sx, loading, animated = true, ...props}: PageProps) => {
+export const Page = ({children, sx, loading, animation = 'default', ...props}: PageProps) => {
   const [appeared, setAppeared] = useState(false)
   const width = typeof props.width === 'string' ? ({
     xs: 780,
@@ -84,7 +69,7 @@ export const Page = ({children, sx, loading, animated = true, ...props}: PagePro
   })[props.width] : props.width
 
   useEffect(() => {
-    if (animated) timeout = setTimeout(() => setAppeared(true))
+    if (animation !== 'none') timeout = setTimeout(() => setAppeared(true))
     return () => clearTimeout(timeout)
   }, [])
 
@@ -99,13 +84,17 @@ export const Page = ({children, sx, loading, animated = true, ...props}: PagePro
           transition: t => t.transitions.create('all', {easing: 'ease', duration: 160}),
           margin: 'auto',
           opacity: 0,
-          transform: 'scale(.90)',
+          transform: fnSwitch(animation, {
+            none: 'none',
+            translateLeft: 'translate(50px)',
+            default: 'scale(.90)',
+          }),
           maxWidth: 932,
           mt: 1,
           width: '100%',
-          ...(!animated || appeared) && {
+          ...(!animation || appeared) && {
             opacity: 1,
-            transform: 'scale(1)',
+            transform: 'none',
           },
           ...width && {maxWidth: width},
           ...sx,
