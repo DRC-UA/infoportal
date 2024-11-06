@@ -73,7 +73,7 @@ export class WfpDeduplicationUpload {
               return WfpDeduplicationStatus.Error
             })()
             const existing = (() => {
-              const match = _.message.match(/\-\s+Already\s+assisted\s+by\s+(.*?)\s+from\s+(\d{8})\s+to\s+(\d{8})\s+for\s+UAH\s+([\d,\.]+)\s+for\s+(CASH-\w+)/)
+              const match = _.message.match(/-\s+Already\s+assisted\s+by\s+(.*?)\s+from\s+(\d{8})\s+to\s+(\d{8})\s+for\s+UAH\s+([\d,.\s]+)\s+for\s+(CASH-\w+)/)
               if (!match) {
                 console.warn(_)
                 return {}
@@ -82,7 +82,7 @@ export class WfpDeduplicationUpload {
                 existingOrga: match![1],
                 existingStart: parse(match![2], 'yyyyMMdd', new Date()),
                 existingEnd: parse(match![3], 'yyyyMMdd', new Date()),
-                existingAmount: +match![4].replace(',', '').split('.')[0],
+                existingAmount: parseFloat(match![4].replace(/[.,]00\s$/g, '').replaceAll(/[,.\s]/g, '')),
               }
             })()
             return ({
