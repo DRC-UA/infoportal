@@ -516,8 +516,8 @@ const extractQuestionName = (_: Record<string, any>) => {
       .map(x => {
         const lastQuestionNameHavingOptionId = seq(indexOptionId[x.select_from_list_name ?? '']).last()?.name
         const basicQuestionTypeMapping = (lastQuestionNameHavingOptionId?: string) => ({
-          'select_one': () => 'undefined | ' + (this.options.skipQuestionTyping?.includes(x.name) ? 'string' : `Option<'${lastQuestionNameHavingOptionId}'>`),
-          'select_multiple': () => 'undefined | ' + (this.options.skipQuestionTyping?.includes(x.name) ? 'string[]' : `Option<'${lastQuestionNameHavingOptionId}'>[]`),
+          'select_one': () => 'undefined | ' + (this.options.skipQuestionTyping?.includes(x.name!) ? 'string' : `Option<'${lastQuestionNameHavingOptionId}'>`),
+          'select_multiple': () => 'undefined | ' + (this.options.skipQuestionTyping?.includes(x.name!) ? 'string[]' : `Option<'${lastQuestionNameHavingOptionId}'>[]`),
           'integer': () => 'number | undefined',
           'decimal': () => 'number | undefined',
           'text': () => 'string | undefined',
@@ -554,7 +554,7 @@ const extractQuestionName = (_: Record<string, any>) => {
     survey: KoboApiSchema['content']['survey'],
     choices: KoboApiSchema['content']['choices']
   }) => {
-    const indexOptionId = seq(survey).reduceObject<Record<string, string>>(_ => [_.select_from_list_name ?? '', _.name])
+    const indexOptionId = seq(survey).reduceObject<Record<string, string>>(_ => [_.select_from_list_name ?? '', _.name ?? ''])
     const res: Record<string, Record<string, string>> = {}
     choices?.forEach(choice => {
       if (this.options.skipQuestionTyping?.includes(indexOptionId[choice.list_name])) return
