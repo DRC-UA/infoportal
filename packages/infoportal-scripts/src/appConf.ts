@@ -6,7 +6,7 @@ dotenv.config()
 const e = env(process.env)
 
 export const appConf = {
-  rootProjectDir: '/Users/alexandreannic/Documents/workspace/infoportal/packages/infoportal-scripts',
+  rootProjectDir: e(required)('ROOT_PROJECT_DIR'),
   db: {
     maxConcurrency: e(int, defaultValue(50))('DATABASE_MAX_CONCURRENCY'),
     url: e(required)('DATABASE_URL')
