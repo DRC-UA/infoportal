@@ -4,6 +4,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	export interface T {
 	    'start': string,
 	    'end': string,
+	  // __IP__TRIGGER_EMAIL [calculate] New referral case
+  '__IP__TRIGGER_EMAIL': string,
 	  // date [date] Date
   'date': Date | undefined,
 	  // introduction/staff_to_insert_their_DRC_office [select_one] 1.1 DRC office
@@ -34,10 +36,26 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'service_requested': undefined | Option<'service_requested'>[],
 	  // referral_details/service_requested_other [text] 2.2.1 If other service requested, please specify
   'service_requested_other': string | undefined,
-	  // referral_details/receiving_department_out_inc [text] 2.3 Receiving department
-  'receiving_department_out_inc': string | undefined,
-	  // referral_details/receiving_staff_out_inc [text] 2.4 Receiving staff
-  'receiving_staff_out_inc': string | undefined,
+	    'cal_mpca': string,
+	    'cal_nfi': string,
+	    'cal_shelter_rehabilitation': string,
+	    'cal_cash_rent': string,
+	    'cal_cash_repair': string,
+	    'cal_emergency_shelter_kit': string,
+	    'cal_agricultural_livelihood_support': string,
+	    'cal_business_support': string,
+	    'cal_vocational_training': string,
+	    'cal_victim_assistance': string,
+	    'cal_legal_aid': string,
+	    'cal_psychosocial_support': string,
+	    'cal_protection_case_management': string,
+	    'cal_ipa': string,
+	    'cal_gbv': string,
+	    'cal_eore': string,
+	  // referral_details/receiving_department_out_inc [note] 2.3 Receiving department
+  'receiving_department_out_inc': string,
+	  // referral_details/receiving_staff_out_inc [note] 2.4 Receiving staff
+  'receiving_staff_out_inc': string,
 	  // referral_details/service_requested_prot [select_one] 2.5 Service requested
   'service_requested_prot': undefined | Option<'service_requested_prot'>,
 	  // referral_details/service_requested_prot_other [text] 2.5.1 If other service requested, please specify
@@ -152,9 +170,12 @@ service_requested: {
 	'shelter_rehabilitation': `Shelter rehabilitation`,
 	'cash_rent': `Cash for rent`,
 	'cash_repair': `Cash for repair`,
+	'cash_fuel': `Cash for solid fuel`,
+	'cash_utilities': `Cash for utilities`,
 	'emergency_shelter_kit': `Emergency shelter kit`,
 	'employment_support': `Employment support`,
 	'agricultural_livelihood_support': `Agricultural livelihood support`,
+	'cash_animal_shelter_repair': `Cash For Animal Shelter Repair`,
 	'business_support': `Business support`,
 	'vocational_training': `Vocational training`,
 	'victim_assistance': `Victim assistance`,
@@ -165,6 +186,7 @@ service_requested: {
 	'gbv': `GBV`,
 	'child_protection': `Child protection`,
 	'education': `Education`,
+	'eore': `EORE`,
 	'other': `Other`
 },
 service_requested_prot: {
@@ -221,7 +243,8 @@ staff_to_insert_their_DRC_office: {
 	'kharkiv': `Kharkiv`,
 	'lviv': `Lviv`,
 	'mykolaiv': `Mykolaiv`,
-	'sumy': `Sumy`
+	'sumy': `Sumy`,
+	'slo': `Sloviansk`
 },
 staff_code: {
 	'CEJ001': `CEJ001`,
@@ -332,7 +355,27 @@ staff_code: {
 	'NLV_A': `NLV-A`,
 	'NLV_B': `NLV-B`,
 	'NLV_C': `NLV-C`,
-	'NLV_D': `NLV-D`
+	'NLV_D': `NLV-D`,
+	'SLO001': `SLO001`,
+	'SLO002': `SLO002`,
+	'SLO003': `SLO003`,
+	'SLO004': `SLO004`,
+	'SLO005': `SLO005`,
+	'SLO006': `SLO006`,
+	'SLO007': `SLO007`,
+	'SLO008': `SLO008`,
+	'SLO009': `SLO009`,
+	'SLO010': `SLO010`,
+	'SLO011': `SLO011`,
+	'SLO012': `SLO012`,
+	'SLO013': `SLO013`,
+	'SLO014': `SLO014`,
+	'SLO015': `SLO015`,
+	'SLO016': `SLO016`,
+	'SLO017': `SLO017`,
+	'SLO018': `SLO018`,
+	'SLO019': `SLO019`,
+	'SLO020': `SLO020`
 },
 oblast: {
 	'cherkaska': `Cherkaska`,
@@ -2263,7 +2306,7 @@ hromada: {
 	'zymnovodivska': `Zymnovodivska`,
 	'zymohirivska': `Zymohirivska`,
 	'zymynska': `Zymynska`
-}}
+}} as const
 
 const extractQuestionName = (_: Record<string, any>) => {
   const output: any = {}
