@@ -132,6 +132,7 @@ export class KoboMetaMapperProtection {
         lviv: DrcOffice.Lviv,
         mykolaiv: DrcOffice.Mykolaiv,
         sumy: DrcOffice.Sumy,
+        sloviansk: DrcOffice.Sloviansk
       }, () => undefined),
       project: projects,
       donor: projects.map(_ => DrcProjectHelper.donorByProject[_]),
