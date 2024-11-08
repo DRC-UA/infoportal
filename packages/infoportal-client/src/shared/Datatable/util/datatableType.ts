@@ -4,7 +4,19 @@ import {KeyOf} from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
 
-export type DatatablePropertyType = 'id' | 'date' | 'number' | 'string' | 'select_one' | 'select_multiple'
+export type DatatableFilterTypeMapping = {
+  id: string
+  date: [Date | undefined, Date | undefined]
+  number: [number | undefined, number | undefined]
+  string: {
+    filterBlank?: boolean
+    value?: string
+  } | undefined
+  select_one: string
+  select_multiple: string[]
+}
+
+export type DatatablePropertyType = keyof DatatableFilterTypeMapping
 
 export type OrderBy = 'asc' | 'desc'
 
@@ -35,7 +47,8 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   loading?: boolean
   total?: number
   contentProps?: BoxProps
-  defaultFilters?: Record<K, any>
+  /** Find a way to enforce k and v typing*/
+  defaultFilters?: Record<KeyOf<T>, DatatableFilterValue>
   defaultLimit?: number
   data?: T[]
   title?: string
@@ -240,44 +253,5 @@ export namespace DatatableColumn {
   }
 }
 
-
-export type DatatableFilterValueId = string
-export type DatatableFilterValueString = {
-  filterBlank?: boolean,
-  value?: string
-} | undefined
-export type DatatableFilterValueSelect = string[]
-export type DatatableFilterValueDate = [Date | undefined, Date | undefined]
-export type DatatableFilterValueNumber = [number | undefined, number | undefined]
-export type DatatableFilterValue = DatatableFilterValueId | DatatableFilterValueString | DatatableFilterValueSelect | DatatableFilterValueDate | DatatableFilterValueNumber
+export type DatatableFilterValue = DatatableFilterTypeMapping[keyof DatatableFilterTypeMapping]
 export type DatatableBlankValue = ''
-
-// type SchemaItem = {
-//   id: string;
-//   type: string;
-// };
-//
-// type FilterValue<T extends SchemaItem> = T['type'] extends 'string'
-//   ? string
-//   : T['type'] extends 'date'
-//     ? Date
-//     : never;
-//
-// type Filters<T extends SchemaItem[]> = {
-//   [K in T[number]['id']]: any
-// };
-//
-// type CallFnArgs<T extends SchemaItem[]> = {
-//   schema: T;
-//   filters: Filters<T>;
-// };
-//
-// function callFn<T extends SchemaItem[]>(args: CallFnArgs<T>): void {
-//   // Your implementation here
-// }
-//
-// // Example usage
-// callFn({
-//   schema: [{ id: 'first', type: 'string' }, { id: 'second', type: 'date' }],
-//   filters: { xxx: 'test', second: new Date() },
-// });

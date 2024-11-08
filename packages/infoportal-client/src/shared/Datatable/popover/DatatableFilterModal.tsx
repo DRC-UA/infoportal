@@ -1,23 +1,14 @@
 import {Alert, Box, Checkbox, Divider, FormControlLabel, Icon, MenuItem, Popover, PopoverProps, Slider, Switch} from '@mui/material'
-import {IpBtn} from '../../Btn'
-import {useI18n} from '../../../core/i18n'
+import {IpBtn, IpIconBtn, MultipleChoices} from '@/shared'
+import {useI18n} from '@/core/i18n'
 import React, {Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useState} from 'react'
 import {IpInput} from '../../Input/Input'
-import {MultipleChoices} from '../../MultipleChoices'
 import {PeriodPicker} from '../../PeriodPicker/PeriodPicker'
-import {IpIconBtn} from '../../IconBtn'
 import {Txt} from '@/shared/Txt'
 import {OrderBy} from '@alexandreannic/react-hooks-lib'
 import {PanelBody, PanelHead} from '@/shared/Panel'
 import {PanelFoot} from '@/shared/Panel/PanelFoot'
-import {
-  DatatableFilterValueDate,
-  DatatableFilterValueNumber,
-  DatatableFilterValueSelect,
-  DatatableFilterValueString,
-  DatatableOptions,
-  DatatableRow
-} from '@/shared/Datatable/util/datatableType'
+import {DatatableFilterTypeMapping, DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {type} from 'os'
 import {seq} from '@alexandreannic/ts-utils'
 import {useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
@@ -36,23 +27,23 @@ export type DatatableFilterDialogProps = Pick<PopoverProps, 'anchorEl'> & {
   options?: DatatableOptions[]
 } & ({
   renderValue: any
-  onChange?: (columnName: string, value: DatatableFilterValueNumber) => void
-  value: DatatableFilterValueNumber
+  onChange?: (columnName: string, value: DatatableFilterTypeMapping['number']) => void
+  value: DatatableFilterTypeMapping['number']
   type: 'number'
 } | {
   renderValue: any
-  onChange?: (columnName: string, value: DatatableFilterValueDate) => void
-  value: DatatableFilterValueDate
+  onChange?: (columnName: string, value: DatatableFilterTypeMapping['date']) => void
+  value: DatatableFilterTypeMapping['date']
   type: 'date'
 } | {
   renderValue: any
-  onChange?: (columnName: string, value: DatatableFilterValueSelect) => void
-  value: DatatableFilterValueSelect
+  onChange?: (columnName: string, value: DatatableFilterTypeMapping['select_multiple']) => void
+  value: DatatableFilterTypeMapping['select_multiple']
   type: 'select_one' | 'select_multiple'
 } | {
   renderValue: any
-  onChange?: (columnName: string, value: DatatableFilterValueString) => void
-  value: DatatableFilterValueString
+  onChange?: (columnName: string, value: DatatableFilterTypeMapping['string']) => void
+  value: DatatableFilterTypeMapping['string']
   type: 'string' | 'id'
 })
 
@@ -160,8 +151,8 @@ export const DatatableFilterDialogSelect = ({
   onChange,
   options,
 }: {
-  value: DatatableFilterValueString
-  onChange: Dispatch<SetStateAction<DatatableFilterValueSelect>>
+  value: DatatableFilterTypeMapping['string']
+  onChange: Dispatch<SetStateAction<DatatableFilterTypeMapping['select_multiple']>>
   options?: DatatableOptions[]
 }) => {
   const {m} = useI18n()
@@ -203,8 +194,8 @@ export const DatatableFilterDialogText = ({
   value,
   onChange,
 }: {
-  value: DatatableFilterValueString
-  onChange: Dispatch<SetStateAction<DatatableFilterValueString>>
+  value: DatatableFilterTypeMapping['string']
+  onChange: Dispatch<SetStateAction<DatatableFilterTypeMapping['string']>>
 }) => {
   const {m} = useI18n()
   return (
@@ -228,8 +219,8 @@ export const DatatableFilterDialogNumber = ({
   columnId,
   onChange,
 }: Pick<DatatableFilterDialogProps, 'data' | 'columnId'> & {
-  value: DatatableFilterValueNumber
-  onChange: Dispatch<SetStateAction<DatatableFilterValueNumber>>
+  value: DatatableFilterTypeMapping['number']
+  onChange: Dispatch<SetStateAction<DatatableFilterTypeMapping['number']>>
 }) => {
   const ctx = useDatatableContext()
   const col = ctx.columnsIndex[columnId]

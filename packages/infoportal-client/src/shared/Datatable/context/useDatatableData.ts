@@ -1,18 +1,7 @@
-import {useCallback, useMemo, useState} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
 import {ApiPaginateHelper, KeyOf, multipleFilters, safeNumber} from 'infoportal-common'
 import {fnSwitch, map, Obj} from '@alexandreannic/ts-utils'
-import {
-  DatatableColumn,
-  DatatableFilterValue,
-  DatatableFilterValueDate,
-  DatatableFilterValueId,
-  DatatableFilterValueNumber,
-  DatatableFilterValueSelect,
-  DatatableFilterValueString,
-  DatatableRow,
-  DatatableSearch,
-  DatatableTableProps
-} from '@/shared/Datatable/util/datatableType'
+import {DatatableColumn, DatatableFilterTypeMapping, DatatableFilterValue, DatatableRow, DatatableSearch, DatatableTableProps} from '@/shared/Datatable/util/datatableType'
 import {OrderBy} from '@alexandreannic/react-hooks-lib'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
@@ -44,6 +33,9 @@ export const useDatatableData = <T extends DatatableRow>({
     storageKey: `datatable-paginate-${id}`,
   })
 
+  useEffect(() => {
+    if (defaultFilters) setFilters(defaultFilters)
+  }, [defaultFilters])
   const resetSearch = () => setSearch({limit: defaultLimit, offset: 0,})
 
   const onOrderBy = useCallback((columnId: string, orderBy?: OrderBy) => {
@@ -125,7 +117,7 @@ const filterBy = <T extends DatatableRow>({
     const col = columnsIndex[k]
     switch (col.type) {
       case 'id': {
-        const typedFilter = filter as DatatableFilterValueId
+        const typedFilter = filter as DatatableFilterTypeMapping['id']
         const filteredIds = typedFilter.split(/\s/)
         return row => {
           let v = col.render(row).value as string | undefined
@@ -136,7 +128,7 @@ const filterBy = <T extends DatatableRow>({
         }
       }
       case 'date': {
-        const typedFilter = filter as DatatableFilterValueDate
+        const typedFilter = filter as DatatableFilterTypeMapping['date']
         return row => {
           let v = col.render(row).value as Date | undefined
           if (v === undefined) return false
@@ -150,7 +142,7 @@ const filterBy = <T extends DatatableRow>({
         }
       }
       case 'select_one': {
-        const typedFilter = filter as DatatableFilterValueSelect
+        const typedFilter = filter as DatatableFilterTypeMapping['select_one']
         return row => {
           const v = col.render(row).value as string
           if (v === undefined) return false
@@ -158,14 +150,14 @@ const filterBy = <T extends DatatableRow>({
         }
       }
       case 'select_multiple': {
-        const typedFilter = filter as DatatableFilterValueSelect
+        const typedFilter = filter as DatatableFilterTypeMapping['select_multiple']
         return row => {
           const v = col.render(row).value as string[]
           return v.some(_ => (typedFilter).includes(_))
         }
       }
       case 'number': {
-        const typedFilter = filter as DatatableFilterValueNumber
+        const typedFilter = filter as DatatableFilterTypeMapping['number']
         return row => {
           const v = col.render(row).value as number | undefined
           const min = typedFilter[0] as number | undefined
@@ -175,7 +167,7 @@ const filterBy = <T extends DatatableRow>({
       }
       default: {
         if (!col.type) return
-        const typedFilter = filter as DatatableFilterValueString
+        const typedFilter = filter as DatatableFilterTypeMapping['string']
         return row => {
           const v = col.render(row).value
           if ((v === DatatableUtils.blank) && typedFilter?.filterBlank !== false) return false
