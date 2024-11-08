@@ -25,6 +25,7 @@ export namespace AiShelterMapper {
     [DrcProject['UKR-000345 BHA2']]: 'SNFI-DRC-00013',
     // [DrcProject['UKR-000xxx UHF9']]: 'SNFI-DRC-00014',
     [DrcProject['UKR-000372 ECHO3']]: 'SNFI-DRC-00015',
+    [DrcProject['UKR-000390 UHF9']]: 'SNFI-DRC-00016',
   }
 
   const getPlanCode = (p: DrcProject): AiSnfiType.Type['Plan/Project Code'] => {

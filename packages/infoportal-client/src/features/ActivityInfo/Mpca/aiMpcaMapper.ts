@@ -27,6 +27,7 @@ export namespace AiMpcaMapper {
       [DrcProject['UKR-000298 Novo-Nordisk']]: 'MPCA-DRC-00003',
       [DrcProject['UKR-000309 OKF']]: 'MPCA-DRC-00002',
       [DrcProject['UKR-000270 Pooled Funds']]: 'MPCA-DRC-00001',
+      [DrcProject['UKR-000329 SIDA H2R']]: 'MPCA-DRC-00012',
     }, () => aiInvalidValueFlag + _)
   }
 
@@ -69,6 +70,7 @@ export namespace AiMpcaMapper {
                 'Hromada': loc.Hromada,
                 'Settlement': loc.Settlement,
                 'Donor': fnSwitch(DrcProjectHelper.donorByProject[project], {
+                  SIDA: 'Swedish International Development Cooperation Agency (Sida)',
                   UHF: 'Ukraine Humanitarian Fund (UHF)',
                   NovoNordisk: 'Novo Nordisk (NN)',
                   OKF: `Ole Kirk's Foundation (OKF)`,
