@@ -48,7 +48,7 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   total?: number
   contentProps?: BoxProps
   /** Find a way to enforce k and v typing*/
-  defaultFilters?: Record<KeyOf<T>, DatatableFilterValue>
+  defaultFilters?: Record<K, DatatableFilterValue>
   defaultLimit?: number
   data?: T[]
   title?: string
