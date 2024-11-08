@@ -16,7 +16,7 @@ export namespace Protection_groupSession {
     // introduction/project [select_one] Project code
     'project': undefined | Option<'project'>,
     // introduction/ben_det_oblast [select_one] Select oblast
-    'ben_det_oblast': undefined | Option<'hh_char_hh_oblast_residence'>,
+    'ben_det_oblast': undefined | Option<'ben_det_oblast'>,
     // introduction/ben_det_raion [select_one] Select raion
     'ben_det_raion': undefined | string,
     // introduction/ben_det_hromada [select_one] Select hromada
@@ -66,7 +66,7 @@ export namespace Protection_groupSession {
       'hh_char_hh_det_gender': undefined | Option<'hh_char_hh_det_gender'> | undefined,
       'hh_char_hh_det_age': number | undefined | undefined,
       'hh_char_hh_det_status': undefined | Option<'hh_char_hh_det_status'> | undefined,
-      'hh_char_hh_oblast_residence': undefined | Option<'hh_char_hh_oblast_residence'> | undefined,
+      'hh_char_hh_oblast_residence': undefined | Option<'ben_det_oblast'> | undefined,
       'new_beneficiaries': undefined | Option<'new_beneficiaries'> | undefined
     }[] | undefined,
     // gi/particular_questions_information_session [text] Were there any particular questions raised triggering needs for new information session?
@@ -325,7 +325,7 @@ export namespace Protection_groupSession {
       'both': `Both old and new`,
       'no': `No`
     },
-    hh_char_hh_oblast_residence: {
+    ben_det_oblast: {
       'crimea': `Autonomous Republic of Crimea`,
       'cherkaska': `Cherkasy`,
       'chernihivska': `Chernihiv`,
