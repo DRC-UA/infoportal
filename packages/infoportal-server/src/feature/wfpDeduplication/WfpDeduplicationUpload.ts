@@ -6,7 +6,6 @@ import {addMinutes, addSeconds, parse, subMinutes} from 'date-fns'
 import {appConf, AppConf} from '../../core/conf/AppConf'
 import {WfpBuildingBlockClient} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockClient'
 import {app, AppLogger} from '../../index'
-import {AppError} from '../../helper/Errors'
 import promiseRetry from 'promise-retry'
 import {Obj} from '@alexandreannic/ts-utils'
 
@@ -154,22 +153,16 @@ export class WfpDeduplicationUpload {
     fetch: (_: WfpFilters) => Promise<ApiPaginate<T>>,
     runOnBatchedResult: (batch: T[]) => Promise<void>
   }) => {
-    const requests: (() => Promise<ApiPaginate<T>>)[] = [
-      () => fetch({limit: 1000, offset: 0})
-    ]
-    const initialRequest = await requests[0]()
-    const limit = initialRequest.data.length
-    if (limit === 0) {
-      throw new AppError.InternalServerError('Initial request returned 0 data.')
+    let offset = 0
+    for (; ;) {
+      const res = await fetch({limit: 1000, offset})
+      if (res.data.length > 0) {
+        await runOnBatchedResult(res.data)
+        offset += res.data.length
+      } else {
+        break
+      }
     }
-    for (let i = limit; i < initialRequest.total; i = i + limit) {
-      requests.push(() => fetch({limit, offset: i}))
-    }
-    for (const r of requests) {
-      await r().then(_ => runOnBatchedResult(_.data))
-      this.log.debug(`Run`)
-    }
-    // await Promise.all(requests.map(r => r.then(_ => fn(_.data))))
   }
 
   private clearHumanMistakes = async () => {
