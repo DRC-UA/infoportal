@@ -2,7 +2,7 @@ import {WFPBuildingBlockSdk} from '../../core/externalSdk/wfpBuildingBlock/WfpBu
 import {AssistancePrevented, AssistanceProvided, WfpFilters} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockType'
 import {PrismaClient} from '@prisma/client'
 import {ApiPaginate, DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
-import {addMinutes, addSeconds, parse, subMinutes} from 'date-fns'
+import {addMinutes, parse, subMinutes} from 'date-fns'
 import {appConf, AppConf} from '../../core/conf/AppConf'
 import {WfpBuildingBlockClient} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockClient'
 import {app, AppLogger} from '../../index'
@@ -146,23 +146,25 @@ export class WfpDeduplicationUpload {
     }))
   }
 
-  private readonly throttledFetchAndRun = async <T>({
+  private readonly throttledFetchAndRun = async <T, R>({
     fetch,
     runOnBatchedResult
   }: {
     fetch: (_: WfpFilters) => Promise<ApiPaginate<T>>,
-    runOnBatchedResult: (batch: T[]) => Promise<void>
-  }) => {
+    runOnBatchedResult: (batch: T[]) => Promise<R>
+  }): Promise<R[]> => {
     let offset = 0
+    const r: R[] = []
     for (; ;) {
       const res = await fetch({limit: 1000, offset})
       if (res.data.length > 0) {
-        await runOnBatchedResult(res.data)
+        r.push(await runOnBatchedResult(res.data))
         offset += res.data.length
       } else {
         break
       }
     }
+    return r
   }
 
   private clearHumanMistakes = async () => {
@@ -185,37 +187,32 @@ export class WfpDeduplicationUpload {
       'SLO': DrcOffice.Sloviansk,
     }
     const possibleOffices = Obj.keys(officeMapping)
-    await this.throttledFetchAndRun({
+    const files = await this.throttledFetchAndRun({
       fetch: this.wfpSdk.getImportFiles,
-      runOnBatchedResult: async (imports) => {
-        const updates$ = imports.map(async (_) => {
-          const office = possibleOffices.find(oblastCode => _.fileName.includes(oblastCode))
-          if (!office) console.warn(`Oblast not found for filename ${_.fileName}`)
-          const prismaSearch: Parameters<typeof this.prisma.mpcaWfpDeduplication.count>[0] = {
-            where: {
-              createdAt: {
-                gt: _.finishedAt,
-                lt: addSeconds(_.finishedAt, 30),
-              },
-            },
-            // take: _.additionalInfo.rowCount,
-          }
-          const registedDedupCount = await this.prisma.mpcaWfpDeduplication.count(prismaSearch)
-          if (registedDedupCount !== _.additionalInfo.rowCount) {
-            console.warn(`Found ${registedDedupCount} rows database but ${_.additionalInfo.rowCount} in in ${_.fileName} at ${_.finishedAt}.`)
-          }
-          await this.prisma.mpcaWfpDeduplication.updateMany({
-            where: prismaSearch.where,
-            data: {
-              office: office ? officeMapping[office] : undefined,
-              fileName: _.fileName,
-              fileUpload: new Date(_.finishedAt)
-            }
-          })
-        })
-        await Promise.all(updates$)
-      }
-    })
+      runOnBatchedResult: async (_) => _,
+    }).then(_ => _.flatMap(_ => _))
+
+    let offset = 0
+    for (const file of files) {
+      this.log.debug(`Update ${file.finishedAt} ${file.fileName}`)
+      const office = possibleOffices.find(oblastCode => file.fileName.includes(oblastCode))
+      if (!office) console.warn(`Oblast not found for filename ${file.fileName}`)
+      const rows = await this.prisma.mpcaWfpDeduplication.findMany({
+        select: {id: true},
+        orderBy: {createdAt: 'desc'},
+        skip: offset,
+        take: file.additionalInfo.rowCount,
+      })
+      await this.prisma.mpcaWfpDeduplication.updateMany({
+        where: {id: {in: rows.map(_ => _.id)}},
+        data: {
+          office: office ? officeMapping[office] : undefined,
+          fileName: file.fileName,
+          fileUpload: new Date(file.finishedAt)
+        }
+      })
+      offset += file.additionalInfo.rowCount
+    }
   }
 }
 
