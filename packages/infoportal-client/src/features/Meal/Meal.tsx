@@ -65,7 +65,7 @@ const MealSidebar = ({
     <Sidebar>
       <SidebarBody>
         <SidebarSection title={m._meal.visitMonitoring}>
-          <NavLink to={path(mealIndex.siteMap.visit._)}>
+          <NavLink to={path(mealIndex.siteMap.visit.dashboard)}>
             {({isActive, isPending}) => (
               <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>{m.dashboard}</SidebarItem>
             )}
