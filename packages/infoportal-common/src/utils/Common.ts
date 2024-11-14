@@ -179,7 +179,7 @@ export const safeInt32: {
 
 export const safeArray = <T extends string>(value?: T[]): T[] => {
   if (!value) return []
-  if (Array.isArray(value)) return value
+  if (Array.isArray(value)) return value.filter(_ => _ !== undefined && _ !== null)
   return [value]
 }
 

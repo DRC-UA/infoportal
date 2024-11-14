@@ -246,6 +246,13 @@ export class KoboMetaService {
         })
         return p
       })
+      // Create ony by one to debug if createMany failed
+      // for (let a of koboAnswersWithId.get()) {
+      //   const {persons, ...kobo} = a
+      //   await this.prisma.koboMeta.create({
+      //     data: kobo,
+      //   })
+      // }
       await this.prisma.koboMeta.createMany({
         data: koboAnswersWithId.map(({persons, ...kobo}) => kobo),
       })

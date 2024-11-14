@@ -150,7 +150,6 @@ export class KoboSdkv2 {
         }
       })
       const results = [...accumulated, ...response.results]
-      console.log({offset, limit, response: {count: response.count, results: results.length}})
       return results.length >= response.count ? {count: response.count, results} : fetchPage({offset: offset + response.results.length, accumulated: results})
     }
     return fetchPage({limit, offset})
