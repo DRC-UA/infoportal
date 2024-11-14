@@ -3,12 +3,13 @@ import {ApiSdk} from '../sdk/server/ApiSdk'
 import {appConfig, AppConfig} from '@/conf/AppConfig'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {AppThemeParams, muiTheme} from '@/core/theme'
-import {Theme} from '@mui/material'
+import {darken, lighten, Theme} from '@mui/material'
 
 export interface ConfigContext {
   api: ApiSdk
   conf: AppConfig
   theme: {
+    adaptiveLighten: (color: string, coefficient: number) => string
     theme: Theme,
     appThemeParams: AppThemeParams
     setAppThemeParams: Dispatch<SetStateAction<AppThemeParams>>
@@ -53,6 +54,7 @@ export const AppSettingsProvider = ({
     <_ConfigContext.Provider value={{
       api,
       theme: {
+        adaptiveLighten: isSystemDark ? darken : lighten,
         theme,
         appThemeParams,
         setAppThemeParams,

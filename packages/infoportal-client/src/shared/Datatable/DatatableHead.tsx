@@ -7,6 +7,7 @@ import {DatatableColumn, DatatableRow} from '@/shared/Datatable/util/datatableTy
 import {ResizableDiv} from '@/shared/Datatable/ResizableDiv'
 import {DatabaseHeadCell} from '@/shared/Datatable/DatatableHeadCell'
 import {TableHeadSectionCell} from '@/shared/Datatable/TableHeadSectionCell'
+import {DatatableHeadCopyIds} from '@/shared/Datatable/DatatableHeadCopyIds'
 
 export const DatatableHead = (() => {
   const Component = <T extends DatatableRow>({
@@ -155,9 +156,17 @@ const DatatableHeadTdBody = ({
     <span style={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
       {column.typeIcon}
       {column.subHeader}
-      {['select_one', 'select_multiple', 'date', 'number'].includes(column.type!) && (
-        <TableIconBtn children="bar_chart" onClick={e => onOpenStats(e)}/>
-      )}
+      {(() => {
+        switch (column.type) {
+          case 'select_one':
+          case 'select_multiple':
+          case 'date':
+          case 'number':
+            return <TableIconBtn children="bar_chart" onClick={e => onOpenStats(e)}/>
+          case 'id':
+            return <DatatableHeadCopyIds column={column}/>
+        }
+      })()}
       {column.type && (
         <TableIconBtn
           color={active ? 'primary' : undefined}
