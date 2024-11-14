@@ -1,4 +1,4 @@
-import {IKoboMeta, KoboAnswerMetaData} from 'infoportal-common'
+import {KoboAnswerMetaData} from 'infoportal-common'
 
 export type KoboMetaOrigin<
   TAnswer extends Record<string, any> = any,
@@ -14,6 +14,4 @@ export type KoboMetaOrigin<
   updatedAt?: KoboAnswerMetaData['updatedAt']
   tags?: TTag | null
 }
-
-export type KoboMetaCreate<TTags = any> = Omit<IKoboMeta<TTags>, 'id'>
 

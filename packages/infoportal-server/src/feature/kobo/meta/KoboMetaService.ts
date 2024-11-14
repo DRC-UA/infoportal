@@ -1,7 +1,6 @@
 import {Prisma, PrismaClient} from '@prisma/client'
 import {GlobalEvent} from '../../../core/GlobalEvent'
 import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds'
-import {KoboMetaCreate} from './KoboMetaType'
 import {app, AppCacheKey, AppLogger} from '../../../index'
 import {KoboService} from '../KoboService'
 import {duration, map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
@@ -15,7 +14,7 @@ import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
 import {PromisePool} from '@supercharge/promise-pool'
 import Event = GlobalEvent.Event
 
-export type MetaMapped<TTag extends Record<string, any> = any> = Omit<KoboMetaCreate<TTag>, 'koboId' | 'id' | 'uuid' | 'updatedAt' | 'formId' | 'date'> & {date?: Date}
+export type MetaMapped<TTag extends Record<string, any> = any> = Omit<IKoboMeta<TTag>, 'koboId' | 'id' | 'uuid' | 'updatedAt' | 'formId' | 'date'> & {date?: Date}
 export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) => {
   originMetaKey: Extract<KeyOf<IKoboMeta>, 'koboId' | 'taxId'>,
   value: number | string,
@@ -204,7 +203,7 @@ export class KoboMetaService {
     mapper: MetaMapperInsert,
   }) => {
     this.debug(formId, `Fetch Kobo answers...`)
-    const koboAnswers: Seq<KoboMetaCreate> = await this.prisma.koboAnswers.findMany({
+    const koboAnswers = await this.prisma.koboAnswers.findMany({
       select: {
         formId: true,
         uuid: true,
@@ -222,7 +221,6 @@ export class KoboMetaService {
         const m = [mapper(r)].flat()
         return seq(m).compact().map(_ => {
           return {
-            // id: KoboMetaService.makeMetaId(r.id, _.activity!),
             koboId: r.id,
             uuid: r.uuid,
             formId: r.formId,
@@ -237,14 +235,19 @@ export class KoboMetaService {
     this.info(formId, `Fetch Kobo answers... ${koboAnswers.length} fetched.`)
 
     const handleCreate = async () => {
-      const koboAnswersWithId = (koboAnswers as Seq<Omit<IKoboMeta, 'persons'> & {persons: Prisma.KoboPersonUncheckedCreateInput[]}>).map(p => {
+      const koboAnswersWithId = koboAnswers.map(p => {
         const genId = genUUID()
-        p.id = genId
-        p.persons?.map(_ => {
-          _.metaId = genId
-          return _
+        const persons: Prisma.KoboPersonCreateManyInput[] = (p.persons ?? []).map(_ => {
+          return {
+            ..._,
+            metaId: genId
+          }
         })
-        return p
+        return {
+          ...p,
+          id: genId,
+          persons: persons
+        }
       })
       // Create ony by one to debug if createMany failed
       // for (let a of koboAnswersWithId.get()) {
@@ -257,7 +260,7 @@ export class KoboMetaService {
         data: koboAnswersWithId.map(({persons, ...kobo}) => kobo),
       })
       await this.prisma.koboPerson.createMany({
-        data: koboAnswersWithId.flatMap(_ => _.persons),
+        data: koboAnswersWithId.flatMap(_ => _.persons)
       })
       return koboAnswersWithId
     }

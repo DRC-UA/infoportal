@@ -260,7 +260,7 @@ export const getColumnsCustom = ({
           return row.numb_part || 0
         } else if (row.new_ben === 'bno' && row.hh_char_hh_det) {
           return row.hh_char_hh_det.reduce((count, participant) => {
-            return count + (participant.hh_char_hh_new_ben === 'yes' ? 1 : 0)
+            return count + (participant.hh_char_hh_new_ben === 'yes' && participant.hh_char_hh_det_age !== undefined && participant.hh_char_hh_det_gender !== undefined ? 1 : 0)
           }, 0)
         }
         return 0
