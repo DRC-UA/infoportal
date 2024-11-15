@@ -81,7 +81,7 @@ export class WfpDeduplicationUpload {
                 existingOrga: match![1],
                 existingStart: parse(match![2], 'yyyyMMdd', new Date()),
                 existingEnd: parse(match![3], 'yyyyMMdd', new Date()),
-                existingAmount: parseFloat(match![4].replace(/[.,]00\s$/g, '').replaceAll(/[,.\s]/g, '')),
+                existingAmount: parseFloat(match![4].replace(/[.,]00\s*$/g, '').replaceAll(/[,.\s]/g, '')),
               }
             })()
             return ({
