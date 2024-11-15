@@ -3,11 +3,10 @@ import {KoboEcrec_cashRegistration, KoboGeneralMapping, KoboIndex} from 'infopor
 export const databaseCustomMapping: Record<any, (_: any) => any> = {
   [KoboIndex.byName('ecrec_cashRegistration').id]: (_: KoboEcrec_cashRegistration.T) => KoboEcrec_cashRegistration.calculateVulnerabilities(_),
   [KoboIndex.byName('ecrec_cashRegistrationBha').id]: (_: KoboEcrec_cashRegistration.T) => KoboEcrec_cashRegistration.calculateVulnerabilities(_),
-  [KoboIndex.byName('ecrec_msmeGrantSelection').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('ecrec_vetApplication').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('ecrec_vetEvaluation').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('ecrec_msmeGrantEoi').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
-  [KoboIndex.byName('ecrec_msmeGrantSelection').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
+  [KoboIndex.byName('ecrec_msmeGrantReg').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('bn_re').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('bn_rapidResponse').id]: KoboGeneralMapping.addIndividualBreakdownColumnForRrm,
   [KoboIndex.byName('bn_rapidResponse2').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
