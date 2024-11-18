@@ -131,6 +131,20 @@ export const ShelterTable = () => {
         },
       },
       {
+        id: 'enum_name',
+        type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        // options: () => Obj.entries(Shelter_nta.options.ben_det_raion).map(([value, label]) => ({value, label})),
+        head: m.drcStaff,
+        render: _ => {
+          return {
+            value: _.nta?.enum_name,
+            label: ctx.nta.schema.translate.choice('enum_name', _.nta?.enum_name)
+          }
+        },
+      },
+      {
         id: 'oblast',
         type: 'select_one',
         group: 'nta',
@@ -191,6 +205,15 @@ export const ShelterTable = () => {
         renderQuick: _ => _.nta ? (_.nta.street ?? '') + ' ' + (_.nta.house_number ?? '') + ' ' + (_.nta.building_number ?? '') : '',
       },
       {
+        id: 'apartment_number',
+        type: 'number',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        // options: () => Obj.entries(Shelter_nta.options.ben_det_raion).map(([value, label]) => ({value, label})),
+        head: m._shelter.apartmentnumber,
+        renderQuick: _ => _.nta?.apartment_number,
+      },
+      {
         id: 'modality',
         type: 'select_one',
         group: 'nta',
@@ -224,7 +247,7 @@ export const ShelterTable = () => {
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         id: 'interviewee_name',
         width: 160,
-        head: m.drcStaff,
+        head: m.hhName,
         render: (row: ShelterEntity) => map(row.nta, nta => ({
           value: nta.tags?.interviewee_name ?? nta.interviewee_name,
           label: <TableInput
