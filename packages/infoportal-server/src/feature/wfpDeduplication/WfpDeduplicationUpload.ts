@@ -1,6 +1,6 @@
 import {WFPBuildingBlockSdk} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockSdk'
 import {AssistancePrevented, AssistanceProvided, WfpFilters} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockType'
-import {PrismaClient} from '@prisma/client'
+import {Prisma, PrismaClient} from '@prisma/client'
 import {ApiPaginate, DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
 import {addMinutes, parse, subMinutes} from 'date-fns'
 import {appConf, AppConf} from '../../core/conf/AppConf'
@@ -102,7 +102,7 @@ export class WfpDeduplicationUpload {
     })
     // ])
     this.log.info('mergePartiallyDuplicated')
-    await this.mergePartiallyDuplicated()
+    // await this.mergePartiallyDuplicated()
     this.log.info('setoblast')
     await this.setOblast()
     this.log.info('clearHumanMistakes')
@@ -129,7 +129,7 @@ export class WfpDeduplicationUpload {
         where: {
           status: WfpDeduplicationStatus.NotDeduplicated,
           beneficiaryId: _.beneficiaryId,
-          createdAt: {gt: subMinutes(_.createdAt, 2), lt: addMinutes(_.createdAt, 2)}
+          createdAt: {gt: subMinutes(_.createdAt, 20), lt: addMinutes(_.createdAt, 20)}
         }
       }).then(res => {
         if (res.length !== 1)
@@ -148,18 +148,21 @@ export class WfpDeduplicationUpload {
 
   private readonly throttledFetchAndRun = async <T, R>({
     fetch,
+    batchSize = 1000,
     runOnBatchedResult
   }: {
+    batchSize?: number
     fetch: (_: WfpFilters) => Promise<ApiPaginate<T>>,
     runOnBatchedResult: (batch: T[]) => Promise<R>
   }): Promise<R[]> => {
     let offset = 0
     const r: R[] = []
     for (; ;) {
-      const res = await fetch({limit: 1000, offset})
+      const res = await fetch({limit: batchSize, offset})
       if (res.data.length > 0) {
         r.push(await runOnBatchedResult(res.data))
         offset += res.data.length
+        break
       } else {
         break
       }
@@ -198,23 +201,36 @@ export class WfpDeduplicationUpload {
       const office = possibleOffices.find(oblastCode => file.fileName.includes(oblastCode))
       if (!office) console.warn(`Oblast not found for filename ${file.fileName}`)
       const rows = await this.prisma.mpcaWfpDeduplication.findMany({
-        select: {id: true},
+        select: {id: true, beneficiaryId: true},
         orderBy: {createdAt: 'desc'},
         skip: offset,
-        take: file.additionalInfo.rowCount,
+        take: file.additionalInfo.rowCount * 2,
+      }).then(function handleMultipleSupport(res) {
+        // If a benef is already supported by 2 NGOs, his record will be duplicated, one row per NGO
+        // So we should get file.additionalInfo.rowCount DISTINCT rows.
+        const unique = new Set()
+        return res.filter(_ => {
+          if (unique.size < file.additionalInfo.rowCount) unique.add(_.beneficiaryId)
+          return unique.has(_.beneficiaryId)
+        })
       })
-      await this.prisma.mpcaWfpDeduplication.updateMany({
-        where: {id: {in: rows.map(_ => _.id)}},
-        data: {
-          office: office ? officeMapping[office] : undefined,
-          fileName: file.fileName,
-          fileUpload: new Date(file.finishedAt)
-        }
-      })
-      offset += file.additionalInfo.rowCount
+      const officeValue = office ? officeMapping[office] : null
+      await this.prisma.$executeRaw`
+          UPDATE "MpcaWfpDeduplication"
+          SET "office"     = ${officeValue},
+              "fileName"   = ${file.fileName},
+              "fileUpload" = ${new Date(file.finishedAt)}
+          WHERE "id" IN (${Prisma.join(rows.map(_ => _.id))})
+      `
+      // await this.prisma.mpcaWfpDeduplication.updateMany({
+      //   where: {id: {in: rows.map(_ => _.id)}},
+      //   data: {
+      //     office: office ? officeMapping[office] : undefined,
+      //     fileName: file.fileName,
+      //     fileUpload: new Date(file.finishedAt)
+      //   }
+      // })
+      offset += rows.length
     }
   }
 }
-
-//"createdAt" between '2023-03-31' and '2023-04-01'
-// office is not null 2315
