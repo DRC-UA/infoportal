@@ -162,7 +162,6 @@ export class WfpDeduplicationUpload {
       if (res.data.length > 0) {
         r.push(await runOnBatchedResult(res.data))
         offset += res.data.length
-        break
       } else {
         break
       }

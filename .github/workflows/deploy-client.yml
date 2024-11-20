@@ -31,6 +31,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: npm ci --production
+        run: npm ci --production
+
+      - name: Check Installed Types
+        run: npm ls jest
+
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
