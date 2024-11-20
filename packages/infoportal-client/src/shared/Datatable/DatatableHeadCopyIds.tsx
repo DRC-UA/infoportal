@@ -1,11 +1,10 @@
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {alpha, Box, Icon, Popover, useTheme} from '@mui/material'
+import {alpha, Box, Icon, lighten, Popover, useTheme} from '@mui/material'
 import {useState} from 'react'
 import {IpBtn} from '@/shared'
 import {useI18n} from '@/core/i18n'
-import {useAppSettings} from '@/core/context/ConfigContext'
 
 export const DatatableHeadCopyIds = ({
   column
@@ -16,7 +15,6 @@ export const DatatableHeadCopyIds = ({
   const t = useTheme()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [copied, setCopied] = useState(0)
-  const {theme} = useAppSettings()
   const data = useDatatableContext().data
 
   const copy = async (data: any[] = []) => {
@@ -46,14 +44,12 @@ export const DatatableHeadCopyIds = ({
         setAnchorEl(currentTarget)
       }}>content_copy</TableIconBtn>
       <Popover
-        slotProps={{
-          paper: {
-            sx: {
-              py: 1.5,
-              px: 2,
-              backdropFilter: 'blur(4px)',
-              backgroundColor: alpha(theme.adaptiveLighten(t.palette.success.light, .7), .7),
-            },
+        PaperProps={{
+          sx: {
+            py: 1.5,
+            px: 2,
+            backdropFilter: 'blur(4px)',
+            backgroundColor: alpha(lighten(t.palette.success.light, .8), .8),
           },
         }}
         open={!!anchorEl}

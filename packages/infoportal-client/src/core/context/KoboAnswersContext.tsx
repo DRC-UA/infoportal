@@ -48,7 +48,7 @@ export const KoboAnswersProvider = ({
       return mappedReq({})
     } else {
       const [schema, answers] = await Promise.all([
-        ctxSchema.fetchById(id).then(_ => KoboSchemaHelper.buildIndex({schema: _})),
+        ctxSchema.fetchById(id).then(_ => KoboSchemaHelper.buildHelper({schema: _})),
         api.kobo.answer.searchByAccess({formId: id}),
       ])
       return {

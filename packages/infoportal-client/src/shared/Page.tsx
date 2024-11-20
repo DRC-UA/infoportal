@@ -12,6 +12,7 @@ export interface PageProps extends BoxProps {
   loading?: boolean
   children: ReactNode
   disableAnimation?: boolean
+  animationDeps?: any[]
 }
 
 let timeout: NodeJS.Timeout | undefined
@@ -59,7 +60,7 @@ export const PagePlaceholder = (props: Pick<PageProps, 'width'>) => {
 }
 
 
-export const Page = ({children, sx, loading, animation = 'default', ...props}: PageProps) => {
+export const Page = ({children, sx, loading, animation = 'default', animationDeps = [], ...props}: PageProps) => {
   const [appeared, setAppeared] = useState(false)
   const width = typeof props.width === 'string' ? ({
     xs: 780,
@@ -69,9 +70,10 @@ export const Page = ({children, sx, loading, animation = 'default', ...props}: P
   })[props.width] : props.width
 
   useEffect(() => {
+    setAppeared(false)
     if (animation !== 'none') timeout = setTimeout(() => setAppeared(true))
     return () => clearTimeout(timeout)
-  }, [])
+  }, animationDeps)
 
   return (
     <>

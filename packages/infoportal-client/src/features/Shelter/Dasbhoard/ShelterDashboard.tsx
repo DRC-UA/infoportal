@@ -151,7 +151,7 @@ export const ShelterDashboard = () => {
         icon: appConfig.icons.disability,
         label: m.vulnerabilities,
         getValue: _ => _.nta?.hh_char_dis_select,
-        getOptions: (get) => ctx.nta.schema.schemaHelper.getOptionsByQuestionName('hh_char_dis_select').map(_ => ({value: _.name, label: _.label[ctx.langIndex]})),
+        getOptions: (get) => ctx.nta.schema.helper.getOptionsByQuestionName('hh_char_dis_select').map(_ => ({value: _.name, label: _.label[ctx.langIndex]})),
         multiple: true,
       },
       // displacementStatus: {

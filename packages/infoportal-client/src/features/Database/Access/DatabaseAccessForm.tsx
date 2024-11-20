@@ -15,7 +15,7 @@ import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {AccessForm, IAccessForm} from '@/features/Access/AccessForm'
 import {AccessFormSection} from '@/features/Access/AccessFormSection'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {koboIconMap} from '@/features/Database/KoboTable/columns/getColumnBySchema'
+import {koboIconMap} from '@/features/Database/KoboTable/columns/columnBySchema'
 
 interface Form extends IAccessForm {
   question?: string

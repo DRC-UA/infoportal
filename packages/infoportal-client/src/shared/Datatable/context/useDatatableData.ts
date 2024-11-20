@@ -113,8 +113,8 @@ const filterBy = <T extends DatatableRow>({
   if (!data) return
   return multipleFilters(data, Obj.keys(filters).map((k, i) => {
     const filter = filters[k]
-    if (filter === undefined) return
     const col = columnsIndex[k]
+    if (col === undefined || filter === undefined) return
     switch (col.type) {
       case 'id': {
         const typedFilter = filter as DatatableFilterTypeMapping['id']

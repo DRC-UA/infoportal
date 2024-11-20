@@ -1,7 +1,7 @@
 import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from 'react'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
 import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {KoboAnswerId, KoboSchemaHelper, UUID} from 'infoportal-common'
+import {KoboAnswerId, KoboSchemaHelper} from 'infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
@@ -9,8 +9,9 @@ import * as csvToJson from 'csvtojson'
 import {Obj, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetchers'
 import {UseDatabaseView, useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
-import {UseDatabaseGroupDisplay, useDatabaseGroupDisplay} from '@/features/Database/KoboTable/groupDisplay/useDatabaseGroupDisplay'
 import {AccessSum} from '@/core/sdk/server/access/Access'
+import {useObjectState, UseObjectStateReturn} from '@/shared/hook/useObjectState'
+import {DatabaseDisplay} from '@/features/Database/KoboTable/groupDisplay/DatabaseKoboDisplay'
 
 export type ExternalFilesChoices = {list_name: string, name: string, label: string}
 export type KoboExternalFilesIndex = Record<string, Record<string, ExternalFilesChoices>>
@@ -28,7 +29,7 @@ export interface DatabaseKoboContext {
   setData: Dispatch<SetStateAction<KoboMappedAnswer[]>>
   externalFilesIndex?: KoboExternalFilesIndex
   view: UseDatabaseView
-  groupDisplay: UseDatabaseGroupDisplay
+  groupDisplay: UseObjectStateReturn<DatabaseDisplay>
 }
 
 const Context = React.createContext({} as DatabaseKoboContext)
@@ -55,7 +56,7 @@ export const DatabaseKoboTableProvider = (props: {
   const [indexExternalFiles, setIndexExternalFiles] = useState<KoboExternalFilesIndex>()
 
   const fetcherExternalFiles = useFetcher<() => Promise<{file: string, csv: string}[]>>(() => {
-    return Promise.all(props.schema.schemaUnsanitized.files.map(file =>
+    return Promise.all(props.schema.schema.files.map(file =>
       api.koboApi.proxy({method: 'GET', url: file.content, formId: form.id})
         .then((csv: string) => ({file: file.metadata.filename, csv}))
         .catch(() => {
@@ -72,7 +73,7 @@ export const DatabaseKoboTableProvider = (props: {
       const indexes = seq(res).map((_, i) => ({file: _.file, index: indexed[i]}))
       setIndexExternalFiles(Obj.mapValues(seq(indexes).groupByFirst(_ => _.file), _ => _.index))
     })
-  }, [props.schema.schemaUnsanitized])
+  }, [props.schema.schema])
 
   const mapData = (data: KoboMappedAnswer[]) => {
     const mapped = databaseCustomMapping[form.id] ? data?.map(_ => {
@@ -102,7 +103,10 @@ export const DatabaseKoboTableProvider = (props: {
   }, [data])
 
   const view = useDatabaseView(form.id)
-  const groupDisplay = useDatabaseGroupDisplay(Object.keys(props.schema.schemaHelper.groupSchemas)[0])
+  const groupDisplay = useObjectState<DatabaseDisplay>({
+    repeatAs: undefined,
+    repeatGroupName: props.schema.helper.group.search({depth: 1})?.[0]?.name
+  })
 
   return (
     <Context.Provider value={{

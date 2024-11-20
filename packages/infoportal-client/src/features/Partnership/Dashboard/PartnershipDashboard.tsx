@@ -65,7 +65,7 @@ export const _PartnershipDashboard = ({
   const mappedData = ctx.data.mappedData!
 
   const getOptions = (questionName: keyof typeof Partnership_partnersDatabase.options) => {
-    return schema.schemaHelper.getOptionsByQuestionName(questionName)
+    return schema.helper.getOptionsByQuestionName(questionName)
       .map(_ => ({value: _.name, label: schema.translate.choice(questionName, _.name)}))
   }
 

@@ -1,11 +1,10 @@
 import {Badge, Box, Icon, LinearProgress, TablePagination, useTheme,} from '@mui/material'
-import React, {isValidElement, useEffect, useMemo} from 'react'
+import React, {useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Txt} from '@/shared/Txt'
 import {map, Obj} from '@alexandreannic/ts-utils'
 import {IpIconBtn} from '@/shared'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
-import {generateXLSFromArray} from '@/shared/Datatable/util/generateXLSFile'
 import {DatatableBody} from './DatatableBody'
 import {DatatableHead} from './DatatableHead'
 import {DatatableColumn, DatatableRow, DatatableTableProps} from '@/shared/Datatable/util/datatableType'
@@ -17,8 +16,8 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {useAsync} from '@/shared/hook/useAsync'
 import {format} from 'date-fns'
-import {Utils} from '@/utils/utils'
 import {slugify} from 'infoportal-common'
+import {DatatableXlsGenerator} from '@/shared/Datatable/util/generateXLSFile'
 
 export const Datatable = <T extends DatatableRow = DatatableRow>({
   total,
@@ -117,7 +116,7 @@ const _Datatable = <T extends DatatableRow>({
 }: Pick<DatatableTableProps<T>, 'contentProps' | 'exportAdditionalSheets' | 'onClickRows' | 'hidePagination' | 'id' | 'title' | 'showExportBtn' | 'rowsPerPageOptions' | 'renderEmptyState' | 'header' | 'loading' | 'sx'>) => {
   const t = useTheme()
   const ctx = useDatatableContext()
-  const _generateXLSFromArray = useAsync(generateXLSFromArray)
+  const _generateXLSFromArray = useAsync(DatatableXlsGenerator.download)
   useEffect(() => ctx.select?.onSelect(ctx.selected.toArray), [ctx.selected.get])
   const {m} = useI18n()
 
@@ -129,18 +128,7 @@ const _Datatable = <T extends DatatableRow>({
           data: ctx.data.filteredAndSortedData,
           schema: ctx.columns
             .filter(_ => _.noCsvExport !== true)
-            .map((q, i) => ({
-              head: q.head as string ?? q.id,
-              render: (row: any) => {
-                const rendered = q.render(row)
-                if (rendered.export) return rendered.export
-                if (rendered.value instanceof Date && !isNaN(rendered.value as any)) return format(rendered.value, 'yyyy-MM-dd hh:mm:ss z')
-                let value = rendered.label
-                if (isValidElement(value)) value = Utils.extractInnerText(value)
-                if (q.type !== 'string' && value !== '' && !isNaN(value as any)) value = +(value as number)
-                return value as any
-              }
-            })),
+            .map(DatatableXlsGenerator.columnsToParams),
         },
         ...exportAdditionalSheets ? exportAdditionalSheets(ctx.data.filteredAndSortedData as any) : []
       ])

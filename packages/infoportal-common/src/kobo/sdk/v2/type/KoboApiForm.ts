@@ -75,6 +75,12 @@ export interface KoboApiSchema {
     schema: string
     settings: {version: string, default_language: string}
     survey: {
+      name: string
+      /**
+       * @deprecated
+       * This variable is set by Kobo based `name` since this last one can be undefined and duplicated.
+       * To simplify usage in this app, `name` = $autoname.
+       */
       $autoname: string
       $kuid: string
       $qpath: string
@@ -82,7 +88,6 @@ export interface KoboApiSchema {
       label?: string[]
       hint?: string[]
       appearance?: 'multiline',
-      name?: string
       file?: string
       type: KoboApiColumType
       calculation: KoboApiColumType

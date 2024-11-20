@@ -7,7 +7,7 @@ import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {IpBtn} from '@/shared/Btn'
 import {useSetState} from '@alexandreannic/react-hooks-lib'
 import {IpAlert} from '@/shared/Alert'
-import {DatatableHeadTypeIconByKoboType} from '@/features/Database/KoboTable/columns/getColumnBySchema'
+import {DatatableHeadTypeIconByKoboType} from '@/features/Database/KoboTable/columns/columnBySchema'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
 interface DatatableColumnToggleProps extends Pick<DatatableColumn.Props<any>,

@@ -660,7 +660,7 @@ export const ShelterTable = () => {
                 <TableIconBtn tooltip={m.edit} href={ctx.asyncEdit(KoboIndex.byName('shelter_ta').id, form.id)} target="_blank" children="edit"/>
               </>
             ) ?? (
-              <TableIconBtn color="primary" target="_blank" href={ctx.ta.schema.schemaUnsanitized.deployment__links.url + '?' + objectToQueryString({
+              <TableIconBtn color="primary" target="_blank" href={ctx.ta.schema.schema.deployment__links.url + '?' + objectToQueryString({
                 'd[nta_id]': _.nta!.id,
                 'd[interwiever_name]': ctx.nta.schema.translate.choice('enum_name', _.nta?.enum_name)?.replaceAll(' ', '_'),
                 'd[ben_det_oblast]': _.nta!.ben_det_oblast,
@@ -1142,7 +1142,7 @@ export const ShelterTable = () => {
                 onChange={ctx.setLangIndex}
                 options={[
                   {children: 'XML', value: -1},
-                  ...ctx.nta.schema.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
+                  ...ctx.nta.schema.schema.content.translations.map((_, i) => ({children: _, value: i}))
                 ]}
               />
               <DatabaseKoboSyncBtn

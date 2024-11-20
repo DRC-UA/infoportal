@@ -13,7 +13,7 @@ import {
 import {fnSwitch, map, seq, Seq} from '@alexandreannic/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
-import {Meal_shelterPdm} from 'infoportal-common/lib/kobo/generated/Meal_shelterPdm'
+import {Meal_shelterPdm} from 'infoportal-common'
 
 export enum PdmType {
   Cash = 'Cash',

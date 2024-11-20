@@ -60,10 +60,10 @@ export const KoboEditModalAnswer = ({
       onClose={onClose}
       loading={loadingSchema}
       fetcherUpdate={fetcherUpdate}
-      title={`${m.edit} (${answerIds.length}) - ${schema?.schemaUnsanitized.name}`}
+      title={`${m.edit} (${answerIds.length}) - ${schema?.schema.name}`}
       subTitle={schema?.translate.question(columnName)}
       type={columnDef?.type as any}
-      options={columnDef ? schema?.schemaHelper.choicesIndex[columnDef.select_from_list_name!]?.map(_ =>
+      options={columnDef ? schema?.helper.choicesIndex[columnDef.select_from_list_name!]?.map(_ =>
         ({value: _.name, desc: _.name, label: schema.translate.choice(columnName, _.name)})
       ) : undefined}
     />
@@ -103,7 +103,7 @@ export const KoboEditModalTag = ({
       onClose={onClose}
       fetcherUpdate={fetcherUpdate}
       title={`${m.edit} (${answerIds.length})`}
-      subTitle={ctxSchema.byId2(formId).get?.schemaUnsanitized.name}
+      subTitle={ctxSchema.byId2(formId).get?.schema.name}
       type={type}
       options={options}
     />
