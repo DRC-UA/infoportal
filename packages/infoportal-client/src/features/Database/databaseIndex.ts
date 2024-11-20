@@ -1,4 +1,4 @@
-import {KoboAnswerId} from 'infoportal-common'
+import {KoboAnswerId, objectToQueryString} from 'infoportal-common'
 
 const base = (formId = ':formId') => `/form/${formId}`
 
@@ -28,5 +28,12 @@ export const databaseIndex = {
       relative: `history`,
       absolute: (formId = ':formId') => base(formId) + '/history'
     },
+    group: (() => {
+      const qs = (id?: string, index?: number) => id ? '?' + objectToQueryString({id, index}) : ''
+      return {
+        relative: (group = ':group', id?: string, index?: number) => `group/${group}${qs(id, index)}`,
+        absolute: (formId = ':formId', group = ':group', id?: string, index?: number) => `${base(formId)}/group/${group}${qs(id, index)}`,
+      }
+    })(),
   }
 }

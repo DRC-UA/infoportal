@@ -202,7 +202,7 @@ export const CfmTable = ({}: any) => {
                 onChange={setLangIndex}
                 options={[
                   {children: 'XML', value: -1},
-                  ...ctx.schemaExternal.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
+                  ...ctx.schemaExternal.schemaSanitized.content.translations.map((_, i) => ({children: _, value: i}))
                 ]}
               />
               <IpIconBtn
@@ -331,7 +331,7 @@ export const CfmTable = ({}: any) => {
                   label: row.form === CfmDataSource.Internal
                     ? <IpSelectSingle
                       label={null}
-                      options={ctx.schemaInternal.schemaHelper.getOptionsByQuestionName('project_code').map(_ => {
+                      options={ctx.schemaInternal.helper.getOptionsByQuestionName('project_code').map(_ => {
                         const label = ctx.schemaInternal.translate.choice('project_code', _.name) as DrcProject
                         return IpSelectMultipleHelper.makeOption({
                           value: DrcProject[label] ?? label + '⚠️',

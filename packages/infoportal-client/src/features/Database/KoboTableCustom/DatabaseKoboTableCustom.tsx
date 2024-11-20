@@ -6,7 +6,6 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useParams} from 'react-router'
 import * as yup from 'yup'
 import {seq} from '@alexandreannic/ts-utils'
-import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useI18n} from '@/core/i18n'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {useTheme} from '@mui/material'
@@ -20,6 +19,7 @@ import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
 import {useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
+import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
 
 interface CustomForm {
   id: string
@@ -109,7 +109,7 @@ export const DatabaseTableCustomRoute = () => {
   const schemas = customForm.forms.map(_ => ({formId: _.id, schema: ctxSchema.byId[_.id]?.get})).filter(_ => !!_.schema) as {formId: KoboId, schema: KoboSchemaHelper.Bundle}[]
 
   useEffect(() => {
-    setTitle(schemas.map(_ => _.schema.schemaUnsanitized.name).join(' + '))
+    setTitle(schemas.map(_ => _.schema.schema.name).join(' + '))
   }, [schemas])
 
   const data = useMemo(() => {
@@ -139,21 +139,13 @@ export const DatabaseTableCustomRoute = () => {
 
   const columns = useMemo(() => {
     return schemas.flatMap(({formId, schema}) => {
-      const cols = getColumnBySchema({
+      const cols = columnBySchemaGenerator({
         formId,
-        data: data,
-        schema: schema.schemaHelper.sanitizedSchema.content.survey,
-        groupSchemas: schema.schemaHelper.groupSchemas,
-        translateQuestion: schema.translate.question,
-        translateChoice: schema.translate.choice,
-        choicesIndex: schema.schemaHelper.choicesIndex,
+        schema,
         m,
-        theme: t,
+        t,
         getRow: _ => (_[formId] ?? {}) as any,
-        // externalFilesIndex: externalFilesIndex,
-        // repeatGroupsAsColumn: repeatGroupsAsColumns,
-        // onOpenGroupModal: setOpenGroupModalAnswer,
-      })
+      }).getAll()
       cols[cols.length - 1].style = () => ({borderRight: '3px solid ' + t.palette.divider})
       cols[cols.length - 1].styleHead = {borderRight: '3px solid ' + t.palette.divider}
       return [
@@ -182,7 +174,7 @@ export const DatabaseTableCustomRoute = () => {
           ..._,
           id: formId + '_' + _.id,
           group: formId + _.group,
-          groupLabel: schema.schemaUnsanitized.name + '/' + _.groupLabel,
+          groupLabel: schema.schema.name + '/' + _.groupLabel,
           width: view.colsById[formId + '_' + _.id]?.width ?? _.width ?? 90,
         }
       })
@@ -247,7 +239,7 @@ export const DatabaseTableCustomRoute = () => {
                   options={[
                     {children: 'XML', value: -1},
                     // ...customForm.langs.map((l, i) => ({children: l, value: i})),
-                    ...ctxSchema.byId[customForm.forms[0].id]?.get?.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i})) ?? [],
+                    ...ctxSchema.byId[customForm.forms[0].id]?.get?.schemaSanitized.content.translations.map((_, i) => ({children: _, value: i})) ?? [],
                     // ...ctx.schema.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
                   ]}
                 />

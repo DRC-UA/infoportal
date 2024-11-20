@@ -33,7 +33,7 @@ export const DatabaseHistory = () => {
   const getAnswerTranslation = (row: KoboAnswerHistory, fn: (_: KoboAnswerHistory) => string) => map(row.property, property => {
     const value: any = fn(row)
     if (!schema) return value
-    const questionSchema = schema.schemaHelper.questionIndex[property]
+    const questionSchema = schema.helper.questionIndex[property]
     if (!questionSchema) return value
     switch (questionSchema.type) {
       case 'select_multiple': {

@@ -1,11 +1,8 @@
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
-import {KoboAnswerFlat, KoboAnswerId} from 'infoportal-common'
-import {renderExportKoboSchema} from '@/features/Database/KoboTable/DatabaseKoboTableExportBtn'
-import {DatabaseKoboTableGroupModal} from '@/features/Database/KoboTable/DatabaseKoboTableGroupModal'
+import {KoboAnswerId, KoboFlattenRepeat} from 'infoportal-common'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {Alert, Icon, useTheme} from '@mui/material'
-import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumnsCustom'
 import {DatabaseTableProps} from '@/features/Database/KoboTable/DatabaseKoboTable'
@@ -14,8 +11,6 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
-import {Obj, seq} from '@alexandreannic/ts-utils'
-import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
 import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
@@ -26,7 +21,14 @@ import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseView
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
-import {DatabaseGroupDisplayInput} from '@/features/Database/KoboTable/groupDisplay/DatabaseGroupDisplayInput'
+import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
+import {databaseIndex} from '@/features/Database/databaseIndex'
+import {useNavigate} from 'react-router-dom'
+import {getColumnsForRepeatGroup} from '@/features/Database/RepeatGroup/DatabaseKoboRepeatGroup'
+import {DatatableXlsGenerator} from '@/shared/Datatable/util/generateXLSFile'
+import {KoboRepeatRef} from 'infoportal-common/kobo'
+import {databaseKoboDisplayBuilder} from '@/features/Database/KoboTable/groupDisplay/DatabaseKoboDisplay'
+import { DatabaseGroupDisplayInput } from './groupDisplay/DatabaseGroupDisplayInput'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -34,30 +36,18 @@ export const DatabaseKoboTableContent = ({
 }: Pick<DatabaseTableProps, 'onFiltersChange' | 'onDataChange'>) => {
   const {m} = useI18n()
   const t = useTheme()
+  const navigate = useNavigate()
   const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
   const ctxEditAnswer = useKoboEditAnswerContext()
   const ctxEditTag = useKoboEditTagContext()
   const [selectedIds, setSelectedIds] = useState<KoboAnswerId[]>([])
-  const [groupModalOpen, setOpenGroupModalAnswer] = useState<{
-    columnId: string,
-    group: KoboAnswerFlat[],
-    event: any
-  } | undefined>()
 
-  const flatData = useMemo(() => {
-    if (ctx.groupDisplay.repeatAs !== 'rows' || ctx.groupDisplay.repeatedQuestion === 'undefined') return ctx.data
-    return ctx.data?.flatMap(answer => {
-      if (answer[ctx.groupDisplay.repeatedQuestion!])
-        return (answer[ctx.groupDisplay.repeatedQuestion!] as KoboMappedAnswer[]).map((_, i) => ({
-          ..._,
-          ...answer,
-          id: answer.id + '-' + i,
-        }) as KoboMappedAnswer)
-      return answer
-    })
-  }, [ctx.data, ctx.groupDisplay.repeatAs, ctx.groupDisplay.repeatedQuestion])
+  const flatData: KoboMappedAnswer[] | undefined = useMemo(() => {
+    if (ctx.groupDisplay.get.repeatAs !== 'rows' || ctx.groupDisplay.get.repeatGroupName === undefined) return ctx.data
+    return KoboFlattenRepeat.run(ctx.data, [ctx.groupDisplay.get.repeatGroupName]) as (KoboRepeatRef & KoboMappedAnswer)[]
+  }, [ctx.data, ctx.groupDisplay.get])
 
   const extraColumns: DatatableColumn.Props<any>[] = useMemo(() => getColumnsCustom({
     selectedIds,
@@ -72,33 +62,33 @@ export const DatabaseKoboTableContent = ({
   })), [selectedIds, ctx.form.id])
 
   const schemaColumns = useMemo(() => {
-    return getColumnBySchema({
+    const schemaColumns = columnBySchemaGenerator({
       formId: ctx.form.id,
-      selectedIds: selectedIds,
-      data: ctx.data,
-      theme: t,
-      schema: ctx.schema.schemaHelper.sanitizedSchema.content.survey,
-      groupSchemas: ctx.schema.schemaHelper.groupSchemas,
-      translateQuestion: ctx.schema.translate.question,
-      translateChoice: ctx.schema.translate.choice,
-      choicesIndex: ctx.schema.schemaHelper.choicesIndex,
-      m,
+      schema: ctx.schema,
       externalFilesIndex: ctx.externalFilesIndex,
-      repeatAs: ctx.groupDisplay.repeatAs,
-      repeatedQuestion: ctx.groupDisplay.repeatedQuestion,
-      onOpenGroupModal: setOpenGroupModalAnswer,
-      onSelectColumn: (columnName: string) => ctxEditAnswer.open({
+      onRepeatGroupClick: _ => navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),
+      onEdit: selectedIds.length > 0 ? (questionName => ctxEditAnswer.open({
         formId: ctx.form.id,
-        question: columnName,
+        question: questionName,
         answerIds: selectedIds,
-      })
-    })
+      })) : undefined,
+      m,
+      t,
+    }).getAll()
+    return databaseKoboDisplayBuilder({
+      formId: ctx.form.id,
+      schema: ctx.schema,
+      onRepeatGroupClick: _ => navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),
+      display: ctx.groupDisplay.get,
+      m,
+      t,
+    }).transformColumns(schemaColumns)
   }, [
-    ctx.schema.schemaUnsanitized,
+    ctx.data,
+    ctx.schema.schema,
     ctxSchema.langIndex,
     selectedIds,
-    ctx.groupDisplay.repeatAs,
-    ctx.groupDisplay.repeatedQuestion,
+    ctx.groupDisplay.get,
     ctx.externalFilesIndex,
     t
   ])
@@ -144,31 +134,24 @@ export const DatabaseKoboTableContent = ({
           getId: _ => _.id,
         } : undefined}
         exportAdditionalSheets={data => {
-          const questionToAddInGroups = ctx.schema.schemaHelper.sanitizedSchema.content.survey.filter(_ => ['id', 'submissionTime', 'start', 'end'].includes(_.name!))
-          return Obj.entries(ctx.schema.schemaHelper.groupSchemas).map(([groupName, questions]) => {
-            const _: GenerateXlsFromArrayParams<any> = {
-              sheetName: groupName as string,
-              data: seq(data).flatMap(d => (d[groupName] as any[])?.map(_ => ({
-                ..._,
-                id: d.id,
-                start: d.start,
-                end: d.end,
-                submissionTime: d.submissionTime,
-              }))).compact(),
-              schema: renderExportKoboSchema({
-                formId: ctx.form.id,
-                schema: [...questionToAddInGroups, ...questions],
-                groupSchemas: ctx.schema.schemaHelper.groupSchemas,
-                translateQuestion: ctx.schema.translate.question,
-                translateChoice: ctx.schema.translate.choice,
-              })
+          return ctx.schema.helper.group.search().map(group => {
+            const cols = getColumnsForRepeatGroup({
+              formId: ctx.form.id,
+              t,
+              m,
+              schema: ctx.schema,
+              groupName: group.name,
+            })
+            return {
+              sheetName: group.name as string,
+              data: KoboFlattenRepeat.run(data, group.pathArr),
+              schema: cols.map(DatatableXlsGenerator.columnsToParams)
             }
-            return _
           })
         }}
         title={ctx.form.name}
         id={ctx.form.id}
-        getRenderRowKey={_ => _.id}
+        getRenderRowKey={_ => _.id + (_._index ?? '')}
         columns={columns}
         data={flatData}
         header={params =>
@@ -181,7 +164,7 @@ export const DatabaseKoboTableContent = ({
               onChange={ctxSchema.setLangIndex}
               options={[
                 {children: 'XML', value: -1},
-                ...ctx.schema.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
+                ...ctx.schema.schemaSanitized.content.translations.map((_, i) => ({children: _, value: i}))
               ]}
             />
             <DatabaseGroupDisplayInput sx={{mr: 1}}/>
@@ -203,7 +186,7 @@ export const DatabaseKoboTableContent = ({
               )}
               <IpIconBtn
                 disabled={ctx.form.deploymentStatus === 'archived'}
-                href={ctx.schema.schemaUnsanitized.deployment__links.offline_url}
+                href={ctx.schema.schema.deployment__links.offline_url}
                 target="_blank"
                 children="file_open"
                 tooltip={m._koboDatabase.openKoboForm}
@@ -217,14 +200,6 @@ export const DatabaseKoboTableContent = ({
           </>
         }
       />
-      {groupModalOpen && (
-        <DatabaseKoboTableGroupModal
-          name={groupModalOpen.columnId}
-          anchorEl={groupModalOpen.event.target}
-          groupData={groupModalOpen.group}
-          onClose={() => setOpenGroupModalAnswer(undefined)}
-        />
-      )}
     </>
   )
 }

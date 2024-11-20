@@ -2,7 +2,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import React, {useMemo, useState} from 'react'
 import {alpha, Box, Icon, Tooltip, useTheme} from '@mui/material'
-import {KoboAnswerFlat, KoboSchemaHelper, toPercent} from 'infoportal-common'
+import {KoboAnswerFlat, KoboApiQuestionSchema, KoboApiSchema, KoboSchemaHelper, NonNullableKey, toPercent} from 'infoportal-common'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
@@ -14,14 +14,12 @@ import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {MealVerification, MealVerificationAnsers, MealVerificationAnswersStatus} from '@/core/sdk/server/mealVerification/MealVerification'
 import {MealVerificationActivity, mealVerificationConf} from '@/features/Meal/Verification/mealVerificationConfig'
 import {useAsync} from '@/shared/hook/useAsync'
-import {getColumnByQuestionSchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useMealVerificationContext} from '@/features/Meal/Verification/MealVerificationContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {IpAlert} from '@/shared/Alert'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import {KoboApiQuestionSchema, KoboApiSchema} from 'infoportal-common'
-import {NonNullableKey} from 'infoportal-common'
+import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
 
 enum Status {
   Selected = 'Selected',
@@ -233,7 +231,7 @@ export const MealVerificationDataTable = <
                 onChange={setLangIndex}
                 options={[
                   {children: 'XML', value: -1},
-                  ...schemaVerif.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
+                  ...schemaVerif.schema.content.translations.map((_, i) => ({children: _, value: i}))
                 ]}
               />
               <ScRadioGroup inline dense value={display} onChange={setDisplay} sx={{mr: 1}}>
@@ -259,7 +257,7 @@ export const MealVerificationDataTable = <
             {
               id: 'actions',
               width: 124,
-              renderExport: false,
+              noCsvExport: true,
               head: '',
               style: _ => ({fontWeight: t.typography.fontWeightBold}),
               renderQuick: _ => {
@@ -306,7 +304,7 @@ export const MealVerificationDataTable = <
               id: 'taxid',
               head: m.taxID,
               type: 'string',
-              renderQuick: _ => activity.registration.joinBy(_.rowReg),
+              renderQuick: (_: ComputedRow) => '' + activity.registration.joinBy(_.rowReg),
               style: (_: ComputedRow) => {
                 if (duplicateErrors.has('' + activity.registration.joinBy(_.rowReg))) {
                   return {color: 'red', fontWeight: 'bold'}
@@ -334,21 +332,15 @@ export const MealVerificationDataTable = <
               },
             },
             ...activity.dataColumns?.flatMap(c => {
-              const q = schemaReg.schemaHelper.questionIndex[c] as NonNullableKey<KoboApiQuestionSchema, 'name'>
+              const q = schemaReg.helper.questionIndex[c] as NonNullableKey<KoboApiQuestionSchema, 'name'>
               if (!q.name) return []
-              const w = getColumnByQuestionSchema({
+              return columnBySchemaGenerator({
                 formId: activity.registration.koboFormId,
-                data: mergedData,
-                q,
-                groupSchemas: schemaReg.schemaHelper.groupSchemas,
-                translateChoice: schemaReg.translate.choice,
-                translateQuestion: schemaReg.translate.question,
-                m,
-                theme: t,
+                schema: schemaReg,
                 getRow: _ => _.rowReg,
-                choicesIndex: schemaReg.schemaHelper.choicesIndex,
-              })
-              return w as any
+                m,
+                t,
+              }).getByQuestion(q) ?? []
             }) ?? [],
             ...Obj.entries(harmonizedVerifiedColumns).map(([id, c]) => {
               return {
@@ -386,9 +378,12 @@ export const MealVerificationDataTable = <
               stickyEnd: true,
               align: 'right',
               style: _ => ({fontWeight: t.typography.fontWeightBold}),
-              renderQuick: _ => (
-                _.rowVerif ? toPercent(_.score / Object.keys(harmonizedVerifiedColumns).length) : ''
-              )
+              render: _ => {
+                return {
+                  value: _.rowVerif ? _.score / Object.keys(harmonizedVerifiedColumns).length : undefined,
+                  label: _.rowVerif ? toPercent(_.score / Object.keys(harmonizedVerifiedColumns).length) : ''
+                }
+              }
             }
           ]}/>
       </Panel>

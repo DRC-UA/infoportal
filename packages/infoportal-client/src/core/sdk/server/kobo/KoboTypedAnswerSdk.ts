@@ -37,7 +37,7 @@ import {
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
-import {Meal_shelterPdm} from "infoportal-common/lib/kobo/generated/Meal_shelterPdm";
+import {Meal_shelterPdm} from "infoportal-common";
 
 /** @deprecated should be coming from the unified database */
 type Meta = {

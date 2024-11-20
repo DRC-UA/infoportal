@@ -78,8 +78,6 @@ export const DatabaseTable = ({
   }, [accesses])
 
   useEffect(() => {
-    ctxSchema.fetchById(formId)
-    fetcherAnswers.fetch({})
     fetcherForm.fetch()
   }, [formId])
 

@@ -6,7 +6,6 @@ import {KoboApiQuestionSchema, KoboId, KoboSchemaHelper, NonNullableKey} from 'i
 import React, {useEffect, useMemo, useState} from 'react'
 import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {Txt} from '@/shared/Txt'
-import {getColumnBySchema} from '@/features/Database/KoboTable/columns/getColumnBySchema'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {Page} from '@/shared/Page'
@@ -18,6 +17,7 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {NavLink} from 'react-router-dom'
+import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
 
 const databaseUrlParamsValidation = yup.object({
   formId: yup.string().required(),
@@ -56,7 +56,7 @@ export const DatabaseKoboAnswerViewPage = () => {
               <Switch size="small" value={showQuestionWithoutAnswer} onChange={e => setShowQuestionWithoutAnswer(e.target.checked)}/>
             </Box>
           }>
-            {schema.schemaUnsanitized.name}<br/>
+            {schema.schema.name}<br/>
             <Txt sx={{color: t => t.palette.info.main}}>{answerId}</Txt>
           </PanelHead>
           <PanelBody>
@@ -137,7 +137,7 @@ const KoboAnswerFormView = ({
 }) => {
   return (
     <Box>
-      {seq(schema.schemaHelper.sanitizedSchema.content.survey)
+      {seq(schema.schemaSanitized.content.survey)
         .compactBy('name')
         .filter(q => showQuestionWithoutAnswer || q.type === 'begin_group' || (answer[q.name] !== '' && answer[q.name]))
         .map(q => (
@@ -170,19 +170,16 @@ const KoboAnswerQuestionView = ({
   const {m} = useI18n()
   const t = useTheme()
   const columns = useMemo(() => {
-    if (questionSchema.type === 'begin_repeat')
-      return getColumnBySchema({
-        data: row[questionSchema.name],
-        m,
-        formId,
-        theme: t,
-        schema: schema.schemaHelper.groupSchemas[questionSchema.name],
-        translateQuestion: schema.translate.question,
-        translateChoice: schema.translate.choice,
-        choicesIndex: schema.schemaHelper.choicesIndex,
-        groupSchemas: schema.schemaHelper.groupSchemas,
-      })
-  }, [schema.schemaHelper.sanitizedSchema, langIndex])
+    if (questionSchema.type !== 'begin_repeat') return
+    const group = schema.helper.group.getByName(questionSchema.name)
+    if (!group) return
+    return columnBySchemaGenerator({
+      m,
+      formId,
+      t,
+      schema,
+    }).getByQuestions(group.questions)
+  }, [schema.schemaSanitized, langIndex])
   switch (questionSchema.type) {
     case 'begin_group': {
       return <Box sx={{pt: 1, mt: 2, borderTop: t => `1px solid ${t.palette.divider}`}}>
@@ -207,7 +204,7 @@ const KoboAnswerQuestionView = ({
     case 'note': {
       return <>
         <KoboQuestionLabelView>{schema.translate.question(questionSchema.name)}</KoboQuestionLabelView>
-        <KoboQuestionAnswerView icon="information">{row[questionSchema.name]}</KoboQuestionAnswerView>
+        <KoboQuestionAnswerView icon="info">{row[questionSchema.name]}</KoboQuestionAnswerView>
       </>
     }
     case 'begin_repeat': {

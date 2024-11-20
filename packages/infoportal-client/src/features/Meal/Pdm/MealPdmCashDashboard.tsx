@@ -40,7 +40,7 @@ export const MealPdmCashDashboard = () => {
       pdmtype: {
         icon: appConfig.icons.project,
         getOptions: () =>
-          schema.schemaHelper.getOptionsByQuestionName('pdmtype').map(_ => ({
+          schema.helper.getOptionsByQuestionName('pdmtype').map(_ => ({
             value: _.name,
             label: _.label[langIndex],
           })),

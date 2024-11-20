@@ -4,7 +4,6 @@ import {Box, Icon, useTheme} from '@mui/material'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {ipSelectItem, IpSelectSingle} from '@/shared/Select/SelectSingle'
-import {Obj} from '@alexandreannic/ts-utils'
 import {useI18n} from '@/core/i18n'
 
 export const DatabaseGroupDisplayInput = (props: IpBtnProps) => {
@@ -15,23 +14,23 @@ export const DatabaseGroupDisplayInput = (props: IpBtnProps) => {
     <PopoverWrapper content={() => (
       <Box sx={{p: 1, minWidth: 120, width: 320}}>
         <Txt color="hint" sx={{mb: .5}} fontSize="small" block>{m._koboDatabase.repeatAs}</Txt>
-        <ScRadioGroup dense value={groupDisplay.repeatAs} onChange={groupDisplay.setRepeatAs}>
+        <ScRadioGroup dense value={groupDisplay.get.repeatAs} onChange={_ => groupDisplay.setProperty('repeatAs', _)}>
           <ScRadioGroupItem value={null} title={m._koboDatabase.repeatDont}/>
           <ScRadioGroupItem value="rows" title={m._koboDatabase.repeatAsRows}/>
           <ScRadioGroupItem value="columns" title={m._koboDatabase.repeatAsColumn}/>
         </ScRadioGroup>
-        {groupDisplay.repeatAs === 'rows' && (
+        {groupDisplay.get.repeatAs === 'rows' && (
           <>
             <Txt color="hint" sx={{mt: 1.5, mb: .5}} fontSize="small" block>{m._koboDatabase.repeatAsQuestionName}</Txt>
             <IpSelectSingle
-              value={groupDisplay.repeatedQuestion}
+              value={groupDisplay.get.repeatGroupName}
               renderValue={_ => schema.translate.question(_)!}
-              onChange={_ => groupDisplay.setRepeatedQuestion(_ ?? undefined)}
-              options={Obj.keys(schema.schemaHelper.groupSchemas).map(_ =>
+              onChange={_ => groupDisplay.setProperty('repeatGroupName', _ ?? undefined)}
+              options={schema.helper.group.search({depth: 1}).map(_ =>
                 ipSelectItem({
-                  value: _,
-                  title: schema.translate.question(_),
-                  desc: _,
+                  value: _.name,
+                  title: schema.translate.question(_.name),
+                  desc: _.name,
                 }),
               )}
             />

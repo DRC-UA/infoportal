@@ -47,7 +47,7 @@ export namespace AiMapper {
   }
 
   export const getLocationByKobo = (d: Pick<Protection_groupSession.T, 'ben_det_oblast' | 'ben_det_hromada' | 'ben_det_raion'>): Location => {
-    const oblast = OblastIndex.byKoboName(d.ben_det_oblast!).name
+    const oblast = OblastIndex.byKoboName(d.ben_det_oblast!)?.name ?? ''
     const raion = AILocationHelper.findRaion(oblast, Bn_re.options.ben_det_raion[d.ben_det_raion as keyof typeof Bn_re.options.ben_det_raion] ?? d.ben_det_raion)!
     const hromada = AILocationHelper.findHromada(oblast,
       raion?.en,

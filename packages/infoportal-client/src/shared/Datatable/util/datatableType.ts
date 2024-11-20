@@ -2,7 +2,7 @@ import React, {CSSProperties, ReactNode} from 'react'
 import {BoxProps} from '@mui/material'
 import {KeyOf} from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {GenerateXlsFromArrayParams} from '@/shared/Datatable/util/generateXLSFile'
+import {DatatableXlsGenerator} from '@/shared/Datatable/util/generateXLSFile'
 
 export type DatatableFilterTypeMapping = {
   id: string
@@ -61,7 +61,7 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   hideColumnsToggle?: boolean
   hidePagination?: boolean
   showExportBtn?: boolean
-  exportAdditionalSheets?: (filteredAndSortedData: T[]) => GenerateXlsFromArrayParams[]
+  exportAdditionalSheets?: (filteredAndSortedData: T[]) => DatatableXlsGenerator.Params[]
   renderEmptyState?: ReactNode
   onFiltersChange?: (_: Record<KeyOf<T>, DatatableFilterValue>) => void
   onDataChange?: (_: {

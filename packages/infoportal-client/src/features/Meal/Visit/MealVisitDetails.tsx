@@ -164,7 +164,7 @@ export const _DashboardMealVisitPdf = () => {
               )}
               {entry.visit_type && (
                 <Row label="Visit type">
-                  {schema.schemaHelper.choicesIndex['visit_type']?.map(_ =>
+                  {schema.helper.choicesIndex['visit_type']?.map(_ =>
                     <Box key={_.$kuid} sx={{display: 'flex', alignItems: 'center', mb: .5}}>
                       <Checkbox disabled size="small" sx={{p: 0, pr: 1}} checked={_.name === entry.visit_type}/>
                       {schema.translate.choice('visit_type', _.name)}
@@ -176,7 +176,7 @@ export const _DashboardMealVisitPdf = () => {
               <Row label="Concerns">
                 {entry.sei ? (
                   <>
-                    {schema.schemaHelper.choicesIndex['details']?.map(_ =>
+                    {schema.helper.choicesIndex['details']?.map(_ =>
                       <Box key={_.$kuid} sx={{display: 'flex', alignItems: 'center', mb: .5}}>
                         <Checkbox disabled size="small" sx={{p: 0, pr: 1}} checked={entry.sei?.includes(_.name as any)}/>
                         {schema.translate.choice('sei', _.name)}

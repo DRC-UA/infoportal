@@ -15,7 +15,7 @@ import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {Meal_shelterPdm} from 'infoportal-common/lib/kobo/generated/Meal_shelterPdm'
+import {Meal_shelterPdm} from 'infoportal-common'
 import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 

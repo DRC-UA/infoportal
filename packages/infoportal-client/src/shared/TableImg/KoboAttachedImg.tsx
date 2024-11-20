@@ -25,7 +25,7 @@ export const proxyKoboImg = ({
 
 const parseKoboFileName = (fileName?: string) => fileName ? fileName.replaceAll(' ', '_').replaceAll(/[^0-9a-zA-Z-_.\u0400-\u04FF]/g, '') : undefined
 
-export const findFileUrl = ({formId, answerId, fileName, attachments}: {formId: KoboId, answerId: KoboAnswerId, fileName?: string, attachments: KoboAttachment[]}) => {
+export const findFileUrl = ({formId, answerId, fileName, attachments = []}: {formId: KoboId, answerId: KoboAnswerId, fileName?: string, attachments: KoboAttachment[]}) => {
   const parsedFileName = parseKoboFileName(fileName)
   const attachment = parsedFileName ? attachments.find(_ => _.filename.includes(parsedFileName)) : undefined
   if (attachment) {
