@@ -5,10 +5,11 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {AiShelterMapper} from '@/features/ActivityInfo/Snfi/aiSnfiMapper'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {AiBundleTable} from '@/features/ActivityInfo/shared/AiTable'
+import {Period} from 'infoportal-common/type/Period'
 
 export const AiSnfi = () => {
   const {api} = useAppSettings()
-  const fetcher = useFetcher((period: string) => {
+  const fetcher = useFetcher((period: Partial<Period>) => {
     return Promise.all([
       AiShelterMapper.reqRepairs(api)(period),
       AiShelterMapper.reqEsk(api)(period),

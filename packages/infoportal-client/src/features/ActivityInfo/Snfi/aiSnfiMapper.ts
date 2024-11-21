@@ -6,6 +6,7 @@ import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo
 import {AiSnfiType} from '@/features/ActivityInfo/Snfi/aiSnfiType'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
+import {Period} from 'infoportal-common/type/Period'
 
 export namespace AiShelterMapper {
 
@@ -78,8 +79,8 @@ export namespace AiShelterMapper {
   //   return bundle
   // }
 
-  export const reqEsk = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
-    const period = PeriodHelper.fromYYYYMM(periodStr)
+  export const reqEsk = (api: ApiSdk) => (period: Partial<Period>): Promise<Bundle[]> => {
+    const periodStr = AiMapper.getPeriodStr(period)
     return api.koboMeta.search({
       status: [KoboMetaStatus.Committed],
       activities: [
@@ -164,8 +165,8 @@ export namespace AiShelterMapper {
       })
   }
 
-  export const reqRepairs = (api: ApiSdk) => (periodStr: string) => {
-    const period = PeriodHelper.fromYYYYMM(periodStr)
+  export const reqRepairs = (api: ApiSdk) => (period: Partial<Period>) => {
+    const periodStr = AiMapper.getPeriodStr(period)
     return api.koboMeta.search<KoboMetaShelterRepairTags>({
       status: [KoboMetaStatus.Committed],
       activities: [DrcProgram.ShelterRepair]

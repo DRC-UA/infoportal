@@ -8,14 +8,15 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useIpToast} from '@/core/useToast'
 import {Badge, Box, useTheme} from '@mui/material'
-import {IpInput} from '@/shared/Input/Input'
 import {IpBtn} from '@/shared/Btn'
 import {useI18n} from '@/core/i18n'
-import {format, subMonths} from 'date-fns'
+import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
 import {KoboAnswerFlat, KoboIndex} from 'infoportal-common'
 import {useSession} from '@/core/Session/SessionContext'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
+import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
+import {Period} from 'infoportal-common/type/Period'
 
 export interface AiTable<
   TActivity = any,
@@ -42,7 +43,7 @@ export const AiBundleTable = ({
 }: {
   header?: ReactNode
   id: string
-  fetcher: UseFetcher<(period: string) => Promise<AiTable<any, any, any>[]>>
+  fetcher: UseFetcher<(period: Partial<Period>) => Promise<AiTable<any, any, any>[]>>
 }) => {
   const {api, conf} = useAppSettings()
   const {toastHttpError} = useIpToast()
@@ -50,7 +51,7 @@ export const AiBundleTable = ({
   const {m} = useI18n()
   const t = useTheme()
 
-  const [period, setPeriod] = useState(format(subMonths(new Date(), 1), 'yyyy-MM'))
+  const [period, setPeriod] = useState<Partial<Period>>({start: subMonths(startOfMonth(new Date()), 1), end: subMonths(endOfMonth(new Date()), 1)})
 
   useEffect(() => {
     fetcher.fetch({clean: false}, period)
@@ -86,12 +87,10 @@ export const AiBundleTable = ({
         data={fetcher.get}
         header={
           <Box sx={{display: 'flex', alignItems: 'center', flex: 1,}}>
-            <IpInput
-              helperText={null}
-              sx={{width: 200, mr: 1}}
-              type="month"
-              value={period}
-              onChange={e => setPeriod(e.target.value)}
+            <PeriodPicker
+              defaultValue={[period.start, period.end]}
+              onChange={([start, end]) => setPeriod({start, end})}
+              max={endOfMonth(new Date())}
             />
             {header}
             <IpBtn icon="send" variant="contained" sx={{ml: 'auto'}} onClick={() => {

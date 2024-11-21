@@ -13,8 +13,17 @@ import {
   Protection_groupSession
 } from 'infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
+import {Period} from 'infoportal-common/type/Period'
+import {format} from 'date-fns'
 
 export namespace AiMapper {
+
+  export const getPeriodStr = (p: Partial<Period>) => {
+    if (!p.start || !p.end) return ''
+    const start = format(p.start, 'yyyy-MM')
+    const end = format(p.end, 'yyyy-MM')
+    return start === end ? start : ''
+  }
 
   export type Location = Pick<AiProtectionType.Type, 'Oblast' | 'Raion' | 'Hromada' | 'Settlement'>
 

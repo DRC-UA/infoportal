@@ -6,6 +6,7 @@ import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
+import {Period} from 'infoportal-common/type/Period'
 
 export namespace AiProtectionMapper {
 
@@ -29,8 +30,9 @@ export namespace AiProtectionMapper {
     return planCode[_] ?? `${aiInvalidValueFlag} ${_}`
   }
 
-  export const req = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
-    const period = PeriodHelper.fromYYYYMM(periodStr)
+  export const req = (api: ApiSdk) => (period: Partial<Period>): Promise<Bundle[]> => {
+    // const period = PeriodHelper.fromYYYYMM(periodStr)
+    const periodStr = AiMapper.getPeriodStr(period)
     return api.koboMeta.search({
       activities: [
         DrcProgram.Counselling,

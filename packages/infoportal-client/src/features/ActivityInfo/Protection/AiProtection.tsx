@@ -5,10 +5,11 @@ import {Panel} from '@/shared/Panel'
 import {AiBundleTable} from '@/features/ActivityInfo/shared/AiTable'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {AiProtectionMapper} from '@/features/ActivityInfo/Protection/aiProtectionMapper'
+import {Period} from 'infoportal-common/type/Period'
 
 export const AiProtection = () => {
   const {api} = useAppSettings()
-  const fetcher = useFetcher((period: string) => AiProtectionMapper.req(api)(period))
+  const fetcher = useFetcher((period: Partial<Period>) => AiProtectionMapper.req(api)(period))
 
   return (
     <Page width="full">

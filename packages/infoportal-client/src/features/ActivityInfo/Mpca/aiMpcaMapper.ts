@@ -7,6 +7,7 @@ import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {AiMpcaType} from '@/features/ActivityInfo/Mpca/aiMpcaType'
 import {appConfig} from '@/conf/AppConfig'
+import {Period} from 'infoportal-common/type/Period'
 
 export namespace AiMpcaMapper {
 
@@ -31,8 +32,8 @@ export namespace AiMpcaMapper {
     }, () => aiInvalidValueFlag + _)
   }
 
-  export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
-    const period = PeriodHelper.fromYYYYMM(periodStr)
+  export const reqCashRegistration = (api: ApiSdk) => (period: Partial<Period>): Promise<Bundle[]> => {
+    const periodStr = AiMapper.getPeriodStr(period)
     let i = 0
     return api.mpca.search({
       // filters: {

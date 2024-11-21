@@ -6,6 +6,7 @@ import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
+import {Period} from 'infoportal-common/type/Period'
 
 export namespace AiWashMapper {
 
@@ -31,8 +32,8 @@ export namespace AiWashMapper {
   export type Bundle = AiTable<AiWashType.Type>
 
   export const req = (api: ApiSdk) => {
-    return (periodStr: string): Promise<Bundle[]> => {
-      const period = PeriodHelper.fromYYYYMM(periodStr)
+    return (period: Partial<Period>): Promise<Bundle[]> => {
+      const periodStr = AiMapper.getPeriodStr(period)
       return api.koboMeta.search({
         status: [KoboMetaStatus.Committed],
         activities: [

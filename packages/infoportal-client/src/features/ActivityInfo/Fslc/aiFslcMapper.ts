@@ -7,6 +7,7 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {IKoboMeta, KoboMetaEcrecTags} from 'infoportal-common'
+import {Period} from 'infoportal-common/type/Period'
 
 export namespace AiFslcMapper {
   export type Bundle = AiTable<AiFslcType.Type>
@@ -21,8 +22,8 @@ export namespace AiFslcMapper {
     }, () => aiInvalidValueFlag + _)
   }
 
-  export const reqCashRegistration = (api: ApiSdk) => (periodStr: string): Promise<Bundle[]> => {
-    const period = PeriodHelper.fromYYYYMM(periodStr)
+  export const reqCashRegistration = (api: ApiSdk) => (period: Partial<Period>): Promise<Bundle[]> => {
+    const periodStr = AiMapper.getPeriodStr(period)
     let i = 0
     return api.koboMeta.search({
       activities: [

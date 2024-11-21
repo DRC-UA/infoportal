@@ -5,6 +5,7 @@ import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {aiInvalidValueFlag} from '@/features/ActivityInfo/shared/AiTable'
 import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
+import {Period} from 'infoportal-common/type/Period'
 
 export namespace AiGbvMapper {
 
@@ -26,7 +27,8 @@ export namespace AiGbvMapper {
     [DrcProject['UKR-000363 UHF8']]: 'GBV-DRC-00007',
   } as const
 
-  export const mapGbvActivity = (reportingMonth: string) => async (res: ApiPaginate<InferTypedAnswer<'protection_gbv'>>['data']) => {
+  export const mapGbvActivity = (period: Partial<Period>) => async (res: ApiPaginate<InferTypedAnswer<'protection_gbv'>>['data']) => {
+    const periodStr = AiMapper.getPeriodStr(period)
     const data: Type[] = await Promise.all(res
       .filter(_ => _.new_ben !== 'no')
       .filter(_ => !!_.activity && !(_.activity.includes('other') && _.activity.length === 1))
@@ -44,7 +46,7 @@ export namespace AiGbvMapper {
               ...AiMapper.getLocationByKobo(d),
               'Settlement': await AILocationHelper.findSettlementByIso(d.ben_det_hromada_001).then(_ => _?._5w ?? aiInvalidValueFlag + d.ben_det_hromada_001),
               ...AiMapper.disaggregatePersons([ind]),
-              'Reporting Month': reportingMonth,
+              'Reporting Month': periodStr,
               'Plan/Project Code': fnSwitch(
                 DrcProjectHelper.search(Protection_gbv.options.project[d.project!])!,
                 planCode,

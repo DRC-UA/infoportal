@@ -5,10 +5,11 @@ import {Panel} from '@/shared/Panel'
 import {AiBundleTable} from '@/features/ActivityInfo/shared/AiTable'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {AiMpcaMapper} from '@/features/ActivityInfo/Mpca/aiMpcaMapper'
+import {Period} from 'infoportal-common/type/Period'
 
 export const AiMpca = () => {
   const {api} = useAppSettings()
-  const fetcher = useFetcher((period: string) => AiMpcaMapper.reqCashRegistration(api)(period))
+  const fetcher = useFetcher((period: Partial<Period>) => AiMpcaMapper.reqCashRegistration(api)(period))
   const {conf} = useAppSettings()
 
   return (

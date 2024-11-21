@@ -10,16 +10,17 @@ import {AiGbvMapper} from '@/features/ActivityInfo/Gbv/AiGbvMapper'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
+import {Period} from 'infoportal-common/type/Period'
 
 type AiGbvBundle = AiTable<AiGbvType.Type, AiGbvType.TypeSub>
 
 export const AiGbv = () => {
   const {api} = useAppSettings()
 
-  const req = (period: string) => {
-    const filters = PeriodHelper.fromYYYYMM(period)
+  const req = (period: Partial<Period>) => {
+    const periodStr = AiMapper.getPeriodStr(period)
     return api.kobo.typedAnswers.search.protection_gbv()
-      .then(data => data.data.filter(_ => PeriodHelper.isDateIn(filters, _.date)))
+      .then(data => data.data.filter(_ => PeriodHelper.isDateIn(period, _.date)))
       .then(AiGbvMapper.mapGbvActivity(period))
       .then(data => {
         const bundles: AiGbvBundle[] = []
@@ -57,7 +58,7 @@ export const AiGbv = () => {
                 DistributionWho,
               ]) => {
                 subActivities.push({
-                  'Reporting Month': period,
+                  'Reporting Month': periodStr,
                   'Population Group': PopulationGroup,
                   'Indicators': Indicators,
                   'Total Individuals Reached': grouped.sum(_ => add(
@@ -99,7 +100,7 @@ export const AiGbv = () => {
             })
             const request = ActivityInfoSdk.makeRecordRequests({
               activityIdPrefix: 'drcgbv',
-              activityYYYYMM: period,
+              activityYYYYMM: periodStr,
               formId: activitiesConfig.gbv.id,
               activity: AiGbvType.map(AiMapper.mapLocationToRecordId(activity)),
               subActivities: subActivities.map(AiGbvType.mapSub),
