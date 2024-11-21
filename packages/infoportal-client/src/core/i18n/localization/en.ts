@@ -79,7 +79,6 @@ export const en = Object.freeze({
     serverCache: 'Server cache',
     cancel: 'Cancel',
     custom: 'Custom',
-    customDb: 'Custom databases',
     close: 'Close',
     reinitialize: 'Reinitialize',
     connectAs: 'Connect as',

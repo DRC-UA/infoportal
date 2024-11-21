@@ -16,7 +16,7 @@ export interface DatabaseContext {
   _forms: UseFetcher<ApiSdk['kobo']['form']['getAll']>
   isAdmin?: boolean
   getForm: (_: KoboId) => KoboForm | undefined
-  formAccess?: KoboForm[]
+  formsAccessible?: KoboForm[]
   // servers: UseFetcher<ApiSdk['kobo']['server']['getAll']>
 }
 
@@ -47,7 +47,7 @@ export const DatabaseProvider = ({
     return accesses.filter(Access.filterByFeature(AppFeatureId.kobo_database)).map(_ => _.params?.koboFormId)
   }, [accesses])
 
-  const formAccess = useMemo(() => {
+  const formsAccessible = useMemo(() => {
     return _forms.get?.filter(_ => session.admin || koboAccesses.includes(_.id))
   }, [koboAccesses, _forms.get])
 
@@ -57,7 +57,7 @@ export const DatabaseProvider = ({
     <Context.Provider value={{
       _forms,
       isAdmin: session.admin,
-      formAccess,
+      formsAccessible,
       getForm,
     }}>
       {children}
