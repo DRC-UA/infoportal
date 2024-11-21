@@ -38,7 +38,7 @@ export const getColumnsCustom = ({
   selectedIds,
   m,
   formId,
-  getRow = _ => _ as unknown as KoboMappedAnswer,
+  getRow = _ => _ as unknown as any,
   // openEditAnswer,
   openEditTag,
   // asyncUpdateAnswerById,
@@ -49,9 +49,7 @@ export const getColumnsCustom = ({
   formId: KoboId
   getRow?: (_: any) => any,
   selectedIds: KoboAnswerId[]
-  // openEditAnswer: KoboEditAnswersContext['open']
   openEditTag: KoboEditTagsContext['open']
-  // asyncUpdateAnswerById: KoboEditAnswersContext['asyncUpdateById']
   asyncUpdateTagById: KoboEditTagsContext['asyncUpdateById']
   m: Messages,
 }): DatatableColumn.Props<KoboMappedAnswer>[] => {

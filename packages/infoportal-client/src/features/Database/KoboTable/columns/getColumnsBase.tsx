@@ -20,7 +20,9 @@ export const getColumnsBase = ({
   asyncEdit,
   openEditTag,
   openAnswerModal,
+  getRow = _ => _,
 }: {
+  getRow?: (_: any) => KoboAnswerFlat,
   asyncEdit: DatabaseKoboContext['asyncEdit']
   openEditTag: KoboEditTagsContext['open']
   openAnswerModal: KoboAnswersContext['openAnswerModal']
@@ -61,8 +63,8 @@ export const getColumnsBase = ({
     })}/>,
     width: 0,
     type: 'select_one',
-    render: (row: KoboAnswerFlat) => {
-      const value = row.tags?._validation
+    render: (row) => {
+      const value = getRow(row).tags?._validation
       return {
         export: value ? m[value] : DatatableUtils.blank,
         value: value ?? DatatableUtils.blank,
@@ -76,7 +78,7 @@ export const getColumnsBase = ({
             onChange={(e) => {
               asyncUpdateTagById.call({
                 formId: formId,
-                answerIds: [row.id],
+                answerIds: [getRow(row).id],
                 tag: '_validation',
                 value: e,
               })

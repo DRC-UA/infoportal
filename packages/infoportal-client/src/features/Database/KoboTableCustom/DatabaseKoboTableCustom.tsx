@@ -20,6 +20,8 @@ import {useLayoutContext} from '@/shared/Layout/LayoutContext'
 import {useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
 import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
+import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
 
 interface CustomForm {
   id: string
@@ -84,17 +86,23 @@ const urlValidation = yup.object({
 })
 
 export const DatabaseTableCustomRoute = () => {
-  const ctxEditTag = useKoboEditTagContext()
   const {api} = useAppSettings()
   const {m} = useI18n()
   const t = useTheme()
+
   const {id} = urlValidation.validateSync(useParams())
+
+  const ctxEditTag = useKoboEditTagContext()
+  const ctxEditAnswer = useKoboEditAnswerContext()
+  const ctxSchema = useKoboSchemaContext()
+  const ctxAnswers = useKoboAnswersContext()
+
   const customForm = useMemo(() => customForms.find(_ => _.id === id), [id])
   const formIds = useMemo(() => customForm!.forms.map(_ => _.id), [id])
-  const ctxSchema = useKoboSchemaContext()
   const {setTitle} = useLayoutContext()
-  const ctxAnswers = useKoboAnswersContext()
-  const [selectedIds, setSelectedIds] = useState<KoboAnswerId[]>([])
+
+  const [selectedIndexes, setSelectedIndexes] = useState<string[]>([])
+
   if (!customForm) return
 
   const view = useDatabaseView('custom-db-' + customForm.id)
@@ -128,6 +136,7 @@ export const DatabaseTableCustomRoute = () => {
     )
     return dataSets[0]!.map((row, i) => {
       return {
+        index: i,
         [customForm.forms[0].id]: (databaseCustomMapping[customForm.forms[0].id] ?? (_ => _))(row),
         ...seq(customForm.forms).compactBy('join').reduceObject(_ => {
           const refRow = indexes[_.id][(row as any)[_.join.originColName]]
@@ -137,12 +146,18 @@ export const DatabaseTableCustomRoute = () => {
     })
   }, [...formIds.map(_ => ctxAnswers.byId(_).get?.data), ctxSchema.langIndex])
 
-  const columns = useMemo(() => {
+  const columns: DatatableColumn.Props<any>[] = useMemo(() => {
     return schemas.flatMap(({formId, schema}) => {
+      const selectedIds = data ? selectedIndexes.map(_ => data[+_][formId]?.id).filter(_ => _ !== undefined) : []
       const cols = columnBySchemaGenerator({
         formId,
         schema,
         m,
+        onEdit: selectedIds.length > 0 ? (questionName => ctxEditAnswer.open({
+          formId: formId,
+          question: questionName,
+          answerIds: selectedIds,
+        })) : undefined,
         t,
         getRow: _ => (_[formId] ?? {}) as any,
       }).getAll()
@@ -150,18 +165,19 @@ export const DatabaseTableCustomRoute = () => {
       cols[cols.length - 1].styleHead = {borderRight: '3px solid ' + t.palette.divider}
       return [
         ...getColumnsBase({
-          selectedIds: [],
+          selectedIds,
           formId,
           canEdit: true,
           m,
           openAnswerModal: ctxAnswers.openAnswerModal,
           asyncEdit: (answerId: KoboAnswerId) => api.koboApi.getEditUrl({formId: formId, answerId}),
           asyncUpdateTagById: ctxEditTag.asyncUpdateById,
+          getRow: _ => (_[formId] ?? {}) as any,
           openEditTag: ctxEditTag.open,
         }),
         ...getColumnsCustom({
           getRow: _ => _[formId] ?? {},
-          selectedIds: [],
+          selectedIds,
           formId: formId,
           canEdit: true,
           m,
@@ -179,7 +195,7 @@ export const DatabaseTableCustomRoute = () => {
         }
       })
     })
-  }, [...schemas, ctxSchema.langIndex, view.currentView])
+  }, [...schemas, data, selectedIndexes, ctxSchema.langIndex, view.currentView])
 
   const loading = ctxSchema.anyLoading || !!formIds.find(_ => ctxAnswers.byId(_).loading)
   return (
@@ -191,10 +207,10 @@ export const DatabaseTableCustomRoute = () => {
             id={customForm.id}
             columns={columns}
             select={{
-              onSelect: setSelectedIds,
-              getId: _ => _.id,
+              onSelect: setSelectedIndexes,
+              getId: _ => '' + _.index,
             }}
-            data={data as any}
+            data={data}
             showExportBtn
             columnsToggle={{
               disableAutoSave: true,
