@@ -76,6 +76,7 @@ export const DatabaseKoboTableContent = ({
       t,
     }).getAll()
     return databaseKoboDisplayBuilder({
+      data: ctx.data ?? [],
       formId: ctx.form.id,
       schema: ctx.schema,
       onRepeatGroupClick: _ => navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),

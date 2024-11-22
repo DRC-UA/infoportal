@@ -20,13 +20,13 @@ export class KoboFlattenRepeat {
 
   static readonly run = (data: Row[] = [], path: string[], depth = 0): KoboFlattenRepeatData[] => {
     if (path.length === depth) return data as any
-    let index = 0
     return this.run(data.flatMap((d, i: number) =>
-      d[path[depth]]?.map((_: any) => ({
+      d[path[depth]]?.map((_: any, j: number) => ({
+        ...d,
         ..._ ?? {},
         submissionTime: d.submissionTime,
         id: d.id,
-        [KoboFlattenRepeat.INDEX_COL]: index++,
+        [KoboFlattenRepeat.INDEX_COL]: j,
         [KoboFlattenRepeat.PARENT_INDEX_COL]: i,
         [KoboFlattenRepeat.PARENT_TABLE_NAME]: path[depth - 1]
       })) ?? []

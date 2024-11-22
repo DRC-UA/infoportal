@@ -1,4 +1,16 @@
-import {KoboApiColumType, KoboApiQuestionSchema, KoboApiQuestionType, KoboFlattenRepeatData, KoboId, KoboSchemaHelper, removeHtml,} from 'infoportal-common'
+import {
+  KoboAnswerMetaData,
+  KoboApiColType,
+  KoboApiColumType,
+  KoboApiQuestionSchema,
+  KoboApiQuestionType,
+  KoboFlattenRepeat,
+  KoboFlattenRepeatData,
+  KoboId,
+  KoboRepeatRef,
+  KoboSchemaHelper,
+  removeHtml,
+} from 'infoportal-common'
 import {useI18n} from '@/core/i18n/I18n'
 import {fnSwitch, map, seq} from '@alexandreannic/ts-utils'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
@@ -11,7 +23,6 @@ import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/Kob
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {formatDate, formatDateTime, Messages} from '@/core/i18n/localization/en'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {KoboAnswerMetaData, KoboApiColType} from 'infoportal-common/kobo'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()
@@ -360,7 +371,20 @@ export const columnBySchemaGenerator = ({
       head: 'ID',
       typeIcon: <DatatableHeadIconByType type="id"/>,
       className: 'td-id',
-      renderQuick: (row: Row) => getRow(row).id,
+      style: row => {
+        const data = getRow(row) as KoboFlattenRepeatData & KoboRepeatRef
+        if (data[KoboFlattenRepeat.INDEX_COL]! > 0) {
+          return {
+            opacity: '.5',
+          }
+        }
+        return {}
+      },
+      renderQuick: (row: Row) => {
+        const data = getRow(row) as KoboFlattenRepeatData & KoboRepeatRef
+        const childIndex = data[KoboFlattenRepeat.INDEX_COL]
+        return data.id + (childIndex !== undefined ? '#' + (childIndex + 1) : '')
+      },
     }
   }
 

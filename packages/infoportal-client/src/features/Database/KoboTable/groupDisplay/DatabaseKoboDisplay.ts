@@ -9,6 +9,7 @@ export type DatabaseDisplay = {
 }
 
 type DatabaseKoboDisplayProps = {
+  data: Record<string, any>[]
   display: DatabaseDisplay
   schema: KoboSchemaHelper.Bundle
   formId: ColumnBySchemaGeneratorProps['formId']
@@ -18,6 +19,7 @@ type DatabaseKoboDisplayProps = {
 }
 
 export const databaseKoboDisplayBuilder = ({
+  data,
   display,
   schema,
   formId,
@@ -31,7 +33,8 @@ export const databaseKoboDisplayBuilder = ({
         const copy = [...columns]
         schema.helper.group.search({depth: 1}).map(group => {
           const index = copy.findIndex(_ => _.id == group.name)
-          mapFor(2, repeat => {
+          const groupSize = Math.max(...data.map(_ => _[group.name]?.length ?? 0))
+          mapFor(groupSize, repeat => {
             const newCols = columnBySchemaGenerator({
               schema,
               onRepeatGroupClick,
@@ -40,6 +43,7 @@ export const databaseKoboDisplayBuilder = ({
               m,
               t,
             }).getByQuestions(group.questions).map((_, i) => {
+              _.head = `[${repeat}] ${_.head}`
               _.group = group.name + repeat
               _.groupLabel = `[${repeat}] ` + schema.translate.question(group.name)
               _.id = _.id + 'repeat' + repeat + '+' + i
