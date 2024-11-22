@@ -5,10 +5,12 @@ import {OblastIndex} from '../../location'
 import {Person} from '../../type/Person'
 import {DisplacementStatus, KoboAnswerFlat, KoboBaseTags, KoboTagStatus, PersonDetails, WgDisability} from './Common'
 import {safeInt32} from '../../utils'
+import {Ecrec_msmeGrantReg} from '../generated/Ecrec_msmeGrantReg'
 
 export namespace KoboGeneralMapping {
 
   type XlsIndividualBase = NonNullable<Ecrec_cashRegistration.T['hh_char_hh_det']>[0]
+
   export type XlsKoboIndividual = {
     'hh_char_hh_det_gender'?: 'male' | 'female' | 'other' | 'unspecified' | 'unable_unwilling_to_answer'
     'hh_char_hh_det_age'?: number
@@ -33,18 +35,9 @@ export namespace KoboGeneralMapping {
   >> & {
     ben_det_res_stat?: XlsDisplacementStatus
     hh_char_hh_det?: XlsKoboIndividual[]
+    hh_member?: XlsKoboIndividual[]
   }
 
-  export const mapOffice = (o?: Protection_pss.Option<'staff_to_insert_their_DRC_office'>): undefined | DrcOffice => fnSwitch(o!, {
-    chernihiv: DrcOffice.Chernihiv,
-    dnipro: DrcOffice.Dnipro,
-    lviv: DrcOffice.Lviv,
-    sumy: DrcOffice.Sumy,
-    kharkiv: DrcOffice.Kharkiv,
-    mykolaiv: DrcOffice.Mykolaiv,
-  }, () => undefined)
-
-  // type XlsDisplacementStatus = NonNullable<Protection_pss.T['hh_char_hh_det']>[0]['hh_char_hh_det_status'] | Bn_re.T['ben_det_res_stat']
   export type XlsDisplacementStatus = 'idp'
     | 'returnee'
     | 'non-displaced'
@@ -66,13 +59,6 @@ export namespace KoboGeneralMapping {
     }, () => undefined)
   }
 
-  export const mapProject = (_?: string) => {
-    if (!_) return
-    const extractCode = _.match(/UKR-000\d{3}/)?.[0]
-    if (extractCode) return DrcProjectHelper.searchByCode(extractCode)
-    throw new Error(`Cannot find project from ${_}.`)
-  }
-
   export const mapOblast = OblastIndex.byKoboName
 
   export const mapRaion = (_?: Bn_re.T['ben_det_raion']) => _
@@ -90,6 +76,9 @@ export namespace KoboGeneralMapping {
   export const mapPersonDetails = (p: {
     hh_char_hh_det_gender?: string
     hh_char_hh_det_age?: number
+    dis_select?: NonNullable<Ecrec_msmeGrantReg.T['dis_select']>
+    dis_level?: NonNullable<Ecrec_msmeGrantReg.T['dis_level']>
+    res_stat?: NonNullable<Ecrec_msmeGrantReg.T['res_stat']>
     hh_char_hh_det_disability?: NonNullable<Protection_hhs3.T['hh_char_hh_det']>[0]['hh_char_hh_det_disability']
     hh_char_hh_det_dis_select?: NonNullable<Bn_re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_select']
     hh_char_hh_det_dis_level?: NonNullable<Bn_re.T['hh_char_hh_det']>[0]['hh_char_hh_det_dis_level']
@@ -97,8 +86,8 @@ export namespace KoboGeneralMapping {
     ben_det_res_stat?: XlsDisplacementStatus
   }): PersonDetails => {
     const res: PersonDetails = KoboGeneralMapping.mapPerson(p as any)
-    if (p.hh_char_hh_det_status)
-      res.displacement = mapDisplacementStatus(p.hh_char_hh_det_status)
+    if (p.hh_char_hh_det_status ?? p.res_stat)
+      res.displacement = mapDisplacementStatus(p.hh_char_hh_det_status ?? p.res_stat)
     else
       res.displacement = fnSwitch(p.ben_det_res_stat!, {
         idp: DisplacementStatus.Idp,
@@ -118,8 +107,10 @@ export namespace KoboGeneralMapping {
         unable_unwilling_to_answer: undefined,
       }, () => undefined)).compact()
     }
-    if (p.hh_char_hh_det_dis_level !== undefined && p.hh_char_hh_det_dis_level !== 'zero')
-      res.disability = seq(p.hh_char_hh_det_dis_select ?? []).map(_ => fnSwitch(_!, {
+    const disabilityLevel = p.hh_char_hh_det_dis_level ?? p.dis_level
+    const disabilitySelect = p.hh_char_hh_det_dis_select ?? p.dis_select
+    if (disabilityLevel !== undefined && disabilityLevel !== 'zero')
+      res.disability = seq(disabilitySelect ?? []).map(_ => fnSwitch(_!, {
         diff_see: WgDisability.See,
         diff_hear: WgDisability.Hear,
         diff_walk: WgDisability.Walk,
@@ -160,11 +151,6 @@ export namespace KoboGeneralMapping {
     return (row as any)
   }
 
-  export const handleStatus = <T extends KoboAnswerFlat<{}, KoboBaseTags & KoboTagStatus>>(row: T): T => {
-    if (row.tags?.lastStatusUpdate) row.tags.lastStatusUpdate = new Date(row.tags?.lastStatusUpdate)
-    return row
-  }
-
   export const addIndividualBreakdownColumnForRrm = (row: Bn_rapidResponse.T): Bn_rapidResponse.T & {custom: IndividualBreakdown} => {
     const p = KoboGeneralMapping.collectXlsKoboIndividualsForRrm(row).map(mapPersonDetails)
     const custom = KoboGeneralMapping.getIndividualBreakdown(p)
@@ -196,10 +182,6 @@ export namespace KoboGeneralMapping {
     }
   }
 
-  export const isValidKoboId = (_: number) => {
-    return _ > 0 && _ < 1562136443
-  }
-
   export const collectXlsKoboIndividuals = (d: XlsKoboIndividuals): XlsKoboIndividual[] => {
     return [
       {
@@ -221,7 +203,7 @@ export namespace KoboGeneralMapping {
   }
 
   export const collectXlsKoboIndividualsFromStandardizedKoboForm = (d: XlsKoboIndividuals): XlsKoboIndividual[] => {
-    return d.hh_char_hh_det?.map(_ => {
+    return (d.hh_char_hh_det ?? d.hh_member ?? []).map(_ => {
       (_ as unknown as XlsKoboIndividual).ben_det_res_stat = d.ben_det_res_stat
       return _ as unknown as XlsKoboIndividual
     }) ?? []
