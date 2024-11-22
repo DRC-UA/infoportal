@@ -48,20 +48,20 @@ export class KoboAnswerHistoryService {
         id: {in: answerIds,}
       }
     }).then(res => seq(res).groupByFirst(_ => _.id))
-    return this.prisma.koboAnswersHistory.createMany({
-      data: answerIds.map(_ => {
-        return {
-          by: authorEmail,
-          type: type,
-          formId,
-          answerId: _,
-          ...type !== 'delete' && {
-            property,
-            newValue: newValue ?? Prisma.JsonNull,
-            oldValue: (currentAnswers[_][type === 'tag' ? 'tags' : 'answers'] as any)?.[property] as any,
-          }
+    return this.prisma.koboAnswersHistory.create({
+      data: {
+        answers: {
+          connect: answerIds.map(id => ({id})),
+        },
+        by: authorEmail,
+        type: type,
+        formId,
+        ...type !== 'delete' && {
+          property,
+          newValue: newValue ?? Prisma.JsonNull,
+          oldValue: (currentAnswers[_][type === 'tag' ? 'tags' : 'answers'] as any)?.[property] as any,
         }
-      })
+      }
     })
   }
 }
