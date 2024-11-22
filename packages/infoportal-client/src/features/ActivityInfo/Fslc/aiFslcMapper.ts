@@ -41,21 +41,21 @@ export namespace AiFslcMapper {
           data,
           groups: [
             {by: _ => _.activity!},
-            {by: _ => _.project?.[0]!,},
+            // {by: _ => _.project?.[0]!,},
             {by: _ => _.oblast!},
-            {by: _ => _.raion!},
-            {by: _ => _.hromada!},
-            {by: _ => _.settlement!},
-            {
-              by: _ => fnSwitch(_.displacement!, {
-                Idp: 'Internally Displaced',
-                NonDisplaced: 'Non-Displaced',
-                Returnee: 'Returnees',
-                Refugee: 'Non-Displaced',
-              }, () => 'Non-Displaced')
-            },
+            // {by: _ => _.raion!},
+            // {by: _ => _.hromada!},
+            // {by: _ => _.settlement!},
+            // {
+            //   by: _ => fnSwitch(_.displacement!, {
+            //     Idp: 'Internally Displaced',
+            //     NonDisplaced: 'Non-Displaced',
+            //     Returnee: 'Returnees',
+            //     Refugee: 'Non-Displaced',
+            //   }, () => 'Non-Displaced')
+            // },
           ],
-          finalTransform: async (grouped: Seq<IKoboMeta<KoboMetaEcrecTags>>, [activity, project, oblast, raion, hromada, settlment, displacement]) => {
+          finalTransform: async (grouped: Seq<IKoboMeta<KoboMetaEcrecTags>>, [activity, oblast, raion, hromada, settlment, displacement]) => {
             let disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
             if (activity === DrcProgram.VET) {
               const total = add(disaggregation['Adult Men (18-59)'] + disaggregation['Adult Women (18-59)'])
@@ -74,8 +74,9 @@ export namespace AiFslcMapper {
               'Reporting Organization': 'Danish Refugee Council',
               'Activity and indicator': activity as any,
               'Implementing Partner': 'Danish Refugee Council',
-              'Activity Plan Code': getPlanCode(project) as never,
+              // 'Activity Plan Code': getPlanCode(project) as never,
               ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlment),
+              // @ts-ignore
               'Population Group': displacement,
               ...(() => {
                 if (activity === DrcProgram.MSME) {

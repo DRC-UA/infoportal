@@ -29,10 +29,10 @@ export const AiGbv = () => {
           data,
           groups: [
             {by: _ => _.Oblast!},
-            {by: _ => _.Raion!},
-            {by: _ => _.Hromada!},
-            {by: _ => _.Settlement!},
-            {by: _ => _['Plan/Project Code']!},
+            // {by: _ => _.Raion!},
+            // {by: _ => _.Hromada!},
+            // {by: _ => _.Settlement!},
+            // {by: _ => _['Plan/Project Code']!},
 
           ],
           finalTransform: (grouped, [Oblast, Raion, Hromada, Settlement, PlanCode]) => {
@@ -47,9 +47,9 @@ export const AiGbv = () => {
               data: grouped,
               groups: [
                 {by: _ => _['Indicators']!},
-                {by: _ => _['Population Group']!},
-                {by: _ => _['Type of distribution']!},
-                {by: _ => _['Who distributed the kits?']!},
+                // {by: _ => _['Population Group']!},
+                // {by: _ => _['Type of distribution']!},
+                // {by: _ => _['Who distributed the kits?']!},
               ],
               finalTransform: (grouped, [
                 Indicators,

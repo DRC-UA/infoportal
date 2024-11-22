@@ -2,7 +2,6 @@ import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from 'inf
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiWashType} from '@/features/ActivityInfo/Wash/aiWashType'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {fnSwitch} from '@alexandreannic/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
@@ -47,35 +46,37 @@ export namespace AiWashMapper {
           return Promise.all(groupBy({
             data,
             groups: [
-              {by: _ => _.project?.[0]!,},
+              // {by: _ => _.project?.[0]!,},
               {by: _ => _.oblast!},
-              {by: _ => _.raion!},
-              {by: _ => _.hromada!},
-              {by: _ => _.settlement!},
-              {
-                by: _ => fnSwitch(_.displacement!, {
-                  Idp: 'Internally Displaced',
-                  NonDisplaced: 'Non-Displaced',
-                  Returnee: 'Returnees',
-                  Refugee: 'Non-Displaced',
-                }, () => 'Non-Displaced')
-              },
+              // {by: _ => _.raion!},
+              // {by: _ => _.hromada!},
+              // {by: _ => _.settlement!},
+              // {
+              //   by: _ => fnSwitch(_.displacement!, {
+              //     Idp: 'Internally Displaced',
+              //     NonDisplaced: 'Non-Displaced',
+              //     Returnee: 'Returnees',
+              //     Refugee: 'Non-Displaced',
+              //   }, () => 'Non-Displaced')
+              // },
               {by: _ => _.activity!}
             ],
-            finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, displacement, activity]) => {
+            // @ts-ignore
+            finalTransform: async (grouped, [oblast, activity]) => {
               const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
               const ai: AiWashType.Type = {
-                'Activity Plan Code': getPlanCode(project),
+                // 'Activity Plan Code': getPlanCode(project),
                 'Implementing Partner': 'Danish Refugee Council',
                 'Reporting Organization': 'Danish Refugee Council',
                 'WASH': '# of individuals benefiting from hygiene kit/items distribution (in-kind)',
                 'Response Theme': 'No specific theme',
                 'Settlement': aiInvalidValueFlag,
-                ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
+                // @ts-ignore
+                ...await AiMapper.getLocationByMeta(oblast),
                 'Location Type': 'Individuals/households',
                 'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
                 'Disaggregation by population group and/or gender and age known?': 'Yes',
-                'Population Group': displacement,
+                // 'Population Group': displacement,
                 'Total Reached (No Disaggregation)': 0, //disaggregation['Total Individuals Reached']
                 'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
                 'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,

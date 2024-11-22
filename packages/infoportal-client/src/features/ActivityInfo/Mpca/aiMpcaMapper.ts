@@ -53,23 +53,25 @@ export namespace AiMpcaMapper {
             data,
             groups: [
               {by: _ => _.oblast},
-              {by: _ => _.raion!},
-              {by: _ => _.hromada!},
-              {by: _ => _.settlement!},
-              {by: _ => _.project?.[0]!},
-              {
-                by: _ => AiMapper.mapPopulationGroup(_.displacement)
-              },
+              // {by: _ => _.raion!},
+              // {by: _ => _.hromada!},
+              // {by: _ => _.settlement!},
+              // {by: _ => _.project?.[0]!},
+              // {by: _ => AiMapper.mapPopulationGroup(_.displacement)},
             ],
+            // @ts-ignore
             finalTransform: async (grouped, [oblast, raion, hromada, settlement, project, displacement]) => {
               const disag = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
+            // @ts-ignore
               const loc = await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement)
               const ai: AiMpcaType.Type = {
                 'Reporting Organization': 'Danish Refugee Council',
                 'Implementing Partner': 'Danish Refugee Council',
+                'Oblast': loc.Oblast,
                 'Raion': loc.Raion,
                 'Hromada': loc.Hromada,
                 'Settlement': loc.Settlement,
+            // @ts-ignore
                 'Donor': fnSwitch(DrcProjectHelper.donorByProject[project], {
                   SIDA: 'Swedish International Development Cooperation Agency (Sida)',
                   UHF: 'Ukraine Humanitarian Fund (UHF)',
@@ -91,9 +93,11 @@ export namespace AiMpcaMapper {
                 'Response Theme': 'No specific theme',
                 'Number of Covered Months': 'Three months (recommended)',
                 'Financial Service Provider (FSP)': 'Bank Transfer',
+                // @ts-ignore
                 'Population Group': displacement,
                 'Total amount (USD) distributed through multi-purpose cash assistance': grouped.sum(_ => _.amountUahFinal ?? 0) * appConfig.uahToUsd,
                 'Payments Frequency': 'Multiple payments',
+                // @ts-ignore
                 'Activity Plan Code': getPlanCode(project) as any,
                 'Indicators - MPCA': '# of individuals assisted with multi-purpose cash assistance',
                 'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,

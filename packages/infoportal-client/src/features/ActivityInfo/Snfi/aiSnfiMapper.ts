@@ -1,4 +1,4 @@
-import {DisplacementStatus, DrcProgram, DrcProject, groupBy, KoboMetaShelterRepairTags, KoboMetaStatus, PeriodHelper, ShelterTaPriceLevel} from 'infoportal-common'
+import {DrcProgram, DrcProject, groupBy, KoboMetaShelterRepairTags, KoboMetaStatus, PeriodHelper, ShelterTaPriceLevel} from 'infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
@@ -97,22 +97,23 @@ export namespace AiShelterMapper {
         return Promise.all(groupBy({
           data,
           groups: [
-            {by: _ => _.project?.[0]!,},
+            // {by: _ => _.project?.[0]!,},
             {by: _ => _.oblast!},
-            {by: _ => _.raion!},
-            {by: _ => _.hromada!},
-            {by: _ => _.settlement!},
-            {
-              by: _ => fnSwitch(_.displacement!, {
-                Idp: 'Internally Displaced',
-                NonDisplaced: 'Non-Displaced',
-                Returnee: 'Returnees',
-                Refugee: 'Non-Displaced',
-              }, () => 'Non-Displaced')
-            },
+            // {by: _ => _.raion!},
+            // {by: _ => _.hromada!},
+            // {by: _ => _.settlement!},
+            // {
+            //   by: _ => fnSwitch(_.displacement!, {
+            //     Idp: 'Internally Displaced',
+            //     NonDisplaced: 'Non-Displaced',
+            //     Returnee: 'Returnees',
+            //     Refugee: 'Non-Displaced',
+            //   }, () => 'Non-Displaced')
+            // },
             {by: _ => _.activity!}
           ],
-          finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, displacement, activity]) => {
+          // @ts-ignore
+          finalTransform: async (grouped, [oblast, activity]) => {
             const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
             const ai: AiSnfiType.Type = {
               'Indicators - SNFI': fnSwitch(activity, {
@@ -123,16 +124,16 @@ export namespace AiShelterMapper {
                 [DrcProgram.CashForRepair]: '# of individuals supported with light humanitarian repairs',
               }, () => aiInvalidValueFlag as keyof typeof AiSnfiType.options['Indicators - SNFI']),
               'Implementing Partner': 'Danish Refugee Council',
-              'Plan/Project Code': getPlanCode(project),
+              //     'Plan/Project Code': getPlanCode(project),
               'Reporting Organization': 'Danish Refugee Council',
-              ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
+              // @ts-ignore
+              ...await AiMapper.getLocationByMeta(oblast),//, raion, hromada, settlement),
               'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
               'Reporting Month': fnSwitch(periodStr, {
                 '2024-01': '2024-03',
                 '2024-02': '2024-03'
               }, () => periodStr),
               // 'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
-              'Population Group': displacement,
               'Non-individuals Reached': grouped.length,
               'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
               'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
@@ -178,11 +179,11 @@ export namespace AiShelterMapper {
         return Promise.all(groupBy({
           data: data,
           groups: [
-            {by: _ => _.project?.[0]!},
+            // {by: _ => _.project?.[0]!},
             {by: _ => _.oblast!},
-            {by: _ => _.raion!},
-            {by: _ => _.hromada!},
-            {by: _ => _.settlement!},
+            // {by: _ => _.raion!},
+            // {by: _ => _.hromada!},
+            // {by: _ => _.settlement!},
             {
               by: _ => {
                 return fnSwitch(_.tags?.damageLevel!, {
@@ -192,14 +193,14 @@ export namespace AiShelterMapper {
                 }, _ => _)
               },
             },
-            {
-              by: row => fnSwitch(row.displacement!, {
-                [DisplacementStatus.Idp]: 'Internally Displaced',
-                [DisplacementStatus.Returnee]: 'Returnees',
-              }, () => 'Non-Displaced')
-            }
+            // {
+            //   by: row => fnSwitch(row.displacement!, {
+            //     [DisplacementStatus.Idp]: 'Internally Displaced',
+            //     [DisplacementStatus.Returnee]: 'Returnees',
+            //   }, () => 'Non-Displaced')
+            // }
           ],
-          finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
+          finalTransform: async (grouped, [oblast, damageLevel]) => {
             const disagg = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons ?? []))
             const ai: AiSnfiType.Type = {
               'Indicators - SNFI': fnSwitch(damageLevel, {
@@ -208,12 +209,13 @@ export namespace AiShelterMapper {
                 [ShelterTaPriceLevel.Heavy]: '# of individuals supported with heavy humanitarian repairs',
               }, () => '# of individuals supported with medium humanitarian repairs'),
               'Implementing Partner': 'Danish Refugee Council',
-              'Plan/Project Code': getPlanCode(project),
+              // 'Plan/Project Code': getPlanCode(project),
               'Reporting Organization': 'Danish Refugee Council',
-              ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
+              // @ts-ignore
+              ...await AiMapper.getLocationByMeta(oblast),
               'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
               'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
-              'Population Group': status,
+              // 'Population Group': status,
               'Non-individuals Reached': grouped.length,
               'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,
               'Adult Women (18-59)': disagg['Adult Women (18-59)'] ?? 0,

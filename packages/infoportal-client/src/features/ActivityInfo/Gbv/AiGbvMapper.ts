@@ -76,9 +76,9 @@ export namespace AiGbvMapper {
                   }
                   return false
                 })
-                if (Obj.values(toDistribute).every(_ => _ === 0)) {
-                  throw new Error('Kit count issue for ' + d.id)
-                }
+                // if (Obj.values(toDistribute).every(_ => _ === 0)) {
+                //   throw new Error('Kit count issue for ' + d.id)
+                // }
                 return {
                   'Type of distribution': fnSwitch(d.distribute!, Protection_gbv.options.distribute, () => aiInvalidValueFlag as any),
                   'Who distributed the kits?': fnSwitch(d.distributor!, Protection_gbv.options.distributor, () => aiInvalidValueFlag as any),

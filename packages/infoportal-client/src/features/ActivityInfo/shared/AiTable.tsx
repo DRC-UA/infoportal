@@ -51,7 +51,10 @@ export const AiBundleTable = ({
   const {m} = useI18n()
   const t = useTheme()
 
-  const [period, setPeriod] = useState<Partial<Period>>({start: subMonths(startOfMonth(new Date()), 1), end: subMonths(endOfMonth(new Date()), 1)})
+  const [period, setPeriod] = useState<Partial<Period>>({
+    start: new Date(2023, 10, 1), end: new Date(2024, 9, 31)
+    // start: subMonths(startOfMonth(new Date()), 1), end: subMonths(endOfMonth(new Date()), 1)
+  })
 
   useEffect(() => {
     fetcher.fetch({clean: false}, period)

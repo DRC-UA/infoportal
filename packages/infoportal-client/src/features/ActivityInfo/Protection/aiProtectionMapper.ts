@@ -52,13 +52,15 @@ export namespace AiProtectionMapper {
           data,
           groups: [
             {by: _ => _.oblast!},
-            {by: _ => _.raion!},
-            {by: _ => _.hromada!},
-            {by: _ => _.settlement!},
-            {by: _ => _.project?.[0]!},
+            // {by: _ => _.raion!},
+            // {by: _ => _.hromada!},
+            // {by: _ => _.settlement!},
+            // {by: _ => _.project?.[0]!},
           ],
+          // @ts-ignore
           finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
             const ai: AiProtectionType.Type = {
+              // @ts-ignore
               ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
               'Plan/Project Code': getPlanCode(project),
               'Reporting Organization': 'Danish Refugee Council',
@@ -69,8 +71,9 @@ export namespace AiProtectionMapper {
               data: grouped,
               groups: [
                 {by: _ => _.activity!},
-                {by: _ => _.displacement!},
+                // {by: _ => _.displacement!},
               ],
+              // @ts-ignore
               finalTransform: (grouped, [activity, displacement]) => {
                 const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
                 subActivities.push({
