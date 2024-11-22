@@ -32,12 +32,12 @@ export class EmailService {
   initializeListeners() {
     this.log.info(`Start listening to Email triggers.`)
     this.event.listen(GlobalEvent.Event.KOBO_TAG_EDITED, this.handleTagEdited)
-    this.event.listen(GlobalEvent.Event.KOBO_ANSWER_EDITED_FROM_KOBO, this.sendEmailIfNeeded)
-    this.event.listen(GlobalEvent.Event.KOBO_ANSWER_EDITED_FROM_IP, this.sendEmailIfNeeded)
-    this.event.listen(GlobalEvent.Event.KOBO_ANSWER_NEW, this.sendEmailIfNeeded)
+    this.event.listen(GlobalEvent.Event.KOBO_ANSWER_EDITED_FROM_KOBO, this.sendEmailIfTriggered)
+    this.event.listen(GlobalEvent.Event.KOBO_ANSWER_EDITED_FROM_IP, this.sendEmailIfTriggered)
+    this.event.listen(GlobalEvent.Event.KOBO_ANSWER_NEW, this.sendEmailIfTriggered)
   }
 
-  readonly sendEmailIfNeeded = async (p: GlobalEvent.KoboAnswerEditedParams) => {
+  readonly sendEmailIfTriggered = async (p: GlobalEvent.KoboAnswerEditedParams) => {
     const schema = await this.koboService.getSchema({formId: p.formId})
     const {question} = getKoboCustomDirectives(schema).find(_ => _.directive === KoboCustomDirectives.TRIGGER_EMAIL) ?? {}
     if (!question) return

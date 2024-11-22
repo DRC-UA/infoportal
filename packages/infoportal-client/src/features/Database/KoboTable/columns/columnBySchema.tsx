@@ -53,6 +53,7 @@ const noEditableColsId: Set<string> = new Set<keyof KoboAnswerMetaData>([
 
 const editableColsType: Set<KoboApiColType> = new Set([
   'select_one',
+  'calculate',
   'select_multiple',
   'text',
   'integer',

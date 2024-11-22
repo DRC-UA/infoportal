@@ -14,6 +14,7 @@ import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Txt} from '@/shared/Txt'
+import {ArrayValues} from 'infoportal-common/type/Generic'
 
 export type KoboEditModalOption = {
   value: string | null,
@@ -22,13 +23,18 @@ export type KoboEditModalOption = {
   before?: ReactNode
 }
 
-export type KoboEditModalType = 'select_one'
-  | 'select_multiple'
-  | 'text'
-  | 'integer'
-  | 'decimal'
-  | 'datetime'
-  | 'date'
+export const editableColumnType = [
+  'select_one',
+  'calculate',
+  'select_multiple',
+  'text',
+  'integer',
+  'decimal',
+  'date',
+  'datetime',
+]
+
+export type KoboEditModalType = ArrayValues<typeof editableColumnType>
 
 export const KoboEditModalAnswer = ({
   formId,
@@ -199,7 +205,8 @@ export const KoboEditModal = ({
                   </ScRadioGroup>
                 )
               }
-              case 'text': {
+              case 'text':
+              case 'calculate': {
                 return <IpInput multiline maxRows={9} fullWidth value={value} onChange={e => setValue(e.target.value)}/>
               }
               case 'integer':
