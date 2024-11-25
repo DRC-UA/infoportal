@@ -84,18 +84,20 @@ export const DatabaseHistory = () => {
               }
             },
             {
-              type: 'id',
+              type: 'number',
+              id: 'answerIdCount',
+              width: 0,
+              head: m.id + ' #',
+              renderQuick: _ => _.answerIds.length,
+            },
+            {
+              type: 'string',
               id: 'answerId',
               typeIcon: <DatatableHeadIconByType type="id"/>,
               className: 'td-id',
               width: 80,
               head: m.id,
-              render: _ => {
-                return {
-                  value: _.answerId,
-                  label: _.answerId,
-                }
-              }
+              renderQuick: _ =>  _.answerIds?.join(' '),
             },
             {
               type: 'select_one',

@@ -1,7 +1,7 @@
 import {yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
 
-export namespace KoboAnswerHistory {
+export namespace KoboAnswerHistoryHelper {
 
   export const validation = {
     search: yup.object({

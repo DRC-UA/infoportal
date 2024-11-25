@@ -466,16 +466,15 @@ export class KoboService {
       this.getSchema({formId}).then(_ => _.content.survey.find(_ => _.name === question)?.$xpath),
     ])
     if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)
-    this.history.create({
-      type: 'answer',
-      formId,
-      answerIds,
-      property: question,
-      newValue: answer,
-      authorEmail,
-    })
-    const [x] = await Promise.all([
-      // this.conf.db.url.includes('localhost') ? () => void 0 :
+    await Promise.all([
+      this.history.create({
+        type: 'answer',
+        formId,
+        answerIds,
+        property: question,
+        newValue: answer,
+        authorEmail,
+      }),
       sdk.v2.updateData({formId, submissionIds: answerIds, data: {[xpath]: answer}}),
       await this.prisma.$executeRawUnsafe(
         `UPDATE "KoboAnswers"
