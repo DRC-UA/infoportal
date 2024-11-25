@@ -55,7 +55,7 @@ model KoboAnswers {
 
   mealVerifications MealVerificationAnswers[]
   // meta              KoboMeta[]
-  history           KoboAnswersHistory[]
+  histories         KoboAnswersHistory[]      @relation("KoboAnswersToHistory")
 
   @@unique([id, formId])
   @@index([deletedAt])
@@ -64,13 +64,12 @@ model KoboAnswers {
 }
 
 model KoboAnswersHistory {
-  id       String      @id @default(uuid())
-  form     KoboForm?   @relation(fields: [formId], references: [id])
+  id       String        @id @default(uuid())
+  form     KoboForm?     @relation(fields: [formId], references: [id])
   formId   String?
-  answer   KoboAnswers @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  answerId String
+  answers  KoboAnswers[] @relation("KoboAnswersToHistory")
   by       String
-  date     DateTime    @default(now())
+  date     DateTime      @default(now())
   type     String?
   property String?
   oldValue Json?

@@ -6,7 +6,7 @@ export interface KoboAnswerHistorySearch {
 
 export interface KoboAnswerHistory {
   id: string
-  answerId: string
+  answerIds: string[]
   by: string
   date: Date
   type: 'answer' | 'tag' | 'delete'

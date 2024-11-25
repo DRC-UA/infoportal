@@ -1,8 +1,8 @@
 import {Prisma, PrismaClient} from '@prisma/client'
 import {app, AppLogger} from '../../../index'
-import {KoboAnswerHistory} from './KoboAnswerHistoryType'
+import {KoboAnswerHistoryHelper} from './KoboAnswerHistoryType'
 import {ApiPaginateHelper, KoboAnswerId, KoboId} from 'infoportal-common'
-import {seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@alexandreannic/ts-utils'
 
 type Create = {
   authorEmail: string
@@ -26,12 +26,24 @@ export class KoboAnswerHistoryService {
   ) {
   }
 
-  readonly search = (params: KoboAnswerHistory.Search) => {
+  readonly search = (params: KoboAnswerHistoryHelper.Search) => {
     return this.prisma.koboAnswersHistory.findMany({
+      include: {
+        answers: {
+          select: {
+            id: true
+          }
+        }
+      },
       where: {
         formId: params.formId,
       },
       orderBy: {date: 'desc'},
+    }).then(_ => {
+      return _.map(history => ({
+        ...history,
+        answerIds: history.answers.map(_ => _.id),
+      }))
     }).then(ApiPaginateHelper.wrap())
   }
 
@@ -43,25 +55,40 @@ export class KoboAnswerHistoryService {
     newValue,
     type,
   }: Create) => {
-    const currentAnswers = await this.prisma.koboAnswers.findMany({
-      where: {
-        id: {in: answerIds,}
-      }
-    }).then(res => seq(res).groupByFirst(_ => _.id))
-    return this.prisma.koboAnswersHistory.createMany({
-      data: answerIds.map(_ => {
-        return {
+    if (type === 'delete') {
+      return this.prisma.koboAnswersHistory.create({
+        data: {
+          answers: {
+            connect: answerIds.map(id => ({id})),
+          },
           by: authorEmail,
           type: type,
           formId,
-          answerId: _,
-          ...type !== 'delete' && {
-            property,
-            newValue: newValue ?? Prisma.JsonNull,
-            oldValue: (currentAnswers[_][type === 'tag' ? 'tags' : 'answers'] as any)?.[property] as any,
-          }
         }
       })
-    })
+    }
+    const currentByPrevValue = await this.prisma.koboAnswers.findMany({
+      where: {
+        id: {in: answerIds,}
+      }
+    }).then(res => seq(res).groupBy(_ => {
+      const data: any = _[type === 'tag' ? 'tags' : 'answers'] ?? {}
+      return data[property]
+    }))
+    return Promise.all(Obj.entries(currentByPrevValue).map(([oldValue, v]) => {
+      return this.prisma.koboAnswersHistory.create({
+        data: {
+          answers: {
+            connect: v.map(_ => ({id: _.id})),
+          },
+          by: authorEmail,
+          type,
+          formId,
+          property,
+          oldValue,
+          newValue: newValue ?? Prisma.JsonNull,
+        }
+      })
+    }))
   }
 }
