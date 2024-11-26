@@ -39,7 +39,7 @@ export class EmailService {
 
   readonly sendEmailIfTriggered = async (p: GlobalEvent.KoboAnswerEditedParams) => {
     const schema = await this.koboService.getSchema({formId: p.formId})
-    const {question} = getKoboCustomDirectives(schema).find(_ => _.directive === KoboCustomDirectives.TRIGGER_EMAIL) ?? {}
+    const {question} = getKoboCustomDirectives(schema).find(_ => _.directive.startsWith('TRIGGER_EMAIL')) ?? {}
     if (!question) return
     if (!question.name || !p.answer[question.name]) return
     const html = question.hint?.[0]
