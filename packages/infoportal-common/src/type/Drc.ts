@@ -271,6 +271,7 @@ export enum DrcProject {
   'UKR-000388 BHA' = 'UKR-000388 BHA',
   'UKR-000396 Danish MFA' = 'UKR-000396 Danish MFA',
   'UKR-000397 GFFO' = 'UKR-000397 GFFO',
+  'UKR-000399 SDC3' = 'UKR-000399 SDC3',
   'SIDA 518-570A' = 'SIDA 518-570A',
   'UKR-000316 UHF5' = 'UKR-000316 UHF5',
   'UKR-000329 SIDA H2R' = 'UKR-000329 SIDA H2R',
@@ -339,6 +340,7 @@ export class DrcProjectHelper {
     'UKR-000388 BHA': DrcDonor.BHA,
     'UKR-000396 Danish MFA': DrcDonor.DMFA,
     'UKR-000397 GFFO': DrcDonor.GFFO,
+    'UKR-000399 SDC3': DrcDonor.SDC,
     'UKR-000378 Danish MFA': DrcDonor.DMFA,
     'None': DrcDonor.None
   }
