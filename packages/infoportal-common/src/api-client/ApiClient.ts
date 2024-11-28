@@ -103,12 +103,12 @@ export class ApiClient {
                 code: _.response.status,
                 id: _.response.data.type,
                 request,
-                error: _,
+                // error: _,
               }))
             }
             return Promise.reject(new ApiError(`Something not caught went wrong`, {
               code: 'uncaught',
-              error: _,
+              // error: _,
               request,
             }))
           }),
