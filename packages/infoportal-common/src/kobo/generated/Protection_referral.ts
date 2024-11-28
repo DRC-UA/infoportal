@@ -7,6 +7,8 @@ export namespace Protection_referral {
     'end': string,
     // __IP__TRIGGER_EMAIL [calculate] New referral case
     '__IP__TRIGGER_EMAIL': string,
+    // __IP__TRIGGER_EMAIL_Delegates [calculate] New referral case
+    '__IP__TRIGGER_EMAIL_Delegates': string,
     // date [date] Date
     'date': Date | undefined,
     // introduction/staff_to_insert_their_DRC_office [select_one] 1.1 DRC office
