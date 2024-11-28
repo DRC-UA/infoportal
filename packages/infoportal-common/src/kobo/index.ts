@@ -1,4 +1,5 @@
 export * from './KoboIndex'
+export * from './KoboCustomDirectives'
 export * from './IKoboMeta'
 export * from './sdk/v2/type/KoboApiForm'
 export * from './generated'

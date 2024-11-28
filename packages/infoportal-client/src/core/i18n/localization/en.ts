@@ -765,6 +765,8 @@ export const en = Object.freeze({
       }
     },
     _koboDatabase: {
+      autoEmail: 'Auto Email',
+      autoEmailDesc: 'Emails are sent to recipients on submission or column updates via Kobo or InfoPortal',
       isArchived: 'This form is archived.',
       translation: 'Translation',
       newValue: 'New value',

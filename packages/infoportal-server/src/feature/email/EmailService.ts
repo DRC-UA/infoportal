@@ -1,12 +1,11 @@
 import {GlobalEvent} from '../../core/GlobalEvent'
 import {EmailClient} from './EmailClient'
-import {KoboIndex, Regexp} from 'infoportal-common'
+import {getKoboCustomDirectives, KoboCustomDirectives, KoboIndex, Regexp} from 'infoportal-common'
 import {app} from '../../index'
 import {UserService} from '../user/UserService'
 import {PrismaClient} from '@prisma/client'
 import {FrontEndSiteMap} from '../../core/FrontEndSiteMap'
 import {appConf} from '../../core/conf/AppConf'
-import {getKoboCustomDirectives, KoboCustomDirectives} from '../kobo/KoboCustomDirectives'
 import {KoboService} from '../kobo/KoboService'
 import {seq} from '@alexandreannic/ts-utils'
 

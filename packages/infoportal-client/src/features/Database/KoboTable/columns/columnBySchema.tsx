@@ -9,6 +9,7 @@ import {
   KoboId,
   KoboRepeatRef,
   KoboSchemaHelper,
+  makeKoboCustomDirective,
   removeHtml,
 } from 'infoportal-common'
 import {useI18n} from '@/core/i18n/I18n'
@@ -23,6 +24,7 @@ import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/Kob
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {formatDate, formatDateTime, Messages} from '@/core/i18n/localization/en'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
+import DOMPurify from 'dompurify'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()
@@ -66,12 +68,12 @@ const editableColsType: Set<KoboApiColType> = new Set([
 export const DatatableHeadTypeIconByKoboType = ({children, ...props}: {
   children: KoboApiColumType,
 } & Pick<IconProps, 'sx' | 'color'>) => {
-  return <DatatableHeadIcon children={fnSwitch(children, koboIconMap, () => 'short_text')} tooltip={children} {...props}/>
+  return <DatatableHeadIcon children={fnSwitch(children, koboIconMap, () => 'short_text')} tooltip={children} {...props} />
 }
 
 export const koboIconMap: Record<KoboApiQuestionType, string> = {
   image: 'image',
-  file: 'functions',
+  file: 'description',
   calculate: 'functions',
   select_one_from_file: 'attach_file',
   username: 'short_text',
@@ -211,6 +213,42 @@ export const columnBySchemaGenerator = ({
   //     renderQuick: (row: Row) => getValue(row, name) as string,
   //   }
   // }
+
+  const getIpTriggerEmail = (name: string) => {
+    const q = schema.helper.questionIndex[name]
+    const directiveName = name.replace(makeKoboCustomDirective('TRIGGER_EMAIL'), '')
+    const x: DatatableColumn.Props<any> = {
+      ...getCommon(q),
+      styleHead: {
+        color: '#A335EE'
+      },
+      head: m._koboDatabase.autoEmail + (directiveName === '' ? '' : ' ' + q.name?.replace(makeKoboCustomDirective('TRIGGER_EMAIL'), '').replaceAll('_', ' ')),
+      type: 'string',
+      typeIcon: <TableIcon fontSize="small" sx={{marginRight: 'auto', color: '#A335EE'}} tooltip={
+        <>
+          <div style={{marginBottom: t.spacing(1)}}>{m._koboDatabase.autoEmailDesc}</div>
+          <div style={{
+            background: t.palette.background.paper,
+            color: t.palette.text.primary,
+            marginBottom: t.spacing(0.5),
+            padding: t.spacing(.5),
+            borderRadius: t.shape.borderRadius - 3
+          }}>
+            <div style={{fontWeight: 'bold', marginBottom: t.spacing(1)}}>{q.label?.[0]}</div>
+            <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(q.hint?.[0] ?? '')}}/>
+          </div>
+        </>
+      }>forward_to_inbox</TableIcon>,
+      render: (row: Row) => {
+        const value = getValue(row, name)
+        return {
+          label: value,
+          value: value,
+        }
+      }
+    }
+    return x
+  }
 
   const getSelectOneFromFile = (name: string) => {
     const q = schema.helper.questionIndex[name]
@@ -357,6 +395,9 @@ export const columnBySchemaGenerator = ({
 
   const getByQuestion = (q: KoboApiQuestionSchema): undefined | DatatableColumn.Props<any> => {
     if (ignoredColType.has(q.type)) return
+    if (q.name?.startsWith(makeKoboCustomDirective('TRIGGER_EMAIL'))) {
+      return getIpTriggerEmail(q.name)
+    }
     const fn = (getBy as any)[q.type]
     return fn ? fn(q.name) : getDefault(q.name)
   }
