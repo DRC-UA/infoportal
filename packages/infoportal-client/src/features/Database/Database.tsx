@@ -206,7 +206,8 @@ export const DatabaseHome = () => {
     if (ctx.getForm(formId)?.name) setTitle(m._koboDatabase.title(ctx.getForm(formId)?.name))
     ctxSchema.fetchById(formId)
     fetcherAnswers.fetch({force: false})
-  }, [formId])
+    return () => setTitle(m._koboDatabase.title())
+  }, [ctx._forms.get, formId])
 
   const schema = ctxSchema.byId[formId]?.get
   const repeatGroups = useMemo(() => {

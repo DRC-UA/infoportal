@@ -28,7 +28,7 @@ import {getColumnsForRepeatGroup} from '@/features/Database/RepeatGroup/Database
 import {DatatableXlsGenerator} from '@/shared/Datatable/util/generateXLSFile'
 import {KoboRepeatRef} from 'infoportal-common/kobo'
 import {databaseKoboDisplayBuilder} from '@/features/Database/KoboTable/groupDisplay/DatabaseKoboDisplay'
-import { DatabaseGroupDisplayInput } from './groupDisplay/DatabaseGroupDisplayInput'
+import {DatabaseGroupDisplayInput} from './groupDisplay/DatabaseGroupDisplayInput'
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -168,7 +168,9 @@ export const DatabaseKoboTableContent = ({
                 ...ctx.schema.schemaSanitized.content.translations.map((_, i) => ({children: _, value: i}))
               ]}
             />
-            <DatabaseGroupDisplayInput sx={{mr: 1}}/>
+            {ctx.schema.helper.group.size > 0 && (
+              <DatabaseGroupDisplayInput sx={{mr: 1}}/>
+            )}
             {header?.(params)}
             {ctx.form.deploymentStatus === 'archived' && (
               <Alert color="info" icon={<Icon sx={{mr: -1}}>archive</Icon>} sx={{pr: t.spacing(1), pl: t.spacing(.5), pt: 0, pb: 0}}>
