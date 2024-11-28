@@ -89,6 +89,8 @@ export enum DrcProgram {
   CapacityBuilding = 'CapacityBuilding',
   MHPSSActivities = 'MHPSSActivities',
   PGS = 'PsychosocialGroupSession',
+  PIS = 'PsychosocialIndividualSession',
+  PFA = 'PsychologicalFirstAid',
 }
 
 export class DrcSectorHelper {
