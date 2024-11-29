@@ -18,9 +18,13 @@ import {
   Meal_cashPdm,
   Meal_cfmExternal,
   Meal_cfmInternal,
+  Meal_shelterPdm,
   Meal_verificationEcrec,
+  Meal_verificationPartnerBnre,
   Meal_verificationWinterization,
   Meal_visitMonitoring,
+  Partner_lampa,
+  Partner_pomogaem,
   Partnership_partnersDatabase,
   Person,
   PersonDetails,
@@ -37,7 +41,6 @@ import {
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
-import {Meal_shelterPdm} from "infoportal-common";
 
 /** @deprecated should be coming from the unified database */
 type Meta = {
@@ -156,6 +159,11 @@ export class KoboTypedAnswerSdk {
         fnMapKobo: Meal_verificationWinterization.map,
         ...filters,
       })),
+      ...make('meal_verificationPartnerBnre', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('meal_verificationPartnerBnre').id,
+        fnMapKobo: Meal_verificationPartnerBnre.map,
+        ...filters,
+      })),
       ...make('bn_re', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('bn_re').id,
         fnMapKobo: Bn_re.map,
@@ -223,6 +231,21 @@ export class KoboTypedAnswerSdk {
       ...make('protection_gbvSocialProviders', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('protection_gbvSocialProviders').id,
         fnMapKobo: Protection_gbvSocialProviders.map,
+        ...filters,
+      })),
+      ...make('protection_gbvSocialProviders', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('protection_gbvSocialProviders').id,
+        fnMapKobo: Protection_gbvSocialProviders.map,
+        ...filters,
+      })),
+      ...make('partner_pomogaem', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('partner_pomogaem').id,
+        fnMapKobo: Partner_pomogaem.map,
+        ...filters,
+      })),
+      ...make('partner_lampa', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('partner_lampa').id,
+        fnMapKobo: Partner_lampa.map,
         ...filters,
       })),
     })

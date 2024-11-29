@@ -79,8 +79,9 @@ export const DatabaseTable = ({
 
   useEffect(() => {
     fetcherForm.fetch()
+    fetcherAnswers.fetch({force: true, clean: true})
+    ctxSchema.fetchById(formId)
   }, [formId])
-
 
   const loading = fetcherAnswers.loading
   const refetch = useCallback(async (p: FetchParams = {}) => {

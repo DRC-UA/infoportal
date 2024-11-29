@@ -368,6 +368,15 @@ export class BuildKoboType {
       formId: KoboIndex.byName('safety_incident').id,
       skipQuestionTyping: ['hromada', 'raion',],
     },
+    partner_pomogaem: {
+      formId: KoboIndex.byName('partner_pomogaem').id,
+    },
+    partner_lampa: {
+      formId: KoboIndex.byName('partner_lampa').id,
+    },
+    meal_verificationPartnerBnre: {
+      formId: KoboIndex.byName('meal_verificationPartnerBnre').id,
+    },
   }, (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>])
 
   readonly build = (f: keyof typeof BuildKoboType['config']) => {

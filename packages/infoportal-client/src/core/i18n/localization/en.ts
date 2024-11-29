@@ -954,6 +954,8 @@ export const en = Object.freeze({
         LegalAid: 'GBV Legal Aid',
         MHPSSActivities: 'MHPSS awareness session',
         PsychosocialGroupSession: 'Psychosocial groupDisplay session',
+        PsychosocialIndividualSession: 'Psychosocial Individual Session',
+        PsychologicalFirstAid: 'Psychological First Aid',
       }
       const activitiesMerged_: Partial<Record<DrcProgram, string>> = {
         ...activities_,

@@ -1,7 +1,6 @@
-import {KeyOf, KoboId, KoboIndex} from 'infoportal-common'
+import {KeyOf, KoboId, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import {KoboSchemaHelper} from 'infoportal-common'
 
 export const mealVerificationConf = {
   sampleSizeRatioDefault: .2,
@@ -237,6 +236,64 @@ export const mealVerificationActivities = seq([
       depend_basic_needs: 'AUTO_MAPPING',
       consume_majority: 'AUTO_MAPPING',
       land_cultivate: 'AUTO_MAPPING',
+    },
+  }),
+  registerActivity({
+    sampleSizeRatio: .1,
+    label: 'Partner LAMPA',
+    id: 'Partner LAMPA',
+    registration: {
+      koboFormId: KoboIndex.byName('partner_lampa').id,
+      fetch: 'partner_lampa',
+      joinBy: _ => _.pay_det_tax_id_num!,
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationPartnerBnre').id,
+      fetch: 'meal_verificationPartnerBnre',
+      joinBy: _ => _.pay_det_tax_id_num!,
+    },
+    verifiedColumns: {
+      back_consent: 'AUTO_MAPPING',
+      ben_det_surname: 'AUTO_MAPPING',
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_settlement: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
+    },
+  }),
+  registerActivity({
+    sampleSizeRatio: .1,
+    label: 'Partner Pomagaem',
+    id: 'Partner Pomagaem',
+    registration: {
+      koboFormId: KoboIndex.byName('partner_pomogaem').id,
+      fetch: 'partner_pomogaem',
+      joinBy: _ => _.pay_det_tax_id_num!,
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationPartnerBnre').id,
+      fetch: 'meal_verificationPartnerBnre',
+      joinBy: _ => _.pay_det_tax_id_num!,
+    },
+    verifiedColumns: {
+      back_consent: 'AUTO_MAPPING',
+      ben_det_surname: 'AUTO_MAPPING',
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_settlement: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
     },
   }),
 ])

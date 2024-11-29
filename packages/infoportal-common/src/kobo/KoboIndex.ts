@@ -1,5 +1,3 @@
-import {Obj, seq} from '@alexandreannic/ts-utils'
-
 const koboIndex = {
   safety_incident: 'aAJNkn7v9fRL2XqQCgEkXf',
   ecrec_cashRegistration: 'aE5md7RfHiy4LJmddoFAQH',
@@ -25,6 +23,7 @@ const koboIndex = {
   bn_rapidResponseSida: 'aTJRd5zLdPHcEhGDovh9dW',
   meal_verificationEcrec: 'aEN2tkQhpsfX4G3i6Re7bi',
   meal_verificationWinterization: 'aAWVLi8bSb2S8bHc5CcL8i',
+  meal_verificationPartnerBnre: 'awDJ8L8B77AvV9SDLYPis9',
   meal_visitMonitoring: 'a8GkjWBQDfxVADGHWJDrUw',
   meal_pdmStandardised: 'aCWKwfvJ6F48HxUZTrr9L7',
   meal_cashPdm: 'aEKoPVd36PLRrmqWgk42DG',
@@ -50,8 +49,12 @@ const koboIndex = {
   partnership_partnersDatabase: 'aLs32U5Qc9HfQ5mxQtsEML',
   partnership_initialQuestionnaire: 'a6u7CBysEz746Hdx6pVLzp',
   partnership_assessment: 'aLD2Xc9cKSY22c5cAP5utT',
-  pseah_training_tracker: 'aRBEzakmsMPpw8VoJG8Gpk'
+  pseah_training_tracker: 'aRBEzakmsMPpw8VoJG8Gpk',
+  partner_pomogaem: 'awpFpKtZZYEDuaZbqPi944',
+  partner_lampa: 'axkkzwvccFtUkkL3BzSSnW',
 }
+
+import {Obj, seq} from '@alexandreannic/ts-utils'
 
 const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex)).reduceObject(([k, v]) => [v, k])
 
@@ -77,6 +80,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   bn_0_mpcaRegESign: '[Basic Needs] v0 MPCA Registration (GREENLIGHT WITH ESIGNATURE)',
   bn_re: '[Basic Needs] Registration and Evaluation Form',
   bn_rapidResponseSida: '[Basic Needs] RRM SIDA',
+  meal_verificationPartnerBnre: '[MEAL] Verification Partner BNRE',
   meal_visitMonitoring: '[MEAL] Field Visit Monitoring',
   meal_pdmStandardised: '[MEAL] MPCA Standardised PDM',
   meal_cashPdm: '[MEAL] Cash PDM',
@@ -105,7 +109,9 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   partnership_assessment: '[Partnership] CBP CSO Assessment',
   partnership_initialQuestionnaire: '[Partnership] CBP CSO Initial Questionnaire',
   partnership_partnersDatabase: '[Partnership] DRC Partners Database',
-  pseah_training_tracker: 'DRC - PSEAH Training tracker'
+  pseah_training_tracker: 'DRC - PSEAH Training tracker',
+  partner_pomogaem: '[Verification] DRC_Pomagaem_UHF',
+  partner_lampa: '[Verification] NGO LAMPA CASH FOR SOLID FUEL',
 }
 
 export type KoboFormName = keyof typeof koboIndex

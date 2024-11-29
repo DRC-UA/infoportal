@@ -12,7 +12,7 @@ export const koboSdk = new KoboSdk({
 
 (async () => {
   // await ActivityInfoBuildType.fslc()
-  await new BuildKoboType().build('protection_groupSession')
+  // await new BuildKoboType().build('partner_pomogaem')
+  // await new BuildKoboType().build('partner_lampa')
+  await new BuildKoboType().build('meal_verificationPartnerBnre')
 })()
-
-// With the release of RAIS+, it has been asked to collect Tax ID for each HH individual. Should we then submit them all to BB?
