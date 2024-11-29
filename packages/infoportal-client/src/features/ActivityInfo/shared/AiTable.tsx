@@ -16,7 +16,7 @@ import {useSession} from '@/core/Session/SessionContext'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {Period} from 'infoportal-common/type/Period'
+import {Period} from 'infoportal-common'
 
 export interface AiTable<
   TActivity = any,

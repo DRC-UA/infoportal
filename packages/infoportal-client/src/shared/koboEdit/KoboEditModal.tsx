@@ -14,7 +14,7 @@ import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Txt} from '@/shared/Txt'
-import {ArrayValues} from 'infoportal-common/type/Generic'
+import {ArrayValues} from 'infoportal-common'
 
 export type KoboEditModalOption = {
   value: string | null,
