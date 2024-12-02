@@ -4,6 +4,7 @@ import {
   KoboApiColumType,
   KoboApiQuestionSchema,
   KoboApiQuestionType,
+  KoboCustomDirectives,
   KoboFlattenRepeat,
   KoboFlattenRepeatData,
   KoboId,
@@ -64,6 +65,28 @@ const editableColsType: Set<KoboApiColType> = new Set([
   'datetime',
 ])
 
+export namespace DirectiveTemplate {
+  export type Template = {
+    icon: string
+    color: string
+    label: (q: KoboApiQuestionSchema, m: Messages) => string
+  }
+  const make = <T extends KoboCustomDirectives>(directive: T, template: Template): Record<T, Template> => ({
+    [directive]: template
+  }) as any
+
+  export const render = {
+    ...make(KoboCustomDirectives.TRIGGER_EMAIL, {
+      icon: 'forward_to_inbox',
+      color: '#A335EE',
+      label: (q, m) => {
+        const directiveName = q.name.replace(makeKoboCustomDirective('TRIGGER_EMAIL'), '')
+        if (directiveName === '') return m._koboDatabase.autoEmail
+        return directiveName.replaceAll('_', ' ')
+      },
+    })
+  }
+}
 
 export const DatatableHeadTypeIconByKoboType = ({children, ...props}: {
   children: KoboApiColumType,
@@ -216,15 +239,15 @@ export const columnBySchemaGenerator = ({
 
   const getIpTriggerEmail = (name: string) => {
     const q = schema.helper.questionIndex[name]
-    const directiveName = name.replace(makeKoboCustomDirective('TRIGGER_EMAIL'), '')
+    const template = DirectiveTemplate.render.TRIGGER_EMAIL
     const x: DatatableColumn.Props<any> = {
       ...getCommon(q),
       styleHead: {
-        color: '#A335EE'
+        color: template.color,
       },
-      head: m._koboDatabase.autoEmail + (directiveName === '' ? '' : ' ' + q.name?.replace(makeKoboCustomDirective('TRIGGER_EMAIL'), '').replaceAll('_', ' ')),
+      head: template.label(q, m),
       type: 'string',
-      typeIcon: <TableIcon fontSize="small" sx={{marginRight: 'auto', color: '#A335EE'}} tooltip={
+      typeIcon: <TableIcon fontSize="small" sx={{marginRight: 'auto', color: template.color}} tooltip={
         <>
           <div style={{marginBottom: t.spacing(1)}}>{m._koboDatabase.autoEmailDesc}</div>
           <div style={{
@@ -238,7 +261,7 @@ export const columnBySchemaGenerator = ({
             <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(q.hint?.[0] ?? '')}}/>
           </div>
         </>
-      }>forward_to_inbox</TableIcon>,
+      }>{template.icon}</TableIcon>,
       render: (row: Row) => {
         const value = getValue(row, name)
         return {
