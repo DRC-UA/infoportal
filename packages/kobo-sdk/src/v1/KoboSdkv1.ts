@@ -1,8 +1,8 @@
-import {ApiClient} from '../../../api-client/ApiClient'
 import retry from 'promise-retry'
-import {KoboId} from '../../mapper'
 import {KoboV1Form, SubmitResponse} from './KoboSdkv1Type'
 import {AxiosError} from 'axios'
+import {Kobo} from '../Kobo'
+import {ApiClient} from '../api-client/ApiClient'
 
 export class KoboSdkv1 {
   constructor(private api: ApiClient) {
@@ -32,7 +32,7 @@ export class KoboSdkv1 {
     uuid?: string
     retries?: number
     data: Partial<T>
-    formId: KoboId
+    formId: Kobo.FormId
   }): Promise<SubmitResponse> => {
     const _uuid = uuid ?? await this.getForms().then(_ => _.find(f => f.id_string === formId)?.uuid)
     if (!_uuid) throw new Error(`Kobo form id ${formId} not found.`)

@@ -1,17 +1,9 @@
 import {Person} from '../../type/Person'
-import {KoboAnswerMetaData} from '../sdk'
+import {KoboAnswerMetaData, KoboValidation} from '../sdk'
 
 export type KoboId = string
 
 export type KoboAnswerId = string
-
-export enum KoboValidation {
-  Approved = 'Approved',
-  Rejected = 'Rejected',
-  Pending = 'Pending',
-  UnderReview = 'UnderReview',
-  Flagged = 'Flagged',
-}
 
 export interface KoboBaseTags {
   _validation?: KoboValidation

@@ -12,19 +12,12 @@
     "rootDir": "./src",
     "composite": true,
     "resolveJsonModule": true,
-    "paths": {
-      "kobo-sdk/*": [
-        "../kobo-sdk/src/*"
-      ]
-    },
-    "references": [
-      {
-        "path": "../kobo-sdk"
-      }
-    ]
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/**/*",
-    "ressources/**/*"
+    "src/**/*"
   ]
 }

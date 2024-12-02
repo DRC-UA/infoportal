@@ -1,6 +1,5 @@
 import axios, {AxiosResponse, ResponseType} from 'axios'
 import * as qs from 'qs'
-import {objectToQueryString} from '../utils'
 
 export interface RequestOption {
   readonly qs?: any
@@ -66,6 +65,24 @@ export class ApiClient {
   readonly baseUrl: string
   private readonly request: (method: Method, url: string, options?: RequestOption) => Promise<any>
 
+  static readonly objectToQueryString = (obj: {
+    [key: string]: any
+  } = {}): string => {
+    const params = new URLSearchParams()
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== null && value !== undefined) {
+        if (Array.isArray(value)) {
+          for (const item of value) {
+            params.append(key, item.toString())
+          }
+        } else {
+          params.set(key, value.toString())
+        }
+      }
+    }
+    return params.toString()
+  }
+
   constructor(public params: ApiClientParams) {
     const {baseUrl, headers, requestInterceptor, mapData, mapError} = params
     const client = axios.create({
@@ -83,7 +100,7 @@ export class ApiClient {
       return client
         .request({
           method,
-          url: url + (options ? '?' + objectToQueryString(options.qs) : ''),
+          url: url + (options ? '?' + ApiClient.objectToQueryString(options.qs) : ''),
           headers: builtOptions?.headers,
           // TODO(Alex) Check if it works
           // params: options?.qs,

@@ -1,6 +1,7 @@
 import {seq} from '@alexandreannic/ts-utils'
 import {KoboApiColType, KoboApiQuestionSchema, KoboApiSchema, removeHtml} from './../../index'
 import {KoboSchemaRepeatHelper} from './koboSchemaRepeatHelper'
+import {Kobo} from 'kobo-sdk/Kobo'
 
 export type KoboTranslateQuestion = (key: string) => string
 export type KoboTranslateChoice = (key: string, choice?: string) => string
@@ -71,7 +72,7 @@ export namespace KoboSchemaHelper {
     langIndex,
     questionIndex,
   }: {
-    schema: KoboApiSchema,
+    schema: Kobo.Form,
     langIndex: number
     questionIndex: Helper['questionIndex']
   }): {
