@@ -1,7 +1,6 @@
 import {duration, Enum} from '@alexandreannic/ts-utils'
 import {NonNullableKeys} from '../type/Generic'
 import {addMonths, differenceInMonths, isAfter, isBefore, startOfMonth} from 'date-fns'
-import {PromisePool} from '@supercharge/promise-pool'
 
 export const generateId = () => ('' + Math.random()).split('.')[1]
 

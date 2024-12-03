@@ -16,13 +16,13 @@
       "kobo-sdk/*": [
         "../kobo-sdk/src/*"
       ]
-    },
-    "references": [
-      {
-        "path": "../kobo-sdk"
-      }
-    ]
+    }
   },
+  "references": [
+    {
+      "path": "../kobo-sdk"
+    }
+  ],
   "include": [
     "src/**/*",
     "ressources/**/*"

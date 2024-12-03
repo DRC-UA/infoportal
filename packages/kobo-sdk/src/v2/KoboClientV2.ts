@@ -1,23 +1,22 @@
 import {map} from '@alexandreannic/ts-utils'
 import axios from 'axios'
-import {KoboSdkv2FixedUpdated, KoboUpdateDataParams, KoboUpdateDataParamsData} from './KoboSdkv2FixedUpdated'
+import {KoboClientv2FixedUpdated, KoboUpdateDataParams, KoboUpdateDataParamsData} from './KoboClientV2FixedUpdated'
 import {Kobo, Logger} from '../Kobo'
 import {ApiClient} from '../api-client/ApiClient'
 
-export class KoboSdkv2 {
+export class KoboClientV2 {
   constructor(
     private api: ApiClient,
     private logger: Logger,
-    private editSdk = new KoboSdkv2FixedUpdated(api, logger),
+    private editSdk = new KoboClientv2FixedUpdated(api, logger),
   ) {
   }
 
+  static readonly parseDate = (_: Date) => _.toISOString()
   static readonly webHookName = 'InfoPortal'
 
-  static readonly parseDate = (_: Date) => _.toISOString()
-
   static readonly makeDateFilter = (name: string, operator: 'gte' | 'lte', date: Date) => {
-    return {[name]: {['$' + operator]: KoboSdkv2.parseDate(date)}}
+    return {[name]: {['$' + operator]: KoboClientV2.parseDate(date)}}
   }
 
   readonly getForm = (form: string) => {
@@ -36,7 +35,7 @@ export class KoboSdkv2 {
   readonly createWebHook = (formId: Kobo.FormId, destinationUrl: string) => {
     return this.api.post(`/v2/assets/${formId}/hooks/`, {
       body: {
-        'name': KoboSdkv2.webHookName,
+        'name': KoboClientV2.webHookName,
         endpoint: destinationUrl,
         // 'endpoint': this.conf.baseUrl + `/kobo-api/webhook`,
         'active': true,
@@ -50,12 +49,12 @@ export class KoboSdkv2 {
     })
   }
 
-  readonly edit = (formId: Kobo.FormId, answerId: Kobo.AnswerId) => {
+  readonly edit = (formId: Kobo.FormId, answerId: Kobo.SubmissionId) => {
     return this.api.get<{url: string, detail?: string}>(`/v2/assets/${formId}/data/${answerId}/enketo/edit/?return_url=false`)
   }
 
   readonly getVersions = (formId: Kobo.FormId) => {
-    return this.api.get<Kobo.Paginate<Kobo.Answer.Version>>(`/v2/assets/${formId}/versions`)
+    return this.api.get<Kobo.Paginate<Kobo.Submission.Version>>(`/v2/assets/${formId}/versions`)
       .then(_ => {
         _.results.forEach(r => {
           r.date_modified = new Date(r.date_modified)
@@ -73,7 +72,7 @@ export class KoboSdkv2 {
     newValue,
   }: {
     formId: Kobo.FormId,
-    submissionIds: Kobo.AnswerId[],
+    submissionIds: Kobo.SubmissionId[],
     group?: string,
     questionName: string,
     newValue: string
@@ -94,7 +93,7 @@ export class KoboSdkv2 {
     })
   }
 
-  readonly delete = (formId: Kobo.Form.Id, ids: Kobo.AnswerId[]): Promise<{detail: string}> => {
+  readonly delete = (formId: Kobo.Form.Id, ids: Kobo.SubmissionId[]): Promise<{detail: string}> => {
     return this.api.delete(`/v2/assets/${formId}/data/bulk/`, {
       body: {
         payload: {submission_ids: ids}
@@ -115,20 +114,20 @@ export class KoboSdkv2 {
    */
   private static readonly MAX_KOBO_PAGESIZE = 2e4
 
-  readonly getAnswersRaw = (form: Kobo.Form.Id, {limit, offset, ...params}: Kobo.Answer.Filter = {}) => {
+  readonly getAnswersRaw = (form: Kobo.Form.Id, {limit, offset, ...params}: Kobo.Submission.Filter = {}) => {
     const fetchPage = async ({
-      limit = KoboSdkv2.MAX_KOBO_PAGESIZE,
+      limit = KoboClientV2.MAX_KOBO_PAGESIZE,
       offset = 0,
       accumulated = []
     }: {
       limit?: number,
       offset?: number,
-      accumulated?: Array<Kobo.Answer>
-    }): Promise<Kobo.Paginate<Kobo.Answer>> => {
-      const start = map(params.start, _ => KoboSdkv2.makeDateFilter('_submission_time', 'gte', _))
-      const end = map(params.end, _ => KoboSdkv2.makeDateFilter('_submission_time', 'lte', _))
+      accumulated?: Array<Kobo.Submission>
+    }): Promise<Kobo.Paginate<Kobo.Submission>> => {
+      const start = map(params.start, _ => KoboClientV2.makeDateFilter('_submission_time', 'gte', _))
+      const end = map(params.end, _ => KoboClientV2.makeDateFilter('_submission_time', 'lte', _))
       const query = start && end ? {'$and': [start, end]} : start ?? end
-      const response = await this.api.get<Kobo.Paginate<Kobo.Answer.MetaData & Record<string, any>>>(`/v2/assets/${form}/data`, {
+      const response = await this.api.get<Kobo.Paginate<Kobo.Submission.MetaData & Record<string, any>>>(`/v2/assets/${form}/data`, {
         qs: {
           limit: limit,
           start: offset,
@@ -141,7 +140,7 @@ export class KoboSdkv2 {
     return fetchPage({limit, offset})
   }
 
-  readonly getAnswers = async (form: Kobo.Form.Id, params: Kobo.Answer.Filter = {}): Promise<Kobo.Paginate<Kobo.Answer>> => {
+  readonly getAnswers = async (form: Kobo.Form.Id, params: Kobo.Submission.Filter = {}): Promise<Kobo.Paginate<Kobo.Submission>> => {
     return await this.getAnswersRaw(form, params)
       .then(res => {
         return ({

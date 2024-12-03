@@ -12,7 +12,6 @@ import {
   Ecrec_msmeGrantSelection,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
-  KoboAnswerUtils,
   KoboBaseTags,
   KoboEcrec_cashRegistration,
   KoboGeneralMapping,
@@ -29,6 +28,7 @@ import {
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
 import {appConf} from '../../../core/conf/AppConf'
+import {KoboHelper} from 'infoportal-common'
 
 export class KoboMetaMapperEcrec {
 
@@ -69,9 +69,9 @@ export class KoboMetaMapperEcrec {
         lastStatusUpdate: row.tags?.lastStatusUpdate,
         passportNum: answer.pay_det_pass_num,
         taxIdFileName: answer.pay_det_tax_id_ph,
-        taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+        taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
         idFileName: answer.pay_det_id_ph,
-        idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph),
+        idFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_id_ph),
       })
     })
   }
@@ -246,9 +246,9 @@ export class KoboMetaMapperEcrec {
       lastStatusUpdate: row.tags?.lastStatusUpdate,
       passportNum: answer.pay_det_pass_num,
       taxIdFileName: answer.pay_det_tax_id_ph,
-      taxIdFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+      taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
       idFileName: answer.pay_det_id_ph,
-      idFileUrl: KoboAnswerUtils.findFileUrl(row.attachments, answer.pay_det_id_ph),
+      idFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_id_ph),
     })
   }
 }

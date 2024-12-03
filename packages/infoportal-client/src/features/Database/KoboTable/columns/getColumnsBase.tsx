@@ -6,7 +6,7 @@ import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shar
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import React from 'react'
 import {Messages} from '@/core/i18n/localization/en'
-import {KoboAnswerFlat, KoboAnswerId, KoboId, KoboValidation} from 'infoportal-common'
+import {KoboSubmissionFlat, KoboValidation} from 'infoportal-common'
 import {KoboEditTagsContext} from '@/core/context/KoboEditTagsContext'
 import {KoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatabaseKoboContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -22,12 +22,12 @@ export const getColumnsBase = ({
   openAnswerModal,
   getRow = _ => _,
 }: {
-  getRow?: (_: any) => KoboAnswerFlat,
+  getRow?: (_: any) => KoboSubmissionFlat,
   asyncEdit: DatabaseKoboContext['asyncEdit']
   openEditTag: KoboEditTagsContext['open']
   openAnswerModal: KoboAnswersContext['openAnswerModal']
-  formId: KoboId
-  selectedIds: KoboAnswerId[]
+  formId: Kobo.FormId
+  selectedIds: Kobo.SubmissionId[]
   asyncUpdateTagById: KoboEditTagsContext['asyncUpdateById']
   canEdit?: boolean
   m: Messages

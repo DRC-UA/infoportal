@@ -1,8 +1,9 @@
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import * as fs from 'fs'
-import {capitalize, KoboApiSchema, KoboId, KoboIndex, KoboSdkv2} from 'infoportal-common'
+import {capitalize, KoboIndex} from 'infoportal-common'
 import {koboSdk} from '../index'
 import {appConf} from '../appConf'
+import {Kobo} from 'kobo-sdk'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string,
@@ -397,7 +398,7 @@ export class BuildKoboType {
   }
 }
 
-const ignoredQuestionTypes: KoboApiSchema['content']['survey'][0]['type'][] = [
+const ignoredQuestionTypes: Kobo.Form['content']['survey'][0]['type'][] = [
   // 'calculate',
   'begin_group',
   'end_group',
@@ -408,7 +409,7 @@ const ignoredQuestionTypes: KoboApiSchema['content']['survey'][0]['type'][] = [
 class KoboInterfaceGenerator {
 
   constructor(
-    private sdk: KoboSdkv2,
+    private sdk: KoboClientv2,
     private options: KoboInterfaceGeneratorParams
   ) {
   }
@@ -418,7 +419,7 @@ class KoboInterfaceGenerator {
     'end'
   ]
 
-  readonly fixDuplicateName = (survey: KoboApiSchema['content']['survey']): KoboApiSchema['content']['survey'] => {
+  readonly fixDuplicateName = (survey: Kobo.Form['content']['survey']): Kobo.Form['content']['survey'] => {
     const duplicate: Record<string, number> = {}
     return survey.map(q => {
       if (!q.name) return q
@@ -462,7 +463,7 @@ const extractQuestionName = (_: Record<string, any>) => {
   return output
 }`
 
-  readonly generateFunctionMapping = (survey: KoboApiSchema['content']['survey']) => {
+  readonly generateFunctionMapping = (survey: Kobo.Form['content']['survey']) => {
     const repeatItems = this.getBeginRepeatQuestion(survey)
     const basicMapping = (name: string) => {
       return {
@@ -518,7 +519,7 @@ const extractQuestionName = (_: Record<string, any>) => {
   //   })
   // }
 
-  readonly getBeginRepeatQuestion = (survey: KoboApiSchema['content']['survey']) => {
+  readonly getBeginRepeatQuestion = (survey: Kobo.Form['content']['survey']) => {
     return survey.filter(_ => _.type === 'begin_repeat')
   }
 
@@ -530,8 +531,8 @@ const extractQuestionName = (_: Record<string, any>) => {
     survey,
     formId,
   }: {
-    survey: KoboApiSchema['content']['survey'],
-    formId: KoboId
+    survey: Kobo.Form['content']['survey'],
+    formId: Kobo.FormId
   }): string[] => {
     const indexOptionId = seq(survey).groupBy(_ => _.select_from_list_name!)
     const repeatItems = this.getBeginRepeatQuestion(survey)
@@ -578,8 +579,8 @@ const extractQuestionName = (_: Record<string, any>) => {
     survey,
     choices,
   }: {
-    survey: KoboApiSchema['content']['survey'],
-    choices: KoboApiSchema['content']['choices']
+    survey: Kobo.Form['content']['survey'],
+    choices: Kobo.Form['content']['choices']
   }) => {
     const indexOptionId = seq(survey).reduceObject<Record<string, string>>(_ => [_.select_from_list_name ?? '', _.name ?? ''])
     const res: Record<string, Record<string, string>> = {}

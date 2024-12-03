@@ -1,20 +1,20 @@
-import {KoboAnswerId, KoboId} from 'infoportal-common'
 import {EventEmitter} from 'events'
 import {app} from '../index'
+import {Kobo} from 'kobo-sdk'
 
 export namespace GlobalEvent {
 
   export interface KoboTagEditedParams {
-    formId: KoboId,
-    answerIds: KoboAnswerId[],
+    formId: Kobo.FormId,
+    answerIds: Kobo.SubmissionId[],
     tags: Record<string, any>,
     index?: number
     total?: number
   }
 
   export interface KoboAnswerEditedParams {
-    formId: KoboId,
-    answerIds: KoboAnswerId[],
+    formId: Kobo.FormId,
+    answerIds: Kobo.SubmissionId[],
     answer: Record<string, any>,
     index?: number
     total?: number
@@ -25,7 +25,7 @@ export namespace GlobalEvent {
   {
     index?: number
     total?: number
-    formId: KoboId
+    formId: Kobo.FormId
   }
 
   export enum Event {

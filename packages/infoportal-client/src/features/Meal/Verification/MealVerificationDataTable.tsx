@@ -2,7 +2,8 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import React, {useMemo, useState} from 'react'
 import {alpha, Box, Icon, Tooltip, useTheme} from '@mui/material'
-import {KoboAnswerFlat, KoboApiQuestionSchema, KoboApiSchema, KoboSchemaHelper, NonNullableKey, toPercent} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk'
+import {KoboSubmissionFlat, KoboSchemaHelper, NonNullableKey, toPercent} from 'infoportal-common'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
@@ -36,8 +37,8 @@ interface ComputedCell {
 
 interface ComputedRow {
   score: number
-  rowReg: KoboAnswerFlat<any>
-  rowVerif: KoboAnswerFlat<any>
+  rowReg: KoboSubmissionFlat<any>
+  rowVerif: KoboSubmissionFlat<any>
   verifiedData: Record<string, ComputedCell>
   status: Status
 }
@@ -70,8 +71,8 @@ export type MealVerificationBundle<
 > = {
   mealVerification: MealVerification
   activity: MealVerificationActivity<TReg, TVerif>
-  schemaReg: KoboApiSchema
-  schemaVerif: KoboApiSchema
+  schemaReg: Kobo.Form
+  schemaVerif: Kobo.Form
   dataReg: InferTypedAnswer<TReg>[]
   dataVerif: InferTypedAnswer<TVerif>[]
   toVerify: MealVerificationAnsers[]
@@ -106,7 +107,7 @@ export const MealVerificationDataTable = <
   const indexToVerify = useMemo(() => seq(toVerify).groupByFirst(_ => _.koboAnswerId), [toVerify])
   const asyncUpdateAnswer = useAsync(api.mealVerification.updateAnswers, {requestKey: _ => _[0]})
 
-  const [openModalAnswer, setOpenModalAnswer] = useState<KoboAnswerFlat<any> | undefined>()
+  const [openModalAnswer, setOpenModalAnswer] = useState<KoboSubmissionFlat<any> | undefined>()
   const [display, setDisplay] = useState<'reg' | 'verif' | 'both'>('both')
 
   const {schemaReg, schemaVerif} = useMemo(() => {
@@ -334,7 +335,7 @@ export const MealVerificationDataTable = <
               },
             },
             ...activity.dataColumns?.flatMap(c => {
-              const q = schemaReg.helper.questionIndex[c] as NonNullableKey<KoboApiQuestionSchema, 'name'>
+              const q = schemaReg.helper.questionIndex[c] as NonNullableKey<Kobo.Form.Question, 'name'>
               if (!q.name) return []
               return columnBySchemaGenerator({
                 formId: activity.registration.koboFormId,

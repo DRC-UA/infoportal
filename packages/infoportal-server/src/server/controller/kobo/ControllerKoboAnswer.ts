@@ -3,11 +3,12 @@ import * as yup from 'yup'
 import {ObjectSchema} from 'yup'
 import {PrismaClient} from '@prisma/client'
 import {KoboService} from '../../../feature/kobo/KoboService'
-import {KoboId, Period} from 'infoportal-common'
+import {Period} from 'infoportal-common'
 import {validateApiPaginate} from '../../../core/Type'
+import {Kobo} from 'kobo-sdk'
 
 export interface KoboAnswersFilters extends Partial<Period> {
-  ids?: KoboId[]
+  ids?: Kobo.FormId[]
   filterBy?: {
     column: string
     value: (string | null | undefined)[]

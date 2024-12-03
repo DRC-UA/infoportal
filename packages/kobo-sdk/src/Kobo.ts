@@ -8,7 +8,7 @@ export namespace Kobo {
   export namespace V1 {
     export type SubmitResponse = {
       message?: 'Successful submission.',
-      formid?: Kobo.Answer.Id
+      formid?: Kobo.Submission.Id
       encrypted?: boolean,
       instanceID?: string,
       submissionDate?: string,
@@ -18,7 +18,7 @@ export namespace Kobo {
 
     export type KoboV1Form = {
       uuid: string
-      id_string: Kobo.Answer.Id
+      id_string: Kobo.Submission.Id
     }
   }
 
@@ -173,9 +173,9 @@ export namespace Kobo {
     }
   }
 
-  export type Answer = Answer.T
-  export type AnswerId = Answer.Id
-  export namespace Answer {
+  export type Submission = Submission.T
+  export type SubmissionId = Submission.Id
+  export namespace Submission {
     export type T = MetaData & Record<string, any>
 
     export type Id = string
@@ -218,7 +218,7 @@ export namespace Kobo {
       _notes: Notes[],
       _validation_status: {
         timestamp: number
-        uid: 'validation_status_approved'
+        uid: Validation
         by_whom: string
       },
       _submitted_by: any

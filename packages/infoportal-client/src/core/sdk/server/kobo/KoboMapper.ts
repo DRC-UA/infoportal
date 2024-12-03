@@ -1,6 +1,7 @@
-import {DeploymentStatus, KoboAnswer, KoboAnswerFlat, KoboAnswerMetaData, KoboApiQuestionSchema, KoboBaseTags, KoboId} from 'infoportal-common'
+import {KoboBaseTags, KoboSubmission, KoboSubmissionFlat, KoboSubmissionMetaData} from 'infoportal-common'
 import {Obj} from '@alexandreannic/ts-utils'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
+import {Kobo} from 'kobo-sdk'
 
 export type KoboServer = {
   id: string
@@ -12,11 +13,11 @@ export interface KoboForm {
   server: KoboServer
   createdAt: Date
   updatedAt: Date
-  id: KoboId
+  id: Kobo.FormId
   name: string
   serverId: string
   uploadedBy?: string
-  deploymentStatus?: DeploymentStatus
+  deploymentStatus?: Kobo.Form.DeploymentStatus
 }
 
 export class KoboFormHelper {
@@ -27,26 +28,26 @@ export class KoboFormHelper {
   }
 }
 
-export type KoboMappedAnswerType = string | string[] | Date | number | undefined | KoboAnswerFlat<any>[]
+export type KoboMappedAnswerType = string | string[] | Date | number | undefined | KoboSubmissionFlat<any>[]
 
 export type KoboMappedAnswer<
   T extends Record<string, any> = Record<string, KoboMappedAnswerType>
-> = (KoboAnswerMetaData<KoboBaseTags> & T)
+> = (KoboSubmissionMetaData<KoboBaseTags> & T)
 
-export class Kobo {
+export class KoboMapper {
 
   static readonly mapAnswer = <
     TKoboAnswer extends Record<string, any>,
     TTags extends KoboBaseTags,
-    TCustomAnswer extends KoboAnswerFlat<TKoboAnswer, TTags>
+    TCustomAnswer extends KoboSubmissionFlat<TKoboAnswer, TTags>
   >(
     fnMap: (x: any) => TKoboAnswer,
     fnMapTags: (x: any) => TTags,
-    fnMapCustom?: (x: KoboAnswerFlat<TKoboAnswer, TTags>) => TCustomAnswer
-  ) => ({answers, ...meta}: KoboAnswer): TCustomAnswer => {
+    fnMapCustom?: (x: KoboSubmissionFlat<TKoboAnswer, TTags>) => TCustomAnswer
+  ) => ({answers, ...meta}: KoboSubmission): TCustomAnswer => {
     const r = {
       ...fnMap(answers),
-      ...Kobo.mapAnswerMetaData(meta, fnMapTags),
+      ...KoboMapper.mapAnswerMetaData(meta, fnMapTags),
     }
     return fnMapCustom ? fnMapCustom(r) : r
   }
@@ -54,19 +55,19 @@ export class Kobo {
   static readonly mapPaginateAnswer = <
     TKoboAnswer extends Record<string, any>,
     TTags extends KoboBaseTags,
-    TCustomAnswer extends KoboAnswerFlat<TKoboAnswer, TTags> = KoboAnswerFlat<TKoboAnswer, TTags>
+    TCustomAnswer extends KoboSubmissionFlat<TKoboAnswer, TTags> = KoboSubmissionFlat<TKoboAnswer, TTags>
   >(
     fnMap: (x: any) => TKoboAnswer,
     fnMapTags: (x: any) => TTags,
-    fnMapCustom?: (x: KoboAnswerFlat<TKoboAnswer, TTags>) => TCustomAnswer
-  ) => (_: ApiPaginate<KoboAnswer>): ApiPaginate<TCustomAnswer> => {
+    fnMapCustom?: (x: KoboSubmissionFlat<TKoboAnswer, TTags>) => TCustomAnswer
+  ) => (_: ApiPaginate<KoboSubmission>): ApiPaginate<TCustomAnswer> => {
     return ({
       ..._,
-      data: _.data.map(Kobo.mapAnswer(fnMap, fnMapTags, fnMapCustom))
+      data: _.data.map(KoboMapper.mapAnswer(fnMap, fnMapTags, fnMapCustom))
     })
   }
 
-  static readonly mapAnswerBySchema = (indexedSchema: Record<string, KoboApiQuestionSchema>, answers: KoboAnswerFlat): KoboMappedAnswer => {
+  static readonly mapAnswerBySchema = (indexedSchema: Record<string, Kobo.Form.Question>, answers: KoboSubmissionFlat): KoboMappedAnswer => {
     const mapped: KoboMappedAnswer = {...answers}
     Obj.entries(mapped).forEach(([question, answer]) => {
       const type = indexedSchema[question]?.type
@@ -83,7 +84,7 @@ export class Kobo {
         }
         case 'begin_repeat': {
           if (mapped[question]) {
-            mapped[question] = (mapped[question] as any).map((_: any) => Kobo.mapAnswerBySchema(indexedSchema, _))
+            mapped[question] = (mapped[question] as any).map((_: any) => KoboMapper.mapAnswerBySchema(indexedSchema, _))
           }
           break
         }
@@ -95,9 +96,9 @@ export class Kobo {
   }
 
   static readonly mapAnswerMetaData = (
-    k: Partial<Record<keyof KoboAnswerMetaData, any>>,
+    k: Partial<Record<keyof KoboSubmissionMetaData, any>>,
     fnMapTags: (x: any) => any = _ => _
-  ): KoboAnswerFlat<any, KoboBaseTags> => {
+  ): KoboSubmissionFlat<any, KoboBaseTags> => {
     delete (k as any)['deviceid']
     return {
       ...k,

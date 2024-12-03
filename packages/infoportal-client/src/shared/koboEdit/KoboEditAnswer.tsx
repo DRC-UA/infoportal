@@ -1,4 +1,4 @@
-import {KoboAnswerId, KoboId} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk'
 import {useKoboColumnDef} from '@/shared/koboEdit/KoboSchemaWrapper'
 import React from 'react'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
@@ -15,9 +15,9 @@ export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>
 }: {
   value?: T[K]
   onChange?: (_: T[K]) => void,
-  formId: KoboId,
+  formId: Kobo.FormId,
   columnName: K
-  answerId: KoboAnswerId
+  answerId: Kobo.SubmissionId
 }) => {
   const ctx = useKoboEditAnswerContext()
 

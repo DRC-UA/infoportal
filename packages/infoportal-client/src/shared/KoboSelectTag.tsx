@@ -1,12 +1,13 @@
-import {KeyOf, KoboAnswerId, KoboId} from 'infoportal-common'
+import {KeyOf} from 'infoportal-common'
 import React, {Dispatch, ReactNode, SetStateAction} from 'react'
 import {Obj} from '@alexandreannic/ts-utils'
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {IpSelectSingle, IpSelectSingleProps} from '@/shared/Select/SelectSingle'
+import {Kobo} from 'kobo-sdk'
 
 export const KoboSelectTag = <
   TTag extends Record<string, any>,
-  T extends {id: KoboAnswerId, tags?: TTag},
+  T extends {id: Kobo.SubmissionId, tags?: TTag},
   K extends string = string,
 >({
   label,
@@ -25,8 +26,8 @@ export const KoboSelectTag = <
   showUndefinedOption?: boolean
   label?: string
   tag: KeyOf<TTag>
-  formId: KoboId
-  answerId: KoboAnswerId
+  formId: Kobo.FormId
+  answerId: Kobo.SubmissionId
   enumerator: Record<K, string>
   translate?: Record<K, ReactNode>
   setData?: Dispatch<SetStateAction<T[] | undefined>>

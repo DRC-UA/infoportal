@@ -6,11 +6,11 @@ import {chunkify} from '../Utils'
 export type KoboUpdateDataParamsData = Record<string, string | string[] | number | null | undefined>
 export type KoboUpdateDataParams<TData extends KoboUpdateDataParamsData = any> = {
   formId: Kobo.FormId,
-  submissionIds: Kobo.AnswerId[],
+  submissionIds: Kobo.SubmissionId[],
   data: TData
 }
 
-export class KoboSdkv2FixedUpdated {
+export class KoboClientv2FixedUpdated {
 
   static readonly BATCH_SIZE = 20
   static readonly CONCURRENCY = 12
@@ -41,8 +41,8 @@ export class KoboSdkv2FixedUpdated {
         const params = this.queues.get(formId)!.shift()!
         try {
           await chunkify({
-            concurrency: KoboSdkv2FixedUpdated.CONCURRENCY,
-            size: KoboSdkv2FixedUpdated.BATCH_SIZE,
+            concurrency: KoboClientv2FixedUpdated.CONCURRENCY,
+            size: KoboClientv2FixedUpdated.BATCH_SIZE,
             data: params.submissionIds,
             fn: ids => this.apiCall({...params, submissionIds: ids}),
           })
@@ -56,14 +56,14 @@ export class KoboSdkv2FixedUpdated {
     this.locks.delete(formId)
   }
 
-  private readonly apiCall = (params: KoboUpdateDataParams): Promise<Kobo.Answer.UpdateResponse> => {
+  private readonly apiCall = (params: KoboUpdateDataParams): Promise<Kobo.Submission.UpdateResponse> => {
     const message = (status: 'Failed' | 'Success', e?: AxiosError) => {
       const name = params.formId
       const ids = `[${params.submissionIds[0]}]` + (params.submissionIds.length > 1) ? ` +${params.submissionIds.length - 1}]` : ''
       return `Update ${name} ${ids} ${JSON.stringify(params.data)}.` + (e ? ` ERR ${e.status}` : '')
     }
     const {formId, data, submissionIds} = params
-    return this.api.patch<Kobo.Answer.UpdateResponse>(`/v2/assets/${formId}/data/bulk/`, {
+    return this.api.patch<Kobo.Submission.UpdateResponse>(`/v2/assets/${formId}/data/bulk/`, {
       body: {
         payload: {
           submission_ids: submissionIds,

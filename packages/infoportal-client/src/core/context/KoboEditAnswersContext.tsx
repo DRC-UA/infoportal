@@ -5,7 +5,7 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import {KoboAnswerId, KoboIndex} from 'infoportal-common'
+import {Kobo.SubmissionId, KoboIndex} from 'infoportal-common'
 import {KeyOf} from '@alexandreannic/ts-utils'
 import {useIpToast} from '@/core/useToast'
 
@@ -15,7 +15,7 @@ interface EditDataParams<T extends Record<string, any> = any> extends Omit<KoboU
 
 interface KoboUpdateAnswersByName<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>> {
   formName: T
-  answerIds: KoboAnswerId[]
+  answerIds: Kobo.SubmissionId[]
   question: K
   answer: InferTypedAnswer<T>[K] | null
 }

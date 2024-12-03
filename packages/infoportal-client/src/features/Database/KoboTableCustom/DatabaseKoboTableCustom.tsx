@@ -13,7 +13,8 @@ import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumns
 import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
-import {KoboAnswerId, KoboId, KoboIndex, KoboSchemaHelper, KoboValidation} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk'
+import {KoboIndex, KoboSchemaHelper, KoboValidation} from 'infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
@@ -31,7 +32,7 @@ interface CustomForm {
     id: string
     // langIndexes?: number[]
     join?: {
-      originId: KoboId, originColName: string, colName: string
+      originId: Kobo.FormId, originColName: string, colName: string
     }
   }[]
 }
@@ -114,7 +115,7 @@ export const DatabaseTableCustomRoute = () => {
     })
   }, [formIds])
 
-  const schemas = customForm.forms.map(_ => ({formId: _.id, schema: ctxSchema.byId[_.id]?.get})).filter(_ => !!_.schema) as {formId: KoboId, schema: KoboSchemaHelper.Bundle}[]
+  const schemas = customForm.forms.map(_ => ({formId: _.id, schema: ctxSchema.byId[_.id]?.get})).filter(_ => !!_.schema) as {formId: Kobo.FormId, schema: KoboSchemaHelper.Bundle}[]
 
   useEffect(() => {
     setTitle(schemas.map(_ => _.schema.schema.name).join(' + '))
@@ -170,7 +171,7 @@ export const DatabaseTableCustomRoute = () => {
           canEdit: true,
           m,
           openAnswerModal: ctxAnswers.openAnswerModal,
-          asyncEdit: (answerId: KoboAnswerId) => api.koboApi.getEditUrl({formId: formId, answerId}),
+          asyncEdit: (answerId: Kobo.SubmissionId) => api.koboApi.getEditUrl({formId: formId, answerId}),
           asyncUpdateTagById: ctxEditTag.asyncUpdateById,
           getRow: _ => (_[formId] ?? {}) as any,
           openEditTag: ctxEditTag.open,

@@ -1,10 +1,10 @@
 import retry from 'promise-retry'
-import {KoboV1Form, SubmitResponse} from './KoboSdkv1Type'
+import {KoboV1Form, SubmitResponse} from './KoboV1'
 import {AxiosError} from 'axios'
 import {Kobo} from '../Kobo'
 import {ApiClient} from '../api-client/ApiClient'
 
-export class KoboSdkv1 {
+export class KoboClientV1 {
   constructor(private api: ApiClient) {
   }
 
@@ -42,7 +42,7 @@ export class KoboSdkv1 {
           id: formId,
           submission: {
             formhub: {uuid: _uuid},
-            ...KoboSdkv1.parseBody(data),
+            ...KoboClientV1.parseBody(data),
           }
         }
       }).catch((e: AxiosError) => {

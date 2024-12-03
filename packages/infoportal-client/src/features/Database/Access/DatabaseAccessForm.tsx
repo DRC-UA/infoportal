@@ -1,5 +1,6 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {KoboApiSchema, KoboId, KoboSchemaHelper, makeKoboCustomDirective, nullValuesToUndefined} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk'
+import {KoboSchemaHelper, makeKoboCustomDirective, nullValuesToUndefined} from 'infoportal-common'
 import {AppFeatureId} from '@/features/appFeatureId'
 import React, {ReactElement, useCallback, useMemo} from 'react'
 import {Modal, Txt} from '@/shared'
@@ -30,8 +31,8 @@ export const DatabaseAccessForm = ({
 }: {
   onAdded?: () => void,
   children: ReactElement,
-  formId: KoboId,
-  form: KoboApiSchema
+  formId: Kobo.FormId,
+  form: Kobo.Form
 }) => {
   const langIndex = 0
   const survey = form.content.survey
@@ -41,7 +42,7 @@ export const DatabaseAccessForm = ({
   const {api} = useAppSettings()
 
   const _addAccess = useAsync(api.access.create)
-  const requestInConstToFixTsInference = (databaseId: KoboId) => api.access.search({featureId: AppFeatureId.kobo_database})
+  const requestInConstToFixTsInference = (databaseId: Kobo.FormId) => api.access.search({featureId: AppFeatureId.kobo_database})
     .then(_ => _.filter(_ => _.params?.koboFormId === databaseId))
   const _access = useFetcher(requestInConstToFixTsInference)
 

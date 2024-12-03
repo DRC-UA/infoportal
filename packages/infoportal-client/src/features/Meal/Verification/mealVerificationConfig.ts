@@ -1,4 +1,5 @@
-import {KeyOf, KoboId, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk'
+import {KeyOf, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
@@ -25,14 +26,14 @@ export type MealVerificationActivity<
   label: string
   id: string
   registration: {
-    koboFormId: KoboId,
+    koboFormId: Kobo.FormId,
     fetch: TReg
     filters?: (_: InferTypedAnswer<TReg>) => boolean
     joinBy: (_: InferTypedAnswer<TReg>) => string | number
   }
   verification: {
     fetch: TVerif
-    koboFormId: KoboId,
+    koboFormId: Kobo.FormId,
     joinBy: (_: InferTypedAnswer<TVerif>) => string | number
   },
   dataColumns?: KeyOf<InferTypedAnswer<TReg>>[]

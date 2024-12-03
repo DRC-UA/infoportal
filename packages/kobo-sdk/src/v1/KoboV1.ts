@@ -2,7 +2,7 @@ import {Kobo} from '../Kobo'
 
 export interface SubmitResponse {
   message?: 'Successful submission.',
-  formid?: Kobo.Answer.Id
+  formid?: Kobo.Submission.Id
   encrypted?: boolean,
   instanceID?: string,
   submissionDate?: string,
@@ -12,5 +12,5 @@ export interface SubmitResponse {
 
 export interface KoboV1Form {
   uuid: string
-  id_string: Kobo.Answer.Id
+  id_string: Kobo.Submission.Id
 }

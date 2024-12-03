@@ -1,4 +1,4 @@
-import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
 import {
   Bn_rapidResponse,
   Bn_rapidResponse2,
@@ -8,12 +8,10 @@ import {
   DrcProject,
   Ecrec_cashRegistration,
   Ecrec_msmeGrantEoi,
-  KoboAnswerFlat,
-  KoboAnswerId,
+  KoboSubmissionFlat,
   KoboBaseTags,
   KoboEcrec_cashRegistration,
   KoboGeneralMapping,
-  KoboId,
   KoboIndex,
   KoboTagStatus,
   Protection_gbv,
@@ -33,6 +31,7 @@ import {KoboEditModalOption} from '@/shared/koboEdit/KoboEditModal'
 import {Messages} from '@/core/i18n/localization/en'
 import {KoboEditTagsContext} from '@/core/context/KoboEditTagsContext'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
+import {Kobo} from 'kobo-sdk'
 
 export const getColumnsCustom = ({
   selectedIds,
@@ -46,9 +45,9 @@ export const getColumnsCustom = ({
   canEdit,
 }: {
   canEdit?: boolean
-  formId: KoboId
+  formId: Kobo.FormId
   getRow?: (_: any) => any,
-  selectedIds: KoboAnswerId[]
+  selectedIds: Kobo.SubmissionId[]
   openEditTag: KoboEditTagsContext['open']
   asyncUpdateTagById: KoboEditTagsContext['asyncUpdateById']
   m: Messages,
@@ -121,7 +120,7 @@ export const getColumnsCustom = ({
   const lastStatusUpdate = ({
     showIf
   }: {
-    showIf?: (_: KoboAnswerFlat<any, any>) => boolean
+    showIf?: (_: KoboSubmissionFlat<any, any>) => boolean
   } = {}): DatatableColumn.Props<any> => ({
     id: 'lastStatusUpdate',
     width: 129,
@@ -134,7 +133,7 @@ export const getColumnsCustom = ({
       tag: 'lastStatusUpdate',
     })}/>,
     render: (_: any) => {
-      const row: KoboAnswerFlat<{}, KoboBaseTags & KoboTagStatus> = getRow(_)
+      const row: KoboSubmissionFlat<{}, KoboBaseTags & KoboTagStatus> = getRow(_)
       if (showIf && !showIf(row)) return {label: '', value: undefined}
       const date = row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined
       return {
@@ -162,7 +161,7 @@ export const getColumnsCustom = ({
     width?: number
     enumerator?: SelectStatusConfig.EnumStatus
     tag?: string
-    showIf?: (_: KoboAnswerFlat<any, any>) => boolean
+    showIf?: (_: KoboSubmissionFlat<any, any>) => boolean
   } = {}): DatatableColumn.Props<any>[] => {
     return [
       {
@@ -183,7 +182,7 @@ export const getColumnsCustom = ({
         }),
         options: () => DatatableUtils.buildOptions(Obj.keys(SelectStatusConfig.enumStatus[enumerator]), true),
         render: (_: any) => {
-          const row: KoboAnswerFlat<{}, any> = getRow(_)
+          const row: KoboSubmissionFlat<{}, any> = getRow(_)
           if (showIf && !showIf(row)) return {label: '', value: undefined}
           return {
             export: row.tags?.[tag],
@@ -253,7 +252,7 @@ export const getColumnsCustom = ({
       head: m.beneficiaries,
       type: 'number',
       renderQuick: (_: any) => {
-        const row: KoboAnswerFlat<Protection_gbv.T, any> = getRow(_)
+        const row: KoboSubmissionFlat<Protection_gbv.T, any> = getRow(_)
         if (row.new_ben === 'yes') {
           return row.numb_part || 0
         } else if (row.new_ben === 'bno' && row.hh_char_hh_det) {
@@ -296,26 +295,26 @@ export const getColumnsCustom = ({
     ],
     [KoboIndex.byName('bn_rapidResponse').id]: [
       ...getPaymentStatusByEnum({
-        showIf: (_: KoboAnswerFlat<Bn_rapidResponse.T>) => !!(_.back_prog_type ?? _.back_prog_type_l)?.find(_ => /mpca|cf|csf/.test(_))
+        showIf: (_: KoboSubmissionFlat<Bn_rapidResponse.T>) => !!(_.back_prog_type ?? _.back_prog_type_l)?.find(_ => /mpca|cf|csf/.test(_))
       }),
       ...individualsBreakdown,
     ],
     [KoboIndex.byName('bn_rapidResponse2').id]: [
       ...getPaymentStatusByEnum({
-        showIf: (_: KoboAnswerFlat<Bn_rapidResponse2.T>) => !!(_.back_prog_type)?.includes('mpca')
+        showIf: (_: KoboSubmissionFlat<Bn_rapidResponse2.T>) => !!(_.back_prog_type)?.includes('mpca')
       }),
       ...individualsBreakdown,
     ],
     [KoboIndex.byName('bn_re').id]: [
       ...getPaymentStatusByEnum({
-        showIf: (_: KoboAnswerFlat<Bn_re.T>) => !!_.back_prog_type?.find(_ => /mpca|cf|csf/.test(_))
+        showIf: (_: KoboSubmissionFlat<Bn_re.T>) => !!_.back_prog_type?.find(_ => /mpca|cf|csf/.test(_))
       }),
       ...individualsBreakdown,
       {
         id: 'eligibility_summary_esk2',
         head: m.mpca.eskAllowance,
         type: 'number',
-        renderQuick: (row: KoboAnswerFlat<Bn_re.T, any>) => {
+        renderQuick: (row: KoboSubmissionFlat<Bn_re.T, any>) => {
           return row.estimate_sqm_damage !== undefined ? (row.estimate_sqm_damage <= 15 ? 1 : 2) : undefined
         }
       }
@@ -375,7 +374,7 @@ export const getColumnsCustom = ({
         id: 'vulnerability',
         head: m.vulnerability,
         type: 'number',
-        render: (row: KoboAnswerFlat<Ecrec_msmeGrantEoi.T, any> & {custom: KoboGeneralMapping.IndividualBreakdown}) => {
+        render: (row: KoboSubmissionFlat<Ecrec_msmeGrantEoi.T, any> & {custom: KoboGeneralMapping.IndividualBreakdown}) => {
           const minimumWageUah = 7100
           const scoring = {
             householdSize: 0,
@@ -458,7 +457,7 @@ export const getColumnsCustom = ({
       //     />
       //   ),
       //   options: () => DatatableUtils.buildOptions(['yes', 'no']),
-      //   render: (row: KoboAnswerFlat<any, any>) => {
+      //   render: (row: KoboSubmissionFlat<any, any>) => {
       //     const eligibilityCriteria = [
       //       {label: 'Employing up to 20 people', condition: row.many_people_employ === '20_more_people'},
       //       {label: 'Minimum 3 years experience', condition: row.experience_business === 'more_five_years'},
@@ -530,7 +529,7 @@ export const getColumnsCustom = ({
         })}/>,
         options: () => DatatableUtils.buildOptions(Obj.keys(DrcProject), true),
         render: (_) => {
-          const row: KoboAnswerFlat<any, ProtectionHhsTags> = getRow(_)
+          const row: KoboSubmissionFlat<any, ProtectionHhsTags> = getRow(_)
           return {
             export: row.tags?.project ?? DatatableUtils.blank,
             tooltip: row.tags?.project,
@@ -565,7 +564,7 @@ export const getColumnsCustom = ({
         subHeader: getSelectMultipleTagSubHeader({tag: 'project', options: currentProtectionProjects}),
         options: () => DatatableUtils.buildOptions(Obj.keys(DrcProject), true),
         render: (_: any) => {
-          const row: KoboAnswerFlat<any, ProtectionHhsTags> = getRow(_)
+          const row: KoboSubmissionFlat<any, ProtectionHhsTags> = getRow(_)
           return {
             export: row.tags?.project ?? DatatableUtils.blank,
             tooltip: row.tags?.project,
@@ -600,7 +599,7 @@ export const getColumnsCustom = ({
         subHeader: getSelectMultipleTagSubHeader({tag: 'projects', options: currentProtectionProjects}),
         options: () => DatatableUtils.buildOptions(Obj.keys(DrcProject), true),
         render: (_: any) => {
-          const row: KoboAnswerFlat<any, ProtectionHhsTags> = getRow(_)
+          const row: KoboSubmissionFlat<any, ProtectionHhsTags> = getRow(_)
           const safeProjects = safeArray(row.tags?.projects)
           return {
             export: safeProjects.join(' | ') ?? DatatableUtils.blank,
