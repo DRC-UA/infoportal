@@ -121,10 +121,16 @@ export class BuildKoboType {
         'ben_det_raion',
       ]
     },
-    ecrec_msmeGrantReg:{
+    ecrec_msmeGrantReg: {
       formId: KoboIndex.byName('ecrec_msmeGrantReg').id, skipQuestionTyping: [
         'ben_det_hromada',
         'ben_det_raion',
+      ]
+    },
+    ecrec_vet2_dmfa: {
+      formId: KoboIndex.byName('ecrec_vet2_dmfa').id,
+      skipQuestionTyping: [
+        'hromada',
       ]
     },
     ecrec_cashRegistration: {
