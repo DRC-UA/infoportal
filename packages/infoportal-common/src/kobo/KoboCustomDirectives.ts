@@ -29,5 +29,5 @@ export const getKoboCustomDirectives = (schema: KoboApiSchema): Directive[] => {
 export const getKoboCustomDirective = (question: KoboApiQuestionSchema): Directive | undefined => {
   if (!question.name) return
   const directive = question.name.match(new RegExp(`^${koboCustomDirectivePrefix}([A-Z_]+)$`))?.[1]
-  return {directive: (KoboCustomDirectives as any)[directive!], question}
+  if (directive) return {directive: (KoboCustomDirectives as any)[directive!], question}
 }

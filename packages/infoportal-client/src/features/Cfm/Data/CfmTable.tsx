@@ -177,6 +177,15 @@ export const CfmTable = ({}: any) => {
     }
   }, [ctx.visibleData])
 
+  const defaultFilters = useMemo(() => {
+    return {
+      status: [
+        KoboMealCfmStatus.Processing,
+        KoboMealCfmStatus.Open,
+        KoboMealCfmStatus.Close,
+      ]
+    }
+  }, [])
   return (
     <Page width="full">
       <Panel>
@@ -185,13 +194,7 @@ export const CfmTable = ({}: any) => {
           //   getId: _ => _.formId + '_' + _.id,
           //   onSelect: _ => setSelectedFromId_Ids(_),
           showExportBtn
-          defaultFilters={{
-            status: [
-              KoboMealCfmStatus.Processing,
-              KoboMealCfmStatus.Open,
-              KoboMealCfmStatus.Close,
-            ]
-          }}
+          defaultFilters={defaultFilters}
           id="cfm"
           header={
             <>
