@@ -12,7 +12,7 @@ import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {MealVerification, MealVerificationAnsers, MealVerificationAnswersStatus} from '@/core/sdk/server/mealVerification/MealVerification'
-import {MealVerificationActivity, mealVerificationConf} from '@/features/Meal/Verification/mealVerificationConfig'
+import {MealVerificationActivity, mealVerificationConf, VerifiedColumnsMapping} from '@/features/Meal/Verification/mealVerificationConfig'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useMealVerificationContext} from '@/features/Meal/Verification/MealVerificationContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
@@ -118,14 +118,16 @@ export const MealVerificationDataTable = <
 
   const harmonizedVerifiedColumns = useMemo(() => {
     return Obj.mapValues(activity.verifiedColumns as any, ((_, col) => {
-      return {
-        reg: (_: InferTypedAnswer<TReg>, schema: KoboSchemaHelper.Bundle) => {
-          return schema.translate.choice(col as any, (_ as any)[col])
-        },
-        verif: (_: InferTypedAnswer<TVerif>, schema: KoboSchemaHelper.Bundle) => {
-          return schema.translate.choice(col as any, (_ as any)[col])
-        },
-      }
+      if (_ === 'AUTO_MAPPING')
+        return {
+          reg: (_: InferTypedAnswer<TReg>, schema: KoboSchemaHelper.Bundle) => {
+            return schema.translate.choice(col as any, (_ as any)[col])
+          },
+          verif: (_: InferTypedAnswer<TVerif>, schema: KoboSchemaHelper.Bundle) => {
+            return schema.translate.choice(col as any, (_ as any)[col])
+          },
+        }
+      return _ as VerifiedColumnsMapping<TReg, TVerif>
     }))
   }, [schemaReg, schemaVerif, activity.verifiedColumns])
 
