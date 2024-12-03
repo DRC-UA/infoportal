@@ -41,6 +41,7 @@ import {
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {Ecrec_vet2_dmfa} from 'infoportal-common/kobo/generated/Ecrec_vet2_dmfa'
 
 /** @deprecated should be coming from the unified database */
 type Meta = {
@@ -77,6 +78,12 @@ export class KoboTypedAnswerSdk {
   private readonly buildSearch = (request: 'searchByAccess' | 'search') => {
     const req = this.sdk[request]
     return ({
+      ...make('ecrec_vet2_dmfa', (filters?: KoboAnswerFilter) =>
+        this.sdk.search({
+          formId: KoboIndex.byName('ecrec_vet2_dmfa').id,
+          fnMapKobo: Ecrec_vet2_dmfa.map,
+          ...filters,
+        })),
       ...make('meal_cfmInternal', (filters?: KoboAnswerFilter) =>
         // BAD, we should revamp the way access is working for CFM. Add FP should add rule in the access table that will natively work with the standard access filters
         this.sdk.search({
