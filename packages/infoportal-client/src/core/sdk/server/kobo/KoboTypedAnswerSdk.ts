@@ -41,7 +41,7 @@ import {
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
-import {Ecrec_vet2_dmfa} from 'infoportal-common/kobo/generated/Ecrec_vet2_dmfa'
+import {Ecrec_vet2_dmfa} from 'infoportal-common'
 
 /** @deprecated should be coming from the unified database */
 type Meta = {
