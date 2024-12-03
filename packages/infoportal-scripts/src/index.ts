@@ -14,5 +14,5 @@ export const koboSdk = new KoboSdk({
   // await ActivityInfoBuildType.fslc()
   // await new BuildKoboType().build('partner_pomogaem')
   // await new BuildKoboType().build('partner_lampa')
-  await new BuildKoboType().build('meal_verificationPartnerBnre')
+  await new BuildKoboType().build('ecrec_vet2_dmfa')
 })()

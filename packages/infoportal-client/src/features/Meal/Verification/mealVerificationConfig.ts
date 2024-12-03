@@ -51,6 +51,48 @@ const registerActivity = <
 export const mealVerificationActivities = seq([
   registerActivity({
     sampleSizeRatio: .1,
+    label: 'ECREC VET DMFA-355',
+    id: 'ECREC VET DMFA-355',
+    registration: {
+      koboFormId: KoboIndex.byName('ecrec_vet2_dmfa').id,
+      fetch: 'ecrec_vet2_dmfa',
+      joinBy: _ => _.tax_id_num!,
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
+      joinBy: _ => _.pay_det_tax_id_num!,
+      fetch: 'meal_verificationEcrec',
+    },
+    dataColumns: [],
+    verifiedColumns: {
+      back_consent: {reg: _ => _.consent, verif: _ => _.back_consent,},
+      ben_det_surname: {reg: _ => _.surname, verif: _ => _.ben_det_surname,},
+      ben_det_first_name: {reg: _ => _.first_name, verif: _ => _.ben_det_first_name,},
+      ben_det_pat_name: {reg: _ => _.pat_name, verif: _ => _.ben_det_pat_name,},
+      ben_det_ph_number: {reg: _ => _.ph_number, verif: _ => _.ben_det_ph_number,},
+      ben_det_oblast: {reg: _ => _.oblast, verif: _ => _.ben_det_oblast,},
+      ben_det_raion: {reg: _ => _.raion, verif: _ => _.ben_det_raion,},
+      ben_det_hromada: {reg: _ => _.hromada, verif: _ => _.ben_det_hromada,},
+      ben_det_res_stat: {reg: _ => _.res_stat, verif: _ => _.ben_det_res_stat,},
+      ben_det_income: {reg: _ => _.household_income, verif: _ => _.ben_det_income,},
+      ben_det_hh_size: {reg: _ => _.number_people, verif: _ => _.ben_det_hh_size,},
+      current_employment_situation: {reg: _ => _.current_employment_situation, verif: _ => _.current_employment_situation,},
+      long_unemployed: {reg: _ => _.long_unemployed, verif: _ => _.long_unemployed,},
+      interested_formally_employed: {reg: _ => _.interested_formally_employed, verif: _ => _.interested_formally_employed,},
+      interested_formally_employed_other: {reg: _ => _.interested_formally_employed_other, verif: _ => _.interested_formally_employed_other,},
+      aware_training_facility_operating: {reg: _ => _.aware_training_facility_operating, verif: _ => _.aware_training_facility_operating,},
+      information_training_center: {reg: _ => _.information_training_center, verif: _ => _.information_training_center,},
+      know_cost_training: {reg: _ => _.know_cost_training, verif: _ => _.know_cost_training,},
+      cost_training: {reg: _ => _.cost_training, verif: _ => _.cost_training,},
+      format_training: {reg: _ => _.format_training, verif: _ => _.format_training,},
+      access_computer_internet: {reg: _ => _.access_computer_internet, verif: _ => _.access_computer_internet,},
+      ability_regularly_attend: {reg: _ => _.ability_regularly_attend, verif: _ => _.ability_regularly_attend,},
+      enrolled_other_training: {reg: _ => _.enrolled_other_training, verif: _ => _.enrolled_other_training,},
+      who_paid_training: {reg: (_, schema) => _.who_paid_training, verif: (_, schema) => _.who_paid_training},
+    }
+  }),
+  registerActivity({
+    sampleSizeRatio: .1,
     label: 'EC-REC Sectoral Cash for Businesses BHA',
     id: 'MSME',
     registration: {
