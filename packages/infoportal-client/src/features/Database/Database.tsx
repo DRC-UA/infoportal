@@ -147,18 +147,20 @@ export const DatabaseWithContext = () => {
                           {_.custom && (
                             <Icon
                               fontSize="small"
-                              color="primary"
                               sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
-                            >auto_awesome</Icon>
+                            >device_hub</Icon>
                           )}
                         </>}
                       >
-                        <Txt
-                          children={_.parsedName.name}
-                          sx={{
-                            color: _.archived ? t.palette.text.disabled : undefined,
-                            fontWeight: _.custom ? 700 : undefined,
-                          }}/>
+                        <Txt sx={{
+                          color: _.archived ? t.palette.text.disabled : undefined,
+                        }}
+                        >
+                          {_.parsedName.name}
+                          {_.custom && (
+                            <span style={{fontWeight: 300}}>{' '}({m._koboDatabase.mergedDb})</span>
+                          )}
+                        </Txt>
                       </SidebarItem>
                     )}
                   </NavLink>
