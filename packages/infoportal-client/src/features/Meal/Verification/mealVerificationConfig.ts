@@ -91,10 +91,6 @@ export const mealVerificationActivities = seq([
       who_paid_training: {reg: (_, schema) => _.who_paid_training, verif: (_, schema) => _.who_paid_training},
     }
   }),
-
-
-
-
   registerActivity({
     sampleSizeRatio: .1,
     label: 'ECREC VET BHA-388',
