@@ -661,7 +661,7 @@ export const en = Object.freeze({
       monitoredHhByOblast: 'Monitored HH By Oblast',
     },
     protHHSnapshot: {
-      male1860: `Males 18-60 years old`,
+      maleYoung: `Males 25-60 years old`,
       avgHhSize: (n: number) => `Average HH size: ${n.toFixed(1)}`,
       noAccommodationDocument: 'HHs without formal lease agreement',
       maleWithoutIDPCert: 'Unregistered IDPs',

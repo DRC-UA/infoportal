@@ -30,6 +30,13 @@ jobs:
         run: |
           npm ci
 
+      - name: npm install, build, and test (kobo-sdk)
+        working-directory: ./packages/kobo-sdk
+        run: |
+          npm ci --production
+          npm run build --if-present
+          npm run test --if-present
+
       - name: Build, and test (lib)
         working-directory: ./packages/infoportal-common
         run: |
