@@ -1,19 +1,20 @@
-import {KoboAnswer, KoboId, KoboIndex, logPerformance, UUID} from 'infoportal-common'
+import {KoboCustomDirectives, KoboIndex, KoboSubmission, KoboValidation, logPerformance, UUID} from 'infoportal-common'
 import {Prisma, PrismaClient} from '@prisma/client'
-import {KoboSdkGenerator} from './KoboSdkGenerator'
-import {app, AppCacheKey, AppLogger} from '../../index'
-import {createdBySystem} from '../../core/DbInit'
-import {seq} from '@alexandreannic/ts-utils'
-import {GlobalEvent} from '../../core/GlobalEvent'
-import {KoboService} from './KoboService'
-import {AppError} from '../../helper/Errors'
-import {appConf} from '../../core/conf/AppConf'
-import {genUUID, Util} from '../../helper/Utils'
+import {KoboSdkGenerator} from '../KoboSdkGenerator'
+import {app, AppCacheKey, AppLogger} from '../../../index'
+import {createdBySystem} from '../../../core/DbInit'
+import {fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {GlobalEvent} from '../../../core/GlobalEvent'
+import {KoboService} from '../KoboService'
+import {AppError} from '../../../helper/Errors'
+import {appConf} from '../../../core/conf/AppConf'
+import {genUUID, Util} from '../../../helper/Utils'
+import {Kobo} from 'kobo-sdk'
 
 export type KoboSyncServerResult = {
-  answersIdsDeleted: KoboId[]
-  answersCreated: KoboAnswer[]
-  answersUpdated: KoboAnswer[]
+  answersIdsDeleted: Kobo.FormId[]
+  answersCreated: KoboSubmission[]
+  answersUpdated: KoboSubmission[]
 }
 
 export class KoboSyncServer {
@@ -29,7 +30,70 @@ export class KoboSyncServer {
   ) {
   }
 
-  readonly handleWebhookNewAnswers = async ({formId, answer}: {formId?: KoboId, answer: KoboAnswer}) => {
+  private static readonly removeGroup = (answers: Record<string, any>): Record<string, any> => {
+    return seq(Object.entries(answers)).reduceObject(([k, v]) => {
+      const nameWithoutGroup = k.replace(/^.*\//, '')
+      if (Array.isArray(v)) {
+        return [nameWithoutGroup, v.map(KoboSyncServer.removeGroup)]
+      }
+      return [nameWithoutGroup, v]
+    })
+  }
+
+  private static readonly mapValidationStatus = (_: Kobo.Submission): undefined | KoboValidation => {
+    if (_._validation_status?.uid) return fnSwitch(_._validation_status.uid, {
+      validation_status_on_hold: KoboValidation.Pending,
+      validation_status_approved: KoboValidation.Approved,
+      validation_status_not_approved: KoboValidation.Rejected,
+      no_status: undefined,
+    })
+    if (_[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]) {
+      return KoboValidation[_._IP_VALIDATION_STATUS_EXTRA as (keyof typeof KoboValidation)]
+    }
+  }
+
+  private static readonly mapAnswer = (k: Kobo.Submission): KoboSubmission => {
+    delete k['formhub/uuid']
+    delete k['meta/instanceId']
+    const {
+      _id,
+      start,
+      end,
+      __version__,
+      _xform_id_string,
+      _uuid,
+      _attachments,
+      _status,
+      _geolocation,
+      _submission_time,
+      _tags,
+      _notes,
+      _validation_status,
+      _submitted_by,
+      ...answers
+    } = k
+    const answersUngrouped = KoboSyncServer.removeGroup(answers)
+    const date = answersUngrouped.date ? new Date(answersUngrouped.date) : new Date(_submission_time)
+    return {
+      attachments: _attachments ?? [],
+      geolocation: _geolocation,
+      date: date,
+      start: start ?? date,
+      end: end ?? date,
+      submissionTime: new Date(_submission_time),
+      version: __version__,
+      id: '' + _id,
+      uuid: _uuid,
+      submittedBy: _submitted_by,
+      validationStatus: KoboSyncServer.mapValidationStatus(k),
+      lastValidatedTimestamp: _validation_status?.timestamp,
+      validatedBy: _validation_status?.by_whom,
+      answers: answersUngrouped,
+    }
+  }
+
+  readonly handleWebhookNewAnswers = async ({formId, answer: _answer}: {formId?: Kobo.FormId, answer: Kobo.Submission}) => {
+    const answer = KoboSyncServer.mapAnswer(_answer)
     this.log.info(`Handle webhook for form ${formId}, ${answer.id}`)
     if (!formId)
       throw new AppError.WrongFormat('missing_form_id')
@@ -61,7 +125,7 @@ export class KoboSyncServer {
   private info = (formId: string, message: string) => this.log.info(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
   private debug = (formId: string, message: string) => this.log.debug(`${KoboIndex.searchById(formId)?.translation ?? formId}: ${message}`)
 
-  readonly syncApiAnswersToDbByForm = async ({formId, updatedBy}: {formId: KoboId, updatedBy?: string}) => {
+  readonly syncApiAnswersToDbByForm = async ({formId, updatedBy}: {formId: Kobo.FormId, updatedBy?: string}) => {
     try {
       this.debug(formId, `Synchronizing by ${updatedBy}...`)
       await this.syncApiFormInfo(formId)
@@ -85,7 +149,7 @@ export class KoboSyncServer {
     }
   }
 
-  private readonly syncApiFormInfo = async (formId: KoboId) => {
+  private readonly syncApiFormInfo = async (formId: Kobo.FormId) => {
     const sdk = await this.koboSdkGenerator.getBy.formId(formId)
     const schema = await sdk.v2.getForm(formId)
     return this.prisma.koboForm.update({
@@ -97,16 +161,16 @@ export class KoboSyncServer {
     })
   }
 
-  private readonly _syncApiFormAnswers = async (formId: KoboId): Promise<KoboSyncServerResult> => {
+  private readonly _syncApiFormAnswers = async (formId: Kobo.FormId): Promise<KoboSyncServerResult> => {
     const sdk = await this.koboSdkGenerator.getBy.formId(formId)
     this.debug(formId, `Fetch remote answers...`)
-    const remoteAnswers = await sdk.v2.getAnswers(formId).then(_ => _.data)
-    const remoteIdsIndex: Map<KoboId, KoboAnswer> = remoteAnswers.reduce((map, curr) => map.set(curr.id, curr), new Map<KoboId, KoboAnswer>)//new Map(remoteAnswers.map(_ => _.id))
+    const remoteAnswers = await sdk.v2.getAnswers(formId).then(_ => _.results.map(KoboSyncServer.mapAnswer))
+    const remoteIdsIndex: Map<Kobo.FormId, KoboSubmission> = remoteAnswers.reduce((map, curr) => map.set(curr.id, curr), new Map<Kobo.FormId, KoboSubmission>)//new Map(remoteAnswers.map(_ => _.id))
     this.debug(formId, `Fetch remote answers... ${remoteAnswers.length} fetched.`)
 
     this.debug(formId, `Fetch local answers...`)
     const localAnswersIndex = await this.prisma.koboAnswers.findMany({where: {formId, deletedAt: null}, select: {id: true, uuid: true}}).then(_ => {
-      return _.reduce((map, curr) => map.set(curr.id, curr.uuid), new Map<KoboId, UUID>())
+      return _.reduce((map, curr) => map.set(curr.id, curr.uuid), new Map<Kobo.FormId, UUID>())
     })
     this.debug(formId, `Fetch local answers... ${localAnswersIndex.size} fetched.`)
 

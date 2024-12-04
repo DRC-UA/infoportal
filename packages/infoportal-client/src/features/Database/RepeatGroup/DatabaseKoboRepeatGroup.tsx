@@ -3,7 +3,8 @@ import {Panel} from '@/shared/Panel'
 import {NavLink, useNavigate, useParams, useSearchParams} from 'react-router-dom'
 import {map} from '@alexandreannic/ts-utils'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {KoboFlattenRepeat, KoboFlattenRepeatData, KoboId, KoboSchemaHelper} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk'
+import {KoboFlattenRepeat, KoboFlattenRepeatData, KoboSchemaHelper} from 'infoportal-common'
 import * as yup from 'yup'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useEffect, useMemo} from 'react'
@@ -47,7 +48,7 @@ export const getColumnsForRepeatGroup = ({
   t,
 }: {
   groupName: string
-  formId: KoboId
+  formId: Kobo.FormId
   schema: KoboSchemaHelper.Bundle
   onRepeatGroupClick?: ColumnBySchemaGeneratorProps['onRepeatGroupClick']
   m: ColumnBySchemaGeneratorProps['m']
@@ -94,7 +95,7 @@ const DatabaseKoboRepeat = ({
   group,
   formId,
 }: {
-  formId: KoboId
+  formId: Kobo.FormId
   group: string
   schema: KoboSchemaHelper.Bundle
 }) => {

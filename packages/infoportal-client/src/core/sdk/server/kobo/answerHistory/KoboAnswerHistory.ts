@@ -1,7 +1,7 @@
-import {KoboId} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk/Kobo'
 
 export interface KoboAnswerHistorySearch {
-  formId: KoboId
+  formId: Kobo.FormId
 }
 
 export interface KoboAnswerHistory {

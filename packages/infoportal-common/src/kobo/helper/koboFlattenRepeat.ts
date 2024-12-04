@@ -1,4 +1,4 @@
-import {KoboAnswerMetaData} from '../sdk'
+import {KoboSubmissionMetaData} from '../mapper'
 
 export type KoboRepeatRef = {
   _index?: number
@@ -6,11 +6,11 @@ export type KoboRepeatRef = {
   _parent_table_name?: string
 }
 
-export type KoboFlattenRepeatData = Pick<KoboAnswerMetaData, 'id' | 'submissionTime'> & KoboRepeatRef & {
+export type KoboFlattenRepeatData = Pick<KoboSubmissionMetaData, 'id' | 'submissionTime'> & KoboRepeatRef & {
   [key: string]: any
 }
 
-type Row = Record<string, any> & Pick<KoboAnswerMetaData, 'id' | 'submissionTime'>
+type Row = Record<string, any> & Pick<KoboSubmissionMetaData, 'id' | 'submissionTime'>
 
 export class KoboFlattenRepeat {
 

@@ -1,37 +1,26 @@
-import {ApiPaginate, KoboAnswer, KoboAnswerId, KoboApiSchema, KoboId} from '../../../index'
-import {ApiClient} from '../../../api-client/ApiClient'
-import {ApiKoboAnswerMetaData, KoboAnswerParams, KoboAnswerUtils, KoboApiList, KoboApiVersion} from './type/KoboAnswer'
 import {map} from '@alexandreannic/ts-utils'
 import axios from 'axios'
-import {KoboHook} from './type/KoboHook'
-import {KoboSdkv2FixedUpdated, KoboUpdateDataParams, KoboUpdateDataParamsData} from './KoboSdkv2FixedUpdated'
-import {Logger} from '../../../types'
+import {KoboClientv2FixedUpdated, KoboUpdateDataParams, KoboUpdateDataParamsData} from './KoboClientV2FixedUpdated'
+import {Kobo, Logger} from '../Kobo'
+import {ApiClient} from '../api-client/ApiClient'
 
-const koboToApiPaginate = <T>(_: KoboApiList<T>): ApiPaginate<T> => {
-  return {
-    total: _.count,
-    data: _.results,
-  }
-}
-
-export class KoboSdkv2 {
+export class KoboClientV2 {
   constructor(
     private api: ApiClient,
     private logger: Logger,
-    private editSdk = new KoboSdkv2FixedUpdated(api, logger),
+    private editSdk = new KoboClientv2FixedUpdated(api, logger),
   ) {
   }
 
+  static readonly parseDate = (_: Date) => _.toISOString()
   static readonly webHookName = 'InfoPortal'
 
-  static readonly parseDate = (_: Date) => _.toISOString()
-
   static readonly makeDateFilter = (name: string, operator: 'gte' | 'lte', date: Date) => {
-    return {[name]: {['$' + operator]: KoboSdkv2.parseDate(date)}}
+    return {[name]: {['$' + operator]: KoboClientV2.parseDate(date)}}
   }
 
   readonly getForm = (form: string) => {
-    return this.api.get<KoboApiSchema>(`/v2/assets/${form}`).then(_ => {
+    return this.api.get<Kobo.Form>(`/v2/assets/${form}`).then(_ => {
       _.content.survey.forEach(q => {
         q.name = q.$autoname ?? q.name
       })
@@ -39,14 +28,14 @@ export class KoboSdkv2 {
     })
   }
 
-  readonly getHook = (formId: KoboId): Promise<ApiPaginate<KoboHook>> => {
-    return this.api.get<KoboApiList<KoboHook>>(`/v2/assets/${formId}/hooks/`).then(koboToApiPaginate)
+  readonly getHook = (formId: Kobo.Form.Id): Promise<Kobo.Paginate<Kobo.Hook>> => {
+    return this.api.get(`/v2/assets/${formId}/hooks/`)
   }
 
-  readonly createWebHook = (formId: KoboId, destinationUrl: string) => {
+  readonly createWebHook = (formId: Kobo.FormId, destinationUrl: string) => {
     return this.api.post(`/v2/assets/${formId}/hooks/`, {
       body: {
-        'name': KoboSdkv2.webHookName,
+        'name': KoboClientV2.webHookName,
         endpoint: destinationUrl,
         // 'endpoint': this.conf.baseUrl + `/kobo-api/webhook`,
         'active': true,
@@ -60,12 +49,12 @@ export class KoboSdkv2 {
     })
   }
 
-  readonly edit = (formId: KoboId, answerId: KoboAnswerId) => {
+  readonly edit = (formId: Kobo.FormId, answerId: Kobo.SubmissionId) => {
     return this.api.get<{url: string, detail?: string}>(`/v2/assets/${formId}/data/${answerId}/enketo/edit/?return_url=false`)
   }
 
-  readonly getVersions = (formId: string) => {
-    return this.api.get<KoboApiList<KoboApiVersion>>(`/v2/assets/${formId}/versions`)
+  readonly getVersions = (formId: Kobo.FormId) => {
+    return this.api.get<Kobo.Paginate<Kobo.Submission.Version>>(`/v2/assets/${formId}/versions`)
       .then(_ => {
         _.results.forEach(r => {
           r.date_modified = new Date(r.date_modified)
@@ -82,8 +71,8 @@ export class KoboSdkv2 {
     questionName,
     newValue,
   }: {
-    formId: KoboId,
-    submissionIds: string[],
+    formId: Kobo.FormId,
+    submissionIds: Kobo.SubmissionId[],
     group?: string,
     questionName: string,
     newValue: string
@@ -104,7 +93,7 @@ export class KoboSdkv2 {
     })
   }
 
-  readonly delete = (formId: KoboId, ids: KoboAnswerId[]): Promise<{detail: string}> => {
+  readonly delete = (formId: Kobo.Form.Id, ids: Kobo.SubmissionId[]): Promise<{detail: string}> => {
     return this.api.delete(`/v2/assets/${formId}/data/bulk/`, {
       body: {
         payload: {submission_ids: ids}
@@ -116,12 +105,8 @@ export class KoboSdkv2 {
     return this.editSdk.enqueue(p)
   }
 
-  readonly getFormByVersion = (formId: KoboId, versionId: string) => {
-    return this.api.get<KoboApiSchema>(`/v2/assets/${formId}/versions/${versionId}`)
-  }
-
-  readonly getAnswersByVersion = (formId: KoboId, versionId: string) => {
-    return this.api.get<KoboApiSchema>(`/v2/assets/${formId}/versions/${versionId}/data.json`)
+  readonly getFormByVersion = (formId: Kobo.Form.Id, versionId: string) => {
+    return this.api.get<Kobo.Form>(`/v2/assets/${formId}/versions/${versionId}`)
   }
 
   /**
@@ -129,20 +114,20 @@ export class KoboSdkv2 {
    */
   private static readonly MAX_KOBO_PAGESIZE = 2e4
 
-  readonly getAnswersRaw = (form: KoboId, {limit, offset, ...params}: KoboAnswerParams = {}) => {
+  readonly getAnswersRaw = (form: Kobo.Form.Id, {limit, offset, ...params}: Kobo.Submission.Filter = {}) => {
     const fetchPage = async ({
-      limit = KoboSdkv2.MAX_KOBO_PAGESIZE,
+      limit = KoboClientV2.MAX_KOBO_PAGESIZE,
       offset = 0,
       accumulated = []
     }: {
       limit?: number,
       offset?: number,
-      accumulated?: Array<ApiKoboAnswerMetaData & Record<string, any>>
-    }): Promise<KoboApiList<ApiKoboAnswerMetaData & Record<string, any>>> => {
-      const start = map(params.start, _ => KoboSdkv2.makeDateFilter('_submission_time', 'gte', _))
-      const end = map(params.end, _ => KoboSdkv2.makeDateFilter('_submission_time', 'lte', _))
+      accumulated?: Array<Kobo.Submission>
+    }): Promise<Kobo.Paginate<Kobo.Submission>> => {
+      const start = map(params.start, _ => KoboClientV2.makeDateFilter('_submission_time', 'gte', _))
+      const end = map(params.end, _ => KoboClientV2.makeDateFilter('_submission_time', 'lte', _))
       const query = start && end ? {'$and': [start, end]} : start ?? end
-      const response = await this.api.get<KoboApiList<ApiKoboAnswerMetaData & Record<string, any>>>(`/v2/assets/${form}/data`, {
+      const response = await this.api.get<Kobo.Paginate<Kobo.Submission.MetaData & Record<string, any>>>(`/v2/assets/${form}/data`, {
         qs: {
           limit: limit,
           start: offset,
@@ -155,22 +140,29 @@ export class KoboSdkv2 {
     return fetchPage({limit, offset})
   }
 
-  readonly getAnswers = async (form: KoboId, params: KoboAnswerParams = {}): Promise<ApiPaginate<KoboAnswer>> => {
+  readonly getAnswers = async (form: Kobo.Form.Id, params: Kobo.Submission.Filter = {}): Promise<Kobo.Paginate<Kobo.Submission>> => {
     return await this.getAnswersRaw(form, params)
       .then(res => {
         return ({
           ...res,
           results: res.results
-            .map(KoboAnswerUtils.mapAnswer)
-            .sort((a, b) => a.submissionTime.getTime() - b.submissionTime.getTime())
+            .map(_ => {
+              const submissionTime = new Date(_._submission_time)
+              _._submission_time = submissionTime
+              _.start = _.start ? new Date(_.start) : undefined
+              _.end = _.end ? new Date(_.end) : undefined
+              return _
+            })
+            .sort((a, b) => {
+              return a._submission_time.getTime() - b._submission_time.getTime()
+            })
         })
       })
-      .then(koboToApiPaginate)
   }
 
   readonly getSchemas = () => {
     // return this.api.get(`/v2/assets/`)
-    return this.api.get<KoboApiList<KoboApiSchema>>(`/v2/assets/?q=asset_type%3Asurvey&limit=1000`)
+    return this.api.get<Kobo.Paginate<Kobo.Form>>(`/v2/assets/?q=asset_type%3Asurvey&limit=1000`)
   }
 
   readonly getAttachement = (path: string) => {

@@ -1,8 +1,8 @@
-import {KoboId} from '../../mapper'
+import {Kobo} from '../Kobo'
 
 export interface SubmitResponse {
   message?: 'Successful submission.',
-  formid?: KoboId
+  formid?: Kobo.Submission.Id
   encrypted?: boolean,
   instanceID?: string,
   submissionDate?: string,
@@ -12,5 +12,5 @@ export interface SubmitResponse {
 
 export interface KoboV1Form {
   uuid: string
-  id_string: KoboId
+  id_string: Kobo.Submission.Id
 }

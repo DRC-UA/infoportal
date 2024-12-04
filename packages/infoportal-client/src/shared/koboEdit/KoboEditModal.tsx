@@ -3,7 +3,6 @@ import React, {ReactNode, useMemo, useState} from 'react'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Alert, Box, Collapse} from '@mui/material'
 import {useI18n} from '@/core/i18n'
-import {KoboAnswerId, KoboId} from 'infoportal-common'
 import {IpInput} from '@/shared/Input/Input'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {KoboUpdateAnswers} from '@/core/sdk/server/kobo/KoboAnswerSdk'
@@ -15,6 +14,7 @@ import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Txt} from '@/shared/Txt'
 import {ArrayValues} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk'
 
 export type KoboEditModalOption = {
   value: string | null,
@@ -43,9 +43,9 @@ export const KoboEditModalAnswer = ({
   onClose,
   onUpdated,
 }: {
-  formId: KoboId,
+  formId: Kobo.FormId,
   columnName: string
-  answerIds: KoboAnswerId[]
+  answerIds: Kobo.SubmissionId[]
   onClose?: () => void,
   onUpdated?: (params: KoboUpdateAnswers<any, any>) => void,
 }) => {
@@ -85,10 +85,10 @@ export const KoboEditModalTag = ({
   onClose,
   onUpdated,
 }: {
-  formId: KoboId,
+  formId: Kobo.FormId,
   tag: string
   type: KoboEditModalType
-  answerIds: KoboAnswerId[]
+  answerIds: Kobo.SubmissionId[]
   options?: string[] | KoboEditModalOption[]
   onClose?: () => void,
   onUpdated?: (_: any) => void,

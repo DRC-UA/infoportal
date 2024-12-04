@@ -1,6 +1,7 @@
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
-import {KoboAnswerId, KoboFlattenRepeat, KoboRepeatRef} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk'
+import {KoboFlattenRepeat, KoboRepeatRef} from 'infoportal-common'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {Alert, Icon, useTheme} from '@mui/material'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -20,7 +21,7 @@ import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
-import {KoboMappedAnswer} from '@/core/sdk/server/kobo/Kobo'
+import {KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
 import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {useNavigate} from 'react-router-dom'
@@ -41,7 +42,7 @@ export const DatabaseKoboTableContent = ({
   const ctxAnswers = useKoboAnswersContext()
   const ctxEditAnswer = useKoboEditAnswerContext()
   const ctxEditTag = useKoboEditTagContext()
-  const [selectedIds, setSelectedIds] = useState<KoboAnswerId[]>([])
+  const [selectedIds, setSelectedIds] = useState<Kobo.SubmissionId[]>([])
 
   const flatData: KoboMappedAnswer[] | undefined = useMemo(() => {
     if (ctx.groupDisplay.get.repeatAs !== 'rows' || ctx.groupDisplay.get.repeatGroupName === undefined) return ctx.data

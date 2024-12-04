@@ -5,15 +5,16 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import {KoboAnswerId, KoboId, KoboIndex} from 'infoportal-common'
+import {KoboIndex} from 'infoportal-common'
 import {KeyOf} from '@alexandreannic/ts-utils'
+import {Kobo} from 'kobo-sdk/Kobo'
 
 interface EditDataParams<T extends Record<string, any> = any, K extends KeyOf<T> = KeyOf<T>> {
   tag: K
   type: KoboEditModalType
-  formId: KoboId
+  formId: Kobo.FormId
   options?: KoboEditModalOption[] | string[]
-  answerIds: KoboAnswerId[]
+  answerIds: Kobo.SubmissionId[]
   onSuccess?: (params: KoboUpdateAnswers<T>) => void
 }
 
@@ -22,20 +23,20 @@ interface EditDataParamsByName<T extends KoboFormNameMapped, K extends KeyOf<Non
   type: KoboEditModalType
   formName: T
   options?: KoboEditModalOption[] | string[]
-  answerIds: KoboAnswerId[]
+  answerIds: Kobo.SubmissionId[]
   onSuccess?: (params: KoboUpdateAnswers<NonNullable<InferTypedAnswer<T>['tags']>>) => void
 }
 
 interface KoboUpdateTagByName<T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>> {
   formName: T,
-  answerIds: KoboAnswerId[]
+  answerIds: Kobo.SubmissionId[]
   tag: K
   value: NonNullable<InferTypedAnswer<T>['tags']>[K] | null // TODO ensure null is updating correctly in DB
 }
 
 interface KoboUpdateTagById {
-  formId: KoboId,
-  answerIds: KoboAnswerId[]
+  formId: Kobo.FormId,
+  answerIds: Kobo.SubmissionId[]
   tag: string
   value: any
 }

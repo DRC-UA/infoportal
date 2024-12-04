@@ -1,9 +1,8 @@
 import {Bn_rapidResponse, Bn_re, Ecrec_cashRegistration, Protection_hhs3, Protection_pss} from '../generated'
-import {DrcOffice, DrcProjectHelper} from '../../type/Drc'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {OblastIndex} from '../../location'
 import {Person} from '../../type/Person'
-import {DisplacementStatus, KoboAnswerFlat, KoboBaseTags, KoboTagStatus, PersonDetails, WgDisability} from './Common'
+import {DisplacementStatus, PersonDetails, WgDisability} from './Kobo'
 import {safeInt32} from '../../utils'
 import {Ecrec_msmeGrantReg} from '../generated/Ecrec_msmeGrantReg'
 
