@@ -8,6 +8,7 @@ const koboIndex = {
   ecrec_msmeGrantEoi: 'awYf9G3sZB4grG8S4w3Wt8',
   ecrec_msmeGrantReg: 'aoJppKLX7QvSkMYokUfEjB',
   ecrec_vet2_dmfa: 'ag34YtGDQiW5FstyAxzy5P',
+  ecrec_vet_bha388: 'aLEGqicGyzkZCeCYeWqEyG',
   bn_rapidResponse: 'aMJL9DG8qEcULqTZTKQbrq',
   bn_rapidResponse2: 'adpuqZypnqHb8LNfX49iA5',
   bn_cashForRentApplication: 'aBupWbhtUmA7so3532tYLa',
@@ -61,6 +62,7 @@ const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex)).r
 
 const koboFormTranslation: Record<KoboFormName, string> = {
   safety_incident: '[Safety] Incident tracker',
+  ecrec_vet_bha388: '[Ecrec] VET BHA388 grant registration form',
   ecrec_vetApplication: `[Ecrec] VET - Training grants - we are now accepting applications / Гранти на навчання — відкриваємо прийом заявок`,
   ecrec_vetEvaluation: `[Ecrec] VET - Candidate evaluation`,
   ecrec_cashRegistration: '[Ecrec] Cash Registration Agricultural Inputs',
