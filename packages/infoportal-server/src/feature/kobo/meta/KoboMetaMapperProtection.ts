@@ -300,7 +300,6 @@ export class KoboMetaMapperProtection {
         pgs: DrcProgram.PGS,
         ais: DrcProgram.PIS,
         pfa: DrcProgram.PFA,
-
       }, () => undefined),
       personsCount: persons.length,
       persons,
