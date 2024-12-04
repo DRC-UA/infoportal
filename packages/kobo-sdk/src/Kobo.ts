@@ -205,8 +205,8 @@ export namespace Kobo {
 
     export interface MetaData {
       _id: Id,
-      start: Date,
-      end: Date,
+      start?: Date,
+      end?: Date,
       __version__?: string,
       _xform_id_string: string,
       _uuid: UUID,

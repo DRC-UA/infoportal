@@ -146,7 +146,16 @@ export class KoboClientV2 {
         return ({
           ...res,
           results: res.results
-            .sort((a, b) => a._submission_time.getTime() - b._submission_time.getTime())
+            .map(_ => {
+              const submissionTime = new Date(_._submission_time)
+              _._submission_time = submissionTime
+              _.start = _.start ? new Date(_.start) : undefined
+              _.end = _.end ? new Date(_.end) : undefined
+              return _
+            })
+            .sort((a, b) => {
+              return a._submission_time.getTime() - b._submission_time.getTime()
+            })
         })
       })
   }

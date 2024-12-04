@@ -10,6 +10,7 @@ import {KoboSubmissionFlat, KoboValidation} from 'infoportal-common'
 import {KoboEditTagsContext} from '@/core/context/KoboEditTagsContext'
 import {KoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatabaseKoboContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
+import {Kobo} from 'kobo-sdk'
 
 export const getColumnsBase = ({
   selectedIds,

@@ -5,9 +5,10 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import {Kobo.SubmissionId, KoboIndex} from 'infoportal-common'
+import {KoboIndex} from 'infoportal-common'
 import {KeyOf} from '@alexandreannic/ts-utils'
 import {useIpToast} from '@/core/useToast'
+import {Kobo} from 'kobo-sdk'
 
 interface EditDataParams<T extends Record<string, any> = any> extends Omit<KoboUpdateAnswers<T>, 'answer'> {
   onSuccess?: (params: KoboUpdateAnswers<T>) => void

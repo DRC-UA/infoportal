@@ -30,7 +30,7 @@ export class KoboSyncServer {
   ) {
   }
 
-  static readonly removeGroup = (answers: Record<string, any>): Record<string, any> => {
+  private static readonly removeGroup = (answers: Record<string, any>): Record<string, any> => {
     return seq(Object.entries(answers)).reduceObject(([k, v]) => {
       const nameWithoutGroup = k.replace(/^.*\//, '')
       if (Array.isArray(v)) {
@@ -40,12 +40,8 @@ export class KoboSyncServer {
     })
   }
 
-  static readonly mapKoboSubmissionTime = (_: any): Date => {
-    return new Date(_)
-  }
-
-  static readonly mapValidationStatus = (_: Kobo.Submission): undefined | KoboValidation => {
-    if (_._validation_status) return fnSwitch(_._validation_status.uid!, {
+  private static readonly mapValidationStatus = (_: Kobo.Submission): undefined | KoboValidation => {
+    if (_._validation_status?.uid) return fnSwitch(_._validation_status.uid, {
       validation_status_on_hold: KoboValidation.Pending,
       validation_status_approved: KoboValidation.Approved,
       validation_status_not_approved: KoboValidation.Rejected,
@@ -56,7 +52,7 @@ export class KoboSyncServer {
     }
   }
 
-  static readonly mapAnswer = (k: Kobo.Submission): KoboSubmission => {
+  private static readonly mapAnswer = (k: Kobo.Submission): KoboSubmission => {
     delete k['formhub/uuid']
     delete k['meta/instanceId']
     const {
@@ -76,15 +72,15 @@ export class KoboSyncServer {
       _submitted_by,
       ...answers
     } = k
-    const submissionTime = KoboSyncServer.mapKoboSubmissionTime(_submission_time)
     const answersUngrouped = KoboSyncServer.removeGroup(answers)
+    const date = answersUngrouped.date ? new Date(answersUngrouped.date) : new Date(_submission_time)
     return {
       attachments: _attachments ?? [],
       geolocation: _geolocation,
-      date: answersUngrouped.date ? new Date(answersUngrouped.date) : submissionTime,
-      start: start ? new Date(start) : submissionTime,
-      end: end ? new Date(end) : submissionTime,
-      submissionTime,
+      date: date,
+      start: start ?? date,
+      end: end ?? date,
+      submissionTime: new Date(_submission_time),
       version: __version__,
       id: '' + _id,
       uuid: _uuid,

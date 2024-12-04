@@ -5,8 +5,8 @@ import {AnswersFilters} from '@/core/sdk/server/kobo/KoboApiSdk'
 import {endOfDay, startOfDay} from 'date-fns'
 import {map} from '@alexandreannic/ts-utils'
 import {ApiPaginate, ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {KoboSubmission, KoboSubmission, KoboSubmissionFlat} from 'infoportal-common/kobo'
-import {Kobo} from 'kobo-sdk/Kobo'
+import {KoboSubmission, KoboSubmissionFlat} from 'infoportal-common'
+import {Kobo} from 'kobo-sdk'
 
 export interface KoboAnswerFilter {
   readonly paginate?: ApiPagination

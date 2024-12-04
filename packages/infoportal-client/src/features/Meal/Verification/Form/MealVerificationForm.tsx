@@ -21,7 +21,6 @@ import {useNavigate} from 'react-router'
 import {mealVerificationActivities, mealVerificationActivitiesIndex} from '@/features/Meal/Verification/mealVerificationConfig'
 import {mealIndex} from '@/features/Meal/Meal'
 import {appConfig} from '@/conf/AppConfig'
-import {Stepper} from '@/shared/Stepper/Stepper'
 
 export interface MealVerificationForm {
   activity: string
