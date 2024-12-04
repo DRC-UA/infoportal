@@ -159,6 +159,7 @@ export const DatabaseAccessForm = ({
             {map(accessForm.watch('question'), questionName => {
               if (questionName === '') return
               const question = indexQuestion[questionName]
+              if (!question) return;
               switch (question.type) {
                 case 'select_one':
                 case 'select_multiple': {
