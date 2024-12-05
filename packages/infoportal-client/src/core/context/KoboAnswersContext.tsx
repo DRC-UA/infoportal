@@ -8,7 +8,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {KoboMappedAnswer, KoboMapper} from '@/core/sdk/server/kobo/KoboMapper'
 import {DatabaseKoboAnswerViewDialog} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
 import {Kobo} from 'kobo-sdk/Kobo'
-import {KoboFormName} from 'infoportal-common/kobo'
+import {KoboFormName} from 'infoportal-common'
 
 const Context = React.createContext({} as KoboAnswersContext)
 

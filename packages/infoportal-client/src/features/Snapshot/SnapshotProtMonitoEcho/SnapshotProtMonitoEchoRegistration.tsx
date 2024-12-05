@@ -63,7 +63,7 @@ export const SnapshotProtMonitoEchoRegistration = () => {
                 })}>
                   {(d, l) => (
                     <ChartPieWidget
-                      title={m.protHHSnapshot.male1860}
+                      title={m.protHHSnapshot.maleYoung}
                       value={d.value}
                       base={d.base}
                       evolution={d.percent - l.percent}

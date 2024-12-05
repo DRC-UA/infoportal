@@ -18,7 +18,7 @@ import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {map, seq} from '@alexandreannic/ts-utils'
 import {NavLink} from 'react-router-dom'
 import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
-import {KoboSchemaHelper} from 'infoportal-common/kobo'
+import {KoboSchemaHelper} from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 
 const databaseUrlParamsValidation = yup.object({
