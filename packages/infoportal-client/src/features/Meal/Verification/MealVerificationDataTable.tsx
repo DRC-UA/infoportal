@@ -364,6 +364,7 @@ export const MealVerificationDataTable = <
                   const reg = _.verifiedData[id]?.valueReg
                   const verif = _.verifiedData[id]?.valueVerif ?? <TableIcon color="disabled">block</TableIcon>
                   return {
+                    export: reg + ' <=> ' + verif,
                     value: _.verifiedData[id].equals ? '1' : '0',
                     label: fnSwitch(display, {
                       reg,
