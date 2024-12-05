@@ -140,6 +140,12 @@ export class BuildKoboType {
         'hromada',
       ]
     },
+    ecrec_msme_bha388: {
+      formId: KoboIndex.byName('ecrec_msme_bha388').id,
+      skipQuestionTyping: [
+        'hromada',
+      ]
+    },
     ecrec_cashRegistration: {
       formId: KoboIndex.byName('ecrec_cashRegistration').id, skipQuestionTyping: [
         'ben_det_hromada',
@@ -386,6 +392,9 @@ export class BuildKoboType {
     },
     partner_lampa: {
       formId: KoboIndex.byName('partner_lampa').id,
+    },
+    partner_angels: {
+      formId: KoboIndex.byName('partner_angels').id,
     },
     meal_verificationPartnerBnre: {
       formId: KoboIndex.byName('meal_verificationPartnerBnre').id,

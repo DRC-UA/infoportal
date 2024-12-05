@@ -25,6 +25,7 @@ import {
   Meal_visitMonitoring,
   Partner_lampa,
   Partner_pomogaem,
+  Partner_angels,
   Partnership_partnersDatabase,
   Person,
   PersonDetails,
@@ -38,11 +39,12 @@ import {
   Shelter_ta,
   ShelterNtaTags,
   ShelterTaTagsHelper,
+  Ecrec_vet2_dmfa,
+  Ecrec_vet_bha388,
+  Ecrec_msme_bha388
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
-import {Ecrec_vet2_dmfa} from 'infoportal-common'
-import {Ecrec_vet_bha388} from 'infoportal-common'
 
 /** @deprecated should be coming from the unified database */
 type Meta = {
@@ -79,6 +81,12 @@ export class KoboTypedAnswerSdk {
   private readonly buildSearch = (request: 'searchByAccess' | 'search') => {
     const req = this.sdk[request]
     return ({
+      ...make('ecrec_msme_bha388', (filters?: KoboAnswerFilter) =>
+        this.sdk.search({
+          formId: KoboIndex.byName('ecrec_msme_bha388').id,
+          fnMapKobo: Ecrec_msme_bha388.map,
+          ...filters,
+        })),
       ...make('ecrec_vet2_dmfa', (filters?: KoboAnswerFilter) =>
         this.sdk.search({
           formId: KoboIndex.byName('ecrec_vet2_dmfa').id,
@@ -260,6 +268,11 @@ export class KoboTypedAnswerSdk {
       ...make('partner_lampa', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('partner_lampa').id,
         fnMapKobo: Partner_lampa.map,
+        ...filters,
+      })),
+      ...make('partner_angels', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('partner_angels').id,
+        fnMapKobo: Partner_angels.map,
         ...filters,
       })),
     })
