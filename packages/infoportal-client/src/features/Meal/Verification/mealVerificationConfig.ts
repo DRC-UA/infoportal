@@ -167,6 +167,35 @@ export const mealVerificationActivities = seq([
   }),
   registerActivity({
     sampleSizeRatio: .1,
+    label: 'ECREC MSME BHA-388',
+    id: 'ECREC MSME BHA-388',
+    registration: {
+      koboFormId: KoboIndex.byName('ecrec_msme_bha388').id,
+      fetch: 'ecrec_msme_bha388',
+      joinBy: _ => _.tax_id_num!,
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
+      joinBy: _ => _.pay_det_tax_id_num!,
+      fetch: 'meal_verificationEcrec',
+    },
+    dataColumns: [],
+    verifiedColumns: {
+      back_consent: {reg: _ => _.consent, verif: _ => _.back_consent,},
+      ben_det_surname: {reg: _ => _.surname, verif: _ => _.ben_det_surname,},
+      ben_det_first_name: {reg: _ => _.first_name, verif: _ => _.ben_det_first_name,},
+      ben_det_pat_name: {reg: _ => _.pat_name, verif: _ => _.ben_det_pat_name,},
+      ben_det_ph_number: {reg: _ => _.ph_number, verif: _ => _.ben_det_ph_number,},
+      ben_det_oblast: {reg: _ => _.oblast, verif: _ => _.ben_det_oblast,},
+      ben_det_raion: {reg: _ => _.raion, verif: _ => _.ben_det_raion,},
+      ben_det_hromada: {reg: _ => _.hromada, verif: _ => _.ben_det_hromada,},
+      ben_det_res_stat: {reg: _ => _.res_stat, verif: _ => _.ben_det_res_stat,},
+      ben_det_income: {reg: _ => _.household_income, verif: _ => _.ben_det_income,},
+      ben_det_hh_size: {reg: _ => _.number_people, verif: _ => _.ben_det_hh_size,},
+    }
+  }),
+  registerActivity({
+    sampleSizeRatio: .1,
     label: 'VET - Training grants',
     id: 'Training grants',
     registration: {
@@ -362,6 +391,35 @@ export const mealVerificationActivities = seq([
     registration: {
       koboFormId: KoboIndex.byName('partner_pomogaem').id,
       fetch: 'partner_pomogaem',
+      joinBy: _ => _.pay_det_tax_id_num!,
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationPartnerBnre').id,
+      fetch: 'meal_verificationPartnerBnre',
+      joinBy: _ => _.pay_det_tax_id_num!,
+    },
+    verifiedColumns: {
+      back_consent: 'AUTO_MAPPING',
+      ben_det_surname: 'AUTO_MAPPING',
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_settlement: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
+    },
+  }),
+  registerActivity({
+    sampleSizeRatio: .1,
+    label: 'Partner Angels of Salvations',
+    id: 'Partner Angels of Salvations',
+    registration: {
+      koboFormId: KoboIndex.byName('partner_angels').id,
+      fetch: 'partner_angels',
       joinBy: _ => _.pay_det_tax_id_num!,
     },
     verification: {
