@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import {capitalize, KoboIndex} from 'infoportal-common'
 import {koboSdk} from '../index'
 import {appConf} from '../appConf'
-import {Kobo} from 'kobo-sdk'
+import {Kobo, KoboClient} from 'kobo-sdk'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string,
@@ -402,7 +402,7 @@ export class BuildKoboType {
   }, (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>])
 
   readonly build = (f: keyof typeof BuildKoboType['config']) => {
-    return new KoboInterfaceGenerator(this.sdk.v2, {
+    return new KoboInterfaceGenerator(this.sdk, {
       outDir: this.outDir,
       ...BuildKoboType.config[f],
     }).generate()
@@ -424,7 +424,7 @@ const ignoredQuestionTypes: Kobo.Form['content']['survey'][0]['type'][] = [
 class KoboInterfaceGenerator {
 
   constructor(
-    private sdk: KoboClientv2,
+    private sdk: KoboClient,
     private options: KoboInterfaceGeneratorParams
   ) {
   }
@@ -449,7 +449,7 @@ class KoboInterfaceGenerator {
   }
 
   readonly generate = async () => {
-    const form = await this.sdk.getForm(this.options.formId)
+    const form = await this.sdk.v2.getForm(this.options.formId)
     const survey = this.fixDuplicateName(form.content.survey)
     const mainInterface = this.generateInterface({survey, formId: this.options.formId,})
     const options = this.generateOptionsType({survey, choices: form.content.choices,})
