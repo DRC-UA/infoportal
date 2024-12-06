@@ -12,7 +12,7 @@
     "rootDir": "./src",
     "composite": true,
     "resolveJsonModule": true,
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
