@@ -41,7 +41,8 @@ import {
   ShelterTaTagsHelper,
   Ecrec_vet2_dmfa,
   Ecrec_vet_bha388,
-  Ecrec_msme_bha388
+  Ecrec_msme_bha388,
+  Partner_misto_syly
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
@@ -273,6 +274,11 @@ export class KoboTypedAnswerSdk {
       ...make('partner_angels', (filters?: KoboAnswerFilter) => req({
         formId: KoboIndex.byName('partner_angels').id,
         fnMapKobo: Partner_angels.map,
+        ...filters,
+      })),
+      ...make('partner_misto_syly', (filters?: KoboAnswerFilter) => req({
+        formId: KoboIndex.byName('partner_misto_syly').id,
+        fnMapKobo: Partner_misto_syly.map,
         ...filters,
       })),
     })

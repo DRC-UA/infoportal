@@ -396,6 +396,9 @@ export class BuildKoboType {
     partner_angels: {
       formId: KoboIndex.byName('partner_angels').id,
     },
+    partner_misto_syly: {
+      formId: KoboIndex.byName('partner_misto_syly').id,
+    },
     meal_verificationPartnerBnre: {
       formId: KoboIndex.byName('meal_verificationPartnerBnre').id,
     },

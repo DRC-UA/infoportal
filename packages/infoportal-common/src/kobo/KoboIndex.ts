@@ -56,6 +56,7 @@ const koboIndex = {
   partner_pomogaem: 'awpFpKtZZYEDuaZbqPi944',
   partner_lampa: 'axkkzwvccFtUkkL3BzSSnW',
   partner_angels:'aSK3rbp4gbRWmaGUL5eN5v',
+  partner_misto_syly:'aHr7429Q2n2YvBBJunx7b9',
 }
 
 import {Obj, seq} from '@alexandreannic/ts-utils'
@@ -119,7 +120,9 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   pseah_training_tracker: 'DRC - PSEAH Training tracker',
   partner_pomogaem: '[Verification] DRC_Pomagaem_UHF',
   partner_lampa: '[Verification] NGO LAMPA CASH FOR SOLID FUEL',
-  partner_angels: '[Verification] UKRF №155 DRC-200 Реєстрація на отримання грошей на паливо'
+  partner_angels: '[Verification] UKRF №155 DRC-200 Реєстрація на отримання грошей на паливо',
+  partner_misto_syly: '[Verification] DRC-203 (Misto Syly)',
+  
 }
 
 export type KoboFormName = keyof typeof koboIndex

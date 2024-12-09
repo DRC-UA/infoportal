@@ -2,6 +2,7 @@ import {Kobo} from 'kobo-sdk'
 import {KeyOf, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import { format } from 'date-fns'
 
 export const mealVerificationConf = {
   sampleSizeRatioDefault: .2,
@@ -192,6 +193,26 @@ export const mealVerificationActivities = seq([
       ben_det_res_stat: {reg: _ => _.res_stat, verif: _ => _.ben_det_res_stat,},
       ben_det_income: {reg: _ => _.household_income, verif: _ => _.ben_det_income,},
       ben_det_hh_size: {reg: _ => _.number_people, verif: _ => _.ben_det_hh_size,},
+      business_currently_operational_bha388: {reg: _ => _.business_currently_operational, verif: _ => _.business_currently_operational_bha388,},
+      years_experience_business: 'AUTO_MAPPING',
+      number_employees_business: 'AUTO_MAPPING',
+      income_past12: 'AUTO_MAPPING',
+      monthly_business_expenditure: 'AUTO_MAPPING',
+      have_debt_repayment: 'AUTO_MAPPING',
+      repayment_debt_loan: 'AUTO_MAPPING',
+      received_previous_support: 'AUTO_MAPPING',
+      who_previous_support: 'AUTO_MAPPING',
+      amount_previous_support: 'AUTO_MAPPING',
+      when_previous_support: {
+        reg: _ => {
+          if(_.when_previous_support)  return format(_.when_previous_support, 'yyyy-MM-dd') 
+          else return ''
+        }, 
+        verif: _ => {
+          if(_.when_previous_support)  return format(_.when_previous_support, 'yyyy-MM-dd') 
+          else return ''
+        }
+      }
     }
   }),
   registerActivity({
@@ -382,6 +403,10 @@ export const mealVerificationActivities = seq([
       },
       ben_det_income: 'AUTO_MAPPING',
       ben_det_hh_size: 'AUTO_MAPPING',
+      current_gov_assist_cff: 'AUTO_MAPPING',
+      type_property_living: 'AUTO_MAPPING',
+      utilities_fuel: 'AUTO_MAPPING',
+      functioning_fuel_delivery: 'AUTO_MAPPING',
     },
   }),
   registerActivity({
@@ -407,10 +432,20 @@ export const mealVerificationActivities = seq([
       ben_det_oblast: 'AUTO_MAPPING',
       ben_det_raion: 'AUTO_MAPPING',
       ben_det_hromada: 'AUTO_MAPPING',
-      ben_det_settlement: 'AUTO_MAPPING',
+      ben_det_settlement: {
+        reg: (_) => _,
+        verif: (_) => {
+          const tokens = _.ben_det_settlement?.split('_ua')
+          return tokens[0]
+        },
+        },
       ben_det_res_stat: 'AUTO_MAPPING',
       ben_det_income: 'AUTO_MAPPING',
       ben_det_hh_size: 'AUTO_MAPPING',
+      current_gov_assist_cff: 'AUTO_MAPPING',
+      type_property_living: 'AUTO_MAPPING',
+      utilities_fuel: 'AUTO_MAPPING',
+      functioning_fuel_delivery: 'AUTO_MAPPING',
     },
   }),
   registerActivity({
@@ -440,6 +475,46 @@ export const mealVerificationActivities = seq([
       ben_det_res_stat: 'AUTO_MAPPING',
       ben_det_income: 'AUTO_MAPPING',
       ben_det_hh_size: 'AUTO_MAPPING',
+      current_gov_assist_cff: 'AUTO_MAPPING',
+      type_property_living: 'AUTO_MAPPING',
+      utilities_fuel: 'AUTO_MAPPING',
+      functioning_fuel_delivery: 'AUTO_MAPPING',
+    },
+  }),
+  registerActivity({
+    sampleSizeRatio: .1,
+    label: 'Partner Misto Syly',
+    id: 'Partner Misto Syly',
+    registration: {
+      koboFormId: KoboIndex.byName('partner_misto_syly').id,
+      fetch: 'partner_misto_syly',
+      joinBy: _ => _.cal_head_pib!,
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationPartnerBnre').id,
+      fetch: 'meal_verificationPartnerBnre',
+      joinBy: _ => _.pay_det_tax_id_num!,
+    },
+    verifiedColumns: {
+      back_consent: 'AUTO_MAPPING',
+      ben_det_surname: {
+        reg: _ => _.hh_char_hh_det?.[0].ben_det_surname, verif: _ => _.ben_det_surname,
+      },
+  
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_settlement: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
+      current_gov_assist_cff: 'AUTO_MAPPING',
+      type_property_living: 'AUTO_MAPPING',
+      utilities_fuel: 'AUTO_MAPPING',
+      functioning_fuel_delivery: 'AUTO_MAPPING',
     },
   }),
 ])
