@@ -2,7 +2,7 @@ import {Kobo} from 'kobo-sdk'
 import {KeyOf, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
 import {seq} from '@alexandreannic/ts-utils'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import { format } from 'date-fns'
+import {format} from 'date-fns'
 
 export const mealVerificationConf = {
   sampleSizeRatioDefault: .2,
@@ -205,11 +205,11 @@ export const mealVerificationActivities = seq([
       amount_previous_support: 'AUTO_MAPPING',
       when_previous_support: {
         reg: _ => {
-          if(_.when_previous_support)  return format(_.when_previous_support, 'yyyy-MM-dd') 
+          if (_.when_previous_support) return format(_.when_previous_support, 'yyyy-MM-dd')
           else return ''
-        }, 
+        },
         verif: _ => {
-          if(_.when_previous_support)  return format(_.when_previous_support, 'yyyy-MM-dd') 
+          if (_.when_previous_support) return format(_.when_previous_support, 'yyyy-MM-dd')
           else return ''
         }
       }
@@ -398,7 +398,7 @@ export const mealVerificationActivities = seq([
       ben_det_hromada: 'AUTO_MAPPING',
       ben_det_settlement: 'AUTO_MAPPING',
       ben_det_res_stat: {
-        reg: (_, s) =>  _.ben_det_res_stat,
+        reg: (_, s) => _.ben_det_res_stat,
         verif: (_, s) => _.ben_det_res_stat,
       },
       ben_det_income: 'AUTO_MAPPING',
@@ -438,7 +438,7 @@ export const mealVerificationActivities = seq([
           const tokens = _.ben_det_settlement?.split('_ua')
           return tokens[0]
         },
-        },
+      },
       ben_det_res_stat: 'AUTO_MAPPING',
       ben_det_income: 'AUTO_MAPPING',
       ben_det_hh_size: 'AUTO_MAPPING',
@@ -500,7 +500,7 @@ export const mealVerificationActivities = seq([
       ben_det_surname: {
         reg: _ => _.hh_char_hh_det?.[0].ben_det_surname, verif: _ => _.ben_det_surname,
       },
-  
+
       ben_det_first_name: 'AUTO_MAPPING',
       ben_det_pat_name: 'AUTO_MAPPING',
       ben_det_ph_number: 'AUTO_MAPPING',
