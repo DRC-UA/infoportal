@@ -433,10 +433,10 @@ export const mealVerificationActivities = seq([
       ben_det_raion: 'AUTO_MAPPING',
       ben_det_hromada: 'AUTO_MAPPING',
       ben_det_settlement: {
-        reg: (_) => _,
+        reg: (_) => _.ben_det_settlement,
         verif: (_) => {
-          const tokens = _.ben_det_settlement?.split('_ua')
-          return tokens[0]
+          const tokens = _.ben_det_settlement?.split('_ua') || []
+          return tokens[0] || ''
         },
       },
       ben_det_res_stat: 'AUTO_MAPPING',
