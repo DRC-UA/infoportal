@@ -13,13 +13,13 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // background/back_donor [select_one] 1.3 Проект
   'back_donor': undefined | Option<'back_donor'>,
 	  // background/reg_drc [select_one] 1.4 Ви зареєструвалися в DRC для отримання грошової допомоги для забезпечення засобів до існування?
-  'reg_drc': undefined | Option<'received_any_assistance_ngo'>,
+  'reg_drc': undefined | Option<'received_previous_support'>,
 	    'calc_vet': string,
 	    'calc_vet_llh': string,
 	  // background/which_support_registered [select_one] 1.4. Для отримання якої підтримки ви були зареєстровані?
   'which_support_registered': undefined | Option<'which_support_registered'>,
 	  // background/back_consent [select_one] 1.5.1 Згода
-  'back_consent': undefined | Option<'received_any_assistance_ngo'>,
+  'back_consent': undefined | Option<'received_previous_support'>,
 	  // background/back_consen_no_reas [text] 1.5.2 Зазначте, будь ласка, причину, з якої Ви не погоджуєтеся заповнити анкету?
   'back_consen_no_reas': string | undefined,
 	  // background/pay_det_tax_id_num [text] 1.6 Ідентифікаційний номер (ІПН) бенефіціара
@@ -59,17 +59,17 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // cash_farmers/know_contamination_neighbour_yes [select_one] Чи знаєте ви, що ця/ці особи все ще продовжують обробляти свою землю?
   'know_contamination_neighbour_yes': undefined | Option<'know_contamination_neighbour_yes'>,
 	  // cash_farmers/has_agriculture_exp [select_one] Сільське господарство чи фермерство є основним джерелом засобів до існування для вашої родини?
-  'has_agriculture_exp': undefined | Option<'received_any_assistance_ngo'>,
+  'has_agriculture_exp': undefined | Option<'received_previous_support'>,
 	  // cash_farmers/consume_majority [select_one] Чи споживає Ваше домогосподарство значну частину того, що ви вирощуєте:
-  'consume_majority': undefined | Option<'received_any_assistance_ngo'>,
+  'consume_majority': undefined | Option<'received_previous_support'>,
 	  // cash_farmers/land_own [decimal] Скільки землі у власності Вашого домогосподарства:
   'land_own': number | undefined,
 	  // cash_farmers/land_cultivate [decimal] Скільки землі обробляє Ваше домогосподарство:
   'land_cultivate': number | undefined,
 	  // cash_farmers/depend_basic_needs [select_one] Чи залежите ви від сільського господарства для задоволення своїх основних потреб?
-  'depend_basic_needs': undefined | Option<'received_any_assistance_ngo'>,
+  'depend_basic_needs': undefined | Option<'received_previous_support'>,
 	  // cash_farmers/depend_basic_needs_uhf [select_one] Чи робить сільське господарство та/або тваринництво значний внесок у те, що домогосподарство може задовольнити свої основні потреби?
-  'depend_basic_needs_uhf': undefined | Option<'received_any_assistance_ngo'>,
+  'depend_basic_needs_uhf': undefined | Option<'received_previous_support'>,
 	  // cash_farmers/not_many_livestock [note] #### 🔘 Скільки у вас є такої худоби:
   'not_many_livestock': string,
 	  // cash_farmers/many_sheep_goat [integer] Вівці/кози:
@@ -87,7 +87,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // cash_farmers/type_assistance [select_multiple] Будь ласка, вкажіть, яку підтримку ви отримали:
   'type_assistance': undefined | Option<'type_assistance'>[],
 	  // cash_farmers/barriers_providing_sufficient [select_one] Чи стикаєтесь ви з бар'єрами у забезпеченні достатньої кількості та якості кормів для вашої худоби?
-  'barriers_providing_sufficient': undefined | Option<'received_any_assistance_ngo'>,
+  'barriers_providing_sufficient': undefined | Option<'received_previous_support'>,
 	  // cash_farmers/barriers_providing_sufficient_yes [text] Якщо "Так", будь ласка, вкажіть
   'barriers_providing_sufficient_yes': string | undefined,
 	  // cash_businesses/organization_business [select_one] Організаційна форма ведення бізнесу
@@ -101,53 +101,53 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // cash_businesses/long_business_operational [select_one] Як довго працює ваш бізнес?
   'long_business_operational': undefined | Option<'long_business_operational'>,
 	  // cash_businesses/committed_one_person_idp [select_one] Чи зобов'язуєтеся ви найняти принаймні одну людину, яка постраждала від війни, наприклад, ВПО або репатріанта?
-  'committed_one_person_idp': undefined | Option<'received_any_assistance_ngo'>,
+  'committed_one_person_idp': undefined | Option<'received_previous_support'>,
 	  // vet_training/you_currently_employed [select_one] 5.1 Чи працюєте ви зараз?
-  'you_currently_employed': undefined | Option<'received_any_assistance_ngo'>,
+  'you_currently_employed': undefined | Option<'received_previous_support'>,
 	  // vet_training/you_currently_employed_no [select_one] 5.1.1 Як довго ви були безробітним?
   'you_currently_employed_no': undefined | Option<'you_currently_employed_no'>,
 	  // vet_training/registered_training_facility [select_one] 5.2 Чи знаєте ви про зареєстрований/офіційний навчальний заклад, який наразі працює і може забезпечити таке навчання?
-  'registered_training_facility': undefined | Option<'received_any_assistance_ngo'>,
+  'registered_training_facility': undefined | Option<'received_previous_support'>,
 	  // vet_training/registered_training_facility_yes [text] 5.2.1 Якщо так, введіть тут інформацію про навчальний центр:
   'registered_training_facility_yes': string | undefined,
 	  // vet_training/training_activities_support [select_one] 5.3 За останні 2 роки Ви брали участь у будь-яких навчальних заходах з метою перекваліфікації або переходу до іншого сектору роботи?
-  'training_activities_support': undefined | Option<'received_any_assistance_ngo'>,
+  'training_activities_support': undefined | Option<'received_previous_support'>,
 	  // vet_training/training_activities_support_yes_paid [select_one] 5.3.1 Хто заплатив за це навчання?
   'training_activities_support_yes_paid': undefined | Option<'training_activities_support_yes_paid'>,
 	  // vet_training/training_activities_support_yes_consequence [select_one] 5.3.2 Чи отримали Ви роботу в результаті цього навчання?
-  'training_activities_support_yes_consequence': undefined | Option<'received_any_assistance_ngo'>,
-	  // vet_training_dmfa/current_employment_situation [select_one] Як би Ви описали Вашу поточну ситуацію з працевлаштуванням?
+  'training_activities_support_yes_consequence': undefined | Option<'received_previous_support'>,
+	  // alt_vet_training/current_employment_situation [select_one] Як би Ви описали Вашу поточну ситуацію з працевлаштуванням?
   'current_employment_situation': undefined | Option<'current_employment_situation'>,
-	  // vet_training_dmfa/long_unemployed [select_one] Як довго Ви перебуваєте без роботи?
+	  // alt_vet_training/long_unemployed [select_one] Як довго Ви перебуваєте без роботи?
   'long_unemployed': undefined | Option<'long_unemployed'>,
-	  // vet_training_dmfa/interested_formally_employed [select_one] Ви вказали, що офіційно працевлаштовані, тому, будь ласка, повідомте нам основну причину, чому ви зацікавлені в подачі заявки на курс професійного навчання
+	  // alt_vet_training/interested_formally_employed [select_one] Ви вказали, що офіційно працевлаштовані, тому, будь ласка, повідомте нам основну причину, чому ви зацікавлені в подачі заявки на курс професійного навчання
   'interested_formally_employed': undefined | Option<'interested_formally_employed'>,
-	  // vet_training_dmfa/interested_formally_employed_other [text] Якщо «Інше», будь ласка, вкажіть
+	  // alt_vet_training/interested_formally_employed_other [text] Якщо «Інше», будь ласка, вкажіть
   'interested_formally_employed_other': string | undefined,
-	  // vet_training_dmfa/aware_training_facility_operating [select_one] Чи знаєте ви про зареєстрований/офіційний навчальний заклад, який наразі працює і може проводити таке навчання?
-  'aware_training_facility_operating': undefined | Option<'received_any_assistance_ngo'>,
-	  // vet_training_dmfa/information_training_center [text] Якщо так, введіть інформацію про навчальний центр тут
+	  // alt_vet_training/aware_training_facility_operating [select_one] Чи знаєте ви про зареєстрований/офіційний навчальний заклад, який наразі працює і може проводити таке навчання?
+  'aware_training_facility_operating': undefined | Option<'received_previous_support'>,
+	  // alt_vet_training/information_training_center [text] Якщо так, введіть інформацію про навчальний центр тут
   'information_training_center': string | undefined,
-	  // vet_training_dmfa/know_cost_training [select_one] Чи знаєте ви загальну вартість навчання, на яке ви хотіли б записатися?
-  'know_cost_training': undefined | Option<'received_any_assistance_ngo'>,
-	  // vet_training_dmfa/cost_training [integer] Якщо так, будь ласка, вкажіть загальну вартість навчання в гривнях.
+	  // alt_vet_training/know_cost_training [select_one] Чи знаєте ви загальну вартість навчання, на яке ви хотіли б записатися?
+  'know_cost_training': undefined | Option<'received_previous_support'>,
+	  // alt_vet_training/cost_training [integer] Якщо так, будь ласка, вкажіть загальну вартість навчання в гривнях.
   'cost_training': number | undefined,
-	  // vet_training_dmfa/format_training [select_one] Який формат навчання ви обрали
+	  // alt_vet_training/format_training [select_one] Який формат навчання ви обрали
   'format_training': undefined | Option<'format_training'>,
-	  // vet_training_dmfa/access_computer_internet [select_one] Оскільки обраний вами курс містить онлайн-компоненти, будь ласка, підтвердіть, що у вас є доступ до ноутбука/комп'ютера та підключення до Інтернету, щоб мати можливість проходити цей курс
+	  // alt_vet_training/access_computer_internet [select_one] Оскільки обраний вами курс містить онлайн-компоненти, будь ласка, підтвердіть, що у вас є доступ до ноутбука/комп'ютера та підключення до Інтернету, щоб мати можливість проходити цей курс
   'access_computer_internet': undefined | Option<'access_computer_internet'>,
-	  // vet_training_dmfa/ability_regularly_attend [select_one] Будь ласка, підтвердіть, що ви маєте можливість регулярно відвідувати навчальні курси протягом обраного вами курсу
-  'ability_regularly_attend': undefined | Option<'received_any_assistance_ngo'>,
-	  // vet_training_dmfa/enrolled_other_training [select_one] Чи брали Ви участь у будь-якій іншій навчальній програмі протягом останніх двох років?
-  'enrolled_other_training': undefined | Option<'received_any_assistance_ngo'>,
-	  // vet_training_dmfa/who_paid_training [select_one] Хто оплачував це навчання?
+	  // alt_vet_training/ability_regularly_attend [select_one] Будь ласка, підтвердіть, що ви маєте можливість регулярно відвідувати навчальні курси протягом обраного вами курсу
+  'ability_regularly_attend': undefined | Option<'received_previous_support'>,
+	  // alt_vet_training/enrolled_other_training [select_one] Чи брали Ви участь у будь-якій іншій навчальній програмі протягом останніх двох років?
+  'enrolled_other_training': undefined | Option<'received_previous_support'>,
+	  // alt_vet_training/who_paid_training [select_one] Хто оплачував це навчання?
   'who_paid_training': undefined | Option<'who_paid_training'>,
 	  // msme/name_business_entrepreneur [text] 6.1 Назва бізнесу
   'name_business_entrepreneur': string | undefined,
 	  // msme/address_business [text] 6.2 Адреса розташування бізнесу
   'address_business': string | undefined,
 	  // msme/business_owned_you [select_one] 6.3 Цей бізнес належить виключно вам?
-  'business_owned_you': undefined | Option<'received_any_assistance_ngo'>,
+  'business_owned_you': undefined | Option<'received_previous_support'>,
 	  // msme/date_registration [date] 6.4 Дата реєстрації
   'date_registration': Date | undefined,
 	  // msme/experience_business [select_one] 6.5.1 Скільки у вас досвіду ведення бізнесу в цій сфері?
@@ -157,13 +157,45 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // msme/many_people_employ [select_one] 6.6 Скільки людей у вас працює?
   'many_people_employ': undefined | Option<'many_people_employ'>,
 	  // msme/business_currently_operational [select_one] 6.7 Чи працює ваш бізнес зараз?
-  'business_currently_operational': undefined | Option<'received_any_assistance_ngo'>,
+  'business_currently_operational': undefined | Option<'received_previous_support'>,
 	  // msme/business_main_income_household [select_one] 6.8 Чи є цей бізнес основним джерелом доходу для Вашого домогосподарства?
-  'business_main_income_household': undefined | Option<'received_any_assistance_ngo'>,
+  'business_main_income_household': undefined | Option<'received_previous_support'>,
 	  // msme/recruiting_idp_6mout [select_one] 6.9 Чи готові ви, відповідно до умов отримання гранту на відновлення та/або розширення вашої бізнес-діяльності, працевлаштувати принаймні на 6 місяців особу, яка постраждала від конфлікту (наприклад, ВПО або людину що що повернулася)?
-  'recruiting_idp_6mout': undefined | Option<'received_any_assistance_ngo'>,
+  'recruiting_idp_6mout': undefined | Option<'received_previous_support'>,
 	  // msme/received_any_assistance_ngo [select_one] 6.10 Чи отримував ваш бізнес будь-яку допомогу від NGO або уряду за останні два роки?
-  'received_any_assistance_ngo': undefined | Option<'received_any_assistance_ngo'>,
+  'received_any_assistance_ngo': undefined | Option<'received_previous_support'>,
+	  // msme_bha388/business_currently_operational_bha388 [select_one] Чи працює Ваше підприємство зараз?
+  'business_currently_operational_bha388': undefined | Option<'received_previous_support'>,
+	  // msme_bha388/business_currently_operational_no [text] Будь ласка, надайте додаткову інформацію, чому Ваше підприємство зараз не працює
+  'business_currently_operational_no': string | undefined,
+	  // msme_bha388/reason_pause_activity [select_multiple] Будь ласка, вкажіть причину призупинення діяльності
+  'reason_pause_activity': undefined | Option<'reason_pause_activity'>[],
+	  // msme_bha388/reason_pause_activity_other [text] Якщо «Інше», будь ласка, вкажіть
+  'reason_pause_activity_other': string | undefined,
+	  // msme_bha388/years_experience_business [integer] Який Ваш загальний стаж роботи в обраному Вами виді діяльності?
+  'years_experience_business': number | undefined,
+	  // msme_bha388/number_employees_business [integer] Будь ласка, вкажіть кількість працівників на Вашому підприємстві
+  'number_employees_business': number | undefined,
+	  // msme_bha388/income_past12 [integer] Яким був дохід від Вашої підприємницької діяльності за останні 12 місяців у гривнях?
+  'income_past12': number | undefined,
+	  // msme_bha388/monthly_business_expenditure [integer] Які ваші середньомісячні витрати на ведення бізнесу в гривнях?
+  'monthly_business_expenditure': number | undefined,
+	  // msme_bha388/have_debt_repayment [select_one] Чи є у вас боргові зобов'язання або зобов'язання з погашення кредиту?
+  'have_debt_repayment': undefined | Option<'received_previous_support'>,
+	  // msme_bha388/repayment_debt_loan [select_one] Будь ласка, вкажіть, чи є у Вас затримка з виплатами за цим боргом або кредитом
+  'repayment_debt_loan': undefined | Option<'received_previous_support'>,
+	  // msme_bha388/received_previous_support [select_one] Чи отримував ваш бізнес будь-яку раніше підтримку від уряду, неурядових організацій або інших суб'єктів?
+  'received_previous_support': undefined | Option<'received_previous_support'>,
+	  // msme_bha388/who_previous_support [select_one] Хто надавав цю підтримку?
+  'who_previous_support': undefined | Option<'who_previous_support'>,
+	  // msme_bha388/who_previous_support_other [text] Якщо «Інше», будь ласка, вкажіть
+  'who_previous_support_other': string | undefined,
+	  // msme_bha388/amount_previous_support [integer] Якою була її сума?
+  'amount_previous_support': number | undefined,
+	  // msme_bha388/when_previous_support [date] Коли вона була надана?
+  'when_previous_support': Date | undefined,
+	  // msme_bha388/grant_purpose_use [select_one] Якщо Ви відповідатимете критеріям для отримання бізнес-гранту від ДРБ, на які цілі Ви плануєте його використати?
+  'grant_purpose_use': undefined | Option<'grant_purpose_use'>,
 	  // fin_det/fin_det_res [text] 7.1 Інші коментарі респондента
   'fin_det_res': string | undefined,
 	  // fin_det/fin_det_enum [text] 7.2 Інші коментарі особи, яка проводила оцінювання
@@ -365,6 +397,7 @@ back_donor: {
 	'uhf7': `UHF-7`,
 	'uhf8': `UHF-8`,
 	'bha_llh_348': `BHA – LLH 348`,
+	'ukr000388_bha': `BHA-388`,
 	'danish_mfa_355': `Danish MFA 355`
 },
 which_support_registered: {
@@ -373,7 +406,7 @@ which_support_registered: {
 	'vet_training': `VET training for New Livelihood Development`,
 	'msme': `MSME Sectoral Cash for Businesses [Livelihood Restoration]`
 },
-received_any_assistance_ngo: {
+received_previous_support: {
 	'yes': `Так`,
 	'no': `Ні`
 },
@@ -480,6 +513,22 @@ format_training: {
 	'offline': `Офлайн`,
 	'mixed': `Змішаний`
 },
+reason_pause_activity: {
+	'relocation_business': `Географічне переміщення бізнесу`,
+	'mine_contamination': `Мінне забруднення`,
+	'damaged_assets': `Пошкодження або знищення активів внаслідок обстрілів`,
+	'other': `Інше`
+},
+who_previous_support: {
+	'government': `Уряд`,
+	'ngo': `Неурядова організація`,
+	'other': `Інше`
+},
+grant_purpose_use: {
+	'restoration': `Відновлення бізнесу`,
+	'continuation': `Продовження бізнесу`,
+	'expansion': `Розширення бізнесу`
+},
 ben_det_oblast: {
 	'cherkaska': `Черкаська`,
 	'chernihivska': `Чернігівська`,
@@ -540,5 +589,12 @@ export const map = (_: Record<keyof T, any>): T => ({
 	main_business_activities: _.main_business_activities?.split(' '),
 	cost_training: _.cost_training ? +_.cost_training : undefined,
 	date_registration: _.date_registration ? new Date(_.date_registration) : undefined,
+	reason_pause_activity: _.reason_pause_activity?.split(' '),
+	years_experience_business: _.years_experience_business ? +_.years_experience_business : undefined,
+	number_employees_business: _.number_employees_business ? +_.number_employees_business : undefined,
+	income_past12: _.income_past12 ? +_.income_past12 : undefined,
+	monthly_business_expenditure: _.monthly_business_expenditure ? +_.monthly_business_expenditure : undefined,
+	amount_previous_support: _.amount_previous_support ? +_.amount_previous_support : undefined,
+	when_previous_support: _.when_previous_support ? new Date(_.when_previous_support) : undefined,
 }) as T
 }

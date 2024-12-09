@@ -9,7 +9,7 @@ const koboIndex = {
   ecrec_msmeGrantReg: 'aoJppKLX7QvSkMYokUfEjB',
   ecrec_vet2_dmfa: 'ag34YtGDQiW5FstyAxzy5P',
   ecrec_vet_bha388: 'aLEGqicGyzkZCeCYeWqEyG',
-  ecrec_msme_bha388:'aoJppKLX7QvSkMYokUfEjB',
+  ecrec_msme_bha388: 'aoJppKLX7QvSkMYokUfEjB',
   bn_rapidResponse: 'aMJL9DG8qEcULqTZTKQbrq',
   bn_rapidResponse2: 'adpuqZypnqHb8LNfX49iA5',
   bn_cashForRentApplication: 'aBupWbhtUmA7so3532tYLa',
@@ -55,7 +55,8 @@ const koboIndex = {
   pseah_training_tracker: 'aRBEzakmsMPpw8VoJG8Gpk',
   partner_pomogaem: 'awpFpKtZZYEDuaZbqPi944',
   partner_lampa: 'axkkzwvccFtUkkL3BzSSnW',
-  partner_angels:'aSK3rbp4gbRWmaGUL5eN5v',
+  partner_angels: 'aSK3rbp4gbRWmaGUL5eN5v',
+  partner_misto_syly: 'aHr7429Q2n2YvBBJunx7b9',
 }
 
 import {Obj, seq} from '@alexandreannic/ts-utils'
@@ -73,7 +74,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   ecrec_msmeGrantEoi: '[Ecrec] MSME EOI',
   ecrec_msmeGrantReg: '[Ecrec] MSME grant registration form',
   ecrec_vet2_dmfa: '[Ecrec] VET DMFA355 grant registration form',
-  ecrec_msme_bha388:'[Ecrec] MSME grant registration form {BHA388}',
+  ecrec_msme_bha388: '[Ecrec] MSME grant registration form {BHA388}',
   bn_rapidResponse: '[Basic Needs] Rapid Response Mechanism',
   bn_rapidResponse2: '[Basic Needs] Rapid Response Mechanism v2',
   bn_cashForRentApplication: '[Basic Needs] Cash for Rent Application',
@@ -119,7 +120,9 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   pseah_training_tracker: 'DRC - PSEAH Training tracker',
   partner_pomogaem: '[Verification] DRC_Pomagaem_UHF',
   partner_lampa: '[Verification] NGO LAMPA CASH FOR SOLID FUEL',
-  partner_angels: '[Verification] UKRF №155 DRC-200 Реєстрація на отримання грошей на паливо'
+  partner_angels: '[Verification] UKRF №155 DRC-200 Реєстрація на отримання грошей на паливо',
+  partner_misto_syly: '[Verification] DRC-203 (Misto Syly)',
+
 }
 
 export type KoboFormName = keyof typeof koboIndex
