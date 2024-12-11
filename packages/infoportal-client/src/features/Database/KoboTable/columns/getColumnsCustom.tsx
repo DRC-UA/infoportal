@@ -596,7 +596,6 @@ export const getColumnsCustom = ({
       //       )
       //     }
       //   }
-   
     [KoboIndex.byName('protection_communityMonitoring').id]: [
       {
         id: 'tags_project',
@@ -709,8 +708,4 @@ export const getColumnsCustom = ({
     ]
   }
   return extra[formId] ?? []
-}
-
-function div(household_income: number, number_people: number | undefined) {
-  throw new Error('Function not implemented.')
 }
