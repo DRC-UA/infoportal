@@ -15,6 +15,7 @@ import {
   KoboBaseTags,
   KoboEcrec_cashRegistration,
   KoboGeneralMapping,
+  KoboHelper,
   KoboMetaEcrecTags,
   KoboMetaHelper,
   KoboMetaStatus,
@@ -28,7 +29,6 @@ import {
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
 import {appConf} from '../../../core/conf/AppConf'
-import {KoboHelper} from 'infoportal-common'
 
 export class KoboMetaMapperEcrec {
 
@@ -66,7 +66,7 @@ export class KoboMetaMapperEcrec {
         taxId: answer.pay_det_tax_id_num,
         phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
         status: KoboMetaHelper.mapCashStatus(row.tags?.status),
-        lastStatusUpdate: row.tags?.lastStatusUpdate,
+        lastStatusUpdate: row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined,
         passportNum: answer.pay_det_pass_num,
         taxIdFileName: answer.pay_det_tax_id_ph,
         taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
@@ -103,7 +103,7 @@ export class KoboMetaMapperEcrec {
       patronymicName: answer.ben_det_pat_name,
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
       status: status,
-      lastStatusUpdate: row.tags?.lastStatusUpdate,
+      lastStatusUpdate: row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined,
     })
   }
 
@@ -243,7 +243,7 @@ export class KoboMetaMapperEcrec {
       taxId: answer.pay_det_tax_id_num,
       phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
       status: KoboMetaHelper.mapCashStatus(row.tags?.status),
-      lastStatusUpdate: row.tags?.lastStatusUpdate,
+      lastStatusUpdate: row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined,
       passportNum: answer.pay_det_pass_num,
       taxIdFileName: answer.pay_det_tax_id_ph,
       taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
