@@ -17,6 +17,7 @@ import {
   Protection_gbv,
   ProtectionHhsTags,
   safeArray,
+  Ecrec_vet_bha388,
 } from 'infoportal-common'
 import React from 'react'
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
@@ -437,6 +438,88 @@ export const getColumnsCustom = ({
           }
         }
       }
+    ], 
+    [KoboIndex.byName('ecrec_vet_bha388').id]: [
+      {
+        id: 'vulnerability_vet_bha388',
+        head: m.vulnerability,
+        type: 'number',
+        render: (row: KoboSubmissionFlat<Ecrec_vet_bha388.T, any> & { custom: KoboGeneralMapping.IndividualBreakdown }) => {
+          const minimumWageUah = 8000
+          const scoring = {
+            householdSize_bha: 0,
+            residenceStatus: 0,
+            pwd: 0,
+            chronic_disease: 0,
+            singleParent: 0,
+            elderly: 0,
+            pregnantLactating: 0,
+            ex_combatants: 0,
+            income: 0
+          }
+          scoring.householdSize_bha += fnSwitch('' + row.number_people!, {
+            1: 2,
+            2: 0,
+            3: 2,
+            4: 3,
+          }, () => 0)
+          if (row.number_people! >= 5) scoring.householdSize_bha += 5
+
+          if (row.res_stat === 'displaced') {
+            if (['more_24m', '12_24m'].includes(row.long_displaced!)) scoring.residenceStatus += 2
+            else if (['less_3m', '3_6m', '6_12m'].includes(row.long_displaced!)) scoring.residenceStatus += 1
+          }
+          const disabilitiesCount = row.family_member?.filter(member => ['one', 'two', 'fri'].includes(member.dis_level!)).length || 0
+          scoring.pwd += disabilitiesCount === 1 ? 1 : disabilitiesCount >= 2 ? 3 : 0
+
+          scoring.chronic_disease += row.many_chronic_diseases! === 1 ? 1 : row.many_chronic_diseases! >= 2 ? 3 : 0
+
+          if (row.single_parent === 'yes') scoring.singleParent += 2
+
+          if (row.elderly_people === 'yes') {
+            if (row.many_elderly_people! >= 2) scoring.elderly += 2
+            else if (row.many_elderly_people === 1) scoring.elderly += 1
+          }
+
+          if (row.household_pregnant_that_breastfeeding === 'yes') {
+            if (row.many_pregnant_that_breastfeeding! >= 2) scoring.pregnantLactating += 3
+            else if (row.many_pregnant_that_breastfeeding === 1) scoring.pregnantLactating += 1
+          }
+          if (row.household_contain_excombatants === 'yes') {
+            if (row.many_excombatants! >= 2) scoring.ex_combatants += 3
+            else if (row.many_excombatants === 1) scoring.ex_combatants += 1
+          }
+
+          if (row.household_income !== undefined) {
+            if (row.household_income < minimumWageUah) scoring.income += 5
+            else if (row.number_people !== 0 && row.household_income / row.number_people! < minimumWageUah) scoring.income += 3;
+          }
+
+          const total = seq(Obj.values(scoring)).sum()
+          return {
+            value: total,
+            label: (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span style={{ display: 'inline-block', width: '100%' }}>{total}</span>
+                <TableIcon color="disabled" sx={{ ml: .5 }} tooltip={
+                  <ul>
+                    <li>Size of household: {scoring.householdSize_bha}</li>
+                    <li>Residence Status: {scoring.residenceStatus}</li>
+                    <li>PWD: {scoring.pwd}</li>
+                    <li>People with a chronic disease: {scoring.chronic_disease}</li>
+                    <li>Single Parent: {scoring.singleParent}</li>
+                    <li>Elderly: {scoring.elderly}</li>
+                    <li>Pregnant/Lactating woman: {scoring.pregnantLactating}</li>
+                    <li>Ex-combatants: {scoring.ex_combatants}</li>
+                    <li>Income: {scoring.income}</li>
+                  </ul>
+                }>help</TableIcon>
+              </div>
+            )
+          }
+        }
+      }
+    ], 
       // {
       //   id: 'Eligibility',
       //   head: m.eligibility,
@@ -513,7 +596,6 @@ export const getColumnsCustom = ({
       //       )
       //     }
       //   }
-    ],
     [KoboIndex.byName('protection_communityMonitoring').id]: [
       {
         id: 'tags_project',
