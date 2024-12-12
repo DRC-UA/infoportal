@@ -419,6 +419,7 @@ export const getColumnsCustom = ({
           const total = seq(Obj.values(scoring)).sum()
           return {
             value: total,
+            export: total,
             label: (
               <div style={{display: 'flex', alignItems: 'center'}}>
                 <span style={{display: 'inline-block', width: '100%'}}>{total}</span>
@@ -459,7 +460,7 @@ export const getColumnsCustom = ({
           }
           scoring.householdSize_bha += fnSwitch('' + row.number_people!, {
             1: 2,
-            2: 0,
+            2: 1,
             3: 2,
             4: 3,
           }, () => 0)
@@ -467,7 +468,7 @@ export const getColumnsCustom = ({
 
           if (row.res_stat === 'displaced') {
             if (['more_24m', '12_24m'].includes(row.long_displaced!)) scoring.residenceStatus += 2
-            else if (['less_3m', '3_6m', '6_12m'].includes(row.long_displaced!)) scoring.residenceStatus += 1
+            else if (['less_3m', '3_6m', '6_12m'].includes(row.long_displaced!)) scoring.residenceStatus += 3
           }
           const disabilitiesCount = row.family_member?.filter(member => ['one', 'two', 'fri'].includes(member.dis_level!)).length || 0
           scoring.pwd += disabilitiesCount === 1 ? 1 : disabilitiesCount >= 2 ? 3 : 0
@@ -477,7 +478,7 @@ export const getColumnsCustom = ({
           if (row.single_parent === 'yes') scoring.singleParent += 2
 
           if (row.elderly_people === 'yes') {
-            if (row.many_elderly_people! >= 2) scoring.elderly += 2
+            if (row.many_elderly_people! >= 2) scoring.elderly += 3
             else if (row.many_elderly_people === 1) scoring.elderly += 1
           }
 
@@ -498,6 +499,7 @@ export const getColumnsCustom = ({
           const total = seq(Obj.values(scoring)).sum()
           return {
             value: total,
+            export: total,
             label: (
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <span style={{ display: 'inline-block', width: '100%' }}>{total}</span>
