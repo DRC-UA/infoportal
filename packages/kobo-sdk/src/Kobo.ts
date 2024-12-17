@@ -47,10 +47,22 @@ export namespace Kobo {
     payload_template: ''
   }
 
+  export namespace ApiRes {
+
+    export type UpdateValidation = {
+      by_whom: string
+      color: string
+      label: string
+      timestamp: number
+      uid: Kobo.Submission.Validation
+    }
+  }
+
   export type FormId = Form.Id
   export type Form = Form.Form
   export namespace Form {
     export type Id = string
+
 
     export type Question = {
       name: string

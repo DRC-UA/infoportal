@@ -10,7 +10,6 @@ import {useI18n} from '@/core/i18n'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {useTheme} from '@mui/material'
 import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumnsCustom'
-import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
 import {Kobo} from 'kobo-sdk'
@@ -22,7 +21,7 @@ import {useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseVie
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
 import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 interface CustomForm {
   id: string
@@ -93,8 +92,7 @@ export const DatabaseTableCustomRoute = () => {
 
   const {id} = urlValidation.validateSync(useParams())
 
-  const ctxEditTag = useKoboEditTagContext()
-  const ctxEditAnswer = useKoboEditAnswerContext()
+  const ctxKoboUpdate = useKoboUpdateContext()
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
 
@@ -154,10 +152,13 @@ export const DatabaseTableCustomRoute = () => {
         formId,
         schema,
         m,
-        onEdit: selectedIds.length > 0 ? (questionName => ctxEditAnswer.open({
-          formId: formId,
-          question: questionName,
-          answerIds: selectedIds,
+        onEdit: selectedIds.length > 0 ? (questionName => ctxKoboUpdate.openById({
+          target: 'answer',
+          params: {
+            formId: formId,
+            question: questionName,
+            answerIds: selectedIds,
+          }
         })) : undefined,
         t,
         getRow: _ => (_[formId] ?? {}) as any,
@@ -170,20 +171,18 @@ export const DatabaseTableCustomRoute = () => {
           formId,
           canEdit: true,
           m,
-          openAnswerModal: ctxAnswers.openAnswerModal,
+          openViewAnswer: ctxAnswers.openView,
+          ctxEdit: ctxKoboUpdate,
           asyncEdit: (answerId: Kobo.SubmissionId) => api.koboApi.getEditUrl({formId: formId, answerId}),
-          asyncUpdateTagById: ctxEditTag.asyncUpdateById,
           getRow: _ => (_[formId] ?? {}) as any,
-          openEditTag: ctxEditTag.open,
         }),
         ...getColumnsCustom({
           getRow: _ => _[formId] ?? {},
           selectedIds,
+          ctxUpdate: ctxKoboUpdate,
           formId: formId,
           canEdit: true,
           m,
-          asyncUpdateTagById: ctxEditTag.asyncUpdateById,
-          openEditTag: ctxEditTag.open,
         }),
         ...cols
       ].map(_ => {

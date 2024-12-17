@@ -12,8 +12,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
-import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {appConfig} from '@/conf/AppConfig'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
@@ -40,8 +39,7 @@ export const DatabaseKoboTableContent = ({
   const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
-  const ctxEditAnswer = useKoboEditAnswerContext()
-  const ctxEditTag = useKoboEditTagContext()
+  const ctxKoboUpdate = useKoboUpdateContext()
   const [selectedIds, setSelectedIds] = useState<Kobo.SubmissionId[]>([])
 
   const flatData: KoboMappedAnswer[] | undefined = useMemo(() => {
@@ -54,8 +52,7 @@ export const DatabaseKoboTableContent = ({
     formId: ctx.form.id,
     canEdit: ctx.access.write,
     m,
-    asyncUpdateTagById: ctxEditTag.asyncUpdateById,
-    openEditTag: ctxEditTag.open,
+    ctxUpdate: ctxKoboUpdate,
   }).map(_ => ({
     ..._,
     typeIcon: <DatatableHeadIconByType type={_.type}/>
@@ -67,10 +64,13 @@ export const DatabaseKoboTableContent = ({
       schema: ctx.schema,
       externalFilesIndex: ctx.externalFilesIndex,
       onRepeatGroupClick: _ => navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),
-      onEdit: selectedIds.length > 0 ? (questionName => ctxEditAnswer.open({
-        formId: ctx.form.id,
-        question: questionName,
-        answerIds: selectedIds,
+      onEdit: selectedIds.length > 0 ? (questionName => ctxKoboUpdate.openById({
+        target: 'answer',
+        params: {
+          formId: ctx.form.id,
+          question: questionName,
+          answerIds: selectedIds,
+        }
       })) : undefined,
       m,
       t,
@@ -100,10 +100,9 @@ export const DatabaseKoboTableContent = ({
       formId: ctx.form.id,
       canEdit: ctx.access.write,
       m,
-      openAnswerModal: ctxAnswers.openAnswerModal,
       asyncEdit: ctx.asyncEdit,
-      asyncUpdateTagById: ctxEditTag.asyncUpdateById,
-      openEditTag: ctxEditTag.open,
+      ctxEdit: ctxKoboUpdate,
+      openViewAnswer: ctxAnswers.openView,
     })
     return [...base, ...extraColumns, ...schemaColumns].map(_ => ({
       ..._,

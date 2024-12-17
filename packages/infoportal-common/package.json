@@ -16,7 +16,7 @@
     "@types/promise-retry": "^1.1.6",
     "@types/qs": "^6.9.15",
     "axios": "1.7.9",
-    "date-fns": "^3.3.1",
+    "date-fns": "4.1.0",
     "promise-retry": "^2.0.1",
     "qs": "^6.12.1",
     "winston": "^3.13.1"

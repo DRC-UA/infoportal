@@ -8,16 +8,16 @@ import {
   DrcProject,
   Ecrec_cashRegistration,
   Ecrec_msmeGrantEoi,
-  KoboSubmissionFlat,
+  Ecrec_vet_bha388,
   KoboBaseTags,
   KoboEcrec_cashRegistration,
   KoboGeneralMapping,
   KoboIndex,
+  KoboSubmissionFlat,
   KoboTagStatus,
   Protection_gbv,
   ProtectionHhsTags,
   safeArray,
-  Ecrec_vet_bha388,
 } from 'infoportal-common'
 import React from 'react'
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
@@ -28,44 +28,40 @@ import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shar
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
-import {KoboEditModalOption} from '@/shared/koboEdit/KoboEditModal'
+import {KoboEditModalOption} from '@/shared/koboEdit/KoboUpdateModal'
 import {Messages} from '@/core/i18n/localization/en'
-import {KoboEditTagsContext} from '@/core/context/KoboEditTagsContext'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {Kobo} from 'kobo-sdk'
+import {KoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export const getColumnsCustom = ({
   selectedIds,
   m,
   formId,
   getRow = _ => _ as unknown as any,
-  // openEditAnswer,
-  openEditTag,
-  // asyncUpdateAnswerById,
-  asyncUpdateTagById,
+  ctxUpdate,
   canEdit,
 }: {
   canEdit?: boolean
   formId: Kobo.FormId
   getRow?: (_: any) => any,
   selectedIds: Kobo.SubmissionId[]
-  openEditTag: KoboEditTagsContext['open']
-  asyncUpdateTagById: KoboEditTagsContext['asyncUpdateById']
+  ctxUpdate: KoboUpdateContext
   m: Messages,
 }): DatatableColumn.Props<KoboMappedAnswer>[] => {
-  // const ctx = useDatabaseKoboTableContext()
-  // const ctxEditTag = useKoboEditTagContext()
-  // const {m} = useI18n()
   const getSelectMultipleTagSubHeader = ({tag, options, type = 'select_one'}: {
     type?: 'select_one' | 'select_multiple',
     tag: string,
     options: string [] | KoboEditModalOption[]
-  }) => selectedIds.length > 0 && <TableEditCellBtn onClick={() => openEditTag({
-    formId: formId,
-    answerIds: selectedIds,
-    type,
-    tag,
-    options,
+  }) => selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxUpdate.openById({
+    target: 'tag',
+    params: {
+      formId: formId,
+      answerIds: selectedIds,
+      type,
+      tag,
+      options,
+    }
   })}/>
 
   const individualsBreakdown: DatatableColumn.Props<any>[] = [
@@ -127,11 +123,14 @@ export const getColumnsCustom = ({
     width: 129,
     head: m.paidOn,
     type: 'date',
-    subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => openEditTag({
-      formId: formId,
-      answerIds: selectedIds,
-      type: 'date',
-      tag: 'lastStatusUpdate',
+    subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxUpdate.openById({
+      target: 'tag',
+      params: {
+        formId: formId,
+        answerIds: selectedIds,
+        type: 'date',
+        tag: 'lastStatusUpdate',
+      }
     })}/>,
     render: (_: any) => {
       const row: KoboSubmissionFlat<{}, KoboBaseTags & KoboTagStatus> = getRow(_)
@@ -142,7 +141,7 @@ export const getColumnsCustom = ({
         label: <IpDatepicker
           value={date}
           onChange={_ => {
-            asyncUpdateTagById.call({
+            ctxUpdate.asyncUpdateById.tag.call({
               formId: formId,
               answerIds: [row.id],
               value: _,
@@ -195,7 +194,7 @@ export const getColumnsCustom = ({
                 value={row.tags?.[tag]}
                 placeholder={m.project}
                 onChange={_ => {
-                  asyncUpdateTagById.call({
+                  ctxUpdate.asyncUpdateById.tag.call({
                     formId: formId,
                     answerIds: [row.id],
                     value: _,
@@ -213,40 +212,6 @@ export const getColumnsCustom = ({
     ]
   }
 
-  // const paymentStatusShelter = (): DatatableColumn.Props<any>[] => {
-  //   return [
-  //     {
-  //       id: 'custom_status',
-  //       head: m.status,
-  //       type: 'select_one',
-  //       width: 120,
-  //       options: () => DatatableUtils.buildOptions(Obj.keys(ShelterCashStatus), true),
-  //       render: (row: any) => {
-  //         return {
-  //           export: row.tags?.status ?? DatatableUtils.blank,
-  //           value: row.tags?.status,
-  //           label: (
-  //             <SelectStatusBy
-  //               enum="ShelterCashStatus"
-  //               disabled={!canEdit}
-  //               value={row.tags?.status}
-  //               placeholder={m.project}
-  //               onChange={_ => {
-  //                 asyncUpdateById.call({
-  //                   formId: formId,
-  //                   answerIds: [row.id],
-  //                   value: _,
-  //                   tag: 'status'
-  //                 })
-  //               }}
-  //             />
-  //           )
-  //         }
-  //       }
-  //     },
-  //     lastStatusUpdate,
-  //   ]
-  // }
   const beneficiaries: DatatableColumn.Props<any>[] = [
     {
       id: 'beneficiaries',
@@ -439,13 +404,13 @@ export const getColumnsCustom = ({
           }
         }
       }
-    ], 
+    ],
     [KoboIndex.byName('ecrec_vet_bha388').id]: [
       {
         id: 'vulnerability_vet_bha388',
         head: m.vulnerability,
         type: 'number',
-        render: (row: KoboSubmissionFlat<Ecrec_vet_bha388.T, any> & { custom: KoboGeneralMapping.IndividualBreakdown }) => {
+        render: (row: KoboSubmissionFlat<Ecrec_vet_bha388.T, any> & {custom: KoboGeneralMapping.IndividualBreakdown}) => {
           const minimumWageUah = 8000
           const scoring = {
             householdSize_bha: 0,
@@ -493,7 +458,7 @@ export const getColumnsCustom = ({
 
           if (row.household_income !== undefined) {
             if (row.household_income < minimumWageUah) scoring.income += 5
-            else if (row.number_people !== 0 && row.household_income / row.number_people! < minimumWageUah) scoring.income += 3;
+            else if (row.number_people !== 0 && row.household_income / row.number_people! < minimumWageUah) scoring.income += 3
           }
 
           const total = seq(Obj.values(scoring)).sum()
@@ -501,9 +466,9 @@ export const getColumnsCustom = ({
             value: total,
             export: total,
             label: (
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <span style={{ display: 'inline-block', width: '100%' }}>{total}</span>
-                <TableIcon color="disabled" sx={{ ml: .5 }} tooltip={
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <span style={{display: 'inline-block', width: '100%'}}>{total}</span>
+                <TableIcon color="disabled" sx={{ml: .5}} tooltip={
                   <ul>
                     <li>Size of household: {scoring.householdSize_bha}</li>
                     <li>Residence Status: {scoring.residenceStatus}</li>
@@ -521,95 +486,22 @@ export const getColumnsCustom = ({
           }
         }
       }
-    ], 
-      // {
-      //   id: 'Eligibility',
-      //   head: m.eligibility,
-      //   type: 'select_one',
-      //   width: 125,
-      //   subHeader: selectedIds.length > 0 && (
-      //     <TableEditCellBtn
-      //       onClick={() => openEditTag({
-      //         formId: formId,
-      //         answerIds: selectedIds,
-      //         type: 'select_one',
-      //         options: [
-      //           {value: 'yes', label: 'Yes'},
-      //           {value: 'no', label: 'No'},
-      //         ],
-      //         tag: 'eligibility',
-      //       })}
-      //     />
-      //   ),
-      //   options: () => DatatableUtils.buildOptions(['yes', 'no']),
-      //   render: (row: KoboSubmissionFlat<any, any>) => {
-      //     const eligibilityCriteria = [
-      //       {label: 'Employing up to 20 people', condition: row.many_people_employ === '20_more_people'},
-      //       {label: 'Minimum 3 years experience', condition: row.experience_business === 'more_five_years'},
-      //       {label: 'Commitment to recruit for 6 months', condition: row.recruiting_idp_6mout === 'yes'},
-      //       {label: 'Business plan informed by market research', condition: row.plan_inoformed_market_research === 'yes'},
-      //       {label: 'No other livelihoods support in the last 2 years', condition: row.received_any_assistance_ngo === 'no'}
-      //     ]
-      //
-      //     const allCriteriaMet = eligibilityCriteria.every(criteria => criteria.condition)
-      //     const initialEligibilityValue = row.tags?.eligibility ?? (allCriteriaMet ? 'yes' : 'no')
-      //     const [eligibilityValue, setEligibilityValue] = useState<string>(initialEligibilityValue)
-      //
-      //     useEffect(() => {
-      //       setEligibilityValue(initialEligibilityValue)
-      //     }, [row.tags?.eligibility])
-      //
-      //     return {
-      //       value: eligibilityValue,
-      //       label: (
-      //         <div style={{display: 'flex', alignItems: 'center'}}>
-      //           <IpSelectSingle
-      //             value={eligibilityValue}
-      //             options={[
-      //               {value: 'yes', children: 'Yes'},
-      //               {value: 'no', children: 'No'},
-      //             ]}
-      //             onChange={(value, event) => {
-      //               const newValue = value || ''
-      //               setEligibilityValue(newValue)
-      //               asyncUpdateTagById.call({
-      //                 formId: formId,
-      //                 answerIds: [row.id],
-      //                 tag: 'eligibility',
-      //                 value: newValue,
-      //               }).then(() => {
-      //                 // Update the state with the new value if necessary
-      //                 setEligibilityValue(newValue)
-      //               })
-      //             }}
-      //           />
-      //           <Tooltip title={
-      //             <ul>
-      //               {eligibilityCriteria.map(criteria => (
-      //                 <li key={criteria.label}>{criteria.label}: {criteria.condition ? 'Yes' : 'No'}</li>
-      //               ))}
-      //             </ul>
-      //           }>
-      //             <IconButton>
-      //               <InfoIcon/>
-      //             </IconButton>
-      //           </Tooltip>
-      //         </div>
-      //       )
-      //     }
-      //   }
+    ],
     [KoboIndex.byName('protection_communityMonitoring').id]: [
       {
         id: 'tags_project',
         head: m.project,
         type: 'select_multiple',
         width: 200,
-        subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => openEditTag({
-          formId: formId,
-          answerIds: selectedIds,
-          type: 'select_one',
-          tag: 'project',
-          options: currentProtectionProjects,
+        subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxUpdate.openById({
+          target: 'tag',
+          params: {
+            formId: formId,
+            answerIds: selectedIds,
+            type: 'select_one',
+            tag: 'project',
+            options: currentProtectionProjects,
+          }
         })}/>,
         options: () => DatatableUtils.buildOptions(Obj.keys(DrcProject), true),
         render: (_) => {
@@ -625,7 +517,7 @@ export const getColumnsCustom = ({
                 value={row.tags?.project}
                 placeholder={m.project}
                 onChange={_ => {
-                  asyncUpdateTagById.call({
+                  ctxUpdate.asyncUpdateById.tag.call({
                     formId: formId,
                     answerIds: [row.id],
                     value: _,
@@ -660,7 +552,7 @@ export const getColumnsCustom = ({
                 value={row.tags?.project}
                 placeholder={m.project}
                 onChange={_ => {
-                  asyncUpdateTagById.call({
+                  ctxUpdate.asyncUpdateById.tag.call({
                     formId: formId,
                     answerIds: [row.id],
                     value: _,
@@ -694,7 +586,7 @@ export const getColumnsCustom = ({
                 disabled={!canEdit}
                 value={safeProjects}
                 onChange={_ => {
-                  asyncUpdateTagById.call({
+                  ctxUpdate.asyncUpdateById.tag.call({
                     formId: formId,
                     answerIds: [row.id],
                     value: _,

@@ -68,8 +68,8 @@ export const ProtectionDashboardMonitoDocument = () => {
               </Lazy>
             </Div>
           </SlidePanel>
-          <Lazy deps={[ctx.dataFlat]} fn={() => ChartHelper.byCategory({
-            data: ctx.dataFlat,
+          <Lazy deps={[ctx.dataFlatFiltered]} fn={() => ChartHelper.byCategory({
+            data: ctx.dataFlatFiltered,
             categories: ctx.categoryOblasts('where_are_you_current_living_oblast'),
             filter: _ => !_.lackDoc?.includes('none'),
             filterBase: _ => _.lackDoc !== undefined,

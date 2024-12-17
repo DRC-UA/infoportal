@@ -1,16 +1,22 @@
 import {ApiClient} from '../ApiClient'
-import {KeyOf, KoboBaseTags, KoboIndex, Period, UUID} from 'infoportal-common'
+import {KeyOf, KoboBaseTags, KoboIndex, KoboSubmission, KoboSubmissionFlat, Period, UUID} from 'infoportal-common'
 import {KoboMapper} from '@/core/sdk/server/kobo/KoboMapper'
 import {AnswersFilters} from '@/core/sdk/server/kobo/KoboApiSdk'
 import {endOfDay, startOfDay} from 'date-fns'
 import {map} from '@alexandreannic/ts-utils'
 import {ApiPaginate, ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {KoboSubmission, KoboSubmissionFlat} from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
+import {KoboValidation} from 'infoportal-common'
 
 export interface KoboAnswerFilter {
   readonly paginate?: ApiPagination
   readonly filters?: AnswersFilters
+}
+
+export type KoboUpdateValidation = {
+  formId: Kobo.FormId
+  answerIds: Kobo.SubmissionId[]
+  status: KoboValidation | null
 }
 
 export type KoboUpdateAnswers<T extends Record<string, any> = any, K extends KeyOf<T> = any> = {
@@ -18,6 +24,12 @@ export type KoboUpdateAnswers<T extends Record<string, any> = any, K extends Key
   answerIds: Kobo.SubmissionId[]
   question: K
   answer: T[K] | null
+}
+
+export type KoboUpdateTag = {
+  formId: Kobo.FormId
+  answerIds: Kobo.SubmissionId[]
+  tags: Record<string, any>
 }
 
 interface KoboAnswerSearch {
@@ -82,6 +94,19 @@ export class KoboAnswerSdk {
     await this.client.delete(`/kobo/answer/${formId}`, {body: {answerIds}})
   }
 
+  readonly updateValidation = ({
+    formId,
+    answerIds,
+    status,
+  }: KoboUpdateValidation) => {
+    return this.client.patch(`/kobo/answer/${formId}/validation`, {
+      body: {
+        answerIds: answerIds,
+        status,
+      }
+    })
+  }
+
   readonly updateAnswers = <T extends Record<string, any>, K extends KeyOf<T>>({
     formId,
     answerIds,
@@ -97,11 +122,7 @@ export class KoboAnswerSdk {
     })
   }
 
-  readonly updateTag = ({formId, answerIds, tags}: {
-    formId: Kobo.FormId,
-    answerIds: Kobo.SubmissionId[],
-    tags: Record<string, any>
-  }) => {
+  readonly updateTag = ({formId, answerIds, tags}: KoboUpdateTag) => {
     for (let k in tags) if (tags[k] === undefined) tags[k] = null
     return this.client.patch(`/kobo/answer/${formId}/tag`, {body: {tags, answerIds: answerIds}})
   }

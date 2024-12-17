@@ -4,7 +4,7 @@ import React from 'react'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {Skeleton} from '@mui/material'
 import {KeyOf} from '@alexandreannic/ts-utils'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>>({
   value,
@@ -19,7 +19,7 @@ export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>
   columnName: K
   answerId: Kobo.SubmissionId
 }) => {
-  const ctx = useKoboEditAnswerContext()
+  const ctx = useKoboUpdateContext()
 
   const {columnDef, schema, loading} = useKoboColumnDef({formId, columnName})
 
@@ -27,7 +27,7 @@ export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>
   if (!columnDef || !schema) return <></>
 
   const handleChange = async (newValue: any) => {
-    await ctx.asyncUpdateById.call({
+    await ctx.asyncUpdateById.answer.call({
       answerIds: [answerId],
       answer: newValue,
       question: columnName,

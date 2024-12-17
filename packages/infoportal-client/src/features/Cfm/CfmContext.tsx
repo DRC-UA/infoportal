@@ -6,12 +6,12 @@ import {
   DrcOffice,
   DrcProject,
   DrcProjectHelper,
-  KoboSubmissionFlat,
   KoboIndex,
   KoboMealCfmHelper,
   KoboMealCfmStatus,
   KoboMealCfmTag,
   KoboSchemaHelper,
+  KoboSubmissionFlat,
   Meal_cfmExternal,
   Meal_cfmInternal,
   OblastIndex,
@@ -28,9 +28,9 @@ import {fnSwitch, map, Obj, Seq, seq} from '@alexandreannic/ts-utils'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 import {TableIcon, TableIconProps} from '@/features/Mpca/MpcaData/TableIcon'
 import {Box, BoxProps} from '@mui/material'
-import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {Kobo} from 'kobo-sdk'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export enum CfmDataOrigin {
   Internal = 'Internal',
@@ -133,7 +133,7 @@ export const CfmProvider = ({
   const {session, accesses} = useSession()
   const {api} = useAppSettings()
   const ctxAnswers = useKoboAnswersContext()
-  const ctxEditTag = useKoboEditTagContext()
+  const ctxKoboUpdate = useKoboUpdateContext()
   const users = useFetcher(() => api.user.search())
   const fetcherInternal = ctxAnswers.byName('meal_cfmInternal')
   const fetcherExternal = ctxAnswers.byName('meal_cfmExternal')
@@ -218,7 +218,7 @@ export const CfmProvider = ({
     formId: Kobo.FormId,
     answerId: Kobo.SubmissionId
   }) => {
-    await ctxEditTag.asyncUpdateById.call({
+    await ctxKoboUpdate.asyncUpdateById.tag.call({
       formId,
       answerIds: [answerId],
       tag: 'deletedBy',
