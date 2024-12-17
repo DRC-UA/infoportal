@@ -162,12 +162,12 @@ export namespace KoboUpdateModal {
     onUpdated?: (params: KoboUpdateAnswers<any, any>) => void,
   }) => {
     const {m} = useI18n()
-    const ctxEdit = useKoboUpdateContext()
+    const ctxKoboUpdate = useKoboUpdateContext()
     const {columnDef, schema, loading: loadingSchema} = useKoboColumnDef({formId, columnName})
 
     const fetcherUpdate = useFetcher((value: any) => {
       const p = {formId, answerIds, question: columnName, answer: value}
-      return ctxEdit.asyncUpdateById.answer.call(p).then(() => {
+      return ctxKoboUpdate.asyncUpdateById.answer.call(p).then(() => {
         onUpdated?.(p)
         return answerIds.length
       })
@@ -200,11 +200,11 @@ export namespace KoboUpdateModal {
     onUpdated?: (params: KoboUpdateValidation) => void,
   }) => {
     const {m} = useI18n()
-    const ctxEdit = useKoboUpdateContext()
+    const ctxKoboUpdate = useKoboUpdateContext()
 
     const fetcherUpdate = useFetcher((value: KoboValidation) => {
       const p: KoboUpdateValidation = {formId, answerIds, status: value}
-      return ctxEdit.asyncUpdateById.validation.call(p).then(() => {
+      return ctxKoboUpdate.asyncUpdateById.validation.call(p).then(() => {
         onUpdated?.(p)
         return answerIds.length
       })
@@ -241,11 +241,11 @@ export namespace KoboUpdateModal {
     onUpdated?: (_: any) => void,
   }) => {
     const {m} = useI18n()
-    const ctxEdit = useKoboUpdateContext()
+    const ctxKoboUpdate = useKoboUpdateContext()
     const ctxSchema = useKoboSchemaContext()
 
     const fetcherUpdate = useFetcher((value: any) => {
-      return ctxEdit.asyncUpdateById.tag.call({formId, answerIds, tag, value}).then(() => {
+      return ctxKoboUpdate.asyncUpdateById.tag.call({formId, answerIds, tag, value}).then(() => {
         onUpdated?.(value)
         return answerIds.length
       })

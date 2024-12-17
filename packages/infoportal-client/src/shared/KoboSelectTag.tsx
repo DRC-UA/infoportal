@@ -33,7 +33,7 @@ export const KoboSelectTag = <
   setData?: Dispatch<SetStateAction<T[] | undefined>>
   disabled?: boolean
 } & Pick<IpSelectSingleProps<any>, 'sx'>) => {
-  const ctxKoboEdit = useKoboUpdateContext()
+  const ctxKoboUpdate = useKoboUpdateContext()
   const enumKeys = Obj.keys(enumerator)
 
   return (
@@ -42,7 +42,7 @@ export const KoboSelectTag = <
       label={label}
       defaultValue={entry.tags?.[tag] ?? ''}
       onChange={(tagChange: any) => {
-        ctxKoboEdit.asyncUpdateById.tag.call({
+        ctxKoboUpdate.asyncUpdateById.tag.call({
           formId: formId,
           answerIds: [answerId],
           tag,

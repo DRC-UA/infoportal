@@ -43,7 +43,7 @@ export const ShelterTable = () => {
   const theme = useTheme()
   const ctx = useShelterContext()
   const ctxAnswers = useKoboAnswersContext()
-  const ctxEditAnswers = useKoboUpdateContext()
+  const ctxKoboUpdate = useKoboUpdateContext()
   const {m, formatDate, formatLargeNumber} = useI18n()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -217,7 +217,7 @@ export const ShelterTable = () => {
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m.modality,
         subHeader: selectedIds.length > 0
-          ? <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+          ? <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
             target: 'answer',
             params: {
               formName: 'shelter_nta',
@@ -253,7 +253,7 @@ export const ShelterTable = () => {
           label: <TableInput
             originalValue={nta.interviewee_name}
             value={nta.tags?.interviewee_name ?? nta.interviewee_name}
-            onChange={_ => ctxEditAnswers.asyncUpdateByName.answer.call({
+            onChange={_ => ctxKoboUpdate.asyncUpdateByName.answer.call({
               formName: 'shelter_nta',
               answerIds: [nta.id],
               question: 'interviewee_name',
@@ -277,7 +277,7 @@ export const ShelterTable = () => {
               type="number"
               originalValue={nta.pay_det_tax_id_num}
               value={nta.tags?.pay_det_tax_id_num ?? nta.pay_det_tax_id_num}
-              onChange={_ => ctxEditAnswers.asyncUpdateByName.answer.call({
+              onChange={_ => ctxKoboUpdate.asyncUpdateByName.answer.call({
                 formName: 'shelter_nta',
                 answerIds: [nta.id],
                 question: 'pay_det_tax_id_num',
@@ -499,7 +499,7 @@ export const ShelterTable = () => {
         head: m._shelter.validationStatus,
         width: 0,
         typeIcon: null,
-        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openById({
+        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openById({
           target: 'validation',
           params: {
             formId: KoboIndex.byName('shelter_nta').id,
@@ -516,7 +516,7 @@ export const ShelterTable = () => {
                 compact
                 value={nta.tags?._validation}
                 onChange={(tagChange) => {
-                  ctxEditAnswers.asyncUpdateByName.tag.call({
+                  ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_nta',
                     answerIds: [nta.id],
                     tag: '_validation',
@@ -534,7 +534,7 @@ export const ShelterTable = () => {
         groupLabel: KoboIndex.byName('shelter_nta').translation,
         head: m._shelter.agreement,
         type: 'string',
-        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
           target: 'tag',
           params: {
             formName: 'shelter_nta',
@@ -550,7 +550,7 @@ export const ShelterTable = () => {
               <TableInput
                 originalValue={null}
                 value={row.nta?.tags?.agreement}
-                onChange={_ => ctxEditAnswers.asyncUpdateByName.tag.call({
+                onChange={_ => ctxKoboUpdate.asyncUpdateByName.tag.call({
                   formName: 'shelter_nta',
                   answerIds: [nta.id],
                   tag: 'agreement',
@@ -568,7 +568,7 @@ export const ShelterTable = () => {
         head: m._shelter.workOrder,
         type: 'select_one',
         typeIcon: null,
-        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
           target: 'tag', params: {
             formName: 'shelter_nta',
             answerIds: selectedNta,
@@ -584,7 +584,7 @@ export const ShelterTable = () => {
               <TableInput
                 originalValue={null}
                 value={row.nta?.tags?.workOrder}
-                onChange={_ => ctxEditAnswers.asyncUpdateByName.tag.call({
+                onChange={_ => ctxKoboUpdate.asyncUpdateByName.tag.call({
                   formName: 'shelter_nta',
                   answerIds: [nta.id],
                   tag: 'workOrder',
@@ -604,7 +604,7 @@ export const ShelterTable = () => {
         type: 'select_multiple',
         typeIcon: null,
         options: () => DatatableUtils.buildOptions(shelterDrcProject, true),
-        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+        subHeader: selectedNta.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
           target: 'tag', params: {
             formName: 'shelter_nta',
             answerIds: selectedNta,
@@ -623,7 +623,7 @@ export const ShelterTable = () => {
                   debounce={1000}
                   value={projectArray}
                   onChange={(projectChange: DrcProject[] | undefined) => {
-                    ctxEditAnswers.asyncUpdateByName.tag.call({
+                    ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_nta',
                       answerIds: [nta.id],
                       tag: 'project',
@@ -795,7 +795,7 @@ export const ShelterTable = () => {
         head: m._shelter.contractor1,
         type: 'select_one',
         typeIcon: null,
-        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
           target: 'tag', params: {
             formName: 'shelter_ta',
             answerIds: selectedTa,
@@ -813,7 +813,7 @@ export const ShelterTable = () => {
                 value={ta.tags?.contractor1}
                 oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
-                  ctxEditAnswers.asyncUpdateByName.tag.call({
+                  ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
                     answerIds: [ta.id],
                     tag: 'contractor1',
@@ -833,7 +833,7 @@ export const ShelterTable = () => {
         head: m._shelter.contractor2,
         type: 'select_one',
         typeIcon: null,
-        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
           target: 'tag', params: {
             formName: 'shelter_ta',
             answerIds: selectedTa,
@@ -851,7 +851,7 @@ export const ShelterTable = () => {
                 value={ta.tags?.contractor2}
                 oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
-                  ctxEditAnswers.asyncUpdateByName.tag.call({
+                  ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
                     answerIds: [ta.id],
                     tag: 'contractor2',
@@ -877,7 +877,7 @@ export const ShelterTable = () => {
               <ShelterSelectContractor
                 value={ta.tags?.contractor3}
                 onChange={(tagChange) => {
-                  ctxEditAnswers.asyncUpdateByName.tag.call({
+                  ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
                     answerIds: [ta.id],
                     tag: 'contractor3',
@@ -903,7 +903,7 @@ export const ShelterTable = () => {
               <ShelterSelectContractor
                 value={ta.tags?.contractor4}
                 onChange={(tagChange) => {
-                  ctxEditAnswers.asyncUpdateByName.tag.call({
+                  ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
                     answerIds: [ta.id],
                     tag: 'contractor4',
@@ -924,7 +924,7 @@ export const ShelterTable = () => {
         type: 'select_one',
         options: () => Obj.keys(ShelterTaPriceLevel).map(_ => ({value: _, label: _})),
         typeIcon: null,
-        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
           target: 'tag', params: {
             formName: 'shelter_ta',
             answerIds: selectedTa,
@@ -942,7 +942,7 @@ export const ShelterTable = () => {
                 <IpSelectSingle<ShelterTaPriceLevel>
                   value={ta.tags?.damageLevel}
                   onChange={(tagChange) => {
-                    ctxEditAnswers.asyncUpdateByName.tag.call({
+                    ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_ta',
                       answerIds: [ta.id],
                       tag: 'damageLevel',
@@ -964,7 +964,7 @@ export const ShelterTable = () => {
         head: m.price,
         type: 'number',
         typeIcon: null,
-        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
           target: 'tag', params: {
             formName: 'shelter_ta',
             answerIds: selectedTa,
@@ -980,7 +980,7 @@ export const ShelterTable = () => {
                 debounce={1250}
                 value={row.ta?.tags?.price}
                 onChange={_ => {
-                  ctxEditAnswers.asyncUpdateByName.tag.call({
+                  ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
                     answerIds: [ta.id],
                     tag: 'price',
@@ -1048,7 +1048,7 @@ export const ShelterTable = () => {
         head: m._shelter.progressStatus,
         width: 190,
         typeIcon: null,
-        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
           target: 'tag', params: {
             formName: 'shelter_ta',
             answerIds: selectedTa,
@@ -1065,21 +1065,21 @@ export const ShelterTable = () => {
               <ShelterSelectStatus
                 value={ta.tags?.progress}
                 onChange={(tagChange) => {
-                  ctxEditAnswers.asyncUpdateByName.tag.call({
+                  ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
                     answerIds: [ta.id],
                     tag: 'progress',
                     value: tagChange,
                   })
                   if (tagChange === ShelterProgress.RepairWorksCompleted)
-                    ctxEditAnswers.asyncUpdateByName.tag.call({
+                    ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_ta',
                       answerIds: [ta.id],
                       tag: 'workDoneAt',
                       value: new Date(),
                     })
                   else if (ta.tags?.workDoneAt)
-                    ctxEditAnswers.asyncUpdateByName.tag.call({
+                    ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_ta',
                       answerIds: [ta.id],
                       tag: 'workDoneAt',
@@ -1098,7 +1098,7 @@ export const ShelterTable = () => {
         head: m._shelter.workDoneAt,
         type: 'date',
         width: 134,
-        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxEditAnswers.openByName({
+        subHeader: selectedTa.length > 0 && <TableEditCellBtn onClick={() => ctxKoboUpdate.openByName({
           target: 'tag', params: {
             formName: 'shelter_ta',
             answerIds: selectedTa,
@@ -1112,7 +1112,7 @@ export const ShelterTable = () => {
             label: row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted && map(row.ta, ta => (
               <IpDatepicker
                 value={row.ta?.tags?.workDoneAt}
-                onChange={_ => ctxEditAnswers.asyncUpdateByName.tag.call({
+                onChange={_ => ctxKoboUpdate.asyncUpdateByName.tag.call({
                   formName: 'shelter_ta',
                   answerIds: [ta.id],
                   tag: 'workDoneAt',
