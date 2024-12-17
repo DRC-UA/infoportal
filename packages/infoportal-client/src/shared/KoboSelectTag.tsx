@@ -1,9 +1,9 @@
 import {KeyOf} from 'infoportal-common'
 import React, {Dispatch, ReactNode, SetStateAction} from 'react'
 import {Obj} from '@alexandreannic/ts-utils'
-import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {IpSelectSingle, IpSelectSingleProps} from '@/shared/Select/SelectSingle'
 import {Kobo} from 'kobo-sdk'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
 
 export const KoboSelectTag = <
   TTag extends Record<string, any>,
@@ -33,7 +33,7 @@ export const KoboSelectTag = <
   setData?: Dispatch<SetStateAction<T[] | undefined>>
   disabled?: boolean
 } & Pick<IpSelectSingleProps<any>, 'sx'>) => {
-  const ctxEditTag = useKoboEditTagContext()
+  const ctxKoboEdit = useKoboEditAnswerContext()
   const enumKeys = Obj.keys(enumerator)
 
   return (
@@ -42,7 +42,7 @@ export const KoboSelectTag = <
       label={label}
       defaultValue={entry.tags?.[tag] ?? ''}
       onChange={(tagChange: any) => {
-        ctxEditTag.asyncUpdateById.call({
+        ctxKoboEdit.asyncUpdateById.tag.call({
           formId: formId,
           answerIds: [answerId],
           tag,

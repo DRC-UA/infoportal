@@ -1,7 +1,7 @@
 import {ReactNode} from 'react'
 import {IpBtn, Modal, Txt} from '@/shared'
 import {useI18n} from '@/core/i18n'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
 import {Kobo} from 'kobo-sdk'
 import {AccessSum} from '@/core/sdk/server/access/Access'
 

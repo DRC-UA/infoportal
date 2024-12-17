@@ -4,6 +4,7 @@ import {
   KoboFlattenRepeatData,
   KoboRepeatRef,
   KoboSchemaHelper,
+  KoboSubmissionMetaData,
   makeKoboCustomDirective,
   removeHtml,
 } from 'infoportal-common'
@@ -21,7 +22,6 @@ import {formatDate, formatDateTime, Messages} from '@/core/i18n/localization/en'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import DOMPurify from 'dompurify'
 import {Kobo} from 'kobo-sdk'
-import {KoboSubmissionMetaData} from 'infoportal-common'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()

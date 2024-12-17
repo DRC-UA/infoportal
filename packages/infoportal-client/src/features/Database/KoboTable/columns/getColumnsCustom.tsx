@@ -8,16 +8,16 @@ import {
   DrcProject,
   Ecrec_cashRegistration,
   Ecrec_msmeGrantEoi,
-  KoboSubmissionFlat,
+  Ecrec_vet_bha388,
   KoboBaseTags,
   KoboEcrec_cashRegistration,
   KoboGeneralMapping,
   KoboIndex,
+  KoboSubmissionFlat,
   KoboTagStatus,
   Protection_gbv,
   ProtectionHhsTags,
   safeArray,
-  Ecrec_vet_bha388,
 } from 'infoportal-common'
 import React from 'react'
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
@@ -30,10 +30,9 @@ import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditModalOption} from '@/shared/koboEdit/KoboEditModal'
 import {Messages} from '@/core/i18n/localization/en'
-import {KoboEditTagsContext} from '@/core/context/KoboEditTagsContext'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {Kobo} from 'kobo-sdk'
-import {KoboEditAnswersContext} from '@/core/context/KoboEditAnswersContext'
+import {KoboEditContext} from '@/core/context/KoboEditContext'
 
 export const getColumnsCustom = ({
   selectedIds,
@@ -47,7 +46,7 @@ export const getColumnsCustom = ({
   formId: Kobo.FormId
   getRow?: (_: any) => any,
   selectedIds: Kobo.SubmissionId[]
-  ctxUpdate: KoboEditAnswersContext
+  ctxUpdate: KoboEditContext
   m: Messages,
 }): DatatableColumn.Props<KoboMappedAnswer>[] => {
   // const ctx = useDatabaseKoboTableContext()

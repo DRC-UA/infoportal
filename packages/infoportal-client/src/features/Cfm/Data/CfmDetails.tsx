@@ -21,7 +21,7 @@ import {NavLink} from 'react-router-dom'
 import {IpInput} from '@/shared/Input/Input'
 import {useIpToast} from '@/core/useToast'
 import {Fender} from '@/shared/Fender'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
 
 const routeParamsSchema = yup.object({
   formId: yup.string().required(),

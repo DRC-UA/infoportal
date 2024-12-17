@@ -10,7 +10,6 @@ import {
   add,
   DrcProject,
   KoboIndex,
-  KoboValidation,
   objectToQueryString,
   safeArray,
   safeNumber,
@@ -32,12 +31,11 @@ import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableInput} from '@/shared/TableInput'
 import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyncBtn'
-import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
+import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
-import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 
@@ -46,7 +44,6 @@ export const ShelterTable = () => {
   const ctx = useShelterContext()
   const ctxAnswers = useKoboAnswersContext()
   const ctxEditAnswers = useKoboEditAnswerContext()
-  const ctxEditTag = useKoboEditTagContext()
   const {m, formatDate, formatLargeNumber} = useI18n()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 

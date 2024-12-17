@@ -103,7 +103,7 @@ export namespace KoboEdit {
   }
 }
 
-export interface KoboEditAnswersContext {
+export interface KoboEditContext {
   asyncUpdateById: {
     tag: UseAsyncMultiple<(_: KoboEdit.Update.ById.Tag) => Promise<void>>,
     answer: UseAsyncMultiple<(_: KoboEdit.Update.ById.Answer) => Promise<void>>
@@ -122,9 +122,9 @@ export interface KoboEditAnswersContext {
   close: () => void
 }
 
-const Context = React.createContext({} as KoboEditAnswersContext)
+const Context = React.createContext({} as KoboEditContext)
 
-export const useKoboEditAnswerContext = () => useContext<KoboEditAnswersContext>(Context)
+export const useKoboEditAnswerContext = () => useContext<KoboEditContext>(Context)
 
 export const KoboEditAnswersProvider = ({
   children,

@@ -4,7 +4,7 @@ import React from 'react'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {Skeleton} from '@mui/material'
 import {KeyOf} from '@alexandreannic/ts-utils'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
 
 export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>>({
   value,

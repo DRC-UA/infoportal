@@ -10,7 +10,6 @@ import {useI18n} from '@/core/i18n'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {useTheme} from '@mui/material'
 import {getColumnsCustom} from '@/features/Database/KoboTable/columns/getColumnsCustom'
-import {useKoboEditTagContext} from '@/core/context/KoboEditTagsContext'
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
 import {Kobo} from 'kobo-sdk'
@@ -22,7 +21,7 @@ import {useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseVie
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
 import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditAnswersContext'
+import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
 
 interface CustomForm {
   id: string
