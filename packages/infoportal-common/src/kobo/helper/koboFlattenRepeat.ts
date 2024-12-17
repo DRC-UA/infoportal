@@ -27,7 +27,7 @@ export class KoboFlattenRepeat {
         submissionTime: d.submissionTime,
         id: d.id,
         [KoboFlattenRepeat.INDEX_COL]: j,
-        [KoboFlattenRepeat.PARENT_INDEX_COL]: i,
+        [KoboFlattenRepeat.PARENT_INDEX_COL]: d._index ?? i,
         [KoboFlattenRepeat.PARENT_TABLE_NAME]: path[depth - 1]
       })) ?? []
     ), path, depth + 1)
