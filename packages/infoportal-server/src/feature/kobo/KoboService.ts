@@ -1,5 +1,17 @@
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
-import {ApiPaginate, ApiPaginateHelper, ApiPagination, KoboIndex, KoboSubmission, logPerformance, UUID} from 'infoportal-common'
+import {
+  ApiPaginate,
+  ApiPaginateHelper,
+  ApiPagination,
+  KoboCustomDirectives,
+  KoboHelper,
+  KoboIndex,
+  KoboSubmission,
+  KoboSubmissionMetaData,
+  KoboValidation,
+  logPerformance,
+  UUID
+} from 'infoportal-common'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {duration, fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {format} from 'date-fns'
@@ -470,6 +482,48 @@ export class KoboService {
         `),
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED_FROM_IP, {formId, answerIds, answer: {[question]: answer}})
+  }
+
+  readonly updateValidation = async ({formId, answerIds, status, authorEmail}: {
+    formId: Kobo.FormId,
+    answerIds: Kobo.SubmissionId[],
+    status: KoboValidation,
+    authorEmail: string
+  }) => {
+    const mappedValidation = KoboHelper.mapValidation.toKobo(status)
+    const validationKey: keyof KoboSubmissionMetaData = 'validationStatus'
+    const sdk = await this.sdkGenerator.getBy.formId(formId)
+    const [sqlRes,] = await Promise.all([
+      this.prisma.koboAnswers.updateMany({
+        where: {id: {in: answerIds}},
+        data: {
+          validationStatus: status,
+          updatedAt: new Date(),
+        }
+      }),
+      (async () => {
+        if (mappedValidation._validation_status) {
+          await Promise.all([
+            sdk.v2.updateValidation({formId, submissionIds: answerIds, status: mappedValidation._validation_status}),
+            sdk.v2.updateData({formId, submissionIds: answerIds, data: {[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]: null}}),
+          ])
+        } else {
+          await Promise.all([
+            sdk.v2.updateData({formId, submissionIds: answerIds, data: {[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]: mappedValidation._IP_VALIDATION_STATUS_EXTRA}}),
+            sdk.v2.updateValidation({formId, submissionIds: answerIds, status: Kobo.Submission.Validation.no_status})
+          ])
+        }
+      })(),
+      this.history.create({
+        type: 'tag',
+        formId,
+        answerIds,
+        property: validationKey,
+        newValue: status,
+        authorEmail,
+      }),
+    ])
+    return sqlRes
   }
 
   readonly updateTags = async ({formId, answerIds, tags, authorEmail}: {formId: Kobo.FormId, answerIds: Kobo.SubmissionId[], tags: Record<string, any>, authorEmail: string}) => {

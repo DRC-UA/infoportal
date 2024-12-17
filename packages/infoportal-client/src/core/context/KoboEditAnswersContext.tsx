@@ -239,13 +239,14 @@ export const KoboEditAnswersProvider = ({
     })
   }, {requestKey: ([_]) => _.formName})
 
-  const asyncUpdateValidationById = useAsync(async (p: KoboUpdateValidation) => {
-    const validationKey: keyof KoboSubmissionMetaData = 'validationStatus'
-    return _updateById({
-      formId: p.formId,
-      answerIds: p.answerIds,
-      question: validationKey,
-      answer: p.status,
+  const asyncUpdateValidationById = useAsync(async (params: KoboUpdateValidation) => {
+    await api.kobo.answer.updateValidation(params)
+    const key: keyof KoboSubmissionMetaData = 'validationStatus'
+    _updateCacheById({
+      formId: params.formId,
+      answerIds: params.answerIds,
+      key,
+      value: params.status,
     })
   }, {requestKey: ([_]) => _.formId})
 
@@ -318,7 +319,7 @@ export const KoboEditAnswersProvider = ({
         answer: asyncUpdateAnswerByName,
       },
       openById: setOpenDialog,
-      openByName: <T extends KoboFormNameMapped, TTarg extends 'tag'| 'answer'>(p: KoboEdit.DialogParams.ByName<T, TTarg> | null) => {
+      openByName: <T extends KoboFormNameMapped, TTarg extends 'tag' | 'answer'>(p: KoboEdit.DialogParams.ByName<T, TTarg> | null) => {
         setOpenDialog(p ? {
           ...p,
           params: {

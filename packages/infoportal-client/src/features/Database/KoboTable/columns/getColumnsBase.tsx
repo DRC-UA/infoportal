@@ -31,7 +31,6 @@ export const getColumnsBase = ({
   canEdit?: boolean
   m: Messages
 }): DatatableColumn.Props<any>[] => {
-  const validationKey: keyof KoboSubmissionMetaData = 'validationStatus'
   return [
     {
       id: 'actions',
@@ -64,7 +63,7 @@ export const getColumnsBase = ({
       width: 0,
       type: 'select_one',
       render: (row: any) => {
-        const value = getRow(row)[validationKey]
+        const value = getRow(row).validationStatus
         return {
           export: value ? m[value] : DatatableUtils.blank,
           value: value ?? DatatableUtils.blank,
