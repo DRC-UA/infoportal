@@ -47,21 +47,22 @@ export namespace Kobo {
     payload_template: ''
   }
 
+  export namespace ApiRes {
+
+    export type UpdateValidation = {
+      by_whom: string
+      color: string
+      label: string
+      timestamp: number
+      uid: Kobo.Submission.Validation
+    }
+  }
+
   export type FormId = Form.Id
   export type Form = Form.Form
   export namespace Form {
     export type Id = string
 
-    export namespace ApiRes {
-
-      export type UpdateValidation = {
-        by_whom: string
-        color: string
-        label: string
-        timestamp: number
-        uid: Kobo.Submission.Validation
-      }
-    }
 
     export type Question = {
       name: string
@@ -246,14 +247,6 @@ export namespace Kobo {
       validation_status_approved = 'validation_status_approved',
       validation_status_not_approved = 'validation_status_not_approved',
       no_status = 'no_status',
-    }
-
-    export type ValidationUpdateResponse = {
-      by_whom: string
-      color: string
-      label: string
-      timestamp: number
-      uid: Validation
     }
 
     export type Geolocation = [number, number]

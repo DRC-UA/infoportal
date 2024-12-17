@@ -107,7 +107,7 @@ export class KoboClientV2 {
       formId: Kobo.FormId,
       submissionIds: Kobo.Submission.Id[],
       status: Kobo.Submission.Validation
-    }): Promise<Kobo.Submission.ValidationUpdateResponse> => {
+    }): Promise<Kobo.ApiRes.UpdateValidation> => {
       return this.api.patch(`/v2/assets/${formId}/data/validation_statuses/`, {
         body: {
           payload: {
