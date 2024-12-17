@@ -8,7 +8,7 @@ import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {KoboUpdateAnswers, KoboUpdateValidation} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {IpBtn} from '@/shared/Btn'
 import {useKoboColumnDef} from '@/shared/koboEdit/KoboSchemaWrapper'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Txt} from '@/shared/Txt'
@@ -35,9 +35,9 @@ export const editableColumnType = [
   'datetime',
 ]
 
-export type KoboEditModalType = ArrayValues<typeof editableColumnType>
+export type KoboUpdateModalType = ArrayValues<typeof editableColumnType>
 
-export namespace KoboEditModal {
+export namespace KoboUpdateModal {
 
   export const Custom = ({
     title,
@@ -48,7 +48,7 @@ export namespace KoboEditModal {
     fetcherUpdate,
     subTitle,
   }: {
-    type?: KoboEditModalType
+    type?: KoboUpdateModalType
     subTitle?: string
     title?: string
     fetcherUpdate: UseFetcher<(_: any) => Promise<number>>
@@ -162,7 +162,7 @@ export namespace KoboEditModal {
     onUpdated?: (params: KoboUpdateAnswers<any, any>) => void,
   }) => {
     const {m} = useI18n()
-    const ctxEdit = useKoboEditAnswerContext()
+    const ctxEdit = useKoboUpdateContext()
     const {columnDef, schema, loading: loadingSchema} = useKoboColumnDef({formId, columnName})
 
     const fetcherUpdate = useFetcher((value: any) => {
@@ -200,7 +200,7 @@ export namespace KoboEditModal {
     onUpdated?: (params: KoboUpdateValidation) => void,
   }) => {
     const {m} = useI18n()
-    const ctxEdit = useKoboEditAnswerContext()
+    const ctxEdit = useKoboUpdateContext()
 
     const fetcherUpdate = useFetcher((value: KoboValidation) => {
       const p: KoboUpdateValidation = {formId, answerIds, status: value}
@@ -234,14 +234,14 @@ export namespace KoboEditModal {
   }: {
     formId: Kobo.FormId,
     tag: string
-    type: KoboEditModalType
+    type: KoboUpdateModalType
     answerIds: Kobo.SubmissionId[]
     options?: string[] | KoboEditModalOption[]
     onClose?: () => void,
     onUpdated?: (_: any) => void,
   }) => {
     const {m} = useI18n()
-    const ctxEdit = useKoboEditAnswerContext()
+    const ctxEdit = useKoboUpdateContext()
     const ctxSchema = useKoboSchemaContext()
 
     const fetcherUpdate = useFetcher((value: any) => {

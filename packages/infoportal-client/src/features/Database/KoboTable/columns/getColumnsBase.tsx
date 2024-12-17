@@ -9,7 +9,7 @@ import {KoboSubmissionFlat} from 'infoportal-common'
 import {KoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatabaseKoboContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {Kobo} from 'kobo-sdk'
-import {KoboEditContext} from '@/core/context/KoboEditContext'
+import {KoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export const getColumnsBase = ({
   selectedIds,
@@ -21,7 +21,7 @@ export const getColumnsBase = ({
   getRow = _ => _,
   asyncEdit,
 }: {
-  ctxEdit: KoboEditContext
+  ctxEdit: KoboUpdateContext
   asyncEdit: DatabaseKoboContext['asyncEdit']
   getRow?: (_: any) => KoboSubmissionFlat,
   openViewAnswer: KoboAnswersContext['openView']

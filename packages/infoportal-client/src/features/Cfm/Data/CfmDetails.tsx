@@ -21,7 +21,7 @@ import {NavLink} from 'react-router-dom'
 import {IpInput} from '@/shared/Input/Input'
 import {useIpToast} from '@/core/useToast'
 import {Fender} from '@/shared/Fender'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 const routeParamsSchema = yup.object({
   formId: yup.string().required(),
@@ -53,7 +53,7 @@ export const CfmDetails = ({entry}: {
 }) => {
   const {m, formatDateTime} = useI18n()
   const ctx = useCfmContext()
-  const ctxKoboUpdate = useKoboEditAnswerContext()
+  const ctxKoboUpdate = useKoboUpdateContext()
   const navigate = useNavigate()
   const {api} = useAppSettings()
   const {session} = useSession()

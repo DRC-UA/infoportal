@@ -33,7 +33,7 @@ import {TableInput} from '@/shared/TableInput'
 import {DatabaseKoboSyncBtn} from '@/features/Database/KoboTable/DatabaseKoboSyncBtn'
 import {SelectStatusBy} from '@/shared/customInput/SelectStatus'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditAnswer} from '@/shared/koboEdit/KoboEditAnswer'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
@@ -43,7 +43,7 @@ export const ShelterTable = () => {
   const theme = useTheme()
   const ctx = useShelterContext()
   const ctxAnswers = useKoboAnswersContext()
-  const ctxEditAnswers = useKoboEditAnswerContext()
+  const ctxEditAnswers = useKoboUpdateContext()
   const {m, formatDate, formatLargeNumber} = useI18n()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 

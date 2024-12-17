@@ -3,7 +3,7 @@ import React, {Dispatch, ReactNode, SetStateAction} from 'react'
 import {Obj} from '@alexandreannic/ts-utils'
 import {IpSelectSingle, IpSelectSingleProps} from '@/shared/Select/SelectSingle'
 import {Kobo} from 'kobo-sdk'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export const KoboSelectTag = <
   TTag extends Record<string, any>,
@@ -33,7 +33,7 @@ export const KoboSelectTag = <
   setData?: Dispatch<SetStateAction<T[] | undefined>>
   disabled?: boolean
 } & Pick<IpSelectSingleProps<any>, 'sx'>) => {
-  const ctxKoboEdit = useKoboEditAnswerContext()
+  const ctxKoboEdit = useKoboUpdateContext()
   const enumKeys = Obj.keys(enumerator)
 
   return (

@@ -36,7 +36,7 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export interface CfmDataFilters extends KoboAnswerFilter {
 }
@@ -61,7 +61,7 @@ export const CfmPriorityLogo = ({
 export const CfmTable = ({}: any) => {
   const ctx = useCfmContext()
   const ctxAnswers = useKoboAnswersContext()
-  const ctxKoboUpdate = useKoboEditAnswerContext()
+  const ctxKoboUpdate = useKoboUpdateContext()
   const {langIndex, setLangIndex} = useKoboSchemaContext()
 
   // const [selectedFromId_Ids, setSelectedFromId_Ids] = useState<string[]>([])

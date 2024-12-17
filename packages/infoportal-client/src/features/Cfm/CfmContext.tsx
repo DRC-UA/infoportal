@@ -30,7 +30,7 @@ import {TableIcon, TableIconProps} from '@/features/Mpca/MpcaData/TableIcon'
 import {Box, BoxProps} from '@mui/material'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {Kobo} from 'kobo-sdk'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export enum CfmDataOrigin {
   Internal = 'Internal',
@@ -133,7 +133,7 @@ export const CfmProvider = ({
   const {session, accesses} = useSession()
   const {api} = useAppSettings()
   const ctxAnswers = useKoboAnswersContext()
-  const ctxKoboEdit = useKoboEditAnswerContext()
+  const ctxKoboEdit = useKoboUpdateContext()
   const users = useFetcher(() => api.user.search())
   const fetcherInternal = ctxAnswers.byName('meal_cfmInternal')
   const fetcherExternal = ctxAnswers.byName('meal_cfmExternal')

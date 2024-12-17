@@ -1,5 +1,5 @@
 import React, {Dispatch, ReactNode, SetStateAction, useContext, useState} from 'react'
-import {KoboEditModal, KoboEditModalOption, KoboEditModalType} from '@/shared/koboEdit/KoboEditModal'
+import {KoboUpdateModal, KoboEditModalOption, KoboUpdateModalType} from '@/shared/koboEdit/KoboUpdateModal'
 import {KoboUpdateAnswers, KoboUpdateTag, KoboUpdateValidation} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -10,7 +10,7 @@ import {KeyOf} from '@alexandreannic/ts-utils'
 import {useIpToast} from '@/core/useToast'
 import {Kobo} from 'kobo-sdk'
 
-export namespace KoboEdit {
+export namespace KoboUpdate {
 
   export namespace DialogParams {
     export type ById = {
@@ -34,28 +34,16 @@ export namespace KoboEdit {
       target: TTarg;
       params: UpdateDialog.ByName.Answer<T, KeyOf<InferTypedAnswer<T>>>
     }
-
-    // export type ByName<
-    //   T extends KoboFormNameMapped,
-    //   TTarg extends 'tag' | 'answer',
-    //   K extends TTarg extends 'tag' ? KeyOf<InferTypedTag<T>> : TTarg extends 'answer' ? KeyOf<InferTypedAnswer<T>> : never
-    // > = {
-    //   target: 'tag'
-    //   params: UpdateDialog.ByName.Tag<T, K>
-    // } | {
-    //   target: 'answer',
-    //   params: UpdateDialog.ByName.Answer<T, K>
-    // }
   }
 
   namespace UpdateDialog {
     export namespace ByName {
-      export type Tag<T extends KoboFormNameMapped, K extends KeyOf<InferTypedTag<T>>> = Omit<KoboEdit.Update.ByName.Tag<T, K>, 'value'> & {
-        type: KoboEditModalType
+      export type Tag<T extends KoboFormNameMapped, K extends KeyOf<InferTypedTag<T>>> = Omit<KoboUpdate.Update.ByName.Tag<T, K>, 'value'> & {
+        type: KoboUpdateModalType
         options?: KoboEditModalOption[] | string[]
         onSuccess?: (params: KoboUpdateAnswers<NonNullable<InferTypedAnswer<T>['tags']>>) => void
       }
-      export type Answer<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>> = Omit<KoboEdit.Update.ByName.Answer<T, K>, 'answer'> & {
+      export type Answer<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>> = Omit<KoboUpdate.Update.ByName.Answer<T, K>, 'answer'> & {
         onSuccess?: (params: KoboUpdateAnswers<NonNullable<InferTypedAnswer<T>['tags']>>) => void
       }
     }
@@ -67,8 +55,8 @@ export namespace KoboEdit {
       export type Validation = Omit<KoboUpdateValidation, 'status'> & {
         onSuccess?: (params: KoboUpdateValidation) => void
       }
-      export type Tag = Omit<KoboEdit.Update.ById.Tag, 'value'> & {
-        type: KoboEditModalType
+      export type Tag = Omit<KoboUpdate.Update.ById.Tag, 'value'> & {
+        type: KoboUpdateModalType
         options?: KoboEditModalOption[] | string[]
         onSuccess?: (params: KoboUpdateTag) => void
       }
@@ -103,37 +91,37 @@ export namespace KoboEdit {
   }
 }
 
-export interface KoboEditContext {
+export interface KoboUpdateContext {
   asyncUpdateById: {
-    tag: UseAsyncMultiple<(_: KoboEdit.Update.ById.Tag) => Promise<void>>,
-    answer: UseAsyncMultiple<(_: KoboEdit.Update.ById.Answer) => Promise<void>>
-    validation: UseAsyncMultiple<(_: KoboEdit.Update.ById.Validation) => Promise<void>>,
+    tag: UseAsyncMultiple<(_: KoboUpdate.Update.ById.Tag) => Promise<void>>,
+    answer: UseAsyncMultiple<(_: KoboUpdate.Update.ById.Answer) => Promise<void>>
+    validation: UseAsyncMultiple<(_: KoboUpdate.Update.ById.Validation) => Promise<void>>,
   },
   asyncUpdateByName: {
-    tag: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<InferTypedTag<T>>>(_: KoboEdit.Update.ByName.Tag<T, K>) => Promise<void>>,
-    answer: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(_: KoboEdit.Update.ByName.Answer<T, K>) => Promise<void>>,
+    tag: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<InferTypedTag<T>>>(_: KoboUpdate.Update.ByName.Tag<T, K>) => Promise<void>>,
+    answer: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(_: KoboUpdate.Update.ByName.Answer<T, K>) => Promise<void>>,
   },
   asyncDeleteById: UseAsyncMultiple<(_: Pick<KoboUpdateAnswers, 'formId' | 'answerIds'>) => Promise<void>>
-  openById: Dispatch<SetStateAction<KoboEdit.DialogParams.ById | null>>
+  openById: Dispatch<SetStateAction<KoboUpdate.DialogParams.ById | null>>
   openByName: <
     T extends KoboFormNameMapped,
     TTarg extends 'tag' | 'answer',
-  >(p: KoboEdit.DialogParams.ByName<T, TTarg> | null) => void
+  >(p: KoboUpdate.DialogParams.ByName<T, TTarg> | null) => void
   close: () => void
 }
 
-const Context = React.createContext({} as KoboEditContext)
+const Context = React.createContext({} as KoboUpdateContext)
 
-export const useKoboEditAnswerContext = () => useContext<KoboEditContext>(Context)
+export const useKoboUpdateContext = () => useContext<KoboUpdateContext>(Context)
 
-export const KoboEditAnswersProvider = ({
+export const KoboUpdateProvider = ({
   children,
 }: {
   children: ReactNode
 }) => {
   const {api} = useAppSettings()
   const {toastHttpError} = useIpToast()
-  const [openDialog, setOpenDialog] = useState<KoboEdit.DialogParams.ById | null>(null)
+  const [openDialog, setOpenDialog] = useState<KoboUpdate.DialogParams.ById | null>(null)
   const ctxAnswers = useKoboAnswersContext()
 
   const _updateCacheById = ({
@@ -218,7 +206,7 @@ export const KoboEditAnswersProvider = ({
 
   const asyncUpdateAnswerById = useAsync(_updateById, {requestKey: ([_]) => _.formId})
 
-  const asyncUpdateAnswerByName = useAsync(async <T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(p: KoboEdit.Update.ByName.Answer<T, K>) => {
+  const asyncUpdateAnswerByName = useAsync(async <T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(p: KoboUpdate.Update.ByName.Answer<T, K>) => {
     await api.kobo.answer.updateAnswers({
       answerIds: p.answerIds,
       answer: p.answer,
@@ -250,7 +238,7 @@ export const KoboEditAnswersProvider = ({
     })
   }, {requestKey: ([_]) => _.formId})
 
-  const asyncUpdateTagByName = useAsync(async <T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(p: KoboEdit.Update.ByName.Tag<T, K>) => {
+  const asyncUpdateTagByName = useAsync(async <T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(p: KoboUpdate.Update.ByName.Tag<T, K>) => {
     await api.kobo.answer.updateTag({
       answerIds: p.answerIds,
       formId: KoboIndex.byName(p.formName).id,
@@ -268,7 +256,7 @@ export const KoboEditAnswersProvider = ({
     })
   }, {requestKey: ([_]) => _.formName})
 
-  const asyncUpdateTagById = useAsync(async (p: KoboEdit.Update.ById.Tag) => {
+  const asyncUpdateTagById = useAsync(async (p: KoboUpdate.Update.ById.Tag) => {
     await api.kobo.answer.updateTag({
       answerIds: p.answerIds,
       formId: p.formId,
@@ -319,7 +307,7 @@ export const KoboEditAnswersProvider = ({
         answer: asyncUpdateAnswerByName,
       },
       openById: setOpenDialog,
-      openByName: <T extends KoboFormNameMapped, TTarg extends 'tag' | 'answer'>(p: KoboEdit.DialogParams.ByName<T, TTarg> | null) => {
+      openByName: <T extends KoboFormNameMapped, TTarg extends 'tag' | 'answer'>(p: KoboUpdate.DialogParams.ByName<T, TTarg> | null) => {
         setOpenDialog(p ? {
           ...p,
           params: {
@@ -336,7 +324,7 @@ export const KoboEditAnswersProvider = ({
         switch (openDialog.target) {
           case 'answer':
             return (
-              <KoboEditModal.Answer
+              <KoboUpdateModal.Answer
                 formId={openDialog.params.formId}
                 columnName={openDialog.params.question}
                 answerIds={openDialog.params.answerIds}
@@ -346,7 +334,7 @@ export const KoboEditAnswersProvider = ({
             )
           case 'tag':
             return (
-              <KoboEditModal.Tag
+              <KoboUpdateModal.Tag
                 type={openDialog.params.type}
                 formId={openDialog.params.formId}
                 tag={openDialog.params.tag}
@@ -358,7 +346,7 @@ export const KoboEditAnswersProvider = ({
             )
           case 'validation':
             return (
-              <KoboEditModal.Validation
+              <KoboUpdateModal.Validation
                 formId={openDialog.params.formId}
                 answerIds={openDialog.params.answerIds}
                 onClose={() => setOpenDialog(null)}

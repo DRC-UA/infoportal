@@ -12,7 +12,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {useCustomSelectedHeader} from '@/features/Database/KoboTable/customization/useCustomSelectedHeader'
 import {useCustomHeader} from '@/features/Database/KoboTable/customization/useCustomHeader'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {appConfig} from '@/conf/AppConfig'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/getColumnsBase'
@@ -39,7 +39,7 @@ export const DatabaseKoboTableContent = ({
   const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
-  const ctxKoboUpdate = useKoboEditAnswerContext()
+  const ctxKoboUpdate = useKoboUpdateContext()
   const [selectedIds, setSelectedIds] = useState<Kobo.SubmissionId[]>([])
 
   const flatData: KoboMappedAnswer[] | undefined = useMemo(() => {

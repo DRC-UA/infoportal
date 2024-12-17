@@ -21,7 +21,7 @@ import {useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseVie
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
 import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {useKoboEditAnswerContext} from '@/core/context/KoboEditContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 interface CustomForm {
   id: string
@@ -92,7 +92,7 @@ export const DatabaseTableCustomRoute = () => {
 
   const {id} = urlValidation.validateSync(useParams())
 
-  const ctxKoboUpdate = useKoboEditAnswerContext()
+  const ctxKoboUpdate = useKoboUpdateContext()
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
 

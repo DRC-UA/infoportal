@@ -28,11 +28,11 @@ import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shar
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
-import {KoboEditModalOption} from '@/shared/koboEdit/KoboEditModal'
+import {KoboEditModalOption} from '@/shared/koboEdit/KoboUpdateModal'
 import {Messages} from '@/core/i18n/localization/en'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {Kobo} from 'kobo-sdk'
-import {KoboEditContext} from '@/core/context/KoboEditContext'
+import {KoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export const getColumnsCustom = ({
   selectedIds,
@@ -46,7 +46,7 @@ export const getColumnsCustom = ({
   formId: Kobo.FormId
   getRow?: (_: any) => any,
   selectedIds: Kobo.SubmissionId[]
-  ctxUpdate: KoboEditContext
+  ctxUpdate: KoboUpdateContext
   m: Messages,
 }): DatatableColumn.Props<KoboMappedAnswer>[] => {
   // const ctx = useDatabaseKoboTableContext()
