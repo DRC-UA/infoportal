@@ -74,6 +74,7 @@ const make = <K extends KoboFormName, T>(key: K,
 export type KoboFormNameMapped = keyof KoboTypedAnswerSdk['search']
 
 export type InferTypedAnswer<N extends KoboFormNameMapped> = Awaited<ReturnType<KoboTypedAnswerSdk['search'][N]>>['data'][number]
+export type InferTypedTag<N extends KoboFormNameMapped> = NonNullable<Awaited<ReturnType<KoboTypedAnswerSdk['search'][N]>>['data'][number]['tags']>
 
 export class KoboTypedAnswerSdk {
   constructor(private client: ApiClient, private sdk = new KoboAnswerSdk(client)) {

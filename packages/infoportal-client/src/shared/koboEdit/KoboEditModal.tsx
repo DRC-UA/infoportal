@@ -15,7 +15,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Txt} from '@/shared/Txt'
 import {ArrayValues} from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
-import {KoboValidation} from 'infoportal-common/kobo'
+import {KoboValidation} from 'infoportal-common'
 import {OptionLabelTypeCompact, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 import { Obj } from '@alexandreannic/ts-utils'
 
@@ -169,7 +169,7 @@ export namespace KoboEditModal {
 
     const fetcherUpdate = useFetcher((value: any) => {
       const p = {formId, answerIds, question: columnName, answer: value}
-      return ctxEdit.asyncUpdateById.call(p).then(() => {
+      return ctxEdit.asyncUpdateById.answer.call(p).then(() => {
         onUpdated?.(p)
         return answerIds.length
       })
@@ -206,7 +206,7 @@ export namespace KoboEditModal {
 
     const fetcherUpdate = useFetcher((value: KoboValidation) => {
       const p: KoboUpdateValidation = {formId, answerIds, status: value}
-      return ctxEdit.asyncUpdateValidationById.call(p).then(() => {
+      return ctxEdit.asyncUpdateById.validation.call(p).then(() => {
         onUpdated?.(p)
         return answerIds.length
       })
@@ -243,11 +243,11 @@ export namespace KoboEditModal {
     onUpdated?: (_: any) => void,
   }) => {
     const {m} = useI18n()
-    const ctxEdit = useKoboEditTagContext()
+    const ctxEdit = useKoboEditAnswerContext()
     const ctxSchema = useKoboSchemaContext()
 
     const fetcherUpdate = useFetcher((value: any) => {
-      return ctxEdit.asyncUpdateById.call({formId, answerIds, tag, value}).then(() => {
+      return ctxEdit.asyncUpdateById.tag.call({formId, answerIds, tag, value}).then(() => {
         onUpdated?.(value)
         return answerIds.length
       })

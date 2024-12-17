@@ -83,7 +83,6 @@ const AppWithConfig = (props: AppProps) => {
       _ => <KoboSchemaProvider children={_}/>,
       _ => <KoboAnswersProvider children={_}/>,
       _ => <KoboEditAnswersProvider children={_}/>,
-      _ => <KoboEditTagsProvider children={_}/>,
       _ => <ModalProvider children={_}/>,
       _ => <SessionProvider children={_}/>,
     ]}>

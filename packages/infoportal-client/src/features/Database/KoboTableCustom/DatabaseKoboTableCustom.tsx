@@ -153,7 +153,7 @@ export const DatabaseTableCustomRoute = () => {
         formId,
         schema,
         m,
-        onEdit: selectedIds.length > 0 ? (questionName => ctxKoboUpdate.open({
+        onEdit: selectedIds.length > 0 ? (questionName => ctxKoboUpdate.openById({
           target: 'answer',
           params: {
             formId: formId,
@@ -172,20 +172,18 @@ export const DatabaseTableCustomRoute = () => {
           formId,
           canEdit: true,
           m,
-          open: ctxAnswers.openView,
+          openViewAnswer: ctxAnswers.openView,
+          ctxEdit: ctxKoboUpdate,
           asyncEdit: (answerId: Kobo.SubmissionId) => api.koboApi.getEditUrl({formId: formId, answerId}),
-          asyncUpdateTagById: ctxKoboUpdate.asyncUpdateById.tag,
           getRow: _ => (_[formId] ?? {}) as any,
-          open: ctxKoboUpdate.open,
         }),
         ...getColumnsCustom({
           getRow: _ => _[formId] ?? {},
           selectedIds,
+          ctxUpdate: ctxKoboUpdate,
           formId: formId,
           canEdit: true,
           m,
-          asyncUpdateTagById: ctxKoboUpdate.asyncUpdateById.tag,
-          openEditTag: ctxKoboUpdate.open,
         }),
         ...cols
       ].map(_ => {

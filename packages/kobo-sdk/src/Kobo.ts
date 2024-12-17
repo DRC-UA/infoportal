@@ -248,6 +248,14 @@ export namespace Kobo {
       no_status = 'no_status',
     }
 
+    export type ValidationUpdateResponse = {
+      by_whom: string
+      color: string
+      label: string
+      timestamp: number
+      uid: Validation
+    }
+
     export type Geolocation = [number, number]
     export type Tags = any
     export type Notes = any

@@ -27,7 +27,7 @@ export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>
   if (!columnDef || !schema) return <></>
 
   const handleChange = async (newValue: any) => {
-    await ctx.asyncUpdateById.call({
+    await ctx.asyncUpdateById.answer.call({
       answerIds: [answerId],
       answer: newValue,
       question: columnName,

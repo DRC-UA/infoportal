@@ -40,8 +40,7 @@ export const DatabaseKoboTableContent = ({
   const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
   const ctxAnswers = useKoboAnswersContext()
-  const ctxEditAnswer = useKoboEditAnswerContext()
-  const ctxEditTag = useKoboEditTagContext()
+  const ctxKoboUpdate = useKoboEditAnswerContext()
   const [selectedIds, setSelectedIds] = useState<Kobo.SubmissionId[]>([])
 
   const flatData: KoboMappedAnswer[] | undefined = useMemo(() => {
@@ -54,8 +53,7 @@ export const DatabaseKoboTableContent = ({
     formId: ctx.form.id,
     canEdit: ctx.access.write,
     m,
-    asyncUpdateTagById: ctxEditAnswer.asyncUpdateById.tag,
-    openEditTag: ctxEditAnswer.open,
+    ctxUpdate: ctxKoboUpdate,
   }).map(_ => ({
     ..._,
     typeIcon: <DatatableHeadIconByType type={_.type}/>
@@ -67,7 +65,7 @@ export const DatabaseKoboTableContent = ({
       schema: ctx.schema,
       externalFilesIndex: ctx.externalFilesIndex,
       onRepeatGroupClick: _ => navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),
-      onEdit: selectedIds.length > 0 ? (questionName => ctxEditAnswer.open({
+      onEdit: selectedIds.length > 0 ? (questionName => ctxKoboUpdate.openById({
         target: 'answer',
         params: {
           formId: ctx.form.id,
@@ -104,9 +102,8 @@ export const DatabaseKoboTableContent = ({
       canEdit: ctx.access.write,
       m,
       asyncEdit: ctx.asyncEdit,
-      asyncUpdateValidationById: ctxEditAnswer.asyncUpdateById.validation,
+      ctxEdit: ctxKoboUpdate,
       openViewAnswer: ctxAnswers.openView,
-      openUpdate: ctxEditAnswer.open,
     })
     return [...base, ...extraColumns, ...schemaColumns].map(_ => ({
       ..._,

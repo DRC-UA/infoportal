@@ -9,7 +9,7 @@ import {KoboSubmissionFlat} from 'infoportal-common'
 import {KoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatabaseKoboContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {Kobo} from 'kobo-sdk'
-import {KoboSubmissionMetaData} from 'infoportal-common/kobo'
+import {KoboSubmissionMetaData} from 'infoportal-common'
 import {KoboEditAnswersContext} from '@/core/context/KoboEditAnswersContext'
 
 export const getColumnsBase = ({
@@ -17,19 +17,17 @@ export const getColumnsBase = ({
   formId,
   canEdit,
   m,
-  asyncUpdateValidationById,
-  asyncEdit,
+  ctxEdit,
   openViewAnswer,
-  openEditAnswer,
   getRow = _ => _,
+  asyncEdit,
 }: {
-  getRow?: (_: any) => KoboSubmissionFlat,
+  ctxEdit: KoboEditAnswersContext
   asyncEdit: DatabaseKoboContext['asyncEdit']
-  openEdit: KoboEditAnswersContext['open']
+  getRow?: (_: any) => KoboSubmissionFlat,
   openViewAnswer: KoboAnswersContext['openView']
   formId: Kobo.FormId
   selectedIds: Kobo.SubmissionId[]
-  asyncUpdateValidationById: KoboEditAnswersContext['asyncUpdateValidationById']
   canEdit?: boolean
   m: Messages
 }): DatatableColumn.Props<any>[] => {
@@ -56,10 +54,12 @@ export const getColumnsBase = ({
     {
       id: '_validation',
       head: m.validation,
-      subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => openEditAnswer({
-        formId: formId,
-        answerIds: selectedIds,
-        question: validationKey,
+      subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxEdit.openById({
+        target: 'validation',
+        params: {
+          formId: formId,
+          answerIds: selectedIds,
+        }
       })}/>,
       width: 0,
       type: 'select_one',
@@ -76,11 +76,10 @@ export const getColumnsBase = ({
               disabled={!canEdit}
               value={value}
               onChange={(e) => {
-                asyncUpdateAnswerById.call({
+                ctxEdit.asyncUpdateById.validation.call({
                   formId: formId,
                   answerIds: [getRow(row).id],
-                  question: validationKey,
-                  answer: e,
+                  status: e,
                 })
               }}
             />

@@ -21,7 +21,7 @@ export const chunkify = <T, R>({
   return Promise.all(chunkedSubmissions.map(fn))
 }
 
-export const queuify = <T, P extends any[]>({
+export const queuify = <T, P extends any[], M>({
   run,
   getQueueIndex,
   extractDataFromParams,
@@ -30,8 +30,8 @@ export const queuify = <T, P extends any[]>({
   concurrency = 12,
 }: {
   getQueueIndex?: (...p: P) => string
-  extractDataFromParams: (...p: P) => T[]
-  reconcileParams: (t: T[], p: P) => P,
+  extractDataFromParams: (...p: P) => M[]
+  reconcileParams: (t: M[], p: P) => P,
   run: (...p: P) => Promise<T>
   batchSize?: number
   concurrency?: number
