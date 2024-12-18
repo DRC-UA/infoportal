@@ -47,7 +47,7 @@ jobs:
       - name: Build, and test (server)
         working-directory: ./packages/infoportal-server
         run: |
-          npm ci --production
+          npm i --production
           npm run db-generate
           npm run build --if-present
           npm run test --if-present
