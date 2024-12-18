@@ -34,13 +34,13 @@ jobs:
         working-directory: ./packages/kobo-sdk
         run: |
           npm run build --workspace kobo-sdk --if-present
-          npm run test --workspace kobo-sdk  --if-present
+          npm run test --workspace kobo-sdk --if-present
 
       - name: Build, and test (common)
         working-directory: ./packages/infoportal-common
         run: |
-          npm run build --workspace infoportal-common  --if-present
-          npm run test --workspace infoportal-common  --if-present
+          npm run build --workspace infoportal-common --if-present
+          npm run test --workspace infoportal-common --if-present
 
       - name: Build, and test (server)
         working-directory: ./packages/infoportal-server
