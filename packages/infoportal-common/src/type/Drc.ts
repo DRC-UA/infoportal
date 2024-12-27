@@ -511,6 +511,7 @@ export enum DrcJob {
   'Monitoring, Evaluation, Accountability and Learning Manager' = 'Monitoring, Evaluation, Accountability and Learning Manager',
   'Monitoring, Evaluation, Accountability and Learning Specialist' = 'Monitoring, Evaluation, Accountability and Learning Specialist',
   'MPCA / NFI Assistant' = 'MPCA / NFI Assistant',
+  'MPCA/ NFI Assistant' = 'MPCA/ NFI Assistant',
   'MPCA Assistant' = 'MPCA Assistant',
   'MPCA/NFI Assistant' = 'MPCA/NFI Assistant',
   'MPCA/NFI Officer' = 'MPCA/NFI Officer',
