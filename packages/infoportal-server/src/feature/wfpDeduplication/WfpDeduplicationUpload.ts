@@ -8,7 +8,7 @@ import {WfpBuildingBlockClient} from '../../core/externalSdk/wfpBuildingBlock/Wf
 import {app, AppLogger} from '../../index'
 import promiseRetry from 'promise-retry'
 import {Obj} from '@alexandreannic/ts-utils'
-import {ApiError} from "kobo-sdk";
+import {ApiError} from 'kobo-sdk'
 
 export class WfpDeduplicationUpload {
 
@@ -226,13 +226,15 @@ export class WfpDeduplicationUpload {
         })
       })
       const officeValue = office ? officeMapping[office] : null
-      await this.prisma.$executeRaw`
-          UPDATE "MpcaWfpDeduplication"
-          SET "office"     = ${officeValue},
-              "fileName"   = ${file.fileName},
-              "fileUpload" = ${new Date(file.finishedAt)}
-          WHERE "id" IN (${Prisma.join(rows.map(_ => _.id))})
-      `
+      if (rows.length > 0) {
+        await this.prisma.$executeRaw`
+            UPDATE "MpcaWfpDeduplication"
+            SET "office"     = ${officeValue},
+                "fileName"   = ${file.fileName},
+                "fileUpload" = ${new Date(file.finishedAt)}
+            WHERE "id" IN (${Prisma.join(rows.map(_ => _.id))})
+        `
+      }
       // await this.prisma.mpcaWfpDeduplication.updateMany({
       //   where: {id: {in: rows.map(_ => _.id)}},
       //   data: {
