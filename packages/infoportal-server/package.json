@@ -8,7 +8,7 @@
     "start": "node dist/bundle.js",
     "build": "webpack --config webpack.config.js",
     "dev-r": "nodemon src/index.ts",
-    "dev": "tsc && node lib/index.js",
+    "dev": "tsc --build --force && node lib/index.js",
     "dev-BROKEN": "ts-node src/index.ts",
     "debug": "npm run build && node --inspect-brk lib/index.js",
     "db-migrate": "npx prisma migrate dev",
