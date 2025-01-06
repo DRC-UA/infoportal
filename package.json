@@ -8,6 +8,7 @@
     "client": "npm run dev --workspace infoportal-client",
     "kobo-sdk": "npm run dev --workspace kobo-sdk",
     "common": "npm run dev --workspace infoportal-common",
+    "scripts": "npm run dev --workspace infoportal-scripts",
     "start:server": "npm run start --workspace infoportal-server",
     "start:client": "npm run start --workspace infoportal-client",
     "build:server": "npm run build --workspace infoportal-server",

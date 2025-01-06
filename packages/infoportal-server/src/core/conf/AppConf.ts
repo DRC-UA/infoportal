@@ -46,10 +46,6 @@ export const appConf = {
     url: e(defaultValue('https://kobo.humanitarianresponse.info'))('KOBO_URL'),
     token: e(required)('KOBO_TOKEN'),
   },
-  ecrecApp: {
-    login: e(required)('ECRECAPP_LOGIN'),
-    password: e(required)('ECRECAPP_PASSWORD'),
-  },
   legalAid: {
     apiToken: e(required)('LEGALAID_API_TOKEN'),
   },
