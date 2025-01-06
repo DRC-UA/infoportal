@@ -2,6 +2,7 @@
   "name": "infoportal",
   "requires": true,
   "scripts": {
+    "format": "prettier --write \"**/*.{js,ts,tsx,json}\" --config .prettierrc",
     "postinstall": "npm run build --workspace infoportal-common",
     "server": "npm run dev --workspace infoportal-server",
     "client": "npm run dev --workspace infoportal-client",
@@ -16,5 +17,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "prettier": "^3.4.2"
+  }
 }
