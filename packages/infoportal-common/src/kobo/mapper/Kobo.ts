@@ -54,11 +54,13 @@ export interface KoboTagStatus<T = CashStatus> {
   lastStatusUpdate?: Date
 }
 
+/** @deprecated*/
 export interface PersonDetails extends Person.Person {
   displacement?: DisplacementStatus
   disability?: WgDisability[]
 }
 
+/** @deprecated*/
 export enum DisplacementStatus {
   Idp = 'Idp',
   Returnee = 'Returnee',
@@ -66,6 +68,7 @@ export enum DisplacementStatus {
   NonDisplaced = 'NonDisplaced',
 }
 
+/** @deprecated*/
 export enum WgDisability {
   See = 'See',
   Hear = 'Hear',
