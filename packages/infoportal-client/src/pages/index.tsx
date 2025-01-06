@@ -5,7 +5,7 @@ import {ProtectRoute} from '@/core/Session/SessionContext'
 const Index = () => {
   return (
     <ProtectRoute>
-      <Home/>
+      <Home />
     </ProtectRoute>
   )
 }

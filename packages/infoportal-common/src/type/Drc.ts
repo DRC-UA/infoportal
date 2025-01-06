@@ -15,7 +15,7 @@ export enum DrcOffice {
   Ivankiv = 'Ivankiv',
   Ichna = 'Ichna',
   Kherson = 'Kherson',
-  Zaporizhzhya = 'Zaporizhzhya'
+  Zaporizhzhya = 'Zaporizhzhya',
 }
 
 export const oblastByDrcOffice: Record<DrcOffice, OblastName> = {
@@ -32,7 +32,7 @@ export const oblastByDrcOffice: Record<DrcOffice, OblastName> = {
   Ivankiv: 'Ivano-Frankivska',
   Ichna: 'Chernihivska',
   Kherson: 'Khersonska',
-  Zaporizhzhya: 'Zaporizka'
+  Zaporizhzhya: 'Zaporizka',
 }
 
 export const drcOffices = Obj.values(DrcOffice)
@@ -52,7 +52,7 @@ export enum DrcSector {
   Evacuations = 'Evacuations',
   GBV = 'GBV',
   EORE = 'EORE',
-  PSS = 'PSS'
+  PSS = 'PSS',
 }
 
 export enum DrcProgram {
@@ -94,7 +94,6 @@ export enum DrcProgram {
 }
 
 export class DrcSectorHelper {
-
   private static readonly byProgram: Record<DrcProgram, DrcSector[]> = {
     CashForFuel: [DrcSector.Shelter],
     CashForUtilities: [DrcSector.Shelter],
@@ -120,14 +119,14 @@ export class DrcSectorHelper {
     Legal: [DrcSector.GeneralProtection],
     FGD: [DrcSector.GeneralProtection],
     Observation: [DrcSector.GeneralProtection],
-    WGSS: [DrcSector.GBV],	//	# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces
-    DignityKits: [DrcSector.GBV],	//	# of women and girls at risk who received dignity kits
-    CapacityBuilding: [DrcSector.GBV],	//	# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards
+    WGSS: [DrcSector.GBV], //	# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces
+    DignityKits: [DrcSector.GBV], //	# of women and girls at risk who received dignity kits
+    CapacityBuilding: [DrcSector.GBV], //	# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards
     MHPSSActivities: [DrcSector.PSS],
     PsychosocialGroupSession: [DrcSector.PSS],
-    CaseManagement: [DrcSector.GBV],	//	# of individuals reached with humanitarian cash and voucher assistance for GBV case management and
-    AwarenessRaisingSession: [DrcSector.GeneralProtection, DrcSector.GBV],	//	# of individuals reached with awareness-raising activities and GBV-life-saving information
-    LegalAid: [DrcSector.GBV],	//	# of individuals at risk supported with GBV specialized legal assistance and counseling
+    CaseManagement: [DrcSector.GBV], //	# of individuals reached with humanitarian cash and voucher assistance for GBV case management and
+    AwarenessRaisingSession: [DrcSector.GeneralProtection, DrcSector.GBV], //	# of individuals reached with awareness-raising activities and GBV-life-saving information
+    LegalAid: [DrcSector.GBV], //	# of individuals at risk supported with GBV specialized legal assistance and counseling
     PsychosocialIndividualSession: [DrcSector.PSS],
     PsychologicalFirstAid: [DrcSector.PSS],
     //	# of operational women and girls\' safe spaces
@@ -348,10 +347,15 @@ export class DrcProjectHelper {
     'UKR-000399 SDC3': DrcDonor.SDC,
     'UKR-000378 Danish MFA': DrcDonor.DMFA,
     'UKR-000373 Novo-Nordilsk': DrcDonor.NovoNordisk,
-    'None': DrcDonor.None
+    None: DrcDonor.None,
   }
 
-  static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = seq(Obj.entries(DrcProjectHelper.donorByProject)).groupByAndApply(_ => _[1], _ => _.map(_ => _[0]))
+  static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = seq(
+    Obj.entries(DrcProjectHelper.donorByProject),
+  ).groupByAndApply(
+    (_) => _[1],
+    (_) => _.map((_) => _[0]),
+  )
 
   static readonly extractCode = (str?: string): string | undefined => {
     return str?.match(/UKR.?(000\d\d\d)/i)?.[1]
@@ -366,17 +370,16 @@ export class DrcProjectHelper {
   }
 
   static readonly searchByCode = (code?: string): DrcProject | undefined => {
-    if (code) return Obj.values(DrcProject).find(_ => _.includes(code))
+    if (code) return Obj.values(DrcProject).find((_) => _.includes(code))
   }
 
   static readonly budgetByProject: Partial<Record<DrcProject, number>> = {
-    [DrcProject['UKR-000322 ECHO2']]: 10243523,//.13, // 9423057.51 EURO from PIP
+    [DrcProject['UKR-000322 ECHO2']]: 10243523, //.13, // 9423057.51 EURO from PIP
     [DrcProject['UKR-000284 BHA']]: 57000000,
     [DrcProject['UKR-000269 ECHO1']]: 3000000,
-    [DrcProject['UKR-000345 BHA2']]: 10080572.00,
+    [DrcProject['UKR-000345 BHA2']]: 10080572.0,
   }
 }
-
 
 export enum DrcJob {
   'GBV Officer' = 'GBV Officer',

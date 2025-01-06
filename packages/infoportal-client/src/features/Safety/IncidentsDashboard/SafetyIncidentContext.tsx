@@ -7,11 +7,7 @@ const Context = React.createContext({} as SafetyIncidentContext)
 
 export const useSafetyIncidentContext = () => useContext<SafetyIncidentContext>(Context)
 
-export const SafetyIncidentProvider = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const SafetyIncidentProvider = ({children}: {children: ReactNode}) => {
   const data = useSafetyIncidentData()
 
   useEffect(() => {
@@ -19,9 +15,5 @@ export const SafetyIncidentProvider = ({
     data.fetcherPeriod.fetch({})
   }, [])
 
-  return (
-    <Context.Provider value={data}>
-      {children}
-    </Context.Provider>
-  )
+  return <Context.Provider value={data}>{children}</Context.Provider>
 }

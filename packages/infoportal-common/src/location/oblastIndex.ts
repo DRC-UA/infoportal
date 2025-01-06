@@ -7,11 +7,10 @@ export interface Oblast {
 }
 
 export type OblastISO = keyof typeof OblastIndex.oblastByISO
-export type OblastName = typeof OblastIndex.oblastByISO[keyof typeof OblastIndex.oblastByISO]
-export type OblastKoboName = keyof typeof OblastIndex['koboOblastIndexIso']
+export type OblastName = (typeof OblastIndex.oblastByISO)[keyof typeof OblastIndex.oblastByISO]
+export type OblastKoboName = keyof (typeof OblastIndex)['koboOblastIndexIso']
 
 export namespace OblastIndex {
-
   export const byIso: {
     (_: OblastISO): Oblast
     (_: string | undefined): Oblast | undefined
@@ -44,33 +43,33 @@ export namespace OblastIndex {
   }
 
   export const shortNamesIndex: Partial<Record<OblastISO, string>> = {
-    'UA01': `TODO Autonomous Republic of Crimea`,
-    'UA71': `TODO Cherkaska`,
-    'UA74': `Chernihiv`, // ok
-    'UA73': `Chernivtsi`,
-    'UA12': `Dnipropetrovsk`, // ok
-    'UA14': `Donetsk`, // ok
-    'UA26': `Ivano-Frankivsk`, // ok
-    'UA63': `Kharkiv`, // ok
-    'UA65': `Kherson`, // ok
-    'UA68': `TODO Khmelnytska`,
-    'UA35': `TODO Kirovohradska`,
-    'UA80': `TODO Kyiv`,
-    'UA32': `TODO Kyivska`,
-    'UA44': `Luhanska`, // UA-09 in Real but UA-44 in Activity Info
-    'UA46': `Lviv`, // ok
-    'UA48': `Mykolaiv`, // ok
-    'UA51': `TODO Odeska`,
-    'UA53': `TODO Poltavska`,
-    'UA56': `TODO Rivnenska`,
-    'UA85': `TODO Sevastopol`,
-    'UA59': `Sumy`,
-    'UA61': `TODO Ternopilska`,
-    'UA05': `TODO Vinnytska`,
-    'UA07': `Volyn`, // ok
-    'UA21': `TODO Zakarpatska`,
-    'UA23': `Zaporizhzhia`, // ok
-    'UA18': `TODO Zhytomyrska`
+    UA01: `TODO Autonomous Republic of Crimea`,
+    UA71: `TODO Cherkaska`,
+    UA74: `Chernihiv`, // ok
+    UA73: `Chernivtsi`,
+    UA12: `Dnipropetrovsk`, // ok
+    UA14: `Donetsk`, // ok
+    UA26: `Ivano-Frankivsk`, // ok
+    UA63: `Kharkiv`, // ok
+    UA65: `Kherson`, // ok
+    UA68: `TODO Khmelnytska`,
+    UA35: `TODO Kirovohradska`,
+    UA80: `TODO Kyiv`,
+    UA32: `TODO Kyivska`,
+    UA44: `Luhanska`, // UA-09 in Real but UA-44 in Activity Info
+    UA46: `Lviv`, // ok
+    UA48: `Mykolaiv`, // ok
+    UA51: `TODO Odeska`,
+    UA53: `TODO Poltavska`,
+    UA56: `TODO Rivnenska`,
+    UA85: `TODO Sevastopol`,
+    UA59: `Sumy`,
+    UA61: `TODO Ternopilska`,
+    UA05: `TODO Vinnytska`,
+    UA07: `Volyn`, // ok
+    UA21: `TODO Zakarpatska`,
+    UA23: `Zaporizhzhia`, // ok
+    UA18: `TODO Zhytomyrska`,
   }
 
   export const names: OblastName[] = [
@@ -100,37 +99,37 @@ export namespace OblastIndex {
     `Volynska`,
     `Zakarpatska`,
     `Zaporizka`,
-    `Zhytomyrska`
+    `Zhytomyrska`,
   ]
 
   export const oblastByISO = Object.freeze({
-    'UA01': `Autonomous Republic of Crimea`,
-    'UA71': `Cherkaska`,
-    'UA74': `Chernihivska`,
-    'UA73': `Chernivetska`,
-    'UA12': `Dnipropetrovska`,
-    'UA14': `Donetska`,
-    'UA26': `Ivano-Frankivska`,
-    'UA63': `Kharkivska`,
-    'UA65': `Khersonska`,
-    'UA68': `Khmelnytska`,
-    'UA35': `Kirovohradska`,
-    'UA80': `Kyiv`,
-    'UA32': `Kyivska`,
-    'UA44': `Luhanska`, // UA-09 in Real but UA-44 in Activity Info
-    'UA46': `Lvivska`,
-    'UA48': `Mykolaivska`,
-    'UA51': `Odeska`,
-    'UA53': `Poltavska`,
-    'UA56': `Rivnenska`,
-    'UA85': `Sevastopol`,
-    'UA59': `Sumska`,
-    'UA61': `Ternopilska`,
-    'UA05': `Vinnytska`,
-    'UA07': `Volynska`,
-    'UA21': `Zakarpatska`,
-    'UA23': `Zaporizka`,
-    'UA18': `Zhytomyrska`
+    UA01: `Autonomous Republic of Crimea`,
+    UA71: `Cherkaska`,
+    UA74: `Chernihivska`,
+    UA73: `Chernivetska`,
+    UA12: `Dnipropetrovska`,
+    UA14: `Donetska`,
+    UA26: `Ivano-Frankivska`,
+    UA63: `Kharkivska`,
+    UA65: `Khersonska`,
+    UA68: `Khmelnytska`,
+    UA35: `Kirovohradska`,
+    UA80: `Kyiv`,
+    UA32: `Kyivska`,
+    UA44: `Luhanska`, // UA-09 in Real but UA-44 in Activity Info
+    UA46: `Lvivska`,
+    UA48: `Mykolaivska`,
+    UA51: `Odeska`,
+    UA53: `Poltavska`,
+    UA56: `Rivnenska`,
+    UA85: `Sevastopol`,
+    UA59: `Sumska`,
+    UA61: `Ternopilska`,
+    UA05: `Vinnytska`,
+    UA07: `Volynska`,
+    UA21: `Zakarpatska`,
+    UA23: `Zaporizka`,
+    UA18: `Zhytomyrska`,
   })
 
   export const isos = Obj.keys(OblastIndex.oblastByISO)
@@ -141,7 +140,7 @@ export namespace OblastIndex {
     aroc: 'UA01' as OblastISO, //'UA43'
     cherkaska: 'UA71' as OblastISO,
     chernihivska: 'UA74' as OblastISO,
-    chernivetska: 'UA73' as OblastISO,// 'UA77'
+    chernivetska: 'UA73' as OblastISO, // 'UA77'
     dnipropetrovska: 'UA12' as OblastISO,
     donetska: 'UA14' as OblastISO,
     'ivano-frankivska': 'UA26' as OblastISO,
@@ -149,15 +148,15 @@ export namespace OblastIndex {
     khersonska: 'UA65' as OblastISO,
     khmelnytska: 'UA68' as OblastISO,
     kirovohradska: 'UA35' as OblastISO,
-    citykyiv: 'UA80' as OblastISO,//'UA80' as OblastISO,
+    citykyiv: 'UA80' as OblastISO, //'UA80' as OblastISO,
     kyivska: 'UA32' as OblastISO,
-    luhanska: 'UA44' as OblastISO,//'UA09' as OblastISO,
+    luhanska: 'UA44' as OblastISO, //'UA09' as OblastISO,
     lvivska: 'UA46' as OblastISO,
     mykolaivska: 'UA48' as OblastISO,
     odeska: 'UA51' as OblastISO,
     poltavska: 'UA53' as OblastISO,
     rivnenska: 'UA56' as OblastISO,
-    sevastopilska: 'UA85' as OblastISO,//'UA85' as OblastISO,
+    sevastopilska: 'UA85' as OblastISO, //'UA85' as OblastISO,
     sumska: 'UA59' as OblastISO,
     ternopilska: 'UA61' as OblastISO,
     vinnytska: 'UA05' as OblastISO,

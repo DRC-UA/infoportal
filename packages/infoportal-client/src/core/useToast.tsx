@@ -8,6 +8,6 @@ export const useIpToast = () => {
     toastHttpError: (e: unknown) => {
       console.error(e)
       toasts.toastError(`Something went wrong. Contact ${appConfig.contact}`)
-    }
+    },
   }
 }

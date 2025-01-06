@@ -4,11 +4,11 @@ import {UseMap2, useMapIp} from '@/shared/hook/useMap'
 export type Func<R = any> = (...args: any[]) => R
 
 export interface FetchParams {
-  force?: boolean,
+  force?: boolean
   clean?: boolean
 }
 
-export type Fetch<T extends Func<Promise<FetcherResult<T>>>> = (p?: FetchParams, ..._: Parameters<T>) => ReturnType<T>;
+export type Fetch<T extends Func<Promise<FetcherResult<T>>>> = (p?: FetchParams, ..._: Parameters<T>) => ReturnType<T>
 
 type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
 
@@ -33,9 +33,9 @@ export interface UseFetchersFn {
   <F extends Func<Promise<any>>, K extends Key = any, E = any>(
     fetcher: F,
     params: {
-      mapError?: (_: any) => E,
-      requestKey: (_: Parameters<F>) => K,
-    }
+      mapError?: (_: any) => E
+      requestKey: (_: Parameters<F>) => K
+    },
   ): UseFetchers<F, K, E>
 }
 
@@ -44,10 +44,7 @@ export interface UseFetchersFn {
  */
 export const useFetchers: UseFetchersFn = <F extends Func<Promise<any>>, K extends Key = any, E = any>(
   fetcher: F,
-  {
-    requestKey = undefined as any,
-    mapError = (_: any) => _,
-  }
+  {requestKey = undefined as any, mapError = (_: any) => _},
 ) => {
   const entities = useMapIp<K, FetcherResult<F>>()
   const errors = useMapIp<K, E | undefined>()
@@ -90,7 +87,7 @@ export const useFetchers: UseFetchersFn = <F extends Func<Promise<any>>, K exten
     entities.clear()
     errors.clear()
     loadings.clear()
-  }, [entities, errors, loadings,])
+  }, [entities, errors, loadings])
 
   return {
     getAsArr: list,
@@ -100,10 +97,10 @@ export const useFetchers: UseFetchersFn = <F extends Func<Promise<any>>, K exten
     error: errors.toObject,
     lastError,
     anyError: errors.size > 0,
-    anyLoading: !!loadings.values.find(_ => _),
+    anyLoading: !!loadings.values.find((_) => _),
     // TODO(Alex) not sure the error is legitimate
     fetch: fetch as any,
     // setEntity,
-    clearCache
+    clearCache,
   }
 }

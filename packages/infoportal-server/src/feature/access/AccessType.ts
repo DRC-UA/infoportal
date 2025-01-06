@@ -21,13 +21,12 @@ export interface WfpDeduplicationAccessParams {
 }
 
 export interface KoboDatabaseAccessParams {
-  koboFormId: Kobo.FormId,
+  koboFormId: Kobo.FormId
   filters?: Record<string, string[]>
 }
 
-
 export interface KoboDatabaseFeatureParams {
-  koboFormId: Kobo.FormId,
+  koboFormId: Kobo.FormId
   filters?: Record<string, string[]>
 }
 

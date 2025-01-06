@@ -28,7 +28,7 @@ export const dateFromNow: {
   (d?: undefined): undefined
   (d?: Date): string | undefined
 } = (d) => {
-  return d ? formatDistance(d, new Date(), {addSuffix: true}) : undefined as any
+  return d ? formatDistance(d, new Date(), {addSuffix: true}) : (undefined as any)
 }
 
 export const formatLargeNumber = (n?: number, options?: Intl.NumberFormatOptions): string => {
@@ -37,7 +37,7 @@ export const formatLargeNumber = (n?: number, options?: Intl.NumberFormatOptions
 
 export const formatDuration = formatDurationFns
 
-export type Messages = typeof en['messages']
+export type Messages = (typeof en)['messages']
 
 export const en = Object.freeze({
   formatDate,
@@ -139,7 +139,8 @@ export const en = Object.freeze({
     recap: 'Recap',
     Approved: 'Approved',
     updatingTag: (rowsCount: number, key: string, value: string) => `Updating ${key}=${value} on ${rowsCount} rows...`,
-    cannotUpdateTag: (rowsCount: number, key: string, value: string) => `Update failed for ${key}=${value} on ${rowsCount} rows. Table not edited.`,
+    cannotUpdateTag: (rowsCount: number, key: string, value: string) =>
+      `Update failed for ${key}=${value} on ${rowsCount} rows. Table not edited.`,
     Rejected: 'Rejected',
     mykolaiv: 'Mykolaiv',
     lastConnectedAt: 'Last connection',
@@ -221,7 +222,7 @@ export const en = Object.freeze({
       north: 'North',
       east: 'East',
       south: 'South',
-      west: 'West'
+      west: 'West',
     },
     paid: 'Paid',
     start: 'Start',
@@ -315,7 +316,8 @@ export const en = Object.freeze({
     duration: 'Duration',
     notSpecified: 'Not specified',
     confirmYourOffice: (office: string) => `Confirm ${office} office`,
-    itCannotBeChanged: (admin: string) => `For privacy reasons, you will not be able to change it later without contacting ${admin}.`,
+    itCannotBeChanged: (admin: string) =>
+      `For privacy reasons, you will not be able to change it later without contacting ${admin}.`,
     select: 'Select',
     welcomePleaseSelectOffice: 'Welcome, select your DRC office:',
     firstName: 'First name',
@@ -394,7 +396,7 @@ export const en = Object.freeze({
       hohh60: 'Elderly HoHH',
       hohhFemale: 'Female HoHH',
       memberWithDisability: 'HH with PwD',
-      all: 'Average'
+      all: 'Average',
     },
     shelter: 'Shelter',
     health: 'Health',
@@ -431,7 +433,7 @@ export const en = Object.freeze({
     register: 'Register',
     noIdpsOnly: 'Non-IDPs only',
     uaCitizen: 'UA citizen',
-    appInMaintenance: 'Application in maintenance, we\'ll be back soon.',
+    appInMaintenance: "Application in maintenance, we'll be back soon.",
     comments: 'Comments',
     ukrainianCitizenShip: 'Ukrainian citizenship',
     hhBarriersToPersonalDocument: 'Experienced barriers to obtain civil documents',
@@ -440,7 +442,7 @@ export const en = Object.freeze({
       openTracker: 'Open Excel tracker',
       visitMonitoring: 'Visit Monitoring',
       verification: 'Verification',
-      pdm: 'PDM'
+      pdm: 'PDM',
     },
     _protection: {
       cocCasesDashboard: 'CoC PowerBi Dashboard',
@@ -631,14 +633,15 @@ export const en = Object.freeze({
       },
       casualties: 'Casualties of War',
       minusRusTitle: 'Intensity Proxy',
-      dataTakenFromMinusRus: 'Data extracted in real-time from <a class="link" target="_blank" href="https://www.minusrus.com/en">https://www.minusrus.com/en</a>.',
+      dataTakenFromMinusRus:
+        'Data extracted in real-time from <a class="link" target="_blank" href="https://www.minusrus.com/en">https://www.minusrus.com/en</a>.',
       aggravatingFactors: 'Aggravating factors',
       lastAttacks: 'Last attacks',
       incidentTrackerTitle: 'Incidents dashboard',
       incidents: 'Incidents',
       incident: 'Incident',
-      attackOfOn: (oblast?: OblastISO,
-        type?: string[]) => `${type?.map(capitalize).join(' and ') ?? ''}${type ? ' a' : 'A'}ttack${oblast ? ` in ${OblastIndex.byIso(oblast).name}` : ''}`,
+      attackOfOn: (oblast?: OblastISO, type?: string[]) =>
+        `${type?.map(capitalize).join(' and ') ?? ''}${type ? ' a' : 'A'}ttack${oblast ? ` in ${OblastIndex.byIso(oblast).name}` : ''}`,
       attackTypes: 'Attack type',
       attacks: 'Attacks',
       attack: 'Attack',
@@ -670,7 +673,7 @@ export const en = Object.freeze({
         document: 'Registration & Documentation',
         livelihood: 'Livelihood',
         needs: 'Specific needs and priorities',
-        safety: `Safety & Security`
+        safety: `Safety & Security`,
       },
       title: 'Protection Monitoring Snapshot',
       title2: 'Ukraine',
@@ -763,7 +766,7 @@ export const en = Object.freeze({
         PartiallyDeduplicated: 'Partially deduplicated',
         NotDeduplicated: 'Not deduplicated',
         Error: 'Error',
-      }
+      },
     },
     _koboDatabase: {
       mergedDb: 'Merged DB',
@@ -791,7 +794,8 @@ export const en = Object.freeze({
       title: (form?: string) => `Kobo Database${form ? `: <b>${form}</b>` : ``}`,
       showAllQuestions: 'Show unanswered questions',
       pullData: `Synchronize last Kobo data.`,
-      pullDataAt: (lastUpdate: Date) => `Synchronize Kobo data.<br/>Last synchronization: <b>${formatDateTime(lastUpdate)}</b>.`,
+      pullDataAt: (lastUpdate: Date) =>
+        `Synchronize Kobo data.<br/>Last synchronization: <b>${formatDateTime(lastUpdate)}</b>.`,
       valueNoLongerInOption: 'This value is no longer in the options list',
       noAccessToForm: `You don't have access to any database.`,
       openKoboForm: 'Open Kobo form',
@@ -804,10 +808,10 @@ export const en = Object.freeze({
       additionalInformation: 'Details',
       deleteWarning: `In case of mistake, you can still recover deleted data by contacting ${appConfig.contact}.`,
       _feedbackType: {
-        'thanks': 'Thanks',
-        'feedback': 'Feedback',
-        'request': 'Request',
-        'complaint': 'Complaint',
+        thanks: 'Thanks',
+        feedback: 'Feedback',
+        request: 'Request',
+        complaint: 'Complaint',
       },
       priority: 'Rank',
       openTicketsHigh: 'High priority',
@@ -835,7 +839,7 @@ export const en = Object.freeze({
         Close: 'Close',
         Open: 'Open',
         Processing: 'Processing',
-      }
+      },
     },
     _admin: {
       createGroup: 'Create groupDisplay',
@@ -892,7 +896,7 @@ export const en = Object.freeze({
         // ContractorInvoiceReceived: 'Contractor invoice received',
         // HandoverCertificateOfCompletionSigned: 'Handover/Certificate of completion signed',
         // InvoicePaymentProcessed: 'Invoice payment processed',
-      }
+      },
     },
     note: 'Note',
     projectCode: 'Project Code',
@@ -985,12 +989,12 @@ export const en = Object.freeze({
       BK: 'Baby Kit',
       WKB: 'Baby Winter Kits',
       HKMV: 'Family Hygiene Kits for moving IDPs',
-      ESK: 'Emergency Shelter Kit'
+      ESK: 'Emergency Shelter Kit',
     },
-    importData:{
+    importData: {
       create: 'Upload New Data',
       update: 'Update Existing Data',
-      generate: 'Generate Excel Template'
-    }
+      generate: 'Generate Excel Template',
+    },
   },
 })

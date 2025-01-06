@@ -6,16 +6,15 @@ import {appConfig} from '@/conf/AppConfig'
 import {en} from '@/core/i18n/localization/en'
 
 interface ErrorBoundaryProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 interface ErrorBoundaryState {
-  hasError: boolean;
-  error: Error | null;
+  hasError: boolean
+  error: Error | null
 }
 
 export class DatatableErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-
   constructor(props: ErrorBoundaryProps) {
     super(props)
     this.state = {
@@ -57,24 +56,36 @@ export class DatatableErrorBoundary extends Component<ErrorBoundaryProps, ErrorB
       const error = this.state.error
       return (
         <Box sx={{p: 2}}>
-          <Txt bold size="title" block sx={{mb: 1}}>{en.messages.somethingWentWrong}</Txt>
-          <Box sx={{mb: 1}}>If the problem persist, please contact <b>{appConfig.contact}</b> and include the snippet below.</Box>
+          <Txt bold size="title" block sx={{mb: 1}}>
+            {en.messages.somethingWentWrong}
+          </Txt>
+          <Box sx={{mb: 1}}>
+            If the problem persist, please contact <b>{appConfig.contact}</b> and include the snippet below.
+          </Box>
 
-          <IpBtn icon="refresh" onClick={() => this.refreshPage()} color="primary" variant="contained" sx={{mr: 1}}>{en.messages.refresh}</IpBtn>
-          <IpBtn icon="settings_backup_restore" onClick={() => this.refreshPage(true)} color="primary" variant="text">{en.messages.hardRefresh}</IpBtn>
+          <IpBtn icon="refresh" onClick={() => this.refreshPage()} color="primary" variant="contained" sx={{mr: 1}}>
+            {en.messages.refresh}
+          </IpBtn>
+          <IpBtn icon="settings_backup_restore" onClick={() => this.refreshPage(true)} color="primary" variant="text">
+            {en.messages.hardRefresh}
+          </IpBtn>
 
-          <Box sx={t => ({
-            fontFamily: 'monospace',
-            py: 1,
-            mt: 2,
-            px: 2,
-            borderRadius: (t.shape.borderRadius - 1) + 'px',
-            background: t.palette.grey[100]
-          })}>
-            {error && <Txt bold size="big">{error.toString()}</Txt>}
-            <pre>
-          {error && <Txt>{error.stack}</Txt>}
-          </pre>
+          <Box
+            sx={(t) => ({
+              fontFamily: 'monospace',
+              py: 1,
+              mt: 2,
+              px: 2,
+              borderRadius: t.shape.borderRadius - 1 + 'px',
+              background: t.palette.grey[100],
+            })}
+          >
+            {error && (
+              <Txt bold size="big">
+                {error.toString()}
+              </Txt>
+            )}
+            <pre>{error && <Txt>{error.stack}</Txt>}</pre>
           </Box>
         </Box>
       )

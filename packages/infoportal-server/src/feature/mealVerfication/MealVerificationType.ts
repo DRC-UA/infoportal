@@ -1,3 +1,3 @@
 export enum MealVerificationAnswersStatus {
-  Selected = 'Selected'
+  Selected = 'Selected',
 }

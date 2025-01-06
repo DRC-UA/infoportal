@@ -13,7 +13,7 @@ import {ProtectionMonito} from '@/features/Protection/DashboardMonito/Protection
 
 export const snapshotProtMonitoNn2Logo = (
   <>
-    <DRCLogo/>
+    <DRCLogo />
   </>
 )
 
@@ -21,14 +21,14 @@ export const SnapshotProtMonitoNN2 = () => {
   return (
     <ProtectionMonito.Provider
       filterDefault={{
-        oblast: [OblastIndex.byName('Mykolaivska').iso]
+        oblast: [OblastIndex.byName('Mykolaivska').iso],
       }}
       periodDefault={{
         start: startOfMonth(new Date(2024, 1, 1)),
         end: endOfMonth(new Date(2024, 2, 31)),
       }}
     >
-      <_SnapshotProtMonitoring/>
+      <_SnapshotProtMonitoring />
     </ProtectionMonito.Provider>
   )
 }
@@ -38,13 +38,16 @@ const _SnapshotProtMonitoring = () => {
   return (
     <Pdf>
       <Box sx={{'@media print': {display: 'none'}}}>
-        <PeriodPicker value={[ctx.period.start, ctx.period.end]} onChange={_ => ctx.setPeriod({start: _[0], end: _[1]})}/>
+        <PeriodPicker
+          value={[ctx.period.start, ctx.period.end]}
+          onChange={(_) => ctx.setPeriod({start: _[0], end: _[1]})}
+        />
       </Box>
-      <SnapshotProtMonitoNN2Sample/>
+      <SnapshotProtMonitoNN2Sample />
       {/* <SnapshotProtMonitoNN2Displacement/> */}
-      <SnapshotProtMonitoNN2Safety/>
-      <SnapshotProtMonitoNN2Needs/>
-      <SnapshotProtMonitoNN2Livelihood/>
+      <SnapshotProtMonitoNN2Safety />
+      <SnapshotProtMonitoNN2Needs />
+      <SnapshotProtMonitoNN2Livelihood />
     </Pdf>
   )
 }

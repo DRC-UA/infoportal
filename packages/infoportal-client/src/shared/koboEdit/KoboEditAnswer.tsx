@@ -14,8 +14,8 @@ export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>
   answerId,
 }: {
   value?: T[K]
-  onChange?: (_: T[K]) => void,
-  formId: Kobo.FormId,
+  onChange?: (_: T[K]) => void
+  formId: Kobo.FormId
   columnName: K
   answerId: Kobo.SubmissionId
 }) => {
@@ -23,7 +23,7 @@ export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>
 
   const {columnDef, schema, loading} = useKoboColumnDef({formId, columnName})
 
-  if (loading) return <Skeleton/>
+  if (loading) return <Skeleton />
   if (!columnDef || !schema) return <></>
 
   const handleChange = async (newValue: any) => {
@@ -41,9 +41,10 @@ export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>
         <IpSelectSingle
           value={value as any}
           onChange={handleChange}
-          options={schema.helper.choicesIndex[columnDef.select_from_list_name!].map(_ =>
-            ({value: _.name, children: schema.translate.choice(columnName, _.name)})
-          )}
+          options={schema.helper.choicesIndex[columnDef.select_from_list_name!].map((_) => ({
+            value: _.name,
+            children: schema.translate.choice(columnName, _.name),
+          }))}
         />
       )
     }

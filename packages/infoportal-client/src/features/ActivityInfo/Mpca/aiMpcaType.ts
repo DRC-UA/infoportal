@@ -2,81 +2,110 @@ export namespace AiMpcaType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
 
   export interface Type {
-    'Reporting Organization': Opt<'Reporting Organization'>,
-    'Implementing Partner': Opt<'Implementing Partner'>,
-    'Activity Plan Code': Opt<'Activity Plan Code'>,
-    'Donor': Opt<'Donor'>,
-    'Indicators - MPCA'?: Opt<'Indicators - MPCA'>,
-    'Total amount (USD) distributed through multi-purpose cash assistance': number,
-    'Payments Frequency': Opt<'Payments Frequency'>,
-    'Financial Service Provider (FSP)': Opt<'Financial Service Provider (FSP)'>,
-    'Response Theme': Opt<'Response Theme'>,
-    'Raion'?: string,
-    'Hromada': string,
-    'Settlement'?: string,
-    'Collective Site'?: string,
-    'Reporting Month': string,
-    'Activity Start Month'?: string,
-    'Activity End Month'?: string,
-    'Number of Covered Months': Opt<'Number of Covered Months'>,
-    'Population Group': Opt<'Population Group'>,
-    'Total Individuals Reached': number,
-    'Girls (0-17)': number,
-    'Boys (0-17)': number,
-    'Adult Women (18-59)': number,
-    'Adult Men (18-59)': number,
-    'Older Women (60+)': number,
-    'Older Men (60+)': number,
-    'People with disability': number,
-    'Girls with disability (0-17)'?: number,
-    'Boys with disability (0-17)'?: number,
-    'Adult Women with disability (18-59)'?: number,
-    'Adult Men with disability (18-59)'?: number,
-    'Older Women with disability (60+)'?: number,
+    'Reporting Organization': Opt<'Reporting Organization'>
+    'Implementing Partner': Opt<'Implementing Partner'>
+    'Activity Plan Code': Opt<'Activity Plan Code'>
+    Donor: Opt<'Donor'>
+    'Indicators - MPCA'?: Opt<'Indicators - MPCA'>
+    'Total amount (USD) distributed through multi-purpose cash assistance': number
+    'Payments Frequency': Opt<'Payments Frequency'>
+    'Financial Service Provider (FSP)': Opt<'Financial Service Provider (FSP)'>
+    'Response Theme': Opt<'Response Theme'>
+    Raion?: string
+    Hromada: string
+    Settlement?: string
+    'Collective Site'?: string
+    'Reporting Month': string
+    'Activity Start Month'?: string
+    'Activity End Month'?: string
+    'Number of Covered Months': Opt<'Number of Covered Months'>
+    'Population Group': Opt<'Population Group'>
+    'Total Individuals Reached': number
+    'Girls (0-17)': number
+    'Boys (0-17)': number
+    'Adult Women (18-59)': number
+    'Adult Men (18-59)': number
+    'Older Women (60+)': number
+    'Older Men (60+)': number
+    'People with disability': number
+    'Girls with disability (0-17)'?: number
+    'Boys with disability (0-17)'?: number
+    'Adult Women with disability (18-59)'?: number
+    'Adult Men with disability (18-59)'?: number
+    'Older Women with disability (60+)'?: number
     'Older Men with disability (60+)'?: number
   }
 
   export const map = (a: Type) => ({
-    'cw67b3nlq6so74pf': a['Reporting Organization'] === undefined ? undefined : 'czbgrslpwg36j52' + ':' + options['Reporting Organization'][a['Reporting Organization']!],
-    'c53wwymlq6so74pg': a['Implementing Partner'] === undefined ? undefined : 'czbgrslpwg36j52' + ':' + options['Implementing Partner'][a['Implementing Partner']!],
-    'cxzc3wylqxzrn9i2': a['Activity Plan Code'] === undefined ? undefined : 'c80149tlqm62xpv1tk' + ':' + options['Activity Plan Code'][a['Activity Plan Code']!],
-    'cmuq05dlqnsj7yqf': a['Donor'] === undefined ? undefined : 'cf9uxrylqf1ttfc2' + ':' + options['Donor'][a['Donor']!],
-    'ckv9joulsvxoptn2': a['Indicators - MPCA'] === undefined ? undefined : 'cid2wxslqb3pzob9e' + ':' + options['Indicators - MPCA'][a['Indicators - MPCA']!],
-    'c9aasnglqnsgaq6e': a['Total amount (USD) distributed through multi-purpose cash assistance'] === undefined ? undefined : a['Total amount (USD) distributed through multi-purpose cash assistance'],
-    'cakkhd9lqntdpktd': a['Payments Frequency'] === undefined ? undefined : options['Payments Frequency'][a['Payments Frequency']!],
-    'cjrs9bzlr0f2x6wd': a['Financial Service Provider (FSP)'] === undefined ? undefined : options['Financial Service Provider (FSP)'][a['Financial Service Provider (FSP)']!],
-    'cb7ml4clqnt87pf3': a['Response Theme'] === undefined ? undefined : options['Response Theme'][a['Response Theme']!],
+    cw67b3nlq6so74pf:
+      a['Reporting Organization'] === undefined
+        ? undefined
+        : 'czbgrslpwg36j52' + ':' + options['Reporting Organization'][a['Reporting Organization']!],
+    c53wwymlq6so74pg:
+      a['Implementing Partner'] === undefined
+        ? undefined
+        : 'czbgrslpwg36j52' + ':' + options['Implementing Partner'][a['Implementing Partner']!],
+    cxzc3wylqxzrn9i2:
+      a['Activity Plan Code'] === undefined
+        ? undefined
+        : 'c80149tlqm62xpv1tk' + ':' + options['Activity Plan Code'][a['Activity Plan Code']!],
+    cmuq05dlqnsj7yqf: a['Donor'] === undefined ? undefined : 'cf9uxrylqf1ttfc2' + ':' + options['Donor'][a['Donor']!],
+    ckv9joulsvxoptn2:
+      a['Indicators - MPCA'] === undefined
+        ? undefined
+        : 'cid2wxslqb3pzob9e' + ':' + options['Indicators - MPCA'][a['Indicators - MPCA']!],
+    c9aasnglqnsgaq6e:
+      a['Total amount (USD) distributed through multi-purpose cash assistance'] === undefined
+        ? undefined
+        : a['Total amount (USD) distributed through multi-purpose cash assistance'],
+    cakkhd9lqntdpktd:
+      a['Payments Frequency'] === undefined ? undefined : options['Payments Frequency'][a['Payments Frequency']!],
+    cjrs9bzlr0f2x6wd:
+      a['Financial Service Provider (FSP)'] === undefined
+        ? undefined
+        : options['Financial Service Provider (FSP)'][a['Financial Service Provider (FSP)']!],
+    cb7ml4clqnt87pf3: a['Response Theme'] === undefined ? undefined : options['Response Theme'][a['Response Theme']!],
     // 'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
-    'cshl0i7lq6so74qp': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
-    'c2o66c6lq6so74qq': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
-    'cf2masdlq6so74qr': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
-    'cmol4qhlq6so74qv': a['Reporting Month'] === undefined ? undefined : a['Reporting Month'],
-    'c4t8d0xlqz50e1e2': a['Activity Start Month'] === undefined ? undefined : a['Activity Start Month'],
-    'c4aesi0lqz510nh3': a['Activity End Month'] === undefined ? undefined : a['Activity End Month'],
-    'canw5vhlqntauao6': a['Number of Covered Months'] === undefined ? undefined : options['Number of Covered Months'][a['Number of Covered Months']!],
-    'cf6hv4zlq6so74qz': a['Population Group'] === undefined ? undefined : 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!],
-    'c8docc8lq6so74q12': a['Total Individuals Reached'] === undefined ? undefined : a['Total Individuals Reached'],
-    'cxxa4fmlq6so74q13': a['Girls (0-17)'] === undefined ? undefined : a['Girls (0-17)'],
-    'cihl0t2lq6so74q14': a['Boys (0-17)'] === undefined ? undefined : a['Boys (0-17)'],
-    'cm5uwnwlq6so74q15': a['Adult Women (18-59)'] === undefined ? undefined : a['Adult Women (18-59)'],
-    'csp8uxllq6so74q16': a['Adult Men (18-59)'] === undefined ? undefined : a['Adult Men (18-59)'],
-    'cy3skbtlq6so74q17': a['Older Women (60+)'] === undefined ? undefined : a['Older Women (60+)'],
-    'c91006ylq6so74r18': a['Older Men (60+)'] === undefined ? undefined : a['Older Men (60+)'],
-    'cexzo0hlq6so74r19': a['People with disability'] === undefined ? undefined : a['People with disability'],
-    'cll4mlllqp9p0mr4': a['Girls with disability (0-17)'] === undefined ? undefined : a['Girls with disability (0-17)'],
-    'c3cim3lqp9pzl35': a['Boys with disability (0-17)'] === undefined ? undefined : a['Boys with disability (0-17)'],
-    'cutta7glqp9qq8v6': a['Adult Women with disability (18-59)'] === undefined ? undefined : a['Adult Women with disability (18-59)'],
-    'cyacnhzlqp9rkug7': a['Adult Men with disability (18-59)'] === undefined ? undefined : a['Adult Men with disability (18-59)'],
-    'cyk1e6rlqp9s7sk8': a['Older Women with disability (60+)'] === undefined ? undefined : a['Older Women with disability (60+)'],
-    'cwt6rrtlqp9sz659': a['Older Men with disability (60+)'] === undefined ? undefined : a['Older Men with disability (60+)']
+    cshl0i7lq6so74qp: a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
+    c2o66c6lq6so74qq: a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
+    cf2masdlq6so74qr: a['Collective Site'] === undefined ? undefined : a['Collective Site'],
+    cmol4qhlq6so74qv: a['Reporting Month'] === undefined ? undefined : a['Reporting Month'],
+    c4t8d0xlqz50e1e2: a['Activity Start Month'] === undefined ? undefined : a['Activity Start Month'],
+    c4aesi0lqz510nh3: a['Activity End Month'] === undefined ? undefined : a['Activity End Month'],
+    canw5vhlqntauao6:
+      a['Number of Covered Months'] === undefined
+        ? undefined
+        : options['Number of Covered Months'][a['Number of Covered Months']!],
+    cf6hv4zlq6so74qz:
+      a['Population Group'] === undefined
+        ? undefined
+        : 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!],
+    c8docc8lq6so74q12: a['Total Individuals Reached'] === undefined ? undefined : a['Total Individuals Reached'],
+    cxxa4fmlq6so74q13: a['Girls (0-17)'] === undefined ? undefined : a['Girls (0-17)'],
+    cihl0t2lq6so74q14: a['Boys (0-17)'] === undefined ? undefined : a['Boys (0-17)'],
+    cm5uwnwlq6so74q15: a['Adult Women (18-59)'] === undefined ? undefined : a['Adult Women (18-59)'],
+    csp8uxllq6so74q16: a['Adult Men (18-59)'] === undefined ? undefined : a['Adult Men (18-59)'],
+    cy3skbtlq6so74q17: a['Older Women (60+)'] === undefined ? undefined : a['Older Women (60+)'],
+    c91006ylq6so74r18: a['Older Men (60+)'] === undefined ? undefined : a['Older Men (60+)'],
+    cexzo0hlq6so74r19: a['People with disability'] === undefined ? undefined : a['People with disability'],
+    cll4mlllqp9p0mr4: a['Girls with disability (0-17)'] === undefined ? undefined : a['Girls with disability (0-17)'],
+    c3cim3lqp9pzl35: a['Boys with disability (0-17)'] === undefined ? undefined : a['Boys with disability (0-17)'],
+    cutta7glqp9qq8v6:
+      a['Adult Women with disability (18-59)'] === undefined ? undefined : a['Adult Women with disability (18-59)'],
+    cyacnhzlqp9rkug7:
+      a['Adult Men with disability (18-59)'] === undefined ? undefined : a['Adult Men with disability (18-59)'],
+    cyk1e6rlqp9s7sk8:
+      a['Older Women with disability (60+)'] === undefined ? undefined : a['Older Women with disability (60+)'],
+    cwt6rrtlqp9sz659:
+      a['Older Men with disability (60+)'] === undefined ? undefined : a['Older Men with disability (60+)'],
   })
 
   export const options = {
     'Reporting Organization': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'
+      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
     },
     'Implementing Partner': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'
+      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
     },
     'Activity Plan Code': {
       'MPCA-DRC-00001': 'cghgcrlltn5k1wn2',
@@ -92,7 +121,7 @@ export namespace AiMpcaType {
       'MPCA-DRC-00011': 'cu5abj0m0w38bc52',
       'MPCA-DRC-00012': 'c4jpb7xm38tx8su2',
     },
-    'Donor': {
+    Donor: {
       'ACT Alliance (ACT)': 'cvkyilllqf1uylbd4',
       'AICM Ukraine (AICMUA)': 'cjtjqpglqf1uylbd5',
       'ATB-Market (ATB)': 'cxbirpslqf1uylbd6',
@@ -107,7 +136,8 @@ export namespace AiMpcaType {
       'Adventist Development and Relief Agency Inter-American Division (ADRA IAD)': 'cgkcztrlqf1uylbdf',
       'Adventist Development and Relief Agency Netherlands (ADRA Netherlands)': 'calwybdlqf1uylbdg',
       'Adventist Development and Relief Agency Norway (ADRA Norway)': 'cxroni7lqf1uylbdh',
-      'Adventist Development and Relief Agency South America Division (ADRA South America Division)': 'ctge4ralqf1uylbdi',
+      'Adventist Development and Relief Agency South America Division (ADRA South America Division)':
+        'ctge4ralqf1uylbdi',
       'Adventist Development and Relief Agency Spain (ADRA Spain)': 'civ5yjlqf1uylbdj',
       'Adventist Development and Relief Agency Sweden (ADRA Sweden)': 'cr41ucplqf1uylbdk',
       'Adventist Development and Relief Agency Switzerland (ADRA Switzerland)': 'cfs7rz3lqf1uylbdl',
@@ -163,11 +193,12 @@ export namespace AiMpcaType {
       'DRA (DRA)': 'c9fea36lqf1uylcez',
       'DanChurchAid (DCA)': 'c3ami7lqf1uylcf0',
       'Danish International Development Agency - Ministry of Foreign Affairs - Denmark (DANIDA)': 'cevc6u8lqf1uyldf1',
-      'Danish People\'s Aid (DPA)': 'cv36n7jlqf1uyldf2',
+      "Danish People's Aid (DPA)": 'cv36n7jlqf1uyldf2',
       'Danish Refugee Council (DRC)': 'c9jdb9xlqf1uyldf3',
       'Delegation of the European Union to Ukraine (EEAS)': 'cu62mn0lqf1uyldf4',
       'Denmark, Government of (Denmark)': 'c3rcxdxlqf1uyldf5',
-      'Directorate General for Development Cooperation of the Ministry of Foreign Affairs and International Cooperation - Italy (DGDC/MFA Italy)': 'caecybqlqf1uyldf6',
+      'Directorate General for Development Cooperation of the Ministry of Foreign Affairs and International Cooperation - Italy (DGDC/MFA Italy)':
+        'caecybqlqf1uyldf6',
       'Disasters Emergency Committee (DEC)': 'ca9wtq0lqf1uyldf7',
       'Dnipropetrovsk Regional Center of Psychosocial Support (DRCPS)': 'cf7jwmelqf1uyldf8',
       'Development Center (DDC)': 'cgfosbmlqf1uyldf9',
@@ -181,14 +212,16 @@ export namespace AiMpcaType {
       'Estonian Refugee Council (ERC)': 'ckd5913lqf1uyldfh',
       'Euro-Plus (Euro+)': 'ch8oee6lqf1uyldfi',
       'European Commission Humanitarian Aid Department and Civil Protection (ECHO)': 'cc3gaj6lqf1uyldfj',
-      'European Commission\'s Directorate-General for European Civil Protection and Humanitarian Aid Operations (DG ECHO)': 'cgjlouwlqf1uyldfk',
+      "European Commission's Directorate-General for European Civil Protection and Humanitarian Aid Operations (DG ECHO)":
+        'cgjlouwlqf1uyldfk',
       'European Programme for Integration and Migration (EPIM)': 'cc4axxjlqf1uyldfl',
       'European Union (EU)': 'ct2gxm8lqf1uyldfm',
       'FHI 360 (FHI360)': 'cibl0ytlqf1uyldfn',
       'Faith, Hope, Love (FHL)': 'ctpdd0ylqf1uyldfo',
       'Federal Agency for Technical Relief (THW Germany)': 'c7pyz3slqf1uyldfp',
       'Federal Ministry for Economic Cooperation and Development - Germany (BMZ)': 'cwi9aj9lqf1uyldfq',
-      'Federal Public Service Foreign Affairs, Foreign Trade and Development Cooperation - Belgium (MFA Belgium)': 'co5kbbplqf1uyldfr',
+      'Federal Public Service Foreign Affairs, Foreign Trade and Development Cooperation - Belgium (MFA Belgium)':
+        'co5kbbplqf1uyldfr',
       'Finland, Government of (Finland)': 'cuytai8lqf1uyldfs',
       'First Ukrainian International Bank (PUMB)': 'cxqob0glqf1uyldft',
       'Foreign, Commonwealth & Development Office (FCDO)': 'cgxr4t2lqf1uyldfu',
@@ -280,15 +313,16 @@ export namespace AiMpcaType {
       'Nonviolent Peaceforce (NVPF)': 'ccrohn5lqf1uylfi8',
       'Norway, Government of (Norway)': 'cwtzjhslqf1uylfi9',
       'Norwegian Church Aid (NCA)': 'crcfsdulqf1uylfia',
-      'Norwegian People\'s Aid (NPAID)': 'cmna78tlqf1uylfib',
+      "Norwegian People's Aid (NPAID)": 'cmna78tlqf1uylfib',
       'Norwegian Red Cross (NORC)': 'c5m5bktlqf1uylfic',
       'Norwegian Refugee Council (NRC)': 'c9v889blqf1uylfid',
       'OM International (OM International)': 'cjk1q8klqf1uylfie',
       'Oak Foundation (Oak)': 'cqox59ulqf1uylfif',
       'Office for Foreign Affairs - Principality of Liechtenstein (MFA Liechtenstein)': 'cnzzoc7lqf1uylfig',
-      'Office of Weapons Removal and Abatement in the U.S. State Department’s Bureau of Political-Military Affairs (PM/WRA)': 'c9jcxxflqf1uylfih',
+      'Office of Weapons Removal and Abatement in the U.S. State Department’s Bureau of Political-Military Affairs (PM/WRA)':
+        'c9jcxxflqf1uylfih',
       'Office the Ukrainian Parliament Commissioner for Human Rights (Ombudsman)': 'cvt9vd3lqf1uylfii',
-      'Ole Kirk\'s Foundation (OKF)': 'ca7mk36lqf1uylfij',
+      "Ole Kirk's Foundation (OKF)": 'ca7mk36lqf1uylfij',
       'Omaze (Omaze)': 'ca3m6oalqf1uylfik',
       'Oxfam International (Oxfam)': 'c7b7wqilqf1uylfil',
       'PMU InterLife (PMU)': 'cglosazlqf1uylfim',
@@ -307,9 +341,9 @@ export namespace AiMpcaType {
       'RE/MAX (RE/MAX)': 'c1usrv1lqf1v04hiz',
       'RKESA (RKESA)': 'c80qxw8lqf1v04hj0',
       'RTL Foundation (RTLF)': 'ccrbytwlqf1v04hj1',
-      'SOS Children\'s Villages (SOSCV)': 'cawckghlqf1v04hj2',
+      "SOS Children's Villages (SOSCV)": 'cawckghlqf1v04hj2',
       'Samaritan Association of Latvia (LSA)': 'c8wut07lqf1v04hj3',
-      'Samaritan\'s Purse (SPIR)': 'cgyzgeplqf1v04hj4',
+      "Samaritan's Purse (SPIR)": 'cgyzgeplqf1v04hj4',
       'Save the Children (SCI)': 'cg3rvcdlqf1v04hj5',
       'Serbia, Government of (Serbia)': 'cx0b5cdlqf1v04hj6',
       'ShelterBox (SB)': 'c4xhj4rlqf1v04hj7',
@@ -334,23 +368,24 @@ export namespace AiMpcaType {
       'Triangle Generation Humanitaire (Triangle)': 'cnropc8lqf1v04hjq',
       'Tzu Chi Foundation (TzuChi)': 'cki9mlvlqf1v04hjr',
       'U.S. Department of State (DoS)': 'cq1zzmolqf1v04hjs',
-      'U.S. Department of State\'s Bureau of Population, Refugees, and Migration (PRM)': 'cqaisj3lqf1v04hjt',
+      "U.S. Department of State's Bureau of Population, Refugees, and Migration (PRM)": 'cqaisj3lqf1v04hjt',
       'UBS (UBS)': 'caqt5cxlqf1v04hju',
       'UN Women (UNW)': 'cacfdkwlqf1v04hjv',
       'USAID / Disaster Assistance Response Team (DART)': 'csmjthzlqf1v04hjw',
-      'USAID / U.S. Department of State\'s Bureau of Population, Refugees, and Migration (USAID-PRM)': 'cbixalclqf1v04hjx',
+      "USAID / U.S. Department of State's Bureau of Population, Refugees, and Migration (USAID-PRM)":
+        'cbixalclqf1v04hjx',
       'USAID Global Health Supply Chain Program (GHSC)': 'c2tjdoxlqf1v04hjy',
-      'USAID\'s Bureau for Humanitarian Assistance (USAID/BHA)': 'c47kw7hlqf1v04hjz',
-      'USAID\'s Country Development Cooperation Strategies (CDCS-USAID)': 'cofcmvblqf1v04hk0',
-      'USAID\'s Office of U.S. Foreign Disaster Assistance (USAID/OFDA)': 'cf6ryqclqf1v04hk1',
+      "USAID's Bureau for Humanitarian Assistance (USAID/BHA)": 'c47kw7hlqf1v04hjz',
+      "USAID's Country Development Cooperation Strategies (CDCS-USAID)": 'cofcmvblqf1v04hk0',
+      "USAID's Office of U.S. Foreign Disaster Assistance (USAID/OFDA)": 'cf6ryqclqf1v04hk1',
       'Ukraine Humanitarian Fund (UHF)': 'c6qd7tylqf1v04hk2',
       'Ukrainian Deminers Association (UDA)': 'cow3v2rlqf1v04hk3',
       'Ukrainian Red Cross Society (URCS)': 'cg8kgnylqf1v04hk4',
-      'Ukrainian Women\'s Fund (UWF)': 'ch9y8ndlqf1v04hk5',
+      "Ukrainian Women's Fund (UWF)": 'ch9y8ndlqf1v04hk5',
       'United Arab Emirates, Government of (United Arab Emirates)': 'cnku3k5lqf1v04hk6',
       'United Kingdom, Government of (United Kingdom)': 'csuk32ulqf1v04hk7',
       'United Methodist Committee on Relief (UMCOR)': 'c6khktvlqf1v04hk8',
-      'United Nations Children\'s Fund (UNICEF)': 'cjef90plqf1v04hk9',
+      "United Nations Children's Fund (UNICEF)": 'cjef90plqf1v04hk9',
       'United Nations Development Programme (UNDP)': 'c4isjeilqf1v04hka',
       'United Nations High Commissioner for Refugees (UNHCR)': 'cihxkshlqf1v04hkb',
       'United Nations Office for the Coordination of Humanitarian Affairs (OCHA)': 'c931hfmlqf1v04hkc',
@@ -382,7 +417,7 @@ export namespace AiMpcaType {
       'Direct Funding': 'ce5oq09lqf1v04il3',
       'Novo Nordisk (NN)': 'c8k5h5llqf1v04il4',
       'Howard G. Buffett Foundation (HBF)': 'c5ed3gtlqf1v04il5',
-      'EU\'s Instrument contributing to Stability and Peace (IcSP)': 'c2aa74ilqf1v04il6',
+      "EU's Instrument contributing to Stability and Peace (IcSP)": 'c2aa74ilqf1v04il6',
       'East-SOS (East-SOS)': 'c6am6wxlqf1v04il7',
       'Fondation de France (FDF)': 'c6ryq9nlqf1v04il8',
       'CARE International (CARE I)': 'c5h586tlqf1v04il9',
@@ -415,7 +450,7 @@ export namespace AiMpcaType {
       'Liechtenstein, Government of (Liechtenstein)': 'cvhqioelqf1v04im0',
       'Ministry of Foreign Affairs of the Republic of Korea (MFA Korea)': 'cvpd6o4lqf1v04im1',
       'Ministry of Justice - Sweden (MJ Sweden)': 'cfx6mn2lqf1v04im2',
-      'U.S. Department of State\'s Office to Monitor and Combat Trafficking in Persons (TIP)': 'cfhe3pelqf1v04im3',
+      "U.S. Department of State's Office to Monitor and Combat Trafficking in Persons (TIP)": 'cfhe3pelqf1v04im3',
       'USAID Mission to Ukraine (USAID Ukraine)': 'cxkvgl4lqf1v04im4',
       'ActionAid International (AAI)': 'c5mgr48lqf1v04im5',
       'Saxon State Parliament (SSP)': 'crj1yfnlqf1v04im6',
@@ -441,11 +476,11 @@ export namespace AiMpcaType {
       'Global Partnership for Education (GPE)': 'cpy50xelqf1v04imq',
       'Food and Agriculture Organization (FAO)': 'c6bpfnclqf1v04imr',
       'World Vision Australia (WVA)': 'c88nv9xlqf1v04imt',
-      'Support to Ukraine\'s Reforms for Governance Project (SURGe)': 'ct87wd6lqf1v04imu',
+      "Support to Ukraine's Reforms for Governance Project (SURGe)": 'ct87wd6lqf1v04imu',
       'Libereco (Libereco)': 'c6ywiarlqf1v04imv',
       'Austrian Development Agency (ADA)': 'c2el4dglqf1v04imw',
       'Think Equal (TE)': 'cw5sd38lqf1v04imx',
-      'Women\'s Peace & Humanitarian Fund (WPHF)': 'cq2sd7elqf1v04imy',
+      "Women's Peace & Humanitarian Fund (WPHF)": 'cq2sd7elqf1v04imy',
       'Resource Center of Non-Governmental Organizations (NGORC)': 'cfjsaeflqf1v04imz',
       'Polish Humanitarian Action (PAH)': 'cpid695lqf1v04in0',
       'Initiative Center to Support Social Action Ednannia (Ednannia)': 'c6rbnrrlqf1v04in1',
@@ -519,32 +554,36 @@ export namespace AiMpcaType {
       'Trocaire (Trocaire)': 'cij5uf3lukuussn2',
       'SlovakAid (SlovakAid)': 'c9aa852lvariqm62',
       'Medico International (Medico)': 'cp7ao04lvxjtuvs2',
-      'Embassy of Switzerland in Ukraine (CHEmbassy)': 'cgx9xg6lvz0inxz2'
+      'Embassy of Switzerland in Ukraine (CHEmbassy)': 'cgx9xg6lvz0inxz2',
     },
     'Indicators - MPCA': {
       '# of individuals assisted with multi-purpose cash assistance': 'cyj5n1elqb3qh9ba5',
       '# amount (USD) distributed through multi-purpose cash assistance': 'c7vtwjhlqb3qh9ba6',
-      '% of households who report being able to meet their basic needs as they define and prioritize them': 'cd0hscblqb3qh9ba7',
-      '% of recipients (disaggregated by sex, age, and disability) reporting that humanitarian assistance is delivered in a safe manner': 'c92m9uflqb3qh9ba8',
-      '% of recipients (disaggregated by sex, age, and disability) reporting that humanitarian assistance is delivered in an accessible manner': 'czn5galqb3qh9ba9',
+      '% of households who report being able to meet their basic needs as they define and prioritize them':
+        'cd0hscblqb3qh9ba7',
+      '% of recipients (disaggregated by sex, age, and disability) reporting that humanitarian assistance is delivered in a safe manner':
+        'c92m9uflqb3qh9ba8',
+      '% of recipients (disaggregated by sex, age, and disability) reporting that humanitarian assistance is delivered in an accessible manner':
+        'czn5galqb3qh9ba9',
       '% of essential needs covered per sector': 'c64d3uwlqb3qh9baa',
-      '% of recipients (disaggregated by sex, age, and disability) reporting that humanitarian assistance is delivered in a timely manner': 'c5at5eelqb3qh9bab'
+      '% of recipients (disaggregated by sex, age, and disability) reporting that humanitarian assistance is delivered in a timely manner':
+        'c5at5eelqb3qh9bab',
     },
     'Payments Frequency': {
       'One-off': 'c22oxp8lqntdpktc',
-      'Multiple payments': 'cigkge6lqnteihce'
+      'Multiple payments': 'cigkge6lqnteihce',
     },
     'Financial Service Provider (FSP)': {
       'Bank Transfer': 'crpccsqlr0f2x6wc',
       'Digital Wallets': 'cqsen3tlsljp7rz8',
-      'MoneyGram': 'cqfsd11lr0f5bzgf',
+      MoneyGram: 'cqfsd11lr0f5bzgf',
       'Private Post Office': 'ckvdcjxlr0f5vavh',
       'Ukrposhta (delivery)': 'c83wejdlsljok6h7',
       'Ukrposhta (pick up)': 'c56c4rhlr0f5hrkg',
-      'Western Union': 'ca6qhyclr0f569te'
+      'Western Union': 'ca6qhyclr0f569te',
     },
     'Response Theme': {
-      'No specific theme': 'clx2juzlqnt87pe2'
+      'No specific theme': 'clx2juzlqnt87pe2',
     },
     'Number of Covered Months': {
       'One month': 'czbonyjlqntauao5',
@@ -552,13 +591,13 @@ export namespace AiMpcaType {
       'Three months (recommended)': 'c6s6jv3lqntc9ua8',
       'Four months': 'cab6to9lqntckcz9',
       'Five months': 'ctsl3i3lqntco52a',
-      'Six months': 'cwqi52ylqntcx15b'
+      'Six months': 'cwqi52ylqntcx15b',
     },
     'Population Group': {
       'Internally Displaced': 'cvw4on6lq6dgcoj5',
       'Non-Displaced': 'ck6ulx8lq6dgcok6',
-      'Returnees': 'cuz9qi9lq6dgcok7'
-    }
+      Returnees: 'cuz9qi9lq6dgcok7',
+    },
   }
 }
 

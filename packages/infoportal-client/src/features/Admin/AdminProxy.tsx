@@ -55,18 +55,25 @@ export const AdminProxy = () => {
                 title={m.create}
                 loading={_search.creating}
                 confirmDisabled={!_createForm.formState.isValid}
-                onConfirm={(e, close) => _createForm.handleSubmit(form => {
-                  _search.create({}, {
-                    ...form,
-                    expireAt: form.expireAt ? endOfDay(new Date(form.expireAt)) : undefined,
-                    slug: parseForUrl(form.name),
-                  }).then(close)
-                })()}
+                onConfirm={(e, close) =>
+                  _createForm.handleSubmit((form) => {
+                    _search
+                      .create(
+                        {},
+                        {
+                          ...form,
+                          expireAt: form.expireAt ? endOfDay(new Date(form.expireAt)) : undefined,
+                          slug: parseForUrl(form.name),
+                        },
+                      )
+                      .then(close)
+                  })()
+                }
                 content={
                   <>
                     <IpInput
                       {..._createForm.register('name', {
-                        required: {value: true, message: m.required}
+                        required: {value: true, message: m.required},
                       })}
                       label={m.name}
                       error={!!_createForm.formState.errors.name}
@@ -105,87 +112,97 @@ export const AdminProxy = () => {
               type: 'string',
               id: 'name',
               head: m.name,
-              renderQuick: _ => _.name,
+              renderQuick: (_) => _.name,
             },
             {
               type: 'string',
               id: 'origin',
               head: m.origin,
-              render: _ => {
+              render: (_) => {
                 return {
                   value: _.slug,
                   label: (
-                    <Txt link><a target="_blank" href={Proxy.makeUrl(_)}>{Proxy.makeUrl(_)}</a></Txt>
-                  )
+                    <Txt link>
+                      <a target="_blank" href={Proxy.makeUrl(_)}>
+                        {Proxy.makeUrl(_)}
+                      </a>
+                    </Txt>
+                  ),
                 }
-              }
+              },
             },
             {
               type: 'string',
               id: 'destination',
               head: m.destination,
-              render: _ => {
+              render: (_) => {
                 return {
                   value: _.url,
                   label: (
-                    <Txt link><a target="_blank" href={_.url}>{_.url}</a></Txt>
-                  )
+                    <Txt link>
+                      <a target="_blank" href={_.url}>
+                        {_.url}
+                      </a>
+                    </Txt>
+                  ),
                 }
-              }
+              },
             },
             {
               type: 'date',
               id: 'createdAt',
               head: m.createdAt,
-              render: _ => {
+              render: (_) => {
                 return {
                   label: formatDateTime(_.createdAt),
                   value: _.createdAt,
                 }
-              }
+              },
             },
             {
               type: 'date',
               id: 'expireAt',
               width: 0,
               head: m.expireAt,
-              render: _ => {
+              render: (_) => {
                 return {
                   label: formatDateTime(_.expireAt),
                   value: _.expireAt,
                 }
-              }
+              },
             },
             {
               type: 'string',
               id: 'enabled',
               align: 'center',
               head: m.enabled,
-              render: _ => {
+              render: (_) => {
                 return {
                   label: (
                     <Switch
                       checked={!_.disabled}
-                      onChange={e => _search.update(_.id, {disabled: !e.currentTarget.checked})}
+                      onChange={(e) => _search.update(_.id, {disabled: !e.currentTarget.checked})}
                     />
                   ),
                   value: !_.disabled ? 'Enabled' : 'Disabled',
                   option: !_.disabled,
                 }
-              }
+              },
             },
             {
               id: 'actions',
               head: '',
               width: 0,
               align: 'right',
-              renderQuick: _ => (
-                <TableIconBtn onClick={() => _search.remove(_.id)} loading={_search.removing(_.id)}>delete</TableIconBtn>
+              renderQuick: (_) => (
+                <TableIconBtn onClick={() => _search.remove(_.id)} loading={_search.removing(_.id)}>
+                  delete
+                </TableIconBtn>
               ),
             },
-          ]}/>
+          ]}
+        />
       </Panel>
     </Page>
-
   )
 }

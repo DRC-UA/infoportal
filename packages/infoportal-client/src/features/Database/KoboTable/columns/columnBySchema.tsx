@@ -27,15 +27,13 @@ export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()
   return (
     <span title={value}>
-      <TableIcon color="disabled" tooltip={m._koboDatabase.valueNoLongerInOption} sx={{mr: 1}} children="error"/>
+      <TableIcon color="disabled" tooltip={m._koboDatabase.valueNoLongerInOption} sx={{mr: 1}} children="error" />
       {value}
     </span>
   )
 }
 
-const ignoredColType: Set<Kobo.Form.QuestionType> = new Set([
-  'begin_group',
-])
+const ignoredColType: Set<Kobo.Form.QuestionType> = new Set(['begin_group'])
 
 const noEditableColsId: Set<string> = new Set<keyof KoboSubmissionMetaData>([
   'start',
@@ -67,9 +65,10 @@ export namespace DirectiveTemplate {
     color: string
     label: (q: Kobo.Form.Question, m: Messages) => string
   }
-  const make = <T extends KoboCustomDirectives>(directive: T, template: Template): Record<T, Template> => ({
-    [directive]: template
-  }) as any
+  const make = <T extends KoboCustomDirectives>(directive: T, template: Template): Record<T, Template> =>
+    ({
+      [directive]: template,
+    }) as any
 
   export const render = {
     ...make(KoboCustomDirectives.TRIGGER_EMAIL, {
@@ -80,14 +79,19 @@ export namespace DirectiveTemplate {
         if (directiveName === '') return m._koboDatabase.autoEmail
         return directiveName.replaceAll('_', ' ')
       },
-    })
+    }),
   }
 }
 
-export const DatatableHeadTypeIconByKoboType = ({children, ...props}: {
-  children: Kobo.Form.QuestionType,
+export const DatatableHeadTypeIconByKoboType = ({
+  children,
+  ...props
+}: {
+  children: Kobo.Form.QuestionType
 } & Pick<IconProps, 'sx' | 'color'>) => {
-  return <DatatableHeadIcon children={fnSwitch(children, koboIconMap, () => 'short_text')} tooltip={children} {...props} />
+  return (
+    <DatatableHeadIcon children={fnSwitch(children, koboIconMap, () => 'short_text')} tooltip={children} {...props} />
+  )
 }
 
 export const koboIconMap: Record<Kobo.Form.QuestionType, string> = {
@@ -121,18 +125,18 @@ type Row = KoboFlattenRepeatData
 export type ColumnBySchemaGeneratorProps = {
   m: Messages
   getRow?: (_: Data) => Row
-  schema: KoboSchemaHelper.Bundle,
+  schema: KoboSchemaHelper.Bundle
   formId: Kobo.FormId
   onEdit?: (name: string) => void
   externalFilesIndex?: KoboExternalFilesIndex
-  onRepeatGroupClick?: (_: {name: string, row: Row, event: any}) => void
+  onRepeatGroupClick?: (_: {name: string; row: Row; event: any}) => void
   t: Theme
 }
 
-export const colorRepeatedQuestionHeader = (t: Theme) => alpha(t.palette.info.light, .22)
+export const colorRepeatedQuestionHeader = (t: Theme) => alpha(t.palette.info.light, 0.22)
 
 export const columnBySchemaGenerator = ({
-  getRow = _ => _ as Row,
+  getRow = (_) => _ as Row,
   onEdit,
   formId,
   externalFilesIndex,
@@ -141,17 +145,23 @@ export const columnBySchemaGenerator = ({
   m,
   t,
 }: ColumnBySchemaGeneratorProps) => {
-
-  const getCommon = (q: Kobo.Form.Question): Pick<DatatableColumn.Props<any>, 'id' | 'groupLabel' | 'group' | 'typeIcon' | 'typeLabel' | 'head' | 'subHeader'> => {
+  const getCommon = (
+    q: Kobo.Form.Question,
+  ): Pick<
+    DatatableColumn.Props<any>,
+    'id' | 'groupLabel' | 'group' | 'typeIcon' | 'typeLabel' | 'head' | 'subHeader'
+  > => {
     return {
       id: q.name,
       typeLabel: q.type,
-      ...map(q.$xpath.split('/')[0], value => ({groupLabel: schema.translate.question(value), group: value})),
-      ...onEdit && editableColsType.has(q.type) && !noEditableColsId.has(q.name) ? {
-        subHeader: <TableEditCellBtn onClick={() => onEdit(q.name)}/>,
-      } : {
-        typeIcon: <DatatableHeadTypeIconByKoboType children={q.type}/>,
-      },
+      ...map(q.$xpath.split('/')[0], (value) => ({groupLabel: schema.translate.question(value), group: value})),
+      ...(onEdit && editableColsType.has(q.type) && !noEditableColsId.has(q.name)
+        ? {
+            subHeader: <TableEditCellBtn onClick={() => onEdit(q.name)} />,
+          }
+        : {
+            typeIcon: <DatatableHeadTypeIconByKoboType children={q.type} />,
+          }),
       head: removeHtml(schema.translate.question(q.name)?.replace(/^#*/, '')),
     }
   }
@@ -166,26 +176,28 @@ export const columnBySchemaGenerator = ({
       ...getCommon(q),
       type: 'string',
       styleHead: {
-        background: colorRepeatedQuestionHeader(t)
+        background: colorRepeatedQuestionHeader(t),
       },
       render: (row: Row) => {
         const value = getValue(row, name) as any[]
         return {
           export: value?.length,
           value: value?.length,
-          label: value && <IpBtn
-            children={value.length}
-            style={{padding: '0 4px'}}
-            onClick={(event) => {
-              onRepeatGroupClick?.({
-                name,
-                row,
-                event,
-              })
-            }}
-          />
+          label: value && (
+            <IpBtn
+              children={value.length}
+              style={{padding: '0 4px'}}
+              onClick={(event) => {
+                onRepeatGroupClick?.({
+                  name,
+                  row,
+                  event,
+                })
+              }}
+            />
+          ),
         }
-      }
+      },
     }
   }
 
@@ -200,9 +212,9 @@ export const columnBySchemaGenerator = ({
           value,
           tooltip: value,
           export: koboImgHelper({formId, answerId: row.id, attachments: row.attachments, fileName: value}).fullUrl,
-          label: <KoboAttachedImg answerId={row.id} formId={formId} attachments={row.attachments} fileName={value}/>
+          label: <KoboAttachedImg answerId={row.id} formId={formId} attachments={row.attachments} fileName={value} />,
         }
-      }
+      },
     }
   }
 
@@ -216,10 +228,16 @@ export const columnBySchemaGenerator = ({
         return {
           export: findFileUrl({formId, answerId: row.id, fileName, attachments: row.attachments}),
           value: fileName ?? DatatableUtils.blank,
-          label: <Txt link><a href={findFileUrl({formId, answerId: row.id, fileName, attachments: row.attachments})} target="_blank">{fileName}</a></Txt>,
+          label: (
+            <Txt link>
+              <a href={findFileUrl({formId, answerId: row.id, fileName, attachments: row.attachments})} target="_blank">
+                {fileName}
+              </a>
+            </Txt>
+          ),
           // label: <Txt link><a href={koboImgHelper({fileName, attachments: row.attachments}).fullUrl} target="_blank">{fileName}</a></Txt>
         }
-      }
+      },
     }
   }
 
@@ -243,28 +261,38 @@ export const columnBySchemaGenerator = ({
       },
       head: template.label(q, m),
       type: 'string',
-      typeIcon: <TableIcon fontSize="small" sx={{marginRight: 'auto', color: template.color}} tooltip={
-        <>
-          <div style={{marginBottom: t.spacing(1)}}>{m._koboDatabase.autoEmailDesc}</div>
-          <div style={{
-            background: t.palette.background.paper,
-            color: t.palette.text.primary,
-            marginBottom: t.spacing(0.5),
-            padding: t.spacing(.5),
-            borderRadius: t.shape.borderRadius - 3
-          }}>
-            <div style={{fontWeight: 'bold', marginBottom: t.spacing(1)}}>{q.label?.[0]}</div>
-            <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(q.hint?.[0] ?? '')}}/>
-          </div>
-        </>
-      }>{template.icon}</TableIcon>,
+      typeIcon: (
+        <TableIcon
+          fontSize="small"
+          sx={{marginRight: 'auto', color: template.color}}
+          tooltip={
+            <>
+              <div style={{marginBottom: t.spacing(1)}}>{m._koboDatabase.autoEmailDesc}</div>
+              <div
+                style={{
+                  background: t.palette.background.paper,
+                  color: t.palette.text.primary,
+                  marginBottom: t.spacing(0.5),
+                  padding: t.spacing(0.5),
+                  borderRadius: t.shape.borderRadius - 3,
+                }}
+              >
+                <div style={{fontWeight: 'bold', marginBottom: t.spacing(1)}}>{q.label?.[0]}</div>
+                <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(q.hint?.[0] ?? '')}} />
+              </div>
+            </>
+          }
+        >
+          {template.icon}
+        </TableIcon>
+      ),
       render: (row: Row) => {
         const value = getValue(row, name)
         return {
           label: value,
           value: value,
         }
-      }
+      },
     }
     return x
   }
@@ -276,7 +304,7 @@ export const columnBySchemaGenerator = ({
       type: 'string',
       renderQuick: (row: Row) => {
         return externalFilesIndex?.[q.file!]?.[row[name] as string]?.label ?? getValue(row, name)
-      }
+      },
     }
   }
 
@@ -322,7 +350,7 @@ export const columnBySchemaGenerator = ({
           tooltip: time,
           export: time,
         }
-      }
+      },
     }
   }
 
@@ -338,9 +366,9 @@ export const columnBySchemaGenerator = ({
           export: render,
           value: v,
           tooltip: render ?? m._koboDatabase.valueNoLongerInOption,
-          label: render ?? <MissingOption value={v}/>,
+          label: render ?? <MissingOption value={v} />,
         }
-      }
+      },
     }
   }
 
@@ -349,11 +377,15 @@ export const columnBySchemaGenerator = ({
     return {
       ...getCommon(q),
       type: 'select_multiple',
-      options: () => schema.helper.choicesIndex[q.select_from_list_name!].map(_ => ({value: _.name, label: schema.translate.choice(name, _.name)})),
+      options: () =>
+        schema.helper.choicesIndex[q.select_from_list_name!].map((_) => ({
+          value: _.name,
+          label: schema.translate.choice(name, _.name),
+        })),
       render: (row: Row) => {
         const v = getValue(row, name) as string[] | undefined
         try {
-          const label = v?.map(_ => schema.translate.choice(name, _,)).join(' | ')
+          const label = v?.map((_) => schema.translate.choice(name, _)).join(' | ')
           return {
             label,
             export: label,
@@ -368,7 +400,7 @@ export const columnBySchemaGenerator = ({
             value: [fixedV],
           }
         }
-      }
+      },
     }
   }
 
@@ -377,7 +409,7 @@ export const columnBySchemaGenerator = ({
     return {
       ...getCommon(q),
       type: 'string',
-      renderQuick: (row: Row) => JSON.stringify(getValue(row, name))
+      renderQuick: (row: Row) => JSON.stringify(getValue(row, name)),
     }
   }
 
@@ -386,7 +418,7 @@ export const columnBySchemaGenerator = ({
     return {
       ...getCommon(q),
       type: 'string',
-      renderQuick: (row: Row) => JSON.stringify(getValue(row, name))
+      renderQuick: (row: Row) => JSON.stringify(getValue(row, name)),
     }
   }
 
@@ -430,9 +462,9 @@ export const columnBySchemaGenerator = ({
       type: 'id',
       id: 'id',
       head: 'ID',
-      typeIcon: <DatatableHeadIconByType type="id"/>,
+      typeIcon: <DatatableHeadIconByType type="id" />,
       className: 'td-id',
-      style: row => {
+      style: (row) => {
         const data = getRow(row) as KoboFlattenRepeatData & KoboRepeatRef
         if (data[KoboFlattenRepeat.INDEX_COL]! > 0) {
           return {
@@ -454,7 +486,7 @@ export const columnBySchemaGenerator = ({
       head: m.submissionTime,
       id: 'submissionTime',
       type: 'date',
-      typeIcon: <DatatableHeadIconByType type="date"/>,
+      typeIcon: <DatatableHeadIconByType type="date" />,
       render: (row: Row) => {
         const _ = getRow(row)
         const time = formatDateTime(_.submissionTime)
@@ -464,16 +496,12 @@ export const columnBySchemaGenerator = ({
           tooltip: time,
           export: time,
         }
-      }
+      },
     }
   }
 
   const getAll = (): DatatableColumn.Props<any>[] => {
-    return [
-      getId(),
-      getSubmissionTime(),
-      ...getByQuestions(schema.schemaFlatAndSanitized)
-    ]
+    return [getId(), getSubmissionTime(), ...getByQuestions(schema.schemaFlatAndSanitized)]
   }
 
   return {

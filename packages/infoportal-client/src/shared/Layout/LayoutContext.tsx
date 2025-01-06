@@ -27,7 +27,12 @@ export interface UseLayoutContextProps {
   currentBreakpointDown: Breakpoint
 }
 
-export const LayoutProvider = ({title: _title, showSidebarButton, mobileBreakpoint = 760, children}: LayoutProviderProps) => {
+export const LayoutProvider = ({
+  title: _title,
+  showSidebarButton,
+  mobileBreakpoint = 760,
+  children,
+}: LayoutProviderProps) => {
   const [title, setTitle] = useState(_title)
   const [pageWidth, setPageWidth] = useState(getWidth())
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -47,9 +52,7 @@ export const LayoutProvider = ({title: _title, showSidebarButton, mobileBreakpoi
   useEffectFn(_title, setTitle)
 
   useEffect(() => {
-    document.title = (process.env.NODE_ENV === 'development' ? '🖥️' : '')
-      + (title ? title + ' - ' : '')
-      + 'InfoPortal'
+    document.title = (process.env.NODE_ENV === 'development' ? '🖥️' : '') + (title ? title + ' - ' : '') + 'InfoPortal'
     window.addEventListener('resize', () => setPageWidth(getWidth()))
     // TODO looks needed when duplicate tab, must be verified
     setPageWidth(getWidth())
@@ -75,7 +78,7 @@ export const LayoutProvider = ({title: _title, showSidebarButton, mobileBreakpoi
 }
 
 function getWidth(): number {
-  return (typeof window !== 'undefined') ? window.outerWidth : 1100
+  return typeof window !== 'undefined' ? window.outerWidth : 1100
 }
 
 export const useLayoutContext = (): UseLayoutContextProps => {

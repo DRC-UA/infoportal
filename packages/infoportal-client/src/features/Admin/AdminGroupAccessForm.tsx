@@ -4,13 +4,15 @@ import {AccessFormSection} from '@/features/Access/AccessFormSection'
 import {Controller, UseFormReturn} from 'react-hook-form'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {fnSwitch} from '@alexandreannic/ts-utils'
-import {AccessFormInputAccessLevel, AccessFormInputDrcJob, AccessFormInputDrcOffice, AccessFormInputEmail, IAccessForm} from '@/features/Access/AccessForm'
+import {
+  AccessFormInputAccessLevel,
+  AccessFormInputDrcJob,
+  AccessFormInputDrcOffice,
+  AccessFormInputEmail,
+  IAccessForm,
+} from '@/features/Access/AccessForm'
 
-export const AdminGroupAccessForm = ({
-  form,
-}: {
-  form: UseFormReturn<IAccessForm>
-}) => {
+export const AdminGroupAccessForm = ({form}: {form: UseFormReturn<IAccessForm>}) => {
   const {m} = useI18n()
   const watchSelectBy = form.watch('selectBy')
   const watch = form.watch()
@@ -37,7 +39,7 @@ export const AdminGroupAccessForm = ({
               dense
               error={!!form.formState.errors.selectBy}
               {...field}
-              onChange={e => {
+              onChange={(e) => {
                 setTimeout(() => {
                   form.setValue('drcJob', null)
                   form.setValue('drcOffice', null)
@@ -46,25 +48,29 @@ export const AdminGroupAccessForm = ({
                 field.onChange(e)
               }}
             >
-              <ScRadioGroupItem value="email" title={m.email}/>
-              <ScRadioGroupItem value="job" title={m.Access.jobAndOffice}/>
+              <ScRadioGroupItem value="email" title={m.email} />
+              <ScRadioGroupItem value="job" title={m.Access.jobAndOffice} />
             </ScRadioGroup>
           )}
         />
-        {fnSwitch(watchSelectBy!, {
-          'job': (
-            <>
-              <AccessFormInputDrcJob form={form} sx={{mb: 2}}/>
-              <AccessFormInputDrcOffice form={form}/>
-            </>
+        {fnSwitch(
+          watchSelectBy!,
+          {
+            job: (
+              <>
+                <AccessFormInputDrcJob form={form} sx={{mb: 2}} />
+                <AccessFormInputDrcOffice form={form} />
+              </>
+            ),
+            email: <AccessFormInputEmail form={form} />,
+          },
+          () => (
+            <></>
           ),
-          'email': (
-            <AccessFormInputEmail form={form}/>
-          )
-        }, () => <></>)}
+        )}
       </AccessFormSection>
       <AccessFormSection icon="lock" label={m.accessLevel}>
-        <AccessFormInputAccessLevel form={form}/>
+        <AccessFormInputAccessLevel form={form} />
       </AccessFormSection>
     </>
   )

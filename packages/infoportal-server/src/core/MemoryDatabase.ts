@@ -10,11 +10,7 @@ export interface MemoryDatabaseInterface<T, TID> {
 }
 
 export class MemoryDatabase {
-
-  private constructor(
-    private log: AppLogger = app.logger('MpcaCachedDb')
-  ) {
-  }
+  private constructor(private log: AppLogger = app.logger('MpcaCachedDb')) {}
 
   private static instance: MemoryDatabase
   static readonly getCache = () => {
@@ -30,17 +26,18 @@ export class MemoryDatabase {
     fetch: () => Promise<T[]>
     getId: (_: T) => TID | TID[]
   }): MemoryDatabaseInterface<T, TID> => {
-
     const build = async () => {
       this.log.info(`Rebuild '${params.name} memory database...`)
       const res$ = params.fetch()
       this.cache.set(params.name, res$)
       const index = new Map<string, number>()
       ;(await res$).forEach((d, i) => {
-        [params.getId(d)].flatMap(_ => _).forEach(id => {
-          if (index.has(id)) throw new Error(`Why ${params.getId(d)} ${id} exists twice?`)
-          index.set(id, i)
-        })
+        ;[params.getId(d)]
+          .flatMap((_) => _)
+          .forEach((id) => {
+            if (index.has(id)) throw new Error(`Why ${params.getId(d)} ${id} exists twice?`)
+            index.set(id, i)
+          })
       })
       this.index.set(params.name, index)
       this.log.info(`Rebuild '${params.name} memory database... Completed!`)
@@ -52,7 +49,7 @@ export class MemoryDatabase {
         const index = this.index.get(params.name)
         const i = index?.get(id)
         if (!i) return
-        return this.cache.get(params.name)?.then(data => {
+        return this.cache.get(params.name)?.then((data) => {
           const newValue = setValue(data[i])
           data[i] = newValue
           return newValue
@@ -62,8 +59,8 @@ export class MemoryDatabase {
       warmUp: build,
       clear: () => this.cache.delete(params.name),
       get: () => {
-        return map(this.cache.get(params.name), _ => _) ?? build()
-      }
+        return map(this.cache.get(params.name), (_) => _) ?? build()
+      },
     }
   }
 }

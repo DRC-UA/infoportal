@@ -6,12 +6,16 @@ import {useI18n} from '@/core/i18n'
 import {IpBtn, IpBtnProps} from '@/shared/Btn'
 import React, {useState} from 'react'
 
-export const KoboFormListButton = ({children, variant = 'contained', ...props}: Omit<IpBtnProps, 'onChange'> & KoboFormListProps) => {
+export const KoboFormListButton = ({
+  children,
+  variant = 'contained',
+  ...props
+}: Omit<IpBtnProps, 'onChange'> & KoboFormListProps) => {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <IpBtn onClick={() => setOpen(_ => !_)} children={children} variant={variant}/>
-      <KoboFormListDialog open={open} onClose={() => setOpen(false)} {...props}/>
+      <IpBtn onClick={() => setOpen((_) => !_)} children={children} variant={variant} />
+      <KoboFormListDialog open={open} onClose={() => setOpen(false)} {...props} />
     </>
   )
 }
@@ -32,7 +36,7 @@ export const KoboFormListDialog = ({
       <DialogContent>
         <KoboFormList
           value={value}
-          onChange={e => {
+          onChange={(e) => {
             onChange?.(e)
             setTimeout(onClose, 100)
           }}
@@ -49,30 +53,24 @@ export const KoboFormListDialog = ({
 }
 
 interface KoboFormListProps {
-  value?: UUID,
+  value?: UUID
   onChange?: (e: UUID) => void
   forms: Kobo.Form[]
 }
 
-export const KoboFormList = ({
-  value,
-  onChange,
-  forms
-}: KoboFormListProps) => {
+export const KoboFormList = ({value, onChange, forms}: KoboFormListProps) => {
   const {formatDateTime} = useI18n()
   return (
     <ScRadioGroup value={value} onChange={onChange}>
-      {forms.map(form =>
+      {forms.map((form) => (
         <ScRadioGroupItem
           dense
           key={form.uid}
           value={form.uid}
           title={form.name}
-          description={<>
-            {formatDateTime(form.date_created)}
-          </>
-          }/>
-      )}
+          description={<>{formatDateTime(form.date_created)}</>}
+        />
+      ))}
     </ScRadioGroup>
   )
 }

@@ -30,31 +30,38 @@ import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaServi
 import {KoboHelper} from 'infoportal-common'
 
 export namespace KoboMetaMapperShelter {
-
-  export const createCfRent: MetaMapperInsert<KoboMetaOrigin<Bn_cashForRentRegistration.T, KoboTagStatus<CashForRentStatus>>> = row => {
+  export const createCfRent: MetaMapperInsert<
+    KoboMetaOrigin<Bn_cashForRentRegistration.T, KoboTagStatus<CashForRentStatus>>
+  > = (row) => {
     const answer = Bn_cashForRentRegistration.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
-    const status = fnSwitch(row.tags?.status!, {
-      FirstPending: KoboMetaStatus.Pending,
-      FirstPaid: KoboMetaStatus.Pending,
-      FirstRejected: KoboMetaStatus.Pending,
-      SecondPending: KoboMetaStatus.Pending,
-      SecondPaid: KoboMetaStatus.Committed,
-      SecondRejected: KoboMetaStatus.Pending,
-      Selected: KoboMetaStatus.Rejected,
-      Referred: undefined,
-    }, () => undefined)
+    const status = fnSwitch(
+      row.tags?.status!,
+      {
+        FirstPending: KoboMetaStatus.Pending,
+        FirstPaid: KoboMetaStatus.Pending,
+        FirstRejected: KoboMetaStatus.Pending,
+        SecondPending: KoboMetaStatus.Pending,
+        SecondPaid: KoboMetaStatus.Committed,
+        SecondRejected: KoboMetaStatus.Pending,
+        Selected: KoboMetaStatus.Rejected,
+        Referred: undefined,
+      },
+      () => undefined,
+    )
     return KoboMetaMapper.make({
       enumerator: Bn_cashForRentRegistration.options.back_enum[answer.back_enum!],
-      office: answer.back_office ? fnSwitch(answer.back_office, {
-        cej: DrcOffice.Chernihiv,
-        dnk: DrcOffice.Dnipro,
-        // hrk: DrcOffice.Kharkiv,
-        // nlv: DrcOffice.Mykolaiv,
-        // umy: DrcOffice.Sumy,
-        lwo: DrcOffice.Lviv,
-      }) : undefined,
+      office: answer.back_office
+        ? fnSwitch(answer.back_office, {
+            cej: DrcOffice.Chernihiv,
+            dnk: DrcOffice.Dnipro,
+            // hrk: DrcOffice.Kharkiv,
+            // nlv: DrcOffice.Mykolaiv,
+            // umy: DrcOffice.Sumy,
+            lwo: DrcOffice.Lviv,
+          })
+        : undefined,
       oblast: oblast.name,
       displacement: KoboGeneralMapping.mapDisplacementStatus(answer.ben_det_res_stat),
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
@@ -80,23 +87,25 @@ export namespace KoboMetaMapperShelter {
     })
   }
 
-  export const createCfShelter: MetaMapperInsert<KoboMetaOrigin<Shelter_cashForShelter.T, KoboTagStatus>> = row => {
+  export const createCfShelter: MetaMapperInsert<KoboMetaOrigin<Shelter_cashForShelter.T, KoboTagStatus>> = (row) => {
     const answer = Shelter_cashForShelter.map(row.answers)
     const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = DrcProjectHelper.search(Shelter_cashForShelter.options.donor[answer.donor!])
     return KoboMetaMapper.make({
       enumerator: Shelter_cashForShelter.options.name_enum[answer.name_enum!],
-      office: answer.back_office ? fnSwitch(answer.back_office, {
-        cej: DrcOffice.Chernihiv,
-        dnk: DrcOffice.Dnipro,
-        hrk: DrcOffice.Kharkiv,
-        nlv: DrcOffice.Mykolaiv,
-        umy: DrcOffice.Sumy,
-        // lwo: DrcOffice.Lviv,
-      }) : undefined,
+      office: answer.back_office
+        ? fnSwitch(answer.back_office, {
+            cej: DrcOffice.Chernihiv,
+            dnk: DrcOffice.Dnipro,
+            hrk: DrcOffice.Kharkiv,
+            nlv: DrcOffice.Mykolaiv,
+            umy: DrcOffice.Sumy,
+            // lwo: DrcOffice.Lviv,
+          })
+        : undefined,
       project: project ? [project] : [],
-      donor: map(project, _ => [DrcProjectHelper.donorByProject[_]]),
+      donor: map(project, (_) => [DrcProjectHelper.donorByProject[_]]),
       oblast: oblast.name,
       // displacement: KoboGeneralMapping.mapDisplacementStatus(answer.),
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
@@ -121,21 +130,27 @@ export namespace KoboMetaMapperShelter {
     })
   }
 
-  export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_nta.T, ShelterNtaTags>> = row => {
+  export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_nta.T, ShelterNtaTags>> = (row) => {
     const answer = Shelter_nta.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(KoboShelterTa.harmonizeNtaDisabilityAll(answer)).map(KoboGeneralMapping.mapPersonDetails)
+    const group = KoboGeneralMapping.collectXlsKoboIndividuals(KoboShelterTa.harmonizeNtaDisabilityAll(answer)).map(
+      KoboGeneralMapping.mapPersonDetails,
+    )
     const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
     const project = safeArray(row.tags?.project)
     const isCfRepair = answer.modality === 'cash_for_repair'
     return KoboMetaMapper.make({
       enumerator: Shelter_nta.options.enum_name[answer.enum_name!],
-      office: fnSwitch(answer.back_office!, {
-        cej: DrcOffice.Chernihiv,
-        dnk: DrcOffice.Dnipro,
-        hrk: DrcOffice.Kharkiv,
-        nlv: DrcOffice.Mykolaiv,
-        umy: DrcOffice.Sumy,
-      }, () => undefined),
+      office: fnSwitch(
+        answer.back_office!,
+        {
+          cej: DrcOffice.Chernihiv,
+          dnk: DrcOffice.Dnipro,
+          hrk: DrcOffice.Kharkiv,
+          nlv: DrcOffice.Mykolaiv,
+          umy: DrcOffice.Sumy,
+        },
+        () => undefined,
+      ),
       oblast: oblast?.name!,
       displacement: KoboGeneralMapping.mapDisplacementStatus(answer.ben_det_res_stat),
       raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
@@ -147,7 +162,7 @@ export namespace KoboMetaMapperShelter {
       persons: group,
       lastName: answer.ben_det_surname_l,
       project: project,
-      donor: project.map(_ => DrcProjectHelper.donorByProject[_]),
+      donor: project.map((_) => DrcProjectHelper.donorByProject[_]),
       firstName: answer.ben_det_first_name_l,
       patronymicName: answer.ben_det_pat_name_l,
       taxId: answer.pay_det_tax_id_num,
@@ -162,7 +177,9 @@ export namespace KoboMetaMapperShelter {
     })
   }
 
-  export const updateTa: MetaMapperMerge<KoboMetaOrigin<Shelter_ta.T, ShelterTaTags>, KoboMetaShelterRepairTags> = row => {
+  export const updateTa: MetaMapperMerge<KoboMetaOrigin<Shelter_ta.T, ShelterTaTags>, KoboMetaShelterRepairTags> = (
+    row,
+  ) => {
     const answers = Shelter_ta.map(row.answers)
     if (!row.tags || !answers.nta_id) return
     return {
@@ -172,8 +189,8 @@ export namespace KoboMetaMapperShelter {
         referencedFormId: KoboIndex.byName('shelter_ta').id,
         status: row.tags.workDoneAt ? KoboMetaStatus.Committed : KoboMetaStatus.Pending,
         lastStatusUpdate: row.tags.workDoneAt,
-        tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {}
-      }
+        tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {},
+      },
     }
   }
 }

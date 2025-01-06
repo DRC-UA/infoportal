@@ -25,117 +25,115 @@ export const DatatableHead = (() => {
     onOpenFilter: (columnId: string, event: any) => void
     onOpenStats: (columnId: string, event: any) => void
   } & Pick<DatatableContext<T>, 'onResizeColumn' | 'selected' | 'columns' | 'columnsIndex' | 'select'> & {
-    data?: T[]
-    onHideColumns: (_: string[]) => void,
-    search: DatatableContext<T>['data']['search']
-    filters: DatatableContext<T>['data']['filters']
-  }) => {
+      data?: T[]
+      onHideColumns: (_: string[]) => void
+      search: DatatableContext<T>['data']['search']
+      filters: DatatableContext<T>['data']['filters']
+    }) => {
     return (
       <thead>
-      <TableHeadSectionCell
-        hasCheckboxColumn={!!select?.getId}
-        columns={columns}
-        onHideColumns={onHideColumns}
-      />
-      <tr className="tr">
-        {map(select?.getId, getId => (
-          <th className="td th td-center td-width0 td-sticky-start">
-            <Checkbox
-              size="small"
-              checked={selected.size === data?.length}
-              indeterminate={selected.size !== data?.length && selected.size !== 0}
-              onChange={() => {
-                if (!data) return
-                if (selected.size === 0) selected.add(data.map(getId))
-                else selected.clear()
-              }}
-            />
-          </th>
-        ))}
-        {columns.map((c, i) => {
-          const sortedByThis = search?.sortBy === c.id
-          const active = sortedByThis || filters[c.id]
-          return (
-            <th
-              style={c.styleHead}
-              key={c.id}
-              title={c.head}
-              // onClick={() => onSortBy(c.id)}
-              className={[
-                c.classHead ?? '',
-                'td th',
-                c.width ? 'th-width-fit-content' : '',
-                c.stickyEnd ? 'td-sticky-end' : '',
-                active ? 'th-active' : '',
-                fnSwitch(c.align!, {
-                  'center': 'td-center',
-                  'right': 'td-right'
-                }, _ => '')
-              ].join(' ')}
-            >
-              <ResizableDiv id={c.id} initialWidth={c.width} onResize={onResizeColumn}>
-                <DatabaseHeadCell onClick={() => onHideColumns([c.id])}>
-                  {c.head}
-                </DatabaseHeadCell>
-              </ResizableDiv>
-            </th>
-          )
-        })}
-      </tr>
-      <tr>
-        {select?.getId && (
-          <td className="td-sticky-start td"/>
-        )}
-        {columns.map(c => {
-          const sortedByThis = search.sortBy === c.id
-          const active = sortedByThis || !!filters[c.id]
-          return (
-            <td key={c.id} style={c.styleHead} className={[
-              'td',
-              'td-sub-head',
-              c.stickyEnd ? 'td-sticky-end' : ''
-            ].join(' ')}>
-              <DatatableHeadTdBody
-                column={c}
-                active={active}
-                onOpenStats={e => onOpenStats(c.id, e)}
-                onOpenFilter={e => onOpenFilter(c.id, e)}
+        <TableHeadSectionCell hasCheckboxColumn={!!select?.getId} columns={columns} onHideColumns={onHideColumns} />
+        <tr className="tr">
+          {map(select?.getId, (getId) => (
+            <th className="td th td-center td-width0 td-sticky-start">
+              <Checkbox
+                size="small"
+                checked={selected.size === data?.length}
+                indeterminate={selected.size !== data?.length && selected.size !== 0}
+                onChange={() => {
+                  if (!data) return
+                  if (selected.size === 0) selected.add(data.map(getId))
+                  else selected.clear()
+                }}
               />
-            </td>
-          )
-        })}
-      </tr>
+            </th>
+          ))}
+          {columns.map((c, i) => {
+            const sortedByThis = search?.sortBy === c.id
+            const active = sortedByThis || filters[c.id]
+            return (
+              <th
+                style={c.styleHead}
+                key={c.id}
+                title={c.head}
+                // onClick={() => onSortBy(c.id)}
+                className={[
+                  c.classHead ?? '',
+                  'td th',
+                  c.width ? 'th-width-fit-content' : '',
+                  c.stickyEnd ? 'td-sticky-end' : '',
+                  active ? 'th-active' : '',
+                  fnSwitch(
+                    c.align!,
+                    {
+                      center: 'td-center',
+                      right: 'td-right',
+                    },
+                    (_) => '',
+                  ),
+                ].join(' ')}
+              >
+                <ResizableDiv id={c.id} initialWidth={c.width} onResize={onResizeColumn}>
+                  <DatabaseHeadCell onClick={() => onHideColumns([c.id])}>{c.head}</DatabaseHeadCell>
+                </ResizableDiv>
+              </th>
+            )
+          })}
+        </tr>
+        <tr>
+          {select?.getId && <td className="td-sticky-start td" />}
+          {columns.map((c) => {
+            const sortedByThis = search.sortBy === c.id
+            const active = sortedByThis || !!filters[c.id]
+            return (
+              <td
+                key={c.id}
+                style={c.styleHead}
+                className={['td', 'td-sub-head', c.stickyEnd ? 'td-sticky-end' : ''].join(' ')}
+              >
+                <DatatableHeadTdBody
+                  column={c}
+                  active={active}
+                  onOpenStats={(e) => onOpenStats(c.id, e)}
+                  onOpenFilter={(e) => onOpenFilter(c.id, e)}
+                />
+              </td>
+            )
+          })}
+        </tr>
       </thead>
     )
   }
   return React.memo(Component) as typeof Component
 })()
 
-export const DatatableHeadIcon = (props: {
-  tooltip: string,
-  children: string,
-} & Pick<IconProps, 'sx' | 'color'>) => {
-  return <TableIcon className="table-head-type-icon" fontSize="small" color="disabled" {...props}/>
+export const DatatableHeadIcon = (
+  props: {
+    tooltip: string
+    children: string
+  } & Pick<IconProps, 'sx' | 'color'>,
+) => {
+  return <TableIcon className="table-head-type-icon" fontSize="small" color="disabled" {...props} />
 }
 
 export const DatatableHeadIconByType = ({
-  type
+  type,
 }: {
-  type: DatatableColumn.Props<any>['type'],
+  type: DatatableColumn.Props<any>['type']
 } & Pick<IconProps, 'sx' | 'color'>) => {
   switch (type) {
     case 'date':
-      return <DatatableHeadIcon children="event" tooltip={type}/>
+      return <DatatableHeadIcon children="event" tooltip={type} />
     case 'select_multiple':
-      return <DatatableHeadIcon children="check_box" tooltip={type}/>
+      return <DatatableHeadIcon children="check_box" tooltip={type} />
     case 'select_one':
-      return <DatatableHeadIcon children="radio_button_checked" tooltip={type}/>
+      return <DatatableHeadIcon children="radio_button_checked" tooltip={type} />
     case 'number':
-      return <DatatableHeadIcon children="tag" tooltip={type}/>
+      return <DatatableHeadIcon children="tag" tooltip={type} />
     case 'id':
-      return <DatatableHeadIcon children="key" tooltip={type} color="info"/>
+      return <DatatableHeadIcon children="key" tooltip={type} color="info" />
     case 'string':
-      return <DatatableHeadIcon children="short_text" tooltip={type}/>
+      return <DatatableHeadIcon children="short_text" tooltip={type} />
     default:
       return
   }
@@ -162,17 +160,13 @@ const DatatableHeadTdBody = ({
           case 'select_multiple':
           case 'date':
           case 'number':
-            return <TableIconBtn children="bar_chart" onClick={e => onOpenStats(e)}/>
+            return <TableIconBtn children="bar_chart" onClick={(e) => onOpenStats(e)} />
           case 'id':
-            return <DatatableHeadCopyIds column={column}/>
+            return <DatatableHeadCopyIds column={column} />
         }
       })()}
       {column.type && (
-        <TableIconBtn
-          color={active ? 'primary' : undefined}
-          children="filter_alt"
-          onClick={e => onOpenFilter(e)}
-        />
+        <TableIconBtn color={active ? 'primary' : undefined} children="filter_alt" onClick={(e) => onOpenFilter(e)} />
       )}
     </span>
   )

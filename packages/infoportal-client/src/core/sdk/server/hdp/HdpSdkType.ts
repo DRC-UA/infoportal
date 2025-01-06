@@ -8,7 +8,7 @@ export type AiMinactionSqlType = {
   'People with Disability': number
   'Total Individuals Reached': number
   'Hromada Hromada ENG/PCODE/UKR': string
-  'Indicator': string
+  Indicator: string
   'Indicators Activity': string
   'Oblast Oblast ENG/UKR': string
   'Plan/Project Code': string
@@ -17,5 +17,5 @@ export type AiMinactionSqlType = {
   'Reporting Month': string //'2024-1'
   'Reporting Organization Organization name (abbreviation)': 'Danish Refugee Council (DRC)'
   'Response Theme': string
-  'project_id': string
+  project_id: string
 }

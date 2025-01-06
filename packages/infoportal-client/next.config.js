@@ -3,7 +3,8 @@ const path = require('path')
 /** @type {import('next').NextConfig} */
 module.exports = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
-  externalDir: true, swcMinify: true,
+  externalDir: true,
+  swcMinify: true,
   productionBrowserSourceMaps: true,
   reactStrictMode: true,
   staticPageGenerationTimeout: 200,

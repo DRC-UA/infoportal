@@ -10,13 +10,13 @@ import {formatLargeNumber} from '@/core/i18n/localization/en'
 // width="612.47321"
 // height="408.0199"
 
-const minAlpha = .05
-const maxAlpha = .8
+const minAlpha = 0.05
+const maxAlpha = 0.8
 const medianAlpha = minAlpha + (maxAlpha - minAlpha) / 2
 
 const computeFill = (value: number, min: number, max: number) => {
   if (max - min === 0) return 1
-  return value > 0 ? (maxAlpha - minAlpha) * (value - min) / (max - min) + minAlpha : undefined
+  return value > 0 ? ((maxAlpha - minAlpha) * (value - min)) / (max - min) + minAlpha : undefined
 }
 
 export const MapSvg = ({
@@ -37,7 +37,7 @@ export const MapSvg = ({
   onSelect?: (oblast: OblastISO) => void
   base?: number
   fillBaseOn?: 'percent' | 'value'
-  data?: Partial<{ [key in keyof MapSvgPaths]: {value: number, base?: number} }>
+  data?: Partial<{[key in keyof MapSvgPaths]: {value: number; base?: number}}>
 } & Pick<BoxProps, 'sx'>) => {
   const theme = useTheme()
 
@@ -45,37 +45,39 @@ export const MapSvg = ({
     return omitValueLt ? new Obj(data).filter((k, v) => !!v && v.value >= omitValueLt).get() : data
   }, [data])
 
-
   const {max, min, maxPercent, minPercent} = useMemo(() => {
     const _data = seq(Obj.values(filteredData)).compact().get()
-    const values = _data.map(_ => _!.value ?? 0)
+    const values = _data.map((_) => _!.value ?? 0)
     // TODO _data.map create invalid array length
-    const percents = ((_data[0] && _data[0].base !== undefined) || base !== undefined) ? _data.map(_ => {
-      const b = (base ?? _.base) || 1
-      if (!b) {
-        return 0
-      } else {
-        return (_.value ?? 0) / b
-      }
-    }) : undefined
+    const percents =
+      (_data[0] && _data[0].base !== undefined) || base !== undefined
+        ? _data.map((_) => {
+            const b = (base ?? _.base) || 1
+            if (!b) {
+              return 0
+            } else {
+              return (_.value ?? 0) / b
+            }
+          })
+        : undefined
     return {
       max: Math.max(...values),
       min: Math.min(...values),
       // maxPercent: 1,
       // minPercent: 0,
-      ...percents && {
+      ...(percents && {
         maxPercent: Math.max(...percents),
         minPercent: Math.min(...percents),
-      }
+      }),
     }
   }, [filteredData])
 
   const generateColor = (fill: number | undefined) => {
     if (fill) {
       if (fill < medianAlpha) {
-        return alpha(theme.palette.primary.main, map(fill * 2, _ => Math.max(_, 0))!)
+        return alpha(theme.palette.primary.main, map(fill * 2, (_) => Math.max(_, 0))!)
       } else {
-        return darken(theme.palette.primary.main, map((fill - .5) * 2, _ => Math.max(_, 0))!)
+        return darken(theme.palette.primary.main, map((fill - 0.5) * 2, (_) => Math.max(_, 0))!)
       }
     }
 
@@ -91,16 +93,19 @@ export const MapSvg = ({
         viewBox="0 0 612 408"
       >
         <g stroke={theme.palette.background.paper} strokeWidth="1">
-          {Obj.keys(ukraineSvgPath).map(iso => {
-            const res = filteredData[iso] ? (() => {
-              const value = filteredData[iso]!.value
-              const _base = base ?? filteredData[iso]!.base
-              const percent = _base ? value / _base : undefined
-              const fill = (percent && fillBaseOn === 'percent' && maxPercent && minPercent !== undefined)
-                ? computeFill(percent, minPercent, maxPercent)
-                : computeFill(value, min, max)
-              return {value, base: _base, fill, percent}
-            })() : undefined
+          {Obj.keys(ukraineSvgPath).map((iso) => {
+            const res = filteredData[iso]
+              ? (() => {
+                  const value = filteredData[iso]!.value
+                  const _base = base ?? filteredData[iso]!.base
+                  const percent = _base ? value / _base : undefined
+                  const fill =
+                    percent && fillBaseOn === 'percent' && maxPercent && minPercent !== undefined
+                      ? computeFill(percent, minPercent, maxPercent)
+                      : computeFill(value, min, max)
+                  return {value, base: _base, fill, percent}
+                })()
+              : undefined
             return (
               <Box
                 onClick={() => {
@@ -111,22 +116,26 @@ export const MapSvg = ({
                 d={ukraineSvgPath[iso].d}
                 fill={generateColor(res?.fill)}
                 sx={{
-                  transition: t => t.transitions.create('fill'),
+                  transition: (t) => t.transitions.create('fill'),
                   '&:hover': {
-                    fill: t => t.palette.action.hover,
-                  }
+                    fill: (t) => t.palette.action.hover,
+                  },
                 }}
               >
-                {map(OblastIndex.byIso(iso as any).name, _ => (
+                {map(OblastIndex.byIso(iso as any).name, (_) => (
                   <title>
                     {_}
                     {'\n'}
                     {res ? (
                       <>
                         {formatLargeNumber(res.value, {maximumFractionDigits})}
-                        {res.base && res.base !== 100 && ' / ' + formatLargeNumber(res.base, {maximumFractionDigits})} - {toPercent(res.percent)}
+                        {res.base &&
+                          res.base !== 100 &&
+                          ' / ' + formatLargeNumber(res.base, {maximumFractionDigits})} - {toPercent(res.percent)}
                       </>
-                    ) : 0}
+                    ) : (
+                      0
+                    )}
                   </title>
                 ))}
               </Box>
@@ -135,24 +144,36 @@ export const MapSvg = ({
         </g>
       </Box>
       {legend && (
-        <Box sx={{width: '25%', position: 'absolute', bottom: '15%', left: theme.spacing(),}}>
-          <Box sx={{
-            height: 10,
-            borderRadius: '2px',
-            // boxShadow: t => t.shadows[1],
-            background: `linear-gradient(90deg, ${generateColor(minAlpha)} 0%, ${theme.palette.primary.main} 50%, ${generateColor(maxAlpha)} 100%)`
-          }}/>
-          <Txt color="hint" sx={{fontSize: '.75em', display: 'flex', justifyContent: 'space-between',}}>
+        <Box sx={{width: '25%', position: 'absolute', bottom: '15%', left: theme.spacing()}}>
+          <Box
+            sx={{
+              height: 10,
+              borderRadius: '2px',
+              // boxShadow: t => t.shadows[1],
+              background: `linear-gradient(90deg, ${generateColor(minAlpha)} 0%, ${theme.palette.primary.main} 50%, ${generateColor(maxAlpha)} 100%)`,
+            }}
+          />
+          <Txt color="hint" sx={{fontSize: '.75em', display: 'flex', justifyContent: 'space-between'}}>
             {fillBaseOn === 'percent' ? (
-              <><Box>{toPercent(minPercent, 0)}</Box> <Box>{toPercent(maxPercent, 0)}</Box></>
+              <>
+                <Box>{toPercent(minPercent, 0)}</Box> <Box>{toPercent(maxPercent, 0)}</Box>
+              </>
             ) : (
-              <><Box>{formatLargeNumber(min, {maximumFractionDigits})}</Box> <Box>{formatLargeNumber(max, {maximumFractionDigits})}</Box></>
+              <>
+                <Box>{formatLargeNumber(min, {maximumFractionDigits})}</Box>{' '}
+                <Box>{formatLargeNumber(max, {maximumFractionDigits})}</Box>
+              </>
             )}
           </Txt>
         </Box>
       )}
       {title && (
-        <Txt block sx={{mt: 0, mr: '-16px', ml: '-16px', width: 'calc(100% + 32px)', textAlign: 'center'}} size="small" color="disabled">
+        <Txt
+          block
+          sx={{mt: 0, mr: '-16px', ml: '-16px', width: 'calc(100% + 32px)', textAlign: 'center'}}
+          size="small"
+          color="disabled"
+        >
           {title}
         </Txt>
       )}

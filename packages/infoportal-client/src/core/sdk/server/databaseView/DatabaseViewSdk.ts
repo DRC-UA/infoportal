@@ -3,19 +3,20 @@ import {DatabaseView, DatabaseViewCol, DatabaseViewHelper} from '@/core/sdk/serv
 import {UUID} from 'infoportal-common'
 
 export class DatabaseViewSdk {
-
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   readonly search = (body: {databaseId: string}): Promise<DatabaseView[]> => {
-    return this.client.post(`/database-view`, {body}).then(_ => _.map(DatabaseViewHelper.map))
+    return this.client.post(`/database-view`, {body}).then((_) => _.map(DatabaseViewHelper.map))
   }
 
   readonly create = (body: Pick<DatabaseView, 'name' | 'databaseId' | 'visibility'>): Promise<DatabaseView> => {
     return this.client.put(`/database-view/${body.databaseId}`, {body})
   }
 
-  readonly update = ({id, ...body}: Partial<Omit<DatabaseView, 'id' | 'details'>> & {id: UUID}): Promise<DatabaseView> => {
+  readonly update = ({
+    id,
+    ...body
+  }: Partial<Omit<DatabaseView, 'id' | 'details'>> & {id: UUID}): Promise<DatabaseView> => {
     return this.client.post(`/database-view/${id}`, {body})
   }
 
@@ -23,7 +24,10 @@ export class DatabaseViewSdk {
     return this.client.delete(`/database-view/${viewId}`)
   }
 
-  readonly updateCol = (viewId: UUID, body: Partial<Pick<DatabaseViewCol, 'name' | 'width' | 'visibility'>>): Promise<DatabaseView> => {
+  readonly updateCol = (
+    viewId: UUID,
+    body: Partial<Pick<DatabaseViewCol, 'name' | 'width' | 'visibility'>>,
+  ): Promise<DatabaseView> => {
     return this.client.post(`/database-view/${viewId}/col/${body.name}`, {body})
   }
 }

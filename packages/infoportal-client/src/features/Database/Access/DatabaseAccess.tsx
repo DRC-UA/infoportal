@@ -29,35 +29,31 @@ export const DatabaseAccessRoute = () => {
 
   return (
     <Page width="lg" loading={_formSchemas.loading[formId]}>
-      {form && (
-        <DatabaseAccess formId={formId} form={form}/>
-      )}
+      {form && <DatabaseAccess formId={formId} form={form} />}
     </Page>
   )
 }
 
-export const DatabaseAccess = ({
-  formId,
-  form,
-}: {
-  formId: Kobo.FormId,
-  form: Kobo.Form
-}) => {
+export const DatabaseAccess = ({formId, form}: {formId: Kobo.FormId; form: Kobo.Form}) => {
   const {m} = useI18n()
   const {api} = useAppSettings()
   const {session, accesses} = useSession()
 
   const accessSum = useMemo(() => {
     return Access.toSum(
-      accesses.filter(Access.filterByFeature(AppFeatureId.kobo_database)).filter(_ => _.params?.koboFormId === formId),
-      session.admin
+      accesses
+        .filter(Access.filterByFeature(AppFeatureId.kobo_database))
+        .filter((_) => _.params?.koboFormId === formId),
+      session.admin,
     )
   }, [session, accesses])
 
-  const requestInConstToFixTsInference = () => api.access.search({featureId: AppFeatureId.kobo_database})
-    .then(_ => _.filter(_ => _.params?.koboFormId === formId))
+  const requestInConstToFixTsInference = () =>
+    api.access
+      .search({featureId: AppFeatureId.kobo_database})
+      .then((_) => _.filter((_) => _.params?.koboFormId === formId))
   const _get = useFetcher(requestInConstToFixTsInference)
-  const _remove = useAsync(api.access.remove, {requestKey: _ => _[0]})
+  const _remove = useAsync(api.access.remove, {requestKey: (_) => _[0]})
 
   const refresh = () => {
     _get.fetch({force: true, clean: false})
@@ -79,10 +75,13 @@ export const DatabaseAccess = ({
           header={
             accessSum.admin && (
               <DatabaseAccessForm formId={formId} form={form} onAdded={refresh}>
-                <IpBtn sx={{mr: 1}} variant="contained" icon="person_add">{m.grantAccess}</IpBtn>
+                <IpBtn sx={{mr: 1}} variant="contained" icon="person_add">
+                  {m.grantAccess}
+                </IpBtn>
               </DatabaseAccessForm>
             )
-          }/>
+          }
+        />
       </Panel>
     </Box>
   )

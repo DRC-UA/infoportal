@@ -3,12 +3,10 @@ import {PrismaClient} from '@prisma/client'
 import {AccessService} from '../../feature/access/AccessService'
 
 export class ControllerAccess {
-
   constructor(
     private prisma: PrismaClient,
     private service = new AccessService(prisma),
-  ) {
-  }
+  ) {}
 
   readonly create = async (req: Request, res: Response, next: NextFunction) => {
     const body = await AccessService.createSchema.validate(req.body)
@@ -40,5 +38,4 @@ export class ControllerAccess {
     const data = await this.service.searchForUser({...qs, user: req.session.user})
     res.send(data)
   }
-
 }

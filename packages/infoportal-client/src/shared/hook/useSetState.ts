@@ -12,7 +12,7 @@ export interface UseSetState<T> {
   has: (t: T) => boolean
   set: (t: T, _: boolean) => void
   reset: (values?: T[]) => void
-  get: Set<T>,
+  get: Set<T>
 }
 
 export const useSetStateIp = <T>(initialValue: T[] = []): UseSetState<T> => {
@@ -31,7 +31,7 @@ export const useSetStateIp = <T>(initialValue: T[] = []): UseSetState<T> => {
     }
 
     const remove = (t: T | T[]): boolean => {
-      const returnValue = [t].flatMap(_ => _).map(_ => set.delete(_))
+      const returnValue = [t].flatMap((_) => _).map((_) => set.delete(_))
       setSet(new Set(set))
       return returnValue[returnValue.length - 1]
     }
@@ -41,7 +41,7 @@ export const useSetStateIp = <T>(initialValue: T[] = []): UseSetState<T> => {
     }
 
     const toggleAll = (t: T[]): void => {
-      t.map(t.every(_ => set.has(_)) ? remove : add)
+      t.map(t.every((_) => set.has(_)) ? remove : add)
     }
 
     const clear = () => setSet(new Set())

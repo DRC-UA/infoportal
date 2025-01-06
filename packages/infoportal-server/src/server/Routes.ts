@@ -81,29 +81,31 @@ export const getRoutes = (
   const cacheController = new ControllerCache()
   const importData = new ControllerKoboApiXlsImport(prisma)
 
-  const auth = ({adminOnly = false}: {adminOnly?: boolean} = {}) => async (req: Request, res: Response, next: NextFunction) => {
-    // req.session.user = {
-    //   email: 'alexandre.annic@drc.ngo',
-    //   admin: true,
-    // } as any
-    // next()
-    try {
-      const email = req.session.user?.email
-      if (!email) {
-        throw new AppError.Forbidden('auth_user_not_connected')
+  const auth =
+    ({adminOnly = false}: {adminOnly?: boolean} = {}) =>
+    async (req: Request, res: Response, next: NextFunction) => {
+      // req.session.user = {
+      //   email: 'alexandre.annic@drc.ngo',
+      //   admin: true,
+      // } as any
+      // next()
+      try {
+        const email = req.session.user?.email
+        if (!email) {
+          throw new AppError.Forbidden('auth_user_not_connected')
+        }
+        const user = await UserService.getInstance(prisma).getUserByEmail(email)
+        if (!user) {
+          throw new AppError.Forbidden('user_not_allowed')
+        }
+        if (adminOnly && !user.admin) {
+          throw new AppError.Forbidden('user_not_admin')
+        }
+        next()
+      } catch (e) {
+        next(e)
       }
-      const user = await UserService.getInstance(prisma).getUserByEmail(email)
-      if (!user) {
-        throw new AppError.Forbidden('user_not_allowed')
-      }
-      if (adminOnly && !user.admin) {
-        throw new AppError.Forbidden('user_not_admin')
-      }
-      next()
-    } catch (e) {
-      next(e)
     }
-  }
 
   try {
     router.get('/', errorCatcher(main.ping))
@@ -140,7 +142,6 @@ export const getRoutes = (
     router.post('/access/:id', auth(), errorCatcher(access.update))
     router.delete('/access/:id', auth(), errorCatcher(access.remove))
 
-
     router.post('/user/me', auth(), errorCatcher(user.updateMe))
     router.get('/user', auth(), errorCatcher(user.search))
     router.get('/user/avatar/:email', auth(), errorCatcher(user.avatar))
@@ -157,7 +158,12 @@ export const getRoutes = (
     router.get('/kobo-api/:formId/schema', auth(), errorCatcher(koboApi.getSchema))
     router.get('/kobo-api/:formId/edit-url/:answerId', errorCatcher(koboApi.edit))
     router.post('/kobo-api/proxy', errorCatcher(koboApi.proxy))
-    router.post('/kobo-api/:formId/import-from-xls', auth(), Server.upload.single('aa-file'), errorCatcher(importData.handleFileUpload))
+    router.post(
+      '/kobo-api/:formId/import-from-xls',
+      auth(),
+      Server.upload.single('aa-file'),
+      errorCatcher(importData.handleFileUpload),
+    )
 
     router.post('/kobo-answer-history/search', errorCatcher(koboAnswerHistory.search))
 
@@ -189,7 +195,12 @@ export const getRoutes = (
     router.post('/mpca/refresh', auth(), errorCatcher(mpca.refresh))
     router.post('/wfp-deduplication/refresh', auth(), errorCatcher(wfp.refresh))
     router.post('/wfp-deduplication/search', auth(), errorCatcher(wfp.search))
-    router.post('/wfp-deduplication/upload-taxid', auth(), Server.upload.single('aa-file'), errorCatcher(wfp.uploadTaxIdMapping))
+    router.post(
+      '/wfp-deduplication/upload-taxid',
+      auth(),
+      Server.upload.single('aa-file'),
+      errorCatcher(wfp.uploadTaxIdMapping),
+    )
 
     router.put('/meal-verification', auth(), errorCatcher(mealVerification.create))
     router.get('/meal-verification', auth(), errorCatcher(mealVerification.getAll))
@@ -200,7 +211,6 @@ export const getRoutes = (
 
     router.get('/cache', cacheController.get)
     router.post('/cache/clear', cacheController.clear)
-
 
     // router.get('/legalaid', auth(), errorCatcher(legalaid.index))
     // router.get('/ecrec', auth(), errorCatcher(ecrec.index))

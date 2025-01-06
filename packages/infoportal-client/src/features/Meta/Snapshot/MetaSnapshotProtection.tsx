@@ -25,7 +25,7 @@ export const MetaSnapshotProtection = (p: MetaSnapshotProps) => {
   return (
     <ThemeProvider theme={muiTheme({...theme.appThemeParams, mainColor: '#1357d0'})}>
       <MetaDashboardProvider storageKeyPrefix="ss-prot">
-        <Cp {...p}/>
+        <Cp {...p} />
       </MetaDashboardProvider>
     </ThemeProvider>
   )
@@ -44,27 +44,23 @@ export const Cp = ({period}: MetaSnapshotProps) => {
   const {data: ctx, fetcher} = useMetaContext()
   useEffect(() => {
     ctx.setShapeFilters({
-      sector: [
-        DrcSector.GeneralProtection,
-        DrcSector.GBV
-      ]
+      sector: [DrcSector.GeneralProtection, DrcSector.GBV],
     })
     ctx.setPeriod(period)
   }, [])
   const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
   if (!ctx.period.start || !ctx.period.end) return 'Set a period'
-  const dataFilteredFlat = ctx.filteredData.flatMap(_ => _.persons?.map(p => ({..._, ...p})) ?? [])
-  const dataFilteredPm = ctx.filteredData.filter(_ => m.activitiesMerged_[_.activity!] === 'Protection Monitoring')
-  const dataFilteredPmIndividuals = dataFilteredPm.flatMap(_ => _.persons ?? [])
-  const dataFilteredActivities = ctx.filteredData.filter(_ => m.activitiesMerged_[_.activity!] !== 'Protection Monitoring')
-  const dataFilteredActivitiesIndividuals = dataFilteredActivities.flatMap(_ => _.persons ?? [])
+  const dataFilteredFlat = ctx.filteredData.flatMap((_) => _.persons?.map((p) => ({..._, ...p})) ?? [])
+  const dataFilteredPm = ctx.filteredData.filter((_) => m.activitiesMerged_[_.activity!] === 'Protection Monitoring')
+  const dataFilteredPmIndividuals = dataFilteredPm.flatMap((_) => _.persons ?? [])
+  const dataFilteredActivities = ctx.filteredData.filter(
+    (_) => m.activitiesMerged_[_.activity!] !== 'Protection Monitoring',
+  )
+  const dataFilteredActivitiesIndividuals = dataFilteredActivities.flatMap((_) => _.persons ?? [])
   return (
     <PdfSlide format="vertical">
-      <MetaSnapshotHeader
-        period={ctx.period as Period}
-        subTitle="Protection"
-      />
+      <MetaSnapshotHeader period={ctx.period as Period} subTitle="Protection" />
       <PdfSlideBody>
         <Div column>
           <Div column>
@@ -90,17 +86,20 @@ export const Cp = ({period}: MetaSnapshotProps) => {
               <PanelWBody title="Individuals reached by Oblast">
                 <MapSvgByOblast
                   sx={{mx: 1.5, mt: -1, mb: -1.5}}
-                  getOblast={_ => OblastIndex.byName(_.oblast).iso}
+                  getOblast={(_) => OblastIndex.byName(_.oblast).iso}
                   data={dataFilteredFlat}
                   fillBaseOn="value"
                 />
               </PanelWBody>
               <PanelWBody title={m.ageGroup}>
-                <Lazy deps={[ctx.filteredData]} fn={(d) => {
-                  const gb = Person.groupByGenderAndGroup(Person.ageGroup.Quick)(d?.flatMap(_ => _.persons ?? [])!)
-                  return new Obj(gb).entries().map(([k, v]) => ({key: k, ...v}))
-                }}>
-                  {_ => <ChartBarStacker data={_} height={130} sx={{mb: -1, mr: -2}}/>}
+                <Lazy
+                  deps={[ctx.filteredData]}
+                  fn={(d) => {
+                    const gb = Person.groupByGenderAndGroup(Person.ageGroup.Quick)(d?.flatMap((_) => _.persons ?? [])!)
+                    return new Obj(gb).entries().map(([k, v]) => ({key: k, ...v}))
+                  }}
+                >
+                  {(_) => <ChartBarStacker data={_} height={130} sx={{mb: -1, mr: -2}} />}
                 </Lazy>
               </PanelWBody>
               <Div>
@@ -110,7 +109,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title="Females"
                       data={ctx.filteredUniquePersons}
-                      filter={_ => _.gender === Person.Gender.Female}
+                      filter={(_) => _.gender === Person.Gender.Female}
                     />
                   </PanelWBody>
                 </Div>
@@ -120,7 +119,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title={<span style={{textTransform: 'none'}}>PwDs</span>}
                       data={ctx.filteredUniquePersons}
-                      filter={_ => (_.disability ?? []).length > 0}
+                      filter={(_) => (_.disability ?? []).length > 0}
                     />
                   </PanelWBody>
                 </Div>
@@ -128,7 +127,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
               <PanelWBody title={m.displacementStatus}>
                 <ChartBarSingleBy
                   data={ctx.filteredPersons}
-                  by={_ => _.displacement}
+                  by={(_) => _.displacement}
                   limit={3}
                   label={{
                     Idp: 'IDP',
@@ -139,35 +138,46 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                 />
               </PanelWBody>
               <PanelWBody title="PIM Products">
-                {products.map(_ =>
+                {products.map((_) => (
                   <Box key={_.label} sx={{display: 'flex', alignItems: 'center', '&:not(:last-of-type)': {pb: 1}}}>
-                    <Icon sx={{mr: 1.5}} color="primary">{_.icon}</Icon>
+                    <Icon sx={{mr: 1.5}} color="primary">
+                      {_.icon}
+                    </Icon>
                     {_.label}
                   </Box>
-                )}
+                ))}
               </PanelWBody>
             </Div>
             <Div column>
               <PanelWBody>
-                <Lazy deps={[ctx.filteredData]} fn={() => {
-                  const gb = ctx.filteredData.groupBy(d => format(d.date, 'yyyy-MM'))
-                  const gbByCommittedDate = ctx.filteredData.groupBy(d => d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '')
-                  return new Obj(gb)
-                    .map((k, v) => [k, {
-                      pm: v.filter(_ => m.activitiesMerged_[_.activity!] === 'Protection Monitoring').length,
-                      activities: v.filter(_ => m.activitiesMerged_[_.activity!] !== 'Protection Monitoring').length,
-                      // committed: gbByCommittedDate[k]?.filter(_ => _.status === KoboMetaStatus.Committed).length
-                    }])
-                    .sort(([ka], [kb]) => ka.localeCompare(kb))
-                    .entries()
-                    .map(([k, v]) => ({
-                      name: k,
-                      'Protection Monitoring': v.pm,
-                      'Assistance': v.activities,
-                      // 'Assistance': v.committed,
-                    }))
-                }}>
-                  {_ => (
+                <Lazy
+                  deps={[ctx.filteredData]}
+                  fn={() => {
+                    const gb = ctx.filteredData.groupBy((d) => format(d.date, 'yyyy-MM'))
+                    const gbByCommittedDate = ctx.filteredData.groupBy((d) =>
+                      d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '',
+                    )
+                    return new Obj(gb)
+                      .map((k, v) => [
+                        k,
+                        {
+                          pm: v.filter((_) => m.activitiesMerged_[_.activity!] === 'Protection Monitoring').length,
+                          activities: v.filter((_) => m.activitiesMerged_[_.activity!] !== 'Protection Monitoring')
+                            .length,
+                          // committed: gbByCommittedDate[k]?.filter(_ => _.status === KoboMetaStatus.Committed).length
+                        },
+                      ])
+                      .sort(([ka], [kb]) => ka.localeCompare(kb))
+                      .entries()
+                      .map(([k, v]) => ({
+                        name: k,
+                        'Protection Monitoring': v.pm,
+                        Assistance: v.activities,
+                        // 'Assistance': v.committed,
+                      }))
+                  }}
+                >
+                  {(_) => (
                     <ChartLine
                       height={200}
                       sx={{mb: -1.5}}
@@ -180,13 +190,11 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                 </Lazy>
               </PanelWBody>
               <PanelWBody title="Activities">
-                <ChartBarSingleBy
-                  data={dataFilteredFlat}
-                  by={_ => m.activitiesMerged_[_.activity!]}
-                  min={10}
-                />
+                <ChartBarSingleBy data={dataFilteredFlat} by={(_) => m.activitiesMerged_[_.activity!]} min={10} />
                 <Txt color="hint" block sx={{mt: 2, textAlign: 'justify'}}>
-                  <Icon sx={{mr: 1, fontSize: '15px !important'}} color="disabled">info</Icon>
+                  <Icon sx={{mr: 1, fontSize: '15px !important'}} color="disabled">
+                    info
+                  </Icon>
                   Not included in the above breakdown:
                   <Box sx={{display: 'flex'}}>
                     <ul style={{margin: 0}}>
@@ -210,7 +218,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                     ...drcDonorTranlate,
                     OKF: 'OKF / SDC / SIDA',
                   }}
-                  by={_ => _.donor ?? []}
+                  by={(_) => _.donor ?? []}
                   mergeOptions={{
                     OKF: 'OKF',
                     SDC: 'OKF',

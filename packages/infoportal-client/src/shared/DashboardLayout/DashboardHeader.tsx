@@ -33,40 +33,44 @@ const headerStickyClass = 'sticky-header'
 //   }
 // }
 
-const generalStyles = <GlobalStyles styles={t => ({
-  [`.${headerStickyClass}`]: {
-    boxShadow: t.shadows[4],
-    background: t.palette.background.paper,
-  }
-  // '.header_content': {
-  //   flex: 1,
-  // },
-  // [`.${headerStickyClass} .header_content`]: {},
-  // [`.${headerStickyClass} .header_title_main`]: {
-  //   fontSize: '1.4em',
-  // },
-  // [`.${headerStickyClass} .header_title_sub`]: {
-  //   fontSize: '1.1em',
-  //   // '&:before': {
-  //   //   content: '" - "',
-  //   // }
-  // },
-  // [`.${headerStickyClass} .header_title`]: {
-  //   // display: 'flex',
-  //   // alignItems: 'center',
-  //   marginBottom: t.spacing(0),
-  // },
-  // [`#${dashboardHeaderId}.${headerStickyClass}`]: {
-  //   border: 'none',
-  //   boxShadow: t.shadows[4],
-  //   background: t.palette.background.paper,
-  //   padding: `${t.spacing(1)} ${t.spacing(0)} ${t.spacing(0)} ${t.spacing(2)}`,
-  //   position: 'fixed',
-  //   top: 0,
-  //   right: 0,
-  //   left: 0,
-  // }
-})}/>
+const generalStyles = (
+  <GlobalStyles
+    styles={(t) => ({
+      [`.${headerStickyClass}`]: {
+        boxShadow: t.shadows[4],
+        background: t.palette.background.paper,
+      },
+      // '.header_content': {
+      //   flex: 1,
+      // },
+      // [`.${headerStickyClass} .header_content`]: {},
+      // [`.${headerStickyClass} .header_title_main`]: {
+      //   fontSize: '1.4em',
+      // },
+      // [`.${headerStickyClass} .header_title_sub`]: {
+      //   fontSize: '1.1em',
+      //   // '&:before': {
+      //   //   content: '" - "',
+      //   // }
+      // },
+      // [`.${headerStickyClass} .header_title`]: {
+      //   // display: 'flex',
+      //   // alignItems: 'center',
+      //   marginBottom: t.spacing(0),
+      // },
+      // [`#${dashboardHeaderId}.${headerStickyClass}`]: {
+      //   border: 'none',
+      //   boxShadow: t.shadows[4],
+      //   background: t.palette.background.paper,
+      //   padding: `${t.spacing(1)} ${t.spacing(0)} ${t.spacing(0)} ${t.spacing(2)}`,
+      //   position: 'fixed',
+      //   top: 0,
+      //   right: 0,
+      //   left: 0,
+      // }
+    })}
+  />
+)
 
 export const DashboardHeader = ({
   title,
@@ -98,10 +102,10 @@ export const DashboardHeader = ({
     <>
       <Box
         sx={{
-          transition: t => t.transitions.create('all'),
+          transition: (t) => t.transitions.create('all'),
           pl: 2,
           zIndex: 2,
-          background: t => t.palette.background.default,
+          background: (t) => t.palette.background.default,
           pt: 2,
           width: '100%',
         }}
@@ -116,35 +120,33 @@ export const DashboardHeader = ({
                   alignSelf: 'start',
                   mr: 2,
                   border: `2px solid ${t.palette.primary.main}`,
-                  background: (sidebarOpen ? 'none' : alpha(t.palette.primary.main, 0.1)),
+                  background: sidebarOpen ? 'none' : alpha(t.palette.primary.main, 0.1),
                   color: t.palette.primary.main,
                   '&:hover': {
                     background: alpha(t.palette.primary.main, 0.1),
                   },
                 }}
-                onClick={() => setSidebarOpen(_ => !_)}
+                onClick={() => setSidebarOpen((_) => !_)}
                 children="menu"
               />
             )}
             <Box className="header_title" sx={{mb: 1, flex: 1, whiteSpace: 'nowrap'}}>
               <Box sx={{display: 'flex', alignItems: 'center', mr: 2}}>
-                <Typography className="header_title_main" variant="h1" sx={{flex: 1}}>{title}</Typography>
-                <Box sx={{ml: 'auto', mr: 2}}>
-                  {action}
-                </Box>
-                {!hideEuLogo && (
-                  <EULogo height={26} sx={{mr: 1}}/>
-                )}
-                <DRCLogo height={24}/>
+                <Typography className="header_title_main" variant="h1" sx={{flex: 1}}>
+                  {title}
+                </Typography>
+                <Box sx={{ml: 'auto', mr: 2}}>{action}</Box>
+                {!hideEuLogo && <EULogo height={26} sx={{mr: 1}} />}
+                <DRCLogo height={24} />
               </Box>
-              <Typography className="header_title_sub" variant="subtitle1" sx={{color: t.palette.text.secondary}}>{subTitle}</Typography>
+              <Typography className="header_title_sub" variant="subtitle1" sx={{color: t.palette.text.secondary}}>
+                {subTitle}
+              </Typography>
             </Box>
           </Box>
         </Box>
       </Box>
-      <AppHeaderContainer id={id}>
-        {header}
-      </AppHeaderContainer>
+      <AppHeaderContainer id={id}>{header}</AppHeaderContainer>
     </>
   )
 }

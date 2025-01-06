@@ -9,8 +9,7 @@ interface LoginRequest {
 }
 
 export class SessionSdk {
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   readonly login = (body: LoginRequest) => {
     return this.client.post<UserSession>(`/session/login`, {body})

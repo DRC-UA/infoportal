@@ -31,12 +31,14 @@ export const MealVerificationLinkToForm = ({
 } & Pick<BoxProps, 'sx'>) => {
   const {conf} = useAppSettings()
   return (
-    <Link target="_blank" href={conf.linkToFeature(
-      AppFeatureId.kobo_database,
-      databaseIndex.siteMap.database.absolute(koboFormId)
-    )}>
+    <Link
+      target="_blank"
+      href={conf.linkToFeature(AppFeatureId.kobo_database, databaseIndex.siteMap.database.absolute(koboFormId))}
+    >
       <Txt link sx={{display: 'flex', alignItems: 'center', ...sx}}>
-        <Icon fontSize="inherit" sx={{mr: .5}}>open_in_new</Icon>
+        <Icon fontSize="inherit" sx={{mr: 0.5}}>
+          open_in_new
+        </Icon>
         {KoboIndex.searchById(koboFormId)?.translation}
       </Txt>
     </Link>
@@ -61,7 +63,9 @@ export const MealVerificationList = () => {
           header={
             <>
               <NavLink to={mealIndex.siteMap.verification.form}>
-                <IpBtn variant="contained" icon="add">{m._mealVerif.newRequest}</IpBtn>
+                <IpBtn variant="contained" icon="add">
+                  {m._mealVerif.newRequest}
+                </IpBtn>
               </NavLink>
             </>
           }
@@ -74,7 +78,7 @@ export const MealVerificationList = () => {
               head: m.validation,
               width: 0,
               type: 'select_one',
-              render: row => {
+              render: (row) => {
                 return {
                   tooltip: null,
                   value: row.status ?? DatatableUtils.blank,
@@ -85,16 +89,37 @@ export const MealVerificationList = () => {
                         disabled={!ctx.access.admin}
                         value={row.status}
                         options={[
-                          {children: <Icon sx={{color: t.palette.success.main}} title={m.Approved}>check_circle</Icon>, value: MealVerificationStatus.Approved},
-                          {children: <Icon sx={{color: t.palette.error.main}} title={m.Rejected}>error</Icon>, value: MealVerificationStatus.Rejected},
-                          {children: <Icon sx={{color: t.palette.warning.main}} title={m.Pending}>schedule</Icon>, value: MealVerificationStatus.Pending},
+                          {
+                            children: (
+                              <Icon sx={{color: t.palette.success.main}} title={m.Approved}>
+                                check_circle
+                              </Icon>
+                            ),
+                            value: MealVerificationStatus.Approved,
+                          },
+                          {
+                            children: (
+                              <Icon sx={{color: t.palette.error.main}} title={m.Rejected}>
+                                error
+                              </Icon>
+                            ),
+                            value: MealVerificationStatus.Rejected,
+                          },
+                          {
+                            children: (
+                              <Icon sx={{color: t.palette.warning.main}} title={m.Pending}>
+                                schedule
+                              </Icon>
+                            ),
+                            value: MealVerificationStatus.Pending,
+                          },
                         ]}
                         onChange={(e) => {
                           ctx.asyncUpdate.call(row.id, e ?? undefined)
                         }}
                       />
                     </>
-                  )
+                  ),
                 }
               },
             },
@@ -103,20 +128,20 @@ export const MealVerificationList = () => {
               id: 'name',
               head: m.name,
               style: () => ({fontWeight: t.typography.fontWeightBold}),
-              renderQuick: _ => _.name
+              renderQuick: (_) => _.name,
             },
             {
               type: 'string',
               id: 'desc',
               head: m.description,
               style: () => ({color: t.palette.text.secondary}),
-              renderQuick: _ => _.desc
+              renderQuick: (_) => _.desc,
             },
             {
               type: 'date',
               id: 'createdAt',
               head: m.createdAt,
-              render: _ => {
+              render: (_) => {
                 return {
                   label: formatDateTime(_.createdAt),
                   value: _.createdAt,
@@ -127,63 +152,79 @@ export const MealVerificationList = () => {
               type: 'select_one',
               id: 'createdBy',
               head: m.createdBy,
-              render: _ => {
+              render: (_) => {
                 return {
                   option: _.createdBy,
                   value: _.createdBy,
                   label: (
                     <Box sx={{display: 'flex', alignItems: 'center'}}>
-                      <Avatar sx={{width: 22, height: 22, mr: 1}}><Icon fontSize="small">person</Icon></Avatar>
+                      <Avatar sx={{width: 22, height: 22, mr: 1}}>
+                        <Icon fontSize="small">person</Icon>
+                      </Avatar>
                       {_.createdBy}
                     </Box>
-                  )
+                  ),
                 }
-              }
+              },
             },
             {
               type: 'string',
               id: 'filters',
               head: m.filters,
-              renderQuick: _ => JSON.stringify(_.filters)
+              renderQuick: (_) => JSON.stringify(_.filters),
             },
             {
               type: 'select_one',
               id: 'activity',
               head: m._mealVerif.activityForm,
-              render: _ => {
+              render: (_) => {
                 return {
-                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)?.translation,
-                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)?.translation,
-                  label: <MealVerificationLinkToForm koboFormId={mealVerificationActivitiesIndex[_.activity].registration.koboFormId}/>
+                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)
+                    ?.translation,
+                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)
+                    ?.translation,
+                  label: (
+                    <MealVerificationLinkToForm
+                      koboFormId={mealVerificationActivitiesIndex[_.activity].registration.koboFormId}
+                    />
+                  ),
                 }
-              }
+              },
             },
             {
               type: 'select_one',
               id: 'verification',
               head: m._mealVerif.verificationForm,
-              render: _ => {
+              render: (_) => {
                 return {
-                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)?.translation,
-                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)?.translation,
-                  label: <MealVerificationLinkToForm koboFormId={mealVerificationActivitiesIndex[_.activity].verification.koboFormId}/>
+                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)
+                    ?.translation,
+                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)
+                    ?.translation,
+                  label: (
+                    <MealVerificationLinkToForm
+                      koboFormId={mealVerificationActivitiesIndex[_.activity].verification.koboFormId}
+                    />
+                  ),
                 }
-              }
+              },
             },
             {
               id: 'actions',
               head: '',
               width: 1,
               align: 'right',
-              renderQuick: _ => (
+              renderQuick: (_) => (
                 <>
                   {session.admin && (
                     <Modal
                       title={m.confirmRemove}
-                      onConfirm={(e, close) => asyncRemove.call(_.id).then(() => {
-                        close()
-                        ctx.fetcherVerifications.fetch({force: true, clean: false})
-                      })}
+                      onConfirm={(e, close) =>
+                        asyncRemove.call(_.id).then(() => {
+                          close()
+                          ctx.fetcherVerifications.fetch({force: true, clean: false})
+                        })
+                      }
                       loading={asyncRemove.loading}
                     >
                       <TableIconBtn>delete</TableIconBtn>
@@ -193,8 +234,8 @@ export const MealVerificationList = () => {
                     <TableIconBtn>chevron_right</TableIconBtn>
                   </NavLink>
                 </>
-              )
-            }
+              ),
+            },
           ]}
         />
       </Panel>

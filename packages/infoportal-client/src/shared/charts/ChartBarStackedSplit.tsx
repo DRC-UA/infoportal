@@ -28,7 +28,7 @@ export const ChartBarStackedSplit = ({
     '#FF6F61',
     '#7FDBFF',
   ]
-  const allKeys = seq(data.flatMap(({key, ...other}) => Object.keys(other))).distinct(_ => _)
+  const allKeys = seq(data.flatMap(({key, ...other}) => Object.keys(other))).distinct((_) => _)
   height = height ?? width ?? 340
   width = width ?? '100%'
   return (
@@ -46,13 +46,13 @@ export const ChartBarStackedSplit = ({
           //   bottom: 5,
         >
           {/*<CartesianGrid strokeDasharray="3 3"/>*/}
-          <XAxis type="number" domain={[0, 100]}/>
-          <YAxis dataKey="key" type="category" width={110}/>
-          <Tooltip/>
-          <Legend {...commonLegendProps}/>
-          {allKeys.map((k, i) =>
-            <Bar key={k} dataKey={k} stackId={k} fill={colors[i]}/>
-          )}
+          <XAxis type="number" domain={[0, 100]} />
+          <YAxis dataKey="key" type="category" width={110} />
+          <Tooltip />
+          <Legend {...commonLegendProps} />
+          {allKeys.map((k, i) => (
+            <Bar key={k} dataKey={k} stackId={k} fill={colors[i]} />
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </Box>

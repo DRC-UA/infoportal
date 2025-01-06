@@ -8,13 +8,10 @@ import {KoboSubmissionMetaData} from 'infoportal-common'
 
 /** @deprecated??*/
 export class KoboToXLS {
-
   constructor(
     private prisma: PrismaClient,
     private service: KoboService = new KoboService(prisma),
-  ) {
-
-  }
+  ) {}
 
   readonly generateXLSFromAnswers = async ({
     fileName,
@@ -24,8 +21,8 @@ export class KoboToXLS {
     password,
   }: {
     fileName: string
-    formId: Kobo.FormId,
-    data: DbKoboAnswer[],
+    formId: Kobo.FormId
+    data: DbKoboAnswer[]
     langIndex?: number
     password?: string
   }) => {
@@ -43,28 +40,26 @@ export class KoboToXLS {
     const flatTranslated = translated.map(({answers, ...meta}) => ({...meta, ...answers}))
     const columns = (() => {
       const metaColumns: (keyof KoboSubmissionMetaData)[] = ['id', 'submissionTime', 'version']
-      const schemaColumns = koboFormDetails.content.survey.filter(_ => koboQuestionType.includes(_.type))
-        .map(_ => langIndex !== undefined && _.label
-          ? _.label[langIndex]?.replace(/(<([^>]+)>)/gi, '') ?? _.name
-          : _.name)
+      const schemaColumns = koboFormDetails.content.survey
+        .filter((_) => koboQuestionType.includes(_.type))
+        .map((_) =>
+          langIndex !== undefined && _.label ? (_.label[langIndex]?.replace(/(<([^>]+)>)/gi, '') ?? _.name) : _.name,
+        )
       return [...metaColumns, ...schemaColumns]
     })()
     const workbook = await XlsxPopulate.fromBlankAsync()
     const sheet = workbook.sheet('Sheet1')
     sheet.cell('A1').value([columns] as any)
-    sheet.cell('A2').value(flatTranslated.map(a =>
-      columns.map(_ => (a as any)[_!])
-    ) as any)
-
+    sheet.cell('A2').value(flatTranslated.map((a) => columns.map((_) => (a as any)[_!])) as any)
 
     sheet.freezePanes(2, 1)
     // const ['start', 'end', 'su']
     sheet.column('A').width(11)
     sheet.column('B').width(11)
     sheet.row(1).style({
-      'bold': true,
-      'fill': 'f2f2f2',
-      'fontColor': '6e7781',
+      bold: true,
+      fill: 'f2f2f2',
+      fontColor: '6e7781',
     })
 
     workbook.toFileAsync(appConf.rootProjectDir + `/${fileName}.xlsx`, {password})

@@ -1,7 +1,6 @@
 import {UUID} from 'infoportal-common'
 
 export namespace Legalaid {
-
   export type ColumnType = 'longText' | 'number' | 'ratioGroup' | 'select' | 'text' | 'datePicker'
 
   export interface PaginateRequest {
@@ -10,7 +9,7 @@ export namespace Legalaid {
   }
 
   export interface PaginateResult<T = Record<string, any>> {
-    cols: Record<UUID, {name: string, type: ColumnType}>
+    cols: Record<UUID, {name: string; type: ColumnType}>
     data: T[]
     total: number
   }
@@ -18,7 +17,7 @@ export namespace Legalaid {
   type Role = 'admin' | 'inner'
 
   interface Office {
-    _id: UUID,
+    _id: UUID
     city: string
   }
 
@@ -30,7 +29,7 @@ export namespace Legalaid {
   }
 
   export interface Poll {
-    createdAt: Date,
+    createdAt: Date
     createdBy: User
     description: string
     name: string
@@ -55,21 +54,19 @@ export namespace Legalaid {
     women: T
   }
 
-  export interface BeneficiaryGroup extends Beneficiary, Gender<number> {
-  }
+  export interface BeneficiaryGroup extends Beneficiary, Gender<number> {}
 
   export class Config {
-
     static readonly offices = {
       // 'DRC avocacy and LAU meetings': {
       //   id: '619f8bea439d3c04f1aba782',
       //   email: 'olha.bushtarenko@drc.ngo',
       // },
-      'DRC': {
+      DRC: {
         id: '624c4e21a397c105f1cdb9cf',
         email: 'olha.bushtarenko@drc.ngo',
       },
-      'БВПД': {
+      БВПД: {
         // FSLAC - Free Secondary Legal aid Centre
         id: '625ec672a397c105f1cdbbda',
         email: 'olha.bushtarenko@drc.ngo',

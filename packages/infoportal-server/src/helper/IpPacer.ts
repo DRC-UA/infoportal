@@ -1,16 +1,9 @@
 import {app, AppLogger} from '../index'
 
 export class IpPacer {
-  constructor(private log: AppLogger = app.logger('IpQueue')) {
-  }
+  constructor(private log: AppLogger = app.logger('IpQueue')) {}
 
-  readonly create = <T>({
-    fn,
-    frequency,
-  }: {
-    frequency: number,
-    fn: (t: T[]) => Promise<void>,
-  }) => {
+  readonly create = <T>({fn, frequency}: {frequency: number; fn: (t: T[]) => Promise<void>}) => {
     let queue: T[] = []
     setInterval(() => {
       this.log.info(`${queue.length} element(s) to insert.`)

@@ -23,60 +23,60 @@ interface Form extends IAccessForm {
   // seeHisOwn?: boolean
 }
 
-export const CfmAccessForm = ({
-  children,
-  onAdded,
-}: {
-  onAdded?: () => void,
-  children: ReactElement,
-}) => {
+export const CfmAccessForm = ({children, onAdded}: {onAdded?: () => void; children: ReactElement}) => {
   const {m} = useI18n()
   const {toastHttpError} = useIpToast()
   const {api} = useAppSettings()
   const ctx = useCfmContext()
 
   const _addAccess = useAsync(api.access.create)
-  const requestInConstToFixTsInference = (databaseId: Kobo.FormId) => api.access.search({featureId: AppFeatureId.kobo_database})
-    .then(_ => _.filter(_ => _.params?.koboFormId === databaseId))
+  const requestInConstToFixTsInference = (databaseId: Kobo.FormId) =>
+    api.access
+      .search({featureId: AppFeatureId.kobo_database})
+      .then((_) => _.filter((_) => _.params?.koboFormId === databaseId))
   const _access = useFetcher(requestInConstToFixTsInference)
 
-  useEffectFn(_addAccess.error, _ => _ > 1 && toastHttpError)
+  useEffectFn(_addAccess.error, (_) => _ > 1 && toastHttpError)
   useEffectFn(_access.error, toastHttpError)
 
   const accessForm = useForm<Form>()
 
   const submit = ({selectBy, office, program, ...f}: Form) => {
-    _addAccess.call({
-      ...nullValuesToUndefined(f),
-      featureId: AppFeatureId.cfm,
-      params: {office, program},
-    }).then(onAdded)
+    _addAccess
+      .call({
+        ...nullValuesToUndefined(f),
+        featureId: AppFeatureId.cfm,
+        params: {office, program},
+      })
+      .then(onAdded)
   }
 
   return (
     <Modal
       loading={_addAccess.loading}
       confirmDisabled={!accessForm.formState.isValid}
-      onConfirm={(_, close) => accessForm.handleSubmit(_ => {
-        submit(_)
-        close()
-      })()}
+      onConfirm={(_, close) =>
+        accessForm.handleSubmit((_) => {
+          submit(_)
+          close()
+        })()
+      }
       content={
         <Box sx={{width: 400}}>
-          <AccessForm form={accessForm as any}/>
+          <AccessForm form={accessForm as any} />
           <AccessFormSection icon="filter_alt" label={m.filter}>
             <Controller
               name="office"
               control={accessForm.control}
               rules={{
-                required: !!ctx.authorizations.accessibleOffices
+                required: !!ctx.authorizations.accessibleOffices,
               }}
               render={({field: {onChange, ...field}}) => (
                 <IpSelectMultiple<DrcOffice>
                   {...field}
                   defaultValue={[]}
                   label={m.drcOffice}
-                  onChange={_ => onChange(_)}
+                  onChange={(_) => onChange(_)}
                   options={ctx.authorizations.accessibleOffices ?? Obj.keys(DrcOffice)}
                   sx={{mb: 2.5}}
                 />
@@ -84,7 +84,7 @@ export const CfmAccessForm = ({
             />
             <Controller
               rules={{
-                required: !!ctx.authorizations.accessiblePrograms
+                required: !!ctx.authorizations.accessiblePrograms,
               }}
               name="program"
               control={accessForm.control}
@@ -94,7 +94,7 @@ export const CfmAccessForm = ({
                   showUndefinedOption
                   defaultValue={[]}
                   label={m.program}
-                  onChange={_ => onChange(_)}
+                  onChange={(_) => onChange(_)}
                   options={ctx.authorizations.accessiblePrograms ?? Obj.keys(CfmDataProgram)}
                 />
               )}

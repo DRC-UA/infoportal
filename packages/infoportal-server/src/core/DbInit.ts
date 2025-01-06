@@ -6,13 +6,10 @@ import {DrcJob, DrcOffice, KoboIndex} from 'infoportal-common'
 export const createdBySystem = 'SYSTEM'
 
 export class DbInit {
-
-
   constructor(
     private conf: AppConf,
-    private prisma: PrismaClient
-  ) {
-  }
+    private prisma: PrismaClient,
+  ) {}
 
   readonly initializeDatabase = async () => {
     // await Promise.all([
@@ -65,30 +62,34 @@ export class DbInit {
       'katrina.zacharewski@drc.ngo',
       'isabel.pearson@drc.ngo',
     ]
-    return this.upsertUsers(adminsEmail.map(email => ({
-      email,
-      createdBy: createdBySystem,
-      admin: true
-    })))
+    return this.upsertUsers(
+      adminsEmail.map((email) => ({
+        email,
+        createdBy: createdBySystem,
+        admin: true,
+      })),
+    )
   }
 
   private readonly createAccOwner = async () => {
     return this.upsertUsers([
       {
         email: this.conf.ownerEmail,
-        admin: true
-      }
+        admin: true,
+      },
     ])
   }
 
   private readonly upsertUsers = async (users: Prisma.UserCreateInput[]) => {
-    await Promise.all(users.map(_ =>
-      this.prisma.user.upsert({
-        update: _,
-        create: _,
-        where: {email: _.email},
-      })
-    ))
+    await Promise.all(
+      users.map((_) =>
+        this.prisma.user.upsert({
+          update: _,
+          create: _,
+          where: {email: _.email},
+        }),
+      ),
+    )
   }
 
   private readonly createAccess = async () => {
@@ -109,18 +110,22 @@ export class DbInit {
         featureId: AppFeatureId.kobo_database,
         params: KoboDatabaseFeatureParams.create({
           koboFormId: KoboIndex.byName('bn_rapidResponse').id,
-          filters: {}
+          filters: {},
         }),
       },
       {
         createdBy: createdBySystem,
         email: appConf.ownerEmail,
         level: FeatureAccessLevel.Admin,
-      }
+      },
     ]
-    await Promise.all(access.map(_ => this.prisma.featureAccess.create({
-      data: _
-    })))
+    await Promise.all(
+      access.map((_) =>
+        this.prisma.featureAccess.create({
+          data: _,
+        }),
+      ),
+    )
   }
 
   private readonly createServer = async () => {
@@ -132,18 +137,16 @@ export class DbInit {
             url: 'https://kobo.humanitarianresponse.info',
             urlV1: 'https://kc-eu.kobotoolbox.org',
             token: appConf.kobo.token,
-          }
+          },
         }),
         this.prisma.koboServer.create({
           data: {
             url: 'https://kf.kobotoolbox.org',
             urlV1: 'https://kc.kobotoolbox.org',
             token: 'TODO',
-          }
-        })
+          },
+        }),
       ])
     }
   }
 }
-
-

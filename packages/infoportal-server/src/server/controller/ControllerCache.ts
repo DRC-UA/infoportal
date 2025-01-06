@@ -3,11 +3,7 @@ import {app} from '../../index'
 import {yup} from '../../helper/Utils'
 
 export class ControllerCache {
-
-  constructor(
-    private appCache = app.cache,
-  ) {
-  }
+  constructor(private appCache = app.cache) {}
 
   readonly get = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -20,10 +16,12 @@ export class ControllerCache {
 
   readonly clear = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {key, subKey} = await yup.object({
-        key: yup.string().required(),
-        subKey: yup.string().optional()
-      }).validate(req.body)
+      const {key, subKey} = await yup
+        .object({
+          key: yup.string().required(),
+          subKey: yup.string().optional(),
+        })
+        .validate(req.body)
       this.appCache.clear(key, subKey)
       res.send()
     } catch (e) {

@@ -15,7 +15,15 @@ export const AiMpca = () => {
   return (
     <Page width="full">
       <Panel>
-        <AiBundleTable fetcher={fetcher} id="mpca" header={<>USD to UAH&nbsp;<b>{conf.uahToUsd}</b></>}/>
+        <AiBundleTable
+          fetcher={fetcher}
+          id="mpca"
+          header={
+            <>
+              USD to UAH&nbsp;<b>{conf.uahToUsd}</b>
+            </>
+          }
+        />
       </Panel>
     </Page>
   )

@@ -8,7 +8,7 @@ import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 
 export interface MealVerificationContext {
   fetcherVerifications: UseFetcher<ApiSdk['mealVerification']['getAll']>
-  access: AccessSum,
+  access: AccessSum
   asyncUpdate: UseAsyncMultiple<ApiSdk['mealVerification']['update']>
 }
 
@@ -16,15 +16,11 @@ const Context = React.createContext({} as MealVerificationContext)
 
 export const useMealVerificationContext = () => useContext<MealVerificationContext>(Context)
 
-export const MealVerificationProvider = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const MealVerificationProvider = ({children}: {children: ReactNode}) => {
   const {api} = useAppSettings()
   const {session, accesses} = useSession()
   const fetcherGetAll = useFetcher(api.mealVerification.getAll)
-  const asyncUpdate = useAsync(api.mealVerification.update, {requestKey: _ => _[0]})
+  const asyncUpdate = useAsync(api.mealVerification.update, {requestKey: (_) => _[0]})
 
   useEffect(() => {
     fetcherGetAll.fetch({force: true, clean: false})
@@ -39,11 +35,13 @@ export const MealVerificationProvider = ({
   }, [])
 
   return (
-    <Context.Provider value={{
-      access,
-      asyncUpdate,
-      fetcherVerifications: fetcherGetAll,
-    }}>
+    <Context.Provider
+      value={{
+        access,
+        asyncUpdate,
+        fetcherVerifications: fetcherGetAll,
+      }}
+    >
       {children}
     </Context.Provider>
   )

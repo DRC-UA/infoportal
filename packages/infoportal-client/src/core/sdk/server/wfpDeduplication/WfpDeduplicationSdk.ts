@@ -11,9 +11,7 @@ interface WfpDeduplicationSearch {
 }
 
 export class WfpDeduplicationSdk {
-
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   readonly refresh = () => {
     return this.client.post(`/wfp-deduplication/refresh`)
@@ -24,13 +22,15 @@ export class WfpDeduplicationSdk {
   }
 
   readonly search = (filters: WfpDeduplicationSearch = {}): Promise<ApiPaginate<WfpDeduplication>> => {
-    return this.client.post<ApiPaginate<any>>(`/wfp-deduplication/search`, {body: filters}).then(_ => ({
+    return this.client.post<ApiPaginate<any>>(`/wfp-deduplication/search`, {body: filters}).then((_) => ({
       ..._,
       data: _.data.map(WfpDeduplicationSdk.map),
     }))
   }
 
-  static readonly map = (_: Record<keyof WfpDeduplication, any> & {beneficiary?: {taxId?: string}}): WfpDeduplication => {
+  static readonly map = (
+    _: Record<keyof WfpDeduplication, any> & {beneficiary?: {taxId?: string}},
+  ): WfpDeduplication => {
     _.fileName = _.fileName?.replace('.gpg', '')
     _.createdAt = new Date(_.createdAt)
     _.validFrom = new Date(_.validFrom)

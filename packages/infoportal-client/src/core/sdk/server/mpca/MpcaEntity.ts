@@ -6,8 +6,8 @@ export interface MpcaTypeTag extends KoboBaseTags, KoboTagStatus {
 }
 
 export class MpcaHelper {
-
-  static readonly projects = Obj.keys({// [DrcProject['Novo-Nordisk (UKR-000274)']]: true,
+  static readonly projects = Obj.keys({
+    // [DrcProject['Novo-Nordisk (UKR-000274)']]: true,
     [DrcProject['UKR-000322 ECHO2']]: true,
     [DrcProject['UKR-000340 Augustinus Fonden']]: true,
     [DrcProject['UKR-000284 BHA']]: true,

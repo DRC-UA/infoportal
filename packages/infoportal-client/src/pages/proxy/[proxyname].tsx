@@ -12,18 +12,19 @@ export default function _Component() {
   const proxyname = router.query.proxyname as string
 
   const {api} = useAppSettings()
-  const request = (proxyname: string) => api.proxy.search()
-    .then(res => res.find(_ => {
-      return _.slug === proxyname
-    }))
+  const request = (proxyname: string) =>
+    api.proxy.search().then((res) =>
+      res.find((_) => {
+        return _.slug === proxyname
+      }),
+    )
 
   const _proxy = useFetcher(request)
 
   const isEnabled = (p: Proxy) => !p.disabled && (!p.expireAt || p.expireAt.getTime() > new Date().getTime())
 
   useEffect(() => {
-    if (proxyname)
-      _proxy.fetch({}, proxyname)
+    if (proxyname) _proxy.fetch({}, proxyname)
   }, [proxyname])
 
   useEffect(() => {
@@ -37,11 +38,15 @@ export default function _Component() {
           Cannot open proxy <b>{router.query.proxyname}</b>
         </Fender>
       )}
-      {map(_proxy.get, p => !isEnabled(p) && (
-        <Fender type="error">
-          The proxy <b>{router.query.proxyname}</b> is disabled.
-        </Fender>
-      ))}
+      {map(
+        _proxy.get,
+        (p) =>
+          !isEnabled(p) && (
+            <Fender type="error">
+              The proxy <b>{router.query.proxyname}</b> is disabled.
+            </Fender>
+          ),
+      )}
     </Page>
   )
 }

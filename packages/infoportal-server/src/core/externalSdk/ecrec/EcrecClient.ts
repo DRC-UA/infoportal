@@ -9,12 +9,13 @@ interface EcrecAppTokens {
 type EcrecAppClientRequestInit = Omit<RequestInit, 'body'> & {body?: any}
 
 export class EcrecClient {
-
-  constructor(private params: {
-    login: string,
-    password: string,
-    baseURL?: string,
-  }) {
+  constructor(
+    private params: {
+      login: string
+      password: string
+      baseURL?: string
+    },
+  ) {
     this.params = {
       baseURL: 'https://lap.drc.ngo',
       ...params,
@@ -40,7 +41,7 @@ export class EcrecClient {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        Accept: 'application/json, text/javascript, */*; q=0.01',
       },
     })
     return EcrecClient.extractTokens(init)
@@ -54,11 +55,11 @@ export class EcrecClient {
       method: 'POST',
       headers: {
         // 'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: 'Basic ' + btoa(`${this.params.login}:${this.params.password}`)
+        Authorization: 'Basic ' + btoa(`${this.params.login}:${this.params.password}`),
       },
       body: new URLSearchParams({
         _csrf: csrf,
-      })
+      }),
     })
   }
 
@@ -75,7 +76,7 @@ export class EcrecClient {
         ...init?.headers,
         'X-CSRF-TOKEN': token,
       },
-    }).then(_ => _.json())
+    }).then((_) => _.json())
   }
 
   readonly post = async <T>(input: string | URL, init?: Omit<EcrecAppClientRequestInit, 'method'>): Promise<T> => {
@@ -84,8 +85,8 @@ export class EcrecClient {
       method: 'POST',
       headers: {
         ...init?.headers,
-        'Content-Type': 'application/json; charset=UTF-8'
-      }
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
     })
   }
 
@@ -95,8 +96,8 @@ export class EcrecClient {
       method: 'GET',
       headers: {
         ...init?.headers,
-        'Content-Type': 'application/json; charset=UTF-8'
-      }
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
     })
   }
 
@@ -106,8 +107,8 @@ export class EcrecClient {
       method: 'PUT',
       headers: {
         ...init?.headers,
-        'Content-Type': 'application/json; charset=UTF-8'
-      }
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
     })
   }
 
@@ -117,8 +118,8 @@ export class EcrecClient {
       method: 'DELETE',
       headers: {
         ...init?.headers,
-        'Content-Type': 'application/json; charset=UTF-8'
-      }
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
     })
   }
 }

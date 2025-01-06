@@ -61,7 +61,10 @@ export const DatatableProvider = <T extends DatatableRow>({
   children: ReactNode
 }) => {
   const selected = useSetStateIp<string>()
-  const columnsIndex = useMemo(() => seq(columns).reduceObject<Record<string, DatatableColumn.InnerProps<T>>>(_ => [_.id, _]), [columns])
+  const columnsIndex = useMemo(
+    () => seq(columns).reduceObject<Record<string, DatatableColumn.InnerProps<T>>>((_) => [_.id, _]),
+    [columns],
+  )
   const data = useDatatableData<T>({
     id,
     columnsIndex,
@@ -108,9 +111,5 @@ export const DatatableProvider = <T extends DatatableRow>({
     getRenderRowKey,
   }
 
-  return (
-    <DatatableContext.Provider value={typeSafeContext}>
-      {children}
-    </DatatableContext.Provider>
-  )
+  return <DatatableContext.Provider value={typeSafeContext}>{children}</DatatableContext.Provider>
 }

@@ -8,7 +8,7 @@ import {
   Shelter_ta,
   ShelterNtaTags,
   ShelterTaPriceLevel,
-  ShelterTaTags
+  ShelterTaTags,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 
@@ -25,7 +25,4 @@ export interface ShelterEntity {
   persons?: Person.Person[]
 }
 
-export class ShelterEntityHelper {
-
-
-}
+export class ShelterEntityHelper {}

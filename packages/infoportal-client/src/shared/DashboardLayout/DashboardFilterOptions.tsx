@@ -22,7 +22,7 @@ const useStyles = makeStyles<{dense?: boolean}>()((t, {dense}) => ({
     height: dense ? 28 : undefined,
     '&:hover': {
       background: t.palette.action.hover,
-    }
+    },
   },
 }))
 
@@ -43,10 +43,11 @@ export const DashboardFilterOptions = ({
   icon?: string
   label: string
   dense?: boolean
-} & SelectProps & Pick<BoxProps, 'sx'>) => {
+} & SelectProps &
+  Pick<BoxProps, 'sx'>) => {
   const options = useCallback(() => props.options(), [props.options])
   const valuesLabel = useCallback(() => {
-    return value.map(_ => (options() ?? []).find(o => o.value === _)?.label)
+    return value.map((_) => (options() ?? []).find((o) => o.value === _)?.label)
   }, [value, options])
 
   return (
@@ -59,7 +60,7 @@ export const DashboardFilterOptions = ({
           {value.length > 1 && <>&nbsp;+ {value.length - 1}</>}
         </>
       }
-      children={open => open && <DashboardFilterOptionsContent {...props} value={value} onChange={onChange}/>}
+      children={(open) => open && <DashboardFilterOptionsContent {...props} value={value} onChange={onChange} />}
       {...props}
     />
   )
@@ -86,26 +87,36 @@ export const DashboardFilterOptionsContent = ({
     <>
       <FormControlLabel
         onClick={choices.toggleAll}
-        control={<Checkbox size="small" checked={choices.allChecked} indeterminate={choices.allChecked && choices.someChecked}/>}
+        control={
+          <Checkbox
+            size="small"
+            checked={choices.allChecked}
+            indeterminate={choices.allChecked && choices.someChecked}
+          />
+        }
         label={
           // <Box sx={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-          <Txt bold sx={{mr: 1.5}} fontSize={dense ? 'small' : undefined}>{m.selectAll}</Txt>
+          <Txt bold sx={{mr: 1.5}} fontSize={dense ? 'small' : undefined}>
+            {m.selectAll}
+          </Txt>
           // <AAIconBtn icon="clear" size="small" sx={{ml: 1.5}}/>
           // </Box>
         }
         className={cx(classes.option, classes.optionSelectAll)}
       />
-      <FormGroup onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-        choices.onClick(e.target.name)
-      }}>
-        {(choices.options).map(o =>
+      <FormGroup
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          choices.onClick(e.target.name)
+        }}
+      >
+        {choices.options.map((o) => (
           <FormControlLabel
             key={o.value}
-            control={<Checkbox size="small" name={o.value ?? undefined} checked={o.checked}/>}
+            control={<Checkbox size="small" name={o.value ?? undefined} checked={o.checked} />}
             label={<Txt fontSize={dense ? 'small' : undefined}>{o.label}</Txt>}
             className={classes.option}
           />
-        )}
+        ))}
       </FormGroup>
     </>
   )

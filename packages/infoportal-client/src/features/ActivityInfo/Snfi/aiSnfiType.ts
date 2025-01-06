@@ -2,68 +2,91 @@ export namespace AiSnfiType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
 
   export interface Type {
-    'Reporting Organization': Opt<'Reporting Organization'>,
-    'Implementing Partner'?: Opt<'Implementing Partner'>,
-    'Plan/Project Code': Opt<'Plan/Project Code'>,
-    'Indicators - SNFI': Opt<'Indicators - SNFI'>,
-    'Distribution through Common Pipeline': Opt<'Distribution through Common Pipeline'>,
-    'Distribution through inter-agency convoy (HOPC)': Opt<'Distribution through inter-agency convoy (HOPC)'>,
-    'Oblast': string,
-    'Raion': string,
-    'Hromada': string,
-    'Settlement'?: string,
-    'Collective Site'?: string,
-    'Reporting Date (YYYY-MM-DD)': string,
-    'Reporting Month': string,
-    'Population Group': Opt<'Population Group'>,
-    'Non-individuals Reached': number,
-    'Total Individuals Reached': number,
-    'Girls (0-17)': number,
-    'Boys (0-17)': number,
-    'Adult Women (18-59)': number,
-    'Adult Men (18-59)': number,
-    'Older Women (60+)': number,
-    'Older Men (60+)': number,
-    'People with disability'?: number,
-    'Comment'?: string
+    'Reporting Organization': Opt<'Reporting Organization'>
+    'Implementing Partner'?: Opt<'Implementing Partner'>
+    'Plan/Project Code': Opt<'Plan/Project Code'>
+    'Indicators - SNFI': Opt<'Indicators - SNFI'>
+    'Distribution through Common Pipeline': Opt<'Distribution through Common Pipeline'>
+    'Distribution through inter-agency convoy (HOPC)': Opt<'Distribution through inter-agency convoy (HOPC)'>
+    Oblast: string
+    Raion: string
+    Hromada: string
+    Settlement?: string
+    'Collective Site'?: string
+    'Reporting Date (YYYY-MM-DD)': string
+    'Reporting Month': string
+    'Population Group': Opt<'Population Group'>
+    'Non-individuals Reached': number
+    'Total Individuals Reached': number
+    'Girls (0-17)': number
+    'Boys (0-17)': number
+    'Adult Women (18-59)': number
+    'Adult Men (18-59)': number
+    'Older Women (60+)': number
+    'Older Men (60+)': number
+    'People with disability'?: number
+    Comment?: string
   }
 
   export const map = (a: Type) => ({
-    'cs1qazglr960f863y': a['Reporting Organization'] === undefined ? undefined : 'czbgrslpwg36j52' + ':' + options['Reporting Organization'][a['Reporting Organization']!],
-    'cuyzrsclr960f873z': a['Implementing Partner'] === undefined ? undefined : 'czbgrslpwg36j52' + ':' + options['Implementing Partner'][a['Implementing Partner']!],
-    'cg1pbdjlr965gbs4v': a['Plan/Project Code'] === undefined ? undefined : 'c52pe2mlr95snzf1q' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
-    'c95dt4flrkljpae5': a['Indicators - SNFI'] === undefined ? undefined : 'cfsiyzhlqb3qx23ac' + ':' + options['Indicators - SNFI'][a['Indicators - SNFI']!],
-    'cryl3w4ls03kgonh': a['Distribution through Common Pipeline'] === undefined ? undefined : options['Distribution through Common Pipeline'][a['Distribution through Common Pipeline']!],
-    'c9r0xuyls03nuejj': a['Distribution through inter-agency convoy (HOPC)'] === undefined ? undefined : options['Distribution through inter-agency convoy (HOPC)'][a['Distribution through inter-agency convoy (HOPC)']!],
-    'cxff006lr960f8c46': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
-    'cu3tssflr960f8c47': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
-    'c3bw3xjlr960f8d48': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
+    cs1qazglr960f863y:
+      a['Reporting Organization'] === undefined
+        ? undefined
+        : 'czbgrslpwg36j52' + ':' + options['Reporting Organization'][a['Reporting Organization']!],
+    cuyzrsclr960f873z:
+      a['Implementing Partner'] === undefined
+        ? undefined
+        : 'czbgrslpwg36j52' + ':' + options['Implementing Partner'][a['Implementing Partner']!],
+    cg1pbdjlr965gbs4v:
+      a['Plan/Project Code'] === undefined
+        ? undefined
+        : 'c52pe2mlr95snzf1q' + ':' + options['Plan/Project Code'][a['Plan/Project Code']!],
+    c95dt4flrkljpae5:
+      a['Indicators - SNFI'] === undefined
+        ? undefined
+        : 'cfsiyzhlqb3qx23ac' + ':' + options['Indicators - SNFI'][a['Indicators - SNFI']!],
+    cryl3w4ls03kgonh:
+      a['Distribution through Common Pipeline'] === undefined
+        ? undefined
+        : options['Distribution through Common Pipeline'][a['Distribution through Common Pipeline']!],
+    c9r0xuyls03nuejj:
+      a['Distribution through inter-agency convoy (HOPC)'] === undefined
+        ? undefined
+        : options['Distribution through inter-agency convoy (HOPC)'][
+            a['Distribution through inter-agency convoy (HOPC)']!
+          ],
+    cxff006lr960f8c46: a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
+    cu3tssflr960f8c47: a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
+    c3bw3xjlr960f8d48: a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
     // 'c6bulw2lqf3085j4y': a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
     // 'cb39ganlqf3085j4z': a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
     // 'cmdrqq8lqf3085j50': a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
-    'cpkkgd9lr960f8d49': a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
-    'cy26vp3lr960f8e4a': a['Collective Site'] === undefined ? undefined : a['Collective Site'],
-    'cq4oobolr960f8e4d': a['Reporting Date (YYYY-MM-DD)'] === undefined ? undefined : a['Reporting Date (YYYY-MM-DD)'],
-    'cpljznblr960f8f4e': a['Reporting Month'] === undefined ? undefined : a['Reporting Month'],
-    'coklklr960f8i4i': a['Population Group'] === undefined ? undefined : 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!],
-    'cbzwmwnlr960f8i4k': a['Non-individuals Reached'] === undefined ? undefined : a['Non-individuals Reached'],
-    'cj9zrudlr960f8j4l': a['Total Individuals Reached'] === undefined ? undefined : a['Total Individuals Reached'],
-    'ch0ejrblr960f8m4m': a['Girls (0-17)'] === undefined ? undefined : a['Girls (0-17)'],
-    'c1514a9lr960f8m4n': a['Boys (0-17)'] === undefined ? undefined : a['Boys (0-17)'],
-    'cjiw5cglr960f8o4o': a['Adult Women (18-59)'] === undefined ? undefined : a['Adult Women (18-59)'],
-    'cvftzh8lr960f8o4p': a['Adult Men (18-59)'] === undefined ? undefined : a['Adult Men (18-59)'],
-    'cr5nvs9lr960f8p4q': a['Older Women (60+)'] === undefined ? undefined : a['Older Women (60+)'],
-    'cfe87k6lr960f8q4r': a['Older Men (60+)'] === undefined ? undefined : a['Older Men (60+)'],
-    'cxoosq1lr960f8r4s': a['People with disability'] === undefined ? undefined : a['People with disability'],
-    'cgpsrwqlrq4ezo1m': a['Comment'] === undefined ? undefined : a['Comment']
+    cpkkgd9lr960f8d49: a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
+    cy26vp3lr960f8e4a: a['Collective Site'] === undefined ? undefined : a['Collective Site'],
+    cq4oobolr960f8e4d: a['Reporting Date (YYYY-MM-DD)'] === undefined ? undefined : a['Reporting Date (YYYY-MM-DD)'],
+    cpljznblr960f8f4e: a['Reporting Month'] === undefined ? undefined : a['Reporting Month'],
+    coklklr960f8i4i:
+      a['Population Group'] === undefined
+        ? undefined
+        : 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!],
+    cbzwmwnlr960f8i4k: a['Non-individuals Reached'] === undefined ? undefined : a['Non-individuals Reached'],
+    cj9zrudlr960f8j4l: a['Total Individuals Reached'] === undefined ? undefined : a['Total Individuals Reached'],
+    ch0ejrblr960f8m4m: a['Girls (0-17)'] === undefined ? undefined : a['Girls (0-17)'],
+    c1514a9lr960f8m4n: a['Boys (0-17)'] === undefined ? undefined : a['Boys (0-17)'],
+    cjiw5cglr960f8o4o: a['Adult Women (18-59)'] === undefined ? undefined : a['Adult Women (18-59)'],
+    cvftzh8lr960f8o4p: a['Adult Men (18-59)'] === undefined ? undefined : a['Adult Men (18-59)'],
+    cr5nvs9lr960f8p4q: a['Older Women (60+)'] === undefined ? undefined : a['Older Women (60+)'],
+    cfe87k6lr960f8q4r: a['Older Men (60+)'] === undefined ? undefined : a['Older Men (60+)'],
+    cxoosq1lr960f8r4s: a['People with disability'] === undefined ? undefined : a['People with disability'],
+    cgpsrwqlrq4ezo1m: a['Comment'] === undefined ? undefined : a['Comment'],
   })
 
   export const options = {
     'Reporting Organization': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'
+      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
     },
     'Implementing Partner': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'
+      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
     },
     'Plan/Project Code': {
       'SNFI-DRC-00001': 'cogjzchltfvf0i96',
@@ -131,18 +154,17 @@ export namespace AiSnfiType {
       // "# of individuals supported with winter NFIs": 'cka2oeolrke6zeb1c'
     },
     'Distribution through Common Pipeline': {
-      'Yes': 'c4rrv3dls03kgong',
-      'No': 'cg7qn48ls03l08gi'
+      Yes: 'c4rrv3dls03kgong',
+      No: 'cg7qn48ls03l08gi',
     },
     'Distribution through inter-agency convoy (HOPC)': {
-      'Yes': 'c7xcwyels03nuejk',
-      'No': 'cuf5onjls03nuejl'
+      Yes: 'c7xcwyels03nuejk',
+      No: 'cuf5onjls03nuejl',
     },
     'Population Group': {
-      "Internally Displaced": 'cvw4on6lq6dgcoj5',
-      "Non-Displaced": 'ck6ulx8lq6dgcok6',
-      "Returnees": 'cuz9qi9lq6dgcok7'
-    }
+      'Internally Displaced': 'cvw4on6lq6dgcoj5',
+      'Non-Displaced': 'ck6ulx8lq6dgcok6',
+      Returnees: 'cuz9qi9lq6dgcok7',
+    },
   }
-
 }

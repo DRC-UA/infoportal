@@ -10,29 +10,27 @@ export type MealVerificationCreate = InferType<typeof MealVerificationSchema.cre
 }
 
 export class MealVerificationService {
-
   constructor(
     private prisma: PrismaClient,
     private log: AppLogger = app.logger('MealVerificationService'),
-  ) {
-  }
+  ) {}
 
   readonly create = async ({answers, ...body}: MealVerificationCreate) => {
     const parent = await this.prisma.mealVerification.create({
       data: body,
     })
     return this.prisma.mealVerificationAnswers.createMany({
-      data: answers.map(_ => ({
+      data: answers.map((_) => ({
         mealVerificationId: parent.id,
         koboAnswerId: _.koboAnswerId,
         status: _.status,
-      }))
+      })),
     })
   }
 
   readonly getAll = async () => {
     return this.prisma.mealVerification.findMany({
-      orderBy: {createdAt: 'desc'}
+      orderBy: {createdAt: 'desc'},
     })
   }
 
@@ -40,7 +38,7 @@ export class MealVerificationService {
     return this.prisma.mealVerificationAnswers.findMany({
       where: {
         mealVerificationId,
-      }
+      },
     })
   }
 
@@ -54,7 +52,7 @@ export class MealVerificationService {
       where: {id},
       data: {
         status,
-      }
+      },
     })
   }
 
@@ -62,8 +60,8 @@ export class MealVerificationService {
     await this.prisma.mealVerificationAnswers.update({
       where: {id},
       data: {
-        status: selected ?? null
-      }
+        status: selected ?? null,
+      },
     })
   }
 }

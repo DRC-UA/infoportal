@@ -1,8 +1,17 @@
-import {FormControl, InputLabel, InputProps as StandardInputProps, OutlinedInput, OutlinedInputProps, TextFieldProps} from '@mui/material'
+import {
+  FormControl,
+  InputLabel,
+  InputProps as StandardInputProps,
+  OutlinedInput,
+  OutlinedInputProps,
+  TextFieldProps,
+} from '@mui/material'
 import {zonedTimeToUtc} from 'date-fns-tz'
 import React, {useEffect, useState} from 'react'
 
-export interface DatepickerProps extends Omit<OutlinedInputProps, 'onChange' | 'value'>, Pick<TextFieldProps, 'InputProps' | 'InputLabelProps'> {
+export interface DatepickerProps
+  extends Omit<OutlinedInputProps, 'onChange' | 'value'>,
+    Pick<TextFieldProps, 'InputProps' | 'InputLabelProps'> {
   min?: Date
   max?: Date
   value?: Date
@@ -11,7 +20,7 @@ export interface DatepickerProps extends Omit<OutlinedInputProps, 'onChange' | '
   InputProps?: Partial<StandardInputProps>
   fullWidth?: boolean
   timeOfDay?: // when picking a date, the Date returned will be at 00:00:000 in the user timezone
-    | 'startOfDay'
+  | 'startOfDay'
     // with this, it will be at 23:59:999 in the user timezone
     | 'endOfDay'
 }
@@ -31,8 +40,7 @@ const safeDate2string = (_?: string | Date) => {
   } catch (e) {
     try {
       return date2string(new Date(_))
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 }
 
@@ -75,7 +83,9 @@ export const IpDatepicker = ({
 
   return (
     <FormControl size="small" sx={{...sx}}>
-      <InputLabel {...InputLabelProps} shrink={true} htmlFor={id}>{label}</InputLabel>
+      <InputLabel {...InputLabelProps} shrink={true} htmlFor={id}>
+        {label}
+      </InputLabel>
       <OutlinedInput
         {...props}
         id={id}

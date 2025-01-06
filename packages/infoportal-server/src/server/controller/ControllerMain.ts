@@ -3,17 +3,17 @@ import * as yup from 'yup'
 import axios, {AxiosError} from 'axios'
 
 export class ControllerMain {
-
-  constructor() {
-  }
+  constructor() {}
 
   readonly proxy = async (req: Request, res: Response, next: NextFunction) => {
-    const body = await yup.object({
-      url: yup.string().required(),
-      method: yup.string().required(),
-      body: yup.mixed<any>().optional(),
-      headers: yup.mixed<any>().optional(),
-    }).validate(req.body)
+    const body = await yup
+      .object({
+        url: yup.string().required(),
+        method: yup.string().required(),
+        body: yup.mixed<any>().optional(),
+        headers: yup.mixed<any>().optional(),
+      })
+      .validate(req.body)
     try {
       const request = await axios.create().request({
         url: body.url,

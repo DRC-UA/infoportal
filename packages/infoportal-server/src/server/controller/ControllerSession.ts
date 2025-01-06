@@ -9,7 +9,6 @@ import {appConf} from '../../core/conf/AppConf'
 import {SessionError} from '../../feature/session/SessionErrors'
 
 export class ControllerSession extends Controller {
-
   constructor(
     private prisma: PrismaClient,
     private service = new SessionService(prisma),
@@ -32,14 +31,15 @@ export class ControllerSession extends Controller {
   }
 
   readonly login = async (req: Request, res: Response, next: NextFunction) => {
-    const user = await yup.object({
-      name: yup.string().required(),
-      username: yup.string().required(),
-      accessToken: yup.string().required(),
-    }).validate(req.body)
+    const user = await yup
+      .object({
+        name: yup.string().required(),
+        username: yup.string().required(),
+        accessToken: yup.string().required(),
+      })
+      .validate(req.body)
     const connectedUser = await this.service.login(user)
-    req.session.user = UserSession.fromUser(connectedUser),
-      res.send(req.session.user)
+    ;(req.session.user = UserSession.fromUser(connectedUser)), res.send(req.session.user)
   }
 
   readonly revertConnectAs = async (req: Request, res: Response, next: NextFunction) => {
@@ -52,9 +52,11 @@ export class ControllerSession extends Controller {
   }
 
   readonly connectAs = async (req: Request, res: Response, next: NextFunction) => {
-    const body = await yup.object({
-      email: yup.string().required(),
-    }).validate(req.body)
+    const body = await yup
+      .object({
+        email: yup.string().required(),
+      })
+      .validate(req.body)
 
     const user = await this.prisma.user.findFirstOrThrow({where: {email: body.email}})
     if (user.email === this.conf.ownerEmail) throw new SessionError.UserNoAccess()
@@ -66,9 +68,11 @@ export class ControllerSession extends Controller {
   }
 
   readonly track = async (req: Request, res: Response, next: NextFunction) => {
-    const body = await yup.object({
-      detail: yup.string().optional(),
-    }).validate(req.body)
+    const body = await yup
+      .object({
+        detail: yup.string().optional(),
+      })
+      .validate(req.body)
     await this.service.saveActivity({email: req.session.user?.email, detail: body.detail})
     res.send()
   }

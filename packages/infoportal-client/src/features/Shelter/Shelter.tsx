@@ -22,10 +22,7 @@ import {getKoboFormRouteProps, SidebarKoboLink} from '@/features/SidebarKoboLink
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
-const relatedKoboForms: KoboFormName[] = [
-  'shelter_nta',
-  'shelter_ta',
-]
+const relatedKoboForms: KoboFormName[] = ['shelter_nta', 'shelter_ta']
 
 export const shelterIndex = {
   basePath: '/shelter',
@@ -34,7 +31,7 @@ export const shelterIndex = {
     access: '/access',
     dashboard: '/dashboard',
     form: (id: KoboFormName = ':id' as any) => '/form/' + id,
-  }
+  },
 }
 
 const ShelterSidebar = () => {
@@ -46,21 +43,32 @@ const ShelterSidebar = () => {
       <SidebarBody>
         <NavLink to={path(shelterIndex.siteMap.dashboard)}>
           {({isActive, isPending}) => (
-            <SidebarItem icon="insights" active={isActive}>{m.dashboard}</SidebarItem>
+            <SidebarItem icon="insights" active={isActive}>
+              {m.dashboard}
+            </SidebarItem>
           )}
         </NavLink>
         <NavLink to={path(shelterIndex.siteMap.data)}>
           {({isActive, isPending}) => (
-            <SidebarItem icon="table_chart" active={isActive}>{m.data}</SidebarItem>
+            <SidebarItem icon="table_chart" active={isActive}>
+              {m.data}
+            </SidebarItem>
           )}
         </NavLink>
-        <Link href={conf.linkToFeature(AppFeatureId.kobo_database, databaseIndex.siteMap.access.absolute(KoboIndex.byName('shelter_nta').id))}>
-          <SidebarItem icon="person_add" iconEnd="open_in_new">{m.accesses}</SidebarItem>
+        <Link
+          href={conf.linkToFeature(
+            AppFeatureId.kobo_database,
+            databaseIndex.siteMap.access.absolute(KoboIndex.byName('shelter_nta').id),
+          )}
+        >
+          <SidebarItem icon="person_add" iconEnd="open_in_new">
+            {m.accesses}
+          </SidebarItem>
         </Link>
         <SidebarSection title={m.koboForms}>
-          {relatedKoboForms.map(_ =>
-            <SidebarKoboLink key={_} path={path(shelterIndex.siteMap.form(_))} name={_}/>
-          )}
+          {relatedKoboForms.map((_) => (
+            <SidebarKoboLink key={_} path={path(shelterIndex.siteMap.form(_))} name={_} />
+          ))}
         </SidebarSection>
       </SidebarBody>
     </Sidebar>
@@ -70,7 +78,7 @@ const ShelterSidebar = () => {
 export const Shelter = () => {
   const {session, accesses} = useSession()
   const canOpen = useMemo(() => !!appFeaturesIndex.shelter.showIf?.(session, accesses), [accesses])
-  return canOpen ? <ShelterWithAccess/> : <NoFeatureAccessPage/>
+  return canOpen ? <ShelterWithAccess /> : <NoFeatureAccessPage />
 }
 
 export const ShelterWithAccess = () => {
@@ -79,9 +87,11 @@ export const ShelterWithAccess = () => {
   useReactRouterDefaultRoute(shelterIndex.siteMap.data)
   const {access, allowedOffices} = useMemo(() => {
     const dbAccesses = seq(accesses).filter(Access.filterByFeature(AppFeatureId.kobo_database))
-    const allowedOffices = dbAccesses.flatMap(_ => {
-      return _.params?.filters?.back_office as Shelter_nta.T['back_office'][] | undefined
-    }).compact()
+    const allowedOffices = dbAccesses
+      .flatMap((_) => {
+        return _.params?.filters?.back_office as Shelter_nta.T['back_office'][] | undefined
+      })
+      .compact()
     return {
       access: Access.toSum(dbAccesses, session.admin),
       allowedOffices,
@@ -100,8 +110,8 @@ export const ShelterWithAccess = () => {
     <Layout
       loading={ctxSchema.anyLoading}
       title={appFeaturesIndex.shelter.name}
-      sidebar={<ShelterSidebar/>}
-      header={<AppHeader id="app-header"/>}
+      sidebar={<ShelterSidebar />}
+      header={<AppHeader id="app-header" />}
     >
       {ctxSchema.byName.shelter_nta.get && ctxSchema.byName.shelter_ta.get && (
         <ShelterProvider
@@ -114,17 +124,14 @@ export const ShelterWithAccess = () => {
           schemaTa={ctxSchema.byName.shelter_ta.get}
         >
           <Routes>
-            <Route path={shelterIndex.siteMap.dashboard} element={<ShelterDashboard/>}/>
-            <Route path={shelterIndex.siteMap.data} element={<ShelterTable/>}/>
-            {relatedKoboForms.map(_ =>
-              <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})}/>
-            )}
+            <Route path={shelterIndex.siteMap.dashboard} element={<ShelterDashboard />} />
+            <Route path={shelterIndex.siteMap.data} element={<ShelterTable />} />
+            {relatedKoboForms.map((_) => (
+              <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})} />
+            ))}
           </Routes>
         </ShelterProvider>
       )}
     </Layout>
   )
 }
-
-
-

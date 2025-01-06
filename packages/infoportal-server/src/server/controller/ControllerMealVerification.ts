@@ -6,12 +6,13 @@ import {MealVerificationStatus, PrismaClient} from '@prisma/client'
 import {MealVerificationService} from '../../feature/mealVerfication/MealVerificationService'
 
 export class MealVerificationSchema {
-
-  static readonly yupAnswerStatus = yup.mixed<MealVerificationAnswersStatus>().oneOf(Obj.values(MealVerificationAnswersStatus))
+  static readonly yupAnswerStatus = yup
+    .mixed<MealVerificationAnswersStatus>()
+    .oneOf(Obj.values(MealVerificationAnswersStatus))
   static readonly yupStatus = yup.mixed<MealVerificationStatus>().oneOf(Obj.values(MealVerificationStatus))
 
   static readonly id = yup.object({
-    id: yup.string().required()
+    id: yup.string().required(),
   })
 
   static readonly answers = yup.object({
@@ -37,13 +38,10 @@ export class MealVerificationSchema {
 }
 
 export class ControllerMealVerification {
-
   constructor(
     private prisma: PrismaClient,
-    private service = new MealVerificationService(prisma)
-  ) {
-
-  }
+    private service = new MealVerificationService(prisma),
+  ) {}
 
   readonly create = async (req: Request, res: Response, next: NextFunction) => {
     const body = await MealVerificationSchema.create.validate(req.body)

@@ -5,13 +5,11 @@ import {app, AppCacheKey} from '../../index'
 import {ApiPaginateHelper} from 'infoportal-common'
 
 export class ControllerKoboMeta {
-
   constructor(
     private prisma: PrismaClient,
     private service = new KoboMetaService(prisma),
-    private cache = app.cache
-  ) {
-  }
+    private cache = app.cache,
+  ) {}
 
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
     const body = await KoboMetaParams.schemaSearchFilter.validate(req.body)

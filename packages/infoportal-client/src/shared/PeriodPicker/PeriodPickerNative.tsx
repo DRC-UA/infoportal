@@ -14,16 +14,7 @@ export interface PeriodPickerProps extends Omit<BoxProps, 'defaultValue' | 'onCh
   fullWidth?: boolean
 }
 
-export const PeriodPickerNative = ({
-  min,
-  max,
-  value,
-  onChange,
-  label,
-  fullWidth,
-  sx,
-  ...props
-}: PeriodPickerProps) => {
+export const PeriodPickerNative = ({min, max, value, onChange, label, fullWidth, sx, ...props}: PeriodPickerProps) => {
   const [start, setStart] = useState<Date | undefined>(undefined)
   const [end, setEnd] = useState<Date | undefined>(undefined)
   const {m} = useI18n()
@@ -69,7 +60,7 @@ export const PeriodPickerNative = ({
           className: 'aa-datepicker-min',
         }}
         InputProps={{
-          sx: _ => ({
+          sx: (_) => ({
             borderBottomRightRadius: 0,
             borderTopRightRadius: 0,
           }),
@@ -85,7 +76,7 @@ export const PeriodPickerNative = ({
         value={end}
         onChange={handleEndChange}
         InputProps={{
-          sx: _ => ({
+          sx: (_) => ({
             borderBottomLeftRadius: 0,
             borderTopLeftRadius: 0,
           }),

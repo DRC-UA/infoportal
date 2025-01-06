@@ -5,7 +5,7 @@ import {ActivityInfo} from '@/features/ActivityInfo/ActivityInfo'
 const _ = () => {
   return (
     <ProtectRoute>
-      <ActivityInfo/>
+      <ActivityInfo />
     </ProtectRoute>
   )
 }

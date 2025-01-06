@@ -22,7 +22,7 @@ export const ProtectionDashboardMonitoSample = () => {
   const ctx = ProtectionMonito.useContext()
   const {formatLargeNumber, m} = useI18n()
   const theme = useTheme()
-  const [ag, setAg] = useState<keyof (typeof Person.ageGroup)>('DRC')
+  const [ag, setAg] = useState<keyof typeof Person.ageGroup>('DRC')
   const [agDisplay, setAgDisplay] = useState<'chart' | 'table'>('chart')
   return (
     <Div column>
@@ -43,28 +43,45 @@ export const ProtectionDashboardMonitoSample = () => {
         <Div column>
           <Div sx={{alignItems: 'stretch'}}>
             <SlideWidget sx={{flex: 1}} icon="elderly" title={m.avgAge}>
-              <Lazy deps={[ctx.dataFiltered]} fn={() => ctx.dataFlat.map(_ => _.age).compact().sum() / ctx.dataFlat.length}>
-                {_ => _.toFixed(1)}
+              <Lazy
+                deps={[ctx.dataFiltered]}
+                fn={() =>
+                  ctx.dataFlat
+                    .map((_) => _.age)
+                    .compact()
+                    .sum() / ctx.dataFlat.length
+                }
+              >
+                {(_) => _.toFixed(1)}
               </Lazy>
             </SlideWidget>
-            <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', pl: 2,}}>
-              <Lazy deps={[ctx.dataFiltered]} fn={() => ChartHelper.percentage({
-                data: ctx.dataFlat,
-                value: _ => _.gender === 'Female'
-              })}>
-                {_ => (
-                  <ChartPieWidget dense value={_.value} base={_.base} title={m.females}/>
-                )}
+            <SlidePanel
+              BodyProps={{sx: {p: '0px !important'}}}
+              sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', pl: 2}}
+            >
+              <Lazy
+                deps={[ctx.dataFiltered]}
+                fn={() =>
+                  ChartHelper.percentage({
+                    data: ctx.dataFlat,
+                    value: (_) => _.gender === 'Female',
+                  })
+                }
+              >
+                {(_) => <ChartPieWidget dense value={_.value} base={_.base} title={m.females} />}
               </Lazy>
             </SlidePanel>
-            <SlidePanel BodyProps={{sx: {p: '0px !important'}}} sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', pl: 2,}}>
+            <SlidePanel
+              BodyProps={{sx: {p: '0px !important'}}}
+              sx={{flex: 1, m: 0, display: 'flex', alignItems: 'center', pl: 2}}
+            >
               <ChartPieWidgetByKey
                 dense
                 title={m.uaCitizen}
                 data={ctx.dataFiltered}
                 property="if_ukrainian_do_you_or_your_household_members_identify_as_member_of_a_minority_group"
-                filterBase={_ => _ !== 'unable_unwilling_to_answer'}
-                filter={_ => _ === 'no'}
+                filterBase={(_) => _ !== 'unable_unwilling_to_answer'}
+                filter={(_) => _ === 'no'}
               />
               {/*<Lazy deps={[data]} fn={() => ChartTools.percentage({*/}
               {/*  data,*/}
@@ -87,101 +104,128 @@ export const ProtectionDashboardMonitoSample = () => {
       <Div alignItems="flex-start" responsive>
         <Div column>
           <SlidePanel title={m.HHsLocation}>
-            <MapSvg data={ctx.byCurrentOblast} sx={{mx: 1}} base={ctx.dataFiltered.length}/>
+            <MapSvg data={ctx.byCurrentOblast} sx={{mx: 1}} base={ctx.dataFiltered.length} />
           </SlidePanel>
           <SlidePanel title={m.disaggregation}>
             <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
-              <IpSelectSingle placeholder={m.ageGroup} sx={{mr: 1}} hideNullOption value={ag} options={Obj.keys(Person.ageGroup)} onChange={e => setAg(e)}/>
+              <IpSelectSingle
+                placeholder={m.ageGroup}
+                sx={{mr: 1}}
+                hideNullOption
+                value={ag}
+                options={Obj.keys(Person.ageGroup)}
+                onChange={(e) => setAg(e)}
+              />
               <ScRadioGroup value={agDisplay} onChange={setAgDisplay} dense inline>
                 <ScRadioGroupItem
-                  dense hideRadio
+                  dense
+                  hideRadio
                   value="table"
-                  title={<Icon color="disabled" sx={{marginBottom: '-5px', fontSize: '20px !important'}}>calendar_view_month</Icon>}
+                  title={
+                    <Icon color="disabled" sx={{marginBottom: '-5px', fontSize: '20px !important'}}>
+                      calendar_view_month
+                    </Icon>
+                  }
                 />
                 <ScRadioGroupItem
-                  dense hideRadio value="chart"
-                  title={<Icon color="disabled" sx={{marginBottom: '-5px', fontSize: '20px !important'}}>align_horizontal_left</Icon>}
+                  dense
+                  hideRadio
+                  value="chart"
+                  title={
+                    <Icon color="disabled" sx={{marginBottom: '-5px', fontSize: '20px !important'}}>
+                      align_horizontal_left
+                    </Icon>
+                  }
                 />
               </ScRadioGroup>
             </Box>
-            <Lazy deps={[ctx.dataFiltered, agDisplay, ag]} fn={() => ctx.ageGroup(ctx.dataFiltered, Person.ageGroup[ag])}>
-              {_ => agDisplay === 'chart' ? (
-                <ChartBarStacker data={_} height={250}/>
-              ) : (
-                <Datatable
-                  id="prot-dash-population"
-                  sx={{border: t => `1px solid ${t.palette.divider}`, overflow: 'hidden', borderRadius: t => t.shape.borderRadius + 'px'}}
-                  hidePagination
-                  data={_}
-                  columns={[
-                    {
-                      width: 0,
-                      id: 'Group',
-                      head: m.ageGroup,
-                      type: 'select_one',
-                      renderQuick: _ => _.key
-                    },
-                    {
-                      width: 0,
-                      id: 'Male',
-                      head: m.male,
-                      type: 'number',
-                      render: _ => {
-                        return {
-                          label: formatLargeNumber(_.Male),
-                          value: _.Male
-                        }
-                      }
-                    },
-                    {
-                      width: 0,
-                      id: 'Female',
-                      head: m.female,
-                      type: 'number',
-                      render: _ => {
-                        return {
-                          label: formatLargeNumber(_.Female),
-                          value: _.Female
-                        }
-                      }
-                    },
-                    {
-                      width: 0,
-                      id: 'Other',
-                      head: m.other,
-                      type: 'number',
-                      render: _ => {
-                        return {
-                          label: formatLargeNumber(_.Other ?? 0),
-                          value: _.Other
-                        }
-                      }
-                    },
-                  ]}
-                />
-                // <Box component="table" sx={css.table}>
-                //   <tr>
-                //     <td></td>
-                //     <td>{m.female}</td>
-                //     <td>{m.male}</td>
-                //     <td>{m.other}</td>
-                //   </tr>
-                //   {_.map(k =>
-                //     <tr key={k.key}>
-                //       <td>{k.key}</td>
-                //       <td>{k.Female}</td>
-                //       <td>{k.Male}</td>
-                //       <td>{k.Other}</td>
-                //     </tr>
-                //   )}
-                //   <tr>
-                //     <td><b>{m.total}</b></td>
-                //     <td><b>{_.reduce((acc, _) => acc + (_.Female ?? 0), 0)}</b></td>
-                //     <td><b>{_.reduce((acc, _) => acc + (_.Male ?? 0), 0)}</b></td>
-                //     <td><b>{_.reduce((acc, _) => acc + (_.Other ?? 0), 0)}</b></td>
-                //   </tr>
-                // </Box>
-              )}
+            <Lazy
+              deps={[ctx.dataFiltered, agDisplay, ag]}
+              fn={() => ctx.ageGroup(ctx.dataFiltered, Person.ageGroup[ag])}
+            >
+              {(_) =>
+                agDisplay === 'chart' ? (
+                  <ChartBarStacker data={_} height={250} />
+                ) : (
+                  <Datatable
+                    id="prot-dash-population"
+                    sx={{
+                      border: (t) => `1px solid ${t.palette.divider}`,
+                      overflow: 'hidden',
+                      borderRadius: (t) => t.shape.borderRadius + 'px',
+                    }}
+                    hidePagination
+                    data={_}
+                    columns={[
+                      {
+                        width: 0,
+                        id: 'Group',
+                        head: m.ageGroup,
+                        type: 'select_one',
+                        renderQuick: (_) => _.key,
+                      },
+                      {
+                        width: 0,
+                        id: 'Male',
+                        head: m.male,
+                        type: 'number',
+                        render: (_) => {
+                          return {
+                            label: formatLargeNumber(_.Male),
+                            value: _.Male,
+                          }
+                        },
+                      },
+                      {
+                        width: 0,
+                        id: 'Female',
+                        head: m.female,
+                        type: 'number',
+                        render: (_) => {
+                          return {
+                            label: formatLargeNumber(_.Female),
+                            value: _.Female,
+                          }
+                        },
+                      },
+                      {
+                        width: 0,
+                        id: 'Other',
+                        head: m.other,
+                        type: 'number',
+                        render: (_) => {
+                          return {
+                            label: formatLargeNumber(_.Other ?? 0),
+                            value: _.Other,
+                          }
+                        },
+                      },
+                    ]}
+                  />
+                  // <Box component="table" sx={css.table}>
+                  //   <tr>
+                  //     <td></td>
+                  //     <td>{m.female}</td>
+                  //     <td>{m.male}</td>
+                  //     <td>{m.other}</td>
+                  //   </tr>
+                  //   {_.map(k =>
+                  //     <tr key={k.key}>
+                  //       <td>{k.key}</td>
+                  //       <td>{k.Female}</td>
+                  //       <td>{k.Male}</td>
+                  //       <td>{k.Other}</td>
+                  //     </tr>
+                  //   )}
+                  //   <tr>
+                  //     <td><b>{m.total}</b></td>
+                  //     <td><b>{_.reduce((acc, _) => acc + (_.Female ?? 0), 0)}</b></td>
+                  //     <td><b>{_.reduce((acc, _) => acc + (_.Male ?? 0), 0)}</b></td>
+                  //     <td><b>{_.reduce((acc, _) => acc + (_.Other ?? 0), 0)}</b></td>
+                  //   </tr>
+                  // </Box>
+                )
+              }
             </Lazy>
           </SlidePanel>
         </Div>
@@ -189,38 +233,54 @@ export const ProtectionDashboardMonitoSample = () => {
           <SlidePanel title={m.poc}>
             <Lazy
               deps={[ctx.dataFiltered]}
-              fn={() => ChartHelper.single({
-                data: ctx.dataFiltered.map(_ => _.do_you_identify_as_any_of_the_following).compact(),
-              })
-                .sortBy.value()
-                .setLabel(Protection_hhs3.options.do_you_identify_as_any_of_the_following)
-                .get()
+              fn={() =>
+                ChartHelper.single({
+                  data: ctx.dataFiltered.map((_) => _.do_you_identify_as_any_of_the_following).compact(),
+                })
+                  .sortBy.value()
+                  .setLabel(Protection_hhs3.options.do_you_identify_as_any_of_the_following)
+                  .get()
               }
             >
-              {_ => <ChartBar data={_}/>}
+              {(_) => <ChartBar data={_} />}
             </Lazy>
           </SlidePanel>
           <SlidePanel>
-            <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={(d) => ChartHelper.percentage({
-              data: d
-                .map(_ => _.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household)
-                .compact()
-                .filter(_ => !_.includes('unable_unwilling_to_answer')),
-              value: _ => !_.includes('no_specific_needs'),
-            })}>
-              {(_, last) => <ChartPieWidget sx={{mb: 2}} title={m.protHHS2.HHSwSN} value={_.value} base={_.base} evolution={_.percent - last.percent}/>}
+            <Lazy
+              deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]}
+              fn={(d) =>
+                ChartHelper.percentage({
+                  data: d
+                    .map((_) => _.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household)
+                    .compact()
+                    .filter((_) => !_.includes('unable_unwilling_to_answer')),
+                  value: (_) => !_.includes('no_specific_needs'),
+                })
+              }
+            >
+              {(_, last) => (
+                <ChartPieWidget
+                  sx={{mb: 2}}
+                  title={m.protHHS2.HHSwSN}
+                  value={_.value}
+                  base={_.base}
+                  evolution={_.percent - last.percent}
+                />
+              )}
             </Lazy>
             <ChartBarMultipleBy
               data={ctx.dataFiltered}
-              by={_ => _.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household}
+              by={(_) => _.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household}
               filterValue={['no_specific_needs', 'unable_unwilling_to_answer', 'other_specify']}
-              label={Protection_hhs3.options.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household}
+              label={
+                Protection_hhs3.options.do_any_of_these_specific_needs_categories_apply_to_the_head_of_this_household
+              }
             />
           </SlidePanel>
           <SlidePanel title={m.protHHS2.hhTypes}>
             <ChartBarSingleBy
               data={ctx.dataFiltered}
-              by={_ => _.what_is_the_type_of_your_household}
+              by={(_) => _.what_is_the_type_of_your_household}
               label={Protection_hhs3.options.what_is_the_type_of_your_household}
             />
           </SlidePanel>

@@ -16,7 +16,7 @@ enum Env {
   NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME = 'NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME',
 }
 
-const persistedTempEnvVariablesForFront: { [key in Env]: string | undefined } = {
+const persistedTempEnvVariablesForFront: {[key in Env]: string | undefined} = {
   NEXT_PUBLIC_SENTRY_DNS: process.env.NEXT_PUBLIC_SENTRY_DNS,
   NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -35,8 +35,8 @@ const e = env(persistedTempEnvVariablesForFront)
 
 export const appConfig = {
   /** @deprecated not working*/
-  production: e(_ => _?.toLowerCase() === 'production', defaultValue(true))('NODE_ENV'),
-  uahToUsd: .027,
+  production: e((_) => _?.toLowerCase() === 'production', defaultValue(true))('NODE_ENV'),
+  uahToUsd: 0.027,
   muiProLicenseKey: e()(Env.NEXT_PUBLIC_MUI_PRO_LICENSE_KEY),
   linkToFeature: (feature: AppFeatureId, path: string) => {
     const featurePath = appFeaturesIndex[feature]?.path ?? feature
@@ -47,7 +47,7 @@ export const appConfig = {
   apiURL: e(defaultValue('https://infoportal-ua-api.drc.ngo'))(Env.NEXT_PUBLIC_API_BASE_URL),
   baseURL: e(defaultValue('https://infoportal-ua.drc.ngo/'))(Env.NEXT_PUBLIC_BASE_URL),
   sentry: {
-    dsn: e()(Env.NEXT_PUBLIC_SENTRY_DNS)
+    dsn: e()(Env.NEXT_PUBLIC_SENTRY_DNS),
   },
   gooogle: {
     apiKey: e(required)(Env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY),
@@ -63,9 +63,12 @@ export const appConfig = {
   chatGptApiKey: e()(Env.NEXT_PUBLIC_CHATGPT_APIKEY),
   appOff: e(bool, defaultValue(false))(Env.NEXT_PUBLIC_APP_OFF),
   externalLink: {
-    mealReferralMatrix: 'https://drcngo.sharepoint.com/:x:/s/UKRPortal/EVjIQqcfHQVDggcGqObP2BwBXdYnRBk7kWe4mJuSqlAyGA?e=R7V8Wg',
-    metaDashboardReadMe: 'https://drcngo.sharepoint.com/sites/UKRPortal/_layouts/15/doc.aspx?sourcedoc={4acb5576-3be2-4939-8f77-2364e048d321}',
-    cocDashboard: 'https://app.powerbi.com/view?r=eyJrIjoiMjhkZDZjMjYtYTk4Ny00Yzg2LWE4YjctMmIyOGQzM2I0ZDM1IiwidCI6IjJhMjEyMjQxLTg5OWMtNDc1Mi1iZDMzLTUxZWFjM2M1ODJkNSIsImMiOjh9&pageName=ReportSection592c43ce6687c8de177c',
+    mealReferralMatrix:
+      'https://drcngo.sharepoint.com/:x:/s/UKRPortal/EVjIQqcfHQVDggcGqObP2BwBXdYnRBk7kWe4mJuSqlAyGA?e=R7V8Wg',
+    metaDashboardReadMe:
+      'https://drcngo.sharepoint.com/sites/UKRPortal/_layouts/15/doc.aspx?sourcedoc={4acb5576-3be2-4939-8f77-2364e048d321}',
+    cocDashboard:
+      'https://app.powerbi.com/view?r=eyJrIjoiMjhkZDZjMjYtYTk4Ny00Yzg2LWE4YjctMmIyOGQzM2I0ZDM1IiwidCI6IjJhMjEyMjQxLTg5OWMtNDc1Mi1iZDMzLTUxZWFjM2M1ODJkNSIsImMiOjh9&pageName=ReportSection592c43ce6687c8de177c',
   },
   mpcaBudgetHolderGroupName: e(defaultValue('MPCA-BudgetHolder'))(Env.NEXT_PUBLIC_BUDGETHOLDER_GROUPNAME),
   icons: {
@@ -88,16 +91,14 @@ export const appConfig = {
     warning: 'warning',
     success: 'check_circle',
     info: 'info',
-    disabled: 'disabled'
+    disabled: 'disabled',
   },
   other: {
     protection: {
       echoDuplicationEstimationPercent: 10,
       echoDisabilityEstimationPercent: 13,
-    }
-  }
+    },
+  },
 }
 
 export type AppConfig = typeof appConfig
-
-

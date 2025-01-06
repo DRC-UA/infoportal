@@ -18,12 +18,12 @@ export const getColumnsBase = ({
   m,
   ctxEdit,
   openViewAnswer,
-  getRow = _ => _,
+  getRow = (_) => _,
   asyncEdit,
 }: {
   ctxEdit: KoboUpdateContext
   asyncEdit: DatabaseKoboContext['asyncEdit']
-  getRow?: (_: any) => KoboSubmissionFlat,
+  getRow?: (_: any) => KoboSubmissionFlat
   openViewAnswer: KoboAnswersContext['openView']
   formId: Kobo.FormId
   selectedIds: Kobo.SubmissionId[]
@@ -36,29 +36,44 @@ export const getColumnsBase = ({
       head: '',
       width: 0,
       noCsvExport: true,
-      render: _ => {
+      render: (_) => {
         return {
           value: null as any,
           label: (
             <>
-              <TableIconBtn tooltip={m.view} children="visibility" onClick={() => openViewAnswer({answer: _, formId: formId})}/>
-              <TableIconBtn disabled={!canEdit} tooltip={m.editKobo} target="_blank" href={asyncEdit(_.id)} children="edit"/>
+              <TableIconBtn
+                tooltip={m.view}
+                children="visibility"
+                onClick={() => openViewAnswer({answer: _, formId: formId})}
+              />
+              <TableIconBtn
+                disabled={!canEdit}
+                tooltip={m.editKobo}
+                target="_blank"
+                href={asyncEdit(_.id)}
+                children="edit"
+              />
             </>
-          )
+          ),
         }
-      }
-    }
-    ,
+      },
+    },
     {
       id: '_validation',
       head: m.validation,
-      subHeader: selectedIds.length > 0 && <TableEditCellBtn onClick={() => ctxEdit.openById({
-        target: 'validation',
-        params: {
-          formId: formId,
-          answerIds: selectedIds,
-        }
-      })}/>,
+      subHeader: selectedIds.length > 0 && (
+        <TableEditCellBtn
+          onClick={() =>
+            ctxEdit.openById({
+              target: 'validation',
+              params: {
+                formId: formId,
+                answerIds: selectedIds,
+              },
+            })
+          }
+        />
+      ),
       width: 0,
       type: 'select_one',
       render: (row: any) => {
@@ -81,9 +96,9 @@ export const getColumnsBase = ({
                 })
               }}
             />
-          )
+          ),
         }
-      }
-    }
+      },
+    },
   ]
 }

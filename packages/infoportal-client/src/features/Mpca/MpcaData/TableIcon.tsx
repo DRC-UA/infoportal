@@ -8,22 +8,23 @@ export interface TableIconProps extends IconProps {
 }
 
 export const TableIcon = ({tooltip, children, sx, ...props}: TableIconProps) => {
-  const body = <Icon sx={{
-    verticalAlign: 'middle',
-    // fontSize: '20px !important',
-    ...sx
-  }} fontSize="medium" {...props}>{children}</Icon>
-  return tooltip
-    ? <Tooltip title={tooltip}>{body}</Tooltip>
-    : body
+  const body = (
+    <Icon
+      sx={{
+        verticalAlign: 'middle',
+        // fontSize: '20px !important',
+        ...sx,
+      }}
+      fontSize="medium"
+      {...props}
+    >
+      {children}
+    </Icon>
+  )
+  return tooltip ? <Tooltip title={tooltip}>{body}</Tooltip> : body
 }
 
-export const TableIconBtn = ({
-  sx,
-  color,
-  size = 'small',
-  ...props
-}: IpIconBtnProps) => {
+export const TableIconBtn = ({sx, color, size = 'small', ...props}: IpIconBtnProps) => {
   return (
     <IpIconBtn
       color={color}
@@ -31,7 +32,7 @@ export const TableIconBtn = ({
       sx={{
         verticalAlign: 'middle',
         // fontSize: '20px !important',
-        ...sx
+        ...sx,
       }}
       {...props}
     />

@@ -14,7 +14,7 @@ const Index = () => {
         <List>
           <ListItem>
             <Link href={path('protection-monitoring')}>
-              <ListItemText primary="Protection Monitoring"/>
+              <ListItemText primary="Protection Monitoring" />
             </Link>
           </ListItem>
         </List>

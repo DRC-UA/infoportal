@@ -24,7 +24,7 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 export const ProtectionOverview = () => {
   return (
     <ProtectionProvider>
-      <ProtectionOverviewWithContext/>
+      <ProtectionOverviewWithContext />
     </ProtectionProvider>
   )
 }
@@ -51,16 +51,14 @@ const ProtectionOverviewWithContext = () => {
             <PeriodPicker
               defaultValue={[ctx.filters.period.start, ctx.filters.period.end]}
               onChange={([start, end]) => {
-                ctx.filters.setPeriod(prev => ({...prev, start, end}))
+                ctx.filters.setPeriod((prev) => ({...prev, start, end}))
               }}
               label={[m.start, m.endIncluded]}
               max={today}
             />
           </>
         }
-        after={
-          <ProtectionOverviewFilterCustom/>
-        }
+        after={<ProtectionOverviewFilterCustom />}
       />
       <Div column>
         <Div responsive>
@@ -77,37 +75,24 @@ const ProtectionOverviewWithContext = () => {
               <ChartLineBy
                 sx={{mt: 1}}
                 data={ctx.data.filtered}
-                getX={_ => format(_.date, 'yyyy-MM')}
-                getY={_ => 1}
+                getX={(_) => format(_.date, 'yyyy-MM')}
+                getY={(_) => 1}
                 label={m.count}
               />
             </Panel>
             <Panel title={m.form}>
               <PanelBody>
-                <ChartBarSingleBy
-                  data={data.filtered}
-                  by={_ => KoboIndex.searchById(_.formId)?.translation}
-                />
+                <ChartBarSingleBy data={data.filtered} by={(_) => KoboIndex.searchById(_.formId)?.translation} />
               </PanelBody>
-              <Divider/>
+              <Divider />
               <PanelHead>{m.activity}</PanelHead>
               <PanelBody>
-                {data.flatFiltered && (
-                  <ChartBarSingleBy
-                    data={data.filtered}
-                    by={_ => _.activity!}
-                  />
-                )}
+                {data.flatFiltered && <ChartBarSingleBy data={data.filtered} by={(_) => _.activity!} />}
               </PanelBody>
             </Panel>
             <Panel title={m.project}>
               <PanelBody>
-                {data.flatFiltered && (
-                  <ChartBarMultipleBy
-                    data={data.filtered}
-                    by={_ => _.project!}
-                  />
-                )}
+                {data.flatFiltered && <ChartBarMultipleBy data={data.filtered} by={(_) => _.project!} />}
               </PanelBody>
             </Panel>
           </Div>
@@ -117,68 +102,65 @@ const ProtectionOverviewWithContext = () => {
                 <MapSvgByOblast
                   sx={{maxWidth: 480, margin: 'auto'}}
                   fillBaseOn="value"
-                  getOblast={_ => OblastIndex.byName(_.oblast)?.iso!}
-                  data={ctx.data.flatFiltered}/>
+                  getOblast={(_) => OblastIndex.byName(_.oblast)?.iso!}
+                  data={ctx.data.flatFiltered}
+                />
               </PanelBody>
             </Panel>
             <Panel title={m.ageGroup}>
               <PanelBody>
-                <AgeGroupTable tableId="protection-dashboard" persons={data.flatFiltered} enableDisplacementStatusFilter enablePwdFilter/>
+                <AgeGroupTable
+                  tableId="protection-dashboard"
+                  persons={data.flatFiltered}
+                  enableDisplacementStatusFilter
+                  enablePwdFilter
+                />
               </PanelBody>
             </Panel>
             <Panel title={m.displacementStatus}>
               <PanelBody>
-                <ChartBarSingleBy
-                  data={data.flatFiltered}
-                  by={_ => _.displacement}
-                  label={DisplacementStatus}
-                />
+                <ChartBarSingleBy data={data.flatFiltered} by={(_) => _.displacement} label={DisplacementStatus} />
               </PanelBody>
             </Panel>
           </Div>
         </Div>
-        <Lazy deps={[data.flatFiltered]} fn={() => {
-          if (!data.flatFiltered) return
-          const res: {
-            oblast: OblastName
-            raion: string
-            hromada: string
-            protection_gbv?: number
-            protection_pss?: number
-            protection_hhs2_1?: number
-            protection_groupSession?: number
-            data: {
-              protection_gbv?: any[]
-              protection_pss?: any[]
-              protection_hhs2_1?: any[]
-              protection_groupSession?: any[]
-            }
-          }[] = []
-          groupBy({
-            data: data.flatFiltered,
-            groups: [
-              {by: _ => _.oblast!},
-              {by: _ => _.raion!},
-              {by: _ => _.hromada!},
-            ],
-            finalTransform: (grouped, [
-              oblast,
-              raion,
-              hromada
-            ]) => {
-              const countByForm = grouped.groupBy(_ => _.formId as string)
-              res.push({
-                oblast,
-                raion,
-                hromada,
-                ...Obj.mapValues(countByForm, _ => _.length),
-                data: countByForm,
-              })
-            }
-          }).groups
-          return res
-        }}>
-          {res => (
+        <Lazy
+          deps={[data.flatFiltered]}
+          fn={() => {
+            if (!data.flatFiltered) return
+            const res: {
+              oblast: OblastName
+              raion: string
+              hromada: string
+              protection_gbv?: number
+              protection_pss?: number
+              protection_hhs2_1?: number
+              protection_groupSession?: number
+              data: {
+                protection_gbv?: any[]
+                protection_pss?: any[]
+                protection_hhs2_1?: any[]
+                protection_groupSession?: any[]
+              }
+            }[] = []
+            groupBy({
+              data: data.flatFiltered,
+              groups: [{by: (_) => _.oblast!}, {by: (_) => _.raion!}, {by: (_) => _.hromada!}],
+              finalTransform: (grouped, [oblast, raion, hromada]) => {
+                const countByForm = grouped.groupBy((_) => _.formId as string)
+                res.push({
+                  oblast,
+                  raion,
+                  hromada,
+                  ...Obj.mapValues(countByForm, (_) => _.length),
+                  data: countByForm,
+                })
+              },
+            }).groups
+            return res
+          }}
+        >
+          {(res) => (
             <Panel>
               <Datatable
                 showExportBtn
@@ -190,56 +172,56 @@ const ProtectionOverviewWithContext = () => {
                     type: 'select_one',
                     id: 'oblast',
                     head: 'oblast',
-                    renderQuick: _ => _.oblast,
+                    renderQuick: (_) => _.oblast,
                   },
                   {
                     type: 'select_one',
                     id: 'raion',
                     head: 'raion',
-                    renderQuick: _ => _.raion
+                    renderQuick: (_) => _.raion,
                   },
                   {
                     type: 'select_one',
                     id: 'hromada',
                     head: 'hromada',
-                    renderQuick: _ => _.hromada,
+                    renderQuick: (_) => _.hromada,
                   },
                   {
                     type: 'number',
                     id: 'protection_gbv',
                     head: 'gbv',
-                    renderQuick: _ => _.protection_gbv,
+                    renderQuick: (_) => _.protection_gbv,
                   },
                   {
                     type: 'number',
                     id: 'protection_pss',
                     head: 'pss',
-                    renderQuick: _ => _.protection_pss,
+                    renderQuick: (_) => _.protection_pss,
                   },
                   {
                     type: 'number',
                     id: 'protection_hhs2_1',
                     head: 'hhs',
-                    renderQuick: _ => _.protection_hhs2_1,
+                    renderQuick: (_) => _.protection_hhs2_1,
                   },
                   {
                     type: 'number',
                     id: 'protection_groupSession',
                     head: 'groupSession',
-                    renderQuick: _ => _.protection_groupSession,
+                    renderQuick: (_) => _.protection_groupSession,
                   },
                   {
                     id: 'actions',
                     head: '',
                     width: 120,
-                    renderQuick: _ => (
+                    renderQuick: (_) => (
                       <>
-                        <AiViewAnswers answers={_.data.protection_gbv ?? []}/>
-                        <AiViewAnswers answers={_.data.protection_pss ?? []}/>
-                        <AiViewAnswers answers={_.data.protection_hhs2_1 ?? []}/>
-                        <AiViewAnswers answers={_.data.protection_groupSession ?? []}/>
+                        <AiViewAnswers answers={_.data.protection_gbv ?? []} />
+                        <AiViewAnswers answers={_.data.protection_pss ?? []} />
+                        <AiViewAnswers answers={_.data.protection_hhs2_1 ?? []} />
+                        <AiViewAnswers answers={_.data.protection_groupSession ?? []} />
                       </>
-                    )
+                    ),
                   },
                 ]}
               />

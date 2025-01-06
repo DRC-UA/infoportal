@@ -12,7 +12,6 @@ export interface User {
 }
 
 export class User {
-
   static readonly map = (u: Record<keyof User, any>): User => {
     return {
       ...u,

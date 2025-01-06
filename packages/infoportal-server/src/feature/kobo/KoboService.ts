@@ -10,7 +10,7 @@ import {
   KoboSubmissionMetaData,
   KoboValidation,
   logPerformance,
-  UUID
+  UUID,
 } from 'infoportal-common'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {duration, fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
@@ -29,26 +29,25 @@ import {Util} from '../../helper/Utils'
 import {Kobo} from 'kobo-sdk'
 import Event = GlobalEvent.Event
 
-export type DbKoboAnswer<
-  T extends Record<string, any> = Record<string, any>,
-> = KoboSubmission<T, any> & {formId: Kobo.FormId}
+export type DbKoboAnswer<T extends Record<string, any> = Record<string, any>> = KoboSubmission<T, any> & {
+  formId: Kobo.FormId
+}
 
 export interface KoboAnswerFilter {
-  filters?: KoboAnswersFilters,
+  filters?: KoboAnswersFilters
   paginate?: ApiPagination
 }
 
 interface KoboAnswerSearch<
   TAnswer extends Record<string, any> = Record<string, string | undefined>,
-  TTags extends Record<string, any> | undefined = undefined
+  TTags extends Record<string, any> | undefined = undefined,
 > extends KoboAnswerFilter {
-  formId: UUID,
+  formId: UUID
   fnMap?: (_: Record<string, string | undefined>) => TAnswer
-  fnMapTags?: (_?: any) => TTags,
+  fnMapTags?: (_?: any) => TTags
 }
 
 export class KoboService {
-
   constructor(
     private prisma: PrismaClient,
     private access = new AccessService(prisma),
@@ -57,8 +56,7 @@ export class KoboService {
     private event: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
     private log = app.logger('KoboService'),
     private conf = appConf,
-  ) {
-  }
+  ) {}
 
   static readonly largeForm = new Set([
     KoboIndex.byName('bn_re').id,
@@ -70,34 +68,41 @@ export class KoboService {
     return this.prisma.koboForm.findMany()
   }
 
-  private readonly _searchAnswersByUsersAccess = async ({user, ...params}: {
-    formId: string,
-    filters: KoboAnswersFilters,
+  private readonly _searchAnswersByUsersAccess = async ({
+    user,
+    ...params
+  }: {
+    formId: string
+    filters: KoboAnswersFilters
     paginate?: Partial<ApiPagination>
     user?: UserSession
   }): Promise<ApiPaginate<DbKoboAnswer>> => {
     if (!user) return ApiPaginateHelper.make()([])
     if (!user.admin) {
-      const access = await this.access.searchForUser({featureId: AppFeatureId.kobo_database, user})
-        .then(_ => seq(_).filter(_ => _.params?.koboFormId === params.formId))
+      const access = await this.access
+        .searchForUser({featureId: AppFeatureId.kobo_database, user})
+        .then((_) => seq(_).filter((_) => _.params?.koboFormId === params.formId))
       if (access.length === 0) return ApiPaginateHelper.make()([])
-      const hasEmptyFilter = access.some(_ => !_.params?.filters || Object.keys(_.params.filters).length === 0)
+      const hasEmptyFilter = access.some((_) => !_.params?.filters || Object.keys(_.params.filters).length === 0)
       if (!hasEmptyFilter) {
-        const accessFilters = access.map(_ => _.params?.filters).compact().reduce<Record<string, string[]>>((acc, x) => {
-          Obj.entries(x).forEach(([k, v]) => {
-            if (Array.isArray(x[k])) {
-              acc[k] = seq([...acc[k] ?? [], ...x[k] ?? []]).distinct(_ => _)
-            } else {
-              acc[k] = v as any
-            }
-          })
-          return acc
-        }, {} as const)
+        const accessFilters = access
+          .map((_) => _.params?.filters)
+          .compact()
+          .reduce<Record<string, string[]>>((acc, x) => {
+            Obj.entries(x).forEach(([k, v]) => {
+              if (Array.isArray(x[k])) {
+                acc[k] = seq([...(acc[k] ?? []), ...(x[k] ?? [])]).distinct((_) => _)
+              } else {
+                acc[k] = v as any
+              }
+            })
+            return acc
+          }, {} as const)
         Obj.entries(accessFilters).forEach(([question, answer]) => {
           if (!params.filters.filterBy) params.filters.filterBy = []
           params.filters.filterBy?.push({
             column: question,
-            value: answer
+            value: answer,
           })
         })
       }
@@ -107,43 +112,39 @@ export class KoboService {
 
   readonly searchAnswersByUsersAccess = logPerformance({
     message: (p) => `Fetch ${KoboIndex.searchById(p.formId)?.name ?? p.formId} by ${p.user?.email}`,
-    showResult: res => `(${res ? res.data.length : '...'} rows)`,
+    showResult: (res) => `(${res ? res.data.length : '...'} rows)`,
     logger: (m: string) => this.log.info(m),
     fn: this._searchAnswersByUsersAccess,
   })
 
-
-  readonly searchAnswers =
-    app.cache.request({
-      key: AppCacheKey.KoboAnswers,
-      cacheIf: (params) => {
-        return false
-        // return KoboService.largeForm.has(params.formId)
-        //   && Object.keys(params.filters ?? {}).length === 0
-        //   && Object.keys(params.paginate ?? {}).length === 0
-      },
-      genIndex: p => p.formId,
-      ttlMs: duration(1, 'day').toMs,
-      fn:
-        (params: {
-          // includeMeta?: boolean
-          formId: string,
-          filters?: KoboAnswersFilters,
-          paginate?: Partial<ApiPagination>
-        }): Promise<ApiPaginate<DbKoboAnswer>> => {
-          const {
-            formId,
-            filters = {},
-            paginate = defaultPagination,
-            // includeMeta,
-          } = params
-          return this.prisma.koboAnswers.findMany({
+  readonly searchAnswers = app.cache.request({
+    key: AppCacheKey.KoboAnswers,
+    cacheIf: (params) => {
+      return false
+      // return KoboService.largeForm.has(params.formId)
+      //   && Object.keys(params.filters ?? {}).length === 0
+      //   && Object.keys(params.paginate ?? {}).length === 0
+    },
+    genIndex: (p) => p.formId,
+    ttlMs: duration(1, 'day').toMs,
+    fn: (params: {
+      // includeMeta?: boolean
+      formId: string
+      filters?: KoboAnswersFilters
+      paginate?: Partial<ApiPagination>
+    }): Promise<ApiPaginate<DbKoboAnswer>> => {
+      const {
+        formId,
+        filters = {},
+        paginate = defaultPagination,
+        // includeMeta,
+      } = params
+      return (
+        this.prisma.koboAnswers
+          .findMany({
             take: paginate.limit,
             skip: paginate.offset,
-            orderBy: [
-              {date: 'desc',},
-              {submissionTime: 'desc',},
-            ],
+            orderBy: [{date: 'desc'}, {submissionTime: 'desc'}],
             // ...includeMeta ? {
             //   include: {
             //     meta: includeMeta,
@@ -157,49 +158,60 @@ export class KoboService {
               },
               formId,
               AND: {
-                OR: filters.filterBy?.flatMap((filter) => Util.ensureArr(filter.value).map(v => ({
-                  answers: {
-                    path: [filter.column],
-                    ...v ? {
-                      ['string_contains']: v
-                    } : {
-                      equals: Prisma.DbNull,
-                    }
-                  }
-                })))
-              }
-            }
-          }).then(_ => _.map(d => ({
-            start: d.start,
-            end: d.end,
-            date: d.date,
-            version: d.version ?? undefined,
-            attachments: d.attachments as Kobo.Submission.Attachment[],
-            geolocation: d.geolocation as any,
-            submissionTime: d.submissionTime,
-            id: d.id,
-            uuid: d.uuid,
-            validationStatus: d.validationStatus as any,
-            validatedBy: d.validatedBy ?? undefined,
-            lastValidatedTimestamp: d.lastValidatedTimestamp ?? undefined,
-            answers: d.answers as any,
-            formId: d.formId,
-            tags: d.tags,
-          })))
-            // .then(_ => {
-            //   if (_?.[0].answers.date)
-            //     return _.sort((a, b) => {
-            //       return (b.answers.date as string ?? b.submissionTime.toISOString()).localeCompare(
-            //         a.answers.date as string ?? a.submissionTime.toISOString()
-            //       )
-            //     })
-            //   return _
-            // })
-            .then(ApiPaginateHelper.make())
-        }
-    })
+                OR: filters.filterBy?.flatMap((filter) =>
+                  Util.ensureArr(filter.value).map((v) => ({
+                    answers: {
+                      path: [filter.column],
+                      ...(v
+                        ? {
+                            ['string_contains']: v,
+                          }
+                        : {
+                            equals: Prisma.DbNull,
+                          }),
+                    },
+                  })),
+                ),
+              },
+            },
+          })
+          .then((_) =>
+            _.map((d) => ({
+              start: d.start,
+              end: d.end,
+              date: d.date,
+              version: d.version ?? undefined,
+              attachments: d.attachments as Kobo.Submission.Attachment[],
+              geolocation: d.geolocation as any,
+              submissionTime: d.submissionTime,
+              id: d.id,
+              uuid: d.uuid,
+              validationStatus: d.validationStatus as any,
+              validatedBy: d.validatedBy ?? undefined,
+              lastValidatedTimestamp: d.lastValidatedTimestamp ?? undefined,
+              answers: d.answers as any,
+              formId: d.formId,
+              tags: d.tags,
+            })),
+          )
+          // .then(_ => {
+          //   if (_?.[0].answers.date)
+          //     return _.sort((a, b) => {
+          //       return (b.answers.date as string ?? b.submissionTime.toISOString()).localeCompare(
+          //         a.answers.date as string ?? a.submissionTime.toISOString()
+          //       )
+          //     })
+          //   return _
+          // })
+          .then(ApiPaginateHelper.make())
+      )
+    },
+  })
 
-  private static readonly mapKoboAnswer = (formId: Kobo.FormId, _: KoboSubmission): Prisma.KoboAnswersUncheckedCreateInput => {
+  private static readonly mapKoboAnswer = (
+    formId: Kobo.FormId,
+    _: KoboSubmission,
+  ): Prisma.KoboAnswersUncheckedCreateInput => {
     return {
       formId,
       answers: _.answers,
@@ -223,7 +235,7 @@ export class KoboService {
   }
 
   readonly createMany = (formId: Kobo.FormId, answers: KoboSubmission[]) => {
-    const inserts = answers.map(_ => KoboService.mapKoboAnswer(formId, _))
+    const inserts = answers.map((_) => KoboService.mapKoboAnswer(formId, _))
     return this.prisma.koboAnswers.createMany({
       data: inserts,
       skipDuplicates: true,
@@ -310,7 +322,7 @@ export class KoboService {
 
   readonly getSchema = app.cache.request({
     key: AppCacheKey.KoboSchema,
-    genIndex: _ => _.formId,
+    genIndex: (_) => _.formId,
     ttlMs: duration(2, 'day').toMs,
     fn: async ({formId}: {formId: Kobo.FormId}): Promise<Kobo.Form> => {
       const sdk = await this.sdkGenerator.getBy.formId(formId)
@@ -323,9 +335,9 @@ export class KoboService {
     langIndex,
     data,
   }: {
-    formId: Kobo.FormId,
-    langIndex: number,
-    data: DbKoboAnswer[],
+    formId: Kobo.FormId
+    langIndex: number
+    data: DbKoboAnswer[]
   }) => {
     const koboQuestionType: Kobo.Form.QuestionType[] = [
       'text',
@@ -338,23 +350,36 @@ export class KoboService {
     ]
     const flatAnswers = data.map(({answers, ...meta}) => ({...meta, ...answers}))
     const koboFormDetails = await this.getSchema({formId})
-    const indexLabel = seq(koboFormDetails.content.survey).compactBy('name').filter(_ => koboQuestionType.includes(_.type)).reduceObject<Record<string, Kobo.Form.Question>>(_ => [_.name, _])
-    const indexOptionsLabels = seq(koboFormDetails.content.choices).reduceObject<Record<string, undefined | string>>(_ => [_.name, _.label?.[langIndex]])
-    return flatAnswers.map(d => {
+    const indexLabel = seq(koboFormDetails.content.survey)
+      .compactBy('name')
+      .filter((_) => koboQuestionType.includes(_.type))
+      .reduceObject<Record<string, Kobo.Form.Question>>((_) => [_.name, _])
+    const indexOptionsLabels = seq(koboFormDetails.content.choices).reduceObject<Record<string, undefined | string>>(
+      (_) => [_.name, _.label?.[langIndex]],
+    )
+    return flatAnswers.map((d) => {
       const translated = {} as DbKoboAnswer
-      Obj.keys(d).forEach(k => {
+      Obj.keys(d).forEach((k) => {
         const translatedKey = indexLabel[k]?.label?.[langIndex] ?? k
         const translatedValue = (() => {
           if (k === 'submissionTime') {
             return format(d[k], 'yyyy-MM-dd')
           }
-          return fnSwitch(indexLabel[k]?.type, {
-            'select_multiple': () => d[k]?.split(' ').map((_: any) => indexOptionsLabels[_]).join('|'),
-            'start': () => format(d[k], 'yyyy-MM-dd'),
-            'end': () => format(d[k], 'yyyy-MM-dd'),
-          }, _ => indexOptionsLabels[d[k]] ?? d[k])
-        })();
-        (translated as any)[translatedKey.replace(/(<([^>]+)>)/gi, '')] = translatedValue
+          return fnSwitch(
+            indexLabel[k]?.type,
+            {
+              select_multiple: () =>
+                d[k]
+                  ?.split(' ')
+                  .map((_: any) => indexOptionsLabels[_])
+                  .join('|'),
+              start: () => format(d[k], 'yyyy-MM-dd'),
+              end: () => format(d[k], 'yyyy-MM-dd'),
+            },
+            (_) => indexOptionsLabels[d[k]] ?? d[k],
+          )
+        })()
+        ;(translated as any)[translatedKey.replace(/(<([^>]+)>)/gi, '')] = translatedValue
       })
       return translated
     })
@@ -406,10 +431,10 @@ export class KoboService {
   //   workbook.toFileAsync(appConf.rootProjectDir + `/${fileName}.xlsx`, {password})
   // }
 
-  private static readonly safeJsonValue = (_: string): string => _.replace(/'/g, '\'\'')
+  private static readonly safeJsonValue = (_: string): string => _.replace(/'/g, "''")
 
   private static readonly safeIds = (ids: string[]): string[] => {
-    return ids.map(_ => {
+    return ids.map((_) => {
       if (!/^\d+$/.test(_)) throw new AppError.WrongFormat(`Invalid id ${_}`)
       return `'${_}'`
     })
@@ -432,10 +457,10 @@ export class KoboService {
         },
         where: {
           formId,
-          id: {in: answerIds}
-        }
+          id: {in: answerIds},
+        },
       }),
-      this.sdkGenerator.getBy.formId(formId).then(_ => _.v2.delete(formId, answerIds)),
+      this.sdkGenerator.getBy.formId(formId).then((_) => _.v2.delete(formId, answerIds)),
     ])
     this.history.create({
       type: 'delete',
@@ -452,16 +477,16 @@ export class KoboService {
     answer,
     authorEmail = 'system',
   }: {
-    authorEmail?: string,
-    formId: Kobo.FormId,
-    answerIds: Kobo.SubmissionId[],
-    question: string,
+    authorEmail?: string
+    formId: Kobo.FormId
+    answerIds: Kobo.SubmissionId[]
+    question: string
     answer?: string
   }) => {
     answer = Array.isArray(answer) ? answer.join(' ') : answer
     const [sdk, xpath] = await Promise.all([
       this.sdkGenerator.getBy.formId(formId),
-      this.getSchema({formId}).then(_ => _.content.survey.find(_ => _.name === question)?.$xpath),
+      this.getSchema({formId}).then((_) => _.content.survey.find((_) => _.name === question)?.$xpath),
     ])
     if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)
     await Promise.all([
@@ -479,38 +504,52 @@ export class KoboService {
          SET answers     = jsonb_set(answers, '{${question}}', '"${KoboService.safeJsonValue(answer ?? '')}"'),
              "updatedAt" = NOW()
          WHERE id IN (${KoboService.safeIds(answerIds).join(',')})
-        `),
+        `,
+      ),
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED_FROM_IP, {formId, answerIds, answer: {[question]: answer}})
   }
 
-  readonly updateValidation = async ({formId, answerIds, status, authorEmail}: {
-    formId: Kobo.FormId,
-    answerIds: Kobo.SubmissionId[],
-    status: KoboValidation,
+  readonly updateValidation = async ({
+    formId,
+    answerIds,
+    status,
+    authorEmail,
+  }: {
+    formId: Kobo.FormId
+    answerIds: Kobo.SubmissionId[]
+    status: KoboValidation
     authorEmail: string
   }) => {
     const mappedValidation = KoboHelper.mapValidation.toKobo(status)
     const validationKey: keyof KoboSubmissionMetaData = 'validationStatus'
     const sdk = await this.sdkGenerator.getBy.formId(formId)
-    const [sqlRes,] = await Promise.all([
+    const [sqlRes] = await Promise.all([
       this.prisma.koboAnswers.updateMany({
         where: {id: {in: answerIds}},
         data: {
           validationStatus: status,
           updatedAt: new Date(),
-        }
+        },
       }),
       (async () => {
         if (mappedValidation._validation_status) {
           await Promise.all([
             sdk.v2.updateValidation({formId, submissionIds: answerIds, status: mappedValidation._validation_status}),
-            sdk.v2.updateData({formId, submissionIds: answerIds, data: {[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]: null}}),
+            sdk.v2.updateData({
+              formId,
+              submissionIds: answerIds,
+              data: {[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]: null},
+            }),
           ])
         } else {
           await Promise.all([
-            sdk.v2.updateData({formId, submissionIds: answerIds, data: {[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]: mappedValidation._IP_VALIDATION_STATUS_EXTRA}}),
-            sdk.v2.updateValidation({formId, submissionIds: answerIds, status: Kobo.Submission.Validation.no_status})
+            sdk.v2.updateData({
+              formId,
+              submissionIds: answerIds,
+              data: {[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]: mappedValidation._IP_VALIDATION_STATUS_EXTRA},
+            }),
+            sdk.v2.updateValidation({formId, submissionIds: answerIds, status: Kobo.Submission.Validation.no_status}),
           ])
         }
       })(),
@@ -526,14 +565,25 @@ export class KoboService {
     return sqlRes
   }
 
-  readonly updateTags = async ({formId, answerIds, tags, authorEmail}: {formId: Kobo.FormId, answerIds: Kobo.SubmissionId[], tags: Record<string, any>, authorEmail: string}) => {
+  readonly updateTags = async ({
+    formId,
+    answerIds,
+    tags,
+    authorEmail,
+  }: {
+    formId: Kobo.FormId
+    answerIds: Kobo.SubmissionId[]
+    tags: Record<string, any>
+    authorEmail: string
+  }) => {
     const safeTags = Obj.keys(tags)
-      .map(key => {
+      .map((key) => {
         if (/[{}'"]/.test(key)) throw new AppError.WrongFormat(`Invalid key ${key}`)
         return `tags = jsonb_set(COALESCE(tags, '{}'::jsonb), '{${key}}', '${KoboService.safeJsonValue(JSON.stringify(tags[key]))}')`
-      }).join(',')
+      })
+      .join(',')
     await Promise.all([
-      Obj.keys(tags).map(tag => {
+      Obj.keys(tags).map((tag) => {
         this.history.create({
           type: 'tag',
           formId,
@@ -548,7 +598,8 @@ export class KoboService {
          SET ${safeTags},
              "updatedAt" = NOW()
          WHERE id IN (${KoboService.safeIds(answerIds).join(',')})
-        `)
+        `,
+      ),
     ])
     // const answers = await this.prisma.koboAnswers.findMany({
     //   select: {

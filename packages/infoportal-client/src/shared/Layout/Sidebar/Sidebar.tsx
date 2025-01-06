@@ -26,7 +26,7 @@ const stickSidebarToHeader = (sidebarId: string, headerId: string) => {
   }
   // setTimeout(() => {
   if (sidebar && header) {
-    sidebar.style.top = (header.getBoundingClientRect().y + header.getBoundingClientRect().height) + 'px'
+    sidebar.style.top = header.getBoundingClientRect().y + header.getBoundingClientRect().height + 'px'
     //Math.max(header.offsetHeight < window.scrollY ? header.offsetHeight : header.offsetHeight - window.scrollY, 0) + 'px'
   }
   // }, 0)
@@ -48,9 +48,8 @@ export const Sidebar = ({
     // Element has been re-created by SwipeableDrawer, thus variable point to nothing.
     sidebar = null
     header = null
-    if (headerId)
-      stickSidebarToHeader(id, headerId)
-    setSidebarOpen(_ => !isMobileWidth)
+    if (headerId) stickSidebarToHeader(id, headerId)
+    setSidebarOpen((_) => !isMobileWidth)
   }, [isMobileWidth, sidebarPinned])
 
   useEffect(() => {
@@ -58,7 +57,7 @@ export const Sidebar = ({
       stickSidebarToHeader(id, headerId)
       window.addEventListener('scroll', () => stickSidebarToHeader(id, headerId), {
         capture: true,
-        passive: true
+        passive: true,
       })
     }
   }, [])
@@ -92,10 +91,10 @@ export const Sidebar = ({
     >
       <Box
         sx={{
-          background: isTemporary ? t => t.palette.background.default : undefined,
+          background: isTemporary ? (t) => t.palette.background.default : undefined,
           width: layoutConfig.sidebarWith,
           height: '100%',
-          transition: t => t.transitions.create('width'),
+          transition: (t) => t.transitions.create('width'),
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
@@ -104,7 +103,7 @@ export const Sidebar = ({
         }}
         {...props}
       >
-        <SidebarHeader hidden={!isTemporary}/>
+        <SidebarHeader hidden={!isTemporary} />
         <SidebarBody>{children}</SidebarBody>
         {/*<Icon onClick={() => setDarkTheme(_ => !_)}>{darkTheme ? 'light_mode' : 'dark_mode'}</Icon>*/}
         <SidebarFooter>
@@ -113,9 +112,13 @@ export const Sidebar = ({
           {/*  <Switch color="primary" sx={{ml: 'auto'}} checked={darkTheme}/>*/}
           {/*</SidebarItem>*/}
           {!isMobileWidth && (
-            <SidebarItem onClick={stopPropagation(() => setSidebarPinned(_ => !_))} icon="push_pin" sx={{mr: 0, pr: 0}}>
+            <SidebarItem
+              onClick={stopPropagation(() => setSidebarPinned((_) => !_))}
+              icon="push_pin"
+              sx={{mr: 0, pr: 0}}
+            >
               {m.pin}
-              <Switch color="primary" sx={{ml: 'auto'}} checked={sidebarPinned}/>
+              <Switch color="primary" sx={{ml: 'auto'}} checked={sidebarPinned} />
             </SidebarItem>
           )}
         </SidebarFooter>

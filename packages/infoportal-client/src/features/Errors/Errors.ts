@@ -1,3 +1,1 @@
-export const Errors = {
-
-}
+export const Errors = {}

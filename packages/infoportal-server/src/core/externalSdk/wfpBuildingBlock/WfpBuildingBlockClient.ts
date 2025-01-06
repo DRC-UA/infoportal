@@ -3,13 +3,14 @@ import {ApiClient} from 'kobo-sdk'
 import fetch from 'node-fetch'
 
 export class WfpBuildingBlockClient {
-
-  constructor(private params: {
-    otpUrl: string
-    login: string,
-    password: string,
-    baseURL?: string,
-  }) {
+  constructor(
+    private params: {
+      otpUrl: string
+      login: string
+      password: string
+      baseURL?: string
+    },
+  ) {
     this.params = {
       baseURL: 'https://buildingblocks.ukr.wfp.org/api',
       ...params,
@@ -31,16 +32,18 @@ export class WfpBuildingBlockClient {
     return fetch(this.params.baseURL + '/manager/auth', {
       method: 'POST',
       headers: {
-        'accept': 'application/json',
-        'content-type': 'application/json'
+        accept: 'application/json',
+        'content-type': 'application/json',
       },
       body: JSON.stringify({
-        'email': this.params.login,
-        'password': this.params.password,
-        'resetOtp': false,
-        'otp': this.getOtpCode(),
-      })
-    }).then(_ => _.json()).then((_: any) => _.apiToken)
+        email: this.params.login,
+        password: this.params.password,
+        resetOtp: false,
+        otp: this.getOtpCode(),
+      }),
+    })
+      .then((_) => _.json())
+      .then((_: any) => _.apiToken)
   }
 
   generate = async () => {
@@ -48,8 +51,8 @@ export class WfpBuildingBlockClient {
     return new ApiClient({
       baseUrl: this.params.baseURL!,
       headers: {
-        Authorization: token
-      }
+        Authorization: token,
+      },
     })
   }
 }

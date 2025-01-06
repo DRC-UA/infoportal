@@ -9,10 +9,10 @@ export const appConf = {
   rootProjectDir: e(required)('ROOT_PROJECT_DIR'),
   db: {
     maxConcurrency: e(int, defaultValue(50))('DATABASE_MAX_CONCURRENCY'),
-    url: e(required)('DATABASE_URL')
+    url: e(required)('DATABASE_URL'),
   },
   activityInfo: {
-    apiToken: e(required)('ACTIVITY_INFO_API_TOKEN')
+    apiToken: e(required)('ACTIVITY_INFO_API_TOKEN'),
   },
   //   host: e(required)('DB_HOST'),
   //   user: e(required)('DB_USER'),

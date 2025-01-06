@@ -50,7 +50,7 @@ const koboIndex = {
   protection_referral: 'a62ZpworuN4nFLznsUej8r',
   protection_counselling: 'a2ck63vPA7hkk8aEhNTSUJ',
   protection_gbvSocialProviders: 'aKrbJdapRxfdPgXb3KqzHd',
-  protection_pfa_training_test:'a68LY3yZUXn6iTNvDCivtB',
+  protection_pfa_training_test: 'a68LY3yZUXn6iTNvDCivtB',
   partnership_partnersDatabase: 'aLs32U5Qc9HfQ5mxQtsEML',
   partnership_initialQuestionnaire: 'a6u7CBysEz746Hdx6pVLzp',
   partnership_assessment: 'aLD2Xc9cKSY22c5cAP5utT',
@@ -117,7 +117,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   protection_gbvSocialProviders: '[Protection] GBV Survey for social service providers',
   protection_coc: '[Protection] GBV PSEAH & CoC Training',
   protection_referral: '[Protection] Referral Tracking Form',
-  protection_pfa_training_test:'[Protection] PFA Training - Pre/post test',
+  protection_pfa_training_test: '[Protection] PFA Training - Pre/post test',
   partnership_assessment: '[Partnership] CBP CSO Assessment',
   partnership_initialQuestionnaire: '[Partnership] CBP CSO Initial Questionnaire',
   partnership_partnersDatabase: '[Partnership] DRC Partners Database',
@@ -131,7 +131,6 @@ const koboFormTranslation: Record<KoboFormName, string> = {
 export type KoboFormName = keyof typeof koboIndex
 
 export namespace KoboIndex {
-
   export interface ParsedForm {
     name: string
     program?: string
@@ -162,7 +161,7 @@ export namespace KoboIndex {
       name,
       id,
       translation,
-      parsed: parseFormName(translation)
+      parsed: parseFormName(translation),
     }
   }
 

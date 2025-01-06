@@ -12,14 +12,13 @@ import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 
-export const snapshotAlternateColor = (t: Theme) => alpha(t.palette.primary.main, .26)//t.palette.grey[500]
+export const snapshotAlternateColor = (t: Theme) => alpha(t.palette.primary.main, 0.26) //t.palette.grey[500]
 
-export const snapshotColors = (t: Theme) => [
-  t.palette.primary.main,
-  snapshotAlternateColor(t),
-]
+export const snapshotColors = (t: Theme) => [t.palette.primary.main, snapshotAlternateColor(t)]
 
-export const snapShotDefaultPieIndicatorsProps: Partial<Pick<ChartPieIndicatorProps, 'hideIndicatorTooltip' | 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'>> = {
+export const snapShotDefaultPieIndicatorsProps: Partial<
+  Pick<ChartPieIndicatorProps, 'hideIndicatorTooltip' | 'dense' | 'evolution' | 'showValue' | 'sx' | 'showBase'>
+> = {
   dense: true,
   hideIndicatorTooltip: true,
   showBase: true,
@@ -27,7 +26,7 @@ export const snapShotDefaultPieIndicatorsProps: Partial<Pick<ChartPieIndicatorPr
   evolution: undefined,
   sx: {
     mb: 1,
-  }
+  },
 }
 
 export const SnapshotProtMonitoEcho = () => {
@@ -38,12 +37,12 @@ export const SnapshotProtMonitoEcho = () => {
           start: startOfMonth(subMonths(new Date(), 1)),
           end: endOfMonth(subMonths(new Date(), 1)),
         }}
-        periodCompare={p => ({
+        periodCompare={(p) => ({
           start: subMonths(p.start, 1),
           end: subMonths(p.end, 1),
         })}
       >
-        <_SnapshotProtMonitoring/>
+        <_SnapshotProtMonitoring />
       </ProtectionMonito.Provider>
     </>
   )
@@ -54,14 +53,17 @@ const _SnapshotProtMonitoring = () => {
   return (
     <Pdf>
       <Box sx={{'@media print': {display: 'none'}}}>
-        <PeriodPicker value={[ctx.period.start, ctx.period.end]} onChange={_ => ctx.setPeriod({start: _[0], end: _[1]})}/>
+        <PeriodPicker
+          value={[ctx.period.start, ctx.period.end]}
+          onChange={(_) => ctx.setPeriod({start: _[0], end: _[1]})}
+        />
       </Box>
-      <SnapshotProtMonitoEchoSample/>
-      <SnapshotProtMonitoEchoDisplacement/>
-      <SnapshotProtMonitoEchoRegistration/>
-      <SnapshotProtMonitoEchoSafety/>
-      <SnapshotProtMonitoEchoNeeds/>
-      <SnapshotProtMonitoEchoLivelihood/>
+      <SnapshotProtMonitoEchoSample />
+      <SnapshotProtMonitoEchoDisplacement />
+      <SnapshotProtMonitoEchoRegistration />
+      <SnapshotProtMonitoEchoSafety />
+      <SnapshotProtMonitoEchoNeeds />
+      <SnapshotProtMonitoEchoLivelihood />
     </Pdf>
   )
 }

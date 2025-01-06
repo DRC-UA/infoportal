@@ -12,7 +12,6 @@ export interface Proxy {
 }
 
 export class Proxy {
-
   static readonly map = (_: any): Proxy => {
     return {
       ..._,

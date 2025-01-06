@@ -24,8 +24,7 @@ import {DatabaseViewSdk} from '@/core/sdk/server/databaseView/DatabaseViewSdk'
 import {ImportFromXlsDataSdk} from '@/core/sdk/server/importXls/ImportFromXlsSdk'
 
 export class ApiSdk {
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   readonly proxyRequest = <T = any>(method: Method, url: string, options?: RequestOption) => {
     return this.client.post<T>(`/proxy-request`, {
@@ -35,8 +34,8 @@ export class ApiSdk {
         url,
         body: options?.body,
         headers: options?.headers,
-        mapData: (_: any) => _
-      }
+        mapData: (_: any) => _,
+      },
     })
   }
   readonly session = new SessionSdk(this.client)

@@ -21,7 +21,7 @@ export interface ScRadioGroupItemProps<T> extends Omit<BoxProps, 'title'> {
   multiple?: boolean
 }
 
-export const ScRadioGroupItem = <T, >({
+export const ScRadioGroupItem = <T,>({
   title,
   description,
   error,
@@ -52,66 +52,70 @@ export const ScRadioGroupItem = <T, >({
         px: dense ? 1.5 : 2,
         display: 'flex',
         alignItems: 'flex-start',
-        border: t => '1px solid ' + t.palette.divider,
+        border: (t) => '1px solid ' + t.palette.divider,
         paddingBottom: '2px',
         transition: 'all .2s ease-in-out',
         cursor: 'pointer',
-        ...inline ? {
-          borderRightColor: 'transparent',
-          '&:last-of-type': {
-            borderRight: t => '1px solid ' + t.palette.divider,
-            borderBottomRightRadius: t => t.shape.borderRadius,
-            borderTopRightRadius: t => t.shape.borderRadius,
-          },
-          '&:first-of-type': {
-            borderBottomLeftRadius: t => t.shape.borderRadius,
-            borderTopLeftRadius: t => t.shape.borderRadius,
-          },
-          '&:not(:first-of-type)': {
-            marginLeft: '-1px',
-          },
-        } : {
-          borderBottomColor: 'transparent',
-          '&:last-of-type': {
-            borderBottom: t => '1px solid ' + t.palette.divider,
-            borderBottomRightRadius: t => t.shape.borderRadius,
-            borderBottomLeftRadius: t => t.shape.borderRadius,
-          },
-          '&:first-of-type': {
-            borderTopRightRadius: t => t.shape.borderRadius,
-            borderTopLeftRadius: t => t.shape.borderRadius,
-          },
-          '&:not(:first-of-type)': {
-            marginTop: '-2px',
-          },
-        },
-        '&:hover': disabled ? {} : {
+        ...(inline
+          ? {
+              borderRightColor: 'transparent',
+              '&:last-of-type': {
+                borderRight: (t) => '1px solid ' + t.palette.divider,
+                borderBottomRightRadius: (t) => t.shape.borderRadius,
+                borderTopRightRadius: (t) => t.shape.borderRadius,
+              },
+              '&:first-of-type': {
+                borderBottomLeftRadius: (t) => t.shape.borderRadius,
+                borderTopLeftRadius: (t) => t.shape.borderRadius,
+              },
+              '&:not(:first-of-type)': {
+                marginLeft: '-1px',
+              },
+            }
+          : {
+              borderBottomColor: 'transparent',
+              '&:last-of-type': {
+                borderBottom: (t) => '1px solid ' + t.palette.divider,
+                borderBottomRightRadius: (t) => t.shape.borderRadius,
+                borderBottomLeftRadius: (t) => t.shape.borderRadius,
+              },
+              '&:first-of-type': {
+                borderTopRightRadius: (t) => t.shape.borderRadius,
+                borderTopLeftRadius: (t) => t.shape.borderRadius,
+              },
+              '&:not(:first-of-type)': {
+                marginTop: '-2px',
+              },
+            }),
+        '&:hover': disabled
+          ? {}
+          : {
+              zIndex: 1,
+              border: (t) => `1px solid ${t.palette.primary.main}`,
+              background: 'rgba(0,0,0,.04)',
+            },
+        ...(disabled && {
+          opacity: 0.8,
+        }),
+        ...(selected && {
           zIndex: 1,
-          border: t => `1px solid ${t.palette.primary.main}`,
-          background: 'rgba(0,0,0,.04)',
-        },
-        ...disabled && {
-          opacity: .8,
-        },
-        ...selected && {
-          zIndex: 1,
-          border: t => `1px solid ${t.palette.primary.main} !important`,
-          background: t => alpha(t.palette.primary.main, 0.1),
-          boxShadow: t => `inset 0 0 0 1px ${t.palette.primary.main}`,
-        },
-        ...error && {
+          border: (t) => `1px solid ${t.palette.primary.main} !important`,
+          background: (t) => alpha(t.palette.primary.main, 0.1),
+          boxShadow: (t) => `inset 0 0 0 1px ${t.palette.primary.main}`,
+        }),
+        ...(error && {
           '&$rootSelected': {
-            borderColor: t => t.palette.error.main + ' !important',
+            borderColor: (t) => t.palette.error.main + ' !important',
           },
-          boxShadow: t => `inset 0 0 0 1px ${t.palette.error.main}`,
-        }
+          boxShadow: (t) => `inset 0 0 0 1px ${t.palette.error.main}`,
+        }),
       }}
       // className={classes(css.root, selected && css.rootSelected, error && css.rootError, className)}
       onClick={onClick}
       {...rest}
     >
-      {!hideRadio && (
-        multiple ? (
+      {!hideRadio &&
+        (multiple ? (
           <Checkbox
             disabled={disabled}
             size={dense ? 'small' : undefined}
@@ -120,7 +124,8 @@ export const ScRadioGroupItem = <T, >({
               marginLeft: -1,
               marginRight: 0,
               minHeight: minHeight,
-            }}/>
+            }}
+          />
         ) : (
           <Radio
             size="small"
@@ -133,10 +138,11 @@ export const ScRadioGroupItem = <T, >({
               minHeight: minHeight,
             }}
           />
-        )
-      )}
+        ))}
       {before}
-      {icon && <Icon sx={{color: iconColor ?? (t => t.palette.text.disabled), mr: 1, alignSelf: 'center'}}>{icon}</Icon>}
+      {icon && (
+        <Icon sx={{color: iconColor ?? ((t) => t.palette.text.disabled), mr: 1, alignSelf: 'center'}}>{icon}</Icon>
+      )}
       <Box
         sx={{
           alignSelf: 'center',
@@ -146,18 +152,15 @@ export const ScRadioGroupItem = <T, >({
           pb: 1.5,
           flexDirection: 'column',
           width: '100%',
-          ...dense && {
-            pt: .5,
-            pb: .5,
-          }
-        }}>
-        {title && (
-          <Box>
-            {title}
-          </Box>
-        )}
+          ...(dense && {
+            pt: 0.5,
+            pb: 0.5,
+          }),
+        }}
+      >
+        {title && <Box>{title}</Box>}
         {description && (
-          <Box sx={{color: t => t.palette.text.secondary, fontSize: t => t.typography.fontSize * 0.90}}>
+          <Box sx={{color: (t) => t.palette.text.secondary, fontSize: (t) => t.typography.fontSize * 0.9}}>
             {description}
           </Box>
         )}

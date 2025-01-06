@@ -7,7 +7,7 @@ export const PopoverWrapper = ({
   popoverProps,
   ...props
 }: {
-  children: ReactElement<any>,
+  children: ReactElement<any>
   content: (close: () => void) => ReactNode
   popoverProps?: Omit<PopoverProps, 'children' | 'anchorEl' | 'open' | 'onClose'>
 }) => {
@@ -32,15 +32,9 @@ export const PopoverWrapper = ({
         onClick: (event: any) => {
           if (children.props.onClick) children.props.onClick(event)
           handleClick(event)
-        }
+        },
       })}
-      <Popover
-        {...popoverProps}
-        children={resovledContent}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-      />
+      <Popover {...popoverProps} children={resovledContent} open={open} anchorEl={anchorEl} onClose={handleClose} />
     </>
   )
 }

@@ -11,13 +11,8 @@ export const ChartBarMultipleByKey = <
   by,
   ...props
 }: Omit<ChartBarMultipleByProps<D, R, O>, 'by'> & {
-  property: K,
-  by?: (_: D[K]) => R[] | undefined,
+  property: K
+  by?: (_: D[K]) => R[] | undefined
 }) => {
-  return (
-    <ChartBarMultipleBy
-      by={_ => by ? by(_[property]) : _[property]}
-      {...props}
-    />
-  )
+  return <ChartBarMultipleBy by={(_) => (by ? by(_[property]) : _[property])} {...props} />
 }

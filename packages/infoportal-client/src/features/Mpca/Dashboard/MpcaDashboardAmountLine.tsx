@@ -15,27 +15,24 @@ export const MpcaDashboardAmountLine = ({
 }) => {
   const {m} = useI18n()
   return (
-    <Lazy deps={[data, getAmount]} fn={() => {
-      const gb = data.groupBy(d => format(d.date, 'yyyy-MM'))
-      return new Obj(gb)
-        .map((k, v) => [k, {
-          count: v.length,
-          amount: seq(v).sum(_ => (getAmount(_) ?? 0))
-        }])
-        .sort(([ka], [kb]) => ka.localeCompare(kb))
-        .entries()
-        .map(([k, v]) => ({name: k, [m.submissionTime]: v.count, [m.amount]: v.amount}))
-    }}>
-      {_ => (
-        <ChartLine
-          fixMissingMonths
-          hideYTicks
-          height={200}
-          data={_ as any}
-          hideLabelToggle
-          distinctYAxis
-        />
-      )}
+    <Lazy
+      deps={[data, getAmount]}
+      fn={() => {
+        const gb = data.groupBy((d) => format(d.date, 'yyyy-MM'))
+        return new Obj(gb)
+          .map((k, v) => [
+            k,
+            {
+              count: v.length,
+              amount: seq(v).sum((_) => getAmount(_) ?? 0),
+            },
+          ])
+          .sort(([ka], [kb]) => ka.localeCompare(kb))
+          .entries()
+          .map(([k, v]) => ({name: k, [m.submissionTime]: v.count, [m.amount]: v.amount}))
+      }}
+    >
+      {(_) => <ChartLine fixMissingMonths hideYTicks height={200} data={_ as any} hideLabelToggle distinctYAxis />}
     </Lazy>
   )
 }

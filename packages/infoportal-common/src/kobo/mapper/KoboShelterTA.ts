@@ -6,12 +6,18 @@ import {DrcProject} from '../../type/Drc'
 import {Bn_re, Shelter_nta} from '../generated'
 
 export namespace KoboShelterTa {
-  const harmonizeNtaDisability = (disabilities: Shelter_nta.T['hh_char_hhh_dis_select']): Bn_re.T['hh_char_dis_select'] => {
-    return disabilities?.map(_ => {
-      return fnSwitch(_!, {
-        diff_medical: 'diff_care',
-        diff_mental: 'diff_rem',
-      }, () => _! as any)
+  const harmonizeNtaDisability = (
+    disabilities: Shelter_nta.T['hh_char_hhh_dis_select'],
+  ): Bn_re.T['hh_char_dis_select'] => {
+    return disabilities?.map((_) => {
+      return fnSwitch(
+        _!,
+        {
+          diff_medical: 'diff_care',
+          diff_mental: 'diff_rem',
+        },
+        () => _! as any,
+      )
     })
   }
 
@@ -21,10 +27,10 @@ export namespace KoboShelterTa {
     // @ts-ignore
     row.hh_char_res_dis_select = harmonizeNtaDisability(row.hh_char_res_dis_select)
     // @ts-ignore
-    row.hh_char_hh_det = row.hh_char_hh_det?.map(_ => {
+    row.hh_char_hh_det = row.hh_char_hh_det?.map((_) => {
       return {
         ..._,
-        hh_char_hh_det_dis_select: harmonizeNtaDisability(_.hh_char_hh_det_dis_select)
+        hh_char_hh_det_dis_select: harmonizeNtaDisability(_.hh_char_hh_det_dis_select),
       }
     })
     return row
@@ -90,19 +96,16 @@ export namespace KoboShelterTa {
     'wall_mountes_cable_wiring_lm',
   ]
 
-  const lot3: KeyOfType<Shelter_ta.T, number | undefined>[] = [
-    'external_doors_pc',
-    'internal_wooden_doors_pc',
-  ]
+  const lot3: KeyOfType<Shelter_ta.T, number | undefined>[] = ['external_doors_pc', 'internal_wooden_doors_pc']
 
   export const hasLot1 = (row?: Shelter_ta.T): boolean | undefined => {
-    if (row) return !!lot1.find(k => map(row[k], _ => _ > 0) ?? false)
+    if (row) return !!lot1.find((k) => map(row[k], (_) => _ > 0) ?? false)
   }
   export const hasLot2 = (row?: Shelter_ta.T): boolean | undefined => {
-    if (row) return !!lot2.find(k => map(row[k], _ => _ > 0) ?? false)
+    if (row) return !!lot2.find((k) => map(row[k], (_) => _ > 0) ?? false)
   }
   export const hasLot3 = (row?: Shelter_ta.T): boolean | undefined => {
-    if (row) return !!lot3.find(k => map(row[k], _ => _ > 0) ?? false)
+    if (row) return !!lot3.find((k) => map(row[k], (_) => _ > 0) ?? false)
   }
 }
 
@@ -147,7 +150,7 @@ export class ShelterTaTagsHelper {
   static readonly mapTags = (_: any): ShelterTaTags => {
     return {
       ..._,
-      workDoneAt: _?.workDoneAt ? new Date(_.workDoneAt) : undefined
+      workDoneAt: _?.workDoneAt ? new Date(_.workDoneAt) : undefined,
     }
   }
 }

@@ -4,7 +4,6 @@ import {DrcProject} from '../../type/Drc'
 import {KoboGeneralMapping} from './KoboMapperPerson'
 
 export namespace KoboProtection_hhs3 {
-
   export type Person = PersonDetails & {
     lackDoc: Protection_hhs2.T['does_1_lack_doc']
     isIdpRegistered: Protection_hhs2.T['is_member_1_registered']
@@ -14,15 +13,18 @@ export namespace KoboProtection_hhs3 {
     persons: Person[]
   }
 
-  export const map = (d: KoboSubmissionFlat<Protection_hhs3.T, ProtectionHhsTags>): KoboSubmissionFlat<T, ProtectionHhsTags> => {
+  export const map = (
+    d: KoboSubmissionFlat<Protection_hhs3.T, ProtectionHhsTags>,
+  ): KoboSubmissionFlat<T, ProtectionHhsTags> => {
     const r: T = d as unknown as T
-    r.persons = d.hh_char_hh_det?.map((_, i) => {
-      return {
-        ...KoboGeneralMapping.mapPersonDetails(_ as any),
-        lackDoc: d.hh_char_hh_doc?.[i].does_lack_doc,
-        isIdpRegistered: d.hh_char_hh_doc?.[i].is_member_registered
-      }
-    }) ?? []
+    r.persons =
+      d.hh_char_hh_det?.map((_, i) => {
+        return {
+          ...KoboGeneralMapping.mapPersonDetails(_ as any),
+          lackDoc: d.hh_char_hh_doc?.[i].does_lack_doc,
+          isIdpRegistered: d.hh_char_hh_doc?.[i].is_member_registered,
+        }
+      }) ?? []
     return r
   }
 }
@@ -48,7 +50,3 @@ export const currentProtectionProjects = [
   DrcProject['UKR-000397 GFFO'],
   DrcProject['None'],
 ]
-
-
-
-

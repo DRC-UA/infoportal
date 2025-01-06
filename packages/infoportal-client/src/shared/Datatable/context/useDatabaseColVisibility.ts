@@ -12,14 +12,15 @@ export const useDatabaseColVisibility = <T extends DatatableRow>({
   defaultHidden,
   hidden,
   id,
-  disableAutoSave
+  disableAutoSave,
 }: {
   id: string
   columns: DatatableColumn.InnerProps<T>[]
 } & DatatableTableProps<T>['columnsToggle']) => {
   const [hiddenColumns, setHiddenColumns] = useState<string[]>(() => {
-    const saved = isServerSide || disableAutoSave ? undefined : localStorage.getItem(DatatableUtils.localStorageKey.column + id)
-    return saved ? JSON.parse(saved) as string[] : hidden ?? defaultHidden ?? []
+    const saved =
+      isServerSide || disableAutoSave ? undefined : localStorage.getItem(DatatableUtils.localStorageKey.column + id)
+    return saved ? (JSON.parse(saved) as string[]) : (hidden ?? defaultHidden ?? [])
   })
 
   useEffect(() => {
@@ -33,13 +34,16 @@ export const useDatabaseColVisibility = <T extends DatatableRow>({
     if (hidden) setHiddenColumns(hidden)
   }, [hidden])
 
-  const filteredColumns = useMemo(() => columns.filter(_ => !hiddenColumns.includes(_.id)), [columns, hiddenColumns])
+  const filteredColumns = useMemo(() => columns.filter((_) => !hiddenColumns.includes(_.id)), [columns, hiddenColumns])
 
-  const handleHide = useCallback((columns: string[]) => {
-    setHiddenColumns(_ => {
-      return [...new Set([..._, ...columns])]
-    })
-  }, [setHiddenColumns])
+  const handleHide = useCallback(
+    (columns: string[]) => {
+      setHiddenColumns((_) => {
+        return [...new Set([..._, ...columns])]
+      })
+    },
+    [setHiddenColumns],
+  )
 
   return {
     columns,

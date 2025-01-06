@@ -1,17 +1,16 @@
 export type Logger = {
-  error: (_: string) => void,
-  info: (_: string) => void,
+  error: (_: string) => void
+  info: (_: string) => void
 }
 
 export namespace Kobo {
-
   export namespace V1 {
     export type SubmitResponse = {
-      message?: 'Successful submission.',
+      message?: 'Successful submission.'
       formid?: Kobo.Submission.Id
-      encrypted?: boolean,
-      instanceID?: string,
-      submissionDate?: string,
+      encrypted?: boolean
+      instanceID?: string
+      submissionDate?: string
       markedAsCompleteDate?: string
       error?: 'Duplicate submission'
     }
@@ -23,32 +22,31 @@ export namespace Kobo {
   }
 
   export interface Paginate<T> {
-    count: number,
+    count: number
     results: T[]
   }
 
   export type Hook = {
     url: string
     logs_url: string
-    asset: number,
-    uid: 'hLgBEVbijurruSrU3nc7d9',
-    name: 'InfoPortal',
-    endpoint: string,
-    active: true,
-    export_type: 'json',
-    auth_level: 'no_auth',
-    success_count: number,
-    failed_count: number,
-    pending_count: number,
-    settings: any,
-    date_modified: Date,
-    email_notification: boolean,
-    subset_fields: any[],
+    asset: number
+    uid: 'hLgBEVbijurruSrU3nc7d9'
+    name: 'InfoPortal'
+    endpoint: string
+    active: true
+    export_type: 'json'
+    auth_level: 'no_auth'
+    success_count: number
+    failed_count: number
+    pending_count: number
+    settings: any
+    date_modified: Date
+    email_notification: boolean
+    subset_fields: any[]
     payload_template: ''
   }
 
   export namespace ApiRes {
-
     export type UpdateValidation = {
       by_whom: string
       color: string
@@ -63,7 +61,6 @@ export namespace Kobo {
   export namespace Form {
     export type Id = string
 
-
     export type Question = {
       name: string
       /**
@@ -77,7 +74,7 @@ export namespace Kobo {
       $xpath: string
       label?: string[]
       hint?: string[]
-      appearance?: 'multiline',
+      appearance?: 'multiline'
       file?: string
       type: QuestionType
       calculation: string
@@ -85,11 +82,11 @@ export namespace Kobo {
     }
 
     export type Choice = {
-      $autovalue: string,
-      $kuid: string,
-      label: string[],
-      list_name: string,
-      name: string,
+      $autovalue: string
+      $kuid: string
+      label: string[]
+      list_name: string
+      name: string
     }
 
     export enum DeploymentStatus {
@@ -115,7 +112,8 @@ export namespace Kobo {
       user__username: string
     }
 
-    export type QuestionType = 'file'
+    export type QuestionType =
+      | 'file'
       | 'deviceid'
       | 'end_repeat'
       | 'begin_repeat'
@@ -153,7 +151,7 @@ export namespace Kobo {
       content: {
         choices?: Choice[]
         schema: string
-        settings: {version: string, default_language: string}
+        settings: {version: string; default_language: string}
         survey: Question[]
         translated: ['hint', 'label', 'media::image']
         translations: string[]
@@ -216,23 +214,23 @@ export namespace Kobo {
     }
 
     export interface MetaData {
-      _id: Id,
-      start?: Date,
-      end?: Date,
-      __version__?: string,
-      _xform_id_string: string,
-      _uuid: UUID,
-      _attachments?: Attachment[],
-      _status: Status,
-      _geolocation: Geolocation,
-      _submission_time: Date,
-      _tags: Tags[],
-      _notes: Notes[],
+      _id: Id
+      start?: Date
+      end?: Date
+      __version__?: string
+      _xform_id_string: string
+      _uuid: UUID
+      _attachments?: Attachment[]
+      _status: Status
+      _geolocation: Geolocation
+      _submission_time: Date
+      _tags: Tags[]
+      _notes: Notes[]
       _validation_status: {
         timestamp: number
         uid: Validation
         by_whom: string
-      },
+      }
       _submitted_by: any
       // 'formhub/uuid': string,
       // 'meta/instanceID': string,

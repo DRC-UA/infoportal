@@ -4,28 +4,28 @@ import {combineSx, makeSx} from '@/core/theme'
 
 const css = makeSx({
   button: {
-    py: .75,
+    py: 0.75,
     px: 1.25,
-    fontWeight: t => t.typography.fontWeightBold,
+    fontWeight: (t) => t.typography.fontWeightBold,
     display: 'inline-flex',
     alignItems: 'center',
-    background: t => t.palette.background.paper,
-    border: t => `1px solid ${t.palette.divider}`,
+    background: (t) => t.palette.background.paper,
+    border: (t) => `1px solid ${t.palette.divider}`,
     borderRadius: 20,
-    color: t => t.palette.text.primary,
-    transition: t => t.transitions.create('all'),
+    color: (t) => t.palette.text.primary,
+    transition: (t) => t.transitions.create('all'),
     '&:active': {
-      boxShadow: t => t.shadows[3],
+      boxShadow: (t) => t.shadows[3],
     },
     '&:hover': {
-      background: t => t.palette.action.hover,
-    }
+      background: (t) => t.palette.action.hover,
+    },
   },
   active: {
-    color: t => t.palette.primary.main,
-    background: t => t.palette.action.focus,
+    color: (t) => t.palette.primary.main,
+    background: (t) => t.palette.action.focus,
     // borderColor: t => alpha(t.palette.primary.light, .8),
-  }
+  },
 })
 
 export const DashboardFilterLabel = ({
@@ -33,7 +33,7 @@ export const DashboardFilterLabel = ({
   children,
   icon,
   active,
-  sx
+  sx,
 }: {
   active?: boolean
   icon?: string
@@ -42,7 +42,7 @@ export const DashboardFilterLabel = ({
 } & Omit<BoxProps, 'children'>) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
-  const opened = (!!anchorEl)
+  const opened = !!anchorEl
 
   return (
     <Box sx={{position: 'relative', display: 'inline-block', ...sx}}>
@@ -51,9 +51,15 @@ export const DashboardFilterLabel = ({
         sx={combineSx(css.button, active && css.active)}
         onClick={(e) => setAnchorEl(e.currentTarget)}
       >
-        {icon && <Icon fontSize="small" sx={{mr: .75}}>{icon}</Icon>}
+        {icon && (
+          <Icon fontSize="small" sx={{mr: 0.75}}>
+            {icon}
+          </Icon>
+        )}
         {label}
-        <Icon color="disabled" sx={{ml: .25, mr: -.25}} fontSize="small">{opened ? 'expand_less' : 'expand_more'}</Icon>
+        <Icon color="disabled" sx={{ml: 0.25, mr: -0.25}} fontSize="small">
+          {opened ? 'expand_less' : 'expand_more'}
+        </Icon>
       </Box>
       <Popover
         disableScrollLock={true}
@@ -65,17 +71,19 @@ export const DashboardFilterLabel = ({
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
         sx={{
-          boxShadow: t => t.shadows[4],
+          boxShadow: (t) => t.shadows[4],
           overflow: 'hidden',
           // border: 'none',
           // position: 'absolute',
           // top: 46,
         }}
       >
-        <Box sx={{
-          overflowY: 'auto',
-          maxHeight: '50vh',
-        }}>
+        <Box
+          sx={{
+            overflowY: 'auto',
+            maxHeight: '50vh',
+          }}
+        >
           {children(opened, () => setAnchorEl(null))}
         </Box>
       </Popover>

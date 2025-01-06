@@ -14,25 +14,35 @@ export interface FeatureAccesses extends FeatureAccess {
 }
 
 interface SearchByFeature {
-  ({featureId, user}: {featureId: AppFeatureId.kobo_database, user?: UserSession}): Promise<Access<KoboDatabaseFeatureParams>[]>
-  ({featureId, user}: {featureId: AppFeatureId.wfp_deduplication, user?: UserSession}): Promise<Access<WfpDeduplicationAccessParams>[]>
-  ({featureId, user}: {featureId?: AppFeatureId, user?: UserSession}): Promise<Access<any>[]>
+  ({
+    featureId,
+    user,
+  }: {
+    featureId: AppFeatureId.kobo_database
+    user?: UserSession
+  }): Promise<Access<KoboDatabaseFeatureParams>[]>
+  ({
+    featureId,
+    user,
+  }: {
+    featureId: AppFeatureId.wfp_deduplication
+    user?: UserSession
+  }): Promise<Access<WfpDeduplicationAccessParams>[]>
+  ({featureId, user}: {featureId?: AppFeatureId; user?: UserSession}): Promise<Access<any>[]>
 }
 
 export class AccessService {
-
   constructor(
     private prisma: PrismaClient,
     private log: AppLogger = app.logger('AccessService'),
-  ) {
-  }
+  ) {}
 
   static readonly idParamsSchema = yup.object({
     id: yup.string().required(),
   })
 
   static readonly drcOfficeSchema = yup.mixed<DrcOffice>().oneOf(Obj.values(DrcOffice))
-  static readonly drcJobSchema = yup.string().required()//yup.mixed<DrcJob>().oneOf(Obj.values(DrcJob)),
+  static readonly drcJobSchema = yup.string().required() //yup.mixed<DrcJob>().oneOf(Obj.values(DrcJob)),
   static readonly levelSchema = yup.mixed<FeatureAccessLevel>().oneOf(Obj.values(FeatureAccessLevel)).required()
   static readonly featureIdSchema = yup.mixed<AppFeatureId>().oneOf(Obj.values(AppFeatureId))
 
@@ -48,42 +58,41 @@ export class AccessService {
 
   static readonly updateSchema = yup.object({
     level: yup.mixed<FeatureAccessLevel>().oneOf(Obj.values(FeatureAccessLevel)),
-    drcJob: yup.string(),//yup.mixed<DrcJob>().oneOf(Obj.values(DrcJob)),
+    drcJob: yup.string(), //yup.mixed<DrcJob>().oneOf(Obj.values(DrcJob)),
     drcOffice: yup.mixed<DrcOffice>().oneOf(Obj.values(DrcOffice)),
   })
 
   static readonly searchSchema = yup.object({
-    featureId: yup.mixed<AppFeatureId>().oneOf(Obj.values(AppFeatureId))
+    featureId: yup.mixed<AppFeatureId>().oneOf(Obj.values(AppFeatureId)),
   })
 
-  private readonly searchFromAccess = async ({featureId, user}: {featureId?: AppFeatureId, user?: UserSession}) => {
+  private readonly searchFromAccess = async ({featureId, user}: {featureId?: AppFeatureId; user?: UserSession}) => {
     return this.prisma.featureAccess.findMany({
-        distinct: ['id'],
-        where: {
-          AND: [
-            {groupId: null},
-            {featureId: featureId},
-            ...user ? [{
-              OR: [
-                {email: {equals: user.email, mode: 'insensitive' as const,}},
+      distinct: ['id'],
+      where: {
+        AND: [
+          {groupId: null},
+          {featureId: featureId},
+          ...(user
+            ? [
                 {
                   OR: [
-                    {drcOffice: user.drcOffice},
-                    {drcOffice: null},
-                    {drcOffice: ''},
+                    {email: {equals: user.email, mode: 'insensitive' as const}},
+                    {
+                      OR: [{drcOffice: user.drcOffice}, {drcOffice: null}, {drcOffice: ''}],
+                      drcJob: {equals: user.drcJob, mode: 'insensitive' as const},
+                    },
                   ],
-                  drcJob: {equals: user.drcJob, mode: 'insensitive' as const,}
-                }
+                },
               ]
-            }] : []
-          ]
-        },
-        orderBy: {createdAt: 'desc',}
-      }
-    )
+            : []),
+        ],
+      },
+      orderBy: {createdAt: 'desc'},
+    })
   }
 
-  private readonly searchFromGroup = async ({featureId, user}: {featureId?: AppFeatureId, user?: UserSession}) => {
+  private readonly searchFromGroup = async ({featureId, user}: {featureId?: AppFeatureId; user?: UserSession}) => {
     return this.prisma.featureAccess.findMany({
       include: {
         group: {include: {items: true}},
@@ -91,73 +100,69 @@ export class AccessService {
       where: {
         featureId: featureId,
         groupId: {not: null},
-        group: user ? {
-          items: {
-            some: {
-              OR: [
-                {email: {equals: user.email, mode: 'insensitive' as const,}},
-                {
+        group: user
+          ? {
+              items: {
+                some: {
                   OR: [
-                    {drcOffice: user.drcOffice},
-                    {drcOffice: null},
-                    {drcOffice: ''},
+                    {email: {equals: user.email, mode: 'insensitive' as const}},
+                    {
+                      OR: [{drcOffice: user.drcOffice}, {drcOffice: null}, {drcOffice: ''}],
+                      drcJob: {
+                        equals: user.drcJob,
+                        mode: 'insensitive' as const,
+                      },
+                    },
                   ],
-                  drcJob: {
-                    equals: user.drcJob,
-                    mode: 'insensitive' as const,
-                  }
-                }
-              ]
+                },
+              },
             }
-          }
-        } : {},
+          : {},
       },
-      orderBy: {createdAt: 'desc',}
+      orderBy: {createdAt: 'desc'},
     })
   }
-
 
   // TODO Perf can be optimized using a single SQL query
   // @ts-ignore
   readonly searchForUser: SearchByFeature = async ({featureId, user}: any) => {
-    const [
-      fromGroup,
-      fromAccess,
-    ] = await Promise.all([
+    const [fromGroup, fromAccess] = await Promise.all([
       this.searchFromGroup({featureId, user}),
       this.searchFromAccess({featureId, user}),
     ])
     return [
       ...fromAccess,
-      ...fromGroup.map(_ => {
+      ...fromGroup.map((_) => {
         const accesses = _.group?.items.reduce((acc, curr) => {
           acc.set(curr.level, curr.level)
           return acc
         }, new Map<FeatureAccessLevel, FeatureAccessLevel>())
-        return ({
+        return {
           ..._,
           level: accesses?.get('Admin') ?? accesses?.get('Write') ?? FeatureAccessLevel.Read,
           groupName: _.group?.name,
-        })
-      })
+        }
+      }),
     ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
   }
 
   readonly create = (body: AccessCreateParams) => {
-    return Promise.all((body.drcJob ?? [undefined]).map(drcJob =>
-      this.prisma.featureAccess.create({
-        data: {
-          ...body,
-          drcJob,
-          level: body.level,
-          drcOffice: body.drcOffice,
-          email: body.email,
-          groupId: body.groupId,
-          featureId: body.featureId,
-          params: body.params ?? Prisma.DbNull,
-        },
-      })
-    ))
+    return Promise.all(
+      (body.drcJob ?? [undefined]).map((drcJob) =>
+        this.prisma.featureAccess.create({
+          data: {
+            ...body,
+            drcJob,
+            level: body.level,
+            drcOffice: body.drcOffice,
+            email: body.email,
+            groupId: body.groupId,
+            featureId: body.featureId,
+            params: body.params ?? Prisma.DbNull,
+          },
+        }),
+      ),
+    )
   }
 
   readonly update = (id: UUID, body: InferType<typeof AccessService.updateSchema>) => {
@@ -174,7 +179,7 @@ export class AccessService {
   readonly remove = (id: string) => {
     return this.prisma.featureAccess.delete({
       where: {
-        id
+        id,
       },
     })
   }

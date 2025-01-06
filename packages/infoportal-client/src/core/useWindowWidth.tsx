@@ -2,10 +2,10 @@ import {useEffect, useState} from 'react'
 
 interface UseWindowWidthParams {
   breakpoints?: {
-    xs: number,
-    sm: number,
-    md: number,
-    lg: number,
+    xs: number
+    sm: number
+    md: number
+    lg: number
   }
 }
 
@@ -32,7 +32,7 @@ export const useWindowWidth = ({
     sm: 900,
     md: 1200,
     lg: 1536,
-  }
+  },
 }: UseWindowWidthParams = {}) => {
   const [windowWidth, setWindowWidth] = useState(960)
 
@@ -57,15 +57,11 @@ export const useWindowWidth = ({
     ...isBreakpoints,
     isMobileWidthMax: isBreakpoints.isMdOrLess,
     windowWidth,
-    switchWidth: <T, >(params: {
-      isXsOrLess?: T
-      isSmOrLess?: T
-      isMdOrLess?: T
-      isLgOrLess?: T
-      isLgOrMore?: T
-    }): T => {
-      const key = Object.entries(isBreakpoints).reverse().find(([bp, active]) => !!active)![0] as keyof typeof params
+    switchWidth: <T,>(params: {isXsOrLess?: T; isSmOrLess?: T; isMdOrLess?: T; isLgOrLess?: T; isLgOrMore?: T}): T => {
+      const key = Object.entries(isBreakpoints)
+        .reverse()
+        .find(([bp, active]) => !!active)![0] as keyof typeof params
       return params[key]!
-    }
+    },
   }
 }

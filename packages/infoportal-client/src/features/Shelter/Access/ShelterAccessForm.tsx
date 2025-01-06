@@ -22,19 +22,15 @@ interface Form extends IAccessForm {
 }
 
 /** @deprecated Not used*/
-export const ShelterAccessForm = ({
-  children,
-  onAdded,
-}: {
-  onAdded?: () => void,
-  children: ReactElement,
-}) => {
+export const ShelterAccessForm = ({children, onAdded}: {onAdded?: () => void; children: ReactElement}) => {
   const {m} = useI18n()
   const {toastHttpError} = useIpToast()
   const {api} = useAppSettings()
   const _addAccess = useAsync(api.access.create)
-  const requestInConstToFixTsInference = (databaseId: Kobo.FormId) => api.access.search({featureId: AppFeatureId.kobo_database})
-    .then(_ => _.filter(_ => _.params?.koboFormId === databaseId))
+  const requestInConstToFixTsInference = (databaseId: Kobo.FormId) =>
+    api.access
+      .search({featureId: AppFeatureId.kobo_database})
+      .then((_) => _.filter((_) => _.params?.koboFormId === databaseId))
   const _access = useFetcher(requestInConstToFixTsInference)
 
   useEffectFn(_addAccess.error, toastHttpError)
@@ -43,26 +39,30 @@ export const ShelterAccessForm = ({
   const accessForm = useForm<Form>()
 
   const submit = ({selectBy, ...f}: Form) => {
-    _addAccess.call({
-      ...nullValuesToUndefined(f),
-      featureId: AppFeatureId.shelter,
-      params: {
-        office: f.office,
-      }
-    }).then(onAdded)
+    _addAccess
+      .call({
+        ...nullValuesToUndefined(f),
+        featureId: AppFeatureId.shelter,
+        params: {
+          office: f.office,
+        },
+      })
+      .then(onAdded)
   }
 
   return (
     <Modal
       loading={_addAccess.loading}
       confirmDisabled={!accessForm.formState.isValid}
-      onConfirm={(_, close) => accessForm.handleSubmit(_ => {
-        submit(_)
-        close()
-      })()}
+      onConfirm={(_, close) =>
+        accessForm.handleSubmit((_) => {
+          submit(_)
+          close()
+        })()
+      }
       content={
         <Box sx={{width: 400}}>
-          <AccessForm form={accessForm as UseFormReturn<any, any, any>}/>
+          <AccessForm form={accessForm as UseFormReturn<any, any, any>} />
           <AccessFormSection icon="filter_alt" label={m.filter}>
             <Controller
               name="office"
@@ -72,13 +72,14 @@ export const ShelterAccessForm = ({
                   {...field}
                   defaultValue={[]}
                   label={m.drcOffice}
-                  onChange={_ => onChange(_)}
+                  onChange={(_) => onChange(_)}
                   options={Obj.keys(DrcOffice)}
                   sx={{mb: 2.5}}
                 />
               )}
             />
-          </AccessFormSection>`
+          </AccessFormSection>
+          `
         </Box>
       }
     >

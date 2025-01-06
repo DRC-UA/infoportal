@@ -5,7 +5,7 @@ import {ProtectRoute} from '@/core/Session/SessionContext'
 const SafetyPage = () => {
   return (
     <ProtectRoute>
-      <Safety/>
+      <Safety />
     </ProtectRoute>
   )
 }

@@ -3,7 +3,6 @@ import {ConnectionPool} from 'mssql'
 import {appConf, AppConf} from '../../conf/AppConf'
 
 export class HdpSdk {
-
   static readonly fetchAiRiskEducation = async (config: AppConf = appConf) => {
     const pool = await mssql.connect({
       password: config.dbAzureHdp.password,
@@ -19,7 +18,5 @@ export class HdpSdk {
     `
   }
 
-  constructor(connector: ConnectionPool) {
-  }
-
+  constructor(connector: ConnectionPool) {}
 }

@@ -33,23 +33,23 @@ export interface KoboSchemaContext {
 
 const Context = React.createContext({} as KoboSchemaContext)
 
-export const KoboSchemaProvider = ({
-  defaultLangIndex = 0,
-  children,
-}: KoboSchemaProviderProps) => {
+export const KoboSchemaProvider = ({defaultLangIndex = 0, children}: KoboSchemaProviderProps) => {
   const {m} = useI18n()
   const {api} = useAppSettings()
   const [langIndex, setLangIndex] = useState<number>(defaultLangIndex)
   const {toastHttpError} = useIpToast()
 
-  const {anyLoading, anyError, clearCache, ...fetchers} = useFetchers((id: Kobo.FormId) => {
-    return api.koboApi.getSchema({id}).catch(e => {
-      toastHttpError(e)
-      throw e
-    })
-  }, {
-    requestKey: _ => _[0],
-  })
+  const {anyLoading, anyError, clearCache, ...fetchers} = useFetchers(
+    (id: Kobo.FormId) => {
+      return api.koboApi.getSchema({id}).catch((e) => {
+        toastHttpError(e)
+        throw e
+      })
+    },
+    {
+      requestKey: (_) => _[0],
+    },
+  )
 
   const by = useMemo(() => {
     const bundles: {
@@ -66,25 +66,27 @@ export const KoboSchemaProvider = ({
       const name = KoboIndex.searchById(id)?.name
       if (name) bundles.byName[name] = r
     })
-    KoboIndex.names.forEach(name => {
+    KoboIndex.names.forEach((name) => {
       if (!bundles.byName[name]) bundles.byName[name] = {get: undefined, loading: undefined, error: undefined}
     })
     return bundles
   }, [fetchers.get, langIndex])
 
   return (
-    <Context.Provider value={{
-      langIndex,
-      setLangIndex,
-      anyLoading,
-      anyError,
-      clearCache,
-      fetchById: (id: Kobo.FormId) => fetchers.fetch({force: false, clean: false}, id),
-      fetchByName: (name: KoboFormName) => fetchers.fetch({force: false, clean: false}, KoboIndex.byName(name).id),
-      byId: by.byId,
-      byId2: (_: Kobo.FormId) => by.byId[_] ?? {},
-      byName: by.byName,
-    }}>
+    <Context.Provider
+      value={{
+        langIndex,
+        setLangIndex,
+        anyLoading,
+        anyError,
+        clearCache,
+        fetchById: (id: Kobo.FormId) => fetchers.fetch({force: false, clean: false}, id),
+        fetchByName: (name: KoboFormName) => fetchers.fetch({force: false, clean: false}, KoboIndex.byName(name).id),
+        byId: by.byId,
+        byId2: (_: Kobo.FormId) => by.byId[_] ?? {},
+        byName: by.byName,
+      }}
+    >
       {children}
     </Context.Provider>
   )
@@ -94,9 +96,10 @@ export const useKoboSchemaContext = ({autoFetch}: {autoFetch?: KoboFormName[]} =
   const ctx = useContext<KoboSchemaContext>(Context)
   if (!ctx) throw Error('Cannot used useKoboSchemasContext outside of KoboSchemasProvider.')
   useEffect(() => {
-    if (autoFetch) autoFetch.forEach(name => {
-      ctx.fetchByName(name)
-    })
+    if (autoFetch)
+      autoFetch.forEach((name) => {
+        ctx.fetchByName(name)
+      })
   }, [])
   return ctx
 }

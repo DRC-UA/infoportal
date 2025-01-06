@@ -27,65 +27,106 @@ export const useProtectionFilters = (data?: Seq<IKoboMeta>, flatData?: Seq<Prote
       office: {
         icon: appConfig.icons.office,
         label: m.office,
-        getValue: _ => _.office,
-        getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.office!).distinct(_ => _).sort())
+        getValue: (_) => _.office,
+        getOptions: () =>
+          DataFilter.buildOptions(
+            d
+              .flatMap((_) => _.office!)
+              .distinct((_) => _)
+              .sort(),
+          ),
       },
       oblast: {
         icon: appConfig.icons.oblast,
         label: m.oblast,
-        getValue: _ => _.oblast,
-        getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.oblast!).distinct(_ => _).sort())
+        getValue: (_) => _.oblast,
+        getOptions: () =>
+          DataFilter.buildOptions(
+            d
+              .flatMap((_) => _.oblast!)
+              .distinct((_) => _)
+              .sort(),
+          ),
       },
       raion: {
         label: m.raion,
-        getValue: _ => _.raion,
-        getOptions: (get) => get().map(_ => _.raion).compact()
-          .distinct(_ => _)
-          .sort().map(_ => ({value: _, label: _}))
+        getValue: (_) => _.raion,
+        getOptions: (get) =>
+          get()
+            .map((_) => _.raion)
+            .compact()
+            .distinct((_) => _)
+            .sort()
+            .map((_) => ({value: _, label: _})),
       },
       hromada: {
         label: m.hromada,
-        getValue: _ => _.hromada,
-        getOptions: (get) => get()
-          .map(_ => _.hromada)
-          .compact()
-          .distinct(_ => _)
-          .sort()
-          .map(_ => ({value: _, label: _}))
+        getValue: (_) => _.hromada,
+        getOptions: (get) =>
+          get()
+            .map((_) => _.hromada)
+            .compact()
+            .distinct((_) => _)
+            .sort()
+            .map((_) => ({value: _, label: _})),
       },
       project: {
         multiple: true,
         icon: appConfig.icons.project,
         label: m.project,
-        getValue: _ => _.project,
-        getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.project!).distinct(_ => _).sort())
+        getValue: (_) => _.project,
+        getOptions: () =>
+          DataFilter.buildOptions(
+            d
+              .flatMap((_) => _.project!)
+              .distinct((_) => _)
+              .sort(),
+          ),
       },
       sector: {
         icon: appConfig.icons.sector,
         label: m.sector,
-        getValue: _ => _.sector,
-        getOptions: () => d.map(_ => _.sector!).distinct(_ => _).sort().map(_ => DataFilter.buildOption(_))
+        getValue: (_) => _.sector,
+        getOptions: () =>
+          d
+            .map((_) => _.sector!)
+            .distinct((_) => _)
+            .sort()
+            .map((_) => DataFilter.buildOption(_)),
       },
       activity: {
         icon: appConfig.icons.program,
         label: m.activity,
-        getValue: _ => _.activity,
-        getOptions: () => d.map(_ => _.activity!).distinct(_ => _).sort().map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation))
+        getValue: (_) => _.activity,
+        getOptions: () =>
+          d
+            .map((_) => _.activity!)
+            .distinct((_) => _)
+            .sort()
+            .map((_) => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation)),
       },
       form: {
         icon: appConfig.icons.koboForm,
         label: m.koboForms,
-        getValue: _ => _.formId,
-        getOptions: () => d.map(_ => _.formId!).distinct(_ => _).sort().map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation))
+        getValue: (_) => _.formId,
+        getOptions: () =>
+          d
+            .map((_) => _.formId!)
+            .distinct((_) => _)
+            .sort()
+            .map((_) => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation)),
       },
     })
   }, [data])
 
-  const [filters, setFilters] = usePersistentState<DataFilter.InferShape<typeof shape>>({}, {storageKey: 'protection-dashboard-filters'})
+  const [filters, setFilters] = usePersistentState<DataFilter.InferShape<typeof shape>>(
+    {},
+    {storageKey: 'protection-dashboard-filters'},
+  )
 
   const filteredData = useMemo(() => {
     if (!data) return
-    const filteredBy_date = data.filter(d => {
+    const filteredBy_date = data.filter((d) => {
       try {
         const isDateIn = PeriodHelper.isDateIn(period, d.date)
         if (!isDateIn) return false
@@ -93,8 +134,13 @@ export const useProtectionFilters = (data?: Seq<IKoboMeta>, flatData?: Seq<Prote
           custom.echo &&
           d.formId === KoboIndex.byName('protection_hhs3').id &&
           hash(d.koboId, 'dedup') % 100 <= conf.other.protection.echoDuplicationEstimationPercent
-        ) return false
-        if (custom.echoDisability && hash(d.koboId, 'disability') % 100 >= conf.other.protection.echoDisabilityEstimationPercent) return false
+        )
+          return false
+        if (
+          custom.echoDisability &&
+          hash(d.koboId, 'disability') % 100 >= conf.other.protection.echoDisabilityEstimationPercent
+        )
+          return false
         return true
       } catch (e) {
         console.log(e, d)

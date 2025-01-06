@@ -23,17 +23,22 @@ import {MetaDashboardActivityPanel} from '@/features/Meta/Dashboard/MetaDashboar
 export const MetaDashboard = () => {
   const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
-  const [showProjectsBy, setShowProjectsBy] = usePersistentState<'donor' | 'project'>('donor', {storageKey: 'meta-dashboard-showProject'})
+  const [showProjectsBy, setShowProjectsBy] = usePersistentState<'donor' | 'project'>('donor', {
+    storageKey: 'meta-dashboard-showProject',
+  })
   const {data: ctx, fetcher} = useMetaContext()
   return (
     <Page width="lg" loading={fetcher.loading}>
       <Grid container sx={{mb: 2}} columnSpacing={2}>
         <Grid item xs={6} md={4} lg={2}>
           <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
-            <Lazy deps={[ctx.filteredData]} fn={() => {
-              return ctx.filteredData.distinct(_ => _.formId).length
-            }}>
-              {_ => formatLargeNumber(_)}
+            <Lazy
+              deps={[ctx.filteredData]}
+              fn={() => {
+                return ctx.filteredData.distinct((_) => _.formId).length
+              }}
+            >
+              {(_) => formatLargeNumber(_)}
             </Lazy>
           </SlideWidget>
         </Grid>
@@ -67,60 +72,82 @@ export const MetaDashboard = () => {
         <Div column>
           <Map
             data={ctx.filteredData}
-            getSettlement={_ => _.settlement}
-            getOblast={_ => OblastIndex.byName(_.oblast).iso}
+            getSettlement={(_) => _.settlement}
+            getOblast={(_) => OblastIndex.byName(_.oblast).iso}
           />
           <SlidePanel title={m.ageGroup}>
-            <AgeGroupTable tableId="meta-dashboard" persons={ctx.filteredPersons} enableDisplacementStatusFilter enablePwdFilter/>
+            <AgeGroupTable
+              tableId="meta-dashboard"
+              persons={ctx.filteredPersons}
+              enableDisplacementStatusFilter
+              enablePwdFilter
+            />
           </SlidePanel>
           <Panel title={m.displacementStatus}>
             <PanelBody>
-              <ChartBarSingleBy
-                data={ctx.filteredPersons}
-                by={_ => _.displacement}
-                label={DisplacementStatus}
-              />
+              <ChartBarSingleBy data={ctx.filteredPersons} by={(_) => _.displacement} label={DisplacementStatus} />
             </PanelBody>
           </Panel>
           <SlidePanel title={m.form}>
-            <ChartBarSingleBy data={ctx.filteredData} by={_ => KoboIndex.searchById(_.formId)?.translation ?? _.formId}/>
+            <ChartBarSingleBy
+              data={ctx.filteredData}
+              by={(_) => KoboIndex.searchById(_.formId)?.translation ?? _.formId}
+            />
           </SlidePanel>
         </Div>
         <Div column>
           <SlidePanel>
-            <Lazy deps={[ctx.filteredData]} fn={() => {
-              const group = ctx.filteredData.groupByAndApply(_ => _.status ?? 'Blank', _ => _.length)
-              return {
-                group,
-                total: seq(Obj.values(group)).sum(),
-              }
-            }}>
-              {_ => (
+            <Lazy
+              deps={[ctx.filteredData]}
+              fn={() => {
+                const group = ctx.filteredData.groupByAndApply(
+                  (_) => _.status ?? 'Blank',
+                  (_) => _.length,
+                )
+                return {
+                  group,
+                  total: seq(Obj.values(group)).sum(),
+                }
+              }}
+            >
+              {(_) => (
                 <Box>
                   <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <Div responsive>
                       <Div>
                         <ChartPieWidget
-                          dense sx={{flex: 1}} color={t.palette.success.main}
+                          dense
+                          sx={{flex: 1}}
+                          color={t.palette.success.main}
                           title={<Txt size="small">{m.committed}</Txt>}
-                          value={_.group.Committed ?? 0} base={_.total}
+                          value={_.group.Committed ?? 0}
+                          base={_.total}
                         />
                         <ChartPieWidget
-                          dense sx={{flex: 1}} color={t.palette.warning.main}
+                          dense
+                          sx={{flex: 1}}
+                          color={t.palette.warning.main}
                           title={<Txt size="small">{m.pending}</Txt>}
-                          value={_.group.Pending ?? 0} base={_.total}
+                          value={_.group.Pending ?? 0}
+                          base={_.total}
                         />
                       </Div>
                       <Div>
                         <ChartPieWidget
-                          dense sx={{flex: 1}} color={t.palette.error.main}
+                          dense
+                          sx={{flex: 1}}
+                          color={t.palette.error.main}
                           title={<Txt size="small">{m.rejected}</Txt>}
-                          value={_.group.Rejected ?? 0} base={_.total}
+                          value={_.group.Rejected ?? 0}
+                          base={_.total}
                         />
                         <ChartPieWidget
-                          dense sx={{flex: 1}} color={t.palette.info.main}
+                          dense
+                          sx={{flex: 1}}
+                          color={t.palette.info.main}
                           title={<Txt size="small">{m.blank}</Txt>}
-                          value={_.group.Blank ?? 0} base={_.total}
+                          value={_.group.Blank ?? 0}
+                          base={_.total}
                         />
                       </Div>
                     </Div>
@@ -130,17 +157,25 @@ export const MetaDashboard = () => {
             </Lazy>
           </SlidePanel>
           <SlidePanel>
-            <Lazy deps={[ctx.filteredData]} fn={() => {
-              const gb = ctx.filteredData.groupBy(d => format(d.date, 'yyyy-MM'))
-              const gbByCommittedDate = ctx.filteredData.groupBy(d => d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '')
-              const months = seq([...Obj.keys(gb), ...Obj.keys(gbByCommittedDate)]).distinct(_ => _).sort()
-              return months.map(month => ({
-                name: month,
-                [m.submissionTime]: gb[month]?.length ?? 0,
-                [m.committed]: gbByCommittedDate[month]?.filter(_ => _.status === KoboMetaStatus.Committed).length ?? 0
-              }))
-            }}>
-              {_ =>
+            <Lazy
+              deps={[ctx.filteredData]}
+              fn={() => {
+                const gb = ctx.filteredData.groupBy((d) => format(d.date, 'yyyy-MM'))
+                const gbByCommittedDate = ctx.filteredData.groupBy((d) =>
+                  d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '',
+                )
+                const months = seq([...Obj.keys(gb), ...Obj.keys(gbByCommittedDate)])
+                  .distinct((_) => _)
+                  .sort()
+                return months.map((month) => ({
+                  name: month,
+                  [m.submissionTime]: gb[month]?.length ?? 0,
+                  [m.committed]:
+                    gbByCommittedDate[month]?.filter((_) => _.status === KoboMetaStatus.Committed).length ?? 0,
+                }))
+              }}
+            >
+              {(_) => (
                 <ChartLine
                   fixMissingMonths
                   hideYTicks
@@ -149,21 +184,21 @@ export const MetaDashboard = () => {
                   colors={() => [t.palette.primary.main, t.palette.success.main]}
                   hideLabelToggle
                 />
-              }
+              )}
             </Lazy>
           </SlidePanel>
           <SlidePanel>
             <ScRadioGroup value={showProjectsBy} onChange={setShowProjectsBy} inline dense>
-              <ScRadioGroupItem hideRadio value="donoor" title={m.donor}/>
-              <ScRadioGroupItem hideRadio value="project" title={m.project}/>
+              <ScRadioGroupItem hideRadio value="donoor" title={m.donor} />
+              <ScRadioGroupItem hideRadio value="project" title={m.project} />
             </ScRadioGroup>
             {showProjectsBy === 'project' ? (
-              <ChartBarMultipleByKey data={ctx.filteredData} property="project"/>
+              <ChartBarMultipleByKey data={ctx.filteredData} property="project" />
             ) : (
-              <ChartBarMultipleByKey data={ctx.filteredData} property="donor"/>
+              <ChartBarMultipleByKey data={ctx.filteredData} property="donor" />
             )}
           </SlidePanel>
-          <MetaDashboardActivityPanel/>
+          <MetaDashboardActivityPanel />
         </Div>
       </Div>
     </Page>

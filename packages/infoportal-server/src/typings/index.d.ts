@@ -8,11 +8,9 @@ import {UserSession} from '../feature/session/UserSession'
 //   }
 // }
 
-
 declare module 'express-session' {
   interface SessionData {
     // Declare additional properties or methods for the session data
     user: UserSession
   }
 }
-

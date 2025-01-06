@@ -15,9 +15,7 @@ export type EmailSendParams = {
 }
 
 export class EmailSendSdk {
-
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   readonly send = (body: EmailSendParams) => {
     return this.client.post(`/email-sender`, {body})

@@ -24,25 +24,28 @@ export const MapGoogleSettlement = <D extends Record<string, any>>({
 
   useEffect(() => {
     if (!data || !fetcherGeoLoc.get || !fetcherSettlements.get) return
-    const res = Obj.entries(data.map(getSettlement)
-      .filter(_ => _ && _.startsWith('UA'))
-      .groupByAndApply(_ => _!, _ => _.length))
-      .map(([iso, count]) => {
-        const s = fetcherSettlements.get![iso]
-        return {
-          label: `${s.en}/${s.ua}`,
-          desc: s.iso,
-          loc: fetcherGeoLoc.get![iso],
-          size: count
-        }
-      })
+    const res = Obj.entries(
+      data
+        .map(getSettlement)
+        .filter((_) => _ && _.startsWith('UA'))
+        .groupByAndApply(
+          (_) => _!,
+          (_) => _.length,
+        ),
+    ).map(([iso, count]) => {
+      const s = fetcherSettlements.get![iso]
+      return {
+        label: `${s.en}/${s.ua}`,
+        desc: s.iso,
+        loc: fetcherGeoLoc.get![iso],
+        size: count,
+      }
+    })
     initGoogleMaps({
       domSelector: '#google-maps',
       color: t.palette.primary.main,
-      bubbles: res
+      bubbles: res,
     })
   }, [fetcherGeoLoc.get, data])
-  return (
-    <div id="google-maps" style={{height: height ?? 320}}/>
-  )
+  return <div id="google-maps" style={{height: height ?? 320}} />
 }

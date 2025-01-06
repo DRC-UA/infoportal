@@ -4,34 +4,32 @@ import {Kobo} from 'kobo-sdk'
 import {KoboValidation} from 'infoportal-common'
 
 export namespace GlobalEvent {
-
   export interface KoboTagEditedParams {
-    formId: Kobo.FormId,
-    answerIds: Kobo.SubmissionId[],
-    tags: Record<string, any>,
+    formId: Kobo.FormId
+    answerIds: Kobo.SubmissionId[]
+    tags: Record<string, any>
     index?: number
     total?: number
   }
 
   export interface KoboAnswerEditedParams {
-    formId: Kobo.FormId,
-    answerIds: Kobo.SubmissionId[],
-    answer: Record<string, any>,
+    formId: Kobo.FormId
+    answerIds: Kobo.SubmissionId[]
+    answer: Record<string, any>
     index?: number
     total?: number
   }
 
   export interface KoboValidationEditedParams {
-    formId: Kobo.FormId,
-    answerIds: Kobo.SubmissionId[],
-    status?: KoboValidation,
+    formId: Kobo.FormId
+    answerIds: Kobo.SubmissionId[]
+    status?: KoboValidation
     index?: number
     total?: number
   }
 
-  interface KoboFormSyncParams
+  interface KoboFormSyncParams {
     // extends KoboSyncServerResult
-  {
     index?: number
     total?: number
     formId: Kobo.FormId
@@ -68,7 +66,6 @@ export namespace GlobalEvent {
   }
 
   export class Class {
-
     private static instance: Class
     static readonly getInstance = () => {
       if (!Class.instance) Class.instance = new Class()
@@ -77,7 +74,7 @@ export namespace GlobalEvent {
 
     private constructor(
       private emitter: EventEmitter = new EventEmitter(),
-      private log = app.logger('GlobalEvent')
+      private log = app.logger('GlobalEvent'),
     ) {
       this.log.info(`Initialize GlobalEvent.`)
       this.listen = this.emitter.on.bind(this.emitter)

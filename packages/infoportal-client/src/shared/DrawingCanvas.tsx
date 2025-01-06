@@ -7,11 +7,7 @@ interface DrawingProps extends Pick<BoxProps, 'sx'> {
   height: number
 }
 
-export const DrawingCanvas = ({
-  width,
-  height,
-  sx,
-}: DrawingProps) => {
+export const DrawingCanvas = ({width, height, sx}: DrawingProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [isDrawing, setIsDrawing] = useState<boolean>(false)
   const t = useTheme()
@@ -73,7 +69,7 @@ export const DrawingCanvas = ({
         height: height,
         position: 'relative',
         '&:hover>.drawing-canvas-clear': {
-          display: 'block'
+          display: 'block',
         },
         ...sx,
       }}
@@ -84,12 +80,19 @@ export const DrawingCanvas = ({
         width={width}
         height={height}
       />
-      <IpIconBtn size="small" className="drawing-canvas-clear" sx={{
-        display: 'none',
-        position: 'absolute',
-        top: 0,
-        right: -26
-      }} onClick={clearCanvas}>clear</IpIconBtn>
+      <IpIconBtn
+        size="small"
+        className="drawing-canvas-clear"
+        sx={{
+          display: 'none',
+          position: 'absolute',
+          top: 0,
+          right: -26,
+        }}
+        onClick={clearCanvas}
+      >
+        clear
+      </IpIconBtn>
     </Box>
   )
 }

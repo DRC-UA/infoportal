@@ -11,7 +11,7 @@ export const useShelterActions = ({
   schema,
 }: {
   schema: KoboSchemaHelper.Bundle
-  formId: Kobo.FormId,
+  formId: Kobo.FormId
   setEntity: Dispatch<SetStateAction<ShelterEntity[] | undefined>>
 }) => {
   const {api} = useAppSettings()

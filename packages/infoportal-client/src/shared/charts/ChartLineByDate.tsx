@@ -4,7 +4,7 @@ import React, {useMemo} from 'react'
 import {ChartLine, ChartLineProps} from '@/shared/charts/ChartLine'
 
 export type DateKeys<T> = {
-  [K in keyof T]: T[K] extends (Date | undefined) ? K : never;
+  [K in keyof T]: T[K] extends Date | undefined ? K : never
 }[keyof T]
 
 export const ChartLineByDate = <T, K extends DateKeys<T>>({
@@ -30,24 +30,26 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
     // const questions = ([question].flat() as K[])
     // const _end = format(end, 'yyyy-MM')
     const res: Record<string, Record<string, number>> = {}
-    data.forEach(d => {
-      Obj.entries(curves).map(([q, fn]) => {
-        const date = map(fn(d), d => typeof d === 'string' ? new Date(d) : d) as Date | undefined
-        try {
-          if (!date) return
-          const yyyyMM = format(date, 'yyyy-MM')
-          if (date.getTime() > end.getTime() || (start && date.getTime() < start.getTime())) return
-          if (!res[yyyyMM]) res[yyyyMM] = {} as any
-          if (!res[yyyyMM][q]) res[yyyyMM][q] = 0
-          res[yyyyMM][q] += 1
-        } catch (e) {
-          console.error('Invalid date', date, e)
-        }
-      }).filter(_ => _ !== undefined)
+    data.forEach((d) => {
+      Obj.entries(curves)
+        .map(([q, fn]) => {
+          const date = map(fn(d), (d) => (typeof d === 'string' ? new Date(d) : d)) as Date | undefined
+          try {
+            if (!date) return
+            const yyyyMM = format(date, 'yyyy-MM')
+            if (date.getTime() > end.getTime() || (start && date.getTime() < start.getTime())) return
+            if (!res[yyyyMM]) res[yyyyMM] = {} as any
+            if (!res[yyyyMM][q]) res[yyyyMM][q] = 0
+            res[yyyyMM][q] += 1
+          } catch (e) {
+            console.error('Invalid date', date, e)
+          }
+        })
+        .filter((_) => _ !== undefined)
     })
     return Obj.entries(res)
       .map(([date, v]) => {
-        Obj.keys(curves).forEach(q => {
+        Obj.keys(curves).forEach((q) => {
           if (!v[q]) v[q] = 0
         })
         return [date, v] as [string, Record<K, number>]

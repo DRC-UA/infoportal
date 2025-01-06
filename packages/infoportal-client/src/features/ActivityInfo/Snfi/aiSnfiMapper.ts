@@ -1,4 +1,13 @@
-import {DisplacementStatus, DrcProgram, DrcProject, groupBy, KoboMetaShelterRepairTags, KoboMetaStatus, PeriodHelper, ShelterTaPriceLevel} from 'infoportal-common'
+import {
+  DisplacementStatus,
+  DrcProgram,
+  DrcProject,
+  groupBy,
+  KoboMetaShelterRepairTags,
+  KoboMetaStatus,
+  PeriodHelper,
+  ShelterTaPriceLevel,
+} from 'infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
@@ -9,7 +18,6 @@ import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {Period} from 'infoportal-common'
 
 export namespace AiShelterMapper {
-
   const planCodes = {
     [DrcProject['UKR-000298 Novo-Nordisk']]: 'SNFI-DRC-00001',
     [DrcProject['UKR-000314 UHF4']]: 'SNFI-DRC-00002',
@@ -79,169 +87,209 @@ export namespace AiShelterMapper {
   //   return bundle
   // }
 
-  export const reqEsk = (api: ApiSdk) => (period: Partial<Period>): Promise<Bundle[]> => {
-    const periodStr = AiMapper.getPeriodStr(period)
-    return api.koboMeta.search({
-      status: [KoboMetaStatus.Committed],
-      activities: [
-        DrcProgram.ESK,
-        DrcProgram.CashForFuel,
-        DrcProgram.CashForUtilities,
-        DrcProgram.CashForRent,
-        DrcProgram.CashForRepair,
-      ]
-    })
-      .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
-      .then(data => {
-        let i = 0
-        return Promise.all(groupBy({
-          data,
-          groups: [
-            {by: _ => _.project?.[0]!,},
-            {by: _ => _.oblast!},
-            {by: _ => _.raion!},
-            {by: _ => _.hromada!},
-            {by: _ => _.settlement!},
-            {
-              by: _ => fnSwitch(_.displacement!, {
-                Idp: 'Internally Displaced',
-                NonDisplaced: 'Non-Displaced',
-                Returnee: 'Returnees',
-                Refugee: 'Non-Displaced',
-              }, () => 'Non-Displaced')
-            },
-            {by: _ => _.activity!}
+  export const reqEsk =
+    (api: ApiSdk) =>
+    (period: Partial<Period>): Promise<Bundle[]> => {
+      const periodStr = AiMapper.getPeriodStr(period)
+      return api.koboMeta
+        .search({
+          status: [KoboMetaStatus.Committed],
+          activities: [
+            DrcProgram.ESK,
+            DrcProgram.CashForFuel,
+            DrcProgram.CashForUtilities,
+            DrcProgram.CashForRent,
+            DrcProgram.CashForRepair,
           ],
-          finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, displacement, activity]) => {
-            const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons).compact())
-            const ai: AiSnfiType.Type = {
-              'Indicators - SNFI': fnSwitch(activity, {
-                [DrcProgram.ESK]: '# of individuals supported with emergency shelter support',
-                [DrcProgram.CashForFuel]: '# of individuals reached with support for winter energy needs (cash/voucher/fuel)',
-                [DrcProgram.CashForUtilities]: '# of individuals supported with cash for utilities',
-                [DrcProgram.CashForRent]: '# of individuals supported by cash for rent (RMI)',
-                [DrcProgram.CashForRepair]: '# of individuals supported with light humanitarian repairs',
-              }, () => aiInvalidValueFlag as keyof typeof AiSnfiType.options['Indicators - SNFI']),
-              'Implementing Partner': 'Danish Refugee Council',
-              'Plan/Project Code': getPlanCode(project),
-              'Reporting Organization': 'Danish Refugee Council',
-              ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
-              'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
-              'Reporting Month': fnSwitch(periodStr, {
-                '2024-01': '2024-03',
-                '2024-02': '2024-03'
-              }, () => periodStr),
-              // 'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
-              'Population Group': displacement,
-              'Non-individuals Reached': grouped.length,
-              'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
-              'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
-              'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
-              'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
-              'Adult Men (18-59)': disaggregation['Adult Men (18-59)'] ?? 0,
-              'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
-              'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
-              'People with disability': 0,
-              'Distribution through Common Pipeline': 'No',
-              'Distribution through inter-agency convoy (HOPC)': 'No',
-            }
-            const request = ActivityInfoSdk.makeRecordRequests({
-              activityIdPrefix: 'drcsnfie',
-              activityYYYYMM: periodStr,
-              formId: activitiesConfig.snfi.id,
-              activity: AiSnfiType.map(AiMapper.mapLocationToRecordId(ai)),
-              activityIndex: i++,
-            })
+        })
+        .then((_) => _.data.filter((_) => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
+        .then((data) => {
+          let i = 0
+          return Promise.all(
+            groupBy({
+              data,
+              groups: [
+                {by: (_) => _.project?.[0]!},
+                {by: (_) => _.oblast!},
+                {by: (_) => _.raion!},
+                {by: (_) => _.hromada!},
+                {by: (_) => _.settlement!},
+                {
+                  by: (_) =>
+                    fnSwitch(
+                      _.displacement!,
+                      {
+                        Idp: 'Internally Displaced',
+                        NonDisplaced: 'Non-Displaced',
+                        Returnee: 'Returnees',
+                        Refugee: 'Non-Displaced',
+                      },
+                      () => 'Non-Displaced',
+                    ),
+                },
+                {by: (_) => _.activity!},
+              ],
+              finalTransform: async (
+                grouped,
+                [project, oblast, raion, hromada, settlement, displacement, activity],
+              ) => {
+                const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons).compact())
+                const ai: AiSnfiType.Type = {
+                  'Indicators - SNFI': fnSwitch(
+                    activity,
+                    {
+                      [DrcProgram.ESK]: '# of individuals supported with emergency shelter support',
+                      [DrcProgram.CashForFuel]:
+                        '# of individuals reached with support for winter energy needs (cash/voucher/fuel)',
+                      [DrcProgram.CashForUtilities]: '# of individuals supported with cash for utilities',
+                      [DrcProgram.CashForRent]: '# of individuals supported by cash for rent (RMI)',
+                      [DrcProgram.CashForRepair]: '# of individuals supported with light humanitarian repairs',
+                    },
+                    () => aiInvalidValueFlag as keyof (typeof AiSnfiType.options)['Indicators - SNFI'],
+                  ),
+                  'Implementing Partner': 'Danish Refugee Council',
+                  'Plan/Project Code': getPlanCode(project),
+                  'Reporting Organization': 'Danish Refugee Council',
+                  ...(await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement)),
+                  'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
+                  'Reporting Month': fnSwitch(
+                    periodStr,
+                    {
+                      '2024-01': '2024-03',
+                      '2024-02': '2024-03',
+                    },
+                    () => periodStr,
+                  ),
+                  // 'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
+                  'Population Group': displacement,
+                  'Non-individuals Reached': grouped.length,
+                  'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
+                  'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
+                  'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
+                  'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
+                  'Adult Men (18-59)': disaggregation['Adult Men (18-59)'] ?? 0,
+                  'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
+                  'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
+                  'People with disability': 0,
+                  'Distribution through Common Pipeline': 'No',
+                  'Distribution through inter-agency convoy (HOPC)': 'No',
+                }
+                const request = ActivityInfoSdk.makeRecordRequests({
+                  activityIdPrefix: 'drcsnfie',
+                  activityYYYYMM: periodStr,
+                  formId: activitiesConfig.snfi.id,
+                  activity: AiSnfiType.map(AiMapper.mapLocationToRecordId(ai)),
+                  activityIndex: i++,
+                })
 
-            return {
-              submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
-              recordId: request.changes[0].recordId,
-              data: grouped,
-              activity: ai,
-              requestBody: request,
-            }
-          }
-        }).transforms)
-      })
-  }
+                return {
+                  submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
+                  recordId: request.changes[0].recordId,
+                  data: grouped,
+                  activity: ai,
+                  requestBody: request,
+                }
+              },
+            }).transforms,
+          )
+        })
+    }
 
   export const reqRepairs = (api: ApiSdk) => (period: Partial<Period>) => {
     const periodStr = AiMapper.getPeriodStr(period)
-    return api.koboMeta.search<KoboMetaShelterRepairTags>({
-      status: [KoboMetaStatus.Committed],
-      activities: [DrcProgram.ShelterRepair]
-    })
-      .then(_ => _.data.filter(_ => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
-      // .then(_ => _.data.flatMap(({persons, ...row}) => (persons ?? []).map(_ => ({...row, ..._}))))
-      .then(async data => {
-        let i = 0
-        return Promise.all(groupBy({
-          data: data,
-          groups: [
-            {by: _ => _.project?.[0]!},
-            {by: _ => _.oblast!},
-            {by: _ => _.raion!},
-            {by: _ => _.hromada!},
-            {by: _ => _.settlement!},
-            {
-              by: _ => {
-                return fnSwitch(_.tags?.damageLevel!, {
-                  [ShelterTaPriceLevel.Heavy]: ShelterTaPriceLevel.Medium,
-                  [ShelterTaPriceLevel.Medium]: ShelterTaPriceLevel.Medium,
-                  [ShelterTaPriceLevel.Light]: ShelterTaPriceLevel.Light,
-                }, _ => _)
-              },
-            },
-            {
-              by: row => fnSwitch(row.displacement!, {
-                [DisplacementStatus.Idp]: 'Internally Displaced',
-                [DisplacementStatus.Returnee]: 'Returnees',
-              }, () => 'Non-Displaced')
-            }
-          ],
-          finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
-            const disagg = AiMapper.disaggregatePersons(grouped.flatMap(_ => _.persons ?? []))
-            const ai: AiSnfiType.Type = {
-              'Indicators - SNFI': fnSwitch(damageLevel, {
-                [ShelterTaPriceLevel.Light]: '# of individuals supported with light humanitarian repairs',
-                [ShelterTaPriceLevel.Medium]: '# of individuals supported with medium humanitarian repairs',
-                [ShelterTaPriceLevel.Heavy]: '# of individuals supported with heavy humanitarian repairs',
-              }, () => '# of individuals supported with medium humanitarian repairs'),
-              'Implementing Partner': 'Danish Refugee Council',
-              'Plan/Project Code': getPlanCode(project),
-              'Reporting Organization': 'Danish Refugee Council',
-              ...await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement),
-              'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
-              'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
-              'Population Group': status,
-              'Non-individuals Reached': grouped.length,
-              'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,
-              'Adult Women (18-59)': disagg['Adult Women (18-59)'] ?? 0,
-              'Boys (0-17)': disagg['Boys (0-17)'] ?? 0,
-              'Girls (0-17)': disagg['Girls (0-17)'] ?? 0,
-              'Older Women (60+)': disagg['Older Women (60+)'] ?? 0,
-              'Older Men (60+)': disagg['Older Men (60+)'] ?? 0,
-              'Total Individuals Reached': disagg['Total Individuals Reached'] ?? 0,
-              'Distribution through Common Pipeline': 'No',
-              'Distribution through inter-agency convoy (HOPC)': 'No',
-            }
-            const request = ActivityInfoSdk.makeRecordRequests({
-              activityIdPrefix: 'drcsnfir',
-              activityYYYYMM: periodStr,
-              formId: activitiesConfig.snfi.id,
-              activity: AiSnfiType.map(AiMapper.mapLocationToRecordId(ai)),
-              activityIndex: i++,
-            })
+    return (
+      api.koboMeta
+        .search<KoboMetaShelterRepairTags>({
+          status: [KoboMetaStatus.Committed],
+          activities: [DrcProgram.ShelterRepair],
+        })
+        .then((_) => _.data.filter((_) => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
+        // .then(_ => _.data.flatMap(({persons, ...row}) => (persons ?? []).map(_ => ({...row, ..._}))))
+        .then(async (data) => {
+          let i = 0
+          return Promise.all(
+            groupBy({
+              data: data,
+              groups: [
+                {by: (_) => _.project?.[0]!},
+                {by: (_) => _.oblast!},
+                {by: (_) => _.raion!},
+                {by: (_) => _.hromada!},
+                {by: (_) => _.settlement!},
+                {
+                  by: (_) => {
+                    return fnSwitch(
+                      _.tags?.damageLevel!,
+                      {
+                        [ShelterTaPriceLevel.Heavy]: ShelterTaPriceLevel.Medium,
+                        [ShelterTaPriceLevel.Medium]: ShelterTaPriceLevel.Medium,
+                        [ShelterTaPriceLevel.Light]: ShelterTaPriceLevel.Light,
+                      },
+                      (_) => _,
+                    )
+                  },
+                },
+                {
+                  by: (row) =>
+                    fnSwitch(
+                      row.displacement!,
+                      {
+                        [DisplacementStatus.Idp]: 'Internally Displaced',
+                        [DisplacementStatus.Returnee]: 'Returnees',
+                      },
+                      () => 'Non-Displaced',
+                    ),
+                },
+              ],
+              finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
+                const disagg = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons ?? []))
+                const ai: AiSnfiType.Type = {
+                  'Indicators - SNFI': fnSwitch(
+                    damageLevel,
+                    {
+                      [ShelterTaPriceLevel.Light]: '# of individuals supported with light humanitarian repairs',
+                      [ShelterTaPriceLevel.Medium]: '# of individuals supported with medium humanitarian repairs',
+                      [ShelterTaPriceLevel.Heavy]: '# of individuals supported with heavy humanitarian repairs',
+                    },
+                    () => '# of individuals supported with medium humanitarian repairs',
+                  ),
+                  'Implementing Partner': 'Danish Refugee Council',
+                  'Plan/Project Code': getPlanCode(project),
+                  'Reporting Organization': 'Danish Refugee Council',
+                  ...(await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement)),
+                  'Reporting Date (YYYY-MM-DD)': periodStr + '-01',
+                  'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
+                  'Population Group': status,
+                  'Non-individuals Reached': grouped.length,
+                  'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,
+                  'Adult Women (18-59)': disagg['Adult Women (18-59)'] ?? 0,
+                  'Boys (0-17)': disagg['Boys (0-17)'] ?? 0,
+                  'Girls (0-17)': disagg['Girls (0-17)'] ?? 0,
+                  'Older Women (60+)': disagg['Older Women (60+)'] ?? 0,
+                  'Older Men (60+)': disagg['Older Men (60+)'] ?? 0,
+                  'Total Individuals Reached': disagg['Total Individuals Reached'] ?? 0,
+                  'Distribution through Common Pipeline': 'No',
+                  'Distribution through inter-agency convoy (HOPC)': 'No',
+                }
+                const request = ActivityInfoSdk.makeRecordRequests({
+                  activityIdPrefix: 'drcsnfir',
+                  activityYYYYMM: periodStr,
+                  formId: activitiesConfig.snfi.id,
+                  activity: AiSnfiType.map(AiMapper.mapLocationToRecordId(ai)),
+                  activityIndex: i++,
+                })
 
-            return {
-              recordId: request.changes[0].recordId,
-              data: grouped,
-              activity: ai,
-              requestBody: request,
-              submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
-            }
-          },
-        }).transforms)
-      })
+                return {
+                  recordId: request.changes[0].recordId,
+                  data: grouped,
+                  activity: ai,
+                  requestBody: request,
+                  submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
+                }
+              },
+            }).transforms,
+          )
+        })
+    )
   }
 }

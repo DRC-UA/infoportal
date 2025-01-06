@@ -9,9 +9,7 @@ export type GroupItemCreateParams = InferType<typeof GroupItemService.createSche
 export type GroupItemUpdateParams = InferType<typeof GroupItemService.updateSchema>
 
 export class GroupItemService {
-
-  constructor(private prisma: PrismaClient) {
-  }
+  constructor(private prisma: PrismaClient) {}
 
   static readonly createSchema = yup.object({
     level: AccessService.levelSchema,
@@ -28,17 +26,19 @@ export class GroupItemService {
   })
 
   readonly create = (groupId: UUID, body: GroupItemCreateParams) => {
-    return Promise.all((body.drcJob ?? [undefined]).map(drcJob =>
-      this.prisma.groupItem.create({
-        data: {
-          level: body.level,
-          drcJob,
-          drcOffice: body.drcOffice,
-          email: body.email,
-          groupId,
-        },
-      })
-    ))
+    return Promise.all(
+      (body.drcJob ?? [undefined]).map((drcJob) =>
+        this.prisma.groupItem.create({
+          data: {
+            level: body.level,
+            drcJob,
+            drcOffice: body.drcOffice,
+            email: body.email,
+            groupId,
+          },
+        }),
+      ),
+    )
   }
 
   readonly update = (id: UUID, body: GroupItemUpdateParams) => {
@@ -56,7 +56,7 @@ export class GroupItemService {
   readonly remove = (id: UUID) => {
     return this.prisma.groupItem.delete({
       where: {
-        id
+        id,
       },
     })
   }
@@ -65,7 +65,7 @@ export class GroupItemService {
     return this.prisma.groupItem.findMany({
       where: {
         groupId,
-      }
+      },
     })
   }
 }

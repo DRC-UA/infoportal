@@ -25,7 +25,7 @@ const useStyles = makeStyles()((t) => ({
     '&:hover .TableHeadSectionCell-content': {
       opacity: 1,
       height: 32,
-    }
+    },
   },
   th: {
     padding: '0 !important',
@@ -41,11 +41,11 @@ const useStyles = makeStyles()((t) => ({
     height: 0,
   },
   btn: {
-    minWidth: 30
+    minWidth: 30,
   },
   tooltip: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 }))
 
@@ -62,24 +62,35 @@ export const TableHeadSectionCell = ({
   const {classes, cx} = useStyles()
   return (
     <tr className={cx('tr', classes.tr)}>
-      {map(Obj.entries(seq(columns).groupBy(_ => _.groupLabel ?? 'None')), groups => groups.length > 1 && groups.map(([group, cols], i) =>
-        <th
-          key={group}
-          style={{
-            color: t.palette.getContrastText(colors[i % colors.length]),
-            background: colors[i % colors.length]
-          }}
-          colSpan={i === 0 ? cols.length + (hasCheckboxColumn ? 1 : 0) : cols.length}
-          className={classes.th}
-        >
-          <div className={cx(classes.content, 'TableHeadSectionCell-content')}>
-            {group}&nbsp;
-            <IpBtn className={classes.btn} size="small" variant="contained" color="primary" onClick={() => onHideColumns(cols.map(_ => _.id))}>
-              <Icon fontSize="small">visibility_off</Icon>
-            </IpBtn>
-          </div>
-        </th>
-      ))}
+      {map(
+        Obj.entries(seq(columns).groupBy((_) => _.groupLabel ?? 'None')),
+        (groups) =>
+          groups.length > 1 &&
+          groups.map(([group, cols], i) => (
+            <th
+              key={group}
+              style={{
+                color: t.palette.getContrastText(colors[i % colors.length]),
+                background: colors[i % colors.length],
+              }}
+              colSpan={i === 0 ? cols.length + (hasCheckboxColumn ? 1 : 0) : cols.length}
+              className={classes.th}
+            >
+              <div className={cx(classes.content, 'TableHeadSectionCell-content')}>
+                {group}&nbsp;
+                <IpBtn
+                  className={classes.btn}
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  onClick={() => onHideColumns(cols.map((_) => _.id))}
+                >
+                  <Icon fontSize="small">visibility_off</Icon>
+                </IpBtn>
+              </div>
+            </th>
+          )),
+      )}
     </tr>
   )
 }

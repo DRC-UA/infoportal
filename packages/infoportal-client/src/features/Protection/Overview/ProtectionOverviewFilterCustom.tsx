@@ -13,23 +13,17 @@ import {Obj} from '@alexandreannic/ts-utils'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {appConfig} from '@/conf/AppConfig'
 
-const Row = ({
-  title,
-  desc,
-  action,
-  icon,
-}: {
-  title: string
-  desc: string
-  action?: ReactNode
-  icon: string
-}) => {
+const Row = ({title, desc, action, icon}: {title: string; desc: string; action?: ReactNode; icon: string}) => {
   return (
     <Box sx={{display: 'flex', alignItems: 'center', '&:not(:last-of-type)': {mb: 2}}}>
-      <Icon color="disabled" sx={{mr: 1}}>{icon}</Icon>
+      <Icon color="disabled" sx={{mr: 1}}>
+        {icon}
+      </Icon>
       <Box sx={{flex: 1}}>
         <Txt block>{title}</Txt>
-        <Txt block color="hint">{desc}</Txt>
+        <Txt block color="hint">
+          {desc}
+        </Txt>
       </Box>
       {action}
     </Box>
@@ -60,22 +54,32 @@ export const ProtectionOverviewFilterCustom = () => {
               title={m._protection.filterEchoReporting}
               desc={m._protection.filterEchoReportingDetails(conf.other.protection.echoDuplicationEstimationPercent)}
               action={
-                <Switch sx={{ml: 1}} checked={innerFilter.echo ?? false} onChange={(e, checked) => setInnerFilter(_ => ({..._, echo: checked}))}/>
+                <Switch
+                  sx={{ml: 1}}
+                  checked={innerFilter.echo ?? false}
+                  onChange={(e, checked) => setInnerFilter((_) => ({..._, echo: checked}))}
+                />
               }
             />
             <Row
               icon={appConfig.icons.disability}
               title={m._protection.filterEchoReportingDisability}
-              desc={m._protection.filterEchoReportingDisabilityDetails(conf.other.protection.echoDisabilityEstimationPercent)}
+              desc={m._protection.filterEchoReportingDisabilityDetails(
+                conf.other.protection.echoDisabilityEstimationPercent,
+              )}
               action={
-                <Switch sx={{ml: 1}} checked={innerFilter.echoDisability ?? false} onChange={(e, checked) => setInnerFilter(_ => ({..._, echoDisability: checked}))}/>
+                <Switch
+                  sx={{ml: 1}}
+                  checked={innerFilter.echoDisability ?? false}
+                  onChange={(e, checked) => setInnerFilter((_) => ({..._, echoDisability: checked}))}
+                />
               }
             />
           </PanelBody>
           <PanelFoot>
             <IpBtn onClick={() => ctx.filters.setCustom(innerFilter)}>{m.apply}</IpBtn>
             <IpBtn onClick={close}>{m.close}</IpBtn>
-            <IpIconBtn children="filter_alt_off" onClick={() => ctx.filters.setCustom({})} tooltip={m.clear}/>
+            <IpIconBtn children="filter_alt_off" onClick={() => ctx.filters.setCustom({})} tooltip={m.clear} />
           </PanelFoot>
         </>
       )}

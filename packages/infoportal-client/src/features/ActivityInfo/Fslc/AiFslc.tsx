@@ -14,7 +14,7 @@ export const AiFslc = () => {
   return (
     <Page width="full">
       <Panel>
-        <AiBundleTable fetcher={fetcher} id="fslc"/>
+        <AiBundleTable fetcher={fetcher} id="fslc" />
       </Panel>
     </Page>
   )

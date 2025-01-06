@@ -23,7 +23,7 @@ export const MetaDashboardProvider = ({
 }) => {
   const {api} = useAppSettings()
   const fetcher = useFetcher(api.koboMeta.search)
-  const data = map(fetcher.get, _ => seq(_.data))
+  const data = map(fetcher.get, (_) => seq(_.data))
   const ctx = useMetaDashboardData({data: data ?? seq(), storageKeyPrefix})
 
   useEffect(() => {
@@ -31,10 +31,12 @@ export const MetaDashboardProvider = ({
   }, [])
 
   return (
-    <Context.Provider value={{
-      data: ctx,
-      fetcher,
-    }}>
+    <Context.Provider
+      value={{
+        data: ctx,
+        fetcher,
+      }}
+    >
       {children}
     </Context.Provider>
   )

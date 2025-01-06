@@ -30,44 +30,49 @@ export class KoboFormHelper {
 
 export type KoboMappedAnswerType = string | string[] | Date | number | undefined | KoboSubmissionFlat<any>[]
 
-export type KoboMappedAnswer<
-  T extends Record<string, any> = Record<string, KoboMappedAnswerType>
-> = (KoboSubmissionMetaData<KoboBaseTags> & T)
+export type KoboMappedAnswer<T extends Record<string, any> = Record<string, KoboMappedAnswerType>> =
+  KoboSubmissionMetaData<KoboBaseTags> & T
 
 export class KoboMapper {
-
-  static readonly mapAnswer = <
-    TKoboAnswer extends Record<string, any>,
-    TTags extends KoboBaseTags,
-    TCustomAnswer extends KoboSubmissionFlat<TKoboAnswer, TTags>
-  >(
-    fnMap: (x: any) => TKoboAnswer,
-    fnMapTags: (x: any) => TTags,
-    fnMapCustom?: (x: KoboSubmissionFlat<TKoboAnswer, TTags>) => TCustomAnswer
-  ) => ({answers, ...meta}: KoboSubmission): TCustomAnswer => {
-    const r = {
-      ...fnMap(answers),
-      ...KoboMapper.mapAnswerMetaData(meta, fnMapTags),
+  static readonly mapAnswer =
+    <
+      TKoboAnswer extends Record<string, any>,
+      TTags extends KoboBaseTags,
+      TCustomAnswer extends KoboSubmissionFlat<TKoboAnswer, TTags>,
+    >(
+      fnMap: (x: any) => TKoboAnswer,
+      fnMapTags: (x: any) => TTags,
+      fnMapCustom?: (x: KoboSubmissionFlat<TKoboAnswer, TTags>) => TCustomAnswer,
+    ) =>
+    ({answers, ...meta}: KoboSubmission): TCustomAnswer => {
+      const r = {
+        ...fnMap(answers),
+        ...KoboMapper.mapAnswerMetaData(meta, fnMapTags),
+      }
+      return fnMapCustom ? fnMapCustom(r) : r
     }
-    return fnMapCustom ? fnMapCustom(r) : r
-  }
 
-  static readonly mapPaginateAnswer = <
-    TKoboAnswer extends Record<string, any>,
-    TTags extends KoboBaseTags,
-    TCustomAnswer extends KoboSubmissionFlat<TKoboAnswer, TTags> = KoboSubmissionFlat<TKoboAnswer, TTags>
-  >(
-    fnMap: (x: any) => TKoboAnswer,
-    fnMapTags: (x: any) => TTags,
-    fnMapCustom?: (x: KoboSubmissionFlat<TKoboAnswer, TTags>) => TCustomAnswer
-  ) => (_: ApiPaginate<KoboSubmission>): ApiPaginate<TCustomAnswer> => {
-    return ({
-      ..._,
-      data: _.data.map(KoboMapper.mapAnswer(fnMap, fnMapTags, fnMapCustom))
-    })
-  }
+  static readonly mapPaginateAnswer =
+    <
+      TKoboAnswer extends Record<string, any>,
+      TTags extends KoboBaseTags,
+      TCustomAnswer extends KoboSubmissionFlat<TKoboAnswer, TTags> = KoboSubmissionFlat<TKoboAnswer, TTags>,
+    >(
+      fnMap: (x: any) => TKoboAnswer,
+      fnMapTags: (x: any) => TTags,
+      fnMapCustom?: (x: KoboSubmissionFlat<TKoboAnswer, TTags>) => TCustomAnswer,
+    ) =>
+    (_: ApiPaginate<KoboSubmission>): ApiPaginate<TCustomAnswer> => {
+      return {
+        ..._,
+        data: _.data.map(KoboMapper.mapAnswer(fnMap, fnMapTags, fnMapCustom)),
+      }
+    }
 
-  static readonly mapAnswerBySchema = (indexedSchema: Record<string, Kobo.Form.Question>, answers: KoboSubmissionFlat): KoboMappedAnswer => {
+  static readonly mapAnswerBySchema = (
+    indexedSchema: Record<string, Kobo.Form.Question>,
+    answers: KoboSubmissionFlat,
+  ): KoboMappedAnswer => {
     const mapped: KoboMappedAnswer = {...answers}
     Obj.entries(mapped).forEach(([question, answer]) => {
       const type = indexedSchema[question]?.type
@@ -75,7 +80,7 @@ export class KoboMapper {
       switch (type) {
         case 'today':
         case 'date': {
-          (mapped as any)[question] = new Date(answer as Date)
+          ;(mapped as any)[question] = new Date(answer as Date)
           break
         }
         case 'select_multiple': {
@@ -97,7 +102,7 @@ export class KoboMapper {
 
   static readonly mapAnswerMetaData = (
     k: Partial<Record<keyof KoboSubmissionMetaData, any>>,
-    fnMapTags: (x: any) => any = _ => _
+    fnMapTags: (x: any) => any = (_) => _,
   ): KoboSubmissionFlat<any, KoboBaseTags> => {
     delete (k as any)['deviceid']
     return {

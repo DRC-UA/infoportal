@@ -5,7 +5,15 @@ import {useMpcaContext} from '../MpcaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {UseMpcaComputed, useMpcaComputed} from '../useMpcaComputed'
 import {fnSwitch, Obj, Seq, seq} from '@alexandreannic/ts-utils'
-import {DrcOffice, KoboIndex, MpcaEntity, OblastIndex, Period, toPercent, WfpDeduplicationStatus,} from 'infoportal-common'
+import {
+  DrcOffice,
+  KoboIndex,
+  MpcaEntity,
+  OblastIndex,
+  Period,
+  toPercent,
+  WfpDeduplicationStatus,
+} from 'infoportal-common'
 import {Txt} from '@/shared/Txt'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
@@ -52,7 +60,9 @@ export const MpcaDashboard = () => {
   const ctx = useMpcaContext()
   const [periodFilter, setPeriodFilter] = useState<Partial<Period>>({})
   const {m, formatLargeNumber} = useI18n()
-  const [amountType, setAmountType] = usePersistentState<MpcaAmountType>(MpcaAmountType.amountUahFinal, {storageKey: 'mpca-dashboard-amountType'})
+  const [amountType, setAmountType] = usePersistentState<MpcaAmountType>(MpcaAmountType.amountUahFinal, {
+    storageKey: 'mpca-dashboard-amountType',
+  })
   const [currency, setCurrency] = usePersistentState<Currency>(Currency.USD, {storageKey: 'mpca-dashboard-currency'})
 
   const mappedData = ctx.data
@@ -63,72 +73,114 @@ export const MpcaDashboard = () => {
       source: {
         icon: appConfig.icons.koboForm,
         label: m.kobo,
-        getValue: _ => _.formId,
-        getOptions: () => d.map(_ => _.formId).distinct(_ => _).map(_ => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation))
+        getValue: (_) => _.formId,
+        getOptions: () =>
+          d
+            .map((_) => _.formId)
+            .distinct((_) => _)
+            .map((_) => DataFilter.buildOption(_, KoboIndex.searchById(_)?.translation)),
       },
       prog: {
         icon: appConfig.icons.program,
         label: m.program,
-        getValue: _ => _.activity,
-        getOptions: () => DataFilter.buildOptions(d.map(_ => _.activity!).distinct(_ => _), false),
+        getValue: (_) => _.activity,
+        getOptions: () =>
+          DataFilter.buildOptions(
+            d.map((_) => _.activity!).distinct((_) => _),
+            false,
+          ),
       },
       finalDonor: {
         icon: appConfig.icons.donor,
         label: m.donor,
-        getValue: _ => _.donor ?? DataFilter.blank,
-        getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.donor).distinct(_ => _), true),
+        getValue: (_) => _.donor ?? DataFilter.blank,
+        getOptions: () =>
+          DataFilter.buildOptions(
+            d.flatMap((_) => _.donor).distinct((_) => _),
+            true,
+          ),
         multiple: true,
       },
       finalProject: {
         icon: appConfig.icons.project,
         label: m.project,
-        getValue: _ => _.project ?? DataFilter.blank,
-        getOptions: () => DataFilter.buildOptions(d.flatMap(_ => _.project).distinct(_ => _), true),
+        getValue: (_) => _.project ?? DataFilter.blank,
+        getOptions: () =>
+          DataFilter.buildOptions(
+            d.flatMap((_) => _.project).distinct((_) => _),
+            true,
+          ),
         multiple: true,
       },
       office: {
         icon: 'business',
         label: m.office,
-        getValue: _ => _.office,
+        getValue: (_) => _.office,
         getOptions: () => DataFilter.buildOptionsFromObject(DrcOffice, false),
       },
       deduplication: {
         icon: appFeaturesIndex.wfp_deduplication.materialIcons,
         label: m.duplication,
-        getValue: _ => _.deduplication?.status ?? DatatableUtils.blank,
-        getOptions: () => [DataFilter.blankOption, ...Obj.values(WfpDeduplicationStatus).map(_ => DataFilter.buildOption(_, <><DeduplicationStatusIcon status={_}/>&nbsp;{_}</>))],
+        getValue: (_) => _.deduplication?.status ?? DatatableUtils.blank,
+        getOptions: () => [
+          DataFilter.blankOption,
+          ...Obj.values(WfpDeduplicationStatus).map((_) =>
+            DataFilter.buildOption(
+              _,
+              <>
+                <DeduplicationStatusIcon status={_} />
+                &nbsp;{_}
+              </>,
+            ),
+          ),
+        ],
       },
       oblast: {
         icon: 'location_on',
         label: m.oblast,
-        getValue: _ => _.oblast,
-        getOptions: () => DataFilter.buildOptions(d.map(_ => _.oblast!).distinct(_ => _).sort())
+        getValue: (_) => _.oblast,
+        getOptions: () =>
+          DataFilter.buildOptions(
+            d
+              .map((_) => _.oblast!)
+              .distinct((_) => _)
+              .sort(),
+          ),
       },
       raion: {
         label: m.raion,
-        getValue: _ => _.raion,
-        getOptions: (get) => get().map(_ => _.raion).compact()
-          .distinct(_ => _)
-          .sort().map(_ => DataFilter.buildOption(_))
+        getValue: (_) => _.raion,
+        getOptions: (get) =>
+          get()
+            .map((_) => _.raion)
+            .compact()
+            .distinct((_) => _)
+            .sort()
+            .map((_) => DataFilter.buildOption(_)),
       },
       hromada: {
         label: m.hromada,
-        getValue: _ => _.hromada,
-        getOptions: (get) => get()
-          .map(_ => _.hromada)
-          .compact()
-          .distinct(_ => _)
-          .sort()
-          .sort().map(_ => DataFilter.buildOption(_))
-      }
+        getValue: (_) => _.hromada,
+        getOptions: (get) =>
+          get()
+            .map((_) => _.hromada)
+            .compact()
+            .distinct((_) => _)
+            .sort()
+            .sort()
+            .map((_) => DataFilter.buildOption(_)),
+      },
     })
   }, [mappedData])
 
-  const [filters, setFilters] = usePersistentState<DataFilter.InferShape<typeof filterShape>>({}, {storageKey: 'mpca-dashboard-filters'})
+  const [filters, setFilters] = usePersistentState<DataFilter.InferShape<typeof filterShape>>(
+    {},
+    {storageKey: 'mpca-dashboard-filters'},
+  )
 
   const filteredData = useMemo(() => {
     if (!mappedData) return
-    const filteredBy_date = mappedData.filter(d => {
+    const filteredBy_date = mappedData.filter((d) => {
       if (periodFilter?.start && periodFilter.start.getTime() >= d.date.getTime()) return false
       if (periodFilter?.end && periodFilter.end.getTime() <= d.date.getTime()) return false
       return true
@@ -138,15 +190,21 @@ export const MpcaDashboard = () => {
 
   const computed = useMpcaComputed({data: filteredData ?? seq()})
 
-  const getAmount = useCallback((_: MpcaEntity) => {
-    const amount = _[amountType]
-    if (!amount) return
-    return amount * fnSwitch(currency, {
-      [Currency.UAH]: 1,
-      [Currency.USD]: conf.uahToUsd,
-    })
-    // return formatLargeNumber(converted) + ' ' + Currency.UAH
-  }, [currency, amountType])
+  const getAmount = useCallback(
+    (_: MpcaEntity) => {
+      const amount = _[amountType]
+      if (!amount) return
+      return (
+        amount *
+        fnSwitch(currency, {
+          [Currency.UAH]: 1,
+          [Currency.USD]: conf.uahToUsd,
+        })
+      )
+      // return formatLargeNumber(converted) + ' ' + Currency.UAH
+    },
+    [currency, amountType],
+  )
 
   return (
     <Page width="lg" loading={ctx.fetcherData.loading}>
@@ -163,7 +221,7 @@ export const MpcaDashboard = () => {
           <>
             <PeriodPicker
               defaultValue={[periodFilter.start, periodFilter.end]}
-              onChange={([start, end]) => setPeriodFilter(prev => ({...prev, start, end}))}
+              onChange={([start, end]) => setPeriodFilter((prev) => ({...prev, start, end}))}
               label={[m.start, m.endIncluded]}
               max={today}
             />
@@ -171,14 +229,30 @@ export const MpcaDashboard = () => {
               {() => (
                 <Box sx={{p: 1}}>
                   <ScRadioGroup value={amountType} onChange={setAmountType} dense sx={{mb: 1}}>
-                    <ScRadioGroupItem value={MpcaAmountType.amountUahSupposed} title="Estimated" description="Estimated when filling the form"/>
-                    <ScRadioGroupItem value={MpcaAmountType.amountUahDedup} title="Deduplicated" description="Amount given after WFP deduplication"/>
-                    <ScRadioGroupItem value={MpcaAmountType.amountUahFinal} title="Reel" description="Deduplicated amount or Estimated if none"/>
-                    <ScRadioGroupItem value={MpcaAmountType.amountUahCommitted} title="Committed" description="Real amount if committed"/>
+                    <ScRadioGroupItem
+                      value={MpcaAmountType.amountUahSupposed}
+                      title="Estimated"
+                      description="Estimated when filling the form"
+                    />
+                    <ScRadioGroupItem
+                      value={MpcaAmountType.amountUahDedup}
+                      title="Deduplicated"
+                      description="Amount given after WFP deduplication"
+                    />
+                    <ScRadioGroupItem
+                      value={MpcaAmountType.amountUahFinal}
+                      title="Reel"
+                      description="Deduplicated amount or Estimated if none"
+                    />
+                    <ScRadioGroupItem
+                      value={MpcaAmountType.amountUahCommitted}
+                      title="Committed"
+                      description="Real amount if committed"
+                    />
                   </ScRadioGroup>
                   <ScRadioGroup value={currency} onChange={setCurrency} inline dense>
-                    <ScRadioGroupItem value={Currency.USD} title="USD" sx={{width: '100%'}}/>
-                    <ScRadioGroupItem value={Currency.UAH} title="UAH" sx={{width: '100%'}}/>
+                    <ScRadioGroupItem value={Currency.USD} title="USD" sx={{width: '100%'}} />
+                    <ScRadioGroupItem value={Currency.UAH} title="UAH" sx={{width: '100%'}} />
                   </ScRadioGroup>
                 </Box>
               )}
@@ -214,9 +288,11 @@ export const _MPCADashboard = ({
 }) => {
   const {session} = useSession()
   const {m, formatDate, formatLargeNumber} = useI18n()
-  const [showProjectsBy, setShowProjectsBy] = usePersistentState<'donor' | 'project'>('donor', {storageKey: 'meta-dashboard-showProject'})
+  const [showProjectsBy, setShowProjectsBy] = usePersistentState<'donor' | 'project'>('donor', {
+    storageKey: 'meta-dashboard-showProject',
+  })
 
-  const totalAmount = useMemo(() => data.sum(_ => getAmount(_) ?? 0), [data, getAmount])
+  const totalAmount = useMemo(() => data.sum((_) => getAmount(_) ?? 0), [data, getAmount])
 
   const displayAmount = (_: number) => formatLargeNumber(_, {maximumFractionDigits: 0}) + ' ' + currency
   return (
@@ -225,8 +301,8 @@ export const _MPCADashboard = ({
         <Div responsive>
           <Div sx={{alignItems: 'stretch'}}>
             <SlideWidget sx={{flex: 1}} icon="person" title="Beneficiaries">
-              <Lazy deps={[data]} fn={() => data.sum(_ => _.personsCount ?? 0)}>
-                {_ => formatLargeNumber(_)}
+              <Lazy deps={[data]} fn={() => data.sum((_) => _.personsCount ?? 0)}>
+                {(_) => formatLargeNumber(_)}
               </Lazy>
             </SlideWidget>
             <SlideWidget sx={{flex: 1}} icon="how_to_reg" title="Duplications checked with WFP">
@@ -236,10 +312,18 @@ export const _MPCADashboard = ({
           <Div sx={{alignItems: 'stretch'}}>
             <SlideWidget sx={{flex: 1}} icon="content_copy" title="Multiple time assisted">
               {formatLargeNumber(Obj.keys(computed.multipleTimeAssisted).length)}
-              <Txt color="hint" sx={{ml: 1}}>{toPercent(Obj.keys(computed.multipleTimeAssisted).length / data.length)}</Txt>
+              <Txt color="hint" sx={{ml: 1}}>
+                {toPercent(Obj.keys(computed.multipleTimeAssisted).length / data.length)}
+              </Txt>
             </SlideWidget>
             <SlidePanel sx={{flex: 1}}>
-              <ChartPieWidget showValue showBase value={computed.preventedAssistance.length} base={computed.deduplications.length} title="Prevented assistances"/>
+              <ChartPieWidget
+                showValue
+                showBase
+                value={computed.preventedAssistance.length}
+                base={computed.deduplications.length}
+                title="Prevented assistances"
+              />
             </SlidePanel>
           </Div>
           {/*<SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>*/}
@@ -249,19 +333,17 @@ export const _MPCADashboard = ({
         <Div sx={{alignItems: 'flex-start'}} responsive>
           <Div column>
             <SlidePanel BodyProps={{sx: {pt: 0}}}>
-              <SlideWidget title="Total amount">
-                {displayAmount(totalAmount)}
-              </SlideWidget>
-              <MpcaDashboardAmountLine data={data} getAmount={getAmount}/>
+              <SlideWidget title="Total amount">{displayAmount(totalAmount)}</SlideWidget>
+              <MpcaDashboardAmountLine data={data} getAmount={getAmount} />
             </SlidePanel>
-            <MpcaDashboardDeduplication data={data}/>
+            <MpcaDashboardDeduplication data={data} />
             <SlidePanel title={m.form}>
-              <Lazy deps={[data]} fn={() => data.map(_ => ({form: KoboIndex.searchById(_.formId)?.translation}))}>
-                {res => <ChartBarSingleBy data={res} by={_ => _.form}/>}
+              <Lazy deps={[data]} fn={() => data.map((_) => ({form: KoboIndex.searchById(_.formId)?.translation}))}>
+                {(res) => <ChartBarSingleBy data={res} by={(_) => _.form} />}
               </Lazy>
             </SlidePanel>
             <SlidePanel title={m.program}>
-              <ChartBarSingleBy data={data} by={_ => _.activity}/>
+              <ChartBarSingleBy data={data} by={(_) => _.activity} />
             </SlidePanel>
             {/*<SlidePanel title={m.submissionTime}>*/}
             {/*  <KoboLineChartDate*/}
@@ -293,27 +375,34 @@ export const _MPCADashboard = ({
             {/*  </Lazy>*/}
             {/*</SlidePanel>*/}
             <SlidePanel title={`${m.mpca.assistanceByLocation}`}>
-              <Lazy deps={[data, currency, getAmount]} fn={() => {
-                const by = data.groupBy(_ => OblastIndex.byName(_.oblast).iso)
-                return new Obj(by).map((k, v) => [k, makeChartData({value: seq(v).sum(x => getAmount(x) ?? 0)})]).get()
-              }}>
-                {_ => <MapSvg data={_} sx={{maxWidth: 480, margin: 'auto'}} maximumFractionDigits={0} base={totalAmount}/>}
+              <Lazy
+                deps={[data, currency, getAmount]}
+                fn={() => {
+                  const by = data.groupBy((_) => OblastIndex.byName(_.oblast).iso)
+                  return new Obj(by)
+                    .map((k, v) => [k, makeChartData({value: seq(v).sum((x) => getAmount(x) ?? 0)})])
+                    .get()
+                }}
+              >
+                {(_) => (
+                  <MapSvg data={_} sx={{maxWidth: 480, margin: 'auto'}} maximumFractionDigits={0} base={totalAmount} />
+                )}
               </Lazy>
             </SlidePanel>
             <Panel title={m.disaggregation}>
               <PanelBody>
-                <AgeGroupTable tableId="mpca-dashboard-ag" persons={computed.persons} enablePwdFilter/>
+                <AgeGroupTable tableId="mpca-dashboard-ag" persons={computed.persons} enablePwdFilter />
               </PanelBody>
             </Panel>
             <SlidePanel>
               <ScRadioGroup value={showProjectsBy} onChange={setShowProjectsBy} inline dense>
-                <ScRadioGroupItem hideRadio value="donoor" title={m.donor}/>
-                <ScRadioGroupItem hideRadio value="project" title={m.project}/>
+                <ScRadioGroupItem hideRadio value="donoor" title={m.donor} />
+                <ScRadioGroupItem hideRadio value="project" title={m.project} />
               </ScRadioGroup>
               {showProjectsBy === 'project' ? (
-                <ChartBarMultipleBy data={data} by={_ => _.project}/>
+                <ChartBarMultipleBy data={data} by={(_) => _.project} />
               ) : (
-                <ChartBarMultipleBy data={data} by={_ => _.donor}/>
+                <ChartBarMultipleBy data={data} by={(_) => _.donor} />
               )}
             </SlidePanel>
           </Div>
@@ -321,14 +410,14 @@ export const _MPCADashboard = ({
         <Div>
           <Div column>
             <Panel title="Budget Tracker (UAH)">
-              <MpcaBudgetTracker data={data} getAmount={getAmount} amountType={amountType}/>
+              <MpcaBudgetTracker data={data} getAmount={getAmount} amountType={amountType} />
             </Panel>
           </Div>
         </Div>
         {(session.admin || session.drcJob === 'Finance Manager') && (
           <Div>
             <Div column>
-              <MpcaDuplicatedCheckPanel data={data}/>
+              <MpcaDuplicatedCheckPanel data={data} />
             </Div>
           </Div>
         )}

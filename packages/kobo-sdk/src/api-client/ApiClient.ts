@@ -46,7 +46,10 @@ export interface ApiErrorDetails {
 export class ApiError extends Error {
   public name = 'ApiError'
 
-  constructor(public message: string, public details: ApiErrorDetails) {
+  constructor(
+    public message: string,
+    public details: ApiErrorDetails,
+  ) {
     super(message)
   }
 }
@@ -65,9 +68,11 @@ export class ApiClient {
   readonly baseUrl: string
   private readonly request: (method: Method, url: string, options?: RequestOption) => Promise<any>
 
-  static readonly objectToQueryString = (obj: {
-    [key: string]: any
-  } = {}): string => {
+  static readonly objectToQueryString = (
+    obj: {
+      [key: string]: any
+    } = {},
+  ): string => {
     const params = new URLSearchParams()
     for (const [key, value] of Object.entries(obj)) {
       if (value !== null && value !== undefined) {
@@ -89,7 +94,7 @@ export class ApiClient {
       baseURL: baseUrl,
       headers: {...headers},
     })
-    client.interceptors.request.use(request => {
+    client.interceptors.request.use((request) => {
       return request
     })
 
@@ -106,29 +111,33 @@ export class ApiClient {
           // params: options?.qs,
           data: options?.body,
           paramsSerializer: {
-            encode: params => qs.stringify(params, {arrayFormat: 'repeat'}),
-          }
+            encode: (params) => qs.stringify(params, {arrayFormat: 'repeat'}),
+          },
         })
         .then(mapData ?? ((_: AxiosResponse) => _.data))
         .catch(
           mapError ??
-          ((_: any) => {
-            const request = {method, url, qs: options?.qs, body: options?.body}
-            if (_.response && _.response.data) {
-              const message = _.response.data.details ?? _.response.data.timeout ?? JSON.stringify(_.response.data)
-              return Promise.reject(new ApiError(message, {
-                code: _.response.status,
-                id: _.response.data.type,
-                request,
-                // error: _,
-              }))
-            }
-            return Promise.reject(new ApiError(`Something not caught went wrong`, {
-              code: 'uncaught',
-              // error: _,
-              request,
-            }))
-          }),
+            ((_: any) => {
+              const request = {method, url, qs: options?.qs, body: options?.body}
+              if (_.response && _.response.data) {
+                const message = _.response.data.details ?? _.response.data.timeout ?? JSON.stringify(_.response.data)
+                return Promise.reject(
+                  new ApiError(message, {
+                    code: _.response.status,
+                    id: _.response.data.type,
+                    request,
+                    // error: _,
+                  }),
+                )
+              }
+              return Promise.reject(
+                new ApiError(`Something not caught went wrong`, {
+                  code: 'uncaught',
+                  // error: _,
+                  request,
+                }),
+              )
+            }),
         )
     }
 
@@ -145,18 +154,18 @@ export class ApiClient {
     }
 
     this.postGetPdf = async (url: string, options?: RequestOption) => {
-      return requestUsingFetchApi('POST', url, options).then(_ => _.blob())
+      return requestUsingFetchApi('POST', url, options).then((_) => _.blob())
     }
 
     this.getPdf = async (url: string, options?: RequestOption) => {
-      return requestUsingFetchApi('GET', url, options).then(_ => _.blob())
+      return requestUsingFetchApi('GET', url, options).then((_) => _.blob())
     }
   }
 
   private static readonly buildOptions = async (
     options?: RequestOption,
     headers?: any,
-    requestInterceptor: (_?: RequestOption) => RequestOption | Promise<RequestOption> = _ => _!,
+    requestInterceptor: (_?: RequestOption) => RequestOption | Promise<RequestOption> = (_) => _!,
   ): Promise<RequestOption> => {
     const interceptedOptions = await requestInterceptor(options)
     return {

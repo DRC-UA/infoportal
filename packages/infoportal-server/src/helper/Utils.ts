@@ -12,33 +12,39 @@ export const yup = _yup
 
 export const genUUID = v4
 
-export const toYYYYMMDD = (_: Date) => format(_, 'yyyy-MM-dd')//_.toString().substring(0, 10)
+export const toYYYYMMDD = (_: Date) => format(_, 'yyyy-MM-dd') //_.toString().substring(0, 10)
 
 export type MappedColumn<T, O = string> = {
   [P in keyof T]: T[P] extends undefined | Date | string | number | boolean | any[] ? O : MappedColumn<T[P], O>
 }
 
-export const renameObjectProperties = <O>(propsMap: Partial<MappedColumn<O>>) => (input: any): O => {
-  return Obj.keys(propsMap).reduce((acc, key) => {
-    if (typeof propsMap[key] === 'object') {
+export const renameObjectProperties =
+  <O>(propsMap: Partial<MappedColumn<O>>) =>
+  (input: any): O => {
+    return Obj.keys(propsMap).reduce((acc, key) => {
+      if (typeof propsMap[key] === 'object') {
+        return {
+          ...acc,
+          [key]: renameObjectProperties(propsMap[key]!)(input),
+        }
+      }
       return {
         ...acc,
-        [key]: renameObjectProperties(propsMap[key]!)(input)
+        [key]: input[propsMap[key]],
       }
-    }
-    return {
-      ...acc,
-      [key]: input[propsMap[key]]
-    }
-  }, {} as O)
-}
+    }, {} as O)
+  }
 
-export const mapMultipleChoices = <T>(value: string | undefined, map: {[key: string]: T}, defaultValue: T[] = []): T[] => {
+export const mapMultipleChoices = <T>(
+  value: string | undefined,
+  map: {[key: string]: T},
+  defaultValue: T[] = [],
+): T[] => {
   const res: T[] = []
   if (!value) {
     return defaultValue
   }
-  Object.keys(map).forEach(k => {
+  Object.keys(map).forEach((k) => {
     if (value?.includes(k)) res.push(map[k])
   })
   return res
@@ -51,8 +57,8 @@ export async function processBatches<T>({
   batchSize,
   run,
 }: {
-  data: T[],
-  batchSize: number,
+  data: T[]
+  batchSize: number
   run: (item: T[], index: number) => Promise<any>
 }): Promise<void> {
   for (let i = 0; i < data.length; i += batchSize) {
@@ -60,9 +66,7 @@ export async function processBatches<T>({
   }
 }
 
-
 export namespace Util {
-
   export const ensureArr = <T>(_: T | T[]): T[] => {
     return Array.isArray(_) ? _ : [_]
   }
@@ -73,7 +77,7 @@ export namespace Util {
     after,
   }: {
     skipProperties?: string[]
-    before: Record<string, any>,
+    before: Record<string, any>
     after: Record<string, any>
   }): Record<string, any> => {
     const updatedAnswers: Record<any, any> = {}
@@ -90,8 +94,12 @@ export namespace Util {
             }
           }
         }
-      } else if (typeof oldValue === 'object' && oldValue !== null &&
-        typeof newValue === 'object' && newValue !== null) {
+      } else if (
+        typeof oldValue === 'object' &&
+        oldValue !== null &&
+        typeof newValue === 'object' &&
+        newValue !== null
+      ) {
         const nestedUpdates = Util.getObjectDiff({before: oldValue, after: newValue, skipProperties})
         if (Object.keys(nestedUpdates).length > 0) {
           updatedAnswers[key] = newValue
@@ -123,10 +131,12 @@ export namespace Util {
     return results
   }
 
-  export const logThen = (log: string) => <T>(args: T): T => {
-    console.log(log, args)
-    return args
-  }
+  export const logThen =
+    (log: string) =>
+    <T>(args: T): T => {
+      console.log(log, args)
+      return args
+    }
 
   export const removeUndefined = <T extends object>(t: T): T => {
     for (const i in t) {

@@ -14,7 +14,7 @@ export type BasicDialogProps = Omit<DialogProps, 'children' | 'onClick'> & {
   onConfirm?: (event: SyntheticEvent<any>) => void
   confirmDisabled?: boolean
   onClick?: EventHandler<SyntheticEvent<any>>
-  PaperProps?: Partial<PaperProps>,
+  PaperProps?: Partial<PaperProps>
   loading?: boolean
   overrideActions?: ReactNode
 }
@@ -37,17 +37,23 @@ export const BasicDialog = ({
   return (
     <Dialog {...props} PaperProps={PaperProps}>
       {loading && (
-        <LinearProgress sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          left: 0,
-        }}/>
+        <LinearProgress
+          sx={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            left: 0,
+          }}
+        />
       )}
-      <DialogTitle><Txt truncate>{title}</Txt></DialogTitle>
+      <DialogTitle>
+        <Txt truncate>{title}</Txt>
+      </DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        {overrideActions ? overrideActions : (
+        {overrideActions ? (
+          overrideActions
+        ) : (
           <>
             <IpBtn color="primary" onClick={onClose}>
               {cancelLabel || 'Cancel'}

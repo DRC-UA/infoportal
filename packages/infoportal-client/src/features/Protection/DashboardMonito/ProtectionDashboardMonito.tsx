@@ -21,18 +21,21 @@ import {subDays} from 'date-fns'
 import {previousPeriodDeltaDays} from '@/features/Safety/IncidentsDashboard/useSafetyIncidentData'
 import {IpAlert} from '@/shared/Alert'
 
-const ProtectionDashboardMonitoPN: any = lazy(() => import('./ProtectionDashboardMonitoPN')
-  .then(module => ({
+const ProtectionDashboardMonitoPN: any = lazy(() =>
+  import('./ProtectionDashboardMonitoPN').then((module) => ({
     default: module.ProtectionDashboardMonitoPN,
-  })))
+  })),
+)
 
 export const ProtectionDashboardMonito = () => {
   return (
-    <ProtectionMonito.Provider periodCompare={p => ({
-      start: p.start,
-      end: subDays(p.end, previousPeriodDeltaDays)
-    })}>
-      <ProtectionDashboardMonitoWCtx/>
+    <ProtectionMonito.Provider
+      periodCompare={(p) => ({
+        start: p.start,
+        end: subDays(p.end, previousPeriodDeltaDays),
+      })}
+    >
+      <ProtectionDashboardMonitoWCtx />
     </ProtectionMonito.Provider>
   )
 }
@@ -62,26 +65,28 @@ export const ProtectionDashboardMonitoWCtx = () => {
               debounce={800}
               value={[ctx.period.start, ctx.period.end]}
               onChange={([start, end]) => {
-                ctx.setPeriod(prev => ({...prev, start: start ?? undefined, end: end ?? undefined}))
+                ctx.setPeriod((prev) => ({...prev, start: start ?? undefined, end: end ?? undefined}))
               }}
             >
-              {(value, onChange) => <PeriodPicker
-                sx={{marginTop: '-6px'}}
-                value={value}
-                onChange={onChange}
-                label={[m.start, m.endIncluded]}
-                min={ctx.fetcherPeriod.get?.start}
-                max={ctx.fetcherPeriod.get?.end}
-              />}
+              {(value, onChange) => (
+                <PeriodPicker
+                  sx={{marginTop: '-6px'}}
+                  value={value}
+                  onChange={onChange}
+                  label={[m.start, m.endIncluded]}
+                  min={ctx.fetcherPeriod.get?.start}
+                  max={ctx.fetcherPeriod.get?.end}
+                />
+              )}
             </DebouncedInput>
           }
           after={
             <DebouncedInput
               debounce={50}
               value={ctx.filterOptions.hhComposition}
-              onChange={_ => ctx.setFilterOptions(prev => ({...prev, hhComposition: _}))}
+              onChange={(_) => ctx.setFilterOptions((prev) => ({...prev, hhComposition: _}))}
             >
-              {(value, onChange) =>
+              {(value, onChange) => (
                 <DashboardFilterOptions
                   icon="wc"
                   value={value ?? []}
@@ -89,36 +94,80 @@ export const ProtectionDashboardMonitoWCtx = () => {
                   options={() => Obj.entries(m.protHHS2._hhComposition).map(([k, v]) => ({value: k, label: v}))}
                   onChange={onChange as any}
                 />
-              }
+              )}
             </DebouncedInput>
           }
         />
       }
       beforeSection={
         <>
-          <IpAlert id="prot-pm-dashboard" color="info" deletable="permanent" sx={{mb: '-20px', borderRadius: t => t.shape.borderRadius + 'px'}}>
-            <Txt size="big" bold block sx={{lineHeight: 1, mb: .5}}>{m.protHHS2.descTitle}</Txt>
-            <Txt block sx={{mb: .5}}>{m.protHHS2.desc}</Txt>
+          <IpAlert
+            id="prot-pm-dashboard"
+            color="info"
+            deletable="permanent"
+            sx={{mb: '-20px', borderRadius: (t) => t.shape.borderRadius + 'px'}}
+          >
+            <Txt size="big" bold block sx={{lineHeight: 1, mb: 0.5}}>
+              {m.protHHS2.descTitle}
+            </Txt>
+            <Txt block sx={{mb: 0.5}}>
+              {m.protHHS2.desc}
+            </Txt>
             {m.protHHS2.disclaimer}
           </IpAlert>
         </>
       }
       sections={(() => {
         return [
-          {icon: 'bar_chart', name: 'sample', title: m.sample, component: () => <ProtectionDashboardMonitoSample/>},
-          {icon: 'explore', name: 'displacement', title: m.displacement, component: () => <ProtectionDashboardMonitoDisplacement/>},
-          {icon: 'family_restroom', name: 'family_unity', title: m.familyUnity, component: () => <ProtectionDashboardMonitoFamilyUnity/>},
-          {icon: 'home', name: 'housing', title: m.housing, component: () => <ProtectionDashboardMonitoHousing/>},
-          {icon: 'savings', name: 'livelihood', title: m.livelihoods, component: () => <ProtectionDashboardMonitoLivelihood/>},
-          {icon: 'fingerprint', name: 'document', title: m.protHHS2.registrationAndDocumention, component: () => <ProtectionDashboardMonitoDocument/>},
-          {icon: 'rocket_launch', name: 'safety', title: m.protHHS2.safetyAndSecurity, component: () => <ProtectionDashboardMonitoSafety/>},
-          {icon: 'local_police', name: 'violence', title: m.protHHS2.protectionIncidents, component: () => <ProtectionDashboardMonitoViolence/>},
-          {icon: 'healing', name: 'disability', title: m.protHHS2.disabilityAndHealth, component: () => <ProtectionDashboardMonitoDisability/>},
+          {icon: 'bar_chart', name: 'sample', title: m.sample, component: () => <ProtectionDashboardMonitoSample />},
+          {
+            icon: 'explore',
+            name: 'displacement',
+            title: m.displacement,
+            component: () => <ProtectionDashboardMonitoDisplacement />,
+          },
+          {
+            icon: 'family_restroom',
+            name: 'family_unity',
+            title: m.familyUnity,
+            component: () => <ProtectionDashboardMonitoFamilyUnity />,
+          },
+          {icon: 'home', name: 'housing', title: m.housing, component: () => <ProtectionDashboardMonitoHousing />},
+          {
+            icon: 'savings',
+            name: 'livelihood',
+            title: m.livelihoods,
+            component: () => <ProtectionDashboardMonitoLivelihood />,
+          },
+          {
+            icon: 'fingerprint',
+            name: 'document',
+            title: m.protHHS2.registrationAndDocumention,
+            component: () => <ProtectionDashboardMonitoDocument />,
+          },
+          {
+            icon: 'rocket_launch',
+            name: 'safety',
+            title: m.protHHS2.safetyAndSecurity,
+            component: () => <ProtectionDashboardMonitoSafety />,
+          },
+          {
+            icon: 'local_police',
+            name: 'violence',
+            title: m.protHHS2.protectionIncidents,
+            component: () => <ProtectionDashboardMonitoViolence />,
+          },
+          {
+            icon: 'healing',
+            name: 'disability',
+            title: m.protHHS2.disabilityAndHealth,
+            component: () => <ProtectionDashboardMonitoDisability />,
+          },
           {
             icon: 'traffic',
             name: 'priorityneeds',
             title: m.priorityNeeds,
-            component: () => <ProtectionDashboardMonitoPN/>
+            component: () => <ProtectionDashboardMonitoPN />,
           },
         ]
       })()}

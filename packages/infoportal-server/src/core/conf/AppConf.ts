@@ -11,14 +11,14 @@ export const appConf = {
   logLevel: e(defaultValue('info'))('LOG_LEVEL'),
   rootProjectDir: e(defaultValue(__dirname))('ROOT_PROJECT_DIR'),
   disableScheduledTask: e(bool, defaultValue(false))('DISABLED_SCHEDULED_TASK'),
-  production: e(_ => _?.toLowerCase() === 'production', defaultValue(true))('NODE_ENV'),
+  production: e((_) => _?.toLowerCase() === 'production', defaultValue(true))('NODE_ENV'),
   port: e(int, defaultValue(80))('PORT'),
   ownerEmail: e(defaultValue('alexandre.annic@drc.ngo'))('OWNER_EMAIL'),
   cors: {
     allowOrigin: e(defaultValue(`http://localhost:3000`))('CORS_ALLOW_ORIGIN'),
   },
   sentry: {
-    dns: e()('SENTRY_DNS')
+    dns: e()('SENTRY_DNS'),
   },
   buildingBlockWfp: {
     otpURL: e(required)('BUILDINGBLOCK_WFP_OTP_URL'),
@@ -34,7 +34,7 @@ export const appConf = {
   },
   db: {
     maxConcurrency: e(int, defaultValue(50))('DATABASE_MAX_CONCURRENCY'),
-    url: e(required)('DATABASE_URL')
+    url: e(required)('DATABASE_URL'),
   },
   //   host: e(required)('DB_HOST'),
   //   user: e(required)('DB_USER'),
@@ -51,13 +51,13 @@ export const appConf = {
     password: e(required)('ECRECAPP_PASSWORD'),
   },
   legalAid: {
-    apiToken: e(required)('LEGALAID_API_TOKEN')
+    apiToken: e(required)('LEGALAID_API_TOKEN'),
   },
   activityInfo: {
-    apiToken: e(required)('ACTIVITY_INFO_API_TOKEN')
+    apiToken: e(required)('ACTIVITY_INFO_API_TOKEN'),
   },
   params: {
-    assistanceAmountUAH: (d: Date) => d.getTime() > new Date(2023, 9, 1).getTime() ? 3600 : 2220
+    assistanceAmountUAH: (d: Date) => (d.getTime() > new Date(2023, 9, 1).getTime() ? 3600 : 2220),
   },
   email: {
     address: e(required)('EMAIL_ADDRESS'),

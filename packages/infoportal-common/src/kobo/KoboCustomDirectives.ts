@@ -14,7 +14,7 @@ export const koboCustomDirectivePrefix = '__IP__'
 
 export const makeKoboCustomDirective = (_: keyof typeof KoboCustomDirectives) => koboCustomDirectivePrefix + _
 
-type Directive = {directive: KoboCustomDirectives, question: Kobo.Form.Question}
+type Directive = {directive: KoboCustomDirectives; question: Kobo.Form.Question}
 
 export const getKoboCustomDirectives = (schema: Kobo.Form): Directive[] => {
   const collected: Directive[] = []

@@ -30,13 +30,15 @@ interface Props<K extends string> {
 export const ChartBar = <K extends string>(props: Props<K>) => {
   const {m} = useI18n()
   return props.data ? (
-    <ChartBarContent {...props} data={props.data!}/>
+    <ChartBarContent {...props} data={props.data!} />
   ) : (
-    <Box sx={{
-      textAlign: 'center',
-      mt: 2,
-      color: t => t.palette.text.disabled
-    }}>
+    <Box
+      sx={{
+        textAlign: 'center',
+        mt: 2,
+        color: (t) => t.palette.text.disabled,
+      }}
+    >
       <Icon sx={{fontSize: '3em !important'}}>block</Icon>
       <Box>{m.noDataAtm}</Box>
     </Box>
@@ -62,10 +64,10 @@ export const ChartBarContent = <K extends string>({
     percents,
   } = useMemo(() => {
     const values = Obj.values(data) as BarChartData[]
-    const maxValue = Math.max(...values.map(_ => _.value))
+    const maxValue = Math.max(...values.map((_) => _.value))
     const sumValue = values.reduce((sum, _) => _.value + sum, 0)
     // const base = values[0]?.base ?? sumValue
-    const percents = values.map(_ => _.value / (_.base ?? sumValue) * 100)
+    const percents = values.map((_) => (_.value / (_.base ?? sumValue)) * 100)
     return {
       values,
       maxValue,
@@ -89,8 +91,12 @@ export const ChartBarContent = <K extends string>({
     <Box sx={{overflow: 'hidden'}}>
       {Obj.keys(data).length === 0 && (
         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <Icon color="disabled" sx={{fontSize: 40, mb: 1}}>block</Icon>
-          <Txt block color="disabled">{m.noDataAtm}</Txt>
+          <Icon color="disabled" sx={{fontSize: 40, mb: 1}}>
+            block
+          </Icon>
+          <Txt block color="disabled">
+            {m.noDataAtm}
+          </Txt>
         </Box>
       )}
       {Obj.entries(data).map(([k, item], i) => {
@@ -99,58 +105,89 @@ export const ChartBarContent = <K extends string>({
           <TooltipWrapper item={item} base={item.base ?? sumValue} sumValue={sumValue} key={i}>
             <Box sx={{display: 'flex', alignItems: 'center'}} onClick={() => onClickData?.(k, item)}>
               {icons && (
-                <Icon color="disabled" sx={{mr: 1}}>{icons[k]}</Icon>
+                <Icon color="disabled" sx={{mr: 1}}>
+                  {icons[k]}
+                </Icon>
               )}
               <Box sx={{flex: 1, minWidth: 0}}>
-                <Box sx={{
-                  mx: 0,
-                  ...item.disabled ? {
-                    mb: -1,
-                    mt: 2,
-                  } : {
-                    mb: (i === values.length - 1) ? 0 : 1,
-                    borderBottom: i === values.length - 1 && !showLastBorder ? 'none' : t => `1px solid ${t.palette.divider}`,
-                    transition: t => t.transitions.create('background'),
-                    '&:hover': {
-                      background: t => alpha(item.color ?? t.palette.primary.main, 0.10),
-                    }
-                  }
-                }}>
-                  <Box sx={{mt: .25, pt: .25, pb: 0, display: 'flex', alignItems: 'center', flexWrap: 'wrap', mb: barHeight + 'px',}}>
-                    <Txt sx={{p: 0, pr: .5, flex: 1}} truncate>
+                <Box
+                  sx={{
+                    mx: 0,
+                    ...(item.disabled
+                      ? {
+                          mb: -1,
+                          mt: 2,
+                        }
+                      : {
+                          mb: i === values.length - 1 ? 0 : 1,
+                          borderBottom:
+                            i === values.length - 1 && !showLastBorder
+                              ? 'none'
+                              : (t) => `1px solid ${t.palette.divider}`,
+                          transition: (t) => t.transitions.create('background'),
+                          '&:hover': {
+                            background: (t) => alpha(item.color ?? t.palette.primary.main, 0.1),
+                          },
+                        }),
+                  }}
+                >
+                  <Box
+                    sx={{
+                      mt: 0.25,
+                      pt: 0.25,
+                      pb: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      mb: barHeight + 'px',
+                    }}
+                  >
+                    <Txt sx={{p: 0, pr: 0.5, flex: 1}} truncate>
                       <Txt block truncate>
                         {(labels && labels[k]) ?? ''}
                         {item.label ?? k}&nbsp;
                       </Txt>
-                      {(item.desc || descs) && <Txt block color="hint" truncate size="small">
-                        {item.desc}
-                        {(descs && descs[k]) ?? ''}
-                      </Txt>}
+                      {(item.desc || descs) && (
+                        <Txt block color="hint" truncate size="small">
+                          {item.desc}
+                          {(descs && descs[k]) ?? ''}
+                        </Txt>
+                      )}
                     </Txt>
                     {!item.disabled && (
-                      <Box sx={{display: 'flex', textAlign: 'right',}}>
+                      <Box sx={{display: 'flex', textAlign: 'right'}}>
                         {!hideValue && (
-                          <Txt color="hint" sx={{flex: 1, mr: 2,}}>{formatLargeNumber(item.value)}</Txt>
+                          <Txt color="hint" sx={{flex: 1, mr: 2}}>
+                            {formatLargeNumber(item.value)}
+                          </Txt>
                         )}
-                        <Txt sx={{
-                          flex: 1,
-                          minWidth: 52,
-                          color: t => t.palette.primary.main,
-                          fontWeight: t => t.typography.fontWeightBold,
-                        }}>{percents[i].toFixed(1)}%</Txt>
+                        <Txt
+                          sx={{
+                            flex: 1,
+                            minWidth: 52,
+                            color: (t) => t.palette.primary.main,
+                            fontWeight: (t) => t.typography.fontWeightBold,
+                          }}
+                        >
+                          {percents[i].toFixed(1)}%
+                        </Txt>
                       </Box>
                     )}
                   </Box>
                   <Box
                     sx={{
-                      transition: t => t.transitions.create('width', {duration: 800, delay: 0}),
+                      transition: (t) => t.transitions.create('width', {duration: 800, delay: 0}),
                       width: 0,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'flex-end',
-                      borderBottom: t => `${barHeight}px solid ${t.palette.primary.main}`,
+                      borderBottom: (t) => `${barHeight}px solid ${t.palette.primary.main}`,
                     }}
-                    style={{width: appeared ? `calc(${percentOfMax * 0.9}%)` : 0, color: item.color, borderColor: item.color}}
+                    style={{
+                      width: appeared ? `calc(${percentOfMax * 0.9}%)` : 0,
+                      color: item.color,
+                      borderColor: item.color,
+                    }}
                   />
                 </Box>
               </Box>
@@ -190,10 +227,25 @@ const TooltipWrapper = ({
               {item.desc}
             </Txt>
           )}
-          <Box sx={{mt: .5}}>
-            <TooltipRow hint={<>{formatLargeNumber(item.value)} / {formatLargeNumber(base)}</>} value={toPercent(item.value / base)}/>
+          <Box sx={{mt: 0.5}}>
+            <TooltipRow
+              hint={
+                <>
+                  {formatLargeNumber(item.value)} / {formatLargeNumber(base)}
+                </>
+              }
+              value={toPercent(item.value / base)}
+            />
             {base !== sumValue && (
-              <TooltipRow label={m.comparedToTotalAnswers} hint={<>{formatLargeNumber(item.value)} / {formatLargeNumber(sumValue)}</>} value={toPercent(item.value / sumValue)}/>
+              <TooltipRow
+                label={m.comparedToTotalAnswers}
+                hint={
+                  <>
+                    {formatLargeNumber(item.value)} / {formatLargeNumber(sumValue)}
+                  </>
+                }
+                value={toPercent(item.value / sumValue)}
+              />
             )}
             {/*<TooltipRow label="% of answers" value={Math.ceil(percentOfAll) + ' %'}/>*/}
             {/*{sumValue !== percentOfBase && (*/}
@@ -207,4 +259,3 @@ const TooltipWrapper = ({
     </LightTooltip>
   )
 }
-

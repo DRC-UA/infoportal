@@ -13,24 +13,24 @@ export const ListRow = ({
   children?: ReactNode
 }) => {
   return (
-    <Box sx={{
-      display: 'flex',
-      alignItems: 'center',
-      '&:not(:first-of-type)': {
-        pt: 1.5,
-      },
-      '&:not(:last-of-type) .row-body': {
-        pb: 1.5,
-        ...border && {
-          borderBottom: t => `1px solid ${t.palette.divider}`,
-        }
-      },
-    }}>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        '&:not(:first-of-type)': {
+          pt: 1.5,
+        },
+        '&:not(:last-of-type) .row-body': {
+          pb: 1.5,
+          ...(border && {
+            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+          }),
+        },
+      }}
+    >
       {icon !== undefined && (
         <Box sx={{minWidth: 40, pb: 1.5}}>
-          {icon !== '' && (
-            <Icon sx={{color: t => t.palette.text.secondary}}>{icon}</Icon>
-          )}
+          {icon !== '' && <Icon sx={{color: (t) => t.palette.text.secondary}}>{icon}</Icon>}
         </Box>
       )}
       <Box className="row-body" sx={{flex: 1, display: 'flex', alignItems: 'center'}}>

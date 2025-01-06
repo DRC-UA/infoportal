@@ -9,7 +9,7 @@ interface ModalRootProps {
   /**
    * Map of modal instances associated by unique ids
    */
-  modals: Record<string, ReactNode>;
+  modals: Record<string, ReactNode>
 
   /**
    * Container component for modals
@@ -18,12 +18,12 @@ interface ModalRootProps {
    * used by defualt, specifying a different component can change the way modals
    * are rendered across the whole application.
    */
-  component?: React.ComponentType<any>;
+  component?: React.ComponentType<any>
 
   /**
    * Specifies the root element to render modals into
    */
-  container?: Element;
+  container?: Element
 }
 
 /**
@@ -33,7 +33,7 @@ interface ModalRendererProps {
   /**
    * Functional component representing the modal
    */
-  component: ReactNode;
+  component: ReactNode
 }
 
 /**
@@ -52,27 +52,21 @@ interface ModalRendererProps {
  *
  * Renders modals using react portal.
  */
-export const ModalRoot = memo(
-  ({
-    modals,
-    container,
-    component: RootComponent = React.Fragment
-  }: ModalRootProps) => {
-    const [mountNode, setMountNode] = useState<Element | undefined>(undefined)
+export const ModalRoot = memo(({modals, container, component: RootComponent = React.Fragment}: ModalRootProps) => {
+  const [mountNode, setMountNode] = useState<Element | undefined>(undefined)
 
-    // This effect will not be ran in the server environment
-    useEffect(() => setMountNode(container || document.body))
+  // This effect will not be ran in the server environment
+  useEffect(() => setMountNode(container || document.body))
 
-    return mountNode
-      ? ReactDOM.createPortal(
+  return mountNode
+    ? ReactDOM.createPortal(
         <RootComponent>
-          {Object.keys(modals).map(key =>
-            modals[key]
+          {Object.keys(modals).map(
+            (key) => modals[key],
             // <ModalRenderer key={key} component={modals[key]}/>
           )}
         </RootComponent>,
-        mountNode
+        mountNode,
       )
-      : null
-  }
-)
+    : null
+})

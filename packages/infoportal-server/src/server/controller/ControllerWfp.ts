@@ -8,13 +8,11 @@ import {appConf} from '../../core/conf/AppConf'
 import {AppError} from '../../helper/Errors'
 
 export class ControllerWfp {
-
   constructor(
     private prisma: PrismaClient,
     private service = new WfpDeduplicationService(prisma),
     private conf = appConf,
-  ) {
-  }
+  ) {}
 
   readonly uploadTaxIdMapping = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.file) {

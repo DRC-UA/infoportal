@@ -19,24 +19,13 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "kobo-sdk/*": [
-        "../kobo-sdk/src/*"
-      ],
-      "infoportal-common/*": [
-        "../infoportal-common/src/*"
-      ]
+      "@/*": ["./src/*"],
+      "kobo-sdk/*": ["../kobo-sdk/src/*"],
+      "infoportal-common/*": ["../infoportal-common/src/*"]
     },
     "incremental": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "references": [
     {
       "path": "../infoportal-common"
@@ -45,8 +34,5 @@
       "path": "../kobo-sdk"
     }
   ],
-  "exclude": [
-    "node_modules",
-    "src/features/ProtectionSnapshot/*"
-  ]
+  "exclude": ["node_modules", "src/features/ProtectionSnapshot/*"]
 }

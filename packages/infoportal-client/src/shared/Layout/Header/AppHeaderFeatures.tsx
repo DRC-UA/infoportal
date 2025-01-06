@@ -12,15 +12,11 @@ const iconSize = 94
 export const AppHeaderFeatures = (props: Omit<IpIconBtnProps, 'children'>) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
   const {session, accesses} = useSession()
-  const open = (!!anchorEl)
+  const open = !!anchorEl
   const t = useTheme()
   return (
     <>
-      <IpIconBtn
-        children="apps"
-        onClick={(e) => setAnchorEl(e.currentTarget)}
-        {...props}
-      />
+      <IpIconBtn children="apps" onClick={(e) => setAnchorEl(e.currentTarget)} {...props} />
       <Popover
         anchorEl={anchorEl}
         anchorOrigin={{
@@ -30,16 +26,26 @@ export const AppHeaderFeatures = (props: Omit<IpIconBtnProps, 'children'>) => {
         onClose={() => setAnchorEl(null)}
         open={open}
       >
-        <Box sx={{width: (iconSize + 8) * 4 + 16, p: .5, pb: 0}}>
-          {new Obj(seq(appFeatures).groupBy(_ => _.category!))
-            .mapValues(features => features.filter(_ => !_.showIf || _.showIf(session, accesses)))
+        <Box sx={{width: (iconSize + 8) * 4 + 16, p: 0.5, pb: 0}}>
+          {new Obj(seq(appFeatures).groupBy((_) => _.category!))
+            .mapValues((features) => features.filter((_) => !_.showIf || _.showIf(session, accesses)))
             .filter((_, features) => features.length > 0)
             .entries()
             .map(([category, features]) => (
-              <Box key={category} sx={{p: 1, background: t.palette.background.default, mb: .5, borderRadius: (t.shape.borderRadius - 2) + 'px'}}>
-                <Txt bold uppercase size="small" color="hint" sx={{fontWeight: '600', ml: 1}}>{category}</Txt>
+              <Box
+                key={category}
+                sx={{
+                  p: 1,
+                  background: t.palette.background.default,
+                  mb: 0.5,
+                  borderRadius: t.shape.borderRadius - 2 + 'px',
+                }}
+              >
+                <Txt bold uppercase size="small" color="hint" sx={{fontWeight: '600', ml: 1}}>
+                  {category}
+                </Txt>
                 <Box>
-                  {features!.map(feature => (
+                  {features!.map((feature) => (
                     <FeatureLogo
                       key={feature.id}
                       fontSize="small"
@@ -50,9 +56,9 @@ export const AppHeaderFeatures = (props: Omit<IpIconBtnProps, 'children'>) => {
                         height: iconSize,
                         width: iconSize,
                         maxWidth: iconSize,
-                        margin: .25,
+                        margin: 0.25,
                         py: 1,
-                        px: .5,
+                        px: 0.5,
                       }}
                     />
                   ))}

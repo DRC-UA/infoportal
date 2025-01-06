@@ -41,7 +41,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#7300d7',
     path: '/meta-dashboard',
     category: 'general',
-    showIf: (u) => true
+    showIf: (u) => true,
   },
   kobo_database: {
     id: AppFeatureId.kobo_database,
@@ -59,10 +59,14 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     path: '/shelter',
     category: 'programs',
     showIf: (u, accesses) => {
-      return u?.admin || accesses && !!accesses
-        .filter(Access.filterByFeature(AppFeatureId.kobo_database))
-        .find(_ => _.params?.koboFormId === KoboIndex.byName('shelter_nta').id)
-    }
+      return (
+        u?.admin ||
+        (accesses &&
+          !!accesses
+            .filter(Access.filterByFeature(AppFeatureId.kobo_database))
+            .find((_) => _.params?.koboFormId === KoboIndex.byName('shelter_nta').id))
+      )
+    },
   },
   mpca: {
     id: AppFeatureId.mpca,
@@ -74,7 +78,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     showIf: (u, accesses) => {
       return true
       // return u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.mpca)
-    }
+    },
   },
   ecrec: {
     id: AppFeatureId.ecrec,
@@ -95,7 +99,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     category: 'programs',
     showIf: (u, accesses) => {
       return true
-    }
+    },
   },
   meal: {
     id: AppFeatureId.meal,
@@ -111,7 +115,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
       //   .filter(Access.filterByFeature(AppFeatureId.kobo_database))
       //   .find(_ => _.params?.koboFormId === KoboIndex.byName('bn_re').id)
       // return u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.mpca)
-    }
+    },
   },
   activity_info: {
     materialIcons: 'group_work',
@@ -120,7 +124,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#00e6b8',
     path: '/activity-info',
     category: 'general',
-    showIf: _ => true,
+    showIf: (_) => true,
   },
   wfp_deduplication: {
     id: AppFeatureId.wfp_deduplication,
@@ -130,8 +134,8 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     path: '/wfp-deduplication',
     category: 'general',
     showIf: (u, accesses) => {
-      return u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.wfp_deduplication)
-    }
+      return u?.admin || (accesses && !!accesses.find((_) => _.featureId === AppFeatureId.wfp_deduplication))
+    },
   },
   hdp: {
     id: AppFeatureId.hdp,
@@ -145,7 +149,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     category: 'programs',
     showIf: (u, accesses) => {
       return false
-    }
+    },
   },
   cfm: {
     id: AppFeatureId.cfm,
@@ -154,7 +158,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#1c2c73',
     path: '/cfm',
     category: 'programs',
-    showIf: (u, accesses) => true
+    showIf: (u, accesses) => true,
     // showIf: (u, accesses) => u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.cfm)
   },
   [AppFeatureId.partnership]: {
@@ -164,7 +168,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#8ab4f8',
     path: '/partnership',
     category: 'programs',
-    showIf: (u, accesses) => true
+    showIf: (u, accesses) => true,
     // showIf: (u, accesses) => u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.cfm)
   },
   safety: {
@@ -177,7 +181,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     category: 'programs',
     showIf: (u, accesses) => {
       return true
-    }
+    },
   },
   snapshot: {
     id: AppFeatureId.snapshot,
@@ -186,7 +190,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: 'silver',
     path: '/snapshot',
     category: 'settings',
-    showIf: _ => true
+    showIf: (_) => true,
   },
   admin: {
     id: AppFeatureId.admin,
@@ -195,7 +199,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: 'silver',
     path: '/admin',
     category: 'settings',
-    showIf: _ => _ && _?.admin
+    showIf: (_) => _ && _?.admin,
   },
   sandbox: {
     id: AppFeatureId.sandbox,
@@ -204,8 +208,8 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'Sandbox',
     path: '/sandbox',
     category: 'settings',
-    showIf: _ => _ && _?.email === appConfig.contact
-  }
+    showIf: (_) => _ && _?.email === appConfig.contact,
+  },
 } as const
 
 export const appFeatures = Obj.values(appFeaturesIndex)

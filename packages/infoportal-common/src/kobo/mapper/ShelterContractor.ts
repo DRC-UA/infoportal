@@ -26,12 +26,11 @@ export enum ShelterContractor {
 }
 
 export class ShelterContractorPrices {
-
   static readonly findContractor = ({
     oblast,
-    lot
+    lot,
   }: {
-    oblast?: keyof typeof Shelter_ta.options['ben_det_oblast']
+    oblast?: keyof (typeof Shelter_ta.options)['ben_det_oblast']
     lot: 1 | 2 | 3
   }): ShelterContractor[] => {
     const contractors = oblasts[oblast as keyof typeof oblasts] ?? Obj.values(ShelterContractor)
@@ -58,22 +57,22 @@ export class ShelterContractorPrices {
     try {
       let total = 0
       if (KoboShelterTa.hasLot1(answer) && contractor1)
-        lot1.map(question => {
-          const quantity = answer[question] as number ?? 0
+        lot1.map((question) => {
+          const quantity = (answer[question] as number) ?? 0
           const price = pricesCents[contractor1]![question]!
           if (price === undefined) throw new Error()
           total += quantity * price
         })
       if (KoboShelterTa.hasLot2(answer) && contractor2)
-        lot2.map(question => {
-          const quantity = answer[question] as number ?? 0
+        lot2.map((question) => {
+          const quantity = (answer[question] as number) ?? 0
           const price = pricesCents[contractor2]![question]!
           if (price === undefined) throw new Error()
           total += quantity * price
         })
       if (KoboShelterTa.hasLot3(answer) && contractor3)
-        lot1.map(question => {
-          const quantity = answer[question] as number ?? 0
+        lot1.map((question) => {
+          const quantity = (answer[question] as number) ?? 0
           const price = pricesCents[contractor3]![question]!
           if (price === undefined) throw new Error()
           total += quantity * price
@@ -96,7 +95,7 @@ const lot1: (keyof Shelter_ta.T)[] = [
   'outer_seels_galvanized_with_pvc_coating_lm',
   'window_slopes_m',
   'minor_window_repairs_pc',
-  'doubleglazed_upvc_door_m'
+  'doubleglazed_upvc_door_m',
 ]
 
 const lot2: (keyof Shelter_ta.T)[] = [
@@ -135,12 +134,9 @@ const lot2: (keyof Shelter_ta.T)[] = [
   'steel_radiator_1000',
   'steel_radiator_2000',
   'bimetallic_radiator_sections_length_mm_pc',
-  'wall_mountes_cable_wiring_lm'
+  'wall_mountes_cable_wiring_lm',
 ]
-const lot3: (keyof Shelter_ta.T)[] = [
-  'external_doors_pc',
-  'internal_wooden_doors_pc',
-]
+const lot3: (keyof Shelter_ta.T)[] = ['external_doors_pc', 'internal_wooden_doors_pc']
 
 const WAITING_FOR_PRICES_LOT: Partial<Record<keyof Shelter_ta.T, number>>[] = [
   {
@@ -154,7 +150,7 @@ const WAITING_FOR_PRICES_LOT: Partial<Record<keyof Shelter_ta.T, number>>[] = [
     outer_seels_galvanized_with_pvc_coating_lm: -1,
     window_slopes_m: -1,
     minor_window_repairs_pc: -1,
-    doubleglazed_upvc_door_m: -1
+    doubleglazed_upvc_door_m: -1,
   },
   {
     dismantling_of_structures2: -1,
@@ -192,14 +188,13 @@ const WAITING_FOR_PRICES_LOT: Partial<Record<keyof Shelter_ta.T, number>>[] = [
     steel_radiator_1000: -1,
     steel_radiator_2000: -1,
     bimetallic_radiator_sections_length_mm_pc: -1,
-    wall_mountes_cable_wiring_lm: -1
+    wall_mountes_cable_wiring_lm: -1,
   },
   {
     external_doors_pc: -1,
     internal_wooden_doors_pc: -1,
-  }
+  },
 ]
-
 
 const WAITING_FOR_PRICES = WAITING_FOR_PRICES_LOT.reduce((acc, _) => ({...acc, ..._}), {})
 
@@ -242,7 +237,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 654200,
     steel_radiator_2000: 654200,
     bimetallic_radiator_sections_length_mm_pc: 189700,
-    wall_mountes_cable_wiring_lm: 25000
+    wall_mountes_cable_wiring_lm: 25000,
   },
   [ShelterContractor['Megalit']]: {
     dismantling_of_structures: 85000,
@@ -255,7 +250,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     outer_seels_galvanized_with_pvc_coating_lm: 38000,
     window_slopes_m: 121900,
     minor_window_repairs_pc: 90000,
-    doubleglazed_upvc_door_m: 530000
+    doubleglazed_upvc_door_m: 530000,
   },
   [ShelterContractor['Artbudservice']]: {
     dismantling_of_structures2: 202,
@@ -295,7 +290,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 571103,
     steel_radiator_2000: 571103,
     bimetallic_radiator_sections_length_mm_pc: 571103,
-    wall_mountes_cable_wiring_lm: 38749
+    wall_mountes_cable_wiring_lm: 38749,
   },
   [ShelterContractor['Kramelitbud']]: {
     dismantling_of_structures: 85000,
@@ -346,7 +341,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 497000,
     steel_radiator_2000: 497000,
     bimetallic_radiator_sections_length_mm_pc: 487000,
-    wall_mountes_cable_wiring_lm: 31500
+    wall_mountes_cable_wiring_lm: 31500,
   },
   [ShelterContractor['Osnova-R']]: {
     dismantling_of_structures: 111111,
@@ -359,7 +354,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     outer_seels_galvanized_with_pvc_coating_lm: 9504,
     window_slopes_m: 284776,
     minor_window_repairs_pc: 38241,
-    doubleglazed_upvc_door_m: 341101
+    doubleglazed_upvc_door_m: 341101,
   },
   [ShelterContractor['Dosvid 2002']]: {
     dismantling_of_structures: 134000,
@@ -410,7 +405,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 418600,
     steel_radiator_2000: 418600,
     bimetallic_radiator_sections_length_mm_pc: 711500,
-    wall_mountes_cable_wiring_lm: 37700
+    wall_mountes_cable_wiring_lm: 37700,
   },
   [ShelterContractor['Donmegastroy']]: {
     ...WAITING_FOR_PRICES,
@@ -491,7 +486,7 @@ const pricesCents: Partial<Record<ShelterContractor, Partial<Record<keyof Shelte
     steel_radiator_1000: 2213400,
     steel_radiator_2000: 2213400,
     bimetallic_radiator_sections_length_mm_pc: 1699962,
-    wall_mountes_cable_wiring_lm: 42839
+    wall_mountes_cable_wiring_lm: 42839,
   },
   // [ShelterContractor['Framplus']]: WAITING_FOR_PRICES,
   [ShelterContractor['Kronos']]: WAITING_FOR_PRICES,
@@ -533,5 +528,5 @@ const oblasts = {
     ShelterContractor['Kronos'],
     ShelterContractor['Monolit'],
     ShelterContractor['Darwin'],
-  ]
+  ],
 }

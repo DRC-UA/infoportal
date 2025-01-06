@@ -29,140 +29,157 @@ export const SafetyIncidentDashboardBody = () => {
   const {m, formatLargeNumber} = useI18n()
   const [mapType, setMapType] = useState<'incident' | 'attack'>('incident')
   const {session} = useSession()
-  const {
-    dataFiltered,
-    dataFilteredLastPeriod,
-  } = useSafetyIncidentContext()
+  const {dataFiltered, dataFilteredLastPeriod} = useSafetyIncidentContext()
   return (
     <Div sx={{alignItems: 'flex-start'}} responsive>
       <Div column>
         <Panel>
-          <Div sx={{alignItems: 'stretch'}}>
-          </Div>
+          <Div sx={{alignItems: 'stretch'}}></Div>
           <PanelBody>
             <ChartPieWidgetBy
               title={m.safety.attacks}
-              filter={_ => _.attack === 'yes'}
+              filter={(_) => _.attack === 'yes'}
               showValue
               showBase
               compare={dataFilteredLastPeriod ? {before: dataFilteredLastPeriod} : undefined}
               data={dataFiltered}
             />
           </PanelBody>
-          <Divider/>
+          <Divider />
           <PanelBody>
             <ScRadioGroup value={mapType} onChange={setMapType} dense inline sx={{mb: 2}}>
-              <ScRadioGroupItem dense hideRadio value="incident" title={m.safety.incidents}/>
-              <ScRadioGroupItem dense hideRadio value="attack" title={m.safety.attacks}/>
+              <ScRadioGroupItem dense hideRadio value="incident" title={m.safety.incidents} />
+              <ScRadioGroupItem dense hideRadio value="attack" title={m.safety.attacks} />
             </ScRadioGroup>
             {fnSwitch(mapType, {
-              'incident': (
+              incident: (
                 <MapSvgByOblast
                   sx={{maxWidth: 480}}
                   fillBaseOn="value"
                   data={dataFiltered}
-                  getOblast={_ => _.oblastISO!}
-                  value={_ => true}
-                  base={_ => _.oblastISO !== undefined}
+                  getOblast={(_) => _.oblastISO!}
+                  value={(_) => true}
+                  base={(_) => _.oblastISO !== undefined}
                 />
               ),
-              'attack': (
+              attack: (
                 <MapSvgByOblast
                   sx={{maxWidth: 480}}
                   fillBaseOn="value"
                   data={dataFiltered}
-                  getOblast={_ => _.oblastISO}
-                  value={_ => _.attack === 'yes'}
-                  base={_ => _.oblastISO !== undefined}
+                  getOblast={(_) => _.oblastISO}
+                  value={(_) => _.attack === 'yes'}
+                  base={(_) => _.oblastISO !== undefined}
                 />
               ),
             })}
           </PanelBody>
-          <Divider/>
+          <Divider />
           <PanelBody>
             <PanelTitle sx={{mb: 1}}>{m.safety.attackTypes}</PanelTitle>
             <ChartBarMultipleBy
               data={dataFiltered}
-              by={_ => _.attack_type}
+              by={(_) => _.attack_type}
               label={Safety_incident.options.attack_type}
             />
           </PanelBody>
-          <Divider/>
+          <Divider />
           <PanelBody>
             <PanelTitle sx={{mb: 1}}>{m.safety.target}</PanelTitle>
             <ChartBarMultipleBy
               data={dataFiltered}
-              by={_ => _.what_destroyed}
+              by={(_) => _.what_destroyed}
               label={Safety_incident.options.what_destroyed}
             />
           </PanelBody>
-          <Divider/>
+          <Divider />
           <PanelBody>
             <PanelTitle sx={{mb: 1}}>{m.safety.typeOfCasualties}</PanelTitle>
             <ChartBarMultipleBy
               data={dataFiltered}
-              by={_ => _.type_casualties}
+              by={(_) => _.type_casualties}
               label={Safety_incident.options.type_casualties}
             />
           </PanelBody>
-          <Divider/>
+          <Divider />
           <PanelBody>
             <PanelTitle sx={{mb: 1}}>{m.safety.lastAttacks}</PanelTitle>
-            <Lazy deps={[dataFiltered]} fn={() => dataFiltered?.filter(_ => _.attack === 'yes').map(_ => ({
-              id: _.id,
-              title: m.safety.attackOfOn(_.oblastISO, _.attack_type),
-              date: _.date_time,
-              desc: _.report_summary,
-            }) as CommentsPanelProps['data'][0])}>
-              {_ => <CommentsPanel pageSize={10} data={_}/>}
+            <Lazy
+              deps={[dataFiltered]}
+              fn={() =>
+                dataFiltered
+                  ?.filter((_) => _.attack === 'yes')
+                  .map(
+                    (_) =>
+                      ({
+                        id: _.id,
+                        title: m.safety.attackOfOn(_.oblastISO, _.attack_type),
+                        date: _.date_time,
+                        desc: _.report_summary,
+                      }) as CommentsPanelProps['data'][0],
+                  )
+              }
+            >
+              {(_) => <CommentsPanel pageSize={10} data={_} />}
             </Lazy>
           </PanelBody>
         </Panel>
       </Div>
       <Div column>
-        <SafetyIncidentDashboardAlert/>
+        <SafetyIncidentDashboardAlert />
         <SlidePanel title={m.safety.casualties}>
           <Div sx={{mt: -2}}>
-            <Lazy deps={[dataFiltered]} fn={() => dataFiltered?.sum(_ => _.dead ?? 0)}>
-              {_ => (
+            <Lazy deps={[dataFiltered]} fn={() => dataFiltered?.sum((_) => _.dead ?? 0)}>
+              {(_) => (
                 <SlideWidget sx={{minHeight: 'auto', flex: 1}} title={m.safety.dead}>
                   {formatLargeNumber(_)}
                 </SlideWidget>
               )}
             </Lazy>
-            <Lazy deps={[dataFiltered]} fn={() => dataFiltered?.sum(_ => _.injured ?? 0)}>
-              {_ => (
+            <Lazy deps={[dataFiltered]} fn={() => dataFiltered?.sum((_) => _.injured ?? 0)}>
+              {(_) => (
                 <SlideWidget sx={{minHeight: 'auto', flex: 1}} title={m.safety.injured}>
                   {formatLargeNumber(_)}
                 </SlideWidget>
               )}
             </Lazy>
           </Div>
-          <Lazy deps={[dataFiltered]} fn={() => {
-            const x = dataFiltered?.groupBy(_ => _.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date')
-            return new Obj(x)
-              .transform((k, v) => [k, {
-                total: v.length,
-                dead: v.sum(_ => _.dead ?? 0),
-                injured: v.sum(_ => _.injured ?? 0),
-              }])
-              .sort(([bk], [ak]) => bk.localeCompare(ak))
-              .entries()
-              .filter(([k]) => k !== 'no_date')
-              .map(([k, v]) => ({name: k, ...v}))
-          }}>
-            {_ => (
-              <ChartLine fixMissingMonths height={200} data={_ as any} translation={{
-                total: m.safety.incidents,
-                dead: m.safety.dead,
-                injured: m.safety.injured,
-              } as any}/>
+          <Lazy
+            deps={[dataFiltered]}
+            fn={() => {
+              const x = dataFiltered?.groupBy((_) => (_.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date'))
+              return new Obj(x)
+                .transform((k, v) => [
+                  k,
+                  {
+                    total: v.length,
+                    dead: v.sum((_) => _.dead ?? 0),
+                    injured: v.sum((_) => _.injured ?? 0),
+                  },
+                ])
+                .sort(([bk], [ak]) => bk.localeCompare(ak))
+                .entries()
+                .filter(([k]) => k !== 'no_date')
+                .map(([k, v]) => ({name: k, ...v}))
+            }}
+          >
+            {(_) => (
+              <ChartLine
+                fixMissingMonths
+                height={200}
+                data={_ as any}
+                translation={
+                  {
+                    total: m.safety.incidents,
+                    dead: m.safety.dead,
+                    injured: m.safety.injured,
+                  } as any
+                }
+              />
             )}
           </Lazy>
         </SlidePanel>
-        {(session?.admin || session?.drcJob === 'Head of Safety') && (
-          <MinusRusChartPanel/>
-        )}
+        {(session?.admin || session?.drcJob === 'Head of Safety') && <MinusRusChartPanel />}
       </Div>
     </Div>
   )

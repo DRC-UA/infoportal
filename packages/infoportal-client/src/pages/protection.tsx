@@ -5,7 +5,7 @@ import {Protection} from '@/features/Protection/Protection'
 const Page = () => {
   return (
     <ProtectRoute>
-      <Protection/>
+      <Protection />
     </ProtectRoute>
   )
 }

@@ -39,7 +39,7 @@ export const databaseUrlParamsValidation = yup.object({
 export const Database = () => {
   return (
     <DatabaseProvider>
-      <DatabaseWithContext/>
+      <DatabaseWithContext />
     </DatabaseProvider>
   )
 }
@@ -60,22 +60,30 @@ export const DatabaseWithContext = () => {
   useReactRouterDefaultRoute(databaseIndex.siteMap.index)
   const parsedFormNames: Record<string, Seq<Form>> = useMemo(() => {
     const mapped: Record<string, Form[]> = {
-      forms: ctx.formsAccessible?.map(_ => ({
-        ..._,
-        id: _.id,
-        url: databaseIndex.siteMap.home(_.id),
-        archived: _.deploymentStatus === 'archived',
-        parsedName: KoboIndex.parseFormName(_.name)
-      })) ?? [],
-      custom: customForms.filter(c => ctx.formsAccessible?.some(_ => _.id === c.forms[0]?.id)).map(_ => ({
-        url: databaseIndex.siteMap.custom(_.id),
-        id: _.id,
-        custom: true,
-        parsedName: KoboIndex.parseFormName(_.name)
-      }))
+      forms:
+        ctx.formsAccessible?.map((_) => ({
+          ..._,
+          id: _.id,
+          url: databaseIndex.siteMap.home(_.id),
+          archived: _.deploymentStatus === 'archived',
+          parsedName: KoboIndex.parseFormName(_.name),
+        })) ?? [],
+      custom: customForms
+        .filter((c) => ctx.formsAccessible?.some((_) => _.id === c.forms[0]?.id))
+        .map((_) => ({
+          url: databaseIndex.siteMap.custom(_.id),
+          id: _.id,
+          custom: true,
+          parsedName: KoboIndex.parseFormName(_.name),
+        })),
     }
-    const grouped = seq([...mapped.forms, ...mapped.custom]).groupBy(_ => _.parsedName.program?.toUpperCase() ?? m.others)
-    return new Obj(grouped).map((k, v) => [k, v.sort((a, b) => a.parsedName.name.localeCompare(b.parsedName.name))]).sort(([ak], [bk]) => ak.localeCompare(bk)).get()
+    const grouped = seq([...mapped.forms, ...mapped.custom]).groupBy(
+      (_) => _.parsedName.program?.toUpperCase() ?? m.others,
+    )
+    return new Obj(grouped)
+      .map((k, v) => [k, v.sort((a, b) => a.parsedName.name.localeCompare(b.parsedName.name))])
+      .sort(([ak], [bk]) => ak.localeCompare(bk))
+      .get()
   }, [ctx.formsAccessible])
 
   const asyncSyncAll = useAsync(api.kobo.form.refreshAll)
@@ -112,80 +120,88 @@ export const DatabaseWithContext = () => {
           {ctx._forms.loading ? (
             <>
               <SidebarItem size="tiny">
-                <Skeleton sx={{width: 160, height: 30}}/>
+                <Skeleton sx={{width: 160, height: 30}} />
               </SidebarItem>
               <SidebarItem size="tiny">
-                <Skeleton sx={{width: 160, height: 30}}/>
+                <Skeleton sx={{width: 160, height: 30}} />
               </SidebarItem>
               <SidebarItem size="tiny">
-                <Skeleton sx={{width: 160, height: 30}}/>
+                <Skeleton sx={{width: 160, height: 30}} />
               </SidebarItem>
               <SidebarItem size="tiny">
-                <Skeleton sx={{width: 160, height: 30}}/>
+                <Skeleton sx={{width: 160, height: 30}} />
               </SidebarItem>
             </>
-          ) : Obj.entries(parsedFormNames)?.map(([category, forms]) => (
-            <SidebarSection dense title={category} key={category}>
-              {forms.map((_: Form) =>
-                <Tooltip key={_.id} title={_.parsedName.name} placement="right-end">
-                  <NavLink to={_.url}>
-                    {({isActive, isPending}) => (
-                      <SidebarItem
-                        size={forms.length > 30 ? 'tiny' : 'small'}
-                        sx={{height: 26}}
-                        onClick={() => undefined}
-                        key={_.id}
-                        active={isActive}
-                        iconEnd={<>
-                          {_.archived && (
-                            <Icon
-                              fontSize="small"
-                              color="disabled"
-                              sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
-                            >archive</Icon>
-                          )}
-                          {_.custom && (
-                            <Icon
-                              fontSize="small"
-                              sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
-                            >device_hub</Icon>
-                          )}
-                        </>}
-                      >
-                        <Txt sx={{color: _.archived ? t.palette.text.disabled : undefined}}>
-                          {_.parsedName.name}
-                          {_.custom && (
-                            <span style={{fontWeight: 300}}>{' '}({m._koboDatabase.mergedDb})</span>
-                          )}
-                        </Txt>
-                      </SidebarItem>
-                    )}
-                  </NavLink>
-                </Tooltip>
-              )}
-            </SidebarSection>
-          ))}
+          ) : (
+            Obj.entries(parsedFormNames)?.map(([category, forms]) => (
+              <SidebarSection dense title={category} key={category}>
+                {forms.map((_: Form) => (
+                  <Tooltip key={_.id} title={_.parsedName.name} placement="right-end">
+                    <NavLink to={_.url}>
+                      {({isActive, isPending}) => (
+                        <SidebarItem
+                          size={forms.length > 30 ? 'tiny' : 'small'}
+                          sx={{height: 26}}
+                          onClick={() => undefined}
+                          key={_.id}
+                          active={isActive}
+                          iconEnd={
+                            <>
+                              {_.archived && (
+                                <Icon
+                                  fontSize="small"
+                                  color="disabled"
+                                  sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
+                                >
+                                  archive
+                                </Icon>
+                              )}
+                              {_.custom && (
+                                <Icon
+                                  fontSize="small"
+                                  sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
+                                >
+                                  device_hub
+                                </Icon>
+                              )}
+                            </>
+                          }
+                        >
+                          <Txt sx={{color: _.archived ? t.palette.text.disabled : undefined}}>
+                            {_.parsedName.name}
+                            {_.custom && <span style={{fontWeight: 300}}> ({m._koboDatabase.mergedDb})</span>}
+                          </Txt>
+                        </SidebarItem>
+                      )}
+                    </NavLink>
+                  </Tooltip>
+                ))}
+              </SidebarSection>
+            ))
+          )}
         </Sidebar>
       }
-      header={<AppHeader id="app-header"/>}
+      header={<AppHeader id="app-header" />}
     >
       {ctx.formsAccessible?.length === 0 && (
         <Fender type="empty" sx={{mt: 2}}>
-          <Txt block color="disabled" size="big">{m._koboDatabase.noAccessToForm}</Txt>
-          <Txt block color="disabled" dangerouslySetInnerHTML={{__html: m.contact(conf.contact)}}/>
+          <Txt block color="disabled" size="big">
+            {m._koboDatabase.noAccessToForm}
+          </Txt>
+          <Txt block color="disabled" dangerouslySetInnerHTML={{__html: m.contact(conf.contact)}} />
         </Fender>
       )}
       <Routes>
-        <Route path={databaseIndex.siteMap.index} element={<DatabaseList forms={ctx.formsAccessible}/>}/>
-        <Route path={databaseIndex.siteMap.custom()} element={<DatabaseTableCustomRoute/>}/>
-        <Route path={databaseIndex.siteMap.home()} element={<DatabaseHome/>}>
-          <Route index element={<Navigate to={databaseIndex.siteMap.database.relative}/>}/>
-          <Route path={databaseIndex.siteMap.answer.relative()} element={<DatabaseKoboAnswerViewPage/>}/>
-          <Route path={databaseIndex.siteMap.access.relative} element={<DatabaseAccessRoute/>}/>
-          <Route path={databaseIndex.siteMap.history.relative} element={<DatabaseHistory/>}/>
-          <Route path={databaseIndex.siteMap.group.relative()} element={<DatabaseKoboRepeatRoute/>}/>
+        <Route path={databaseIndex.siteMap.index} element={<DatabaseList forms={ctx.formsAccessible} />} />
+        <Route path={databaseIndex.siteMap.custom()} element={<DatabaseTableCustomRoute />} />
+        <Route path={databaseIndex.siteMap.home()} element={<DatabaseHome />}>
+          <Route index element={<Navigate to={databaseIndex.siteMap.database.relative} />} />
+          <Route path={databaseIndex.siteMap.answer.relative()} element={<DatabaseKoboAnswerViewPage />} />
+          <Route path={databaseIndex.siteMap.access.relative} element={<DatabaseAccessRoute />} />
+          <Route path={databaseIndex.siteMap.history.relative} element={<DatabaseHistory />} />
+          <Route path={databaseIndex.siteMap.group.relative()} element={<DatabaseKoboRepeatRoute />} />
           {/*Persisted components across routes: */}
-          <Route path={databaseIndex.siteMap.database.relative} element={<></>}/>
+          <Route path={databaseIndex.siteMap.database.relative} element={<></>} />
         </Route>
       </Routes>
     </Layout>
@@ -210,7 +226,7 @@ export const DatabaseHome = () => {
 
   const schema = ctxSchema.byId[formId]?.get
   const repeatGroups = useMemo(() => {
-    return schema?.helper.group.search().map(_ => _.name)
+    return schema?.helper.group.search().map((_) => _.name)
   }, [schema])
 
   return (
@@ -220,7 +236,7 @@ export const DatabaseHome = () => {
         scrollButtons="auto"
         value={pathname}
         sx={{
-          borderBottom: t => `1px solid ${t.palette.divider}`
+          borderBottom: (t) => `1px solid ${t.palette.divider}`,
         }}
       >
         <Tab
@@ -250,7 +266,8 @@ export const DatabaseHome = () => {
           to={databaseIndex.siteMap.history.absolute(formId)}
           label={m.history}
         />
-        {schema && repeatGroups?.map((_ =>
+        {schema &&
+          repeatGroups?.map((_) => (
             <Tab
               icon={<Icon color="disabled">repeat</Icon>}
               iconPosition="start"
@@ -261,13 +278,12 @@ export const DatabaseHome = () => {
               to={databaseIndex.siteMap.group.absolute(formId, _)}
               label={schema.translate.question(_)}
             />
-        ))}
+          ))}
       </Tabs>
       <div style={{display: pathname === databaseIndex.siteMap.database.absolute(formId) ? 'block' : 'none'}}>
-        <DatabaseTableRoute/>
+        <DatabaseTableRoute />
       </div>
-      <Outlet/>
+      <Outlet />
     </>
   )
 }
-

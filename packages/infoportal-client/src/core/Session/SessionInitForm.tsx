@@ -31,28 +31,38 @@ export const SessionInitForm = ({
   useEffectFn(_updateUser.error, toastHttpError)
 
   useEffect(() => {
-    map(_updateUser.get?.drcOffice, _ => onSelectOffice(_ as DrcOffice))
+    map(_updateUser.get?.drcOffice, (_) => onSelectOffice(_ as DrcOffice))
   }, [_updateUser.get])
 
   return (
     <Box sx={{p: 1, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
       <Box sx={{width: '100%', maxWidth: 400}}>
-        <IpBtn icon="arrow_back" color="primary" onClick={onChangeAccount}>{m.changeAccount}</IpBtn>
+        <IpBtn icon="arrow_back" color="primary" onClick={onChangeAccount}>
+          {m.changeAccount}
+        </IpBtn>
       </Box>
-      <Box sx={{
-        mb: 4,
-        mt: 2,
-        textAlign: 'center',
-      }}>
-        <Txt block noWrap sx={{fontSize: '3em', fontWeight: 'lighter'}} bold>{user.name}</Txt>
-        <Txt block noWrap sx={{fontSize: '1.4em', fontWeight: 'lighter'}} color="hint">{user.drcJob}</Txt>
+      <Box
+        sx={{
+          mb: 4,
+          mt: 2,
+          textAlign: 'center',
+        }}
+      >
+        <Txt block noWrap sx={{fontSize: '3em', fontWeight: 'lighter'}} bold>
+          {user.name}
+        </Txt>
+        <Txt block noWrap sx={{fontSize: '1.4em', fontWeight: 'lighter'}} color="hint">
+          {user.drcJob}
+        </Txt>
       </Box>
       <Box sx={{width: '100%', maxWidth: 400}}>
-        <Txt block sx={{fontSize: '1.2em', mb: 1}}>{m.welcomePleaseSelectOffice}</Txt>
+        <Txt block sx={{fontSize: '1.2em', mb: 1}}>
+          {m.welcomePleaseSelectOffice}
+        </Txt>
         <ScRadioGroup onChange={setDrcOffice}>
-          {Obj.keys(DrcOffice).map(k =>
-            <ScRadioGroupItem key={k} value={k} title={k}/>
-          )}
+          {Obj.keys(DrcOffice).map((k) => (
+            <ScRadioGroupItem key={k} value={k} title={k} />
+          ))}
         </ScRadioGroup>
         <Modal
           title={m.confirmYourOffice(drcOffice!)}
@@ -60,12 +70,7 @@ export const SessionInitForm = ({
           onConfirm={() => _updateUser.fetch({}, {drcOffice: drcOffice})}
           loading={_updateUser.loading}
         >
-          <IpBtn
-            icon="arrow_forward"
-            disabled={!drcOffice}
-            variant="contained"
-            sx={{mt: 2}}
-          >
+          <IpBtn icon="arrow_forward" disabled={!drcOffice} variant="contained" sx={{mt: 2}}>
             {m.select}
           </IpBtn>
         </Modal>

@@ -4,11 +4,10 @@ import {Sandbox} from '@/features/Sandbox'
 import {MetaDashboardProvider} from '@/features/Meta/MetaContext'
 
 const Page = () => {
-
   return (
     <ProtectRoute>
       <MetaDashboardProvider>
-        <Sandbox/>
+        <Sandbox />
       </MetaDashboardProvider>
     </ProtectRoute>
   )

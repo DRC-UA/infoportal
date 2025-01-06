@@ -3,12 +3,10 @@ import {ProxyService} from '../../feature/proxy/ProxyService'
 import {PrismaClient} from '@prisma/client'
 
 export class ControllerProxy {
-
   constructor(
     private prisma: PrismaClient,
-    private service = new ProxyService(prisma)
-  ) {
-  }
+    private service = new ProxyService(prisma),
+  ) {}
 
   readonly create = async (req: Request, res: Response, next: NextFunction) => {
     const body = await ProxyService.schema.create.validate(req.body)

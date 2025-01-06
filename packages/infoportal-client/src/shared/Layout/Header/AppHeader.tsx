@@ -14,8 +14,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {Obj} from '@alexandreannic/ts-utils'
 import {styleUtils} from '@/core/theme'
 
-interface Props extends BoxProps {
-}
+interface Props extends BoxProps {}
 
 const lightThemeIcons = {
   light: 'light_mode',
@@ -27,7 +26,9 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) 
   const {sidebarOpen, showSidebarButton, setSidebarOpen, title} = useLayoutContext()
   const {m} = useI18n()
   const t = useTheme()
-  const {theme: {brightness, setBrightness}} = useAppSettings()
+  const {
+    theme: {brightness, setBrightness},
+  } = useAppSettings()
   return (
     <AppHeaderContainer
       component="header"
@@ -61,39 +62,49 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) 
             size="small"
             sx={{
               mr: 1,
-              border: t => `2px solid ${t.palette.primary.main}`,
-              background: t => (sidebarOpen ? 'none' : alpha(t.palette.primary.main, 0.1)),
-              color: t => t.palette.primary.main,
+              border: (t) => `2px solid ${t.palette.primary.main}`,
+              background: (t) => (sidebarOpen ? 'none' : alpha(t.palette.primary.main, 0.1)),
+              color: (t) => t.palette.primary.main,
               '&:hover': {
-                background: t => alpha(t.palette.primary.main, 0.1),
+                background: (t) => alpha(t.palette.primary.main, 0.1),
               },
             }}
-            onClick={() => setSidebarOpen(_ => !_)}
+            onClick={() => setSidebarOpen((_) => !_)}
             children="menu"
           />
         )}
-        <Txt sx={{ml: 1, ...styleUtils(t).truncate}} size="title" bold dangerouslySetInnerHTML={{__html: title ?? ''}}/>
+        <Txt
+          sx={{ml: 1, ...styleUtils(t).truncate}}
+          size="title"
+          bold
+          dangerouslySetInnerHTML={{__html: title ?? ''}}
+        />
         {children}
       </div>
-      <PopoverWrapper content={close => (
-        Obj.entries(lightThemeIcons).map(([theme, icon]) =>
-          <MenuItem key={theme} selected={brightness === theme} onClick={() => {
-            setBrightness(theme)
-            close()
-          }}>
-            <Icon sx={{mr: 1}}>{icon}</Icon>{m.lightTheme[theme]}
-          </MenuItem>
-        )
-      )}>
-        <IpIconBtn children={lightThemeIcons[brightness ?? 'auto']}/>
+      <PopoverWrapper
+        content={(close) =>
+          Obj.entries(lightThemeIcons).map(([theme, icon]) => (
+            <MenuItem
+              key={theme}
+              selected={brightness === theme}
+              onClick={() => {
+                setBrightness(theme)
+                close()
+              }}
+            >
+              <Icon sx={{mr: 1}}>{icon}</Icon>
+              {m.lightTheme[theme]}
+            </MenuItem>
+          ))
+        }
+      >
+        <IpIconBtn children={lightThemeIcons[brightness ?? 'auto']} />
       </PopoverWrapper>
       <Link href="/">
-        <IpIconBtn children="home"/>
+        <IpIconBtn children="home" />
       </Link>
-      <AppHeaderFeatures sx={{mr: 1}}/>
-      <AppHeaderMenu/>
+      <AppHeaderFeatures sx={{mr: 1}} />
+      <AppHeaderMenu />
     </AppHeaderContainer>
   )
 }
-
-

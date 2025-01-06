@@ -26,17 +26,32 @@ export const Map = <D extends Record<string, any>>({
   const {m} = useI18n()
   const [type, setType] = useState<Type>('oblast')
   return (
-    <Panel sx={{...sx, height,}}>
-      <PanelHead action={
-        <ScRadioGroup inline dense onChange={setType} value={type} sx={{fontSize: 'inherit'}}>
-          <ScRadioGroupItem hideRadio value="oblast">{m.oblast}</ScRadioGroupItem>
-          <ScRadioGroupItem hideRadio value="settlement">{m.settlement}</ScRadioGroupItem>
-        </ScRadioGroup>
-      }>{m.location}</PanelHead>
+    <Panel sx={{...sx, height}}>
+      <PanelHead
+        action={
+          <ScRadioGroup inline dense onChange={setType} value={type} sx={{fontSize: 'inherit'}}>
+            <ScRadioGroupItem hideRadio value="oblast">
+              {m.oblast}
+            </ScRadioGroupItem>
+            <ScRadioGroupItem hideRadio value="settlement">
+              {m.settlement}
+            </ScRadioGroupItem>
+          </ScRadioGroup>
+        }
+      >
+        {m.location}
+      </PanelHead>
       <Box sx={{mt: 1}}>
         {fnSwitch(type, {
-          oblast: <MapSvgByOblast sx={{mx: 2, maxWidth: 480, margin: 'auto'}} getOblast={getOblast} data={data} fillBaseOn="value"/>,
-          settlement: <MapGoogleSettlement data={data} getSettlement={getSettlement}/>
+          oblast: (
+            <MapSvgByOblast
+              sx={{mx: 2, maxWidth: 480, margin: 'auto'}}
+              getOblast={getOblast}
+              data={data}
+              fillBaseOn="value"
+            />
+          ),
+          settlement: <MapGoogleSettlement data={data} getSettlement={getSettlement} />,
         })}
       </Box>
     </Panel>

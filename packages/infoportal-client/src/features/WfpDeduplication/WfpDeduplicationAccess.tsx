@@ -18,7 +18,7 @@ export const WfpDeduplicationAccess = () => {
   const {m} = useI18n()
 
   const _get = useFetcher(() => api.access.search({featureId: AppFeatureId.wfp_deduplication}))
-  const _remove = useAsync(api.access.remove, {requestKey: _ => _[0]})
+  const _remove = useAsync(api.access.remove, {requestKey: (_) => _[0]})
 
   const refresh = () => {
     _get.fetch({force: true, clean: false})
@@ -40,10 +40,13 @@ export const WfpDeduplicationAccess = () => {
           header={
             session.admin && (
               <WfpDeduplicationAccessForm onAdded={refresh}>
-                <IpBtn sx={{mr: 1}} variant="contained" icon="person_add">{m.grantAccess}</IpBtn>
+                <IpBtn sx={{mr: 1}} variant="contained" icon="person_add">
+                  {m.grantAccess}
+                </IpBtn>
               </WfpDeduplicationAccessForm>
             )
-          }/>
+          }
+        />
       </Panel>
     </Page>
   )

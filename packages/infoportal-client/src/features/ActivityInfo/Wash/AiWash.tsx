@@ -14,7 +14,7 @@ export const AiWash = () => {
   return (
     <Page width="full">
       <Panel>
-        <AiBundleTable fetcher={fetcher} id="snfi"/>
+        <AiBundleTable fetcher={fetcher} id="snfi" />
       </Panel>
     </Page>
   )

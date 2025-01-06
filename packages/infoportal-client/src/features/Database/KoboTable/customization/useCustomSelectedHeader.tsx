@@ -8,10 +8,10 @@ import {AccessSum} from '@/core/sdk/server/access/Access'
 export const useCustomSelectedHeader = ({
   formId,
   access,
-  selectedIds
+  selectedIds,
 }: {
   access: AccessSum
-  formId: Kobo.FormId,
+  formId: Kobo.FormId
   selectedIds: Kobo.SubmissionId[]
 }): ReactNode => {
   const {m} = useI18n()
@@ -22,15 +22,20 @@ export const useCustomSelectedHeader = ({
       {access.write && (
         <Modal
           loading={ctx.asyncDeleteById.anyLoading}
-          onConfirm={(event, close) => ctx.asyncDeleteById.call({
-            formId,
-            answerIds: selectedIds,
-          }).then(close)}
+          onConfirm={(event, close) =>
+            ctx.asyncDeleteById
+              .call({
+                formId,
+                answerIds: selectedIds,
+              })
+              .then(close)
+          }
           title={m.confirmRemove}
-          content={
-            <Txt color="hint">{m.confirmRemoveDesc}</Txt>
-          }>
-          <IpBtn variant="contained" icon="delete">{m.deleteSelected}</IpBtn>
+          content={<Txt color="hint">{m.confirmRemoveDesc}</Txt>}
+        >
+          <IpBtn variant="contained" icon="delete">
+            {m.deleteSelected}
+          </IpBtn>
         </Modal>
       )}
     </>

@@ -5,7 +5,7 @@ import {Meta} from '@/features/Meta/Meta'
 export default () => {
   return (
     <ProtectRoute>
-      <Meta/>
+      <Meta />
     </ProtectRoute>
   )
 }

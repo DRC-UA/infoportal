@@ -12,11 +12,7 @@ const Context = React.createContext({} as PartnershipContext)
 
 export const usePartnershipContext = () => useContext<PartnershipContext>(Context)
 
-export const PartnershipProvider = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const PartnershipProvider = ({children}: {children: ReactNode}) => {
   const {api} = useAppSettings()
   const {session, accesses} = useSession()
 
@@ -30,12 +26,13 @@ export const PartnershipProvider = ({
     fetchAll()
   }, [])
 
-
   return (
-    <Context.Provider value={{
-      data,
-      fetchAll,
-    }}>
+    <Context.Provider
+      value={{
+        data,
+        fetchAll,
+      }}
+    >
       {children}
     </Context.Provider>
   )

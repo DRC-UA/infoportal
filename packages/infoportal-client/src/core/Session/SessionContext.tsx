@@ -23,15 +23,17 @@ export interface SessionContext {
   setSession: Dispatch<SetStateAction<UserSession | undefined>>
 }
 
-const Context = React.createContext({} as {
-  session?: SessionContext['session'],
-  accesses?: SessionContext['accesses'],
-  logout: SessionContext['logout'],
-  setSession: SessionContext['setSession'],
-  loading?: boolean
-  fetcherSession: UseFetcher<ApiSdk['session']['get']>
-  fetcherAccesses: UseFetcher<ApiSdk['access']['searchForConnectedUser']>
-})
+const Context = React.createContext(
+  {} as {
+    session?: SessionContext['session']
+    accesses?: SessionContext['accesses']
+    logout: SessionContext['logout']
+    setSession: SessionContext['setSession']
+    loading?: boolean
+    fetcherSession: UseFetcher<ApiSdk['session']['get']>
+    fetcherAccesses: UseFetcher<ApiSdk['access']['searchForConnectedUser']>
+  },
+)
 
 const useSessionPending = () => useContext(Context)
 
@@ -49,11 +51,7 @@ export const useSession = (): SessionContext => {
   }
 }
 
-export const SessionProvider = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const SessionProvider = ({children}: {children: ReactNode}) => {
   const {api} = useAppSettings()
   const fetcherSession = useFetcher(api.session.get)
   const fetcherAccesses = useFetcher<any>(api.access.searchForConnectedUser)
@@ -65,8 +63,7 @@ export const SessionProvider = ({
   }, [])
 
   useEffect(() => {
-    if (session?.email)
-      fetcherAccesses.fetch({force: true, clean: true})
+    if (session?.email) fetcherAccesses.fetch({force: true, clean: true})
   }, [session?.email, session?.drcOffice, session?.drcJob])
 
   useEffect(() => {
@@ -74,35 +71,26 @@ export const SessionProvider = ({
   }, [])
 
   return (
-    <Context.Provider value={{
-      fetcherSession,
-      fetcherAccesses,
-      session,
-      setSession: fetcherSession.set,
-      accesses: fetcherAccesses.get,
-      logout,
-    }}>
+    <Context.Provider
+      value={{
+        fetcherSession,
+        fetcherAccesses,
+        session,
+        setSession: fetcherSession.set,
+        accesses: fetcherAccesses.get,
+        logout,
+      }}
+    >
       {children}
     </Context.Provider>
   )
 }
 
-export const ProtectRoute = ({
-  adminOnly,
-  children,
-}: {
-  children: ReactNode
-  adminOnly?: boolean
-}) => {
+export const ProtectRoute = ({adminOnly, children}: {children: ReactNode; adminOnly?: boolean}) => {
   const {api} = useAppSettings()
   const {m} = useI18n()
   const {toastError} = useIpToast()
-  const {
-    fetcherSession,
-    session,
-    fetcherAccesses,
-    logout,
-  } = useSessionPending()
+  const {fetcherSession, session, fetcherAccesses, logout} = useSessionPending()
   useEffectFn(fetcherSession.error, () => toastError(m.youDontHaveAccess))
 
   const _revertConnectAs = useAsync<any>(async () => {
@@ -113,44 +101,44 @@ export const ProtectRoute = ({
   if (fetcherSession.loading || fetcherAccesses.loading) {
     return (
       <CenteredContent>
-        <HomeTitle/>
-        <LinearProgress sx={{mt: 2, width: 200}}/>
+        <HomeTitle />
+        <LinearProgress sx={{mt: 2, width: 200}} />
       </CenteredContent>
     )
   }
   if (!session || !fetcherAccesses.get) {
     return (
       <CenteredContent>
-        <SessionLoginForm setSession={fetcherSession.set}/>
+        <SessionLoginForm setSession={fetcherSession.set} />
       </CenteredContent>
     )
   }
   if (adminOnly && !session.admin) {
     return (
       <CenteredContent>
-        <Fender type="error"/>
+        <Fender type="error" />
       </CenteredContent>
     )
   }
-  return (
-    !session.drcOffice ? (
-      <CenteredContent>
-        <SessionInitForm
-          user={session}
-          onChangeAccount={logout}
-          onSelectOffice={drcOffice => fetcherSession.set(prev => prev && ({...prev, drcOffice: drcOffice}))}
-        />
-      </CenteredContent>
-    ) : (
-      <>
-        {session.originalEmail && (
-          <Box sx={{px: 2, py: .25, background: t => t.palette.background.paper}}>
-            Connected as <b>{session.email}</b>. Go back as <b>{session.originalEmail}</b>
-            <IpIconBtn loading={_revertConnectAs.loading} onClick={_revertConnectAs.call} color="primary">logout</IpIconBtn>
-          </Box>
-        )}
-        {children}
-      </>
-    )
+  return !session.drcOffice ? (
+    <CenteredContent>
+      <SessionInitForm
+        user={session}
+        onChangeAccount={logout}
+        onSelectOffice={(drcOffice) => fetcherSession.set((prev) => prev && {...prev, drcOffice: drcOffice})}
+      />
+    </CenteredContent>
+  ) : (
+    <>
+      {session.originalEmail && (
+        <Box sx={{px: 2, py: 0.25, background: (t) => t.palette.background.paper}}>
+          Connected as <b>{session.email}</b>. Go back as <b>{session.originalEmail}</b>
+          <IpIconBtn loading={_revertConnectAs.loading} onClick={_revertConnectAs.call} color="primary">
+            logout
+          </IpIconBtn>
+        </Box>
+      )}
+      {children}
+    </>
   )
 }

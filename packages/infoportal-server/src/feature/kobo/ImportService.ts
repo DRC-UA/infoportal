@@ -1,4 +1,4 @@
-import { KoboSchemaHelper} from 'infoportal-common'
+import {KoboSchemaHelper} from 'infoportal-common'
 import * as xlsx from 'xlsx'
 import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
@@ -14,9 +14,8 @@ type KoboData = {_parent_index?: number; _index?: number} & Record<string, any>
 export class ImportService {
   constructor(
     private prisma: PrismaClient,
-    private koboSdkGenerator = KoboSdkGenerator.getSingleton(prisma)
-  ) {
-  }
+    private koboSdkGenerator = KoboSdkGenerator.getSingleton(prisma),
+  ) {}
 
   readonly processData = async (formId: FormId, filePath: string, action: 'create' | 'update') => {
     const sdk = await this.koboSdkGenerator.getBy.formId(formId)
@@ -38,13 +37,13 @@ export class ImportService {
 
   private getSheets = (workbook: xlsx.WorkBook): Record<string, KoboData[]> => {
     const sheetData: Record<string, KoboData[]> = {}
-    workbook.SheetNames.forEach(sheetName => {
+    workbook.SheetNames.forEach((sheetName) => {
       const sheet = workbook.Sheets[sheetName]
       const jsonData = xlsx.utils.sheet_to_json(sheet, {header: 1}) as any[][]
       if (jsonData.length > 0) {
         const headers = jsonData[0]
         const rows = jsonData.slice(1)
-        sheetData[sheetName] = rows.map(row => {
+        sheetData[sheetName] = rows.map((row) => {
           return lodash.zipObject(headers, row)
         })
       }
@@ -53,19 +52,18 @@ export class ImportService {
   }
 
   private transformValues = (rows: KoboData[], schemaHelper: KoboSchemaHelper.Bundle): KoboData[] => {
-    return rows.map(row => {
+    return rows.map((row) => {
       const transformedRow: KoboData = {}
 
       if (row['ID']) {
         transformedRow['ID'] = String(row['ID'])
       }
 
-      Obj.keys(row).forEach(key => {
+      Obj.keys(row).forEach((key) => {
         const question = schemaHelper.helper.questionIndex[key]
         if (key !== 'ID') {
-          transformedRow[key] = question && this.isValid(question.type, row[key])
-            ? this.transformValue(question.type, row[key])
-            : null
+          transformedRow[key] =
+            question && this.isValid(question.type, row[key]) ? this.transformValue(question.type, row[key]) : null
         }
       })
 
@@ -97,7 +95,7 @@ export class ImportService {
 
   private transformNestedData(value: any, schemaHelper: KoboSchemaHelper.Bundle): any {
     if (Array.isArray(value)) {
-      return value.map(item => this.transformRow(item, schemaHelper))
+      return value.map((item) => this.transformRow(item, schemaHelper))
     }
     return value
   }
@@ -105,7 +103,7 @@ export class ImportService {
   private transformRow(row: Record<string, any>, schemaHelper: KoboSchemaHelper.Bundle): Record<string, any> {
     const transformedRow: Record<string, any> = {}
 
-    Obj.keys(row).forEach(key => {
+    Obj.keys(row).forEach((key) => {
       const question = schemaHelper.helper.questionIndex[key]
       if (question) {
         transformedRow[key] = this.isNestedField(question.type)
@@ -118,15 +116,16 @@ export class ImportService {
     return transformedRow
   }
 
-
   private mergeNestedData = (sheets: Record<string, KoboData[]>, schemaHelper: KoboSchemaHelper.Bundle) => {
     const rootSheet = Object.keys(sheets)[0]
     const rootData = sheets[rootSheet]
 
-    return rootData.map(row => {
+    return rootData.map((row) => {
       const groups = schemaHelper.helper.group.search({depth: 1})
-      groups.forEach(group => {
-        const indexedChildren = seq(sheets[group.name]).compactBy('_parent_index').groupBy(_ => _._parent_index)
+      groups.forEach((group) => {
+        const indexedChildren = seq(sheets[group.name])
+          .compactBy('_parent_index')
+          .groupBy((_) => _._parent_index)
         if (sheets[group.name]) {
           row[group.name] = indexedChildren[row._index!] || []
         }
@@ -173,12 +172,12 @@ export class ImportService {
     data: KoboData[],
     schemaHelper: KoboSchemaHelper.Bundle,
     skipNullForCreate: boolean,
-    action: 'create' | 'update'
+    action: 'create' | 'update',
   ): KoboData[] => {
-    return data.map(row => {
+    return data.map((row) => {
       const formattedRow: KoboData = {}
 
-      Obj.keys(row).forEach(questionName => {
+      Obj.keys(row).forEach((questionName) => {
         const questionSchema = schemaHelper.helper.questionIndex[questionName]
         const xpath = questionSchema?.$xpath
 
@@ -214,7 +213,6 @@ export class ImportService {
     })
   }
 
-
   private async batchCreate(data: KoboData[], sdk: any, formId: FormId) {
     for (const row of data) {
       await sdk.v1.submit({
@@ -225,12 +223,7 @@ export class ImportService {
     }
   }
 
-  private async batchUpdate(
-    sdk: KoboClient,
-    data: KoboData[],
-    formId: FormId,
-    schemaHelper: KoboSchemaHelper.Bundle
-  ) {
+  private async batchUpdate(sdk: KoboClient, data: KoboData[], formId: FormId, schemaHelper: KoboSchemaHelper.Bundle) {
     for (const row of data) {
       const answerId = row['ID']
       if (!answerId) continue

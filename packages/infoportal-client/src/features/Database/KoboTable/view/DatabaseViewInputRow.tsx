@@ -19,8 +19,8 @@ const useStyles = makeStyles<{open?: boolean}>()((t, {open}) => ({
     borderRadius: t.shape.borderRadius + 'px',
     boxShadow: open ? t.shadows[1] : undefined,
     ':hover': {
-      background: alpha(t.palette.primary.main, .08),
-    }
+      background: alpha(t.palette.primary.main, 0.08),
+    },
   },
   head: {
     display: 'flex',
@@ -29,7 +29,7 @@ const useStyles = makeStyles<{open?: boolean}>()((t, {open}) => ({
     paddingLeft: 0,
     borderBottom: open ? `1px solid ${t.palette.divider}` : undefined,
     marginBottom: open ? t.spacing(1) : 0,
-  }
+  },
 }))
 
 export const DatabaseViewInputRow = ({
@@ -58,33 +58,33 @@ export const DatabaseViewInputRow = ({
   return (
     <div className={classes.root}>
       <div className={classes.head} onClick={onClick}>
-        <Radio checked={checked}/>
+        <Radio checked={checked} />
         <Box sx={{flex: 1, height: '32px', display: 'flex', alignItems: 'center'}}>
           {view.name}&nbsp;<Txt color="hint">({view.visibility})</Txt>
         </Box>
-        <Box sx={{display: 'flex', alignItems: 'center'}} onClick={e => e.stopPropagation()}>
-          <IpIconBtn onClick={onOpen} color={open ? 'primary' : undefined}>{open ? 'close_fullscreen' : 'settings'}</IpIconBtn>
+        <Box sx={{display: 'flex', alignItems: 'center'}} onClick={(e) => e.stopPropagation()}>
+          <IpIconBtn onClick={onOpen} color={open ? 'primary' : undefined}>
+            {open ? 'close_fullscreen' : 'settings'}
+          </IpIconBtn>
         </Box>
       </div>
       <Collapse in={open}>
         <IpListItem icon="notes">
           <Txt size="small">
             <Box>{view.details.length} items</Box>
-            {!readOnly && (
-              <Box>{m.createdByAt(view.createdBy, formatDateTime(view.createdAt))}</Box>
-            )}
-            {view.updatedBy && (
-              <Box>{m.updatedByAt(view.updatedBy, formatDateTime(view.updatedAt))}</Box>
-            )}
+            {!readOnly && <Box>{m.createdByAt(view.createdBy, formatDateTime(view.createdAt))}</Box>}
+            {view.updatedBy && <Box>{m.updatedByAt(view.updatedBy, formatDateTime(view.updatedAt))}</Box>}
           </Txt>
         </IpListItem>
         <IpListItem icon="public">
-          <Txt size="small" color="hint">{m.visibility}</Txt>
+          <Txt size="small" color="hint">
+            {m.visibility}
+          </Txt>
           <IpSelectSingle<DatabaseViewVisibility>
             disabled={readOnly}
             value={view.visibility}
-            onChange={_ => onUpdate({visibility: _})}
-            renderValue={_ => _}
+            onChange={(_) => onUpdate({visibility: _})}
+            renderValue={(_) => _}
             hideNullOption
             options={[
               ipSelectItem({
@@ -110,7 +110,9 @@ export const DatabaseViewInputRow = ({
         </IpListItem>
         {!readOnly && (
           <IpListItem icon="delete">
-            <BtnConfirm size="small" iconAfter="chevron_right" onClick={onDelete}>{m.delete}</BtnConfirm>
+            <BtnConfirm size="small" iconAfter="chevron_right" onClick={onDelete}>
+              {m.delete}
+            </BtnConfirm>
           </IpListItem>
         )}
       </Collapse>

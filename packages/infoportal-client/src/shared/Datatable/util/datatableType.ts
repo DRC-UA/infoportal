@@ -8,10 +8,12 @@ export type DatatableFilterTypeMapping = {
   id: string
   date: [Date | undefined, Date | undefined]
   number: [number | undefined, number | undefined]
-  string: {
-    filterBlank?: boolean
-    value?: string
-  } | undefined
+  string:
+    | {
+        filterBlank?: boolean
+        value?: string
+      }
+    | undefined
   select_one: string
   select_multiple: string[]
 }
@@ -41,10 +43,8 @@ export type HeaderParams<T extends DatatableRow> = {
 }
 
 export type DatatableRow = Record<string, any> // Record<string, any/* string | number[] | string[] | Date | number | undefined*/>
-export interface DatatableTableProps<
-  T extends DatatableRow,
-  K extends string = string
-> extends Omit<BoxProps, 'onSelect'> {
+export interface DatatableTableProps<T extends DatatableRow, K extends string = string>
+  extends Omit<BoxProps, 'onSelect'> {
   header?: ReactNode | ((_: HeaderParams<T>) => ReactNode)
   id: string
   loading?: boolean
@@ -77,10 +77,7 @@ export interface DatatableTableProps<
     sortableColumns?: string[]
     sortBy?: KeyOf<T>
     orderBy?: OrderBy
-    onSortChange: (_: {
-      sortBy?: KeyOf<T>;
-      orderBy?: OrderBy
-    }) => void
+    onSortChange: (_: {sortBy?: KeyOf<T>; orderBy?: OrderBy}) => void
   }
   columnsToggle?: {
     defaultHidden?: K[]
@@ -97,7 +94,6 @@ export interface DatatableTableProps<
 }
 
 export namespace DatatableColumn {
-
   export type Value = string[] | string | undefined | Date | number | null | boolean
 
   export type RenderT<T extends Value, TOption = any> = {
@@ -124,7 +120,7 @@ export namespace DatatableColumn {
     classHead?: string
     typeIcon?: ReactNode
     typeLabel?: string
-    subHeader?: ReactNode,
+    subHeader?: ReactNode
     className?: string | ((_: T) => string | undefined)
     stickyEnd?: boolean
   }
@@ -138,9 +134,9 @@ export namespace DatatableColumn {
     }
     export type TypeInner<T extends DatatableRow> = BaseType & {
       render: Render<T>
-    } & ({
+    } & {
       noCsvExport?: false
-    })
+    }
     export type TypeQuick<T extends DatatableRow> = BaseType & {
       renderQuick: RenderQuick<T>
     }
@@ -223,29 +219,32 @@ export namespace DatatableColumn {
     export type TypeOuter<T extends DatatableRow> = TypeInner<T> | TypeQuick<T>
   }
 
-  export type InnerProps<T extends DatatableRow, K extends string = string> = Base<T, K> & (
-    Text.TypeInner<T> |
-    SelectOne.TypeInner<T> |
-    Date.TypeInner<T> |
-    Number.TypeInner<T> |
-    SelectMultiple.TypeInner<T> |
-    Undefined.TypeInner<T>
+  export type InnerProps<T extends DatatableRow, K extends string = string> = Base<T, K> &
+    (
+      | Text.TypeInner<T>
+      | SelectOne.TypeInner<T>
+      | Date.TypeInner<T>
+      | Number.TypeInner<T>
+      | SelectMultiple.TypeInner<T>
+      | Undefined.TypeInner<T>
     )
-  export type Props<T extends DatatableRow, K extends string = string> = Base<T, K> & (
-    Text.TypeOuter<T> |
-    SelectOne.TypeOuter<T> |
-    Date.TypeOuter<T> |
-    Number.TypeOuter<T> |
-    SelectMultiple.TypeOuter<T> |
-    Undefined.TypeOuter<T>
+  export type Props<T extends DatatableRow, K extends string = string> = Base<T, K> &
+    (
+      | Text.TypeOuter<T>
+      | SelectOne.TypeOuter<T>
+      | Date.TypeOuter<T>
+      | Number.TypeOuter<T>
+      | SelectMultiple.TypeOuter<T>
+      | Undefined.TypeOuter<T>
     )
-  export type QuickProps<T extends DatatableRow, K extends string = string> = Base<T, K> & (
-    Text.TypeQuick<T> |
-    SelectOne.TypeQuick<T> |
-    Date.TypeQuick<T> |
-    Number.TypeQuick<T> |
-    SelectMultiple.TypeQuick<T> |
-    Undefined.TypeQuick<T>
+  export type QuickProps<T extends DatatableRow, K extends string = string> = Base<T, K> &
+    (
+      | Text.TypeQuick<T>
+      | SelectOne.TypeQuick<T>
+      | Date.TypeQuick<T>
+      | Number.TypeQuick<T>
+      | SelectMultiple.TypeQuick<T>
+      | Undefined.TypeQuick<T>
     )
 
   export const isQuick = (_: Props<any>): _ is QuickProps<any> => {

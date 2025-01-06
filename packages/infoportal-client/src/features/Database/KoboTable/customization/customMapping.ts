@@ -1,8 +1,10 @@
 import {KoboEcrec_cashRegistration, KoboGeneralMapping, KoboIndex} from 'infoportal-common'
 
 export const databaseCustomMapping: Record<any, (_: any) => any> = {
-  [KoboIndex.byName('ecrec_cashRegistration').id]: (_: KoboEcrec_cashRegistration.T) => KoboEcrec_cashRegistration.calculateVulnerabilities(_),
-  [KoboIndex.byName('ecrec_cashRegistrationBha').id]: (_: KoboEcrec_cashRegistration.T) => KoboEcrec_cashRegistration.calculateVulnerabilities(_),
+  [KoboIndex.byName('ecrec_cashRegistration').id]: (_: KoboEcrec_cashRegistration.T) =>
+    KoboEcrec_cashRegistration.calculateVulnerabilities(_),
+  [KoboIndex.byName('ecrec_cashRegistrationBha').id]: (_: KoboEcrec_cashRegistration.T) =>
+    KoboEcrec_cashRegistration.calculateVulnerabilities(_),
   [KoboIndex.byName('ecrec_vetApplication').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('ecrec_vetEvaluation').id]: KoboGeneralMapping.addIndividualBreakdownColumn,
   [KoboIndex.byName('ecrec_msmeGrantEoi').id]: KoboGeneralMapping.addIndividualBreakdownColumn,

@@ -8,12 +8,10 @@ import {SessionError} from '../../feature/session/SessionErrors'
 import {Util} from '../../helper/Utils'
 
 export class ControllerUser {
-
   constructor(
     private pgClient: PrismaClient,
-    private service = UserService.getInstance(pgClient)
-  ) {
-  }
+    private service = UserService.getInstance(pgClient),
+  ) {}
 
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
     const data = await this.service.getAll()
@@ -21,9 +19,11 @@ export class ControllerUser {
   }
 
   readonly avatar = async (req: Request, res: Response, next: NextFunction) => {
-    const {email} = await yup.object({
-      email: yup.string().optional()
-    }).validate(req.params)
+    const {email} = await yup
+      .object({
+        email: yup.string().optional(),
+      })
+      .validate(req.params)
     const avatar = await this.service.getUserAvatarByEmail(email ?? req.session.user?.email!)
     if (!avatar) {
       res.send()
@@ -35,9 +35,11 @@ export class ControllerUser {
   }
 
   readonly updateMe = async (req: Request, res: Response, next: NextFunction) => {
-    const user = await yup.object({
-      drcOffice: yup.mixed<DrcOffice>().oneOf(Obj.values(DrcOffice)),
-    }).validate(req.body)
+    const user = await yup
+      .object({
+        drcOffice: yup.mixed<DrcOffice>().oneOf(Obj.values(DrcOffice)),
+      })
+      .validate(req.body)
 
     const email = req.session.user?.email
     if (!email) {
@@ -46,7 +48,7 @@ export class ControllerUser {
     const data = await this.service.update({email, ...user})
     req.session.user = {
       ...req.session.user,
-      ...Util.removeUndefined(data) as any,
+      ...(Util.removeUndefined(data) as any),
     }
     res.send(data)
   }

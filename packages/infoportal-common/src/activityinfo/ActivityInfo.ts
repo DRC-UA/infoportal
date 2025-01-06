@@ -3,7 +3,7 @@ export interface Form {
     id: AIID
     parentId: AIID
     label: string
-    type: 'FORM',
+    type: 'FORM'
     visibility: 'PRIVATE'
   }[]
 }
@@ -15,23 +15,23 @@ export type FormDescs = Record<AIID, FormDesc>
 export type FormDesc = {
   id: AIID
   permissions: {
-    viewFilter?: string,
-  },
+    viewFilter?: string
+  }
   schema: {
     elements: {
       id: AIID
-      code: string,
+      code: string
       label: string
       description: string
-      relevanceCondition: string,
-      validationCondition: string,
-      required: boolean,
-      type: 'subform' | 'reference' | 'enumerated' | 'calculated' | 'quantity' | 'FREE_TEXT' | 'month' | string,
+      relevanceCondition: string
+      validationCondition: string
+      required: boolean
+      type: 'subform' | 'reference' | 'enumerated' | 'calculated' | 'quantity' | 'FREE_TEXT' | 'month' | string
       typeParameters: {
-        formId?: AIID,
+        formId?: AIID
         cardinality?: 'single'
         range?: [{formId: AIID}]
-        values?: {id: string, label: string}[]
+        values?: {id: string; label: string}[]
         // formula?: string
       }
     }[]

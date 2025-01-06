@@ -12,40 +12,46 @@ import {UserSession} from '@/core/sdk/server/session/Session'
 import {CenteredContent} from '@/shared/CenteredContent'
 import {useAsync} from '@/shared/hook/useAsync'
 
-export const SessionLoginForm = ({
-  setSession
-}: {
-  setSession: (_: UserSession) => void
-}) => {
+export const SessionLoginForm = ({setSession}: {setSession: (_: UserSession) => void}) => {
   const {api} = useAppSettings()
   const {m} = useI18n()
   const {toastError} = useIpToast()
   const msal = useMsal()
 
-  const _login = useAsync(() => msal.instance.loginPopup({
-    scopes: ['User.Read']
-  }))
+  const _login = useAsync(() =>
+    msal.instance.loginPopup({
+      scopes: ['User.Read'],
+    }),
+  )
   // useEffectFn(_login.error, _ => _ && toastError(m.youDontHaveAccess))
 
-  const _saveSession = useAsync(mapPromise({
-    promise: api.session.login,
-    mapThen: setSession,
-  }))
+  const _saveSession = useAsync(
+    mapPromise({
+      promise: api.session.login,
+      mapThen: setSession,
+    }),
+  )
   useEffectFn(_saveSession.error, () => toastError(m.youDontHaveAccess))
 
   return (
     <CenteredContent>
-      <Box sx={{
-        border: t => `1px solid ${t.palette.divider}`,
-        padding: 4,
-        borderRadius: '8px',
-      }}>
-        <DRCLogo sx={{margin: 'auto', display: 'block', mb: 2}}/>
-        <Txt sx={{textAlign: 'center'}} size="title" block>{m.title}</Txt>
-        <Txt sx={{textAlign: 'center', mb: 4}} size="big" color="hint" block>{m.subTitle}</Txt>
+      <Box
+        sx={{
+          border: (t) => `1px solid ${t.palette.divider}`,
+          padding: 4,
+          borderRadius: '8px',
+        }}
+      >
+        <DRCLogo sx={{margin: 'auto', display: 'block', mb: 2}} />
+        <Txt sx={{textAlign: 'center'}} size="title" block>
+          {m.title}
+        </Txt>
+        <Txt sx={{textAlign: 'center', mb: 4}} size="big" color="hint" block>
+          {m.subTitle}
+        </Txt>
         <ButtonBase
           sx={{
-            boxShadow: t => t.shadows[2],
+            boxShadow: (t) => t.shadows[2],
             display: 'flex',
             alignItems: 'center',
             margin: 'auto',
@@ -54,21 +60,29 @@ export const SessionLoginForm = ({
             minWidth: 300,
             borderRadius: '8px',
           }}
-          onClick={() => msal.instance.loginPopup({
-            scopes: ['User.Read']
-          }).then(_ => {
-            _saveSession.call({
-              accessToken: _.accessToken,
-              name: _.account?.name ?? '',
-              username: _.account!.username,
-            })
-            return _
-          })}
+          onClick={() =>
+            msal.instance
+              .loginPopup({
+                scopes: ['User.Read'],
+              })
+              .then((_) => {
+                _saveSession.call({
+                  accessToken: _.accessToken,
+                  name: _.account?.name ?? '',
+                  username: _.account!.username,
+                })
+                return _
+              })
+          }
         >
           <Icon sx={{mr: 2}}>login</Icon>
           <Box>
-            <Txt block size="big" bold>{m.signIn}</Txt>
-            <Txt block color="hint">{m.signInDesc}</Txt>
+            <Txt block size="big" bold>
+              {m.signIn}
+            </Txt>
+            <Txt block color="hint">
+              {m.signInDesc}
+            </Txt>
           </Box>
         </ButtonBase>
       </Box>

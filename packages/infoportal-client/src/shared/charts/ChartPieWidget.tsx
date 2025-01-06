@@ -46,56 +46,73 @@ export const ChartPieWidget = ({
   const {m, formatLargeNumber} = useI18n()
   const fontSize = dense ? '1.6em' : '1.7em'
   return (
-    <LightTooltip title={
-      <>
-        <Txt size="big" block bold>
-          {title}
-        </Txt>
-        <Box sx={{mt: .5}}>
-          <TooltipRow hint={<>{formatLargeNumber(value)} / {formatLargeNumber(base)}</>} value={toPercent(value / base)}/>
-        </Box>
-      </>
-    }>
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        ...sx,
-      }}>
-        <Donut percent={value / base} size={dense ? 45 : 50} color={color}/>
+    <LightTooltip
+      title={
+        <>
+          <Txt size="big" block bold>
+            {title}
+          </Txt>
+          <Box sx={{mt: 0.5}}>
+            <TooltipRow
+              hint={
+                <>
+                  {formatLargeNumber(value)} / {formatLargeNumber(base)}
+                </>
+              }
+              value={toPercent(value / base)}
+            />
+          </Box>
+        </>
+      }
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          ...sx,
+        }}
+      >
+        <Donut percent={value / base} size={dense ? 45 : 50} color={color} />
         <Box sx={{ml: dense ? 1 : 1.5}}>
           <SlidePanelTitle icon={titleIcon} noWrap={noWrap} sx={{mb: 0}}>
             {title}
           </SlidePanelTitle>
           <Box sx={{display: 'inline-flex', lineHeight: 1, alignItems: 'flex-start'}}>
-            <Txt bold sx={{fontSize, letterSpacing: '1px'}}>{renderPercent(value / base, true, fractionDigits)}</Txt>
+            <Txt bold sx={{fontSize, letterSpacing: '1px'}}>
+              {renderPercent(value / base, true, fractionDigits)}
+            </Txt>
             {evolution && (
               <>
-                <Txt sx={{
-                  fontSize,
-                  color: t => evolution > 0 ? t.palette.success.main : t.palette.error.main,
-                  display: 'inline-flex', alignItems: 'center'
-                }}>
-                  <Icon sx={{ml: 1}} fontSize="inherit">{evolution > 0 ? 'north' : 'south'}</Icon>
-                  <Box sx={{ml: .25}}>
-                    {evolution >= 0 && '+'}{(evolution * 100).toFixed(Math.abs(evolution) > 0.1 ? fractionDigits : 1)}
+                <Txt
+                  sx={{
+                    fontSize,
+                    color: (t) => (evolution > 0 ? t.palette.success.main : t.palette.error.main),
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Icon sx={{ml: 1}} fontSize="inherit">
+                    {evolution > 0 ? 'north' : 'south'}
+                  </Icon>
+                  <Box sx={{ml: 0.25}}>
+                    {evolution >= 0 && '+'}
+                    {(evolution * 100).toFixed(Math.abs(evolution) > 0.1 ? fractionDigits : 1)}
                   </Box>
                   {children}
                 </Txt>
                 {!hideIndicatorTooltip && (
                   <Tooltip title={tooltip}>
-                    <Icon sx={{fontSize: '15px !important'}} color="disabled">info</Icon>
+                    <Icon sx={{fontSize: '15px !important'}} color="disabled">
+                      info
+                    </Icon>
                   </Tooltip>
                 )}
               </>
             )}
             {!!showValue && (
-              <Txt color="disabled" sx={{ml: .5, fontWeight: '400'}}>
-              <span style={{fontWeight: '400', fontSize}}>
-                &nbsp;{formatLargeNumber(value)}
-              </span>
-                {!!showBase && (
-                  <span style={{fontWeight: '400', fontSize: '1.2em'}}>/{formatLargeNumber(base)}</span>
-                )}
+              <Txt color="disabled" sx={{ml: 0.5, fontWeight: '400'}}>
+                <span style={{fontWeight: '400', fontSize}}>&nbsp;{formatLargeNumber(value)}</span>
+                {!!showBase && <span style={{fontWeight: '400', fontSize: '1.2em'}}>/{formatLargeNumber(base)}</span>}
                 {/*<Txt color="disabled" sx={{fontSize: '1.4em', fontWeight: 'lighter'}}>)</Txt>*/}
               </Txt>
             )}
@@ -111,22 +128,14 @@ const renderPercent = (value: number, isPercent?: boolean, fractionDigits = 1) =
   return isPercent ? (value * 100).toFixed(fractionDigits) + '%' : value
 }
 
-const Donut = ({
-  percent = 0,
-  size = 55,
-  color,
-}: {
-  percent?: number
-  size?: number
-  color?: string
-}) => {
+const Donut = ({percent = 0, size = 55, color}: {percent?: number; size?: number; color?: string}) => {
   const theme = useTheme()
   return (
     <ChartPie
       stroke="none"
       hideTooltip={true}
       outerRadius={size / 2}
-      innerRadius={(size / 2) - 9}
+      innerRadius={size / 2 - 9}
       height={size}
       width={size}
       hideLabel
@@ -136,7 +145,7 @@ const Donut = ({
       }}
       colors={{
         value: color ?? theme.palette.primary.main,
-        rest: alpha(color ?? theme.palette.primary.main, .16),
+        rest: alpha(color ?? theme.palette.primary.main, 0.16),
       }}
       m={{
         value: 'ukrainian',

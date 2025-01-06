@@ -3,22 +3,20 @@ import {UUID} from 'infoportal-common'
 import {Proxy} from '@/core/sdk/server/proxy/Proxy'
 
 export class ProxySdk {
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
-  readonly create = (body: {
-    name: string
-    slug: string
-    url: string
-  }): Promise<Proxy> => {
+  readonly create = (body: {name: string; slug: string; url: string}): Promise<Proxy> => {
     return this.client.put(`/proxy`, {body})
   }
 
-  readonly update = (id: UUID, body: {
-    name?: string
-    url?: string
-    disabled?: boolean
-  }): Promise<Proxy> => {
+  readonly update = (
+    id: UUID,
+    body: {
+      name?: string
+      url?: string
+      disabled?: boolean
+    },
+  ): Promise<Proxy> => {
     return this.client.post(`/proxy/${id}`, {body})
   }
 
@@ -27,7 +25,6 @@ export class ProxySdk {
   }
 
   readonly search = (): Promise<Proxy[]> => {
-    return this.client.get(`/proxy`).then(_ => _.map(Proxy.map))
+    return this.client.get(`/proxy`).then((_) => _.map(Proxy.map))
   }
-
 }

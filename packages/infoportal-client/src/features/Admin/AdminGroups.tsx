@@ -34,28 +34,36 @@ export const AdminGroups = () => {
   const fetcher = useFetcher(api.group.search)
   const asyncCreate = useAsync(api.group.create)
   const asyncUpdate = useAsync(api.group.update)
-  const asyncRemove = useAsync(api.group.remove, {requestKey: _ => _[0]})
+  const asyncRemove = useAsync(api.group.remove, {requestKey: (_) => _[0]})
   const asyncItemCreate = useAsync(api.group.createItem)
   const asyncItemItem = useAsync(api.group.updateItem)
-  const asyncItemDelete = useAsync(api.group.deleteItem, {requestKey: _ => _[0]})
-  const asyncDuplicate = useAsync(async (g: Group) => {
-    const {id, items, createdAt, name, ...params} = g
-    const newGroup = await asyncCreate.call({
-      name: `${name} (copy)`,
-      ...params
-    })
-    await Promise.all(items.map(item => {
-      return api.group.createItem(newGroup.id, {
-        ...item,
-        drcJob: item.drcJob ? [item.drcJob] : undefined,
+  const asyncItemDelete = useAsync(api.group.deleteItem, {requestKey: (_) => _[0]})
+  const asyncDuplicate = useAsync(
+    async (g: Group) => {
+      const {id, items, createdAt, name, ...params} = g
+      const newGroup = await asyncCreate.call({
+        name: `${name} (copy)`,
+        ...params,
       })
-    }))
-  }, {requestKey: _ => _[0].id})
+      await Promise.all(
+        items.map((item) => {
+          return api.group.createItem(newGroup.id, {
+            ...item,
+            drcJob: item.drcJob ? [item.drcJob] : undefined,
+          })
+        }),
+      )
+    },
+    {requestKey: (_) => _[0].id},
+  )
 
-  const [selectedGroupId, setSelectedGroupId] = useState<{
-    groupId: UUID,
-    accessId?: UUID
-  } | undefined>()
+  const [selectedGroupId, setSelectedGroupId] = useState<
+    | {
+        groupId: UUID
+        accessId?: UUID
+      }
+    | undefined
+  >()
 
   useEffect(() => {
     fetcher.fetch()
@@ -83,18 +91,22 @@ export const AdminGroups = () => {
             <>
               <Modal
                 onOpen={groupForm.reset}
-                onConfirm={(e, close) => groupForm.handleSubmit(form => {
-                  asyncCreate.call(form).then(close)
-                })()}
+                onConfirm={(e, close) =>
+                  groupForm.handleSubmit((form) => {
+                    asyncCreate.call(form).then(close)
+                  })()
+                }
                 title={m._admin.createGroup}
                 content={
                   <>
-                    <IpInput sx={{mt: 2}} label={m.name} autoFocus {...groupForm.register('name')}/>
-                    <IpInput multiline minRows={3} maxRows={6} label={m.desc} {...groupForm.register('desc')}/>
+                    <IpInput sx={{mt: 2}} label={m.name} autoFocus {...groupForm.register('name')} />
+                    <IpInput multiline minRows={3} maxRows={6} label={m.desc} {...groupForm.register('desc')} />
                   </>
                 }
               >
-                <IpBtn icon="add" variant="outlined">{m.create}</IpBtn>
+                <IpBtn icon="add" variant="outlined">
+                  {m.create}
+                </IpBtn>
               </Modal>
             </>
           }
@@ -104,53 +116,55 @@ export const AdminGroups = () => {
               id: 'drcJob',
               width: 150,
               head: m.name,
-              renderQuick: _ => _.name
+              renderQuick: (_) => _.name,
             },
             {
               type: 'string',
               id: 'desc',
               width: 120,
               head: m.desc,
-              renderQuick: _ => _.desc
+              renderQuick: (_) => _.desc,
             },
             {
               type: 'date',
               id: 'createdAt',
-              width: 80, head:
-              m.createdAt,
-              render: _ => {
+              width: 80,
+              head: m.createdAt,
+              render: (_) => {
                 return {
                   label: formatDateTime(_.createdAt),
                   value: _.createdAt,
                 }
-              }
+              },
             },
             {
               id: 'items',
               style: () => ({whiteSpace: 'normal'}),
               head: m.accesses,
-              renderQuick: _ => (
+              renderQuick: (_) => (
                 <>
-                  {_.items.map(item =>
+                  {_.items.map((item) => (
                     <Chip
                       onClick={() => {
                         accessForm.reset({
                           ...item,
-                          drcJob: item.drcJob ? [item.drcJob] : undefined
+                          drcJob: item.drcJob ? [item.drcJob] : undefined,
                         })
                         setSelectedGroupId({groupId: _.id, accessId: item.id})
                       }}
-                      onDelete={e => asyncItemDelete.call(item.id)}
-                      sx={{mr: .5, my: .25}}
+                      onDelete={(e) => asyncItemDelete.call(item.id)}
+                      sx={{mr: 0.5, my: 0.25}}
                       icon={<Icon>{accessLevelIcon[item.level]}</Icon>}
                       size="small"
                       key={item.id}
-                      label={<>
-                        {item.drcJob ?? item.email}
-                        {item.drcOffice ? ` (${item.drcOffice})` : ''}
-                      </>}
+                      label={
+                        <>
+                          {item.drcJob ?? item.email}
+                          {item.drcOffice ? ` (${item.drcOffice})` : ''}
+                        </>
+                      }
                     />
-                  )}
+                  ))}
                   <Chip
                     icon={<Icon>add</Icon>}
                     size="small"
@@ -163,34 +177,63 @@ export const AdminGroups = () => {
                     }}
                   />
                 </>
-              )
+              ),
             },
             {
               id: 'actions',
               width: 84,
               align: 'right',
-              renderQuick: _ => (
+              renderQuick: (_) => (
                 <>
                   <Modal
                     onOpen={groupForm.reset}
-                    onConfirm={(e, close) => groupForm.handleSubmit(form => {
-                      asyncUpdate.call(_.id, form).then(close)
-                    })()}
+                    onConfirm={(e, close) =>
+                      groupForm.handleSubmit((form) => {
+                        asyncUpdate.call(_.id, form).then(close)
+                      })()
+                    }
                     title={m._admin.createGroup}
                     confirmLabel={m.edit}
                     content={
                       <>
-                        <IpInput sx={{mt: 2}} label={m.name} defaultValue={_.name} autoFocus {...groupForm.register('name')}/>
-                        <IpInput multiline minRows={3} maxRows={6} defaultValue={_.desc} label={m.desc} {...groupForm.register('desc')}/>
+                        <IpInput
+                          sx={{mt: 2}}
+                          label={m.name}
+                          defaultValue={_.name}
+                          autoFocus
+                          {...groupForm.register('name')}
+                        />
+                        <IpInput
+                          multiline
+                          minRows={3}
+                          maxRows={6}
+                          defaultValue={_.desc}
+                          label={m.desc}
+                          {...groupForm.register('desc')}
+                        />
                       </>
                     }
                   >
                     <IpIconBtn size="small">edit</IpIconBtn>
                   </Modal>
-                  <IpIconBtn size="small" tooltip={m.duplicate} onClick={() => asyncDuplicate.call(_)} loading={asyncDuplicate.loading[_.id]}>content_copy</IpIconBtn>
-                  <IpIconBtn size="small" tooltip={m.remove} onClick={() => asyncRemove.call(_.id)} loading={asyncRemove.loading[_.id]}>delete</IpIconBtn>
+                  <IpIconBtn
+                    size="small"
+                    tooltip={m.duplicate}
+                    onClick={() => asyncDuplicate.call(_)}
+                    loading={asyncDuplicate.loading[_.id]}
+                  >
+                    content_copy
+                  </IpIconBtn>
+                  <IpIconBtn
+                    size="small"
+                    tooltip={m.remove}
+                    onClick={() => asyncRemove.call(_.id)}
+                    loading={asyncRemove.loading[_.id]}
+                  >
+                    delete
+                  </IpIconBtn>
                 </>
-              )
+              ),
             },
           ]}
         />
@@ -199,19 +242,20 @@ export const AdminGroups = () => {
           loading={asyncItemCreate.loading}
           onClose={() => setSelectedGroupId(undefined)}
           confirmDisabled={!accessForm.formState.isValid}
-          onConfirm={(e) => accessForm.handleSubmit(f => {
-            if (selectedGroupId?.accessId) {
-              asyncItemItem.call(selectedGroupId.accessId, {
-                ...f,
-                drcJob: f.drcJob?.[0] ?? null
-              })
-            } else
-              asyncItemCreate.call(selectedGroupId?.groupId!, nullValuesToUndefined(f))
-            setSelectedGroupId(undefined)
-          })()}
+          onConfirm={(e) =>
+            accessForm.handleSubmit((f) => {
+              if (selectedGroupId?.accessId) {
+                asyncItemItem.call(selectedGroupId.accessId, {
+                  ...f,
+                  drcJob: f.drcJob?.[0] ?? null,
+                })
+              } else asyncItemCreate.call(selectedGroupId?.groupId!, nullValuesToUndefined(f))
+              setSelectedGroupId(undefined)
+            })()
+          }
         >
           <Box sx={{width: 400}}>
-            <AdminGroupAccessForm form={accessForm}/>
+            <AdminGroupAccessForm form={accessForm} />
           </Box>
         </BasicDialog>
       </Panel>

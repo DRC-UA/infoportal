@@ -1,6 +1,14 @@
 import React from 'react'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
-import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
+import {
+  Div,
+  PdfSlide,
+  PdfSlideBody,
+  SlideHeader,
+  SlidePanel,
+  SlidePanelTitle,
+  SlideTxt,
+} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
@@ -22,60 +30,88 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
         <Div>
           <Div column>
             <SlideTxt>
-              <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
-                value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
-                data: d,
-                base: _ => _ !== undefined,
-              })}>
-                {_ =>
+              <Lazy
+                deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]}
+                fn={(d) =>
+                  ChartHelper.percentage({
+                    value: (_) =>
+                      _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment ===
+                      'yes',
+                    data: d,
+                    base: (_) => _ !== undefined,
+                  })
+                }
+              >
+                {(_) => (
                   <p
-                    // dangerouslySetInnerHTML={{
-                    // __html: m.snapshotProtMonito.echo.livelihood({
-                    //   outOfWork: toPercent(_.percent, 0),
+                  // dangerouslySetInnerHTML={{
+                  // __html: m.snapshotProtMonito.echo.livelihood({
+                  //   outOfWork: toPercent(_.percent, 0),
                   >
                     {/* Following the changes in the housing assistance system for IDPs under Resolution No. 332, a substantially higher number of IDPs have reported gaps in meeting
                     their basic needs, with a <Txt bold style={{color: t.palette.success.main}}>37%</Txt> increase compared to March. The limited availability of job opportunities continues to be reported as the primary factor affecting
                     employment. */}
-                    IDPs face limited work opportunities in host areas, with financial constraints and changes in government allowances for IDPs often pushing them into precarious or physically demanding jobs. 
-                    Barriers such as job scarcity, impairments, and childcare responsibilities – particularly due to online education – worsen financial insecurity, leading households to deplete savings and cut back on food consumption.
+                    IDPs face limited work opportunities in host areas, with financial constraints and changes in
+                    government allowances for IDPs often pushing them into precarious or physically demanding jobs.
+                    Barriers such as job scarcity, impairments, and childcare responsibilities – particularly due to
+                    online education – worsen financial insecurity, leading households to deplete savings and cut back
+                    on food consumption.
                   </p>
-                }
+                )}
               </Lazy>
             </SlideTxt>
 
             <Div>
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
-                  value: _ => _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment === 'yes',
-                  data: d,
-                  base: _ => _ !== undefined,
-                })}>
-                  {(_, last) => <ChartPieWidget
-                    title={m.hhOutOfWork}
-                    value={_.value}
-                    base={_.base}
-                    evolution={_.percent - last.percent}
-                    {...snapShotDefaultPieIndicatorsProps}
-                    showBase={false}
-                    sx={{mb: 0}}
-                  />}
+                <Lazy
+                  deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]}
+                  fn={(d) =>
+                    ChartHelper.percentage({
+                      value: (_) =>
+                        _.including_yourself_are_there_members_of_your_household_who_are_out_of_work_and_seeking_employment ===
+                        'yes',
+                      data: d,
+                      base: (_) => _ !== undefined,
+                    })
+                  }
+                >
+                  {(_, last) => (
+                    <ChartPieWidget
+                      title={m.hhOutOfWork}
+                      value={_.value}
+                      base={_.base}
+                      evolution={_.percent - last.percent}
+                      {...snapShotDefaultPieIndicatorsProps}
+                      showBase={false}
+                      sx={{mb: 0}}
+                    />
+                  )}
                 </Lazy>
               </SlidePanel>
 
               <SlidePanel sx={{flex: 1}}>
-                <Lazy deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]} fn={d => ChartHelper.percentage({
-                  value: _ => _.are_there_gaps_in_meeting_your_basic_needs === 'yes_somewhat' || _.are_there_gaps_in_meeting_your_basic_needs === 'yes_a_lot',
-                  data: d,
-                })}>
-                  {(_, last) => <ChartPieWidget
-                    title={m.hhWithGapMeetingBasicNeeds}
-                    value={_.value}
-                    base={_.base}
-                    evolution={_.percent - last.percent}
-                    {...snapShotDefaultPieIndicatorsProps}
-                    showBase={false}
-                    sx={{mb: 0}}
-                  />}
+                <Lazy
+                  deps={[ctx.dataFiltered, ctx.dataPreviousPeriod]}
+                  fn={(d) =>
+                    ChartHelper.percentage({
+                      value: (_) =>
+                        _.are_there_gaps_in_meeting_your_basic_needs === 'yes_somewhat' ||
+                        _.are_there_gaps_in_meeting_your_basic_needs === 'yes_a_lot',
+                      data: d,
+                    })
+                  }
+                >
+                  {(_, last) => (
+                    <ChartPieWidget
+                      title={m.hhWithGapMeetingBasicNeeds}
+                      value={_.value}
+                      base={_.base}
+                      evolution={_.percent - last.percent}
+                      {...snapShotDefaultPieIndicatorsProps}
+                      showBase={false}
+                      sx={{mb: 0}}
+                    />
+                  )}
                 </Lazy>
               </SlidePanel>
             </Div>
@@ -113,9 +149,10 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
               <SlidePanelTitle>{m.copyingMechanisms}</SlidePanelTitle>
               <ChartBarMultipleBy
                 data={ctx.dataFiltered}
-                by={_ => _.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges}
+                by={(_) => _.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges}
                 label={{
-                  ...Protection_hhs3.options.what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
+                  ...Protection_hhs3.options
+                    .what_are_the_strategies_that_your_household_uses_to_cope_with_these_challenges,
                   reducing_consumption_of_food: m.protHHS2.reducing_consumption_of_food,
                 }}
                 filterValue={['unable_unwilling_to_answer']}
@@ -127,7 +164,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
               <SlidePanelTitle>{m.protHHS2.mainSourceOfIncome}</SlidePanelTitle>
               <ChartBarMultipleBy
                 data={ctx.dataFiltered}
-                by={_ => _.what_are_the_main_sources_of_income_of_your_household}
+                by={(_) => _.what_are_the_main_sources_of_income_of_your_household}
                 label={Protection_hhs3.options.what_are_the_main_sources_of_income_of_your_household}
                 filterValue={['unable_unwilling_to_answer']}
                 limit={4}
@@ -137,7 +174,7 @@ export const SnapshotProtMonitoEchoLivelihood = () => {
               <SlidePanelTitle>{m.protHHS2.unemploymentFactors}</SlidePanelTitle>
               <ChartBarMultipleBy
                 data={ctx.dataFiltered}
-                by={_ => _.what_are_the_reasons_for_being_out_of_work}
+                by={(_) => _.what_are_the_reasons_for_being_out_of_work}
                 label={Protection_hhs3.options.what_are_the_reasons_for_being_out_of_work}
                 filterValue={['unable_unwilling_to_answer']}
               />

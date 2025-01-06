@@ -6,9 +6,8 @@ import {PrismaClient} from '@prisma/client'
 export class ControllerKoboApiXlsImport {
   constructor(
     private prisma: PrismaClient,
-    private service = new ImportService(prisma)
-  ) {
-  }
+    private service = new ImportService(prisma),
+  ) {}
 
   readonly handleFileUpload = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.file) {

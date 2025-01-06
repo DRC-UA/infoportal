@@ -11,12 +11,11 @@ interface ActivityInfoRequest {
 }
 
 export class ActivityInfoSdk {
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   static readonly makeRecordRequest = (params: ActivityInfoRequest): ActiviftyInfoRecords => {
     return {
-      'changes': [ActivityInfoSdk.makeRecordRequestContent(params)]
+      changes: [ActivityInfoSdk.makeRecordRequestContent(params)],
     }
   }
 
@@ -30,7 +29,7 @@ export class ActivityInfoSdk {
     subformId,
     subActivities,
   }: ActivityInfoRequest & {
-    subformId?: string,
+    subformId?: string
     subActivities?: Record<string, any>[]
   }) => {
     activityYYYYMM = activityYYYYMM?.replace('-', '')
@@ -43,17 +42,20 @@ export class ActivityInfoSdk {
       parentRecordId,
     })
     return {
-      'changes': [
+      changes: [
         parentRequest,
-        ...subformId ? subActivities?.map((_, i) =>
-          ActivityInfoSdk.makeRecordRequestContent({
-            activity: _,
-            activityIndex: i,
-            activityIdPrefix: parentRequest.recordId,
-            formId: subformId,
-            parentRecordId: parentRequest.recordId,
-          })) ?? [] : []
-      ]
+        ...(subformId
+          ? (subActivities?.map((_, i) =>
+              ActivityInfoSdk.makeRecordRequestContent({
+                activity: _,
+                activityIndex: i,
+                activityIdPrefix: parentRequest.recordId,
+                formId: subformId,
+                parentRecordId: parentRequest.recordId,
+              }),
+            ) ?? [])
+          : []),
+      ],
     }
   }
 
@@ -66,15 +68,14 @@ export class ActivityInfoSdk {
     parentRecordId,
   }: ActivityInfoRequest) => {
     return {
-      'formId': formId,
-      'recordId': activityIdPrefix + activityYYYYMM + ('' + activityIndex).padStart(3, '0'),
-      'parentRecordId': parentRecordId ?? null,
-      'fields': activity
+      formId: formId,
+      recordId: activityIdPrefix + activityYYYYMM + ('' + activityIndex).padStart(3, '0'),
+      parentRecordId: parentRecordId ?? null,
+      fields: activity,
     }
   }
 
   readonly submitActivity = (body: ActiviftyInfoRecords[]) => {
     return this.client.post(`/activity-info/activity`, {body})
   }
-
 }

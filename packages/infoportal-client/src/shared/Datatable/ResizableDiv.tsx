@@ -41,10 +41,10 @@ export const ResizableDiv = ({
   onResize,
   ...props
 }: Pick<BoxProps, 'style' | 'children'> & {
-  id: string;
-  debounceTime?: number;
-  initialWidth?: number;
-  onResize?: (id: string, newWidth: number) => void;
+  id: string
+  debounceTime?: number
+  initialWidth?: number
+  onResize?: (id: string, newWidth: number) => void
 }) => {
   const {classes} = useStyles()
   const divRef = useRef<HTMLDivElement | null>(null)

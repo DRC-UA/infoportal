@@ -1,5 +1,5 @@
 export const raions = {
-  'UA0102': {
+  UA0102: {
     iso: 'UA0102',
     ua: 'Бахчисарайський',
     // ru: 'Бахчисарайский',
@@ -9,7 +9,7 @@ export const raions = {
     // lat_centroid: 44.65944871572703,
     // lon_centroid: 33.83442735144661
   },
-  'UA0104': {
+  UA0104: {
     iso: 'UA0104',
     ua: 'Білогірський',
     // ru: 'Белогорский',
@@ -19,7 +19,7 @@ export const raions = {
     // lat_centroid: 45.06478359532861,
     // lon_centroid: 34.57573834966283
   },
-  'UA0106': {
+  UA0106: {
     iso: 'UA0106',
     ua: 'Джанкойський',
     // ru: 'Джанкойский',
@@ -29,7 +29,7 @@ export const raions = {
     // lat_centroid: 45.73860445854893,
     // lon_centroid: 34.38241753240169
   },
-  'UA0118': {
+  UA0118: {
     iso: 'UA0118',
     ua: 'Феодосійський',
     // ru: 'Феодосийский',
@@ -39,7 +39,7 @@ export const raions = {
     // lat_centroid: 45.18107900000004,
     // lon_centroid: 35.10586732450005
   },
-  'UA0110': {
+  UA0110: {
     iso: 'UA0110',
     ua: 'Керченський',
     // ru: 'Керченский',
@@ -49,7 +49,7 @@ export const raions = {
     // lat_centroid: 45.25187090603707,
     // lon_centroid: 36.02401743264749
   },
-  'UA0112': {
+  UA0112: {
     iso: 'UA0112',
     ua: 'Красногвардійський',
     // ru: 'Красногвардейский',
@@ -59,7 +59,7 @@ export const raions = {
     // lat_centroid: 45.49201626257361,
     // lon_centroid: 34.06314048803143
   },
-  'UA0114': {
+  UA0114: {
     iso: 'UA0114',
     ua: 'Красноперекопський',
     // ru: 'Красноперекопский',
@@ -69,7 +69,7 @@ export const raions = {
     // lat_centroid: 45.81612117050005,
     // lon_centroid: 33.62788292150006
   },
-  'UA0116': {
+  UA0116: {
     iso: 'UA0116',
     ua: 'Сімферопольський',
     // ru: 'Симферопольский',
@@ -79,7 +79,7 @@ export const raions = {
     // lat_centroid: 44.98377359250532,
     // lon_centroid: 34.05975520229648
   },
-  'UA0120': {
+  UA0120: {
     iso: 'UA0120',
     ua: 'Ялтинський',
     // ru: 'Ялтинский',
@@ -89,7 +89,7 @@ export const raions = {
     // lat_centroid: 44.66375540421621,
     // lon_centroid: 34.33163012779314
   },
-  'UA0108': {
+  UA0108: {
     iso: 'UA0108',
     ua: 'Євпаторійський',
     // ru: 'Евпаторийский',
@@ -99,7 +99,7 @@ export const raions = {
     // lat_centroid: 45.35118518100006,
     // lon_centroid: 33.21824532850007
   },
-  'UA7108': {
+  UA7108: {
     iso: 'UA7108',
     ua: 'Черкаський',
     // ru: 'Черкасский',
@@ -109,7 +109,7 @@ export const raions = {
     // lat_centroid: 49.30875758310641,
     // lon_centroid: 31.8503373571094
   },
-  'UA7106': {
+  UA7106: {
     iso: 'UA7106',
     ua: 'Уманський',
     // ru: 'Уманский',
@@ -119,7 +119,7 @@ export const raions = {
     // lat_centroid: 48.9155312286607,
     // lon_centroid: 30.14652415119997
   },
-  'UA7104': {
+  UA7104: {
     iso: 'UA7104',
     ua: 'Золотоніський',
     // ru: 'Золотоношский',
@@ -129,7 +129,7 @@ export const raions = {
     // lat_centroid: 49.73603290409094,
     // lon_centroid: 32.14679002520848
   },
-  'UA7102': {
+  UA7102: {
     iso: 'UA7102',
     ua: 'Звенигородський',
     // ru: 'Звенигородский',
@@ -139,7 +139,7 @@ export const raions = {
     // lat_centroid: 49.05905036051339,
     // lon_centroid: 31.02081448107162
   },
-  'UA7410': {
+  UA7410: {
     iso: 'UA7410',
     ua: 'Чернігівський',
     // ru: 'Черниговский',
@@ -149,7 +149,7 @@ export const raions = {
     // lat_centroid: 51.4755755955543,
     // lon_centroid: 31.17199199432646
   },
-  'UA7402': {
+  UA7402: {
     iso: 'UA7402',
     ua: 'Корюківський',
     // ru: 'Корюковский',
@@ -159,7 +159,7 @@ export const raions = {
     // lat_centroid: 51.7275261893333,
     // lon_centroid: 32.22385081211166
   },
-  'UA7404': {
+  UA7404: {
     iso: 'UA7404',
     ua: 'Ніжинський',
     // ru: 'Нежинский',
@@ -169,7 +169,7 @@ export const raions = {
     // lat_centroid: 51.02162541576618,
     // lon_centroid: 31.82724494876933
   },
-  'UA7406': {
+  UA7406: {
     iso: 'UA7406',
     ua: 'Новгород-Сіверський',
     // ru: 'Новгород-Северский',
@@ -179,7 +179,7 @@ export const raions = {
     // lat_centroid: 51.97680668170556,
     // lon_centroid: 32.98146150044583
   },
-  'UA7408': {
+  UA7408: {
     iso: 'UA7408',
     ua: 'Прилуцький',
     // ru: 'Прилукский',
@@ -189,7 +189,7 @@ export const raions = {
     // lat_centroid: 50.69146525543833,
     // lon_centroid: 32.54958240846244
   },
-  'UA7306': {
+  UA7306: {
     iso: 'UA7306',
     ua: 'Чернівецький',
     // ru: 'Черновицкий',
@@ -199,7 +199,7 @@ export const raions = {
     // lat_centroid: 48.25452689752638,
     // lon_centroid: 25.88656554950527
   },
-  'UA7304': {
+  UA7304: {
     iso: 'UA7304',
     ua: 'Дністровський',
     // ru: 'Днестровский',
@@ -209,7 +209,7 @@ export const raions = {
     // lat_centroid: 48.46736450595999,
     // lon_centroid: 26.79608467761466
   },
-  'UA7302': {
+  UA7302: {
     iso: 'UA7302',
     ua: 'Вижницький',
     // ru: 'Вижницкий',
@@ -219,7 +219,7 @@ export const raions = {
     // lat_centroid: 48.06334365839862,
     // lon_centroid: 25.19623038299601
   },
-  'UA1202': {
+  UA1202: {
     iso: 'UA1202',
     ua: 'Дніпровський',
     // ru: 'Днипровский',
@@ -229,7 +229,7 @@ export const raions = {
     // lat_centroid: 48.39354195976637,
     // lon_centroid: 34.92645139748711
   },
-  'UA1204': {
+  UA1204: {
     iso: 'UA1204',
     ua: 'Кам’янський',
     // ru: 'Каменский',
@@ -239,7 +239,7 @@ export const raions = {
     // lat_centroid: 48.47979767550007,
     // lon_centroid: 34.11543585950005
   },
-  'UA1206': {
+  UA1206: {
     iso: 'UA1206',
     ua: 'Криворізький',
     // ru: 'Криворожский',
@@ -249,7 +249,7 @@ export const raions = {
     // lat_centroid: 47.88744344800006,
     // lon_centroid: 33.59862882600004
   },
-  'UA1208': {
+  UA1208: {
     iso: 'UA1208',
     ua: 'Нікопольський',
     // ru: 'Никопольский',
@@ -259,7 +259,7 @@ export const raions = {
     // lat_centroid: 47.7459272283502,
     // lon_centroid: 34.47315780105653
   },
-  'UA1210': {
+  UA1210: {
     iso: 'UA1210',
     ua: 'Новомосковський',
     // ru: 'Новомосковский',
@@ -269,7 +269,7 @@ export const raions = {
     // lat_centroid: 48.86936445556161,
     // lon_centroid: 35.21237659315181
   },
-  'UA1212': {
+  UA1212: {
     iso: 'UA1212',
     ua: 'Павлоградський',
     // ru: 'Павлоградский',
@@ -279,7 +279,7 @@ export const raions = {
     // lat_centroid: 48.63746356369782,
     // lon_centroid: 35.91312078842954
   },
-  'UA1214': {
+  UA1214: {
     iso: 'UA1214',
     ua: 'Синельниківський',
     // ru: 'Синельниковский',
@@ -289,7 +289,7 @@ export const raions = {
     // lat_centroid: 48.20862950104845,
     // lon_centroid: 36.20935065826475
   },
-  'UA1402': {
+  UA1402: {
     iso: 'UA1402',
     ua: 'Бахмутський',
     // ru: 'Бахмутский',
@@ -299,7 +299,7 @@ export const raions = {
     // lat_centroid: 48.64956395106144,
     // lon_centroid: 38.08650770297693
   },
-  'UA1408': {
+  UA1408: {
     iso: 'UA1408',
     ua: 'Донецький',
     // ru: 'Донецкий',
@@ -309,7 +309,7 @@ export const raions = {
     // lat_centroid: 47.90760470371939,
     // lon_centroid: 38.20451380367567
   },
-  'UA1406': {
+  UA1406: {
     iso: 'UA1406',
     ua: 'Горлівський',
     // ru: 'Горловский',
@@ -319,7 +319,7 @@ export const raions = {
     // lat_centroid: 48.14620586093692,
     // lon_centroid: 38.43945564889367
   },
-  'UA1410': {
+  UA1410: {
     iso: 'UA1410',
     ua: 'Кальміуський',
     // ru: 'Кальмиусский',
@@ -329,7 +329,7 @@ export const raions = {
     // lat_centroid: 47.56321534806258,
     // lon_centroid: 38.08355607908329
   },
-  'UA1412': {
+  UA1412: {
     iso: 'UA1412',
     ua: 'Краматорський',
     // ru: 'Краматорский',
@@ -339,7 +339,7 @@ export const raions = {
     // lat_centroid: 48.76802361639648,
     // lon_centroid: 37.51660059847345
   },
-  'UA1414': {
+  UA1414: {
     iso: 'UA1414',
     ua: 'Маріупольський',
     // ru: 'Мариупольский',
@@ -349,7 +349,7 @@ export const raions = {
     // lat_centroid: 47.18444513422778,
     // lon_centroid: 37.37040628918849
   },
-  'UA1416': {
+  UA1416: {
     iso: 'UA1416',
     ua: 'Покровський',
     // ru: 'Покровский',
@@ -359,7 +359,7 @@ export const raions = {
     // lat_centroid: 48.22403862904429,
     // lon_centroid: 37.31278440490286
   },
-  'UA1404': {
+  UA1404: {
     iso: 'UA1404',
     ua: 'Волноваський',
     // ru: 'Волновахский',
@@ -369,7 +369,7 @@ export const raions = {
     // lat_centroid: 47.67123837039615,
     // lon_centroid: 37.19036821255734
   },
-  'UA2604': {
+  UA2604: {
     iso: 'UA2604',
     ua: 'Івано-Франківський',
     // ru: 'Ивано-Франковский',
@@ -379,7 +379,7 @@ export const raions = {
     // lat_centroid: 48.93855208146174,
     // lon_centroid: 24.73729441338647
   },
-  'UA2606': {
+  UA2606: {
     iso: 'UA2606',
     ua: 'Калуський',
     // ru: 'Калушский',
@@ -389,7 +389,7 @@ export const raions = {
     // lat_centroid: 48.86505417534875,
     // lon_centroid: 23.9996895120305
   },
-  'UA2608': {
+  UA2608: {
     iso: 'UA2608',
     ua: 'Коломийський',
     // ru: 'Коломыйский',
@@ -399,7 +399,7 @@ export const raions = {
     // lat_centroid: 48.54360916659395,
     // lon_centroid: 25.21714608929978
   },
-  'UA2610': {
+  UA2610: {
     iso: 'UA2610',
     ua: 'Косівський',
     // ru: 'Косовский',
@@ -409,7 +409,7 @@ export const raions = {
     // lat_centroid: 48.32154729666848,
     // lon_centroid: 24.98180715455925
   },
-  'UA2612': {
+  UA2612: {
     iso: 'UA2612',
     ua: 'Надвірнянський',
     // ru: 'Надворнянский',
@@ -419,7 +419,7 @@ export const raions = {
     // lat_centroid: 48.47123980561115,
     // lon_centroid: 24.51806570256198
   },
-  'UA2602': {
+  UA2602: {
     iso: 'UA2602',
     ua: 'Верховинський',
     // ru: 'Верховинский',
@@ -429,7 +429,7 @@ export const raions = {
     // lat_centroid: 48.02917828813384,
     // lon_centroid: 24.80094214104318
   },
-  'UA6302': {
+  UA6302: {
     iso: 'UA6302',
     ua: 'Богодухівський',
     // ru: 'Богодуховский',
@@ -439,7 +439,7 @@ export const raions = {
     // lat_centroid: 50.02418543075623,
     // lon_centroid: 35.40307249176121
   },
-  'UA6314': {
+  UA6314: {
     iso: 'UA6314',
     ua: 'Чугуївський',
     // ru: 'Чугуевский',
@@ -449,7 +449,7 @@ export const raions = {
     // lat_centroid: 49.85939537517494,
     // lon_centroid: 36.79489235116915
   },
-  'UA6304': {
+  UA6304: {
     iso: 'UA6304',
     ua: 'Ізюмський',
     // ru: 'Изюмский',
@@ -459,7 +459,7 @@ export const raions = {
     // lat_centroid: 49.25495201817054,
     // lon_centroid: 37.10883104019438
   },
-  'UA6312': {
+  UA6312: {
     iso: 'UA6312',
     ua: 'Харківський',
     // ru: 'Харьковский',
@@ -469,7 +469,7 @@ export const raions = {
     // lat_centroid: 49.99409429150003,
     // lon_centroid: 36.18822721350006
   },
-  'UA6306': {
+  UA6306: {
     iso: 'UA6306',
     ua: 'Красноградський',
     // ru: 'Красноградский',
@@ -479,17 +479,17 @@ export const raions = {
     // lat_centroid: 49.28414110656996,
     // lon_centroid: 35.66394225574416
   },
-  'UA6308': {
+  UA6308: {
     iso: 'UA6308',
-    ua: 'Куп\'янський',
+    ua: "Куп'янський",
     // ru: 'Купянский',
     en: 'Kupianskyi',
-    _5w: 'Kupianskyi_Куп\'янський',
+    _5w: "Kupianskyi_Куп'янський",
     parent: 'UA63',
     // lat_centroid: 49.83513215111956,
     // lon_centroid: 37.54014952748507
   },
-  'UA6310': {
+  UA6310: {
     iso: 'UA6310',
     ua: 'Лозівський',
     // ru: 'Лозовский',
@@ -499,7 +499,7 @@ export const raions = {
     // lat_centroid: 48.9400064927899,
     // lon_centroid: 36.40135550338645
   },
-  'UA6502': {
+  UA6502: {
     iso: 'UA6502',
     ua: 'Бериславський',
     // ru: 'Бериславский',
@@ -509,7 +509,7 @@ export const raions = {
     // lat_centroid: 47.17207962050006,
     // lon_centroid: 33.45373642750005
   },
-  'UA6504': {
+  UA6504: {
     iso: 'UA6504',
     ua: 'Генічеський',
     // ru: 'Генический',
@@ -519,7 +519,7 @@ export const raions = {
     // lat_centroid: 46.49351321214084,
     // lon_centroid: 34.47705328367904
   },
-  'UA6506': {
+  UA6506: {
     iso: 'UA6506',
     ua: 'Каховський',
     // ru: 'Каховский',
@@ -529,7 +529,7 @@ export const raions = {
     // lat_centroid: 46.72140624848355,
     // lon_centroid: 33.7054759848256
   },
-  'UA6510': {
+  UA6510: {
     iso: 'UA6510',
     ua: 'Херсонський',
     // ru: 'Херсонский',
@@ -539,7 +539,7 @@ export const raions = {
     // lat_centroid: 46.66903997988006,
     // lon_centroid: 32.72044599406903
   },
-  'UA6508': {
+  UA6508: {
     iso: 'UA6508',
     ua: 'Скадовський',
     // ru: 'Скадовский',
@@ -549,17 +549,17 @@ export const raions = {
     // lat_centroid: 46.29618164256512,
     // lon_centroid: 32.51110702253403
   },
-  'UA6802': {
+  UA6802: {
     iso: 'UA6802',
-    ua: 'Кам\'янець-Подільський',
+    ua: "Кам'янець-Подільський",
     // ru: 'Каменец-Подольский',
     en: 'Kamianets-Podilskyi',
-    _5w: 'Kamianets-Podilskyi_Кам\'янець-Подільський',
+    _5w: "Kamianets-Podilskyi_Кам'янець-Подільський",
     parent: 'UA68',
     // lat_centroid: 48.81347683800007,
     // lon_centroid: 26.80182423700006
   },
-  'UA6804': {
+  UA6804: {
     iso: 'UA6804',
     ua: 'Хмельницький',
     // ru: 'Хмельницкий',
@@ -569,7 +569,7 @@ export const raions = {
     // lat_centroid: 49.46907107613899,
     // lon_centroid: 27.0010496193234
   },
-  'UA6806': {
+  UA6806: {
     iso: 'UA6806',
     ua: 'Шепетівський',
     // ru: 'Шепетовский',
@@ -579,7 +579,7 @@ export const raions = {
     // lat_centroid: 50.16006509671514,
     // lon_centroid: 26.93266180788644
   },
-  'UA3502': {
+  UA3502: {
     iso: 'UA3502',
     ua: 'Голованівський',
     // ru: 'Голованевский',
@@ -589,7 +589,7 @@ export const raions = {
     // lat_centroid: 48.35026384891969,
     // lon_centroid: 30.40213023754217
   },
-  'UA3504': {
+  UA3504: {
     iso: 'UA3504',
     ua: 'Кропивницький',
     // ru: 'Кропивницкий',
@@ -599,7 +599,7 @@ export const raions = {
     // lat_centroid: 48.41686837200004,
     // lon_centroid: 32.39699618800003
   },
-  'UA3506': {
+  UA3506: {
     iso: 'UA3506',
     ua: 'Новоукраїнський',
     // ru: 'Новоукраинский',
@@ -609,7 +609,7 @@ export const raions = {
     // lat_centroid: 48.47915228117289,
     // lon_centroid: 31.51929224686622
   },
-  'UA3508': {
+  UA3508: {
     iso: 'UA3508',
     ua: 'Олександрійський',
     // ru: 'Александрийский',
@@ -619,7 +619,7 @@ export const raions = {
     // lat_centroid: 48.70695843358143,
     // lon_centroid: 33.22562372797108
   },
-  'UA8000': {
+  UA8000: {
     iso: 'UA8000',
     ua: 'Київ',
     // ru: 'Киев',
@@ -629,7 +629,7 @@ export const raions = {
     // lat_centroid: 50.4298104687561,
     // lon_centroid: 30.55437837238595
   },
-  'UA3202': {
+  UA3202: {
     iso: 'UA3202',
     ua: 'Білоцерківський',
     // ru: 'Белоцерковский',
@@ -639,7 +639,7 @@ export const raions = {
     // lat_centroid: 49.62882153259729,
     // lon_centroid: 30.07687697482561
   },
-  'UA3204': {
+  UA3204: {
     iso: 'UA3204',
     ua: 'Бориспільський',
     // ru: 'Бориспольский',
@@ -649,7 +649,7 @@ export const raions = {
     // lat_centroid: 50.08127679714951,
     // lon_centroid: 31.45619220769677
   },
-  'UA3206': {
+  UA3206: {
     iso: 'UA3206',
     ua: 'Броварський',
     // ru: 'Броварский',
@@ -659,7 +659,7 @@ export const raions = {
     // lat_centroid: 50.43915515883732,
     // lon_centroid: 31.36396538498591
   },
-  'UA3208': {
+  UA3208: {
     iso: 'UA3208',
     ua: 'Бучанський',
     // ru: 'Бучанский',
@@ -669,7 +669,7 @@ export const raions = {
     // lat_centroid: 50.54502422700006,
     // lon_centroid: 29.88533487796253
   },
-  'UA3200': {
+  UA3200: {
     iso: 'UA3200',
     ua: 'Чорнобильська зона відчуження',
     // ru: 'Чернобыльская зона отчуждения',
@@ -679,7 +679,7 @@ export const raions = {
     // lat_centroid: 51.31758764591288,
     // lon_centroid: 29.96868513845083
   },
-  'UA3214': {
+  UA3214: {
     iso: 'UA3214',
     ua: 'Фастівський',
     // ru: 'Фастовский',
@@ -689,7 +689,7 @@ export const raions = {
     // lat_centroid: 50.19513163574745,
     // lon_centroid: 29.98138659923731
   },
-  'UA3212': {
+  UA3212: {
     iso: 'UA3212',
     ua: 'Обухівський',
     // ru: 'Обуховский',
@@ -699,7 +699,7 @@ export const raions = {
     // lat_centroid: 49.91114903621399,
     // lon_centroid: 30.87558049151519
   },
-  'UA3210': {
+  UA3210: {
     iso: 'UA3210',
     ua: 'Вишгородський',
     // ru: 'Вышгородский',
@@ -709,7 +709,7 @@ export const raions = {
     // lat_centroid: 50.91997856949833,
     // lon_centroid: 30.08634243201867
   },
-  'UA4402': {
+  UA4402: {
     iso: 'UA4402',
     ua: 'Алчевський',
     // ru: 'Алчевский',
@@ -719,7 +719,7 @@ export const raions = {
     // lat_centroid: 48.52076033072443,
     // lon_centroid: 38.71851255391836
   },
-  'UA4404': {
+  UA4404: {
     iso: 'UA4404',
     ua: 'Довжанський',
     // ru: 'Должанский',
@@ -729,7 +729,7 @@ export const raions = {
     // lat_centroid: 48.11882934398839,
     // lon_centroid: 39.66907444704925
   },
-  'UA4406': {
+  UA4406: {
     iso: 'UA4406',
     ua: 'Луганський',
     // ru: 'Луганский',
@@ -739,7 +739,7 @@ export const raions = {
     // lat_centroid: 48.44512681093106,
     // lon_centroid: 39.33305475098543
   },
-  'UA4408': {
+  UA4408: {
     iso: 'UA4408',
     ua: 'Ровеньківський',
     // ru: 'Ровеньковский',
@@ -749,7 +749,7 @@ export const raions = {
     // lat_centroid: 48.11477352479859,
     // lon_centroid: 39.0746505552877
   },
-  'UA4416': {
+  UA4416: {
     iso: 'UA4416',
     ua: 'Щастинський',
     // ru: 'Счастьинский',
@@ -759,7 +759,7 @@ export const raions = {
     // lat_centroid: 48.88681431170392,
     // lon_centroid: 39.25416108889358
   },
-  'UA4412': {
+  UA4412: {
     iso: 'UA4412',
     ua: 'Сєвєродонецький',
     // ru: 'Северодонецкий',
@@ -769,7 +769,7 @@ export const raions = {
     // lat_centroid: 48.978579973194,
     // lon_centroid: 38.44268600389237
   },
-  'UA4414': {
+  UA4414: {
     iso: 'UA4414',
     ua: 'Старобільський',
     // ru: 'Старобельский',
@@ -779,7 +779,7 @@ export const raions = {
     // lat_centroid: 49.37537685069194,
     // lon_centroid: 39.41054830240169
   },
-  'UA4410': {
+  UA4410: {
     iso: 'UA4410',
     ua: 'Сватівський',
     // ru: 'Сватовский',
@@ -789,7 +789,7 @@ export const raions = {
     // lat_centroid: 49.59561575417694,
     // lon_centroid: 38.37369233755192
   },
-  'UA4612': {
+  UA4612: {
     iso: 'UA4612',
     ua: 'Червоноградський',
     // ru: 'Червоноградский',
@@ -799,7 +799,7 @@ export const raions = {
     // lat_centroid: 50.35171567523181,
     // lon_centroid: 24.35843492887122
   },
-  'UA4602': {
+  UA4602: {
     iso: 'UA4602',
     ua: 'Дрогобицький',
     // ru: 'Дрогобычский',
@@ -809,7 +809,7 @@ export const raions = {
     // lat_centroid: 49.3208416514868,
     // lon_centroid: 23.45371274870047
   },
-  'UA4606': {
+  UA4606: {
     iso: 'UA4606',
     ua: 'Львівський',
     // ru: 'Львовский',
@@ -819,7 +819,7 @@ export const raions = {
     // lat_centroid: 49.78392935747327,
     // lon_centroid: 24.14085212806446
   },
-  'UA4608': {
+  UA4608: {
     iso: 'UA4608',
     ua: 'Самбірський',
     // ru: 'Самборский',
@@ -829,7 +829,7 @@ export const raions = {
     // lat_centroid: 49.41394427289575,
     // lon_centroid: 22.95064631500743
   },
-  'UA4610': {
+  UA4610: {
     iso: 'UA4610',
     ua: 'Стрийський',
     // ru: 'Стрыйский',
@@ -839,7 +839,7 @@ export const raions = {
     // lat_centroid: 49.26289502749548,
     // lon_centroid: 23.96012958229809
   },
-  'UA4614': {
+  UA4614: {
     iso: 'UA4614',
     ua: 'Яворівський',
     // ru: 'Яворовский',
@@ -849,7 +849,7 @@ export const raions = {
     // lat_centroid: 49.91243191350006,
     // lon_centroid: 23.39389800100003
   },
-  'UA4604': {
+  UA4604: {
     iso: 'UA4604',
     ua: 'Золочівський',
     // ru: 'Золочевский',
@@ -859,7 +859,7 @@ export const raions = {
     // lat_centroid: 49.95389179706609,
     // lon_centroid: 24.91007918787388
   },
-  'UA4802': {
+  UA4802: {
     iso: 'UA4802',
     ua: 'Баштанський',
     // ru: 'Баштанский',
@@ -869,7 +869,7 @@ export const raions = {
     // lat_centroid: 47.40787587601154,
     // lon_centroid: 32.61468651848507
   },
-  'UA4806': {
+  UA4806: {
     iso: 'UA4806',
     ua: 'Миколаївський',
     // ru: 'Николаевский',
@@ -879,7 +879,7 @@ export const raions = {
     // lat_centroid: 47.01656188224366,
     // lon_centroid: 31.79912976626803
   },
-  'UA4808': {
+  UA4808: {
     iso: 'UA4808',
     ua: 'Первомайський',
     // ru: 'Первомайский',
@@ -889,7 +889,7 @@ export const raions = {
     // lat_centroid: 47.99221576381044,
     // lon_centroid: 30.79598875018618
   },
-  'UA4804': {
+  UA4804: {
     iso: 'UA4804',
     ua: 'Вознесенський',
     // ru: 'Вознесенский',
@@ -899,7 +899,7 @@ export const raions = {
     // lat_centroid: 47.58990530218205,
     // lon_centroid: 31.39362419314761
   },
-  'UA5102': {
+  UA5102: {
     iso: 'UA5102',
     ua: 'Березівський',
     // ru: 'Березовский',
@@ -909,7 +909,7 @@ export const raions = {
     // lat_centroid: 47.21499626708366,
     // lon_centroid: 30.58705744723255
   },
-  'UA5104': {
+  UA5104: {
     iso: 'UA5104',
     ua: 'Білгород-Дністровський',
     // ru: 'Белгород-Днестровский',
@@ -919,7 +919,7 @@ export const raions = {
     // lat_centroid: 46.04672981922612,
     // lon_centroid: 29.95730517280695
   },
-  'UA5106': {
+  UA5106: {
     iso: 'UA5106',
     ua: 'Болградський',
     // ru: 'Болградский',
@@ -929,7 +929,7 @@ export const raions = {
     // lat_centroid: 45.97541737860576,
     // lon_centroid: 29.22214915135933
   },
-  'UA5108': {
+  UA5108: {
     iso: 'UA5108',
     ua: 'Ізмаїльський',
     // ru: 'Измаильский',
@@ -939,7 +939,7 @@ export const raions = {
     // lat_centroid: 45.5200658553433,
     // lon_centroid: 29.08924769791688
   },
-  'UA5110': {
+  UA5110: {
     iso: 'UA5110',
     ua: 'Одеський',
     // ru: 'Одесский',
@@ -949,7 +949,7 @@ export const raions = {
     // lat_centroid: 46.53308061100006,
     // lon_centroid: 30.53714872950005
   },
-  'UA5112': {
+  UA5112: {
     iso: 'UA5112',
     ua: 'Подільський',
     // ru: 'Подольский',
@@ -959,7 +959,7 @@ export const raions = {
     // lat_centroid: 47.80940247013562,
     // lon_centroid: 29.71359222846127
   },
-  'UA5114': {
+  UA5114: {
     iso: 'UA5114',
     ua: 'Роздільнянський',
     // ru: 'Раздельнянский',
@@ -969,7 +969,7 @@ export const raions = {
     // lat_centroid: 47.06002189439625,
     // lon_centroid: 29.860763507492
   },
-  'UA5302': {
+  UA5302: {
     iso: 'UA5302',
     ua: 'Кременчуцький',
     // ru: 'Кременчугский',
@@ -979,7 +979,7 @@ export const raions = {
     // lat_centroid: 49.35944239445164,
     // lon_centroid: 33.34188041871953
   },
-  'UA5304': {
+  UA5304: {
     iso: 'UA5304',
     ua: 'Лубенський',
     // ru: 'Лубенский',
@@ -989,7 +989,7 @@ export const raions = {
     // lat_centroid: 50.0369089875252,
     // lon_centroid: 32.84039679002345
   },
-  'UA5306': {
+  UA5306: {
     iso: 'UA5306',
     ua: 'Миргородський',
     // ru: 'Миргородский',
@@ -999,7 +999,7 @@ export const raions = {
     // lat_centroid: 50.12834041603454,
     // lon_centroid: 33.71862986062416
   },
-  'UA5308': {
+  UA5308: {
     iso: 'UA5308',
     ua: 'Полтавський',
     // ru: 'Полтавский',
@@ -1009,7 +1009,7 @@ export const raions = {
     // lat_centroid: 49.54235340700004,
     // lon_centroid: 34.57940021850004
   },
-  'UA5604': {
+  UA5604: {
     iso: 'UA5604',
     ua: 'Дубенський',
     // ru: 'Дубенский',
@@ -1019,7 +1019,7 @@ export const raions = {
     // lat_centroid: 50.39014648417555,
     // lon_centroid: 25.57072878183994
   },
-  'UA5606': {
+  UA5606: {
     iso: 'UA5606',
     ua: 'Рівненський',
     // ru: 'Ровенский',
@@ -1029,7 +1029,7 @@ export const raions = {
     // lat_centroid: 50.735423180874,
     // lon_centroid: 26.52692040943163
   },
-  'UA5608': {
+  UA5608: {
     iso: 'UA5608',
     ua: 'Сарненський',
     // ru: 'Сарненский',
@@ -1039,7 +1039,7 @@ export const raions = {
     // lat_centroid: 51.42600739529651,
     // lon_centroid: 26.87483247137257
   },
-  'UA5602': {
+  UA5602: {
     iso: 'UA5602',
     ua: 'Вараський',
     // ru: 'Варашский',
@@ -1049,7 +1049,7 @@ export const raions = {
     // lat_centroid: 51.56688593050004,
     // lon_centroid: 25.99857613550006
   },
-  'UA8500': {
+  UA8500: {
     iso: 'UA8500',
     ua: 'Севастополь',
     // ru: 'Севастополь',
@@ -1059,7 +1059,7 @@ export const raions = {
     // lat_centroid: 44.59310370014412,
     // lon_centroid: 33.51229932797325
   },
-  'UA5902': {
+  UA5902: {
     iso: 'UA5902',
     ua: 'Конотопський',
     // ru: 'Конотопский',
@@ -1069,7 +1069,7 @@ export const raions = {
     // lat_centroid: 51.30528858549761,
     // lon_centroid: 33.58513411459499
   },
-  'UA5904': {
+  UA5904: {
     iso: 'UA5904',
     ua: 'Охтирський',
     // ru: 'Ахтырский',
@@ -1079,7 +1079,7 @@ export const raions = {
     // lat_centroid: 50.39815189049573,
     // lon_centroid: 34.98312874219213
   },
-  'UA5906': {
+  UA5906: {
     iso: 'UA5906',
     ua: 'Роменський',
     // ru: 'Роменский',
@@ -1089,7 +1089,7 @@ export const raions = {
     // lat_centroid: 50.73994412800777,
     // lon_centroid: 33.66130085811368
   },
-  'UA5910': {
+  UA5910: {
     iso: 'UA5910',
     ua: 'Шосткинський',
     // ru: 'Шосткинский',
@@ -1099,7 +1099,7 @@ export const raions = {
     // lat_centroid: 51.90670848840283,
     // lon_centroid: 33.76656913916154
   },
-  'UA5908': {
+  UA5908: {
     iso: 'UA5908',
     ua: 'Сумський',
     // ru: 'Сумский',
@@ -1109,7 +1109,7 @@ export const raions = {
     // lat_centroid: 50.89984238737775,
     // lon_centroid: 34.70596081417095
   },
-  'UA6106': {
+  UA6106: {
     iso: 'UA6106',
     ua: 'Чортківський',
     // ru: 'Чортковский',
@@ -1119,7 +1119,7 @@ export const raions = {
     // lat_centroid: 48.93774378106063,
     // lon_centroid: 25.78043704949651
   },
-  'UA6102': {
+  UA6102: {
     iso: 'UA6102',
     ua: 'Кременецький',
     // ru: 'Кременецкий',
@@ -1129,7 +1129,7 @@ export const raions = {
     // lat_centroid: 49.98766972085782,
     // lon_centroid: 25.85379323490841
   },
-  'UA6104': {
+  UA6104: {
     iso: 'UA6104',
     ua: 'Тернопільський',
     // ru: 'Тернопольский',
@@ -1139,7 +1139,7 @@ export const raions = {
     // lat_centroid: 49.50026957327499,
     // lon_centroid: 25.47397796193664
   },
-  'UA0504': {
+  UA0504: {
     iso: 'UA0504',
     ua: 'Гайсинський',
     // ru: 'Гайсинский',
@@ -1149,7 +1149,7 @@ export const raions = {
     // lat_centroid: 48.55752077251852,
     // lon_centroid: 29.51830311781632
   },
-  'UA0512': {
+  UA0512: {
     iso: 'UA0512',
     ua: 'Хмільницький',
     // ru: 'Хмельницкий',
@@ -1159,7 +1159,7 @@ export const raions = {
     // lat_centroid: 49.60736049291006,
     // lon_centroid: 28.41207227766472
   },
-  'UA0508': {
+  UA0508: {
     iso: 'UA0508',
     ua: 'Могилів-Подільський',
     // ru: 'Могилев-Подольский',
@@ -1169,7 +1169,7 @@ export const raions = {
     // lat_centroid: 48.49386503150004,
     // lon_centroid: 27.98241239250004
   },
-  'UA0510': {
+  UA0510: {
     iso: 'UA0510',
     ua: 'Тульчинський',
     // ru: 'Тульчинский',
@@ -1179,7 +1179,7 @@ export const raions = {
     // lat_centroid: 48.5623259237044,
     // lon_centroid: 28.67777010122719
   },
-  'UA0502': {
+  UA0502: {
     iso: 'UA0502',
     ua: 'Вінницький',
     // ru: 'Винницкий',
@@ -1189,7 +1189,7 @@ export const raions = {
     // lat_centroid: 49.17068566915142,
     // lon_centroid: 28.84011641695802
   },
-  'UA0506': {
+  UA0506: {
     iso: 'UA0506',
     ua: 'Жмеринський',
     // ru: 'Жмеринский',
@@ -1199,7 +1199,7 @@ export const raions = {
     // lat_centroid: 48.94950909591971,
     // lon_centroid: 27.91719774519166
   },
-  'UA0704': {
+  UA0704: {
     iso: 'UA0704',
     ua: 'Камінь-Каширський',
     // ru: 'Камень-Каширский',
@@ -1209,7 +1209,7 @@ export const raions = {
     // lat_centroid: 51.58008851001755,
     // lon_centroid: 25.1754799388499
   },
-  'UA0706': {
+  UA0706: {
     iso: 'UA0706',
     ua: 'Ковельський',
     // ru: 'Ковельский',
@@ -1219,7 +1219,7 @@ export const raions = {
     // lat_centroid: 51.31632027773269,
     // lon_centroid: 24.3845542600546
   },
-  'UA0708': {
+  UA0708: {
     iso: 'UA0708',
     ua: 'Луцький',
     // ru: 'Луцкий',
@@ -1229,7 +1229,7 @@ export const raions = {
     // lat_centroid: 50.84740092800853,
     // lon_centroid: 25.33175307145379
   },
-  'UA0702': {
+  UA0702: {
     iso: 'UA0702',
     ua: 'Володимирський',
     // ru: 'Владимирский',
@@ -1239,7 +1239,7 @@ export const raions = {
     // lat_centroid: 50.76634325294955,
     // lon_centroid: 24.43152613175991
   },
-  'UA2102': {
+  UA2102: {
     iso: 'UA2102',
     ua: 'Берегівський',
     // ru: 'Береговский',
@@ -1249,7 +1249,7 @@ export const raions = {
     // lat_centroid: 48.18423218472812,
     // lon_centroid: 22.83322902933507
   },
-  'UA2112': {
+  UA2112: {
     iso: 'UA2112',
     ua: 'Хустський',
     // ru: 'Хустский',
@@ -1259,7 +1259,7 @@ export const raions = {
     // lat_centroid: 48.41068548817424,
     // lon_centroid: 23.39856184772298
   },
-  'UA2104': {
+  UA2104: {
     iso: 'UA2104',
     ua: 'Мукачівський',
     // ru: 'Мукачевский',
@@ -1269,7 +1269,7 @@ export const raions = {
     // lat_centroid: 48.55052046000956,
     // lon_centroid: 22.88805632921632
   },
-  'UA2106': {
+  UA2106: {
     iso: 'UA2106',
     ua: 'Рахівський',
     // ru: 'Раховский',
@@ -1279,7 +1279,7 @@ export const raions = {
     // lat_centroid: 48.11950190536216,
     // lon_centroid: 24.26066721897122
   },
-  'UA2108': {
+  UA2108: {
     iso: 'UA2108',
     ua: 'Тячівський',
     // ru: 'Тячевский',
@@ -1289,7 +1289,7 @@ export const raions = {
     // lat_centroid: 48.24745653800005,
     // lon_centroid: 23.80920592200005
   },
-  'UA2110': {
+  UA2110: {
     iso: 'UA2110',
     ua: 'Ужгородський',
     // ru: 'Ужгородский',
@@ -1299,7 +1299,7 @@ export const raions = {
     // lat_centroid: 48.73923236961965,
     // lon_centroid: 22.57006719014408
   },
-  'UA2302': {
+  UA2302: {
     iso: 'UA2302',
     ua: 'Бердянський',
     // ru: 'Бердянский',
@@ -1309,7 +1309,7 @@ export const raions = {
     // lat_centroid: 46.9383979788721,
     // lon_centroid: 36.48300475543565
   },
-  'UA2308': {
+  UA2308: {
     iso: 'UA2308',
     ua: 'Мелітопольський',
     // ru: 'Мелитопольский',
@@ -1319,7 +1319,7 @@ export const raions = {
     // lat_centroid: 46.79319931325574,
     // lon_centroid: 35.29521571836023
   },
-  'UA2310': {
+  UA2310: {
     iso: 'UA2310',
     ua: 'Пологівський',
     // ru: 'Пологовский',
@@ -1329,7 +1329,7 @@ export const raions = {
     // lat_centroid: 47.51848483937514,
     // lon_centroid: 36.29141448254465
   },
-  'UA2304': {
+  UA2304: {
     iso: 'UA2304',
     ua: 'Василівський',
     // ru: 'Васильевский',
@@ -1339,7 +1339,7 @@ export const raions = {
     // lat_centroid: 47.33290308140396,
     // lon_centroid: 35.03707988190413
   },
-  'UA2306': {
+  UA2306: {
     iso: 'UA2306',
     ua: 'Запорізький',
     // ru: 'Запорожский',
@@ -1349,7 +1349,7 @@ export const raions = {
     // lat_centroid: 47.86525925749255,
     // lon_centroid: 35.43090241983455
   },
-  'UA1802': {
+  UA1802: {
     iso: 'UA1802',
     ua: 'Бердичівський',
     // ru: 'Бердичевский',
@@ -1359,7 +1359,7 @@ export const raions = {
     // lat_centroid: 49.95780038745327,
     // lon_centroid: 28.8115080503033
   },
-  'UA1806': {
+  UA1806: {
     iso: 'UA1806',
     ua: 'Коростенський',
     // ru: 'Коростенский',
@@ -1369,7 +1369,7 @@ export const raions = {
     // lat_centroid: 51.14095994261588,
     // lon_centroid: 28.61069777981852
   },
-  'UA1804': {
+  UA1804: {
     iso: 'UA1804',
     ua: 'Житомирський',
     // ru: 'Житомирский',
@@ -1379,7 +1379,7 @@ export const raions = {
     // lat_centroid: 50.35454198544127,
     // lon_centroid: 28.65700327206238
   },
-  'UA1808': {
+  UA1808: {
     iso: 'UA1808',
     ua: 'Звягельський',
     // ru: 'Звягельский',
@@ -1388,5 +1388,5 @@ export const raions = {
     parent: 'UA18',
     // lat_centroid: 50.64488875724325,
     // lon_centroid: 27.69776751933724
-  }
+  },
 }

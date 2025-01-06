@@ -11,39 +11,46 @@ import {useIpToast} from '@/core/useToast'
 import {Kobo} from 'kobo-sdk'
 
 export namespace KoboUpdate {
-
   export namespace DialogParams {
-    export type ById = {
-      target: 'answer'
-      params: UpdateDialog.ById.Answer
-    } | {
-      target: 'validation'
-      params: UpdateDialog.ById.Validation
-    } | {
-      target: 'tag'
-      params: UpdateDialog.ById.Tag
-    }
+    export type ById =
+      | {
+          target: 'answer'
+          params: UpdateDialog.ById.Answer
+        }
+      | {
+          target: 'validation'
+          params: UpdateDialog.ById.Validation
+        }
+      | {
+          target: 'tag'
+          params: UpdateDialog.ById.Tag
+        }
 
-    export type ByName<
-      T extends KoboFormNameMapped,
-      TTarg extends 'tag' | 'answer',
-    > = TTarg extends 'tag' ? {
-      target: TTarg;
-      params: UpdateDialog.ByName.Tag<T, KeyOf<InferTypedTag<T>>>
-    } : {
-      target: TTarg;
-      params: UpdateDialog.ByName.Answer<T, KeyOf<InferTypedAnswer<T>>>
-    }
+    export type ByName<T extends KoboFormNameMapped, TTarg extends 'tag' | 'answer'> = TTarg extends 'tag'
+      ? {
+          target: TTarg
+          params: UpdateDialog.ByName.Tag<T, KeyOf<InferTypedTag<T>>>
+        }
+      : {
+          target: TTarg
+          params: UpdateDialog.ByName.Answer<T, KeyOf<InferTypedAnswer<T>>>
+        }
   }
 
   namespace UpdateDialog {
     export namespace ByName {
-      export type Tag<T extends KoboFormNameMapped, K extends KeyOf<InferTypedTag<T>>> = Omit<KoboUpdate.Update.ByName.Tag<T, K>, 'value'> & {
+      export type Tag<T extends KoboFormNameMapped, K extends KeyOf<InferTypedTag<T>>> = Omit<
+        KoboUpdate.Update.ByName.Tag<T, K>,
+        'value'
+      > & {
         type: KoboUpdateModalType
         options?: KoboEditModalOption[] | string[]
         onSuccess?: (params: KoboUpdateAnswers<NonNullable<InferTypedAnswer<T>['tags']>>) => void
       }
-      export type Answer<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>> = Omit<KoboUpdate.Update.ByName.Answer<T, K>, 'answer'> & {
+      export type Answer<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>> = Omit<
+        KoboUpdate.Update.ByName.Answer<T, K>,
+        'answer'
+      > & {
         onSuccess?: (params: KoboUpdateAnswers<NonNullable<InferTypedAnswer<T>['tags']>>) => void
       }
     }
@@ -66,7 +73,7 @@ export namespace KoboUpdate {
   export namespace Update {
     export namespace ById {
       export type Tag = {
-        formId: Kobo.FormId,
+        formId: Kobo.FormId
         answerIds: Kobo.SubmissionId[]
         tag: string
         value: any
@@ -76,7 +83,7 @@ export namespace KoboUpdate {
     }
     export namespace ByName {
       export type Tag<T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>> = {
-        formName: T,
+        formName: T
         answerIds: Kobo.SubmissionId[]
         tag: K
         value: NonNullable<InferTypedAnswer<T>['tags']>[K] | null // TODO ensure null is updating correctly in DB
@@ -93,20 +100,27 @@ export namespace KoboUpdate {
 
 export interface KoboUpdateContext {
   asyncUpdateById: {
-    tag: UseAsyncMultiple<(_: KoboUpdate.Update.ById.Tag) => Promise<void>>,
+    tag: UseAsyncMultiple<(_: KoboUpdate.Update.ById.Tag) => Promise<void>>
     answer: UseAsyncMultiple<(_: KoboUpdate.Update.ById.Answer) => Promise<void>>
-    validation: UseAsyncMultiple<(_: KoboUpdate.Update.ById.Validation) => Promise<void>>,
-  },
+    validation: UseAsyncMultiple<(_: KoboUpdate.Update.ById.Validation) => Promise<void>>
+  }
   asyncUpdateByName: {
-    tag: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<InferTypedTag<T>>>(_: KoboUpdate.Update.ByName.Tag<T, K>) => Promise<void>>,
-    answer: UseAsyncMultiple<<T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(_: KoboUpdate.Update.ByName.Answer<T, K>) => Promise<void>>,
-  },
+    tag: UseAsyncMultiple<
+      <T extends KoboFormNameMapped, K extends KeyOf<InferTypedTag<T>>>(
+        _: KoboUpdate.Update.ByName.Tag<T, K>,
+      ) => Promise<void>
+    >
+    answer: UseAsyncMultiple<
+      <T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(
+        _: KoboUpdate.Update.ByName.Answer<T, K>,
+      ) => Promise<void>
+    >
+  }
   asyncDeleteById: UseAsyncMultiple<(_: Pick<KoboUpdateAnswers, 'formId' | 'answerIds'>) => Promise<void>>
   openById: Dispatch<SetStateAction<KoboUpdate.DialogParams.ById | null>>
-  openByName: <
-    T extends KoboFormNameMapped,
-    TTarg extends 'tag' | 'answer',
-  >(p: KoboUpdate.DialogParams.ByName<T, TTarg> | null) => void
+  openByName: <T extends KoboFormNameMapped, TTarg extends 'tag' | 'answer'>(
+    p: KoboUpdate.DialogParams.ByName<T, TTarg> | null,
+  ) => void
   close: () => void
 }
 
@@ -114,11 +128,7 @@ const Context = React.createContext({} as KoboUpdateContext)
 
 export const useKoboUpdateContext = () => useContext<KoboUpdateContext>(Context)
 
-export const KoboUpdateProvider = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
   const {api} = useAppSettings()
   const {toastHttpError} = useIpToast()
   const [openDialog, setOpenDialog] = useState<KoboUpdate.DialogParams.ById | null>(null)
@@ -141,15 +151,16 @@ export const KoboUpdateProvider = ({
     const currentAnswers = ctxAnswers.byId(formId).get
     if (!currentAnswers) return
     ctxAnswers.byId(formId).set({
-      ...currentAnswers, data: currentAnswers.data.map(a => {
+      ...currentAnswers,
+      data: currentAnswers.data.map((a) => {
         if (idsIndex.has(a.id)) {
           if (isTag) {
-            if (!a.tags) a.tags = {};
-            (a.tags as any)[key] = value
+            if (!a.tags) a.tags = {}
+            ;(a.tags as any)[key] = value
           } else a[key] = value
         }
         return {...a}
-      })
+      }),
     })
   }
 
@@ -170,15 +181,16 @@ export const KoboUpdateProvider = ({
     const currentAnswers = ctxAnswers.byName(formName).get
     if (!currentAnswers) return
     ctxAnswers.byName(formName).set({
-      ...currentAnswers, data: currentAnswers.data.map((a: any) => {
+      ...currentAnswers,
+      data: currentAnswers.data.map((a: any) => {
         if (idsIndex.has(a.id)) {
           if (isTag) {
-            if (!a.tags) a.tags = {};
-            (a.tags as any)[key] = value
+            if (!a.tags) a.tags = {}
+            ;(a.tags as any)[key] = value
           } else a[key] = value
         }
         return {...a}
-      })
+      }),
     })
   }
 
@@ -206,118 +218,157 @@ export const KoboUpdateProvider = ({
 
   const asyncUpdateAnswerById = useAsync(_updateById, {requestKey: ([_]) => _.formId})
 
-  const asyncUpdateAnswerByName = useAsync(async <T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(p: KoboUpdate.Update.ByName.Answer<T, K>) => {
-    await api.kobo.answer.updateAnswers({
-      answerIds: p.answerIds,
-      answer: p.answer,
-      formId: KoboIndex.byName(p.formName).id,
-      question: p.question,
-    }).then(() => {
-      _updateCacheByName({
-        formName: p.formName,
-        key: p.question,
-        isTag: false,
-        value: p.answer,
-        answerIds: p.answerIds,
-      })
-    }).catch((e) => {
-      toastHttpError(e)
-      ctxAnswers.byName(p.formName).fetch({force: true, clean: false})
-      return Promise.reject(e)
-    })
-  }, {requestKey: ([_]) => _.formName})
+  const asyncUpdateAnswerByName = useAsync(
+    async <T extends KoboFormNameMapped, K extends KeyOf<InferTypedAnswer<T>>>(
+      p: KoboUpdate.Update.ByName.Answer<T, K>,
+    ) => {
+      await api.kobo.answer
+        .updateAnswers({
+          answerIds: p.answerIds,
+          answer: p.answer,
+          formId: KoboIndex.byName(p.formName).id,
+          question: p.question,
+        })
+        .then(() => {
+          _updateCacheByName({
+            formName: p.formName,
+            key: p.question,
+            isTag: false,
+            value: p.answer,
+            answerIds: p.answerIds,
+          })
+        })
+        .catch((e) => {
+          toastHttpError(e)
+          ctxAnswers.byName(p.formName).fetch({force: true, clean: false})
+          return Promise.reject(e)
+        })
+    },
+    {requestKey: ([_]) => _.formName},
+  )
 
-  const asyncUpdateValidationById = useAsync(async (params: KoboUpdateValidation) => {
-    await api.kobo.answer.updateValidation(params)
-    const key: keyof KoboSubmissionMetaData = 'validationStatus'
-    _updateCacheById({
-      formId: params.formId,
-      answerIds: params.answerIds,
-      key,
-      value: params.status,
-    })
-  }, {requestKey: ([_]) => _.formId})
-
-  const asyncUpdateTagByName = useAsync(async <T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(p: KoboUpdate.Update.ByName.Tag<T, K>) => {
-    await api.kobo.answer.updateTag({
-      answerIds: p.answerIds,
-      formId: KoboIndex.byName(p.formName).id,
-      tags: {[p.tag]: p.value},
-    }).then(() => {
-      _updateCacheByName({
-        key: p.tag,
-        answerIds: p.answerIds,
-        value: p.value,
-        formName: p.formName,
-      })
-    }).catch((e) => {
-      ctxAnswers.byName(p.formName).fetch({force: true, clean: false})
-      return Promise.reject(e)
-    })
-  }, {requestKey: ([_]) => _.formName})
-
-  const asyncUpdateTagById = useAsync(async (p: KoboUpdate.Update.ById.Tag) => {
-    await api.kobo.answer.updateTag({
-      answerIds: p.answerIds,
-      formId: p.formId,
-      tags: {[p.tag]: p.value},
-    }).then(() => {
+  const asyncUpdateValidationById = useAsync(
+    async (params: KoboUpdateValidation) => {
+      await api.kobo.answer.updateValidation(params)
+      const key: keyof KoboSubmissionMetaData = 'validationStatus'
       _updateCacheById({
-        formId: p.formId,
-        key: p.tag,
-        isTag: true,
-        value: p.value,
-        answerIds: p.answerIds,
+        formId: params.formId,
+        answerIds: params.answerIds,
+        key,
+        value: params.status,
       })
-    }).catch((e) => {
-      ctxAnswers.byId(p.formId).fetch({force: true, clean: false})
-      return Promise.reject(e)
-    })
-  }, {requestKey: ([_]) => _.formId})
+    },
+    {requestKey: ([_]) => _.formId},
+  )
 
+  const asyncUpdateTagByName = useAsync(
+    async <T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(
+      p: KoboUpdate.Update.ByName.Tag<T, K>,
+    ) => {
+      await api.kobo.answer
+        .updateTag({
+          answerIds: p.answerIds,
+          formId: KoboIndex.byName(p.formName).id,
+          tags: {[p.tag]: p.value},
+        })
+        .then(() => {
+          _updateCacheByName({
+            key: p.tag,
+            answerIds: p.answerIds,
+            value: p.value,
+            formName: p.formName,
+          })
+        })
+        .catch((e) => {
+          ctxAnswers.byName(p.formName).fetch({force: true, clean: false})
+          return Promise.reject(e)
+        })
+    },
+    {requestKey: ([_]) => _.formName},
+  )
 
-  const asyncDeleteById = useAsync(async ({answerIds, formId}: Pick<KoboUpdateAnswers, 'answerIds' | 'formId'>) => {
-    await api.kobo.answer.delete({
-      answerIds: answerIds,
-      formId: formId,
-    }).then(() => {
-      const idsIndex = new Set(answerIds)
-      const currentAnswers = ctxAnswers.byId(formId).get
-      if (!currentAnswers) return
-      ctxAnswers.byId(formId).set({
-        ...currentAnswers, data: currentAnswers.data.filter(a => !idsIndex.has(a.id))
-      })
-    }).catch((e) => {
-      toastHttpError(e)
-      ctxAnswers.byId(formId).fetch({force: true, clean: false})
-      return Promise.reject(e)
-    })
-  }, {requestKey: ([_]) => _.formId})
+  const asyncUpdateTagById = useAsync(
+    async (p: KoboUpdate.Update.ById.Tag) => {
+      await api.kobo.answer
+        .updateTag({
+          answerIds: p.answerIds,
+          formId: p.formId,
+          tags: {[p.tag]: p.value},
+        })
+        .then(() => {
+          _updateCacheById({
+            formId: p.formId,
+            key: p.tag,
+            isTag: true,
+            value: p.value,
+            answerIds: p.answerIds,
+          })
+        })
+        .catch((e) => {
+          ctxAnswers.byId(p.formId).fetch({force: true, clean: false})
+          return Promise.reject(e)
+        })
+    },
+    {requestKey: ([_]) => _.formId},
+  )
+
+  const asyncDeleteById = useAsync(
+    async ({answerIds, formId}: Pick<KoboUpdateAnswers, 'answerIds' | 'formId'>) => {
+      await api.kobo.answer
+        .delete({
+          answerIds: answerIds,
+          formId: formId,
+        })
+        .then(() => {
+          const idsIndex = new Set(answerIds)
+          const currentAnswers = ctxAnswers.byId(formId).get
+          if (!currentAnswers) return
+          ctxAnswers.byId(formId).set({
+            ...currentAnswers,
+            data: currentAnswers.data.filter((a) => !idsIndex.has(a.id)),
+          })
+        })
+        .catch((e) => {
+          toastHttpError(e)
+          ctxAnswers.byId(formId).fetch({force: true, clean: false})
+          return Promise.reject(e)
+        })
+    },
+    {requestKey: ([_]) => _.formId},
+  )
 
   return (
-    <Context.Provider value={{
-      asyncDeleteById,
-      asyncUpdateById: {
-        tag: asyncUpdateTagById,
-        answer: asyncUpdateAnswerById,
-        validation: asyncUpdateValidationById,
-      },
-      asyncUpdateByName: {
-        tag: asyncUpdateTagByName,
-        answer: asyncUpdateAnswerByName,
-      },
-      openById: setOpenDialog,
-      openByName: <T extends KoboFormNameMapped, TTarg extends 'tag' | 'answer'>(p: KoboUpdate.DialogParams.ByName<T, TTarg> | null) => {
-        setOpenDialog(p ? {
-          ...p,
-          params: {
-            formId: KoboIndex.byName(p.params.formName).id,
-            ...p.params,
-          } as any
-        } : null)
-      },
-      close: () => setOpenDialog(null)
-    }}>
+    <Context.Provider
+      value={{
+        asyncDeleteById,
+        asyncUpdateById: {
+          tag: asyncUpdateTagById,
+          answer: asyncUpdateAnswerById,
+          validation: asyncUpdateValidationById,
+        },
+        asyncUpdateByName: {
+          tag: asyncUpdateTagByName,
+          answer: asyncUpdateAnswerByName,
+        },
+        openById: setOpenDialog,
+        openByName: <T extends KoboFormNameMapped, TTarg extends 'tag' | 'answer'>(
+          p: KoboUpdate.DialogParams.ByName<T, TTarg> | null,
+        ) => {
+          setOpenDialog(
+            p
+              ? {
+                  ...p,
+                  params: {
+                    formId: KoboIndex.byName(p.params.formName).id,
+                    ...p.params,
+                  } as any,
+                }
+              : null,
+          )
+        },
+        close: () => setOpenDialog(null),
+      }}
+    >
       {children}
       {(() => {
         if (!openDialog) return <></>

@@ -4,12 +4,10 @@ import {KoboAnswerHistoryHelper} from '../../../feature/kobo/history/KoboAnswerH
 import {KoboAnswerHistoryService} from '../../../feature/kobo/history/KoboAnswerHistoryService'
 
 export class ControllerKoboAnswerHistory {
-
   constructor(
     private prisma: PrismaClient,
     private service = new KoboAnswerHistoryService(prisma),
-  ) {
-  }
+  ) {}
 
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
     const body = await KoboAnswerHistoryHelper.validation.search.validate(req.body)

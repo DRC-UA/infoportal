@@ -17,25 +17,24 @@ const Context = React.createContext({} as MealVisitContext)
 
 export const useMealVisitContext = () => useContext<MealVisitContext>(Context)
 
-export const MealVisitProvider = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const MealVisitProvider = ({children}: {children: ReactNode}) => {
   const {api} = useAppSettings()
   const [periodFilter, setPeriodFilter] = useState<Partial<Period>>({})
 
-  const request = (filter: Partial<Period>) => api.kobo.typedAnswers.search.meal_visitMonitoring({
-    filters: {
-      start: filter.start,
-      end: filter.end,
-    }
-  }).then(_ => _.data)
+  const request = (filter: Partial<Period>) =>
+    api.kobo.typedAnswers.search
+      .meal_visitMonitoring({
+        filters: {
+          start: filter.start,
+          end: filter.end,
+        },
+      })
+      .then((_) => _.data)
 
   const fetcherPeriod = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('meal_visitMonitoring').id))
   const fetcherAnswers = useFetcher(request)
   const answersIndex = useMemo(() => {
-    return seq(fetcherAnswers.get).groupByFirst(_ => _.id)
+    return seq(fetcherAnswers.get).groupByFirst((_) => _.id)
   }, [fetcherAnswers.get])
 
   useEffect(() => {
@@ -51,13 +50,15 @@ export const MealVisitProvider = ({
   }, [periodFilter])
 
   return (
-    <Context.Provider value={{
-      fetcherAnswers,
-      periodFilter,
-      setPeriodFilter,
-      fetcherPeriod,
-      answersIndex,
-    }}>
+    <Context.Provider
+      value={{
+        fetcherAnswers,
+        periodFilter,
+        setPeriodFilter,
+        fetcherPeriod,
+        answersIndex,
+      }}
+    >
       {children}
     </Context.Provider>
   )

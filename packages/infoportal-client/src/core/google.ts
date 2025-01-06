@@ -6,7 +6,7 @@ declare const google: any
 export const getGoogle = async () => {
   let trys = 0
   while (!google) {
-    await sleep(200 + (100 * trys))
+    await sleep(200 + 100 * trys)
     trys++
     if (trys > 140) break
   }

@@ -14,7 +14,7 @@ export const EULogo = ({
       <Box
         sx={{
           [theme.breakpoints.down('sm')]: {
-            display: 'none'
+            display: 'none',
           },
           ...sx,
         }}
@@ -28,7 +28,7 @@ export const EULogo = ({
         component="img"
         sx={{
           [theme.breakpoints.up('sm')]: {
-            display: 'none'
+            display: 'none',
           },
           ...sx,
         }}
@@ -47,15 +47,7 @@ export const DRCLogo = ({
 }: {
   height?: number
 } & BoxProps) => {
-  return (
-    <Box
-      component="img"
-      src="/static/drc-logo.png"
-      height={height}
-      alt="DRC Logo"
-      {...props}
-    />
-  )
+  return <Box component="img" src="/static/drc-logo.png" height={height} alt="DRC Logo" {...props} />
 }
 
 export const UhfLogo = ({
@@ -64,15 +56,7 @@ export const UhfLogo = ({
 }: {
   height?: number
 } & BoxProps) => {
-  return (
-    <Box
-      component="img"
-      src="/static/logo-uhf.png"
-      height={height}
-      alt="UHF Logo"
-      {...props}
-    />
-  )
+  return <Box component="img" src="/static/logo-uhf.png" height={height} alt="UHF Logo" {...props} />
 }
 export const UsaidLogo = ({
   height = 28,
@@ -80,15 +64,7 @@ export const UsaidLogo = ({
 }: {
   height?: number
 } & BoxProps) => {
-  return (
-    <Box
-      component="img"
-      src="/static/logo-usaid.png"
-      height={height}
-      alt="USAID Logo"
-      {...props}
-    />
-  )
+  return <Box component="img" src="/static/logo-usaid.png" height={height} alt="USAID Logo" {...props} />
 }
 
 export const DRCLogoLarge = ({
@@ -97,14 +73,5 @@ export const DRCLogoLarge = ({
 }: {
   height?: number
 } & BoxProps) => {
-  return (
-    <Box
-      component="img"
-      src="/static/drc-logo-large.png"
-      height={height}
-      alt="DRC Logo"
-      {...props}
-    />
-
-  )
+  return <Box component="img" src="/static/drc-logo-large.png" height={height} alt="DRC Logo" {...props} />
 }

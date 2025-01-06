@@ -7,7 +7,7 @@ import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export const KoboSelectTag = <
   TTag extends Record<string, any>,
-  T extends {id: Kobo.SubmissionId, tags?: TTag},
+  T extends {id: Kobo.SubmissionId; tags?: TTag},
   K extends string = string,
 >({
   label,
@@ -22,7 +22,7 @@ export const KoboSelectTag = <
   disabled,
   ...props
 }: {
-  entry: T,
+  entry: T
   showUndefinedOption?: boolean
   label?: string
   tag: KeyOf<TTag>
@@ -49,9 +49,13 @@ export const KoboSelectTag = <
           value: tagChange,
         })
       }}
-      options={enumKeys.map(_ => ({
-        value: _, children: translate ? translate[_] : _,
-      }) as any)}
+      options={enumKeys.map(
+        (_) =>
+          ({
+            value: _,
+            children: translate ? translate[_] : _,
+          }) as any,
+      )}
       disabled={disabled}
       {...props}
     />

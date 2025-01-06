@@ -12,27 +12,22 @@ const useStyles = makeStyles()((t) => ({
   },
 }))
 
-export const DatabaseHeadCell = ({
-  children,
-  onClick
-}: {
-  onClick: IpIconBtnProps['onClick']
-  children: ReactNode
-}) => {
+export const DatabaseHeadCell = ({children, onClick}: {onClick: IpIconBtnProps['onClick']; children: ReactNode}) => {
   const {classes} = useStyles()
   return (
-    <Tooltip placement="top" title={
-      <div style={{display: 'flex', alignItems: 'center'}}>
-        <IpBtn className={classes.btn} size="small" variant="contained" color="primary" onClick={onClick}>
-          <Icon fontSize="small">visibility_off</Icon>
-        </IpBtn>
-        &nbsp;
-        {children}
-      </div>
-    }>
-      <div className={classes.root}>
-        {children}
-      </div>
+    <Tooltip
+      placement="top"
+      title={
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          <IpBtn className={classes.btn} size="small" variant="contained" color="primary" onClick={onClick}>
+            <Icon fontSize="small">visibility_off</Icon>
+          </IpBtn>
+          &nbsp;
+          {children}
+        </div>
+      }
+    >
+      <div className={classes.root}>{children}</div>
     </Tooltip>
   )
 }

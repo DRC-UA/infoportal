@@ -10,7 +10,7 @@ export interface ConfigContext {
   conf: AppConfig
   theme: {
     adaptiveLighten: (color: string, coefficient: number) => string
-    theme: Theme,
+    theme: Theme
     appThemeParams: AppThemeParams
     setAppThemeParams: Dispatch<SetStateAction<AppThemeParams>>
     isDark: boolean
@@ -27,15 +27,10 @@ type LightTheme = 'auto' | 'dark' | 'light'
 
 declare const window: any
 
-const isSystemDarkTheme = () => !!(typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+const isSystemDarkTheme = () =>
+  !!(typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
-export const AppSettingsProvider = ({
-  api,
-  children,
-}: {
-  api: ApiSdk,
-  children: ReactNode
-}) => {
+export const AppSettingsProvider = ({api, children}: {api: ApiSdk; children: ReactNode}) => {
   const [brightness, setBrightness] = usePersistentState<LightTheme>('auto', {storageKey: 'dark-theme2'})
   const [isSystemDark, setIsSystemDark] = useState(isSystemDarkTheme())
   const isDark = useMemo(() => {
@@ -51,19 +46,21 @@ export const AppSettingsProvider = ({
   }, [])
 
   return (
-    <_ConfigContext.Provider value={{
-      api,
-      theme: {
-        adaptiveLighten: isSystemDark ? darken : lighten,
-        theme,
-        appThemeParams,
-        setAppThemeParams,
-        isDark,
-        brightness,
-        setBrightness,
-      },
-      conf: appConfig,
-    }}>
+    <_ConfigContext.Provider
+      value={{
+        api,
+        theme: {
+          adaptiveLighten: isSystemDark ? darken : lighten,
+          theme,
+          appThemeParams,
+          setAppThemeParams,
+          isDark,
+          brightness,
+          setBrightness,
+        },
+        conf: appConfig,
+      }}
+    >
       {children}
     </_ConfigContext.Provider>
   )

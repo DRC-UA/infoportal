@@ -19,11 +19,7 @@ const group = (props: ModalProps | undefined, dispatch: Dispatch<SetStateAction<
 
 export type DatatableModal<T extends DatatableRow> = ReturnType<typeof useDatatableModal<T>>
 
-export const useDatatableModal = <T extends DatatableRow>({
-  data,
-}: {
-  data: UseDatatableData<T>
-}) => {
+export const useDatatableModal = <T extends DatatableRow>({data}: {data: UseDatatableData<T>}) => {
   const [filterPopover, setFilterPopover] = useState<ModalProps | undefined>()
   const [statsPopover, setStatsPopover] = useState<ModalProps | undefined>()
 
@@ -32,9 +28,5 @@ export const useDatatableModal = <T extends DatatableRow>({
       filterPopover: group(filterPopover, setFilterPopover),
       statsPopover: group(statsPopover, setStatsPopover),
     }
-  }, [
-    data,
-    filterPopover,
-    statsPopover,
-  ])
+  }, [data, filterPopover, statsPopover])
 }

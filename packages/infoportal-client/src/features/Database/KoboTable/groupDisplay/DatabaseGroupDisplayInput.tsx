@@ -11,33 +11,43 @@ export const DatabaseGroupDisplayInput = (props: IpBtnProps) => {
   const {m} = useI18n()
   const {schema, groupDisplay} = useDatabaseKoboTableContext()
   return (
-    <PopoverWrapper content={() => (
-      <Box sx={{p: 1, minWidth: 120, width: 320}}>
-        <Txt color="hint" sx={{mb: .5}} fontSize="small" block>{m._koboDatabase.repeatAs}</Txt>
-        <ScRadioGroup dense value={groupDisplay.get.repeatAs} onChange={_ => groupDisplay.setProperty('repeatAs', _)}>
-          <ScRadioGroupItem value={null} title={m._koboDatabase.repeatDont}/>
-          <ScRadioGroupItem value="rows" title={m._koboDatabase.repeatAsRows}/>
-          <ScRadioGroupItem value="columns" title={m._koboDatabase.repeatAsColumn}/>
-        </ScRadioGroup>
-        {groupDisplay.get.repeatAs === 'rows' && (
-          <>
-            <Txt color="hint" sx={{mt: 1.5, mb: .5}} fontSize="small" block>{m._koboDatabase.repeatAsQuestionName}</Txt>
-            <IpSelectSingle
-              value={groupDisplay.get.repeatGroupName}
-              renderValue={_ => schema.translate.question(_)!}
-              onChange={_ => groupDisplay.setProperty('repeatGroupName', _ ?? undefined)}
-              options={schema.helper.group.search({depth: 1}).map(_ =>
-                ipSelectItem({
-                  value: _.name,
-                  title: schema.translate.question(_.name),
-                  desc: _.name,
-                }),
-              )}
-            />
-          </>
-        )}
-      </Box>
-    )}>
+    <PopoverWrapper
+      content={() => (
+        <Box sx={{p: 1, minWidth: 120, width: 320}}>
+          <Txt color="hint" sx={{mb: 0.5}} fontSize="small" block>
+            {m._koboDatabase.repeatAs}
+          </Txt>
+          <ScRadioGroup
+            dense
+            value={groupDisplay.get.repeatAs}
+            onChange={(_) => groupDisplay.setProperty('repeatAs', _)}
+          >
+            <ScRadioGroupItem value={null} title={m._koboDatabase.repeatDont} />
+            <ScRadioGroupItem value="rows" title={m._koboDatabase.repeatAsRows} />
+            <ScRadioGroupItem value="columns" title={m._koboDatabase.repeatAsColumn} />
+          </ScRadioGroup>
+          {groupDisplay.get.repeatAs === 'rows' && (
+            <>
+              <Txt color="hint" sx={{mt: 1.5, mb: 0.5}} fontSize="small" block>
+                {m._koboDatabase.repeatAsQuestionName}
+              </Txt>
+              <IpSelectSingle
+                value={groupDisplay.get.repeatGroupName}
+                renderValue={(_) => schema.translate.question(_)!}
+                onChange={(_) => groupDisplay.setProperty('repeatGroupName', _ ?? undefined)}
+                options={schema.helper.group.search({depth: 1}).map((_) =>
+                  ipSelectItem({
+                    value: _.name,
+                    title: schema.translate.question(_.name),
+                    desc: _.name,
+                  }),
+                )}
+              />
+            </>
+          )}
+        </Box>
+      )}
+    >
       <IpBtn
         variant="input"
         color="inherit"

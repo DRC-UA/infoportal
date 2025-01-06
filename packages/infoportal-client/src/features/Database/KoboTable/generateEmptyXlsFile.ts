@@ -7,16 +7,14 @@ import {KoboSchemaHelper} from 'infoportal-common'
 
 export const generateEmptyXlsTemplate = async (
   schemaBundle: KoboSchemaHelper.Bundle,
-  fileName: string
+  fileName: string,
 ): Promise<void> => {
   const workbook = new ExcelJS.Workbook()
   const templateSheet = workbook.addWorksheet('Template')
   const optionsSheet = workbook.addWorksheet('Options')
 
   const excludedQuestions = new Set(['begin_group', 'end_group', 'begin_repeat', 'end_repeat'])
-  const questions = schemaBundle.schema.content.survey.filter(
-    (q: Question) => !excludedQuestions.has(q.type)
-  )
+  const questions = schemaBundle.schema.content.survey.filter((q: Question) => !excludedQuestions.has(q.type))
 
   const dropdownRanges: Record<string, string> = {}
 
@@ -58,7 +56,7 @@ const writeDropdownOptions = (
   optionsSheet: ExcelJS.Worksheet,
   header: string,
   values: string[],
-  columnIndex: number
+  columnIndex: number,
 ): string => {
   optionsSheet.getCell(1, columnIndex).value = header
 
@@ -68,9 +66,7 @@ const writeDropdownOptions = (
 
   const startRow = 2
   const endRow = values.length + 1
-  return `Options!$${getExcelColumnName(columnIndex)}$${startRow}:$${getExcelColumnName(
-    columnIndex
-  )}$${endRow}`
+  return `Options!$${getExcelColumnName(columnIndex)}$${startRow}:$${getExcelColumnName(columnIndex)}$${endRow}`
 }
 
 const getExcelColumnName = (col: number): string => {

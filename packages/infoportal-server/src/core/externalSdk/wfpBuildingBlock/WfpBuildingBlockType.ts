@@ -26,7 +26,6 @@ export interface AssistanceProvided {
 }
 
 export class AssistanceProvided {
-
   static readonly map = (_: Record<keyof AssistanceProvided, any>): AssistanceProvided => {
     return {
       ..._,
@@ -51,11 +50,10 @@ export interface AssistancePrevented {
 }
 
 export class AssistancePrevented {
-
   static readonly filterRemoved = (input: WfpPaginate<any>): WfpPaginate<any> => {
     return {
       ...input,
-      items: input.items.filter(_ => _.removedByAsyncTaskId === null)
+      items: input.items.filter((_) => _.removedByAsyncTaskId === null),
     }
   }
 

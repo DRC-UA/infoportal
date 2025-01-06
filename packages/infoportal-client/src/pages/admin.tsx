@@ -5,7 +5,7 @@ import {Admin} from '@/features/Admin/Admin'
 const Adminpage = () => {
   return (
     <ProtectRoute>
-      <Admin/>
+      <Admin />
     </ProtectRoute>
   )
 }

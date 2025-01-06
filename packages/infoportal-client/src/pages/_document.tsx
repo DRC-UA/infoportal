@@ -11,44 +11,59 @@ import {CacheProvider} from '@emotion/react'
 import {IpAlert} from '@/shared/Alert'
 
 interface MyDocumentProps extends DocumentProps {
-  emotionStyleTags: React.JSX.Element[];
+  emotionStyleTags: React.JSX.Element[]
 }
 
-const isStupidMicrosoftBrowser = typeof window !== 'undefined' && (
-  window.navigator.userAgent.includes('Edg') ||
-  window.navigator.userAgent.includes('MSIE') ||
-  window.navigator.userAgent.includes('Trident')
-)
+const isStupidMicrosoftBrowser =
+  typeof window !== 'undefined' &&
+  (window.navigator.userAgent.includes('Edg') ||
+    window.navigator.userAgent.includes('MSIE') ||
+    window.navigator.userAgent.includes('Trident'))
 
 export default function MyDocument({emotionStyleTags}: MyDocumentProps) {
   return (
     <Html lang="en">
       <Head>
-        <meta charSet="utf-8"/>
-        <base href="/"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com"/>
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+        <meta charSet="utf-8" />
+        <base href="/" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap"
+          rel="stylesheet"
+        />
         {/*<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>*/}
-        <link rel="icon" type="image/x-icon" href="/static/favicon.svg"/>
+        <link rel="icon" type="image/x-icon" href="/static/favicon.svg" />
         {emotionStyleTags}
-        <meta name="emotion-insertion-point" content=""/>
+        <meta name="emotion-insertion-point" content="" />
       </Head>
       <body>
-      {isStupidMicrosoftBrowser && (
-        <IpAlert deletable="transient" color="warning" sx={{minHeight: 30, height: 30}}>
-          This app may not working well on Edge and IE. Please install a
-          <Txt link sx={{textDecoration: 'underline'}}>
-            <a href="https://www.mozilla.org/en-US/firefox/new/">real browser</a>
-          </Txt>, not a Microsoft one.
-        </IpAlert>
-      )}
-      {process.env.NODE_ENV === 'development' && (
-        <Box sx={{'@media print': {display: 'none'}, zIndex: 1000, height: 2, background: 'blue', position: 'fixed', top: 0, right: 0, left: 0}}/>
-      )}
-      <Main/>
-      <NextScript/>
-      <script async type="text/javascript" src="https://www.gstatic.com/charts/loader.js"/>
-      <script async defer src={`https://maps.googleapis.com/maps/api/js?key=${appConfig.gooogle.apiKey}`}/>
+        {isStupidMicrosoftBrowser && (
+          <IpAlert deletable="transient" color="warning" sx={{minHeight: 30, height: 30}}>
+            This app may not working well on Edge and IE. Please install a
+            <Txt link sx={{textDecoration: 'underline'}}>
+              <a href="https://www.mozilla.org/en-US/firefox/new/">real browser</a>
+            </Txt>
+            , not a Microsoft one.
+          </IpAlert>
+        )}
+        {process.env.NODE_ENV === 'development' && (
+          <Box
+            sx={{
+              '@media print': {display: 'none'},
+              zIndex: 1000,
+              height: 2,
+              background: 'blue',
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              left: 0,
+            }}
+          />
+        )}
+        <Main />
+        <NextScript />
+        <script async type="text/javascript" src="https://www.gstatic.com/charts/loader.js" />
+        <script async defer src={`https://maps.googleapis.com/maps/api/js?key=${appConfig.gooogle.apiKey}`} />
       </body>
     </Html>
   )
@@ -89,9 +104,11 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
     originalRenderPage({
       enhanceApp: (App: React.ComponentType<React.ComponentProps<AppType> & MyAppProps>) =>
         function EnhanceApp(props) {
-          return <CacheProvider value={cache}>
-            <App emotionCache={cache} {...props} />
-          </CacheProvider>
+          return (
+            <CacheProvider value={cache}>
+              <App emotionCache={cache} {...props} />
+            </CacheProvider>
+          )
         },
     })
 

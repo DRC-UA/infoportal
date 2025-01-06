@@ -24,10 +24,7 @@ import {CfmDashboard} from '@/features/Cfm/Dashboard/CfmDashboard'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {Kobo} from 'kobo-sdk'
 
-const relatedKoboForms: KoboFormName[] = [
-  'meal_cfmInternal',
-  'meal_cfmExternal',
-]
+const relatedKoboForms: KoboFormName[] = ['meal_cfmInternal', 'meal_cfmExternal']
 
 export const cfmIndex = {
   basePath: '/cfm',
@@ -35,8 +32,8 @@ export const cfmIndex = {
     dashboard: '/dashboard',
     access: '/access',
     data: '/data',
-    entry: (formId: Kobo.FormId = ':formId', answerId: string = ':answerId') => `/entry/${formId}/${answerId}`
-  }
+    entry: (formId: Kobo.FormId = ':formId', answerId: string = ':answerId') => `/entry/${formId}/${answerId}`,
+  },
 }
 
 const CfmSidebar = () => {
@@ -47,7 +44,7 @@ const CfmSidebar = () => {
   const _stats = useMemo(() => {
     let open = 0
     let coc = 0
-    ctx.mappedData?.forEach(_ => {
+    ctx.mappedData?.forEach((_) => {
       if (_.tags?.status === undefined || _.tags?.status === KoboMealCfmStatus.Open) {
         if (_.priority === CfmDataPriority.High) coc++
         open++
@@ -56,7 +53,7 @@ const CfmSidebar = () => {
     return {
       open,
       coc,
-      total: ctx.mappedData?.length
+      total: ctx.mappedData?.length,
     }
   }, [ctx.mappedData])
 
@@ -65,20 +62,26 @@ const CfmSidebar = () => {
       <SidebarBody>
         <NavLink to={path(cfmIndex.siteMap.dashboard)}>
           {({isActive, isPending}) => (
-            <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>{m.dashboard}</SidebarItem>
+            <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>
+              {m.dashboard}
+            </SidebarItem>
           )}
         </NavLink>
         <NavLink to={path(cfmIndex.siteMap.data)}>
           {({isActive, isPending}) => (
-            <SidebarItem icon={appConfig.icons.dataTable} active={isActive}>{m.data}</SidebarItem>
+            <SidebarItem icon={appConfig.icons.dataTable} active={isActive}>
+              {m.data}
+            </SidebarItem>
           )}
         </NavLink>
         <NavLink to={path(cfmIndex.siteMap.access)}>
           {({isActive, isPending}) => (
-            <SidebarItem icon="person_add" active={isActive}>{m.access}</SidebarItem>
+            <SidebarItem icon="person_add" active={isActive}>
+              {m.access}
+            </SidebarItem>
           )}
         </NavLink>
-        <SidebarHr/>
+        <SidebarHr />
         <SidebarItem
           icon={appConfig.icons.matrix}
           onClick={() => void 0}
@@ -89,21 +92,15 @@ const CfmSidebar = () => {
           {m._cfm.referralMatrix}
         </SidebarItem>
         <SidebarSection title={m.koboForms}>
-          {relatedKoboForms.map(_ =>
-            <SidebarKoboLink key={_} path={path(shelterIndex.siteMap.form(_))} name={_}/>
-          )}
+          {relatedKoboForms.map((_) => (
+            <SidebarKoboLink key={_} path={path(shelterIndex.siteMap.form(_))} name={_} />
+          ))}
         </SidebarSection>
       </SidebarBody>
-      <SidebarHr/>
+      <SidebarHr />
       <SidebarBody>
         <Box sx={{pl: 2}}>
-          <ChartPieWidget
-            dense
-            showValue
-            title={m._cfm.openTickets}
-            value={_stats.open}
-            base={_stats.total ?? 1}
-          />
+          <ChartPieWidget dense showValue title={m._cfm.openTickets} value={_stats.open} base={_stats.total ?? 1} />
           {/*<Divider sx={{my: 1.5}}/>*/}
           <ChartPieWidget
             sx={{mt: 2}}
@@ -131,9 +128,7 @@ export const Cfm = () => {
   useReactRouterDefaultRoute(cfmIndex.siteMap.data)
 
   if (!access) {
-    return (
-      <NoFeatureAccessPage/>
-    )
+    return <NoFeatureAccessPage />
   }
   return (
     <>
@@ -142,26 +137,21 @@ export const Cfm = () => {
           schemaExternal={schemaContext.byName.meal_cfmExternal.get}
           schemaInternal={schemaContext.byName.meal_cfmInternal.get}
         >
-          <Layout
-            title={appFeaturesIndex.cfm.name}
-            sidebar={<CfmSidebar/>}
-            header={<AppHeader id="app-header"/>}
-          >
+          <Layout title={appFeaturesIndex.cfm.name} sidebar={<CfmSidebar />} header={<AppHeader id="app-header" />}>
             <Routes>
-              <Route path={cfmIndex.siteMap.dashboard} element={<CfmDashboard/>}/>
-              <Route path={cfmIndex.siteMap.data} element={<CfmTable/>}/>
-              <Route path={cfmIndex.siteMap.entry()} element={<CfmEntryRoute/>}/>
-              <Route path={cfmIndex.siteMap.access} element={<CfmAccess/>}/>
-              {relatedKoboForms.map(_ =>
-                <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})}/>
-              )}
+              <Route path={cfmIndex.siteMap.dashboard} element={<CfmDashboard />} />
+              <Route path={cfmIndex.siteMap.data} element={<CfmTable />} />
+              <Route path={cfmIndex.siteMap.entry()} element={<CfmEntryRoute />} />
+              <Route path={cfmIndex.siteMap.access} element={<CfmAccess />} />
+              {relatedKoboForms.map((_) => (
+                <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})} />
+              ))}
             </Routes>
           </Layout>
         </CfmProvider>
-      ) : schemaContext.anyLoading && (
-        <LinearProgress/>
+      ) : (
+        schemaContext.anyLoading && <LinearProgress />
       )}
     </>
   )
 }
-

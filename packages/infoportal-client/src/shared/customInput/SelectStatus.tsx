@@ -18,7 +18,7 @@ export namespace SelectStatusConfig {
     CashStatus: CashStatus,
     KoboValidation: KoboValidation,
     CashForRentStatus: CashForRentStatus,
-    VetApplicationStatus: VetApplicationStatus
+    VetApplicationStatus: VetApplicationStatus,
   }
 
   export type EnumStatus = keyof typeof enumStatus
@@ -62,49 +62,80 @@ export namespace SelectStatusConfig {
       [VetApplicationStatus.SecondPending]: 'warning',
       [VetApplicationStatus.SecondPaid]: 'info',
       [VetApplicationStatus.CertificateSubmitted]: 'success',
-    } as Record<VetApplicationStatus, StateStatus>
+    } as Record<VetApplicationStatus, StateStatus>,
   }
 }
 
 const commonProps = {borderRadius: '20px', px: 1}
 
-export const OptionLabelType = ({
-  type,
-  children,
-}: {
-  type: StateStatus
-  children: ReactNode
-}) => {
+export const OptionLabelType = ({type, children}: {type: StateStatus; children: ReactNode}) => {
   const t = useTheme()
-  return fnSwitch(type, {
-    'disabled': <Box sx={{...commonProps, background: t.palette.divider, color: t.palette.text.secondary}}>{children}</Box>,
-    'error': <Box sx={{...commonProps, background: t.palette.error.main, color: t.palette.error.contrastText}}>{children}</Box>,
-    'warning': <Box sx={{...commonProps, background: t.palette.warning.main, color: t.palette.warning.contrastText}}>{children}</Box>,
-    'info': <Box sx={{...commonProps, background: t.palette.info.main, color: t.palette.info.contrastText}}>{children}</Box>,
-    'success': <Box sx={{...commonProps, background: t.palette.success.main, color: t.palette.success.contrastText}}>{children}</Box>,
-  }, () => undefined)
+  return fnSwitch(
+    type,
+    {
+      disabled: (
+        <Box sx={{...commonProps, background: t.palette.divider, color: t.palette.text.secondary}}>{children}</Box>
+      ),
+      error: (
+        <Box sx={{...commonProps, background: t.palette.error.main, color: t.palette.error.contrastText}}>
+          {children}
+        </Box>
+      ),
+      warning: (
+        <Box sx={{...commonProps, background: t.palette.warning.main, color: t.palette.warning.contrastText}}>
+          {children}
+        </Box>
+      ),
+      info: (
+        <Box sx={{...commonProps, background: t.palette.info.main, color: t.palette.info.contrastText}}>{children}</Box>
+      ),
+      success: (
+        <Box sx={{...commonProps, background: t.palette.success.main, color: t.palette.success.contrastText}}>
+          {children}
+        </Box>
+      ),
+    },
+    () => undefined,
+  )
 }
 
-export const OptionLabelTypeCompact = ({
-  type,
-  sx,
-}: {
-  type: StateStatus
-  sx?: SxProps
-}) => {
+export const OptionLabelTypeCompact = ({type, sx}: {type: StateStatus; sx?: SxProps}) => {
   const t = useTheme()
-  return fnSwitch(type, {
-    'disabled': <Icon sx={{color: t.palette.text.disabled, ...sx}} title={type}>remove_circle</Icon>,
-    'error': <Icon sx={{color: t.palette.error.main, ...sx}} title={type}>error</Icon>,
-    'warning': <Icon sx={{color: t.palette.warning.main, ...sx}} title={type}>schedule</Icon>,
-    'info': <Icon sx={{color: t.palette.info.main, ...sx}} title={type}>info</Icon>,
-    'success': <Icon sx={{color: t.palette.success.main, ...sx}} title={type}>check_circle</Icon>,
-  }, () => undefined)
+  return fnSwitch(
+    type,
+    {
+      disabled: (
+        <Icon sx={{color: t.palette.text.disabled, ...sx}} title={type}>
+          remove_circle
+        </Icon>
+      ),
+      error: (
+        <Icon sx={{color: t.palette.error.main, ...sx}} title={type}>
+          error
+        </Icon>
+      ),
+      warning: (
+        <Icon sx={{color: t.palette.warning.main, ...sx}} title={type}>
+          schedule
+        </Icon>
+      ),
+      info: (
+        <Icon sx={{color: t.palette.info.main, ...sx}} title={type}>
+          info
+        </Icon>
+      ),
+      success: (
+        <Icon sx={{color: t.palette.success.main, ...sx}} title={type}>
+          check_circle
+        </Icon>
+      ),
+    },
+    () => undefined,
+  )
 }
-
 
 type SelectStatusProps<T extends string> = Omit<IpSelectSingleNullableProps<T>, 'hideNullOption' | 'options'> & {
-  status: Record<T, string>,
+  status: Record<T, string>
   labels: Record<T, StateStatus>
   compact?: boolean
 }
@@ -117,30 +148,33 @@ export const SelectStatus = <T extends string>({
 }: SelectStatusProps<T>) => {
   const {m} = useI18n()
   const options: IpSelectOption<any>[] = useMemo(() => {
-    return Obj.keys(status).map(_ => ({
+    return Obj.keys(status).map((_) => ({
       value: _,
-      children: compact
-        ? <OptionLabelTypeCompact type={labels[_]}/>
-        : <OptionLabelType type={labels[_]}>{_ as string}</OptionLabelType>
+      children: compact ? (
+        <OptionLabelTypeCompact type={labels[_]} />
+      ) : (
+        <OptionLabelType type={labels[_]}>{_ as string}</OptionLabelType>
+      ),
     }))
   }, [labels, status])
-  return (
-    <IpSelectSingle placeholder={placeholder ?? m.status} hideNullOption={false} options={options} {...props}/>
-  )
+  return <IpSelectSingle placeholder={placeholder ?? m.status} hideNullOption={false} options={options} {...props} />
 }
 
 export const SelectStatusBy = <
   K extends SelectStatusConfig.EnumStatus,
-  V extends typeof SelectStatusConfig.enumStatus[K][KeyOf<typeof SelectStatusConfig.enumStatus[K]>]
+  V extends (typeof SelectStatusConfig.enumStatus)[K][KeyOf<(typeof SelectStatusConfig.enumStatus)[K]>],
 >(
-// @ts-ignore
+  // @ts-ignore
   props: Omit<SelectStatusProps<V>, 'status' | 'labels'> & {
     enum: K
-  }
+  },
 ) => {
   return (
     // @ts-ignore
-    <SelectStatus {...props} labels={SelectStatusConfig.statusType[props.enum]} status={SelectStatusConfig.enumStatus[props.enum]}/>
+    <SelectStatus
+      {...props}
+      labels={SelectStatusConfig.statusType[props.enum]}
+      status={SelectStatusConfig.enumStatus[props.enum]}
+    />
   )
 }
-

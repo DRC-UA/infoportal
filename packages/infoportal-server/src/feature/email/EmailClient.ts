@@ -4,7 +4,6 @@ import {app} from '../../index'
 import {PrismaClient} from '@prisma/client'
 
 export class EmailClient {
-
   constructor(
     private prisma = new PrismaClient(),
     private conf = appConf,
@@ -18,9 +17,8 @@ export class EmailClient {
         user: conf.email.address,
         pass: conf.email.password,
       },
-    })
-  ) {
-  }
+    }),
+  ) {}
 
   public async send({
     to,
@@ -34,12 +32,12 @@ export class EmailClient {
     cc?: string[]
     createdBy?: string
     context: string
-    html: string,
-    to: string | string[],
-    subject: string,
+    html: string
+    to: string | string[]
+    subject: string
     tags?: any
   }): Promise<void> {
-    const ensureStr = (_: string | string[]): string => Array.isArray(_) ? _.join(' ') : _
+    const ensureStr = (_: string | string[]): string => (Array.isArray(_) ? _.join(' ') : _)
     try {
       const params = {
         from: appConf.email.address,
@@ -48,8 +46,7 @@ export class EmailClient {
         subject,
         html,
       }
-      if (this.conf.production)
-        await this.transporter.sendMail(params)
+      if (this.conf.production) await this.transporter.sendMail(params)
       this.log.info(`Send email [${context}] ${JSON.stringify({subject, to: ensureStr(to), tags})}.`)
       await this.prisma.emailOutBox.create({
         data: {
@@ -61,7 +58,7 @@ export class EmailClient {
           cc: cc ? ensureStr(cc) : undefined,
           tags,
           deliveredAt: new Date(),
-        }
+        },
       })
     } catch (error) {
       this.log.error('Failed to send email:', error)

@@ -4,7 +4,7 @@ import {ReactNode, useMemo} from 'react'
 import {Seq} from '@alexandreannic/ts-utils'
 
 export type ChartPieWidgetProps<T> = {
-  compare?: {before: Seq<T>, now?: Seq<T>}
+  compare?: {before: Seq<T>; now?: Seq<T>}
   title?: ReactNode
   data: Seq<T>
   showValue?: boolean
@@ -12,7 +12,7 @@ export type ChartPieWidgetProps<T> = {
   hideEvolution?: boolean
 } & Omit<ChartPieIndicatorProps, 'base' | 'value'>
 
-export const ChartPieWidgetBy = <T, >({
+export const ChartPieWidgetBy = <T,>({
   title,
   compare,
   data,
@@ -24,7 +24,7 @@ export const ChartPieWidgetBy = <T, >({
   filter: (_: T) => boolean
   filterBase?: (_: T) => boolean
 }) => {
-  const percent = ({res, base}: {res: number, base: number}) => res / base
+  const percent = ({res, base}: {res: number; base: number}) => res / base
   const run = (d: Seq<T>) => {
     const base = filterBase ? d.filter(filterBase) : d
     return {
@@ -47,9 +47,14 @@ export const ChartPieWidgetBy = <T, >({
       title={title}
       value={all.res}
       base={all.base}
-      evolution={hideEvolution ? undefined : comparedData ? percent(comparedData.now ?? all) - percent(comparedData.before) : undefined}
+      evolution={
+        hideEvolution
+          ? undefined
+          : comparedData
+            ? percent(comparedData.now ?? all) - percent(comparedData.before)
+            : undefined
+      }
       {...props}
     />
   )
 }
-

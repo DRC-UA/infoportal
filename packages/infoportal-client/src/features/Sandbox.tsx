@@ -6,9 +6,9 @@ import {DrcProgram, Person} from 'infoportal-common'
 import {expect} from 'chai'
 
 type Row = {
-  id: string;
-  persons: Person.Person[];
-};
+  id: string
+  persons: Person.Person[]
+}
 
 const extract = (p: Person.Person) => {
   return {age: p.age, gender: p.gender}
@@ -26,7 +26,7 @@ export const Sandbox = () => {
   const compareDataArrays = (arr1: Seq<Row>, arr2: Seq<Row>): void => {
     const differingElements: {id: string; item1: Row['persons']; item2: Row['persons']}[] = []
 
-    const indexArr2 = arr2.groupByFirst(item => item.id)
+    const indexArr2 = arr2.groupByFirst((item) => item.id)
     console.log('>>>', arr1.length, arr2.length, indexArr2)
 
     arr1.forEach((item1) => {
@@ -53,26 +53,29 @@ export const Sandbox = () => {
   }
 
   useEffect(() => {
-    if (!(metaData.data?.data) || !(testData.mappedData?.length)) {
+    if (!metaData.data?.data || !testData.mappedData?.length) {
       return
     }
-    const meta: Seq<Row> = seq(metaData.data.data.filter(_ => _.activity === DrcProgram.ShelterRepair) || []).map(t => ({
-      id: t.koboId,
-      persons: t.persons ?? [],
-    }))
+    const meta: Seq<Row> = seq(metaData.data.data.filter((_) => _.activity === DrcProgram.ShelterRepair) || []).map(
+      (t) => ({
+        id: t.koboId,
+        persons: t.persons ?? [],
+      }),
+    )
 
     const shelter: Seq<Row> = seq(testData.mappedData || [])
-      .filter(t => t.nta?.id)
-      .map(t => {
+      .filter((t) => t.nta?.id)
+      .map((t) => {
         const result: Row = {
           id: t.nta!.id,
           persons: t.persons ?? [],
         }
         return result
-      }).compact()
+      })
+      .compact()
 
     compareDataArrays(shelter, meta)
   }, [metaData.data.data, testData.mappedData])
 
-  return <div/>
+  return <div />
 }

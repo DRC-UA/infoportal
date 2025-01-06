@@ -51,34 +51,44 @@ export const DatabaseKoboTableContent = ({
 
   const flatData: KoboMappedAnswer[] | undefined = useMemo(() => {
     if (ctx.groupDisplay.get.repeatAs !== 'rows' || ctx.groupDisplay.get.repeatGroupName === undefined) return ctx.data
-    return KoboFlattenRepeat.run(ctx.data, [ctx.groupDisplay.get.repeatGroupName]) as (KoboRepeatRef & KoboMappedAnswer)[]
+    return KoboFlattenRepeat.run(ctx.data, [ctx.groupDisplay.get.repeatGroupName]) as (KoboRepeatRef &
+      KoboMappedAnswer)[]
   }, [ctx.data, ctx.groupDisplay.get])
 
-  const extraColumns: DatatableColumn.Props<any>[] = useMemo(() => getColumnsCustom({
-    selectedIds,
-    formId: ctx.form.id,
-    canEdit: ctx.access.write,
-    m,
-    ctxUpdate: ctxKoboUpdate,
-  }).map(_ => ({
-    ..._,
-    typeIcon: <DatatableHeadIconByType type={_.type}/>
-  })), [selectedIds, ctx.form.id])
+  const extraColumns: DatatableColumn.Props<any>[] = useMemo(
+    () =>
+      getColumnsCustom({
+        selectedIds,
+        formId: ctx.form.id,
+        canEdit: ctx.access.write,
+        m,
+        ctxUpdate: ctxKoboUpdate,
+      }).map((_) => ({
+        ..._,
+        typeIcon: <DatatableHeadIconByType type={_.type} />,
+      })),
+    [selectedIds, ctx.form.id],
+  )
 
   const schemaColumns = useMemo(() => {
     const schemaColumns = columnBySchemaGenerator({
       formId: ctx.form.id,
       schema: ctx.schema,
       externalFilesIndex: ctx.externalFilesIndex,
-      onRepeatGroupClick: _ => navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),
-      onEdit: selectedIds.length > 0 ? (questionName => ctxKoboUpdate.openById({
-        target: 'answer',
-        params: {
-          formId: ctx.form.id,
-          question: questionName,
-          answerIds: selectedIds,
-        }
-      })) : undefined,
+      onRepeatGroupClick: (_) =>
+        navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),
+      onEdit:
+        selectedIds.length > 0
+          ? (questionName) =>
+              ctxKoboUpdate.openById({
+                target: 'answer',
+                params: {
+                  formId: ctx.form.id,
+                  question: questionName,
+                  answerIds: selectedIds,
+                },
+              })
+          : undefined,
       m,
       t,
     }).getAll()
@@ -86,20 +96,13 @@ export const DatabaseKoboTableContent = ({
       data: ctx.data ?? [],
       formId: ctx.form.id,
       schema: ctx.schema,
-      onRepeatGroupClick: _ => navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),
+      onRepeatGroupClick: (_) =>
+        navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),
       display: ctx.groupDisplay.get,
       m,
       t,
     }).transformColumns(schemaColumns)
-  }, [
-    ctx.data,
-    ctx.schema.schema,
-    ctxSchema.langIndex,
-    selectedIds,
-    ctx.groupDisplay.get,
-    ctx.externalFilesIndex,
-    t
-  ])
+  }, [ctx.data, ctx.schema.schema, ctxSchema.langIndex, selectedIds, ctx.groupDisplay.get, ctx.externalFilesIndex, t])
 
   const columns: DatatableColumn.Props<any>[] = useMemo(() => {
     const base = getColumnsBase({
@@ -111,7 +114,7 @@ export const DatabaseKoboTableContent = ({
       ctxEdit: ctxKoboUpdate,
       openViewAnswer: ctxAnswers.openView,
     })
-    return [...base, ...extraColumns, ...schemaColumns].map(_ => ({
+    return [...base, ...extraColumns, ...schemaColumns].map((_) => ({
       ..._,
       width: ctx.view.colsById[_.id]?.width ?? _.width ?? 90,
     }))
@@ -148,13 +151,17 @@ export const DatabaseKoboTableContent = ({
         rowsPerPageOptions={[20, 50, 100, 200]}
         onFiltersChange={onFiltersChange}
         onDataChange={onDataChange}
-        select={ctx.access.write ? {
-          onSelect: setSelectedIds,
-          selectActions: selectedHeader,
-          getId: _ => _.id,
-        } : undefined}
-        exportAdditionalSheets={data => {
-          return ctx.schema.helper.group.search().map(group => {
+        select={
+          ctx.access.write
+            ? {
+                onSelect: setSelectedIds,
+                selectActions: selectedHeader,
+                getId: (_) => _.id,
+              }
+            : undefined
+        }
+        exportAdditionalSheets={(data) => {
+          return ctx.schema.helper.group.search().map((group) => {
             const cols = getColumnsForRepeatGroup({
               formId: ctx.form.id,
               t,
@@ -165,18 +172,18 @@ export const DatabaseKoboTableContent = ({
             return {
               sheetName: group.name as string,
               data: KoboFlattenRepeat.run(data, group.pathArr),
-              schema: cols.map(DatatableXlsGenerator.columnsToParams)
+              schema: cols.map(DatatableXlsGenerator.columnsToParams),
             }
           })
         }}
         title={ctx.form.name}
         id={ctx.form.id}
-        getRenderRowKey={_ => _.id + (_._index ?? '')}
+        getRenderRowKey={(_) => _.id + (_._index ?? '')}
         columns={columns}
         data={flatData}
-        header={params =>
+        header={(params) => (
           <>
-            <DatabaseViewInput sx={{mr: 1}} view={ctx.view}/>
+            <DatabaseViewInput sx={{mr: 1}} view={ctx.view} />
             <IpSelectSingle<number>
               hideNullOption
               sx={{maxWidth: 128, mr: 1}}
@@ -184,15 +191,17 @@ export const DatabaseKoboTableContent = ({
               onChange={ctxSchema.setLangIndex}
               options={[
                 {children: 'XML', value: -1},
-                ...ctx.schema.schemaSanitized.content.translations.map((_, i) => ({children: _, value: i}))
+                ...ctx.schema.schemaSanitized.content.translations.map((_, i) => ({children: _, value: i})),
               ]}
             />
-            {ctx.schema.helper.group.size > 0 && (
-              <DatabaseGroupDisplayInput sx={{mr: 1}}/>
-            )}
+            {ctx.schema.helper.group.size > 0 && <DatabaseGroupDisplayInput sx={{mr: 1}} />}
             {header?.(params)}
             {ctx.form.deploymentStatus === 'archived' && (
-              <Alert color="info" icon={<Icon sx={{mr: -1}}>archive</Icon>} sx={{pr: t.spacing(1), pl: t.spacing(.5), pt: 0, pb: 0}}>
+              <Alert
+                color="info"
+                icon={<Icon sx={{mr: -1}}>archive</Icon>}
+                sx={{pr: t.spacing(1), pl: t.spacing(0.5), pt: 0, pb: 0}}
+              >
                 {m._koboDatabase.isArchived}
               </Alert>
             )}
@@ -215,7 +224,7 @@ export const DatabaseKoboTableContent = ({
               />
               <DatabaseKoboSyncBtn
                 loading={ctx.asyncRefresh.loading}
-                tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.pullDataAt(ctx.form.updatedAt)}}/>}
+                tooltip={<div dangerouslySetInnerHTML={{__html: m._koboDatabase.pullDataAt(ctx.form.updatedAt)}} />}
                 onClick={ctx.asyncRefresh.call}
               />
               {session.admin && (
@@ -227,7 +236,7 @@ export const DatabaseKoboTableContent = ({
               )}
             </div>
           </>
-        }
+        )}
       />
     </>
   )

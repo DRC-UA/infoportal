@@ -17688,5 +17688,5 @@ export const hromadas = {
     _5w: 'Zviahelska_UA1808015_Звягельська',
     // lat_centroid: '50.59728585',
     // lon_centroid: '27.48549616'
-  }
+  },
 }

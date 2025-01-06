@@ -3,8 +3,8 @@ import {seq} from '@alexandreannic/ts-utils'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
 export type MultipleChoicesChoice<T extends string> = {
-  value: T,
-  label?: ReactNode,
+  value: T
+  label?: ReactNode
   key?: number | string
 }
 
@@ -17,10 +17,10 @@ export type UseMultipleChoicesProps<T extends string> = {
 }
 
 export type UseMultipleChoicesRes<T extends string> = {
-  allChecked: boolean,
-  someChecked: boolean,
-  onClick: (_: T) => void,
-  toggleAll: () => void,
+  allChecked: boolean
+  someChecked: boolean
+  onClick: (_: T) => void
+  toggleAll: () => void
   options: {
     value: T
     checked?: boolean
@@ -44,9 +44,9 @@ export const useMultipleChoices = <T extends string>({
 }: UseMultipleChoicesProps<T>): UseMultipleChoicesRes<T> => {
   const [innerValue, setInnerValue] = useState<T[]>(value ?? initialValue ?? [])
 
-  const allValues = useMemo(() => options.map(_ => _.value), [options])
+  const allValues = useMemo(() => options.map((_) => _.value), [options])
 
-  const someChecked = !!allValues.find(_ => innerValue?.includes(_))
+  const someChecked = !!allValues.find((_) => innerValue?.includes(_))
 
   const allChecked = allValues.length === innerValue?.length
 
@@ -55,19 +55,15 @@ export const useMultipleChoices = <T extends string>({
   }
 
   const onClick = (v: T) => {
-    setInnerValue(prev => prev.includes(v)
-      ? prev.filter(_ => _ !== v)
-      : [...prev, v])
+    setInnerValue((prev) => (prev.includes(v) ? prev.filter((_) => _ !== v) : [...prev, v]))
   }
 
   useEffect(() => {
-    if (!seq(value).equals(innerValue))
-      setInnerValue(value ?? [])
+    if (!seq(value).equals(innerValue)) setInnerValue(value ?? [])
   }, [value])
 
   useEffect(() => {
-    if (!seq(innerValue).equals(initialValue))
-      onChange(innerValue)
+    if (!seq(innerValue).equals(initialValue)) onChange(innerValue)
   }, [innerValue])
 
   return {
@@ -76,14 +72,16 @@ export const useMultipleChoices = <T extends string>({
     toggleAll,
     onClick,
     options: [
-      ...addBlankOption ? [{value: DatatableUtils.blank, label: DatatableUtils.blankLabel} as MultipleChoicesChoice<any>] : [],
-      ...options
-    ].map(_ => ({
+      ...(addBlankOption
+        ? [{value: DatatableUtils.blank, label: DatatableUtils.blankLabel} as MultipleChoicesChoice<any>]
+        : []),
+      ...options,
+    ].map((_) => ({
       ..._,
       key: _.key ?? _.value,
       checked: innerValue.includes(_.value),
-      onChange: () => onClick(_.value)
-    }))
+      onChange: () => onClick(_.value),
+    })),
   }
 }
 

@@ -3,10 +3,9 @@ import {ProtectRoute} from '@/core/Session/SessionContext'
 import {Shelter} from '@/features/Shelter/Shelter'
 
 const ShelterPage = () => {
-
   return (
     <ProtectRoute>
-      <Shelter/>
+      <Shelter />
     </ProtectRoute>
   )
 }

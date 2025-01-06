@@ -33,7 +33,7 @@ export interface WfpDeduplicationAccessParams {
 }
 
 export interface KoboDatabaseAccessParams {
-  koboFormId: Kobo.FormId,
+  koboFormId: Kobo.FormId
   filters?: Record<string, string[]>
 }
 
@@ -74,19 +74,24 @@ export interface AccessSum {
 }
 
 export class Access {
-
   static readonly toSum = (accesses: Access<any>[], admin?: boolean) => {
     return {
-      admin: admin || !!accesses.find(_ => _.level === AccessLevel.Admin),
-      write: admin || !!accesses.find(_ => _.level === AccessLevel.Write || _.level === AccessLevel.Admin),
-      read: admin || !!accesses.find(_ => _.level === AccessLevel.Write || _.level === AccessLevel.Admin || _.level === AccessLevel.Read),
+      admin: admin || !!accesses.find((_) => _.level === AccessLevel.Admin),
+      write: admin || !!accesses.find((_) => _.level === AccessLevel.Write || _.level === AccessLevel.Admin),
+      read:
+        admin ||
+        !!accesses.find(
+          (_) => _.level === AccessLevel.Write || _.level === AccessLevel.Admin || _.level === AccessLevel.Read,
+        ),
     }
   }
 
   static readonly getAccessToKobo = (accesses: Access<any>[], koboName: KoboFormName) => {
     const koboId = KoboIndex.byName(koboName)?.id
     if (!koboId) throw new Error(`No kobo found with name ${koboName}`)
-    const koboAccesses = accesses.filter(this.filterByFeature(AppFeatureId.kobo_database)).filter(_ => _.params?.koboFormId === koboId)
+    const koboAccesses = accesses
+      .filter(this.filterByFeature(AppFeatureId.kobo_database))
+      .filter((_) => _.params?.koboFormId === koboId)
     return this.toSum(koboAccesses)
   }
 

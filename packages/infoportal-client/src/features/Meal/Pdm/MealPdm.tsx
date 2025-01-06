@@ -21,10 +21,7 @@ export const MealPdm = ({formName}: {formName: KoboFormName}) => {
     return (
       <MealPdmProvider>
         <>
-          <Tabs
-            value={pathname}
-            sx={{borderBottom: t => `1px solid ${t.palette.divider}`}}
-          >
+          <Tabs value={pathname} sx={{borderBottom: (t) => `1px solid ${t.palette.divider}`}}>
             <Tab
               sx={{minHeight: 34, py: 1}}
               component={NavLink}
@@ -40,7 +37,7 @@ export const MealPdm = ({formName}: {formName: KoboFormName}) => {
               label={m.mealMonitoringPdm.shelterPdmDashboard}
             />
           </Tabs>
-          <Outlet/>
+          <Outlet />
         </>
       </MealPdmProvider>
     )

@@ -1,13 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": [
-      "ES2021",
-      "dom"
-    ],
-    "typeRoots": [
-      "../../node_modules/@types"
-    ],
+    "lib": ["ES2021", "dom"],
+    "typeRoots": ["../../node_modules/@types"],
     "declaration": true,
     "declarationMap": true,
     "outDir": "./lib",
@@ -16,9 +11,7 @@
     "composite": true,
     "resolveJsonModule": true,
     "paths": {
-      "kobo-sdk/*": [
-        "../kobo-sdk/src/*"
-      ]
+      "kobo-sdk/*": ["../kobo-sdk/src/*"]
     }
   },
   "references": [
@@ -26,8 +19,5 @@
       "path": "../kobo-sdk"
     }
   ],
-  "include": [
-    "src/**/*",
-    "ressources/**/*"
-  ]
+  "include": ["src/**/*", "ressources/**/*"]
 }

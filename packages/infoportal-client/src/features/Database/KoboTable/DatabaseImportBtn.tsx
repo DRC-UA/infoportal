@@ -4,10 +4,10 @@ import {IpIconBtn, PopoverWrapper} from '@/shared'
 import {useI18n} from '@/core/i18n'
 
 interface DatabaseImportBtnProps {
-  onUploadNewData: (file: File) => void;
-  onUpdateExistingData: (file: File) => void;
-  onGenerateTemplate: () => void;
-  loading?: boolean;
+  onUploadNewData: (file: File) => void
+  onUpdateExistingData: (file: File) => void
+  onGenerateTemplate: () => void
+  loading?: boolean
 }
 
 export const DatabaseImportBtn: React.FC<DatabaseImportBtnProps> = ({
@@ -44,26 +44,18 @@ export const DatabaseImportBtn: React.FC<DatabaseImportBtnProps> = ({
 
   return (
     <>
-      <PopoverWrapper content={(close) => (
-        <>
-          <MenuItem onClick={() => handleMenuClick('create', close)}>{m.importData.create}</MenuItem>
-          <MenuItem onClick={() => handleMenuClick('update', close)}>{m.importData.update}</MenuItem>
-          <MenuItem onClick={() => handleMenuClick('generate', close)}>{m.importData.generate}</MenuItem>
-        </>
-      )}>
-        <IpIconBtn
-          loading={loading}
-          children="upload"
-          tooltip="Import Data"
-        />
+      <PopoverWrapper
+        content={(close) => (
+          <>
+            <MenuItem onClick={() => handleMenuClick('create', close)}>{m.importData.create}</MenuItem>
+            <MenuItem onClick={() => handleMenuClick('update', close)}>{m.importData.update}</MenuItem>
+            <MenuItem onClick={() => handleMenuClick('generate', close)}>{m.importData.generate}</MenuItem>
+          </>
+        )}
+      >
+        <IpIconBtn loading={loading} children="upload" tooltip="Import Data" />
       </PopoverWrapper>
-      <input
-        type="file"
-        ref={fileInputRef}
-        accept=".xls,.xlsx"
-        style={{display: 'none'}}
-        onChange={handleFileChange}
-      />
+      <input type="file" ref={fileInputRef} accept=".xls,.xlsx" style={{display: 'none'}} onChange={handleFileChange} />
     </>
   )
 }

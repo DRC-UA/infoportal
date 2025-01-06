@@ -23,15 +23,9 @@ import {DashboardFilterOptionsContent} from '@/shared/DashboardLayout/DashboardF
 import {IKoboMeta} from 'infoportal-common'
 import {PopoverWrapper, Txt} from '@/shared'
 
-export const Item = ({
-  label,
-  children,
-}: {
-  label: ReactNode
-  children: ReactNode
-}) => {
+export const Item = ({label, children}: {label: ReactNode; children: ReactNode}) => {
   return (
-    <Box sx={{display: 'flex', alignItems: 'center', px: 1, py: .125}}>
+    <Box sx={{display: 'flex', alignItems: 'center', px: 1, py: 0.125}}>
       <Txt size="small">{label}</Txt>
       {children}
     </Box>
@@ -54,56 +48,54 @@ export const MetaSidebar = () => {
       <SidebarBody>
         <NavLink to={path(metaSiteMap.routes.dashboard)}>
           {({isActive, isPending}) => (
-            <SidebarItem active={isActive} icon={appConfig.icons.dashboard}>{m.dashboard}</SidebarItem>
+            <SidebarItem active={isActive} icon={appConfig.icons.dashboard}>
+              {m.dashboard}
+            </SidebarItem>
           )}
         </NavLink>
         <NavLink to={path(metaSiteMap.routes.data)}>
           {({isActive, isPending}) => (
-            <SidebarItem active={isActive} icon={appConfig.icons.dataTable}>{m.data}</SidebarItem>
+            <SidebarItem active={isActive} icon={appConfig.icons.dataTable}>
+              {m.data}
+            </SidebarItem>
           )}
         </NavLink>
 
         {session.admin && (
-          <SidebarItem
-            icon="refresh"
-            onClick={() => asyncRefresh.call().then(() => toastInfo(m._meta.refreshLong))}
-          >
+          <SidebarItem icon="refresh" onClick={() => asyncRefresh.call().then(() => toastInfo(m._meta.refreshLong))}>
             {m._meta.refresh}
-            <IpIconBtn
-              color="primary"
-              loading={asyncRefresh.loading}
-              sx={{marginLeft: 'auto'}}
-              children="cloud_sync"
-            />
+            <IpIconBtn color="primary" loading={asyncRefresh.loading} sx={{marginLeft: 'auto'}} children="cloud_sync" />
           </SidebarItem>
         )}
         {session.admin && (
-          <SidebarItem
-            icon="no_sim"
-            onClick={() => asyncKillCache.call()}
-          >
+          <SidebarItem icon="no_sim" onClick={() => asyncKillCache.call()}>
             {m._meta.killCache}
-            <IpIconBtn
-              sx={{marginLeft: 'auto'}}
-              color="primary"
-              loading={asyncKillCache.loading}
-              children="refresh"
-            />
+            <IpIconBtn sx={{marginLeft: 'auto'}} color="primary" loading={asyncKillCache.loading} children="refresh" />
           </SidebarItem>
         )}
-        <SidebarItem href={appConfig.externalLink.metaDashboardReadMe} icon="info" iconEnd="open_in_new" target="_blank" children="Read Me"/>
-        <SidebarHr/>
+        <SidebarItem
+          href={appConfig.externalLink.metaDashboardReadMe}
+          icon="info"
+          iconEnd="open_in_new"
+          target="_blank"
+          children="Read Me"
+        />
+        <SidebarHr />
 
         {location.pathname === metaSiteMap.routes.dashboard && (
           <Box sx={{ml: 1}}>
-            <Typography variant="caption" noWrap sx={{
-              fontWeight: t => t.typography.fontWeightMedium,
-              textTransform: 'uppercase',
-              letterSpacing: 1,
-              color: t => t.palette.text.disabled,
-              mb: 1,
-              display: 'block',
-            }}>
+            <Typography
+              variant="caption"
+              noWrap
+              sx={{
+                fontWeight: (t) => t.typography.fontWeightMedium,
+                textTransform: 'uppercase',
+                letterSpacing: 1,
+                color: (t) => t.palette.text.disabled,
+                mb: 1,
+                display: 'block',
+              }}
+            >
               <Box sx={{display: 'flex', alignItems: 'center'}}>
                 {m.filters}
                 <IpBtn
@@ -120,15 +112,12 @@ export const MetaSidebar = () => {
                 <DebouncedInput<[Date | undefined, Date | undefined]>
                   defaultValue={[ctx.period.start, ctx.period.end]}
                   onChange={([start, end]) => {
-                    ctx.setPeriod(prev => ({...prev, start, end}))
+                    ctx.setPeriod((prev) => ({...prev, start, end}))
                   }}
                 >
-                  {(value, onChange) => <PeriodPicker
-                    value={value}
-                    onChange={onChange}
-                    label={[m.start, m.endIncluded]}
-                    max={today}
-                  />}
+                  {(value, onChange) => (
+                    <PeriodPicker value={value} onChange={onChange} label={[m.start, m.endIncluded]} max={today} />
+                  )}
                 </DebouncedInput>
               </Box>
             </SidebarSubSection>
@@ -137,15 +126,12 @@ export const MetaSidebar = () => {
                 <DebouncedInput<[Date | undefined, Date | undefined]>
                   defaultValue={[ctx.periodCommit.start, ctx.period.end]}
                   onChange={([start, end]) => {
-                    ctx.setPeriodCommit(prev => ({...prev, start, end}))
+                    ctx.setPeriodCommit((prev) => ({...prev, start, end}))
                   }}
                 >
-                  {(value, onChange) => <PeriodPicker
-                    value={value}
-                    onChange={onChange}
-                    label={[m.start, m.endIncluded]}
-                    max={today}
-                  />}
+                  {(value, onChange) => (
+                    <PeriodPicker value={value} onChange={onChange} label={[m.start, m.endIncluded]} max={today} />
+                  )}
                 </DebouncedInput>
               </Box>
             </SidebarSubSection>
@@ -155,7 +141,7 @@ export const MetaSidebar = () => {
                   sx={{marginLeft: 'auto'}}
                   size="small"
                   checked={ctx.distinctBy.has('submission')}
-                  onChange={e => ctx.setDistinctBy('submission', e.currentTarget.checked)}
+                  onChange={(e) => ctx.setDistinctBy('submission', e.currentTarget.checked)}
                 />
               </Item>
               <Item label={m._meta.distinctByTaxId}>
@@ -163,7 +149,7 @@ export const MetaSidebar = () => {
                   sx={{marginLeft: 'auto'}}
                   size="small"
                   checked={ctx.distinctBy.has('taxId')}
-                  onChange={e => ctx.setDistinctBy('taxId', e.currentTarget.checked)}
+                  onChange={(e) => ctx.setDistinctBy('taxId', e.currentTarget.checked)}
                 />
               </Item>
               <Item label={m._meta.distinctByPhone}>
@@ -171,17 +157,13 @@ export const MetaSidebar = () => {
                   sx={{marginLeft: 'auto'}}
                   size="small"
                   checked={ctx.distinctBy.has('phone')}
-                  onChange={e => ctx.setDistinctBy('phone', e.currentTarget.checked)}
+                  onChange={(e) => ctx.setDistinctBy('phone', e.currentTarget.checked)}
                 />
               </Item>
             </SidebarSubSection>
-            {Obj.entries(ctx.shape).map(([name, shape]) =>
-              <MetaSidebarFilter
-                key={name}
-                name={name}
-                shape={shape}
-              />
-            )}
+            {Obj.entries(ctx.shape).map(([name, shape]) => (
+              <MetaSidebarFilter key={name} name={name} shape={shape} />
+            ))}
           </Box>
         )}
       </SidebarBody>
@@ -189,13 +171,7 @@ export const MetaSidebar = () => {
   )
 }
 
-export const MetaSidebarFilter = ({
-  name,
-  shape,
-}: {
-  name: string
-  shape: DataFilter.Shape<IKoboMeta>
-}) => {
+export const MetaSidebarFilter = ({name, shape}: {name: string; shape: DataFilter.Shape<IKoboMeta>}) => {
   const {data: ctx} = useMetaContext()
   const getFilteredOptions = (name: string) => {
     const filtersCopy = {...ctx.shapeFilters}
@@ -208,31 +184,37 @@ export const MetaSidebarFilter = ({
       key={name}
       debounce={50}
       value={ctx.shapeFilters[name]}
-      onChange={_ => ctx.setShapeFilters((prev: any) => ({...prev, [name]: _}))}
+      onChange={(_) => ctx.setShapeFilters((prev: any) => ({...prev, [name]: _}))}
     >
-      {(value, onChange) =>
-        <PopoverWrapper content={() => (
-          <DashboardFilterOptionsContent
-            value={value ?? []}
-            onChange={onChange}
-            addBlankOption={shape.addBlankOption}
-            options={() => shape.getOptions(() => getFilteredOptions(name))}
-          />
-        )}>
+      {(value, onChange) => (
+        <PopoverWrapper
+          content={() => (
+            <DashboardFilterOptionsContent
+              value={value ?? []}
+              onChange={onChange}
+              addBlankOption={shape.addBlankOption}
+              options={() => shape.getOptions(() => getFilteredOptions(name))}
+            />
+          )}
+        >
           <SidebarSubSection
             active={active}
             dense
             icon={shape.icon}
             title={shape.label + (active ? ` (${ctx.shapeFilters[name]!.length})` : '')}
-            onClear={active ? (() => {
-              ctx.setShapeFilters(_ => ({
-                ..._,
-                [name]: []
-              }))
-            }) : undefined}
+            onClear={
+              active
+                ? () => {
+                    ctx.setShapeFilters((_) => ({
+                      ..._,
+                      [name]: [],
+                    }))
+                  }
+                : undefined
+            }
           />
         </PopoverWrapper>
-      }
+      )}
     </DebouncedInput>
   )
 }

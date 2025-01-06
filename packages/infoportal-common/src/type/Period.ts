@@ -6,7 +6,6 @@ export interface Period {
 }
 
 export class PeriodHelper {
-
   static readonly isDateIn = (period: Partial<Period>, date?: Date) => {
     if (date) {
       if (period?.start && period.start.getTime() > date.getTime()) return false

@@ -1,4 +1,11 @@
-import {AuthenticationResult, Configuration, EventMessage, EventType, PopupRequest, PublicClientApplication} from '@azure/msal-browser'
+import {
+  AuthenticationResult,
+  Configuration,
+  EventMessage,
+  EventType,
+  PopupRequest,
+  PublicClientApplication,
+} from '@azure/msal-browser'
 import type {AppConfig} from '@/conf/AppConfig'
 
 export const getMsalInstance = (config: AppConfig) => {
@@ -7,23 +14,23 @@ export const getMsalInstance = (config: AppConfig) => {
       clientId: config.microsoft.clientId,
       authority: 'https://login.microsoftonline.com/' + config.microsoft.authority,
       redirectUri: '/',
-      postLogoutRedirectUri: '/'
+      postLogoutRedirectUri: '/',
     },
     system: {
-      allowNativeBroker: false // Disables WAM Broker
+      allowNativeBroker: false, // Disables WAM Broker
     },
   }
 
   // Add here scopes for id token to be used at MS Identity Platform endpoints.
   const loginRequest: PopupRequest = {
-    scopes: ['User.Read']
+    scopes: ['User.Read'],
   }
 
   // TO get picture me/photo/$value
 
   // Add here the endpoints for MS Graph API services you would like to use.
   const graphConfig = {
-    graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me'
+    graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me',
   }
 
   const msalInstance = new PublicClientApplication(msalConfig)

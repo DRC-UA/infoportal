@@ -17,7 +17,7 @@ export const CfmAccess = () => {
   const ctx = useCfmContext()
 
   const _get = useFetcher(() => api.access.search({featureId: AppFeatureId.cfm}))
-  const _remove = useAsync(api.access.remove, {requestKey: _ => _[0]})
+  const _remove = useAsync(api.access.remove, {requestKey: (_) => _[0]})
 
   const refresh = () => {
     _get.fetch({force: true, clean: false})
@@ -39,10 +39,13 @@ export const CfmAccess = () => {
           header={
             ctx.authorizations.sum.admin && (
               <CfmAccessForm onAdded={refresh}>
-                <IpBtn sx={{mr: 1}} variant="contained" icon="person_add">{m.grantAccess}</IpBtn>
+                <IpBtn sx={{mr: 1}} variant="contained" icon="person_add">
+                  {m.grantAccess}
+                </IpBtn>
               </CfmAccessForm>
             )
-          }/>
+          }
+        />
       </Panel>
     </Page>
   )

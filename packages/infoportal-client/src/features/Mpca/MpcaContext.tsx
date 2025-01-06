@@ -19,8 +19,8 @@ import {Kobo} from 'kobo-sdk'
 
 interface UpdateTag<K extends keyof MpcaTypeTag> {
   formId?: Kobo.FormId
-  answerIds: Kobo.SubmissionId[],
-  key: K,
+  answerIds: Kobo.SubmissionId[]
+  key: K
   value: MpcaTypeTag[K] | null
 }
 
@@ -35,14 +35,12 @@ const Context = React.createContext({} as MpcaContext)
 
 export const useMpcaContext = () => useContext(Context)
 
-export const MpcaProvider = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const MpcaProvider = ({children}: {children: ReactNode}) => {
   const {api} = useAppSettings()
 
-  const fetcherData = useFetcher((_?: KoboAnswerFilter) => api.mpca.search(_).then(_ => seq(_.data)) as Promise<Seq<MpcaEntity>>)
+  const fetcherData = useFetcher(
+    (_?: KoboAnswerFilter) => api.mpca.search(_).then((_) => seq(_.data)) as Promise<Seq<MpcaEntity>>,
+  )
   const dataIndex = useMemo(() => {
     const index: Record<Kobo.SubmissionId, number> = {}
     fetcherData.get?.forEach((_, i) => {
@@ -61,18 +59,13 @@ export const MpcaProvider = ({
   }, [])
 
   const mappedData = useMemo(() => {
-    return fetcherData.get?.map(_ => {
+    return fetcherData.get?.map((_) => {
       _.amountUahCommitted = _.tags?.status === CashStatus.Paid ? _.amountUahFinal : 0
       return _
     })
   }, [fetcherData.get])
 
-  const asyncUpdates = useAsync(async <K extends keyof MpcaTypeTag>({
-    formId,
-    answerIds,
-    key,
-    value
-  }: UpdateTag<K>) => {
+  const asyncUpdates = useAsync(async <K extends keyof MpcaTypeTag>({formId, answerIds, key, value}: UpdateTag<K>) => {
     if (formId) {
       await updateByFormId({
         formId,
@@ -81,16 +74,18 @@ export const MpcaProvider = ({
         value,
       })
     } else {
-      const data = answerIds.map(_ => fetcherData.get![dataIndex[_]])
-      const gb = seq(data).groupBy(_ => _.formId)
-      await Promise.all(Obj.entries(gb).map(([formId, answers]) => {
-        return updateByFormId({
-          formId,
-          answerIds: answers.map(_ => _.id),
-          key,
-          value,
-        })
-      }))
+      const data = answerIds.map((_) => fetcherData.get![dataIndex[_]])
+      const gb = seq(data).groupBy((_) => _.formId)
+      await Promise.all(
+        Obj.entries(gb).map(([formId, answers]) => {
+          return updateByFormId({
+            formId,
+            answerIds: answers.map((_) => _.id),
+            key,
+            value,
+          })
+        }),
+      )
     }
   })
 
@@ -98,7 +93,7 @@ export const MpcaProvider = ({
     formId,
     answerIds,
     key,
-    value
+    value,
   }: NonNullableKey<UpdateTag<K>, 'formId'>) => {
     const newTags = {[key]: value}
     await api.kobo.answer.updateTag({
@@ -106,9 +101,9 @@ export const MpcaProvider = ({
       answerIds: answerIds,
       tags: newTags,
     })
-    fetcherData.set(prev => {
+    fetcherData.set((prev) => {
       const copy = prev ? seq([...prev]) : seq([])
-      answerIds.forEach(id => {
+      answerIds.forEach((id) => {
         copy[dataIndex[id]].tags = {
           ...copy[dataIndex[id]].tags,
           ...newTags,
@@ -118,14 +113,15 @@ export const MpcaProvider = ({
     })
   }
 
-
   return (
-    <Context.Provider value={{
-      data: mappedData,
-      fetcherData,
-      refresh: asyncRefresh,
-      asyncUpdates,
-    }}>
+    <Context.Provider
+      value={{
+        data: mappedData,
+        fetcherData,
+        refresh: asyncRefresh,
+        asyncUpdates,
+      }}
+    >
       {children}
     </Context.Provider>
   )

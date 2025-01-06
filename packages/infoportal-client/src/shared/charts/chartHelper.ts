@@ -23,21 +23,22 @@ export const makeChartData: {
 }
 
 export class ChartHelper<K extends string = string> {
-
   static readonly single = <K extends string>({
     data,
     percent,
     filterValue,
   }: {
-    data: K[],
-    filterValue?: K[],
+    data: K[]
+    filterValue?: K[]
     percent?: boolean
   }): ChartHelper<K> => {
-    const obj = seq(data.filter(_ => filterValue ? !filterValue.includes(_) : true)).reduceObject<Record<K, number>>((curr, acc) => {
+    const obj = seq(data.filter((_) => (filterValue ? !filterValue.includes(_) : true))).reduceObject<
+      Record<K, number>
+    >((curr, acc) => {
       return [curr, (acc[curr] ?? 0) + 1]
     })
     const res = {} as ChartData<K>
-    Obj.keys(obj).forEach(k => {
+    Obj.keys(obj).forEach((k) => {
       res[k] = {value: obj[k] / (percent ? data.length : 1)}
     })
     return new ChartHelper(res).sortBy.value()
@@ -48,21 +49,25 @@ export class ChartHelper<K extends string = string> {
     base = 'percentOfTotalAnswers',
     filterValue,
   }: {
-    data: Seq<K[] | undefined>,
-    filterValue?: K[],
-    base?: 'percentOfTotalAnswers' | 'percentOfTotalChoices',
+    data: Seq<K[] | undefined>
+    filterValue?: K[]
+    base?: 'percentOfTotalAnswers' | 'percentOfTotalChoices'
   }): ChartHelper<K> => {
-    const filteredData = data.compact().filter(_ => {
+    const filteredData = data.compact().filter((_) => {
       return filterValue ? seq(_).intersect(filterValue).length === 0 : true
     })
-    const flatData: K[] = filteredData.flatMap(_ => _)
+    const flatData: K[] = filteredData.flatMap((_) => _)
     const obj = seq(flatData).reduceObject<Record<K, number>>((_, acc) => [_!, (acc[_!] ?? 0) + 1])
-    const baseCount = fnSwitch(base!, {
-      percentOfTotalAnswers: filteredData.length,
-      percentOfTotalChoices: flatData.length,
-    }, _ => undefined)
+    const baseCount = fnSwitch(
+      base!,
+      {
+        percentOfTotalAnswers: filteredData.length,
+        percentOfTotalChoices: flatData.length,
+      },
+      (_) => undefined,
+    )
     const res = {} as ChartData<K>
-    Obj.keys(obj).forEach(k => {
+    Obj.keys(obj).forEach((k) => {
       if (!res[k]) res[k] = {value: 0, base: 0}
       res[k].value = obj[k]
       res[k].base = baseCount
@@ -75,7 +80,7 @@ export class ChartHelper<K extends string = string> {
     filter,
     categories,
     filterBase,
-    filterZeroCategory
+    filterZeroCategory,
   }: {
     data: A[]
     filter: (_: A) => boolean | undefined
@@ -83,8 +88,11 @@ export class ChartHelper<K extends string = string> {
     filterZeroCategory?: boolean
     categories: Record<K, (_: A) => boolean>
   }): ChartHelper<K> => {
-    const res = Obj.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0, percent: 0}}), {} as Record<K, ChartDataValPercent>)
-    data.forEach(x => {
+    const res = Obj.keys(categories).reduce(
+      (acc, category) => ({...acc, [category]: {value: 0, base: 0, percent: 0}}),
+      {} as Record<K, ChartDataValPercent>,
+    )
+    data.forEach((x) => {
       Obj.entries(categories).forEach(([category, isCategory]) => {
         if (!isCategory(x)) return
         if (filterBase && !filterBase(x)) return
@@ -97,36 +105,37 @@ export class ChartHelper<K extends string = string> {
       })
     })
     if (filterZeroCategory) {
-      Obj.keys(res).forEach(k => {
+      Obj.keys(res).forEach((k) => {
         if (res[k].value === 0) delete res[k]
       })
     }
     return new ChartHelper(res)
   }
 
-  constructor(private value: ChartData<K>) {
-  }
+  constructor(private value: ChartData<K>) {}
 
   readonly get = () => this.value
 
-  static readonly filterValue = <K extends string>(fn: (_: ChartDataVal) => boolean) => (obj: ChartData<K>): ChartData<K> => {
-    return Obj.filterValue(obj, fn) as any
-  }
+  static readonly filterValue =
+    <K extends string>(fn: (_: ChartDataVal) => boolean) =>
+    (obj: ChartData<K>): ChartData<K> => {
+      return Obj.filterValue(obj, fn) as any
+    }
 
   readonly filterValue = (fn: (_: ChartDataVal) => boolean) => {
     this.value = ChartHelper.filterValue(fn)(this.value)
     return this
   }
 
-  static readonly take = <K extends string>(n?: number) => (obj: Record<K, ChartDataVal>): ChartData<K> => {
-    if (n)
-      return seq(Obj.entries(obj).splice(0, n)).reduceObject(_ => _)
-    return obj
-  }
+  static readonly take =
+    <K extends string>(n?: number) =>
+    (obj: Record<K, ChartDataVal>): ChartData<K> => {
+      if (n) return seq(Obj.entries(obj).splice(0, n)).reduceObject((_) => _)
+      return obj
+    }
 
   readonly map = (fn?: (_: ChartData<K>) => ChartData<K>) => {
-    if (fn)
-      this.value = fn(this.value)
+    if (fn) this.value = fn(this.value)
     return this
   }
 
@@ -136,11 +145,13 @@ export class ChartHelper<K extends string = string> {
   }
 
   static readonly sortBy = {
-    custom: <T extends string>(order: T[]) => <V>(obj: ChartData<T>): ChartData<T> => {
-      return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
-        return order.indexOf(aK) - order.indexOf(bK)
-      })
-    },
+    custom:
+      <T extends string>(order: T[]) =>
+      <V>(obj: ChartData<T>): ChartData<T> => {
+        return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
+          return order.indexOf(aK) - order.indexOf(bK)
+        })
+      },
     percent: <T extends string>(obj: ChartData<T>): ChartData<T> => {
       return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
         try {
@@ -157,9 +168,9 @@ export class ChartHelper<K extends string = string> {
     },
     label: <T extends string>(obj: ChartData<T>): ChartData<T> => {
       return Obj.sort(obj, ([aK, aV], [bK, bV]) => {
-        return (bV.label as string ?? '').localeCompare(aV.label as string ?? '')
+        return ((bV.label as string) ?? '').localeCompare((aV.label as string) ?? '')
       })
-    }
+    },
   }
 
   readonly sortBy = {
@@ -178,14 +189,14 @@ export class ChartHelper<K extends string = string> {
     label: (): ChartHelper<K> => {
       this.value = ChartHelper.sortBy.label(this.value)
       return this
-    }
+    },
   }
 
   static readonly groupBy = <A extends Record<string, any>, K extends string>({
     data,
     filter,
     filterBase,
-    groupBy
+    groupBy,
   }: {
     data: A[]
     groupBy: (_: A) => K | undefined
@@ -193,7 +204,7 @@ export class ChartHelper<K extends string = string> {
     filterBase?: (_: A) => boolean
   }): ChartData<K> => {
     const res: ChartData<any> = {} as any
-    data.forEach(x => {
+    data.forEach((x) => {
       const value = groupBy(x) ?? 'undefined'
       if (!res[value]) res[value] = {value: 0} as ChartDataVal
       if (filterBase && filterBase(x)) {
@@ -217,8 +228,11 @@ export class ChartHelper<K extends string = string> {
     sumBase?: (_: A) => number
     categories: Record<K, (_: A) => boolean>
   }): Record<K, ChartDataVal> => {
-    const res = Obj.keys(categories).reduce((acc, category) => ({...acc, [category]: {value: 0, base: 0}}), {} as Record<K, {value: number, base: 0}>)
-    data.forEach(x => {
+    const res = Obj.keys(categories).reduce(
+      (acc, category) => ({...acc, [category]: {value: 0, base: 0}}),
+      {} as Record<K, {value: number; base: 0}>,
+    )
+    data.forEach((x) => {
       Obj.entries(categories).forEach(([category, isCategory]) => {
         if (!isCategory(x)) return
         const base = sumBase ? sumBase(x) : 1
@@ -233,28 +247,30 @@ export class ChartHelper<K extends string = string> {
 
   readonly setLabel = (m?: Record<K, ReactNode>): ChartHelper<K> => {
     if (m) {
-      Obj.keys(this.value).forEach(k => {
+      Obj.keys(this.value).forEach((k) => {
         this.value[k].label = m[k]
       })
     }
     return this
   }
 
-  readonly setDesc = (m: Record<string, string>) => (data: ChartData): ChartData => {
-    Object.keys(data).forEach(k => {
-      data[k].desc = m[k]
-    })
-    return data
-  }
+  readonly setDesc =
+    (m: Record<string, string>) =>
+    (data: ChartData): ChartData => {
+      Object.keys(data).forEach((k) => {
+        data[k].desc = m[k]
+      })
+      return data
+    }
 
   static readonly percentage = <A>({
     data,
     value,
-    base
+    base,
   }: {
-    data: A[],
-    value: (a: A) => boolean,
-    base?: (a: A) => boolean,
+    data: A[]
+    value: (a: A) => boolean
+    base?: (a: A) => boolean
   }): ChartDataValPercent => {
     const v = seq(data).count(value)
     const b = (base ? seq(data).count(base) : data.length) || 1
@@ -270,7 +286,7 @@ export class ChartHelper<K extends string = string> {
     getDate: (_: F) => string | undefined
     percentageOf?: (_: F) => boolean
   }): ChartData<F> => {
-    const obj = seq(data).reduceObject<Record<string, {filter: number, total: number}>>((x, acc) => {
+    const obj = seq(data).reduceObject<Record<string, {filter: number; total: number}>>((x, acc) => {
       const date = getDate(x) ?? 'undefined'
       let value = acc[date]
       if (!value) value = {filter: 0, total: 0}

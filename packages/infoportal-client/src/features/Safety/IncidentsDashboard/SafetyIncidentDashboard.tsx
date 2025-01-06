@@ -4,12 +4,15 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
 import {SafetyIncidentDashboardBody} from '@/features/Safety/IncidentsDashboard/SafetyIncidentDashboardBody'
-import {SafetyIncidentProvider, useSafetyIncidentContext} from '@/features/Safety/IncidentsDashboard/SafetyIncidentContext'
+import {
+  SafetyIncidentProvider,
+  useSafetyIncidentContext,
+} from '@/features/Safety/IncidentsDashboard/SafetyIncidentContext'
 
 export const SafetyIncidentDashboard = () => {
   return (
     <SafetyIncidentProvider>
-      <SafetyIncidentDashboardWithContext/>
+      <SafetyIncidentDashboardWithContext />
     </SafetyIncidentProvider>
   )
 }
@@ -18,10 +21,7 @@ const SafetyIncidentDashboardWithContext = () => {
   const {m} = useI18n()
   const ctx = useSafetyIncidentContext()
   return (
-    <Page
-      width="lg"
-      loading={ctx.fetcherAnswer.loading}
-    >
+    <Page width="lg" loading={ctx.fetcherAnswer.loading}>
       <DataFilterLayout
         shapes={ctx.filterShape}
         filters={ctx.optionFilter}
@@ -35,7 +35,7 @@ const SafetyIncidentDashboardWithContext = () => {
             sx={{marginTop: '-6px'}}
             value={[ctx.period.start, ctx.period.end]}
             onChange={([start, end]) => {
-              ctx.setPeriod(prev => ({...prev, start: start ?? undefined, end: end ?? undefined}))
+              ctx.setPeriod((prev) => ({...prev, start: start ?? undefined, end: end ?? undefined}))
             }}
             label={[m.start, m.endIncluded]}
             min={ctx.fetcherPeriod.get?.start}
@@ -44,7 +44,7 @@ const SafetyIncidentDashboardWithContext = () => {
         }
       />
       <>
-        <SafetyIncidentDashboardBody/>
+        <SafetyIncidentDashboardBody />
         {/*<DashboardSafetyIncidentAgravatingFactors data={data} computed={computed}/>*/}
       </>
     </Page>

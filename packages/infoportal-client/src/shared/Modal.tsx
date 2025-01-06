@@ -1,6 +1,15 @@
 // import * as React from 'react'
 import {cloneElement, EventHandler, ReactElement, ReactNode, SyntheticEvent, useState} from 'react'
-import {Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, LinearProgress, PaperProps} from '@mui/material'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogProps,
+  DialogTitle,
+  LinearProgress,
+  PaperProps,
+} from '@mui/material'
 
 export interface ModalProps extends Omit<DialogProps, 'children' | 'onClick' | 'open' | 'content'> {
   disabled?: boolean
@@ -14,7 +23,7 @@ export interface ModalProps extends Omit<DialogProps, 'children' | 'onClick' | '
   onConfirm?: (event: SyntheticEvent<any>, close: () => void) => void
   confirmDisabled?: boolean
   onClick?: EventHandler<SyntheticEvent<any>>
-  PaperProps?: Partial<PaperProps>,
+  PaperProps?: Partial<PaperProps>
   loading?: boolean
   overrideActions?: (_: () => void) => ReactNode
 }
@@ -37,7 +46,6 @@ export const Modal = ({
   PaperProps,
   ...props
 }: ModalProps) => {
-
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const open = () => {
@@ -67,21 +75,25 @@ export const Modal = ({
           if (children.props.onClick) children.props.onClick(event)
           if (onClick) onClick(event)
           open()
-        }
+        },
       })}
       <Dialog open={isOpen} {...props} PaperProps={PaperProps}>
         {loading && (
-          <LinearProgress sx={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            left: 0,
-          }}/>
+          <LinearProgress
+            sx={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              left: 0,
+            }}
+          />
         )}
         <DialogTitle>{title}</DialogTitle>
-        <DialogContent>{(typeof content === 'function') ? content(close) : content}</DialogContent>
+        <DialogContent>{typeof content === 'function' ? content(close) : content}</DialogContent>
         <DialogActions>
-          {overrideActions ? overrideActions(close) : (
+          {overrideActions ? (
+            overrideActions(close)
+          ) : (
             <>
               <Button color="primary" onClick={close}>
                 {cancelLabel || 'Cancel'}

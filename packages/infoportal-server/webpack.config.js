@@ -5,9 +5,7 @@ const {PrismaPlugin} = require('@prisma/nextjs-monorepo-workaround-plugin')
 module.exports = {
   entry: './src/index.ts',
   target: 'node',
-  plugins: [
-    new PrismaPlugin()
-  ],
+  plugins: [new PrismaPlugin()],
   module: {
     rules: [
       {

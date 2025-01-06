@@ -1,9 +1,7 @@
 import {MapGeochartOffices} from '@/shared/maps/MapGeochartOffices'
 
 const uaMap = () => {
-  return (
-    <MapGeochartOffices/>
-  )
+  return <MapGeochartOffices />
 }
 
 export default uaMap

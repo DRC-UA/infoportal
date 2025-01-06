@@ -13,14 +13,14 @@ export interface ChartBarMultipleByProps<
   onClickData?: (_: R) => void
   limit?: number
   // sortBy?: typeof ChartHelper2.sortBy.value
-  data: Seq<D>,
+  data: Seq<D>
   mergeOptions?: Partial<Record<KeyOf<O>, KeyOf<O>>>
   label?: O
   filterValue?: KeyOf<O>[]
-  by: (_: D) => R[] | undefined,
+  by: (_: D) => R[] | undefined
   checked?: Record<NonNullable<R>, boolean>
   onToggle?: (_: R) => void
-  base?: 'percentOfTotalAnswers' | 'percentOfTotalChoices',
+  base?: 'percentOfTotalAnswers' | 'percentOfTotalChoices'
 }
 
 export const ChartBarMultipleBy = <
@@ -41,38 +41,45 @@ export const ChartBarMultipleBy = <
   mergeOptions,
 }: ChartBarMultipleByProps<D, K, O>) => {
   const res = useMemo(() => {
-    const source = data.map(d => {
-      if (by(d) === undefined) return
-      if (mergeOptions) {
-        return seq(by(d) as string[]).map(_ => (mergeOptions as any)[_] ?? _).distinct(_ => _).get()
-      }
-      return by(d)
-    }).compact()
+    const source = data
+      .map((d) => {
+        if (by(d) === undefined) return
+        if (mergeOptions) {
+          return seq(by(d) as string[])
+            .map((_) => (mergeOptions as any)[_] ?? _)
+            .distinct((_) => _)
+            .get()
+        }
+        return by(d)
+      })
+      .compact()
     return ChartHelper.multiple({
       data: source,
       filterValue,
       base,
-    }).setLabel(label).take(limit).get()
+    })
+      .setLabel(label)
+      .take(limit)
+      .get()
   }, [data, by, label])
 
   return (
     <ChartBar
       data={res}
-      onClickData={_ => onClickData?.(_ as K)}
-      labels={!onToggle ? undefined :
-        seq(Obj.keys(res)).reduceObject<Record<string, ReactNode>>((option => [
-            option,
-            <Checkbox
-              key={option as string}
-              size="small"
-              checked={(checked as any)?.[option] ?? false}
-              onChange={() => onToggle(option)}
-            />
-          ]
-        ))
+      onClickData={(_) => onClickData?.(_ as K)}
+      labels={
+        !onToggle
+          ? undefined
+          : seq(Obj.keys(res)).reduceObject<Record<string, ReactNode>>((option) => [
+              option,
+              <Checkbox
+                key={option as string}
+                size="small"
+                checked={(checked as any)?.[option] ?? false}
+                onChange={() => onToggle(option)}
+              />,
+            ])
       }
     />
   )
 }
-
-

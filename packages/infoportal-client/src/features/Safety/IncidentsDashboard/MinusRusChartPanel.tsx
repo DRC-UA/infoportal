@@ -33,12 +33,11 @@ interface MinusRusData {
 const parseMinusRus = (htmlPage: string) => {
   let fix20231224WrongDate = 0
   const mapped = (evalScript(htmlPage).state.sortedStoriesByDateDESC as any[])
-    .map(_ => _.content as MinusRusData)
+    .map((_) => _.content as MinusRusData)
     .map((_) => {
       if (format(new Date(_.date), 'yyyy-MM-dd') === '2023-12-25') {
         fix20231224WrongDate++
-        if (fix20231224WrongDate === 2)
-          _.date = new Date(2023, 11, 24)
+        if (fix20231224WrongDate === 2) _.date = new Date(2023, 11, 24)
       }
       return {
         ..._,
@@ -82,8 +81,13 @@ export const MinusRusChartPanel = () => {
   const {api} = useAppSettings()
   const {toastError} = useIpToast()
   const {m} = useI18n()
-  const fetcherMinusRus = useFetcher(() => api.proxyRequest('GET', 'https://russialoses-dev.herokuapp.com')
-    .then(parseMinusRus).catch(console.error) as Promise<Seq<MinusRusData>>)
+  const fetcherMinusRus = useFetcher(
+    () =>
+      api
+        .proxyRequest('GET', 'https://russialoses-dev.herokuapp.com')
+        .then(parseMinusRus)
+        .catch(console.error) as Promise<Seq<MinusRusData>>,
+  )
 
   const [minusRusDateFormat, setMinusRusDateFormat] = useState<string>('yyyy-MM-dd')
   const [minusRusCurveType, setMinusRusCurveType] = useState<'relative' | 'cumulative'>('relative')
@@ -120,20 +124,28 @@ export const MinusRusChartPanel = () => {
       {/*<Txt block dangerouslySetInnerHTML={{__html: m._dashboardSafetyIncident.dataTakenFromMinusRus}}/>*/}
       <Box sx={{my: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
         <ScRadioGroup inline dense value={minusRusCurveType} onChange={setMinusRusCurveType}>
-          <ScRadioGroupItem hideRadio value="relative">{m.relative}</ScRadioGroupItem>
-          <ScRadioGroupItem hideRadio value="cumulative">{m.cumulative}</ScRadioGroupItem>
+          <ScRadioGroupItem hideRadio value="relative">
+            {m.relative}
+          </ScRadioGroupItem>
+          <ScRadioGroupItem hideRadio value="cumulative">
+            {m.cumulative}
+          </ScRadioGroupItem>
         </ScRadioGroup>
         <ScRadioGroup inline dense value={minusRusDateFormat} onChange={setMinusRusDateFormat}>
-          <ScRadioGroupItem hideRadio value="yyyy-MM-dd">{m.daily}</ScRadioGroupItem>
-          <ScRadioGroupItem hideRadio value="yyyy-MM">{m.monthly}</ScRadioGroupItem>
+          <ScRadioGroupItem hideRadio value="yyyy-MM-dd">
+            {m.daily}
+          </ScRadioGroupItem>
+          <ScRadioGroupItem hideRadio value="yyyy-MM">
+            {m.monthly}
+          </ScRadioGroupItem>
         </ScRadioGroup>
         <IpSelectMultiple
           sx={{width: 200}}
-          options={minusResKeys.map(_ => ({value: _, children: m.safety.minusRusLabel[_]}))}
-          value={minusResKeys.filter(_ => minusRusCurves[_])}
-          onChange={e => {
-            setMinusRusCurves(prev => {
-              Obj.keys(prev).forEach(_ => {
+          options={minusResKeys.map((_) => ({value: _, children: m.safety.minusRusLabel[_]}))}
+          value={minusResKeys.filter((_) => minusRusCurves[_])}
+          onChange={(e) => {
+            setMinusRusCurves((prev) => {
+              Obj.keys(prev).forEach((_) => {
                 if (e.includes(_)) prev[_] = true
                 else prev[_] = false
               })
@@ -143,35 +155,53 @@ export const MinusRusChartPanel = () => {
         />
       </Box>
 
-      <Lazy deps={[fetcherMinusRus.get, minusRusDateFormat, minusRusCurveType, minusRusCurves]} fn={() => {
-        if (!fetcherMinusRus.get) return
-        const gb = fetcherMinusRus.get?.sortByNumber(_ => _.date.getTime()).groupBy(_ => format(_.date, minusRusDateFormat))
-        const res = Obj.entries(gb).map(([k, v]) => {
-          return {
-            name: k,
-            ...Obj.entries(minusRusCurves).filter(([curveK, isEnabled]) => isEnabled).reduce((acc, [curveK]) => ({
-              ...acc,
-              [curveK]: v.sum(_ => _[curveK])
-            }), {}),
-          }
-        })
-        if (minusRusCurveType === 'cumulative') return res
-        return res.filter((_, i) => i > 0).map((_, i) => ({
-          ..._,
-          ...Obj.entries(minusRusCurves).filter(([k, v]) => v).reduce((acc, [k]) => ({
-            ...acc,
-            // @ts-ignore
-            [k]: _[k] - res[i][k]
-          }), {}),
-        }))
-      }}>
-        {_ => (
+      <Lazy
+        deps={[fetcherMinusRus.get, minusRusDateFormat, minusRusCurveType, minusRusCurves]}
+        fn={() => {
+          if (!fetcherMinusRus.get) return
+          const gb = fetcherMinusRus.get
+            ?.sortByNumber((_) => _.date.getTime())
+            .groupBy((_) => format(_.date, minusRusDateFormat))
+          const res = Obj.entries(gb).map(([k, v]) => {
+            return {
+              name: k,
+              ...Obj.entries(minusRusCurves)
+                .filter(([curveK, isEnabled]) => isEnabled)
+                .reduce(
+                  (acc, [curveK]) => ({
+                    ...acc,
+                    [curveK]: v.sum((_) => _[curveK]),
+                  }),
+                  {},
+                ),
+            }
+          })
+          if (minusRusCurveType === 'cumulative') return res
+          return res
+            .filter((_, i) => i > 0)
+            .map((_, i) => ({
+              ..._,
+              ...Obj.entries(minusRusCurves)
+                .filter(([k, v]) => v)
+                .reduce(
+                  (acc, [k]) => ({
+                    ...acc,
+                    // @ts-ignore
+                    [k]: _[k] - res[i][k],
+                  }),
+                  {},
+                ),
+            }))
+        }}
+      >
+        {(_) => (
           <ChartLine
             loading={fetcherMinusRus.loading}
             hideLabelToggle
             height={280}
             data={_ as any}
-            translation={m.safety.minusRusLabel}/>
+            translation={m.safety.minusRusLabel}
+          />
         )}
       </Lazy>
     </SlidePanel>

@@ -50,7 +50,7 @@ const GbvSurveyHeader = () => {
         </Typography>
       </Box>
       <Box className={classes.logo}>
-        <DRCLogo height={24}/>
+        <DRCLogo height={24} />
       </Box>
     </Box>
   )

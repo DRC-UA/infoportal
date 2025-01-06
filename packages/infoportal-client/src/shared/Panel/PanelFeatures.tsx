@@ -23,41 +23,52 @@ export const PanelFeatures = ({
       allowTaint: true,
       backgroundColor: 'transparent',
       // backgroundColor: t.palette.background.default,
-    }).then(_ => Utils.openCanvasInNewTab(_, 'imaa-tools-static'))
+    }).then((_) => Utils.openCanvasInNewTab(_, 'imaa-tools-static'))
   }
 
   return (
-    <Box sx={{
-      ...expended ? {
-        zIndex: 9990,
-        position: 'fixed',
-        fontSize: 17,
-        top: 0,
-        right: 0,
-        left: 0,
-        bottom: 0,
-      } : {},
-      position: 'relative',
-      '&:hover .panel-features': {
-        display: 'block',
-      },
-    }}>
+    <Box
+      sx={{
+        ...(expended
+          ? {
+              zIndex: 9990,
+              position: 'fixed',
+              fontSize: 17,
+              top: 0,
+              right: 0,
+              left: 0,
+              bottom: 0,
+            }
+          : {}),
+        position: 'relative',
+        '&:hover .panel-features': {
+          display: 'block',
+        },
+      }}
+    >
       <Box ref={content}>{children}</Box>
-      <Box className="panel-features" sx={{
-        p: .5,
-        position: 'absolute',
-        display: 'none',
-        background: t => t.palette.background.paper,
-        top: 0,
-        right: 0,
-      }}>
+      <Box
+        className="panel-features"
+        sx={{
+          p: 0.5,
+          position: 'absolute',
+          display: 'none',
+          background: (t) => t.palette.background.paper,
+          top: 0,
+          right: 0,
+        }}
+      >
         {expendable && (
-          <IpIconBtn size="small" sx={{marginLeft: 'auto', p: 0, color: t => t.palette.text.disabled}} onClick={() => setExpended(_ => !_)}>
+          <IpIconBtn
+            size="small"
+            sx={{marginLeft: 'auto', p: 0, color: (t) => t.palette.text.disabled}}
+            onClick={() => setExpended((_) => !_)}
+          >
             {expended ? 'fullscreen_exit' : 'fullscreen'}
           </IpIconBtn>
         )}
         {savableAsImg && (
-          <IpIconBtn size="small" sx={{ml: 1, p: 0, color: t => t.palette.text.disabled}} onClick={saveAsImg}>
+          <IpIconBtn size="small" sx={{ml: 1, p: 0, color: (t) => t.palette.text.disabled}} onClick={saveAsImg}>
             download
           </IpIconBtn>
         )}

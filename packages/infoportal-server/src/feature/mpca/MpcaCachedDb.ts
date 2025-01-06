@@ -8,16 +8,13 @@ import Event = GlobalEvent.Event
 export class MpcaCachedDb {
   private static instance: MpcaCachedDb
 
-  static constructSingleton = (
-    prisma: PrismaClient,
-    service: MpcaDbService = new MpcaDbService(prisma),
-  ) => {
+  static constructSingleton = (prisma: PrismaClient, service: MpcaDbService = new MpcaDbService(prisma)) => {
     if (!MpcaCachedDb.instance) {
       const mem = MemoryDatabase.getCache()
       const cache = mem.register({
         name: 'mpca',
-        fetch: () => service.search({}).then(_ => _.data),
-        getId: _ => _.id,
+        fetch: () => service.search({}).then((_) => _.data),
+        getId: (_) => _.id,
       })
       this.instance = new MpcaCachedDb(cache)
     }
@@ -29,16 +26,18 @@ export class MpcaCachedDb {
     private event: GlobalEvent.Class = GlobalEvent.Class.getInstance(),
   ) {
     this.event.listen(Event.KOBO_TAG_EDITED, async (x) => {
-      if (![
-        KoboIndex.byName('bn_re').id,
-        KoboIndex.byName('bn_1_mpcaNfi').id,
-        KoboIndex.byName('bn_rapidResponse').id,
-        KoboIndex.byName('shelter_cashForRepair').id,
-      ].includes(x.formId)) {
+      if (
+        ![
+          KoboIndex.byName('bn_re').id,
+          KoboIndex.byName('bn_1_mpcaNfi').id,
+          KoboIndex.byName('bn_rapidResponse').id,
+          KoboIndex.byName('shelter_cashForRepair').id,
+        ].includes(x.formId)
+      ) {
         return
       }
-      x.answerIds.forEach(id => {
-        this.meme.update(id, prev => {
+      x.answerIds.forEach((id) => {
+        this.meme.update(id, (prev) => {
           prev.tags = {
             ...prev.tags,
             ...x.tags,

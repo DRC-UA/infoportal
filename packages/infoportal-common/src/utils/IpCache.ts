@@ -2,21 +2,20 @@ import {duration, Duration, filterUndefined, hashArgs, Obj} from '@alexandreanni
 import {Logger} from '../types'
 
 export interface IpCacheData<V> {
-  lastUpdate: Date;
-  expiration?: number;
-  value: V;
+  lastUpdate: Date
+  expiration?: number
+  value: V
 }
 
 export interface IpCacheParams {
-  ttlMs?: number,
-  cleaningCheckupInterval?: Duration,
+  ttlMs?: number
+  cleaningCheckupInterval?: Duration
 }
 
 export class IpCacheApp<Key extends string = string> {
-
   constructor(
     private cache: IpCache<Record<string, any>>,
-    private log: Logger
+    private log: Logger,
   ) {
     // setInterval(() => {
     //   console.log(this.cache.getAllKeys().map(k =>
@@ -38,11 +37,11 @@ export class IpCacheApp<Key extends string = string> {
     genIndex,
     ...params
   }: IpCacheParams & {
-    key: Key,
-    fn: (...p: P) => Promise<T>,
-    cacheIf?: (...p: P) => boolean,
+    key: Key
+    fn: (...p: P) => Promise<T>
+    cacheIf?: (...p: P) => boolean
     genIndex?: (...p: P) => string
-  }): (...p: P) => Promise<T> => {
+  }): ((...p: P) => Promise<T>) => {
     this.log.info(`Initialize cache ${key}.`)
     if (!this.cache.has(key)) {
       this.log.info(`Cache for ${key} not found. Initializing new cache.`)
@@ -73,7 +72,7 @@ export class IpCacheApp<Key extends string = string> {
     }
   }
 
-  readonly set = ({key, subKey, value}: {key: Key, subKey?: string, value: any}) => {
+  readonly set = ({key, subKey, value}: {key: Key; subKey?: string; value: any}) => {
     this.log.info(`Set cache ${key} ${subKey ? '/' + subKey : ''}`)
     if (subKey) {
       if (!this.cache.get(key)) this.cache.set(key, {})
@@ -92,9 +91,11 @@ export class IpCacheApp<Key extends string = string> {
 }
 
 export class IpCache<V = undefined> {
-
   /** @deprecated prefer to use GlobalCache for this app */
-  static readonly request = <T, P extends Array<any>>(fn: ((...p: P) => Promise<T>), params?: IpCacheParams): (...p: P) => Promise<T> => {
+  static readonly request = <T, P extends Array<any>>(
+    fn: (...p: P) => Promise<T>,
+    params?: IpCacheParams,
+  ): ((...p: P) => Promise<T>) => {
     const cache = new IpCache(params)
     return async (...p: P) => {
       const argsHashed = hashArgs(p)
@@ -108,10 +109,7 @@ export class IpCache<V = undefined> {
     }
   }
 
-  constructor({
-    ttlMs = duration(1, 'hour'),
-    cleaningCheckupInterval = duration(2, 'day'),
-  }: IpCacheParams = {}) {
+  constructor({ttlMs = duration(1, 'hour'), cleaningCheckupInterval = duration(2, 'day')}: IpCacheParams = {}) {
     this.ttlMs = ttlMs
     this.cleaningCheckupIntervalMs = cleaningCheckupInterval
     this.intervalRef = setInterval(this.cleanCheckup, cleaningCheckupInterval)
@@ -125,7 +123,8 @@ export class IpCache<V = undefined> {
 
   private cache: Map<string, IpCacheData<V>> = new Map()
 
-  private readonly isExpired = (_: IpCacheData<V>) => _.expiration && _.lastUpdate.getTime() + _.expiration < new Date().getTime()
+  private readonly isExpired = (_: IpCacheData<V>) =>
+    _.expiration && _.lastUpdate.getTime() + _.expiration < new Date().getTime()
 
   readonly get = <T = any>(key: string): undefined | (V extends undefined ? T : V) => {
     const data = this.cache.get(key)
@@ -140,7 +139,7 @@ export class IpCache<V = undefined> {
 
   readonly getAll = (): (V extends undefined ? any : V)[] => {
     this.cleanCheckup()
-    return filterUndefined(Array.from(this.cache.values()).map(_ => _.value)) as any
+    return filterUndefined(Array.from(this.cache.values()).map((_) => _.value)) as any
   }
 
   readonly getAllKeys = (): string[] => {
@@ -150,17 +149,18 @@ export class IpCache<V = undefined> {
 
   readonly getInfo = () => {
     this.cleanCheckup()
-    return Obj.mapValues(Object.fromEntries(this.cache), v => {
+    return Obj.mapValues(Object.fromEntries(this.cache), (v) => {
       if (typeof v.value === 'object') {
         return {
-          ...v, value: Obj.mapValues(v.value as any, v2 => {
+          ...v,
+          value: Obj.mapValues(v.value as any, (v2) => {
             try {
               const canStringfy = JSON.stringify(v2)
               return v2
             } catch (e) {
               return 'Cannot stringify'
             }
-          })
+          }),
         }
       }
       return v

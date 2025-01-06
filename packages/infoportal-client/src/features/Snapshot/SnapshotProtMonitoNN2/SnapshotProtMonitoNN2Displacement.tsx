@@ -1,6 +1,14 @@
 import React from 'react'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
-import {Div, PdfSlide, PdfSlideBody, SlideHeader, SlidePanel, SlidePanelTitle, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
+import {
+  Div,
+  PdfSlide,
+  PdfSlideBody,
+  SlideHeader,
+  SlidePanel,
+  SlidePanelTitle,
+  SlideTxt,
+} from '@/shared/PdfLayout/PdfSlide'
 import {useI18n} from '@/core/i18n'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
 import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
@@ -18,12 +26,15 @@ export const SnapshotProtMonitoNN2Displacement = () => {
       <PdfSlideBody>
         <Div>
           <Div column>
-            <SlideTxt sx={{mb: .5}} block>
-              IDPs surveyed in Mykolaiv Oblast are originally from Kherson Oblast and from different parts of Mykolaiv Oblast itself. The primary drivers prompting their departure
-              encompassed a range of factors, such as shelling and attacks on civilians, the destruction of critical infrastructure, housing, land, or property due to conflict, and
-              the pervasive fear of conscription. Notably, respondents reported that adult men often refrain from leaving their homes to evade conscription, and the requirement of
-              holding an exemption certificate adds an additional layer of limitation to their access to formal employment. A significant 90% of surveyed IDPs expressed their
-              intention to return to their place of habitual residence once the security situation improves.
+            <SlideTxt sx={{mb: 0.5}} block>
+              IDPs surveyed in Mykolaiv Oblast are originally from Kherson Oblast and from different parts of Mykolaiv
+              Oblast itself. The primary drivers prompting their departure encompassed a range of factors, such as
+              shelling and attacks on civilians, the destruction of critical infrastructure, housing, land, or property
+              due to conflict, and the pervasive fear of conscription. Notably, respondents reported that adult men
+              often refrain from leaving their homes to evade conscription, and the requirement of holding an exemption
+              certificate adds an additional layer of limitation to their access to formal employment. A significant 90%
+              of surveyed IDPs expressed their intention to return to their place of habitual residence once the
+              security situation improves.
             </SlideTxt>
 
             <SlidePanel>
@@ -35,8 +46,8 @@ export const SnapshotProtMonitoNN2Displacement = () => {
                 data={ctx.dataFiltered}
                 start={new Date(2022, 0, 1)}
                 curves={{
-                  [m.departureFromAreaOfOrigin]: _ => _.when_did_you_leave_your_area_of_origin,
-                  [m.returnToOrigin]: _ => _.when_did_you_return_to_your_area_of_origin,
+                  [m.departureFromAreaOfOrigin]: (_) => _.when_did_you_leave_your_area_of_origin,
+                  [m.returnToOrigin]: (_) => _.when_did_you_return_to_your_area_of_origin,
                 }}
                 label={[m.departureFromAreaOfOrigin, m.returnToOrigin]}
                 end={ctx.period.end}
@@ -45,17 +56,19 @@ export const SnapshotProtMonitoNN2Displacement = () => {
           </Div>
 
           <Div column>
-
             <SlidePanel>
               <SlidePanelTitle>{m.intentions}</SlidePanelTitle>
               <ChartBarSingleBy
                 data={ctx.dataIdps}
-                by={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence}
-                filter={_ => _.what_are_your_households_intentions_in_terms_of_place_of_residence !== 'unable_unwilling_to_answer'}
+                by={(_) => _.what_are_your_households_intentions_in_terms_of_place_of_residence}
+                filter={(_) =>
+                  _.what_are_your_households_intentions_in_terms_of_place_of_residence !== 'unable_unwilling_to_answer'
+                }
                 label={{
                   ...Protection_hhs3.options.what_are_your_households_intentions_in_terms_of_place_of_residence,
-                  integrate_into_the_local_community_of_current_place_of_residence: m.snapshotProtMonito.integrateIntoTheLocalCommunity,
-                  return_to_the_area_of_origin: m.returnToThePlaceOfHabitualResidence
+                  integrate_into_the_local_community_of_current_place_of_residence:
+                    m.snapshotProtMonito.integrateIntoTheLocalCommunity,
+                  return_to_the_area_of_origin: m.returnToThePlaceOfHabitualResidence,
                 }}
               />
             </SlidePanel>
@@ -65,11 +78,13 @@ export const SnapshotProtMonitoNN2Displacement = () => {
               <ChartBarMultipleBy
                 data={ctx.dataIdps}
                 filterValue={['unable_unwilling_to_answer']}
-                by={_ => _.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin}
+                by={(_) => _.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin}
                 label={{
                   ...Protection_hhs3.options.what_would_be_the_deciding_factor_in_your_return_to_your_area_of_origin,
-                  increased_restored_access_to_livelihood_employment_and_economic_opportunities: 'Increased/restored access to livelihood/employment',
-                  repaired_housing_compensation_for_destroyedor_damaged_property: 'Repaired housing/compensation for damaged property',
+                  increased_restored_access_to_livelihood_employment_and_economic_opportunities:
+                    'Increased/restored access to livelihood/employment',
+                  repaired_housing_compensation_for_destroyedor_damaged_property:
+                    'Repaired housing/compensation for damaged property',
                 }}
                 // mergeOptions={{
                 //   cessation_of_hostilities: 'improved_security_situation',
@@ -81,14 +96,14 @@ export const SnapshotProtMonitoNN2Displacement = () => {
               <ChartBarMultipleBy
                 data={ctx.dataIdps}
                 filterValue={['unable_unwilling_to_answer']}
-                by={_ => _.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community}
+                by={(_) => _.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community}
                 label={{
-                  ...Protection_hhs3.options.what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community,
+                  ...Protection_hhs3.options
+                    .what_factors_would_be_key_to_support_your_successful_integration_into_the_local_community,
                   access_to_essential_services: 'Access to essential services',
                 }}
               />
             </SlidePanel>
-
           </Div>
         </Div>
         {/*<Div>*/}

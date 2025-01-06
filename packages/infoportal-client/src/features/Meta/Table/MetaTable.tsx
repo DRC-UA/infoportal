@@ -3,7 +3,15 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {AILocationHelper, DrcProject, IKoboMeta, KoboIndex, KoboMetaStatus, koboMetaStatusLabel, PersonDetails} from 'infoportal-common'
+import {
+  AILocationHelper,
+  DrcProject,
+  IKoboMeta,
+  KoboIndex,
+  KoboMetaStatus,
+  koboMetaStatusLabel,
+  PersonDetails,
+} from 'infoportal-common'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {IpIconBtn} from '@/shared/IconBtn'
@@ -41,10 +49,10 @@ export const MetaTable = () => {
   }, [])
 
   const mappedData: Data[] = useMemo(() => {
-    const source = ctx.data.data.filter(_ => _.status !== KoboMetaStatus.Rejected)
-    const byPhone = source.groupBy(_ => _.phone ?? '')
-    const byTax = source.groupBy(_ => _.taxId ?? '')
-    return ctx.data.data.map(_ => {
+    const source = ctx.data.data.filter((_) => _.status !== KoboMetaStatus.Rejected)
+    const byPhone = source.groupBy((_) => _.phone ?? '')
+    const byTax = source.groupBy((_) => _.taxId ?? '')
+    return ctx.data.data.map((_) => {
       return {
         ..._,
         duplicatedPhone: _.phone ? byPhone[_.phone]?.length : undefined,
@@ -61,9 +69,9 @@ export const MetaTable = () => {
         head: m.status,
         width: 0,
         align: 'center',
-        render: _ => {
+        render: (_) => {
           return {
-            label: <OptionLabelTypeCompact type={koboMetaStatusLabel[_.status!]}/>,
+            label: <OptionLabelTypeCompact type={koboMetaStatusLabel[_.status!]} />,
             value: _.status,
             option: _.status,
           }
@@ -73,110 +81,113 @@ export const MetaTable = () => {
         type: 'id',
         id: 'id',
         head: m.koboId,
-        typeIcon: <DatatableHeadIconByType type="id"/>,
+        typeIcon: <DatatableHeadIconByType type="id" />,
         className: 'td-id',
-        renderQuick: _ => _.koboId,
+        renderQuick: (_) => _.koboId,
       },
       {
         type: 'date',
         id: 'date',
         head: m.date,
-        render: _ => {
+        render: (_) => {
           return {
             value: _.date,
             label: formatDate(_.date),
             tooltip: formatDateTime(_.date),
           }
-        }
+        },
       },
       {
         type: 'date',
         id: 'lastStatusUpdate',
         head: m.lastStatusUpdate,
-        render: _ => {
+        render: (_) => {
           return {
             value: _.lastStatusUpdate,
             label: formatDate(_.lastStatusUpdate),
             tooltip: formatDateTime(_.lastStatusUpdate),
           }
-        }
+        },
       },
       {
         id: 'formId',
         head: m.form,
         type: 'select_one',
-        render: _ => {
+        render: (_) => {
           const f = KoboIndex.searchById(_.formId)
-          if (!f) return {
-            value: undefined,
-            label: ''
-          }
+          if (!f)
+            return {
+              value: undefined,
+              label: '',
+            }
           return {
             value: f.translation,
             option: f.translation,
             label: (
-              <Link target="_blank" href={conf.linkToFeature(
-                AppFeatureId.kobo_database,
-                databaseIndex.siteMap.database.absolute(f.id))
-              }>
+              <Link
+                target="_blank"
+                href={conf.linkToFeature(AppFeatureId.kobo_database, databaseIndex.siteMap.database.absolute(f.id))}
+              >
                 <Txt link>{f.translation}</Txt>
-                <Icon fontSize="inherit" color="primary" style={{marginLeft: 2, verticalAlign: 'middle'}}>open_in_new</Icon>
+                <Icon fontSize="inherit" color="primary" style={{marginLeft: 2, verticalAlign: 'middle'}}>
+                  open_in_new
+                </Icon>
               </Link>
-            )
+            ),
           }
-        }
+        },
       },
       {
         id: 'ofice',
         type: 'select_one',
         head: m.office,
-        renderQuick: _ => _.office,
+        renderQuick: (_) => _.office,
       },
       {
         id: 'oblast',
         type: 'select_one',
         head: m.oblast,
-        renderQuick: _ => _.oblast,
+        renderQuick: (_) => _.oblast,
       },
       {
         id: 'sector',
         type: 'select_one',
         head: m.sector,
-        renderQuick: _ => _.sector,
+        renderQuick: (_) => _.sector,
       },
       {
         id: 'activity',
         type: 'select_one',
         head: m.activity,
-        renderQuick: _ => _.activity,
+        renderQuick: (_) => _.activity,
       },
       {
         id: 'project',
         type: 'select_multiple',
         head: m.project,
         options: () => [...DatatableUtils.buildOptionByEnum(DrcProject), DatatableUtils.blankOption],
-        renderQuick: _ => _.project,
+        renderQuick: (_) => _.project,
       },
       {
         id: 'raion',
         type: 'select_one',
         head: m.raion,
-        renderQuick: _ => _.raion,
+        renderQuick: (_) => _.raion,
       },
       {
         id: 'hromada',
         type: 'select_one',
         head: m.hromada,
-        renderQuick: _ => _.hromada,
+        renderQuick: (_) => _.hromada,
       },
       {
         id: 'settlement',
         type: 'select_one',
         head: m.settlement,
-        render: _ => {
+        render: (_) => {
           const value = fetcherSettlement.get ? fetcherSettlement.get[_.settlement!]?.en : _.settlement
           return {
-            label: fetcherSettlement.loading ? <Skeleton/> : value,
+            label: fetcherSettlement.loading ? <Skeleton /> : value,
             value,
           }
         },
@@ -185,16 +196,21 @@ export const MetaTable = () => {
         type: 'string',
         id: 'taxId',
         head: m.taxID,
-        renderQuick: _ => _.taxId,
+        renderQuick: (_) => _.taxId,
       },
       {
         id: 'taxIdImg',
         align: 'center',
         head: m.taxIdPhoto,
         type: 'string',
-        render: _ => {
+        render: (_) => {
           return {
-            label: _.taxIdFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath({baseUrl: conf.apiURL, formId: _.formId, url: _.taxIdFileUrl})}/>,
+            label: _.taxIdFileUrl && (
+              <TableImg
+                tooltipSize={650}
+                url={getKoboImagePath({baseUrl: conf.apiURL, formId: _.formId, url: _.taxIdFileUrl})}
+              />
+            ),
             export: _.taxIdFileUrl,
             value: _.taxIdFileName,
           }
@@ -204,16 +220,21 @@ export const MetaTable = () => {
         type: 'string',
         id: 'passport',
         head: m.passportNumber,
-        renderQuick: _ => _.passportNum,
+        renderQuick: (_) => _.passportNum,
       },
       {
         id: 'idImg',
         align: 'center',
         head: m.idPhoto,
         type: 'string',
-        render: _ => {
+        render: (_) => {
           return {
-            label: _.idFileUrl && <TableImg tooltipSize={650} url={getKoboImagePath({baseUrl: conf.apiURL, formId: _.formId, url: _.idFileUrl})}/>,
+            label: _.idFileUrl && (
+              <TableImg
+                tooltipSize={650}
+                url={getKoboImagePath({baseUrl: conf.apiURL, formId: _.formId, url: _.idFileUrl})}
+              />
+            ),
             export: _.idFileUrl,
             value: _.idFileName,
           }
@@ -223,56 +244,80 @@ export const MetaTable = () => {
         type: 'number',
         id: 'duplicatedTax',
         head: m.taxIdOccurrences,
-        renderQuick: _ => _.duplicatedTax,
+        renderQuick: (_) => _.duplicatedTax,
       },
       {
         type: 'string',
         id: 'phone',
         head: m.phone,
-        renderQuick: _ => _.phone ? session.admin ? _.phone : '*******' + _.phone.substring(_.phone.length - 3) : undefined,
+        renderQuick: (_) =>
+          _.phone ? (session.admin ? _.phone : '*******' + _.phone.substring(_.phone.length - 3)) : undefined,
       },
       {
         type: 'number',
         id: 'duplicatedPhone',
         head: m.phoneOccurrences,
-        renderQuick: _ => _.duplicatedPhone,
+        renderQuick: (_) => _.duplicatedPhone,
       },
-      ...session.admin ? [{
-        type: 'select_one',
-        id: 'enumerator',
-        head: m.enumerator,
-        renderQuick: _ => _.enumerator,
-      } as DatatableColumn.Props<Data>] : [],
+      ...(session.admin
+        ? [
+            {
+              type: 'select_one',
+              id: 'enumerator',
+              head: m.enumerator,
+              renderQuick: (_) => _.enumerator,
+            } as DatatableColumn.Props<Data>,
+          ]
+        : []),
       {
         type: 'number',
         id: 'individuals',
         head: m.individuals,
-        renderQuick: _ => _.personsCount,
+        renderQuick: (_) => _.personsCount,
       },
       {
         type: 'number',
         id: 'individuals-details',
         head: m.individuals,
-        render: _ => {
+        render: (_) => {
           return {
             label: (
               <PopoverWrapper
-                content={close => _.persons ? (
-                  <Datatable<PersonDetails>
-                    header={<IpIconBtn style={{marginLeft: 'auto'}} onClick={close}>close</IpIconBtn>}
-                    hideColumnsToggle
-                    hidePagination
-                    defaultLimit={200}
-                    id="meta-table-persons"
-                    data={_.persons}
-                    columns={[
-                      {type: 'number', id: 'age', head: m.age, renderQuick: _ => _.age},
-                      {type: 'select_one', id: 'gender', head: m.gender, renderQuick: _ => _.gender},
-                      {width: 120, type: 'select_one', id: 'displacement', head: m.displacementStatus, renderQuick: _ => _.displacement},
-                      {width: 220, type: 'select_one', id: 'disability', head: m.disability, renderQuick: _ => _.disability?.map(d => m.disability_[d]).join(', ')},
-                    ]}
-                  />
-                ) : undefined}>
+                content={(close) =>
+                  _.persons ? (
+                    <Datatable<PersonDetails>
+                      header={
+                        <IpIconBtn style={{marginLeft: 'auto'}} onClick={close}>
+                          close
+                        </IpIconBtn>
+                      }
+                      hideColumnsToggle
+                      hidePagination
+                      defaultLimit={200}
+                      id="meta-table-persons"
+                      data={_.persons}
+                      columns={[
+                        {type: 'number', id: 'age', head: m.age, renderQuick: (_) => _.age},
+                        {type: 'select_one', id: 'gender', head: m.gender, renderQuick: (_) => _.gender},
+                        {
+                          width: 120,
+                          type: 'select_one',
+                          id: 'displacement',
+                          head: m.displacementStatus,
+                          renderQuick: (_) => _.displacement,
+                        },
+                        {
+                          width: 220,
+                          type: 'select_one',
+                          id: 'disability',
+                          head: m.disability,
+                          renderQuick: (_) => _.disability?.map((d) => m.disability_[d]).join(', '),
+                        },
+                      ]}
+                    />
+                  ) : undefined
+                }
+              >
                 <IpBtn>{_.persons?.length ?? 0}</IpBtn>
               </PopoverWrapper>
             ),
@@ -289,26 +334,26 @@ export const MetaTable = () => {
       <Panel>
         <Datatable
           showExportBtn
-          header={props => (
+          header={(props) => (
             <PopoverWrapper
               popoverProps={{
                 slotProps: {
                   paper: {
-                    sx: {minWidth: 510}
-                  }
-                }
+                    sx: {minWidth: 510},
+                  },
+                },
               }}
               content={() => (
                 <AgeGroupTable
                   tableId="useCustomHeader"
                   enableDisplacementStatusFilter
                   enablePwdFilter
-                  persons={props.filteredData.flatMap(_ => _.persons ?? [])}
+                  persons={props.filteredData.flatMap((_) => _.persons ?? [])}
                   sx={{p: 1}}
                 />
               )}
             >
-              <IpIconBtn children="group"/>
+              <IpIconBtn children="group" />
             </PopoverWrapper>
           )}
           id="meta"
@@ -318,5 +363,4 @@ export const MetaTable = () => {
       </Panel>
     </Page>
   )
-
 }

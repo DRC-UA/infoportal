@@ -20,21 +20,26 @@ export interface WfpDbSearch {
 }
 
 export class WfpDeduplicationService {
-
   constructor(
     private prisma: PrismaClient,
     private access: AccessService = new AccessService(prisma),
     private conf = appConf,
     private event = GlobalEvent.Class.getInstance(),
-  ) {
-  }
+  ) {}
 
   readonly searchByUserAccess = async (search: WfpDbSearch, user: UserSession) => {
     const accesses = await this.access.searchForUser({featureId: AppFeatureId.wfp_deduplication, user})
-    const authorizedOffices = [...new Set(seq(accesses).flatMap(_ => _.params?.filters?.office!).compact())]
-    const filteredOffices = (user.admin || authorizedOffices.length === 0)
-      ? search.offices
-      : authorizedOffices.filter(_ => !search.offices || search.offices.includes(_))
+    const authorizedOffices = [
+      ...new Set(
+        seq(accesses)
+          .flatMap((_) => _.params?.filters?.office!)
+          .compact(),
+      ),
+    ]
+    const filteredOffices =
+      user.admin || authorizedOffices.length === 0
+        ? search.offices
+        : authorizedOffices.filter((_) => !search.offices || search.offices.includes(_))
     return this.search({...search, offices: filteredOffices})
   }
 
@@ -46,7 +51,7 @@ export class WfpDeduplicationService {
       },
       office: {in: search.offices},
       beneficiary: {
-        taxId: {in: search.taxId}
+        taxId: {in: search.taxId},
       },
     }
     const [totalSize, data] = await Promise.all([
@@ -56,36 +61,41 @@ export class WfpDeduplicationService {
           beneficiary: {
             select: {
               taxId: true,
-            }
-          }
+            },
+          },
         },
         where,
         take: search.limit,
         skip: search.offset,
         orderBy: {
           createdAt: 'desc',
-        }
+        },
       }),
     ])
-    return ApiPaginateHelper.wrap(totalSize)(data.map((_: any): WfpDeduplication => {
-      _.suggestion = getDrcSuggestion(_)
-      _.taxId = _.beneficiary.taxId
-      return _
-    }))
+    return ApiPaginateHelper.wrap(totalSize)(
+      data.map((_: any): WfpDeduplication => {
+        _.suggestion = getDrcSuggestion(_)
+        _.taxId = _.beneficiary.taxId
+        return _
+      }),
+    )
   }
 
   readonly uploadTaxId = async (filePath: string) => {
     const xls = await XlsxPopulate.fromFileAsync(filePath)
-    const data = xls.activeSheet()._rows
-      .splice(1)
-      .map(_ => ({beneficiaryId: _.cell(1).value() as string, taxId: '' + _.cell(2).value() as string}))
-    await PromisePool.for(data).withConcurrency(this.conf.db.maxConcurrency).process((_: any) =>
-      this.prisma.mpcaWfpDeduplicationIdMapping.upsert({
-        update: _,
-        where: {beneficiaryId: _.beneficiaryId},
-        create: _,
-      })
-    )
+    const data = xls
+      .activeSheet()
+      ._rows.splice(1)
+      .map((_) => ({beneficiaryId: _.cell(1).value() as string, taxId: ('' + _.cell(2).value()) as string}))
+    await PromisePool.for(data)
+      .withConcurrency(this.conf.db.maxConcurrency)
+      .process((_: any) =>
+        this.prisma.mpcaWfpDeduplicationIdMapping.upsert({
+          update: _,
+          where: {beneficiaryId: _.beneficiaryId},
+          create: _,
+        }),
+      )
     this.event.emit(Event.WFP_DEDUPLICATION_SYNCHRONIZED)
   }
 }

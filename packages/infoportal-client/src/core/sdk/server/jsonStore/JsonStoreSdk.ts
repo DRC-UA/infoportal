@@ -3,11 +3,11 @@ import {ApiClient} from '../ApiClient'
 import {UUID} from 'crypto'
 
 export type JsonStore<T> = {
-  id: UUID,
-  createdAt: Date,
-  updatedAt: Date,
-  updatedBy: string,
-  key: JsonStoreKey,
+  id: UUID
+  createdAt: Date
+  updatedAt: Date
+  updatedBy: string
+  key: JsonStoreKey
   value: T
 }
 
@@ -19,13 +19,11 @@ export type JsonStoreMpcaBudget = {
 }[]
 
 export enum JsonStoreKey {
-  MpcaBudget = 'MpcaBudget'
+  MpcaBudget = 'MpcaBudget',
 }
 
 export class JsonStoreSdk {
-
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   private readonly getRaw = <T>(key: JsonStoreKey.MpcaBudget): Promise<JsonStore<T>> => {
     return this.client.get(`/json-store/${key}`)
@@ -34,7 +32,7 @@ export class JsonStoreSdk {
   readonly getValue: {
     (key: JsonStoreKey.MpcaBudget): Promise<JsonStoreMpcaBudget>
   } = async (key) => {
-    const data = await this.getRaw<any>(key).then(_ => _.value)
+    const data = await this.getRaw<any>(key).then((_) => _.value)
     if (key === JsonStoreKey.MpcaBudget && !Array.isArray(data)) {
       throw new Error(`Except JsonStoreKey.MpcaBudget value to be of type Array`)
     }

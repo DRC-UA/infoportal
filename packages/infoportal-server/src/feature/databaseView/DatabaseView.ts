@@ -3,10 +3,9 @@ import {UUID} from 'infoportal-common'
 import {AppError} from '../../helper/Errors'
 
 export class DatabaseView {
-  constructor(private prisma: PrismaClient) {
-  }
+  constructor(private prisma: PrismaClient) {}
 
-  readonly search = ({databaseId, email}: {email?: string, databaseId?: string}) => {
+  readonly search = ({databaseId, email}: {email?: string; databaseId?: string}) => {
     return this.prisma.databaseView.findMany({
       include: {details: true},
       where: {
@@ -14,13 +13,13 @@ export class DatabaseView {
         OR: [
           {
             visibility: {
-              in: [DatabaseViewVisibility.Public, DatabaseViewVisibility.Sealed]
-            }
+              in: [DatabaseViewVisibility.Public, DatabaseViewVisibility.Sealed],
+            },
           },
           {
             createdBy: email,
-          }
-        ]
+          },
+        ],
       },
     })
   }
@@ -42,13 +41,15 @@ export class DatabaseView {
     updatedBy = 'unknown',
     body,
   }: {
-    viewId: UUID,
-    updatedBy?: string,
+    viewId: UUID
+    updatedBy?: string
     body: Pick<Prisma.DatabaseViewColCreateInput, 'name' | 'width' | 'visibility'>
   }) => {
-    const view = await this.prisma.databaseView.findFirst({select: {visibility: true, createdBy: true}, where: {id: viewId}})
-    if (!view)
-      throw new AppError.NotFound(`DatabaseView ${viewId}.`)
+    const view = await this.prisma.databaseView.findFirst({
+      select: {visibility: true, createdBy: true},
+      where: {id: viewId},
+    })
+    if (!view) throw new AppError.NotFound(`DatabaseView ${viewId}.`)
     if (view.visibility === DatabaseViewVisibility.Sealed && updatedBy !== view.createdBy)
       throw new AppError.Forbidden(`${updatedBy} cannot edit DatabaseView ${viewId}.`)
 
@@ -60,7 +61,7 @@ export class DatabaseView {
         },
         where: {
           id: viewId,
-        }
+        },
       }),
       this.prisma.databaseViewCol.upsert({
         where: {
@@ -78,8 +79,8 @@ export class DatabaseView {
           name: body.name,
           width: body.width,
           visibility: body.visibility,
-        }
-      })
+        },
+      }),
     ])
     return this.prisma.databaseView.findFirstOrThrow({include: {details: true}, where: {id: viewId}})
   }

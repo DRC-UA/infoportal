@@ -27,28 +27,30 @@ export const TableInput = ({
     <DebouncedInput<string>
       debounce={debounce}
       value={value}
-      onChange={_ => onChange(_ === '' || _ === originalValue ? undefined : _)}
+      onChange={(_) => onChange(_ === '' || _ === originalValue ? undefined : _)}
     >
       {(value, onChange) => (
         <IpInput
           helperText={null}
           value={value}
-          onChange={e => onChange(e.target.value)}
+          onChange={(e) => onChange(e.target.value)}
           endAdornment={
             <>
               {helper && (
-                <TableIcon tooltip={helper.text ?? undefined} color={helper.status}>{appConfig.iconStatus[helper.status]}</TableIcon>
+                <TableIcon tooltip={helper.text ?? undefined} color={helper.status}>
+                  {appConfig.iconStatus[helper.status]}
+                </TableIcon>
               )}
-              {value !== originalValue && originalValue !== null &&
+              {value !== originalValue && originalValue !== null && (
                 <IpIconBtn
                   disabled={props.disabled}
                   size="small"
-                  sx={{mr: -2, mt: .25}}
+                  sx={{mr: -2, mt: 0.25}}
                   onClick={() => onChange(originalValue ?? '')}
                 >
                   clear
                 </IpIconBtn>
-              }
+              )}
             </>
           }
           {...props}

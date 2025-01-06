@@ -5,9 +5,8 @@ import {useState} from 'react'
 type Key = number | string
 
 interface UseAsyncBase<F extends Func<Promise<any>>> {
-  call: F,
+  call: F
   callIndex: number
-
 }
 
 export interface UseAsyncSimple<F extends Func<Promise<any>>, E = any> extends UseAsyncBase<F> {
@@ -18,7 +17,7 @@ export interface UseAsyncSimple<F extends Func<Promise<any>>, E = any> extends U
 export interface UseAsyncMultiple<F extends Func<Promise<any>>, K extends Key = any, E = any> extends UseAsyncBase<F> {
   anyLoading: boolean
   lastError?: E
-  loading: Record<K, boolean>,
+  loading: Record<K, boolean>
   error: Record<K, E>
 }
 
@@ -26,16 +25,16 @@ export interface UseAsyncFn {
   <F extends Func<Promise<any>>, K extends Key = any, E = any>(
     caller: F,
     params: {
-      mapError?: (_: any) => E,
-      requestKey: (_: Parameters<F>) => K,
-    }
+      mapError?: (_: any) => E
+      requestKey: (_: Parameters<F>) => K
+    },
   ): UseAsyncMultiple<F, K, E>
   <F extends Func<Promise<any>>, K extends Key = any, E = any>(
     caller: F,
     params?: {
-      mapError?: (_: any) => E,
-      requestKey?: undefined,
-    }
+      mapError?: (_: any) => E
+      requestKey?: undefined
+    },
   ): UseAsyncSimple<F, E>
 }
 
@@ -47,12 +46,12 @@ const DEFAULT_KEY: any = 'DEFAULT_KEY'
 export const useAsync: UseAsyncFn = <F extends Func<Promise<any>>, K extends Key = any, E = any>(
   caller: F,
   {
-    mapError = _ => _,
-    requestKey
+    mapError = (_) => _,
+    requestKey,
   }: {
-    mapError?: (_: any) => E,
-    requestKey?: (_: Parameters<F>) => K,
-  } = {} as any
+    mapError?: (_: any) => E
+    requestKey?: (_: Parameters<F>) => K
+  } = {} as any,
 ) => {
   const loading = useMapIp<K, boolean>()
   const error = useMapIp<K, E>()
@@ -64,13 +63,13 @@ export const useAsync: UseAsyncFn = <F extends Func<Promise<any>>, K extends Key
     const key = requestKey ? requestKey(args) : DEFAULT_KEY
     loading.set(key, true)
     return caller(...args)
-      .then(_ => {
+      .then((_) => {
         loading.delete(key)
-        setCallIndex(_ => _ + 1)
+        setCallIndex((_) => _ + 1)
         return _
       })
       .catch((e: E) => {
-        setCallIndex(_ => _ + 1)
+        setCallIndex((_) => _ + 1)
         setLastError(e)
         loading.delete(key)
         error.set(key, mapError(e))
@@ -84,8 +83,8 @@ export const useAsync: UseAsyncFn = <F extends Func<Promise<any>>, K extends Key
     callIndex,
     lastError,
     anyLoading,
-    loading: requestKey ? loading.toObject : loading.get(DEFAULT_KEY) as any,
-    error: requestKey ? error.toObject : error.get(DEFAULT_KEY) as any,
+    loading: requestKey ? loading.toObject : (loading.get(DEFAULT_KEY) as any),
+    error: requestKey ? error.toObject : (error.get(DEFAULT_KEY) as any),
     call,
   }
 }

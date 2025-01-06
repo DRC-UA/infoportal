@@ -10,17 +10,17 @@ export interface ModalProviderProps {
   /**
    * Specifies the root element to render modals into
    */
-  container?: Element;
+  container?: Element
 
   /**
    * Container component for modal nodes
    */
-  rootComponent?: React.ComponentType<any>;
+  rootComponent?: React.ComponentType<any>
 
   /**
    * Subtree that will receive modal context
    */
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 /**
@@ -28,11 +28,7 @@ export interface ModalProviderProps {
  *
  * Provides modal context and renders ModalRoot.
  */
-export const ModalProvider = ({
-  container,
-  rootComponent,
-  children
-}: ModalProviderProps) => {
+export const ModalProvider = ({container, rootComponent, children}: ModalProviderProps) => {
   if (container && !(container instanceof HTMLElement)) {
     throw new Error(`Container must specify DOM element to mount modal root into.
 
@@ -42,15 +38,15 @@ export const ModalProvider = ({
   const [modals, setModals] = useState<Record<string, ReactNode>>({})
   const showModal = useCallback(
     (key: string, modal: ModalType<any>, props: any) =>
-      setModals(modals => ({
+      setModals((modals) => ({
         ...modals,
-        [key]: modal(props)
+        [key]: modal(props),
       })),
-    []
+    [],
   )
   const hideModal = useCallback(
     (key: string) =>
-      setModals(modals => {
+      setModals((modals) => {
         if (!modals[key]) {
           return modals
         }
@@ -58,7 +54,7 @@ export const ModalProvider = ({
         delete newModals[key]
         return newModals
       }),
-    []
+    [],
   )
   const contextValue = useMemo(() => ({showModal, hideModal}), [])
 
@@ -66,11 +62,7 @@ export const ModalProvider = ({
     <ModalContext.Provider value={contextValue}>
       <React.Fragment>
         {children}
-        <ModalRoot
-          modals={modals}
-          component={rootComponent}
-          container={container}
-        />
+        <ModalRoot modals={modals} component={rootComponent} container={container} />
       </React.Fragment>
     </ModalContext.Provider>
   )

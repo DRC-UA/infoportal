@@ -6,11 +6,7 @@ import {useState} from 'react'
 import {IpBtn} from '@/shared'
 import {useI18n} from '@/core/i18n'
 
-export const DatatableHeadCopyIds = ({
-  column
-}: {
-  column: DatatableColumn.InnerProps<any>
-}) => {
+export const DatatableHeadCopyIds = ({column}: {column: DatatableColumn.InnerProps<any>}) => {
   const {formatLargeNumber} = useI18n()
   const t = useTheme()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -38,18 +34,23 @@ export const DatatableHeadCopyIds = ({
 
   return (
     <>
-      <TableIconBtn disabled={!data.filteredData || data.filteredData.length === 0} onClick={(e) => {
-        const {currentTarget} = e
-        copy(data.filteredSortedAndPaginatedData?.data.map(_ => column.render(_).value))
-        setAnchorEl(currentTarget)
-      }}>content_copy</TableIconBtn>
+      <TableIconBtn
+        disabled={!data.filteredData || data.filteredData.length === 0}
+        onClick={(e) => {
+          const {currentTarget} = e
+          copy(data.filteredSortedAndPaginatedData?.data.map((_) => column.render(_).value))
+          setAnchorEl(currentTarget)
+        }}
+      >
+        content_copy
+      </TableIconBtn>
       <Popover
         PaperProps={{
           sx: {
             py: 1.5,
             px: 2,
             backdropFilter: 'blur(4px)',
-            backgroundColor: alpha(lighten(t.palette.success.light, .8), .8),
+            backgroundColor: alpha(lighten(t.palette.success.light, 0.8), 0.8),
           },
         }}
         open={!!anchorEl}
@@ -61,7 +62,9 @@ export const DatatableHeadCopyIds = ({
         }}
       >
         <Box sx={{display: 'flex', alignItems: 'center'}}>
-          <Icon sx={{mr: 1}} color="success">check_circle</Icon>
+          <Icon sx={{mr: 1}} color="success">
+            check_circle
+          </Icon>
           <span style={{color: t.palette.success.main, fontWeight: t.typography.fontWeightBold}}>
             <b>{formatLargeNumber(copied)}</b> copied!
           </span>
@@ -74,7 +77,7 @@ export const DatatableHeadCopyIds = ({
               ml: 2,
             }}
             onClick={() => {
-              copy(data.data?.map(_ => column.render(_).value))
+              copy(data.data?.map((_) => column.render(_).value))
             }}
           >
             Copy All {formatLargeNumber(data.filteredData?.length)}

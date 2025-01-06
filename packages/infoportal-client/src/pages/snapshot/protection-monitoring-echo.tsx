@@ -4,11 +4,15 @@ import {GlobalStyles, useTheme} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {defaultAppThemeParams} from '@/core/theme'
 
-const generalStyles = <GlobalStyles styles={{
-  body: {
-    // background: '#fff',
-  }
-}}/>
+const generalStyles = (
+  <GlobalStyles
+    styles={{
+      body: {
+        // background: '#fff',
+      },
+    }}
+  />
+)
 
 const SnapshotProtectionMonitoringPage = () => {
   const {theme} = useAppSettings()
@@ -26,7 +30,7 @@ const SnapshotProtectionMonitoringPage = () => {
   return (
     <>
       {generalStyles}
-      <SnapshotProtMonitoEcho/>
+      <SnapshotProtMonitoEcho />
     </>
   )
 }

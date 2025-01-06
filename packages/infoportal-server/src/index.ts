@@ -26,30 +26,33 @@ export enum AppCacheKey {
 }
 
 export const App = (config: AppConf = appConf) => {
-
   const logger = (label?: string) => {
     return winston.createLogger({
       level: config.logLevel,
       format: winston.format.combine(
         format.label({label}),
         winston.format.timestamp({
-          format: 'YYYY-MM-DD hh:mm:ss'
+          format: 'YYYY-MM-DD hh:mm:ss',
         }),
         winston.format.colorize(),
         winston.format.simple(),
-        format.printf((props) => `${props.timestamp} [${props.label}] ${props.level}: ${props.message}`)
+        format.printf((props) => `${props.timestamp} [${props.label}] ${props.level}: ${props.message}`),
       ),
       transports: [
-        ...(config.production && !config.cors.allowOrigin.includes('localhost')) ? [new Syslog({
-          host: 'logs.papertrailapp.com',
-          port: 32079,
-          protocol: 'tls4',
-          localhost: os.hostname(),
-          eol: '\n',
-        })] : [],
+        ...(config.production && !config.cors.allowOrigin.includes('localhost')
+          ? [
+              new Syslog({
+                host: 'logs.papertrailapp.com',
+                port: 32079,
+                protocol: 'tls4',
+                localhost: os.hostname(),
+                eol: '\n',
+              }),
+            ]
+          : []),
         new winston.transports.Console({
-          level: appConf.logLevel
-        })
+          level: appConf.logLevel,
+        }),
       ],
     })
   }
@@ -57,9 +60,9 @@ export const App = (config: AppConf = appConf) => {
   const cache = new IpCacheApp(
     new IpCache<Record<string, any>>({
       ttlMs: duration(20, 'day').toMs,
-      cleaningCheckupInterval: duration(20, 'day',)
+      cleaningCheckupInterval: duration(20, 'day'),
     }),
-    logger('GlobalCache')
+    logger('GlobalCache'),
   )
   return {logger, cache}
 }
@@ -113,10 +116,7 @@ const startApp = async (conf: AppConf) => {
   }
 
   const start = () => {
-    new Server(
-      conf,
-      prisma,
-    ).start()
+    new Server(conf, prisma).start()
   }
   // if (cluster.isPrimary) {
   init()

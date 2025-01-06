@@ -5,7 +5,7 @@ import {ProtectRoute} from '@/core/Session/SessionContext'
 const DashboardProtectionHouseholdSurvey = () => {
   return (
     <ProtectRoute>
-      <Database/>
+      <Database />
     </ProtectRoute>
   )
 }

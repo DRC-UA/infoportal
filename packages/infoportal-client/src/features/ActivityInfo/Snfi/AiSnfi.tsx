@@ -10,16 +10,15 @@ import {Period} from 'infoportal-common'
 export const AiSnfi = () => {
   const {api} = useAppSettings()
   const fetcher = useFetcher((period: Partial<Period>) => {
-    return Promise.all([
-      AiShelterMapper.reqRepairs(api)(period),
-      AiShelterMapper.reqEsk(api)(period),
-    ]).then(_ => _.reduce((acc, r) => [...acc, ...r], []))
+    return Promise.all([AiShelterMapper.reqRepairs(api)(period), AiShelterMapper.reqEsk(api)(period)]).then((_) =>
+      _.reduce((acc, r) => [...acc, ...r], []),
+    )
   })
 
   return (
     <Page width="full">
       <Panel>
-        <AiBundleTable fetcher={fetcher} id="snfi"/>
+        <AiBundleTable fetcher={fetcher} id="snfi" />
       </Panel>
     </Page>
   )

@@ -2,7 +2,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {Box, BoxProps, Icon} from '@mui/material'
 import {makeStyles} from 'tss-react/mui'
 
-const useStyles = makeStyles<{url?: string, size: number, tooltipSize?: number}>()((t, {url, size, tooltipSize}) => ({
+const useStyles = makeStyles<{url?: string; size: number; tooltipSize?: number}>()((t, {url, size, tooltipSize}) => ({
   root: {
     height: size,
     width: size,
@@ -14,7 +14,7 @@ const useStyles = makeStyles<{url?: string, size: number, tooltipSize?: number}>
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 }))
 
 export const AppAvatar = ({
@@ -24,14 +24,13 @@ export const AppAvatar = ({
   // hideTooltip,
 }: {
   email?: string
-  size: number,
+  size: number
   // hideTooltip?: boolean
 } & BoxProps) => {
   const {api} = useAppSettings()
   const {classes} = useStyles({
     url: email ? api.user.avatarUrl(email) : undefined,
     size,
-
   })
   return (
     <Box title={email} className={classes.root} {...props}>

@@ -2,14 +2,12 @@ import {GetServerSideProps} from 'next'
 
 export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
   return {
-    props: {}
+    props: {},
   }
 }
 
 const Home = () => {
-  return (
-    <div>Home</div>
-  )
+  return <div>Home</div>
 }
 
 export default Home

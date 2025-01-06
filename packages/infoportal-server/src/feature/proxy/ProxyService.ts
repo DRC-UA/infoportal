@@ -4,20 +4,18 @@ import {InferType} from 'yup'
 import {UUID} from 'infoportal-common'
 
 export class ProxyService {
-
-  constructor(
-    private prisma: PrismaClient,
-  ) {
-  }
+  constructor(private prisma: PrismaClient) {}
 
   static readonly schema = {
-    create: yup.object({
-      name: yup.string().required(),
-      slug: yup.string().required(),
-      url: yup.string().required(),
-      expireAt: yup.date().optional(),
-      createdBy: yup.string().optional(),
-    }).required(),
+    create: yup
+      .object({
+        name: yup.string().required(),
+        slug: yup.string().required(),
+        url: yup.string().required(),
+        expireAt: yup.date().optional(),
+        createdBy: yup.string().optional(),
+      })
+      .required(),
     update: yup.object({
       name: yup.string().optional(),
       slug: yup.string().optional(),
@@ -27,7 +25,7 @@ export class ProxyService {
     }),
     id: yup.object({
       id: yup.string().required(),
-    })
+    }),
   }
 
   readonly create = (body: InferType<typeof ProxyService.schema.create>) => {

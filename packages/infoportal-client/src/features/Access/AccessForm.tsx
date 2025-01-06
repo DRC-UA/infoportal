@@ -23,18 +23,13 @@ export interface IAccessForm {
   level: AccessLevel
 }
 
-export const AccessForm = ({
-  form,
-}: {
-  form: UseFormReturn<IAccessForm>
-}) => {
+export const AccessForm = ({form}: {form: UseFormReturn<IAccessForm>}) => {
   const {m} = useI18n()
   const watchSelectBy = form.watch('selectBy')
   const watch = form.watch()
 
   useEffect(() => {
-    if (form.watch('selectBy') !== 'group')
-      form.setValue('groupId', undefined)
+    if (form.watch('selectBy') !== 'group') form.setValue('groupId', undefined)
   }, [watchSelectBy])
 
   useEffect(() => {
@@ -58,7 +53,7 @@ export const AccessForm = ({
               dense
               error={!!form.formState.errors.selectBy}
               {...field}
-              onChange={e => {
+              onChange={(e) => {
                 form.setValue('drcJob', null)
                 form.setValue('drcOffice', null)
                 form.setValue('email', null)
@@ -66,43 +61,43 @@ export const AccessForm = ({
                 field.onChange(e)
               }}
             >
-              <ScRadioGroupItem value="email" title={m.email}/>
-              <ScRadioGroupItem value="job" title={m.Access.jobAndOffice}/>
-              <ScRadioGroupItem value="group" title={m.group}/>
+              <ScRadioGroupItem value="email" title={m.email} />
+              <ScRadioGroupItem value="job" title={m.Access.jobAndOffice} />
+              <ScRadioGroupItem value="group" title={m.group} />
             </ScRadioGroup>
           )}
         />
-        {fnSwitch(watchSelectBy!, {
-          'group': (
-            <>
-              <AccessFormInputGroup form={form}/>
-            </>
+        {fnSwitch(
+          watchSelectBy!,
+          {
+            group: (
+              <>
+                <AccessFormInputGroup form={form} />
+              </>
+            ),
+            job: (
+              <>
+                <AccessFormInputDrcJob form={form} sx={{mb: 2}} />
+                <AccessFormInputDrcOffice form={form} />
+              </>
+            ),
+            email: <AccessFormInputEmail form={form} />,
+          },
+          () => (
+            <></>
           ),
-          'job': (
-            <>
-              <AccessFormInputDrcJob form={form} sx={{mb: 2}}/>
-              <AccessFormInputDrcOffice form={form}/>
-            </>
-          ),
-          'email': (
-            <AccessFormInputEmail form={form}/>
-          )
-        }, () => <></>)}
+        )}
       </AccessFormSection>
       {watchSelectBy !== 'group' && (
         <AccessFormSection icon="lock" label={m.accessLevel}>
-          <AccessFormInputAccessLevel form={form}/>
+          <AccessFormInputAccessLevel form={form} />
         </AccessFormSection>
       )}
     </>
   )
 }
 
-export const AccessFormInputEmail = ({
-  form,
-}: {
-  form: UseFormReturn<IAccessForm>
-}) => {
+export const AccessFormInputEmail = ({form}: {form: UseFormReturn<IAccessForm>}) => {
   const {m} = useI18n()
   const required = form.watch('selectBy') === 'email'
   return (
@@ -113,17 +108,13 @@ export const AccessFormInputEmail = ({
       required={required}
       {...form.register('email', {
         required: {value: required, message: m.required},
-        pattern: {value: /(@drc.ngo$|\s)/, message: m.invalidEmail}
+        pattern: {value: /(@drc.ngo$|\s)/, message: m.invalidEmail},
       })}
     />
   )
 }
 
-export const AccessFormInputDrcOffice = ({
-  form,
-}: {
-  form: UseFormReturn<IAccessForm>
-}) => {
+export const AccessFormInputDrcOffice = ({form}: {form: UseFormReturn<IAccessForm>}) => {
   const {m} = useI18n()
   return (
     <Controller
@@ -133,7 +124,7 @@ export const AccessFormInputDrcOffice = ({
         <IpSelectSingle<DrcOffice>
           {...field}
           label={m.drcOffice}
-          onChange={_ => onChange(_)}
+          onChange={(_) => onChange(_)}
           options={Obj.values(DrcOffice)}
         />
       )}
@@ -141,11 +132,7 @@ export const AccessFormInputDrcOffice = ({
   )
 }
 
-export const AccessFormInputAccessLevel = ({
-  form,
-}: {
-  form: UseFormReturn<IAccessForm>
-}) => {
+export const AccessFormInputAccessLevel = ({form}: {form: UseFormReturn<IAccessForm>}) => {
   return (
     <Controller
       name="level"
@@ -158,22 +145,16 @@ export const AccessFormInputAccessLevel = ({
           {...field}
           // onChange={_ => field.onChange({target: {value: _}} as any)}
         >
-          {Obj.values(AccessLevel).map(level =>
-            <ScRadioGroupItem icon={accessLevelIcon[level]} value={level} key={level} title={level}/>
-          )}
+          {Obj.values(AccessLevel).map((level) => (
+            <ScRadioGroupItem icon={accessLevelIcon[level]} value={level} key={level} title={level} />
+          ))}
         </ScRadioGroup>
       )}
     />
   )
 }
 
-export const AccessFormInputDrcJob = ({
-  form,
-  sx
-}: {
-  form: UseFormReturn<IAccessForm>
-  sx?: SxProps<Theme>
-}) => {
+export const AccessFormInputDrcJob = ({form, sx}: {form: UseFormReturn<IAccessForm>; sx?: SxProps<Theme>}) => {
   const {m} = useI18n()
   const required = form.watch('selectBy') === 'job'
   return (
@@ -182,27 +163,18 @@ export const AccessFormInputDrcJob = ({
       name="drcJob"
       rules={{required: {value: required, message: m.required}}}
       render={({field: {onChange, ...field}}) => (
-        <DrcJobInputMultiple
-          {...field}
-          sx={sx}
-          value={field.value ?? []}
-          onChange={(e: any, _) => _ && onChange(_)}
-        />
+        <DrcJobInputMultiple {...field} sx={sx} value={field.value ?? []} onChange={(e: any, _) => _ && onChange(_)} />
       )}
     />
   )
 }
 
-export const AccessFormInputGroup = ({
-  form,
-}: {
-  form: UseFormReturn<IAccessForm>
-}) => {
+export const AccessFormInputGroup = ({form}: {form: UseFormReturn<IAccessForm>}) => {
   const {m} = useI18n()
   const {api} = useAppSettings()
   const fetcherGroups = useFetcher(api.group.search)
   const groupIndex = useMemo(() => {
-    return seq(fetcherGroups.get).groupByFirst(_ => _.id)
+    return seq(fetcherGroups.get).groupByFirst((_) => _.id)
   }, [fetcherGroups.get])
 
   useEffect(() => {
@@ -221,7 +193,7 @@ export const AccessFormInputGroup = ({
             value={groupIndex[field.value!]}
             onChange={(e: any, _) => _ && onChange(_.id ?? undefined)}
             loading={fetcherGroups.loading}
-            getOptionLabel={_ => _.name}
+            getOptionLabel={(_) => _.name}
             // renderTags={_ => }
             options={fetcherGroups.get ?? []}
             renderOption={(props, option, state, ownerState) => (
@@ -239,21 +211,21 @@ export const AccessFormInputGroup = ({
                 {option.name}
               </Box>
             )}
-            renderInput={({InputProps, ...props}) =>
-              <IpInput
-                helperText={null}
-                label={m.group}
-                {...InputProps}
-                {...props}
-              />
-            }
+            renderInput={({InputProps, ...props}) => (
+              <IpInput helperText={null} label={m.group} {...InputProps} {...props} />
+            )}
           />
         )}
       />
-      {map(form.watch('groupId'), groupId => (
+      {map(form.watch('groupId'), (groupId) => (
         <>
           <Datatable
-            sx={{mt: 2, border: t => `1px solid ${t.palette.divider}`, overflow: 'hidden', borderRadius: t => t.shape.borderRadius + 'px'}}
+            sx={{
+              mt: 2,
+              border: (t) => `1px solid ${t.palette.divider}`,
+              overflow: 'hidden',
+              borderRadius: (t) => t.shape.borderRadius + 'px',
+            }}
             id="access"
             defaultLimit={5}
             data={groupIndex[groupId!]?.items}
@@ -262,25 +234,25 @@ export const AccessFormInputGroup = ({
                 id: 'email',
                 head: m.email,
                 type: 'string',
-                renderQuick: _ => _.email
+                renderQuick: (_) => _.email,
               },
               {
                 id: 'drcJob',
                 head: m.drcJob,
                 type: 'select_one',
-                renderQuick: _ => _.drcJob
+                renderQuick: (_) => _.drcJob,
               },
               {
                 id: 'drcOffice',
                 head: m.drcOffice,
                 type: 'select_one',
-                renderQuick: _ => _.drcOffice
+                renderQuick: (_) => _.drcOffice,
               },
               {
                 id: 'level',
                 head: m.accessLevel,
                 type: 'select_one',
-                renderQuick: _ => _.level
+                renderQuick: (_) => _.level,
               },
             ]}
           />

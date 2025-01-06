@@ -23,7 +23,7 @@ export const mpcaIndex = {
     data: '/data',
     dashboard: '/dashboard',
     // form: (id = ':id') => '/form/' + id,
-  }
+  },
 }
 
 const MpcaSidebar = () => {
@@ -33,25 +33,36 @@ const MpcaSidebar = () => {
   return (
     <Sidebar>
       <SidebarBody>
-        <SidebarItem sx={{pr: 0}} iconEnd={
-          <Tooltip placement="right" title={m.mpca.pullLastDataDesc + ' ' + m.timeConsumingOperation}>
-            <IpBtn onClick={ctx.refresh.call} loading={ctx.refresh.loading} icon="cloud_sync">{m.pullLast}</IpBtn>
-          </Tooltip>
-        }>
+        <SidebarItem
+          sx={{pr: 0}}
+          iconEnd={
+            <Tooltip placement="right" title={m.mpca.pullLastDataDesc + ' ' + m.timeConsumingOperation}>
+              <IpBtn onClick={ctx.refresh.call} loading={ctx.refresh.loading} icon="cloud_sync">
+                {m.pullLast}
+              </IpBtn>
+            </Tooltip>
+          }
+        >
           <Box>
-            <Txt color="hint" block uppercase sx={{fontSize: '0.75rem'}}>{m.data}</Txt>
+            <Txt color="hint" block uppercase sx={{fontSize: '0.75rem'}}>
+              {m.data}
+            </Txt>
             <Txt color="default">{formatLargeNumber(ctx.data?.length)}</Txt>
           </Box>
         </SidebarItem>
-        <SidebarHr/>
+        <SidebarHr />
         <NavLink to={path(mpcaIndex.siteMap.dashboard)}>
           {({isActive, isPending}) => (
-            <SidebarItem icon="equalizer" active={isActive}>{m.dashboard}</SidebarItem>
+            <SidebarItem icon="equalizer" active={isActive}>
+              {m.dashboard}
+            </SidebarItem>
           )}
         </NavLink>
         <NavLink to={path(mpcaIndex.siteMap.data)}>
           {({isActive, isPending}) => (
-            <SidebarItem icon="table_chart" active={isActive}>{m.data}</SidebarItem>
+            <SidebarItem icon="table_chart" active={isActive}>
+              {m.data}
+            </SidebarItem>
           )}
         </NavLink>
         {/*<NavLink to={path(mpcaModule.siteMap.paymentTools)}>*/}
@@ -70,24 +81,17 @@ export const Mpca = () => {
   const {session, accesses} = useSession()
   const access = useMemo(() => !!appFeaturesIndex.mpca.showIf?.(session, accesses), [accesses])
   if (!access) {
-    return (
-      <NoFeatureAccessPage/>
-    )
+    return <NoFeatureAccessPage />
   }
   return (
     <MpcaProvider>
-      <Layout
-        title={appFeaturesIndex.mpca.name}
-        sidebar={<MpcaSidebar/>}
-        header={<AppHeader id="app-header"/>}
-      >
+      <Layout title={appFeaturesIndex.mpca.name} sidebar={<MpcaSidebar />} header={<AppHeader id="app-header" />}>
         <Routes>
-          <Route path={mpcaIndex.siteMap.dashboard} element={<MpcaDashboard/>}/>
-          <Route path={mpcaIndex.siteMap.deduplication} element={<WfpDeduplicationData/>}/>
-          <Route path={mpcaIndex.siteMap.data} element={<MpcaData/>}/>
+          <Route path={mpcaIndex.siteMap.dashboard} element={<MpcaDashboard />} />
+          <Route path={mpcaIndex.siteMap.deduplication} element={<WfpDeduplicationData />} />
+          <Route path={mpcaIndex.siteMap.data} element={<MpcaData />} />
         </Routes>
       </Layout>
     </MpcaProvider>
   )
 }
-

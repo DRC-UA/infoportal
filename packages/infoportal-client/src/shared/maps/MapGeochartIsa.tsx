@@ -5,18 +5,22 @@ import {Theme} from '@mui/material/styles'
 import {OblastIndex} from 'infoportal-common'
 import {getGoogle} from '@/core/google'
 
-const generalStyles = <GlobalStyles styles={{
-  '#map-isa-ua path': {
-    stroke: '#bfbfbf',
-    strokeWidth: 1,
-  },
-  '#map-isa-offices svg path[fill="none"]': {
-    strokeWidth: 0
-  },
-  '#map-isa-ua svg path[fill="none"]': {
-    strokeWidth: 0
-  }
-}}/>
+const generalStyles = (
+  <GlobalStyles
+    styles={{
+      '#map-isa-ua path': {
+        stroke: '#bfbfbf',
+        strokeWidth: 1,
+      },
+      '#map-isa-offices svg path[fill="none"]': {
+        strokeWidth: 0,
+      },
+      '#map-isa-ua svg path[fill="none"]': {
+        strokeWidth: 0,
+      },
+    }}
+  />
+)
 
 const occupiedColor = '#ffdcd2'
 
@@ -30,13 +34,13 @@ const officeStyle = (t: Theme) => ({
   open: {
     icon: 'business',
     color: t.palette.primary.main,
-    label: 'Operational office'
+    label: 'Operational office',
   },
   closed: {
     icon: 'domain_disabled',
     color: '#afafaf',
     label: 'Temporary closed office',
-  }
+  },
 })
 
 const offices: Office[] = [
@@ -68,8 +72,8 @@ const drawMaps = async ({
   let trys = 0
   google = await getGoogle()
   google.charts.load('current', {
-    'packages': ['geochart'],
-    'mapsApiKey': apiKey
+    packages: ['geochart'],
+    mapsApiKey: apiKey,
   })
   google.charts.setOnLoadCallback(() => {
     drawUA(mapUaSelector, theme)
@@ -78,12 +82,7 @@ const drawMaps = async ({
   })
 }
 
-const occupiedOblasts = [
-  'UA65',
-  'UA12',
-  'UA48',
-  'UA23',
-]
+const occupiedOblasts = ['UA65', 'UA12', 'UA48', 'UA23']
 
 const drawOffices = (selector: string) => {
   // const data = google.visualization.arrayToDataTable([
@@ -118,7 +117,7 @@ const drawOffices = (selector: string) => {
 const drawUA = (selector: string, theme: Theme) => {
   const data = google.visualization.arrayToDataTable([
     ['State', 'Population'],
-    ...OblastIndex.isos.map(_ => [_.replace('UA', 'UA-'), occupiedOblasts.includes(_) ? 2 : 1]),
+    ...OblastIndex.isos.map((_) => [_.replace('UA', 'UA-'), occupiedOblasts.includes(_) ? 2 : 1]),
   ])
 
   const chart = new google.visualization.GeoChart(document.querySelector(selector)!)
@@ -157,8 +156,8 @@ export const MapGeochartIsa = () => {
       <Box sx={{display: 'inline-flex', alignItems: 'center', background: 'white', position: 'relative'}}>
         <Box sx={{position: 'relative', height: 500, width: 700}}>
           <Box sx={{textAlign: 'center', fontSize: '1.6em'}}>Areas of Intervention (Oblast Level)</Box>
-          <Box id="map-isa-ua" sx={{top: 0, right: 0, bottom: 0, left: 0, position: 'absolute'}}/>
-          <Box id="map-isa-offices" sx={{top: 0, right: 0, bottom: 0, left: 0, position: 'absolute'}}/>
+          <Box id="map-isa-ua" sx={{top: 0, right: 0, bottom: 0, left: 0, position: 'absolute'}} />
+          <Box id="map-isa-offices" sx={{top: 0, right: 0, bottom: 0, left: 0, position: 'absolute'}} />
         </Box>
         <Box sx={{fontSize: '.9em'}}>
           <Box sx={{position: 'absolute', top: 249, right: 450 - offset}}>Dnipropetrovska</Box>

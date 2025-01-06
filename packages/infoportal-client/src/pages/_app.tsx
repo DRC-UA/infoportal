@@ -28,9 +28,11 @@ import {ToastProvider} from '@/shared/Toast'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
-const api = new ApiSdk(new ApiClient({
-  baseUrl: appConfig.apiURL,
-}))
+const api = new ApiSdk(
+  new ApiClient({
+    baseUrl: appConfig.apiURL,
+  }),
+)
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -38,11 +40,7 @@ export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
 }
 
-const App = ({
-  emotionCache = clientSideEmotionCache,
-  ...props
-}: MyAppProps) => {
-
+const App = ({emotionCache = clientSideEmotionCache, ...props}: MyAppProps) => {
   const router = useRouter()
   useEffect(() => {
     // initSentry(appConfigConfig)
@@ -50,15 +48,19 @@ const App = ({
   }, [router])
 
   return (
-    <Provide providers={[
-      ...process.env.NODE_ENV === 'production' ? [] : [(_: any) => <CacheProvider value={emotionCache} children={_}/>],
-      _ => <AppSettingsProvider api={api} children={_}/>,
-    ]}>
+    <Provide
+      providers={[
+        ...(process.env.NODE_ENV === 'production'
+          ? []
+          : [(_: any) => <CacheProvider value={emotionCache} children={_} />]),
+        (_) => <AppSettingsProvider api={api} children={_} />,
+      ]}
+    >
       <>
         <Head>
-          <meta name="viewport" content="initial-scale=1, width=device-width"/>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
-        <AppWithConfig {...props}/>
+        <AppWithConfig {...props} />
       </>
     </Provide>
   )
@@ -70,22 +72,24 @@ const AppWithConfig = (props: AppProps) => {
   const settings = useAppSettings()
   const msal = useMemo(() => getMsalInstance(settings.conf), [settings.conf])
   return (
-    <Provide providers={[
-      // _ => <StyledEngineProvider injectFirst children={_}/>,
-      _ => <LocalizationProvider children={_} dateAdapter={AdapterDateFns}/>,
-      _ => <ToastProvider children={_}/>,
-      _ => <ThemeProvider theme={settings.theme.theme} children={_}/>,
-      _ => <CssBaseline children={_}/>,
-      _ => <I18nProvider children={_}/>,
-      _ => <MsalProvider children={_} instance={msal}/>,
-      ...!isServerSide ? [(_: any) => <HashRouter children={_}/>] : [],
-      _ => <KoboSchemaProvider children={_}/>,
-      _ => <KoboAnswersProvider children={_}/>,
-      _ => <KoboUpdateProvider children={_}/>,
-      _ => <ModalProvider children={_}/>,
-      _ => <SessionProvider children={_}/>,
-    ]}>
-      <AppWithBaseContext {...props}/>
+    <Provide
+      providers={[
+        // _ => <StyledEngineProvider injectFirst children={_}/>,
+        (_) => <LocalizationProvider children={_} dateAdapter={AdapterDateFns} />,
+        (_) => <ToastProvider children={_} />,
+        (_) => <ThemeProvider theme={settings.theme.theme} children={_} />,
+        (_) => <CssBaseline children={_} />,
+        (_) => <I18nProvider children={_} />,
+        (_) => <MsalProvider children={_} instance={msal} />,
+        ...(!isServerSide ? [(_: any) => <HashRouter children={_} />] : []),
+        (_) => <KoboSchemaProvider children={_} />,
+        (_) => <KoboAnswersProvider children={_} />,
+        (_) => <KoboUpdateProvider children={_} />,
+        (_) => <ModalProvider children={_} />,
+        (_) => <SessionProvider children={_} />,
+      ]}
+    >
+      <AppWithBaseContext {...props} />
     </Provide>
   )
 }
@@ -96,29 +100,30 @@ const AppWithBaseContext = ({Component, pageProps}: AppProps) => {
   if (settings.conf.appOff) {
     return (
       <CenteredContent>
-        <Box sx={{
-          border: t => `1px solid ${t.palette.divider}`,
-          padding: 4,
-          borderRadius: '8px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
-          <DRCLogo sx={{display: 'block', mb: 2}}/>
-          <Txt size="title" block>{m.title}</Txt>
-          <Txt sx={{mb: 4}} size="big" color="hint" block>{m.appInMaintenance}</Txt>
-          <Icon sx={{fontSize: '90px !important', color: t => t.palette.text.disabled}}>
-            engineering
-          </Icon>
-          <Box>
-          </Box>
+        <Box
+          sx={{
+            border: (t) => `1px solid ${t.palette.divider}`,
+            padding: 4,
+            borderRadius: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <DRCLogo sx={{display: 'block', mb: 2}} />
+          <Txt size="title" block>
+            {m.title}
+          </Txt>
+          <Txt sx={{mb: 4}} size="big" color="hint" block>
+            {m.appInMaintenance}
+          </Txt>
+          <Icon sx={{fontSize: '90px !important', color: (t) => t.palette.text.disabled}}>engineering</Icon>
+          <Box></Box>
         </Box>
       </CenteredContent>
     )
   }
-  return (
-    <Component {...pageProps} />
-  )
+  return <Component {...pageProps} />
 }
 
 export default App

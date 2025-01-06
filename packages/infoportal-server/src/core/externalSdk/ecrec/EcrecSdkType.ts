@@ -34,11 +34,10 @@ export interface EcrecGetDataRawParams {
   }
   searchData?: any[]
   sortData?: {
-    fieldName: string,
+    fieldName: string
     type: 'DESC' | 'ASC'
   }
 }
-
 
 export enum EcrecMsdStatus {
   'New' = 42,

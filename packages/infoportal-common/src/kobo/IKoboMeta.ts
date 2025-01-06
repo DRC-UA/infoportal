@@ -81,7 +81,6 @@ export type KoboMetaTagNfi = {
 }
 
 export namespace KoboMetaHelper {
-
   const cashStatus: Partial<Record<CashStatus, KoboMetaStatus>> = {
     Selected: KoboMetaStatus.Pending,
     Pending: KoboMetaStatus.Pending,

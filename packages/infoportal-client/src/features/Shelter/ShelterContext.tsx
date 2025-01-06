@@ -43,19 +43,21 @@ export const ShelterProvider = ({
   const asyncEdit = (formId: Kobo.FormId, answerId: Kobo.SubmissionId) => api.koboApi.getEditUrl({formId, answerId})
 
   return (
-    <Context.Provider value={{
-      access,
-      asyncEdit,
-      nta: {
-        schema: schemaNta,
-      },
-      ta: {
-        schema: schemaTa,
-      },
-      data,
-      allowedOffices,
-      ...props,
-    }}>
+    <Context.Provider
+      value={{
+        access,
+        asyncEdit,
+        nta: {
+          schema: schemaNta,
+        },
+        ta: {
+          schema: schemaTa,
+        },
+        data,
+        allowedOffices,
+        ...props,
+      }}
+    >
       {children}
     </Context.Provider>
   )

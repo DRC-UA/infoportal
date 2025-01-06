@@ -4,11 +4,15 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {defaultAppThemeParams} from '@/core/theme'
 import {MetaSnapshot} from '@/features/Meta/Snapshot/MetaSnapshot'
 
-const generalStyles = <GlobalStyles styles={{
-  body: {
-    // background: '#fff',
-  }
-}}/>
+const generalStyles = (
+  <GlobalStyles
+    styles={{
+      body: {
+        // background: '#fff',
+      },
+    }}
+  />
+)
 
 const Meta = () => {
   const {theme} = useAppSettings()
@@ -27,7 +31,7 @@ const Meta = () => {
   return (
     <>
       {generalStyles}
-      <MetaSnapshot/>
+      <MetaSnapshot />
     </>
   )
 }

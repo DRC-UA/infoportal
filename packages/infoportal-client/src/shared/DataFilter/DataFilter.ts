@@ -4,11 +4,10 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {ReactNode} from 'react'
 
 export namespace DataFilter {
-
   export type Filter = Record<string, string[] | undefined>
 
   interface ShapeOption<TOption extends string = string> {
-    value: TOption,
+    value: TOption
     label?: ReactNode
   }
 
@@ -36,24 +35,20 @@ export namespace DataFilter {
   }
 
   export const buildOptionsFromObject = (opt: Record<string, string>, addBlank?: boolean): ShapeOption[] => {
-    return [
-      ...(addBlank ? [blankOption] : []),
-      ...Object.entries(opt).map(([k, v]) => buildOption(k, v))
-    ]
+    return [...(addBlank ? [blankOption] : []), ...Object.entries(opt).map(([k, v]) => buildOption(k, v))]
   }
 
   export const buildOptions = (opt: string[], addBlank?: boolean): ShapeOption[] => {
-    return [
-      ...(addBlank ? [blankOption] : []),
-      ...opt.map(_ => buildOption(_)),
-    ]
+    return [...(addBlank ? [blankOption] : []), ...opt.map((_) => buildOption(_))]
   }
 
   export const buildOption = (value: string, label?: ReactNode): ShapeOption => {
     return {value: value, label: label ?? value}
   }
 
-  export type Shape<TData, TOption extends string = string> = ShapeMultiple<TData, TOption> | ShapeSingle<TData, TOption>
+  export type Shape<TData, TOption extends string = string> =
+    | ShapeMultiple<TData, TOption>
+    | ShapeSingle<TData, TOption>
 
   export const makeShape = <TData extends Record<string, any>>(filters: Record<string, Shape<TData>>) => filters
 
@@ -62,22 +57,25 @@ export namespace DataFilter {
   export const filterData = <TData, TValue extends string, TName extends string>(
     d: Seq<TData>,
     shapes: Partial<Record<TName, Shape<TData, TValue>>>,
-    filters: Record<TName, string[] | undefined>
+    filters: Record<TName, string[] | undefined>,
   ): Seq<TData> => {
-    return multipleFilters(d, Obj.entries(filters).filter(([k]) => shapes[k] !== undefined).map(([filterName, filterValue]) => {
-      if (!filterValue || filterValue.length <= 0) return
-      const shape = shapes[filterName]!
-      if (shape.customFilter) return _ => shape.customFilter!(filterValue, _)
-      if (!shape.getValue) throw new Error('Either getValue or customFilter should be defined for ' + filterName)
-      if (shape.multiple)
-        return _ => !!filterValue.find(f => {
-          const v = shape.getValue!(_)
-          return (f === DataFilter.blank && (v ?? []).length === 0) || v?.includes(f as any)
-        })
-      return _ => filterValue.includes(shape.getValue!(_) as any)
-    })) as Seq<TData>
+    return multipleFilters(
+      d,
+      Obj.entries(filters)
+        .filter(([k]) => shapes[k] !== undefined)
+        .map(([filterName, filterValue]) => {
+          if (!filterValue || filterValue.length <= 0) return
+          const shape = shapes[filterName]!
+          if (shape.customFilter) return (_) => shape.customFilter!(filterValue, _)
+          if (!shape.getValue) throw new Error('Either getValue or customFilter should be defined for ' + filterName)
+          if (shape.multiple)
+            return (_) =>
+              !!filterValue.find((f) => {
+                const v = shape.getValue!(_)
+                return (f === DataFilter.blank && (v ?? []).length === 0) || v?.includes(f as any)
+              })
+          return (_) => filterValue.includes(shape.getValue!(_) as any)
+        }),
+    ) as Seq<TData>
   }
 }
-
-
-

@@ -18,8 +18,8 @@ import {OptionLabelTypeCompact, SelectStatusConfig} from '@/shared/customInput/S
 import {Obj} from '@alexandreannic/ts-utils'
 
 export type KoboEditModalOption = {
-  value: string | null,
-  label: string,
+  value: string | null
+  label: string
   desc?: string
   before?: ReactNode
 }
@@ -38,7 +38,6 @@ export const editableColumnType = [
 export type KoboUpdateModalType = ArrayValues<typeof editableColumnType>
 
 export namespace KoboUpdateModal {
-
   export const Custom = ({
     title,
     loading,
@@ -52,26 +51,32 @@ export namespace KoboUpdateModal {
     subTitle?: string
     title?: string
     fetcherUpdate: UseFetcher<(_: any) => Promise<number>>
-    onClose?: () => void,
+    onClose?: () => void
     options?: string[] | KoboEditModalOption[]
     loading?: boolean
   }) => {
     const [value, setValue] = useState<any>()
     const {m} = useI18n()
     const _options = useMemo(() => {
-      const harmonized: KoboEditModalOption[] | undefined = options?.map(x => typeof x === 'string' ? {value: x, label: x,} : x) as any
+      const harmonized: KoboEditModalOption[] | undefined = options?.map((x) =>
+        typeof x === 'string' ? {value: x, label: x} : x,
+      ) as any
       const resetOption: KoboEditModalOption = {value: null, label: 'BLANK', desc: ' '}
-      return [resetOption, ...harmonized ?? []].map(_ =>
+      return [resetOption, ...(harmonized ?? [])].map((_) => (
         <ScRadioGroupItem
           dense
-          disabled={type === 'select_multiple' && _.value !== null && ((value ?? []) as KoboEditModalOption[]).some(_ => _ === null)}
+          disabled={
+            type === 'select_multiple' &&
+            _.value !== null &&
+            ((value ?? []) as KoboEditModalOption[]).some((_) => _ === null)
+          }
           key={_.value}
           value={_.value}
           before={_.before}
           description={_.desc}
           title={_.label}
         />
-      )
+      ))
     }, [options, value])
 
     const _loading = loading || fetcherUpdate.loading
@@ -86,18 +91,21 @@ export namespace KoboUpdateModal {
         onConfirm={() => fetcherUpdate.fetch({force: true, clean: true}, value)}
         title={title}
       >
-        <Txt truncate color="hint" block sx={{mb: 1, maxWidth: 400}}>{subTitle}</Txt>
-        {fetcherUpdate.error && (
-          <Alert color="error">
-            {m.somethingWentWrong}
-          </Alert>
-        )}
+        <Txt truncate color="hint" block sx={{mb: 1, maxWidth: 400}}>
+          {subTitle}
+        </Txt>
+        {fetcherUpdate.error && <Alert color="error">{m.somethingWentWrong}</Alert>}
         {fetcherUpdate.get && (
-          <Alert color="success" action={
-            <>
-              <IpBtn onClick={() => fetcherUpdate.clearCache()}>{m.change}</IpBtn>
-            </>
-          }>{m.successfullyEdited(fetcherUpdate.get)}</Alert>
+          <Alert
+            color="success"
+            action={
+              <>
+                <IpBtn onClick={() => fetcherUpdate.clearCache()}>{m.change}</IpBtn>
+              </>
+            }
+          >
+            {m.successfullyEdited(fetcherUpdate.get)}
+          </Alert>
         )}
         <Collapse in={!fetcherUpdate.get}>
           <Box sx={{minWidth: 340}}>
@@ -118,27 +126,24 @@ export namespace KoboUpdateModal {
                 }
                 case 'select_multiple': {
                   return (
-                    <ScRadioGroup
-                      dense
-                      multiple
-                      value={value ?? []}
-                      onChange={_ => setValue(_)}
-                    >
+                    <ScRadioGroup dense multiple value={value ?? []} onChange={(_) => setValue(_)}>
                       {_options}
                     </ScRadioGroup>
                   )
                 }
                 case 'text':
                 case 'calculate': {
-                  return <IpInput multiline maxRows={9} fullWidth value={value} onChange={e => setValue(e.target.value)}/>
+                  return (
+                    <IpInput multiline maxRows={9} fullWidth value={value} onChange={(e) => setValue(e.target.value)} />
+                  )
                 }
                 case 'integer':
                 case 'decimal': {
-                  return <IpInput type="number" fullWidth value={value} onChange={e => setValue(e.target.value)}/>
+                  return <IpInput type="number" fullWidth value={value} onChange={(e) => setValue(e.target.value)} />
                 }
                 case 'datetime':
                 case 'date': {
-                  return <IpDatepicker value={value} onChange={setValue}/>
+                  return <IpDatepicker value={value} onChange={setValue} />
                 }
               }
             })()}
@@ -155,11 +160,11 @@ export namespace KoboUpdateModal {
     onClose,
     onUpdated,
   }: {
-    formId: Kobo.FormId,
+    formId: Kobo.FormId
     columnName: string
     answerIds: Kobo.SubmissionId[]
-    onClose?: () => void,
-    onUpdated?: (params: KoboUpdateAnswers<any, any>) => void,
+    onClose?: () => void
+    onUpdated?: (params: KoboUpdateAnswers<any, any>) => void
   }) => {
     const {m} = useI18n()
     const ctxKoboUpdate = useKoboUpdateContext()
@@ -181,9 +186,15 @@ export namespace KoboUpdateModal {
         title={`${m.edit} (${answerIds.length}) - ${schema?.schema.name}`}
         subTitle={schema?.translate.question(columnName)}
         type={columnDef?.type as any}
-        options={columnDef ? schema?.helper.choicesIndex[columnDef.select_from_list_name!]?.map(_ =>
-          ({value: _.name, desc: _.name, label: schema.translate.choice(columnName, _.name)})
-        ) : undefined}
+        options={
+          columnDef
+            ? schema?.helper.choicesIndex[columnDef.select_from_list_name!]?.map((_) => ({
+                value: _.name,
+                desc: _.name,
+                label: schema.translate.choice(columnName, _.name),
+              }))
+            : undefined
+        }
       />
     )
   }
@@ -194,10 +205,10 @@ export namespace KoboUpdateModal {
     onClose,
     onUpdated,
   }: {
-    formId: Kobo.FormId,
+    formId: Kobo.FormId
     answerIds: Kobo.SubmissionId[]
-    onClose?: () => void,
-    onUpdated?: (params: KoboUpdateValidation) => void,
+    onClose?: () => void
+    onUpdated?: (params: KoboUpdateValidation) => void
   }) => {
     const {m} = useI18n()
     const ctxKoboUpdate = useKoboUpdateContext()
@@ -216,8 +227,15 @@ export namespace KoboUpdateModal {
         fetcherUpdate={fetcherUpdate}
         title={`${m.edit} (${answerIds.length}) - ${m.validation}`}
         type="select_one"
-        options={Obj.values(KoboValidation).map(_ => ({
-          value: _, label: _, before: <OptionLabelTypeCompact sx={{alignSelf: 'center', mr: 1}} type={SelectStatusConfig.statusType.KoboValidation[_]}/>
+        options={Obj.values(KoboValidation).map((_) => ({
+          value: _,
+          label: _,
+          before: (
+            <OptionLabelTypeCompact
+              sx={{alignSelf: 'center', mr: 1}}
+              type={SelectStatusConfig.statusType.KoboValidation[_]}
+            />
+          ),
         }))}
       />
     )
@@ -232,13 +250,13 @@ export namespace KoboUpdateModal {
     onClose,
     onUpdated,
   }: {
-    formId: Kobo.FormId,
+    formId: Kobo.FormId
     tag: string
     type: KoboUpdateModalType
     answerIds: Kobo.SubmissionId[]
     options?: string[] | KoboEditModalOption[]
-    onClose?: () => void,
-    onUpdated?: (_: any) => void,
+    onClose?: () => void
+    onUpdated?: (_: any) => void
   }) => {
     const {m} = useI18n()
     const ctxKoboUpdate = useKoboUpdateContext()

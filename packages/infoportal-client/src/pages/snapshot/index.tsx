@@ -14,22 +14,22 @@ const Index = () => {
         <List>
           <ListItem>
             <Link href={path('protection-monitoring-echo')}>
-              <ListItemText primary="Protection Monitoring ECHO"/>
+              <ListItemText primary="Protection Monitoring ECHO" />
             </Link>
           </ListItem>
           <ListItem>
             <Link href={path('protection-monitoring-nn2')}>
-              <ListItemText primary="Protection Monitoring NN 2"/>
+              <ListItemText primary="Protection Monitoring NN 2" />
             </Link>
           </ListItem>
           <ListItem>
             <Link href={path('protection-monitoring-gbv-survey')}>
-              <ListItemText primary="Protection Monitoring GBV Survey"/>
+              <ListItemText primary="Protection Monitoring GBV Survey" />
             </Link>
           </ListItem>
           <ListItem>
             <Link href={path('meta')}>
-              <ListItemText primary="Meta"/>
+              <ListItemText primary="Meta" />
             </Link>
           </ListItem>
         </List>

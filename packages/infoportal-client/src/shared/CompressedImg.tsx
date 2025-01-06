@@ -16,7 +16,7 @@ const handleImage = ({
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')!
     const targetWidth = height
-    const targetHeight = imgElement.height * height / imgElement.width
+    const targetHeight = (imgElement.height * height) / imgElement.width
     canvas.width = targetWidth
     canvas.height = targetHeight
 
@@ -36,13 +36,7 @@ interface Param {
   url: string
 }
 
-export const CompressedImg = ({
-  url,
-  height,
-  quality,
-  sx,
-  ...props
-}: BoxProps & Param) => {
+export const CompressedImg = ({url, height, quality, sx, ...props}: BoxProps & Param) => {
   const t = useTheme()
   const id = useMemo(() => props.id ?? '' + Math.random(), [props.id])
 
@@ -56,19 +50,23 @@ export const CompressedImg = ({
   }, [url, height, quality, props.id])
 
   return (
-    <Box id={id} {...props} sx={{
-      m: .5,
-      borderRadius: t.shape.borderRadius + 'px',
-      backgroundColor: t.palette.divider,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      height: 'auto',
-      '&:before': {
-        paddingTop: '100%',
-        content: '" "',
-        display: 'block',
-      },
-      ...sx,
-    }}/>
+    <Box
+      id={id}
+      {...props}
+      sx={{
+        m: 0.5,
+        borderRadius: t.shape.borderRadius + 'px',
+        backgroundColor: t.palette.divider,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: 'auto',
+        '&:before': {
+          paddingTop: '100%',
+          content: '" "',
+          display: 'block',
+        },
+        ...sx,
+      }}
+    />
   )
 }

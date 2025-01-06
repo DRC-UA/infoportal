@@ -14,11 +14,7 @@ enum Type {
   'taxId+phone' = 'taxId+phone',
 }
 
-export const MpcaDuplicatedCheckPanel = ({
-  data
-}: {
-  data: Seq<MpcaEntity>
-}) => {
+export const MpcaDuplicatedCheckPanel = ({data}: {data: Seq<MpcaEntity>}) => {
   const {m} = useI18n()
   const [type, setType] = useState<Type>(Type.phone)
   return (
@@ -26,18 +22,18 @@ export const MpcaDuplicatedCheckPanel = ({
       <MpcaDuplicatedCheck
         header={
           <ScRadioGroup value={type} onChange={setType} inline dense>
-            {Obj.values(Type).map(_ =>
-              <ScRadioGroupItem hideRadio value={_} key={_} title={_}/>
-            )}
+            {Obj.values(Type).map((_) => (
+              <ScRadioGroupItem hideRadio value={_} key={_} title={_} />
+            ))}
           </ScRadioGroup>
         }
         data={data}
         property={type}
-        fn={_ => {
-          if (type === Type['taxId+phone'])
-            if (_.phone && _.taxId) return _.phone + '+' + _.taxId
+        fn={(_) => {
+          if (type === Type['taxId+phone']) if (_.phone && _.taxId) return _.phone + '+' + _.taxId
           return (_ as any)[type]
-        }}/>
+        }}
+      />
     </SlidePanel>
   )
 }
@@ -59,16 +55,19 @@ export const MpcaDuplicatedCheck = ({
       // .compactBy(property)
       // .groupBy(_ => (_ as any)[property])
       .groupBy(fn)
-    return seq(Obj.entries(gb)).map(([k, v]) => ({
-      key: k,
-      count: v.length,
-      list: v,
-    }))
-      .filter(_ => _.count > 1 && _.key !== 'undefined')
-      // .sortByNumber(_ => _.count, '9-0')
-      .sort((a, b) => {
-        return b.count - a.count
-      })
+    return (
+      seq(Obj.entries(gb))
+        .map(([k, v]) => ({
+          key: k,
+          count: v.length,
+          list: v,
+        }))
+        .filter((_) => _.count > 1 && _.key !== 'undefined')
+        // .sortByNumber(_ => _.count, '9-0')
+        .sort((a, b) => {
+          return b.count - a.count
+        })
+    )
   }, [property, data])
   return (
     <Datatable
@@ -81,51 +80,70 @@ export const MpcaDuplicatedCheck = ({
           type: 'select_one',
           id: property,
           head: property,
-          renderQuick: _ => _.key,
+          renderQuick: (_) => _.key,
           width: 80,
         },
         {
           type: 'number',
           id: 'count',
           head: m.count,
-          renderQuick: _ => _.count,
+          renderQuick: (_) => _.count,
           width: 10,
         },
         {
           id: 'oblast',
           type: 'select_multiple',
           head: m.oblast,
-          options: () => DatatableUtils.buildOptions(res.flatMap(_ => _.list.map(_ => _.oblast)).distinct(_ => _).compact()),
-          render: _ => {
-            const offices = _.list?.map(_ => _.oblast).distinct(_ => _) ?? []
+          options: () =>
+            DatatableUtils.buildOptions(
+              res
+                .flatMap((_) => _.list.map((_) => _.oblast))
+                .distinct((_) => _)
+                .compact(),
+            ),
+          render: (_) => {
+            const offices = _.list?.map((_) => _.oblast).distinct((_) => _) ?? []
             return {
               label: offices,
               value: offices,
-              tooltip: offices.map(_ => [null, undefined, 'null', 'undefined', ''].includes(_) ? '""' : _).join(', ')
+              tooltip: offices
+                .map((_) => ([null, undefined, 'null', 'undefined', ''].includes(_) ? '""' : _))
+                .join(', '),
             }
-          }
+          },
         },
         {
           id: 'enumerator',
           type: 'string',
           head: m.enumerator,
-          render: _ => {
-            const enumerators = _.list?.map(_ => _.enumerator).distinct(_ => _) ?? []
+          render: (_) => {
+            const enumerators = _.list?.map((_) => _.enumerator).distinct((_) => _) ?? []
             const enumeratorString = enumerators.join(', ')
             return {
               label: enumeratorString,
               value: enumeratorString,
-              tooltip: enumerators.map(_ => _).join(', ')
+              tooltip: enumerators.map((_) => _).join(', '),
             }
-          }
+          },
         },
         {
           id: 'date',
           head: m.date,
-          renderQuick: _ => {
-            const dates = _.list.map(_ => formatDate(_.date))
+          renderQuick: (_) => {
+            const dates = _.list.map((_) => formatDate(_.date))
             return (
-              <Tooltip title={<>{dates.map(_ => <>{_}<br/></>)}</>}>
+              <Tooltip
+                title={
+                  <>
+                    {dates.map((_) => (
+                      <>
+                        {_}
+                        <br />
+                      </>
+                    ))}
+                  </>
+                }
+              >
                 <div>{dates.join(', ')}</div>
               </Tooltip>
             )

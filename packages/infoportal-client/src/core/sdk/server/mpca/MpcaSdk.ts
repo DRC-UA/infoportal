@@ -5,8 +5,7 @@ import {MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
 import {MpcaEntity} from 'infoportal-common'
 
 export class MpcaSdk {
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   readonly search = (filters: KoboAnswerFilter = {}): Promise<ApiPaginate<MpcaEntity>> => {
     return this.client.post(`/mpca/search`, {body: {filters}}).then(ApiSdkUtils.mapPaginate(MpcaHelper.map))

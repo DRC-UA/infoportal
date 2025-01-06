@@ -4,13 +4,11 @@ import {appConf, AppConf} from '../core/conf/AppConf'
 import {app} from '../index'
 
 export class IpSentry {
-
   constructor(
     private conf: AppConf = appConf,
     private expressApp: any,
     private log = app.logger('Sentry'),
-  ) {
-  }
+  ) {}
 
   readonly init = () => {
     if (!this.conf.sentry.dns) {

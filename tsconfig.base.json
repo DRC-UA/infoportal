@@ -1,11 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "ES2021.String"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext", "ES2021.String"],
     "strict": true,
     "moduleResolution": "node",
     "target": "ESNext",
@@ -14,8 +9,5 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true
   },
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.test.ts"
-  ]
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
 }

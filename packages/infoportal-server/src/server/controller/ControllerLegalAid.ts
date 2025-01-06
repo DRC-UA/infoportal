@@ -4,7 +4,6 @@ import {Controller} from './Controller'
 import {AppLogger} from '../../index'
 
 export class ControllerLegalAid extends Controller {
-
   constructor(
     private legalAidSdk: LegalaidSdk,
     private logger: AppLogger,
@@ -19,5 +18,4 @@ export class ControllerLegalAid extends Controller {
       next(e)
     }
   }
-
 }

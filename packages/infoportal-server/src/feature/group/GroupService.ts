@@ -10,9 +10,7 @@ export type GroupCreateParams = InferType<typeof GroupService.createSchema>
 export type GroupUpdateParams = InferType<typeof GroupService.updateSchema>
 
 export class GroupService {
-
-  constructor(private prisma: PrismaClient) {
-  }
+  constructor(private prisma: PrismaClient) {}
 
   static readonly createSchema = yup.object({
     name: yup.string().optional(),
@@ -20,7 +18,7 @@ export class GroupService {
   })
 
   static readonly updateSchema = yup.object({
-    name: yup.string().required()
+    name: yup.string().required(),
   })
 
   readonly create = (body: GroupCreateParams) => {
@@ -44,7 +42,7 @@ export class GroupService {
   readonly remove = (id: UUID) => {
     return this.prisma.group.delete({
       where: {
-        id
+        id,
       },
     })
   }
@@ -56,52 +54,42 @@ export class GroupService {
       },
       where: {
         accesses: {
-          some: {featureId}
-        }
-      }
+          some: {featureId},
+        },
+      },
     })
   }
 
-  readonly search = ({
-    featureId,
-    name,
-    user,
-  }: {
-    user?: UserSession
-    name?: string
-    featureId?: UUID
-  }) => {
+  readonly search = ({featureId, name, user}: {user?: UserSession; name?: string; featureId?: UUID}) => {
     return this.prisma.group.findMany({
       include: {
-        items: true
+        items: true,
       },
       where: {
         name,
         accesses: {
-          every: {featureId}
+          every: {featureId},
         },
-        ...user ? {
-          items: {
-            some: {
-              OR: [
-                {email: {equals: user.email, mode: 'insensitive' as const,}},
-                {
+        ...(user
+          ? {
+              items: {
+                some: {
                   OR: [
-                    {drcOffice: user.drcOffice},
-                    {drcOffice: null},
-                    {drcOffice: ''},
+                    {email: {equals: user.email, mode: 'insensitive' as const}},
+                    {
+                      OR: [{drcOffice: user.drcOffice}, {drcOffice: null}, {drcOffice: ''}],
+                      drcJob: {
+                        equals: user.drcJob,
+                        mode: 'insensitive' as const,
+                      },
+                    },
                   ],
-                  drcJob: {
-                    equals: user.drcJob,
-                    mode: 'insensitive' as const,
-                  }
-                }
-              ]
+                },
+              },
             }
-          }
-        } : {}
+          : {}),
       },
-      orderBy: {createdAt: 'desc'}
+      orderBy: {createdAt: 'desc'},
     })
   }
 }

@@ -22,17 +22,14 @@ export const PeriodPickerMui = ({
   const shortcutsItems: PickersShortcutsItem<DateRange<Date>>[] = useMemo(() => {
     const today = new Date()
     const limit = 7
-    const months: PickersShortcutsItem<DateRange<Date>>[] = mapFor(limit, i => {
+    const months: PickersShortcutsItem<DateRange<Date>>[] = mapFor(limit, (i) => {
       const currentDate = subMonths(today, limit - 1 - i)
-      return ({
+      return {
         label: format(currentDate, 'MMMM yyyy'),
         getValue: () => [startOfMonth(currentDate), endOfMonth(currentDate)],
-      })
+      }
     })
-    return [
-      ...months,
-      {label: 'Reset', getValue: () => [null, null]},
-    ]
+    return [...months, {label: 'Reset', getValue: () => [null, null]}]
   }, [])
 
   return (
@@ -40,9 +37,9 @@ export const PeriodPickerMui = ({
       minDate={min}
       maxDate={max}
       localeText={{start: label?.[0], end: label?.[1]}}
-      sx={{...sx, mb: -.25, mt: -.5}}
+      sx={{...sx, mb: -0.25, mt: -0.5}}
       defaultValue={defaultValue}
-      value={(value && (value[0] || value[1])) ? value : undefined}
+      value={value && (value[0] || value[1]) ? value : undefined}
       onChange={onChange as any}
       slotProps={{
         shortcuts: {
@@ -138,7 +135,7 @@ const BrowserMultiInputDateRangeField = React.forwardRef((props: any, ref: React
         sx={{minWidth: 115, marginRight: '-1px'}}
         InputProps={{
           ...startDateProps.InputProps,
-          sx: _ => ({
+          sx: (_) => ({
             borderBottomRightRadius: 0,
             borderTopRightRadius: 0,
           }),
@@ -156,7 +153,7 @@ const BrowserMultiInputDateRangeField = React.forwardRef((props: any, ref: React
         {...endDateProps}
         InputProps={{
           ...endDateProps.InputProps,
-          sx: _ => ({
+          sx: (_) => ({
             borderBottomLeftRadius: 0,
             borderTopLeftRadius: 0,
           }),
@@ -165,4 +162,4 @@ const BrowserMultiInputDateRangeField = React.forwardRef((props: any, ref: React
       />
     </Box>
   )
-},) as any
+}) as any

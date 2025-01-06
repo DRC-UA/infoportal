@@ -4,8 +4,8 @@ import {ModalContext, ModalType} from './ModalContext'
 /**
  * Callback types provided for descriptive type-hints
  */
-type ShowModal<T> = (t: T) => void;
-type HideModal = () => void;
+type ShowModal<T> = (t: T) => void
+type HideModal = () => void
 
 /**
  * Utility function to generate unique number per component instance
@@ -38,11 +38,11 @@ const isFunctionalComponent = (Component: Function) => {
  */
 export const useModal = <T extends Record<any, any> = any>(
   component: ModalType<T>,
-  inputs: DependencyList = []
+  inputs: DependencyList = [],
 ): [ShowModal<T>, HideModal, boolean] => {
   if (!isFunctionalComponent(component)) {
     throw new Error(
-      'Only stateless components can be used as an argument to useModal. You have probably passed a class component where a function was expected.'
+      'Only stateless components can be used as an argument to useModal. You have probably passed a class component where a function was expected.',
     )
   }
 

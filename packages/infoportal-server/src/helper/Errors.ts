@@ -1,17 +1,18 @@
 export namespace AppError {
-
   export class Base extends Error {
     constructor(message: string) {
       super(message)
     }
   }
 
-  export const throwNotFoundIfUndefined = (message: string) => <T>(t: T | undefined): T => {
-    if (t) return t
-    throw new NotFound(message)
-  }
+  export const throwNotFoundIfUndefined =
+    (message: string) =>
+    <T>(t: T | undefined): T => {
+      if (t) return t
+      throw new NotFound(message)
+    }
 
-  export const throwError = (error: {new(): Base}) => (e?: Error) => {
+  export const throwError = (error: {new (): Base}) => (e?: Error) => {
     return Promise.reject(new error())
   }
 
@@ -109,5 +110,4 @@ export namespace AppError {
       // this.name = this.constructor.name
     }
   }
-
 }

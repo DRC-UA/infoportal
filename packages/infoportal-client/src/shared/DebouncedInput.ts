@@ -10,7 +10,13 @@ interface DebouncedInputProps<V> {
 }
 
 // FIXME(Alex) Trigger only one onChange but fix useless 2nd API calls.
-export const DebouncedInput = <V>({debounce: debounceTime = 450, defaultValue, value, onChange, children}: DebouncedInputProps<V>) => {
+export const DebouncedInput = <V>({
+  debounce: debounceTime = 450,
+  defaultValue,
+  value,
+  onChange,
+  children,
+}: DebouncedInputProps<V>) => {
   const [innerValue, setInnerValue] = useState<V | undefined>(value)
   const debounced = useCallback(debounce(onChange, debounceTime), [debounceTime, onChange])
 

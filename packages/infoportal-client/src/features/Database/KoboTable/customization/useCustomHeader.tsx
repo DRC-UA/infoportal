@@ -27,7 +27,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('shelter_cashForShelter').id:
       case KoboIndex.byName('ecrec_msmeGrantReg').id:
       case KoboIndex.byName('bn_rapidResponse2').id:
-      case KoboIndex.byName('partner_lampa').id:{
+      case KoboIndex.byName('partner_lampa').id: {
         return (_: HeaderParams<{custom: KoboGeneralMapping.IndividualBreakdown}>) => {
           return (
             <PopoverWrapper
@@ -35,21 +35,21 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
                 slotProps: {
                   paper: {
                     sx: {
-                      minWidth: 510
-                    }
-                  }
-                }
+                      minWidth: 510,
+                    },
+                  },
+                },
               }}
               content={() => (
                 <AgeGroupTable
                   tableId="useCustomHeader"
                   enableDisplacementStatusFilter
                   enablePwdFilter
-                  persons={_.filteredData.flatMap(_ => _.custom.persons)}
+                  persons={_.filteredData.flatMap((_) => _.custom.persons)}
                 />
               )}
             >
-              <IpIconBtn children="group" disabled={!_.filteredData}/>
+              <IpIconBtn children="group" disabled={!_.filteredData} />
             </PopoverWrapper>
           )
         }

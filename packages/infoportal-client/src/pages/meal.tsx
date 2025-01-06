@@ -5,7 +5,7 @@ import {Meal} from '@/features/Meal/Meal'
 export default () => {
   return (
     <ProtectRoute>
-      <Meal/>
+      <Meal />
     </ProtectRoute>
   )
 }

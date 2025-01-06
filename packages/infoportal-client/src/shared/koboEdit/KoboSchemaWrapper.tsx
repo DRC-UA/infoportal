@@ -7,7 +7,7 @@ export const useKoboColumnDef = <T extends Record<string, any>>({
   formId,
   columnName,
 }: {
-  formId: Kobo.FormId,
+  formId: Kobo.FormId
   columnName: KeyOf<T>
 }) => {
   const ctx = useKoboSchemaContext()
@@ -20,7 +20,7 @@ export const useKoboColumnDef = <T extends Record<string, any>>({
     return {
       loading: ctx.byId[formId]?.loading,
       schema,
-      columnDef: schema?.helper.questionIndex[columnName as string]
+      columnDef: schema?.helper.questionIndex[columnName as string],
     }
   }, [ctx.byId, formId, columnName])
 }

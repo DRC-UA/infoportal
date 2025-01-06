@@ -27,52 +27,51 @@ export const DataFilterLayout = ({
   hidePopup?: boolean
 }) => {
   const {m} = useI18n()
-  const {
-    before,
-    after,
-    shapes,
-    filters,
-    setFilters,
-    data,
-    onClear,
-  } = props
+  const {before, after, shapes, filters, setFilters, data, onClear} = props
 
-  const getFilteredOptions = useCallback((name: string) => {
-    const filtersCopy = {...filters}
-    delete filtersCopy[name]
-    return DataFilter.filterData(data ?? seq([]), shapes, filtersCopy)
-  }, [filters, shapes, data])
+  const getFilteredOptions = useCallback(
+    (name: string) => {
+      const filtersCopy = {...filters}
+      delete filtersCopy[name]
+      return DataFilter.filterData(data ?? seq([]), shapes, filtersCopy)
+    },
+    [filters, shapes, data],
+  )
 
   return (
-    <Box sx={{
-      maxWidth: '100%',
-      display: 'flex',
-      alignItems: 'center',
-    }}>
-      <Box sx={{
-        flex: 1,
-        mt: -1,
-        mb: 1,
-        pt: 2,
-        pb: .5,
+    <Box
+      sx={{
+        maxWidth: '100%',
         display: 'flex',
         alignItems: 'center',
-        ...themeLightScrollbar,
-        whiteSpace: 'nowrap',
-        '& > *': {
-          mr: .5,
-        },
-        ...sx as any,
-      }}>
+      }}
+    >
+      <Box
+        sx={{
+          flex: 1,
+          mt: -1,
+          mb: 1,
+          pt: 2,
+          pb: 0.5,
+          display: 'flex',
+          alignItems: 'center',
+          ...themeLightScrollbar,
+          whiteSpace: 'nowrap',
+          '& > *': {
+            mr: 0.5,
+          },
+          ...(sx as any),
+        }}
+      >
         {before}
-        {Obj.entries(shapes).map(([name, shape]) =>
+        {Obj.entries(shapes).map(([name, shape]) => (
           <DebouncedInput<string[]>
             key={name}
             debounce={50}
             value={filters[name]}
-            onChange={_ => setFilters((prev: any) => ({...prev, [name]: _}))}
+            onChange={(_) => setFilters((prev: any) => ({...prev, [name]: _}))}
           >
-            {(value, onChange) =>
+            {(value, onChange) => (
               <DashboardFilterOptions
                 icon={shape.icon}
                 value={value ?? []}
@@ -81,17 +80,19 @@ export const DataFilterLayout = ({
                 options={() => shape.getOptions(() => getFilteredOptions(name))}
                 onChange={onChange}
               />
-            }
+            )}
           </DebouncedInput>
-        )}
+        ))}
         {after}
       </Box>
-      <Box sx={{
-        alignSelf: 'flex-start',
-        display: 'flex',
-        alignItems: 'center',
-        mt: 1.25,
-      }}>
+      <Box
+        sx={{
+          alignSelf: 'flex-start',
+          display: 'flex',
+          alignItems: 'center',
+          mt: 1.25,
+        }}
+      >
         {!hidePopup && (
           <DataFilterLayoutPopup
             {...props}
@@ -101,9 +102,7 @@ export const DataFilterLayout = ({
             getFilteredOptions={getFilteredOptions}
           />
         )}
-        {onClear && (
-          <IpIconBtn children="clear" tooltip={m.clearFilter} onClick={() => onClear()}/>
-        )}
+        {onClear && <IpIconBtn children="clear" tooltip={m.clearFilter} onClick={() => onClear()} />}
       </Box>
     </Box>
   )

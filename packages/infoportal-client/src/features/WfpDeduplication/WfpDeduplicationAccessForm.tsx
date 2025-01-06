@@ -21,20 +21,16 @@ interface Form extends IAccessForm {
   drcOfficesDataFilter?: DrcOffice[]
 }
 
-export const WfpDeduplicationAccessForm = ({
-  children,
-  onAdded,
-}: {
-  onAdded?: () => void,
-  children: ReactElement,
-}) => {
+export const WfpDeduplicationAccessForm = ({children, onAdded}: {onAdded?: () => void; children: ReactElement}) => {
   const {m} = useI18n()
   const {toastHttpError} = useIpToast()
   const {api} = useAppSettings()
 
   const _addAccess = useAsync(api.access.create)
-  const requestInConstToFixTsInference = (databaseId: Kobo.FormId) => api.access.search({featureId: AppFeatureId.kobo_database})
-    .then(_ => _.filter(_ => _.params?.koboFormId === databaseId))
+  const requestInConstToFixTsInference = (databaseId: Kobo.FormId) =>
+    api.access
+      .search({featureId: AppFeatureId.kobo_database})
+      .then((_) => _.filter((_) => _.params?.koboFormId === databaseId))
   const _access = useFetcher(requestInConstToFixTsInference)
 
   useEffectFn(_addAccess.error, toastHttpError)
@@ -43,24 +39,28 @@ export const WfpDeduplicationAccessForm = ({
   const accessForm = useForm<Form>()
 
   const submit = ({selectBy, drcOfficesDataFilter, ...f}: Form) => {
-    _addAccess.call({
-      ...nullValuesToUndefined(f),
-      featureId: AppFeatureId.wfp_deduplication,
-      params: {filters: {office: drcOfficesDataFilter}},
-    }).then(onAdded)
+    _addAccess
+      .call({
+        ...nullValuesToUndefined(f),
+        featureId: AppFeatureId.wfp_deduplication,
+        params: {filters: {office: drcOfficesDataFilter}},
+      })
+      .then(onAdded)
   }
 
   return (
     <Modal
       loading={_addAccess.loading}
       confirmDisabled={!accessForm.formState.isValid}
-      onConfirm={(_, close) => accessForm.handleSubmit(_ => {
-        submit(_)
-        close()
-      })()}
+      onConfirm={(_, close) =>
+        accessForm.handleSubmit((_) => {
+          submit(_)
+          close()
+        })()
+      }
       content={
         <Box sx={{width: 400}}>
-          <AccessForm form={accessForm}/>
+          <AccessForm form={accessForm} />
           <AccessFormSection icon="filter_alt" label={m.filter}>
             <Controller
               name="drcOfficesDataFilter"
@@ -71,7 +71,7 @@ export const WfpDeduplicationAccessForm = ({
                   {...field}
                   defaultValue={[]}
                   label={m.drcOffice}
-                  onChange={_ => onChange(_)}
+                  onChange={(_) => onChange(_)}
                   options={Obj.values(DrcOffice)}
                   sx={{mb: 2.5}}
                 />

@@ -5,7 +5,7 @@ import {WfpDeduplicationPage} from '@/features/WfpDeduplication/WfpDeduplication
 const WfpDeduplicationRoute = () => {
   return (
     <ProtectRoute>
-      <WfpDeduplicationPage/>
+      <WfpDeduplicationPage />
     </ProtectRoute>
   )
 }
@@ -23,7 +23,6 @@ export default WfpDeduplicationRoute
 //   'mode': 'cors',
 //   'credentials': 'include'
 // })
-
 
 // {
 //   "id": "00dc9114-aa04-4b3c-a061-15b85a23cb29",

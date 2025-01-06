@@ -6,12 +6,20 @@ import {chartConfig} from './chartConfig'
 const RADIAN = Math.PI / 180
 
 const renderCustomizedLabel = ({x, y, stroke, value, ...rest}: any) => {
-  return <text x={x} y={y} dy={-4} fill={stroke} fontSize={10} textAnchor="middle">{value}</text>
+  return (
+    <text x={x} y={y} dy={-4} fill={stroke} fontSize={10} textAnchor="middle">
+      {value}
+    </text>
+  )
 }
 
 export const commonLegendProps = {
-  formatter: (_: any) => <Box component="span" sx={{verticalAlign: 'middle', color: t => t.palette.text.primary}}>{_}</Box>,
-  iconType: 'circle'
+  formatter: (_: any) => (
+    <Box component="span" sx={{verticalAlign: 'middle', color: (t) => t.palette.text.primary}}>
+      {_}
+    </Box>
+  ),
+  iconType: 'circle',
 } as const
 
 export const ChartBarStacker = ({
@@ -57,26 +65,22 @@ export const ChartBarStacker = ({
           {/*<CartesianGrid strokeDasharray="3 3"/>*/}
           {layout === 'vertical' ? (
             <>
-              <XAxis type="number" domain={[0, 10]} hide={hideXTicks}/>
-              <YAxis dataKey="key" type="category" width={110} hide={hideYTicks}/>
+              <XAxis type="number" domain={[0, 10]} hide={hideXTicks} />
+              <YAxis dataKey="key" type="category" width={110} hide={hideYTicks} />
             </>
           ) : (
             <>
-              <YAxis type="number" domain={[0, 10]} hide={hideYTicks}/>
-              <XAxis dataKey="key" type="category" width={110} hide={hideXTicks}/>
+              <YAxis type="number" domain={[0, 10]} hide={hideYTicks} />
+              <XAxis dataKey="key" type="category" width={110} hide={hideXTicks} />
             </>
-
           )}
-          <Tooltip/>
-          {!hideLegend && (
-            <Legend {...commonLegendProps}/>
-          )}
-          {Object.keys(first).map((k, i) =>
-            <Bar key={k} dataKey={k} stackId="a" fill={colors(theme)[i]}/>
-          )}
+          <Tooltip />
+          {!hideLegend && <Legend {...commonLegendProps} />}
+          {Object.keys(first).map((k, i) => (
+            <Bar key={k} dataKey={k} stackId="a" fill={colors(theme)[i]} />
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </Box>
   )
 }
-

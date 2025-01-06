@@ -6,13 +6,11 @@ import {yup} from '../../helper/Utils'
 import {GroupService} from '../../feature/group/GroupService'
 
 export class ControllerGroup {
-
   constructor(
     private prisma: PrismaClient,
     private service = new GroupService(prisma),
     private itemService = new GroupItemService(prisma),
-  ) {
-  }
+  ) {}
 
   static readonly idSchema = yup.object({
     id: yup.string().required(),

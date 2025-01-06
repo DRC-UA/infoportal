@@ -6,7 +6,7 @@ export const chunkify = <T, R>({
   fn,
   concurrency,
 }: {
-  size: number,
+  size: number
   data: T[]
   fn: (_: T[]) => Promise<R>
   concurrency?: number
@@ -17,7 +17,10 @@ export const chunkify = <T, R>({
     return chunks
   }, [] as T[][])
   if (concurrency)
-    return PromisePool.withConcurrency(concurrency).for(chunkedSubmissions).process(fn).then(_ => _.results)
+    return PromisePool.withConcurrency(concurrency)
+      .for(chunkedSubmissions)
+      .process(fn)
+      .then((_) => _.results)
   return Promise.all(chunkedSubmissions.map(fn))
 }
 
@@ -31,7 +34,7 @@ export const queuify = <T, P extends any[], M>({
 }: {
   getQueueIndex?: (...p: P) => string
   extractDataFromParams: (...p: P) => M[]
-  reconcileParams: (t: M[], p: P) => P,
+  reconcileParams: (t: M[], p: P) => P
   run: (...p: P) => Promise<T>
   batchSize?: number
   concurrency?: number
@@ -52,7 +55,7 @@ export const queuify = <T, P extends any[], M>({
             concurrency,
             size: batchSize,
             data: data,
-            fn: data => {
+            fn: (data) => {
               return run(...reconcileParams(data, params))
             },
           })
@@ -64,8 +67,6 @@ export const queuify = <T, P extends any[], M>({
     locks.set(queue, processing)
     await processing
     locks.delete(queue)
-
-
   }
 
   return async (...p: P) => {

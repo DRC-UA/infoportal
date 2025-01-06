@@ -11,8 +11,8 @@ export const initGoogleMaps = async ({
   domSelector,
 }: {
   domSelector: string
-  mapId?: string,
-  color: string,
+  mapId?: string
+  color: string
   bubbles: {
     loc: [number, number]
     size: number
@@ -23,7 +23,7 @@ export const initGoogleMaps = async ({
   // return;
   let trys = 0
   while (!google) {
-    await sleep(200 + (100 * trys))
+    await sleep(200 + 100 * trys)
     trys++
     if (trys > 140) break
   }
@@ -34,12 +34,12 @@ export const initGoogleMaps = async ({
     zoom: 5.1,
     controlSize: 32,
   })
-  const max = Math.max(...bubbles.map(_ => _.size))
+  const max = Math.max(...bubbles.map((_) => _.size))
   const flatted = bubbles.map((_: any) => {
-    _.opacity = _.size / max * 0.7
+    _.opacity = (_.size / max) * 0.7
     return _
   })
-  flatted.forEach(_ => {
+  flatted.forEach((_) => {
     if (!_.loc?.[0]) return
     const marker = new google.maps.Marker({
       position: new google.maps.LatLng(_.loc[0], _.loc[1]),
@@ -52,8 +52,8 @@ export const initGoogleMaps = async ({
         // strokeOpacity: 1.0,
         // strokeColor: olor,
         strokeWeight: 0,
-        scale: 5 //pixels
-      }
+        scale: 5, //pixels
+      },
     })
     marker.addListener('click', () => {
       new google.maps.InfoWindow({
@@ -61,7 +61,7 @@ export const initGoogleMaps = async ({
         // ariaLabel: "Uluru",
       }).open({
         anchor: marker,
-        map
+        map,
       })
     })
     // const circle = new google.maps.Circle({

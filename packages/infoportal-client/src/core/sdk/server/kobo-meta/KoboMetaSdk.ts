@@ -4,13 +4,10 @@ import {ApiPaginate, ApiSdkUtils} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {IKoboMeta} from 'infoportal-common'
 
 export class KoboMetaSdk {
-
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   readonly search = <TTag = any>(body: KoboMetaSearchParans = {}): Promise<ApiPaginate<IKoboMeta<TTag>>> => {
-    return this.client.post(`/kobo-meta/search`, {body})
-      .then(ApiSdkUtils.mapPaginate(KoboMetaHelper.mapEntity))
+    return this.client.post(`/kobo-meta/search`, {body}).then(ApiSdkUtils.mapPaginate(KoboMetaHelper.mapEntity))
   }
 
   readonly sync = (): Promise<void> => {

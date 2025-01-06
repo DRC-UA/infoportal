@@ -11,7 +11,7 @@ export const MealVisit = () => {
   if (ctx.byName.meal_visitMonitoring?.get) {
     return (
       <MealVisitProvider>
-        <Outlet/>
+        <Outlet />
       </MealVisitProvider>
     )
   }

@@ -9,9 +9,7 @@ interface ApiParams extends Omit<RequestInit, 'body'> {
 }
 
 class Api {
-
-  constructor(private token: string) {
-  }
+  constructor(private token: string) {}
 
   readonly request = (path: string, init?: ApiParams) => {
     return fetch('https://www.activityinfo.org' + path, {
@@ -20,19 +18,19 @@ class Api {
       // body: init?.method === 'POST' ? body as any : undefined,
       body: init?.body ? JSON.stringify(init.body) : undefined,
       headers: {
-        'Accept': 'application/json, text/plain',
+        Accept: 'application/json, text/plain',
         'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': 'Bearer ' + this.token,
+        Authorization: 'Bearer ' + this.token,
       },
     })
   }
 
   readonly get = <T = any>(path: string, init?: ApiParams): Promise<T> => {
-    return this.request(path, {...init, method: 'GET'}).then(_ => _.json())
+    return this.request(path, {...init, method: 'GET'}).then((_) => _.json())
   }
 
   readonly post = (path: string, init?: ApiParams) => {
-    return this.request(path, {...init, method: 'POST'}).then(_ => _.json())
+    return this.request(path, {...init, method: 'POST'}).then((_) => _.json())
   }
 
   readonly delete = (path: string, init?: ApiParams) => {
@@ -40,14 +38,15 @@ class Api {
   }
 
   readonly postNoJSON = (path: string, init?: ApiParams) => {
-    return this.request(path, {...init, method: 'POST'}).then(_ => _.text())
+    return this.request(path, {...init, method: 'POST'}).then((_) => _.text())
   }
 }
 
 export class ActivityInfoSdk {
-
-  constructor(private token: string, private api = new Api(token)) {
-  }
+  constructor(
+    private token: string,
+    private api = new Api(token),
+  ) {}
 
   static readonly buildRequest = ({
     activityIdPrefix,
@@ -61,36 +60,42 @@ export class ActivityInfoSdk {
     formId: string
   }) => {
     return {
-      'changes': [{
-        'formId': formId,
-        'recordId': activityIdPrefix + ('' + activityIndex).padStart(3, '0'),
-        'parentRecordId': null,
-        'fields': activity
-      }]
+      changes: [
+        {
+          formId: formId,
+          recordId: activityIdPrefix + ('' + activityIndex).padStart(3, '0'),
+          parentRecordId: null,
+          fields: activity,
+        },
+      ],
     }
   }
 
   readonly restore = (formId: string, recordId: string) => {
     return this.api.postNoJSON(`/resources/update`, {
       body: {
-        changes: [{
-          formId,
-          recordId,
-          deleted: false,
-        }]
-      }
+        changes: [
+          {
+            formId,
+            recordId,
+            deleted: false,
+          },
+        ],
+      },
     })
   }
 
   readonly softDeleteRecord = (formId: string, recordId: string) => {
     return this.api.postNoJSON(`/resources/update`, {
       body: {
-        changes: [{
-          formId,
-          recordId,
-          deleted: true,
-        }]
-      }
+        changes: [
+          {
+            formId,
+            recordId,
+            deleted: true,
+          },
+        ],
+      },
     })
   }
 
@@ -99,27 +104,35 @@ export class ActivityInfoSdk {
   }
 
   readonly fetchForms = (dbId: string = 'cas3n26ldsu5aea5') => {
-    return this.api.get<Form>(`/resources/databases/${dbId}`)//.then(_ => _.resources.map(_ => _.id === dbId))
+    return this.api.get<Form>(`/resources/databases/${dbId}`) //.then(_ => _.resources.map(_ => _.id === dbId))
   }
 
   readonly fetchForm = (formId: string = 'cas3n26ldsu5aea5'): Promise<FormDescs> => {
-    return this.api.get(`/resources/form/${formId}/tree/translated`)
-      .then(_ => {
-        return _.forms
-      })
+    return this.api.get(`/resources/form/${formId}/tree/translated`).then((_) => {
+      return _.forms
+    })
   }
 
-  readonly fetchColumns = async (formId: AIID, optionDefId: AIID, filter?: string): Promise<{id: AIID, label: string}[]> => {
-    return this.api.post(`/resources/query/columns`, {
-      body: {
-        filter,
-        // filter: filter ? `_id == \\"${filter}\\"` : undefined,
-        rowSources: [{'rootFormId': formId}],
-        columns: [{'id': 'id', 'expression': '_id'}, {'id': 'k1', 'expression': optionDefId}],
-        truncateStrings: false
-      }
-    }).then(_ => _.columns)
-      .then(res => {
+  readonly fetchColumns = async (
+    formId: AIID,
+    optionDefId: AIID,
+    filter?: string,
+  ): Promise<{id: AIID; label: string}[]> => {
+    return this.api
+      .post(`/resources/query/columns`, {
+        body: {
+          filter,
+          // filter: filter ? `_id == \\"${filter}\\"` : undefined,
+          rowSources: [{rootFormId: formId}],
+          columns: [
+            {id: 'id', expression: '_id'},
+            {id: 'k1', expression: optionDefId},
+          ],
+          truncateStrings: false,
+        },
+      })
+      .then((_) => _.columns)
+      .then((res) => {
         return res.id.values.map((col: any, i: number) => ({
           id: col,
           label: res.k1.values[i],
@@ -128,8 +141,9 @@ export class ActivityInfoSdk {
   }
 
   readonly fetchColumnsFree = async (body: any): Promise<Record<AIID, {values: string[]}>> => {
-    return this.api.post(`/resources/query/columns`, {body})//.then(_ => _.columns)
-      .then(_ => {
+    return this.api
+      .post(`/resources/query/columns`, {body}) //.then(_ => _.columns)
+      .then((_) => {
         const {id, value} = _.columns
         const res = (id.values as string[]).reduce((acc, id, i) => {
           // @ts-ignore
@@ -142,31 +156,43 @@ export class ActivityInfoSdk {
 
   readonly fetchColumnsDemoFslc = async () => {
     return this.fetchColumnsFree({
-      'rowSources': [{'rootFormId': 'cvseljqlqb3ntvj7j'}],
-      'columns': [{'id': '_id', 'expression': '_id'}, {
-        'id': 'Activity',
-        'expression': 'cdu30d0lqb3o3gm7u'
-      }, {
-        'id': 'Subactivity',
-        'expression': 'cxgts7wls342mqv2'
-      }, {'id': 'Indicator', 'expression': 'c8qwc6llqb3o3gm7v'}],
-      'truncateStrings': false,
-      'tags': ['data-entry-ref', 'key-matrix']
-    }).then(_ => {
-      return _._id.values.reduce((acc, id, i) => {
-        if (!acc[_.Activity.values[i]]) acc[_.Activity.values[i]] = {}
-        if (!acc[_.Activity.values[i]][_.Subactivity.values[i]]) acc[_.Activity.values[i]][_.Subactivity.values[i]] = {}
-        if (!acc[_.Activity.values[i]][_.Subactivity.values[i]][_.Indicator.values[i]]) acc[_.Activity.values[i]][_.Subactivity.values[i]][_.Indicator.values[i]] = {}
-        acc[_.Activity.values[i]][_.Subactivity.values[i]][_.Indicator.values[i]] = id
-        return acc
-      }, {} as Record<string, any>)
-    }).then(console.log)
+      rowSources: [{rootFormId: 'cvseljqlqb3ntvj7j'}],
+      columns: [
+        {id: '_id', expression: '_id'},
+        {
+          id: 'Activity',
+          expression: 'cdu30d0lqb3o3gm7u',
+        },
+        {
+          id: 'Subactivity',
+          expression: 'cxgts7wls342mqv2',
+        },
+        {id: 'Indicator', expression: 'c8qwc6llqb3o3gm7v'},
+      ],
+      truncateStrings: false,
+      tags: ['data-entry-ref', 'key-matrix'],
+    })
+      .then((_) => {
+        return _._id.values.reduce(
+          (acc, id, i) => {
+            if (!acc[_.Activity.values[i]]) acc[_.Activity.values[i]] = {}
+            if (!acc[_.Activity.values[i]][_.Subactivity.values[i]])
+              acc[_.Activity.values[i]][_.Subactivity.values[i]] = {}
+            if (!acc[_.Activity.values[i]][_.Subactivity.values[i]][_.Indicator.values[i]])
+              acc[_.Activity.values[i]][_.Subactivity.values[i]][_.Indicator.values[i]] = {}
+            acc[_.Activity.values[i]][_.Subactivity.values[i]][_.Indicator.values[i]] = id
+            return acc
+          },
+          {} as Record<string, any>,
+        )
+      })
+      .then(console.log)
   }
 
   readonly publish = (params: any) => {
     // console.dir(params, {depth: null})
     return this.api.postNoJSON(`/resources/update`, {
-      body: params
+      body: params,
     })
   }
 

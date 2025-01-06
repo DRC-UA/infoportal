@@ -20,15 +20,15 @@ export const Layout = ({
   // loading,
   sidebar,
   loading,
-  header = <AppHeader id="app-header"/>,
+  header = <AppHeader id="app-header" />,
   title,
   mobileBreakpoint,
-  children
+  children,
 }: LayoutProps) => {
   return (
     <LayoutProvider title={title} mobileBreakpoint={mobileBreakpoint} showSidebarButton={!!sidebar}>
       <LayoutUsingContext sidebar={sidebar} header={header}>
-        {loading && <LinearProgress/>}
+        {loading && <LinearProgress />}
         {children}
       </LayoutUsingContext>
     </LayoutProvider>
@@ -44,8 +44,11 @@ const LayoutUsingContext = ({sidebar, header, children}: Pick<LayoutProps, 'side
       <Box
         component="main"
         sx={{
-          transition: t => t.transitions.create('all'),
-          paddingLeft: (sidebar && sidebarOpen && sidebarPinned && !isMobileWidth ? layoutConfig.sidebarWith + defaultSpacing : 0) + 'px',
+          transition: (t) => t.transitions.create('all'),
+          paddingLeft:
+            (sidebar && sidebarOpen && sidebarPinned && !isMobileWidth
+              ? layoutConfig.sidebarWith + defaultSpacing
+              : 0) + 'px',
           overflow: 'hidden',
           position: 'relative',
           display: 'flex',

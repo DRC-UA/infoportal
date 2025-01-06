@@ -2,7 +2,6 @@ import {Obj, seq} from '@alexandreannic/ts-utils'
 import {KeyOf, NonNullableKeys} from './Generic'
 
 export namespace Person {
-
   export type AgeGroup = Record<string, [number, number]>
 
   export interface Person {
@@ -18,7 +17,7 @@ export namespace Person {
     Other = 'Other',
   }
 
-  export const filterDefined = (p: Person[]): NonNullableKeys<Person>[] => p.filter(_ => !!_.gender && _.age) as any
+  export const filterDefined = (p: Person[]): NonNullableKeys<Person>[] => p.filter((_) => !!_.gender && _.age) as any
 
   export const elderlyLimitIncluded = 60
 
@@ -69,7 +68,7 @@ export namespace Person {
       '0 - 17': [0, 17] as [number, number],
       '18 - 59': [18, 59] as [number, number],
       '60+': [60, Infinity] as [number, number],
-    }
+    },
   })
 
   export const getAgeGroup = (str: keyof typeof ageGroup): AgeGroup => {
@@ -85,42 +84,43 @@ export namespace Person {
     return undefined
   }
 
+  export const groupByAgeGroup =
+    <AG extends AgeGroup>(ag: AG = Person.ageGroup.BHA as unknown as AG) =>
+    <T>(p: T, getAge: (_: T) => number) => {
+      return ageToAgeGroup(getAge(p), ag)
+    }
 
-  export const groupByAgeGroup = <AG extends AgeGroup>(
-    ag: AG = Person.ageGroup.BHA as unknown as AG,
-  ) => <T>(
-    p: T, getAge: (_: T) => number
-  ) => {
-    return ageToAgeGroup(getAge(p), ag)
-  }
-
-  export const filterByAgegroup = <AG extends AgeGroup>(ag: AG, key: keyof AG) => (p: Person) => {
-    const [min, max] = ag[key]
-    return p.age !== undefined && p.age >= min && p.age <= max
-  }
+  export const filterByAgegroup =
+    <AG extends AgeGroup>(ag: AG, key: keyof AG) =>
+    (p: Person) => {
+      const [min, max] = ag[key]
+      return p.age !== undefined && p.age >= min && p.age <= max
+    }
 
   // TODO Can improve perf if needed
-  export const groupByGenderAndGroup = <AG extends AgeGroup>(
-    ag: AG = Person.ageGroup.BHA as unknown as AG,
-    skipOther?: boolean
-  ) => (
-    data: Person[]
-  ): Record<KeyOf<AG>, Record<Gender, number>> => {
-    const res = seq(skipOther ? data.filter(_ => [Gender.Female, Gender.Male].includes(_.gender!)) : data).groupBy(_ => _.gender ?? Gender.Other)
-    // const order = [
-    //   Person.Gender.Female,
-    //   Person.Gender.Male,
-    //   Person.Gender.Other,
-    // ]
-    return new Obj(ag).map(k => {
-      return [
-        k as KeyOf<AG>,
-        new Obj(res).mapValues((byGender, gender) => {
-          return byGender.filter(filterByAgegroup(ag, k)).length
+  export const groupByGenderAndGroup =
+    <AG extends AgeGroup>(ag: AG = Person.ageGroup.BHA as unknown as AG, skipOther?: boolean) =>
+    (data: Person[]): Record<KeyOf<AG>, Record<Gender, number>> => {
+      const res = seq(skipOther ? data.filter((_) => [Gender.Female, Gender.Male].includes(_.gender!)) : data).groupBy(
+        (_) => _.gender ?? Gender.Other,
+      )
+      // const order = [
+      //   Person.Gender.Female,
+      //   Person.Gender.Male,
+      //   Person.Gender.Other,
+      // ]
+      return new Obj(ag)
+        .map((k) => {
+          return [
+            k as KeyOf<AG>,
+            new Obj(res)
+              .mapValues((byGender, gender) => {
+                return byGender.filter(filterByAgegroup(ag, k)).length
+              })
+              // .sort(([aK], [bK]) => order.indexOf(aK as any) - order.indexOf(bK as any))
+              .get(),
+          ]
         })
-          // .sort(([aK], [bK]) => order.indexOf(aK as any) - order.indexOf(bK as any))
-          .get()
-      ]
-    }).get() as any
-  }
+        .get() as any
+    }
 }

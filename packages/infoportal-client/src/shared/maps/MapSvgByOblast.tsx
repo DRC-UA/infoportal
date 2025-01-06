@@ -25,12 +25,10 @@ export const MapSvgByOblast = <D extends Record<string, any>>({
   const res = useMemo(() => {
     return ChartHelper.groupBy({
       data: data,
-      groupBy: _ => getOblast(_),
+      groupBy: (_) => getOblast(_),
       filter: value,
       filterBase: base,
     })
   }, [data, value, getOblast])
-  return (
-    <MapSvg data={res} fillBaseOn={fillBaseOn} base={total} {...props}/>
-  )
+  return <MapSvg data={res} fillBaseOn={fillBaseOn} base={total} {...props} />
 }

@@ -1,11 +1,11 @@
 import {Kobo} from '../Kobo'
 
 export interface SubmitResponse {
-  message?: 'Successful submission.',
+  message?: 'Successful submission.'
   formid?: Kobo.Submission.Id
-  encrypted?: boolean,
-  instanceID?: string,
-  submissionDate?: string,
+  encrypted?: boolean
+  instanceID?: string
+  submissionDate?: string
   markedAsCompleteDate?: string
   error?: 'Duplicate submission'
 }

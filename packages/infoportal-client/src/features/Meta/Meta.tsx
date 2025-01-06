@@ -11,7 +11,7 @@ import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 export const Meta = () => {
   return (
     <MetaDashboardProvider>
-      <_Meta/>
+      <_Meta />
     </MetaDashboardProvider>
   )
 }
@@ -28,15 +28,11 @@ const _Meta = () => {
   const ctx = useMetaContext()
   useReactRouterDefaultRoute(metaSiteMap.routes.dashboard)
   return (
-    <Layout
-      title={appFeaturesIndex.metaDashboard.name}
-      loading={ctx.fetcher.loading}
-      sidebar={<MetaSidebar/>}
-    >
+    <Layout title={appFeaturesIndex.metaDashboard.name} loading={ctx.fetcher.loading} sidebar={<MetaSidebar />}>
       {ctx.fetcher.get && (
         <Routes>
-          <Route path={metaSiteMap.routes.dashboard} element={<MetaDashboard/>}/>
-          <Route path={metaSiteMap.routes.data} element={<MetaTable/>}/>
+          <Route path={metaSiteMap.routes.dashboard} element={<MetaDashboard />} />
+          <Route path={metaSiteMap.routes.data} element={<MetaTable />} />
         </Routes>
       )}
     </Layout>

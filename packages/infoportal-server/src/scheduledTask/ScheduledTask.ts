@@ -6,16 +6,13 @@ import {appConf} from '../core/conf/AppConf'
 import {MpcaCachedDb} from '../feature/mpca/MpcaCachedDb'
 
 export class ScheduledTask {
-
   constructor(
     private prisma: PrismaClient,
     private koboApiService = new KoboSyncServer(prisma),
     private conf = appConf,
     private log = app.logger('ScheduledTask'),
     private memMpcaDb = MpcaCachedDb.constructSingleton(prisma),
-  ) {
-
-  }
+  ) {}
 
   readonly start = async () => {
     cron.schedule('0 2 * * *', () => {

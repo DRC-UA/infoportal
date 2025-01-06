@@ -7,14 +7,12 @@ import axios, {AxiosError} from 'axios'
 import {KoboService} from '../../../feature/kobo/KoboService'
 
 export class ControllerKoboApi {
-
   constructor(
     private pgClient: PrismaClient,
     private koboService = new KoboService(pgClient),
     private syncService = new KoboSyncServer(pgClient),
     private koboSdkGenerator = KoboSdkGenerator.getSingleton(pgClient),
-  ) {
-  }
+  ) {}
 
   private readonly extractParams = async (req: Request) => {
     const schema = yup.object({
@@ -24,9 +22,11 @@ export class ControllerKoboApi {
   }
 
   readonly searchSchemas = async (req: Request, res: Response, next: NextFunction) => {
-    const {serverId} = await yup.object({
-      serverId: yup.string().required(),
-    }).validate(req.body)
+    const {serverId} = await yup
+      .object({
+        serverId: yup.string().required(),
+      })
+      .validate(req.body)
     const sdk = await this.koboSdkGenerator.getBy.serverId(serverId)
     const forms = await sdk.v2.getSchemas()
     res.send(forms)
@@ -95,10 +95,12 @@ export class ControllerKoboApi {
   readonly getAttachementsWithoutAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const {formId} = await this.extractParams(req)
-      const {path, fileName} = await yup.object({
-        path: yup.string().required(),
-        fileName: yup.string().optional(),
-      }).validate(req.query)
+      const {path, fileName} = await yup
+        .object({
+          path: yup.string().required(),
+          fileName: yup.string().optional(),
+        })
+        .validate(req.query)
       const sdk = await this.koboSdkGenerator.getBy.formId(formId)
       const img = await sdk.v2.getAttachement(path)
       if (!fileName) {
@@ -115,13 +117,15 @@ export class ControllerKoboApi {
   }
 
   readonly proxy = async (req: Request, res: Response, next: NextFunction) => {
-    const body = await yup.object({
-      formId: yup.string().required(),
-      url: yup.string().required(),
-      method: yup.string().required(),
-      body: yup.mixed<any>().optional(),
-      headers: yup.mixed<any>().optional(),
-    }).validate(req.body)
+    const body = await yup
+      .object({
+        formId: yup.string().required(),
+        url: yup.string().required(),
+        method: yup.string().required(),
+        body: yup.mixed<any>().optional(),
+        headers: yup.mixed<any>().optional(),
+      })
+      .validate(req.body)
     const server = await this.koboSdkGenerator.getServerBy.formId(body.formId)
     try {
       const request = await axios.create().request({

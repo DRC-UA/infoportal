@@ -14,63 +14,58 @@ export interface PanelProps extends Omit<CardProps, 'title'> {
   savableAsImg?: boolean
 }
 
-export const Panel = forwardRef(({
-  elevation,
-  hoverable,
-  loading,
-  children,
-  stretch,
-  sx,
-  title,
-  expendable,
-  savableAsImg,
-  ...other
-}: PanelProps, ref: any) => {
-  return (
-    <Card
-      ref={ref}
-      elevation={elevation}
-      sx={{
-        position: 'relative',
-        background: t => t.palette.background.paper,
-        borderRadius: t => t.shape.borderRadius + 'px',
-        mb: 2,
-        ...(hoverable && {
-          cursor: 'pointer',
-          transition: t => t.transitions.create('all'),
-          '&:hover': {
-            transform: 'scale(1.01)',
-            boxShadow: t => t.shadows[4],
+export const Panel = forwardRef(
+  (
+    {elevation, hoverable, loading, children, stretch, sx, title, expendable, savableAsImg, ...other}: PanelProps,
+    ref: any,
+  ) => {
+    return (
+      <Card
+        ref={ref}
+        elevation={elevation}
+        sx={{
+          position: 'relative',
+          background: (t) => t.palette.background.paper,
+          borderRadius: (t) => t.shape.borderRadius + 'px',
+          mb: 2,
+          ...(hoverable && {
+            cursor: 'pointer',
+            transition: (t) => t.transitions.create('all'),
+            '&:hover': {
+              transform: 'scale(1.01)',
+              boxShadow: (t) => t.shadows[4],
+            },
+          }),
+          ...(stretch && {
+            display: 'flex',
+            flexDirection: 'column',
+            height: (t) => `calc(100% - ${t.spacing(2)})`,
+          }),
+          ...(elevation &&
+            elevation > 0 && {
+              border: 'none',
+            }),
+          '&:hover .panel-actions': {
+            display: 'block',
           },
-        }),
-        ...(stretch && {
-          display: 'flex',
-          flexDirection: 'column',
-          height: t => `calc(100% - ${t.spacing(2)})`,
-        }),
-        ...(elevation && elevation > 0 && {
-          border: 'none',
-        }),
-        '&:hover .panel-actions': {
-          display: 'block',
-        },
-        ...sx,
-      }}
-      {...other}
-    >
-      {title && (
-        <PanelHead>
-          <Box sx={{display: 'flex', alignItems: 'center'}}>
-            {title}
-          </Box>
-        </PanelHead>
-      )}
-      {loading && <LinearProgress sx={{mb: '-4px'}}/>}
-      {(expendable || savableAsImg) ? (
-        <PanelFeatures expendable={expendable} savableAsImg={savableAsImg}>
-          {children}
-        </PanelFeatures>
-      ) : children}
-    </Card>
-  )
-})
+          ...sx,
+        }}
+        {...other}
+      >
+        {title && (
+          <PanelHead>
+            <Box sx={{display: 'flex', alignItems: 'center'}}>{title}</Box>
+          </PanelHead>
+        )}
+        {loading && <LinearProgress sx={{mb: '-4px'}} />}
+        {expendable || savableAsImg ? (
+          <PanelFeatures expendable={expendable} savableAsImg={savableAsImg}>
+            {children}
+          </PanelFeatures>
+        ) : (
+          children
+        )}
+      </Card>
+    )
+  },
+)

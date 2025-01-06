@@ -27,16 +27,13 @@ export const DatabaseTableRoute = () => {
   const {formId} = databaseUrlParamsValidation.validateSync(useParams())
   return (
     <>
-      {map(ctx.getForm(formId), form =>
-        <Page width="full" sx={{p: 0, pb: 0, mb: 0,}}>
+      {map(ctx.getForm(formId), (form) => (
+        <Page width="full" sx={{p: 0, pb: 0, mb: 0}}>
           <Panel sx={{mb: 0}}>
-            <DatabaseTable
-              form={form}
-              formId={formId}
-            />
+            <DatabaseTable form={form} formId={formId} />
           </Panel>
         </Page>
-      )}
+      ))}
     </>
   )
 }
@@ -67,12 +64,14 @@ export const DatabaseTable = ({
   const {accesses, session} = useSession()
   const ctxSchema = useKoboSchemaContext()
   const fetcherAnswers = useKoboAnswersContext().byId(formId)
-  const fetcherForm = useFetcher(() => form ? Promise.resolve(form) : api.kobo.form.get(formId))
+  const fetcherForm = useFetcher(() => (form ? Promise.resolve(form) : api.kobo.form.get(formId)))
 
   const access = useMemo(() => {
-    const list = accesses.filter(Access.filterByFeature(AppFeatureId.kobo_database)).filter(_ => _.params?.koboFormId === formId)
-    const admin = session.admin || !!list.find(_ => _.level === AccessLevel.Admin)
-    const write = admin || !!list.find(_ => _.level === AccessLevel.Write)
+    const list = accesses
+      .filter(Access.filterByFeature(AppFeatureId.kobo_database))
+      .filter((_) => _.params?.koboFormId === formId)
+    const admin = session.admin || !!list.find((_) => _.level === AccessLevel.Admin)
+    const write = admin || !!list.find((_) => _.level === AccessLevel.Write)
     const read = write || list.length > 0
     return {admin, write, read}
   }, [accesses])
@@ -84,16 +83,19 @@ export const DatabaseTable = ({
   }, [formId])
 
   const loading = fetcherAnswers.loading
-  const refetch = useCallback(async (p: FetchParams = {}) => {
-    await fetcherAnswers.fetch(p)
-  }, [formId])
+  const refetch = useCallback(
+    async (p: FetchParams = {}) => {
+      await fetcherAnswers.fetch(p)
+    },
+    [formId],
+  )
 
   return (
     <>
       {ctxSchema.anyLoading && loading && (
         <>
-          <Skeleton sx={{mx: 1, height: 54}}/>
-          <DatatableSkeleton/>
+          <Skeleton sx={{mx: 1, height: 54}} />
+          <DatatableSkeleton />
         </>
       )}
       {/*{(ctxSchema.anyLoading || loading) && !ctxAnswers.byId.get(formId) && (*/}
@@ -110,10 +112,7 @@ export const DatabaseTable = ({
           data={fetcherAnswers.get?.data}
           form={form}
         >
-          <DatabaseKoboTableContent
-            onFiltersChange={onFiltersChange}
-            onDataChange={onDataChange}
-          />
+          <DatabaseKoboTableContent onFiltersChange={onFiltersChange} onDataChange={onDataChange} />
         </DatabaseKoboTableProvider>
       ))}
     </>

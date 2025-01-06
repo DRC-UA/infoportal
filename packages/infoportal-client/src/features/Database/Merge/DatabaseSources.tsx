@@ -12,13 +12,12 @@ export const DatabaseSources = ({serverId}: {serverId: UUID}) => {
   const {api} = useAppSettings()
   const fetcherKoboSchema = useFetcher(api.koboApi.searchSchemas)
   const _sources = useFetchers((formId: UUID) => api.koboApi.getSchema({id: formId}), {
-    requestKey: ([_]) => _
+    requestKey: ([_]) => _,
   })
   const [mainSource, setMainSource] = useState<UUID | undefined>()
 
   useEffect(() => {
-    if (mainSource)
-      _sources.fetch({}, mainSource)
+    if (mainSource) _sources.fetch({}, mainSource)
   }, [mainSource])
 
   useEffect(() => {
@@ -30,10 +29,10 @@ export const DatabaseSources = ({serverId}: {serverId: UUID}) => {
     <Page>
       {fetcherKoboSchema.get && (
         <>
-          <KoboFormListButton forms={fetcherKoboSchema.get} onChange={_ => setMainSource(_)}/>
-          {map(_sources.get[mainSource!], source => (
+          <KoboFormListButton forms={fetcherKoboSchema.get} onChange={(_) => setMainSource(_)} />
+          {map(_sources.get[mainSource!], (source) => (
             <>
-              {source.content.survey.map(q => (
+              {source.content.survey.map((q) => (
                 <Box key={q.name}>{q.name}</Box>
               ))}
             </>

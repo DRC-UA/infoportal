@@ -23,9 +23,7 @@ export type GroupItemUpdate = {
 }
 
 export class GroupSdk {
-
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   readonly create = (body: GroupCreate) => {
     return this.client.put<Group>(`/group`, {body})
@@ -43,14 +41,14 @@ export class GroupSdk {
     name,
     featureId,
   }: {
-    name?: string,
+    name?: string
     featureId?: AppFeatureId
   } = {}): Promise<Group[]> => {
-    return this.client.post(`/group`, {body: {name, featureId}}).then(_ => _.map(GroupHelper.map))
+    return this.client.post(`/group`, {body: {name, featureId}}).then((_) => _.map(GroupHelper.map))
   }
 
   readonly getMine = async (): Promise<Group[]> => {
-    return this.client.get(`/group/me`).then(_ => _.map(GroupHelper.map))
+    return this.client.get(`/group/me`).then((_) => _.map(GroupHelper.map))
   }
 
   readonly updateItem = (itemId: UUID, body: GroupItemUpdate) => {

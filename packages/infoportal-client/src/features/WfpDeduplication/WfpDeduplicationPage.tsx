@@ -21,7 +21,7 @@ export const wfpDeduplicationIndex = {
   siteMap: {
     data: '/',
     access: '/access',
-  }
+  },
 }
 
 const WpfDeduplicationSidebar = () => {
@@ -61,25 +61,25 @@ const WpfDeduplicationSidebar = () => {
                 {m.refresh}
               </IpBtn>
             </SidebarItem>
-            <SidebarHr sx={{my: 2}}/>
+            <SidebarHr sx={{my: 2}} />
           </>
         )}
         <NavLink to={path(wfpDeduplicationIndex.siteMap.data)}>
-          {({isActive}) =>
+          {({isActive}) => (
             <SidebarItem icon="list_alt" active={isActive}>
               {m.data}
             </SidebarItem>
-          }
+          )}
         </NavLink>
         {/*<SidebarItem icon="bar_chart">*/}
         {/*  {m.dashboard}*/}
         {/*</SidebarItem>*/}
         <NavLink to={path(wfpDeduplicationIndex.siteMap.access)}>
-          {({isActive}) =>
+          {({isActive}) => (
             <SidebarItem icon="person_add" active={isActive}>
               {m.accesses}
             </SidebarItem>
-          }
+          )}
         </NavLink>
       </SidebarBody>
     </Sidebar>
@@ -91,15 +91,13 @@ export const WfpDeduplicationPage = () => {
   const access = useMemo(() => appFeaturesIndex.wfp_deduplication.showIf?.(session, accesses), [session, accesses])
   useReactRouterDefaultRoute(wfpDeduplicationIndex.siteMap.data)
   if (!access) {
-    return (
-      <NoFeatureAccessPage/>
-    )
+    return <NoFeatureAccessPage />
   }
   return (
-    <Layout title={appFeaturesIndex.wfp_deduplication.name} sidebar={<WpfDeduplicationSidebar/>}>
+    <Layout title={appFeaturesIndex.wfp_deduplication.name} sidebar={<WpfDeduplicationSidebar />}>
       <Routes>
-        <Route path={wfpDeduplicationIndex.siteMap.data} element={<WfpDeduplicationData/>}/>
-        <Route path={wfpDeduplicationIndex.siteMap.access} element={<WfpDeduplicationAccess/>}/>
+        <Route path={wfpDeduplicationIndex.siteMap.data} element={<WfpDeduplicationData />} />
+        <Route path={wfpDeduplicationIndex.siteMap.access} element={<WfpDeduplicationAccess />} />
       </Routes>
     </Layout>
   )

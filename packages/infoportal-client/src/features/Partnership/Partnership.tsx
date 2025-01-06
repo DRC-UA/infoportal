@@ -25,7 +25,7 @@ export const partnershipIndex = {
     // access: '/access',
     dashboard: '/dashboard',
     form: (id = ':id') => '/form/' + id,
-  }
+  },
 }
 
 const PartnershipSidebar = () => {
@@ -36,7 +36,9 @@ const PartnershipSidebar = () => {
       <SidebarBody>
         <NavLink to={path(partnershipIndex.siteMap.dashboard)}>
           {({isActive, isPending}) => (
-            <SidebarItem icon="insights" active={isActive}>{m.dashboard}</SidebarItem>
+            <SidebarItem icon="insights" active={isActive}>
+              {m.dashboard}
+            </SidebarItem>
           )}
         </NavLink>
         {/*<NavLink to={path(partnershipModule.siteMap.data)}>*/}
@@ -44,11 +46,11 @@ const PartnershipSidebar = () => {
         {/*    <SidebarItem icon="table_chart" active={isActive}>{m.data}</SidebarItem>*/}
         {/*  )}*/}
         {/*</NavLink>*/}
-        <SidebarHr/>
+        <SidebarHr />
         <SidebarSection title={m.koboForms}>
-          {relatedKoboForms.map(_ =>
-            <SidebarKoboLink size="small" key={_} path={path(partnershipIndex.siteMap.form(_))} name={_}/>
-          )}
+          {relatedKoboForms.map((_) => (
+            <SidebarKoboLink size="small" key={_} path={path(partnershipIndex.siteMap.form(_))} name={_} />
+          ))}
         </SidebarSection>
       </SidebarBody>
     </Sidebar>
@@ -60,15 +62,15 @@ export const Partnership = () => {
   return (
     <Layout
       title={appFeaturesIndex.partnership.name}
-      sidebar={<PartnershipSidebar/>}
-      header={<AppHeader id="app-header"/>}
+      sidebar={<PartnershipSidebar />}
+      header={<AppHeader id="app-header" />}
     >
       <PartnershipProvider>
         <Routes>
-          <Route path={partnershipIndex.siteMap.dashboard} element={<PartnershipDashboard/>}/>
-          {relatedKoboForms.map(_ =>
-            <Route key={_} {...getKoboFormRouteProps({path: partnershipIndex.siteMap.form(_), name: _})}/>
-          )}
+          <Route path={partnershipIndex.siteMap.dashboard} element={<PartnershipDashboard />} />
+          {relatedKoboForms.map((_) => (
+            <Route key={_} {...getKoboFormRouteProps({path: partnershipIndex.siteMap.form(_), name: _})} />
+          ))}
         </Routes>
       </PartnershipProvider>
     </Layout>

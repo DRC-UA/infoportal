@@ -2,10 +2,13 @@ import {Dispatch, SetStateAction, useMemo, useRef, useState} from 'react'
 
 export type Func<R = any> = (...args: any[]) => R
 
-export type Fetch<T extends Func<Promise<FetcherResult<T>>>> = (p?: {force?: boolean, clean?: boolean}, ..._: Parameters<T>) => ReturnType<T>;
+export type Fetch<T extends Func<Promise<FetcherResult<T>>>> = (
+  p?: {force?: boolean; clean?: boolean},
+  ..._: Parameters<T>
+) => ReturnType<T>
 
 export interface FetchParams {
-  force?: boolean,
+  force?: boolean
   clean?: boolean
 }
 
@@ -14,14 +17,14 @@ type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
 type FetcherResult<T extends Func> = ThenArg<ReturnType<T>>
 
 export type UseFetcher<F extends Func<Promise<FetcherResult<F>>>, E = any> = {
-  get?: FetcherResult<F>,
-  set: Dispatch<SetStateAction<FetcherResult<F> | undefined>>,
-  loading: boolean,
+  get?: FetcherResult<F>
+  set: Dispatch<SetStateAction<FetcherResult<F> | undefined>>
+  loading: boolean
   error?: E
-  fetch: Fetch<F>,
+  fetch: Fetch<F>
   callIndex: number
-  clearCache: () => void,
-};
+  clearCache: () => void
+}
 
 /**
  * Factorize fetching logic which goal is to prevent unneeded fetchs and expose loading indicator + error status.
@@ -30,11 +33,11 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
   fetcher: F,
   {
     initialValue,
-    mapError = _ => _,
+    mapError = (_) => _,
   }: {
-    initialValue?: FetcherResult<F>,
+    initialValue?: FetcherResult<F>
     mapError?: (_: any) => E
-  } = {}
+  } = {},
 ): UseFetcher<F, E> => {
   const [entity, setEntity] = useState<FetcherResult<F> | undefined>(initialValue)
   const [error, setError] = useState<E | undefined>()
@@ -42,7 +45,7 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
   const [callIndex, setCallIndex] = useState(0)
   const fetch$ = useRef<{
     // Needed to prevent competition issue when call2 got overridden by call1 because call1 finish after call 2.
-    queryRef: number,
+    queryRef: number
     query?: Promise<FetcherResult<F>>
   }>({queryRef: 0})
 
@@ -54,7 +57,7 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
   const fetch = ({force = true, clean = true}: FetchParams = {}, ...args: any[]): Promise<FetcherResult<F>> => {
     fetch$.current.queryRef = fetch$.current.queryRef + 1
     const currQueryRef = fetch$.current.queryRef
-    setCallIndex(_ => _ + 1)
+    setCallIndex((_) => _ + 1)
     if (!force) {
       if (fetch$.current.query) {
         return fetch$.current.query!
@@ -97,14 +100,17 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
     fetch$.current.query = undefined
   }
 
-  return useMemo(() => ({
-    get: entity,
-    set: setEntity,
-    loading,
-    error,
-    callIndex,
-    // TODO(Alex) not sure the error is legitimate
-    fetch: fetch as any,
-    clearCache
-  }), [entity, fetcher, error, loading, callIndex])
+  return useMemo(
+    () => ({
+      get: entity,
+      set: setEntity,
+      loading,
+      error,
+      callIndex,
+      // TODO(Alex) not sure the error is legitimate
+      fetch: fetch as any,
+      clearCache,
+    }),
+    [entity, fetcher, error, loading, callIndex],
+  )
 }

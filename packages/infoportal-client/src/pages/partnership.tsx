@@ -3,10 +3,9 @@ import {Partnership} from '@/features/Partnership/Partnership'
 import {ProtectRoute} from '@/core/Session/SessionContext'
 
 const PartnershipPage = () => {
-
   return (
     <ProtectRoute>
-      <Partnership/>
+      <Partnership />
     </ProtectRoute>
   )
 }

@@ -15,7 +15,7 @@ export const SidebarKoboLink = ({
   size,
 }: {
   size?: SidebarItemProps['size']
-  path: string,
+  path: string
   name: KoboFormName
 }) => {
   const shortName = KoboIndex.byName(name).parsed.name
@@ -23,28 +23,24 @@ export const SidebarKoboLink = ({
     <Tooltip title={name} placement="right">
       <NavLink to={path}>
         {({isActive, isPending}) => (
-          <SidebarItem size={size} active={isActive} icon={appConfig.icons.koboFormLink}>{shortName}</SidebarItem>
+          <SidebarItem size={size} active={isActive} icon={appConfig.icons.koboFormLink}>
+            {shortName}
+          </SidebarItem>
         )}
       </NavLink>
     </Tooltip>
   )
 }
 
-export const getKoboFormRouteProps = ({
-  name,
-  path,
-}: {
-  name: KoboFormName
-  path: string
-}) => {
+export const getKoboFormRouteProps = ({name, path}: {name: KoboFormName; path: string}) => {
   return {
     path,
     element: (
       <Page width="full">
         <Panel>
-          <DatabaseTable formId={KoboIndex.byName(name).id}/>
+          <DatabaseTable formId={KoboIndex.byName(name).id} />
         </Panel>
       </Page>
-    )
+    ),
   }
 }

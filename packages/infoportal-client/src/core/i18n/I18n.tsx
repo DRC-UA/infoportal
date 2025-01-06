@@ -7,19 +7,19 @@ import {ua} from '@/core/i18n/localization/ua'
 export interface I18nContextProps {
   currentLang: AppLang
   setLang: (_: AppLang) => void
-  m: typeof en['messages']
+  m: (typeof en)['messages']
   availableLangs: AppLang[]
-  formatLargeNumber: typeof en['formatLargeNumber']
-  formatDuration: typeof en['formatDuration']
-  formatDate: typeof en['formatDate']
-  dateFromNow: typeof en['dateFromNow']
-  formatTime: typeof en['formatTime']
-  formatDateTime: typeof en['formatDateTime']
+  formatLargeNumber: (typeof en)['formatLargeNumber']
+  formatDuration: (typeof en)['formatDuration']
+  formatDate: (typeof en)['formatDate']
+  dateFromNow: (typeof en)['dateFromNow']
+  formatTime: (typeof en)['formatTime']
+  formatDateTime: (typeof en)['formatDateTime']
 }
 
 export const appLangs = {
   ua,
-  en
+  en,
 }
 
 export type AppLang = keyof typeof appLangs
@@ -28,16 +28,11 @@ const I18nContext = React.createContext<I18nContextProps>({} as any)
 
 export const useI18n = () => useContext<I18nContextProps>(I18nContext as any)
 
-export const withI18n = (Component: any) => (props: any) =>
+export const withI18n = (Component: any) => (props: any) => (
   <I18nContext.Consumer>{(other: any) => <Component {...props} {...other} />}</I18nContext.Consumer>
+)
 
-export const I18nProvider = ({
-  children,
-  defaultLang = 'en'
-}: {
-  readonly defaultLang?: AppLang
-  children: ReactNode
-}) => {
+export const I18nProvider = ({children, defaultLang = 'en'}: {readonly defaultLang?: AppLang; children: ReactNode}) => {
   const [lang, setLang] = useState<AppLang>(defaultLang)
 
   useEffect(() => {

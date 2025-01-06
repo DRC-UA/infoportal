@@ -24,18 +24,21 @@ export const Context = React.createContext({} as DatabaseContext)
 
 export const useDatabaseContext = () => useContext(Context)
 
-export const DatabaseProvider = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const DatabaseProvider = ({children}: {children: ReactNode}) => {
   const {session, accesses} = useSession()
   const {api} = useAppSettings()
-  const _forms = useFetcher(() => api.kobo.form.getAll().then(_ => seq(_).sortByString(_ => KoboFormSdk.parseFormName(_.name).program ?? '')) as Promise<KoboForm[]>)
+  const _forms = useFetcher(
+    () =>
+      api.kobo.form
+        .getAll()
+        .then((_) => seq(_).sortByString((_) => KoboFormSdk.parseFormName(_.name).program ?? '')) as Promise<
+        KoboForm[]
+      >,
+  )
   const {toastHttpError} = useIpToast()
 
   const getForm = useMemo(() => {
-    const index = seq(_forms.get).reduceObject<Record<Kobo.FormId, KoboForm>>(_ => [_.id, _])
+    const index = seq(_forms.get).reduceObject<Record<Kobo.FormId, KoboForm>>((_) => [_.id, _])
     return (_: Kobo.FormId) => index[_]
   }, [_forms.get])
 
@@ -44,22 +47,24 @@ export const DatabaseProvider = ({
   }, [])
 
   const koboAccesses = useMemo(() => {
-    return accesses.filter(Access.filterByFeature(AppFeatureId.kobo_database)).map(_ => _.params?.koboFormId)
+    return accesses.filter(Access.filterByFeature(AppFeatureId.kobo_database)).map((_) => _.params?.koboFormId)
   }, [accesses])
 
   const formsAccessible = useMemo(() => {
-    return _forms.get?.filter(_ => session.admin || koboAccesses.includes(_.id))
+    return _forms.get?.filter((_) => session.admin || koboAccesses.includes(_.id))
   }, [koboAccesses, _forms.get])
 
   useEffectFn(_forms.error, toastHttpError)
 
   return (
-    <Context.Provider value={{
-      _forms,
-      isAdmin: session.admin,
-      formsAccessible,
-      getForm,
-    }}>
+    <Context.Provider
+      value={{
+        _forms,
+        isAdmin: session.admin,
+        formsAccessible,
+        getForm,
+      }}
+    >
       {children}
     </Context.Provider>
   )

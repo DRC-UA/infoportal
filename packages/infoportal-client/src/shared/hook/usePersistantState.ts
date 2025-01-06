@@ -2,13 +2,15 @@ import {Dispatch, SetStateAction, useCallback, useEffect, useState} from 'react'
 import {generateId} from 'react-persistent-state/build/utils/hash'
 
 export const usePersistentState = <S>(
-  initialState: S | (() => S), {
+  initialState: S | (() => S),
+  {
     storageKey = 'react-persistent-state' + generateId(),
-    transformFromStorage = _ => _,
+    transformFromStorage = (_) => _,
   }: {
     transformFromStorage?: (_: S) => S
     storageKey: string
-  }): [S, Dispatch<SetStateAction<S>>, () => void] => {
+  },
+): [S, Dispatch<SetStateAction<S>>, () => void] => {
   const isLocalStorageAvailable = typeof window !== 'undefined' && window.localStorage
 
   const getInitialValue = (): S | (() => S) => {

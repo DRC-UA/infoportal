@@ -12,18 +12,12 @@ type User = {
 }
 
 export class SessionService {
-
   constructor(
     private prisma: PrismaClient,
     private log: AppLogger = app.logger('SessionService'),
-  ) {
-  }
+  ) {}
 
-  readonly login = async (userBody: {
-    name: string
-    username: string
-    accessToken: string
-  }) => {
+  readonly login = async (userBody: {name: string; username: string; accessToken: string}) => {
     class MyCustomAuthenticationProvider implements AuthenticationProvider {
       getAccessToken = async (authenticationProviderOptions?: AuthenticationProviderOptions) => {
         return userBody.accessToken
@@ -39,15 +33,19 @@ export class SessionService {
     // })
 
     const msGraphSdk = Client.initWithMiddleware({
-      authProvider: new MyCustomAuthenticationProvider()
+      authProvider: new MyCustomAuthenticationProvider(),
     })
     const msUser: User = await msGraphSdk.api('/me').get()
-    const avatar = await msGraphSdk.api('/me/photo/$value').get().then((_: Blob) => _.arrayBuffer()).catch(() => {
-      this.log.info(`No profile picture for ${msUser.mail}.`)
-    })
+    const avatar = await msGraphSdk
+      .api('/me/photo/$value')
+      .get()
+      .then((_: Blob) => _.arrayBuffer())
+      .catch(() => {
+        this.log.info(`No profile picture for ${msUser.mail}.`)
+      })
 
     if (msUser.mail === undefined || msUser.jobTitle === undefined) {
-      throw new SessionError.UserNotFound
+      throw new SessionError.UserNotFound()
     }
     const connectedUser = await this.syncUserInDb({
       email: msUser.mail,
@@ -60,11 +58,17 @@ export class SessionService {
     return connectedUser
   }
 
-  readonly syncUserInDb = async ({email, drcJob, accessToken, avatar, name}: {
-    accessToken: string,
-    avatar?: Buffer,
-    name: string,
-    email: string,
+  readonly syncUserInDb = async ({
+    email,
+    drcJob,
+    accessToken,
+    avatar,
+    name,
+  }: {
+    accessToken: string
+    avatar?: Buffer
+    name: string
+    email: string
     drcJob: string
   }): Promise<PUser> => {
     const user = await this.prisma.user.findFirst({where: {email}})
@@ -77,8 +81,8 @@ export class SessionService {
           accessToken,
           drcJob: drcJob,
           avatar,
-          lastConnectedAt: new Date()
-        }
+          lastConnectedAt: new Date(),
+        },
       })
     } else {
       return this.prisma.user.update({
@@ -88,20 +92,20 @@ export class SessionService {
           name,
           avatar,
           drcJob: drcJob,
-          lastConnectedAt: new Date()
-        }
+          lastConnectedAt: new Date(),
+        },
       })
     }
   }
 
-  readonly saveActivity = async ({email, detail}: {email?: string, detail?: string}) => {
+  readonly saveActivity = async ({email, detail}: {email?: string; detail?: string}) => {
     const user = email ? await this.prisma.user.findUnique({where: {email}}) : undefined
     return this.prisma.userActivity.create({
       data: {
         userId: user?.id,
         detail,
         at: new Date(),
-      }
+      },
     })
   }
 }

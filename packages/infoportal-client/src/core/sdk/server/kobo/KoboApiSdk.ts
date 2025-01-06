@@ -5,11 +5,10 @@ import {appConfig, AppConfig} from '@/conf/AppConfig'
 import {ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {Method} from 'axios'
 
-
 export interface FilterBy {
   column: string
   value: (string | null)[]
-  type?: 'array',
+  type?: 'array'
 }
 
 export interface AnswersFilters<T extends FilterBy[] = FilterBy[]> {
@@ -20,7 +19,7 @@ export interface AnswersFilters<T extends FilterBy[] = FilterBy[]> {
 }
 
 export interface FiltersProps {
-  paginate?: ApiPagination;
+  paginate?: ApiPagination
   filters?: AnswersFilters
 }
 
@@ -28,11 +27,11 @@ export interface FnMap<T> {
   fnMap?: (_: Record<string, string | undefined>) => T
 }
 
-
 export class KoboApiSdk {
-
-  constructor(private client: ApiClient, private conf: AppConfig = appConfig) {
-  }
+  constructor(
+    private client: ApiClient,
+    private conf: AppConfig = appConfig,
+  ) {}
 
   readonly synchronizeAnswers = (formId: Kobo.FormId) => {
     return this.client.post(`/kobo-api/${formId}/sync`)
@@ -42,28 +41,45 @@ export class KoboApiSdk {
     return this.client.get(`/kobo-api/${id}/schema`)
   }
 
-  readonly getEditUrl = ({formId, answerId}: {
-    formId: Kobo.FormId,
-    answerId: Kobo.SubmissionId
-  }): string => {
+  readonly getEditUrl = ({formId, answerId}: {formId: Kobo.FormId; answerId: Kobo.SubmissionId}): string => {
     return `${this.conf.apiURL}/kobo-api/${formId}/edit-url/${answerId}`
   }
 
   readonly searchSchemas = (body: {serverId: UUID}): Promise<Kobo.Form[]> => {
-    return this.client.post(`/kobo-api/schema`, {body}).then(_ => _.results.map((_: Record<keyof Kobo.Form, any>): Kobo.Form => {
-      return {
-        ..._,
-        date_created: new Date(_.date_created),
-        date_modified: new Date(_.date_modified),
-      }
-    }))
+    return this.client.post(`/kobo-api/schema`, {body}).then((_) =>
+      _.results.map((_: Record<keyof Kobo.Form, any>): Kobo.Form => {
+        return {
+          ..._,
+          date_created: new Date(_.date_created),
+          date_modified: new Date(_.date_modified),
+        }
+      }),
+    )
   }
 
-  static readonly getAttachementUrl = ({baseUrl, path, formId}: {baseUrl: string, formId: Kobo.FormId, path: string}) => {
+  static readonly getAttachementUrl = ({
+    baseUrl,
+    path,
+    formId,
+  }: {
+    baseUrl: string
+    formId: Kobo.FormId
+    path: string
+  }) => {
     return baseUrl + `/kobo-api/${formId}/attachment?path=${path}`
   }
 
-  readonly proxy = <T = any>({url, method, formId, options}: {formId: Kobo.FormId, method: Method, url: string, options?: RequestOption}) => {
+  readonly proxy = <T = any>({
+    url,
+    method,
+    formId,
+    options,
+  }: {
+    formId: Kobo.FormId
+    method: Method
+    url: string
+    options?: RequestOption
+  }) => {
     return this.client.post<T>(`/kobo-api/proxy`, {
       // responseType: 'blob',
       body: {
@@ -72,8 +88,8 @@ export class KoboApiSdk {
         url,
         body: options?.body,
         headers: options?.headers,
-        mapData: (_: any) => _
-      }
+        mapData: (_: any) => _,
+      },
     })
   }
 }

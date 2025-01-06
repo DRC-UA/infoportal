@@ -1,7 +1,6 @@
 import {AppError} from '../../helper/Errors'
 
 export namespace SessionError {
-
   export class UserNotConnected extends AppError.Forbidden {
     constructor() {
       super('user_not_connected')
@@ -18,4 +17,3 @@ export namespace SessionError {
     }
   }
 }
-

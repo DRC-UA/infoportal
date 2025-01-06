@@ -55,18 +55,21 @@ export interface KoboMealCfmTag extends KoboBaseTags {
 }
 
 export class KoboMealCfmHelper {
-
   static readonly feedbackType2priority = (_?: Meal_cfmInternal.T['feedback_type']) => {
-    return fnSwitch(_!, {
-      apprec_com: CfmDataPriority.Low,
-      request_info: CfmDataPriority.Medium,
-      request_assistance: CfmDataPriority.Medium,
-      non_s_feedback: CfmDataPriority.Medium,
-      sen_feedback: CfmDataPriority.High,
-      coc: CfmDataPriority.High,
-      violation_other: CfmDataPriority.High,
-      sen_safety: CfmDataPriority.High,
-    }, () => undefined)
+    return fnSwitch(
+      _!,
+      {
+        apprec_com: CfmDataPriority.Low,
+        request_info: CfmDataPriority.Medium,
+        request_assistance: CfmDataPriority.Medium,
+        non_s_feedback: CfmDataPriority.Medium,
+        sen_feedback: CfmDataPriority.High,
+        coc: CfmDataPriority.High,
+        violation_other: CfmDataPriority.High,
+        sen_safety: CfmDataPriority.High,
+      },
+      () => undefined,
+    )
   }
 
   static readonly map = (_?: any): KoboMealCfmTag => {

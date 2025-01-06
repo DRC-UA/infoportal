@@ -16,7 +16,7 @@ import {appConfig} from '@/conf/AppConfig'
 import {ProtectionDashboardPsea} from '@/features/Protection/DashboardPsea/ProtectionDashboardPsea'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
-const relatedKoboForms: (KoboFormName)[] = [
+const relatedKoboForms: KoboFormName[] = [
   // 'protection_hhs2_1',
   'protection_communityMonitoring',
   'protection_groupSession',
@@ -32,7 +32,7 @@ export const protectionIndex = {
     dashboardPsea: '/dashboard-psea',
     dashboard: '/dashboard',
     form: (id = ':id') => '/form/' + id,
-  }
+  },
 }
 
 export const ProtectionSidebar = () => {
@@ -45,27 +45,43 @@ export const ProtectionSidebar = () => {
         <SidebarSection title={m.general}>
           <NavLink to={path(protectionIndex.siteMap.dashboard)}>
             {({isActive, isPending}) => (
-              <SidebarItem icon="home" active={isActive}>{m.overview}</SidebarItem>
+              <SidebarItem icon="home" active={isActive}>
+                {m.overview}
+              </SidebarItem>
             )}
           </NavLink>
-          {relatedKoboForms.map(_ =>
-            <SidebarKoboLink size="tiny" key={_} path={path(shelterIndex.siteMap.form(_))} name={_}/>
-          )}
+          {relatedKoboForms.map((_) => (
+            <SidebarKoboLink size="tiny" key={_} path={path(shelterIndex.siteMap.form(_))} name={_} />
+          ))}
         </SidebarSection>
         <SidebarSection title={m.protHHS2.descTitle}>
           <Link target="_blank" href={conf.linkToFeature('dashboard/protection-monitoring' as any, '')}>
-            <SidebarItem icon={appConfig.icons.dashboard} iconEnd="open_in_new">{m.dashboard}</SidebarItem>
+            <SidebarItem icon={appConfig.icons.dashboard} iconEnd="open_in_new">
+              {m.dashboard}
+            </SidebarItem>
           </Link>
-          <SidebarKoboLink size="tiny" path={path(protectionIndex.siteMap.form('protection_hhs3'))} name="protection_hhs3"/>
+          <SidebarKoboLink
+            size="tiny"
+            path={path(protectionIndex.siteMap.form('protection_hhs3'))}
+            name="protection_hhs3"
+          />
         </SidebarSection>
         <SidebarSection title={m._protection.psea}>
           <NavLink to={path(protectionIndex.siteMap.dashboardPsea)}>
             {({isActive, isPending}) => (
-              <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>{m.dashboard}</SidebarItem>
+              <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>
+                {m.dashboard}
+              </SidebarItem>
             )}
           </NavLink>
-          <SidebarItem href={appConfig.externalLink.cocDashboard} icon="open_in_new" target="_blank">{m._protection.cocCasesDashboard}</SidebarItem>
-          <SidebarKoboLink size="tiny" path={path(protectionIndex.siteMap.form('protection_coc'))} name="protection_coc"/>
+          <SidebarItem href={appConfig.externalLink.cocDashboard} icon="open_in_new" target="_blank">
+            {m._protection.cocCasesDashboard}
+          </SidebarItem>
+          <SidebarKoboLink
+            size="tiny"
+            path={path(protectionIndex.siteMap.form('protection_coc'))}
+            name="protection_coc"
+          />
         </SidebarSection>
       </SidebarBody>
     </Sidebar>
@@ -77,15 +93,15 @@ export const Protection = () => {
   return (
     <Layout
       title={appFeaturesIndex.protection.name}
-      sidebar={<ProtectionSidebar/>}
-      header={<AppHeader id="app-header"/>}
+      sidebar={<ProtectionSidebar />}
+      header={<AppHeader id="app-header" />}
     >
       <Routes>
-        <Route path={protectionIndex.siteMap.dashboard} element={<ProtectionOverview/>}/>
-        <Route path={protectionIndex.siteMap.dashboardPsea} element={<ProtectionDashboardPsea/>}/>
-        {relatedKoboForms.map(_ =>
-          <Route key={_} {...getKoboFormRouteProps({path: protectionIndex.siteMap.form(_), name: _})}/>
-        )}
+        <Route path={protectionIndex.siteMap.dashboard} element={<ProtectionOverview />} />
+        <Route path={protectionIndex.siteMap.dashboardPsea} element={<ProtectionDashboardPsea />} />
+        {relatedKoboForms.map((_) => (
+          <Route key={_} {...getKoboFormRouteProps({path: protectionIndex.siteMap.form(_), name: _})} />
+        ))}
       </Routes>
     </Layout>
   )

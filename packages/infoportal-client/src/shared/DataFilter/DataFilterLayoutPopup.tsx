@@ -33,7 +33,7 @@ export const DataFilterLayoutPopup = ({
 
   useEffect(() => setInnerFilters(filters), [filters])
 
-  const open = (!!anchorEl)
+  const open = !!anchorEl
 
   const handleClose = () => {
     setAnchorEl(null)
@@ -47,10 +47,7 @@ export const DataFilterLayoutPopup = ({
 
   return (
     <Box sx={{position: 'relative', ...sx}}>
-      <IpIconBtn
-        children="tune"
-        onClick={(e) => setAnchorEl(e.currentTarget)}
-      />
+      <IpIconBtn children="tune" onClick={(e) => setAnchorEl(e.currentTarget)} />
       <Popover
         disableScrollLock={true}
         open={open}
@@ -61,38 +58,54 @@ export const DataFilterLayoutPopup = ({
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
         sx={{
-          boxShadow: t => t.shadows[4],
+          boxShadow: (t) => t.shadows[4],
           overflow: 'hidden',
           // border: 'none',
           // position: 'absolute',
           // top: 46,
         }}
       >
-        <Box sx={{
-          p: 2,
-          overflowY: 'auto',
-          // maxHeight: '50vh',
-        }}>
+        <Box
+          sx={{
+            p: 2,
+            overflowY: 'auto',
+            // maxHeight: '50vh',
+          }}
+        >
           <Box sx={{mb: 1}}>{before}</Box>
-          {Obj.entries(shapes).map(([name, shape]) =>
+          {Obj.entries(shapes).map(([name, shape]) => (
             <Box key={name} sx={{display: 'flex', alignItems: 'center', mb: 2}}>
-              <Icon color="disabled" sx={{minWidth: 22}}>{shape.icon}</Icon>
-              <Txt truncate sx={{mx: 1, width: 140, maxWidth: 140}}>{shape.label}</Txt>
+              <Icon color="disabled" sx={{minWidth: 22}}>
+                {shape.icon}
+              </Icon>
+              <Txt truncate sx={{mx: 1, width: 140, maxWidth: 140}}>
+                {shape.label}
+              </Txt>
               <Box sx={{flex: 1}}>
                 <IpSelectMultiple
                   sx={{maxWidth: 250, width: 250}}
                   value={innerFilters[name] ?? []}
-                  onChange={_ => setInnerFilters((prev: any) => ({...prev, [name]: _}))}
-                  options={shape.getOptions(() => getFilteredOptions(name))?.map(_ => ({value: _.value, children: _.label})) ?? []}
+                  onChange={(_) => setInnerFilters((prev: any) => ({...prev, [name]: _}))}
+                  options={
+                    shape
+                      .getOptions(() => getFilteredOptions(name))
+                      ?.map((_) => ({value: _.value, children: _.label})) ?? []
+                  }
                 />
               </Box>
             </Box>
-          )}
+          ))}
           <Box sx={{mt: 1}}>{after}</Box>
           <Box sx={{display: 'flex', mt: 1}}>
-            <IpBtn color="primary" onClick={() => setInnerFilters({})}>{m.reinitialize}</IpBtn>
-            <IpBtn color="primary" onClick={handleClose} sx={{marginLeft: 'auto', mr: 1}}>{m.close}</IpBtn>
-            <IpBtn color="primary" variant="contained" onClick={handleSubmit}>{m.confirm}</IpBtn>
+            <IpBtn color="primary" onClick={() => setInnerFilters({})}>
+              {m.reinitialize}
+            </IpBtn>
+            <IpBtn color="primary" onClick={handleClose} sx={{marginLeft: 'auto', mr: 1}}>
+              {m.close}
+            </IpBtn>
+            <IpBtn color="primary" variant="contained" onClick={handleSubmit}>
+              {m.confirm}
+            </IpBtn>
           </Box>
         </Box>
       </Popover>

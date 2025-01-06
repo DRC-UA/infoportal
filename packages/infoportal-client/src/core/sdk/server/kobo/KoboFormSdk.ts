@@ -15,9 +15,7 @@ interface KoboParsedFormName {
 }
 
 export class KoboFormSdk {
-
-  constructor(private client: ApiClient) {
-  }
+  constructor(private client: ApiClient) {}
 
   /**@deprecated*/
   static readonly parseFormName = (name: string): KoboParsedFormName => {
@@ -48,6 +46,6 @@ export class KoboFormSdk {
   }
 
   readonly getAll = (): Promise<KoboForm[]> => {
-    return this.client.get(`/kobo/form`).then(_ => _.map(KoboFormHelper.map))
+    return this.client.get(`/kobo/form`).then((_) => _.map(KoboFormHelper.map))
   }
 }

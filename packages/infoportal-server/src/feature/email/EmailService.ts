@@ -15,7 +15,6 @@ export enum EmailContext {
 }
 
 export class EmailService {
-
   constructor(
     private prisma = new PrismaClient(),
     private conf = appConf,
@@ -25,8 +24,7 @@ export class EmailService {
     private siteMap = new FrontEndSiteMap(),
     private koboService = new KoboService(prisma),
     private log = app.logger('EmailService'),
-  ) {
-  }
+  ) {}
 
   initializeListeners() {
     this.log.info(`Start listening to Email triggers.`)
@@ -38,22 +36,24 @@ export class EmailService {
 
   readonly sendEmailIfTriggered = async (p: GlobalEvent.KoboAnswerEditedParams) => {
     const schema = await this.koboService.getSchema({formId: p.formId})
-    const {question} = getKoboCustomDirectives(schema).find(_ => _.directive.startsWith('TRIGGER_EMAIL')) ?? {}
+    const {question} = getKoboCustomDirectives(schema).find((_) => _.directive.startsWith('TRIGGER_EMAIL')) ?? {}
     if (!question) return
     if (!question.name || !p.answer[question.name]) return
     const html = question.hint?.[0]
     const subject = question.label?.[0]
     if (!html || !subject) {
-      this.log.error(`Missing hint or label in directive ${KoboCustomDirectives.TRIGGER_EMAIL} of form ${KoboIndex.searchById(p.formId) ?? p.formId}`)
+      this.log.error(
+        `Missing hint or label in directive ${KoboCustomDirectives.TRIGGER_EMAIL} of form ${KoboIndex.searchById(p.formId) ?? p.formId}`,
+      )
     } else {
       await this.emailHelper.send({
         to: seq((p.answer[question.name] as string).replaceAll(/\s+/g, ' ').split(' '))
-          .distinct(_ => _)
-          .filter(_ => Regexp.get.email.test(_)),
+          .distinct((_) => _)
+          .filter((_) => Regexp.get.email.test(_)),
         context: EmailContext.Kobo,
         html: this.setVariables(html, p.answer),
         subject: this.setVariables(subject, p.answer),
-        tags: {formId: p.formId}
+        tags: {formId: p.formId},
       })
     }
   }
@@ -73,10 +73,7 @@ export class EmailService {
   }
 
   private isCfmForm(formId: string): boolean {
-    const cfmFormIds = [
-      KoboIndex.byName('meal_cfmInternal').id,
-      KoboIndex.byName('meal_cfmExternal').id,
-    ]
+    const cfmFormIds = [KoboIndex.byName('meal_cfmInternal').id, KoboIndex.byName('meal_cfmExternal').id]
     return cfmFormIds.includes(formId)
   }
 
@@ -84,7 +81,7 @@ export class EmailService {
     try {
       for (const answerId of answerIds) {
         const link = this.siteMap.openCfmEntry(formId, answerId)
-        const userName = await this.users.getUserByEmail(email).then(_ => _?.name)
+        const userName = await this.users.getUserByEmail(email).then((_) => _?.name)
         await this.emailHelper.send({
           context: EmailContext.Cfm,
           to: email,
@@ -97,7 +94,7 @@ export class EmailService {
             <a href="${link}">Link to request</a>
             <br/><br/> 
             Thank you!
-          `
+          `,
         })
         this.log.info(`sendCfmNotification sent to ${email} for form ${formId} and answer ${answerId}`)
       }

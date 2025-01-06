@@ -7,24 +7,24 @@ export const combineSx = (...sxs: (SxProps<Theme> | undefined | false)[]): SxPro
   return sxs.reduce((res, sx) => (sx !== undefined && sx !== false ? {...res, ...sx} : res), {} as any)
 }
 
-export const makeSx = <T>(_: { [key in keyof T]: SxProps<Theme> }) => _
+export const makeSx = <T>(_: {[key in keyof T]: SxProps<Theme>}) => _
 export const makeStyle = (_: SxProps<Theme>) => _
 
 export const sxUtils = makeSx({
   fontBig: {
-    fontSize: t => t.typography.fontSize * 1.15,
+    fontSize: (t) => t.typography.fontSize * 1.15,
   },
   fontNormal: {
-    fontSize: t => t.typography.fontSize,
+    fontSize: (t) => t.typography.fontSize,
   },
   fontSmall: {
-    fontSize: t => t.typography.fontSize * 0.85,
+    fontSize: (t) => t.typography.fontSize * 0.85,
   },
   fontTitle: {
-    fontSize: t => t.typography.fontSize * 1.3,
+    fontSize: (t) => t.typography.fontSize * 1.3,
   },
   fontBigTitle: {
-    fontSize: t => t.typography.fontSize * 1.6,
+    fontSize: (t) => t.typography.fontSize * 1.6,
   },
   tdActions: {
     textAlign: 'right',
@@ -63,7 +63,7 @@ export const styleUtils = (t: Theme) => ({
     input: 'rgba(100,100,220,.04)',
     // inputBorder: 'rgba(0,0,0,0)',// 'rgba(0, 0, 0, 0.12)',
     inputBorder: 'rgba(0, 0, 0, 0.11)',
-    toolbar: t.palette.mode === 'dark' ? t.palette.background.paper : 'rgb(237, 242, 250)',//'#e9eef6',
+    toolbar: t.palette.mode === 'dark' ? t.palette.background.paper : 'rgb(237, 242, 250)', //'#e9eef6',
     // toolbar: t.palette.mode === 'dark' ? t.palette.background.paper :'#ebf1f9',//'#e9eef6',
     success: '#00b79f',
     error: '#cf0040',
@@ -115,8 +115,8 @@ export const muiTheme = ({
   // const mainColor = '#af161e'
   const colorPrimary = {
     main: mainColor,
-    light: alpha(mainColor, .4),
-    dark: darken(mainColor, .4),
+    light: alpha(mainColor, 0.4),
+    dark: darken(mainColor, 0.4),
   }
   const colorSecondary = {
     main: '#1a73e8',
@@ -127,8 +127,8 @@ export const muiTheme = ({
     spacing,
     palette: {
       action: {
-        focus: alpha(mainColor, .1),
-        focusOpacity: .1,
+        focus: alpha(mainColor, 0.1),
+        focusOpacity: 0.1,
       },
       warning: orange,
       primary: colorPrimary,
@@ -136,9 +136,13 @@ export const muiTheme = ({
       error: red,
       mode: dark ? 'dark' : 'light',
       background: {
-        default: backgroundDefault ?? (dark ? defaultAppThemeParams.dark.backgroundDefault : defaultAppThemeParams.light.backgroundDefault),
-        paper: backgroundPaper ?? (dark ? defaultAppThemeParams.dark.backgroundPaper : defaultAppThemeParams.light.backgroundPaper),
-      }
+        default:
+          backgroundDefault ??
+          (dark ? defaultAppThemeParams.dark.backgroundDefault : defaultAppThemeParams.light.backgroundDefault),
+        paper:
+          backgroundPaper ??
+          (dark ? defaultAppThemeParams.dark.backgroundPaper : defaultAppThemeParams.light.backgroundPaper),
+      },
     },
     shape: {
       borderRadius: defaultRadius,
@@ -256,8 +260,8 @@ export const muiTheme = ({
         styleOverrides: {
           badge: {
             zIndex: 0,
-          }
-        }
+          },
+        },
       },
       MuiButton: {
         styleOverrides: {
@@ -331,8 +335,8 @@ export const muiTheme = ({
           root: {
             paddingRight: defaultSpacing * 2,
             paddingLeft: defaultSpacing * 2,
-          }
-        }
+          },
+        },
       },
       MuiFormHelperText: {
         styleOverrides: {
@@ -382,20 +386,22 @@ export const muiTheme = ({
           },
         },
       },
-      MuiOutlinedInput: dark ? {} : {
-        styleOverrides: {
-          root: {
-            '&:hover fieldset': {
-              borderColor: alpha(colorPrimary.main, 0.5) + ` !important`,
+      MuiOutlinedInput: dark
+        ? {}
+        : {
+            styleOverrides: {
+              root: {
+                '&:hover fieldset': {
+                  borderColor: alpha(colorPrimary.main, 0.5) + ` !important`,
+                },
+              },
+              notchedOutline: {
+                transition: 'border-color 140ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+                background: styleUtils(baseTheme).color.input,
+                borderColor: styleUtils(baseTheme).color.inputBorder,
+              },
             },
           },
-          notchedOutline: {
-            transition: 'border-color 140ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-            background: styleUtils(baseTheme).color.input,
-            borderColor: styleUtils(baseTheme).color.inputBorder,
-          },
-        },
-      },
     },
   }
   return createTheme({
@@ -403,14 +409,14 @@ export const muiTheme = ({
     ...theme,
     ...(dark
       ? {
-        MuiOutlinedInput: {
-          styleOverrides: {
-            notchedOutline: {
-              borderColor: '#d9dce0',
+          MuiOutlinedInput: {
+            styleOverrides: {
+              notchedOutline: {
+                borderColor: '#d9dce0',
+              },
             },
           },
-        },
-      }
+        }
       : ({} as any)),
   })
 }
@@ -506,11 +512,13 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     zIndex: 10,
     left: 0,
     // background: t.palette.background.paper,
-    boxShadow: 'inset -2px 0 1px -1px rgba(0,0,0,0.2), -1px 0px 1px 0px rgba(0,0,0,0.14), -1px 0px 3px 0px rgba(0,0,0,0.12)',
+    boxShadow:
+      'inset -2px 0 1px -1px rgba(0,0,0,0.2), -1px 0px 1px 0px rgba(0,0,0,0.14), -1px 0px 3px 0px rgba(0,0,0,0.12)',
   },
   '.table .td-sticky-end': {
     paddingTop: '1px',
-    boxShadow: 'inset 2px 0 1px -1px rgba(0,0,0,0.2), 1px 0px 1px 0px rgba(0,0,0,0.14), 1px 0px 3px 0px rgba(0,0,0,0.12)',
+    boxShadow:
+      'inset 2px 0 1px -1px rgba(0,0,0,0.2), 1px 0px 1px 0px rgba(0,0,0,0.14), 1px 0px 3px 0px rgba(0,0,0,0.12)',
     position: 'sticky',
     zIndex: 10,
     right: 0,
@@ -566,7 +574,7 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
     minWidth: 0,
     width: 0,
     top: 0,
-    paddingTop: t.spacing(.25),
+    paddingTop: t.spacing(0.25),
     paddingBottom: 0,
     position: 'sticky',
     color: t.palette.text.secondary,
@@ -600,14 +608,14 @@ export const themeLightScrollbar: SxProps<Theme> = {
     height: '10px',
   },
   '&::-webkit-scrollbar-track': {
-    borderTop: t => '1px solid ' + t.palette.divider,
+    borderTop: (t) => '1px solid ' + t.palette.divider,
     // borderRadius: 40,
   },
   '&::-webkit-scrollbar-thumb': {
     border: '3px solid transparent',
     height: '4px',
     borderRadius: 40,
-    background: t => t.palette.text.disabled,
+    background: (t) => t.palette.text.disabled,
     backgroundClip: 'content-box',
     // backgroundColor: 'darkgrey',
   },

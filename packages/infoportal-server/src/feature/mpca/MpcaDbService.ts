@@ -11,7 +11,7 @@ import {
   MpcaEntity,
   WfpCategory,
   WfpDeduplication,
-  WfpDeduplicationStatus
+  WfpDeduplicationStatus,
 } from 'infoportal-common'
 import {KoboAnswerFilter} from '../kobo/KoboService'
 import {WfpDeduplicationService} from '../wfpDeduplication/WfpDeduplicationService'
@@ -21,16 +21,14 @@ import {KoboMetaService} from '../kobo/meta/KoboMetaService'
 import {addMonths} from 'date-fns'
 
 export class MpcaDbService {
-
   constructor(
     private prisma: PrismaClient,
     private meta = new KoboMetaService(prisma),
     private kobo: KoboMappedAnswersService = new KoboMappedAnswersService(prisma),
     private wfp: WfpDeduplicationService = new WfpDeduplicationService(prisma),
     private koboSync: KoboSyncServer = new KoboSyncServer(prisma),
-    private conf = appConf
-  ) {
-  }
+    private conf = appConf,
+  ) {}
 
   readonly refreshNonArchivedForms = async () => {
     const forms = [
@@ -38,12 +36,12 @@ export class MpcaDbService {
       KoboIndex.byName('bn_rapidResponse').id,
       KoboIndex.byName('shelter_cashForRepair').id,
     ]
-    await Promise.all(forms.map(formId => this.koboSync.syncApiAnswersToDbByForm({formId})))
+    await Promise.all(forms.map((formId) => this.koboSync.syncApiAnswersToDbByForm({formId})))
   }
 
   readonly search = async (filters: KoboAnswerFilter): Promise<ApiPaginate<MpcaEntity>> => {
     const [wfpIndex, meta] = await Promise.all([
-      this.wfp.search().then(_ => seq(_.data).groupBy(_ => _.taxId!)),
+      this.wfp.search().then((_) => seq(_.data).groupBy((_) => _.taxId!)),
       this.meta.search({
         activities: [
           DrcProgram.MPCA,
@@ -55,54 +53,62 @@ export class MpcaDbService {
           DrcProgram.CashForEducation,
           DrcProgram.CashForFuel,
           DrcProgram.CashForUtilities,
-        ]
+        ],
       }),
     ])
     return ApiPaginateHelper.make()(
-      meta.map(this.getDeduplication(wfpIndex))
+      meta.map(this.getDeduplication(wfpIndex)),
       // .map(this.redirectDonor)
       // .map(this.mergeTagDonor)
     )
   }
 
-  private readonly getDeduplication = (wfpIndex: Record<string, Seq<WfpDeduplication>>) => (row: IKoboMeta): MpcaEntity => {
-    if (row.activity !== DrcProgram.MPCA) return row
-    const res: MpcaEntity = {...row}
-    res.amountUahSupposed = row.personsCount ? row.personsCount * 3 * this.conf.params.assistanceAmountUAH(row.date) : undefined
-    res.amountUahFinal = res.amountUahSupposed
-    if (!row.taxId) return res
-    const dedup = wfpIndex[row.taxId]
-    if (!dedup || dedup.length === 0) return res
-    const defaultResultIfNotFound = {
-      suggestion: DrcSupportSuggestion.FullNoDuplication,
-      suggestionDurationInMonths: -1,
-      amount: res.amountUahSupposed!,
-      beneficiaryId: '',
-      createdAt: row.date,
-      expiry: row.date,
-      validFrom: row.date,
-      wfpId: -1,
-      id: '',
-      category: WfpCategory['CASH-MPA'], // TODO Depends!
-      status: WfpDeduplicationStatus.NotDeduplicated,
+  private readonly getDeduplication =
+    (wfpIndex: Record<string, Seq<WfpDeduplication>>) =>
+    (row: IKoboMeta): MpcaEntity => {
+      if (row.activity !== DrcProgram.MPCA) return row
+      const res: MpcaEntity = {...row}
+      res.amountUahSupposed = row.personsCount
+        ? row.personsCount * 3 * this.conf.params.assistanceAmountUAH(row.date)
+        : undefined
+      res.amountUahFinal = res.amountUahSupposed
+      if (!row.taxId) return res
+      const dedup = wfpIndex[row.taxId]
+      if (!dedup || dedup.length === 0) return res
+      const defaultResultIfNotFound = {
+        suggestion: DrcSupportSuggestion.FullNoDuplication,
+        suggestionDurationInMonths: -1,
+        amount: res.amountUahSupposed!,
+        beneficiaryId: '',
+        createdAt: row.date,
+        expiry: row.date,
+        validFrom: row.date,
+        wfpId: -1,
+        id: '',
+        category: WfpCategory['CASH-MPA'], // TODO Depends!
+        status: WfpDeduplicationStatus.NotDeduplicated,
+      }
+      res.deduplication =
+        wfpIndex[row.taxId].find(
+          (_) =>
+            _.existingStart &&
+            _.existingEnd &&
+            addMonths(row.date, 3).getTime() > _.existingStart.getTime() &&
+            row.date.getTime() < _.existingEnd.getTime(),
+        ) ?? defaultResultIfNotFound
+      if (res.deduplication) {
+        res.amountUahDedup = res.deduplication.amount
+        res.amountUahFinal = res.amountUahDedup
+      }
+      // if (row.hhSize)
+      //   row.amountUahAfterDedup = fnSwitch(row.deduplication?.suggestion!, {
+      //     [DrcSupportSuggestion.OneMonth]: row.hhSize * 2220,
+      //     [DrcSupportSuggestion.TwoMonths]: row.hhSize * 2220 * 2,
+      //     [DrcSupportSuggestion.NoAssistanceDrcDuplication]: 0,
+      //     [DrcSupportSuggestion.NoAssistanceFullDuplication]: 0,
+      //   }, () => row.hhSize! * 3 * 2220)
+      return res
     }
-    res.deduplication = wfpIndex[row.taxId].find(_ => _.existingStart && _.existingEnd
-      && addMonths(row.date, 3).getTime() > _.existingStart.getTime()
-      && row.date.getTime() < _.existingEnd.getTime()
-    ) ?? defaultResultIfNotFound
-    if (res.deduplication) {
-      res.amountUahDedup = res.deduplication.amount
-      res.amountUahFinal = res.amountUahDedup
-    }
-    // if (row.hhSize)
-    //   row.amountUahAfterDedup = fnSwitch(row.deduplication?.suggestion!, {
-    //     [DrcSupportSuggestion.OneMonth]: row.hhSize * 2220,
-    //     [DrcSupportSuggestion.TwoMonths]: row.hhSize * 2220 * 2,
-    //     [DrcSupportSuggestion.NoAssistanceDrcDuplication]: 0,
-    //     [DrcSupportSuggestion.NoAssistanceFullDuplication]: 0,
-    //   }, () => row.hhSize! * 3 * 2220)
-    return res
-  }
 
   // private readonly searchBn_1_mpcaNfi = (filters: KoboAnswerFilter): Promise<MpcaEntity[]> => {
   //   return this.kobo.searchBn_1_mpcaNfi({

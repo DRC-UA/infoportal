@@ -13,16 +13,14 @@ import {SafetyIncidentDashboard} from '@/features/Safety/IncidentsDashboard/Safe
 import {getKoboFormRouteProps, SidebarKoboLink} from '@/features/SidebarKoboLink'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
-const relatedKoboForms: (KoboFormName)[] = [
-  'safety_incident',
-]
+const relatedKoboForms: KoboFormName[] = ['safety_incident']
 
 export const safetyIndex = {
   basePath: '/safety',
   siteMap: {
     incidentDashboard: '/incident-dashboard',
     form: (id = ':id') => '/form/' + id,
-  }
+  },
 }
 
 const MpcaSidebar = () => {
@@ -33,14 +31,16 @@ const MpcaSidebar = () => {
       <SidebarBody>
         <NavLink to={path(safetyIndex.siteMap.incidentDashboard)}>
           {({isActive, isPending}) => (
-            <SidebarItem icon="equalizer" active={isActive}>{m.safety.incidentTrackerTitle}</SidebarItem>
+            <SidebarItem icon="equalizer" active={isActive}>
+              {m.safety.incidentTrackerTitle}
+            </SidebarItem>
           )}
         </NavLink>
-        <SidebarHr/>
+        <SidebarHr />
         <SidebarSection title={m.koboForms}>
-          {relatedKoboForms.map(_ =>
-            <SidebarKoboLink key={_} path={path(safetyIndex.siteMap.form(_))} name={_}/>
-          )}
+          {relatedKoboForms.map((_) => (
+            <SidebarKoboLink key={_} path={path(safetyIndex.siteMap.form(_))} name={_} />
+          ))}
         </SidebarSection>
       </SidebarBody>
     </Sidebar>
@@ -52,23 +52,16 @@ export const Safety = () => {
   const {session, accesses} = useSession()
   const access = useMemo(() => !!appFeaturesIndex.safety.showIf?.(session, accesses), [accesses])
   if (!access) {
-    return (
-      <NoFeatureAccessPage/>
-    )
+    return <NoFeatureAccessPage />
   }
   return (
-    <Layout
-      title={appFeaturesIndex.safety.name}
-      sidebar={<MpcaSidebar/>}
-      header={<AppHeader id="app-header"/>}
-    >
+    <Layout title={appFeaturesIndex.safety.name} sidebar={<MpcaSidebar />} header={<AppHeader id="app-header" />}>
       <Routes>
-        <Route path={safetyIndex.siteMap.incidentDashboard} element={<SafetyIncidentDashboard/>}/>
-        {relatedKoboForms.map(_ =>
-          <Route key={_} {...getKoboFormRouteProps({path: safetyIndex.siteMap.form(_), name: _})}/>
-        )}
+        <Route path={safetyIndex.siteMap.incidentDashboard} element={<SafetyIncidentDashboard />} />
+        {relatedKoboForms.map((_) => (
+          <Route key={_} {...getKoboFormRouteProps({path: safetyIndex.siteMap.form(_), name: _})} />
+        ))}
       </Routes>
     </Layout>
   )
 }
-

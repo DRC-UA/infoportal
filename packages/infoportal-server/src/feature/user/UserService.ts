@@ -9,13 +9,12 @@ export class UserService {
     private prisma: PrismaClient,
     private cache = app.cache,
     private log: AppLogger = app.logger('UserService'),
-  ) {
-  }
+  ) {}
 
   public static getInstance(
     prisma: PrismaClient,
     cache = app.cache,
-    log: AppLogger = app.logger('UserService')
+    log: AppLogger = app.logger('UserService'),
   ): UserService {
     if (!UserService.instance) {
       UserService.instance = new UserService(prisma, cache, log)
@@ -39,9 +38,9 @@ export class UserService {
 
   readonly getUserByEmail = async (email: string) => {
     const cache = await this.loadUsersCache()
-    let user = cache.find(user => user.email === email)
+    let user = cache.find((user) => user.email === email)
     if (!user) {
-      user = await this.prisma.user.findUnique({where: {email}}).then(_ => _ ?? undefined)
+      user = await this.prisma.user.findUnique({where: {email}}).then((_) => _ ?? undefined)
       if (user) {
         cache.push(user!)
       }
@@ -50,23 +49,17 @@ export class UserService {
   }
 
   readonly getUserAvatarByEmail = async (email: string): Promise<Buffer | undefined> => {
-    return this.getUserByEmail(email).then(_ => _?.avatar ?? undefined)
+    return this.getUserByEmail(email).then((_) => _?.avatar ?? undefined)
   }
 
-  readonly update = async ({
-    email,
-    drcOffice,
-  }: {
-    email: string,
-    drcOffice?: DrcOffice
-  }) => {
+  readonly update = async ({email, drcOffice}: {email: string; drcOffice?: DrcOffice}) => {
     const updatedUser = await this.prisma.user.update({
       where: {email},
-      data: {drcOffice}
+      data: {drcOffice},
     })
     this.cache.set({
       key: AppCacheKey.Users,
-      value: this.loadUsersCache().then(_ => _.map(_ => _.email === email ? updatedUser : _))
+      value: this.loadUsersCache().then((_) => _.map((_) => (_.email === email ? updatedUser : _))),
     })
     return updatedUser
   }

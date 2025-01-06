@@ -1,5 +1,14 @@
 import React, {useMemo} from 'react'
-import {DisplacementStatus, drcDonorTranlate, DrcSector, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person} from 'infoportal-common'
+import {
+  DisplacementStatus,
+  drcDonorTranlate,
+  DrcSector,
+  KoboMetaStatus,
+  OblastIndex,
+  Period,
+  PeriodHelper,
+  Person,
+} from 'infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {Divider, Icon, ThemeProvider, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
@@ -26,13 +35,15 @@ import {Txt} from '@/shared/Txt'
 export const MetaSnapshotCashAssistance = (p: MetaSnapshotProps) => {
   const {theme} = useAppSettings()
   return (
-    <ThemeProvider theme={muiTheme({
-      ...theme.appThemeParams,
-      mainColor: '#3700b3'
-      // mainColor: '#6200ee'
-    })}>
+    <ThemeProvider
+      theme={muiTheme({
+        ...theme.appThemeParams,
+        mainColor: '#3700b3',
+        // mainColor: '#6200ee'
+      })}
+    >
       <MpcaProvider>
-        <Cp {...p}/>
+        <Cp {...p} />
       </MpcaProvider>
     </ThemeProvider>
   )
@@ -43,18 +54,15 @@ const Cp = ({period}: MetaSnapshotProps) => {
   const {m, formatLargeNumber} = useI18n()
   const ctx = useMpcaContext()
 
-  const data = useMemo(() => ctx.data?.filter(_ => PeriodHelper.isDateIn(period, _.date)) ?? seq([]), [ctx.data])
-  const dataMpca = data.filter(_ => _.sector === DrcSector.MPCA)
-  const persons = data.flatMap(_ => _.persons ?? [])
+  const data = useMemo(() => ctx.data?.filter((_) => PeriodHelper.isDateIn(period, _.date)) ?? seq([]), [ctx.data])
+  const dataMpca = data.filter((_) => _.sector === DrcSector.MPCA)
+  const persons = data.flatMap((_) => _.persons ?? [])
   const computed = useMpcaComputed({data: dataMpca})
-  const totalAmount = useMemo(() => data.sum(_ => _.amountUahFinal ?? 0), [data])
+  const totalAmount = useMemo(() => data.sum((_) => _.amountUahFinal ?? 0), [data])
 
   return (
     <PdfSlide format="vertical">
-      <MetaSnapshotHeader
-        period={period as Period}
-        subTitle="Cash assistance"
-      />
+      <MetaSnapshotHeader period={period as Period} subTitle="Cash assistance" />
       <PdfSlideBody>
         <Div column>
           <Div column>
@@ -70,7 +78,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                   {formatLargeNumber(persons.length)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="person_remove" title={m.uniqIndividuals}>
-                  {formatLargeNumber(data.distinct(_ => _.taxId).sum(_ => _.personsCount ?? 0))}
+                  {formatLargeNumber(data.distinct((_) => _.taxId).sum((_) => _.personsCount ?? 0))}
                 </SlideWidget>
               </Div>
             </Div>
@@ -80,17 +88,23 @@ const Cp = ({period}: MetaSnapshotProps) => {
               <PanelWBody title="Registrations by Oblast">
                 <MapSvgByOblast
                   sx={{mx: 1.5, mt: -1, mb: -1.5}}
-                  getOblast={_ => OblastIndex.byName(_.oblast).iso}
+                  getOblast={(_) => OblastIndex.byName(_.oblast).iso}
                   data={data}
                   fillBaseOn="value"
                 />
               </PanelWBody>
               <PanelWBody title={m.ageGroup}>
-                <Lazy deps={[data]} fn={(d) => {
-                  const gb = Person.groupByGenderAndGroup(Person.ageGroup.ECHO, true)(d?.flatMap(_ => _.persons ?? [])!)
-                  return new Obj(gb).entries().map(([k, v]) => ({key: k, ...v}))
-                }}>
-                  {_ => <ChartBarStacker data={_} height={156} sx={{mb: -1, mr: -2}}/>}
+                <Lazy
+                  deps={[data]}
+                  fn={(d) => {
+                    const gb = Person.groupByGenderAndGroup(
+                      Person.ageGroup.ECHO,
+                      true,
+                    )(d?.flatMap((_) => _.persons ?? [])!)
+                    return new Obj(gb).entries().map(([k, v]) => ({key: k, ...v}))
+                  }}
+                >
+                  {(_) => <ChartBarStacker data={_} height={156} sx={{mb: -1, mr: -2}} />}
                 </Lazy>
               </PanelWBody>
               <Div>
@@ -100,7 +114,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title="Females"
                       data={persons}
-                      filter={_ => _.gender === Person.Gender.Female}
+                      filter={(_) => _.gender === Person.Gender.Female}
                     />
                   </PanelWBody>
                 </Div>
@@ -110,7 +124,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title={<span style={{textTransform: 'none'}}>PwDs</span>}
                       data={persons}
-                      filter={_ => (_.disability ?? []).length > 0}
+                      filter={(_) => (_.disability ?? []).length > 0}
                     />
                   </PanelWBody>
                 </Div>
@@ -122,7 +136,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title="IDPs"
                       data={persons}
-                      filter={_ => _.displacement === DisplacementStatus.Idp}
+                      filter={(_) => _.displacement === DisplacementStatus.Idp}
                     />
                   </PanelWBody>
                 </Div>
@@ -132,33 +146,35 @@ const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title="Returnees"
                       data={persons}
-                      filter={_ => _.displacement === DisplacementStatus.Returnee}
+                      filter={(_) => _.displacement === DisplacementStatus.Returnee}
                     />
                   </PanelWBody>
                 </Div>
               </Div>
               <PanelWBody title="Main Donors">
-                <ChartBarMultipleBy
-                  data={data}
-                  label={drcDonorTranlate}
-                  limit={5}
-                  by={_ => _.donor ?? []}
-                />
+                <ChartBarMultipleBy data={data} label={drcDonorTranlate} limit={5} by={(_) => _.donor ?? []} />
               </PanelWBody>
             </Div>
             <Div column>
               <PanelWBody>
-                <Lazy deps={[data]} fn={() => {
-                  const gb = data.groupBy(d => format(d.date, 'yyyy-MM'))
-                  const gbByCommittedDate = data.groupBy(d => d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '')
-                  const months = seq([...Obj.keys(gb), ...Obj.keys(gbByCommittedDate)]).distinct(_ => _).sort()
-                  return months.map(month => ({
-                    name: month,
-                    'Registration': gb[month].length,
-                    'Assistance': gbByCommittedDate[month]?.filter(_ => _.status === KoboMetaStatus.Committed).length
-                  }))
-                }}>
-                  {_ => (
+                <Lazy
+                  deps={[data]}
+                  fn={() => {
+                    const gb = data.groupBy((d) => format(d.date, 'yyyy-MM'))
+                    const gbByCommittedDate = data.groupBy((d) =>
+                      d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '',
+                    )
+                    const months = seq([...Obj.keys(gb), ...Obj.keys(gbByCommittedDate)])
+                      .distinct((_) => _)
+                      .sort()
+                    return months.map((month) => ({
+                      name: month,
+                      Registration: gb[month].length,
+                      Assistance: gbByCommittedDate[month]?.filter((_) => _.status === KoboMetaStatus.Committed).length,
+                    }))
+                  }}
+                >
+                  {(_) => (
                     <ChartLine
                       fixMissingMonths
                       height={180}
@@ -171,12 +187,11 @@ const Cp = ({period}: MetaSnapshotProps) => {
                 </Lazy>
               </PanelWBody>
               <PanelWBody title="Activities">
-                <ChartBarSingleBy
-                  data={data}
-                  by={_ => m.activitiesMerged_[_.activity!]}
-                />
+                <ChartBarSingleBy data={data} by={(_) => m.activitiesMerged_[_.activity!]} />
                 <Txt color="hint" block sx={{mt: 2, textAlign: 'justify'}}>
-                  <Icon sx={{mr: 1, fontSize: '15px !important'}} color="disabled">info</Icon>
+                  <Icon sx={{mr: 1, fontSize: '15px !important'}} color="disabled">
+                    info
+                  </Icon>
                   IPA/C4P not included not included
                 </Txt>
               </PanelWBody>
@@ -185,36 +200,36 @@ const Cp = ({period}: MetaSnapshotProps) => {
                   <SlideWidget title="Total amount provided with MPCA" sx={{mt: 0, pt: 0}}>
                     {formatLargeNumber(totalAmount)} UAH
                   </SlideWidget>
-                  <Lazy deps={[dataMpca]} fn={(d) => {
-                    const all = d.groupBy(d => format(d.date, 'yyyy-MM'))
-                    return Obj.keys(all).sort().map(m => ({
-                      name: m,
-                      'Provided': seq(all[m]).filter(_ => _.status === KoboMetaStatus.Committed).sum(_ => _.amountUahFinal ?? 0),
-                      'Planned': seq(all[m]).sum(_ => _.amountUahSupposed ?? 0),
-                    }))
-                    // .map((k, v) => [k, {
-                    //   supposed: seq(v).sum(_ => _.amountUahSupposed ?? 0),
-                    //   final: seq(v).filter(_ => _.status === KoboMetaStatus.Committed).sum(_ => _.amountUahFinal ?? 0),
-                    // }])
-                    // .sort(([ka], [kb]) => ka.localeCompare(kb))
-                    // .entries()
-                    // .map(([k, v]) => ({
-                    //   name: k,
-                    //   'Estimated amount': v.supposed,
-                    //   'Amount provided': v.final,
-                    // }))
-                  }}>
-                    {_ => (
-                      <ChartLine
-                        fixMissingMonths
-                        height={180}
-                        data={_ as any}
-                        hideLabelToggle
-                      />
-                    )}
+                  <Lazy
+                    deps={[dataMpca]}
+                    fn={(d) => {
+                      const all = d.groupBy((d) => format(d.date, 'yyyy-MM'))
+                      return Obj.keys(all)
+                        .sort()
+                        .map((m) => ({
+                          name: m,
+                          Provided: seq(all[m])
+                            .filter((_) => _.status === KoboMetaStatus.Committed)
+                            .sum((_) => _.amountUahFinal ?? 0),
+                          Planned: seq(all[m]).sum((_) => _.amountUahSupposed ?? 0),
+                        }))
+                      // .map((k, v) => [k, {
+                      //   supposed: seq(v).sum(_ => _.amountUahSupposed ?? 0),
+                      //   final: seq(v).filter(_ => _.status === KoboMetaStatus.Committed).sum(_ => _.amountUahFinal ?? 0),
+                      // }])
+                      // .sort(([ka], [kb]) => ka.localeCompare(kb))
+                      // .entries()
+                      // .map(([k, v]) => ({
+                      //   name: k,
+                      //   'Estimated amount': v.supposed,
+                      //   'Amount provided': v.final,
+                      // }))
+                    }}
+                  >
+                    {(_) => <ChartLine fixMissingMonths height={180} data={_ as any} hideLabelToggle />}
                   </Lazy>
                   {/*</PanelBody>*/}
-                  <Divider sx={{my: 2}}/>
+                  <Divider sx={{my: 2}} />
                   {/*<PanelBody>*/}
                   <ChartPieWidget
                     dense

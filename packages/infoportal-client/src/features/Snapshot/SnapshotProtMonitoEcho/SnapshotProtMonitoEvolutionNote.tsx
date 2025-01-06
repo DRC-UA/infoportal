@@ -11,9 +11,11 @@ export const SnapshotProtMonitoEvolutionNote = (props: BoxProps) => {
     <Box {...props}>
       {ctx.period.start && ctx.period.end && (
         <Txt color="disabled">
-          <Icon sx={{mr: 1, fontSize: '15px !important'}} color="disabled">info</Icon>
-          {'Compared with the previous monthly monitoring period '}
-          ({format(subMonths(ctx.period.start, 1), 'MMMM yyyy')})
+          <Icon sx={{mr: 1, fontSize: '15px !important'}} color="disabled">
+            info
+          </Icon>
+          {'Compared with the previous monthly monitoring period '}(
+          {format(subMonths(ctx.period.start, 1), 'MMMM yyyy')})
         </Txt>
       )}
     </Box>
