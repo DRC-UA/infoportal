@@ -2,7 +2,6 @@ import {ApiClient} from '@/core/sdk/server/ApiClient'
 import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {
   Bn_re,
-  DisplacementStatus,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   Ecrec_msmeGrantEoi,
@@ -29,7 +28,6 @@ import {
   Partner_angels,
   Partnership_partnersDatabase,
   Person,
-  Person.Details,
   Protection_coc,
   Protection_gbv,
   Protection_gbvSocialProviders,
@@ -171,9 +169,9 @@ export class KoboTypedAnswerSdk {
                         displacement: fnSwitch(
                           p.hh_char_hh_det_status!,
                           {
-                            idp:Person.DisplacementStatus.Idp,
-                            returnee:Person.DisplacementStatus.Idp,
-                            'non-displaced':Person.DisplacementStatus.NonDisplaced,
+                            idp: Person.DisplacementStatus.Idp,
+                            returnee: Person.DisplacementStatus.Idp,
+                            'non-displaced': Person.DisplacementStatus.NonDisplaced,
                           },
                           () => undefined,
                         ),

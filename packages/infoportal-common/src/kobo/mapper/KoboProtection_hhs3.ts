@@ -1,7 +1,7 @@
 import {Protection_hhs2, Protection_hhs3} from '../generated'
 import {KoboBaseTags, KoboSubmissionFlat} from './Kobo'
 import {DrcProject} from '../../type/Drc'
-import {Person as IpPerson} from 'infoportal-common'
+import {Person as IpPerson} from '../../type/Person'
 import {KoboXmlMapper} from './KoboXmlMapper'
 
 export namespace KoboProtection_hhs3 {
