@@ -29,14 +29,14 @@ export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
 
   namespace Xml {
-    export type Gender = 'male' | 'female' | 'other' | string
+    export type Gender = 'male' | 'female' | 'other' | 'unspecified' | 'unable_unwilling_to_answer' | 'other_pns'
 
     export type DisabilityLevel = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_det_dis_level']
 
     export type DisabilitySelected = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_det_dis_select']
 
     // export type Displacement = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_res_stat']
-    export type Displacement = 'idp' | 'long_res' | 'ret' | 'ref_asy' | 'other' | 'returnee' | 'long'
+    export type Displacement = 'idp' | 'long_res' | 'ret' | 'ref_asy' | 'other' | 'returnee' | 'long' | 'pnd'
 
     export type Individual = {
       hh_char_hh_det_gender?: Gender
@@ -71,6 +71,8 @@ export namespace KoboXmlMapper {
           {
             male: Person.Gender.Male,
             female: Person.Gender.Female,
+            other: Person.Gender.Other,
+            other_pns: Person.Gender.Other,
           },
           () => undefined,
         )
@@ -281,7 +283,15 @@ export namespace KoboXmlMapper {
       return [
         {
           age: row.age,
-          gender: Gender.common({hh_char_hh_det_gender: row.gender}),
+          gender: fnSwitch(
+            row.gender!,
+            {
+              man: Person.Gender.Male,
+              other: Person.Gender.Other,
+              woman: Person.Gender.Female,
+            },
+            () => undefined,
+          ),
           displacement: fnSwitch(
             row.disp_status!,
             {

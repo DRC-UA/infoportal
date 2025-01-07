@@ -1,6 +1,6 @@
 import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
-import {capitalize, DrcProgram, OblastIndex, OblastISO} from 'infoportal-common'
+import {capitalize, DrcProgram, OblastIndex, OblastISO, Person} from 'infoportal-common'
 
 const invalidDate = ''
 

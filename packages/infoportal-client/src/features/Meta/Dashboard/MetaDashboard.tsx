@@ -1,5 +1,5 @@
 import React from 'react'
-import {KoboIndex, KoboMetaStatus, OblastIndex} from 'infoportal-common'
+import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared/Page'
