@@ -14,7 +14,7 @@ import {
   KeyOf,
   KoboIndex,
   KoboMetaStatus,
-  PersonDetails,
+  Person,
   UUID,
 } from 'infoportal-common'
 import {appConf} from '../../../core/conf/AppConf'
@@ -45,7 +45,7 @@ export class KoboMetaMapper {
     _: Omit<MetaMapped<T>, 'project' | 'donor'> & {
       project?: DrcProject[]
       donor?: DrcDonor[]
-      persons?: PersonDetails[]
+      persons?: Person.Details[]
     },
   ): MetaMapped => {
     if (!_.project) _.project = []

@@ -1,4 +1,4 @@
-import {add, DisplacementStatus, Person, PersonDetails, WgDisability} from 'infoportal-common'
+import {add, Person} from 'infoportal-common'
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
@@ -9,8 +9,8 @@ import {Box, BoxProps, Switch, Theme} from '@mui/material'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {IpBtn} from '@/shared/Btn'
 
-const displacementStatusOptions = Obj.values(DisplacementStatus)
-const disabilitiesOptions = Obj.values(WgDisability)
+const displacementStatusOptions = Obj.values(Person.DisplacementStatus)
+const disabilitiesOptions = Obj.values(Person.WgDisability)
 
 export const AgeGroupTable = ({
   tableId,
@@ -23,10 +23,10 @@ export const AgeGroupTable = ({
   hideHeader?: boolean
   enableDisplacementStatusFilter?: boolean
   tableId: string
-  persons?: PersonDetails[]
+  persons?: Person.Details[]
   enablePwdFilter?: boolean
 } & BoxProps) => {
-  const [displacementStatus, setDisplacementStatus] = useState<DisplacementStatus[]>([])
+  const [displacementStatus, setDisplacementStatus] = useState<Person.DisplacementStatus[]>([])
   const [onlyPwd, setOnlyPwd] = useState<boolean>(false)
   const [tableAgeGroup, setTableAgeGroup] = usePersistentState<(typeof Person.ageGroups)[0]>('ECHO', {
     storageKey: 'mpca-dashboard-ageGroup',
@@ -45,7 +45,7 @@ export const AgeGroupTable = ({
       if (
         enablePwdFilter &&
         onlyPwd &&
-        (_.disability === undefined || _.disability.includes(WgDisability.None) || _.disability.length === 0)
+        (_.disability === undefined || _.disability.includes(Person.WgDisability.None) || _.disability.length === 0)
       )
         return false
       return true

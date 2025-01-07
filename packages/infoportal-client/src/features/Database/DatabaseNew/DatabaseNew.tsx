@@ -43,7 +43,6 @@ export const DatabaseNew = ({children, onAdded}: {onAdded?: () => void; children
         if (selectedForm) {
           _add.call(selectedForm).then(onAdded)
           setSelectedForm(undefined)
-          close()
         }
       }}
       content={

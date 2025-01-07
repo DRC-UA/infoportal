@@ -1,12 +1,12 @@
 import {Meal_cashPdm} from '../generated'
 import {Person} from '../../type/Person'
 import {fnSwitch} from '@alexandreannic/ts-utils'
-import {DisplacementStatus, KoboSubmissionFlat, PersonDetails} from './Kobo'
+import {KoboSubmissionFlat} from './Kobo'
 import {Meal_shelterPdm} from '../generated/Meal_shelterPdm'
 import {KoboClient} from 'kobo-sdk'
 
 export namespace KoboMealPdm {
-  export type Person = PersonDetails
+  export type Person = Person.Details
 
   export type T = KoboSubmissionFlat<PdmFormAnswers> & {
     persons: Person[]
@@ -20,7 +20,7 @@ export namespace KoboMealPdm {
     return r
   }
 
-  const mapPersons = (data: PdmFormAnswers): PersonDetails[] => {
+  const mapPersons = (data: PdmFormAnswers): Person.Details[] => {
     if (isCashForm(data)) {
       return mapCashPersons(data as Meal_cashPdm.T)
     } else {
@@ -28,7 +28,7 @@ export namespace KoboMealPdm {
     }
   }
 
-  export const mapCashPersons = (_: Meal_cashPdm.T): PersonDetails[] => {
+  export const mapCashPersons = (_: Meal_cashPdm.T): Person.Details[] => {
     return [
       {
         age: _.age!,
@@ -49,9 +49,9 @@ export namespace KoboMealPdm {
       displacement: fnSwitch(
         person.displacement,
         {
-          idp: DisplacementStatus.Idp,
-          long: DisplacementStatus.NonDisplaced,
-          returnee: DisplacementStatus.Returnee,
+          idp: Person.DisplacementStatus.Idp,
+          long: Person.DisplacementStatus.NonDisplaced,
+          returnee: Person.DisplacementStatus.Returnee,
         },
         () => undefined,
       ),
@@ -59,7 +59,7 @@ export namespace KoboMealPdm {
     }))
   }
 
-  export const mapShelterPersons = (_: Meal_shelterPdm.T): PersonDetails[] => {
+  export const mapShelterPersons = (_: Meal_shelterPdm.T): Person.Details[] => {
     return [
       {
         age: _.Please_state_your_age!,
@@ -80,9 +80,9 @@ export namespace KoboMealPdm {
       displacement: fnSwitch(
         person.displacement,
         {
-          idp: DisplacementStatus.Idp,
-          long: DisplacementStatus.NonDisplaced,
-          returnee: DisplacementStatus.Returnee,
+          idp: Person.DisplacementStatus.Idp,
+          long: Person.DisplacementStatus.NonDisplaced,
+          returnee: Person.DisplacementStatus.Returnee,
         },
         () => undefined,
       ),

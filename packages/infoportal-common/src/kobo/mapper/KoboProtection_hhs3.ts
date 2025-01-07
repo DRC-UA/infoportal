@@ -1,10 +1,11 @@
 import {Protection_hhs2, Protection_hhs3} from '../generated'
-import {KoboBaseTags, KoboSubmissionFlat, PersonDetails} from './Kobo'
+import {KoboBaseTags, KoboSubmissionFlat} from './Kobo'
 import {DrcProject} from '../../type/Drc'
+import {Person as IpPerson} from 'infoportal-common'
 import {KoboXmlMapper} from './KoboXmlMapper'
 
 export namespace KoboProtection_hhs3 {
-  export type Person = PersonDetails & {
+  export type Person = IpPerson.Details & {
     lackDoc: Protection_hhs2.T['does_1_lack_doc']
     isIdpRegistered: Protection_hhs2.T['is_member_1_registered']
   }

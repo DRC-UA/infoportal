@@ -234,8 +234,8 @@ export namespace AiShelterMapper {
                     fnSwitch(
                       row.displacement!,
                       {
-                        [DisplacementStatus.Idp]: 'Internally Displaced',
-                        [DisplacementStatus.Returnee]: 'Returnees',
+                        [Person.DisplacementStatus.Idp]: 'Internally Displaced',
+                        [Person.DisplacementStatus.Returnee]: 'Returnees',
                       },
                       () => 'Non-Displaced',
                     ),

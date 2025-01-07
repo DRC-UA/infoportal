@@ -154,7 +154,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title={<span style={{textTransform: 'none'}}>IDPs</span>}
                       data={ctx.filteredUniquePersons}
-                      filter={(_) => _.displacement === DisplacementStatus.Idp}
+                      filter={(_) => _.displacement === Person.DisplacementStatus.Idp}
                     />
                   </PanelWBody>
                 </Div>

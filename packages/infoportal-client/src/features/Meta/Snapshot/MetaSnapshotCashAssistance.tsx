@@ -136,7 +136,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title="IDPs"
                       data={persons}
-                      filter={(_) => _.displacement === DisplacementStatus.Idp}
+                      filter={(_) => _.displacement === Person.DisplacementStatus.Idp}
                     />
                   </PanelWBody>
                 </Div>
@@ -146,7 +146,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title="Returnees"
                       data={persons}
-                      filter={(_) => _.displacement === DisplacementStatus.Returnee}
+                      filter={(_) => _.displacement === Person.DisplacementStatus.Returnee}
                     />
                   </PanelWBody>
                 </Div>

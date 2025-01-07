@@ -3,20 +3,20 @@ import {
   DrcOffice,
   DrcProject,
   DrcProjectHelper,
-  KoboSubmissionFlat,
   KoboIndex,
   KoboMealPdm,
+  KoboSubmissionFlat,
   Meal_cashPdm,
+  Meal_shelterPdm,
   OblastIndex,
   OblastName,
   Period,
-  PersonDetails,
+  Person,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {fnSwitch, map, seq, Seq} from '@alexandreannic/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
-import {Meal_shelterPdm} from 'infoportal-common'
 
 export enum PdmType {
   Cash = 'Cash',
@@ -30,7 +30,7 @@ export type PdmData<T extends PdmForm> = {
   oblast: OblastName
   project: DrcProject | undefined
   office: DrcOffice | undefined
-  persons: PersonDetails[]
+  persons: Person.Details[]
   answers: KoboSubmissionFlat<T>
 }
 

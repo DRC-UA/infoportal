@@ -6,10 +6,8 @@ import {
   aiRaions,
   aiSettlements,
   Bn_re,
-  DisplacementStatus,
   OblastIndex,
   Person,
-  PersonDetails,
   Protection_groupSession,
 } from 'infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
@@ -89,7 +87,7 @@ export namespace AiMapper {
     }
   }
 
-  export const mapPopulationGroup = (_?: DisplacementStatus): AiProtectionType.TypeSub['Population Group'] => {
+  export const mapPopulationGroup = (_?: Person.DisplacementStatus): AiProtectionType.TypeSub['Population Group'] => {
     return fnSwitch(
       _!,
       {
@@ -101,7 +99,7 @@ export namespace AiMapper {
   }
 
   export const disaggregatePersons = (
-    persons: PersonDetails[],
+    persons: Person.Details[],
   ): {
     'Adult Men (18-59)': number
     'Adult Women (18-59)': number

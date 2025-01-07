@@ -24,7 +24,6 @@ import {Person} from '../../type/Person'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {Ecrec_msmeGrantReg} from '../generated/Ecrec_msmeGrantReg'
 import {OblastIndex} from '../../location'
-import DisplacementStatus = Person.DisplacementStatus
 
 export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
@@ -124,7 +123,7 @@ export namespace KoboXmlMapper {
       }
     }
 
-    const common = (row: Xml.Row): Person.PersonDetails[] => {
+    const common = (row: Xml.Row): Person.Details[] => {
       return [
         ...(row.hh_char_hhh_age || row.hh_char_hhh_gender
           ? [
@@ -161,7 +160,7 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const bn_re = (row: Bn_re.T): Person.PersonDetails[] =>
+    export const bn_re = (row: Bn_re.T): Person.Details[] =>
       common({
         ...row,
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
@@ -170,7 +169,7 @@ export namespace KoboXmlMapper {
         })),
       })
 
-    export const bn_rapidResponse = (row: Bn_rapidResponse.T): Person.PersonDetails[] => {
+    export const bn_rapidResponse = (row: Bn_rapidResponse.T): Person.Details[] => {
       return [
         ...(row.hh_char_hhh_age_l || row.hh_char_hhh_gender_l
           ? [
@@ -286,11 +285,11 @@ export namespace KoboXmlMapper {
           displacement: fnSwitch(
             row.disp_status!,
             {
-              idp: DisplacementStatus.Idp,
-              idp_retuenee: DisplacementStatus.Returnee,
-              refugee_returnee: DisplacementStatus.Returnee,
-              non_displaced: DisplacementStatus.NonDisplaced,
-              refugee: DisplacementStatus.Refugee,
+              idp: Person.DisplacementStatus.Idp,
+              idp_retuenee: Person.DisplacementStatus.Returnee,
+              refugee_returnee: Person.DisplacementStatus.Returnee,
+              non_displaced: Person.DisplacementStatus.NonDisplaced,
+              refugee: Person.DisplacementStatus.Refugee,
               pnd: undefined,
             },
             () => undefined,
@@ -329,7 +328,7 @@ export namespace KoboXmlMapper {
       })
     }
 
-    export const protection_hhs3 = (row: Protection_hhs3.T): Person.PersonDetails[] => {
+    export const protection_hhs3 = (row: Protection_hhs3.T): Person.Details[] => {
       row.hh_char_hh_det?.map((hh) => {
         return {
           age: hh.hh_char_hh_det_age,
@@ -411,7 +410,7 @@ export namespace KoboXmlMapper {
       })
     }
 
-    export const meal_cashPdm = (row: Meal_cashPdm.T): Person.PersonDetails[] => [
+    export const meal_cashPdm = (row: Meal_cashPdm.T): Person.Details[] => [
       {
         age: row.age,
         gender: Gender.common({hh_char_hh_det_gender: row.sex}),
@@ -419,7 +418,7 @@ export namespace KoboXmlMapper {
       },
     ]
 
-    export const protection_referral = (row: Protection_referral.T): Person.PersonDetails[] => {
+    export const protection_referral = (row: Protection_referral.T): Person.Details[] => {
       return [
         {
           age: row.age,
@@ -472,7 +471,7 @@ export namespace KoboXmlMapper {
 
   export type Breakdown = {
     disabilities: Person.WgDisability[]
-    persons: Person.PersonDetails[]
+    persons: Person.Details[]
     disabilitiesCount: number
     elderlyCount: number
     childrenCount: number
@@ -481,7 +480,7 @@ export namespace KoboXmlMapper {
   export namespace Breakdown {
     export const addProperty = <T extends Record<string, any>>(
       row: T,
-      mapper: (row: any) => Person.PersonDetails[],
+      mapper: (row: any) => Person.Details[],
     ): T & {custom: Breakdown} => {
       return {
         ...row,
@@ -489,7 +488,7 @@ export namespace KoboXmlMapper {
       }
     }
 
-    export const get = (persons: Person.PersonDetails[]): Breakdown => {
+    export const get = (persons: Person.Details[]): Breakdown => {
       const disabilities = new Set<Person.WgDisability>()
       let pwdCount = 0
       let childrenCount = 0

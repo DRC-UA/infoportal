@@ -31,7 +31,7 @@ export type IKoboMeta<TTag = any> = {
   project: DrcProject[]
   donor: DrcDonor[]
 
-  persons?: Person.PersonDetails[]
+  persons?: Person.Details[]
   personsCount?: number
 
   status?: KoboMetaStatus
