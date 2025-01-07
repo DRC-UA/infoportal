@@ -8,18 +8,17 @@ import {
   DrcProject,
   Ecrec_cashRegistration,
   Ecrec_msmeGrantEoi,
+  Ecrec_vet2_dmfa,
+  Ecrec_vet_bha388,
   KoboBaseTags,
   KoboEcrec_cashRegistration,
-  KoboGeneralMapping,
   KoboIndex,
   KoboSubmissionFlat,
   KoboTagStatus,
   Protection_gbv,
+  Protection_pfa_training_test,
   ProtectionHhsTags,
   safeArray,
-  Ecrec_vet_bha388,
-  Protection_pfa_training_test,
-  Ecrec_vet2_dmfa,
 } from 'infoportal-common'
 import React from 'react'
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
@@ -35,6 +34,7 @@ import {Messages} from '@/core/i18n/localization/en'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {Kobo} from 'kobo-sdk'
 import {KoboUpdateContext} from '@/core/context/KoboUpdateContext'
+import {KoboXmlMapper} from 'infoportal-common'
 
 export const getColumnsCustom = ({
   selectedIds,
@@ -84,7 +84,7 @@ export const getColumnsCustom = ({
       type: 'number',
       render: (
         row: KoboSubmissionFlat<Ecrec_vet_bha388.T | Ecrec_vet2_dmfa.T, any> & {
-          custom: KoboGeneralMapping.IndividualBreakdown
+          custom: KoboXmlMapper.Breakdown
         },
       ) => {
         const minimumWageUah = 8000
@@ -182,30 +182,28 @@ export const getColumnsCustom = ({
       head: m.minors + ' < 18',
       type: 'number',
       width: 20,
-      renderQuick: (row: any) =>
-        (getRow(row) as {custom: KoboGeneralMapping.IndividualBreakdown}).custom?.childrenCount,
+      renderQuick: (row: any) => (getRow(row) as {custom: KoboXmlMapper.Breakdown}).custom?.childrenCount,
     },
     {
       id: 'custom_adult',
       head: m.adults + ' 18 ≤ age < 60',
       type: 'number',
       width: 20,
-      renderQuick: (row: any) => (getRow(row) as {custom: KoboGeneralMapping.IndividualBreakdown}).custom?.adultCount,
+      renderQuick: (row: any) => (getRow(row) as {custom: KoboXmlMapper.Breakdown}).custom?.adultCount,
     },
     {
       id: 'custom_elderly',
       head: m.elderly + ' 60+',
       type: 'number',
       width: 20,
-      renderQuick: (row: any) => (getRow(row) as {custom: KoboGeneralMapping.IndividualBreakdown}).custom?.elderlyCount,
+      renderQuick: (row: any) => (getRow(row) as {custom: KoboXmlMapper.Breakdown}).custom?.elderlyCount,
     },
     {
       id: 'custom_disabilitiesCount',
       head: m.PwDs,
       type: 'number',
       width: 20,
-      renderQuick: (row: any) =>
-        (getRow(row) as {custom: KoboGeneralMapping.IndividualBreakdown}).custom?.disabilitiesCount,
+      renderQuick: (row: any) => (getRow(row) as {custom: KoboXmlMapper.Breakdown}).custom?.disabilitiesCount,
     },
     {
       id: 'custom_disabilities',
@@ -216,7 +214,7 @@ export const getColumnsCustom = ({
           DatatableUtils.buildCustomOption(k, v),
         ),
       render: (_: any) => {
-        const row: {custom: KoboGeneralMapping.IndividualBreakdown} = getRow(_)
+        const row: {custom: KoboXmlMapper.Breakdown} = getRow(_)
         return {
           value: getRow(row).custom?.disabilities,
           label: getRow(row).custom?.disabilities.join(' | '),
@@ -228,8 +226,7 @@ export const getColumnsCustom = ({
       width: 0,
       head: m.hohhAge,
       type: 'number',
-      renderQuick: (row: any) =>
-        (getRow(row) as {custom: KoboGeneralMapping.IndividualBreakdown}).custom?.persons[0]?.age,
+      renderQuick: (row: any) => (getRow(row) as {custom: KoboXmlMapper.Breakdown}).custom?.persons[0]?.age,
     },
   ]
   const lastStatusUpdate = ({
@@ -471,9 +468,7 @@ export const getColumnsCustom = ({
         id: 'vulnerability',
         head: m.vulnerability,
         type: 'number',
-        render: (
-          row: KoboSubmissionFlat<Ecrec_msmeGrantEoi.T, any> & {custom: KoboGeneralMapping.IndividualBreakdown},
-        ) => {
+        render: (row: KoboSubmissionFlat<Ecrec_msmeGrantEoi.T, any> & {custom: KoboXmlMapper.Breakdown}) => {
           const minimumWageUah = 7100
           const scoring = {
             householdSize: 0,
@@ -557,7 +552,7 @@ export const getColumnsCustom = ({
         type: 'number',
         render: (
           row: KoboSubmissionFlat<Protection_pfa_training_test.T, any> & {
-            custom: KoboGeneralMapping.IndividualBreakdown
+            custom: KoboXmlMapper.Breakdown
           },
         ) => {
           const scoring = {

@@ -1,10 +1,11 @@
 import React, {ReactNode, useMemo} from 'react'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {KoboGeneralMapping, KoboIndex} from 'infoportal-common'
+import {KoboIndex} from 'infoportal-common'
 import {HeaderParams} from '@/shared/Datatable/util/datatableType'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {PopoverWrapper} from '@/shared/PopoverWrapper'
 import {IpIconBtn} from '@/shared/IconBtn'
+import {KoboXmlMapper} from 'infoportal-common'
 
 export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactNode) => {
   const ctx = useDatabaseKoboTableContext()
@@ -28,7 +29,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('ecrec_msmeGrantReg').id:
       case KoboIndex.byName('bn_rapidResponse2').id:
       case KoboIndex.byName('partner_lampa').id: {
-        return (_: HeaderParams<{custom: KoboGeneralMapping.IndividualBreakdown}>) => {
+        return (_: HeaderParams<{custom: KoboXmlMapper.Breakdown}>) => {
           return (
             <PopoverWrapper
               popoverProps={{

@@ -1,7 +1,7 @@
 import {Protection_hhs2, Protection_hhs3} from '../generated'
 import {KoboBaseTags, KoboSubmissionFlat, PersonDetails} from './Kobo'
 import {DrcProject} from '../../type/Drc'
-import {KoboGeneralMapping} from './KoboMapperPerson'
+import {KoboXmlMapper} from './KoboXmlMapper'
 
 export namespace KoboProtection_hhs3 {
   export type Person = PersonDetails & {
@@ -17,14 +17,13 @@ export namespace KoboProtection_hhs3 {
     d: KoboSubmissionFlat<Protection_hhs3.T, ProtectionHhsTags>,
   ): KoboSubmissionFlat<T, ProtectionHhsTags> => {
     const r: T = d as unknown as T
-    r.persons =
-      d.hh_char_hh_det?.map((_, i) => {
-        return {
-          ...KoboGeneralMapping.mapPersonDetails(_ as any),
-          lackDoc: d.hh_char_hh_doc?.[i].does_lack_doc,
-          isIdpRegistered: d.hh_char_hh_doc?.[i].is_member_registered,
-        }
-      }) ?? []
+    r.persons = KoboXmlMapper.Persons.protection_hhs3(d).map((_, i) => {
+      return {
+        ..._,
+        lackDoc: d.hh_char_hh_doc?.[i].does_lack_doc,
+        isIdpRegistered: d.hh_char_hh_doc?.[i].is_member_registered,
+      }
+    })
     return r
   }
 }

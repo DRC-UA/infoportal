@@ -21,12 +21,10 @@ import {
   Shelter_nta,
 } from '../generated'
 import {Person} from '../../type/Person'
-import {fnSwitch, mapFor, seq} from '@alexandreannic/ts-utils'
-import DisplacementStatus = Person.DisplacementStatus
-import {PersonDetails, WgDisability} from './Kobo'
+import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 import {Ecrec_msmeGrantReg} from '../generated/Ecrec_msmeGrantReg'
-import * as readline from 'node:readline'
 import {OblastIndex} from '../../location'
+import DisplacementStatus = Person.DisplacementStatus
 
 export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
@@ -66,7 +64,7 @@ export namespace KoboXmlMapper {
     }
   }
 
-  export namespace PersonDetails {
+  export namespace Persons {
     namespace Gender {
       export const common = (person?: {hh_char_hh_det_gender?: Xml.Gender}) => {
         return fnSwitch(
@@ -263,6 +261,9 @@ export namespace KoboXmlMapper {
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({..._, hh_char_hh_res_stat: row.ben_det_res_stat})),
       })
     }
+    export const bn_cashForRentApplication = (row: Bn_cashForRentRegistration.T) => {
+      return common(row)
+    }
 
     export const shelter_cashForShelter = (row: Shelter_cashForShelter.T) => common(row)
 
@@ -308,9 +309,25 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const protection_pss = (row: Protection_pss.T) => common(row)
+    export const protection_pss = (row: Protection_pss.T) => {
+      if (row.new_ben === 'no') return []
+      return common({
+        hh_char_hh_det: row.hh_char_hh_det?.filter((_) => {
+          if (_.hh_char_hh_new_ben === 'no') return false
+          if (row.activity !== 'pgs') return true
+          if (!_.hh_char_hh_session) return false
+          if (row.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
+          if (row.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
+          return false
+        }),
+      })
+    }
 
-    export const protection_gbv = (row: Protection_gbv.T) => common(row)
+    export const protection_gbv = (row: Protection_gbv.T) => {
+      return common({
+        hh_char_hh_det: row.hh_char_hh_det?.filter((_) => _.hh_char_hh_new_ben !== 'no'),
+      })
+    }
 
     export const protection_hhs3 = (row: Protection_hhs3.T): Person.PersonDetails[] => {
       row.hh_char_hh_det?.map((hh) => {
@@ -453,14 +470,23 @@ export namespace KoboXmlMapper {
     }
   }
 
+  export type Breakdown = {
+    disabilities: Person.WgDisability[]
+    persons: Person.PersonDetails[]
+    disabilitiesCount: number
+    elderlyCount: number
+    childrenCount: number
+    adultCount: number
+  }
   export namespace Breakdown {
-    export type Breakdown = {
-      disabilities: Person.WgDisability[]
-      persons: Person.PersonDetails[]
-      disabilitiesCount: number
-      elderlyCount: number
-      childrenCount: number
-      adultCount: number
+    export const addProperty = <T extends Record<string, any>>(
+      row: T,
+      mapper: (row: any) => Person.PersonDetails[],
+    ): T & {custom: Breakdown} => {
+      return {
+        ...row,
+        custom: get(mapper(row)),
+      }
     }
 
     export const get = (persons: Person.PersonDetails[]): Breakdown => {
