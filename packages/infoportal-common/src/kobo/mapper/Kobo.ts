@@ -54,31 +54,6 @@ export interface KoboTagStatus<T = CashStatus> {
   lastStatusUpdate?: Date
 }
 
-/** @deprecated*/
-export interface PersonDetails extends Person.Person {
-  displacement?: DisplacementStatus
-  disability?: WgDisability[]
-}
-
-/** @deprecated*/
-export enum DisplacementStatus {
-  Idp = 'Idp',
-  Returnee = 'Returnee',
-  Refugee = 'Refugee',
-  NonDisplaced = 'NonDisplaced',
-}
-
-/** @deprecated*/
-export enum WgDisability {
-  See = 'See',
-  Hear = 'Hear',
-  Walk = 'Walk',
-  Rem = 'Rem',
-  Care = 'Care',
-  Comm = 'Comm',
-  None = 'None',
-}
-
 export enum CashStatus {
   Selected = 'Selected',
   Pending = 'Pending',
