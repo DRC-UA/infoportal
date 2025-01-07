@@ -10,7 +10,7 @@ export namespace Person {
     gender?: Gender
   }
 
-  export interface PersonDetails {
+  export interface PersonDetails extends Person {
     displacement?: DisplacementStatus
     disability?: WgDisability[]
   }
