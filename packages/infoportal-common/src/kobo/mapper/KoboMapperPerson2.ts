@@ -5,10 +5,18 @@ import {
   Bn_re,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
+  Ecrec_msmeGrantEoi,
+  Ecrec_vetApplication,
+  Ecrec_vetEvaluation,
+  Meal_cashPdm,
+  Partner_lampa,
+  Protection_communityMonitoring,
   Protection_counselling,
   Protection_gbv,
+  Protection_groupSession,
   Protection_hhs3,
   Protection_pss,
+  Protection_referral,
   Shelter_cashForShelter,
   Shelter_nta,
 } from '../generated'
@@ -16,6 +24,7 @@ import {Person} from '../../type/Person'
 import {fnSwitch, mapFor, seq} from '@alexandreannic/ts-utils'
 import DisplacementStatus = Person.DisplacementStatus
 import {WgDisability} from './Kobo'
+import {Ecrec_msmeGrantReg} from '../generated/Ecrec_msmeGrantReg'
 
 export namespace KoboGeneralMapping2 {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
@@ -27,7 +36,8 @@ export namespace KoboGeneralMapping2 {
 
     export type DisabilitySelected = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_det_dis_select']
 
-    export type Displacement = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_res_stat']
+    // export type Displacement = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_res_stat']
+    export type Displacement = 'idp' | 'long_res' | 'ret' | 'ref_asy' | 'other' | 'returnee' | 'long'
 
     export type Individual = {
       hh_char_hh_det_gender?: Gender
@@ -76,8 +86,10 @@ export namespace KoboGeneralMapping2 {
           person.hh_char_hh_res_stat!,
           {
             idp: Person.DisplacementStatus.Idp,
+            long: Person.DisplacementStatus.NonDisplaced,
             long_res: Person.DisplacementStatus.NonDisplaced,
             ret: Person.DisplacementStatus.Returnee,
+            returnee: Person.DisplacementStatus.Returnee,
             ref_asy: Person.DisplacementStatus.Refugee,
           },
           () => undefined,
@@ -149,7 +161,7 @@ export namespace KoboGeneralMapping2 {
       ]
     }
 
-    const bn_re = (row: Bn_re.T): Person.PersonDetails[] =>
+    export const bn_re = (row: Bn_re.T): Person.PersonDetails[] =>
       common({
         ...row,
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
@@ -158,7 +170,7 @@ export namespace KoboGeneralMapping2 {
         })),
       })
 
-    const bn_rapidResponse = (row: Bn_rapidResponse.T): Person.PersonDetails[] => {
+    export const bn_rapidResponse = (row: Bn_rapidResponse.T): Person.PersonDetails[] => {
       return [
         ...(row.hh_char_hhh_age_l || row.hh_char_hhh_gender_l
           ? [
@@ -199,7 +211,7 @@ export namespace KoboGeneralMapping2 {
       ]
     }
 
-    const ecrec_cashRegistrationBha = (row: Ecrec_cashRegistrationBha.T) => {
+    export const ecrec_cashRegistrationBha = (row: Ecrec_cashRegistrationBha.T) => {
       return common({
         ...row,
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
@@ -209,7 +221,7 @@ export namespace KoboGeneralMapping2 {
       })
     }
 
-    const shelter_nta = (row: Shelter_nta.T) => {
+    export const shelter_nta = (row: Shelter_nta.T) => {
       const mapDis = (
         dis: Shelter_nta.T['hh_char_dis_select'],
       ): undefined | Ecrec_cashRegistration.T['hh_char_res_dis_select'] => {
@@ -243,18 +255,16 @@ export namespace KoboGeneralMapping2 {
       })
     }
 
-    const bn_cashForRentRegistration = (row: Bn_cashForRentRegistration.T) => {
+    export const bn_cashForRentRegistration = (row: Bn_cashForRentRegistration.T) => {
       return common({
         ...row,
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({..._, hh_char_hh_res_stat: row.ben_det_res_stat})),
       })
     }
 
-    const shelter_cashForShelter = (row: Shelter_cashForShelter.T) => {
-      return common(row)
-    }
+    export const shelter_cashForShelter = (row: Shelter_cashForShelter.T) => common(row)
 
-    const protection_counselling = (row: Protection_counselling.T) => {
+    export const protection_counselling = (row: Protection_counselling.T) => {
       const hasDisab = (_: Protection_counselling.T['difficulty_remembering']): boolean => {
         return (
           fnSwitch(_!, {
@@ -296,44 +306,131 @@ export namespace KoboGeneralMapping2 {
       ]
     }
 
-    const protection_pss = (row: Protection_pss.T) => {
-      return common(row)
-    }
+    export const protection_pss = (row: Protection_pss.T) => common(row)
 
-    const protection_gbv = (row: Protection_gbv.T) => {
-      return common(row)
-    }
+    export const protection_gbv = (row: Protection_gbv.T) => common(row)
 
-    const protection_hhs3 = (row: Protection_hhs3.T) => {
-      mapFor(row.hh_char_hh_det?.length ?? 0, i => {
-        const x: Person.PersonDetails = {
-          disability:
+    export const protection_hhs3 = (row: Protection_hhs3.T): Person.PersonDetails[] => {
+      row.hh_char_hh_det?.map((hh) => {
+        return {
+          age: hh.hh_char_hh_det_age,
+          gender: Persons.Gender.common(hh),
+          displacement: fnSwitch(
+            row.do_you_identify_as_any_of_the_following!,
+            {
+              idp: Person.DisplacementStatus.Idp,
+              non_displaced: Person.DisplacementStatus.NonDisplaced,
+              refugee: Person.DisplacementStatus.Refugee,
+              returnee: Person.DisplacementStatus.Returnee,
+            },
+            () => undefined,
+          ),
+          disability: hh.hh_char_hh_det_disability
+            ?.map((_) =>
+              fnSwitch(
+                _,
+                {
+                  no: Person.WgDisability.None,
+                  wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
+                  wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
+                  wg_walking_or_climbing_steps: Person.WgDisability.Walk,
+                  wg_remembering_or_concentrating: Person.WgDisability.Rem,
+                  wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
+                  wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
+                  unable_unwilling_to_answer: undefined,
+                },
+                () => undefined,
+              ),
+            )
+            .filter((_) => !!_),
         }
       })
-      row.do_you_have_a_household_member_that_has_a_lot_of_difficulty?.map((_) =>
-        fnSwitch(
-          _,
-          {
-            no: Person.WgDisability.None,
-            wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
-            wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
-            wg_walking_or_climbing_steps: Person.WgDisability.Walk,
-            wg_remembering_or_concentrating: Person.WgDisability.Rem,
-            wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
-            wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
-            unable_unwilling_to_answer: undefined,
-          },
-          () => undefined,
-        ),
-      )
       return common(row)
     }
 
-    const ecrec_cashRegistration = (row: Ecrec_cashRegistration.T) => {
-      return common(row)
+    export const ecrec_cashRegistration = (row: Ecrec_cashRegistration.T) => common(row)
+
+    export const protection_groupSession = (row: Protection_groupSession.T) => common(row)
+
+    export const ecrec_vetApplication = (row: Ecrec_vetApplication.T) => common(row)
+
+    export const ecrec_vetEvaluation = (row: Ecrec_vetEvaluation.T) => common(row)
+
+    export const ecrec_msmeGrantReg = (row: Ecrec_msmeGrantReg.T) =>
+      common({
+        hh_char_res_age: row.age,
+        hh_char_res_gender: row.gender,
+        hh_char_hhh_res_stat: row.res_stat,
+        hh_char_res_dis_select: row.dis_select,
+        hh_char_dis_level: row.dis_level,
+        hh_char_hh_det: row.hh_member?.map((_) => ({
+          ..._,
+          hh_char_hh_res_stat: row.res_stat,
+          hh_char_hh_det_dis_select: row.dis_select,
+          hh_char_hh_det_dis_level: row.dis_level,
+        })),
+      })
+
+    export const ecrec_msmeGrantEoi = (row: Ecrec_msmeGrantEoi.T) => common(row)
+
+    export const partner_lampa = (row: Partner_lampa.T) => common(row)
+
+    export const protection_communityMonitoring = (row: Protection_communityMonitoring.T) => {
+      return common({
+        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          ..._,
+          hh_char_hh_res_stat: fnSwitch(
+            _.hh_char_hh_det_status!,
+            {
+              idp: 'idp',
+              returnee: `ret`,
+              'non-displaced': `long_res`,
+            },
+            () => undefined,
+          ),
+        })),
+      })
     }
 
-    const bn_rapidResponse2 = (row: Bn_rapidResponse2.T) => {
+    export const meal_cashPdm = (row: Meal_cashPdm.T): Person.PersonDetails[] => [
+      {
+        age: row.age,
+        gender: Persons.Gender.common({hh_char_hh_det_gender: row.sex}),
+        displacement: Persons.Displacement.common({hh_char_hh_res_stat: row.status_person}),
+      },
+    ]
+
+    export const protection_referral = (row: Protection_referral.T): Person.PersonDetails[] => {
+      return [
+        {
+          age: row.age,
+          gender: fnSwitch(
+            row.gender!,
+            {
+              man: Person.Gender.Male,
+              woman: Person.Gender.Female,
+              boy: Person.Gender.Male,
+              girl: Person.Gender.Female,
+              other: Person.Gender.Other,
+            },
+            () => undefined,
+          ),
+          displacement: fnSwitch(
+            row.displacement_status!,
+            {
+              idp: Person.DisplacementStatus.Idp,
+              idp_returnee: Person.DisplacementStatus.Returnee,
+              refugee_retuenee: Person.DisplacementStatus.Returnee,
+              non_peenisplaced: Person.DisplacementStatus.NonDisplaced,
+              refugee_Refenee: Person.DisplacementStatus.Refugee,
+            },
+            () => undefined,
+          ),
+        },
+      ]
+    }
+
+    export const bn_rapidResponse2 = (row: Bn_rapidResponse2.T) => {
       return common({
         ...row,
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
