@@ -297,7 +297,16 @@ export namespace KoboXmlMapper {
           }) ?? false
         )
       }
-
+      const disability = (
+        [
+          hasDisab(row.difficulty_seeing) ? Person.WgDisability.See : undefined,
+          hasDisab(row.difficulty_hearing) ? Person.WgDisability.Hear : undefined,
+          hasDisab(row.difficulty_walking) ? Person.WgDisability.Walk : undefined,
+          hasDisab(row.difficulty_remembering) ? Person.WgDisability.Rem : undefined,
+          hasDisab(row.difficulty_washing) ? Person.WgDisability.Care : undefined,
+          hasDisab(row.difficulty_usual_language) ? Person.WgDisability.Comm : undefined,
+        ] as const
+      ).filter((_) => !!_)
       return [
         {
           age: row.age,
@@ -322,16 +331,7 @@ export namespace KoboXmlMapper {
             },
             () => undefined,
           ),
-          disability: (
-            [
-              hasDisab(row.difficulty_seeing) ? Person.WgDisability.See : undefined,
-              hasDisab(row.difficulty_hearing) ? Person.WgDisability.Hear : undefined,
-              hasDisab(row.difficulty_walking) ? Person.WgDisability.Walk : undefined,
-              hasDisab(row.difficulty_remembering) ? Person.WgDisability.Rem : undefined,
-              hasDisab(row.difficulty_washing) ? Person.WgDisability.Care : undefined,
-              hasDisab(row.difficulty_usual_language) ? Person.WgDisability.Comm : undefined,
-            ] as const
-          ).filter((_) => !!_),
+          disability,
         },
       ]
     }
@@ -367,46 +367,54 @@ export namespace KoboXmlMapper {
     }
 
     export const protection_hhs3 = (row: Protection_hhs3.T): Person.Details[] => {
-      row.hh_char_hh_det?.map((hh) => {
-        return {
-          age: hh.hh_char_hh_det_age,
-          gender: Gender.common(hh),
-          displacement: fnSwitch(
-            row.do_you_identify_as_any_of_the_following!,
-            {
-              idp: Person.DisplacementStatus.Idp,
-              non_displaced: Person.DisplacementStatus.NonDisplaced,
-              refugee: Person.DisplacementStatus.Refugee,
-              returnee: Person.DisplacementStatus.Returnee,
-            },
-            () => undefined,
-          ),
-          disability: hh.hh_char_hh_det_disability
-            ?.map((_) =>
-              fnSwitch(
-                _,
-                {
-                  no: Person.WgDisability.None,
-                  wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
-                  wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
-                  wg_walking_or_climbing_steps: Person.WgDisability.Walk,
-                  wg_remembering_or_concentrating: Person.WgDisability.Rem,
-                  wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
-                  wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
-                  unable_unwilling_to_answer: undefined,
-                },
-                () => undefined,
-              ),
-            )
-            .filter((_) => !!_),
-        }
-      })
-      return common(row)
+      const displacement = fnSwitch(
+        row.do_you_identify_as_any_of_the_following!,
+        {
+          idp: Person.DisplacementStatus.Idp,
+          non_displaced: Person.DisplacementStatus.NonDisplaced,
+          refugee: Person.DisplacementStatus.Refugee,
+          returnee: Person.DisplacementStatus.Returnee,
+        },
+        () => undefined,
+      )
+      return seq(row.hh_char_hh_det)
+        ?.map((hh) => {
+          return {
+            age: hh.hh_char_hh_det_age,
+            gender: Gender.common(hh),
+            displacement: displacement,
+            disability: hh.hh_char_hh_det_disability
+              ?.map((_) =>
+                fnSwitch(
+                  _,
+                  {
+                    no: Person.WgDisability.None,
+                    wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
+                    wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
+                    wg_walking_or_climbing_steps: Person.WgDisability.Walk,
+                    wg_remembering_or_concentrating: Person.WgDisability.Rem,
+                    wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
+                    wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
+                    unable_unwilling_to_answer: undefined,
+                  },
+                  () => undefined,
+                ),
+              )
+              .filter((_) => !!_),
+          }
+        })
+        .compact()
     }
 
     export const ecrec_cashRegistration = (row: Ecrec_cashRegistration.T) => common(row)
 
-    export const protection_groupSession = (row: Protection_groupSession.T) => common(row)
+    export const protection_groupSession = (row: Protection_groupSession.T) =>
+      common({
+        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          ..._,
+          hh_char_hh_res_stat: _.hh_char_hh_det_status,
+        })),
+      })
 
     export const ecrec_vetApplication = (row: Ecrec_vetApplication.T) => common(row)
 
@@ -432,26 +440,27 @@ export namespace KoboXmlMapper {
     export const partner_lampa = (row: Partner_lampa.T) => common(row)
 
     export const protection_communityMonitoring = (row: Protection_communityMonitoring.T) => {
+      const hh_char_hh_det_dis_select = seq(row.key_informant_difficulty ?? [])
+        .map((_) => {
+          return fnSwitch(
+            _!,
+            {
+              no: 'diff_none',
+              seeing: 'diff_see',
+              hearing: 'diff_hear',
+              walking: 'diff_walk',
+              remembering_concentrating: 'diff_rem',
+              self_care: 'diff_care',
+              using_usual_language: 'diff_comm',
+            } as const,
+            () => undefined,
+          )
+        })
+        .compact()
       return common({
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
           ..._,
-          hh_char_hh_det_dis_select: seq(row.key_informant_difficulty ?? [])
-            .map((_) => {
-              return fnSwitch(
-                _!,
-                {
-                  no: 'diff_none',
-                  seeing: 'diff_see',
-                  hearing: 'diff_hear',
-                  walking: 'diff_walk',
-                  remembering_concentrating: 'diff_rem',
-                  self_care: 'diff_care',
-                  using_usual_language: 'diff_comm',
-                } as const,
-                () => undefined,
-              )
-            })
-            .compact(),
+          hh_char_hh_det_dis_select,
           hh_char_hh_res_stat: _.hh_char_hh_det_status,
         })),
       })
@@ -466,6 +475,17 @@ export namespace KoboXmlMapper {
     ]
 
     export const protection_referral = (row: Protection_referral.T): Person.Details[] => {
+      const displacement = fnSwitch(
+        row.displacement_status!,
+        {
+          idp: Person.DisplacementStatus.Idp,
+          idp_returnee: Person.DisplacementStatus.Returnee,
+          refugee_retuenee: Person.DisplacementStatus.Returnee,
+          non_peenisplaced: Person.DisplacementStatus.NonDisplaced,
+          refugee_Refenee: Person.DisplacementStatus.Refugee,
+        },
+        () => undefined,
+      )
       return [
         {
           age: row.age,
@@ -480,17 +500,7 @@ export namespace KoboXmlMapper {
             },
             () => undefined,
           ),
-          displacement: fnSwitch(
-            row.displacement_status!,
-            {
-              idp: Person.DisplacementStatus.Idp,
-              idp_returnee: Person.DisplacementStatus.Returnee,
-              refugee_retuenee: Person.DisplacementStatus.Returnee,
-              non_peenisplaced: Person.DisplacementStatus.NonDisplaced,
-              refugee_Refenee: Person.DisplacementStatus.Refugee,
-            },
-            () => undefined,
-          ),
+          displacement,
         },
       ]
     }
@@ -524,6 +534,7 @@ export namespace KoboXmlMapper {
     childrenCount: number
     adultCount: number
   }
+
   export namespace Breakdown {
     export const addProperty = <T extends Record<string, any>>(
       row: T,
