@@ -29,14 +29,31 @@ export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
 
   namespace Xml {
-    export type Gender = 'male' | 'female' | 'other' | 'unspecified' | 'unable_unwilling_to_answer' | 'other_pns'
+    export type Gender =
+      | 'male'
+      | 'female'
+      | 'other'
+      | 'unspecified'
+      | 'unable_unwilling_to_answer'
+      | 'other_pns'
+      | 'pnd'
 
     export type DisabilityLevel = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_det_dis_level']
 
     export type DisabilitySelected = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_det_dis_select']
 
     // export type Displacement = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_res_stat']
-    export type Displacement = 'idp' | 'long_res' | 'ret' | 'ref_asy' | 'other' | 'returnee' | 'long' | 'pnd'
+    export type Displacement =
+      | 'idp'
+      | 'long_res'
+      | 'ret'
+      | 'ref_asy'
+      | 'other'
+      | 'returnee'
+      | 'long'
+      | 'pnd'
+      | 'non-displaced'
+      | 'unspec'
 
     export type Individual = {
       hh_char_hh_det_gender?: Gender
@@ -92,6 +109,7 @@ export namespace KoboXmlMapper {
             ret: Person.DisplacementStatus.Returnee,
             returnee: Person.DisplacementStatus.Returnee,
             ref_asy: Person.DisplacementStatus.Refugee,
+            'non-displaced': Person.DisplacementStatus.NonDisplaced,
           },
           () => undefined,
         )
@@ -321,20 +339,30 @@ export namespace KoboXmlMapper {
     export const protection_pss = (row: Protection_pss.T) => {
       if (row.new_ben === 'no') return []
       return common({
-        hh_char_hh_det: row.hh_char_hh_det?.filter((_) => {
-          if (_.hh_char_hh_new_ben === 'no') return false
-          if (row.activity !== 'pgs') return true
-          if (!_.hh_char_hh_session) return false
-          if (row.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
-          if (row.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
-          return false
-        }),
+        hh_char_hh_det: row.hh_char_hh_det
+          ?.filter((_) => {
+            if (_.hh_char_hh_new_ben === 'no') return false
+            if (row.activity !== 'pgs') return true
+            if (!_.hh_char_hh_session) return false
+            if (row.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
+            if (row.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
+            return false
+          })
+          .map((_) => ({
+            ..._,
+            hh_char_hh_res_stat: _.hh_char_hh_det_status,
+          })),
       })
     }
 
     export const protection_gbv = (row: Protection_gbv.T) => {
       return common({
-        hh_char_hh_det: row.hh_char_hh_det?.filter((_) => _.hh_char_hh_new_ben !== 'no'),
+        hh_char_hh_det: row.hh_char_hh_det
+          ?.filter((_) => _.hh_char_hh_new_ben !== 'no')
+          .map((_) => ({
+            ..._,
+            hh_char_hh_res_stat: _.hh_char_hh_det_status,
+          })),
       })
     }
 
@@ -407,15 +435,24 @@ export namespace KoboXmlMapper {
       return common({
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
           ..._,
-          hh_char_hh_res_stat: fnSwitch(
-            _.hh_char_hh_det_status!,
-            {
-              idp: 'idp',
-              returnee: `ret`,
-              'non-displaced': `long_res`,
-            },
-            () => undefined,
-          ),
+          hh_char_hh_det_dis_select: seq(row.key_informant_difficulty ?? [])
+            .map((_) => {
+              return fnSwitch(
+                _!,
+                {
+                  no: 'diff_none',
+                  seeing: 'diff_see',
+                  hearing: 'diff_hear',
+                  walking: 'diff_walk',
+                  remembering_concentrating: 'diff_rem',
+                  self_care: 'diff_care',
+                  using_usual_language: 'diff_comm',
+                } as const,
+                () => undefined,
+              )
+            })
+            .compact(),
+          hh_char_hh_res_stat: _.hh_char_hh_det_status,
         })),
       })
     }
