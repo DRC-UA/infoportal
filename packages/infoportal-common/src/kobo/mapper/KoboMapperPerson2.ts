@@ -23,10 +23,12 @@ import {
 import {Person} from '../../type/Person'
 import {fnSwitch, mapFor, seq} from '@alexandreannic/ts-utils'
 import DisplacementStatus = Person.DisplacementStatus
-import {WgDisability} from './Kobo'
+import {PersonDetails, WgDisability} from './Kobo'
 import {Ecrec_msmeGrantReg} from '../generated/Ecrec_msmeGrantReg'
+import * as readline from 'node:readline'
+import {OblastIndex} from '../../location'
 
-export namespace KoboGeneralMapping2 {
+export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
 
   namespace Xml {
@@ -64,8 +66,8 @@ export namespace KoboGeneralMapping2 {
     }
   }
 
-  export namespace Persons {
-    export namespace Gender {
+  export namespace PersonDetails {
+    namespace Gender {
       export const common = (person?: {hh_char_hh_det_gender?: Xml.Gender}) => {
         return fnSwitch(
           person?.hh_char_hh_det_gender!,
@@ -78,7 +80,7 @@ export namespace KoboGeneralMapping2 {
       }
     }
 
-    export namespace Displacement {
+    namespace Displacement {
       export const common = (person: {
         hh_char_hh_res_stat?: Xml.Displacement
       }): undefined | Person.DisplacementStatus => {
@@ -97,7 +99,7 @@ export namespace KoboGeneralMapping2 {
       }
     }
 
-    export namespace Disability {
+    namespace Disability {
       export const common = (person: {
         hh_char_hh_det_dis_level?: Xml.DisabilityLevel
         hh_char_hh_det_dis_select?: Xml.DisabilitySelected
@@ -314,7 +316,7 @@ export namespace KoboGeneralMapping2 {
       row.hh_char_hh_det?.map((hh) => {
         return {
           age: hh.hh_char_hh_det_age,
-          gender: Persons.Gender.common(hh),
+          gender: Gender.common(hh),
           displacement: fnSwitch(
             row.do_you_identify_as_any_of_the_following!,
             {
@@ -395,8 +397,8 @@ export namespace KoboGeneralMapping2 {
     export const meal_cashPdm = (row: Meal_cashPdm.T): Person.PersonDetails[] => [
       {
         age: row.age,
-        gender: Persons.Gender.common({hh_char_hh_det_gender: row.sex}),
-        displacement: Persons.Displacement.common({hh_char_hh_res_stat: row.status_person}),
+        gender: Gender.common({hh_char_hh_det_gender: row.sex}),
+        displacement: Displacement.common({hh_char_hh_res_stat: row.status_person}),
       },
     ]
 
@@ -449,5 +451,56 @@ export namespace KoboGeneralMapping2 {
         })),
       })
     }
+  }
+
+  export namespace Breakdown {
+    export type Breakdown = {
+      disabilities: Person.WgDisability[]
+      persons: Person.PersonDetails[]
+      disabilitiesCount: number
+      elderlyCount: number
+      childrenCount: number
+      adultCount: number
+    }
+
+    export const get = (persons: Person.PersonDetails[]): Breakdown => {
+      const disabilities = new Set<Person.WgDisability>()
+      let pwdCount = 0
+      let childrenCount = 0
+      let elderlyCount = 0
+      let adultCount = 0
+      persons?.forEach((_) => {
+        _.disability?.forEach(disabilities.add, disabilities)
+        if (_.age && _.age < 18) childrenCount++
+        if (_.age && _.age >= 18 && _.age < 60) adultCount++
+        if (_.age && _.age >= 60) elderlyCount++
+        if (_.disability && !_.disability.includes(Person.WgDisability.None)) pwdCount++
+      })
+      disabilities.delete(Person.WgDisability.None)
+      return {
+        persons: persons,
+        adultCount: adultCount,
+        elderlyCount: elderlyCount,
+        childrenCount: childrenCount,
+        disabilitiesCount: pwdCount,
+        disabilities: Array.from(disabilities),
+      }
+    }
+  }
+
+  export namespace Location {
+    export const mapOblast = OblastIndex.byKoboName
+
+    export const mapRaion = (_?: Bn_re.T['ben_det_raion']) => _
+
+    export const mapHromada = (_?: Bn_re.T['ben_det_hromada']) => _
+
+    export const searchRaion = (_?: string) => (Bn_re.options.ben_det_raion as any)[_!]
+
+    export const searchHromada = (_?: string) => (Bn_re.options.ben_det_hromada as any)[_!]
+
+    export const getRaionLabel = (_?: Bn_re.T['ben_det_raion']) => (Bn_re.options.ben_det_raion as any)[_!]
+
+    export const getHromadaLabel = (_?: Bn_re.T['ben_det_hromada']) => (Bn_re.options.ben_det_hromada as any)[_!]
   }
 }
