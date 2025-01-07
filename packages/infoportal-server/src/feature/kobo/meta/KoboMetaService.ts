@@ -178,7 +178,8 @@ export class KoboMetaService {
         where: {formId, deletedAt: null},
       })
       .then((_) => seq(_).map(mapper).compact())
-    const JOIN_COL = updates[0].originMetaKey // Assume it never changes for other updates
+    const JOIN_COL = updates[0]?.originMetaKey // Assume it never changes for other updates
+    if (!JOIN_COL) return
     const joinToMetaId: Record<string, Seq<UUID>> = await this.prisma.koboMeta
       .findMany({
         select: {
