@@ -94,7 +94,18 @@ export const MealPdmCashDashboard = () => {
                   dense
                   title={m.mealMonitoringPdm.treated}
                   data={data}
-                  filter={(_) => _.answers.feel_treated_respect === 'rcyc' || _.answers.feel_treated_respect === 'rcmy'}
+                  filter={(_) =>
+                    _.answers.feel_treated_respect === 'rcyc'
+                    || _.answers.feel_treated_respect === 'rcnt'
+                    }
+                  filterBase={(_) =>
+                    _.answers.feel_treated_respect === 'rcyc'
+                    || _.answers.feel_treated_respect === 'rcnt'
+                    || _.answers.feel_treated_respect === 'rcnr'
+                    || _.answers.feel_treated_respect === 'rcmy'
+                    || _.answers.feel_treated_respect === 'rcdk'
+                    || _.answers.feel_treated_respect === 'rcna'
+                  }
                 />
                 <ChartPieWidgetBy
                   dense
@@ -144,7 +155,7 @@ export const MealPdmCashDashboard = () => {
                 </PanelBody>
               </Panel>
               <SlidePanel title={m.mealMonitoringPdm.pdmType}>
-                <ChartBarMultipleBy data={data} by={(_) => _.answers.pdmtype} label={Meal_cashPdm.options.pdmtype} />
+                <ChartBarMultipleBy data={data} by={(_) => _.answers.pdmtype} label={Meal_cashPdm.options.pdmtype}/>
               </SlidePanel>
             </Div>
             <Div column sx={{maxHeight: '50%'}}>
@@ -156,7 +167,7 @@ export const MealPdmCashDashboard = () => {
                 />
               </SlidePanel>
               <SlidePanel title={m.project}>
-                <ChartBarSingleBy data={data} by={(_) => _.answers.donor} label={Meal_cashPdm.options.donor} />
+                <ChartBarSingleBy data={data} by={(_) => _.answers.donor} label={Meal_cashPdm.options.donor}/>
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.timeToTake}>
                 <ChartBarSingleBy
