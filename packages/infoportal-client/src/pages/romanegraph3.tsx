@@ -78,7 +78,7 @@ const ua = {
   // 'Main sources of income': 'Головні джерела доходу переміщених осіб',
 }
 
-const optionsUa: DeepPartial<typeof Protection_hhs3.options> = {
+const optionsUa: Partial<Record<keyof typeof Protection_hhs3.options, Record<string, string>>> = {
   do_you_identify_as_any_of_the_following: {
     idp: 'Внутрішньо переміщена особа',
     non_displaced: 'Не переміщена особа',

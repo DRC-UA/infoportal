@@ -9,16 +9,13 @@ import {
   DrcProjectHelper,
   DrcSector,
   DrcSectorHelper,
-  KoboGeneralMapping,
+  KoboHelper,
   KoboIndex,
   KoboMetaHelper,
   KoboMetaShelterRepairTags,
   KoboMetaStatus,
-  KoboShelterTa,
   KoboTagStatus,
-  OblastIndex,
   safeArray,
-  safeNumber,
   Shelter_cashForShelter,
   Shelter_nta,
   Shelter_ta,
@@ -27,15 +24,15 @@ import {
 } from 'infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
-import {KoboHelper} from 'infoportal-common'
+import {KoboXmlMapper} from 'infoportal-common'
 
 export namespace KoboMetaMapperShelter {
   export const createCfRent: MetaMapperInsert<
     KoboMetaOrigin<Bn_cashForRentRegistration.T, KoboTagStatus<CashForRentStatus>>
   > = (row) => {
     const answer = Bn_cashForRentRegistration.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const persons = KoboXmlMapper.Persons.bn_cashForRentApplication(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const status = fnSwitch(
       row.tags?.status!,
       {
@@ -52,24 +49,15 @@ export namespace KoboMetaMapperShelter {
     )
     return KoboMetaMapper.make({
       enumerator: Bn_cashForRentRegistration.options.back_enum[answer.back_enum!],
-      office: answer.back_office
-        ? fnSwitch(answer.back_office, {
-            cej: DrcOffice.Chernihiv,
-            dnk: DrcOffice.Dnipro,
-            // hrk: DrcOffice.Kharkiv,
-            // nlv: DrcOffice.Mykolaiv,
-            // umy: DrcOffice.Sumy,
-            lwo: DrcOffice.Lviv,
-          })
-        : undefined,
+      office: KoboXmlMapper.office(answer.back_office),
       oblast: oblast.name,
-      displacement: KoboGeneralMapping.mapDisplacementStatus(answer.ben_det_res_stat),
-      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      displacement: persons[0]?.displacement,
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       sector: DrcSectorHelper.findFirstByProgram(DrcProgram.CashForRent),
       activity: DrcProgram.CashForRent,
-      personsCount: safeNumber(answer.ben_det_hh_size),
-      persons: group,
+      personsCount: persons.length,
+      persons: persons,
       lastName: answer.ben_det_surname,
       firstName: answer.ben_det_first_name,
       patronymicName: answer.ben_det_pat_name,
@@ -89,32 +77,22 @@ export namespace KoboMetaMapperShelter {
 
   export const createCfShelter: MetaMapperInsert<KoboMetaOrigin<Shelter_cashForShelter.T, KoboTagStatus>> = (row) => {
     const answer = Shelter_cashForShelter.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const persons = KoboXmlMapper.Persons.shelter_cashForShelter(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const project = DrcProjectHelper.search(Shelter_cashForShelter.options.donor[answer.donor!])
     return KoboMetaMapper.make({
       enumerator: Shelter_cashForShelter.options.name_enum[answer.name_enum!],
-      office: answer.back_office
-        ? fnSwitch(answer.back_office, {
-            cej: DrcOffice.Chernihiv,
-            dnk: DrcOffice.Dnipro,
-            hrk: DrcOffice.Kharkiv,
-            nlv: DrcOffice.Mykolaiv,
-            umy: DrcOffice.Sumy,
-            // lwo: DrcOffice.Lviv,
-          })
-        : undefined,
+      office: KoboXmlMapper.office(answer.back_office),
       project: project ? [project] : [],
       donor: map(project, (_) => [DrcProjectHelper.donorByProject[_]]),
       oblast: oblast.name,
-      // displacement: KoboGeneralMapping.mapDisplacementStatus(answer.),
-      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_settlement,
       sector: DrcSectorHelper.findFirstByProgram(DrcProgram.CashForRepair),
       activity: DrcProgram.CashForRepair,
-      personsCount: safeNumber(answer.ben_det_hh_size),
-      persons: group,
+      personsCount: persons.length,
+      persons: persons,
       lastName: answer.bis,
       firstName: answer.bif,
       patronymicName: answer.bip,
@@ -132,34 +110,22 @@ export namespace KoboMetaMapperShelter {
 
   export const createNta: MetaMapperInsert<KoboMetaOrigin<Shelter_nta.T, ShelterNtaTags>> = (row) => {
     const answer = Shelter_nta.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(KoboShelterTa.harmonizeNtaDisabilityAll(answer)).map(
-      KoboGeneralMapping.mapPersonDetails,
-    )
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const persons = KoboXmlMapper.Persons.shelter_nta(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const project = safeArray(row.tags?.project)
     const isCfRepair = answer.modality === 'cash_for_repair'
     return KoboMetaMapper.make({
       enumerator: Shelter_nta.options.enum_name[answer.enum_name!],
-      office: fnSwitch(
-        answer.back_office!,
-        {
-          cej: DrcOffice.Chernihiv,
-          dnk: DrcOffice.Dnipro,
-          hrk: DrcOffice.Kharkiv,
-          nlv: DrcOffice.Mykolaiv,
-          umy: DrcOffice.Sumy,
-        },
-        () => undefined,
-      ),
+      office: KoboXmlMapper.office(answer.back_office),
       oblast: oblast?.name!,
-      displacement: KoboGeneralMapping.mapDisplacementStatus(answer.ben_det_res_stat),
-      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      displacement: persons[0]?.displacement,
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.settlement,
       sector: DrcSector.Shelter,
       activity: isCfRepair ? DrcProgram.CashForRepair : DrcProgram.ShelterRepair,
-      personsCount: safeNumber(answer.ben_det_hh_size),
-      persons: group,
+      personsCount: persons.length,
+      persons: persons,
       lastName: answer.ben_det_surname_l,
       project: project,
       donor: project.map((_) => DrcProjectHelper.donorByProject[_]),

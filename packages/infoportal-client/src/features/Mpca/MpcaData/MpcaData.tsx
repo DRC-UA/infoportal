@@ -4,7 +4,7 @@ import {useMpcaContext} from '../MpcaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {Bn_re, DrcOffice, KoboIndex, koboMetaStatusLabel, MpcaEntity} from 'infoportal-common'
+import {Bn_re, DrcOffice, KoboIndex, koboMetaStatusLabel, KoboXmlMapper, MpcaEntity} from 'infoportal-common'
 import {IpBtn} from '@/shared/Btn'
 import {formatDateTime, formatLargeNumber} from '@/core/i18n/localization/en'
 import {MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
@@ -61,18 +61,7 @@ export const MpcaData = () => {
     const offices = bnreAccesses?.params?.filters?.back_office as Bn_re.T['back_office'][] | undefined
     return new Set(
       seq(offices ?? [])
-        .map(
-          (_) =>
-            fnSwitch(_!, {
-              lwo: DrcOffice['Lviv'],
-              chj: DrcOffice['Chernihiv'],
-              dnk: DrcOffice['Dnipro'],
-              hrk: DrcOffice['Kharkiv'],
-              nlv: DrcOffice['Mykolaiv'],
-              umy: DrcOffice['Sumy'],
-            }),
-          () => undefined,
-        )
+        .map(KoboXmlMapper.office)
         .compact(),
     )
   }, [accesses])

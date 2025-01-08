@@ -22,7 +22,7 @@ export interface ShelterEntity {
   oblast?: OblastName | ''
   office?: DrcOffice | ''
   id: Kobo.SubmissionId
-  persons?: Person.Person[]
+  persons?: Person[]
 }
 
 export class ShelterEntityHelper {}

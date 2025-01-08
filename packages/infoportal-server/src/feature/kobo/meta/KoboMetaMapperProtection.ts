@@ -1,13 +1,11 @@
 import {fnSwitch, map} from '@alexandreannic/ts-utils'
 import {
   AILocationHelper,
-  DisplacementStatus,
   DrcOffice,
   DrcProgram,
   DrcProject,
   DrcProjectHelper,
   DrcSector,
-  KoboGeneralMapping,
   KoboMetaStatus,
   KoboTagStatus,
   OblastIndex,
@@ -22,10 +20,10 @@ import {
   ProtectionCommunityMonitoringTags,
   ProtectionHhsTags,
   safeArray,
-  WgDisability,
 } from 'infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
+import {KoboXmlMapper} from 'infoportal-common'
 import Gender = Person.Gender
 
 export class KoboMetaMapperProtection {
@@ -33,7 +31,7 @@ export class KoboMetaMapperProtection {
     KoboMetaOrigin<Protection_communityMonitoring.T, ProtectionCommunityMonitoringTags>
   > = (row) => {
     const answer = Protection_communityMonitoring.map(row.answers)
-    const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPerson)
+    const persons = KoboXmlMapper.Persons.protection_communityMonitoring(answer)
     if (answer.informant_gender || answer.informant_age) {
       persons.push({
         age: answer.informant_age,
@@ -62,9 +60,9 @@ export class KoboMetaMapperProtection {
         },
         () => undefined,
       ),
-      oblast: OblastIndex.byKoboName(answer.ben_det_oblast)?.name!,
-      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      oblast: KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast)?.name!,
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
       sector: DrcSector.GeneralProtection,
       activity: answer.activity
@@ -96,7 +94,7 @@ export class KoboMetaMapperProtection {
     )
     if (!activity) return
     // if (answer.activity as any === 'gbv' || answer.activity === 'pss' || answer.activity === 'other' || answer.activity === 'let') return
-    const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
+    const persons = KoboXmlMapper.Persons.protection_groupSession(answer)
     const project = answer.project
       ? fnSwitch(
           answer.project,
@@ -125,9 +123,9 @@ export class KoboMetaMapperProtection {
         },
         () => undefined,
       ),
-      oblast: OblastIndex.byKoboName(answer.ben_det_oblast)?.name!,
-      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      oblast: KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast)?.name!,
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
       sector: DrcSector.GeneralProtection,
       activity: activity,
@@ -168,49 +166,23 @@ export class KoboMetaMapperProtection {
       ),
       project: projects,
       donor: projects.map((_) => DrcProjectHelper.donorByProject[_]),
-      oblast: OblastIndex.byKoboName(answer.oblast)?.name!,
-      raion: KoboGeneralMapping.searchRaion(answer.raion),
-      hromada: KoboGeneralMapping.searchHromada(answer.hromada),
+      oblast: KoboXmlMapper.Location.mapOblast(answer.oblast)?.name!,
+      raion: KoboXmlMapper.Location.searchRaion(answer.raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
       settlement: answer.settement,
       sector: DrcSector.GeneralProtection,
       activity: DrcProgram.Referral,
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: answer.month_provision,
       personsCount: 1,
-      persons: [
-        {
-          age: answer.age,
-          gender: fnSwitch(
-            answer.gender!,
-            {
-              boy: Gender.Male,
-              man: Gender.Male,
-              girl: Gender.Female,
-              woman: Gender.Female,
-              other: Gender.Other,
-              unspecified: undefined,
-            },
-            () => undefined,
-          ),
-        },
-      ],
+      persons: KoboXmlMapper.Persons.protection_referral(answer),
       enumerator: answer.staff_code,
     })
   }
 
   static readonly hhs: MetaMapperInsert<KoboMetaOrigin<Protection_hhs3.T, ProtectionHhsTags>> = (row) => {
     const answer = Protection_hhs3.map(row.answers)
-    const persons = KoboGeneralMapping.collectXlsKoboIndividuals(answer).map(KoboGeneralMapping.mapPersonDetails)
-    const displacement = fnSwitch(
-      answer.do_you_identify_as_any_of_the_following!,
-      {
-        idp: DisplacementStatus.Idp,
-        non_displaced: DisplacementStatus.NonDisplaced,
-        refugee: DisplacementStatus.Refugee,
-        returnee: DisplacementStatus.Returnee,
-      },
-      () => undefined,
-    )
+    const persons = KoboXmlMapper.Persons.protection_hhs3(answer)
     const projects = safeArray(row.tags?.projects)
     if (answer.have_you_filled_out_this_form_before === 'yes' || answer.present_yourself === 'no') return
     return KoboMetaMapper.make({
@@ -232,10 +204,7 @@ export class KoboMetaMapperProtection {
       settlement: answer.settlement,
       sector: DrcSector.GeneralProtection,
       activity: DrcProgram.ProtectionMonitoring,
-      persons: persons.map((_) => {
-        _.displacement = displacement
-        return _
-      }),
+      persons,
       personsCount: persons.length,
       project: projects,
       donor: projects.map((_) => DrcProjectHelper.donorByProject[_]),
@@ -246,18 +215,7 @@ export class KoboMetaMapperProtection {
 
   static readonly counselling: MetaMapperInsert<KoboMetaOrigin<Protection_counselling.T, KoboTagStatus>> = (row) => {
     const answer = Protection_counselling.map(row.answers)
-    const wDis = ['yes_some', 'yes_lot', 'cannot_all']
-    const displacement = fnSwitch(
-      answer.disp_status!,
-      {
-        idp: DisplacementStatus.Idp,
-        non_displaced: DisplacementStatus.NonDisplaced,
-        refugee: DisplacementStatus.Refugee,
-        idp_retuenee: DisplacementStatus.Returnee,
-        refugee_returnee: DisplacementStatus.Refugee,
-      },
-      () => undefined,
-    )
+    const persons = KoboXmlMapper.Persons.protection_counselling(answer)
     const project = DrcProjectHelper.search(Protection_counselling.options.project_code[answer.project_code!])
     return KoboMetaMapper.make({
       office: fnSwitch(
@@ -272,37 +230,15 @@ export class KoboMetaMapperProtection {
         },
         () => undefined,
       ),
-      oblast: OblastIndex.byKoboName(answer.ben_det_oblast!).name,
-      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      oblast: KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!).name,
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
       sector: DrcSector.GeneralProtection,
       activity: DrcProgram.Counselling,
-      persons: [
-        {
-          age: answer.age,
-          disability: [
-            ...(wDis.includes(answer.difficulty_hearing!) ? [WgDisability.Hear] : []),
-            ...(wDis.includes(answer.difficulty_washing!) ? [WgDisability.Care] : []),
-            ...(wDis.includes(answer.difficulty_walking!) ? [WgDisability.Walk] : []),
-            ...(wDis.includes(answer.difficulty_remembering!) ? [WgDisability.Rem] : []),
-            ...(wDis.includes(answer.difficulty_usual_language!) ? [WgDisability.Comm] : []),
-            ...(wDis.includes(answer.difficulty_seeing!) ? [WgDisability.See] : []),
-          ],
-          gender: fnSwitch(
-            answer.gender!,
-            {
-              man: Gender.Male,
-              woman: Gender.Female,
-              other: Gender.Other,
-            },
-            () => undefined,
-          ),
-          displacement,
-        },
-      ],
-      displacement,
-      personsCount: 1,
+      persons: persons,
+      displacement: persons[0]?.displacement,
+      personsCount: persons.length,
       project: project ? [project] : [],
       donor: map(DrcProjectHelper.donorByProject[project!], (_) => [_]) ?? [],
       status: KoboMetaStatus.Committed,
@@ -314,18 +250,8 @@ export class KoboMetaMapperProtection {
   static readonly pss: MetaMapperInsert<KoboMetaOrigin<Protection_pss.T, KoboTagStatus>> = (row) => {
     const answer = Protection_pss.map(row.answers)
     if (answer.new_ben === 'no') return
-    const persons =
-      answer.hh_char_hh_det
-        ?.filter((_) => {
-          if (_.hh_char_hh_new_ben === 'no') return false
-          if (answer.activity !== 'pgs') return true
-          if (!_.hh_char_hh_session) return false
-          if (answer.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
-          if (answer.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
-          return false
-        })
-        .map(KoboGeneralMapping.mapPersonDetails) ?? []
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)!
+    const persons = KoboXmlMapper.Persons.protection_pss(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)!
     const project = answer.project
       ? fnSwitch(answer.project, {
           uhf6: DrcProject['UKR-000336 UHF6'],
@@ -353,8 +279,8 @@ export class KoboMetaMapperProtection {
         () => undefined,
       ),
       oblast: oblast.name,
-      raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
-      hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
       sector: DrcSector.PSS,
       activity: fnSwitch(
@@ -398,9 +324,8 @@ export class KoboMetaMapperProtection {
         )
         .filter((_) => _ !== undefined) ?? []
     if (activities.length === 0) return
-    const persons =
-      answer.hh_char_hh_det?.filter((_) => _.hh_char_hh_new_ben !== 'no').map(KoboGeneralMapping.mapPersonDetails) ?? []
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const persons = KoboXmlMapper.Persons.protection_gbv(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const project = answer.project
       ? fnSwitch(
           answer.project,
@@ -426,8 +351,8 @@ export class KoboMetaMapperProtection {
           () => undefined,
         ),
         oblast: oblast.name,
-        raion: KoboGeneralMapping.searchRaion(answer.ben_det_raion),
-        hromada: KoboGeneralMapping.searchHromada(answer.ben_det_hromada),
+        raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+        hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
         settlement: answer.ben_det_hromada_001,
         sector: DrcSector.GBV,
         activity,

@@ -10,7 +10,7 @@ import {
   KoboIndex,
   KoboMetaStatus,
   koboMetaStatusLabel,
-  PersonDetails,
+  Person,
 } from 'infoportal-common'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
@@ -285,7 +285,7 @@ export const MetaTable = () => {
               <PopoverWrapper
                 content={(close) =>
                   _.persons ? (
-                    <Datatable<PersonDetails>
+                    <Datatable<Person.Details>
                       header={
                         <IpIconBtn style={{marginLeft: 'auto'}} onClick={close}>
                           close

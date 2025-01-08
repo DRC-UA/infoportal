@@ -10,25 +10,24 @@ import {
   DrcProject,
   DrcProjectHelper,
   DrcSectorHelper,
-  KoboGeneralMapping,
+  KoboHelper,
   KoboMetaHelper,
   KoboMetaTagNfi,
   KoboTagStatus,
   MpcaEntityTags,
-  OblastIndex,
   safeNumber,
 } from 'infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapped, MetaMapperInsert} from './KoboMetaService'
-import {KoboHelper} from 'infoportal-common'
+import {KoboXmlMapper} from 'infoportal-common'
 
 const nfisPrograms = [DrcProgram.NFI, DrcProgram.ESK, DrcProgram.InfantWinterClothing, DrcProgram.InfantWinterClothing]
 
 export class KoboMetaBasicneeds {
   static readonly bn_re: MetaMapperInsert<KoboMetaOrigin<Bn_re.T, MpcaEntityTags>> = (row) => {
     const answer = Bn_re.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
+    const persons = KoboXmlMapper.Persons.bn_re(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
 
     const activities =
       seq(answer.back_prog_type)
@@ -87,26 +86,15 @@ export class KoboMetaBasicneeds {
       const status = DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : row.tags?.status
       return {
         enumerator: Bn_re.options.back_enum[answer.back_enum!],
-        office: fnSwitch(
-          answer.back_office!,
-          {
-            chj: DrcOffice.Chernihiv,
-            dnk: DrcOffice.Dnipro,
-            hrk: DrcOffice.Kharkiv,
-            lwo: DrcOffice.Lviv,
-            nlv: DrcOffice.Mykolaiv,
-            umy: DrcOffice.Sumy,
-          },
-          () => undefined,
-        ),
+        office: KoboXmlMapper.office(answer.back_office),
         oblast: oblast.name,
         raion: Bn_re.options.ben_det_raion[answer.ben_det_raion!],
         hromada: Bn_re.options.ben_det_hromada[answer.ben_det_hromada!],
         settlement: answer.ben_det_settlement,
         sector: DrcSectorHelper.findFirstByProgram(activity),
         activity,
-        personsCount: safeNumber(answer.ben_det_hh_size),
-        persons: group.map(KoboGeneralMapping.mapPersonDetails),
+        personsCount: persons.length,
+        persons,
         project: project ? [project] : [],
         donor: map(DrcProjectHelper.donorByProject[project!], (_) => [_]) ?? [],
         lastName: answer.ben_det_surname,
@@ -160,6 +148,7 @@ export class KoboMetaBasicneeds {
 
   static readonly bn_rrm: MetaMapperInsert<KoboMetaOrigin<Bn_rapidResponse.T, KoboTagStatus>> = (row) => {
     const answer = Bn_rapidResponse.map(row.answers)
+    const persons = KoboXmlMapper.Persons.bn_rapidResponse(answer)
     if (answer.form_length === 'short') return
     const getBnreProject = (
       back_donor?:
@@ -230,26 +219,7 @@ export class KoboMetaBasicneeds {
         (_) => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(_)),
       )
     }
-
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals({
-      hh_char_hh_det: answer.hh_char_hh_det_l?.map((_) => ({
-        hh_char_hh_det_age: _.hh_char_hh_det_age_l,
-        hh_char_hh_det_gender: _.hh_char_hh_det_gender_l,
-        hh_char_hh_det_dis_level: _.hh_char_hh_det_dis_level_l,
-        hh_char_hh_det_dis_select: _.hh_char_hh_det_dis_select_l,
-      })),
-      hh_char_hhh_age: answer.hh_char_hhh_age_l,
-      hh_char_hhh_gender: answer.hh_char_hhh_gender_l,
-      hh_char_hhh_dis_level: answer.hh_char_hhh_dis_level_l,
-      hh_char_hhh_dis_select: answer.hh_char_hhh_dis_select_l,
-      hh_char_res_age: answer.hh_char_res_age_l,
-      hh_char_res_gender: answer.hh_char_res_gender_l,
-      hh_char_res_dis_level: answer.hh_char_res_dis_level_l,
-      hh_char_res_dis_select: answer.hh_char_res_dis_select_l,
-      ben_det_res_stat: answer.ben_det_res_stat_l,
-    })
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast_l!)
-
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast_l!)
     const activities =
       seq(answer.back_prog_type_l)
         ?.map((prog) => {
@@ -273,46 +243,19 @@ export class KoboMetaBasicneeds {
         .compact()
         .distinct((_) => _.activity) ?? []
 
-    // const project = this.getBnreProject(answer.back_donor_l)
-    // const donor = project ? DrcProjectHelper.donorByProject[project] : undefined
-    // const programs = seq(answer.back_prog_type_l)
-    //   .map(_ => _.split('_')[0])
-    //   .distinct(_ => _)
-    //   .map(prog => fnSwitch(prog, {
-    //     mpca: DrcProgram.MPCA,
-    //     nfi: DrcProgram.NFI,
-    //     cfr: DrcProgram.CashForRent,
-    //     cfe: DrcProgram.CashForEducation,
-    //     iwk: DrcProgram.InfantWinterClothing,
-    //     ihk: DrcProgram.HygieneKit,
-    //     esk: DrcProgram.ESK,
-    //   }, () => undefined))
-    //   .compact()
-
     const prepare = (activity: DrcProgram, project?: DrcProject): MetaMapped => {
       const status = DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : row.tags?.status
       return {
         enumerator: Bn_rapidResponse.options.back_enum_l[answer.back_enum_l!],
-        office: fnSwitch(
-          answer.back_office ?? answer.back_office_l!,
-          {
-            chj: DrcOffice.Chernihiv,
-            dnk: DrcOffice.Dnipro,
-            hrk: DrcOffice.Kharkiv,
-            lwo: DrcOffice.Lviv,
-            nlv: DrcOffice.Mykolaiv,
-            umy: DrcOffice.Sumy,
-          },
-          () => undefined,
-        ),
+        office: KoboXmlMapper.office(answer.back_office ?? answer.back_office_l),
         oblast: oblast.name,
         raion: Bn_rapidResponse.options.ben_det_raion_l[answer.ben_det_raion_l!],
         hromada: Bn_rapidResponse.options.ben_det_hromada_l[answer.ben_det_hromada_l!],
         settlement: answer.ben_det_settlement_l,
         sector: DrcSectorHelper.findFirstByProgram(activity),
         activity: activity,
-        personsCount: safeNumber(answer.ben_det_hh_size_l),
-        persons: group.map(KoboGeneralMapping.mapPersonDetails),
+        personsCount: persons.length,
+        persons,
         project: project ? [project] : [],
         donor: map(DrcProjectHelper.donorByProject[project!], (_) => [_]) ?? [],
         lastName: answer.ben_det_surname_l,
@@ -362,20 +305,9 @@ export class KoboMetaBasicneeds {
 
   static readonly bn_rrm2: MetaMapperInsert<KoboMetaOrigin<Bn_rapidResponse2.T, KoboTagStatus>> = (row) => {
     const answer = Bn_rapidResponse2.map(row.answers)
-    const group = KoboGeneralMapping.collectXlsKoboIndividuals(answer)
-    const oblast = OblastIndex.byKoboName(answer.ben_det_oblast!)
-    const office = fnSwitch(
-      answer.back_office!,
-      {
-        chj: DrcOffice.Chernihiv,
-        dnk: DrcOffice.Dnipro,
-        hrk: DrcOffice.Kharkiv,
-        lwo: DrcOffice.Lviv,
-        nlv: DrcOffice.Mykolaiv,
-        umy: DrcOffice.Sumy,
-      },
-      () => undefined,
-    )
+    const persons = KoboXmlMapper.Persons.bn_rapidResponse2(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
+    const office = KoboXmlMapper.office(answer.back_office)
     const oblastName = oblast.name
     const activities = (answer.back_prog_type ?? []).map((prog) => {
       return fnSwitch(prog, {
@@ -393,8 +325,8 @@ export class KoboMetaBasicneeds {
         raion: Bn_re.options.ben_det_raion[answer.ben_det_raion as NonNullable<Bn_re.T['ben_det_raion']>],
         hromada: Bn_re.options.ben_det_hromada[answer.ben_det_hromada as NonNullable<Bn_re.T['ben_det_hromada']>],
         settlement: answer.ben_det_settlement,
-        personsCount: safeNumber(answer.ben_det_hh_size),
-        persons: group.map(KoboGeneralMapping.mapPersonDetails),
+        personsCount: persons.length,
+        persons,
         sector: DrcSectorHelper.findFirstByProgram(activity.program)!,
         activity: activity.program,
         project: activity.project ? [activity.project] : [],

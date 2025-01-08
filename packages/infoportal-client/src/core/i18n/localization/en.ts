@@ -1,6 +1,6 @@
 import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
-import {capitalize, DrcProgram, OblastIndex, OblastISO, WgDisability} from 'infoportal-common'
+import {capitalize, DrcProgram, OblastIndex, OblastISO, Person} from 'infoportal-common'
 
 const invalidDate = ''
 
@@ -919,13 +919,13 @@ export const en = Object.freeze({
     pullLastTitle: 'Pull last',
     beneficiaries: 'Beneficiaries',
     disability_: {
-      [WgDisability.See]: 'Seeing',
-      [WgDisability.Hear]: 'Hearing',
-      [WgDisability.Walk]: 'Walking/Climbing steps',
-      [WgDisability.Rem]: 'Remembering or concentrating',
-      [WgDisability.Care]: 'With self-care',
-      [WgDisability.Comm]: 'Communicating',
-      [WgDisability.None]: 'None',
+      [Person.WgDisability.See]: 'Seeing',
+      [Person.WgDisability.Hear]: 'Hearing',
+      [Person.WgDisability.Walk]: 'Walking/Climbing steps',
+      [Person.WgDisability.Rem]: 'Remembering or concentrating',
+      [Person.WgDisability.Care]: 'With self-care',
+      [Person.WgDisability.Comm]: 'Communicating',
+      [Person.WgDisability.None]: 'None',
     },
     ...(() => {
       const activities_: Record<DrcProgram, string> = {

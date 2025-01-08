@@ -2,14 +2,7 @@ import {Page} from '@/shared/Page'
 import {CfmData, CfmDataOrigin, CfmStatusIconLabel, useCfmContext} from '@/features/Cfm/CfmContext'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import React, {useMemo, useState} from 'react'
-import {
-  KoboGeneralMapping,
-  KoboIndex,
-  KoboMealCfmStatus,
-  Meal_cfmInternal,
-  Period,
-  PeriodHelper,
-} from 'infoportal-common'
+import {KoboIndex, KoboMealCfmStatus, Meal_cfmInternal, Period, PeriodHelper} from 'infoportal-common'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Div} from '@/shared/PdfLayout/PdfSlide'
@@ -26,6 +19,7 @@ import {format} from 'date-fns'
 import {Txt} from '@/shared/Txt'
 import {AppAvatar} from '@/shared/AppAvatar'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
+import {KoboXmlMapper} from 'infoportal-common'
 
 const feedbacTypeLabel = {
   apprec_com: `Appreciation or compliments`,
@@ -106,7 +100,7 @@ export const CfmDashboard = () => {
             .flatMap((_) => _.ben_det_raion!)
             .distinct((_) => _)
             .sort()
-            .map((_: any) => DataFilter.buildOption(_ ?? DataFilter.blank, KoboGeneralMapping.getRaionLabel(_))),
+            .map((_: any) => DataFilter.buildOption(_ ?? DataFilter.blank, KoboXmlMapper.Location.getRaionLabel(_))),
       },
       hromada: {
         label: m.hromada,
@@ -116,7 +110,7 @@ export const CfmDashboard = () => {
             .flatMap((_) => _.ben_det_hromada!)
             .distinct((_) => _)
             .sort()
-            .map((_: any) => DataFilter.buildOption(_ ?? DataFilter.blank, KoboGeneralMapping.getHromadaLabel(_))),
+            .map((_: any) => DataFilter.buildOption(_ ?? DataFilter.blank, KoboXmlMapper.Location.getHromadaLabel(_))),
       },
       program: {
         label: m.program,

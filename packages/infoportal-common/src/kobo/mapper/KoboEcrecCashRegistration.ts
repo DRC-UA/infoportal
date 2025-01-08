@@ -1,8 +1,8 @@
 import {CashStatus, KoboBaseTags, KoboSubmissionFlat} from './Kobo'
-import {KoboGeneralMapping} from './KoboMapperPerson'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {Ecrec_cashRegistration, Ecrec_cashRegistrationBha} from '../generated'
 import {DrcProgram, DrcProject, DrcProjectHelper} from '../../type/Drc'
+import {KoboXmlMapper} from './KoboXmlMapper'
 
 const minimumWageUah = 7100
 
@@ -40,7 +40,7 @@ export namespace KoboEcrec_cashRegistration {
   }
 
   export type T = KoboSubmissionFlat<Ecrec_cashRegistrationBha.T | Ecrec_cashRegistration.T, Tags> & {
-    custom: KoboGeneralMapping.IndividualBreakdown & {
+    custom: KoboXmlMapper.Breakdown & {
       eligibility: boolean
       vulnerability: number
     }
@@ -56,7 +56,7 @@ export namespace KoboEcrec_cashRegistration {
   }
 
   export const calculateVulnerabilities = (_: KoboEcrec_cashRegistration.T) => {
-    const res = KoboGeneralMapping.addIndividualBreakdownColumn(_)
+    const res = KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.ecrec_cashRegistration)
     res.custom.eligibility =
       (_.land_cultivate ?? 0) >= 5 &&
       res.consume_majority === 'yes' &&

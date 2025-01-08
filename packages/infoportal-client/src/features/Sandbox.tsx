@@ -7,10 +7,10 @@ import {expect} from 'chai'
 
 type Row = {
   id: string
-  persons: Person.Person[]
+  persons: Person[]
 }
 
-const extract = (p: Person.Person) => {
+const extract = (p: Person) => {
   return {age: p.age, gender: p.gender}
 }
 

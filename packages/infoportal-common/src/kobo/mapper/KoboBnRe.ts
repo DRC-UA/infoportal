@@ -3,7 +3,7 @@ import {fnSwitch} from '@alexandreannic/ts-utils'
 import {Person} from '../../type/Person'
 
 export class KoboBnReHelper {
-  static readonly getPersons = (_: Bn_re.T): Person.Person[] => {
+  static readonly getPersons = (_: Bn_re.T): Person[] => {
     return [
       ...(_.hh_char_hhh_age || _.hh_char_hhh_gender ? [{age: _.hh_char_hhh_age, gender: _.hh_char_hhh_gender}] : []),
       ...(_.hh_char_res_age || _.hh_char_res_gender ? [{age: _.hh_char_res_age, gender: _.hh_char_res_gender}] : []),

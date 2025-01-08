@@ -1,21 +1,43 @@
 import {Obj, seq} from '@alexandreannic/ts-utils'
 import {KeyOf, NonNullableKeys} from './Generic'
 
+export type Person = {
+  age?: number
+  gender?: Person.Gender
+}
+
 export namespace Person {
   export type AgeGroup = Record<string, [number, number]>
 
-  export interface Person {
-    age?: number
-    gender?: Gender
+  export interface Details extends Person {
+    displacement?: DisplacementStatus
+    disability?: WgDisability[]
   }
 
-  export const create = (_: Person) => _
+  export enum DisplacementStatus {
+    Idp = 'Idp',
+    Returnee = 'Returnee',
+    Refugee = 'Refugee',
+    NonDisplaced = 'NonDisplaced',
+  }
+
+  export enum WgDisability {
+    See = 'See',
+    Hear = 'Hear',
+    Walk = 'Walk',
+    Rem = 'Rem',
+    Care = 'Care',
+    Comm = 'Comm',
+    None = 'None',
+  }
 
   export enum Gender {
     Male = 'Male',
     Female = 'Female',
     Other = 'Other',
   }
+
+  export const create = (_: Person.Details) => _
 
   export const filterDefined = (p: Person[]): NonNullableKeys<Person>[] => p.filter((_) => !!_.gender && _.age) as any
 

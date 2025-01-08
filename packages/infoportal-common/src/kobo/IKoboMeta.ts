@@ -1,9 +1,10 @@
 import {StateStatus, UUID} from '../type/Generic'
 import {OblastName} from '../location'
 import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc'
-import {CashStatus, DisplacementStatus, KoboValidation, PersonDetails, ShelterTaPriceLevel} from './mapper'
+import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {Kobo} from 'kobo-sdk'
+import {Person} from '../type/Person'
 
 export type IKoboMeta<TTag = any> = {
   id: UUID
@@ -23,14 +24,14 @@ export type IKoboMeta<TTag = any> = {
   lastName?: string
   patronymicName?: string
   phone?: string
-  displacement?: DisplacementStatus
+  displacement?: Person.DisplacementStatus
   sector: DrcSector
   activity?: DrcProgram
   office?: DrcOffice
   project: DrcProject[]
   donor: DrcDonor[]
 
-  persons?: PersonDetails[]
+  persons?: Person.Details[]
   personsCount?: number
 
   status?: KoboMetaStatus

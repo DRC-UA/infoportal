@@ -2,7 +2,6 @@ import {ApiClient} from '@/core/sdk/server/ApiClient'
 import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {
   Bn_re,
-  DisplacementStatus,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   Ecrec_msmeGrantEoi,
@@ -29,7 +28,6 @@ import {
   Partner_angels,
   Partnership_partnersDatabase,
   Person,
-  PersonDetails,
   Protection_coc,
   Protection_gbv,
   Protection_gbvSocialProviders,
@@ -51,13 +49,13 @@ import {fnSwitch, seq} from '@alexandreannic/ts-utils'
 
 /** @deprecated should be coming from the unified database */
 type Meta = {
-  persons: PersonDetails[]
+  persons: Person.Details[]
 }
 
 /** @deprecated should be coming from the unified database */
 type WithMeta<T extends Record<string, any>> = T & {
   meta: {
-    persons: PersonDetails[]
+    persons: Person.Details[]
   }
 }
 
@@ -151,7 +149,7 @@ export class KoboTypedAnswerSdk {
           formId: KoboIndex.byName('protection_gbv').id,
           fnMapKobo: Protection_gbv.map,
           fnMapCustom: (_) => {
-            const persons: PersonDetails[] | undefined =
+            const persons: Person.Details[] | undefined =
               _.new_ben === 'no' || !_.hh_char_hh_det
                 ? []
                 : _.hh_char_hh_det
@@ -171,9 +169,9 @@ export class KoboTypedAnswerSdk {
                         displacement: fnSwitch(
                           p.hh_char_hh_det_status!,
                           {
-                            idp: DisplacementStatus.Idp,
-                            returnee: DisplacementStatus.Idp,
-                            'non-displaced': DisplacementStatus.NonDisplaced,
+                            idp: Person.DisplacementStatus.Idp,
+                            returnee: Person.DisplacementStatus.Idp,
+                            'non-displaced': Person.DisplacementStatus.NonDisplaced,
                           },
                           () => undefined,
                         ),

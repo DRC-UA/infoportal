@@ -8,7 +8,7 @@ import React from 'react'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {useI18n} from '@/core/i18n'
 import {Lazy} from '@/shared/Lazy'
-import {DisplacementStatus, groupBy, KoboIndex, OblastIndex, OblastName} from 'infoportal-common'
+import {groupBy, KoboIndex, OblastIndex, OblastName, Person} from 'infoportal-common'
 import {Obj} from '@alexandreannic/ts-utils'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
@@ -119,7 +119,11 @@ const ProtectionOverviewWithContext = () => {
             </Panel>
             <Panel title={m.displacementStatus}>
               <PanelBody>
-                <ChartBarSingleBy data={data.flatFiltered} by={(_) => _.displacement} label={DisplacementStatus} />
+                <ChartBarSingleBy
+                  data={data.flatFiltered}
+                  by={(_) => _.displacement}
+                  label={Person.DisplacementStatus}
+                />
               </PanelBody>
             </Panel>
           </Div>

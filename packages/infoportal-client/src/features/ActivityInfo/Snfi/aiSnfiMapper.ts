@@ -1,11 +1,11 @@
 import {
-  DisplacementStatus,
   DrcProgram,
   DrcProject,
   groupBy,
   KoboMetaShelterRepairTags,
   KoboMetaStatus,
   PeriodHelper,
+  Person,
   ShelterTaPriceLevel,
 } from 'infoportal-common'
 import {fnSwitch} from '@alexandreannic/ts-utils'
@@ -234,8 +234,8 @@ export namespace AiShelterMapper {
                     fnSwitch(
                       row.displacement!,
                       {
-                        [DisplacementStatus.Idp]: 'Internally Displaced',
-                        [DisplacementStatus.Returnee]: 'Returnees',
+                        [Person.DisplacementStatus.Idp]: 'Internally Displaced',
+                        [Person.DisplacementStatus.Returnee]: 'Returnees',
                       },
                       () => 'Non-Displaced',
                     ),

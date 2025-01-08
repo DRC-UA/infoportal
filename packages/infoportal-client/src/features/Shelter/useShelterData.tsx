@@ -1,20 +1,13 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useMemo} from 'react'
 import {useAsync} from '@/shared/hook/useAsync'
-import {
-  DrcOffice,
-  KoboGeneralMapping,
-  KoboIndex,
-  KoboShelterTa,
-  OblastIndex,
-  ShelterContractorPrices,
-  ShelterTaPriceLevel,
-} from 'infoportal-common'
+import {DrcOffice, KoboIndex, OblastIndex, ShelterContractorPrices, ShelterTaPriceLevel} from 'infoportal-common'
 import {fnSwitch, map, Seq, seq} from '@alexandreannic/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetcher'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {ShelterEntity} from '@/features/Shelter/shelterEntity'
 import {Kobo} from 'kobo-sdk'
+import {KoboXmlMapper} from 'infoportal-common'
 
 export type UseShelterData = ReturnType<typeof useShelterData>
 
@@ -41,22 +34,8 @@ export const useShelterData = () => {
           index[d.id].nta = d
           index[d.id].oblastIso = oblast?.iso
           index[d.id].oblast = oblast?.name
-          index[d.id].persons = KoboGeneralMapping.collectXlsKoboIndividuals(
-            KoboShelterTa.harmonizeNtaDisabilityAll(d as any),
-          ).map(KoboGeneralMapping.mapPersonDetails)
-          index[d.id].office =
-            fnSwitch(
-              d.back_office!,
-              {
-                cej: DrcOffice.Chernihiv,
-                dnk: DrcOffice.Dnipro,
-                hrk: DrcOffice.Kharkiv,
-                umy: DrcOffice.Sumy,
-                nlv: DrcOffice.Mykolaiv,
-                slo: DrcOffice.Sloviansk,
-              },
-              () => undefined,
-            ) ?? ''
+          index[d.id].persons = KoboXmlMapper.Persons.shelter_nta(d)
+          index[d.id].office = KoboXmlMapper.office(d.back_office) ?? ''
         })
         ta.data.forEach((d) => {
           const refId = d.nta_id ? ('' + d.nta_id).replaceAll(/[^\d]/g, '') : d.id

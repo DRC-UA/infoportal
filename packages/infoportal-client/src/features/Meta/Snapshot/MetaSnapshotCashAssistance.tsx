@@ -1,14 +1,5 @@
 import React, {useMemo} from 'react'
-import {
-  DisplacementStatus,
-  drcDonorTranlate,
-  DrcSector,
-  KoboMetaStatus,
-  OblastIndex,
-  Period,
-  PeriodHelper,
-  Person,
-} from 'infoportal-common'
+import {drcDonorTranlate, DrcSector, KoboMetaStatus, OblastIndex, Period, PeriodHelper, Person} from 'infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {Divider, Icon, ThemeProvider, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
@@ -136,7 +127,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title="IDPs"
                       data={persons}
-                      filter={(_) => _.displacement === DisplacementStatus.Idp}
+                      filter={(_) => _.displacement === Person.DisplacementStatus.Idp}
                     />
                   </PanelWBody>
                 </Div>
@@ -146,7 +137,7 @@ const Cp = ({period}: MetaSnapshotProps) => {
                       dense
                       title="Returnees"
                       data={persons}
-                      filter={(_) => _.displacement === DisplacementStatus.Returnee}
+                      filter={(_) => _.displacement === Person.DisplacementStatus.Returnee}
                     />
                   </PanelWBody>
                 </Div>

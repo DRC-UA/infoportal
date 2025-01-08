@@ -3,20 +3,21 @@ import {
   DrcOffice,
   DrcProject,
   DrcProjectHelper,
-  KoboSubmissionFlat,
   KoboIndex,
   KoboMealPdm,
+  KoboSubmissionFlat,
+  KoboXmlMapper,
   Meal_cashPdm,
+  Meal_shelterPdm,
   OblastIndex,
   OblastName,
   Period,
-  PersonDetails,
+  Person,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {fnSwitch, map, seq, Seq} from '@alexandreannic/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
-import {Meal_shelterPdm} from 'infoportal-common'
 
 export enum PdmType {
   Cash = 'Cash',
@@ -30,7 +31,7 @@ export type PdmData<T extends PdmForm> = {
   oblast: OblastName
   project: DrcProject | undefined
   office: DrcOffice | undefined
-  persons: PersonDetails[]
+  persons: Person.Details[]
   answers: KoboSubmissionFlat<T>
 }
 
@@ -80,18 +81,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           type: PdmType.Shelter,
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
           project: DrcProjectHelper.search(record.Donor),
-          office: fnSwitch(
-            record.office!,
-            {
-              dnk: DrcOffice.Dnipro,
-              hrk: DrcOffice.Kharkiv,
-              cej: DrcOffice.Chernihiv,
-              lwo: DrcOffice.Lviv,
-              umy: DrcOffice.Sumy,
-              nlv: DrcOffice.Mykolaiv,
-            },
-            () => undefined,
-          ),
+          office: KoboXmlMapper.office(record.office),
           persons: KoboMealPdm.mapShelterPersons(record),
           answers: record,
         })),

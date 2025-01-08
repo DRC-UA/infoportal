@@ -5,7 +5,7 @@ import {useI18n} from '@/core/i18n'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {Lazy} from '@/shared/Lazy'
-import {Protection_hhs3, toPercent, WgDisability} from 'infoportal-common'
+import {Person, Protection_hhs3, toPercent} from 'infoportal-common'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartHelper} from '@/shared/charts/chartHelper'
 import {Obj, seq} from '@alexandreannic/ts-utils'
@@ -169,7 +169,7 @@ export const SnapshotProtMonitoNN2Needs = () => {
                         Comm: `Using your usual language`,
                         None: '',
                       }}
-                      filterValue={[WgDisability.None]}
+                      filterValue={[Person.WgDisability.None]}
                     />
                   </>
                 )}

@@ -1,5 +1,5 @@
 import React from 'react'
-import {DisplacementStatus, KoboIndex, KoboMetaStatus, OblastIndex} from 'infoportal-common'
+import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared/Page'
@@ -85,7 +85,11 @@ export const MetaDashboard = () => {
           </SlidePanel>
           <Panel title={m.displacementStatus}>
             <PanelBody>
-              <ChartBarSingleBy data={ctx.filteredPersons} by={(_) => _.displacement} label={DisplacementStatus} />
+              <ChartBarSingleBy
+                data={ctx.filteredPersons}
+                by={(_) => _.displacement}
+                label={Person.DisplacementStatus}
+              />
             </PanelBody>
           </Panel>
           <SlidePanel title={m.form}>

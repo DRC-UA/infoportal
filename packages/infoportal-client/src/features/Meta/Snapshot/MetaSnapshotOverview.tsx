@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {drcDonorTranlate, OblastIndex, Period, Person, WgDisability} from 'infoportal-common'
+import {drcDonorTranlate, OblastIndex, Period, Person} from 'infoportal-common'
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {format} from 'date-fns'
 import {useTheme} from '@mui/material'
@@ -107,7 +107,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
               <PanelWBody title="Most Reported Access Issues">
                 <ChartBarMultipleBy
                   data={ctx.filteredPersons}
-                  filterValue={[WgDisability.None]}
+                  filterValue={[Person.WgDisability.None]}
                   by={(_) => _.disability}
                   limit={3}
                   label={m.disability_}
