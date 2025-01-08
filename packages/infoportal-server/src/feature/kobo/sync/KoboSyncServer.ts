@@ -240,7 +240,7 @@ export class KoboSyncServer {
       const answersToUpdate = seq([...localAnswersIndex])
         .map(([id, index]) => {
           const match = remoteIdsIndex.get(id)
-          const hasBeenUpdated = match && match.lastValidatedTimestamp !== index.lastValidatedTimestamp
+          const hasBeenUpdated = match && (match.lastValidatedTimestamp ?? null) !== index.lastValidatedTimestamp
           return hasBeenUpdated ? match : undefined
         })
         .compact()
