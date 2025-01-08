@@ -3,7 +3,7 @@ import {GlobalEvent} from '../../../core/GlobalEvent'
 import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds'
 import {app, AppCacheKey, AppLogger} from '../../../index'
 import {KoboService} from '../KoboService'
-import {duration, map, Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {duration, map, Obj, seq, Seq, sleep} from '@alexandreannic/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
 import {
@@ -304,10 +304,12 @@ export class KoboMetaService {
     return {}
   }
 
-  readonly sync = () => {
+  readonly sync = async () => {
     const keys = [...Obj.keys(KoboMetaMapper.mappersCreate), ...Obj.keys(KoboMetaMapper.mappersUpdate)]
-    keys.forEach((formId, i) => {
+    for (let i = 0; i < keys.length; i++) {
+      const formId = keys[i]
+      await sleep(duration(1, 'minute'))
       this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId, index: i, total: keys.length - 1})
-    })
+    }
   }
 }
