@@ -68,7 +68,16 @@ export const mealVerificationActivities = seq([
       ben_det_oblast: {reg: (_) => _.oblast, verif: (_) => _.ben_det_oblast},
       ben_det_raion: {reg: (_) => _.raion, verif: (_) => _.ben_det_raion},
       ben_det_hromada: {reg: (_) => _.hromada, verif: (_) => _.ben_det_hromada},
-      ben_det_res_stat: {reg: (_) => _.res_stat, verif: (_) => _.ben_det_res_stat},
+      ben_det_res_stat: {
+        reg: (_) => {
+          if (_.res_stat === 'displaced')
+            return 'idp'
+          else if (_.res_stat === 'returnee')
+            return 'ret'
+          return _.res_stat
+        },
+        verif: (_) => _.ben_det_res_stat
+      },
       ben_det_income: {reg: (_) => _.household_income, verif: (_) => _.ben_det_income},
       ben_det_hh_size: {reg: (_) => _.number_people, verif: (_) => _.ben_det_hh_size},
       current_employment_situation: {
@@ -125,7 +134,16 @@ export const mealVerificationActivities = seq([
       ben_det_oblast: {reg: (_) => _.oblast, verif: (_) => _.ben_det_oblast},
       ben_det_raion: {reg: (_) => _.raion, verif: (_) => _.ben_det_raion},
       ben_det_hromada: {reg: (_) => _.hromada, verif: (_) => _.ben_det_hromada},
-      ben_det_res_stat: {reg: (_) => _.res_stat, verif: (_) => _.ben_det_res_stat},
+      ben_det_res_stat: {
+        reg: (_) => {
+          if (_.res_stat === 'displaced')
+            return 'idp'
+          else if (_.res_stat === 'returnee')
+            return 'ret'
+          return _.res_stat
+        },
+        verif: (_) => _.ben_det_res_stat
+      },
       ben_det_income: {reg: (_) => _.household_income, verif: (_) => _.ben_det_income},
       ben_det_hh_size: {reg: (_) => _.number_people, verif: (_) => _.ben_det_hh_size},
       current_employment_situation: {
