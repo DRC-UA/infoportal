@@ -109,10 +109,6 @@ export class BuildKoboType {
         formId: KoboIndex.byName('ecrec_vet_bha388').id,
         skipQuestionTyping: ['hromada'],
       },
-      ecrec_msme_bha388: {
-        formId: KoboIndex.byName('ecrec_msme_bha388').id,
-        skipQuestionTyping: ['hromada'],
-      },
       ecrec_cashRegistration: {
         formId: KoboIndex.byName('ecrec_cashRegistration').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
