@@ -247,9 +247,12 @@ export namespace AiShelterMapper {
                   'Indicators - SNFI': fnSwitch(
                     damageLevel,
                     {
-                      [ShelterTaPriceLevel.Light]: '# of individuals supported with light humanitarian repairs - In Kind',
-                      [ShelterTaPriceLevel.Medium]: '# of individuals supported with medium humanitarian repairs - In Kind',
-                      [ShelterTaPriceLevel.Heavy]: '# of individuals supported with heavy humanitarian repairs - In Kind',
+                      [ShelterTaPriceLevel.Light]:
+                        '# of individuals supported with light humanitarian repairs - In Kind',
+                      [ShelterTaPriceLevel.Medium]:
+                        '# of individuals supported with medium humanitarian repairs - In Kind',
+                      [ShelterTaPriceLevel.Heavy]:
+                        '# of individuals supported with heavy humanitarian repairs - In Kind',
                     },
                     () => '# of individuals supported with medium humanitarian repairs - In Kind',
                   ),
