@@ -21,6 +21,8 @@ export namespace AiFslcMapper {
         [DrcProject['UKR-000352 UHF7']]: 'FSLC-DRC-00003',
         [DrcProject['UKR-000363 UHF8']]: 'FSLC-DRC-00004',
         [DrcProject['UKR-000372 ECHO3']]: 'FSLC-DRC-00005',
+        [DrcProject['UKR-000355 Danish MFA']]: 'FSLC-DRC-00008',
+        [DrcProject['UKR-000388 BHA']]: 'FSLC-DRC-00009',
       },
       () => aiInvalidValueFlag + _,
     )
