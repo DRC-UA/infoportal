@@ -52,6 +52,7 @@ export namespace AiProtectionType {
       'PRT-DRC-00010': 'cfbrw5olx039qnm4',
       'PRT-DRC-00011': 'caaapdflxoq6ktk2',
       'PRT-DRC-00012': 'ciu3pcllxoqadnt3',
+      'PRT-DRC-00013': 'ck2bquam5qwnp6o2\n',
     },
     Oblast: {
       'Autonomous Republic of Crimea_Автономна Республіка Крим': 'c5c2sr3lq3kjj6gd',

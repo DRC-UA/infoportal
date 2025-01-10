@@ -24,6 +24,7 @@ export namespace AiProtectionMapper {
       [DrcProject['UKR-000372 ECHO3']]: 'PRT-DRC-00009',
       [DrcProject['UKR-000363 UHF8']]: 'PRT-DRC-00010',
       [DrcProject['UKR-000350 SIDA']]: 'PRT-DRC-00011',
+      [DrcProject['UKR-000355 Danish MFA']]: 'PRT-DRC-00013',
     })
     // @ts-ignore
     return planCode[_] ?? `${aiInvalidValueFlag} ${_}`
