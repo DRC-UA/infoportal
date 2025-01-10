@@ -6,6 +6,8 @@ import {
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   Ecrec_msmeGrantEoi,
+  Ecrec_vet2_dmfa,
+  Ecrec_vet_bha388,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
   Meal_cashPdm,
@@ -48,6 +50,7 @@ export namespace KoboXmlMapper {
 
     export type Displacement =
       | 'idp'
+      | 'displaced'
       | 'long_res'
       | 'ret'
       | 'ref_asy'
@@ -124,6 +127,7 @@ export namespace KoboXmlMapper {
           person.hh_char_hh_res_stat!,
           {
             idp: Person.DisplacementStatus.Idp,
+            displaced: Person.DisplacementStatus.Idp,
             long: Person.DisplacementStatus.NonDisplaced,
             long_res: Person.DisplacementStatus.NonDisplaced,
             ret: Person.DisplacementStatus.Returnee,
@@ -439,6 +443,27 @@ export namespace KoboXmlMapper {
     export const ecrec_vetApplication = (row: Ecrec_vetApplication.T) => common(row)
 
     export const ecrec_vetEvaluation = (row: Ecrec_vetEvaluation.T) => common(row)
+
+    export const ecrec_vet_bha388 = (row: Ecrec_vet_bha388.T) => common({
+      hh_char_hh_det: row.family_member?.map(({gender, age, dis_select, dis_level}) => ({
+        hh_char_hh_det_age: age,
+        hh_char_hh_det_gender: gender,
+        hh_char_hh_det_dis_select: dis_select,
+        hh_char_hh_det_dis_level: dis_level,
+        hh_char_hh_res_stat: row.res_stat, // notice it comes from the row, not the family member
+      }))
+    })
+
+    export const ecrec_vet2_dmfa = (row: Ecrec_vet2_dmfa.T) => common({
+      ...row,
+      hh_char_hh_det: row.family_member?.map((member) => ({
+        hh_char_hh_det_age: member.age,
+        hh_char_hh_det_gender: member.gender,
+        hh_char_hh_det_dis_select: member.dis_select,
+        hh_char_hh_det_dis_level: member.dis_level,
+        hh_char_hh_res_stat: row.res_stat, // notice it comes from the row, not the family member
+      })),
+    })
 
     export const ecrec_msmeGrantReg = (row: Ecrec_msmeGrantReg.T) =>
       common({

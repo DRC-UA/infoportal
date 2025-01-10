@@ -26,6 +26,8 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('ecrec_vetEvaluation').id:
       case KoboIndex.byName('ecrec_msmeGrantEoi').id:
       case KoboIndex.byName('shelter_cashForShelter').id:
+      case KoboIndex.byName('ecrec_vet_bha388').id:
+      case KoboIndex.byName('ecrec_vet2_dmfa').id:
       case KoboIndex.byName('ecrec_msmeGrantReg').id:
       case KoboIndex.byName('bn_rapidResponse2').id:
       case KoboIndex.byName('partner_lampa').id: {
