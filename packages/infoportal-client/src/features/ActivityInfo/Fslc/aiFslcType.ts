@@ -249,6 +249,9 @@ export namespace AiFslcType {
       'FSLC-DRC-00003': 'cex9iwdltn0pa1y4',
       'FSLC-DRC-00004': 'c9fdyl6m0wi6rxz15j',
       'FSLC-DRC-00005': 'c8ds712m0wibuyo15k',
+      'FSLC-DRC-00008': 'ce8581lm5qv7rse3', 
+      'FSLC-DRC-00009': 'ctgme0cm5qvrxa96i',
+
     },
     'Activity and indicator': {
       [DrcProgram.SectoralCashForAgriculture]: 'cv58tzkluclbdwv3',
