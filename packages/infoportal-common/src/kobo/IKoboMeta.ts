@@ -15,7 +15,7 @@ export type IKoboMeta<TTag = any> = {
   updatedAt?: Date
   date: Date
 
-  oblast: OblastName
+  oblast?: OblastName
   enumerator?: string
   raion?: string
   hromada?: string

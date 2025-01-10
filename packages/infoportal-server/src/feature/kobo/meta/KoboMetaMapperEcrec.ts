@@ -1,4 +1,4 @@
-import {fnSwitch, map} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, Obj} from '@alexandreannic/ts-utils'
 import {
   DrcDonor,
   DrcOffice,
@@ -9,7 +9,9 @@ import {
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   Ecrec_msmeGrantEoi,
+  Ecrec_msmeGrantReg,
   Ecrec_msmeGrantSelection,
+  Ecrec_vet_bha388,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
   KoboBaseTags,
@@ -20,13 +22,14 @@ import {
   KoboMetaStatus,
   KoboTagStatus,
   KoboValidation,
+  KoboXmlMapper,
   oblastByDrcOffice,
   VetApplicationStatus,
 } from 'infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
 import {appConf} from '../../../core/conf/AppConf'
-import {KoboXmlMapper} from 'infoportal-common'
+import {Ecrec_vet2_dmfa} from 'infoportal-common'
 
 export class KoboMetaMapperEcrec {
   static readonly cashRegistration: MetaMapperInsert<
@@ -262,6 +265,92 @@ export class KoboMetaMapperEcrec {
       taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
       idFileName: answer.pay_det_id_ph,
       idFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_id_ph),
+    })
+  }
+
+  static readonly ecrec_vet_bha388: MetaMapperInsert<KoboMetaOrigin<Ecrec_vet_bha388.T, KoboBaseTags>> = (row) => {
+    const answer = Ecrec_vet_bha388.map(row.answers)
+    const persons = KoboXmlMapper.Persons.ecrec_vet_bha388(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.oblast!)
+    const project = DrcProject['UKR-000388 BHA']
+
+    return KoboMetaMapper.make({
+      enumerator: Ecrec_vet_bha388.options.back_enum_extra[answer.back_enum!],
+      office: KoboXmlMapper.office(answer.office),
+      oblast: oblast?.name,
+      raion: KoboXmlMapper.Location.searchRaion(answer.raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
+      settlement: answer.settlement,
+      sector: DrcSector.Livelihoods,
+      activity: DrcProgram.VET,
+      personsCount: persons.length,
+      persons,
+      project: project ? [project] : [],
+      donor: map(project, (_) => [DrcProjectHelper.donorByProject[_]]),
+      lastName: answer.surname,
+      firstName: answer.first_name,
+      patronymicName: answer.pat_name,
+      taxId: answer.tax_id_num,
+      phone: answer.ph_number ? '' + answer.ph_number : '',
+      status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
+      lastStatusUpdate: map(row.lastValidatedTimestamp, (_) => new Date((_ as any) * 1000)),
+    })
+  }
+
+  static readonly ecrec_vet2_dmfa: MetaMapperInsert<KoboMetaOrigin<Ecrec_vet2_dmfa.T, KoboBaseTags>> = (row) => {
+    const answer = Ecrec_vet2_dmfa.map(row.answers)
+    const persons = KoboXmlMapper.Persons.ecrec_vet2_dmfa(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.oblast!)
+    const project = DrcProject['UKR-000355 Danish MFA']
+
+    return KoboMetaMapper.make({
+      // enumerator: Ecrec_vet2_dmfa.options.[answer.back_enum!],
+      office: DrcOffice.Mykolaiv,
+      oblast: oblast?.name,
+      raion: KoboXmlMapper.Location.searchRaion(answer.raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
+      settlement: answer.settlement,
+      sector: DrcSector.Livelihoods,
+      activity: DrcProgram.VET,
+      personsCount: persons.length,
+      persons,
+      project: project ? [project] : [],
+      donor: map(project, (_) => [DrcProjectHelper.donorByProject[_]]),
+      lastName: answer.surname,
+      firstName: answer.first_name,
+      patronymicName: answer.pat_name,
+      taxId: answer.tax_id_num,
+      phone: answer.ph_number ? '' + answer.ph_number : '',
+      status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
+      lastStatusUpdate: map(row.lastValidatedTimestamp, (_) => new Date((_ as any) * 1000)),
+    })
+  }
+
+  static readonly ecrec_msmeGrantReg: MetaMapperInsert<KoboMetaOrigin<Ecrec_msmeGrantReg.T, KoboBaseTags>> = (row) => {
+    const answer = Ecrec_msmeGrantReg.map(row.answers)
+    const persons = KoboXmlMapper.Persons.ecrec_msmeGrantReg(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.oblast!)
+    const project = DrcProject['UKR-000388 BHA']
+    return KoboMetaMapper.make({
+      // enumerator: Ecrec_msmeGrantReg.options.[answer.back_enum!],
+      office: DrcOffice.Mykolaiv,
+      oblast: oblast?.name,
+      raion: KoboXmlMapper.Location.searchRaion(answer.raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
+      settlement: answer.settlement,
+      sector: DrcSector.Livelihoods,
+      activity: DrcProgram.MSME,
+      personsCount: persons.length,
+      persons,
+      project: project ? [project] : [],
+      donor: map(project, (_) => [DrcProjectHelper.donorByProject[_]]),
+      lastName: answer.surname,
+      firstName: answer.first_name,
+      patronymicName: answer.pat_name,
+      taxId: answer.tax_id_num,
+      phone: answer.ph_number ? '' + answer.ph_number : '',
+      status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
+      lastStatusUpdate: map(row.lastValidatedTimestamp, (_) => new Date((_ as any) * 1000)),
     })
   }
 }

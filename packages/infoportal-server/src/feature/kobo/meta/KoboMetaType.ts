@@ -1,5 +1,5 @@
 import {Kobo} from 'kobo-sdk'
-import {KoboSubmissionMetaData} from 'infoportal-common'
+import {KoboSubmissionMetaData, KoboValidation} from 'infoportal-common'
 
 export type KoboMetaOrigin<
   TAnswer extends Record<string, any> = any,
@@ -12,6 +12,8 @@ export type KoboMetaOrigin<
   date: Date
   submissionTime: Date
   id: Kobo.SubmissionId
+  validationStatus: KoboValidation
+  lastValidatedTimestamp?: Date
   updatedAt?: KoboSubmissionMetaData['updatedAt']
   tags?: TTag | null
 }

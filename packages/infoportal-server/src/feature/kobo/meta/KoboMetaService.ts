@@ -29,6 +29,7 @@ export type MetaMapped<TTag extends Record<string, any> = any> = Omit<
   IKoboMeta<TTag>,
   'koboId' | 'id' | 'uuid' | 'updatedAt' | 'formId' | 'date'
 > & {date?: Date}
+
 export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Record<string, any> = any> = (_: T) =>
   | {
       originMetaKey: Extract<KeyOf<IKoboMeta>, 'koboId' | 'taxId'>
@@ -36,6 +37,7 @@ export type MetaMapperMerge<T extends Record<string, any> = any, TTag extends Re
       changes: Partial<MetaMapped<TTag>>
     }
   | undefined
+
 export type MetaMapperInsert<T extends Record<string, any> = any, TMeta extends Record<string, any> = any> = (
   _: T,
 ) => MetaMapped<TMeta> | MetaMapped<TMeta>[] | undefined
@@ -71,6 +73,9 @@ export class KoboMetaMapper {
     [KoboIndex.byName('protection_communityMonitoring').id]: KoboMetaMapperProtection.communityMonitoring,
     [KoboIndex.byName('ecrec_vetApplication').id]: KoboMetaMapperEcrec.vetApplication,
     [KoboIndex.byName('ecrec_msmeGrantEoi').id]: KoboMetaMapperEcrec.msmeEoi,
+    [KoboIndex.byName('ecrec_vet_bha388').id]: KoboMetaMapperEcrec.ecrec_vet_bha388,
+    [KoboIndex.byName('ecrec_vet2_dmfa').id]: KoboMetaMapperEcrec.ecrec_vet2_dmfa,
+    [KoboIndex.byName('ecrec_msmeGrantReg').id]: KoboMetaMapperEcrec.ecrec_msmeGrantReg,
   }
   static readonly mappersUpdate: Record<Kobo.FormId, MetaMapperMerge> = {
     [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa,
@@ -239,6 +244,8 @@ export class KoboMetaService {
           uuid: true,
           answers: true,
           date: true,
+          validationStatus: true,
+          lastValidatedTimestamp: true,
           submissionTime: true,
           id: true,
           tags: true,
