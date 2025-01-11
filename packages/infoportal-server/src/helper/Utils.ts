@@ -18,6 +18,14 @@ export type MappedColumn<T, O = string> = {
   [P in keyof T]: T[P] extends undefined | Date | string | number | boolean | any[] ? O : MappedColumn<T[P], O>
 }
 
+export const previewList = (list: (string | number)[], toPrint = 1) => {
+  const displayedItems = list.splice(0, toPrint).join(',')
+  const rest = list.length - toPrint
+  if (rest > 0) {
+    return `${displayedItems} +${rest}`
+  }
+}
+
 export const renameObjectProperties =
   <O>(propsMap: Partial<MappedColumn<O>>) =>
   (input: any): O => {

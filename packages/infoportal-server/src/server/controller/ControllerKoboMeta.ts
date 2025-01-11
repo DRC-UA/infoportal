@@ -18,7 +18,7 @@ export class ControllerKoboMeta {
   }
 
   readonly sync = async (req: Request, res: Response, next: NextFunction) => {
-    this.service.sync()
+    await this.service.syncAll()
     res.send()
   }
 

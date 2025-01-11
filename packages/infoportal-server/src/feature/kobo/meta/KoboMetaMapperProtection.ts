@@ -263,7 +263,7 @@ export class KoboMetaMapperProtection {
           uhf8: DrcProject['UKR-000363 UHF8'],
           '372_echo': DrcProject['UKR-000372 ECHO3'],
           'sida h2r': DrcProject['UKR-000329 SIDA H2R'],
-        })
+        }, () => DrcProjectHelper.search(answer.project))
       : undefined
     return {
       office: fnSwitch(

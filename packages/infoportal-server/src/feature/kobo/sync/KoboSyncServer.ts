@@ -8,8 +8,8 @@ import {GlobalEvent} from '../../../core/GlobalEvent'
 import {KoboService} from '../KoboService'
 import {AppError} from '../../../helper/Errors'
 import {appConf} from '../../../core/conf/AppConf'
-import {genUUID, Util} from '../../../helper/Utils'
-import {Kobo} from 'kobo-sdk'
+import {genUUID, previewList, Util} from '../../../helper/Utils'
+import {chunkify, Kobo} from 'kobo-sdk'
 
 export type KoboSyncServerResult = {
   answersIdsDeleted: Kobo.FormId[]
@@ -188,15 +188,21 @@ export class KoboSyncServer {
           formId,
           `Handle delete ${tracker} - localAnswersIndex: ${localAnswersIndex.size} - remoteIdsIndex: ${remoteIdsIndex.size}`,
         )
-        this.info(formId, `Handle delete ${tracker} - idsToDelete: ${idsToDelete.join(',')}`)
+        this.info(formId, `Handle delete ${tracker} - idsToDelete: ${previewList(idsToDelete)}`)
       }
-
-      await this.prisma.koboAnswers.updateMany({
-        data: {
-          deletedAt: new Date(),
-          deletedBy: 'system-sync-' + tracker,
+      await chunkify({
+        concurrency: 1,
+        data: idsToDelete,
+        size: this.conf.db.maxPreparedStatementParams,
+        fn: (ids) => {
+          return this.prisma.koboAnswers.updateMany({
+            data: {
+              deletedAt: new Date(),
+              deletedBy: 'system-sync-' + tracker,
+            },
+            where: {source: null, formId, id: {in: ids}},
+          })
         },
-        where: {source: null, formId, id: {in: idsToDelete}},
       })
       return idsToDelete
     }

@@ -22,7 +22,7 @@ import {genUUID, yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
 import {PromisePool} from '@supercharge/promise-pool'
-import {Kobo} from 'kobo-sdk'
+import {chunkify, Kobo} from 'kobo-sdk'
 import Event = GlobalEvent.Event
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<
@@ -106,18 +106,7 @@ export class KoboMetaService {
   readonly start = () => {
     this.info('', `Start listening to ${Event.KOBO_FORM_SYNCHRONIZED}`)
     this.event.listen(Event.KOBO_FORM_SYNCHRONIZED, async (_) => {
-      const createMapper = KoboMetaMapper.mappersCreate[_.formId]
-      const updateMapper = KoboMetaMapper.mappersUpdate[_.formId]
-      if (createMapper) {
-        await this.syncInsert({formId: _.formId, mapper: createMapper})
-        ;(KoboMetaMapper.triggerUpdate[_.formId] ?? []).forEach((triggeredFormId) => {
-          this.syncMerge({formId: triggeredFormId, mapper: KoboMetaMapper.mappersUpdate[triggeredFormId]})
-        })
-      } else if (updateMapper) {
-        this.syncMerge({formId: _.formId, mapper: updateMapper})
-      } else {
-        this.log.error(`No mapper implemented for ${JSON.stringify(_.formId)}`)
-      }
+      await this.sync(_.formId)
       // setTimeout(() => {
       //   // Wait for the database to be rebuilt before clearing the cache
       //   app.cache.clear(SytemCache.Meta)
@@ -126,6 +115,22 @@ export class KoboMetaService {
     this.event.listen(Event.WFP_DEDUPLICATION_SYNCHRONIZED, () => {
       this.syncWfpDeduplication()
     })
+  }
+
+  private sync = async (formId: Kobo.FormId) => {
+    this.log.info(`Sync form ${KoboIndex.searchById(formId)?.name ?? formId}...`)
+    const createMapper = KoboMetaMapper.mappersCreate[formId]
+    const updateMapper = KoboMetaMapper.mappersUpdate[formId]
+    if (createMapper) {
+      await this.syncInsert({formId: formId, mapper: createMapper})
+      ;(KoboMetaMapper.triggerUpdate[formId] ?? []).forEach((triggeredFormId) => {
+        this.syncMerge({formId: triggeredFormId, mapper: KoboMetaMapper.mappersUpdate[triggeredFormId]})
+      })
+    } else if (updateMapper) {
+      await this.syncMerge({formId: formId, mapper: updateMapper})
+    } else {
+      this.log.error(`No mapper implemented for ${JSON.stringify(formId)}`)
+    }
   }
 
   private syncWfpDeduplication = async () => {
@@ -277,18 +282,17 @@ export class KoboMetaService {
           persons: persons,
         }
       })
-      // Create ony by one to debug if createMany failed
-      // for (let a of koboAnswersWithId.get()) {
-      //   const {persons, ...kobo} = a
-      //   await this.prisma.koboMeta.create({
-      //     data: kobo,
-      //   })
-      // }
-      await this.prisma.koboMeta.createMany({
+      await chunkify({
+        concurrency: 1,
+        size: this.conf.db.maxPreparedStatementParams,
         data: koboAnswersWithId.map(({persons, ...kobo}) => kobo),
+        fn: (data) => this.prisma.koboMeta.createMany({data}),
       })
-      await this.prisma.koboPerson.createMany({
+      await chunkify({
+        concurrency: 1,
+        size: this.conf.db.maxPreparedStatementParams,
         data: koboAnswersWithId.flatMap((_) => _.persons),
+        fn: (data) => this.prisma.koboPerson.createMany({data}),
       })
       return koboAnswersWithId
     }
@@ -304,12 +308,11 @@ export class KoboMetaService {
     return {}
   }
 
-  readonly sync = async () => {
+  readonly syncAll = async () => {
     const keys = [...Obj.keys(KoboMetaMapper.mappersCreate), ...Obj.keys(KoboMetaMapper.mappersUpdate)]
     for (let i = 0; i < keys.length; i++) {
       const formId = keys[i]
-      await sleep(duration(1, 'minute'))
-      this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId, index: i, total: keys.length - 1})
+      await this.sync(formId)
     }
   }
 }
