@@ -293,7 +293,7 @@ export class KoboMetaMapperEcrec {
       taxId: answer.tax_id_num,
       phone: answer.ph_number ? '' + answer.ph_number : '',
       status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
-      lastStatusUpdate: map(row.lastValidatedTimestamp, (_) => new Date((_ as any) * 1000)),
+      lastStatusUpdate: KoboHelper.timestampToDate(row.lastValidatedTimestamp),
     })
   }
 
@@ -322,7 +322,7 @@ export class KoboMetaMapperEcrec {
       taxId: answer.tax_id_num,
       phone: answer.ph_number ? '' + answer.ph_number : '',
       status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
-      lastStatusUpdate: map(row.lastValidatedTimestamp, (_) => new Date((_ as any) * 1000)),
+      lastStatusUpdate: KoboHelper.timestampToDate(row.lastValidatedTimestamp),
     })
   }
 
@@ -350,7 +350,7 @@ export class KoboMetaMapperEcrec {
       taxId: answer.tax_id_num,
       phone: answer.ph_number ? '' + answer.ph_number : '',
       status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
-      lastStatusUpdate: map(row.lastValidatedTimestamp, (_) => new Date((_ as any) * 1000)),
+      lastStatusUpdate: KoboHelper.timestampToDate(row.lastValidatedTimestamp),
     })
   }
 }

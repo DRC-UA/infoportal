@@ -13,7 +13,8 @@ export type KoboMetaOrigin<
   submissionTime: Date
   id: Kobo.SubmissionId
   validationStatus: KoboValidation
-  lastValidatedTimestamp?: Date
+  /** Timestamp in second. new Date(_.lastValidatedTimestamp) to convert as Date.*/
+  lastValidatedTimestamp?: number
   updatedAt?: KoboSubmissionMetaData['updatedAt']
   tags?: TTag | null
 }
