@@ -1,4 +1,4 @@
-import {map} from '@alexandreannic/ts-utils'
+import {bool, map} from '@alexandreannic/ts-utils'
 import axios from 'axios'
 import {KoboClientv2FixedUpdated, KoboUpdateDataParams, KoboUpdateDataParamsData} from './KoboClientV2FixedUpdated'
 import {Kobo, Logger} from '../Kobo'
@@ -197,6 +197,15 @@ export class KoboClientV2 {
   readonly getSchemas = () => {
     // return this.api.get(`/v2/assets/`)
     return this.api.get<Kobo.Paginate<Kobo.Form>>(`/v2/assets/?q=asset_type%3Asurvey&limit=1000`)
+  }
+
+  readonly deployment = (
+    formId: Kobo.FormId,
+    params: {
+      active: boolean
+    },
+  ) => {
+    return this.api.patch(`/v2/assets/${formId}/deployment/`, {body: params})
   }
 
   readonly getAttachement = (path: string) => {
