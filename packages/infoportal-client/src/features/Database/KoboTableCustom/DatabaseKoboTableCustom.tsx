@@ -13,7 +13,7 @@ import {getColumnsCustom} from '@/features/Database/KoboTable/columns/columnsCus
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 import {getColumnsBase} from '@/features/Database/KoboTable/columns/columnsBase'
 import {Kobo} from 'kobo-sdk'
-import {KoboIndex, KoboSchemaHelper, KoboValidation} from 'infoportal-common'
+import {KoboIndex, KoboSchemaHelper, KoboValidation, Shelter_ta} from 'infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
@@ -71,6 +71,38 @@ export const customForms: CustomForm[] = [
           originId: KoboIndex.byName('ecrec_msmeGrantEoi').id,
           originColName: 'ben_det_tax_id_num',
           colName: 'tax_id_num',
+        },
+      },
+      // {
+      //   id: KoboIndex.byName('ecrec_msmeGrantSelection').id,
+      //   // langIndexes: [1, 0],
+      // },
+      // {
+      //   id: KoboIndex.byName('ecrec_msmeGrantEoi').id,
+      //   // langIndexes: [0, 1],
+      //   join: {originId: KoboIndex.byName('ecrec_msmeGrantSelection').id, originColName: 'ben_det_tax_id_num', colName: 'tax_id_num'}
+      // },
+    ],
+  },
+  {
+    id: 'shelter_repair',
+    // langs: ['English (en)', 'Ukrainian (ua)'],
+    name: '[Shelter] Repair (NTA+TA)',
+    forms: [
+      {
+        id: KoboIndex.byName('shelter_nta').id,
+        // langIndexes: [1, 0],
+      },
+      {
+        id: KoboIndex.byName('shelter_ta').id,
+        // langIndexes: [0, 1],
+        join: {
+          originId: KoboIndex.byName('shelter_nta').id,
+          originColName: 'id',
+          colName: (() => {
+            const key: keyof Shelter_ta.T = 'nta_id'
+            return key
+          })(),
         },
       },
       // {

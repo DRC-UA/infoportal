@@ -476,7 +476,7 @@ export const columnBySchemaGenerator = ({
       renderQuick: (row: Row) => {
         const data = getRow(row) as KoboFlattenRepeatData & KoboRepeatRef
         const childIndex = data[KoboFlattenRepeat.INDEX_COL]
-        return data.id + (childIndex !== undefined ? '#' + (childIndex + 1) : '')
+        return (data.id ?? '') + (childIndex !== undefined ? '#' + (childIndex + 1) : '')
       },
     }
   }

@@ -35,6 +35,10 @@ export const objectToQueryString = (
   return params.toString()
 }
 
+export const isDate = (value: any) => {
+  return Object.prototype.toString.call(value) === '[object Date]' && !isNaN(value.getTime())
+}
+
 type PipeFunction = <T, R>(fn1: (arg: T) => R, ...fns: (((arg: R) => R) | undefined)[]) => (arg: T) => R
 
 export const pipe: PipeFunction = (fn1, ...fns) => {
