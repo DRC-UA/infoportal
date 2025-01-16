@@ -69,7 +69,7 @@ export const DatatableHeadCopyIds = ({column}: {column: DatatableColumn.InnerPro
             <b>{formatLargeNumber(copied)}</b> copied!
           </span>
           <IpBtn
-            disabled={copied === data.data?.length}
+            disabled={copied === data.filteredData?.length}
             variant="outlined"
             icon="content_copy"
             color="success"
@@ -77,7 +77,7 @@ export const DatatableHeadCopyIds = ({column}: {column: DatatableColumn.InnerPro
               ml: 2,
             }}
             onClick={() => {
-              copy(data.data?.map((_) => column.render(_).value))
+              copy(data.filteredData?.map((_) => column.render(_).value))
             }}
           >
             Copy All {formatLargeNumber(data.filteredData?.length)}
