@@ -1,6 +1,8 @@
 import {NextFunction, Request, Response} from 'express'
 import {ProxyService} from '../../feature/proxy/ProxyService'
 import {PrismaClient} from '@prisma/client'
+import {ApiError} from 'kobo-sdk'
+import {AppError} from '../../helper/Errors'
 
 export class ControllerProxy {
   constructor(
@@ -30,5 +32,23 @@ export class ControllerProxy {
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
     const data = await this.service.search()
     res.send(data)
+  }
+
+  static readonly getIps = (req: Request): string[] => {
+    const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+    return ipAddress ? (!Array.isArray(ipAddress) ? [ipAddress] : ipAddress) : []
+  }
+
+  readonly redirect = async (req: Request, res: Response, next: NextFunction) => {
+    const {slug} = await ProxyService.schema.redirect.validate(req.params)
+    const url = await this.service.redirect({
+      ipAddresses: ControllerProxy.getIps(req),
+      slug,
+    })
+    if (url) {
+      res.redirect(url)
+    } else {
+      throw new AppError.NotFound('Proxy does not exist or is disabled.')
+    }
   }
 }

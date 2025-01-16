@@ -22,6 +22,7 @@ export enum AppCacheKey {
   KoboSchema = 'KoboSchema',
   KoboServerIndex = 'KoboServerIndex',
   KoboClient = 'KoboClient',
+  Proxy = 'Proxy',
   WfpDeduplication = 'WfpDeduplication',
 }
 

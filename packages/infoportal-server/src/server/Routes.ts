@@ -121,6 +121,7 @@ export const getRoutes = (
     router.post('/kobo-meta/sync', errorCatcher(koboMeta.sync))
     router.post('/kobo-meta/kill-cache', errorCatcher(koboMeta.killCache))
 
+    router.get('/proxy/:slug', errorCatcher(proxy.redirect))
     router.put('/proxy', auth({adminOnly: true}), errorCatcher(proxy.create))
     router.post('/proxy/:id', auth({adminOnly: true}), errorCatcher(proxy.update))
     router.delete('/proxy/:id', auth({adminOnly: true}), errorCatcher(proxy.delete))

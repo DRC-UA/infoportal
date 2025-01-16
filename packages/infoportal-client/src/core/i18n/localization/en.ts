@@ -235,6 +235,8 @@ export const en = Object.freeze({
     error: 'Error',
     create: 'Create',
     proxy: 'Proxy',
+    proxyUrl: 'Proxy URL',
+    proxyDestinationUrl: 'DestinationURL',
     enabled: 'Enabled',
     households: 'Households',
     hhType: 'HH Type',

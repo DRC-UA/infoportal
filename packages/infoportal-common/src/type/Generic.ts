@@ -28,3 +28,9 @@ export type ReverseMap<T extends Record<keyof T, keyof any>> = {
     [K in keyof T]: T[K] extends P ? K : never
   }[keyof T]
 }
+
+export type NullableFn<T> = {
+  (_: T): T
+  (_: undefined): undefined
+  (_?: T): T | undefined
+}

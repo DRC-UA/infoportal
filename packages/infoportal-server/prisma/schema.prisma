@@ -254,14 +254,23 @@ model Session {
 }
 
 model Proxy {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
+  id        String       @id @default(uuid())
+  createdAt DateTime     @default(now())
   expireAt  DateTime?
   createdBy String?
-  name      String    @unique
-  slug      String    @unique
+  name      String       @unique
+  slug      String       @unique
   url       String
   disabled  Boolean?
+  usage     ProxyUsage[]
+}
+
+model ProxyUsage {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  ipAddresses String[]
+  proxy       Proxy    @relation(fields: [proxyId], references: [id])
+  proxyId     String
 }
 
 model MealVerificationAnswers {

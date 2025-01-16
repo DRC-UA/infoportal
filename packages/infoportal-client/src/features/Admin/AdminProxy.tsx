@@ -6,7 +6,7 @@ import {useCrudList} from '@alexandreannic/react-hooks-lib'
 import {useI18n} from '@/core/i18n'
 import {Switch} from '@mui/material'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {useForm} from 'react-hook-form'
+import {Controller, useForm} from 'react-hook-form'
 import {IpInput} from '@/shared/Input/Input'
 import {Regexp, slugify} from 'infoportal-common'
 import {Txt} from '@/shared/Txt'
@@ -16,32 +16,36 @@ import {endOfDay} from 'date-fns'
 import {Modal} from '@/shared'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {formatDateTime} from '@/core/i18n/localization/en'
+import {appConfig} from '@/conf/AppConfig'
+import {NullableFn} from 'infoportal-common/type/Generic'
 
 interface CreateForm {
   name: string
   slug: string
   url: string
-  expireAt: Date
+  expireAt?: Date
 }
 
 export const AdminProxy = () => {
   const {api} = useAppSettings()
   const {formatDate, m} = useI18n()
 
-  const _createForm = useForm<CreateForm>()
+  const _createForm = useForm<CreateForm>({
+    mode: 'onChange',
+  })
 
   const _search = useCrudList('id', {
     c: api.proxy.create,
-    u: api.proxy.update,
     r: api.proxy.search,
+    u: api.proxy.update,
     d: api.proxy.delete,
   })
   useEffect(() => {
     _search.fetch()
   }, [])
 
-  const parseForUrl = (_?: string) => {
-    return slugify(_?.toLowerCase())
+  const parseForUrl: NullableFn<string> = (_) => {
+    return slugify(_?.toLowerCase()) as any
   }
 
   return (
@@ -71,32 +75,63 @@ export const AdminProxy = () => {
                 }
                 content={
                   <>
-                    <IpInput
-                      {..._createForm.register('name', {
+                    <Controller
+                      defaultValue={''}
+                      control={_createForm.control}
+                      name="name"
+                      rules={{
                         required: {value: true, message: m.required},
-                      })}
-                      label={m.name}
-                      error={!!_createForm.formState.errors.name}
-                      helperText={parseForUrl(_createForm.watch('name'))}
-                      sx={{mb: 2, mt: 1}}
+                      }}
+                      render={({field, fieldState}) => (
+                        <IpInput
+                          {...field}
+                          label={m.name}
+                          error={!!fieldState.error}
+                          helperText={fieldState.error?.message}
+                          sx={{mb: 2, mt: 1}}
+                        />
+                      )}
                     />
                     <IpInput
+                      disabled={true}
+                      label={m.proxyUrl}
+                      value={Proxy.makeUrl({
+                        appConfig,
+                        proxy: {slug: parseForUrl(_createForm.watch('name') ?? '')},
+                      })}
                       sx={{mb: 2}}
-                      label={m.url}
-                      error={!!_createForm.formState.errors.url}
-                      helperText={_createForm.formState.errors.name?.message ?? m.error}
-                      {..._createForm.register('url', {
+                    />
+                    <Controller
+                      defaultValue={''}
+                      control={_createForm.control}
+                      name="url"
+                      rules={{
                         required: {value: true, message: m.required},
                         pattern: {value: Regexp.get.url, message: m.invalidUrl},
-                      })}
+                      }}
+                      render={({field, fieldState}) => (
+                        <IpInput
+                          {...field}
+                          label={m.proxyDestinationUrl}
+                          error={!!fieldState.error}
+                          helperText={fieldState.error?.message}
+                          sx={{mb: 2}}
+                        />
+                      )}
                     />
-                    <IpInput
-                      InputLabelProps={{shrink: true}}
-                      label={m.expireAt}
-                      type="date"
-                      {..._createForm.register('expireAt', {
-                        required: {value: true, message: m.required},
-                      })}
+                    <Controller
+                      control={_createForm.control}
+                      name="expireAt"
+                      render={({field, fieldState}) => (
+                        <IpInput
+                          {...field}
+                          InputLabelProps={{shrink: true}}
+                          label={m.expireAt}
+                          type="date"
+                          error={!!fieldState.error}
+                          helperText={fieldState.error?.message}
+                        />
+                      )}
                     />
                   </>
                 }
@@ -119,12 +154,13 @@ export const AdminProxy = () => {
               id: 'origin',
               head: m.origin,
               render: (_) => {
+                const redirectUrl = Proxy.makeUrl({appConfig: appConfig, proxy: _})
                 return {
                   value: _.slug,
                   label: (
                     <Txt link>
-                      <a target="_blank" href={Proxy.makeUrl(_)}>
-                        {Proxy.makeUrl(_)}
+                      <a target="_blank" href={redirectUrl}>
+                        {redirectUrl}
                       </a>
                     </Txt>
                   ),

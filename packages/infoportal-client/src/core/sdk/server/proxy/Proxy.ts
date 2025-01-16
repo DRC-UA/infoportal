@@ -1,4 +1,5 @@
 import {UUID} from 'infoportal-common'
+import {AppConfig} from '@/conf/AppConfig'
 
 export interface Proxy {
   id: UUID
@@ -21,5 +22,7 @@ export class Proxy {
     }
   }
 
-  static readonly makeUrl = (_: Proxy) => window.location.origin + '/proxy/' + _.slug
+  static readonly makeUrl = ({proxy, appConfig}: {proxy: Pick<Proxy, 'slug'>; appConfig: AppConfig}) => {
+    return appConfig.apiURL + '/proxy/' + proxy.slug
+  }
 }
