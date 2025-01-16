@@ -5,6 +5,7 @@ import {
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   Ecrec_msmeGrantEoi,
+  Ecrec_msmeGrantReg,
   Ecrec_msmeGrantSelection,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
@@ -41,7 +42,6 @@ import {
   ShelterTaTagsHelper,
   Ecrec_vet2_dmfa,
   Ecrec_vet_bha388,
-  Ecrec_msme_bha388,
   Partner_misto_syly,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
@@ -90,10 +90,10 @@ export class KoboTypedAnswerSdk {
   private readonly buildSearch = (request: 'searchByAccess' | 'search') => {
     const req = this.sdk[request]
     return {
-      ...make('ecrec_msme_bha388', (filters?: KoboAnswerFilter) =>
+      ...make('ecrec_msmeGrantReg', (filters?: KoboAnswerFilter) =>
         req({
-          formId: KoboIndex.byName('ecrec_msme_bha388').id,
-          fnMapKobo: Ecrec_msme_bha388.map,
+          formId: KoboIndex.byName('ecrec_msmeGrantReg').id,
+          fnMapKobo: Ecrec_msmeGrantReg.map,
           ...filters,
         }),
       ),

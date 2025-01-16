@@ -84,6 +84,12 @@ export enum VetApplicationStatus {
 }
 
 export class KoboHelper {
+  static readonly timestampToDate: {
+    (_: number): Date
+    (_: undefined): undefined
+    (_?: number | undefined): Date | undefined
+  } = (koboTs) => (koboTs ? new Date(koboTs * 1000) : undefined) as any
+
   static readonly findFileUrl = (attachments?: Kobo.Submission.Attachment[], fileName?: string) =>
     fileName ? attachments?.find((x) => x.filename.includes(fileName))?.download_url : undefined
 
