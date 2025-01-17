@@ -4,6 +4,7 @@ import {Obj, Seq} from '@alexandreannic/ts-utils'
 import {initGoogleMaps} from '@/core/initGoogleMaps'
 import {useTheme} from '@mui/material'
 import {AILocationHelper} from 'infoportal-common'
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 export const MapGoogleSettlement = <D extends Record<string, any>>({
   height,
@@ -15,11 +16,13 @@ export const MapGoogleSettlement = <D extends Record<string, any>>({
   getSettlement: (_: D) => string | undefined
 }) => {
   const t = useTheme()
+  const {api} = useAppSettings()
   const fetcherGeoLoc = useFetcher(AILocationHelper.getSettlementGeoLoc)
   const fetcherSettlements = useFetcher(AILocationHelper.getSettlement)
   useEffect(() => {
     fetcherGeoLoc.fetch()
     fetcherSettlements.fetch()
+    api.session.track(`Load Settlements GoogleMaps`)
   }, [])
 
   useEffect(() => {
