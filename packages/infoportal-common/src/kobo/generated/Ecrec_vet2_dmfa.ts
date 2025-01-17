@@ -233,7 +233,6 @@ export namespace Ecrec_vet2_dmfa {
       lvivska: `Львівська`,
       chernihivska: `Чернігівська`,
       sumska: `Сумська`,
-      other: `Інша`,
     },
     raion: {
       zvenyhorodskyi: `Звенигородський`,

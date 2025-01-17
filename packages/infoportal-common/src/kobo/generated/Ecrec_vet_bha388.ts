@@ -456,7 +456,6 @@ export namespace Ecrec_vet_bha388 {
       lvivska: `Львівська`,
       chernihivska: `Чернігівська`,
       sumska: `Сумська`,
-      other: `Інша`,
     },
     raion: {
       zvenyhorodskyi: `Звенигородський`,

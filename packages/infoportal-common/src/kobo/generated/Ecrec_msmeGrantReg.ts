@@ -360,7 +360,6 @@ export namespace Ecrec_msmeGrantReg {
       lvivska: `Львівська`,
       chernihivska: `Чернігівська`,
       sumska: `Сумська`,
-      other: `Інша`,
     },
     raion: {
       zvenyhorodskyi: `Звенигородський`,

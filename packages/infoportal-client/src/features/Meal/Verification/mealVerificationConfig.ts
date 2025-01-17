@@ -208,8 +208,8 @@ export const mealVerificationActivities = seq([
     label: 'ECREC MSME BHA-388',
     id: 'ECREC MSME BHA-388',
     registration: {
-      koboFormId: KoboIndex.byName('ecrec_msme_bha388').id,
-      fetch: 'ecrec_msme_bha388',
+      koboFormId: KoboIndex.byName('ecrec_msmeGrantReg').id,
+      fetch: 'ecrec_msmeGrantReg',
       joinBy: (_) => _.tax_id_num!,
     },
     verification: {
