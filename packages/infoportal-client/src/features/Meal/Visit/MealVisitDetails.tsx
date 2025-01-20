@@ -10,7 +10,7 @@ import {capitalize, KoboSubmissionFlat, KoboIndex, Meal_visitMonitoring} from 'i
 import {useSession} from '@/core/Session/SessionContext'
 import {DrawingCanvas} from '@/shared/DrawingCanvas'
 import {mapFor, seq} from '@alexandreannic/ts-utils'
-import {koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
+import {getKoboAttachmentUrl} from '@/shared/TableImg/KoboAttachedImg'
 import {CompressedImg} from '@/shared/CompressedImg'
 import {useMealVisitContext} from '@/features/Meal/Visit/MealVisitContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
@@ -253,14 +253,13 @@ export const _DashboardMealVisitPdf = () => {
               {/*</Box>*/}
               <Box sx={{display: 'grid', mt: 1, mx: -0.5, gridTemplateColumns: '1fr 1fr 1fr'}}>
                 {seq(mapFor(10, (i) => (entry as any)['fcp' + (i + 1)]))
-                  .map(
-                    (fileName) =>
-                      koboImgHelper({
-                        formId: KoboIndex.byName('meal_visitMonitoring').id,
-                        answerId: entry.id,
-                        attachments: entry.attachments,
-                        fileName,
-                      }).fullUrl,
+                  .map((fileName) =>
+                    getKoboAttachmentUrl({
+                      formId: KoboIndex.byName('meal_visitMonitoring').id,
+                      answerId: entry.id,
+                      attachments: entry.attachments,
+                      fileName,
+                    }),
                   )
                   .compact()
                   .map((x) => (

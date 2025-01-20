@@ -10,6 +10,7 @@
     "scripts": "npm run dev --workspace infoportal-scripts",
     "start:server": "npm run start --workspace infoportal-server",
     "start:client": "npm run start --workspace infoportal-client",
+    "build:all": "npm run build:kobo-sdk && npm run build:common && npm run build:server && npm run build:client",
     "build:server": "npm run build --workspace infoportal-server",
     "build:client": "npm run build --workspace infoportal-client",
     "build:kobo-sdk": "npm run build --workspace kobo-sdk",

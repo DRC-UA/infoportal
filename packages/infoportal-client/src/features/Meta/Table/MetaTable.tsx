@@ -21,7 +21,6 @@ import {OptionLabelTypeCompact} from '@/shared/customInput/SelectStatus'
 import {useSession} from '@/core/Session/SessionContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {TableImg} from '@/shared/TableImg/TableImg'
-import {getKoboImagePath} from '@/features/Mpca/MpcaData/MpcaData'
 import Link from 'next/link'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {databaseIndex} from '@/features/Database/databaseIndex'
@@ -31,6 +30,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {IpBtn} from '@/shared/Btn'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
+import {KoboApiSdk} from '@/core/sdk/server/kobo/KoboApiSdk'
 
 type Data = IKoboMeta & {
   duplicatedPhone?: number
@@ -204,14 +204,16 @@ export const MetaTable = () => {
         head: m.taxIdPhoto,
         type: 'string',
         render: (_) => {
+          if (!_.taxIdFileId) return {value: undefined, label: ''}
+          const url = KoboApiSdk.getAttachementUrl({
+            baseUrl: conf.apiURL,
+            formId: _.formId,
+            attachmentId: _.taxIdFileId,
+            answerId: _.koboId,
+          })
           return {
-            label: _.taxIdFileUrl && (
-              <TableImg
-                tooltipSize={650}
-                url={getKoboImagePath({baseUrl: conf.apiURL, formId: _.formId, url: _.taxIdFileUrl})}
-              />
-            ),
-            export: _.taxIdFileUrl,
+            label: <TableImg tooltipSize={650} url={url} />,
+            export: url,
             value: _.taxIdFileName,
           }
         },
@@ -228,14 +230,16 @@ export const MetaTable = () => {
         head: m.idPhoto,
         type: 'string',
         render: (_) => {
+          if (!_.idFileId) return {value: undefined, label: ''}
+          const url = KoboApiSdk.getAttachementUrl({
+            baseUrl: conf.apiURL,
+            formId: _.formId,
+            attachmentId: _.idFileId,
+            answerId: _.koboId,
+          })
           return {
-            label: _.idFileUrl && (
-              <TableImg
-                tooltipSize={650}
-                url={getKoboImagePath({baseUrl: conf.apiURL, formId: _.formId, url: _.idFileUrl})}
-              />
-            ),
-            export: _.idFileUrl,
+            label: <TableImg tooltipSize={650} url={url} />,
+            export: url,
             value: _.idFileName,
           }
         },

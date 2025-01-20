@@ -293,7 +293,9 @@ export class KoboMetaService {
         concurrency: 1,
         size: this.conf.db.maxPreparedStatementParams,
         data: koboAnswersWithId.map(({persons, ...kobo}) => kobo),
-        fn: (data) => this.prisma.koboMeta.createMany({data}),
+        fn: (data) => {
+          return this.prisma.koboMeta.createMany({data})
+        },
       })
       await chunkify({
         concurrency: 1,

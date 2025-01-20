@@ -208,11 +208,19 @@ export class KoboClientV2 {
     return this.api.patch(`/v2/assets/${formId}/deployment/`, {body: params})
   }
 
-  readonly getAttachement = (path: string) => {
+  readonly getAttachement = ({
+    formId,
+    attachmentId,
+    submissionId,
+  }: {
+    formId: Kobo.FormId
+    submissionId: Kobo.SubmissionId
+    attachmentId: string
+  }) => {
     return axios
       .create()
       .request({
-        url: this.api.params.baseUrl + path,
+        url: this.api.params.baseUrl + `/v2/assets/${formId}/data/${submissionId}/attachments/${attachmentId}/`,
         method: 'GET',
         headers: this.api.params.headers,
         responseType: 'arraybuffer',

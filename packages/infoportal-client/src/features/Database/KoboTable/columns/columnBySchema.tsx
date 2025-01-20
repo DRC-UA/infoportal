@@ -16,7 +16,7 @@ import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/Dat
 import {alpha, IconProps, Theme} from '@mui/material'
 import {IpBtn, TableEditCellBtn, Txt} from '@/shared'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {findFileUrl, KoboAttachedImg, koboImgHelper} from '@/shared/TableImg/KoboAttachedImg'
+import {getKoboAttachmentUrl, KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {formatDate, formatDateTime, Messages} from '@/core/i18n/localization/en'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -211,7 +211,7 @@ export const columnBySchemaGenerator = ({
         return {
           value,
           tooltip: value,
-          export: koboImgHelper({formId, answerId: row.id, attachments: row.attachments, fileName: value}).fullUrl,
+          export: getKoboAttachmentUrl({formId, answerId: row.id, attachments: row.attachments, fileName: value}),
           label: <KoboAttachedImg answerId={row.id} formId={formId} attachments={row.attachments} fileName={value} />,
         }
       },
@@ -225,12 +225,13 @@ export const columnBySchemaGenerator = ({
       type: 'string',
       render: (row: Row) => {
         const fileName = getValue(row, name) as string
+        const url = getKoboAttachmentUrl({formId, answerId: row.id, fileName, attachments: row.attachments})
         return {
-          export: findFileUrl({formId, answerId: row.id, fileName, attachments: row.attachments}),
+          export: url,
           value: fileName ?? DatatableUtils.blank,
           label: (
             <Txt link>
-              <a href={findFileUrl({formId, answerId: row.id, fileName, attachments: row.attachments})} target="_blank">
+              <a href={url} target="_blank">
                 {fileName}
               </a>
             </Txt>

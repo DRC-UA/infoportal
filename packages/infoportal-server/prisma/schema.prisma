@@ -126,9 +126,9 @@ model KoboMeta {
   address          String?
   status           String?
   taxIdFileName    String?
-  taxIdFileUrl     String?
+  taxIdFileId      Int?
   idFileName       String?
-  idFileUrl        String?
+  idFileId         Int?
   passportNum      String?
 
   lastStatusUpdate DateTime?

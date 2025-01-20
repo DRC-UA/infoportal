@@ -27,10 +27,7 @@ import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {KoboApiSdk} from '@/core/sdk/server/kobo/KoboApiSdk'
-
-export const getKoboImagePath = ({baseUrl, url, formId}: {formId: string; baseUrl: string; url: string}): string => {
-  return KoboApiSdk.getAttachementUrl({baseUrl, formId, path: url.split('api')[1]})
-}
+import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 
 const PrivateCell = () => {
   return <TableIcon color="disabled">lock</TableIcon>
@@ -330,21 +327,23 @@ export const MpcaData = () => {
               head: m.taxID,
               type: 'string',
               render: (_) => {
-                return canSee(_.office)
-                  ? {
-                      export: _.taxIdFileUrl,
-                      value: _.taxIdFileName,
-                      label: _.taxIdFileUrl && (
-                        <TableImg
-                          tooltipSize={650}
-                          url={getKoboImagePath({url: _.taxIdFileUrl, baseUrl: conf.apiURL, formId: _.formId})}
-                        />
-                      ),
-                    }
-                  : {
-                      label: <PrivateCell />,
-                      value: undefined,
-                    }
+                if (!canSee(_.office))
+                  return {
+                    label: <PrivateCell />,
+                    value: undefined,
+                  }
+                if (!_.taxIdFileId) return {value: undefined, label: ''}
+                const url = KoboApiSdk.getAttachementUrl({
+                  baseUrl: conf.apiURL,
+                  formId: _.formId,
+                  attachmentId: _.taxIdFileId,
+                  answerId: _.koboId,
+                })
+                return {
+                  export: url,
+                  value: _.taxIdFileName,
+                  label: <TableImg tooltipSize={650} url={url} />,
+                }
               },
             },
             {
@@ -423,21 +422,23 @@ export const MpcaData = () => {
               head: m.id,
               type: 'string',
               render: (_) => {
-                return canSee(_.office)
-                  ? {
-                      export: _.idFileUrl,
-                      value: _.idFileName,
-                      label: _.idFileUrl && (
-                        <TableImg
-                          tooltipSize={650}
-                          url={getKoboImagePath({url: _.idFileUrl, baseUrl: conf.apiURL, formId: _.formId})}
-                        />
-                      ),
-                    }
-                  : {
-                      label: <PrivateCell />,
-                      value: undefined,
-                    }
+                if (!canSee(_.office))
+                  return {
+                    label: <PrivateCell />,
+                    value: undefined,
+                  }
+                if (!_.idFileId) return {value: undefined, label: ''}
+                const url = KoboApiSdk.getAttachementUrl({
+                  baseUrl: conf.apiURL,
+                  formId: _.formId,
+                  attachmentId: _.idFileId,
+                  answerId: _.koboId,
+                })
+                return {
+                  export: url,
+                  value: _.idFileName,
+                  label: <TableImg tooltipSize={650} url={url} />,
+                }
               },
             },
             {type: 'string', id: 'lastName', head: m.lastName, renderQuick: (_) => _.lastName},
