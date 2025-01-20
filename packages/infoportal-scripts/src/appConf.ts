@@ -10,6 +10,7 @@ export const appConf = {
   db: {
     maxConcurrency: e(int, defaultValue(50))('DATABASE_MAX_CONCURRENCY'),
     url: e(required)('DATABASE_URL'),
+    backgrupUrl: e()('DATABASE_URL_BACKUP')
   },
   activityInfo: {
     apiToken: e(required)('ACTIVITY_INFO_API_TOKEN'),
