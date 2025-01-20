@@ -40,7 +40,7 @@ export const findFileUrl = ({
   const parsedFileName = parseKoboFileName(fileName)
   const attachment = parsedFileName ? attachments.find((_) => _.filename.includes(parsedFileName)) : undefined
   if (attachment) {
-    return `https://eu.kobotoolbox.org/api/v2/assets/${formId}/data/${answerId}/attachments/${attachment.id}/`
+    return `https://kobo.drc.ngo/api/v2/assets/${formId}/data/${answerId}/attachments/${attachment.id}/`
   }
   // return parsedFileName ? attachments.find(_ => _.filename.includes(parsedFileName))?.download_small_url : undefined
 }

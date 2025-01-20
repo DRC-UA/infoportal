@@ -7,6 +7,7 @@ import {
 } from '@/core/sdk/server/access/Access'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {DrcJob, UUID} from 'infoportal-common'
+import {UserSdk} from '@/core/sdk/server/user/UserSdk'
 
 interface SearchByFeature {
   ({
@@ -44,7 +45,10 @@ interface AccessCreate {
 }
 
 export class AccessSdk {
-  constructor(private client: ApiClient) {}
+  constructor(
+    private client: ApiClient,
+    private userSdk: UserSdk,
+  ) {}
 
   static readonly filterByFeature: {
     (_: AppFeatureId.kobo_database): (a: Access<any>) => a is Access<KoboDatabaseAccessParams>
@@ -56,11 +60,11 @@ export class AccessSdk {
       return !featureId || access.featureId === featureId
     }
 
-  readonly create: AccessCreate = (body) => {
+  readonly create: AccessCreate = async (body) => {
     return this.client.put<Access>(`/access`, {body})
   }
 
-  readonly update = (id: UUID, body: AccessUpdate) => {
+  readonly update = async (id: string, body: AccessUpdate) => {
     return this.client.post<Access>(`/access/${id}`, {body})
   }
 
