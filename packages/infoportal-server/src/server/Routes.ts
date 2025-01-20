@@ -146,6 +146,7 @@ export const getRoutes = (
     router.post('/user/me', auth(), errorCatcher(user.updateMe))
     router.get('/user', auth(), errorCatcher(user.search))
     router.get('/user/avatar/:email', auth(), errorCatcher(user.avatar))
+    router.get('/user/drc-job', auth(), errorCatcher(user.getDrcJobs))
 
     router.post('/activity-info/activity', auth({adminOnly: true}), errorCatcher(activityInfo.submitActivity))
 

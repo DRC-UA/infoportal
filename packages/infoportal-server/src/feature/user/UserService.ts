@@ -63,4 +63,13 @@ export class UserService {
     })
     return updatedUser
   }
+
+  readonly getDistinctDrcJobs = async (): Promise<string[]> => {
+    const drcJobs = await this.prisma.user.findMany({
+      select: {drcJob: true},
+      distinct: ['drcJob'],
+      where: {drcJob: {not: null}},
+    })
+    return drcJobs.map((job) => job.drcJob!)
+  }
 }

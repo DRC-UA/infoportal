@@ -1,11 +1,11 @@
-import {DrcOffice} from 'infoportal-common'
+import {DrcJob, DrcOffice} from 'infoportal-common'
 
 export interface User {
   email: string
   name: string
   accessToken: string
   admin?: boolean
-  drcJob?: string
+  drcJob?: DrcJob
   createdAt?: Date
   lastConnectedAt?: Date
   drcOffice?: DrcOffice

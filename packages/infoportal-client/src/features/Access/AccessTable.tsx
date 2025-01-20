@@ -1,5 +1,5 @@
 import {Access, AccessLevel} from '@/core/sdk/server/access/Access'
-import React, {ReactNode, useEffect} from 'react'
+import React, {ReactNode, useEffect, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {UUID} from 'infoportal-common'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
@@ -11,6 +11,7 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {UseFetcher} from '@/shared/hook/useFetcher'
 import {Txt} from '@/shared/Txt'
 import {Datatable} from '@/shared/Datatable/Datatable'
+import {useFetcher} from '@/shared/hook/useFetcher'
 
 export const AccessTable = ({
   isAdmin,
@@ -31,8 +32,10 @@ export const AccessTable = ({
   const {m, formatDate, formatDateTime} = useI18n()
   const {api} = useAppSettings()
   const _update = useAsync(api.access.update, {requestKey: ([id]) => id})
+  const drcJobs = useFetcher(api.user.fetchDrcJobs)
 
   useEffect(() => {
+    drcJobs.fetch()
     fetcherData.fetch({force: true, clean: false})
   }, [_update.callIndex])
 
@@ -62,11 +65,7 @@ export const AccessTable = ({
           head: m.drcJob,
           renderQuick: (_) => _.drcJob,
           type: 'select_one',
-          options: () =>
-            seq(fetcherData.get?.map((_) => _.drcJob))
-              .distinct((_) => _)
-              .compact()
-              .map((_) => ({value: _, label: _})),
+          options: () => drcJobs.get?.map((job) => ({ value: job, label: job })) || [],
         },
         {
           id: 'drcOffice',

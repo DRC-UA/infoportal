@@ -52,4 +52,9 @@ export class ControllerUser {
     }
     res.send(data)
   }
+
+  readonly getDrcJobs = async (req: Request, res: Response, next: NextFunction) => {
+    const drcJobs = await this.service.getDistinctDrcJobs()
+    res.send(drcJobs)
+  }
 }
