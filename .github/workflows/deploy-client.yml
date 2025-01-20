@@ -9,25 +9,9 @@ on:
   #      - main
   workflow_dispatch:
 
-env:
-  NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
-  NEXT_PUBLIC_APP_OFF: ${{ secrets.NEXT_PUBLIC_APP_OFF }}
-  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
-  NEXT_PUBLIC_GOOGLE_MAPS_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_ID }}
-  NEXT_PUBLIC_MS_AUTHORITY: ${{ secrets.NEXT_PUBLIC_MS_AUTHORITY }}
-  NEXT_PUBLIC_MS_BEARER_TOKEN: ${{ secrets.NEXT_PUBLIC_MS_BEARER_TOKEN }}
-  NEXT_PUBLIC_MS_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_MS_CLIENT_ID }}
-  NEXT_PUBLIC_MUI_PRO_LICENSE_KEY: ${{ secrets.NEXT_PUBLIC_MUI_PRO_LICENSE_KEY }}
-  IGNORE_BUILD_TS_ERRORS: ${{ secrets.IGNORE_BUILD_TS_ERRORS }}
-  PORT: ${{ secrets.PORT }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    #    defaults:
-    #      run:
-    #        working-directory: ./infoportal-client
-
     steps:
       - uses: actions/checkout@v4
 
@@ -36,22 +20,11 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: npm install, build, and test (kobo-sdk)
-        working-directory: ./packages/kobo-sdk
+      - name: npm install
         run: |
           npm ci --production
-          npm run build --if-present
-          npm run test --if-present
 
-      - name: npm install, build, and test (library)
-        working-directory: ./packages/infoportal-common
-        run: |
-          npm ci --production
-          npm run build --if-present
-          npm run test --if-present
-
-      - name: npm install, build, and test (library)
-        working-directory: ./packages/infoportal-client
+      - name: npm build
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ vars.NEXT_PUBLIC_API_BASE_URL }}
           NEXT_PUBLIC_APP_OFF: ${{ vars.NEXT_PUBLIC_APP_OFF }}
@@ -64,10 +37,22 @@ jobs:
           IGNORE_BUILD_TS_ERRORS: ${{ secrets.IGNORE_BUILD_TS_ERRORS }}
           PORT: ${{ secrets.PORT }}
         run: |
-          npm ci --production
-          npm run build --if-present
-          npm run test --if-present
-          npm run test --if-present
+          npm run build:kobo-sdk  
+          npm run build:common  
+          npm run build:client  
+
+      - name: Update deployment tag
+        run: |
+          TAG_NAME="deployed_client"
+          
+          echo "Delete the tag locally if it exists"
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Deleting existing tag $TAG_NAME"
+            git tag -d "$TAG_NAME"
+          fi
+
+          echo "Creating tag $TAG_NAME at commit $GITHUB_SHA"
+          git tag "$TAG_NAME" "$GITHUB_SHA"
 
       - name: Zip artifact for deployment
         working-directory: ./packages/infoportal-client
