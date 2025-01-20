@@ -81,7 +81,7 @@
     "nodemailer": "^6.9.13",
     "otpauth": "^9.1.2",
     "pg": "^8.8.0",
-    "prisma": "^5.22.0",
+    "prisma": "^6.2.1",
     "promise-retry": "^2.0.1",
     "qs": "^6.11.0",
     "tough-cookie": "^4.1.2",
