@@ -112,6 +112,7 @@ export class ControllerKoboApi {
       }
       res.send(img)
     } catch (e) {
+      console.log((e as AxiosError).code)
       res.send(undefined)
     }
   }

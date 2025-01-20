@@ -39,9 +39,9 @@ export type IKoboMeta<TTag = any> = {
 
   taxId?: string
   taxIdFileName?: string
-  taxIdFileUrl?: string
+  taxIdFileId?: number
   idFileName?: string
-  idFileUrl?: string
+  idFileId?: number
   passportNum?: string
 
   tags?: TTag
