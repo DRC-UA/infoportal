@@ -110,9 +110,9 @@ export class KoboMetaBasicneeds {
           _ === '' ? undefined : _,
         ),
         taxIdFileName: answer.pay_det_tax_id_ph,
-        taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+        taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
         idFileName: answer.pay_det_id_ph,
-        idFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_id_ph),
+        idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
         tags: fnSwitch(
           activity,
           {
@@ -270,9 +270,9 @@ export class KoboMetaBasicneeds {
         ),
         taxId: answer.pay_det_tax_id_num ?? answer.pay_det_tax_id_num_l,
         taxIdFileName: answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l,
-        taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l),
+        taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l),
         idFileName: answer.pay_det_id_ph ?? answer.pay_det_id_ph_l,
-        idFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_id_ph ?? answer.pay_det_id_ph_l),
+        idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph ?? answer.pay_det_id_ph_l),
         lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
         tags: fnSwitch(
           activity,
@@ -344,9 +344,9 @@ export class KoboMetaBasicneeds {
           _ === '' ? undefined : _,
         ),
         taxIdFileName: answer.pay_det_tax_id_ph,
-        taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+        taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
         idFileName: answer.pay_det_id_ph,
-        idFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_id_ph),
+        idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
         tags: fnSwitch(
           activity.program,
           {

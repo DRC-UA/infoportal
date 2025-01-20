@@ -254,7 +254,7 @@ export namespace Kobo {
       download_url: string
       filename: string
       download_small_url: string
-      id: string
+      id: number
     }
   }
 }

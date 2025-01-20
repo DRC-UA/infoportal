@@ -64,9 +64,9 @@ export class KoboMetaMapperEcrec {
         lastStatusUpdate: row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined,
         passportNum: answer.pay_det_pass_num,
         taxIdFileName: answer.pay_det_tax_id_ph,
-        taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+        taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
         idFileName: answer.pay_det_id_ph,
-        idFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_id_ph),
+        idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
       })
     })
   }
@@ -262,9 +262,9 @@ export class KoboMetaMapperEcrec {
       lastStatusUpdate: row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined,
       passportNum: answer.pay_det_pass_num,
       taxIdFileName: answer.pay_det_tax_id_ph,
-      taxIdFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_tax_id_ph),
+      taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
       idFileName: answer.pay_det_id_ph,
-      idFileUrl: KoboHelper.findFileUrl(row.attachments, answer.pay_det_id_ph),
+      idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
     })
   }
 

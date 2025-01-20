@@ -90,8 +90,9 @@ export class KoboHelper {
     (_?: number | undefined): Date | undefined
   } = (koboTs) => (koboTs ? new Date(koboTs * 1000) : undefined) as any
 
-  static readonly findFileUrl = (attachments?: Kobo.Submission.Attachment[], fileName?: string) =>
-    fileName ? attachments?.find((x) => x.filename.includes(fileName))?.download_url : undefined
+  static readonly findAttachmentId = (attachments?: Kobo.Submission.Attachment[], fileName?: string): number | undefined => {
+    return fileName ? attachments?.find((x) => x.filename.includes(fileName))?.id : undefined
+  }
 
   static readonly mapValidation = {
     fromKobo: (_: Kobo.Submission): undefined | KoboValidation => {

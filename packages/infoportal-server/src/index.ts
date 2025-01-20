@@ -12,6 +12,7 @@ import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './feature/email/EmailService'
 import {DbInit} from './core/DbInit'
+import {KoboSyncServer} from './feature/kobo/sync/KoboSyncServer'
 
 export type AppLogger = WinstonLogger
 
@@ -108,6 +109,7 @@ const startApp = async (conf: AppConf) => {
     // })
     new KoboMetaService(prisma).start()
     new EmailService().initializeListeners()
+    // await new KoboSyncServer(prisma).syncApiAnswersToDbAll()
     if (conf.production) {
       new ScheduledTask(prisma).start()
       MpcaCachedDb.constructSingleton(prisma).warmUp()
