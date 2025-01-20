@@ -27,11 +27,16 @@ export class ImportService {
 
     if (action === 'create') {
       const mergedData = this.mergeNestedData(sheetData, schemaHelper)
-      const formattedData = this.formatDataForSubmission(mergedData, schemaHelper, true, action)
+      const formattedData = ImportService.formatDataForSubmission({
+        data: mergedData,
+        schemaHelper: schemaHelper,
+        skipNullForCreate: true,
+        action: action,
+      })
       await this.batchCreate(formattedData, sdk, formId)
     } else if (action === 'update') {
-      const transformedData = this.transformValues(sheetData[rootSheet], schemaHelper)
-      await this.batchUpdate(sdk, transformedData, formId, schemaHelper)
+      const transformedData = ImportService.transformValues(sheetData[rootSheet], schemaHelper)
+      await ImportService.batchUpdate(sdk, transformedData, formId, schemaHelper)
     }
   }
 
@@ -51,7 +56,7 @@ export class ImportService {
     return sheetData
   }
 
-  private transformValues = (rows: KoboData[], schemaHelper: KoboSchemaHelper.Bundle): KoboData[] => {
+  private static transformValues = (rows: KoboData[], schemaHelper: KoboSchemaHelper.Bundle): KoboData[] => {
     return rows.map((row) => {
       const transformedRow: KoboData = {}
 
@@ -72,7 +77,7 @@ export class ImportService {
     })
   }
 
-  private isValid = (type: QuestionType, value: any): boolean => {
+  private static isValid = (type: QuestionType, value: any): boolean => {
     if (value == null || value === '') return true
 
     switch (type) {
@@ -93,14 +98,14 @@ export class ImportService {
     }
   }
 
-  private transformNestedData(value: any, schemaHelper: KoboSchemaHelper.Bundle): any {
+  private static transformNestedData(value: any, schemaHelper: KoboSchemaHelper.Bundle): any {
     if (Array.isArray(value)) {
       return value.map((item) => this.transformRow(item, schemaHelper))
     }
     return value
   }
 
-  private transformRow(row: Record<string, any>, schemaHelper: KoboSchemaHelper.Bundle): Record<string, any> {
+  private static transformRow(row: Record<string, any>, schemaHelper: KoboSchemaHelper.Bundle): Record<string, any> {
     const transformedRow: Record<string, any> = {}
 
     Obj.keys(row).forEach((key) => {
@@ -134,7 +139,7 @@ export class ImportService {
     })
   }
 
-  private transformValue = (type: string, value: any): any => {
+  private static transformValue = (type: string, value: any): any => {
     if (value == null || value === '') return null
 
     switch (type) {
@@ -148,7 +153,7 @@ export class ImportService {
     }
   }
 
-  private stupidMicrosoftDateToJSDate(serial: number): string | null {
+  private static stupidMicrosoftDateToJSDate(serial: number): string | null {
     const excelEpoch = new Date(Date.UTC(1899, 11, 30))
     if (isNaN(serial)) return null
     const days = Math.floor(serial)
@@ -159,21 +164,26 @@ export class ImportService {
     return date.toISOString().split('T')[0]
   }
 
-  private formatDate = (value: any): string | null => {
+  private static formatDate = (value: any): string | null => {
     const parsedDate = new Date(value)
     return isNaN(parsedDate.getTime()) ? null : parsedDate.toISOString().split('T')[0]
   }
 
-  private isNestedField(type: string): boolean {
+  private static isNestedField(type: string): boolean {
     return ['begin_group', 'begin_repeat'].includes(type)
   }
 
-  private formatDataForSubmission = (
-    data: KoboData[],
-    schemaHelper: KoboSchemaHelper.Bundle,
-    skipNullForCreate: boolean,
-    action: 'create' | 'update',
-  ): KoboData[] => {
+  static formatDataForSubmission = ({
+    data,
+    schemaHelper,
+    skipNullForCreate,
+    action,
+  }: {
+    data: KoboData[]
+    schemaHelper: KoboSchemaHelper.Bundle
+    skipNullForCreate: boolean
+    action: 'create' | 'update'
+  }): KoboData[] => {
     return data.map((row) => {
       const formattedRow: KoboData = {}
 
@@ -208,7 +218,6 @@ export class ImportService {
           formattedRow[questionName] = row[questionName]
         }
       })
-
       return formattedRow
     })
   }
@@ -223,12 +232,22 @@ export class ImportService {
     }
   }
 
-  private async batchUpdate(sdk: KoboClient, data: KoboData[], formId: FormId, schemaHelper: KoboSchemaHelper.Bundle) {
+  private static async batchUpdate(
+    sdk: KoboClient,
+    data: KoboData[],
+    formId: FormId,
+    schemaHelper: KoboSchemaHelper.Bundle,
+  ) {
     for (const row of data) {
       const answerId = row['ID']
       if (!answerId) continue
 
-      const formattedRow = this.formatDataForSubmission([row], schemaHelper, false, 'update')[0]
+      const formattedRow = this.formatDataForSubmission({
+        data: [row],
+        schemaHelper,
+        skipNullForCreate: false,
+        action: 'update',
+      })[0]
 
       await sdk.v2.updateData({
         formId,
