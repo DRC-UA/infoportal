@@ -94,15 +94,16 @@ export class ControllerKoboApi {
 
   readonly getAttachementsWithoutAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {formId} = await this.extractParams(req)
-      const {path, fileName} = await yup
+      const params = await yup
         .object({
-          path: yup.string().required(),
-          fileName: yup.string().optional(),
+          formId: yup.string().required(),
+          attachmentId: yup.string().required(),
+          submissionId: yup.string().required(),
         })
-        .validate(req.query)
-      const sdk = await this.koboSdkGenerator.getBy.formId(formId)
-      const img = await sdk.v2.getAttachement(path)
+        .validate(req.params)
+      const fileName = req.query.fileName
+      const sdk = await this.koboSdkGenerator.getBy.formId(params.formId)
+      const img = await sdk.v2.getAttachement(params)
       if (!fileName) {
         res.set('Content-Type', 'image/jpeg')
         res.set('Content-Length', img.length)
@@ -112,7 +113,6 @@ export class ControllerKoboApi {
       res.send(img)
     } catch (e) {
       res.send(undefined)
-      // next(e)
     }
   }
 

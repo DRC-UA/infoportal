@@ -1,5 +1,5 @@
 import {ApiClient, RequestOption} from '../ApiClient'
-import {UUID} from 'infoportal-common'
+import {objectToQueryString, UUID} from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {appConfig, AppConfig} from '@/conf/AppConfig'
 import {ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
@@ -59,14 +59,22 @@ export class KoboApiSdk {
 
   static readonly getAttachementUrl = ({
     baseUrl,
-    path,
     formId,
+    attachmentId,
+    answerId,
+    fileName,
   }: {
     baseUrl: string
     formId: Kobo.FormId
-    path: string
+    answerId: Kobo.SubmissionId
+    attachmentId: string
+    fileName?: string
   }) => {
-    return baseUrl + `/kobo-api/${formId}/attachment?path=${path}`
+    return (
+      baseUrl +
+      `/kobo-api/${formId}/submission/${answerId}/attachment/${attachmentId}` +
+      (fileName ? '?' + objectToQueryString({fileName}) : '')
+    )
   }
 
   readonly proxy = <T = any>({
