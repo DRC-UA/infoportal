@@ -4,7 +4,7 @@ import {NavLink, useNavigate, useParams, useSearchParams} from 'react-router-dom
 import {map} from '@alexandreannic/ts-utils'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Kobo} from 'kobo-sdk'
-import {KoboFlattenRepeat, KoboFlattenRepeatData, KoboSchemaHelper} from 'infoportal-common'
+import {KoboFlattenRepeatedGroup, KoboSchemaHelper} from 'infoportal-common'
 import * as yup from 'yup'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useEffect, useMemo} from 'react'
@@ -60,7 +60,7 @@ export const getColumnsForRepeatGroup = ({
   t: ColumnBySchemaGeneratorProps['t']
 }) => {
   const groupInfo = schema.helper.group.getByName(groupName)!
-  const res: DatatableColumn.Props<KoboFlattenRepeatData>[] = []
+  const res: DatatableColumn.Props<KoboFlattenRepeatedGroup.Data>[] = []
   const schemaGenerator = columnBySchemaGenerator({
     onRepeatGroupClick,
     formId,
@@ -74,13 +74,13 @@ export const getColumnsForRepeatGroup = ({
         type: 'select_one',
         id: '_parent_table_name',
         head: '_parent_table_name',
-        renderQuick: (_: KoboFlattenRepeatData) => _._parent_table_name,
+        renderQuick: (_: KoboFlattenRepeatedGroup.Data) => _._parent_table_name,
       },
       {
         type: 'string',
         id: '_parent_index',
         head: '_parent_index',
-        renderQuick: (_: KoboFlattenRepeatData) => '' + _._parent_index,
+        renderQuick: (_: KoboFlattenRepeatedGroup.Data) => '' + _._parent_index,
       },
     )
   }
@@ -143,7 +143,7 @@ const DatabaseKoboRepeat = ({
   }, [formId, group, schema, data])
 
   const flat = useMemo(() => {
-    return KoboFlattenRepeat.run(fetcherAnswers.get?.data ?? [], paths)
+    return KoboFlattenRepeatedGroup.run({data: fetcherAnswers.get?.data ?? [], path: paths})
   }, [fetcherAnswers.get?.data, groupInfo])
 
   return (

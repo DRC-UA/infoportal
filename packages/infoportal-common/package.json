@@ -4,6 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
+    "test": "jest",
     "dev": "tsc -w",
     "build": "tsc --build --force"
   },

@@ -1,7 +1,7 @@
 import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Kobo} from 'kobo-sdk'
-import {KoboFlattenRepeat, KoboRepeatRef} from 'infoportal-common'
+import {KoboFlattenRepeatedGroup} from 'infoportal-common'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {Alert, Icon, useTheme} from '@mui/material'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -51,8 +51,11 @@ export const DatabaseKoboTableContent = ({
 
   const flatData: KoboMappedAnswer[] | undefined = useMemo(() => {
     if (ctx.groupDisplay.get.repeatAs !== 'rows' || ctx.groupDisplay.get.repeatGroupName === undefined) return ctx.data
-    return KoboFlattenRepeat.run(ctx.data, [ctx.groupDisplay.get.repeatGroupName]) as (KoboRepeatRef &
-      KoboMappedAnswer)[]
+    return KoboFlattenRepeatedGroup.run({
+      data: ctx.data,
+      path: [ctx.groupDisplay.get.repeatGroupName],
+      replicateParentData: true,
+    }) as (KoboFlattenRepeatedGroup.Cursor & KoboMappedAnswer)[]
   }, [ctx.data, ctx.groupDisplay.get])
 
   const extraColumns: DatatableColumn.Props<any>[] = useMemo(
@@ -171,7 +174,7 @@ export const DatabaseKoboTableContent = ({
             })
             return {
               sheetName: group.name as string,
-              data: KoboFlattenRepeat.run(data, group.pathArr),
+              data: KoboFlattenRepeatedGroup.run({data, path: group.pathArr}),
               schema: cols.map(DatatableXlsGenerator.columnsToParams),
             }
           })

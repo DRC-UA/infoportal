@@ -1,7 +1,7 @@
 import {Util} from './Utils'
 
-describe('getUpdatedAnswers', () => {
-  it('should return updated answers when values are changed', () => {
+describe('getObjectDiff', () => {
+  it('should npreturn updated answers when values are changed', () => {
     const oldAnswers = {
       question1: 'Yes',
       question2: 'No',

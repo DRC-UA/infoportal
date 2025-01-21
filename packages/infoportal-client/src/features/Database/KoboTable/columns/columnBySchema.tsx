@@ -1,8 +1,6 @@
 import {
   KoboCustomDirectives,
-  KoboFlattenRepeat,
-  KoboFlattenRepeatData,
-  KoboRepeatRef,
+  KoboFlattenRepeatedGroup,
   KoboSchemaHelper,
   KoboSubmissionMetaData,
   makeKoboCustomDirective,
@@ -120,7 +118,7 @@ export const koboIconMap: Record<Kobo.Form.QuestionType, string> = {
 }
 
 type Data = Record<string, any>
-type Row = KoboFlattenRepeatData
+type Row = KoboFlattenRepeatedGroup.Data
 
 export type ColumnBySchemaGeneratorProps = {
   m: Messages
@@ -466,8 +464,8 @@ export const columnBySchemaGenerator = ({
       typeIcon: <DatatableHeadIconByType type="id" />,
       className: 'td-id',
       style: (row) => {
-        const data = getRow(row) as KoboFlattenRepeatData & KoboRepeatRef
-        if (data[KoboFlattenRepeat.INDEX_COL]! > 0) {
+        const data = getRow(row) as KoboFlattenRepeatedGroup.Data
+        if (data[KoboFlattenRepeatedGroup.INDEX_COL]! > 0) {
           return {
             opacity: '.5',
           }
@@ -475,8 +473,8 @@ export const columnBySchemaGenerator = ({
         return {}
       },
       renderQuick: (row: Row) => {
-        const data = getRow(row) as KoboFlattenRepeatData & KoboRepeatRef
-        const childIndex = data[KoboFlattenRepeat.INDEX_COL]
+        const data = getRow(row) as KoboFlattenRepeatedGroup.Data
+        const childIndex = data[KoboFlattenRepeatedGroup.INDEX_COL]
         return (data.id ?? '') + (childIndex !== undefined ? '#' + (childIndex + 1) : '')
       },
     }

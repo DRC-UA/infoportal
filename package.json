@@ -16,7 +16,7 @@
     "build:kobo-sdk": "npm run build --workspace kobo-sdk",
     "build:common": "npm run build --workspace infoportal-common",
     "db-migrate-f": "npm run db-migrate-f --workspace infoportal-server",
-    "test": "npx jest"
+    "test": "npm test --workspace infoportal-common && npm test --workspace infoportal-server"
   },
   "workspaces": [
     "packages/*"
