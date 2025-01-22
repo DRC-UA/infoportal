@@ -1,12 +1,11 @@
 import {PrismaClient} from '@prisma/client'
 import {Ecrec_vetEvaluation, KoboIndex, Shelter_ta, UUID} from 'infoportal-common'
 import {Pool, PoolClient} from 'pg'
-import {Kobo} from 'kobo-sdk'
+import {Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
 import {appConf} from '../appConf'
 import {PromisePool} from '@supercharge/promise-pool'
 import {duration, Obj, Progress, seq} from '@alexandreannic/ts-utils'
-import {koboSdk} from '../index'
-import {ImportService} from 'infoportal-server/src/feature/kobo/ImportService'
+import {koboSdkDrc, koboSdkHumanitarian} from '../index'
 
 export namespace FixKoboMigration {
   export const getBackupDbClient = async () => {
@@ -418,10 +417,22 @@ export namespace FixKoboMigration {
       const prisma = new PrismaClient()
 
       const migrateForm = async (formId: Kobo.FormId) => {
-        const answers = await koboSdk.v2.getAnswers(formId, {start: deadline})
-        console.log(answers.count)
-        console.log(answers.results[0])
-        new ImportService(prisma)
+        const [answers, form] = await Promise.all([
+          koboSdkHumanitarian.v2.getAnswers(formId, {start: deadline}).then((_) => _.results),
+          koboSdkHumanitarian.v2.getForm(formId),
+        ])
+        console.log(answers.length)
+        const output = KoboSubmissionFormatter.format({
+          questionIndex: KoboSubmissionFormatter.buildQuestionIndex(form),
+          data: answers,
+          output: 'toInsert_withNestedSection',
+        })
+        console.log('SENTTT')
+        await koboSdkDrc.v1.submit({
+          formId,
+          data: answers[9],
+        })
+        console.log(answers[9], '>>>>', output[9])
       }
 
       await migrateForm('aLEGqicGyzkZCeCYeWqEyG')

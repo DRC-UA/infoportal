@@ -1,7 +1,7 @@
 import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import * as fs from 'fs'
 import {capitalize, KoboIndex} from 'infoportal-common'
-import {koboSdk} from '../index'
+import {koboSdkHumanitarian} from '../index'
 import {appConf} from '../appConf'
 import {Kobo, KoboClient} from 'kobo-sdk'
 
@@ -17,7 +17,7 @@ interface KoboInterfaceGeneratorParams {
 
 export class BuildKoboType {
   constructor(
-    private sdk = koboSdk,
+    private sdk = koboSdkHumanitarian,
     private outDir: string = appConf.rootProjectDir + '/../infoportal-common/src/kobo/generated',
   ) {}
 
