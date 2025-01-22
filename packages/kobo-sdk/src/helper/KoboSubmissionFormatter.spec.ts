@@ -85,7 +85,7 @@ describe('Formatter', function () {
 
   it('setGroup', function () {
     expect(
-      KoboSubmissionFormatter.setGroup(
+      KoboSubmissionFormatter.setFullQuestionPath(
         {
           oblast: 'CEJ',
           family_name: 'Volodymyr',
@@ -184,7 +184,7 @@ describe('Formatter', function () {
       KoboSubmissionFormatter.format({
         data: fixture.data.withSection,
         questionIndex: fixture.questionIndex,
-        output: 'toInsert_withNestedSection',
+        output: 'toInsert',
       }),
     ).toEqual([
       {
@@ -238,7 +238,7 @@ describe('Formatter', function () {
           },
         ],
         questionIndex: fixture.questionIndex,
-        output: 'toUpdate_withFlatSectionPath',
+        output: 'toUpdate',
       }),
     ).toEqual([
       {
@@ -258,7 +258,7 @@ describe('Formatter', function () {
           },
         ],
         questionIndex: fixture.questionIndex,
-        output: 'toUpdate_withFlatSectionPath',
+        output: 'toUpdate',
       }),
     ).toEqual([
       {

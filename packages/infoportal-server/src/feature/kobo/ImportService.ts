@@ -22,21 +22,19 @@ export class ImportService {
     const sheetData = Obj.mapValues(this.getSheets(xlsx.readFile(filePath)), (sheet) =>
       ImportService.fixStupidMicrosoftDate(sheet, schemaHelper),
     )
-    const rootSheetData = Object.values(sheetData)[0]
-
     if (action === 'create') {
       const mergedData = ImportService.mergeNestedSheets(sheetData, schemaHelper)
       const formattedData = KoboSubmissionFormatter.format({
         questionIndex: schemaHelper.helper.questionIndex,
         data: mergedData,
-        output: 'toInsert_withNestedSection',
+        output: 'toInsert',
       })
       await this.batchCreate(formattedData, sdk, formId)
     } else if (action === 'update') {
       const formattedData = KoboSubmissionFormatter.format({
         questionIndex: schemaHelper.helper.questionIndex,
-        data: rootSheetData,
-        output: 'toUpdate_withFlatSectionPath',
+        data: Object.values(sheetData)[0],
+        output: 'toUpdate',
       })
       await ImportService.batchUpdate(sdk, formattedData, formId)
     }

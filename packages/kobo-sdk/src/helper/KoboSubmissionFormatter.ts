@@ -13,27 +13,39 @@ export namespace KoboSubmissionFormatter {
     questionIndex,
   }: {
     questionIndex: QuestionIndex
-    output: 'toInsert_withNestedSection' | 'toUpdate_withFlatSectionPath'
+    output: 'toInsert' | 'toUpdate'
     data: Data[]
   }) => {
-    if (output === 'toInsert_withNestedSection') {
+    if (output === 'toInsert') {
       return data
+        .map(removeMetaData)
         .map(removeGroup)
         .map((_) => mapValues(_, questionIndex))
-        .map((_) => setGroup(_, questionIndex))
-        .map(nestKeyWithPath)
+        .map((_) => setFullQuestionPath(_, questionIndex))
+        // .map(nestKeyWithPath)
+        .map(tagData)
     } else {
       return data
+        .map(removeMetaData)
         .map(removeGroup)
         .map((_) => mapValues(_, questionIndex))
-        .map((_) => setGroup(_, questionIndex))
+        .map((_) => setFullQuestionPath(_, questionIndex))
+    }
+  }
+
+  const tagData = (data: Data): Data => {
+    return {
+      ...data,
+      _IP_ADDED_FROM_XLS: 'true',
     }
   }
 
   export const removeMetaData = (data: Record<string, any>): Data => {
-    return Object.keys(data).reduce((acc, key) => {
-      if (!key.startsWith('_') || ['meta/instanceID', 'formhub/uuid'].includes(key)) {
-        acc[key] = data[key]
+    return Object.keys(data).reduce((acc, k) => {
+      const isMeta =
+        (k.startsWith('_') && !k.startsWith('__IP__')) || k.startsWith('meta/') || ['meta/instanceID'].includes(k)
+      if (!isMeta) {
+        acc[k] = data[k]
       }
       return acc
     }, {} as any)
@@ -87,11 +99,11 @@ export namespace KoboSubmissionFormatter {
     })
   }
 
-  export const setGroup = (data: Data, questionIndex: QuestionIndex): Data => {
+  export const setFullQuestionPath = (data: Data, questionIndex: QuestionIndex): Data => {
     return seq(Object.entries(data)).reduceObject(([k, v]) => {
       const nameWithGroup = questionIndex[k]?.$xpath ?? k
       if (Array.isArray(v)) {
-        return [nameWithGroup, v.map((_) => setGroup(_, questionIndex))]
+        return [nameWithGroup, v.map((_) => setFullQuestionPath(_, questionIndex))]
       }
       return [nameWithGroup, v]
     })

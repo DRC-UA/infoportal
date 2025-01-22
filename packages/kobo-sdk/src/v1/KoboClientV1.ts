@@ -14,7 +14,7 @@ export class KoboClientV1 {
       if (obj[i] === undefined || obj[i] === null) {
         delete obj[i]
       }
-      if (Array.isArray(obj[i])) {
+      if (Array.isArray(obj[i]) && typeof obj[i][0] === 'string') {
         obj[i] = (obj[i] as any).join(' ')
       }
       if (typeof obj[i] === 'number') {
