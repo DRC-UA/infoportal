@@ -2,7 +2,7 @@ import {KoboSchemaHelper} from 'infoportal-common'
 import * as xlsx from 'xlsx'
 import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
-import {seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@alexandreannic/ts-utils'
 import lodash from 'lodash'
 import {Kobo, KoboClient, KoboSubmissionFormatter} from 'kobo-sdk'
 
@@ -19,24 +19,26 @@ export class ImportService {
     const schema = await sdk.v2.getForm(formId)
     const schemaHelper = KoboSchemaHelper.buildBundle({schema})
 
-    const sheetData = this.getSheets(xlsx.readFile(filePath))
-    const rootSheet = Object.keys(sheetData)[0]
+    const sheetData = Obj.mapValues(this.getSheets(xlsx.readFile(filePath)), (sheet) =>
+      ImportService.fixStupidMicrosoftDate(sheet, schemaHelper),
+    )
+    const rootSheetData = Object.values(sheetData)[0]
 
     if (action === 'create') {
       const mergedData = ImportService.mergeNestedSheets(sheetData, schemaHelper)
-      const formattedData = KoboSubmissionFormatter.formatData({
-        data: mergedData,
+      const formattedData = KoboSubmissionFormatter.format({
         questionIndex: schemaHelper.helper.questionIndex,
-        skipNullForCreate: true,
-        action: action,
+        data: mergedData,
+        output: 'toInsert_withNestedSection',
       })
       await this.batchCreate(formattedData, sdk, formId)
     } else if (action === 'update') {
-      const transformedData = KoboSubmissionFormatter.transformValues(
-        sheetData[rootSheet],
-        schemaHelper.helper.questionIndex,
-      )
-      await ImportService.batchUpdate(sdk, transformedData, formId, schemaHelper)
+      const formattedData = KoboSubmissionFormatter.format({
+        questionIndex: schemaHelper.helper.questionIndex,
+        data: rootSheetData,
+        output: 'toUpdate_withFlatSectionPath',
+      })
+      await ImportService.batchUpdate(sdk, formattedData, formId)
     }
   }
 
@@ -57,10 +59,9 @@ export class ImportService {
   }
 
   private static mergeNestedSheets = (sheets: Record<string, KoboData[]>, schemaHelper: KoboSchemaHelper.Bundle) => {
-    const rootSheet = Object.keys(sheets)[0]
-    const rootData = sheets[rootSheet]
+    const rootSheetData = Object.values(sheets)[0]
 
-    return rootData.map((row) => {
+    return rootSheetData.map((row) => {
       const groups = schemaHelper.helper.group.search({depth: 1})
       groups.forEach((group) => {
         const indexedChildren = seq(sheets[group.name])
@@ -74,6 +75,29 @@ export class ImportService {
     })
   }
 
+  private static fixStupidMicrosoftDate = (data: KoboData[], schemaHelper: KoboSchemaHelper.Bundle): KoboData[] => {
+    const dates: Set<Kobo.Form.QuestionType> = new Set(['date', 'today', 'start', 'end', 'datetime'])
+    return data.map((d) => {
+      return Obj.map(d, (k, v) => {
+        if (dates.has(schemaHelper.helper.questionIndex[k]?.type)) {
+          return [k, ImportService.stupidMicrosoftDateToJSDate(v)]
+        }
+        return [k, v]
+      })
+    })
+  }
+
+  private static stupidMicrosoftDateToJSDate = (serial: number): string | null => {
+    const excelEpoch = new Date(Date.UTC(1899, 11, 30))
+    if (isNaN(serial)) return null
+    const days = Math.floor(serial)
+    const timeFraction = serial - days
+    const date = new Date(excelEpoch.getTime() + days * 24 * 60 * 60 * 1000)
+    const timeInMs = Math.round(timeFraction * 24 * 60 * 60 * 1000)
+    date.setTime(date.getTime() + timeInMs)
+    return date.toISOString().split('T')[0]
+  }
+
   private async batchCreate(data: KoboData[], sdk: any, formId: Kobo.FormId) {
     for (const row of data) {
       await sdk.v1.submit({
@@ -84,26 +108,13 @@ export class ImportService {
     }
   }
 
-  private static async batchUpdate(
-    sdk: KoboClient,
-    data: KoboData[],
-    formId: Kobo.FormId,
-    schemaHelper: KoboSchemaHelper.Bundle,
-  ) {
+  private static async batchUpdate(sdk: KoboClient, data: KoboData[], formId: Kobo.FormId) {
     for (const row of data) {
       const answerId = row['ID']
       if (!answerId) continue
-
-      const formattedRow = KoboSubmissionFormatter.formatData({
-        data: [row],
-        questionIndex: schemaHelper.helper.questionIndex,
-        skipNullForCreate: false,
-        action: 'update',
-      })[0]
-
       await sdk.v2.updateData({
         formId,
-        data: formattedRow,
+        data: row,
         submissionIds: [answerId],
       })
     }
