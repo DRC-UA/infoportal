@@ -1,4 +1,4 @@
-import {bool, map} from '@alexandreannic/ts-utils'
+import {bool, map, seq} from '@alexandreannic/ts-utils'
 import axios from 'axios'
 import {KoboClientv2FixedUpdated, KoboUpdateDataParams, KoboUpdateDataParamsData} from './KoboClientV2FixedUpdated'
 import {Kobo, Logger} from '../Kobo'
@@ -19,8 +19,8 @@ export class KoboClientV2 {
     return {[name]: {['$' + operator]: KoboClientV2.parseDate(date)}}
   }
 
-  readonly getForm = (form: string) => {
-    return this.api.get<Kobo.Form>(`/v2/assets/${form}`).then((_) => {
+  readonly getForm = (formId: Kobo.FormId) => {
+    return this.api.get<Kobo.Form>(`/v2/assets/${formId}`).then((_) => {
       _.content.survey.forEach((q) => {
         q.name = q.$autoname ?? q.name
       })

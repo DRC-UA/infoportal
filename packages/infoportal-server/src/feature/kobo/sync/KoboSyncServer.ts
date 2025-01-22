@@ -9,7 +9,7 @@ import {KoboService} from '../KoboService'
 import {AppError} from '../../../helper/Errors'
 import {appConf} from '../../../core/conf/AppConf'
 import {genUUID, previewList, Util} from '../../../helper/Utils'
-import {chunkify, Kobo} from 'kobo-sdk'
+import {chunkify, Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
 
 export type KoboSyncServerResult = {
   answersIdsDeleted: Kobo.FormId[]
@@ -28,16 +28,6 @@ export class KoboSyncServer {
     private conf = appConf,
     private log: AppLogger = app.logger('KoboSyncServer'),
   ) {}
-
-  private static readonly removeGroup = (answers: Record<string, any>): Record<string, any> => {
-    return seq(Object.entries(answers)).reduceObject(([k, v]) => {
-      const nameWithoutGroup = k.replace(/^.*\//, '')
-      if (Array.isArray(v)) {
-        return [nameWithoutGroup, v.map(KoboSyncServer.removeGroup)]
-      }
-      return [nameWithoutGroup, v]
-    })
-  }
 
   private static readonly mapAnswer = (k: Kobo.Submission): KoboSubmission => {
     delete k['formhub/uuid']
@@ -59,8 +49,8 @@ export class KoboSyncServer {
       _submitted_by,
       ...answers
     } = k
-    const answersUngrouped = KoboSyncServer.removeGroup(answers)
-    const date = answersUngrouped.date ? new Date(answersUngrouped.date) : new Date(_submission_time)
+    const answersUngrouped = KoboSubmissionFormatter.removeGroup(answers)
+    const date = answersUngrouped.date ? new Date(answersUngrouped.date as number) : new Date(_submission_time)
     return {
       attachments: _attachments ?? [],
       geolocation: _geolocation,
