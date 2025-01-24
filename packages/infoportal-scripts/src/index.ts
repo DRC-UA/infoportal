@@ -17,7 +17,6 @@ export const koboSdkDrc = new KoboClient({
   log: winston.createLogger(),
 })
 ;(async () => {
-  await FixKoboMigration.MissingSubmissions.run()
   // await new BuildKoboType().build('partner_misto_syly')
   // await ActivityInfoBuildType.fslc()
   // await new BuildKoboType().build('ecrec_msme_bha388')
