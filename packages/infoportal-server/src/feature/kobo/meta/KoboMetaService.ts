@@ -16,6 +16,7 @@ import {
   KoboMetaStatus,
   Person,
   UUID,
+  type KoboFormName,
 } from 'infoportal-common'
 import {appConf} from '../../../core/conf/AppConf'
 import {genUUID, yup} from '../../../helper/Utils'
@@ -95,6 +96,8 @@ export namespace KoboMetaParams {
     .object({
       status: yup.array().of(yup.mixed<KoboMetaStatus>().defined()).optional(),
       activities: yup.array().of(yup.mixed<DrcProgram>().defined()).optional(),
+      // TODO: define formIds properly
+      formNames: yup.array().of(yup.string<KoboFormName>().defined()).optional(),
     })
     .optional()
   export type SearchFilter = InferType<typeof schemaSearchFilter>
@@ -166,6 +169,9 @@ export class KoboMetaService {
         where: {
           ...map(params?.status, (_) => ({status: {in: _}})),
           ...map(params?.activities, (_) => ({activity: {in: _}})),
+          ...map(params?.formNames, (formNames) => ({
+            formId: {in: formNames.map((formName) => KoboIndex.byName(formName).id)},
+          })),
         },
         orderBy: {
           date: 'desc',
