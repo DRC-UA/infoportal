@@ -1,11 +1,13 @@
 import {PrismaClient} from '@prisma/client'
 import {Ecrec_vetEvaluation, KoboIndex, Shelter_ta, UUID} from 'infoportal-common'
 import {Pool, PoolClient} from 'pg'
-import {Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
+import {chunkify, Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
 import {appConf} from '../appConf'
 import {PromisePool} from '@supercharge/promise-pool'
 import {duration, Obj, Progress, seq} from '@alexandreannic/ts-utils'
 import {koboSdkDrc, koboSdkHumanitarian} from '../index'
+import {format} from 'date-fns'
+import Validation = Kobo.Submission.Validation
 
 export namespace FixKoboMigration {
   export const getBackupDbClient = async () => {
@@ -413,29 +415,63 @@ export namespace FixKoboMigration {
 
   export namespace MissingSubmissions {
     export const run = async () => {
-      const deadline = new Date(2025, 0, 12)
-      const prisma = new PrismaClient()
+      const firstMigrationDate = new Date(2025, 0, 12)
+      const secondMigrationDate = new Date(2025, 0, 23)
 
+      console.log('Started')
       const migrateForm = async (formId: Kobo.FormId) => {
-        const [answers, form] = await Promise.all([
-          koboSdkHumanitarian.v2.getAnswers(formId, {start: deadline}).then((_) => _.results),
-          koboSdkHumanitarian.v2.getForm(formId),
-        ])
-        console.log(answers.length)
-        const output = KoboSubmissionFormatter.format({
-          questionIndex: KoboSubmissionFormatter.buildQuestionIndex(form),
-          data: answers,
-          output: 'toInsert_withNestedSection',
-        })
-        console.log('SENTTT')
-        await koboSdkDrc.v1.submit({
-          formId,
-          data: answers[9],
-        })
-        console.log(answers[9], '>>>>', output[9])
+        try {
+          const [answers, form] = await Promise.all([
+            koboSdkHumanitarian.v2
+              .getAnswers(formId, {start: firstMigrationDate})
+              .then((_) => _.results.filter((_) => _._validation_status.uid !== Validation.validation_status_approved)),
+            koboSdkHumanitarian.v2.getForm(formId),
+          ])
+          if (answers && answers.length) {
+            const afterClosure = answers.filter((_) => _._submission_time.getTime() > new Date(2025, 0, 19).getTime())
+            const lastSubmission = format(
+              answers.sort((_) => -_._submission_time.getTime())[0]._submission_time,
+              'yyyy-MM-dd',
+            )
+            const users = seq(afterClosure)
+              .map((_) => _._submitted_by)
+              .distinct((_) => _)
+              .join(' ')
+            const statuses = seq(afterClosure)
+              .map((_) => _._validation_status.uid)
+              .distinct((_) => _)
+              .join(' ')
+            console.log(
+              `Migrate ${(KoboIndex.searchById(formId)?.name ?? formId).padEnd(32)} ${('' + answers.length).padStart(4)} ${lastSubmission} ${statuses}`,
+            )
+          } else {
+            console.log(`${(KoboIndex.searchById(formId)?.name ?? formId).padEnd(32)} 0`)
+          }
+          // const output = KoboSubmissionFormatter.format({
+          //   questionIndex: KoboSubmissionFormatter.buildQuestionIndex(form),
+          //   data: answers,
+          //   output: 'toInsert',
+          // })
+          //   await PromisePool.withConcurrency(10)
+          //     .for(output)
+          //     .process((data) => koboSdkDrc.v1.submit({formId, data}))
+          //   await chunkify({
+          //     data: answers,
+          //     size: 20,
+          //     concurrency: 2,
+          //     fn: (_) =>
+          //       koboSdkHumanitarian.v2.updateValidation({
+          //         formId,
+          //         submissionIds: _.map((_) => _._id),
+          //         status: Validation.validation_status_approved,
+          //       }),
+          //   })
+        } catch (error) {}
       }
 
-      await migrateForm('aLEGqicGyzkZCeCYeWqEyG')
+      await PromisePool.withConcurrency(1)
+        .for(KoboIndex.names.map((n) => KoboIndex.byName(n).id))
+        .process(migrateForm)
     }
   }
 }

@@ -22,7 +22,7 @@ export namespace KoboSubmissionFormatter {
         .map(removeGroup)
         .map((_) => mapValues(_, questionIndex))
         .map((_) => setFullQuestionPath(_, questionIndex))
-        // .map(nestKeyWithPath)
+        .map(nestKeyWithPath)
         .map(tagData)
     } else {
       return data
