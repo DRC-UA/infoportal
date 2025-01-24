@@ -15,7 +15,7 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicationData'
 import {TableImg} from '@/shared/TableImg/TableImg'
-import {OptionLabelTypeCompact} from '@/shared/customInput/SelectStatus'
+import {StateStatusIcon} from '@/shared/customInput/SelectStatus'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import Link from 'next/link'
@@ -141,7 +141,7 @@ export const MpcaData = () => {
               align: 'center',
               render: (_) => {
                 return {
-                  label: <OptionLabelTypeCompact type={koboMetaStatusLabel[_.status!]} />,
+                  label: <StateStatusIcon type={koboMetaStatusLabel[_.status!]} />,
                   value: _.status,
                   option: _.status,
                 }

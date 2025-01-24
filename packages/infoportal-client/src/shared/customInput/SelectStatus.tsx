@@ -1,8 +1,8 @@
 import {IpSelectOption, IpSelectSingle, IpSelectSingleNullableProps} from '@/shared/Select/SelectSingle'
-import {fnSwitch, KeyOf, Obj} from '@alexandreannic/ts-utils'
+import {KeyOf, Obj} from '@alexandreannic/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
 import {CashForRentStatus, CashStatus, KoboValidation, StateStatus, VetApplicationStatus} from 'infoportal-common'
-import {Box, Icon, SxProps, useTheme} from '@mui/material'
+import {Box, Icon, SxProps, Theme, useTheme} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 
 export enum ShelterCashStatus {
@@ -23,7 +23,43 @@ export namespace SelectStatusConfig {
 
   export type EnumStatus = keyof typeof enumStatus
 
-  export const statusType = {
+  export const stateStatusStyle: Record<
+    StateStatus,
+    {color: (t: Theme) => string; colorContrast: (t: Theme) => string; iconOutlined: string; icon: string}
+  > = {
+    error: {
+      color: (t) => t.palette.error.main,
+      colorContrast: (t) => t.palette.error.contrastText,
+      icon: 'error',
+      iconOutlined: 'error_outline',
+    },
+    warning: {
+      color: (t) => t.palette.warning.main,
+      colorContrast: (t) => t.palette.warning.contrastText,
+      icon: 'access_time_filled',
+      iconOutlined: 'schedule',
+    },
+    info: {
+      color: (t) => t.palette.info.main,
+      colorContrast: (t) => t.palette.info.contrastText,
+      icon: 'info',
+      iconOutlined: 'info',
+    },
+    success: {
+      color: (t) => t.palette.success.main,
+      colorContrast: (t) => t.palette.success.contrastText,
+      icon: 'check_circle',
+      iconOutlined: 'check_circle_outline',
+    },
+    disabled: {
+      color: (t) => t.palette.text.disabled,
+      colorContrast: (t) => t.palette.divider,
+      icon: 'remove_circle',
+      iconOutlined: 'remove_circle_outline',
+    },
+  }
+
+  export const customStatusToStateStatus = {
     ShelterCashStatus: {
       Selected: 'warning',
       Rejected: 'error',
@@ -39,125 +75,94 @@ export namespace SelectStatusConfig {
       PaymentRejected: 'error',
     } as Record<CashStatus, StateStatus>,
     KoboValidation: {
-      [KoboValidation.Approved]: 'success',
-      [KoboValidation.Pending]: 'warning',
-      [KoboValidation.Rejected]: 'error',
-      [KoboValidation.Flagged]: 'info',
-      [KoboValidation.UnderReview]: 'disabled',
+      Approved: 'success',
+      Pending: 'warning',
+      Rejected: 'error',
+      Flagged: 'info',
+      UnderReview: 'disabled',
     } as Record<KoboValidation, StateStatus>,
     CashForRentStatus: {
-      [CashForRentStatus.FirstPending]: 'warning',
-      [CashForRentStatus.FirstPaid]: 'success',
-      [CashForRentStatus.FirstRejected]: 'error',
-      [CashForRentStatus.SecondPending]: 'warning',
-      [CashForRentStatus.SecondPaid]: 'success',
-      [CashForRentStatus.SecondRejected]: 'error',
-      [CashForRentStatus.Selected]: 'info',
-      [CashForRentStatus.Referred]: 'disabled',
+      FirstPending: 'warning',
+      FirstPaid: 'success',
+      FirstRejected: 'error',
+      SecondPending: 'warning',
+      SecondPaid: 'success',
+      SecondRejected: 'error',
+      Selected: 'info',
+      Referred: 'disabled',
     } as Record<CashForRentStatus, StateStatus>,
     VetApplicationStatus: {
-      [VetApplicationStatus.Approved]: 'disabled',
-      [VetApplicationStatus.FirstPending]: 'warning',
-      [VetApplicationStatus.FirstPaid]: 'info',
-      [VetApplicationStatus.SecondPending]: 'warning',
-      [VetApplicationStatus.SecondPaid]: 'info',
-      [VetApplicationStatus.CertificateSubmitted]: 'success',
+      Approved: 'disabled',
+      FirstPending: 'warning',
+      FirstPaid: 'info',
+      SecondPending: 'warning',
+      SecondPaid: 'info',
+      CertificateSubmitted: 'success',
     } as Record<VetApplicationStatus, StateStatus>,
   }
 }
 
-const commonProps = {borderRadius: '20px', px: 1}
-
-export const OptionLabelType = ({type, children}: {type: StateStatus; children: ReactNode}) => {
+export const OptionLabelType = ({
+  type,
+  iconFilled,
+  children,
+}: {
+  iconFilled?: boolean
+  type: StateStatus
+  children: ReactNode
+}) => {
   const t = useTheme()
-  return fnSwitch(
-    type,
-    {
-      disabled: (
-        <Box sx={{...commonProps, background: t.palette.divider, color: t.palette.text.secondary}}>{children}</Box>
-      ),
-      error: (
-        <Box sx={{...commonProps, background: t.palette.error.main, color: t.palette.error.contrastText}}>
-          {children}
-        </Box>
-      ),
-      warning: (
-        <Box sx={{...commonProps, background: t.palette.warning.main, color: t.palette.warning.contrastText}}>
-          {children}
-        </Box>
-      ),
-      info: (
-        <Box sx={{...commonProps, background: t.palette.info.main, color: t.palette.info.contrastText}}>{children}</Box>
-      ),
-      success: (
-        <Box sx={{...commonProps, background: t.palette.success.main, color: t.palette.success.contrastText}}>
-          {children}
-        </Box>
-      ),
-    },
-    () => undefined,
+  const style = SelectStatusConfig.stateStatusStyle[type]
+  return (
+    <Box sx={{display: 'flex', alignItems: 'center'}}>
+      <StateStatusIcon filled={iconFilled} type={type} />
+      <Box sx={{ml: 0.5, color: style.color(t), fontWeight: 700}}>{children}</Box>
+    </Box>
   )
 }
 
-export const OptionLabelTypeCompact = ({type, sx}: {type: StateStatus; sx?: SxProps}) => {
+export const StateStatusIcon = ({type, filled, sx}: {type: StateStatus; filled?: boolean; sx?: SxProps}) => {
   const t = useTheme()
-  return fnSwitch(
-    type,
-    {
-      disabled: (
-        <Icon sx={{color: t.palette.text.disabled, ...sx}} title={type}>
-          remove_circle
-        </Icon>
-      ),
-      error: (
-        <Icon sx={{color: t.palette.error.main, ...sx}} title={type}>
-          error
-        </Icon>
-      ),
-      warning: (
-        <Icon sx={{color: t.palette.warning.main, ...sx}} title={type}>
-          schedule
-        </Icon>
-      ),
-      info: (
-        <Icon sx={{color: t.palette.info.main, ...sx}} title={type}>
-          info
-        </Icon>
-      ),
-      success: (
-        <Icon sx={{color: t.palette.success.main, ...sx}} title={type}>
-          check_circle
-        </Icon>
-      ),
-    },
-    () => undefined,
-  )
+  const style = SelectStatusConfig.stateStatusStyle[type]
+  return <Icon title={type} sx={{color: style.color(t), ...sx}} children={filled ? style.icon : style.iconOutlined} />
 }
 
 type SelectStatusProps<T extends string> = Omit<IpSelectSingleNullableProps<T>, 'hideNullOption' | 'options'> & {
   status: Record<T, string>
   labels: Record<T, StateStatus>
   compact?: boolean
+  iconFilled?: boolean
 }
 export const SelectStatus = <T extends string>({
   status,
   placeholder,
   compact,
   labels,
+  iconFilled,
   ...props
 }: SelectStatusProps<T>) => {
   const {m} = useI18n()
   const options: IpSelectOption<any>[] = useMemo(() => {
     return Obj.keys(status).map((_) => ({
       value: _,
-      children: compact ? (
-        <OptionLabelTypeCompact type={labels[_]} />
-      ) : (
-        <OptionLabelType type={labels[_]}>{_ as string}</OptionLabelType>
-      ),
+      children: <OptionLabelType type={labels[_]}>{_ as string}</OptionLabelType>,
     }))
   }, [labels, status])
-  return <IpSelectSingle placeholder={placeholder ?? m.status} hideNullOption={false} options={options} {...props} />
+  return (
+    <IpSelectSingle
+      renderValue={(_) =>
+        compact ? (
+          <StateStatusIcon filled={iconFilled} type={labels[_]} sx={{display: 'block'}} />
+        ) : (
+          <OptionLabelType type={labels[_]}>{_ as string}</OptionLabelType>
+        )
+      }
+      placeholder={placeholder ?? m.status}
+      hideNullOption={false}
+      options={options}
+      {...props}
+    />
+  )
 }
 
 export const SelectStatusBy = <
@@ -173,7 +178,7 @@ export const SelectStatusBy = <
     // @ts-ignore
     <SelectStatus
       {...props}
-      labels={SelectStatusConfig.statusType[props.enum]}
+      labels={SelectStatusConfig.customStatusToStateStatus[props.enum]}
       status={SelectStatusConfig.enumStatus[props.enum]}
     />
   )

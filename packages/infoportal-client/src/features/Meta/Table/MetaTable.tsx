@@ -17,7 +17,7 @@ import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {PopoverWrapper} from '@/shared/PopoverWrapper'
 import React, {useEffect, useMemo} from 'react'
-import {OptionLabelTypeCompact} from '@/shared/customInput/SelectStatus'
+import {StateStatusIcon} from '@/shared/customInput/SelectStatus'
 import {useSession} from '@/core/Session/SessionContext'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {TableImg} from '@/shared/TableImg/TableImg'
@@ -71,7 +71,7 @@ export const MetaTable = () => {
         align: 'center',
         render: (_) => {
           return {
-            label: <OptionLabelTypeCompact type={koboMetaStatusLabel[_.status!]} />,
+            label: <StateStatusIcon type={koboMetaStatusLabel[_.status!]} />,
             value: _.status,
             option: _.status,
           }

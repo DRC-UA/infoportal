@@ -86,6 +86,7 @@ export const getColumnsBase = ({
             <SelectStatusBy
               enum="KoboValidation"
               compact
+              iconFilled={true}
               disabled={!canEdit}
               value={value}
               onChange={(e) => {

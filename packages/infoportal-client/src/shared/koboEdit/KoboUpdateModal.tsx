@@ -14,7 +14,7 @@ import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Txt} from '@/shared/Txt'
 import {ArrayValues, KoboValidation} from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
-import {OptionLabelTypeCompact, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
+import {StateStatusIcon, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 import {Obj} from '@alexandreannic/ts-utils'
 
 export type KoboEditModalOption = {
@@ -231,9 +231,9 @@ export namespace KoboUpdateModal {
           value: _,
           label: _,
           before: (
-            <OptionLabelTypeCompact
+            <StateStatusIcon
               sx={{alignSelf: 'center', mr: 1}}
-              type={SelectStatusConfig.statusType.KoboValidation[_]}
+              type={SelectStatusConfig.customStatusToStateStatus.KoboValidation[_]}
             />
           ),
         }))}

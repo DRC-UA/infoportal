@@ -25,7 +25,7 @@ import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-import {OptionLabelTypeCompact, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
+import {StateStatusIcon, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
@@ -298,9 +298,9 @@ export const getColumnsCustom = ({
             value: _,
             label: _,
             before: (
-              <OptionLabelTypeCompact
+              <StateStatusIcon
                 sx={{alignSelf: 'center', mr: 1}}
-                type={SelectStatusConfig.statusType[enumerator][_]}
+                type={SelectStatusConfig.customStatusToStateStatus[enumerator][_]}
               />
             ),
           })),
