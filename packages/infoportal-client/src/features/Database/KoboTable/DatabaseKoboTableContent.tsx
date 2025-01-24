@@ -3,7 +3,7 @@ import {useI18n} from '@/core/i18n'
 import {Kobo} from 'kobo-sdk'
 import {KoboFlattenRepeatedGroup} from 'infoportal-common'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {Alert, Icon, useTheme} from '@mui/material'
+import {Alert, AlertProps, Icon, useTheme} from '@mui/material'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {getColumnsCustom} from '@/features/Database/KoboTable/columns/columnsCustom'
 import {DatabaseTableProps} from '@/features/Database/KoboTable/DatabaseKoboTable'
@@ -34,6 +34,21 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {DatabaseImportBtn} from '@/features/Database/KoboTable/DatabaseImportBtn'
 import {generateEmptyXlsTemplate} from '@/features/Database/KoboTable/generateEmptyXlsFile'
+
+export const ArchiveAlert = ({sx, ...props}: AlertProps) => {
+  const t = useTheme()
+  const {m} = useI18n()
+  return (
+    <Alert
+      color="info"
+      icon={<Icon sx={{mr: -1}}>archive</Icon>}
+      sx={{pr: t.spacing(1), pl: t.spacing(0.5), pt: 0, pb: 0, ...sx}}
+      {...props}
+    >
+      {m._koboDatabase.isArchived}
+    </Alert>
+  )
+}
 
 export const DatabaseKoboTableContent = ({
   onFiltersChange,
@@ -200,13 +215,7 @@ export const DatabaseKoboTableContent = ({
             {ctx.schema.helper.group.size > 0 && <DatabaseGroupDisplayInput sx={{mr: 1}} />}
             {header?.(params)}
             {ctx.form.deploymentStatus === 'archived' && (
-              <Alert
-                color="info"
-                icon={<Icon sx={{mr: -1}}>archive</Icon>}
-                sx={{pr: t.spacing(1), pl: t.spacing(0.5), pt: 0, pb: 0}}
-              >
-                {m._koboDatabase.isArchived}
-              </Alert>
+              <ArchiveAlert/>
             )}
 
             <div style={{marginLeft: 'auto'}}>

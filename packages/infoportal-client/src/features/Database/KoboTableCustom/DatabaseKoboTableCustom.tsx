@@ -22,6 +22,7 @@ import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseView
 import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
+import {ArchiveAlert} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
 
 interface CustomForm {
   id: string
@@ -153,6 +154,7 @@ export const DatabaseTableCustomRoute = () => {
   const schemas = customForm.forms
     .map((_) => ({formId: _.id, schema: ctxSchema.byId[_.id]?.get}))
     .filter((_) => !!_.schema) as {formId: Kobo.FormId; schema: KoboSchemaHelper.Bundle}[]
+  const isFullyArchived = schemas.every((_) => _.schema.schema.deployment_status === 'archived')
 
   useEffect(() => {
     setTitle(schemas.map((_) => _.schema.schema.name).join(' + '))
@@ -311,6 +313,7 @@ export const DatabaseTableCustomRoute = () => {
                     // ...ctx.schema.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
                   ]}
                 />
+                {isFullyArchived && <ArchiveAlert />}
               </>
             }
           />

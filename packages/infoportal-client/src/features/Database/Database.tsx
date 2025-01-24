@@ -74,6 +74,10 @@ export const DatabaseWithContext = () => {
           url: databaseIndex.siteMap.custom(_.id),
           id: _.id,
           custom: true,
+          archived: _.forms.every((fa) => {
+            const form = ctx.formsAccessible?.find((fa) => fa.id === _.id)
+            return !form || form.deploymentStatus === 'archived'
+          }),
           parsedName: KoboIndex.parseFormName(_.name),
         })),
     }
@@ -147,6 +151,14 @@ export const DatabaseWithContext = () => {
                           active={isActive}
                           iconEnd={
                             <>
+                              {_.custom && (
+                                <Icon
+                                  fontSize="small"
+                                  sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
+                                >
+                                  device_hub
+                                </Icon>
+                              )}
                               {_.archived && (
                                 <Icon
                                   fontSize="small"
@@ -154,14 +166,6 @@ export const DatabaseWithContext = () => {
                                   sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
                                 >
                                   archive
-                                </Icon>
-                              )}
-                              {_.custom && (
-                                <Icon
-                                  fontSize="small"
-                                  sx={{marginLeft: '4px', marginRight: '-4px', verticalAlign: 'middle'}}
-                                >
-                                  device_hub
                                 </Icon>
                               )}
                             </>
