@@ -60,6 +60,7 @@ export namespace Kobo {
   export type Form = Form.Form
   export namespace Form {
     export type Id = string
+    export type Light = Exclude<Form, 'deployment__links'>
 
     export type Question = {
       name: string

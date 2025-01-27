@@ -194,9 +194,8 @@ export class KoboClientV2 {
     })
   }
 
-  readonly getSchemas = () => {
-    // return this.api.get(`/v2/assets/`)
-    return this.api.get<Kobo.Paginate<Kobo.Form>>(`/v2/assets/?q=asset_type%3Asurvey&limit=1000`)
+  readonly getForms = ({limit = 2000}: {limit?: number} = {}) => {
+    return this.api.get<Kobo.Paginate<Kobo.Form.Light>>(`/v2/assets/?q=asset_type%3Asurvey&limit=${limit}`)
   }
 
   readonly deployment = (

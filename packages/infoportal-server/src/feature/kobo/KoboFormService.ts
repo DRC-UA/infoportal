@@ -105,7 +105,7 @@ export class KoboFormService {
         .get(),
     )
     const indexForm = seq(forms).groupByFirst((_) => _.id)
-    const indexSchema = await Promise.all(sdks.map((_) => _.v2.getSchemas()))
+    const indexSchema = await Promise.all(sdks.map((_) => _.v2.getForms()))
       .then((_) => _.flatMap((_) => _.results))
       .then((_) => seq(_).groupByFirst((_) => _.uid))
     await PromisePool.withConcurrency(this.conf.db.maxConcurrency)
