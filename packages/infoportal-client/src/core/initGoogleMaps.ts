@@ -1,6 +1,8 @@
 import {sleep} from '@alexandreannic/ts-utils'
 import {appConfig} from '@/conf/AppConfig'
 
+const layers = import('./geojson.json')
+
 /**
  * Was used in old ProtMonito dashboard that had kobo geolocalisation
  */
@@ -20,7 +22,6 @@ export const initGoogleMaps = async ({
     desc: string
   }[]
 }) => {
-  // return;
   let trys = 0
   while (!google) {
     await sleep(200 + 100 * trys)
@@ -33,6 +34,84 @@ export const initGoogleMaps = async ({
     center: ukraineCenter,
     zoom: 5.1,
     controlSize: 32,
+  })
+  const layerOpacity = 0.2
+  layers.then((_) => {
+    map.data.addGeoJson(_)
+    map.data.setStyle((feature) => {
+      const name = feature.getProperty('name') as string
+      switch (name) {
+        case 'x2':
+        case 'x3':
+        case 'x4':
+        case 'x6':
+        case 'x8':
+        case 'x7':
+        case 'x10':
+        case 'x11':
+        case 'x12':
+        case 'x13':
+        case 'x14':
+        case 'x21':
+        case 'x16':
+        case 'x27':
+        case 'x22':
+        case 'x1': {
+          return {
+            fillColor: 'orange',
+            fillOpacity: layerOpacity,
+            strokeWeight: 0,
+          }
+        }
+        case 'Luhansk Axis':
+        case 'Donetsk Axis':
+        case "Donetsk and Luhansk People's Republic":
+        case 'Crimea':
+        case 'Zaporizhia and Kherson Axis':
+        case 'x18':
+        case 'x17':
+        case 'x9': {
+          return {
+            fillColor: 'transparent',
+            fillOpacity: layerOpacity,
+            strokeWeight: 0,
+          }
+        }
+        case 'x5':
+        case 'x23':
+        case 'x24':
+        case 'x25':
+        case 'x26':
+        case 'x28':
+        case 'x29':
+        case 'x3': {
+          return {
+            fillColor: 'green',
+            fillOpacity: layerOpacity,
+            strokeWeight: 0,
+          }
+        }
+        case 'Frontline': {
+          return {
+            strokeWeight: 2,
+            strokeColor: 'red',
+          }
+        }
+        case 'Red Areas': {
+          return {
+            fillColor: 'red',
+            fillOpacity: layerOpacity,
+            // strokeColor: 'black',
+            strokeWeight: 0,
+          }
+        }
+        default:
+          return {
+            fillColor: 'transparent',
+            strokeWeight: 0,
+          }
+      }
+    })
   })
   const max = Math.max(...bubbles.map((_) => _.size))
   const flatted = bubbles.map((_: any) => {
