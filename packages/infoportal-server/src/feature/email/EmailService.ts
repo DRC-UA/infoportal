@@ -7,7 +7,8 @@ import {PrismaClient} from '@prisma/client'
 import {FrontEndSiteMap} from '../../core/FrontEndSiteMap'
 import {appConf} from '../../core/conf/AppConf'
 import {KoboService} from '../kobo/KoboService'
-import {seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Kobo} from 'kobo-sdk'
 
 export enum EmailContext {
   Cfm = 'Cfm',
@@ -36,9 +37,12 @@ export class EmailService {
 
   readonly sendEmailIfTriggered = async (p: GlobalEvent.KoboAnswerEditedParams) => {
     const schema = await this.koboService.getSchema({formId: p.formId})
-    const {question} = KoboCustomDirective.getAllInSchemas(schema).find((_) => _.directive.startsWith('TRIGGER_EMAIL')) ?? {}
-    if (!question) return
-    if (!question.name || !p.answer[question.name]) return
+    const toSend_names = Obj.keys(p.answer).filter((_) => _.startsWith(KoboCustomDirective.make('TRIGGER_EMAIL')))
+    const toSend_questions = schema.content.survey.filter((_) => toSend_names.includes(_.name))
+    await Promise.all(toSend_questions.map((_) => this.sendByQuestion(_, p)))
+  }
+
+  private readonly sendByQuestion = async (question: Kobo.Form.Question, p: GlobalEvent.KoboAnswerEditedParams) => {
     const html = question.hint?.[0]
     const subject = question.label?.[0]
     if (!html || !subject) {
