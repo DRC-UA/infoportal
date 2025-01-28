@@ -28,6 +28,7 @@ export class ImportService {
         questionIndex: schemaHelper.helper.questionIndex,
         data: mergedData,
         output: 'toInsert',
+        tag: '_IP_ADDED_FROM_XLS'
       })
       await this.batchCreate(formattedData, sdk, formId)
     } else if (action === 'update') {

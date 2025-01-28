@@ -11,10 +11,12 @@ export namespace KoboSubmissionFormatter {
     data,
     output,
     questionIndex,
+    tag,
   }: {
     questionIndex: QuestionIndex
     output: 'toInsert' | 'toUpdate'
     data: Data[]
+    tag?: string
   }) => {
     if (output === 'toInsert') {
       return data
@@ -23,27 +25,32 @@ export namespace KoboSubmissionFormatter {
         .map((_) => mapValues(_, questionIndex))
         .map((_) => setFullQuestionPath(_, questionIndex))
         .map(nestKeyWithPath)
-        .map(tagData)
+        .map((_) => (tag ? tagData(tag, _) : _))
     } else {
       return data
         .map(removeMetaData)
         .map(removeGroup)
         .map((_) => mapValues(_, questionIndex))
         .map((_) => setFullQuestionPath(_, questionIndex))
+        .map((_) => (tag ? tagData(tag, _) : _))
     }
   }
 
-  const tagData = (data: Data): Data => {
+  const tagData = (tag: string, data: Data): Data => {
+    // _IP_ADDED_FROM_XLS
     return {
       ...data,
-      _IP_ADDED_FROM_XLS: 'true',
+      [tag]: 'true',
     }
   }
 
   export const removeMetaData = (data: Record<string, any>): Data => {
     return Object.keys(data).reduce((acc, k) => {
       const isMeta =
-        (k.startsWith('_') && !k.startsWith('__IP__')) || k.startsWith('meta/') || ['meta/instanceID'].includes(k)
+        (k.startsWith('_') && (!k.startsWith('__IP__') || !k.startsWith('_IP__'))) ||
+        k.startsWith('meta/') ||
+        k.startsWith('formhub/') ||
+        ['meta/instanceID'].includes(k)
       if (!isMeta) {
         acc[k] = data[k]
       }

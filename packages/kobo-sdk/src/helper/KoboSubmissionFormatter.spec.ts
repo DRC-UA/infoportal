@@ -36,7 +36,6 @@ describe('Formatter', function () {
         _submitted_by: 'meal_drc_ddg_ukr',
       }),
     ).toEqual({
-      _id: 280073,
       oblast: 'CEJ',
       'family/family_name': 'Volodymyr',
       'family/location': [
