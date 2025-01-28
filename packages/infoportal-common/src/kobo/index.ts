@@ -1,5 +1,5 @@
 export * from './KoboIndex'
-export * from './KoboCustomDirectives'
+export * from './KoboCustomDirective'
 export * from './IKoboMeta'
 export * from './generated'
 export * from './mapper'

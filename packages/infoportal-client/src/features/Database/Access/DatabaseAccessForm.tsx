@@ -1,6 +1,6 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Kobo} from 'kobo-sdk'
-import {KoboSchemaHelper, makeKoboCustomDirective, nullValuesToUndefined} from 'infoportal-common'
+import {KoboSchemaHelper, KoboCustomDirective, nullValuesToUndefined} from 'infoportal-common'
 import {AppFeatureId} from '@/features/appFeatureId'
 import React, {ReactElement, useCallback, useMemo} from 'react'
 import {Modal, Txt} from '@/shared'
@@ -147,7 +147,7 @@ export const DatabaseAccessForm = ({
                     />
                   )}
                   renderOption={(props, option) => {
-                    if (indexQuestion[option].name.startsWith(makeKoboCustomDirective('TRIGGER_EMAIL'))) {
+                    if (indexQuestion[option].name.startsWith(KoboCustomDirective.make('TRIGGER_EMAIL'))) {
                       const template = DirectiveTemplate.render.TRIGGER_EMAIL
                       return (
                         <Box component="li" {...props} key={option} sx={{color: template.color}}>

@@ -1,9 +1,8 @@
 import {
-  KoboCustomDirectives,
+  KoboCustomDirective,
   KoboFlattenRepeatedGroup,
   KoboSchemaHelper,
   KoboSubmissionMetaData,
-  makeKoboCustomDirective,
   removeHtml,
 } from 'infoportal-common'
 import {useI18n} from '@/core/i18n/I18n'
@@ -63,17 +62,17 @@ export namespace DirectiveTemplate {
     color: string
     label: (q: Kobo.Form.Question, m: Messages) => string
   }
-  const make = <T extends KoboCustomDirectives>(directive: T, template: Template): Record<T, Template> =>
+  const make = <T extends KoboCustomDirective.Name>(directive: T, template: Template): Record<T, Template> =>
     ({
       [directive]: template,
     }) as any
 
   export const render = {
-    ...make(KoboCustomDirectives.TRIGGER_EMAIL, {
+    ...make(KoboCustomDirective.Name.TRIGGER_EMAIL, {
       icon: 'forward_to_inbox',
       color: '#A335EE',
       label: (q, m) => {
-        const directiveName = q.name.replace(makeKoboCustomDirective('TRIGGER_EMAIL'), '')
+        const directiveName = q.name.replace(KoboCustomDirective.make('TRIGGER_EMAIL'), '')
         if (directiveName === '') return m._koboDatabase.autoEmail
         return directiveName.replaceAll('_', ' ')
       },
@@ -445,7 +444,7 @@ export const columnBySchemaGenerator = ({
 
   const getByQuestion = (q: Kobo.Form.Question): undefined | DatatableColumn.Props<any> => {
     if (ignoredColType.has(q.type)) return
-    if (q.name?.startsWith(makeKoboCustomDirective('TRIGGER_EMAIL'))) {
+    if (q.name?.startsWith(KoboCustomDirective.make('TRIGGER_EMAIL'))) {
       return getIpTriggerEmail(q.name)
     }
     const fn = (getBy as any)[q.type]

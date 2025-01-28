@@ -1,7 +1,7 @@
 import {Kobo} from 'kobo-sdk'
 import {Person} from '../../type/Person'
 import {fnSwitch} from '@alexandreannic/ts-utils'
-import {KoboCustomDirectives} from '../KoboCustomDirectives'
+import {KoboCustomDirective} from '../KoboCustomDirective'
 
 export enum KoboValidation {
   Approved = 'Approved',
@@ -103,7 +103,7 @@ export class KoboHelper {
           validation_status_not_approved: KoboValidation.Rejected,
           no_status: undefined,
         })
-      if (_[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]) {
+      if (_[KoboCustomDirective.Name._IP_VALIDATION_STATUS_EXTRA]) {
         return KoboValidation[_._IP_VALIDATION_STATUS_EXTRA as keyof typeof KoboValidation]
       }
     },
@@ -114,7 +114,7 @@ export class KoboHelper {
       _validation_status?: Kobo.Submission.Validation
     } => {
       if (_ === KoboValidation.Flagged || _ === KoboValidation.UnderReview) {
-        return {[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]: _}
+        return {[KoboCustomDirective.Name._IP_VALIDATION_STATUS_EXTRA]: _}
       }
       return {
         _validation_status: fnSwitch(

@@ -2,8 +2,7 @@ import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
 import {
   ApiPaginate,
   ApiPaginateHelper,
-  ApiPagination,
-  KoboCustomDirectives,
+  ApiPagination, KoboCustomDirective,
   KoboHelper,
   KoboIndex,
   KoboSubmission,
@@ -539,7 +538,7 @@ export class KoboService {
             sdk.v2.updateData({
               formId,
               submissionIds: answerIds,
-              data: {[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]: null},
+              data: {[KoboCustomDirective.Name._IP_VALIDATION_STATUS_EXTRA]: null},
             }),
           ])
         } else {
@@ -547,7 +546,7 @@ export class KoboService {
             sdk.v2.updateData({
               formId,
               submissionIds: answerIds,
-              data: {[KoboCustomDirectives._IP_VALIDATION_STATUS_EXTRA]: mappedValidation._IP_VALIDATION_STATUS_EXTRA},
+              data: {[KoboCustomDirective.Name._IP_VALIDATION_STATUS_EXTRA]: mappedValidation._IP_VALIDATION_STATUS_EXTRA},
             }),
             sdk.v2.updateValidation({formId, submissionIds: answerIds, status: Kobo.Submission.Validation.no_status}),
           ])

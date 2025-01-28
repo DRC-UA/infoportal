@@ -1,6 +1,6 @@
 import {GlobalEvent} from '../../core/GlobalEvent'
 import {EmailClient} from './EmailClient'
-import {getKoboCustomDirectives, KoboCustomDirectives, KoboIndex, Regexp} from 'infoportal-common'
+import {KoboCustomDirective, KoboIndex, Regexp} from 'infoportal-common'
 import {app} from '../../index'
 import {UserService} from '../user/UserService'
 import {PrismaClient} from '@prisma/client'
@@ -36,14 +36,14 @@ export class EmailService {
 
   readonly sendEmailIfTriggered = async (p: GlobalEvent.KoboAnswerEditedParams) => {
     const schema = await this.koboService.getSchema({formId: p.formId})
-    const {question} = getKoboCustomDirectives(schema).find((_) => _.directive.startsWith('TRIGGER_EMAIL')) ?? {}
+    const {question} = KoboCustomDirective.getAllInSchemas(schema).find((_) => _.directive.startsWith('TRIGGER_EMAIL')) ?? {}
     if (!question) return
     if (!question.name || !p.answer[question.name]) return
     const html = question.hint?.[0]
     const subject = question.label?.[0]
     if (!html || !subject) {
       this.log.error(
-        `Missing hint or label in directive ${KoboCustomDirectives.TRIGGER_EMAIL} of form ${KoboIndex.searchById(p.formId) ?? p.formId}`,
+        `Missing hint or label in directive ${KoboCustomDirective.Name.TRIGGER_EMAIL} of form ${KoboIndex.searchById(p.formId) ?? p.formId}`,
       )
     } else {
       await this.emailHelper.send({
