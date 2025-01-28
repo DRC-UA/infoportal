@@ -33,14 +33,14 @@ jobs:
       - name: npm install, build, and test (kobo-sdk)
         working-directory: ./packages/kobo-sdk
         run: |
-          npm run db-generate
+          npm run build --workspace kobo-sdk --if-present
+          npm run test --workspace kobo-sdk --if-present
 
       - name: Build, and test (common)
         working-directory: ./packages/infoportal-common
         run: |
-          npm run build:kobo-sdk
-          npm run build:common
-          npm run build:server
+          npm run build --workspace infoportal-common --if-present
+          npm run test --workspace infoportal-common --if-present
 
       - name: Build, and test (server)
         working-directory: ./packages/infoportal-server
@@ -48,6 +48,16 @@ jobs:
           npm run db-generate
           npm run build --workspace infoportal-server --if-present
           npm run test --workspace infoportal-server --if-present
+
+      - name: Update deployment tag
+        run: |
+          TAG_NAME="deployed_server"
+          
+          echo "Delete the tag locally if it exists"
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Deleting existing tag $TAG_NAME"
+            git tag -d "$TAG_NAME"
+          fi
 
           echo "Creating tag $TAG_NAME at commit $GITHUB_SHA"
           git tag "$TAG_NAME" "$GITHUB_SHA"
