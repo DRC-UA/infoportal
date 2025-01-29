@@ -10,7 +10,7 @@ export type KoboUpdateDataParams<TData extends KoboUpdateDataParamsData = any> =
   data: TData
 }
 
-export class KoboV2ClientSubmissionFixedUpdated {
+export class KoboClientV2SubmissionFixedUpdated {
   static readonly BATCH_SIZE = 20
   static readonly CONCURRENCY = 12
 
@@ -39,8 +39,8 @@ export class KoboV2ClientSubmissionFixedUpdated {
         const params = this.queues.get(formId)!.shift()!
         try {
           await chunkify({
-            concurrency: KoboV2ClientSubmissionFixedUpdated.CONCURRENCY,
-            size: KoboV2ClientSubmissionFixedUpdated.BATCH_SIZE,
+            concurrency: KoboClientV2SubmissionFixedUpdated.CONCURRENCY,
+            size: KoboClientV2SubmissionFixedUpdated.BATCH_SIZE,
             data: params.submissionIds,
             fn: (ids) => this.apiCall({...params, submissionIds: ids}),
           })

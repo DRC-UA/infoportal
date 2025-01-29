@@ -3,26 +3,26 @@ import {Kobo, Logger} from '../Kobo'
 import {
   KoboUpdateDataParams,
   KoboUpdateDataParamsData,
-  KoboV2ClientSubmissionFixedUpdated,
-} from './KoboV2ClientSubmissionFixedUpdated'
+  KoboClientV2SubmissionFixedUpdated,
+} from './KoboClientV2SubmissionFixedUpdated'
 import {queuify} from '../helper/Utils'
 import {map} from '@alexandreannic/ts-utils'
 import axios from 'axios'
-import {KoboV2Client} from './KoboV2Client'
+import {KoboClientV2} from './KoboClientV2'
 import {KoboError} from '../KoboError'
 
-export class KoboV2ClientSubmission {
+export class KoboClientV2Submission {
   constructor(
     private api: ApiClient,
     private log: Logger,
-    private parent: KoboV2Client,
-    private editSdk = new KoboV2ClientSubmissionFixedUpdated(api, log),
+    private parent: KoboClientV2,
+    private editSdk = new KoboClientV2SubmissionFixedUpdated(api, log),
   ) {}
 
   static readonly parseDate = (_: Date) => _.toISOString()
 
   static readonly makeDateFilter = (name: string, operator: 'gte' | 'lte', date: Date) => {
-    return {[name]: {['$' + operator]: KoboV2ClientSubmission.parseDate(date)}}
+    return {[name]: {['$' + operator]: KoboClientV2Submission.parseDate(date)}}
   }
 
   /**
@@ -108,7 +108,7 @@ export class KoboV2ClientSubmission {
 
   private readonly getRaw = (form: Kobo.Form.Id, {limit, offset, ...params}: Kobo.Submission.Filter = {}) => {
     const fetchPage = async ({
-      limit = KoboV2ClientSubmission.MAX_KOBO_PAGESIZE,
+      limit = KoboClientV2Submission.MAX_KOBO_PAGESIZE,
       offset = 0,
       accumulated = [],
     }: {
@@ -116,8 +116,8 @@ export class KoboV2ClientSubmission {
       offset?: number
       accumulated?: Array<Kobo.Submission>
     }): Promise<Kobo.Paginate<Kobo.Submission>> => {
-      const start = map(params.start, (_) => KoboV2ClientSubmission.makeDateFilter('_submission_time', 'gte', _))
-      const end = map(params.end, (_) => KoboV2ClientSubmission.makeDateFilter('_submission_time', 'lte', _))
+      const start = map(params.start, (_) => KoboClientV2Submission.makeDateFilter('_submission_time', 'gte', _))
+      const end = map(params.end, (_) => KoboClientV2Submission.makeDateFilter('_submission_time', 'lte', _))
       const query = start && end ? {$and: [start, end]} : (start ?? end)
       const response = await this.api.get<Kobo.Paginate<Kobo.Submission.MetaData & Record<string, any>>>(
         `/v2/assets/${form}/data`,

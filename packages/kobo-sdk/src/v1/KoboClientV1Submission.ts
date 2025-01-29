@@ -3,12 +3,12 @@ import {Kobo, Logger} from '../Kobo'
 import {KoboError} from '../KoboError'
 import retry from 'promise-retry'
 import {AxiosError} from 'axios'
-import {KoboV1Client} from './KoboV1Client'
+import {KoboClientV1} from './KoboClientV1'
 
-export class KoboV1ClientSubmission {
+export class KoboClientV1Submission {
   constructor(
     private api: ApiClient,
-    private parent: KoboV1Client,
+    private parent: KoboClientV1,
     private log: Logger,
   ) {}
 
@@ -66,7 +66,7 @@ export class KoboV1ClientSubmission {
               id: formId,
               submission: {
                 formhub: {uuid: _uuid},
-                ...KoboV1ClientSubmission.parseBody(data),
+                ...KoboClientV1Submission.parseBody(data),
               },
             },
           })
