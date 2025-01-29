@@ -165,4 +165,5 @@ export const shelterDrcProject = [
   DrcProject['UKR-000345 BHA2'],
   DrcProject['UKR-000363 UHF8'],
   DrcProject['UKR-000372 ECHO3'],
+  DrcProject['UKR-000399 SDC']
 ]
