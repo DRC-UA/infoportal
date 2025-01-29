@@ -1,5 +1,5 @@
-import {KoboClientV2} from './v2/KoboClientV2'
-import {KoboClientV1} from './v1/KoboClientV1'
+import {KoboV2Client} from './v2/KoboV2Client'
+import {KoboV1Client} from './v1/KoboV1Client'
 import {ApiClient, ApiClientParams} from './api-client/ApiClient'
 import {Logger} from './Kobo'
 
@@ -17,15 +17,16 @@ export class KoboClient {
     ApiClientClass?: new (_: ApiClientParams) => ApiClient
     log: Logger
   }) {
-    this.v1 = new KoboClientV1(
+    this.v1 = new KoboV1Client(
       new ApiClientClass({
         baseUrl: urlv1,
         headers: {
           Authorization: KoboClient.makeAuthorizationHeader(token),
         },
       }),
+      log,
     )
-    this.v2 = new KoboClientV2(
+    this.v2 = new KoboV2Client(
       new ApiClientClass({
         baseUrl: urlv2,
         headers: {
@@ -36,7 +37,7 @@ export class KoboClient {
     )
   }
 
-  readonly v1: KoboClientV1
-  readonly v2: KoboClientV2
+  readonly v1: KoboV1Client
+  readonly v2: KoboV2Client
   static readonly makeAuthorizationHeader = (token: string) => `Token ${token}`
 }
