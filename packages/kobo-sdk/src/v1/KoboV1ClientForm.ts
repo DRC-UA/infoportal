@@ -1,6 +1,5 @@
 import {ApiClient} from '../api-client/ApiClient'
-import {Logger} from '../Kobo'
-import {KoboV1Form} from './KoboV1'
+import {Kobo, Logger} from '../Kobo'
 
 export class KoboV1ClientForm {
   constructor(
@@ -8,7 +7,7 @@ export class KoboV1ClientForm {
     private log: Logger,
   ) {}
 
-  readonly getAll = async (): Promise<KoboV1Form[]> => {
+  readonly getAll = async (): Promise<Kobo.V1.KoboV1Form[]> => {
     return this.api.get(`/forms`)
   }
 }

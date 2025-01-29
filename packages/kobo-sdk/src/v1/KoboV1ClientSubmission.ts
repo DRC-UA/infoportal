@@ -1,6 +1,5 @@
 import {ApiClient} from '../api-client/ApiClient'
 import {Kobo, Logger} from '../Kobo'
-import {SubmitResponse} from './KoboV1'
 import {KoboError} from '../KoboError'
 import retry from 'promise-retry'
 import {AxiosError} from 'axios'
@@ -56,13 +55,13 @@ export class KoboV1ClientSubmission {
     retries?: number
     data: Partial<T>
     formId: Kobo.FormId
-  }): Promise<SubmitResponse> => {
+  }): Promise<Kobo.V1.SubmitResponse> => {
     const _uuid = uuid ?? (await this.parent.form.getAll().then((_) => _.find((f) => f.id_string === formId)?.uuid))
     if (!_uuid) throw new KoboError(`Form id ${formId} not found.`)
     return retry(
       (retry, number) => {
         return this.api
-          .post<SubmitResponse>(`/submissions.json`, {
+          .post<Kobo.V1.SubmitResponse>(`/submissions.json`, {
             body: {
               id: formId,
               submission: {
