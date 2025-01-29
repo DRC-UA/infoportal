@@ -1,7 +1,7 @@
 import {ApiClient} from '../api-client/ApiClient'
 import {Kobo, Logger} from '../Kobo'
 
-export class KoboV2ClientSurvey {
+export class KoboV2ClientForm {
   constructor(
     private api: ApiClient,
     private log: Logger,

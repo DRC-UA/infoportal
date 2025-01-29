@@ -326,7 +326,7 @@ export class KoboService {
     ttlMs: duration(2, 'day').toMs,
     fn: async ({formId}: {formId: Kobo.FormId}): Promise<Kobo.Form> => {
       const sdk = await this.sdkGenerator.getBy.formId(formId)
-      return sdk.v2.survey.get({formId, use$autonameAsName: true})
+      return sdk.v2.form.get({formId, use$autonameAsName: true})
     },
   })
 

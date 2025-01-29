@@ -85,7 +85,7 @@ export class KoboV2ClientSubmission {
     //     'start': new Date().toISOString(),
     //   }
     // })
-    const form = await this.parent.survey.get({formId, use$autonameAsName: true})
+    const form = await this.parent.form.get({formId, use$autonameAsName: true})
     const question = form.content.survey.find((_) => _.name === questionName)
     if (!question) throw new KoboError(`Question ${questionName} not found in form ${formId}`)
     return this.api.patch(`/v2/assets/${formId}/data/bulk/`, {

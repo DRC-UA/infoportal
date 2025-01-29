@@ -57,7 +57,7 @@ export class KoboV1ClientSubmission {
     data: Partial<T>
     formId: Kobo.FormId
   }): Promise<SubmitResponse> => {
-    const _uuid = uuid ?? (await this.parent.survey.getAll().then((_) => _.find((f) => f.id_string === formId)?.uuid))
+    const _uuid = uuid ?? (await this.parent.form.getAll().then((_) => _.find((f) => f.id_string === formId)?.uuid))
     if (!_uuid) throw new KoboError(`Form id ${formId} not found.`)
     return retry(
       (retry, number) => {

@@ -138,7 +138,7 @@ export class KoboSyncServer {
 
   private readonly syncApiFormInfo = async (formId: Kobo.FormId) => {
     const sdk = await this.koboSdkGenerator.getBy.formId(formId)
-    const schema = await sdk.v2.survey.get({formId, use$autonameAsName: true})
+    const schema = await sdk.v2.form.get({formId, use$autonameAsName: true})
     return this.prisma.koboForm.update({
       where: {id: formId},
       data: {
