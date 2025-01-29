@@ -31,7 +31,7 @@ export namespace Kobo {
     url: string
     logs_url: string
     asset: number
-    uid: 'hLgBEVbijurruSrU3nc7d9'
+    uid: string
     name: 'InfoPortal'
     endpoint: string
     active: true
