@@ -50,10 +50,18 @@ export class EmailService {
         `Missing hint or label in directive ${KoboCustomDirective.Name.TRIGGER_EMAIL} of form ${KoboIndex.searchById(p.formId) ?? p.formId}`,
       )
     } else {
+      const answer = (p.answer[question.name] as string) ?? ''
+      const toEmails = seq(answer.replaceAll(/\s+/g, ' ').split(' '))
+        .distinct((_) => _)
+        .filter((_) => Regexp.get.email.test(_))
+
+      if (toEmails.length === 0) {
+        this.log.info(`No valid emails found for question ${question.name} in form ${p.formId}`)
+        return
+      }
+
       await this.emailHelper.send({
-        to: seq((p.answer[question.name] as string).replaceAll(/\s+/g, ' ').split(' '))
-          .distinct((_) => _)
-          .filter((_) => Regexp.get.email.test(_)),
+        to: toEmails,
         context: EmailContext.Kobo,
         html: this.setVariables(html, p.answer),
         subject: this.setVariables(subject, p.answer),

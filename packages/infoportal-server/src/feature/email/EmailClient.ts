@@ -11,7 +11,7 @@ export class EmailClient {
     private transporter = nodemailer.createTransport({
       host: conf.email.host,
       port: conf.email.port,
-      secure: true,
+      secure: false,
       pool: true,
       auth: {
         user: conf.email.address,
