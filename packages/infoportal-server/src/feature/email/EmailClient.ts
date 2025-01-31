@@ -5,16 +5,16 @@ import {PrismaClient} from '@prisma/client'
 
 export class EmailClient {
   constructor(
-    private prisma = new PrismaClient(),
+    private prisma: PrismaClient,
     private conf = appConf,
     private log = app.logger('EmailClient'),
     private transporter = nodemailer.createTransport({
       host: conf.email.host,
       port: conf.email.port,
-      secure: false,
+      secure: conf.email.port !== 587,
       pool: true,
       auth: {
-        user: conf.email.address,
+        user: conf.email.user,
         pass: conf.email.password,
       },
     }),

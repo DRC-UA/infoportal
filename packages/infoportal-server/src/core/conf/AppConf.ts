@@ -58,6 +58,7 @@ export const appConf = {
   },
   email: {
     address: e(required)('EMAIL_ADDRESS'),
+    user: e(required)('EMAIL_USER'),
     password: e(required)('EMAIL_PASSWORD'),
     host: e(required)('EMAIL_HOST'),
     port: e(required, int)('EMAIL_PORT'),

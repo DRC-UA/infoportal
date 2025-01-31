@@ -21,7 +21,7 @@ export class EmailService {
     private conf = appConf,
     private users = UserService.getInstance(prisma),
     private event = GlobalEvent.Class.getInstance(),
-    private emailHelper = new EmailClient(),
+    private emailHelper = new EmailClient(prisma),
     private siteMap = new FrontEndSiteMap(),
     private koboService = new KoboService(prisma),
     private log = app.logger('EmailService'),
