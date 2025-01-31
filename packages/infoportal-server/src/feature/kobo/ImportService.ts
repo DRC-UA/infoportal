@@ -4,7 +4,7 @@ import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {Obj, seq} from '@alexandreannic/ts-utils'
 import lodash from 'lodash'
-import {Kobo, KoboClient, KoboSubmissionFormatter} from 'kobo-sdk'
+import {Kobo, KoboClient} from 'kobo-sdk'
 
 type KoboData = {_parent_index?: number; _index?: number} & Record<string, any>
 
@@ -24,20 +24,13 @@ export class ImportService {
     )
     if (action === 'create') {
       const mergedData = ImportService.mergeNestedSheets(sheetData, schemaHelper)
-      const formattedData = KoboSubmissionFormatter.format({
-        questionIndex: schemaHelper.helper.questionIndex,
-        data: mergedData,
-        output: 'toInsert',
-        tag: '_IP_ADDED_FROM_XLS',
+      const taggedData = mergedData.map((_) => {
+        _._IP_ADDED_FROM_XLS = true
+        return _
       })
-      await this.batchCreate(formattedData, sdk, formId)
+      await this.batchCreate(taggedData, sdk, formId)
     } else if (action === 'update') {
-      const formattedData = KoboSubmissionFormatter.format({
-        questionIndex: schemaHelper.helper.questionIndex,
-        data: Object.values(sheetData)[0],
-        output: 'toUpdate',
-      })
-      await ImportService.batchUpdate(sdk, formattedData, formId)
+      await ImportService.batchUpdate(sdk, Object.values(sheetData)[0], formId)
     }
   }
 
@@ -97,9 +90,9 @@ export class ImportService {
     return date.toISOString().split('T')[0]
   }
 
-  private async batchCreate(data: KoboData[], sdk: any, formId: Kobo.FormId) {
+  private async batchCreate(data: KoboData[], sdk: KoboClient, formId: Kobo.FormId) {
     for (const row of data) {
-      await sdk.v1.submissions.submit({
+      await sdk.v1.submission.submitXml({
         formId,
         data: {...row},
         retries: 2,

@@ -74,8 +74,8 @@ export class KoboSdkGenerator {
 
   private readonly buildSdk = (server: KoboServer): KoboClient => {
     return new KoboClient({
-      urlv1: server.urlV1 + '/api/v1',
-      urlv2: server.url + '/api',
+      urlv1: server.urlV1 ?? '<TBD - Only used to submit into a form>',
+      urlv2: server.url,
       token: server.token,
       log: app.logger('KoboClient'),
     })

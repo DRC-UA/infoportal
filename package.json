@@ -5,21 +5,18 @@
     "format": "prettier --write \"**/*.{js,ts,tsx,json}\" --config .prettierrc",
     "server": "npm run dev --workspace infoportal-server",
     "client": "npm run dev --workspace infoportal-client",
-    "kobo-sdk": "npm run dev --workspace kobo-sdk",
     "common": "npm run dev --workspace infoportal-common",
     "scripts": "npm run dev --workspace infoportal-scripts",
     "start:server": "npm run start --workspace infoportal-server",
     "start:client": "npm run start --workspace infoportal-client",
-    "build:all": "npm run build:kobo-sdk && npm run build:common && npm run build:server && npm run build:client",
+    "build:all": "npm run build:common && npm run build:server && npm run build:client",
     "build:server": "npm run build --workspace infoportal-server",
     "build:client": "npm run build --workspace infoportal-client",
-    "build:kobo-sdk": "npm run build --workspace kobo-sdk",
     "build:common": "npm run build --workspace infoportal-common",
     "test:common": "npm run test --workspace infoportal-common",
-    "test:kobo-sdk": "npm run test --workspace kobo-sdk",
     "db-migrate-f": "npm run db-migrate-f --workspace infoportal-server",
     "db-generate": "npm run db-generate --workspace infoportal-server",
-    "test": "npm test --workspace kobo-sdk && npm test --workspace infoportal-common && npm test --workspace infoportal-server"
+    "test": "npm test --workspace infoportal-common && npm test --workspace infoportal-server"
   },
   "workspaces": [
     "packages/*"

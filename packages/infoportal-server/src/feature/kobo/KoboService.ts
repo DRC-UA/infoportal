@@ -460,7 +460,7 @@ export class KoboService {
           id: {in: answerIds},
         },
       }),
-      this.sdkGenerator.getBy.formId(formId).then((_) => _.v2.submission.delete({formId, ids: answerIds})),
+      this.sdkGenerator.getBy.formId(formId).then((_) => _.v2.submission.delete({formId, submissionIds: answerIds})),
     ])
     this.history.create({
       type: 'delete',
@@ -484,11 +484,7 @@ export class KoboService {
     answer?: string
   }) => {
     answer = Array.isArray(answer) ? answer.join(' ') : answer
-    const [sdk, xpath] = await Promise.all([
-      this.sdkGenerator.getBy.formId(formId),
-      this.getSchema({formId}).then((_) => _.content.survey.find((_) => _.name === question)?.$xpath),
-    ])
-    if (!xpath) throw new Error(`Cannot find xpath for ${formId} ${question}.`)
+    const sdk = await this.sdkGenerator.getBy.formId(formId)
     await Promise.all([
       this.history.create({
         type: 'answer',
@@ -498,7 +494,7 @@ export class KoboService {
         newValue: answer,
         authorEmail,
       }),
-      sdk.v2.submission.update({formId, submissionIds: answerIds, data: {[xpath]: answer}}),
+      sdk.v2.submission.update({formId, submissionIds: answerIds, data: {[question]: answer}}),
       await this.prisma.$executeRawUnsafe(
         `UPDATE "KoboAnswers"
          SET answers     = jsonb_set(answers, '{${question}}', '"${KoboService.safeJsonValue(answer ?? '')}"'),

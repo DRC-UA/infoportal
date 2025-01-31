@@ -3,13 +3,13 @@ import {Prisma, PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from '../KoboSdkGenerator'
 import {app, AppCacheKey, AppLogger} from '../../../index'
 import {createdBySystem} from '../../../core/DbInit'
-import {seq} from '@alexandreannic/ts-utils'
+import {chunkify, seq} from '@alexandreannic/ts-utils'
 import {GlobalEvent} from '../../../core/GlobalEvent'
 import {KoboService} from '../KoboService'
 import {AppError} from '../../../helper/Errors'
 import {appConf} from '../../../core/conf/AppConf'
 import {genUUID, previewList, Util} from '../../../helper/Utils'
-import {chunkify, Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
+import {Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
 
 export type KoboSyncServerResult = {
   answersIdsDeleted: Kobo.FormId[]
@@ -30,9 +30,9 @@ export class KoboSyncServer {
   ) {}
 
   private static readonly mapAnswer = (k: Kobo.Submission): KoboSubmission => {
-    delete k['formhub/uuid']
-    delete k['meta/instanceId']
     const {
+      ['formhub/uuid']: formhubUuid,
+      ['meta/instanceId']: instanceId,
       _id,
       start,
       end,
@@ -49,7 +49,7 @@ export class KoboSyncServer {
       _submitted_by,
       ...answers
     } = k
-    const answersUngrouped = KoboSubmissionFormatter.removeGroup(answers)
+    const answersUngrouped = KoboSubmissionFormatter.removePath(answers)
     const date = answersUngrouped.date ? new Date(answersUngrouped.date as number) : new Date(_submission_time)
     return {
       attachments: _attachments ?? [],

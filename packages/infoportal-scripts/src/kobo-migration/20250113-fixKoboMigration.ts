@@ -1,12 +1,12 @@
 import {PrismaClient} from '@prisma/client'
 import {Ecrec_vetEvaluation, KoboIndex, Shelter_ta, UUID} from 'infoportal-common'
 import {Pool, PoolClient} from 'pg'
-import {chunkify, Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
 import {appConf} from '../appConf'
 import {PromisePool} from '@supercharge/promise-pool'
 import {duration, Obj, Progress, seq} from '@alexandreannic/ts-utils'
-import {koboSdkDrc, koboSdkHumanitarian} from '../index'
+import {koboSdkHumanitarian} from '../index'
 import {format} from 'date-fns'
+import {Kobo} from 'kobo-sdk'
 import Validation = Kobo.Submission.Validation
 
 export namespace FixKoboMigration {
@@ -422,8 +422,8 @@ export namespace FixKoboMigration {
       const migrateForm = async (formId: Kobo.FormId) => {
         try {
           const [answers, form] = await Promise.all([
-            koboSdkHumanitarian.v2
-              .submission.get({formId, filters:{start: firstMigrationDate}})
+            koboSdkHumanitarian.v2.submission
+              .get({formId, filters: {start: firstMigrationDate}})
               .then((_) => _.results.filter((_) => _._validation_status.uid !== Validation.validation_status_approved)),
             koboSdkHumanitarian.v2.form.get({formId}),
           ])

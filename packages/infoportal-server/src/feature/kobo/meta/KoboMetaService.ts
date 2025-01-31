@@ -22,7 +22,8 @@ import {genUUID, yup} from '../../../helper/Utils'
 import {InferType} from 'yup'
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
 import {PromisePool} from '@supercharge/promise-pool'
-import {chunkify, Kobo} from 'kobo-sdk'
+import {Kobo} from 'kobo-sdk'
+import {chunkify} from '@alexandreannic/ts-utils'
 import Event = GlobalEvent.Event
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<

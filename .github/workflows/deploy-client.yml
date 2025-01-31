@@ -37,7 +37,6 @@ jobs:
           IGNORE_BUILD_TS_ERRORS: ${{ secrets.IGNORE_BUILD_TS_ERRORS }}
           PORT: ${{ secrets.PORT }}
         run: |
-          npm run build:kobo-sdk  
           npm run build:common  
           npm run build:client  
 

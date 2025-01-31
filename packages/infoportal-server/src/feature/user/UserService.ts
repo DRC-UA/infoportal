@@ -49,7 +49,7 @@ export class UserService {
   }
 
   readonly getUserAvatarByEmail = async (email: string): Promise<Buffer | undefined> => {
-    return this.getUserByEmail(email).then((_) => _?.avatar ?? undefined)
+    return this.getUserByEmail(email).then((_) => (_?.avatar ? Buffer.from(_.avatar) : undefined))
   }
 
   readonly update = async ({email, drcOffice}: {email: string; drcOffice?: DrcOffice}) => {

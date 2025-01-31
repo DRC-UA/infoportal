@@ -1,5 +1,4 @@
 import {Kobo} from 'kobo-sdk'
-import {Person} from '../../type/Person'
 import {fnSwitch} from '@alexandreannic/ts-utils'
 import {KoboCustomDirective} from '../KoboCustomDirective'
 
@@ -90,7 +89,10 @@ export class KoboHelper {
     (_?: number | undefined): Date | undefined
   } = (koboTs) => (koboTs ? new Date(koboTs * 1000) : undefined) as any
 
-  static readonly findAttachmentId = (attachments?: Kobo.Submission.Attachment[], fileName?: string): number | undefined => {
+  static readonly findAttachmentId = (
+    attachments?: Kobo.Submission.Attachment[],
+    fileName?: string,
+  ): number | undefined => {
     return fileName ? attachments?.find((x) => x.filename.includes(fileName))?.id : undefined
   }
 

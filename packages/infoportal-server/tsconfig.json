@@ -7,16 +7,12 @@
     "typeRoots": ["../../node_modules/@types", "./node_modules/@types", "./src/typings"],
     "paths": {
       "infoportal-common/*": ["../infoportal-common/src/*"],
-      "kobo-sdk/*": ["../kobo-sdk/src/*"]
     }
   },
   "references": [
     {
       "path": "../infoportal-common"
     },
-    {
-      "path": "../kobo-sdk"
-    }
   ],
   "ts-node": {
     "files": true
