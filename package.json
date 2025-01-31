@@ -18,6 +18,7 @@
     "test:common": "npm run test --workspace infoportal-common",
     "test:kobo-sdk": "npm run test --workspace kobo-sdk",
     "db-migrate-f": "npm run db-migrate-f --workspace infoportal-server",
+    "db-generate": "npm run db-generate --workspace infoportal-server",
     "test": "npm test --workspace kobo-sdk && npm test --workspace infoportal-common && npm test --workspace infoportal-server"
   },
   "workspaces": [
