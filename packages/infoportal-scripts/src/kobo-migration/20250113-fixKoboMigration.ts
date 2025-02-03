@@ -4,7 +4,7 @@ import {Pool, PoolClient} from 'pg'
 import {appConf} from '../appConf'
 import {PromisePool} from '@supercharge/promise-pool'
 import {duration, Obj, Progress, seq} from '@alexandreannic/ts-utils'
-import {koboSdkHumanitarian} from '../index'
+import {koboSdkDrc, koboSdkHumanitarian} from '../index'
 import {format} from 'date-fns'
 import {Kobo} from 'kobo-sdk'
 import Validation = Kobo.Submission.Validation
@@ -424,7 +424,7 @@ export namespace FixKoboMigration {
           const [answers, form] = await Promise.all([
             koboSdkHumanitarian.v2.submission
               .get({formId, filters: {start: firstMigrationDate}})
-              .then((_) => _.results.filter((_) => _._validation_status.uid !== Validation.validation_status_approved)),
+              .then((_) => _.results), //.filter((_) => _._validation_status.uid !== Validation.validation_status_approved)),
             koboSdkHumanitarian.v2.form.get({formId}),
           ])
           if (answers && answers.length) {
@@ -437,15 +437,15 @@ export namespace FixKoboMigration {
               .map((_) => _._submitted_by)
               .distinct((_) => _)
               .join(' ')
-            const statuses = seq(afterClosure)
-              .map((_) => _._validation_status.uid)
-              .distinct((_) => _)
-              .join(' ')
+            // const statuses = seq(afterClosure)
+            //   .map((_) => _._validation_status.uid)
+            //   .distinct((_) => _)
+            //   .join(' ')
             console.log(
-              `Migrate ${(KoboIndex.searchById(formId)?.name ?? formId).padEnd(32)} ${('' + answers.length).padStart(4)} ${lastSubmission} ${statuses}`,
+              `Migrate ${(KoboIndex.searchById(formId)?.name ?? formId).padEnd(32)} ${('' + answers.length).padStart(4)} ${lastSubmission}`,
             )
           } else {
-            console.log(`${(KoboIndex.searchById(formId)?.name ?? formId).padEnd(32)} 0`)
+            // console.log(`${(KoboIndex.searchById(formId)?.name ?? formId).padEnd(32)} 0`)
           }
           // const output = KoboSubmissionFormatter.format({
           //   questionIndex: KoboSubmissionFormatter.buildQuestionIndex(form),
@@ -466,12 +466,47 @@ export namespace FixKoboMigration {
           //         status: Validation.validation_status_approved,
           //       }),
           //   })
-        } catch (error) {}
+        } catch (error) {
+          console.error(error)
+        }
       }
 
       await PromisePool.withConcurrency(1)
         .for(KoboIndex.names.map((n) => KoboIndex.byName(n).id))
         .process(migrateForm)
     }
+  }
+
+  export const resetWrongMigration = async () => {
+    const forms = [
+      // KoboIndex.byName('ecrec_msmeGrantReg').id,
+      // KoboIndex.byName('ecrec_vet_bha388').id,
+      KoboIndex.byName('bn_rapidResponse2').id,
+      KoboIndex.byName('meal_shelterPdm').id,
+      KoboIndex.byName('meal_nfiPdm').id,
+      KoboIndex.byName('meal_cfmInternal').id,
+      KoboIndex.byName('meal_cfmExternal').id,
+      KoboIndex.byName('shelter_nta').id,
+      KoboIndex.byName('protection_hhs3').id,
+      KoboIndex.byName('protection_communityMonitoring').id,
+      KoboIndex.byName('protection_groupSession').id,
+      KoboIndex.byName('protection_pss').id,
+      KoboIndex.byName('protection_referral').id,
+      KoboIndex.byName('protection_counselling').id,
+    ]
+
+    const clean = async (formId: Kobo.FormId) => {
+      const res = await koboSdkDrc.v2.submission
+        .get({
+          formId,
+          filters: {
+            start: new Date(2025, 0, 1),
+          },
+        })
+        .then((_) => _.results.filter((_) => _['_uuid'] && _['uuid'] && _._submitted_by === 'meal_drc_ddg_ukr'))
+      console.log(KoboIndex.searchById(formId)!.name + ' DELETE ' + res.length)
+      await koboSdkDrc.v2.submission.delete({formId, submissionIds: res.map((_) => _._id)})
+    }
+    await PromisePool.withConcurrency(2).for(forms).process(clean)
   }
 }

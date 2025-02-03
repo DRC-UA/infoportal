@@ -29,7 +29,7 @@ export class KoboSyncServer {
     private log: AppLogger = app.logger('KoboSyncServer'),
   ) {}
 
-  private static readonly mapAnswer = (k: Kobo.Submission): KoboSubmission => {
+  private static readonly mapAnswer = (k: Kobo.Submission.Raw): KoboSubmission => {
     const {
       ['formhub/uuid']: formhubUuid,
       ['meta/instanceId']: instanceId,
@@ -151,7 +151,7 @@ export class KoboSyncServer {
   private readonly _syncApiFormAnswers = async (formId: Kobo.FormId): Promise<KoboSyncServerResult> => {
     const sdk = await this.koboSdkGenerator.getBy.formId(formId)
     this.debug(formId, `Fetch remote answers...`)
-    const remoteAnswers = await sdk.v2.submission.get({formId}).then((_) => _.results.map(KoboSyncServer.mapAnswer))
+    const remoteAnswers = await sdk.v2.submission.getRaw({formId}).then((_) => _.results.map(KoboSyncServer.mapAnswer))
     const remoteIdsIndex: Map<Kobo.FormId, KoboSubmission> = remoteAnswers.reduce(
       (map, curr) => map.set(curr.id, curr),
       new Map<Kobo.FormId, KoboSubmission>(),

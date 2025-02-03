@@ -97,7 +97,7 @@ export class KoboHelper {
   }
 
   static readonly mapValidation = {
-    fromKobo: (_: Kobo.Submission): undefined | KoboValidation => {
+    fromKobo: (_: Kobo.Submission.Raw): undefined | KoboValidation => {
       if (_._validation_status?.uid)
         return fnSwitch(_._validation_status.uid, {
           validation_status_on_hold: KoboValidation.Pending,
