@@ -21,7 +21,8 @@ export const koboSdkDrc = new KoboClient({
   log: winston.createLogger(),
 })
 ;(async () => {
-  await FixKoboMigration.resetWrongMigration()
+  // await new BuildKoboType().build('protection_groupSession')
+  // await FixKoboMigration.resetWrongMigration()
   // await FixKoboMigration.MissingSubmissions.run()
   // await ActivityInfoBuildType.fslc()
   // await new BuildKoboType().build('ecrec_msme_bha388')
