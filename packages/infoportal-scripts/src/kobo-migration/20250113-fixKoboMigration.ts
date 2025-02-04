@@ -423,7 +423,7 @@ export namespace FixKoboMigration {
         try {
           const [answers, form] = await Promise.all([
             koboSdkHumanitarian.v2.submission
-              .get({formId, filters: {start: firstMigrationDate}})
+              .getRaw({formId, filters: {start: firstMigrationDate}})
               .then((_) => _.results), //.filter((_) => _._validation_status.uid !== Validation.validation_status_approved)),
             koboSdkHumanitarian.v2.form.get({formId}),
           ])
@@ -497,7 +497,7 @@ export namespace FixKoboMigration {
 
     const clean = async (formId: Kobo.FormId) => {
       const res = await koboSdkDrc.v2.submission
-        .get({
+        .getRaw({
           formId,
           filters: {
             start: new Date(2025, 0, 1),

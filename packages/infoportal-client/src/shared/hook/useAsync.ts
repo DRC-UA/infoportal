@@ -73,7 +73,6 @@ export const useAsync: UseAsyncFn = <F extends Func<Promise<any>>, K extends Key
         setLastError(e)
         loading.delete(key)
         error.set(key, mapError(e))
-        throw e
       })
   }
 

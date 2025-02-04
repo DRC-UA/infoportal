@@ -1,5 +1,5 @@
 import {useCallback, useMemo, useRef, useState} from 'react'
-import {UseMap2, useMapIp} from '@/shared/hook/useMap'
+import {UseMap2, useMapIp} from './useMap'
 
 export type Func<R = any> = (...args: any[]) => R
 
@@ -12,7 +12,7 @@ export type Fetch<T extends Func<Promise<FetcherResult<T>>>> = (p?: FetchParams,
 
 type ThenArg<T> = T extends PromiseLike<infer U> ? U : T
 
-type FetcherResult<T extends Func> = ThenArg<ReturnType<T>>
+type FetcherResult<T extends Func> = ThenArg<undefined | ReturnType<T>>
 
 type Key = number | string
 
@@ -46,41 +46,47 @@ export const useFetchers: UseFetchersFn = <F extends Func<Promise<any>>, K exten
   fetcher: F,
   {requestKey = undefined as any, mapError = (_: any) => _},
 ) => {
-  const entities = useMapIp<K, FetcherResult<F>>()
+  const entities = useMapIp<K, undefined | FetcherResult<F>>()
   const errors = useMapIp<K, E | undefined>()
   const loadings = useMapIp<K, boolean>()
   const [lastError, setLastError] = useState<E | undefined>()
   const list = useMemo(() => entities.values ?? [], [entities])
-  const fetch$ = useRef<Promise<FetcherResult<F>>>()
+  const fetch$ = useRef(new Map<string, Promise<undefined | FetcherResult<F>>>())
 
-  const fetch = ({force = true, clean = true}: FetchParams = {}, ...args: Parameters<F>): Promise<FetcherResult<F>> => {
+  const fetch = ({force = true, clean = true}: FetchParams = {}, ...args: Parameters<F>): Promise<undefined | FetcherResult<F>> => {
     const key = requestKey(args)
     const entity = entities.get(key)
     errors.delete(key)
-    if (!force) {
-      if (entity) {
-        return Promise.resolve(entity)
-      }
+
+    if (!force && entity) {
+      return Promise.resolve(entity)
     }
     if (clean) {
       entities.delete(key)
     }
+    if (loadings.get(key)) {
+      return fetch$.current.get(key)!
+    }
+
     loadings.set(key, true)
-    fetch$.current = fetcher(...args)
-    fetch$.current
+    const promise = fetcher(...args)
       .then((x: FetcherResult<F>) => {
         entities.set(key, x)
-        fetch$.current = undefined
         loadings.set(key, false)
+        fetch$.current.delete(key)
+        return x
       })
       .catch((e) => {
         errors.set(key, mapError ? mapError(e) : e)
         setLastError(e)
         loadings.set(key, false)
         entities.delete(key)
-        throw e
+        fetch$.current.delete(key)
+        return undefined
       })
-    return fetch$.current
+
+    fetch$.current.set(key, promise)
+    return promise
   }
 
   const clearCache = useCallback(() => {
