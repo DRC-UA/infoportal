@@ -14,6 +14,7 @@ import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 import {EcrecProvider, useEcrecContext} from './EcrecContext'
 import {EcrecDataTable} from './EcrecDataTable'
+import {EcrecDashboard} from './Dashboard/EcrecDashboard'
 
 export const ecrecIndex = {
   basePath: '/ecrec',
@@ -71,15 +72,15 @@ const EcrecSidebar = () => {
 export const Ecrec = () => {
   useReactRouterDefaultRoute(ecrecIndex.siteMap.dashboard)
   const {session, accesses} = useSession()
-  const access = useMemo(() => !!appFeaturesIndex.mpca.showIf?.(session, accesses), [accesses])
-  if (!access) {
-    return <NoFeatureAccessPage />
-  }
+  const access = useMemo(() => !!appFeaturesIndex.ecrec.showIf?.(session, accesses), [accesses])
+
+  if (!access) return <NoFeatureAccessPage />
+
   return (
     <EcrecProvider>
-      <Layout title={appFeaturesIndex.mpca.name} sidebar={<EcrecSidebar />} header={<AppHeader id="app-header" />}>
+      <Layout title={appFeaturesIndex.ecrec.name} sidebar={<EcrecSidebar />} header={<AppHeader id="app-header" />}>
         <Routes>
-          <Route path={ecrecIndex.siteMap.dashboard} element={<div>Hello</div>} />
+          <Route path={ecrecIndex.siteMap.dashboard} element={<EcrecDashboard />} />
           <Route path={ecrecIndex.siteMap.data} element={<EcrecDataTable />} />
         </Routes>
       </Layout>
