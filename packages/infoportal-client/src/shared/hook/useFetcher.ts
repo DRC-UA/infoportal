@@ -38,29 +38,31 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
     initialValue?: FetcherResult<F>
     mapError?: (_: any) => E
   } = {},
-): UseFetcher<F, E> => {
+) => {
   const [entity, setEntity] = useState<FetcherResult<F> | undefined>(initialValue)
   const [error, setError] = useState<E | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
   const [callIndex, setCallIndex] = useState(0)
-  const fetch$ = useRef<{
-    // Needed to prevent competition issue when call2 got overridden by call1 because call1 finish after call 2.
-    queryRef: number
-    query?: Promise<FetcherResult<F>>
-  }>({queryRef: 0})
+  const fetch$ = useRef<{queryRef: number; query?: Promise<undefined | FetcherResult<F>>}>({
+    queryRef: 0,
+  })
 
   const clear = () => {
     setError(undefined)
     setEntity(undefined)
   }
 
-  const fetch = ({force = true, clean = true}: FetchParams = {}, ...args: any[]): Promise<FetcherResult<F>> => {
-    fetch$.current.queryRef = fetch$.current.queryRef + 1
+  const fetch = (
+    {force = true, clean = true}: FetchParams = {},
+    ...args: Parameters<F>
+  ): Promise<undefined | FetcherResult<F>> => {
+    fetch$.current.queryRef += 1
     const currQueryRef = fetch$.current.queryRef
-    setCallIndex((_) => _ + 1)
+    setCallIndex((prev) => prev + 1)
+
     if (!force) {
       if (fetch$.current.query) {
-        return fetch$.current.query!
+        return fetch$.current.query // Return existing in-flight request
       }
       if (entity) {
         return Promise.resolve(entity)
@@ -68,18 +70,24 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
     } else {
       fetch$.current.query = undefined
     }
+
     if (clean) {
       clear()
     }
-    setLoading(true)
-    fetch$.current.query = fetcher(...args)
-    fetch$.current.query
+
+    setLoading((_) => {
+      if (currQueryRef === fetch$.current.queryRef) return true
+      return _
+    })
+
+    const promise = fetcher(...args)
       .then((x: FetcherResult<F>) => {
         if (currQueryRef === fetch$.current.queryRef) {
-          setLoading(false)
           setEntity(x)
+          setLoading(false)
         }
         fetch$.current.query = undefined
+        return x
       })
       .catch((e) => {
         if (currQueryRef === fetch$.current.queryRef) {
@@ -88,10 +96,11 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
           setLoading(false)
         }
         fetch$.current.query = undefined
-        // return Promise.reject(e)
-        throw e
+        return undefined
       })
-    return fetch$.current.query
+
+    fetch$.current.query = promise
+    return promise
   }
 
   const clearCache = () => {
@@ -107,10 +116,9 @@ export const useFetcher = <F extends Func<Promise<any>>, E = any>(
       loading,
       error,
       callIndex,
-      // TODO(Alex) not sure the error is legitimate
-      fetch: fetch as any,
+      fetch,
       clearCache,
     }),
-    [entity, fetcher, error, loading, callIndex],
+    [entity, error, loading, callIndex],
   )
 }

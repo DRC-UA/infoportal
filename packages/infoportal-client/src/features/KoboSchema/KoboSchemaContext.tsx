@@ -34,7 +34,6 @@ export interface KoboSchemaContext {
 const Context = React.createContext({} as KoboSchemaContext)
 
 export const KoboSchemaProvider = ({defaultLangIndex = 0, children}: KoboSchemaProviderProps) => {
-  const {m} = useI18n()
   const {api} = useAppSettings()
   const [langIndex, setLangIndex] = useState<number>(defaultLangIndex)
   const {toastHttpError} = useIpToast()

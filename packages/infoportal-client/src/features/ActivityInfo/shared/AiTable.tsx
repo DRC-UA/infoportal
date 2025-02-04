@@ -22,6 +22,7 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Period} from 'infoportal-common'
+import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 
 export interface AiTable<
   TActivity = any,
@@ -87,6 +88,7 @@ export const AiBundleTable = ({
   const _submit = useAsync((id: string, p: any) => api.activityInfo.submitActivity(p), {
     requestKey: ([i]) => i,
   })
+  useEffectFn(_submit.error, toastHttpError)
 
   return (
     <>
@@ -110,12 +112,10 @@ export const AiBundleTable = ({
               sx={{ml: 'auto'}}
               onClick={() => {
                 if (!fetcher.get) return
-                _submit
-                  .call(
-                    'all',
-                    fetcher.get.filter((_) => _.submit).map((_) => _.requestBody),
-                  )
-                  .catch(toastHttpError)
+                _submit.call(
+                  'all',
+                  fetcher.get.filter((_) => _.submit).map((_) => _.requestBody),
+                )
               }}
             >
               {m.submitAll}
@@ -135,7 +135,7 @@ export const AiBundleTable = ({
                       <AiSendBtn
                         disabled={!_.submit || JSON.stringify(_.requestBody).includes('undefined')}
                         onClick={() => {
-                          _submit.call(_.recordId, [_.requestBody]).catch(toastHttpError)
+                          _submit.call(_.recordId, [_.requestBody])
                         }}
                       />
                       <AiPreviewActivity activity={{..._.activity, ..._.subActivity}} />

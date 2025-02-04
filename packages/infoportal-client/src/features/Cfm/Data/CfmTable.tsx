@@ -109,20 +109,6 @@ export const CfmTable = ({}: any) => {
     ])
   })
 
-  // const {toastHttpError, toastLoading} = useAaToast()
-  //
-  // const _editExternal = useFetchers(async (answerId: Kobo.SubmissionId) => {
-  //   return api.koboApi.getEditUrl(kobo.drcUa.server.prod, KoboIndex.byName('cfmExternal').id, answerId).then(_ => {
-  //     if (_.url) window.open(_.url, '_blank')
-  //   }).catch(toastHttpError)
-  // }, {requestKey: _ => _[0]})
-  //
-  // const _editInternal = useFetchers(async (answerId: Kobo.SubmissionId) => {
-  //   return api.koboApi.getEditUrl(kobo.drcUa.server.prod, KoboIndex.byName('cfmInternal').id, answerId).then(_ => {
-  //     if (_.url) window.open(_.url, '_blank')
-  //   }).catch(toastHttpError)
-  // }, {requestKey: _ => _[0]})
-
   const buildTagObjColumn = useCallback(
     <T extends keyof Partial<KoboMealCfmTag>, K extends string>({
       head,

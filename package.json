@@ -13,10 +13,12 @@
     "build:server": "npm run build --workspace infoportal-server",
     "build:client": "npm run build --workspace infoportal-client",
     "build:common": "npm run build --workspace infoportal-common",
+    "test": "npm run test:common && npm run test:server && npm run test:clientnpm ",
     "test:common": "npm run test --workspace infoportal-common",
+    "test:client": "npm run test --workspace infoportal-client",
+    "test:server": "npm run test --workspace infoportal-server",
     "db-migrate-f": "npm run db-migrate-f --workspace infoportal-server",
-    "db-generate": "npm run db-generate --workspace infoportal-server",
-    "test": "npm test --workspace infoportal-common && npm test --workspace infoportal-server"
+    "db-generate": "npm run db-generate --workspace infoportal-server"
   },
   "workspaces": [
     "packages/*"

@@ -31,6 +31,7 @@ import {IpInput} from '@/shared/Input/Input'
 import {useIpToast} from '@/core/useToast'
 import {Fender} from '@/shared/Fender'
 import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
+import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 
 const routeParamsSchema = yup.object({
   formId: yup.string().required(),
@@ -65,6 +66,8 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
   const [isEditing, setIsEditing] = useState(false)
   const [comment, setComment] = useState('')
   const {toastHttpError} = useIpToast()
+
+  useEffectFn(ctxKoboUpdate.asyncUpdateById.tag.lastError, toastHttpError)
 
   useEffect(() => {
     setComment(entry.tags?.notes ?? '')
@@ -286,9 +289,12 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
                 variant="outlined"
                 loading={ctxKoboUpdate.asyncUpdateById.tag.anyLoading}
                 onClick={async () => {
-                  await ctxKoboUpdate.asyncUpdateById.tag
-                    .call({formId: entry.formId, answerIds: [entry.id], tag: 'notes', value: comment})
-                    .catch(toastHttpError)
+                  await ctxKoboUpdate.asyncUpdateById.tag.call({
+                    formId: entry.formId,
+                    answerIds: [entry.id],
+                    tag: 'notes',
+                    value: comment,
+                  })
                   setIsEditing(false)
                 }}
                 sx={{marginLeft: 'auto', mr: 1}}
