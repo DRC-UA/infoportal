@@ -69,6 +69,13 @@ export class Server {
 
   readonly start = () => {
     const app = express()
+
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      if (req.path.includes('/kobo/answer') && !req.path.includes('by-access'))
+        this.log.warn(`>> ${req.method} ${req.path} ${req.session?.user?.email}`)
+      next()
+    })
+
     // new IpSentry(this.conf, app,)
     // app.use(Sentry.Handlers.requestHandler())
     // app.use(Sentry.Handlers.tracingHandler())

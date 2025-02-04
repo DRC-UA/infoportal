@@ -17,7 +17,7 @@ import {Modal} from '@/shared'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {formatDateTime} from '@/core/i18n/localization/en'
 import {appConfig} from '@/conf/AppConfig'
-import {NullableFn} from 'infoportal-common/type/Generic'
+import {NullableFn} from 'infoportal-common'
 
 interface CreateForm {
   name: string

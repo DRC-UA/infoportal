@@ -1,12 +1,13 @@
 import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
 import {ObjectSchema} from 'yup'
-import {FeatureAccessLevel, PrismaClient} from '@prisma/client'
+import {PrismaClient} from '@prisma/client'
 import {KoboService} from '../../../feature/kobo/KoboService'
 import {KoboValidation, Period} from 'infoportal-common'
 import {validateApiPaginate} from '../../../core/Type'
 import {Kobo} from 'kobo-sdk'
 import {Obj} from '@alexandreannic/ts-utils'
+import {app} from '../../../index'
 
 export interface KoboAnswersFilters extends Partial<Period> {
   ids?: Kobo.FormId[]
@@ -33,6 +34,7 @@ const answersFiltersValidation: ObjectSchema<KoboAnswersFilters> = yup.object({
 export class ControllerKoboAnswer {
   constructor(
     private pgClient: PrismaClient,
+    private log = app.logger('ControllerKoboAnswer'),
     private service = new KoboService(pgClient),
   ) {}
 
@@ -103,11 +105,18 @@ export class ControllerKoboAnswer {
 
   /** TODO need to handle public access */
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
-    const {formId} = req.params
-    const filters = await answersFiltersValidation.validate(req.body)
-    const paginate = await validateApiPaginate.validate(req.body)
-    const answers = await this.service.searchAnswers({formId, filters, paginate})
-    res.send(answers)
+    this.log.info(`> SEARCH by ${req.session?.user?.email} ${req.params.formId}`)
+    try {
+      const {formId} = req.params
+      const filters = await answersFiltersValidation.validate(req.body)
+      const paginate = await validateApiPaginate.validate(req.body)
+      const answers = await this.service.searchAnswers({formId, filters, paginate})
+      this.log.info(`> SEARCH by ${req.session.user?.email} ${req.params.formId}. SUCCESS`)
+      res.send(answers)
+    } catch (error) {
+      this.log.info(`> SEARCH by ${req.session.user?.email} ${req.params.formId}. FAILED`, JSON.stringify(error))
+      res.status(500).send(JSON.stringify(error))
+    }
   }
 
   readonly searchByUserAccess = async (req: Request, res: Response, next: NextFunction) => {
