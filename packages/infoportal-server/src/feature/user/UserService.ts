@@ -25,7 +25,23 @@ export class UserService {
   private async loadUsersCache(): Promise<Prisma.UserCreateInput[]> {
     if (!this.cache.get(AppCacheKey.Users)) {
       this.log.info('Load users from database')
-      const request = this.prisma.user.findMany({orderBy: {lastConnectedAt: 'desc'}})
+      const request = this.prisma.user.findMany({
+        orderBy: {lastConnectedAt: 'desc'},
+        select: {
+          id: true,
+          email: true,
+          createdBy: true,
+          createdAt: true,
+          lastConnectedAt: true,
+          accessToken: true,
+          name: true,
+          drcJob: true,
+          avatar: false,
+          drcOffice: true,
+          admin: true,
+          officer: true,
+        },
+      })
       this.cache.set({key: AppCacheKey.Users, value: request})
       return request
     }
