@@ -1,10 +1,10 @@
-import {useCallback, useEffect, useMemo, useState} from 'react'
+import {useCallback, useMemo, useState} from 'react'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {seq} from '@alexandreannic/ts-utils'
 import {Icon} from '@mui/material'
 import Link from 'next/link'
 
-import {Bn_re, DrcOffice, KoboIndex, koboMetaStatusLabel, KoboXmlMapper, type IKoboMeta} from 'infoportal-common'
+import {Bn_re, DrcOffice, KoboIndex, koboMetaStatusLabel, KoboXmlMapper} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -14,16 +14,18 @@ import {KoboApiSdk} from '@/core/sdk/server/kobo/KoboApiSdk'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
+import {type KoboSchemaContext, useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Page} from '@/shared'
-import {OptionLabelTypeCompact} from '@/shared/customInput/SelectStatus'
+import {StateStatusIcon} from '@/shared/customInput/SelectStatus'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Panel} from '@/shared/Panel'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableImg} from '@/shared/TableImg/TableImg'
 import {Txt} from '@/shared/Txt'
 
-import {useEcrecContext} from './EcrecContext'
+import {useEcrecContext, type EcrecMergedEntity} from './EcrecContext'
 
 const PrivateCell = () => {
   return <TableIcon color="disabled">lock</TableIcon>
@@ -35,10 +37,7 @@ export const EcrecDataTable = () => {
   const {session, accesses} = useSession()
   const ctx = useEcrecContext()
   const [selected, setSelected] = useState<string[]>([])
-
-  useEffect(() => {
-    ctx.fetcherData.fetch({force: false})
-  }, [])
+  const {langIndex, setLangIndex} = useKoboSchemaContext()
 
   const index = useMemoFn(ctx.data, (d) =>
     d.groupByAndApply(
@@ -69,12 +68,29 @@ export const EcrecDataTable = () => {
   return (
     <Page width="full">
       <Panel sx={{overflow: 'visible'}}>
-        <Datatable<IKoboMeta>
+        <Datatable<EcrecMergedEntity>
           id="ecrec"
           title={m.data}
           showExportBtn
           loading={ctx.fetcherData.loading}
           getRenderRowKey={(_) => '' + _.id}
+          header={
+            ctx.schema.ecrec_msmeGrantReg ? (
+              <IpSelectSingle
+                hideNullOption
+                sx={{maxWidth: 128, mr: 1}}
+                defaultValue={langIndex}
+                onChange={setLangIndex}
+                options={[
+                  {children: 'XML', value: -1},
+                  ...ctx.schema.ecrec_msmeGrantReg.schemaSanitized.content.translations.map((_, i) => ({
+                    children: _,
+                    value: i,
+                  })),
+                ]}
+              />
+            ) : null
+          }
           data={ctx.data}
           columns={[
             {
@@ -85,7 +101,7 @@ export const EcrecDataTable = () => {
               align: 'center',
               render: (_) => {
                 return {
-                  label: <OptionLabelTypeCompact type={koboMetaStatusLabel[_.status!]} />,
+                  label: <StateStatusIcon type={koboMetaStatusLabel[_.status!]} />,
                   value: _.status,
                   option: _.status,
                 }
@@ -341,6 +357,64 @@ export const EcrecDataTable = () => {
                       label: <PrivateCell />,
                       value: undefined,
                     },
+            },
+            {
+              type: 'select_one',
+              id: 'vetting_status',
+              head: ctx.schema.ecrec_msmeGrantReg?.translate.question('vetting_status'),
+              render: (_) => ({
+                value: _.vetting_status,
+                label: ctx.schema.ecrec_msmeGrantReg?.translate.choice('vetting_status', _.vetting_status),
+              }),
+            },
+            {
+              type: 'select_one',
+              id: 'validation_visit',
+              head: ctx.schema.ecrec_msmeGrantReg?.translate.question('validation_visit'),
+              render: (_) => ({
+                value: _.validation_visit,
+                label: ctx.schema.ecrec_msmeGrantReg?.translate.choice('validation_visit', _.validation_visit),
+              }),
+            },
+            {
+              type: 'select_one',
+              id: 'committee_decision',
+              head: ctx.schema.ecrec_msmeGrantReg?.translate.question('committee_decision'),
+              renderQuick: (_) => {
+                return ctx.schema.ecrec_msmeGrantReg?.translate.choice('committee_decision', _.committee_decision)
+              },
+            },
+            {
+              type: 'select_one',
+              id: 'status_first_tranche',
+              head: ctx.schema.ecrec_msmeGrantReg?.translate.question('status_first_tranche'),
+              renderQuick: (_) => {
+                return ctx.schema.ecrec_msmeGrantReg?.translate.choice('status_first_tranche', _.status_first_tranche)
+              },
+            },
+            {
+              type: 'select_one',
+              id: 'status_second_tranche',
+              head: ctx.schema.ecrec_msmeGrantReg?.translate.question('status_second_tranche'),
+              renderQuick: (_) => {
+                return ctx.schema.ecrec_msmeGrantReg?.translate.choice('status_second_tranche', _.status_second_tranche)
+              },
+            },
+            {
+              type: 'select_one',
+              id: 'business_consultancy',
+              head: ctx.schema.ecrec_msmeGrantReg?.translate.question('business_consultancy'),
+              renderQuick: (_) => {
+                return ctx.schema.ecrec_msmeGrantReg?.translate.choice('business_consultancy', _.business_consultancy)
+              },
+            },
+            {
+              type: 'select_one',
+              id: 'post_distribution',
+              head: ctx.schema.ecrec_msmeGrantReg?.translate.question('post_distribution'),
+              renderQuick: (_) => {
+                return ctx.schema.ecrec_msmeGrantReg?.translate.choice('post_distribution', _.post_distribution)
+              },
             },
           ]}
         />
