@@ -1,7 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 import type {Request, Response} from 'express'
 
-import {type ApiPaginate, ApiPaginateHelper, DrcProgram} from 'infoportal-common'
+import {type ApiPaginate, ApiPaginateHelper} from 'infoportal-common'
 import type {IKoboMeta} from 'infoportal-common/kobo/IKoboMeta'
 
 import {app, AppCacheKey} from '../../index'
