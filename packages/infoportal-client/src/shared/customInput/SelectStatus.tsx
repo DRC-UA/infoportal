@@ -149,7 +149,11 @@ export const SelectStatus = <T extends string>({
   const options: IpSelectOption<any>[] = useMemo(() => {
     return Obj.keys(status).map((_) => ({
       value: _,
-      children: <OptionLabelType type={labels[_]}>{_ as string}</OptionLabelType>,
+      children: (
+        <OptionLabelType iconFilled={iconFilled} type={labels[_]}>
+          {_ as string}
+        </OptionLabelType>
+      ),
     }))
   }, [labels, status])
   return (
@@ -182,6 +186,7 @@ export const SelectStatusBy = <
     // @ts-ignore
     <SelectStatus
       {...props}
+      iconFilled={props.enum === 'KoboValidation'}
       labels={SelectStatusConfig.customStatusToStateStatus[props.enum]}
       status={SelectStatusConfig.enumStatus[props.enum]}
     />
