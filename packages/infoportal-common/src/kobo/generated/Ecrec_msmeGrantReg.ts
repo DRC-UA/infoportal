@@ -4,14 +4,46 @@ export namespace Ecrec_msmeGrantReg {
   export interface T {
     start: string
     end: string
-    // note_hello [note] Дякуємо за інтерес до бізнес-програми Данської ради у справах біженців (ДРБ). Ця програма має на меті допомогти малим і середнім підприємствам та підприємцям подолати наслідки ескалації війни, щоб вони могли відновити або продовжити свою діяльність. Ми приймаємо заявки від підприємств та підприємців з Дніпропетровської, Херсонської, Миколаївської, Запорізької, Харківської, Сумської та Чернігівської областей. Будь ласка, заповнюйте аплікаційну форму повністю і правдиво. Ми не розглядатимемо заявки від третіх осіб або осіб, які не мають прямого відношення до бізнесу, що звертається за підтримкою. Якщо вам потрібна допомога у заповненні заявки або якщо вам щось незрозуміло, будь ласка, звертайтеся за підтримкою безпосередньо до ДРБ (контактна інформація вказана нижче). **Критерії прийнятності** Щоб претендувати на отримання бізнес-гранту, ви повинні бути зареєстрованим підприємством з макс. 20 працівників; мати щонайменше два роки досвіду роботи у вашій сфері бізнесу; сплачувати податки протягом останніх шести місяців (навіть якщо ви не мали змоги зробити це останнім часом). Вам також потрібно буде подати чіткий бізнес-план з детальним описом того, як ви будете використовувати грант, продемонструвати, що ваші продукти/послуги відповідають ринковому попиту, а також продемонструвати деякі маркетингові дослідження для обґрунтування використання гранту. Підприємство також не повинно мати жодних юридичних перешкод для отримання гранту і не повинно отримувати подібну допомогу протягом останніх шести місяців. Сума гранту залежить від розміру та бізнес-плану кожного підприємства, але не може перевищувати 5 000 доларів США. **Процес подання заявки** Будь ласка, скористайтеся можливістю повністю висловити свою мотивацію подати заявку на отримання бізнес-гранту та заповнити всю інформацію правдиво і повністю. Ваша детальна заявка дозволить нам краще зрозуміти ваші прагнення та прийняти обґрунтоване рішення. Ми маємо обмежену кількість грантів, і посилання на реєстрацію може бути закрите, якщо буде досягнуто максимальної кількості місць. Будь ласка, зверніть увагу, що подання заявки не означає, що ви автоматично отримаєте бізнес-грант, а лише те, що ваша заявка буде оцінена на основі критеріїв відбору для цієї програми. Команда DRC зв'яжеться з підприємствами, що потрапили до короткого списку, для проходження наступних етапів процесу відбору.  DRC високо цінує будь-який зворотній зв'язок щодо наших програм. Якщо у вас виникли запитання чи побажання, будь ласка, зв'яжіться з нами електронною поштою UKR-feedback@drc.ngo; або за телефоном 0 800 33 95 18 (понеділок-п'ятниця, з 9:00 до 17:00). Програма реалізується завдяки щедрій підтримці американського народу, наданій через Бюро з гуманітарної допомоги Агентства США з міжнародного розвитку (USAID).
+    // __IP__TRIGGER_EMAIL [calculate] Confirmation of Your Submission
+    __IP__TRIGGER_EMAIL: string
+    // shortlisted [select_one] Відібрано до шорт-листу
+    shortlisted: undefined | Option<'shortlisted'>
+    // cal_office [select_one] Відповідальний офіс
+    cal_office: undefined | Option<'cal_office'>
+    // vetting_status [select_one] Статус перевірки
+    vetting_status: undefined | Option<'vetting_status'>
+    // validation_visit [select_one] Валідаційний візит
+    validation_visit: undefined | Option<'validation_visit'>
+    // committee_decision [select_one] Рішення комітету
+    committee_decision: undefined | Option<'committee_decision'>
+    // cal_scoring_business [calculate] Бали фінальної оцінки
+    cal_scoring_business: string
+    // grant_agreement_upload [file] Завантаження договору про надання гранту
+    grant_agreement_upload: string
+    // status_first_tranche [select_one] Статус виконання першого траншу
+    status_first_tranche: undefined | Option<'status_first_tranche'>
+    // date_first_tranche [date] Дата першого траншу
+    date_first_tranche: Date | undefined
+    // status_second_tranche [select_one] Статус виконання другого траншу
+    status_second_tranche: undefined | Option<'status_second_tranche'>
+    // date_second_tranche [date] Дата другого траншу
+    date_second_tranche: Date | undefined
+    // business_consultancy [select_one] Бізнес консультації
+    business_consultancy: undefined | Option<'business_consultancy'>
+    // post_distribution [select_one] Подальший супровід після дистрибуції
+    post_distribution: undefined | Option<'post_distribution'>
+    // business_category [select_one] Категорія бизнеса
+    business_category: undefined | Option<'business_category'>
+    // comments_case_management [text] Коментарі
+    comments_case_management: string | undefined
+    // note_hello [note] Дякуємо за інтерес до бізнес-програми Данської ради у справах біженців (ДРБ). Ця програма має на меті допомогти малим і середнім підприємствам та підприємцям подолати наслідки ескалації війни, щоб вони могли відновити або продовжити свою діяльність. Ми приймаємо заявки від підприємств та підприємців з Дніпропетровської, Херсонської, Миколаївської, Запорізької, Харківської, Сумської та Чернігівської областей. Будь ласка, заповнюйте аплікаційну форму повністю і правдиво. Ми не розглядатимемо заявки від третіх осіб або осіб, які не мають прямого відношення до бізнесу, що звертається за підтримкою. Якщо вам потрібна допомога у заповненні заявки або якщо вам щось незрозуміло, будь ласка, звертайтеся за підтримкою безпосередньо до ДРБ (контактна інформація вказана нижче).  **Критерії прийнятності** Щоб претендувати на отримання бізнес-гранту, ви повинні бути зареєстрованим підприємством з макс. 20 працівників; мати щонайменше два роки досвіду роботи у вашій сфері бізнесу; сплачувати податки протягом останніх шести місяців (навіть якщо ви не мали змоги зробити це останнім часом). Вам також потрібно буде подати чіткий бізнес-план з детальним описом того, як ви будете використовувати грант, продемонструвати, що ваші продукти/послуги відповідають ринковому попиту, а також продемонструвати деякі маркетингові дослідження для обґрунтування використання гранту. Підприємство також не повинно мати жодних юридичних перешкод для отримання гранту і не повинно отримувати подібну допомогу протягом останніх шести місяців. Сума гранту залежить від розміру та бізнес-плану кожного підприємства, але не може перевищувати 5 000 доларів США.  **Процес подання заявки** Будь ласка, скористайтеся можливістю повністю висловити свою мотивацію подати заявку на отримання бізнес-гранту та заповнити всю інформацію правдиво і повністю. Ваша детальна заявка дозволить нам краще зрозуміти ваші прагнення та прийняти обґрунтоване рішення. Ми маємо обмежену кількість грантів, і посилання на реєстрацію може бути закрите, якщо буде досягнуто максимальної кількості місць. Будь ласка, зверніть увагу, що подання заявки не означає, що ви автоматично отримаєте бізнес-грант, а лише те, що ваша заявка буде оцінена на основі критеріїв відбору для цієї програми. Команда DRC зв'яжеться з підприємствами, що потрапили до короткого списку, для проходження наступних етапів процесу відбору.   ** Кінцевий термін подачі заявок** Будь ласка, подайте заявку до **31 січня 2025 року**. Ми очікуємо отримати велику кількість заявок. Будь ласка, наберіться терпіння, ми опрацюємо вашу заявку і повідомимо вам, чи потрапили ви до шорт-листа, протягом максимум трьох місяців.  DRC високо цінує будь-який зворотній зв'язок щодо наших програм. **Ваші скарги, звернення та пропозиції направляйте на пошту: UKR-feedback@drc.ngo або телефонуйте 0 800 33 95 18 (пн-пт 9:00-17:00).** Програма реалізується завдяки щедрій підтримці американського народу, наданій через Бюро з гуманітарної допомоги Агентства США з міжнародного розвитку (USAID).
     note_hello: string
     // consent_personal_data/date [date] Дата реєстрації
     date: Date | undefined
     // consent_personal_data/consent [select_one] Чи надаєте Ви згоду на обробку ДРБ Ваших персональних даних?
-    consent: undefined | Option<'have_other_documents'>
+    consent: undefined | Option<'company_engages_socially'>
     // consent_personal_data/business_owner [select_one] Ви є власником бізнесу, на який подаєте заявку?
-    business_owner: undefined | Option<'have_other_documents'>
+    business_owner: undefined | Option<'company_engages_socially'>
     // consent_personal_data/business_owner_no [select_one] Якщо «Ні», то чи належите Ви до однієї з наступних категорій?
     business_owner_no: undefined | Option<'business_owner_no'>
     // consent_personal_data/res_describe_role [text] Будь ласка, опишіть вашу роль
@@ -35,7 +67,7 @@ export namespace Ecrec_msmeGrantReg {
     // business_owner_details/res_stat_other [text] Якщо «Інше», будь ласка, вкажіть Ваш статус
     res_stat_other: string | undefined
     // business_owner_details/idp_certificate [select_one] Чи маєте Ви дійсну довідку ВПО?
-    idp_certificate: undefined | Option<'have_other_documents'>
+    idp_certificate: undefined | Option<'company_engages_socially'>
     // business_owner_details/gender [select_one] Ваша стать?
     gender: undefined | Option<'hh_char_hh_det_gender'>
     // business_owner_details/date_birth [date] Дата народження
@@ -58,7 +90,7 @@ export namespace Ecrec_msmeGrantReg {
     // family_details/hh_member [begin_repeat] Члени домогосподарства
     hh_member:
       | {
-          hh_char_tax_id_yn: undefined | Option<'have_other_documents'> | undefined
+          hh_char_tax_id_yn: undefined | Option<'company_engages_socially'> | undefined
           hh_char_tax_id_num: string | undefined | undefined
           taxid_weightedsum: string | undefined
           taxid_roundedsum: string | undefined
@@ -71,29 +103,29 @@ export namespace Ecrec_msmeGrantReg {
     // family_details/dis_level [select_one] Який рівень складності обраних варіантів відповідей на попередні запитання?
     dis_level: undefined | Option<'dis_level'>
     // family_details/impact_ability_household [select_one] Чи впливає щось з перерахованого вище на здатність Вашого домогосподарства займатися діяльністю, що забезпечує засоби до існування?
-    impact_ability_household: undefined | Option<'have_other_documents'>
+    impact_ability_household: undefined | Option<'company_engages_socially'>
     // family_details/household_contain_excombatants [select_one] Чи є у Вашому домогосподарстві колишні учасники бойових дій?
-    household_contain_excombatants: undefined | Option<'have_other_documents'>
+    household_contain_excombatants: undefined | Option<'company_engages_socially'>
     // family_details/many_excombatants [integer] Будь ласка, вкажіть, кількість таких осіб
     many_excombatants: number | undefined
     // family_details/certification_status_excombatants [select_one] Чи мають вони посвідчення, що підтверджують їхній статус учасника бойових дій?
-    certification_status_excombatants: undefined | Option<'have_other_documents'>
+    certification_status_excombatants: undefined | Option<'company_engages_socially'>
     // family_details/household_chronic_diseases [select_one] Чи є у Вашому домогосподарстві люди з хронічними захворюваннями, які роблять їх непрацездатними або які потребують постійного догляду?
-    household_chronic_diseases: undefined | Option<'have_other_documents'>
+    household_chronic_diseases: undefined | Option<'company_engages_socially'>
     // family_details/many_chronic_diseases [integer] Будь ласка, вкажіть, кількість таких осіб
     many_chronic_diseases: number | undefined
     // family_details/household_pregnant_that_breastfeeding [select_one] Чи є у Вашому домогосподарстві вагітні або жінки, які годують груддю?
-    household_pregnant_that_breastfeeding: undefined | Option<'have_other_documents'>
+    household_pregnant_that_breastfeeding: undefined | Option<'company_engages_socially'>
     // family_details/many_pregnant_that_breastfeeding [integer] Будь ласка, вкажіть, кількість таких осіб
     many_pregnant_that_breastfeeding: number | undefined
     // family_details/business_primary_source_income [select_one] Чи є підприємницька діяльність основним джерелом доходу домогосподарства?
-    business_primary_source_income: undefined | Option<'have_other_documents'>
+    business_primary_source_income: undefined | Option<'company_engages_socially'>
     // family_details/business_primary_source_income_no [text] Якщо «Ні», будь ласка, вкажіть, які ще джерела доходу має Ваше домогосподарство
     business_primary_source_income_no: string | undefined
     // business_details/business_name [text] Назва бізнесу
     business_name: string | undefined
     // business_details/business_type [select_one] Тип реєстрації підприємства
-    business_type: undefined | Option<'business_type'>
+    business_type: undefined | Option<'business_type_validation'>
     // business_details/business_type_other [text] Якщо «Інше», будь ласка, вкажіть
     business_type_other: string | undefined
     // business_details/enterprise_tax_id [text] Податковий номер підприємства (ЄДРПОУ)
@@ -111,7 +143,7 @@ export namespace Ecrec_msmeGrantReg {
     // business_details/date_business_registration [date] Дата реєстрації підприємства
     date_business_registration: Date | undefined
     // business_details/business_currently_operational [select_one] Чи працює Ваше підприємство зараз?
-    business_currently_operational: undefined | Option<'have_other_documents'>
+    business_currently_operational: undefined | Option<'company_engages_socially'>
     // business_details/business_currently_operational_no [text] Будь ласка, надайте додаткову інформацію, чому Ваше підприємство зараз не працює
     business_currently_operational_no: string | undefined
     // business_details/reason_pause_activity [select_multiple] Будь ласка, вкажіть причину призупинення діяльності
@@ -137,11 +169,11 @@ export namespace Ecrec_msmeGrantReg {
     // business_details/monthly_business_expenditure [integer] Які ваші середньомісячні витрати на ведення бізнесу в гривнях?
     monthly_business_expenditure: number | undefined
     // business_details/have_debt_repayment [select_one] Чи є у вас боргові зобов'язання або зобов'язання з погашення кредиту?
-    have_debt_repayment: undefined | Option<'have_other_documents'>
+    have_debt_repayment: undefined | Option<'company_engages_socially'>
     // business_details/repayment_debt_loan [select_one] Будь ласка, вкажіть, чи є у Вас затримка з виплатами за цим боргом або кредитом
-    repayment_debt_loan: undefined | Option<'have_other_documents'>
+    repayment_debt_loan: undefined | Option<'company_engages_socially'>
     // business_details/access_business_loans [select_one] Чи маєте Ви доступ до бізнес-позик або кредитів?
-    access_business_loans: undefined | Option<'have_other_documents'>
+    access_business_loans: undefined | Option<'company_engages_socially'>
     // business_details/not_access_business_loans [select_one] Якщо «Ні», то чому?
     not_access_business_loans: undefined | Option<'not_access_business_loans'>
     // business_details/not_access_business_loans_other [text] Якщо «Інше», будь ласка, вкажіть
@@ -169,13 +201,13 @@ export namespace Ecrec_msmeGrantReg {
     // business_plan/amount_implement_plan [integer] Будь ласка, вкажіть суму в гривнях, необхідну для реалізації цього бізнес-плану?
     amount_implement_plan: number | undefined
     // business_plan/able_spend_grant_6m [select_one] Зважаючи на характер проєкту, Ви повинні бути в змозі витратити грант протягом 6 місяців після його отримання, але не пізніше кінця серпня 2025 року. Чи можете Ви підтвердити, що зможете це зробити?
-    able_spend_grant_6m: undefined | Option<'have_other_documents'>
+    able_spend_grant_6m: undefined | Option<'company_engages_socially'>
     // business_plan/about_market_research [text] Розкажіть, будь ласка, трохи більше про дослідження ринку, яке ви провели для підтримки вашого бізнес-плану? Це має включати інформацію про (потенційних) конкурентів
     about_market_research: string | undefined
     // business_plan/creating_additional_jobs [select_one] Чи плануєте ви створити додаткові робочі місця в рамках Вашого бізнес-плану?
-    creating_additional_jobs: undefined | Option<'have_other_documents'>
+    creating_additional_jobs: undefined | Option<'company_engages_socially'>
     // business_plan/received_previous_support [select_one] Чи отримував ваш бізнес будь-яку раніше підтримку від уряду, неурядових організацій або інших суб'єктів?
-    received_previous_support: undefined | Option<'have_other_documents'>
+    received_previous_support: undefined | Option<'company_engages_socially'>
     // business_plan/who_previous_support [select_one] Хто надавав цю підтримку?
     who_previous_support: undefined | Option<'who_previous_support'>
     // business_plan/who_previous_support_other [text] Якщо «Інше», будь ласка, вкажіть
@@ -184,16 +216,16 @@ export namespace Ecrec_msmeGrantReg {
     amount_previous_support: number | undefined
     // business_plan/when_previous_support [date] Коли вона була надана?
     when_previous_support: Date | undefined
-    // business_consultancy/topic_business_consultancy [select_multiple] Частина грантової підтримки, що надається обраним підприємствам, включає 5 годин бізнес-консультацій. Будь ласка, вкажіть тему(и), якій(им) ви надаєте перевагу під час консультації. Будь ласка, зверніть увагу, що ви не зможете отримати консультацію на обрану вами тему, і що, швидше за все, ви зможете отримати консультацію лише в одній конкретній сфері.
+    // business_consultancy_001/topic_business_consultancy [select_multiple] Частина грантової підтримки, що надається обраним підприємствам, включає 5 годин бізнес-консультацій. Будь ласка, вкажіть тему(и), якій(им) ви надаєте перевагу під час консультації. Будь ласка, зверніть увагу, що ви не зможете отримати консультацію на обрану вами тему, і що, швидше за все, ви зможете отримати консультацію лише в одній конкретній сфері.
     topic_business_consultancy: undefined | Option<'topic_business_consultancy'>[]
-    // business_consultancy/topic_business_consultancy_other [text] Якщо «Інше», будь ласка, вкажіть
+    // business_consultancy_001/topic_business_consultancy_other [text] Якщо «Інше», будь ласка, вкажіть
     topic_business_consultancy_other: string | undefined
     // comments_documents/file_tax_statement [file] Будь ласка, додайте податкову декларацію, яка показує податкові платежі (як мінімум) за останні шість місяців
     file_tax_statement: string
     // comments_documents/file_business_document [file] Свідоцтво про державну реєстрацію бізнесу або виписка з Єдиного державного реєстру
     file_business_document: string
     // comments_documents/have_other_documents [select_one] Чи є у вас ще якісь документи, якими ви хотіли б поділитися з нами?
-    have_other_documents: undefined | Option<'have_other_documents'>
+    have_other_documents: undefined | Option<'company_engages_socially'>
     // comments_documents/other_documents1 [file] Додайте більше фотографій/документів
     other_documents1: string
     // comments_documents/other_documents2 [file] Додайте більше фотографій/документів
@@ -212,9 +244,145 @@ export namespace Ecrec_msmeGrantReg {
     hear_program_other: string | undefined
     // not_thank [note] **Дякуємо, що знайшли час, щоб надати цю інформацію. Якщо ви натиснете кнопку «Надіслати», ми успішно отримаємо вашу заявку. Ми повідомимо вас про результат і будь-які подальші кроки (якщо такі будуть) протягом трьох місяців.  (але, сподіваємось, раніше)**
     not_thank: string
+    // verification_information/date_visit [date] Дата візиту
+    date_visit: Date | undefined
+    // verification_information/enumerator_name [text] Відповідальна особа
+    enumerator_name: string | undefined
+    // verification_information/business_name_validation [text] Назва підприємства
+    business_name_validation: string | undefined
+    // verification_information/business_type_validation [select_one] Тип бізнесу
+    business_type_validation: undefined | Option<'business_type_validation'>
+    // verification_information/business_type_validation_other [text] Якщо інше, будь ласка, поясніть
+    business_type_validation_other: string | undefined
+    // verification_information/validation_visit_001 [select_one] Як проходив перевірочний візит:
+    validation_visit_001: undefined | Option<'validation_visit_001'>
+    // verification_information/business_premises [select_one] Чи має підприємство приміщення?
+    business_premises: undefined | Option<'company_engages_socially'>
+    // verification_information/business_premises_no [select_one] Якщо ні, то чому?
+    business_premises_no: undefined | Option<'business_premises_no'>
+    // verification_information/business_premises_no_other [text] Якщо інше, будь ласка, поясніть
+    business_premises_no_other: string | undefined
+    // verification_information/primary_goods_services [select_multiple] Основні товари або послуги, які пропонує бізнес
+    primary_goods_services: undefined | Option<'primary_goods_services'>[]
+    // verification_information/primary_goods_services_other [text] Якщо інше, будь ласка, поясніть
+    primary_goods_services_other: string | undefined
+    // verification_information/ownership_details [text] Інформація про власника
+    ownership_details: string | undefined
+    // verification_information/years_experience [integer] Роки досвіду роботи
+    years_experience: number | undefined
+    // verification_information/number_employees [integer] Кількість співробітників
+    number_employees: number | undefined
+    // verification_information/currently_operational [select_one] Наразі працює
+    currently_operational: undefined | Option<'company_engages_socially'>
+    // verification_information/business_have_assets [select_one] Якщо бізнес не працює, чи збереглися його активи?
+    business_have_assets: undefined | Option<'company_engages_socially'>
+    // verification_information/protection_risk_employees [select_one] Ризик захисту працівників?
+    protection_risk_employees: undefined | Option<'company_engages_socially'>
+    // verification_information/confirm_not_working_sectors [select_multiple] Якщо можливо, підтвердіть, що вони не працюють у наступних секторах, які не можуть розглядатися для виділення грантів.
+    confirm_not_working_sectors: undefined | Option<'confirm_not_working_sectors'>[]
+    // verification_information/photos_premises1 [image] Фотографії приміщень
+    photos_premises1: string
+    // verification_information/photos_premises2 [image] Фотографії приміщень
+    photos_premises2: string
+    // verification_information/photos_premises3 [image] Фотографії приміщень
+    photos_premises3: string
+    // verification_information/photos_premises4 [image] Фотографії приміщень
+    photos_premises4: string
+    // verification_information/photos_premises5 [image] Фотографії приміщень
+    photos_premises5: string
+    // verification_information/photos_premises6 [image] Фотографії приміщень
+    photos_premises6: string
+    // verification_information/photos_premises7 [image] Фотографії приміщень
+    photos_premises7: string
+    // verification_information/photos_premises8 [image] Фотографії приміщень
+    photos_premises8: string
+    // verification_information/photos_premises9 [image] Фотографії приміщень
+    photos_premises9: string
+    // verification_information/photos_premises10 [image] Фотографії приміщень
+    photos_premises10: string
+    // verification_information/company_engages_socially [select_one] На основі вашого візиту на підприємство, чи вважаєте ви, що ця компанія займається соціально та екологічно відповідальним підприємництвом?
+    company_engages_socially: undefined | Option<'company_engages_socially'>
+    // verification_information/comments_001 [text] Будь-які інші коментарі/зауваження
+    comments_001: string | undefined
+    // verification_information/comments_authorities_community [text] Будь-які коментарі/спостереження з боку органів влади або членів громади щодо підприємства
+    comments_authorities_community: string | undefined
+    // scoring_business/scor_use_grant [integer] Грант буде використано для пом'якшення або подолання шоку, спричиненого ескалацією конфлікту.
+    scor_use_grant: number | undefined
+    // scoring_business/com_scor_use_grant [text] Коментар до попереднього запитання
+    com_scor_use_grant: string | undefined
+    // scoring_business/scor_plan_clearly [integer] Бізнес-план чітко сформульований, обґрунтований та відповідає ринковому попиту.
+    scor_plan_clearly: number | undefined
+    // scoring_business/com_scor_plan_clearly [text] Коментар до попереднього запитання
+    com_scor_plan_clearly: string | undefined
+    // scoring_business/scor_compete_market [integer] Бізнес може конкурувати на ринку
+    scor_compete_market: number | undefined
+    // scoring_business/com_scor_compete_market [text] Коментар до попереднього запитання
+    com_scor_compete_market: string | undefined
+    // scoring_business/scor_financially_healthy [integer] Бізнес є фінансово спроможним
+    scor_financially_healthy: number | undefined
+    // scoring_business/com_scor_financially_healthy [text] Коментар до попереднього запитання
+    com_scor_financially_healthy: string | undefined
+    // scoring_business/scor_business_owner [integer] Власник/ця бізнесу має значний і відповідний технічний та підприємницький досвід для реалізації бізнес-плану
+    scor_business_owner: number | undefined
+    // scoring_business/com_scor_business_owner [text] Коментар до попереднього запитання
+    com_scor_business_owner: string | undefined
+    // scoring_business/scor_spent_sustainably [integer] Грант буде витрачено раціонально
+    scor_spent_sustainably: number | undefined
+    // scoring_business/com_scor_spent_sustainably [text] Коментар до попереднього запитання
+    com_scor_spent_sustainably: string | undefined
+    // scoring_business/scor_owner_degree [integer] Домогосподарство власника/ці бізнесу демонструє високий ступінь вразливості
+    scor_owner_degree: number | undefined
+    // scoring_business/com_scor_owner_degree [text] Коментар до попереднього запитання
+    com_scor_owner_degree: string | undefined
   }
+
   export const options = {
-    have_other_documents: {
+    shortlisted: {
+      yes: `✅ Так`,
+      no: `❌ Ні`,
+      deduplication: `⚠️ Дедуплікація`,
+      pending: `🕓 Очікує на розгляд`,
+    },
+    vetting_status: {
+      completed: `✅ Завершено`,
+      ongoing: `🕓 Триває`,
+      rejected: `❌ Відхилено`,
+    },
+    validation_visit: {
+      completed: `✅ Завершено`,
+      rejected: `❌ Відхилено`,
+      follow_up_required: `🕓 Потрібні подальші дії`,
+    },
+    committee_decision: {
+      approved: `✅ Затверджено`,
+      rejected: `❌ Відхилено`,
+      waiting_list: `🕓 Очікується лист`,
+    },
+    status_first_tranche: {
+      done: `✅ Виконано`,
+      pending: `🕓 На розгляді`,
+      only_first_tranche: `❎ Тільки перший транш`,
+    },
+    status_second_tranche: {
+      done: `✅ Виконано`,
+      pending: `🕓 На розгляді`,
+      na: `❎ N/A`,
+    },
+    business_consultancy: {
+      done: `✅ Виконано`,
+      ongoing: `🕓 Триває`,
+      rejected: `❌ Відхилено`,
+    },
+    post_distribution: {
+      completed: `✅ Завершено`,
+      ongoing: `🕓 Триває`,
+    },
+    business_category: {
+      rank1: `Rank 1`,
+      rank2: `Rank 2`,
+      rank3: `Rank 3`,
+    },
+    company_engages_socially: {
       yes: `Так`,
       no: `Ні`,
     },
@@ -246,17 +414,26 @@ export namespace Ecrec_msmeGrantReg {
       two: `Так, багато труднощів`,
       fri: `Взагалі не можу(-е) робити`,
     },
+    cal_office: {
+      kharkiv: `Харків`,
+      dnipro: `Дніпро`,
+      mykovaiv: `Миколаїв`,
+      chernihiv: `Chernihiv`,
+      sumy: `Sumy`,
+    },
     confirm_receive_grant: {
       myself: `Я`,
       someone_else: `Хтось інший`,
     },
-    business_type: {
+    business_type_validation: {
       fop1: `ФОП 1`,
       fop2: `ФОП 2`,
       fop3: `ФОП 3`,
       fop4: `ФОП 4`,
+      entrepreneurs: `Підприємці на загальній системі оподаткування`,
       llc: `ТОВ`,
       farming_enterprise: `Фермерське господарство`,
+      family_farming_enterprise: `Сімейне фермерське господарство`,
       other: `Інше`,
     },
     reason_pause_activity: {
@@ -347,6 +524,41 @@ export namespace Ecrec_msmeGrantReg {
       local_authorities: `Місцеві органи влади`,
       employment_centre: `Центр зайнятості`,
       other: `Інші`,
+    },
+    primary_goods_services: {
+      agro_processing: `Переробка сільськогосподарської продукції`,
+      agriculture: `Сільське господарство (рослинництво та/або тваринництво)`,
+      transport_services: `Транспортні послуги`,
+      construction: `Будівництво`,
+      food_services: `Харчові послуги`,
+      electrical: `Електрика`,
+      mechanics: `Механіка`,
+      plumber: `Сантехнік`,
+      petty_trade: `Дрібна торгівля`,
+      retail_wholesale: `Роздрібна та оптова торгівля`,
+      sewing_shoe_repair: `Пошиття / ремонт взуття`,
+      small_manufacturing: `Мале виробництво`,
+      hairdressing: `Перукарня/барбер`,
+      it: `ІТ`,
+      other: `Інше`,
+    },
+    confirm_not_working_sectors: {
+      weapons_ammunition: `Виробництво або торгівля зброєю та боєприпасами`,
+      alcoholic_beverages: `Виробництво або торгівля алкогольними напоями (за винятком супермаркетів або продуктових магазинів, які продають алкоголь серед інших товарів)`,
+      tobacco_products: `Виробництво або торгівля тютюновими виробами (за винятком супермаркетів або продуктових магазинів, які продають тютюнові вироби серед інших товарів)`,
+      radioactive_materials: `Виробництво або торгівля радіоактивними матеріалами`,
+      unbound_asbestos_fibres: `Виробництво, торгівля або використання незв'язаних азбестових волокон.`,
+      pesticides_herbicides: `Виробництво або торгівля пестицидами/гербіцидами`,
+      illegal_harmful_activities: `Компанії підтримують будь-яку незаконну та/або шкідливу діяльність і сприяють забрудненню навколишнього середовища.`,
+    },
+    validation_visit_001: {
+      in_person: `Особисто`,
+      remotely: `Дистанційно`,
+    },
+    business_premises_no: {
+      relocated: `Підприємство змінило місцезнаходження`,
+      online: `Підприємство працює онлайн`,
+      other: `Інше`,
     },
     oblast: {
       dnipropetrovska: `Дніпропетровська`,
@@ -2274,6 +2486,8 @@ export namespace Ecrec_msmeGrantReg {
   export const map = (_: Record<keyof T, any>): T =>
     ({
       ..._,
+      date_first_tranche: _.date_first_tranche ? new Date(_.date_first_tranche) : undefined,
+      date_second_tranche: _.date_second_tranche ? new Date(_.date_second_tranche) : undefined,
       date: _.date ? new Date(_.date) : undefined,
       date_birth: _.date_birth ? new Date(_.date_birth) : undefined,
       age: _.age ? +_.age : undefined,
@@ -2311,5 +2525,17 @@ export namespace Ecrec_msmeGrantReg {
       amount_previous_support: _.amount_previous_support ? +_.amount_previous_support : undefined,
       when_previous_support: _.when_previous_support ? new Date(_.when_previous_support) : undefined,
       topic_business_consultancy: _.topic_business_consultancy?.split(' '),
+      date_visit: _.date_visit ? new Date(_.date_visit) : undefined,
+      primary_goods_services: _.primary_goods_services?.split(' '),
+      years_experience: _.years_experience ? +_.years_experience : undefined,
+      number_employees: _.number_employees ? +_.number_employees : undefined,
+      confirm_not_working_sectors: _.confirm_not_working_sectors?.split(' '),
+      scor_use_grant: _.scor_use_grant ? +_.scor_use_grant : undefined,
+      scor_plan_clearly: _.scor_plan_clearly ? +_.scor_plan_clearly : undefined,
+      scor_compete_market: _.scor_compete_market ? +_.scor_compete_market : undefined,
+      scor_financially_healthy: _.scor_financially_healthy ? +_.scor_financially_healthy : undefined,
+      scor_business_owner: _.scor_business_owner ? +_.scor_business_owner : undefined,
+      scor_spent_sustainably: _.scor_spent_sustainably ? +_.scor_spent_sustainably : undefined,
+      scor_owner_degree: _.scor_owner_degree ? +_.scor_owner_degree : undefined,
     }) as T
 }
