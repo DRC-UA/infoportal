@@ -112,7 +112,7 @@ export class Server {
         },
       }),
     )
-    app.use(bodyParser.json({limit: '50mb'}))
+    app.use(bodyParser.json({limit: '512mb'}))
     app.use(bodyParser.urlencoded({extended: false}))
     app.use(
       getRoutes(
