@@ -17,6 +17,7 @@
     "files": true
   },
   "include": ["src"],
+  "exclude": ["src/output"],
   "references": [
     {
       "path": "../infoportal-common"
