@@ -1,44 +1,19 @@
-import {Project, SourceFile, VariableDeclarationKind} from 'ts-morph'
-import {capitalize} from 'infoportal-common'
-import {AiBuilder} from './AiBuilder'
-import {AiParsedSchema} from './AiBuilderSchemaParser'
 import {fnSwitch} from '@alexandreannic/ts-utils'
-import * as prettier from 'prettier'
+import {capitalize} from 'infoportal-common'
+import {AiParsedSchema} from './AiBuilderSchemaParser'
+import {AiBuilder} from './AiBuilder'
 import * as fs from 'node:fs'
+import * as prettier from 'prettier'
+import path from 'node:path'
 import {appConf} from '../appConf'
-import * as path from 'node:path'
 
 export class AiBuilderFileMaker {
   constructor(
     private args: AiBuilder.Args,
     private parsedForm: AiParsedSchema[],
     private parsedSubForm?: AiParsedSchema[],
-    private project = new Project({
-      compilerOptions: {
-        noEmitOnError: false,
-      },
-    }),
     private conf = appConf,
   ) {}
-
-  async print(outDir: string) {
-    const fileName = `AiType${capitalize(this.args.name)}.ts`
-    const filePath = `${outDir}/${fileName}`
-    console.log(`Generating into ${filePath}`)
-
-    const sourceFile = this.project.createSourceFile(filePath, '', {overwrite: true})
-
-    this.generateNamespace(sourceFile, this.parsedForm)
-    if (this.parsedSubForm && this.parsedSubForm.length > 0) {
-      this.generateNamespace(sourceFile, this.parsedSubForm, 'sub')
-    }
-    try {
-      fs.writeFileSync(filePath, await this.formatCode(sourceFile.getFullText()))
-    } catch (e) {
-      console.log(`${this.args.name} contains error.`)
-      fs.writeFileSync(filePath, sourceFile.getFullText())
-    }
-  }
 
   private readonly formatCode = async (textContent: string): Promise<string> => {
     const prettierConfig = await prettier.resolveConfig(path.join(this.conf.rootProjectDir, '../../.prettierrc'))
@@ -48,91 +23,85 @@ export class AiBuilderFileMaker {
     })
   }
 
-  private generateNamespace(sourceFile: SourceFile, d: AiParsedSchema[], prefix = '') {
-    const namespaceName = `AiType${capitalize(prefix)}`
-    const namespaceDeclaration = sourceFile.addModule({name: namespaceName, isExported: true})
+  readonly make = async (outDir: string) => {
+    const filePath = outDir + '/AiType' + capitalize(this.args.name) + '.ts'
+    console.log(`Generate into ${filePath}`)
 
-    namespaceDeclaration.addTypeAlias({
-      name: `Opt${capitalize(prefix)}<T extends keyof typeof options${capitalize(prefix)}>`,
-      type: `keyof (typeof options${capitalize(prefix)})[T]`,
-    })
+    const textContent = [
+      `export namespace AiType${capitalize(this.args.name)} {`,
+      this.makeInterface(this.parsedForm),
+      this.makeMappingFunction(this.parsedForm),
+      this.makeChoices(this.parsedForm),
+      ...(this.parsedSubForm && this.parsedSubForm.length > 0
+        ? [
+            this.makeInterface(this.parsedSubForm, 'sub'),
+            this.makeMappingFunction(this.parsedSubForm, 'sub'),
+            this.makeChoices(this.parsedSubForm, 'sub'),
+          ]
+        : []),
+      '}',
+    ].join('\n\n')
 
-    namespaceDeclaration.addInterface({
-      name: `Type${capitalize(prefix)}`,
-      isExported: true,
-      properties: d.map((q) => ({
-        name: `'${q.label}'`,
-        hasQuestionToken: !q.required,
-        type: this.getType(q, prefix),
-      })),
-    })
-
-    namespaceDeclaration.addVariableStatement({
-      declarationKind: VariableDeclarationKind.Const,
-      isExported: true,
-      declarations: [
-        {
-          name: `options${capitalize(prefix)}`,
-          initializer: this.generateOptions(d, prefix),
-        },
-      ],
-    })
-
-    namespaceDeclaration.addVariableStatement({
-      declarationKind: VariableDeclarationKind.Const,
-      isExported: true,
-      declarations: [
-        {
-          name: `map${capitalize(prefix)}`,
-          initializer: this.generateMappingFn(d, prefix),
-        },
-      ],
-    })
+    try {
+      fs.writeFileSync(filePath, await this.formatCode(textContent))
+    } catch (e) {
+      console.log(`${this.args.name} contains error.`)
+      fs.writeFileSync(filePath, textContent)
+    }
   }
 
-  private generateOptions(d: AiParsedSchema[], prefix = ''): string {
-    return `{
-      ${d
-        .filter((q) => q.options)
-        .map(
-          (q) => `'${q.label}': {
-        ${q.options?.map((o) => `'${o.label}': '${o.id}'`).join(',\n')}
-      }`,
-        )
-        .join(',\n')}
-    }`
+  readonly makeChoices = (d: AiParsedSchema[], prefix = '') => {
+    return [
+      `export const options${capitalize(prefix)} = {`,
+      d
+        .filter((_) => !!_.options)
+        .map((q) => `${q.code}: { ${q.options?.map((o) => `"${o.label}": '${o.id}'`).join(',\n    ')}}`)
+        .join(',\n'),
+      '}',
+    ].join('\n')
   }
 
-  private generateMappingFn = (d: AiParsedSchema[], prefix = '') => {
-    return (
-      `(a: Type${capitalize(prefix)}) => ({\n` +
+  readonly makeMappingFunction = (d: AiParsedSchema[], prefix = '') => {
+    return [
+      `export const map${capitalize(prefix)} = (a: Type${capitalize(prefix)}) => ({`,
       d
         .map((q) => {
           const mapValue = fnSwitch(
             q.type,
             {
-              enumerated: () => {
-                return `options${capitalize(prefix)}['${q.label}'][a['${q.label}']!]`
-              },
-              reference: () => {
-                return `'${q.optionsId}' + ':' + options${capitalize(prefix)}['${q.label}'][a['${q.label}']!]`
-              },
+              enumerated: () => `options${capitalize(prefix)}['${q.label}'][a['${q.label}']!]`,
+              reference: () => `'${q.optionsId}' + ':' + options${capitalize(prefix)}['${q.label}'][a['${q.label}']!]`,
             },
             (_) => `a['${q.label}']`,
           )
           return `  '${q.id}': a['${q.label}'] === undefined ? undefined : ${mapValue}`
         })
-        .join(',\n') +
-      '\n})'
-    )
+        .join(',\n'),
+      '})',
+    ].join('\n')
+  }
+
+  readonly makeInterface = (d: AiParsedSchema[], prefix = '') => {
+    return [
+      `type Opt${capitalize(prefix)}<T extends keyof typeof options${capitalize(prefix)}> = keyof (typeof options${capitalize(prefix)})[T]`,
+      `export interface Type${capitalize(prefix)}`,
+      '{',
+      d
+        .flatMap((q) => [
+          `/**\n\t\t\t${q.label}${q.description ? '\n\t\t\t' + q.description.replaceAll(/\s/g, ' ') : ''}\n\t\t*/`,
+          `${q.code}${q.required ? '' : '?'}: ${this.getType(q, prefix)}`,
+        ])
+        .join('\n'),
+      '}',
+    ].join('\n')
   }
 
   private getType(q: AiParsedSchema, prefix: string): string {
     return fnSwitch(
       q.type,
       {
-        reference: `Opt${capitalize(prefix)}<'${q.label}'>`,
-        enumerated: `Opt${capitalize(prefix)}<'${q.label}'>`,
+        reference: `Opt${capitalize(prefix)}<'${q.code}'>`,
+        enumerated: `Opt${capitalize(prefix)}<'${q.code}'>`,
         quantity: 'number',
       },
       (_) => 'string',

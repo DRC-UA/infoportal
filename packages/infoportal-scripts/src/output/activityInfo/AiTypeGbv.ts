@@ -1,18 +1,52 @@
 export namespace AiTypeGbv {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
-    ID?: string
-    'Reporting Organization': Opt<'Reporting Organization'>
-    'Implementing Partner'?: string
-    'Implementing Partner 2'?: string
-    'Plan/Project Code': Opt<'Plan/Project Code'>
-    Oblast: Opt<'Oblast'>
-    Raion: string
-    Hromada: string
-    Settlement?: string
-    'Collective Site'?: string
-    'Response Theme': Opt<'Response Theme'>
+    /**
+			ID
+		*/
+    RMM_ID?: string
+    /**
+			Reporting Organization
+		*/
+    org_rep: Opt<'org_rep'>
+    /**
+			Implementing Partner
+			If applicable
+		*/
+    org_imp1?: string
+    /**
+			Implementing Partner 2
+			Add another Implementing Partner if applicable
+		*/
+    org_imp2?: string
+    /**
+			Plan/Project Code
+		*/
+    plan_code: Opt<'plan_code'>
+    /**
+			Oblast
+		*/
+    adm1: Opt<'adm1'>
+    /**
+			Raion
+		*/
+    adm2: string
+    /**
+			Hromada
+		*/
+    adm3: string
+    /**
+			Settlement
+		*/
+    adm4?: string
+    /**
+			Collective Site
+		*/
+    cs?: string
+    /**
+			Response Theme
+		*/
+    theme: Opt<'theme'>
   }
 
   export const map = (a: Type) => ({
@@ -37,10 +71,8 @@ export namespace AiTypeGbv {
   })
 
   export const options = {
-    'Reporting Organization': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    'Plan/Project Code': {
+    org_rep: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    plan_code: {
       'GBV-DRC-00001': 'c10nfqbls2wqyvg2',
       'GBV-DRC-00002': 'co0svlsls2x3ndr3',
       'GBV-DRC-00003': 'cftn5bgls2xbfl14',
@@ -49,7 +81,7 @@ export namespace AiTypeGbv {
       'GBV-DRC-00006': 'cujyq82lx8vzpq17',
       'GBV-DRC-00007': 'cd2wcsflx8w67gb8',
     },
-    Oblast: {
+    adm1: {
       'Autonomous Republic of Crimea_Автономна Республіка Крим': 'c5c2sr3lq3kjj6gd',
       Cherkaska_Черкаська: 'clbgltvlq3kjj6he',
       Chernihivska_Чернігівська: 'c7jz1shlq3kjj6hf',
@@ -78,44 +110,141 @@ export namespace AiTypeGbv {
       Zaporizka_Запорізька: 'cmqvx7elq3kjj6h12',
       Zhytomyrska_Житомирська: 'c51dllnlq3kjj6h13',
     },
-    'Response Theme': {
-      'No specific theme': 'c40c4vklqf3085j55',
-    },
+    theme: {'No specific theme': 'c40c4vklqf3085j55'},
   }
 
   type OptSub<T extends keyof typeof optionsSub> = keyof (typeof optionsSub)[T]
-
   export interface TypeSub {
-    'Reporting Month': string
-    'Population Group': OptSub<'Population Group'>
-    'Type of beneficiaries'?: OptSub<'Type of beneficiaries'>
-    Indicators: OptSub<'Indicators'>
-    'Total Individuals Reached': number
-    'Girls (0-17)': number
-    'Boys (0-17)': number
-    'Adult Women (18-59)': number
-    'Adult Men (18-59)': number
-    'Older Women (60+)': number
-    'Older Men (60+)': number
-    'Non-individuals Reached/Quantity': number
-    'People with Disability'?: number
-    'Basic/Essential': number
-    Elderly: number
-    Winter: number
-    Other: number
-    'Type of distribution': OptSub<'Type of distribution'>
-    'Who distributed the kits?': OptSub<'Who distributed the kits?'>
-    'Dignity kits in stock?': OptSub<'Dignity kits in stock?'>
-    'Basic/Essential': number
-    Elderly: number
-    Winter: number
-    'Other kits in stock': number
-    'Current status of stock': OptSub<'Current status of stock'>
-    'Any assessment/feedback done/collected on post distribution of kits?': OptSub<'Any assessment/feedback done/collected on post distribution of kits?'>
-    'Was the service provided to evacuees?'?: OptSub<'Was the service provided to evacuees?'>
-    'How many evacuees received the service?'?: number
-    'HNRP Scope'?: OptSub<'HNRP Scope'>
-    'Outside HNRP Scope sub-categories'?: OptSub<'Outside HNRP Scope sub-categories'>
+    /**
+			Reporting Month
+		*/
+    month_rep: string
+    /**
+			Population Group
+		*/
+    popgroup: OptSub<'popgroup'>
+    /**
+			Type of beneficiaries
+			New beneficiary - is a person who receives a service for the first time.  Repeated beneficiary - is a person who receives the same service multiple times.
+		*/
+    type_benef?: OptSub<'type_benef'>
+    /**
+			Indicators
+		*/
+    indicator: OptSub<'indicator'>
+    /**
+			Total Individuals Reached
+		*/
+    ind_total: number
+    /**
+			Girls (0-17)
+		*/
+    ind_girls: number
+    /**
+			Boys (0-17)
+		*/
+    ind_boys: number
+    /**
+			Adult Women (18-59)
+		*/
+    ind_adwomen: number
+    /**
+			Adult Men (18-59)
+		*/
+    ind_admen: number
+    /**
+			Older Women (60+)
+		*/
+    ind_oldwomen: number
+    /**
+			Older Men (60+)
+		*/
+    ind_oldmen: number
+    /**
+			Non-individuals Reached/Quantity
+		*/
+    nonind: number
+    /**
+			People with Disability
+			Out of the total individuals reached
+		*/
+    ind_pwd?: number
+    /**
+			Basic/Essential
+			Please enter the number of Basic/Essential dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".
+		*/
+    basic_essen: number
+    /**
+			Elderly
+			Please enter the number of Elderly dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".
+		*/
+    elderl: number
+    /**
+			Winter
+			Please enter the number of Winter dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".
+		*/
+    winter_kit: number
+    /**
+			Other
+			Please enter the number of Other dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".
+		*/
+    other_kit: number
+    /**
+			Type of distribution
+		*/
+    distr_type: OptSub<'distr_type'>
+    /**
+			Who distributed the kits?
+		*/
+    who_distr_k: OptSub<'who_distr_k'>
+    /**
+			Dignity kits in stock?
+		*/
+    dk_stock: OptSub<'dk_stock'>
+    /**
+			Basic/Essential
+			Please enter the number of Basic/Essential dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".
+		*/
+    basic_stock: number
+    /**
+			Elderly
+			Please enter the number of Elderly dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".
+		*/
+    elderly_stock: number
+    /**
+			Winter
+			Please enter the number of Winter dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".
+		*/
+    winter_stock: number
+    /**
+			Other kits in stock
+			Please enter the number of Other dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".
+		*/
+    other_stock: number
+    /**
+			Current status of stock
+		*/
+    stock_status: OptSub<'stock_status'>
+    /**
+			Any assessment/feedback done/collected on post distribution of kits?
+		*/
+    post_distrib: OptSub<'post_distrib'>
+    /**
+			Was the service provided to evacuees?
+		*/
+    evacuees?: OptSub<'evacuees'>
+    /**
+			How many evacuees received the service?
+		*/
+    many_evac?: number
+    /**
+			HNRP Scope
+		*/
+    hnrp_scope?: OptSub<'hnrp_scope'>
+    /**
+			Outside HNRP Scope sub-categories
+		*/
+    outscope_type?: OptSub<'outscope_type'>
   }
 
   export const mapSub = (a: TypeSub) => ({
@@ -188,16 +317,13 @@ export namespace AiTypeGbv {
   })
 
   export const optionsSub = {
-    'Population Group': {
+    popgroup: {
       'Internally Displaced': 'cvw4on6lq6dgcoj5',
       'Non-Displaced': 'ck6ulx8lq6dgcok6',
       Returnees: 'cuz9qi9lq6dgcok7',
     },
-    'Type of beneficiaries': {
-      'New beneficiaries': 'clxysqflslppffd5',
-      'Repeated beneficiaries': 'cv19gg2lslpptjy7',
-    },
-    Indicators: {
+    type_benef: {'New beneficiaries': 'clxysqflslppffd5', 'Repeated beneficiaries': 'cv19gg2lslpptjy7'},
+    indicator: {
       '# of individuals supported with GBV case management that meet GBViE minimum standards': 'c296s26lqmgu66ul',
       '# of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE standards (not including recreational activities)':
         'c5q9o3xlqmgu66um',
@@ -225,41 +351,33 @@ export namespace AiTypeGbv {
         'c5zjdi5lqmgu66u14',
       '# of GBV advocacy interventions undertaken with decision-makers and communities': 'c3ufluolqmgu66u15',
     },
-    'Type of distribution': {
+    distr_type: {
       'Via convoys': 'csct9jvlz6vk00d2',
       'Through static centers': 'cenbkqlz6vlilq4',
       'Through mobile teams or door-to-door': 'cw0jeaclz6vluuk5',
     },
-    'Who distributed the kits?': {
+    who_distr_k: {
       'Employees/staff/volunteers of the reporting organization': 'crm2lwdlz6voilh6',
       'Employees/staff/volunteers of the implementing organization': 'cspb9mblz6vpwbb8',
       'Community volunteers': 'ck9eujklz6vqqik9',
       'Local authority': 'crbln39lz6vqw1ca',
     },
-    'Dignity kits in stock?': {
-      Yes: 'c9z4jlglz9rrvop2',
-      No: 'c10f080lz9rteeo4',
-    },
-    'Current status of stock': {
+    dk_stock: {Yes: 'c9z4jlglz9rrvop2', No: 'c10f080lz9rteeo4'},
+    stock_status: {
       Procured: 'cnvgyiolz9s9v7ce',
       'Outside of country': 'c9n9kmhlz9scej7g',
       'Currently in transit to Ukraine': 'c5l0hsolz9scn45h',
       'In location in Ukraine': 'cciatn6lz9sczv5i',
     },
-    'Any assessment/feedback done/collected on post distribution of kits?': {
+    post_distrib: {
       'No assessments planned/done': 'cbw8wg8lz9sg86uj',
       'An assessment is planned or ongoing': 'ceijherlz9sjt21l',
       'Assessment completed – report currently being drafted/finalized': 'cfa27folz9sk1olm',
       'Assessment completed – report is ready (please share with GBV AoR team)': 'cwy2y3wlz9sk7hzn',
     },
-    'Was the service provided to evacuees?': {
-      Yes: 'cuieqxklt6ysqm62',
-      No: 'cw6e6s4lt6z214r4',
-    },
-    'HNRP Scope': {
-      'Outside HNRP Scope': 'c8fdrbqlw6fmedx2',
-    },
-    'Outside HNRP Scope sub-categories': {
+    evacuees: {Yes: 'cuieqxklt6ysqm62', No: 'cw6e6s4lt6z214r4'},
+    hnrp_scope: {'Outside HNRP Scope': 'c8fdrbqlw6fmedx2'},
+    outscope_type: {
       'Outside priority areas': 'cvf0ba4lw6fucqv4',
       'Funding not reported in FTS​': 'c7cah40lw6fula95',
       'Delivered outside HNRP​ mechanism': 'cj4y1s3lw6furva6',

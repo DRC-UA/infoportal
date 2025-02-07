@@ -1,42 +1,148 @@
 export namespace AiTypeMpca {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
-    'Reporting Organization': Opt<'Reporting Organization'>
-    'Implementing Partner': Opt<'Implementing Partner'>
-    'Activity Plan Code': Opt<'Activity Plan Code'>
-    Donor: string
-    'Indicators - MPCA'?: Opt<'Indicators - MPCA'>
-    'Total amount (USD) distributed through multi-purpose cash assistance': number
-    'Payments Frequency': Opt<'Payments Frequency'>
-    'Targeting Framework': Opt<'Targeting Framework'>
-    'Financial Service Provider (FSP)': Opt<'Financial Service Provider (FSP)'>
-    'Response Theme': Opt<'Response Theme'>
-    Raion?: string
-    Hromada: string
-    Settlement?: string
-    'Collective Site'?: string
-    'Reporting Month': string
-    'Activity Start Month'?: string
-    'Activity End Month'?: string
-    'Number of Covered Months': Opt<'Number of Covered Months'>
-    'Population Group': Opt<'Population Group'>
-    'Total Individuals Reached': number
-    'Girls (0-17)': number
-    'Boys (0-17)': number
-    'Adult Women (18-59)': number
-    'Adult Men (18-59)': number
-    'Older Women (60+)': number
-    'Older Men (60+)': number
-    'People with disability': number
-    'Girls with disability (0-17)'?: number
-    'Boys with disability (0-17)'?: number
-    'Adult Women with disability (18-59)'?: number
-    'Adult Men with disability (18-59)'?: number
-    'Older Women with disability (60+)'?: number
-    'Older Men with disability (60+)'?: number
-    'HNRP Scope'?: Opt<'HNRP Scope'>
-    'Outside HNRP Scope sub-categories'?: Opt<'Outside HNRP Scope sub-categories'>
+    /**
+			Reporting Organization
+		*/
+    org_rep: Opt<'org_rep'>
+    /**
+			Implementing Partner
+		*/
+    org_imp: Opt<'org_imp'>
+    /**
+			Activity Plan Code
+		*/
+    plan_code: Opt<'plan_code'>
+    /**
+			Donor
+		*/
+    donor: string
+    /**
+			Indicators - MPCA
+		*/
+    indicator?: Opt<'indicator'>
+    /**
+			Total amount (USD) distributed through multi-purpose cash assistance
+			The total cost for the MPCA activity, including financial service provider costs.
+		*/
+    MP101_CV_02: number
+    /**
+			Payments Frequency
+		*/
+    frequency: Opt<'frequency'>
+    /**
+			Targeting Framework
+		*/
+    target_frame: Opt<'target_frame'>
+    /**
+			Financial Service Provider (FSP)
+		*/
+    FSP: Opt<'FSP'>
+    /**
+			Response Theme
+		*/
+    theme: Opt<'theme'>
+    /**
+			Raion
+		*/
+    adm2?: string
+    /**
+			Hromada
+		*/
+    adm3: string
+    /**
+			Settlement
+		*/
+    adm4?: string
+    /**
+			Collective Site
+		*/
+    cs?: string
+    /**
+			Reporting Month
+		*/
+    month_rep: string
+    /**
+			Activity Start Month
+		*/
+    month_start?: string
+    /**
+			Activity End Month
+		*/
+    month_end?: string
+    /**
+			Number of Covered Months
+		*/
+    duration: Opt<'duration'>
+    /**
+			Population Group
+		*/
+    popgroup: Opt<'popgroup'>
+    /**
+			Total Individuals Reached
+		*/
+    ind_total: number
+    /**
+			Girls (0-17)
+		*/
+    ind_girls: number
+    /**
+			Boys (0-17)
+		*/
+    ind_boys: number
+    /**
+			Adult Women (18-59)
+		*/
+    ind_adwomen: number
+    /**
+			Adult Men (18-59)
+		*/
+    ind_admen: number
+    /**
+			Older Women (60+)
+		*/
+    ind_oldwomen: number
+    /**
+			Older Men (60+)
+		*/
+    ind_oldmen: number
+    /**
+			People with disability
+			Out of the total individuals reached
+		*/
+    ind_pwd: number
+    /**
+			Girls with disability (0-17)
+		*/
+    girls_pwd?: number
+    /**
+			Boys with disability (0-17)
+		*/
+    boys_pwd?: number
+    /**
+			Adult Women with disability (18-59)
+		*/
+    adwomen_pwd?: number
+    /**
+			Adult Men with disability (18-59)
+		*/
+    admen_pwd?: number
+    /**
+			Older Women with disability (60+)
+		*/
+    oldwomen_pwd?: number
+    /**
+			Older Men with disability (60+)
+		*/
+    oldmen_pwd?: number
+    /**
+			HNRP Scope
+		*/
+    hnrp_scope?: Opt<'hnrp_scope'>
+    /**
+			Outside HNRP Scope sub-categories
+		*/
+    outscope_type?: Opt<'outscope_type'>
   }
 
   export const map = (a: Type) => ({
@@ -113,13 +219,9 @@ export namespace AiTypeMpca {
   })
 
   export const options = {
-    'Reporting Organization': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    'Implementing Partner': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    'Activity Plan Code': {
+    org_rep: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    org_imp: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    plan_code: {
       'MPCA-DRC-00001': 'cghgcrlltn5k1wn2',
       'MPCA-DRC-00002': 'cf1o4x9ltn5mws75',
       'MPCA-DRC-00003': 'cin9hupltn5o8y68',
@@ -134,7 +236,7 @@ export namespace AiTypeMpca {
       'MPCA-DRC-00012': 'c4jpb7xm38tx8su2',
       'MPCA-DRC-00013': 'ck959bmm4inykm0a',
     },
-    'Indicators - MPCA': {
+    indicator: {
       '# of individuals assisted with multi-purpose cash assistance': 'cyj5n1elqb3qh9ba5',
       '# amount (USD) distributed through multi-purpose cash assistance': 'c7vtwjhlqb3qh9ba6',
       '% of households who report being able to meet their basic needs as they define and prioritize them':
@@ -147,16 +249,13 @@ export namespace AiTypeMpca {
       '% of recipients (disaggregated by sex, age, and disability) reporting that humanitarian assistance is delivered in a timely manner':
         'c5at5eelqb3qh9bab',
     },
-    'Payments Frequency': {
-      'One-off': 'c22oxp8lqntdpktc',
-      'Multiple payments': 'cigkge6lqnteihce',
-    },
-    'Targeting Framework': {
+    frequency: {'One-off': 'c22oxp8lqntdpktc', 'Multiple payments': 'cigkge6lqnteihce'},
+    target_frame: {
       'Regular Targeting': 'cewjd3vlu6qi1jq5',
       'Rapid Targeting': 'cfi4u8rlu6qm2j67',
       Unknown: 'ce3ihfulu6qm5qe8',
     },
-    'Financial Service Provider (FSP)': {
+    FSP: {
       'Bank Transfer': 'crpccsqlr0f2x6wc',
       'Digital Wallets': 'cqsen3tlsljp7rz8',
       MoneyGram: 'cqfsd11lr0f5bzgf',
@@ -165,10 +264,8 @@ export namespace AiTypeMpca {
       'Ukrposhta (pick up)': 'c56c4rhlr0f5hrkg',
       'Western Union': 'ca6qhyclr0f569te',
     },
-    'Response Theme': {
-      'No specific theme': 'clx2juzlqnt87pe2',
-    },
-    'Number of Covered Months': {
+    theme: {'No specific theme': 'clx2juzlqnt87pe2'},
+    duration: {
       'One month': 'czbonyjlqntauao5',
       'Two months': 'cokxxzhlqntc71k7',
       'Three months (recommended)': 'c6s6jv3lqntc9ua8',
@@ -176,15 +273,13 @@ export namespace AiTypeMpca {
       'Five months': 'ctsl3i3lqntco52a',
       'Six months': 'cwqi52ylqntcx15b',
     },
-    'Population Group': {
+    popgroup: {
       'Internally Displaced': 'cvw4on6lq6dgcoj5',
       'Non-Displaced': 'ck6ulx8lq6dgcok6',
       Returnees: 'cuz9qi9lq6dgcok7',
     },
-    'HNRP Scope': {
-      'Outside HNRP Scope': 'c5xynzmlw6flq1u2',
-    },
-    'Outside HNRP Scope sub-categories': {
+    hnrp_scope: {'Outside HNRP Scope': 'c5xynzmlw6flq1u2'},
+    outscope_type: {
       'Outside priority areas': 'cvf0ba4lw6fucqv4',
       'Funding not reported in FTS​': 'c7cah40lw6fula95',
       'Delivered outside HNRP​ mechanism': 'cj4y1s3lw6furva6',

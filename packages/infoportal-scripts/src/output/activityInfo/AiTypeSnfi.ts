@@ -1,33 +1,114 @@
 export namespace AiTypeSnfi {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
-    'Reporting Organization': Opt<'Reporting Organization'>
-    'Implementing Partner'?: Opt<'Implementing Partner'>
-    'Plan/Project Code': Opt<'Plan/Project Code'>
-    'Indicators - SNFI': Opt<'Indicators - SNFI'>
-    'Distribution through Common Pipeline': Opt<'Distribution through Common Pipeline'>
-    'Distribution through inter-agency convoy (HOPC)': Opt<'Distribution through inter-agency convoy (HOPC)'>
-    Oblast: string
-    Raion: string
-    Hromada: string
-    Settlement: string
-    'Collective Site'?: string
-    'Date of completion/ distribution (YYYY-MM-DD)': string
-    'Reporting Month': string
-    'Population Group': Opt<'Population Group'>
-    'Non-individuals Reached': number
-    'Total Individuals Reached': number
-    'Girls (0-17)': number
-    'Boys (0-17)': number
-    'Adult Women (18-59)': number
-    'Adult Men (18-59)': number
-    'Older Women (60+)': number
-    'Older Men (60+)': number
-    'People with disability'?: number
-    Comment?: string
-    'HNRP Scope'?: Opt<'HNRP Scope'>
-    'Outside HNRP Scope sub-categories'?: Opt<'Outside HNRP Scope sub-categories'>
+    /**
+			Reporting Organization
+		*/
+    org_rep: Opt<'org_rep'>
+    /**
+			Implementing Partner
+		*/
+    org_imp?: Opt<'org_imp'>
+    /**
+			Plan/Project Code
+		*/
+    plan_code: Opt<'plan_code'>
+    /**
+			Indicators - SNFI
+		*/
+    indicator: Opt<'indicator'>
+    /**
+			Distribution through Common Pipeline
+			Select yes if items were received through the common pipeline.
+		*/
+    pipeline: Opt<'pipeline'>
+    /**
+			Distribution through inter-agency convoy (HOPC)
+			Select yes if items were distributed through inter-agency convoy
+		*/
+    convoy: Opt<'convoy'>
+    /**
+			Oblast
+		*/
+    adm1: Opt<'adm1'>
+    /**
+			Raion
+		*/
+    adm2: string
+    /**
+			Hromada
+		*/
+    adm3: string
+    /**
+			Settlement
+		*/
+    adm4: string
+    /**
+			Collective Site
+		*/
+    cs?: string
+    /**
+			Date of completion/ distribution (YYYY-MM-DD)
+		*/
+    date_rep: string
+    /**
+			Reporting Month
+		*/
+    month_rep: string
+    /**
+			Population Group
+		*/
+    popgroup: Opt<'popgroup'>
+    /**
+			Non-individuals Reached
+			Enter the number of units/ households reached.
+		*/
+    nonind: number
+    /**
+			Total Individuals Reached
+		*/
+    ind_total: number
+    /**
+			Girls (0-17)
+		*/
+    ind_girls: number
+    /**
+			Boys (0-17)
+		*/
+    ind_boys: number
+    /**
+			Adult Women (18-59)
+		*/
+    ind_adwomen: number
+    /**
+			Adult Men (18-59)
+		*/
+    ind_admen: number
+    /**
+			Older Women (60+)
+		*/
+    ind_oldwomen: number
+    /**
+			Older Men (60+)
+		*/
+    ind_oldmen: number
+    /**
+			People with disability
+			Out of the total individuals reached
+		*/
+    ind_pwd?: number
+    /**
+			Comment
+		*/
+    comment?: string
+    /**
+			HNRP Scope
+		*/
+    hnrp_scope?: Opt<'hnrp_scope'>
+    /**
+			Outside HNRP Scope sub-categories
+		*/
+    outscope_type?: Opt<'outscope_type'>
   }
 
   export const map = (a: Type) => ({
@@ -57,7 +138,8 @@ export namespace AiTypeSnfi {
         : options['Distribution through inter-agency convoy (HOPC)'][
             a['Distribution through inter-agency convoy (HOPC)']!
           ],
-    cxff006lr960f8c46: a['Oblast'] === undefined ? undefined : a['Oblast'],
+    cxff006lr960f8c46:
+      a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + options['Oblast'][a['Oblast']!],
     cu3tssflr960f8c47: a['Raion'] === undefined ? undefined : a['Raion'],
     c3bw3xjlr960f8d48: a['Hromada'] === undefined ? undefined : a['Hromada'],
     cpkkgd9lr960f8d49: a['Settlement'] === undefined ? undefined : a['Settlement'],
@@ -91,13 +173,9 @@ export namespace AiTypeSnfi {
   })
 
   export const options = {
-    'Reporting Organization': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    'Implementing Partner': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    'Plan/Project Code': {
+    org_rep: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    org_imp: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    plan_code: {
       'SNFI-DRC-00001': 'cogjzchltfvf0i96',
       'SNFI-DRC-00002': 'comrbdrltfvt2ba7',
       'SNFI-DRC-00003': 'cfk562tltfvw5658',
@@ -115,7 +193,7 @@ export namespace AiTypeSnfi {
       'SNFI-DRC-00016': 'c2us37im38uc9385g',
       'SNFI-DRC-00017': 'c3c2365m4jkyh1u2',
     },
-    'Indicators - SNFI': {
+    indicator: {
       'Emergency Construction Material (ECM) and Emergency Shelter Kit (ESK) > # supported with emergency shelter support > In Kind > No specific theme':
         'cqbiyfslrke6ze93',
       'Construction Materials > # supported with construction materials > In Kind > No specific theme':
@@ -244,23 +322,44 @@ export namespace AiTypeSnfi {
       'Emergency Construction Material (ECM) and Emergency Shelter Kit (ESK) > # of residential units supported with emergency shelter assistance > Voucher > No specific theme':
         'c3ou5xlm3rfkow94',
     },
-    'Distribution through Common Pipeline': {
-      Yes: 'c4rrv3dls03kgong',
-      No: 'cg7qn48ls03l08gi',
+    pipeline: {Yes: 'c4rrv3dls03kgong', No: 'cg7qn48ls03l08gi'},
+    convoy: {Yes: 'c7xcwyels03nuejk', No: 'cuf5onjls03nuejl'},
+    adm1: {
+      'Autonomous Republic of Crimea_Автономна Республіка Крим': 'c5c2sr3lq3kjj6gd',
+      Cherkaska_Черкаська: 'clbgltvlq3kjj6he',
+      Chernihivska_Чернігівська: 'c7jz1shlq3kjj6hf',
+      Chernivetska_Чернівецька: 'c78zq2rlq3kjj6hg',
+      Dnipropetrovska_Дніпропетровська: 'c6l0fjylq3kjj6hh',
+      Donetska_Донецька: 'c3memjqlq3kjj6hi',
+      'Ivano-Frankivska_Івано-Франківська': 'cy93k5lq3kjj6hj',
+      Kharkivska_Харківська: 'cbbcx5ylq3kjj6hk',
+      Khersonska_Херсонська: 'cq8k2oylq3kjj6hl',
+      Khmelnytska_Хмельницька: 'cliunu3lq3kjj6hm',
+      Kirovohradska_Кіровоградська: 'cxvw276lq3kjj6hn',
+      Kyiv_Київ: 'cwe11jplq3kjj6ho',
+      Kyivska_Київська: 'cnp046mlq3kjj6hp',
+      Luhanska_Луганська: 'ctu8ahklq3kjj6hq',
+      Lvivska_Львівська: 'cmpyidslq3kjj6hr',
+      Mykolaivska_Миколаївська: 'ccqvlallq3kjj6hs',
+      Odeska_Одеська: 'c2uwqqqlq3kjj6ht',
+      Poltavska_Полтавська: 'cwq2uuxlq3kjj6hu',
+      Rivnenska_Рівненська: 'c2j0t0flq3kjj6hv',
+      Sevastopol_Севастополь: 'cjvbpkplq3kjj6hw',
+      Sumska_Сумська: 'cb4nm4xlq3kjj6hx',
+      Ternopilska_Тернопільська: 'clrrzfslq3kjj6hy',
+      Vinnytska_Вінницька: 'cvx17yllq3kjj6hz',
+      Volynska_Волинська: 'cdzklrblq3kjj6h10',
+      Zakarpatska_Закарпатська: 'cfqiux5lq3kjj6h11',
+      Zaporizka_Запорізька: 'cmqvx7elq3kjj6h12',
+      Zhytomyrska_Житомирська: 'c51dllnlq3kjj6h13',
     },
-    'Distribution through inter-agency convoy (HOPC)': {
-      Yes: 'c7xcwyels03nuejk',
-      No: 'cuf5onjls03nuejl',
-    },
-    'Population Group': {
+    popgroup: {
       'Internally Displaced': 'cvw4on6lq6dgcoj5',
       'Non-Displaced': 'ck6ulx8lq6dgcok6',
       Returnees: 'cuz9qi9lq6dgcok7',
     },
-    'HNRP Scope': {
-      'Outside HNRP Scope': 'c3isd05lw6flwkf2',
-    },
-    'Outside HNRP Scope sub-categories': {
+    hnrp_scope: {'Outside HNRP Scope': 'c3isd05lw6flwkf2'},
+    outscope_type: {
       'Outside priority areas': 'cvf0ba4lw6fucqv4',
       'Funding not reported in FTS​': 'c7cah40lw6fula95',
       'Delivered outside HNRP​ mechanism': 'cj4y1s3lw6furva6',

@@ -9,9 +9,11 @@ export interface AiParsedOption {
 
 export interface AiParsedSchema {
   id: string
+  code: string
   type: ActivityInfo.FormSchema['schema']['elements'][0]['type']
   optionsId?: string
   label: string
+  description?: string
   options?: AiParsedOption[]
   optionsLength?: number
   required?: boolean
@@ -37,6 +39,8 @@ export class AiBuilderSchemParser {
         id: q.id,
         type: q.type,
         optionsId: choices?.optionDefId,
+        code: q.code,
+        description: q.description,
         label: this.sanitalizeNonASCIIChar(q.label),
         options: choices?.choices ?? (q.type === 'enumerated' ? q.typeParameters.values : undefined),
         optionsLength: choices?.choices.length,

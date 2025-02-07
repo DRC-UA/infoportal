@@ -1,38 +1,132 @@
 export namespace AiTypeWash {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
-    'Activity Plan Code': Opt<'Activity Plan Code'>
-    'Reporting Organization': Opt<'Reporting Organization'>
-    'Implementing Partner': Opt<'Implementing Partner'>
-    'Donor Name'?: string
-    WASH: Opt<'WASH'>
-    'Response Theme': Opt<'Response Theme'>
-    'Additional Topic'?: Opt<'Additional Topic'>
-    Oblast: Opt<'Oblast'>
-    Raion: Opt<'Raion'>
-    Hromada: string
-    Settlement: string
-    'Location Type': Opt<'Location Type'>
-    'Other Institution'?: string
-    'Reporting Month': string
-    'Activity Start month'?: string
-    'Activity End month'?: string
-    'Disaggregation by population group and/or gender and age known?': Opt<'Disaggregation by population group and/or gender and age known?'>
-    'Total Reached (No Disaggregation)': number
-    'Population Group': Opt<'Population Group'>
-    'Girls (0-17)': number
-    'Boys (0-17)': number
-    'Adult Women (18-59)': number
-    'Adult Men (18-59)': number
-    'Older Women (60+)': number
-    'Older Men (60+)': number
-    'People with disability'?: number
-    'Name of items/services delivered'?: string
-    'Quantity of items/services delivered'?: number
-    Comments?: string
-    'HNRP Scope'?: Opt<'HNRP Scope'>
-    'Outside HNRP Scope sub-categories'?: Opt<'Outside HNRP Scope sub-categories'>
+    /**
+			Activity Plan Code
+		*/
+    plan_code: Opt<'plan_code'>
+    /**
+			Reporting Organization
+		*/
+    org_rep: Opt<'org_rep'>
+    /**
+			Implementing Partner
+		*/
+    org_imp: Opt<'org_imp'>
+    /**
+			Donor Name
+		*/
+    donor?: string
+    /**
+			WASH
+		*/
+    indicator: Opt<'indicator'>
+    /**
+			Response Theme
+		*/
+    theme: Opt<'theme'>
+    /**
+			Additional Topic
+		*/
+    theme2?: Opt<'theme2'>
+    /**
+			Oblast
+		*/
+    adm1: Opt<'adm1'>
+    /**
+			Raion
+		*/
+    adm2: Opt<'adm2'>
+    /**
+			Hromada
+		*/
+    adm3: string
+    /**
+			Settlement
+		*/
+    adm4: string
+    /**
+			Location Type
+		*/
+    loc_type: Opt<'loc_type'>
+    /**
+			Other Institution
+		*/
+    ben_type_other?: string
+    /**
+			Reporting Month
+		*/
+    month_rep: string
+    /**
+			Activity Start month
+		*/
+    month_start?: string
+    /**
+			Activity End month
+			estimated
+		*/
+    month_end?: string
+    /**
+			Disaggregation by population group and/or gender and age known?
+		*/
+    disaggregation: Opt<'disaggregation'>
+    /**
+			Total Reached (No Disaggregation)
+		*/
+    tot_reach: number
+    /**
+			Population Group
+		*/
+    popgroup: Opt<'popgroup'>
+    /**
+			Girls (0-17)
+		*/
+    ind_girls: number
+    /**
+			Boys (0-17)
+		*/
+    ind_boys: number
+    /**
+			Adult Women (18-59)
+		*/
+    ind_adwomen: number
+    /**
+			Adult Men (18-59)
+		*/
+    ind_admen: number
+    /**
+			Older Women (60+)
+		*/
+    ind_oldwomen: number
+    /**
+			Older Men (60+)
+		*/
+    ind_oldmen: number
+    /**
+			People with disability
+			Out of the total individuals reached
+		*/
+    ind_pwd?: number
+    /**
+			Name of items/services delivered
+		*/
+    items_name?: string
+    /**
+			Quantity of items/services delivered
+		*/
+    items_qty?: number
+    /**
+			Comments
+		*/
+    com?: string
+    /**
+			HNRP Scope
+		*/
+    hnrp_scope?: Opt<'hnrp_scope'>
+    /**
+			Outside HNRP Scope sub-categories
+		*/
+    outscope_type?: Opt<'outscope_type'>
   }
 
   export const map = (a: Type) => ({
@@ -95,7 +189,7 @@ export namespace AiTypeWash {
   })
 
   export const options = {
-    'Activity Plan Code': {
+    plan_code: {
       'WASH-DRC-00001': 'cklh0hltn666me2',
       'WASH-DRC-00002': 'cn94ssyltn670dk3',
       'WASH-DRC-00003': 'c9p2whmltn67fg34',
@@ -107,13 +201,9 @@ export namespace AiTypeWash {
       'WASH-DRC-00009': 'cskeweem0w6k2jg82',
       'WASH-DRC-00010': 'cftkpczm4ind03p2',
     },
-    'Reporting Organization': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    'Implementing Partner': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    WASH: {
+    org_rep: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    org_imp: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    indicator: {
       '# of individuals benefiting from the new water source construction or rehabilitation (boreholes, wells, etc.)':
         'c7xomzulqb3t0zxcs',
       '# of individuals benefiting from the distribution of household water treatment materials': 'c41inuzlqb3t0zxct',
@@ -162,19 +252,19 @@ export namespace AiTypeWash {
         'ccg3p6blqb3t0zxdn',
       '# of individuals assisted through the provision of generators for heating systems': 'c9ggh5jlqb3t0zxdo',
     },
-    'Response Theme': {
+    theme: {
       'No specific theme': 'c13zbetlqc9lcele',
       'Winter response': 'c1pajmzlqc9mbhog',
       'Inter-agency convoy': 'c3mpvh8lsxaedio3',
     },
-    'Additional Topic': {
+    theme2: {
       'No specific topic': 'c3gudm2lr7vymrv70',
       'Liberated Area': 'cw3iezglr7vymrw72',
       'WASH FIT': 'cenvhq4lr7vymrw73',
       'IOM Pipeline': 'c4354felr7vymrw74',
       UHF: 'cnyz1zplr7vymrw75',
     },
-    Oblast: {
+    adm1: {
       'Autonomous Republic of Crimea_Автономна Республіка Крим': 'c5c2sr3lq3kjj6gd',
       Cherkaska_Черкаська: 'clbgltvlq3kjj6he',
       Chernihivska_Чернігівська: 'c7jz1shlq3kjj6hf',
@@ -203,7 +293,7 @@ export namespace AiTypeWash {
       Zaporizka_Запорізька: 'cmqvx7elq3kjj6h12',
       Zhytomyrska_Житомирська: 'c51dllnlq3kjj6h13',
     },
-    Raion: {
+    adm2: {
       Bakhchysaraiskyi_Бахчисарайський: 'clpy8gmlq3kosdz1f',
       Bilohirskyi_Білогірський: 'cnv5hktlq3kosdz1g',
       Dzhankoiskyi_Джанкойський: 'ckoz8z0lq3kosdz1h',
@@ -344,7 +434,7 @@ export namespace AiTypeWash {
       Kyiv_Київ: 'cfy1yh6lq3kose058',
       Sevastopol_Севастополь: 'cuk10dalq3kose059',
     },
-    'Location Type': {
+    loc_type: {
       'Individuals/households': 'ct4n84alqca5a7mr',
       Vodocanal: 'cjwfxh7lqca80v0t',
       'Collective centers for IDPs': 'c7l2xkhlqca8nmiu',
@@ -355,20 +445,15 @@ export namespace AiTypeWash {
       'Local authority': 'cq8jviklqca9w2yz',
       'Other Institution': 'chjo4tzlqcaaa5p10',
     },
-    'Disaggregation by population group and/or gender and age known?': {
-      Yes: 'czas9m9lqcbo0sd1k',
-      No: 'cdkz04slqcborra1m',
-    },
-    'Population Group': {
+    disaggregation: {Yes: 'czas9m9lqcbo0sd1k', No: 'cdkz04slqcborra1m'},
+    popgroup: {
       'Overall (all groups)': 'cq6gpkulqcci9rj1o',
       'Non-Displaced': 'cp78xblqccj1to1q',
       Returnees: 'ca7ebx6lqccjhy01r',
       'Internally Displaced': 'cbnpmdvlqccjjaj1s',
     },
-    'HNRP Scope': {
-      'Outside HNRP Scope': 'c1im1zxlw6fm42i2',
-    },
-    'Outside HNRP Scope sub-categories': {
+    hnrp_scope: {'Outside HNRP Scope': 'c1im1zxlw6fm42i2'},
+    outscope_type: {
       'Outside priority areas': 'cvf0ba4lw6fucqv4',
       'Funding not reported in FTS​': 'c7cah40lw6fula95',
       'Delivered outside HNRP​ mechanism': 'cj4y1s3lw6furva6',

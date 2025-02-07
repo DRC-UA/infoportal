@@ -1,18 +1,52 @@
 export namespace AiTypeGeneralProtection {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
-    ID?: string
-    'Reporting Organization': Opt<'Reporting Organization'>
-    'Implementing Partner'?: string
-    'Implementing Partner 2'?: string
-    'Plan/Project Code': Opt<'Plan/Project Code'>
-    Oblast: Opt<'Oblast'>
-    Raion: string
-    Hromada: string
-    Settlement?: string
-    'Collective Site'?: string
-    'Response Theme': Opt<'Response Theme'>
+    /**
+			ID
+		*/
+    RMM_ID?: string
+    /**
+			Reporting Organization
+		*/
+    org_rep: Opt<'org_rep'>
+    /**
+			Implementing Partner
+			If applicable
+		*/
+    org_imp1?: string
+    /**
+			Implementing Partner 2
+			Add another Implementing Partner if applicable
+		*/
+    org_imp2?: string
+    /**
+			Plan/Project Code
+		*/
+    plan_code: Opt<'plan_code'>
+    /**
+			Oblast
+		*/
+    adm1: Opt<'adm1'>
+    /**
+			Raion
+		*/
+    adm2: string
+    /**
+			Hromada
+		*/
+    adm3: string
+    /**
+			Settlement
+		*/
+    adm4?: string
+    /**
+			Collective Site
+		*/
+    cs?: string
+    /**
+			Response Theme
+		*/
+    theme: Opt<'theme'>
   }
 
   export const map = (a: Type) => ({
@@ -37,10 +71,8 @@ export namespace AiTypeGeneralProtection {
   })
 
   export const options = {
-    'Reporting Organization': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    'Plan/Project Code': {
+    org_rep: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    plan_code: {
       'PRT-DRC-00001': 'cepwx9plsai8rlfd',
       'PRT-DRC-00002': 'c5woab2lsaieofhe',
       'PRT-DRC-00003': 'c6oy73wlsaihu52f',
@@ -55,7 +87,7 @@ export namespace AiTypeGeneralProtection {
       'PRT-DRC-00012': 'ciu3pcllxoqadnt3',
       'PRT-DRC-00013': 'ck2bquam5qwnp6o2',
     },
-    Oblast: {
+    adm1: {
       'Autonomous Republic of Crimea_Автономна Республіка Крим': 'c5c2sr3lq3kjj6gd',
       Cherkaska_Черкаська: 'clbgltvlq3kjj6he',
       Chernihivska_Чернігівська: 'c7jz1shlq3kjj6hf',
@@ -84,28 +116,68 @@ export namespace AiTypeGeneralProtection {
       Zaporizka_Запорізька: 'cmqvx7elq3kjj6h12',
       Zhytomyrska_Житомирська: 'c51dllnlq3kjj6h13',
     },
-    'Response Theme': {
-      'No specific theme': 'c40c4vklqf3085j55',
-    },
+    theme: {'No specific theme': 'c40c4vklqf3085j55'},
   }
 
   type OptSub<T extends keyof typeof optionsSub> = keyof (typeof optionsSub)[T]
-
   export interface TypeSub {
-    'Reporting Month': string
-    'Population Group': OptSub<'Population Group'>
-    Indicators: OptSub<'Indicators'>
-    'Total Individuals Reached': number
-    'Girls (0-17)': number
-    'Boys (0-17)': number
-    'Adult Women (18-59)': number
-    'Adult Men (18-59)': number
-    'Older Women (60+)': number
-    'Older Men (60+)': number
-    'Non-individuals Reached/Quantity': number
-    'People with Disability'?: number
-    'HNRP Scope'?: OptSub<'HNRP Scope'>
-    'Outside HNRP Scope sub-categories'?: OptSub<'Outside HNRP Scope sub-categories'>
+    /**
+			Reporting Month
+		*/
+    month_rep: string
+    /**
+			Population Group
+		*/
+    popgroup: OptSub<'popgroup'>
+    /**
+			Indicators
+		*/
+    indicator: OptSub<'indicator'>
+    /**
+			Total Individuals Reached
+		*/
+    ind_total: number
+    /**
+			Girls (0-17)
+		*/
+    ind_girls: number
+    /**
+			Boys (0-17)
+		*/
+    ind_boys: number
+    /**
+			Adult Women (18-59)
+		*/
+    ind_adwomen: number
+    /**
+			Adult Men (18-59)
+		*/
+    ind_admen: number
+    /**
+			Older Women (60+)
+		*/
+    ind_oldwomen: number
+    /**
+			Older Men (60+)
+		*/
+    ind_oldmen: number
+    /**
+			Non-individuals Reached/Quantity
+		*/
+    nonind: number
+    /**
+			People with Disability
+			Out of the total individuals reached
+		*/
+    ind_pwd?: number
+    /**
+			HNRP Scope
+		*/
+    hnrp_scope?: OptSub<'hnrp_scope'>
+    /**
+			Outside HNRP Scope sub-categories
+		*/
+    outscope_type?: OptSub<'outscope_type'>
   }
 
   export const mapSub = (a: TypeSub) => ({
@@ -136,12 +208,12 @@ export namespace AiTypeGeneralProtection {
   })
 
   export const optionsSub = {
-    'Population Group': {
+    popgroup: {
       'Internally Displaced': 'cvw4on6lq6dgcoj5',
       'Non-Displaced': 'ck6ulx8lq6dgcok6',
       Returnees: 'cuz9qi9lq6dgcok7',
     },
-    Indicators: {
+    indicator: {
       '# of individuals who received case management services (not including specialized CP & GBV services)':
         'cuv5lkclqmgu66u1f',
       '# of individuals who participated in community-based protection activities': 'cfye7v0lqmgu66u1g',
@@ -181,10 +253,8 @@ export namespace AiTypeGeneralProtection {
       '# of community centers established or maintained': 'c2395qdlqmgu66v29',
       '# of government institutions supported': 'cy4jvntlqmgu66v2a',
     },
-    'HNRP Scope': {
-      'Outside HNRP Scope': 'ckx98ielw6fmn962',
-    },
-    'Outside HNRP Scope sub-categories': {
+    hnrp_scope: {'Outside HNRP Scope': 'ckx98ielw6fmn962'},
+    outscope_type: {
       'Outside priority areas': 'cvf0ba4lw6fucqv4',
       'Funding not reported in FTS​': 'c7cah40lw6fula95',
       'Delivered outside HNRP​ mechanism': 'cj4y1s3lw6furva6',

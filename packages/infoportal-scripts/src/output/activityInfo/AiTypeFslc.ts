@@ -1,43 +1,153 @@
 export namespace AiTypeFslc {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
-    'Reporting Month': string
-    'Reporting Organization': Opt<'Reporting Organization'>
-    'Implementing Partner'?: Opt<'Implementing Partner'>
-    'Activity Plan Code': Opt<'Activity Plan Code'>
-    'Activity and indicator': Opt<'Activity and indicator'>
-    'Implementation Status': Opt<'Implementation Status'>
-    Frequency?: Opt<'Frequency'>
-    'Kcal covered  (per person per day)'?: number
-    Unit?: Opt<'Unit'>
-    'Total Quantity distributed (per person)'?: number
-    'Total Value (local currency)'?: number
-    Currency?: Opt<'Currency'>
-    'Cash delivery mechanism'?: Opt<'Cash delivery mechanism'>
-    Oblast: Opt<'Oblast'>
-    Raion: string
-    Hromada: string
-    Settlement?: string
-    'Location type'?: Opt<'Location type'>
-    'Population Group': Opt<'Population Group'>
-    'Number of people reached': number
-    'Girls (0-17)': number
-    'Boys (0-17)': number
-    'Adult Women (18-59)': number
-    'Adult Men (18-59)': number
-    'Older Women (60+)': number
-    'Older Men (60+)': number
-    'Number of people with disability'?: number
-    'Number of reached households'?: number
-    'New beneficiaries (assisted for the first time in 2024)': number
-    'Were these people reached in 2024 by another FSL sub-activity?': Opt<'Were these people reached in 2024 by another FSL sub-activity?'>
-    'If yes, which sub-activity': Opt<'If yes, which sub-activity'>
-    'If yes, how many people received from both sub-activities': number
-    Comments?: string
+    /**
+			Reporting Month
+		*/
+    month_rep: string
+    /**
+			Reporting Organization
+		*/
+    org_rep: Opt<'org_rep'>
+    /**
+			Implementing Partner
+		*/
+    org_imp1?: Opt<'org_imp1'>
+    /**
+			Activity Plan Code
+			Choose from the drop-down the Activity Planning Code of the implemented project. You can check the code using the Activity Planning Module (APM).  If you do not have the Activity Planning Code, please register the project in the Activity Planning Module (APM) first.
+		*/
+    plan_code: Opt<'plan_code'>
+    /**
+			Activity and indicator
+		*/
+    indicator: Opt<'indicator'>
+    /**
+			Implementation Status
+		*/
+    status: Opt<'status'>
+    /**
+			Frequency
+		*/
+    frequency?: Opt<'frequency'>
+    /**
+			Kcal covered  (per person per day)
+		*/
+    kcal?: number
+    /**
+			Unit
+		*/
+    unit?: Opt<'unit'>
+    /**
+			Total Quantity distributed (per person)
+		*/
+    total_quantity?: number
+    /**
+			Total Value (local currency)
+			Please enter the amount of money beneficiary received.
+		*/
+    total_value?: number
+    /**
+			Currency
+		*/
+    currency?: Opt<'currency'>
+    /**
+			Cash delivery mechanism
+		*/
+    cash_delivery_mechanism?: Opt<'cash_delivery_mechanism'>
+    /**
+			Oblast
+		*/
+    adm1: Opt<'adm1'>
+    /**
+			Raion
+		*/
+    adm2: string
+    /**
+			Hromada
+		*/
+    adm3: string
+    /**
+			Settlement
+		*/
+    adm4?: string
+    /**
+			Location type
+		*/
+    location_type?: Opt<'location_type'>
+    /**
+			Population Group
+		*/
+    popgroup: Opt<'popgroup'>
+    /**
+			Number of people reached
+		*/
+    ind_total: number
+    /**
+			Girls (0-17)
+		*/
+    ind_girls: number
+    /**
+			Boys (0-17)
+		*/
+    ind_boys: number
+    /**
+			Adult Women (18-59)
+		*/
+    ind_adwomen: number
+    /**
+			Adult Men (18-59)
+		*/
+    ind_admen: number
+    /**
+			Older Women (60+)
+		*/
+    ind_oldwomen: number
+    /**
+			Older Men (60+)
+		*/
+    ind_oldmen: number
+    /**
+			Number of people with disability
+		*/
+    ind_pwd?: number
+    /**
+			Number of reached households
+		*/
+    hh_reached?: number
+    /**
+			New beneficiaries (assisted for the first time in 2024)
+		*/
+    ind_new: number
+    /**
+			Were these people reached in 2024 by another FSL sub-activity?
+		*/
+    question_new: Opt<'question_new'>
+    /**
+			If yes, which sub-activity
+		*/
+    subactivity_if_yes: Opt<'subactivity_if_yes'>
+    /**
+			If yes, how many people received from both sub-activities
+		*/
+    reached_if_yes: number
+    /**
+			Comments
+		*/
+    comment?: string
+    /**
+			key
+			БУДЬ ЛАСКА, НЕ ЧІПАЙТЕ ЦЕ ПОЛЕ, ІНАКШЕ ВАМ ДОВЕДЕТЬСЯ ЗАПОВНЮВАТИ ФОРМУ З НУЛЯ!!  PLEASE DO NOT EDIT THIS FIELD, OTHERWISE YOU NEED TO FILL IN THE FORM FROM SCRATCH!!!
+		*/
     key: string
-    'HNRP Scope'?: Opt<'HNRP Scope'>
-    'Outside HNRP Scope sub-categories'?: Opt<'Outside HNRP Scope sub-categories'>
+    /**
+			HNRP Scope
+		*/
+    hnrp_scope?: Opt<'hnrp_scope'>
+    /**
+			Outside HNRP Scope sub-categories
+		*/
+    outscope_type?: Opt<'outscope_type'>
   }
 
   export const map = (a: Type) => ({
@@ -126,13 +236,9 @@ export namespace AiTypeFslc {
   })
 
   export const options = {
-    'Reporting Organization': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    'Implementing Partner': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
-    },
-    'Activity Plan Code': {
+    org_rep: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    org_imp1: {'Danish Refugee Council': 'cloyih3lpwhjdsu2r0'},
+    plan_code: {
       'FSLC-DRC-00001': 'csp3fvaltn0j3ou2',
       'FSLC-DRC-00002': 'cbcn08hltn0lsg03',
       'FSLC-DRC-00003': 'cex9iwdltn0pa1y4',
@@ -143,7 +249,7 @@ export namespace AiTypeFslc {
       'FSLC-DRC-00008': 'ce8581lm5qv7rse3',
       'FSLC-DRC-00009': 'ctgme0cm5qvrxa96i',
     },
-    'Activity and indicator': {
+    indicator: {
       'Provision of market-based assistance > Provision of market-based relief voucher assistance (value voucher or commodity voucher) > # of individuals receiving market-based assistance to ensure their immediate access to food > Cash':
         'cdsseb9luclbdwv2',
       'Agriculture and livestock inputs (cash) > Agricultural grants > # of individuals receiving sectoral cash to contributing to household food security > Cash':
@@ -231,11 +337,8 @@ export namespace AiTypeFslc {
       'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Temporary repair of livestock shelter/barns > # of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage > Voucher':
         'cco7mfeluclbdwv18',
     },
-    'Implementation Status': {
-      Completed: 'cg07fuklqc9r6qq13',
-      Ongoing: 'c6s86zqlqc9sloo15',
-    },
-    Frequency: {
+    status: {Completed: 'cg07fuklqc9r6qq13', Ongoing: 'c6s86zqlqc9sloo15'},
+    frequency: {
       Weekly: 'cobeyzclqca6as81r',
       Fortnight: 'cy66rvklqca75ce1t',
       Monthly: 'cr09863lqca7avy1u',
@@ -244,7 +347,7 @@ export namespace AiTypeFslc {
       Other: 'cdfo485lqca7xym1x',
       'Bi-monthly': 'cn9xsotlyebztvz7',
     },
-    Unit: {
+    unit: {
       Tons: 'c19r7opls26p5nod',
       Kilograms: 'cmdpumdls26qzmof',
       Grams: 'cwoj9z1ls26r2a7g',
@@ -252,12 +355,8 @@ export namespace AiTypeFslc {
       Animals: 'cuvmooilsogvr3q2',
       Objects: 'ci5tdi7m0ur3p494',
     },
-    Currency: {
-      EUR: 'c4kgwg9lqca2b8e1o',
-      UAH: 'cuc2fcqlqca1d331m',
-      USD: 'cxfbx1plqca2e4m1p',
-    },
-    'Cash delivery mechanism': {
+    currency: {EUR: 'c4kgwg9lqca2b8e1o', UAH: 'cuc2fcqlqca1d331m', USD: 'cxfbx1plqca2e4m1p'},
+    cash_delivery_mechanism: {
       'ATM Card': 'ccupph2lqc9wp9b1b',
       'Bank Transfer': 'cm3fx07lqc9xsyg1d',
       'Direct cash payment': 'cfpj6qglqc9xymn1e',
@@ -269,7 +368,7 @@ export namespace AiTypeFslc {
       'Post Office': 'cf1261jlqc9ze661k',
       'Other mechanisms': 'cybkw5hlqc9zj3k1l',
     },
-    Oblast: {
+    adm1: {
       'Autonomous Republic of Crimea_Автономна Республіка Крим': 'c5c2sr3lq3kjj6gd',
       Cherkaska_Черкаська: 'clbgltvlq3kjj6he',
       Chernihivska_Чернігівська: 'c7jz1shlq3kjj6hf',
@@ -298,7 +397,7 @@ export namespace AiTypeFslc {
       Zaporizka_Запорізька: 'cmqvx7elq3kjj6h12',
       Zhytomyrska_Житомирська: 'c51dllnlq3kjj6h13',
     },
-    'Location type': {
+    location_type: {
       Rural: 'cazwy1bls2786wqj',
       'Urban / Peri-urban': 'cd7dhfvls279bv8l',
       'Collective centers': 'cqhhz4als279lhqm',
@@ -309,64 +408,102 @@ export namespace AiTypeFslc {
       'Local authority': 'c4w31sls27ahbir',
       Other: 'cer3u3yls27amhjs',
     },
-    'Population Group': {
+    popgroup: {
       'Internally Displaced': 'cvw4on6lq6dgcoj5',
       'Non-Displaced': 'ck6ulx8lq6dgcok6',
       Returnees: 'cuz9qi9lq6dgcok7',
     },
-    'Were these people reached in 2024 by another FSL sub-activity?': {
-      Yes: 'cmqxgadls27x2tov',
-      No: 'clcxcdzls27xkm0x',
+    question_new: {Yes: 'cmqxgadls27x2tov', No: 'clcxcdzls27xkm0x'},
+    subactivity_if_yes: {
+      'Provision of market-based assistance > Provision of market-based relief voucher assistance (value voucher or commodity voucher) > # of individuals receiving market-based assistance to ensure their immediate access to food > Cash':
+        'cdsseb9luclbdwv2',
+      'Agriculture and livestock inputs (cash) > Agricultural grants > # of individuals receiving sectoral cash to contributing to household food security > Cash':
+        'cv58tzkluclbdwv3',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for seeds and tools > # of individuals receiving sectoral cash to contributing to household food security > Cash':
+        'cksul5oluclbdwv4',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for livestock and poultry input (restocking/distribution) > # of individuals receiving sectoral cash to contributing to household food security > Cash':
+        'cod9ox4luclbdwv5',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for temporary livestock shelter > # of individuals receiving sectoral cash to contributing to household food security > Cash':
+        'cgsu89wluclbdwv6',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for animal feed > # of individuals receiving sectoral cash to contributing to household food security > Cash':
+        'cx8imqaluclbdwv7',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for livestock health > # of individuals receiving sectoral cash to contributing to household food security > Cash':
+        'cl3nmf1luclbdwv8',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Support to cooperatives and market linkages > # of individuals supported with rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Cash':
+        'cqn8fmluclbdwv9',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Temporary repair of grain and vegetable storage > # of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage > Cash':
+        'c1y6esfluclbdwva',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Temporary repair of livestock shelter/barns > # of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage > Cash':
+        'cy77eh2luclbdwvb',
+      'Urban and off-farm (Non-agricultural) livelihoods > Small business grants (startup grants) > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Cash':
+        'cwf5wugluclbdwvc',
+      'Urban and off-farm (Non-agricultural) livelihoods > Cash for work > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Cash':
+        'cy7mlolluclbdwvd',
+      'Distribution of in-kind food assistance > General Food Distribution > # of individuals receiving in-kind food assistance to ensure their immediate access to food > In-kind':
+        'ckb9x6nluclbdwve',
+      'Distribution of in-kind food assistance > Rapid Response Ration  > # of individuals receiving in-kind food assistance to ensure their immediate access to food > In-kind':
+        'cudv593luclbdwvf',
+      'Distribution of in-kind food assistance > Institutional feeding > # of individuals receiving in-kind food assistance to ensure their immediate access to food > In-kind':
+        'clk0ve8luclbdwvg',
+      'Distribution of in-kind food assistance > Hot meals > # of individuals receiving in-kind food assistance to ensure their immediate access to food > In-kind':
+        'c62jbb4luclbdwvh',
+      'Agriculture and livestock inputs (in-kind) > Cereal seeds and tools > # of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption > In-kind':
+        'cajjme8luclbdwvi',
+      'Agriculture and livestock inputs (in-kind) > Vegetable seed and tools > # of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption > In-kind':
+        'cwuh3kxluclbdwvj',
+      'Agriculture and livestock inputs (in-kind) > Emergency livestock and poultry input (restocking, poultry distribution) > # of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption > In-kind':
+        'c1r8kw1luclbdwvk',
+      'Agriculture and livestock inputs (in-kind) > Support to livestock and poultry health > # of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption > In-kind':
+        'clqz8mdluclbdwvl',
+      'Agriculture and livestock inputs (in-kind) > Support to livestock and poultry feed > # of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption > In-kind':
+        'cacdxvsluclbdwvm',
+      'Agriculture and livestock inputs (in-kind) > Support to beekeepers (tools and equipment) > # of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption > In-kind':
+        'cddjt06luclbdwvn',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Support to cooperatives and market linkages > # of individuals supported with rehabilitation of the agricultural infrastructure, cooperative support, and value chain > In-kind':
+        'cqumr0mluclbdwvo',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Temporary repair of grain and vegetable storage > # of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage > In-kind':
+        'cig4itpluclbdwvp',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Temporary repair of livestock shelter/barns > # of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage > In-kind':
+        'c680vshluclbdwvq',
+      'Agriculture and livestock inputs (in-kind) > Training on agricultural practice > # of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption > Service':
+        'c9gwbc6luclbdwvr',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Support to cooperatives and market linkages > # of individuals supported with rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Service':
+        'clpm48jluclbdwvs',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Temporary repair of grain and vegetable storage > # of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage > Service':
+        'c14nmxnluclbdwvt',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Temporary repair of livestock shelter/barns > # of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage > Service':
+        'cwlq0zmluclbdwvu',
+      'Urban and off-farm (Non-agricultural) livelihoods > Employment and reskilling > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Service':
+        'c7x4cjiluclbdwvv',
+      'Urban and off-farm (Non-agricultural) livelihoods > Job placement and counseling > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Service':
+        'c16nyfvluclbdwvw',
+      'Urban and off-farm (Non-agricultural) livelihoods > Temporary employment programs > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Service':
+        'c190tv5luclbdwvx',
+      'Urban and off-farm (Non-agricultural) livelihoods > Technical and vocational education and training (TVET) > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Service':
+        'ca0kvknluclbdwvy',
+      'Urban and off-farm (Non-agricultural) livelihoods > Bussiness trainings and skill enhancement workshops > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Service':
+        'cp9zi8yluclbdwvz',
+      'Provision of market-based assistance > Provision of market-based relief voucher assistance (value voucher or commodity voucher) > # of individuals receiving market-based assistance to ensure their immediate access to food > Voucher':
+        'cnuo9k8luclbdwv10',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for seeds and tools > # of individuals receiving sectoral cash to contributing to household food security > Voucher':
+        'clcwb1hluclbdwv11',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for livestock and poultry input (restocking/distribution) > # of individuals receiving sectoral cash to contributing to household food security > Voucher':
+        'c69xjcrluclbdwv12',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for temporary livestock shelter > # of individuals receiving sectoral cash to contributing to household food security > Voucher':
+        'cxckdpeluclbdwv13',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for animal feed > # of individuals receiving sectoral cash to contributing to household food security > Voucher':
+        'cb8q6qgluclbdwv14',
+      'Agriculture and livestock inputs (cash) > Sectoral cash for livestock health > # of individuals receiving sectoral cash to contributing to household food security > Voucher':
+        'cfm70w9luclbdwv15',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Support to cooperatives and market linkages > # of individuals supported with rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Voucher':
+        'crkjt22luclbdwv16',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Temporary repair of grain and vegetable storage > # of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage > Voucher':
+        'cwnkw41luclbdwv17',
+      'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain > Temporary repair of livestock shelter/barns > # of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage > Voucher':
+        'cco7mfeluclbdwv18',
     },
-    'If yes, which sub-activity': {
-      FSL: 'cdsseb9luclbdwv2',
-      FSL: 'cv58tzkluclbdwv3',
-      FSL: 'cksul5oluclbdwv4',
-      FSL: 'cod9ox4luclbdwv5',
-      FSL: 'cgsu89wluclbdwv6',
-      FSL: 'cx8imqaluclbdwv7',
-      FSL: 'cl3nmf1luclbdwv8',
-      FSL: 'cqn8fmluclbdwv9',
-      FSL: 'c1y6esfluclbdwva',
-      FSL: 'cy77eh2luclbdwvb',
-      FSL: 'cwf5wugluclbdwvc',
-      FSL: 'cy7mlolluclbdwvd',
-      FSL: 'ckb9x6nluclbdwve',
-      FSL: 'cudv593luclbdwvf',
-      FSL: 'clk0ve8luclbdwvg',
-      FSL: 'c62jbb4luclbdwvh',
-      FSL: 'cajjme8luclbdwvi',
-      FSL: 'cwuh3kxluclbdwvj',
-      FSL: 'c1r8kw1luclbdwvk',
-      FSL: 'clqz8mdluclbdwvl',
-      FSL: 'cacdxvsluclbdwvm',
-      FSL: 'cddjt06luclbdwvn',
-      FSL: 'cqumr0mluclbdwvo',
-      FSL: 'cig4itpluclbdwvp',
-      FSL: 'c680vshluclbdwvq',
-      FSL: 'c9gwbc6luclbdwvr',
-      FSL: 'clpm48jluclbdwvs',
-      FSL: 'c14nmxnluclbdwvt',
-      FSL: 'cwlq0zmluclbdwvu',
-      FSL: 'c7x4cjiluclbdwvv',
-      FSL: 'c16nyfvluclbdwvw',
-      FSL: 'c190tv5luclbdwvx',
-      FSL: 'ca0kvknluclbdwvy',
-      FSL: 'cp9zi8yluclbdwvz',
-      FSL: 'cnuo9k8luclbdwv10',
-      FSL: 'clcwb1hluclbdwv11',
-      FSL: 'c69xjcrluclbdwv12',
-      FSL: 'cxckdpeluclbdwv13',
-      FSL: 'cb8q6qgluclbdwv14',
-      FSL: 'cfm70w9luclbdwv15',
-      FSL: 'crkjt22luclbdwv16',
-      FSL: 'cwnkw41luclbdwv17',
-      FSL: 'cco7mfeluclbdwv18',
-    },
-    'HNRP Scope': {
-      'Outside HNRP Scope': 'cse3gxjlw6flfyl2',
-    },
-    'Outside HNRP Scope sub-categories': {
+    hnrp_scope: {'Outside HNRP Scope': 'cse3gxjlw6flfyl2'},
+    outscope_type: {
       'Outside priority areas': 'cvf0ba4lw6fucqv4',
       'Funding not reported in FTS​': 'c7cah40lw6fula95',
       'Delivered outside HNRP​ mechanism': 'cj4y1s3lw6furva6',

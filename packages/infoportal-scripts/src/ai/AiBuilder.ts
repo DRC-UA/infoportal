@@ -1,7 +1,7 @@
 import {ActivityInfoSdk} from 'infoportal-common'
 import {appConf} from '../appConf'
 import {AiBuilderSchemParser} from './AiBuilderSchemaParser'
-import {AiBuilderFileMakerBackup} from './AiBuilderFileMaker.backup'
+import {AiBuilderFileMaker} from './AiBuilderFileMaker'
 
 export namespace AiBuilder {
   export type Args = {
@@ -28,6 +28,6 @@ export namespace AiBuilder {
     // TODO: Here we assume there won't be more than 1 nested form, and that's not good :-)
     const [form, subForm] = await new AiBuilderSchemParser(args, formTree, sdk).parse()
     const outDir = conf.rootProjectDir + '/src/output/activityInfo'
-    await new AiBuilderFileMakerBackup(args, form, subForm).print(outDir)
+    await new AiBuilderFileMaker(args, form, subForm).make(outDir)
   }
 }
