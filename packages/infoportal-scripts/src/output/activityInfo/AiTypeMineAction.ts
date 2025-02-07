@@ -2,50 +2,39 @@ export namespace AiTypeMineAction {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
   export interface Type {
     /**
-			ID
-		*/
+      ID    */
     RMM_ID?: string
     /**
-			Reporting Organization
-		*/
+      Reporting Organization    */
     org_rep: Opt<'org_rep'>
     /**
-			Implementing Partner
-			If applicable
-		*/
+      Implementing Partner
+      If applicable    */
     org_imp1?: string
     /**
-			Implementing Partner 2
-			Add another Implementing Partner if applicable
-		*/
+      Implementing Partner 2
+      Add another Implementing Partner if applicable    */
     org_imp2?: string
     /**
-			Plan/Project Code
-		*/
+      Plan/Project Code    */
     plan_code: Opt<'plan_code'>
     /**
-			Oblast
-		*/
+      Oblast    */
     adm1: Opt<'adm1'>
     /**
-			Raion
-		*/
+      Raion    */
     adm2: string
     /**
-			Hromada
-		*/
+      Hromada    */
     adm3: string
     /**
-			Settlement
-		*/
+      Settlement    */
     adm4?: string
     /**
-			Collective Site
-		*/
+      Collective Site    */
     cs?: string
     /**
-			Response Theme
-		*/
+      Response Theme    */
     theme: Opt<'theme'>
   }
 
@@ -127,61 +116,47 @@ export namespace AiTypeMineAction {
   type OptSub<T extends keyof typeof optionsSub> = keyof (typeof optionsSub)[T]
   export interface TypeSub {
     /**
-			Reporting Month
-		*/
+      Reporting Month    */
     month_rep: string
     /**
-			Population Group
-		*/
+      Population Group    */
     popgroup: OptSub<'popgroup'>
     /**
-			Indicators
-		*/
+      Indicators    */
     indicator: OptSub<'indicator'>
     /**
-			Total Individuals Reached
-		*/
+      Total Individuals Reached    */
     ind_total: number
     /**
-			Girls (0-17)
-		*/
+      Girls (0-17)    */
     ind_girls: number
     /**
-			Boys (0-17)
-		*/
+      Boys (0-17)    */
     ind_boys: number
     /**
-			Adult Women (18-59)
-		*/
+      Adult Women (18-59)    */
     ind_adwomen: number
     /**
-			Adult Men (18-59)
-		*/
+      Adult Men (18-59)    */
     ind_admen: number
     /**
-			Older Women (60+)
-		*/
+      Older Women (60+)    */
     ind_oldwomen: number
     /**
-			Older Men (60+)
-		*/
+      Older Men (60+)    */
     ind_oldmen: number
     /**
-			Non-individuals Reached/Quantity
-		*/
+      Non-individuals Reached/Quantity    */
     nonind: number
     /**
-			People with Disability
-			Out of the total individuals reached
-		*/
+      People with Disability
+      Out of the total individuals reached    */
     ind_pwd?: number
     /**
-			HNRP Scope
-		*/
+      HNRP Scope    */
     hnrp_scope?: OptSub<'hnrp_scope'>
     /**
-			Outside HNRP Scope sub-categories
-		*/
+      Outside HNRP Scope sub-categories    */
     outscope_type?: OptSub<'outscope_type'>
   }
 

@@ -2,112 +2,86 @@ export namespace AiTypeSnfi {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
   export interface Type {
     /**
-			Reporting Organization
-		*/
+      Reporting Organization    */
     org_rep: Opt<'org_rep'>
     /**
-			Implementing Partner
-		*/
+      Implementing Partner    */
     org_imp?: Opt<'org_imp'>
     /**
-			Plan/Project Code
-		*/
+      Plan/Project Code    */
     plan_code: Opt<'plan_code'>
     /**
-			Indicators - SNFI
-		*/
+      Indicators - SNFI    */
     indicator: Opt<'indicator'>
     /**
-			Distribution through Common Pipeline
-			Select yes if items were received through the common pipeline.
-		*/
+      Distribution through Common Pipeline
+      Select yes if items were received through the common pipeline.    */
     pipeline: Opt<'pipeline'>
     /**
-			Distribution through inter-agency convoy (HOPC)
-			Select yes if items were distributed through inter-agency convoy
-		*/
+      Distribution through inter-agency convoy (HOPC)
+      Select yes if items were distributed through inter-agency convoy    */
     convoy: Opt<'convoy'>
     /**
-			Oblast
-		*/
+      Oblast    */
     adm1: Opt<'adm1'>
     /**
-			Raion
-		*/
+      Raion    */
     adm2: string
     /**
-			Hromada
-		*/
+      Hromada    */
     adm3: string
     /**
-			Settlement
-		*/
+      Settlement    */
     adm4: string
     /**
-			Collective Site
-		*/
+      Collective Site    */
     cs?: string
     /**
-			Date of completion/ distribution (YYYY-MM-DD)
-		*/
+      Date of completion/ distribution (YYYY-MM-DD)    */
     date_rep: string
     /**
-			Reporting Month
-		*/
+      Reporting Month    */
     month_rep: string
     /**
-			Population Group
-		*/
+      Population Group    */
     popgroup: Opt<'popgroup'>
     /**
-			Non-individuals Reached
-			Enter the number of units/ households reached.
-		*/
+      Non-individuals Reached
+      Enter the number of units/ households reached.    */
     nonind: number
     /**
-			Total Individuals Reached
-		*/
+      Total Individuals Reached    */
     ind_total: number
     /**
-			Girls (0-17)
-		*/
+      Girls (0-17)    */
     ind_girls: number
     /**
-			Boys (0-17)
-		*/
+      Boys (0-17)    */
     ind_boys: number
     /**
-			Adult Women (18-59)
-		*/
+      Adult Women (18-59)    */
     ind_adwomen: number
     /**
-			Adult Men (18-59)
-		*/
+      Adult Men (18-59)    */
     ind_admen: number
     /**
-			Older Women (60+)
-		*/
+      Older Women (60+)    */
     ind_oldwomen: number
     /**
-			Older Men (60+)
-		*/
+      Older Men (60+)    */
     ind_oldmen: number
     /**
-			People with disability
-			Out of the total individuals reached
-		*/
+      People with disability
+      Out of the total individuals reached    */
     ind_pwd?: number
     /**
-			Comment
-		*/
+      Comment    */
     comment?: string
     /**
-			HNRP Scope
-		*/
+      HNRP Scope    */
     hnrp_scope?: Opt<'hnrp_scope'>
     /**
-			Outside HNRP Scope sub-categories
-		*/
+      Outside HNRP Scope sub-categories    */
     outscope_type?: Opt<'outscope_type'>
   }
 

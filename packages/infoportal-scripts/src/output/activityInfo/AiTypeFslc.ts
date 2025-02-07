@@ -2,151 +2,115 @@ export namespace AiTypeFslc {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
   export interface Type {
     /**
-			Reporting Month
-		*/
+      Reporting Month    */
     month_rep: string
     /**
-			Reporting Organization
-		*/
+      Reporting Organization    */
     org_rep: Opt<'org_rep'>
     /**
-			Implementing Partner
-		*/
+      Implementing Partner    */
     org_imp1?: Opt<'org_imp1'>
     /**
-			Activity Plan Code
-			Choose from the drop-down the Activity Planning Code of the implemented project. You can check the code using the Activity Planning Module (APM).  If you do not have the Activity Planning Code, please register the project in the Activity Planning Module (APM) first.
-		*/
+      Activity Plan Code
+      Choose from the drop-down the Activity Planning Code of the implemented project. You can check the code using the Activity Planning Module (APM).  If you do not have the Activity Planning Code, please register the project in the Activity Planning Module (APM) first.    */
     plan_code: Opt<'plan_code'>
     /**
-			Activity and indicator
-		*/
+      Activity and indicator    */
     indicator: Opt<'indicator'>
     /**
-			Implementation Status
-		*/
+      Implementation Status    */
     status: Opt<'status'>
     /**
-			Frequency
-		*/
+      Frequency    */
     frequency?: Opt<'frequency'>
     /**
-			Kcal covered  (per person per day)
-		*/
+      Kcal covered  (per person per day)    */
     kcal?: number
     /**
-			Unit
-		*/
+      Unit    */
     unit?: Opt<'unit'>
     /**
-			Total Quantity distributed (per person)
-		*/
+      Total Quantity distributed (per person)    */
     total_quantity?: number
     /**
-			Total Value (local currency)
-			Please enter the amount of money beneficiary received.
-		*/
+      Total Value (local currency)
+      Please enter the amount of money beneficiary received.    */
     total_value?: number
     /**
-			Currency
-		*/
+      Currency    */
     currency?: Opt<'currency'>
     /**
-			Cash delivery mechanism
-		*/
+      Cash delivery mechanism    */
     cash_delivery_mechanism?: Opt<'cash_delivery_mechanism'>
     /**
-			Oblast
-		*/
+      Oblast    */
     adm1: Opt<'adm1'>
     /**
-			Raion
-		*/
+      Raion    */
     adm2: string
     /**
-			Hromada
-		*/
+      Hromada    */
     adm3: string
     /**
-			Settlement
-		*/
+      Settlement    */
     adm4?: string
     /**
-			Location type
-		*/
+      Location type    */
     location_type?: Opt<'location_type'>
     /**
-			Population Group
-		*/
+      Population Group    */
     popgroup: Opt<'popgroup'>
     /**
-			Number of people reached
-		*/
+      Number of people reached    */
     ind_total: number
     /**
-			Girls (0-17)
-		*/
+      Girls (0-17)    */
     ind_girls: number
     /**
-			Boys (0-17)
-		*/
+      Boys (0-17)    */
     ind_boys: number
     /**
-			Adult Women (18-59)
-		*/
+      Adult Women (18-59)    */
     ind_adwomen: number
     /**
-			Adult Men (18-59)
-		*/
+      Adult Men (18-59)    */
     ind_admen: number
     /**
-			Older Women (60+)
-		*/
+      Older Women (60+)    */
     ind_oldwomen: number
     /**
-			Older Men (60+)
-		*/
+      Older Men (60+)    */
     ind_oldmen: number
     /**
-			Number of people with disability
-		*/
+      Number of people with disability    */
     ind_pwd?: number
     /**
-			Number of reached households
-		*/
+      Number of reached households    */
     hh_reached?: number
     /**
-			New beneficiaries (assisted for the first time in 2024)
-		*/
+      New beneficiaries (assisted for the first time in 2024)    */
     ind_new: number
     /**
-			Were these people reached in 2024 by another FSL sub-activity?
-		*/
+      Were these people reached in 2024 by another FSL sub-activity?    */
     question_new: Opt<'question_new'>
     /**
-			If yes, which sub-activity
-		*/
+      If yes, which sub-activity    */
     subactivity_if_yes: Opt<'subactivity_if_yes'>
     /**
-			If yes, how many people received from both sub-activities
-		*/
+      If yes, how many people received from both sub-activities    */
     reached_if_yes: number
     /**
-			Comments
-		*/
+      Comments    */
     comment?: string
     /**
-			key
-			БУДЬ ЛАСКА, НЕ ЧІПАЙТЕ ЦЕ ПОЛЕ, ІНАКШЕ ВАМ ДОВЕДЕТЬСЯ ЗАПОВНЮВАТИ ФОРМУ З НУЛЯ!!  PLEASE DO NOT EDIT THIS FIELD, OTHERWISE YOU NEED TO FILL IN THE FORM FROM SCRATCH!!!
-		*/
+      key
+      БУДЬ ЛАСКА, НЕ ЧІПАЙТЕ ЦЕ ПОЛЕ, ІНАКШЕ ВАМ ДОВЕДЕТЬСЯ ЗАПОВНЮВАТИ ФОРМУ З НУЛЯ!!  PLEASE DO NOT EDIT THIS FIELD, OTHERWISE YOU NEED TO FILL IN THE FORM FROM SCRATCH!!!    */
     key: string
     /**
-			HNRP Scope
-		*/
+      HNRP Scope    */
     hnrp_scope?: Opt<'hnrp_scope'>
     /**
-			Outside HNRP Scope sub-categories
-		*/
+      Outside HNRP Scope sub-categories    */
     outscope_type?: Opt<'outscope_type'>
   }
 

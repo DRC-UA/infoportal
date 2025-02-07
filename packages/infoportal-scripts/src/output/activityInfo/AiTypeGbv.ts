@@ -2,50 +2,39 @@ export namespace AiTypeGbv {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
   export interface Type {
     /**
-			ID
-		*/
+      ID    */
     RMM_ID?: string
     /**
-			Reporting Organization
-		*/
+      Reporting Organization    */
     org_rep: Opt<'org_rep'>
     /**
-			Implementing Partner
-			If applicable
-		*/
+      Implementing Partner
+      If applicable    */
     org_imp1?: string
     /**
-			Implementing Partner 2
-			Add another Implementing Partner if applicable
-		*/
+      Implementing Partner 2
+      Add another Implementing Partner if applicable    */
     org_imp2?: string
     /**
-			Plan/Project Code
-		*/
+      Plan/Project Code    */
     plan_code: Opt<'plan_code'>
     /**
-			Oblast
-		*/
+      Oblast    */
     adm1: Opt<'adm1'>
     /**
-			Raion
-		*/
+      Raion    */
     adm2: string
     /**
-			Hromada
-		*/
+      Hromada    */
     adm3: string
     /**
-			Settlement
-		*/
+      Settlement    */
     adm4?: string
     /**
-			Collective Site
-		*/
+      Collective Site    */
     cs?: string
     /**
-			Response Theme
-		*/
+      Response Theme    */
     theme: Opt<'theme'>
   }
 
@@ -116,134 +105,104 @@ export namespace AiTypeGbv {
   type OptSub<T extends keyof typeof optionsSub> = keyof (typeof optionsSub)[T]
   export interface TypeSub {
     /**
-			Reporting Month
-		*/
+      Reporting Month    */
     month_rep: string
     /**
-			Population Group
-		*/
+      Population Group    */
     popgroup: OptSub<'popgroup'>
     /**
-			Type of beneficiaries
-			New beneficiary - is a person who receives a service for the first time.  Repeated beneficiary - is a person who receives the same service multiple times.
-		*/
+      Type of beneficiaries
+      New beneficiary - is a person who receives a service for the first time.  Repeated beneficiary - is a person who receives the same service multiple times.    */
     type_benef?: OptSub<'type_benef'>
     /**
-			Indicators
-		*/
+      Indicators    */
     indicator: OptSub<'indicator'>
     /**
-			Total Individuals Reached
-		*/
+      Total Individuals Reached    */
     ind_total: number
     /**
-			Girls (0-17)
-		*/
+      Girls (0-17)    */
     ind_girls: number
     /**
-			Boys (0-17)
-		*/
+      Boys (0-17)    */
     ind_boys: number
     /**
-			Adult Women (18-59)
-		*/
+      Adult Women (18-59)    */
     ind_adwomen: number
     /**
-			Adult Men (18-59)
-		*/
+      Adult Men (18-59)    */
     ind_admen: number
     /**
-			Older Women (60+)
-		*/
+      Older Women (60+)    */
     ind_oldwomen: number
     /**
-			Older Men (60+)
-		*/
+      Older Men (60+)    */
     ind_oldmen: number
     /**
-			Non-individuals Reached/Quantity
-		*/
+      Non-individuals Reached/Quantity    */
     nonind: number
     /**
-			People with Disability
-			Out of the total individuals reached
-		*/
+      People with Disability
+      Out of the total individuals reached    */
     ind_pwd?: number
     /**
-			Basic/Essential
-			Please enter the number of Basic/Essential dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".
-		*/
+      Basic/Essential
+      Please enter the number of Basic/Essential dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".    */
     basic_essen: number
     /**
-			Elderly
-			Please enter the number of Elderly dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".
-		*/
+      Elderly
+      Please enter the number of Elderly dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".    */
     elderl: number
     /**
-			Winter
-			Please enter the number of Winter dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".
-		*/
+      Winter
+      Please enter the number of Winter dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".    */
     winter_kit: number
     /**
-			Other
-			Please enter the number of Other dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".
-		*/
+      Other
+      Please enter the number of Other dignity kits.  If no dignity kits of this type were distributed for this month, please put "0".    */
     other_kit: number
     /**
-			Type of distribution
-		*/
+      Type of distribution    */
     distr_type: OptSub<'distr_type'>
     /**
-			Who distributed the kits?
-		*/
+      Who distributed the kits?    */
     who_distr_k: OptSub<'who_distr_k'>
     /**
-			Dignity kits in stock?
-		*/
+      Dignity kits in stock?    */
     dk_stock: OptSub<'dk_stock'>
     /**
-			Basic/Essential
-			Please enter the number of Basic/Essential dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".
-		*/
+      Basic/Essential
+      Please enter the number of Basic/Essential dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".    */
     basic_stock: number
     /**
-			Elderly
-			Please enter the number of Elderly dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".
-		*/
+      Elderly
+      Please enter the number of Elderly dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".    */
     elderly_stock: number
     /**
-			Winter
-			Please enter the number of Winter dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".
-		*/
+      Winter
+      Please enter the number of Winter dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".    */
     winter_stock: number
     /**
-			Other kits in stock
-			Please enter the number of Other dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".
-		*/
+      Other kits in stock
+      Please enter the number of Other dignity kits in stock. If there are no dignity kits of this type in stock, please put "0".    */
     other_stock: number
     /**
-			Current status of stock
-		*/
+      Current status of stock    */
     stock_status: OptSub<'stock_status'>
     /**
-			Any assessment/feedback done/collected on post distribution of kits?
-		*/
+      Any assessment/feedback done/collected on post distribution of kits?    */
     post_distrib: OptSub<'post_distrib'>
     /**
-			Was the service provided to evacuees?
-		*/
+      Was the service provided to evacuees?    */
     evacuees?: OptSub<'evacuees'>
     /**
-			How many evacuees received the service?
-		*/
+      How many evacuees received the service?    */
     many_evac?: number
     /**
-			HNRP Scope
-		*/
+      HNRP Scope    */
     hnrp_scope?: OptSub<'hnrp_scope'>
     /**
-			Outside HNRP Scope sub-categories
-		*/
+      Outside HNRP Scope sub-categories    */
     outscope_type?: OptSub<'outscope_type'>
   }
 

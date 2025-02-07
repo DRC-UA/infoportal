@@ -2,146 +2,111 @@ export namespace AiTypeMpca {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
   export interface Type {
     /**
-			Reporting Organization
-		*/
+      Reporting Organization    */
     org_rep: Opt<'org_rep'>
     /**
-			Implementing Partner
-		*/
+      Implementing Partner    */
     org_imp: Opt<'org_imp'>
     /**
-			Activity Plan Code
-		*/
+      Activity Plan Code    */
     plan_code: Opt<'plan_code'>
     /**
-			Donor
-		*/
+      Donor    */
     donor: string
     /**
-			Indicators - MPCA
-		*/
+      Indicators - MPCA    */
     indicator?: Opt<'indicator'>
     /**
-			Total amount (USD) distributed through multi-purpose cash assistance
-			The total cost for the MPCA activity, including financial service provider costs.
-		*/
+      Total amount (USD) distributed through multi-purpose cash assistance
+      The total cost for the MPCA activity, including financial service provider costs.    */
     MP101_CV_02: number
     /**
-			Payments Frequency
-		*/
+      Payments Frequency    */
     frequency: Opt<'frequency'>
     /**
-			Targeting Framework
-		*/
+      Targeting Framework    */
     target_frame: Opt<'target_frame'>
     /**
-			Financial Service Provider (FSP)
-		*/
+      Financial Service Provider (FSP)    */
     FSP: Opt<'FSP'>
     /**
-			Response Theme
-		*/
+      Response Theme    */
     theme: Opt<'theme'>
     /**
-			Raion
-		*/
+      Raion    */
     adm2?: string
     /**
-			Hromada
-		*/
+      Hromada    */
     adm3: string
     /**
-			Settlement
-		*/
+      Settlement    */
     adm4?: string
     /**
-			Collective Site
-		*/
+      Collective Site    */
     cs?: string
     /**
-			Reporting Month
-		*/
+      Reporting Month    */
     month_rep: string
     /**
-			Activity Start Month
-		*/
+      Activity Start Month    */
     month_start?: string
     /**
-			Activity End Month
-		*/
+      Activity End Month    */
     month_end?: string
     /**
-			Number of Covered Months
-		*/
+      Number of Covered Months    */
     duration: Opt<'duration'>
     /**
-			Population Group
-		*/
+      Population Group    */
     popgroup: Opt<'popgroup'>
     /**
-			Total Individuals Reached
-		*/
+      Total Individuals Reached    */
     ind_total: number
     /**
-			Girls (0-17)
-		*/
+      Girls (0-17)    */
     ind_girls: number
     /**
-			Boys (0-17)
-		*/
+      Boys (0-17)    */
     ind_boys: number
     /**
-			Adult Women (18-59)
-		*/
+      Adult Women (18-59)    */
     ind_adwomen: number
     /**
-			Adult Men (18-59)
-		*/
+      Adult Men (18-59)    */
     ind_admen: number
     /**
-			Older Women (60+)
-		*/
+      Older Women (60+)    */
     ind_oldwomen: number
     /**
-			Older Men (60+)
-		*/
+      Older Men (60+)    */
     ind_oldmen: number
     /**
-			People with disability
-			Out of the total individuals reached
-		*/
+      People with disability
+      Out of the total individuals reached    */
     ind_pwd: number
     /**
-			Girls with disability (0-17)
-		*/
+      Girls with disability (0-17)    */
     girls_pwd?: number
     /**
-			Boys with disability (0-17)
-		*/
+      Boys with disability (0-17)    */
     boys_pwd?: number
     /**
-			Adult Women with disability (18-59)
-		*/
+      Adult Women with disability (18-59)    */
     adwomen_pwd?: number
     /**
-			Adult Men with disability (18-59)
-		*/
+      Adult Men with disability (18-59)    */
     admen_pwd?: number
     /**
-			Older Women with disability (60+)
-		*/
+      Older Women with disability (60+)    */
     oldwomen_pwd?: number
     /**
-			Older Men with disability (60+)
-		*/
+      Older Men with disability (60+)    */
     oldmen_pwd?: number
     /**
-			HNRP Scope
-		*/
+      HNRP Scope    */
     hnrp_scope?: Opt<'hnrp_scope'>
     /**
-			Outside HNRP Scope sub-categories
-		*/
+      Outside HNRP Scope sub-categories    */
     outscope_type?: Opt<'outscope_type'>
   }
 

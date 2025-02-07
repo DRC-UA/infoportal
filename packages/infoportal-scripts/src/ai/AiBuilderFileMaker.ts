@@ -88,7 +88,7 @@ export class AiBuilderFileMaker {
       '{',
       d
         .flatMap((q) => [
-          `/**\n\t\t\t${q.label}${q.description ? '\n\t\t\t' + q.description.replaceAll(/\s/g, ' ') : ''}\n\t\t*/`,
+          `/**\n      ${q.label}${q.description ? '\n      ' + q.description.replaceAll(/\s/g, ' ') : ''}    */`,
           `${q.code}${q.required ? '' : '?'}: ${this.getType(q, prefix)}`,
         ])
         .join('\n'),

@@ -2,130 +2,99 @@ export namespace AiTypeWash {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
   export interface Type {
     /**
-			Activity Plan Code
-		*/
+      Activity Plan Code    */
     plan_code: Opt<'plan_code'>
     /**
-			Reporting Organization
-		*/
+      Reporting Organization    */
     org_rep: Opt<'org_rep'>
     /**
-			Implementing Partner
-		*/
+      Implementing Partner    */
     org_imp: Opt<'org_imp'>
     /**
-			Donor Name
-		*/
+      Donor Name    */
     donor?: string
     /**
-			WASH
-		*/
+      WASH    */
     indicator: Opt<'indicator'>
     /**
-			Response Theme
-		*/
+      Response Theme    */
     theme: Opt<'theme'>
     /**
-			Additional Topic
-		*/
+      Additional Topic    */
     theme2?: Opt<'theme2'>
     /**
-			Oblast
-		*/
+      Oblast    */
     adm1: Opt<'adm1'>
     /**
-			Raion
-		*/
+      Raion    */
     adm2: Opt<'adm2'>
     /**
-			Hromada
-		*/
+      Hromada    */
     adm3: string
     /**
-			Settlement
-		*/
+      Settlement    */
     adm4: string
     /**
-			Location Type
-		*/
+      Location Type    */
     loc_type: Opt<'loc_type'>
     /**
-			Other Institution
-		*/
+      Other Institution    */
     ben_type_other?: string
     /**
-			Reporting Month
-		*/
+      Reporting Month    */
     month_rep: string
     /**
-			Activity Start month
-		*/
+      Activity Start month    */
     month_start?: string
     /**
-			Activity End month
-			estimated
-		*/
+      Activity End month
+      estimated    */
     month_end?: string
     /**
-			Disaggregation by population group and/or gender and age known?
-		*/
+      Disaggregation by population group and/or gender and age known?    */
     disaggregation: Opt<'disaggregation'>
     /**
-			Total Reached (No Disaggregation)
-		*/
+      Total Reached (No Disaggregation)    */
     tot_reach: number
     /**
-			Population Group
-		*/
+      Population Group    */
     popgroup: Opt<'popgroup'>
     /**
-			Girls (0-17)
-		*/
+      Girls (0-17)    */
     ind_girls: number
     /**
-			Boys (0-17)
-		*/
+      Boys (0-17)    */
     ind_boys: number
     /**
-			Adult Women (18-59)
-		*/
+      Adult Women (18-59)    */
     ind_adwomen: number
     /**
-			Adult Men (18-59)
-		*/
+      Adult Men (18-59)    */
     ind_admen: number
     /**
-			Older Women (60+)
-		*/
+      Older Women (60+)    */
     ind_oldwomen: number
     /**
-			Older Men (60+)
-		*/
+      Older Men (60+)    */
     ind_oldmen: number
     /**
-			People with disability
-			Out of the total individuals reached
-		*/
+      People with disability
+      Out of the total individuals reached    */
     ind_pwd?: number
     /**
-			Name of items/services delivered
-		*/
+      Name of items/services delivered    */
     items_name?: string
     /**
-			Quantity of items/services delivered
-		*/
+      Quantity of items/services delivered    */
     items_qty?: number
     /**
-			Comments
-		*/
+      Comments    */
     com?: string
     /**
-			HNRP Scope
-		*/
+      HNRP Scope    */
     hnrp_scope?: Opt<'hnrp_scope'>
     /**
-			Outside HNRP Scope sub-categories
-		*/
+      Outside HNRP Scope sub-categories    */
     outscope_type?: Opt<'outscope_type'>
   }
 
