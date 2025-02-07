@@ -9,7 +9,7 @@
     "dev-r": "nodemon src/index.ts",
     "dev": "npm run build && npm start",
     "debug": "npm run build && node --inspect-brk lib/index.js",
-    "build-ai-type": "ts-node src/ai/BuildTypeActivityInfo.ts",
+    "build-ai-type": "ts-node src/ai/index.ts",
     "build-kobo-type": "ts-node src/kobo/BuildTypeKobo.ts"
   },
   "keywords": [],

@@ -503,7 +503,9 @@ export namespace FixKoboMigration {
             start: new Date(2025, 0, 1),
           },
         })
-        .then((_) => _.results.filter((_) => _['_uuid'] && _['uuid'] && _._submitted_by === 'meal_drc_ddg_ukr'))
+        .then((_) =>
+          _.results.filter((_) => _['_uuid'] && (_ as any)['uuid'] && _._submitted_by === 'meal_drc_ddg_ukr'),
+        )
       console.log(KoboIndex.searchById(formId)!.name + ' DELETE ' + res.length)
       await koboSdkDrc.v2.submission.delete({formId, submissionIds: res.map((_) => _._id)})
     }
