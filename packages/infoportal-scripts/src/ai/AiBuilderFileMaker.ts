@@ -74,7 +74,7 @@ export class AiBuilderFileMaker {
             },
             (_) => `a['${q.label}']`,
           )
-          return `  '${q.id}': a['${q.label}'] === undefined ? undefined : ${mapValue}`
+          return `'${q.id}': a['${q.label}'] === undefined ? undefined : ${mapValue}`
         })
         .join(',\n'),
       '})',
