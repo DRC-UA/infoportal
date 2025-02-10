@@ -32,7 +32,7 @@ export class UserService {
           accessToken: true,
           activities: false,
           admin: true,
-          avatar: true,
+          avatar: false,
           createdBy: true,
           createdAt: true,
           drcOffice: true,
