@@ -105,7 +105,7 @@ export class ControllerKoboAnswer {
 
   /** TODO need to handle public access */
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
-    this.log.info(`> SEARCH by ${req.session?.user?.email} ${req.params.formId}`)
+    this.log.info(`> SEARCH by ${req.session?.user?.email}, form id: ${req.params.formId}`)
     try {
       const {formId} = req.params
       const filters = await answersFiltersValidation.validate(req.body)
