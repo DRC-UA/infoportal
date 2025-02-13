@@ -68,6 +68,7 @@ export const en = Object.freeze({
     seeResults: `See results`,
     updating: 'Updating',
     users: 'Users',
+    link: 'Link',
     select3Outcomes: `Please, select 3 outcomes`,
     oblast: 'Oblast',
     edit: 'Edit',

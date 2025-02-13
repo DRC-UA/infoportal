@@ -144,6 +144,8 @@ export class KoboSyncServer {
       data: {
         name: schema.name,
         deploymentStatus: schema.deployment_status,
+        enketoUrl: schema.deployment__links.offline_url,
+        submissionsCount: schema.deployment__submission_count,
       },
     })
   }

@@ -1,6 +1,5 @@
 import {KoboForm} from '@/core/sdk/server/kobo/KoboMapper'
 import {useI18n} from '@/core/i18n'
-import {useNavigate} from 'react-router'
 import {Page, PageTitle} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
@@ -12,13 +11,13 @@ import {Icon, useTheme} from '@mui/material'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {NavLink} from 'react-router-dom'
 
 export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
   const {api} = useAppSettings()
   const fetcherServers = useFetcher(api.kobo.server.getAll)
   const {formatDate, m} = useI18n()
-  const navigate = useNavigate()
   const t = useTheme()
 
   useEffect(() => {
@@ -29,12 +28,13 @@ export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
   }, [fetcherServers.get])
 
   return (
-    <Page width="lg">
+    <Page width="full">
       {forms && forms.length > 0 && (
         <>
           <PageTitle>{m.selectADatabase}</PageTitle>
           <Panel>
             <Datatable
+              showExportBtn
               defaultLimit={500}
               id="kobo-index"
               data={forms}
@@ -59,6 +59,7 @@ export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
                           </Icon>
                         ) : undefined,
                       value: _.deploymentStatus,
+                      export: _.deploymentStatus,
                       option: _.deploymentStatus,
                     }
                   },
@@ -85,7 +86,7 @@ export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
                       return {
                         value: url,
                         label: (
-                          <a className="link" href={url}>
+                          <a className="link" href={url} target="_blank">
                             {url.replace(/https?:\/\//, '')}
                           </a>
                         ),
@@ -117,6 +118,14 @@ export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
                   renderQuick: (_) => KoboFormSdk.parseFormName(_.name)?.donors?.join(','),
                 },
                 {
+                  id: 'length',
+                  head: m.submissions,
+                  type: 'number',
+                  align: 'right',
+                  width: 0,
+                  renderQuick: (_) => _.submissionsCount,
+                },
+                {
                   id: 'createdAt',
                   type: 'date',
                   head: m.createdAt,
@@ -141,17 +150,35 @@ export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
                   },
                 },
                 {
+                  id: 'form_url',
+                  head: m.link,
+                  align: 'center',
+                  type: 'string',
+                  width: 0,
+                  render: (_) => {
+                    if (!_.enketoUrl) return {label: '', value: undefined}
+                    return {
+                      export: _.enketoUrl,
+                      tooltip: _.enketoUrl,
+                      value: _.enketoUrl,
+                      label: (
+                        <a href={_.enketoUrl} target="_blank" rel="noopener noreferrer">
+                          <TableIconBtn color="primary">file_open</TableIconBtn>
+                        </a>
+                      ),
+                    }
+                  },
+                },
+                {
                   id: 'actions',
                   width: 0,
                   styleHead: {maxWidth: 0},
                   align: 'right',
                   head: '',
                   renderQuick: (_) => (
-                    <TableIconBtn
-                      color="primary"
-                      onClick={() => navigate(databaseIndex.siteMap.database.absolute(_.id))}
-                      children="chevron_right"
-                    />
+                    <NavLink to={databaseIndex.siteMap.database.absolute(_.id)}>
+                      <TableIconBtn color="primary" children="chevron_right" />
+                    </NavLink>
                   ),
                 },
               ]}

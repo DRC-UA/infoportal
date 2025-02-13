@@ -17,6 +17,8 @@ export interface KoboForm {
   name: string
   serverId: string
   uploadedBy?: string
+  enketoUrl?: string
+  submissionsCount?: number
   deploymentStatus?: Kobo.Form.DeploymentStatus
 }
 

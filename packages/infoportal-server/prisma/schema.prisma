@@ -28,6 +28,8 @@ model KoboForm {
   deploymentStatus   String?
   updatedBy          String?
   uploadedBy         String?
+  enketoUrl          String?
+  submissionsCount   Int?
   KoboAnswers        KoboAnswers[]
   KoboAnswersHistory KoboAnswersHistory[]
 }
