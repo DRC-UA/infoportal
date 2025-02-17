@@ -597,7 +597,6 @@ export const ShelterTable = () => {
               <SelectStatusBy
                 enum="KoboValidation"
                 compact
-                iconFilled={true}
                 value={nta.tags?._validation}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({

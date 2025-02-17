@@ -161,7 +161,7 @@ export const run = async () => {
     }
     const answers = await sdk.v2.submission.get({formId})
     await Promise.all(
-      Obj.entries(seq(answers.results).groupBy((_) => _.validationStatus!)).map(([k, v]) => {
+      Obj.entries(seq(answers.results).groupBy((_) => _._validation_status.uid!)).map(([k, v]) => {
         return chunkify({
           size: 10000,
           data: v.map((_) => _._id),
