@@ -1,10 +1,11 @@
 import React from 'react'
 import {ProtectRoute} from '@/core/Session/SessionContext'
+import {Victim} from '@/features/Victim/Victim'
 
 const HdpPage = () => {
   return (
     <ProtectRoute>
-      <div>In dev</div>
+      <Victim />
     </ProtectRoute>
   )
 }

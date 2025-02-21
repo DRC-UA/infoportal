@@ -10,6 +10,7 @@ import {
   Ecrec_vet_bha388,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
+  Ecrec_msmeGrantReg,
   Meal_cashPdm,
   Partner_lampa,
   Protection_communityMonitoring,
@@ -21,13 +22,12 @@ import {
   Protection_referral,
   Shelter_cashForShelter,
   Shelter_nta,
+  Va_bio_tia,
 } from '../generated'
 import {Person} from '../../type/Person'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
-import {Ecrec_msmeGrantReg} from '../generated/Ecrec_msmeGrantReg'
 import {OblastIndex} from '../../location'
 import {DrcOffice} from '../../type/Drc'
-import {fnTry} from '../../utils'
 
 export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
@@ -62,6 +62,7 @@ export namespace KoboXmlMapper {
       | 'kharkiv'
       | 'dnipro'
       | 'mykovaiv'
+      | 'iev'
 
     export type Displacement =
       | 'idp'
@@ -117,6 +118,7 @@ export namespace KoboXmlMapper {
         slo: DrcOffice.Sloviansk,
         zap: DrcOffice.Zaporizhzhya,
         khe: DrcOffice.Kherson,
+        iev: DrcOffice.Kyiv
       },
       () => undefined,
     )
@@ -598,6 +600,37 @@ export namespace KoboXmlMapper {
           ),
         })),
       })
+    }
+
+    export const va_bio_tia = (row: Va_bio_tia.T): Person.Details[] => {
+      const tiaEntry = row.tia_assesment?.find(tia => tia.res_stat !== undefined || tia.cash_age !== undefined || tia.cash_gender !== undefined);
+
+      const age = tiaEntry?.cash_age;
+      const gender = tiaEntry?.cash_gender;
+
+      const displacement = fnSwitch(
+        tiaEntry?.res_stat ?? '',
+        {
+          idp: Person.DisplacementStatus.Idp,
+          returnees: Person.DisplacementStatus.Returnee,
+          host_communities: Person.DisplacementStatus.NonDisplaced,
+        },
+        () => undefined,
+      )
+      return [
+        {
+          age: age,
+          gender: fnSwitch(
+            gender ?? '',
+            {
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            },
+            () => undefined,
+          ),
+          displacement,
+        },
+      ]
     }
   }
 

@@ -245,6 +245,8 @@ export const en = Object.freeze({
     householdStatus: 'Household Status',
     individuals: 'Individuals',
     uniqIndividuals: 'Unique individuals',
+    injured: 'Injured victims',
+    dead: 'Dead victims',
     submissions: 'Submissions',
     householdSize: 'Household size',
     occurrences: 'Occurrences',
@@ -368,6 +370,7 @@ export const en = Object.freeze({
     submissionTime: 'Submission',
     submittedBy: 'By',
     add: 'Add',
+    case: 'Case',
     protectionMonitoringDashboard: 'Protection monitoring dashboard',
     undefined: 'Unknown',
     women: 'Women',
@@ -387,6 +390,7 @@ export const en = Object.freeze({
     propertyDamaged: 'Properties damaged due to conflict',
     email: 'Email',
     drcJob: 'DRC Job',
+    assistance: 'Type of assistance',
     intentionToReturn: 'Intention to return',
     hhWithGapMeetingBasicNeeds: 'Basic needs gaps',
     unemployedMemberByOblast: 'By oblast population',
@@ -966,6 +970,7 @@ export const en = Object.freeze({
         PsychosocialGroupSession: 'Psychosocial groupDisplay session',
         PsychosocialIndividualSession: 'Psychosocial Individual Session',
         PsychologicalFirstAid: 'Psychological First Aid',
+        TIA: 'TIA'
       }
       const activitiesMerged_: Partial<Record<DrcProgram, string>> = {
         ...activities_,
