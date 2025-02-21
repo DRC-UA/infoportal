@@ -12,6 +12,8 @@ import {
   Ecrec_vetEvaluation,
   Ecrec_msmeGrantReg,
   Meal_cashPdm,
+  Meal_nfiPdm,
+  Meal_shelterPdm,
   Partner_lampa,
   Protection_communityMonitoring,
   Protection_counselling,
@@ -543,14 +545,6 @@ export namespace KoboXmlMapper {
       })
     }
 
-    export const meal_cashPdm = (row: Meal_cashPdm.T): Person.Details[] => [
-      {
-        age: row.age,
-        gender: Gender.common({hh_char_hh_det_gender: row.sex}),
-        displacement: Displacement.common({hh_char_hh_res_stat: row.status_person}),
-      },
-    ]
-
     export const protection_referral = (row: Protection_referral.T): Person.Details[] => {
       const displacement = fnSwitch(
         row.displacement_status!,
@@ -600,6 +594,91 @@ export namespace KoboXmlMapper {
           ),
         })),
       })
+    }
+
+    export const cash_pdm = (_: Meal_cashPdm.T): Person.Details[] => {
+      return [
+        {
+          age: _.age!,
+          gender: _.sex!,
+          displacement: _.status_person!,
+          disability: undefined,
+        },
+      ].map((person) => ({
+        age: person.age,
+        gender: fnSwitch(
+          person.gender,
+          {
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          },
+          () => undefined,
+        ),
+        displacement: fnSwitch(
+          person.displacement,
+          {
+            idp: Person.DisplacementStatus.Idp,
+            long: Person.DisplacementStatus.NonDisplaced,
+            returnee: Person.DisplacementStatus.Returnee,
+          },
+          () => undefined,
+        ),
+        disability: person.disability,
+      }))
+    }
+
+    export const shelter_pdm = (_: Meal_shelterPdm.T): Person.Details[] => {
+      return [
+        {
+          age: _.Please_state_your_age!,
+          gender: _.Please_state_your_gender!,
+          displacement: _.Are_you_an_IDP_conflict_affected_person!,
+          disability: undefined,
+        },
+      ].map((person) => ({
+        age: person.age,
+        gender: fnSwitch(
+          person.gender,
+          {
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          },
+          () => undefined,
+        ),
+        displacement: fnSwitch(
+          person.displacement,
+          {
+            idp: Person.DisplacementStatus.Idp,
+            long: Person.DisplacementStatus.NonDisplaced,
+            returnee: Person.DisplacementStatus.Returnee,
+          },
+          () => undefined,
+        ),
+        disability: person.disability,
+      }))
+    }
+
+    export const nfi_pdm = (_: Meal_nfiPdm.T): Person.Details[] => {
+      return [
+        {
+          age: _.age!,
+          gender: _.sex!,
+          displacement: undefined,
+          disability: undefined,
+        },
+      ].map((person) => ({
+        age: person.age,
+        gender: fnSwitch(
+          person.gender,
+          {
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          },
+          () => undefined,
+        ),
+        displacement: person.displacement,
+        disability: person.disability,
+      }))
     }
 
     export const va_bio_tia = (row: Va_bio_tia.T): Person.Details[] => {

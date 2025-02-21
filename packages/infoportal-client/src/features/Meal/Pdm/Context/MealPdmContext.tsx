@@ -4,7 +4,6 @@ import {
   DrcProject,
   DrcProjectHelper,
   KoboIndex,
-  KoboMealPdm,
   KoboSubmissionFlat,
   KoboXmlMapper,
   Meal_cashPdm,
@@ -12,6 +11,7 @@ import {
   OblastIndex,
   OblastName,
   Period,
+  Meal_nfiPdm,
   Person,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
@@ -22,9 +22,10 @@ import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 export enum PdmType {
   Cash = 'Cash',
   Shelter = 'Shelter',
+  Nfi = 'Nfi',
 }
 
-export type PdmForm = Meal_cashPdm.T | Meal_shelterPdm.T
+export type PdmForm = Meal_cashPdm.T | Meal_shelterPdm.T | Meal_nfiPdm.T
 
 export type PdmData<T extends PdmForm> = {
   type: PdmType
@@ -62,7 +63,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
             record.office!,
             {
               dnipro: DrcOffice.Dnipro,
-              kharkiv: DrcOffice.Kharkiv,
+              empca: DrcOffice.Kharkiv,
               chernihiv: DrcOffice.Chernihiv,
               sumy: DrcOffice.Sumy,
               mykolaiv: DrcOffice.Mykolaiv,
@@ -72,7 +73,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
             },
             () => undefined,
           ),
-          persons: KoboMealPdm.mapCashPersons(record),
+          persons: KoboXmlMapper.Persons.cash_pdm(record),
           answers: record,
         })),
       ),
@@ -82,7 +83,17 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
           project: DrcProjectHelper.search(record.Donor),
           office: KoboXmlMapper.office(record.office),
-          persons: KoboMealPdm.mapShelterPersons(record),
+          persons: KoboXmlMapper.Persons.shelter_pdm(record),
+          answers: record,
+        })),
+      ),
+      api.kobo.typedAnswers.search.meal_nfiPdm().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Nfi,
+          oblast: OblastIndex.byKoboName(record.oblast!)!.name,
+          project: DrcProjectHelper.search(record.donor),
+          office: KoboXmlMapper.office(record.office_responsible),
+          persons: KoboXmlMapper.Persons.nfi_pdm(record),
           answers: record,
         })),
       ),
@@ -93,9 +104,11 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
     return Promise.all([
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_cashPdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_shelterPdm').id),
-    ]).then(([cashPeriod, shelterPeriod]) => ({
+      api.kobo.answer.getPeriod(KoboIndex.byName('meal_nfiPdm').id),
+    ]).then(([cashPeriod, shelterPeriod, nfiPeriod]) => ({
       cashPeriod,
       shelterPeriod,
+      nfiPeriod,
     }))
   })
 
