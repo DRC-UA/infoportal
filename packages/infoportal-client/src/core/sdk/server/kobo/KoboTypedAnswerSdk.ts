@@ -43,6 +43,7 @@ import {
   Ecrec_vet2_dmfa,
   Ecrec_vet_bha388,
   Partner_misto_syly,
+  Va_bio_tia,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@alexandreannic/ts-utils'
@@ -369,6 +370,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('partner_misto_syly').id,
           fnMapKobo: Partner_misto_syly.map,
+          ...filters,
+        }),
+      ),
+      ...make('va_bio_tia', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('va_bio_tia').id,
+          fnMapKobo: Va_bio_tia.map,
           ...filters,
         }),
       ),

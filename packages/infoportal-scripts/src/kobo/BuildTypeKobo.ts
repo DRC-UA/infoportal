@@ -365,6 +365,9 @@ export class BuildKoboType {
       meal_verificationPartnerBnre: {
         formId: KoboIndex.byName('meal_verificationPartnerBnre').id,
       },
+      va_bio_tia: {
+        formId: KoboIndex.byName('va_bio_tia').id,
+      },
     },
     (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>],
   )
@@ -452,7 +455,7 @@ const extractQuestionName = (_: Record<string, any>) => {
       .filter((_) => !ignoredQuestionTypes.includes(_.type))
       .filter((_) =>
         repeatItems.every((r) => {
-          return !_.$qpath.includes(r.name + '-')
+          return !_.$xpath?.includes(r.name + '/')
         }),
       )
       .map((x) => {
@@ -468,7 +471,7 @@ const extractQuestionName = (_: Record<string, any>) => {
               // datetime: `_.${name} ? new Date(_.${name}) : undefined`,
               // select_multiple: `_.${name}?.split(' ')`,
               begin_repeat: () => {
-                const groupedQuestions = survey.filter((_) => _.name !== x.name && _.$qpath?.includes(x.name + '-'))
+                const groupedQuestions = survey.filter((_) => _.name !== x.name && _.$xpath?.includes(x.name + '/'))
                 return (
                   `_['${name}']?.map(extractQuestionName).map((_: any) => {\n` +
                   groupedQuestions
@@ -502,7 +505,7 @@ const extractQuestionName = (_: Record<string, any>) => {
   // readonly skipQuestionInBeginRepeat = (survey: KoboApiForm.ts['content']['survey']) => (_: KoboApiForm.ts['content']['survey'][lang]) => {
   //   const repeatItem = this.getBeginRepeatQuestion(survey)
   //   return _ => repeatItem.every(r => {
-  //     return !_.$qpath.includes(r.name + '-')
+  //     return !_.$xpath.includes(r.name + '/')
   //   })
   // }
 
@@ -527,7 +530,7 @@ const extractQuestionName = (_: Record<string, any>) => {
       .filter((_) => !ignoredQuestionTypes.includes(_.type))
       .filter((_) =>
         repeatItems.every((r) => {
-          return !_.$qpath.includes(r.name + '-')
+          return !_.$xpath?.includes(r.name + '/')
         }),
       )
       .map((x) => {
@@ -554,7 +557,7 @@ const extractQuestionName = (_: Record<string, any>) => {
           {
             ...basicQuestionTypeMapping(lastQuestionNameHavingOptionId),
             begin_repeat: () => {
-              const groupedQuestions = survey.filter((_) => _.name !== x.name && _.$qpath?.includes(x.name + '-'))
+              const groupedQuestions = survey.filter((_) => _.name !== x.name && _.$xpath?.includes(x.name + '/'))
               return (
                 '{' +
                 groupedQuestions

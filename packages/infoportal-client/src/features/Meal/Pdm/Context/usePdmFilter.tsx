@@ -52,12 +52,3 @@ export const usePdmFilters = (data: Seq<PdmData<PdmForm>> = seq()) => {
 
   return {shape}
 }
-
-//   const [filters, setFilters] = useState<DataFilter.InferShape<typeof shape>>({})
-//
-//   return {
-//     shape,
-//     filters,
-//     setFilters,
-//   }
-// }

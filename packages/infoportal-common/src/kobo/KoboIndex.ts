@@ -58,6 +58,7 @@ const koboIndex = {
   partner_lampa: 'axkkzwvccFtUkkL3BzSSnW',
   partner_angels: 'aSK3rbp4gbRWmaGUL5eN5v',
   partner_misto_syly: 'aHr7429Q2n2YvBBJunx7b9',
+  va_bio_tia: 'aKZW9UTf9nqfiLhxtjcT3d',
 }
 
 import {Obj, seq} from '@alexandreannic/ts-utils'
@@ -124,6 +125,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   partner_lampa: '[Verification] NGO LAMPA CASH FOR SOLID FUEL',
   partner_angels: '[Verification] UKRF №155 DRC-200 Реєстрація на отримання грошей на паливо',
   partner_misto_syly: '[Verification] DRC-203 (Misto Syly)',
+  va_bio_tia: ' [VA] BIO & TIA Assessment form',
 }
 
 export type KoboFormName = keyof typeof koboIndex

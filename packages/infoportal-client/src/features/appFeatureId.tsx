@@ -147,9 +147,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#027ca2',
     path: '/hdp',
     category: 'programs',
-    showIf: (u, accesses) => {
-      return false
-    },
+    showIf: (u, accesses) => true,
   },
   cfm: {
     id: AppFeatureId.cfm,

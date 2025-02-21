@@ -69,6 +69,9 @@ export const useDatatableData = <T extends DatatableRow>({
     return (
       map(filteredData, search.sortBy, (d, sortBy) => {
         const col = columnsIndex[sortBy]
+        if (!col) {
+          return filteredData
+        }
         if (!col.type) return
         const sorted = d.sort(
           fnSwitch(

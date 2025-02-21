@@ -53,6 +53,7 @@ export enum DrcSector {
   GBV = 'GBV',
   EORE = 'EORE',
   PSS = 'PSS',
+  VA = 'VA',
 }
 
 export enum DrcProgram {
@@ -91,6 +92,7 @@ export enum DrcProgram {
   PGS = 'PsychosocialGroupSession',
   PIS = 'PsychosocialIndividualSession',
   PFA = 'PsychologicalFirstAid',
+  TIA = 'TIA',
 }
 
 export class DrcSectorHelper {
@@ -129,6 +131,7 @@ export class DrcSectorHelper {
     LegalAid: [DrcSector.GBV], //	# of individuals at risk supported with GBV specialized legal assistance and counseling
     PsychosocialIndividualSession: [DrcSector.PSS],
     PsychologicalFirstAid: [DrcSector.PSS],
+    TIA: [DrcSector.VA],
     //	# of operational women and girls\' safe spaces
     // CapacityBuilding: DrcSector.GBV,	//	# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards
   } as const
