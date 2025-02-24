@@ -58,6 +58,7 @@ export const Pan = ({title, children}: {title: string; children: ReactNode}) => 
 const en = {
   'Household respondents per displacement group': 'Household respondents per displacement group',
   'Surveyed households per age and gender groups': 'Surveyed households per age and gender groups',
+  'Factors influencing displacement': 'Factors influencing displacement',
   'Intentions per displacement status': `Intentions per displacement status`,
   'Factors influencing the sense of safety': 'Factors influencing the sense of safety',
   'Major stress factors': 'Major stress factors',
@@ -69,6 +70,7 @@ const en = {
 const ua = {
   'Surveyed households per age and gender groups': `Опитанні сім'ї за віком і статтю `,
   'Household respondents per displacement group': 'Сімї за статусом переміщеної особи',
+  'Factors influencing displacement': 'Чинники впливу на переміщення',
   'Intentions per displacement status': `Наміри щодо статусу переміщенної особи`,
   'Factors influencing the sense of safety': 'Відчуття безпеки: Фактори, які впливають на це',
   'Major stress factors': 'Найбільші фактори стресу',
@@ -165,7 +167,6 @@ const optionsUa: Partial<Record<keyof typeof Protection_hhs3.options, Record<str
     business_self_employment: 'Підприємництво/Самозайнятість',
   },
 }
-
 export default () => {
   const t = useTheme()
   const {api} = useAppSettings()
@@ -245,6 +246,14 @@ export default () => {
           }
           height={250}
           colors={(t) => [t.palette.primary.main, snapshotAlternateColor(t)]}
+        />
+      </Pan>
+      <Pan title={title('Factors influencing displacement')}>
+        <ChartBarMultipleBy
+          data={data}
+          by={(_) => _.why_did_you_leave_your_area_of_origin}
+          label={Protection_hhs3.options.why_did_you_leave_your_area_of_origin}
+          filterValue={['unable_unwilling_to_answer']}
         />
       </Pan>
       {/*<Pan title={title('Наміри щодо статусу переміщенної особи')}>*/}
