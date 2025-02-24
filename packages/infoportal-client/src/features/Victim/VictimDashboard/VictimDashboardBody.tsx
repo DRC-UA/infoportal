@@ -6,13 +6,13 @@ import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {format} from 'date-fns'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {seq} from '@alexandreannic/ts-utils'
+import {Seq, seq} from '@alexandreannic/ts-utils'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {OblastIndex, Va_bio_tia, KoboXmlMapper} from 'infoportal-common'
+import {OblastIndex, Va_bio_tia, KoboXmlMapper, KoboSubmissionFlat, KoboBaseTags} from 'infoportal-common'
 import {AgeGroupTable} from '@/shared'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 
-export const VictimDashboardBody = () => {
+export const VictimDashboardBody = ({ data }: { data: Seq<KoboSubmissionFlat<Va_bio_tia.T, KoboBaseTags>> }) => {
   const {m, formatLargeNumber} = useI18n()
   const ctx = useVictimContext()
 
