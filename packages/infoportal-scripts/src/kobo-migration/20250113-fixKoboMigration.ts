@@ -224,20 +224,27 @@ export namespace FixKoboMigration {
             if (matchs.length === 1) {
               const ntaUuid = matchs[0]
               const newNtaId = newNtaByUuid[ntaUuid]?.[0]
-              console.log('UPDATE', mapped.nta_id, '=>', newNtaId.id, submission.id, {
-                nta_id: newNtaId.id,
-              })
-              await prisma.koboAnswers.update({
-                where: {
-                  id: submission.id,
-                },
+              // console.log('UPDATE', mapped.nta_id, '=>', newNtaId.id, submission.id, {
+              //   nta_id: newNtaId.id,
+              // })
+              await koboSdkDrc.v2.submission.update({
+                formId: KoboIndex.byName('shelter_ta').id,
+                submissionIds: [submission.id],
                 data: {
-                  answers: {
-                    ...(submission.answers as any),
-                    nta_id: newNtaId.id,
-                  },
-                },
+                  nta_id: newNtaId.id,
+                }
               })
+              // await prisma.koboAnswers.update({
+              //   where: {
+              //     id: submission.id,
+              //   },
+              //   data: {
+              //     answers: {
+              //       ...(submission.answers as any),
+              //       nta_id: newNtaId.id,
+              //     },
+              //   },
+              // })
               done++
             } else {
               console.log('Not found')
