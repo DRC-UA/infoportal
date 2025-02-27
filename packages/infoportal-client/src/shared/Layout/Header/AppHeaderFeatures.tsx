@@ -4,7 +4,7 @@ import {useSession} from '@/core/Session/SessionContext'
 import {Box, Popover, useTheme} from '@mui/material'
 import {appFeatures} from '@/features/appFeatureId'
 import {FeatureLogo} from '@/features/FeatureLogo'
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import {Txt} from '@/shared/Txt'
 
 const iconSize = 94

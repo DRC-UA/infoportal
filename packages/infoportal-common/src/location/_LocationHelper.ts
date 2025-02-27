@@ -1,4 +1,4 @@
-import {lazy, map, Obj} from '@alexandreannic/ts-utils'
+import {lazy, map, Obj} from '@axanc/ts-utils'
 import {OblastIndex} from './oblastIndex'
 import {AiOblast, aiOblasts} from './aiOblasts'
 import {hromadas} from './hromadas'

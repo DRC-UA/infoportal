@@ -3,7 +3,7 @@ import {forwardRef, ReactNode} from 'react'
 import {alpha, Button, CircularProgress, Icon, Tooltip} from '@mui/material'
 import {ButtonProps} from '@mui/material/Button'
 import {makeStyles} from 'tss-react/mui'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {styleUtils} from '@/core/theme'
 
 const useStyles = makeStyles<{loading?: boolean; variant?: IpBtnVariant}>()((t, {loading, variant}) => ({

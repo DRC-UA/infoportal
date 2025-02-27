@@ -1,5 +1,5 @@
 import {SlidePanel} from '@/shared/PdfLayout/PdfSlide'
-import {fnSwitch, Obj, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, Seq} from '@axanc/ts-utils'
 import {DrcProject, Partnership_partnersDatabase} from 'infoportal-common'
 import React, {useState} from 'react'
 import {PartnershipData} from '@/features/Partnership/PartnershipType'

@@ -3,7 +3,7 @@ import {Box, SxProps, Theme, useTheme} from '@mui/material'
 import {Cell, Pie, PieChart, PieChartProps, PieLabelRenderProps, ResponsiveContainer, Tooltip} from 'recharts'
 import React, {ReactNode} from 'react'
 import {toPercent} from 'infoportal-common'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 
 const RADIAN = Math.PI / 180
 const renderCustomizedLabel = ({cx, cy, midAngle, innerRadius, outerRadius, percent, index}: any) => {

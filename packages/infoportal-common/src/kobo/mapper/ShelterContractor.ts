@@ -1,4 +1,4 @@
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {Shelter_ta} from '../generated'
 import {KoboShelterTa} from './KoboShelterTA'
 

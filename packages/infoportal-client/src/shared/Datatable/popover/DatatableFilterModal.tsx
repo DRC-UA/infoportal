@@ -22,7 +22,7 @@ import {PanelBody, PanelHead} from '@/shared/Panel'
 import {PanelFoot} from '@/shared/Panel/PanelFoot'
 import {DatatableFilterTypeMapping, DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {type} from 'os'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {endOfDay} from 'date-fns'
 

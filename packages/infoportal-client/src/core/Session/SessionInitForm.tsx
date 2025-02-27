@@ -1,5 +1,5 @@
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {map, Obj} from '@alexandreannic/ts-utils'
+import {map, Obj} from '@axanc/ts-utils'
 import {UserSession} from '@/core/sdk/server/session/Session'
 import {Txt} from '@/shared/Txt'
 import {useI18n} from '@/core/i18n'

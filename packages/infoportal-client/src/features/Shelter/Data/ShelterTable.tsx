@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from 'react'
 import {Page} from '@/shared/Page'
-import {fnSwitch, map, Obj, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, Obj, seq} from '@axanc/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {Box, useTheme} from '@mui/material'

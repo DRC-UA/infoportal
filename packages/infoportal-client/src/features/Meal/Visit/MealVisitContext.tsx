@@ -1,6 +1,6 @@
 import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState} from 'react'
 import {KoboSubmissionFlat, KoboIndex, Meal_visitMonitoring, Period} from 'infoportal-common'
-import {map, seq, Seq} from '@alexandreannic/ts-utils'
+import {map, seq, Seq} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'

@@ -1,5 +1,5 @@
 import {Bn_re} from '../generated/Bn_re'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {Person} from '../../type/Person'
 
 export class KoboBnReHelper {

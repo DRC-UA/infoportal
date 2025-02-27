@@ -1,4 +1,4 @@
-import {Obj, Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@axanc/ts-utils'
 import {useMemo} from 'react'
 import {DrcSupportSuggestion, MpcaEntity} from 'infoportal-common'
 

@@ -1,4 +1,4 @@
-import {Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {Obj, seq, Seq} from '@axanc/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {Checkbox} from '@mui/material'

@@ -15,7 +15,7 @@ import {
   Person,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
-import {fnSwitch, map, seq, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, seq, Seq} from '@axanc/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 

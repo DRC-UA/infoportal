@@ -1,7 +1,7 @@
 import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
 import {DatatableFilterModal} from '@/shared/Datatable/popover/DatatableFilterModal'
 import React from 'react'
-import {map} from '@alexandreannic/ts-utils'
+import {map} from '@axanc/ts-utils'
 import {useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatesPopover, MultipleChoicesPopover, NumberChoicesPopover} from '@/shared/Datatable/popover/DatatablePopover'
 

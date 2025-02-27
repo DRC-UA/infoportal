@@ -9,7 +9,7 @@ import {MapSvg} from '@/shared/maps/MapSvg'
 import {ChartLineByKey} from '@/shared/charts/ChartLineByKey'
 import {Divider} from '@mui/material'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
 import {ChartHelper} from '@/shared/charts/chartHelper'
 

@@ -1,7 +1,7 @@
 import {alpha, Box, BoxProps, GlobalStyles, useTheme} from '@mui/material'
 import React, {useEffect} from 'react'
 import {layoutConfig} from '@/shared/Layout'
-import {map} from '@alexandreannic/ts-utils'
+import {map} from '@axanc/ts-utils'
 
 let header$: HTMLElement | null = null
 const headerStickyClass = 'sticky-header'

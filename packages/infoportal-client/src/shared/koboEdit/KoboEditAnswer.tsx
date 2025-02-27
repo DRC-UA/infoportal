@@ -3,7 +3,7 @@ import {useKoboColumnDef} from '@/shared/koboEdit/KoboSchemaWrapper'
 import React from 'react'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {Skeleton} from '@mui/material'
-import {KeyOf} from '@alexandreannic/ts-utils'
+import {KeyOf} from '@axanc/ts-utils'
 import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export const KoboEditAnswer = <T extends Record<string, any>, K extends KeyOf<T>>({

@@ -1,7 +1,7 @@
 import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import React, {ReactNode, useCallback, useMemo} from 'react'
 import {Page} from '@/shared/Page'
-import {fnSwitch, Obj} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj} from '@axanc/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {IpInput} from '@/shared/Input/Input'

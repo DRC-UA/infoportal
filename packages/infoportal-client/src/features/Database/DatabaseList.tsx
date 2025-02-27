@@ -11,7 +11,7 @@ import {Icon, useTheme} from '@mui/material'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, seq} from '@axanc/ts-utils'
 import {NavLink} from 'react-router-dom'
 
 export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {

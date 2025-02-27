@@ -1,4 +1,4 @@
-import {mapFor, Obj} from '@alexandreannic/ts-utils'
+import {mapFor, Obj} from '@axanc/ts-utils'
 import {useMemo} from 'react'
 import {Box, Theme} from '@mui/material'
 import {Lazy} from '@/shared/Lazy'

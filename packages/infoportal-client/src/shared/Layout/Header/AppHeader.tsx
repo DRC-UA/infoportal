@@ -11,7 +11,7 @@ import {AppHeaderContainer} from '@/shared/Layout/Header/AppHeaderContainer'
 import {PopoverWrapper} from '@/shared/PopoverWrapper'
 import {useI18n} from '@/core/i18n'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {styleUtils} from '@/core/theme'
 
 interface Props extends BoxProps {}

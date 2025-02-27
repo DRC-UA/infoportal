@@ -1,5 +1,5 @@
 import {DrcOffice, DrcProgram, DrcProject, groupBy, MpcaEntity} from 'infoportal-common'
-import {Seq, seq, toPercent} from '@alexandreannic/ts-utils'
+import {Seq, seq, toPercent} from '@axanc/ts-utils'
 import React, {useEffect, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {MpcaAmountType} from '@/features/Mpca/Dashboard/MpcaDashboard'

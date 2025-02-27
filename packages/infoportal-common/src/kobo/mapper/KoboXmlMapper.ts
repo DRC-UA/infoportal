@@ -27,7 +27,7 @@ import {
   Va_bio_tia,
 } from '../generated'
 import {Person} from '../../type/Person'
-import {fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, seq} from '@axanc/ts-utils'
 import {OblastIndex} from '../../location'
 import {DrcOffice} from '../../type/Drc'
 

@@ -1,6 +1,6 @@
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useEffect} from 'react'
-import {Obj, Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@axanc/ts-utils'
 import {initGoogleMaps} from '@/core/initGoogleMaps'
 import {useTheme} from '@mui/material'
 import {AILocationHelper} from 'infoportal-common'

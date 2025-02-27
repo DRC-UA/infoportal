@@ -1,6 +1,6 @@
 import {MapSvg} from '@/shared/maps/MapSvg'
 import React, {useMemo} from 'react'
-import {Seq} from '@alexandreannic/ts-utils'
+import {Seq} from '@axanc/ts-utils'
 import {BoxProps} from '@mui/material'
 import {OblastISO} from 'infoportal-common'
 import {ChartHelper} from '@/shared/charts/chartHelper'

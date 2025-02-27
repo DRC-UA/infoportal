@@ -7,7 +7,7 @@ import {PrismaClient} from '@prisma/client'
 import {FrontEndSiteMap} from '../../core/FrontEndSiteMap'
 import {appConf} from '../../core/conf/AppConf'
 import {KoboService} from '../kobo/KoboService'
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
 
 export enum EmailContext {

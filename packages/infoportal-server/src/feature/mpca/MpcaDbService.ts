@@ -1,6 +1,6 @@
 import {PrismaClient} from '@prisma/client'
 import {KoboMappedAnswersService} from '../kobo/KoboMappedAnswersService'
-import {Seq, seq} from '@alexandreannic/ts-utils'
+import {Seq, seq} from '@axanc/ts-utils'
 import {
   ApiPaginate,
   ApiPaginateHelper,

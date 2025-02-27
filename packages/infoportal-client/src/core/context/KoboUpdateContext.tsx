@@ -6,7 +6,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
 import {InferTypedAnswer, InferTypedTag, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {KoboIndex, KoboSubmissionMetaData} from 'infoportal-common'
-import {KeyOf} from '@alexandreannic/ts-utils'
+import {KeyOf} from '@axanc/ts-utils'
 import {useIpToast} from '@/core/useToast'
 import {Kobo} from 'kobo-sdk'
 

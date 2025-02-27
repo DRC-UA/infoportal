@@ -1,5 +1,5 @@
 import {useCallback, useMemo, useState} from 'react'
-import {Obj, Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@axanc/ts-utils'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {appConfig} from '@/conf/AppConfig'
 import {usePersistentState} from '@/shared/hook/usePersistantState'

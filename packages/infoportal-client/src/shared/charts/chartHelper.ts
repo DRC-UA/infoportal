@@ -1,4 +1,4 @@
-import {fnSwitch, Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq, Seq} from '@axanc/ts-utils'
 import {ReactNode} from 'react'
 import {NonNullableKey} from 'infoportal-common'
 

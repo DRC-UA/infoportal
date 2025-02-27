@@ -16,7 +16,7 @@ import {Protection_hhs3} from 'infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {snapShotDefaultPieIndicatorsProps} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
 import {ChartHelper} from '@/shared/charts/chartHelper'
 

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {ReactNode, useContext, useEffect, useMemo, useState} from 'react'
 import {en} from './localization/en'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {ua} from '@/core/i18n/localization/ua'
 
 export interface I18nContextProps {

@@ -1,5 +1,5 @@
 import {DrcProject, KoboBaseTags, KoboTagStatus, MpcaEntity} from 'infoportal-common'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 
 export interface MpcaTypeTag extends KoboBaseTags, KoboTagStatus {
   projects?: DrcProject[]

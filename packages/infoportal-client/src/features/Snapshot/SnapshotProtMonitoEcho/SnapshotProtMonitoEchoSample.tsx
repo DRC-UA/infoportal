@@ -18,7 +18,7 @@ import {Legend} from 'recharts'
 import {ChartPie} from '@/shared/charts/ChartPie'
 import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import {OblastIndex, Person, Protection_hhs3} from 'infoportal-common'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 

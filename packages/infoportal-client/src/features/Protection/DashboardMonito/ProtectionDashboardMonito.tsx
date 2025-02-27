@@ -1,5 +1,5 @@
 import React, {lazy} from 'react'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {ProtectionMonito} from './ProtectionMonitoContext'
 import {ProtectionDashboardMonitoSample} from './ProtectionDashboardMonitoSample'

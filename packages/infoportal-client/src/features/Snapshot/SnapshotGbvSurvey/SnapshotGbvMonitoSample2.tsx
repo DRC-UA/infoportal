@@ -7,7 +7,7 @@ import {Protection_gbvSocialProviders} from 'infoportal-common'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import GbvSurveyHeader from '@/features/Snapshot/SnapshotGbvSurvey/GbvSurveyHeader'
 

@@ -10,7 +10,7 @@ import {
   Person,
   Protection_groupSession,
 } from 'infoportal-common'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {Period} from 'infoportal-common'
 import {format} from 'date-fns'
 

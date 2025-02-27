@@ -1,5 +1,5 @@
 import {app, AppLogger} from '../index'
-import {map} from '@alexandreannic/ts-utils'
+import {map} from '@axanc/ts-utils'
 
 export interface MemoryDatabaseInterface<T, TID> {
   update: (id: TID, setValue: (prev: T) => T) => Promise<T> | undefined

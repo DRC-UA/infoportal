@@ -5,7 +5,7 @@ import {
   columnBySchemaGenerator,
   ColumnBySchemaGeneratorProps,
 } from '../columns/columnBySchema'
-import {mapFor} from '@alexandreannic/ts-utils'
+import {mapFor} from '@axanc/ts-utils'
 
 export type DatabaseDisplay = {
   repeatAs?: 'rows' | 'columns'

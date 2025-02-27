@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react'
-import {map, mapFor, seq, Seq} from '@alexandreannic/ts-utils'
+import {map, mapFor, seq, Seq} from '@axanc/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {Box, Icon} from '@mui/material'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'

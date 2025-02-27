@@ -10,7 +10,7 @@ import {useSession} from '@/core/Session/SessionContext'
 import {Layout} from '@/shared/Layout'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
-import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
 import {styleUtils} from '@/core/theme'
 
 export const Home = () => {

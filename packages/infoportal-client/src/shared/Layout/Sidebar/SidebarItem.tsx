@@ -2,7 +2,7 @@ import * as React from 'react'
 import {ReactNode} from 'react'
 import {Box, ButtonBase, ButtonBaseProps, Icon, Theme, useTheme} from '@mui/material'
 import {alpha} from '@mui/material/styles'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {makeSx} from '@/core/theme'
 
 const css = makeSx({

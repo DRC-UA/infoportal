@@ -1,6 +1,6 @@
 import {FeatureAccessLevel, PrismaClient} from '@prisma/client'
 import {yup} from '../../helper/Utils'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {UUID} from 'infoportal-common'
 import {InferType} from 'yup'
 import {AccessService} from '../access/AccessService'

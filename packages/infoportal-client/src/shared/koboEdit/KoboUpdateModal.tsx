@@ -15,7 +15,7 @@ import {Txt} from '@/shared/Txt'
 import {ArrayValues, KoboValidation} from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {StateStatusIcon, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 
 export type KoboEditModalOption = {
   value: string | null

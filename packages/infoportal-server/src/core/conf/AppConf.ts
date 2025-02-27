@@ -1,4 +1,4 @@
-import {bool, defaultValue, env, int, required} from '@alexandreannic/ts-utils'
+import {bool, defaultValue, env, int, required} from '@axanc/ts-utils'
 import * as dotenv from 'dotenv'
 
 dotenv.config()

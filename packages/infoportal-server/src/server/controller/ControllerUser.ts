@@ -3,7 +3,7 @@ import * as yup from 'yup'
 import {PrismaClient} from '@prisma/client'
 import {UserService} from '../../feature/user/UserService'
 import {DrcOffice} from 'infoportal-common'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {SessionError} from '../../feature/session/SessionErrors'
 import {Util} from '../../helper/Utils'
 

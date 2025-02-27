@@ -1,5 +1,5 @@
 import React, {ReactNode, useEffect, useMemo, useState} from 'react'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
 export type MultipleChoicesChoice<T extends string> = {

@@ -1,5 +1,5 @@
 import {DrcProgram, DrcProject, DrcProjectHelper, groupBy, KoboMetaStatus, PeriodHelper} from 'infoportal-common'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'

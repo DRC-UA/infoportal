@@ -7,7 +7,7 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Protection_hhs3} from 'infoportal-common'
 import {ProtectionMonito} from '@/features/Protection/DashboardMonito/ProtectionMonitoContext'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 
 export const ProtectionDashboardMonitoSafety = () => {
   const ctx = ProtectionMonito.useContext()

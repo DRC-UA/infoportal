@@ -8,7 +8,7 @@ import {PanelFoot} from '@/shared/Panel/PanelFoot'
 import {Txt} from '@/shared/Txt'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
 import {DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {KeyOf} from 'infoportal-common'
 import {ChartHelper} from '@/shared/charts/chartHelper'
 

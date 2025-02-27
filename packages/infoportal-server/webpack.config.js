@@ -3,7 +3,7 @@ const nodeExternals = require('webpack-node-externals')
 const {PrismaPlugin} = require('@prisma/nextjs-monorepo-workaround-plugin')
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/ActivityInfoBuildType.ts',
   target: 'node',
   plugins: [new PrismaPlugin()],
   module: {

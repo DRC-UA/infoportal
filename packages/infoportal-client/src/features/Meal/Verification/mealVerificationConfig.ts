@@ -1,6 +1,6 @@
 import {Kobo} from 'kobo-sdk'
 import {KeyOf, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {format} from 'date-fns'
 

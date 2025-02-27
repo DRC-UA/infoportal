@@ -5,7 +5,7 @@ import React, {useMemo, useState} from 'react'
 import {Box} from '@mui/material'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {useI18n} from '@/core/i18n'
-import {fnSwitch, Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq, Seq} from '@axanc/ts-utils'
 import {
   DrcOffice,
   KoboValidation,

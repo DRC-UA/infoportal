@@ -1,7 +1,7 @@
 import {DatatableColumn, DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {useCallback, useEffect, useMemo} from 'react'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {UseDatatableData} from '@/shared/Datatable/context/useDatatableData'
 
 import {KeyOf} from 'infoportal-common'

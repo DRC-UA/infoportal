@@ -1,4 +1,4 @@
-import {duration, seq} from '@alexandreannic/ts-utils'
+import {duration, seq} from '@axanc/ts-utils'
 import {KoboServer, PrismaClient} from '@prisma/client'
 import {app, AppCacheKey} from '../../index'
 import {AppError} from '../../helper/Errors'

@@ -1,4 +1,4 @@
-import {fnSwitch, map, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, seq} from '@axanc/ts-utils'
 import {
   add,
   Bn_rapidResponse,

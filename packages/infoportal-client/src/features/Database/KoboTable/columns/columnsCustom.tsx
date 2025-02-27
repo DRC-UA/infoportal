@@ -21,7 +21,7 @@ import {
   safeArray,
 } from 'infoportal-common'
 import React from 'react'
-import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'

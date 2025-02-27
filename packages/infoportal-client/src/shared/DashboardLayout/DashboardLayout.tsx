@@ -8,7 +8,7 @@ import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 import {DashboardHeader, dashboardHeaderId} from '@/shared/DashboardLayout/DashboardHeader'
 import {Page} from '@/shared/Page'
-import {map} from '@alexandreannic/ts-utils'
+import {map} from '@axanc/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {appConfig} from '@/conf/AppConfig'
 

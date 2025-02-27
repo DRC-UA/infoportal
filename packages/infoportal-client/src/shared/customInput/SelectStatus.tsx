@@ -1,5 +1,5 @@
 import {IpSelectOption, IpSelectSingle, IpSelectSingleNullableProps} from '@/shared/Select/SelectSingle'
-import {KeyOf, Obj} from '@alexandreannic/ts-utils'
+import {KeyOf, Obj} from '@axanc/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
 import {CashForRentStatus, CashStatus, KoboValidation, StateStatus, VetApplicationStatus} from 'infoportal-common'
 import {Box, Icon, SxProps, Theme, useTheme} from '@mui/material'

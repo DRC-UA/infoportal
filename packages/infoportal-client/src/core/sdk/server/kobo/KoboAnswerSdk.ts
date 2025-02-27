@@ -3,7 +3,7 @@ import {KeyOf, KoboBaseTags, KoboIndex, KoboSubmission, KoboSubmissionFlat, Peri
 import {KoboMapper} from '@/core/sdk/server/kobo/KoboMapper'
 import {AnswersFilters} from '@/core/sdk/server/kobo/KoboApiSdk'
 import {endOfDay, startOfDay} from 'date-fns'
-import {map} from '@alexandreannic/ts-utils'
+import {map} from '@axanc/ts-utils'
 import {ApiPaginate, ApiPagination} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {Kobo} from 'kobo-sdk'
 import {KoboValidation} from 'infoportal-common'

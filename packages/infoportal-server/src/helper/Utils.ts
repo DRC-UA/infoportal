@@ -1,7 +1,7 @@
 import {v4} from 'uuid'
 import {addMonths, differenceInMonths, format, isAfter, isBefore, startOfMonth} from 'date-fns'
 import * as _yup from 'yup'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 
 export const getObj = <K extends string, V extends any>(o: Record<K, V>, key: string): V | undefined => {
   // @ts-ignore

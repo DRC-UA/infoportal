@@ -2,7 +2,7 @@ import {StateStatus, UUID} from '../type/Generic'
 import {OblastName} from '../location'
 import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc'
 import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
 import {Person} from '../type/Person'
 

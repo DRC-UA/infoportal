@@ -1,6 +1,6 @@
 import {AILocationHelper, DrcProject, DrcProjectHelper, Protection_gbv} from 'infoportal-common'
 import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
-import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {aiInvalidValueFlag} from '@/features/ActivityInfo/shared/AiTable'
 import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'

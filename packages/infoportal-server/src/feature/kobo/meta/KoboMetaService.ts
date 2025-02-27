@@ -3,7 +3,7 @@ import {GlobalEvent} from '../../../core/GlobalEvent'
 import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds'
 import {app, AppCacheKey, AppLogger} from '../../../index'
 import {KoboService} from '../KoboService'
-import {duration, map, Obj, seq, Seq, sleep} from '@alexandreannic/ts-utils'
+import {duration, map, Obj, seq, Seq, sleep} from '@axanc/ts-utils'
 import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
 import {
@@ -23,7 +23,7 @@ import {InferType} from 'yup'
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
 import {PromisePool} from '@supercharge/promise-pool'
 import {Kobo} from 'kobo-sdk'
-import {chunkify} from '@alexandreannic/ts-utils'
+import {chunkify} from '@axanc/ts-utils'
 import Event = GlobalEvent.Event
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<

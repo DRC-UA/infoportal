@@ -4,7 +4,7 @@ import {useI18n} from '@/core/i18n'
 import {useMpcaContext} from '../MpcaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {UseMpcaComputed, useMpcaComputed} from '../useMpcaComputed'
-import {fnSwitch, Obj, Seq, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, Seq, seq} from '@axanc/ts-utils'
 import {
   DrcOffice,
   KoboIndex,

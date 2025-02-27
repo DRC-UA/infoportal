@@ -1,6 +1,6 @@
 import {ApiClient} from '../ApiClient'
 import {IpCacheData} from 'infoportal-common'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 
 export class CacheSdk {
   constructor(private client: ApiClient) {}

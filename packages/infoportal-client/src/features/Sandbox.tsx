@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {Seq, seq} from '@alexandreannic/ts-utils'
+import {Seq, seq} from '@axanc/ts-utils'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {useShelterData} from '@/features/Shelter/useShelterData'
 import {DrcProgram, Person} from 'infoportal-common'

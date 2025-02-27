@@ -2,7 +2,7 @@ import {KoboSchemaHelper} from 'infoportal-common'
 import * as xlsx from 'xlsx'
 import {PrismaClient} from '@prisma/client'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import lodash from 'lodash'
 import {Kobo, KoboClient} from 'kobo-sdk'
 

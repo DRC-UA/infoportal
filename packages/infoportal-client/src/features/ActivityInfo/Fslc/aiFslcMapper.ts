@@ -1,7 +1,7 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiFslcType} from '@/features/ActivityInfo/Fslc/aiFslcType'
 import {add, DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper, safeNumber} from 'infoportal-common'
-import {fnSwitch, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Seq} from '@axanc/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'

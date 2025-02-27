@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {ApiPaginateHelper, KeyOf, multipleFilters, safeNumber} from 'infoportal-common'
-import {fnSwitch, map, Obj} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, Obj} from '@axanc/ts-utils'
 import {
   DatatableColumn,
   DatatableFilterTypeMapping,

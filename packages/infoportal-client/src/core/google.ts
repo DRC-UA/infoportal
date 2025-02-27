@@ -1,4 +1,4 @@
-import {sleep} from '@alexandreannic/ts-utils'
+import {sleep} from '@axanc/ts-utils'
 // import { Loader, Map, LatLngLiteral, Marker } from 'google.maps';
 
 declare const google: any

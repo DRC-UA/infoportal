@@ -1,4 +1,4 @@
-import {Seq, seq} from '@alexandreannic/ts-utils'
+import {Seq, seq} from '@axanc/ts-utils'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {ProtectionActivityFlat} from '@/features/Protection/Context/protectionType'
 import {useI18n} from '@/core/i18n'
