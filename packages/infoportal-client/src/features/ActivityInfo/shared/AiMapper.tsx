@@ -13,6 +13,7 @@ import {
 import {fnSwitch} from '@axanc/ts-utils'
 import {Period} from 'infoportal-common'
 import {format} from 'date-fns'
+import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 
 export namespace AiMapper {
   export const getPeriodStr = (p: Partial<Period>) => {
@@ -87,12 +88,12 @@ export namespace AiMapper {
     }
   }
 
-  export const mapPopulationGroup = (_?: Person.DisplacementStatus): AiProtectionType.TypeSub['Population Group'] => {
+  export const mapPopulationGroup = (_?: Person.DisplacementStatus): AiGbvType.AiTypeActivitiesAndPeople['Population Group'] => {
     return fnSwitch(
       _!,
       {
         Idp: 'Internally Displaced',
-        Returnee: 'Returnees',
+        // Returnee: 'Returnees',
       },
       () => 'Non-Displaced',
     )
