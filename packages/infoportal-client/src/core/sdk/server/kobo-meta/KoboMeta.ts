@@ -1,7 +1,8 @@
-import {DrcProgram, IKoboMeta, KoboMetaStatus} from 'infoportal-common'
+import {DrcProgram, DrcSector, IKoboMeta, KoboMetaStatus} from 'infoportal-common'
 
-export interface KoboMetaSearchParans {
+export interface KoboMetaSearchParams {
   activities?: DrcProgram[]
+  sectors?: DrcSector[]
   status?: KoboMetaStatus[]
 }
 
