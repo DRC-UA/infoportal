@@ -7,9 +7,9 @@
     "start": "node -r tsconfig-paths/register lib/index.js",
     "build": "tsc --build --force",
     "dev-r": "nodemon src/index.ts",
-    "dev": "npm run build && npm start",
+    "dev": "tsx src/index.ts",
     "debug": "npm run build && node --inspect-brk lib/index.js",
-    "build-ai-type": "ts-node src/ai/index.ts",
+    "build-ai-type": "ts-node src/ActivityInfoBuildType.ts",
     "build-kobo-type": "ts-node src/kobo/BuildTypeKobo.ts"
   },
   "keywords": [],
@@ -28,6 +28,7 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "activityinfo-sdk": "^1.1.4",
     "kobo-sdk": "^1.1.4",
     "@axanc/ts-utils": "2.3.1",
     "@azure/msal-common": "^13.1.0",
