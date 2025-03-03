@@ -8,7 +8,7 @@ import {OblastIndex, Protection_gbvSocialProviders} from 'infoportal-common'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import GbvSurveyHeader from '@/features/Snapshot/SnapshotGbvSurvey/GbvSurveyHeader'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 

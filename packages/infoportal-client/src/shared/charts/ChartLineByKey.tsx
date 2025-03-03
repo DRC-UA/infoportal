@@ -1,7 +1,7 @@
-import {Obj, Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@axanc/ts-utils'
 import {format} from 'date-fns'
 import React, {useMemo} from 'react'
-import {KeyOfType} from '@alexandreannic/ts-utils'
+import {KeyOfType} from '@axanc/ts-utils'
 import {ChartLine, ChartLineData} from '@/shared/charts/ChartLine'
 
 export const ChartLineByKey = <T extends {end: Date}, K extends KeyOfType<T, undefined | string>, V extends T[K]>({

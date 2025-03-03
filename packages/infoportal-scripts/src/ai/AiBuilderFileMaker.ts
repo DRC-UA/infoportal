@@ -1,4 +1,4 @@
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {capitalize} from 'infoportal-common'
 import {AiParsedSchema} from './AiBuilderSchemaParser'
 import {AiBuilder} from './AiBuilder'

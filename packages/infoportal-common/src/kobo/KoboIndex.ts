@@ -61,7 +61,7 @@ const koboIndex = {
   va_bio_tia: 'aKZW9UTf9nqfiLhxtjcT3d',
 }
 
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 
 const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex)).reduceObject(([k, v]) => [v, k])
 

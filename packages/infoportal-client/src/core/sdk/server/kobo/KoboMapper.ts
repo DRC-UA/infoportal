@@ -1,5 +1,5 @@
 import {KoboBaseTags, KoboSubmission, KoboSubmissionFlat, KoboSubmissionMetaData} from 'infoportal-common'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {Kobo} from 'kobo-sdk'
 

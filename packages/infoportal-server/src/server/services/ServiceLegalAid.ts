@@ -1,5 +1,5 @@
 import {LegalaidSdk} from '../../core/externalSdk/legalaid/LegalaidSdk'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {Period} from 'infoportal-common'
 
 interface Filters extends Partial<Period> {}

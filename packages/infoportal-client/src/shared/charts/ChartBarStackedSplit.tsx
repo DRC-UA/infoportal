@@ -1,5 +1,5 @@
 import {Box, BoxProps, useTheme} from '@mui/material'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts'
 import React from 'react'
 import {commonLegendProps} from '@/shared/charts/ChartBarStacked'

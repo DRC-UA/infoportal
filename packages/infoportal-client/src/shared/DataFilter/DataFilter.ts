@@ -1,5 +1,5 @@
 import {multipleFilters} from 'infoportal-common'
-import {Obj, Seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq} from '@axanc/ts-utils'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {ReactNode} from 'react'
 

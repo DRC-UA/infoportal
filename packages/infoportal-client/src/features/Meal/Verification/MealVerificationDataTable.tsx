@@ -1,5 +1,5 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
 import React, {useMemo, useState} from 'react'
 import {alpha, Box, Icon, Tooltip, useTheme} from '@mui/material'
 import {Kobo} from 'kobo-sdk'

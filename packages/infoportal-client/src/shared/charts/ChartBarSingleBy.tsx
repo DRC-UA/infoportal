@@ -1,5 +1,5 @@
 import {ChartData, ChartDataVal, ChartHelper} from '@/shared/charts/chartHelper'
-import {Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {Obj, seq, Seq} from '@axanc/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
 import {KeyOf} from 'infoportal-common'
 import {ChartBar} from '@/shared/charts/ChartBar'

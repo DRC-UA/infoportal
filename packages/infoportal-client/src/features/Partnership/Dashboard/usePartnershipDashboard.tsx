@@ -1,6 +1,6 @@
 import {PartnershipData} from '@/features/Partnership/PartnershipType'
 import {useMemo} from 'react'
-import {Seq} from '@alexandreannic/ts-utils'
+import {Seq} from '@axanc/ts-utils'
 
 export const usePartnershipDashboard = ({data}: {data: Seq<PartnershipData>}) => {
   return useMemo(() => {

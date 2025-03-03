@@ -1,5 +1,5 @@
 import {MpcaEntity} from 'infoportal-common'
-import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq, seq} from '@axanc/ts-utils'
 import React, {ReactNode, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {SlidePanel} from '@/shared/PdfLayout/PdfSlide'

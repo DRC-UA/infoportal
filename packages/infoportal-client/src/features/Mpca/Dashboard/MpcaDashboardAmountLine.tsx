@@ -1,5 +1,5 @@
 import {format} from 'date-fns'
-import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq, seq} from '@axanc/ts-utils'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {Lazy} from '@/shared/Lazy'
 import React from 'react'

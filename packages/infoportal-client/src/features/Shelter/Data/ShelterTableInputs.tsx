@@ -1,6 +1,6 @@
 import {Shelter_ta, ShelterContractor, ShelterContractorPrices, ShelterProgress} from 'infoportal-common'
 import React from 'react'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {IpSelectSingle, IpSelectSingleNullableProps, IpSelectSingleProps} from '@/shared/Select/SelectSingle'
 

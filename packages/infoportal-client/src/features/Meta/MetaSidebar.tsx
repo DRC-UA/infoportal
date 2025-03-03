@@ -1,6 +1,6 @@
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {useMetaContext} from '@/features/Meta/MetaContext'
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import React, {ReactNode} from 'react'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'

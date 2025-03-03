@@ -1,4 +1,4 @@
-import {sleep} from '@alexandreannic/ts-utils'
+import {sleep} from '@axanc/ts-utils'
 import {appConfig} from '@/conf/AppConfig'
 
 const layers = import('./geojson.json')

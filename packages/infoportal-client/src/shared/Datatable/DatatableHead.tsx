@@ -1,4 +1,4 @@
-import {fnSwitch, map} from '@alexandreannic/ts-utils'
+import {fnSwitch, map} from '@axanc/ts-utils'
 import {Checkbox, IconProps} from '@mui/material'
 import React from 'react'
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'

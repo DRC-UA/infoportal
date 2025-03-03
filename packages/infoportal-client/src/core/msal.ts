@@ -17,7 +17,7 @@ export const getMsalInstance = (config: AppConfig) => {
       postLogoutRedirectUri: '/',
     },
     system: {
-      allowNativeBroker: false, // Disables WAM Broker
+      // allowNativeBroker: false, // Disables WAM Broker
     },
   }
 

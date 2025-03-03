@@ -2,7 +2,7 @@ import * as React from 'react'
 import {ReactNode, useEffect, useState} from 'react'
 import {Box, BoxProps, LinearProgress, Skeleton} from '@mui/material'
 import {Txt} from '@/shared'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 
 export interface PageProps extends BoxProps {
   width?: number | 'xs' | 'md' | 'lg' | 'full'

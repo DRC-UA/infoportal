@@ -1,6 +1,6 @@
 import {KeyOf} from 'infoportal-common'
 import React, {Dispatch, ReactNode, SetStateAction} from 'react'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {IpSelectSingle, IpSelectSingleProps} from '@/shared/Select/SelectSingle'
 import {Kobo} from 'kobo-sdk'
 import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'

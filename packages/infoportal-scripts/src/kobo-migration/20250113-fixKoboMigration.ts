@@ -3,7 +3,7 @@ import {Ecrec_vetEvaluation, KoboIndex, Shelter_ta, UUID} from 'infoportal-commo
 import {Pool, PoolClient} from 'pg'
 import {appConf} from '../appConf'
 import {PromisePool} from '@supercharge/promise-pool'
-import {duration, Obj, Progress, seq} from '@alexandreannic/ts-utils'
+import {duration, Obj, Progress, seq} from '@axanc/ts-utils'
 import {koboSdkDrc, koboSdkHumanitarian} from '../index'
 import {format} from 'date-fns'
 import {Kobo} from 'kobo-sdk'

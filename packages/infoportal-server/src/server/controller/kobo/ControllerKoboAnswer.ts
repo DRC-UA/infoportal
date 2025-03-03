@@ -6,7 +6,7 @@ import {KoboService} from '../../../feature/kobo/KoboService'
 import {KoboValidation, Period} from 'infoportal-common'
 import {validateApiPaginate} from '../../../core/Type'
 import {Kobo} from 'kobo-sdk'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {app} from '../../../index'
 
 export interface KoboAnswersFilters extends Partial<Period> {

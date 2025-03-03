@@ -1,4 +1,4 @@
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import {OblastName} from '../location'
 
 export enum DrcOffice {

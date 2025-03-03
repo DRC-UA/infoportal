@@ -1,5 +1,5 @@
 import {ChartBarMultipleBy, ChartBarMultipleByProps} from '@/shared/charts/ChartBarMultipleBy'
-import {KeyOfType} from '@alexandreannic/ts-utils'
+import {KeyOfType} from '@axanc/ts-utils'
 
 export const ChartBarMultipleByKey = <
   D extends Record<string, any>,

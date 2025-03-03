@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {MealVerificationAnswersStatus} from '../../feature/mealVerfication/MealVerificationType'
 import {MealVerificationStatus, PrismaClient} from '@prisma/client'
 import {MealVerificationService} from '../../feature/mealVerfication/MealVerificationService'

@@ -1,6 +1,6 @@
 import {Period, UUID} from 'infoportal-common'
 import {Legalaid} from './Legalaid'
-import {Cache, duration, Obj, seq, throwIf} from '@alexandreannic/ts-utils'
+import {Cache, duration, Obj, seq, throwIf} from '@axanc/ts-utils'
 import {toYYYYMMDD} from '../../../helper/Utils'
 import {ApiClient} from 'kobo-sdk'
 import Poll = Legalaid.Poll

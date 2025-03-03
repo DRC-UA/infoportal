@@ -1,7 +1,7 @@
 import {groupBy, KoboHelper, KoboIndex, KoboValidation} from 'infoportal-common'
 import {PrismaClient} from '@prisma/client'
 import winston from 'winston'
-import {chunkify, Obj, seq} from '@alexandreannic/ts-utils'
+import {chunkify, Obj, seq} from '@axanc/ts-utils'
 import {KoboClient} from 'kobo-sdk'
 
 type Req = {

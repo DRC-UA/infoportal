@@ -2,7 +2,7 @@ import {Badge, Box, Icon, LinearProgress, TablePagination, useTheme} from '@mui/
 import React, {useEffect, useMemo} from 'react'
 import {useI18n} from '@/core/i18n'
 import {Txt} from '@/shared/Txt'
-import {map, Obj} from '@alexandreannic/ts-utils'
+import {map, Obj} from '@axanc/ts-utils'
 import {IpIconBtn} from '@/shared'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {DatatableBody} from './DatatableBody'

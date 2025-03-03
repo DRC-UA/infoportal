@@ -20,7 +20,7 @@ import {capitalize} from 'infoportal-common'
 import {Box, CircularProgress, Icon, useTheme} from '@mui/material'
 import {useParams} from 'react-router-dom'
 import * as yup from 'yup'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 
 const paramSchema = yup.object({id: yup.string().required()})
 

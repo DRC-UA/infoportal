@@ -1,4 +1,4 @@
-import {Obj, seq, Seq} from '@alexandreannic/ts-utils'
+import {Obj, seq, Seq} from '@axanc/ts-utils'
 import React, {useMemo} from 'react'
 import {ChartLine, ChartLineData, ChartLineProps} from '@/shared/charts/ChartLine'
 

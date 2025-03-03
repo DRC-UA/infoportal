@@ -4,7 +4,7 @@ import {useCallback, useEffect, useMemo} from 'react'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useAsync} from '@/shared/hook/useAsync'
-import {Seq, seq} from '@alexandreannic/ts-utils'
+import {Seq, seq} from '@axanc/ts-utils'
 import {
   DatabaseView,
   DatabaseViewCol,

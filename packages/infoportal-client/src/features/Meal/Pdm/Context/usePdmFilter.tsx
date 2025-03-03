@@ -2,7 +2,7 @@ import {useMemo} from 'react'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {useI18n} from '@/core/i18n'
 import {PdmData, PdmForm} from '@/features/Meal/Pdm/Context/MealPdmContext'
-import {Seq, seq} from '@alexandreannic/ts-utils'
+import {Seq, seq} from '@axanc/ts-utils'
 
 export const usePdmFilters = (data: Seq<PdmData<PdmForm>> = seq()) => {
   const {m} = useI18n()

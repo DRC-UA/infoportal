@@ -4,7 +4,7 @@ import {UUID} from 'infoportal-common'
 import {useEffect, useState} from 'react'
 import {KoboFormListButton} from './KoboFormList'
 import {useFetchers} from '@/shared/hook/useFetchers'
-import {map} from '@alexandreannic/ts-utils'
+import {map} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 import {useFetcher} from '@/shared/hook/useFetcher'
 

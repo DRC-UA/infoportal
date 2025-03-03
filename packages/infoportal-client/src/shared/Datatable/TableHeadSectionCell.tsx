@@ -3,7 +3,7 @@ import {Icon, useTheme} from '@mui/material'
 import {makeStyles} from 'tss-react/mui'
 import {styleUtils} from '@/core/theme'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {map, Obj, seq} from '@alexandreannic/ts-utils'
+import {map, Obj, seq} from '@axanc/ts-utils'
 
 const colors = [
   '#2196F3',

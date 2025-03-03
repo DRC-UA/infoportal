@@ -1,7 +1,7 @@
 import {IpBtn, Page} from '@/shared'
 import {Panel} from '@/shared/Panel'
 import {NavLink, useNavigate, useParams, useSearchParams} from 'react-router-dom'
-import {map} from '@alexandreannic/ts-utils'
+import {map} from '@axanc/ts-utils'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Kobo} from 'kobo-sdk'
 import {KoboFlattenRepeatedGroup, KoboSchemaHelper} from 'infoportal-common'

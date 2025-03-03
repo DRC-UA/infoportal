@@ -11,7 +11,7 @@ import {appConf, AppConf} from '../../core/conf/AppConf'
 import {WfpBuildingBlockClient} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockClient'
 import {app, AppLogger} from '../../index'
 import promiseRetry from 'promise-retry'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {ApiError} from 'kobo-sdk'
 
 export class WfpDeduplicationUpload {

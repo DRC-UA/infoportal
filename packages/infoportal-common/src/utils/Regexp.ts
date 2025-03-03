@@ -1,4 +1,4 @@
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 
 export namespace Regexp {
   export const pattern = {

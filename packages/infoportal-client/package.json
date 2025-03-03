@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@alexandreannic/react-hooks-lib": "^1.11.22",
-    "@alexandreannic/ts-utils": "^2.1.15",
-    "@azure/msal-browser": "^2.37.1",
-    "@azure/msal-react": "^1.5.8",
+    "@axanc/ts-utils": "2.3.1",
+    "@azure/msal-browser": "^4.5.0",
+    "@azure/msal-react": "^3.0.5",
     "@emotion/react": "^11.11.1",
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.11.0",

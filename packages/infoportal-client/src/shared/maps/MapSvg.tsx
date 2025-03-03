@@ -1,5 +1,5 @@
 import {OblastIndex, OblastISO, toPercent} from 'infoportal-common'
-import {map, Obj, seq} from '@alexandreannic/ts-utils'
+import {map, Obj, seq} from '@axanc/ts-utils'
 import {MapSvgPaths, ukraineSvgPath} from './mapSvgPaths'
 import {alpha, Box, BoxProps, darken, useTheme} from '@mui/material'
 import {useMemo} from 'react'

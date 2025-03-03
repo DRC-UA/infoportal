@@ -1,5 +1,5 @@
 import {Kobo} from 'kobo-sdk'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {KoboCustomDirective} from '../KoboCustomDirective'
 
 export enum KoboValidation {

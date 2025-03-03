@@ -1,4 +1,4 @@
-import {duration, Enum} from '@alexandreannic/ts-utils'
+import {duration, Enum} from '@axanc/ts-utils'
 import {NonNullableKeys} from '../type/Generic'
 import {addMonths, differenceInMonths, isAfter, isBefore, startOfMonth} from 'date-fns'
 

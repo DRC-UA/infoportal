@@ -1,4 +1,4 @@
-import {fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
 import * as fs from 'fs'
 import {capitalize, KoboIndex} from 'infoportal-common'
 import {koboSdkDrc} from '../index'

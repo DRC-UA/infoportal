@@ -1,6 +1,6 @@
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {useEffect, useMemo} from 'react'
-import {KeyOf} from '@alexandreannic/ts-utils'
+import {KeyOf} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
 
 export const useKoboColumnDef = <T extends Record<string, any>>({

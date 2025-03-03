@@ -1,5 +1,5 @@
 import {Skeleton} from '@mui/material'
-import {mapFor} from '@alexandreannic/ts-utils'
+import {mapFor} from '@axanc/ts-utils'
 import React, {memo} from 'react'
 
 export const DatatableSkeleton = memo(() => {

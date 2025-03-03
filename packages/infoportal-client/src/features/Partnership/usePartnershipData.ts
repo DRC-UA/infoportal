@@ -1,6 +1,6 @@
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useMemo} from 'react'
-import {fnSwitch, seq, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, seq, Seq} from '@axanc/ts-utils'
 import {DrcSector, OblastIndex, OblastName} from 'infoportal-common'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {PartnershipData} from './PartnershipType'

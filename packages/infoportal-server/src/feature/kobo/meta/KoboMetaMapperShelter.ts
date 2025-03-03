@@ -1,4 +1,4 @@
-import {fnSwitch, map} from '@alexandreannic/ts-utils'
+import {fnSwitch, map} from '@axanc/ts-utils'
 import {
   Bn_cashForRentRegistration,
   CashForRentStatus,

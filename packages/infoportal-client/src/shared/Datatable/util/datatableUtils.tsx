@@ -5,7 +5,7 @@ import {
   DatatableRow,
 } from '@/shared/Datatable/util/datatableType'
 import React, {ReactNode} from 'react'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 
 export class DatatableUtils {
   static readonly localStorageKey = {

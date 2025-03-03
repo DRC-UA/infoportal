@@ -1,4 +1,4 @@
-import {fnSwitch, map, Obj} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, Obj} from '@axanc/ts-utils'
 import {
   DrcDonor,
   DrcOffice,

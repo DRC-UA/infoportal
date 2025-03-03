@@ -1,5 +1,5 @@
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {appConf} from '../../core/conf/AppConf'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
 import {PromisePool} from '@supercharge/promise-pool'

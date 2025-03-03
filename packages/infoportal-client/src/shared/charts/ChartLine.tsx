@@ -2,7 +2,7 @@ import {CartesianGrid, LabelList, Legend, Line, LineChart, ResponsiveContainer, 
 import * as React from 'react'
 import {ReactNode, useState} from 'react'
 import {Box, BoxProps, Checkbox, Theme, useTheme} from '@mui/material'
-import {map, Obj} from '@alexandreannic/ts-utils'
+import {map, Obj} from '@axanc/ts-utils'
 import {styleUtils} from '@/core/theme'
 import {chartConfig} from '@/shared/charts/chartConfig'
 import {formatLargeNumber} from '@/core/i18n/localization/en'

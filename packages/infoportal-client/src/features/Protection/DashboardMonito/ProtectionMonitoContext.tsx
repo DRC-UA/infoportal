@@ -8,7 +8,7 @@ import {
   Person,
   Protection_hhs3,
 } from 'infoportal-common'
-import {map, Obj, Seq, seq} from '@alexandreannic/ts-utils'
+import {map, Obj, Seq, seq} from '@axanc/ts-utils'
 import {ukraineSvgPath} from '@/shared/maps/mapSvgPaths'
 import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {ChartHelper} from '@/shared/charts/chartHelper'

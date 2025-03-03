@@ -2,7 +2,7 @@ import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from 'inf
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiWashType} from '@/features/ActivityInfo/Wash/aiWashType'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'

@@ -3,7 +3,7 @@ import React, {useEffect} from 'react'
 import {AccessFormSection} from '@/features/Access/AccessFormSection'
 import {Controller, UseFormReturn} from 'react-hook-form'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {fnSwitch} from '@alexandreannic/ts-utils'
+import {fnSwitch} from '@axanc/ts-utils'
 import {
   AccessFormInputAccessLevel,
   AccessFormInputDrcJob,

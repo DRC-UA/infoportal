@@ -1,5 +1,5 @@
 import {ActivityInfo, ActivityInfoSdk} from 'infoportal-common'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {AiBuilder} from './AiBuilder'
 
 export interface AiParsedOption {

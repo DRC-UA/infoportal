@@ -2,7 +2,7 @@ import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 import {ProtectionActivityFlat} from '@/features/Protection/Context/protectionType'
-import {seq, Seq} from '@alexandreannic/ts-utils'
+import {seq, Seq} from '@axanc/ts-utils'
 import {UseProtectionFilter, useProtectionFilters} from '@/features/Protection/Context/useProtectionFilter'
 import {DrcProgram, IKoboMeta} from 'infoportal-common'
 

@@ -3,7 +3,7 @@ import {yup} from '../../helper/Utils'
 import {InferType} from 'yup'
 import {UUID} from 'infoportal-common'
 import {app, AppCacheKey} from '../../index'
-import {duration} from '@alexandreannic/ts-utils'
+import {duration} from '@axanc/ts-utils'
 import {Request} from 'express'
 
 const clearCache = <T>(t: T): T => {

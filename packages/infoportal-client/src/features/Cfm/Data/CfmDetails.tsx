@@ -18,7 +18,7 @@ import {
   Regexp,
 } from 'infoportal-common'
 import {KoboSelectTag} from '@/shared/KoboSelectTag'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {CfmPriorityLogo} from '@/features/Cfm/Data/CfmTable'
 import {cfmIndex} from '@/features/Cfm/Cfm'
 import {useSession} from '@/core/Session/SessionContext'

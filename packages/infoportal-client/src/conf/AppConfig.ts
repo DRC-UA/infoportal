@@ -1,4 +1,4 @@
-import {bool, defaultValue, env, required} from '@alexandreannic/ts-utils'
+import {bool, defaultValue, env, required} from '@axanc/ts-utils'
 import {AppFeatureId, appFeaturesIndex} from '@/features/appFeatureId'
 
 enum Env {

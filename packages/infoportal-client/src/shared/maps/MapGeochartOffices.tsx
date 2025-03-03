@@ -1,4 +1,4 @@
-import {fnSwitch, Obj} from '@alexandreannic/ts-utils'
+import {fnSwitch, Obj} from '@axanc/ts-utils'
 import React, {useEffect} from 'react'
 import {Box, GlobalStyles, Icon, useTheme} from '@mui/material'
 import {useAppSettings} from '@/core/context/ConfigContext'

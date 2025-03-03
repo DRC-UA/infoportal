@@ -1,4 +1,4 @@
-import {fnSwitch, Seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, Seq} from '@axanc/ts-utils'
 import {OblastISO} from 'infoportal-common'
 import React, {useState} from 'react'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'

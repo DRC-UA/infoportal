@@ -1,4 +1,4 @@
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {UserSession} from '@/core/sdk/server/session/Session'
 import {appConfig} from '@/conf/AppConfig'
 import {Access} from '@/core/sdk/server/access/Access'

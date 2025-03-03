@@ -1,4 +1,4 @@
-import {Obj, Seq, seq} from '@alexandreannic/ts-utils'
+import {Obj, Seq, seq} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'

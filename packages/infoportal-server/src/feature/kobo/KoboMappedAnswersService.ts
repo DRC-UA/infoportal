@@ -19,7 +19,7 @@ import {
   Shelter_nta,
   Shelter_ta,
 } from 'infoportal-common'
-import {map} from '@alexandreannic/ts-utils'
+import {map} from '@axanc/ts-utils'
 import {ShelterNtaTags, ShelterTaTags} from './tags/ShelterTags'
 import {Kobo} from 'kobo-sdk'
 

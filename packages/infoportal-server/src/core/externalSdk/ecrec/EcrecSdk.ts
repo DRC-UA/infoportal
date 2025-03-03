@@ -8,7 +8,7 @@ import {
   FundedStatus,
 } from './EcrecSdkType'
 import {format, sub} from 'date-fns'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {StandardEnum} from '../../../helper/HelperType'
 
 /** @deprecated Ecrec App does not exist anymore. Keep the code since it can be helpful*/

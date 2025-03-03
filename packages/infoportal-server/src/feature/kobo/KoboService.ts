@@ -13,7 +13,7 @@ import {
   UUID,
 } from 'infoportal-common'
 import {KoboSdkGenerator} from './KoboSdkGenerator'
-import {duration, fnSwitch, Obj, seq} from '@alexandreannic/ts-utils'
+import {duration, fnSwitch, Obj, seq} from '@axanc/ts-utils'
 import {format} from 'date-fns'
 import {KoboAnswersFilters} from '../../server/controller/kobo/ControllerKoboAnswer'
 import {UserSession} from '../session/UserSession'

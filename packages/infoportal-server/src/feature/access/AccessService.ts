@@ -1,7 +1,7 @@
 import {FeatureAccess, FeatureAccessLevel, Prisma, PrismaClient} from '@prisma/client'
 import {Access, AppFeatureId, KoboDatabaseFeatureParams, WfpDeduplicationAccessParams} from './AccessType'
 import {yup} from '../../helper/Utils'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {InferType} from 'yup'
 import {DrcOffice, UUID} from 'infoportal-common'
 import {UserSession} from '../session/UserSession'

@@ -4,7 +4,7 @@ import {useSlotProps} from '@mui/base'
 import {DateRange, MultiInputFieldSlotTextFieldProps, PickersShortcutsItem} from '@mui/x-date-pickers-pro'
 import {unstable_useMultiInputDateRangeField as useMultiInputDateRangeField} from '@mui/x-date-pickers-pro/MultiInputDateRangeField'
 import {Box, TextField} from '@mui/material'
-import {mapFor} from '@alexandreannic/ts-utils'
+import {mapFor} from '@axanc/ts-utils'
 import {endOfMonth, format, startOfMonth, subMonths} from 'date-fns'
 import {PeriodPickerProps} from '@/shared/PeriodPicker/PeriodPickerNative'
 

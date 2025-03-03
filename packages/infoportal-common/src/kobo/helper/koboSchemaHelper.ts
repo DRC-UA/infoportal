@@ -1,4 +1,4 @@
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {removeHtml} from './../../index'
 import {KoboSchemaRepeatHelper} from './koboSchemaRepeatHelper'
 import {Kobo} from 'kobo-sdk'

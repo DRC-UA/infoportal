@@ -9,7 +9,7 @@ import {useI18n} from '@/core/i18n'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {ProtectionCustomFilter} from '@/features/Protection/Context/useProtectionFilter'
 import {useProtectionContext} from '@/features/Protection/Context/ProtectionContext'
-import {Obj} from '@alexandreannic/ts-utils'
+import {Obj} from '@axanc/ts-utils'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {appConfig} from '@/conf/AppConfig'
 

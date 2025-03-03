@@ -46,7 +46,7 @@ import {
   Va_bio_tia,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {fnSwitch, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, seq} from '@axanc/ts-utils'
 
 /** @deprecated should be coming from the unified database */
 type Meta = {

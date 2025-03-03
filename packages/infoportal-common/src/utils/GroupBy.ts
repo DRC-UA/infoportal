@@ -1,4 +1,4 @@
-import {Enum, Obj, Seq, seq} from '@alexandreannic/ts-utils'
+import {Enum, Obj, Seq, seq} from '@axanc/ts-utils'
 
 type GroupByKey = string | number
 

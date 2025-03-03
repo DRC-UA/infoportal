@@ -6,7 +6,7 @@ import {
   removeHtml,
 } from 'infoportal-common'
 import {useI18n} from '@/core/i18n/I18n'
-import {fnSwitch, map, seq} from '@alexandreannic/ts-utils'
+import {fnSwitch, map, seq} from '@axanc/ts-utils'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import React from 'react'
 import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'

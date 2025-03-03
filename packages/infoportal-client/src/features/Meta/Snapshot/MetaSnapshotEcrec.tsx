@@ -18,7 +18,7 @@ import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext
 import {useI18n} from '@/core/i18n'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Lazy} from '@/shared/Lazy'
-import {Obj, seq} from '@alexandreannic/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {PanelWBody} from '@/shared/Panel/PanelWBody'

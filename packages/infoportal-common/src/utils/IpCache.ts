@@ -1,4 +1,4 @@
-import {duration, Duration, filterUndefined, hashArgs, Obj} from '@alexandreannic/ts-utils'
+import {duration, Duration, filterUndefined, hashArgs, Obj} from '@axanc/ts-utils'
 import {Logger} from '../types'
 
 export interface IpCacheData<V> {

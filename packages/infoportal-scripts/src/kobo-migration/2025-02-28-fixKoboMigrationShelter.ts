@@ -1,7 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 import {FixKoboMigration} from './20250113-fixKoboMigration'
 import {KoboIndex, Shelter_ta, UUID} from 'infoportal-common'
-import {duration, Progress, seq} from '@alexandreannic/ts-utils'
+import {duration, Progress, seq} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
 import {PromisePool} from '@supercharge/promise-pool'
 import {addHours, subHours} from 'date-fns'

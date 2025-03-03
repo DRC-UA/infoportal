@@ -2,7 +2,7 @@ import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInf
 import {Datatable} from '@/shared/Datatable/Datatable'
 import React, {ReactNode, useEffect, useMemo, useState} from 'react'
 import {UseFetcher} from '@/shared/hook/useFetcher'
-import {seq} from '@alexandreannic/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {
   AiPreviewActivity,
   AiPreviewRequest,
