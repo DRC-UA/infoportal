@@ -13,6 +13,10 @@ interface ActivityInfoRequest {
 export class ActivityInfoSdk {
   constructor(private client: ApiClient) {}
 
+  static readonly makeRecordId = ({prefix, periodStr, index}: {prefix: string; periodStr: string; index: number}) => {
+    return prefix + periodStr.replaceAll('_', '') + ('' + index).padStart(3, '0')
+  }
+
   static readonly makeRecordRequest = (params: ActivityInfoRequest): ActiviftyInfoRecords => {
     return {
       changes: [ActivityInfoSdk.makeRecordRequestContent(params)],

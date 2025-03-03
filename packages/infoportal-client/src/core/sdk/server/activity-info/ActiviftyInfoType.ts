@@ -1,8 +1,10 @@
+// @deprecated
+// TODO DELETE
 export interface ActiviftyInfoRecords {
-  changes: ActiviftyInfoRecord[]
+  changes: ActivityInfoRecord[]
 }
 
-export interface ActiviftyInfoRecord {
+export interface ActivityInfoRecord {
   formId: string
   recordId: string
   parentRecordId: string | null
