@@ -12,6 +12,7 @@ import {
   koboMetaStatusLabel,
   Person,
 } from 'infoportal-common'
+import {UaLocation} from 'ua-location'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {IpIconBtn} from '@/shared/IconBtn'
@@ -42,7 +43,7 @@ export const MetaTable = () => {
   const {session} = useSession()
   const {conf} = useAppSettings()
   const {m, formatDate, formatDateTime} = useI18n()
-  const fetcherSettlement = useFetcher(() => AILocationHelper.settlements)
+  const fetcherSettlement = useFetcher(UaLocation.Settlement.getAll)
 
   useEffect(() => {
     fetcherSettlement.fetch()
@@ -185,7 +186,7 @@ export const MetaTable = () => {
         type: 'select_one',
         head: m.settlement,
         render: (_) => {
-          const value = fetcherSettlement.get ? fetcherSettlement.get[_.settlement!]?.en : _.settlement
+          const value = fetcherSettlement.get?.get(_.settlement!)?.en ?? _.settlement
           return {
             label: fetcherSettlement.loading ? <Skeleton /> : value,
             value,
