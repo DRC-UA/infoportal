@@ -1,4 +1,4 @@
-import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
+import {ActivityInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import React, {ReactNode, useEffect, useMemo, useState} from 'react'
 import {UseFetcher} from '@/shared/hook/useFetcher'
@@ -23,17 +23,14 @@ import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Period} from 'infoportal-common'
 
-export interface AiTable<
-  TActivity = any,
-  TSubActivity extends any = undefined,
-  TAnswer extends Record<string, any> = any,
-> {
+export interface AiTable<TActivity = any, TSubActivity extends any = any, TAnswer extends Record<string, any> = any> {
   submit?: boolean
   recordId: string
   data: KoboSubmissionFlat<TAnswer>[]
   activity: TActivity
   subActivity?: TSubActivity
-  requestBody: ActiviftyInfoRecords
+  requestBody: any
+  // requestBody: ActiviftyInfoRecords
 }
 
 export const aiInvalidValueFlag = '⚠️'
@@ -84,9 +81,7 @@ export const AiBundleTable = ({
     }
   }, [fetcher.get])
 
-  const _submit = useAsync((id: string, p: any) => api.activityInfo.submitActivity(p), {
-    requestKey: ([i]) => i,
-  })
+  const _submit = useAsync((id: string, p: any) => api.activityInfo.submitActivity(p), {requestKey: ([i]) => i})
 
   return (
     <>
