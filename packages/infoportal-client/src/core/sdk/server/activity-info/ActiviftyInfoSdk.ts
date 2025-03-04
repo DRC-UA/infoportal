@@ -1,5 +1,5 @@
 import {ApiClient} from '../ApiClient'
-import {ActiviftyInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
+import {ActivityInfoRecord, ActivityInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 
 interface ActivityInfoRequest {
   activityIdPrefix: string
@@ -13,7 +13,15 @@ interface ActivityInfoRequest {
 export class ActivityInfoSdk {
   constructor(private client: ApiClient) {}
 
-  static readonly makeRecordRequest = (params: ActivityInfoRequest): ActiviftyInfoRecords => {
+  static readonly makeRecordId = ({prefix, periodStr, index}: {prefix: string; periodStr: string; index: number}) => {
+    return prefix + periodStr.replaceAll('-', '') + ('' + index).padStart(3, '0')
+  }
+
+  static readonly wrapRequest = (changes: ActivityInfoRecord[]) => {
+    return {changes}
+  }
+
+  static readonly makeRecordRequest = (params: ActivityInfoRequest): ActivityInfoRecords => {
     return {
       changes: [ActivityInfoSdk.makeRecordRequestContent(params)],
     }
@@ -75,7 +83,7 @@ export class ActivityInfoSdk {
     }
   }
 
-  readonly submitActivity = (body: ActiviftyInfoRecords[]) => {
+  readonly submitActivity = (body: ActivityInfoRecords[]) => {
     return this.client.post(`/activity-info/activity`, {body})
   }
 }

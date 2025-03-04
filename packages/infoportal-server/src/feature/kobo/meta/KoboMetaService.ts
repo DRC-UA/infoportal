@@ -10,6 +10,7 @@ import {
   DrcDonor,
   DrcProgram,
   DrcProject,
+  DrcSector,
   IKoboMeta,
   KeyOf,
   KoboIndex,
@@ -95,6 +96,7 @@ export namespace KoboMetaParams {
     .object({
       status: yup.array().of(yup.mixed<KoboMetaStatus>().defined()).optional(),
       activities: yup.array().of(yup.mixed<DrcProgram>().defined()).optional(),
+      sectors: yup.array().of(yup.mixed<DrcSector>().defined()).optional(),
     })
     .optional()
   export type SearchFilter = InferType<typeof schemaSearchFilter>
@@ -166,6 +168,7 @@ export class KoboMetaService {
         where: {
           ...map(params?.status, (_) => ({status: {in: _}})),
           ...map(params?.activities, (_) => ({activity: {in: _}})),
+          ...map(params?.sectors, (_) => ({sector: {in: _}})),
         },
         orderBy: {
           date: 'desc',

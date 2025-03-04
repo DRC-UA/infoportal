@@ -1,18 +1,18 @@
 import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {
-  aiHromadas,
   AILocationHelper,
-  aiOblasts,
-  aiRaions,
-  aiSettlements,
   Bn_re,
+  IKoboMeta,
   OblastIndex,
+  Period,
   Person,
   Protection_groupSession,
 } from 'infoportal-common'
 import {fnSwitch} from '@axanc/ts-utils'
-import {Period} from 'infoportal-common'
 import {format} from 'date-fns'
+import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
+import {aiLocationMap} from 'activityinfo-sdk/location-map'
+import {UaLocation} from 'ua-location'
 
 export namespace AiMapper {
   export const getPeriodStr = (p: Partial<Period>) => {
@@ -23,6 +23,23 @@ export namespace AiMapper {
   }
 
   export type Location = Pick<AiProtectionType.Type, 'Oblast' | 'Raion' | 'Hromada' | 'Settlement'>
+
+  export const getLocationRecordIdByMeta = (p: {
+    oblast: IKoboMeta['oblast'],
+    raion: IKoboMeta['raion'],
+    hromada: IKoboMeta['hromada'],
+    settlement: IKoboMeta['settlement'],
+  }) => {
+    const oblast = UaLocation.Oblast.findByName(p.oblast!)
+    const raion = oblast?.raions?.find(_ => _.en === p.raion)
+    const hromada = raion?.hromadas?.find(_ => _.en === p.hromada)
+    return locationIsoToRecordId({
+      Oblast: oblast?.iso,
+      Raion: raion?.iso,
+      Hromada: hromada?.iso,
+      Settlement: p.settlement,
+    })
+  }
 
   export const getLocationByMeta = async (
     oblast: string,
@@ -37,32 +54,27 @@ export namespace AiMapper {
       Hromada: hromadaLoc ? hromadaLoc.en + '_' + hromadaLoc.iso : (('⚠️' + hromada) as any),
       Settlement: settlement
         ? await AILocationHelper.findSettlementByIso(settlement).then((res) => {
-            if (!res)
-              return AILocationHelper.findSettlement(oblast, raion, hromada, settlement).then(
-                (_) => _?._5w ?? '⚠️' + settlement,
-              )
-            return Promise.resolve(res._5w)
-          })
+          if (!res)
+            return AILocationHelper.findSettlement(oblast, raion, hromada, settlement).then(
+              (_) => _?._5w ?? '⚠️' + settlement,
+            )
+          return Promise.resolve(res._5w)
+        })
         : undefined,
     }
   }
 
-  export const mapLocationToRecordId = <
-    T extends {
-      Oblast?: string
-      Raion?: string
-      Hromada?: string
-      Settlement?: string
-    },
-  >(
-    _: T,
-  ): T => {
+  export const locationIsoToRecordId = (_: {
+    Oblast?: string
+    Raion?: string
+    Hromada?: string
+    Settlement?: string
+  }): any => {
     return {
-      ..._,
-      Oblast: _.Oblast ? aiOblasts[_.Oblast as unknown as keyof typeof aiOblasts] : undefined,
-      Raion: _.Raion ? aiRaions[_.Raion as unknown as keyof typeof aiRaions] : undefined,
-      Hromada: _.Hromada ? aiHromadas[_.Hromada as unknown as keyof typeof aiHromadas] : undefined,
-      Settlement: _.Settlement ? aiSettlements[_.Settlement as unknown as keyof typeof aiSettlements] : undefined,
+      Oblast: _.Oblast ? aiLocationMap.oblast[_.Oblast] : undefined,
+      Raion: _.Raion ? aiLocationMap.raion[_.Raion] : undefined,
+      Hromada: _.Hromada ? aiLocationMap.hromada[_.Hromada] : undefined,
+      Settlement: _.Settlement ? aiLocationMap.settlement[_.Settlement] : undefined,
     }
   }
 
@@ -78,7 +90,7 @@ export namespace AiMapper {
       oblast,
       raion?.en,
       Bn_re.options.ben_det_hromada[d.ben_det_hromada as keyof typeof Bn_re.options.ben_det_hromada] ??
-        d.ben_det_hromada,
+      d.ben_det_hromada,
     )
     return {
       Oblast: AILocationHelper.findOblast(oblast)! as any, //  @FIXME
@@ -87,12 +99,14 @@ export namespace AiMapper {
     }
   }
 
-  export const mapPopulationGroup = (_?: Person.DisplacementStatus): AiProtectionType.TypeSub['Population Group'] => {
+  export const mapPopulationGroup = (
+    _?: Person.DisplacementStatus,
+  ): AiGbvType.AiTypeActivitiesAndPeople['Population Group'] => {
     return fnSwitch(
       _!,
       {
         Idp: 'Internally Displaced',
-        Returnee: 'Returnees',
+        // Returnee: 'Returnees',
       },
       () => 'Non-Displaced',
     )
