@@ -128,6 +128,7 @@ export class ActivityInfoBuildType {
           },
           'Implementing Partner': {skipChoices: true},
           'Implementing Partner 2': {skipChoices: true},
+          Oblast: {skipChoices: true},
           Raion: {skipChoices: true},
           Hromada: {skipChoices: true},
           Settlement: {skipChoices: true},

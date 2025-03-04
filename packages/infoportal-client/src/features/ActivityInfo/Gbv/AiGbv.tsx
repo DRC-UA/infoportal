@@ -12,11 +12,10 @@ export const AiGbv = () => {
 
   const fetcher = useFetcher((period: Partial<Period>) => AiGbvMapper2.req(api)(period))
 
-  console.log(fetcher.get)
   return (
     <Page width="full">
       <Panel>
-        <AiBundleTable id="gbv" fetcher={fetcher} subActivityKey="Activities and People" />
+        <AiBundleTable id="gbv" fetcher={fetcher} />
       </Panel>
     </Page>
   )

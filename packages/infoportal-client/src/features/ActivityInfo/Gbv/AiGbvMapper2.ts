@@ -36,6 +36,7 @@ export namespace AiGbvMapper2 {
 
   const mapActivity = (data: IKoboMeta[], periodStr: string): Bundle[] => {
     const res: Bundle[] = []
+    let i = 0
     groupBy({
       data,
       groups: [
@@ -46,7 +47,6 @@ export namespace AiGbvMapper2 {
         {by: (_) => _.project?.[0]!},
       ],
       finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
-        let i = 0
         const activity: AiGbvType = {
           'Plan/Project code': planCode[project],
           'Reporting Organization': 'Danish Refugee Council (DRC)',
@@ -55,26 +55,36 @@ export namespace AiGbvMapper2 {
           Raion: raion,
           Hromada: hromada,
           Settlement: settlement,
-          'Activities and People': mapSubActivity(grouped, periodStr),
+          // 'Activities and People': mapSubActivity(grouped, periodStr),
+        }
+        const subActivities = mapSubActivity(grouped, periodStr)
+        const activityPrebuilt = {
+          ...activity,
+          ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+          'Activities and People': subActivities,
         }
         const recordId = ActivityInfoSdk.makeRecordId({
           prefix: 'drcgbv',
           periodStr,
           index: i++,
         })
-        res.push({
-          activity,
-          data,
-          requestBody: AiGbvType.buildRequest(activity, recordId),
-          recordId,
-          submit: checkAiValid(
-            activity.Oblast,
-            activity.Raion,
-            activity.Hromada,
-            activity.Settlement,
-            activity['Plan/Project code'],
-            ...(activity['Activities and People']?.map((_) => _.Indicators) ?? []),
-          ),
+        return mapSubActivity(grouped, periodStr).map((subActivity) => {
+          res.push({
+            activity,
+            data: grouped,
+            requestBody: ActivityInfoSdk.wrapRequest(AiGbvType.buildRequest(activityPrebuilt, recordId)),
+            subActivity,
+            recordId,
+            submit: checkAiValid(
+              activity.Oblast,
+              activity.Raion,
+              activity.Hromada,
+              activity.Settlement,
+              activity['Plan/Project code'],
+              ...(activity['Activities and People']?.map((_: AiGbvType.AiTypeActivitiesAndPeople) => _.Indicators) ??
+                []),
+            ),
+          })
         })
       },
     })

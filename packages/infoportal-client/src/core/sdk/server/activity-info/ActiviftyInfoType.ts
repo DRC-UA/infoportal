@@ -1,6 +1,4 @@
-// @deprecated
-// TODO DELETE
-export interface ActiviftyInfoRecords {
+export interface ActivityInfoRecords {
   changes: ActivityInfoRecord[]
 }
 
