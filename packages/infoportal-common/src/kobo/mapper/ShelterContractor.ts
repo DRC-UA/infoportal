@@ -23,6 +23,7 @@ export enum ShelterContractor {
   'Ukr Bud Tekhnolohiyi' = 'Ukr Bud Tekhnolohiyi',
   'Ukrbudtechnologii' = 'Ukrbudtechnologii',
   'Zhilvest' = 'Zhilvest',
+  'Agent Bud' = 'Agent Bud'
 }
 
 export class ShelterContractorPrices {
