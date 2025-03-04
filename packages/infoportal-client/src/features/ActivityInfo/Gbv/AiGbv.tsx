@@ -5,7 +5,7 @@ import {Period} from 'infoportal-common'
 import {Panel} from '@/shared/Panel'
 import {Page} from '@/shared/Page'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {AiGbvMapper2} from '@/features/ActivityInfo/Gbv/AiGbvMapper2'
+import {AiGbvMapper2} from '@/features/ActivityInfo/Gbv/AiGbvMapper'
 
 export const AiGbv = () => {
   const {api} = useAppSettings()
