@@ -8,7 +8,7 @@ import {AiMineActionType} from '@/features/ActivityInfo/MineAction/aiMineActionT
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
-import {Period} from 'infoportal-common'
+import {OblastName, Period} from 'infoportal-common'
 
 type Bundle = AiTable<AiMineActionType.Type, AiMineActionType.TypeSub>
 
@@ -31,15 +31,12 @@ export const AiMineAction = () => {
                 _['Plan/Project Code'],
                 AiMineActionType.options['Plan/Project Code'],
               ),
-              ...(await AiMapper.getLocationByMeta(
-                _['Oblast Oblast ENG/UKR'],
-                _['Raion Raion ENG/UKR'],
-                _['Hromada Hromada ENG/PCODE/UKR'],
-                undefined,
-              )),
-              // 'Oblast': addFlagIfNotInList(_['Oblast Oblast ENG/UKR'], AiMineActionType.options['Oblast']),
-              // 'Raion': _['Raion Raion ENG/UKR'],
-              // 'Hromada': _['Hromada Hromada ENG/PCODE/UKR'],
+              ...(await AiMapper.getLocationRecordIdByMeta({
+                oblast: _['Oblast Oblast ENG/UKR'] as OblastName,
+                raion: _['Raion Raion ENG/UKR'],
+                hromada: _['Hromada Hromada ENG/PCODE/UKR'],
+                settlement: undefined,
+              })),
               'Response Theme': addFlagIfNotInList(_['Response Theme'], AiMineActionType.options['Response Theme']),
             }
             const rawSubActivity: AiMineActionType.TypeSub = {

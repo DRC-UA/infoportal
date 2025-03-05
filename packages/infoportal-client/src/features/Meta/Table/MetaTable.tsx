@@ -3,15 +3,7 @@ import {Datatable} from '@/shared/Datatable/Datatable'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
-import {
-  AILocationHelper,
-  DrcProject,
-  IKoboMeta,
-  KoboIndex,
-  KoboMetaStatus,
-  koboMetaStatusLabel,
-  Person,
-} from 'infoportal-common'
+import {DrcProject, IKoboMeta, KoboIndex, KoboMetaStatus, koboMetaStatusLabel, Person} from 'infoportal-common'
 import {UaLocation} from 'ua-location'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'

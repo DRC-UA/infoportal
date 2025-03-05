@@ -1,13 +1,5 @@
 import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
-import {
-  AILocationHelper,
-  Bn_re,
-  IKoboMeta,
-  OblastIndex,
-  Period,
-  Person,
-  Protection_groupSession,
-} from 'infoportal-common'
+import {IKoboMeta, Period, Person} from 'infoportal-common'
 import {fnSwitch} from '@axanc/ts-utils'
 import {format} from 'date-fns'
 import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
@@ -25,43 +17,20 @@ export namespace AiMapper {
   export type Location = Pick<AiProtectionType.Type, 'Oblast' | 'Raion' | 'Hromada' | 'Settlement'>
 
   export const getLocationRecordIdByMeta = (p: {
-    oblast: IKoboMeta['oblast'],
-    raion: IKoboMeta['raion'],
-    hromada: IKoboMeta['hromada'],
-    settlement: IKoboMeta['settlement'],
+    oblast: IKoboMeta['oblast']
+    raion: IKoboMeta['raion']
+    hromada: IKoboMeta['hromada']
+    settlement: IKoboMeta['settlement']
   }) => {
     const oblast = UaLocation.Oblast.findByName(p.oblast!)
-    const raion = oblast?.raions?.find(_ => _.en === p.raion)
-    const hromada = raion?.hromadas?.find(_ => _.en === p.hromada)
+    const raion = oblast?.raions?.find((_) => _.en === p.raion)
+    const hromada = raion?.hromadas?.find((_) => _.en === p.hromada)
     return locationIsoToRecordId({
       Oblast: oblast?.iso,
       Raion: raion?.iso,
       Hromada: hromada?.iso,
       Settlement: p.settlement,
     })
-  }
-
-  export const getLocationByMeta = async (
-    oblast: string,
-    raion: string,
-    hromada: string,
-    settlement?: string,
-  ): Promise<Location> => {
-    const hromadaLoc = AILocationHelper.findHromada(oblast, raion, hromada)
-    return {
-      Oblast: AILocationHelper.findOblast(oblast) ?? (('⚠️' + oblast) as any),
-      Raion: AILocationHelper.findRaion(oblast, raion)?._5w ?? (('⚠️' + raion) as any),
-      Hromada: hromadaLoc ? hromadaLoc.en + '_' + hromadaLoc.iso : (('⚠️' + hromada) as any),
-      Settlement: settlement
-        ? await AILocationHelper.findSettlementByIso(settlement).then((res) => {
-          if (!res)
-            return AILocationHelper.findSettlement(oblast, raion, hromada, settlement).then(
-              (_) => _?._5w ?? '⚠️' + settlement,
-            )
-          return Promise.resolve(res._5w)
-        })
-        : undefined,
-    }
   }
 
   export const locationIsoToRecordId = (_: {
@@ -75,27 +44,6 @@ export namespace AiMapper {
       Raion: _.Raion ? aiLocationMap.raion[_.Raion] : undefined,
       Hromada: _.Hromada ? aiLocationMap.hromada[_.Hromada] : undefined,
       Settlement: _.Settlement ? aiLocationMap.settlement[_.Settlement] : undefined,
-    }
-  }
-
-  export const getLocationByKobo = (
-    d: Pick<Protection_groupSession.T, 'ben_det_oblast' | 'ben_det_hromada' | 'ben_det_raion'>,
-  ): Location => {
-    const oblast = OblastIndex.byKoboName(d.ben_det_oblast!)?.name ?? ''
-    const raion = AILocationHelper.findRaion(
-      oblast,
-      Bn_re.options.ben_det_raion[d.ben_det_raion as keyof typeof Bn_re.options.ben_det_raion] ?? d.ben_det_raion,
-    )!
-    const hromada = AILocationHelper.findHromada(
-      oblast,
-      raion?.en,
-      Bn_re.options.ben_det_hromada[d.ben_det_hromada as keyof typeof Bn_re.options.ben_det_hromada] ??
-      d.ben_det_hromada,
-    )
-    return {
-      Oblast: AILocationHelper.findOblast(oblast)! as any, //  @FIXME
-      Raion: raion?._5w as any,
-      Hromada: hromada ? hromada.en + '_' + hromada.iso : undefined!,
     }
   }
 

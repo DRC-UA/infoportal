@@ -1,6 +1,5 @@
 import {fnSwitch, map} from '@axanc/ts-utils'
 import {
-  AILocationHelper,
   DrcOffice,
   DrcProgram,
   DrcProject,
@@ -8,6 +7,7 @@ import {
   DrcSector,
   KoboMetaStatus,
   KoboTagStatus,
+  KoboXmlMapper,
   OblastIndex,
   Person,
   Protection_communityMonitoring,
@@ -23,7 +23,7 @@ import {
 } from 'infoportal-common'
 import {KoboMetaOrigin} from './KoboMetaType'
 import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
-import {KoboXmlMapper} from 'infoportal-common'
+import {UaLocation} from 'ua-location'
 import Gender = Person.Gender
 
 export class KoboMetaMapperProtection {
@@ -199,8 +199,8 @@ export class KoboMetaMapperProtection {
         () => undefined,
       ),
       oblast: OblastIndex.byIso(answer.where_are_you_current_living_oblast)?.name!,
-      raion: AILocationHelper.findRaionByIso(answer.where_are_you_current_living_raion)?.en,
-      hromada: AILocationHelper.findHromadaByIso(answer.where_are_you_current_living_hromada!)?.en,
+      raion: UaLocation.Raion.findByIso(answer.where_are_you_current_living_raion!)?.en,
+      hromada: UaLocation.Hromada.findByIso(answer.where_are_you_current_living_hromada!)?.en,
       settlement: answer.settlement,
       sector: DrcSector.GeneralProtection,
       activity: DrcProgram.ProtectionMonitoring,
@@ -253,17 +253,21 @@ export class KoboMetaMapperProtection {
     const persons = KoboXmlMapper.Persons.protection_pss(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)!
     const project = answer.project
-      ? fnSwitch(answer.project, {
-          uhf6: DrcProject['UKR-000336 UHF6'],
-          okf: DrcProject['UKR-000309 OKF'],
-          uhf4: DrcProject['UKR-000314 UHF4'],
-          echo: DrcProject['UKR-000322 ECHO2'],
-          bha: DrcProject['UKR-000284 BHA'],
-          bha2: DrcProject['UKR-000345 BHA2'],
-          uhf8: DrcProject['UKR-000363 UHF8'],
-          '372_echo': DrcProject['UKR-000372 ECHO3'],
-          'sida h2r': DrcProject['UKR-000329 SIDA H2R'],
-        }, () => DrcProjectHelper.search(answer.project))
+      ? fnSwitch(
+          answer.project,
+          {
+            uhf6: DrcProject['UKR-000336 UHF6'],
+            okf: DrcProject['UKR-000309 OKF'],
+            uhf4: DrcProject['UKR-000314 UHF4'],
+            echo: DrcProject['UKR-000322 ECHO2'],
+            bha: DrcProject['UKR-000284 BHA'],
+            bha2: DrcProject['UKR-000345 BHA2'],
+            uhf8: DrcProject['UKR-000363 UHF8'],
+            '372_echo': DrcProject['UKR-000372 ECHO3'],
+            'sida h2r': DrcProject['UKR-000329 SIDA H2R'],
+          },
+          () => DrcProjectHelper.search(answer.project),
+        )
       : undefined
     return {
       office: fnSwitch(
