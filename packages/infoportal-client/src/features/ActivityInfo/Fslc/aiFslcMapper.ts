@@ -101,10 +101,10 @@ export namespace AiFslcMapper {
                         'Total Cash Value (local currency)': grouped.sum((_) => _.tags?.amount ?? 0),
                         Currency: 'UAH',
                         'Cash Delivery Mechanism': 'Bank Transfer',
-                        'Girls (0-17)': undefined as any,
-                        'Boys (0-17)': undefined as any,
-                        'Older Women (60+)': undefined as any,
-                        'Older Men (60+)': undefined as any,
+                        'Girls (0-17)': null as any,
+                        'Boys (0-17)': null as any,
+                        'Older Women (60+)': null as any,
+                        'Older Men (60+)': null as any,
                       }
                     }
                     return {
@@ -122,8 +122,8 @@ export namespace AiFslcMapper {
                     }
                   })(),
                   'Were these people reached in 2025 by another FSL sub-activity?': 'No',
-                  'If yes, which sub-activity': undefined as any,
-                  'If yes, how many people received from both sub-activities': undefined as any,
+                  'If yes, which sub-activity': null as any,
+                  'If yes, how many people received from both sub-activities': null as any,
                   'Implementation Status': 'Completed',
                 }
                 const recordId = ActivityInfoSdk.makeRecordId({

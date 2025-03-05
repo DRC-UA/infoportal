@@ -6,17 +6,16 @@ import {
   groupBy,
   KoboIndex,
   KoboMetaStatus,
+  Period,
   PeriodHelper,
 } from 'infoportal-common'
 import {fnSwitch, match} from '@axanc/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
-import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {AiMpcaType} from '@/features/ActivityInfo/Mpca/aiMpcaType'
 import {appConfig} from '@/conf/AppConfig'
-import {Period} from 'infoportal-common'
 
 export namespace AiMpcaMapper {
   type Bundle = AiTable<AiMpcaType.Type>
