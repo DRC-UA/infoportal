@@ -130,12 +130,8 @@ export class ActivityInfoBuildType {
 
     mpca: () =>
       this.builder.generateSchema({
-        optionsLimit: 200,
         formId: this.formIds.mpca,
         questionSettings: {
-          Donor: {
-            skipChoices: true,
-          },
           'Implementing Partner': {filterChoices: (_) => _.includes('Danish Refugee Council')},
           'Reporting Organization': {filterChoices: (_) => _.includes('Danish Refugee Council')},
           Oblast: {skipChoices: true},
