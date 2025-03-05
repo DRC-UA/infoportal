@@ -8,11 +8,10 @@ import {IpCache, IpCacheApp} from 'infoportal-common'
 import {duration} from '@axanc/ts-utils'
 import * as winston from 'winston'
 import {format, Logger as WinstonLogger} from 'winston'
-import * as os from 'os'
 import {Syslog} from 'winston-syslog'
 import {EmailService} from './feature/email/EmailService'
 import {DbInit} from './core/DbInit'
-import {KoboSyncServer} from './feature/kobo/sync/KoboSyncServer'
+import * as os from 'os'
 
 export type AppLogger = WinstonLogger
 

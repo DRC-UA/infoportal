@@ -36,10 +36,13 @@ jobs:
           npm run build --workspace infoportal-common --if-present
           npm run test --workspace infoportal-common --if-present
 
+      - name: Generate Prisma schema
+        run: |
+          npm run db-generate
+
       - name: Build, and test (server)
         working-directory: ./packages/infoportal-server
         run: |
-          npm run db-generate
           npm run build --workspace infoportal-server --if-present
           npm run test --workspace infoportal-server --if-present
 
