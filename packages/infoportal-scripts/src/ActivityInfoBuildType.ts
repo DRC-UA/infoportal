@@ -12,69 +12,55 @@ export class ActivityInfoBuildType {
       generalProtection: 'c1viqabm4whwvwo3',
       mineAction: 'cxpfp3xm513b6r15nwo',
       snfi: 'cmasgbem5w7pgf02',
-      // fslc: 'chxr3zlqc5qatg2',
-      // wash: 'cz86p3tlqc7h66y2',
+      fslc: 'cxx4z9am74csoag9',
+      wash: 'czg50xvm6an62wz2',
       mpca: 'cmh1f87m6jumnb314it',
       gbv: 'co7iurtm513bt64h7u',
     },
   ) {}
 
   readonly definition = {
-    // wash: () =>
-    //   builder.generateSchema({
-    //     optionsLimit: 200000,
-    //     formId: this.formIds.activityInfoForms.wash,
-    //     questionSettings: {
-    //       'Reporting Organization': {
-    //         filterChoices: (_) => _.includes('Danish Refugee Council'),
-    //       },
-    //       'Implementing Partner': {
-    //         filterChoices: (_) => _.includes('Danish Refugee Council'),
-    //       },
-    //       'Donor Name': {
-    //         skipChoices: true,
-    //       },
-    //       'Sub-Implementing Partner': {
-    //         skipChoices: true,
-    //       },
-    //       Hromada: {
-    //         skipChoices: true,
-    //       },
-    //       Settlement: {
-    //         skipChoices: true,
-    //       },
-    //     },
-    //   }),
+    wash: () =>
+      this.builder.generateSchema({
+        formId: this.formIds.wash,
+        questionSettings: {
+          Oblast: {skipChoices: true},
+          Raion: {skipChoices: true},
+          Hromada: {skipChoices: true},
+          Settlement: {skipChoices: true},
+          'Collective Sites': {skipChoices: true},
+          'Reporting Organization': {
+            filterChoices: (_) => _.includes('Danish Refugee Council'),
+          },
+          'Implementing Partner': {
+            filterChoices: (_) => _.includes('Danish Refugee Council'),
+          },
+        },
+      }),
 
-    // fslc: () =>
-    //   builder.generateSchema({
-    //     formId: this.formIds.activityInfoForms.fslc,
-    //     questionSettings: {
-    //       'Reporting Organization': {
-    //         filterChoices: (_) => _.includes('Danish Refugee Council'),
-    //       },
-    //       'Activity and indicator': {
-    //         selectColumnByLabels: ['Activity', 'Sub-activity', 'Indicator', 'Modality'],
-    //       },
-    //       'If yes, which sub-activity': {
-    //         selectColumnByLabels: ['Activity', 'Sub-activity', 'Indicator', 'Modality'],
-    //       },
-    //       'Implementing Partner': {
-    //         filterChoices: (_) => _.includes('Danish Refugee Council'),
-    //       },
-    //
-    //       Raion: {skipChoices: true},
-    //       Hromada: {skipChoices: true},
-    //       Settlement: {skipChoices: true},
-    //       'Collective Site': {skipChoices: true},
-    //     },
-    //   }),
+    fslc: () =>
+      this.builder.generateSchema({
+        formId: this.formIds.fslc,
+        questionSettings: {
+          Oblast: {skipChoices: true},
+          Raion: {skipChoices: true},
+          Hromada: {skipChoices: true},
+          Settlement: {skipChoices: true},
+          'Collective Sites': {skipChoices: true},
+          'Reporting Organization': {
+            filterChoices: (_) => _.includes('Danish Refugee Council'),
+          },
+          'Implementing Partner': {
+            filterChoices: (_) => _.includes('Danish Refugee Council'),
+          },
+        },
+      }),
 
     snfi: () =>
       this.builder.generateSchema({
         formId: this.formIds.snfi,
         questionSettings: {
-          Oblast: {},
+          Oblast: {skipChoices: true},
           Raion: {skipChoices: true},
           Hromada: {skipChoices: true},
           Settlement: {skipChoices: true},
@@ -98,24 +84,13 @@ export class ActivityInfoBuildType {
           'Reporting Organization': {
             filterChoices: (_) => _.includes('Danish Refugee Council'),
           },
-          'Implementing Partner': {
-            skipChoices: true,
-          },
-          'Implementing Partner 2': {
-            skipChoices: true,
-          },
-          Raion: {
-            skipChoices: true,
-          },
-          Hromada: {
-            skipChoices: true,
-          },
-          Settlement: {
-            skipChoices: true,
-          },
-          'Collective Site': {
-            skipChoices: true,
-          },
+          'Implementing Partner': {skipChoices: true},
+          'Implementing Partner 2': {skipChoices: true},
+          Oblast: {skipChoices: true},
+          Raion: {skipChoices: true},
+          Hromada: {skipChoices: true},
+          Settlement: {skipChoices: true},
+          'Collective Site': {skipChoices: true},
         },
       }),
 
@@ -145,7 +120,7 @@ export class ActivityInfoBuildType {
           },
           'Implementing Partner': {skipChoices: true},
           'Implementing Partner 2': {skipChoices: true},
-          OblastIndex: {skipChoices: true},
+          Oblast: {skipChoices: true},
           Raion: {skipChoices: true},
           Hromada: {skipChoices: true},
           Settlement: {skipChoices: true},
@@ -163,6 +138,7 @@ export class ActivityInfoBuildType {
           },
           'Implementing Partner': {filterChoices: (_) => _.includes('Danish Refugee Council')},
           'Reporting Organization': {filterChoices: (_) => _.includes('Danish Refugee Council')},
+          Oblast: {skipChoices: true},
           Raion: {skipChoices: true},
           Hromada: {skipChoices: true},
           Settlement: {skipChoices: true},

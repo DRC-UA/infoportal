@@ -22,5 +22,4 @@ export const koboSdkDrc = new KoboClient({
   await new ActivityInfoBuildType().buildAll()
   // await new BuildKoboType().build('ecrec_msme_bha388')
   // await new BuildKoboType().build('ecrec_vet2_dmfa')
-  await new ShelterRepair().run()
 })()
