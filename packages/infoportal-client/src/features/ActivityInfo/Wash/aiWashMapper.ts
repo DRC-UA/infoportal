@@ -10,21 +10,12 @@ import {Period} from 'infoportal-common'
 
 export namespace AiWashMapper {
   const planCodes = {
-    [DrcProject['UKR-000314 UHF4']]: 'WASH-DRC-00001',
-    [DrcProject['UKR-000270 Pooled Funds']]: 'WASH-DRC-00002',
-    [DrcProject['UKR-000298 Novo-Nordisk']]: 'WASH-DRC-00003',
-    [DrcProject['UKR-000309 OKF']]: 'WASH-DRC-00004',
-    // Wrong assigment in kobo form
-    [DrcProject['UKR-000284 BHA']]: 'WASH-DRC-00005',
-    [DrcProject['UKR-000345 BHA2']]: 'WASH-DRC-00005',
-    [DrcProject['UKR-000330 SDC2']]: 'WASH-DRC-00006',
-    [DrcProject['UKR-000347 DANIDA']]: 'WASH-DRC-00007',
-    [DrcProject['UKR-000329 SIDA H2R']]: 'WASH-DRC-00009',
-    [DrcProject['UKR-000342 Pooled Funds']]: 'WASH-DRC-00009',
+    // [DrcProject['UKR-000342 Pooled Funds']]: 'WASH-DRC-00009',
   }
 
-  const getPlanCode = (p: DrcProject): AiWashType.Type['Activity Plan Code'] => {
+  const getPlanCode = (p: DrcProject): AiWashType.Type['Plan/Project Code'] => {
     // @ts-ignore
+    // TODO Assign
     return planCodes[p] ?? `${aiInvalidValueFlag} ${p}`
   }
 
@@ -50,19 +41,7 @@ export namespace AiWashMapper {
                 {by: (_) => _.raion!},
                 {by: (_) => _.hromada!},
                 {by: (_) => _.settlement!},
-                {
-                  by: (_) =>
-                    fnSwitch(
-                      _.displacement!,
-                      {
-                        Idp: 'Internally Displaced',
-                        NonDisplaced: 'Non-Displaced',
-                        Returnee: 'Returnees',
-                        Refugee: 'Non-Displaced',
-                      },
-                      () => 'Non-Displaced',
-                    ),
-                },
+                {by: (_) => _.displacement!,},
                 {by: (_) => _.activity!},
               ],
               finalTransform: async (
@@ -71,18 +50,19 @@ export namespace AiWashMapper {
               ) => {
                 const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons).compact())
                 const ai: AiWashType.Type = {
-                  'Activity Plan Code': getPlanCode(project),
-                  'Implementing Partner': 'Danish Refugee Council',
-                  'Reporting Organization': 'Danish Refugee Council',
-                  WASH: '# of individuals benefiting from hygiene kit/items distribution (in-kind)',
-                  'Response Theme': 'No specific theme',
-                  Settlement: aiInvalidValueFlag,
-                  ...(await AiMapper.getLocationByMeta(oblast, raion, hromada, settlement)),
-                  'Location Type': 'Individuals/households',
-                  'Reporting Month': periodStr === '2024-01' ? '2024-02' : periodStr,
-                  'Disaggregation by population group and/or gender and age known?': 'Yes',
-                  'Population Group': displacement,
-                  'Total Reached (No Disaggregation)': 0, //disaggregation['Total Individuals Reached']
+                  Oblast: oblast,
+                  Raion: raion,
+                  Hromada: hromada,
+                  Settlement: settlement,
+                  'Type of institution / Beneficiary': 'Individuals/households',
+                  'Plan/Project Code': getPlanCode(project),
+                  'Implementing Partner': 'Danish Refugee Council (DRC)',
+                  'Reporting Organization': 'Danish Refugee Council (DRC)',
+                  'Indictors': 'WASH NFI distributions (in-kind) > # of individuals benefiting from hygiene kit/items distribution (in-kind)',
+                  'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
+                  'Is the disaggregation by population group, gender and age known?': 'Yes',
+                  'Population Group': AiMapper.mapPopulationGroup(displacement),
+                  'Total Reached (No Disaggregation)': null as any, //disaggregation['Total Individuals Reached']
                   'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
                   'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
                   'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
@@ -91,17 +71,18 @@ export namespace AiWashMapper {
                   'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
                   'People with disability': disaggregation['People with Disability'] ?? 0,
                 }
-                const request = ActivityInfoSdk.makeRecordRequests({
-                  activityIdPrefix: 'drcwash',
-                  activityYYYYMM: periodStr,
-                  formId: activitiesConfig.wash.id,
-                  activity: AiWashType.map(AiMapper.mapLocationToRecordId(ai)),
-                  activityIndex: i++,
+                const recordId = ActivityInfoSdk.makeRecordId({
+                  prefix: 'drcwash',
+                  periodStr,
+                  index: i++,
                 })
-
+                const request = AiWashType.buildRequest({
+                  ...ai,
+                  ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+                }, recordId)
                 return {
-                  submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Settlement'], ai['Activity Plan Code']),
-                  recordId: request.changes[0].recordId,
+                  submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Settlement'], ai['Plan/Project Code']),
+                  recordId,
                   data: grouped,
                   activity: ai,
                   requestBody: request,
