@@ -10,7 +10,7 @@ export class ActivityInfoBuildType {
     }),
     private formIds = {
       generalProtection: 'c1viqabm4whwvwo3',
-      mineAction: 'cxpfp3xm513b6r15nwo',
+      mineAction: 'cmnzatklqv1q3s243u',
       snfi: 'cmasgbem5w7pgf02',
       fslc: 'cxx4z9am74csoag9',
       wash: 'czg50xvm6an62wz2',
