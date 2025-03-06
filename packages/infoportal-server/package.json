@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest",
     "start": "node dist/bundle.mjs",
-    "build": "webpack --config webpack.config.cjs",
+    "build": "node --loader ts-node/esm ../../node_modules/webpack/bin/webpack.js --config webpack.config.mjs",
     "dev-r": "nodemon src/index.ts",
     "dev-hmr": "tsx watch src/index.ts",
     "dev": "tsc --build --force && node lib/index.js",
@@ -15,9 +15,7 @@
     "debug": "npm run build && node --inspect-brk lib/index.js",
     "db-migrate": "npx prisma migrate dev",
     "db-migrate-f": "prisma db push",
-    "db-generate": "prisma generate",
-    "update-kobo-tags": "node src/script/RefactoProjectForHhs.ts",
-    "ln": "ln -s ../../node_modules/* node_modules/"
+    "db-generate": "prisma generate"
   },
   "keywords": [],
   "author": "",

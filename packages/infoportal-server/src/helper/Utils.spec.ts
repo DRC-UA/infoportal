@@ -1,4 +1,4 @@
-import {Util} from './Utils.js'
+import {Util} from './Utils'
 
 describe('getObjectDiff', () => {
   it('should npreturn updated answers when values are changed', () => {

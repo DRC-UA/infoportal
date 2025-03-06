@@ -1,7 +1,11 @@
-const path = require('path')
-const {PrismaPlugin} = require('@prisma/nextjs-monorepo-workaround-plugin')
+import * as path from 'path'
+import {PrismaPlugin} from '@prisma/nextjs-monorepo-workaround-plugin'
+import {fileURLToPath} from 'url'
 
-module.exports = {
+// Resolve `__dirname` equivalent in ES modules
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+export default {
   entry: './src/index.ts',
   target: 'node',
   plugins: [new PrismaPlugin()],

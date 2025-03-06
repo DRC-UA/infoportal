@@ -1,13 +1,7 @@
 const path = require('path')
 
-const withTM = require('next-transpile-modules')([
-  // '@mui/x-telemetry',
-  // '@mui/x-license',
-  '@mui/x-date-pickers-pro'
-]);
-
 /** @type {import('next').NextConfig} */
-module.exports = withTM({
+module.exports = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   externalDir: true,
   swcMinify: true,
@@ -25,4 +19,4 @@ module.exports = withTM({
   eslint: {
     ignoreDuringBuilds: true,
   },
-})
+}

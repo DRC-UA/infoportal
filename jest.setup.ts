@@ -1,4 +1,5 @@
 // https://github.com/jestjs/jest/issues/10322#issuecomment-1304375267
 
-const console = require('console')
+import * as console from 'console'
+
 global.console = console
