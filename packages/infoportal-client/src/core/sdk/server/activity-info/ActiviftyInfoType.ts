@@ -1,8 +1,8 @@
-export interface ActiviftyInfoRecords {
-  changes: ActiviftyInfoRecord[]
+export interface ActivityInfoRequest {
+  changes: ActivityInfoRecord[]
 }
 
-export interface ActiviftyInfoRecord {
+export interface ActivityInfoRecord {
   formId: string
   recordId: string
   parentRecordId: string | null

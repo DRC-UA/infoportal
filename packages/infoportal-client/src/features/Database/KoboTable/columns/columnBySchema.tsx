@@ -411,7 +411,7 @@ export const columnBySchemaGenerator = ({
     }
   }
 
-  const getDefault = (name: string) => {
+  const getDefault = (name: string): DatatableColumn.Props<any> => {
     const q = schema.helper.questionIndex[name]
     return {
       ...getCommon(q),

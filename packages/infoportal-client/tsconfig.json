@@ -8,6 +8,7 @@
     "module": "esnext",
     "downlevelIteration": true,
     "resolveJsonModule": true,
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "jsx": "preserve",
     "noImplicitAny": true,

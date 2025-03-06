@@ -1,359 +1,192 @@
-import {DrcProgram} from 'infoportal-common'
+export type AiFslcType = AiFslType.Type
 
-export namespace AiFslcType {
+export namespace AiFslType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
-  const activities = {
-    'Distribution of in-kind food assistance': {
-      'General Food Distribution': {
-        '# of individuals receiving in-kind food assistance to ensure their immediate access to food':
-          'c9dypo1ls348s0b5',
-      },
-      'Rapid Response Ration': {
-        '# of individuals receiving in-kind food assistance to ensure their immediate access to food':
-          'czaqo8pls348s0b6',
-      },
-      'Institutional feeding': {
-        '# of individuals receiving in-kind food assistance to ensure their immediate access to food':
-          'c6eqanrls348s0b7',
-      },
-      'Hot meals': {
-        '# of individuals receiving in-kind food assistance to ensure their immediate access to food':
-          'ckvrpisls348s0b8',
-      },
-    },
-    'Provision of market-based assistance': {
-      'Provision of market-based relief voucher assistance (value voucher or commodity voucher)': {
-        '# of individuals receiving market-based assistance to ensure their immediate access to food':
-          'cz6z2r0ls348s0b9',
-      },
-    },
-    'Agriculture and livestock inputs (in-kind)': {
-      'Cereal seeds and tools': {
-        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption':
-          'cixs9g2ls348s0ba',
-      },
-      'Vegetable seed and tools': {
-        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption':
-          'cpebsb1ls348s0bb',
-      },
-      'Emergency livestock and poultry input (restocking, poultry distribution)': {
-        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption':
-          'cej6la3ls348s0bc',
-      },
-      'Support to livestock and poultry health': {
-        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption':
-          'cneib8ls348s0bd',
-      },
-      'Support to livestock and poultry feed': {
-        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption':
-          'cig2ayfls348s0be',
-      },
-      'Support to beekeepers (tools and equipment)': {
-        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption':
-          'ck031yals348s0bf',
-      },
-      'Training on agricultural practice': {
-        '# of individuals provided with emergency agriculture and livestock inputs, contributing to their food consumption':
-          'c49afnvls348s0bg',
-      },
-    },
-    'Agriculture and livestock inputs (cash)': {
-      'Agricultural grants': {
-        '# of individuals receiving sectoral cash to contributing to household food security': 'c6b7ldwls348s0bh',
-      },
-      'Sectoral cash for seeds and tools': {
-        '# of individuals receiving sectoral cash to contributing to household food security': 'cih2ke9ls348s0bi',
-      },
-      'Sectoral cash for livestock and poultry input (restocking/distribution)': {
-        '# of individuals receiving sectoral cash to contributing to household food security': 'c4s25icls348s0bj',
-      },
-      'Sectoral cash for temporary livestock shelter': {
-        '# of individuals receiving sectoral cash to contributing to household food security': 'c3ivapgls348s0bk',
-      },
-      'Sectoral cash for animal feed': {
-        '# of individuals receiving sectoral cash to contributing to household food security': 'cwp0gqrls348s0bl',
-      },
-      'Sectoral cash for livestock health': {
-        '# of individuals receiving sectoral cash to contributing to household food security': 'cvhl3kyls348s0bm',
-      },
-    },
-    'Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain': {
-      'Support to cooperatives and market linkages': {
-        '# of individuals supported with rehabilitation of the agricultural infrastructure, cooperative support, and value chain':
-          'clelxdqls348s0bn',
-      },
-      'Temporary repair of grain and vegetable storage': {
-        '# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage':
-          'c5z99zsls348s0bo',
-      },
-      'Temporary repair of livestock shelter/barns': {
-        '# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage':
-          'cgo6mccls348s0bp',
-      },
-    },
-    'Urban and off-farm (Non-agricultural) livelihoods': {
-      'Small business grants (startup grants)': {
-        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability':
-          'c1v7epols348s0bq',
-      },
-      'Cash for work': {
-        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability':
-          'cs92sbbls348s0br',
-      },
-      'Employment and reskilling': {
-        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability':
-          'cl2lo8pls348s0bs',
-      },
-      'Job placement and counseling': {
-        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability':
-          'c4pozswls348s0bt',
-      },
-      'Temporary employment programs': {
-        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability':
-          'c9shzxfls348s0bu',
-      },
-      'Technical and vocational education and training (TVET)': {
-        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability':
-          'cyatasals348s0bv',
-      },
-      'Bussiness trainings and skill enhancement workshops': {
-        '# of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability':
-          'c68psfcls348s0bw',
-      },
-    },
-  }
-
   export interface Type {
     'Reporting Month': string
-    'Reporting Organization': Opt<'Reporting Organization'>
-    'Implementing Partner'?: Opt<'Implementing Partner'>
-    'Activity Plan Code': Opt<'Activity Plan Code'>
-    'Activity and indicator': Opt<'Activity and indicator'>
+    'Reporting Organization': Opt<'Partner'>
+    'Implementing Partner': Opt<'Partner'>
+    'Activity Plan Code': Opt<'FSLC Activity Planning Module (APM)'>
+    'Activity and indicator': Opt<'Indicators - FSL'>
     'Implementation Status': Opt<'Implementation Status'>
     Frequency?: Opt<'Frequency'>
-    Modality: Opt<'Modality'>
     'Kcal covered  (per person per day)'?: number
     Unit?: Opt<'Unit'>
     'Total Quantity distributed (per person)'?: number
-    'Total Value (local currency)'?: number
+    'Total Cash Value (local currency)'?: number
     Currency?: Opt<'Currency'>
-    'Cash delivery mechanism'?: Opt<'Cash delivery mechanism'>
+    'Cash Delivery Mechanism'?: Opt<'Cash Delivery Mechanism'>
     Oblast: string
-    Raion: string
+    Raion?: string
     Hromada: string
-    Settlement?: string
-    'Location type'?: Opt<'Location type'>
+    Settlement: string
     'Population Group': Opt<'Population Group'>
-    'Number of people reached': number
-    'Girls (0-17)'?: number
-    'Boys (0-17)'?: number
+    'Total People Assisted': number
+    'Girls (0-17)': number
+    'Boys (0-17)': number
     'Adult Women (18-59)': number
     'Adult Men (18-59)': number
-    'Older Women (60+)'?: number
-    'Older Men (60+)'?: number
-    'Number of people with disability'?: number
-    'Number of reached households'?: number
-    'New beneficiaries (same activity)': number
-    'Were these people reached in 2024 by another FSL sub-activity?': Opt<'Were these people reached in 2024 by another FSL sub-activity?'>
-    'If yes, which sub-activity'?: Opt<'If yes, which sub-activity'>
-    'If yes, how many people received from both sub-activities'?: number
-    Comments?: string
+    'Older Women (60+)': number
+    'Older Men (60+)': number
+    'People With Disabilities'?: number
+    'Households Assisted'?: number
+    'New beneficiaries (assisted for the first time in 2025)': number
+    'Were these people reached in 2025 by another FSL sub-activity?': Opt<'Were these people reached in 2025 by another FSL sub-activity?'>
+    'If yes, which sub-activity': Opt<'Indicators - FSL'>
+    'If yes, how many people received from both sub-activities': number
+    Comment?: string
+    'HNRP Scope'?: Opt<'HNRP Scope'>
+    'Outside HNRP Scope categories'?: Opt<'Outside HNRP Scope categories'>
   }
 
-  export const map = (a: Type) => ({
-    c5xzo7ilqc8soyxy: a['Reporting Month'] === undefined ? undefined : a['Reporting Month'],
-    c3x7t6ylqc66x155:
-      a['Reporting Organization'] === undefined
-        ? undefined
-        : 'czbgrslpwg36j52' + ':' + options['Reporting Organization'][a['Reporting Organization']!],
-    cuemiqzlqc6c2k88:
-      a['Implementing Partner'] === undefined
-        ? undefined
-        : 'czbgrslpwg36j52' + ':' + options['Implementing Partner'][a['Implementing Partner']!],
-    c47kem6ls28yvcg4:
-      a['Activity Plan Code'] === undefined
-        ? undefined
-        : 'cjjdxkylqdjn7p72' + ':' + options['Activity Plan Code'][a['Activity Plan Code']!],
-    cwboqx7lqc9cx5i12:
-      a['Activity and indicator'] === undefined
-        ? undefined
-        : 'cvseljqlqb3ntvj7j' + ':' + options['Activity and indicator'][a['Activity and indicator']!],
-    c3lymiilqc9r6qr14:
-      a['Implementation Status'] === undefined
-        ? undefined
-        : options['Implementation Status'][a['Implementation Status']!],
-    cp6l488lqca6as81s: a['Frequency'] === undefined ? undefined : options['Frequency'][a['Frequency']!],
-    // 'cc8x4wylqc9v51s19': a['Modality'] === undefined ? undefined : options['Modality'][a['Modality']!],
-    c14yq8gls26mj3nc:
-      a['Kcal covered  (per person per day)'] === undefined ? undefined : a['Kcal covered  (per person per day)'],
-    cet46puls26p5noe: a['Unit'] === undefined ? undefined : options['Unit'][a['Unit']!],
-    c4hr51dls270cnki:
-      a['Total Quantity distributed (per person)'] === undefined
-        ? undefined
-        : a['Total Quantity distributed (per person)'],
-    chs58s3lqca2w271q: a['Total Value (local currency)'] === undefined ? undefined : a['Total Value (local currency)'],
-    c9axoqdlqca1d331n: a['Currency'] === undefined ? undefined : options['Currency'][a['Currency']!],
-    cxjlomilqc9wp9b1c:
-      a['Cash delivery mechanism'] === undefined
-        ? undefined
-        : options['Cash delivery mechanism'][a['Cash delivery mechanism']!],
-    cddimyllqc7p5vdk: a['Oblast'] === undefined ? undefined : 'cemuxawlq3kfmqf2' + ':' + a['Oblast'],
-    cgzvhgwlqc7zjuvl: a['Raion'] === undefined ? undefined : 'cd5q9sdlq3kklo314' + ':' + a['Raion'],
-    cluq8u7lqc81x2bm: a['Hromada'] === undefined ? undefined : 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'],
-    cn8bos4lqc84hi0n: a['Settlement'] === undefined ? undefined : 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'],
-    c1m3xohls2786wqk: a['Location type'] === undefined ? undefined : options['Location type'][a['Location type']!],
-    c68n3qzlqc981m410:
-      a['Population Group'] === undefined
-        ? undefined
-        : 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!],
-    cdhyf9tlqcab8261z: a['Number of people reached'] === undefined ? undefined : a['Number of people reached'],
-    cii0393lqcajgwu21: a['Girls (0-17)'] === undefined ? undefined : a['Girls (0-17)'],
-    cbmkl0klqcale6622: a['Boys (0-17)'] === undefined ? undefined : a['Boys (0-17)'],
-    c5xgzvblqcamsrx23: a['Adult Women (18-59)'] === undefined ? undefined : a['Adult Women (18-59)'],
-    chcj26blqcax7ou24: a['Adult Men (18-59)'] === undefined ? undefined : a['Adult Men (18-59)'],
-    cgzc21slqcaxhqn25: a['Older Women (60+)'] === undefined ? undefined : a['Older Women (60+)'],
-    cqoejaglqcay3pr26: a['Older Men (60+)'] === undefined ? undefined : a['Older Men (60+)'],
-    cq4uxglqcayeav27:
-      a['Number of people with disability'] === undefined ? undefined : a['Number of people with disability'],
-    caomv6mls27r2m3t: a['Number of reached households'] === undefined ? undefined : a['Number of reached households'],
-    ck0g4kpls27s7dvu:
-      a['New beneficiaries (same activity)'] === undefined ? undefined : a['New beneficiaries (same activity)'],
-    c2jbl2kls27x2tow:
-      a['Were these people reached in 2024 by another FSL sub-activity?'] === undefined
-        ? undefined
-        : options['Were these people reached in 2024 by another FSL sub-activity?'][
-            a['Were these people reached in 2024 by another FSL sub-activity?']!
-          ],
-    chpi4dhls8w61ct2:
-      a['If yes, which sub-activity'] === undefined
-        ? undefined
-        : 'cvseljqlqb3ntvj7j' + ':' + options['If yes, which sub-activity'][a['If yes, which sub-activity']!],
-    cad7my8ls282dx115:
-      a['If yes, how many people received from both sub-activities'] === undefined
-        ? undefined
-        : a['If yes, how many people received from both sub-activities'],
-    ctbdca9ls28349s16: a['Comments'] === undefined ? undefined : a['Comments'],
-  })
+  export const buildRequest = (a: Type, recordId: string, parentRecordId: string | null = null) => {
+    return [
+      {
+        formId: 'cxx4z9am74csoag9',
+        recordId,
+        parentRecordId,
+        fields: {
+          c5shhuim74ctls4b: a['Reporting Month'],
+          c8ta7spm74cus9jd: a['Reporting Organization'] ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Reporting Organization']!] : undefined,
+          c8m0rzem74cwwi1g: a['Implementing Partner'] ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner']!] : undefined,
+          cbt281vm74czamji: a['Activity Plan Code'] ? 'ch3x9upm67vz8ng3' + ':' + options['FSLC Activity Planning Module (APM)'][a['Activity Plan Code']!] : undefined,
+          chzv6znm74d91x8p: a['Activity and indicator'] ? 'caybsh0m4r95mfm198' + ':' + options['Indicators - FSL'][a['Activity and indicator']!] : undefined,
+          cj3gufum74db4w5s: a['Implementation Status'] ? options['Implementation Status'][a['Implementation Status']!] : undefined,
+          cai4mcjm74ddh3wv: a['Frequency'] ? options['Frequency'][a['Frequency']!] : undefined,
+          cpqutcpm74dg00712: a['Kcal covered  (per person per day)'],
+          codusvbm74djjk715: a['Unit'] ? options['Unit'][a['Unit']!] : undefined,
+          clsqvjwm74dm6ig1b: a['Total Quantity distributed (per person)'],
+          cc5bwyam74do3hg1c: a['Total Cash Value (local currency)'],
+          cguxb7am74dqhl31f: a['Currency'] ? options['Currency'][a['Currency']!] : undefined,
+          cnxiqgfm74drukl1j: a['Cash Delivery Mechanism'] ? options['Cash Delivery Mechanism'][a['Cash Delivery Mechanism']!] : undefined,
+          cns96rm74dvxy71u: a['Oblast'] ? 'ciok70dm4r8lp7f2' + ':' + a['Oblast'] : undefined,
+          c1mu55wm74dwh0t1v: a['Raion'] ? 'c1v215km4s71ndl22' + ':' + a['Raion'] : undefined,
+          c8gxbuvm74dxp151w: a['Hromada'] ? 'cu8n0g0m4s7y2p16b' + ':' + a['Hromada'] : undefined,
+          c3w3q1jm74dyr3z1x: a['Settlement'] ? 'cyr4ry4m4s81hdd6v' + ':' + a['Settlement'] : undefined,
+          cnowra7m74e26yb21: a['Population Group'] ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!] : undefined,
+          ccomu65m74e2xgo22: a['Total People Assisted'],
+          c55sl1fm74e4gyl23: a['Girls (0-17)'],
+          cruxt7xm74e669l24: a['Boys (0-17)'],
+          c9w7c39m74e6thq25: a['Adult Women (18-59)'],
+          c88exf5m74e80rv26: a['Adult Men (18-59)'],
+          cbd136fm74eaa1e27: a['Older Women (60+)'],
+          cw042h3m74ecuq028: a['Older Men (60+)'],
+          cxlhhwem74edw9629: a['People With Disabilities'],
+          cjv2vbem74ef0i22a: a['Households Assisted'],
+          cqypj9sm74elbee2b: a['New beneficiaries (assisted for the first time in 2025)'],
+          cc9dpi3m74en0yg2d: a['Were these people reached in 2025 by another FSL sub-activity?']
+            ? options['Were these people reached in 2025 by another FSL sub-activity?'][a['Were these people reached in 2025 by another FSL sub-activity?']!]
+            : undefined,
+          cxmypsxm74erbao2f: a['If yes, which sub-activity'] ? 'caybsh0m4r95mfm198' + ':' + options['Indicators - FSL'][a['If yes, which sub-activity']!] : undefined,
+          cnzbyp9m74etytf2g: a['If yes, how many people received from both sub-activities'],
+          cdhcrtym74f2x5x2k: a['Comment'],
+          c1jpxpjm74f0pyh2i: a['HNRP Scope'] ? options['HNRP Scope'][a['HNRP Scope']!] : undefined,
+          cvdttxbm74f1upg2j: a['Outside HNRP Scope categories'] ? 'ch0e182m4vgc05r2' + ':' + options['Outside HNRP Scope categories'][a['Outside HNRP Scope categories']!] : undefined,
+        },
+      },
+    ]
+  }
 
   export const options = {
-    'Reporting Organization': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
+    Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
+    'FSLC Activity Planning Module (APM)': {},
+    'Indicators - FSL': {
+      'Provision of market-based transitional cash and relief voucher assistance > # of individuals receiving market-based assistance to ensure their immediate access to food > Provision of market-based transitional relief voucher assistance > Cash/Voucher':
+        'cbasp8bm74osbft4',
+      'Distribution of in-kind food assistance > # of individuals receiving in-kind food assistance to ensure their immediate access to food > General Food Distribution > In-kind': 'cr1uzgm74osbft5',
+      'Distribution of in-kind food assistance > # of individuals receiving in-kind food assistance to ensure their immediate access to food > Hot meals > In-kind': 'cf3vk9km74osbft6',
+      'Distribution of in-kind food assistance > # of individuals receiving in-kind food assistance to ensure their immediate access to food > Rapid Response Ration > In-kind': 'c9jfqzjm74osbft7',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Cereal seeds, seedlings, fertilizers, and hand tools > Cash/Voucher':
+        'cih6ivzm74osbft8',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Equipment and tools, such as greenhouses, irrigation systems, motor blocks, etc > Cash/Voucher':
+        'c4mrq01m74osbft9',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Multi purpose Agricultural grants or vouchers > Cash/Voucher':
+        'ci9eh7gm74osbfta',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Vegetable seeds and seedlings and tools > Cash/Voucher':
+        'cdhbquim74osbftb',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Cereal seeds and tools > In-kind': 'cjcx4nim74osbftc',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Equipment and tools, such as greenhouses, irrigation systems, motor blocks, etc > In-kind':
+        'clccfrwm74osbftd',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Training on agricultural practice > Service':
+        'cp2umu6m74osbfte',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Vegetable seeds, fertilizers, and hand tools > In-kind':
+        'cj5gx5vm74osbftf',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Other agricultural infrastructure rehabilitation > Cash/Voucher':
+        'ca2h5jhm74osbftg',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Other agricultural infrastructure rehabilitation > In-kind':
+        'c5qb9v5m74osbfth',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Beekeeping grant > Cash/Voucher':
+        'cawvfuum74osbfti',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock feed > Cash/Voucher': 'cqwmzc9m74osbftj',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock health > Cash/Voucher':
+        'cktsiu2m74osbftk',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock kit grants > Cash/Voucher':
+        'c86wecom74osbftl',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock provision / restocking > Cash/Voucher':
+        'ci3e5fzm74osbftm',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock shelter/barnes > Cash/Voucher':
+        'c1q5kkom74osbftn',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Poultry kit (feed, health, provision) > Cash/Voucher':
+        'c9qptflm74osbfto',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Beekeeping kit > Cash/Voucher': 'cvz4yxsm74osbftp',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Beekeeping kit > In-kind': 'cougjiwm74osbftq',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock feed > In-kind': 'cgy0sc8m74osbftr',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock health > In-kind': 'chgxytem74osbfts',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock provision / restocking > In-kind':
+        'c70el2jm74osbftt',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock shelter/barnes > In-kind':
+        'cgo6eo8m74osbftu',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Poultry kit (feed, health, provision) > In-kind':
+        'cuyht5km74osbftv',
+      'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Emergency business grants > Cash/Voucher':
+        'cjsmm6zm74osbftw',
+      'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Start-up or self-employment grants > Cash/Voucher':
+        'chi27tkm74osbftx',
+      'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Cash for work > Cash/Voucher':
+        'cxjgsw2m74osbfty',
+      'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Job placements/internships/temporary work > Cash/Voucher':
+        'cvuf7oim74osbftz',
+      'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Business and entrepreneurship training or events > Service':
+        'cv0w1fmm74osbft10',
+      'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Job placements/internships/temporary work > Service':
+        'ca9drsqm74osbft11',
+      'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Vocational and reskilling training > Service':
+        'cniimuim74osbft12',
+      'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Career councelling and employment training or events > Service':
+        'cdxr6kom74osbft13',
     },
-    'Implementing Partner': {
-      'Danish Refugee Council': 'cloyih3lpwhjdsu2r0',
+    'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
+    'Outside HNRP Scope categories': {
+      'Outside priority areas': 'c3ap6l0m4vgd4ov4',
+      'Funding not reported in FTS​': 'c9801rnm4vgdewn5',
+      'Delivered outside HNRP​ mechanism': 'cgc12ggm4vgdovj6',
+      'Not aligned to guidance': 'cei6bscm4vgdvpq7',
     },
-    'Activity Plan Code': {
-      'FSLC-DRC-00001': 'csp3fvaltn0j3ou2',
-      'FSLC-DRC-00002': 'cbcn08hltn0lsg03',
-      'FSLC-DRC-00003': 'cex9iwdltn0pa1y4',
-      'FSLC-DRC-00004': 'c9fdyl6m0wi6rxz15j',
-      'FSLC-DRC-00005': 'c8ds712m0wibuyo15k',
-      'FSLC-DRC-00008': 'ce8581lm5qv7rse3', 
-      'FSLC-DRC-00009': 'ctgme0cm5qvrxa96i',
-
-    },
-    'Activity and indicator': {
-      [DrcProgram.SectoralCashForAgriculture]: 'cv58tzkluclbdwv3',
-      [DrcProgram.SectoralCashForAnimalFeed]: 'cx8imqaluclbdwv7',
-      [DrcProgram.SectoralCashForAnimalShelterRepair]: 'cy77eh2luclbdwvb',
-      [DrcProgram.VET]: 'ca0kvknluclbdwvy', // Found manually from AI
-      [DrcProgram.MSME]: 'cwf5wugluclbdwvc', // Found manually from AI
-      // [DrcProgram.SectoralCashForAgriculture]: activities['Agriculture and livestock inputs (cash)']['Agricultural grants']['# of individuals receiving sectoral cash to contributing to household food security'],
-      // [DrcProgram.SectoralCashForAnimalFeed]: activities['Agriculture and livestock inputs (cash)']['Sectoral cash for animal feed']['# of individuals receiving sectoral cash to contributing to household food security'],
-      // [DrcProgram.SectoralCashForAnimalShelterRepair]: activities['Temporary rehabilitation of the agricultural infrastructure, cooperative support, and value chain']['Temporary repair of livestock shelter/barns']['# of individual farmers supported with repairs of their livestock shelter, grain, and vegetable storage'],
-    },
-    'Implementation Status': {
-      Completed: 'cg07fuklqc9r6qq13',
-      Ongoing: 'c6s86zqlqc9sloo15',
-    },
+    'Implementation Status': {Ongoing: 'cw8mkxsm74db4w5r', Completed: 'c2eiij2m74dcav9t'},
     Frequency: {
-      Weekly: 'cobeyzclqca6as81r',
-      Fortnight: 'cy66rvklqca75ce1t',
-      Monthly: 'cr09863lqca7avy1u',
-      Quarterly: 'c672byclqca7ezi1v',
-      'One-off': 'cgjbd91lqca7msv1w',
-      Other: 'cdfo485lqca7xym1x',
+      Weekly: 'cw34ekkm74ddh3wu',
+      Biweekly: 'chaemqkm74ddzuzw',
+      Monthly: 'c6y1cnim74de34rx',
+      Bimonthly: 'cb16xium74deh10y',
+      Quarterly: 'c8oilyhm74deyl3z',
+      'One-off': 'c2af6jlm74df2v110',
+      Other: 'c70bsarm74df9m611',
     },
-    Modality: {
-      'In-kind': 'c3jort9lqc9v51s18',
-      Service: 'c1zk7xolqc9vuvs1a',
-      Cash: 'clm9r4bls26ivpt8',
-      Voucher: 'c5qzjvzls26izg19',
+    Unit: {Grams: 'cg8wld5m74djjk614', Kilograms: 'clcp65am74dk7vs16', Tons: 'ckhu31m74dkant17', Animals: 'cfo9yy2m74dkcyl18', Objects: 'cee14w2m74dkrm719', Trainings: 'cxdkkknm74dkvt01a'},
+    Currency: {EUR: 'ccn4ls7m74dqhl31e', UAH: 'cw900bfm74dr0m01g', USD: 'c7whof8m74dr2k81h'},
+    'Cash Delivery Mechanism': {
+      'ATM Card': 'csa8rhvm74drukl1i',
+      'Bank Transfer': 'clygy9fm74dsjt91k',
+      'Direct Cash Payment': 'cayxllym74dsuc01l',
+      'E-Transfer': 'c86j261m74dt0gf1m',
+      'E-Voucher': 'clkpbtpm74dt7861n',
+      'Mobile Money': 'clgl89em74dtda91o',
+      'Money Transfer Agent': 'cyu9dmqm74dtmv91p',
+      'Paper Voucher': 'c926bnum74dtt261q',
+      'Post Office': 'ckjvidrm74dtycg1r',
+      'Other Mechanisms': 'c1qq0dzm74du3k61s',
     },
-    Unit: {
-      Tons: 'c19r7opls26p5nod',
-      Kilograms: 'cmdpumdls26qzmof',
-      Grams: 'cwoj9z1ls26r2a7g',
-      Trainings: 'c1llff3ls26rdo9h',
-      Animals: 'cuvmooilsogvr3q2',
-    },
-    Currency: {
-      EUR: 'c4kgwg9lqca2b8e1o',
-      UAH: 'cuc2fcqlqca1d331m',
-      USD: 'cxfbx1plqca2e4m1p',
-    },
-    'Cash delivery mechanism': {
-      'ATM Card': 'ccupph2lqc9wp9b1b',
-      'Bank Transfer': 'cm3fx07lqc9xsyg1d',
-      'Direct cash payment': 'cfpj6qglqc9xymn1e',
-      'E-transfer': 'crpuyxwlqc9ycad1f',
-      'E-voucher': 'cn3kwz7lqc9ygev1g',
-      'Mobile Money': 'cm8mloclqc9ymrq1h',
-      'Money Transfer Agent': 'c9wcc13lqc9z1j91i',
-      'Paper Voucher': 'cr6f8z3lqc9z9f21j',
-      'Post Office': 'cf1261jlqc9ze661k',
-      'Other mechanisms': 'cybkw5hlqc9zj3k1l',
-    },
-    'Location type': {
-      Rural: 'cazwy1bls2786wqj',
-      'Urban / Peri-urban': 'cd7dhfvls279bv8l',
-      'Collective centers': 'cqhhz4als279lhqm',
-      'Health Institution': 'cqi9ossls279thwn',
-      'Educational institution': 'cfyj2e3ls279vcyo',
-      'Social Institution': 'cszqcjxls27a1qlp',
-      'Charity / NGO': 'cijxlcnls27acalq',
-      'Local authority': 'c4w31sls27ahbir',
-      Other: 'cer3u3yls27amhjs',
-    },
-    'Population Group': {
-      'Internally Displaced': 'cvw4on6lq6dgcoj5',
-      'Non-Displaced': 'ck6ulx8lq6dgcok6',
-      Returnees: 'cuz9qi9lq6dgcok7',
-    },
-    'Were these people reached in 2024 by another FSL sub-activity?': {
-      Yes: 'cmqxgadls27x2tov',
-      No: 'clcxcdzls27xkm0x',
-    },
-    'If yes, which sub-activity': {
-      // "FSL": 'c9dypo1ls348s0b5',
-      // "FSL": 'czaqo8pls348s0b6',
-      // "FSL": 'c6eqanrls348s0b7',
-      // "FSL": 'ckvrpisls348s0b8',
-      // "FSL": 'cz6z2r0ls348s0b9',
-      // "FSL": 'cixs9g2ls348s0ba',
-      // "FSL": 'cpebsb1ls348s0bb',
-      // "FSL": 'cej6la3ls348s0bc',
-      // "FSL": 'cneib8ls348s0bd',
-      // "FSL": 'cig2ayfls348s0be',
-      // "FSL": 'ck031yals348s0bf',
-      // "FSL": 'c49afnvls348s0bg',
-      // "FSL": 'c6b7ldwls348s0bh',
-      // "FSL": 'cih2ke9ls348s0bi',
-      // "FSL": 'c4s25icls348s0bj',
-      // "FSL": 'c3ivapgls348s0bk',
-      // "FSL": 'cwp0gqrls348s0bl',
-      // "FSL": 'cvhl3kyls348s0bm',
-      // "FSL": 'clelxdqls348s0bn',
-      // "FSL": 'c5z99zsls348s0bo',
-      // "FSL": 'cgo6mccls348s0bp',
-      // "FSL": 'c1v7epols348s0bq',
-      // "FSL": 'cs92sbbls348s0br',
-      // "FSL": 'cl2lo8pls348s0bs',
-      // "FSL": 'c4pozswls348s0bt',
-      // "FSL": 'c9shzxfls348s0bu',
-      // "FSL": 'cyatasals348s0bv',
-      // "FSL": 'c68psfcls348s0bw'
-    },
+    'Were these people reached in 2025 by another FSL sub-activity?': {Yes: 'cpsp477m74en0yg2c', No: 'c2rn16qm74epszt2e'},
+    'HNRP Scope': {'Outside HNRP Scope': 'cci23kym74f0pyh2h'},
   }
 }

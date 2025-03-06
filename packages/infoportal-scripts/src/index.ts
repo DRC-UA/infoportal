@@ -1,8 +1,7 @@
 import {KoboClient} from 'kobo-sdk'
 import {appConf} from './appConf'
 import winston from 'winston'
-import {ActivityInfoBuildType} from './ai'
-import {ShelterRepair} from './kobo-migration/2025-02-28-fixKoboMigrationShelter'
+import {ActivityInfoBuildType} from './ActivityInfoBuildType'
 
 export const koboSdkHumanitarian = new KoboClient({
   urlv1: appConf.kobo.humanitarian.urlV1,
@@ -20,15 +19,7 @@ export const koboSdkDrc = new KoboClient({
 ;(async () => {
   // await FixKoboMigration.resetWrongMigration()
   // await FixKoboMigration.MissingSubmissions.run()
-  // await ActivityInfoBuildType.snfi()
-  // await ActivityInfoBuildType.gbv()
-  // await ActivityInfoBuildType.fslc()
-  // await ActivityInfoBuildType.mpca()
-  // await ActivityInfoBuildType.fslc()
-  // await ActivityInfoBuildType.wash()
-  // await ActivityInfoBuildType.generalProtection()
-  // await ActivityInfoBuildType.mineAction()
+  await new ActivityInfoBuildType().buildAll()
   // await new BuildKoboType().build('ecrec_msme_bha388')
   // await new BuildKoboType().build('ecrec_vet2_dmfa')
-  await new ShelterRepair().run()
 })()

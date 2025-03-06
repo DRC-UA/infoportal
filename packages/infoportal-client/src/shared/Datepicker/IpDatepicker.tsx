@@ -6,7 +6,7 @@ import {
   OutlinedInputProps,
   TextFieldProps,
 } from '@mui/material'
-import {zonedTimeToUtc} from 'date-fns-tz'
+import {fromZonedTime} from 'date-fns-tz'
 import React, {useEffect, useState} from 'react'
 
 export interface DatepickerProps
@@ -63,7 +63,7 @@ export const IpDatepicker = ({
     if (newValue.length) {
       const dateAndTime = `${newValue}T${timeOfDay === 'startOfDay' ? '00:00:00.000' : '23:59:59.999'}`
       const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-      const utcDate = zonedTimeToUtc(dateAndTime, userTimeZone)
+      const utcDate = fromZonedTime(dateAndTime, userTimeZone)
       onChange(utcDate)
     } else {
       onChange(undefined)
