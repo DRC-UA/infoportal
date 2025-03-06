@@ -25,7 +25,7 @@
     "@types/uuid": "^9.0.0",
     "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.2"
+    "typescript": "^5.8.2"
   },
   "dependencies": {
     "activityinfo-sdk": "^1.1.8",
@@ -40,7 +40,7 @@
     "@types/apicache": "^1.6.2",
     "@types/cors": "^2.8.13",
     "@types/lodash.merge": "^4.6.9",
-    "@types/mssql": "^9.1.5",
+    "@types/mssql": "^9.1.7",
     "@types/multer": "^1.4.7",
     "@types/node-cron": "^3.0.8",
     "@types/node-fetch": "^2.6.11",
@@ -61,7 +61,7 @@
     "infoportal-common": "1.0.0",
     "infoportal-server": "1.0.0",
     "lodash.merge": "^4.6.2",
-    "mssql": "^10.0.2",
+    "mssql": "^11.0.1",
     "multer": "^1.4.5-lts.1",
     "node-cron": "^3.0.2",
     "node-fetch": "^2.7.0",
