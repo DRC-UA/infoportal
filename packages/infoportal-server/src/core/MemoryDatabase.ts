@@ -1,4 +1,4 @@
-import {app, AppLogger} from '../index'
+import {app, AppLogger} from '../index.js'
 import {map} from '@axanc/ts-utils'
 
 export interface MemoryDatabaseInterface<T, TID> {

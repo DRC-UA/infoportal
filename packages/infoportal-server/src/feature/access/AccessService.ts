@@ -1,11 +1,11 @@
 import {FeatureAccess, FeatureAccessLevel, Prisma, PrismaClient} from '@prisma/client'
-import {Access, AppFeatureId, KoboDatabaseFeatureParams, WfpDeduplicationAccessParams} from './AccessType'
-import {yup} from '../../helper/Utils'
+import {Access, AppFeatureId, KoboDatabaseFeatureParams, WfpDeduplicationAccessParams} from './AccessType.js'
+import {yup} from '../../helper/Utils.js'
 import {Obj} from '@axanc/ts-utils'
 import {InferType} from 'yup'
 import {DrcOffice, UUID} from 'infoportal-common'
-import {UserSession} from '../session/UserSession'
-import {app, AppLogger} from '../../index'
+import {UserSession} from '../session/UserSession.js'
+import {app, AppLogger} from '../../index.js'
 
 export type AccessCreateParams = InferType<typeof AccessService.createSchema>
 

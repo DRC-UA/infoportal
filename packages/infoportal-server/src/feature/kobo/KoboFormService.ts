@@ -1,9 +1,9 @@
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
 import {seq} from '@axanc/ts-utils'
-import {appConf} from '../../core/conf/AppConf'
-import {KoboSdkGenerator} from './KoboSdkGenerator'
+import {appConf} from '../../core/conf/AppConf.js'
+import {KoboSdkGenerator} from './KoboSdkGenerator.js'
 import {PromisePool} from '@supercharge/promise-pool'
-import {app, AppCacheKey} from '../../index'
+import {app, AppCacheKey} from '../../index.js'
 import {UUID} from 'infoportal-common'
 import {Kobo, KoboClient} from 'kobo-sdk'
 

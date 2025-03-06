@@ -1,4 +1,4 @@
-import {AppError} from '../../helper/Errors'
+import {AppError} from '../../helper/Errors.js'
 
 export namespace SessionError {
   export class UserNotConnected extends AppError.Forbidden {

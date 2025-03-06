@@ -1,8 +1,8 @@
-import {MpcaDbService} from './MpcaDbService'
+import {MpcaDbService} from './MpcaDbService.js'
 import {PrismaClient} from '@prisma/client'
 import {ApiPaginate, ApiPaginateHelper, KoboIndex, MpcaEntity, UUID} from 'infoportal-common'
-import {GlobalEvent} from '../../core/GlobalEvent'
-import {MemoryDatabase, MemoryDatabaseInterface} from '../../core/MemoryDatabase'
+import {GlobalEvent} from '../../core/GlobalEvent.js'
+import {MemoryDatabase, MemoryDatabaseInterface} from '../../core/MemoryDatabase.js'
 import Event = GlobalEvent.Event
 
 export class MpcaCachedDb {

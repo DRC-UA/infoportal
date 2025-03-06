@@ -1,9 +1,8 @@
-import {ShelterContractor} from './ShelterContractor'
-import {Shelter_ta} from '../generated/Shelter_TA'
+import {ShelterContractor} from './ShelterContractor.js'
+import {Bn_re, Shelter_nta, Shelter_ta} from '../generated/index.js'
 import {fnSwitch, KeyOfType, map} from '@axanc/ts-utils'
-import {KoboBaseTags, KoboTagStatus} from './Kobo'
-import {DrcProject} from '../../type/Drc'
-import {Bn_re, Shelter_nta} from '../generated'
+import {KoboBaseTags, KoboTagStatus} from './Kobo.js'
+import {DrcProject} from '../../type/Drc.js'
 
 export namespace KoboShelterTa {
   const harmonizeNtaDisability = (
@@ -165,5 +164,5 @@ export const shelterDrcProject = [
   DrcProject['UKR-000345 BHA2'],
   DrcProject['UKR-000363 UHF8'],
   DrcProject['UKR-000372 ECHO3'],
-  DrcProject['UKR-000399 SDC']
+  DrcProject['UKR-000399 SDC'],
 ]

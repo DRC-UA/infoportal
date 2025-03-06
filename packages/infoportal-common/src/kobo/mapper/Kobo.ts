@@ -1,6 +1,6 @@
 import {Kobo} from 'kobo-sdk'
 import {fnSwitch} from '@axanc/ts-utils'
-import {KoboCustomDirective} from '../KoboCustomDirective'
+import {KoboCustomDirective} from '../KoboCustomDirective.js'
 
 export enum KoboValidation {
   Approved = 'Approved',

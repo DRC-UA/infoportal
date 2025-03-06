@@ -6,7 +6,7 @@ import {
   WfpImport,
   WfpImportHelper,
   WfpPaginate,
-} from './WfpBuildingBlockType'
+} from './WfpBuildingBlockType.js'
 import {ApiClient} from 'kobo-sdk'
 
 export class WFPBuildingBlockSdk {

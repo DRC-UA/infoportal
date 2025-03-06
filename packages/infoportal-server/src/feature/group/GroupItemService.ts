@@ -1,9 +1,9 @@
 import {FeatureAccessLevel, PrismaClient} from '@prisma/client'
-import {yup} from '../../helper/Utils'
+import {yup} from '../../helper/Utils.js'
 import {Obj} from '@axanc/ts-utils'
 import {UUID} from 'infoportal-common'
 import {InferType} from 'yup'
-import {AccessService} from '../access/AccessService'
+import {AccessService} from '../access/AccessService.js'
 
 export type GroupItemCreateParams = InferType<typeof GroupItemService.createSchema>
 export type GroupItemUpdateParams = InferType<typeof GroupItemService.updateSchema>

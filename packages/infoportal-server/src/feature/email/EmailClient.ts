@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
-import {appConf} from '../../core/conf/AppConf'
-import {app} from '../../index'
+import {appConf} from '../../core/conf/AppConf.js'
+import {app} from '../../index.js'
 import {PrismaClient} from '@prisma/client'
 
 export class EmailClient {

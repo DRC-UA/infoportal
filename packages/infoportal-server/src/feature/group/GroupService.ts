@@ -1,10 +1,10 @@
 import {PrismaClient} from '@prisma/client'
-import {yup} from '../../helper/Utils'
+import {yup} from '../../helper/Utils.js'
 import {InferType} from 'yup'
 import {UUID} from 'infoportal-common'
 import {format} from 'date-fns'
-import {AppFeatureId} from '../access/AccessType'
-import {UserSession} from '../session/UserSession'
+import {AppFeatureId} from '../access/AccessType.js'
+import {UserSession} from '../session/UserSession.js'
 
 export type GroupCreateParams = InferType<typeof GroupService.createSchema>
 export type GroupUpdateParams = InferType<typeof GroupService.updateSchema>

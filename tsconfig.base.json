@@ -2,13 +2,14 @@
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext", "ES2021.String"],
     "strict": true,
-    "moduleResolution": "node",
-    "target": "ESNext",
-    "module": "CommonJS",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "resolveJsonModule": true
   },
   "exclude": ["**/*.spec.ts", "**/*.test.ts"]
 }

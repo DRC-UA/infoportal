@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express'
 import {PrismaClient} from '@prisma/client'
-import {KoboService} from '../../../feature/kobo/KoboService'
+import {KoboService} from '../../../feature/kobo/KoboService.js'
 
 export class ControllerKoboServer {
   constructor(

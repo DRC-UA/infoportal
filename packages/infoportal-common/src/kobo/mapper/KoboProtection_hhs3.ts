@@ -1,8 +1,8 @@
-import {Protection_hhs2, Protection_hhs3} from '../generated'
-import {KoboBaseTags, KoboSubmissionFlat} from './Kobo'
-import {DrcProject} from '../../type/Drc'
-import {Person as IpPerson} from '../../type/Person'
-import {KoboXmlMapper} from './KoboXmlMapper'
+import {Protection_hhs2, Protection_hhs3} from '../generated/index.js'
+import {KoboBaseTags, KoboSubmissionFlat} from './Kobo.js'
+import {DrcProject} from '../../type/Drc.js'
+import {Person as IpPerson} from '../../type/Person.js'
+import {KoboXmlMapper} from './KoboXmlMapper.js'
 
 export namespace KoboProtection_hhs3 {
   export type Person = IpPerson.Details & {

@@ -1,9 +1,9 @@
 import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
 import {Obj} from '@axanc/ts-utils'
-import {MealVerificationAnswersStatus} from '../../feature/mealVerfication/MealVerificationType'
+import {MealVerificationAnswersStatus} from '../../feature/mealVerfication/MealVerificationType.js'
 import {MealVerificationStatus, PrismaClient} from '@prisma/client'
-import {MealVerificationService} from '../../feature/mealVerfication/MealVerificationService'
+import {MealVerificationService} from '../../feature/mealVerfication/MealVerificationService.js'
 
 export class MealVerificationSchema {
   static readonly yupAnswerStatus = yup

@@ -1,11 +1,11 @@
 import {Prisma, PrismaClient} from '@prisma/client'
-import {GlobalEvent} from '../../../core/GlobalEvent'
-import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds'
-import {app, AppCacheKey, AppLogger} from '../../../index'
-import {KoboService} from '../KoboService'
+import {GlobalEvent} from '../../../core/GlobalEvent.js'
+import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds.js'
+import {app, AppCacheKey, AppLogger} from '../../../index.js'
+import {KoboService} from '../KoboService.js'
 import {duration, map, Obj, seq, Seq, sleep} from '@axanc/ts-utils'
-import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec'
-import {KoboMetaMapperShelter} from './KoboMetaMapperShelter'
+import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec.js'
+import {KoboMetaMapperShelter} from './KoboMetaMapperShelter.js'
 import {
   DrcDonor,
   DrcProgram,
@@ -18,10 +18,10 @@ import {
   Person,
   UUID,
 } from 'infoportal-common'
-import {appConf} from '../../../core/conf/AppConf'
-import {genUUID, yup} from '../../../helper/Utils'
+import {appConf} from '../../../core/conf/AppConf.js'
+import {genUUID, yup} from '../../../helper/Utils.js'
 import {InferType} from 'yup'
-import {KoboMetaMapperProtection} from './KoboMetaMapperProtection'
+import {KoboMetaMapperProtection} from './KoboMetaMapperProtection.js'
 import {PromisePool} from '@supercharge/promise-pool'
 import {Kobo} from 'kobo-sdk'
 import {chunkify} from '@axanc/ts-utils'

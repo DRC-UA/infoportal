@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express'
-import {app} from '../../index'
-import {yup} from '../../helper/Utils'
+import {app} from '../../index.js'
+import {yup} from '../../helper/Utils.js'
 
 export class ControllerCache {
   constructor(private appCache = app.cache) {}

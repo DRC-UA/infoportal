@@ -1,4 +1,4 @@
-import {UserSession} from '../feature/session/UserSession'
+import {UserSession} from '../feature/session/UserSession.js'
 
 // export = session;
 //

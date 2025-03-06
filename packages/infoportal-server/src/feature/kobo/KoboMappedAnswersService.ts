@@ -1,4 +1,4 @@
-import {DbKoboAnswer, KoboAnswerFilter, KoboService} from './KoboService'
+import {DbKoboAnswer, KoboAnswerFilter, KoboService} from './KoboService.js'
 import {PrismaClient} from '@prisma/client'
 import {
   ApiPaginate,
@@ -20,7 +20,7 @@ import {
   Shelter_ta,
 } from 'infoportal-common'
 import {map} from '@axanc/ts-utils'
-import {ShelterNtaTags, ShelterTaTags} from './tags/ShelterTags'
+import {ShelterNtaTags, ShelterTaTags} from './tags/ShelterTags.js'
 import {Kobo} from 'kobo-sdk'
 
 export class KoboMappedAnswersService {

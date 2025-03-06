@@ -25,11 +25,11 @@ import {
   Shelter_cashForShelter,
   Shelter_nta,
   Va_bio_tia,
-} from '../generated'
-import {Person} from '../../type/Person'
+} from '../generated/index.js'
+import {Person} from '../../type/Person.js'
 import {fnSwitch, seq} from '@axanc/ts-utils'
-import {OblastIndex} from '../../location'
-import {DrcOffice} from '../../type/Drc'
+import {OblastIndex} from '../../location/index.js'
+import {DrcOffice} from '../../type/Drc.js'
 
 export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never

@@ -32,7 +32,6 @@ const SafetyIncidentDashboardWithContext = () => {
         setFilters={ctx.setOptionFilters}
         before={
           <PeriodPicker
-            sx={{marginTop: '-6px'}}
             value={[ctx.period.start, ctx.period.end]}
             onChange={([start, end]) => {
               ctx.setPeriod((prev) => ({...prev, start: start ?? undefined, end: end ?? undefined}))

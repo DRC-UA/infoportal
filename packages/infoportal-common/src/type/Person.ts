@@ -1,5 +1,5 @@
 import {Obj, seq} from '@axanc/ts-utils'
-import {KeyOf, NonNullableKeys} from './Generic'
+import {KeyOf, NonNullableKeys} from './Generic.js'
 
 export type Person = {
   age?: number

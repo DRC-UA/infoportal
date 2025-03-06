@@ -22,8 +22,8 @@ import {
   ShelterNtaTags,
   ShelterTaTags,
 } from 'infoportal-common'
-import {KoboMetaOrigin} from './KoboMetaType'
-import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
+import {KoboMetaOrigin} from './KoboMetaType.js'
+import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService.js'
 import {KoboXmlMapper} from 'infoportal-common'
 
 export namespace KoboMetaMapperShelter {

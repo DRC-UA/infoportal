@@ -1,4 +1,4 @@
-import {app, AppLogger} from '../index'
+import {app, AppLogger} from '../index.js'
 
 export class IpPacer {
   constructor(private log: AppLogger = app.logger('IpQueue')) {}

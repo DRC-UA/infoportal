@@ -1,10 +1,10 @@
-import {StateStatus, UUID} from '../type/Generic'
-import {OblastName} from '../location'
-import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc'
-import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper'
+import {StateStatus, UUID} from '../type/Generic.js'
+import {OblastName} from '../location/index.js'
+import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc.js'
+import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper/index.js'
 import {fnSwitch} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
-import {Person} from '../type/Person'
+import {Person} from '../type/Person.js'
 
 export type IKoboMeta<TTag = any> = {
   id: UUID

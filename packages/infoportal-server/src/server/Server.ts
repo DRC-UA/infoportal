@@ -1,14 +1,14 @@
 import express, {NextFunction, Request, Response} from 'express'
-import * as bodyParser from 'body-parser'
-import {getRoutes} from './Routes'
-import {app} from '../index'
-import {appConf, AppConf} from '../core/conf/AppConf'
-import {genUUID} from '../helper/Utils'
-import {HttpError} from './controller/Controller'
+import bodyParser from 'body-parser'
+import {getRoutes} from './Routes.js'
+import {app} from '../index.js'
+import {appConf, AppConf} from '../core/conf/AppConf.js'
+import {genUUID} from '../helper/Utils.js'
+import {HttpError} from './controller/Controller.js'
 import {PrismaClient} from '@prisma/client'
 import session from 'express-session'
 import multer from 'multer'
-import {AppError} from '../helper/Errors'
+import {AppError} from '../helper/Errors.js'
 import {PrismaSessionStore} from '@quixo3/prisma-session-store'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -69,13 +69,6 @@ export class Server {
 
   readonly start = () => {
     const app = express()
-
-    app.use((req: Request, res: Response, next: NextFunction) => {
-      if (req.path.includes('/kobo/answer') && !req.path.includes('by-access'))
-        this.log.warn(`>> ${req.method} ${req.path} ${req.session?.user?.email}`)
-      next()
-    })
-
     // new IpSentry(this.conf, app,)
     // app.use(Sentry.Handlers.requestHandler())
     // app.use(Sentry.Handlers.tracingHandler())

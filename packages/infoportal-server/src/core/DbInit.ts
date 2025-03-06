@@ -1,6 +1,6 @@
 import {FeatureAccessLevel, Prisma, PrismaClient} from '@prisma/client'
-import {appConf, AppConf} from './conf/AppConf'
-import {AppFeatureId, KoboDatabaseFeatureParams} from '../feature/access/AccessType'
+import {appConf, AppConf} from './conf/AppConf.js'
+import {AppFeatureId, KoboDatabaseFeatureParams} from '../feature/access/AccessType.js'
 import {DrcJob, DrcOffice, KoboIndex} from 'infoportal-common'
 
 export const createdBySystem = 'SYSTEM'

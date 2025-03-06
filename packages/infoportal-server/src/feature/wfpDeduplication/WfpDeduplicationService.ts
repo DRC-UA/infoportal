@@ -1,13 +1,13 @@
 import {PrismaClient} from '@prisma/client'
 import XlsxPopulate from 'xlsx-populate'
-import {UserSession} from '../session/UserSession'
-import {AccessService} from '../access/AccessService'
-import {AppFeatureId} from '../access/AccessType'
+import {UserSession} from '../session/UserSession.js'
+import {AccessService} from '../access/AccessService.js'
+import {AppFeatureId} from '../access/AccessType.js'
 import {seq} from '@axanc/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'
-import {appConf} from '../../core/conf/AppConf'
+import {appConf} from '../../core/conf/AppConf.js'
 import {ApiPaginateHelper, getDrcSuggestion, WfpDeduplication} from 'infoportal-common'
-import {GlobalEvent} from '../../core/GlobalEvent'
+import {GlobalEvent} from '../../core/GlobalEvent.js'
 import Event = GlobalEvent.Event
 
 export interface WfpDbSearch {

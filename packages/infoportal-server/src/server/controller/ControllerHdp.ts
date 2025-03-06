@@ -1,4 +1,4 @@
-import {HdpSdk} from '../../core/externalSdk/hdp/HdpSdk'
+import {HdpSdk} from '../../core/externalSdk/hdp/HdpSdk.js'
 import {NextFunction, Request, Response} from 'express'
 
 export class ControllerHdp {

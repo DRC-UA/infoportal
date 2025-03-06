@@ -1,4 +1,4 @@
-import {KoboSubmissionMetaData} from '../mapper'
+import {KoboSubmissionMetaData} from '../mapper/index.js'
 
 export namespace KoboFlattenRepeatedGroup {
   export type Data = Pick<KoboSubmissionMetaData, 'id' | 'submissionTime'> & Cursor & Record<string, any>

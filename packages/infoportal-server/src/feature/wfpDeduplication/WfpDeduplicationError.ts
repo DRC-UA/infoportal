@@ -1,4 +1,4 @@
-import {AppError} from '../../helper/Errors'
+import {AppError} from '../../helper/Errors.js'
 
 export namespace WfPDeduplicationError {
   export class NoFileUploaded extends AppError.NoFileUploaded {

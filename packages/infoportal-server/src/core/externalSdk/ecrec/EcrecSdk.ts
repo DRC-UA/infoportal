@@ -1,4 +1,4 @@
-import {EcrecClient} from './EcrecClient'
+import {EcrecClient} from './EcrecClient.js'
 import {
   EcrecGetDataFilters,
   EcrecGetDataResponse,
@@ -6,10 +6,10 @@ import {
   EcrecSmeStatus,
   EcrecVetStatus,
   FundedStatus,
-} from './EcrecSdkType'
+} from './EcrecSdkType.js'
 import {format, sub} from 'date-fns'
 import {seq} from '@axanc/ts-utils'
-import {StandardEnum} from '../../../helper/HelperType'
+import {StandardEnum} from '../../../helper/HelperType.js'
 
 /** @deprecated Ecrec App does not exist anymore. Keep the code since it can be helpful*/
 export class EcrecSdk {

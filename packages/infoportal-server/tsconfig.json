@@ -3,19 +3,32 @@
   "compilerOptions": {
     "baseUrl": "./",
     "rootDir": "./src",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "outDir": "./lib",
-    "typeRoots": ["../../node_modules/@types", "./node_modules/@types", "./src/typings"],
+    "typeRoots": [
+      "../../node_modules/@types",
+      "./node_modules/@types",
+      "./src/typings"
+    ],
     "paths": {
-      "infoportal-common/*": ["../infoportal-common/src/*"],
+      "infoportal-common/*": [
+        "../infoportal-common/src/*"
+      ],
+      "*": [
+        "./*"
+      ]
     }
   },
   "references": [
     {
       "path": "../infoportal-common"
-    },
+    }
   ],
   "ts-node": {
     "files": true
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }
