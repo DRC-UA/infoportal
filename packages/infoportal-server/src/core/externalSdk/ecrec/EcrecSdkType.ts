@@ -1,4 +1,4 @@
-import {StandardEnum} from '../../../helper/HelperType'
+import {StandardEnum} from '../../../helper/HelperType.js'
 
 export interface EcrecGetDataResponse<T> {
   totalCount: number

@@ -2,12 +2,12 @@ import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
 import {ObjectSchema} from 'yup'
 import {PrismaClient} from '@prisma/client'
-import {KoboService} from '../../../feature/kobo/KoboService'
+import {KoboService} from '../../../feature/kobo/KoboService.js'
 import {KoboValidation, Period} from 'infoportal-common'
-import {validateApiPaginate} from '../../../core/Type'
+import {validateApiPaginate} from '../../../core/Type.js'
 import {Kobo} from 'kobo-sdk'
 import {Obj} from '@axanc/ts-utils'
-import {app} from '../../../index'
+import {app} from '../../../index.js'
 
 export interface KoboAnswersFilters extends Partial<Period> {
   ids?: Kobo.FormId[]

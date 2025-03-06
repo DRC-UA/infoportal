@@ -1,8 +1,8 @@
 import {NextFunction, Request, Response} from 'express'
-import {ProxyService} from '../../feature/proxy/ProxyService'
+import {ProxyService} from '../../feature/proxy/ProxyService.js'
 import {PrismaClient} from '@prisma/client'
 import {ApiError} from 'kobo-sdk'
-import {AppError} from '../../helper/Errors'
+import {AppError} from '../../helper/Errors.js'
 
 export class ControllerProxy {
   constructor(

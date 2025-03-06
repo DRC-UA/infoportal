@@ -1,4 +1,4 @@
-import {LegalaidSdk} from '../../core/externalSdk/legalaid/LegalaidSdk'
+import {LegalaidSdk} from '../../core/externalSdk/legalaid/LegalaidSdk.js'
 import {seq} from '@axanc/ts-utils'
 import {Period} from 'infoportal-common'
 

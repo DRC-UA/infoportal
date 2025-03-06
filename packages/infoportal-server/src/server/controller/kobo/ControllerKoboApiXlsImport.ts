@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express'
-import {AppError} from '../../../helper/Errors'
-import {ImportService} from '../../../feature/kobo/ImportService'
+import {AppError} from '../../../helper/Errors.js'
+import {ImportService} from '../../../feature/kobo/ImportService.js'
 import {PrismaClient} from '@prisma/client'
 
 export class ControllerKoboApiXlsImport {

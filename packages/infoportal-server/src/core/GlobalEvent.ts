@@ -1,5 +1,5 @@
 import {EventEmitter} from 'events'
-import {app} from '../index'
+import {app} from '../index.js'
 import {Kobo} from 'kobo-sdk'
 import {KoboValidation} from 'infoportal-common'
 

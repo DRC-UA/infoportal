@@ -1,9 +1,9 @@
 import {MealVerificationStatus, PrismaClient} from '@prisma/client'
-import {app, AppLogger} from '../../index'
+import {app, AppLogger} from '../../index.js'
 import {InferType} from 'yup'
-import {MealVerificationSchema} from '../../server/controller/ControllerMealVerification'
+import {MealVerificationSchema} from '../../server/controller/ControllerMealVerification.js'
 import {UUID} from 'infoportal-common'
-import {MealVerificationAnswersStatus} from './MealVerificationType'
+import {MealVerificationAnswersStatus} from './MealVerificationType.js'
 
 export type MealVerificationCreate = InferType<typeof MealVerificationSchema.create> & {
   createdBy: string

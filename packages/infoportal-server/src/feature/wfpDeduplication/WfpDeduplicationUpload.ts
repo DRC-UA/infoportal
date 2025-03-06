@@ -1,15 +1,15 @@
-import {WFPBuildingBlockSdk} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockSdk'
+import {WFPBuildingBlockSdk} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockSdk.js'
 import {
   AssistancePrevented,
   AssistanceProvided,
   WfpFilters,
-} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockType'
+} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockType.js'
 import {Prisma, PrismaClient} from '@prisma/client'
 import {ApiPaginate, DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
 import {addMinutes, parse, subMinutes} from 'date-fns'
-import {appConf, AppConf} from '../../core/conf/AppConf'
-import {WfpBuildingBlockClient} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockClient'
-import {app, AppLogger} from '../../index'
+import {appConf, AppConf} from '../../core/conf/AppConf.js'
+import {WfpBuildingBlockClient} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockClient.js'
+import {app, AppLogger} from '../../index.js'
 import promiseRetry from 'promise-retry'
 import {Obj} from '@axanc/ts-utils'
 import {ApiError} from 'kobo-sdk'

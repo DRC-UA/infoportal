@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express'
 import {PrismaClient} from '@prisma/client'
-import {KoboAnswerHistoryHelper} from '../../../feature/kobo/history/KoboAnswerHistoryType'
-import {KoboAnswerHistoryService} from '../../../feature/kobo/history/KoboAnswerHistoryService'
+import {KoboAnswerHistoryHelper} from '../../../feature/kobo/history/KoboAnswerHistoryType.js'
+import {KoboAnswerHistoryService} from '../../../feature/kobo/history/KoboAnswerHistoryService.js'
 
 export class ControllerKoboAnswerHistory {
   constructor(

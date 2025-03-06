@@ -1,7 +1,7 @@
 import {PrismaClient} from '@prisma/client'
-import {KoboMetaParams, KoboMetaService} from '../../feature/kobo/meta/KoboMetaService'
+import {KoboMetaParams, KoboMetaService} from '../../feature/kobo/meta/KoboMetaService.js'
 import {NextFunction, Request, Response} from 'express'
-import {app, AppCacheKey} from '../../index'
+import {app, AppCacheKey} from '../../index.js'
 import {ApiPaginateHelper} from 'infoportal-common'
 
 export class ControllerKoboMeta {

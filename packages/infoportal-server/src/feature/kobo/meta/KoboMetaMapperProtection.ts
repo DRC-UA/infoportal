@@ -21,8 +21,8 @@ import {
   ProtectionHhsTags,
   safeArray,
 } from 'infoportal-common'
-import {KoboMetaOrigin} from './KoboMetaType'
-import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService'
+import {KoboMetaOrigin} from './KoboMetaType.js'
+import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService.js'
 import {UaLocation} from 'ua-location'
 import Gender = Person.Gender
 

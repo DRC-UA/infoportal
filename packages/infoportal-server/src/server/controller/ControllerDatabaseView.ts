@@ -1,7 +1,7 @@
 import {DatabaseViewColVisibility, DatabaseViewVisibility, PrismaClient} from '@prisma/client'
-import {yup} from '../../helper/Utils'
+import {yup} from '../../helper/Utils.js'
 import {NextFunction, Request, Response} from 'express'
-import {DatabaseView} from '../../feature/databaseView/DatabaseView'
+import {DatabaseView} from '../../feature/databaseView/DatabaseView.js'
 
 const schema = {
   id: yup.string().required(),

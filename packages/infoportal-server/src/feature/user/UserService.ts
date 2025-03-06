@@ -1,5 +1,5 @@
 import {Prisma, PrismaClient} from '@prisma/client'
-import {app, AppCacheKey, AppLogger} from '../../index'
+import {app, AppCacheKey, AppLogger} from '../../index.js'
 import {DrcOffice} from 'infoportal-common'
 
 export class UserService {

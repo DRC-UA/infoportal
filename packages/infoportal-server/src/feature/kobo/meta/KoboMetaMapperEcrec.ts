@@ -26,9 +26,9 @@ import {
   oblastByDrcOffice,
   VetApplicationStatus,
 } from 'infoportal-common'
-import {KoboMetaOrigin} from './KoboMetaType'
-import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService'
-import {appConf} from '../../../core/conf/AppConf'
+import {KoboMetaOrigin} from './KoboMetaType.js'
+import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService.js'
+import {appConf} from '../../../core/conf/AppConf.js'
 import {Ecrec_vet2_dmfa} from 'infoportal-common'
 
 export class KoboMetaMapperEcrec {

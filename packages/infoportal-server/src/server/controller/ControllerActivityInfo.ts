@@ -1,9 +1,9 @@
 import {NextFunction, Request, Response} from 'express'
 import {ActivityInfoSdk} from 'infoportal-common'
-import {app, AppLogger} from '../../index'
-import {appConf} from '../../core/conf/AppConf'
-import {AppError} from '../../helper/Errors'
-import {Util} from '../../helper/Utils'
+import {app, AppLogger} from '../../index.js'
+import {appConf} from '../../core/conf/AppConf.js'
+import {AppError} from '../../helper/Errors.js'
+import {Util} from '../../helper/Utils.js'
 
 export class ControllerActivityInfo {
   constructor(

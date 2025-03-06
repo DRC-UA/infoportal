@@ -1,4 +1,4 @@
-import {yup} from '../../../helper/Utils'
+import {yup} from '../../../helper/Utils.js'
 import {InferType} from 'yup'
 
 export namespace KoboAnswerHistoryHelper {

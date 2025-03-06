@@ -1,12 +1,12 @@
-import {Controller} from './Controller'
+import {Controller} from './Controller.js'
 import {NextFunction, Request, Response} from 'express'
 import * as yup from 'yup'
 import {PrismaClient} from '@prisma/client'
-import {SessionService} from '../../feature/session/SessionService'
-import {AppError} from '../../helper/Errors'
-import {UserSession} from '../../feature/session/UserSession'
-import {appConf} from '../../core/conf/AppConf'
-import {SessionError} from '../../feature/session/SessionErrors'
+import {SessionService} from '../../feature/session/SessionService.js'
+import {AppError} from '../../helper/Errors.js'
+import {UserSession} from '../../feature/session/UserSession.js'
+import {appConf} from '../../core/conf/AppConf.js'
+import {SessionError} from '../../feature/session/SessionErrors.js'
 
 export class ControllerSession extends Controller {
   constructor(

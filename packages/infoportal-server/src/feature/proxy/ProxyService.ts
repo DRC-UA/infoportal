@@ -1,8 +1,8 @@
 import {Prisma, PrismaClient} from '@prisma/client'
-import {yup} from '../../helper/Utils'
+import {yup} from '../../helper/Utils.js'
 import {InferType} from 'yup'
 import {UUID} from 'infoportal-common'
-import {app, AppCacheKey} from '../../index'
+import {app, AppCacheKey} from '../../index.js'
 import {duration} from '@axanc/ts-utils'
 import {Request} from 'express'
 

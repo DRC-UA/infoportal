@@ -1,11 +1,11 @@
 import {NextFunction, Request, Response} from 'express'
-import {yup} from '../../helper/Utils'
+import {yup} from '../../helper/Utils.js'
 import {PrismaClient} from '@prisma/client'
-import {WfpDbSearch, WfpDeduplicationService} from '../../feature/wfpDeduplication/WfpDeduplicationService'
-import {WfPDeduplicationError} from '../../feature/wfpDeduplication/WfpDeduplicationError'
-import {WfpDeduplicationUpload} from '../../feature/wfpDeduplication/WfpDeduplicationUpload'
-import {appConf} from '../../core/conf/AppConf'
-import {AppError} from '../../helper/Errors'
+import {WfpDbSearch, WfpDeduplicationService} from '../../feature/wfpDeduplication/WfpDeduplicationService.js'
+import {WfPDeduplicationError} from '../../feature/wfpDeduplication/WfpDeduplicationError.js'
+import {WfpDeduplicationUpload} from '../../feature/wfpDeduplication/WfpDeduplicationUpload.js'
+import {appConf} from '../../core/conf/AppConf.js'
+import {AppError} from '../../helper/Errors.js'
 
 export class ControllerWfp {
   constructor(

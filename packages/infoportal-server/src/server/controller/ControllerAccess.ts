@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express'
 import {PrismaClient} from '@prisma/client'
-import {AccessService} from '../../feature/access/AccessService'
+import {AccessService} from '../../feature/access/AccessService.js'
 
 export class ControllerAccess {
   constructor(

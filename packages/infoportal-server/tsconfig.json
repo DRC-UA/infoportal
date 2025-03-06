@@ -12,7 +12,6 @@
       "./src/typings"
     ],
     "paths": {
-      "@/*": ["src/*"],
       "infoportal-common/*": [
         "../infoportal-common/src/*"
       ],

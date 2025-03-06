@@ -1,9 +1,9 @@
 import {PrismaClient, User as PUser} from '@prisma/client'
-import {app, AppLogger} from '../../index'
+import {app, AppLogger} from '../../index.js'
 import {AuthenticationProvider} from '@microsoft/microsoft-graph-client/src/IAuthenticationProvider'
 import {AuthenticationProviderOptions} from '@microsoft/microsoft-graph-client/src/IAuthenticationProviderOptions'
 import {Client} from '@microsoft/microsoft-graph-client'
-import {SessionError} from './SessionErrors'
+import {SessionError} from './SessionErrors.js'
 // import {User} from '@microsoft/msgraph-sdk-javascript/lib/src/models/user'
 
 type User = {

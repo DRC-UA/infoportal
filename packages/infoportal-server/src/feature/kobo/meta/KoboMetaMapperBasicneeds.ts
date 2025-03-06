@@ -17,8 +17,8 @@ import {
   MpcaEntityTags,
   safeNumber,
 } from 'infoportal-common'
-import {KoboMetaOrigin} from './KoboMetaType'
-import {KoboMetaMapper, MetaMapped, MetaMapperInsert} from './KoboMetaService'
+import {KoboMetaOrigin} from './KoboMetaType.js'
+import {KoboMetaMapper, MetaMapped, MetaMapperInsert} from './KoboMetaService.js'
 import {KoboXmlMapper} from 'infoportal-common'
 
 const nfisPrograms = [DrcProgram.NFI, DrcProgram.ESK, DrcProgram.InfantWinterClothing, DrcProgram.InfantWinterClothing]

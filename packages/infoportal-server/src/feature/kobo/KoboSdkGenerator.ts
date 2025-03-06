@@ -1,7 +1,7 @@
 import {duration, seq} from '@axanc/ts-utils'
 import {KoboServer, PrismaClient} from '@prisma/client'
-import {app, AppCacheKey} from '../../index'
-import {AppError} from '../../helper/Errors'
+import {app, AppCacheKey} from '../../index.js'
+import {AppError} from '../../helper/Errors.js'
 import {UUID} from 'infoportal-common'
 import {Kobo, KoboClient} from 'kobo-sdk'
 
