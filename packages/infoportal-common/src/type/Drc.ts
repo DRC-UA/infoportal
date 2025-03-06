@@ -1,5 +1,5 @@
 import {Obj, seq} from '@axanc/ts-utils'
-import {OblastName} from '../location'
+import {OblastName} from '../location/index.js'
 
 export enum DrcOffice {
   Kyiv = 'Kyiv',

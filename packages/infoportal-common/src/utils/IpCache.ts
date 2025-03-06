@@ -1,5 +1,5 @@
 import {duration, Duration, filterUndefined, hashArgs, Obj} from '@axanc/ts-utils'
-import {Logger} from '../types'
+import {Logger} from '../types.js'
 
 export interface IpCacheData<V> {
   lastUpdate: Date

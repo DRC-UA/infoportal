@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const projectRoot = '/Users/alex/Documents/Workspaces/infoportal/packages/infoportal-server/src'
+const projectRoot = '/Users/alex/Documents/Workspaces/infoportal/packages/infoportal-common/src'
 const tsFiles = [];
 function scanDir(dir) {
   const files = fs.readdirSync(dir);

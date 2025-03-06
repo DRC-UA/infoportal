@@ -1,1 +1,1 @@
-export * from './oblastIndex'
+export * from './oblastIndex.js'

@@ -13,14 +13,14 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
         resolve: {
-          fullySpecified: false
-        }
+          fullySpecified: false,
+        },
       },
     ],
   },
   resolve: {
     extensionAlias: {
-      '.js': ['.js', '.ts']
+      '.js': ['.js', '.ts'],
     },
     fullySpecified: false,
     extensions: ['.ts', '.js'],
@@ -28,11 +28,15 @@ module.exports = {
   output: {
     module: true,
     libraryTarget: 'module',
-    filename: 'bundle.js',
+    filename: 'bundle.mjs',
     path: path.resolve(__dirname, 'dist'),
   },
   mode: 'production',
   experiments: {
-    outputModule: true
+    outputModule: true,
+  },
+  externalsType: 'module',
+  externals: {
+    '@prisma/client': '@prisma/client',
   },
 }

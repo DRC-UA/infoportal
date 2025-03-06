@@ -1,6 +1,6 @@
-import {Bn_re} from '../generated/Bn_re'
+import {Bn_re} from '../generated/Bn_re.js'
 import {fnSwitch} from '@axanc/ts-utils'
-import {Person} from '../../type/Person'
+import {Person} from '../../type/Person.js'
 
 export class KoboBnReHelper {
   static readonly getPersons = (_: Bn_re.T): Person[] => {

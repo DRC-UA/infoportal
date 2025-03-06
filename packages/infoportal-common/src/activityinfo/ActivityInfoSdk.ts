@@ -1,4 +1,4 @@
-import {ActivityInfo} from './ActivityInfo'
+import {ActivityInfo} from './ActivityInfo.js'
 
 interface ApiParams extends Omit<RequestInit, 'body'> {
   body?: object

@@ -1,7 +1,7 @@
 import {fnSwitch} from '@axanc/ts-utils'
-import {Meal_cfmInternal} from '../generated/Meal_cfmInternal'
-import {KoboBaseTags} from './Kobo'
-import {DrcOffice, DrcProject} from '../../type/Drc'
+import {Meal_cfmInternal} from '../generated/Meal_cfmInternal.js'
+import {KoboBaseTags} from './Kobo.js'
+import {DrcOffice, DrcProject} from '../../type/Drc.js'
 
 export enum CfmDataSource {
   Internal = 'Internal',

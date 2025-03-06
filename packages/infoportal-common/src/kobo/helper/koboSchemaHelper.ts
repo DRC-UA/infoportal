@@ -1,6 +1,6 @@
 import {seq} from '@axanc/ts-utils'
-import {removeHtml} from './../../index'
-import {KoboSchemaRepeatHelper} from './koboSchemaRepeatHelper'
+import {removeHtml} from './../../index.js'
+import {KoboSchemaRepeatHelper} from './koboSchemaRepeatHelper.js'
 import {Kobo} from 'kobo-sdk'
 
 export type KoboTranslateQuestion = (key: string) => string

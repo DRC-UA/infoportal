@@ -1,6 +1,6 @@
 import {Obj} from '@axanc/ts-utils'
-import {Shelter_ta} from '../generated'
-import {KoboShelterTa} from './KoboShelterTA'
+import {Shelter_ta} from '../generated/index.js'
+import {KoboShelterTa} from './KoboShelterTA.js'
 
 export enum ShelterContractor {
   'Artbudservice' = 'Artbudservice',

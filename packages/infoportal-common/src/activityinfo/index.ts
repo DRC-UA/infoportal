@@ -1,2 +1,2 @@
-export * from './ActivityInfoSdk'
-export * from './ActivityInfo'
+export * from './ActivityInfoSdk.js'
+export * from './ActivityInfo.js'

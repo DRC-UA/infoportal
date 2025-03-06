@@ -1,8 +1,8 @@
-import {CashStatus, KoboBaseTags, KoboSubmissionFlat} from './Kobo'
+import {CashStatus, KoboBaseTags, KoboSubmissionFlat} from './Kobo.js'
 import {fnSwitch} from '@axanc/ts-utils'
-import {Ecrec_cashRegistration, Ecrec_cashRegistrationBha} from '../generated'
-import {DrcProgram, DrcProject, DrcProjectHelper} from '../../type/Drc'
-import {KoboXmlMapper} from './KoboXmlMapper'
+import {Ecrec_cashRegistration, Ecrec_cashRegistrationBha} from '../generated/index.js'
+import {DrcProgram, DrcProject, DrcProjectHelper} from '../../type/Drc.js'
+import {KoboXmlMapper} from './KoboXmlMapper.js'
 
 const minimumWageUah = 7100
 

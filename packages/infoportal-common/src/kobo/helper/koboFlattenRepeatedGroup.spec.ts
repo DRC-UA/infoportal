@@ -1,4 +1,4 @@
-import {KoboFlattenRepeatedGroup} from './koboFlattenRepeatedGroup'
+import {KoboFlattenRepeatedGroup} from './koboFlattenRepeatedGroup.js'
 
 describe('koboFlattenRepeatedGroup', () => {
   it('should flatten the nested objects', () => {
