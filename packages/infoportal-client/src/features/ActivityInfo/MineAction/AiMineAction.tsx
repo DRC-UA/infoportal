@@ -86,7 +86,7 @@ export const AiMineAction = () => {
               activity: rawActivity,
               subActivity: rawSubActivity,
               data: [_],
-              requestBody: request,
+              requestBody: ActivityInfoSdk.wrapRequest(request),
             }
             return bundles
           }),

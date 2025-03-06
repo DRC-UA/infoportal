@@ -1,4 +1,4 @@
-import {ActivityInfoRecords} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
+import {ActivityInfoRequest} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import React, {ReactNode, useEffect, useMemo, useState} from 'react'
 import {UseFetcher} from '@/shared/hook/useFetcher'
@@ -29,8 +29,7 @@ export interface AiTable<TActivity = any, TSubActivity extends any = any, TAnswe
   data: KoboSubmissionFlat<TAnswer>[]
   activity: TActivity
   subActivity?: TSubActivity
-  requestBody: any
-  // requestBody: ActiviftyInfoRecords
+  requestBody: ActivityInfoRequest
 }
 
 export const aiInvalidValueFlag = '⚠️'

@@ -1,4 +1,4 @@
-export interface ActivityInfoRecords {
+export interface ActivityInfoRequest {
   changes: ActivityInfoRecord[]
 }
 

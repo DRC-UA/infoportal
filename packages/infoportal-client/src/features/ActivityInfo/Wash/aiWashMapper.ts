@@ -85,7 +85,7 @@ export namespace AiWashMapper {
                   recordId,
                   data: grouped,
                   activity: ai,
-                  requestBody: request,
+                  requestBody: ActivityInfoSdk.wrapRequest(request),
                 }
               },
             }).transforms,

@@ -123,7 +123,7 @@ export namespace AiShelterMapper {
                   recordId,
                   data: grouped,
                   activity: ai,
-                  requestBody: request,
+                  requestBody: ActivityInfoSdk.wrapRequest(request),
                 }
               },
             }).transforms,
@@ -213,7 +213,7 @@ export namespace AiShelterMapper {
                 recordId,
                 data: grouped,
                 activity: ai,
-                requestBody: request,
+                requestBody: ActivityInfoSdk.wrapRequest(request),
                 submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
               }
             },

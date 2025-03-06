@@ -144,7 +144,7 @@ export namespace AiFslcMapper {
                   recordId,
                   data: grouped,
                   activity: ai,
-                  requestBody: request,
+                  requestBody: ActivityInfoSdk.wrapRequest(request),
                 }
               },
             }).transforms,

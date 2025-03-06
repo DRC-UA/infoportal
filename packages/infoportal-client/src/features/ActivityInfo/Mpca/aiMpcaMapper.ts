@@ -127,7 +127,7 @@ export namespace AiMpcaMapper {
                   recordId,
                   data: grouped,
                   activity: ai,
-                  requestBody: request,
+                  requestBody: ActivityInfoSdk.wrapRequest(request),
                 }
               },
             }).transforms,
