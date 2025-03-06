@@ -76,7 +76,7 @@ export class EcrecClient {
         ...init?.headers,
         'X-CSRF-TOKEN': token,
       },
-    }).then((_) => _.json())
+    }).then((_) => _.json() as T)
   }
 
   readonly post = async <T>(input: string | URL, init?: Omit<EcrecAppClientRequestInit, 'method'>): Promise<T> => {

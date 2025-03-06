@@ -24,7 +24,32 @@ import {DatabaseViewSdk} from '@/core/sdk/server/databaseView/DatabaseViewSdk'
 import {ImportFromXlsDataSdk} from '@/core/sdk/server/importXls/ImportFromXlsSdk'
 
 export class ApiSdk {
-  constructor(private client: ApiClient) {}
+  constructor(private client: ApiClient) {
+    this.session = new SessionSdk(client)
+    this.nfi = new NfiMPcaSdk(client)
+    this.koboMeta = new KoboMetaSdk(client)
+    this.kobo = {
+      answerHistory: new KoboAnswerHistorySdk(this.client),
+      typedAnswers: new KoboTypedAnswerSdk(this.client),
+      answer: new KoboAnswerSdk(this.client),
+      server: new KoboServerSdk(this.client),
+      form: new KoboFormSdk(this.client),
+    }
+    this.koboApi = new KoboApiSdk(client)
+    this.mealVerification = new MealVerificationClient(client)
+    this.activityInfo = new ActivityInfoSdk(client)
+    this.mpca = new MpcaSdk(client)
+    this.wfpDeduplication = new WfpDeduplicationSdk(client)
+    this.user = new UserSdk(client)
+    this.access = new AccessSdk(this.client, this.user)
+    this.group = new GroupSdk(client)
+    this.databaseView = new DatabaseViewSdk(client)
+    this.proxy = new ProxySdk(client)
+    this.jsonStore = new JsonStoreSdk(client)
+    this.hdp = new HdpSdk(client)
+    this.cache = new CacheSdk(client)
+    this.importData = new ImportFromXlsDataSdk(client)
+  }
 
   readonly proxyRequest = <T = any>(method: Method, url: string, options?: RequestOption) => {
     return this.client.post<T>(`/proxy-request`, {
@@ -38,28 +63,28 @@ export class ApiSdk {
       },
     })
   }
-  readonly session = new SessionSdk(this.client)
-  readonly nfi = new NfiMPcaSdk(this.client)
-  readonly koboMeta = new KoboMetaSdk(this.client)
-  readonly kobo = {
-    answerHistory: new KoboAnswerHistorySdk(this.client),
-    typedAnswers: new KoboTypedAnswerSdk(this.client),
-    answer: new KoboAnswerSdk(this.client),
-    server: new KoboServerSdk(this.client),
-    form: new KoboFormSdk(this.client),
+  readonly session: SessionSdk
+  readonly nfi: NfiMPcaSdk
+  readonly koboMeta: KoboMetaSdk
+  readonly kobo: {
+    answerHistory: KoboAnswerHistorySdk
+    typedAnswers: KoboTypedAnswerSdk
+    answer: KoboAnswerSdk
+    server: KoboServerSdk
+    form: KoboFormSdk
   }
-  readonly koboApi = new KoboApiSdk(this.client)
-  readonly mealVerification = new MealVerificationClient(this.client)
-  readonly activityInfo = new ActivityInfoSdk(this.client)
-  readonly mpca = new MpcaSdk(this.client)
-  readonly wfpDeduplication = new WfpDeduplicationSdk(this.client)
-  readonly user = new UserSdk(this.client)
-  readonly access = new AccessSdk(this.client, this.user)
-  readonly group = new GroupSdk(this.client)
-  readonly databaseView = new DatabaseViewSdk(this.client)
-  readonly proxy = new ProxySdk(this.client)
-  readonly jsonStore = new JsonStoreSdk(this.client)
-  readonly hdp = new HdpSdk(this.client)
-  readonly cache = new CacheSdk(this.client)
-  readonly importData = new ImportFromXlsDataSdk(this.client)
+  readonly koboApi: KoboApiSdk
+  readonly mealVerification: MealVerificationClient
+  readonly activityInfo: ActivityInfoSdk
+  readonly mpca: MpcaSdk
+  readonly wfpDeduplication: WfpDeduplicationSdk
+  readonly user: UserSdk
+  readonly access: AccessSdk
+  readonly group: GroupSdk
+  readonly databaseView: DatabaseViewSdk
+  readonly proxy: ProxySdk
+  readonly jsonStore: JsonStoreSdk
+  readonly hdp: HdpSdk
+  readonly cache: CacheSdk
+  readonly importData: ImportFromXlsDataSdk
 }

@@ -2,7 +2,7 @@ import * as React from 'react'
 import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState} from 'react'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {useTheme} from '@mui/material'
-import {Breakpoint} from '@mui/system/createTheme/createBreakpoints'
+import {Breakpoint} from '@mui/system'
 
 const LayoutContext = createContext<UseLayoutContextProps>({} as UseLayoutContextProps)
 

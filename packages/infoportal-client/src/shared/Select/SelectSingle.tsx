@@ -117,7 +117,6 @@ export const IpSelectSingle = <T extends TType>({
         label={label}
         size="small"
         margin="dense"
-        placeholder={placeholder}
         id={id}
         value={value ?? defaultValue ?? IGNORED_VALUE_EMPTY}
         defaultValue={defaultValue}
@@ -134,7 +133,7 @@ export const IpSelectSingle = <T extends TType>({
         input={<OutlinedInput label={label} placeholder={placeholder} />}
         {...props}
       >
-        {!hideNullOption && <MenuItem dense value={null as any} sx={style.item} />}
+        {(!hideNullOption || placeholder) && <MenuItem dense value={null as any} sx={style.item}>{placeholder}</MenuItem>}
         {options.map((option, i) => (
           <MenuItem dense key={option.key ?? option.value} value={option.value} sx={style.item}>
             {option.children}

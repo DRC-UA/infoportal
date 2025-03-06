@@ -1,4 +1,4 @@
-import {AppConf, appConf} from './core/conf/AppConf'
+import {AppConf, appConf} from '@/core/conf/AppConf'
 import {Server} from './server/Server'
 import {PrismaClient} from '@prisma/client'
 import {ScheduledTask} from './scheduledTask/ScheduledTask'

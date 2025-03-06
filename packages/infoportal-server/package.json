@@ -2,11 +2,12 @@
   "name": "infoportal-server",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "lib/index.js",
   "scripts": {
     "test": "jest",
     "start": "node dist/bundle.js",
-    "build": "webpack --config webpack.config.js",
+    "build": "webpack --config webpack.config.cjs",
     "dev-r": "nodemon src/index.ts",
     "dev-hmr": "tsx watch src/index.ts",
     "dev": "tsc --build --force && node lib/index.js",

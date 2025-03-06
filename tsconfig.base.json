@@ -2,9 +2,9 @@
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext", "ES2021.String"],
     "strict": true,
-    "moduleResolution": "node",
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": true,

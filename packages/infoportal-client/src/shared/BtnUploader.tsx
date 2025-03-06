@@ -45,6 +45,7 @@ export const BtnUploader = ({
   onUpload,
   onDelete,
   maxUploadFileSize,
+  loading,
   ...other
 }: BtnUploaderProps) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
@@ -112,7 +113,13 @@ export const BtnUploader = ({
         )
       } else {
         return (
-          <IpBtn color="primary" onClick={openFileSelection} icon="file_upload" {...other}>
+          <IpBtn
+            color="primary"
+            onClick={openFileSelection}
+            icon="file_upload"
+            loading={loading ?? undefined}
+            {...other}
+          >
             {msg.upload}
             <input
               style={{display: 'none'}}
