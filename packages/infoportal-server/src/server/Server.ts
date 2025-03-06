@@ -1,5 +1,5 @@
 import express, {NextFunction, Request, Response} from 'express'
-import * as bodyParser from 'body-parser'
+import bodyParser from 'body-parser'
 import {getRoutes} from './Routes.js'
 import {app} from '../index.js'
 import {appConf, AppConf} from '../core/conf/AppConf.js'
@@ -69,13 +69,6 @@ export class Server {
 
   readonly start = () => {
     const app = express()
-
-    app.use((req: Request, res: Response, next: NextFunction) => {
-      if (req.path.includes('/kobo/answer') && !req.path.includes('by-access'))
-        this.log.warn(`>> ${req.method} ${req.path} ${req.session?.user?.email}`)
-      next()
-    })
-
     // new IpSentry(this.conf, app,)
     // app.use(Sentry.Handlers.requestHandler())
     // app.use(Sentry.Handlers.tracingHandler())

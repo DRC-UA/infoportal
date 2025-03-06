@@ -128,7 +128,6 @@ export const ProtectionDashboardPsea = () => {
         setFilters={setOptionFilters}
         before={
           <PeriodPicker
-            sx={{marginTop: '-6px'}}
             value={[period.start, period.end]}
             onChange={([start, end]) => {
               setPeriod((prev) => ({...prev, start: start ?? undefined, end: end ?? undefined}))

@@ -105,16 +105,13 @@ export class ControllerKoboAnswer {
 
   /** TODO need to handle public access */
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
-    this.log.info(`> SEARCH by ${req.session?.user?.email} ${req.params.formId}`)
     try {
       const {formId} = req.params
       const filters = await answersFiltersValidation.validate(req.body)
       const paginate = await validateApiPaginate.validate(req.body)
       const answers = await this.service.searchAnswers({formId, filters, paginate})
-      this.log.info(`> SEARCH by ${req.session.user?.email} ${req.params.formId}. SUCCESS`)
       res.send(answers)
     } catch (error) {
-      this.log.info(`> SEARCH by ${req.session.user?.email} ${req.params.formId}. FAILED`, JSON.stringify(error))
       res.status(500).send(JSON.stringify(error))
     }
   }
