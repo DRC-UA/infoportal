@@ -130,8 +130,9 @@ const startApp = async (conf: AppConf) => {
       process.exit(1)
     })
     process.on('unhandledRejection', (reason, promise) => {
-      log.error('Unhandled Rejection at:', promise, 'reason:', reason)
-      process.exit(1)
+      console.log(reason, promise)
+      log.error('>>> Unhandled Rejection at:', promise, 'reason:', reason)
+      // process.exit(1)
     })
   }
 }

@@ -5,6 +5,7 @@
   "type": "module",
   "main": "lib/index.js",
   "scripts": {
+    "postinstall": "prisma generate",
     "test": "jest",
     "start": "node dist/bundle.mjs",
     "build": "node --loader ts-node/esm ../../node_modules/webpack/bin/webpack.js --config webpack.config.mjs",
