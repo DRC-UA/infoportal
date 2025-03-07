@@ -11,7 +11,10 @@ export namespace AiProtectionMapper {
 
   const getPlanCode = (_?: DrcProject): AiProtectionType.Type['Plan/Project Code'] => {
     const planCode = Object.freeze({
-      // [DrcProject['UKR-000355 Danish MFA']]: 'PRT-DRC-00013',
+      [DrcProject['UKR-000363 UHF8']]: 'PRT-DRC-00007',
+      [DrcProject['UKR-000372 ECHO3']]: 'PRT-DRC-00002',
+      [DrcProject['UKR-000355 Danish MFA']]: 'PRT-DRC-00008',
+      [DrcProject['UKR-000345 BHA2']]: '',
     })
     // @ts-ignore
     return planCode[_] ?? `${aiInvalidValueFlag} ${_}`
@@ -66,7 +69,7 @@ export namespace AiProtectionMapper {
           const activityPrebuilt = {
             ...activity,
             ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
-            'Activities and People': subActivities.map(_ => _.activity),
+            'Activities and People': subActivities.map((_) => _.activity),
           }
           const recordId = ActivityInfoSdk.makeRecordId({
             prefix: 'drcprot',

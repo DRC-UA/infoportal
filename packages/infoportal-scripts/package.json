@@ -28,7 +28,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "activityinfo-sdk": "^1.1.8",
+    "activityinfo-sdk": "^1.1.9",
     "kobo-sdk": "^1.1.4",
     "@axanc/ts-utils": "2.3.1",
     "@azure/msal-common": "^13.1.0",

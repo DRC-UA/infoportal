@@ -23,7 +23,7 @@ export namespace AiMpcaMapper {
   const getPlanCode = (_: DrcProject) => {
     return match(_ as any)
       .cases({
-        // [DrcProject['UKR-000380 DANIDA']]: 'MPCA-DRC-00011',
+        [DrcProject['UKR-000380 DANIDA']]: 'MPCA-DRC-00011',
       })
       .default(() => aiInvalidValueFlag + _)
   }

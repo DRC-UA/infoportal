@@ -1,4 +1,4 @@
-import {DrcSector, groupBy, IKoboMeta, KoboMetaStatus, Period, PeriodHelper} from 'infoportal-common'
+import {DrcProject, DrcSector, groupBy, IKoboMeta, KoboMetaStatus, Period, PeriodHelper} from 'infoportal-common'
 import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
@@ -9,17 +9,12 @@ import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 export namespace AiGbvMapper2 {
   export type Bundle = AiTable<AiGbvType>
 
-  const planCode: Record<string, never> = {
-    // TODO
-    // [DrcProject['UKR-000345 BHA2']]: 'GBV-DRC-00001',
-    // [DrcProject['UKR-000347 DANIDA']]: 'GBV-DRC-00002',
-    // [DrcProject['UKR-000355 Danish MFA']]: 'GBV-DRC-00003',
-    // [DrcProject['UKR-000330 SDC2']]: 'GBV-DRC-00004',
-    // [DrcProject['UKR-000304 PSPU']]: 'GBV-DRC-00005',
-    // [DrcProject['UKR-000371 ECHO3']]: 'GBV-DRC-00006',
-    // [DrcProject['UKR-000372 ECHO3']]: 'GBV-DRC-00006',
-    // [DrcProject['UKR-000363 UHF8']]: 'GBV-DRC-00007',
-  }
+  const planCode: Record<DrcProject, AiGbvType['Plan/Project code']> = {
+    [DrcProject['UKR-000345 BHA2']]: 'MISSING APM',
+    [DrcProject['UKR-000372 ECHO3']]: 'GBV-DRC-00002',
+    [DrcProject['UKR-000363 UHF8']]: 'GBV-DRC-00001',
+    [DrcProject['UKR-000355 Danish MFA']]: 'GBV-DRC-00003',
+  } as any
 
   export const req =
     (api: ApiSdk) =>

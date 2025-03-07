@@ -20,8 +20,13 @@ import {AiMpcaType} from '@/features/ActivityInfo/Mpca/aiMpcaType'
 
 export namespace AiShelterMapper {
   const planCodes = {
-    // TODO Setup new projects
-    // [DrcProject['UKR-000390 UHF9']]: 'SNFI-DRC-00016',
+    [DrcProject['UKR-000345 BHA2']]: 'SNFI-DRC-00004',
+    [DrcProject['UKR-000355 Danish MFA']]: 'SNFI-DRC-00005',
+    [DrcProject['UKR-000363 UHF8']]: 'SNFI-DRC-00006',
+    [DrcProject['UKR-000390 UHF9']]: 'SNFI-DRC-00007',
+    [DrcProject['UKR-000397 GFFO']]: 'SNFI-DRC-00008',
+    [DrcProject['UKR-000399 SDC']]: 'SNFI-DRC-00009',
+    [DrcProject['UKR-000372 ECHO3']]: 'SNFI-DRC-00003',
   }
 
   const getPlanCode = (p: DrcProject): AiSnfiType.Type['Plan/Project Code'] => {

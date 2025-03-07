@@ -83,7 +83,7 @@ export namespace AiWashType {
   }
 
   export const options = {
-    'WASH APM 2025': {},
+    'WASH APM 2025': {'WASH-DRC-00001': 'c5jceofm7xgsnhy8'},
     Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
     Donor: {
       'ACT Alliance (ACT)': 'cei9dbm4s9iiu9cm',

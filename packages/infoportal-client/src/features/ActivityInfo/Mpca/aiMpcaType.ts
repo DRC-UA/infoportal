@@ -133,7 +133,7 @@ export namespace AiMpcaType {
 
   export const options = {
     Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
-    'MPCA Activity Planning Module (APM) - 2025': {},
+    'MPCA Activity Planning Module (APM) - 2025': {'MPCA-DRC-00001': 'ctkcwohm7yj9l5c2'},
     Donor: {
       'ACT Alliance (ACT)': 'cei9dbm4s9iiu9cm',
       'AICM Ukraine (AICMUA)': 'clndct5m4s9iiu9cn',

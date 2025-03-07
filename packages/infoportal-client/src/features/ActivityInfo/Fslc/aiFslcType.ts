@@ -2,6 +2,7 @@ export type AiFslcType = AiFslType.Type
 
 export namespace AiFslType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
+
   export interface Type {
     'Reporting Month': string
     'Reporting Organization': Opt<'Partner'>
@@ -47,23 +48,37 @@ export namespace AiFslType {
         parentRecordId,
         fields: {
           c5shhuim74ctls4b: a['Reporting Month'],
-          c8ta7spm74cus9jd: a['Reporting Organization'] ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Reporting Organization']!] : undefined,
-          c8m0rzem74cwwi1g: a['Implementing Partner'] ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner']!] : undefined,
-          cbt281vm74czamji: a['Activity Plan Code'] ? 'ch3x9upm67vz8ng3' + ':' + options['FSLC Activity Planning Module (APM)'][a['Activity Plan Code']!] : undefined,
-          chzv6znm74d91x8p: a['Activity and indicator'] ? 'caybsh0m4r95mfm198' + ':' + options['Indicators - FSL'][a['Activity and indicator']!] : undefined,
-          cj3gufum74db4w5s: a['Implementation Status'] ? options['Implementation Status'][a['Implementation Status']!] : undefined,
+          c8ta7spm74cus9jd: a['Reporting Organization']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Reporting Organization']!]
+            : undefined,
+          c8m0rzem74cwwi1g: a['Implementing Partner']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner']!]
+            : undefined,
+          cbt281vm74czamji: a['Activity Plan Code']
+            ? 'ch3x9upm67vz8ng3' + ':' + options['FSLC Activity Planning Module (APM)'][a['Activity Plan Code']!]
+            : undefined,
+          chzv6znm74d91x8p: a['Activity and indicator']
+            ? 'caybsh0m4r95mfm198' + ':' + options['Indicators - FSL'][a['Activity and indicator']!]
+            : undefined,
+          cj3gufum74db4w5s: a['Implementation Status']
+            ? options['Implementation Status'][a['Implementation Status']!]
+            : undefined,
           cai4mcjm74ddh3wv: a['Frequency'] ? options['Frequency'][a['Frequency']!] : undefined,
           cpqutcpm74dg00712: a['Kcal covered  (per person per day)'],
           codusvbm74djjk715: a['Unit'] ? options['Unit'][a['Unit']!] : undefined,
           clsqvjwm74dm6ig1b: a['Total Quantity distributed (per person)'],
           cc5bwyam74do3hg1c: a['Total Cash Value (local currency)'],
           cguxb7am74dqhl31f: a['Currency'] ? options['Currency'][a['Currency']!] : undefined,
-          cnxiqgfm74drukl1j: a['Cash Delivery Mechanism'] ? options['Cash Delivery Mechanism'][a['Cash Delivery Mechanism']!] : undefined,
+          cnxiqgfm74drukl1j: a['Cash Delivery Mechanism']
+            ? options['Cash Delivery Mechanism'][a['Cash Delivery Mechanism']!]
+            : undefined,
           cns96rm74dvxy71u: a['Oblast'] ? 'ciok70dm4r8lp7f2' + ':' + a['Oblast'] : undefined,
           c1mu55wm74dwh0t1v: a['Raion'] ? 'c1v215km4s71ndl22' + ':' + a['Raion'] : undefined,
           c8gxbuvm74dxp151w: a['Hromada'] ? 'cu8n0g0m4s7y2p16b' + ':' + a['Hromada'] : undefined,
           c3w3q1jm74dyr3z1x: a['Settlement'] ? 'cyr4ry4m4s81hdd6v' + ':' + a['Settlement'] : undefined,
-          cnowra7m74e26yb21: a['Population Group'] ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!] : undefined,
+          cnowra7m74e26yb21: a['Population Group']
+            ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!]
+            : undefined,
           ccomu65m74e2xgo22: a['Total People Assisted'],
           c55sl1fm74e4gyl23: a['Girls (0-17)'],
           cruxt7xm74e669l24: a['Boys (0-17)'],
@@ -75,13 +90,19 @@ export namespace AiFslType {
           cjv2vbem74ef0i22a: a['Households Assisted'],
           cqypj9sm74elbee2b: a['New beneficiaries (assisted for the first time in 2025)'],
           cc9dpi3m74en0yg2d: a['Were these people reached in 2025 by another FSL sub-activity?']
-            ? options['Were these people reached in 2025 by another FSL sub-activity?'][a['Were these people reached in 2025 by another FSL sub-activity?']!]
+            ? options['Were these people reached in 2025 by another FSL sub-activity?'][
+                a['Were these people reached in 2025 by another FSL sub-activity?']!
+              ]
             : undefined,
-          cxmypsxm74erbao2f: a['If yes, which sub-activity'] ? 'caybsh0m4r95mfm198' + ':' + options['Indicators - FSL'][a['If yes, which sub-activity']!] : undefined,
+          cxmypsxm74erbao2f: a['If yes, which sub-activity']
+            ? 'caybsh0m4r95mfm198' + ':' + options['Indicators - FSL'][a['If yes, which sub-activity']!]
+            : undefined,
           cnzbyp9m74etytf2g: a['If yes, how many people received from both sub-activities'],
           cdhcrtym74f2x5x2k: a['Comment'],
           c1jpxpjm74f0pyh2i: a['HNRP Scope'] ? options['HNRP Scope'][a['HNRP Scope']!] : undefined,
-          cvdttxbm74f1upg2j: a['Outside HNRP Scope categories'] ? 'ch0e182m4vgc05r2' + ':' + options['Outside HNRP Scope categories'][a['Outside HNRP Scope categories']!] : undefined,
+          cvdttxbm74f1upg2j: a['Outside HNRP Scope categories']
+            ? 'ch0e182m4vgc05r2' + ':' + options['Outside HNRP Scope categories'][a['Outside HNRP Scope categories']!]
+            : undefined,
         },
       },
     ]
@@ -89,13 +110,19 @@ export namespace AiFslType {
 
   export const options = {
     Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
-    'FSLC Activity Planning Module (APM)': {},
+    'FSLC Activity Planning Module (APM)': {
+      'FSLC-DRC-00001': 'cptll80m7ytnmrp15a',
+      'FSLC-DRC-00002': 'cxthga8m7ystarl6i',
+    },
     'Indicators - FSL': {
       'Provision of market-based transitional cash and relief voucher assistance > # of individuals receiving market-based assistance to ensure their immediate access to food > Provision of market-based transitional relief voucher assistance > Cash/Voucher':
         'cbasp8bm74osbft4',
-      'Distribution of in-kind food assistance > # of individuals receiving in-kind food assistance to ensure their immediate access to food > General Food Distribution > In-kind': 'cr1uzgm74osbft5',
-      'Distribution of in-kind food assistance > # of individuals receiving in-kind food assistance to ensure their immediate access to food > Hot meals > In-kind': 'cf3vk9km74osbft6',
-      'Distribution of in-kind food assistance > # of individuals receiving in-kind food assistance to ensure their immediate access to food > Rapid Response Ration > In-kind': 'c9jfqzjm74osbft7',
+      'Distribution of in-kind food assistance > # of individuals receiving in-kind food assistance to ensure their immediate access to food > General Food Distribution > In-kind':
+        'cr1uzgm74osbft5',
+      'Distribution of in-kind food assistance > # of individuals receiving in-kind food assistance to ensure their immediate access to food > Hot meals > In-kind':
+        'cf3vk9km74osbft6',
+      'Distribution of in-kind food assistance > # of individuals receiving in-kind food assistance to ensure their immediate access to food > Rapid Response Ration > In-kind':
+        'c9jfqzjm74osbft7',
       'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Cereal seeds, seedlings, fertilizers, and hand tools > Cash/Voucher':
         'cih6ivzm74osbft8',
       'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Equipment and tools, such as greenhouses, irrigation systems, motor blocks, etc > Cash/Voucher':
@@ -104,7 +131,8 @@ export namespace AiFslType {
         'ci9eh7gm74osbfta',
       'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Vegetable seeds and seedlings and tools > Cash/Voucher':
         'cdhbquim74osbftb',
-      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Cereal seeds and tools > In-kind': 'cjcx4nim74osbftc',
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Cereal seeds and tools > In-kind':
+        'cjcx4nim74osbftc',
       'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Equipment and tools, such as greenhouses, irrigation systems, motor blocks, etc > In-kind':
         'clccfrwm74osbftd',
       'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Training on agricultural practice > Service':
@@ -117,7 +145,8 @@ export namespace AiFslType {
         'c5qb9v5m74osbfth',
       'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Beekeeping grant > Cash/Voucher':
         'cawvfuum74osbfti',
-      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock feed > Cash/Voucher': 'cqwmzc9m74osbftj',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock feed > Cash/Voucher':
+        'cqwmzc9m74osbftj',
       'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock health > Cash/Voucher':
         'cktsiu2m74osbftk',
       'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock kit grants > Cash/Voucher':
@@ -128,10 +157,14 @@ export namespace AiFslType {
         'c1q5kkom74osbftn',
       'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Poultry kit (feed, health, provision) > Cash/Voucher':
         'c9qptflm74osbfto',
-      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Beekeeping kit > Cash/Voucher': 'cvz4yxsm74osbftp',
-      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Beekeeping kit > In-kind': 'cougjiwm74osbftq',
-      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock feed > In-kind': 'cgy0sc8m74osbftr',
-      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock health > In-kind': 'chgxytem74osbfts',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Beekeeping kit > Cash/Voucher':
+        'cvz4yxsm74osbftp',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Beekeeping kit > In-kind':
+        'cougjiwm74osbftq',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock feed > In-kind':
+        'cgy0sc8m74osbftr',
+      'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock health > In-kind':
+        'chgxytem74osbfts',
       'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock provision / restocking > In-kind':
         'c70el2jm74osbftt',
       'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock shelter/barnes > In-kind':
@@ -172,7 +205,14 @@ export namespace AiFslType {
       'One-off': 'c2af6jlm74df2v110',
       Other: 'c70bsarm74df9m611',
     },
-    Unit: {Grams: 'cg8wld5m74djjk614', Kilograms: 'clcp65am74dk7vs16', Tons: 'ckhu31m74dkant17', Animals: 'cfo9yy2m74dkcyl18', Objects: 'cee14w2m74dkrm719', Trainings: 'cxdkkknm74dkvt01a'},
+    Unit: {
+      Grams: 'cg8wld5m74djjk614',
+      Kilograms: 'clcp65am74dk7vs16',
+      Tons: 'ckhu31m74dkant17',
+      Animals: 'cfo9yy2m74dkcyl18',
+      Objects: 'cee14w2m74dkrm719',
+      Trainings: 'cxdkkknm74dkvt01a',
+    },
     Currency: {EUR: 'ccn4ls7m74dqhl31e', UAH: 'cw900bfm74dr0m01g', USD: 'c7whof8m74dr2k81h'},
     'Cash Delivery Mechanism': {
       'ATM Card': 'csa8rhvm74drukl1i',
@@ -186,7 +226,10 @@ export namespace AiFslType {
       'Post Office': 'ckjvidrm74dtycg1r',
       'Other Mechanisms': 'c1qq0dzm74du3k61s',
     },
-    'Were these people reached in 2025 by another FSL sub-activity?': {Yes: 'cpsp477m74en0yg2c', No: 'c2rn16qm74epszt2e'},
+    'Were these people reached in 2025 by another FSL sub-activity?': {
+      Yes: 'cpsp477m74en0yg2c',
+      No: 'c2rn16qm74epszt2e',
+    },
     'HNRP Scope': {'Outside HNRP Scope': 'cci23kym74f0pyh2h'},
   }
 }

@@ -77,7 +77,15 @@ export namespace AiSnfiType {
 
   export const options = {
     Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
-    'SNFI 2025 APM': {'': 'cf4l4bem797vey53'},
+    'SNFI 2025 APM': {
+      'SNFI-DRC-00003': 'c1e4i22m7xattdq2',
+      'SNFI-DRC-00004': 'cpbol3jm7xcpal62',
+      'SNFI-DRC-00005': 'csd2ahnm7xdgzhi3',
+      'SNFI-DRC-00006': 'cpflc8mm7xdkfm64',
+      'SNFI-DRC-00007': 'cs1owlnm7xe8mq25',
+      'SNFI-DRC-00008': 'c2jnc3fm7xfhwdz6',
+      'SNFI-DRC-00009': 'coqp6ewm7xgn5l07',
+    },
     'Indicators - SNFI': {
       'Emergency Shelter Support > # supported with emergency shelter kits > cash-voucher': 'cgccvcom6f3xnh22',
       'Emergency Shelter Support > # supported with emergency construction materials > cash-voucher': 'cn67cnim6f3xnh23',

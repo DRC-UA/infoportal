@@ -23,7 +23,8 @@ export namespace AiFslcMapper {
   const getPlanCode = (_: DrcProject) => {
     return match(_)
       .cases({
-        // [DrcProject['UKR-000348 BHA3']]: 'FSLC-DRC-00001',
+        [DrcProject['UKR-000388 BHA']]: 'FSLC-DRC-00001',
+        [DrcProject['UKR-000372 ECHO3']]: 'FSLC-DRC-00002',
       })
       .default(() => aiInvalidValueFlag + _)
   }
@@ -79,7 +80,13 @@ export namespace AiFslcMapper {
                     })
                     .default(() => periodStr),
                   'Reporting Organization': 'Danish Refugee Council (DRC)',
-                  'Activity and indicator': 'TODO' as any,
+                  'Activity and indicator': match(activity).cases({
+                    [DrcProgram.SectoralCashForAgriculture]: 'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Multi purpose Agricultural grants or vouchers > Cash/Voucher',
+                    [DrcProgram.SectoralCashForAnimalShelterRepair]: 'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock shelter/barnes > Cash/Voucher',
+                    [DrcProgram.SectoralCashForAnimalFeed]: 'Provision of productive animal survival > # of individuals provided with emergency livestock inputs, contributing to their food consumption > Livestock health > Cash/Voucher',
+                    [DrcProgram.MSME]: 'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Emergency business grants > Cash/Voucher',
+                    [DrcProgram.VET]: 'Protection of emergency off-farm livelihoods > # of individuals provided with livelihoods assets restoration support, assistance in establishing small business, and skills enhancing employability > Vocational and reskilling training > Service',
+                  }).default(() => (aiInvalidValueFlag + activity) as any),
                   'Implementing Partner': 'Danish Refugee Council (DRC)',
                   'Activity Plan Code': getPlanCode(project) as never,
                   Oblast: oblast,

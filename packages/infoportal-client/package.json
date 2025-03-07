@@ -33,7 +33,7 @@
     "@types/react-dom": "^18.3.0",
     "@types/react-portal": "^4.0.7",
     "@types/recharts": "^1.8.24",
-    "activityinfo-sdk": "^1.1.8",
+    "activityinfo-sdk": "^1.1.9",
     "axios": "^1.6.5",
     "chai": "^5.1.1",
     "csvtojson": "^2.0.10",
