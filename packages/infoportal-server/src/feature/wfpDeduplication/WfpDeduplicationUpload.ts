@@ -37,7 +37,6 @@ export class WfpDeduplicationUpload {
     this.log.info('Clear database...')
     await this.prisma.mpcaWfpDeduplication.deleteMany()
     this.log.info('AssistanceProvided...')
-    // await Promise.all([
     await this.throttledFetchAndRun({
       fetch: (_) =>
         promiseRetry((retry, number) => {
@@ -115,7 +114,6 @@ export class WfpDeduplicationUpload {
         })
       },
     })
-    // ])
     this.log.info('mergePartiallyDuplicated')
     // await this.mergePartiallyDuplicated()
     this.log.info('setoblast')
@@ -231,22 +229,13 @@ export class WfpDeduplicationUpload {
       this.log.debug(`Update ${file.finishedAt} ${file.fileName}`)
       const office = possibleOffices.find((oblastCode) => file.fileName.includes(oblastCode))
       if (!office) console.warn(`Oblast not found for filename ${file.fileName}`)
-      const rows = await this.prisma.mpcaWfpDeduplication
-        .findMany({
-          select: {id: true, beneficiaryId: true},
-          orderBy: {createdAt: 'desc'},
-          skip: offset,
-          take: file.additionalInfo.rowCount * 2,
-        })
-        .then(function handleMultipleSupport(res) {
-          // If a benef is already supported by 2 NGOs, his record will be duplicated, one row per NGO
-          // So we should get file.additionalInfo.rowCount DISTINCT rows.
-          const unique = new Set()
-          return res.filter((_) => {
-            if (unique.size < file.additionalInfo.rowCount) unique.add(_.beneficiaryId)
-            return unique.has(_.beneficiaryId)
-          })
-        })
+      const rowsCount = file.additionalInfo.rowCount
+      const rows = await this.prisma.mpcaWfpDeduplication.findMany({
+        select: {id: true, beneficiaryId: true},
+        orderBy: {createdAt: 'desc'},
+        skip: offset,
+        take: rowsCount,
+      })
       const officeValue = office ? officeMapping[office] : null
       if (rows.length > 0) {
         await this.prisma.$executeRaw`
@@ -257,15 +246,7 @@ export class WfpDeduplicationUpload {
             WHERE "id" IN (${Prisma.join(rows.map((_) => _.id))})
         `
       }
-      // await this.prisma.mpcaWfpDeduplication.updateMany({
-      //   where: {id: {in: rows.map(_ => _.id)}},
-      //   data: {
-      //     office: office ? officeMapping[office] : undefined,
-      //     fileName: file.fileName,
-      //     fileUpload: new Date(file.finishedAt)
-      //   }
-      // })
-      offset += rows.length
+      offset += rowsCount
     }
   }
 }
