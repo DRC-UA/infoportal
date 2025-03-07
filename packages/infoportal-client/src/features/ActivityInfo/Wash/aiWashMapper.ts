@@ -10,7 +10,7 @@ import {Period} from 'infoportal-common'
 
 export namespace AiWashMapper {
   const planCodes = {
-    // [DrcProject['UKR-000342 Pooled Funds']]: 'WASH-DRC-00009',
+    [DrcProject['UKR-000270 Pooled Funds']]: 'WASH-DRC-00002',
   }
 
   const getPlanCode = (p: DrcProject): AiWashType.Type['Plan/Project Code'] => {
@@ -41,7 +41,7 @@ export namespace AiWashMapper {
                 {by: (_) => _.raion!},
                 {by: (_) => _.hromada!},
                 {by: (_) => _.settlement!},
-                {by: (_) => _.displacement!,},
+                {by: (_) => _.displacement!},
                 {by: (_) => _.activity!},
               ],
               finalTransform: async (
@@ -58,7 +58,8 @@ export namespace AiWashMapper {
                   'Plan/Project Code': getPlanCode(project),
                   'Implementing Partner': 'Danish Refugee Council (DRC)',
                   'Reporting Organization': 'Danish Refugee Council (DRC)',
-                  'Indictors': 'WASH NFI distributions (in-kind) > # of individuals benefiting from hygiene kit/items distribution (in-kind)',
+                  Indictors:
+                    'WASH NFI distributions (in-kind) > # of individuals benefiting from hygiene kit/items distribution (in-kind)',
                   'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
                   'Is the disaggregation by population group, gender and age known?': 'Yes',
                   'Population Group': AiMapper.mapPopulationGroup(displacement),
@@ -76,10 +77,13 @@ export namespace AiWashMapper {
                   periodStr,
                   index: i++,
                 })
-                const request = AiWashType.buildRequest({
-                  ...ai,
-                  ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
-                }, recordId)
+                const request = AiWashType.buildRequest(
+                  {
+                    ...ai,
+                    ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+                  },
+                  recordId,
+                )
                 return {
                   submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Settlement'], ai['Plan/Project Code']),
                   recordId,

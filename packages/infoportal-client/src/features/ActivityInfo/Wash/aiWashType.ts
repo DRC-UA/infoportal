@@ -2,6 +2,7 @@ export type AiWashType = AiWashType.Type
 
 export namespace AiWashType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
+
   export interface Type {
     'Plan/Project Code': Opt<'WASH APM 2025'>
     'Reporting Organization': Opt<'Partner'>
@@ -28,8 +29,8 @@ export namespace AiWashType {
     'Older Women (60+)': number
     'Older Men (60+)': number
     /**
-      Out of the total individuals reached
-    */
+     Out of the total individuals reached
+     */
     'People with disability'?: number
     'Name of items/services delivered'?: string
     'Quantity of items/services delivered'?: number
@@ -45,26 +46,40 @@ export namespace AiWashType {
         recordId,
         parentRecordId,
         fields: {
-          ckha5hmm6anb4ox4: a['Plan/Project Code'] ? 'c3skhwjm5l0iiy52' + ':' + options['WASH APM 2025'][a['Plan/Project Code']!] : undefined,
-          ccf86g8m6ann72c3: a['Reporting Organization'] ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Reporting Organization']!] : undefined,
-          cvgfaxrm6anoubg4: a['Implementing Partner'] ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner']!] : undefined,
+          ckha5hmm6anb4ox4: a['Plan/Project Code']
+            ? 'c3skhwjm5l0iiy52' + ':' + options['WASH APM 2025'][a['Plan/Project Code']!]
+            : undefined,
+          ccf86g8m6ann72c3: a['Reporting Organization']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Reporting Organization']!]
+            : undefined,
+          cvgfaxrm6anoubg4: a['Implementing Partner']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner']!]
+            : undefined,
           c24f2xmm6anw1206: a['Donor'] ? 'c3m2htlm4s9h25d16' + ':' + options['Donor'][a['Donor']!] : undefined,
-          cq68acdm6ao0qwm7: a['Indictors'] ? 'cywemjem4r94m7l196' + ':' + options['Indicators - WASH'][a['Indictors']!] : undefined,
+          cq68acdm6ao0qwm7: a['Indictors']
+            ? 'cywemjem4r94m7l196' + ':' + options['Indicators - WASH'][a['Indictors']!]
+            : undefined,
           cmlg59mm6ao2j8b9: a['Theme'] ? options['Theme'][a['Theme']!] : undefined,
           cir7cxwm6ao6gyab: a['Oblast'] ? 'ciok70dm4r8lp7f2' + ':' + a['Oblast'] : undefined,
           cx21763m6ao80uuc: a['Raion'] ? 'c1v215km4s71ndl22' + ':' + a['Raion'] : undefined,
           cdr0ffm6ao9nc5d: a['Hromada'] ? 'cu8n0g0m4s7y2p16b' + ':' + a['Hromada'] : undefined,
           cywrf8mm6aobi3me: a['Settlement'] ? 'cyr4ry4m4s81hdd6v' + ':' + a['Settlement'] : undefined,
-          cecsem8m6aof1cmg: a['Type of institution / Beneficiary'] ? options['Type of institution / Beneficiary'][a['Type of institution / Beneficiary']!] : undefined,
+          cecsem8m6aof1cmg: a['Type of institution / Beneficiary']
+            ? options['Type of institution / Beneficiary'][a['Type of institution / Beneficiary']!]
+            : undefined,
           cyzwskcm6aoi2mup: a['Facility Name'],
           cmgpxd2m6aol5y6r: a['Reporting Month'],
           cggbhakm6aoo988s: a['Activity Start month'],
           cbav6csm6aoouvwt: a['Activity End month'],
           cbsx2d2m6aqfz5bw: a['Is the disaggregation by population group, gender and age known?']
-            ? options['Is the disaggregation by population group, gender and age known?'][a['Is the disaggregation by population group, gender and age known?']!]
+            ? options['Is the disaggregation by population group, gender and age known?'][
+                a['Is the disaggregation by population group, gender and age known?']!
+              ]
             : undefined,
           ctvd758m6aqm0rwy: a['Total Reached (No Disaggregation)'],
-          cwwmg44m6aqpk8dz: a['Population Group'] ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!] : undefined,
+          cwwmg44m6aqpk8dz: a['Population Group']
+            ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!]
+            : undefined,
           ciob248m6ar3rfy10: a['Girls (0-17)'],
           c28ur4lm6ar4l3l11: a['Boys (0-17)'],
           cd9s6nwm6ar5opy12: a['Adult Women (18-59)'],
@@ -76,14 +91,16 @@ export namespace AiWashType {
           c2vdeg0m6ghnxki4: a['Quantity of items/services delivered'],
           c6oiwvzm6hr5puy2: a['Comments'],
           cwhkykam6f3aa9u4: a['HNRP Scope'] ? options['HNRP Scope'][a['HNRP Scope']!] : undefined,
-          c4fo3dem6f3c4nn5: a['Outside HNRP Scope sub-category'] ? 'ch0e182m4vgc05r2' + ':' + options['Outside HNRP Scope categories'][a['Outside HNRP Scope sub-category']!] : undefined,
+          c4fo3dem6f3c4nn5: a['Outside HNRP Scope sub-category']
+            ? 'ch0e182m4vgc05r2' + ':' + options['Outside HNRP Scope categories'][a['Outside HNRP Scope sub-category']!]
+            : undefined,
         },
       },
     ]
   }
 
   export const options = {
-    'WASH APM 2025': {'WASH-DRC-00001': 'c5jceofm7xgsnhy8'},
+    'WASH APM 2025': {'WASH-DRC-00001': 'c5jceofm7xgsnhy8', 'WASH-DRC-00002': 'ceb3t45m7z5hqhv2'},
     Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
     Donor: {
       'ACT Alliance (ACT)': 'cei9dbm4s9iiu9cm',
@@ -100,7 +117,8 @@ export namespace AiWashType {
       'Adventist Development and Relief Agency Inter-American Division (ADRA IAD)': 'clz6opqm4s9iiuacx',
       'Adventist Development and Relief Agency Netherlands (ADRA Netherlands)': 'cnmslh9m4s9iiuacy',
       'Adventist Development and Relief Agency Norway (ADRA Norway)': 'c8ixmaqm4s9iiuacz',
-      'Adventist Development and Relief Agency South America Division (ADRA South America Division)': 'c9i82sem4s9iiuad0',
+      'Adventist Development and Relief Agency South America Division (ADRA South America Division)':
+        'c9i82sem4s9iiuad0',
       'Adventist Development and Relief Agency Spain (ADRA Spain)': 'camfk9gm4s9iiuad1',
       'Adventist Development and Relief Agency Sweden (ADRA Sweden)': 'c40voedm4s9iiuad2',
       'Adventist Development and Relief Agency Switzerland (ADRA Switzerland)': 'c9ub71zm4s9iiuad3',
@@ -160,7 +178,8 @@ export namespace AiWashType {
       'Danish Refugee Council (DRC)': 'cdaselsm4s9iiucel',
       'Delegation of the European Union to Ukraine (EEAS)': 'cf4c50hm4s9iiucem',
       'Denmark, Government of (Denmark)': 'c72uhdcm4s9iiucen',
-      'Directorate General for Development Cooperation of the Ministry of Foreign Affairs and International Cooperation - Italy (DGDC/MFA Italy)': 'cx2sdiwm4s9iiudeo',
+      'Directorate General for Development Cooperation of the Ministry of Foreign Affairs and International Cooperation - Italy (DGDC/MFA Italy)':
+        'cx2sdiwm4s9iiudeo',
       'Disasters Emergency Committee (DEC)': 'ctgttasm4s9iiudep',
       'Dnipropetrovsk Regional Center of Psychosocial Support (DRCPS)': 'cqm8nj4m4s9iiudeq',
       'Development Center (DDC)': 'c4vkxslm4s9iiuder',
@@ -174,14 +193,16 @@ export namespace AiWashType {
       'Estonian Refugee Council (ERC)': 'c14dfa5m4s9iiudez',
       'Euro-Plus (Euro+)': 'c30tjy7m4s9iiudf0',
       'European Commission Humanitarian Aid Department and Civil Protection (ECHO)': 'csn15j6m4s9iiudf1',
-      "European Commission's Directorate-General for European Civil Protection and Humanitarian Aid Operations (DG ECHO)": 'cns6k4cm4s9iiudf2',
+      "European Commission's Directorate-General for European Civil Protection and Humanitarian Aid Operations (DG ECHO)":
+        'cns6k4cm4s9iiudf2',
       'European Programme for Integration and Migration (EPIM)': 'cwn1i4ym4s9iiudf3',
       'European Union (EU)': 'ckcg2k9m4s9iiudf4',
       'FHI 360 (FHI360)': 'c3gikdwm4s9iiudf5',
       'Faith, Hope, Love (FHL)': 'cwjl2lom4s9iiudf6',
       'Federal Agency for Technical Relief (THW Germany)': 'c1n04ygm4s9iiudf7',
       'Federal Ministry for Economic Cooperation and Development - Germany (BMZ)': 'cwkxllxm4s9iiudf8',
-      'Federal Public Service Foreign Affairs, Foreign Trade and Development Cooperation - Belgium (MFA Belgium)': 'c3ownqsm4s9iiudf9',
+      'Federal Public Service Foreign Affairs, Foreign Trade and Development Cooperation - Belgium (MFA Belgium)':
+        'c3ownqsm4s9iiudf9',
       'Finland, Government of (Finland)': 'cbckzqam4s9iiudfa',
       'First Ukrainian International Bank (PUMB)': 'c43n6rgm4s9iiuefb',
       'Foreign, Commonwealth & Development Office (FCDO)': 'c9av4rjm4s9iiuefc',
@@ -279,7 +300,8 @@ export namespace AiWashType {
       'OM International (OM International)': 'cbmuawpm4s9iiuhhw',
       'Oak Foundation (Oak)': 'cvzh9ffm4s9iiuhhx',
       'Office for Foreign Affairs - Principality of Liechtenstein (MFA Liechtenstein)': 'cwb3twqm4s9iiuhhy',
-      'Office of Weapons Removal and Abatement in the U.S. State Department’s Bureau of Political-Military Affairs (PM/WRA)': 'ct5sie2m4s9iiuhhz',
+      'Office of Weapons Removal and Abatement in the U.S. State Department’s Bureau of Political-Military Affairs (PM/WRA)':
+        'ct5sie2m4s9iiuhhz',
       'Office the Ukrainian Parliament Commissioner for Human Rights (Ombudsman)': 'cj0sgd0m4s9iiuhi0',
       "Ole Kirk's Foundation (OKF)": 'cbf3g7sm4s9iiuhi1',
       'Omaze (Omaze)': 'c5lhzcsm4s9iiuhi2',
@@ -330,7 +352,8 @@ export namespace AiWashType {
       'UBS (UBS)': 'ctevzgfm4s9ijd3jb',
       'UN Women (UNW)': 'cp12i7zm4s9ijd3jc',
       'USAID / Disaster Assistance Response Team (DART)': 'cmb2t1em4s9ijd3jd',
-      "USAID / U.S. Department of State's Bureau of Population, Refugees, and Migration (USAID-PRM)": 'cox4g97m4s9ijd3je',
+      "USAID / U.S. Department of State's Bureau of Population, Refugees, and Migration (USAID-PRM)":
+        'cox4g97m4s9ijd3je',
       'USAID Global Health Supply Chain Program (GHSC)': 'cc2uam0m4s9ijd3jf',
       "USAID's Bureau for Humanitarian Assistance (USAID/BHA)": 'c1vyg49m4s9ijd3jg',
       "USAID's Country Development Cooperation Strategies (CDCS-USAID)": 'ckot7ccm4s9ijd3jh',
@@ -530,7 +553,8 @@ export namespace AiWashType {
       'Global Communities (GC)': 'ce2dw9am4s9ijyqow',
       'Mennonite Central Committee Ukraine (MCCUA)': 'cnp260vm4s9ijyqox',
       'Aktion Mensch (AktionMensch)': 'crth65im4s9ijyqoy',
-      'Diaconia of the Evangelical Church of Czech Brethren – Center of Relief and Development (Diaconia ECCB – CRD)': 'ctpydj0m4s9ijyqoz',
+      'Diaconia of the Evangelical Church of Czech Brethren – Center of Relief and Development (Diaconia ECCB – CRD)':
+        'ctpydj0m4s9ijyqoz',
       'Representative Office of the German Adult Education Association (DVVInternational)': 'ca378sbm4s9ijyqp0',
       'The Tree of Life - Ukraine (TOL-UA)': 'cgvjbe9m4s9ijyqp1',
       'Alight (ALIGHT)': 'cc2lkudm4s9ijyqp2',
@@ -566,36 +590,55 @@ export namespace AiWashType {
       'United Jewish Appeal - Federation of New York (UJA)': 'c1fpez6m7ukhvdl4',
     },
     'Indicators - WASH': {
-      'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of machinery/equipment': 'ccrhtfnm6ukn8yu2',
+      'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of machinery/equipment':
+        'ccrhtfnm6ukn8yu2',
       'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of generators for water/wastewater service providers':
         'c4ouoyzm6ukn8yv3',
       'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of water treatment supplies (Chlorine, coagulants, etc.)':
         'ca5qivwm6ukn8yv4',
-      'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of leak detection equipment/training': 'clsv4ahm6ukn8yv5',
-      'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of water testing materials/equipment': 'chb7pemm6ukn8yv6',
-      'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of PPE/safety equipment': 'choxwodm6ukn8yv7',
-      'Emergency water supply > # of individuals benefiting from the new water source construction or rehabilitation (boreholes, wells, etc.)': 'cbba80bm6ukn8yv8',
-      'Emergency water supply > # of individuals benefiting from the distribution of household water treatment materials': 'c65wze9m6ukn8yv9',
-      'Emergency water supply > # of individuals benefiting from the installation / operation of water treatment units and temporary distribution systems': 'c2ehkyim6ukn8yva',
-      'Emergency water supply > # of individuals benefiting from the provision of bottled water / distribution of water bottles': 'ceuhdwwm6ukn8yvb',
+      'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of leak detection equipment/training':
+        'clsv4ahm6ukn8yv5',
+      'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of water testing materials/equipment':
+        'chb7pemm6ukn8yv6',
+      'Water & waste-water systems emergency support (i.e., support to Vodakanals) > # of individuals benefiting from the provision of PPE/safety equipment':
+        'choxwodm6ukn8yv7',
+      'Emergency water supply > # of individuals benefiting from the new water source construction or rehabilitation (boreholes, wells, etc.)':
+        'cbba80bm6ukn8yv8',
+      'Emergency water supply > # of individuals benefiting from the distribution of household water treatment materials':
+        'c65wze9m6ukn8yv9',
+      'Emergency water supply > # of individuals benefiting from the installation / operation of water treatment units and temporary distribution systems':
+        'c2ehkyim6ukn8yva',
+      'Emergency water supply > # of individuals benefiting from the provision of bottled water / distribution of water bottles':
+        'ceuhdwwm6ukn8yvb',
       'Emergency water supply > # of individuals benefiting from the provision of water trucking': 'c9clyhjm6ukn8yvc',
-      'Emergency water supply > # of individuals benefiting from the provision / installation of water storage tanks': 'cuynl4xm6ukn8yvd',
-      'Emergency water supply > # of individuals benefiting from the provision of jerry cans for household water storage': 'clierz5m6ukn8yve',
-      'WASH NFI distributions (cash or voucher) > # of individuals benefiting from hygiene kit/items distribution (cash or voucher)': 'cyk923lm6ukn8yvf',
-      'WASH NFI distributions (in-kind) > # of individuals benefiting from hygiene kit/items distribution (in-kind)': 'cfklmzwm6ukn8yvg',
-      'WASH NFI distributions (in-kind) > # of individuals benefiting from hygiene promotion activities': 'cjbn70om6ukn8yvh',
+      'Emergency water supply > # of individuals benefiting from the provision / installation of water storage tanks':
+        'cuynl4xm6ukn8yvd',
+      'Emergency water supply > # of individuals benefiting from the provision of jerry cans for household water storage':
+        'clierz5m6ukn8yve',
+      'WASH NFI distributions (cash or voucher) > # of individuals benefiting from hygiene kit/items distribution (cash or voucher)':
+        'cyk923lm6ukn8yvf',
+      'WASH NFI distributions (in-kind) > # of individuals benefiting from hygiene kit/items distribution (in-kind)':
+        'cfklmzwm6ukn8yvg',
+      'WASH NFI distributions (in-kind) > # of individuals benefiting from hygiene promotion activities':
+        'cjbn70om6ukn8yvh',
       'Water & waste-water systems Operation & Maintenance (O&M) and rehabilitation (i.e., support to Vodakanals) > # of individuals benefiting from the repair of existing centralized water system':
         'cevudbom6ukn8yvi',
       'Water & waste-water systems Operation & Maintenance (O&M) and rehabilitation (i.e., support to Vodakanals) > # of individuals benefiting from the rehabilitation of off-site sewage treatment, pumping stations or sewage networks':
         'cwr4z3tm6ukn8yvj',
       'Water & waste-water systems Operation & Maintenance (O&M) and rehabilitation (i.e., support to Vodakanals) > # of individuals benefiting from the repair of existing decentralized water systems (boreholes, wells, etc.) (operated by service providers only)':
         'czg44umm6ukn8yvk',
-      'Water & waste-water systems Operation & Maintenance (O&M) and rehabilitation (i.e., support to Vodakanals) > # of individuals trained': 'c2ppbc6m6ukn8yvl',
-      'District Heating systems repairs and rehabilitation > # of individuals assisted through the repairs/rehabilitation/improvment of centralized heating systems': 'crm6l8jm6ukn8yvm',
-      'District Heating systems repairs and rehabilitation > # of individuals assisted through the provision of equipment/materials for centralized heating systems': 'c4pd2inm6ukn8yvn',
-      'District Heating systems repairs and rehabilitation > # of individuals assisted through the supply of modular boiler houses for centralized heating systems': 'c8kots3m6ukn8yvo',
-      'District Heating systems repairs and rehabilitation > # of individuals assisted through the provision of co-generation units for heating systems': 'c8k3lcmm6ukn8yvp',
-      'District Heating systems repairs and rehabilitation > # of individuals assisted through the provision of generators for heating systems': 'cg9xsnem6ukn8yvq',
+      'Water & waste-water systems Operation & Maintenance (O&M) and rehabilitation (i.e., support to Vodakanals) > # of individuals trained':
+        'c2ppbc6m6ukn8yvl',
+      'District Heating systems repairs and rehabilitation > # of individuals assisted through the repairs/rehabilitation/improvment of centralized heating systems':
+        'crm6l8jm6ukn8yvm',
+      'District Heating systems repairs and rehabilitation > # of individuals assisted through the provision of equipment/materials for centralized heating systems':
+        'c4pd2inm6ukn8yvn',
+      'District Heating systems repairs and rehabilitation > # of individuals assisted through the supply of modular boiler houses for centralized heating systems':
+        'c8kots3m6ukn8yvo',
+      'District Heating systems repairs and rehabilitation > # of individuals assisted through the provision of co-generation units for heating systems':
+        'c8k3lcmm6ukn8yvp',
+      'District Heating systems repairs and rehabilitation > # of individuals assisted through the provision of generators for heating systems':
+        'cg9xsnem6ukn8yvq',
       'WASH interventions in institutions (i.e. schools, hospitals, and collective centers) > # of individuals benefiting from the sustainable connection or rehabilitation of water networks in facilities (incl. boreholes, water treatment equipment etc.)':
         'conu2yxm6ukn8yvr',
       'WASH interventions in institutions (i.e. schools, hospitals, and collective centers) > # of individuals benefitting from rehabilitation/installation of adequate sanitation facilities (e.g., toilets, showers & hot water boilers, wastewater, etc.)':
@@ -610,8 +653,10 @@ export namespace AiWashType {
         'ce8tqlzm6ukn8yvw',
       'WASH interventions in institutions (i.e. schools, hospitals, and collective centers) > # of individuals benefitting from training in IPC, (menstrual) hygiene promotion, WASH FIT, and related areas for improved facility management':
         'c8e5rnnm6ukn8yvx',
-      'Solid waste management support and repairs > # of individuals assisted through the provision of solid waste management materials / consumables (bins, bags, etc.)': 'ccnfx5sm6ukn8yvy',
-      'Solid waste management support and repairs > # of individuals assisted through support to solid waste collection / disposal services': 'cgjkaoym6ukn8yvz',
+      'Solid waste management support and repairs > # of individuals assisted through the provision of solid waste management materials / consumables (bins, bags, etc.)':
+        'ccnfx5sm6ukn8yvy',
+      'Solid waste management support and repairs > # of individuals assisted through support to solid waste collection / disposal services':
+        'cgjkaoym6ukn8yvz',
     },
     'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
     'Outside HNRP Scope categories': {
@@ -632,7 +677,10 @@ export namespace AiWashType {
       'Local authority': 'c2p1p2fm6aoh5v6n',
       'Other Institution': 'cl2ptykm6aohbjro',
     },
-    'Is the disaggregation by population group, gender and age known?': {Yes: 'cylxocm6aqfz58v', No: 'c1650k5m6aqj6zyx'},
+    'Is the disaggregation by population group, gender and age known?': {
+      Yes: 'cylxocm6aqfz58v',
+      No: 'c1650k5m6aqj6zyx',
+    },
     'HNRP Scope': {'Outside HNRP Scope': 'ckjb30sm6f3aa9u3'},
   }
 }
