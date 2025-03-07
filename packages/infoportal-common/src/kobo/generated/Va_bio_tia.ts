@@ -8,8 +8,8 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   '__IP__TRIGGER_EMAIL': string,
 	  // __IP__TRIGGER_EMAIL_Delegates [text] New va case
   '__IP__TRIGGER_EMAIL_Delegates': string | undefined,
-	  // sub_status [select_one] Approved
-  'sub_status': undefined | Option<'sub_status'>,
+	  // sub_status [select_multiple] Approved
+  'sub_status': undefined | Option<'sub_status'>[],
 	  // case_status [select_one] Paid status
   'case_status': undefined | Option<'case_status'>,
 	  // date_paid [date] Date Paid
@@ -125,6 +125,9 @@ responsible_drc_staff: {
 	'oksana_shokun': `Oksana SHOKUN`,
 	'olena_yarem': `Olena YAREM`,
 	'Anna_HROMA': `Anna HROMA`,
+	'nataliia_terokhina': `Nataliia Terokhina`,
+	'tetiana_serhieieva': `Tetiana Serhieieva`,
+	'maryna_novak': `Maryna Novak`,
 	'Olha_HORPENKO': `Olha HORPENKO`,
 	'valeriia_yakubenko': `Valeriia YAKUBENKO`,
 	'yuliia_pastushenko': `Yuliia PASTUSHENKO`,
@@ -135,6 +138,7 @@ responsible_drc_staff: {
 	'vadym_ivanov': `Vadym IVANOV`,
 	'svitlana_kotliar': `Svitlana KOTLIAR`,
 	'hanna_berkovska': `Hanna BERKOVSKA`,
+	'mariia_kozachko': `Mariia Kozachko`,
 	'oleksandr_basenko': `Oleksandr BASENKO`,
 	'yana_semetsova': `Yana SEMETSOVA`,
 	'yana_beskrovna': `Yana Beskrovna`,
@@ -146,6 +150,7 @@ agreed_protection_manager: {
 	'myroslava_kondakova': `Myroslava Kondakova`,
 	'juthi_ahmed': `Juthi Ahmed`,
 	'iryna_kylymena': `Iryna Kylymena`,
+	'ann_halsig': `Ann Halsig`,
 	'nataliia_sychak': `Nataliia Sychak`,
 	'robyn_shortall': `Robyn Shortall`
 },
@@ -2204,6 +2209,7 @@ const extractQuestionName = (_: Record<string, any>) => {
 
 export const map = (_: Record<keyof T, any>): T => ({
 	..._,
+	sub_status: _.sub_status?.split(' '),
 	date_paid: _.date_paid ? new Date(_.date_paid) : undefined,
 	receipt_number: _.receipt_number ? +_.receipt_number : undefined,
 	receipt_paid: _.receipt_paid ? new Date(_.receipt_paid) : undefined,
