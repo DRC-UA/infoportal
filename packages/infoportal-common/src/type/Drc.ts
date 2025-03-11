@@ -363,7 +363,15 @@ export class DrcProjectHelper {
   )
 
   static readonly extractCode = (str?: string): string | undefined => {
-    return str?.match(/UKR.?(000\d\d\d)/i)?.[1]
+    if (!str) return undefined
+
+    let match = str.match(/UKR.?(000\d\d\d)/i)
+    if (match) return match[1]
+
+    match = str.match(/(\d{3,})/)
+    if (match) return `000${match[1]}`
+
+    return undefined
   }
 
   static readonly searchCode = (value?: string): string | undefined => {
