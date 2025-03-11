@@ -44,6 +44,7 @@ import {
   Ecrec_vet_bha388,
   Partner_misto_syly,
   Va_bio_tia,
+  Protection_gbvPdm,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -291,6 +292,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('meal_nfiPdm').id,
           fnMapKobo: Meal_nfiPdm.map,
+          ...filters,
+        }),
+      ),
+      ...make('protection_gbvPdm', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('protection_gbvPdm').id,
+          fnMapKobo: Protection_gbvPdm.map,
           ...filters,
         }),
       ),

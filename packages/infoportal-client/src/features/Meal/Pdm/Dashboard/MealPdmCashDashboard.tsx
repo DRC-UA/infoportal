@@ -144,7 +144,7 @@ export const MealPdmCashDashboard = () => {
                 <PanelBody>
                   <AgeGroupTable
                     tableId="pdm-dashboard"
-                    persons={data.flatMap((_) => _.persons)}
+                    persons={data.flatMap((_) => _.persons).compact()}
                     enableDisplacementStatusFilter
                     enablePwdFilter
                   />

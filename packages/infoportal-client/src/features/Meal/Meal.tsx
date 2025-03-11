@@ -18,12 +18,13 @@ import {MealVisitDetails} from '@/features/Meal/Visit/MealVisitDetails'
 import {MealVerification} from '@/features/Meal/Verification/MealVerification'
 import {Access} from '@/core/sdk/server/access/Access'
 import {appConfig} from '@/conf/AppConfig'
-import {MealPdm} from '@/features/Meal/Pdm/MealPdm'
+import {MealPdm} from '@/features/Meal/Pdm/Dashboard/MealPdm'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {MealVerificationData} from '@/features/Meal/Verification/MealVerificationData'
-import {MealPdmCashDashboard} from '@/features/Meal/Pdm/MealPdmCashDashboard'
-import {MealPdmShelterDashboard} from '@/features/Meal/Pdm/MealPdmShelterDashboard'
-import {MealPdmNfiDashboard} from '@/features/Meal/Pdm/MealPdmNfiDashboard'
+import {MealPdmCashDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmCashDashboard'
+import {MealPdmShelterDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmShelterDashboard'
+import {MealPdmNfiDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmNfiDashboard'
+import {PdmGbvDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGbvDashboard'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -32,6 +33,7 @@ const relatedKoboForms: KoboFormName[] = [
   'meal_cashPdm',
   'meal_shelterPdm',
   'meal_nfiPdm',
+  'protection_gbvPdm',
 ]
 
 export const mealIndex = {
@@ -53,6 +55,7 @@ export const mealIndex = {
       cashPdmDashboard: `/pdm/cash/dashboard`,
       shelterPdmDashboard: `/pdm/shelter/dashboard`,
       nfiPdmDashboard: `/pdm/nfi/dashboard`,
+      gbvPdmDashboard: `/pdm/gbv/dashboard`,
     },
     form: (id: KoboFormName = ':id' as any) => '/form/' + id,
   },
@@ -125,6 +128,7 @@ const MealSidebar = ({
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_cashPdm'))} name="meal_cashPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_shelterPdm'))} name="meal_shelterPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_nfiPdm'))} name="meal_nfiPdm" />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('protection_gbvPdm'))} name="protection_gbvPdm" />
         </SidebarSection>
       </SidebarBody>
     </Sidebar>
@@ -147,7 +151,8 @@ export const Meal = () => {
               _.params?.koboFormId === KoboIndex.byName('meal_visitMonitoring').id ||
               _.params?.koboFormId === KoboIndex.byName('meal_cashPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('meal_shelterPdm').id ||
-              _.params?.koboFormId === KoboIndex.byName('meal_nfiPdm').id
+              _.params?.koboFormId === KoboIndex.byName('meal_nfiPdm').id ||
+              _.params?.koboFormId === KoboIndex.byName('protection_gbvPdm').id
             )
           })),
     }
@@ -181,6 +186,7 @@ export const Meal = () => {
           <Route path={mealIndex.siteMap.pdm.cashPdmDashboard} element={<MealPdmCashDashboard />} />
           <Route path={mealIndex.siteMap.pdm.shelterPdmDashboard} element={<MealPdmShelterDashboard />} />
           <Route path={mealIndex.siteMap.pdm.nfiPdmDashboard} element={<MealPdmNfiDashboard />} />
+          <Route path={mealIndex.siteMap.pdm.gbvPdmDashboard} element={<PdmGbvDashboard />} />
         </Route>
         <Route index element={<Navigate to={mealIndex.siteMap.visit.dashboard} />} />
         {relatedKoboForms.map((_) => (

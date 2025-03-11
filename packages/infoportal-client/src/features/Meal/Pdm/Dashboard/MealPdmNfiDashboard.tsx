@@ -26,7 +26,7 @@ export const MealPdmNfiDashboard = () => {
   const ctx = useMealPdmContext()
   const ctxSchema = useKoboSchemaContext()
   const schema = ctxSchema.byName.meal_nfiPdm.get!
-  const {shape: commonShape} = usePdmFilters(ctx.fetcherAnswers.get)
+  const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isNfiPdm))
   const langIndex = ctxSchema.langIndex
   const {m, formatDateTime, formatDate} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
@@ -171,7 +171,7 @@ export const MealPdmNfiDashboard = () => {
                 <PanelBody>
                   <AgeGroupTable
                     tableId="pdm-dashboard"
-                    persons={data.flatMap((_) => _.persons)}
+                    persons={data.flatMap((_) => _.persons).compact()}
                     enableDisplacementStatusFilter
                     enablePwdFilter
                   />
