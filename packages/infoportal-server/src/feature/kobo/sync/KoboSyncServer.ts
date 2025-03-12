@@ -201,7 +201,6 @@ export class KoboSyncServer {
         this.info(formId, `Handle delete ${tracker} - idsToDelete: ${previewList(idsToDelete)}`)
       }
       await chunkify({
-        concurrency: 1,
         data: idsToDelete,
         size: this.conf.db.maxPreparedStatementParams,
         fn: (ids) => {
