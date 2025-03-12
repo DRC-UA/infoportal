@@ -111,17 +111,9 @@ export class KoboSyncServer {
 
   readonly syncApiAnswersToDbByForm = async ({formId, updatedBy}: {formId: Kobo.FormId; updatedBy?: string}) => {
     try {
-      this.debug(formId, `Starting synchronization by ${updatedBy}...`)
-
-      console.log(`[DEBUG] Fetching form info for ${formId}`)
+      this.debug(formId, `Synchronizing by ${updatedBy}...`)
       await this.syncApiFormInfo(formId)
-      console.log(`[DEBUG] Form info for ${formId} fetched successfully`)
-
-      console.log(`[DEBUG] Fetching and syncing form answers for ${formId}`)
       const res = await this.syncApiFormAnswers(formId)
-      console.log(`[DEBUG] Form answers for ${formId} synced successfully:`, res)
-
-      console.log(`[DEBUG] Updating form metadata in Prisma for ${formId}`)
       await this.prisma.$transaction([
         this.prisma.koboForm.update({
           where: {id: formId},
@@ -131,25 +123,17 @@ export class KoboSyncServer {
           },
         }),
       ])
-      console.log(`[DEBUG] Form metadata updated for ${formId}`)
-
-      this.log.info(formId, `Synchronization by ${updatedBy}... COMPLETED.`)
-
+      this.log.info(formId, `Synchronizing by ${updatedBy}... COMPLETED.`)
       if (
         !this.conf.production ||
         res.answersIdsDeleted.length + res.answersUpdated.length + res.answersIdsDeleted.length > 0
       ) {
-        console.log(`[DEBUG] Emitting KOBO_FORM_SYNCHRONIZED event for ${formId}`)
         this.event.emit(GlobalEvent.Event.KOBO_FORM_SYNCHRONIZED, {formId})
       }
-
-      console.log(`[DEBUG] Clearing cache for ${formId}`)
       this.appCache.clear(AppCacheKey.KoboAnswers, formId)
       this.appCache.clear(AppCacheKey.KoboSchema, formId)
-      console.log(`[DEBUG] Cache cleared for ${formId}`)
     } catch (e) {
-      console.log(`[ERROR] Synchronization failed for ${formId}:`, e)
-      this.log.info(formId, `Synchronization by ${updatedBy}... FAILED.`)
+      this.log.info(formId, `Synchronizing by ${updatedBy}... FAILED.`)
       throw e
     }
   }
