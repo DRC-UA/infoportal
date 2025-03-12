@@ -71,7 +71,7 @@ export const useVictimData = () => {
   const data = seq(fetcherAnswer.get?.data) ?? []
 
   const dataFiltered = useMemo(() => {
-    return DataFilter.filterData(data, filterShape, optionFilter).filter((_) => PeriodHelper.isDateIn(period, _.date_paid))
+    return DataFilter.filterData(data, filterShape, optionFilter).filter((_) => PeriodHelper.isDateIn(period, _.date))
   }, [data, filterShape, optionFilter])
 
   useEffect(() => {
