@@ -679,6 +679,11 @@ export const en = Object.freeze({
       typeOfCasualties: 'Type of casualties',
       target: 'Target',
     },
+    hdp: {
+      assistance: 'Assistance',
+      incidents: 'Incidents',
+      location: 'Location by'
+    },
     snapshotProtMonito: {
       basicNeeds: `Basic Needs`,
       livelihood: `Livelihoods & Coping mechanisms`,

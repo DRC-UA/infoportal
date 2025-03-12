@@ -4,12 +4,10 @@ import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {useI18n} from '@/core/i18n'
 import {KoboIndex, Period, PeriodHelper} from 'infoportal-common'
 import {map, seq} from '@axanc/ts-utils'
-import {differenceInDays, subDays} from 'date-fns'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Va_bio_tia} from 'infoportal-common'
-import {previousPeriodDeltaDays} from '@/features/Safety/IncidentsDashboard/useSafetyIncidentData'
 import {appConfig} from '@/conf/AppConfig'
 
 export type UseVictimData = ReturnType<typeof useVictimData>
@@ -73,21 +71,8 @@ export const useVictimData = () => {
   const data = seq(fetcherAnswer.get?.data) ?? []
 
   const dataFiltered = useMemo(() => {
-    return DataFilter.filterData(data, filterShape, optionFilter)
+    return DataFilter.filterData(data, filterShape, optionFilter).filter((_) => PeriodHelper.isDateIn(period, _.date_paid))
   }, [data, filterShape, optionFilter])
-
-  const dataFilteredLastPeriod = useMemo(
-    () =>
-      map(period.start, period.end, (start, end) => {
-        const lastPeriod = {
-          start: start,
-          end: subDays(end, previousPeriodDeltaDays),
-        }
-        if (differenceInDays(end, start) <= previousPeriodDeltaDays) return
-        return data.filter((_) => PeriodHelper.isDateIn(lastPeriod, _.date))
-      }),
-    [dataFiltered],
-  )
 
   useEffect(() => {
     map(fetcherPeriod.get, setPeriod)
@@ -96,7 +81,6 @@ export const useVictimData = () => {
   return {
     data,
     dataFiltered,
-    dataFilteredLastPeriod,
     filterShape,
     fetcherAnswer,
     fetcherPeriod,

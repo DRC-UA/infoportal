@@ -1,20 +1,22 @@
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import React, {useMemo} from 'react'
+import React, {useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {useVictimContext} from '@/features/Victim/VictimContext'
 import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {format} from 'date-fns'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Seq, seq} from '@axanc/ts-utils'
+import {fnSwitch, Seq, seq} from '@axanc/ts-utils'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {OblastIndex, Va_bio_tia, KoboXmlMapper, KoboSubmissionFlat, KoboBaseTags} from 'infoportal-common'
 import {AgeGroupTable} from '@/shared'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
+import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 
 export const VictimDashboardBody = ({ data }: { data: Seq<KoboSubmissionFlat<Va_bio_tia.T, KoboBaseTags>> }) => {
   const {m, formatLargeNumber} = useI18n()
   const ctx = useVictimContext()
+  const [mapType, setMapType] = useState<'assistance' | 'incidents'>('assistance')
 
   const persons = useMemo(() => {
     return ctx.dataFiltered.flatMap((row) => KoboXmlMapper.Persons.va_bio_tia(row) ?? [])
@@ -82,16 +84,34 @@ export const VictimDashboardBody = ({ data }: { data: Seq<KoboSubmissionFlat<Va_
             </Panel>
           </Div>
           <Div column>
-            <Panel title={m.mpca.assistanceByLocation}>
+            <Panel title={m.hdp.location}>
               <PanelBody>
-                <MapSvgByOblast
-                  sx={{maxWidth: 480, margin: 'auto'}}
-                  fillBaseOn="value"
-                  data={ctx.dataFiltered}
-                  getOblast={(_) => OblastIndex.byKoboName(_.place_oblast)?.iso!}
-                  value={(_) => true}
-                  base={(_) => _.place_oblast !== undefined}
-                />
+                <ScRadioGroup value={mapType} onChange={setMapType} dense inline sx={{mb: 2}}>
+                  <ScRadioGroupItem dense hideRadio value="assistance" title={m.hdp.assistance} />
+                  <ScRadioGroupItem dense hideRadio value="incidents" title={m.hdp.incidents} />
+                </ScRadioGroup>
+                {fnSwitch(mapType, {
+                  assistance: (
+                    <MapSvgByOblast
+                      sx={{maxWidth: 480, margin: 'auto'}}
+                      fillBaseOn="value"
+                      data={ctx.dataFiltered}
+                      getOblast={(_) => OblastIndex.byKoboName(_.place_oblast)?.iso!}
+                      value={(_) => true}
+                      base={(_) => _.place_oblast !== undefined}
+                    />
+                  ),
+                  incidents: (
+                    <MapSvgByOblast
+                      sx={{maxWidth: 480}}
+                      fillBaseOn="value"
+                      data={ctx.dataFiltered}
+                      getOblast={(_) => OblastIndex.byKoboName(_.loc_oblast)?.iso!}
+                      value={(_) => true}
+                      base={(_) => _.loc_oblast !== undefined}
+                    />
+                  ),
+                })}
               </PanelBody>
             </Panel>
             <Panel title={m.disability}>

@@ -140,7 +140,7 @@ export class KoboAnswerSdk {
       case KoboIndex.byName('protection_gbvPdm').id:
         return Promise.resolve({start: new Date(2024, 6, 14), end: startOfDay(new Date())})
       case KoboIndex.byName('va_bio_tia').id:
-        return Promise.resolve({start: new Date(2024, 12, 26), end: startOfDay(new Date())})
+        return Promise.resolve({start: new Date(2024, 10, 24), end: startOfDay(new Date())})
       default:
         throw new Error('To implement')
     }
