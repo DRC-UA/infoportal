@@ -12,13 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@axanc/ts-utils": "2.3.1",
     "@supercharge/promise-pool": "^3.2.0",
     "@types/promise-retry": "^1.1.6",
     "@types/qs": "^6.9.15",
     "axios": "1.7.9",
     "date-fns": "4.1.0",
-    "kobo-sdk": "^1.1.4",
+    "kobo-sdk": "^2.1.2",
     "promise-retry": "^2.0.1",
     "qs": "^6.12.1",
     "winston": "^3.13.1"
