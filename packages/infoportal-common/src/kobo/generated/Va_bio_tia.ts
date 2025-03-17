@@ -14,7 +14,7 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'case_status': undefined | Option<'case_status'>,
 	  // date_paid [date] Date Paid
   'date_paid': Date | undefined,
-	  // receipt_number [integer] Receipt Amount
+	  // receipt_number [decimal] Receipt Amount
   'receipt_number': number | undefined,
 	  // receipt_paid [date] Receipt Date
   'receipt_paid': Date | undefined,
@@ -2211,7 +2211,6 @@ export const map = (_: Record<keyof T, any>): T => ({
 	..._,
 	sub_status: _.sub_status?.split(' '),
 	date_paid: _.date_paid ? new Date(_.date_paid) : undefined,
-	receipt_number: _.receipt_number ? +_.receipt_number : undefined,
 	receipt_paid: _.receipt_paid ? new Date(_.receipt_paid) : undefined,
 	bio_date_birth: _.bio_date_birth ? new Date(_.bio_date_birth) : undefined,
 	bio_date_incident: _.bio_date_incident ? new Date(_.bio_date_incident) : undefined,
