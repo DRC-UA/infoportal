@@ -2,6 +2,7 @@ import {KoboClient} from 'kobo-sdk'
 import {appConf} from './appConf'
 import winston from 'winston'
 import {ActivityInfoBuildType} from './ActivityInfoBuildType'
+import {FixKoboMigration} from './kobo-migration/20250113-fixKoboMigration'
 
 export const koboSdkHumanitarian = new KoboClient({
   urlv1: appConf.kobo.humanitarian.urlV1,
@@ -19,7 +20,8 @@ export const koboSdkDrc = new KoboClient({
 ;(async () => {
   // await FixKoboMigration.resetWrongMigration()
   // await FixKoboMigration.MissingSubmissions.run()
-  await new ActivityInfoBuildType().buildAll()
+  // await FixKoboMigration.Tags.run()
+  // await new ActivityInfoBuildType().buildAll()
   // await new BuildKoboType().build('ecrec_msme_bha388')
   // await new BuildKoboType().build('ecrec_vet2_dmfa')
 })()

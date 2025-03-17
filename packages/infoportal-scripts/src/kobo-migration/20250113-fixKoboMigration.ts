@@ -67,46 +67,46 @@ export namespace FixKoboMigration {
         {id: 'aJaGLvGEdpYWk5ift8k87y', done: true}, //	11911 meal_cfmExternal
         {id: 'aN3Y8JeH2fU3GthrWAs9FG', done: true}, //	4326 meal_cfmInternal
         {id: 'aTP5nwZjpyR7oy7bdMZktC', done: true}, //	4338 shelter_ta
-        {id: 'aKgX4MNs6gCemDQKPeXxY8', done: false}, //	31504 bn_re
-        {id: 'aL8oHMzJJ9soPepvK6YU9E', done: false}, //	4690 shelter_nta
-        {id: 'a4bgAsLLag7HTjjY3pSLT7', done: false}, //	1
-        {id: 'a4iDDoLpUJHbu6cwsn2fnG', done: false}, //	207
-        {id: 'a4Sx3PrFMDAMZEGsyzgJJg', done: false}, //	8050
-        {id: 'a52hN5iiCW73mxqqfmEAfp', done: false}, //	1
-        {id: 'a5kgQdqZLLNTLSmC8DK7Eq', done: false}, //	46
-        {id: 'a5Noq6Wf9a8aE2cmi74FyS', done: false}, //	2
-        {id: 'a62ZpworuN4nFLznsUej8r', done: false}, //	229
-        {id: 'a8JXohrBDqTdCc86Ysz26r', done: false}, //	118
-        {id: 'a9CjhyhTKVojCdArKmw9yM', done: false}, //	95
-        {id: 'aAJNkn7v9fRL2XqQCgEkXf', done: false}, //	3
-        {id: 'aCPdwVnnsYeReynJ7YnLGH', done: false}, //	75
-        {id: 'aDmHHT6QzBSwwy9WZcTRrM', done: false}, //	5014
-        {id: 'adpuqZypnqHb8LNfX49iA5', done: false}, //	1953
-        {id: 'aE5md7RfHiy4LJmddoFAQH', done: false}, //	10101
-        {id: 'aEwY33SAtdayNTeHoiJfdg', done: false}, //	1722
-        {id: 'affnm5MBjwADExT9SH6Eng', done: false}, //	3
-        {id: 'ag34YtGDQiW5FstyAxzy5P', done: false}, //	117
-        {id: 'ag6n7kQk7vps4MYjjVoja8', done: false}, //	1
-        {id: 'aGGGapARnC2ek7sA6SuHmu', done: false}, //	1907
-        {id: 'aHr7429Q2n2YvBBJunx7b9', done: false}, //	119
-        {id: 'ajNzDaUuLkcEvjQhVsAmao', done: false}, //	664
-        {id: 'aKvvsPDBHyrZt4tZPWBsQL', done: false}, //	4
-        {id: 'aLEGqicGyzkZCeCYeWqEyG', done: false}, //	3959
-        {id: 'aMJL9DG8qEcULqTZTKQbrq', done: false}, //	4793
-        {id: 'aNRJbxkYEH2yogyeNowXzS', done: false}, //	56
-        {id: 'aoJppKLX7QvSkMYokUfEjB', done: false}, //	248
-        {id: 'aPaTzi4QaCUu9F4oci4iit', done: false}, //	4
-        {id: 'apn6HTbCJgwzrrGAywJdp2', done: false}, //	1
-        {id: 'aQCGR2fESUNFMYKVHMyAET', done: false}, //	9279
-        {id: 'aQDZ2xhPUnNd43XzuQucVR', done: false}, //	3063
-        {id: 'aQgRrYdwHuvWbj23LpywPF', done: false}, //	342
-        {id: 'aQHBhYgevdzw8TR2Vq2ZdR', done: false}, //	960
-        {id: 'aQkWZkWjVpJsqZ3tYtuwFZ', done: false}, //	957
-        {id: 'aSK3rbp4gbRWmaGUL5eN5v', done: false}, //	531
-        {id: 'aVKUygTUFUYktC89rAoy5Y', done: false}, //	2
-        {id: 'awpFpKtZZYEDuaZbqPi944', done: false}, //	218
-        {id: 'awYf9G3sZB4grG8S4w3Wt8', done: false}, //	1605
-        {id: 'axkkzwvccFtUkkL3BzSSnW', done: false}, //	476
+        {id: 'aKgX4MNs6gCemDQKPeXxY8', done: true}, //	31504 bn_re
+        {id: 'aL8oHMzJJ9soPepvK6YU9E', done: true}, //	4690 shelter_nta
+        {id: 'a4bgAsLLag7HTjjY3pSLT7', done: true}, //	1
+        {id: 'a4iDDoLpUJHbu6cwsn2fnG', done: true}, //	207
+        {id: 'a4Sx3PrFMDAMZEGsyzgJJg', done: true}, //	8050
+        {id: 'a52hN5iiCW73mxqqfmEAfp', done: true}, //	1
+        {id: 'a5kgQdqZLLNTLSmC8DK7Eq', done: true}, //	46
+        {id: 'a5Noq6Wf9a8aE2cmi74FyS', done: true}, //	2
+        {id: 'a62ZpworuN4nFLznsUej8r', done: true}, //	229
+        {id: 'a8JXohrBDqTdCc86Ysz26r', done: true}, //	118
+        {id: 'a9CjhyhTKVojCdArKmw9yM', done: true}, //	95
+        {id: 'aAJNkn7v9fRL2XqQCgEkXf', done: true}, //	3
+        {id: 'aCPdwVnnsYeReynJ7YnLGH', done: true}, //	75
+        {id: 'aDmHHT6QzBSwwy9WZcTRrM', done: true}, //	5014
+        {id: 'adpuqZypnqHb8LNfX49iA5', done: true}, //	1953
+        {id: 'aE5md7RfHiy4LJmddoFAQH', done: true}, //	10101
+        {id: 'aEwY33SAtdayNTeHoiJfdg', done: true}, //	1722
+        {id: 'affnm5MBjwADExT9SH6Eng', done: true}, //	3
+        {id: 'ag34YtGDQiW5FstyAxzy5P', done: true}, //	117
+        {id: 'ag6n7kQk7vps4MYjjVoja8', done: true}, //	1
+        {id: 'aGGGapARnC2ek7sA6SuHmu', done: true}, //	1907
+        {id: 'aHr7429Q2n2YvBBJunx7b9', done: true}, //	119
+        {id: 'ajNzDaUuLkcEvjQhVsAmao', done: true}, //	664
+        {id: 'aKvvsPDBHyrZt4tZPWBsQL', done: true}, //	4
+        {id: 'aLEGqicGyzkZCeCYeWqEyG', done: true}, //	3959
+        {id: 'aMJL9DG8qEcULqTZTKQbrq', done: true}, //	4793
+        {id: 'aNRJbxkYEH2yogyeNowXzS', done: true}, //	56
+        {id: 'aoJppKLX7QvSkMYokUfEjB', done: true}, //	248
+        {id: 'aPaTzi4QaCUu9F4oci4iit', done: true}, //	4
+        {id: 'apn6HTbCJgwzrrGAywJdp2', done: true}, //	1
+        {id: 'aQCGR2fESUNFMYKVHMyAET', done: true}, //	9279
+        {id: 'aQDZ2xhPUnNd43XzuQucVR', done: true}, //	3063
+        {id: 'aQgRrYdwHuvWbj23LpywPF', done: true}, //	342
+        {id: 'aQHBhYgevdzw8TR2Vq2ZdR', done: true}, //	960
+        {id: 'aQkWZkWjVpJsqZ3tYtuwFZ', done: true}, //	957
+        {id: 'aSK3rbp4gbRWmaGUL5eN5v', done: true}, //	531
+        {id: 'aVKUygTUFUYktC89rAoy5Y', done: true}, //	2
+        {id: 'awpFpKtZZYEDuaZbqPi944', done: true}, //	218
+        {id: 'awYf9G3sZB4grG8S4w3Wt8', done: true}, //	1605
+        {id: 'axkkzwvccFtUkkL3BzSSnW', done: true}, //	476
       ]
 
       const prisma = new PrismaClient()
