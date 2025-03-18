@@ -6,18 +6,9 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "outDir": "./lib",
-    "typeRoots": [
-      "../../node_modules/@types",
-      "./node_modules/@types",
-      "./src/typings"
-    ],
     "paths": {
-      "infoportal-common/*": [
-        "../infoportal-common/src/*"
-      ],
-      "*": [
-        "./*"
-      ]
+      "infoportal-common/*": ["../infoportal-common/src/*"],
+      "*": ["./*"]
     }
   },
   "references": [
@@ -28,7 +19,5 @@
   "ts-node": {
     "files": true
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
