@@ -14,7 +14,6 @@ const shortcutsItems: PickersShortcutsItem<DateRange<Date>>[] = (() => {
       label: format(currentDate, 'MMMM yyyy'),
       getValue: () => [startOfMonth(currentDate), endOfMonth(currentDate)],
     }
-    // }).concat({label: 'Reset', getValue: () => [null, null]})
   })
 })()
 
@@ -23,6 +22,13 @@ const toDateRange = (_?: [Date | undefined, Date | undefined]): DateRange<Date> 
   return [start ?? null, end ?? null]
 }
 
+const revertNulls = (_?: [Date | null, Date | null]): [Date | undefined, Date | undefined] => {
+  const [start, end] = _ ?? []
+  return [start ?? undefined, end ?? undefined]
+}
+
+type DateChangeHandler = (range: DateRange<Date>) => void
+
 export const PeriodPickerMui = ({
   min,
   max,
@@ -30,10 +36,11 @@ export const PeriodPickerMui = ({
   value,
   onChange,
   label,
-  fullWidth,
+  fullWidth = true,
   sx,
-  ...props
 }: PeriodPickerProps) => {
+  const handleChange: DateChangeHandler = (range: DateRange<Date>) => onChange(revertNulls(range))
+
   return (
     <DateRangePicker
       minDate={min}
@@ -42,19 +49,18 @@ export const PeriodPickerMui = ({
       sx={{mb: -0.25, mt: -0.5, ...sx}}
       defaultValue={toDateRange(defaultValue)}
       value={toDateRange(value)}
-      onChange={onChange as any}
+      onChange={handleChange}
       slotProps={{
         textField: {
           size: 'small',
           variant: 'outlined',
           margin: 'dense',
           sx: {minWidth: 218, ...sx},
-          fullWidth: true,
+          fullWidth,
         },
         shortcuts: {items: shortcutsItems},
       }}
       slots={{field: SingleInputDateRangeField}}
-      // slots={{field: () => <SingleInputDateRangeField margin="dense" variant="outlined" sx={{minWidth: 115}} fullWidth/>}}
     />
   )
 }
@@ -89,7 +95,6 @@ const BrowserMultiInputDateRangeField = React.forwardRef<HTMLDivElement, any>((p
     startDate: {sectionListRef: startRef, ...startDateProps},
     endDate: {sectionListRef: endRef, ...endDateProps},
   } = useMultiInputDateRangeField({
-    // } = useMultiInputDateRangeField<Date, MultiInputFieldSlotTextFieldProps>({
     sharedProps: {
       value,
       defaultValue,
@@ -129,13 +134,15 @@ const BrowserMultiInputDateRangeField = React.forwardRef<HTMLDivElement, any>((p
         variant="outlined"
         fullWidth
         size="small"
-        InputLabelProps={{shrink: true}}
-        {...startDateProps}
         sx={{minWidth: 115, marginRight: '-1px'}}
-        InputProps={{
-          ...startDateProps.InputProps,
-          sx: {borderBottomRightRadius: 0, borderTopRightRadius: 0},
+        slotProps={{
+          inputLabel: {shrink: true},
+          input: {
+            ...startDateProps.InputProps,
+            sx: {borderBottomRightRadius: 0, borderTopRightRadius: 0},
+          },
         }}
+        {...startDateProps}
         inputRef={startRef}
       />
       <TextField
@@ -145,12 +152,14 @@ const BrowserMultiInputDateRangeField = React.forwardRef<HTMLDivElement, any>((p
         fullWidth
         size="small"
         sx={{minWidth: 115}}
-        InputLabelProps={{shrink: true}}
-        {...endDateProps}
-        InputProps={{
-          ...endDateProps.InputProps,
-          sx: {borderBottomLeftRadius: 0, borderTopLeftRadius: 0},
+        slotProps={{
+          inputLabel: {shrink: true},
+          input: {
+            ...endDateProps.InputProps,
+            sx: {borderBottomLeftRadius: 0, borderTopLeftRadius: 0},
+          },
         }}
+        {...endDateProps}
         inputRef={endRef}
       />
     </Box>

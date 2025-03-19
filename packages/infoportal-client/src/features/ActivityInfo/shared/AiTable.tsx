@@ -93,8 +93,9 @@ export const AiBundleTable = ({
         header={
           <Box sx={{display: 'flex', alignItems: 'center', flex: 1}}>
             <PeriodPicker
-              defaultValue={[period.start, period.end]}
+              value={[period.start, period.end]}
               onChange={([start, end]) => setPeriod({start, end})}
+              fullWidth={false}
               max={endOfMonth(new Date())}
             />
             {header}
