@@ -1,21 +1,20 @@
-import {useAppSettings} from '@/core/context/ConfigContext'
 import {useMemo} from 'react'
+import {map, Seq, seq} from '@axanc/ts-utils'
+import {Kobo} from 'kobo-sdk'
+
+import {KoboIndex, OblastIndex, ShelterContractorPrices, ShelterTaPriceLevel, KoboXmlMapper} from 'infoportal-common'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
 import {useAsync} from '@/shared/hook/useAsync'
-import {DrcOffice, KoboIndex, OblastIndex, ShelterContractorPrices, ShelterTaPriceLevel} from 'infoportal-common'
-import {fnSwitch, map, Seq, seq} from '@axanc/ts-utils'
 import {FetchParams} from '@/shared/hook/useFetcher'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {ShelterEntity} from '@/features/Shelter/shelterEntity'
-import {Kobo} from 'kobo-sdk'
-import {KoboXmlMapper} from 'infoportal-common'
 
 export type UseShelterData = ReturnType<typeof useShelterData>
 
 export const useShelterData = () => {
   const {api} = useAppSettings()
   const ctxAnswers = useKoboAnswersContext()
-  // const req = () => api.shelter.search().then(_ => _.data)
-  // const fetcher = useFetcher(req)
   const fetcherNta = ctxAnswers.byName('shelter_nta')
   const fetcherTa = ctxAnswers.byName('shelter_ta')
 
@@ -87,17 +86,6 @@ export const useShelterData = () => {
       },
       {} as Record<Kobo.SubmissionId, number>,
     )
-    // const index: Record<'all' | 'nta' | 'ta', Record<Kobo.SubmissionId, number>> = {
-    //   all: {},
-    //   nta: {},
-    //   ta: {},
-    // }
-    // fetcher.get.forEach((_, i) => {
-    //   index.all[_.id] = i
-    //   if (_.nta) index.all[_.nta.id] = i
-    //   if (_.ta) index.all[_.ta.id] = i
-    // })
-    // return index
   }, [mappedData])
 
   const asyncSyncAnswers = useAsync(async () => {
