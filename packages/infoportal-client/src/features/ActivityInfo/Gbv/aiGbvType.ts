@@ -153,7 +153,6 @@ export namespace AiGbvType {
         'Advocacy on GBV issues > # of GBV advocacy interventions undertaken with decision-makers and communities':
           'chntanum6g8dljqp',
       },
-      'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
     }
   }
 }
