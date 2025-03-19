@@ -2,7 +2,7 @@ import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionT
 import {IKoboMeta, Period, Person} from 'infoportal-common'
 import {fnSwitch} from '@axanc/ts-utils'
 import {format} from 'date-fns'
-import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
+import {AiFslType} from '@/features/ActivityInfo/Fslc/aiFslcType'
 import {aiLocationMap} from 'activityinfo-sdk/location-map'
 import {UaLocation} from 'ua-location'
 
@@ -47,9 +47,7 @@ export namespace AiMapper {
     }
   }
 
-  export const mapPopulationGroup = (
-    _?: Person.DisplacementStatus,
-  ): AiGbvType.AiTypeActivitiesAndPeople['Population Group'] => {
+  export const mapPopulationGroup = (_?: Person.DisplacementStatus): AiFslType.Type['Population Group'] => {
     return fnSwitch(
       _!,
       {
