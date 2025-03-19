@@ -22,8 +22,8 @@ export namespace Shelter_nta {
     ben_det_hromada: undefined | string
     // Meta_data/ben_det_res_stat [select_one] Select residential status
     ben_det_res_stat: undefined | Option<'ben_det_res_stat'>
-    // Shelter_Damage/damage_hostilities [select_one] Is the damage a result of ongoing hostilities?
-    damage_hostilities: undefined | Option<'pregnant_lac'>
+    // Shelter_Damage/damage_hostilities [select_one] What is the Condition of the building/ Apartment:
+    damage_hostilities: undefined | Option<'damage_hostilities'>
     // Shelter_Damage/damage_note [note] ℹ️ Because of limited financial resources in the project, it’s important to note that participating in this initial assessment does not guarantee that assistance will be provided.
     damage_note: string
     // Shelter_Damage/resident_available [select_one] Please confirm that the resident of the shelter is available in the next three months and grants access to DRC for the rehabilitation work
@@ -95,6 +95,16 @@ export namespace Shelter_nta {
     pd_picture4: string
     // House_Details/pd_picture5 [image] Picture of personal documents
     pd_picture5: string
+    // House_Details/pd_picture6 [image] Picture of personal documents
+    pd_picture6: string
+    // House_Details/pd_picture7 [image] Picture of personal documents
+    pd_picture7: string
+    // House_Details/pd_picture8 [image] Picture of personal documents
+    pd_picture8: string
+    // House_Details/pd_picture9 [image] Picture of personal documents
+    pd_picture9: string
+    // House_Details/pd_picture10 [image] Picture of personal documents
+    pd_picture10: string
     // House_Details/pay_det_tax_id_num [text] Individual tax number of the person with whom the contract will be signed ?
     pay_det_tax_id_num: string | undefined
     // House_Details/pay_det_tax_id_ph [image] Take a photo of the Tax ID
@@ -143,6 +153,10 @@ export namespace Shelter_nta {
     picture_agreement: string
     // House_Details/picture_agreement1 [image] Picture of tenancy agreement
     picture_agreement1: string
+    // House_Details/picture_agreement2 [image] Picture of tenancy agreement
+    picture_agreement2: string
+    // House_Details/picture_agreement3 [image] Picture of tenancy agreement
+    picture_agreement3: string
     // House_Details/tenancy_present_later [select_one] If no, can you present it later?
     tenancy_present_later: undefined | Option<'rehab_solo'>
     // House_Details/why_not_available [text] If the document is not available, please explain why
@@ -172,11 +186,33 @@ export namespace Shelter_nta {
       | undefined
     // House_Details/hh_char_hhh_care_child [select_one] Do you take care of the child/children yourself?
     hh_char_hhh_care_child: undefined | Option<'pregnant_lac'>
+    // winterization_requirements/primary_heating [select_one] What is the primary of heating in the apartment/house?
+    primary_heating: undefined | Option<'primary_heating'>
+    // winterization_requirements/primary_heating_other [text] Other
+    primary_heating_other: string | undefined
+    // winterization_requirements/mold_interior_surfaces [select_one] Do you have mold on interior surfaces (walls, ceilings, and floor)?
+    mold_interior_surfaces: undefined | Option<'pregnant_lac'>
+    // winterization_requirements/mold_interior_surfaces_yes [select_multiple] If Yes, which of the following?
+    mold_interior_surfaces_yes: undefined | Option<'mold_interior_surfaces_yes'>[]
+    // winterization_requirements/main_interior_surfaces [select_multiple] What is the main cause of mold in the interior surfaces?
+    main_interior_surfaces: undefined | Option<'main_interior_surfaces'>[]
+    // winterization_requirements/main_interior_surfaces_other [text] Other
+    main_interior_surfaces_other: string | undefined
+    // winterization_requirements/visible_cracks_external_walls [select_one] Are there any visible cracks in the external walls?
+    visible_cracks_external_walls: undefined | Option<'pregnant_lac'>
+    // winterization_requirements/photo_cracks [image] Photos of cracks in the outer walls?
+    photo_cracks: string
+    // winterization_requirements/cracks_fixed_adhesive [select_one] Are the cracks too severe to be fixed with adhesive?
+    cracks_fixed_adhesive: undefined | Option<'pregnant_lac'>
+    // winterization_requirements/external_walls_thermal_insulation [select_one] Do the external walls have thermal insulation?”
+    external_walls_thermal_insulation: undefined | Option<'pregnant_lac'>
+    // winterization_requirements/attic_insulated [select_one] Does the roof have insulation?
+    attic_insulated: undefined | Option<'pregnant_lac'>
     // Technical/damage_type_quality [note] Specify the type and quantity of damage
     damage_type_quality: string
     // Technical/roof_damage [select_one] Is the roof damaged?
     roof_damage: undefined | Option<'rehab_solo'>
-    // Technical/window_number [integer] How many windows are damaged?
+    // Technical/window_number [integer] How many windows need to be replaced (Only external) because damaged or quality?
     window_number: number | undefined
     // Technical/glazed_number_house [integer] What is the number of damaged double-glazed or three-glazed windows
     glazed_number_house: number | undefined
@@ -184,6 +220,8 @@ export namespace Shelter_nta {
     external_brick_damage: undefined | Option<'rehab_solo'>
     // Technical/damag_house_entrance [select_one] Is there damage to the household entrance door?
     damag_house_entrance: undefined | Option<'rehab_solo'>
+    // Technical/number_damag_house_entrance [integer] How many external doors need to be replaced because damaged or old?
+    number_damag_house_entrance: number | undefined
     // Technical/interior_door_damage [integer] How many interior doors have been damaged?
     interior_door_damage: number | undefined
     // Technical/wall_cracks [select_one] Are there any cracks on the indoor walls?
@@ -210,7 +248,7 @@ export namespace Shelter_nta {
     total_damage_medium: string
     // Technical/total_damage_heavy [note] 🔴🔴🔴 Heavy damaged
     total_damage_heavy: string
-    // Technical/apartment_window [integer] How many windows are damaged?
+    // Technical/apartment_window [integer] How many windows need to be replaced (Only external) because damaged or quality?
     apartment_window: number | undefined
     // Technical/glazed_number_apartment [integer] What is the number of damaged double-glazed or three-glazed windows
     glazed_number_apartment: number | undefined
@@ -218,6 +256,8 @@ export namespace Shelter_nta {
     apartment_balcony: number | undefined
     // Technical/apartment_entrance [select_one] Is there damage to the apartment entrance door?
     apartment_entrance: undefined | Option<'rehab_solo'>
+    // Technical/number_apartment_entrance [integer] How many external doors need to be replaced because damaged or old?
+    number_apartment_entrance: number | undefined
     // Technical/top_floor [select_one] Do you live on the top floor of the apartment?
     top_floor: undefined | Option<'rehab_solo'>
     // Technical/roof_type [select_one] Is the roof flat or non-flat?
@@ -270,6 +310,26 @@ export namespace Shelter_nta {
     pictures_apt_damage9: string
     // Technical/pictures_apt_damage10 [image] Photo of the damage to the house
     pictures_apt_damage10: string
+    // Technical/pictures_apt_damage11 [image] Photo of the damage to the house
+    pictures_apt_damage11: string
+    // Technical/pictures_apt_damage12 [image] Photo of the damage to the house
+    pictures_apt_damage12: string
+    // Technical/pictures_apt_damage13 [image] Photo of the damage to the house
+    pictures_apt_damage13: string
+    // Technical/pictures_apt_damage14 [image] Photo of the damage to the house
+    pictures_apt_damage14: string
+    // Technical/pictures_apt_damage15 [image] Photo of the damage to the house
+    pictures_apt_damage15: string
+    // Technical/pictures_apt_damage16 [image] Photo of the damage to the house
+    pictures_apt_damage16: string
+    // Technical/pictures_apt_damage17 [image] Photo of the damage to the house
+    pictures_apt_damage17: string
+    // Technical/pictures_apt_damage18 [image] Photo of the damage to the house
+    pictures_apt_damage18: string
+    // Technical/pictures_apt_damage19 [image] Photo of the damage to the house
+    pictures_apt_damage19: string
+    // Technical/pictures_apt_damage20 [image] Photo of the damage to the house
+    pictures_apt_damage20: string
     // Technical/rehab_solo [select_one] Do you see yourself capable and willing to rehabilitate the shelter yourswelf in case DRC only provides the required materials and tools?
     rehab_solo: undefined | Option<'rehab_solo'>
     // Technical/modality [select_one] What kind of support modality would you prefer?
@@ -334,8 +394,6 @@ export namespace Shelter_nta {
     calc_ret: string
     // Displacement/calc_na [calculate] Not Applicable
     calc_na: string
-    // Socio_economic_Vulnerability/hh_char_dis_note [note] **3.3 The next set of questions ask about difficulties you or members of your household may have doing certain activities.**
-    hh_char_dis_note: string
     // Socio_economic_Vulnerability/hh_char_dis_select [select_multiple] Please select any of the below that apply to you or a member of your household
     hh_char_dis_select: undefined | Option<'hh_char_dis_select'>[]
     // Socio_economic_Vulnerability/see_number [integer] How many household individuals struggle with seeing
@@ -481,6 +539,8 @@ export namespace Shelter_nta {
     owner_tenant_type: {
       owner: `Owner`,
       tenant: `Tenant`,
+      idp_residing: `IDP residing in dwelling and hosted`,
+      close_relative: `Close relative to owner and hosted`,
     },
     dwelling_type: {
       house: `House`,
@@ -536,6 +596,7 @@ export namespace Shelter_nta {
       mykola_zemliuk: `Mykola Zemliuk`,
       serhii_fedirko: `Serhii Fedirko`,
       yaroslav_bilyk: `Yaroslav Bilyk`,
+      olena_bychkova: `Olena Bychkova`,
       VS: `Viktoriia Stepanenko`,
       AS: `Andrii Stovpchenko`,
       VS1: `Valeriy Shapovalov`,
@@ -552,6 +613,8 @@ export namespace Shelter_nta {
       serhii_tymofieiev: `Serhii Tymofieiev`,
       serhii_kashyra: `Serhii Kashyra`,
       iryna_zhyfarska: `Iryna Zhyfarska`,
+      nadiia_konoval: `Nadiia Konoval`,
+      oleksandr_narsieiev: `Oleksandr Narsieiev`,
       ext1: `extra1`,
       ext2: `extra2`,
       KL: `Klym Oleksandr`,
@@ -568,6 +631,7 @@ export namespace Shelter_nta {
       anastasiia_honcharuk: `Anastasiia Honcharuk`,
       anton_marchenko: `Anton Marchenko`,
       anton_rozhanskyi: `Anton Rozhanskyi`,
+      yevhen_perepechyn: `Yevhen Perepechyn`,
       ext1_slo: `extra1`,
       ext2_slo: `extra2`,
     },
@@ -593,6 +657,40 @@ export namespace Shelter_nta {
       bank_card: `C = Bank card`,
       other_pay: `D = Other Payment Method`,
       none_pay: `E = None of the above fit my needs`,
+    },
+    primary_heating: {
+      centralized_system: `Centralized system`,
+      gas: `Gas heating`,
+      electrical_fixed: `Electrical heating (Fixed)`,
+      electrical_portable: `Electrical heating (portable)`,
+      solid_fuel: `Solid fuel`,
+      other: `Other`,
+    },
+    mold_interior_surfaces_yes: {
+      external_walls: `External walls`,
+      celling: `Ceiling`,
+      floor: `Floor`,
+    },
+    main_interior_surfaces: {
+      cracks_external_walls: `Big cracks in external walls`,
+      roof_leaking: `Roof leaking`,
+      sewage_leaking: `Sewage leaking`,
+      water_pipes_leaking: `Water pipes leaking`,
+      leaking_windows_doors: `Water leaking from the windows / doors`,
+      other: `Other`,
+    },
+    undefined: {
+      flat: `Flat roof`,
+      stanted: `Slanted roof`,
+      wooden_flooring: `Wooden flooring`,
+      concrete_flooring_linoleum: `Concrete flooring covered with Linoleum`,
+      concrete_flooring_tiles: `Concrete flooring covered with tiles`,
+      other: `Other`,
+    },
+    damage_hostilities: {
+      yes: `Damaged because of the ongoing hostilities.`,
+      poor_condition: `Substandard/Old housing in poor condition.`,
+      no: `NO damage`,
     },
     ben_det_oblast: {
       crimea: `Autonomous Republic of Crimea`,
@@ -622,7 +720,7 @@ export namespace Shelter_nta {
       zhytomyrska: `Zhytomyr`,
       sevastopol: `Sevastopol`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}
@@ -652,12 +750,16 @@ export namespace Shelter_nta {
         _['hh_char_hh_det_dis_select'] = _.hh_char_hh_det_dis_select?.split(' ')
         return _
       }),
+      mold_interior_surfaces_yes: _.mold_interior_surfaces_yes?.split(' '),
+      main_interior_surfaces: _.main_interior_surfaces?.split(' '),
       window_number: _.window_number ? +_.window_number : undefined,
       glazed_number_house: _.glazed_number_house ? +_.glazed_number_house : undefined,
+      number_damag_house_entrance: _.number_damag_house_entrance ? +_.number_damag_house_entrance : undefined,
       interior_door_damage: _.interior_door_damage ? +_.interior_door_damage : undefined,
       apartment_window: _.apartment_window ? +_.apartment_window : undefined,
       glazed_number_apartment: _.glazed_number_apartment ? +_.glazed_number_apartment : undefined,
       apartment_balcony: _.apartment_balcony ? +_.apartment_balcony : undefined,
+      number_apartment_entrance: _.number_apartment_entrance ? +_.number_apartment_entrance : undefined,
       interior_apt_door_damage: _.interior_apt_door_damage ? +_.interior_apt_door_damage : undefined,
       ben_det_ph_number_l: _.ben_det_ph_number_l ? +_.ben_det_ph_number_l : undefined,
       hh_char_dis_select: _.hh_char_dis_select?.split(' '),
