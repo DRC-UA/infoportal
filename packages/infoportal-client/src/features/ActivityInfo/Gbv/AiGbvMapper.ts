@@ -1,4 +1,5 @@
 import {DrcProject, DrcSector, groupBy, IKoboMeta, KoboMetaStatus, Period, PeriodHelper} from 'infoportal-common'
+
 import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
@@ -14,6 +15,7 @@ export namespace AiGbvMapper2 {
     [DrcProject['UKR-000372 ECHO3']]: 'GBV-DRC-00002',
     [DrcProject['UKR-000363 UHF8']]: 'GBV-DRC-00001',
     [DrcProject['UKR-000355 Danish MFA']]: 'GBV-DRC-00003',
+    [DrcProject['UKR-000386 Pooled Funds']]: 'GBV-DRC-00004',
   } as any
 
   export const req =
@@ -94,14 +96,13 @@ export namespace AiGbvMapper2 {
     const res: {activity: AiGbvType.AiTypeActivitiesAndPeople; data: IKoboMeta[]}[] = []
     groupBy({
       data,
-      groups: [{by: (_) => _.activity!}, {by: (_) => _.displacement!}],
-      finalTransform: (grouped, [activity, displacement]) => {
+      groups: [{by: (_) => _.activity!}],
+      finalTransform: (grouped, [activity]) => {
         const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons).compact())
         res.push({
           data: grouped,
           activity: {
             'Non-individuals Reached/Quantity': grouped.length,
-            'Population Group': AiMapper.mapPopulationGroup(displacement),
             'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
             Indicators: match(activity)
               .cases({

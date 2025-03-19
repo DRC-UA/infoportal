@@ -32,14 +32,16 @@ export namespace Protection_gbv {
     activity: undefined | Option<'activity'>[]
     // gi/activity_other [text] If "Other", please specify
     activity_other: string | undefined
-    // gi/basic [text] Basic/Essential dignity kits
+    // gi/basic [integer] Basic/Essential dignity kits
     basic: number | undefined
-    // gi/elderly [text] Elderly dignity kits
+    // gi/elderly [integer] Elderly dignity kits
     elderly: number | undefined
-    // gi/winter [text] Winter dignity kits
+    // gi/winter [integer] Winter dignity kits
     winter: number | undefined
-    // gi/kit_other [text] Other dignity kits
+    // gi/kit_other [integer] Other dignity kits
     kit_other: number | undefined
+    // gi/kit_total [note] Total distributed kits
+    kit_total: string
     // gi/distribute [select_one] Type of distribution
     distribute: undefined | Option<'distribute'>
     // gi/distributor [select_one] Who distributed the kits?
@@ -135,7 +137,8 @@ export namespace Protection_gbv {
       danida: `UKR-000347 (Danida)`,
       '355_dfma': `UKR-000355 (DFMA)`,
       uhf8: `UKR-000363 (UHF VIII)`,
-      '371_echo': `UKR-000371 (ECHO)`,
+      ukr000372_echo3: `UKR-000372 (ECHO)`,
+      ukr000386_pooled_funds: `UKR-000386 (Pooled Funds)`,
     },
     location: {
       wgssd: `Women and Girls Safe Space (operated by DRC)`,
@@ -242,6 +245,10 @@ export namespace Protection_gbv {
       date: _.date ? new Date(_.date) : undefined,
       extra_staff_code: _.extra_staff_code?.split(' '),
       activity: _.activity?.split(' '),
+      basic: _.basic ? +_.basic : undefined,
+      elderly: _.elderly ? +_.elderly : undefined,
+      winter: _.winter ? +_.winter : undefined,
+      kit_other: _.kit_other ? +_.kit_other : undefined,
       new_ben_yes: _.new_ben_yes ? +_.new_ben_yes : undefined,
       numb_part: _.numb_part ? +_.numb_part : undefined,
       hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {

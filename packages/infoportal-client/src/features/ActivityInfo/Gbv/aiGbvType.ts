@@ -2,7 +2,6 @@ export type AiGbvType = AiGbvType.Type
 
 export namespace AiGbvType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
     ID?: string
     'Reporting Organization': Opt<'Partner'>
@@ -54,7 +53,12 @@ export namespace AiGbvType {
 
   export const options = {
     Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
-    'Activity Planning Module (GBV)': {'GBV-DRC-00001': 'cttpclmm7ueb7126', 'GBV-DRC-00002': 'cdr8jq1m7ui9n4s7', 'GBV-DRC-00003': 'cbsvmkpm7uk5x6lc'},
+    'Activity Planning Module (GBV)': {
+      'GBV-DRC-00001': 'cttpclmm7ueb7126',
+      'GBV-DRC-00002': 'cdr8jq1m7ui9n4s7',
+      'GBV-DRC-00003': 'cbsvmkpm7uk5x6lc',
+      'GBV-DRC-00004': 'crwci9mm8fsg4422',
+    },
     'Response Theme': {'No specific theme': 'crfw0hkm4wiqb94f'},
   }
 
@@ -62,11 +66,9 @@ export namespace AiGbvType {
 
   export namespace AiTypeActivitiesAndPeople {
     type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
     export interface Type {
       'Reporting Month': string
       Indicators: Opt<'Indicators - Protection'>
-      'Population Group': Opt<'Population Group'>
       'Total Individuals Reached': number
       'Girls (0-17)': number
       'Boys (0-17)': number
@@ -76,8 +78,8 @@ export namespace AiGbvType {
       'Older Men (60+)': number
       'Non-individuals Reached/Quantity': number
       /**
-       Out of the total individuals reached
-       */
+      Out of the total individuals reached
+    */
       'People with Disability'?: number
     }
 
@@ -91,9 +93,6 @@ export namespace AiGbvType {
             c9znya5m6j1fwro6: a['Reporting Month'],
             ckgn2n6m4wk2393o: a['Indicators']
               ? 'ctica5gm4r928td16' + ':' + options['Indicators - Protection'][a['Indicators']!]
-              : undefined,
-            cc9whaum4wl74eb12: a['Population Group']
-              ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!]
               : undefined,
             cxcth1bm4wk7dvms: a['Total Individuals Reached'],
             ce79tc4m4wkdpd4t: a['Girls (0-17)'],
