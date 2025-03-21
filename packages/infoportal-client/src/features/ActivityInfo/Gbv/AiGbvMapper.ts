@@ -27,8 +27,8 @@ export namespace AiGbvMapper2 {
           sectors: [DrcSector.GBV],
           status: [KoboMetaStatus.Committed],
         })
-        .then((_) => _.data.filter((_) => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
-        .then((_) => mapActivity(_, periodStr))
+        .then(({data}) => data.filter((record) => PeriodHelper.isDateIn(period, record.lastStatusUpdate)))
+        .then((filteredData) => mapActivity(filteredData, periodStr))
     }
 
   const mapActivity = async (data: IKoboMeta[], periodStr: string): Promise<Bundle[]> => {
@@ -96,14 +96,15 @@ export namespace AiGbvMapper2 {
     const res: {activity: AiGbvType.AiTypeActivitiesAndPeople; data: IKoboMeta[]}[] = []
     groupBy({
       data,
-      groups: [{by: (_) => _.activity!}],
-      finalTransform: (grouped, [activity]) => {
+      groups: [{by: (_) => _.activity!}, {by: (_) => _.displacement!}],
+      finalTransform: (grouped, [activity, displacement]) => {
         const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons).compact())
         res.push({
           data: grouped,
           activity: {
             'Non-individuals Reached/Quantity': grouped.length,
             'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
+            'Population Group': AiMapper.mapPopulationGroup(displacement),
             Indicators: match(activity)
               .cases({
                 WGSS: 'Support through Women and Girls Safe Spaces (WGSS) > # of women and girls who participated in skill-building, recreational, or livelihood (including vocational education) activities in women and girls safe spaces',
@@ -111,7 +112,7 @@ export namespace AiGbvMapper2 {
                   'Dignity kits to GBV survivors and those at-risk > # of women and girls at risk who received dignity kits',
                 AwarenessRaisingSession:
                   'Conduct awareness raising campaigns on GBV > # of individuals reached with awareness-raising activities and GBV-lifesaving information',
-                PSS: 'GBV hotline > # of individuals who received services through hotlines (excluding PSS and legal aid)',
+                PSS: 'Psychosocial (mobile & static) support to GBV survivors and those at-risk > # of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE minimum standards (not including recreational activities)',
                 CapacityBuilding:
                   'Capacity Building of GBV service providers to deliver in accordance with the GBViE minimum standards > # of GBV service providers trained to deliver services in accordance with the GBViE minimum standards',
               })
