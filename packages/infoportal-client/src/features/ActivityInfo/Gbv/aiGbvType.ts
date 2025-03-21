@@ -69,6 +69,7 @@ export namespace AiGbvType {
     export interface Type {
       'Reporting Month': string
       Indicators: Opt<'Indicators - Protection'>
+      'Population Group': Opt<'Population Group'>
       'Total Individuals Reached': number
       'Girls (0-17)': number
       'Boys (0-17)': number
@@ -93,6 +94,9 @@ export namespace AiGbvType {
             c9znya5m6j1fwro6: a['Reporting Month'],
             ckgn2n6m4wk2393o: a['Indicators']
               ? 'ctica5gm4r928td16' + ':' + options['Indicators - Protection'][a['Indicators']!]
+              : undefined,
+            cc9whaum4wl74eb12: a['Population Group']
+              ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!]
               : undefined,
             cxcth1bm4wk7dvms: a['Total Individuals Reached'],
             ce79tc4m4wkdpd4t: a['Girls (0-17)'],
@@ -153,6 +157,7 @@ export namespace AiGbvType {
         'Advocacy on GBV issues > # of GBV advocacy interventions undertaken with decision-makers and communities':
           'chntanum6g8dljqp',
       },
+      'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
     }
   }
 }

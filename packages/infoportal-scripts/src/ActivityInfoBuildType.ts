@@ -1,6 +1,7 @@
-import {AiBuilder} from 'activityinfo-sdk'
-import {appConf} from './appConf'
 import {Obj} from '@axanc/ts-utils'
+import {AiBuilder} from 'activityinfo-sdk'
+
+import {appConf} from './appConf'
 
 export class ActivityInfoBuildType {
   constructor(
