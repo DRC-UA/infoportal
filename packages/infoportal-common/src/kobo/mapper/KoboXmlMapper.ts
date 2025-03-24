@@ -25,6 +25,7 @@ import {
   Shelter_cashForShelter,
   Shelter_nta,
   Va_bio_tia,
+  Meal_winterizationPdm,
 } from '../generated/index.js'
 import {Person} from '../../type/Person.js'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -677,6 +678,38 @@ export namespace KoboXmlMapper {
           () => undefined,
         ),
         displacement: person.displacement,
+        disability: person.disability,
+      }))
+    }
+
+    export const winter_pdm = (_: Meal_winterizationPdm.T): Person.Details[] => {
+      return [
+        {
+          age: _.age,
+          sex: _.sex!,
+          displacement: _.status_person!,
+          disability: undefined,
+        },
+      ].map((person) => ({
+        age: person.age,
+        gender: fnSwitch(
+          person.sex,
+          {
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+            pnd: Person.Gender.Other,
+          },
+          () => undefined,
+        ),
+        displacement: fnSwitch(
+          person.displacement,
+          {
+            idp: Person.DisplacementStatus.Idp,
+            long: Person.DisplacementStatus.NonDisplaced,
+            returnee: Person.DisplacementStatus.Returnee,
+          },
+          () => undefined,
+        ),
         disability: person.disability,
       }))
     }
