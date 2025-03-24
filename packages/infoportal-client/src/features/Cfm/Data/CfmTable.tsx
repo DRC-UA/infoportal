@@ -508,6 +508,56 @@ export const CfmTable = ({}: any) => {
             },
             {
               type: 'select_one',
+              head: m._cfm.subcat,
+              id: 'subcategory',
+              render: (row) => {
+                if (row.form !== CfmDataSource.Internal) {
+                  return {value: undefined, option: undefined, label: null}
+                }
+
+                const prefixMap: Record<string, string> = {
+                  apprec_com: '0.',
+                  request_info: '1.',
+                  request_assistance: '2.',
+                  non_s_feedback: '3.',
+                  sen_feedback: '4.',
+                  coc: '5.',
+                  violation_other: '6.',
+                  sen_safety: '7.',
+                }
+
+                const prefix = prefixMap[row.category ?? ''] ?? ''
+                const allOptions = Obj.entries(Meal_cfmInternal.options.sub_category)
+
+                const filteredOptions = allOptions
+                  .filter(([_, label]) => label.startsWith(prefix))
+                  .map(([value, label]) => ({
+                    value,
+                    children: label,
+                  }))
+
+                return {
+                  value: row.sub_category,
+                  option: filteredOptions.find((opt) => opt.value === row.sub_category)?.children,
+                  label: (
+                    <IpSelectSingle
+                      value={row.sub_category ?? ''}
+                      onChange={(newValue) => {
+                        ctxKoboUpdate.asyncUpdateById.answer.call({
+                          formId: row.formId,
+                          answerIds: [row.id],
+                          question: 'sub_category',
+                          answer: newValue,
+                        })
+                      }}
+                      options={filteredOptions}
+                    />
+                  ),
+                }
+              },
+            },
+            {
+              type: 'select_one',
               head: m._cfm.feedbackTypeExternal,
               id: 'feedbackTypeExternal',
               // options: () => Obj.entries(m._cfm._feedbackType).map(([k, v]) => ({value: k, label: v})),
