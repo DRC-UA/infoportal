@@ -93,6 +93,7 @@ export type CfmData = {
   readonly oblast: OblastName
   readonly oblastIso: OblastISO
   readonly category?: Meal_cfmInternal.T['feedback_type']
+  readonly sub_category?: Meal_cfmInternal.T['sub_category']
   readonly external_prot_support?: Meal_cfmExternal.T['prot_support']
   readonly benef_origin?: Meal_cfmInternal.T['benef_origin']
   // internal_project_code?: Meal_CfmInternal.T['project_code']
@@ -180,7 +181,7 @@ export const CfmProvider = ({
         const res: CfmData[] = []
         external.data.forEach((_) => {
           const category = _.tags?.feedbackTypeOverride
-          res.push({
+            res.push({
             category,
             project: _.tags?.project,
             priority: KoboMealCfmHelper.feedbackType2priority(category),

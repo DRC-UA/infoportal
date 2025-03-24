@@ -853,6 +853,7 @@ export const en = Object.freeze({
         request: 'Request',
         complaint: 'Complaint',
       },
+      subcat: 'Subcategory',
       priority: 'Rank',
       openTicketsHigh: 'High priority',
       openTickets: 'Open tickets',
