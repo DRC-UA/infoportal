@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {Box, BoxProps, SwipeableDrawer, Switch} from '@mui/material'
 import {useLayoutContext} from '../LayoutContext'
 import {layoutConfig} from '../index'
@@ -44,6 +44,8 @@ export const Sidebar = ({
   const {isMobileWidth, sidebarOpen, setSidebarOpen, sidebarPinned, setSidebarPinned} = useLayoutContext()
   const {m} = useI18n()
 
+  const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
     // Element has been re-created by SwipeableDrawer, thus variable point to nothing.
     sidebar = null
@@ -53,6 +55,7 @@ export const Sidebar = ({
   }, [isMobileWidth, sidebarPinned])
 
   useEffect(() => {
+    setMounted(true)
     if (headerId) {
       stickSidebarToHeader(id, headerId)
       window.addEventListener('scroll', () => stickSidebarToHeader(id, headerId), {
@@ -60,10 +63,11 @@ export const Sidebar = ({
         passive: true,
       })
     }
-  }, [])
+  }, [mounted])
 
   const isTemporary = isMobileWidth || !sidebarPinned
 
+  if (!mounted) return
   return (
     <SwipeableDrawer
       ModalProps={{

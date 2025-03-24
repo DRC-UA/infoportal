@@ -13,7 +13,6 @@ import {getMsalInstance} from '@/core/msal'
 import {DRCLogo} from '@/shared/logo/logo'
 import {EmotionCache} from '@emotion/react'
 import {ModalProvider} from '@/shared/Modal/ModalProvider'
-import createEmotionCache from '@/core/createEmotionCache'
 import Head from 'next/head'
 import {LocalizationProvider} from '@mui/x-date-pickers-pro'
 import {AdapterDateFns} from '@mui/x-date-pickers-pro/AdapterDateFnsV3'
@@ -34,8 +33,6 @@ const api = new ApiSdk(
     baseUrl: appConfig.apiURL,
   }),
 )
-
-const clientSideEmotionCache = createEmotionCache()
 
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
@@ -124,7 +121,7 @@ const AppWithBaseContext = ({Component, pageProps}: AppProps) => {
       </CenteredContent>
     )
   }
-  return <Component {...pageProps} />
+  return <Component {...pageProps} suppressHydrationWarning={true} />
 }
 
 export default App
