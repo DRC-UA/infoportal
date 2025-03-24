@@ -1,5 +1,5 @@
 import {alpha, Box, BoxProps, GlobalStyles, useTheme} from '@mui/material'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {layoutConfig} from '@/shared/Layout'
 import {map} from '@axanc/ts-utils'
 
@@ -19,20 +19,12 @@ const redesignHeaderOnTop = (headerId: string) => {
   }
 }
 
-const generalStyles = (
-  <GlobalStyles
-    styles={(t) => ({
-      [`.${headerStickyClass}`]: {
-        boxShadow: t.shadows[4],
-        background: alpha(t.palette.background.paper, 0.5),
-      },
-    })}
-  />
-)
-
 export const AppHeaderContainer = ({children, sx, ...props}: BoxProps) => {
   const t = useTheme()
+  const [hydrated, setHydrated] = useState(false)
+
   useEffect(() => {
+    setHydrated(true) // Prevents SSR mismatch
     header$ = null
     map(props.id, (id) => {
       const fn = () => redesignHeaderOnTop(id)
@@ -43,10 +35,19 @@ export const AppHeaderContainer = ({children, sx, ...props}: BoxProps) => {
 
   return (
     <>
-      {generalStyles}
-      {/*<Slide direction="down" in={true} mountOnEnter unmountOnExit>*/}
+      {/* Global styles moved inside component */}
+      <GlobalStyles
+        styles={{
+          [`.${headerStickyClass}`]: {
+            boxShadow: t.shadows[4],
+            background: alpha(t.palette.background.paper, 0.5),
+          },
+        }}
+      />
+
       <Box
         {...props}
+        className={hydrated ? undefined : headerStickyClass} // Prevents hydration mismatch
         sx={{
           position: 'sticky',
           top: 0,
