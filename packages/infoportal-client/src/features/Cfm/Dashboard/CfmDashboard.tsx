@@ -152,12 +152,14 @@ export const CfmDashboard = () => {
         before={
           <>
             <PeriodPicker
+              value={[period.start, period.end]}
               defaultValue={[period.start, period.end]}
               onChange={([start, end]) => {
                 setPeriod((prev) => ({...prev, start, end}))
               }}
               label={[m.start, m.endIncluded]}
               max={today}
+              fullWidth={false}
             />
           </>
         }

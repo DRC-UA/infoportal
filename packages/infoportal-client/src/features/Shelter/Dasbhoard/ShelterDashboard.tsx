@@ -213,12 +213,14 @@ export const ShelterDashboard = () => {
         before={
           <>
             <PeriodPicker
+              value={[periodFilter.start, periodFilter.end]}
               defaultValue={[periodFilter.start, periodFilter.end]}
               onChange={([start, end]) => setPeriodFilter((prev) => ({...prev, start, end}))}
               label={[m.submissionStart, m.endIncluded]}
               max={today}
             />
             <PeriodPicker
+              value={[workDonePeriodFilter.start, workDonePeriodFilter.end]}
               defaultValue={[workDonePeriodFilter.start, workDonePeriodFilter.end]}
               onChange={([start, end]) => setWorkDonePeriodFilter((prev) => ({...prev, start, end}))}
               label={[m._shelter.workDoneStart, m.endIncluded]}

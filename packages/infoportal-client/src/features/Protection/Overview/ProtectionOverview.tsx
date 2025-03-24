@@ -49,12 +49,14 @@ const ProtectionOverviewWithContext = () => {
         before={
           <>
             <PeriodPicker
+              value={[ctx.filters.period.start, ctx.filters.period.end]}
               defaultValue={[ctx.filters.period.start, ctx.filters.period.end]}
               onChange={([start, end]) => {
                 ctx.filters.setPeriod((prev) => ({...prev, start, end}))
               }}
               label={[m.start, m.endIncluded]}
               max={today}
+              fullWidth={false}
             />
           </>
         }

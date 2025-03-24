@@ -69,8 +69,8 @@ export const MealPdmCashDashboard = () => {
           >
             {(value, onChange) => (
               <PeriodPicker
-                defaultValue={value ?? [undefined, undefined]}
-                value={value ?? [undefined, undefined]}
+                defaultValue={value}
+                value={value}
                 onChange={onChange}
                 min={ctx.fetcherPeriod.get?.start}
                 max={ctx.fetcherPeriod.get?.end}
