@@ -70,9 +70,11 @@ export const MealPdmCashDashboard = () => {
             {(value, onChange) => (
               <PeriodPicker
                 defaultValue={value ?? [undefined, undefined]}
+                value={value ?? [undefined, undefined]}
                 onChange={onChange}
                 min={ctx.fetcherPeriod.get?.start}
                 max={ctx.fetcherPeriod.get?.end}
+                fullWidth={false}
               />
             )}
           </DebouncedInput>
@@ -182,8 +184,8 @@ export const MealPdmCashDashboard = () => {
               <SlidePanel title={m.mealMonitoringPdm.priorityNeeds}>
                 <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _?.answers?.needs_community_currently}
-                  label={Meal_cashPdm.options?.needs_community_currently}
+                  by={(_) => _.answers.needs_community_currently}
+                  label={Meal_cashPdm.options.needs_community_currently}
                 />
               </SlidePanel>
             </Div>

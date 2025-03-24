@@ -450,6 +450,7 @@ export const en = Object.freeze({
       visitMonitoring: 'Visit Monitoring',
       verification: 'Verification',
       pdm: 'PDM',
+      winterization: 'Winterization',
     },
     _protection: {
       cocCasesDashboard: 'CoC PowerBi Dashboard',
@@ -493,19 +494,28 @@ export const en = Object.freeze({
       officeResponsible: 'Office responsible',
       priorityNeeds: 'Priority needs',
       needsShelter: 'Contents of the kit meet your immediate needs?',
+      cashOrKind: 'Did you prefer the cash modality or in-kind assistance?',
       assistancePrefer: 'Preferred method of receiving assistance',
       assistanceReceive: 'Method of delivering assistance',
       idpConflict: 'IDP/conflict-affected person',
+      helpedThermal: 'Helped to improve thermal comfort for your hh',
+      satisfiedAssistance: 'Satisfied with assistance',
       satisfiedAmount: 'Satisfied with cash amount',
       satisfiedQuality: 'Satisfied with quality of items in kit',
       satisfiedKits: 'Satisfied with kits received',
       satisfiedNumber: 'Satisfied with quantity of items in kit',
       feedback: 'Feedback',
       satisfiedProcess: 'Satisfied with process',
+      inAdvance: 'Were you informed in advance about the amount you would receive?',
+      assistanceCorrespond: 'Did the amount received correspond to one communicated to you?',
+      isEnough: 'Is it enough for your HH whole winter season 24-25?',
+      longCover: 'For how long will the assistance cover your heating needs?',
+      access: 'Do you have access to basic facilities (electricity, water, gas)?',
       correspond: 'Cash received correspond to the amount was told',
       eskContent: 'Satisfied with the ESK content',
       eskUseful: 'Satisfied with usefulness of kits',
       timeToTake: 'How much time did it take from the registration till receiving',
+      fuelCommon: 'What type of heating fuel is most common in your community?',
       contentEnough: 'Is the contents of the kit enough to last 3 months?',
       qualityKit: 'Are you satisfied with the quality items within the kit?',
       provideInfo: 'Provided all needed info',
@@ -529,6 +539,7 @@ export const en = Object.freeze({
       partner_type: 'Implementing partner',
       kits: 'Number of kits',
       info_used: 'Did you receive information on how to use the items in the dignity kits?',
+      isPartner: 'Filled by partner?',
     },
     _mealVerif: {
       numericToleranceMargin: 'Tolerance margin',
@@ -682,7 +693,7 @@ export const en = Object.freeze({
     hdp: {
       assistance: 'Assistance',
       incidents: 'Incidents',
-      location: 'Location by'
+      location: 'Location by',
     },
     snapshotProtMonito: {
       basicNeeds: `Basic Needs`,
@@ -992,7 +1003,7 @@ export const en = Object.freeze({
         PsychosocialGroupSession: 'Psychosocial groupDisplay session',
         PsychosocialIndividualSession: 'Psychosocial Individual Session',
         PsychologicalFirstAid: 'Psychological First Aid',
-        TIA: 'TIA'
+        TIA: 'TIA',
       }
       const activitiesMerged_: Partial<Record<DrcProgram, string>> = {
         ...activities_,
