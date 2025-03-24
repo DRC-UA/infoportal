@@ -6,11 +6,13 @@ import {IpIconBtn} from '@/shared/IconBtn'
 import {useSetState} from '@alexandreannic/react-hooks-lib'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
-import {DashboardHeader, dashboardHeaderId} from '@/shared/DashboardLayout/DashboardHeader'
+import {DashboardHeader} from '@/shared/DashboardLayout/DashboardHeader'
 import {Page} from '@/shared/Page'
 import {map} from '@axanc/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {appConfig} from '@/conf/AppConfig'
+
+const dashboardHeaderId = 'aa-header-id'
 
 const style = makeSx({
   sectionTitle: {
@@ -116,7 +118,7 @@ export const DashboardLayout = ({
           </Sidebar>
         ))}
       >
-        <Page width={pageWidth} disableAnimation sx={{mb: 2}}>
+        <Page width={pageWidth} sx={{mb: 2}}>
           {beforeSection}
           {sections?.map((s) => (
             <Box key={s.name}>
