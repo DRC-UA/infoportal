@@ -48,9 +48,6 @@ const App = (props: MyAppProps) => {
   return (
     <Provide
       providers={[
-        // ...(process.env.NODE_ENV === 'production'
-        //   ? []
-        //   : [(_: any) => <CacheProvider value={emotionCache} children={_} />]),
         (_) => <AppCacheProvider {...props} children={_} />,
         (_) => <AppSettingsProvider api={api} children={_} />,
       ]}

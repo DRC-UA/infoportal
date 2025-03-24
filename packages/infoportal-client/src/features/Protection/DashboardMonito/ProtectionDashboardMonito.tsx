@@ -28,10 +28,6 @@ const ProtectionDashboardMonitoPN: any = lazy(() =>
 )
 
 export const ProtectionDashboardMonito = () => {
-  // const settings = useAppSettings()
-  // useEffect(() => {
-  //   settings.theme.setBrightness('light')
-  // }, [])
   return (
     <ProtectionMonito.Provider
       periodCompare={(p) => ({
