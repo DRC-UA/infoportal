@@ -1,4 +1,4 @@
-import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {NavLink, Route, Routes} from 'react-router-dom'
 import React from 'react'
 import {AdminUsers} from '@/features/Admin/AdminUsers'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
@@ -8,10 +8,8 @@ import {Layout} from '@/shared/Layout'
 import {AdminProxy} from '@/features/Admin/AdminProxy'
 import {AdminGroups} from '@/features/Admin/AdminGroups'
 import {appFeaturesIndex} from '@/features/appFeatureId'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {useIpToast} from '@/core/useToast'
-import {useAsync} from '@/shared/hook/useAsync'
 import {AdminCache} from '@/features/Admin/AdminCache'
+import {Docs, DocsMenu, DocsActivityInfo} from '@/features/Docs'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 
 export const adminModule = {
@@ -21,15 +19,18 @@ export const adminModule = {
     proxy: '/proxy',
     group: '/group',
     cache: '/cache',
+    docs: {
+      basePath: '/docs',
+      siteMap: {
+        aiReporting: '/docs/reporting-to-activity-info',
+      },
+    },
   },
 }
 
 const AdminSidebar = () => {
   const path = (page: string) => '' + page
   const {m} = useI18n()
-  const {api} = useAppSettings()
-  const {toastInfo} = useIpToast()
-  const asyncRefresh = useAsync(api.koboMeta.sync)
   return (
     <Sidebar>
       <SidebarBody>
@@ -61,6 +62,13 @@ const AdminSidebar = () => {
             </SidebarItem>
           )}
         </NavLink>
+        <NavLink to={adminModule.siteMap.docs.basePath}>
+          {({isActive}) => (
+            <SidebarItem icon="book" active={isActive}>
+              {m.docsTitle}
+            </SidebarItem>
+          )}
+        </NavLink>
       </SidebarBody>
     </Sidebar>
   )
@@ -75,6 +83,10 @@ export const Admin = () => {
         <Route path={adminModule.siteMap.proxy} element={<AdminProxy />} />
         <Route path={adminModule.siteMap.group} element={<AdminGroups />} />
         <Route path={adminModule.siteMap.cache} element={<AdminCache />} />
+        <Route path={adminModule.siteMap.docs.basePath} element={<Docs />}>
+          <Route path={adminModule.siteMap.docs.basePath} element={<DocsMenu />} />
+          <Route path={adminModule.siteMap.docs.siteMap.aiReporting} element={<DocsActivityInfo />} />
+        </Route>
       </Routes>
     </Layout>
   )
