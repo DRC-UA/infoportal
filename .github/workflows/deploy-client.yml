@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: "[Client] Build & Deploy to Azure - drc-imaa-ukr-tools"
+name: '[Client] Build & Deploy to Azure - drc-imaa-ukr-tools'
 
 on:
   #  push:
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: 'lts'
 
       - name: npm install
         run: |
@@ -37,13 +37,13 @@ jobs:
           IGNORE_BUILD_TS_ERRORS: ${{ secrets.IGNORE_BUILD_TS_ERRORS }}
           PORT: ${{ secrets.PORT }}
         run: |
-          npm run build:common  
-          npm run build:client  
+          npm run build:common
+          npm run build:client
 
       - name: Update deployment tag
         run: |
           TAG_NAME="deployed_client"
-          
+
           echo "Delete the tag locally if it exists"
           if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
             echo "Deleting existing tag $TAG_NAME"
@@ -69,7 +69,7 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
