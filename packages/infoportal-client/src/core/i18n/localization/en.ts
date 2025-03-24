@@ -612,7 +612,7 @@ export const en = Object.freeze({
       `,
       disclaimer: `
         The dashboard was created by the Danish Refugee Council (DRC), and funded by USAID's Bureau for Humanitarian Assistance (BHA)
-        and the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect 
+        and the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect
         those of the European Union or the BHA. Neither the European Union nor the BHA can be held responsible for any use of the dashboard.
       `,
       mainConcernsRegardingHousing: 'Concerns related to current accommodation',
@@ -1037,5 +1037,6 @@ export const en = Object.freeze({
       update: 'Update Existing Data',
       generate: 'Generate Excel Template',
     },
+    docsTitle: 'Documentation',
   },
 })

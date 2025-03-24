@@ -91,5 +91,6 @@ export const ua = {
       south: 'Південь',
       west: 'Захід',
     },
+    docsTitle: 'Документація',
   },
 }
