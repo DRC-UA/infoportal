@@ -75,6 +75,7 @@ export const ProtectionDashboardMonitoWCtx = () => {
                   label={[m.start, m.endIncluded]}
                   min={ctx.fetcherPeriod.get?.start}
                   max={ctx.fetcherPeriod.get?.end}
+                  fullWidth={false}
                 />
               )}
             </DebouncedInput>

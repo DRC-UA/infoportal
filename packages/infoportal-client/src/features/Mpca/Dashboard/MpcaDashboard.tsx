@@ -220,10 +220,12 @@ export const MpcaDashboard = () => {
         before={
           <>
             <PeriodPicker
+              value={[periodFilter.start, periodFilter.end]}
               defaultValue={[periodFilter.start, periodFilter.end]}
               onChange={([start, end]) => setPeriodFilter((prev) => ({...prev, start, end}))}
               label={[m.start, m.endIncluded]}
               max={today}
+              fullWidth={false}
             />
             <DashboardFilterLabel icon="attach_money" active={true} label={currency}>
               {() => (

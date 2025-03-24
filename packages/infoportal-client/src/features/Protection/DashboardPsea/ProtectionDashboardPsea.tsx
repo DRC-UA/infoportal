@@ -134,6 +134,7 @@ export const ProtectionDashboardPsea = () => {
             }}
             label={[m.start, m.endIncluded]}
             max={new Date()}
+            fullWidth={false}
           />
         }
       />
