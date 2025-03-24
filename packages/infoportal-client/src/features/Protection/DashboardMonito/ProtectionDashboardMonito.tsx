@@ -28,6 +28,10 @@ const ProtectionDashboardMonitoPN: any = lazy(() =>
 )
 
 export const ProtectionDashboardMonito = () => {
+  // const settings = useAppSettings()
+  // useEffect(() => {
+  //   settings.theme.setBrightness('light')
+  // }, [])
   return (
     <ProtectionMonito.Provider
       periodCompare={(p) => ({
@@ -70,6 +74,7 @@ export const ProtectionDashboardMonitoWCtx = () => {
             >
               {(value, onChange) => (
                 <PeriodPicker
+                  sx={{mt: 0, mb: 0, mr: 1}}
                   value={value}
                   onChange={onChange}
                   label={[m.start, m.endIncluded]}

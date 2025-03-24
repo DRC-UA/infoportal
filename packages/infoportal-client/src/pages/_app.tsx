@@ -11,7 +11,7 @@ import {appConfig} from '@/conf/AppConfig'
 import {MsalProvider} from '@azure/msal-react'
 import {getMsalInstance} from '@/core/msal'
 import {DRCLogo} from '@/shared/logo/logo'
-import {CacheProvider, EmotionCache} from '@emotion/react'
+import {EmotionCache} from '@emotion/react'
 import {ModalProvider} from '@/shared/Modal/ModalProvider'
 import createEmotionCache from '@/core/createEmotionCache'
 import Head from 'next/head'
@@ -25,6 +25,7 @@ import {KoboAnswersProvider} from '@/core/context/KoboAnswersContext'
 import {HashRouter} from 'react-router-dom'
 import {SessionProvider} from '@/core/Session/SessionContext'
 import {ToastProvider} from '@/shared/Toast'
+import {AppCacheProvider} from '@mui/material-nextjs/v15-pagesRouter'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
@@ -40,7 +41,7 @@ export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
 }
 
-const App = ({emotionCache = clientSideEmotionCache, ...props}: MyAppProps) => {
+const App = (props: MyAppProps) => {
   const router = useRouter()
   useEffect(() => {
     // initSentry(appConfigConfig)
@@ -50,9 +51,10 @@ const App = ({emotionCache = clientSideEmotionCache, ...props}: MyAppProps) => {
   return (
     <Provide
       providers={[
-        ...(process.env.NODE_ENV === 'production'
-          ? []
-          : [(_: any) => <CacheProvider value={emotionCache} children={_} />]),
+        // ...(process.env.NODE_ENV === 'production'
+        //   ? []
+        //   : [(_: any) => <CacheProvider value={emotionCache} children={_} />]),
+        (_) => <AppCacheProvider {...props} children={_} />,
         (_) => <AppSettingsProvider api={api} children={_} />,
       ]}
     >
@@ -74,7 +76,6 @@ const AppWithConfig = (props: AppProps) => {
   return (
     <Provide
       providers={[
-        // _ => <StyledEngineProvider injectFirst children={_}/>,
         (_) => <LocalizationProvider children={_} dateAdapter={AdapterDateFns} />,
         (_) => <ToastProvider children={_} />,
         (_) => <ThemeProvider theme={settings.theme.theme} children={_} />,

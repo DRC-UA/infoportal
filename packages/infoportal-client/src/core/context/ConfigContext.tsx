@@ -26,23 +26,28 @@ export const useAppSettings = () => useContext(_ConfigContext)
 type LightTheme = 'auto' | 'dark' | 'light'
 
 declare const window: any
-
 const isSystemDarkTheme = () =>
-  !!(typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 
 export const AppSettingsProvider = ({api, children}: {api: ApiSdk; children: ReactNode}) => {
   const [brightness, setBrightness] = usePersistentState<LightTheme>('auto', {storageKey: 'dark-theme2'})
-  const [isSystemDark, setIsSystemDark] = useState(isSystemDarkTheme())
+  const [isSystemDark, setIsSystemDark] = useState(false)
+
   const isDark = useMemo(() => {
-    return brightness === 'dark' || (brightness === 'auto' && isSystemDarkTheme())
+    return brightness === 'dark' || (brightness === 'auto' && isSystemDark)
   }, [brightness, isSystemDark])
+
   const [appThemeParams, setAppThemeParams] = useState<AppThemeParams>({})
   const theme = useMemo(() => muiTheme({...appThemeParams, dark: isDark}), [appThemeParams, isDark])
 
   useEffect(() => {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event: any) => {
-      setIsSystemDark(!!event.matches)
-    })
+    setIsSystemDark(isSystemDarkTheme())
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = (event: MediaQueryListEvent) => setIsSystemDark(event.matches)
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
   return (
