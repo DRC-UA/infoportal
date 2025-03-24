@@ -11,7 +11,6 @@ export interface PageProps extends BoxProps {
   style?: object
   loading?: boolean
   children: ReactNode
-  disableAnimation?: boolean
   animationDeps?: any[]
 }
 
