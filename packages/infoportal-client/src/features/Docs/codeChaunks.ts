@@ -196,9 +196,8 @@ export namespace AiTypeActivitiesAndPeople {
 }`
 
 const interfaceGeneratorCommand = `// packages/infoportal-scripts/src/index.ts
-
-  await new ActivityInfoBuildType().definition.gbv()
-`
+  ...
+  await new ActivityInfoBuildType().definition.gbv()`
 
 export {
   rrmFormStructureJson,

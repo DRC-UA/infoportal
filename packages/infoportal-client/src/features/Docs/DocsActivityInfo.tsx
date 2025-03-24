@@ -1,7 +1,7 @@
 import type {FC} from 'react'
 import Typography from '@mui/material/Typography'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import {atomOneDark} from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import atomOneDark from 'react-syntax-highlighter/dist/esm/styles/hljs/atom-one-dark'
 
 import {
   rrmFormStructureJson,
