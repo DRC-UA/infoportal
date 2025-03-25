@@ -70,6 +70,7 @@ export const ProtectionDashboardMonitoWCtx = () => {
             >
               {(value, onChange) => (
                 <PeriodPicker
+                  sx={{mt: 0, mb: 0, mr: 1}}
                   value={value}
                   onChange={onChange}
                   label={[m.start, m.endIncluded]}

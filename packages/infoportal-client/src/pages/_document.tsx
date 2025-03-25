@@ -1,18 +1,10 @@
 import * as React from 'react'
-import Document, {DocumentContext, DocumentProps, Head, Html, Main, NextScript} from 'next/document'
+import {DocumentContext, DocumentProps, Head, Html, Main, NextScript} from 'next/document'
 import {appConfig} from '@/conf/AppConfig'
-import createEmotionCache from '@/core/createEmotionCache'
-import createEmotionServer from '@emotion/server/create-instance'
-import {AppType} from 'next/app'
-import {MyAppProps} from '@/pages/_app'
 import {Txt} from '@/shared'
 import {Box} from '@mui/material'
-import {CacheProvider} from '@emotion/react'
 import {IpAlert} from '@/shared/Alert'
-
-interface MyDocumentProps extends DocumentProps {
-  emotionStyleTags: React.JSX.Element[]
-}
+import {documentGetInitialProps, DocumentHeadTags, DocumentHeadTagsProps} from '@mui/material-nextjs/v15-pagesRouter'
 
 const isStupidMicrosoftBrowser =
   typeof window !== 'undefined' &&
@@ -20,7 +12,7 @@ const isStupidMicrosoftBrowser =
     window.navigator.userAgent.includes('MSIE') ||
     window.navigator.userAgent.includes('Trident'))
 
-export default function MyDocument({emotionStyleTags}: MyDocumentProps) {
+export default function MyDocument(props: DocumentProps & DocumentHeadTagsProps) {
   return (
     <Html lang="en">
       <Head>
@@ -31,10 +23,31 @@ export default function MyDocument({emotionStyleTags}: MyDocumentProps) {
           href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap"
           rel="stylesheet"
         />
-        {/*<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>*/}
+        {/*<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />*/}
         <link rel="icon" type="image/x-icon" href="/static/favicon.svg" />
-        {emotionStyleTags}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              .material-icons {
+                font-family: 'Material Icons';
+                font-weight: normal;
+                font-style: normal;
+                font-size: 24px;
+                line-height: 1;
+                letter-spacing: normal;
+                text-transform: none;
+                display: inline-block;
+                white-space: nowrap;
+                word-wrap: normal;
+                direction: ltr;
+                -webkit-font-feature-settings: "liga";
+                -webkit-font-smoothing: antialiased;
+              }
+            `,
+          }}
+        />
         <meta name="emotion-insertion-point" content="" />
+        <DocumentHeadTags {...props} />
       </Head>
       <body>
         {isStupidMicrosoftBrowser && (
@@ -69,64 +82,7 @@ export default function MyDocument({emotionStyleTags}: MyDocumentProps) {
   )
 }
 
-// `getInitialProps` belongs to `_document` (instead of `_app`),
-// it's compatible with static-site generation (SSG).
 MyDocument.getInitialProps = async (ctx: DocumentContext) => {
-  // Resolution order
-  //
-  // On the server:
-  // 1. app.getInitialProps
-  // 2. page.getInitialProps
-  // 3. document.getInitialProps
-  // 4. app.render
-  // 5. page.render
-  // 6. document.render
-  //
-  // On the server with error:
-  // 1. document.getInitialProps
-  // 2. app.render
-  // 3. page.render
-  // 4. document.render
-  //
-  // On the client
-  // 1. app.getInitialProps
-  // 2. page.getInitialProps
-  // 3. app.render
-  // 4. page.render
-  const originalRenderPage = ctx.renderPage
-
-  // You can consider sharing the same Emotion cache between all the SSR requests to speed up performance.
-  // However, be aware that it can have global side effects.
-  const cache = createEmotionCache()
-  const {extractCriticalToChunks} = createEmotionServer(cache)
-
-  ctx.renderPage = () =>
-    originalRenderPage({
-      enhanceApp: (App: React.ComponentType<React.ComponentProps<AppType> & MyAppProps>) =>
-        function EnhanceApp(props) {
-          return (
-            <CacheProvider value={cache}>
-              <App emotionCache={cache} {...props} />
-            </CacheProvider>
-          )
-        },
-    })
-
-  const initialProps = await Document.getInitialProps(ctx)
-  // This is important. It prevents Emotion to render invalid HTML.
-  // See https://github.com/mui/material-ui/issues/26561#issuecomment-855286153
-  const emotionStyles = extractCriticalToChunks(initialProps.html)
-  const emotionStyleTags = emotionStyles.styles.map((style) => (
-    <style
-      data-emotion={`${style.key} ${style.ids.join(' ')}`}
-      key={style.key}
-      // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{__html: style.css}}
-    />
-  ))
-
-  return {
-    ...initialProps,
-    emotionStyleTags,
-  }
+  const finalProps = await documentGetInitialProps(ctx)
+  return finalProps
 }

@@ -5,73 +5,6 @@ import {useLayoutContext} from '@/shared/Layout/LayoutContext'
 import {AppHeaderContainer} from '@/shared/Layout/Header/AppHeaderContainer'
 import {IpIconBtn} from '@/shared/IconBtn'
 
-export const dashboardHeaderId = 'aa-header-id'
-const headerStickyClass = 'sticky-header'
-
-// const stickHeader = () => {
-//   if (!header$) {
-//     header$ = document.getElementById(dashboardHeaderId)!
-//   }
-//   if (window.scrollY > header$.offsetHeight) {
-//     if (!header$.classList.contains(headerStickyClass)) {
-//       header$.classList.add(headerStickyClass)
-//     }
-//   } else {
-//     header$.classList.remove(headerStickyClass)
-//   }s
-// }
-
-// const redesignHeaderOnTop = () => {
-//   if (!header$) {
-//     header$ = document.getElementById(dashboardHeaderId)!
-//   }
-//   if (header$.getBoundingClientRect().y === 0) {
-//     header$.classList.add(headerStickyClass)
-//   } else {
-//     header$.classList.remove(headerStickyClass)
-//
-//   }
-// }
-
-const generalStyles = (
-  <GlobalStyles
-    styles={(t) => ({
-      [`.${headerStickyClass}`]: {
-        boxShadow: t.shadows[4],
-        background: t.palette.background.paper,
-      },
-      // '.header_content': {
-      //   flex: 1,
-      // },
-      // [`.${headerStickyClass} .header_content`]: {},
-      // [`.${headerStickyClass} .header_title_main`]: {
-      //   fontSize: '1.4em',
-      // },
-      // [`.${headerStickyClass} .header_title_sub`]: {
-      //   fontSize: '1.1em',
-      //   // '&:before': {
-      //   //   content: '" - "',
-      //   // }
-      // },
-      // [`.${headerStickyClass} .header_title`]: {
-      //   // display: 'flex',
-      //   // alignItems: 'center',
-      //   marginBottom: t.spacing(0),
-      // },
-      // [`#${dashboardHeaderId}.${headerStickyClass}`]: {
-      //   border: 'none',
-      //   boxShadow: t.shadows[4],
-      //   background: t.palette.background.paper,
-      //   padding: `${t.spacing(1)} ${t.spacing(0)} ${t.spacing(0)} ${t.spacing(2)}`,
-      //   position: 'fixed',
-      //   top: 0,
-      //   right: 0,
-      //   left: 0,
-      // }
-    })}
-  />
-)
-
 export const DashboardHeader = ({
   title,
   subTitle,
@@ -89,14 +22,6 @@ export const DashboardHeader = ({
 }) => {
   const t = useTheme()
   const {sidebarOpen, showSidebarButton, setSidebarOpen} = useLayoutContext()
-
-  // useEffect(() => {
-  //   header$ = null
-  //   window.addEventListener('scroll', redesignHeaderOnTop)
-  //   return () => {
-  //     window.removeEventListener('scroll', redesignHeaderOnTop)
-  //   }
-  // }, [])
 
   return (
     <>
