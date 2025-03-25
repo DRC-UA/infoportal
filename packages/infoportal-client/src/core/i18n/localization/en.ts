@@ -849,6 +849,7 @@ export const en = Object.freeze({
       deleteWarning: `In case of mistake, you can still recover deleted data by contacting ${appConfig.contact}.`,
       _feedbackType: {
         thanks: 'Thanks',
+        thanks_event: 'Thanks event',
         feedback: 'Feedback',
         request: 'Request',
         complaint: 'Complaint',

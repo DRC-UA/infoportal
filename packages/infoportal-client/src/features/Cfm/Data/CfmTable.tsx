@@ -511,10 +511,6 @@ export const CfmTable = ({}: any) => {
               head: m._cfm.subcat,
               id: 'subcategory',
               render: (row) => {
-                if (row.form !== CfmDataSource.Internal) {
-                  return {value: undefined, option: undefined, label: null}
-                }
-
                 const prefixMap: Record<string, string> = {
                   apprec_com: '0.',
                   request_info: '1.',
