@@ -480,29 +480,30 @@ export const CfmTable = ({}: any) => {
               id: 'feedbackType',
               width: 120,
               render: (row) => {
+                const schema = row.form === CfmDataSource.Internal ? ctx.schemaInternal : ctx.schemaExternal
+
+                const options = schema.helper.getOptionsByQuestionName('feedback_type').map((_) => ({
+                  value: _.name,
+                  children: schema.translate.choice('feedback_type', _.name),
+                }))
+
                 return {
                   value: row.category,
-                  option: ctx.schemaInternal.translate.choice('feedback_type', row.category),
-                  label:
-                    row.form === CfmDataSource.Internal ? (
-                      ctx.schemaInternal.translate.choice('feedback_type', row.category)
-                    ) : (
-                      <IpSelectSingle
-                        defaultValue={row.category}
-                        onChange={(newValue) => {
-                          ctxKoboUpdate.asyncUpdateById.tag.call({
-                            formId: row.formId,
-                            answerIds: [row.id],
-                            tag: 'feedbackTypeOverride',
-                            value: newValue,
-                          })
-                        }}
-                        options={Obj.entries(Meal_cfmInternal.options.feedback_type).map(([k, v]) => ({
-                          value: k,
-                          children: v,
-                        }))}
-                      />
-                    ),
+                  option: schema.translate.choice('feedback_type', row.category),
+                  label: (
+                    <IpSelectSingle
+                      value={row.category}
+                      onChange={(newValue) => {
+                        ctxKoboUpdate.asyncUpdateById.answer.call({
+                          formId: row.formId,
+                          answerIds: [row.id],
+                          question: 'feedback_type',
+                          answer: newValue,
+                        })
+                      }}
+                      options={options}
+                    />
+                  ),
                 }
               },
             },
