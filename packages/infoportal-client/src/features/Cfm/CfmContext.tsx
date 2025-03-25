@@ -94,6 +94,7 @@ export type CfmData = {
   readonly oblastIso: OblastISO
   readonly category?: Meal_cfmInternal.T['feedback_type']
   readonly sub_category?: Meal_cfmInternal.T['sub_category']
+  readonly external_sub_category?: Meal_cfmExternal.T['sub_category']
   readonly external_prot_support?: Meal_cfmExternal.T['prot_support']
   readonly benef_origin?: Meal_cfmInternal.T['benef_origin']
   // internal_project_code?: Meal_CfmInternal.T['project_code']
