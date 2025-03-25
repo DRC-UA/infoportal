@@ -1,6 +1,6 @@
 import type {FC} from 'react'
 import {NavLink} from 'react-router-dom'
-import Stack from '@mui/system/Stack'
+import Stack from '@mui/material/Stack'
 
 import {useI18n} from '@/core/i18n'
 
