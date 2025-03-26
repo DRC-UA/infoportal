@@ -124,18 +124,19 @@ export const MapSvg = ({
               >
                 {map(OblastIndex.byIso(iso as any).name, (_) => (
                   <title>
-                    {_}
-                    {'\n'}
-                    {res ? (
-                      <>
-                        {formatLargeNumber(res.value, {maximumFractionDigits})}
-                        {res.base &&
-                          res.base !== 100 &&
-                          ' / ' + formatLargeNumber(res.base, {maximumFractionDigits})} - {toPercent(res.percent)}
-                      </>
-                    ) : (
-                      0
-                    )}
+                    {_ +
+                      '\n' +
+                      (res ? (
+                        <>
+                          {formatLargeNumber(res.value, {maximumFractionDigits})}
+                          {res.base &&
+                            res.base !== 100 &&
+                            ' / ' + formatLargeNumber(res.base, {maximumFractionDigits})}{' '}
+                          - {toPercent(res.percent)}
+                        </>
+                      ) : (
+                        0
+                      ))}
                   </title>
                 ))}
               </Box>
