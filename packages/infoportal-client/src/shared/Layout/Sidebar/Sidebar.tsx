@@ -10,6 +10,7 @@ import {SidebarHeader} from './SidebarHeader'
 import {useI18n} from '../../../core/i18n'
 import {Utils} from '@/utils/utils'
 import stopPropagation = Utils.stopPropagation
+import {useAppSettings} from '@/core/context/ConfigContext'
 
 let sidebar: HTMLElement | null = null
 let header: HTMLElement | null = null
@@ -34,13 +35,16 @@ const stickSidebarToHeader = (sidebarId: string, headerId: string) => {
 
 export const Sidebar = ({
   children,
+  showThemeToggle,
   sx,
   id = 'app-sidebar-id',
   headerId = 'app-header',
   ...props
 }: BoxProps & {
+  showThemeToggle?: boolean
   headerId?: string
 }) => {
+  const app = useAppSettings()
   const {isMobileWidth, sidebarOpen, setSidebarOpen, sidebarPinned, setSidebarPinned} = useLayoutContext()
   const {m} = useI18n()
 
@@ -109,12 +113,17 @@ export const Sidebar = ({
       >
         <SidebarHeader hidden={!isTemporary} />
         <SidebarBody>{children}</SidebarBody>
-        {/*<Icon onClick={() => setDarkTheme(_ => !_)}>{darkTheme ? 'light_mode' : 'dark_mode'}</Icon>*/}
         <SidebarFooter>
-          {/*<SidebarItem disabled={process.env.NODE_ENV !== 'development'} onClick={stopPropagation(() => setDarkTheme(_ => !_))} icon="dark_mode" sx={{mr: 0, pr: 0}}>*/}
-          {/*  {m.theme}*/}
-          {/*  <Switch color="primary" sx={{ml: 'auto'}} checked={darkTheme}/>*/}
-          {/*</SidebarItem>*/}
+          {showThemeToggle && (
+            <SidebarItem
+              onClick={stopPropagation(() => app.theme.setBrightness((_) => (_ === 'dark' ? 'light' : 'dark')))}
+              icon="dark_mode"
+              sx={{mr: 0, pr: 0}}
+            >
+              {m.theme}
+              <Switch color="primary" sx={{ml: 'auto'}} checked={app.theme.brightness === 'dark'} />
+            </SidebarItem>
+          )}
           {!isMobileWidth && (
             <SidebarItem
               onClick={stopPropagation(() => setSidebarPinned((_) => !_))}

@@ -109,7 +109,7 @@ export const DashboardLayout = ({
           />
         }
         sidebar={map(sections, (_) => (
-          <Sidebar headerId={dashboardHeaderId}>
+          <Sidebar headerId={dashboardHeaderId} showThemeToggle>
             {_.map((s) => (
               <SidebarItem icon={s.icon} key={s.name} href={'#' + s.name} active={activeSection === s.name}>
                 {s.title}
