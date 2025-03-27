@@ -50,12 +50,14 @@ export const AppSettingsProvider = ({api, children}: {api: ApiSdk; children: Rea
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
+  const adaptiveLighten = useMemo(() => (isSystemDark ? darken : lighten), [isSystemDark])
+
   return (
     <_ConfigContext.Provider
       value={{
         api,
         theme: {
-          adaptiveLighten: isSystemDark ? darken : lighten,
+          adaptiveLighten,
           theme,
           appThemeParams,
           setAppThemeParams,

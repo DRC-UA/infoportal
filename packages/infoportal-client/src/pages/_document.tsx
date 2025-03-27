@@ -5,6 +5,7 @@ import {Txt} from '@/shared'
 import {Box} from '@mui/material'
 import {IpAlert} from '@/shared/Alert'
 import {documentGetInitialProps, DocumentHeadTags, DocumentHeadTagsProps} from '@mui/material-nextjs/v15-pagesRouter'
+import MuiXLicense from '@/core/MuiXLicense'
 
 const isStupidMicrosoftBrowser =
   typeof window !== 'undefined' &&
@@ -14,7 +15,8 @@ const isStupidMicrosoftBrowser =
 
 export default function MyDocument(props: DocumentProps & DocumentHeadTagsProps) {
   return (
-    <Html lang="en">
+    <Html lang="en" suppressHydrationWarning>
+      <MuiXLicense />
       <Head>
         <meta charSet="utf-8" />
         <base href="/" />

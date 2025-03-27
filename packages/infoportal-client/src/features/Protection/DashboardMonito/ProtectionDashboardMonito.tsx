@@ -1,4 +1,4 @@
-import React, {lazy} from 'react'
+import React, {lazy, useCallback} from 'react'
 import {Obj} from '@axanc/ts-utils'
 import {useI18n} from '@/core/i18n'
 import {ProtectionMonito} from './ProtectionMonitoContext'
@@ -20,21 +20,19 @@ import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {subDays} from 'date-fns'
 import {previousPeriodDeltaDays} from '@/features/Safety/IncidentsDashboard/useSafetyIncidentData'
 import {IpAlert} from '@/shared/Alert'
-
-const ProtectionDashboardMonitoPN: any = lazy(() =>
-  import('./ProtectionDashboardMonitoPN').then((module) => ({
-    default: module.ProtectionDashboardMonitoPN,
-  })),
-)
+import {ProtectionDashboardMonitoPN} from './ProtectionDashboardMonitoPN'
+import {Period} from 'infoportal-common'
 
 export const ProtectionDashboardMonito = () => {
+  const periodCompare = useCallback(
+    (p: Period) => ({
+      start: p.start,
+      end: subDays(p.end, previousPeriodDeltaDays),
+    }),
+    [],
+  )
   return (
-    <ProtectionMonito.Provider
-      periodCompare={(p) => ({
-        start: p.start,
-        end: subDays(p.end, previousPeriodDeltaDays),
-      })}
-    >
+    <ProtectionMonito.Provider periodCompare={periodCompare}>
       <ProtectionDashboardMonitoWCtx />
     </ProtectionMonito.Provider>
   )
@@ -118,60 +116,58 @@ export const ProtectionDashboardMonitoWCtx = () => {
           </IpAlert>
         </>
       }
-      sections={(() => {
-        return [
-          {icon: 'bar_chart', name: 'sample', title: m.sample, component: () => <ProtectionDashboardMonitoSample />},
-          {
-            icon: 'explore',
-            name: 'displacement',
-            title: m.displacement,
-            component: () => <ProtectionDashboardMonitoDisplacement />,
-          },
-          {
-            icon: 'family_restroom',
-            name: 'family_unity',
-            title: m.familyUnity,
-            component: () => <ProtectionDashboardMonitoFamilyUnity />,
-          },
-          {icon: 'home', name: 'housing', title: m.housing, component: () => <ProtectionDashboardMonitoHousing />},
-          {
-            icon: 'savings',
-            name: 'livelihood',
-            title: m.livelihoods,
-            component: () => <ProtectionDashboardMonitoLivelihood />,
-          },
-          {
-            icon: 'fingerprint',
-            name: 'document',
-            title: m.protHHS2.registrationAndDocumention,
-            component: () => <ProtectionDashboardMonitoDocument />,
-          },
-          {
-            icon: 'rocket_launch',
-            name: 'safety',
-            title: m.protHHS2.safetyAndSecurity,
-            component: () => <ProtectionDashboardMonitoSafety />,
-          },
-          {
-            icon: 'local_police',
-            name: 'violence',
-            title: m.protHHS2.protectionIncidents,
-            component: () => <ProtectionDashboardMonitoViolence />,
-          },
-          {
-            icon: 'healing',
-            name: 'disability',
-            title: m.protHHS2.disabilityAndHealth,
-            component: () => <ProtectionDashboardMonitoDisability />,
-          },
-          {
-            icon: 'traffic',
-            name: 'priorityneeds',
-            title: m.priorityNeeds,
-            component: () => <ProtectionDashboardMonitoPN />,
-          },
-        ]
-      })()}
+      sections={[
+        {icon: 'bar_chart', name: 'sample', title: m.sample, component: () => <ProtectionDashboardMonitoSample />},
+        {
+          icon: 'explore',
+          name: 'displacement',
+          title: m.displacement,
+          component: () => <ProtectionDashboardMonitoDisplacement />,
+        },
+        {
+          icon: 'family_restroom',
+          name: 'family_unity',
+          title: m.familyUnity,
+          component: () => <ProtectionDashboardMonitoFamilyUnity />,
+        },
+        {icon: 'home', name: 'housing', title: m.housing, component: () => <ProtectionDashboardMonitoHousing />},
+        {
+          icon: 'savings',
+          name: 'livelihood',
+          title: m.livelihoods,
+          component: () => <ProtectionDashboardMonitoLivelihood />,
+        },
+        {
+          icon: 'fingerprint',
+          name: 'document',
+          title: m.protHHS2.registrationAndDocumention,
+          component: () => <ProtectionDashboardMonitoDocument />,
+        },
+        {
+          icon: 'rocket_launch',
+          name: 'safety',
+          title: m.protHHS2.safetyAndSecurity,
+          component: () => <ProtectionDashboardMonitoSafety />,
+        },
+        {
+          icon: 'local_police',
+          name: 'violence',
+          title: m.protHHS2.protectionIncidents,
+          component: () => <ProtectionDashboardMonitoViolence />,
+        },
+        {
+          icon: 'healing',
+          name: 'disability',
+          title: m.protHHS2.disabilityAndHealth,
+          component: () => <ProtectionDashboardMonitoDisability />,
+        },
+        {
+          icon: 'traffic',
+          name: 'priorityneeds',
+          title: m.priorityNeeds,
+          component: () => <ProtectionDashboardMonitoPN />,
+        },
+      ]}
     />
   )
 }
