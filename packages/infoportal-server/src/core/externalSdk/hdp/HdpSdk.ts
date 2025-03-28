@@ -3,20 +3,22 @@ import mssql, {type ConnectionPool} from 'mssql'
 import {appConf, AppConf} from '../../conf/AppConf.js'
 
 export class HdpSdk {
-  static readonly fetchAiRiskEducation = async (config: AppConf = appConf) => {
-    const pool = await mssql.connect({
-      password: config.dbAzureHdp.password,
-      user: config.dbAzureHdp.user,
-      port: config.dbAzureHdp.port,
-      database: config.dbAzureHdp.schema,
-      server: config.dbAzureHdp.host,
+  #pool: mssql.ConnectionPool
+
+  constructor() {
+    this.#pool = new mssql.ConnectionPool({
+      password: appConf.dbAzureHdp.password,
+      user: appConf.dbAzureHdp.user,
+      port: appConf.dbAzureHdp.port,
+      database: appConf.dbAzureHdp.schema,
+      server: appConf.dbAzureHdp.host,
     })
     const sql = await pool.connect()
     return await sql.query`
       SELECT *
       FROM external_migrate.undp_rmm_re_direct_session
     `
+    console.log(result)
+    return result.recordset
   }
-
-  constructor(connector: ConnectionPool) {}
 }
