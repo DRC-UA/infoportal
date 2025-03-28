@@ -32,6 +32,11 @@ const Index = () => {
               <ListItemText primary="Meta" />
             </Link>
           </ListItem>
+          <ListItem>
+            <Link href={path('winterization-2024-2025-pdm')}>
+              <ListItemText primary="Winterization 2024-2025 PDM" />
+            </Link>
+          </ListItem>
         </List>
       </Page>
     </Layout>
