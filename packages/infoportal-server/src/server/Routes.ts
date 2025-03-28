@@ -84,11 +84,6 @@ export const getRoutes = (
   const auth =
     ({adminOnly = false}: {adminOnly?: boolean} = {}) =>
     async (req: Request, res: Response, next: NextFunction) => {
-      // req.session.user = {
-      //   email: 'alexandre.annic@drc.ngo',
-      //   admin: true,
-      // } as any
-      // next()
       try {
         const email = req.session.user?.email
         if (!email) {
