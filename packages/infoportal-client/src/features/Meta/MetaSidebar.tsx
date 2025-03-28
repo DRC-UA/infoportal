@@ -53,13 +53,6 @@ export const MetaSidebar = () => {
             </SidebarItem>
           )}
         </NavLink>
-        <NavLink to={path(metaSiteMap.routes.data)}>
-          {({isActive, isPending}) => (
-            <SidebarItem active={isActive} icon={appConfig.icons.dataTable}>
-              {m.data}
-            </SidebarItem>
-          )}
-        </NavLink>
 
         {session.admin && (
           <SidebarItem icon="refresh" onClick={() => asyncRefresh.call().then(() => toastInfo(m._meta.refreshLong))}>

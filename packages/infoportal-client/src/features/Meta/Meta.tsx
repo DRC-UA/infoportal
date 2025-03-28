@@ -32,7 +32,6 @@ const _Meta = () => {
       {ctx.fetcher.get && (
         <Routes>
           <Route path={metaSiteMap.routes.dashboard} element={<MetaDashboard />} />
-          <Route path={metaSiteMap.routes.data} element={<MetaTable />} />
         </Routes>
       )}
     </Layout>
