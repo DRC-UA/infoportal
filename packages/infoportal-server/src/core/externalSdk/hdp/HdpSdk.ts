@@ -38,5 +38,7 @@ export class HdpSdk {
         AND (@end IS NULL OR session_date <= @end)
         AND (@office IS NULL OR office_name_short IN (@office));
     `
+    console.log(result)
+    return result.recordset
   }
 }
