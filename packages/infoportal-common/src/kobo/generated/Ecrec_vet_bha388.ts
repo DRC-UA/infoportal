@@ -12,6 +12,8 @@ export namespace Ecrec_vet_bha388 {
     cal_office: undefined | Option<'office'>
     // shortlisted [select_one] Відібрано до шорт-листу
     shortlisted: undefined | Option<'shortlisted'>
+    // alter_donor [select_one] Донор
+    alter_donor: undefined | Option<'alter_donor'>
     // interview_status [select_one] Інтерв'ю
     interview_status: undefined | Option<'interview_status'>
     // total_score_question [calculate] Бали за інтерв'ю
@@ -269,6 +271,9 @@ export namespace Ecrec_vet_bha388 {
       yes: `✅ Так`,
       no: `❌ Ні`,
     },
+    alter_donor: {
+      ukr000386_pooled_funds: `UKR-000386 (Pooled Funds)`,
+    },
     office: {
       kharkiv: `Харків`,
       dnipro: `Дніпро`,
@@ -305,9 +310,9 @@ export namespace Ecrec_vet_bha388 {
       yurii_volkov: `Юрій Волков`,
       andrii_zagoruiev: `Андрій Загоруєв`,
       olena_sydorenko: `Олена Сидоренко`,
-      svitlana_smyrnova: `Світлана Смирнова`,
+      dmytro_maistrenko: `Дмитро Майстренко`,
       tetiana_konovshii: `Тетяна Коновшій`,
-      bohdan_taranushchenko: `Богдан Таранущенко`,
+      taras_stomin: `Тарас Стомін`,
       olena_buglo: `Олена Бугло`,
       vitalii_shapoval: `Віталій Шаповал`,
       hrk_ex1: `Додатковий 1`,
@@ -456,6 +461,7 @@ export namespace Ecrec_vet_bha388 {
       lvivska: `Львівська`,
       chernihivska: `Чернігівська`,
       sumska: `Сумська`,
+      other: `Інша`,
     },
     raion: {
       zvenyhorodskyi: `Звенигородський`,

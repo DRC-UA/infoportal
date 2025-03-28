@@ -14,8 +14,10 @@ export const databaseCustomMapping: Record<any, (_: any) => any> = {
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.ecrec_msmeGrantEoi),
   [KoboIndex.byName('ecrec_msmeGrantReg').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.ecrec_msmeGrantReg),
-  [KoboIndex.byName('ecrec_vet_bha388').id]: (_) =>
-    KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.ecrec_vet_bha388),
+  [KoboIndex.byName('ecrec_vet_bha388').id]: (_) => ({
+    ...KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.ecrec_vet_bha388),
+    alter_donor: _.alter_donor ?? 'UKR-000388 BHA', // draw default donor in Datatable, becuase Pool Funds were introduced as replacement for selected beneficiaries
+  }),
   [KoboIndex.byName('ecrec_vet2_dmfa').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.ecrec_vet2_dmfa),
   [KoboIndex.byName('bn_re').id]: (_) => KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.bn_re),
@@ -37,8 +39,7 @@ export const databaseCustomMapping: Record<any, (_: any) => any> = {
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.protection_hhs3),
   [KoboIndex.byName('protection_groupSession').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.protection_groupSession),
-  [KoboIndex.byName('meal_cashPdm').id]: (_) =>
-    KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.cash_pdm),
+  [KoboIndex.byName('meal_cashPdm').id]: (_) => KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.cash_pdm),
   [KoboIndex.byName('partner_lampa').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.partner_lampa),
 }
