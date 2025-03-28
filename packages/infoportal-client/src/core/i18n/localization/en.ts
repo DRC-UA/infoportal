@@ -900,6 +900,7 @@ export const en = Object.freeze({
       repairCost: 'Total repairs cost',
       repairCostByHh: 'Repairs cost by HH',
       workDoneAt: 'Work done at',
+      repairstandards:'Repair standards',
       workDoneStart: 'Work done start',
       scoreLevel: 'Price level',
       priceLevel: 'Price level',
@@ -947,6 +948,10 @@ export const en = Object.freeze({
         // HandoverCertificateOfCompletionSigned: 'Handover/Certificate of completion signed',
         // InvoicePaymentProcessed: 'Invoice payment processed',
       },
+      standards:{
+        yes: 'Yes',
+        no: 'No'
+      }
     },
     note: 'Note',
     projectCode: 'Project Code',
