@@ -272,12 +272,15 @@ export class KoboMetaMapperEcrec {
     const answer = Ecrec_vet_bha388.map(row.answers)
     const persons = KoboXmlMapper.Persons.ecrec_vet_bha388(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.oblast!)
-    const project = DrcProject['UKR-000388 BHA']
+    const project =
+      row.answers.alter_donor === 'ukr000386_pooled_funds'
+        ? DrcProject['UKR-000386 Pooled Funds']
+        : DrcProject['UKR-000388 BHA']
 
     return KoboMetaMapper.make({
       enumerator: Ecrec_vet_bha388.options.back_enum_extra[answer.back_enum!],
       office: KoboXmlMapper.office(answer.office),
-      oblast: oblast?.name,
+      oblast: oblast?.name!,
       raion: KoboXmlMapper.Location.searchRaion(answer.raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
       settlement: answer.settlement,

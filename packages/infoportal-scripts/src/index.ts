@@ -24,5 +24,5 @@ export const koboSdkDrc = new KoboClient({
   // await FixKoboMigration.Tags.run()
   // await new ActivityInfoBuildType().buildAll()
   // await new BuildKoboType().build('ecrec_msme_bha388')
-  // await new BuildKoboType().build('meal_winterizationPdm')
+  // await new BuildKoboType().build('ecrec_vet_bha388')
 })()
