@@ -17,6 +17,7 @@ import {
   ShelterContractor,
   shelterDrcProject,
   ShelterProgress,
+  Shelterstandards,
   ShelterTaPriceLevel,
 } from 'infoportal-common'
 import {Txt} from '@/shared/Txt'
@@ -845,30 +846,6 @@ export const ShelterTable = () => {
             ? add(_.ta.roof_shiffer_m, _.ta.roof_metal_sheets_m, _.ta.roof_onduline_sheets_m, _.ta.bitumen_paint_m)
             : undefined,
       },
-      // {
-      //   id: 'hasLot1',
-      //   group: 'ta',
-      //   groupLabel: KoboIndex.byName('shelter_ta').translation,
-      //   head: m._shelter.lot1,
-      //   width: 0,
-      //   align: 'center',
-      //   type: 'select_one',
-      //   typeIcon: null,
-      //   options: () => ['Yes', 'No', 'None'].map(DatatableUtils.buildOption),
-      //   render: row => {
-      //     return {
-      //       tooltip: null,
-      //       value: fnSwitch(KoboShelterTa.hasLot1(row.ta) + '', {
-      //         true: 'Yes',
-      //         false: 'No',
-      //       }, () => 'None'),
-      //       label: fnSwitch(KoboShelterTa.hasLot1(row.ta) + '', {
-      //         true: <TableIcon color="success">check</TableIcon>,
-      //         false: <TableIcon color="disabled">block</TableIcon>,
-      //       }, () => <></>)
-      //     }
-      //   },
-      // },
       {
         type: 'number',
         width: 0,
@@ -896,30 +873,6 @@ export const ShelterTable = () => {
         renderQuick: (_) =>
           _.ta ? add(_.ta.doubleglazed_upvc_door_pc, _.ta.external_doors_pc, _.ta.internal_wooden_doors_pc) : undefined,
       },
-      // {
-      //   id: 'hasLot2',
-      //   group: 'ta',
-      //   groupLabel: KoboIndex.byName('shelter_ta').translation,
-      //   head: m._shelter.lot2,
-      //   width: 0,
-      //   align: 'center',
-      //   type: 'select_one',
-      //   typeIcon: null,
-      //   options: () => ['Yes', 'No', 'None'].map(DatatableUtils.buildOption),
-      //   render: row => {
-      //     return {
-      //       tooltip: null,
-      //       value: fnSwitch(KoboShelterTa.hasLot2(row.ta) + '', {
-      //         true: 'Yes',
-      //         false: 'No',
-      //       }, () => 'None'),
-      //       label: fnSwitch(KoboShelterTa.hasLot2(row.ta) + '', {
-      //         true: <TableIcon color="success">check</TableIcon>,
-      //         false: <TableIcon color="disabled">block</TableIcon>,
-      //       }, () => <></>),
-      //     }
-      //   }
-      // },
       {
         id: 'contractor1',
         group: 'ta',
@@ -1318,6 +1271,54 @@ export const ShelterTable = () => {
                   }
                 />
               )),
+          }
+        },
+      },
+      {
+        id: 'repairstandards',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
+        width: 148,
+        head: m._shelter.repairstandards,
+        type: 'select_one',
+        options: () => Obj.keys(Shelterstandards).map((_) => ({value: _, label: _})),
+        typeIcon: null,
+        subHeader: selectedTa.length > 0 && (
+          <TableEditCellBtn
+            onClick={() =>
+              ctxKoboUpdate.openByName({
+                target: 'tag',
+                params: {
+                  formName: 'shelter_ta',
+                  answerIds: selectedTa,
+                  type: 'select_one',
+                  options: Obj.values(Shelterstandards),
+                  tag: 'standards',
+                },
+              })
+            }
+          />
+        ),
+        render: (row) => {
+          return {
+            option: row.ta?.tags?.standards,
+            value: row.ta?.tags?.standards,
+            label: row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted && map(row.ta, (ta) => {
+              return (
+                <IpSelectSingle<Shelterstandards>
+                  value={ta.tags?.standards}
+                  onChange={(tagChange) => {
+                    ctxKoboUpdate.asyncUpdateByName.tag.call({
+                      formName: 'shelter_ta',
+                      answerIds: [ta.id],
+                      tag: 'standards',
+                      value: tagChange,
+                    })
+                  }}
+                  options={Obj.keys(Shelterstandards)}
+                />
+              )
+            }),
           }
         },
       },
