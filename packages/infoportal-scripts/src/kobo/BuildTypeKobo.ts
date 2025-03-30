@@ -161,7 +161,7 @@ export class BuildKoboType {
       },
       meal_winterizationPdm: {
         formId: KoboIndex.byName('meal_winterizationPdm').id,
-        skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
+        skipQuestionTyping: ['ben_det_hromada'],
       },
       protection_gbvPdm: {
         formId: KoboIndex.byName('protection_gbvPdm').id,
@@ -170,7 +170,7 @@ export class BuildKoboType {
       meal_cfmInternal: {
         formId: KoboIndex.byName('meal_cfmInternal').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
-        langIndex: 1
+        langIndex: 1,
       },
       meal_cfmExternal: {
         formId: KoboIndex.byName('meal_cfmExternal').id,

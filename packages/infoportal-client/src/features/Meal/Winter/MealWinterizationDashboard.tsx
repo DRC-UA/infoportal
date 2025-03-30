@@ -4,7 +4,7 @@ import {useI18n} from '@/core/i18n'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {DebouncedInput} from '@/shared/DebouncedInput'
-import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
+import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
@@ -18,7 +18,6 @@ import {appConfig} from '@/conf/AppConfig'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {AgeGroupTable, Lazy} from '@/shared'
 import {Box} from '@mui/material'
-import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {formatLargeNumber} from '@/core/i18n/localization/en'
 
 export interface DashboardPageProps {
@@ -43,6 +42,12 @@ export const MealWinterizationDashboard = () => {
         getValue: (_) => _.ben_det_oblast,
         getOptions: () => DataFilter.buildOptionsFromObject(Meal_winterizationPdm.options.ben_det_oblast),
         label: m.oblast,
+      },
+      raion: {
+        icon: 'location_on',
+        getValue: (_) => _.ben_det_raion,
+        getOptions: () => DataFilter.buildOptionsFromObject(Meal_winterizationPdm.options.ben_det_raion),
+        label: m.raion,
       },
       office: {
         icon: 'share',
@@ -109,24 +114,30 @@ export const MealWinterizationDashboard = () => {
                       icon: 'location_on',
                       label: m.coveredOblasts,
                       valueFn: () => {
-                        const values = seq(data).map(_ => _.ben_det_oblast).compact()
-                        return values.distinct(_ => _).length
+                        const values = seq(data)
+                          .map((_) => _.ben_det_oblast)
+                          .compact()
+                        return values.distinct((_) => _).length
                       },
                     },
                     {
                       icon: 'location_on',
                       label: m.coveredRaions,
                       valueFn: () => {
-                        const values = seq(data).map(_ => _.ben_det_raion).compact()
-                        return values.distinct(_ => _).length
+                        const values = seq(data)
+                          .map((_) => _.ben_det_raion)
+                          .compact()
+                        return values.distinct((_) => _).length
                       },
                     },
                     {
                       icon: 'fingerprint',
                       label: m.uniqIndividuals,
                       valueFn: () => {
-                        const values = seq(data).map(_ => _.unique_number).compact()
-                        return values.distinct(_ => _).length
+                        const values = seq(data)
+                          .map((_) => _.unique_number)
+                          .compact()
+                        return values.distinct((_) => _).length
                       },
                     },
                   ].map(({icon, label, valueFn}) => (
@@ -134,7 +145,9 @@ export const MealWinterizationDashboard = () => {
                       <Lazy deps={[data]} fn={valueFn}>
                         {(value) => (
                           <Box display="flex" alignItems="center" gap={1}>
-                            <span className="material-icons" style={{fontSize: 20, color: '#555'}}>{icon}</span>
+                            <span className="material-icons" style={{fontSize: 20, color: '#555'}}>
+                              {icon}
+                            </span>
                             <strong style={{fontSize: 18}}>{formatLargeNumber(value)}</strong>
                           </Box>
                         )}
@@ -177,13 +190,13 @@ export const MealWinterizationDashboard = () => {
                 </SlidePanel>
               </SlidePanel>
               <SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.priorityNeeds}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.needs_community_currently}
-                  label={Meal_winterizationPdm.options.needs_community_currently}
-                />
-              </SlidePanel>
+                <SlidePanel title={m.mealMonitoringPdm.priorityNeeds}>
+                  <ChartBarMultipleBy
+                    data={data}
+                    by={(_) => _.needs_community_currently}
+                    label={Meal_winterizationPdm.options.needs_community_currently}
+                  />
+                </SlidePanel>
               </SlidePanel>
             </Div>
             <Div column sx={{maxHeight: '33%'}}>
@@ -348,32 +361,32 @@ export const MealWinterizationDashboard = () => {
                 />
               </SlidePanel>
               <SlidePanel>
-              <SlidePanel>
-                <ChartPieWidgetBy
-                  title={m.mealMonitoringPdm.inAdvance}
-                  filter={(_) => _.informed_amount_cash_receive === 'yes'}
-                  data={data}
-                  sx={{mb: 1}}
-                />
-                <ChartBarSingleBy
-                  data={data}
-                  by={(_) => _.informed_amount_cash_receive}
-                  label={Meal_winterizationPdm.options.were_informed_timeframe}
-                />
-              </SlidePanel>
-              <SlidePanel>
-                <ChartPieWidgetBy
-                  title={m.mealMonitoringPdm.assistanceCorrespond}
-                  filter={(_) => _.amount_received_correspond === 'yes'}
-                  data={data}
-                  sx={{mb: 1}}
-                />
-                <ChartBarSingleBy
-                  data={data}
-                  by={(_) => _.amount_received_correspond}
-                  label={Meal_winterizationPdm.options.were_informed_timeframe}
-                />
-              </SlidePanel>
+                <SlidePanel>
+                  <ChartPieWidgetBy
+                    title={m.mealMonitoringPdm.inAdvance}
+                    filter={(_) => _.informed_amount_cash_receive === 'yes'}
+                    data={data}
+                    sx={{mb: 1}}
+                  />
+                  <ChartBarSingleBy
+                    data={data}
+                    by={(_) => _.informed_amount_cash_receive}
+                    label={Meal_winterizationPdm.options.were_informed_timeframe}
+                  />
+                </SlidePanel>
+                <SlidePanel>
+                  <ChartPieWidgetBy
+                    title={m.mealMonitoringPdm.assistanceCorrespond}
+                    filter={(_) => _.amount_received_correspond === 'yes'}
+                    data={data}
+                    sx={{mb: 1}}
+                  />
+                  <ChartBarSingleBy
+                    data={data}
+                    by={(_) => _.amount_received_correspond}
+                    label={Meal_winterizationPdm.options.were_informed_timeframe}
+                  />
+                </SlidePanel>
               </SlidePanel>
             </Div>
           </Div>
