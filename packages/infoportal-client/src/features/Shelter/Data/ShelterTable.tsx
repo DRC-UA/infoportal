@@ -1279,7 +1279,7 @@ export const ShelterTable = () => {
         group: 'ta',
         groupLabel: KoboIndex.byName('shelter_ta').translation,
         width: 148,
-        head: m._shelter.repairstandards,
+        head: m._shelter.repairStandards,
         type: 'select_one',
         options: () => Obj.keys(Shelterstandards).map((_) => ({value: _, label: _})),
         typeIcon: null,
@@ -1303,22 +1303,24 @@ export const ShelterTable = () => {
           return {
             option: row.ta?.tags?.standards,
             value: row.ta?.tags?.standards,
-            label: row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted && map(row.ta, (ta) => {
-              return (
-                <IpSelectSingle<Shelterstandards>
-                  value={ta.tags?.standards}
-                  onChange={(tagChange) => {
-                    ctxKoboUpdate.asyncUpdateByName.tag.call({
-                      formName: 'shelter_ta',
-                      answerIds: [ta.id],
-                      tag: 'standards',
-                      value: tagChange,
-                    })
-                  }}
-                  options={Obj.keys(Shelterstandards)}
-                />
-              )
-            }),
+            label:
+              row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted &&
+              map(row.ta, (ta) => {
+                return (
+                  <IpSelectSingle<Shelterstandards>
+                    value={ta.tags?.standards}
+                    onChange={(tagChange) => {
+                      ctxKoboUpdate.asyncUpdateByName.tag.call({
+                        formName: 'shelter_ta',
+                        answerIds: [ta.id],
+                        tag: 'standards',
+                        value: tagChange,
+                      })
+                    }}
+                    options={Obj.keys(Shelterstandards)}
+                  />
+                )
+              }),
           }
         },
       },
