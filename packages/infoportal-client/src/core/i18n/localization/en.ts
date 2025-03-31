@@ -900,7 +900,7 @@ export const en = Object.freeze({
       repairCost: 'Total repairs cost',
       repairCostByHh: 'Repairs cost by HH',
       workDoneAt: 'Work done at',
-      repairStandards: 'Repair standards met',
+      repairStandards: 'Compliance with technical and performance standards',
       workDoneStart: 'Work done start',
       scoreLevel: 'Price level',
       priceLevel: 'Price level',
