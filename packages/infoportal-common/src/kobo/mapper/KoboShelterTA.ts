@@ -133,7 +133,10 @@ export enum ShelterTaPriceLevel {
   Medium = 'Medium',
   Heavy = 'Heavy',
 }
-
+export enum Shelterstandards{
+  yes = 'Yes',
+  no = 'No'
+}
 export interface ShelterTaTags extends KoboBaseTags {
   progress?: ShelterProgress
   contractor1?: ShelterContractor
@@ -143,6 +146,7 @@ export interface ShelterTaTags extends KoboBaseTags {
   workDoneAt?: Date
   price?: number
   damageLevel: ShelterTaPriceLevel
+  standards?: Shelterstandards
 }
 
 export class ShelterTaTagsHelper {
