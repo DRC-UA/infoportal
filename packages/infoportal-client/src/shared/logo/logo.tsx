@@ -66,6 +66,14 @@ export const UsaidLogo = ({
 } & BoxProps) => {
   return <Box component="img" src="/static/logo-usaid.png" height={height} alt="USAID Logo" {...props} />
 }
+export const SdcLogo = ({
+  height = 28,
+  ...props
+}: {
+  height?: number
+} & BoxProps) => {
+  return <Box component="img" src="/static/sdc.png" height={height} alt="Sdc Logo" {...props} />
+}
 
 export const DRCLogoLarge = ({
   height = 24,

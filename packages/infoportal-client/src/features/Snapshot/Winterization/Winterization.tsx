@@ -3,7 +3,7 @@ import {Box} from '@mui/material'
 import {Pdf} from '@/shared/PdfLayout/PdfLayout'
 import {MealWinterizationProvider, useMealWinterizationContext} from '@/features/Meal/Winter/MealWinterizationContext'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {DRCLogo, EULogo, UhfLogo} from '@/shared/logo/logo'
+import {DRCLogo, EULogo, SdcLogo, UhfLogo} from '@/shared/logo/logo'
 
 import {WinterizationIntro} from './WinterizationIntro'
 import {WinterizationFeedback} from './WinterizationFeedback'
@@ -13,9 +13,11 @@ import React from 'react'
 
 export const SnapshotLogoPDM = (
   <>
-    <UhfLogo sx={{mr: 2.5}} />
-    <EULogo sx={{mr: 2.5}} />
+    <UhfLogo sx={{mr: 2}} />
+    <EULogo sx={{mr: 2}} />
+    <SdcLogo sx={{mr: 2}} />
     <DRCLogo />
+
   </>
 )
 
