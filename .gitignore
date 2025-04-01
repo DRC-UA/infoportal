@@ -89,3 +89,6 @@ sessions/
 .idea/
 
 .DS_Store
+
+# generate scripts outpur folder, the destination for generated AI types
+packages/infoportal-scripts/output

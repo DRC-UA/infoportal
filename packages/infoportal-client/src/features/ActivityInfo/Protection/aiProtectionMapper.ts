@@ -6,18 +6,14 @@ import {fnSwitch} from '@axanc/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 
+import {PROTECTION_PLAN_CODES} from './constants'
+
 export namespace AiProtectionMapper {
   type Bundle = AiTable<AiProtectionType.Type, AiProtectionType.AiTypeActivitiesAndPeople>
 
-  const getPlanCode = (_?: DrcProject): AiProtectionType.Type['Plan/Project Code'] => {
-    const planCode = Object.freeze({
-      [DrcProject['UKR-000363 UHF8']]: 'PRT-DRC-00007',
-      [DrcProject['UKR-000372 ECHO3']]: 'PRT-DRC-00002',
-      [DrcProject['UKR-000355 Danish MFA']]: 'PRT-DRC-00008',
-      [DrcProject['UKR-000345 BHA2']]: '',
-    })
-    // @ts-ignore
-    return planCode[_] ?? `${aiInvalidValueFlag} ${_}`
+  const getPlanCode = (project?: DrcProject): AiProtectionType.Type['Plan/Project Code'] => {
+    // @ts-expect-error
+    return PROTECTION_PLAN_CODES[project] ?? `${aiInvalidValueFlag} ${project}`
   }
 
   export const req =
