@@ -12,7 +12,7 @@ export namespace AiProtectionMapper {
   type Bundle = AiTable<AiProtectionType.Type, AiProtectionType.AiTypeActivitiesAndPeople>
 
   const getPlanCode = (project?: DrcProject): AiProtectionType.Type['Plan/Project Code'] => {
-    // @ts-expect-error
+    // @ts-expect-error It's OK to get an error here, we expect it to flag missing or mismatching data
     return PROTECTION_PLAN_CODES[project] ?? `${aiInvalidValueFlag} ${project}`
   }
 
