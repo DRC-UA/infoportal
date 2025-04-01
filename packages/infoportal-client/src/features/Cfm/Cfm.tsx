@@ -44,8 +44,8 @@ const CfmSidebar = () => {
   const _stats = useMemo(() => {
     let open = 0
     let coc = 0
-    ctx.mappedData?.forEach((_) => {
-      if (_.tags?.status === undefined || _.tags?.status === KoboMealCfmStatus.Open) {
+    ctx.visibleData?.forEach((_) => {
+      if (_.tags?.status === KoboMealCfmStatus.Open) {
         if (_.priority === CfmDataPriority.High) coc++
         open++
       }
