@@ -6,7 +6,7 @@ import {Meal_winterizationPdm} from 'infoportal-common'
 import {useI18n} from '@/core/i18n'
 import {useMealWinterizationContext} from '@/features/Meal/Winter/MealWinterizationContext'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
-import {Div, SlidePanel, PdfSlide, PdfSlideBody} from '@/shared/PdfLayout/PdfSlide'
+import {Div, SlidePanel, PdfSlide, PdfSlideBody, SlideTxt} from '@/shared/PdfLayout/PdfSlide'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {SnapshotLogoPDM} from '@/features/Snapshot/Winterization/Winterization'
@@ -23,7 +23,7 @@ export const WinterizationFeedback = () => {
     <PdfSlide>
       <SnapshotHeader
         title="Winterization 2024-2025"
-        subTitle="PDM"
+        subTitle="Additional Feedback"
         period={ctx.periodFilter}
         logo={SnapshotLogoPDM}
         showDashboardLink={false}
@@ -31,13 +31,24 @@ export const WinterizationFeedback = () => {
       <PdfSlideBody>
         <Div>
           <Div column sx={{flex: 1}}>
+            <SlideTxt>
+              At the end of every DRC post-assistance monitoring, we ask households what they perceive their primary
+              needs to be, even after receiving assistance.
+            </SlideTxt>
             <SlidePanel title={m.mealMonitoringPdm.priorityNeeds}>
               <ChartBarMultipleBy
                 data={data ?? seq([])}
                 by={(_) => _.needs_community_currently}
                 label={Meal_winterizationPdm.options.needs_community_currently}
+                limit={9}
               />
             </SlidePanel>
+            <SlideTxt>
+              Whilst utilities was most commonly reported as the second highest priority need (61.2%) and heating (fuel)
+              as the fourth highest (51%) it must be acknowledged that healthcare and medication (71%) and food (53%)
+              are highly reported needs, and could be a contributing factor as to why future winterisation assistance as
+              a cash modality may be used to reach households other basic needs.
+            </SlideTxt>
           </Div>
           <Div column sx={{flex: 1}}>
             <SlidePanel title={m.mealMonitoringPdm.feedback}>
