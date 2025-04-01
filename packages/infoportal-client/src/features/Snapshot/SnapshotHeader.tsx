@@ -19,12 +19,14 @@ export const SnapshotHeader = ({
   title,
   subTitle,
   dashBoardHref,
+  showDashboardLink = true,
 }: {
   title?: string
   subTitle?: string
   period: Partial<Period>
   logo?: ReactNode
   dashBoardHref?: string
+  showDashboardLink?: boolean
 }) => {
   const {m} = useI18n()
   useEffect(() => {
@@ -47,7 +49,7 @@ export const SnapshotHeader = ({
           {title ?? m.protHHSnapshot.title}&nbsp;
           <Box sx={{display: 'inline', fontWeight: 'lighter'}}>- {subTitle ?? m.protHHSnapshot.title2}</Box>
         </Txt>
-        <SnapshotPeriod period={period} href={dashBoardHref} />
+        <SnapshotPeriod period={period} href={dashBoardHref} showLink={showDashboardLink !== false} />
       </Box>
       <Box sx={{display: 'flex', alignItems: 'center', marginLeft: 'auto'}}>{logo}</Box>
     </Box>

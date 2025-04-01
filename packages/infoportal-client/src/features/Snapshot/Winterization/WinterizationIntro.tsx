@@ -2,17 +2,16 @@ import {useMemo} from 'react'
 import {map, seq} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 
-import {KoboXmlMapper, OblastIndex, Meal_winterizationPdm} from 'infoportal-common'
+import {KoboXmlMapper, OblastIndex, Meal_winterizationPdm, DrcOffice} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {useMealWinterizationContext} from '@/features/Meal/Winter/MealWinterizationContext'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
-import {snapshotProtMonitoNn2Logo} from '@/features/Snapshot/SnapshotProtMonitoNN2/SnapshotProtMonitoNN2'
 import {AgeGroupTable, Lazy} from '@/shared'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {Panel, PanelBody, PanelTitle} from '@/shared/Panel'
 import {Div, SlidePanel, PdfSlide, PdfSlideBody, SlideTxt, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
+import {SnapshotLogoPDM} from '@/features/Snapshot/Winterization/Winterization'
 
 export const WinterizationIntro = () => {
   const ctx = useMealWinterizationContext()
@@ -70,24 +69,71 @@ export const WinterizationIntro = () => {
         title="Winterization 2024-2025"
         subTitle="PDM"
         period={ctx.periodFilter}
-        dashBoardHref="https://infoportal-ua.drc.ngo/meal#/winterization/dashboard"
-        logo={snapshotProtMonitoNn2Logo}
+        logo={SnapshotLogoPDM}
+        showDashboardLink={false}
       />
       <PdfSlideBody>
         <Div>
           <Div column sx={{flex: 1}}>
             <SlideTxt>This snapshot summarizes the ... [ 📢 please help me with wording].</SlideTxt>
-            <Box sx={{height: 316, borderRadius: (t) => t.shape.borderRadius}}>
-              <PanelTitle sx={{mb: 3, mt: 1}}>Oblasts Covered</PanelTitle>
-              <MapSvgByOblast
-                sx={{maxWidth: 480, margin: 'auto'}}
-                fillBaseOn="value"
-                data={data ?? seq([])}
-                getOblast={(_) => mapOblast[_.ben_det_oblast!]}
-                value={(_) => true}
-                base={(_) => _.ben_det_oblast !== undefined}
+            <Div column sx={{flex: 1}}>
+              <AgeGroupTable
+                sx={{flex: 1}}
+                tableId="pdm-dashboard"
+                persons={persons}
+                enableDisplacementStatusFilter
+                enablePwdFilter
               />
-            </Box>
+              <Box sx={{display: 'flex', gap: 2, mt: 1}}>
+                <SlideWidget title={m.avgMale} sx={{flex: 1}}>
+                  <Lazy
+                    deps={[data]}
+                    fn={() => {
+                      const values = seq(data)
+                        .filter((_) => _.sex === 'male' && typeof _.age === 'number')
+                        .map((_) => _.age!)
+                      return values.length ? values.sum() / values.length : undefined
+                    }}
+                  >
+                    {(value) => (
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <span className="material-icons" style={{fontSize: 20, color: '#555'}}>
+                          man
+                        </span>
+                        <strong style={{fontSize: 18}}>{value ? value.toFixed(1) : '–'}</strong>
+                      </Box>
+                    )}
+                  </Lazy>
+                </SlideWidget>
+                <SlideWidget title={m.avgFemale} sx={{flex: 1}}>
+                  <Lazy
+                    deps={[data]}
+                    fn={() => {
+                      const values = seq(data)
+                        .filter((_) => _.sex === 'female' && typeof _.age === 'number')
+                        .map((_) => _.age!)
+                      return values.length ? values.sum() / values.length : undefined
+                    }}
+                  >
+                    {(value) => (
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <span className="material-icons" style={{fontSize: 20, color: '#555'}}>
+                          woman
+                        </span>
+                        <strong style={{fontSize: 18}}>{value ? value.toFixed(1) : '–'}</strong>
+                      </Box>
+                    )}
+                  </Lazy>
+                </SlideWidget>
+              </Box>
+            </Div>
+            <SlidePanel title={m.project}>
+              <ChartBarSingleBy
+                data={data ?? seq([])}
+                by={(_) => _.donor}
+                label={Meal_winterizationPdm.options.donor}
+              />
+            </SlidePanel>
           </Div>
           <Div column sx={{flex: 1}}>
             <Div sx={{flex: 1}}>
@@ -106,29 +152,39 @@ export const WinterizationIntro = () => {
                 </SlideWidget>
               ))}
             </Div>
-            <Div column sx={{flex: 1}}>
-              <AgeGroupTable
-                sx={{flex: 1}}
-                tableId="pdm-dashboard"
-                persons={persons}
-                enableDisplacementStatusFilter
-                enablePwdFilter
+            <Box sx={{height: 316, borderRadius: (t) => t.shape.borderRadius}}>
+              <MapSvgByOblast
+                sx={{maxWidth: 480, margin: 'auto'}}
+                fillBaseOn="value"
+                data={data ?? seq([])}
+                getOblast={(_) => mapOblast[_.ben_det_oblast!]}
+                value={(_) => true}
+                base={(_) => _.ben_det_oblast !== undefined}
               />
-              <SlidePanel title={m.project}>
-                <ChartBarSingleBy
-                  data={data ?? seq([])}
-                  by={(_) => _.donor}
-                  label={Meal_winterizationPdm.options.donor}
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.pdmType}>
-                <ChartBarSingleBy
-                  data={data ?? seq([])}
-                  by={(_) => _.pdmtype}
-                  label={Meal_winterizationPdm.options.pdmtype}
-                />
-              </SlidePanel>
-            </Div>
+            </Box>
+            <SlidePanel title={m.office} sx={{mt: 1}}>
+              <ChartBarSingleBy
+                data={data ?? seq([])}
+                by={(_) => _.office}
+                label={
+                  Object.fromEntries(
+                    Object.entries({
+                      dnipro: DrcOffice.Dnipro,
+                      empca: DrcOffice.Kharkiv,
+                      mykolaiv: DrcOffice.Mykolaiv,
+                      sumy: DrcOffice.Sumy,
+                      chernihiv: DrcOffice.Chernihiv,
+                      lviv: DrcOffice.Lviv,
+                      zaporizhzhya: DrcOffice.Zaporizhzhya,
+                      slovyansk: DrcOffice.Sloviansk,
+                    }),
+                  ) as Record<
+                    'dnipro' | 'empca' | 'mykolaiv' | 'sumy' | 'chernihiv' | 'lviv' | 'zaporizhzhya' | 'slovyansk',
+                    React.ReactNode
+                  >
+                }
+              />
+            </SlidePanel>
           </Div>
         </Div>
       </PdfSlideBody>

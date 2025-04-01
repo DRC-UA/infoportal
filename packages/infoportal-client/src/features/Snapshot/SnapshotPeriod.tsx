@@ -14,9 +14,11 @@ export const periodToString = (period: Partial<Period>) => {
 export const SnapshotPeriod = ({
   period,
   href = 'https://infoportal-ua.drc.ngo/dashboard/protection-monitoring',
+  showLink = true,
 }: {
   period: Partial<Period>
   href?: string
+  showLink?: boolean
 }) => {
   const asString = useMemo(() => (period && (period.start || period.end) ? periodToString(period) : ''), [period])
   return (
@@ -27,13 +29,17 @@ export const SnapshotPeriod = ({
           {asString.end !== asString.start && <>&nbsp;-&nbsp;{asString.end}</>}
         </>
       )}
-      <Icon sx={{mx: 1.5, fontSize: 10}}>fiber_manual_record</Icon>
-      <Box component="a" target="_blank" href={href} sx={{color: '#4c8cca', display: 'flex', alignItems: 'center'}}>
-        <Icon sx={{mr: 0.5}} fontSize="small">
-          open_in_new
-        </Icon>
-        Interactive dashboard
-      </Box>
+      {showLink && href && (
+        <>
+          <Icon sx={{mx: 1.5, fontSize: 10}}>fiber_manual_record</Icon>
+          <Box component="a" target="_blank" href={href} sx={{color: '#4c8cca', display: 'flex', alignItems: 'center'}}>
+            <Icon sx={{mr: 0.5}} fontSize="small">
+              open_in_new
+            </Icon>
+            Interactive dashboard
+          </Box>
+        </>
+      )}
     </Txt>
   )
 }

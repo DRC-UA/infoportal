@@ -3,11 +3,21 @@ import {Box} from '@mui/material'
 import {Pdf} from '@/shared/PdfLayout/PdfLayout'
 import {MealWinterizationProvider, useMealWinterizationContext} from '@/features/Meal/Winter/MealWinterizationContext'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {DRCLogo} from '@/shared/logo/logo'
+import {DRCLogo, EULogo, UhfLogo} from '@/shared/logo/logo'
 
 import {WinterizationIntro} from './WinterizationIntro'
+import {WinterizationFeedback} from './WinterizationFeedback'
+import {WinterizationMonitoring} from './WinterizationMonitoring'
+import {WinterizationMonitoringAnother} from './WinterizationMonitoringAnother'
+import React from 'react'
 
-export const snapshotProtMonitoNn2Logo = <DRCLogo />
+export const SnapshotLogoPDM = (
+  <>
+    <UhfLogo sx={{mr: 2.5}} />
+    <EULogo sx={{mr: 2.5}} />
+    <DRCLogo />
+  </>
+)
 
 export const WinterizationSnapshot = () => {
   return (
@@ -28,6 +38,9 @@ const _SnapshotProtMonitoring = () => {
         />
       </Box>
       <WinterizationIntro />
+      <WinterizationMonitoring />
+      <WinterizationMonitoringAnother />
+      <WinterizationFeedback />
     </Pdf>
   )
 }
