@@ -1,8 +1,8 @@
-import {useMemo} from 'react'
+import React, {useMemo} from 'react'
 import {map, seq} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 
-import {KoboXmlMapper, OblastIndex, Meal_winterizationPdm, DrcOffice} from 'infoportal-common'
+import {KoboXmlMapper, OblastIndex, Meal_winterizationPdm, DrcOffice, Person} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {useMealWinterizationContext} from '@/features/Meal/Winter/MealWinterizationContext'
@@ -12,6 +12,7 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Div, SlidePanel, PdfSlide, PdfSlideBody, SlideTxt, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {SnapshotLogoPDM} from '@/features/Snapshot/Winterization/Winterization'
+import {Panel, PanelBody} from '@/shared/Panel'
 
 export const WinterizationIntro = () => {
   const ctx = useMealWinterizationContext()
@@ -127,13 +128,15 @@ export const WinterizationIntro = () => {
                 </SlideWidget>
               </Box>
             </Div>
-            <SlidePanel title={m.project}>
-              <ChartBarSingleBy
-                data={data ?? seq([])}
-                by={(_) => _.donor}
-                label={Meal_winterizationPdm.options.donor}
-              />
-            </SlidePanel>
+            <Panel title={m.displacementStatus}>
+              <PanelBody>
+                <ChartBarSingleBy
+                  data={data ?? seq([])}
+                  by={(_) => _.status_person}
+                  label={Meal_winterizationPdm.options.status_person}
+                />
+              </PanelBody>
+            </Panel>
           </Div>
           <Div column sx={{flex: 1}}>
             <Div sx={{flex: 1}}>

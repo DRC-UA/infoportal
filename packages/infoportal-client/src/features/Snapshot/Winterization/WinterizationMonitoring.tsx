@@ -32,12 +32,21 @@ export const WinterizationMonitoring = () => {
       <PdfSlideBody>
         <Div>
           <Div column sx={{flex: 1}}>
+            <SlidePanel>
+            <SlidePanel title={m.project}>
+              <ChartBarSingleBy
+                data={data ?? seq([])}
+                by={(_) => _.donor}
+                label={Meal_winterizationPdm.options.donor}
+              />
+            </SlidePanel>
             <SlidePanel title={m.mealMonitoringPdm.pdmType}>
               <ChartBarSingleBy
                 data={data ?? seq([])}
                 by={(_) => _.pdmtype}
                 label={Meal_winterizationPdm.options.pdmtype}
               />
+            </SlidePanel>
             </SlidePanel>
             <SlidePanel>
               <ChartPieWidgetBy
