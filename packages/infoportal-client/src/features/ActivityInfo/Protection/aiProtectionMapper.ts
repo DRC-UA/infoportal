@@ -29,7 +29,6 @@ export namespace AiProtectionMapper {
             DrcProgram.PGS,
             DrcProgram.ProtectionMonitoring,
             DrcProgram.CommunityLevelPm,
-            DrcProgram.AwarenessRaisingSession,
             DrcProgram.Referral,
           ],
           status: [KoboMetaStatus.Committed],
