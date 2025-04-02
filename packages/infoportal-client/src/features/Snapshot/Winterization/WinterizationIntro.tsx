@@ -89,19 +89,24 @@ export const WinterizationIntro = () => {
         <Div>
           <Div column sx={{flex: 1}}>
             <SlideTxt>
-              DRC Ukraine interviewed 2,684 households across 9 Oblasts and 20 Raions of Ukraine to
-              assess the impact of cash for utilities and cash for fuel programming funded by ECHO, UHF, and SDC. The
-              larger sample size was utilised to ensure sampling was representative at a Hromada level, to ensure DRC
-              had a more granular understanding of the value of this approach to winterisation support. As part of the
-              post-assistance monitoring, DRC asked additional questions related to the preference of assistance
-              modality, as well as anticipated needs for winter 2025/26.{' '}
+              DRC Ukraine interviewed 2,684 households across 9 Oblasts and 20 Raions of Ukraine to assess the impact of
+              cash for utilities and cash for fuel programming funded by ECHO, UHF, and SDC. The larger sample size was
+              utilised to ensure sampling was representative at a Hromada level, to ensure DRC had a more granular
+              understanding of the value of this approach to winterisation support. As part of the post-assistance
+              monitoring, DRC asked additional questions related to the preference of assistance modality, as well as
+              anticipated needs for winter 2025/26.{' '}
             </SlideTxt>
             <SlidePanel>
               <SlidePanel title={m.project}>
                 <ChartBarSingleBy
                   data={data ?? seq([])}
                   by={(_) => _.donor}
-                  label={Meal_winterizationPdm.options.donor}
+                  label={{
+                    ...Meal_winterizationPdm.options.donor,
+                    ukr000372_echo: `ECHO`,
+                    ukr000390_uhf9: `UHF`,
+                    ukr000399_sdc3: `SDC`,
+                  }}
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.pdmType}>
@@ -127,9 +132,9 @@ export const WinterizationIntro = () => {
                       <Lazy deps={[data]} fn={valueFn}>
                         {(value) => (
                           <Box display="flex" alignItems="center" gap={1}>
-                          <span className="material-icons" style={{fontSize: 20, color: '#555'}}>
-                            {icon}
-                          </span>
+                            <span className="material-icons" style={{fontSize: 20, color: '#555'}}>
+                              {icon}
+                            </span>
                             <strong style={{fontSize: 18}}>{formatLargeNumber(value)}</strong>
                           </Box>
                         )}
