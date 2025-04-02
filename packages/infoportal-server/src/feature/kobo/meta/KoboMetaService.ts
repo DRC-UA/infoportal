@@ -1,11 +1,9 @@
+import {duration, map, Obj, seq, Seq, chunkify} from '@axanc/ts-utils'
 import {Prisma, PrismaClient} from '@prisma/client'
-import {GlobalEvent} from '../../../core/GlobalEvent.js'
-import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds.js'
-import {app, AppCacheKey, AppLogger} from '../../../index.js'
-import {KoboService} from '../KoboService.js'
-import {duration, map, Obj, seq, Seq, sleep} from '@axanc/ts-utils'
-import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec.js'
-import {KoboMetaMapperShelter} from './KoboMetaMapperShelter.js'
+import {PromisePool} from '@supercharge/promise-pool'
+import {Kobo} from 'kobo-sdk'
+import {InferType} from 'yup'
+
 import {
   DrcDonor,
   DrcProgram,
@@ -18,14 +16,21 @@ import {
   Person,
   UUID,
 } from 'infoportal-common'
+
+import {app, AppCacheKey, AppLogger} from '../../../index.js'
 import {appConf} from '../../../core/conf/AppConf.js'
+import {GlobalEvent} from '../../../core/GlobalEvent.js'
 import {genUUID, yup} from '../../../helper/Utils.js'
-import {InferType} from 'yup'
+
+import {KoboService} from '../KoboService.js'
+
+import {KoboMetaBasicneeds} from './KoboMetaMapperBasicneeds.js'
+import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec.js'
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection.js'
-import {PromisePool} from '@supercharge/promise-pool'
-import {Kobo} from 'kobo-sdk'
-import {chunkify} from '@axanc/ts-utils'
-import Event = GlobalEvent.Event
+import {KoboMetaMapperShelter} from './KoboMetaMapperShelter.js'
+import {KoboMetaMapperVa} from './KoboMetaMapperVa.js'
+
+const {Event} = GlobalEvent
 
 export type MetaMapped<TTag extends Record<string, any> = any> = Omit<
   IKoboMeta<TTag>,
@@ -78,6 +83,7 @@ export class KoboMetaMapper {
     [KoboIndex.byName('ecrec_vet_bha388').id]: KoboMetaMapperEcrec.ecrec_vet_bha388,
     [KoboIndex.byName('ecrec_vet2_dmfa').id]: KoboMetaMapperEcrec.ecrec_vet2_dmfa,
     [KoboIndex.byName('ecrec_msmeGrantReg').id]: KoboMetaMapperEcrec.ecrec_msmeGrantReg,
+    [KoboIndex.byName('va_bio_tia').id]: KoboMetaMapperVa.bioAndTia,
   }
   static readonly mappersUpdate: Record<Kobo.FormId, MetaMapperMerge> = {
     [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa,
