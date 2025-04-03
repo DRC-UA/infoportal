@@ -1,5 +1,5 @@
-import * as mssql from 'mssql'
-import {ConnectionPool} from 'mssql'
+import mssql, {type ConnectionPool} from 'mssql'
+
 import {appConf, AppConf} from '../../conf/AppConf.js'
 
 export class HdpSdk {
@@ -13,8 +13,8 @@ export class HdpSdk {
     })
     const sql = await pool.connect()
     return await sql.query`
-        SELECT *
-        FROM external_migrate.undp_rmm_re_direct_session
+      SELECT *
+      FROM external_migrate.undp_rmm_re_direct_session
     `
   }
 
