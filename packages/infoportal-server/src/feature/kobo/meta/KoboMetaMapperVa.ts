@@ -65,7 +65,7 @@ export class KoboMetaMapperVa {
       activity: DrcProgram.TIA,
       persons,
       personsCount: persons.length,
-      project: projects || [],
+      project: projects,
       donor:
         seq(projects)
           .map((project) => DrcProjectHelper.donorByProject[project])
@@ -74,7 +74,7 @@ export class KoboMetaMapperVa {
         .cases({
           paid: KoboMetaStatus.Committed,
           rejected: KoboMetaStatus.Rejected,
-          ongoing: KoboMetaStatus.Committed,
+          ongoing: KoboMetaStatus.Pending,
         })
         .default(undefined),
       lastStatusUpdate: row.date,
