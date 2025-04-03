@@ -42,6 +42,7 @@ export const MetaSidebar = () => {
   const asyncKillCache = useAsync(api.koboMeta.killCache)
   const {toastInfo} = useIpToast()
   const {session} = useSession()
+  const isDevEnv = process?.env.NODE_ENV === 'development'
 
   return (
     <Sidebar>
@@ -53,6 +54,16 @@ export const MetaSidebar = () => {
             </SidebarItem>
           )}
         </NavLink>
+
+        {isDevEnv && (
+          <NavLink to={path(metaSiteMap.routes.data)}>
+            {({isActive, isPending}) => (
+              <SidebarItem active={isActive} icon={appConfig.icons.dataTable}>
+                {m.data}
+              </SidebarItem>
+            )}
+          </NavLink>
+        )}
 
         {session.admin && (
           <SidebarItem icon="refresh" onClick={() => asyncRefresh.call().then(() => toastInfo(m._meta.refreshLong))}>

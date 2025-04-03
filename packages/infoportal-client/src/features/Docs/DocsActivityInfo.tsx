@@ -40,7 +40,7 @@ const DocsActivityInfo: FC = () => {
         {rrmFormStructureJson}
       </SyntaxHighlighter>
       <Typography>
-        As one may see, the <code>forms</code> in terms of Activity Info are actually a <code>fields</code> of the form.
+        As one may see, the <code>forms</code> in terms of Activity Info are actually a <code>fields</code> of the form.{' '}
         <code>elements</code> of the <code>schema</code> property are the answer variants (translations, options of
         different relevance etc). Let&#39;s stick to English variant.
       </Typography>
@@ -65,7 +65,12 @@ const DocsActivityInfo: FC = () => {
       </SyntaxHighlighter>
       <Typography>
         Make needed modifications to the <code>ActivityInfoBuildType</code> class, like provide proper
-        &quot;formId&quot; for a respective sector in
+        &quot;formId&quot; for a respective sector. The <code>cofrmId</code> could be taken from the respective RRM
+        form's URI, like{' '}
+        <code>
+          https://www.activityinfo.org/app#form/<strong>cmasgbem5w7pgf02</strong>/table
+        </code>{' '}
+        for SNFI form:
       </Typography>
       <SyntaxHighlighter
         language="typescript"

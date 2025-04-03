@@ -31,10 +31,18 @@ export namespace AiMineActionType {
         parentRecordId,
         fields: {
           cvb0gcplqf3085j4s: a['ID'],
-          c1g03yllqf3085j4t: a['Reporting Organization'] ? 'czbgrslpwg36j52' + ':' + options['Partner'][a['Reporting Organization']!] : undefined,
-          ct68whplqf3085j4u: a['Implementing Partner'] ? 'czbgrslpwg36j52' + ':' + options['Partner'][a['Implementing Partner']!] : undefined,
-          cz796xnlqf3085j4v: a['Implementing Partner 2'] ? 'czbgrslpwg36j52' + ':' + options['Partner'][a['Implementing Partner 2']!] : undefined,
-          ccn9h61lrkokg015: a['Plan/Project Code'] ? 'c9c396nlr6f4i48zv' + ':' + options['Activity Planning Module (Mine Action AoR)'][a['Plan/Project Code']!] : undefined,
+          c1g03yllqf3085j4t: a['Reporting Organization']
+            ? 'czbgrslpwg36j52' + ':' + options['Partner'][a['Reporting Organization']!]
+            : undefined,
+          ct68whplqf3085j4u: a['Implementing Partner']
+            ? 'czbgrslpwg36j52' + ':' + options['Partner'][a['Implementing Partner']!]
+            : undefined,
+          cz796xnlqf3085j4v: a['Implementing Partner 2']
+            ? 'czbgrslpwg36j52' + ':' + options['Partner'][a['Implementing Partner 2']!]
+            : undefined,
+          ccn9h61lrkokg015: a['Plan/Project Code']
+            ? 'c9c396nlr6f4i48zv' + ':' + options['Activity Planning Module (Mine Action AoR)'][a['Plan/Project Code']!]
+            : undefined,
           c6bulw2lqf3085j4y: a['Oblast'] ? 'cemuxawlq3kfmqf2' + ':' + a['Oblast'] : undefined,
           cb39ganlqf3085j4z: a['Raion'] ? 'cd5q9sdlq3kklo314' + ':' + a['Raion'] : undefined,
           cmdrqq8lqf3085j50: a['Hromada'] ? 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'] : undefined,
@@ -43,7 +51,9 @@ export namespace AiMineActionType {
           c18374vlqf3085j54: a['Response Theme'] ? options['Response Theme'][a['Response Theme']!] : undefined,
         },
       },
-      ...(a['Activities and People'] ?? []).flatMap((_, i) => AiTypeActivitiesAndPeople.buildRequest(_, recordId + 'i' + ('' + i).padStart(2, '0'), recordId)),
+      ...(a['Activities and People'] ?? []).flatMap((_, i) =>
+        AiTypeActivitiesAndPeople.buildRequest(_, recordId + 'i' + ('' + i).padStart(2, '0'), recordId),
+      ),
     ]
   }
 
@@ -104,8 +114,12 @@ export namespace AiMineActionType {
           parentRecordId,
           fields: {
             c3qgzazlqf3umfi5q: a['Reporting Month'],
-            cfk8s3wlqf3umfi5r: a['Population Group'] ? 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!] : undefined,
-            cdy5p8nlqf3umfi5s: a['Indicators'] ? 'c8uhbuclqb1fjlg2' + ':' + options['Indicators - Protection'][a['Indicators']!] : undefined,
+            cfk8s3wlqf3umfi5r: a['Population Group']
+              ? 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!]
+              : undefined,
+            cdy5p8nlqf3umfi5s: a['Indicators']
+              ? 'c8uhbuclqb1fjlg2' + ':' + options['Indicators - Protection'][a['Indicators']!]
+              : undefined,
             c91ka88lqf3umfi5w: a['Total Individuals Reached'],
             cehoaaplqf3umfi5x: a['Girls (0-17)'],
             co2cpjrlqf3umfi5y: a['Boys (0-17)'],
@@ -116,23 +130,38 @@ export namespace AiMineActionType {
             cnaij95lqf3umfi63: a['Non-individuals Reached/Quantity'],
             cz8i6pylqf3umfi64: a['People with Disability'],
             cbisjn4lw6fmi713: a['HNRP Scope'] ? options['HNRP Scope'][a['HNRP Scope']!] : undefined,
-            cny9yumlw6fyggv4: a['Outside HNRP Scope sub-categories'] ? 'cs4astklw6ftd2y2' + ':' + options['Outside HNRP Scope sub-categories'][a['Outside HNRP Scope sub-categories']!] : undefined,
+            cny9yumlw6fyggv4: a['Outside HNRP Scope sub-categories']
+              ? 'cs4astklw6ftd2y2' +
+                ':' +
+                options['Outside HNRP Scope sub-categories'][a['Outside HNRP Scope sub-categories']!]
+              : undefined,
           },
         },
       ]
     }
 
     export const options = {
-      'Population Group': {'Internally Displaced': 'cvw4on6lq6dgcoj5', 'Non-Displaced': 'ck6ulx8lq6dgcok6', Returnees: 'cuz9qi9lq6dgcok7'},
+      'Population Group': {
+        'Internally Displaced': 'cvw4on6lq6dgcoj5',
+        'Non-Displaced': 'ck6ulx8lq6dgcok6',
+        Returnees: 'cuz9qi9lq6dgcok7',
+      },
       'Indicators - Protection': {
-        'Provision of face-to-face Explosive Ordnance Risk Education (EORE) sessions > # of individuals who participated in face-to-face EORE sessions in the educational institutions (e.g. schools)': 'ck8w3wflqmgu66u16',
-        'Provide ToT: Capacity building support to become an accredited EORE operator > # of organizations (national or local) who received capacity building support to become an accredited EORE operator': 'cau7kexlqmgu66u17', 'Cash assistance provided to mine / ERW survivor (SADD) > # mine / ERW survivors who received cash assistance (SADD)': 'cihm2xplqmgu66u18',
-        'MHPSS provided to mine / ERW survivor (SADD) > # of mine / ERW survivor who received MHPSS (SADD)': 'cy1jgeilqmgu66u19',
+        'Provision of face-to-face Explosive Ordnance Risk Education (EORE) sessions > # of individuals who participated in face-to-face EORE sessions in the educational institutions (e.g. schools)':
+          'ck8w3wflqmgu66u16',
+        'Provide ToT: Capacity building support to become an accredited EORE operator > # of organizations (national or local) who received capacity building support to become an accredited EORE operator':
+          'cau7kexlqmgu66u17',
+        'Cash assistance provided to mine / ERW survivor (SADD) > # mine / ERW survivors who received cash assistance (SADD)':
+          'cihm2xplqmgu66u18',
+        'MHPSS provided to mine / ERW survivor (SADD) > # of mine / ERW survivor who received MHPSS (SADD)':
+          'cy1jgeilqmgu66u19',
         'Non-technical survey > Area surveyed (square metres) - (TBD)': 'cmg8547lqmgu66u1a',
         'Land clearance > Area cleared (square metres)': 'ci7ya6zlqmgu66u1b',
         'Land clearance > # of individuals who directly benefitted from land clearance (SADD)': 'cl00iz2lqmgu66u1c',
-        'Institutional support > # of interventions (equipment provision) to national mine action institutions': 'clxeupalqmgu66u1d',
-        'Capacity building > # of personnel trained on mine action activities (IMAS) related to survey and clearance': 'chks7q9lqmgu66u1e',
+        'Institutional support > # of interventions (equipment provision) to national mine action institutions':
+          'clxeupalqmgu66u1d',
+        'Capacity building > # of personnel trained on mine action activities (IMAS) related to survey and clearance':
+          'chks7q9lqmgu66u1e',
         'Provision of face-to-face Explosive Ordnance Risk Education (EORE) sessions > # of individuals who participated in face-to-face EORE sessions excluding educational institutions (e.g. communities)':
           'cepwuk2ls044z522',
       },

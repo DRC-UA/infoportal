@@ -2,7 +2,6 @@ export type AiProtectionType = AiProtectionType.Type
 
 export namespace AiProtectionType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
     ID?: string
     'Reporting Organization': Opt<'Partner'>
@@ -59,10 +58,6 @@ export namespace AiProtectionType {
       'PRT-DRC-00002': 'cqzyoqrm730zf5d4',
       'PRT-DRC-00003': 'c91inndm73143d45',
       'PRT-DRC-00004': 'cmzh0x9m7317x856',
-      'PRT-DRC-00005': 'ct0f0spm7968bod2',
-      'PRT-DRC-00006': 'cvwq10vm796dv6e3',
-      'PRT-DRC-00007': 'cj7tjljm796h1ve4',
-      'PRT-DRC-00008': 'cgsjq7xm796jwzz5',
     },
     'Response Theme': {'No specific theme': 'crfw0hkm4wiqb94f'},
   }
@@ -71,7 +66,6 @@ export namespace AiProtectionType {
 
   export namespace AiTypeActivitiesAndPeople {
     type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
     export interface Type {
       'Reporting Month': string
       Indicators: Opt<'Indicators - Protection'>
@@ -85,8 +79,8 @@ export namespace AiProtectionType {
       'Older Men (60+)': number
       'Non-individuals Reached/Quantity': number
       /**
-       Out of the total individuals reached
-       */
+      Out of the total individuals reached
+    */
       'People with Disability'?: number
     }
 

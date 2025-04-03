@@ -27,11 +27,14 @@ export const metaSiteMap = {
 const _Meta = () => {
   const ctx = useMetaContext()
   useReactRouterDefaultRoute(metaSiteMap.routes.dashboard)
+  const isDevEnv = process?.env.NODE_ENV === 'development'
+
   return (
     <Layout title={appFeaturesIndex.metaDashboard.name} loading={ctx.fetcher.loading} sidebar={<MetaSidebar />}>
       {ctx.fetcher.get && (
         <Routes>
           <Route path={metaSiteMap.routes.dashboard} element={<MetaDashboard />} />
+          {isDevEnv && <Route path={metaSiteMap.routes.data} element={<MetaTable />} />}
         </Routes>
       )}
     </Layout>
