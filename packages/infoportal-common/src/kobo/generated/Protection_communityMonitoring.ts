@@ -25,7 +25,9 @@ export namespace Protection_communityMonitoring {
     // gi/activity [select_one] Which activity have you conducted?
     activity: undefined | Option<'activity'>
     // gi/pmt_npc [select_one] Is it a PMT KII (NPC)?
-    pmt_npc: undefined | Option<'pmt_npc'>
+    pmt_npc: undefined | Option<'pmt_interviewed_before'>
+    // gi/pmt_interviewed_before [select_one] Have they been interviewed before?
+    pmt_interviewed_before: undefined | Option<'pmt_interviewed_before'>
     // gi/informant_role [select_one] Key informant role
     informant_role: undefined | Option<'informant_role'>
     // gi/informant_role_other [text] If "Other", please specify
@@ -654,6 +656,222 @@ export namespace Protection_communityMonitoring {
     government_initiatives_women_q: string | undefined
     // gi/women_roles_armed_conflic/government_initiatives_women_a [text] Answer 10 (women_roles_armed_conflic)
     government_initiatives_women_a: string | undefined
+    // gi/evacuations_fgd/evac_process_q_fgd [text] Question 1 (evacuations_fgd)
+    evac_process_q_fgd: string | undefined
+    // gi/evacuations_fgd/evac_process_a_fgd [text] Answer 1 (evacuations_fgd)
+    evac_process_a_fgd: string | undefined
+    // gi/evacuations_fgd/evac_access_information_service_q_fgd [text] Question 2 (evacuations_fgd)
+    evac_access_information_service_q_fgd: string | undefined
+    // gi/evacuations_fgd/evac_access_information_service_a_fgd [text] Answer 2 (evacuations_fgd)
+    evac_access_information_service_a_fgd: string | undefined
+    // gi/evacuations_fgd/evac_safety_intentions_q_fgd [text] Question 3 (evacuations_fgd)
+    evac_safety_intentions_q_fgd: string | undefined
+    // gi/evacuations_fgd/evac_safety_intentions_a_fgd [text] Answer 3 (evacuations_fgd)
+    evac_safety_intentions_a_fgd: string | undefined
+    // gi/evacuations_fgd/evac_freedom_movement_q_fgd [text] Question 4 (evacuations_fgd)
+    evac_freedom_movement_q_fgd: string | undefined
+    // gi/evacuations_fgd/evac_freedom_movement_a_fgd [text] Answer 4 (evacuations_fgd)
+    evac_freedom_movement_a_fgd: string | undefined
+    // gi/evacuations_fgd/evac_child_protection_q_fgd [text] Question 5 (evacuations_fgd)
+    evac_child_protection_q_fgd: string | undefined
+    // gi/evacuations_fgd/evac_child_protection_a_fgd [text] Answer 5 (evacuations_fgd)
+    evac_child_protection_a_fgd: string | undefined
+    // gi/evacuations_fgd/evac_priority_needs_q_fgd [text] Question 6 (evacuations_fgd)
+    evac_priority_needs_q_fgd: string | undefined
+    // gi/evacuations_fgd/evac_priority_needs_a_fgd [text] Answer 6 (evacuations_fgd)
+    evac_priority_needs_a_fgd: string | undefined
+    // gi/evacuations_fgd/evac_social_cohesion_q_fgd [text] Question 7 (evacuations_fgd)
+    evac_social_cohesion_q_fgd: string | undefined
+    // gi/evacuations_fgd/evac_social_cohesion_a_fgd [text] Answer 7 (evacuations_fgd)
+    evac_social_cohesion_a_fgd: string | undefined
+    // gi/evacuations_fgd/evac_host_community_q_fgd [text] Question 8 (evacuations_fgd)
+    evac_host_community_q_fgd: string | undefined
+    // gi/evacuations_fgd/evac_host_community_a_fgd [text] Answer 8 (evacuations_fgd)
+    evac_host_community_a_fgd: string | undefined
+    // gi/evacuations_kii/profile_evacuated_population_q_kii [text] Question 1 (evacuations_kii)
+    profile_evacuated_population_q_kii: string | undefined
+    // gi/evacuations_kii/profile_evacuated_population_a_kii [text] Answer 1 (evacuations_kii)
+    profile_evacuated_population_a_kii: string | undefined
+    // gi/evacuations_kii/evac_process_q_kii [text] Question 2 (evacuations_kii)
+    evac_process_q_kii: string | undefined
+    // gi/evacuations_kii/evac_process_a_kii [text] Answer 2 (evacuations_kii)
+    evac_process_a_kii: string | undefined
+    // gi/evacuations_kii/evac_access_information_q_kii [text] Question 3 (evacuations_kii)
+    evac_access_information_q_kii: string | undefined
+    // gi/evacuations_kii/evac_access_information_a_kii [text] Answer 3 (evacuations_kii)
+    evac_access_information_a_kii: string | undefined
+    // gi/evacuations_kii/evac_safety_intentions_q_kii [text] Question 4 (evacuations_kii)
+    evac_safety_intentions_q_kii: string | undefined
+    // gi/evacuations_kii/evac_safety_intentions_a_kii [text] Answer 4 (evacuations_kii)
+    evac_safety_intentions_a_kii: string | undefined
+    // gi/evacuations_kii/evac_social_cohesion_q_kii [text] Question 5 (evacuations_kii)
+    evac_social_cohesion_q_kii: string | undefined
+    // gi/evacuations_kii/evac_social_cohesion_a_kii [text] Answer 5 (evacuations_kii)
+    evac_social_cohesion_a_kii: string | undefined
+    // gi/evacuations_kii_sp/profile_evacuated_population_q_kii_sp [text] Question 1 (evacuations_kii)
+    profile_evacuated_population_q_kii_sp: string | undefined
+    // gi/evacuations_kii_sp/profile_evacuated_population_a_kii_sp [text] Answer 1 (evacuations_kii)
+    profile_evacuated_population_a_kii_sp: string | undefined
+    // gi/evacuations_kii_sp/evac_process_q_kii_sp [text] Question 2 (evacuations_kii)
+    evac_process_q_kii_sp: string | undefined
+    // gi/evacuations_kii_sp/evac_process_a_kii_sp [text] Answer 2 (evacuations_kii)
+    evac_process_a_kii_sp: string | undefined
+    // gi/evacuations_kii_sp/evac_access_information_q_kii_sp [text] Question 3 (evacuations_kii)
+    evac_access_information_q_kii_sp: string | undefined
+    // gi/evacuations_kii_sp/evac_access_information_a_kii_sp [text] Answer 3 (evacuations_kii)
+    evac_access_information_a_kii_sp: string | undefined
+    // gi/power_outages/po_general_impact_q [text] Question 1 (power_outages)
+    po_general_impact_q: string | undefined
+    // gi/power_outages/po_general_impact_a [text] Answer 1 (power_outages)
+    po_general_impact_a: string | undefined
+    // gi/power_outages/po_safety_security_a [text] Question 2 (power_outages)
+    po_safety_security_a: string | undefined
+    // gi/power_outages/po_safety_security_q [text] Answer 2 (power_outages)
+    po_safety_security_q: string | undefined
+    // gi/power_outages/po_housing_safety_q [text] Question 3 (power_outages)
+    po_housing_safety_q: string | undefined
+    // gi/power_outages/po_housing_safety_a [text] Answer 3 (power_outages)
+    po_housing_safety_a: string | undefined
+    // gi/power_outages/po_access_services_q [text] Question 4 (power_outages)
+    po_access_services_q: string | undefined
+    // gi/power_outages/po_access_services_a [text] Answer 4 (power_outages)
+    po_access_services_a: string | undefined
+    // gi/power_outages/po_mental_health_q [text] Question 5 (power_outages)
+    po_mental_health_q: string | undefined
+    // gi/power_outages/po_mental_health_a [text] Answer 5 (power_outages)
+    po_mental_health_a: string | undefined
+    // gi/power_outages/po_coping_mechanisms_q [text] Question 6 (power_outages)
+    po_coping_mechanisms_q: string | undefined
+    // gi/power_outages/po_coping_mechanisms_a [text] Answer 6 (power_outages)
+    po_coping_mechanisms_a: string | undefined
+    // gi/access_compensation_mechanisms/acm_introduction_q [text] Question 1 (access_compensation_mechanisms)
+    acm_introduction_q: string | undefined
+    // gi/access_compensation_mechanisms/acm_introduction_a [text] Answer 1 (access_compensation_mechanisms)
+    acm_introduction_a: string | undefined
+    // gi/access_compensation_mechanisms/acm_administrative_barriers_q [text] Question 2 (access_compensation_mechanisms)
+    acm_administrative_barriers_q: string | undefined
+    // gi/access_compensation_mechanisms/acm_administrative_barriers_a [text] Answer 2 (access_compensation_mechanisms)
+    acm_administrative_barriers_a: string | undefined
+    // gi/access_compensation_mechanisms/acm_fg_barriers_q [text] Question 3 (access_compensation_mechanisms)
+    acm_fg_barriers_q: string | undefined
+    // gi/access_compensation_mechanisms/acm_fg_barriers_a [text] Answer 3 (access_compensation_mechanisms)
+    acm_fg_barriers_a: string | undefined
+    // gi/access_compensation_mechanisms/acm_information_barriers_q [text] Question 4 (access_compensation_mechanisms)
+    acm_information_barriers_q: string | undefined
+    // gi/access_compensation_mechanisms/acm_information_barriers_a [text] Answer 4 (access_compensation_mechanisms)
+    acm_information_barriers_a: string | undefined
+    // gi/access_compensation_mechanisms/acm_process_q [text] Question 5 (access_compensation_mechanisms)
+    acm_process_q: string | undefined
+    // gi/access_compensation_mechanisms/acm_process_a [text] Answer 5 (access_compensation_mechanisms)
+    acm_process_a: string | undefined
+    // gi/access_compensation_mechanisms/acm_impact_q [text] Question 6 (access_compensation_mechanisms)
+    acm_impact_q: string | undefined
+    // gi/access_compensation_mechanisms/acm_impact_a [text] Answer 6 (access_compensation_mechanisms)
+    acm_impact_a: string | undefined
+    // gi/access_compensation_mechanisms/acm_recommendations_q [text] Question 7 (access_compensation_mechanisms)
+    acm_recommendations_q: string | undefined
+    // gi/access_compensation_mechanisms/acm_recommendations_a [text] Answer 7 (access_compensation_mechanisms)
+    acm_recommendations_a: string | undefined
+    // gi/denial_access_resources/dar_introduction_q [text] Question 1 (denial_access_resources)
+    dar_introduction_q: string | undefined
+    // gi/denial_access_resources/dar_introduction_a [text] Answer 1 (denial_access_resources)
+    dar_introduction_a: string | undefined
+    // gi/denial_access_resources/dar_challenges_access_q [text] Question 2 (denial_access_resources)
+    dar_challenges_access_q: string | undefined
+    // gi/denial_access_resources/dar_challenges_access_a [text] Answer 2 (denial_access_resources)
+    dar_challenges_access_a: string | undefined
+    // gi/denial_access_resources/dar_consequences_risks_q [text] Question 3 (denial_access_resources)
+    dar_consequences_risks_q: string | undefined
+    // gi/denial_access_resources/dar_consequences_risks_a [text] Answer 3 (denial_access_resources)
+    dar_consequences_risks_a: string | undefined
+    // gi/denial_access_resources/dar_coping_mechanisms_q [text] Question 4 (denial_access_resources)
+    dar_coping_mechanisms_q: string | undefined
+    // gi/denial_access_resources/dar_coping_mechanisms_a [text] Answer 4 (denial_access_resources)
+    dar_coping_mechanisms_a: string | undefined
+    // gi/denial_access_resources/dar_recommendations_q [text] Question 5 (denial_access_resources)
+    dar_recommendations_q: string | undefined
+    // gi/denial_access_resources/dar_recommendations_a [text] Answer 5 (denial_access_resources)
+    dar_recommendations_a: string | undefined
+    // gi/access_documentation/ad_challenges_civil_q [text] Question 1 (access_documentation )
+    ad_challenges_civil_q: string | undefined
+    // gi/access_documentation/ad_challenges_civil_a [text] Answer 1 (access_documentation )
+    ad_challenges_civil_a: string | undefined
+    // gi/access_documentation/ad_lack_documentation_q [text] Question 2 (access_documentation )
+    ad_lack_documentation_q: string | undefined
+    // gi/access_documentation/ad_lack_documentation_a [text] Answer 2 (access_documentation )
+    ad_lack_documentation_a: string | undefined
+    // gi/access_documentation/ad_challenges_hlp_q [text] Question 3 (access_documentation )
+    ad_challenges_hlp_q: string | undefined
+    // gi/access_documentation/ad_challenges_hlp_a [text] Answer 3 (access_documentation )
+    ad_challenges_hlp_a: string | undefined
+    // gi/access_documentation/ad_lack_hlp_q [text] Question 4 (access_documentation )
+    ad_lack_hlp_q: string | undefined
+    // gi/access_documentation/ad_lack_hlp_a [text] Answer 4 (access_documentation )
+    ad_lack_hlp_a: string | undefined
+    // gi/access_documentation/ad_recommendations_q [text] Question 5 (access_documentation )
+    ad_recommendations_q: string | undefined
+    // gi/access_documentation/ad_recommendations_a [text] Answer 5 (access_documentation )
+    ad_recommendations_a: string | undefined
+    // gi/transportation_challenges/tc_introduction_q [text] Question 1 (transportation_challenges)
+    tc_introduction_q: string | undefined
+    // gi/transportation_challenges/tc_introduction_a [text] Answer 1 (transportation_challenges)
+    tc_introduction_a: string | undefined
+    // gi/transportation_challenges/tc_access_service_q [text] Question 2 (transportation_challenges)
+    tc_access_service_q: string | undefined
+    // gi/transportation_challenges/tc_access_service_a [text] Answer 2 (transportation_challenges)
+    tc_access_service_a: string | undefined
+    // gi/transportation_challenges/tc_education_q [text] Question 3 (transportation_challenges)
+    tc_education_q: string | undefined
+    // gi/transportation_challenges/tc_education_a [text] Answer 3 (transportation_challenges)
+    tc_education_a: string | undefined
+    // gi/transportation_challenges/tc_safety_q [text] Question 4 (transportation_challenges)
+    tc_safety_q: string | undefined
+    // gi/transportation_challenges/tc_safety_a [text] Answer 4 (transportation_challenges)
+    tc_safety_a: string | undefined
+    // gi/transportation_challenges/tc_coping_mechanisms_q [text] Question 5 (transportation_challenges)
+    tc_coping_mechanisms_q: string | undefined
+    // gi/transportation_challenges/tc_coping_mechanisms_a [text] Answer 5 (transportation_challenges)
+    tc_coping_mechanisms_a: string | undefined
+    // gi/secure_afforable_housing/sah_access_accommodation_q [text] Question 1 (secure_afforable_housing)
+    sah_access_accommodation_q: string | undefined
+    // gi/secure_afforable_housing/sah_access_accommodation_a [text] Answer 1 (secure_afforable_housing)
+    sah_access_accommodation_a: string | undefined
+    // gi/secure_afforable_housing/sah_security_tenure_q [text] Question 2 (secure_afforable_housing)
+    sah_security_tenure_q: string | undefined
+    // gi/secure_afforable_housing/sah_security_tenure_a [text] Answer 2 (secure_afforable_housing)
+    sah_security_tenure_a: string | undefined
+    // gi/secure_afforable_housing/sah_risk_eviction_q [text] Question 3 (secure_afforable_housing)
+    sah_risk_eviction_q: string | undefined
+    // gi/secure_afforable_housing/sah_risk_eviction_a [text] Answer 3 (secure_afforable_housing)
+    sah_risk_eviction_a: string | undefined
+    // gi/secure_afforable_housing/sah_damaged_housing_q [text] Question 4 (secure_afforable_housing)
+    sah_damaged_housing_q: string | undefined
+    // gi/secure_afforable_housing/sah_damaged_housing_a [text] Answer 4 (secure_afforable_housing)
+    sah_damaged_housing_a: string | undefined
+    // gi/secure_afforable_housing/sah_aob_q [text] Question 5 (secure_afforable_housing)
+    sah_aob_q: string | undefined
+    // gi/secure_afforable_housing/sah_aob_a [text] Answer 5 (secure_afforable_housing)
+    sah_aob_a: string | undefined
+    // gi/inclusion_accessibility/ia_general_questions_q [text] Question 1 (inclusion_accessibility)
+    ia_general_questions_q: string | undefined
+    // gi/inclusion_accessibility/ia_general_questions_a [text] Answer 1 (inclusion_accessibility)
+    ia_general_questions_a: string | undefined
+    // gi/inclusion_accessibility/ia_physical_accessibility_q [text] Question 2 (inclusion_accessibility)
+    ia_physical_accessibility_q: string | undefined
+    // gi/inclusion_accessibility/ia_physical_accessibility_a [text] Answer 2 (inclusion_accessibility)
+    ia_physical_accessibility_a: string | undefined
+    // gi/inclusion_accessibility/ia_transport_accessibility_q [text] Question 3 (inclusion_accessibility)
+    ia_transport_accessibility_q: string | undefined
+    // gi/inclusion_accessibility/ia_transport_accessibility_a [text] Answer 3 (inclusion_accessibility)
+    ia_transport_accessibility_a: string | undefined
+    // gi/inclusion_accessibility/ia_information_accessibility_q [text] Question 4 (inclusion_accessibility)
+    ia_information_accessibility_q: string | undefined
+    // gi/inclusion_accessibility/ia_information_accessibility_a [text] Answer 4 (inclusion_accessibility)
+    ia_information_accessibility_a: string | undefined
+    // gi/inclusion_accessibility/ia_ [text] Question 5 (inclusion_accessibility)
+    ia_: string | undefined
+    // gi/inclusion_accessibility/ia [text] Answer 5 (inclusion_accessibility)
+    ia: string | undefined
     // gi/topic_all/main_healthcare_available_area_q_all [text] Question 1: (other topic)
     main_healthcare_available_area_q_all: string | undefined
     // gi/topic_all/main_healthcare_available_area_a_all [text] Answer 1: (other topic)
@@ -705,6 +923,7 @@ export namespace Protection_communityMonitoring {
       lviv: `Lviv`,
       mykolaiv: `Mykolaiv`,
       sumy: `Sumy`,
+      slovyansk: `Slovyansk`,
     },
     staff_code_001: {
       CEJ001: `CEJ001`,
@@ -723,6 +942,10 @@ export namespace Protection_communityMonitoring {
       CEJ014: `CEJ014`,
       CEJ015: `CEJ015`,
       CEJ016: `CEJ016`,
+      CEJ017: `CEJ017`,
+      CEJ018: `CEJ018`,
+      CEJ019: `CEJ019`,
+      CEJ020: `CEJ020`,
       UMY001: `UMY001`,
       UMY002: `UMY002`,
       UMY003: `UMY003`,
@@ -738,6 +961,11 @@ export namespace Protection_communityMonitoring {
       UMY013: `UMY013`,
       UMY014: `UMY014`,
       UMY015: `UMY015`,
+      UMY016: `UMY016`,
+      UMY017: `UMY017`,
+      UMY018: `UMY018`,
+      UMY019: `UMY019`,
+      UMY020: `UMY020`,
       HRK001: `HRK001`,
       HRK002: `HRK002`,
       HRK003: `HRK003`,
@@ -753,6 +981,11 @@ export namespace Protection_communityMonitoring {
       HRK013: `HRK013`,
       HRK014: `HRK014`,
       HRK015: `HRK015`,
+      HRK016: `HRK016`,
+      HRK017: `HRK017`,
+      HRK018: `HRK018`,
+      HRK019: `HRK019`,
+      HRK020: `HRK020`,
       DNK001: `DNK001`,
       DNK002: `DNK002`,
       DNK003: `DNK003`,
@@ -768,6 +1001,11 @@ export namespace Protection_communityMonitoring {
       DNK013: `DNK013`,
       DNK014: `DNK014`,
       DNK015: `DNK015`,
+      DNK016: `DNK016`,
+      DNK017: `DNK017`,
+      DNK018: `DNK018`,
+      DNK019: `DNK019`,
+      DNK020: `DNK020`,
       LWO001: `LWO001`,
       LWO002: `LWO002`,
       LWO003: `LWO003`,
@@ -798,6 +1036,26 @@ export namespace Protection_communityMonitoring {
       NVL013: `NLV013`,
       NVL014: `NLV014`,
       NVL015: `NLV015`,
+      NVL016: `NLV016`,
+      NVL017: `NLV017`,
+      NVL018: `NLV018`,
+      NVL019: `NLV019`,
+      NVL020: `NLV020`,
+      SLO001: `SLO001`,
+      SLO002: `SLO002`,
+      SLO003: `SLO003`,
+      SLO004: `SLO004`,
+      SLO005: `SLO005`,
+      SLO006: `SLO006`,
+      SLO007: `SLO007`,
+      SLO008: `SLO008`,
+      SLO009: `SLO009`,
+      SLO010: `SLO010`,
+      SLO011: `SLO011`,
+      SLO012: `SLO012`,
+      SLO013: `SLO013`,
+      SLO014: `SLO014`,
+      SLO015: `SLO015`,
     },
     ben_det_oblast: {
       cherkaska: `Cherkaska`,
@@ -835,7 +1093,7 @@ export namespace Protection_communityMonitoring {
       fgd: `FGD`,
       observation: `Observation`,
     },
-    pmt_npc: {
+    pmt_interviewed_before: {
       yes: `Yes`,
       no: `No`,
     },
@@ -879,7 +1137,6 @@ export namespace Protection_communityMonitoring {
       access_protection_service: `Access to social protection services`,
       access_healthcare: `Access to Healthcare services`,
       access_social: `Civil status and access to social services and benefits`,
-      housing: `Housing, Land and Property Challenges`,
       access_basic: `Access to basic services`,
       access_information: `Access to information on available services`,
       challenges_faced_elderly: `Challenges faced by elderly people`,
@@ -891,11 +1148,19 @@ export namespace Protection_communityMonitoring {
       access_education: `Access to education in rural hromadas`,
       challenges_related: `Challenges related to accessing clean water`,
       transportation_issues: `Transportation issues in rural areas`,
+      transportation_challenges: `Transportation challenges`,
+      power_outages: `Power outages`,
       limited_mobility: `Limited mobility and access to services for PwDs`,
       employment_challenges: `Employment challenges for men subjected to military conscription`,
       existing_risks_online_education: `Existing risks in online education of children`,
       access_rehabilitation: `Issues in ensuring access to rehabilitation resources for PwDs`,
+      evacuations: `Evacuations`,
+      denial_access_resources: `Denial of access to resources and services`,
+      access_compensation_mechanisms: `Access to compensation mechanisms`,
+      access_documentation: `Access to documentation`,
       women_roles_armed_conflic: `Women Roles During Armed Conflict`,
+      secure_afforable_housing: `Access to secure and afforable housing parallel`,
+      inclusion_accessibility: `Inclusion and Accessibility`,
       other: `Other`,
     },
     key_informant_difficulty: {
@@ -913,7 +1178,7 @@ export namespace Protection_communityMonitoring {
       no: `No`,
       uu: `Unable/unwilling to answer`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

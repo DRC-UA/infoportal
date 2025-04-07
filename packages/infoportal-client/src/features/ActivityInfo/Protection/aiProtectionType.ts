@@ -167,6 +167,7 @@ export namespace AiProtectionType {
           'ciqjitjm6gnc64gw',
         'Protection monitoring at the community level > # of key informants reached through community level protection monitoring':
           'c7w3d24m6gnc64gx',
+        'Community-based protection activities > # of CSOs supported': 'chy6ojqm8ymdji23',
       },
       'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
     }

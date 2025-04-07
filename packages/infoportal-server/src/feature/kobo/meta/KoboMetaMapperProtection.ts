@@ -1,4 +1,6 @@
-import {fnSwitch, map} from '@axanc/ts-utils'
+import {map, match} from '@axanc/ts-utils'
+import {UaLocation} from 'ua-location'
+
 import {
   DrcOffice,
   DrcProgram,
@@ -21,10 +23,11 @@ import {
   ProtectionHhsTags,
   safeArray,
 } from 'infoportal-common'
+
 import {KoboMetaOrigin} from './KoboMetaType.js'
 import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService.js'
-import {UaLocation} from 'ua-location'
-import Gender = Person.Gender
+
+const {Gender} = Person
 
 export class KoboMetaMapperProtection {
   static readonly communityMonitoring: MetaMapperInsert<
@@ -35,43 +38,40 @@ export class KoboMetaMapperProtection {
     if (answer.informant_gender || answer.informant_age) {
       persons.push({
         age: answer.informant_age,
-        gender: fnSwitch(
-          answer.informant_gender!,
-          {
+        gender: match(answer.informant_gender)
+          .cases({
             female: Gender.Female,
             male: Gender.Male,
             other: Gender.Other,
             unspecified: undefined,
-          },
-          () => undefined,
-        ),
+          })
+          .default(() => undefined),
       })
     }
+
     return {
-      office: fnSwitch(
-        answer.staff_to_insert_their_DRC_office!,
-        {
+      office: match(answer.staff_to_insert_their_DRC_office)
+        .cases({
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
           lviv: DrcOffice.Lviv,
           mykolaiv: DrcOffice.Mykolaiv,
           sumy: DrcOffice.Sumy,
-        },
-        () => undefined,
-      ),
+        })
+        .default(() => undefined),
       oblast: KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast)?.name!,
       raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
       sector: DrcSector.GeneralProtection,
-      activity: answer.activity
-        ? fnSwitch(answer.activity, {
-            fgd: DrcProgram.FGD,
-            kll: DrcProgram.CommunityLevelPm,
-            observation: DrcProgram.Observation,
-          })
-        : undefined,
+      activity: match(answer.activity)
+        .cases({
+          fgd: DrcProgram.FGD,
+          kll: DrcProgram.CommunityLevelPm,
+          observation: DrcProgram.Observation,
+        })
+        .default(() => undefined),
       persons,
       personsCount: persons.length,
       project: row.tags?.project ? [row.tags?.project] : [],
@@ -83,46 +83,39 @@ export class KoboMetaMapperProtection {
 
   static readonly groupSession: MetaMapperInsert<KoboMetaOrigin<Protection_groupSession.T>> = (row) => {
     const answer = Protection_groupSession.map(row.answers)
-    const activity = fnSwitch(
-      answer.activity as any,
-      {
+    const activity = match(answer.activity as any)
+      .cases({
         gpt: DrcProgram.AwarenessRaisingSession,
         pss: DrcProgram.AwarenessRaisingSession,
         // let:
-      },
-      () => undefined,
-    )
+      })
+      .default(() => undefined)
     if (!activity) return
     // if (answer.activity as any === 'gbv' || answer.activity === 'pss' || answer.activity === 'other' || answer.activity === 'let') return
     const persons = KoboXmlMapper.Persons.protection_groupSession(answer)
-    const project = answer.project
-      ? fnSwitch(
-          answer.project,
-          {
-            bha: DrcProject['UKR-000345 BHA2'],
-            echo: DrcProject['UKR-000322 ECHO2'],
-            okf: DrcProject['UKR-000309 OKF'],
-            uhf4: DrcProject['UKR-000314 UHF4'],
-            uhf6: DrcProject['UKR-000336 UHF6'],
-            novo: DrcProject['UKR-000360 Novo-Nordisk'],
-            uhf8: DrcProject['UKR-000363 UHF8'],
-          },
-          () => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project)),
-        )
-      : undefined
+    const project = match(answer.project)
+      .cases({
+        bha: DrcProject['UKR-000345 BHA2'],
+        echo: DrcProject['UKR-000322 ECHO2'],
+        okf: DrcProject['UKR-000309 OKF'],
+        uhf4: DrcProject['UKR-000314 UHF4'],
+        uhf6: DrcProject['UKR-000336 UHF6'],
+        novo: DrcProject['UKR-000360 Novo-Nordisk'],
+        uhf8: DrcProject['UKR-000363 UHF8'],
+      })
+      .default(() => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project)))
+
     return {
-      office: fnSwitch(
-        answer.staff_to_insert_their_DRC_office!,
-        {
+      office: match(answer.staff_to_insert_their_DRC_office)
+        .cases({
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
           lviv: DrcOffice.Lviv,
           mykolaiv: DrcOffice.Mykolaiv,
           sumy: DrcOffice.Sumy,
-        },
-        () => undefined,
-      ),
+        })
+        .default(() => undefined),
       oblast: KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast)?.name!,
       raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
@@ -150,10 +143,10 @@ export class KoboMetaMapperProtection {
       return
     const project = DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project_code))
     const projects = project ? [project] : []
+
     return KoboMetaMapper.make({
-      office: fnSwitch(
-        answer.staff_to_insert_their_DRC_office!,
-        {
+      office: match(answer.staff_to_insert_their_DRC_office)
+        .cases({
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
@@ -161,9 +154,8 @@ export class KoboMetaMapperProtection {
           mykolaiv: DrcOffice.Mykolaiv,
           sumy: DrcOffice.Sumy,
           sloviansk: DrcOffice.Sloviansk,
-        },
-        () => undefined,
-      ),
+        })
+        .default(() => undefined),
       project: projects,
       donor: projects.map((_) => DrcProjectHelper.donorByProject[_]),
       oblast: KoboXmlMapper.Location.mapOblast(answer.oblast)?.name!,
@@ -185,19 +177,18 @@ export class KoboMetaMapperProtection {
     const persons = KoboXmlMapper.Persons.protection_hhs3(answer)
     const projects = safeArray(row.tags?.projects)
     if (answer.have_you_filled_out_this_form_before === 'yes' || answer.present_yourself === 'no') return
+
     return KoboMetaMapper.make({
-      office: fnSwitch(
-        answer.staff_to_insert_their_DRC_office!,
-        {
+      office: match(answer.staff_to_insert_their_DRC_office)
+        .cases({
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
           lviv: DrcOffice.Lviv,
           mykolaiv: DrcOffice.Mykolaiv,
           sumy: DrcOffice.Sumy,
-        },
-        () => undefined,
-      ),
+        })
+        .default(() => undefined),
       oblast: OblastIndex.byIso(answer.where_are_you_current_living_oblast)?.name!,
       raion: UaLocation.Raion.findByIso(answer.where_are_you_current_living_raion!)?.en,
       hromada: UaLocation.Hromada.findByIso(answer.where_are_you_current_living_hromada!)?.en,
@@ -217,19 +208,18 @@ export class KoboMetaMapperProtection {
     const answer = Protection_counselling.map(row.answers)
     const persons = KoboXmlMapper.Persons.protection_counselling(answer)
     const project = DrcProjectHelper.search(Protection_counselling.options.project_code[answer.project_code!])
+
     return KoboMetaMapper.make({
-      office: fnSwitch(
-        answer.staff_to_insert_their_DRC_office!,
-        {
+      office: match(answer.staff_to_insert_their_DRC_office)
+        .cases({
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
           lviv: DrcOffice.Lviv,
           mykolaiv: DrcOffice.Mykolaiv,
           sumy: DrcOffice.Sumy,
-        },
-        () => undefined,
-      ),
+        })
+        .default(() => undefined),
       oblast: KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!).name,
       raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
@@ -252,51 +242,44 @@ export class KoboMetaMapperProtection {
     if (answer.new_ben === 'no') return
     const persons = KoboXmlMapper.Persons.protection_pss(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)!
-    const project = answer.project
-      ? fnSwitch(
-          answer.project,
-          {
-            uhf6: DrcProject['UKR-000336 UHF6'],
-            okf: DrcProject['UKR-000309 OKF'],
-            uhf4: DrcProject['UKR-000314 UHF4'],
-            echo: DrcProject['UKR-000322 ECHO2'],
-            bha: DrcProject['UKR-000284 BHA'],
-            bha2: DrcProject['UKR-000345 BHA2'],
-            uhf8: DrcProject['UKR-000363 UHF8'],
-            '372_echo': DrcProject['UKR-000372 ECHO3'],
-            'sida h2r': DrcProject['UKR-000329 SIDA H2R'],
-          },
-          () => DrcProjectHelper.search(answer.project),
-        )
-      : undefined
+    const project = match(answer.project)
+      .cases({
+        uhf6: DrcProject['UKR-000336 UHF6'],
+        okf: DrcProject['UKR-000309 OKF'],
+        uhf4: DrcProject['UKR-000314 UHF4'],
+        echo: DrcProject['UKR-000322 ECHO2'],
+        bha: DrcProject['UKR-000284 BHA'],
+        bha2: DrcProject['UKR-000345 BHA2'],
+        uhf8: DrcProject['UKR-000363 UHF8'],
+        '372_echo': DrcProject['UKR-000372 ECHO3'],
+        'sida h2r': DrcProject['UKR-000329 SIDA H2R'],
+      })
+      .default(() => DrcProjectHelper.search(answer.project))
+
     return {
-      office: fnSwitch(
-        answer.staff_to_insert_their_DRC_office!,
-        {
+      office: match(answer.staff_to_insert_their_DRC_office)
+        .cases({
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
           lviv: DrcOffice.Lviv,
           mykolaiv: DrcOffice.Mykolaiv,
           sumy: DrcOffice.Sumy,
-        },
-        () => undefined,
-      ),
+        })
+        .default(() => undefined),
       oblast: oblast.name,
       raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
       sector: DrcSector.PSS,
-      activity: fnSwitch(
-        answer.activity!,
-        {
+      activity: match(answer.activity)
+        .cases({
           mhpss: DrcProgram.MHPSSActivities,
           pgs: DrcProgram.PGS,
           ais: DrcProgram.PIS,
           pfa: DrcProgram.PFA,
-        },
-        () => undefined,
-      ),
+        })
+        .default(() => undefined),
       personsCount: persons.length,
       persons,
       project: project ? [project] : [],
@@ -312,9 +295,8 @@ export class KoboMetaMapperProtection {
     const activities =
       answer.activity
         ?.map((_) =>
-          fnSwitch(
-            _!,
-            {
+          match(_)
+            .cases({
               // https://docs.google.com/spreadsheets/d/1SbRr4rRTL3Heap_8XUzZnBBx08Cx9XX5bmtr0CLSQ4w/edit?gid=0#gid=0
               education_sessions: DrcProgram.WGSS,
               dignity_kits: DrcProgram.DignityKits,
@@ -322,38 +304,32 @@ export class KoboMetaMapperProtection {
               psychosocial_support: DrcProgram.PSS,
               training_actors: DrcProgram.CapacityBuilding,
               training_providers: DrcProgram.CapacityBuilding,
-            },
-            () => undefined,
-          ),
+            })
+            .default(() => undefined),
         )
         .filter((_) => _ !== undefined) ?? []
     if (activities.length === 0) return
     const persons = KoboXmlMapper.Persons.protection_gbv(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
-    const project = answer.project
-      ? fnSwitch(
-          answer.project,
-          {
-            bha: DrcProject['UKR-000345 BHA2'],
-            sdc: DrcProject['UKR-000226 SDC'],
-            danida: DrcProject['UKR-000347 DANIDA'],
-            uhf8: DrcProject['UKR-000363 UHF8'],
-          },
-          () => DrcProjectHelper.search(Protection_gbv.options.project[answer.project!] ?? answer.project),
-        )
-      : undefined
+    const project = match(answer.project)
+      .cases({
+        bha: DrcProject['UKR-000345 BHA2'],
+        sdc: DrcProject['UKR-000226 SDC'],
+        danida: DrcProject['UKR-000347 DANIDA'],
+        uhf8: DrcProject['UKR-000363 UHF8'],
+      })
+      .default(() => DrcProjectHelper.search(Protection_gbv.options.project[answer.project!] ?? answer.project))
+
     return activities.map((activity) => {
       return {
-        office: fnSwitch(
-          answer.staff_to_insert_their_DRC_office!,
-          {
+        office: match(answer.staff_to_insert_their_DRC_office)
+          .cases({
             chernihiv: DrcOffice.Chernihiv,
             dnipro: DrcOffice.Dnipro,
             kharkiv: DrcOffice.Kharkiv,
             mykolaiv: DrcOffice.Mykolaiv,
-          },
-          () => undefined,
-        ),
+          })
+          .default(() => undefined),
         oblast: oblast.name,
         raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
         hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),

@@ -2,24 +2,27 @@ import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {DrcProgram, DrcProject, groupBy, IKoboMeta, KoboMetaStatus, Period, PeriodHelper} from 'infoportal-common'
-import {fnSwitch} from '@axanc/ts-utils'
+import {match} from '@axanc/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-
-import {PROTECTION_PLAN_CODES} from './constants'
 
 export namespace AiProtectionMapper {
   type Bundle = AiTable<AiProtectionType.Type, AiProtectionType.AiTypeActivitiesAndPeople>
 
   const getPlanCode = (project?: DrcProject): AiProtectionType.Type['Plan/Project Code'] => {
     // @ts-expect-error It's OK to get an error here, we expect it to flag missing or mismatching data
-    return PROTECTION_PLAN_CODES[project] ?? `${aiInvalidValueFlag} ${project}`
+    return match(project)
+      .cases({
+        [DrcProject['UKR-000363 UHF8']]: 'PRT-DRC-00007',
+        [DrcProject['UKR-000372 ECHO3']]: 'PRT-DRC-00002',
+        [DrcProject['UKR-000355 Danish MFA']]: 'PRT-DRC-00008',
+      })
+      .default(() => `${aiInvalidValueFlag} ${project}`)
   }
 
   export const req =
     (api: ApiSdk) =>
     (period: Partial<Period>): Promise<Bundle[]> => {
-      // const period = PeriodHelper.fromYYYYMM(periodStr)
       const periodStr = AiMapper.getPeriodStr(period)
       return api.koboMeta
         .search({
@@ -33,7 +36,7 @@ export namespace AiProtectionMapper {
           ],
           status: [KoboMetaStatus.Committed],
         })
-        .then((_) => _.data.filter((_) => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
+        .then((response) => response.data.filter((row) => PeriodHelper.isDateIn(period, row.lastStatusUpdate)))
         .then((data) => mapActivity(data, periodStr))
     }
 
@@ -109,9 +112,8 @@ export namespace AiProtectionMapper {
           res.push({
             data: grouped,
             activity: {
-              Indicators: fnSwitch<DrcProgram, AiProtectionType.AiTypeActivitiesAndPeople['Indicators']>(
-                activity,
-                {
+              Indicators: match<DrcProgram>(activity)
+                .cases({
                   [DrcProgram.Counselling]:
                     'Protection counselling > # of individuals who received protection counselling',
                   [DrcProgram.FGD]:
@@ -128,28 +130,14 @@ export namespace AiProtectionMapper {
                     'Awareness raising - Protection & HLP > # of individuals who participated in awareness raising activities on Protection',
                   [DrcProgram.Referral]:
                     'Referral to specialized services > # of individuals with specific needs referred to specialized services and assistance (Internal/External referrals)',
-                },
-                () => aiInvalidValueFlag as AiProtectionType.AiTypeActivitiesAndPeople['Indicators'],
-              ),
+                } as const)
+                .default(
+                  () => `${aiInvalidValueFlag} acivity` as AiProtectionType.AiTypeActivitiesAndPeople['Indicators'],
+                ),
               'Population Group': AiMapper.mapPopulationGroup(displacement),
               'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
-              ...fnSwitch<
-                DrcProgram,
-                Pick<
-                  AiProtectionType.AiTypeActivitiesAndPeople,
-                  | 'Total Individuals Reached'
-                  | 'Girls (0-17)'
-                  | 'Boys (0-17)'
-                  | 'Adult Women (18-59)'
-                  | 'Adult Men (18-59)'
-                  | 'Older Women (60+)'
-                  | 'Older Men (60+)'
-                  | 'People with Disability'
-                  | 'Non-individuals Reached/Quantity'
-                >
-              >(
-                activity,
-                {
+              ...match<DrcProgram>(activity)
+                .cases({
                   [DrcProgram.FGD]: {
                     'Total Individuals Reached': null as any,
                     'Girls (0-17)': null as any,
@@ -172,8 +160,8 @@ export namespace AiProtectionMapper {
                     'People with Disability': null as any,
                     'Non-individuals Reached/Quantity': grouped.length,
                   },
-                },
-                () => {
+                })
+                .default(() => {
                   return {
                     'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
                     'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
@@ -185,8 +173,7 @@ export namespace AiProtectionMapper {
                     'People with Disability': null as any,
                     'Non-individuals Reached/Quantity': null as any,
                   }
-                },
-              ),
+                }),
             },
           })
         },
