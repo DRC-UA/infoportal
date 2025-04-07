@@ -1,5 +1,7 @@
 import {NextFunction, Request, Response} from 'express'
+
 import {ActivityInfoSdk} from 'infoportal-common'
+
 import {app, AppLogger} from '../../index.js'
 import {appConf} from '../../core/conf/AppConf.js'
 import {AppError} from '../../helper/Errors.js'
@@ -17,9 +19,14 @@ export class ControllerActivityInfo {
     try {
       // TODO Remove hard email
       if (
-        req.session.user?.email !== this.conf.ownerEmail &&
-        req.session.user?.email !== 'isabel.pearson@drc.ngo' &&
-        req.session.user?.email !== 'vladyslav.marchenko@drc.ngo'
+        !req.session.user?.email ||
+        ![
+          this.conf.ownerEmail,
+          'pavlo.boiko@drc.ngo',
+          'isabel.pearson@drc.ngo',
+          'mariia.halchenko@drc.ngo',
+          'vladyslav.marchenko@drc.ngo',
+        ].includes(req.session.user?.email)
       ) {
         throw new AppError.Forbidden('only_owner_can_submit_ai')
       }
@@ -31,7 +38,7 @@ export class ControllerActivityInfo {
         this.log.error(`Failed to insert ${errors.length} activities on ${activities.length}`)
         throw new AppError.BadRequest(JSON.stringify(errors))
       }
-      this.log.info(`${activities.length} activities inserted !`)
+      this.log.info(`${activities.length} activities inserted!`)
       res.send(status)
     } catch (e) {
       console.error(activities)
