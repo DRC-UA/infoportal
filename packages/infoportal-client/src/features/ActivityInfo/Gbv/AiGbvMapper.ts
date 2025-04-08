@@ -31,61 +31,60 @@ export namespace AiGbvMapper2 {
         .then((filteredData) => mapActivity(filteredData, periodStr))
     }
 
-  const mapActivity = async (data: IKoboMeta[], periodStr: string): Promise<Bundle[]> => {
+  const mapActivity = (data: IKoboMeta[], periodStr: string): Bundle[] => {
     const res: Bundle[] = []
     let i = 0
-    await Promise.all(
-      groupBy({
-        data,
-        groups: [
-          {by: (_) => _.oblast!},
-          {by: (_) => _.raion!},
-          {by: (_) => _.hromada!},
-          {by: (_) => _.settlement!},
-          {by: (_) => _.project?.[0]!},
-        ],
-        finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
-          const activity: AiGbvType = {
-            'Plan/Project code': planCode[project],
-            'Reporting Organization': 'Danish Refugee Council (DRC)',
-            'Response Theme': 'No specific theme',
-            Oblast: oblast,
-            Raion: raion,
-            Hromada: hromada,
-            Settlement: settlement,
-          }
-          const subActivities = mapSubActivity(grouped, periodStr)
-          const activityPrebuilt = {
-            ...activity,
-            ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
-            'Activities and People': subActivities.map((_) => _.activity),
-          }
+    groupBy({
+      data,
+      groups: [
+        {by: (_) => _.oblast!},
+        {by: (_) => _.raion!},
+        {by: (_) => _.hromada!},
+        {by: (_) => _.settlement!},
+        {by: (_) => _.project?.[0]!},
+      ],
+      finalTransform: (grouped, [oblast, raion, hromada, settlement, project]) => {
+        const activity: AiGbvType = {
+          'Plan/Project code': planCode[project],
+          'Reporting Organization': 'Danish Refugee Council (DRC)',
+          'Response Theme': 'No specific theme',
+          Oblast: oblast,
+          Raion: raion,
+          Hromada: hromada,
+          Settlement: settlement,
+        }
+        const subActivities = mapSubActivity(grouped, periodStr)
+        const activityPrebuilt = {
+          ...activity,
+          ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+          'Activities and People': subActivities.map((_) => _.activity),
+        }
+        return subActivities.map((subActivity) => {
           const recordId = ActivityInfoSdk.makeRecordId({
             prefix: 'drcgbv',
             periodStr,
             index: i++,
           })
-          return subActivities.map((subActivity) => {
-            res.push({
-              activity,
-              data: subActivity.data,
-              requestBody: ActivityInfoSdk.wrapRequest(AiGbvType.buildRequest(activityPrebuilt, recordId)),
-              subActivity: subActivity.activity,
-              recordId,
-              submit: checkAiValid(
-                activity.Oblast,
-                activity.Raion,
-                activity.Hromada,
-                activity.Settlement,
-                activity['Plan/Project code'],
-                ...(activity['Activities and People']?.map((_: AiGbvType.AiTypeActivitiesAndPeople) => _.Indicators) ??
-                  []),
-              ),
-            })
+          res.push({
+            activity,
+            data: subActivity.data,
+            requestBody: ActivityInfoSdk.wrapRequest(AiGbvType.buildRequest(activityPrebuilt, recordId)),
+            subActivity: subActivity.activity,
+            recordId,
+            submit: checkAiValid(
+              activity.Oblast,
+              activity.Raion,
+              activity.Hromada,
+              activity.Settlement,
+              activity['Plan/Project code'],
+              ...(activity['Activities and People']?.map((_: AiGbvType.AiTypeActivitiesAndPeople) => _.Indicators) ??
+                []),
+            ),
           })
-        },
-      }).transforms,
-    )
+        })
+      },
+    }).transforms
+    console.log(data, res)
     return res
   }
 
