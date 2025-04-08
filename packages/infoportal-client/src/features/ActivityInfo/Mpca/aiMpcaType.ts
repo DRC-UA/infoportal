@@ -2,15 +2,14 @@ export type AiMpcaType = AiMpcaType.Type
 
 export namespace AiMpcaType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
     'Reporting Organization': Opt<'Partner'>
     'Implementing Partner': Opt<'Partner'>
     'Plan/Project Code': Opt<'MPCA Activity Planning Module (APM) - 2025'>
     Donor: Opt<'Donor'>
     /**
-     Select the type of MPCA: MPCA or Rapid MPCA.
-     */
+        Select the type of MPCA: MPCA or Rapid MPCA.
+      */
     Activity: Opt<'Indicators - MPC'>
     'Payment Frequency': Opt<'Payment Frequency'>
     'Financial Service Provider (FSP)': Opt<'Financial Service Provider (FSP)'>
@@ -25,8 +24,8 @@ export namespace AiMpcaType {
     'Number of Covered Months': Opt<'Number of Covered Months'>
     'Population Group': Opt<'Population Group'>
     /**
-     The total cost for the MPCA activity, including financial service provider costs.
-     */
+        The total cost for the MPCA activity, including financial service provider costs.
+      */
     'Total amount (USD) distributed through MPCA': number
     'Total People Assisted': number
     'Girls (0-17)': number
@@ -36,32 +35,32 @@ export namespace AiMpcaType {
     'Older Women (60+)': number
     'Older Men (60+)': number
     /**
-     Out of the total individuals reached
-     */
+        Out of the total individuals reached
+      */
     'People with disability': number
     /**
-     Out of the total individuals reached
-     */
+        Out of the total individuals reached
+      */
     'Girls with disability (0-17)'?: number
     /**
-     Out of the total individuals reached
-     */
+        Out of the total individuals reached
+      */
     'Boys with disability (0-17)'?: number
     /**
-     Out of the total individuals reached
-     */
+        Out of the total individuals reached
+      */
     'Adult Women with disability (18-59)'?: number
     /**
-     Out of the total individuals reached
-     */
+        Out of the total individuals reached
+      */
     'Adult Men with disability (18-59)'?: number
     /**
-     Out of the total individuals reached
-     */
+        Out of the total individuals reached
+      */
     'Older Women with disability (60+)'?: number
     /**
-     Out of the total individuals reached
-     */
+        Out of the total individuals reached
+      */
     'Older Men with disability (60+)'?: number
     'HNRP Scope'?: Opt<'HNRP Scope'>
     'Outside HNRP Scope sub-category'?: Opt<'Outside HNRP Scope categories'>
@@ -149,7 +148,8 @@ export namespace AiMpcaType {
       'Adventist Development and Relief Agency Inter-American Division (ADRA IAD)': 'clz6opqm4s9iiuacx',
       'Adventist Development and Relief Agency Netherlands (ADRA Netherlands)': 'cnmslh9m4s9iiuacy',
       'Adventist Development and Relief Agency Norway (ADRA Norway)': 'c8ixmaqm4s9iiuacz',
-      'Adventist Development and Relief Agency South America Division (ADRA South America Division)': 'c9i82sem4s9iiuad0',
+      'Adventist Development and Relief Agency South America Division (ADRA South America Division)':
+        'c9i82sem4s9iiuad0',
       'Adventist Development and Relief Agency Spain (ADRA Spain)': 'camfk9gm4s9iiuad1',
       'Adventist Development and Relief Agency Sweden (ADRA Sweden)': 'c40voedm4s9iiuad2',
       'Adventist Development and Relief Agency Switzerland (ADRA Switzerland)': 'c9ub71zm4s9iiuad3',
@@ -209,7 +209,8 @@ export namespace AiMpcaType {
       'Danish Refugee Council (DRC)': 'cdaselsm4s9iiucel',
       'Delegation of the European Union to Ukraine (EEAS)': 'cf4c50hm4s9iiucem',
       'Denmark, Government of (Denmark)': 'c72uhdcm4s9iiucen',
-      'Directorate General for Development Cooperation of the Ministry of Foreign Affairs and International Cooperation - Italy (DGDC/MFA Italy)': 'cx2sdiwm4s9iiudeo',
+      'Directorate General for Development Cooperation of the Ministry of Foreign Affairs and International Cooperation - Italy (DGDC/MFA Italy)':
+        'cx2sdiwm4s9iiudeo',
       'Disasters Emergency Committee (DEC)': 'ctgttasm4s9iiudep',
       'Dnipropetrovsk Regional Center of Psychosocial Support (DRCPS)': 'cqm8nj4m4s9iiudeq',
       'Development Center (DDC)': 'c4vkxslm4s9iiuder',
@@ -223,14 +224,16 @@ export namespace AiMpcaType {
       'Estonian Refugee Council (ERC)': 'c14dfa5m4s9iiudez',
       'Euro-Plus (Euro+)': 'c30tjy7m4s9iiudf0',
       'European Commission Humanitarian Aid Department and Civil Protection (ECHO)': 'csn15j6m4s9iiudf1',
-      "European Commission's Directorate-General for European Civil Protection and Humanitarian Aid Operations (DG ECHO)": 'cns6k4cm4s9iiudf2',
+      "European Commission's Directorate-General for European Civil Protection and Humanitarian Aid Operations (DG ECHO)":
+        'cns6k4cm4s9iiudf2',
       'European Programme for Integration and Migration (EPIM)': 'cwn1i4ym4s9iiudf3',
       'European Union (EU)': 'ckcg2k9m4s9iiudf4',
       'FHI 360 (FHI360)': 'c3gikdwm4s9iiudf5',
       'Faith, Hope, Love (FHL)': 'cwjl2lom4s9iiudf6',
       'Federal Agency for Technical Relief (THW Germany)': 'c1n04ygm4s9iiudf7',
       'Federal Ministry for Economic Cooperation and Development - Germany (BMZ)': 'cwkxllxm4s9iiudf8',
-      'Federal Public Service Foreign Affairs, Foreign Trade and Development Cooperation - Belgium (MFA Belgium)': 'c3ownqsm4s9iiudf9',
+      'Federal Public Service Foreign Affairs, Foreign Trade and Development Cooperation - Belgium (MFA Belgium)':
+        'c3ownqsm4s9iiudf9',
       'Finland, Government of (Finland)': 'cbckzqam4s9iiudfa',
       'First Ukrainian International Bank (PUMB)': 'c43n6rgm4s9iiuefb',
       'Foreign, Commonwealth & Development Office (FCDO)': 'c9av4rjm4s9iiuefc',
@@ -328,7 +331,8 @@ export namespace AiMpcaType {
       'OM International (OM International)': 'cbmuawpm4s9iiuhhw',
       'Oak Foundation (Oak)': 'cvzh9ffm4s9iiuhhx',
       'Office for Foreign Affairs - Principality of Liechtenstein (MFA Liechtenstein)': 'cwb3twqm4s9iiuhhy',
-      'Office of Weapons Removal and Abatement in the U.S. State Department’s Bureau of Political-Military Affairs (PM/WRA)': 'ct5sie2m4s9iiuhhz',
+      'Office of Weapons Removal and Abatement in the U.S. State Department’s Bureau of Political-Military Affairs (PM/WRA)':
+        'ct5sie2m4s9iiuhhz',
       'Office the Ukrainian Parliament Commissioner for Human Rights (Ombudsman)': 'cj0sgd0m4s9iiuhi0',
       "Ole Kirk's Foundation (OKF)": 'cbf3g7sm4s9iiuhi1',
       'Omaze (Omaze)': 'c5lhzcsm4s9iiuhi2',
@@ -379,7 +383,8 @@ export namespace AiMpcaType {
       'UBS (UBS)': 'ctevzgfm4s9ijd3jb',
       'UN Women (UNW)': 'cp12i7zm4s9ijd3jc',
       'USAID / Disaster Assistance Response Team (DART)': 'cmb2t1em4s9ijd3jd',
-      "USAID / U.S. Department of State's Bureau of Population, Refugees, and Migration (USAID-PRM)": 'cox4g97m4s9ijd3je',
+      "USAID / U.S. Department of State's Bureau of Population, Refugees, and Migration (USAID-PRM)":
+        'cox4g97m4s9ijd3je',
       'USAID Global Health Supply Chain Program (GHSC)': 'cc2uam0m4s9ijd3jf',
       "USAID's Bureau for Humanitarian Assistance (USAID/BHA)": 'c1vyg49m4s9ijd3jg',
       "USAID's Country Development Cooperation Strategies (CDCS-USAID)": 'ckot7ccm4s9ijd3jh',
@@ -579,7 +584,8 @@ export namespace AiMpcaType {
       'Global Communities (GC)': 'ce2dw9am4s9ijyqow',
       'Mennonite Central Committee Ukraine (MCCUA)': 'cnp260vm4s9ijyqox',
       'Aktion Mensch (AktionMensch)': 'crth65im4s9ijyqoy',
-      'Diaconia of the Evangelical Church of Czech Brethren – Center of Relief and Development (Diaconia ECCB – CRD)': 'ctpydj0m4s9ijyqoz',
+      'Diaconia of the Evangelical Church of Czech Brethren – Center of Relief and Development (Diaconia ECCB – CRD)':
+        'ctpydj0m4s9ijyqoz',
       'Representative Office of the German Adult Education Association (DVVInternational)': 'ca378sbm4s9ijyqp0',
       'The Tree of Life - Ukraine (TOL-UA)': 'cgvjbe9m4s9ijyqp1',
       'Alight (ALIGHT)': 'cc2lkudm4s9ijyqp2',
@@ -613,6 +619,12 @@ export namespace AiMpcaType {
       'Archeparchy of Philadelphia (UkrCatholic)': 'ccqt000m7ukhvdl2',
       'Jewish Federations of North America (JFNA)': 'c4w1j3rm7ukhvdl3',
       'United Jewish Appeal - Federation of New York (UJA)': 'c1fpez6m7ukhvdl4',
+      "U.S. Department of State's Bureau of International Narcotics and Law Enforcement Affairs (BINALEA)":
+        'cnzktcm7x8fb522',
+      'Action Medeor (Medeor)': 'c2fuseum85rig4n2',
+      'Elton John AIDS Foundation (EJAIDSF)': 'c11i4dxm85rig4n3',
+      'Expertise France (ExpertiseF)': 'c6lo05om85rig4n4',
+      'Ministry of the Interior of the Czech Republic (MV Czech)': 'cobvsihm8d39qsl3',
     },
     'Indicators - MPC': {
       'MPCA > Provision of multi-purpose cash > # individuals assisted with MPC': 'cvrs9bum4v5isrx16',

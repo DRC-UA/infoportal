@@ -1,3 +1,4 @@
+import {match} from '@axanc/ts-utils'
 import {
   DrcDonor,
   DrcProgram,
@@ -9,24 +10,24 @@ import {
   Period,
   PeriodHelper,
 } from 'infoportal-common'
-import {fnSwitch, match} from '@axanc/ts-utils'
+
+import {appConfig} from '@/conf/AppConfig'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {AiMpcaType} from '@/features/ActivityInfo/Mpca/aiMpcaType'
-import {appConfig} from '@/conf/AppConfig'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 
 export namespace AiMpcaMapper {
   type Bundle = AiTable<AiMpcaType.Type>
 
-  const getPlanCode = (_: DrcProject) => {
-    return match(_ as any)
+  const getPlanCode = (drcProject: DrcProject) => {
+    return match(drcProject)
       .cases({
-        [DrcProject['UKR-000380 DANIDA']]: 'MPCA-DRC-00011',
-        [DrcProject['UKR-000386 Pooled Funds']]: 'MPCA-DRC-00011',
+        [DrcProject['UKR-000380 DANIDA']]: 'MPCA-DRC-00001',
+        [DrcProject['UKR-000386 Pooled Funds']]: 'MPCA-DRC-00001',
       })
-      .default(() => aiInvalidValueFlag + _)
+      .default(() => aiInvalidValueFlag + drcProject)
   }
 
   export const reqCashRegistration =
@@ -68,9 +69,8 @@ export namespace AiMpcaMapper {
                   Raion: raion,
                   Hromada: hromada,
                   Settlement: settlement,
-                  Donor: fnSwitch<DrcDonor, AiMpcaType.Type['Donor']>(
-                    DrcProjectHelper.donorByProject[project],
-                    {
+                  Donor: match<DrcDonor>(DrcProjectHelper.donorByProject[project])
+                    .cases({
                       SIDA: 'Swedish International Development Cooperation Agency (Sida)',
                       UHF: 'Ukraine Humanitarian Fund (UHF)',
                       NovoNordisk: 'Novo Nordisk (NN)',
@@ -87,9 +87,8 @@ export namespace AiMpcaMapper {
                       ECHO: 'European Commission Humanitarian Aid Department and Civil Protection (ECHO)',
                       DANI: `Danish International Development Agency - Ministry of Foreign Affairs - Denmark (DANIDA)`,
                       SDC: 'Swiss Agency for Development and Cooperation (SDC)',
-                    },
-                    () => aiInvalidValueFlag as AiMpcaType.Type['Donor'],
-                  ),
+                    } as const)
+                    .default(() => aiInvalidValueFlag as AiMpcaType.Type['Donor']),
                   'Number of Covered Months': 'Three months (recommended)',
                   'Financial Service Provider (FSP)': 'Bank Transfer',
                   'Population Group': displacement,
