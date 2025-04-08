@@ -38,6 +38,15 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
   const innerColumns = useMemo(() => {
     return columns
       .map((col) => {
+        if ((col.type === 'date') && DatatableColumn.isQuick(col)) {
+          const prevRenderQuick = col.renderQuick
+          col.renderQuick = (row: T) => {
+            const raw = prevRenderQuick ? prevRenderQuick(row) : (row as any)[col.id]
+            if (!raw) return undefined
+            const date = new Date(raw)
+            return isNaN(date.getTime()) ? undefined : date.toISOString().split('T')[0]
+          }
+        }
         if (DatatableColumn.isQuick(col)) {
           if (col.type === undefined) {
             ;(col as unknown as DatatableColumn.InnerProps<T>).render = (_: T) => {

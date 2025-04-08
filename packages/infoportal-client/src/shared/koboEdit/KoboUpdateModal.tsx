@@ -88,7 +88,14 @@ export namespace KoboUpdateModal {
         loading={_loading}
         cancelLabel={m.close}
         confirmDisabled={_loading || !!fetcherUpdate.get}
-        onConfirm={() => fetcherUpdate.fetch({force: true, clean: true}, value)}
+        onConfirm={() => {
+          const normalized =
+            value instanceof Date
+              ? value.toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' })
+              : value
+          fetcherUpdate.fetch({ force: true, clean: true }, normalized)
+        }}
+
         title={title}
       >
         <Txt truncate color="hint" block sx={{mb: 1, maxWidth: 400}}>
