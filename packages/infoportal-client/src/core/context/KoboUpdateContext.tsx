@@ -157,7 +157,10 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
           if (isTag) {
             if (!a.tags) a.tags = {}
             ;(a.tags as any)[key] = value
-          } else a[key] = value
+          } else {
+            const isDateField = key.toLowerCase().includes('date')
+            a[key] = isDateField && typeof value === 'string' ? new Date(value) : value
+          }
         }
         return {...a}
       }),
