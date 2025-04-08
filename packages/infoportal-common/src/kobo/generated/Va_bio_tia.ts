@@ -96,7 +96,7 @@ sub_status: {
 	'ukr000306_dutch': `UKR000306 Dutch II`,
 	'ukr000397_gffo': `UKR000397 GFFO`,
 	'ukr000363_uhf8': `UKR000363 UHF8`,
-	'ukr000284_uhf8': `UKR000284 BHA`,
+	'ukr000284_bha': `UKR000284 BHA`,
 	'ukr000316_uhf5': `UKR000316 UHF5`,
 	'ukr000246_mfa': `UKR000249 Finnish MFA`,
 	'ongoing': `🕓 For revision`,
@@ -163,9 +163,9 @@ project: {
 	'ukr000363_uhf8': `UKR-000363 UHF8`,
 	'ukr000372_echo3': `UKR-000372 ECHO3`,
 	'ukr000397_gffo': `UKR-000397 GFFO`,
-	'ukr000284_uhf8': `UKR000284 BHA`,
-	'ukr000316_uhf5': `UKR000316 UHF5`,
-	'ukr000246_mfa': `UKR000249 Finnish MFA`,
+	'ukr000284_bha': `UKR-000284 BHA`,
+	'ukr000316_uhf5': `UKR-000316 UHF5`,
+	'ukr000246_mfa': `UKR-000249 Finnish MFA`,
 	'not_approved': `Not approved`
 },
 type_eo: {

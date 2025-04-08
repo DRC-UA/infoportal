@@ -42,6 +42,7 @@ export class KoboMetaMapperVa {
           if (!project || Va_bio_tia.options.project[project] === 'Not approved') return
 
           return DrcProject[Va_bio_tia.options.project[project]]
+
         })
         .filter((project) => !!project) || []
 
