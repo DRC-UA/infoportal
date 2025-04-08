@@ -76,7 +76,42 @@ export class KoboMetaMapperProtection {
       personsCount: persons.length,
       project: (() => {
         // ad-hoc solution for selected forms without project in tags
-        if (['463335'].includes(row.id)) return [DrcProject['UKR-000363 UHF8']]
+        if (
+          [
+            '463335',
+            '463998',
+            '476680',
+            '477480',
+            '465576',
+            '475060',
+            '465577',
+            '476696',
+            '1141527',
+            '476695',
+            '1141523',
+            '1141741',
+            '477484',
+            '1141381',
+            '461140',
+            '477483',
+            '1140946',
+            '1140947',
+            '466081',
+            '465639',
+            '466106',
+            '1142024',
+            '1141743',
+            '1141740',
+            '1142077',
+            '1142082',
+            '1141735',
+            '1141738',
+            '1141797',
+            '1141732',
+            '465578',
+          ].includes(row.id)
+        )
+          return [DrcProject['UKR-000363 UHF8']]
 
         return row.tags?.project ? [row.tags?.project] : []
       })(),
