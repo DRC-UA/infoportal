@@ -57,10 +57,10 @@ export class KoboMetaMapperVa {
     const projects =
       answer.tia_assesment
         ?.map(({project}, index) => {
-          if (project === 'not_approved' || (!project && !answer.sub_status?.[index]) || !answer.sub_status) return
+          // if (project === 'not_approved' || (!project && !answer.sub_status?.[index]) || !answer.sub_status) return
+          if (!project || project === 'not_approved') return
 
           return DrcProject[Va_bio_tia.options.project[project]]
-
         })
         .filter((project) => !!project) || []
 
