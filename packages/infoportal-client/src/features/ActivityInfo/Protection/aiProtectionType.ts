@@ -79,8 +79,8 @@ export namespace AiProtectionType {
       'Older Men (60+)': number
       'Non-individuals Reached/Quantity': number
       /**
-      Out of the total individuals reached
-    */
+        Out of the total individuals reached
+      */
       'People with Disability'?: number
     }
 

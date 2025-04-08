@@ -74,7 +74,12 @@ export class KoboMetaMapperProtection {
         .default(() => undefined),
       persons,
       personsCount: persons.length,
-      project: row.tags?.project ? [row.tags?.project] : [],
+      project: (() => {
+        // ad-hoc solution for selected forms without project in tags
+        if (['463335'].includes(row.id)) return [DrcProject['UKR-000363 UHF8']]
+
+        return row.tags?.project ? [row.tags?.project] : []
+      })(),
       donor: row.tags?.project ? [DrcProjectHelper.donorByProject[row.tags?.project]] : [],
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
