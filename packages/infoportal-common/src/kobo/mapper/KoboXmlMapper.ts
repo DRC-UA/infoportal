@@ -1,3 +1,9 @@
+import {match, seq, type Seq} from '@axanc/ts-utils'
+
+import {Person} from '../../type/Person.js'
+import {OblastIndex} from '../../location/index.js'
+import {DrcOffice} from '../../type/Drc.js'
+
 import {
   Bn_cashForRentRegistration,
   Bn_rapidResponse,
@@ -27,10 +33,6 @@ import {
   Va_bio_tia,
   Meal_winterizationPdm,
 } from '../generated/index.js'
-import {Person} from '../../type/Person.js'
-import {fnSwitch, seq} from '@axanc/ts-utils'
-import {OblastIndex} from '../../location/index.js'
-import {DrcOffice} from '../../type/Drc.js'
 
 export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
@@ -106,9 +108,8 @@ export namespace KoboXmlMapper {
   }
 
   export const office = (_?: Xml.Office): DrcOffice | undefined =>
-    fnSwitch(
-      _!,
-      {
+    match(_)
+      .cases({
         kharkiv: DrcOffice.Kharkiv,
         dnipro: DrcOffice.Dnipro,
         mykovaiv: DrcOffice.Mykolaiv,
@@ -122,23 +123,20 @@ export namespace KoboXmlMapper {
         zap: DrcOffice.Zaporizhzhya,
         khe: DrcOffice.Kherson,
         iev: DrcOffice.Kyiv,
-      },
-      () => undefined,
-    )
+      })
+      .default(undefined)
 
   export namespace Persons {
     namespace Gender {
       export const common = (person?: {hh_char_hh_det_gender?: Xml.Gender}) => {
-        return fnSwitch(
-          person?.hh_char_hh_det_gender!,
-          {
+        return match(person?.hh_char_hh_det_gender)
+          .cases({
             male: Person.Gender.Male,
             female: Person.Gender.Female,
             other: Person.Gender.Other,
             other_pns: Person.Gender.Other,
-          },
-          () => undefined,
-        )
+          })
+          .default(undefined)
       }
     }
 
@@ -146,9 +144,8 @@ export namespace KoboXmlMapper {
       export const common = (person: {
         hh_char_hh_res_stat?: Xml.Displacement
       }): undefined | Person.DisplacementStatus => {
-        return fnSwitch(
-          person.hh_char_hh_res_stat!,
-          {
+        return match(person.hh_char_hh_res_stat)
+          .cases({
             idp: Person.DisplacementStatus.Idp,
             displaced: Person.DisplacementStatus.Idp,
             long: Person.DisplacementStatus.NonDisplaced,
@@ -157,9 +154,8 @@ export namespace KoboXmlMapper {
             returnee: Person.DisplacementStatus.Returnee,
             ref_asy: Person.DisplacementStatus.Refugee,
             'non-displaced': Person.DisplacementStatus.NonDisplaced,
-          },
-          () => undefined,
-        )
+          })
+          .default(undefined)
       }
     }
 
@@ -172,9 +168,8 @@ export namespace KoboXmlMapper {
         if (person.hh_char_hh_det_dis_level === 'zero') return [Person.WgDisability.None]
         return person.hh_char_hh_det_dis_select
           ?.map((_) =>
-            fnSwitch(
-              _,
-              {
+            match(_)
+              .cases({
                 diff_see: Person.WgDisability.See,
                 diff_hear: Person.WgDisability.Hear,
                 diff_walk: Person.WgDisability.Walk,
@@ -182,9 +177,8 @@ export namespace KoboXmlMapper {
                 diff_care: Person.WgDisability.Care,
                 diff_comm: Person.WgDisability.Comm,
                 diff_none: Person.WgDisability.None,
-              },
-              () => undefined,
-            ),
+              })
+              .default(undefined),
           )
           .filter((_) => !!_)
       }
@@ -293,17 +287,19 @@ export namespace KoboXmlMapper {
       ): undefined | Ecrec_cashRegistration.T['hh_char_res_dis_select'] => {
         return seq(dis)
           ?.map((_) =>
-            fnSwitch(_, {
-              diff_see: 'diff_see',
-              diff_hear: 'diff_hear',
-              diff_walk: 'diff_walk',
-              diff_rem: 'diff_rem',
-              diff_care: 'diff_care',
-              diff_comm: 'diff_comm',
-              diff_none: 'diff_none',
-              diff_medical: undefined,
-              diff_mental: undefined,
-            }),
+            match(_)
+              .cases({
+                diff_see: 'diff_see',
+                diff_hear: 'diff_hear',
+                diff_walk: 'diff_walk',
+                diff_rem: 'diff_rem',
+                diff_care: 'diff_care',
+                diff_comm: 'diff_comm',
+                diff_none: 'diff_none',
+                diff_medical: undefined,
+                diff_mental: undefined,
+              })
+              .default(undefined),
           )
           .compact()
           .get() as Ecrec_cashRegistration.T['hh_char_res_dis_select']
@@ -335,14 +331,14 @@ export namespace KoboXmlMapper {
 
     export const protection_counselling = (row: Protection_counselling.T) => {
       const hasDisab = (_: Protection_counselling.T['difficulty_remembering']): boolean => {
-        return (
-          fnSwitch(_!, {
+        return match(_)
+          .cases({
             no: false,
             yes_some: true,
             yes_lot: true,
             cannot_all: true,
-          }) ?? false
-        )
+          })
+          .default(false)
       }
       const disability = (
         [
@@ -357,27 +353,23 @@ export namespace KoboXmlMapper {
       return [
         {
           age: row.age,
-          gender: fnSwitch(
-            row.gender!,
-            {
+          gender: match(row.gender!)
+            .cases({
               man: Person.Gender.Male,
               other: Person.Gender.Other,
               woman: Person.Gender.Female,
-            },
-            () => undefined,
-          ),
-          displacement: fnSwitch(
-            row.disp_status!,
-            {
+            })
+            .default(undefined),
+          displacement: match(row.disp_status)
+            .cases({
               idp: Person.DisplacementStatus.Idp,
               idp_retuenee: Person.DisplacementStatus.Returnee,
               refugee_returnee: Person.DisplacementStatus.Returnee,
               non_displaced: Person.DisplacementStatus.NonDisplaced,
               refugee: Person.DisplacementStatus.Refugee,
               pnd: undefined,
-            },
-            () => undefined,
-          ),
+            })
+            .default(undefined),
           disability,
         },
       ]
@@ -414,16 +406,14 @@ export namespace KoboXmlMapper {
     }
 
     export const protection_hhs3 = (row: Protection_hhs3.T): Person.Details[] => {
-      const displacement = fnSwitch(
-        row.do_you_identify_as_any_of_the_following!,
-        {
+      const displacement = match(row.do_you_identify_as_any_of_the_following)
+        .cases({
           idp: Person.DisplacementStatus.Idp,
           non_displaced: Person.DisplacementStatus.NonDisplaced,
           refugee: Person.DisplacementStatus.Refugee,
           returnee: Person.DisplacementStatus.Returnee,
-        },
-        () => undefined,
-      )
+        })
+        .default(undefined)
       return seq(row.hh_char_hh_det)
         ?.map((hh) => {
           return {
@@ -432,9 +422,8 @@ export namespace KoboXmlMapper {
             displacement: displacement,
             disability: hh.hh_char_hh_det_disability
               ?.map((_) =>
-                fnSwitch(
-                  _,
-                  {
+                match(_)
+                  .cases({
                     no: Person.WgDisability.None,
                     wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
                     wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
@@ -443,9 +432,8 @@ export namespace KoboXmlMapper {
                     wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
                     wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
                     unable_unwilling_to_answer: undefined,
-                  },
-                  () => undefined,
-                ),
+                  })
+                  .default(undefined),
               )
               .filter((_) => !!_),
           }
@@ -522,22 +510,21 @@ export namespace KoboXmlMapper {
     export const protection_communityMonitoring = (row: Protection_communityMonitoring.T) => {
       const hh_char_hh_det_dis_select = seq(row.key_informant_difficulty ?? [])
         .map((_) => {
-          return fnSwitch(
-            _!,
-            {
-              no: 'diff_none',
-              seeing: 'diff_see',
-              hearing: 'diff_hear',
-              walking: 'diff_walk',
-              remembering_concentrating: 'diff_rem',
-              self_care: 'diff_care',
-              using_usual_language: 'diff_comm',
-            } as const,
-            () => undefined,
-          )
+          match(_).cases({
+            no: 'diff_none',
+            seeing: 'diff_see',
+            hearing: 'diff_hear',
+            walking: 'diff_walk',
+            remembering_concentrating: 'diff_rem',
+            self_care: 'diff_care',
+            using_usual_language: 'diff_comm',
+          })
         })
         .compact()
+        .get() as Xml.DisabilitySelected[]
+
       return common({
+        // @ts-expect-error void IS undefined. Kind of. Period. Sorry. Blame me in case of crashes
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
           ..._,
           hh_char_hh_det_dis_select,
@@ -547,31 +534,28 @@ export namespace KoboXmlMapper {
     }
 
     export const protection_referral = (row: Protection_referral.T): Person.Details[] => {
-      const displacement = fnSwitch(
-        row.displacement_status!,
-        {
+      const displacement = match(row.displacement_status)
+        .cases({
           idp: Person.DisplacementStatus.Idp,
           idp_returnee: Person.DisplacementStatus.Returnee,
           refugee_retuenee: Person.DisplacementStatus.Returnee,
           non_peenisplaced: Person.DisplacementStatus.NonDisplaced,
           refugee_Refenee: Person.DisplacementStatus.Refugee,
-        },
-        () => undefined,
-      )
+        })
+        .default(undefined)
+
       return [
         {
           age: row.age,
-          gender: fnSwitch(
-            row.gender!,
-            {
+          gender: match(row.gender)
+            .cases({
               man: Person.Gender.Male,
               woman: Person.Gender.Female,
               boy: Person.Gender.Male,
               girl: Person.Gender.Female,
               other: Person.Gender.Other,
-            },
-            () => undefined,
-          ),
+            })
+            .default(undefined),
           displacement,
         },
       ]
@@ -582,17 +566,15 @@ export namespace KoboXmlMapper {
         ...row,
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
           ..._,
-          hh_char_hh_res_stat: fnSwitch(
-            _.hh_char_hh_res_stat!,
-            {
+          hh_char_hh_res_stat: match(_.hh_char_hh_res_stat)
+            .cases({
               ret: 'ret',
               ref_asy: 'ref_asy',
               idp: 'idp',
               long_res: 'long_res',
               idp_after_evacuation: 'idp',
-            },
-            () => undefined,
-          ),
+            } as const)
+            .default(undefined),
         })),
       })
     }
@@ -607,23 +589,19 @@ export namespace KoboXmlMapper {
         },
       ].map((person) => ({
         age: person.age,
-        gender: fnSwitch(
-          person.gender,
-          {
+        gender: match(person.gender)
+          .cases({
             male: Person.Gender.Male,
             female: Person.Gender.Female,
-          },
-          () => undefined,
-        ),
-        displacement: fnSwitch(
-          person.displacement,
-          {
+          })
+          .default(undefined),
+        displacement: match(person.displacement)
+          .cases({
             idp: Person.DisplacementStatus.Idp,
             long: Person.DisplacementStatus.NonDisplaced,
             returnee: Person.DisplacementStatus.Returnee,
-          },
-          () => undefined,
-        ),
+          })
+          .default(undefined),
         disability: person.disability,
       }))
     }
@@ -638,23 +616,19 @@ export namespace KoboXmlMapper {
         },
       ].map((person) => ({
         age: person.age,
-        gender: fnSwitch(
-          person.gender,
-          {
+        gender: match(person.gender)
+          .cases({
             male: Person.Gender.Male,
             female: Person.Gender.Female,
-          },
-          () => undefined,
-        ),
-        displacement: fnSwitch(
-          person.displacement,
-          {
+          })
+          .default(undefined),
+        displacement: match(person.displacement)
+          .cases({
             idp: Person.DisplacementStatus.Idp,
             long: Person.DisplacementStatus.NonDisplaced,
             returnee: Person.DisplacementStatus.Returnee,
-          },
-          () => undefined,
-        ),
+          })
+          .default(undefined),
         disability: person.disability,
       }))
     }
@@ -669,14 +643,12 @@ export namespace KoboXmlMapper {
         },
       ].map((person) => ({
         age: person.age,
-        gender: fnSwitch(
-          person.gender,
-          {
+        gender: match(person.gender)
+          .cases({
             male: Person.Gender.Male,
             female: Person.Gender.Female,
-          },
-          () => undefined,
-        ),
+          })
+          .default(undefined),
         displacement: person.displacement,
         disability: person.disability,
       }))
@@ -692,24 +664,20 @@ export namespace KoboXmlMapper {
         },
       ].map((person) => ({
         age: person.age,
-        gender: fnSwitch(
-          person.sex,
-          {
+        gender: match(person.sex)
+          .cases({
             male: Person.Gender.Male,
             female: Person.Gender.Female,
             pnd: Person.Gender.Other,
-          },
-          () => undefined,
-        ),
-        displacement: fnSwitch(
-          person.displacement,
-          {
+          })
+          .default(undefined),
+        displacement: match(person.displacement)
+          .cases({
             idp: Person.DisplacementStatus.Idp,
             long: Person.DisplacementStatus.NonDisplaced,
             returnee: Person.DisplacementStatus.Returnee,
-          },
-          () => undefined,
-        ),
+          })
+          .default(undefined),
         disability: person.disability,
       }))
     }
@@ -722,26 +690,23 @@ export namespace KoboXmlMapper {
       const age = tiaEntry?.cash_age
       const gender = tiaEntry?.cash_gender
 
-      const displacement = fnSwitch(
-        tiaEntry?.res_stat ?? '',
-        {
+      const displacement = match(tiaEntry?.res_stat ?? '')
+        .cases({
           idp: Person.DisplacementStatus.Idp,
           returnees: Person.DisplacementStatus.Returnee,
           host_communities: Person.DisplacementStatus.NonDisplaced,
-        },
-        () => undefined,
-      )
+        })
+        .default(() => undefined)
+
       return [
         {
-          age: age,
-          gender: fnSwitch(
-            gender ?? '',
-            {
+          age,
+          gender: match(gender)
+            .cases({
               male: Person.Gender.Male,
               female: Person.Gender.Female,
-            },
-            () => undefined,
-          ),
+            })
+            .default(() => undefined),
           displacement,
         },
       ]
