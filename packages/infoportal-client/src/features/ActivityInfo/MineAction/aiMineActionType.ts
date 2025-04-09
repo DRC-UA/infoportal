@@ -5,15 +5,9 @@ export namespace AiMineActionType {
   export interface Type {
     ID?: string
     'Reporting Organization': Opt<'Partner'>
-    /**
-      If applicable
-    */
     'Implementing Partner'?: Opt<'Partner'>
-    /**
-      Add another Implementing Partner if applicable
-    */
     'Implementing Partner 2'?: Opt<'Partner'>
-    'Plan/Project Code': Opt<'Activity Planning Module (Mine Action AoR)'>
+    'Plan/Project Code': Opt<'Activity Planning Module (Mine Action)'>
     Oblast: string
     Raion: string
     Hromada: string
@@ -26,29 +20,29 @@ export namespace AiMineActionType {
   export const buildRequest = (a: Type, recordId: string, parentRecordId: string | null = null) => {
     return [
       {
-        formId: 'cmnzatklqv1q3s243u',
+        formId: 'cxpfp3xm513b6r15nwo',
         recordId,
         parentRecordId,
         fields: {
-          cvb0gcplqf3085j4s: a['ID'],
-          c1g03yllqf3085j4t: a['Reporting Organization']
-            ? 'czbgrslpwg36j52' + ':' + options['Partner'][a['Reporting Organization']!]
+          c9jwta5m4whznd44: a['ID'],
+          chkoxzhm4wi1a2f5: a['Reporting Organization']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Reporting Organization']!]
             : undefined,
-          ct68whplqf3085j4u: a['Implementing Partner']
-            ? 'czbgrslpwg36j52' + ':' + options['Partner'][a['Implementing Partner']!]
+          cxegdaym4wi2qbq6: a['Implementing Partner']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner']!]
             : undefined,
-          cz796xnlqf3085j4v: a['Implementing Partner 2']
-            ? 'czbgrslpwg36j52' + ':' + options['Partner'][a['Implementing Partner 2']!]
+          c4y1cm9m4wi4r8x7: a['Implementing Partner 2']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner 2']!]
             : undefined,
-          ccn9h61lrkokg015: a['Plan/Project Code']
-            ? 'c9c396nlr6f4i48zv' + ':' + options['Activity Planning Module (Mine Action AoR)'][a['Plan/Project Code']!]
+          cudwpx1m52jxy70a: a['Plan/Project Code']
+            ? 'cmxjoenm4tt829i1amo' + ':' + options['Activity Planning Module (Mine Action)'][a['Plan/Project Code']!]
             : undefined,
-          c6bulw2lqf3085j4y: a['Oblast'] ? 'cemuxawlq3kfmqf2' + ':' + a['Oblast'] : undefined,
-          cb39ganlqf3085j4z: a['Raion'] ? 'cd5q9sdlq3kklo314' + ':' + a['Raion'] : undefined,
-          cmdrqq8lqf3085j50: a['Hromada'] ? 'cwlaxxlq3kp2bu5a' + ':' + a['Hromada'] : undefined,
-          cn43jajlqf3085j51: a['Settlement'] ? 'cfn5ltdlq3lbcb95w' + ':' + a['Settlement'] : undefined,
-          ce0zvlllqf3085j52: a['Collective Site'] ? 'ca2hwjalq6e6dbs1l' + ':' + a['Collective Site'] : undefined,
-          c18374vlqf3085j54: a['Response Theme'] ? options['Response Theme'][a['Response Theme']!] : undefined,
+          ce9pjx6m4wihjfpa: a['Oblast'] ? 'ciok70dm4r8lp7f2' + ':' + a['Oblast'] : undefined,
+          c7plljum4wiik9ib: a['Raion'] ? 'c1v215km4s71ndl22' + ':' + a['Raion'] : undefined,
+          cjd10k0m4wijuqtc: a['Hromada'] ? 'cu8n0g0m4s7y2p16b' + ':' + a['Hromada'] : undefined,
+          cp70mkkm4wil1q7d: a['Settlement'] ? 'cyr4ry4m4s81hdd6v' + ':' + a['Settlement'] : undefined,
+          chcqc70m4wjta8gh: a['Collective Site'] ? 'ckt3l0m4wiw1n92' + ':' + a['Collective Site'] : undefined,
+          cy52j7km4wiqb94g: a['Response Theme'] ? options['Response Theme'][a['Response Theme']!] : undefined,
         },
       },
       ...(a['Activities and People'] ?? []).flatMap((_, i) =>
@@ -58,28 +52,21 @@ export namespace AiMineActionType {
   }
 
   export const options = {
-    Partner: {'Danish Refugee Council (DRC)': 'cloyih3lpwhjdsu2r0'},
-    'Activity Planning Module (Mine Action AoR)': {
-      'MA-DRC-00001': 'csduwtmlsn2cadn8',
-      'MA-DRC-00002': 'c1ibtnblsnbwirq2',
-      'MA-DRC-00003': 'c410zexlsogr3942',
-      'MA-DRC-00004': 'ckql3hzlsogumin3',
-      'MA-DRC-00005': 'c5h7kj9lsohodvh4',
-      'MA-DRC-00006': 'cfr73p4lsohuagv5',
-      'MA-DRC-00007': 'cnpgzxlsoi5jhb6',
-      'MA-DRC-00008': 'c4dqoqzlsoi8e4m7',
-      'MA-DRC-00009': 'cbq4ql1lsojygo38',
-      'MA-DRC-00010': 'cvnl97qlsok0t9m9',
-      'MA-DRC-00011': 'c4bck8ylssrdvtb2',
-      'MA-DRC-00012': 'cxmz8zyly7c04mi2',
-      'MA-DRC-00013': 'cytsa31ly7c6dm43',
-      'MA-DRC-00014': 'cc4w1sily7c9xva4',
-      'MA-DRC-00015': 'c26rv9dly7cdl9g5',
-      'MA-DRC-00016': 'cfzu1rnm4b9h8qp4',
-      'MA-DRC-00017': 'cd7xp0ym4b9koer5',
-      'MA-DRC-00018': 'c8up20vm4bb3y1d6',
+    Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
+    'Activity Planning Module (Mine Action)': {
+      'MA-DRC-00001': 'ctcpgydm7d3o87d1hr',
+      'MA-DRC-00002': 'cb0nbfcm7d3o87d1hs',
+      'MA-DRC-00003': 'cpw6zd7m7d3o87e1ht',
+      'MA-DRC-00004': 'cgf37som7d3o87e1hu',
+      'MA-DRC-00005': 'cs2ppiom7d3o87e1hv',
+      'MA-DRC-00006': 'ca7nt41m7d3o87e1hw',
+      'MA-DRC-00007': 'cbyya7nm7d3o87e1hx',
+      'MA-DRC-00008': 'chhxz5m7d3o87e1hy',
+      'MA-DRC-00009': 'chyqpvrm7d3o87e1hz',
+      'MA-DRC-00010': 'clyht14m7d3o87e1i0',
+      'MA-DRC-00011': 'cbuernkm7k7a2ai3',
     },
-    'Response Theme': {'No specific theme': 'c40c4vklqf3085j55'},
+    'Response Theme': {'No specific theme': 'crfw0hkm4wiqb94f'},
   }
 
   export type AiTypeActivitiesAndPeople = AiTypeActivitiesAndPeople.Type
@@ -88,8 +75,8 @@ export namespace AiMineActionType {
     type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
     export interface Type {
       'Reporting Month': string
-      'Population Group': Opt<'Population Group'>
       Indicators: Opt<'Indicators - Protection'>
+      'Population Group': Opt<'Population Group'>
       'Total Individuals Reached': number
       'Girls (0-17)': number
       'Boys (0-17)': number
@@ -99,79 +86,59 @@ export namespace AiMineActionType {
       'Older Men (60+)': number
       'Non-individuals Reached/Quantity': number
       /**
-      Out of the total individuals reached
-    */
+        Out of the total individuals reached
+      */
       'People with Disability'?: number
-      'HNRP Scope'?: Opt<'HNRP Scope'>
-      'Outside HNRP Scope sub-categories'?: Opt<'Outside HNRP Scope sub-categories'>
     }
 
     export const buildRequest = (a: Type, recordId: string, parentRecordId: string | null = null) => {
       return [
         {
-          formId: 'cegbam4lqv1q3s243v',
+          formId: 'c1qx3sfm513b6r15nwp',
           recordId,
           parentRecordId,
           fields: {
-            c3qgzazlqf3umfi5q: a['Reporting Month'],
-            cfk8s3wlqf3umfi5r: a['Population Group']
-              ? 'cf8ig2alq6dbe8t2' + ':' + options['Population Group'][a['Population Group']!]
+            cndgh2bm6j5fhcqa: a['Reporting Month'],
+            ckgn2n6m4wk2393o: a['Indicators']
+              ? 'ctica5gm4r928td16' + ':' + options['Indicators - Protection'][a['Indicators']!]
               : undefined,
-            cdy5p8nlqf3umfi5s: a['Indicators']
-              ? 'c8uhbuclqb1fjlg2' + ':' + options['Indicators - Protection'][a['Indicators']!]
+            cc9whaum4wl74eb12: a['Population Group']
+              ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!]
               : undefined,
-            c91ka88lqf3umfi5w: a['Total Individuals Reached'],
-            cehoaaplqf3umfi5x: a['Girls (0-17)'],
-            co2cpjrlqf3umfi5y: a['Boys (0-17)'],
-            cosf9hmlqf3umfi5z: a['Adult Women (18-59)'],
-            cug19qulqf3umfi60: a['Adult Men (18-59)'],
-            cdrd176lqf3umfi61: a['Older Women (60+)'],
-            c81tgzdlqf3umfi62: a['Older Men (60+)'],
-            cnaij95lqf3umfi63: a['Non-individuals Reached/Quantity'],
-            cz8i6pylqf3umfi64: a['People with Disability'],
-            cbisjn4lw6fmi713: a['HNRP Scope'] ? options['HNRP Scope'][a['HNRP Scope']!] : undefined,
-            cny9yumlw6fyggv4: a['Outside HNRP Scope sub-categories']
-              ? 'cs4astklw6ftd2y2' +
-                ':' +
-                options['Outside HNRP Scope sub-categories'][a['Outside HNRP Scope sub-categories']!]
-              : undefined,
+            cxcth1bm4wk7dvms: a['Total Individuals Reached'],
+            ce79tc4m4wkdpd4t: a['Girls (0-17)'],
+            ckd43oym4wkfhmwu: a['Boys (0-17)'],
+            cflqb6km4wkujyxv: a['Adult Women (18-59)'],
+            clhi83vm4wkxl81w: a['Adult Men (18-59)'],
+            cty2zyem4wkyvyhx: a['Older Women (60+)'],
+            csq1r47m4wl091ky: a['Older Men (60+)'],
+            ctm6pddm4wl2ky2z: a['Non-individuals Reached/Quantity'],
+            c3knsqem4wl8nfu14: a['People with Disability'],
           },
         },
       ]
     }
 
     export const options = {
-      'Population Group': {
-        'Internally Displaced': 'cvw4on6lq6dgcoj5',
-        'Non-Displaced': 'ck6ulx8lq6dgcok6',
-        Returnees: 'cuz9qi9lq6dgcok7',
-      },
       'Indicators - Protection': {
-        'Provision of face-to-face Explosive Ordnance Risk Education (EORE) sessions > # of individuals who participated in face-to-face EORE sessions in the educational institutions (e.g. schools)':
-          'ck8w3wflqmgu66u16',
-        'Provide ToT: Capacity building support to become an accredited EORE operator > # of organizations (national or local) who received capacity building support to become an accredited EORE operator':
-          'cau7kexlqmgu66u17',
-        'Cash assistance provided to mine / ERW survivor (SADD) > # mine / ERW survivors who received cash assistance (SADD)':
-          'cihm2xplqmgu66u18',
-        'MHPSS provided to mine / ERW survivor (SADD) > # of mine / ERW survivor who received MHPSS (SADD)':
-          'cy1jgeilqmgu66u19',
-        'Non-technical survey > Area surveyed (square metres) - (TBD)': 'cmg8547lqmgu66u1a',
-        'Land clearance > Area cleared (square metres)': 'ci7ya6zlqmgu66u1b',
-        'Land clearance > # of individuals who directly benefitted from land clearance (SADD)': 'cl00iz2lqmgu66u1c',
-        'Institutional support > # of interventions (equipment provision) to national mine action institutions':
-          'clxeupalqmgu66u1d',
+        'Explosive Ordnance Risk Education (EORE) > # of individuals who participated in face-to-face EORE sessions in the educational institutions (e.g. schools)':
+          'cn10071m5111jhc1a',
+        'Explosive Ordnance Risk Education (EORE) > # of individuals who participated in face-to-face EORE sessions excluding educational institutions (e.g. communities)':
+          'cbwhw5m5111jhc1b',
+        'Number of organizations (national or local) who received capacity-building support to become an accredited EORE operator > # of organizations (national or local) who received capacity building support to become an certified EORE operator':
+          'cocqg63m5111jhc1c',
+        'Cash assistance provided to mine / ERW survivor (SADD) > # EO survivors who received cash assistance (SADD)':
+          'crzckufm5111jhc1d',
+        'Number of EO victims that have been referred to other services > # of EO victims that have been referred to other services':
+          'cuk4lbgm5111jhc1e',
+        'Non-technical survey (# surveys) - Area in m2 surveyed > Area surveyed (square metres of area identified and SHA or CHA)':
+          'cibcwb8m5111jhc1f',
+        'Land cleared > Area cleared (square metres)': 'cliiyj5m5111jhc1g',
+        'Land cleared > # of individuals who directly benefitted from land clearance (SADD)': 'cbtmf9im5111jhc1h',
         'Capacity building > # of personnel trained on mine action activities (IMAS) related to survey and clearance':
-          'chks7q9lqmgu66u1e',
-        'Provision of face-to-face Explosive Ordnance Risk Education (EORE) sessions > # of individuals who participated in face-to-face EORE sessions excluding educational institutions (e.g. communities)':
-          'cepwuk2ls044z522',
+          'c4xk9rfm5111jhc1i',
       },
-      'Outside HNRP Scope sub-categories': {
-        'Outside priority areas': 'cvf0ba4lw6fucqv4',
-        'Funding not reported in FTS​': 'c7cah40lw6fula95',
-        'Delivered outside HNRP​ mechanism': 'cj4y1s3lw6furva6',
-        'Not aligned to guidance': 'c8mycj4lw6fv7477',
-      },
-      'HNRP Scope': {'Outside HNRP Scope': 'cmkd5v6lw6fmi712'},
+      'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
     }
   }
 }
