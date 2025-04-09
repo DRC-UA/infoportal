@@ -187,6 +187,9 @@ export class BuildKoboType {
       bn_rapidResponseSida: {
         formId: KoboIndex.byName('bn_rapidResponseSida').id,
       },
+      safeguarding_psea: {
+        formId: KoboIndex.byName('safeguarding_psea').id,
+      },
       protection_hhs2_1: {
         formId: KoboIndex.byName('protection_hhs2_1').id,
         overrideAllOptions: {

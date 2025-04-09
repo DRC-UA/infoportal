@@ -1,5 +1,5 @@
 import {KoboFormName} from 'infoportal-common'
-import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {NavLink, Route, Routes} from 'react-router-dom'
 import React from 'react'
 import {Sidebar, SidebarBody, SidebarItem} from '@/shared/Layout/Sidebar'
 import {useI18n} from '@/core/i18n'
@@ -13,8 +13,8 @@ import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {shelterIndex} from '@/features/Shelter/Shelter'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {appConfig} from '@/conf/AppConfig'
-import {ProtectionDashboardPsea} from '@/features/Protection/DashboardPsea/ProtectionDashboardPsea'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
+import {ProtectionDashboardTabs} from '@/features/Protection/ProtectionDashboardTabs'
 
 const relatedKoboForms: KoboFormName[] = [
   // 'protection_hhs2_1',
@@ -24,13 +24,14 @@ const relatedKoboForms: KoboFormName[] = [
   // 'protection_hhs1',
   'protection_gbv',
   'protection_coc',
+  'safeguarding_psea',
 ]
 
 export const protectionIndex = {
   basePath: '/protection',
   siteMap: {
-    dashboardPsea: '/dashboard-psea',
     dashboard: '/dashboard',
+    dashboardTabs: '/dashboard-tabs',
     form: (id = ':id') => '/form/' + id,
   },
 }
@@ -67,20 +68,25 @@ export const ProtectionSidebar = () => {
           />
         </SidebarSection>
         <SidebarSection title={m._protection.psea}>
-          <NavLink to={path(protectionIndex.siteMap.dashboardPsea)}>
-            {({isActive, isPending}) => (
+          <SidebarItem href={appConfig.externalLink.cocDashboard} icon="open_in_new" target="_blank">
+            {m._protection.cocCasesDashboard}
+          </SidebarItem>
+          <NavLink to={path(protectionIndex.siteMap.dashboardTabs)}>
+            {({isActive}) => (
               <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>
                 {m.dashboard}
               </SidebarItem>
             )}
           </NavLink>
-          <SidebarItem href={appConfig.externalLink.cocDashboard} icon="open_in_new" target="_blank">
-            {m._protection.cocCasesDashboard}
-          </SidebarItem>
           <SidebarKoboLink
             size="tiny"
             path={path(protectionIndex.siteMap.form('protection_coc'))}
             name="protection_coc"
+          />
+          <SidebarKoboLink
+            size="tiny"
+            path={path(protectionIndex.siteMap.form('safeguarding_psea'))}
+            name="safeguarding_psea"
           />
         </SidebarSection>
       </SidebarBody>
@@ -98,7 +104,7 @@ export const Protection = () => {
     >
       <Routes>
         <Route path={protectionIndex.siteMap.dashboard} element={<ProtectionOverview />} />
-        <Route path={protectionIndex.siteMap.dashboardPsea} element={<ProtectionDashboardPsea />} />
+        <Route path="/dashboard-tabs" element={<ProtectionDashboardTabs />} />
         {relatedKoboForms.map((_) => (
           <Route key={_} {...getKoboFormRouteProps({path: protectionIndex.siteMap.form(_), name: _})} />
         ))}

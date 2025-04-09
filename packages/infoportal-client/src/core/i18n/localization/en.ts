@@ -106,6 +106,7 @@ export const en = Object.freeze({
     adultWomen: 'Adult women',
     boy: 'Boy',
     modality: 'Modality',
+    partnerName: 'Partner Organization',
     drcStaff: 'DRC staff',
     girl: 'Girl',
     save: 'Save',
@@ -456,6 +457,8 @@ export const en = Object.freeze({
       winterization: 'Winterization',
     },
     _protection: {
+      safeDashboard: 'Safeguarding Dashboard',
+      pseaDashboard: 'PSEAH Dashboard',
       cocCasesDashboard: 'CoC PowerBi Dashboard',
       trainings: 'Trainings',
       participants: 'Participants',
