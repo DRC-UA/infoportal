@@ -61,6 +61,7 @@ const koboIndex = {
   partner_angels: 'aSK3rbp4gbRWmaGUL5eN5v',
   partner_misto_syly: 'aHr7429Q2n2YvBBJunx7b9',
   va_bio_tia: 'aKZW9UTf9nqfiLhxtjcT3d',
+  safeguarding_psea: 'afq5ayhc2kssnomB8LR4oX',
 }
 
 import {Obj, seq} from '@axanc/ts-utils'
@@ -130,6 +131,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   partner_angels: '[Verification] UKRF №155 DRC-200 Реєстрація на отримання грошей на паливо',
   partner_misto_syly: '[Verification] DRC-203 (Misto Syly)',
   va_bio_tia: '[VA] BIO & TIA Assessment form',
+  safeguarding_psea: '[Safeguarding] Tracker of trainings on Safeguarding and PSEA of partners in DRC'
 }
 
 export type KoboFormName = keyof typeof koboIndex
