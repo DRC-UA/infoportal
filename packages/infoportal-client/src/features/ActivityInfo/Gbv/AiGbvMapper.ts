@@ -84,7 +84,6 @@ export namespace AiGbvMapper2 {
         })
       },
     }).transforms
-    console.log(data, res)
     return res
   }
 
