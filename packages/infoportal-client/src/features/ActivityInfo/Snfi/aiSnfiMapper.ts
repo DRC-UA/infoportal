@@ -33,8 +33,6 @@ export namespace AiShelterMapper {
 
   export type Bundle = AiTable<AiSnfiType.Type>
 
-  let starter = 0
-
   export const reqEsk =
     (api: ApiSdk) =>
     (period: Partial<Period>): Promise<Bundle[]> => {
@@ -51,9 +49,9 @@ export namespace AiShelterMapper {
             DrcProgram.CashForRepair,
           ],
         })
-        .then((_) => _.data.filter((_) => PeriodHelper.isDateIn(period, _.lastStatusUpdate)))
+        .then((response) => response.data.filter((record) => PeriodHelper.isDateIn(period, record.lastStatusUpdate)))
         .then((data) => {
-          const grouped = groupBy({
+          return groupBy({
             data,
             groups: [
               {by: (_) => _.project?.[0]!},
@@ -103,7 +101,7 @@ export namespace AiShelterMapper {
                 'Distribution through Common Pipeline': 'No',
               }
               const recordId = ActivityInfoSdk.makeRecordId({
-                prefix: 'drcsnfi',
+                prefix: 'drcsnfiesk',
                 periodStr,
                 index: index++,
               })
@@ -123,8 +121,6 @@ export namespace AiShelterMapper {
               }
             },
           }).transforms
-          starter = grouped.length
-          return grouped
         })
     }
 
@@ -137,8 +133,7 @@ export namespace AiShelterMapper {
       })
       .then((response) => response.data.filter((row) => PeriodHelper.isDateIn(period, row.lastStatusUpdate)))
       .then((data) => {
-        let index = starter
-
+        let index = 0
         return groupBy({
           data: data,
           groups: [
@@ -189,7 +184,7 @@ export namespace AiShelterMapper {
               'Distribution through Common Pipeline': 'No',
             }
             const recordId = ActivityInfoSdk.makeRecordId({
-              prefix: 'drcsnfi',
+              prefix: 'drcsnfirep',
               periodStr: periodStr,
               index: index++,
             })
