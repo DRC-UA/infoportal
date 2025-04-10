@@ -18,6 +18,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   mergeOptions,
   min,
   debug,
+  includeNullish = false,
 }: {
   debug?: boolean
   onClickData?: (_: K) => void
@@ -31,6 +32,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   filter?: (_: D) => boolean
   checked?: Record<K, boolean>
   onToggle?: (_: K) => void
+  includeNullish?: boolean
 }) => {
   const res = useMemo(() => {
     const source = seq(data)
@@ -40,8 +42,8 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
         if (mergeOptions) return (mergeOptions as any)[by(d)] ?? by(d)
         return by(d)
       })
-      .compact()
-    return ChartHelper.single({data: source})
+
+    return ChartHelper.single({data: includeNullish ? source : source.compact()})
       .setLabel(label)
       .sortBy.value()
       .filterValue((_) => (min ? _.value > min : true))
