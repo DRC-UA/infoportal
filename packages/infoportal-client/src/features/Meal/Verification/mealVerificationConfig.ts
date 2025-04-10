@@ -46,6 +46,69 @@ const registerActivity = <TData extends KoboFormNameMapped, TCheck extends KoboF
 export const mealVerificationActivities = seq([
   registerActivity({
     sampleSizeRatio: 0.1,
+    label: 'ECREC MBG',
+    id: 'ECREC MBG',
+    registration: {
+      koboFormId: KoboIndex.byName('ecrec_mbg').id,
+      fetch: 'ecrec_mbg',
+      joinBy: (_) => _.tax_id_num!,
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
+      joinBy: (_) => _.pay_det_tax_id_num!,
+      fetch: 'meal_verificationEcrec',
+    },
+    dataColumns: [],
+    verifiedColumns: {
+      back_consent: {reg: (_) => _.consent, verif: (_) => _.back_consent},
+      ben_det_surname: {reg: (_) => _.surname, verif: (_) => _.ben_det_surname},
+      ben_det_first_name: {reg: (_) => _.first_name, verif: (_) => _.ben_det_first_name},
+      ben_det_pat_name: {reg: (_) => _.pat_name, verif: (_) => _.ben_det_pat_name},
+      ben_det_ph_number: {reg: (_) => _.ph_number, verif: (_) => _.ben_det_ph_number},
+      ben_det_oblast: {reg: (_) => _.oblast, verif: (_) => _.ben_det_oblast},
+      ben_det_raion: {reg: (_) => _.raion, verif: (_) => _.ben_det_raion},
+      ben_det_hromada: {reg: (_) => _.hromada, verif: (_) => _.ben_det_hromada},
+      ben_det_res_stat: {reg: (_) => _.res_stat, verif: (_) => _.ben_det_res_stat,}, 
+      business_name: {reg: (_) => _.business_name, verif: (_) => _.business_name,},
+      business_type: {reg: (_) => _.business_type, verif: (_) => _.business_type,},
+      enterprise_tax_id: {reg: (_) => _.enterprise_tax_id, verif: (_) => _.enterprise_tax_id,},
+      legal_address_business: {reg: (_) => _.legal_address_business, verif: (_) => _.legal_address_business,},
+
+      date_business_registration:
+      {
+        reg: (_) => {
+          if (_.date_business_registration) return format(_.date_business_registration, 'yyyy-MM-dd')
+          else return ''
+        },
+        verif: (_) => {
+          if (_.date_business_registration) return format(_.date_business_registration, 'yyyy-MM-dd')
+          else return ''
+        },
+      },
+
+      business_currently_operational_mbg: {reg: (_) => _.business_currently_operational, verif: (_) => _.business_currently_operational_mbg,},
+      key_business_activities: {reg: (_) => _.key_business_activities, verif: (_) => _.key_business_activities,},
+      key_business_activities_other: {reg: (_) => _.key_business_activities_other, verif: (_) => _.key_business_activities_other,},
+      produce_buy_processing: {reg: (_) => _.produce_buy_processing, verif: (_) => _.produce_buy_processing,},
+      have_data_bought_goods: {reg: (_) => _.have_data_bought_goods, verif: (_) => _.have_data_bought_goods,},     
+      how_bought_goods: {reg: (_) => _.how_bought_goods, verif: (_) => _.how_bought_goods,},
+      received_local_produce: {reg: (_) => _.received_local_produce, verif: (_) => _.received_local_produce,},
+      years_experience_business_mbg: {reg: (_) => _.years_experience_business, verif: (_) => _.years_experience_business_mbg,},
+      number_employees_business_mbg: {reg: (_) => _.number_employees_business, verif: (_) => _.number_employees_business_mbg,},
+      turnover_exceeded_9m: {reg: (_) => _.turnover_exceeded_9m, verif: (_) => _.turnover_exceeded_9m,},
+      have_debt_repayment_mbg: {reg: (_) => _.have_debt_repayment, verif: (_) => _.have_debt_repayment_mbg,},
+      repayment_debt_loan_mbg: {reg: (_) => _.repayment_debt_loan, verif: (_) => _.repayment_debt_loan_mbg,},
+      access_business_loans: {reg: (_) => _.access_business_loans, verif: (_) => _.access_business_loans,},
+      your_main_customers: {reg: (_) => _.your_main_customers, verif: (_) => _.your_main_customers,},
+      main_barriers_business: {reg: (_) => _.main_barriers_business, verif: (_) => _.main_barriers_business,},
+      escalation_conflict_affected_business: {reg: (_) => _.escalation_conflict_affected_business, verif: (_) => _.escalation_conflict_affected_business,},
+      amount_implement_plan: {reg: (_) => _.amount_implement_plan, verif: (_) => _.amount_implement_plan,},
+      amount_co_funding: {reg: (_) => _.amount_co_funding, verif: (_) => _.amount_co_funding,},
+      project_spend_grant: {reg: (_) => _.project_spend_grant, verif: (_) => _.project_spend_grant,},
+    },
+  }),
+  registerActivity({
+    sampleSizeRatio: 0.1,
     label: 'ECREC VET DMFA-355',
     id: 'ECREC VET DMFA-355',
     registration: {

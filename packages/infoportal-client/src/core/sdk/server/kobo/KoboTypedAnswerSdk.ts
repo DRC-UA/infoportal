@@ -9,6 +9,7 @@ import {
   Ecrec_msmeGrantSelection,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
+  Ecrec_mbg,
   KoboEcrec_cashRegistration,
   KoboFormName,
   KoboIndex,
@@ -112,6 +113,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('ecrec_vet_bha388').id,
           fnMapKobo: Ecrec_vet_bha388.map,
+          ...filters,
+        }),
+      ),
+      ...make('ecrec_mbg', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('ecrec_mbg').id,
+          fnMapKobo: Ecrec_mbg.map,
           ...filters,
         }),
       ),
