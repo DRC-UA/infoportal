@@ -88,7 +88,12 @@ export const MetaDashboard = () => {
               <ChartBarSingleBy
                 data={ctx.filteredPersons}
                 by={(_) => _.displacement}
-                label={Person.DisplacementStatus}
+                includeNullish
+                label={{
+                  ...Person.DisplacementStatus,
+                  null: m.notSpecified,
+                  undefined: m.notSpecified,
+                }}
               />
             </PanelBody>
           </Panel>
