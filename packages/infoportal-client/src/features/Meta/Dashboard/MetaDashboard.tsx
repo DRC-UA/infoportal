@@ -9,7 +9,7 @@ import {format} from 'date-fns'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Lazy} from '@/shared/Lazy'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
-import {Box, Grid, useTheme} from '@mui/material'
+import {Box, Grid2, useTheme} from '@mui/material'
 import {Txt} from '@/shared/Txt'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
@@ -29,8 +29,8 @@ export const MetaDashboard = () => {
   const {data: ctx, fetcher} = useMetaContext()
   return (
     <Page width="lg" loading={fetcher.loading}>
-      <Grid container sx={{mb: 2}} columnSpacing={2}>
-        <Grid item xs={6} md={4} lg={2}>
+      <Grid2 container sx={{mb: 2}} columnSpacing={2}>
+        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
             <Lazy
               deps={[ctx.filteredData]}
@@ -41,33 +41,33 @@ export const MetaDashboard = () => {
               {(_) => formatLargeNumber(_)}
             </Lazy>
           </SlideWidget>
-        </Grid>
-        <Grid item xs={6} md={4} lg={2}>
+        </Grid2>
+        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="storage" title={m.submissions}>
             {formatLargeNumber(ctx.filteredData.length)}
           </SlideWidget>
-        </Grid>
-        <Grid item xs={6} md={4} lg={2}>
+        </Grid2>
+        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
             {formatLargeNumber(ctx.filteredUniqueData.length)}
           </SlideWidget>
-        </Grid>
-        <Grid item xs={6} md={4} lg={2}>
+        </Grid2>
+        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
             {(ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)}
           </SlideWidget>
-        </Grid>
-        <Grid item xs={6} md={4} lg={2}>
+        </Grid2>
+        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
             {formatLargeNumber(ctx.filteredPersons.length)}
           </SlideWidget>
-        </Grid>
-        <Grid item xs={6} md={4} lg={2}>
+        </Grid2>
+        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="person" title={m.uniqIndividuals}>
             {formatLargeNumber(ctx.filteredUniquePersons.length)}
           </SlideWidget>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <Div responsive>
         <Div column>
           <Map
