@@ -1,9 +1,11 @@
-import {ChartData, ChartDataVal, ChartHelper} from '@/shared/charts/chartHelper'
+import {useMemo, type ReactNode} from 'react'
 import {Obj, seq, Seq} from '@axanc/ts-utils'
-import React, {ReactNode, useMemo} from 'react'
-import {KeyOf} from 'infoportal-common'
-import {ChartBar} from '@/shared/charts/ChartBar'
 import {Checkbox} from '@mui/material'
+
+import {KeyOf} from 'infoportal-common'
+
+import {ChartData, ChartDataVal, ChartHelper} from '@/shared/charts/chartHelper'
+import {ChartBar} from '@/shared/charts/ChartBar'
 
 export const ChartBarSingleBy = <D extends Record<string, any>, K extends string, O extends Record<K, ReactNode>>({
   by,
@@ -17,7 +19,6 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   filter,
   mergeOptions,
   min,
-  debug,
   includeNullish = false,
 }: {
   debug?: boolean
@@ -51,6 +52,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
       .map(finalTransform)
       .get() as Record<K, ChartDataVal>
   }, [data, by, label])
+
   return (
     <ChartBar
       data={res}
