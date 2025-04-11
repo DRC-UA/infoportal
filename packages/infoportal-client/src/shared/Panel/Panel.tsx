@@ -1,10 +1,17 @@
-import * as React from 'react'
-import {forwardRef, ReactNode} from 'react'
+import {forwardRef, type ReactNode, type ComponentType, type ComponentProps} from 'react'
 import {Box, Card, CardProps, LinearProgress} from '@mui/material'
 import {PanelHead} from './PanelHead'
 import {PanelFeatures} from '@/shared/Panel/PanelFeatures'
 
-export interface PanelProps extends Omit<CardProps, 'title'> {
+type SlotComponents = {
+  titleEndAdornment?: ComponentType<any>
+}
+
+type SlotProps<S extends SlotComponents> = {
+  [K in keyof S]: S[K] extends ComponentType<any> ? ComponentProps<NonNullable<S[K]>> : never
+}
+
+export interface PanelProps<S extends SlotComponents = SlotComponents> extends Omit<CardProps, 'title'> {
   loading?: boolean
   hoverable?: boolean
   stretch?: boolean
@@ -12,13 +19,34 @@ export interface PanelProps extends Omit<CardProps, 'title'> {
   title?: ReactNode
   expendable?: boolean
   savableAsImg?: boolean
+  slots?: S
+  slotProps?: SlotProps<S>
 }
 
-export const Panel = forwardRef(
-  (
-    {elevation, hoverable, loading, children, stretch, sx, title, expendable, savableAsImg, ...other}: PanelProps,
-    ref: any,
+interface PanelComponent {
+  <S extends SlotComponents>(props: PanelProps<S> & {ref?: React.ForwardedRef<HTMLDivElement>}): ReactNode | undefined
+}
+
+export const Panel: PanelComponent = forwardRef(
+  <S extends SlotComponents>(
+    {
+      elevation,
+      hoverable,
+      loading,
+      children,
+      stretch,
+      sx,
+      title,
+      expendable,
+      savableAsImg,
+      slots,
+      slotProps,
+      ...other
+    }: PanelProps<S>,
+    ref: React.ForwardedRef<HTMLDivElement>,
   ) => {
+    const TitleEndAdornment = slots?.titleEndAdornment
+
     return (
       <Card
         ref={ref}
@@ -53,8 +81,9 @@ export const Panel = forwardRef(
         {...other}
       >
         {title && (
-          <PanelHead>
+          <PanelHead sx={{display: 'flex', flexDirection: 'row'}}>
             <Box sx={{display: 'flex', alignItems: 'center'}}>{title}</Box>
+            {TitleEndAdornment && <TitleEndAdornment {...(slotProps?.titleEndAdornment || {})} />}
           </PanelHead>
         )}
         {loading && <LinearProgress sx={{mb: '-4px'}} />}
