@@ -1,9 +1,11 @@
-import {ChartData, ChartDataVal, ChartHelper} from '@/shared/charts/chartHelper'
+import {useMemo, type ReactNode} from 'react'
 import {Obj, seq, Seq} from '@axanc/ts-utils'
-import React, {ReactNode, useMemo} from 'react'
-import {KeyOf} from 'infoportal-common'
-import {ChartBar} from '@/shared/charts/ChartBar'
 import {Checkbox} from '@mui/material'
+
+import {KeyOf} from 'infoportal-common'
+
+import {ChartData, ChartDataVal, ChartHelper} from '@/shared/charts/chartHelper'
+import {ChartBar} from '@/shared/charts/ChartBar'
 
 export const ChartBarSingleBy = <D extends Record<string, any>, K extends string, O extends Record<K, ReactNode>>({
   by,
@@ -17,7 +19,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   filter,
   mergeOptions,
   min,
-  debug,
+  includeNullish = false,
 }: {
   debug?: boolean
   onClickData?: (_: K) => void
@@ -31,6 +33,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   filter?: (_: D) => boolean
   checked?: Record<K, boolean>
   onToggle?: (_: K) => void
+  includeNullish?: boolean
 }) => {
   const res = useMemo(() => {
     const source = seq(data)
@@ -40,8 +43,8 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
         if (mergeOptions) return (mergeOptions as any)[by(d)] ?? by(d)
         return by(d)
       })
-      .compact()
-    return ChartHelper.single({data: source})
+
+    return ChartHelper.single({data: includeNullish ? source : source.compact()})
       .setLabel(label)
       .sortBy.value()
       .filterValue((_) => (min ? _.value > min : true))
@@ -49,6 +52,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
       .map(finalTransform)
       .get() as Record<K, ChartDataVal>
   }, [data, by, label])
+
   return (
     <ChartBar
       data={res}

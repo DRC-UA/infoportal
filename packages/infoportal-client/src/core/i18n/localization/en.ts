@@ -323,6 +323,7 @@ export const en = Object.freeze({
     vulnerability: 'Vulnerability',
     duration: 'Duration',
     notSpecified: 'Not specified',
+    includeNotSpecified: 'include "Not Specified"',
     confirmYourOffice: (office: string) => `Confirm ${office} office`,
     itCannotBeChanged: (admin: string) =>
       `For privacy reasons, you will not be able to change it later without contacting ${admin}.`,
