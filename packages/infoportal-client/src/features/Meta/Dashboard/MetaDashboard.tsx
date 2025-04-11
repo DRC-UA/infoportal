@@ -1,24 +1,26 @@
-import React from 'react'
-import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
-import {AgeGroupTable} from '@/shared/AgeGroupTable'
-import {useI18n} from '@/core/i18n'
-import {Page} from '@/shared/Page'
-import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
-import {format} from 'date-fns'
-import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Lazy} from '@/shared/Lazy'
-import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
-import {Box, Grid2, useTheme} from '@mui/material'
-import {Txt} from '@/shared/Txt'
-import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {useMetaContext} from '@/features/Meta/MetaContext'
-import {Panel, PanelBody} from '@/shared/Panel'
+import {useState} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
-import {ChartLine} from '@/shared/charts/ChartLine'
-import {Map} from '@/shared/maps/Map'
+import {format} from 'date-fns'
+import {Box, FormControlLabel, Grid2, Switch, useTheme} from '@mui/material'
+
+import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
+
+import {useI18n} from '@/core/i18n'
 import {MetaDashboardActivityPanel} from '@/features/Meta/Dashboard/MetaDashboardActivityPanel'
+import {useMetaContext} from '@/features/Meta/MetaContext'
+import {AgeGroupTable} from '@/shared/AgeGroupTable'
+import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
+import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {ChartLine} from '@/shared/charts/ChartLine'
+import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
+import {usePersistentState} from '@/shared/hook/usePersistantState'
+import {Lazy} from '@/shared/Lazy'
+import {Map} from '@/shared/maps/Map'
+import {Page} from '@/shared/Page'
+import {Panel, PanelBody} from '@/shared/Panel'
+import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
+import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
+import {Txt} from '@/shared/Txt'
 
 export const MetaDashboard = () => {
   const t = useTheme()
@@ -27,6 +29,9 @@ export const MetaDashboard = () => {
     storageKey: 'meta-dashboard-showProject',
   })
   const {data: ctx, fetcher} = useMetaContext()
+  const [showNullishDisplacementStatus, setShowNullishDisplacementStatus] = useState(true)
+  const handleDisplacementAdornmentClick = () => setShowNullishDisplacementStatus((prev) => !prev)
+
   return (
     <Page width="lg" loading={fetcher.loading}>
       <Grid2 container sx={{mb: 2}} columnSpacing={2}>
@@ -83,12 +88,24 @@ export const MetaDashboard = () => {
               enablePwdFilter
             />
           </SlidePanel>
-          <Panel title={m.displacementStatus}>
+          <Panel
+            title={m.displacementStatus}
+            slots={{
+              titleEndAdornment: FormControlLabel,
+            }}
+            slotProps={{
+              titleEndAdornment: {
+                control: <Switch checked={showNullishDisplacementStatus} size="small" />,
+                label: 'include "Not Specified"',
+                onChange: handleDisplacementAdornmentClick,
+              },
+            }}
+          >
             <PanelBody>
               <ChartBarSingleBy
                 data={ctx.filteredPersons}
                 by={(_) => _.displacement}
-                includeNullish
+                includeNullish={showNullishDisplacementStatus}
                 label={{
                   ...Person.DisplacementStatus,
                   null: m.notSpecified,
