@@ -102,8 +102,10 @@ export namespace AiProtectionMapper {
         },
       }).transforms,
     ).then((_) => _.flat())
+
     return res
   }
+
   const mapSubActivity = (
     data: IKoboMeta[],
     periodStr: string,
