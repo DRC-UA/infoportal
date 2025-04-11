@@ -81,9 +81,13 @@ export const Panel: PanelComponent = forwardRef(
         {...other}
       >
         {title && (
-          <PanelHead sx={{display: 'flex', flexDirection: 'row'}}>
-            <Box sx={{display: 'flex', alignItems: 'center'}}>{title}</Box>
-            {TitleEndAdornment && <TitleEndAdornment {...(slotProps?.titleEndAdornment || {})} />}
+          <PanelHead PanelTitleProps={{width: '100%', sx: {gap: 1}}}>
+            <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+              {title}
+              {TitleEndAdornment && (
+                <TitleEndAdornment sx={{marginLeft: 'auto'}} {...(slotProps?.titleEndAdornment || {})} />
+              )}
+            </Box>
           </PanelHead>
         )}
         {loading && <LinearProgress sx={{mb: '-4px'}} />}

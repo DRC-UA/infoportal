@@ -98,6 +98,7 @@ export const MetaDashboard = () => {
                 control: <Switch checked={showNullishDisplacementStatus} size="small" />,
                 label: 'include "Not Specified"',
                 onChange: handleDisplacementAdornmentClick,
+                labelPlacement: 'start',
               },
             }}
           >
