@@ -96,7 +96,7 @@ export const MetaDashboard = () => {
             slotProps={{
               titleEndAdornment: {
                 control: <Switch checked={showNullishDisplacementStatus} size="small" />,
-                label: 'include "Not Specified"',
+                label: m.includeNotSpecified,
                 onChange: handleDisplacementAdornmentClick,
                 labelPlacement: 'start',
               },
