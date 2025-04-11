@@ -625,6 +625,7 @@ export namespace AiMpcaType {
       'Elton John AIDS Foundation (EJAIDSF)': 'c11i4dxm85rig4n3',
       'Expertise France (ExpertiseF)': 'c6lo05om85rig4n4',
       'Ministry of the Interior of the Czech Republic (MV Czech)': 'cobvsihm8d39qsl3',
+      '#WeAreAllUkrainians (WeAreAllUkrainians)': 'cdu1ha5m9857k0i2',
     },
     'Indicators - MPC': {
       'MPCA > Provision of multi-purpose cash > # individuals assisted with MPC': 'cvrs9bum4v5isrx16',
