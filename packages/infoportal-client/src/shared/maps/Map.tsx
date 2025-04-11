@@ -1,8 +1,10 @@
-import {fnSwitch, Seq} from '@axanc/ts-utils'
-import {OblastISO} from 'infoportal-common'
-import React, {useState} from 'react'
-import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
+import {useState} from 'react'
+import {match, Seq} from '@axanc/ts-utils'
 import {Box, SxProps} from '@mui/material'
+
+import {OblastISO} from 'infoportal-common'
+
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {MapGoogleSettlement} from '@/shared/maps/MapGoogleSettlement'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {useI18n} from '@/core/i18n'
@@ -42,17 +44,19 @@ export const Map = <D extends Record<string, any>>({
         {m.location}
       </PanelHead>
       <Box sx={{mt: 1}}>
-        {fnSwitch(type, {
-          oblast: (
-            <MapSvgByOblast
-              sx={{mx: 2, maxWidth: 480, margin: 'auto'}}
-              getOblast={getOblast}
-              data={data}
-              fillBaseOn="value"
-            />
-          ),
-          settlement: <MapGoogleSettlement data={data} getSettlement={getSettlement} />,
-        })}
+        {match(type)
+          .cases({
+            oblast: (
+              <MapSvgByOblast
+                sx={{mx: 2, maxWidth: 480, margin: 'auto'}}
+                getOblast={getOblast}
+                data={data}
+                fillBaseOn="value"
+              />
+            ),
+            settlement: <MapGoogleSettlement data={data} getSettlement={getSettlement} />,
+          })
+          .default(() => null)}
       </Box>
     </Panel>
   )
