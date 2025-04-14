@@ -145,4 +145,20 @@ export namespace Person {
         })
         .get() as any
     }
+
+  export const averageAge = (list: Person.Details[], gender?: Person.Gender): string => {
+    const MIN_AGE = 0
+    const MAX_AGE = 140
+
+    const filtered = list.filter((p) => {
+      const isValidAge = typeof p.age === 'number' && p.age >= MIN_AGE && p.age <= MAX_AGE
+      const isValidGender = gender ? p.gender === gender : true
+      return isValidAge && isValidGender
+    })
+
+    if (filtered.length === 0) return '-'
+
+    const avg = filtered.reduce((sum, p) => sum + (p.age ?? 0), 0) / filtered.length
+    return avg.toFixed(1)
+  }
 }
