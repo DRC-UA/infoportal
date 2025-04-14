@@ -82,6 +82,17 @@ export const MetaDashboard = () => {
               enableDisplacementStatusFilter
               enablePwdFilter
             />
+            <Box display="flex" gap={2} mt={2}>
+              <SlideWidget icon="equalizer" title={m.avgAge}>
+                {Person.averageAge(ctx.filteredPersons)}
+              </SlideWidget>
+              <SlideWidget icon="man" title={m.male}>
+                {Person.averageAge(ctx.filteredPersons, Person.Gender.Male)}
+              </SlideWidget>
+              <SlideWidget icon="woman" title={m.female}>
+                {Person.averageAge(ctx.filteredPersons, Person.Gender.Female)}
+              </SlideWidget>
+            </Box>
           </SlidePanel>
           <Panel title={m.displacementStatus}>
             <PanelBody>
