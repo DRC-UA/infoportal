@@ -381,7 +381,6 @@ export const en = Object.freeze({
     protectionMonitoringDashboard: 'Protection monitoring dashboard',
     undefined: 'Unknown',
     women: 'Women',
-    avgAge: 'Avg. age',
     coveredOblasts: 'Covered oblasts',
     coveredRaions: 'Covered raions',
     lackOfPersonalDoc: 'Individuals lacking personal documentation',
