@@ -342,6 +342,7 @@ export const en = Object.freeze({
     vulnerabilities: 'Vulnerabilities',
     selectAll: 'Select all',
     ageGroup: 'Age groups',
+    avgAge: 'Average age',
     completed: 'Completed',
     ratio: 'Ratio',
     koboSubmissionTime: 'Kobo submission',
