@@ -8,7 +8,7 @@ import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {KoboSubmissionFlat, KoboXmlMapper, Meal_winterizationPdm, OblastIndex} from 'infoportal-common'
+import {KoboSubmissionFlat, KoboXmlMapper, Meal_winterizationPdm, OblastIndex, PeriodHelper} from 'infoportal-common'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
@@ -111,6 +111,11 @@ export const MealWinterizationDashboard = () => {
                 <Box display="flex" justifyContent="space-between" alignItems="center" gap={4}>
                   {[
                     {
+                      icon: 'fingerprint',
+                      label: m.individualsInterviewed,
+                      valueFn: () => seq(data).length,
+                    },
+                    {
                       icon: 'location_on',
                       label: m.coveredOblasts,
                       valueFn: () => {
@@ -131,13 +136,10 @@ export const MealWinterizationDashboard = () => {
                       },
                     },
                     {
-                      icon: 'fingerprint',
-                      label: m.uniqIndividuals,
+                      icon: 'payments',
+                      label: m.individualsAssistance,
                       valueFn: () => {
-                        const values = seq(data)
-                          .map((_) => _.unique_number)
-                          .compact()
-                        return values.distinct((_) => _).length
+                        return seq(data).filter((_) => _.spent_cash_assistance_received === 'yes').length
                       },
                     },
                   ].map(({icon, label, valueFn}) => (
@@ -217,6 +219,9 @@ export const MealWinterizationDashboard = () => {
                 <ChartPieWidgetBy
                   title={m.mealMonitoringPdm.spent}
                   filter={(_) => _.spent_cash_assistance_received === 'yes'}
+                  filterBase={(_) =>
+                    _.spent_cash_assistance_received === 'yes' || _.spent_cash_assistance_received === 'no'
+                  }
                   data={data}
                   sx={{mb: 1}}
                 />
