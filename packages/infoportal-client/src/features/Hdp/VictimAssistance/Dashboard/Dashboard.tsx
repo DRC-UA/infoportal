@@ -1,22 +1,25 @@
-import React from 'react'
+import type {FC} from 'react'
+
 import {useI18n} from '@/core/i18n'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
-import {VictimDashboardBody} from '@/features/Victim/VictimDashboard/VictimDashboardBody'
-import {useVictimContext, VictimProvider} from '@/features/Victim/VictimContext'
 
-export const VictimDashboard = () => {
+import {useVictimAssistanceContext, VictimAssistanceProvider} from './Context'
+import {DashboardWidgets} from './DashboardWidgets'
+
+export const Dashboard: FC = () => {
   return (
-    <VictimProvider>
-      <VictimDashboardWithContext />
-    </VictimProvider>
+    <VictimAssistanceProvider>
+      <DashboardWithContext />
+    </VictimAssistanceProvider>
   )
 }
 
-const VictimDashboardWithContext = () => {
+const DashboardWithContext: FC = () => {
   const {m} = useI18n()
-  const ctx = useVictimContext()
+  const ctx = useVictimAssistanceContext()
+
   return (
     <Page width="lg" loading={ctx.fetcherAnswer.loading}>
       <DataFilterLayout
@@ -39,7 +42,7 @@ const VictimDashboardWithContext = () => {
           />
         }
       />
-      <VictimDashboardBody data={ctx.dataFiltered} />
+      <DashboardWidgets />
     </Page>
   )
 }

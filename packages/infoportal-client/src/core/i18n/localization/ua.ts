@@ -93,5 +93,6 @@ export const ua = {
       west: 'Захід',
     },
     docsTitle: 'Документація',
+    victimAssistanceTitle: 'допомога постраждалим',
   },
 }
