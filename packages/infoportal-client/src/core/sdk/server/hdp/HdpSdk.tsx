@@ -4,7 +4,11 @@ import {AiMinactionSqlType} from '@/core/sdk/server/hdp/HdpSdkType'
 export class HdpSdk {
   constructor(private client: ApiClient) {}
 
-  readonly fetchRiskEducation = (): Promise<AiMinactionSqlType[]> => {
+  readonly fetchAiRiskEducation = (): Promise<AiMinactionSqlType[]> => {
+    return this.client.get(`/hdp/ai-risk-education`)
+  }
+
+  readonly fetchRiskEducation = (): Promise<any[]> => {
     return this.client.get(`/hdp/risk-education`)
   }
 }

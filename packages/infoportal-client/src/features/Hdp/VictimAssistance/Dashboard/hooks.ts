@@ -1,18 +1,19 @@
 import {useEffect, useMemo, useState} from 'react'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
-import {useI18n} from '@/core/i18n'
-import {KoboIndex, Period, PeriodHelper} from 'infoportal-common'
 import {map, seq} from '@axanc/ts-utils'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
-import {useFetcher} from '@/shared/hook/useFetcher'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {Va_bio_tia} from 'infoportal-common'
+
+import {Va_bio_tia, KoboIndex, Period, PeriodHelper} from 'infoportal-common'
+
 import {appConfig} from '@/conf/AppConfig'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
+import {useI18n} from '@/core/i18n'
+import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
+import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {useFetcher} from '@/shared/hook/useFetcher'
 
-export type UseVictimData = ReturnType<typeof useVictimData>
+export type UseVictimAssistanceData = ReturnType<typeof useVictimAssistanceData>
 
-export const useVictimData = () => {
+export const useVictimAssistanceData = () => {
   const {m} = useI18n()
   const {api} = useAppSettings()
   const fetcherAnswer = useKoboAnswersContext().byName('va_bio_tia')
