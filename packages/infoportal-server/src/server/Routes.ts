@@ -179,7 +179,7 @@ export const getRoutes = (
     router.delete('/kobo/answer/:formId', auth({adminOnly: true}), errorCatcher(koboAnswer.deleteAnswers))
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
 
-    router.get('/hdp/risk-education', errorCatcher(hdp.fetchRiskEducation))
+    router.get('/hdp/ai-risk-education', errorCatcher(hdp.fetchAiRiskEducation))
 
     router.post(`/database-view/:viewId/col/:colName`, auth(), errorCatcher(databaseView.updateCol))
     router.post(`/database-view`, auth(), errorCatcher(databaseView.search))

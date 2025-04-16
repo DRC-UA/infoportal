@@ -28,7 +28,7 @@ export namespace AiMineActionMapper {
 
       return Promise.all([
         api.hdp
-          .fetchRiskEducation()
+          .fetchAiRiskEducation()
           .then((response) => response.filter((_) => _['Reporting Month'] === periodStr))
           .then((filteredData) => mapHdpActivity(filteredData, periodStr)),
         api.koboMeta
