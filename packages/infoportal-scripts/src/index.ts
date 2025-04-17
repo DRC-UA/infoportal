@@ -23,6 +23,6 @@ export const koboSdkDrc = new KoboClient({
   // await FixKoboMigration.MissingSubmissions.run()
   // await FixKoboMigration.Tags.run()
   // await new ActivityInfoBuildType().buildAll()
-  // await new BuildKoboType().build('ecrec_msme_bha388')
+  // await new BuildKoboType().build('pseah_coc')
   // await new BuildKoboType().build('ecrec_vet_bha388')
 })()

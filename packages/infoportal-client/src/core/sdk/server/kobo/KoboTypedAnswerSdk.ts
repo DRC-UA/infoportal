@@ -48,6 +48,7 @@ import {
   Protection_gbvPdm,
   Meal_winterizationPdm,
   Safeguarding_psea,
+  Pseah_coc
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -202,6 +203,13 @@ export class KoboTypedAnswerSdk {
           formId: KoboIndex.byName('shelter_ta').id,
           fnMapKobo: Shelter_ta.map,
           fnMapTags: ShelterTaTagsHelper.mapTags,
+          ...filters,
+        }),
+      ),
+      ...make('pseah_coc', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('pseah_coc').id,
+          fnMapKobo: Pseah_coc.map,
           ...filters,
         }),
       ),

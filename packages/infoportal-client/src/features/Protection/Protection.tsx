@@ -25,6 +25,7 @@ const relatedKoboForms: KoboFormName[] = [
   'protection_gbv',
   'protection_coc',
   'safeguarding_psea',
+  'pseah_coc'
 ]
 
 export const protectionIndex = {
@@ -87,6 +88,11 @@ export const ProtectionSidebar = () => {
             size="tiny"
             path={path(protectionIndex.siteMap.form('safeguarding_psea'))}
             name="safeguarding_psea"
+          />
+          <SidebarKoboLink
+            size="tiny"
+            path={path(protectionIndex.siteMap.form('pseah_coc'))}
+            name="pseah_coc"
           />
         </SidebarSection>
       </SidebarBody>

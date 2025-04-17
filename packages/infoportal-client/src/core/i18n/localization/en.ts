@@ -278,6 +278,7 @@ export const en = Object.freeze({
     slug: 'Slug',
     try: 'Try',
     category: 'Category',
+    typeTraining:'Type of Training',
     origin: 'Origin',
     destination: 'Destination',
     invalidUrl: 'Invalid URL',
