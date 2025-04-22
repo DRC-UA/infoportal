@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
-import {format} from 'date-fns'
+import {format, isAfter} from 'date-fns'
 import {Box, FormControlLabel, Grid2, Switch, useTheme} from '@mui/material'
 
 import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
@@ -198,7 +198,9 @@ export const MetaDashboard = () => {
             <Lazy
               deps={[ctx.filteredData]}
               fn={() => {
-                const gb = ctx.filteredData.groupBy((d) => format(d.date, 'yyyy-MM'))
+                const gb = ctx.filteredData
+                  .filter(({date}) => isAfter(date, '2013-12-31')) // filter out the dates before DRC start in Uklraine
+                  .groupBy((d) => format(d.date, 'yyyy-MM'))
                 const gbByCommittedDate = ctx.filteredData.groupBy((d) =>
                   d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '',
                 )
