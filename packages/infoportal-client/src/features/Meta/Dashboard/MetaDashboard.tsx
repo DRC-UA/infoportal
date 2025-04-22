@@ -199,7 +199,7 @@ export const MetaDashboard = () => {
               deps={[ctx.filteredData]}
               fn={() => {
                 const gb = ctx.filteredData
-                  .filter(({date}) => isAfter(date, '2013-12-31')) // filter out the dates before DRC start in Uklraine
+                  .filter(({date}) => isAfter(date, '2013-12-31')) // filter out the dates before DRC start in Ukraine
                   .groupBy((d) => format(d.date, 'yyyy-MM'))
                 const gbByCommittedDate = ctx.filteredData.groupBy((d) =>
                   d.lastStatusUpdate ? format(d.lastStatusUpdate!, 'yyyy-MM') : '',
