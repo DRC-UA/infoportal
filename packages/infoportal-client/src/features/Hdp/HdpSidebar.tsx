@@ -31,15 +31,17 @@ export const HdpSidebar: FC = () => {
             <SidebarKoboLink key={name} name={name} path={generatePath(hdpIndex.victimAssistance.form.path, {name})} />
           ))}
         </SidebarSection>
-        <SidebarSection title={m.riskEducation.sectionTitle}>
-          <NavLink to={hdpIndex.riskEducation.dashboard.path}>
-            {({isActive}) => (
-              <SidebarItem icon="insights" active={isActive}>
-                {m.dashboard}
-              </SidebarItem>
-            )}
-          </NavLink>
-        </SidebarSection>
+        {process?.env?.NODE_ENV === 'development' && (
+          <SidebarSection title={m.riskEducation.sectionTitle}>
+            <NavLink to={hdpIndex.riskEducation.dashboard.path}>
+              {({isActive}) => (
+                <SidebarItem icon="insights" active={isActive}>
+                  {m.dashboard}
+                </SidebarItem>
+              )}
+            </NavLink>
+          </SidebarSection>
+        )}
       </SidebarBody>
     </Sidebar>
   )
