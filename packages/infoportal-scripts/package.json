@@ -28,8 +28,6 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "activityinfo-sdk": "^1.1.9",
-    "kobo-sdk": "^2.1.4",
     "@axanc/ts-utils": "2.3.2",
     "@azure/msal-common": "^15.4.0",
     "@azure/msal-node": "^3.4.1",
@@ -46,6 +44,7 @@
     "@types/node-fetch": "^2.6.11",
     "@types/promise-retry": "^1.1.6",
     "@types/session-file-store": "^1.2.2",
+    "activityinfo-sdk": "^1.1.9",
     "apicache": "^1.6.3",
     "axios": "^1.7.3",
     "compression": "^1.7.4",
@@ -60,6 +59,7 @@
     "fetch-cookie": "^2.1.0",
     "infoportal-common": "1.0.0",
     "infoportal-server": "1.0.0",
+    "kobo-sdk": "^2.1.4",
     "lodash.merge": "^4.6.2",
     "mssql": "^11.0.1",
     "multer": "^1.4.5-lts.1",

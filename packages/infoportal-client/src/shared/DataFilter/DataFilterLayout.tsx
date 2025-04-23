@@ -90,7 +90,7 @@ export const DataFilterLayout = ({
           alignSelf: 'flex-start',
           display: 'flex',
           alignItems: 'center',
-          mt: 1.25,
+          mt: 1,
         }}
       >
         {!hidePopup && (

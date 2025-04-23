@@ -94,5 +94,10 @@ export const ua = {
     },
     docsTitle: 'Документація',
     victimAssistanceTitle: 'допомога постраждалим',
+    riskEducation: {
+      sectionTitle: 'Навчання про ризики',
+      sessionsNumber: 'Кількість сесій',
+      individualsReached: 'Осіб охоплено',
+    },
   },
 }

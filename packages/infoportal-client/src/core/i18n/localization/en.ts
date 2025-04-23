@@ -1063,5 +1063,10 @@ export const en = Object.freeze({
       generate: 'Generate Excel Template',
     },
     docsTitle: 'Documentation',
+    riskEducation: {
+      sectionTitle: 'Risk Education',
+      sessionsNumber: 'Number of sessions',
+      individualsReached: 'Individuals reached',
+    },
   },
 })

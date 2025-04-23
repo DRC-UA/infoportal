@@ -150,7 +150,23 @@ export class DrcSectorHelper {
   }
 }
 
-export const drcOfficeShort: Record<DrcOffice, string> = {
+export type DrcOfficeShort =
+  | 'KYV'
+  | 'UMY'
+  | 'NLV'
+  | 'LWO'
+  | 'CEJ'
+  | 'HRK'
+  | 'DNK'
+  | 'Poltava'
+  | 'Chernivtsi'
+  | 'Sloviansk'
+  | 'Ivankiv'
+  | 'Ichna'
+  | 'Kherson'
+  | 'Zaporizhzhya'
+
+export const drcOfficeShort: Record<DrcOffice, DrcOfficeShort> = {
   [DrcOffice.Kyiv]: 'KYV',
   [DrcOffice.Sumy]: 'UMY',
   [DrcOffice.Mykolaiv]: 'NLV',

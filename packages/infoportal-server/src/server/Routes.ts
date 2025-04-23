@@ -180,6 +180,7 @@ export const getRoutes = (
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
 
     router.get('/hdp/ai-risk-education', errorCatcher(hdp.fetchAiRiskEducation))
+    router.get('/hdp/risk-education', errorCatcher(hdp.fetchRiskEducation))
 
     router.post(`/database-view/:viewId/col/:colName`, auth(), errorCatcher(databaseView.updateCol))
     router.post(`/database-view`, auth(), errorCatcher(databaseView.search))

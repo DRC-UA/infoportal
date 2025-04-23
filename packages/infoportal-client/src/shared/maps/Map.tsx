@@ -4,11 +4,11 @@ import {Box, SxProps} from '@mui/material'
 
 import {OblastISO} from 'infoportal-common'
 
+import {useI18n} from '@/core/i18n'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {MapGoogleSettlement} from '@/shared/maps/MapGoogleSettlement'
-import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {useI18n} from '@/core/i18n'
 import {Panel, PanelHead} from '@/shared/Panel'
+import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 
 type Type = 'oblast' | 'settlement'
 
@@ -46,17 +46,25 @@ export const Map = <D extends Record<string, any>>({
       <Box sx={{mt: 1}}>
         {match(type)
           .cases({
-            oblast: (
-              <MapSvgByOblast
-                sx={{mx: 2, maxWidth: 480, margin: 'auto'}}
-                getOblast={getOblast}
+            settlement: (
+              <MapGoogleSettlement
                 data={data}
-                fillBaseOn="value"
+                getSettlement={(props) => {
+                  console.log({before: props, after: getSettlement(props)})
+                  return getSettlement(props)
+                }}
               />
             ),
-            settlement: <MapGoogleSettlement data={data} getSettlement={getSettlement} />,
           })
-          .default(() => null)}
+          .default(
+            // default is oblast
+            <MapSvgByOblast
+              sx={{mx: 2, maxWidth: 480, margin: 'auto'}}
+              getOblast={getOblast}
+              data={data}
+              fillBaseOn="value"
+            />,
+          )}
       </Box>
     </Panel>
   )

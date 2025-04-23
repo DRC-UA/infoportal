@@ -10,4 +10,11 @@ export const hdpIndex = {
       slug: 'form/:name',
     },
   },
+  riskEducation: {
+    slug: 'risk-education',
+    dashboard: {
+      slug: 'dashboard',
+      path: 'risk-education/dashboard',
+    },
+  },
 }

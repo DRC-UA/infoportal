@@ -1,5 +1,5 @@
 import {useMemo, useState, type FC} from 'react'
-import {match, seq} from '@axanc/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {format} from 'date-fns'
 
 import {OblastIndex, Va_bio_tia, KoboXmlMapper} from 'infoportal-common'
@@ -92,30 +92,16 @@ export const DashboardWidgets: FC = () => {
                 <ScRadioGroupItem dense hideRadio value="assistance" title={m.hdp.assistance} />
                 <ScRadioGroupItem dense hideRadio value="incidents" title={m.hdp.incidents} />
               </ScRadioGroup>
-              {match(mapType)
-                .cases({
-                  assistance: (
-                    <MapSvgByOblast
-                      sx={{maxWidth: 480, margin: 'auto'}}
-                      fillBaseOn="value"
-                      data={ctx.dataFiltered}
-                      getOblast={(_) => OblastIndex.byKoboName(_.place_oblast)?.iso!}
-                      value={(_) => true}
-                      base={(_) => _.place_oblast !== undefined}
-                    />
-                  ),
-                  incidents: (
-                    <MapSvgByOblast
-                      sx={{maxWidth: 480}}
-                      fillBaseOn="value"
-                      data={ctx.dataFiltered}
-                      getOblast={(_) => OblastIndex.byKoboName(_.loc_oblast)?.iso!}
-                      value={(_) => true}
-                      base={(_) => _.loc_oblast !== undefined}
-                    />
-                  ),
-                })
-                .default(null)}
+              <MapSvgByOblast
+                sx={{maxWidth: 480, margin: 'auto'}}
+                fillBaseOn="value"
+                data={ctx.dataFiltered}
+                getOblast={(row) =>
+                  OblastIndex.byKoboName(row[mapType === 'assistance' ? 'place_oblast' : 'loc_oblast'])?.iso!
+                }
+                value={(_) => true}
+                base={(row) => row[mapType === 'assistance' ? 'place_oblast' : 'loc_oblast'] !== undefined}
+              />
             </PanelBody>
           </Panel>
           <Panel title={m.disability}>

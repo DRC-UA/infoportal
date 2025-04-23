@@ -277,3 +277,93 @@ export const logPerformance = <R, P extends Array<any>>({
     return r
   }
 }
+
+/**
+ * Encodes a value for use in a URL query string component.
+ * Ensures null/undefined become empty strings.
+ */
+function encodeValue(value: unknown): string {
+  if (value === null || value === undefined) {
+    return ''
+  }
+
+  return encodeURIComponent(String(value))
+}
+
+/**
+ * Builds a URL search query string from a nested object.
+ * Example: { filters: { period: { start: '2025-11-01' }, office: ['DNK', 'SMY'] } }
+ * becomes: ?filters[period][start]=2025-11-01&filters[office][]=DNK&filters[office][]=SMY
+ *
+ * @param params - The object to serialize.
+ * @param prefix - Optional prefix for internal recursion (don't use directly).
+ * @returns The query string (starting with '?') or an empty string if params is empty/null.
+ */
+function queryPartsBuilder(params: unknown, name?: string): string[] {
+  const queryParts: string[] = []
+
+  if (params === null || typeof params !== 'object') {
+    // Should not happen at top level, but handles recursion edge cases
+    return []
+  }
+
+  Object.keys(params).forEach((key) => {
+    const value = (params as any)[key]
+    const encodedKey = encodeURIComponent(key)
+    // Build the key prefix for the next level
+    const newPrefix = name ? `${name}[${encodedKey}]` : encodedKey
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      // Recurse for nested objects
+      queryParts.push(...queryPartsBuilder(value, newPrefix))
+    } else if (Array.isArray(value)) {
+      // Handle arrays: key[]=value1&key[]=value2
+      if (value.length === 0) {
+        // Optionally represent empty arrays like key[] = ''
+        // queryParts.push(`${newPrefix}[]=${encodeValue(null)}`);
+      } else {
+        value.forEach((item) => {
+          // We don't recurse further *into* the array item's structure with brackets here
+          // for the common case. Each item gets its own key[]=value pair.
+          // If array items were objects needing further nesting, the logic would be more complex.
+          queryParts.push(`${newPrefix}[]=${encodeValue(item)}`)
+        })
+      }
+    } else if (value !== undefined) {
+      // Handle primitive values (string, number, boolean, null)
+      // Undefined values are typically skipped
+      queryParts.push(`${newPrefix}=${encodeValue(value)}`)
+    }
+  })
+
+  return queryParts
+}
+
+/**
+ * Public-facing function to build the search query string.
+ * @param params - The object containing query parameters.
+ * @returns The formatted query string (e.g., "?key=value&arr[]=1") or an empty string.
+ */
+export function buildSearchQuery(params: Record<string, unknown> | null | undefined): string {
+  if (!params || Object.keys(params).length === 0) {
+    return ''
+  }
+
+  const queryParts = queryPartsBuilder(params)
+
+  if (queryParts.length === 0) {
+    return ''
+  }
+
+  return `?${queryParts.join('&')}`
+}
+
+/**
+ * Public-facing function to build the search query string.
+ * @param uri - The URI base, but could be any string
+ * @param params - The object containing query parameters to append
+ * @returns The formatted URI string with query (e.g., "some/path?key=value&arr[]=1") or input base URI ("some/path").
+ */
+export function appendSearchQuery(uri: string, params: Record<string, unknown> | null | undefined): string {
+  // console.log({params}, buildSearchQuery(params))
+  return `${uri}${buildSearchQuery(params)}`
+}

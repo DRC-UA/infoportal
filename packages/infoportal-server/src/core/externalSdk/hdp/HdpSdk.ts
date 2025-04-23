@@ -1,5 +1,7 @@
 import mssql from 'mssql'
 
+import type {RiskEducationDirectSession, RiskEducationDirectSessionResponseData} from 'infoportal-common/type/Hdp'
+
 import {appConf} from '../../conf/AppConf.js'
 
 export class HdpSdk {
@@ -20,16 +22,19 @@ export class HdpSdk {
     return await this.#pool.request().query`SELECT * FROM external_migrate.undp_rmm_re_direct_session`
   }
 
-  // TODO: provide proper types
-  async fetchRiskEducation(filters: any): Promise<any> {
+  // TODO: provide proper filter types
+  async fetchRiskEducation(filters: any): Promise<RiskEducationDirectSessionResponseData> {
     const request = this.#pool.request()
-    request.input('month', mssql.Int, filters.month || '02')
-    request.input('year', mssql.Int, filters.year || '2025')
+    const {start, end} = filters?.period
+    request.input('start', mssql.DateTime, start)
+    request.input('end', mssql.DateTime, end)
+    // request.input('office', filters?.office ? `(${filters.office.join(', ')})` : null)
 
-    return await request.query`
-      SELECT * FROM external_migrate.undp_rmm_re_direct_session
-        WHERE DATEPART(month, session_date) = @month
-        AND DATEPART(year, session_date) = @year;
+    return await request.query<RiskEducationDirectSession>`
+      SELECT * FROM external_migrate.info_portal_re_direct_session
+        WHERE (@start IS NULL OR session_date >= @start)
+        AND (@end IS NULL OR session_date <= @end);
+        --AND (@office IS NULL OR office_name_short IN (@office));
     `
   }
 }

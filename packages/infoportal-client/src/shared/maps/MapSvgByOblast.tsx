@@ -30,5 +30,6 @@ export const MapSvgByOblast = <D extends Record<string, any>>({
       filterBase: base,
     })
   }, [data, value, getOblast])
+
   return <MapSvg data={res} fillBaseOn={fillBaseOn} base={total} {...props} />
 }
