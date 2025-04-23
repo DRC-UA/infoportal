@@ -46,15 +46,7 @@ export const Map = <D extends Record<string, any>>({
       <Box sx={{mt: 1}}>
         {match(type)
           .cases({
-            settlement: (
-              <MapGoogleSettlement
-                data={data}
-                getSettlement={(props) => {
-                  console.log({before: props, after: getSettlement(props)})
-                  return getSettlement(props)
-                }}
-              />
-            ),
+            settlement: <MapGoogleSettlement data={data} getSettlement={getSettlement} />,
           })
           .default(
             // default is oblast
