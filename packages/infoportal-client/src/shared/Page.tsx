@@ -1,8 +1,8 @@
-import * as React from 'react'
 import {ReactNode, useEffect, useState} from 'react'
+import {match} from '@axanc/ts-utils'
 import {Box, BoxProps, LinearProgress, Skeleton} from '@mui/material'
+
 import {Txt} from '@/shared'
-import {fnSwitch} from '@axanc/ts-utils'
 
 export interface PageProps extends BoxProps {
   width?: number | 'xs' | 'md' | 'lg' | 'full'
@@ -81,18 +81,19 @@ export const Page = ({children, sx, loading, animation = 'default', animationDep
 
   return (
     <>
-      {loading && <LinearProgress />}
+      {loading && <LinearProgress sx={{position: 'absolute', width: '100%'}} />}
       <Box
         {...props}
         sx={{
           transition: (t) => t.transitions.create('all', {easing: 'ease', duration: 160}),
           margin: 'auto',
           opacity: 0,
-          transform: fnSwitch(animation, {
-            none: 'none',
-            translateLeft: 'translate(50px)',
-            default: 'scale(.90)',
-          }),
+          transform: match(animation)
+            .cases({
+              none: 'none',
+              translateLeft: 'translate(50px)',
+            })
+            .default(() => 'scale(.90)'),
           maxWidth: 932,
           mt: 1,
           width: '100%',

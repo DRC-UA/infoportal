@@ -1,22 +1,40 @@
-import mssql, {type ConnectionPool} from 'mssql'
+import mssql from 'mssql'
 
-import {appConf, AppConf} from '../../conf/AppConf.js'
+import type {RiskEducationDirectSession, RiskEducationDirectSessionResponseData} from 'infoportal-common/type/Hdp'
+
+import {appConf} from '../../conf/AppConf.js'
 
 export class HdpSdk {
-  static readonly fetchAiRiskEducation = async (config: AppConf = appConf) => {
-    const pool = await mssql.connect({
-      password: config.dbAzureHdp.password,
-      user: config.dbAzureHdp.user,
-      port: config.dbAzureHdp.port,
-      database: config.dbAzureHdp.schema,
-      server: config.dbAzureHdp.host,
+  #pool: mssql.ConnectionPool
+
+  constructor() {
+    this.#pool = new mssql.ConnectionPool({
+      password: appConf.dbAzureHdp.password,
+      user: appConf.dbAzureHdp.user,
+      port: appConf.dbAzureHdp.port,
+      database: appConf.dbAzureHdp.schema,
+      server: appConf.dbAzureHdp.host,
     })
-    const sql = await pool.connect()
-    return await sql.query`
-      SELECT *
-      FROM external_migrate.undp_rmm_re_direct_session
-    `
+    this.#pool.connect()
   }
 
-  constructor(connector: ConnectionPool) {}
+  async fetchAiRiskEducation(): Promise<any> {
+    return await this.#pool.request().query`SELECT * FROM external_migrate.undp_rmm_re_direct_session`
+  }
+
+  // TODO: provide proper filter types
+  async fetchRiskEducation(filters: any): Promise<RiskEducationDirectSessionResponseData> {
+    const request = this.#pool.request()
+    const {start, end} = filters?.period
+    request.input('start', mssql.DateTime, start)
+    request.input('end', mssql.DateTime, end)
+    // request.input('office', filters?.office ? `(${filters.office.join(', ')})` : null)
+
+    return await request.query<RiskEducationDirectSession>`
+      SELECT * FROM external_migrate.info_portal_re_direct_session
+        WHERE (@start IS NULL OR session_date >= @start)
+        AND (@end IS NULL OR session_date <= @end);
+        --AND (@office IS NULL OR office_name_short IN (@office));
+    `
+  }
 }

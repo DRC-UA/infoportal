@@ -53,9 +53,7 @@ export const PeriodPickerMui = ({
       slotProps={{
         textField: {
           size: 'small',
-          variant: 'outlined',
-          margin: 'dense',
-          sx: {minWidth: 218, ...sx},
+          sx: {minWidth: 218, marginTop: 0, paddingTop: 0, marginRight: 1, ...sx},
           fullWidth,
         },
         shortcuts: {items: shortcutsItems},

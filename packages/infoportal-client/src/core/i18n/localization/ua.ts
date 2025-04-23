@@ -93,5 +93,11 @@ export const ua = {
       west: 'Захід',
     },
     docsTitle: 'Документація',
+    victimAssistanceTitle: 'допомога постраждалим',
+    riskEducation: {
+      sectionTitle: 'Навчання про ризики',
+      sessionsNumber: 'Кількість сесій',
+      individualsReached: 'Осіб охоплено',
+    },
   },
 }

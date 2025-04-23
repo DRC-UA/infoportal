@@ -32,7 +32,7 @@ export const appConf = {
   },
   dbAzureHdp: {
     host: e(defaultValue('hdp-ukr.database.windows.net'))('DBAZUREHDP_HOST'),
-    user: e(defaultValue('alexandreannic'))('DBAZUREHDP_USER'),
+    user: e(required)('DBAZUREHDP_USER'),
     password: e(required)('DBAZUREHDP_PWD'),
     port: e(required, int)('DBAZUREHDP_PORT'),
     schema: 'hdp',

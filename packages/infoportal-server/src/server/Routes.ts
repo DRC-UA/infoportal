@@ -84,11 +84,6 @@ export const getRoutes = (
   const auth =
     ({adminOnly = false}: {adminOnly?: boolean} = {}) =>
     async (req: Request, res: Response, next: NextFunction) => {
-      // req.session.user = {
-      //   email: 'alexandre.annic@drc.ngo',
-      //   admin: true,
-      // } as any
-      // next()
       try {
         const email = req.session.user?.email
         if (!email) {
@@ -184,6 +179,7 @@ export const getRoutes = (
     router.delete('/kobo/answer/:formId', auth({adminOnly: true}), errorCatcher(koboAnswer.deleteAnswers))
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
 
+    router.get('/hdp/ai-risk-education', errorCatcher(hdp.fetchAiRiskEducation))
     router.get('/hdp/risk-education', errorCatcher(hdp.fetchRiskEducation))
 
     router.post(`/database-view/:viewId/col/:colName`, auth(), errorCatcher(databaseView.updateCol))

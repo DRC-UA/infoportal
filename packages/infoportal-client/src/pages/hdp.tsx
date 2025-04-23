@@ -1,11 +1,12 @@
-import React from 'react'
-import {ProtectRoute} from '@/core/Session/SessionContext'
-import {Victim} from '@/features/Victim/Victim'
+import type {FC} from 'react'
 
-const HdpPage = () => {
+import {ProtectRoute} from '@/core/Session/SessionContext'
+import {Hdp} from '@/features/Hdp'
+
+const HdpPage: FC = () => {
   return (
     <ProtectRoute>
-      <Victim />
+      <Hdp />
     </ProtectRoute>
   )
 }

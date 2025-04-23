@@ -452,6 +452,7 @@ export const en = Object.freeze({
     ukrainianCitizenShip: 'Ukrainian citizenship',
     hhBarriersToPersonalDocument: 'Experienced barriers to obtain civil documents',
     atLeastOneMemberWorking: 'HHs with at least one member working',
+    victimAssistanceTitle: 'Victim Assistance',
     _meal: {
       openTracker: 'Open Excel tracker',
       visitMonitoring: 'Visit Monitoring',
@@ -1062,5 +1063,10 @@ export const en = Object.freeze({
       generate: 'Generate Excel Template',
     },
     docsTitle: 'Documentation',
+    riskEducation: {
+      sectionTitle: 'Risk Education',
+      sessionsNumber: 'Number of sessions',
+      individualsReached: 'Individuals reached',
+    },
   },
 })
