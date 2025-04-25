@@ -384,6 +384,9 @@ export class BuildKoboType {
       va_bio_tia: {
         formId: KoboIndex.byName('va_bio_tia').id,
       },
+      conflict_trainings: {
+        formId: KoboIndex.byName('conflict_trainings').id,
+      },
     },
     (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>],
   )
