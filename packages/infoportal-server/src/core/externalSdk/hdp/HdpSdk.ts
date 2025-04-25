@@ -1,6 +1,6 @@
 import mssql from 'mssql'
 
-import type {RiskEducationDirectSession, RiskEducationDirectSessionResponseData} from 'infoportal-common/type/Hdp'
+import type {RiskEducationDirectSession, RiskEducationDirectSessionResponseData} from 'infoportal-common'
 
 import {appConf} from '../../conf/AppConf.js'
 
