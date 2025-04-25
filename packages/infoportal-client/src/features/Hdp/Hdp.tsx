@@ -9,6 +9,7 @@ import {RiskEducation} from './RiskEducation'
 import {VictimAssistance} from './VictimAssistance'
 import {HdpSidebar} from './HdpSidebar'
 import {hdpIndex} from './constants'
+import {Peacebuilding} from '@/features/Hdp/Peacebuilding'
 
 export const Hdp: FC = () => (
   <Routes>
@@ -20,7 +21,7 @@ export const Hdp: FC = () => (
     >
       <Route path={`${hdpIndex.victimAssistance.slug}/*`} Component={VictimAssistance} />
       <Route path={`${hdpIndex.riskEducation.slug}/*`} Component={RiskEducation} />
-      <Route path="*" element={<p>TODO a proper 404 page</p>} />
+      <Route path={`${hdpIndex.peacebuilding.slug}/*`} Component={Peacebuilding} />
     </Route>
   </Routes>
 )

@@ -48,6 +48,7 @@ import {
   Protection_gbvPdm,
   Meal_winterizationPdm,
   Safeguarding_psea,
+  Conflict_trainings,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -409,6 +410,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('va_bio_tia').id,
           fnMapKobo: Va_bio_tia.map,
+          ...filters,
+        }),
+      ),
+      ...make('conflict_trainings', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('conflict_trainings').id,
+          fnMapKobo: Conflict_trainings.map,
           ...filters,
         }),
       ),

@@ -10,7 +10,8 @@ import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 
 import {hdpIndex} from './constants'
 
-const relatedKoboForms: KoboFormName[] = ['va_bio_tia']
+const victim: KoboFormName[] = ['va_bio_tia']
+const peace: KoboFormName[] =  ['conflict_trainings']
 
 export const HdpSidebar: FC = () => {
   const path = (page: string) => '' + page
@@ -27,7 +28,7 @@ export const HdpSidebar: FC = () => {
               </SidebarItem>
             )}
           </NavLink>
-          {relatedKoboForms.map((name) => (
+          {victim.map((name) => (
             <SidebarKoboLink key={name} name={name} path={generatePath(hdpIndex.victimAssistance.form.path, {name})} />
           ))}
         </SidebarSection>
@@ -42,6 +43,18 @@ export const HdpSidebar: FC = () => {
             </NavLink>
           </SidebarSection>
         )}
+        <SidebarSection title={m.peacebuildingTitle}>
+          <NavLink to={hdpIndex.peacebuilding.dashboard.path}>
+            {({isActive}) => (
+              <SidebarItem icon="insights" active={isActive}>
+                {m.dashboard}
+              </SidebarItem>
+            )}
+          </NavLink>
+          {peace.map((name) => (
+            <SidebarKoboLink key={name} name={name} path={generatePath(hdpIndex.peacebuilding.form.path, {name})} />
+          ))}
+        </SidebarSection>
       </SidebarBody>
     </Sidebar>
   )
