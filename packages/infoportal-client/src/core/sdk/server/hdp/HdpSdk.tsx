@@ -10,13 +10,16 @@ export class HdpSdk {
     return this.client.get(`/hdp/ai-risk-education`)
   }
 
+  readonly fetchRiskEducationFilters = () => {
+    return this.client.get('/hdp/risk-education-filters')
+  }
+
   readonly fetchRiskEducation = (
     query?: Record<string, unknown> | null | undefined,
   ): Promise<RiskEducationDirectSessionResponseData> => {
     return this.client.get(
       appendSearchQuery(`/hdp/risk-education`, {
         ...query,
-        // @ts-ignore
         filters: {...query.filters},
       }),
     )
