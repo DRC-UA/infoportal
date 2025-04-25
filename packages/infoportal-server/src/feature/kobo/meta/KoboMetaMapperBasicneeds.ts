@@ -83,6 +83,7 @@ export class KoboMetaBasicneeds {
         return
       }
       const status = DrcSectorHelper.isAutoValidatedActivity(activity) ? CashStatus.Paid : row.tags?.status
+
       return {
         enumerator: Bn_re.options.back_enum[answer.back_enum!],
         office: KoboXmlMapper.office(answer.back_office),
