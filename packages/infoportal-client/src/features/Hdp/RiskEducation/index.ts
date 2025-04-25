@@ -1,1 +1,0 @@
-export {RiskEducation} from './RiskEducation'
