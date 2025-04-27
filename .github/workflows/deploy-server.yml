@@ -91,17 +91,14 @@ jobs:
         with:
           name: node-app
 
-      - name: List contents of release.zip
-        working-directory: ./packages/infoportal-server
-        run: |
-          unzip -l release.zip
-
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: |
+          unzip release.zip
+          ls -lAR .
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'drc-imaa-ukr-tools-api'
           slot-name: 'Production'
