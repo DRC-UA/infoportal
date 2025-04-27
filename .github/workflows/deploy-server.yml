@@ -11,9 +11,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: '22.x'
+          node-version: '20.x'
 
       - name: Clean
         run: |
@@ -90,20 +90,15 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-          path: ./packages/infoportal-server
-
-      - name: List contents of artifact directory after download
-        run: ls -laR ./packages/infoportal-server
 
       - name: Unzip artifact for deployment
-        working-directory: ./packages/infoportal-server
         run: unzip release.zip
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'drc-imaa-ukr-tools-api'
           slot-name: 'Production'
-          package: ./packages/infoportal-server
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_498AC70480F04DF09CF86CBF3D15E5B2 }}
