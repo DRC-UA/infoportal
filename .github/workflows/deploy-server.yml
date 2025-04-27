@@ -35,18 +35,21 @@ jobs:
           # Generate Prisma client
           npm run db-generate
 
-          # Copy Prisma engine binaries and client to the server package
-          mkdir -p ./packages/infoportal-server/node_modules/.prisma/client
-          mkdir -p ./packages/infoportal-server/node_modules/@prisma
+      - name: Copy Prisma client to server package
+        run: |
+          echo "Copying generated Prisma client to server package..."
+          # Define source (root node_modules) and destination (package node_modules)
+          PRISMA_CLIENT_SOURCE="./node_modules/.prisma/client"
+          PRISMA_CLIENT_DEST="./packages/infoportal-server/node_modules/.prisma/client"
 
-          # Copy Prisma client files into the correct location
-          cp -r ./node_modules/.prisma/client/* ./packages/infoportal-server/node_modules/.prisma/client/
+          # Ensure destination directory exists
+          mkdir -p "$PRISMA_CLIENT_DEST"
 
-          # Copy the Prisma engine binaries and other needed files
-          cp -r ./node_modules/.prisma/* ./packages/infoportal-server/node_modules/.prisma/
+          # Copy the generated client files and binaries
+          rsync -a "$PRISMA_CLIENT_SOURCE"/ "$PRISMA_CLIENT_DEST"/
 
-          # Copy the Prisma client package files into the @prisma folder
-          cp -r ./node_modules/@prisma/* ./packages/infoportal-server/node_modules/@prisma/
+          echo "Verifying copied files:"
+          ls -l "$PRISMA_CLIENT_DEST"
 
       - name: Build, and test (server)
         working-directory: ./packages/infoportal-server
@@ -93,6 +96,13 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
+
+      - name: Create .deployment file to disable Oryx build
+        run: |
+          echo "[config]" > .deployment
+          echo "SCM_DO_BUILD_DURING_DEPLOYMENT=false" >> .deployment
+          echo "Created .deployment file:"
+          cat .deployment
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
