@@ -47,10 +47,6 @@ jobs:
 
           # Copy the Prisma client package files into the @prisma folder
           cp -r ./node_modules/@prisma/* ./packages/infoportal-server/node_modules/@prisma/
-          ls -lAR ./packages/infoportal-server/node_modules/@prisma
-          ls -lAR ./node_modules/@prisma
-          ls -lAR ./packages/infoportal-server/node_modules/.prisma
-          ls -lAR ./node_modules/.prisma
 
       - name: Build, and test (server)
         working-directory: ./packages/infoportal-server
@@ -94,6 +90,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
+
+      - name: List contents of release.zip
+        working-directory: ./packages/infoportal-server
+        run: |
+          unzip -l release.zip
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
