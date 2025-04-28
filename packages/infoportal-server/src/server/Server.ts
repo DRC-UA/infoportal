@@ -17,7 +17,7 @@ import * as console from 'console'
 // import * as Sentry from '@sentry/node'
 // import sessionFileStore from 'session-file-store'
 
-const uploadsPath = process.env.NODE_ENV === 'production' ? '/home/uploads' : 'uploads/'
+const uploadsPath = process.env.NODE_ENV === 'development' ? 'uploads/' : '/home/uploads/'
 
 export class Server {
   constructor(
