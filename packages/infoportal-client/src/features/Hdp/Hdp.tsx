@@ -19,7 +19,6 @@ export const Hdp: FC = () => (
       }
     >
       <Route path={`${hdpIndex.victimAssistance.slug}/*`} Component={VictimAssistance} />
-      <Route path={`${hdpIndex.riskEducation.slug}/*`} Component={RiskEducation} />
       <Route path={`${hdpIndex.peacebuilding.slug}/*`} Component={Peacebuilding} />
     </Route>
   </Routes>
