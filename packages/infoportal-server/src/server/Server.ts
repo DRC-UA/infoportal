@@ -17,6 +17,8 @@ import * as console from 'console'
 // import * as Sentry from '@sentry/node'
 // import sessionFileStore from 'session-file-store'
 
+const uploadsPath = process.env.NODE_ENV === 'development' ? 'uploads/' : '/home/uploads/'
+
 export class Server {
   constructor(
     private conf: AppConf = appConf,
@@ -26,7 +28,7 @@ export class Server {
     private log = app.logger('Server'),
   ) {}
 
-  static readonly upload = multer({dest: 'uploads/'})
+  static readonly upload = multer({dest: uploadsPath})
 
   readonly errorHandler = (err: HttpError, req: Request, res: Response, next: (err?: any) => void) => {
     const errorId = genUUID().split('-')[0]
