@@ -37,19 +37,39 @@ jobs:
 
       - name: Copy Prisma client to server package
         run: |
-          echo "Copying generated Prisma client to server package..."
-          # Define source (root node_modules) and destination (package node_modules)
-          PRISMA_CLIENT_SOURCE="./node_modules/.prisma/client"
-          PRISMA_CLIENT_DEST="./packages/infoportal-server/node_modules/.prisma/client"
+          echo "Copying generated Prisma client and engines to server package..."
+          # Source locations in root node_modules
+          PRISMA_CLIENT_GEN_SOURCE="./node_modules/.prisma/client"
+          PRISMA_ENGINES_SOURCE="./node_modules/@prisma/engines"
+          PRISMA_CLIENT_PKG_SOURCE="./node_modules/@prisma/client" # The actual package code
 
-          # Ensure destination directory exists
-          mkdir -p "$PRISMA_CLIENT_DEST"
+          # Destination base directory within the package
+          PACKAGE_NODE_MODULES="./packages/infoportal-server/node_modules"
 
-          # Copy the generated client files and binaries
-          rsync -a "$PRISMA_CLIENT_SOURCE"/ "$PRISMA_CLIENT_DEST"/
+          # --- Create destination structure ---
+          mkdir -p "$PACKAGE_NODE_MODULES/.prisma/client"
+          mkdir -p "$PACKAGE_NODE_MODULES/@prisma/engines"
+          mkdir -p "$PACKAGE_NODE_MODULES/@prisma/client"
 
-          echo "Verifying copied files:"
-          ls -l "$PRISMA_CLIENT_DEST"
+          # --- Perform the copies ---
+          echo "Copying GENERATED client files..."
+          rsync -a --info=progress2 "$PRISMA_CLIENT_GEN_SOURCE/" "$PACKAGE_NODE_MODULES/.prisma/client/"
+
+          echo "Copying engine binaries..."
+          rsync -a --info=progress2 "$PRISMA_ENGINES_SOURCE/" "$PACKAGE_NODE_MODULES/@prisma/engines/"
+
+          echo "Copying @prisma/client PACKAGE..."
+          rsync -a --info=progress2 "$PRISMA_CLIENT_PKG_SOURCE/" "$PACKAGE_NODE_MODULES/@prisma/client/"
+
+          echo "--- Verification ---"
+          echo "Listing $PACKAGE_NODE_MODULES/@prisma/client/package.json:"
+          ls -l "$PACKAGE_NODE_MODULES/@prisma/client/package.json" || echo "Verification failed: @prisma/client/package.json not found"
+          echo "Listing $PACKAGE_NODE_MODULES/.prisma/client/index.js:"
+          ls -l "$PACKAGE_NODE_MODULES/.prisma/client/index.js" || echo "Verification failed: .prisma/client/index.js not found"
+          echo "Listing $PACKAGE_NODE_MODULES/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node:" # Engine should be copied here too by generate
+          ls -l "$PACKAGE_NODE_MODULES/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node" || echo "Verification failed: Query Engine in .prisma/client not found"
+          echo "Listing $PACKAGE_NODE_MODULES/@prisma/engines/libquery_engine-debian-openssl-3.0.x.so.node:" # Also check engines dir
+          ls -l "$PACKAGE_NODE_MODULES/@prisma/engines/libquery_engine-debian-openssl-3.0.x.so.node" || echo "Verification failed: Query Engine in @prisma/engines not found"
 
       - name: Build, and test (server)
         working-directory: ./packages/infoportal-server
