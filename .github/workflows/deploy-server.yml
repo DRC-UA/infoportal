@@ -100,5 +100,5 @@ jobs:
         with:
           app-name: 'drc-imaa-ukr-tools-api'
           slot-name: 'Production'
-          package: releaze.zip
+          package: release.zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_498AC70480F04DF09CF86CBF3D15E5B2 }}
