@@ -94,21 +94,11 @@ jobs:
         with:
           name: node-app
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-
-      - name: Create .deployment file to disable Oryx build
-        run: |
-          echo "[config]" > .deployment
-          echo "SCM_DO_BUILD_DURING_DEPLOYMENT=false" >> .deployment
-          echo "Created .deployment file:"
-          cat .deployment
-
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'drc-imaa-ukr-tools-api'
           slot-name: 'Production'
-          package: .
+          package: releaze.zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_498AC70480F04DF09CF86CBF3D15E5B2 }}
