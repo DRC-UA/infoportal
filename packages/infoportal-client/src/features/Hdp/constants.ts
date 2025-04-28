@@ -17,4 +17,15 @@ export const hdpIndex = {
       path: 'risk-education/dashboard',
     },
   },
+  peacebuilding: {
+    slug: 'peacebuilding',
+    dashboard: {
+      path: 'peacebuilding/dashboard',
+      slug: 'dashboard',
+    },
+    form: {
+      path: 'peacebuilding/form/:name',
+      slug: 'form/:name',
+    },
+  },
 }

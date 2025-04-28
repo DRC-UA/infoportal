@@ -8,6 +8,7 @@ import {AppHeader} from '@/shared/Layout/Header/AppHeader'
 import {VictimAssistance} from './VictimAssistance'
 import {HdpSidebar} from './HdpSidebar'
 import {hdpIndex} from './constants'
+import {Peacebuilding} from '@/features/Hdp/Peacebuilding'
 
 export const Hdp: FC = () => (
   <Routes>
@@ -18,7 +19,8 @@ export const Hdp: FC = () => (
       }
     >
       <Route path={`${hdpIndex.victimAssistance.slug}/*`} Component={VictimAssistance} />
-      <Route path="*" element={<p>TODO a proper 404 page</p>} />
+      <Route path={`${hdpIndex.riskEducation.slug}/*`} Component={RiskEducation} />
+      <Route path={`${hdpIndex.peacebuilding.slug}/*`} Component={Peacebuilding} />
     </Route>
   </Routes>
 )
