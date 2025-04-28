@@ -73,7 +73,8 @@ jobs:
       - name: Zip and prepare release artifact
         working-directory: ./packages/infoportal-server
         run: |
-          zip -r release.zip dist package.json package-lock.json node_modules prisma host.json deploy.sh
+          zip -r release.zip dist package.json package-lock.json prisma host.json
+          # deploy.sh
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
