@@ -417,9 +417,9 @@ const tableTheme = (t: Theme, colorOverOpaque: string) => ({
   },
   '.table': {
     minWidth: '100%',
-    width: 'max-content',
+    // width: 'max-content',  https://trello.com/c/bIVACEN9
     // borderTop: '1px solid ' + t.palette.divider,
-    tableLayout: 'fixed',
+    // tableLayout: 'fixed',  https://trello.com/c/bIVACEN9
     borderCollapse: 'collapse',
     borderSpacing: 0,
   },
