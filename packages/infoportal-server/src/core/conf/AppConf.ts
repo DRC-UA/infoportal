@@ -38,7 +38,7 @@ export const appConf = {
     schema: 'hdp',
   },
   db: {
-    maxPreparedStatementParams: 5000, // 5e3
+    maxPreparedStatementParams: 1000, // 1e3, down from 5e3, which is down from previous 5e4
     maxConcurrency: e(int, defaultValue(50))('DATABASE_MAX_CONCURRENCY'),
     url: e(required)('DATABASE_URL'),
   },
