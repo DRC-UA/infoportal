@@ -18,25 +18,15 @@ import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService.js'
 
 const Gender = Person.Gender
 
-export class KoboMetaMapperVa {
-  static readonly #mapKoboProjectCodeToDrcProject = (
-    projectCode:
-      | NonNullable<Va_bio_tia.T['tia_assesment']>[number]['project']
-      | NonNullable<Va_bio_tia.T['sub_status']>[number], // TIA Assessment's project or Submission Status' project
-  ): DrcProject | undefined => {
-    return match(projectCode)
-      .cases({
-        ukr000306_dutch: DrcProject['UKR-000306 Dutch II'],
-        // override typo in the VA BIO&TIA form:
-        ukt000350_sida: DrcProject['UKR-000350 SIDA'],
-        ukr000350_sida: DrcProject['UKR-000350 SIDA'],
-        ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
-        ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
-        ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
-      })
-      .default(undefined)
-  }
+// MEMO: do not remove this
+//
+// override typo in the VA BIO&TIA form
+// in packages/infoportal-common/src/kobo/generated/Va_bio_tia.ts
+// which is replaced by infoportal-scripts/kobo-generator,
+// ukt000350_sida: DrcProject['UKR-000350 SIDA'],
+// __t___________: _____________________________, - notice the "t" instead of "r"
 
+export class KoboMetaMapperVa {
   static readonly bioAndTia: MetaMapperInsert<KoboMetaOrigin<Va_bio_tia.T>> = (row) => {
     const answer = Va_bio_tia.map(row.answers)
     const persons = KoboXmlMapper.Persons.va_bio_tia(answer)
@@ -56,8 +46,7 @@ export class KoboMetaMapperVa {
 
     const projects =
       answer.tia_assesment
-        ?.map(({project}, index) => {
-          // if (project === 'not_approved' || (!project && !answer.sub_status?.[index]) || !answer.sub_status) return
+        ?.map(({project}) => {
           if (!project || project === 'not_approved') return
 
           return DrcProject[Va_bio_tia.options.project[project]]
@@ -98,7 +87,7 @@ export class KoboMetaMapperVa {
           ongoing: KoboMetaStatus.Pending,
         })
         .default(undefined),
-      lastStatusUpdate: row.date,
+      lastStatusUpdate: answer.date_paid,
     })
   }
 }

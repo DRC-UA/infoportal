@@ -57,7 +57,7 @@ export namespace AiProtectionMapper {
           {by: (_) => _.raion!},
           {by: (_) => _.hromada!},
           {by: (_) => _.settlement!},
-          {by: (_) => _.project?.[0]!},
+          {by: (_) => _.project[0]},
         ],
         finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
           const activity: AiProtectionType.Type = {

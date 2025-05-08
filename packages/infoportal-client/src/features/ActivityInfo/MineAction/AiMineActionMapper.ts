@@ -1,4 +1,4 @@
-import {match} from '@axanc/ts-utils'
+import {match, seq} from '@axanc/ts-utils'
 
 import {
   DrcProgram,
@@ -34,6 +34,22 @@ export namespace AiMineActionMapper {
         api.koboMeta
           .search({activities: [DrcProgram.TIA], status: [KoboMetaStatus.Committed]})
           .then(({data}) => data.filter((record) => PeriodHelper.isDateIn(period, record.lastStatusUpdate)))
+          .then((dataInPeriod) =>
+            seq(dataInPeriod)
+              .map((record) => {
+                // filter children out
+                if (record.persons?.every(({age}) => age! > 17)) {
+                  return record
+                }
+
+                const adults = record.persons?.filter(({age}) => age! > 17)
+
+                if (adults?.length && adults.length > 0) {
+                  return {...record, persons: adults}
+                }
+              })
+              .compact(),
+          )
           .then((filteredData) => mapTiaActivity(filteredData, periodStr)),
       ]).then((processedResponses) => processedResponses.reduce((acc, r) => [...acc, ...r], []))
     }
@@ -128,7 +144,7 @@ export namespace AiMineActionMapper {
         {by: (_) => _.raion!},
         {by: (_) => _.hromada!},
         {by: (_) => _.settlement!},
-        {by: (_) => _.project?.[0]!},
+        {by: (_) => _.project[0]},
       ],
       finalTransform: (grouped, [oblast, raion, hromada, settlement, project]) => {
         const activity: AiMineActionType = {
