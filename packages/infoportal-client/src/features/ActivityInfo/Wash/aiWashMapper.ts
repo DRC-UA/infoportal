@@ -22,7 +22,7 @@ export namespace AiWashMapper {
   export type Bundle = AiTable<AiWashType.Type>
 
   export const req = (api: ApiSdk) => {
-    return (period: Partial<Period>): Promise<Bundle[]> => {
+    return async (period: Partial<Period>): Promise<Bundle[]> => {
       const periodStr = AiMapper.getPeriodStr(period)
       return api.koboMeta
         .search({
@@ -80,7 +80,7 @@ export namespace AiWashMapper {
                 const request = AiWashType.buildRequest(
                   {
                     ...ai,
-                    ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+                    ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
                   },
                   recordId,
                 )

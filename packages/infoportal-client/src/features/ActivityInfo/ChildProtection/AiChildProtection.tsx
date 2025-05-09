@@ -8,16 +8,16 @@ import {useFetcher} from '@/shared/hook/useFetcher'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 
-import {AiMineActionMapper} from './AiMineActionMapper'
+import {AiChildProtectionMapper} from './AiChildProtectionMapper'
 
-export const AiMineAction: FC = () => {
+export const AiChildProtection: FC = () => {
   const {api} = useAppSettings()
-  const fetcher = useFetcher((period: Partial<Period>) => AiMineActionMapper.request(api)(period))
+  const fetcher = useFetcher((period: Partial<Period>) => AiChildProtectionMapper.request(api)(period))
 
   return (
     <Page width="full">
       <Panel>
-        <AiBundleTable fetcher={fetcher} id="mine-action" />
+        <AiBundleTable fetcher={fetcher} id="child-protection" />
       </Panel>
     </Page>
   )

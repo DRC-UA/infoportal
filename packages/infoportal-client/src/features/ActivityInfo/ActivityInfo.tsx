@@ -1,16 +1,18 @@
-import {Layout} from '@/shared/Layout'
-import {NavLink, Route, Routes} from 'react-router-dom'
 import React from 'react'
+import {NavLink, Route, Routes} from 'react-router-dom'
+import {Obj} from '@axanc/ts-utils'
+
 import {AiWash} from '@/features/ActivityInfo/Wash/AiWash'
 import {AiMpca} from '@/features/ActivityInfo/Mpca/AiMpca'
-import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
-import {Obj} from '@axanc/ts-utils'
 import {AiSnfi} from '@/features/ActivityInfo/Snfi/AiSnfi'
 import {AiProtection} from '@/features/ActivityInfo/Protection/AiProtection'
 import {AiFslc} from '@/features/ActivityInfo/Fslc/AiFslc'
 import {AiGbv} from '@/features/ActivityInfo/Gbv/AiGbv'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {AiMineAction} from '@/features/ActivityInfo/MineAction/AiMineAction'
+import {AiChildProtection} from '@/features/ActivityInfo/ChildProtection/AiChildProtection'
+import {Layout} from '@/shared/Layout'
+import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
 export const activitiesConfig = {
   protection_general: {
@@ -19,6 +21,18 @@ export const activitiesConfig = {
     name: 'Protection',
     path: '/protection_general',
     componnent: <AiProtection />,
+  },
+  mineAction: {
+    id: 'cmnzatklqv1q3s243u',
+    name: 'Mine Action',
+    path: '/mine-action',
+    subId: 'cegbam4lqv1q3s243v',
+    componnent: <AiMineAction />,
+  },
+  childProtection: {
+    name: 'Child Protection',
+    path: '/child-protection',
+    componnent: <AiChildProtection />,
   },
   gbv: {
     id: 'c6mrp6dlqv1q7q243w',
@@ -50,13 +64,6 @@ export const activitiesConfig = {
     name: 'FSLC',
     path: '/fslc',
     componnent: <AiFslc />,
-  },
-  mineAction: {
-    id: 'cmnzatklqv1q3s243u',
-    name: 'Mine Action',
-    path: '/mine-action',
-    subId: 'cegbam4lqv1q3s243v',
-    componnent: <AiMineAction />,
   },
 }
 

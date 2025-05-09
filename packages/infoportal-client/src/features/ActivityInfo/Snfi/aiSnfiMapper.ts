@@ -35,7 +35,7 @@ export namespace AiShelterMapper {
 
   export const reqEsk =
     (api: ApiSdk) =>
-    (period: Partial<Period>): Promise<Bundle[]> => {
+    async (period: Partial<Period>): Promise<Bundle[]> => {
       const periodStr = AiMapper.getPeriodStr(period)
       let index = 0
       return api.koboMeta
@@ -51,80 +51,87 @@ export namespace AiShelterMapper {
         })
         .then((response) => response.data.filter((record) => PeriodHelper.isDateIn(period, record.lastStatusUpdate)))
         .then((data) => {
-          return groupBy({
-            data,
-            groups: [
-              {by: (_) => _.project?.[0]!},
-              {by: (_) => _.oblast!},
-              {by: (_) => _.raion!},
-              {by: (_) => _.hromada!},
-              {by: (_) => _.settlement!},
-              {by: (_) => _.displacement!},
-              {by: (_) => _.activity!},
-            ],
-            finalTransform: (grouped, [project, oblast, raion, hromada, settlement, displacement, activity]) => {
-              const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap((record) => record.persons).compact())
-              const ai: AiSnfiType.Type = {
-                Oblast: oblast,
-                Raion: raion,
-                Hromada: hromada,
-                Settlement: settlement,
-                'Indicators - SNFI': match(activity)
-                  .cases({
-                    [DrcProgram.ESK]: 'Emergency Shelter Support > # supported with emergency shelter kits > in-kind',
-                    [DrcProgram.CashForFuel]: 'Winter Heating > # supported with winter energy > cash-voucher',
-                    [DrcProgram.CashForUtilities]:
-                      'Winter Heating > # supported with cash for utilities > cash-voucher',
-                    [DrcProgram.CashForRent]: 'Rental support > # received rental support (RMI) > cash-voucher',
-                    [DrcProgram.CashForRepair]: 'Humanitarian repair > # supported with light repairs > cash-voucher',
-                  } as const)
-                  .default(() => aiInvalidValueFlag as keyof (typeof AiSnfiType.options)['Indicators - SNFI']),
-                'Implementing Partner': 'Danish Refugee Council (DRC)',
-                'Plan/Project Code': getPlanCode(project),
-                'Reporting Organization': 'Danish Refugee Council (DRC)',
-                'Reporting Month': match(periodStr)
-                  .cases({
-                    '2024-01': '2024-03',
-                    '2024-02': '2024-03',
-                  })
-                  .default(() => periodStr),
-                'Population Group': AiMapper.mapPopulationGroup(displacement),
-                'Non-individuals Reached': grouped.length,
-                'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
-                'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
-                'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
-                'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
-                'Adult Men (18-59)': disaggregation['Adult Men (18-59)'] ?? 0,
-                'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
-                'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
-                'People with disability': 0,
-                'Distribution through Common Pipeline': 'No',
-              }
-              const recordId = ActivityInfoSdk.makeRecordId({
-                prefix: 'drcsnfiesk',
-                periodStr,
-                index: index++,
-              })
-              const request = AiSnfiType.buildRequest(
-                {
-                  ...ai,
-                  ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
-                },
-                recordId,
-              )
-              return {
-                submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
-                recordId,
-                data: grouped,
-                activity: ai,
-                requestBody: ActivityInfoSdk.wrapRequest(request),
-              }
-            },
-          }).transforms
+          return Promise.all(
+            groupBy({
+              data,
+              groups: [
+                {by: (_) => _.project?.[0]!},
+                {by: (_) => _.oblast!},
+                {by: (_) => _.raion!},
+                {by: (_) => _.hromada!},
+                {by: (_) => _.settlement!},
+                {by: (_) => _.displacement!},
+                {by: (_) => _.activity!},
+              ],
+              finalTransform: async (
+                grouped,
+                [project, oblast, raion, hromada, settlement, displacement, activity],
+              ) => {
+                const disaggregation = AiMapper.disaggregatePersons(
+                  grouped.flatMap((record) => record.persons).compact(),
+                )
+                const ai: AiSnfiType.Type = {
+                  Oblast: oblast,
+                  Raion: raion,
+                  Hromada: hromada,
+                  Settlement: settlement,
+                  'Indicators - SNFI': match(activity)
+                    .cases({
+                      [DrcProgram.ESK]: 'Emergency Shelter Support > # supported with emergency shelter kits > in-kind',
+                      [DrcProgram.CashForFuel]: 'Winter Heating > # supported with winter energy > cash-voucher',
+                      [DrcProgram.CashForUtilities]:
+                        'Winter Heating > # supported with cash for utilities > cash-voucher',
+                      [DrcProgram.CashForRent]: 'Rental support > # received rental support (RMI) > cash-voucher',
+                      [DrcProgram.CashForRepair]: 'Humanitarian repair > # supported with light repairs > cash-voucher',
+                    } as const)
+                    .default(() => aiInvalidValueFlag as keyof (typeof AiSnfiType.options)['Indicators - SNFI']),
+                  'Implementing Partner': 'Danish Refugee Council (DRC)',
+                  'Plan/Project Code': getPlanCode(project),
+                  'Reporting Organization': 'Danish Refugee Council (DRC)',
+                  'Reporting Month': match(periodStr)
+                    .cases({
+                      '2024-01': '2024-03',
+                      '2024-02': '2024-03',
+                    })
+                    .default(() => periodStr),
+                  'Population Group': AiMapper.mapPopulationGroup(displacement),
+                  'Non-individuals Reached': grouped.length,
+                  'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
+                  'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
+                  'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
+                  'Adult Women (18-59)': disaggregation['Adult Women (18-59)'] ?? 0,
+                  'Adult Men (18-59)': disaggregation['Adult Men (18-59)'] ?? 0,
+                  'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
+                  'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
+                  'People with disability': 0,
+                  'Distribution through Common Pipeline': 'No',
+                }
+                const recordId = ActivityInfoSdk.makeRecordId({
+                  prefix: 'drcsnfiesk',
+                  periodStr,
+                  index: index++,
+                })
+                const request = AiSnfiType.buildRequest(
+                  {
+                    ...ai,
+                    ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
+                  },
+                  recordId,
+                )
+                return {
+                  submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
+                  recordId,
+                  data: grouped,
+                  activity: ai,
+                  requestBody: ActivityInfoSdk.wrapRequest(request),
+                }
+              },
+            }).transforms,
+          )
         })
     }
 
-  export const reqRepairs = (api: ApiSdk) => (period: Partial<Period>) => {
+  export const reqRepairs = (api: ApiSdk) => async (period: Partial<Period>) => {
     const periodStr = AiMapper.getPeriodStr(period)
     return api.koboMeta
       .search<KoboMetaShelterRepairTags>({
@@ -154,7 +161,7 @@ export namespace AiShelterMapper {
             },
             {by: (row) => row.displacement!},
           ],
-          finalTransform: (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
+          finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
             const disagg = AiMapper.disaggregatePersons(grouped.flatMap((record) => record.persons ?? []))
             const ai: AiSnfiType.Type = {
               Oblast: oblast,
@@ -191,7 +198,7 @@ export namespace AiShelterMapper {
             const request = AiSnfiType.buildRequest(
               {
                 ...ai,
-                ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+                ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
               },
               recordId,
             )

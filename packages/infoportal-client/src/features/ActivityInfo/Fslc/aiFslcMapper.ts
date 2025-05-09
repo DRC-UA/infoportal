@@ -31,7 +31,7 @@ export namespace AiFslcMapper {
 
   export const reqCashRegistration =
     (api: ApiSdk) =>
-    (period: Partial<Period>): Promise<Bundle[]> => {
+    async (period: Partial<Period>): Promise<Bundle[]> => {
       const periodStr = AiMapper.getPeriodStr(period)
       let i = 0
       return api.koboMeta
@@ -148,7 +148,7 @@ export namespace AiFslcMapper {
                 const request = AiFslType.buildRequest(
                   {
                     ...ai,
-                    ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+                    ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
                   },
                   recordId,
                 )

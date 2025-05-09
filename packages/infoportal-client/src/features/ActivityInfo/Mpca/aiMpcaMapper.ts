@@ -57,7 +57,7 @@ export namespace AiMpcaMapper {
               by: (_) => AiMapper.mapPopulationGroup(_.displacement),
             },
           ],
-          finalTransform: (grouped, [formId, oblast, raion, hromada, settlement, project, displacement]) => {
+          finalTransform: async (grouped, [formId, oblast, raion, hromada, settlement, project, displacement]) => {
             const disag = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons).compact())
             const ai: AiMpcaType.Type = {
               'Reporting Organization': 'Danish Refugee Council (DRC)',
@@ -121,7 +121,7 @@ export namespace AiMpcaMapper {
             const request = AiMpcaType.buildRequest(
               {
                 ...ai,
-                ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+                ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
               },
               recordId,
             )

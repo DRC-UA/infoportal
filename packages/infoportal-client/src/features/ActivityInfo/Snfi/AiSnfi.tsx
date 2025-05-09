@@ -9,8 +9,8 @@ import {Period} from 'infoportal-common'
 
 export const AiSnfi = () => {
   const {api} = useAppSettings()
-  const fetcher = useFetcher((period: Partial<Period>) => {
-    return Promise.all([AiShelterMapper.reqRepairs(api)(period), AiShelterMapper.reqEsk(api)(period)]).then((_) =>
+  const fetcher = useFetcher(async (period: Partial<Period>) => {
+    return await Promise.all([AiShelterMapper.reqRepairs(api)(period), AiShelterMapper.reqEsk(api)(period)]).then((_) =>
       _.reduce((acc, r) => [...acc, ...r], []),
     )
   })

@@ -20,7 +20,7 @@ export namespace AiGbvMapper2 {
 
   export const req =
     (api: ApiSdk) =>
-    (period: Partial<Period>): Promise<Bundle[]> => {
+    async (period: Partial<Period>): Promise<Bundle[]> => {
       const periodStr = AiMapper.getPeriodStr(period)
       return api.koboMeta
         .search({
@@ -43,7 +43,7 @@ export namespace AiGbvMapper2 {
         {by: (_) => _.settlement!},
         {by: (_) => _.project?.[0]!},
       ],
-      finalTransform: (grouped, [oblast, raion, hromada, settlement, project]) => {
+      finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
         const activity: AiGbvType = {
           'Plan/Project code': planCode[project],
           'Reporting Organization': 'Danish Refugee Council (DRC)',
@@ -56,7 +56,7 @@ export namespace AiGbvMapper2 {
         const subActivities = mapSubActivity(grouped, periodStr)
         const activityPrebuilt = {
           ...activity,
-          ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+          ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
           'Activities and People': subActivities.map((_) => _.activity),
         }
         return subActivities.map((subActivity) => {
@@ -84,6 +84,7 @@ export namespace AiGbvMapper2 {
         })
       },
     }).transforms
+
     return res
   }
 

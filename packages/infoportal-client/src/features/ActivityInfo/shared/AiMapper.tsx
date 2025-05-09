@@ -16,7 +16,7 @@ export namespace AiMapper {
 
   export type Location = Pick<AiProtectionType.Type, 'Oblast' | 'Raion' | 'Hromada' | 'Settlement'>
 
-  export const getLocationRecordIdByMeta = (p: {
+  export const getLocationRecordIdByMeta = async (p: {
     oblast: IKoboMeta['oblast']
     raion: IKoboMeta['raion']
     hromada: IKoboMeta['hromada']
@@ -25,11 +25,14 @@ export namespace AiMapper {
     const oblast = UaLocation.Oblast.findByName(p.oblast!)
     const raion = oblast?.raions?.find((_) => _.en === p.raion)
     const hromada = raion?.hromadas?.find((_) => _.en === p.hromada)
+    const settlements = await hromada?.getSettlements()
+    const settlement = settlements?.find(({iso}) => p.settlement?.toUpperCase() === iso)
+
     return locationIsoToRecordId({
       Oblast: oblast?.iso,
       Raion: raion?.iso,
       Hromada: hromada?.iso,
-      Settlement: p.settlement,
+      Settlement: settlement?.iso,
     })
   }
 

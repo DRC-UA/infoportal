@@ -12,6 +12,7 @@ export class ActivityInfoBuildType {
     private formIds = {
       generalProtection: 'c1viqabm4whwvwo3',
       mineAction: 'cxpfp3xm513b6r15nwo',
+      childProtection: 'cvgj28ym513hkiph7y',
       snfi: 'cmasgbem5w7pgf02',
       fslc: 'cxx4z9am74csoag9',
       wash: 'czg50xvm6an62wz2',
@@ -81,6 +82,23 @@ export class ActivityInfoBuildType {
     generalProtection: () =>
       this.builder.generateSchema({
         formId: this.formIds.generalProtection,
+        questionSettings: {
+          'Reporting Organization': {
+            filterChoices: (_) => _.includes('Danish Refugee Council'),
+          },
+          'Implementing Partner': {skipChoices: true},
+          'Implementing Partner 2': {skipChoices: true},
+          Oblast: {skipChoices: true},
+          Raion: {skipChoices: true},
+          Hromada: {skipChoices: true},
+          Settlement: {skipChoices: true},
+          'Collective Site': {skipChoices: true},
+        },
+      }),
+
+    childProtection: () =>
+      this.builder.generateSchema({
+        formId: this.formIds.childProtection,
         questionSettings: {
           'Reporting Organization': {
             filterChoices: (_) => _.includes('Danish Refugee Council'),
