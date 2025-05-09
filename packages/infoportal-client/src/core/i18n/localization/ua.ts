@@ -99,5 +99,8 @@ export const ua = {
       sessionsNumber: 'Кількість сесій',
       individualsReached: 'Осіб охоплено',
     },
+    _shelter: {
+      damageCondition: 'What is the Condition of the Building / Apartment',
+    },
   },
 }

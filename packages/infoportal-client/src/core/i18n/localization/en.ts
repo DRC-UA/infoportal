@@ -954,6 +954,7 @@ export const en = Object.freeze({
       scoreDisplacement: 'Displ.',
       settlement: 'Settlement',
       street: 'Street',
+      damageCondition: 'What is the Condition of the Building / Apartment',
       progress: {
         ContractorVisitDone: 'Contractor visit done',
         WorkEstimatesReceived: 'Work estimates received',

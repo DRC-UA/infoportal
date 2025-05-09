@@ -515,6 +515,17 @@ export const ShelterTable = () => {
         },
       },
       {
+        id: 'damage_hostilities',
+        typeIcon: null,
+        type: 'select_one',
+        group: 'nta',
+        groupLabel: KoboIndex.byName('shelter_nta').translation,
+        width: 0,
+        head: m._shelter.damageCondition,
+        renderQuick: (_) =>
+          _.nta?.damage_hostilities && Shelter_nta.options.damage_hostilities[_.nta?.damage_hostilities],
+      },
+      {
         id: 'damage_score',
         typeIcon: null,
         type: 'number',
