@@ -21,6 +21,10 @@ export namespace AiChildProtectionMapper {
         .search({activities: [DrcProgram.TIA], status: [KoboMetaStatus.Committed]})
         .then(({data}) => data.filter((record) => PeriodHelper.isDateIn(period, record.lastStatusUpdate)))
         .then((dataInPeriod) => dataInPeriod.filter(({persons}) => persons?.some(({age}) => age! < 18)))
+        .then((families) =>
+          // filter adults out
+          families.map(({persons, ...rest}) => ({...rest, persons: persons?.filter(({age}) => age! < 18)})),
+        )
         .then((childrenData) => mapTiaActivity(childrenData, periodStr))
     }
 
@@ -54,7 +58,7 @@ export namespace AiChildProtectionMapper {
           Raion: raion,
           Hromada: hromada,
           Settlement: settlement,
-          ID: `${tiaPlanCode[project]}${settlementIso}`,
+          ID: `${tiaPlanCode[project] ?? `${aiInvalidValueFlag} `}${settlementIso ?? `UA ${aiInvalidValueFlag}`}`,
         }
         const subActivities = mapSubActivity(grouped, periodStr)
         const activityPrebuilt = {
