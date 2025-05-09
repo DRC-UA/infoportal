@@ -141,77 +141,79 @@ export namespace AiShelterMapper {
       .then((response) => response.data.filter((row) => PeriodHelper.isDateIn(period, row.lastStatusUpdate)))
       .then((data) => {
         let index = 0
-        return groupBy({
-          data: data,
-          groups: [
-            {by: (_) => _.project?.[0]!},
-            {by: (_) => _.oblast!},
-            {by: (_) => _.raion!},
-            {by: (_) => _.hromada!},
-            {by: (_) => _.settlement!},
-            {
-              by: (_) =>
-                match(_.tags?.damageLevel!)
-                  .cases({
-                    [ShelterTaPriceLevel.Heavy]: ShelterTaPriceLevel.Medium,
-                    [ShelterTaPriceLevel.Medium]: ShelterTaPriceLevel.Medium,
-                    [ShelterTaPriceLevel.Light]: ShelterTaPriceLevel.Light,
-                  })
-                  .default((_: unknown) => _ as any),
-            },
-            {by: (row) => row.displacement!},
-          ],
-          finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
-            const disagg = AiMapper.disaggregatePersons(grouped.flatMap((record) => record.persons ?? []))
-            const ai: AiSnfiType.Type = {
-              Oblast: oblast,
-              Raion: raion,
-              Hromada: hromada,
-              Settlement: settlement,
-              'Indicators - SNFI': match(damageLevel)
-                .cases({
-                  [ShelterTaPriceLevel.Light]: 'Humanitarian repair > # supported with light repairs > in-kind',
-                  [ShelterTaPriceLevel.Medium]: 'Humanitarian repair > # supported with medium repairs > in-kind',
-                  [ShelterTaPriceLevel.Heavy]: 'Humanitarian repair > # supported with heavy repairs > in-kind',
-                } as const)
-                .default(() => 'Humanitarian repair > # supported with medium repairs > in-kind'),
-              'Implementing Partner': 'Danish Refugee Council (DRC)',
-              'Plan/Project Code': getPlanCode(project),
-              'Reporting Organization': 'Danish Refugee Council (DRC)',
-              'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
-              'Population Group': AiMapper.mapPopulationGroup(status),
-              'Non-individuals Reached': grouped.length,
-              'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,
-              'Adult Women (18-59)': disagg['Adult Women (18-59)'] ?? 0,
-              'Boys (0-17)': disagg['Boys (0-17)'] ?? 0,
-              'Girls (0-17)': disagg['Girls (0-17)'] ?? 0,
-              'Older Women (60+)': disagg['Older Women (60+)'] ?? 0,
-              'Older Men (60+)': disagg['Older Men (60+)'] ?? 0,
-              'Total Individuals Reached': disagg['Total Individuals Reached'] ?? 0,
-              'Distribution through Common Pipeline': 'No',
-            }
-            const recordId = ActivityInfoSdk.makeRecordId({
-              prefix: 'drcsnfirep',
-              periodStr: periodStr,
-              index: index++,
-            })
-            const request = AiSnfiType.buildRequest(
+        return Promise.all(
+          groupBy({
+            data: data,
+            groups: [
+              {by: (_) => _.project?.[0]!},
+              {by: (_) => _.oblast!},
+              {by: (_) => _.raion!},
+              {by: (_) => _.hromada!},
+              {by: (_) => _.settlement!},
               {
-                ...ai,
-                ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
+                by: (_) =>
+                  match(_.tags?.damageLevel!)
+                    .cases({
+                      [ShelterTaPriceLevel.Heavy]: ShelterTaPriceLevel.Medium,
+                      [ShelterTaPriceLevel.Medium]: ShelterTaPriceLevel.Medium,
+                      [ShelterTaPriceLevel.Light]: ShelterTaPriceLevel.Light,
+                    })
+                    .default((_: unknown) => _ as any),
               },
-              recordId,
-            )
+              {by: (row) => row.displacement!},
+            ],
+            finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
+              const disagg = AiMapper.disaggregatePersons(grouped.flatMap((record) => record.persons ?? []))
+              const ai: AiSnfiType.Type = {
+                Oblast: oblast,
+                Raion: raion,
+                Hromada: hromada,
+                Settlement: settlement,
+                'Indicators - SNFI': match(damageLevel)
+                  .cases({
+                    [ShelterTaPriceLevel.Light]: 'Humanitarian repair > # supported with light repairs > in-kind',
+                    [ShelterTaPriceLevel.Medium]: 'Humanitarian repair > # supported with medium repairs > in-kind',
+                    [ShelterTaPriceLevel.Heavy]: 'Humanitarian repair > # supported with heavy repairs > in-kind',
+                  } as const)
+                  .default(() => 'Humanitarian repair > # supported with medium repairs > in-kind'),
+                'Implementing Partner': 'Danish Refugee Council (DRC)',
+                'Plan/Project Code': getPlanCode(project),
+                'Reporting Organization': 'Danish Refugee Council (DRC)',
+                'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
+                'Population Group': AiMapper.mapPopulationGroup(status),
+                'Non-individuals Reached': grouped.length,
+                'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,
+                'Adult Women (18-59)': disagg['Adult Women (18-59)'] ?? 0,
+                'Boys (0-17)': disagg['Boys (0-17)'] ?? 0,
+                'Girls (0-17)': disagg['Girls (0-17)'] ?? 0,
+                'Older Women (60+)': disagg['Older Women (60+)'] ?? 0,
+                'Older Men (60+)': disagg['Older Men (60+)'] ?? 0,
+                'Total Individuals Reached': disagg['Total Individuals Reached'] ?? 0,
+                'Distribution through Common Pipeline': 'No',
+              }
+              const recordId = ActivityInfoSdk.makeRecordId({
+                prefix: 'drcsnfirep',
+                periodStr: periodStr,
+                index: index++,
+              })
+              const request = AiSnfiType.buildRequest(
+                {
+                  ...ai,
+                  ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
+                },
+                recordId,
+              )
 
-            return {
-              recordId,
-              data: grouped,
-              activity: ai,
-              requestBody: ActivityInfoSdk.wrapRequest(request),
-              submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
-            }
-          },
-        }).transforms
+              return {
+                recordId,
+                data: grouped,
+                activity: ai,
+                requestBody: ActivityInfoSdk.wrapRequest(request),
+                submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
+              }
+            },
+          }).transforms,
+        )
       })
   }
 }
