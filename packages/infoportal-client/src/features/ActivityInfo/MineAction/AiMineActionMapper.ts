@@ -34,11 +34,12 @@ export namespace AiMineActionMapper {
         api.koboMeta
           .search({activities: [DrcProgram.TIA], status: [KoboMetaStatus.Committed]})
           .then(({data}) => data.filter((record) => PeriodHelper.isDateIn(period, record.lastStatusUpdate)))
-          .then((dataInPeriod) => dataInPeriod.filter(({persons}) => !persons?.every(({age}) => age! < 17))) // filter those records with children only, reported to Child Protection
-          .then((families) => {
-            // filter children out
-            return families.map(({persons, ...rest}) => ({...rest, persons: persons?.filter(({age}) => age! > 17)}))
-          })
+          .then(
+            (dataInPeriod) =>
+              dataInPeriod.map(({persons, ...rest}) => ({...rest, ...(persons?.[0] && {persons: [persons[0]]})})),
+            // the first row is the beneficiary
+          )
+          .then((beneficiariesOnly) => beneficiariesOnly.filter(({persons}) => persons?.[0].age! > 17))
           .then((adultsData) => mapTiaActivity(adultsData, periodStr)),
       ]).then((processedResponses) => processedResponses.reduce((acc, r) => [...acc, ...r], []))
     }

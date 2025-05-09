@@ -20,11 +20,12 @@ export namespace AiChildProtectionMapper {
       return api.koboMeta
         .search({activities: [DrcProgram.TIA], status: [KoboMetaStatus.Committed]})
         .then(({data}) => data.filter((record) => PeriodHelper.isDateIn(period, record.lastStatusUpdate)))
-        .then((dataInPeriod) => dataInPeriod.filter(({persons}) => persons?.some(({age}) => age! < 18)))
-        .then((families) =>
-          // filter adults out
-          families.map(({persons, ...rest}) => ({...rest, persons: persons?.filter(({age}) => age! < 18)})),
+        .then(
+          (dataInPeriod) =>
+            dataInPeriod.map(({persons, ...rest}) => ({...rest, ...(persons?.[0] && {persons: [persons[0]]})})),
+          // the first row is the beneficiary
         )
+        .then((beneficiariesOnly) => beneficiariesOnly.filter(({persons}) => persons?.[0].age! < 18))
         .then((childrenData) => mapTiaActivity(childrenData, periodStr))
     }
 
