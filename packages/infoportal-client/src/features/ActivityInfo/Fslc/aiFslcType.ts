@@ -2,12 +2,12 @@ export type AiFslcType = AiFslType.Type
 
 export namespace AiFslType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
     'Reporting Month': string
     'Reporting Organization': Opt<'Partner'>
     'Implementing Partner': Opt<'Partner'>
     'Activity Plan Code': Opt<'FSLC Activity Planning Module (APM)'>
+    'Response Theme'?: Opt<'Response Theme'>
     'Activity and indicator': Opt<'Indicators - FSL'>
     'Implementation Status': Opt<'Implementation Status'>
     Frequency?: Opt<'Frequency'>
@@ -18,9 +18,9 @@ export namespace AiFslType {
     Currency?: Opt<'Currency'>
     'Cash Delivery Mechanism'?: Opt<'Cash Delivery Mechanism'>
     Oblast: string
-    Raion?: string
+    Raion: string
     Hromada: string
-    Settlement: string
+    Settlement?: string
     'Population Group': Opt<'Population Group'>
     'Total People Assisted': number
     'Girls (0-17)': number
@@ -32,12 +32,18 @@ export namespace AiFslType {
     'People With Disabilities'?: number
     'Households Assisted'?: number
     'New beneficiaries (assisted for the first time in 2025)': number
-    'Were these people reached in 2025 by another FSL sub-activity?': Opt<'Were these people reached in 2025 by another FSL sub-activity?'>
-    'If yes, which sub-activity': Opt<'Indicators - FSL'>
+    'Were these people reached in 2025 by another FSL sub-indicator?': Opt<'Were these people reached in 2025 by another FSL sub-indicator?'>
+    'If yes, which sub-indicator': Opt<'Indicators - FSL'>
     'If yes, how many people received from both sub-activities': number
     Comment?: string
     'HNRP Scope'?: Opt<'HNRP Scope'>
     'Outside HNRP Scope categories'?: Opt<'Outside HNRP Scope categories'>
+    /**
+      DO NOT EDIT THIS FIELD PLEASE!
+
+БУДЬ ЛАСКА, НЕ РЕДАГУЙТЕ ЦЕ ПОЛЕ!
+    */
+    key?: string
   }
 
   export const buildRequest = (a: Type, recordId: string, parentRecordId: string | null = null) => {
@@ -57,6 +63,7 @@ export namespace AiFslType {
           cbt281vm74czamji: a['Activity Plan Code']
             ? 'ch3x9upm67vz8ng3' + ':' + options['FSLC Activity Planning Module (APM)'][a['Activity Plan Code']!]
             : undefined,
+          c8nrqwomaclgncx6: a['Response Theme'] ? options['Response Theme'][a['Response Theme']!] : undefined,
           chzv6znm74d91x8p: a['Activity and indicator']
             ? 'caybsh0m4r95mfm198' + ':' + options['Indicators - FSL'][a['Activity and indicator']!]
             : undefined,
@@ -89,13 +96,13 @@ export namespace AiFslType {
           cxlhhwem74edw9629: a['People With Disabilities'],
           cjv2vbem74ef0i22a: a['Households Assisted'],
           cqypj9sm74elbee2b: a['New beneficiaries (assisted for the first time in 2025)'],
-          cc9dpi3m74en0yg2d: a['Were these people reached in 2025 by another FSL sub-activity?']
-            ? options['Were these people reached in 2025 by another FSL sub-activity?'][
-                a['Were these people reached in 2025 by another FSL sub-activity?']!
+          cc9dpi3m74en0yg2d: a['Were these people reached in 2025 by another FSL sub-indicator?']
+            ? options['Were these people reached in 2025 by another FSL sub-indicator?'][
+                a['Were these people reached in 2025 by another FSL sub-indicator?']!
               ]
             : undefined,
-          cxmypsxm74erbao2f: a['If yes, which sub-activity']
-            ? 'caybsh0m4r95mfm198' + ':' + options['Indicators - FSL'][a['If yes, which sub-activity']!]
+          cxmypsxm74erbao2f: a['If yes, which sub-indicator']
+            ? 'caybsh0m4r95mfm198' + ':' + options['Indicators - FSL'][a['If yes, which sub-indicator']!]
             : undefined,
           cnzbyp9m74etytf2g: a['If yes, how many people received from both sub-activities'],
           cdhcrtym74f2x5x2k: a['Comment'],
@@ -111,8 +118,8 @@ export namespace AiFslType {
   export const options = {
     Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
     'FSLC Activity Planning Module (APM)': {
-      'FSLC-DRC-00001': 'cptll80m7ytnmrp15a',
-      'FSLC-DRC-00002': 'cxthga8m7ystarl6i',
+      'FSLC-DRC-00001': 'cxthga8m7ystarl6i',
+      'FSLC-DRC-00002': 'cptll80m7ytnmrp15a',
     },
     'Indicators - FSL': {
       'Provision of market-based transitional cash and relief voucher assistance > # of individuals receiving market-based assistance to ensure their immediate access to food > Provision of market-based transitional relief voucher assistance > Cash/Voucher':
@@ -129,15 +136,15 @@ export namespace AiFslType {
         'c4mrq01m74osbft9',
       'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Multi purpose Agricultural grants or vouchers > Cash/Voucher':
         'ci9eh7gm74osbfta',
-      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Vegetable seeds and seedlings and tools > Cash/Voucher':
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Vegetable seeds, seedlings, fertilizers, and hand tools > Cash/Voucher':
         'cdhbquim74osbftb',
-      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Cereal seeds and tools > In-kind':
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Cereal seeds, seedlings, fertilizers, and hand tools > In-kind':
         'cjcx4nim74osbftc',
       'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Equipment and tools, such as greenhouses, irrigation systems, motor blocks, etc > In-kind':
         'clccfrwm74osbftd',
       'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Training on agricultural practice > Service':
         'cp2umu6m74osbfte',
-      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Vegetable seeds, fertilizers, and hand tools > In-kind':
+      'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Vegetable seeds, seedlings, fertilizers, and hand tools > In-kind':
         'cj5gx5vm74osbftf',
       'Provision of agricultural inputs > # of individuals provided with emergency agriculture inputs, contributing to their food consumption > Other agricultural infrastructure rehabilitation > Cash/Voucher':
         'ca2h5jhm74osbftg',
@@ -195,6 +202,7 @@ export namespace AiFslType {
       'Delivered outside HNRP​ mechanism': 'cgc12ggm4vgdovj6',
       'Not aligned to guidance': 'cei6bscm4vgdvpq7',
     },
+    'Response Theme': {Evacuations: 'cpomm6tmaclgncx5', 'Emergency response after strikes': 'cdvh6xymaclhrqo7'},
     'Implementation Status': {Ongoing: 'cw8mkxsm74db4w5r', Completed: 'c2eiij2m74dcav9t'},
     Frequency: {
       Weekly: 'cw34ekkm74ddh3wu',
@@ -226,7 +234,7 @@ export namespace AiFslType {
       'Post Office': 'ckjvidrm74dtycg1r',
       'Other Mechanisms': 'c1qq0dzm74du3k61s',
     },
-    'Were these people reached in 2025 by another FSL sub-activity?': {
+    'Were these people reached in 2025 by another FSL sub-indicator?': {
       Yes: 'cpsp477m74en0yg2c',
       No: 'c2rn16qm74epszt2e',
     },
