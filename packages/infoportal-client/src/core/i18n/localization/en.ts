@@ -949,7 +949,7 @@ export const en = Object.freeze({
       accommodation: 'Accommodation',
       total: 'Total',
       apartmentnumber: 'Apartment Number',
-      scoreDamage: 'Damage',
+      scoreDamage: 'Damage Score',
       scoreSocio: 'Socio',
       scoreDisplacement: 'Displ.',
       settlement: 'Settlement',
