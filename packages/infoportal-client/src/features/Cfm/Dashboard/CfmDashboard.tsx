@@ -228,7 +228,7 @@ export const CfmDashboard = () => {
               />
             </PanelBody>
           </Panel>
-          <Panel savableAsImg expendable title={m.category}>
+          <Panel savableAsImg expendable title={m.status}>
             <PanelBody>
               <ChartBarSingleBy
                 data={filteredData}
