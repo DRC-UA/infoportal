@@ -23,7 +23,7 @@ export namespace AiMineActionMapper {
 
   export const request =
     (api: ApiSdk) =>
-    (period: Partial<Period>): Promise<Bundle[]> => {
+    async (period: Partial<Period>): Promise<Bundle[]> => {
       const periodStr = AiMapper.getPeriodStr(period)
 
       return Promise.all([
@@ -34,81 +34,89 @@ export namespace AiMineActionMapper {
         api.koboMeta
           .search({activities: [DrcProgram.TIA], status: [KoboMetaStatus.Committed]})
           .then(({data}) => data.filter((record) => PeriodHelper.isDateIn(period, record.lastStatusUpdate)))
-          .then((filteredData) => mapTiaActivity(filteredData, periodStr)),
+          .then(
+            (dataInPeriod) =>
+              dataInPeriod.map(({persons, ...rest}) => ({...rest, ...(persons?.[0] && {persons: [persons[0]]})})),
+            // the first row is the beneficiary
+          )
+          .then((beneficiariesOnly) => beneficiariesOnly.filter(({persons}) => persons?.[0].age! > 17))
+          .then((adultsData) => mapTiaActivity(adultsData, periodStr)),
       ]).then((processedResponses) => processedResponses.reduce((acc, r) => [...acc, ...r], []))
     }
 
-  const mapHdpActivity = (data: AiMinactionSqlType[], periodStr: string): Bundle[] => {
-    return data.map((_, i): Bundle => {
-      const addFlagIfNotInList = (value: string, options: Record<string, string>): any => {
-        if (!options[value]) return aiInvalidValueFlag + ' ' + value
-        return value
-      }
-      const rawActivity: AiMineActionType.Type = {
-        'Reporting Organization': 'Danish Refugee Council (DRC)',
-        'Plan/Project Code': addFlagIfNotInList(
-          _['Plan/Project Code'],
-          AiMineActionType.options['Activity Planning Module (Mine Action)'],
-        ),
-        Oblast: _['Oblast Oblast ENG/UKR'] as OblastName,
-        Raion: _['Raion Raion ENG/UKR'],
-        Hromada: _['Hromada Hromada ENG/PCODE/UKR'],
-        Settlement: undefined,
-        'Response Theme': addFlagIfNotInList(_['Response Theme'], AiMineActionType.options['Response Theme']),
-      }
-      const rawSubActivity: AiMineActionType.AiTypeActivitiesAndPeople = {
-        'Reporting Month': _['Reporting Month'],
-        'Population Group': addFlagIfNotInList(
-          _['Population Group'],
-          AiMineActionType.AiTypeActivitiesAndPeople.options['Population Group'],
-        ),
-        Indicators: addFlagIfNotInList(
-          _['Indicator'],
-          AiMineActionType.AiTypeActivitiesAndPeople.options['Indicators - Protection'],
-        ),
-        'Total Individuals Reached': _['Total Individuals Reached'],
-        'Girls (0-17)': _['Girls (0-17)'],
-        'Boys (0-17)': _['Boys (0-17)'],
-        'Adult Women (18-59)': _['Adult Women (18-59)'],
-        'Adult Men (18-59)': _['Adult Men (18-59)'],
-        'Older Women (60+)': _['Older Women (60+)'],
-        'Older Men (60+)': _['Older Men (60+)'],
-        'Non-individuals Reached/Quantity': 0,
-        'People with Disability': _['People with Disability'],
-      }
-      const recordId = ActivityInfoSdk.makeRecordId({
-        index: i,
-        prefix: 'drcma',
-        periodStr,
-      })
-      const request = AiMineActionType.buildRequest(
-        {
-          ...rawActivity,
-          'Activities and People': [rawSubActivity],
-          ...AiMapper.getLocationRecordIdByMeta({
-            oblast: rawActivity.Oblast as OblastName,
-            raion: rawActivity.Raion,
-            hromada: rawActivity.Hromada,
-            settlement: rawActivity.Settlement,
-          }),
-        },
-        recordId,
-      )
-      const bundles: Bundle = {
-        submit: checkAiValid(
-          _['Oblast Oblast ENG/UKR'],
-          _['Raion Raion ENG/UKR'],
-          _['Hromada Hromada ENG/PCODE/UKR'],
-          _['Plan/Project Code'],
-        ),
-        recordId,
-        activity: rawActivity,
-        subActivity: rawSubActivity,
-        data: [_],
-        requestBody: ActivityInfoSdk.wrapRequest(request),
-      }
-      return bundles
-    })
+  const mapHdpActivity = async (data: AiMinactionSqlType[], periodStr: string): Promise<Bundle[]> => {
+    return Promise.all(
+      data.map(async (_, i): Promise<Bundle> => {
+        const addFlagIfNotInList = (value: string, options: Record<string, string>): any => {
+          if (!options[value]) return aiInvalidValueFlag + ' ' + value
+          return value
+        }
+        const rawActivity: AiMineActionType.Type = {
+          'Reporting Organization': 'Danish Refugee Council (DRC)',
+          'Plan/Project Code': addFlagIfNotInList(
+            _['Plan/Project Code'],
+            AiMineActionType.options['Activity Planning Module (Mine Action)'],
+          ),
+          Oblast: _['Oblast Oblast ENG/UKR'] as OblastName,
+          Raion: _['Raion Raion ENG/UKR'],
+          Hromada: _['Hromada Hromada ENG/PCODE/UKR'],
+          Settlement: undefined,
+          'Response Theme': addFlagIfNotInList(_['Response Theme'], AiMineActionType.options['Response Theme']),
+        }
+        const rawSubActivity: AiMineActionType.AiTypeActivitiesAndPeople = {
+          'Reporting Month': _['Reporting Month'],
+          'Population Group': addFlagIfNotInList(
+            _['Population Group'],
+            AiMineActionType.AiTypeActivitiesAndPeople.options['Population Group'],
+          ),
+          Indicators: addFlagIfNotInList(
+            _['Indicator'],
+            AiMineActionType.AiTypeActivitiesAndPeople.options['Indicators - Protection'],
+          ),
+          'Total Individuals Reached': _['Total Individuals Reached'],
+          'Girls (0-17)': _['Girls (0-17)'],
+          'Boys (0-17)': _['Boys (0-17)'],
+          'Adult Women (18-59)': _['Adult Women (18-59)'],
+          'Adult Men (18-59)': _['Adult Men (18-59)'],
+          'Older Women (60+)': _['Older Women (60+)'],
+          'Older Men (60+)': _['Older Men (60+)'],
+          'Non-individuals Reached/Quantity': 0,
+          'People with Disability': _['People with Disability'],
+        }
+        const recordId = ActivityInfoSdk.makeRecordId({
+          index: i,
+          prefix: 'drcma',
+          periodStr,
+        })
+        const request = AiMineActionType.buildRequest(
+          {
+            ...rawActivity,
+            'Activities and People': [rawSubActivity],
+            ...(await AiMapper.getLocationRecordIdByMeta({
+              oblast: rawActivity.Oblast as OblastName,
+              raion: rawActivity.Raion,
+              hromada: rawActivity.Hromada,
+              settlement: rawActivity.Settlement,
+            })),
+          },
+          recordId,
+        )
+
+        return {
+          submit: checkAiValid(
+            _['Oblast Oblast ENG/UKR'],
+            _['Raion Raion ENG/UKR'],
+            _['Hromada Hromada ENG/PCODE/UKR'],
+            _['Plan/Project Code'],
+          ),
+          recordId,
+          activity: rawActivity,
+          subActivity: rawSubActivity,
+          data: [_],
+          requestBody: ActivityInfoSdk.wrapRequest(request),
+        }
+      }),
+    )
   }
 
   const tiaPlanCode: Partial<Record<DrcProject, AiMineActionType['Plan/Project Code']>> = {
@@ -128,9 +136,9 @@ export namespace AiMineActionMapper {
         {by: (_) => _.raion!},
         {by: (_) => _.hromada!},
         {by: (_) => _.settlement!},
-        {by: (_) => _.project?.[0]!},
+        {by: (_) => _.project[0]},
       ],
-      finalTransform: (grouped, [oblast, raion, hromada, settlement, project]) => {
+      finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
         const activity: AiMineActionType = {
           // @ts-expect-error it's an intention to flag an error here
           'Plan/Project Code': tiaPlanCode[project] ?? `${aiInvalidValueFlag} ${project}`,
@@ -144,7 +152,7 @@ export namespace AiMineActionMapper {
         const subActivities = mapSubActivity(grouped, periodStr)
         const activityPrebuilt = {
           ...activity,
-          ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+          ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
           'Activities and People': subActivities.map((_) => _.activity),
         }
         const recordId = ActivityInfoSdk.makeRecordId({

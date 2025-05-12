@@ -145,6 +145,11 @@ export const ShelterDashboard = () => {
             .map((_) => DataFilter.buildOption(_, ctx.nta.schema.translate.choice('dwelling_type', _))),
         ],
       },
+      damageCause: {
+        label: m.damageCause,
+        getValue: (_) => _.nta?.damage_hostilities,
+        getOptions: () => DataFilter.buildOptionsFromObject(Shelter_nta.options.damage_hostilities),
+      },
       damageLevel: {
         icon: 'construction',
         label: m.levelOfPropertyDamaged,

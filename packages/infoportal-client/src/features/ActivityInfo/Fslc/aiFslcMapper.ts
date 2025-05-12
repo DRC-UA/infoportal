@@ -31,7 +31,7 @@ export namespace AiFslcMapper {
 
   export const reqCashRegistration =
     (api: ApiSdk) =>
-    (period: Partial<Period>): Promise<Bundle[]> => {
+    async (period: Partial<Period>): Promise<Bundle[]> => {
       const periodStr = AiMapper.getPeriodStr(period)
       let i = 0
       return api.koboMeta
@@ -135,8 +135,8 @@ export namespace AiFslcMapper {
                       'Households Assisted': grouped.length,
                     }
                   })(),
-                  'Were these people reached in 2025 by another FSL sub-activity?': 'No',
-                  'If yes, which sub-activity': null as any,
+                  'Were these people reached in 2025 by another FSL sub-indicator?': 'No',
+                  'If yes, which sub-indicator': null as any,
                   'If yes, how many people received from both sub-activities': null as any,
                   'Implementation Status': 'Completed',
                 }
@@ -148,7 +148,7 @@ export namespace AiFslcMapper {
                 const request = AiFslType.buildRequest(
                   {
                     ...ai,
-                    ...AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement}),
+                    ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
                   },
                   recordId,
                 )

@@ -242,7 +242,7 @@ export class KoboMetaService {
           data: update,
         })
       })
-    this.info(formId, `Update ${updates.length}... COMPLETED`)
+    this.info(formId, `\nUpdate ${updates.length}... COMPLETED`)
   }
 
   private syncInsert = async ({formId, mapper}: {formId: Kobo.FormId; mapper: MetaMapperInsert}) => {

@@ -26,6 +26,7 @@ export const ua = {
     formSubmitted: 'Відповіді успішно відправлені',
     protHHSnapshot: {},
     includeNotSpecified: 'в т.ч. "Не зазначено"',
+    damageCause: 'Причина руйнувань',
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {
@@ -98,6 +99,9 @@ export const ua = {
       sectionTitle: 'Навчання про ризики',
       sessionsNumber: 'Кількість сесій',
       individualsReached: 'Осіб охоплено',
+    },
+    _shelter: {
+      damageCondition: 'What is the Condition of the Building / Apartment',
     },
   },
 }
