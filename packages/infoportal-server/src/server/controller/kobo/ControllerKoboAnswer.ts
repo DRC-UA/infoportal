@@ -71,7 +71,7 @@ export class ControllerKoboAnswer {
       .validate(req.body)
 
     const data = await this.service.updateTags({...params, ...body, authorEmail: email})
-    res.send()
+    res.send(data)
   }
 
   readonly updateValidation = async (req: Request, res: Response, next: NextFunction) => {

@@ -274,9 +274,10 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
           formId: KoboIndex.byName(p.formName).id,
           tags: {[p.tag]: p.value},
         })
-        .then(() => {
+        .then((data) => {
           _updateCacheByName({
             key: p.tag,
+            isTag: true,
             answerIds: p.answerIds,
             value: p.value,
             formName: p.formName,

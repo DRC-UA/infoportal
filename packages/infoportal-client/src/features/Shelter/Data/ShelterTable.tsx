@@ -910,11 +910,11 @@ export const ShelterTable = () => {
         ),
         render: (row) => {
           return {
-            option: row.ta?.contractor1,
-            value: row.ta?.contractor1,
+            option: row.ta?.tags?.contractor1,
+            value: row.ta?.tags?.contractor1,
             label: map(row.ta, (ta) => (
               <ShelterSelectContractor
-                value={ta.contractor1}
+                value={ta.tags?.contractor1}
                 oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
@@ -955,11 +955,11 @@ export const ShelterTable = () => {
         ),
         render: (row) => {
           return {
-            option: row.ta?.contractor2,
-            value: row.ta?.contractor2,
+            option: row.ta?.tags?.contractor2,
+            value: row.ta?.tags?.contractor2,
             label: map(row.ta, (ta) => (
               <ShelterSelectContractor
-                value={ta.contractor2}
+                value={ta.tags?.contractor2}
                 oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
@@ -982,11 +982,11 @@ export const ShelterTable = () => {
         typeIcon: null,
         render: (row) => {
           return {
-            option: row.ta?.contractor3,
-            value: row.ta?.contractor3,
+            option: row.ta?.tags?.contractor3,
+            value: row.ta?.tags?.contractor3,
             label: map(row.ta, (ta) => (
               <ShelterSelectContractor
-                value={ta.contractor3}
+                value={ta.tags?.contractor3}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
@@ -1008,11 +1008,11 @@ export const ShelterTable = () => {
         typeIcon: null,
         render: (row) => {
           return {
-            option: row.ta?.contractor4,
-            value: row.ta?.contractor4,
+            option: row.ta?.tags?.contractor4,
+            value: row.ta?.tags?.contractor4,
             label: map(row.ta, (ta) => (
               <ShelterSelectContractor
-                value={ta.contractor4}
+                value={ta.tags?.contractor4}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
@@ -1053,12 +1053,12 @@ export const ShelterTable = () => {
         ),
         render: (row) => {
           return {
-            option: row.ta?.damageLevel,
-            value: row.ta?.damageLevel,
+            option: row.ta?.tags?.damageLevel,
+            value: row.ta?.tags?.damageLevel,
             label: map(row.ta, (ta) => {
               return (
                 <IpSelectSingle<ShelterTaPriceLevel>
-                  value={ta.damageLevel}
+                  value={ta.tags?.damageLevel}
                   onChange={(tagChange) => {
                     ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_ta',
@@ -1099,11 +1099,11 @@ export const ShelterTable = () => {
         ),
         render: (row) => {
           return {
-            value: row.ta?.price,
+            value: row.ta?.tags?.price,
             label: map(row.ta, (ta) => (
               <DebouncedInput<number | undefined>
                 debounce={1250}
-                value={row.ta?.price}
+                value={row.ta?.tags?.price}
                 onChange={(_) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
@@ -1209,10 +1209,10 @@ export const ShelterTable = () => {
         options: () => Obj.keys(ShelterProgress).map((_) => ({value: _, label: m._shelter.progress[_]})),
         render: (row: ShelterEntity) => {
           return {
-            value: row.ta?.progress,
+            value: row.ta?.tags?.progress,
             label: map(row.ta, (ta) => (
               <ShelterSelectStatus
-                value={ta?.progress}
+                value={ta?.tags?.progress}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
@@ -1227,7 +1227,7 @@ export const ShelterTable = () => {
                       tag: 'workDoneAt',
                       value: new Date(),
                     })
-                  else if (ta?.workDoneAt)
+                  else if (ta?.tags?.workDoneAt)
                     ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_ta',
                       answerIds: [ta.id],
@@ -1264,12 +1264,12 @@ export const ShelterTable = () => {
         ),
         render: (row: ShelterEntity) => {
           return {
-            value: row.ta?.workDoneAt,
+            value: row.ta?.tags?.workDoneAt,
             label:
-              row.ta?.progress === ShelterProgress.RepairWorksCompleted &&
+              row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted &&
               map(row.ta, (ta) => (
                 <IpDatepicker
-                  value={row.ta?.workDoneAt}
+                  value={row.ta?.tags?.workDoneAt}
                   onChange={(_) =>
                     ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_ta',
@@ -1313,17 +1313,17 @@ export const ShelterTable = () => {
             option: row.ta?.tags?.standards,
             value: row.ta?.tags?.standards,
             label:
-              row.ta?.progress === ShelterProgress.RepairWorksCompleted &&
+              row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted &&
               map(row.ta, (ta) => {
                 return (
                   <IpSelectSingle<Shelterstandards>
-                    value={ta.standards}
-                    onChange={(tagChange) => {
+                    value={ta.tags?.standards}
+                    onChange={(standard) => {
                       ctxKoboUpdate.asyncUpdateByName.tag.call({
                         formName: 'shelter_ta',
                         answerIds: [ta.id],
                         tag: 'standards',
-                        value: tagChange,
+                        value: standard,
                       })
                     }}
                     options={Obj.keys(Shelterstandards)}
@@ -1354,13 +1354,6 @@ export const ShelterTable = () => {
           // showExportBtn
           header={
             <>
-              {/*<IpIconBtn*/}
-              {/*  children="refresh"*/}
-              {/*  loading={ctx.data.fetching}*/}
-              {/*  onClick={() => ctx.data.fetchAll({force: true, clean: true})}*/}
-              {/*  tooltip={m.refreshTable}*/}
-              {/*  sx={{ml: -1}}*/}
-              {/*/>*/}
               <IpSelectSingle<number>
                 hideNullOption
                 sx={{maxWidth: 128, mr: 1}}

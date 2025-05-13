@@ -607,18 +607,18 @@ export class KoboService {
         `,
       ),
     ])
-    // const answers = await this.prisma.koboAnswers.findMany({
-    //   select: {
-    //     id: true,
-    //     tags: true,
-    //   },
-    //   where: {
-    //     formId,
-    //     id: {
-    //       in: answerIds
-    //     }
-    //   }
-    // })
+    const updatedAnswers = await this.prisma.koboAnswers.findMany({
+      select: {
+        id: true,
+        tags: true,
+      },
+      where: {
+        formId,
+        id: {
+          in: answerIds,
+        },
+      },
+    })
     // await PromisePool.withConcurrency(this.conf.db.maxConcurrency).for(answers).process((answer => {
     //   const newTag = {...answer.tags as any, ...tags}
     //   return this.prisma.koboAnswers.update({
@@ -632,5 +632,7 @@ export class KoboService {
     //   })
     // }))
     this.event.emit(Event.KOBO_TAG_EDITED, {formId, answerIds, tags})
+
+    return updatedAnswers
   }
 }
