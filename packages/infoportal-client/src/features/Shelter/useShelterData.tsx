@@ -19,8 +19,8 @@ export const useShelterData = () => {
   const fetcherTa = ctxAnswers.byName('shelter_ta')
 
   const fetchAll = (p: FetchParams = {}) => {
-    fetcherNta.fetch()
-    fetcherTa.fetch()
+    fetcherNta.fetch(p)
+    fetcherTa.fetch(p)
   }
 
   const mappedData = useMemo(() => {
@@ -93,7 +93,7 @@ export const useShelterData = () => {
       api.koboApi.synchronizeAnswers(KoboIndex.byName('shelter_ta').id),
       api.koboApi.synchronizeAnswers(KoboIndex.byName('shelter_nta').id),
     ])
-    await fetchAll({clean: false, force: true})
+    fetchAll({clean: false, force: true})
   })
 
   return {

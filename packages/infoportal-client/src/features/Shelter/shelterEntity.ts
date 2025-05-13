@@ -16,7 +16,7 @@ export interface ShelterEntity {
   ta?: KoboSubmissionFlat<Shelter_ta.T, ShelterTaTags> & {
     _price?: number | null
     _priceLevel?: ShelterTaPriceLevel
-  } & ShelterTaTags
+  } & Partial<ShelterTaTags>
   nta?: KoboSubmissionFlat<Shelter_nta.T, ShelterNtaTags>
   oblastIso?: OblastISO | ''
   oblast?: OblastName | ''

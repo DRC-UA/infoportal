@@ -10,6 +10,8 @@ export namespace Shelter_ta {
     nta_id: string | undefined
     // interwiever_name [text] Interwiever's name
     interwiever_name: string | undefined
+    // cal_office [select_one] Responsible office
+    cal_office: undefined | Option<'cal_office'>
     // ben_det_oblast [select_one] Specify the Oblast
     ben_det_oblast: undefined | Option<'ben_det_oblast'>
     // ben_det_raion [select_one] Specify the Rayon
@@ -159,6 +161,14 @@ export namespace Shelter_ta {
     nta_form: {
       nta: `Shelter - Non-Technical Assessment`,
     },
+    cal_office: {
+      kharkiv: `Kharkiv`,
+      dnipro: `Dnipro`,
+      mykovaiv: `Mykolaiv`,
+      chernihiv: `Chernihiv`,
+      sumy: `Sumy`,
+      slovyansk: `Slovyansk`,
+    },
     ben_det_oblast: {
       cherkaska: `Cherkaska`,
       chernihivska: `Chernihivska`,
@@ -190,7 +200,7 @@ export namespace Shelter_ta {
       house: `House`,
       apartment: `Apartment`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}
