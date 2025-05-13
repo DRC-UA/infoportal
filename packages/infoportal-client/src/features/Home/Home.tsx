@@ -1,16 +1,16 @@
-import {Box, BoxProps, darken, Grid, useTheme} from '@mui/material'
+import {match, Obj, seq} from '@axanc/ts-utils'
+import {Box, BoxProps, darken, Grid2, useTheme} from '@mui/material'
+
 import {DRCLogo} from '@/shared/logo/logo'
 import {Txt} from '@/shared/Txt'
 import {appFeatures} from '@/features/appFeatureId'
 import {FeatureLogo} from '@/features/FeatureLogo'
 import {Page} from '@/shared/Page'
-import React from 'react'
 import {useI18n} from '@/core/i18n'
 import {useSession} from '@/core/Session/SessionContext'
 import {Layout} from '@/shared/Layout'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
-import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
 import {styleUtils} from '@/core/theme'
 
 export const Home = () => {
@@ -63,14 +63,11 @@ const _Home = () => {
             <Txt bold uppercase color="hint" sx={{fontWeight: '600', ml: 1}}>
               {category}
             </Txt>
-            <Grid container spacing={1}>
+            <Grid2 container spacing={1}>
               {features!.map((feature) => (
-                <Grid
+                <Grid2
                   key={feature.id}
-                  item
-                  md={2}
-                  sm={3}
-                  xs={4}
+                  size={{md: 2, sm: 3, xs: 4}}
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -79,17 +76,19 @@ const _Home = () => {
                 >
                   <FeatureLogo
                     feature={feature}
-                    iconSize={fnSwitch(layoutCtx.currentBreakpointDown, {
-                      xl: 70,
-                      lg: 65,
-                      md: 60,
-                      sm: 55,
-                      xs: 50,
-                    })}
+                    iconSize={match(layoutCtx.currentBreakpointDown)
+                      .cases({
+                        xl: 70,
+                        lg: 65,
+                        md: 60,
+                        sm: 55,
+                        xs: 50,
+                      })
+                      .default(60)}
                   />
-                </Grid>
+                </Grid2>
               ))}
-            </Grid>
+            </Grid2>
           </Box>
         ))}
     </Page>

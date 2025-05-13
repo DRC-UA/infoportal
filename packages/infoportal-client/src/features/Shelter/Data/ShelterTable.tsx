@@ -1,11 +1,6 @@
-import React, {useMemo, useState} from 'react'
-import {Page} from '@/shared/Page'
-import {fnSwitch, map, Obj, seq} from '@axanc/ts-utils'
-import {useI18n} from '@/core/i18n'
-import {Panel} from '@/shared/Panel'
-import {Box, useTheme} from '@mui/material'
-import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
-import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
+import {useMemo, useState} from 'react'
+import {match, map, Obj, seq} from '@axanc/ts-utils'
+
 import {
   add,
   DrcProject,
@@ -20,6 +15,13 @@ import {
   Shelterstandards,
   ShelterTaPriceLevel,
 } from 'infoportal-common'
+
+import {Page} from '@/shared/Page'
+import {useI18n} from '@/core/i18n'
+import {Panel} from '@/shared/Panel'
+import {Box, useTheme} from '@mui/material'
+import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
+import {KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {Txt} from '@/shared/Txt'
 import {useShelterContext} from '@/features/Shelter/ShelterContext'
 import {IpInput} from '@/shared/Input/Input'
@@ -449,14 +451,12 @@ export const ShelterTable = () => {
         render: (_) => {
           return {
             value: _.nta?.ownership_verification,
-            label: fnSwitch(
-              _.nta?.ownership_verification!,
-              {
+            label: match(_.nta?.ownership_verification!)
+              .cases({
                 yes: <TableIcon color="success">check</TableIcon>,
                 no: <TableIcon color="error">close</TableIcon>,
-              },
-              () => undefined,
-            ),
+              })
+              .default(() => undefined),
           }
         },
       },
@@ -910,11 +910,11 @@ export const ShelterTable = () => {
         ),
         render: (row) => {
           return {
-            option: row.ta?.tags?.contractor1,
-            value: row.ta?.tags?.contractor1,
+            option: row.ta?.contractor1,
+            value: row.ta?.contractor1,
             label: map(row.ta, (ta) => (
               <ShelterSelectContractor
-                value={ta.tags?.contractor1}
+                value={ta.contractor1}
                 oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
@@ -955,11 +955,11 @@ export const ShelterTable = () => {
         ),
         render: (row) => {
           return {
-            option: row.ta?.tags?.contractor2,
-            value: row.ta?.tags?.contractor2,
+            option: row.ta?.contractor2,
+            value: row.ta?.contractor2,
             label: map(row.ta, (ta) => (
               <ShelterSelectContractor
-                value={ta.tags?.contractor2}
+                value={ta.contractor2}
                 oblast={ta?.ben_det_oblast}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
@@ -982,11 +982,11 @@ export const ShelterTable = () => {
         typeIcon: null,
         render: (row) => {
           return {
-            option: row.ta?.tags?.contractor3,
-            value: row.ta?.tags?.contractor3,
+            option: row.ta?.contractor3,
+            value: row.ta?.contractor3,
             label: map(row.ta, (ta) => (
               <ShelterSelectContractor
-                value={ta.tags?.contractor3}
+                value={ta.contractor3}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
@@ -1008,11 +1008,11 @@ export const ShelterTable = () => {
         typeIcon: null,
         render: (row) => {
           return {
-            option: row.ta?.tags?.contractor4,
-            value: row.ta?.tags?.contractor4,
+            option: row.ta?.contractor4,
+            value: row.ta?.contractor4,
             label: map(row.ta, (ta) => (
               <ShelterSelectContractor
-                value={ta.tags?.contractor4}
+                value={ta.contractor4}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
@@ -1053,12 +1053,12 @@ export const ShelterTable = () => {
         ),
         render: (row) => {
           return {
-            option: row.ta?.tags?.damageLevel,
-            value: row.ta?.tags?.damageLevel,
+            option: row.ta?.damageLevel,
+            value: row.ta?.damageLevel,
             label: map(row.ta, (ta) => {
               return (
                 <IpSelectSingle<ShelterTaPriceLevel>
-                  value={ta.tags?.damageLevel}
+                  value={ta.damageLevel}
                   onChange={(tagChange) => {
                     ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_ta',
@@ -1099,11 +1099,11 @@ export const ShelterTable = () => {
         ),
         render: (row) => {
           return {
-            value: row.ta?.tags?.price,
+            value: row.ta?.price,
             label: map(row.ta, (ta) => (
               <DebouncedInput<number | undefined>
                 debounce={1250}
-                value={row.ta?.tags?.price}
+                value={row.ta?.price}
                 onChange={(_) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
@@ -1172,15 +1172,13 @@ export const ShelterTable = () => {
         render: (row: ShelterEntity) => {
           return {
             value: row.ta?._priceLevel,
-            label: fnSwitch(
-              row.ta?._priceLevel!,
-              {
+            label: match(row.ta?._priceLevel!)
+              .cases({
                 [ShelterTaPriceLevel.Light]: <TableIcon color="success">looks_one</TableIcon>,
                 [ShelterTaPriceLevel.Medium]: <TableIcon color="warning">looks_two</TableIcon>,
                 [ShelterTaPriceLevel.Heavy]: <TableIcon color="error">looks_3</TableIcon>,
-              },
-              () => <></>,
-            ),
+              })
+              .default(() => null),
           }
         },
       },
@@ -1211,10 +1209,10 @@ export const ShelterTable = () => {
         options: () => Obj.keys(ShelterProgress).map((_) => ({value: _, label: m._shelter.progress[_]})),
         render: (row: ShelterEntity) => {
           return {
-            value: row.ta?.tags?.progress,
+            value: row.ta?.progress,
             label: map(row.ta, (ta) => (
               <ShelterSelectStatus
-                value={ta.tags?.progress}
+                value={ta?.progress}
                 onChange={(tagChange) => {
                   ctxKoboUpdate.asyncUpdateByName.tag.call({
                     formName: 'shelter_ta',
@@ -1229,7 +1227,7 @@ export const ShelterTable = () => {
                       tag: 'workDoneAt',
                       value: new Date(),
                     })
-                  else if (ta.tags?.workDoneAt)
+                  else if (ta?.workDoneAt)
                     ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_ta',
                       answerIds: [ta.id],
@@ -1266,12 +1264,12 @@ export const ShelterTable = () => {
         ),
         render: (row: ShelterEntity) => {
           return {
-            value: row.ta?.tags?.workDoneAt,
+            value: row.ta?.workDoneAt,
             label:
-              row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted &&
+              row.ta?.progress === ShelterProgress.RepairWorksCompleted &&
               map(row.ta, (ta) => (
                 <IpDatepicker
-                  value={row.ta?.tags?.workDoneAt}
+                  value={row.ta?.workDoneAt}
                   onChange={(_) =>
                     ctxKoboUpdate.asyncUpdateByName.tag.call({
                       formName: 'shelter_ta',
@@ -1315,11 +1313,11 @@ export const ShelterTable = () => {
             option: row.ta?.tags?.standards,
             value: row.ta?.tags?.standards,
             label:
-              row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted &&
+              row.ta?.progress === ShelterProgress.RepairWorksCompleted &&
               map(row.ta, (ta) => {
                 return (
                   <IpSelectSingle<Shelterstandards>
-                    value={ta.tags?.standards}
+                    value={ta.standards}
                     onChange={(tagChange) => {
                       ctxKoboUpdate.asyncUpdateByName.tag.call({
                         formName: 'shelter_ta',
