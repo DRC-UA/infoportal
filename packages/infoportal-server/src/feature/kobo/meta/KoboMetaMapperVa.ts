@@ -43,51 +43,50 @@ export class KoboMetaMapperVa {
           .default(undefined),
       })
     }
+// Each TIA assessment can belong to a different project,
+// so we split them into separate meta records to avoid mixing multiple projects in a single record.
+// This ensures clean data structure and accurate reporting per project.
 
-    const projects =
-      answer.tia_assesment
-        ?.map(({project}) => {
-          if (!project || project === 'not_approved') return
+    const assessments = answer.tia_assesment || []
 
-          return DrcProject[Va_bio_tia.options.project[project]]
-        })
-        .filter((project) => !!project) || []
+    return assessments.flatMap((tia) => {
+      const projectKey = tia.project
+      const project =
+        projectKey && projectKey !== 'not_approved' ? DrcProject[Va_bio_tia.options.project[projectKey]] : undefined
 
-    return KoboMetaMapper.make({
-      office: match(answer.office_bio)
-        .cases({
-          cej: DrcOffice.Chernihiv,
-          dnk: DrcOffice.Dnipro,
-          hrk: DrcOffice.Kharkiv,
-          nlv: DrcOffice.Mykolaiv,
-          umy: DrcOffice.Sumy,
-          iev: DrcOffice.Kyiv,
-          slo: DrcOffice.Sloviansk,
-        })
-        .default(undefined),
-      oblast: KoboXmlMapper.Location.mapOblast(answer.place_oblast)?.name!,
-      raion: KoboXmlMapper.Location.searchRaion(answer.place_raion),
-      hromada: KoboXmlMapper.Location.searchHromada(answer.place_hromada),
-      settlement: answer.place_settlement,
-      sector: DrcSector.VA,
-      activity: DrcProgram.TIA,
-      persons,
-      personsCount: persons.length,
-      project: projects,
-      donor:
-        seq(projects)
-          .map((project) => {
-            return DrcProjectHelper.donorByProject[project]
+      if (!project) return []
+
+      return KoboMetaMapper.make({
+        office: match(answer.office_bio)
+          .cases({
+            cej: DrcOffice.Chernihiv,
+            dnk: DrcOffice.Dnipro,
+            hrk: DrcOffice.Kharkiv,
+            nlv: DrcOffice.Mykolaiv,
+            umy: DrcOffice.Sumy,
+            iev: DrcOffice.Kyiv,
+            slo: DrcOffice.Sloviansk,
           })
-          .compact() || [],
-      status: match(answer.case_status)
-        .cases({
-          paid: KoboMetaStatus.Committed,
-          rejected: KoboMetaStatus.Rejected,
-          ongoing: KoboMetaStatus.Pending,
-        })
-        .default(undefined),
-      lastStatusUpdate: answer.date_paid,
+          .default(undefined),
+        oblast: KoboXmlMapper.Location.mapOblast(answer.place_oblast)?.name!,
+        raion: KoboXmlMapper.Location.searchRaion(answer.place_raion),
+        hromada: KoboXmlMapper.Location.searchHromada(answer.place_hromada),
+        settlement: answer.place_settlement,
+        sector: DrcSector.VA,
+        activity: DrcProgram.TIA,
+        persons,
+        personsCount: persons.length,
+        project: [project],
+        donor: [DrcProjectHelper.donorByProject[project]],
+        status: match(answer.case_status)
+          .cases({
+            paid: KoboMetaStatus.Committed,
+            rejected: KoboMetaStatus.Rejected,
+            ongoing: KoboMetaStatus.Pending,
+          })
+          .default(undefined),
+        lastStatusUpdate: answer.date_paid,
+      })
     })
   }
 }

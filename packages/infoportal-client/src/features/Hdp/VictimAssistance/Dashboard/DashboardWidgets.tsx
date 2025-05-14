@@ -113,13 +113,14 @@ export const DashboardWidgets: FC = () => {
                     Array.from(
                       new Set(
                         seq(_.tia_assesment)
-                          .map((_) => _.cash_disability_status)
+                          .map((_) => _.res_stat)
                           .compact()
                           .get(),
                       ),
                     ).join(', ')
                   }
-                  label={Va_bio_tia.options.cash_disability_status}
+                  label={Va_bio_tia.options.res_stat}
+                  includeNullish
                 />
               )}
             </PanelBody>
