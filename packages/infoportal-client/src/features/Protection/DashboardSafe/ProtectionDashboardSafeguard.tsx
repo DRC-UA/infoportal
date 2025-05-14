@@ -202,6 +202,12 @@ export const ProtectionDashboardSafeguard = () => {
                   head: m.drcJob,
                   renderQuick: (_) => _.job,
                 },
+                {
+                  type: 'select_one',
+                  id: 'nameOrg',
+                  head: m.organisation,
+                  renderQuick: (_) => _.nameOrg,
+                },
               ]}
             />
           </Panel>
