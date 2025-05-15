@@ -247,7 +247,10 @@ export const MealVisitDashboard = () => {
                         </>
                       ),
                       date: row.mdd ?? row.end,
-                      desc: row.fcpc,
+                      desc:
+                        row.has_comments === 'no'
+                          ? [row.main_objective, row.target_groups, row.activity_overview].filter(Boolean).join('\n\n')
+                          : row.fcpc,
                       children: (
                         <Box>
                           <Box sx={{display: 'flex', flexWrap: 'wrap', '& > *': {mb: 1, mr: 1}}}>
@@ -270,16 +273,18 @@ export const MealVisitDashboard = () => {
                                 <Icon>open_in_new</Icon>
                               </Box>
                             )}
-                            {mapFor(10, (i) => (
-                              <KoboAttachedImg
-                                answerId={row.id}
-                                formId={KoboIndex.byName('meal_visitMonitoring').id}
-                                key={i}
-                                attachments={row.attachments}
-                                size={90}
-                                fileName={(row as any)['fcp' + (i + 1)]}
-                              />
-                            ))}
+                            {['fcp', 'photo'].flatMap((prefix) =>
+                              mapFor(prefix === 'fcp' ? 10 : 12, (i) => (
+                                <KoboAttachedImg
+                                  answerId={row.id}
+                                  formId={KoboIndex.byName('meal_visitMonitoring').id}
+                                  key={`${prefix}${i + 1}`}
+                                  attachments={row.attachments}
+                                  size={90}
+                                  fileName={(row as any)[`${prefix}${i + 1}`]}
+                                />
+                              )),
+                            )}
                           </Box>
                           <Box sx={{textAlign: 'right'}}>
                             <NavLink to={mealIndex.siteMap.visit.details(row.id)}>
