@@ -228,7 +228,6 @@ export const _DashboardMealVisitPdf = () => {
                 General Observation
               </Title>
               <Box sx={{textAlign: 'justify', whiteSpace: 'pre-line'}}>
-                {' '}
                 {entry.has_comments === 'no'
                   ? [entry.main_objective, entry.target_groups, entry.activity_overview].filter(Boolean).join('\n\n')
                   : entry.fcpc}
