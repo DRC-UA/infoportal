@@ -227,7 +227,11 @@ export const _DashboardMealVisitPdf = () => {
               <Title sx={{mb: 0.5}} size="big">
                 General Observation
               </Title>
-              <Box sx={{textAlign: 'justify', whiteSpace: 'pre-line'}}>{entry.fcpc}</Box>
+              <Box sx={{textAlign: 'justify', whiteSpace: 'pre-line'}}>
+                {entry.has_comments === 'no'
+                  ? [entry.main_objective, entry.target_groups, entry.activity_overview].filter(Boolean).join('\n\n')
+                  : entry.fcpc}
+              </Box>
 
               {/*<Box sx={{display: 'grid', mt: 1, mx: -.5, gridTemplateColumns: '1fr 1fr 1fr'}}>*/}
               {/*  {seq(mapFor(10, i => (entry as any)['fcp' + (i + 1)]))*/}
@@ -252,7 +256,10 @@ export const _DashboardMealVisitPdf = () => {
               {/*    )}*/}
               {/*</Box>*/}
               <Box sx={{display: 'grid', mt: 1, mx: -0.5, gridTemplateColumns: '1fr 1fr 1fr'}}>
-                {seq(mapFor(10, (i) => (entry as any)['fcp' + (i + 1)]))
+                {seq([
+                  ...mapFor(10, (i) => (entry as any)['fcp' + (i + 1)]),
+                  ...mapFor(12, (i) => (entry as any)['photo' + (i + 1)]),
+                ])
                   .map((fileName) =>
                     getKoboAttachmentUrl({
                       formId: KoboIndex.byName('meal_visitMonitoring').id,
