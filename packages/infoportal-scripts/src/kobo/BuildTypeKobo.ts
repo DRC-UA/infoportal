@@ -125,6 +125,14 @@ export class BuildKoboType {
         formId: KoboIndex.byName('ecrec_cashRegistrationBha').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
       },
+      ecrec_small_scale: {
+        formId: KoboIndex.byName('ecrec_small_scale').id,
+        skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
+      },
+      ecrec_subsistance: {
+        formId: KoboIndex.byName('ecrec_subsistance').id,
+        skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
+      },
       ecrec_vetApplication: {
         langIndex: 1,
         formId: KoboIndex.byName('ecrec_vetApplication').id,
