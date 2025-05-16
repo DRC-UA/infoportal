@@ -49,6 +49,8 @@ import {
   Meal_winterizationPdm,
   Safeguarding_psea,
   Conflict_trainings,
+  Ecrec_small_scale,
+  Ecrec_subsistance,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -417,6 +419,20 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('conflict_trainings').id,
           fnMapKobo: Conflict_trainings.map,
+          ...filters,
+        }),
+      ),
+      ...make('ecrec_small_scale', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('ecrec_small_scale').id,
+          fnMapKobo: Ecrec_small_scale.map,
+          ...filters,
+        }),
+      ),
+      ...make('ecrec_subsistance', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('ecrec_subsistance').id,
+          fnMapKobo: Ecrec_subsistance.map,
           ...filters,
         }),
       ),

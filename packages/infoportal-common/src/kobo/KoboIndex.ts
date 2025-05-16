@@ -64,6 +64,8 @@ const koboIndex = {
   va_bio_tia: 'aKZW9UTf9nqfiLhxtjcT3d',
   safeguarding_psea: 'afq5ayhc2kssnomB8LR4oX',
   conflict_trainings: 'arEDCmKLXgKRcxoddunFgq',
+  ecrec_small_scale: 'aGLgXRGGXGrwtJc8y9mEUQ',
+  ecrec_subsistance: 'acWaJmM4PAj2zbiw75rcRk'
 }
 
 import {Obj, seq} from '@axanc/ts-utils'
@@ -136,6 +138,8 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   va_bio_tia: '[VA] BIO & TIA Assessment form',
   safeguarding_psea: '[Safeguarding] Tracker of trainings on Safeguarding and PSEA of partners in DRC',
   conflict_trainings: '[Peacebuilding] Conflict Sensitivity Trainings',
+  ecrec_small_scale: '[Ecrec] Small Scale Farmer Registration Form',
+  ecrec_subsistance: '[Ecrec] Subsistance farmer registration'
 }
 
 export type KoboFormName = keyof typeof koboIndex

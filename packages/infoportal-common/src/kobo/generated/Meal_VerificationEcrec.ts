@@ -55,9 +55,9 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
 	  // ben_det/ben_det_hh_size [integer] 2.7 Кількість членів домогосподарства (включно з головою домогосподарства)
   'ben_det_hh_size': number | undefined,
 	  // cash_farmers/know_contamination_farming [select_one] Чи знаєте ви про будь-яке можливе забруднення (наприклад, боєприпасами, що не розірвалися) на землі, яку ви обробляєте?
-  'know_contamination_farming': undefined | Option<'know_contamination_neighbour'>,
+  'know_contamination_farming': undefined | Option<'land_rent_other_small'>,
 	  // cash_farmers/know_contamination_neighbour [select_one] Чи знаєте ви про будь-яке можливе забруднення (наприклад, нерозірваними боєприпасами) на землі сусіда або дрібного фермера, що знаходиться поблизу?
-  'know_contamination_neighbour': undefined | Option<'know_contamination_neighbour'>,
+  'know_contamination_neighbour': undefined | Option<'land_rent_other_small'>,
 	  // cash_farmers/know_contamination_neighbour_yes [select_one] Чи знаєте ви, що ця/ці особи все ще продовжують обробляти свою землю?
   'know_contamination_neighbour_yes': undefined | Option<'know_contamination_neighbour_yes'>,
 	  // cash_farmers/has_agriculture_exp [select_one] Сільське господарство чи фермерство є основним джерелом засобів до існування для вашої родини?
@@ -92,6 +92,128 @@ export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   'barriers_providing_sufficient': undefined | Option<'project_spend_grant'>,
 	  // cash_farmers/barriers_providing_sufficient_yes [text] Якщо "Так", будь ласка, вкажіть
   'barriers_providing_sufficient_yes': string | undefined,
+	  // subsistance_farmer/have_concerns_contamination [select_one] Чи є у вас якісь занепокоєння щодо забруднення землі вибухонебезпечними предметами або залишками війни?
+  'have_concerns_contamination': undefined | Option<'project_spend_grant'>,
+	  // subsistance_farmer/known_contamination_your [select_one] Чи знаєте ви про забруднення вибухонебезпечними предметами або залишками війни (наприклад, боєприпаси, що не розірвалися) на вашій землі?
+  'known_contamination_your': undefined | Option<'known_contamination_your'>,
+	  // subsistance_farmer/contamination_impact_your [select_one] Чи вплинуло це на вашу здатність обробляти цю землю?
+  'contamination_impact_your': undefined | Option<'contamination_impact_your'>,
+	  // subsistance_farmer/what_primary_livelihood [select_one] Що є основним джерелом засобів до існування в домогосподарстві:
+  'what_primary_livelihood': undefined | Option<'what_primary_livelihood'>,
+	  // subsistance_farmer/what_primary_livelihood_other [text] Якщо "Інше", вкажіть яке саме
+  'what_primary_livelihood_other': string | undefined,
+	  // subsistance_farmer/consume_majority_sub [select_one] Чи споживає Ваше домогосподарство значну частину того, що ви вирощуєте:
+  'consume_majority_sub': undefined | Option<'project_spend_grant'>,
+	  // subsistance_farmer/land_own_sub [decimal] Скільки землі у власності Вашого домогосподарства:
+  'land_own_sub': number | undefined,
+	  // subsistance_farmer/land_cultivate_sub [decimal] Скільки землі ви обробляєте для сільськогосподарських потреб?
+  'land_cultivate_sub': number | undefined,
+	  // subsistance_farmer/land_rent_other [select_one] Чи є у вас земля, яку ви не обробляєте, а здаєте в оренду іншим фермерам?
+  'land_rent_other': undefined | Option<'project_spend_grant'>,
+	  // subsistance_farmer/rent_receive_year [integer] Яку орендну плату ви отримуєте на рік у гривнях?
+  'rent_receive_year': number | undefined,
+	  // subsistance_farmer/not_livestock [note] Скільки з перерахованих нижче видів худоби у вас є у власності?
+  'not_livestock': string,
+	  // subsistance_farmer/poultry [integer] Птиця:
+  'poultry': number | undefined,
+	  // subsistance_farmer/cattle [integer] Велика рогата худоба:
+  'cattle': number | undefined,
+	  // subsistance_farmer/sheep [integer] Вівці:
+  'sheep': number | undefined,
+	  // subsistance_farmer/goats [integer] Кози:
+  'goats': number | undefined,
+	  // subsistance_farmer/pigs [integer] Свині:
+  'pigs': number | undefined,
+	  // subsistance_farmer/ostriches [integer] Страуси:
+  'ostriches': number | undefined,
+	  // subsistance_farmer/rabbits_nutrias [integer] Кролики/нутрії:
+  'rabbits_nutrias': number | undefined,
+	  // subsistance_farmer/bee_families [integer] Бджолині сім'ї:
+  'bee_families': number | undefined,
+	  // subsistance_farmer/other_animals [integer] Інші
+  'other_animals': number | undefined,
+	  // subsistance_farmer/other_animals_details [text] Якщо "Інше", вкажіть яке(і) саме
+  'other_animals_details': string | undefined,
+	  // subsistance_farmer/household_access_water [select_one] Чи має домогосподарство доступ до води чи інших засобів поливу?
+  'household_access_water': undefined | Option<'project_spend_grant'>,
+	  // subsistance_farmer/access_basic_farming_tools [select_one] Чи має домогосподарство доступ до основних сільськогосподарських знарядь та обладнання?
+  'access_basic_farming_tools': undefined | Option<'project_spend_grant'>,
+	  // subsistance_farmer/eligible_assistance_agricultural [select_multiple] Якщо ви маєте право на отримання допомоги, які сільськогосподарські засоби виробництва ви маєте намір придбати:
+  'eligible_assistance_agricultural': undefined | Option<'eligible_assistance_agricultural'>[],
+	  // subsistance_farmer/eligible_assistance_agricultural_other [text] Якщо "Інше", вкажіть що саме
+  'eligible_assistance_agricultural_other': string | undefined,
+	  // subsistance_farmer/interested_training_agriculture [select_one] Чи були б ви зацікавлені в навчанні на теми, пов'язані з сільським господарством?
+  'interested_training_agriculture': undefined | Option<'project_spend_grant'>,
+	  // subsistance_farmer/interested_training_agriculture_yes [text] Вкажіть, будь ласка, яку тему(и)?
+  'interested_training_agriculture_yes': string | undefined,
+	  // small_scall_farmer/know_contamination_land [select_one] Чи є на вашій землі, яку ви зараз обробляєте, забруднення (наприклад, боєприпаси, що не розірвалися)?
+  'know_contamination_land': undefined | Option<'land_rent_other_small'>,
+	  // small_scall_farmer/know_contamination_land_neighbour [select_one] Чи знаєте ви про забруднення (наприклад, боєприпасами, що не вибухнули) на землі сусіда або малого фермера поблизу?
+  'know_contamination_land_neighbour': undefined | Option<'land_rent_other_small'>,
+	  // small_scall_farmer/individual_continues_land [select_one] Чи знаєте ви, чи продовжує ця особа (особи) обробляти свою землю?
+  'individual_continues_land': undefined | Option<'project_spend_grant'>,
+	  // small_scall_farmer/primary_source_livelihoods [select_one] Що є основним джерелом засобів до існування в домогосподарстві?
+  'primary_source_livelihoods': undefined | Option<'primary_source_livelihoods'>,
+	  // small_scall_farmer/primary_source_livelihoods_other [text] Якщо «Інше», будь ласка, вкажіть
+  'primary_source_livelihoods_other': string | undefined,
+	  // small_scall_farmer/registered_farming_enterprise [select_one] Чи маєте ви реєстрацію фермерського господарства?
+  'registered_farming_enterprise': undefined | Option<'project_spend_grant'>,
+	  // small_scall_farmer/land_own_small [decimal] Якою площею землі ви володієте? (гектари)
+  'land_own_small': number | undefined,
+	  // small_scall_farmer/land_cultivate_small [decimal] Яку площу землі ви обробляєте в сільськогосподарських цілях? (гектари)
+  'land_cultivate_small': number | undefined,
+	  // small_scall_farmer/land_rent_other_small [select_one] Чи є у вас земля, яку ви не обробляєте, а здаєте в оренду іншим фермерам?
+  'land_rent_other_small': undefined | Option<'land_rent_other_small'>,
+	  // small_scall_farmer/land_rent_other_yes [integer] Якщо так, то яку орендну плату ви отримуєте на рік у гривнях?
+  'land_rent_other_yes': number | undefined,
+	  // small_scall_farmer/not_many_livestock_small [note] ##### Скільки у вас є такої худоби:
+  'not_many_livestock_small': string,
+	  // small_scall_farmer/many_poultry_small [integer] Птахи:
+  'many_poultry_small': number | undefined,
+	  // small_scall_farmer/many_cattle_small [integer] Велика рогата худоба:
+  'many_cattle_small': number | undefined,
+	  // small_scall_farmer/many_sheep_small [integer] Вівці:
+  'many_sheep_small': number | undefined,
+	  // small_scall_farmer/many_goats_small [integer] Кози:
+  'many_goats_small': number | undefined,
+	  // small_scall_farmer/many_pigs_small [integer] Свині:
+  'many_pigs_small': number | undefined,
+	  // small_scall_farmer/many_ostriches_small [integer] Страуси:
+  'many_ostriches_small': number | undefined,
+	  // small_scall_farmer/many_rabbit_nutria_small [integer] Кролики / нутрії:
+  'many_rabbit_nutria_small': number | undefined,
+	  // small_scall_farmer/many_bee_families_small [integer] Бджолині сім'ї:
+  'many_bee_families_small': number | undefined,
+	  // small_scall_farmer/many_other_small [integer] Інші:
+  'many_other_small': number | undefined,
+	  // small_scall_farmer/detail_other_livestock_small [text] Якщо «Інше», будь ласка, вкажіть які саме
+  'detail_other_livestock_small': string | undefined,
+	  // small_scall_farmer/income_generate_agricultural [integer] Який дохід ви отримуєте від сільськогосподарської діяльності в місяць у гривнях?
+  'income_generate_agricultural': number | undefined,
+	  // small_scall_farmer/years_engaged_agricultural [integer] Скільки років ви займаєтеся сільськогосподарською діяльністю?
+  'years_engaged_agricultural': number | undefined,
+	  // small_scall_farmer/sell_agricultural_products [select_multiple] Який ринок збуту ви використовуєте для своєї сільськогосподарської продукції?
+  'sell_agricultural_products': undefined | Option<'sell_agricultural_products'>[],
+	  // small_scall_farmer/sell_agricultural_products_other [text] Якщо «Інше», будь ласка, вкажіть які саме
+  'sell_agricultural_products_other': string | undefined,
+	  // small_scall_farmer/selling_reliably_produce [select_one] Чи дозволяють ці методи реалізації забезпечити надійний збут вашої продукції?
+  'selling_reliably_produce': undefined | Option<'project_spend_grant'>,
+	  // small_scall_farmer/agricultural_inputs_purchase [select_multiple] Якщо ви відповідатимете критеріям отримання допомоги, які сільськогосподарські засоби виробництва ви маєте намір придбати?
+  'agricultural_inputs_purchase': undefined | Option<'agricultural_inputs_purchase'>[],
+	  // small_scall_farmer/agricultural_inputs_purchase_other [text] Якщо «Інше», будь ласка, вкажіть
+  'agricultural_inputs_purchase_other': string | undefined,
+	  // small_scall_farmer/confirm_capacity_productive [select_one] Будь ласка, підтвердіть, що ви маєте можливість та активи для ефективного використання грошової допомоги
+  'confirm_capacity_productive': undefined | Option<'project_spend_grant'>,
+	  // small_scall_farmer/interested_training_agriculture_small [select_one] Чи зацікавлені ви в навчанні, спрямованому на сільське господарство?
+  'interested_training_agriculture_small': undefined | Option<'project_spend_grant'>,
+	  // small_scall_farmer/interested_training_agriculture_small_yes [text] Які теми вас цікавлять, коли мова йде про таке навчання?
+  'interested_training_agriculture_small_yes': string | undefined,
+	  // small_scall_farmer/any_support_february2022 [select_one] Чи отримували ви будь-яку неурядову або державну фінансову допомогу з лютого 2022 року?
+  'any_support_february2022': undefined | Option<'project_spend_grant'>,
+	  // small_scall_farmer/any_support_february2022_details [text] Будь ласка, надайте більш детальну інформацію про це
+  'any_support_february2022_details': string | undefined,
+	  // small_scall_farmer/plan_government_support_future [select_one] Чи плануєте ви звертатися за державною фінансовою підтримкою в найближчому майбутньому?
+  'plan_government_support_future': undefined | Option<'project_spend_grant'>,
 	  // cash_businesses/organization_business [select_one] Організаційна форма ведення бізнесу
   'organization_business': undefined | Option<'organization_business_001'>,
 	  // cash_businesses/organization_business_other [text] Якщо "Інше", будь ласка, вкажіть
@@ -426,37 +548,7 @@ undefined: {
 	'ukrpost': `B = Укрпошта`,
 	'bank_card': `C = Банківська картка`,
 	'other_pay': `D = Інший спосіб оплати`,
-	'none_pay': `E = Жодний з перелічених способів мені не підходить`,
-	'agricul': `Сільське господарство та/або тваринництво`,
-	'grocery': `Продукти, магазин`,
-	'smalls': `Невеликий магазин/кіоск`,
-	'carpentry': `Столярні, різьбярські або деревообробні роботи`,
-	'mechanic': `Механіка`,
-	'plumber': `Сантехнік`,
-	'electrical': `Електромонтажні роботи`,
-	'construct': `Будівельні роботи`,
-	'textiel': `Текстиль та пошиття одягу`,
-	'education': `Освітній центр`,
-	'heath': `Оздоровчий центр`,
-	'manufacturing': `Виробництво / робота на заводі`,
-	'computer': `Комп'ютер, технології`,
-	'administration': `Адміністрування,`,
-	'graphic': `Графічний дизайн`,
-	'transport': `Транспортне обслуговування`,
-	'hairdressing': `Перукарня/барбер`,
-	'pscoffe': `Надання послуг (наприклад, кава/чай, невеликий ресторан, кулінарія тощо)`,
-	'pscleaning': `Надання послуг (прибирання, охорона)`,
-	'ngo': `НУО / агенції ООН`,
-	'government': `Уряд`,
-	'seeds': `Насіння`,
-	'fertilizers': `Добрива`,
-	'irrigationp': `Зрошувальні труби (краплинні лінії)`,
-	'fuel': `Паливо (для сільськогосподарської техніки)`,
-	'agriculser': `Сільськогосподарські послуги (тракторний сервіс, збір врожаю)`,
-	'livestock': `Тваринництво (кури, свині, корови тощо)`,
-	'agricultool': `Сільськогосподарські інструменти (лопата, граблі тощо)`,
-	'livestockf': `Корми для худоби`,
-	'buildingm': `Будівельні матеріали,`
+	'none_pay': `E = Жодний з перелічених способів мені не підходить`
 },
 back_donor: {
 	'uhf6': `UHF-6`,
@@ -469,6 +561,8 @@ back_donor: {
 which_support_registered: {
 	'scf_iap': `Sectoral Cash for Farmers [Improving Agricultural Production]`,
 	'scfb_lr': `Sectoral Cash for Businesses [Livelihood Restoration]`,
+	'subsistance_farmer': `Subsistance farmer`,
+	'small_scall_farmer': `Small Scale Farmer`,
 	'vet_training': `VET training for New Livelihood Development`,
 	'mbg': `Medium Business Grant`,
 	'msme': `MSME Sectoral Cash for Businesses [Livelihood Restoration]`
@@ -477,7 +571,7 @@ project_spend_grant: {
 	'yes': `Так`,
 	'no': `Ні`
 },
-know_contamination_neighbour: {
+land_rent_other_small: {
 	'yes': `Так`,
 	'no': `Ні`,
 	'unwilling': `Не бажають або не можуть відповісти`
@@ -655,6 +749,81 @@ escalation_conflict_affected_business: {
 	'changes_legal_environment': `Зміни юридичних і регуляторних умов: Підприємства можуть зіткнутися з новими правовими вимогами, змінами в законодавстві та санкціями, які ускладнюють ведення бізнесу і змушують швидко адаптуватися до нових умов`,
 	'other': `Інше`
 },
+known_contamination_your: {
+	'yes': `Так`,
+	'no': `Немає`,
+	'unable_unwilling_to_answer': `Не можу/не хочу відповідати`
+},
+contamination_impact_your: {
+	'still_farm_all_of_the_land': `Все ще обробляють всю землю`,
+	'partially_farm_the_land': `Частково оброблена земля`,
+	'stopped_farming_all_together': `Перестали всі разом займатися сільським господарством`,
+	'unable_unwilling_to_answer': `Не можу/не хочу відповідати`
+},
+what_primary_livelihood: {
+	'agricul': `Сільське господарство та/або тваринництво`,
+	'grocery': `Продукти, магазин`,
+	'smalls': `Невеликий магазин/кіоск`,
+	'carpentry': `Столярні, різьбярські або деревообробні роботи`,
+	'mechanic': `Механіка`,
+	'plumber': `Сантехнік`,
+	'electrical': `Електромонтажні роботи`,
+	'construct': `Будівельні роботи`,
+	'textiel': `Текстиль та пошиття одягу`,
+	'education': `Освітній центр`,
+	'heath': `Оздоровчий центр`,
+	'manufacturing': `Виробництво / робота на заводі`,
+	'computer': `Комп'ютер, технології`,
+	'administration': `Адміністрування,`,
+	'graphic': `Графічний дизайн`,
+	'transport': `Транспортне обслуговування`,
+	'hairdressing': `Перукарня/барбер`,
+	'pscoffe': `Надання послуг (наприклад, кава/чай, невеликий ресторан, кулінарія тощо)`,
+	'pscleaning': `Надання послуг (прибирання, охорона)`,
+	'ngo': `НУО / агенції ООН`,
+	'government': `Уряд`,
+	'formal_employment': `Офіційне працевлаштування`,
+	'allowances': `Допомога/пенсії тощо`,
+	'other': `Інше`
+},
+eligible_assistance_agricultural: {
+	'seeds': `Насіння`,
+	'fertilizers': `Добрива`,
+	'irrigationp': `Зрошувальні труби (краплинні лінії)`,
+	'fuel': `Паливо (для сільськогосподарської техніки)`,
+	'agriculser': `Сільськогосподарські послуги (тракторний сервіс, збір врожаю)`,
+	'livestock': `Тваринництво (кури, свині, корови тощо)`,
+	'agricultool': `Сільськогосподарські інструменти (лопата, граблі тощо)`,
+	'livestockf': `Корми для худоби`,
+	'buildingm': `Будівельні матеріали,`,
+	'other': `Інше`
+},
+primary_source_livelihoods: {
+	'agricultural_activities': `Сільськогосподарська діяльність (включаючи тваринництво)`,
+	'formal_employment': `Офіційне працевлаштування`,
+	'allowances': `Грошова допомога/пенсії тощо`,
+	'other': `Інше`
+},
+sell_agricultural_products: {
+	'neighbours': `Сусіди`,
+	'local_market': `Місцевий ринок`,
+	'wholesale_market': `Оптовий ринок`,
+	'cooperative': `Кооператив`,
+	'agroprocessing_company': `Агропереробне підприємство`,
+	'other': `Інший`
+},
+agricultural_inputs_purchase: {
+	'seeds': `Посівний матеріал`,
+	'fertilizers': `Добрива`,
+	'irrigation_materials': `Зрошувальні матеріали`,
+	'fuel': `Паливо (для техніки)`,
+	'agricultural_services': `Сільськогосподарські послуги`,
+	'livestock': `Утримання та/або придбання великої рогатої худоби`,
+	'poultry': `Утримання та/або придбання птахів`,
+	'tools': `Інструменти`,
+	'construction_materials': `Будівельні матеріали`,
+	'other': `Інше`
+},
 ben_det_oblast: {
 	'cherkaska': `Черкаська`,
 	'chernihivska': `Чернігівська`,
@@ -712,6 +881,31 @@ export const map = (_: Record<keyof T, any>): T => ({
 	many_pig: _.many_pig ? +_.many_pig : undefined,
 	many_poultry: _.many_poultry ? +_.many_poultry : undefined,
 	type_assistance: _.type_assistance?.split(' '),
+	rent_receive_year: _.rent_receive_year ? +_.rent_receive_year : undefined,
+	poultry: _.poultry ? +_.poultry : undefined,
+	cattle: _.cattle ? +_.cattle : undefined,
+	sheep: _.sheep ? +_.sheep : undefined,
+	goats: _.goats ? +_.goats : undefined,
+	pigs: _.pigs ? +_.pigs : undefined,
+	ostriches: _.ostriches ? +_.ostriches : undefined,
+	rabbits_nutrias: _.rabbits_nutrias ? +_.rabbits_nutrias : undefined,
+	bee_families: _.bee_families ? +_.bee_families : undefined,
+	other_animals: _.other_animals ? +_.other_animals : undefined,
+	eligible_assistance_agricultural: _.eligible_assistance_agricultural?.split(' '),
+	land_rent_other_yes: _.land_rent_other_yes ? +_.land_rent_other_yes : undefined,
+	many_poultry_small: _.many_poultry_small ? +_.many_poultry_small : undefined,
+	many_cattle_small: _.many_cattle_small ? +_.many_cattle_small : undefined,
+	many_sheep_small: _.many_sheep_small ? +_.many_sheep_small : undefined,
+	many_goats_small: _.many_goats_small ? +_.many_goats_small : undefined,
+	many_pigs_small: _.many_pigs_small ? +_.many_pigs_small : undefined,
+	many_ostriches_small: _.many_ostriches_small ? +_.many_ostriches_small : undefined,
+	many_rabbit_nutria_small: _.many_rabbit_nutria_small ? +_.many_rabbit_nutria_small : undefined,
+	many_bee_families_small: _.many_bee_families_small ? +_.many_bee_families_small : undefined,
+	many_other_small: _.many_other_small ? +_.many_other_small : undefined,
+	income_generate_agricultural: _.income_generate_agricultural ? +_.income_generate_agricultural : undefined,
+	years_engaged_agricultural: _.years_engaged_agricultural ? +_.years_engaged_agricultural : undefined,
+	sell_agricultural_products: _.sell_agricultural_products?.split(' '),
+	agricultural_inputs_purchase: _.agricultural_inputs_purchase?.split(' '),
 	main_business_activities: _.main_business_activities?.split(' '),
 	cost_training: _.cost_training ? +_.cost_training : undefined,
 	date_registration: _.date_registration ? new Date(_.date_registration) : undefined,
