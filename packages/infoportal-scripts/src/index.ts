@@ -1,6 +1,7 @@
 import {KoboClient} from 'kobo-sdk'
-import {appConf} from './appConf'
 import winston from 'winston'
+
+import {appConf} from './appConf'
 import {ActivityInfoBuildType} from './ActivityInfoBuildType'
 import {FixKoboMigration} from './kobo-migration/20250113-fixKoboMigration'
 import {BuildKoboType} from './kobo/BuildTypeKobo'
@@ -24,5 +25,4 @@ export const koboSdkDrc = new KoboClient({
   // await FixKoboMigration.Tags.run()
   // await new ActivityInfoBuildType().buildAll()
   // await new BuildKoboType().build('ecrec_msme_bha388')
-  // await new BuildKoboType().build('ecrec_vet_bha388')
 })()
