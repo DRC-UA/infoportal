@@ -1,18 +1,20 @@
-import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from 'react'
-import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
-import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
-import {Kobo} from 'kobo-sdk'
-import {KoboSchemaHelper} from 'infoportal-common'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {useFetcher} from '@/shared/hook/useFetcher'
-import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
-import * as csvToJson from 'csvtojson'
+import {createContext, useContext, useEffect, useState, type Dispatch, type ReactNode, type SetStateAction} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
-import {FetchParams} from '@/shared/hook/useFetchers'
-import {UseDatabaseView, useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
-import {AccessSum} from '@/core/sdk/server/access/Access'
-import {useObjectState, UseObjectStateReturn} from '@/shared/hook/useObjectState'
+import * as csvToJson from 'csvtojson'
+import {Kobo} from 'kobo-sdk'
+
+import {KoboSchemaHelper} from 'infoportal-common'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
 import {DatabaseDisplay} from '@/features/Database/KoboTable/groupDisplay/DatabaseKoboDisplay'
+import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
+import {UseDatabaseView, useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
+import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
+import {useFetcher} from '@/shared/hook/useFetcher'
+import {FetchParams} from '@/shared/hook/useFetchers'
+import {useObjectState, UseObjectStateReturn} from '@/shared/hook/useObjectState'
+import {AccessSum} from '@/core/sdk/server/access/Access'
 
 export type ExternalFilesChoices = {list_name: string; name: string; label: string}
 export type KoboExternalFilesIndex = Record<string, Record<string, ExternalFilesChoices>>
@@ -33,7 +35,7 @@ export interface DatabaseKoboContext {
   groupDisplay: UseObjectStateReturn<DatabaseDisplay>
 }
 
-const Context = React.createContext({} as DatabaseKoboContext)
+const Context = createContext({} as DatabaseKoboContext)
 
 export const useDatabaseKoboTableContext = () => useContext<DatabaseKoboContext>(Context)
 
@@ -51,8 +53,8 @@ export const DatabaseKoboTableProvider = (props: {
   const {api} = useAppSettings()
   const [indexExternalFiles, setIndexExternalFiles] = useState<KoboExternalFilesIndex>()
 
-  const fetcherExternalFiles = useFetcher<() => Promise<{file: string; csv: string}[]>>(() => {
-    return Promise.all(
+  const fetcherExternalFiles = useFetcher<() => Promise<{file: string; csv: string}[]>>(async () => {
+    return await Promise.all(
       props.schema.schema.files.map((file) =>
         api.koboApi
           .proxy({method: 'GET', url: file.content, formId: form.id})
@@ -87,13 +89,7 @@ export const DatabaseKoboTableProvider = (props: {
           return databaseCustomMapping[form.id](_)
         })
       : data
-    // const mapped = data.map(_ => {
-    //   const m = Kobo.mapAnswerBySchema(props.schema.schemaHelper.questionIndex, _)
-    //   if (databaseCustomMapping[form.id]) {
-    //     return databaseCustomMapping[form.id](m)
-    //   }
-    //   return m
-    // })
+
     return props.dataFilter ? mapped.filter(props.dataFilter) : mapped
   }
 
