@@ -20,6 +20,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   mergeOptions,
   min,
   includeNullish = false,
+  forceShowEmptyLabels = false,
 }: {
   debug?: boolean
   onClickData?: (_: K) => void
@@ -34,6 +35,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   checked?: Record<K, boolean>
   onToggle?: (_: K) => void
   includeNullish?: boolean
+  forceShowEmptyLabels?: boolean
 }) => {
   const res = useMemo(() => {
     const source = seq(data)
@@ -53,9 +55,17 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
       .get() as Record<K, ChartDataVal>
   }, [data, by, label])
 
+  const finalData = useMemo(() => {
+    if (!forceShowEmptyLabels || !label) return res
+    return seq(Obj.keys(label)).reduceObject((key) => [
+      key as unknown as K,
+      res[key as unknown as K] ?? {value: 0, label: label[key as unknown as K], percent: 0},
+    ])
+  }, [res, forceShowEmptyLabels, label])
+
   return (
     <ChartBar
-      data={res}
+      data={finalData}
       onClickData={(_) => onClickData?.(_ as K)}
       labels={
         !onToggle

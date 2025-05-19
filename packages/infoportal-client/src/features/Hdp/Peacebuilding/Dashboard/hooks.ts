@@ -10,6 +10,7 @@ import {useI18n} from '@/core/i18n'
 import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {startOfDay} from 'date-fns'
 
 export type UsePeacebuildingData = ReturnType<typeof usePeacebuildingData>
 
@@ -46,6 +47,12 @@ export const usePeacebuildingData = () => {
           getOptions: () => DataFilter.buildOptionsFromObject(Conflict_trainings.options.training_format),
           label: m.format,
         },
+        project: {
+          icon: appConfig.icons.project,
+          getValue: (_) => _.project_code,
+          getOptions: () => DataFilter.buildOptionsFromObject(Conflict_trainings.options.project_code),
+          label: m.project,
+        },
       }),
     [m],
   )
@@ -54,19 +61,43 @@ export const usePeacebuildingData = () => {
 
   const data = seq(fetcherAnswer.get?.data) ?? []
 
+  const normalizeDate = (d?: Date) => (d ? startOfDay(d) : undefined)
+
   const dataFiltered = useMemo(() => {
-    return DataFilter.filterData(data, filterShape, optionFilter).filter((_) => PeriodHelper.isDateIn(period, _.date))
-  }, [data, filterShape, optionFilter])
+    const normalizedStart = normalizeDate(period.start)
+    const normalizedEnd = normalizeDate(period.end)
+
+    const filtered = DataFilter.filterData(data, filterShape, optionFilter).filter((_) => {
+      const entryDate = normalizeDate(_.start)
+      const isInRange = PeriodHelper.isDateIn({start: normalizedStart, end: normalizedEnd}, entryDate)
+      return isInRange
+    })
+
+    return filtered
+  }, [data, filterShape, optionFilter, period])
 
   useEffect(() => {
     map(fetcherPeriod.get, setPeriod)
   }, [fetcherPeriod.get])
+
+  const fetcherUsers = useFetcher(api.user.search)
+
+  useEffect(() => {
+    fetcherUsers.fetch({clean: false})
+  }, [])
+
+  const drcUsers = useMemo(() => {
+    return seq(fetcherUsers.get)
+      .filter((user) => user.drcJob || user.drcOffice) // adjust this filter if needed
+      .get()
+  }, [fetcherUsers.get])
 
   return {
     data,
     dataFiltered,
     filterShape,
     fetcherAnswer,
+    drcUsers,
     fetcherPeriod,
     optionFilter,
     setOptionFilters,

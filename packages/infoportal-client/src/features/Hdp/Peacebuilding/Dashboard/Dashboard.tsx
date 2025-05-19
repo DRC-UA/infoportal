@@ -7,6 +7,7 @@ import {Page} from '@/shared/Page'
 
 import {usePeacebuildingContext, VictimAssistanceProvider} from './Context'
 import {DashboardWidgets} from './DashboardWidgets'
+import {Typography} from '@mui/material'
 
 export const Dashboard: FC = () => {
   return (
@@ -22,6 +23,9 @@ const DashboardWithContext: FC = () => {
 
   return (
     <Page width="lg" loading={ctx.fetcherAnswer.loading}>
+      <Typography variant="h4" sx={{fontWeight: 'bold', mb: 2, mt: 2}}>
+        {m.peacebuildingTitle}
+      </Typography>
       <DataFilterLayout
         shapes={ctx.filterShape}
         filters={ctx.optionFilter}
