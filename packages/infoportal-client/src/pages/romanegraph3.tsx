@@ -3,8 +3,8 @@ import React, {ReactNode, useCallback, useEffect, useState} from 'react'
 import {Txt} from '@/shared/Txt'
 import {PanelFeatures} from '@/shared/Panel/PanelFeatures'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {endOfMonth, startOfMonth} from 'date-fns'
-import {DeepPartial, Obj, seq} from '@axanc/ts-utils'
+import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
+import {Obj, seq} from '@axanc/ts-utils'
 import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
 import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {SnapshotHeader} from '@/features/Snapshot/SnapshotHeader'
@@ -172,8 +172,8 @@ export default () => {
   const {api} = useAppSettings()
   const {m, currentLang: lang, setLang} = useI18n()
   const [period, setPeriod] = useState<Partial<Period>>({
-    start: startOfMonth(new Date(2023, 6)),
-    end: endOfMonth(new Date(2023, 8)),
+    start: startOfMonth(subMonths(new Date(), 2)),
+    end: endOfMonth(new Date()),
   })
   // const [lang, setLang] = usePersistentState('en', {storageKey: 'romanegraph3'})
   const req = (period: Partial<Period>) =>
@@ -208,6 +208,7 @@ export default () => {
   return (
     <Page loading={fetcher.loading} sx={{background: t.palette.background.paper}}>
       <PeriodPicker
+        value={[period.start, period.end]}
         defaultValue={[period.start, period.end]}
         onChange={([start, end]) => {
           setPeriod((prev) => ({...prev, start, end}))
