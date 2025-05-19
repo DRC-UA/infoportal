@@ -15,12 +15,14 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
   height,
   start,
   end,
+  formatLabel = (date: Date) => format(date, 'yyyy-MM-dd'),
   // translations,
   ...props
 }: {
   height?: number
   curves: Record<string, (_: T) => Date | undefined>
   label?: string | string[]
+  formatLabel?: (date: Date) => string
   data: T[]
   start?: Date
   end?: Date
@@ -36,7 +38,7 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
           const date = map(fn(d), (d) => (typeof d === 'string' ? new Date(d) : d)) as Date | undefined
           try {
             if (!date || !isDate(date)) throw Error('Invalid date')
-            const yyyyMM = format(date, 'yyyy-MM')
+            const yyyyMM = formatLabel(date)
             if ((end && date.getTime() > end.getTime()) || (start && date.getTime() < start.getTime())) {
               return
             }
