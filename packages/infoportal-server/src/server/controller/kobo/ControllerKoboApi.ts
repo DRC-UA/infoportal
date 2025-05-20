@@ -5,6 +5,7 @@ import {KoboSdkGenerator} from '../../../feature/kobo/KoboSdkGenerator.js'
 import {KoboSyncServer} from '../../../feature/kobo/sync/KoboSyncServer.js'
 import axios, {AxiosError} from 'axios'
 import {KoboService} from '../../../feature/kobo/KoboService.js'
+import mime from 'mime-types'
 
 export class ControllerKoboApi {
   constructor(
@@ -104,11 +105,11 @@ export class ControllerKoboApi {
       const fileName = req.query.fileName
       const sdk = await this.koboSdkGenerator.getBy.formId(params.formId)
       const img = await sdk.v2.submission.getAttachement(params)
-      if (!fileName) {
-        res.set('Content-Type', 'image/jpeg')
-        res.set('Content-Length', img.length)
-      } else {
-        res.set(`Content-Disposition`, `inline; filename="${fileName}"`)
+      const mimeType = (typeof fileName === 'string' && mime.lookup(fileName)) || 'application/octet-stream'
+      res.set('Content-Type', mimeType)
+      res.set('Content-Length', img.length)
+      if (fileName) {
+        res.set('Content-Disposition', `inline; filename="${fileName}"`)
       }
       res.send(img)
     } catch (e) {

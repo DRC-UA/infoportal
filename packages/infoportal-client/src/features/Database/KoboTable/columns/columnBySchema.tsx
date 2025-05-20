@@ -13,7 +13,7 @@ import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/Dat
 import {alpha, IconProps, Theme} from '@mui/material'
 import {IpBtn, TableEditCellBtn, Txt} from '@/shared'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {getKoboAttachmentUrl, KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
+import {getKoboAttachmentUrl, KoboAttachedFile, KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {formatDate, formatDateTime, Messages} from '@/core/i18n/localization/en'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -227,11 +227,7 @@ export const columnBySchemaGenerator = ({
           export: url,
           value: fileName ?? DatatableUtils.blank,
           label: (
-            <Txt link>
-              <a href={url} target="_blank">
-                {fileName}
-              </a>
-            </Txt>
+            <KoboAttachedFile answerId={row.id} formId={formId} attachments={row.attachments} fileName={fileName} />
           ),
           // label: <Txt link><a href={koboImgHelper({fileName, attachments: row.attachments}).fullUrl} target="_blank">{fileName}</a></Txt>
         }
