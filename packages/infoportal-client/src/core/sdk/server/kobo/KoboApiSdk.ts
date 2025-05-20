@@ -70,12 +70,10 @@ export class KoboApiSdk {
     attachmentId: number
     fileName?: string
   }) => {
-    return (
-      baseUrl +
-      `/kobo-api/${formId}/submission/${answerId}/attachment/${attachmentId}` +
-      (fileName ? '?' + objectToQueryString({fileName}) : '')
-    )
+    const query = fileName ? `?fileName=${encodeURIComponent(fileName)}` : ''
+    return `${baseUrl}/kobo-api/${formId}/submission/${answerId}/attachment/${attachmentId}${query}`
   }
+
 
   readonly proxy = <T = any>({
     url,

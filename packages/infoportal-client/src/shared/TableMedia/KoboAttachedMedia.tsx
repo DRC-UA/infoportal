@@ -33,14 +33,15 @@ export const getKoboAttachmentUrl = ({
   attachments: Kobo.Submission.Attachment[]
   conf?: AppConfig
 }) => {
-  const attachment = getAttachment({fileName, attachments})
+  const parsedFileName = parseKoboFileName(fileName)
+  const attachment = parsedFileName ? attachments.find((a) => a.filename.includes(parsedFileName)) : undefined
   return attachment
     ? KoboApiSdk.getAttachementUrl({
         formId,
         answerId,
         attachmentId: attachment.id,
         baseUrl: conf.apiURL,
-        fileName,
+        fileName: attachment.filename,
       })
     : undefined
 }

@@ -102,16 +102,21 @@ export class ControllerKoboApi {
           submissionId: yup.string().required(),
         })
         .validate(req.params)
-      const fileName = req.query.fileName
+
       const sdk = await this.koboSdkGenerator.getBy.formId(params.formId)
-      const img = await sdk.v2.submission.getAttachement(params)
-      const mimeType = (typeof fileName === 'string' && mime.lookup(fileName)) || 'application/octet-stream'
+      const buffer = await sdk.v2.submission.getAttachement(params)
+
+      const fileName = req.query.fileName as string | undefined
+      const safeFileName = fileName?.replace(/[^a-zA-Z0-9_.-]/g, '_') || 'attachment'
+
+      const ext = fileName?.split('.').pop() || 'bin'
+      const mimeType = mime.lookup(ext) || 'application/octet-stream'
+
       res.set('Content-Type', mimeType)
-      res.set('Content-Length', img.length)
-      if (fileName) {
-        res.set('Content-Disposition', `inline; filename="${fileName}"`)
-      }
-      res.send(img)
+      res.set('Content-Length', buffer.length)
+      res.set('Content-Disposition', `inline; filename="${safeFileName}"`)
+
+      res.send(buffer)
     } catch (e) {
       console.log((e as AxiosError).code)
       res.send(undefined)
