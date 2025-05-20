@@ -10,7 +10,7 @@ import {capitalize, KoboSubmissionFlat, KoboIndex, Meal_visitMonitoring} from 'i
 import {useSession} from '@/core/Session/SessionContext'
 import {DrawingCanvas} from '@/shared/DrawingCanvas'
 import {mapFor, seq} from '@axanc/ts-utils'
-import {getKoboAttachmentUrl} from '@/shared/TableImg/KoboAttachedImg'
+import {getKoboAttachmentUrl} from '@/shared/TableMedia/KoboAttachedMedia'
 import {CompressedImg} from '@/shared/CompressedImg'
 import {useMealVisitContext} from '@/features/Meal/Visit/MealVisitContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'

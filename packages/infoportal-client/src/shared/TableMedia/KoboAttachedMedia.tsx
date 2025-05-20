@@ -1,8 +1,10 @@
-import {AppConfig, appConfig} from '@/conf/AppConfig'
-import {TableImg} from '@/shared/TableImg/TableImg'
 import {useMemo} from 'react'
-import {KoboApiSdk} from '@/core/sdk/server/kobo/KoboApiSdk'
 import {Kobo} from 'kobo-sdk'
+
+import {AppConfig, appConfig} from '@/conf/AppConfig'
+import {KoboApiSdk} from '@/core/sdk/server/kobo/KoboApiSdk'
+
+import {TableImg} from './TableImg'
 
 const parseKoboFileName = (fileName?: string) =>
   fileName ? fileName.replaceAll(' ', '_').replaceAll(/[^0-9a-zA-Z-_.\u0400-\u04FF]/g, '') : undefined
