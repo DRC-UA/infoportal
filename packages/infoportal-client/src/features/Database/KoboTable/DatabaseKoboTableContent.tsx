@@ -1,7 +1,11 @@
-import React, {useMemo, useState} from 'react'
-import {useI18n} from '@/core/i18n'
+import {useMemo, useState} from 'react'
 import {Kobo} from 'kobo-sdk'
-import {KoboFlattenRepeatedGroup} from 'infoportal-common'
+import {useNavigate} from 'react-router-dom'
+
+import {KoboFlattenRepeatedGroup, KoboIndex} from 'infoportal-common'
+import {Legal_individual_aid} from 'infoportal-common/kobo/generated/Legal_individual_aid'
+
+import {useI18n} from '@/core/i18n'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {Alert, AlertProps, Icon, useTheme} from '@mui/material'
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
@@ -23,7 +27,6 @@ import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
 import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
 import {databaseIndex} from '@/features/Database/databaseIndex'
-import {useNavigate} from 'react-router-dom'
 import {getColumnsForRepeatGroup} from '@/features/Database/RepeatGroup/DatabaseKoboRepeatGroup'
 import {DatatableXlsGenerator} from '@/shared/Datatable/util/generateXLSFile'
 import {databaseKoboDisplayBuilder} from '@/features/Database/KoboTable/groupDisplay/DatabaseKoboDisplay'
@@ -73,7 +76,7 @@ export const DatabaseKoboTableContent = ({
     }) as (KoboFlattenRepeatedGroup.Cursor & KoboMappedAnswer)[]
   }, [ctx.data, ctx.groupDisplay.get])
 
-  const extraColumns: DatatableColumn.Props<any>[] = useMemo(
+  const customColumns: DatatableColumn.Props<any>[] = useMemo(
     () =>
       getColumnsCustom({
         selectedIds,
@@ -110,8 +113,32 @@ export const DatabaseKoboTableContent = ({
       m,
       t,
     }).getAll()
+
+    const processedData = // sort subcases of Individual Legal Aid
+      KoboIndex.byName('legal_individual_aid').id === ctx.form.id
+        ? (ctx.data as unknown as Legal_individual_aid.T[])?.map((record) => {
+            const cases: Legal_individual_aid.T['number_case'] = record.number_case && [...record.number_case]
+            const assistanceIndex = cases?.findIndex(({beneficiary_application_type, status_case}) => {
+              return beneficiary_application_type === 'assistance' && status_case === 'closed_ready'
+            })
+
+            // let's return early, if no complete assistance found, or found in the first record
+            switch (assistanceIndex) {
+              case undefined:
+              case -1:
+              case 0:
+                return record
+              default:
+                const completeAssistance = cases!.splice(assistanceIndex, 1)[0] // safe to assert cases !== undefined, since assistanceIndex !== undefined
+                cases!.unshift(completeAssistance)
+                record.number_case = cases
+                return record
+            }
+          })
+        : ctx.data
+
     return databaseKoboDisplayBuilder({
-      data: ctx.data ?? [],
+      data: processedData ?? [],
       formId: ctx.form.id,
       schema: ctx.schema,
       onRepeatGroupClick: (_) =>
@@ -132,7 +159,8 @@ export const DatabaseKoboTableContent = ({
       ctxEdit: ctxKoboUpdate,
       openViewAnswer: ctxAnswers.openView,
     })
-    return [...base, ...extraColumns, ...schemaColumns].map((_) => ({
+
+    return [...base, ...customColumns, ...schemaColumns].map((_) => ({
       ..._,
       width: ctx.view.colsById[_.id]?.width ?? _.width ?? 90,
     }))
@@ -214,9 +242,7 @@ export const DatabaseKoboTableContent = ({
             />
             {ctx.schema.helper.group.size > 0 && <DatabaseGroupDisplayInput sx={{mr: 1}} />}
             {header?.(params)}
-            {ctx.form.deploymentStatus === 'archived' && (
-              <ArchiveAlert/>
-            )}
+            {ctx.form.deploymentStatus === 'archived' && <ArchiveAlert />}
 
             <div style={{marginLeft: 'auto'}}>
               {ctx.access.admin && (

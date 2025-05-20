@@ -1,26 +1,27 @@
-import React, {useCallback, useEffect, useMemo} from 'react'
-import {useDatabaseContext} from '@/features/Database/DatabaseContext'
-import {useParams} from 'react-router'
-import {useAppSettings} from '@/core/context/ConfigContext'
+import {useCallback, useEffect, useMemo} from 'react'
 import {map} from '@axanc/ts-utils'
+import {Skeleton} from '@mui/material'
+import {Kobo} from 'kobo-sdk'
+import {useParams} from 'react-router'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
+import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
+import {useSession} from '@/core/Session/SessionContext'
+import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
+import {Access, AccessLevel} from '@/core/sdk/server/access/Access'
+import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
+import {AppFeatureId} from '@/features/appFeatureId'
+import {databaseUrlParamsValidation} from '@/features/Database/Database'
+import {useDatabaseContext} from '@/features/Database/DatabaseContext'
+import {DatabaseKoboTableProvider} from '@/features/Database/KoboTable/DatabaseKoboContext'
+import {DatabaseKoboTableContent} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
+import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
+import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
-import {databaseUrlParamsValidation} from '@/features/Database/Database'
-import {DatabaseKoboTableContent} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
-import {useSession} from '@/core/Session/SessionContext'
-import {Access, AccessLevel} from '@/core/sdk/server/access/Access'
-import {AppFeatureId} from '@/features/appFeatureId'
-import {DatabaseKoboTableProvider} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {Kobo} from 'kobo-sdk'
-import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
-import {Skeleton} from '@mui/material'
-import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {FetchParams} from '@/shared/hook/useFetchers'
-import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 
 export const DatabaseTableRoute = () => {
   const ctx = useDatabaseContext()
@@ -98,10 +99,6 @@ export const DatabaseTable = ({
           <DatatableSkeleton />
         </>
       )}
-      {/*{(ctxSchema.anyLoading || loading) && !ctxAnswers.byId.get(formId) && (*/}
-      {/*  <>*/}
-      {/*  </>*/}
-      {/*)}*/}
       {map(fetcherForm.get, ctxSchema.byId[formId]?.get, (form, schema) => (
         <DatabaseKoboTableProvider
           schema={schema}

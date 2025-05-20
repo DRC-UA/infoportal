@@ -1,4 +1,6 @@
-import {KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
+import {match, Obj, seq} from '@axanc/ts-utils'
+import {Kobo} from 'kobo-sdk'
+
 import {
   Bn_rapidResponse,
   Bn_rapidResponse2,
@@ -15,26 +17,25 @@ import {
   KoboIndex,
   KoboSubmissionFlat,
   KoboTagStatus,
+  KoboXmlMapper,
   Protection_gbv,
   Protection_pfa_training_test,
   ProtectionHhsTags,
   safeArray,
 } from 'infoportal-common'
-import React from 'react'
-import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
-import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
-import {IpSelectSingle} from '@/shared/Select/SelectSingle'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+
+import {KoboUpdateContext} from '@/core/context/KoboUpdateContext'
+import {Messages} from '@/core/i18n/localization/en'
+import {KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
+import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {StateStatusIcon, SelectStatusBy, SelectStatusConfig} from '@/shared/customInput/SelectStatus'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
-import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {KoboEditModalOption} from '@/shared/koboEdit/KoboUpdateModal'
-import {Messages} from '@/core/i18n/localization/en'
-import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
-import {Kobo} from 'kobo-sdk'
-import {KoboUpdateContext} from '@/core/context/KoboUpdateContext'
-import {KoboXmlMapper} from 'infoportal-common'
+import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 
 export const getColumnsCustom = ({
   selectedIds,
@@ -99,16 +100,14 @@ export const getColumnsCustom = ({
           ex_combatants: 0,
           income: 0,
         }
-        scoring.householdSize_bha += fnSwitch(
-          '' + row.number_people!,
-          {
+        scoring.householdSize_bha += match('' + row.number_people!)
+          .cases({
             1: 2,
             2: 1,
             3: 2,
             4: 3,
-          },
-          () => 0,
-        )
+          })
+          .default(() => 0)
         if (row.number_people! >= 5) scoring.householdSize_bha += 5
 
         if (row.res_stat === 'displaced') {
@@ -379,7 +378,7 @@ export const getColumnsCustom = ({
     },
   ]
 
-  const extra: Record<string, DatatableColumn.Props<any>[]> = {
+  const custom: Record<string, DatatableColumn.Props<any>[]> = {
     [KoboIndex.byName('ecrec_vet_bha388').id]: [...scoring_ecrec],
     [KoboIndex.byName('ecrec_vet2_dmfa').id]: [...scoring_ecrec],
     [KoboIndex.byName('shelter_nta').id]: [...individualsBreakdown],
@@ -479,17 +478,15 @@ export const getColumnsCustom = ({
             pregnantLactating: 0,
             income: 0,
           }
-          scoring.householdSize += fnSwitch(
-            row.ben_det_hh_size!,
-            {
+          scoring.householdSize += match(row.ben_det_hh_size)
+            .cases({
               1: 2,
               2: 0,
               3: 2,
               4: 3,
               5: 5,
-            },
-            () => 0,
-          )
+            })
+            .default(() => 0)
 
           if (row.ben_det_res_stat === 'idp') {
             scoring.residenceStatus += 3
@@ -729,5 +726,6 @@ export const getColumnsCustom = ({
       },
     ],
   }
-  return extra[formId] ?? []
+
+  return custom[formId] ?? []
 }

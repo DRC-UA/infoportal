@@ -143,6 +143,9 @@ export class BuildKoboType {
         formId: KoboIndex.byName('ecrec_vetEvaluation').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
       },
+      legal_individual_aid: {
+        formId: KoboIndex.byName('legal_individual_aid').id,
+      },
       meal_verificationEcrec: {
         formId: KoboIndex.byName('meal_verificationEcrec').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
