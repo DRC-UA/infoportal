@@ -1,3 +1,8 @@
+import {match, map, seq} from '@axanc/ts-utils'
+import {alpha, IconProps, Theme} from '@mui/material'
+import DOMPurify from 'dompurify'
+import {Kobo} from 'kobo-sdk'
+
 import {
   KoboCustomDirective,
   KoboFlattenRepeatedGroup,
@@ -5,20 +10,16 @@ import {
   KoboSubmissionMetaData,
   removeHtml,
 } from 'infoportal-common'
+
 import {useI18n} from '@/core/i18n/I18n'
-import {fnSwitch, map, seq} from '@axanc/ts-utils'
-import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
-import React from 'react'
-import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
-import {alpha, IconProps, Theme} from '@mui/material'
-import {IpBtn, TableEditCellBtn, Txt} from '@/shared'
-import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {getKoboAttachmentUrl, KoboAttachedImg} from '@/shared/TableImg/KoboAttachedImg'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {formatDate, formatDateTime, Messages} from '@/core/i18n/localization/en'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import DOMPurify from 'dompurify'
-import {Kobo} from 'kobo-sdk'
+import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
+import {IpBtn, TableEditCellBtn} from '@/shared'
+import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
+import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {getKoboAttachmentUrl, KoboAttachedFile, KoboAttachedImg} from '@/shared/TableMedia/KoboAttachedMedia'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()
@@ -87,7 +88,13 @@ export const DatatableHeadTypeIconByKoboType = ({
   children: Kobo.Form.QuestionType
 } & Pick<IconProps, 'sx' | 'color'>) => {
   return (
-    <DatatableHeadIcon children={fnSwitch(children, koboIconMap, () => 'short_text')} tooltip={children} {...props} />
+    <DatatableHeadIcon
+      children={match(children)
+        .cases(koboIconMap)
+        .default(() => 'short_text')}
+      tooltip={children}
+      {...props}
+    />
   )
 }
 
@@ -227,11 +234,7 @@ export const columnBySchemaGenerator = ({
           export: url,
           value: fileName ?? DatatableUtils.blank,
           label: (
-            <Txt link>
-              <a href={url} target="_blank">
-                {fileName}
-              </a>
-            </Txt>
+            <KoboAttachedFile answerId={row.id} formId={formId} attachments={row.attachments} fileName={fileName} />
           ),
           // label: <Txt link><a href={koboImgHelper({fileName, attachments: row.attachments}).fullUrl} target="_blank">{fileName}</a></Txt>
         }
