@@ -34,6 +34,9 @@ export class KoboMetaMapperProtection {
     KoboMetaOrigin<Protection_communityMonitoring.T, ProtectionCommunityMonitoringTags>
   > = (row) => {
     const answer = Protection_communityMonitoring.map(row.answers)
+
+    if (answer.pmt_npc !== 'no') return // select non-PMT KII (NPC) only
+
     const persons = KoboXmlMapper.Persons.protection_communityMonitoring(answer)
     if (answer.informant_gender || answer.informant_age) {
       persons.push({
