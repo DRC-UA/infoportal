@@ -224,14 +224,71 @@ export const _DashboardMealVisitPdf = () => {
                   )}
                 </Row>
               </Box>
-              <Title sx={{mb: 0.5}} size="big">
-                General Observation
-              </Title>
-              <Box sx={{textAlign: 'justify', whiteSpace: 'pre-line'}}>
-                {entry.has_comments === 'no'
-                  ? [entry.main_objective, entry.target_groups, entry.activity_overview].filter(Boolean).join('\n\n')
-                  : entry.fcpc}
-              </Box>
+              {[
+                {title: 'General Observation:', field: 'main_objective'},
+                {title: 'Target Groups:', field: 'target_groups'},
+                {title: 'Activity Overview:', field: 'activity_overview'},
+                {title: 'Satisfaction and Feedback:', field: 'satisfaction_level'},
+                {title: 'Focus Group Discussions:', field: 'FGD_part'},
+                {title: 'Feedback from Organizers:', field: 'feedback_org'},
+                {title: 'Stakeholders Interviews:', field: 'stakeholder_interview'},
+                {title: 'Overall Observations:', field: 'overall_observation'},
+                {
+                  title: 'Safety and Security Issues:',
+                  fields: [
+                    'shelter_available',
+                    'space_not_suitable_reason',
+                    'no_access_reason',
+                    'weather_not_proof_reason',
+                  ],
+                },
+                {
+                  title: 'Code of Conduct and Accountability:',
+                  fields: ['ccn', 'ccsn', 'ccdn', 'cccn', 'psean'],
+                },
+                {
+                  title: 'Visibility:',
+                  fields: ['visbn', 'vislogon', 'vispo'],
+                },
+              ]
+                .filter(({field, fields}) => {
+                  const value = field
+                    ? entry[field as keyof typeof entry]
+                    : fields
+                        ?.map((f) => entry[f as keyof typeof entry])
+                        .filter(Boolean)
+                        .join(', ')
+
+                  return entry.has_comments !== 'no' || !!value
+                })
+                .map(({title, field, fields}) => {
+                  const raw = field
+                    ? entry[field as keyof typeof entry]
+                    : fields
+                        ?.map((f) => entry[f as keyof typeof entry])
+                        .filter(Boolean)
+                        .join(', ')
+
+                  const value =
+                    entry.has_comments === 'no'
+                      ? typeof raw === 'object' && raw !== null
+                        ? Array.isArray(raw)
+                          ? raw.join(', ')
+                          : JSON.stringify(raw)
+                        : String(raw ?? '')
+                      : entry.fcpc
+
+                  return (
+                    <React.Fragment key={title}>
+                      <Box sx={{mt: 2}}>
+                        <Title sx={{mb: 0.5}} size="big">
+                          {title}
+                        </Title>
+                        <Box sx={{textAlign: 'justify', whiteSpace: 'pre-line'}}>{value}</Box>
+                      </Box>
+                    </React.Fragment>
+                  )
+                })}
 
               {/*<Box sx={{display: 'grid', mt: 1, mx: -.5, gridTemplateColumns: '1fr 1fr 1fr'}}>*/}
               {/*  {seq(mapFor(10, i => (entry as any)['fcp' + (i + 1)]))*/}
