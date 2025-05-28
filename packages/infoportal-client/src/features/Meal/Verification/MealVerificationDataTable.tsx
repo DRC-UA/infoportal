@@ -1,9 +1,11 @@
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
-import React, {useMemo, useState} from 'react'
+import {useMemo, useState} from 'react'
+import {match, Obj, seq} from '@axanc/ts-utils'
 import {alpha, Box, Icon, Tooltip, useTheme} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
+
 import {KoboSubmissionFlat, KoboSchemaHelper, NonNullableKey, toPercent} from 'infoportal-common'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
@@ -94,7 +96,7 @@ export const MealVerificationDataTable = <
   refreshToVerify,
   ...bundle
 }: MealVerificationBundle<TReg, TVerif> & {refreshToVerify: () => void}) => {
-  const {mealVerification, activity, dataReg, dataVerif, toVerify} = bundle
+  const {activity, dataReg, dataVerif, toVerify} = bundle
   const {api} = useAppSettings()
   const {m} = useI18n()
   const t = useTheme()
@@ -167,11 +169,13 @@ export const MealVerificationDataTable = <
         })
       })
       .sortByNumber((_) =>
-        fnSwitch(_.status, {
-          [Status.Completed]: 0,
-          [Status.Selected]: 1,
-          [Status.NotSelected]: 2,
-        }),
+        match(_.status)
+          .cases({
+            [Status.Completed]: 0,
+            [Status.Selected]: 1,
+            [Status.NotSelected]: 2,
+          })
+          .default(2),
       )
     return {
       mergedData,
@@ -309,9 +313,8 @@ export const MealVerificationDataTable = <
                       onClick={() => setOpenModalAnswer(_.rowVerif)}
                     />
                     {ctx.access.write &&
-                      fnSwitch(
-                        _.status,
-                        {
+                      match(_.status)
+                        .cases({
                           NotSelected: (
                             <TableIconBtn
                               color="primary"
@@ -347,9 +350,8 @@ export const MealVerificationDataTable = <
                               />
                             </>
                           ),
-                        },
-                        () => undefined,
-                      )}
+                        })
+                        .default(undefined)}
                   </>
                 )
               },
@@ -373,11 +375,14 @@ export const MealVerificationDataTable = <
               head: m.status,
               type: 'select_one',
               render: (_) => {
-                const label = fnSwitch(_.status, {
-                  NotSelected: <TableIcon color="disabled">do_disturb_on</TableIcon>,
-                  Completed: <TableIcon color="success">check_circle</TableIcon>,
-                  Selected: <TableIcon color="warning">schedule</TableIcon>,
-                })
+                const label = match(_.status)
+                  .cases({
+                    NotSelected: <TableIcon color="disabled">do_disturb_on</TableIcon>,
+                    Completed: <TableIcon color="success">check_circle</TableIcon>,
+                    Selected: <TableIcon color="warning">schedule</TableIcon>,
+                  })
+                  .default(null)
+
                 return {
                   value: _.status,
                   label: label,
@@ -421,19 +426,20 @@ export const MealVerificationDataTable = <
                   return {
                     export: reg + ' <=> ' + verif,
                     value: _.verifiedData[id].equals ? '1' : '0',
-                    label: fnSwitch(display, {
-                      reg,
-                      verif,
-                      both: (
+                    label: match(display)
+                      .cases({
+                        reg,
+                        verif,
+                      })
+                      .default(
                         <>
                           {reg}{' '}
                           <TableIcon color="disabled" sx={{transform: 'rotate(90deg)'}}>
                             height
                           </TableIcon>{' '}
                           {verif}
-                        </>
+                        </>,
                       ),
-                    }),
                   }
                 },
               } as const

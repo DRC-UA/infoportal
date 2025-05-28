@@ -1,8 +1,9 @@
-import {NextFunction, Request, Response} from 'express'
-import * as yup from 'yup'
+import {Request, Response} from 'express'
 import {Obj} from '@axanc/ts-utils'
-import {MealVerificationAnswersStatus} from '../../feature/mealVerfication/MealVerificationType.js'
 import {MealVerificationStatus, PrismaClient} from '@prisma/client'
+import * as yup from 'yup'
+
+import {MealVerificationAnswersStatus} from '../../feature/mealVerfication/MealVerificationType.js'
 import {MealVerificationService} from '../../feature/mealVerfication/MealVerificationService.js'
 
 export class MealVerificationSchema {
@@ -43,37 +44,37 @@ export class ControllerMealVerification {
     private service = new MealVerificationService(prisma),
   ) {}
 
-  readonly create = async (req: Request, res: Response, next: NextFunction) => {
+  readonly create = async (req: Request, res: Response) => {
     const body = await MealVerificationSchema.create.validate(req.body)
     const data = await this.service.create({...body, createdBy: req.session.user?.email ?? 'unknown'})
     res.send(data)
   }
 
-  readonly getAll = async (req: Request, res: Response, next: NextFunction) => {
+  readonly getAll = async (_req: Request, res: Response) => {
     const data = await this.service.getAll()
     res.send(data)
   }
 
-  readonly getAnswers = async (req: Request, res: Response, next: NextFunction) => {
+  readonly getAnswers = async (req: Request, res: Response) => {
     const {id} = await MealVerificationSchema.id.validate(req.params)
     const data = await this.service.getAnswers(id)
     res.send(data)
   }
 
-  readonly remove = async (req: Request, res: Response, next: NextFunction) => {
+  readonly remove = async (req: Request, res: Response) => {
     const {id} = await MealVerificationSchema.id.validate(req.params)
     await this.service.remove(id)
     res.send(id)
   }
 
-  readonly update = async (req: Request, res: Response, next: NextFunction) => {
+  readonly update = async (req: Request, res: Response) => {
     const {id} = await MealVerificationSchema.id.validate(req.params)
     const {status} = await MealVerificationSchema.update.validate(req.body)
     await this.service.update(id, status)
     res.send({status})
   }
 
-  readonly updateAnswerStatus = async (req: Request, res: Response, next: NextFunction) => {
+  readonly updateAnswerStatus = async (req: Request, res: Response) => {
     const {id} = await MealVerificationSchema.id.validate(req.params)
     const {status} = await MealVerificationSchema.answerStatus.validate(req.body)
     await this.service.updateAnswerStatus(id, status)
