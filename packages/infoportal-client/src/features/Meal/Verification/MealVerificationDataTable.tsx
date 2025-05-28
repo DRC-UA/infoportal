@@ -131,9 +131,9 @@ export const MealVerificationDataTable = <
 
   const {mergedData, duplicateErrors, unselectedAnswers} = useMemo(() => {
     const duplicateErrors = new Set<string>()
-    const indexDataVerif: Record<any, InferTypedAnswer<TVerif>[]> = seq(dataVerif).groupBy(
-      (_) => activity.verification.joinBy(_) ?? '',
-    )
+    const indexDataVerif: Record<any, InferTypedAnswer<TVerif>[]> = seq(dataVerif)
+      .filter((record) => (activity.verification.filters ? activity.verification.filters(record) : true))
+      .groupBy((_) => activity.verification.joinBy(_) ?? '')
     const mergedData = seq(dataReg)
       .filter((_) => indexToVerify[_.id])
       .flatMap((rowReg: InferTypedAnswer<TReg>) => {

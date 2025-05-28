@@ -29,6 +29,7 @@ export type MealVerificationActivity<TReg extends KoboFormNameMapped = any, TVer
   verification: {
     fetch: TVerif
     koboFormId: Kobo.FormId
+    filters?: (_: InferTypedAnswer<TVerif>) => boolean
     joinBy: (_: InferTypedAnswer<TVerif>) => string | number
   }
   dataColumns?: KeyOf<InferTypedAnswer<TReg>>[]
@@ -248,6 +249,8 @@ export const mealVerificationActivities = seq([
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
       joinBy: (_) => _.pay_det_tax_id_num!,
       fetch: 'meal_verificationEcrec',
+      filters: (record) => record.which_support_registered === 'small_scall_farmer',
+      joinBy: (_) => _.pay_det_tax_id_num!,
     },
     dataColumns: [],
     verifiedColumns: {
