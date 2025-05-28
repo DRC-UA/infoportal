@@ -1,8 +1,10 @@
-import {Kobo} from 'kobo-sdk'
-import {KeyOf, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
 import {seq} from '@axanc/ts-utils'
-import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {format} from 'date-fns'
+import {Kobo} from 'kobo-sdk'
+
+import {KeyOf, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
+
+import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
 export const mealVerificationConf = {
   sampleSizeRatioDefault: 0.2,
@@ -29,6 +31,7 @@ export type MealVerificationActivity<TReg extends KoboFormNameMapped = any, TVer
   verification: {
     fetch: TVerif
     koboFormId: Kobo.FormId
+    filters?: (_: InferTypedAnswer<TVerif>) => boolean
     joinBy: (_: InferTypedAnswer<TVerif>) => string | number
   }
   dataColumns?: KeyOf<InferTypedAnswer<TReg>>[]
@@ -39,9 +42,7 @@ export type MealVerificationActivity<TReg extends KoboFormNameMapped = any, TVer
 
 const registerActivity = <TData extends KoboFormNameMapped, TCheck extends KoboFormNameMapped>(
   _: MealVerificationActivity<TData, TCheck>,
-) => {
-  return _
-}
+) => _
 
 export const mealVerificationActivities = seq([
   registerActivity({
@@ -68,14 +69,13 @@ export const mealVerificationActivities = seq([
       ben_det_oblast: {reg: (_) => _.oblast, verif: (_) => _.ben_det_oblast},
       ben_det_raion: {reg: (_) => _.raion, verif: (_) => _.ben_det_raion},
       ben_det_hromada: {reg: (_) => _.hromada, verif: (_) => _.ben_det_hromada},
-      ben_det_res_stat: {reg: (_) => _.res_stat, verif: (_) => _.ben_det_res_stat,}, 
-      business_name: {reg: (_) => _.business_name, verif: (_) => _.business_name,},
-      business_type: {reg: (_) => _.business_type, verif: (_) => _.business_type,},
-      enterprise_tax_id: {reg: (_) => _.enterprise_tax_id, verif: (_) => _.enterprise_tax_id,},
-      legal_address_business: {reg: (_) => _.legal_address_business, verif: (_) => _.legal_address_business,},
+      ben_det_res_stat: {reg: (_) => _.res_stat, verif: (_) => _.ben_det_res_stat},
+      business_name: {reg: (_) => _.business_name, verif: (_) => _.business_name},
+      business_type: {reg: (_) => _.business_type, verif: (_) => _.business_type},
+      enterprise_tax_id: {reg: (_) => _.enterprise_tax_id, verif: (_) => _.enterprise_tax_id},
+      legal_address_business: {reg: (_) => _.legal_address_business, verif: (_) => _.legal_address_business},
 
-      date_business_registration:
-      {
+      date_business_registration: {
         reg: (_) => {
           if (_.date_business_registration) return format(_.date_business_registration, 'yyyy-MM-dd')
           else return ''
@@ -86,25 +86,40 @@ export const mealVerificationActivities = seq([
         },
       },
 
-      business_currently_operational_mbg: {reg: (_) => _.business_currently_operational, verif: (_) => _.business_currently_operational_mbg,},
-      key_business_activities: {reg: (_) => _.key_business_activities, verif: (_) => _.key_business_activities,},
-      key_business_activities_other: {reg: (_) => _.key_business_activities_other, verif: (_) => _.key_business_activities_other,},
-      produce_buy_processing: {reg: (_) => _.produce_buy_processing, verif: (_) => _.produce_buy_processing,},
-      have_data_bought_goods: {reg: (_) => _.have_data_bought_goods, verif: (_) => _.have_data_bought_goods,},     
-      how_bought_goods: {reg: (_) => _.how_bought_goods, verif: (_) => _.how_bought_goods,},
-      received_local_produce: {reg: (_) => _.received_local_produce, verif: (_) => _.received_local_produce,},
-      years_experience_business_mbg: {reg: (_) => _.years_experience_business, verif: (_) => _.years_experience_business_mbg,},
-      number_employees_business_mbg: {reg: (_) => _.number_employees_business, verif: (_) => _.number_employees_business_mbg,},
-      turnover_exceeded_9m: {reg: (_) => _.turnover_exceeded_9m, verif: (_) => _.turnover_exceeded_9m,},
-      have_debt_repayment_mbg: {reg: (_) => _.have_debt_repayment, verif: (_) => _.have_debt_repayment_mbg,},
-      repayment_debt_loan_mbg: {reg: (_) => _.repayment_debt_loan, verif: (_) => _.repayment_debt_loan_mbg,},
-      access_business_loans: {reg: (_) => _.access_business_loans, verif: (_) => _.access_business_loans,},
-      your_main_customers: {reg: (_) => _.your_main_customers, verif: (_) => _.your_main_customers,},
-      main_barriers_business: {reg: (_) => _.main_barriers_business, verif: (_) => _.main_barriers_business,},
-      escalation_conflict_affected_business: {reg: (_) => _.escalation_conflict_affected_business, verif: (_) => _.escalation_conflict_affected_business,},
-      amount_implement_plan: {reg: (_) => _.amount_implement_plan, verif: (_) => _.amount_implement_plan,},
-      amount_co_funding: {reg: (_) => _.amount_co_funding, verif: (_) => _.amount_co_funding,},
-      project_spend_grant: {reg: (_) => _.project_spend_grant, verif: (_) => _.project_spend_grant,},
+      business_currently_operational_mbg: {
+        reg: (_) => _.business_currently_operational,
+        verif: (_) => _.business_currently_operational_mbg,
+      },
+      key_business_activities: {reg: (_) => _.key_business_activities, verif: (_) => _.key_business_activities},
+      key_business_activities_other: {
+        reg: (_) => _.key_business_activities_other,
+        verif: (_) => _.key_business_activities_other,
+      },
+      produce_buy_processing: {reg: (_) => _.produce_buy_processing, verif: (_) => _.produce_buy_processing},
+      have_data_bought_goods: {reg: (_) => _.have_data_bought_goods, verif: (_) => _.have_data_bought_goods},
+      how_bought_goods: {reg: (_) => _.how_bought_goods, verif: (_) => _.how_bought_goods},
+      received_local_produce: {reg: (_) => _.received_local_produce, verif: (_) => _.received_local_produce},
+      years_experience_business_mbg: {
+        reg: (_) => _.years_experience_business,
+        verif: (_) => _.years_experience_business_mbg,
+      },
+      number_employees_business_mbg: {
+        reg: (_) => _.number_employees_business,
+        verif: (_) => _.number_employees_business_mbg,
+      },
+      turnover_exceeded_9m: {reg: (_) => _.turnover_exceeded_9m, verif: (_) => _.turnover_exceeded_9m},
+      have_debt_repayment_mbg: {reg: (_) => _.have_debt_repayment, verif: (_) => _.have_debt_repayment_mbg},
+      repayment_debt_loan_mbg: {reg: (_) => _.repayment_debt_loan, verif: (_) => _.repayment_debt_loan_mbg},
+      access_business_loans: {reg: (_) => _.access_business_loans, verif: (_) => _.access_business_loans},
+      your_main_customers: {reg: (_) => _.your_main_customers, verif: (_) => _.your_main_customers},
+      main_barriers_business: {reg: (_) => _.main_barriers_business, verif: (_) => _.main_barriers_business},
+      escalation_conflict_affected_business: {
+        reg: (_) => _.escalation_conflict_affected_business,
+        verif: (_) => _.escalation_conflict_affected_business,
+      },
+      amount_implement_plan: {reg: (_) => _.amount_implement_plan, verif: (_) => _.amount_implement_plan},
+      amount_co_funding: {reg: (_) => _.amount_co_funding, verif: (_) => _.amount_co_funding},
+      project_spend_grant: {reg: (_) => _.project_spend_grant, verif: (_) => _.project_spend_grant},
     },
   }),
   registerActivity({
@@ -246,8 +261,9 @@ export const mealVerificationActivities = seq([
     },
     verification: {
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
-      joinBy: (_) => _.pay_det_tax_id_num!,
       fetch: 'meal_verificationEcrec',
+      filters: (record) => record.which_support_registered === 'small_scall_farmer',
+      joinBy: (_) => _.pay_det_tax_id_num!,
     },
     dataColumns: [],
     verifiedColumns: {
@@ -266,10 +282,19 @@ export const mealVerificationActivities = seq([
       ben_det_income: {reg: (_) => _.ben_det_income, verif: (_) => _.ben_det_income},
       ben_det_hh_size: {reg: (_) => _.ben_det_hh_size, verif: (_) => _.ben_det_hh_size},
       know_contamination_land: {reg: (_) => _.know_contamination_land, verif: (_) => _.know_contamination_land},
-      know_contamination_land_neighbour: {reg: (_) => _.know_contamination_land_neighbour, verif: (_) => _.know_contamination_land_neighbour},
+      know_contamination_land_neighbour: {
+        reg: (_) => _.know_contamination_land_neighbour,
+        verif: (_) => _.know_contamination_land_neighbour,
+      },
       individual_continues_land: {reg: (_) => _.individual_continues_land, verif: (_) => _.individual_continues_land},
-      primary_source_livelihoods: {reg: (_) => _.primary_source_livelihoods, verif: (_) => _.primary_source_livelihoods},
-      registered_farming_enterprise: {reg: (_) => _.registered_farming_enterprise, verif: (_) => _.registered_farming_enterprise},
+      primary_source_livelihoods: {
+        reg: (_) => _.primary_source_livelihoods,
+        verif: (_) => _.primary_source_livelihoods,
+      },
+      registered_farming_enterprise: {
+        reg: (_) => _.registered_farming_enterprise,
+        verif: (_) => _.registered_farming_enterprise,
+      },
       land_own_small: {reg: (_) => _.land_own, verif: (_) => _.land_own_small},
       land_cultivate_small: {reg: (_) => _.land_cultivate, verif: (_) => _.land_cultivate_small},
       land_rent_other_small: {reg: (_) => _.land_rent_other, verif: (_) => _.land_rent_other_small},
@@ -283,18 +308,39 @@ export const mealVerificationActivities = seq([
       many_rabbit_nutria_small: {reg: (_) => _.many_rabbit_nutria, verif: (_) => _.many_rabbit_nutria_small},
       many_bee_families_small: {reg: (_) => _.many_bee_families, verif: (_) => _.many_bee_families_small},
       many_other_small: {reg: (_) => _.many_other, verif: (_) => _.many_other_small},
-      income_generate_agricultural: {reg: (_) => _.income_generate_agricultural, verif: (_) => _.income_generate_agricultural},
-      years_engaged_agricultural: {reg: (_) => _.years_engaged_agricultural, verif: (_) => _.years_engaged_agricultural},
-      sell_agricultural_products: {reg: (_) => _.sell_agricultural_products, verif: (_) => _.sell_agricultural_products},
+      income_generate_agricultural: {
+        reg: (_) => _.income_generate_agricultural,
+        verif: (_) => _.income_generate_agricultural,
+      },
+      years_engaged_agricultural: {
+        reg: (_) => _.years_engaged_agricultural,
+        verif: (_) => _.years_engaged_agricultural,
+      },
+      sell_agricultural_products: {
+        reg: (_) => _.sell_agricultural_products,
+        verif: (_) => _.sell_agricultural_products,
+      },
       selling_reliably_produce: {reg: (_) => _.selling_reliably_produce, verif: (_) => _.selling_reliably_produce},
-      agricultural_inputs_purchase: {reg: (_) => _.agricultural_inputs_purchase, verif: (_) => _.agricultural_inputs_purchase},
-      confirm_capacity_productive: {reg: (_) => _.confirm_capacity_productive, verif: (_) => _.confirm_capacity_productive},
-      interested_training_agriculture_small: {reg: (_) => _.interested_training_agriculture, verif: (_) => _.interested_training_agriculture_small},
+      agricultural_inputs_purchase: {
+        reg: (_) => _.agricultural_inputs_purchase,
+        verif: (_) => _.agricultural_inputs_purchase,
+      },
+      confirm_capacity_productive: {
+        reg: (_) => _.confirm_capacity_productive,
+        verif: (_) => _.confirm_capacity_productive,
+      },
+      interested_training_agriculture_small: {
+        reg: (_) => _.interested_training_agriculture,
+        verif: (_) => _.interested_training_agriculture_small,
+      },
       any_support_february2022: {reg: (_) => _.any_support_february2022, verif: (_) => _.any_support_february2022},
-      plan_government_support_future: {reg: (_) => _.plan_government_support_future, verif: (_) => _.plan_government_support_future},
+      plan_government_support_future: {
+        reg: (_) => _.plan_government_support_future,
+        verif: (_) => _.plan_government_support_future,
+      },
     },
   }),
-   registerActivity({
+  registerActivity({
     sampleSizeRatio: 0.1,
     label: '[Ecrec] Subsistance farmer registration',
     id: '[Ecrec] Subsistance farmer registration',
@@ -324,7 +370,10 @@ export const mealVerificationActivities = seq([
       },
       ben_det_income: {reg: (_) => _.ben_det_income, verif: (_) => _.ben_det_income},
       ben_det_hh_size: {reg: (_) => _.ben_det_hh_size, verif: (_) => _.ben_det_hh_size},
-      have_concerns_contamination: {reg: (_) => _.have_concerns_contamination, verif: (_) => _.have_concerns_contamination},
+      have_concerns_contamination: {
+        reg: (_) => _.have_concerns_contamination,
+        verif: (_) => _.have_concerns_contamination,
+      },
       known_contamination_your: {reg: (_) => _.known_contamination_your, verif: (_) => _.known_contamination_your},
       contamination_impact_your: {reg: (_) => _.contamination_impact_your, verif: (_) => _.contamination_impact_your},
       what_primary_livelihood: {reg: (_) => _.what_primary_livelihood, verif: (_) => _.what_primary_livelihood},
@@ -343,9 +392,18 @@ export const mealVerificationActivities = seq([
       bee_families: {reg: (_) => _.bee_families, verif: (_) => _.bee_families},
       other_animals: {reg: (_) => _.other_animals, verif: (_) => _.other_animals},
       household_access_water: {reg: (_) => _.household_access_water, verif: (_) => _.household_access_water},
-      access_basic_farming_tools: {reg: (_) => _.access_basic_farming_tools, verif: (_) => _.access_basic_farming_tools},
-      eligible_assistance_agricultural: {reg: (_) => _.eligible_assistance_agricultural, verif: (_) => _.eligible_assistance_agricultural},
-      interested_training_agriculture: {reg: (_) => _.interested_training_agriculture, verif: (_) => _.interested_training_agriculture},
+      access_basic_farming_tools: {
+        reg: (_) => _.access_basic_farming_tools,
+        verif: (_) => _.access_basic_farming_tools,
+      },
+      eligible_assistance_agricultural: {
+        reg: (_) => _.eligible_assistance_agricultural,
+        verif: (_) => _.eligible_assistance_agricultural,
+      },
+      interested_training_agriculture: {
+        reg: (_) => _.interested_training_agriculture,
+        verif: (_) => _.interested_training_agriculture,
+      },
     },
   }),
   registerActivity({
