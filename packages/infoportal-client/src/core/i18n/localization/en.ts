@@ -1047,6 +1047,7 @@ export const en = Object.freeze({
         PsychosocialIndividualSession: 'Psychosocial Individual Session',
         PsychologicalFirstAid: 'Psychological First Aid',
         TIA: 'TIA',
+        PeerToPeerTraining: 'Peer-to-peer training',
       }
       const activitiesMerged_: Partial<Record<DrcProgram, string>> = {
         ...activities_,
