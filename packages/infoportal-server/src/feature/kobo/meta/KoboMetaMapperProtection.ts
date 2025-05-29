@@ -321,6 +321,7 @@ export class KoboMetaMapperProtection {
           pgs: DrcProgram.PGS,
           ais: DrcProgram.PIS,
           pfa: DrcProgram.PFA,
+          p2p: DrcProgram.P2P,
         })
         .default(() => undefined),
       personsCount: persons.length,

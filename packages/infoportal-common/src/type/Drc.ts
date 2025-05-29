@@ -93,6 +93,7 @@ export enum DrcProgram {
   PIS = 'PsychosocialIndividualSession',
   PFA = 'PsychologicalFirstAid',
   TIA = 'TIA',
+  P2P = 'PeerToPeerTraining',
 }
 
 export class DrcSectorHelper {
@@ -132,6 +133,7 @@ export class DrcSectorHelper {
     PsychosocialIndividualSession: [DrcSector.PSS],
     PsychologicalFirstAid: [DrcSector.PSS],
     TIA: [DrcSector.VA],
+    PeerToPeerTraining: [DrcSector.PSS],
     //	# of operational women and girls\' safe spaces
     // CapacityBuilding: DrcSector.GBV,	//	# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards
   } as const
