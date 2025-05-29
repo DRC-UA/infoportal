@@ -1,4 +1,4 @@
-import {match, seq, type Seq} from '@axanc/ts-utils'
+import {match, seq} from '@axanc/ts-utils'
 
 import {Person} from '../../type/Person.js'
 import {OblastIndex} from '../../location/index.js'
@@ -70,16 +70,19 @@ export namespace KoboXmlMapper {
       | 'iev'
 
     export type Displacement =
-      | 'idp'
       | 'displaced'
-      | 'long_res'
-      | 'ret'
-      | 'ref_asy'
-      | 'other'
-      | 'returnee'
+      | 'idp'
+      | 'idp_returnee'
       | 'long'
-      | 'pnd'
+      | 'long_res'
       | 'non-displaced'
+      | 'other'
+      | 'pnd'
+      | 'ref_asy'
+      | 'refugee'
+      | 'refugee_returnee'
+      | 'ret'
+      | 'returnee'
       | 'unspec'
 
     export type Individual = {
@@ -152,6 +155,7 @@ export namespace KoboXmlMapper {
             long_res: Person.DisplacementStatus.NonDisplaced,
             ret: Person.DisplacementStatus.Returnee,
             returnee: Person.DisplacementStatus.Returnee,
+            refugee_returnee: Person.DisplacementStatus.Returnee,
             ref_asy: Person.DisplacementStatus.Refugee,
             'non-displaced': Person.DisplacementStatus.NonDisplaced,
           })
@@ -377,6 +381,7 @@ export namespace KoboXmlMapper {
 
     export const protection_pss = (row: Protection_pss.T) => {
       if (row.new_ben === 'no') return []
+
       return common({
         hh_char_hh_det: row.hh_char_hh_det
           ?.filter((_) => {
