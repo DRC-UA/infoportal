@@ -302,6 +302,7 @@ export enum DrcProject {
   'UKR-000291_292 UNHCR' = 'UKR-000291_292 UNHCR',
   'UKR-000xxx DANIDA' = 'UKR-000xxx DANIDA',
   'UKR-000399 SDC' = 'UKR-000399 SDC',
+  'UKR-000423 ECHO4' = 'UKR-000423 ECHO4',
   'None' = 'None',
 }
 
@@ -370,6 +371,7 @@ export class DrcProjectHelper {
     'UKR-000378 Danish MFA': DrcDonor.DMFA,
     'UKR-000373 Novo-Nordilsk': DrcDonor.NovoNordisk,
     'UKR-000399 SDC': DrcDonor.SDC,
+    'UKR-000423 ECHO4': DrcDonor.ECHO,
     None: DrcDonor.None,
   }
 
