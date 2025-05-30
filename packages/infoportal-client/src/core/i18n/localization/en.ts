@@ -242,6 +242,7 @@ export const en = Object.freeze({
     proxyUrl: 'Proxy URL',
     proxyDestinationUrl: 'DestinationURL',
     enabled: 'Enabled',
+    avgHHSize: 'Average household size',
     households: 'Households',
     hhType: 'HH Type',
     displacementStatus: 'Displacement status',

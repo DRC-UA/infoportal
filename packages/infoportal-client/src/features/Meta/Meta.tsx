@@ -1,12 +1,12 @@
-import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
-import React, {useEffect} from 'react'
-import {MetaDashboard} from '@/features/Meta/Dashboard/MetaDashboard'
-import {Layout} from '@/shared/Layout'
-import {appFeaturesIndex} from '@/features/appFeatureId'
-import {MetaSidebar} from '@/features/Meta/MetaSidebar'
-import {Navigate, Route, Routes} from 'react-router-dom'
-import {MetaTable} from '@/features/Meta/Table/MetaTable'
+import {Route, Routes} from 'react-router-dom'
+
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
+import {appFeaturesIndex} from '@/features/appFeatureId'
+import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
+import {MetaDashboard} from '@/features/Meta/Dashboard/MetaDashboard'
+import {MetaSidebar} from '@/features/Meta/MetaSidebar'
+import {MetaTable} from '@/features/Meta/Table/MetaTable'
+import {Layout} from '@/shared/Layout'
 
 export const Meta = () => {
   return (
