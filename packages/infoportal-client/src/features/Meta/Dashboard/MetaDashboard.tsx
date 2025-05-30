@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
-import {format, isAfter} from 'date-fns'
-import {Box, FormControlLabel, Grid2, Switch, useTheme} from '@mui/material'
+import {format, isAfter, compareAsc} from 'date-fns'
+import {Box, FormControlLabel, Grid2, Switch, Typography, useTheme} from '@mui/material'
 
 import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
 
@@ -11,6 +11,8 @@ import {useMetaContext} from '@/features/Meta/MetaContext'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {ChartBarVertical} from '@/shared/charts/ChartBarVertical'
+import {CustomAvgHHSizeTooltip} from '@/shared/charts/CustomTooltips'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
@@ -31,6 +33,7 @@ export const MetaDashboard = () => {
   const {data: ctx, fetcher} = useMetaContext()
   const [showNullishDisplacementStatus, setShowNullishDisplacementStatus] = useState(true)
   const handleDisplacementAdornmentClick = () => setShowNullishDisplacementStatus((prev) => !prev)
+  const avgHHSize = (ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)
 
   return (
     <Page width="lg" loading={fetcher.loading}>
@@ -59,7 +62,7 @@ export const MetaDashboard = () => {
         </Grid2>
         <Grid2 size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
-            {(ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)}
+            {avgHHSize}
           </SlideWidget>
         </Grid2>
         <Grid2 size={{xs: 6, md: 4, lg: 2}}>
@@ -99,6 +102,53 @@ export const MetaDashboard = () => {
               </SlideWidget>
             </Box>
           </SlidePanel>
+          <Panel
+            title={
+              <Typography sx={{fontSize: '1.3rem', fontWeight: 500}}>
+                {m.avgHHSize}: <strong>{avgHHSize}</strong>
+              </Typography>
+            }
+          >
+            <PanelBody>
+              <ChartBarVertical
+                hideLegends
+                showGrid
+                height={140}
+                axes={{
+                  y: {domain: [1], tick: {fill: t.palette.text.primary}},
+                  x: {tick: {fill: t.palette.text.primary}},
+                }}
+                extraKeys={[m.households]}
+                slotProps={{
+                  CartesianGrid: {
+                    strokeDasharray: '5 5',
+                    strokeOpacity: 0.4,
+                  },
+                  Tooltip: {
+                    content: CustomAvgHHSizeTooltip,
+                  },
+                }}
+                data={Object.entries(ctx.filteredData.groupBy(({date}) => format(date, 'yyyy-MM')))
+                  .map(([name, value]) => ({
+                    name,
+                    [m.households]: value.length,
+                    [m.avgHHSize]: Number(
+                      (value.reduce((accum, current) => accum + (current.personsCount || 0), 0) / value.length).toFixed(
+                        2,
+                      ),
+                    ),
+                  }))
+                  .sort(({name: d1}, {name: d2}) => compareAsc(d1, d2))}
+              />
+              {Object.entries(ctx.shapeFilters)
+                .filter(([, values]) => !!values?.length)
+                .map(([label, values]) => (
+                  <Typography fontSize="small">
+                    {label}: {values?.reduce((accum, current) => `${accum}, ${current}`)}
+                  </Typography>
+                ))}
+            </PanelBody>
+          </Panel>
           <Panel
             title={m.displacementStatus}
             slots={{

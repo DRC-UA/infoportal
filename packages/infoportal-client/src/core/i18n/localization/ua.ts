@@ -27,6 +27,8 @@ export const ua = {
     protHHSnapshot: {},
     includeNotSpecified: 'в т.ч. "Не зазначено"',
     damageCause: 'Причина руйнувань',
+    avgHHSize: 'Середній розмір домогосподарства',
+    households: 'Домогосподарств',
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {
