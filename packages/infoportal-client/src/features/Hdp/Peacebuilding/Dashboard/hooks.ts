@@ -18,7 +18,7 @@ export const usePeacebuildingData = () => {
   const {m} = useI18n()
   const {api} = useAppSettings()
   const fetcherAnswer = useKoboAnswersContext().byName('cs_tracker')
-  const fetcherPeriod = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('conflict_trainings').id))
+  const fetcherPeriod = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('cs_tracker').id))
 
   const filterShape = useMemo(
     () =>
