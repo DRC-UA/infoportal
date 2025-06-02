@@ -75,7 +75,13 @@ export const MetaSidebar = () => {
         {session.admin && (
           <SidebarItem icon="no_sim" onClick={() => asyncKillCache.call()}>
             {m._meta.killCache}
-            <IpIconBtn sx={{marginLeft: 'auto'}} color="primary" loading={asyncKillCache.loading} children="refresh" />
+            <IpIconBtn
+              component="span"
+              sx={{marginLeft: 'auto'}}
+              color="primary"
+              loading={asyncKillCache.loading}
+              children="refresh"
+            />
           </SidebarItem>
         )}
         <SidebarItem
