@@ -1,27 +1,28 @@
-import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
-import {useMetaContext} from '@/features/Meta/MetaContext'
+import type {ReactNode} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
-import {DebouncedInput} from '@/shared/DebouncedInput'
-import React, {ReactNode} from 'react'
-import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
-import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {useI18n} from '@/core/i18n'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {Box, Switch, Typography} from '@mui/material'
-import {IpIconBtn} from '@/shared/IconBtn'
-import {SidebarSubSection} from '@/shared/Layout/Sidebar/SidebarSubSection'
-import {IpBtn} from '@/shared/Btn'
-import {appConfig} from '@/conf/AppConfig'
-import {NavLink} from 'react-router-dom'
-import {metaSiteMap} from '@/features/Meta/Meta'
-import {useLocation} from 'react-router'
-import {useAsync} from '@/shared/hook/useAsync'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {useIpToast} from '@/core/useToast'
-import {useSession} from '@/core/Session/SessionContext'
-import {DashboardFilterOptionsContent} from '@/shared/DashboardLayout/DashboardFilterOptions'
+import {NavLink, useLocation} from 'react-router-dom'
+
 import {IKoboMeta} from 'infoportal-common'
+
+import {appConfig} from '@/conf/AppConfig'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useI18n} from '@/core/i18n'
+import {useSession} from '@/core/Session/SessionContext'
+import {useIpToast} from '@/core/useToast'
+import {metaSiteMap} from '@/features/Meta/Meta'
+import {useMetaContext} from '@/features/Meta/MetaContext'
+import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {PopoverWrapper, Txt} from '@/shared'
+import {IpBtn} from '@/shared/Btn'
+import {DashboardFilterOptionsContent} from '@/shared/DashboardLayout/DashboardFilterOptions'
+import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {DebouncedInput} from '@/shared/DebouncedInput'
+import {useAsync} from '@/shared/hook/useAsync'
+import {IpIconBtn} from '@/shared/IconBtn'
+import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
+import {SidebarSubSection} from '@/shared/Layout/Sidebar/SidebarSubSection'
+import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 export const Item = ({label, children}: {label: ReactNode; children: ReactNode}) => {
   return (
@@ -33,7 +34,7 @@ export const Item = ({label, children}: {label: ReactNode; children: ReactNode})
 }
 
 export const MetaSidebar = () => {
-  const {m, formatLargeNumber} = useI18n()
+  const {m} = useI18n()
   const path = (page: string) => '' + page
   const {data: ctx} = useMetaContext()
   const location = useLocation()
@@ -48,7 +49,7 @@ export const MetaSidebar = () => {
     <Sidebar>
       <SidebarBody>
         <NavLink to={path(metaSiteMap.routes.dashboard)}>
-          {({isActive, isPending}) => (
+          {({isActive}) => (
             <SidebarItem active={isActive} icon={appConfig.icons.dashboard}>
               {m.dashboard}
             </SidebarItem>
@@ -57,7 +58,7 @@ export const MetaSidebar = () => {
 
         {isDevEnv && (
           <NavLink to={path(metaSiteMap.routes.data)}>
-            {({isActive, isPending}) => (
+            {({isActive}) => (
               <SidebarItem active={isActive} icon={appConfig.icons.dataTable}>
                 {m.data}
               </SidebarItem>

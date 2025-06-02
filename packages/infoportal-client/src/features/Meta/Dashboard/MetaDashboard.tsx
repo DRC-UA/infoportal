@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
 import {format, isAfter, compareAsc} from 'date-fns'
-import {Box, FormControlLabel, Grid2, Switch, Typography, useTheme} from '@mui/material'
+import {Box, FormControlLabel, Grid, Switch, Typography, useTheme} from '@mui/material'
 
 import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
 
@@ -37,8 +37,8 @@ export const MetaDashboard = () => {
 
   return (
     <Page width="lg" loading={fetcher.loading}>
-      <Grid2 container sx={{mb: 2}} columnSpacing={2}>
-        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
+      <Grid container sx={{mb: 2}} columnSpacing={2}>
+        <Grid size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
             <Lazy
               deps={[ctx.filteredData]}
@@ -49,33 +49,33 @@ export const MetaDashboard = () => {
               {(_) => formatLargeNumber(_)}
             </Lazy>
           </SlideWidget>
-        </Grid2>
-        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
+        </Grid>
+        <Grid size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="storage" title={m.submissions}>
             {formatLargeNumber(ctx.filteredData.length)}
           </SlideWidget>
-        </Grid2>
-        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
+        </Grid>
+        <Grid size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
             {formatLargeNumber(ctx.filteredUniqueData.length)}
           </SlideWidget>
-        </Grid2>
-        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
+        </Grid>
+        <Grid size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
             {avgHHSize}
           </SlideWidget>
-        </Grid2>
-        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
+        </Grid>
+        <Grid size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
             {formatLargeNumber(ctx.filteredPersons.length)}
           </SlideWidget>
-        </Grid2>
-        <Grid2 size={{xs: 6, md: 4, lg: 2}}>
+        </Grid>
+        <Grid size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="person" title={m.uniqIndividuals}>
             {formatLargeNumber(ctx.filteredUniquePersons.length)}
           </SlideWidget>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
       <Div responsive>
         <Div column>
           <Map

@@ -1,9 +1,7 @@
-import React, {useMemo} from 'react'
 import {DateRange, DateRangePicker, PickersShortcutsItem, SingleInputDateRangeField} from '@mui/x-date-pickers-pro'
-import {unstable_useMultiInputDateRangeField as useMultiInputDateRangeField} from '@mui/x-date-pickers-pro/MultiInputDateRangeField'
-import {Box, TextField} from '@mui/material'
 import {endOfMonth, format, startOfMonth, subMonths} from 'date-fns'
-import {PeriodPickerProps} from '@/shared/PeriodPicker/PeriodPickerNative'
+
+import type {PeriodPickerProps} from '@/shared/PeriodPicker/PeriodPickerNative'
 
 const shortcutsItems: PickersShortcutsItem<DateRange<Date>>[] = (() => {
   const today = new Date()
@@ -62,106 +60,3 @@ export const PeriodPickerMui = ({
     />
   )
 }
-
-const BrowserMultiInputDateRangeField = React.forwardRef<HTMLDivElement, any>((props, ref) => {
-  const {
-    slotProps,
-    value,
-    defaultValue,
-    format,
-    onChange,
-    readOnly,
-    disabled,
-    onError,
-    fullWidth,
-    shouldDisableDate,
-    minDate,
-    maxDate,
-    disableFuture,
-    disablePast,
-    sx,
-    selectedSections,
-    onSelectedSectionsChange,
-    className,
-  } = props
-
-  const {inputRef: startInputRef, ...startTextFieldProps} = slotProps?.textField || {}
-
-  const {inputRef: endInputRef, ...endTextFieldProps} = slotProps?.textField || {}
-
-  const {
-    startDate: {sectionListRef: startRef, ...startDateProps},
-    endDate: {sectionListRef: endRef, ...endDateProps},
-  } = useMultiInputDateRangeField({
-    sharedProps: {
-      value,
-      defaultValue,
-      format,
-      onChange,
-      readOnly,
-      disabled,
-      onError,
-      shouldDisableDate,
-      minDate,
-      maxDate,
-      disableFuture,
-      disablePast,
-      selectedSections,
-      onSelectedSectionsChange,
-    },
-    startTextFieldProps,
-    endTextFieldProps,
-    unstableStartFieldRef: startInputRef,
-    unstableEndFieldRef: endInputRef,
-  })
-
-  return (
-    <Box
-      ref={ref}
-      className={className}
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        ...(fullWidth && {width: '100%'}),
-        ...sx,
-      }}
-    >
-      <TextField
-        type="text"
-        margin="dense"
-        variant="outlined"
-        fullWidth
-        size="small"
-        sx={{minWidth: 115, marginRight: '-1px'}}
-        slotProps={{
-          inputLabel: {shrink: true},
-          input: {
-            ...startDateProps.InputProps,
-            sx: {borderBottomRightRadius: 0, borderTopRightRadius: 0},
-          },
-        }}
-        {...startDateProps}
-        inputRef={startRef}
-      />
-      <TextField
-        type="text"
-        margin="dense"
-        variant="outlined"
-        fullWidth
-        size="small"
-        sx={{minWidth: 115}}
-        slotProps={{
-          inputLabel: {shrink: true},
-          input: {
-            ...endDateProps.InputProps,
-            sx: {borderBottomLeftRadius: 0, borderTopLeftRadius: 0},
-          },
-        }}
-        {...endDateProps}
-        inputRef={endRef}
-      />
-    </Box>
-  )
-})
-
-BrowserMultiInputDateRangeField.displayName = 'BrowserMultiInputDateRangeField'

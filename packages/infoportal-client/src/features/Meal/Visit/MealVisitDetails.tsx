@@ -1,4 +1,4 @@
-import {useParams} from 'react-router'
+import {useParams} from 'react-router-dom'
 import * as yup from 'yup'
 import React, {ReactNode} from 'react'
 import {Box, GlobalStyles, Icon, ThemeProvider} from '@mui/material'

@@ -1,5 +1,5 @@
 import {CfmData, cfmMakeEditRequestKey, CfmStatusIconLabel, useCfmContext} from '@/features/Cfm/CfmContext'
-import {useNavigate, useParams} from 'react-router'
+import {useNavigate, useParams} from 'react-router-dom'
 import {Page, PageTitle} from '@/shared/Page'
 import * as yup from 'yup'
 import {IpBtn, ListRow, Modal, Txt} from '@/shared'

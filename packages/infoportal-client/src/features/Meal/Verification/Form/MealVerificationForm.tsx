@@ -20,7 +20,7 @@ import {
   MealVerificationAnsers,
   MealVerificationAnswersStatus,
 } from '@/core/sdk/server/mealVerification/MealVerification'
-import {useNavigate} from 'react-router'
+import {useNavigate} from 'react-router-dom'
 import {
   mealVerificationActivities,
   mealVerificationActivitiesIndex,
