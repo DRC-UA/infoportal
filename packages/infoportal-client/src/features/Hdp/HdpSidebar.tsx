@@ -11,7 +11,7 @@ import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {hdpIndex} from './constants'
 
 const victim: KoboFormName[] = ['va_bio_tia']
-const peace: KoboFormName[] =  ['conflict_trainings']
+const peace: KoboFormName[] = ['cs_tracker', 'conflict_pre_post']
 
 export const HdpSidebar: FC = () => {
   const path = (page: string) => '' + page

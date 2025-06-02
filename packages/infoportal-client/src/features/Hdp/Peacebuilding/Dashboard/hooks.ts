@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react'
 import {map, seq} from '@axanc/ts-utils'
 
-import {KoboIndex, Period, PeriodHelper, Conflict_trainings} from 'infoportal-common'
+import {KoboIndex, Period, PeriodHelper, Cs_tracker} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -17,40 +17,40 @@ export type UsePeacebuildingData = ReturnType<typeof usePeacebuildingData>
 export const usePeacebuildingData = () => {
   const {m} = useI18n()
   const {api} = useAppSettings()
-  const fetcherAnswer = useKoboAnswersContext().byName('conflict_trainings')
+  const fetcherAnswer = useKoboAnswersContext().byName('cs_tracker')
   const fetcherPeriod = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('conflict_trainings').id))
 
   const filterShape = useMemo(
     () =>
-      DataFilter.makeShape<InferTypedAnswer<'conflict_trainings'>>({
+      DataFilter.makeShape<InferTypedAnswer<'cs_tracker'>>({
         office: {
           icon: appConfig.icons.office,
-          getValue: (_) => _.office,
-          getOptions: () => DataFilter.buildOptionsFromObject(Conflict_trainings.options.office),
+          getValue: (_) => _.location,
+          getOptions: () => DataFilter.buildOptionsFromObject(Cs_tracker.options.office),
           label: m.office,
         },
-        team: {
-          icon: 'handshake',
-          getValue: (_) => _.sector_team,
-          getOptions: () => DataFilter.buildOptionsFromObject(Conflict_trainings.options.sector_team),
-          label: m.teamConducted,
-        },
-        first: {
-          icon: 'schedule',
-          getValue: (_) => _.first_training,
-          getOptions: () => DataFilter.buildOptionsFromObject(Conflict_trainings.options.first_training),
-          label: m.firstTraining,
-        },
+        // team: {
+        //   icon: 'handshake',
+        //   getValue: (_) => _.sector_team,
+        //   getOptions: () => DataFilter.buildOptionsFromObject(Cs_tracker.options.sector_team),
+        //   label: m.teamConducted,
+        // },
+        // first: {
+        //   icon: 'schedule',
+        //   getValue: (_) => _.first_training,
+        //   getOptions: () => DataFilter.buildOptionsFromObject(Cs_tracker.options.first_training),
+        //   label: m.firstTraining,
+        // },
         format: {
           icon: 'share',
           getValue: (_) => _.training_format,
-          getOptions: () => DataFilter.buildOptionsFromObject(Conflict_trainings.options.training_format),
+          getOptions: () => DataFilter.buildOptionsFromObject(Cs_tracker.options.training_format),
           label: m.format,
         },
         project: {
           icon: appConfig.icons.project,
           getValue: (_) => _.project_code,
-          getOptions: () => DataFilter.buildOptionsFromObject(Conflict_trainings.options.project_code),
+          getOptions: () => DataFilter.buildOptionsFromObject(Cs_tracker.options.project_code),
           label: m.project,
         },
       }),

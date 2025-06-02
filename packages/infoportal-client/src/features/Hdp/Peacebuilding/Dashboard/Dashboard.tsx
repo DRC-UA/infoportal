@@ -5,15 +5,15 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
 
-import {usePeacebuildingContext, VictimAssistanceProvider} from './Context'
+import {usePeacebuildingContext, PeacebuildingProvider} from './Context'
 import {DashboardWidgets} from './DashboardWidgets'
 import {Typography} from '@mui/material'
 
 export const Dashboard: FC = () => {
   return (
-    <VictimAssistanceProvider>
+    <PeacebuildingProvider>
       <DashboardWithContext />
-    </VictimAssistanceProvider>
+    </PeacebuildingProvider>
   )
 }
 

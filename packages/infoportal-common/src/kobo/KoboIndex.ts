@@ -66,7 +66,9 @@ const koboIndex = {
   safeguarding_psea: 'afq5ayhc2kssnomB8LR4oX',
   conflict_trainings: 'arEDCmKLXgKRcxoddunFgq',
   ecrec_small_scale: 'aGLgXRGGXGrwtJc8y9mEUQ',
-  ecrec_subsistance: 'acWaJmM4PAj2zbiw75rcRk'
+  ecrec_subsistance: 'acWaJmM4PAj2zbiw75rcRk',
+  conflict_pre_post: 'atG7X5hrbXbR9eseskUoCq',
+  cs_tracker: 'ac5Xu2t2vJ97WneTGaSVNH',
 }
 
 import {Obj, seq} from '@axanc/ts-utils'
@@ -141,7 +143,9 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   safeguarding_psea: '[Safeguarding] Tracker of trainings on Safeguarding and PSEA of partners in DRC',
   conflict_trainings: '[Peacebuilding] Conflict Sensitivity Trainings',
   ecrec_small_scale: '[Ecrec] Small Scale Farmer Registration Form',
-  ecrec_subsistance: '[Ecrec] Subsistance farmer registration'
+  ecrec_subsistance: '[Ecrec] Subsistance farmer registration',
+  conflict_pre_post: '[Peacebuilding] Conflict Sensitivity Training Pre-Post Test',
+  cs_tracker: '[Peacebuilding] CS Training Tracker',
 }
 
 export type KoboFormName = keyof typeof koboIndex

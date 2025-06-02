@@ -398,6 +398,12 @@ export class BuildKoboType {
       conflict_trainings: {
         formId: KoboIndex.byName('conflict_trainings').id,
       },
+      conflict_pre_post: {
+        formId: KoboIndex.byName('conflict_pre_post').id,
+      },
+      cs_tracker: {
+        formId: KoboIndex.byName('cs_tracker').id,
+      },
     },
     (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>],
   )
