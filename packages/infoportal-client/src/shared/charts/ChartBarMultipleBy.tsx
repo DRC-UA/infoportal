@@ -1,6 +1,6 @@
 import {Obj, seq, Seq} from '@axanc/ts-utils'
 import React, {ReactNode, useMemo} from 'react'
-import {ChartBar} from '@/shared/charts/ChartBar'
+import {BarChartData, ChartBar} from '@/shared/charts/ChartBar'
 import {Checkbox} from '@mui/material'
 import {ChartHelper} from '@/shared/charts/chartHelper'
 import {KeyOf} from 'infoportal-common'
@@ -21,6 +21,7 @@ export interface ChartBarMultipleByProps<
   checked?: Record<NonNullable<R>, boolean>
   onToggle?: (_: R) => void
   base?: 'percentOfTotalAnswers' | 'percentOfTotalChoices'
+  forceShowEmptyLabels?: boolean
 }
 
 export const ChartBarMultipleBy = <
@@ -39,6 +40,7 @@ export const ChartBarMultipleBy = <
   filterValue,
   base,
   mergeOptions,
+  forceShowEmptyLabels,
 }: ChartBarMultipleByProps<D, K, O>) => {
   const res = useMemo(() => {
     const source = data
@@ -63,9 +65,21 @@ export const ChartBarMultipleBy = <
       .get()
   }, [data, by, label])
 
+  const finalData = useMemo(() => {
+    if (!forceShowEmptyLabels || !label) return res
+    return seq(Obj.keys(label)).reduceObject((key) => [
+      key as unknown as NonNullable<K>,
+      res[key as unknown as NonNullable<K>] ?? {
+        value: 0,
+        label: label[key as unknown as NonNullable<K>],
+        percent: 0,
+      },
+    ]) as Record<NonNullable<K>, BarChartData>
+  }, [res, forceShowEmptyLabels, label])
+
   return (
     <ChartBar
-      data={res}
+      data={finalData}
       onClickData={(_) => onClickData?.(_ as K)}
       labels={
         !onToggle

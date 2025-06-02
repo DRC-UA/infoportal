@@ -8,7 +8,7 @@ import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
 
 import {hdpIndex} from '../constants'
 
-import {VictimAssistanceDashboard} from './Dashboard'
+import {PeacebuildingDashboard} from './Dashboard'
 import {relatedKoboForms} from './constants'
 
 export const Peacebuilding: FC = () => {
@@ -20,7 +20,7 @@ export const Peacebuilding: FC = () => {
   return (
     <Routes>
       <Route index element={<Navigate to={hdpIndex.peacebuilding.dashboard.slug} replace />} />
-      <Route path={hdpIndex.peacebuilding.dashboard.slug} element={<VictimAssistanceDashboard />} />
+      <Route path={hdpIndex.peacebuilding.dashboard.slug} element={<PeacebuildingDashboard />} />
       {relatedKoboForms.map((name) => (
         <Route
           key={name}

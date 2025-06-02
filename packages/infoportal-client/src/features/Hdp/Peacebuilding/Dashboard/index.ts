@@ -1,1 +1,1 @@
-export {Dashboard as VictimAssistanceDashboard} from './Dashboard'
+export {Dashboard as PeacebuildingDashboard} from './Dashboard'

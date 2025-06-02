@@ -51,6 +51,8 @@ import {
   Conflict_trainings,
   Ecrec_small_scale,
   Ecrec_subsistance,
+  Conflict_pre_post,
+  Cs_tracker,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -419,6 +421,20 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('conflict_trainings').id,
           fnMapKobo: Conflict_trainings.map,
+          ...filters,
+        }),
+      ),
+      ...make('conflict_pre_post', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('conflict_pre_post').id,
+          fnMapKobo: Conflict_pre_post.map,
+          ...filters,
+        }),
+      ),
+      ...make('cs_tracker', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('cs_tracker').id,
+          fnMapKobo: Cs_tracker.map,
           ...filters,
         }),
       ),

@@ -470,6 +470,7 @@ export const en = Object.freeze({
     atLeastOneMemberWorking: 'HHs with at least one member working',
     peacebuildingTitle: 'Conflict Sensitivity Training Dashboard',
     trainingTrends: 'Training Trends',
+    trainingOfTrainers: 'Training of Trainers (ToT)',
     victimAssistanceTitle: 'Victim Assistance',
     _meal: {
       openTracker: 'Open Excel tracker',

@@ -8,11 +8,7 @@ const Context = createContext({} as PeaceContext)
 
 export const usePeacebuildingContext = () => useContext<PeaceContext>(Context)
 
-export const VictimAssistanceProvider = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const PeacebuildingProvider = ({children}: {children: ReactNode}) => {
   const data = usePeacebuildingData()
 
   useEffect(() => {
