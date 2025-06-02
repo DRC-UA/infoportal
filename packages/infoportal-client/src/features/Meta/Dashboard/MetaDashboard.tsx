@@ -279,14 +279,10 @@ export const MetaDashboard = () => {
           </SlidePanel>
           <SlidePanel>
             <ScRadioGroup value={showProjectsBy} onChange={setShowProjectsBy} inline dense>
-              <ScRadioGroupItem hideRadio value="donoor" title={m.donor} />
+              <ScRadioGroupItem hideRadio value="donor" title={m.donor} />
               <ScRadioGroupItem hideRadio value="project" title={m.project} />
             </ScRadioGroup>
-            {showProjectsBy === 'project' ? (
-              <ChartBarMultipleByKey data={ctx.filteredData} property="project" />
-            ) : (
-              <ChartBarMultipleByKey data={ctx.filteredData} property="donor" />
-            )}
+            <ChartBarMultipleByKey data={ctx.filteredData} property={showProjectsBy} />
           </SlidePanel>
           <MetaDashboardActivityPanel />
         </Div>
