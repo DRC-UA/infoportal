@@ -139,17 +139,17 @@ export const ProtectionDashboardPsea = () => {
         }
       />
       <Grid container sx={{mb: 2, alignItems: 'stretch'}} columnSpacing={2}>
-        <Grid item xs={6} md={3}>
+        <Grid size={{xs: 6, md: 3}}>
           <SlideWidget sx={{flex: 1}} icon="storage" title={m._protection.trainings}>
             {dataFiltered.length}
           </SlideWidget>
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid size={{xs: 6, md: 3}}>
           <SlideWidget sx={{flex: 1}} icon="person" title={m._protection.participants}>
             {participants.length}
           </SlideWidget>
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid size={{xs: 6, md: 3}}>
           <Panel sx={{height: '100%', mb: 0, display: 'flex', alignItems: 'center', pl: 2}}>
             <ChartPieWidget
               title="Participation rate"
@@ -160,7 +160,7 @@ export const ProtectionDashboardPsea = () => {
             />
           </Panel>
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid size={{xs: 6, md: 3}}>
           <SlideWidget sx={{flex: 1}} icon="home" title={m._protection.avgParticipants}>
             {(participants.length / dataFiltered.length).toFixed(1)}
           </SlideWidget>
