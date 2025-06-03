@@ -10,7 +10,7 @@ export interface IpInputProps extends OutlinedInputProps, Pick<TextFieldProps, '
 export const IpInput = React.forwardRef(
   ({small, label, sx, error, InputLabelProps, id, helperText = '', ...props}: IpInputProps, ref) => {
     // const id = useMemo(() => Math.random() + '', [])
-    const inputElement = useRef<HTMLInputElement>()
+    const inputElement = useRef<HTMLInputElement>(null)
     useEffect(() => {
       if (props.autoFocus) inputElement?.current?.focus()
     }, [])

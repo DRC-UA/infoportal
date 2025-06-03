@@ -51,7 +51,7 @@ export const useFetchers: UseFetchersFn = <F extends Func<Promise<any>>, K exten
   const loadings = useMapIp<K, boolean>()
   const [lastError, setLastError] = useState<E | undefined>()
   const list = useMemo(() => entities.values ?? [], [entities])
-  const fetch$ = useRef<Promise<FetcherResult<F>>>()
+  const fetch$ = useRef<Promise<FetcherResult<F>>>(undefined)
 
   const fetch = ({force = true, clean = true}: FetchParams = {}, ...args: Parameters<F>): Promise<FetcherResult<F>> => {
     const key = requestKey(args)

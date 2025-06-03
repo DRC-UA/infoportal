@@ -161,7 +161,7 @@ export const SlidePanelTitle = ({
   children,
   ...props
 }: {icon?: string} & TxtProps) => {
-  const ref = useRef<HTMLDivElement>()
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (ref.current) ref.current.innerHTML = uppercaseHandlingAcronyms(ref.current.innerHTML)

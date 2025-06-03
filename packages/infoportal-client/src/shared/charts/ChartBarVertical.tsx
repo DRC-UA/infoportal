@@ -65,7 +65,18 @@ export const ChartBarVertical = ({
           <Tooltip {...slotProps?.Tooltip} />
           {!hideLegends && <Legend {...commonLegendProps} />}
           {bars.map((_, i) => (
-            <Bar key={_} dataKey={_} fill={colors(theme)[i]} label={axes?.y?.label} />
+            <Bar
+              key={_}
+              dataKey={_}
+              fill={colors(theme)[i]}
+              {...(axes?.y?.label && {
+                label: ({x, y, value}) => (
+                  <text x={x} y={y}>
+                    {value}
+                  </text>
+                ),
+              })}
+            />
           ))}
         </BarChart>
       </ResponsiveContainer>

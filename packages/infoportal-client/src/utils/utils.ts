@@ -1,15 +1,26 @@
 import {addMonths, differenceInMonths, isAfter, isBefore, startOfMonth} from 'date-fns'
 import {isValidElement, ReactElement, ReactNode} from 'react'
 
+interface ElementProps {
+  value?: string
+  children?: ReactNode | ReactNode[]
+}
+
+function isElementWithProps(node: any): node is ReactElement<ElementProps> {
+  return isValidElement(node) && typeof node.props === 'object'
+}
+
 export namespace Utils {
   export const clearParenthesis = (_: string) => _.replaceAll(/(.*)\([^(]*\)/g, '$1')
 
   export const extractInnerText = (node: ReactNode | ReactElement): string => {
-    if ((node as ReactElement)?.props?.value) return (node as ReactElement).props.value
+    if (isElementWithProps(node) && node.props.value) {
+      return node.props.value
+    }
     if (typeof node === 'string') {
       return node
     }
-    if (!node || !isValidElement(node) || !node.props || !node.props.children) {
+    if (!node || !isElementWithProps(node) || !node.props || !node.props.children) {
       return ''
     }
     if (Array.isArray(node.props.children)) {
