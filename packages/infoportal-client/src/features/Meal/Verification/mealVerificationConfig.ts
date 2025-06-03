@@ -450,6 +450,7 @@ export const mealVerificationActivities = seq([
       koboFormId: KoboIndex.byName('meal_verificationEcrec').id,
       joinBy: (_) => _.pay_det_tax_id_num!,
       fetch: 'meal_verificationEcrec',
+      filters: (record) => record.which_support_registered === 'msme',
     },
     dataColumns: [],
     verifiedColumns: {
