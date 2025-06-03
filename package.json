@@ -22,12 +22,12 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@types/mime-types": "^2.1.4",
-    "prettier": "^3.4.2",
-    "tsx": "^4.19.3"
+    "@types/mime-types": "^3.0.0",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.4"
   },
   "dependencies": {
-    "kobo-sdk": "^2.1.4",
+    "kobo-sdk": "^2.2.5",
     "mime-types": "^3.0.1"
   },
   "overrides": {
