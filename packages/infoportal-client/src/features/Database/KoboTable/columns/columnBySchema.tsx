@@ -275,7 +275,7 @@ export const columnBySchemaGenerator = ({
                   color: t.palette.text.primary,
                   marginBottom: t.spacing(0.5),
                   padding: t.spacing(0.5),
-                  borderRadius: t.shape.borderRadius - 3,
+                  borderRadius: Number(t.shape.borderRadius) - 3,
                 }}
               >
                 <div style={{fontWeight: 'bold', marginBottom: t.spacing(1)}}>{q.label?.[0]}</div>

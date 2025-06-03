@@ -38,7 +38,7 @@ export const AppHeaderFeatures = (props: Omit<IpIconBtnProps, 'children'>) => {
                   p: 1,
                   background: t.palette.background.default,
                   mb: 0.5,
-                  borderRadius: t.shape.borderRadius - 2 + 'px',
+                  borderRadius: Number(t.shape.borderRadius) - 2 + 'px',
                 }}
               >
                 <Txt bold uppercase size="small" color="hint" sx={{fontWeight: '600', ml: 1}}>
