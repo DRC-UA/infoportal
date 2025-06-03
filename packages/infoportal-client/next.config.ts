@@ -1,7 +1,7 @@
-const path = require('path')
+import path from 'node:path'
+import type {NextConfig} from 'next'
 
-/** @type {import('next').NextConfig} */
-module.exports = {
+const config: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   externalDir: true,
   swcMinify: true,
@@ -29,3 +29,5 @@ module.exports = {
     'cookie',
   ],
 }
+
+export default config
