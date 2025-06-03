@@ -58,6 +58,7 @@ export namespace AiProtectionType {
       'PRT-DRC-00002': 'cqzyoqrm730zf5d4',
       'PRT-DRC-00003': 'c91inndm73143d45',
       'PRT-DRC-00004': 'cmzh0x9m7317x856',
+      'PRT-DRC-00009': 'cia5o5imbes21gi2',
     },
     'Response Theme': {'No specific theme': 'crfw0hkm4wiqb94f'},
   }
