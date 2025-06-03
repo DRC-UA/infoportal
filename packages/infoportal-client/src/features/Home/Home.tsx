@@ -1,5 +1,5 @@
 import {match, Obj, seq} from '@axanc/ts-utils'
-import {Box, BoxProps, darken, Grid2, useTheme} from '@mui/material'
+import {Box, BoxProps, darken, Grid, useTheme} from '@mui/material'
 
 import {DRCLogo} from '@/shared/logo/logo'
 import {Txt} from '@/shared/Txt'
@@ -35,12 +35,11 @@ export const HomeTitle = ({sx, ...props}: BoxProps) => {
     </Box>
   )
 }
-
 const _Home = () => {
-  const {m} = useI18n()
   const {session, accesses} = useSession()
   const layoutCtx = useLayoutContext()
   const t = useTheme()
+
   return (
     <Page>
       <Box>
@@ -57,15 +56,15 @@ const _Home = () => {
               p: 1,
               background: darken(styleUtils(t).color.toolbar, 0.02),
               mb: 1,
-              borderRadius: t.shape.borderRadius * 2 + 'px',
+              borderRadius: 2,
             }}
           >
             <Txt bold uppercase color="hint" sx={{fontWeight: '600', ml: 1}}>
               {category}
             </Txt>
-            <Grid2 container spacing={1}>
+            <Grid container spacing={1}>
               {features!.map((feature) => (
-                <Grid2
+                <Grid
                   key={feature.id}
                   size={{md: 2, sm: 3, xs: 4}}
                   sx={{
@@ -86,9 +85,9 @@ const _Home = () => {
                       })
                       .default(60)}
                   />
-                </Grid2>
+                </Grid>
               ))}
-            </Grid2>
+            </Grid>
           </Box>
         ))}
     </Page>
