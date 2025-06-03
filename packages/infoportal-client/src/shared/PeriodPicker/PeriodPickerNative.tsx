@@ -1,7 +1,9 @@
-import {addDays, subDays} from 'date-fns'
 import React, {useEffect, useState} from 'react'
-import {useI18n} from '../../core/i18n'
 import {Box, BoxProps} from '@mui/material'
+import {addDays, subDays} from 'date-fns'
+
+import {useI18n} from '@/core/i18n'
+
 import {IpDatepicker} from '../Datepicker/IpDatepicker'
 
 export interface PeriodPickerProps extends Omit<BoxProps, 'defaultValue' | 'onChange'> {
@@ -14,7 +16,7 @@ export interface PeriodPickerProps extends Omit<BoxProps, 'defaultValue' | 'onCh
   fullWidth?: boolean
 }
 
-export const PeriodPickerNative = ({min, max, value, onChange, label, fullWidth, sx, ...props}: PeriodPickerProps) => {
+export const PeriodPickerNative = ({min, max, value, onChange, label, fullWidth, sx}: PeriodPickerProps) => {
   const [start, setStart] = useState<Date | undefined>(undefined)
   const [end, setEnd] = useState<Date | undefined>(undefined)
   const {m} = useI18n()

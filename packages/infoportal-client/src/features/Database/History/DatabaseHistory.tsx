@@ -1,7 +1,7 @@
 import {Page} from '@/shared/Page'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {databaseUrlParamsValidation} from '@/features/Database/Database'
-import {useParams} from 'react-router'
+import {useParams} from 'react-router-dom'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import React, {useEffect} from 'react'
 import {Datatable} from '@/shared/Datatable/Datatable'
