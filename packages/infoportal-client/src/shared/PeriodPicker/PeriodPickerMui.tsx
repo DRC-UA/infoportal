@@ -49,12 +49,22 @@ export const PeriodPickerMui = ({
       value={toDateRange(value)}
       onChange={handleChange}
       slotProps={{
+        field: {
+          clearable: true,
+        },
         textField: {
           size: 'small',
           sx: {minWidth: 218, marginTop: 0, paddingTop: 0, marginRight: 1, ...sx},
           fullWidth,
         },
         shortcuts: {items: shortcutsItems},
+        openPickerButton: {
+          size: 'small',
+          sx: {mr: -1.5},
+        },
+        clearButton: {
+          size: 'small',
+        },
       }}
       slots={{field: SingleInputDateRangeField}}
     />

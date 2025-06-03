@@ -34,7 +34,7 @@ export const Item = ({label, children}: {label: ReactNode; children: ReactNode})
 }
 
 export const MetaSidebar = () => {
-  const {m} = useI18n()
+  const {m, formatDate} = useI18n()
   const path = (page: string) => '' + page
   const {data: ctx} = useMetaContext()
   const location = useLocation()
@@ -118,10 +118,18 @@ export const MetaSidebar = () => {
                 />
               </Box>
             </Typography>
-            <SidebarSubSection dense title={m.submittedAt} keepOpen>
+            <SidebarSubSection
+              dense
+              title={
+                ctx.period.start && ctx.period.end
+                  ? `Submitted ${formatDate(ctx.period.start)} - ${formatDate(ctx.period.end)}`
+                  : m.submittedAt
+              }
+              keepOpen
+            >
               <Box sx={{px: 1}}>
                 <DebouncedInput<[Date | undefined, Date | undefined]>
-                  defaultValue={[ctx.period.start, ctx.period.end]}
+                  value={[ctx.period.start, ctx.period.end]}
                   onChange={([start, end]) => {
                     ctx.setPeriod((prev) => ({...prev, start, end}))
                   }}
@@ -132,10 +140,18 @@ export const MetaSidebar = () => {
                 </DebouncedInput>
               </Box>
             </SidebarSubSection>
-            <SidebarSubSection dense title={m.committedAt} keepOpen>
+            <SidebarSubSection
+              dense
+              title={
+                ctx.periodCommit.start && ctx.periodCommit.end
+                  ? `Committed ${formatDate(ctx.periodCommit.start)} - ${formatDate(ctx.periodCommit.end)}`
+                  : m.committedAt
+              }
+              keepOpen
+            >
               <Box sx={{px: 1}}>
                 <DebouncedInput<[Date | undefined, Date | undefined]>
-                  defaultValue={[ctx.periodCommit.start, ctx.period.end]}
+                  value={[ctx.periodCommit.start, ctx.periodCommit.end]}
                   onChange={([start, end]) => {
                     ctx.setPeriodCommit((prev) => ({...prev, start, end}))
                   }}
