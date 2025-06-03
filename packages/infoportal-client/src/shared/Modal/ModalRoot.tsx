@@ -1,6 +1,5 @@
-import * as React from 'react'
-import {memo, ReactNode, useEffect, useState} from 'react'
-import * as ReactDOM from 'react-dom'
+import {memo, ReactNode, useEffect, useState, Fragment} from 'react'
+import {createPortal} from 'react-dom'
 
 /**
  * Modal Root Props
@@ -27,16 +26,6 @@ interface ModalRootProps {
 }
 
 /**
- * Modal renderer props
- */
-interface ModalRendererProps {
-  /**
-   * Functional component representing the modal
-   */
-  component: ReactNode
-}
-
-/**
  * Component responsible for rendering the modal.
  *
  * The identity of `Component` may change dependeing on the inputs passed to
@@ -52,21 +41,13 @@ interface ModalRendererProps {
  *
  * Renders modals using react portal.
  */
-export const ModalRoot = memo(({modals, container, component: RootComponent = React.Fragment}: ModalRootProps) => {
+export const ModalRoot = memo(({modals, container, component: RootComponent = Fragment}: ModalRootProps) => {
   const [mountNode, setMountNode] = useState<Element | undefined>(undefined)
 
   // This effect will not be ran in the server environment
   useEffect(() => setMountNode(container || document.body))
 
   return mountNode
-    ? ReactDOM.createPortal(
-        <RootComponent>
-          {Object.keys(modals).map(
-            (key) => modals[key],
-            // <ModalRenderer key={key} component={modals[key]}/>
-          )}
-        </RootComponent>,
-        mountNode,
-      )
+    ? createPortal(<RootComponent>{Object.keys(modals).map((key) => modals[key])}</RootComponent>, mountNode)
     : null
 })

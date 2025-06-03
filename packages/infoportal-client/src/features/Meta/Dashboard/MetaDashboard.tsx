@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, type ReactNode} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
 import {format, isAfter, compareAsc} from 'date-fns'
 import {Box, FormControlLabel, Grid, Switch, Typography, useTheme} from '@mui/material'
@@ -125,7 +125,7 @@ export const MetaDashboard = () => {
                     strokeOpacity: 0.4,
                   },
                   Tooltip: {
-                    content: CustomAvgHHSizeTooltip,
+                    content: CustomAvgHHSizeTooltip as (props: any) => ReactNode,
                   },
                 }}
                 data={Object.entries(ctx.filteredData.groupBy(({date}) => format(date, 'yyyy-MM')))
