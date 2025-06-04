@@ -24,6 +24,9 @@ jobs:
         run: |
           npm ci
 
+      - name: Dedupe node_modules
+        run: npm dedupe
+
       - name: Build, and test (common)
         working-directory: ./packages/infoportal-common
         run: |
