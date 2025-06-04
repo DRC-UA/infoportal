@@ -22,7 +22,11 @@ jobs:
 
       - name: npm install
         run: |
+          rm -rf node_modules .next
           npm ci
+
+      - name: Dedupe node_modules
+        run: npm dedupe
 
       - name: npm build
         env:

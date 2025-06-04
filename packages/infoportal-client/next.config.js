@@ -23,6 +23,7 @@ module.exports = {
     '@mui/system',
     '@mui/utils',
     '@mui/x-date-pickers-pro',
+    'axios',
     'react-router',
     'react-router-dom',
     'cookie',
