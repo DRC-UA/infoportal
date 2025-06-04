@@ -4,9 +4,6 @@
 name: '[Client] Build & Deploy to Azure - drc-imaa-ukr-tools'
 
 on:
-  #  push:
-  #    branches:
-  #      - main
   workflow_dispatch:
 
 jobs:
@@ -20,7 +17,7 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: npm install
+      - name: Clean install
         run: |
           rm -rf node_modules .next
           npm ci
@@ -47,14 +44,9 @@ jobs:
       - name: Update deployment tag
         run: |
           TAG_NAME="deployed_client"
-
-          echo "Delete the tag locally if it exists"
           if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
-            echo "Deleting existing tag $TAG_NAME"
             git tag -d "$TAG_NAME"
           fi
-
-          echo "Creating tag $TAG_NAME at commit $GITHUB_SHA"
           git tag "$TAG_NAME" "$GITHUB_SHA"
 
       - name: Zip artifact for deployment
