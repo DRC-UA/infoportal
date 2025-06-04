@@ -55,7 +55,7 @@
     "react-json-tree": "^0.20.0",
     "react-persistent-state": "^1.1.14",
     "react-portal": "^4.3.0",
-    "react-router-dom": "^7.6.1",
+    "react-router-dom": "^7.6.2",
     "react-syntax-highlighter": "^15.6.1",
     "recharts": "^2.15.3",
     "tss-react": "^4.9.18",
