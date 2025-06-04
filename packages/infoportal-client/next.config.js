@@ -19,4 +19,12 @@ module.exports = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  transpilePackages: [
+    '@mui/system',
+    '@mui/utils',
+    '@mui/x-date-pickers-pro',
+    'react-router',
+    'react-router-dom',
+    'cookie',
+  ],
 }

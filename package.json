@@ -29,5 +29,11 @@
   "dependencies": {
     "kobo-sdk": "^2.1.4",
     "mime-types": "^3.0.1"
+  },
+  "overrides": {
+    "@mui/utils": "^6.4.7",
+    "@mui/x-date-pickers-pro": {
+      "@mui/utils": "^6.4.7"
+    }
   }
 }
