@@ -1,17 +1,19 @@
-import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
-import {map, Obj} from '@axanc/ts-utils'
-import {UserSession} from '@/core/sdk/server/session/Session'
-import {Txt} from '@/shared/Txt'
-import {useI18n} from '@/core/i18n'
-import {Box} from '@mui/material'
-import {IpBtn} from '@/shared/Btn'
 import {useEffect, useState} from 'react'
+import {useEffectFn} from '@alexandreannic/react-hooks-lib'
+import {map, Obj} from '@axanc/ts-utils'
+import {Box} from '@mui/material'
+
+import {DrcOffice} from 'infoportal-common'
+
 import {useAppSettings} from '@/core/context/ConfigContext'
+import {useI18n} from '@/core/i18n'
 import {useIpToast} from '@/core/useToast'
 import {Modal} from '@/shared'
-import {DrcOffice} from 'infoportal-common'
+import {IpBtn} from '@/shared/Btn'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {useEffectFn} from '@alexandreannic/react-hooks-lib'
+import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
+import {UserSession} from '@/core/sdk/server/session/Session'
+import {Txt} from '@/shared/Txt'
 
 export const SessionInitForm = ({
   user,
