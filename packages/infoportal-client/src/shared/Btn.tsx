@@ -1,9 +1,8 @@
-import * as React from 'react'
 import {forwardRef, ReactNode} from 'react'
 import {alpha, Button, CircularProgress, Icon, Tooltip} from '@mui/material'
 import {ButtonProps} from '@mui/material/Button'
 import {makeStyles} from 'tss-react/mui'
-import {fnSwitch} from '@axanc/ts-utils'
+import {match} from '@axanc/ts-utils'
 import {styleUtils} from '@/core/theme'
 
 const useStyles = makeStyles<{loading?: boolean; variant?: IpBtnVariant}>()((t, {loading, variant}) => ({
@@ -14,9 +13,8 @@ const useStyles = makeStyles<{loading?: boolean; variant?: IpBtnVariant}>()((t, 
     marginRight: t.spacing(1),
   },
   root: {
-    ...fnSwitch(
-      variant!,
-      {
+    ...match(variant)
+      .cases({
         light: {
           fontWeight: 500,
           background: alpha(t.palette.primary.main, 0.12),
@@ -35,9 +33,8 @@ const useStyles = makeStyles<{loading?: boolean; variant?: IpBtnVariant}>()((t, 
             background: alpha(t.palette.primary.main, 0.2),
           },
         },
-      },
-      () => undefined,
-    ),
+      })
+      .default(undefined),
   },
   content: {
     display: 'flex',
