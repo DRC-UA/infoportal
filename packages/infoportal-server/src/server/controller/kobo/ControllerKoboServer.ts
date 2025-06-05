@@ -1,5 +1,6 @@
-import {NextFunction, Request, Response} from 'express'
+import {Request, Response} from 'express'
 import {PrismaClient} from '@prisma/client'
+
 import {KoboService} from '../../../feature/kobo/KoboService.js'
 
 export class ControllerKoboServer {
@@ -8,7 +9,7 @@ export class ControllerKoboServer {
     private service = new KoboService(pgClient),
   ) {}
 
-  readonly getServers = async (req: Request, res: Response, next: NextFunction) => {
+  readonly getServers = async (_req: Request, res: Response) => {
     const servers = await this.pgClient.koboServer.findMany()
     res.send(servers)
   }

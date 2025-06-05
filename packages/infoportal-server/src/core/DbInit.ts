@@ -1,7 +1,9 @@
 import {FeatureAccessLevel, Prisma, PrismaClient} from '@prisma/client'
-import {appConf, AppConf} from './conf/AppConf.js'
+
+import {DrcOffice, KoboIndex} from 'infoportal-common'
+
 import {AppFeatureId, KoboDatabaseFeatureParams} from '../feature/access/AccessType.js'
-import {DrcJob, DrcOffice, KoboIndex} from 'infoportal-common'
+import {appConf, AppConf} from './conf/AppConf.js'
 
 export const createdBySystem = 'SYSTEM'
 
@@ -13,13 +15,7 @@ export class DbInit {
 
   readonly initializeDatabase = async () => {
     if ((await this.prisma.user.count()) > 0) return
-    await Promise.all([
-      this.createAccOwner(),
-      this.createAccAdmins(),
-      this.createAccTest(),
-      this.createServer(),
-      this.createAccess(),
-    ])
+    await Promise.all([this.createAccOwner(), this.createAccAdmins(), this.createAccTest(), this.createAccess()])
   }
 
   private readonly createAccTest = async () => {
@@ -94,15 +90,6 @@ export class DbInit {
   private readonly createAccess = async () => {
     await this.prisma.featureAccess.deleteMany({where: {createdBy: createdBySystem}})
     const access: Prisma.FeatureAccessCreateInput[] = [
-      // {
-      //   createdBy: createdBySystem,
-      //   email: 'romane.breton@drc.ngo',
-      //   featureId: AppFeature.kobo_database,
-      //   level: FeatureAccessLevel.Admin,
-      //   params: KoboDatabaseFeatureParams.create({
-      //     koboFormId: KoboIndex.byName('protectionHh_2_1').id,
-      //   }),
-      // },
       {
         createdBy: createdBySystem,
         level: FeatureAccessLevel.Write,
@@ -125,27 +112,5 @@ export class DbInit {
         }),
       ),
     )
-  }
-
-  private readonly createServer = async () => {
-    const serversCount = await this.prisma.koboServer.count()
-    if (serversCount < 2) {
-      return Promise.all([
-        this.prisma.koboServer.create({
-          data: {
-            url: 'https://kobo.humanitarianresponse.info',
-            urlV1: 'https://kc-eu.kobotoolbox.org',
-            token: appConf.kobo.token,
-          },
-        }),
-        this.prisma.koboServer.create({
-          data: {
-            url: 'https://kf.kobotoolbox.org',
-            urlV1: 'https://kc.kobotoolbox.org',
-            token: 'TODO',
-          },
-        }),
-      ])
-    }
   }
 }

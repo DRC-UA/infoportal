@@ -15,21 +15,10 @@ export const appConf = {
   activityInfo: {
     apiToken: e(required)('ACTIVITY_INFO_API_TOKEN'),
   },
-  //   host: e(required)('DB_HOST'),
-  //   user: e(required)('DB_USER'),
-  //   database: e(required)('DB_NAME'),
-  //   password: e(required)('DB_PASSWORD'),
-  //   port: e(int, defaultValue(5432))('DB_PORT')
-  // },
   kobo: {
-    humanitarian: {
-      url: e(defaultValue('https://kobo.humanitarianresponse.info'))('KOBO_HUMANITARIAN_URL'),
-      urlV1: e(defaultValue('https://kc-eu.kobotoolbox.org'))('KOBO_HUMANITARIAN_URLV1'),
-      token: e(required)('KOBO_HUMANITARIAN_TOKEN'),
-    },
     drc: {
-      url: e(defaultValue('https://kobo.humanitarianresponse.info'))('KOBO_DRC_URL'),
-      urlV1: e(defaultValue('https://kc-eu.kobotoolbox.org'))('KOBO_DRC_URLV1'),
+      url: e(required)('KOBO_DRC_URL'),
+      urlV1: e(required)('KOBO_DRC_URLV1'),
       token: e(required)('KOBO_DRC_TOKEN'),
     },
   },
