@@ -104,7 +104,7 @@ export const DashboardWidgets: FC = () => {
               />
             </PanelBody>
           </Panel>
-          <Panel title={m.disability}>
+          <Panel title={m.displacementStatus}>
             <PanelBody>
               {ctx.dataFiltered && (
                 <ChartBarSingleBy
