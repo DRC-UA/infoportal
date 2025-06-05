@@ -6,6 +6,7 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@/core/i18n'
 import {KoboFormCreate} from '@/core/sdk/server/kobo/KoboFormSdk'
 import {useIpToast} from '@/core/useToast'
+import {useDatabaseContext} from '@/features/Database/DatabaseContext'
 import {Modal, Txt} from '@/shared'
 import {useAsync} from '@/shared/hook/useAsync'
 import {useFetcher} from '@/shared/hook/useFetcher'
@@ -20,6 +21,8 @@ export const DatabaseNew = ({children, onAdded}: {onAdded?: () => void; children
   const {m, formatDate} = useI18n()
   const [selectedForm, setSelectedForm] = useState<KoboFormCreate | undefined>()
   const {toastHttpError} = useIpToast()
+  const {formsAccessible} = useDatabaseContext()
+  const accessibleFormIds = formsAccessible?.map((form) => form.id)
 
   useEffectFn(_server.error, toastHttpError)
   // useEffectFn(_form.error, toastHttpError)
@@ -62,6 +65,7 @@ export const DatabaseNew = ({children, onAdded}: {onAdded?: () => void; children
           <ScRadioGroup dense value={selectedForm?.uid}>
             {_form.get[server.id]
               ?.filter((_) => _.has_deployment)
+              .filter((form) => !accessibleFormIds?.includes(form.uid)) // do not show already connected forms
               .map((form) => (
                 <ScRadioGroupItem
                   dense
