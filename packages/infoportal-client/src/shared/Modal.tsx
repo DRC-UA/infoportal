@@ -1,5 +1,4 @@
-// import * as React from 'react'
-import {cloneElement, EventHandler, ReactElement, ReactNode, SyntheticEvent, useState} from 'react'
+import {cloneElement, useState, type EventHandler, type ReactElement, type ReactNode, type SyntheticEvent} from 'react'
 import {
   Button,
   Dialog,
@@ -8,7 +7,7 @@ import {
   DialogProps,
   DialogTitle,
   LinearProgress,
-  PaperProps,
+  type PaperProps,
 } from '@mui/material'
 
 export interface ModalProps extends Omit<DialogProps, 'children' | 'onClick' | 'open' | 'content'> {
@@ -28,8 +27,6 @@ export interface ModalProps extends Omit<DialogProps, 'children' | 'onClick' | '
   overrideActions?: (_: () => void) => ReactNode
 }
 
-const enterKeyCode = 13
-
 export const Modal = ({
   overrideActions,
   children,
@@ -43,7 +40,6 @@ export const Modal = ({
   onClose,
   confirmDisabled,
   loading,
-  PaperProps,
   ...props
 }: ModalProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -62,22 +58,16 @@ export const Modal = ({
     if (onConfirm) onConfirm(event, close)
   }
 
-  const handleKeypress = (e: any) => {
-    if (e.keyCode === enterKeyCode) {
-      confirm(e)
-    }
-  }
-
   return (
     <>
       {cloneElement(children, {
-        onClick: (event: any) => {
+        onClick: (event: SyntheticEvent<any>) => {
           if (children.props.onClick) children.props.onClick(event)
           if (onClick) onClick(event)
           open()
         },
       })}
-      <Dialog open={isOpen} {...props} PaperProps={PaperProps}>
+      <Dialog open={isOpen} onClose={close} {...props}>
         {loading && (
           <LinearProgress
             sx={{

@@ -98,7 +98,7 @@ export const DatabaseWithContext = () => {
       sidebar={
         <Sidebar headerId="app-header">
           <NavLink to={databaseIndex.siteMap.index}>
-            {({isActive, isPending}) => (
+            {() => (
               <SidebarItem icon="home" component="div">
                 All forms
                 {ctx.isAdmin && (

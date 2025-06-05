@@ -1,15 +1,16 @@
+import {useEffect, useState, type ReactElement} from 'react'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {ReactElement, useEffect, useState} from 'react'
-import {Modal, Txt} from '@/shared'
-import {useI18n} from '@/core/i18n'
 import {Box} from '@mui/material'
-import {useFetchers} from '@/shared/hook/useFetchers'
-import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useI18n} from '@/core/i18n'
 import {KoboFormCreate} from '@/core/sdk/server/kobo/KoboFormSdk'
 import {useIpToast} from '@/core/useToast'
-import {useFetcher} from '@/shared/hook/useFetcher'
+import {Modal, Txt} from '@/shared'
 import {useAsync} from '@/shared/hook/useAsync'
+import {useFetcher} from '@/shared/hook/useFetcher'
+import {useFetchers} from '@/shared/hook/useFetchers'
+import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 
 export const DatabaseNew = ({children, onAdded}: {onAdded?: () => void; children: ReactElement<any>}) => {
   const {api} = useAppSettings()
@@ -39,54 +40,52 @@ export const DatabaseNew = ({children, onAdded}: {onAdded?: () => void; children
       loading={_server.loading || _form.anyLoading || _add.loading}
       title={m._koboDatabase.registerNewForm}
       confirmLabel={m.register}
-      onConfirm={(event, close) => {
+      confirmDisabled={selectedForm === undefined}
+      onConfirm={() => {
         if (selectedForm) {
           _add.call(selectedForm).then(onAdded)
           setSelectedForm(undefined)
         }
       }}
-      content={
-        <>
-          {_server.get?.map((server) => (
-            <Box
-              key={server.id}
-              sx={{
-                '&:not(:last-of-type)': {
-                  mb: 2,
-                },
-              }}
-            >
-              <Txt size="big" bold sx={{mb: 0.5}}>
-                {server.url.replace('https://', '')}
-              </Txt>
-              <ScRadioGroup dense value={selectedForm?.uid}>
-                {_form.get[server.id]
-                  ?.filter((_) => _.has_deployment)
-                  .map((form) => (
-                    <ScRadioGroupItem
-                      dense
-                      key={form.uid}
-                      value={form.uid}
-                      onClick={() =>
-                        setSelectedForm({
-                          uid: form.uid,
-                          serverId: server.id,
-                        })
-                      }
-                      title={form.name}
-                      description={
-                        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                          <Box>{form.deployment__submission_count}</Box>
-                          {formatDate(form.date_created)}
-                        </Box>
-                      }
-                    />
-                  ))}
-              </ScRadioGroup>
-            </Box>
-          ))}
-        </>
-      }
+      content={_server.get?.map((server) => (
+        <Box
+          key={server.id}
+          sx={{
+            '&:not(:last-of-type)': {
+              mb: 2,
+            },
+          }}
+        >
+          <Txt size="big" bold sx={{mb: 0.5}}>
+            {server.url.replace('https://', '')}
+          </Txt>
+          <ScRadioGroup dense value={selectedForm?.uid}>
+            {_form.get[server.id]
+              ?.filter((_) => _.has_deployment)
+              .map((form) => (
+                <ScRadioGroupItem
+                  dense
+                  key={form.uid}
+                  selected={form.uid === selectedForm?.uid}
+                  value={form.uid}
+                  onClick={() =>
+                    setSelectedForm({
+                      uid: form.uid,
+                      serverId: server.id,
+                    })
+                  }
+                  title={form.name}
+                  description={
+                    <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                      <Box>{form.deployment__submission_count}</Box>
+                      {formatDate(form.date_created)}
+                    </Box>
+                  }
+                />
+              ))}
+          </ScRadioGroup>
+        </Box>
+      ))}
     >
       {children}
     </Modal>
