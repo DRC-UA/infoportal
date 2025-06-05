@@ -335,7 +335,9 @@ export class KoboMetaMapperProtection {
 
   static readonly gbv: MetaMapperInsert<KoboMetaOrigin<Protection_gbv.T, KoboTagStatus>> = (row) => {
     const answer = Protection_gbv.map(row.answers)
+
     if (answer.new_ben === 'no') return
+
     const activities =
       answer.activity
         ?.map((_) =>

@@ -42,14 +42,8 @@ export const appConf = {
     maxConcurrency: e(int, defaultValue(50))('DATABASE_MAX_CONCURRENCY'),
     url: e(required)('DATABASE_URL'),
   },
-  //   host: e(required)('DB_HOST'),
-  //   user: e(required)('DB_USER'),
-  //   database: e(required)('DB_NAME'),
-  //   password: e(required)('DB_PASSWORD'),
-  //   port: e(int, defaultValue(5432))('DB_PORT')
-  // },
   kobo: {
-    url: e(defaultValue('https://kobo.humanitarianresponse.info'))('KOBO_URL'),
+    url: e(required)('KOBO_URL'),
     token: e(required)('KOBO_TOKEN'),
   },
   legalAid: {

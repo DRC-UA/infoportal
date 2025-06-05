@@ -6,13 +6,6 @@ import {ActivityInfoBuildType} from './ActivityInfoBuildType'
 import {FixKoboMigration} from './kobo-migration/20250113-fixKoboMigration'
 import {BuildKoboType} from './kobo/BuildTypeKobo'
 
-export const koboSdkHumanitarian = new KoboClient({
-  urlv1: appConf.kobo.humanitarian.urlV1,
-  urlv2: appConf.kobo.humanitarian.url,
-  token: appConf.kobo.humanitarian.token,
-  log: winston.createLogger(),
-})
-
 export const koboSdkDrc = new KoboClient({
   urlv1: appConf.kobo.drc.urlV1,
   urlv2: appConf.kobo.drc.url,
