@@ -1,5 +1,4 @@
-import {seq, match} from '@axanc/ts-utils'
-import {differenceInYears} from 'date-fns'
+import {match} from '@axanc/ts-utils'
 
 import {
   DrcOffice,
@@ -9,14 +8,11 @@ import {
   DrcSector,
   KoboMetaStatus,
   KoboXmlMapper,
-  Person,
   Va_bio_tia,
 } from 'infoportal-common'
 
 import {KoboMetaOrigin} from './KoboMetaType.js'
 import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService.js'
-
-const Gender = Person.Gender
 
 // MEMO: do not remove this
 //
@@ -30,22 +26,10 @@ export class KoboMetaMapperVa {
   static readonly bioAndTia: MetaMapperInsert<KoboMetaOrigin<Va_bio_tia.T>> = (row) => {
     const answer = Va_bio_tia.map(row.answers)
     const persons = KoboXmlMapper.Persons.va_bio_tia(answer)
-    if (answer.bio_gender || answer.bio_date_birth) {
-      const age = answer.bio_date_birth && differenceInYears(Date.now(), answer.bio_date_birth)
 
-      persons.push({
-        age,
-        gender: match(answer.bio_gender)
-          .cases({
-            female: Gender.Female,
-            male: Gender.Male,
-          })
-          .default(undefined),
-      })
-    }
-// Each TIA assessment can belong to a different project,
-// so we split them into separate meta records to avoid mixing multiple projects in a single record.
-// This ensures clean data structure and accurate reporting per project.
+    // Each TIA assessment can belong to a different project,
+    // so we split them into separate meta records to avoid mixing multiple projects in a single record.
+    // This ensures clean data structure and accurate reporting per project.
 
     const assessments = answer.tia_assesment || []
 
