@@ -15,6 +15,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('protection_hhs3').id:
       case KoboIndex.byName('protection_gbv').id:
       case KoboIndex.byName('protection_groupSession').id:
+      case KoboIndex.byName('protection_communityMonitoring').id:
       case KoboIndex.byName('ecrec_cashRegistration').id:
       case KoboIndex.byName('ecrec_cashRegistrationBha').id:
       case KoboIndex.byName('bn_re').id:

@@ -42,4 +42,6 @@ export const databaseCustomMapping: Record<any, (_: any) => any> = {
   [KoboIndex.byName('meal_cashPdm').id]: (_) => KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.cash_pdm),
   [KoboIndex.byName('partner_lampa').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.partner_lampa),
+  [KoboIndex.byName('protection_communityMonitoring').id]: (_) =>
+    KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.protection_communityMonitoring),
 }
