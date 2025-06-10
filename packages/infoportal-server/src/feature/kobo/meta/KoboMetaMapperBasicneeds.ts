@@ -1,11 +1,11 @@
-import {fnSwitch, map, seq} from '@axanc/ts-utils'
+import {match, map, seq} from '@axanc/ts-utils'
+
 import {
   add,
   Bn_rapidResponse,
   Bn_rapidResponse2,
   Bn_re,
   CashStatus,
-  DrcOffice,
   DrcProgram,
   DrcProject,
   DrcProjectHelper,
@@ -14,12 +14,13 @@ import {
   KoboMetaHelper,
   KoboMetaTagNfi,
   KoboTagStatus,
+  KoboXmlMapper,
   MpcaEntityTags,
   safeNumber,
 } from 'infoportal-common'
+
 import {KoboMetaOrigin} from './KoboMetaType.js'
 import {KoboMetaMapper, MetaMapped, MetaMapperInsert} from './KoboMetaService.js'
-import {KoboXmlMapper} from 'infoportal-common'
 
 const nfisPrograms = [DrcProgram.NFI, DrcProgram.ESK, DrcProgram.InfantWinterClothing, DrcProgram.InfantWinterClothing]
 
@@ -32,9 +33,8 @@ export class KoboMetaBasicneeds {
     const activities =
       seq(answer.back_prog_type)
         ?.map((prog) => {
-          return fnSwitch(
-            prog.split('_')[0],
-            {
+          return match(prog.split('_')[0])
+            .cases({
               mpca: {
                 activity: DrcProgram.MPCA,
                 project: DrcProjectHelper.search(answer.donor_mpca ?? answer.back_donor?.[0]),
@@ -67,9 +67,8 @@ export class KoboMetaBasicneeds {
                 activity: DrcProgram.HygieneKit,
                 project: DrcProjectHelper.search(answer.donor_ihk ?? answer.back_donor?.[0]),
               },
-            },
-            () => undefined,
-          )
+            })
+            .default(undefined)
         })
         .compact()
         .distinct((_) => _.activity) ?? []
@@ -103,9 +102,11 @@ export class KoboMetaBasicneeds {
         taxId: answer.pay_det_tax_id_num,
         phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
         status: KoboMetaHelper.mapCashStatus(status),
-        lastStatusUpdate:
-          row.tags?.lastStatusUpdate ??
-          (status === CashStatus.Paid || nfisPrograms.includes(activity) ? row.date : undefined),
+        lastStatusUpdate: row.tags?.lastStatusUpdate
+          ? new Date(row.tags?.lastStatusUpdate)
+          : status === CashStatus.Paid || nfisPrograms.includes(activity)
+            ? row.date
+            : undefined,
         passportNum: map((answer.pay_det_pass_ser ?? '') + (answer.pay_det_pass_num ?? ''), (_) =>
           _ === '' ? undefined : _,
         ),
@@ -113,9 +114,8 @@ export class KoboMetaBasicneeds {
         taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
         idFileName: answer.pay_det_id_ph,
         idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
-        tags: fnSwitch(
-          activity,
-          {
+        tags: match(activity)
+          .cases({
             ESK: () => {
               if (!answer.estimate_sqm_damage) return
               const x: KoboMetaTagNfi = {
@@ -136,11 +136,11 @@ export class KoboMetaBasicneeds {
               }
               return x
             },
-          },
-          () => undefined,
-        ),
+          })
+          .default(undefined),
       }
     }
+
     return activities
       .map((_) => prepare(_.activity, _.project ?? DrcProjectHelper.search(answer.back_donor?.[0])))
       .compact()
@@ -156,9 +156,8 @@ export class KoboMetaBasicneeds {
         | Bn_rapidResponse.Option<'back_donor'>
         | Bn_rapidResponse.Option<'donor_nfi_fks'>[0],
     ) => {
-      return fnSwitch(
-        back_donor!,
-        {
+      return match(back_donor)
+        .cases({
           uhf_chj: DrcProject['UKR-000314 UHF4'],
           uhf_dnk: DrcProject['UKR-000314 UHF4'],
           uhf_hrk: DrcProject['UKR-000314 UHF4'],
@@ -215,18 +214,16 @@ export class KoboMetaBasicneeds {
           '330_sdc_dnk': DrcProject['UKR-000330 SDC2'],
           dnk_danida_347: DrcProject['UKR-000347 DANIDA'],
           echo2_dnk: DrcProject['UKR-000322 ECHO2'],
-        },
-        (_) => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(_)),
-      )
+        })
+        .default(undefined)
     }
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast_l!)
     const activities =
       seq(answer.back_prog_type_l)
         ?.map((prog) => {
           const defaultProject = answer.back_donor_l?.[0] ?? answer.back_donor
-          return fnSwitch(
-            prog.split('_')[0],
-            {
+          return match(prog.split('_')[0])
+            .cases({
               cfr: {activity: DrcProgram.CashForRent, project: getBnreProject(answer.donor_cfr ?? defaultProject)},
               cfe: {activity: DrcProgram.CashForEducation, project: getBnreProject(answer.donor_cfe ?? defaultProject)},
               mpca: {activity: DrcProgram.MPCA, project: getBnreProject(answer.donor_mpca ?? defaultProject)},
@@ -236,9 +233,8 @@ export class KoboMetaBasicneeds {
               esk: {activity: DrcProgram.ESK, project: getBnreProject(answer.donor_esk ?? defaultProject)},
               iwk: {activity: DrcProgram.ESK, project: getBnreProject(defaultProject)},
               ihk: {activity: DrcProgram.HygieneKit, project: getBnreProject(answer.donor_ihk ?? defaultProject)},
-            },
-            () => undefined,
-          )
+            })
+            .default(undefined)
         })
         .compact()
         .distinct((_) => _.activity) ?? []
@@ -270,13 +266,17 @@ export class KoboMetaBasicneeds {
         ),
         taxId: answer.pay_det_tax_id_num ?? answer.pay_det_tax_id_num_l,
         taxIdFileName: answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l,
-        taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l),
+        taxIdFileId: KoboHelper.findAttachmentId(
+          row.attachments,
+          answer.pay_det_tax_id_ph ?? answer.pay_det_tax_id_ph_l,
+        ),
         idFileName: answer.pay_det_id_ph ?? answer.pay_det_id_ph_l,
         idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph ?? answer.pay_det_id_ph_l),
-        lastStatusUpdate: row.tags?.lastStatusUpdate ?? (status === CashStatus.Paid ? row.date : undefined),
-        tags: fnSwitch(
-          activity,
-          {
+        lastStatusUpdate:
+          (row.tags?.lastStatusUpdate && new Date(row.tags?.lastStatusUpdate)) ??
+          (status === CashStatus.Paid ? row.date : undefined),
+        tags: match(activity)
+          .cases({
             ESK: () => {
               if (!answer.estimate_sqm_damage_l) return
               const x: KoboMetaTagNfi = {
@@ -295,9 +295,8 @@ export class KoboMetaBasicneeds {
               }
               return x
             },
-          },
-          () => undefined,
-        ),
+          })
+          .default(undefined),
       }
     }
     return activities.map((_) => prepare(_.activity, _.project))
@@ -310,67 +309,69 @@ export class KoboMetaBasicneeds {
     const office = KoboXmlMapper.office(answer.back_office)
     const oblastName = oblast.name
     const activities = (answer.back_prog_type ?? []).map((prog) => {
-      return fnSwitch(prog, {
-        mpca: {program: DrcProgram.MPCA, project: DrcProjectHelper.search(answer.mpca_donor)},
-        nfi: {program: DrcProgram.NFI, project: DrcProjectHelper.search(answer.nfi_donor)},
-        esk: {program: DrcProgram.ESK, project: DrcProjectHelper.search(answer.esk_donor)},
+      return match(prog)
+        .cases({
+          mpca: {program: DrcProgram.MPCA, project: DrcProjectHelper.search(answer.mpca_donor)},
+          nfi: {program: DrcProgram.NFI, project: DrcProjectHelper.search(answer.nfi_donor)},
+          esk: {program: DrcProgram.ESK, project: DrcProjectHelper.search(answer.esk_donor)},
+        })
+        .default(undefined)
+    })
+    return activities
+      .filter((activity) => activity !== undefined)
+      .map((activity) => {
+        const status = DrcSectorHelper.isAutoValidatedActivity(activity.program) ? CashStatus.Paid : row.tags?.status
+        return KoboMetaMapper.make({
+          enumerator: Bn_rapidResponse2.options.back_enum[answer.back_enum!],
+          office,
+          oblast: oblastName,
+          raion: Bn_re.options.ben_det_raion[answer.ben_det_raion as NonNullable<Bn_re.T['ben_det_raion']>],
+          hromada: Bn_re.options.ben_det_hromada[answer.ben_det_hromada as NonNullable<Bn_re.T['ben_det_hromada']>],
+          settlement: answer.ben_det_settlement,
+          personsCount: persons.length,
+          persons,
+          sector: DrcSectorHelper.findFirstByProgram(activity.program)!,
+          activity: activity.program,
+          project: activity.project ? [activity.project] : [],
+          donor: activity.project ? [DrcProjectHelper.donorByProject[activity.project!]] : [],
+          firstName: answer.ben_det_first_name,
+          lastName: answer.ben_det_surname,
+          patronymicName: answer.ben_det_pat_name,
+          taxId: answer.pay_det_tax_id_num,
+          phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+          status: KoboMetaHelper.mapCashStatus(status),
+          lastStatusUpdate:
+            (row.tags?.lastStatusUpdate && new Date(row.tags?.lastStatusUpdate)) ??
+            (status === CashStatus.Paid || nfisPrograms.includes(activity.program) ? row.date : undefined),
+          passportNum: map((answer.pay_det_pass_ser ?? '') + (answer.pay_det_pass_num ?? ''), (_) =>
+            _ === '' ? undefined : _,
+          ),
+          taxIdFileName: answer.pay_det_tax_id_ph,
+          taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
+          idFileName: answer.pay_det_id_ph,
+          idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
+          tags: match(activity.program)
+            .cases({
+              ESK: () => {
+                if (!answer.esk_estimate_sqm_damage) return
+                const x: KoboMetaTagNfi = {
+                  ESK: answer.esk_estimate_sqm_damage >= 15 ? 2 : 1,
+                }
+                return x
+              },
+              NFI: () => {
+                const x: KoboMetaTagNfi = {
+                  FKS: answer.nfi_fks,
+                  HKF: answer.nfi_dist_hkf,
+                  NFKF_KS: answer.nfi_dist_nfkf_ks,
+                  FoldingBed: answer.nfi_bed,
+                  CollectiveCenterKits: answer.nfi_kit_cc,
+                }
+                return x
+              },
+            })
+            .default(undefined),
+        }) as any
       })
-    })
-    return activities.map((activity) => {
-      const status = DrcSectorHelper.isAutoValidatedActivity(activity.program) ? CashStatus.Paid : row.tags?.status
-      return KoboMetaMapper.make({
-        enumerator: Bn_rapidResponse2.options.back_enum[answer.back_enum!],
-        office,
-        oblast: oblastName,
-        raion: Bn_re.options.ben_det_raion[answer.ben_det_raion as NonNullable<Bn_re.T['ben_det_raion']>],
-        hromada: Bn_re.options.ben_det_hromada[answer.ben_det_hromada as NonNullable<Bn_re.T['ben_det_hromada']>],
-        settlement: answer.ben_det_settlement,
-        personsCount: persons.length,
-        persons,
-        sector: DrcSectorHelper.findFirstByProgram(activity.program)!,
-        activity: activity.program,
-        project: activity.project ? [activity.project] : [],
-        donor: activity.project ? [DrcProjectHelper.donorByProject[activity.project!]] : [],
-        firstName: answer.ben_det_first_name,
-        lastName: answer.ben_det_surname,
-        patronymicName: answer.ben_det_pat_name,
-        taxId: answer.pay_det_tax_id_num,
-        phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
-        status: KoboMetaHelper.mapCashStatus(status),
-        lastStatusUpdate:
-          row.tags?.lastStatusUpdate ??
-          (status === CashStatus.Paid || nfisPrograms.includes(activity.program) ? row.date : undefined),
-        passportNum: map((answer.pay_det_pass_ser ?? '') + (answer.pay_det_pass_num ?? ''), (_) =>
-          _ === '' ? undefined : _,
-        ),
-        taxIdFileName: answer.pay_det_tax_id_ph,
-        taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
-        idFileName: answer.pay_det_id_ph,
-        idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
-        tags: fnSwitch(
-          activity.program,
-          {
-            ESK: () => {
-              if (!answer.esk_estimate_sqm_damage) return
-              const x: KoboMetaTagNfi = {
-                ESK: answer.esk_estimate_sqm_damage >= 15 ? 2 : 1,
-              }
-              return x
-            },
-            NFI: () => {
-              const x: KoboMetaTagNfi = {
-                FKS: answer.nfi_fks,
-                HKF: answer.nfi_dist_hkf,
-                NFKF_KS: answer.nfi_dist_nfkf_ks,
-                FoldingBed: answer.nfi_bed,
-                CollectiveCenterKits: answer.nfi_kit_cc,
-              }
-              return x
-            },
-          },
-          () => undefined,
-        ),
-      }) as any
-    })
   }
 }

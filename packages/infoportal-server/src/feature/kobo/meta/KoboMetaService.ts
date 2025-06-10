@@ -16,6 +16,7 @@ import {
   Person,
   UUID,
 } from 'infoportal-common'
+import {pluralize} from 'infoportal-common/utils'
 
 import {app, AppCacheKey, AppLogger} from '../../../index.js'
 import {appConf} from '../../../core/conf/AppConf.js'
@@ -303,8 +304,21 @@ export class KoboMetaService {
         concurrency: 1,
         size: this.conf.db.maxPreparedStatementParams,
         data: koboAnswersWithId.map(({persons, ...kobo}) => kobo),
-        fn: (data) => {
-          return this.prisma.koboMeta.createMany({data})
+        fn: async (data) => {
+          try {
+            return await this.prisma.koboMeta.createMany({
+              data,
+            })
+          } catch (err) {
+            for (let i = 0; i < data.length; i++) {
+              try {
+                await this.prisma.koboMeta.create({data: data[i]})
+              } catch (recErr) {
+                console.error(`Failed record in ${pluralize(i, {fullString: true})} chunk:`, data[i], recErr)
+              }
+            }
+            throw err // Stop the process if any chunk fails
+          }
         },
       })
       await chunkify({
@@ -322,7 +336,11 @@ export class KoboMetaService {
     this.info(formId, `Deleting KoboMeta ${koboAnswers.length}... Done in ${duration(performance.now() - t0)}`)
     this.debug(formId, `Handle create (${koboAnswers.length})...`)
     t0 = performance.now()
-    await handleCreate()
+    try {
+      await handleCreate()
+    } catch (error) {
+      console.error('\nTransaction failed:\n', error)
+    }
     this.info(formId, `Handle create (${koboAnswers.length})... Done in ${duration(performance.now() - t0)}`)
     return {}
   }
