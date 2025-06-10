@@ -58,6 +58,7 @@ export namespace AiGbvType {
       'GBV-DRC-00002': 'cdr8jq1m7ui9n4s7',
       'GBV-DRC-00003': 'cbsvmkpm7uk5x6lc',
       'GBV-DRC-00004': 'crwci9mm8fsg4422',
+      'GBV-DRC-00005': 'csreyx3mbg7zjhq2',
     },
     'Response Theme': {'No specific theme': 'crfw0hkm4wiqb94f'},
   }

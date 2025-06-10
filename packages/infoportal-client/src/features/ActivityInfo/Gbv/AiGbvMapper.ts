@@ -16,6 +16,7 @@ export namespace AiGbvMapper2 {
     [DrcProject['UKR-000363 UHF8']]: 'GBV-DRC-00001',
     [DrcProject['UKR-000355 Danish MFA']]: 'GBV-DRC-00003',
     [DrcProject['UKR-000386 Pooled Funds']]: 'GBV-DRC-00004',
+    [DrcProject['UKR-000423 ECHO4']]: 'GBV-DRC-00005',
   } as any
 
   export const req =

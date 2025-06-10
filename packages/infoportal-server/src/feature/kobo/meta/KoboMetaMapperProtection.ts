@@ -116,9 +116,9 @@ export class KoboMetaMapperProtection {
         )
           return [DrcProject['UKR-000363 UHF8']]
 
-        return row.tags?.project ? [row.tags?.project] : []
+        return row.tags?.project ? [row.tags.project] : []
       })(),
-      donor: row.tags?.project ? [DrcProjectHelper.donorByProject[row.tags?.project]] : [],
+      donor: row.tags?.project ? [DrcProjectHelper.donorByProject[row.tags.project]] : [],
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
     }
