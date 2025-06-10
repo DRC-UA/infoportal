@@ -15,8 +15,8 @@ import {
   KoboMetaStatus,
   Person,
   UUID,
+  pluralize,
 } from 'infoportal-common'
-import {pluralize} from 'infoportal-common/utils'
 
 import {app, AppCacheKey, AppLogger} from '../../../index.js'
 import {appConf} from '../../../core/conf/AppConf.js'
