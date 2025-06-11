@@ -31,11 +31,5 @@
     "prettier": "^3.5.3",
     "ts-jest": "^29.3.4",
     "tsx": "^4.20.1"
-  },
-  "overrides": {
-    "@mui/utils": "^6.4.7",
-    "@mui/x-date-pickers-pro": {
-      "@mui/utils": "^6.4.7"
-    }
   }
 }
