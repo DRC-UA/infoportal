@@ -26,6 +26,7 @@
     "mime-types": "^3.0.1"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/mime-types": "^3.0.1",
     "prettier": "^3.5.3",
     "ts-jest": "^29.3.4",
