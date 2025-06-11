@@ -2,6 +2,7 @@
   "name": "infoportal-client",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build  && cp -a public .next/standalone/packages/infoportal-client/public && cp -a .next/static .next/standalone/packages/infoportal-client/.next/static",
