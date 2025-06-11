@@ -7,9 +7,9 @@ const config: NextConfig = {
   reactStrictMode: true,
   staticPageGenerationTimeout: 200,
   output: 'standalone',
-  experimental: {
-    esmExternals: true,
-  },
+  // experimental: {
+  //   serverComponentsExternalPackages: ['infoportal-common'],
+  // },
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -28,6 +28,7 @@ const config: NextConfig = {
     'react-router',
     'react-router-dom',
     'cookie',
+    'infoportal-common',
   ],
 }
 
