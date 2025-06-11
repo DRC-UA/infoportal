@@ -3,8 +3,6 @@ import type {NextConfig} from 'next'
 
 const config: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
-  externalDir: true,
-  swcMinify: true,
   productionBrowserSourceMaps: true,
   reactStrictMode: true,
   staticPageGenerationTimeout: 200,
