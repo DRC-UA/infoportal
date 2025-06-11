@@ -7,9 +7,9 @@ const config: NextConfig = {
   reactStrictMode: true,
   staticPageGenerationTimeout: 200,
   output: 'standalone',
-  // experimental: {
-  //   serverComponentsExternalPackages: ['infoportal-common'],
-  // },
+  experimental: {
+    serverComponentsExternalPackages: ['infoportal-common'],
+  },
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
