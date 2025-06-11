@@ -8,6 +8,7 @@ const config: NextConfig = {
   staticPageGenerationTimeout: 200,
   output: 'standalone',
   experimental: {
+    esmExternals: 'loose',
     serverComponentsExternalPackages: ['infoportal-common'],
   },
   typescript: {
