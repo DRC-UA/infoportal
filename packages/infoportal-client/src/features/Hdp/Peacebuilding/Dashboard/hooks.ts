@@ -29,18 +29,6 @@ export const usePeacebuildingData = () => {
           getOptions: () => DataFilter.buildOptionsFromObject(Cs_tracker.options.office),
           label: m.office,
         },
-        // team: {
-        //   icon: 'handshake',
-        //   getValue: (_) => _.sector_team,
-        //   getOptions: () => DataFilter.buildOptionsFromObject(Cs_tracker.options.sector_team),
-        //   label: m.teamConducted,
-        // },
-        // first: {
-        //   icon: 'schedule',
-        //   getValue: (_) => _.first_training,
-        //   getOptions: () => DataFilter.buildOptionsFromObject(Cs_tracker.options.first_training),
-        //   label: m.firstTraining,
-        // },
         format: {
           icon: 'share',
           getValue: (_) => _.training_format,
