@@ -1,12 +1,9 @@
-import {CfmData, cfmMakeEditRequestKey, CfmStatusIconLabel, useCfmContext} from '@/features/Cfm/CfmContext'
-import {useNavigate, useParams} from 'react-router'
-import {Page, PageTitle} from '@/shared/Page'
+import {useEffect, useMemo, useState} from 'react'
+import {Obj} from '@axanc/ts-utils'
+import {useNavigate, useParams, NavLink} from 'react-router-dom'
 import * as yup from 'yup'
-import {IpBtn, ListRow, Modal, Txt} from '@/shared'
 import {Box, Divider, Grid, Icon} from '@mui/material'
-import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
-import {useI18n} from '@/core/i18n'
-import React, {useEffect, useMemo, useState} from 'react'
+
 import {
   CfmDataProgram,
   CfmDataSource,
@@ -17,8 +14,13 @@ import {
   Meal_cfmInternal,
   Regexp,
 } from 'infoportal-common'
+
+import {CfmData, cfmMakeEditRequestKey, CfmStatusIconLabel, useCfmContext} from '@/features/Cfm/CfmContext'
+import {Page, PageTitle} from '@/shared/Page'
+import {IpBtn, ListRow, Modal, Txt} from '@/shared'
+import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
+import {useI18n} from '@/core/i18n'
 import {KoboSelectTag} from '@/shared/KoboSelectTag'
-import {Obj} from '@axanc/ts-utils'
 import {CfmPriorityLogo} from '@/features/Cfm/Data/CfmTable'
 import {cfmIndex} from '@/features/Cfm/Cfm'
 import {useSession} from '@/core/Session/SessionContext'
@@ -26,7 +28,6 @@ import {useAppSettings} from '@/core/context/ConfigContext'
 import {TableInput} from '@/shared/TableInput'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {NavLink} from 'react-router-dom'
 import {IpInput} from '@/shared/Input/Input'
 import {useIpToast} from '@/core/useToast'
 import {Fender} from '@/shared/Fender'
@@ -111,7 +112,7 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
         </Box>
       </PageTitle>
       <Grid container spacing={2} alignItems="stretch">
-        <Grid item xs={6}>
+        <Grid size={{xs: 6}}>
           <Panel>
             <PanelHead
               action={
@@ -175,7 +176,7 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
             </PanelBody>
           </Panel>
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={{xs: 6}}>
           <Panel>
             <PanelBody>
               <ListRow icon="support_agent" label={m.focalPoint}>

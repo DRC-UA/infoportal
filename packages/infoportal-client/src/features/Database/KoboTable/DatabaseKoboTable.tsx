@@ -2,7 +2,7 @@ import {useCallback, useEffect, useMemo} from 'react'
 import {map} from '@axanc/ts-utils'
 import {Skeleton} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
-import {useParams} from 'react-router'
+import {useParams} from 'react-router-dom'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'

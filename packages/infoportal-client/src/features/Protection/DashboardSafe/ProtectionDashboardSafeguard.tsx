@@ -133,12 +133,12 @@ export const ProtectionDashboardSafeguard = () => {
         }
       />
       <Grid container sx={{mb: 2, alignItems: 'stretch'}} columnSpacing={2} justifyContent="center">
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs: 12, md: 6}}>
           <SlideWidget sx={{flex: 1}} icon="storage" title={m._protection.trainings}>
             {dataFiltered.length}
           </SlideWidget>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs: 12, md: 6}}>
           <SlideWidget sx={{flex: 1}} icon="person" title={m._protection.participants}>
             {participants.length}
           </SlideWidget>

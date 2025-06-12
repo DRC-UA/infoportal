@@ -1,7 +1,7 @@
-const path = require('path')
+import path from 'node:path'
+import type {NextConfig} from 'next'
 
-/** @type {import('next').NextConfig} */
-module.exports = {
+const config: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   externalDir: true,
   swcMinify: true,
@@ -14,7 +14,7 @@ module.exports = {
     // Dangerously allow production builds to successfully complete even if
     // your project has type errors.
     // !! WARN !!
-    ignoreBuildErrors: process.env.IGNORE_BUILD_TS_ERRORS === 'true',
+    // ignoreBuildErrors: process.env.IGNORE_BUILD_TS_ERRORS === 'true',
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -29,3 +29,5 @@ module.exports = {
     'cookie',
   ],
 }
+
+export default config

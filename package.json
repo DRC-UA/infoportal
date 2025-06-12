@@ -22,18 +22,18 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@types/mime-types": "^2.1.4",
-    "prettier": "^3.4.2",
-    "tsx": "^4.19.3"
+    "@types/mime-types": "^3.0.1",
+    "prettier": "^3.5.3",
+    "tsx": "^4.20.1"
   },
   "dependencies": {
-    "kobo-sdk": "^2.1.4",
+    "kobo-sdk": "^2.2.5",
     "mime-types": "^3.0.1"
   },
   "overrides": {
-    "@mui/utils": "^6.4.7",
+    "@mui/utils": "^7.1.1",
     "@mui/x-date-pickers-pro": {
-      "@mui/utils": "^6.4.7"
+      "@mui/utils": "^7.1.1"
     }
   }
 }

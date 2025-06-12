@@ -1,6 +1,6 @@
 import {orange, red} from '@mui/material/colors'
-import {alpha, createTheme, darken, SxProps, Theme} from '@mui/material'
-import {ThemeOptions} from '@mui/material/styles/createTheme'
+import {alpha, createTheme, darken, type SxProps, type Theme} from '@mui/material'
+import type {ThemeOptions} from '@mui/material/styles'
 import {lighten} from '@mui/system/colorManipulator'
 
 export const combineSx = (...sxs: (SxProps<Theme> | undefined | false)[]): SxProps<Theme> => {

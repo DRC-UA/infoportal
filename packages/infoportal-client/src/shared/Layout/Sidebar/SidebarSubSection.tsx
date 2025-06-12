@@ -50,7 +50,7 @@ export const SidebarSubSection = ({
           cursor: 'pointer',
           '&:hover': {
             background: t.palette.action.focus,
-            borderRadius: t.shape.borderRadius * 1.5 + 'px',
+            borderRadius: Number(t.shape.borderRadius) * 1.5 + 'px',
           },
         }),
         ...(active && {
@@ -68,9 +68,11 @@ export const SidebarSubSection = ({
         }}
         sx={{minHeight: dense ? 26 : 30, pl: keepOpen ? 1 : 0.5, mb: 0, display: 'flex', alignItems: 'center'}}
       >
-        <Icon fontSize="small" sx={{visibility: icon ? 'inherit' : 'hidden', mr: 1}}>
-          {icon}
-        </Icon>
+        {icon ? (
+          <Icon fontSize="small" sx={{visibility: icon ? 'inherit' : 'hidden', mr: 1}}>
+            {icon}
+          </Icon>
+        ) : null}
         <Txt bold sx={{fontSize: '.825em', flex: 1}}>
           {title}
         </Txt>
