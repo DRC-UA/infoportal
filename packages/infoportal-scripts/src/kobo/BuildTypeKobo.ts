@@ -404,6 +404,10 @@ export class BuildKoboType {
       cs_tracker: {
         formId: KoboIndex.byName('cs_tracker').id,
       },
+      legal_pam: {
+        formId: KoboIndex.byName('legal_pam').id,
+        langIndex: 1,
+      },
     },
     (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>],
   )

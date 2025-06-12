@@ -141,6 +141,8 @@ export class KoboAnswerSdk {
         return Promise.resolve({start: new Date(2024, 2, 22), end: startOfDay(new Date())})
       case KoboIndex.byName('protection_gbvPdm').id:
         return Promise.resolve({start: new Date(2024, 6, 14), end: startOfDay(new Date())})
+      case KoboIndex.byName('legal_pam').id:
+        return Promise.resolve({start: new Date(2024, 8, 2), end: startOfDay(new Date())})
       case KoboIndex.byName('va_bio_tia').id:
         return Promise.resolve({start: new Date(2024, 10, 24), end: startOfDay(new Date())})
       case KoboIndex.byName('cs_tracker').id:

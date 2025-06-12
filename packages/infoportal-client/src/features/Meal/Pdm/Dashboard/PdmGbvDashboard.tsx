@@ -55,7 +55,7 @@ export const PdmGbvDashboard = () => {
             {(value, onChange) => (
               <PeriodPicker
                 sx={{marginTop: '-6px'}}
-                defaultValue={value ?? [undefined, undefined]}
+                value={value ?? [undefined, undefined]}
                 onChange={onChange}
                 min={ctx.fetcherPeriod.get?.start}
                 max={ctx.fetcherPeriod.get?.end}

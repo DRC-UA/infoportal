@@ -69,6 +69,7 @@ const koboIndex = {
   ecrec_subsistance: 'acWaJmM4PAj2zbiw75rcRk',
   conflict_pre_post: 'atG7X5hrbXbR9eseskUoCq',
   cs_tracker: 'ac5Xu2t2vJ97WneTGaSVNH',
+  legal_pam: 'a3puEbm9w4ME323B6werxJ',
 }
 
 import {Obj, seq} from '@axanc/ts-utils'
@@ -146,6 +147,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   ecrec_subsistance: '[Ecrec] Subsistance farmer registration',
   conflict_pre_post: '[Peacebuilding] Conflict Sensitivity Training Pre-Post Test',
   cs_tracker: '[Peacebuilding] CS Training Tracker',
+  legal_pam: '[MEAL] Legal Aid PAM Master',
 }
 
 export type KoboFormName = keyof typeof koboIndex

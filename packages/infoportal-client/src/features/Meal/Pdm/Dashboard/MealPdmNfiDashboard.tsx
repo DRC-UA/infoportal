@@ -54,7 +54,7 @@ export const MealPdmNfiDashboard = () => {
           >
             {(value, onChange) => (
               <PeriodPicker
-                defaultValue={value ?? [undefined, undefined]}
+                value={value ?? [undefined, undefined]}
                 onChange={onChange}
                 min={ctx.fetcherPeriod.get?.start}
                 max={ctx.fetcherPeriod.get?.end}
