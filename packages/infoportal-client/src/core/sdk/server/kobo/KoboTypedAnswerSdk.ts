@@ -53,6 +53,7 @@ import {
   Ecrec_subsistance,
   Conflict_pre_post,
   Cs_tracker,
+  Legal_pam,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -449,6 +450,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('ecrec_subsistance').id,
           fnMapKobo: Ecrec_subsistance.map,
+          ...filters,
+        }),
+      ),
+      ...make('legal_pam', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('legal_pam').id,
+          fnMapKobo: Legal_pam.map,
           ...filters,
         }),
       ),

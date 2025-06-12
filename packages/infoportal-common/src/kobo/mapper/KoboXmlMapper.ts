@@ -32,6 +32,7 @@ import {
   Shelter_nta,
   Va_bio_tia,
   Meal_winterizationPdm,
+  Legal_pam,
 } from '../generated/index.js'
 
 export namespace KoboXmlMapper {
@@ -655,6 +656,34 @@ export namespace KoboXmlMapper {
           })
           .default(undefined),
         displacement: person.displacement,
+        disability: person.disability,
+      }))
+    }
+
+    export const legal_pdm = (_: Legal_pam.T): Person.Details[] => {
+      return [
+        {
+          age: _.ben_det_age,
+          gender: _.ben_det_gender!,
+          displacement: _.ben_det_res_stat,
+          disability: undefined,
+        },
+      ].map((person) => ({
+        age: person.age,
+        gender: match(person.gender)
+          .cases({
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          })
+          .default(undefined),
+        displacement: match(person.displacement)
+          .cases({
+            idp: Person.DisplacementStatus.Idp,
+            conflict_affected: Person.DisplacementStatus.NonDisplaced,
+            ret: Person.DisplacementStatus.Returnee,
+            ref_asy: Person.DisplacementStatus.Refugee,
+          })
+          .default(undefined),
         disability: person.disability,
       }))
     }

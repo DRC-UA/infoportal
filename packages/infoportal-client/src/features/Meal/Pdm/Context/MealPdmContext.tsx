@@ -14,9 +14,10 @@ import {
   Meal_nfiPdm,
   Person,
   Protection_gbvPdm,
+  Legal_pam,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
-import {fnSwitch, map, seq, Seq} from '@axanc/ts-utils'
+import {match, map, seq, Seq} from '@axanc/ts-utils'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 
@@ -25,9 +26,10 @@ export enum PdmType {
   Shelter = 'Shelter',
   Nfi = 'Nfi',
   Gbv = 'Gbv',
+  Legal = 'Legal',
 }
 
-export type PdmForm = Meal_cashPdm.T | Meal_shelterPdm.T | Meal_nfiPdm.T | Protection_gbvPdm.T
+export type PdmForm = Meal_cashPdm.T | Meal_shelterPdm.T | Meal_nfiPdm.T | Protection_gbvPdm.T | Legal_pam.T
 
 export type PdmData<T extends PdmForm> = {
   type: PdmType
@@ -61,9 +63,8 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           type: PdmType.Cash,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
           project: DrcProjectHelper.search(record.donor),
-          office: fnSwitch(
-            record.office!,
-            {
+          office: match(record.office!)
+            .cases({
               dnipro: DrcOffice.Dnipro,
               empca: DrcOffice.Kharkiv,
               chernihiv: DrcOffice.Chernihiv,
@@ -72,9 +73,8 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               lviv: DrcOffice.Lviv,
               zaporizhzhya: DrcOffice.Zaporizhzhya,
               slovyansk: DrcOffice.Sloviansk,
-            },
-            () => undefined,
-          ),
+            })
+            .default(() => undefined),
           persons: KoboXmlMapper.Persons.cash_pdm(record),
           answers: record,
         })),
@@ -83,18 +83,16 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         seq(_.data).map((record) => ({
           type: PdmType.Shelter,
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
-          project: fnSwitch(
-            record.Donor!,
-            {
+          project: match(record.Donor!)
+            .cases({
               ukr000345_bha2: DrcProject['UKR-000345 BHA2'],
               echo: DrcProject['UKR-000322 ECHO2'],
               uhf4: DrcProject['UKR-000314 UHF4'],
               unhcr: DrcProject['UKR-000308 UNHCR'],
               novo: DrcProject['UKR-000298 Novo-Nordisk'],
               uhf6: DrcProject['UKR-000336 UHF6'],
-            },
-            () => undefined,
-          ),
+            })
+            .default(() => undefined),
           office: KoboXmlMapper.office(record.office),
           persons: KoboXmlMapper.Persons.shelter_pdm(record),
           answers: record,
@@ -104,9 +102,8 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         seq(_.data).map((record) => ({
           type: PdmType.Nfi,
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
-          project: fnSwitch(
-            record.donor!,
-            {
+          project: match(record.donor!)
+            .cases({
               bha: DrcProject['UKR-000284 BHA'],
               '345_bha': DrcProject['UKR-000345 BHA2'],
               echo2: DrcProject['UKR-000322 ECHO2'],
@@ -119,9 +116,8 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               nono: DrcProject['UKR-000298 Novo-Nordisk'],
               sdcs: DrcProject['UKR-000330 SDC2'],
               mofa: DrcProject['UKR-000301 DANISH MoFA'],
-            },
-            () => undefined,
-          ),
+            })
+            .default(() => undefined),
           office: KoboXmlMapper.office(record.office_responsible),
           persons: KoboXmlMapper.Persons.nfi_pdm(record),
           answers: record,
@@ -131,14 +127,32 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         seq(_.data).map((record) => ({
           type: PdmType.Gbv,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
-          project: fnSwitch(
-            record.donor!,
-            {
+          project: match(record.donor!)
+            .cases({
               '347_danida': DrcProject['UKR-000347 DANIDA'],
               '336_uhf6': DrcProject['UKR-000336 UHF6'],
-            },
-            () => undefined,
-          ),
+            })
+            .default(() => undefined),
+          answers: record,
+        })),
+      ),
+      api.kobo.typedAnswers.search.legal_pam().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Legal,
+          oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
+          office: KoboXmlMapper.office(record.office),
+          persons: KoboXmlMapper.Persons.legal_pdm(record),
+          project: match(record.project!)
+            .cases({
+              ukr000372_echo: DrcProject['UKR-000372 ECHO3'],
+              ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
+              ukr000355_dmfa: DrcProject['UKR-000355 Danish MFA'],
+              ukr000304_pspu: DrcProject['UKR-000304 PSPU'],
+              ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
+              ukr000388_bha: DrcProject['UKR-000388 BHA'],
+              ukr000xxx_fcdo: DrcProject['UKR-000285 FCDO'],
+            })
+            .default(() => undefined),
           answers: record,
         })),
       ),
@@ -151,11 +165,13 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_shelterPdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_nfiPdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('protection_gbvPdm').id),
-    ]).then(([cashPeriod, shelterPeriod, nfiPeriod, gbvPeriod]) => ({
+      api.kobo.answer.getPeriod(KoboIndex.byName('legal_pam').id),
+    ]).then(([cashPeriod, shelterPeriod, nfiPeriod, gbvPeriod, legalPeriod]) => ({
       cashPeriod,
       shelterPeriod,
       nfiPeriod,
       gbvPeriod,
+      legalPeriod,
     }))
   })
 
