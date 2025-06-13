@@ -252,6 +252,9 @@ export const en = Object.freeze({
     individualsInterviewed: 'Individuals Interviewed',
     individualsAssistance: 'Individuals who used assistance',
     individualsTrained: 'Total People Trained',
+    prePostProgress: 'Progress',
+    avgBefore: 'Pre-test',
+    avgAfter: 'Post-test',
     individualsProgress: 'DRC Staff Training Progress',
     injured: 'Injured victims',
     dead: 'Dead victims',
@@ -455,6 +458,7 @@ export const en = Object.freeze({
     respondent: 'Respondent',
     program: 'Program',
     progress: 'Progress',
+    points: 'Points',
     raion: 'Raion',
     relative: 'Relative',
     cumulative: 'Cumulative',
@@ -471,6 +475,8 @@ export const en = Object.freeze({
     peacebuildingTitle: 'Conflict Sensitivity Training Dashboard',
     trainingTrends: 'Training Trends',
     trainingOfTrainers: 'Training of Trainers (ToT)',
+    trained: 'Trained',
+    facilitated: 'Facilitated',
     victimAssistanceTitle: 'Victim Assistance',
     _meal: {
       openTracker: 'Open Excel tracker',
@@ -589,19 +595,27 @@ export const en = Object.freeze({
       independtlyResolve: 'Could have independently resolved the issue without a free lawyer',
       infoUnderstandable: 'Information was clear, understandable',
       clearExplanation: 'Lawyer gave you clear explanations',
-      provisionHelped: 'Do you think the provision of legal aid has enhanced your and your family\'s wellbeing/ quality of life?',
+      provisionHelped:
+        "Do you think the provision of legal aid has enhanced your and your family's wellbeing/ quality of life?",
       wellInformed: 'Did you feel well informed',
       howHear: 'How did you hear about DRC and it’s partners free legal assistance?',
-      howReport: 'Do you know how and where to report if a DRC employee requested something from you in exchange for receiving assistance, made you feel uncomfortable in anyway, or insulted you?',
-      channel: 'If you had a suggestion for, or a problem with the assistance/ service, do you think you could channel the suggestion or lodge a complaint?',
+      howReport:
+        'Do you know how and where to report if a DRC employee requested something from you in exchange for receiving assistance, made you feel uncomfortable in anyway, or insulted you?',
+      channel:
+        'If you had a suggestion for, or a problem with the assistance/ service, do you think you could channel the suggestion or lodge a complaint?',
       contactedChannel: 'Have you contacted channels?',
       responded: 'To your knowledge have suggestions or complained raised been responded to or followed up?',
-      putContact: 'Were you immediately put in contact with a lawyer at the point of applying/ calling DRC or its partner for legal assistance?',
-      delayOpinion: 'In your opinion, if the legal assistance was not immediately given to you, was the delay from DRC and its partners, or because of your personal circumstance?',
-      consideration: 'Did you feel that your personal situation was taken into consideration during the provision of legal assistance?',
-      listened: 'Do you feel that the lawyer listened actively to your case and responded to your questions during the counselling or legal assistance?',
+      putContact:
+        'Were you immediately put in contact with a lawyer at the point of applying/ calling DRC or its partner for legal assistance?',
+      delayOpinion:
+        'In your opinion, if the legal assistance was not immediately given to you, was the delay from DRC and its partners, or because of your personal circumstance?',
+      consideration:
+        'Did you feel that your personal situation was taken into consideration during the provision of legal assistance?',
+      listened:
+        'Do you feel that the lawyer listened actively to your case and responded to your questions during the counselling or legal assistance?',
       difficultiesLawyer: 'Did you encounter any difficulties with your lawyer?',
-      peopleExcluded: 'Do you know of people in your Hromada/ Raion who are in need of legal assistance/ services who were excluded from the services provided?',
+      peopleExcluded:
+        'Do you know of people in your Hromada/ Raion who are in need of legal assistance/ services who were excluded from the services provided?',
       peopleSpecify: 'If you know excluded people, specify',
     },
     _mealVerif: {

@@ -43,7 +43,7 @@ export const appConfig = {
     return featurePath + '/#' + path
   },
   koboServerUrl: 'https://kobo.drc.ngo',
-  contact: 'alexandre.annic@drc.ngo',
+  contact: 'pavlo.boiko@drc.ngo',
   apiURL: e(defaultValue('https://infoportal-ua-api.drc.ngo'))(Env.NEXT_PUBLIC_API_BASE_URL),
   baseURL: e(defaultValue('https://infoportal-ua.drc.ngo/'))(Env.NEXT_PUBLIC_BASE_URL),
   sentry: {

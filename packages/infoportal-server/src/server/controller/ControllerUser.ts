@@ -18,6 +18,14 @@ export class ControllerUser {
     res.send(data)
   }
 
+  readonly count = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const count = await this.service.usersCount()
+      res.send({count})
+    } catch (error) {
+      next(error)
+    }
+  }
   readonly avatar = async (req: Request, res: Response, next: NextFunction) => {
     const {email} = await yup
       .object({
