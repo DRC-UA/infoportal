@@ -5,7 +5,6 @@ import {KoboIndex, Period, PeriodHelper, Cs_tracker} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useI18n} from '@/core/i18n'
 import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
@@ -17,7 +16,8 @@ export type UsePeacebuildingData = ReturnType<typeof usePeacebuildingData>
 export const usePeacebuildingData = () => {
   const {m} = useI18n()
   const {api} = useAppSettings()
-  const fetcherAnswer = useKoboAnswersContext().byName('cs_tracker')
+  const fetcherAnswer = useFetcher(() => api.kobo.typedAnswers.search.cs_tracker())
+  const fetcherPrePost = useFetcher(() => api.kobo.typedAnswers.search.conflict_pre_post())
   const fetcherPeriod = useFetcher(() => api.kobo.answer.getPeriod(KoboIndex.byName('cs_tracker').id))
 
   const filterShape = useMemo(
@@ -49,6 +49,17 @@ export const usePeacebuildingData = () => {
 
   const data = seq(fetcherAnswer.get?.data) ?? []
 
+  const dataPrePost = useMemo(() => {
+    return seq(fetcherPrePost.get?.data)
+      .filter((row) => row.cal_score && row.complete_training)
+      .map((row) => ({
+        ...row,
+        cal_score_num: Number(row.cal_score),
+      }))
+      .compact()
+      .get()
+  }, [fetcherPrePost.get?.data])
+
   const normalizeDate = (d?: Date) => (d ? startOfDay(d) : undefined)
 
   const dataFiltered = useMemo(() => {
@@ -68,25 +79,25 @@ export const usePeacebuildingData = () => {
     map(fetcherPeriod.get, setPeriod)
   }, [fetcherPeriod.get])
 
-  const fetcherUsers = useFetcher(api.user.search)
+  const fetcherUsers = useFetcher(api.user.getCount)
 
   useEffect(() => {
     fetcherUsers.fetch({clean: false})
   }, [])
 
-  const drcUsers = useMemo(() => {
-    return seq(fetcherUsers.get)
-      .filter((user) => user.drcJob || user.drcOffice) // adjust this filter if needed
-      .get()
-  }, [fetcherUsers.get])
+  useEffect(() => {
+    fetcherUsers.fetch({clean: false})
+  }, [])
 
   return {
     data,
+    dataPrePost,
     dataFiltered,
     filterShape,
     fetcherAnswer,
-    drcUsers,
+    fetcherPrePost,
     fetcherPeriod,
+    fetcherUsers,
     optionFilter,
     setOptionFilters,
     period,

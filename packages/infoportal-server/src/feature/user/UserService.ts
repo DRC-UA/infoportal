@@ -53,6 +53,10 @@ export class UserService {
     return this.loadUsersCache()
   }
 
+  readonly usersCount = async (): Promise<number> => {
+    return this.prisma.user.count()
+  }
+
   readonly getUserByEmail = async (email: string) => {
     const cache = await this.loadUsersCache()
     let user = cache.find((user) => user.email === email)

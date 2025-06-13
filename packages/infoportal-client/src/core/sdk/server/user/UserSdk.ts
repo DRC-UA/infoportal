@@ -23,4 +23,7 @@ export class UserSdk {
   readonly fetchDrcJobs = () => {
     return this.client.get<DrcJob[]>('/user/drc-job');
   }
+  readonly getCount = () => {
+    return this.client.get<{ count: number }>('/user/count').then((res) => res.count)
+  }
 }

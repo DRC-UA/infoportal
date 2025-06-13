@@ -13,6 +13,7 @@ export const PeacebuildingProvider = ({children}: {children: ReactNode}) => {
 
   useEffect(() => {
     data.fetcherAnswer.fetch({})
+    data.fetcherPrePost.fetch({})
     data.fetcherPeriod.fetch({})
   }, [])
 
