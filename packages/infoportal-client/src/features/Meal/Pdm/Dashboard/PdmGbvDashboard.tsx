@@ -82,7 +82,7 @@ export const PdmGbvDashboard = () => {
                 />
                 <ChartPieWidgetBy
                   dense
-                  title={m.mealMonitoringPdm.esk_used}
+                  title={m.mealMonitoringPdm.itemsEskUsed}
                   data={data}
                   filter={(_) => _.answers.used_items_kit === 'yes'}
                   filterBase={(_) =>
