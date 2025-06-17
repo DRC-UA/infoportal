@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify'
 import {Kobo} from 'kobo-sdk'
 
 import {
+  isDate,
   KoboCustomDirective,
   KoboFlattenRepeatedGroup,
   KoboSchemaHelper,
@@ -339,15 +340,16 @@ export const columnBySchemaGenerator = ({
 
   const getDate = (name: string) => {
     const q = schema.helper.questionIndex[name]
+
     return {
       ...getCommon(q),
       type: 'date',
       render: (row: Row) => {
-        const _ = getValue(row, name) as Date | undefined
-        const time = formatDateTime(_)
+        const value = getValue(row, name) ? new Date(getValue(row, name)) : undefined
+        const time = formatDateTime(value)
         return {
-          label: formatDate(_),
-          value: _,
+          label: formatDate(value),
+          value,
           tooltip: time,
           export: time,
         }
