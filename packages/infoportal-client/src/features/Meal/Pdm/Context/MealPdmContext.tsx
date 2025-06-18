@@ -15,6 +15,7 @@ import {
   Person,
   Protection_gbvPdm,
   Legal_pam,
+  Meal_pssPdm,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {match, map, seq, Seq} from '@axanc/ts-utils'
@@ -27,13 +28,20 @@ export enum PdmType {
   Nfi = 'Nfi',
   Gbv = 'Gbv',
   Legal = 'Legal',
+  Pss = 'Pss',
 }
 
-export type PdmForm = Meal_cashPdm.T | Meal_shelterPdm.T | Meal_nfiPdm.T | Protection_gbvPdm.T | Legal_pam.T
+export type PdmForm =
+  | Meal_cashPdm.T
+  | Meal_shelterPdm.T
+  | Meal_nfiPdm.T
+  | Protection_gbvPdm.T
+  | Legal_pam.T
+  | Meal_pssPdm.T
 
 export type PdmData<T extends PdmForm> = {
   type: PdmType
-  oblast: OblastName
+  oblast?: OblastName
   project: DrcProject | undefined
   office?: DrcOffice | undefined
   persons?: Person.Details[]
@@ -156,6 +164,43 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
+      api.kobo.typedAnswers.search.meal_pssPdm().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Pss,
+          oblast: OblastIndex.byKoboName(record.oblast!)!.name,
+          office: match(record.gire!)
+            .cases({
+              od: DrcOffice.Dnipro,
+              ok: DrcOffice.Kharkiv,
+              oc: DrcOffice.Chernihiv,
+              os: DrcOffice.Sumy,
+              om: DrcOffice.Mykolaiv,
+              ol: DrcOffice.Lviv,
+              oy: DrcOffice.Kyiv,
+            })
+            .default(() => undefined),
+          persons: KoboXmlMapper.Persons.pss_pdm(record),
+          project: match(record.gido!)
+            .cases({
+              bha: DrcProject['UKR-000372 ECHO3'],
+              pofu: DrcProject['UKR-000270 Pooled Funds'],
+              ukr000298_novo: DrcProject['UKR-000298 Novo-Nordisk'],
+              okf: DrcProject['UKR-000309 OKF'],
+              uhf4: DrcProject['UKR-000314 UHF4'],
+              echo: DrcProject['UKR-000322 ECHO2'],
+              '329_sida_h2r': DrcProject['UKR-000329 SIDA H2R'],
+              ukr000336_uhf6: DrcProject['UKR-000336 UHF6'],
+              ukr000345_bha: DrcProject['UKR-000345 BHA2'],
+              ukr000347_danida: DrcProject['UKR-000347 DANIDA'],
+              ukr000355_dmfa: DrcProject['UKR-000355 Danish MFA'],
+              '363_uhf8': DrcProject['UKR-000363 UHF8'],
+              '372_echo': DrcProject['UKR-000372 ECHO3'],
+              oth: DrcProject['Other'],
+            })
+            .default(() => undefined),
+          answers: record,
+        })),
+      ),
     ]).then((results) => seq(results.flat()))
   }
 
@@ -166,12 +211,14 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_nfiPdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('protection_gbvPdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('legal_pam').id),
-    ]).then(([cashPeriod, shelterPeriod, nfiPeriod, gbvPeriod, legalPeriod]) => ({
+      api.kobo.answer.getPeriod(KoboIndex.byName('meal_pssPdm').id),
+    ]).then(([cashPeriod, shelterPeriod, nfiPeriod, gbvPeriod, legalPeriod, pssPeriod]) => ({
       cashPeriod,
       shelterPeriod,
       nfiPeriod,
       gbvPeriod,
       legalPeriod,
+      pssPeriod,
     }))
   })
 
