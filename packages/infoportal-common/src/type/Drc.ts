@@ -211,6 +211,7 @@ export enum DrcDonor {
   MOFA = 'MOFA',
   AugustinusFonden = 'AugustinusFonden',
   HoffmansAndHusmans = 'HoffmansAndHusmans',
+  Other = 'Other',
   None = 'None',
 }
 
@@ -240,6 +241,7 @@ export const drcDonorTranlate: Record<DrcDonor, string> = {
   MOFA: 'MOFA',
   AugustinusFonden: 'Augustinus Fonden',
   HoffmansAndHusmans: 'Hoffmans & Husmans',
+  Other: 'Other',
   None: 'None',
 }
 
@@ -306,6 +308,7 @@ export enum DrcProject {
   'UKR-000xxx DANIDA' = 'UKR-000xxx DANIDA',
   'UKR-000399 SDC' = 'UKR-000399 SDC',
   'UKR-000423 ECHO4' = 'UKR-000423 ECHO4',
+  'Other' = 'Other',
   'None' = 'None',
 }
 
@@ -376,6 +379,7 @@ export class DrcProjectHelper {
     'UKR-000373 Novo-Nordilsk': DrcDonor.NovoNordisk,
     'UKR-000399 SDC': DrcDonor.SDC,
     'UKR-000423 ECHO4': DrcDonor.ECHO,
+    Other: DrcDonor.Other,
     None: DrcDonor.None,
   }
 

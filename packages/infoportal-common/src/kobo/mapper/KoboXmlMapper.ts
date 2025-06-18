@@ -20,6 +20,7 @@ import {
   Meal_cashPdm,
   Meal_nfiPdm,
   Meal_shelterPdm,
+  Meal_pssPdm,
   Partner_lampa,
   Protection_communityMonitoring,
   Protection_counselling,
@@ -644,6 +645,27 @@ export namespace KoboXmlMapper {
         {
           age: _.age!,
           gender: _.sex!,
+          displacement: undefined,
+          disability: undefined,
+        },
+      ].map((person) => ({
+        age: person.age,
+        gender: match(person.gender)
+          .cases({
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          })
+          .default(undefined),
+        displacement: person.displacement,
+        disability: person.disability,
+      }))
+    }
+
+    export const pss_pdm = (_: Meal_pssPdm.T): Person.Details[] => {
+      return [
+        {
+          age: _.giage!,
+          gender: _.gis!,
           displacement: undefined,
           disability: undefined,
         },

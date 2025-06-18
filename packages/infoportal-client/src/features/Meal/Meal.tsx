@@ -28,6 +28,7 @@ import {PdmGbvDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGbvDashboard'
 import {MealWinterization} from '@/features/Meal/Winter/MealWinterization'
 import {MealWinterizationDashboard} from '@/features/Meal/Winter/MealWinterizationDashboard'
 import {PdmLegalDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmLegalDashboard'
+import {MealPdmPssDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmPssDashboard'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -39,6 +40,7 @@ const relatedKoboForms: KoboFormName[] = [
   'protection_gbvPdm',
   'meal_winterizationPdm',
   'legal_pam',
+  'meal_pssPdm',
 ]
 
 export const mealIndex = {
@@ -62,6 +64,7 @@ export const mealIndex = {
       nfiPdmDashboard: `/pdm/nfi/dashboard`,
       gbvPdmDashboard: `/pdm/gbv/dashboard`,
       legalPdmDashboard: `/pdm/legal/dashboard`,
+      pssPdmDashboard: `/pdm/pss/dashboard`,
     },
     winterization: {
       _: '/winterization',
@@ -140,6 +143,7 @@ const MealSidebar = ({
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_nfiPdm'))} name="meal_nfiPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('protection_gbvPdm'))} name="protection_gbvPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('legal_pam'))} name="legal_pam" />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_pssPdm'))} name="meal_pssPdm" />
         </SidebarSection>
         <SidebarSection title={m._meal.winterization}>
           <NavLink to={path(mealIndex.siteMap.winterization.winterizationDashboard)}>
@@ -211,6 +215,7 @@ export const Meal = () => {
           <Route path={mealIndex.siteMap.pdm.nfiPdmDashboard} element={<MealPdmNfiDashboard />} />
           <Route path={mealIndex.siteMap.pdm.gbvPdmDashboard} element={<PdmGbvDashboard />} />
           <Route path={mealIndex.siteMap.pdm.legalPdmDashboard} element={<PdmLegalDashboard />} />
+          <Route path={mealIndex.siteMap.pdm.pssPdmDashboard} element={<MealPdmPssDashboard />} />
         </Route>
         <Route path={mealIndex.siteMap.winterization._} element={<MealWinterization />}>
           <Route

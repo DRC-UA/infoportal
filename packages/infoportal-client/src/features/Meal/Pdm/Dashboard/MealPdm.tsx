@@ -57,6 +57,13 @@ export const MealPdm = ({formName}: {formName: KoboFormName}) => {
               to={mealIndex.siteMap.pdm.legalPdmDashboard}
               label={m.mealMonitoringPdm.legalPdmDashboard}
             />
+            <Tab
+              sx={{minHeight: 34, py: 1}}
+              component={NavLink}
+              value={mealIndex.siteMap.pdm.pssPdmDashboard}
+              to={mealIndex.siteMap.pdm.pssPdmDashboard}
+              label={m.mealMonitoringPdm.pssPdmDashboard}
+            />
           </Tabs>
           <Outlet />
         </>

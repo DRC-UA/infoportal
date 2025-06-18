@@ -54,6 +54,7 @@ import {
   Conflict_pre_post,
   Cs_tracker,
   Legal_pam,
+  Meal_pssPdm,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -457,6 +458,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('legal_pam').id,
           fnMapKobo: Legal_pam.map,
+          ...filters,
+        }),
+      ),
+      ...make('meal_pssPdm', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('meal_pssPdm').id,
+          fnMapKobo: Meal_pssPdm.map,
           ...filters,
         }),
       ),

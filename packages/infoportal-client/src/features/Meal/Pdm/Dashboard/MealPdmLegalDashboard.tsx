@@ -310,7 +310,7 @@ export const PdmLegalDashboard = () => {
                     sx={{maxWidth: 480, margin: 'auto'}}
                     fillBaseOn="value"
                     data={data}
-                    getOblast={(_) => OblastIndex.byName(_.oblast)?.iso}
+                    getOblast={(_) => OblastIndex.byName(_.oblast)?.iso!}
                     value={(_) => true}
                     base={(_) => _.answers.ben_det_oblast !== undefined}
                   />
