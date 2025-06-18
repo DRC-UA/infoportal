@@ -133,10 +133,12 @@ export enum ShelterTaPriceLevel {
   Medium = 'Medium',
   Heavy = 'Heavy',
 }
-export enum Shelterstandards{
+
+export enum Shelterstandards {
   yes = 'Yes',
-  no = 'No'
+  no = 'No',
 }
+
 export interface ShelterTaTags extends KoboBaseTags {
   progress?: ShelterProgress
   contractor1?: ShelterContractor
@@ -169,4 +171,5 @@ export const shelterDrcProject = [
   DrcProject['UKR-000363 UHF8'],
   DrcProject['UKR-000372 ECHO3'],
   DrcProject['UKR-000399 SDC'],
+  DrcProject['UKR-000423 ECHO4'],
 ]
