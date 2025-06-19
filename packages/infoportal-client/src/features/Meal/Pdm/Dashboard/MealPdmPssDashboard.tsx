@@ -14,23 +14,29 @@ import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 
-const mapOblast = OblastIndex.koboOblastIndexIso
-
 const isPssPdm = (_: PdmData<PdmForm>): _ is PdmData<Meal_pssPdm.T> => {
   return _.type === 'Pss'
 }
 
 export const MealPdmPssDashboard = () => {
   const ctx = useMealPdmContext()
+  const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isPssPdm))
   const ctxSchema = useKoboSchemaContext()
   const schema = ctxSchema.byName.meal_pssPdm.get!
-  const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isPssPdm))
-  const langIndex = ctxSchema.langIndex
-  const {m, formatDateTime, formatDate} = useI18n()
+  const {m} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
+
   const filterShape = useMemo(() => {
-    return DataFilter.makeShape(commonShape)
-  }, [commonShape])
+    return DataFilter.makeShape<PdmData<Meal_pssPdm.T>>({
+      ...commonShape,
+      received: {
+        icon: 'check_circle',
+        getOptions: () => DataFilter.buildOptionsFromObject(Meal_pssPdm.options.type_session),
+        label: m.mealMonitoringPdm.sessionType,
+        getValue: (_) => _.answers.type_session,
+      },
+    })
+  }, [commonShape, schema])
 
   const data = useMemo(() => {
     return map(ctx.fetcherAnswers.get, (_) => {
