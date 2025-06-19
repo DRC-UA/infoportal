@@ -71,6 +71,7 @@ const koboIndex = {
   conflict_pre_post: 'atG7X5hrbXbR9eseskUoCq',
   cs_tracker: 'ac5Xu2t2vJ97WneTGaSVNH',
   legal_pam: 'a3puEbm9w4ME323B6werxJ',
+  meal_eorePdm: 'aTHMDjqm7jodctcrBE4bS7',
 }
 
 import {Obj, seq} from '@axanc/ts-utils'
@@ -150,6 +151,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   conflict_pre_post: '[Peacebuilding] Conflict Sensitivity Training Pre-Post Test',
   cs_tracker: '[Peacebuilding] CS Training Tracker',
   legal_pam: '[MEAL] Legal Aid PAM Master',
+  meal_eorePdm: '[MEAL] EORE PDM',
 }
 
 export type KoboFormName = keyof typeof koboIndex

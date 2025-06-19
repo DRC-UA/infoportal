@@ -34,6 +34,7 @@ import {
   Va_bio_tia,
   Meal_winterizationPdm,
   Legal_pam,
+  Meal_eorePdm,
 } from '../generated/index.js'
 
 export namespace KoboXmlMapper {
@@ -654,6 +655,28 @@ export namespace KoboXmlMapper {
           .cases({
             male: Person.Gender.Male,
             female: Person.Gender.Female,
+          })
+          .default(undefined),
+        displacement: person.displacement,
+        disability: person.disability,
+      }))
+    }
+
+    export const eore_pdm = (_: Meal_eorePdm.T): Person.Details[] => {
+      return [
+        {
+          age: _._age!,
+          gender: _.select_one_hs54l01!,
+          displacement: undefined,
+          disability: undefined,
+        },
+      ].map((person) => ({
+        age: person.age,
+        gender: match(person.gender)
+          .cases({
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+            other: Person.Gender.Other,
           })
           .default(undefined),
         displacement: person.displacement,

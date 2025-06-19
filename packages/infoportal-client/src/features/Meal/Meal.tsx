@@ -29,6 +29,7 @@ import {MealWinterization} from '@/features/Meal/Winter/MealWinterization'
 import {MealWinterizationDashboard} from '@/features/Meal/Winter/MealWinterizationDashboard'
 import {PdmLegalDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmLegalDashboard'
 import {MealPdmPssDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmPssDashboard'
+import {MealPdmEoreDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmEoreDashboard'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -41,6 +42,7 @@ const relatedKoboForms: KoboFormName[] = [
   'meal_winterizationPdm',
   'legal_pam',
   'meal_pssPdm',
+  'meal_eorePdm',
 ]
 
 export const mealIndex = {
@@ -65,6 +67,7 @@ export const mealIndex = {
       gbvPdmDashboard: `/pdm/gbv/dashboard`,
       legalPdmDashboard: `/pdm/legal/dashboard`,
       pssPdmDashboard: `/pdm/pss/dashboard`,
+      eorePdmDashboard: `/pdm/eore/dashboard`,
     },
     winterization: {
       _: '/winterization',
@@ -144,6 +147,7 @@ const MealSidebar = ({
           <SidebarKoboLink path={path(mealIndex.siteMap.form('protection_gbvPdm'))} name="protection_gbvPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('legal_pam'))} name="legal_pam" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_pssPdm'))} name="meal_pssPdm" />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_eorePdm'))} name="meal_eorePdm" />
         </SidebarSection>
         <SidebarSection title={m._meal.winterization}>
           <NavLink to={path(mealIndex.siteMap.winterization.winterizationDashboard)}>
@@ -179,7 +183,8 @@ export const Meal = () => {
               _.params?.koboFormId === KoboIndex.byName('meal_nfiPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('protection_gbvPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('meal_winterizationPdm').id ||
-              _.params?.koboFormId === KoboIndex.byName('legal_pam').id
+              _.params?.koboFormId === KoboIndex.byName('legal_pam').id ||
+              _.params?.koboFormId === KoboIndex.byName('meal_eorePdm').id
             )
           })),
     }
@@ -216,6 +221,7 @@ export const Meal = () => {
           <Route path={mealIndex.siteMap.pdm.gbvPdmDashboard} element={<PdmGbvDashboard />} />
           <Route path={mealIndex.siteMap.pdm.legalPdmDashboard} element={<PdmLegalDashboard />} />
           <Route path={mealIndex.siteMap.pdm.pssPdmDashboard} element={<MealPdmPssDashboard />} />
+          <Route path={mealIndex.siteMap.pdm.eorePdmDashboard} element={<MealPdmEoreDashboard />} />
         </Route>
         <Route path={mealIndex.siteMap.winterization._} element={<MealWinterization />}>
           <Route
