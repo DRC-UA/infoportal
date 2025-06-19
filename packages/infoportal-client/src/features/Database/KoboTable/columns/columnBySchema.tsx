@@ -339,7 +339,8 @@ export const columnBySchemaGenerator = ({
       type: isNumeric ? 'number' : 'calculate',
       renderQuick: (row: Row) => {
         const value = getValue(row, name)
-        return isNumeric ? Number(value) : value
+        const numericValue = isNaN(Number(value)) ? '' : value // hide nasty NaNs from the view
+        return isNumeric ? numericValue : value
       },
     }
   }
