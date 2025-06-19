@@ -525,6 +525,7 @@ export const en = Object.freeze({
       gbvPdmDashboard: 'Gbv',
       legalPdmDashboard: 'Legal',
       pssPdmDashboard: 'Pss',
+      eorePdmDashboard: 'Eore',
       pdmType: 'PDM Type',
       sessionType: 'Session type',
       spentA: 'Spent?',
@@ -693,6 +694,14 @@ export const en = Object.freeze({
       peopleExcluded:
         'Do you know of people in your Hromada/ Raion who are in need of legal assistance/ services who were excluded from the services provided?',
       peopleSpecify: 'If you know excluded people, specify',
+      eoreSafety: 'Did you feel safe in the place where EORE session was conducted?',
+      eoreRespect: 'Did you feel that the DRC staff treated you with respect during the session?',
+      eoreSharing:
+        'Do you think you will share what you have learned in the session today with your family members/friends/neighbors, etc.?',
+      eoreUseful: 'Do you think you will find what you have learned useful in your everyday life?',
+      eoreSatis: 'Are you satisfied with the service provided?',
+      eoreTrainer: 'Did the EORE assistant provide answers to your questions?',
+      eoreInfo: 'To what extent is the material presented in the session understandable/clear for you?',
     },
     _mealVerif: {
       numericToleranceMargin: 'Tolerance margin',

@@ -16,6 +16,7 @@ import {
   Protection_gbvPdm,
   Legal_pam,
   Meal_pssPdm,
+  Meal_eorePdm,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {match, map, seq, Seq} from '@axanc/ts-utils'
@@ -29,6 +30,7 @@ export enum PdmType {
   Gbv = 'Gbv',
   Legal = 'Legal',
   Pss = 'Pss',
+  Eore = 'Eore',
 }
 
 export type PdmForm =
@@ -38,6 +40,7 @@ export type PdmForm =
   | Protection_gbvPdm.T
   | Legal_pam.T
   | Meal_pssPdm.T
+  | Meal_eorePdm.T
 
 export type PdmData<T extends PdmForm> = {
   type: PdmType
@@ -201,6 +204,28 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
+      api.kobo.typedAnswers.search.meal_eorePdm().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Eore,
+          oblast: OblastIndex.byKoboName(record.oblast!)!.name,
+          persons: KoboXmlMapper.Persons.eore_pdm(record),
+          project: match(record.project_id!)
+            .cases({
+              dutch1: DrcProject['UKR-000294 Dutch I'],
+              dutch2: DrcProject['UKR-000306 Dutch II'],
+              uhf5: DrcProject['UKR-000316 UHF5'],
+              echo322: DrcProject['UKR-000322 ECHO2'],
+              gffo331: DrcProject['UKR-000331 GFFO'],
+              sida350: DrcProject['UKR-000350 SIDA'],
+              uhf8_363: DrcProject['UKR-000363 UHF8'],
+              ech372: DrcProject['UKR-000372 ECHO3'],
+              novonordisk373: DrcProject['UKR-000373 Novo-Nordilsk'],
+              danida380: DrcProject['UKR-000380 DANIDA'],
+            })
+            .default(() => undefined),
+          answers: record,
+        })),
+      ),
     ]).then((results) => seq(results.flat()))
   }
 
@@ -212,13 +237,15 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
       api.kobo.answer.getPeriod(KoboIndex.byName('protection_gbvPdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('legal_pam').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_pssPdm').id),
-    ]).then(([cashPeriod, shelterPeriod, nfiPeriod, gbvPeriod, legalPeriod, pssPeriod]) => ({
+      api.kobo.answer.getPeriod(KoboIndex.byName('meal_eorePdm').id),
+    ]).then(([cashPeriod, shelterPeriod, nfiPeriod, gbvPeriod, legalPeriod, pssPeriod, eorePeriod]) => ({
       cashPeriod,
       shelterPeriod,
       nfiPeriod,
       gbvPeriod,
       legalPeriod,
       pssPeriod,
+      eorePeriod,
     }))
   })
 

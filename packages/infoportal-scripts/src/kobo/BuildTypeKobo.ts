@@ -177,6 +177,10 @@ export class BuildKoboType {
       meal_pssPdm: {
         formId: KoboIndex.byName('meal_pssPdm').id,
       },
+      meal_eorePdm: {
+        formId: KoboIndex.byName('meal_eorePdm').id,
+        langIndex: 1,
+      },
       meal_winterizationPdm: {
         formId: KoboIndex.byName('meal_winterizationPdm').id,
         skipQuestionTyping: ['ben_det_hromada'],
