@@ -526,6 +526,7 @@ export const en = Object.freeze({
       legalPdmDashboard: 'Legal',
       pssPdmDashboard: 'Pss',
       pdmType: 'PDM Type',
+      sessionType: 'Session type',
       spentA: 'Spent?',
       method: 'Methodology group',
       general: 'General Information',
