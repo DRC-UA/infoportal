@@ -39,9 +39,9 @@ export const NumberChoicesPopover = <T,>({
   const {m, formatLargeNumber} = useI18n()
   const chart = useMemo(() => {
     const mapped = seq(data)
-      .map((_, i) => (mapValues ? mapValues(_, i) : _[question]))
-      .filter((_) => _ !== undefined && _ !== '')
-      .map((_) => +_)
+      .map((row, i) => (mapValues ? mapValues(row, i) : row[question]))
+      .filter((cell) => cell !== undefined && cell !== '' && !isNaN(cell))
+      .map((cell) => Number(cell))
     const min = Math.min(...mapped)
     const max = Math.max(...mapped)
     const sum = mapped.sum()
