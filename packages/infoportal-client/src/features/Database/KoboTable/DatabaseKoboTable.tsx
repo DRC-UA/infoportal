@@ -14,8 +14,6 @@ import {KoboForm, KoboMappedAnswer} from '@/core/sdk/server/kobo/KoboMapper'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {databaseUrlParamsValidation} from '@/features/Database/Database'
 import {useDatabaseContext} from '@/features/Database/DatabaseContext'
-import {DatabaseKoboTableProvider} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {DatabaseKoboTableContent} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
 import {Page} from '@/shared/Page'
@@ -23,44 +21,35 @@ import {Panel} from '@/shared/Panel'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {FetchParams} from '@/shared/hook/useFetchers'
 
+import {DatabaseKoboTableProvider} from './DatabaseKoboContext'
+import {DatabaseKoboTableContent} from './DatabaseKoboTableContent'
+
 export const DatabaseTableRoute = () => {
   const ctx = useDatabaseContext()
   const {formId} = databaseUrlParamsValidation.validateSync(useParams())
-  return (
-    <>
-      {map(ctx.getForm(formId), (form) => (
-        <Page width="full" sx={{p: 0, pb: 0, mb: 0}}>
-          <Panel sx={{mb: 0}}>
-            <DatabaseTable form={form} formId={formId} />
-          </Panel>
-        </Page>
-      ))}
-    </>
-  )
+  return map(ctx.getForm(formId), (form) => (
+    <Page width="full" sx={{p: 0, pb: 0, mb: 0}}>
+      <Panel sx={{mb: 0}}>
+        <DatabaseTable form={form} formId={formId} />
+      </Panel>
+    </Page>
+  ))
 }
 
 export interface DatabaseTableProps {
   form?: KoboForm
   formId: Kobo.FormId
-  dataFilter?: (_: KoboMappedAnswer) => boolean
-  onFiltersChange?: (_: Record<string, DatatableFilterValue>) => void
-  onDataChange?: (_: {
+  dataFilter?: (arg: KoboMappedAnswer) => boolean
+  onFiltersChange?: (arg: Record<string, DatatableFilterValue>) => void
+  onDataChange?: (arg: {
     data?: KoboMappedAnswer[]
     filteredData?: KoboMappedAnswer[]
     filteredAndSortedData?: KoboMappedAnswer[]
     filteredSortedAndPaginatedData?: ApiPaginate<KoboMappedAnswer>
   }) => void
-  overrideEditAccess?: boolean
 }
 
-export const DatabaseTable = ({
-  form,
-  formId,
-  onFiltersChange,
-  onDataChange,
-  dataFilter,
-  overrideEditAccess,
-}: DatabaseTableProps) => {
+export const DatabaseTable = ({form, formId, onFiltersChange, onDataChange, dataFilter}: DatabaseTableProps) => {
   const {api} = useAppSettings()
   const {accesses, session} = useSession()
   const ctxSchema = useKoboSchemaContext()

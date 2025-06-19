@@ -1,6 +1,7 @@
-import {fnSwitch, map} from '@axanc/ts-utils'
+import {memo} from 'react'
+import {match, map} from '@axanc/ts-utils'
 import {Checkbox, IconProps} from '@mui/material'
-import React from 'react'
+
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumn, DatatableRow} from '@/shared/Datatable/util/datatableType'
@@ -63,14 +64,12 @@ export const DatatableHead = (() => {
                   c.width ? 'th-width-fit-content' : '',
                   c.stickyEnd ? 'td-sticky-end' : '',
                   active ? 'th-active' : '',
-                  fnSwitch(
-                    c.align!,
-                    {
+                  match(c.align!)
+                    .cases({
                       center: 'td-center',
                       right: 'td-right',
-                    },
-                    (_) => '',
-                  ),
+                    })
+                    .default(''),
                 ].join(' ')}
               >
                 <ResizableDiv id={c.id} initialWidth={c.width} onResize={onResizeColumn}>
@@ -104,7 +103,8 @@ export const DatatableHead = (() => {
       </thead>
     )
   }
-  return React.memo(Component) as typeof Component
+
+  return memo(Component) as typeof Component
 })()
 
 export const DatatableHeadIcon = (
@@ -112,9 +112,7 @@ export const DatatableHeadIcon = (
     tooltip: string
     children: string
   } & Pick<IconProps, 'sx' | 'color'>,
-) => {
-  return <TableIcon className="table-head-type-icon" fontSize="small" color="disabled" {...props} />
-}
+) => <TableIcon className="table-head-type-icon" fontSize="small" color="disabled" {...props} />
 
 export const DatatableHeadIconByType = ({
   type,
@@ -160,7 +158,7 @@ const DatatableHeadTdBody = ({
           case 'select_multiple':
           case 'date':
           case 'number':
-            return <TableIconBtn children="bar_chart" onClick={(e) => onOpenStats(e)} />
+            return <TableIconBtn children="bar_chart" onClick={onOpenStats} />
           case 'id':
             return <DatatableHeadCopyIds column={column} />
         }

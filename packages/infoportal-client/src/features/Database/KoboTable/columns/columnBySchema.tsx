@@ -4,7 +4,6 @@ import DOMPurify from 'dompurify'
 import {Kobo} from 'kobo-sdk'
 
 import {
-  isDate,
   KoboCustomDirective,
   KoboFlattenRepeatedGroup,
   KoboSchemaHelper,
@@ -21,6 +20,8 @@ import {DatatableHeadIcon, DatatableHeadIconByType} from '@/shared/Datatable/Dat
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {getKoboAttachmentUrl, KoboAttachedFile, KoboAttachedImg} from '@/shared/TableMedia/KoboAttachedMedia'
+
+import {isCalculateNumeric} from './helpers'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()
@@ -329,6 +330,20 @@ export const columnBySchemaGenerator = ({
     }
   }
 
+  const getCalculate = (name: string) => {
+    const q = schema.helper.questionIndex[name]
+    const isNumeric = isCalculateNumeric(formId, name)
+
+    return {
+      ...getCommon(q),
+      type: isNumeric ? 'number' : 'calculate',
+      renderQuick: (row: Row) => {
+        const value = getValue(row, name)
+        return isNumeric ? Number(value) : value
+      },
+    }
+  }
+
   const getNote = (name: string) => {
     const q = schema.helper.questionIndex[name]
     return {
@@ -428,7 +443,7 @@ export const columnBySchemaGenerator = ({
   const getBy = {
     image: getImage,
     file: getFile,
-    calculate: getText,
+    calculate: getCalculate,
     select_one_from_file: getSelectOneFromFile,
     username: getText,
     text: getText,
