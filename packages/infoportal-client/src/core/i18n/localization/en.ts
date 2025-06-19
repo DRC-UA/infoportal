@@ -566,6 +566,7 @@ export const en = Object.freeze({
       materialSat: 'Satisfied with the materials',
       similarPss: 'Have you received similar PSS session before?',
       rateSession: 'How would you rate that similar session that you had before?',
+      rateExperience: 'Overall, how would you rate your experience of the activities in this  PSS session?',
       overallHelpful: 'Overall, do you find DRС PSS sessions were helpful?',
       satWithActivity: 'Are you satisfied with the activities provided?',
       satActivityBad: 'If ‘Mostly yes, Not really/not at all’: Would you mind telling us why you are not satisfied?',

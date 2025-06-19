@@ -80,6 +80,13 @@ export const MealPdmPssDashboard = () => {
                   label={Meal_pssPdm.options.rate_activities_session}
                 />
               </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.rateExperience}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.rate_activities_session}
+                  label={Meal_pssPdm.options.rate_activities_session}
+                />
+              </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.overallHelpful}>
                 <ChartBarSingleBy
                   data={data}
@@ -87,18 +94,18 @@ export const MealPdmPssDashboard = () => {
                   label={Meal_pssPdm.options.overall_sessions_helpful}
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.satWithActivity}>
+              <SlidePanel title={m.mealMonitoringPdm.emotionalBenefit}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.satisfied_activities_provided}
-                  label={Meal_pssPdm.options.report_misconduct_employees}
+                  by={(_) => _.answers.feel_emotional_benefits}
+                  label={Meal_pssPdm.options.feel_emotional_benefits}
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.satActivityBad}>
+              <SlidePanel title={m.mealMonitoringPdm.feelIntegrated}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.satisfied_activities_provided_bad}
-                  label={Meal_pssPdm.options.satisfied_activities_provided_bad}
+                  by={(_) => _.answers.feel_integrated_activity}
+                  label={Meal_pssPdm.options.know_where_address_suggestions}
                 />
               </SlidePanel>
             </Div>
@@ -125,11 +132,18 @@ export const MealPdmPssDashboard = () => {
                   />
                 </PanelBody>
               </Panel>
-              <SlidePanel title={m.mealMonitoringPdm.emotionalBenefit}>
+              <SlidePanel title={m.mealMonitoringPdm.satWithActivity}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.feel_emotional_benefits}
-                  label={Meal_pssPdm.options.feel_emotional_benefits}
+                  by={(_) => _.answers.satisfied_activities_provided}
+                  label={Meal_pssPdm.options.report_misconduct_employees}
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.satActivityBad}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.satisfied_activities_provided_bad}
+                  label={Meal_pssPdm.options.satisfied_activities_provided_bad}
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.respect}>
@@ -141,13 +155,6 @@ export const MealPdmPssDashboard = () => {
               </SlidePanel>
             </Div>
             <Div column>
-              <SlidePanel title={m.mealMonitoringPdm.feelIntegrated}>
-                <ChartBarSingleBy
-                  data={data}
-                  by={(_) => _.answers.feel_integrated_activity}
-                  label={Meal_pssPdm.options.know_where_address_suggestions}
-                />
-              </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.wellInformPss}>
                 <ChartBarSingleBy
                   data={data}
@@ -166,6 +173,20 @@ export const MealPdmPssDashboard = () => {
                 <ChartBarSingleBy
                   data={data}
                   by={(_) => _.answers.know_people_needing_pss}
+                  label={Meal_pssPdm.options.report_misconduct_employees}
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.address}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.know_where_address_suggestions}
+                  label={Meal_pssPdm.options.know_where_address_suggestions}
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.howReport}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.report_misconduct_employees}
                   label={Meal_pssPdm.options.report_misconduct_employees}
                 />
               </SlidePanel>
