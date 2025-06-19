@@ -39,7 +39,6 @@ export const MealVerificationFormData = ({
       </Box>
       <Box sx={{border: '1px solid ' + t.palette.divider, borderRadius: t.shape.borderRadius + 'px'}}>
         <DatabaseTable
-          overrideEditAccess={false}
           formId={activity.registration.koboFormId}
           onFiltersChange={setSelectedFilters}
           dataFilter={activity.registration.filters}
