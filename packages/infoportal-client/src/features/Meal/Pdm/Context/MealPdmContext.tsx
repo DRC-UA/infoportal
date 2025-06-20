@@ -96,12 +96,17 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
           project: match(record.Donor!)
             .cases({
-              ukr000345_bha2: DrcProject['UKR-000345 BHA2'],
+              novo: DrcProject['UKR-000298 Novo-Nordisk'],
+              unhcr: DrcProject['UKR-000308 UNHCR'],
               echo: DrcProject['UKR-000322 ECHO2'],
               uhf4: DrcProject['UKR-000314 UHF4'],
-              unhcr: DrcProject['UKR-000308 UNHCR'],
-              novo: DrcProject['UKR-000298 Novo-Nordisk'],
               uhf6: DrcProject['UKR-000336 UHF6'],
+              ukr000345_bha2: DrcProject['UKR-000345 BHA2'],
+              ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
+              ukr000372_echo: DrcProject['UKR-000372 ECHO3'],
+              ukr000390_uhf9: DrcProject['UKR-000390 UHF9'],
+              ukr000399_sdc3: DrcProject['UKR-000399 SDC3'],
+              other: DrcProject['Other'],
             })
             .default(() => undefined),
           office: KoboXmlMapper.office(record.office),
