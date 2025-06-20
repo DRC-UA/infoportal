@@ -9,6 +9,8 @@ export namespace Meal_eorePdm {
     note_tp17z50: string
     // note_tx9vt44 [note] Danish Refugee Council in Ukraine provides Explosive Ordnance Risk Education sessions for population.  We would like to ask for your help in determining the quality of our assistance provided and answer a few questions. This survey is conducted solely for the purpose of research, as well as to improve the quality of our work. You do not need to provide your name or contact information. We undertake to maintain the confidentiality of the answers you've provided.  We are grateful to you for your consent to respond to our questions, your opinion is extremely important to us!
     note_tx9vt44: string
+    // begin/office [select_one] Responsible office:
+    office: undefined | Option<'office'>
     // begin/project_id [select_one] Project ID:
     project_id: undefined | Option<'project_id'>
     // begin/date_session [date] Date of session:
@@ -56,6 +58,16 @@ export namespace Meal_eorePdm {
   }
 
   export const options = {
+    office: {
+      dnk: `Dnipro (DNK)`,
+      hrk: `Kharkiv (HRK)`,
+      lwo: `Lviv (LWO)`,
+      cej: `Chernihiv (CEJ)`,
+      iev: `Kyiv (IEV)`,
+      nlv: `Mykolaiv (NLV)`,
+      umy: `Sumy (UMY)`,
+      slo: `Sloviansk (SLO)`,
+    },
     project_id: {
       dutch1: `Dutch I`,
       dutch2: `Dutch II`,

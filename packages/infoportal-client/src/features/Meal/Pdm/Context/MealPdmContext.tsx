@@ -208,6 +208,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         seq(_.data).map((record) => ({
           type: PdmType.Eore,
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
+          office: KoboXmlMapper.office(record.office),
           persons: KoboXmlMapper.Persons.eore_pdm(record),
           project: match(record.project_id!)
             .cases({
