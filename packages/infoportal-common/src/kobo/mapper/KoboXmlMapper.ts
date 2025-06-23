@@ -33,6 +33,8 @@ import {
   Shelter_nta,
   Va_bio_tia,
   Meal_winterizationPdm,
+  Ecrec_small_scale,
+  Ecrec_subsistance,
   Legal_pam,
   Meal_eorePdm,
 } from '../generated/index.js'
@@ -49,6 +51,7 @@ export namespace KoboXmlMapper {
       | 'unable_unwilling_to_answer'
       | 'other_pns'
       | 'pnd'
+      | 'pns'
 
     export type DisabilityLevel = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_det_dis_level']
 
@@ -141,6 +144,7 @@ export namespace KoboXmlMapper {
             female: Person.Gender.Female,
             other: Person.Gender.Other,
             other_pns: Person.Gender.Other,
+            pns: Person.Gender.Other,
           })
           .default(undefined)
       }
@@ -510,6 +514,16 @@ export namespace KoboXmlMapper {
         })),
       })
     }
+
+    export const ecrec_subsistance = (row: Ecrec_subsistance.T) =>
+      common({
+        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          ..._,
+          hh_char_hh_res_stat: _.hh_char_hh_res_stat,
+        })),
+      })
+
+    export const ecrec_small_scale = (row: Ecrec_small_scale.T) => common(row)
 
     export const ecrec_msmeGrantEoi = (row: Ecrec_msmeGrantEoi.T) => common(row)
 
