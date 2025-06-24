@@ -47,7 +47,10 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
       })
 
     return ChartHelper.single({data: includeNullish ? source : source.compact()})
-      .setLabel(label)
+      .setLabel({
+        ...label,
+        undefined: 'Not specified',
+      })
       .sortBy.value()
       .filterValue((_) => (min ? _.value > min : true))
       .take(limit)
