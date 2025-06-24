@@ -77,6 +77,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.received_similar_pss}
                   label={Meal_pssPdm.options.received_similar_pss}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.rateSession}>
@@ -84,6 +85,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.received_similar_pss_yes}
                   label={Meal_pssPdm.options.rate_activities_session}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.rateExperience}>
@@ -91,6 +93,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.rate_activities_session}
                   label={Meal_pssPdm.options.rate_activities_session}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.overallHelpful}>
@@ -98,6 +101,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.overall_sessions_helpful}
                   label={Meal_pssPdm.options.overall_sessions_helpful}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.emotionalBenefit}>
@@ -105,6 +109,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.feel_emotional_benefits}
                   label={Meal_pssPdm.options.feel_emotional_benefits}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.feelIntegrated}>
@@ -112,6 +117,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.feel_integrated_activity}
                   label={Meal_pssPdm.options.know_where_address_suggestions}
+                  includeNullish
                 />
               </SlidePanel>
             </Div>
@@ -143,6 +149,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.satisfied_activities_provided}
                   label={Meal_pssPdm.options.report_misconduct_employees}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.satActivityBad}>
@@ -150,6 +157,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.satisfied_activities_provided_bad}
                   label={Meal_pssPdm.options.satisfied_activities_provided_bad}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.respect}>
@@ -157,6 +165,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.feel_staff_respect}
                   label={Meal_pssPdm.options.know_where_address_suggestions}
+                  includeNullish
                 />
               </SlidePanel>
             </Div>
@@ -166,6 +175,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.well_informed_service}
                   label={Meal_pssPdm.options.report_misconduct_employees}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.safePss}>
@@ -173,6 +183,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.feel_safe_sessions}
                   label={Meal_pssPdm.options.know_where_address_suggestions}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.pssExcluded}>
@@ -180,6 +191,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.know_people_needing_pss}
                   label={Meal_pssPdm.options.report_misconduct_employees}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.address}>
@@ -187,6 +199,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.know_where_address_suggestions}
                   label={Meal_pssPdm.options.know_where_address_suggestions}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.howReport}>
@@ -194,6 +207,7 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.report_misconduct_employees}
                   label={Meal_pssPdm.options.report_misconduct_employees}
+                  includeNullish
                 />
               </SlidePanel>
             </Div>
