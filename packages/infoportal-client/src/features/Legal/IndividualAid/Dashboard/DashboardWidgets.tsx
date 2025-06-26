@@ -77,6 +77,14 @@ const Widgets: FC = () => {
             by={({category_issue}) => category_issue}
           />
         </SlidePanel>
+        <SlidePanel title={m.project}>
+          <ChartBarSingleBy
+            data={seq(cases).map(({project}) => ({
+              project: DrcProject[Legal_individual_aid.options.project[project!]],
+            }))}
+            by={({project}) => project}
+          />
+        </SlidePanel>
       </Div>
       <Div column>
         <Panel title={m.legal.map.title}>
@@ -99,12 +107,15 @@ const Widgets: FC = () => {
             </Lazy>
           </PanelBody>
         </Panel>
-        <SlidePanel title={m.project}>
+        <SlidePanel title={m.office}>
           <ChartBarSingleBy
-            data={seq(cases).map(({project}) => ({
-              project: DrcProject[Legal_individual_aid.options.project[project!]],
-            }))}
-            by={({project}) => project}
+            data={seq(cases)
+              .map(({office}) => office)
+              .compact()
+              .map((office) => ({
+                office: Legal_individual_aid.options.office[office],
+              }))}
+            by={({office}) => office}
           />
         </SlidePanel>
       </Div>
