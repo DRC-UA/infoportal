@@ -38,6 +38,13 @@ const useIndividualAidData = () => {
           getOptions: () => DataFilter.buildOptionsFromObject(Legal_individual_aid.options.project),
           label: m.project,
         },
+        registeredBy: {
+          icon: 'assignment_ind',
+          getValue: ({number_case}) => number_case?.map(({first_lawyer}) => first_lawyer!),
+          multiple: true,
+          getOptions: () => DataFilter.buildOptionsFromObject(Legal_individual_aid.options.another_lawyer),
+          label: m.legal.registeredBy,
+        },
         applicationType: {
           icon: 'cases',
           getValue: ({number_case}) => {

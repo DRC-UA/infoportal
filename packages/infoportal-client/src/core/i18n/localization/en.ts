@@ -1256,6 +1256,7 @@ export const en = Object.freeze({
         assistance: 'Assistance',
         councelling: 'Councelling',
       },
+      registeredBy: 'Registered by',
       caseStatus: 'Case status',
       caseCategory: 'Case category',
       caseDate: 'Case date',

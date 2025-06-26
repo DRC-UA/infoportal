@@ -118,6 +118,17 @@ const Widgets: FC = () => {
             by={({office}) => office}
           />
         </SlidePanel>
+        <SlidePanel title={m.legal.registeredBy}>
+          <ChartBarSingleBy
+            data={seq(cases)
+              .map(({first_lawyer}) => first_lawyer)
+              .compact()
+              .map((first_lawyer) => ({
+                first_lawyer: Legal_individual_aid.options.another_lawyer[first_lawyer],
+              }))}
+            by={({first_lawyer}) => first_lawyer}
+          />
+        </SlidePanel>
       </Div>
     </Div>
   )
