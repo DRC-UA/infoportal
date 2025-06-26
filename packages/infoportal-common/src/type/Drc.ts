@@ -315,7 +315,6 @@ export enum DrcProject {
   'UKR-000426 SDC' = 'UKR-000426 SDC',
   'Other' = 'Other',
   'None' = 'None',
-  undefined = 'Not specified',
 }
 
 export const allProjects = Obj.values(DrcProject)
@@ -389,7 +388,6 @@ export class DrcProjectHelper {
     'UKR-000426 SDC': DrcDonor.SDC,
     Other: DrcDonor.Other,
     None: DrcDonor.None,
-    'Not specified': DrcDonor.None,
   }
 
   static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = seq(
