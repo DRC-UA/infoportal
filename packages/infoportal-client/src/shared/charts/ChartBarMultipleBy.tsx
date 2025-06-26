@@ -22,6 +22,7 @@ export interface ChartBarMultipleByProps<
   onToggle?: (_: R) => void
   base?: 'percentOfTotalAnswers' | 'percentOfTotalChoices'
   forceShowEmptyLabels?: boolean
+  includeNullish?: boolean
 }
 
 export const ChartBarMultipleBy = <
@@ -41,29 +42,34 @@ export const ChartBarMultipleBy = <
   base,
   mergeOptions,
   forceShowEmptyLabels,
+  includeNullish,
 }: ChartBarMultipleByProps<D, K, O>) => {
   const res = useMemo(() => {
-    const source = data
-      .map((d) => {
-        if (by(d) === undefined) return
-        if (mergeOptions) {
-          return seq(by(d) as string[])
-            .map((_) => (mergeOptions as any)[_] ?? _)
+    const sourceRaw = data.map((d) => {
+      const val = by(d)
+      if (val === undefined) return undefined
+      const values = mergeOptions
+        ? seq(val)
+            .map((v) => (mergeOptions as any)[v] ?? v)
             .distinct((_) => _)
             .get()
-        }
-        return by(d)
-      })
-      .compact()
+        : val
+      return values
+    })
+
+    const source = includeNullish ? sourceRaw : sourceRaw.compact()
     return ChartHelper.multiple({
       data: source,
       filterValue,
       base,
     })
-      .setLabel(label)
+      .setLabel({
+        ...label,
+        undefined: 'Not specified',
+      })
       .take(limit)
       .get()
-  }, [data, by, label])
+  }, [data, by, label, includeNullish])
 
   const finalData = useMemo(() => {
     if (!forceShowEmptyLabels || !label) return res

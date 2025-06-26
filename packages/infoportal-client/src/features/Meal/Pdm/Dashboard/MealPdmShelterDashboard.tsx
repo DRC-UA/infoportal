@@ -117,6 +117,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.which_type_of_assistance_have}
                   label={Meal_shelterPdm.options.which_type_of_assistance_have}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel>
@@ -129,6 +130,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.spent_cash_assistance_received === 'yes' ||
                     _.answers.spent_cash_assistance_received === 'no'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -136,6 +138,7 @@ export const MealPdmShelterDashboard = () => {
                   title={m.mealMonitoringPdm.spendOn}
                   filter={(_) => _.answers.spend_cash_received === 'yes'}
                   filterBase={(_) => _.answers.spend_cash_received === 'yes' || _.answers.spend_cash_received === 'no'}
+                  includeNullish
                 />
               </SlidePanel>
               <DashboardPanelTitle> {m.mealMonitoringPdm.esk} </DashboardPanelTitle>
@@ -146,11 +149,13 @@ export const MealPdmShelterDashboard = () => {
                   title={m.mealMonitoringPdm.usedEsk}
                   filter={(_) => _.answers.used_provided_esk === 'yes'}
                   filterBase={(_) => _.answers.used_provided_esk === 'yes' || _.answers.used_provided_esk === 'no'}
+                  includeNullish
                 />
                 <ChartBarSingleBy
                   data={data}
                   by={(_) => _.answers.used_provided_esk}
                   label={Meal_shelterPdm.options.responded_complaint_feed}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.whoAssisted}>
@@ -158,6 +163,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.used_provided_esk_001}
                   label={Meal_shelterPdm.options.Who_assisted_you_with_the_hous}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel>
@@ -169,11 +175,13 @@ export const MealPdmShelterDashboard = () => {
                   filterBase={(_) =>
                     _.answers.quantity_given_sufficient === 'yes' || _.answers.quantity_given_sufficient === 'no'
                   }
+                  includeNullish
                 />
                 <ChartBarSingleBy
                   data={data}
                   by={(_) => _.answers.quantity_given_sufficient}
                   label={Meal_shelterPdm.options.responded_complaint_feed}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel>
@@ -183,11 +191,13 @@ export const MealPdmShelterDashboard = () => {
                   title={m.mealMonitoringPdm.findUseful}
                   filter={(_) => _.answers.find_kits_useful === 'yes'}
                   filterBase={(_) => _.answers.find_kits_useful === 'yes' || _.answers.find_kits_useful === 'no'}
+                  includeNullish
                 />
                 <ChartBarSingleBy
                   data={data}
                   by={(_) => _.answers.find_kits_useful}
                   label={Meal_shelterPdm.options.responded_complaint_feed}
+                  includeNullish
                 />
               </SlidePanel>
               <DashboardPanelTitle> {m.mealMonitoringPdm.cashAssistance} </DashboardPanelTitle>
@@ -196,6 +206,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.What_have_you_spent_the_money__001}
                   label={Meal_shelterPdm.options.What_have_you_spent_the_money__001}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.coverEnough}>
@@ -203,6 +214,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.Was_the_cash_assistance_enough}
                   label={Meal_shelterPdm.options._17_Are_you_planning_on_stayin}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.useBrochure}>
@@ -210,6 +222,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.brochure_provided}
                   label={Meal_shelterPdm.options.brochure_provided}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.hadQuestions}>
@@ -217,6 +230,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.questions_complete_repairs}
                   label={Meal_shelterPdm.options.questions_complete_repairs}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.hlpIssues}>
@@ -224,6 +238,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers._9_Do_you_have_any_HLP_issues_}
                   label={Meal_shelterPdm.options.responded_complaint_feed}
+                  includeNullish
                 />
               </SlidePanel>
               <DashboardPanelTitle> {m.mealMonitoringPdm.overcomeBarrier} </DashboardPanelTitle>
@@ -233,6 +248,7 @@ export const MealPdmShelterDashboard = () => {
                     data={data}
                     by={(_) => _.answers._9_Did_you_and_your_family_ha}
                     label={Meal_shelterPdm.options.responded_complaint_feed}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.enableReturn}>
@@ -240,6 +256,7 @@ export const MealPdmShelterDashboard = () => {
                     data={data}
                     by={(_) => _.answers._10_Did_shelter_assistance_hel}
                     label={Meal_shelterPdm.options._17_Are_you_planning_on_stayin}
+                    includeNullish
                   />
                 </SlidePanel>
               </SlidePanel>
@@ -248,6 +265,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers._12_How_would_your_HH_prefer_t}
                   label={Meal_shelterPdm.options._12_How_would_your_HH_prefer_t}
+                  includeNullish
                 />
               </SlidePanel>
               <DashboardPanelTitle> {m.mealMonitoringPdm.outcome} </DashboardPanelTitle>
@@ -256,6 +274,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.needing_repair_excluded}
                   label={Meal_shelterPdm.options.report_drc_employee}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel>
@@ -272,6 +291,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.feel_treated_respect === 'dk' ||
                     _.answers.feel_treated_respect === 'na'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -286,6 +306,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.feel_informed_repair === 'dk' ||
                     _.answers.feel_informed_repair === 'na'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -302,6 +323,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.safe_during_distribution === 'dk' ||
                     _.answers.safe_during_distribution === 'na'
                   }
+                  includeNullish
                 />
               </SlidePanel>
             </Div>
@@ -322,6 +344,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.place_largely_secure}
                   label={Meal_shelterPdm.options.place_largely_secure}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel>
@@ -334,6 +357,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.shelter_culturally_acceptable === 'yes' ||
                     _.answers.shelter_culturally_acceptable === 'no'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -343,6 +367,7 @@ export const MealPdmShelterDashboard = () => {
                   filterBase={(_) =>
                     _.answers.planning_support_activity === 'yes' || _.answers.planning_support_activity === 'no'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -352,6 +377,7 @@ export const MealPdmShelterDashboard = () => {
                   filterBase={(_) =>
                     _.answers.appropriate_sleeping_space === 'yes' || _.answers.appropriate_sleeping_space === 'no'
                   }
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.howInvolved}>
@@ -359,6 +385,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.involved_repairs_home}
                   label={Meal_shelterPdm.options.involved_repairs_home}
+                  includeNullish
                 />
               </SlidePanel>
               <DashboardPanelTitle> {m.mealMonitoringPdm.shelterConditions} </DashboardPanelTitle>
@@ -373,6 +400,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.Are_you_currently_able === 'no' ||
                     _.answers.Are_you_currently_able === 'dk'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -384,6 +412,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.meters_person_space === 'no' ||
                     _.answers.meters_person_space === 'dk'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -393,6 +422,7 @@ export const MealPdmShelterDashboard = () => {
                   filterBase={(_) =>
                     _.answers.shelter_solution_standards === 'yes' || _.answers.shelter_solution_standards === 'no'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -400,6 +430,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   filter={(_) => _.answers.find_good_materials === 'yes'}
                   filterBase={(_) => _.answers.find_good_materials === 'yes' || _.answers.find_good_materials === 'no'}
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -409,6 +440,7 @@ export const MealPdmShelterDashboard = () => {
                   filterBase={(_) =>
                     _.answers.repairs_done_accordance === 'yes' || _.answers.repairs_done_accordance === 'no'
                   }
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.rateQuality}>
@@ -416,6 +448,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers._6_Please_rate_the_quality_of}
                   label={Meal_shelterPdm.options._6_Please_rate_the_quality_of}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel>
@@ -429,6 +462,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers._7_Are_you_satisfied_with_the_ === 'no' ||
                     _.answers._7_Are_you_satisfied_with_the_ === 'other'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -440,6 +474,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.received_correspond_needs === 'no' ||
                     _.answers.received_correspond_needs === 'dk'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -451,6 +486,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers._5_Have_living_conditions_been === 'no' ||
                     _.answers._5_Have_living_conditions_been === 'other'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -462,6 +498,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.living_sufficiently_comfort === 'no' ||
                     _.answers.living_sufficiently_comfort === 'dk'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -473,6 +510,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.helped_thermal_comfort === 'no' ||
                     _.answers.helped_thermal_comfort === 'other'
                   }
+                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -484,6 +522,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers._8_Has_the_re_construction_be === 'no' ||
                     _.answers._8_Has_the_re_construction_be === 'other'
                   }
+                  includeNullish
                 />
               </SlidePanel>
               <DashboardPanelTitle> {m.mealMonitoringPdm.accountabilityCRM} </DashboardPanelTitle>
@@ -498,6 +537,7 @@ export const MealPdmShelterDashboard = () => {
                     _.answers.did_you_have_regular_commu === 'no' ||
                     _.answers.did_you_have_regular_commu === 'other'
                   }
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.address}>
@@ -505,6 +545,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.where_address_feedback}
                   label={Meal_shelterPdm.options.report_drc_employee}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.provideFeedback}>
@@ -512,6 +553,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.where_address_feedback_yes}
                   label={Meal_shelterPdm.options.where_address_feedback_yes}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.respond}>
@@ -519,6 +561,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.responded_complaint_feed}
                   label={Meal_shelterPdm.options.responded_complaint_feed}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.notProvide}>
@@ -526,6 +569,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.where_address_feedback_yes_no}
                   label={Meal_shelterPdm.options.where_address_feedback_yes_no}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.howReport}>
@@ -533,6 +577,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.report_drc_employee}
                   label={Meal_shelterPdm.options.report_drc_employee}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.planToStay}>
@@ -540,6 +585,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers._17_Are_you_planning_on_stayin}
                   label={Meal_shelterPdm.options._17_Are_you_planning_on_stayin}
+                  includeNullish
                 />
               </SlidePanel>
             </Div>
@@ -641,6 +687,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.assistance_delivered}
                   label={Meal_shelterPdm.options.assistance_delivered}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel>
@@ -695,6 +742,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.how_much_money_yes}
                   label={Meal_shelterPdm.options.how_much_money_yes}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.howMuchTake}>
@@ -702,6 +750,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.time_registered_assistance}
                   label={Meal_shelterPdm.options.time_registered_assistance}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.doneBetter}>
@@ -709,6 +758,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.better_inform_distribution}
                   label={Meal_shelterPdm.options.better_inform_distribution}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.overallEvaluate}>
@@ -716,6 +766,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.process_assistance_delivery}
                   label={Meal_shelterPdm.options.process_assistance_delivery}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.carryKit}>
@@ -723,6 +774,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.carry_kit_received}
                   label={Meal_shelterPdm.options.carry_kit_received}
+                  includeNullish
                 />
               </SlidePanel>
               <DashboardPanelTitle> {m.mealMonitoringPdm.outstandingNeeds} </DashboardPanelTitle>
@@ -731,6 +783,7 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.top3_priority_needs}
                   label={Meal_shelterPdm.options.top3_priority_needs}
+                  includeNullish
                 />
               </SlidePanel>
             </Div>
