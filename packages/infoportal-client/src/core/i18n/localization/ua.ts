@@ -105,5 +105,17 @@ export const ua = {
     _shelter: {
       damageCondition: 'What is the Condition of the Building / Apartment',
     },
+    legal: {
+      individualAid: 'Індивідуальна юридична допомога',
+      caseType: 'Тип справи',
+      caseStatus: 'Статус справи',
+      caseDate: 'Дата справи',
+      caseClosureDate: 'Дата закриття справи',
+      individualsAssistedTitle: 'Осіб отримало допомогу',
+      allCasesCountTitle: 'Усіх справ',
+      map: {
+        title: 'Бенефіціари по областях',
+      },
+    },
   },
 }

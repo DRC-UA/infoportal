@@ -1,5 +1,5 @@
 import {addMonths, differenceInMonths, isAfter, isBefore, startOfMonth} from 'date-fns'
-import {isValidElement, ReactElement, ReactNode} from 'react'
+import {isValidElement, type ReactElement, type ReactNode, type FC} from 'react'
 
 export namespace Utils {
   export const clearParenthesis = (_: string) => _.replaceAll(/(.*)\([^(]*\)/g, '$1')
@@ -74,4 +74,17 @@ export namespace Utils {
       event.preventDefault?.()
       action(event)
     }
+}
+
+export function withContext({provider, component}: {provider: FC<{children: ReactElement}>; component: FC}) {
+  const Provider = provider
+  const Component = component
+
+  return function WrappedComponent(props: any) {
+    return (
+      <Provider>
+        <Component {...props} />
+      </Provider>
+    )
+  }
 }

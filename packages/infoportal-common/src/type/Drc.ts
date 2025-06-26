@@ -285,8 +285,10 @@ export enum DrcProject {
   'UKR-000350 SIDA' = 'UKR-000350 SIDA',
   'UKR-000352 UHF7' = 'UKR-000352 UHF7',
   'UKR-000355 Danish MFA' = 'UKR-000355 Danish MFA',
+  'UKR-000355 DMFA Mykolaiv' = 'UKR-000355 Danish MFA',
   'UKR-000360 Novo-Nordisk' = 'UKR-000360 Novo-Nordisk',
   'UKR-000363 UHF8' = 'UKR-000363 UHF8',
+  'UKR-000363 UHF VIII' = 'UKR-000363 UHF8',
   'UKR-000390 UHF9' = 'UKR-000390 UHF9',
   // @deprecated wrong code 371, it should be 372
   'UKR-000370 SIDA' = 'UKR-000370 SIDA',
@@ -308,8 +310,12 @@ export enum DrcProject {
   'UKR-000xxx DANIDA' = 'UKR-000xxx DANIDA',
   'UKR-000399 SDC' = 'UKR-000399 SDC',
   'UKR-000423 ECHO4' = 'UKR-000423 ECHO4',
+  'UKR-000423 ECHO' = 'UKR-000423 ECHO4',
+  'UKR-000424 Dutch MFA' = 'UKR-000424 Dutch MFA',
+  'UKR-000426 SDC' = 'UKR-000426 SDC',
   'Other' = 'Other',
   'None' = 'None',
+  undefined = 'Not specified',
 }
 
 export const allProjects = Obj.values(DrcProject)
@@ -379,8 +385,11 @@ export class DrcProjectHelper {
     'UKR-000373 Novo-Nordilsk': DrcDonor.NovoNordisk,
     'UKR-000399 SDC': DrcDonor.SDC,
     'UKR-000423 ECHO4': DrcDonor.ECHO,
+    'UKR-000424 Dutch MFA': DrcDonor.DUT,
+    'UKR-000426 SDC': DrcDonor.SDC,
     Other: DrcDonor.Other,
     None: DrcDonor.None,
+    'Not specified': DrcDonor.None,
   }
 
   static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = seq(

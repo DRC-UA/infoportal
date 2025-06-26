@@ -1249,5 +1249,22 @@ export const en = Object.freeze({
       sessionsNumber: 'Number of sessions',
       individualsReached: 'Individuals reached',
     },
+    legal: {
+      individualAid: 'Individual Legal Aid',
+      caseType: {
+        title: 'Case type',
+        assistance: 'Assistance',
+        councelling: 'Councelling',
+      },
+      caseStatus: 'Case status',
+      caseCategory: 'Case category',
+      caseDate: 'Case date',
+      caseClosureDate: 'Case closure date',
+      individualsAssistedTitle: 'Individuals assisted',
+      allCasesCountTitle: 'All cases',
+      map: {
+        title: 'Beneficiaries by oblasts',
+      },
+    },
   },
 })
