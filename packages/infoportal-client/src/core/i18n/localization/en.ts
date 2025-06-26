@@ -1256,8 +1256,7 @@ export const en = Object.freeze({
       caseCategory: 'Case category',
       caseDate: 'Case date',
       caseClosureDate: 'Case closure date',
-      individualsAssistedTitle: 'Individuals assisted',
-      allCasesCountTitle: 'All cases',
+      allCasesCountTitle: 'Cases',
       map: {
         title: 'Beneficiaries by oblasts',
       },

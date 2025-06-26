@@ -111,8 +111,7 @@ export const ua = {
       caseStatus: 'Статус справи',
       caseDate: 'Дата справи',
       caseClosureDate: 'Дата закриття справи',
-      individualsAssistedTitle: 'Осіб отримало допомогу',
-      allCasesCountTitle: 'Усіх справ',
+      allCasesCountTitle: 'Усього справ',
       map: {
         title: 'Бенефіціари по областях',
       },
