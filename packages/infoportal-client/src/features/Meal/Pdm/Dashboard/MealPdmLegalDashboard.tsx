@@ -176,6 +176,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.type_assistance}
                     label={Legal_pam.options.type_assistance}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.benefits}>
@@ -183,6 +184,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.received_additional_benefits}
                     label={Legal_pam.options.received_additional_benefits}
+                    includeNullish
                   />
                 </SlidePanel>
               </Panel>
@@ -293,6 +295,7 @@ export const PdmLegalDashboard = () => {
                   data={data}
                   by={(_) => _.answers.provision_legal_enhanced}
                   label={Legal_pam.options.provision_legal_enhanced}
+                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.howHear}>
@@ -300,6 +303,7 @@ export const PdmLegalDashboard = () => {
                   data={data}
                   by={(_) => _.answers.how_hear_drc}
                   label={Legal_pam.options.how_hear_drc}
+                  includeNullish
                 />
               </SlidePanel>
             </Div>
@@ -332,6 +336,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.support_resolving_issue}
                     label={Legal_pam.options.support_resolving_issue}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.secondTime}>
@@ -339,6 +344,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.applied_second}
                     label={Legal_pam.options.applied_second}
+                    includeNullish
                   />
                 </SlidePanel>
               </Panel>
@@ -373,6 +379,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.report_drc_employee}
                     label={Legal_pam.options.overall_satisfied_assistance_accountability}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.channel}>
@@ -380,6 +387,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.suggestion_problem_assistance}
                     label={Legal_pam.options.overall_satisfied_assistance_accountability}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.contactedChannel}>
@@ -387,6 +395,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.yes_suggestion_problem}
                     label={Legal_pam.options.yes_suggestion_problem}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.responded}>
@@ -394,6 +403,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.knowledge_suggestions_complained}
                     label={Legal_pam.options.overall_satisfied_assistance_accountability}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.putContact}>
@@ -401,6 +411,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.immediately_contact_lawyer}
                     label={Legal_pam.options.outstanding_legal_needs}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.consideration}>
@@ -408,6 +419,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.situation_into_consideration}
                     label={Legal_pam.options.overall_satisfied_assistance_accountability}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.listened}>
@@ -415,6 +427,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.lawyer_listened_actively}
                     label={Legal_pam.options.lawyer_listened_actively}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.difficultiesLawyer}>
@@ -422,6 +435,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.encounter_difficulties_lawyer}
                     label={Legal_pam.options.encounter_difficulties_lawyer}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.peopleExcluded}>
@@ -429,6 +443,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.know_people_need_legal}
                     label={Legal_pam.options.know_people_need_legal}
+                    includeNullish
                   />
                 </SlidePanel>
                 <SlidePanel title={m.mealMonitoringPdm.peopleSpecify}>
@@ -436,6 +451,7 @@ export const PdmLegalDashboard = () => {
                     data={data}
                     by={(_) => _.answers.people_need_legal}
                     label={Legal_pam.options.people_need_legal}
+                    includeNullish
                   />
                 </SlidePanel>
               </Panel>
