@@ -7,9 +7,9 @@ const pages = {
       path: `${root}/dashboard`,
       slug: 'dashboard',
     },
-    form: {
-      path: `${root}/form`,
-      slug: 'form',
+    data: {
+      path: `${root}/data`,
+      slug: 'data',
     },
   },
 }
