@@ -54,6 +54,7 @@ import {
   Conflict_pre_post,
   Cs_tracker,
   Legal_pam,
+  Legal_individual_aid,
   Meal_pssPdm,
   Meal_eorePdm,
 } from 'infoportal-common'
@@ -459,6 +460,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('legal_pam').id,
           fnMapKobo: Legal_pam.map,
+          ...filters,
+        }),
+      ),
+      ...make('legal_individual_aid', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('legal_individual_aid').id,
+          fnMapKobo: Legal_individual_aid.map,
           ...filters,
         }),
       ),

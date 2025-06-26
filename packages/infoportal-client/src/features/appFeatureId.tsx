@@ -21,6 +21,7 @@ export enum AppFeatureId {
   safety = 'safety',
   protection = 'protection',
   metaDashboard = 'metaDashboard',
+  legal = 'legal',
 }
 
 export interface AppFeature {
@@ -207,6 +208,18 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     path: '/sandbox',
     category: 'settings',
     showIf: (_) => _ && _?.email === appConfig.contact,
+  },
+  legal: {
+    id: AppFeatureId.legal,
+    name: 'Legal',
+    path: '/legal',
+    category: 'programs',
+    color: '#c0c0c0',
+    materialIcons: 'gavel',
+    showIf: (user, accesses) => {
+      if (user?.admin || (accesses?.length && accesses.length > 0)) return true
+      return false
+    },
   },
 } as const
 

@@ -37,6 +37,7 @@ import {
   Ecrec_subsistance,
   Legal_pam,
   Meal_eorePdm,
+  Legal_individual_aid,
 } from '../generated/index.js'
 
 export namespace KoboXmlMapper {
@@ -745,6 +746,33 @@ export namespace KoboXmlMapper {
           .default(undefined),
         disability: person.disability,
       }))
+    }
+
+    export const legal_individual_aid = ({
+      age,
+      gender,
+      displacement,
+      vulnerability_detail,
+    }: Legal_individual_aid.T): Person.Details => {
+      return {
+        age,
+        gender: match(gender)
+          .cases({
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          })
+          .default(Person.Gender.Other),
+        displacement: match(displacement)
+          .cases({
+            idp: Person.DisplacementStatus.Idp,
+            non_idp: Person.DisplacementStatus.NonDisplaced,
+            displaced_abroad: Person.DisplacementStatus.Refugee,
+            returnee: Person.DisplacementStatus.Returnee,
+            refugee: Person.DisplacementStatus.Refugee,
+          })
+          .default(undefined),
+        ...(vulnerability_detail?.includes('pwd') && {disability: [Person.WgDisability.Comm]}), // if beneficiary is vulnerable and the reason for this is some form of disability, add the property
+      }
     }
 
     export const winter_pdm = (_: Meal_winterizationPdm.T): Person.Details[] => {

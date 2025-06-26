@@ -17,6 +17,10 @@ export interface FilterLayoutProps extends Pick<BoxProps, 'sx'> {
   readonly after?: ReactNode
   readonly data?: Seq<any>
   readonly shapes: Record<string, DataFilter.Shape<any, any>>
+  readonly slotProps?: {
+    filtersBox?: BoxProps
+    controlsBox?: BoxProps
+  }
 }
 
 export const DataFilterLayout = ({
@@ -27,7 +31,7 @@ export const DataFilterLayout = ({
   hidePopup?: boolean
 }) => {
   const {m} = useI18n()
-  const {before, after, shapes, filters, setFilters, data, onClear} = props
+  const {before, after, shapes, filters, setFilters, data, onClear, slotProps} = props
 
   const getFilteredOptions = useCallback(
     (name: string) => {
@@ -64,25 +68,27 @@ export const DataFilterLayout = ({
         }}
       >
         {before}
-        {Obj.entries(shapes).map(([name, shape]) => (
-          <DebouncedInput<string[]>
-            key={name}
-            debounce={50}
-            value={filters[name]}
-            onChange={(_) => setFilters((prev: any) => ({...prev, [name]: _}))}
-          >
-            {(value, onChange) => (
-              <DashboardFilterOptions
-                icon={shape.icon}
-                value={value ?? []}
-                label={shape.label}
-                addBlankOption={shape.addBlankOption}
-                options={() => shape.getOptions(() => getFilteredOptions(name))}
-                onChange={onChange}
-              />
-            )}
-          </DebouncedInput>
-        ))}
+        <Box display="flex" gap={1} {...slotProps?.filtersBox}>
+          {Obj.entries(shapes).map(([name, shape]) => (
+            <DebouncedInput<string[]>
+              key={name}
+              debounce={50}
+              value={filters[name]}
+              onChange={(_) => setFilters((prev: any) => ({...prev, [name]: _}))}
+            >
+              {(value, onChange) => (
+                <DashboardFilterOptions
+                  icon={shape.icon}
+                  value={value ?? []}
+                  label={shape.label}
+                  addBlankOption={shape.addBlankOption}
+                  options={() => shape.getOptions(() => getFilteredOptions(name))}
+                  onChange={onChange}
+                />
+              )}
+            </DebouncedInput>
+          ))}
+        </Box>
         {after}
       </Box>
       <Box
@@ -92,6 +98,7 @@ export const DataFilterLayout = ({
           alignItems: 'center',
           mt: 1,
         }}
+        {...slotProps?.controlsBox}
       >
         {!hidePopup && (
           <DataFilterLayoutPopup
