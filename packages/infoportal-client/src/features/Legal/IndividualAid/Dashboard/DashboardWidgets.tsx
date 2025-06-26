@@ -22,99 +22,93 @@ const Widgets: FC = () => {
   const cases = dataFiltered.map(({number_case}) => number_case).flat()
 
   return (
-    <>
-      <Div responsive>
-        <Div column>
-          <Box display="flex" gap={2} mb={2}>
-            <SlideWidget icon="groups" title={m.legal.individualsAssistedTitle}>
-              {dataFiltered.length}
-            </SlideWidget>
-            <SlideWidget icon="cases" title={m.legal.allCasesCountTitle}>
-              {cases.length}
-            </SlideWidget>
-          </Box>
-          <SlidePanel>
-            <AgeGroupTable
-              tableId="individual-legal-aid-age-groups"
-              enableDisplacementStatusFilter
-              enablePwdFilter
-              persons={dataFiltered.map(KoboXmlMapper.Persons.legal_individual_aid)}
-            />
-          </SlidePanel>
-          <SlidePanel title={m.legal.caseType.title}>
-            <ChartBarSingleBy
-              data={seq(cases).map(({beneficiary_application_type: case_type}) => ({
-                case_type: match(case_type)
-                  .cases({
-                    assistance: m.legal.caseType.assistance,
-                    counselling: m.legal.caseType.councelling,
-                  })
-                  .default(m.notSpecified),
-              }))}
-              by={({case_type}) => case_type}
-            />
-          </SlidePanel>
-          <SlidePanel title={m.legal.caseStatus}>
-            <ChartBarSingleBy
-              data={seq(cases).map(({status_case}) => ({
-                status_case: match(status_case)
-                  .cases({
-                    pending: Legal_individual_aid.options.status_case.pending,
-                    closed_ready: Legal_individual_aid.options.status_case.closed_ready,
-                  })
-                  .default(m.notSpecified),
-              }))}
-              by={({status_case}) => status_case}
-            />
-          </SlidePanel>
-          <SlidePanel title={m.legal.caseCategory}>
-            <ChartBarSingleBy
-              data={seq(cases).map(({category_issue}) => ({
-                category_issue:
-                  category_issue === undefined
-                    ? m.notSpecified
-                    : Legal_individual_aid.options.category_issue[category_issue],
-              }))}
-              by={({category_issue}) => category_issue}
-            />
-          </SlidePanel>
-        </Div>
-        <Div column>
-          <Panel title={m.legal.map.title}>
-            <PanelBody>
-              <Lazy
-                deps={[dataFiltered]}
-                fn={() => {
-                  const gb = seq(dataFiltered).groupBy(({oblast}) => OblastIndex.byKoboName(oblast)?.iso!)
-                  return new Obj(gb).map((k, v) => [k, makeChartData({value: v.length})]).get()
-                }}
-              >
-                {(mapData) => (
-                  <MapSvg data={mapData} sx={{mx: 1}} maximumFractionDigits={0} base={dataFiltered.length} />
-                )}
-              </Lazy>
-            </PanelBody>
-          </Panel>
-          <SlidePanel title={m.project}>
-            <ChartBarSingleBy
-              data={seq(cases).map(({project}) => ({
-                project: DrcProject[Legal_individual_aid.options.project[project!]],
-              }))}
-              by={({project}) => project}
-            />
-          </SlidePanel>
-        </Div>
+    <Div responsive paddingBottom={2}>
+      <Div column>
+        <Box display="flex" gap={2} mb={2}>
+          <SlideWidget icon="groups" title={m.legal.individualsAssistedTitle}>
+            {dataFiltered.length}
+          </SlideWidget>
+          <SlideWidget icon="cases" title={m.legal.allCasesCountTitle}>
+            {cases.length}
+          </SlideWidget>
+        </Box>
+        <SlidePanel>
+          <AgeGroupTable
+            tableId="individual-legal-aid-age-groups"
+            enableDisplacementStatusFilter
+            enablePwdFilter
+            persons={dataFiltered.map(KoboXmlMapper.Persons.legal_individual_aid)}
+          />
+        </SlidePanel>
+        <SlidePanel title={m.legal.caseType.title}>
+          <ChartBarSingleBy
+            data={seq(cases).map(({beneficiary_application_type: case_type}) => ({
+              case_type: match(case_type)
+                .cases({
+                  assistance: m.legal.caseType.assistance,
+                  counselling: m.legal.caseType.councelling,
+                })
+                .default(m.notSpecified),
+            }))}
+            by={({case_type}) => case_type}
+          />
+        </SlidePanel>
+        <SlidePanel title={m.legal.caseStatus}>
+          <ChartBarSingleBy
+            data={seq(cases).map(({status_case}) => ({
+              status_case: match(status_case)
+                .cases({
+                  pending: Legal_individual_aid.options.status_case.pending,
+                  closed_ready: Legal_individual_aid.options.status_case.closed_ready,
+                })
+                .default(m.notSpecified),
+            }))}
+            by={({status_case}) => status_case}
+          />
+        </SlidePanel>
+        <SlidePanel title={m.legal.caseCategory}>
+          <ChartBarSingleBy
+            data={seq(cases).map(({category_issue}) => ({
+              category_issue:
+                category_issue === undefined
+                  ? m.notSpecified
+                  : Legal_individual_aid.options.category_issue[category_issue],
+            }))}
+            by={({category_issue}) => category_issue}
+          />
+        </SlidePanel>
       </Div>
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            dataFiltered.find(({number_case}) => number_case.length > 1),
-            null,
-            2,
-          )}
-        </code>
-      </pre> */}
-    </>
+      <Div column>
+        <Panel title={m.legal.map.title}>
+          <PanelBody>
+            <Lazy
+              deps={[dataFiltered]}
+              fn={(data) => {
+                const beneficiariesGroupedByOblast = seq(data).groupBy(
+                  ({oblast}) => OblastIndex.byKoboName(oblast)?.iso!,
+                )
+                return {
+                  data: new Obj(beneficiariesGroupedByOblast)
+                    .map((k, v) => [k, makeChartData({value: v.length})])
+                    .get(),
+                  base: data.length,
+                }
+              }}
+            >
+              {({data, base}) => <MapSvg data={data} sx={{mx: 1}} maximumFractionDigits={0} base={base} />}
+            </Lazy>
+          </PanelBody>
+        </Panel>
+        <SlidePanel title={m.project}>
+          <ChartBarSingleBy
+            data={seq(cases).map(({project}) => ({
+              project: DrcProject[Legal_individual_aid.options.project[project!]],
+            }))}
+            by={({project}) => project}
+          />
+        </SlidePanel>
+      </Div>
+    </Div>
   )
 }
 
