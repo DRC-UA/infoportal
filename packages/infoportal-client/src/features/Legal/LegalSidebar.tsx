@@ -21,7 +21,7 @@ const LegalSidebar: FC = () => {
               </SidebarItem>
             )}
           </NavLink>
-          <SidebarKoboLink name={'legal_individual_aid'} path={pages.individualLegalAid.form.path} />
+          <SidebarKoboLink name={'legal_individual_aid'} path={pages.individualLegalAid.data.path} />
         </SidebarSection>
       </SidebarBody>
     </Sidebar>

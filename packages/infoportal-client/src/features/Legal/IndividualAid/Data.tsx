@@ -6,7 +6,7 @@ import {DatabaseTable} from '@/features/Database/KoboTable/DatabaseKoboTable'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 
-const Form: FC = () => {
+const Data: FC = () => {
   return (
     <Page width="full">
       <Panel>
@@ -16,4 +16,4 @@ const Form: FC = () => {
   )
 }
 
-export {Form}
+export {Data}
