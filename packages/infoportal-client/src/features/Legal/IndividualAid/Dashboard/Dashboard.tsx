@@ -14,6 +14,15 @@ const Dashboard: FC = () => {
     <Page width="lg" loading={ctx.fetcherAnswer.loading}>
       <Filters />
       <Widgets />
+      <pre>
+        <code>
+          {JSON.stringify(
+            ctx.dataFiltered.find(({number_case}) => number_case.length > 1),
+            null,
+            2,
+          )}
+        </code>
+      </pre>
     </Page>
   )
 }

@@ -107,7 +107,12 @@ export const ua = {
     },
     legal: {
       individualAid: 'Індивідуальна юридична допомога',
-      caseType: 'Тип справи',
+      caseType: {
+        title: 'тип справи',
+        assistance: 'Вторинна допомога',
+        councelling: 'Консультація',
+      },
+      registeredBy: 'Зареєстрував',
       caseStatus: 'Статус справи',
       caseDate: 'Дата справи',
       caseClosureDate: 'Дата закриття справи',
