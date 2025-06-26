@@ -2,7 +2,6 @@ import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMe
 import {
   DrcOffice,
   DrcProject,
-  DrcProjectHelper,
   KoboIndex,
   KoboSubmissionFlat,
   KoboXmlMapper,
@@ -17,6 +16,7 @@ import {
   Legal_pam,
   Meal_pssPdm,
   Meal_eorePdm,
+  Ecrec_cashRegistration,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {match, map, seq, Seq} from '@axanc/ts-utils'
@@ -31,6 +31,7 @@ export enum PdmType {
   Legal = 'Legal',
   Pss = 'Pss',
   Eore = 'Eore',
+  Ecrec = 'Ecrec',
 }
 
 export type PdmForm =
@@ -41,6 +42,7 @@ export type PdmForm =
   | Legal_pam.T
   | Meal_pssPdm.T
   | Meal_eorePdm.T
+  | Ecrec_cashRegistration.T
 
 export type PdmData<T extends PdmForm> = {
   type: PdmType
@@ -73,7 +75,26 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         seq(_.data).map((record) => ({
           type: PdmType.Cash,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
-          project: DrcProjectHelper.search(record.donor),
+          project: match(record.donor!)
+            .cases({
+              ukr000270_pofu: DrcProject['UKR-000270 Pooled Funds'],
+              ukr000298_novo: DrcProject['UKR-000298 Novo-Nordisk'],
+              ukr000360_novo: DrcProject['UKR-000360 Novo-Nordisk'],
+              ukr000322_echo: DrcProject['UKR-000322 ECHO2'],
+              ukr000314_uhf4: DrcProject['UKR-000314 UHF4'],
+              ukr000348_bha_llh: DrcProject['UKR-000348 BHA3'],
+              ukr000352_uhf7: DrcProject['UKR-000352 UHF7'],
+              ukr000347_danida: DrcProject['UKR-000347 DANIDA'],
+              ukr000330_sdc: DrcProject['UKR-000330 SDC2'],
+              ukr000336_uhf6: DrcProject['UKR-000336 UHF6'],
+              ukr000345_bha: DrcProject['UKR-000345 BHA2'],
+              ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
+              ukr000340_augustinus_fonden_mpca: DrcProject['UKR-000340 Augustinus Fonden'],
+              ukr000341_hoffman_husmans_fond_mpca: DrcProject['UKR-000341 Hoffmans & Husmans'],
+              ukr000342_private_funds: DrcProject['UKR-000342 Pooled Funds'],
+              other: DrcProject['Other'],
+            })
+            .default(() => undefined),
           office: match(record.office!)
             .cases({
               dnipro: DrcOffice.Dnipro,
@@ -232,6 +253,34 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
+      api.kobo.typedAnswers.search.ecrec_cashRegistration().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Ecrec,
+          oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
+          project: match(record.back_donor!)
+            .cases({
+              '372_echo': DrcProject['UKR-000372 ECHO3'],
+              '363_uhf8': DrcProject['UKR-000363 UHF8'],
+              uhf7: DrcProject['UKR-000352 UHF7'],
+              uhf6: DrcProject['UKR-000336 UHF6'],
+            })
+            .default(() => undefined),
+          office: match(record.back_office!)
+            .cases({
+              dnk: DrcOffice.Dnipro,
+              hrk: DrcOffice.Kharkiv,
+              chj: DrcOffice.Chernihiv,
+              umy: DrcOffice.Sumy,
+              nlv: DrcOffice.Mykolaiv,
+              lwo: DrcOffice.Lviv,
+              zap: DrcOffice.Zaporizhzhya,
+              khe: DrcOffice.Kherson,
+            })
+            .default(() => undefined),
+          persons: KoboXmlMapper.Persons.ecrec_cashRegistration(record),
+          answers: record,
+        })),
+      ),
     ]).then((results) => seq(results.flat()))
   }
 
@@ -244,7 +293,8 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
       api.kobo.answer.getPeriod(KoboIndex.byName('legal_pam').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_pssPdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_eorePdm').id),
-    ]).then(([cashPeriod, shelterPeriod, nfiPeriod, gbvPeriod, legalPeriod, pssPeriod, eorePeriod]) => ({
+      api.kobo.answer.getPeriod(KoboIndex.byName('ecrec_cashRegistration').id),
+    ]).then(([cashPeriod, shelterPeriod, nfiPeriod, gbvPeriod, legalPeriod, pssPeriod, eorePeriod, ecrecPeriod]) => ({
       cashPeriod,
       shelterPeriod,
       nfiPeriod,
@@ -252,6 +302,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
       legalPeriod,
       pssPeriod,
       eorePeriod,
+      ecrecPeriod,
     }))
   })
 
