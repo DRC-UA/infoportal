@@ -291,7 +291,7 @@ export namespace Legal_individual_aid {
       hrk: `Kharkiv (HRK)`,
       nlv: `Mykolaiv (NLV)`,
       khe: `Kherson (KHE)`,
-      iev: `Kiev (IEV)`,
+      iev: `Kyiv (IEV)`,
       dnk: `Dnipro (DNK)`,
       zap: `Zaporizhzhya (ZAP)`,
       slo: `Sloviansk (SLO)`,
