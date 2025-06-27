@@ -59,7 +59,7 @@ jobs:
 
       - name: Zip artifact for deployment
         working-directory: ./packages/infoportal-client
-        run: zip release.zip package.json .next/standalone ./next/static -r
+        run: zip release.zip package.json .next -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
