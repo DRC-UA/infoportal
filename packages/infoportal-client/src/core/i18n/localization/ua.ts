@@ -112,6 +112,10 @@ export const ua = {
         assistance: 'Вторинна допомога',
         councelling: 'Консультація',
       },
+      docTypeCount: {
+        hlp: 'Документи на власність',
+        civilDocs: 'Цивільні документи',
+      },
       registeredBy: 'Зареєстрував',
       caseStatus: 'Статус справи',
       caseDate: 'Дата справи',

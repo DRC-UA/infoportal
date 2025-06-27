@@ -714,7 +714,8 @@ export const en = Object.freeze({
       eoreSatis: 'Are you satisfied with the service provided?',
       eoreTrainer: 'Did the EORE assistant provide answers to your questions?',
       eoreInfo: 'To what extent is the material presented in the session understandable/clear for you?',
-      sellAssets: 'In the last 30 days, did your household sell household assets/goods due to a lack of resources to cover basic needs?',
+      sellAssets:
+        'In the last 30 days, did your household sell household assets/goods due to a lack of resources to cover basic needs?',
       lifestock: 'Maintain agricultural needs during winter',
       renovate: 'Renovate your shelter for animals',
       spring: 'Cover agricultural needs during spring period',
@@ -722,7 +723,8 @@ export const en = Object.freeze({
       howLong: 'How long did it take to spend the money received?',
       completed: 'At this point, have you completed the renovation of your livestock shelter?',
       trainingNeed: 'Do you need training or inductions to improve your agricultural practices, increase produce?',
-      whatPrefer: 'Did you prefer the cash modality, or would you have liked to receive in-kind assistance (e.g., like tools, seeds, maybe poultry)?',
+      whatPrefer:
+        'Did you prefer the cash modality, or would you have liked to receive in-kind assistance (e.g., like tools, seeds, maybe poultry)?',
       lcs_sell_hh_assets: 'Selling household assets/goods',
       lcs_spent_savings: 'Spending savings "for a rainy day"',
       lcs_forrowed_food: 'Purchasing food on credit/borrowing',
@@ -1255,6 +1257,10 @@ export const en = Object.freeze({
         title: 'Case type',
         assistance: 'Assistance',
         councelling: 'Councelling',
+      },
+      docTypeCount: {
+        hlp: 'HLP docs issued',
+        civilDocs: 'Civil docs issued',
       },
       registeredBy: 'Registered by',
       caseStatus: 'Case status',
