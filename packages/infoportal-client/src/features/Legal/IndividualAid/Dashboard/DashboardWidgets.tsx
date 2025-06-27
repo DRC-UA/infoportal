@@ -2,7 +2,7 @@ import type {FC} from 'react'
 import {seq, match, Obj} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 
-import {DrcProject, KoboXmlMapper, OblastIndex, Legal_individual_aid} from 'infoportal-common'
+import {DrcProject, KoboXmlMapper, OblastIndex, Legal_individual_aid, isDate} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {SlideWidget, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
@@ -15,6 +15,8 @@ import {Panel, PanelBody} from '@/shared/Panel'
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 
 import {useIndividualAidContext} from './context'
+
+import {civic_doc_date_fields, hlp_doc_date_fields} from './constants'
 
 const Widgets: FC = () => {
   const {dataFiltered} = useIndividualAidContext()
@@ -30,6 +32,26 @@ const Widgets: FC = () => {
           </SlideWidget>
           <SlideWidget icon="cases" title={m.legal.allCasesCountTitle}>
             {cases.length}
+          </SlideWidget>
+        </Box>
+        <Box display="flex" gap={2} mb={2}>
+          <SlideWidget icon="description" title={m.legal.docTypeCount.hlp}>
+            {cases.reduce((prev, current) => {
+              hlp_doc_date_fields.forEach((field) => {
+                if (isDate(current[field])) prev++
+              })
+
+              return prev
+            }, 0)}
+          </SlideWidget>
+          <SlideWidget icon="description" title={m.legal.docTypeCount.civilDocs}>
+            {cases.reduce((prev, current) => {
+              civic_doc_date_fields.forEach((field) => {
+                if (isDate(current[field])) prev++
+              })
+
+              return prev
+            }, 0)}
           </SlideWidget>
         </Box>
         <SlidePanel>
