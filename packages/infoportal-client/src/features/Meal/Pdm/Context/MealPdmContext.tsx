@@ -92,13 +92,14 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000340_augustinus_fonden_mpca: DrcProject['UKR-000340 Augustinus Fonden'],
               ukr000341_hoffman_husmans_fond_mpca: DrcProject['UKR-000341 Hoffmans & Husmans'],
               ukr000342_private_funds: DrcProject['UKR-000342 Pooled Funds'],
+              ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
               other: DrcProject['Other'],
             })
             .default(() => undefined),
           office: match(record.office!)
             .cases({
               dnipro: DrcOffice.Dnipro,
-              empca: DrcOffice.Kharkiv,
+              kharkiv: DrcOffice.Kharkiv,
               chernihiv: DrcOffice.Chernihiv,
               sumy: DrcOffice.Sumy,
               mykolaiv: DrcOffice.Mykolaiv,

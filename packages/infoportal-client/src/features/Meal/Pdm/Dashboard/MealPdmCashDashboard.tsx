@@ -5,7 +5,7 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {Div, PdfSlide, PdfSlideBody, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {Meal_cashPdm, Ecrec_cashRegistration, OblastIndex} from 'infoportal-common'
+import {Meal_cashPdm, Ecrec_cashRegistration, OblastIndex, Shelter_nta} from 'infoportal-common'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
@@ -397,6 +397,48 @@ export const MealPdmCashDashboard = () => {
               </Div>
             </PdfSlideBody>
           </PdfSlide>
+          <PdfSlide>
+            <PdfSlideBody>
+              <Div responsive>
+                <Div column sx={{maxHeight: '50%'}}>
+                  <SlidePanel title={m.mealMonitoringPdm.typePrefer}>
+                    <ChartBarSingleBy
+                      data={dataCash}
+                      by={(_) => _.answers.type_assistance_agricultural}
+                      label={Meal_cashPdm.options.type_assistance_agricultural}
+                      includeNullish
+                    />
+                  </SlidePanel>
+                  <SlidePanel title={m.mealMonitoringPdm.itemsHelpful}>
+                    <ChartBarSingleBy
+                      data={dataCash}
+                      by={(_) => _.answers.items_helpful_agriculture}
+                      label={Meal_cashPdm.options.items_helpful_agriculture}
+                      includeNullish
+                    />
+                  </SlidePanel>
+                </Div>
+                <Div column sx={{maxHeight: '50%'}}>
+                  <SlidePanel title={m.mealMonitoringPdm.infoTraining}>
+                    <ChartBarSingleBy
+                      data={dataCash}
+                      by={(_) => _.answers.type_training_helpful}
+                      label={Meal_cashPdm.options.type_training_helpful}
+                      includeNullish
+                    />
+                  </SlidePanel>
+                  <SlidePanel title={m.mealMonitoringPdm.trainingImprove}>
+                    <ChartBarSingleBy
+                      data={dataCash}
+                      by={(_) => _.answers.training_improve_agricultural}
+                      label={Meal_cashPdm.options.training_improve_agricultural}
+                      includeNullish
+                    />
+                  </SlidePanel>
+                </Div>
+              </Div>
+            </PdfSlideBody>
+          </PdfSlide>
           <PdfSectionTitle>{m.mealMonitoringPdm.lcs}</PdfSectionTitle>
           <PdfSlide>
             <PdfSlideBody>
@@ -584,7 +626,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_sell_hh_assets}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
@@ -592,7 +634,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_spent_savings}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
@@ -647,7 +689,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_forrowed_food}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
@@ -657,7 +699,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_sell_productive_assets}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
@@ -665,7 +707,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_reduce_health_expenditures}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
@@ -681,7 +723,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_sell_house}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
@@ -689,7 +731,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_move_elsewhere}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
@@ -706,7 +748,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_eat_elsewhere}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
@@ -716,7 +758,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_degrading_income_source}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
@@ -724,7 +766,7 @@ export const MealPdmCashDashboard = () => {
                     <ChartBarSingleBy
                       data={dataCash}
                       by={(_) => _.answers.lcs_ask_stranger}
-                      label={Meal_cashPdm.options.lcs_ask_stranger}
+                      label={Meal_cashPdm.options.lcs_decrease_fertilizer}
                       includeNullish
                     />
                   </SlidePanel>
