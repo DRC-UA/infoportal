@@ -233,7 +233,6 @@ export const SlideWidget = ({
       BodyProps={{
         sx: {
           px: 0.25,
-          pb: (t) => t.spacing(1) + ' !important',
         },
       }}
       sx={{
@@ -247,14 +246,11 @@ export const SlideWidget = ({
         ...sx,
       }}
     >
-      <Txt block color="hint" bold sx={{lineHeight: 1, mb: 0.5, mt: -0.5}}>
-        {uppercaseHandlingAcronyms(title)}
-      </Txt>
       <Box
         sx={{
           lineHeight: 1,
           fontWeight: (t) => t.typography.fontWeightBold,
-          fontSize: '1.7em',
+          fontSize: '2em',
           display: 'inline-flex',
           alignItems: 'center',
           minHeight: 32,
@@ -270,6 +266,9 @@ export const SlideWidget = ({
           ))}
         {children}
       </Box>
+      <Txt block color="hint" bold sx={{lineHeight: 1, mt: 0.5}} fontSize="0.90em">
+        {uppercaseHandlingAcronyms(title)}
+      </Txt>
     </SlidePanel>
   )
 }
