@@ -34,14 +34,14 @@ export const useVictimAssistanceData = () => {
           getOptions: () => DataFilter.buildOptionsFromObject(Va_bio_tia.options.case_oblast),
           label: m.oblast,
         },
-        donor: {
-          icon: appConfig.icons.donor,
-          getValue: (_) =>
-            seq(_.tia_assesment)
-              .map((_) => _.project)
+        project: {
+          icon: appConfig.icons.project,
+          multiple: true,
+          getValue: ({tia_assesment}) =>
+            seq(tia_assesment)
+              .map(({project}) => project)
               .compact()
-              .get()
-              .join(', '),
+              .get(),
           getOptions: () => DataFilter.buildOptionsFromObject(Va_bio_tia.options.project),
           label: m.project,
         },
