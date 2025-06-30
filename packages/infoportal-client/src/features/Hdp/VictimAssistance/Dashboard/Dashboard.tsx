@@ -36,6 +36,7 @@ const DashboardWithContext: FC = () => {
             onChange={([start, end]) => {
               ctx.setPeriod((prev) => ({...prev, start: start ?? undefined, end: end ?? undefined}))
             }}
+            fullWidth={false}
             label={[m.start, m.endIncluded]}
             min={ctx.fetcherPeriod.get?.start}
             max={ctx.fetcherPeriod.get?.end}
