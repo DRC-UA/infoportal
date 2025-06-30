@@ -14,6 +14,8 @@ export namespace Legal_individual_aid {
     country_phone_number: undefined | Option<'country_phone_number'>
     // introduction/phone_number [text] Ukrainian phone number of the beneficiary/legal representative
     phone_number: string | undefined
+    // introduction/full_phone_number [text] Full phone number
+    full_phone_number: string | undefined
     // introduction/country_alternative_phone [select_one] Alternative phone number (select country)
     country_alternative_phone: undefined | Option<'specify_country'>
     // introduction/alternative_phone [text] Alternative phone of the beneficiary/legal representative
@@ -224,7 +226,6 @@ export namespace Legal_individual_aid {
           document_status_statuses_other: undefined | Option<'document_status_statuses_other'> | undefined
           date_recipt_statuses_other: Date | undefined | undefined
           name_obtained_statuses_other: string | undefined | undefined
-          confirm_document_obtained: undefined | Option<'case_referred_further'> | undefined
           beneficiary_application_type: undefined | Option<'beneficiary_application_type'> | undefined
           type_application_assistance: undefined | Option<'type_application_assistance'>[] | undefined
           institution_accompanying_cases: string | undefined | undefined
@@ -290,7 +291,7 @@ export namespace Legal_individual_aid {
       hrk: `Kharkiv (HRK)`,
       nlv: `Mykolaiv (NLV)`,
       khe: `Kherson (KHE)`,
-      iev: `Kiev (IEV)`,
+      iev: `Kyiv (IEV)`,
       dnk: `Dnipro (DNK)`,
       zap: `Zaporizhzhya (ZAP)`,
       slo: `Sloviansk (SLO)`,
@@ -332,11 +333,16 @@ export namespace Legal_individual_aid {
       abroad: `Abroad`,
     },
     project: {
-      ukr000xxx_echo: `ECHO - UKR-000ххх`,
-      ukr000355_dmfa: `Danish MFA – UKR-000355`,
-      ukr000304_danida: `DANIDA – UKR-000304 (PSPU)`,
-      ukr000397_gffo: `GFFO UKR-000397`,
-      ukr000xxx_sdc: `SDC - UKR-000ххх`,
+      ukr000304_pspu: `UKR-000304 PSPU`,
+      ukr000350_sida: `UKR-000350 SIDA`,
+      ukr000355_danish_mofa: `UKR-000355 DMFA Mykolaiv`,
+      ukr000363_uhf8: `UKR-000363 UHF VIII`,
+      ukr000388_bha: `UKR-000388 BHA`,
+      ukr000397_gffo: `UKR-000397 GFFO`,
+      ukr000399_sdc: `UKR-000399 SDC`,
+      ukr000423_echo: `UKR-000423 ECHO`,
+      ukr000424_dutch_mfa: `UKR-000424 Dutch MFA`,
+      ukr000426_sdc: `UKR-000426 SDC`,
     },
     another_lawyer: {
       viktoriia_borman: `Viktoriia Borman viktoriia.borman@drc.ngo – Lawyer UMY`,
@@ -350,7 +356,7 @@ export namespace Legal_individual_aid {
       vitalii_kolodystyi: `Vitalii Kolodystyi vitalii.kolodystyi@drc.ngo - Lawyer NLV`,
       andrii_bielikov: `Andrii Bielikov andrii.bielikov@drc.ngo - Lawyer NLV`,
       mykhailo_obolentsev: `Mykhailo Obolentsev mykhailo.obolentsev@drc.ngo - Lawyer DNK`,
-      volodymyr_kryvoruchko: `Volodymyr Kryvoruchko volodymyr.kryvoruchko@drc.ngo - Lawyer DNK`,
+      volodymyr_kryvoruchko: `Volodymyr Kryvoruchko volodymyr.kryvoruchko@drc.ngo - Lawyer NLV`,
       khrystyna_malikova: `Khrystyna Malikova khrystyna.malikova@drc.ngo  - Lawyer DNK`,
       tetiana_demianova: `Tetiana Demianova tetiana.demianova@drc.ngo - Lawyer IEV`,
       expert_panel: `Expert Panel`,
@@ -863,8 +869,8 @@ export namespace Legal_individual_aid {
       other: `Other documents related to certain statuses`,
     },
     closed_ready: {
-      not_resolved: `Closed but not yet Resolved`,
       fully: `Case Fully Resolved`,
+      not_resolved: `Closed but not yet Resolved`,
       beneficiary_cannot: `Beneficiary Cannot Be Reached or Refused Further Assistance`,
       referred_another: `The case was referred further for legal assistance to another external legal actor`,
     },

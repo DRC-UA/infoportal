@@ -19,6 +19,33 @@ const computeFill = (value: number, min: number, max: number) => {
   return value > 0 ? ((maxAlpha - minAlpha) * (value - min)) / (max - min) + minAlpha : undefined
 }
 
+const getTitle = ({
+  oblast,
+  figure,
+  maximumFractionDigits,
+}: {
+  oblast: string
+  figure:
+    | {
+        value: number
+        base?: number
+        fill?: number
+        percent?: number
+      }
+    | undefined
+  maximumFractionDigits?: number
+}) => {
+  if (!figure) return `${oblast}\n0`
+
+  let title = `${oblast}\n${formatLargeNumber(figure.value, {maximumFractionDigits})}`
+  if (figure.base && figure.base !== 100) {
+    title += ` / ${formatLargeNumber(figure.base, {maximumFractionDigits})}`
+  }
+  title += ` - ${toPercent(figure.percent)}`
+
+  return title
+}
+
 export const MapSvg = ({
   data = {} as any,
   omitValueLt = 0,
@@ -122,22 +149,8 @@ export const MapSvg = ({
                   },
                 }}
               >
-                {map(OblastIndex.byIso(iso as any).name, (_) => (
-                  <title>
-                    {_ +
-                      '\n' +
-                      (res ? (
-                        <>
-                          {formatLargeNumber(res.value, {maximumFractionDigits})}
-                          {res.base &&
-                            res.base !== 100 &&
-                            ' / ' + formatLargeNumber(res.base, {maximumFractionDigits})}{' '}
-                          - {toPercent(res.percent)}
-                        </>
-                      ) : (
-                        0
-                      ))}
-                  </title>
+                {map(OblastIndex.byIso(iso as any).name, (oblast) => (
+                  <title>{getTitle({oblast, figure: res, maximumFractionDigits})}</title>
                 ))}
               </Box>
             )
