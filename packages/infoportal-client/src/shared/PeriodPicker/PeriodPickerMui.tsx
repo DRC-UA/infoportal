@@ -56,7 +56,7 @@ export const PeriodPickerMui = ({
         },
         textField: {
           size: 'small',
-          sx: {minWidth: 218, marginTop: 0, paddingTop: 0, marginRight: 1, ...sx},
+          sx: {minWidth: 228, marginTop: 0, paddingTop: 0, marginRight: 1, ...sx},
           fullWidth,
         },
         shortcuts: {items: shortcutsItems},
