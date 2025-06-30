@@ -27,7 +27,7 @@ const Widgets: FC = () => {
     <Div responsive paddingBottom={2}>
       <Div column>
         <Box display="flex" gap={2} mb={2}>
-          <SlideWidget icon="groups" title={m.individuals}>
+          <SlideWidget icon="person" title={m.individuals}>
             {dataFiltered.length}
           </SlideWidget>
           <SlideWidget icon="cases" title={m.legal.allCasesCountTitle}>
