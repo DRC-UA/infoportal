@@ -72,7 +72,18 @@ export const useVictimAssistanceData = () => {
   const data = seq(fetcherAnswer.get?.data) ?? []
 
   const dataFiltered = useMemo(() => {
-    return DataFilter.filterData(data, filterShape, optionFilter).filter((_) => PeriodHelper.isDateIn(period, _.date))
+    return DataFilter.filterData(data, filterShape, optionFilter)
+      .map((record) =>
+        optionFilter.project && optionFilter.project.length > 0
+          ? {
+              ...record,
+              tia_assesment: record.tia_assesment?.filter(
+                ({project}) => project && optionFilter.project?.includes(project),
+              ),
+            }
+          : record,
+      )
+      .filter(({date}) => PeriodHelper.isDateIn(period, date))
   }, [data, filterShape, optionFilter])
 
   useEffect(() => {

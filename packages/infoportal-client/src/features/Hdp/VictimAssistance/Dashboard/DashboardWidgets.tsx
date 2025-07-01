@@ -72,13 +72,13 @@ export const DashboardWidgets: FC = () => {
             <PanelBody>
               {ctx.dataFiltered && (
                 <ChartBarMultipleBy
-                  data={ctx.dataFiltered}
-                  by={(_) =>
-                    seq(_.tia_assesment)
-                      .flatMap((tia) => (Array.isArray(tia.project) ? tia.project : [tia.project]))
+                  data={seq(
+                    ctx.dataFiltered
+                      .map(({tia_assesment}) => tia_assesment)
                       .compact()
-                      .get()
-                  }
+                      .flat(),
+                  )}
+                  by={({project}) => (Array.isArray(project) ? project : [project])}
                   label={Va_bio_tia.options.project}
                 />
               )}
@@ -108,17 +108,13 @@ export const DashboardWidgets: FC = () => {
             <PanelBody>
               {ctx.dataFiltered && (
                 <ChartBarSingleBy
-                  data={ctx.dataFiltered}
-                  by={(_) =>
-                    Array.from(
-                      new Set(
-                        seq(_.tia_assesment)
-                          .map((_) => _.res_stat)
-                          .compact()
-                          .get(),
-                      ),
-                    ).join(', ')
-                  }
+                  data={seq(ctx.dataFiltered).flatMap((row) =>
+                    seq(row.tia_assesment)
+                      .map((tia) => tia.res_stat)
+                      .map((res_stat) => ({res_stat}))
+                      .get(),
+                  )}
+                  by={(item) => item.res_stat}
                   label={Va_bio_tia.options.res_stat}
                   includeNullish
                 />
