@@ -48,4 +48,6 @@ export const databaseCustomMapping: Record<any, (_: any) => any> = {
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.ecrec_small_scale),
   [KoboIndex.byName('protection_communityMonitoring').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.protection_communityMonitoring),
+  [KoboIndex.byName('legal_individual_aid').id]: (_) =>
+    KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.legal_individual_aid),
 }

@@ -59,7 +59,7 @@ const Widgets: FC = () => {
             tableId="individual-legal-aid-age-groups"
             enableDisplacementStatusFilter
             enablePwdFilter
-            persons={dataFiltered.map(KoboXmlMapper.Persons.legal_individual_aid)}
+            persons={dataFiltered.flatMap(KoboXmlMapper.Persons.legal_individual_aid)}
           />
         </SlidePanel>
         <SlidePanel title={m.legal.caseType.title}>

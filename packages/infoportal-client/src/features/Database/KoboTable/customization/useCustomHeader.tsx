@@ -1,11 +1,12 @@
-import React, {ReactNode, useMemo} from 'react'
+import {ReactNode, useMemo} from 'react'
+
+import {KoboIndex, KoboXmlMapper} from 'infoportal-common'
+
 import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
-import {KoboIndex} from 'infoportal-common'
-import {HeaderParams} from '@/shared/Datatable/util/datatableType'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
-import {PopoverWrapper} from '@/shared/PopoverWrapper'
+import {HeaderParams} from '@/shared/Datatable/util/datatableType'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {KoboXmlMapper} from 'infoportal-common'
+import {PopoverWrapper} from '@/shared/PopoverWrapper'
 
 export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactNode) => {
   const ctx = useDatabaseKoboTableContext()
@@ -33,7 +34,8 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('bn_rapidResponse2').id:
       case KoboIndex.byName('partner_lampa').id:
       case KoboIndex.byName('ecrec_small_scale').id:
-      case KoboIndex.byName('ecrec_subsistance').id: {
+      case KoboIndex.byName('ecrec_subsistance').id:
+      case KoboIndex.byName('legal_individual_aid').id: {
         return (_: HeaderParams<{custom: KoboXmlMapper.Breakdown}>) => {
           return (
             <PopoverWrapper
@@ -51,7 +53,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
                   tableId="useCustomHeader"
                   enableDisplacementStatusFilter
                   enablePwdFilter
-                  persons={_.filteredData.flatMap((_) => _.custom.persons)}
+                  persons={_.filteredData.flatMap((_) => _.custom?.persons ?? [])}
                 />
               )}
             >

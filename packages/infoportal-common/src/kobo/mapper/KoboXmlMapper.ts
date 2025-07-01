@@ -753,26 +753,28 @@ export namespace KoboXmlMapper {
       gender,
       displacement,
       vulnerability_detail,
-    }: Legal_individual_aid.T): Person.Details => {
-      return {
-        age,
-        gender: match(gender)
-          .cases({
-            male: Person.Gender.Male,
-            female: Person.Gender.Female,
-          })
-          .default(Person.Gender.Other),
-        displacement: match(displacement)
-          .cases({
-            idp: Person.DisplacementStatus.Idp,
-            non_idp: Person.DisplacementStatus.NonDisplaced,
-            displaced_abroad: Person.DisplacementStatus.Refugee,
-            returnee: Person.DisplacementStatus.Returnee,
-            refugee: Person.DisplacementStatus.Refugee,
-          })
-          .default(undefined),
-        ...(vulnerability_detail?.includes('pwd') && {disability: [Person.WgDisability.Comm]}), // if beneficiary is vulnerable and the reason for this is some form of disability, add the property
-      }
+    }: Legal_individual_aid.T): Person.Details[] => {
+      return [
+        {
+          age,
+          gender: match(gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            })
+            .default(Person.Gender.Other),
+          displacement: match(displacement)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              non_idp: Person.DisplacementStatus.NonDisplaced,
+              displaced_abroad: Person.DisplacementStatus.Refugee,
+              returnee: Person.DisplacementStatus.Returnee,
+              refugee: Person.DisplacementStatus.Refugee,
+            })
+            .default(undefined),
+          ...(vulnerability_detail?.includes('pwd') && {disability: [Person.WgDisability.Comm]}), // if beneficiary is vulnerable and the reason for this is some form of disability, add the property
+        },
+      ]
     }
 
     export const winter_pdm = (_: Meal_winterizationPdm.T): Person.Details[] => {
