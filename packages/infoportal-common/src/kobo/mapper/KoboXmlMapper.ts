@@ -804,33 +804,27 @@ export namespace KoboXmlMapper {
     }
 
     export const va_bio_tia = (row: Va_bio_tia.T): Person.Details[] => {
-      const tiaEntry = row.tia_assesment?.find(
-        (tia) => tia.res_stat !== undefined || tia.cash_age !== undefined || tia.cash_gender !== undefined,
-      )
+      const tiaEntries =
+        row.tia_assesment?.filter(
+          (tia) => tia.res_stat !== undefined || tia.cash_age !== undefined || tia.cash_gender !== undefined,
+        ) ?? []
 
-      const age = tiaEntry?.cash_age
-      const gender = tiaEntry?.cash_gender
-
-      const displacement = match(tiaEntry?.res_stat ?? '')
-        .cases({
-          idp: Person.DisplacementStatus.Idp,
-          returnees: Person.DisplacementStatus.Returnee,
-          host_communities: Person.DisplacementStatus.NonDisplaced,
-        })
-        .default(() => undefined)
-
-      return [
-        {
-          age,
-          gender: match(gender)
-            .cases({
-              male: Person.Gender.Male,
-              female: Person.Gender.Female,
-            })
-            .default(() => undefined),
-          displacement,
-        },
-      ]
+      return tiaEntries.map(({cash_age, cash_gender, res_stat}) => ({
+        age: cash_age,
+        gender: match(cash_gender)
+          .cases({
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          })
+          .default(() => undefined),
+        displacement: match(res_stat)
+          .cases({
+            idp: Person.DisplacementStatus.Idp,
+            returnees: Person.DisplacementStatus.Returnee,
+            host_communities: Person.DisplacementStatus.NonDisplaced,
+          })
+          .default(() => undefined),
+      }))
     }
   }
 
