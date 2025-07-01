@@ -40,7 +40,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'Meta Dashboard',
     materialIcons: 'language',
     color: '#7300d7',
-    path: '/meta-dashboard',
+    path: '/meta-dashboard#',
     category: 'general',
     showIf: (u) => true,
   },
@@ -49,7 +49,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'Kobo Databases',
     materialIcons: 'fact_check',
     color: '#259af4',
-    path: '/database',
+    path: '/database#',
     category: 'general',
   },
   shelter: {
@@ -57,7 +57,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'Shelter',
     materialIcons: 'home_work',
     color: '#742020',
-    path: '/shelter',
+    path: '/shelter#',
     category: 'programs',
     showIf: (u, accesses) => {
       return (
@@ -74,7 +74,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'Cash Assistance',
     materialIcons: 'savings',
     color: '#00d82e',
-    path: '/mpca',
+    path: '/mpca#',
     category: 'programs',
     showIf: (u, accesses) => {
       return true
@@ -87,7 +87,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     materialIcons: 'agriculture',
     color: '#daba00',
     category: 'programs',
-    path: '/ecrec',
+    path: '/ecrec#',
     showIf: (u, accesses) => false,
   },
   protection: {
@@ -96,7 +96,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     // materialIcons: 'display_settings',
     materialIcons: 'diversity_3',
     color: '#418fde',
-    path: '/protection',
+    path: '/protection#',
     category: 'programs',
     showIf: (u, accesses) => {
       return true
@@ -108,7 +108,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     // materialIcons: 'display_settings',
     materialIcons: 'troubleshoot',
     color: '#1f9b97',
-    path: '/meal',
+    path: '/meal#',
     category: 'programs',
     showIf: (u, accesses) => {
       return true
@@ -123,7 +123,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     id: AppFeatureId.activity_info,
     name: 'Activity Info',
     color: '#00e6b8',
-    path: '/activity-info',
+    path: '/activity-info#',
     category: 'general',
     showIf: (_) => true,
   },
@@ -132,7 +132,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'WFP Deduplication',
     materialIcons: 'join_left',
     color: '#f1a100',
-    path: '/wfp-deduplication',
+    path: '/wfp-deduplication#',
     category: 'general',
     showIf: (u, accesses) => {
       return u?.admin || (accesses && !!accesses.find((_) => _.featureId === AppFeatureId.wfp_deduplication))
@@ -146,7 +146,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     // materialIcons: 'destruction',
     // materialIcons: 'bomb',
     color: '#027ca2',
-    path: '/hdp',
+    path: '/hdp#',
     category: 'programs',
     showIf: (u, accesses) => true,
   },
@@ -155,7 +155,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'CFM',
     materialIcons: 'support_agent',
     color: '#1c2c73',
-    path: '/cfm',
+    path: '/cfm#',
     category: 'programs',
     showIf: (u, accesses) => true,
     // showIf: (u, accesses) => u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.cfm)
@@ -165,7 +165,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'Partnership',
     materialIcons: 'handshake',
     color: '#8ab4f8',
-    path: '/partnership',
+    path: '/partnership#',
     category: 'programs',
     showIf: (u, accesses) => true,
     // showIf: (u, accesses) => u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.cfm)
@@ -176,7 +176,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     // materialIcons: 'display_settings',
     materialIcons: 'security',
     color: '#dd2222',
-    path: '/safety',
+    path: '/safety#',
     category: 'programs',
     showIf: (u, accesses) => {
       return true
@@ -187,7 +187,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'Snapshots',
     materialIcons: 'photo_camera',
     color: 'silver',
-    path: '/snapshot',
+    path: '/snapshot#',
     category: 'settings',
     showIf: (_) => true,
   },
@@ -196,7 +196,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'Admin',
     materialIcons: 'admin_panel_settings',
     color: 'silver',
-    path: '/admin',
+    path: '/admin#',
     category: 'settings',
     showIf: (_) => _ && _?.admin,
   },
@@ -205,14 +205,14 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#c0c0c0',
     materialIcons: 'api',
     name: 'Sandbox',
-    path: '/sandbox',
+    path: '/sandbox#',
     category: 'settings',
     showIf: (_) => _ && _?.email === appConfig.contact,
   },
   legal: {
     id: AppFeatureId.legal,
     name: 'Legal',
-    path: '/legal',
+    path: '/legal#',
     category: 'programs',
     color: '#c0c0c0',
     materialIcons: 'gavel',
