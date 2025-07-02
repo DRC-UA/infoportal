@@ -226,6 +226,7 @@ export namespace Legal_individual_aid {
           document_status_statuses_other: undefined | Option<'document_status_statuses_other'> | undefined
           date_recipt_statuses_other: Date | undefined | undefined
           name_obtained_statuses_other: string | undefined | undefined
+          document_received_assistance: undefined | Option<'case_referred_further'> | undefined
           beneficiary_application_type: undefined | Option<'beneficiary_application_type'> | undefined
           type_application_assistance: undefined | Option<'type_application_assistance'>[] | undefined
           institution_accompanying_cases: string | undefined | undefined
