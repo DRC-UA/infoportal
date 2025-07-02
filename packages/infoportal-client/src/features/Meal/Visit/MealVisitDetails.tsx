@@ -81,23 +81,25 @@ const SectionWithParts = ({
       const answer = entry[field]
       const explanation = ifNoExplain && entry[ifNoExplain]
 
-      // Show only "no" answers with explanations
-      if (answer !== 'no' || !explanation) return null
+      // Show "yes" and "no" answers
+      if ((answer !== 'yes' && answer !== 'no')) return null;
+
 
       return (
         <Box key={String(field)} sx={{mb: 1}}>
           <Txt bold>{question}</Txt>
           <Box sx={{mt: 0.5, ml: 2}}>
+          {/* Show "yes" and "no" answers with explanations */}
             <Txt italic color="hint">
-              <b>No.</b> {String(explanation)}
-            </Txt>
+            <b>{answer === 'yes' ? 'Yes.' : 'No.'}</b>
+            {explanation ? ` ${String(explanation)}` : ''}
+          </Txt>
           </Box>
         </Box>
       )
     })
     .filter(Boolean)
-
-  return content.length > 0 ? (
+    return content.length > 0 ? (
     <Box sx={{mt: 2}}>
       <Title size="big">{title}</Title>
       {content}
@@ -238,26 +240,12 @@ export const _DashboardMealVisitPdf = () => {
                 entry={entry}
                 schema={schema}
                 parts={[
-                  {
-                    question: 'Was there a shelter available for the team during this alarm?',
-                    field: 'shelter_available',
-                    ifNoExplain: 'shelter_no_reason',
-                  },
-                  {
-                    question: 'Was the space suitable?',
-                    field: 'space_suitable',
-                    ifNoExplain: 'space_not_suitable_reason',
-                  },
-                  {
-                    question: 'Was there wheelchair access?',
-                    field: 'wheelchair_access',
-                    ifNoExplain: 'no_access_reason',
-                  },
-                  {
-                    question: 'Was the site weather-proof?',
-                    field: 'weather_proof',
-                    ifNoExplain: 'weather_not_proof_reason',
-                  },
+                  {question: 'Was there an air alarm during the distribution?', field: 'air_alarm',},
+                  {question: 'Was there a red alarm (according to DRC system)?', field: 'red_alarm',},
+                  {question: 'Was there a shelter available for the team during this alarm?', field: 'shelter_available', ifNoExplain: 'shelter_no_reason',},
+                  {question: 'Was the space suitable?', field: 'space_suitable', ifNoExplain: 'space_not_suitable_reason',},
+                  {question: 'Was there wheelchair access?', field: 'wheelchair_access', ifNoExplain: 'no_access_reason',},
+                  {question: 'Was the site weather-proof?', field: 'weather_proof', ifNoExplain: 'weather_not_proof_reason',},
                 ]}
               />
 
@@ -267,14 +255,30 @@ export const _DashboardMealVisitPdf = () => {
                 schema={schema}
                 parts={[
                   {question: 'Was CFM explained?', field: 'ccm', ifNoExplain: 'ccn'},
-                  {
-                    question: 'Was staff behaviour aligned with the Code of Conduct?',
-                    field: 'ccs',
-                    ifNoExplain: 'ccsn',
-                  },
+                  {question: 'Was staff behaviour aligned with the Code of Conduct?', field: 'ccs', ifNoExplain: 'ccsn',},
                   {question: 'Did any beneficiaries feel unsafe around staff?', field: 'ccd', ifNoExplain: 'ccdn'},
                   {question: 'Were CFM flyers distributed?', field: 'ccc', ifNoExplain: 'cccn'},
                   {question: 'Were PSEA flyers distributed?', field: 'psea', ifNoExplain: 'psean'},
+                ]}
+              />
+
+              <SectionWithParts
+                title="Protection, cohesion or inclusion concerns"
+                entry={entry}
+                schema={schema}
+                parts={[
+                  {question: 'Were individuals asked for permission to collect their data?', field: 'pmid', ifNoExplain: 'pmidn'},
+                  {question: 'For vulnerable beneficiaries, were issues handled with care and confidentiality?', field: 'pmic', ifNoExplain: 'pmicn'},
+                ]}
+              />
+
+              <SectionWithParts
+                title="Quality & Timeliness"
+                entry={entry}
+                schema={schema}
+                parts={[
+                  {question: 'Was the assistance from DRC timely for people?', field: 'qtip', ifNoExplain: 'qtipn'},
+                  {question: 'Was the activity of quality and in line with the planned activity?', field: 'qtia', ifNoExplain: 'qtian'},
                 ]}
               />
 
