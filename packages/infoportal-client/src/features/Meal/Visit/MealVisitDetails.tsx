@@ -1,19 +1,21 @@
+import type {ReactNode} from 'react'
 import {useParams} from 'react-router'
 import * as yup from 'yup'
-import React, {ReactNode} from 'react'
-import {Box, GlobalStyles, Icon, ThemeProvider} from '@mui/material'
-import {Txt, TxtProps} from '@/shared/Txt'
-import {useI18n} from '@/core/i18n'
-import {muiTheme} from '@/core/theme'
-import {DRCLogoLarge} from '@/shared/logo/logo'
-import {capitalize, KoboSubmissionFlat, KoboIndex, Meal_visitMonitoring, KoboSchemaHelper} from 'infoportal-common'
-import {useSession} from '@/core/Session/SessionContext'
-import {DrawingCanvas} from '@/shared/DrawingCanvas'
 import {mapFor, seq} from '@axanc/ts-utils'
-import {getKoboAttachmentUrl} from '@/shared/TableMedia/KoboAttachedMedia'
-import {CompressedImg} from '@/shared/CompressedImg'
-import {useMealVisitContext} from '@/features/Meal/Visit/MealVisitContext'
+import {Box, GlobalStyles, Icon, ThemeProvider} from '@mui/material'
+
+import {capitalize, KoboSubmissionFlat, KoboIndex, Meal_visitMonitoring, KoboSchemaHelper} from 'infoportal-common'
+
+import {useI18n} from '@/core/i18n'
+import {useSession} from '@/core/Session/SessionContext'
+import {muiTheme} from '@/core/theme'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
+import {useMealVisitContext} from '@/features/Meal/Visit/MealVisitContext'
+import {CompressedImg} from '@/shared/CompressedImg'
+import {DrawingCanvas} from '@/shared/DrawingCanvas'
+import {DRCLogoLarge} from '@/shared/logo/logo'
+import {getKoboAttachmentUrl} from '@/shared/TableMedia/KoboAttachedMedia'
+import {Txt, TxtProps} from '@/shared/Txt'
 
 const urlValidation = yup.object({
   id: yup.string().required(),
@@ -81,22 +83,23 @@ const SectionWithParts = ({
       const answer = entry[field]
       const explanation = ifNoExplain && entry[ifNoExplain]
 
-      // Show only "no" answers with explanations
-      if (answer !== 'no' || !explanation) return null
+      // Show "yes" and "no" answers
+      if (answer !== 'yes' && answer !== 'no') return null
 
       return (
         <Box key={String(field)} sx={{mb: 1}}>
           <Txt bold>{question}</Txt>
           <Box sx={{mt: 0.5, ml: 2}}>
+            {/* Show "yes" and "no" answers with explanations */}
             <Txt italic color="hint">
-              <b>No.</b> {String(explanation)}
+              <b>{answer === 'yes' ? 'Yes.' : 'No.'}</b>
+              {explanation ? ` ${String(explanation)}` : ''}
             </Txt>
           </Box>
         </Box>
       )
     })
     .filter(Boolean)
-
   return content.length > 0 ? (
     <Box sx={{mt: 2}}>
       <Title size="big">{title}</Title>
@@ -215,20 +218,22 @@ export const _DashboardMealVisitPdf = () => {
                   </Row>
                 )}
               </Box>
-              {[
-                {title: 'General Observation:', field: 'main_objective'},
-                {title: 'Target Groups:', field: 'target_groups'},
-                {title: 'Activity Overview:', field: 'activity_overview'},
-                {title: 'Satisfaction and Feedback:', field: 'satisfaction_level'},
-                {title: 'Focus Group Discussions:', field: 'FGD_part'},
-                {title: 'Feedback from Organizers:', field: 'feedback_org'},
-                {title: 'Stakeholders Interviews:', field: 'stakeholder_interview'},
-                {title: 'Overall Observations:', field: 'overall_observation'},
-              ].map((props) => (
+              {(
+                [
+                  {title: 'General Observation:', field: 'main_objective'},
+                  {title: 'Target Groups:', field: 'target_groups'},
+                  {title: 'Activity Overview:', field: 'activity_overview'},
+                  {title: 'Satisfaction and Feedback:', field: 'satisfaction_level'},
+                  {title: 'Focus Group Discussions:', field: 'FGD_part'},
+                  {title: 'Feedback from Organizers:', field: 'feedback_org'},
+                  {title: 'Stakeholders Interviews:', field: 'stakeholder_interview'},
+                  {title: 'Overall Observations:', field: 'overall_observation'},
+                ] as const
+              ).map((props) => (
                 <SimpleFieldSection
                   key={props.field}
                   {...props}
-                  field={props.field as keyof Meal_visitMonitoring.T}
+                  field={props.field satisfies keyof Meal_visitMonitoring.T}
                   entry={entry}
                 />
               ))}
@@ -238,6 +243,8 @@ export const _DashboardMealVisitPdf = () => {
                 entry={entry}
                 schema={schema}
                 parts={[
+                  {question: 'Was there an air alarm during the distribution?', field: 'air_alarm'},
+                  {question: 'Was there a red alarm (according to DRC system)?', field: 'red_alarm'},
                   {
                     question: 'Was there a shelter available for the team during this alarm?',
                     field: 'shelter_available',
@@ -275,6 +282,38 @@ export const _DashboardMealVisitPdf = () => {
                   {question: 'Did any beneficiaries feel unsafe around staff?', field: 'ccd', ifNoExplain: 'ccdn'},
                   {question: 'Were CFM flyers distributed?', field: 'ccc', ifNoExplain: 'cccn'},
                   {question: 'Were PSEA flyers distributed?', field: 'psea', ifNoExplain: 'psean'},
+                ]}
+              />
+
+              <SectionWithParts
+                title="Protection, cohesion or inclusion concerns"
+                entry={entry}
+                schema={schema}
+                parts={[
+                  {
+                    question: 'Were individuals asked for permission to collect their data?',
+                    field: 'pmid',
+                    ifNoExplain: 'pmidn',
+                  },
+                  {
+                    question: 'For vulnerable beneficiaries, were issues handled with care and confidentiality?',
+                    field: 'pmic',
+                    ifNoExplain: 'pmicn',
+                  },
+                ]}
+              />
+
+              <SectionWithParts
+                title="Quality & Timeliness"
+                entry={entry}
+                schema={schema}
+                parts={[
+                  {question: 'Was the assistance from DRC timely for people?', field: 'qtip', ifNoExplain: 'qtipn'},
+                  {
+                    question: 'Was the activity of quality and in line with the planned activity?',
+                    field: 'qtia',
+                    ifNoExplain: 'qtian',
+                  },
                 ]}
               />
 
