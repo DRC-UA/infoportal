@@ -107,7 +107,7 @@ export const ua = {
     },
     legal: {
       individualAid: 'Індивідуальна юридична допомога',
-      caseType: {
+      serviceType: {
         title: 'тип справи',
         assistance: 'Вторинна допомога',
         councelling: 'Консультація',

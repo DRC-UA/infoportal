@@ -53,7 +53,7 @@ const useIndividualAidData = () => {
           multiple: true,
           getOptions: () =>
             DataFilter.buildOptionsFromObject(Legal_individual_aid.options.beneficiary_application_type),
-          label: m.legal.caseType.title,
+          label: m.legal.aidType.title,
         },
         caseStatus: {
           icon: 'fact_check',

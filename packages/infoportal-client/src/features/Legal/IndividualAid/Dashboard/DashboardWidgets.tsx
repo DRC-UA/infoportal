@@ -2,7 +2,7 @@ import type {FC} from 'react'
 import {seq, match, Obj} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 
-import {DrcProject, KoboXmlMapper, OblastIndex, Legal_individual_aid, isDate} from 'infoportal-common'
+import {DrcProject, KoboXmlMapper, OblastIndex, Legal_individual_aid, isDate, pluralize} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {SlideWidget, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
@@ -21,7 +21,17 @@ import {civic_doc_date_fields, hlp_doc_date_fields} from './constants'
 const Widgets: FC = () => {
   const {dataFiltered} = useIndividualAidContext()
   const {m} = useI18n()
-  const cases = dataFiltered.map(({number_case}) => number_case).flat()
+  const cases = dataFiltered
+    .map(({number_case}) => {
+      const beneficiarys_assistances = number_case.filter(
+        ({beneficiary_application_type}) => beneficiary_application_type === 'assistance',
+      )
+
+      // if beneficiary received legal assistance, deduct counsellings from the report
+      return beneficiarys_assistances.length > 0 ? beneficiarys_assistances : number_case
+    })
+    .flat()
+  const assistances = cases.filter(({beneficiary_application_type}) => beneficiary_application_type === 'assistance')
 
   return (
     <Div responsive paddingBottom={2}>
@@ -30,8 +40,11 @@ const Widgets: FC = () => {
           <SlideWidget icon="person" title={m.individuals}>
             {dataFiltered.length}
           </SlideWidget>
-          <SlideWidget icon="cases" title={m.legal.allCasesCountTitle}>
-            {cases.length}
+          <SlideWidget icon="cases" title={pluralize(m.legal.aidType.assistance)}>
+            {assistances.length}
+          </SlideWidget>
+          <SlideWidget icon="question_answer" title={m.legal.aidType.councelling}>
+            {cases.length - assistances.length}
           </SlideWidget>
         </Box>
         <Box display="flex" gap={2} mb={2}>
@@ -60,19 +73,6 @@ const Widgets: FC = () => {
             enableDisplacementStatusFilter
             enablePwdFilter
             persons={dataFiltered.flatMap(KoboXmlMapper.Persons.legal_individual_aid)}
-          />
-        </SlidePanel>
-        <SlidePanel title={m.legal.caseType.title}>
-          <ChartBarSingleBy
-            data={seq(cases).map(({beneficiary_application_type: case_type}) => ({
-              case_type: match(case_type)
-                .cases({
-                  assistance: m.legal.caseType.assistance,
-                  counselling: m.legal.caseType.councelling,
-                })
-                .default(m.notSpecified),
-            }))}
-            by={({case_type}) => case_type}
           />
         </SlidePanel>
         <SlidePanel title={m.legal.caseStatus}>
