@@ -28,7 +28,7 @@ const Filters: FC = () => {
       before={
         <Box display="flex">
           <Box>
-            <Typography fontSize="small">{m.legal.caseDate}</Typography>
+            <Typography fontSize="small">{m.legal.aidDate}</Typography>
             <PeriodPicker
               value={[ctx.casePeriod.start, ctx.casePeriod.end]}
               onChange={([start, end]) => {
@@ -41,7 +41,7 @@ const Filters: FC = () => {
             />
           </Box>
           <Box>
-            <Typography fontSize="small">{m.legal.caseClosureDate}</Typography>
+            <Typography fontSize="small">{m.legal.aidClosureDate}</Typography>
             <PeriodPicker
               value={[ctx.caseClosurePeriod.start, ctx.caseClosurePeriod.end]}
               onChange={([start, end]) => {

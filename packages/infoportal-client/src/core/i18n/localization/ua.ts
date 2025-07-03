@@ -107,8 +107,8 @@ export const ua = {
     },
     legal: {
       individualAid: 'Індивідуальна юридична допомога',
-      serviceType: {
-        title: 'тип справи',
+      aidType: {
+        title: 'Тип допомоги',
         assistance: 'Вторинна допомога',
         councelling: 'Консультація',
       },
@@ -117,10 +117,9 @@ export const ua = {
         civilDocs: 'Цивільні документи',
       },
       registeredBy: 'Зареєстрував',
-      caseStatus: 'Статус справи',
-      caseDate: 'Дата справи',
-      caseClosureDate: 'Дата закриття справи',
-      allCasesCountTitle: 'Усього справ',
+      aidStatus: 'Статус допомоги',
+      aidDate: 'Дата допомоги',
+      aidClosureDate: 'Дата закриття допомоги',
       map: {
         title: 'Бенефіціари по областях',
       },
