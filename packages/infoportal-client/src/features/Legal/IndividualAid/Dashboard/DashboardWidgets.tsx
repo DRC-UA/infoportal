@@ -75,7 +75,7 @@ const Widgets: FC = () => {
             persons={dataFiltered.flatMap(KoboXmlMapper.Persons.legal_individual_aid)}
           />
         </SlidePanel>
-        <SlidePanel title={m.legal.caseStatus}>
+        <SlidePanel title={m.legal.aidStatus}>
           <ChartBarSingleBy
             data={seq(cases).map(({status_case}) => ({
               status_case: match(status_case)
@@ -88,7 +88,7 @@ const Widgets: FC = () => {
             by={({status_case}) => status_case}
           />
         </SlidePanel>
-        <SlidePanel title={m.legal.caseCategory}>
+        <SlidePanel title={m.legal.aidCategory}>
           <ChartBarSingleBy
             data={seq(cases).map(({category_issue}) => ({
               category_issue:
