@@ -370,15 +370,22 @@ export function appendSearchQuery(uri: string, params: Record<string, unknown> |
 
 const enOrdinalRules = new Intl.PluralRules('en-US', {type: 'ordinal'})
 
-export const pluralize = (n: number, options: {fullString?: boolean} | undefined): string => {
-  const rule = enOrdinalRules.select(n)
-  const suffix = match(rule)
-    .cases({
-      one: 'st',
-      two: 'nd',
-      few: 'rd',
-    })
-    .default('th')
+export const pluralize = (
+  n: number | string,
+  options?: typeof n extends 'number' ? {fullString?: boolean} : {suffix?: string},
+): string => {
+  if (typeof n === 'number') {
+    const rule = enOrdinalRules.select(n)
+    const suffix = match(rule)
+      .cases({
+        one: 'st',
+        two: 'nd',
+        few: 'rd',
+      })
+      .default('th')
 
-  return options?.fullString ? `${n}${suffix}` : suffix
+    return (options as {fullString?: boolean})?.fullString ? `${n}${suffix}` : suffix
+  } else {
+    return `${n}${options?.suffix ?? 's'}`
+  }
 }
