@@ -1,6 +1,6 @@
-export type AiSnfiType = AiSnfiType.Type
+export type AiTypeSnfiRmm = AiTypeSnfiRmm.Type
 
-export namespace AiSnfiType {
+export namespace AiTypeSnfiRmm {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
   export interface Type {
     'Reporting Organization': Opt<'Partner'>
@@ -44,11 +44,21 @@ export namespace AiSnfiType {
         recordId,
         parentRecordId,
         fields: {
-          c5i3wifm5w7q3vq4: a['Reporting Organization'] ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Reporting Organization']!] : undefined,
-          cn33ikom5w7q3vq5: a['Implementing Partner'] ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner']!] : undefined,
-          cx8b8s5m6ul1gml2: a['Plan/Project Code'] ? 'ctgic3km6ukvzc22' + ':' + options['SNFI 2025 APM'][a['Plan/Project Code']!] : undefined,
-          ceiqk7wm697ng7n2: a['Indicators - SNFI'] ? 'cxff543m4r94qi4d' + ':' + options['Indicators - SNFI'][a['Indicators - SNFI']!] : undefined,
-          ck0xai3m7ajd4ve3: a['Distribution through Common Pipeline'] ? options['Distribution through Common Pipeline'][a['Distribution through Common Pipeline']!] : undefined,
+          c5i3wifm5w7q3vq4: a['Reporting Organization']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Reporting Organization']!]
+            : undefined,
+          cn33ikom5w7q3vq5: a['Implementing Partner']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner']!]
+            : undefined,
+          cx8b8s5m6ul1gml2: a['Plan/Project Code']
+            ? 'ctgic3km6ukvzc22' + ':' + options['SNFI 2025 APM'][a['Plan/Project Code']!]
+            : undefined,
+          ceiqk7wm697ng7n2: a['Indicators - SNFI']
+            ? 'cxff543m4r94qi4d' + ':' + options['Indicators - SNFI'][a['Indicators - SNFI']!]
+            : undefined,
+          ck0xai3m7ajd4ve3: a['Distribution through Common Pipeline']
+            ? options['Distribution through Common Pipeline'][a['Distribution through Common Pipeline']!]
+            : undefined,
           cx1f1xtm5w7q3vqb: a['Theme'] ? options['Theme'][a['Theme']!] : undefined,
           czi6xi7m5w7q3vqe: a['Oblast'] ? 'ciok70dm4r8lp7f2' + ':' + a['Oblast'] : undefined,
           c9jdhgpm5w7q3vqf: a['Raion'] ? 'c1v215km4s71ndl22' + ':' + a['Raion'] : undefined,
@@ -58,7 +68,9 @@ export namespace AiSnfiType {
           cwy07nvm5w7q3vsm: a['Reporting Month'],
           cxukplim5w7q3vsn: a['Activity Start month'],
           cyrbergm5w7q3vso: a['Activity End month'],
-          c34r0rcm5w7q3vsq: a['Population Group'] ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!] : undefined,
+          c34r0rcm5w7q3vsq: a['Population Group']
+            ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!]
+            : undefined,
           cec1r1cm5w7q3vss: a['Non-individuals Reached'],
           cptm3phm5w7q3vst: a['Total Individuals Reached'],
           cxchrp3m5w7q3vsu: a['Girls (0-17)'],
@@ -69,7 +81,9 @@ export namespace AiSnfiType {
           c8qlzrcm5w7q3vtz: a['Older Men (60+)'],
           cdn7buym5w7q3vt10: a['People with disability'],
           c1vmga5m5w7q3vt11: a['HNRP Scope'] ? options['HNRP Scope'][a['HNRP Scope']!] : undefined,
-          ct2ezbgm5w7q3vt13: a['Outside HNRP Scope sub-category'] ? 'ch0e182m4vgc05r2' + ':' + options['Outside HNRP Scope categories'][a['Outside HNRP Scope sub-category']!] : undefined,
+          ct2ezbgm5w7q3vt13: a['Outside HNRP Scope sub-category']
+            ? 'ch0e182m4vgc05r2' + ':' + options['Outside HNRP Scope categories'][a['Outside HNRP Scope sub-category']!]
+            : undefined,
         },
       },
     ]
@@ -85,15 +99,20 @@ export namespace AiSnfiType {
       'SNFI-DRC-00007': 'cs1owlnm7xe8mq25',
       'SNFI-DRC-00008': 'c2jnc3fm7xfhwdz6',
       'SNFI-DRC-00009': 'coqp6ewm7xgn5l07',
+      'SNFI-DRC-00010': 'cyfam4fmct791u22',
+      'SNFI-DRC-00011': 'cxsivt3mct9gfu33',
     },
     'Indicators - SNFI': {
       'Emergency Shelter Support > # supported with emergency shelter kits > cash-voucher': 'cgccvcom6f3xnh22',
-      'Emergency Shelter Support > # supported with emergency construction materials > cash-voucher': 'cn67cnim6f3xnh23',
+      'Emergency Shelter Support > # supported with emergency construction materials > cash-voucher':
+        'cn67cnim6f3xnh23',
       'Emergency Shelter Support > # supported with emergency construction materials > in-kind': 'ch7noasm6f3xnh24',
       'Emergency Shelter Support > # supported with emergency shelter kits > in-kind': 'c72t93hm6f3xnh25',
       'Emergency NFI support > # supported with household NFI > cash-voucher': 'ci1qchm6f3xnh26',
-      'Emergency NFI support > # reached through donation of NFIs (Invincibility Points, bomb shelters, transit centers) > cash-voucher': 'cmi0cu6m6f3xnh27',
-      'Emergency NFI support > # reached through donation of NFIs (Invincibility Points, bomb shelters, transit centers) > in-kind': 'c5gtxa7m6f3xnh28',
+      'Emergency NFI support > # reached through donation of NFIs (Invincibility Points, bomb shelters, transit centers) > cash-voucher':
+        'cmi0cu6m6f3xnh27',
+      'Emergency NFI support > # reached through donation of NFIs (Invincibility Points, bomb shelters, transit centers) > in-kind':
+        'c5gtxa7m6f3xnh28',
       'Emergency NFI support > # supported with household NFI > in-kind': 'crmuflgm6f3xnh29',
       'Winter Heating > # supported with winter energy > cash-voucher': 'cvp39cym6f3xnh2b',
       'Winter Heating > # supported with cash for utilities > cash-voucher': 'cwdmzdmm6f3xnh2c',
@@ -116,8 +135,13 @@ export namespace AiSnfiType {
       'Humanitarian repair > # supported with heavy repairs > in-kind': 'ca3y9udm6f3xnh3t',
       'Humanitarian repair > # supported through repairs of common spaces > in-kind': 'c9sdg0rm6f3xnh3u',
       'Humanitarian repair > # supported through the repair of social facilities > in-kind': 'cgxmt75m6f3xnh3v',
-      'Refurbishment of Collective Sites > # supported through the refurbishment of collective sites > in-kind': 'crvhu8om6f3xnh3w',
+      'Refurbishment of Collective Sites > # supported through the refurbishment of collective sites > in-kind':
+        'crvhu8om6f3xnh3w',
       'Rental support > # received rental support (RMI) > cash-voucher': 'cvw540sm6f3xnh3x',
+      'Humanitarian repair > # supported with IDP light repair > cash-voucher': 'c8v1crgmb7p045c5',
+      'Humanitarian repair > # supported with IDP medium repair > cash-voucher': 'cp58u5hmb7p045c6',
+      'Humanitarian repair > # supported with IDP light repair > in-kind': 'cvicxoymb7p045c7',
+      'Humanitarian repair > # supported with IDP medium repair > in-kind': 'cqpu9namb7p045c8',
     },
     'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
     'Outside HNRP Scope categories': {
@@ -127,7 +151,12 @@ export namespace AiSnfiType {
       'Not aligned to guidance': 'cei6bscm4vgdvpq7',
     },
     'Distribution through Common Pipeline': {Yes: 'c5uk15xm7ajd4vd2', No: 'coik3vdm7ajeeuc4'},
-    Theme: {'No specific theme': 'cu5nj6em5w7q3vqc'},
+    Theme: {
+      'No specific theme': 'cu5nj6em5w7q3vqc',
+      Evacuations: 'cvret7nmb818f1n2',
+      'Emergency response after strikes': 'cqpda51mb818ocb3',
+      'Both (evacuation & emergency response after strikes)': 'c8cob8lmb818rff4',
+    },
     'HNRP Scope': {'Outside HNRP Scope': 'c4xszfom5w7q3vt12'},
   }
 }

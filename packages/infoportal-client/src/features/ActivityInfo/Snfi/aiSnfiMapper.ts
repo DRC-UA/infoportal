@@ -11,7 +11,7 @@ import {match} from '@axanc/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
-import {AiSnfiType} from '@/features/ActivityInfo/Snfi/aiSnfiType'
+import {AiTypeSnfiRmm} from '@/features/ActivityInfo/Snfi/aiSnfiType'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {Period} from 'infoportal-common'
 
@@ -20,18 +20,20 @@ export namespace AiShelterMapper {
     [DrcProject['UKR-000345 BHA2']]: 'SNFI-DRC-00004',
     [DrcProject['UKR-000355 Danish MFA']]: 'SNFI-DRC-00005',
     [DrcProject['UKR-000363 UHF8']]: 'SNFI-DRC-00006',
+    [DrcProject['UKR-000372 ECHO3']]: 'SNFI-DRC-00003',
+    [DrcProject['UKR-000386 Pooled Funds']]: 'SNFI-DRC-00011',
     [DrcProject['UKR-000390 UHF9']]: 'SNFI-DRC-00007',
     [DrcProject['UKR-000397 GFFO']]: 'SNFI-DRC-00008',
     [DrcProject['UKR-000399 SDC']]: 'SNFI-DRC-00009',
-    [DrcProject['UKR-000372 ECHO3']]: 'SNFI-DRC-00003',
+    [DrcProject['UKR-000423 ECHO4']]: 'SNFI-DRC-00010',
   }
 
-  const getPlanCode = (p: DrcProject): AiSnfiType.Type['Plan/Project Code'] => {
+  const getPlanCode = (p: DrcProject): AiTypeSnfiRmm.Type['Plan/Project Code'] => {
     // @ts-expect-error This is intentional
     return planCodes[p] ?? `${aiInvalidValueFlag} ${p}`
   }
 
-  export type Bundle = AiTable<AiSnfiType.Type>
+  export type Bundle = AiTable<AiTypeSnfiRmm.Type>
 
   export const reqEsk =
     (api: ApiSdk) =>
@@ -70,7 +72,7 @@ export namespace AiShelterMapper {
                 const disaggregation = AiMapper.disaggregatePersons(
                   grouped.flatMap((record) => record.persons).compact(),
                 )
-                const ai: AiSnfiType.Type = {
+                const ai: AiTypeSnfiRmm.Type = {
                   Oblast: oblast,
                   Raion: raion,
                   Hromada: hromada,
@@ -84,7 +86,7 @@ export namespace AiShelterMapper {
                       [DrcProgram.CashForRent]: 'Rental support > # received rental support (RMI) > cash-voucher',
                       [DrcProgram.CashForRepair]: 'Humanitarian repair > # supported with light repairs > cash-voucher',
                     } as const)
-                    .default(() => aiInvalidValueFlag as keyof (typeof AiSnfiType.options)['Indicators - SNFI']),
+                    .default(() => aiInvalidValueFlag as keyof (typeof AiTypeSnfiRmm.options)['Indicators - SNFI']),
                   'Implementing Partner': 'Danish Refugee Council (DRC)',
                   'Plan/Project Code': getPlanCode(project),
                   'Reporting Organization': 'Danish Refugee Council (DRC)',
@@ -111,7 +113,7 @@ export namespace AiShelterMapper {
                   periodStr,
                   index: index++,
                 })
-                const request = AiSnfiType.buildRequest(
+                const request = AiTypeSnfiRmm.buildRequest(
                   {
                     ...ai,
                     ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
@@ -164,7 +166,7 @@ export namespace AiShelterMapper {
             ],
             finalTransform: async (grouped, [project, oblast, raion, hromada, settlement, damageLevel, status]) => {
               const disagg = AiMapper.disaggregatePersons(grouped.flatMap((record) => record.persons ?? []))
-              const ai: AiSnfiType.Type = {
+              const ai: AiTypeSnfiRmm.Type = {
                 Oblast: oblast,
                 Raion: raion,
                 Hromada: hromada,
@@ -196,7 +198,7 @@ export namespace AiShelterMapper {
                 periodStr: periodStr,
                 index: index++,
               })
-              const request = AiSnfiType.buildRequest(
+              const request = AiTypeSnfiRmm.buildRequest(
                 {
                   ...ai,
                   ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
