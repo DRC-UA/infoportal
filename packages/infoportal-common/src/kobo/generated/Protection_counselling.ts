@@ -180,6 +180,11 @@ export namespace Protection_counselling {
       UMY013: `UMY013`,
       UMY014: `UMY014`,
       UMY015: `UMY015`,
+      UMY016: `UMY016`,
+      UMY017: `UMY017`,
+      UMY018: `UMY018`,
+      UMY019: `UMY019`,
+      UMY020: `UMY020`,
       HRK001: `HRK001`,
       HRK002: `HRK002`,
       HRK003: `HRK003`,
@@ -216,6 +221,16 @@ export namespace Protection_counselling {
       DNK013: `DNK013`,
       DNK014: `DNK014`,
       DNK015: `DNK015`,
+      DNK016: `DNK016`,
+      DNK017: `DNK017`,
+      DNK018: `DNK018`,
+      DNK019: `DNK019`,
+      DNK020: `DNK020`,
+      DNK021: `DNK021`,
+      DNK022: `DNK022`,
+      DNK023: `DNK023`,
+      DNK024: `DNK024`,
+      DNK025: `DNK025`,
       DNK_A: `DNK-A`,
       DNK_B: `DNK-B`,
       DNK_C: `DNK-C`,
@@ -250,6 +265,11 @@ export namespace Protection_counselling {
       NVL013: `NLV013`,
       NVL014: `NLV014`,
       NVL015: `NLV015`,
+      NVL016: `NLV016`,
+      NVL017: `NLV017`,
+      NVL018: `NLV018`,
+      NVL019: `NLV019`,
+      NVL020: `NLV020`,
       NLV_A: `NLV-A`,
       NLV_B: `NLV-B`,
       NLV_C: `NLV-C`,
@@ -257,6 +277,7 @@ export namespace Protection_counselling {
     },
     project_code: {
       '363_uhf8': `UKR-000363 UHF VIII`,
+      ukr000423_echo: `UKR-000423 ECHO`,
       na: `N/A`,
     },
     modality: {
@@ -404,7 +425,7 @@ export namespace Protection_counselling {
       zaporizka: `Zaporizka`,
       zhytomyrska: `Zhytomyrska`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}
