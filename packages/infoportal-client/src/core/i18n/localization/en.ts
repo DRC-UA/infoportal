@@ -1260,9 +1260,9 @@ export const en = Object.freeze({
         assistance: 'Assistance',
         councelling: 'Councelling',
       },
-      docTypeCount: {
-        hlp: 'HLP docs issued',
-        civilDocs: 'Civil docs issued',
+      docsCount: {
+        hlp: 'Received HLP docs',
+        civilDocs: 'Received civil docs',
       },
       registeredBy: 'Registered by',
       aidStatus: 'Aid status',

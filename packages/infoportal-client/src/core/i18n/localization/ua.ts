@@ -113,8 +113,8 @@ export const ua = {
         councelling: 'Консультація',
       },
       docTypeCount: {
-        hlp: 'Документи на власність',
-        civilDocs: 'Цивільні документи',
+        hlp: 'Отримали документи на власність',
+        civilDocs: 'Отримали цивільні документи',
       },
       registeredBy: 'Зареєстрував',
       aidStatus: 'Статус допомоги',
