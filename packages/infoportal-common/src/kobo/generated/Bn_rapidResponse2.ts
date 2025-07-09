@@ -14,35 +14,62 @@ export namespace Bn_rapidResponse2 {
     back_enum: undefined | Option<'back_enum'>
     // background/back_prog_type [select_multiple] Programme Type
     back_prog_type: undefined | Option<'back_prog_type'>[]
-    // background/back_refer_who [select_one] If this case is an internal DRC referral, from which department?
+    // background/back_refer_who [select_one] Is this case targeted through internal referral from DRC? from which department?
     back_refer_who: undefined | Option<'back_refer_who'>
     // background/back_consent [note] Consent
     back_consent: string
-    // ben_det/ben_det_surname [text] What is your surname name (as shown in personal ID)?
+    // ben_det/ben_det_surname [text] Surname
     ben_det_surname: string | undefined
-    // ben_det/ben_det_first_name [text] What is your first name (as shown in personal ID)?
+    // ben_det/ben_det_first_name [text] First name
     ben_det_first_name: string | undefined
-    // ben_det/ben_det_pat_name [text] What is your patronymic name?
+    // ben_det/ben_det_pat_name [text] Patronymic name
     ben_det_pat_name: string | undefined
-    // ben_det/ben_det_ph_number [integer] What is your phone number?
+    // ben_det/ben_det_ph_number [integer] Phone number
     ben_det_ph_number: number | undefined
-    // ben_det/ben_det_oblast [select_one] Select oblast where registration is taking place
+    // ben_det/ben_det_oblast [select_one] Oblast
     ben_det_oblast: undefined | Option<'ben_det_oblast'>
-    // ben_det/ben_det_raion [select_one] Select raion where registration is taking place
+    // ben_det/ben_det_raion [select_one] Raion
     ben_det_raion: undefined | string
-    // ben_det/ben_det_hromada [select_one] Select hromada where registration is taking place
+    // ben_det/ben_det_hromada [select_one] Hromada
     ben_det_hromada: undefined | string
-    // ben_det/ben_det_settlement [select_one_from_file] Select settlement where registration is taking place
+    // ben_det/ben_det_settlement [select_one_from_file] Settlement
     ben_det_settlement: string
-    // ben_det/ben_det_income [integer] What was the total value in UAH of all the resources your household received in the last one month?
+    // ben_det/leave_regular_place [select_one] Were you forced to leave your regular place of residence due to the attack/evacuation in the last 30 days?
+    leave_regular_place: undefined | Option<'receive_pss'>
+    // ben_det/reduction_income [select_one] Has your household experienced a reduction in income in the past 30 days due to any of the following events?
+    reduction_income: undefined | Option<'reduction_income'>
+    // ben_det/documentation_reduction_income [image] Upload supporting documentation (hospital record, sick leave form, death certificate or inclusion in official local authority list)
+    documentation_reduction_income: string
+    // ben_det/safe_room [select_one] Do you have a warm, dry and safe room to spend the night in at your regular place of residence?
+    safe_room: undefined | Option<'receive_pss'>
+    // ben_det/access_water [select_one] Do you have access to potable/technical water?
+    access_water: undefined | Option<'receive_pss'>
+    // ben_det/plan_general_living [select_multiple] How do you plan to cover your general living costs for the next two weeks?
+    plan_general_living: undefined | Option<'plan_general_living'>[]
+    negative_coping: string
+    cal_status_negative: string
+    // ben_det/recent_shock [select_one] Is this because your home was damaged by a recent shock (windows, roofs or doors damaged by shelling or explosions)? or is it because your home is old and can no longer protect you from the elements (old windows, leaking roofs, etc)
+    recent_shock: undefined | Option<'recent_shock'>
+    // ben_det/repair_home_there [select_one] Are you able to repair your home so you can live safely there? or do you need support
+    repair_home_there: undefined | Option<'repair_home_there'>
+    // ben_det/ben_det_income [integer] Total value of HH resources received (UAH) in the last month
     ben_det_income: number | undefined
-    // ben_det/ben_det_hh_size [integer] Indicate the total number of people in your household, including the HHH
+    // ben_det/ben_det_hh_size [integer] Number of people in HH
     ben_det_hh_size: number | undefined
+    cal_head_tax: string
     // hh_char/hh_char_hh_det [begin_repeat] Household members
     hh_char_hh_det:
       | {
+          hh_chart_note_resp: string | undefined
           hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
+          hh_char_date_birth: Date | undefined | undefined
           hh_char_hh_det_age: number | undefined | undefined
+          hh_char_tax_id_yn: undefined | Option<'receive_pss'> | undefined
+          head_tax_id: string | undefined
+          hh_char_tax_id_num: string | undefined | undefined
+          hh_char_tax_id_photo: string | undefined
+          taxid_weightedsum: string | undefined
+          taxid_roundedsum: string | undefined
           hh_char_hh_res_stat: undefined | Option<'hh_char_hh_res_stat'> | undefined
           hh_char_hh_det_dis_select: undefined | Option<'hh_char_hh_det_dis_select'>[] | undefined
           hh_char_hh_det_dis_level: undefined | Option<'hh_char_hh_det_dis_level'> | undefined
@@ -66,22 +93,26 @@ export namespace Bn_rapidResponse2 {
     calc_sum_preg: string
     // hh_char/hh_char_chh [note] This is a child headed household (high risk protection case), please refer immediately to a DRC Protection colleague and complete internal referral form.
     hh_char_chh: string
-    // hh_char/pregnant_count [integer] How many females in the household are pregnant or lactating?
+    // hh_char/pregnant_count [integer] Number of pregnant/lactating females
     pregnant_count: number | undefined
-    // nfi/nfi_donor [select_one] Which donor for NFI
+    // nfi/nfi_donor [select_one] Donor NFI
     nfi_donor: undefined | Option<'mpca_donor'>
     // nfi/nfi_eligibility_summary [note] Based on minimum standards this house is eligible for:
     nfi_eligibility_summary: string
-    // nfi/nfi_fam_hy [note] Recommended quantity Family Hygiene Kit (HKMV)
+    // nfi/nfi_fam_hy [note] Family Hygiene Kit (HKMV) recommanded
     nfi_fam_hy: string
-    // nfi/nfi_fam_nfi [note] Recommended quantity Family NFI Kit (NFKF + KS)
+    // nfi/nfi_fam_nfi [note] Family NFI Kit (NFKF+KS) recommended
     nfi_fam_nfi: string
-    // nfi/nfi_kit_disitrbuted [select_one] Did you distribute the NFI Kits at the point of registration
-    nfi_kit_disitrbuted: undefined | Option<'shelter_safe_winter'>
+    // nfi/nfi_kit_disitrbuted [select_one] NFI Kits distributed at the point of registration?
+    nfi_kit_disitrbuted: undefined | Option<'receive_pss'>
     // nfi/nfi_dist_hkf [integer] Family Hygiene Kits (HKF)
     nfi_dist_hkf: number | undefined
+    // nfi/nfi_dist_hkf_donor [select_one] Donor Family Hygiene Kits (HKF)
+    nfi_dist_hkf_donor: undefined | Option<'mpca_donor'>
     // nfi/nfi_dist_nfkf_ks [integer] Family NFI kits distributed (NFKF + KS)
     nfi_dist_nfkf_ks: number | undefined
+    // nfi/nfi_dist_nfkf_ks_donor [select_one] Donor Family NFI kits distributed (NFKF + KS)
+    nfi_dist_nfkf_ks_donor: undefined | Option<'mpca_donor'>
     // nfi/nfi_kit_cc [integer] NFI Kit for Collective Center distributed
     nfi_kit_cc: number | undefined
     // nfi/nfi_bed [integer] Folding Beds distributed
@@ -90,60 +121,72 @@ export namespace Bn_rapidResponse2 {
     nfi_fks: number | undefined
     // nfi/donor_nfi_fks [select_one] Donor Family kitchen set (FKS)
     donor_nfi_fks: undefined | Option<'mpca_donor'>
-    // esk/esk_donor [select_one] Which donor for Emergency Shelter Kit
+    // esk/esk_donor [select_one] Donor Emergency Shelter Kit
     esk_donor: undefined | Option<'mpca_donor'>
-    // esk/esk_shelter_damage [select_one] Is there damage to your current shelter?
+    // esk/esk_shelter_damage [select_one] Current shelter damaged?
     esk_shelter_damage: undefined | Option<'esk_shelter_damage'>
     // esk/esk_note_heavy_damage [note] If there is heavy damage to this property, please refer to the shelter team immediately
     esk_note_heavy_damage: string
-    // esk/esk_estimate_sqm_damage [integer] Can you estimate the square meter or roof or window that is damaged?
+    // esk/esk_estimate_sqm_damage [integer] Square meter or roof or window that is damaged estimation
     esk_estimate_sqm_damage: number | undefined
     // esk/esk_eligibility_summary_esk [note] Based upon the answers above, the household is eligible for the following:
     esk_eligibility_summary_esk: string
-    // esk/esk_note_eligible [note] Number of kits the household is eligible for
-    esk_note_eligible: string
-    // ass_inc/mpca_donor [select_one] Which donor for MPCA
+    // esk/esk_note_eligible [integer] Number of kits the household eligible
+    esk_note_eligible: number | undefined
+    // ass_inc/mpca_donor [select_one] Donor MPCA
     mpca_donor: undefined | Option<'mpca_donor'>
-    // ass_inc/mpca_amount [note] The provisional calculated total benefit for this household (HH Size × UAH 3,600 × 3 Months) will be UAH <span style="color: red">Do not read this out to the household</span>
+    // ass_inc/mpca_amount [note] Provisional calculated benefit (HH Size × UAH 3,600 × 3 Months)
     mpca_amount: string
     // ass_inc/pay_consent [note] Ensure the interviewee agrees to provide their payment details before completing the form.
     pay_consent: string
-    // ass_inc/pay_det_id_type [select_one] What form of ID do you have?
+    // ass_inc/pay_det_id_type [select_one] Form of ID
     pay_det_id_type: undefined | Option<'pay_det_id_type'>
-    // ass_inc/pay_det_id_type_oth [text] What other form of ID do you have?
+    // ass_inc/pay_det_id_type_oth [text] Other form of ID
     pay_det_id_type_oth: string | undefined
     // ass_inc/pay_det_pass_ser [text] Input Passport Series
     pay_det_pass_ser: string | undefined
     // ass_inc/pay_det_pass_num [text] Number of ID
     pay_det_pass_num: string | undefined
-    // ass_inc/pay_det_id_ph [image] Take a photo of the ID
+    // ass_inc/pay_det_id_ph [image] ID photo
     pay_det_id_ph: string
-    // ass_inc/pay_det_tax_id_yn [select_one] Do you have an individual tax number (TIN)?
-    pay_det_tax_id_yn: undefined | Option<'shelter_safe_winter'>
-    // ass_inc/pay_det_tax_id_num [text] What is your individual tax number?
+    // ass_inc/pay_det_tax_id_yn [select_one] Have Individual tax number (TIN)?
+    pay_det_tax_id_yn: undefined | Option<'receive_pss'>
+    // ass_inc/pay_det_tax_id_num [text] Tax number
     pay_det_tax_id_num: string | undefined
-    // ass_inc/pay_det_tax_id_ph [image] Take a photo of the Tax ID
+    // ass_inc/cal_organization [calculate] Organization
+    cal_organization: string
+    // ass_inc/cal_category [calculate] Category
+    cal_category: string
+    // ass_inc/cal_currency [calculate] Currency
+    cal_currency: string
+    // ass_inc/cal_amount [calculate] Amount
+    cal_amount: string
+    // ass_inc/cal_date_start [calculate] Start (YYYYMMDD)
+    cal_date_start: string
+    // ass_inc/cal_date_end [calculate] End (YYYYMMDD)
+    cal_date_end: string
+    // ass_inc/pay_det_tax_id_ph [image] Tax number photo
     pay_det_tax_id_ph: string
-    // ass_inc/pay_det_tax_exempt [select_one] Do you have a tax exemptions?
-    pay_det_tax_exempt: undefined | Option<'shelter_safe_winter'>
-    // ass_inc/pay_det_tax_exempt_im [image] Take a photo of the proof of the tax of exemptions
+    // ass_inc/pay_det_tax_exempt [select_one] Have a tax exemptions?
+    pay_det_tax_exempt: undefined | Option<'receive_pss'>
+    // ass_inc/pay_det_tax_exempt_im [image] Proof of the tax of exemptions photo
     pay_det_tax_exempt_im: string
-    // ass_inc/pay_det_pay_meth [select_one] What is your preferred payment method?
+    // ass_inc/pay_det_pay_meth [select_one] Preferred payment method?
     pay_det_pay_meth: undefined | Option<'pay_det_pay_meth'>
-    // ass_inc/pay_det_iban [text] What is your IBAN number?
+    // ass_inc/pay_det_iban [text] IBAN
     pay_det_iban: string | undefined
     pay_det_iban_length: string
-    // ass_inc/pay_det_iban_im [image] Take a picture of IBAN number if available
+    // ass_inc/pay_det_iban_im [image] IBAN number photo if available
     pay_det_iban_im: string
-    // ass_inc/pay_address [text] Your address
+    // ass_inc/pay_address [text] Address
     pay_address: string | undefined
-    // ass_inc/pay_zip [text] Your ZIP code
+    // ass_inc/pay_zip [text] ZIP code
     pay_zip: string | undefined
-    // ass_inc/pay_det_add_im [image] Take a picture of the address page of passport
+    // ass_inc/pay_det_add_im [image] Address page of passport photo
     pay_det_add_im: string
-    // ass_inc/pay_det_pay_meth_oth [text] What other Payment methods do you prefer?
+    // ass_inc/pay_det_pay_meth_oth [text] Other Payment methods?
     pay_det_pay_meth_oth: string | undefined
-    // ass_inc/pay_det_pay_meth_none [text] Can you highlight the main reason that none of these payment methods are suitable to you?
+    // ass_inc/pay_det_pay_meth_none [text] Reason why no suitable payment method
     pay_det_pay_meth_none: string | undefined
     // mpca_bha_345/extent_basic_needs_bha345 [select_one] M02. To what extent is your household able to meet the basic needs of your HH according to your priorities?
     extent_basic_needs_bha345: undefined | Option<'extent_basic_needs_bha345'>
@@ -156,13 +199,13 @@ export namespace Bn_rapidResponse2 {
     // mpca_bha_345/basic_needs_unable_fully_reason_other_bha345 [text] M02.2 Why are you unable to fully meet this need, if other?
     basic_needs_unable_fully_reason_other_bha345: string | undefined
     // mpca_bha_345/items_basicevel_comfort_bha_345 [select_one] M11. Does your household currently have enough clothing, bedding, cooking supplies, fuel, lighting, and other items needed to provide a basic level of comfort?
-    items_basicevel_comfort_bha_345: undefined | Option<'shelter_safe_winter'>
+    items_basicevel_comfort_bha_345: undefined | Option<'receive_pss'>
     // mpca_bha_345/items_basicevel_comfort_no_bha_345 [select_multiple] M11.1 If no, what items do you still feel you need?
     items_basicevel_comfort_no_bha_345: undefined | Option<'items_basicevel_comfort_no_bha_345'>[]
     // mpca_bha_345/items_basicevel_comfort_no_other_bha_345 [text] M11.1.1 If no, what other items do you still feel you need?
     items_basicevel_comfort_no_other_bha_345: string | undefined
     // mpca_bha_345/member_access_water_bha_345 [select_one] M12. Does your home have enough safe water for everyone in your household to drink, cook and wash?
-    member_access_water_bha_345: undefined | Option<'shelter_safe_winter'>
+    member_access_water_bha_345: undefined | Option<'receive_pss'>
     // esk_bha_345_m04/where_staying [select_one] M04. Where are you staying?
     where_staying: undefined | Option<'where_staying'>
     // esk_bha_345_m04/where_staying_other [text] M04.1 Where are you staying, if other?
@@ -172,22 +215,41 @@ export namespace Bn_rapidResponse2 {
     // esk_bha_345_m04/separate_space_girls [select_one] M04.3 Do you have separate space for Adolescent girls and pregnant and lactating women (PLWs) in side your house/shelters?
     separate_space_girls: undefined | Option<'separate_space_girls'>
     // esk_bha_345_m04/shelter_safe_winter [select_one] M04.4 Is your existing shelter/house is safe from winter, wind (health risks)?
-    shelter_safe_winter: undefined | Option<'shelter_safe_winter'>
-    // fin_det/fin_det_res [text] Other Comments from Respondent
+    shelter_safe_winter: undefined | Option<'receive_pss'>
+    // protection_questions/legal_support [select_one] 1. Do you need legal support regarding any of the following topics?
+    legal_support: undefined | Option<'legal_support'>
+    // protection_questions/not_legal_support [note] *Note for DRC staff member*: If yes refer to Legal
+    not_legal_support: string
+    // protection_questions/member_injured_mine [select_one] 2. Have you or any member of your household been injured by a mine, shell, or other explosive device?
+    member_injured_mine: undefined | Option<'stressful_events'>
+    // protection_questions/members_require_medical [select_one] 2.1. If yes, would do you or your family members require support for medical/rehabilitative treatment or other support?
+    members_require_medical: undefined | Option<'stressful_events'>
+    // protection_questions/not_va [note] *Note for DRC staff member*: If yes refer to VA
+    not_va: string
+    // protection_questions/stressful_events [select_one] 3. Have recent stressful events affected you emotionally—for example, causing feelings such as anxiety, fear, anger, irritability, panic, or sadness
+    stressful_events: undefined | Option<'stressful_events'>
+    // protection_questions/receive_pss [select_one] 3.1. If yes, would you like to receive psychological support?
+    receive_pss: undefined | Option<'receive_pss'>
+    // protection_questions/not_pss [note] *Note for DRC staff member*: If yes refer to PSS
+    not_pss: string
+    protection_ref_dep: string
+    // fin_det/fin_det_res [text] Comments Respondent
     fin_det_res: string | undefined
-    // fin_det/fin_det_enum [text] Other Comments from Enumerator
+    // fin_det/fin_det_enum [text] Comments Enumerator
     fin_det_enum: string | undefined
-    // fin_det/fin_det_oth_doc_im [image] Please take picture of any other relevant document
+    // fin_det/not_add_photo [note] **Picture of any other relevant document The following is a list of non-mandatory but recommended documents that may be requested, depending on availability and the type of group. These documents can help justify the partner’s eligibility for tax exemption, as they relate to conflict-affected populations. It is not required to submit all of them—one or more may be requested based on the context. No documents other than those listed below may be requested or uploaded.** - Police reports, building inspection certificates, official documentation of the damage. - Local authorities lists. - Photos of the damage. Evacuation orders and announcements. - Registration records in official evacuation/transit centers or collective sites. - Transport receipt. - IDP certificate or other registration documents established by local authorities. - Documentation verifying a self-evacuation and new location vs the previous place of origin or habitual residence (place of residence as indicated in Ukraine passport, place of residence as indicated in paper annex to Ukraine ID-card, certificate of actual place of residence, rental agreement).  - Lists/documentation provided by humanitarian organizations, CSOs, and volunteers conducting evacuations)  - Damaged property report
+    not_add_photo: string
+    // fin_det/fin_det_oth_doc_im [image] Additionals photos
     fin_det_oth_doc_im: string
     // fin_det/additionals_photo1 [image] Additionals photos
     additionals_photo1: string
     // fin_det/additionals_photo2 [image] Additionals photos
     additionals_photo2: string
+    // fin_det/additionals_photo3 [image] Additionals photos
+    additionals_photo3: string
   }
   export const options = {
     back_office: {
-      lwo: `Lviv (LWO)`,
-      chj: `Chernihiv (CHJ)`,
       dnk: `Dnipro (DNK)`,
       hrk: `Kharkiv (HRK)`,
       nlv: `Mykloaiv (NLV)`,
@@ -197,23 +259,18 @@ export namespace Bn_rapidResponse2 {
       anna_artiukh: `Anna Artiukh`,
       vitalii_hrynenko: `Vitalii Hrynenko`,
       yevhenii_musiienko: `Yevhenii Musiienko`,
-      dmytro_ivanov: `Dmytro Ivanov`,
-      henadii_petrychenko: `Henadii Petrychenko`,
-      nadiia_yudaieva: `Nadiia Yudaieva`,
-      dmytro_tsaruk: `Dmytro Tsaruk`,
-      viktoria_ushan: `Viktoria Ushan`,
-      kostiantyn_yefimchuk: `Kostiantyn Yefimchuk`,
-      viktoriia_lytvynova: `Viktoriia Lytvynova`,
-      valerii_vietrov: `Valerii Vietrov`,
-      daria_kokalia: `Daria Kokalia`,
-      artem_chernukha_1: `Artem Chernukha`,
-      lwo_ex1: `Extra 1`,
-      lwo_ex2: `Extra 2`,
-      ievgen_kylymenniy: `Ievgen Kylymenniy`,
-      oleksandr_shmunk: `Oleksandr Shmunk`,
+      maksym_sedun: `Maksym Sedun`,
+      oleksii_marchenko: `Oleksii Marchenko`,
+      artem_chernukha: `Artem Chernukha`,
+      svitlana_labunska: `Svitlana Labunska`,
+      nataliia_lanina: `Nataliia Lanina`,
+      olena_suhoniak: `Olena Suhoniak`,
+      mykola_marchenko: `Mykola Marchenko`,
       inna_kovalchuk: `Inna Kovalchuk`,
-      polina_prusakova: `Polina Prusakova`,
+      oleksandr_shmunk: `Oleksandr Shmunk`,
       mykyta_pokynboroda: `Mykyta Pokynboroda`,
+      ievgen_kylymenniy: `Ievgen Kylymenniy`,
+      polina_prusakova: `Polina Prusakova`,
       anna_pastushenko: `Anna Pastushenko`,
       nlv_ex1: `Extra 1`,
       nlv_ex2: `Extra 2`,
@@ -241,36 +298,30 @@ export namespace Bn_rapidResponse2 {
       oleksii_pohorielov: `Oleksii Pohorielov`,
       hrk_ex1: `Extra 1`,
       hrk_ex2: `Extra 2`,
-      dmytro_chernukha: `Dmytro Chernukha`,
-      anastasiia_reshynska: `Anastasiia Reshynska`,
-      nataliia_pushenko: `Nataliia Pushenko`,
-      tetiana_gorbatiuk: `Tetiana Gorbatiuk`,
-      oleksandr_lukomets: `Oleksandr Lukomets`,
-      tetiana_kolot: `Tetiana Kolot`,
-      katerina_severin: `Katerina Severin`,
-      maksim_sedun: `Maksim Sedun`,
-      ivan_volynkin: `Ivan Volynkin`,
-      surzhyk_oleksandr: `Surzhyk Oleksandr`,
-      chj_ex1: `Extra 1`,
-      chj_ex2: `Extra 2`,
     },
     mpca_donor: {
-      ukr000322_echo2: `UKR-000322 ECHO2`,
-      ukr000372_echo3: `UKR-000372 ECHO3`,
+      ukr000270_pooledfunds: `UKR-000270 Pooled Funds`,
       ukr000314_uhf4: `UKR-000314 UHF4`,
+      ukr000322_echo2: `UKR-000322 ECHO2`,
+      ukr000329_sida: `UKR-000329 SIDA`,
+      ukr000330_sdc2: `UKR-000330 SDC2`,
+      ukr000336_uhf6: `UKR-000336 UHF6`,
+      ukr000342_pooledfunds: `UKR-000342 Pooled Funds`,
       ukr000345_bha2: `UKR-000345 BHA2`,
       ukr000360_novonordisk: `UKR-000360 Novo-Nordisk`,
-      ukr000270_pooledfunds: `UKR-000270 Pooled Funds`,
-      ukr000342_pooledfunds: `UKR-000342 Pooled Funds`,
-      ukr000330_sdc2: `UKR-000330 SDC2`,
+      ukr000370_sida: `UKR-000370 SIDA`,
+      ukr000372_echo3: `UKR-000372 ECHO3`,
       ukr000380_danida: `UKR-000380 DANIDA`,
+      ukr000386_mass_appeal: `UKR-000386 Mass Appeal Ukraine 2024`,
+      ukr000418_sida: `UKR-000418 SIDA`,
+      ukr000423_echo: `UKR-000423 ECHO4`,
     },
     back_prog_type: {
       mpca: `MPCA`,
       esk: `Emergency Shelter Kit`,
       nfi: `NFI`,
     },
-    shelter_safe_winter: {
+    receive_pss: {
       yes: `Yes`,
       no: `No`,
     },
@@ -364,6 +415,14 @@ export namespace Bn_rapidResponse2 {
       cooking: `For cooking`,
       washing: `For washing`,
       none: `None`,
+      police_reports: `Police reports, building inspection certificates, official documentation of the damage.`,
+      local_authorities_lists: `Local authorities lists.`,
+      photos_damage: `Photos of the damage. Evacuation orders and announcements.`,
+      records_official_evacuation: `Registration records in official evacuation/transit centers or collective sites.`,
+      transport_receipt: `Transport receipt.`,
+      idp_certificate: `IDP certificate or other registration documents established by local authorities.`,
+      verifying_self_evacuation: `Documentation verifying a self-evacuation and new location vs the previous place of origin or habitual residence (place of residence as indicated in Ukraine passport, place of residence as indicated in paper annex to Ukraine ID-card, certificate of actual place of residence, rental agreement).`,
+      documentation_ngo: `Lists/documentation provided by humanitarian organizations, CSOs, and volunteers conducting evacuations)`,
     },
     hh_char_hh_det_dis_select: {
       diff_see: `Have difficulty seeing, even if wearing glasses`,
@@ -461,7 +520,50 @@ export namespace Bn_rapidResponse2 {
       dorm: `In dorm`,
       other: `Other`,
     },
-  }
+    reduction_income: {
+      member_injured: `A family member was injured and is currently receiving medical treatment or hospitalized due to a conflict related event`,
+      member_passed: `A family member passed away due to a conflict-related event`,
+      member_sick_leave: `A family member is on sick leave due to an injury related to the conflict related event`,
+      no_events: `No such events occurred`,
+    },
+    plan_general_living: {
+      current_salary: `✅ Current Salary/other income generating activity`,
+      borrow_money: `❌ Borrow money from friends and family`,
+      buying_credit: `❌ Buying on credit at shops`,
+      loan_bank: `❌ Take a loan from a bank or micro-finance institutions`,
+      selling_households_items: `❌ Selling of critical households’ items/assets (households goods, means of transportation [car, bike, etc.], land/house)`,
+      moving_unsafe_area: `❌ Moving to a more unsafe area / overcrowded dwelling`,
+      reduce_health_expenditures: `❌ Reduce/Postpone essential health expenditures (including drugs, etc.)?`,
+      reduce_essential_education: `❌ Reduce essential education expenditures?`,
+      apply_humanitarian_aid: `✅ Apply for humanitarian aid`,
+      look_new_job: `✅ Look for a new/second job`,
+      remittances: `✅ Remittances (money from abroad)`,
+      dividends_investments: `✅ Dividends from investments/ rental payments from house`,
+      decrease_household_expenditures: `❌ Decrease household expenditures`,
+      buy_small_amounts: `❌ Buy small amounts of goods/shop at discount stores`,
+      received_social_benefits: `✅ Received Social Benefits (Pensions, Disability, ETC)`,
+    },
+    legal_support: {
+      lost_documents: `Lost or damaged personal documents or property ownership documents`,
+      damaged_housing: `Damaged or destroyed housing.`,
+      injuries_explosive: `Injuries caused by explosive ordnance`,
+      no: `No`,
+      pns: `Prefer not to say`,
+    },
+    stressful_events: {
+      yes: `Yes`,
+      no: `No`,
+      pns: `Prefer not to say`,
+    },
+    recent_shock: {
+      new: `Damaged by recent shock`,
+      old: `Old and in disrepair`,
+    },
+    repair_home_there: {
+      yes: `Yes, I can`,
+      no: `No, I need support`,
+    },
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}
@@ -479,9 +581,11 @@ export namespace Bn_rapidResponse2 {
       date: _.date ? new Date(_.date) : undefined,
       back_prog_type: _.back_prog_type?.split(' '),
       ben_det_ph_number: _.ben_det_ph_number ? +_.ben_det_ph_number : undefined,
+      plan_general_living: _.plan_general_living?.split(' '),
       ben_det_income: _.ben_det_income ? +_.ben_det_income : undefined,
       ben_det_hh_size: _.ben_det_hh_size ? +_.ben_det_hh_size : undefined,
       hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {
+        _['hh_char_date_birth'] = _.hh_char_date_birth ? new Date(_.hh_char_date_birth) : undefined
         _['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
         _['hh_char_hh_det_dis_select'] = _.hh_char_hh_det_dis_select?.split(' ')
         return _
@@ -493,6 +597,7 @@ export namespace Bn_rapidResponse2 {
       nfi_bed: _.nfi_bed ? +_.nfi_bed : undefined,
       nfi_fks: _.nfi_fks ? +_.nfi_fks : undefined,
       esk_estimate_sqm_damage: _.esk_estimate_sqm_damage ? +_.esk_estimate_sqm_damage : undefined,
+      esk_note_eligible: _.esk_note_eligible ? +_.esk_note_eligible : undefined,
       basic_needs_unable_fulfill_bha345: _.basic_needs_unable_fulfill_bha345?.split(' '),
       basic_needs_unable_fully_reason_bha345: _.basic_needs_unable_fully_reason_bha345?.split(' '),
       items_basicevel_comfort_no_bha_345: _.items_basicevel_comfort_no_bha_345?.split(' '),

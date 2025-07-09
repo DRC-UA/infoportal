@@ -8,12 +8,12 @@ export namespace AiMpcaType {
     'Plan/Project Code': Opt<'MPCA Activity Planning Module (APM) - 2025'>
     Donor: Opt<'Donor'>
     /**
-        Select the type of MPCA: MPCA or Rapid MPCA.
-      */
+      Select the type of MPCA: MPCA or Rapid MPCA.
+    */
     Activity: Opt<'Indicators - MPC'>
     'Payment Frequency': Opt<'Payment Frequency'>
     'Financial Service Provider (FSP)': Opt<'Financial Service Provider (FSP)'>
-    Theme?: Opt<'Theme'>
+    Theme: Opt<'Theme'>
     Oblast: string
     Raion: string
     Hromada: string
@@ -24,8 +24,8 @@ export namespace AiMpcaType {
     'Number of Covered Months': Opt<'Number of Covered Months'>
     'Population Group': Opt<'Population Group'>
     /**
-        The total cost for the MPCA activity, including financial service provider costs.
-      */
+      The total cost for the MPCA activity, including financial service provider costs.
+    */
     'Total amount (USD) distributed through MPCA': number
     'Total People Assisted': number
     'Girls (0-17)': number
@@ -35,32 +35,32 @@ export namespace AiMpcaType {
     'Older Women (60+)': number
     'Older Men (60+)': number
     /**
-        Out of the total individuals reached
-      */
+      Out of the total individuals reached
+    */
     'People with disability': number
     /**
-        Out of the total individuals reached
-      */
+      Out of the total individuals reached
+    */
     'Girls with disability (0-17)'?: number
     /**
-        Out of the total individuals reached
-      */
+      Out of the total individuals reached
+    */
     'Boys with disability (0-17)'?: number
     /**
-        Out of the total individuals reached
-      */
+      Out of the total individuals reached
+    */
     'Adult Women with disability (18-59)'?: number
     /**
-        Out of the total individuals reached
-      */
+      Out of the total individuals reached
+    */
     'Adult Men with disability (18-59)'?: number
     /**
-        Out of the total individuals reached
-      */
+      Out of the total individuals reached
+    */
     'Older Women with disability (60+)'?: number
     /**
-        Out of the total individuals reached
-      */
+      Out of the total individuals reached
+    */
     'Older Men with disability (60+)'?: number
     'HNRP Scope'?: Opt<'HNRP Scope'>
     'Outside HNRP Scope sub-category'?: Opt<'Outside HNRP Scope categories'>
@@ -574,7 +574,7 @@ export namespace AiMpcaType {
       'TERRA TECH (TERRATECH)': 'caax89km4s9ijyqom',
       'OLAM (OLAM)': 'cm4e3ocm4s9ijyqon',
       'Farmaceuticos Mundi (Farmamundi)': 'cf29j6qm4s9ijyqoo',
-      'Ukrainian National Women’s League of America (UNWLA)': 'cg033s2m4s9ijyqop',
+      "Ukrainian National Women's League of America (UNLWA)": 'cg033s2m4s9ijyqop',
       'If! Foundation (If!)': 'ctb15qjm4s9ijyqoq',
       'Hilfswerk International (HWI)': 'ckieh1ym4s9ijyqor',
       'The German Marshall Fund of the United States (GMF)': 'csmsiedm4s9ijyqos',
@@ -626,6 +626,20 @@ export namespace AiMpcaType {
       'Expertise France (ExpertiseF)': 'c6lo05om85rig4n4',
       'Ministry of the Interior of the Czech Republic (MV Czech)': 'cobvsihm8d39qsl3',
       '#WeAreAllUkrainians (WeAreAllUkrainians)': 'cdu1ha5m9857k0i2',
+      'Dignity - Danish Institute Against Torture (Dignity)': 'cnguak8m9a09oz97',
+      'National Network of Local Philanthropy Development (NNLPD)': 'c5cwa62m9a2ymcv2',
+      'Enza Zaden Ukraine (EnzaZaden)': 'c4imszbmacjqrk13',
+      'AF Jochnick Foundation (AFJochnick)': 'c1nd2humadx6iym3',
+      'Biosphere Corporation (Biosphere)': 'cqzy4wjmakzf6bz5',
+      'DM-Drogerie Markt (DM-DM)': 'csu83nzmakzf6bz6',
+      'Ecoclub (Ecoclub)': 'c9f20rsmaqzx3763',
+      'The Global Village Fund of Felissimo Corporation (GVF)': 'cd3e3bxmb0o1iu83',
+      'Credit Agricole (Credit Agricole)': 'cbo5qajmbhvc77e2',
+      'Biedronka Foundation (Biedronka)': 'co304bpmbi0zvn12',
+      'Integrity Action (IntegrityAction)': 'cksd8nrmbs55vpr3',
+      'A Family for Every Orphan (AFFEO)': 'cqtsrqtmbs55vpr4',
+      'World Relief (WorldRelief)': 'cfcveygmcsrbadf3',
+      'Development Helps Alliance (DHA)': 'cnl3620mcu9adl93',
     },
     'Indicators - MPC': {
       'MPCA > Provision of multi-purpose cash > # individuals assisted with MPC': 'cvrs9bum4v5isrx16',
@@ -648,7 +662,11 @@ export namespace AiMpcaType {
       'Ukrposhta (pick up)': 'c6val5gm6kqtf012c',
       'Western Union': 'cfd114jm6kqtif02d',
     },
-    Theme: {'No specific theme': 'c6rj6slm558kb1281'},
+    Theme: {
+      'Emergency response after strikes': 'cm6w4fwmaa2j7ob4',
+      Evacuations: 'c6rj6slm558kb1281',
+      'Evacuations; Emergency response after strikes': 'cmorvwvmaa2lhmv6',
+    },
     'Number of Covered Months': {
       'One month': 'c3xgbpkm559hsia92',
       'Two months': 'chepl27m559i9mm94',
