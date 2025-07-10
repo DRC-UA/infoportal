@@ -5,13 +5,13 @@ import {
   DrcProgram,
   DrcProject,
   groupBy,
-  IKoboMeta,
   KoboIndex,
-  KoboMetaEcrecTags,
   KoboMetaStatus,
-  Period,
   PeriodHelper,
   safeNumber,
+  type IKoboMeta,
+  type KoboMetaEcrecTags,
+  type Period,
 } from 'infoportal-common'
 
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
