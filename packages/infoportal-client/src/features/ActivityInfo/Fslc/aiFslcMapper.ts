@@ -56,7 +56,7 @@ export namespace AiFslcMapper {
       const msmePayments: Map<string, number> = new Map(
         (await api.kobo.answer.searchByAccess({formId: msmeGrantRegFormId})).data
           .filter(({id}) => msmeIds.has(id))
-          .map(({id, amount_payment}) => [id, Number(amount_payment)]),
+          .map(({id, amount_payment}) => [id, amount_payment !== undefined ? Math.round(Number(amount_payment)) : 0]),
       )
 
       return Promise.all(
