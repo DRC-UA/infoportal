@@ -1,6 +1,6 @@
 import {Legal_individual_aid} from 'infoportal-common'
 
-const civic_doc_date_fields = [
+const civilDocDateFields = [
   'date_recipt_personal_identity',
   'date_recipt_personal_territorial',
   'date_recipt_personal_education',
@@ -27,9 +27,9 @@ const civic_doc_date_fields = [
   'date_recipt_statuses_other',
 ] as const satisfies readonly (keyof NonNullable<Legal_individual_aid.T['number_case']>[number])[]
 
-const hlp_doc_date_fields = [
+const hlpDocDateFields = [
   'date_recipt_ownership_documents_housing',
   'date_recipt_ownership_documents_land',
 ] as const satisfies readonly (keyof NonNullable<Legal_individual_aid.T['number_case']>[number])[]
 
-export {civic_doc_date_fields, hlp_doc_date_fields}
+export {civilDocDateFields, hlpDocDateFields}

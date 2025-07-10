@@ -53,7 +53,7 @@ const useIndividualAidData = () => {
           multiple: true,
           getOptions: () =>
             DataFilter.buildOptionsFromObject(Legal_individual_aid.options.beneficiary_application_type),
-          label: m.legal.caseType.title,
+          label: m.legal.aidType.title,
         },
         caseStatus: {
           icon: 'fact_check',
@@ -62,7 +62,7 @@ const useIndividualAidData = () => {
           },
           multiple: true,
           getOptions: () => DataFilter.buildOptionsFromObject(Legal_individual_aid.options.status_case),
-          label: m.legal.caseStatus,
+          label: m.legal.aidStatus,
         },
         caseCategory: {
           icon: 'check',
@@ -71,7 +71,7 @@ const useIndividualAidData = () => {
           },
           multiple: true,
           getOptions: () => DataFilter.buildOptionsFromObject(Legal_individual_aid.options.category_issue),
-          label: m.legal.caseCategory,
+          label: m.legal.aidCategory,
         },
       }),
     [m],

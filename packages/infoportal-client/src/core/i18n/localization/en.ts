@@ -550,9 +550,11 @@ export const en = Object.freeze({
       accountabilityCRM: 'Accountability',
       didReceive: 'Did you receive Cash assistance from DRC?',
       typePrefer: 'Which type of assistance would better support your agricultural needs?',
-      itemsHelpful: 'If you selected in-kind support or a combination, what specific items or resources would be most helpful for your household?',
+      itemsHelpful:
+        'If you selected in-kind support or a combination, what specific items or resources would be most helpful for your household?',
       infoTraining: 'What type of training or info would be most helpful?',
-      trainingImprove: 'Would training or additional information on farming or livestock activities help you improve your agricultural practices or use of cash assistance effectively?',
+      trainingImprove:
+        'Would training or additional information on farming or livestock activities help you improve your agricultural practices or use of cash assistance effectively?',
       manage: 'Did you manage to buy solid fuel?',
       spent: 'Have you spent the cash assistance you received yet?',
       spendOn: 'Did you spend the cash on what you received it for?',
@@ -1253,21 +1255,20 @@ export const en = Object.freeze({
     },
     legal: {
       individualAid: 'Individual Legal Aid',
-      caseType: {
-        title: 'Case type',
+      aidType: {
+        title: 'Aid type',
         assistance: 'Assistance',
         councelling: 'Councelling',
       },
-      docTypeCount: {
-        hlp: 'HLP docs issued',
-        civilDocs: 'Civil docs issued',
+      docsCount: {
+        hlp: 'Received HLP docs',
+        civilDocs: 'Received civil docs',
       },
       registeredBy: 'Registered by',
-      caseStatus: 'Case status',
-      caseCategory: 'Case category',
-      caseDate: 'Case date',
-      caseClosureDate: 'Case closure date',
-      allCasesCountTitle: 'Cases',
+      aidStatus: 'Aid status',
+      aidCategory: 'Aid category',
+      aidDate: 'Aid date',
+      aidClosureDate: 'Aid closure date',
       map: {
         title: 'Beneficiaries by oblasts',
       },

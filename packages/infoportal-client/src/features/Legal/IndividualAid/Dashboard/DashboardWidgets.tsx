@@ -1,8 +1,8 @@
 import type {FC} from 'react'
-import {seq, match, Obj} from '@axanc/ts-utils'
+import {match, Obj} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 
-import {DrcProject, KoboXmlMapper, OblastIndex, Legal_individual_aid, isDate} from 'infoportal-common'
+import {DrcProject, KoboXmlMapper, OblastIndex, Legal_individual_aid, isDate, pluralize} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {SlideWidget, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
@@ -16,12 +16,39 @@ import {Div} from '@/shared/PdfLayout/PdfSlide'
 
 import {useIndividualAidContext} from './context'
 
-import {civic_doc_date_fields, hlp_doc_date_fields} from './constants'
+import {civilDocDateFields, hlpDocDateFields} from './constants'
+
+// MEMO: all figures are PEOPLE - those who receive aid, get documents issued etc
 
 const Widgets: FC = () => {
   const {dataFiltered} = useIndividualAidContext()
   const {m} = useI18n()
-  const cases = dataFiltered.map(({number_case}) => number_case).flat()
+  // the data is already memoized in the hook called above
+  // calculate everything in one Array.prototype.reduce run:
+  const {assistances, counselling, docs} = dataFiltered.reduce(
+    (result, {number_case}) => ({
+      ...result,
+      ...(number_case.some(({beneficiary_application_type}) => beneficiary_application_type === 'assistance')
+        ? {
+            assistances: ++result.assistances,
+          }
+        : {
+            counselling: ++result.counselling,
+          }),
+      ...(number_case.some((aid) => hlpDocDateFields.some((field) => isDate(aid[field])))
+        ? {docs: {...result.docs, hlp: ++result.docs.hlp}}
+        : number_case.some((aid) => civilDocDateFields.some((field) => isDate(aid[field])))
+          ? {docs: {...result.docs, civil: ++result.docs.civil}}
+          : undefined),
+      ...number_case.some,
+    }),
+    {
+      assistances: 0,
+      counselling: 0,
+      docs: {hlp: 0, civil: 0},
+      status: {closed: 0, pending: 0},
+    },
+  )
 
   return (
     <Div responsive paddingBottom={2}>
@@ -30,28 +57,19 @@ const Widgets: FC = () => {
           <SlideWidget icon="person" title={m.individuals}>
             {dataFiltered.length}
           </SlideWidget>
-          <SlideWidget icon="cases" title={m.legal.allCasesCountTitle}>
-            {cases.length}
+          <SlideWidget icon="cases" title={pluralize(m.legal.aidType.assistance)}>
+            {assistances}
+          </SlideWidget>
+          <SlideWidget icon="question_answer" title={m.legal.aidType.councelling}>
+            {counselling}
           </SlideWidget>
         </Box>
         <Box display="flex" gap={2} mb={2}>
-          <SlideWidget icon="description" title={m.legal.docTypeCount.hlp}>
-            {cases.reduce((prev, current) => {
-              hlp_doc_date_fields.forEach((field) => {
-                if (isDate(current[field])) prev++
-              })
-
-              return prev
-            }, 0)}
+          <SlideWidget icon="description" title={m.legal.docsCount.hlp}>
+            {docs.hlp}
           </SlideWidget>
-          <SlideWidget icon="description" title={m.legal.docTypeCount.civilDocs}>
-            {cases.reduce((prev, current) => {
-              civic_doc_date_fields.forEach((field) => {
-                if (isDate(current[field])) prev++
-              })
-
-              return prev
-            }, 0)}
+          <SlideWidget icon="description" title={m.legal.docsCount.civilDocs}>
+            {docs.civil}
           </SlideWidget>
         </Box>
         <SlidePanel>
@@ -62,23 +80,10 @@ const Widgets: FC = () => {
             persons={dataFiltered.flatMap(KoboXmlMapper.Persons.legal_individual_aid)}
           />
         </SlidePanel>
-        <SlidePanel title={m.legal.caseType.title}>
+        <SlidePanel title={m.legal.aidStatus}>
           <ChartBarSingleBy
-            data={seq(cases).map(({beneficiary_application_type: case_type}) => ({
-              case_type: match(case_type)
-                .cases({
-                  assistance: m.legal.caseType.assistance,
-                  counselling: m.legal.caseType.councelling,
-                })
-                .default(m.notSpecified),
-            }))}
-            by={({case_type}) => case_type}
-          />
-        </SlidePanel>
-        <SlidePanel title={m.legal.caseStatus}>
-          <ChartBarSingleBy
-            data={seq(cases).map(({status_case}) => ({
-              status_case: match(status_case)
+            data={dataFiltered.map(({number_case}) => ({
+              status_case: match(number_case[0].status_case)
                 .cases({
                   pending: Legal_individual_aid.options.status_case.pending,
                   closed_ready: Legal_individual_aid.options.status_case.closed_ready,
@@ -88,24 +93,24 @@ const Widgets: FC = () => {
             by={({status_case}) => status_case}
           />
         </SlidePanel>
-        <SlidePanel title={m.legal.caseCategory}>
-          <ChartBarSingleBy
-            data={seq(cases).map(({category_issue}) => ({
+        <SlidePanel title={m.legal.aidCategory}>
+          {/* <ChartBarSingleBy
+            data={cases.map(({category_issue}) => ({
               category_issue:
                 category_issue === undefined
                   ? m.notSpecified
                   : Legal_individual_aid.options.category_issue[category_issue],
             }))}
             by={({category_issue}) => category_issue}
-          />
+          /> */}
         </SlidePanel>
         <SlidePanel title={m.project}>
-          <ChartBarSingleBy
-            data={seq(cases).map(({project}) => ({
+          {/* <ChartBarSingleBy
+            data={cases.map(({project}) => ({
               project: DrcProject[Legal_individual_aid.options.project[project!]],
             }))}
             by={({project}) => project}
-          />
+          /> */}
         </SlidePanel>
       </Div>
       <Div column>
@@ -114,9 +119,7 @@ const Widgets: FC = () => {
             <Lazy
               deps={[dataFiltered]}
               fn={(data) => {
-                const beneficiariesGroupedByOblast = seq(data).groupBy(
-                  ({oblast}) => OblastIndex.byKoboName(oblast)?.iso!,
-                )
+                const beneficiariesGroupedByOblast = data.groupBy(({oblast}) => OblastIndex.byKoboName(oblast)?.iso!)
                 return {
                   data: new Obj(beneficiariesGroupedByOblast)
                     .map((k, v) => [k, makeChartData({value: v.length})])
@@ -131,8 +134,8 @@ const Widgets: FC = () => {
         </Panel>
         <SlidePanel title={m.office}>
           <ChartBarSingleBy
-            data={seq(cases)
-              .map(({office}) => office)
+            data={dataFiltered
+              .map(({number_case}) => number_case[0].office)
               .compact()
               .map((office) => ({
                 office: Legal_individual_aid.options.office[office],
@@ -142,8 +145,8 @@ const Widgets: FC = () => {
         </SlidePanel>
         <SlidePanel title={m.legal.registeredBy}>
           <ChartBarSingleBy
-            data={seq(cases)
-              .map(({first_lawyer}) => first_lawyer)
+            data={dataFiltered
+              .map(({number_case}) => number_case[0].first_lawyer)
               .compact()
               .map((first_lawyer) => ({
                 first_lawyer: Legal_individual_aid.options.another_lawyer[first_lawyer],
