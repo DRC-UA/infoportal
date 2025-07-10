@@ -2,12 +2,14 @@ import {match, Seq} from '@axanc/ts-utils'
 
 import {
   add,
+  Ecrec_msmeGrantReg,
   DrcProgram,
   DrcProject,
   groupBy,
   KoboIndex,
   KoboMetaStatus,
   PeriodHelper,
+  Person,
   safeNumber,
   type IKoboMeta,
   type KoboMetaEcrecTags,
@@ -53,10 +55,16 @@ export namespace AiFslcMapper {
       filteredData.forEach(({formId, koboId}) => {
         if (formId === msmeGrantRegFormId) msmeIds.add(koboId)
       })
-      const msmePayments: Map<string, number> = new Map(
+      const msmeRecords = new Map(
         (await api.kobo.answer.searchByAccess({formId: msmeGrantRegFormId})).data
           .filter(({id}) => msmeIds.has(id))
-          .map(({id, amount_payment}) => [id, amount_payment !== undefined ? Math.round(Number(amount_payment)) : 0]),
+          .map(({id, amount_payment, ...rest}) => [
+            id,
+            {
+              amount_payment: amount_payment !== undefined ? Math.round(Number(amount_payment)) : 0,
+              ...rest,
+            } as unknown as Ecrec_msmeGrantReg.T,
+          ]),
       )
 
       return Promise.all(
@@ -115,26 +123,57 @@ export namespace AiFslcMapper {
               'Population Group': AiMapper.mapPopulationGroup(displacement!),
               ...(() => {
                 if (activity === DrcProgram.MSME) {
-                  const total = Math.round(grouped.sum((_) => _.tags?.employeesCount ?? 0) * 2.6)
-                  const women = Math.floor(total / 2)
+                  const msmeDisaggregation = AiMapper.disaggregatePersons(
+                    grouped
+                      .map(({koboId}) => msmeRecords.get(koboId))
+                      .compact()
+                      .map(({gender, res_stat, age, dis_select}) => ({
+                        age,
+                        gender: match(gender)
+                          .cases({male: Person.Gender.Male, female: Person.Gender.Female})
+                          .default(undefined),
+                        displacement: match(res_stat)
+                          .cases({
+                            idp: Person.DisplacementStatus.Idp,
+                            long_res: Person.DisplacementStatus.NonDisplaced,
+                            ret: Person.DisplacementStatus.Returnee,
+                          })
+                          .default(undefined),
+                        disability: (Array.isArray(dis_select) ? dis_select : [dis_select]).map((disability) =>
+                          match(disability)
+                            .cases({
+                              diff_care: Person.WgDisability.Care,
+                              diff_comm: Person.WgDisability.Comm,
+                              diff_hear: Person.WgDisability.Hear,
+                              diff_rem: Person.WgDisability.Rem,
+                              diff_see: Person.WgDisability.See,
+                              diff_walk: Person.WgDisability.Walk,
+                            })
+                            .default(Person.WgDisability.None),
+                        ),
+                      })),
+                  )
+
                   return {
-                    'New beneficiaries (assisted for the first time in 2025)': total,
+                    'Total People Assisted': msmeDisaggregation['Total Individuals Reached'] ?? 0,
+                    'Girls (0-17)': 0,
+                    'Boys (0-17)': 0,
+                    'Adult Women (18-59)': msmeDisaggregation['Adult Women (18-59)'] ?? 0,
+                    'Adult Men (18-59)': msmeDisaggregation['Adult Men (18-59)'] ?? 0,
+                    'Older Women (60+)': msmeDisaggregation['Older Women (60+)'] ?? 0,
+                    'Older Men (60+)': msmeDisaggregation['Older Men (60+)'] ?? 0,
+                    'People With Disabilities': msmeDisaggregation['People with Disability'] ?? 0,
                     'Households Assisted': grouped.length,
-                    'Total People Assisted': total,
-                    'Adult Women (18-59)': women,
-                    'Adult Men (18-59)': total - women,
+                    'New beneficiaries (assisted for the first time in 2025)': grouped.length,
                     Frequency: 'One-off',
                     'Total Cash Value (local currency)':
                       grouped.sum((_) => _.tags?.amount ?? 0) ||
-                      grouped.reduce((accum, {koboId}) => accum + (msmePayments.get(koboId) ?? 0), 0),
+                      grouped.reduce((accum, {koboId}) => accum + (msmeRecords.get(koboId)?.amount_payment ?? 0), 0),
                     Currency: 'UAH',
                     'Cash Delivery Mechanism': 'Bank Transfer',
-                    'Girls (0-17)': null as any,
-                    'Boys (0-17)': null as any,
-                    'Older Women (60+)': null as any,
-                    'Older Men (60+)': null as any,
                   }
                 }
+
                 return {
                   'New beneficiaries (assisted for the first time in 2025)':
                     disaggregation['Total Individuals Reached'] ?? 0,
