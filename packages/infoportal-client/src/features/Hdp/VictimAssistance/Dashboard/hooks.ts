@@ -25,12 +25,17 @@ export const useVictimAssistanceData = () => {
         office: {
           icon: appConfig.icons.office,
           getValue: (_) => _.office_bio,
-          getOptions: () => DataFilter.buildOptionsFromObject(Va_bio_tia.options.office),
+          getOptions: () => DataFilter.buildOptionsFromObject(Va_bio_tia.options.office_bio),
           label: m.office,
         },
         oblast: {
           icon: 'location_on',
-          getValue: (_) => _.place_oblast,
+          multiple: true,
+          getValue: ({tia_assesment}) =>
+            seq(tia_assesment)
+              .map(({oblast}) => oblast)
+              .compact()
+              .get(),
           getOptions: () => DataFilter.buildOptionsFromObject(Va_bio_tia.options.case_oblast),
           label: m.oblast,
         },
@@ -60,7 +65,7 @@ export const useVictimAssistanceData = () => {
         incident: {
           icon: 'preview',
           getValue: (_) => _.bio_type_incident,
-          getOptions: () => DataFilter.buildOptionsFromObject(Va_bio_tia.options.bio_type_incident),
+          getOptions: () => DataFilter.buildOptionsFromObject(Va_bio_tia.options.type_eo),
           label: m.safety.incident,
         },
       }),

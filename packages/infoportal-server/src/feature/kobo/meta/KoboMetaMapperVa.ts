@@ -35,8 +35,12 @@ export class KoboMetaMapperVa {
 
     return assessments.flatMap((tia) => {
       const projectKey = tia.project
-      const project =
-        projectKey && projectKey !== 'not_approved' ? DrcProject[Va_bio_tia.options.project[projectKey]] : undefined
+      const mappedProject = Va_bio_tia.options.project[projectKey!]
+      const project = ['ongoing', 'rejected', 'not_approved', undefined].includes(projectKey)
+        ? undefined
+        : mappedProject in DrcProject
+          ? DrcProject[mappedProject as keyof typeof DrcProject]
+          : undefined
 
       if (!project) return []
 
@@ -52,10 +56,10 @@ export class KoboMetaMapperVa {
             slo: DrcOffice.Sloviansk,
           })
           .default(undefined),
-        oblast: KoboXmlMapper.Location.mapOblast(answer.place_oblast)?.name!,
-        raion: KoboXmlMapper.Location.searchRaion(answer.place_raion),
-        hromada: KoboXmlMapper.Location.searchHromada(answer.place_hromada),
-        settlement: answer.place_settlement,
+        oblast: KoboXmlMapper.Location.mapOblast(tia.oblast)?.name!,
+        raion: KoboXmlMapper.Location.searchRaion(tia.raion),
+        hromada: KoboXmlMapper.Location.searchHromada(tia.hromada),
+        settlement: tia.settlement,
         sector: DrcSector.VA,
         activity: DrcProgram.TIA,
         persons,

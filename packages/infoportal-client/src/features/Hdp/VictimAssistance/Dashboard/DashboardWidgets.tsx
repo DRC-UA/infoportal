@@ -95,12 +95,12 @@ export const DashboardWidgets: FC = () => {
               <MapSvgByOblast
                 sx={{maxWidth: 480, margin: 'auto'}}
                 fillBaseOn="value"
-                data={ctx.dataFiltered}
-                getOblast={(row) =>
-                  OblastIndex.byKoboName(row[mapType === 'assistance' ? 'place_oblast' : 'loc_oblast'])?.iso!
+                data={ctx.dataFiltered.flatMap(({tia_assesment}) => tia_assesment).compact()}
+                getOblast={({oblast, case_oblast}) =>
+                  OblastIndex.byKoboName(mapType === 'assistance' ? oblast : case_oblast)?.iso!
                 }
                 value={(_) => true}
-                base={(row) => row[mapType === 'assistance' ? 'place_oblast' : 'loc_oblast'] !== undefined}
+                base={({oblast, case_oblast}) => (mapType === 'assistance' ? oblast : case_oblast) !== undefined}
               />
             </PanelBody>
           </Panel>
@@ -114,8 +114,8 @@ export const DashboardWidgets: FC = () => {
                       .map((res_stat) => ({res_stat}))
                       .get(),
                   )}
-                  by={(item) => item.res_stat}
-                  label={Va_bio_tia.options.res_stat}
+                  by={({res_stat}) => res_stat}
+                  label={Va_bio_tia.options.add_res_stat}
                   includeNullish
                 />
               )}
