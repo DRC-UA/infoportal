@@ -314,7 +314,7 @@ export class KoboMetaService {
               try {
                 await this.prisma.koboMeta.create({data: data[i]})
               } catch (recErr) {
-                console.error(`Failed record in ${pluralize(i, {fullString: true})} chunk:`, data[i], recErr)
+                console.error(`Failed record in ${pluralize(i)} chunk:`, data[i], recErr)
               }
             }
             throw err // Stop the process if any chunk fails
