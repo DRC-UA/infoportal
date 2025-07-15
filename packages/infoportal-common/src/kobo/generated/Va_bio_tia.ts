@@ -168,7 +168,7 @@ export namespace Va_bio_tia {
     },
     project: {
       ukt000350_sida: `UKR-000350 SIDA`,
-      ukr000386_mass_appeal: `UKR-000386 MAF`,
+      ukr000386_mass_appeal: `UKR-000386 Pooled Funds`,
       ukr000397_gffo: `UKR-000397 GFFO`,
       ukr000398_sdc: `UKR-000398 SDC`,
       ukr000423_echo4: `UKR-000423 ECHO4`,
