@@ -9,7 +9,7 @@ export namespace Va_bio_tia {
     // __IP__TRIGGER_EMAIL_Delegates [text] New va case
     __IP__TRIGGER_EMAIL_Delegates: string | undefined
     // sub_status [select_multiple] Approved
-    sub_status: undefined | Option<'sub_status'>[]
+    sub_status: undefined | Option<'project'>[]
     // case_status [select_one] Paid status
     case_status: undefined | Option<'case_status'>
     // date_paid [date] Date Paid
@@ -24,13 +24,13 @@ export namespace Va_bio_tia {
     // bio_data/case_number_bio [text] Case Number
     case_number_bio: string | undefined
     // bio_data/office_bio [select_one] Office
-    office_bio: undefined | Option<'office'>
+    office_bio: undefined | Option<'office_bio'>
     // bio_data/responsible_drc_staff_bio [select_one] Name of the responsible DRC staff
     responsible_drc_staff_bio: undefined | Option<'responsible_drc_staff'>
     // bio_data/bio_name [text] Surname, name, patronymic in Ukrainian
     bio_name: string | undefined
     // bio_data/bio_gender [select_one] Gender
-    bio_gender: undefined | Option<'cash_gender'>
+    bio_gender: undefined | Option<'add_cash_gender'>
     // bio_data/bio_injured_dead [select_one] Injured/dead
     bio_injured_dead: undefined | Option<'case_injured_dead'>
     // bio_data/bio_date_birth [date] Date of birth
@@ -39,38 +39,12 @@ export namespace Va_bio_tia {
     bio_date_incident: Date | undefined
     // bio_data/bio_information_incident/bio_family_id [text] Family ID
     bio_family_id: string | undefined
-    // bio_data/bio_information_incident/bio_type_incident [select_one] Type of incident
-    bio_type_incident: undefined | Option<'bio_type_incident'>
-    // bio_data/bio_information_incident/not_loc [note] **Location**
-    not_loc: string
-    // bio_data/bio_information_incident/loc_oblast [select_one] Region
-    loc_oblast: undefined | Option<'case_oblast'>
-    // bio_data/bio_information_incident/loc_raion [select_one] District
-    loc_raion: undefined | Option<'case_raion'>
-    // bio_data/bio_information_incident/loc_hromada [select_one] Hromada
-    loc_hromada: undefined | Option<'case_hromada'>
-    // bio_data/bio_information_incident/loc_settlement [select_one_from_file] Settlement
-    loc_settlement: string
-    // bio_data/bio_information_incident/loc_code_settlement [select_one_from_file] Settlement_code
-    loc_code_settlement: string
-    // bio_data/bio_information_incident/not_current_place [note] ####Current place of residence
-    not_current_place: string
-    // bio_data/bio_information_incident/place_oblast [select_one] Region
-    place_oblast: undefined | Option<'case_oblast'>
-    // bio_data/bio_information_incident/place_raion [select_one] District
-    place_raion: undefined | Option<'case_raion'>
-    // bio_data/bio_information_incident/place_hromada [select_one] Hromada
-    place_hromada: undefined | Option<'case_hromada'>
-    // bio_data/bio_information_incident/place_settlement [select_one_from_file] Settlement
-    place_settlement: string
-    // bio_data/bio_information_incident/place_code_settlement [select_one_from_file] Settlement_code
-    place_code_settlement: string
+    // bio_data/bio_information_incident/bio_type_incident [select_one] Type of EO
+    bio_type_incident: undefined | Option<'type_eo'>
     // bio_data/bio_information_incident/bio_name_001 [text] Name of the contact person
     bio_name_001: string | undefined
     // bio_data/bio_information_incident/ben_det_ph_number [integer] Telephone number
     ben_det_ph_number: number | undefined
-    // bio_data/bio_information_incident/bio_resource_information [select_one] Resource of information
-    bio_resource_information: undefined | Option<'source_information_incident'>
     // bio_data/bio_information_incident/number_tia [integer] ####Number TIA assesment
     number_tia: number | undefined
     // tia_assesment [begin_repeat] TIA
@@ -78,14 +52,14 @@ export namespace Va_bio_tia {
       | {
           not_name: string | undefined
           date: Date | undefined | undefined
-          office: undefined | Option<'office'> | undefined
           case_number: string | undefined | undefined
           consent: string | undefined
-          confidentiality_explained: undefined | Option<'cash_disability_status'> | undefined
-          informed_consent: undefined | Option<'cash_disability_status'> | undefined
-          consent_give: undefined | Option<'cash_disability_status'> | undefined
+          confidentiality_explained: undefined | Option<'add_cash_disability_status'> | undefined
+          informed_consent: undefined | Option<'add_cash_disability_status'> | undefined
+          consent_give: undefined | Option<'add_cash_disability_status'> | undefined
           incident_information: string | undefined
           source_information_incident: undefined | Option<'source_information_incident'> | undefined
+          source_information_ingos: string | undefined | undefined
           source_information_incident_other: string | undefined | undefined
           date_incident: Date | undefined | undefined
           oblast: undefined | Option<'case_oblast'> | undefined
@@ -97,45 +71,47 @@ export namespace Va_bio_tia {
           activity_during_incident: undefined | Option<'activity_during_incident'> | undefined
           circumstances_description: string | undefined | undefined
           victims: string | undefined
+          total_victims: number | undefined | undefined
           number_injured: number | undefined | undefined
           injured_victims: string | undefined
-          injured_gender: undefined | Option<'cash_gender'> | undefined
+          injured_gender: undefined | Option<'add_cash_gender'> | undefined
           injured_age: number | undefined | undefined
           number_dead: number | undefined | undefined
           dead_victims: string | undefined
-          dead_gender: undefined | Option<'cash_gender'> | undefined
+          dead_gender: undefined | Option<'add_cash_gender'> | undefined
           dead_age: number | undefined | undefined
-          total_victims: number | undefined | undefined
+          comment_victims: string | undefined | undefined
           family_information: string | undefined
           family_id: string | undefined | undefined
           current_situation_family: string | undefined | undefined
           nubmer_family_member: number | undefined | undefined
           family_member: string | undefined
-          family_member_gender: undefined | Option<'cash_gender'> | undefined
+          family_member_gender: undefined | Option<'add_cash_gender'> | undefined
           family_member_age: number | undefined | undefined
           nubmer_Injured_dead: number | undefined | undefined
           family: string | undefined
           injured_dead: undefined | Option<'case_injured_dead'> | undefined
-          gender: undefined | Option<'cash_gender'> | undefined
+          gender: undefined | Option<'add_cash_gender'> | undefined
           age: number | undefined | undefined
           family_member_001: undefined | Option<'member_tia_provided'> | undefined
-          disability_status: undefined | Option<'cash_disability_status'> | undefined
+          disability_status: undefined | Option<'add_cash_disability_status'> | undefined
           case_information: string | undefined
           inf_case_number: string | undefined | undefined
           case_oblast: undefined | Option<'case_oblast'> | undefined
           case_raion: undefined | Option<'case_raion'> | undefined
           case_hromada: undefined | Option<'case_hromada'> | undefined
           case_settlement: string | undefined
-          case_referred_drc: undefined | Option<'cash_disability_status'> | undefined
+          case_referred_drc: undefined | Option<'add_cash_disability_status'> | undefined
           case_referred_drc_yes: string | undefined | undefined
+          not_info: string | undefined
           case_injured_dead: undefined | Option<'case_injured_dead'> | undefined
-          case_gender: undefined | Option<'cash_gender'> | undefined
+          case_gender: undefined | Option<'add_cash_gender'> | undefined
           case_age: number | undefined | undefined
           case_family_member: undefined | Option<'member_tia_provided'> | undefined
-          case_disability_status: undefined | Option<'cash_disability_status'> | undefined
+          case_disability_status: undefined | Option<'add_cash_disability_status'> | undefined
           type_damages: string | undefined | undefined
           consequences_injury: string | undefined | undefined
-          assistance_provided_ngo: undefined | Option<'cash_disability_status'> | undefined
+          assistance_provided_ngo: undefined | Option<'add_cash_disability_status'> | undefined
           assistance_provided_ngo_yes: string | undefined | undefined
           targeted_assistance: string | undefined
           vulnerabilities: undefined | Option<'vulnerabilities'>[] | undefined
@@ -143,11 +119,18 @@ export namespace Va_bio_tia {
           type_assistance: undefined | Option<'type_assistance'>[] | undefined
           cash_assistance: string | undefined
           member_tia_provided: undefined | Option<'member_tia_provided'> | undefined
-          cash_gender: undefined | Option<'cash_gender'> | undefined
+          not_cash: string | undefined
+          cash_gender: undefined | Option<'add_cash_gender'> | undefined
           cash_age: number | undefined | undefined
-          res_stat: undefined | Option<'res_stat'> | undefined
-          idp: undefined | Option<'cash_disability_status'> | undefined
-          cash_disability_status: undefined | Option<'cash_disability_status'> | undefined
+          res_stat: undefined | Option<'add_res_stat'> | undefined
+          idp: undefined | Option<'add_cash_disability_status'> | undefined
+          cash_disability_status: undefined | Option<'add_cash_disability_status'> | undefined
+          person_receive_cash_assistance: undefined | Option<'add_cash_disability_status'> | undefined
+          not_add_person: string | undefined
+          add_cash_gender: undefined | Option<'add_cash_gender'> | undefined
+          add_cash_age: number | undefined | undefined
+          add_res_stat: undefined | Option<'add_res_stat'> | undefined
+          add_cash_disability_status: undefined | Option<'add_cash_disability_status'> | undefined
           cash_assistance_provided1: string | undefined | undefined
           estimated_value1: number | undefined | undefined
           cash_assistance_provided2: string | undefined | undefined
@@ -165,6 +148,8 @@ export namespace Va_bio_tia {
           signature_agreed_hdp_manager: string | undefined | undefined
         }[]
       | undefined
+    // old_case_number [hidden] Old case number
+    old_case_number: string
   }
   export const options = {
     source_information_incident: {
@@ -178,34 +163,36 @@ export namespace Va_bio_tia {
       hotline: `Hotline`,
       online_form: `Online form`,
       national_mine: `National mine action authority`,
+      cfm: `CFM`,
       other: `Other`,
     },
-    sub_status: {
-      ukr000350_sida: `UKR000350 SIDA`,
-      ukr000372_echo3: `UKR000372 ECHO3`,
-      ukr000306_dutch: `UKR000306 Dutch II`,
-      ukr000397_gffo: `UKR000397 GFFO`,
-      ukr000363_uhf8: `UKR000363 UHF8`,
-      ukr000284_bha: `UKR000284 BHA`,
-      ukr000316_uhf5: `UKR000316 UHF5`,
-      ukr000246_mfa: `UKR000249 Finnish MFA`,
+    project: {
+      ukt000350_sida: `UKR-000350 SIDA`,
+      ukr000386_mass_appeal: `UKR-000386 MAF`,
+      ukr000397_gffo: `UKR-000397 GFFO`,
+      ukr000398_sdc: `UKR-000398 SDC`,
+      ukr000423_echo4: `UKR-000423 ECHO4`,
+      not_approved: `Not approved`,
       ongoing: `🕓 For revision`,
       rejected: `❌ Rejected`,
+      ukr000306_dutch: `UKR-000306 DUTCH`,
+      ukr000363_uhf8: `UKR-000363 UHF8`,
+      ukr000372_echo3: `UKR-000372 ECHO3`,
     },
     hide_bio: {
       yes: `Yes`,
     },
-    cash_disability_status: {
+    add_cash_disability_status: {
       yes: `Yes`,
       no: `No`,
     },
-    office: {
+    office_bio: {
       umy: `Sumy (UMY)`,
       cej: `Chernihiv (CEJ)`,
       dnk: `Dnipro (DNK)`,
       hrk: `Kharkiv (HRK)`,
       nlv: `Mykolaiv (NLV)`,
-      iev: `Kiev (IEV)`,
+      iev: `Kyiv (IEV)`,
       slo: `Sloviansk (SLO)`,
     },
     responsible_drc_staff: {
@@ -214,7 +201,7 @@ export namespace Va_bio_tia {
       oleksandra_rura: `Oleksandra RURA`,
       kristina_sekker: `Kristina Sekker`,
       victoriia_lishchynska: `Viktoriia Lishchynska`,
-      dmytro_tatarenko: `Dmytro TATARENKO`,
+      tetiana_kolot: `Tetiana Kolot`,
       oksana_shokun: `Oksana SHOKUN`,
       olena_yarem: `Olena YAREM`,
       Anna_HROMA: `Anna HROMA`,
@@ -222,42 +209,44 @@ export namespace Va_bio_tia {
       tetiana_serhieieva: `Tetiana Serhieieva`,
       maryna_novak: `Maryna Novak`,
       Olha_HORPENKO: `Olha HORPENKO`,
+      kateryna_yevtieieva: `Kateryna Yevtieieva`,
       valeriia_yakubenko: `Valeriia YAKUBENKO`,
       yuliia_pastushenko: `Yuliia PASTUSHENKO`,
       viktoriia_nor: `Viktoriia NOR`,
-      tetiana_kolot: `Tetiana Kolot`,
       maryna_unihovska: `Maryna Unihovska`,
       yurii_samoilik: `Yurii Samoilik`,
       vadym_ivanov: `Vadym IVANOV`,
       svitlana_kotliar: `Svitlana KOTLIAR`,
-      hanna_berkovska: `Hanna BERKOVSKA`,
+      daria_pisteleva: `Daria Pisteleva`,
       mariia_kozachko: `Mariia Kozachko`,
       oleksandr_basenko: `Oleksandr BASENKO`,
       yana_semetsova: `Yana SEMETSOVA`,
       yana_beskrovna: `Yana Beskrovna`,
       kateryna_bobokalo: `Kateryna Bobokalo`,
+      dmytro_tatarenko: `Dmytro TATARENKO`,
+      nataliia_liakhovska: `Nataliia Liakhovska`,
+      anna_kolesnyk: `Anna Kolesnyk`,
+      oleksandra_martysheva: `Oleksandra Martysheva`,
+      inna_geiko: `Inna Geiko`,
+      elyzaveta_blyzno: `Elyzaveta Blyzno`,
+      dmytro_kurhanov: `Dmytro Kurhanov`,
+      danylo_buriak: `Danylo Buriak`,
+      yurii_chopyk: `Yurii Chopyk`,
+      nataliia_sychak: `Nataliia Sychak`,
+      hanna_berkovska: `Hanna BERKOVSKA`,
     },
     agreed_protection_manager: {
       dina_krakovetska: `Dina Krakovetska`,
       iryna_nesterenko: `Iryna Nesterenko`,
       myroslava_kondakova: `Myroslava Kondakova`,
       juthi_ahmed: `Juthi Ahmed`,
+      viktoriia_sheliekhova: `Viktoriia Sheliekhova`,
       iryna_kylymena: `Iryna Kylymena`,
       ann_halsig: `Ann Halsig`,
       nataliia_sychak: `Nataliia Sychak`,
       robyn_shortall: `Robyn Shortall`,
-    },
-    project: {
-      ukr000306_dutch: `UKR-000306 Dutch II`,
-      ukt000350_sida: `UKR-000350 SIDA`,
-      ukr000350_sida: `UKR-000350 SIDA`,
-      ukr000363_uhf8: `UKR-000363 UHF8`,
-      ukr000372_echo3: `UKR-000372 ECHO3`,
-      ukr000397_gffo: `UKR-000397 GFFO`,
-      ukr000284_bha: `UKR-000284 BHA`,
-      ukr000316_uhf5: `UKR-000316 UHF5`,
-      ukr000246_mfa: `UKR-000249 Finnish MFA`,
-      not_approved: `Not approved`,
+      jakub_walenda: `Jakub Walenda`,
+      nick_vovk: `Nick Vovk`,
     },
     type_eo: {
       landmine: `Landmine`,
@@ -275,7 +264,7 @@ export namespace Va_bio_tia {
       injured: `Injured`,
       dead: `Dead`,
     },
-    cash_gender: {
+    add_cash_gender: {
       male: `Male`,
       female: `Female`,
     },
@@ -336,7 +325,7 @@ export namespace Va_bio_tia {
       wife: `Wife`,
       husband: `Husband`,
     },
-    bio_type_incident: {
+    undefined: {
       shelling: `Shelling`,
       mine: `Mine`,
       eo: `EO`,
@@ -347,7 +336,7 @@ export namespace Va_bio_tia {
       ongoing: `🕓 Ongoin`,
       rejected: `❌ Rejected`,
     },
-    res_stat: {
+    add_res_stat: {
       idp: `Internally Displaced People`,
       returnees: `Returnees`,
       host_communities: `Host Communities`,
@@ -2318,11 +2307,11 @@ export namespace Va_bio_tia {
       tia_assesment: _['tia_assesment']?.map(extractQuestionName).map((_: any) => {
         _['date'] = _.date ? new Date(_.date) : undefined
         _['date_incident'] = _.date_incident ? new Date(_.date_incident) : undefined
+        _['total_victims'] = _.total_victims ? +_.total_victims : undefined
         _['number_injured'] = _.number_injured ? +_.number_injured : undefined
         _['injured_age'] = _.injured_age ? +_.injured_age : undefined
         _['number_dead'] = _.number_dead ? +_.number_dead : undefined
         _['dead_age'] = _.dead_age ? +_.dead_age : undefined
-        _['total_victims'] = _.total_victims ? +_.total_victims : undefined
         _['nubmer_family_member'] = _.nubmer_family_member ? +_.nubmer_family_member : undefined
         _['family_member_age'] = _.family_member_age ? +_.family_member_age : undefined
         _['nubmer_Injured_dead'] = _.nubmer_Injured_dead ? +_.nubmer_Injured_dead : undefined
@@ -2331,6 +2320,7 @@ export namespace Va_bio_tia {
         _['vulnerabilities'] = _.vulnerabilities?.split(' ')
         _['type_assistance'] = _.type_assistance?.split(' ')
         _['cash_age'] = _.cash_age ? +_.cash_age : undefined
+        _['add_cash_age'] = _.add_cash_age ? +_.add_cash_age : undefined
         _['estimated_value1'] = _.estimated_value1 ? +_.estimated_value1 : undefined
         _['estimated_value2'] = _.estimated_value2 ? +_.estimated_value2 : undefined
         _['estimated_value3'] = _.estimated_value3 ? +_.estimated_value3 : undefined
