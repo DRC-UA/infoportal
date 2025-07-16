@@ -828,6 +828,31 @@ export namespace KoboXmlMapper {
           .default(() => undefined),
       }))
     }
+
+    export const va_bio_tia_receivedCash = (row: Va_bio_tia.T): Person.Details[] => {
+      const tiaEntries =
+        row.tia_assesment?.filter(
+          (tia) =>
+            tia.add_res_stat !== undefined || tia.add_cash_age !== undefined || tia.add_cash_gender !== undefined,
+        ) ?? []
+
+      return tiaEntries.map(({add_cash_age, add_cash_gender, add_res_stat}) => ({
+        age: add_cash_age,
+        gender: match(add_cash_gender)
+          .cases({
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          })
+          .default(() => undefined),
+        displacement: match(add_res_stat)
+          .cases({
+            idp: Person.DisplacementStatus.Idp,
+            returnees: Person.DisplacementStatus.Returnee,
+            host_communities: Person.DisplacementStatus.NonDisplaced,
+          })
+          .default(() => undefined),
+      }))
+    }
   }
 
   export type Breakdown = {

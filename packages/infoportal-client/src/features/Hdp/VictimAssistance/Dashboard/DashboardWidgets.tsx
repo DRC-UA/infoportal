@@ -15,15 +15,20 @@ import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 
 import {useVictimAssistanceContext} from './Context'
+import {Switch, useTheme} from '@mui/material'
 
 export const DashboardWidgets: FC = () => {
   const {m, formatLargeNumber} = useI18n()
   const ctx = useVictimAssistanceContext()
+  const theme = useTheme()
   const [mapType, setMapType] = useState<'assistance' | 'incidents'>('assistance')
+  const [showReceivedCash, setShowReceivedCash] = useState(false)
 
   const persons = useMemo(() => {
-    return ctx.dataFiltered.flatMap((row) => KoboXmlMapper.Persons.va_bio_tia(row) ?? [])
-  }, [ctx.dataFiltered])
+    return ctx.dataFiltered.flatMap((row) =>
+      showReceivedCash ? KoboXmlMapper.Persons.va_bio_tia_receivedCash(row) : KoboXmlMapper.Persons.va_bio_tia(row),
+    )
+  }, [ctx.dataFiltered, showReceivedCash])
 
   const {numInjuredVictims, numDeadVictims} = useMemo(() => {
     return ctx.dataFiltered.reduce(
@@ -63,11 +68,42 @@ export const DashboardWidgets: FC = () => {
               label={m.count}
             />
           </Panel>
-          <Panel title={m.ageGroup}>
+          <Panel
+            title={
+              <Div sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                <span>{m.ageGroup}</span>
+                <Div sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                  <span
+                    style={{
+                      fontSize: 13,
+                      color: showReceivedCash ? theme.palette.error.main : theme.palette.text.secondary,
+                      fontWeight: showReceivedCash ? 600 : 400,
+                    }}
+                  >
+                    {m.hdp.receivedCashAssistance}
+                  </span>
+                  <Switch
+                    size="small"
+                    checked={showReceivedCash}
+                    onChange={() => setShowReceivedCash((prev) => !prev)}
+                    sx={{
+                      '& .MuiSwitch-thumb': {
+                        backgroundColor: showReceivedCash ? theme.palette.error.main : theme.palette.primary.main,
+                      },
+                      '& .MuiSwitch-track': {
+                        backgroundColor: theme.palette.action.active,
+                      },
+                    }}
+                  />
+                </Div>
+              </Div>
+            }
+          >
             <PanelBody>
               <AgeGroupTable tableId="protection-dashboard" persons={persons} enableDisplacementStatusFilter />
             </PanelBody>
           </Panel>
+
           <Panel title={m.project}>
             <PanelBody>
               {ctx.dataFiltered && (

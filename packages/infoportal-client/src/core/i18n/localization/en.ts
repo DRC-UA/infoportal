@@ -895,6 +895,7 @@ export const en = Object.freeze({
       assistance: 'Assistance',
       incidents: 'Incidents',
       location: 'Location by',
+      receivedCashAssistance: 'Received cash assistance',
     },
     snapshotProtMonito: {
       basicNeeds: `Basic Needs`,
