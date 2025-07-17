@@ -20,6 +20,7 @@ const dictionary: Partial<Record<(typeof KoboIndex.names)[number], Set<string>>>
     'cal_tot_idp_more_1y',
     'cal_tot_long_res',
     'cal_tot_ret',
+    'cal_tot_vulnerability',
   ] as const),
   ecrec_msmeGrantReg: new Set<keyof Ecrec_msmeGrantReg.T>(['cal_scoring_business', 'cal_total_vulnerability'] as const),
 }
