@@ -17,5 +17,5 @@ export const koboSdkDrc = new KoboClient({
   // await FixKoboMigration.MissingSubmissions.run()
   // await FixKoboMigration.Tags.run()
   // await new ActivityInfoBuildType().buildAll()
-  // await new BuildKoboType().build('legal_individual_aid')
+  // await new BuildKoboType().build('cbp_pre_post')
 })()
