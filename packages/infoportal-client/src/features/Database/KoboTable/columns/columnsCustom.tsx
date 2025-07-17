@@ -5,6 +5,7 @@ import {
   Bn_rapidResponse,
   Bn_rapidResponse2,
   Bn_re,
+  Cbp_pre_post,
   currentProtectionProjects,
   DrcProgram,
   DrcProject,
@@ -720,6 +721,133 @@ export const getColumnsCustom = ({
                 }}
                 options={currentProtectionProjects.map((k) => ({value: k, children: k}))}
               />
+            ),
+          }
+        },
+      },
+    ],
+    [KoboIndex.byName('cbp_pre_post').id]: [
+      {
+        id: 'score_cbp_pre_post',
+        head: m.scoring,
+        type: 'number',
+        render: (
+          row: KoboSubmissionFlat<Cbp_pre_post.T, any> & {
+            custom: KoboXmlMapper.Breakdown
+          },
+        ) => {
+          const scoring = {
+          // Humantiarian Principles and Protection Mainstreaming 
+          humanitarian_principles:0,
+          impartiality_means:0,
+          protection_responsibility_organisations:0,
+          protection_mainstreaming_described:0,
+          elements_protection_mainstreaming:0,
+          affected_population_information:0,
+
+          // Safe referrals
+          referral_considered_safe:0,
+          guiding_principles_referrals:0,
+          correct_referral_process:0,
+          service_mapping_identifies:0,
+          not_promise_anything:0,
+          referrals_personal_data:0,
+
+          // Advocacy
+          what_advocacy:0,
+          effective_advocacy_requires:0,
+          problem_tree_advocacy:0,
+          advocacy_goal:0,
+          difference_goal_objectives:0,
+          power_mapping_advocacy:0,
+          get_message_influence:0,
+
+          // PFA
+          elements_define_pfa:0,
+          everyone_stressful_situatuon:0,
+          automatic_reactions_situation:0,
+          pfa_counselling_psychotherapy:0,
+          technique_active_listening:0,
+          key_elements_pfa:0,
+          more_help_better:0,
+          prevent_further_harm:0,
+          practised_providing_pfa:0,
+          feel_confident_pfa:0,
+          relevant_skills_pfa:0,
+
+          // PSEAH 
+          sex_anyone_over_16:0,
+          idp_same_standards_sexual:0,
+          anything_recipients_assistance:0,
+          afterwork_nobody_business:0,
+          sex_with_sexworkers:0,
+          sexual_exploitation_abuse:0,
+          sexual_relations_beneficiary:0,
+          volunteer_power_influence:0,
+          witnessed_sexual_comment:0, 
+          }
+          if (row.topic! === 'hum_pri_pro_main') {
+            if (row.humanitarian_principles! === 'hum_imp_neu_ind') scoring.humanitarian_principles +=1
+            if (row.impartiality_means! === 'true') scoring.impartiality_means +=1
+            if (row.protection_responsibility_organisations! === 'false') scoring.protection_responsibility_organisations +=1
+            if (row.protection_mainstreaming_described! === 'incorporating') scoring.protection_mainstreaming_described +=1
+            if (row.elements_protection_mainstreaming! === 'prioritise_safety') scoring.elements_protection_mainstreaming +=1
+            if (row.affected_population_information! === 'false') scoring.affected_population_information +=1
+          } else
+          if (row.topic === 'safe_referrals') {
+            if (row.referral_considered_safe! === 'true') scoring.referral_considered_safe +=1
+            if (row.guiding_principles_referrals?.some((guiding) => guiding === 'all')) scoring.guiding_principles_referrals +=1
+            if (row.correct_referral_process! === 'ser_map_pri_ref') scoring.correct_referral_process +=1
+            if (row.service_mapping_identifies! === 'true') scoring.service_mapping_identifies +=1
+            if (row.not_promise_anything! === 'true') scoring.not_promise_anything +=1
+            if (row.referrals_personal_data! === 'basic_personal_data') scoring.referrals_personal_data +=1
+          } else
+          if (row.topic === 'advocacy') {
+            if (row.what_advocacy! === 'means_change') scoring.what_advocacy +=1
+            if (row.effective_advocacy_requires! === 'true') scoring.effective_advocacy_requires +=1
+            if (row.problem_tree_advocacy! === 'identify_visualize') scoring.problem_tree_advocacy +=1
+            if (row.advocacy_goal! === 'true') scoring.advocacy_goal +=1
+            if (row.difference_goal_objectives! === 'big_change') scoring.difference_goal_objectives +=1
+            if (row.power_mapping_advocacy! === 'identify_key') scoring.power_mapping_advocacy +=1
+            if (row.get_message_influence?.some((message) => message ==='all')) scoring.get_message_influence +=1
+          } else
+          if (row.topic === 'pfa') {
+            if (row.elements_define_pfa?.some((elements)=> elements === 'all')) scoring.elements_define_pfa +=1
+            if (row.everyone_stressful_situatuon! === 'false') scoring.everyone_stressful_situatuon +=1
+            if (row.automatic_reactions_situation?.some((reactions)=> reactions === 'all')) scoring.automatic_reactions_situation +=1
+            if (row.pfa_counselling_psychotherapy! === 'false') scoring.pfa_counselling_psychotherapy +=1
+            if (row.technique_active_listening?.includes('body_language') &&
+                row.technique_active_listening.includes('noding') &&
+                row.technique_active_listening.includes('paraphrasing') &&
+                row.technique_active_listening.includes('asking_questions')) scoring.technique_active_listening += 1
+            if (row.key_elements_pfa! === 'look_listen_link') scoring.key_elements_pfa +=1
+            if (row.more_help_better! === 'no') scoring.more_help_better +=1
+            if (row.prevent_further_harm?.some((prevent_further_harm)=> prevent_further_harm ==='all')) scoring.prevent_further_harm +=1
+            if(['strongly_agree', 'agree'].includes(row.practised_providing_pfa!)) scoring.practised_providing_pfa +=1
+            if(['strongly_agree', 'agree'].includes(row.feel_confident_pfa!)) scoring.feel_confident_pfa +=1
+            if(['strongly_agree', 'agree'].includes(row.relevant_skills_pfa!)) scoring.relevant_skills_pfa +=1
+          } else
+          if (row.topic === 'pseah') {
+            if (row.sex_anyone_over_16! === 'no') scoring.sex_anyone_over_16 +=1
+            if (row.idp_same_standards_sexual! === 'yes') scoring.idp_same_standards_sexual +=1
+            if (row.anything_recipients_assistance! === 'no') scoring.anything_recipients_assistance +=1
+            if (row.afterwork_nobody_business! === 'no') scoring.afterwork_nobody_business +=1
+            if (row.sex_with_sexworkers! === 'no') scoring.sex_with_sexworkers +=1
+            if (row.sexual_exploitation_abuse! === 'yes') scoring.sexual_exploitation_abuse +=1
+            if (row.sexual_relations_beneficiary! === 'yes') scoring.sexual_relations_beneficiary +=1
+            if (row.volunteer_power_influence! === 'yes') scoring.volunteer_power_influence +=1
+            if (row.witnessed_sexual_comment! === 'no') scoring.witnessed_sexual_comment +=1
+          }
+
+
+          const total = seq(Obj.values(scoring)).sum()
+          return {
+            value: total,
+            export: total,
+            label: (
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <span style={{display: 'inline-block', width: '100%'}}>{total}</span>
+              </div>
             ),
           }
         },

@@ -72,6 +72,7 @@ const koboIndex = {
   cs_tracker: 'ac5Xu2t2vJ97WneTGaSVNH',
   legal_pam: 'a3puEbm9w4ME323B6werxJ',
   meal_eorePdm: 'aTHMDjqm7jodctcrBE4bS7',
+  cbp_pre_post:'aHSQ7cJKbGoBs3F5DGSf8Y',
 }
 
 import {Obj, seq} from '@axanc/ts-utils'
@@ -152,6 +153,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   cs_tracker: '[Peacebuilding] CS Training Tracker',
   legal_pam: '[MEAL] Legal Aid PAM Master',
   meal_eorePdm: '[MEAL] EORE PDM',
+  cbp_pre_post: '[Protection] CBP Trainings - Pre/post test',
 }
 
 export type KoboFormName = keyof typeof koboIndex

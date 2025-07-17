@@ -212,6 +212,9 @@ export class BuildKoboType {
       safeguarding_psea: {
         formId: KoboIndex.byName('safeguarding_psea').id,
       },
+      cbp_pre_post:{
+        formId: KoboIndex.byName('cbp_pre_post').id,
+      },
       protection_hhs2_1: {
         formId: KoboIndex.byName('protection_hhs2_1').id,
         overrideAllOptions: {
