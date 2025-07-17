@@ -1,5 +1,6 @@
 export namespace Va_bio_tia {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
+
   // Form id: aKZW9UTf9nqfiLhxtjcT3d
   export interface T {
     start: string
@@ -151,6 +152,7 @@ export namespace Va_bio_tia {
     // old_case_number [hidden] Old case number
     old_case_number: string
   }
+
   export const options = {
     source_information_incident: {
       news: `News`,
@@ -178,6 +180,7 @@ export namespace Va_bio_tia {
       ukr000306_dutch: `UKR-000306 DUTCH`,
       ukr000363_uhf8: `UKR-000363 UHF8`,
       ukr000372_echo3: `UKR-000372 ECHO3`,
+      ukr000284_bha: `UKR-000284 BHA`,
     },
     hide_bio: {
       yes: `Yes`,
@@ -270,21 +273,22 @@ export namespace Va_bio_tia {
     },
     vulnerabilities: {
       income_significantly_decreased: `As a result of the incident, family’s income significantly decreased`,
-      victim_physical_mental: `EO victim has disability (physical or mental)`,
-      child_deceased_physical_mental: `Child of the deceased EO victim has a disability (physical or mental)`,
+      victim_physical_mental: `EO victim has disability`,
+      child_deceased_physical_mental: `Child of the deceased EO victim has a disability`,
       victim_lives_alone: `EO victim lives in a foster family or lives alone`,
       child_deceased_lives_alone: `Child of the deceased EO victim lives in a foster family or lives alone`,
       'victim_lives_family_single-headed': `Child EO victim or child of the deceased EO victim lives in a family with single-headed household (single parenthood)`,
       under_care_pwd: `Child EO victim or child of the deceased EO victim is under the care of PwD (physical/mental)`,
       under_care_medical_condition: `Child EO victim or child of the deceased EO victim lives under the care of persons with a serious medical condition`,
-      extreme_poverty: `Extreme poverty that impacts access to assistance and/or services required`,
-      economically_inactive_people: `A high number of economically inactive people (three and more)`,
+      extreme_poverty: `Average income, including social protection assistance, is below 14000 UAH per person,  that impacts access to assistance and/or services required`,
+      economically_inactive_people: `A high number of economically inactive people (three and more children)`,
       under_care_elderlies: `Child EO victim or child of the deceased EO victim under care of elderlies (over 60)`,
       orphan: `Child EO victim or child of the deceased EO victim is an orphan`,
       remote_residing: `Remote residing resulting in physical impediments to access assistance/services`,
       victim_chronic_disease: `EO victim has chronic disease(s)`,
-      victim_family_idp: `EO victim or family of the deceased EO victim have IDP status`,
+      victim_family_idp: `EO victim or family of the deceased EO victim has been recently displaced`,
       victim_family_damaged_house: `EO victim or family of the deceased EO victim have a destroyed or damaged house/apartment`,
+      victim_family_lives_frontline: `EO victim or family of the deceased EO victim lives 30km from the frontline`,
     },
     type_assistance: {
       access_education: `Access to education and/or employment: special individual items for education in school or at home (e.g. individual chair or desk to meet specific needs of a child, computer) or afterschool curricula (lessons) or equiping workplace as well as procuring new equipment for self-employment`,
