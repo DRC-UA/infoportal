@@ -85,7 +85,7 @@ export namespace AiFslcMapper {
           ) => {
             let disaggregation = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons).compact())
             if (activity === DrcProgram.VET) {
-              const total = add(disaggregation['Adult Men (18-59)'] + disaggregation['Adult Women (18-59)'])
+              const total = add(disaggregation['Adult Men (18-59)'], disaggregation['Adult Women (18-59)'])
               disaggregation = {
                 'Adult Men (18-59)': safeNumber(disaggregation['Adult Men (18-59)']),
                 'Adult Women (18-59)': safeNumber(disaggregation['Adult Women (18-59)']),
