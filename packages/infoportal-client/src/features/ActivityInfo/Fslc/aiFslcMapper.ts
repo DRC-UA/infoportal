@@ -83,7 +83,10 @@ export namespace AiFslcMapper {
             grouped: Seq<IKoboMeta<KoboMetaEcrecTags>>,
             [activity, project, oblast, raion, hromada, settlement, displacement],
           ) => {
-            let disaggregation = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons).compact())
+            let disaggregation = AiMapper.disaggregatePersons(
+              // for VET we report only the trainee, who is the first member of the persons array:
+              grouped.flatMap((_) => (activity === DrcProgram.VET ? [_.persons?.[0]] : _.persons)).compact(),
+            )
             if (activity === DrcProgram.VET) {
               const total = add(disaggregation['Adult Men (18-59)'], disaggregation['Adult Women (18-59)'])
               disaggregation = {
