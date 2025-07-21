@@ -26,14 +26,10 @@ export namespace Ecrec_msmeGrantReg {
     amount_payment: number | undefined
     // pays_taxes [select_one] Хто сплачує податки?
     pays_taxes: undefined | Option<'pays_taxes'>
-    // status_first_tranche [select_one] Статус виконання першого траншу
+    // status_first_tranche [select_one] Статус оплати
     status_first_tranche: undefined | Option<'status_first_tranche'>
-    // date_first_tranche [date] Дата першого траншу
+    // date_first_tranche [date] Дата оплати
     date_first_tranche: Date | undefined
-    // status_second_tranche [select_one] Статус виконання другого траншу
-    status_second_tranche: undefined | Option<'status_second_tranche'>
-    // date_second_tranche [date] Дата другого траншу
-    date_second_tranche: Date | undefined
     // business_consultancy [select_one] Бізнес консультації
     business_consultancy: undefined | Option<'business_consultancy'>
     // post_distribution [select_one] Подальший супровід після дистрибуції
@@ -390,12 +386,6 @@ export namespace Ecrec_msmeGrantReg {
     status_first_tranche: {
       done: `✅ Виконано`,
       pending: `🕓 На розгляді`,
-      only_first_tranche: `❎ Тільки перший транш`,
-    },
-    status_second_tranche: {
-      done: `✅ Виконано`,
-      pending: `🕓 На розгляді`,
-      na: `❎ N/A`,
     },
     business_consultancy: {
       done: `✅ Виконано`,
@@ -2523,7 +2513,6 @@ export namespace Ecrec_msmeGrantReg {
       ..._,
       amount_payment: _.amount_payment ? +_.amount_payment : undefined,
       date_first_tranche: _.date_first_tranche ? new Date(_.date_first_tranche) : undefined,
-      date_second_tranche: _.date_second_tranche ? new Date(_.date_second_tranche) : undefined,
       date: _.date ? new Date(_.date) : undefined,
       date_birth: _.date_birth ? new Date(_.date_birth) : undefined,
       age: _.age ? +_.age : undefined,

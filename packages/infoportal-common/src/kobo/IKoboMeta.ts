@@ -1,10 +1,12 @@
-import {StateStatus, UUID} from '../type/Generic.js'
+import {match} from '@axanc/ts-utils'
+import {Kobo} from 'kobo-sdk'
+
 import {OblastName} from '../location/index.js'
 import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc.js'
-import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper/index.js'
-import {fnSwitch} from '@axanc/ts-utils'
-import {Kobo} from 'kobo-sdk'
+import {StateStatus, UUID} from '../type/Generic.js'
 import {Person} from '../type/Person.js'
+
+import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper/index.js'
 
 export type IKoboMeta<TTag = any> = {
   id: UUID
@@ -89,6 +91,11 @@ export namespace KoboMetaHelper {
     Rejected: KoboMetaStatus.Rejected,
   }
 
+  const msmeStatus: Partial<Record<string, KoboMetaStatus>> = {
+    pending: KoboMetaStatus.Pending,
+    done: KoboMetaStatus.Committed,
+  }
+
   const validationStatus: Partial<Record<KoboValidation, KoboMetaStatus>> = {
     [KoboValidation.Approved]: KoboMetaStatus.Committed,
     [KoboValidation.Rejected]: KoboMetaStatus.Rejected,
@@ -97,11 +104,15 @@ export namespace KoboMetaHelper {
     [KoboValidation.Flagged]: KoboMetaStatus.Pending,
   }
 
-  export const mapCashStatus = (_?: CashStatus): KoboMetaStatus | undefined => {
-    return fnSwitch(_!, cashStatus, () => undefined)
+  export const mapCashStatus = (status: CashStatus | undefined): KoboMetaStatus | undefined => {
+    return match(status).cases(cashStatus).default(undefined)
   }
 
-  export const mapValidationStatus = (_?: KoboValidation): KoboMetaStatus | undefined => {
-    return fnSwitch(_!, validationStatus, () => undefined)
+  export const mapMsmeStatus = (status: 'done' | 'pending' | undefined): KoboMetaStatus | undefined => {
+    return match(status).cases(msmeStatus).default(undefined)
+  }
+
+  export const mapValidationStatus = (status: KoboValidation | undefined): KoboMetaStatus | undefined => {
+    return match(status).cases(validationStatus).default(undefined)
   }
 }
