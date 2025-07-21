@@ -6,6 +6,8 @@ import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Dr
 import {StateStatus, UUID} from '../type/Generic.js'
 import {Person} from '../type/Person.js'
 
+import {Ecrec_vet_bha388} from './generated/Ecrec_vet_bha388'
+import {Ecrec_msmeGrantReg} from './generated/Ecrec_msmeGrantReg.js'
 import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper/index.js'
 
 export type IKoboMeta<TTag = any> = {
@@ -91,7 +93,12 @@ export namespace KoboMetaHelper {
     Rejected: KoboMetaStatus.Rejected,
   }
 
-  const msmeStatus: Partial<Record<string, KoboMetaStatus>> = {
+  const msmeStatus: Partial<Record<keyof typeof Ecrec_msmeGrantReg.options.status_first_tranche, KoboMetaStatus>> = {
+    pending: KoboMetaStatus.Pending,
+    done: KoboMetaStatus.Committed,
+  }
+
+  const vetStatus: Partial<Record<keyof typeof Ecrec_vet_bha388.options.course_payment, KoboMetaStatus>> = {
     pending: KoboMetaStatus.Pending,
     done: KoboMetaStatus.Committed,
   }
@@ -108,9 +115,13 @@ export namespace KoboMetaHelper {
     return match(status).cases(cashStatus).default(undefined)
   }
 
-  export const mapMsmeStatus = (status: 'done' | 'pending' | undefined): KoboMetaStatus | undefined => {
-    return match(status).cases(msmeStatus).default(undefined)
-  }
+  export const mapMsmeStatus = (
+    status: keyof typeof Ecrec_msmeGrantReg.options.status_first_tranche | undefined,
+  ): KoboMetaStatus | undefined => match(status).cases(msmeStatus).default(undefined)
+
+  export const mapVetStatus = (
+    status: keyof typeof Ecrec_vet_bha388.options.course_payment | undefined,
+  ): KoboMetaStatus | undefined => match(status).cases(vetStatus).default(undefined)
 
   export const mapValidationStatus = (status: KoboValidation | undefined): KoboMetaStatus | undefined => {
     return match(status).cases(validationStatus).default(undefined)

@@ -290,8 +290,15 @@ export class KoboMetaMapperEcrec {
       patronymicName: answer.pat_name,
       taxId: answer.tax_id_num,
       phone: answer.ph_number ? '' + answer.ph_number : '',
-      status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
-      lastStatusUpdate: KoboHelper.timestampToDate(row.lastValidatedTimestamp),
+      ...(row.validationStatus === KoboValidation.Approved
+        ? {
+            status: KoboMetaHelper.mapVetStatus(answer.course_payment),
+            lastStatusUpdate: answer.course_payment_date,
+          }
+        : {
+            status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
+            lastStatusUpdate: KoboHelper.timestampToDate(row.lastValidatedTimestamp),
+          }),
     })
   }
 
