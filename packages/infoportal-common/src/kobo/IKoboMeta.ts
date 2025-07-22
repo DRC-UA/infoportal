@@ -1,10 +1,14 @@
-import {StateStatus, UUID} from '../type/Generic.js'
+import {match} from '@axanc/ts-utils'
+import {Kobo} from 'kobo-sdk'
+
 import {OblastName} from '../location/index.js'
 import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc.js'
-import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper/index.js'
-import {fnSwitch} from '@axanc/ts-utils'
-import {Kobo} from 'kobo-sdk'
+import {StateStatus, UUID} from '../type/Generic.js'
 import {Person} from '../type/Person.js'
+
+import {Ecrec_vet_bha388} from './generated/Ecrec_vet_bha388'
+import {Ecrec_msmeGrantReg} from './generated/Ecrec_msmeGrantReg.js'
+import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper/index.js'
 
 export type IKoboMeta<TTag = any> = {
   id: UUID
@@ -89,6 +93,16 @@ export namespace KoboMetaHelper {
     Rejected: KoboMetaStatus.Rejected,
   }
 
+  const msmeStatus: Partial<Record<keyof typeof Ecrec_msmeGrantReg.options.status_first_tranche, KoboMetaStatus>> = {
+    pending: KoboMetaStatus.Pending,
+    done: KoboMetaStatus.Committed,
+  }
+
+  const vetStatus: Partial<Record<keyof typeof Ecrec_vet_bha388.options.course_payment, KoboMetaStatus>> = {
+    pending: KoboMetaStatus.Pending,
+    done: KoboMetaStatus.Committed,
+  }
+
   const validationStatus: Partial<Record<KoboValidation, KoboMetaStatus>> = {
     [KoboValidation.Approved]: KoboMetaStatus.Committed,
     [KoboValidation.Rejected]: KoboMetaStatus.Rejected,
@@ -97,11 +111,19 @@ export namespace KoboMetaHelper {
     [KoboValidation.Flagged]: KoboMetaStatus.Pending,
   }
 
-  export const mapCashStatus = (_?: CashStatus): KoboMetaStatus | undefined => {
-    return fnSwitch(_!, cashStatus, () => undefined)
+  export const mapCashStatus = (status: CashStatus | undefined): KoboMetaStatus | undefined => {
+    return match(status).cases(cashStatus).default(undefined)
   }
 
-  export const mapValidationStatus = (_?: KoboValidation): KoboMetaStatus | undefined => {
-    return fnSwitch(_!, validationStatus, () => undefined)
+  export const mapMsmeStatus = (
+    status: keyof typeof Ecrec_msmeGrantReg.options.status_first_tranche | undefined,
+  ): KoboMetaStatus | undefined => match(status).cases(msmeStatus).default(undefined)
+
+  export const mapVetStatus = (
+    status: keyof typeof Ecrec_vet_bha388.options.course_payment | undefined,
+  ): KoboMetaStatus | undefined => match(status).cases(vetStatus).default(undefined)
+
+  export const mapValidationStatus = (status: KoboValidation | undefined): KoboMetaStatus | undefined => {
+    return match(status).cases(validationStatus).default(undefined)
   }
 }

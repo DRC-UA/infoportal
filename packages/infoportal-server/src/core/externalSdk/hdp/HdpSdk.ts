@@ -16,7 +16,7 @@ export class HdpSdk {
       database: appConf.dbAzureHdp.schema,
       server: appConf.dbAzureHdp.host,
     })
-    this.#pool.connect()
+    // this.#pool.connect()
   }
 
   async fetchAiRiskEducation(): Promise<any> {

@@ -1,4 +1,5 @@
-import {fnSwitch, map, Obj} from '@axanc/ts-utils'
+import {match, map} from '@axanc/ts-utils'
+
 import {
   DrcDonor,
   DrcOffice,
@@ -12,6 +13,7 @@ import {
   Ecrec_msmeGrantReg,
   Ecrec_msmeGrantSelection,
   Ecrec_vet_bha388,
+  Ecrec_vet2_dmfa,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
   KoboBaseTags,
@@ -26,10 +28,11 @@ import {
   oblastByDrcOffice,
   VetApplicationStatus,
 } from 'infoportal-common'
+
+import {appConf} from '../../../core/conf/AppConf.js'
+
 import {KoboMetaOrigin} from './KoboMetaType.js'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService.js'
-import {appConf} from '../../../core/conf/AppConf.js'
-import {Ecrec_vet2_dmfa} from 'infoportal-common'
 
 export class KoboMetaMapperEcrec {
   static readonly cashRegistration: MetaMapperInsert<
@@ -143,17 +146,15 @@ export class KoboMetaMapperEcrec {
         oblast: oblast.name,
         raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
         hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
-        office: fnSwitch(
-          answer.ben_det_oblast!,
-          {
+        office: match(answer.ben_det_oblast)
+          .cases({
             dnipropetrovska: DrcOffice.Dnipro,
             khersonska: DrcOffice.Kherson,
             mykolaivska: DrcOffice.Mykolaiv,
             zaporizka: DrcOffice.Dnipro,
             lvivska: DrcOffice.Lviv,
-          },
-          () => undefined,
-        ),
+          })
+          .default(undefined),
         taxId: map(answer.ben_enterprise_tax_id ?? answer.tax_id_num, (_) => '' + _),
         firstName: answer.ben_first_name,
         lastName: answer.ben_last_name,
@@ -164,17 +165,15 @@ export class KoboMetaMapperEcrec {
           amount: answer.much_need_grant,
           employeesCount:
             1 +
-            fnSwitch(
-              answer.there_paid_employees_quantity!,
-              {
+            match(answer.there_paid_employees_quantity)
+              .cases({
                 '0_5_people': 3,
                 '5_10_people': 8,
                 '10_15_people': 13,
                 '15_20_people': 18,
                 '20_more_people': 23,
-              },
-              () => 0,
-            ),
+              })
+              .default(0),
         },
       },
     }
@@ -186,17 +185,15 @@ export class KoboMetaMapperEcrec {
     const answer = Ecrec_msmeGrantEoi.map(row.answers)
     const persons = KoboXmlMapper.Persons.ecrec_msmeGrantEoi(answer)
     if (answer.back_consent !== 'yes' && answer.back_consent_lviv !== 'yes') return
-    const office = fnSwitch(
-      answer.ben_det_oblast!,
-      {
+    const office = match(answer.ben_det_oblast)
+      .cases({
         dnipropetrovska: DrcOffice.Dnipro,
         zaporizka: DrcOffice.Dnipro,
         mykolaivska: DrcOffice.Dnipro,
         khersonska: DrcOffice.Dnipro,
         lvivska: DrcOffice.Dnipro,
-      },
-      () => undefined,
-    )
+      })
+      .default(undefined)
     if (!office) return
     return KoboMetaMapper.make<KoboMetaEcrecTags>({
       date: row.submissionTime,
@@ -217,17 +214,15 @@ export class KoboMetaMapperEcrec {
       patronymicName: answer.ben_det_pat_name,
       status: row.tags?._validation === KoboValidation.Rejected ? KoboMetaStatus.Rejected : KoboMetaStatus.Pending,
       tags: {
-        employeesCount: fnSwitch(
-          answer.many_people_employ!,
-          {
+        employeesCount: match(answer.many_people_employ)
+          .cases({
             '0_5_people': 3,
             '5_10_people': 8,
             '10_15_people': 13,
             '15_20_people': 18,
             '20_more_people': 23,
-          },
-          () => 0,
-        ),
+          })
+          .default(0),
       },
     })
   }
@@ -295,8 +290,15 @@ export class KoboMetaMapperEcrec {
       patronymicName: answer.pat_name,
       taxId: answer.tax_id_num,
       phone: answer.ph_number ? '' + answer.ph_number : '',
-      status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
-      lastStatusUpdate: KoboHelper.timestampToDate(row.lastValidatedTimestamp),
+      ...(row.validationStatus === KoboValidation.Approved
+        ? {
+            status: KoboMetaHelper.mapVetStatus(answer.course_payment),
+            lastStatusUpdate: answer.course_payment_date,
+          }
+        : {
+            status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
+            lastStatusUpdate: KoboHelper.timestampToDate(row.lastValidatedTimestamp),
+          }),
     })
   }
 
@@ -334,6 +336,7 @@ export class KoboMetaMapperEcrec {
     const persons = KoboXmlMapper.Persons.ecrec_msmeGrantReg(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.oblast!)
     const project = DrcProject['UKR-000388 BHA']
+
     return KoboMetaMapper.make({
       // enumerator: Ecrec_msmeGrantReg.options.[answer.back_enum!],
       office: DrcOffice.Mykolaiv,
@@ -352,8 +355,16 @@ export class KoboMetaMapperEcrec {
       patronymicName: answer.pat_name,
       taxId: answer.tax_id_num,
       phone: answer.ph_number ? '' + answer.ph_number : '',
-      status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
-      lastStatusUpdate: KoboHelper.timestampToDate(row.lastValidatedTimestamp),
+      ...(row.validationStatus === KoboValidation.Approved
+        ? {
+            // if approved, then set Commited status when paid
+            status: KoboMetaHelper.mapMsmeStatus(answer.status_first_tranche),
+            lastStatusUpdate: answer.date_first_tranche,
+          }
+        : {
+            status: KoboMetaHelper.mapValidationStatus(row.validationStatus),
+            lastStatusUpdate: KoboHelper.timestampToDate(row.lastValidatedTimestamp),
+          }),
     })
   }
 }
