@@ -9,11 +9,11 @@ const pickPrioritizedAid = (aids: Legal_individual_aid.T['number_case']): Legal_
     return (
       beneficiary_application_type === 'assistance' &&
       hlpDocDateFields.some((field) => {
-        console.log(isDate(aid[field]))
         return isDate(aid[field])
       })
     )
   })
+
   const civilAssistanceWithDoc = aids.find(({beneficiary_application_type, ...aid}) => {
     return beneficiary_application_type === 'assistance' && civilDocDateFields.some((field) => isDate(aid[field]))
   })

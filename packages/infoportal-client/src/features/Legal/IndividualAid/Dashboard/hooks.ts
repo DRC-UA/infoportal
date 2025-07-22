@@ -8,6 +8,7 @@ import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useI18n} from '@/core/i18n'
 import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {pickPrioritizedAid} from './utils'
 
 const useIndividualAidData = () => {
   const {m} = useI18n()
@@ -93,6 +94,7 @@ const useIndividualAidData = () => {
           }) ?? [],
       }))
       .filter((record) => record.number_case.length > 0)
+      .map(({number_case, ...record}) => ({...record, number_case: pickPrioritizedAid(number_case)}))
   }, [data, filterShape, optionFilter, casePeriod, caseClosurePeriod])
 
   return {
