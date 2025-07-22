@@ -1,27 +1,28 @@
-import {ActivityInfoRequest} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
-import {Datatable} from '@/shared/Datatable/Datatable'
-import React, {ReactNode, useEffect, useMemo, useState} from 'react'
-import {UseFetcher} from '@/shared/hook/useFetcher'
+import {useEffect, useMemo, useState, type ReactNode} from 'react'
 import {seq} from '@axanc/ts-utils'
+import {Badge, Box, useTheme} from '@mui/material'
+import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
+
+import {KoboSubmissionFlat, KoboIndex, Period} from 'infoportal-common'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useI18n} from '@/core/i18n'
+import {ActivityInfoRequest} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
+import {useSession} from '@/core/Session/SessionContext'
+import {useIpToast} from '@/core/useToast'
 import {
   AiPreviewActivity,
   AiPreviewRequest,
   AiSendBtn,
   AiViewAnswers,
 } from '@/features/ActivityInfo/shared/ActivityInfoActions'
-import {useAsync} from '@/shared/hook/useAsync'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {useIpToast} from '@/core/useToast'
-import {Badge, Box, useTheme} from '@mui/material'
 import {IpBtn} from '@/shared/Btn'
-import {useI18n} from '@/core/i18n'
-import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
-import {KoboSubmissionFlat, KoboIndex} from 'infoportal-common'
-import {useSession} from '@/core/Session/SessionContext'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {useAsync} from '@/shared/hook/useAsync'
+import {UseFetcher} from '@/shared/hook/useFetcher'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {Period} from 'infoportal-common'
 
 export interface AiTable<TActivity = any, TSubActivity extends any = any, TAnswer extends Record<string, any> = any> {
   submit?: boolean
@@ -99,22 +100,24 @@ export const AiBundleTable = ({
               max={endOfMonth(new Date())}
             />
             {header}
-            <IpBtn
-              icon="send"
-              variant="contained"
-              sx={{ml: 'auto'}}
-              onClick={() => {
-                if (!fetcher.get) return
-                _submit
-                  .call(
-                    'all',
-                    fetcher.get.filter((_) => _.submit).map((_) => _.requestBody),
-                  )
-                  .catch(toastHttpError)
-              }}
-            >
-              {m.submitAll}
-            </IpBtn>
+            {session.admin && (
+              <IpBtn
+                icon="send"
+                variant="contained"
+                sx={{ml: 'auto'}}
+                onClick={() => {
+                  if (!fetcher.get) return
+                  _submit
+                    .call(
+                      'all',
+                      fetcher.get.filter((_) => _.submit).map((_) => _.requestBody),
+                    )
+                    .catch(toastHttpError)
+                }}
+              >
+                {m.submitAll}
+              </IpBtn>
+            )}
           </Box>
         }
         columns={[

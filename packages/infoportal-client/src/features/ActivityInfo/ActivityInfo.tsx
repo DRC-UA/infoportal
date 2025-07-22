@@ -69,7 +69,7 @@ export const activitiesConfig = {
 
 export const activityInfoIndex = {
   basePath: '/activity-info',
-  siteMap: new Obj(activitiesConfig).transform((k, v) => [k, v.path]).get(),
+  siteMap: new Obj(activitiesConfig).map((k, v) => [k, v.path]).get(),
 }
 
 const ActivityInfoSidebar = () => {
