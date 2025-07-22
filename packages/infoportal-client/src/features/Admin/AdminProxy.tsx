@@ -21,6 +21,7 @@ import {NullableFn} from 'infoportal-common'
 
 interface CreateForm {
   name: string
+  origin?: string
   slug: string
   url: string
   expireAt?: Date
@@ -31,6 +32,10 @@ export const AdminProxy = () => {
   const {formatDate, m} = useI18n()
 
   const _createForm = useForm<CreateForm>({
+    mode: 'onChange',
+  })
+
+  const _editForm = useForm<CreateForm>({
     mode: 'onChange',
   })
 
@@ -231,9 +236,85 @@ export const AdminProxy = () => {
               width: 0,
               align: 'right',
               renderQuick: (_) => (
-                <TableIconBtn onClick={() => _search.remove(_.id)} loading={_search.removing(_.id)}>
-                  delete
-                </TableIconBtn>
+                <>
+                  <Modal
+                    onOpen={() =>
+                      _editForm.reset({
+                        name: _.name,
+                        url: _.url,
+                        expireAt: _.expireAt ? new Date(_.expireAt) : undefined,
+                        slug: _.slug,
+                      })
+                    }
+                    title={m.edit}
+                    confirmLabel={m.save}
+                    onConfirm={(e, close) =>
+                      _editForm.handleSubmit((form) => {
+                        _search
+                          .update(_.id, {
+                            name: form.name,
+                            url: form.url,
+                            expireAt: form.expireAt ? endOfDay(new Date(form.expireAt)) : undefined,
+                          })
+                          .then(close)
+                      })()
+                    }
+                    content={
+                      <>
+                        <Controller
+                          name="name"
+                          control={_editForm.control}
+                          rules={{required: {value: true, message: m.required}}}
+                          render={({field, fieldState}) => (
+                            <IpInput
+                              {...field}
+                              label={m.name}
+                              error={!!fieldState.error}
+                              helperText={fieldState.error?.message}
+                              sx={{mb: 2}}
+                            />
+                          )}
+                        />
+                        <Controller
+                          name="url"
+                          control={_editForm.control}
+                          rules={{
+                            required: {value: true, message: m.required},
+                            pattern: {value: Regexp.get.url, message: m.invalidUrl},
+                          }}
+                          render={({field, fieldState}) => (
+                            <IpInput
+                              {...field}
+                              label={m.proxyDestinationUrl}
+                              error={!!fieldState.error}
+                              helperText={fieldState.error?.message}
+                              sx={{mb: 2}}
+                            />
+                          )}
+                        />
+                        <Controller
+                          name="expireAt"
+                          control={_editForm.control}
+                          render={({field, fieldState}) => (
+                            <IpInput
+                              {...field}
+                              InputLabelProps={{shrink: true}}
+                              label={m.expireAt}
+                              type="date"
+                              error={!!fieldState.error}
+                              helperText={fieldState.error?.message}
+                            />
+                          )}
+                        />
+                      </>
+                    }
+                  >
+                    <IpIconBtn size="small">edit</IpIconBtn>
+                  </Modal>
+                  <TableIconBtn onClick={() => _search.remove(_.id)} loading={_search.removing(_.id)}>
+                    delete
+                  </TableIconBtn>
+                </>
               ),
             },
           ]}
