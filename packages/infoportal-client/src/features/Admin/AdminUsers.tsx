@@ -7,7 +7,7 @@ import {IpIconBtn} from '@/shared/IconBtn'
 import {Panel} from '@/shared/Panel'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {Txt} from '@/shared/Txt'
-import {Box, Switch} from '@mui/material'
+import {Autocomplete, Box, Switch, TextField} from '@mui/material'
 import {useRouter} from 'next/router'
 import {seq} from '@axanc/ts-utils'
 import {useFetcher} from '@/shared/hook/useFetcher'
@@ -180,12 +180,56 @@ export const AdminUsers = () => {
                         <Controller
                           name="drcJob"
                           control={_editForm.control}
-                          render={({field}) => <IpInput {...field} label={m.drcJob} sx={{mb: 2}} />}
+                          render={({field}) => {
+                            const values = seq(_users.get?.map((_) => _.drcJob))
+                              .distinct((_) => _)
+                              .compact()
+                              .get()
+
+                            const currentValue = field.value ?? ''
+                            const allOptions = seq([...values, currentValue])
+                              .distinct((_) => _)
+                              .compact()
+                              .get()
+
+                            return (
+                              <Autocomplete
+                                disablePortal
+                                options={allOptions}
+                                value={field.value ?? null}
+                                onChange={(e, newValue) => field.onChange(newValue)}
+                                renderInput={(params) => <TextField {...params} label={m.drcJob} sx={{mb: 2}} />}
+                                isOptionEqualToValue={(opt, val) => opt === val}
+                              />
+                            )
+                          }}
                         />
                         <Controller
                           name="drcOffice"
                           control={_editForm.control}
-                          render={({field}) => <IpInput {...field} label={m.drcOffice} sx={{mb: 2}} />}
+                          render={({field}) => {
+                            const values = seq(_users.get?.map((_) => _.drcOffice))
+                              .distinct((_) => _)
+                              .compact()
+                              .get()
+
+                            const currentValue = field.value ?? ''
+                            const allOptions = seq([...values, currentValue])
+                              .distinct((_) => _)
+                              .compact()
+                              .get()
+
+                            return (
+                              <Autocomplete
+                                disablePortal
+                                options={allOptions}
+                                value={field.value ?? null}
+                                onChange={(e, newValue) => field.onChange(newValue)}
+                                renderInput={(params) => <TextField {...params} label={m.drcOffice} sx={{mb: 2}} />}
+                                isOptionEqualToValue={(opt, val) => opt === val}
+                              />
+                            )
+                          }}
                         />
                       </>
                     }
