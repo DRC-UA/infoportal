@@ -1,4 +1,3 @@
-import React from 'react'
 import {NavLink, Route, Routes} from 'react-router-dom'
 import {Obj} from '@axanc/ts-utils'
 
@@ -11,59 +10,65 @@ import {AiGbv} from '@/features/ActivityInfo/Gbv/AiGbv'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {AiMineAction} from '@/features/ActivityInfo/MineAction/AiMineAction'
 import {AiChildProtection} from '@/features/ActivityInfo/ChildProtection/AiChildProtection'
+import {AiLegal} from '@/features/ActivityInfo/Legal/AiLegal'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
 export const activitiesConfig = {
-  protection_general: {
+  protectionGeneral: {
     id: 'czd5jf7lqf2zv4r4r',
     subId: 'c4u0d3glqf3085j58',
-    name: 'Protection',
-    path: '/protection_general',
-    componnent: <AiProtection />,
+    name: 'Protection General',
+    path: '/protection-general',
+    component: <AiProtection />,
   },
   mineAction: {
     id: 'cmnzatklqv1q3s243u',
     name: 'Mine Action',
     path: '/mine-action',
     subId: 'cegbam4lqv1q3s243v',
-    componnent: <AiMineAction />,
+    component: <AiMineAction />,
   },
   childProtection: {
     name: 'Child Protection',
     path: '/child-protection',
-    componnent: <AiChildProtection />,
+    component: <AiChildProtection />,
   },
   gbv: {
     id: 'c6mrp6dlqv1q7q243w',
     subId: 'cdgpehzlqv1q7q243x',
     name: 'GBV',
     path: '/gbv',
-    componnent: <AiGbv />,
+    component: <AiGbv />,
+  },
+  legal: {
+    name: 'Legal Aid',
+    path: 'legal',
+    component: <AiLegal />,
   },
   wash: {
     id: 'cz86p3tlqc7h66y2',
     name: 'WASH (NFI)',
-    path: '/wash_nfi',
-    componnent: <AiWash />,
+    path: '/wash-nfi',
+    component: <AiWash />,
   },
   mpca: {
     id: 'c9vv9j8lqm633lj1tm',
     name: 'MPCA',
     path: '/mpca',
-    componnent: <AiMpca />,
+    component: <AiMpca />,
   },
   snfi: {
     id: 'c95ky7klr95z6ia3v',
     name: 'SNFI',
     path: '/snfi',
-    componnent: <AiSnfi />,
+    component: <AiSnfi />,
   },
   fslc: {
     id: 'chxr3zlqc5qatg2',
     name: 'FSLC',
     path: '/fslc',
-    componnent: <AiFslc />,
+    component: <AiFslc />,
   },
 }
 
@@ -93,7 +98,7 @@ export const ActivityInfo = () => {
     <Layout sidebar={<ActivityInfoSidebar />} title={appFeaturesIndex.activity_info.name}>
       <Routes>
         {Obj.values(activitiesConfig).map((k) => (
-          <Route key={k.path} path={k.path} element={k.componnent} />
+          <Route key={k.path} path={k.path} element={k.component} />
         ))}
       </Routes>
     </Layout>

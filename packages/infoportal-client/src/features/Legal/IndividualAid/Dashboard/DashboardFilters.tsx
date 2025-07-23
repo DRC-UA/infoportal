@@ -1,62 +1,25 @@
 import type {FC} from 'react'
 
-import {useI18n} from '@/core/i18n'
-import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
-import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
+import {useLegalFilterShape} from '../hooks'
+import Filters from '../Filters'
 
 import {useIndividualAidContext} from './context'
-import {Box, Typography} from '@mui/material'
 
-const Filters: FC = () => {
+const DashboardFilters: FC = () => {
+  const shapes = useLegalFilterShape()
   const ctx = useIndividualAidContext()
-  const {m} = useI18n()
 
   return (
-    <DataFilterLayout
-      shapes={ctx.filterShape}
+    <Filters
+      shapes={shapes}
       filters={ctx.optionFilter}
-      onClear={() => {
-        ctx.setOptionFilters({})
-        ctx.setCasePeriod(ctx.casePeriod)
-        ctx.setCasePeriod(ctx.caseClosurePeriod)
-      }}
-      setFilters={ctx.setOptionFilters}
-      slotProps={{
-        filtersBox: {pt: 2.5},
-        controlsBox: {pt: 2.5},
-      }}
-      before={
-        <Box display="flex">
-          <Box>
-            <Typography fontSize="small">{m.legal.aidDate}</Typography>
-            <PeriodPicker
-              value={[ctx.casePeriod.start, ctx.casePeriod.end]}
-              onChange={([start, end]) => {
-                ctx.setCasePeriod((prev) => ({...prev, start: start ?? undefined, end: end ?? undefined}))
-              }}
-              fullWidth={false}
-              label={[m.start, m.endIncluded]}
-              min={ctx.casePeriod?.start}
-              max={ctx.casePeriod?.end}
-            />
-          </Box>
-          <Box>
-            <Typography fontSize="small">{m.legal.aidClosureDate}</Typography>
-            <PeriodPicker
-              value={[ctx.caseClosurePeriod.start, ctx.caseClosurePeriod.end]}
-              onChange={([start, end]) => {
-                ctx.setCaseClosurePeriod((prev) => ({...prev, start: start ?? undefined, end: end ?? undefined}))
-              }}
-              fullWidth={false}
-              label={[m.start, m.endIncluded]}
-              min={ctx.caseClosurePeriod?.start}
-              max={ctx.caseClosurePeriod?.end}
-            />
-          </Box>
-        </Box>
-      }
+      setOptionFilters={ctx.setOptionFilters}
+      setCasePeriod={ctx.setCasePeriod}
+      casePeriod={ctx.casePeriod}
+      caseClosurePeriod={ctx.caseClosurePeriod}
+      setCaseClosurePeriod={ctx.setCaseClosurePeriod}
     />
   )
 }
 
-export default Filters
+export default DashboardFilters

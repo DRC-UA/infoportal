@@ -104,7 +104,7 @@ export const DatabaseKoboTableProvider = (props: {
 
   useEffect(() => {
     if (data) setMappedData(mapData(data))
-  }, [data])
+  }, [data, props.dataFilter]) // dataFilter triggers filtering from external filter set
 
   const view = useDatabaseView(form.id)
   const groupDisplay = useObjectState<DatabaseDisplay>({

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build  && cp -a public .next/standalone/packages/infoportal-client/public && cp -a .next/static .next/standalone/packages/infoportal-client/.next/static",
+    "build": "next build && cp -a public .next/standalone/packages/infoportal-client/public && cp -a .next/static .next/standalone/packages/infoportal-client/.next/static",
     "start": "next start",
     "start-standalone": "node ./.next/standalone/packages/infoportal-client/server.js",
     "lint": "next lint"

@@ -18,6 +18,7 @@ export interface FilterLayoutProps extends Pick<BoxProps, 'sx'> {
   readonly data?: Seq<any>
   readonly shapes: Record<string, DataFilter.Shape<any, any>>
   readonly slotProps?: {
+    wrapperBox?: BoxProps
     filtersBox?: BoxProps
     controlsBox?: BoxProps
   }
@@ -48,6 +49,7 @@ export const DataFilterLayout = ({
         maxWidth: '100%',
         display: 'flex',
         alignItems: 'center',
+        ...slotProps?.wrapperBox,
       }}
     >
       <Box
