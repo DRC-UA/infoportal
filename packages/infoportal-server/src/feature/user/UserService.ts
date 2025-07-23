@@ -93,4 +93,19 @@ export class UserService {
     })
     return drcJobs.map((job) => job.drcJob!)
   }
+
+  readonly updateByEmail = async (
+    email: string,
+    data: Partial<{name: string; drcOffice: DrcOffice; drcJob: string}>,
+  ) => {
+    const updatedUser = await this.prisma.user.update({
+      where: {email},
+      data,
+    })
+    this.cache.set({
+      key: AppCacheKey.Users,
+      value: this.loadUsersCache().then((_) => _.map((_) => (_.email === email ? updatedUser : _))),
+    })
+    return updatedUser
+  }
 }

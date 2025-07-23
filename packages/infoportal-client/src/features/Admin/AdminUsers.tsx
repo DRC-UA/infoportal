@@ -13,6 +13,10 @@ import {seq} from '@axanc/ts-utils'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {AppAvatar} from '@/shared/AppAvatar'
+import {Controller, useForm} from 'react-hook-form'
+import {IpInput} from '@/shared/Input/Input'
+import {Modal} from '@/shared'
+import {DrcJob, DrcOffice} from 'infoportal-common'
 
 export const AdminUsers = () => {
   const {api, conf} = useAppSettings()
@@ -23,6 +27,14 @@ export const AdminUsers = () => {
   const router = useRouter()
 
   const [showDummyAccounts, setShowDummyAccounts] = useState(false)
+
+  const _editForm = useForm<{
+    name?: string
+    drcJob?: DrcJob
+    drcOffice?: DrcOffice
+  }>({
+    mode: 'onChange',
+  })
 
   useEffect(() => {
     _users.fetch({clean: false}, {includeDummy: showDummyAccounts})
@@ -139,13 +151,55 @@ export const AdminUsers = () => {
               width: 10,
               align: 'right',
               renderQuick: (_) => (
-                <IpIconBtn
-                  disabled={_.email === conf.contact || _.email === session.email}
-                  children="visibility"
-                  loading={_connectAs.loading}
-                  onClick={() => connectAs(_.email)}
-                  tooltip={m.connectAs}
-                />
+                <>
+                  <Modal
+                    onOpen={() => {
+                      _editForm.reset({
+                        name: _.name,
+                        drcJob: _.drcJob,
+                        drcOffice: _.drcOffice,
+                      })
+                    }}
+                    title={m.edit}
+                    confirmLabel={m.save}
+                    onConfirm={(e, close) =>
+                      _editForm.handleSubmit((form) => {
+                        api.user.updateByEmail(_.email, form).then(() => {
+                          _users.fetch({clean: false}, {includeDummy: showDummyAccounts})
+                          close()
+                        })
+                      })()
+                    }
+                    content={
+                      <>
+                        <Controller
+                          name="name"
+                          control={_editForm.control}
+                          render={({field}) => <IpInput {...field} label={m.name} sx={{mb: 2}} />}
+                        />
+                        <Controller
+                          name="drcJob"
+                          control={_editForm.control}
+                          render={({field}) => <IpInput {...field} label={m.drcJob} sx={{mb: 2}} />}
+                        />
+                        <Controller
+                          name="drcOffice"
+                          control={_editForm.control}
+                          render={({field}) => <IpInput {...field} label={m.drcOffice} sx={{mb: 2}} />}
+                        />
+                      </>
+                    }
+                  >
+                    <IpIconBtn size="small">edit</IpIconBtn>
+                  </Modal>
+                  <IpIconBtn
+                    disabled={_.email === conf.contact || _.email === session.email}
+                    children="visibility"
+                    loading={_connectAs.loading}
+                    onClick={() => connectAs(_.email)}
+                    tooltip={m.connectAs}
+                  />
+                </>
               ),
             },
           ]}
