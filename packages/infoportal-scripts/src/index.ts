@@ -16,6 +16,6 @@ export const koboSdkDrc = new KoboClient({
   // await FixKoboMigration.resetWrongMigration()
   // await FixKoboMigration.MissingSubmissions.run()
   // await FixKoboMigration.Tags.run()
-  await new ActivityInfoBuildType().buildAll()
+  // await new ActivityInfoBuildType().buildAll()
   // await new BuildKoboType().build('cbp_pre_post')
 })()
