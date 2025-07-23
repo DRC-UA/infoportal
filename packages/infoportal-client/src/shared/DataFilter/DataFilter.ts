@@ -55,7 +55,7 @@ export namespace DataFilter {
   export type InferShape<F extends Record<string, Shape<any>>> = Record<keyof F, string[] | undefined>
 
   export const filterData = <TData, TValue extends string, TName extends string>(
-    d: Seq<TData>,
+    d: TData[],
     shapes: Partial<Record<TName, Shape<TData, TValue>>>,
     filters: Record<TName, string[] | undefined>,
   ): Seq<TData> => {

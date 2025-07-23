@@ -1,6 +1,5 @@
 export namespace AiLegalType {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
     ID?: string
     'Reporting Organization': Opt<'Partner'>
@@ -12,7 +11,7 @@ export namespace AiLegalType {
     Hromada: string
     Settlement?: string
     'Collective Site'?: string
-    'Response Theme': Opt<'Response Theme'>
+    'Response Theme'?: Opt<'Response Theme'>
     'Activities and People'?: AiTypeActivitiesAndPeople[]
   }
 
@@ -70,6 +69,7 @@ export namespace AiLegalType {
       'Reporting Month': string
       Indicators: Opt<'Indicators - Protection'>
       'Population Group': Opt<'Population Group'>
+      'Response Theme': Opt<'Response Theme'>
       'Total Individuals Reached': number
       'Girls (0-17)': number
       'Boys (0-17)': number
@@ -77,10 +77,9 @@ export namespace AiLegalType {
       'Adult Men (18-59)': number
       'Older Women (60+)': number
       'Older Men (60+)': number
-      'Non-individuals Reached/Quantity': number
       /**
-        Out of the total individuals reached
-      */
+      Out of the total individuals reached
+    */
       'People with Disability'?: number
     }
 
@@ -98,6 +97,7 @@ export namespace AiLegalType {
             cc9whaum4wl74eb12: a['Population Group']
               ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!]
               : undefined,
+            cifocgamb6a4au98: a['Response Theme'] ? options['Response Theme'][a['Response Theme']!] : undefined,
             cxcth1bm4wk7dvms: a['Total Individuals Reached'],
             ce79tc4m4wkdpd4t: a['Girls (0-17)'],
             ckd43oym4wkfhmwu: a['Boys (0-17)'],
@@ -105,7 +105,6 @@ export namespace AiLegalType {
             clhi83vm4wkxl81w: a['Adult Men (18-59)'],
             cty2zyem4wkyvyhx: a['Older Women (60+)'],
             csq1r47m4wl091ky: a['Older Men (60+)'],
-            ctm6pddm4wl2ky2z: a['Non-individuals Reached/Quantity'],
             c3knsqem4wl8nfu14: a['People with Disability'],
           },
         },
@@ -170,6 +169,12 @@ export namespace AiLegalType {
         'Community-based protection activities > # of CSOs supported': 'chy6ojqm8ymdji23',
       },
       'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
+      'Response Theme': {
+        'No specific theme': 'cfv425ymb6a4au97',
+        Evacuations: 'cd70jqnmb6a51199',
+        'Emergency response after strikes': 'cwb81gcmb6a51oba',
+        'Both (evacuation & emergency response after strikes)': 'cx7nuzdmb6a52abb',
+      },
     }
   }
 }

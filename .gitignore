@@ -94,3 +94,4 @@ sessions/
 packages/infoportal-scripts/output
 
 .aider.*
+.aider*

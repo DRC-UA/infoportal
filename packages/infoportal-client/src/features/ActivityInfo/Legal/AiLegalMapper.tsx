@@ -1,7 +1,6 @@
 import {match, seq} from '@axanc/ts-utils'
 
 import {
-  DrcProgram,
   DrcProject,
   DrcProjectHelper,
   groupBy,
@@ -10,21 +9,21 @@ import {
   Legal_individual_aid,
   PeriodHelper,
   Person,
-  type IKoboMeta,
   type Period,
 } from 'infoportal-common'
 
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {pickPrioritizedAid, hlpDocDateFields, civilDocDateFields} from '@/features/Legal/IndividualAid/Dashboard'
 
-namespace AiLegalMapper {
-  type Bundle = AiTable<AiProtectionType.Type, AiProtectionType.AiTypeActivitiesAndPeople>
+import {AiLegalType} from './AiLegalTypes'
 
-  const getPlanCode = (project?: DrcProject): AiProtectionType.Type['Plan/Project Code'] => {
+namespace AiLegalMapper {
+  type Bundle = AiTable<AiLegalType.Type, AiLegalType.AiTypeActivitiesAndPeople>
+
+  const getPlanCode = (project?: DrcProject): AiLegalType.Type['Plan/Project Code'] => {
     // @ts-expect-error It's OK to get an error here, we expect it to flag missing or mismatching data
     return match(project)
       .cases({
@@ -68,11 +67,12 @@ namespace AiLegalMapper {
     return 'counselling'
   }
 
-  const tempKoboMapper = (data: Legal_individual_aid.T[]) => {
-    return data.map(({oblast, raion, hromada, displacement, ...record}) => {
-      if (KoboXmlMapper.Location.mapOblast(oblast)?.name === undefined) console.log({oblast})
+  const legalAidKoboMapper = (data: Legal_individual_aid.T[]) => {
+    // @ts-expect-error No id is expected in type, but it really is there
+    return data.map(({oblast, raion, hromada, displacement, id, ...record}) => {
       return {
         ...record,
+        koboId: id,
         oblast: KoboXmlMapper.Location.mapOblast(oblast)?.name,
         raion: KoboXmlMapper.Location.searchRaion(raion),
         hromada: KoboXmlMapper.Location.searchHromada(hromada),
@@ -126,7 +126,7 @@ namespace AiLegalMapper {
     let i = 0
     await Promise.all(
       groupBy({
-        data: tempKoboMapper(data),
+        data: legalAidKoboMapper(data),
         groups: [
           {by: (_) => _.oblast!},
           {by: (_) => _.raion!},
@@ -141,14 +141,13 @@ namespace AiLegalMapper {
             periodStr,
             index: i++,
           })
-          const activity: AiProtectionType.Type = {
+          const activity: AiLegalType.Type = {
             Oblast: oblast,
             Raion: raion,
             Hromada: hromada,
             Settlement: settlement,
             'Plan/Project Code': getPlanCode(project),
             'Reporting Organization': 'Danish Refugee Council (DRC)',
-            'Response Theme': 'No specific theme',
           }
           const subActivities = mapSubActivity(
             grouped.filter((item) => item.displacement === displacement),
@@ -159,7 +158,7 @@ namespace AiLegalMapper {
             ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
             'Activities and People': subActivities.map((_) => _.activity),
           }
-          const requestBody = ActivityInfoSdk.wrapRequest(AiProtectionType.buildRequest(activityPrebuilt, recordId))
+          const requestBody = ActivityInfoSdk.wrapRequest(AiLegalType.buildRequest(activityPrebuilt, recordId))
           subActivities.map((subActivity) => {
             res.push({
               activity,
@@ -174,7 +173,7 @@ namespace AiLegalMapper {
                 activity.Settlement,
                 activity['Plan/Project Code'],
                 ...(activity['Activities and People']?.map(
-                  (_: AiProtectionType.AiTypeActivitiesAndPeople) => _.Indicators,
+                  (_: AiLegalType.AiTypeActivitiesAndPeople) => _.Indicators,
                 ) ?? []),
               ),
             })
@@ -187,10 +186,13 @@ namespace AiLegalMapper {
   }
 
   const mapSubActivity = (
-    data: ReturnType<typeof tempKoboMapper>,
+    data: ReturnType<typeof legalAidKoboMapper>,
     periodStr: string,
-  ): {activity: AiProtectionType.AiTypeActivitiesAndPeople; data: IKoboMeta[]}[] => {
-    const res: {activity: AiProtectionType.AiTypeActivitiesAndPeople; data: IKoboMeta[]}[] = []
+  ): {activity: AiLegalType.AiTypeActivitiesAndPeople.Type; data: ReturnType<typeof legalAidKoboMapper>}[] => {
+    const res: {
+      activity: AiLegalType.AiTypeActivitiesAndPeople.Type
+      data: ReturnType<typeof legalAidKoboMapper>
+    }[] = []
 
     groupBy({
       data,
@@ -209,6 +211,7 @@ namespace AiLegalMapper {
         res.push({
           data: grouped,
           activity: {
+            'Response Theme': 'No specific theme',
             Indicators: match(activity)
               .cases({
                 'assistance-hlp-with-docs':
@@ -220,9 +223,7 @@ namespace AiLegalMapper {
                 assistance: 'Legal assistance - Protection > # of individuals who received legal assistance',
                 counselling: 'Protection counselling > # of individuals who received protection counselling',
               } as const)
-              .default(
-                () => `${aiInvalidValueFlag} acivity` as AiProtectionType.AiTypeActivitiesAndPeople['Indicators'],
-              ),
+              .default(() => `${aiInvalidValueFlag} acivity` as AiLegalType.AiTypeActivitiesAndPeople['Indicators']),
             'Population Group': AiMapper.mapPopulationGroup(displacement),
             'Reporting Month': periodStr === '2025-05' ? '2025-06' : periodStr,
             'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
