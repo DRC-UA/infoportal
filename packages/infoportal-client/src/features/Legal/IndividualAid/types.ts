@@ -1,4 +1,5 @@
 import type {Dispatch, SetStateAction} from 'react'
+import type {BoxProps} from '@mui/system'
 
 import {Legal_individual_aid, KoboSubmissionFlat, KoboBaseTags} from 'infoportal-common'
 
@@ -14,6 +15,9 @@ interface FiltersProps {
   casePeriod?: Period
   caseClosurePeriod?: Period
   setCaseClosurePeriod: Dispatch<SetStateAction<Period>>
+  slotProps?: {
+    wrapperBox?: BoxProps
+  }
 }
 
 export type {FiltersProps}

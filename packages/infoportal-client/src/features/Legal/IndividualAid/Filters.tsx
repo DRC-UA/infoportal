@@ -15,6 +15,7 @@ const Filters: FC<FiltersProps> = ({
   casePeriod,
   caseClosurePeriod,
   setCaseClosurePeriod,
+  slotProps,
 }) => {
   const {m} = useI18n()
 
@@ -31,6 +32,7 @@ const Filters: FC<FiltersProps> = ({
       slotProps={{
         filtersBox: {pt: 2.5},
         controlsBox: {pt: 2.5},
+        wrapperBox: slotProps?.wrapperBox,
       }}
       before={
         <Box display="flex">

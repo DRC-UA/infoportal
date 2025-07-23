@@ -1,5 +1,4 @@
 import {useCallback, type FC} from 'react'
-import {seq} from '@axanc/ts-utils'
 
 import {KoboIndex, Legal_individual_aid, PeriodHelper} from 'infoportal-common'
 
@@ -66,6 +65,7 @@ const Data: FC = () => {
           setCasePeriod={setCasePeriod}
           caseClosurePeriod={caseClosurePeriod}
           setCaseClosurePeriod={setCaseClosurePeriod}
+          slotProps={{wrapperBox: {paddingInline: 2}}}
         />
         <DatabaseTable
           formId={KoboIndex.byName('legal_individual_aid').id}
