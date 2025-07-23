@@ -1,6 +1,6 @@
 import {Prisma, PrismaClient} from '@prisma/client'
 import {app, AppCacheKey, AppLogger} from '../../index.js'
-import {DrcOffice} from 'infoportal-common'
+import {DrcOffice, DrcJob} from 'infoportal-common'
 
 export class UserService {
   private static instance: UserService
@@ -96,7 +96,7 @@ export class UserService {
 
   readonly updateByEmail = async (
     email: string,
-    data: Partial<{name: string; drcOffice: DrcOffice; drcJob: string}>,
+    data: Partial<{name: string; drcOffice: DrcOffice; drcJob: DrcJob}>,
   ) => {
     const updatedUser = await this.prisma.user.update({
       where: {email},
