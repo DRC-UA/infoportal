@@ -139,6 +139,7 @@ export const getRoutes = (
     router.delete('/access/:id', auth(), errorCatcher(access.remove))
 
     router.post('/user/me', auth(), errorCatcher(user.updateMe))
+    router.post('/user/:email', auth(), errorCatcher(user.updateByEmail))
     router.get('/user', auth(), errorCatcher(user.search))
     router.get('/user/avatar/:email', auth(), errorCatcher(user.avatar))
     router.get('/user/drc-job', auth(), errorCatcher(user.getDrcJobs))

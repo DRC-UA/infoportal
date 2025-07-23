@@ -65,4 +65,23 @@ export class ControllerUser {
     const drcJobs = await this.service.getDistinctDrcJobs()
     res.send(drcJobs)
   }
+
+  readonly updateByEmail = async (req: Request, res: Response, next: NextFunction) => {
+    const {email} = await yup
+      .object({
+        email: yup.string().required(),
+      })
+      .validate(req.params)
+
+    const body = await yup
+      .object({
+        drcOffice: yup.mixed<DrcOffice>().optional(),
+        drcJob: yup.string().optional(),
+        name: yup.string().optional(),
+      })
+      .validate(req.body)
+
+    const data = await this.service.updateByEmail(email, body)
+    res.send(data)
+  }
 }

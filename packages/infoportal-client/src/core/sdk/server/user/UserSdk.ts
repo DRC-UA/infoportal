@@ -9,6 +9,10 @@ export class UserSdk {
     return this.client.post<User>(`/user/me`, {body: user})
   }
 
+  readonly updateByEmail = (email: string, user: Partial<User>) => {
+    return this.client.post<User>(`/user/${email}`, {body: user})
+  }
+
   readonly avatarUrl = (email: string) => {
     return `${this.client.baseUrl}/user/avatar/${email}`
   }
@@ -21,9 +25,9 @@ export class UserSdk {
   }
 
   readonly fetchDrcJobs = () => {
-    return this.client.get<DrcJob[]>('/user/drc-job');
+    return this.client.get<DrcJob[]>('/user/drc-job')
   }
   readonly getCount = () => {
-    return this.client.get<{ count: number }>('/user/count').then((res) => res.count)
+    return this.client.get<{count: number}>('/user/count').then((res) => res.count)
   }
 }
