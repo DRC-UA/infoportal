@@ -162,6 +162,14 @@ export const AdminUsers = () => {
                     }}
                     title={m.edit}
                     confirmLabel={m.save}
+                    PaperProps={{
+                      sx: {
+                        width: 600,
+                        maxWidth: '95vw',
+                        px: 3,
+                        py: 2,
+                      },
+                    }}
                     onConfirm={(e, close) =>
                       _editForm.handleSubmit((form) => {
                         api.user.updateByEmail(_.email, form).then(() => {
@@ -175,8 +183,26 @@ export const AdminUsers = () => {
                         <Controller
                           name="name"
                           control={_editForm.control}
-                          render={({field}) => <IpInput {...field} label={m.name} sx={{mb: 2}} />}
+                          defaultValue={_.name || ''}
+                          render={({field}) => (
+                            <TextField
+                              {...field}
+                              label={m.name}
+                              fullWidth
+                              size="small"
+                              sx={{
+                                mt: 3,
+                                mb: 2,
+                                '& label': {
+                                  backgroundColor: 'white',
+                                  px: 0.5,
+                                },
+                              }}
+                              variant="outlined"
+                            />
+                          )}
                         />
+
                         <Controller
                           name="drcJob"
                           control={_editForm.control}

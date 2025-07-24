@@ -44,4 +44,15 @@ export class ControllerKoboForm {
     const data = await this.service.get(id)
     res.send(data)
   }
+
+  readonly delete = async (req: Request, res: Response, next: NextFunction) => {
+    const {id} = await yup
+      .object({
+        id: yup.string().required(),
+      })
+      .validate(req.params)
+
+    await this.service.deleteForm(id)
+    res.send()
+  }
 }

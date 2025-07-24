@@ -4,7 +4,7 @@ import {useEffect} from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useCrudList} from '@alexandreannic/react-hooks-lib'
 import {useI18n} from '@/core/i18n'
-import {Switch} from '@mui/material'
+import {Switch, TextField} from '@mui/material'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {Controller, useForm} from 'react-hook-form'
 import {IpInput} from '@/shared/Input/Input'
@@ -266,12 +266,14 @@ export const AdminProxy = () => {
                           control={_editForm.control}
                           rules={{required: {value: true, message: m.required}}}
                           render={({field, fieldState}) => (
-                            <IpInput
+                            <TextField
                               {...field}
+                              fullWidth
+                              size="small"
                               label={m.name}
                               error={!!fieldState.error}
                               helperText={fieldState.error?.message}
-                              sx={{mb: 2}}
+                              sx={{mt: 2, mb: 2}}
                             />
                           )}
                         />

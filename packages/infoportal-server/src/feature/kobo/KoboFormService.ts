@@ -133,4 +133,17 @@ export class KoboFormService {
         })
       })
   }
+
+  readonly deleteForm = async (formId: string) => {
+    await this.prisma.koboAnswers.deleteMany({
+      where: {formId},
+    })
+
+    await this.prisma.koboForm.delete({
+      where: {id: formId},
+    })
+
+    this.cache.clear(AppCacheKey.KoboServerIndex)
+    this.cache.clear(AppCacheKey.KoboClient)
+  }
 }

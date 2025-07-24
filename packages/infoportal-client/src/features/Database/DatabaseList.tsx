@@ -4,21 +4,29 @@ import {Page, PageTitle} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
-import React, {useEffect, useMemo} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {Txt} from '@/shared/Txt'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {Icon, useTheme} from '@mui/material'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {fnSwitch, seq} from '@axanc/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {NavLink} from 'react-router-dom'
+import {useAsync} from '@/shared/hook/useAsync'
+import {BtnConfirm} from '@/shared/BtnConfirm'
+import {useIpToast} from '@/core/useToast'
+import {useSession} from '@/core/Session/SessionContext'
 
 export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
   const {api} = useAppSettings()
   const fetcherServers = useFetcher(api.kobo.server.getAll)
   const {formatDate, m} = useI18n()
   const t = useTheme()
+  const deleteForm = useAsync(api.kobo.form.delete)
+  const [formList, setFormList] = useState(forms ?? [])
+  const {toastSuccess, toastHttpError} = useIpToast()
+  const {session} = useSession()
 
   useEffect(() => {
     fetcherServers.fetch()
@@ -37,7 +45,7 @@ export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
               showExportBtn
               defaultLimit={500}
               id="kobo-index"
-              data={forms}
+              data={formList}
               columns={[
                 {
                   id: 'status',
@@ -176,9 +184,24 @@ export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
                   align: 'right',
                   head: '',
                   renderQuick: (_) => (
-                    <NavLink to={databaseIndex.siteMap.database.absolute(_.id)}>
-                      <TableIconBtn color="primary" children="chevron_right" />
-                    </NavLink>
+                    <>
+                      <NavLink to={databaseIndex.siteMap.database.absolute(_.id)}>
+                        <TableIconBtn color="primary">chevron_right</TableIconBtn>
+                      </NavLink>
+                      {session.admin && (
+                        <BtnConfirm
+                          icon="delete"
+                          sx={{color: t.palette.error.dark}}
+                          size="small"
+                          onClick={async () => {
+                            await deleteForm.call(_.id)
+                            toastSuccess(m.formDeleted)
+                            setFormList((prev) => prev.filter((f) => f.id !== _.id))
+                          }}
+                          tooltip={m.deleteForm}
+                        />
+                      )}
+                    </>
                   ),
                 },
               ]}
