@@ -1,6 +1,8 @@
 import {useEffect, type FC} from 'react'
 import {Navigate, Route, Routes} from 'react-router-dom'
 
+import {KoboIndex} from 'infoportal-common'
+
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {DatabaseKoboRepeatRoute} from '@/features/Database/RepeatGroup'
 import {Layout} from '@/shared/Layout'
@@ -31,7 +33,7 @@ const Legal: FC = () => {
               path={pages.individualLegalAid.data.group.slug}
               element={
                 <DatabaseKoboRepeatRoute
-                  formId="aJxhKpk5fw5SYjEkBopxvJ"
+                  formId={KoboIndex.byName('legal_individual_aid').id}
                   backLink={`/${pages.individualLegalAid.data.path}`}
                 />
               }
