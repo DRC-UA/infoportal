@@ -3,8 +3,7 @@ import {Alert, AlertProps, Icon, useTheme} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
 import {useNavigate} from 'react-router-dom'
 
-import {KoboFlattenRepeatedGroup, KoboIndex} from 'infoportal-common'
-import {Legal_individual_aid} from 'infoportal-common/kobo/generated/Legal_individual_aid'
+import {KoboFlattenRepeatedGroup, KoboIndex, Legal_individual_aid} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -67,7 +66,6 @@ export const DatabaseKoboTableContent = ({
   const ctxAnswers = useKoboAnswersContext()
   const ctxKoboUpdate = useKoboUpdateContext()
   const [selectedIds, setSelectedIds] = useState<Kobo.SubmissionId[]>([])
-
   const flatData: KoboMappedAnswer[] | undefined = useMemo(() => {
     if (ctx.groupDisplay.get.repeatAs !== 'rows' || ctx.groupDisplay.get.repeatGroupName === undefined) return ctx.data
     return KoboFlattenRepeatedGroup.run({
@@ -97,8 +95,9 @@ export const DatabaseKoboTableContent = ({
       formId: ctx.form.id,
       schema: ctx.schema,
       externalFilesIndex: ctx.externalFilesIndex,
-      onRepeatGroupClick: (_) =>
-        navigate(databaseIndex.siteMap.group.absolute(ctx.form.id, _.name, _.row.id, _.row._index)),
+      onRepeatGroupClick: ({name, row}) => {
+        navigate(databaseIndex.siteMap.group.relative(name, row.id, row._index))
+      },
       onEdit:
         selectedIds.length > 0
           ? (questionName) =>

@@ -10,6 +10,10 @@ const pages = {
     data: {
       path: `${root}/data`,
       slug: 'data',
+      group: {
+        path: `${root}/data/group/:group`,
+        slug: `group/:group`,
+      },
     },
   },
 }

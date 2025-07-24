@@ -1,32 +1,41 @@
-import {IpBtn, Page} from '@/shared'
-import {Panel} from '@/shared/Panel'
-import {NavLink, useNavigate, useParams, useSearchParams} from 'react-router-dom'
+import {useEffect, useMemo, type FC} from 'react'
 import {map} from '@axanc/ts-utils'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {Kobo} from 'kobo-sdk'
-import {KoboFlattenRepeatedGroup, KoboSchemaHelper} from 'infoportal-common'
-import * as yup from 'yup'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
-import {useEffect, useMemo} from 'react'
 import {useTheme} from '@mui/material'
+import {Kobo} from 'kobo-sdk'
+import {NavLink, useNavigate, useParams, useSearchParams} from 'react-router-dom'
+import * as yup from 'yup'
+
+import {KoboFlattenRepeatedGroup, KoboSchemaHelper} from 'infoportal-common'
+
 import {useI18n} from '@/core/i18n'
-import {Datatable} from '@/shared/Datatable/Datatable'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {databaseIndex} from '@/features/Database/databaseIndex'
-import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {
   columnBySchemaGenerator,
   ColumnBySchemaGeneratorProps,
 } from '@/features/Database/KoboTable/columns/columnBySchema'
+import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
+import {IpBtn, Page} from '@/shared'
+import {Datatable} from '@/shared/Datatable/Datatable'
+import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+import {Panel} from '@/shared/Panel'
+
+import type {DatabaseKoboRepeatGroupProps} from './types'
 
 const databaseUrlParamsValidation = yup.object({
   formId: yup.string().required(),
   group: yup.string().required(),
 })
 
-export const DatabaseKoboRepeatRoute = () => {
+export const DatabaseKoboRepeatRoute: FC<DatabaseKoboRepeatGroupProps> = ({formId: formIdFromProps, backLink}) => {
   const ctxSchema = useKoboSchemaContext()
-  const {formId, group} = databaseUrlParamsValidation.validateSync(useParams())
+  const {formId: formIdFromRoute, group} = databaseUrlParamsValidation.validateSync({
+    formId: false,
+    ...useParams(),
+  })
+  const formId = formIdFromProps || formIdFromRoute
   const schemaLoader = ctxSchema.byId[formId]
+
   return (
     <Page
       width="full"
@@ -37,7 +46,7 @@ export const DatabaseKoboRepeatRoute = () => {
     >
       {map(schemaLoader?.get, (schema) => (
         <Panel sx={{mb: 0}}>
-          <DatabaseKoboRepeat schema={schema} group={group} formId={formId} />
+          <DatabaseKoboRepeat schema={schema} group={group} formId={formId} backLink={backLink} />
         </Panel>
       ))}
     </Page>
@@ -102,10 +111,12 @@ const DatabaseKoboRepeat = ({
   schema,
   group,
   formId,
+  backLink,
 }: {
   formId: Kobo.FormId
   group: string
   schema: KoboSchemaHelper.Bundle
+  backLink?: string
 }) => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
@@ -152,9 +163,10 @@ const DatabaseKoboRepeat = ({
       header={
         <NavLink
           to={
-            groupInfo.depth > 1
+            backLink ??
+            (groupInfo.depth > 1
               ? databaseIndex.siteMap.group.absolute(formId, paths[paths.length - 2], qs.id)
-              : databaseIndex.siteMap.database.absolute(formId)
+              : databaseIndex.siteMap.database.absolute(formId))
           }
         >
           <IpBtn variant="contained" icon="arrow_back">
