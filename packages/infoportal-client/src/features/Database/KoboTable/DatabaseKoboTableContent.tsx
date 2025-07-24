@@ -1,7 +1,7 @@
 import {useMemo, useState} from 'react'
 import {Alert, AlertProps, Icon, useTheme} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
-import {useNavigate, useNavigation, useNavigationType} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 import {KoboFlattenRepeatedGroup, KoboIndex, Legal_individual_aid} from 'infoportal-common'
 
@@ -60,7 +60,6 @@ export const DatabaseKoboTableContent = ({
   const {m} = useI18n()
   const t = useTheme()
   const navigate = useNavigate()
-  const navigation = useNavigationType()
   const {session} = useSession()
   const ctx = useDatabaseKoboTableContext()
   const ctxSchema = useKoboSchemaContext()
