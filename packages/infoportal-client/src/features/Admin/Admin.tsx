@@ -84,7 +84,7 @@ export const Admin = () => {
         <Route path={adminModule.siteMap.group} element={<AdminGroups />} />
         <Route path={adminModule.siteMap.cache} element={<AdminCache />} />
         <Route path={adminModule.siteMap.docs.basePath} element={<Docs />}>
-          <Route path={adminModule.siteMap.docs.basePath} element={<DocsMenu />} />
+          <Route index element={<DocsMenu />} />
           <Route path={adminModule.siteMap.docs.siteMap.aiReporting} element={<DocsActivityInfo />} />
         </Route>
       </Routes>
