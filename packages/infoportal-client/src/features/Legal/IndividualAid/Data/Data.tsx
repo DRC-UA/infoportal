@@ -65,7 +65,7 @@ const Data: FC = () => {
           setCasePeriod={setCasePeriod}
           caseClosurePeriod={caseClosurePeriod}
           setCaseClosurePeriod={setCaseClosurePeriod}
-          slotProps={{wrapperBox: {paddingInline: 2}}}
+          slotProps={{wrapperBox: {paddingInline: 1}}}
         />
         <DatabaseTable
           formId={KoboIndex.byName('legal_individual_aid').id}
