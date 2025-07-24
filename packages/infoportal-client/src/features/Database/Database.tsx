@@ -30,7 +30,7 @@ import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {appConfig} from '@/conf/AppConfig'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
-import {DatabaseKoboRepeatRoute} from '@/features/Database/RepeatGroup/DatabaseKoboRepeatGroup'
+import {DatabaseKoboRepeatRoute} from '@/features/Database/RepeatGroup'
 
 export const databaseUrlParamsValidation = yup.object({
   formId: yup.string().required(),

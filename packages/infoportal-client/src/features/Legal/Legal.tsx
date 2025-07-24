@@ -2,6 +2,7 @@ import {useEffect, type FC} from 'react'
 import {Navigate, Route, Routes} from 'react-router-dom'
 
 import {appFeaturesIndex} from '@/features/appFeatureId'
+import {DatabaseKoboRepeatRoute} from '@/features/Database/RepeatGroup'
 import {Layout} from '@/shared/Layout'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
 
@@ -24,7 +25,18 @@ const Legal: FC = () => {
         <Route path={pages.individualLegalAid.slug}>
           <Route index element={<Navigate to={pages.individualLegalAid.dashboard.slug} replace />} />
           <Route path={pages.individualLegalAid.dashboard.slug} element={<IndividualAidDashboard />} />
-          <Route path={pages.individualLegalAid.data.slug} element={<IndividualAidData />} />
+          <Route path={pages.individualLegalAid.data.slug}>
+            <Route index element={<IndividualAidData />} />
+            <Route
+              path={pages.individualLegalAid.data.group.slug}
+              element={
+                <DatabaseKoboRepeatRoute
+                  formId="aJxhKpk5fw5SYjEkBopxvJ"
+                  backLink={`/${pages.individualLegalAid.data.path}`}
+                />
+              }
+            />
+          </Route>
         </Route>
       </Routes>
     </Layout>
