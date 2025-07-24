@@ -48,4 +48,8 @@ export class KoboFormSdk {
   readonly getAll = (): Promise<KoboForm[]> => {
     return this.client.get(`/kobo/form`).then((_) => _.map(KoboFormHelper.map))
   }
+
+  readonly delete = (formId: string): Promise<void> => {
+    return this.client.delete(`/kobo/form/${formId}`)
+  }
 }

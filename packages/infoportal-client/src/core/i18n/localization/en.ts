@@ -204,6 +204,8 @@ export const en = Object.freeze({
     nLines: (n: number) => `<b>${n}</b> lignes`,
     confirm: 'Confirm',
     delete: 'Delete',
+    deleteForm: 'Delete form',
+    formDeleted: 'Form deleted successfully',
     deleteSelected: `Delete selected`,
     downloadAsXLS: 'Download as XLS',
     downloadAsPdf: 'Download as PDF',

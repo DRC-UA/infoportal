@@ -174,6 +174,7 @@ export const getRoutes = (
     router.post('/kobo/form/refresh', auth(), errorCatcher(koboForm.refreshAll))
     router.get('/kobo/form/:id', auth(), errorCatcher(koboForm.get))
     router.put('/kobo/form', auth(), errorCatcher(koboForm.add))
+    router.delete('/kobo/form/:id', auth({adminOnly: true}), errorCatcher(koboForm.delete))
     router.post('/kobo/answer/:formId/by-access', auth(), errorCatcher(koboAnswer.searchByUserAccess))
     router.patch('/kobo/answer/:formId/tag', auth(), errorCatcher(koboAnswer.updateTag))
     router.patch('/kobo/answer/:formId/validation', auth(), errorCatcher(koboAnswer.updateValidation))
