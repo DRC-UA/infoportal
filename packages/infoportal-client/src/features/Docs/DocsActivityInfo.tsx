@@ -10,7 +10,7 @@ import {
   sectorSchemaGenerator,
   indicators,
   interfaceGeneratorCommand,
-} from './codeChaunks'
+} from './codeChunks'
 
 const DocsActivityInfo: FC = () => {
   return (
