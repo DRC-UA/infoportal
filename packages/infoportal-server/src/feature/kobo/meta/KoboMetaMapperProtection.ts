@@ -287,15 +287,18 @@ export class KoboMetaMapperProtection {
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)!
     const project = match(answer.project)
       .cases({
-        uhf6: DrcProject['UKR-000336 UHF6'],
-        okf: DrcProject['UKR-000309 OKF'],
-        uhf4: DrcProject['UKR-000314 UHF4'],
-        echo: DrcProject['UKR-000322 ECHO2'],
-        bha: DrcProject['UKR-000284 BHA'],
-        bha2: DrcProject['UKR-000345 BHA2'],
-        uhf8: DrcProject['UKR-000363 UHF8'],
-        '372_echo': DrcProject['UKR-000372 ECHO3'],
-        'sida h2r': DrcProject['UKR-000329 SIDA H2R'],
+        ukr000336_uhf6: DrcProject['UKR-000336 UHF6'],
+        ukr000309_okf: DrcProject['UKR-000309 OKF'],
+        ukr000314_uhf4: DrcProject['UKR-000314 UHF4'],
+        ukr000322_echo2: DrcProject['UKR-000322 ECHO2'],
+        ukr000284_bha: DrcProject['UKR-000284 BHA'],
+        ukr000345_bha2: DrcProject['UKR-000345 BHA2'],
+        ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
+        ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
+        ukr000329_sida: DrcProject['UKR-000329 SIDA H2R'],
+        ukr000355_dmfa: DrcProject['UKR-000355 Danish MFA'],
+        ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
+        ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
       })
       .default(() => DrcProjectHelper.search(answer.project))
 
