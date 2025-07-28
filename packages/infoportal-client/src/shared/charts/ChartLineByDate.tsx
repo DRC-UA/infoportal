@@ -1,8 +1,10 @@
+import {useMemo} from 'react'
+import {Obj} from '@axanc/ts-utils'
 import {format} from 'date-fns'
-import {map, Obj} from '@axanc/ts-utils'
-import React, {useMemo} from 'react'
-import {ChartLine, ChartLineProps} from '@/shared/charts/ChartLine'
+
 import {isDate} from 'infoportal-common'
+
+import {ChartLine, ChartLineProps} from '@/shared/charts/ChartLine'
 
 export type DateKeys<T> = {
   [K in keyof T]: T[K] extends Date | undefined ? K : never
@@ -16,7 +18,6 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
   start,
   end,
   formatLabel = (date: Date) => format(date, 'yyyy-MM-dd'),
-  // translations,
   ...props
 }: {
   height?: number
@@ -26,8 +27,6 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
   data: T[]
   start?: Date
   end?: Date
-  // @ts-ignore
-  // translations?: Partial<Record<T[K], string>>
 } & Pick<ChartLineProps, 'hideYTicks' | 'colors' | 'sx'>) => {
   const curve = useMemo(() => {
     const res: Record<string, Record<string, number>> = {}
@@ -35,8 +34,11 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
     data.forEach((d) => {
       Obj.entries(curves)
         .map(([q, fn]) => {
-          const date = map(fn(d), (d) => (typeof d === 'string' ? new Date(d) : d)) as Date | undefined
+          const rawDate = fn(d)
           try {
+            if (!rawDate) return
+            const date = typeof rawDate === 'string' ? new Date(rawDate) : rawDate
+            // const date = map(fn(d), (d) => (typeof d === 'string' ? new Date(d) : d)) as Date | undefined
             if (!date || !isDate(date)) throw Error('Invalid date')
             const yyyyMM = formatLabel(date)
             if ((end && date.getTime() > end.getTime()) || (start && date.getTime() < start.getTime())) {
@@ -50,7 +52,7 @@ export const ChartLineByDate = <T, K extends DateKeys<T>>({
             return
           }
         })
-        .filter((_) => _ !== undefined)
+        .filter(Boolean)
     })
     if (hasInvalidDate) {
       console.log(`Invalid date`, {data, res})

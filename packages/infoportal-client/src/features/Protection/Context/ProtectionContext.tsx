@@ -1,10 +1,12 @@
-import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
-import {ProtectionActivityFlat} from '@/features/Protection/Context/protectionType'
+import {useContext, useEffect, createContext, useMemo, type ReactNode} from 'react'
 import {seq, Seq} from '@axanc/ts-utils'
-import {UseProtectionFilter, useProtectionFilters} from '@/features/Protection/Context/useProtectionFilter'
+
 import {DrcProgram, IKoboMeta} from 'infoportal-common'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {ProtectionActivityFlat} from '@/features/Protection/Context/protectionType'
+import {UseProtectionFilter, useProtectionFilters} from '@/features/Protection/Context/useProtectionFilter'
+import {UseFetcher, useFetcher} from '@/shared/hook/useFetcher'
 
 export interface ProtectionContext {
   filters: Omit<UseProtectionFilter, 'data'>
@@ -18,7 +20,7 @@ export interface ProtectionContext {
   }
 }
 
-const Context = React.createContext({} as ProtectionContext)
+const Context = createContext({} as ProtectionContext)
 
 export const useProtectionContext = () => useContext<ProtectionContext>(Context)
 

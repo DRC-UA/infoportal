@@ -1,25 +1,27 @@
+import type {FC} from 'react'
+import {Obj} from '@axanc/ts-utils'
+import {Divider} from '@mui/material'
+import {format} from 'date-fns'
+
+import {groupBy, KoboIndex, OblastIndex, OblastName, Person} from 'infoportal-common'
+
+import {useI18n} from '@/core/i18n'
+import {AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
+import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {ProtectionProvider, useProtectionContext} from '@/features/Protection/Context/ProtectionContext'
+import {ProtectionOverviewFilterCustom} from '@/features/Protection/Overview/ProtectionOverviewFilterCustom'
+import {AgeGroupTable} from '@/shared/AgeGroupTable'
+import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
+import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {ChartLineBy} from '@/shared/charts/ChartLineBy'
+import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
+import {Datatable} from '@/shared/Datatable/Datatable'
+import {Lazy} from '@/shared/Lazy'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Page} from '@/shared/Page'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
-import {AgeGroupTable} from '@/shared/AgeGroupTable'
-import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import React from 'react'
-import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
-import {useI18n} from '@/core/i18n'
-import {Lazy} from '@/shared/Lazy'
-import {groupBy, KoboIndex, OblastIndex, OblastName, Person} from 'infoportal-common'
-import {Obj} from '@axanc/ts-utils'
-import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {AiViewAnswers} from '@/features/ActivityInfo/shared/ActivityInfoActions'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {format} from 'date-fns'
-import {ChartLineBy} from '@/shared/charts/ChartLineBy'
-import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {ProtectionOverviewFilterCustom} from '@/features/Protection/Overview/ProtectionOverviewFilterCustom'
-import {Divider} from '@mui/material'
-import {Datatable} from '@/shared/Datatable/Datatable'
 
 export const ProtectionOverview = () => {
   return (
@@ -29,11 +31,14 @@ export const ProtectionOverview = () => {
   )
 }
 
-const ProtectionOverviewWithContext = () => {
+const ProtectionOverviewWithContext: FC = () => {
   const ctx = useProtectionContext()
   const {m, formatLargeNumber} = useI18n()
-  if (!ctx.data) return <></>
+
+  if (!ctx.data) return null
+
   const data = ctx.data
+
   return (
     <Page width="lg" loading={ctx.fetcher.loading}>
       <DataFilterLayout

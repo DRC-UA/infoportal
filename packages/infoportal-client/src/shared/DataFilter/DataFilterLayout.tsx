@@ -1,12 +1,13 @@
-import {themeLightScrollbar} from '@/core/theme'
-import React, {Dispatch, ReactNode, SetStateAction, useCallback} from 'react'
-import {Box, BoxProps} from '@mui/material'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {useCallback, useMemo, type Dispatch, type ReactNode, type SetStateAction} from 'react'
 import {Obj, Seq, seq} from '@axanc/ts-utils'
+import {Box, BoxProps} from '@mui/material'
+
+import {useI18n} from '@/core/i18n'
+import {themeLightScrollbar} from '@/core/theme'
+import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {DashboardFilterOptions} from '@/shared/DashboardLayout/DashboardFilterOptions'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {useI18n} from '@/core/i18n'
 import {DataFilterLayoutPopup} from '@/shared/DataFilter/DataFilterLayoutPopup'
 
 export interface FilterLayoutProps extends Pick<BoxProps, 'sx'> {
@@ -27,12 +28,18 @@ export interface FilterLayoutProps extends Pick<BoxProps, 'sx'> {
 export const DataFilterLayout = ({
   sx,
   hidePopup,
-  ...props
+  before,
+  after,
+  shapes,
+  filters,
+  setFilters,
+  data,
+  onClear,
+  slotProps,
 }: FilterLayoutProps & {
   hidePopup?: boolean
 }) => {
   const {m} = useI18n()
-  const {before, after, shapes, filters, setFilters, data, onClear, slotProps} = props
 
   const getFilteredOptions = useCallback(
     (name: string) => {
@@ -104,11 +111,18 @@ export const DataFilterLayout = ({
       >
         {!hidePopup && (
           <DataFilterLayoutPopup
-            {...props}
+            {...{
+              before,
+              after,
+              shapes,
+              filters,
+              setFilters,
+              data,
+              onClear,
+              slotProps,
+              getFilteredOptions,
+            }}
             onConfirm={setFilters}
-            filters={filters}
-            onClear={onClear}
-            getFilteredOptions={getFilteredOptions}
           />
         )}
         {onClear && <IpIconBtn children="clear" tooltip={m.clearFilter} onClick={() => onClear()} />}
