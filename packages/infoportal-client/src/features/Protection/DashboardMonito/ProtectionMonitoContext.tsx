@@ -1,4 +1,14 @@
-import React, {ReactNode, useCallback, useContext as reactUseContext, useEffect, useMemo, useState} from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext as reactUseContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
+import {map, Obj, Seq, seq} from '@axanc/ts-utils'
+
 import {
   KoboIndex,
   KoboProtection_hhs3,
@@ -8,7 +18,7 @@ import {
   Person,
   Protection_hhs3,
 } from 'infoportal-common'
-import {map, Obj, Seq, seq} from '@axanc/ts-utils'
+
 import {ukraineSvgPath} from '@/shared/maps/mapSvgPaths'
 import {InferTypedAnswer} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {ChartHelper} from '@/shared/charts/chartHelper'
@@ -38,7 +48,7 @@ export namespace ProtectionMonito {
       .flatMap((_) => _[p] as any)
       .distinct((_) => _)
       .compact()
-      .map((_: any) => ({value: _, label: (Protection_hhs3.options[option] as any)[_]}))
+      .map((value) => ({value, label: (Protection_hhs3.options[option] as any)[value]}))
       .sortByString((_) => _.label ?? '', 'a-z')
   }
 
@@ -131,24 +141,29 @@ export namespace ProtectionMonito {
     const dataFiltered = useMemo(() => {
       const {hhComposition, ...basicFilters} = filterOptions
       const filtered = seq(DataFilter.filterData(dataInPeriod, filterShape, basicFilters as any)) as Seq<Data>
-      if (hhComposition && hhComposition.length > 0)
+      if (hhComposition && hhComposition.length > 0) {
         return filtered.filter(
           (d) =>
             !!d.persons?.find((p) => {
               if (!p.age) return false
+
               if (p.gender === Person.Gender.Female) {
                 if (hhComposition.includes('girl') && p.age < 17) return true
                 if (hhComposition.includes('olderFemale') && p.age > 60) return true
                 if (hhComposition.includes('adultFemale')) return true
               }
+
               if (p.gender === Person.Gender.Male) {
                 if (hhComposition.includes('boy') && p.age < 17) return true
                 if (hhComposition.includes('olderMale') && p.age > 60) return true
                 if (hhComposition.includes('adultMale')) return true
               }
+
               return false
             }),
         )
+      }
+
       return filtered
     }, [dataInPeriod, filterOptions])
 
@@ -177,31 +192,31 @@ export namespace ProtectionMonito {
       const byCurrentOblast = ChartHelper.byCategory({
         categories: categoryOblasts('where_are_you_current_living_oblast'),
         data: dataFiltered,
-        filter: (_) => true,
+        filter: () => true,
       }).get()
 
       const byOriginOblast = ChartHelper.byCategory({
         categories: categoryOblasts('what_is_your_area_of_origin_oblast'),
         data: dataFiltered,
-        filter: (_) => true,
+        filter: () => true,
       }).get()
 
       const idpsByCurrentOblast = ChartHelper.byCategory({
         categories: categoryOblasts('where_are_you_current_living_oblast'),
         data: dataIdps,
-        filter: (_) => true,
+        filter: () => true,
       }).get()
 
       const idpsByOriginOblast = ChartHelper.byCategory({
         categories: categoryOblasts('what_is_your_area_of_origin_oblast'),
         data: dataIdps,
-        filter: (_) => true,
+        filter: () => true,
       }).get()
 
       return {
         filterShape,
         filterOptions,
-        setFilterOptions: setFilterOptions,
+        setFilterOptions,
         period,
         setPeriod,
         periodDefault,
@@ -227,7 +242,7 @@ export namespace ProtectionMonito {
     }, [dataFiltered, periodCompare])
   }
 
-  const Context = React.createContext({} as any)
+  const Context = createContext({} as any)
 
   export const useContext = () => reactUseContext<ProviderParams>(Context)
 
@@ -245,10 +260,9 @@ export namespace ProtectionMonito {
 
     useEffect(() => {
       fetcherData.fetch()
-    }, [])
-    useEffect(() => {
+
       if (!periodDefault) fetcherPeriod.fetch()
-    }, [periodDefault])
+    }, [])
 
     const ctx = useData({
       filterDefault,

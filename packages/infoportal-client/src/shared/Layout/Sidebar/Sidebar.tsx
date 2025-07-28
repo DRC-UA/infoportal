@@ -71,25 +71,28 @@ export const Sidebar = ({
 
   const isTemporary = isMobileWidth || !sidebarPinned
 
-  if (!mounted) return
+  if (!mounted) return null
+
   return (
     <SwipeableDrawer
       ModalProps={{
         disableScrollLock: true,
       }}
-      PaperProps={{
-        id,
-        sx: {
-          mr: 2,
-          top: layoutConfig.headerHeight,
-          background: 'transparent',
-          position: 'fixed',
-          border: 'none',
-          bottom: 0,
-          height: 'auto',
-          ...(isTemporary && {
-            top: '0 !important',
-          }),
+      slotProps={{
+        paper: {
+          id,
+          sx: {
+            mr: 2,
+            top: layoutConfig.headerHeight,
+            background: 'transparent',
+            position: 'fixed',
+            border: 'none',
+            bottom: 0,
+            height: 'auto',
+            ...(isTemporary && {
+              top: '0 !important',
+            }),
+          },
         },
       }}
       open={sidebarOpen}
