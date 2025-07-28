@@ -41,7 +41,7 @@ export const ProtectionProvider = ({children}: {children: ReactNode}) => {
       .then((_) => seq(_.data))
   const fetcher = useFetcher(reqProtection)
 
-  const mappedData = fetcher.get && fetcher.get
+  const mappedData = fetcher.get
 
   const flatData = useMemo(() => {
     return mappedData?.flatMap((r) => (r.persons ?? []).map((p) => ({...r, ...p}))).compact()
