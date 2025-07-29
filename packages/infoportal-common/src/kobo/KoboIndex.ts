@@ -1,5 +1,7 @@
 import {Obj, seq} from '@axanc/ts-utils'
 
+// MEMO: please keep indexes sorted
+
 const koboIndex = {
   bn_0_mpcaReg: 'aEwY33SAtdayNTeHoiJfdg',
   bn_0_mpcaRegESign: 'a8JXohrBDqTdCc86Ysz26r',
