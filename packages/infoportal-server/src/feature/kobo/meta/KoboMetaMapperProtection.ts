@@ -143,7 +143,7 @@ export class KoboMetaMapperProtection {
         ukr000309_okf: DrcProject['UKR-000309 OKF'],
         ukr000314_uhf4: DrcProject['UKR-000314 UHF4'],
         ukr000336_uhf6: DrcProject['UKR-000336 UHF6'],
-        ukr000298_novo: DrcProject['UKR-000360 Novo-Nordisk'],
+        ukr000298_novo: DrcProject['UKR-000298 Novo-Nordisk'],
         ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
         ukr000284_bha: DrcProject['UKR-000284 BHA'],
         ukr000350_sida: DrcProject['UKR-000350 SIDA'],
