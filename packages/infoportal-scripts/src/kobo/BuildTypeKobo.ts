@@ -1,9 +1,13 @@
-import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
-import * as fs from 'fs'
+import {match, Obj, seq} from '@axanc/ts-utils'
+import {Kobo, KoboClient} from 'kobo-sdk'
+import fs from 'node:fs'
+import {resolve} from 'node:path'
+import prettier from 'prettier'
+
 import {capitalize, KoboIndex} from 'infoportal-common'
+
 import {koboSdkDrc} from '../index'
 import {appConf} from '../appConf'
-import {Kobo, KoboClient} from 'kobo-sdk'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string
@@ -212,7 +216,7 @@ export class BuildKoboType {
       safeguarding_psea: {
         formId: KoboIndex.byName('safeguarding_psea').id,
       },
-      cbp_pre_post:{
+      cbp_pre_post: {
         formId: KoboIndex.byName('cbp_pre_post').id,
       },
       protection_hhs2_1: {
@@ -474,10 +478,17 @@ class KoboInterfaceGenerator {
     if (!fs.existsSync(location)) {
       fs.mkdirSync(location)
     }
-    fs.writeFileSync(
-      location + '/' + this.options.formName + '.ts',
-      [`export namespace ${this.options.formName} {`, mainInterface.join('\n\t'), options, mapping, `}`].join(`\n`),
-    )
+    const rawFileContent = [
+      `export namespace ${this.options.formName} {`,
+      mainInterface.join('\n\t'),
+      options,
+      mapping,
+      `}`,
+    ].join(`\n`)
+    const prettierConfigPath = await prettier.resolveConfigFile()
+    const prettierOptions = await prettier.resolveConfig(prettierConfigPath!)
+    const fileContent = await prettier.format(rawFileContent, {...prettierOptions, parser: 'typescript'})
+    fs.writeFileSync(location + '/' + this.options.formName + '.ts', fileContent)
   }
 
   readonly extractQuestionNameFromGroupFn = `
@@ -512,9 +523,8 @@ const extractQuestionName = (_: Record<string, any>) => {
         const name = x.name ?? x.$autoname
         return [
           name,
-          fnSwitch(
-            x.type,
-            {
+          match(x.type)
+            .cases({
               ...basicMapping(name),
               // integer: `_.${name} ? +_.${name} : undefined`,
               // date: `_.${name} ? new Date(_.${name}) : undefined`,
@@ -527,7 +537,7 @@ const extractQuestionName = (_: Record<string, any>) => {
                   groupedQuestions
                     .map((_) => {
                       const sname = _.name ?? _.$autoname
-                      return [sname, fnSwitch(_.type, basicMapping(sname), () => undefined)]
+                      return [sname, match(_.type).cases(basicMapping(sname)).default(undefined)]
                     })
                     .filter((_) => _[1] !== undefined)
                     .map(([questionName, fn]) => `\t\t_['${questionName}'] = ${fn}`)
@@ -536,9 +546,8 @@ const extractQuestionName = (_: Record<string, any>) => {
                   `\t\n})`
                 )
               },
-            },
-            (_) => undefined,
-          ),
+            })
+            .default(undefined),
         ]
       })
       .filter((_) => _[1] !== undefined)
@@ -602,9 +611,8 @@ const extractQuestionName = (_: Record<string, any>) => {
           date: () => 'Date | undefined',
           datetime: () => 'Date | undefined',
         })
-        const type = fnSwitch(
-          x.type,
-          {
+        const type = match(x.type)
+          .cases({
             ...basicQuestionTypeMapping(lastQuestionNameHavingOptionId),
             begin_repeat: () => {
               const groupedQuestions = survey.filter((_) => _.name !== x.name && _.$xpath?.includes(x.name + '/'))
@@ -614,15 +622,14 @@ const extractQuestionName = (_: Record<string, any>) => {
                   .map((_) => {
                     const lastQuestionNameHavingOptionId = seq(indexOptionId[_.select_from_list_name ?? '']).last()
                       ?.name
-                    return `'${_.$autoname}': ${fnSwitch(_.type, basicQuestionTypeMapping(lastQuestionNameHavingOptionId), (_) => 'string')} | undefined`
+                    return `'${_.$autoname}': ${match(_.type).cases(basicQuestionTypeMapping(lastQuestionNameHavingOptionId)).default('string')} | undefined`
                   })
                   .join(',') +
                 '}[] | undefined'
               )
             },
-          },
-          () => 'string',
-        )
+          })
+          .default('string')
         return (
           (x.label ? `// ${x.$xpath} [${x.type}] ${x.label[this.langIndex]?.replace(/\s/g, ' ')}\n` : '') +
           `  '${x.name ?? x.$autoname}': ${type},`
