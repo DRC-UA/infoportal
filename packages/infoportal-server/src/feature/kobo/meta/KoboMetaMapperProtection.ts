@@ -138,13 +138,23 @@ export class KoboMetaMapperProtection {
     const persons = KoboXmlMapper.Persons.protection_groupSession(answer)
     const project = match(answer.project)
       .cases({
-        bha: DrcProject['UKR-000345 BHA2'],
-        echo: DrcProject['UKR-000322 ECHO2'],
-        okf: DrcProject['UKR-000309 OKF'],
-        uhf4: DrcProject['UKR-000314 UHF4'],
-        uhf6: DrcProject['UKR-000336 UHF6'],
-        novo: DrcProject['UKR-000360 Novo-Nordisk'],
-        uhf8: DrcProject['UKR-000363 UHF8'],
+        ukr000345_bha2: DrcProject['UKR-000345 BHA2'],
+        ukr000322_echo2: DrcProject['UKR-000322 ECHO2'],
+        ukr000309_okf: DrcProject['UKR-000309 OKF'],
+        ukr000314_uhf4: DrcProject['UKR-000314 UHF4'],
+        ukr000336_uhf6: DrcProject['UKR-000336 UHF6'],
+        ukr000298_novo: DrcProject['UKR-000360 Novo-Nordisk'],
+        ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
+        ukr000284_bha: DrcProject['UKR-000284 BHA'],
+        ukr000350_sida: DrcProject['UKR-000350 SIDA'],
+        ukr000355_danish_mofa: DrcProject['UKR-000355 Danish MFA'],
+        ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
+        ukr000388_bha: DrcProject['UKR-000388 BHA'],
+        ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
+        ukr000399_sdc: DrcProject['UKR-000399 SDC'],
+        ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+        ukr000424_dutch_mfa: DrcProject['UKR-000424 Dutch MFA'],
+        ukr000426_sdc: DrcProject['UKR-000426 SDC'],
       })
       .default(() => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project)))
 
@@ -362,10 +372,15 @@ export class KoboMetaMapperProtection {
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const project = match(answer.project)
       .cases({
-        bha: DrcProject['UKR-000345 BHA2'],
-        sdc: DrcProject['UKR-000226 SDC'],
-        danida: DrcProject['UKR-000347 DANIDA'],
-        uhf8: DrcProject['UKR-000363 UHF8'],
+        ukr000284_bha: DrcProject['UKR-000284 BHA'],
+        ukr000345_bha2: DrcProject['UKR-000345 BHA2'],
+        ukr000330_sdc2: DrcProject['UKR-000330 SDC2'],
+        ukr000347_danida: DrcProject['UKR-000347 DANIDA'],
+        ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
+        ukr000355_dfma: DrcProject['UKR-000355 Danish MFA'],
+        ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
+        ukr000386_pooled_funds: DrcProject['UKR-000386 Pooled Funds'],
+        ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
       })
       .default(() => DrcProjectHelper.search(Protection_gbv.options.project[answer.project!] ?? answer.project))
 
