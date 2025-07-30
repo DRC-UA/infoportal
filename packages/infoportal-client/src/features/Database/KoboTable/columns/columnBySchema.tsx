@@ -35,7 +35,7 @@ export const MissingOption = ({value}: {value?: string}) => {
 
 const ignoredColType: Set<Kobo.Form.QuestionType> = new Set(['begin_group'])
 
-const noEditableColsId: Set<string> = new Set<keyof KoboSubmissionMetaData>([
+const noEditableColsId: Set<string> = new Set<keyof KoboSubmissionMetaData | 'cal_eligibility'>([
   'start',
   'end',
   'version',
@@ -46,6 +46,7 @@ const noEditableColsId: Set<string> = new Set<keyof KoboSubmissionMetaData>([
   'lastValidatedTimestamp',
   'geolocation',
   'tags',
+  'cal_eligibility',
 ])
 
 const editableColsType: Set<Kobo.Form.QuestionType> = new Set([
