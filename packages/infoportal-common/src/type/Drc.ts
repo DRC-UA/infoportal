@@ -1,20 +1,21 @@
 import {Obj, seq} from '@axanc/ts-utils'
+
 import {OblastName} from '../location/index.js'
 
 export enum DrcOffice {
-  Kyiv = 'Kyiv',
-  Sumy = 'Sumy',
-  Mykolaiv = 'Mykolaiv',
-  Lviv = 'Lviv',
   Chernihiv = 'Chernihiv',
-  Kharkiv = 'Kharkiv',
-  Dnipro = 'Dnipro',
-  Poltava = 'Poltava',
   Chernivtsi = 'Chernivtsi',
-  Sloviansk = 'Sloviansk',
-  Ivankiv = 'Ivankiv',
+  Dnipro = 'Dnipro',
   Ichna = 'Ichna',
+  Ivankiv = 'Ivankiv',
+  Kharkiv = 'Kharkiv',
   Kherson = 'Kherson',
+  Kyiv = 'Kyiv',
+  Lviv = 'Lviv',
+  Mykolaiv = 'Mykolaiv',
+  Poltava = 'Poltava',
+  Sloviansk = 'Sloviansk',
+  Sumy = 'Sumy',
   Zaporizhzhya = 'Zaporizhzhya',
 }
 
@@ -29,7 +30,7 @@ export const oblastByDrcOffice: Record<DrcOffice, OblastName> = {
   Poltava: 'Poltavska',
   Chernivtsi: 'Chernihivska',
   Sloviansk: 'Donetska',
-  Ivankiv: 'Ivano-Frankivska',
+  Ivankiv: 'Ivano-Frankivska', // 🫣
   Ichna: 'Chernihivska',
   Kherson: 'Khersonska',
   Zaporizhzhya: 'Zaporizka',
@@ -38,102 +39,104 @@ export const oblastByDrcOffice: Record<DrcOffice, OblastName> = {
 export const drcOffices = Obj.values(DrcOffice)
 
 export enum DrcSector {
-  NFI = 'NFI',
-  WaSH = 'WaSH',
-  Education = 'Education',
-  GeneralProtection = 'GeneralProtection',
   DrcSector = 'DrcSector',
-  Livelihoods = 'Livelihoods',
-  FoodSecurity = 'FoodSecurity',
-  MPCA = 'MPCA',
-  Health = 'Health',
-  Nutrition = 'Nutrition',
-  Shelter = 'Shelter',
-  Evacuations = 'Evacuations',
-  GBV = 'GBV',
   EORE = 'EORE',
+  Education = 'Education',
+  Evacuations = 'Evacuations',
+  FoodSecurity = 'FoodSecurity',
+  GBV = 'GBV',
+  GeneralProtection = 'GeneralProtection',
+  Health = 'Health',
+  Legal = 'Legal',
+  Livelihoods = 'Livelihoods',
+  MPCA = 'MPCA',
+  NFI = 'NFI',
+  Nutrition = 'Nutrition',
   PSS = 'PSS',
+  Shelter = 'Shelter',
   VA = 'VA',
+  WaSH = 'WaSH',
 }
 
 export enum DrcProgram {
+  AwarenessRaisingSession = 'AwarenessRaisingSession',
+  CapacityBuilding = 'CapacityBuilding',
+  CaseManagement = 'CaseManagement',
+  CashForEducation = 'CashForEducation',
   CashForFuel = 'CashForFuel',
-  CashForUtilities = 'CashForUtilities',
   CashForRent = 'CashForRent',
   CashForRepair = 'CashForRepair',
-  CashForEducation = 'CashForEducation',
-  MPCA = 'MPCA',
-  NFI = 'NFI',
-  ShelterRepair = 'ShelterRepair',
-  Referral = 'Referral',
-  ESK = 'ESK',
-  InfantWinterClothing = 'InfantWinterClothing',
-  HygieneKit = 'HygieneKit',
-  SectoralCashForAgriculture = 'SectoralCashForAgriculture',
-  VET = 'VET',
-  MSME = 'MSME',
-  SectoralCashForAnimalShelterRepair = 'SectoralCashForAnimalShelterRepair',
-  SectoralCashForAnimalFeed = 'SectoralCashForAnimalFeed',
-  Counselling = 'Counselling',
-  PSS = 'PSS',
-  // GBV = 'GBV',
-  ProtectionMonitoring = 'ProtectionMonitoring',
-  AwarenessRaisingSession = 'AwarenessRaisingSession',
+  CashForUtilities = 'CashForUtilities',
   CommunityLevelPm = 'CommunityLevelPm',
-  Legal = 'Legal',
-  FGD = 'FGD',
-  Observation = 'Observation',
-  WGSS = 'WGSS',
+  Counselling = 'Counselling',
   DignityKits = 'DignityKits',
-  CaseManagement = 'CaseManagement',
+  ESK = 'ESK',
+  FGD = 'FGD',
+  GBV = 'GBV',
+  HygieneKit = 'HygieneKit',
+  InfantWinterClothing = 'InfantWinterClothing',
+  Legal = 'Legal',
   LegalAid = 'LegalAid',
-  CapacityBuilding = 'CapacityBuilding',
   MHPSSActivities = 'MHPSSActivities',
+  MPCA = 'MPCA',
+  MSME = 'MSME',
+  NFI = 'NFI',
+  Observation = 'Observation',
+  P2P = 'PeerToPeerTraining',
+  PFA = 'PsychologicalFirstAid',
   PGS = 'PsychosocialGroupSession',
   PIS = 'PsychosocialIndividualSession',
-  PFA = 'PsychologicalFirstAid',
+  PSS = 'PSS',
+  ProtectionMonitoring = 'ProtectionMonitoring',
+  Referral = 'Referral',
+  SectoralCashForAgriculture = 'SectoralCashForAgriculture',
+  SectoralCashForAnimalFeed = 'SectoralCashForAnimalFeed',
+  SectoralCashForAnimalShelterRepair = 'SectoralCashForAnimalShelterRepair',
+  ShelterRepair = 'ShelterRepair',
   TIA = 'TIA',
-  P2P = 'PeerToPeerTraining',
+  VET = 'VET',
+  WGSS = 'WGSS',
 }
 
 export class DrcSectorHelper {
   private static readonly byProgram: Record<DrcProgram, DrcSector[]> = {
+    AwarenessRaisingSession: [DrcSector.GeneralProtection, DrcSector.GBV], //	# of individuals reached with awareness-raising activities and GBV-life-saving information
+    CapacityBuilding: [DrcSector.GBV], //	# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards
+    CaseManagement: [DrcSector.GBV], //	# of individuals reached with humanitarian cash and voucher assistance for GBV case management and
+    CashForEducation: [DrcSector.Education],
     CashForFuel: [DrcSector.Shelter],
-    CashForUtilities: [DrcSector.Shelter],
     CashForRent: [DrcSector.Shelter],
     CashForRepair: [DrcSector.Shelter],
-    CashForEducation: [DrcSector.Education],
-    MPCA: [DrcSector.MPCA],
-    NFI: [DrcSector.NFI],
-    ShelterRepair: [DrcSector.Shelter],
+    CashForUtilities: [DrcSector.Shelter],
+    CommunityLevelPm: [DrcSector.GeneralProtection],
+    Counselling: [DrcSector.GeneralProtection],
+    DignityKits: [DrcSector.GBV], //	# of women and girls at risk who received dignity kits
     ESK: [DrcSector.Shelter],
-    InfantWinterClothing: [DrcSector.NFI],
+    FGD: [DrcSector.GeneralProtection],
+    GBV: [DrcSector.GBV],
     HygieneKit: [DrcSector.NFI],
+    InfantWinterClothing: [DrcSector.NFI],
+    Legal: [DrcSector.GeneralProtection],
+    LegalAid: [DrcSector.GBV], //	# of individuals at risk supported with GBV specialized legal assistance and counseling
+    MHPSSActivities: [DrcSector.PSS],
+    MPCA: [DrcSector.MPCA],
+    MSME: [DrcSector.Livelihoods],
+    NFI: [DrcSector.NFI],
+    Observation: [DrcSector.GeneralProtection],
+    PSS: [DrcSector.GeneralProtection],
+    PeerToPeerTraining: [DrcSector.PSS],
+    ProtectionMonitoring: [DrcSector.GeneralProtection],
+    PsychologicalFirstAid: [DrcSector.PSS],
+    PsychosocialGroupSession: [DrcSector.PSS],
+    PsychosocialIndividualSession: [DrcSector.PSS],
     Referral: [DrcSector.GeneralProtection],
     SectoralCashForAgriculture: [DrcSector.Livelihoods],
-    VET: [DrcSector.Livelihoods],
-    MSME: [DrcSector.Livelihoods],
-    SectoralCashForAnimalShelterRepair: [DrcSector.Livelihoods],
     SectoralCashForAnimalFeed: [DrcSector.Livelihoods],
-    Counselling: [DrcSector.GeneralProtection],
-    PSS: [DrcSector.GeneralProtection],
-    ProtectionMonitoring: [DrcSector.GeneralProtection],
-    CommunityLevelPm: [DrcSector.GeneralProtection],
-    Legal: [DrcSector.GeneralProtection],
-    FGD: [DrcSector.GeneralProtection],
-    Observation: [DrcSector.GeneralProtection],
-    WGSS: [DrcSector.GBV], //	# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces
-    DignityKits: [DrcSector.GBV], //	# of women and girls at risk who received dignity kits
-    CapacityBuilding: [DrcSector.GBV], //	# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards
-    MHPSSActivities: [DrcSector.PSS],
-    PsychosocialGroupSession: [DrcSector.PSS],
-    CaseManagement: [DrcSector.GBV], //	# of individuals reached with humanitarian cash and voucher assistance for GBV case management and
-    AwarenessRaisingSession: [DrcSector.GeneralProtection, DrcSector.GBV], //	# of individuals reached with awareness-raising activities and GBV-life-saving information
-    LegalAid: [DrcSector.GBV], //	# of individuals at risk supported with GBV specialized legal assistance and counseling
-    PsychosocialIndividualSession: [DrcSector.PSS],
-    PsychologicalFirstAid: [DrcSector.PSS],
+    SectoralCashForAnimalShelterRepair: [DrcSector.Livelihoods],
+    ShelterRepair: [DrcSector.Shelter],
     TIA: [DrcSector.VA],
-    PeerToPeerTraining: [DrcSector.PSS],
+    VET: [DrcSector.Livelihoods],
+    WGSS: [DrcSector.GBV], //	# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces
     //	# of operational women and girls\' safe spaces
     // CapacityBuilding: DrcSector.GBV,	//	# of GBV service providers trained on GBV prevention and response that meet GBViE minimum standards
   } as const
@@ -153,94 +156,97 @@ export class DrcSectorHelper {
 }
 
 export type DrcOfficeShort =
-  | 'KYV'
-  | 'UMY'
-  | 'NLV'
-  | 'LWO'
   | 'CEJ'
-  | 'HRK'
   | 'DNK'
-  | 'Poltava'
+  | 'HRK'
+  | 'KYV'
+  | 'LWO'
+  | 'NLV'
+  | 'UMY'
+  // legacy offices:
   | 'Chernivtsi'
-  | 'Sloviansk'
-  | 'Ivankiv'
   | 'Ichna'
+  | 'Ivankiv'
   | 'Kherson'
+  | 'Poltava'
+  | 'Sloviansk'
   | 'Zaporizhzhya'
 
 export const drcOfficeShort: Record<DrcOffice, DrcOfficeShort> = {
-  [DrcOffice.Kyiv]: 'KYV',
-  [DrcOffice.Sumy]: 'UMY',
-  [DrcOffice.Mykolaiv]: 'NLV',
-  [DrcOffice.Lviv]: 'LWO',
   [DrcOffice.Chernihiv]: 'CEJ',
-  [DrcOffice.Kharkiv]: 'HRK',
-  [DrcOffice.Dnipro]: 'DNK',
-  [DrcOffice.Poltava]: 'Poltava',
   [DrcOffice.Chernivtsi]: 'Chernivtsi',
-  [DrcOffice.Sloviansk]: 'Sloviansk',
-  [DrcOffice.Ivankiv]: 'Ivankiv',
+  [DrcOffice.Dnipro]: 'DNK',
   [DrcOffice.Ichna]: 'Ichna',
+  [DrcOffice.Ivankiv]: 'Ivankiv',
+  [DrcOffice.Kharkiv]: 'HRK',
   [DrcOffice.Kherson]: 'Kherson',
+  [DrcOffice.Kyiv]: 'KYV',
+  [DrcOffice.Lviv]: 'LWO',
+  [DrcOffice.Mykolaiv]: 'NLV',
+  [DrcOffice.Poltava]: 'Poltava',
+  [DrcOffice.Sloviansk]: 'Sloviansk',
+  [DrcOffice.Sumy]: 'UMY',
   [DrcOffice.Zaporizhzhya]: 'Zaporizhzhya',
 }
 
 export enum DrcDonor {
-  PFRU = 'PFRU',
-  GFFO = 'GFFO',
-  DMFA = 'DMFA',
+  AugustinusFonden = 'AugustinusFonden',
   BHA = 'BHA',
+  DANI = 'DANI',
+  DMFA = 'DMFA',
+  DUT = 'DUT',
   ECHO = 'ECHO',
-  SDC = 'SDC',
+  EUIC = 'EUIC',
   FCDO = 'FCDO',
-  OKF = 'OKF',
-  PSPU = 'PSPU',
-  PoolFunds = 'PoolFunds',
   FINM = 'FINM',
   FREM = 'FREM',
-  EUIC = 'EUIC',
-  PMRA = 'PMRA',
+  GFFO = 'GFFO',
+  HoffmansAndHusmans = 'HoffmansAndHusmans',
+  MOFA = 'MOFA',
+  NovoNordisk = 'NovoNordisk',
+  OKF = 'OKF',
+  PFRU = 'PFRU',
   PMKA = 'PMKA',
+  PMRA = 'PMRA',
+  PSPU = 'PSPU',
+  PoolFunds = 'PoolFunds',
+  SDC = 'SDC',
+  SDCS = 'SDCS',
   SIDA = 'SIDA',
   UHF = 'UHF',
   UNHC = 'UNHC',
-  DANI = 'DANI',
-  DUT = 'DUT',
-  NovoNordisk = 'NovoNordisk',
-  SDCS = 'SDCS',
-  MOFA = 'MOFA',
-  AugustinusFonden = 'AugustinusFonden',
-  HoffmansAndHusmans = 'HoffmansAndHusmans',
+  // extra options out of sorted list:
   Other = 'Other',
   None = 'None',
 }
 
 export const drcDonorTranlate: Record<DrcDonor, string> = {
-  PFRU: 'PFRU',
-  GFFO: 'GFFO',
-  DMFA: 'DMFA',
+  AugustinusFonden: 'Augustinus Fonden',
   BHA: 'BHA',
+  DANI: 'Danida',
+  DMFA: 'DMFA',
+  DUT: 'DUT',
   ECHO: 'ECHO',
-  SDC: 'SDC',
+  EUIC: 'EUIC',
   FCDO: 'FCDO',
-  OKF: 'OKF',
-  PSPU: 'PSPU',
-  PoolFunds: 'Pooled Funds',
   FINM: 'FINM',
   FREM: 'FREM',
-  EUIC: 'EUIC',
-  PMRA: 'PMRA',
+  GFFO: 'GFFO',
+  HoffmansAndHusmans: 'Hoffmans & Husmans',
+  MOFA: 'MOFA',
+  NovoNordisk: 'Novo Nordisk',
+  OKF: 'OKF',
+  PFRU: 'PFRU',
   PMKA: 'PMKA',
+  PMRA: 'PMRA',
+  PSPU: 'PSPU',
+  PoolFunds: 'Pooled Funds',
+  SDC: 'SDC',
+  SDCS: 'SDCS',
   SIDA: 'SIDA',
   UHF: 'UHF',
   UNHC: 'UNHC',
-  DANI: 'Danida',
-  DUT: 'DUT',
-  NovoNordisk: 'Novo Nordisk',
-  SDCS: 'SDCS',
-  MOFA: 'MOFA',
-  AugustinusFonden: 'Augustinus Fonden',
-  HoffmansAndHusmans: 'Hoffmans & Husmans',
+  // extra options out of sorted list:
   Other: 'Other',
   None: 'None',
 }
@@ -248,6 +254,7 @@ export const drcDonorTranlate: Record<DrcDonor, string> = {
 export enum DrcProject {
   'SIDA 518-570A' = 'SIDA 518-570A',
   'UKR-000xxx DANIDA' = 'UKR-000xxx DANIDA',
+  // sorted part starts here:
   'UKR-000226 SDC' = 'UKR-000226 SDC',
   'UKR-000230 PM WRA' = 'UKR-000230 PM WRA',
   'UKR-000231 PM WKA' = 'UKR-000231 PM WKA',
@@ -256,8 +263,8 @@ export enum DrcProject {
   'UKR-000255 EU IcSP' = 'UKR-000255 EU IcSP',
   'UKR-000267 DANIDA' = 'UKR-000267 DANIDA',
   'UKR-000269 ECHO1' = 'UKR-000269 ECHO1',
-  'UKR-000270 Pooled Funds' = 'UKR-000270 Pooled Funds',
   'UKR-000270 Pooled Funds Old (MPCA)' = 'UKR-000270 Pooled Funds Old (MPCA)',
+  'UKR-000270 Pooled Funds' = 'UKR-000270 Pooled Funds',
   'UKR-000274 Novo-Nordilsk' = 'UKR-000274 Novo-Nordilsk',
   'UKR-000276 UHF3' = 'UKR-000276 UHF3',
   'UKR-000284 BHA' = 'UKR-000284 BHA',
@@ -273,13 +280,13 @@ export enum DrcProject {
   'UKR-000306 Dutch II' = 'UKR-000306 Dutch II',
   'UKR-000308 UNHCR' = 'UKR-000308 UNHCR',
   'UKR-000309 OKF' = 'UKR-000309 OKF',
-  'UKR-000331 GFFO' = 'UKR-000331 GFFO',
   'UKR-000314 UHF4' = 'UKR-000314 UHF4',
   'UKR-000316 UHF5' = 'UKR-000316 UHF5',
   'UKR-000322 ECHO2' = 'UKR-000322 ECHO2',
   'UKR-000323 PFRU' = 'UKR-000323 PFRU',
   'UKR-000329 SIDA H2R' = 'UKR-000329 SIDA H2R',
   'UKR-000330 SDC2' = 'UKR-000330 SDC2',
+  'UKR-000331 GFFO' = 'UKR-000331 GFFO',
   'UKR-000336 UHF6' = 'UKR-000336 UHF6',
   'UKR-000340 Augustinus Fonden' = 'UKR-000340 Augustinus Fonden',
   'UKR-000341 Hoffmans & Husmans' = 'UKR-000341 Hoffmans & Husmans',
@@ -289,11 +296,11 @@ export enum DrcProject {
   'UKR-000348 BHA3' = 'UKR-000348 BHA3',
   'UKR-000350 SIDA' = 'UKR-000350 SIDA',
   'UKR-000352 UHF7' = 'UKR-000352 UHF7',
-  'UKR-000355 Danish MFA' = 'UKR-000355 Danish MFA',
   'UKR-000355 DMFA Mykolaiv' = 'UKR-000355 Danish MFA',
+  'UKR-000355 Danish MFA' = 'UKR-000355 Danish MFA',
   'UKR-000360 Novo-Nordisk' = 'UKR-000360 Novo-Nordisk',
-  'UKR-000363 UHF8' = 'UKR-000363 UHF8',
   'UKR-000363 UHF VIII' = 'UKR-000363 UHF8',
+  'UKR-000363 UHF8' = 'UKR-000363 UHF8',
   'UKR-000370 SIDA' = 'UKR-000370 SIDA',
   // @deprecated wrong code 371, it should be 372
   'UKR-000371 ECHO3' = 'UKR-000371 ECHO3',
@@ -308,12 +315,13 @@ export enum DrcProject {
   'UKR-000396 Danish MFA' = 'UKR-000396 Danish MFA',
   'UKR-000397 GFFO' = 'UKR-000397 GFFO',
   'UKR-000398 SDC' = 'UKR-000398 SDC',
-  'UKR-000399 SDC3' = 'UKR-000399 SDC3',
   'UKR-000399 SDC' = 'UKR-000399 SDC',
-  'UKR-000423 ECHO4' = 'UKR-000423 ECHO4',
+  'UKR-000399 SDC3' = 'UKR-000399 SDC3',
   'UKR-000423 ECHO' = 'UKR-000423 ECHO4',
+  'UKR-000423 ECHO4' = 'UKR-000423 ECHO4',
   'UKR-000424 Dutch MFA' = 'UKR-000424 Dutch MFA',
   'UKR-000426 SDC' = 'UKR-000426 SDC',
+  // extra options out of sorted list:
   'Other' = 'Other',
   'None' = 'None',
 }
@@ -325,6 +333,8 @@ export class DrcProjectHelper {
 
   static readonly donorByProject: Record<DrcProject, DrcDonor> = {
     'SIDA 518-570A': DrcDonor.SIDA,
+    'UKR-000xxx DANIDA': DrcDonor.DANI,
+    // sorted list starts here:
     'UKR-000226 SDC': DrcDonor.SDC,
     'UKR-000230 PM WRA': DrcDonor.PMRA,
     'UKR-000231 PM WKA': DrcDonor.PMKA,
@@ -333,8 +343,8 @@ export class DrcProjectHelper {
     'UKR-000255 EU IcSP': DrcDonor.EUIC,
     'UKR-000267 DANIDA': DrcDonor.DANI,
     'UKR-000269 ECHO1': DrcDonor.ECHO,
-    'UKR-000270 Pooled Funds': DrcDonor.PoolFunds,
     'UKR-000270 Pooled Funds Old (MPCA)': DrcDonor.PoolFunds,
+    'UKR-000270 Pooled Funds': DrcDonor.PoolFunds,
     'UKR-000274 Novo-Nordilsk': DrcDonor.NovoNordisk,
     'UKR-000276 UHF3': DrcDonor.UHF,
     'UKR-000284 BHA': DrcDonor.BHA,
@@ -351,8 +361,10 @@ export class DrcProjectHelper {
     'UKR-000308 UNHCR': DrcDonor.UNHC,
     'UKR-000309 OKF': DrcDonor.OKF,
     'UKR-000314 UHF4': DrcDonor.UHF,
+    'UKR-000316 UHF5': DrcDonor.UHF,
     'UKR-000322 ECHO2': DrcDonor.ECHO,
     'UKR-000323 PFRU': DrcDonor.PFRU,
+    'UKR-000329 SIDA H2R': DrcDonor.SIDA,
     'UKR-000330 SDC2': DrcDonor.SDC,
     'UKR-000331 GFFO': DrcDonor.GFFO,
     'UKR-000336 UHF6': DrcDonor.UHF,
@@ -367,19 +379,16 @@ export class DrcProjectHelper {
     'UKR-000355 Danish MFA': DrcDonor.DMFA,
     'UKR-000360 Novo-Nordisk': DrcDonor.NovoNordisk,
     'UKR-000363 UHF8': DrcDonor.UHF,
-    'UKR-000390 UHF9': DrcDonor.UHF,
+    'UKR-000370 SIDA': DrcDonor.SIDA,
     'UKR-000371 ECHO3': DrcDonor.ECHO,
     'UKR-000372 ECHO3': DrcDonor.ECHO,
     'UKR-000373 Novo-Nordilsk': DrcDonor.NovoNordisk,
     'UKR-000378 Danish MFA': DrcDonor.DMFA,
-    'UKR-000316 UHF5': DrcDonor.UHF,
-    'UKR-000329 SIDA H2R': DrcDonor.SIDA,
-    'UKR-000xxx DANIDA': DrcDonor.DANI,
-    'UKR-000370 SIDA': DrcDonor.SIDA,
     'UKR-000380 DANIDA': DrcDonor.DANI,
     'UKR-000385 Pooled Funds': DrcDonor.PoolFunds,
     'UKR-000386 Pooled Funds': DrcDonor.PoolFunds,
     'UKR-000388 BHA': DrcDonor.BHA,
+    'UKR-000390 UHF9': DrcDonor.UHF,
     'UKR-000396 Danish MFA': DrcDonor.DMFA,
     'UKR-000397 GFFO': DrcDonor.GFFO,
     'UKR-000398 SDC': DrcDonor.SDC,
@@ -388,6 +397,7 @@ export class DrcProjectHelper {
     'UKR-000423 ECHO4': DrcDonor.ECHO,
     'UKR-000424 Dutch MFA': DrcDonor.DUT,
     'UKR-000426 SDC': DrcDonor.SDC,
+    // extra options out of sorted list:
     Other: DrcDonor.Other,
     None: DrcDonor.None,
   }
@@ -424,9 +434,9 @@ export class DrcProjectHelper {
   }
 
   static readonly budgetByProject: Partial<Record<DrcProject, number>> = {
-    [DrcProject['UKR-000322 ECHO2']]: 10243523, //.13, // 9423057.51 EURO from PIP
-    [DrcProject['UKR-000284 BHA']]: 57000000,
     [DrcProject['UKR-000269 ECHO1']]: 3000000,
+    [DrcProject['UKR-000284 BHA']]: 57000000,
+    [DrcProject['UKR-000322 ECHO2']]: 10243523, //.13, // 9423057.51 EURO from PIP
     [DrcProject['UKR-000345 BHA2']]: 10080572.0,
   }
 }
