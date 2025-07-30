@@ -1,7 +1,6 @@
 import {match, Obj, seq} from '@axanc/ts-utils'
 import {Kobo, KoboClient} from 'kobo-sdk'
 import fs from 'node:fs'
-import {resolve} from 'node:path'
 import prettier from 'prettier'
 
 import {capitalize, KoboIndex} from 'infoportal-common'
@@ -149,6 +148,9 @@ export class BuildKoboType {
       },
       legal_individual_aid: {
         formId: KoboIndex.byName('legal_individual_aid').id,
+      },
+      legal_individual_aid_partners: {
+        formId: KoboIndex.byName('legal_individual_aid_partners').id,
       },
       meal_verificationEcrec: {
         formId: KoboIndex.byName('meal_verificationEcrec').id,
