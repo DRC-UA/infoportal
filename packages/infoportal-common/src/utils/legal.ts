@@ -1,4 +1,6 @@
-import {Legal_individual_aid} from 'infoportal-common'
+import {Legal_individual_aid} from '../kobo/generated'
+
+import {isDate} from './Common'
 
 const civilDocDateFields = [
   'date_recipt_personal_identity',
@@ -32,4 +34,27 @@ const hlpDocDateFields = [
   'date_recipt_ownership_documents_land',
 ] as const satisfies readonly (keyof NonNullable<Legal_individual_aid.T['number_case']>[number])[]
 
-export {civilDocDateFields, hlpDocDateFields}
+const pickPrioritizedAid = (aids: Legal_individual_aid.T['number_case']): Legal_individual_aid.T['number_case'] => {
+  if (aids === undefined) return
+
+  const hlpAssistanceWithDoc = aids.find(({beneficiary_application_type, ...aid}) => {
+    return (
+      beneficiary_application_type === 'assistance' &&
+      hlpDocDateFields.some((field) => {
+        return isDate(aid[field])
+      })
+    )
+  })
+
+  const civilAssistanceWithDoc = aids.find(({beneficiary_application_type, ...aid}) => {
+    return beneficiary_application_type === 'assistance' && civilDocDateFields.some((field) => isDate(aid[field]))
+  })
+
+  if (hlpAssistanceWithDoc) return [hlpAssistanceWithDoc]
+
+  if (civilAssistanceWithDoc) return [civilAssistanceWithDoc]
+
+  return [aids[0]]
+}
+
+export {civilDocDateFields, hlpDocDateFields, pickPrioritizedAid}

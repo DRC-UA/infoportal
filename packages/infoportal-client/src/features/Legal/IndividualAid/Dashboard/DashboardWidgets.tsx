@@ -2,7 +2,16 @@ import type {FC} from 'react'
 import {match, Obj} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 
-import {DrcProject, KoboXmlMapper, OblastIndex, Legal_individual_aid, isDate, pluralize} from 'infoportal-common'
+import {
+  civilDocDateFields,
+  DrcProject,
+  hlpDocDateFields,
+  isDate,
+  KoboXmlMapper,
+  Legal_individual_aid,
+  OblastIndex,
+  pluralize,
+} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {SlideWidget, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
@@ -14,7 +23,6 @@ import {MapSvg} from '@/shared/maps/MapSvg'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 
-import {civilDocDateFields, hlpDocDateFields} from './constants'
 import {useIndividualAidContext} from './context'
 
 // MEMO: all figures are PEOPLE - those who receive aid, get documents issued etc
