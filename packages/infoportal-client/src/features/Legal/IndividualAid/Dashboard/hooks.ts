@@ -1,15 +1,13 @@
 import {useMemo, useState} from 'react'
 import {seq} from '@axanc/ts-utils'
 
-import {Period, PeriodHelper} from 'infoportal-common'
+import {Period, PeriodHelper, pickPrioritizedAid} from 'infoportal-common'
 
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useI18n} from '@/core/i18n'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 
 import {useLegalFilterShape} from '../hooks'
-
-import {pickPrioritizedAid} from './utils'
 
 const useIndividualAidData = () => {
   const {m} = useI18n()
