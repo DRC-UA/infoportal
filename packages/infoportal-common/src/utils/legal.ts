@@ -34,7 +34,9 @@ const hlpDocDateFields = [
   'date_recipt_ownership_documents_land',
 ] as const satisfies readonly (keyof NonNullable<Legal_individual_aid.T['number_case']>[number])[]
 
-const pickPrioritizedAid = (aids: Legal_individual_aid.T['number_case']): Legal_individual_aid.T['number_case'] => {
+const pickPrioritizedAid = (
+  aids: Legal_individual_aid.T['number_case'],
+): (NonNullable<Legal_individual_aid.T['number_case']> extends Array<infer E> ? E : never) | undefined => {
   if (aids === undefined) return
 
   const hlpAssistanceWithDoc = aids.find(({beneficiary_application_type, ...aid}) => {
@@ -50,11 +52,11 @@ const pickPrioritizedAid = (aids: Legal_individual_aid.T['number_case']): Legal_
     return beneficiary_application_type === 'assistance' && civilDocDateFields.some((field) => isDate(aid[field]))
   })
 
-  if (hlpAssistanceWithDoc) return [hlpAssistanceWithDoc]
+  if (hlpAssistanceWithDoc) return hlpAssistanceWithDoc
 
-  if (civilAssistanceWithDoc) return [civilAssistanceWithDoc]
+  if (civilAssistanceWithDoc) return civilAssistanceWithDoc
 
-  return [aids[0]]
+  return aids[0]
 }
 
 export {civilDocDateFields, hlpDocDateFields, pickPrioritizedAid}

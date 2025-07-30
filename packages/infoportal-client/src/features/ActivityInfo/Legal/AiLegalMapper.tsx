@@ -1,14 +1,17 @@
 import {match, seq} from '@axanc/ts-utils'
 
 import {
+  civilDocDateFields,
   DrcProject,
   DrcProjectHelper,
   groupBy,
+  hlpDocDateFields,
   KoboIndex,
   KoboXmlMapper,
   Legal_individual_aid,
   PeriodHelper,
   Person,
+  pickPrioritizedAid,
   type Period,
 } from 'infoportal-common'
 
@@ -16,7 +19,6 @@ import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
-import {pickPrioritizedAid, hlpDocDateFields, civilDocDateFields} from '@/features/Legal/IndividualAid/Dashboard'
 
 import {AiLegalType} from './AiLegalTypes'
 
@@ -111,7 +113,7 @@ namespace AiLegalMapper {
             return aids !== undefined && aids.length > 0
               ? {
                   ...rest,
-                  number_case: pickPrioritizedAid(aids),
+                  number_case: [pickPrioritizedAid(aids)],
                 }
               : undefined
           }),
