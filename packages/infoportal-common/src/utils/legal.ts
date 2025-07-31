@@ -1,4 +1,5 @@
 import {Legal_individual_aid} from '../kobo/generated'
+import {DrcProgram} from '../type/Drc'
 
 import {isDate} from './Common'
 
@@ -36,8 +37,11 @@ const hlpDocDateFields = [
 
 const pickPrioritizedAid = (
   aids: Legal_individual_aid.T['number_case'],
-): (NonNullable<Legal_individual_aid.T['number_case']> extends Array<infer E> ? E : never) | undefined => {
-  if (aids === undefined) return
+): {
+  aid?: NonNullable<Legal_individual_aid.T['number_case']> extends Array<infer E> ? E : never
+  activity?: DrcProgram
+} => {
+  if (aids === undefined) return {}
 
   const hlpAssistanceWithDoc = aids.find(({beneficiary_application_type, ...aid}) => {
     return (
@@ -52,11 +56,29 @@ const pickPrioritizedAid = (
     return beneficiary_application_type === 'assistance' && civilDocDateFields.some((field) => isDate(aid[field]))
   })
 
-  if (hlpAssistanceWithDoc) return hlpAssistanceWithDoc
+  if (hlpAssistanceWithDoc) return {aid: hlpAssistanceWithDoc, activity: DrcProgram.AwarenessRaisingSession}
 
-  if (civilAssistanceWithDoc) return civilAssistanceWithDoc
+  if (civilAssistanceWithDoc) return {aid: civilAssistanceWithDoc, activity: DrcProgram.CapacityBuilding}
 
-  return aids[0]
+  return {aid: aids[0]}
 }
 
-export {civilDocDateFields, hlpDocDateFields, pickPrioritizedAid}
+const getActivityType = (aid: NonNullable<Legal_individual_aid.T['number_case']>[number]): DrcProgram | undefined => {
+  if (aid === undefined) return undefined
+
+  if (aid.beneficiary_application_type === 'assistance' && aid.category_issue === 'hlp') {
+    return hlpDocDateFields.some((field) => typeof aid[field] === 'string')
+      ? DrcProgram.LegalAssistanceHlpDocs
+      : DrcProgram.LegalAssistanceHlp
+  }
+
+  if (aid.beneficiary_application_type === 'assistance' && aid.category_issue === 'general_protection') {
+    return civilDocDateFields.some((field) => typeof aid[field] === 'string')
+      ? DrcProgram.LegalAssistanceDocs
+      : DrcProgram.LegalAssistanceOther
+  }
+
+  return DrcProgram.LegalCounselling
+}
+
+export {civilDocDateFields, getActivityType, hlpDocDateFields, pickPrioritizedAid}

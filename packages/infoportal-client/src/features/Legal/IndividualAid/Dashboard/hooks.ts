@@ -33,7 +33,10 @@ const useIndividualAidData = () => {
           }) ?? [],
       }))
       .filter((record) => record.number_case.length > 0)
-      .map(({number_case, ...record}) => ({...record, number_case: [pickPrioritizedAid(number_case)]}))
+      .map(({number_case, ...record}) => ({
+        ...record,
+        number_case: [pickPrioritizedAid(number_case).aid],
+      }))
   }, [data, filterShape, optionFilter, casePeriod, caseClosurePeriod])
 
   return {
