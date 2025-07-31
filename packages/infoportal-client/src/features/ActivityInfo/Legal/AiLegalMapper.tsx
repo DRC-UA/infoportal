@@ -1,11 +1,11 @@
-import {match, seq} from '@axanc/ts-utils'
+import {match, seq, type Seq} from '@axanc/ts-utils'
 
 import {
-  civilDocDateFields,
+  DrcProgram,
   DrcProject,
   DrcProjectHelper,
+  getActivityType,
   groupBy,
-  hlpDocDateFields,
   KoboIndex,
   KoboXmlMapper,
   Legal_individual_aid,
@@ -34,39 +34,6 @@ namespace AiLegalMapper {
         [DrcProject['UKR-000423 ECHO4']]: 'PRT-DRC-00009',
       })
       .default(() => `${aiInvalidValueFlag} ${project}`)
-  }
-
-  const getActivityType = (
-    aid: NonNullable<Legal_individual_aid.T['number_case']>[number],
-  ):
-    | 'assistance-hlp-with-docs'
-    | 'assistance-hlp'
-    | 'assistance-with-docs'
-    | 'assistance'
-    | 'counselling'
-    | undefined => {
-    if (aid === undefined) return undefined
-
-    if (
-      aid.beneficiary_application_type === 'assistance' &&
-      aid.category_issue === 'hlp' &&
-      hlpDocDateFields.some((field) => typeof aid[field] === 'string')
-    )
-      return 'assistance-hlp-with-docs'
-
-    if (aid.beneficiary_application_type === 'assistance' && aid.category_issue === 'hlp') return 'assistance-hlp'
-
-    if (
-      aid.beneficiary_application_type === 'assistance' &&
-      aid.category_issue === 'general_protection' &&
-      civilDocDateFields.some((field) => typeof aid[field] === 'string')
-    )
-      return 'assistance-with-docs'
-
-    if (aid.beneficiary_application_type === 'assistance' && aid.category_issue === 'general_protection')
-      return 'assistance'
-
-    return 'counselling'
   }
 
   const legalAidKoboMapper = (data: Legal_individual_aid.T[]) => {
@@ -101,29 +68,31 @@ namespace AiLegalMapper {
       return api.kobo.answer
         .searchByAccess({formId: KoboIndex.byName('legal_individual_aid').id})
         .then(({data}) =>
-          (data as unknown as Legal_individual_aid.T[]).map(({number_case, ...rest}) => {
-            // select only closed and ready to be reported
-            const aids = number_case?.filter(
-              ({status_case, date_case_closure}) =>
-                status_case === 'closed_ready' &&
-                date_case_closure !== undefined &&
-                PeriodHelper.isDateIn(period, new Date(date_case_closure)),
-            )
+          (data as unknown as Legal_individual_aid.T[]).map(
+            ({number_case, ...rest}): Legal_individual_aid.T | undefined => {
+              // select only closed and ready to be reported
+              const aids = number_case?.filter(
+                ({status_case, date_case_closure}) =>
+                  status_case === 'closed_ready' &&
+                  date_case_closure !== undefined &&
+                  PeriodHelper.isDateIn(period, new Date(date_case_closure)),
+              )
 
-            return aids !== undefined && aids.length > 0
-              ? {
-                  ...rest,
-                  number_case: [pickPrioritizedAid(aids)],
-                }
-              : undefined
-          }),
+              return aids !== undefined && aids.length > 0
+                ? {
+                    ...rest,
+                    number_case: [pickPrioritizedAid(aids).aid!],
+                  }
+                : undefined
+            },
+          ),
         )
         .then(seq)
-        .then((data) => data.compact())
+        .then((data) => data.compact() as Seq<NonNullable<Legal_individual_aid.T>>)
         .then((data) => mapActivity(data, periodStr))
     }
 
-  const mapActivity = async (data: Legal_individual_aid.T[], periodStr: string): Promise<Bundle[]> => {
+  const mapActivity = async (data: Seq<Legal_individual_aid.T>, periodStr: string): Promise<Bundle[]> => {
     const res: Bundle[] = []
     let i = 0
     await Promise.all(
@@ -216,14 +185,16 @@ namespace AiLegalMapper {
             'Response Theme': 'No specific theme',
             Indicators: match(activity)
               .cases({
-                'assistance-hlp-with-docs':
+                [DrcProgram.LegalAssistanceHlpDocs]:
                   'Legal assistance - HLP > # of individuals who successfully secured HLP documentation',
-                'assistance-hlp':
+                [DrcProgram.LegalAssistanceHlp]:
                   'Legal assistance - HLP > # of individuals who received legal assistance on HLP issues',
-                'assistance-with-docs':
+                [DrcProgram.LegalAssistanceDocs]:
                   'Legal assistance - Protection > # of individuals who successfully secured civil documentation',
-                assistance: 'Legal assistance - Protection > # of individuals who received legal assistance',
-                counselling: 'Protection counselling > # of individuals who received protection counselling',
+                [DrcProgram.LegalAssistanceOther]:
+                  'Legal assistance - Protection > # of individuals who received legal assistance',
+                [DrcProgram.LegalCounselling]:
+                  'Protection counselling > # of individuals who received protection counselling',
               } as const)
               .default(() => `${aiInvalidValueFlag} acivity` as AiLegalType.AiTypeActivitiesAndPeople['Indicators']),
             'Population Group': AiMapper.mapPopulationGroup(displacement),
