@@ -52,15 +52,33 @@ const pickPrioritizedAid = (
     )
   })
 
+  const hlpAssistance = aids.find(({beneficiary_application_type, category_issue, ...aid}) => {
+    return (
+      beneficiary_application_type === 'assistance' &&
+      category_issue === 'hlp' &&
+      !hlpDocDateFields.some((field) => {
+        return isDate(aid[field])
+      })
+    )
+  })
+
   const civilAssistanceWithDoc = aids.find(({beneficiary_application_type, ...aid}) => {
     return beneficiary_application_type === 'assistance' && civilDocDateFields.some((field) => isDate(aid[field]))
   })
 
-  if (hlpAssistanceWithDoc) return {aid: hlpAssistanceWithDoc, activity: DrcProgram.AwarenessRaisingSession}
+  const civilAssistance = aids.find(({beneficiary_application_type, category_issue, ...aid}) => {
+    return beneficiary_application_type === 'assistance' && category_issue !== 'hlp'
+  })
 
-  if (civilAssistanceWithDoc) return {aid: civilAssistanceWithDoc, activity: DrcProgram.CapacityBuilding}
+  if (hlpAssistanceWithDoc) return {aid: hlpAssistanceWithDoc, activity: DrcProgram.LegalAssistanceHlpDocs}
 
-  return {aid: aids[0]}
+  if (hlpAssistance) return {aid: hlpAssistance, activity: DrcProgram.LegalAssistanceHlp}
+
+  if (civilAssistanceWithDoc) return {aid: civilAssistanceWithDoc, activity: DrcProgram.LegalAssistanceCivilDocs}
+
+  if (civilAssistance) return {aid: civilAssistance, activity: DrcProgram.LegalAssistanceCivil}
+
+  return {aid: aids[0], activity: DrcProgram.LegalCounselling}
 }
 
 const getActivityType = (aid: NonNullable<Legal_individual_aid.T['number_case']>[number]): DrcProgram | undefined => {
@@ -74,8 +92,8 @@ const getActivityType = (aid: NonNullable<Legal_individual_aid.T['number_case']>
 
   if (aid.beneficiary_application_type === 'assistance' && aid.category_issue === 'general_protection') {
     return civilDocDateFields.some((field) => typeof aid[field] === 'string')
-      ? DrcProgram.LegalAssistanceDocs
-      : DrcProgram.LegalAssistanceOther
+      ? DrcProgram.LegalAssistanceCivilDocs
+      : DrcProgram.LegalAssistanceCivil
   }
 
   return DrcProgram.LegalCounselling
