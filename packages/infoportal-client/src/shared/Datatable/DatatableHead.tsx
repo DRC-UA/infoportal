@@ -32,7 +32,13 @@ export const DatatableHead = (() => {
       filters: DatatableContext<T>['data']['filters']
     }) => {
     return (
-      <thead>
+      <thead
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 11,
+        }}
+      >
         <TableHeadSectionCell hasCheckboxColumn={!!select?.getId} columns={columns} onHideColumns={onHideColumns} />
         <tr className="tr">
           {map(select?.getId, (getId) => (

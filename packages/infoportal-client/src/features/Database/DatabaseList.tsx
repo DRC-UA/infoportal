@@ -24,13 +24,18 @@ export const DatabaseList = ({forms}: {forms?: KoboForm[]}) => {
   const {formatDate, m} = useI18n()
   const t = useTheme()
   const deleteForm = useAsync(api.kobo.form.delete)
-  const [formList, setFormList] = useState(forms ?? [])
+  const [formList, setFormList] = useState<KoboForm[]>(forms ?? [])
   const {toastSuccess, toastHttpError} = useIpToast()
   const {session} = useSession()
 
   useEffect(() => {
+    if (forms) setFormList(forms)
+  }, [forms])
+
+  useEffect(() => {
     fetcherServers.fetch()
   }, [])
+
   const indexServers = useMemo(() => {
     return seq(fetcherServers.get).groupByFirst((_) => _.id)
   }, [fetcherServers.get])

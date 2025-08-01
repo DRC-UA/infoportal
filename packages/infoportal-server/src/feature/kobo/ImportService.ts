@@ -90,11 +90,17 @@ export class ImportService {
     return date.toISOString().split('T')[0]
   }
 
+  private readonly removeTechnicalKeys = (data: KoboData): KoboData => {
+    const keysToStrip = new Set(['_index', '_parent_index'])
+    return Obj.filter(data, (key) => !keysToStrip.has(key))
+  }
+
   private async batchCreate(data: KoboData[], sdk: KoboClient, formId: Kobo.FormId) {
     for (const row of data) {
+      const cleaned = this.removeTechnicalKeys(row)
       await sdk.v1.submission.submitXml({
         formId,
-        data: {...row},
+        data: cleaned,
         retries: 2,
       })
     }
