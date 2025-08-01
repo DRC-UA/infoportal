@@ -189,9 +189,9 @@ namespace AiLegalMapper {
                   'Legal assistance - HLP > # of individuals who successfully secured HLP documentation',
                 [DrcProgram.LegalAssistanceHlp]:
                   'Legal assistance - HLP > # of individuals who received legal assistance on HLP issues',
-                [DrcProgram.LegalAssistanceDocs]:
+                [DrcProgram.LegalAssistanceCivilDocs]:
                   'Legal assistance - Protection > # of individuals who successfully secured civil documentation',
-                [DrcProgram.LegalAssistanceOther]:
+                [DrcProgram.LegalAssistanceCivil]:
                   'Legal assistance - Protection > # of individuals who received legal assistance',
                 [DrcProgram.LegalCounselling]:
                   'Protection counselling > # of individuals who received protection counselling',

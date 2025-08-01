@@ -21,7 +21,7 @@ class KoboMetaMapperLegal {
 
     const persons = KoboXmlMapper.Persons.legal_individual_aid(answers)
 
-    const {aid} = pickPrioritizedAid(answers.number_case)
+    const {aid, activity} = pickPrioritizedAid(answers.number_case)
 
     if (aid !== undefined) {
       const project = match(aid.project)
@@ -57,7 +57,7 @@ class KoboMetaMapperLegal {
         hromada: KoboXmlMapper.Location.searchHromada(answers.hromada),
         settlement: answers.settlement,
         sector: DrcSector.Legal,
-        activity: getActivityType(aid),
+        activity,
         persons,
         personsCount: persons.length,
         project: project ? [project] : [],
@@ -68,7 +68,7 @@ class KoboMetaMapperLegal {
             closed_ready: KoboMetaStatus.Committed,
           })
           .default(() => (aid.status_case_pending ? KoboMetaStatus.Pending : undefined)),
-        lastStatusUpdate: aid?.date_case_closure ?? row.date,
+        lastStatusUpdate: aid?.date_case_closure ?? aid?.date_case ?? row.updatedAt ?? row.date,
       })
     }
   }
