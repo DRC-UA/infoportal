@@ -1,5 +1,5 @@
 import {Access, AccessLevel} from '@/core/sdk/server/access/Access'
-import React, {ReactNode, useEffect, useState} from 'react'
+import React, {ReactNode, useEffect, useMemo, useState} from 'react'
 import {useI18n} from '@/core/i18n'
 import {UUID} from 'infoportal-common'
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
@@ -12,6 +12,7 @@ import {UseFetcher} from '@/shared/hook/useFetcher'
 import {Txt} from '@/shared/Txt'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {Box, Tooltip} from '@mui/material'
 
 export const AccessTable = ({
   isAdmin,
@@ -33,11 +34,35 @@ export const AccessTable = ({
   const {api} = useAppSettings()
   const _update = useAsync(api.access.update, {requestKey: ([id]) => id})
   const drcJobs = useFetcher(api.user.fetchDrcJobs)
+  const groupFetcher = useFetcher(api.group.search)
 
   useEffect(() => {
+    groupFetcher.fetch()
     drcJobs.fetch()
     fetcherData.fetch({force: true, clean: false})
   }, [_update.callIndex])
+
+  const groupMemberRoles = useMemo(() => {
+    const map: Record<string, string[]> = {}
+
+    for (const group of groupFetcher.get ?? []) {
+      const roles: string[] = []
+
+      for (const item of group.items ?? []) {
+        const jobs = Array.isArray(item.drcJob) ? item.drcJob : item.drcJob ? [item.drcJob] : []
+        const office = item.drcOffice ?? ''
+
+        for (const job of jobs) {
+          const label = office ? `${job} (${office})` : job
+          roles.push(label)
+        }
+      }
+
+      map[group.name] = Array.from(new Set(roles)).sort()
+    }
+
+    return map
+  }, [groupFetcher.get])
 
   return (
     <Datatable<Access>
@@ -65,7 +90,7 @@ export const AccessTable = ({
           head: m.drcJob,
           renderQuick: (_) => _.drcJob,
           type: 'select_one',
-          options: () => drcJobs.get?.map((job) => ({ value: job, label: job })) || [],
+          options: () => drcJobs.get?.map((job) => ({value: job, label: job})) || [],
         },
         {
           id: 'drcOffice',
@@ -87,7 +112,26 @@ export const AccessTable = ({
           id: 'group',
           type: 'select_one',
           head: m.group,
-          renderQuick: (_) => _.groupName ?? DatatableUtils.blank,
+          render: (row) => {
+            const groupName = row.groupName
+            if (!groupName) return {value: undefined, label: DatatableUtils.blank}
+
+            const roles = groupMemberRoles[groupName]
+            const tooltipText = roles?.join('\n')
+
+            return {
+              value: groupName,
+              label: (
+                <Tooltip
+                  title={<Box sx={{whiteSpace: 'pre-wrap', maxWidth: 300}}>{tooltipText}</Box>}
+                  arrow
+                  placement="top"
+                >
+                  <span>{groupName}</span>
+                </Tooltip>
+              ),
+            }
+          },
         },
         {
           width: 90,
