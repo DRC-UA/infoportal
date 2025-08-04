@@ -167,7 +167,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#8ab4f8',
     path: '/partnership',
     category: 'programs',
-    showIf: (u, accesses) => true,
+    showIf: (u, accesses) => false,
     // showIf: (u, accesses) => u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.cfm)
   },
   safety: {
