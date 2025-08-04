@@ -1,19 +1,6 @@
 import {match, seq, type Seq} from '@axanc/ts-utils'
 
-import {
-  DrcProgram,
-  DrcProject,
-  DrcProjectHelper,
-  getActivityType,
-  groupBy,
-  KoboIndex,
-  KoboXmlMapper,
-  Legal_individual_aid,
-  PeriodHelper,
-  Person,
-  pickPrioritizedAid,
-  type Period,
-} from 'infoportal-common'
+import {DrcProgram, DrcProject, groupBy, IKoboMeta, KoboMetaStatus, PeriodHelper, type Period} from 'infoportal-common'
 
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
@@ -36,77 +23,43 @@ namespace AiLegalMapper {
       .default(() => `${aiInvalidValueFlag} ${project}`)
   }
 
-  const legalAidKoboMapper = (data: Legal_individual_aid.T[]) => {
-    // @ts-expect-error No id is expected in type, but it really is there
-    return data.map(({oblast, raion, hromada, displacement, id, ...record}) => {
-      return {
-        ...record,
-        koboId: id,
-        oblast: KoboXmlMapper.Location.mapOblast(oblast)?.name,
-        raion: KoboXmlMapper.Location.searchRaion(raion),
-        hromada: KoboXmlMapper.Location.searchHromada(hromada),
-        project: DrcProjectHelper.search(record.number_case?.[0]!.project)!,
-        activity: getActivityType(
-          record.number_case?.[0] as NonNullable<Legal_individual_aid.T['number_case']>[number],
-        ),
-        displacement: match(displacement)
-          .cases({
-            idp: Person.DisplacementStatus.Idp,
-            non_idp: Person.DisplacementStatus.NonDisplaced,
-            returnee: Person.DisplacementStatus.NonDisplaced,
-          })
-          .default(Person.DisplacementStatus.Idp),
-      }
-    })
-  }
-
   export const req =
     (api: ApiSdk) =>
     async (period: Partial<Period>): Promise<Bundle[]> => {
       const periodStr = AiMapper.getPeriodStr(period)
 
-      return api.kobo.answer
-        .searchByAccess({formId: KoboIndex.byName('legal_individual_aid').id})
-        .then(({data}) =>
-          (data as unknown as Legal_individual_aid.T[]).map(
-            ({number_case, ...rest}): Legal_individual_aid.T | undefined => {
-              // select only closed and ready to be reported
-              const aids = number_case?.filter(
-                ({status_case, date_case_closure}) =>
-                  status_case === 'closed_ready' &&
-                  date_case_closure !== undefined &&
-                  PeriodHelper.isDateIn(period, new Date(date_case_closure)),
-              )
-
-              return aids !== undefined && aids.length > 0
-                ? {
-                    ...rest,
-                    number_case: [pickPrioritizedAid(aids).aid!],
-                  }
-                : undefined
-            },
-          ),
-        )
+      return api.koboMeta
+        .search({
+          activities: [
+            DrcProgram.Legal,
+            DrcProgram.LegalAid,
+            DrcProgram.LegalAssistanceHlpDocs,
+            DrcProgram.LegalAssistanceHlp,
+            DrcProgram.LegalAssistanceCivilDocs,
+            DrcProgram.LegalAssistanceCivil,
+            DrcProgram.LegalCounselling,
+          ],
+          status: [KoboMetaStatus.Committed],
+        })
+        .then(({data}) => data.filter((row) => PeriodHelper.isDateIn(period, row.lastStatusUpdate)))
         .then(seq)
-        .then((data) => data.compact() as Seq<NonNullable<Legal_individual_aid.T>>)
         .then((data) => mapActivity(data, periodStr))
     }
 
-  const mapActivity = async (data: Seq<Legal_individual_aid.T>, periodStr: string): Promise<Bundle[]> => {
+  const mapActivity = async (data: Seq<IKoboMeta>, periodStr: string): Promise<Bundle[]> => {
     const res: Bundle[] = []
     let i = 0
     await Promise.all(
       groupBy({
-        data: legalAidKoboMapper(data),
+        data,
         groups: [
           {by: (_) => _.oblast!},
           {by: (_) => _.raion!},
           {by: (_) => _.hromada!},
           {by: (_) => _.settlement!},
-          {by: (_) => _.project},
-          {by: (_) => _.displacement},
+          {by: (_) => _.project[0]},
         ],
-        finalTransform: async (grouped, [oblast, raion, hromada, settlement, project, displacement]) => {
+        finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
           const recordId = ActivityInfoSdk.makeRecordId({
             prefix: 'drcila',
             periodStr,
@@ -120,10 +73,7 @@ namespace AiLegalMapper {
             'Plan/Project Code': getPlanCode(project),
             'Reporting Organization': 'Danish Refugee Council (DRC)',
           }
-          const subActivities = mapSubActivity(
-            grouped.filter((item) => item.displacement === displacement),
-            periodStr,
-          )
+          const subActivities = mapSubActivity(grouped, periodStr)
           const activityPrebuilt = {
             ...activity,
             ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
@@ -157,28 +107,19 @@ namespace AiLegalMapper {
   }
 
   const mapSubActivity = (
-    data: ReturnType<typeof legalAidKoboMapper>,
+    data: IKoboMeta[],
     periodStr: string,
-  ): {activity: AiLegalType.AiTypeActivitiesAndPeople.Type; data: ReturnType<typeof legalAidKoboMapper>}[] => {
+  ): {activity: AiLegalType.AiTypeActivitiesAndPeople.Type; data: IKoboMeta[]}[] => {
     const res: {
       activity: AiLegalType.AiTypeActivitiesAndPeople.Type
-      data: ReturnType<typeof legalAidKoboMapper>
+      data: IKoboMeta[]
     }[] = []
 
     groupBy({
       data,
-      groups: [{by: (_) => _.activity!}],
-      finalTransform: (grouped, [activity]) => {
-        const displacement = grouped[0].displacement
-        const disaggregation = AiMapper.disaggregatePersons(
-          grouped
-            .map(({age, gender, vulnerability_detail}) => ({
-              age,
-              gender: match(gender).cases({male: Person.Gender.Male, female: Person.Gender.Female}).default(undefined),
-              ...(vulnerability_detail?.includes('pwd') ? {disability: [Person.WgDisability.See]} : {}),
-            }))
-            .compact(),
-        )
+      groups: [{by: ({activity}) => activity!}, {by: ({displacement}) => displacement!}],
+      finalTransform: (grouped, [activity, displacement]) => {
+        const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(({persons}) => persons).compact())
         res.push({
           data: grouped,
           activity: {
