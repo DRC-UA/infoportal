@@ -3,13 +3,12 @@ import {match, Obj} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 
 import {
-  civilDocDateFields,
+  DrcProgram,
   DrcProject,
-  hlpDocDateFields,
-  isDate,
   KoboXmlMapper,
   Legal_individual_aid,
   OblastIndex,
+  pickPrioritizedAid,
   pluralize,
 } from 'infoportal-common'
 
@@ -32,21 +31,25 @@ const Widgets: FC = () => {
   // the dataFiltered is already memoized in the hook called above
   // calculate everything in one Array.prototype.reduce run:
   const {assistances, counselling, docs} = dataFiltered.reduce(
-    (result, {number_case}) => ({
-      ...result,
-      ...(number_case?.[0]?.beneficiary_application_type === 'assistance'
-        ? {
-            assistances: ++result.assistances,
-          }
-        : {
-            counselling: ++result.counselling,
-          }),
-      ...(number_case?.some((aid) => hlpDocDateFields.some((field) => isDate(aid?.[field])))
-        ? {docs: {...result.docs, hlp: ++result.docs.hlp}}
-        : number_case?.some((aid) => civilDocDateFields.some((field) => isDate(aid?.[field])))
-          ? {docs: {...result.docs, civil: ++result.docs.civil}}
-          : undefined),
-    }),
+    (result, {number_case}) => {
+      const {activity} = pickPrioritizedAid(number_case)
+
+      return {
+        ...result,
+        ...(number_case?.[0]?.beneficiary_application_type === 'assistance'
+          ? {
+              assistances: ++result.assistances,
+            }
+          : {
+              counselling: ++result.counselling,
+            }),
+        docs: {
+          ...result.docs,
+          ...(activity === DrcProgram['LegalAssistanceHlpDocs'] ? {hlp: ++result.docs.hlp} : undefined),
+          ...(activity === DrcProgram['LegalAssistanceCivilDocs'] ? {civil: ++result.docs.civil} : undefined),
+        },
+      }
+    },
     {
       assistances: 0,
       counselling: 0,

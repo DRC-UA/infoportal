@@ -22,12 +22,20 @@ const useIndividualAidData = () => {
 
   const dataFiltered = useMemo(() => {
     return DataFilter.filterData(data, filterShape, optionFilter)
-      .map(({number_case, ...record}) => ({...record, number_case: [pickPrioritizedAid(number_case).aid]}))
-      .filter(
-        ({number_case}) =>
-          PeriodHelper.isDateIn(casePeriod, number_case[0]?.date_case) &&
-          PeriodHelper.isDateIn(caseClosurePeriod, number_case[0]?.date_case_closure),
-      )
+      .map(({number_case, ...record}) => {
+        const prioritizedAid = pickPrioritizedAid(number_case).aid
+        // let's ignore lower priority cases:
+        return {
+          ...record,
+          number_case: prioritizedAid ? [prioritizedAid] : undefined,
+        }
+      })
+      .filter(({number_case}) => {
+        return (
+          PeriodHelper.isDateIn(casePeriod, number_case?.[0]?.date_case) &&
+          PeriodHelper.isDateIn(caseClosurePeriod, number_case?.[0]?.date_case_closure)
+        )
+      })
   }, [data, filterShape, optionFilter, casePeriod, caseClosurePeriod])
 
   return {

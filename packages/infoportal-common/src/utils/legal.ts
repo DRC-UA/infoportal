@@ -43,32 +43,40 @@ const pickPrioritizedAid = (
 } => {
   if (aids === undefined) return {}
 
-  const hlpAssistanceWithDoc = aids.find(({beneficiary_application_type, ...aid}) => {
-    return (
-      beneficiary_application_type === 'assistance' &&
-      hlpDocDateFields.some((field) => {
-        return isDate(aid[field])
-      })
-    )
-  })
+  const hlpAssistanceWithDoc: NonNullable<Legal_individual_aid.T['number_case']>[number] | undefined = aids.find(
+    ({beneficiary_application_type, ...aid}) => {
+      return (
+        beneficiary_application_type === 'assistance' &&
+        hlpDocDateFields.some((field) => {
+          return isDate(aid[field])
+        })
+      )
+    },
+  )
 
-  const hlpAssistance = aids.find(({beneficiary_application_type, category_issue, ...aid}) => {
-    return (
-      beneficiary_application_type === 'assistance' &&
-      category_issue === 'hlp' &&
-      !hlpDocDateFields.some((field) => {
-        return isDate(aid[field])
-      })
-    )
-  })
+  const hlpAssistance: NonNullable<Legal_individual_aid.T['number_case']>[number] | undefined = aids.find(
+    ({beneficiary_application_type, category_issue, ...aid}) => {
+      return (
+        beneficiary_application_type === 'assistance' &&
+        category_issue === 'hlp' &&
+        !hlpDocDateFields.some((field) => {
+          return isDate(aid[field])
+        })
+      )
+    },
+  )
 
-  const civilAssistanceWithDoc = aids.find(({beneficiary_application_type, ...aid}) => {
-    return beneficiary_application_type === 'assistance' && civilDocDateFields.some((field) => isDate(aid[field]))
-  })
+  const civilAssistanceWithDoc: NonNullable<Legal_individual_aid.T['number_case']>[number] | undefined = aids.find(
+    ({beneficiary_application_type, ...aid}) => {
+      return beneficiary_application_type === 'assistance' && civilDocDateFields.some((field) => isDate(aid[field]))
+    },
+  )
 
-  const civilAssistance = aids.find(({beneficiary_application_type, category_issue, ...aid}) => {
-    return beneficiary_application_type === 'assistance' && category_issue !== 'hlp'
-  })
+  const civilAssistance: NonNullable<Legal_individual_aid.T['number_case']>[number] | undefined = aids.find(
+    ({beneficiary_application_type, category_issue, ...aid}) => {
+      return beneficiary_application_type === 'assistance' && category_issue !== 'hlp'
+    },
+  )
 
   if (hlpAssistanceWithDoc) return {aid: hlpAssistanceWithDoc, activity: DrcProgram.LegalAssistanceHlpDocs}
 
