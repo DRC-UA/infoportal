@@ -398,6 +398,7 @@ export namespace KoboXmlMapper {
             if (!_.hh_char_hh_session) return false
             if (row.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
             if (row.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
+            if (row.cycle_type === 'short_6') return _.hh_char_hh_session.length >= 4
             return false
           })
           .map((_) => ({

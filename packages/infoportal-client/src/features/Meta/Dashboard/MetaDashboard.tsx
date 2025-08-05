@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useMemo, useState} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
 import {format, isAfter, compareAsc} from 'date-fns'
 import {Box, FormControlLabel, Grid2, Switch, Typography, useTheme} from '@mui/material'
@@ -33,7 +33,32 @@ export const MetaDashboard = () => {
   const {data: ctx, fetcher} = useMetaContext()
   const [showNullishDisplacementStatus, setShowNullishDisplacementStatus] = useState(true)
   const handleDisplacementAdornmentClick = () => setShowNullishDisplacementStatus((prev) => !prev)
-  const avgHHSize = (ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)
+
+  const excludedForms = ['protection_counselling', 'protection_referral', 'protection_communityMonitoring']
+
+  const {monthlyAvgHHSizeData, avgHHSize} = useMemo(() => {
+    const filtered = ctx.filteredData.filter((d) => !excludedForms.includes(d.formId))
+
+    const monthlyAvgHHSizeData = Object.entries(filtered.groupBy(({date}) => format(date, 'yyyy-MM')))
+      .map(([month, entries]) => {
+        const totalHouseholds = entries.length
+        const totalPersons = entries.reduce((sum, entry) => sum + (entry.personsCount || 0), 0)
+        const monthlyAvgHHSize = totalHouseholds > 0 ? Number((totalPersons / totalHouseholds).toFixed(2)) : 0
+
+        return {
+          name: month,
+          [m.households]: totalHouseholds,
+          [m.avgHHSize]: monthlyAvgHHSize,
+        }
+      })
+      .sort((a, b) => compareAsc(a.name, b.name))
+
+    const totalHouseholds = filtered.length
+    const totalPersons = filtered.reduce((sum, d) => sum + (d.personsCount || 0), 0)
+    const avgHHSize = totalHouseholds > 0 ? (totalPersons / totalHouseholds).toFixed(2) : '0.00'
+
+    return {monthlyAvgHHSizeData, avgHHSize}
+  }, [ctx.filteredData])
 
   return (
     <Page width="lg" loading={fetcher.loading}>
@@ -128,23 +153,16 @@ export const MetaDashboard = () => {
                     content: CustomAvgHHSizeTooltip,
                   },
                 }}
-                data={Object.entries(ctx.filteredData.groupBy(({date}) => format(date, 'yyyy-MM')))
-                  .map(([name, value]) => ({
-                    name,
-                    [m.households]: value.length,
-                    [m.avgHHSize]: Number(
-                      (value.reduce((accum, current) => accum + (current.personsCount || 0), 0) / value.length).toFixed(
-                        2,
-                      ),
-                    ),
-                  }))
-                  .sort(({name: d1}, {name: d2}) => compareAsc(d1, d2))}
+                data={monthlyAvgHHSizeData}
               />
               {Object.entries(ctx.shapeFilters)
-                .filter(([, values]) => !!values?.length)
+                .filter((entry): entry is [string, string[]] => {
+                  const values = entry[1]
+                  return Array.isArray(values) && values.length > 0
+                })
                 .map(([label, values]) => (
-                  <Typography fontSize="small">
-                    {label}: {values?.reduce((accum, current) => `${accum}, ${current}`)}
+                  <Typography key={label} fontSize="small">
+                    {label}: {values.join(', ')}
                   </Typography>
                 ))}
             </PanelBody>
