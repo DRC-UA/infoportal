@@ -5,10 +5,10 @@ import {
   DrcProject,
   DrcProjectHelper,
   DrcSector,
-  getActivityType,
   KoboMetaStatus,
   KoboXmlMapper,
   Legal_individual_aid,
+  oblastByDrcOffice,
   pickPrioritizedAid,
 } from 'infoportal-common'
 
@@ -39,23 +39,89 @@ class KoboMetaMapperLegal {
         })
         .default(undefined)
 
+      const office = match(aid?.office)
+        .cases({
+          umy: DrcOffice.Sumy,
+          hrk: DrcOffice.Kharkiv,
+          nlv: DrcOffice.Mykolaiv,
+          khe: DrcOffice.Kherson,
+          iev: DrcOffice.Kyiv,
+          dnk: DrcOffice.Dnipro,
+          zap: DrcOffice.Zaporizhzhya,
+          slo: DrcOffice.Sloviansk,
+        })
+        .default(undefined)
+
+      // refugees have no UA location, hence use office location instead (doesn't come the form,
+      // so setting manually here:)
+      const officeLocation = match(aid?.office as any)
+        .cases({
+          umy: {
+            oblast: oblastByDrcOffice[DrcOffice.Sumy].toLocaleLowerCase(),
+            raion: 'Sumskyi',
+            hromada: 'Sumska',
+            settlement: 'Sumy_UA5908027001',
+          },
+          hrk: {
+            oblast: oblastByDrcOffice[DrcOffice.Kharkiv].toLocaleLowerCase(),
+            raion: 'Kharkivskyi',
+            hromada: 'Kharkivska',
+            settlement: 'Kharkiv_UA6312027001',
+          },
+          nlv: {
+            oblast: oblastByDrcOffice[DrcOffice.Mykolaiv].toLocaleLowerCase(),
+            raion: 'Mykolaivskyi',
+            hromada: 'Mykolaivska',
+            settlement: 'Mykolaiv_UA6804049016',
+          },
+          khe: {
+            oblast: oblastByDrcOffice[DrcOffice.Kherson].toLocaleLowerCase(),
+            raion: 'Khersonskyi',
+            hromada: 'Khersonska',
+            settlement: 'Kherson_UA6510015001',
+          },
+          iev: {
+            oblast: oblastByDrcOffice[DrcOffice.Kyiv].toLocaleLowerCase(),
+            raion: 'Kyiv',
+            hromada: 'Kyiv',
+            settlement: 'Kyiv_UA8000000',
+          },
+          dnk: {
+            oblast: oblastByDrcOffice[DrcOffice.Dnipro].toLocaleLowerCase(),
+            raion: 'Dniprovskyi',
+            hromada: 'Dniprovska',
+            settlement: 'Dnipro_UA1202001001',
+          },
+          zap: {
+            oblast: oblastByDrcOffice[DrcOffice.Zaporizhzhya].toLocaleLowerCase(),
+            raion: 'Zaporizkyi',
+            hromada: 'Zaporizka',
+            settlement: 'Zaporizhzhia_UA1416021011',
+          },
+          slo: {
+            oblast: oblastByDrcOffice[DrcOffice.Sloviansk].toLocaleLowerCase(),
+            raion: 'Kramatorskyi',
+            hromada: 'Slovianska',
+            settlement: 'Sloviansk_UA1412021001',
+          },
+        })
+        .default(undefined)
+
       return KoboMetaMapper.make({
-        office: match(aid?.office)
-          .cases({
-            umy: DrcOffice.Sumy,
-            hrk: DrcOffice.Kharkiv,
-            nlv: DrcOffice.Mykolaiv,
-            khe: DrcOffice.Kherson,
-            iev: DrcOffice.Kyiv,
-            dnk: DrcOffice.Dnipro,
-            zap: DrcOffice.Zaporizhzhya,
-            slo: DrcOffice.Sloviansk,
-          })
-          .default(undefined),
-        oblast: KoboXmlMapper.Location.mapOblast(answers.oblast)?.name!,
-        raion: KoboXmlMapper.Location.searchRaion(answers.raion),
-        hromada: KoboXmlMapper.Location.searchHromada(answers.hromada),
-        settlement: answers.settlement,
+        office,
+        ...(answers.oblast
+          ? {
+              oblast: KoboXmlMapper.Location.mapOblast(answers.settlement === 'kyiv' ? 'kyiv' : answers.oblast)?.name!,
+              raion: KoboXmlMapper.Location.searchRaion(answers.settlement === 'kyiv' ? 'kyiv' : answers.raion),
+              hromada: KoboXmlMapper.Location.searchHromada(answers.settlement === 'kyiv' ? 'kyiv' : answers.hromada),
+              settlement: answers.settlement,
+            }
+          : {
+              oblast: KoboXmlMapper.Location.mapOblast(officeLocation?.oblast)?.name!,
+              raion: officeLocation?.raion,
+              hromada: officeLocation?.hromada,
+              settlement: officeLocation?.settlement,
+            }),
         sector: DrcSector.Legal,
         activity,
         persons,
