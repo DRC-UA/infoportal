@@ -22,8 +22,8 @@ import {
 } from '@/core/sdk/server/mealVerification/MealVerification'
 import {useNavigate} from 'react-router'
 import {
-  mealVerificationActivities,
   mealVerificationActivitiesIndex,
+  mealVerificationActivitiesVisible,
 } from '@/features/Meal/Verification/mealVerificationConfig'
 import {mealIndex} from '@/features/Meal/Meal'
 import {appConfig} from '@/conf/AppConfig'
@@ -129,7 +129,7 @@ export const MealVerificationForm = () => {
                         field.onChange(id)
                       }}
                     >
-                      {mealVerificationActivities.map((activity) => (
+                      {mealVerificationActivitiesVisible.map((activity) => (
                         <ScRadioGroupItem
                           key={activity.id}
                           value={activity.id}
