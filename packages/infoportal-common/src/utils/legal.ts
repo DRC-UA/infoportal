@@ -1,7 +1,7 @@
-import {Legal_individual_aid} from '../kobo/generated'
-import {DrcProgram} from '../type/Drc'
+import {Legal_individual_aid} from '../kobo/generated/index.js'
+import {DrcProgram} from '../type/Drc.js'
 
-import {isDate} from './Common'
+import {isDate} from './Common.js'
 
 const civilDocDateFields = [
   'date_recipt_personal_identity',
