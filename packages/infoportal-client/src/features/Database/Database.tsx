@@ -57,6 +57,7 @@ export const DatabaseWithContext = () => {
   const t = useTheme()
   const {conf, api} = useAppSettings()
   const ctx = useDatabaseContext()
+  const [collapseAll, setCollapseAll] = React.useState<boolean | null>(null)
   useReactRouterDefaultRoute(databaseIndex.siteMap.index)
   const parsedFormNames: Record<string, Seq<Form>> = useMemo(() => {
     const mapped: Record<string, Form[]> = {
@@ -101,6 +102,13 @@ export const DatabaseWithContext = () => {
             {() => (
               <SidebarItem icon="home" component="div">
                 All forms
+                <IpIconBtn
+                  tooltip={collapseAll === true ? m._koboDatabase.expand : m._koboDatabase.collapse}
+                  onClick={() => setCollapseAll((c) => !c)}
+                  size="small"
+                >
+                  {collapseAll === true ? 'unfold_more' : 'unfold_less'}
+                </IpIconBtn>
                 {ctx.isAdmin && (
                   <IpIconBtn
                     sx={{ml: 'auto'}}
@@ -138,7 +146,7 @@ export const DatabaseWithContext = () => {
             </>
           ) : (
             Obj.entries(parsedFormNames)?.map(([category, forms]) => (
-              <SidebarSection dense title={category} key={category}>
+              <SidebarSection dense title={category} key={category} forceCollapsed={collapseAll}>
                 {forms.map((_: Form) => (
                   <Tooltip key={_.id} title={_.parsedName.name} placement="right-end">
                     <NavLink to={_.url}>

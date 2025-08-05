@@ -1022,6 +1022,8 @@ export const en = Object.freeze({
       oldValue: 'Old value',
       koboQuestion: 'Kobo question',
       deleted: 'Deleted',
+      expand: 'Expand all',
+      collapse: 'Collapse all',
       customColumn: 'Custom column',
       currentlyDisplayed: `columns displayed`,
       tagNotUpdated: 'Failed to update tag. Reloading clean data set...',
