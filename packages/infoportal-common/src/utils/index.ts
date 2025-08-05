@@ -1,5 +1,5 @@
 export * from './Common.js'
 export * from './GroupBy.js'
 export * from './IpCache.js'
-export * from './legal'
+export * from './legal.js'
 export * from './Regexp.js'
