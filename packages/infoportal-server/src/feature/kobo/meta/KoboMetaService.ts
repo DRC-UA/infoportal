@@ -30,6 +30,7 @@ import {KoboMetaMapperEcrec} from './KoboMetaMapperEcrec.js'
 import {KoboMetaMapperProtection} from './KoboMetaMapperProtection.js'
 import {KoboMetaMapperShelter} from './KoboMetaMapperShelter.js'
 import {KoboMetaMapperVa} from './KoboMetaMapperVa.js'
+import {KoboMetaMapperLegal} from './KoboMetaMapperLegal.js'
 
 const {Event} = GlobalEvent
 
@@ -64,37 +65,40 @@ export class KoboMetaMapper {
   }
 
   static readonly mappersCreate: Record<Kobo.FormId, MetaMapperInsert> = {
-    [KoboIndex.byName('bn_re').id]: KoboMetaBasicneeds.bn_re,
+    [KoboIndex.byName('bn_cashForRentRegistration').id]: KoboMetaMapperShelter.createCfRent,
     [KoboIndex.byName('bn_rapidResponse').id]: KoboMetaBasicneeds.bn_rrm,
     [KoboIndex.byName('bn_rapidResponse2').id]: KoboMetaBasicneeds.bn_rrm2,
+    [KoboIndex.byName('bn_re').id]: KoboMetaBasicneeds.bn_re,
     [KoboIndex.byName('ecrec_cashRegistration').id]: KoboMetaMapperEcrec.cashRegistration,
     [KoboIndex.byName('ecrec_cashRegistrationBha').id]: KoboMetaMapperEcrec.cashRegistrationBha,
-    [KoboIndex.byName('shelter_nta').id]: KoboMetaMapperShelter.createNta,
-    [KoboIndex.byName('bn_cashForRentRegistration').id]: KoboMetaMapperShelter.createCfRent,
-    [KoboIndex.byName('shelter_cashForShelter').id]: KoboMetaMapperShelter.createCfShelter,
-    [KoboIndex.byName('protection_counselling').id]: KoboMetaMapperProtection.counselling,
-    [KoboIndex.byName('protection_pss').id]: KoboMetaMapperProtection.pss,
-    [KoboIndex.byName('protection_gbv').id]: KoboMetaMapperProtection.gbv,
-    [KoboIndex.byName('protection_hhs3').id]: KoboMetaMapperProtection.hhs,
-    [KoboIndex.byName('protection_groupSession').id]: KoboMetaMapperProtection.groupSession,
-    [KoboIndex.byName('protection_referral').id]: KoboMetaMapperProtection.referral,
-    [KoboIndex.byName('protection_communityMonitoring').id]: KoboMetaMapperProtection.communityMonitoring,
-    [KoboIndex.byName('ecrec_vetApplication').id]: KoboMetaMapperEcrec.vetApplication,
     [KoboIndex.byName('ecrec_msmeGrantEoi').id]: KoboMetaMapperEcrec.msmeEoi,
+    [KoboIndex.byName('ecrec_msmeGrantReg').id]: KoboMetaMapperEcrec.ecrec_msmeGrantReg,
     [KoboIndex.byName('ecrec_vet_bha388').id]: KoboMetaMapperEcrec.ecrec_vet_bha388,
     [KoboIndex.byName('ecrec_vet2_dmfa').id]: KoboMetaMapperEcrec.ecrec_vet2_dmfa,
-    [KoboIndex.byName('ecrec_msmeGrantReg').id]: KoboMetaMapperEcrec.ecrec_msmeGrantReg,
+    [KoboIndex.byName('ecrec_vetApplication').id]: KoboMetaMapperEcrec.vetApplication,
+    [KoboIndex.byName('legal_individual_aid').id]: KoboMetaMapperLegal.individualAid,
+    [KoboIndex.byName('protection_gbv').id]: KoboMetaMapperProtection.gbv,
+    [KoboIndex.byName('protection_groupSession').id]: KoboMetaMapperProtection.groupSession,
+    [KoboIndex.byName('protection_communityMonitoring').id]: KoboMetaMapperProtection.communityMonitoring,
+    [KoboIndex.byName('protection_counselling').id]: KoboMetaMapperProtection.counselling,
+    [KoboIndex.byName('protection_hhs3').id]: KoboMetaMapperProtection.hhs,
+    [KoboIndex.byName('protection_pss').id]: KoboMetaMapperProtection.pss,
+    [KoboIndex.byName('protection_referral').id]: KoboMetaMapperProtection.referral,
+    [KoboIndex.byName('shelter_nta').id]: KoboMetaMapperShelter.createNta,
+    [KoboIndex.byName('shelter_cashForShelter').id]: KoboMetaMapperShelter.createCfShelter,
     [KoboIndex.byName('va_bio_tia').id]: KoboMetaMapperVa.bioAndTia,
   }
+
   static readonly mappersUpdate: Record<Kobo.FormId, MetaMapperMerge> = {
-    [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa,
-    [KoboIndex.byName('ecrec_vetEvaluation').id]: KoboMetaMapperEcrec.vetEvaluation,
     [KoboIndex.byName('ecrec_msmeGrantSelection').id]: KoboMetaMapperEcrec.msmeSelection,
+    [KoboIndex.byName('ecrec_vetEvaluation').id]: KoboMetaMapperEcrec.vetEvaluation,
+    [KoboIndex.byName('shelter_ta').id]: KoboMetaMapperShelter.updateTa,
   }
+
   static readonly triggerUpdate = {
-    [KoboIndex.byName('shelter_nta').id]: [KoboIndex.byName('shelter_ta').id],
-    [KoboIndex.byName('ecrec_vetApplication').id]: [KoboIndex.byName('ecrec_vetEvaluation').id],
     [KoboIndex.byName('ecrec_msmeGrantEoi').id]: [KoboIndex.byName('ecrec_msmeGrantSelection').id],
+    [KoboIndex.byName('ecrec_vetApplication').id]: [KoboIndex.byName('ecrec_vetEvaluation').id],
+    [KoboIndex.byName('shelter_nta').id]: [KoboIndex.byName('shelter_ta').id],
   }
 }
 

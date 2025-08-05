@@ -2,7 +2,15 @@ import type {FC} from 'react'
 import {match, Obj} from '@axanc/ts-utils'
 import {Box} from '@mui/material'
 
-import {DrcProject, KoboXmlMapper, OblastIndex, Legal_individual_aid, isDate, pluralize} from 'infoportal-common'
+import {
+  DrcProgram,
+  DrcProject,
+  KoboXmlMapper,
+  Legal_individual_aid,
+  OblastIndex,
+  pickPrioritizedAid,
+  pluralize,
+} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {SlideWidget, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
@@ -14,7 +22,6 @@ import {MapSvg} from '@/shared/maps/MapSvg'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 
-import {civilDocDateFields, hlpDocDateFields} from './constants'
 import {useIndividualAidContext} from './context'
 
 // MEMO: all figures are PEOPLE - those who receive aid, get documents issued etc
@@ -24,21 +31,25 @@ const Widgets: FC = () => {
   // the dataFiltered is already memoized in the hook called above
   // calculate everything in one Array.prototype.reduce run:
   const {assistances, counselling, docs} = dataFiltered.reduce(
-    (result, {number_case}) => ({
-      ...result,
-      ...(number_case?.[0].beneficiary_application_type === 'assistance'
-        ? {
-            assistances: ++result.assistances,
-          }
-        : {
-            counselling: ++result.counselling,
-          }),
-      ...(number_case?.some((aid) => hlpDocDateFields.some((field) => isDate(aid[field])))
-        ? {docs: {...result.docs, hlp: ++result.docs.hlp}}
-        : number_case?.some((aid) => civilDocDateFields.some((field) => isDate(aid[field])))
-          ? {docs: {...result.docs, civil: ++result.docs.civil}}
-          : undefined),
-    }),
+    (result, {number_case}) => {
+      const {activity} = pickPrioritizedAid(number_case)
+
+      return {
+        ...result,
+        ...(number_case?.[0]?.beneficiary_application_type === 'assistance'
+          ? {
+              assistances: ++result.assistances,
+            }
+          : {
+              counselling: ++result.counselling,
+            }),
+        docs: {
+          ...result.docs,
+          ...(activity === DrcProgram['LegalAssistanceHlpDocs'] ? {hlp: ++result.docs.hlp} : undefined),
+          ...(activity === DrcProgram['LegalAssistanceCivilDocs'] ? {civil: ++result.docs.civil} : undefined),
+        },
+      }
+    },
     {
       assistances: 0,
       counselling: 0,
@@ -80,7 +91,7 @@ const Widgets: FC = () => {
         <SlidePanel title={m.legal.aidStatus}>
           <ChartBarSingleBy
             data={dataFiltered.map(({number_case}) => ({
-              status_case: match(number_case?.[0].status_case)
+              status_case: match(number_case?.[0]?.status_case)
                 .cases({
                   pending: Legal_individual_aid.options.status_case.pending,
                   closed_ready: Legal_individual_aid.options.status_case.closed_ready,
@@ -138,7 +149,7 @@ const Widgets: FC = () => {
         <SlidePanel title={m.office}>
           <ChartBarSingleBy
             data={dataFiltered
-              .map(({number_case}) => number_case?.[0].office)
+              .map(({number_case}) => number_case?.[0]?.office)
               .compact()
               .map((office) => ({
                 office: Legal_individual_aid.options.office[office],
@@ -149,7 +160,7 @@ const Widgets: FC = () => {
         <SlidePanel title={m.legal.registeredBy}>
           <ChartBarSingleBy
             data={dataFiltered
-              .map(({number_case}) => number_case?.[0].first_lawyer)
+              .map(({number_case}) => number_case?.[0]?.first_lawyer)
               .compact()
               .map((first_lawyer) => ({
                 first_lawyer: Legal_individual_aid.options.another_lawyer[first_lawyer],
