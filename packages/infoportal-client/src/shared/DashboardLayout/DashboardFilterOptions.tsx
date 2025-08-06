@@ -88,8 +88,10 @@ export const DashboardFilterOptionsContent = ({
     onChange,
   })
   const [options, setOptions] = useState(choices.options)
-  const filterOptions: ChangeEventHandler<HTMLInputElement> = (evt) => {
-    setOptions(choices.options.filter(({value}) => value.includes(evt.target.value)))
+  const filterOptions: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setOptions(
+      choices.options.filter(({value}) => value.toLocaleLowerCase().includes(event.target.value.toLowerCase())),
+    )
   }
 
   return (
