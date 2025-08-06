@@ -1,6 +1,7 @@
-import React, {useCallback} from 'react'
-import {BoxProps, Checkbox, FormControlLabel, FormGroup} from '@mui/material'
+import {useCallback, useState, type ChangeEventHandler} from 'react'
+import {BoxProps, Checkbox, FormControlLabel, FormGroup, TextFieldProps} from '@mui/material'
 import {Txt, useMultipleChoices} from '@/shared'
+import {TextField} from '@mui/material'
 import {DashboardFilterLabel} from './DashboardFilterLabel'
 import {useI18n} from '@/core/i18n'
 import {DatatableOptions} from '@/shared/Datatable/util/datatableType'
@@ -70,19 +71,26 @@ export const DashboardFilterOptionsContent = ({
   addBlankOption,
   onChange,
   value,
-  options,
+  options: optionsFromProps,
   dense,
+  searchable = false,
 }: SelectProps & {
   dense?: boolean
+  searchable?: boolean
 }) => {
   const {classes, cx} = useStyles({dense})
   const {m} = useI18n()
   const choices = useMultipleChoices({
     addBlankOption,
     value,
-    options: options(),
+    options: optionsFromProps(),
     onChange,
   })
+  const [options, setOptions] = useState(choices.options)
+  const filterOptions: ChangeEventHandler<HTMLInputElement> = (evt) => {
+    setOptions(choices.options.filter(({value}) => value.includes(evt.target.value)))
+  }
+
   return (
     <>
       <FormControlLabel
@@ -104,12 +112,13 @@ export const DashboardFilterOptionsContent = ({
         }
         className={cx(classes.option, classes.optionSelectAll)}
       />
+      {searchable && <TextField variant="standard" fullWidth sx={{padding: 1}} onChange={filterOptions} />}
       <FormGroup
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           choices.onClick(e.target.name)
         }}
       >
-        {choices.options.map((o) => (
+        {options.map((o) => (
           <FormControlLabel
             key={o.value}
             control={<Checkbox size="small" name={o.value ?? undefined} checked={o.checked} />}
