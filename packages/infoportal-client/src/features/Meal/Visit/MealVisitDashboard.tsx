@@ -64,6 +64,7 @@ export const MealVisitDashboard = () => {
         label: m.donor,
         getValue: (_) => _.mdd_001,
         multiple: true,
+        searchable: true,
       },
       activity: {
         multiple: true,
