@@ -33,6 +33,7 @@ export const MetaDashboard = () => {
   const {data: ctx, fetcher} = useMetaContext()
   const [showNullishDisplacementStatus, setShowNullishDisplacementStatus] = useState(true)
   const handleDisplacementAdornmentClick = () => setShowNullishDisplacementStatus((prev) => !prev)
+  const noHHDataPlaceholder = '-'
 
   const formsToPassAvgHouseholdSizeCalculation = [
     KoboIndex.byName('protection_counselling').id,
@@ -60,7 +61,7 @@ export const MetaDashboard = () => {
 
     const totalHouseholds = filtered.length
     const totalPersons = filtered.reduce((sum, d) => sum + (d.personsCount || 0), 0)
-    const avgHHSize = totalHouseholds > 0 ? (totalPersons / totalHouseholds).toFixed(2) : '0.00'
+    const avgHHSize = totalHouseholds > 0 ? (totalPersons / totalHouseholds).toFixed(2) : noHHDataPlaceholder
 
     return {monthlyAvgHHSizeData, avgHHSize}
   }, [ctx.filteredData])
@@ -87,7 +88,10 @@ export const MetaDashboard = () => {
         </Grid2>
         <Grid2 size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
-            {formatLargeNumber(ctx.filteredUniqueData.length)}
+            {
+              // if individual forms are selected, there is no HH data:
+              avgHHSize === noHHDataPlaceholder ? noHHDataPlaceholder : formatLargeNumber(ctx.filteredUniqueData.length)
+            }
           </SlideWidget>
         </Grid2>
         <Grid2 size={{xs: 6, md: 4, lg: 2}}>
