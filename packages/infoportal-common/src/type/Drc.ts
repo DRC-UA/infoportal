@@ -19,6 +19,15 @@ export enum DrcOffice {
   Zaporizhzhya = 'Zaporizhzhya',
 }
 
+export enum DrcOperatingOffice {
+  Dnipro = 'Dnipro',
+  Kharkiv = 'Kharkiv',
+  Kyiv = 'Kyiv',
+  Mykolaiv = 'Mykolaiv',
+  Sloviansk = 'Sloviansk',
+  Sumy = 'Sumy',
+}
+
 export const oblastByDrcOffice: Record<DrcOffice, OblastName> = {
   Kyiv: 'Kyivska',
   Sumy: 'Sumska',

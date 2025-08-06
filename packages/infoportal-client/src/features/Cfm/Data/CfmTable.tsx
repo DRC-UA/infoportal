@@ -9,7 +9,7 @@ import {
   CfmDataPriority,
   CfmDataProgram,
   CfmDataSource,
-  DrcOffice,
+  DrcOperatingOffice,
   DrcProject,
   KoboIndex,
   KoboMealCfmStatus,
@@ -188,7 +188,7 @@ export const CfmTable = ({}: any) => {
         head: m.office,
         tag: 'office',
         width: 100,
-        enumerator: DrcOffice,
+        enumerator: DrcOperatingOffice,
       }),
       program: buildTagObjColumn({
         head: m.program,
