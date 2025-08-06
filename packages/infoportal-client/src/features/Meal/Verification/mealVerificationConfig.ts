@@ -6,6 +6,14 @@ import {KeyOf, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
 
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
+export const visibleMealVerificationActivityIds = [
+  '[Ecrec] Subsistance farmer registration',
+  'ECREC VET DMFA-355',
+  'ECREC VET BHA-388',
+  '[Ecrec] Small Scale Farmer Registration Form',
+  'ECREC MSME BHA-388',
+]
+
 export const mealVerificationConf = {
   sampleSizeRatioDefault: 0.2,
   numericToleranceMargin: 0.1,
@@ -85,7 +93,6 @@ export const mealVerificationActivities = seq([
           else return ''
         },
       },
-
       business_currently_operational_mbg: {
         reg: (_) => _.business_currently_operational,
         verif: (_) => _.business_currently_operational_mbg,
@@ -801,3 +808,7 @@ export const mealVerificationActivities = seq([
 ])
 
 export const mealVerificationActivitiesIndex = mealVerificationActivities.groupByFirst((_) => _.id)
+
+export const mealVerificationActivitiesVisible = mealVerificationActivities.filter((a) =>
+  visibleMealVerificationActivityIds.includes(a.id),
+)
