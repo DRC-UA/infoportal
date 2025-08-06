@@ -57,7 +57,10 @@ export const MealVisitDashboard = () => {
       donor: {
         icon: 'handshake',
         getOptions: () =>
-          schema.helper.getOptionsByQuestionName('mdd_001').map((_) => ({value: _.name, label: _.label[langIndex]})),
+          schema.helper
+            .getOptionsByQuestionName('mdd_001')
+            .sortByString(({label}) => label[0])
+            .map((_) => ({value: _.name, label: _.label[langIndex]})),
         label: m.donor,
         getValue: (_) => _.mdd_001,
         multiple: true,
