@@ -93,6 +93,7 @@ export const DataFilterLayout = ({
                   addBlankOption={shape.addBlankOption}
                   options={() => shape.getOptions(() => getFilteredOptions(name))}
                   onChange={onChange}
+                  searchable={shape.searchable}
                 />
               )}
             </DebouncedInput>

@@ -19,6 +19,7 @@ export namespace DataFilter {
     label: string
     customFilter?: (filterValue: string[], _: TData) => boolean
     skipOption?: string[]
+    searchable?: boolean
   }
 
   export const blank = DatatableUtils.blank
