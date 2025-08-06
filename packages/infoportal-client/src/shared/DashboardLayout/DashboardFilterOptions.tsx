@@ -87,11 +87,9 @@ export const DashboardFilterOptionsContent = ({
     options: optionsFromProps(),
     onChange,
   })
-  const [options, setOptions] = useState(choices.options)
-  const filterOptions: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setOptions(
-      choices.options.filter(({value}) => value.toLocaleLowerCase().includes(event.target.value.toLowerCase())),
-    )
+  const [query, setQuery] = useState('')
+  const handleQuery: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setQuery(event.target.value.toLowerCase())
   }
 
   return (
@@ -115,20 +113,22 @@ export const DashboardFilterOptionsContent = ({
         }
         className={cx(classes.option, classes.optionSelectAll)}
       />
-      {searchable && <TextField variant="standard" fullWidth sx={{padding: 1}} onChange={filterOptions} />}
+      {searchable && <TextField variant="standard" fullWidth sx={{padding: 1}} onChange={handleQuery} />}
       <FormGroup
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           choices.onClick(e.target.name)
         }}
       >
-        {options.map((o) => (
-          <FormControlLabel
-            key={o.value}
-            control={<Checkbox size="small" name={o.value ?? undefined} checked={o.checked} />}
-            label={<Txt fontSize={dense ? 'small' : undefined}>{o.label}</Txt>}
-            className={classes.option}
-          />
-        ))}
+        {choices.options
+          .filter(({value}) => (query ? value.toLocaleLowerCase().includes(query) : true))
+          .map((o) => (
+            <FormControlLabel
+              key={o.value}
+              control={<Checkbox size="small" name={o.value ?? undefined} checked={o.checked} />}
+              label={<Txt fontSize={dense ? 'small' : undefined}>{o.label}</Txt>}
+              className={classes.option}
+            />
+          ))}
       </FormGroup>
     </>
   )
