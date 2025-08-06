@@ -11,6 +11,7 @@ import {Period} from 'infoportal-common'
 export namespace AiWashMapper {
   const planCodes = {
     [DrcProject['UKR-000270 Pooled Funds']]: 'WASH-DRC-00002',
+    [DrcProject['UKR-000270 Pooled Funds Old (MPCA)']]: 'WASH-DRC-00002',
   }
 
   const getPlanCode = (p: DrcProject): AiWashType.Type['Plan/Project Code'] => {
