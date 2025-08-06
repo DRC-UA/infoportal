@@ -1,7 +1,7 @@
 import {useMemo, useState} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
-import {format, isAfter, compareAsc} from 'date-fns'
 import {Box, FormControlLabel, Grid2, Switch, Typography, useTheme} from '@mui/material'
+import {format, isAfter, compareAsc} from 'date-fns'
 
 import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
 
@@ -34,10 +34,15 @@ export const MetaDashboard = () => {
   const [showNullishDisplacementStatus, setShowNullishDisplacementStatus] = useState(true)
   const handleDisplacementAdornmentClick = () => setShowNullishDisplacementStatus((prev) => !prev)
 
-  const excludedForms = ['protection_counselling', 'protection_referral', 'protection_communityMonitoring']
+  const formsToPassAvgHouseholdSizeCalculation = [
+    KoboIndex.byName('protection_counselling').id,
+    KoboIndex.byName('protection_referral').id,
+    KoboIndex.byName('protection_communityMonitoring').id,
+    KoboIndex.byName('legal_individual_aid').id,
+  ]
 
   const {monthlyAvgHHSizeData, avgHHSize} = useMemo(() => {
-    const filtered = ctx.filteredData.filter((d) => !excludedForms.includes(d.formId))
+    const filtered = ctx.filteredData.filter((d) => !formsToPassAvgHouseholdSizeCalculation.includes(d.formId))
 
     const monthlyAvgHHSizeData = Object.entries(filtered.groupBy(({date}) => format(date, 'yyyy-MM')))
       .map(([month, entries]) => {
