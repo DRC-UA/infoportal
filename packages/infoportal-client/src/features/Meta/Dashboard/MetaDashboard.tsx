@@ -1,7 +1,7 @@
 import {useMemo, useState} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
-import {format, isAfter, compareAsc} from 'date-fns'
 import {Box, FormControlLabel, Grid2, Switch, Typography, useTheme} from '@mui/material'
+import {format, isAfter, compareAsc} from 'date-fns'
 
 import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
 
@@ -33,11 +33,17 @@ export const MetaDashboard = () => {
   const {data: ctx, fetcher} = useMetaContext()
   const [showNullishDisplacementStatus, setShowNullishDisplacementStatus] = useState(true)
   const handleDisplacementAdornmentClick = () => setShowNullishDisplacementStatus((prev) => !prev)
+  const noHHDataPlaceholder = '-'
 
-  const excludedForms = ['protection_counselling', 'protection_referral', 'protection_communityMonitoring']
+  const formsToPassAvgHouseholdSizeCalculation = [
+    KoboIndex.byName('protection_counselling').id,
+    KoboIndex.byName('protection_referral').id,
+    KoboIndex.byName('protection_communityMonitoring').id,
+    KoboIndex.byName('legal_individual_aid').id,
+  ]
 
   const {monthlyAvgHHSizeData, avgHHSize} = useMemo(() => {
-    const filtered = ctx.filteredData.filter((d) => !excludedForms.includes(d.formId))
+    const filtered = ctx.filteredData.filter((d) => !formsToPassAvgHouseholdSizeCalculation.includes(d.formId))
 
     const monthlyAvgHHSizeData = Object.entries(filtered.groupBy(({date}) => format(date, 'yyyy-MM')))
       .map(([month, entries]) => {
@@ -55,7 +61,7 @@ export const MetaDashboard = () => {
 
     const totalHouseholds = filtered.length
     const totalPersons = filtered.reduce((sum, d) => sum + (d.personsCount || 0), 0)
-    const avgHHSize = totalHouseholds > 0 ? (totalPersons / totalHouseholds).toFixed(2) : '0.00'
+    const avgHHSize = totalHouseholds > 0 ? (totalPersons / totalHouseholds).toFixed(2) : noHHDataPlaceholder
 
     return {monthlyAvgHHSizeData, avgHHSize}
   }, [ctx.filteredData])
@@ -82,7 +88,10 @@ export const MetaDashboard = () => {
         </Grid2>
         <Grid2 size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
-            {formatLargeNumber(ctx.filteredUniqueData.length)}
+            {
+              // if individual forms are selected, there is no HH data:
+              avgHHSize === noHHDataPlaceholder ? noHHDataPlaceholder : formatLargeNumber(ctx.filteredUniqueData.length)
+            }
           </SlideWidget>
         </Grid2>
         <Grid2 size={{xs: 6, md: 4, lg: 2}}>
