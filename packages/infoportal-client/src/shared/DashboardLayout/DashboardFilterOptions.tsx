@@ -44,6 +44,7 @@ export const DashboardFilterOptions = ({
   icon?: string
   label: string
   dense?: boolean
+  searchable?: boolean
 } & SelectProps &
   Pick<BoxProps, 'sx'>) => {
   const options = useCallback(() => props.options(), [props.options])
