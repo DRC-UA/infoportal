@@ -92,6 +92,7 @@ export type CfmData = {
   readonly project?: DrcProject
   readonly oblast: OblastName
   readonly oblastIso: OblastISO
+  readonly createdAt?: Meal_cfmInternal.T['created_at']
   readonly category?: Meal_cfmInternal.T['feedback_type']
   readonly sub_category?: Meal_cfmInternal.T['sub_category']
   readonly external_sub_category?: Meal_cfmExternal.T['sub_category']
@@ -206,6 +207,7 @@ export const CfmProvider = ({
             project: DrcProjectHelper.searchByCode(parsedCode),
             priority: KoboMealCfmHelper.feedbackType2priority(category),
             category,
+            createdAt: _.created_at ? new Date(_.created_at) : undefined,
             formId: KoboIndex.byName('meal_cfmInternal').id,
             origin: CfmDataOrigin.Internal,
             form: CfmDataSource.Internal,

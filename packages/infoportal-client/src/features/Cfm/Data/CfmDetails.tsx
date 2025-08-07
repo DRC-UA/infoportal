@@ -31,6 +31,7 @@ import {IpInput} from '@/shared/Input/Input'
 import {useIpToast} from '@/core/useToast'
 import {Fender} from '@/shared/Fender'
 import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
+import {IpDatepicker} from '@/shared/Datepicker/IpDatepicker'
 
 const routeParamsSchema = yup.object({
   formId: yup.string().required(),
@@ -64,7 +65,12 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
   const canEdit = ctx.authorizations.sum.write || session.email === entry.tags?.focalPointEmail
   const [isEditing, setIsEditing] = useState(false)
   const [comment, setComment] = useState('')
+  const [createdAt, setCreatedAt] = useState<Date | undefined>(entry.createdAt ? new Date(entry.createdAt) : undefined)
   const {toastHttpError} = useIpToast()
+
+  useEffect(() => {
+    setCreatedAt(entry.createdAt ? new Date(entry.createdAt) : undefined)
+  }, [entry.createdAt])
 
   useEffect(() => {
     setComment(entry.tags?.notes ?? '')
@@ -78,7 +84,15 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
           <>
             <CfmPriorityLogo fontSize="large" priority={entry.priority} sx={{mr: 2}} />
             <div
-              title={!entry.tags?.notes || entry.tags?.notes.trim() === '' ? 'Notes section is empty!' : ''}
+              title={
+                !entry.tags?.notes?.trim() && !entry.createdAt
+                  ? 'Please fill Notes and Created date first'
+                  : !entry.tags?.notes?.trim()
+                    ? 'Notes section is empty!'
+                    : !entry.createdAt
+                      ? 'Created date is not set!'
+                      : ''
+              }
               style={{width: '200px'}}
             >
               <KoboSelectTag<KoboMealCfmTag, CfmData>
@@ -95,7 +109,7 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
                     <CfmStatusIconLabel key={k} status={k!} sx={{display: 'flex', alignItems: 'center'}} />
                   ))
                   .get()}
-                disabled={!entry.tags?.notes || entry.tags?.notes.trim() === ''}
+                disabled={!(entry.tags?.notes?.trim() && entry.createdAt)}
               />
             </div>
           </>
@@ -256,7 +270,27 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
             options={Obj.entries(Meal_cfmInternal.options.feedback_type).map(([k, v]) => ({value: k, children: v}))}
           />
           <Box>{entry.feedback}</Box>
+          <Txt block sx={{mt: 2}} bold size="big">
+            {m.createdAt}
+          </Txt>
+          <IpDatepicker
+            withTime
+            value={createdAt}
+            onChange={async (newValue) => {
+              setCreatedAt(newValue ?? undefined)
 
+              try {
+                await ctxKoboUpdate.asyncUpdateById.answer.call({
+                  formId: entry.formId,
+                  answerIds: [entry.id],
+                  question: 'created_at',
+                  answer: newValue ?? null,
+                })
+              } catch (e) {
+                toastHttpError(e)
+              }
+            }}
+          />
           {entry.comments && (
             <Txt block sx={{mt: 2}} bold size="big">
               {m.comments}

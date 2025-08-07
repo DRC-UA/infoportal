@@ -38,6 +38,8 @@ export namespace Meal_cfmInternal {
     feedback_type: undefined | Option<'feedback_type'>
     // begin_group_UTzxDVd8w/sub_category [select_one] Буль ласка, уточніть підкатегорію
     sub_category: undefined | Option<'sub_category'>
+    // begin_group_UTzxDVd8w/created_at [datetime] Дата фідбеку
+    created_at: Date | undefined
     // begin_group_UTzxDVd8w/feedback_coc_type [note] ⚠️ Будь ласка, переконайтеся, що повідомлено особу відповідальну за Кодекс поведінки
     feedback_coc_type: string
     // begin_group_UTzxDVd8w/feedback [text] Будь ласка, напишіть Ваш відгук
@@ -236,5 +238,6 @@ export namespace Meal_cfmInternal {
     ({
       ..._,
       date: _.date ? new Date(_.date) : undefined,
+      created_at: _.created_at ? new Date(_.created_at) : undefined,
     }) as T
 }

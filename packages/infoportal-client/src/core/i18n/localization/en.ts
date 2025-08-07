@@ -1066,6 +1066,7 @@ export const en = Object.freeze({
       openTickets: 'Open tickets',
       referralMatrix: 'Referral Matrix',
       feedback: 'Feedback',
+      createdAt: 'Feedback Date',
       feedbackType: 'Category',
       feedbackTypeExternal: 'Feedback type',
       contactAgreement: 'Contact agreement',

@@ -1,5 +1,5 @@
 import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
-import React, {ReactNode, useCallback, useMemo} from 'react'
+import React, {ReactNode, useCallback, useMemo, useState} from 'react'
 import {Page} from '@/shared/Page'
 import {fnSwitch, Obj} from '@axanc/ts-utils'
 import {useI18n} from '@/core/i18n'
@@ -34,7 +34,7 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Autocomplete} from '@mui/material'
 import {useSession} from '@/core/Session/SessionContext'
-import {Modal} from '@/shared'
+import {Modal, TableEditCellBtn, Txt} from '@/shared'
 import {SelectDrcProject} from '@/shared/customInput/SelectDrcProject'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
@@ -43,6 +43,7 @@ import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
 import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
+import {formatDateTime} from '@/core/i18n/localization/en'
 
 export interface CfmDataFilters extends KoboAnswerFilter {}
 
@@ -471,6 +472,18 @@ export const CfmTable = ({}: any) => {
                       )}
                     </DebouncedInput>
                   ),
+                }
+              },
+            },
+            {
+              head: m.createdAt,
+              id: 'created_at',
+              type: 'date',
+              width: 200,
+              render: (_) => {
+                return {
+                  label: <Txt color="hint">{formatDateTime(_.createdAt)}</Txt>,
+                  value: _.createdAt,
                 }
               },
             },
