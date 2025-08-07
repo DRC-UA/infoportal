@@ -35,7 +35,8 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('partner_lampa').id:
       case KoboIndex.byName('ecrec_small_scale').id:
       case KoboIndex.byName('ecrec_subsistance').id:
-      case KoboIndex.byName('legal_individual_aid').id: {
+      case KoboIndex.byName('legal_individual_aid').id:
+      case KoboIndex.byName('legal_individual_aid_partners').id: {
         return (_: HeaderParams<{custom: KoboXmlMapper.Breakdown}>) => {
           return (
             <PopoverWrapper
