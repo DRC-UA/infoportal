@@ -12,15 +12,21 @@ import {
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   Ecrec_msmeGrantEoi,
+  Ecrec_msmeGrantReg,
+  Ecrec_small_scale,
+  Ecrec_subsistance,
   Ecrec_vet2_dmfa,
-  Ecrec_vet_bha388,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
-  Ecrec_msmeGrantReg,
+  Ecrec_vet_bha388,
+  Legal_individual_aid,
+  Legal_pam,
   Meal_cashPdm,
+  Meal_eorePdm,
   Meal_nfiPdm,
-  Meal_shelterPdm,
   Meal_pssPdm,
+  Meal_shelterPdm,
+  Meal_winterizationPdm,
   Partner_lampa,
   Protection_communityMonitoring,
   Protection_counselling,
@@ -32,12 +38,6 @@ import {
   Shelter_cashForShelter,
   Shelter_nta,
   Va_bio_tia,
-  Meal_winterizationPdm,
-  Ecrec_small_scale,
-  Ecrec_subsistance,
-  Legal_pam,
-  Meal_eorePdm,
-  Legal_individual_aid,
 } from '../generated/index.js'
 
 export namespace KoboXmlMapper {
@@ -777,6 +777,8 @@ export namespace KoboXmlMapper {
         },
       ]
     }
+
+    export const legal_individual_aid_partners = legal_individual_aid
 
     export const winter_pdm = (_: Meal_winterizationPdm.T): Person.Details[] => {
       return [
