@@ -65,6 +65,7 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
   const canEdit = ctx.authorizations.sum.write || session.email === entry.tags?.focalPointEmail
   const [isEditing, setIsEditing] = useState(false)
   const [comment, setComment] = useState('')
+  const [createdAtDisabled, setCreatedAtDisabled] = useState(false)
   const [createdAt, setCreatedAt] = useState<Date | undefined>(entry.createdAt ? new Date(entry.createdAt) : undefined)
   const {toastHttpError} = useIpToast()
 
@@ -277,8 +278,8 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
             withTime
             value={createdAt}
             onChange={async (newValue) => {
+              setCreatedAtDisabled(true)
               setCreatedAt(newValue ?? undefined)
-
               try {
                 await ctxKoboUpdate.asyncUpdateById.answer.call({
                   formId: entry.formId,
@@ -288,6 +289,8 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
                 })
               } catch (e) {
                 toastHttpError(e)
+              } finally {
+                setCreatedAtDisabled(false)
               }
             }}
           />
