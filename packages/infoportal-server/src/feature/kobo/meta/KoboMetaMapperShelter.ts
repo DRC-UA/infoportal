@@ -31,7 +31,7 @@ export namespace KoboMetaMapperShelter {
     KoboMetaOrigin<Bn_cashForRentRegistration.T, KoboTagStatus<CashForRentStatus>>
   > = (row) => {
     const answer = Bn_cashForRentRegistration.map(row.answers)
-    const persons = KoboXmlMapper.Persons.bn_cashForRentApplication(answer)
+    const persons = KoboXmlMapper.Persons.bn_cashForRentRegistration(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const status = fnSwitch(
       row.tags?.status!,
