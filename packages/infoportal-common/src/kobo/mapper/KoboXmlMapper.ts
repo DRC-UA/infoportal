@@ -39,6 +39,7 @@ import {
   Shelter_nta,
   Va_bio_tia,
 } from '../generated/index.js'
+import {Awareness_raising_partners} from '../generated/Awareness_raising_partners.js'
 
 export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
@@ -231,6 +232,16 @@ export namespace KoboXmlMapper {
           displacement: Displacement.common(_),
         })),
       ]
+    }
+
+    export const awareness_raising_partners = (row: Awareness_raising_partners.T): Person.Details[] => {
+      return (
+        row.hh_char_hh_det?.flatMap((beneficiary) => ({
+          age: beneficiary.hh_char_hh_det_age,
+          gender: Gender.common(beneficiary),
+          displacement: Displacement.common({hh_char_hh_res_stat: beneficiary.hh_char_hh_det_status}),
+        })) || []
+      )
     }
 
     export const bn_re = (row: Bn_re.T): Person.Details[] =>

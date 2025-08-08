@@ -1,6 +1,8 @@
 import {KoboEcrec_cashRegistration, KoboIndex, KoboXmlMapper} from 'infoportal-common'
 
 export const databaseCustomMapping: Record<any, (_: any) => any> = {
+  [KoboIndex.byName('awareness_raising_partners').id]: (_) =>
+    KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.awareness_raising_partners),
   [KoboIndex.byName('bn_cashForRentApplication').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.bn_cashForRentApplication),
   [KoboIndex.byName('bn_cashForRentRegistration').id]: (_) =>
