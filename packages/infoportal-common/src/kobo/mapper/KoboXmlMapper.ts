@@ -5,6 +5,8 @@ import {OblastIndex} from '../../location/index.js'
 import {DrcOffice} from '../../type/Drc.js'
 
 import {
+  Awareness_raising_partners,
+  Bn_cashForRentApplication,
   Bn_cashForRentRegistration,
   Bn_rapidResponse,
   Bn_rapidResponse2,
@@ -20,6 +22,7 @@ import {
   Ecrec_vetEvaluation,
   Ecrec_vet_bha388,
   Legal_individual_aid,
+  Legal_individual_aid_partners,
   Legal_pam,
   Meal_cashPdm,
   Meal_eorePdm,
@@ -39,10 +42,10 @@ import {
   Shelter_nta,
   Va_bio_tia,
 } from '../generated/index.js'
-import {Awareness_raising_partners} from '../generated/Awareness_raising_partners.js'
 
 export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
+  type PersonsMapper<T extends any> = (row: T) => Person.Details[]
 
   namespace Xml {
     export type Gender =
@@ -234,7 +237,19 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const awareness_raising_partners = (row: Awareness_raising_partners.T): Person.Details[] => {
+    const safeAge = (age: any) => {
+      try {
+        const int = parseInt(age as any, 10)
+        if (int > 140 || int < 0) return undefined
+        return int
+      } catch (error) {
+        return undefined
+      }
+    }
+
+    // MEMO: please keep person mappers sorted
+
+    export const awareness_raising_partners: PersonsMapper<Awareness_raising_partners.T> = (row) => {
       return (
         row.hh_char_hh_det?.flatMap((beneficiary) => ({
           age: beneficiary.hh_char_hh_det_age,
@@ -244,16 +259,7 @@ export namespace KoboXmlMapper {
       )
     }
 
-    export const bn_re = (row: Bn_re.T): Person.Details[] =>
-      common({
-        ...row,
-        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
-          ..._,
-          hh_char_hh_res_stat: row.ben_det_res_stat,
-        })),
-      })
-
-    export const bn_rapidResponse = (row: Bn_rapidResponse.T): Person.Details[] => {
+    export const bn_rapidResponse: PersonsMapper<Bn_rapidResponse.T> = (row) => {
       return [
         ...(row.hh_char_hhh_age_l || row.hh_char_hhh_gender_l
           ? [
@@ -294,309 +300,16 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const ecrec_cashRegistrationBha = (row: Ecrec_cashRegistrationBha.T) => {
-      return common({
-        ...row,
-        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
-          ..._,
-          hh_char_hh_res_stat: row.ben_det_res_stat,
-        })),
-      })
-    }
+    export const bn_cashForRentApplication: PersonsMapper<Bn_cashForRentApplication.T> = common
 
-    export const shelter_nta = (row: Shelter_nta.T) => {
-      const mapDis = (
-        dis: Shelter_nta.T['hh_char_dis_select'],
-      ): undefined | Ecrec_cashRegistration.T['hh_char_res_dis_select'] => {
-        return seq(dis)
-          ?.map((_) =>
-            match(_)
-              .cases({
-                diff_see: 'diff_see',
-                diff_hear: 'diff_hear',
-                diff_walk: 'diff_walk',
-                diff_rem: 'diff_rem',
-                diff_care: 'diff_care',
-                diff_comm: 'diff_comm',
-                diff_none: 'diff_none',
-                diff_medical: undefined,
-                diff_mental: undefined,
-              })
-              .default(undefined),
-          )
-          .compact()
-          .get() as Ecrec_cashRegistration.T['hh_char_res_dis_select']
-      }
-      return common({
-        ...row,
-        hh_char_dis_select: mapDis(row.hh_char_dis_select),
-        hh_char_hhh_dis_select: mapDis(row.hh_char_hhh_dis_select),
-        hh_char_res_dis_select: mapDis(row.hh_char_res_dis_select),
-        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
-          ..._,
-          hh_char_hh_res_stat: row.ben_det_res_stat,
-          hh_char_hh_det_dis_select: mapDis(_.hh_char_hh_det_dis_select),
-        })),
-      })
-    }
-
-    export const bn_cashForRentRegistration = (row: Bn_cashForRentRegistration.T) => {
+    export const bn_cashForRentRegistration: PersonsMapper<Bn_cashForRentRegistration.T> = (row) => {
       return common({
         ...row,
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({..._, hh_char_hh_res_stat: row.ben_det_res_stat})),
       })
     }
-    export const bn_cashForRentApplication = (row: Bn_cashForRentRegistration.T) => {
-      return common(row)
-    }
 
-    export const shelter_cashForShelter = (row: Shelter_cashForShelter.T) => common(row)
-
-    export const protection_counselling = (row: Protection_counselling.T) => {
-      const hasDisab = (_: Protection_counselling.T['difficulty_remembering']): boolean => {
-        return match(_)
-          .cases({
-            no: false,
-            yes_some: true,
-            yes_lot: true,
-            cannot_all: true,
-          })
-          .default(false)
-      }
-      const disability = (
-        [
-          hasDisab(row.difficulty_seeing) ? Person.WgDisability.See : undefined,
-          hasDisab(row.difficulty_hearing) ? Person.WgDisability.Hear : undefined,
-          hasDisab(row.difficulty_walking) ? Person.WgDisability.Walk : undefined,
-          hasDisab(row.difficulty_remembering) ? Person.WgDisability.Rem : undefined,
-          hasDisab(row.difficulty_washing) ? Person.WgDisability.Care : undefined,
-          hasDisab(row.difficulty_usual_language) ? Person.WgDisability.Comm : undefined,
-        ] as const
-      ).filter((_) => !!_)
-      return [
-        {
-          age: row.age,
-          gender: match(row.gender!)
-            .cases({
-              man: Person.Gender.Male,
-              other: Person.Gender.Other,
-              woman: Person.Gender.Female,
-            })
-            .default(undefined),
-          displacement: match(row.disp_status)
-            .cases({
-              idp: Person.DisplacementStatus.Idp,
-              idp_retuenee: Person.DisplacementStatus.Returnee,
-              refugee_returnee: Person.DisplacementStatus.Returnee,
-              non_displaced: Person.DisplacementStatus.NonDisplaced,
-              refugee: Person.DisplacementStatus.Refugee,
-              pnd: undefined,
-            })
-            .default(undefined),
-          disability,
-        },
-      ]
-    }
-
-    export const protection_pss = (row: Protection_pss.T) => {
-      if (row.new_ben === 'no') return []
-
-      return common({
-        hh_char_hh_det: row.hh_char_hh_det
-          ?.filter((_) => {
-            if (_.hh_char_hh_new_ben === 'no') return false
-            if (row.activity !== 'pgs') return true
-            if (!_.hh_char_hh_session) return false
-            if (row.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
-            if (row.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
-            if (row.cycle_type === 'short_6') return _.hh_char_hh_session.length >= 4
-            return false
-          })
-          .map((_) => ({
-            ..._,
-            hh_char_hh_res_stat: _.hh_char_hh_det_status,
-          })),
-      })
-    }
-
-    export const protection_gbv = (row: Protection_gbv.T) => {
-      return common({
-        hh_char_hh_det: row.hh_char_hh_det
-          ?.filter((_) => _.hh_char_hh_new_ben !== 'no')
-          .map((_) => ({
-            ..._,
-            hh_char_hh_res_stat: _.hh_char_hh_det_status,
-          })),
-      })
-    }
-
-    export const protection_hhs3 = (row: Protection_hhs3.T): Person.Details[] => {
-      const displacement = match(row.do_you_identify_as_any_of_the_following)
-        .cases({
-          idp: Person.DisplacementStatus.Idp,
-          non_displaced: Person.DisplacementStatus.NonDisplaced,
-          refugee: Person.DisplacementStatus.Refugee,
-          returnee: Person.DisplacementStatus.Returnee,
-        })
-        .default(undefined)
-      return seq(row.hh_char_hh_det)
-        ?.map((hh) => {
-          return {
-            age: hh.hh_char_hh_det_age,
-            gender: Gender.common(hh),
-            displacement: displacement,
-            disability: hh.hh_char_hh_det_disability
-              ?.map((_) =>
-                match(_)
-                  .cases({
-                    no: Person.WgDisability.None,
-                    wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
-                    wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
-                    wg_walking_or_climbing_steps: Person.WgDisability.Walk,
-                    wg_remembering_or_concentrating: Person.WgDisability.Rem,
-                    wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
-                    wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
-                    unable_unwilling_to_answer: undefined,
-                  })
-                  .default(undefined),
-              )
-              .filter((_) => !!_),
-          }
-        })
-        .compact()
-    }
-
-    export const ecrec_cashRegistration = (row: Ecrec_cashRegistration.T) => common(row)
-
-    export const protection_groupSession = (row: Protection_groupSession.T) =>
-      common({
-        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
-          ..._,
-          hh_char_hh_res_stat: _.hh_char_hh_det_status,
-        })),
-      })
-
-    export const ecrec_vetApplication = (row: Ecrec_vetApplication.T) => common(row)
-
-    export const ecrec_vetEvaluation = (row: Ecrec_vetEvaluation.T) => common(row)
-
-    export const ecrec_vet_bha388 = (row: Ecrec_vet_bha388.T) =>
-      common({
-        hh_char_hh_det: row.family_member?.map(({gender, age, dis_select, dis_level}) => ({
-          hh_char_hh_det_age: age,
-          hh_char_hh_det_gender: gender,
-          hh_char_hh_det_dis_select: dis_select,
-          hh_char_hh_det_dis_level: dis_level,
-          hh_char_hh_res_stat: row.res_stat, // notice it comes from the row, not the family member
-        })),
-      })
-
-    export const ecrec_vet2_dmfa = (row: Ecrec_vet2_dmfa.T) =>
-      common({
-        ...row,
-        hh_char_hh_det: row.family_member?.map((member) => ({
-          hh_char_hh_det_age: member.age,
-          hh_char_hh_det_gender: member.gender,
-          hh_char_hh_det_dis_select: member.dis_select,
-          hh_char_hh_det_dis_level: member.dis_level,
-          hh_char_hh_res_stat: row.res_stat, // notice it comes from the row, not the family member
-        })),
-      })
-
-    export const ecrec_msmeGrantReg = (row: Ecrec_msmeGrantReg.T) => {
-      const safeAge = (age: any) => {
-        try {
-          const int = parseInt(age as any)
-          if (int > 140 || int < 0) return undefined
-          return int
-        } catch (error) {
-          return undefined
-        }
-      }
-      return common({
-        hh_char_res_age: safeAge(row.age),
-        hh_char_res_gender: row.gender,
-        ben_det_res_stat: row.res_stat,
-        hh_char_res_dis_select: row.dis_select,
-        hh_char_res_dis_level: row.dis_level,
-        hh_char_hh_det: row.hh_member?.map((_) => ({
-          ..._,
-          hh_char_hh_det_age: safeAge(_.hh_char_hh_det_age),
-          hh_char_hh_det_dis_select: row.dis_select,
-          hh_char_hh_det_dis_level: row.dis_level,
-        })),
-      })
-    }
-
-    export const ecrec_subsistance = (row: Ecrec_subsistance.T) =>
-      common({
-        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
-          ..._,
-          hh_char_hh_res_stat: _.hh_char_hh_res_stat,
-        })),
-      })
-
-    export const ecrec_small_scale = (row: Ecrec_small_scale.T) => common(row)
-
-    export const ecrec_msmeGrantEoi = (row: Ecrec_msmeGrantEoi.T) => common(row)
-
-    export const partner_lampa = (row: Partner_lampa.T) => common(row)
-
-    export const protection_communityMonitoring = (row: Protection_communityMonitoring.T) => {
-      const hh_char_hh_det_dis_select = seq(row.key_informant_difficulty ?? [])
-        .map((_) => {
-          match(_).cases({
-            no: 'diff_none',
-            seeing: 'diff_see',
-            hearing: 'diff_hear',
-            walking: 'diff_walk',
-            remembering_concentrating: 'diff_rem',
-            self_care: 'diff_care',
-            using_usual_language: 'diff_comm',
-          })
-        })
-        .compact()
-        .get() as Xml.DisabilitySelected[]
-
-      return common({
-        // @ts-expect-error void IS undefined. Kind of. Period. Sorry. Blame me in case of crashes
-        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
-          ..._,
-          hh_char_hh_det_dis_select,
-          hh_char_hh_res_stat: _.hh_char_hh_det_status,
-        })),
-      })
-    }
-
-    export const protection_referral = (row: Protection_referral.T): Person.Details[] => {
-      const displacement = match(row.displacement_status)
-        .cases({
-          idp: Person.DisplacementStatus.Idp,
-          idp_returnee: Person.DisplacementStatus.Returnee,
-          refugee_retuenee: Person.DisplacementStatus.Returnee,
-          non_peenisplaced: Person.DisplacementStatus.NonDisplaced,
-          refugee_Refenee: Person.DisplacementStatus.Refugee,
-        })
-        .default(undefined)
-
-      return [
-        {
-          age: row.age,
-          gender: match(row.gender)
-            .cases({
-              man: Person.Gender.Male,
-              woman: Person.Gender.Female,
-              boy: Person.Gender.Male,
-              girl: Person.Gender.Female,
-              other: Person.Gender.Other,
-            })
-            .default(undefined),
-          displacement,
-        },
-      ]
-    }
-
-    export const bn_rapidResponse2 = (row: Bn_rapidResponse2.T) => {
+    export const bn_rapidResponse2: PersonsMapper<Bn_rapidResponse2.T> = (row) => {
       return common({
         ...row,
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
@@ -614,158 +327,128 @@ export namespace KoboXmlMapper {
       })
     }
 
-    export const cash_pdm = (_: Meal_cashPdm.T): Person.Details[] => {
-      return [
-        {
-          age: _.age!,
-          gender: _.sex!,
-          displacement: _.status_person!,
-          disability: undefined,
-        },
-      ].map((person) => ({
-        age: person.age,
-        gender: match(person.gender)
-          .cases({
-            male: Person.Gender.Male,
-            female: Person.Gender.Female,
-          })
-          .default(undefined),
-        displacement: match(person.displacement)
-          .cases({
-            idp: Person.DisplacementStatus.Idp,
-            long: Person.DisplacementStatus.NonDisplaced,
-            returnee: Person.DisplacementStatus.Returnee,
-          })
-          .default(undefined),
-        disability: person.disability,
-      }))
+    export const bn_re: PersonsMapper<Bn_re.T> = (row) => {
+      return common({
+        ...row,
+        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          ..._,
+          hh_char_hh_res_stat: row.ben_det_res_stat,
+        })),
+      })
     }
 
-    export const shelter_pdm = (_: Meal_shelterPdm.T): Person.Details[] => {
+    export const cash_pdm: PersonsMapper<Meal_cashPdm.T> = (row) => {
       return [
         {
-          age: _.Please_state_your_age!,
-          gender: _.Please_state_your_gender!,
-          displacement: _.Are_you_an_IDP_conflict_affected_person!,
-          disability: undefined,
+          age: row.age,
+          gender: match(row.sex)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            })
+            .default(undefined),
+          displacement: match(row.status_person)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              long: Person.DisplacementStatus.NonDisplaced,
+              returnee: Person.DisplacementStatus.Returnee,
+            })
+            .default(undefined),
         },
-      ].map((person) => ({
-        age: person.age,
-        gender: match(person.gender)
-          .cases({
-            male: Person.Gender.Male,
-            female: Person.Gender.Female,
-          })
-          .default(undefined),
-        displacement: match(person.displacement)
-          .cases({
-            idp: Person.DisplacementStatus.Idp,
-            long: Person.DisplacementStatus.NonDisplaced,
-            returnee: Person.DisplacementStatus.Returnee,
-          })
-          .default(undefined),
-        disability: person.disability,
-      }))
+      ]
     }
 
-    export const nfi_pdm = (_: Meal_nfiPdm.T): Person.Details[] => {
+    export const ecrec_cashRegistration: PersonsMapper<Ecrec_cashRegistration.T> = common
+
+    export const ecrec_cashRegistrationBha: PersonsMapper<Ecrec_cashRegistrationBha.T> = (row) => {
+      return common({
+        ...row,
+        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          ..._,
+          hh_char_hh_res_stat: row.ben_det_res_stat,
+        })),
+      })
+    }
+
+    export const ecrec_msmeGrantEoi: PersonsMapper<Ecrec_msmeGrantEoi.T> = common
+
+    export const ecrec_msmeGrantReg: PersonsMapper<Ecrec_msmeGrantReg.T> = (row) => {
+      return common({
+        hh_char_res_age: safeAge(row.age),
+        hh_char_res_gender: row.gender,
+        ben_det_res_stat: row.res_stat,
+        hh_char_res_dis_select: row.dis_select,
+        hh_char_res_dis_level: row.dis_level,
+        hh_char_hh_det: row.hh_member?.map((_) => ({
+          ..._,
+          hh_char_hh_det_age: safeAge(_.hh_char_hh_det_age),
+          hh_char_hh_det_dis_select: row.dis_select,
+          hh_char_hh_det_dis_level: row.dis_level,
+        })),
+      })
+    }
+
+    export const ecrec_small_scale: PersonsMapper<Ecrec_small_scale.T> = common
+
+    export const ecrec_vet_bha388: PersonsMapper<Ecrec_vet_bha388.T> = (row) => {
+      return common({
+        hh_char_hh_det: row.family_member?.map(({gender, age, dis_select, dis_level}) => ({
+          hh_char_hh_det_age: age,
+          hh_char_hh_det_gender: gender,
+          hh_char_hh_det_dis_select: dis_select,
+          hh_char_hh_det_dis_level: dis_level,
+          hh_char_hh_res_stat: row.res_stat, // notice it comes from the row, not the family member
+        })),
+      })
+    }
+
+    export const ecrec_vet2_dmfa: PersonsMapper<Ecrec_vet2_dmfa.T> = (row) => {
+      return common({
+        ...row,
+        hh_char_hh_det: row.family_member?.map((member) => ({
+          hh_char_hh_det_age: member.age,
+          hh_char_hh_det_gender: member.gender,
+          hh_char_hh_det_dis_select: member.dis_select,
+          hh_char_hh_det_dis_level: member.dis_level,
+          hh_char_hh_res_stat: row.res_stat, // notice it comes from the row, not the family member
+        })),
+      })
+    }
+
+    export const ecrec_subsistance: PersonsMapper<Ecrec_subsistance.T> = (row) => {
+      return common({
+        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          ..._,
+          hh_char_hh_res_stat: _.hh_char_hh_res_stat,
+        })),
+      })
+    }
+
+    export const ecrec_vetApplication: PersonsMapper<Ecrec_vetApplication.T> = common
+
+    export const ecrec_vetEvaluation: PersonsMapper<Ecrec_vetEvaluation.T> = common
+
+    export const eore_pdm: PersonsMapper<Meal_eorePdm.T> = (row) => {
       return [
         {
-          age: _.age!,
-          gender: _.sex!,
-          displacement: undefined,
-          disability: undefined,
+          age: row._age,
+          gender: match(row.select_one_hs54l01)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+              other: Person.Gender.Other,
+            })
+            .default(undefined),
         },
-      ].map((person) => ({
-        age: person.age,
-        gender: match(person.gender)
-          .cases({
-            male: Person.Gender.Male,
-            female: Person.Gender.Female,
-          })
-          .default(undefined),
-        displacement: person.displacement,
-        disability: person.disability,
-      }))
+      ]
     }
 
-    export const eore_pdm = (_: Meal_eorePdm.T): Person.Details[] => {
-      return [
-        {
-          age: _._age!,
-          gender: _.select_one_hs54l01!,
-          displacement: undefined,
-          disability: undefined,
-        },
-      ].map((person) => ({
-        age: person.age,
-        gender: match(person.gender)
-          .cases({
-            male: Person.Gender.Male,
-            female: Person.Gender.Female,
-            other: Person.Gender.Other,
-          })
-          .default(undefined),
-        displacement: person.displacement,
-        disability: person.disability,
-      }))
-    }
-
-    export const pss_pdm = (_: Meal_pssPdm.T): Person.Details[] => {
-      return [
-        {
-          age: _.giage!,
-          gender: _.gis!,
-          displacement: undefined,
-          disability: undefined,
-        },
-      ].map((person) => ({
-        age: person.age,
-        gender: match(person.gender)
-          .cases({
-            male: Person.Gender.Male,
-            female: Person.Gender.Female,
-          })
-          .default(undefined),
-        displacement: person.displacement,
-        disability: person.disability,
-      }))
-    }
-
-    export const legal_pdm = (_: Legal_pam.T): Person.Details[] => {
-      return [
-        {
-          age: _.ben_det_age,
-          gender: _.ben_det_gender!,
-          displacement: _.ben_det_res_stat,
-          disability: undefined,
-        },
-      ].map((person) => ({
-        age: person.age,
-        gender: match(person.gender)
-          .cases({
-            male: Person.Gender.Male,
-            female: Person.Gender.Female,
-          })
-          .default(undefined),
-        displacement: match(person.displacement)
-          .cases({
-            idp: Person.DisplacementStatus.Idp,
-            conflict_affected: Person.DisplacementStatus.NonDisplaced,
-            ret: Person.DisplacementStatus.Returnee,
-            ref_asy: Person.DisplacementStatus.Refugee,
-          })
-          .default(undefined),
-        disability: person.disability,
-      }))
-    }
-
-    export const legal_individual_aid = ({
+    export const legal_individual_aid: PersonsMapper<Legal_individual_aid.T> = ({
       age,
       gender,
       displacement,
       vulnerability_detail,
-    }: Legal_individual_aid.T): Person.Details[] => {
+    }) => {
       return [
         {
           age,
@@ -789,37 +472,326 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const legal_individual_aid_partners = legal_individual_aid
-
-    export const winter_pdm = (_: Meal_winterizationPdm.T): Person.Details[] => {
+    export const legal_individual_aid_partners: PersonsMapper<Legal_individual_aid_partners.T> = ({
+      age,
+      gender,
+      displacement,
+      vulnerability_detail,
+    }) => {
       return [
         {
-          age: _.age,
-          sex: _.sex!,
-          displacement: _.status_person!,
-          disability: undefined,
+          age,
+          gender: match(gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            })
+            .default(Person.Gender.Other),
+          displacement: match(displacement)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              non_idp: Person.DisplacementStatus.NonDisplaced,
+              displaced_abroad: Person.DisplacementStatus.Refugee,
+              returnee: Person.DisplacementStatus.Returnee,
+              refugee: Person.DisplacementStatus.Refugee,
+            })
+            .default(undefined),
+          ...(vulnerability_detail?.includes('pwd') && {disability: [Person.WgDisability.Comm]}), // if beneficiary is vulnerable and the reason for this is some form of disability, add the property
         },
-      ].map((person) => ({
-        age: person.age,
-        gender: match(person.sex)
-          .cases({
-            male: Person.Gender.Male,
-            female: Person.Gender.Female,
-            pnd: Person.Gender.Other,
-          })
-          .default(undefined),
-        displacement: match(person.displacement)
-          .cases({
-            idp: Person.DisplacementStatus.Idp,
-            long: Person.DisplacementStatus.NonDisplaced,
-            returnee: Person.DisplacementStatus.Returnee,
-          })
-          .default(undefined),
-        disability: person.disability,
-      }))
+      ]
     }
 
-    export const va_bio_tia = (row: Va_bio_tia.T): Person.Details[] => {
+    export const legal_pdmMapper: PersonsMapper<Legal_pam.T> = ({ben_det_age, ben_det_gender, ben_det_res_stat}) => {
+      return [
+        {
+          age: ben_det_age,
+          gender: match(ben_det_gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            })
+            .default(undefined),
+          displacement: match(ben_det_res_stat)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              conflict_affected: Person.DisplacementStatus.NonDisplaced,
+              ret: Person.DisplacementStatus.Returnee,
+              ref_asy: Person.DisplacementStatus.Refugee,
+            })
+            .default(undefined),
+        },
+      ]
+    }
+
+    export const nfi_pdm: PersonsMapper<Meal_nfiPdm.T> = ({age, sex}) => {
+      return [
+        {
+          age,
+          gender: match(sex)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            })
+            .default(undefined),
+        },
+      ]
+    }
+
+    export const partner_lampa: PersonsMapper<Partner_lampa.T> = common
+
+    export const protection_communityMonitoring: PersonsMapper<Protection_communityMonitoring.T> = (row) => {
+      return common({
+        // @ts-expect-error void IS undefined. Kind of. Period. Sorry. Blame me in case of crashes
+        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          ..._,
+          hh_char_hh_det_dis_select: seq(row.key_informant_difficulty ?? [])
+            .map((_) => {
+              match(_).cases({
+                no: 'diff_none',
+                seeing: 'diff_see',
+                hearing: 'diff_hear',
+                walking: 'diff_walk',
+                remembering_concentrating: 'diff_rem',
+                self_care: 'diff_care',
+                using_usual_language: 'diff_comm',
+              })
+            })
+            .compact()
+            .get(),
+          hh_char_hh_res_stat: _.hh_char_hh_det_status,
+        })),
+      })
+    }
+
+    export const protection_counselling: PersonsMapper<Protection_counselling.T> = (row) => {
+      return [
+        {
+          age: row.age,
+          gender: match(row.gender!)
+            .cases({
+              man: Person.Gender.Male,
+              other: Person.Gender.Other,
+              woman: Person.Gender.Female,
+            })
+            .default(undefined),
+          displacement: match(row.disp_status)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              idp_retuenee: Person.DisplacementStatus.Returnee,
+              refugee_returnee: Person.DisplacementStatus.Returnee,
+              non_displaced: Person.DisplacementStatus.NonDisplaced,
+              refugee: Person.DisplacementStatus.Refugee,
+              pnd: undefined,
+            })
+            .default(undefined),
+          disability: (
+            [
+              protection_counselling_disability_mapper(row.difficulty_seeing) ? Person.WgDisability.See : undefined,
+              protection_counselling_disability_mapper(row.difficulty_hearing) ? Person.WgDisability.Hear : undefined,
+              protection_counselling_disability_mapper(row.difficulty_walking) ? Person.WgDisability.Walk : undefined,
+              protection_counselling_disability_mapper(row.difficulty_remembering)
+                ? Person.WgDisability.Rem
+                : undefined,
+              protection_counselling_disability_mapper(row.difficulty_washing) ? Person.WgDisability.Care : undefined,
+              protection_counselling_disability_mapper(row.difficulty_usual_language)
+                ? Person.WgDisability.Comm
+                : undefined,
+            ] as const
+          ).filter((_) => !!_),
+        },
+      ]
+    }
+
+    const protection_counselling_disability_mapper = (
+      difficulty: Protection_counselling.T['difficulty_remembering'],
+    ): boolean => {
+      return match(difficulty)
+        .cases({
+          no: false,
+          yes_some: true,
+          yes_lot: true,
+          cannot_all: true,
+        })
+        .default(false)
+    }
+
+    export const protection_gbv: PersonsMapper<Protection_gbv.T> = (row) => {
+      return common({
+        hh_char_hh_det: row.hh_char_hh_det
+          ?.filter((_) => _.hh_char_hh_new_ben !== 'no')
+          .map(({hh_char_hh_det_status, ...member}) => ({
+            ...member,
+            hh_char_hh_res_stat: hh_char_hh_det_status,
+          })),
+      })
+    }
+
+    export const protection_groupSession: PersonsMapper<Protection_groupSession.T> = (row) => {
+      return common({
+        hh_char_hh_det: row.hh_char_hh_det?.map(({hh_char_hh_det_status, ...member}) => ({
+          ...member,
+          hh_char_hh_res_stat: hh_char_hh_det_status,
+        })),
+      })
+    }
+
+    export const protection_hhs3: PersonsMapper<Protection_hhs3.T> = (row) => {
+      return seq(row.hh_char_hh_det)
+        ?.map((hh) => {
+          return {
+            age: hh.hh_char_hh_det_age,
+            gender: Gender.common(hh),
+            displacement: match(row.do_you_identify_as_any_of_the_following)
+              .cases({
+                idp: Person.DisplacementStatus.Idp,
+                non_displaced: Person.DisplacementStatus.NonDisplaced,
+                refugee: Person.DisplacementStatus.Refugee,
+                returnee: Person.DisplacementStatus.Returnee,
+              })
+              .default(undefined),
+            disability: hh.hh_char_hh_det_disability
+              ?.map((_) =>
+                match(_)
+                  .cases({
+                    no: Person.WgDisability.None,
+                    wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
+                    wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
+                    wg_walking_or_climbing_steps: Person.WgDisability.Walk,
+                    wg_remembering_or_concentrating: Person.WgDisability.Rem,
+                    wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
+                    wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
+                    unable_unwilling_to_answer: undefined,
+                  })
+                  .default(undefined),
+              )
+              .filter((_) => !!_),
+          }
+        })
+        .compact()
+    }
+
+    export const protection_pss: PersonsMapper<Protection_pss.T> = (row) => {
+      if (row.new_ben === 'no') return []
+
+      return common({
+        hh_char_hh_det: row.hh_char_hh_det
+          ?.filter((_) => {
+            if (_.hh_char_hh_new_ben === 'no') return false
+            if (row.activity !== 'pgs') return true
+            if (!_.hh_char_hh_session) return false
+            if (row.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
+            if (row.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
+            if (row.cycle_type === 'short_6') return _.hh_char_hh_session.length >= 4
+            return false
+          })
+          .map(({hh_char_hh_det_status, ...member}) => ({
+            ...member,
+            hh_char_hh_res_stat: hh_char_hh_det_status,
+          })),
+      })
+    }
+
+    export const protection_referral: PersonsMapper<Protection_referral.T> = (row) => {
+      return [
+        {
+          age: row.age,
+          gender: match(row.gender)
+            .cases({
+              man: Person.Gender.Male,
+              woman: Person.Gender.Female,
+              boy: Person.Gender.Male,
+              girl: Person.Gender.Female,
+              other: Person.Gender.Other,
+            })
+            .default(undefined),
+          displacement: match(row.displacement_status)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              idp_returnee: Person.DisplacementStatus.Returnee,
+              refugee_retuenee: Person.DisplacementStatus.Returnee,
+              non_peenisplaced: Person.DisplacementStatus.NonDisplaced,
+              refugee_Refenee: Person.DisplacementStatus.Refugee,
+            })
+            .default(undefined),
+        },
+      ]
+    }
+
+    export const pss_pdm: PersonsMapper<Meal_pssPdm.T> = (row) => {
+      return [
+        {
+          age: row.giage,
+          gender: match(row.gis)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            })
+            .default(undefined),
+        },
+      ]
+    }
+
+    export const shelter_cashForShelter: PersonsMapper<Shelter_cashForShelter.T> = common
+
+    export const shelter_pdm: PersonsMapper<Meal_shelterPdm.T> = (row) => {
+      return [
+        {
+          age: row.Please_state_your_age,
+          gender: match(row.Please_state_your_gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            })
+            .default(undefined),
+          displacement: match(row.Are_you_an_IDP_conflict_affected_person)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              long: Person.DisplacementStatus.NonDisplaced,
+              returnee: Person.DisplacementStatus.Returnee,
+            })
+            .default(undefined),
+        },
+      ]
+    }
+
+    export const shelter_nta: PersonsMapper<Shelter_nta.T> = (row) => {
+      return common({
+        ...row,
+        hh_char_dis_select: shelter_nta_disability_mapper(row.hh_char_dis_select),
+        hh_char_hhh_dis_select: shelter_nta_disability_mapper(row.hh_char_hhh_dis_select),
+        hh_char_res_dis_select: shelter_nta_disability_mapper(row.hh_char_res_dis_select),
+        hh_char_hh_det: row.hh_char_hh_det?.map(({hh_char_hh_det_dis_select, ...member}) => ({
+          ...member,
+          hh_char_hh_res_stat: row.ben_det_res_stat,
+          hh_char_hh_det_dis_select: shelter_nta_disability_mapper(hh_char_hh_det_dis_select),
+        })),
+      })
+    }
+
+    const shelter_nta_disability_mapper = (
+      disabilities: Shelter_nta.T['hh_char_dis_select'],
+    ): undefined | Ecrec_cashRegistration.T['hh_char_res_dis_select'] => {
+      return seq(disabilities)
+        ?.map((disability) =>
+          match(disability)
+            .cases({
+              diff_see: 'diff_see',
+              diff_hear: 'diff_hear',
+              diff_walk: 'diff_walk',
+              diff_rem: 'diff_rem',
+              diff_care: 'diff_care',
+              diff_comm: 'diff_comm',
+              diff_none: 'diff_none',
+              diff_medical: undefined,
+              diff_mental: undefined,
+            })
+            .default(undefined),
+        )
+        .compact()
+        .get() as Ecrec_cashRegistration.T['hh_char_res_dis_select']
+    }
+
+    export const va_bio_tia: PersonsMapper<Va_bio_tia.T> = (row) => {
       const tiaEntries =
         row.tia_assesment?.filter(
           (tia) => tia.res_stat !== undefined || tia.cash_age !== undefined || tia.cash_gender !== undefined,
@@ -843,7 +815,7 @@ export namespace KoboXmlMapper {
       }))
     }
 
-    export const va_bio_tia_receivedCash = (row: Va_bio_tia.T): Person.Details[] => {
+    export const va_bio_tia_receivedCash: PersonsMapper<Va_bio_tia.T> = (row) => {
       const tiaEntries =
         row.tia_assesment?.filter(
           (tia) =>
@@ -866,6 +838,28 @@ export namespace KoboXmlMapper {
           })
           .default(() => undefined),
       }))
+    }
+
+    export const winter_pdm: PersonsMapper<Meal_winterizationPdm.T> = ({age, sex, status_person}) => {
+      return [
+        {
+          age: age,
+          gender: match(sex)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+              pnd: Person.Gender.Other,
+            })
+            .default(undefined),
+          displacement: match(status_person)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              long: Person.DisplacementStatus.NonDisplaced,
+              returnee: Person.DisplacementStatus.Returnee,
+            })
+            .default(undefined),
+        },
+      ]
     }
   }
 
