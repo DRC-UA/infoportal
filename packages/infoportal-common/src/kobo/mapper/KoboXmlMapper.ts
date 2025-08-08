@@ -501,7 +501,7 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const legal_pdmMapper: PersonsMapper<Legal_pam.T> = ({ben_det_age, ben_det_gender, ben_det_res_stat}) => {
+    export const legal_pdm: PersonsMapper<Legal_pam.T> = ({ben_det_age, ben_det_gender, ben_det_res_stat}) => {
       return [
         {
           age: ben_det_age,
