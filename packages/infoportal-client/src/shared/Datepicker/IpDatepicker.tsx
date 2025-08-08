@@ -19,10 +19,33 @@ export interface DatepickerProps
   label?: string
   InputProps?: Partial<StandardInputProps>
   fullWidth?: boolean
+  withTime?: boolean
   timeOfDay?: // when picking a date, the Date returned will be at 00:00:000 in the user timezone
   | 'startOfDay'
     // with this, it will be at 23:59:999 in the user timezone
     | 'endOfDay'
+}
+
+const formatToInputValue = (date: Date, withTime: boolean): string => {
+  const pad = (n: number) => n.toString().padStart(2, '0')
+  const yyyy = date.getFullYear()
+  const mm = pad(date.getMonth() + 1)
+  const dd = pad(date.getDate())
+  const hh = pad(date.getHours())
+  const mi = pad(date.getMinutes())
+  return withTime ? `${yyyy}-${mm}-${dd}T${hh}:${mi}` : `${yyyy}-${mm}-${dd}`
+}
+
+const parseFromInputValue = (str: string, withTime: boolean): Date => {
+  return new Date(str)
+}
+
+const safeFormatDate = (date?: Date, withTime?: boolean): string | undefined => {
+  try {
+    return date ? formatToInputValue(date, withTime ?? false) : undefined
+  } catch (e) {
+    return undefined
+  }
 }
 
 const date2string = (_: Date) => {
@@ -53,33 +76,30 @@ export const IpDatepicker = ({
   fullWidth,
   InputLabelProps,
   id,
+  withTime = false,
   timeOfDay = 'startOfDay',
   sx,
   ...props
 }: DatepickerProps) => {
-  const onChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
-    // it is either an empty string or yyyy-mm-dd
-    if (newValue.length) {
-      const dateAndTime = `${newValue}T${timeOfDay === 'startOfDay' ? '00:00:00.000' : '23:59:59.999'}`
-      const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-      const utcDate = fromZonedTime(dateAndTime, userTimeZone)
-      onChange(utcDate)
+  const [displayedValue, setDisplayedValue] = useState<string | undefined>()
+
+  useEffect(() => {
+    setDisplayedValue(safeFormatDate(value, withTime))
+  }, [value, withTime])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const str = e.target.value
+    if (str) {
+      try {
+        const parsed = parseFromInputValue(str, withTime)
+        onChange(parsed)
+      } catch {
+        onChange(undefined)
+      }
     } else {
       onChange(undefined)
     }
   }
-
-  const [displayedDate, setDisplayedDate] = useState<string | undefined>(undefined)
-
-  useEffect(() => {
-    if (value) {
-      const yyyymmdd = safeDate2string(value)
-      setDisplayedDate(yyyymmdd)
-    } else {
-      setDisplayedDate(undefined)
-    }
-  }, [setDisplayedDate, value])
 
   return (
     <FormControl size="small" sx={{...sx}}>
@@ -89,16 +109,16 @@ export const IpDatepicker = ({
       <OutlinedInput
         {...props}
         id={id}
-        type="date"
+        type={withTime ? 'datetime-local' : 'date'}
         inputProps={{
-          min: safeDate2string(min),
-          max: safeDate2string(max),
+          min: safeFormatDate(min, withTime),
+          max: safeFormatDate(max, withTime),
         }}
         margin="dense"
         size="small"
         label={label}
-        value={displayedDate}
-        onChange={onChangeDate}
+        value={displayedValue ?? ''}
+        onChange={handleChange}
         fullWidth={fullWidth}
       />
     </FormControl>
