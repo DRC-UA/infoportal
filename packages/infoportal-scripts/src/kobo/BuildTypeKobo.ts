@@ -26,6 +26,9 @@ export class BuildKoboType {
 
   static readonly config = Obj.map(
     {
+      awareness_raising_partners: {
+        formId: KoboIndex.byName('awareness_raising_partners').id,
+      },
       shelter_north: {
         formId: KoboIndex.byName('shelter_north').id,
       },

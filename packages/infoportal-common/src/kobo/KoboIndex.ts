@@ -3,6 +3,7 @@ import {Obj, seq} from '@axanc/ts-utils'
 // MEMO: please keep indexes sorted
 
 const koboIndex = {
+  awareness_raising_partners: 'aEMZ2g3Hv2d69unotuewKn',
   bn_0_mpcaReg: 'aEwY33SAtdayNTeHoiJfdg',
   bn_0_mpcaRegESign: 'a8JXohrBDqTdCc86Ysz26r',
   bn_0_mpcaRegNewShort: 'a5kgQdqZLLNTLSmC8DK7Eq',
@@ -83,6 +84,7 @@ const koboIndex = {
 const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex)).reduceObject(([k, v]) => [v, k])
 
 const koboFormTranslation: Record<KoboFormName, string> = {
+  awareness_raising_partners: '[Legal] (PARTNERS) Awareness raising sessions',
   bn_0_mpcaReg: '[Basic Needs] v0 MPCA Registration',
   bn_0_mpcaRegESign: '[Basic Needs] v0 MPCA Registration (GREENLIGHT WITH ESIGNATURE)',
   bn_0_mpcaRegNewShort: '[Basic Needs] v0 MPCA Registration (NEW-SHORT 01102022)',
