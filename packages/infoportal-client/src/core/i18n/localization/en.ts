@@ -377,7 +377,7 @@ export const en = Object.freeze({
     daily: 'Daily',
     monthly: 'Monthly',
     months: 'Months',
-    createdAt: 'Created at',
+    createdAt: 'Feedback provided',
     visible: 'Visible',
     visibility: 'Visibility',
     hidden: 'Hidden',

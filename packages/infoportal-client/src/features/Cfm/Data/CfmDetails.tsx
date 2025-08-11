@@ -69,6 +69,16 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
   const [createdAt, setCreatedAt] = useState<Date | undefined>(entry.createdAt ? new Date(entry.createdAt) : undefined)
   const {toastHttpError} = useIpToast()
 
+  const category = entry.category ?? entry.tags?.feedbackTypeOverride
+  const isThanks = category === 'apprec_com'
+
+  const isNotesEmpty = !entry.tags?.notes?.trim()
+  const isCreatedAtMissing = !isThanks && !entry.createdAt
+
+  const statusDisabled = isNotesEmpty || isCreatedAtMissing
+
+  const statusTitle = isNotesEmpty ? 'Notes section is empty!' : isCreatedAtMissing ? 'Created date is not set!' : ''
+
   useEffect(() => {
     setCreatedAt(entry.createdAt ? new Date(entry.createdAt) : undefined)
   }, [entry.createdAt])
@@ -84,18 +94,7 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
         action={
           <>
             <CfmPriorityLogo fontSize="large" priority={entry.priority} sx={{mr: 2}} />
-            <div
-              title={
-                !entry.tags?.notes?.trim() && !entry.createdAt
-                  ? 'Please fill Notes and Created date first'
-                  : !entry.tags?.notes?.trim()
-                    ? 'Notes section is empty!'
-                    : !entry.createdAt
-                      ? 'Created date is not set!'
-                      : ''
-              }
-              style={{width: '200px'}}
-            >
+            <div title={statusTitle} style={{width: '200px'}}>
               <KoboSelectTag<KoboMealCfmTag, CfmData>
                 sx={{width: '100%'}}
                 label={m.status}
@@ -110,7 +109,7 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
                     <CfmStatusIconLabel key={k} status={k!} sx={{display: 'flex', alignItems: 'center'}} />
                   ))
                   .get()}
-                disabled={!(entry.tags?.notes?.trim() && entry.createdAt)}
+                disabled={statusDisabled}
               />
             </div>
           </>
