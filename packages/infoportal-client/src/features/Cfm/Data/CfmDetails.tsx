@@ -69,15 +69,18 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
   const [createdAt, setCreatedAt] = useState<Date | undefined>(entry.createdAt ? new Date(entry.createdAt) : undefined)
   const {toastHttpError} = useIpToast()
 
-  const category = entry.category ?? entry.tags?.feedbackTypeOverride
-  const isThanks = category === 'apprec_com'
+  const category = entry.tags?.feedbackTypeOverride ?? entry.category
+  const requireDate = category !== 'apprec_com'
 
   const isNotesEmpty = !entry.tags?.notes?.trim()
-  const isCreatedAtMissing = !isThanks && !entry.createdAt
+  const isCreatedAtMissing = requireDate && !entry.createdAt
 
-  const statusDisabled = isNotesEmpty || isCreatedAtMissing
+  const statusProblems: string[] = []
+  if (isNotesEmpty) statusProblems.push('Notes section is empty!')
+  if (isCreatedAtMissing) statusProblems.push('Feedback provided is not set!')
 
-  const statusTitle = isNotesEmpty ? 'Notes section is empty!' : isCreatedAtMissing ? 'Created date is not set!' : ''
+  const statusDisabled = statusProblems.length > 0
+  const statusTitle = statusProblems.join(' ')
 
   useEffect(() => {
     setCreatedAt(entry.createdAt ? new Date(entry.createdAt) : undefined)
