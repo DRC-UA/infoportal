@@ -1,7 +1,7 @@
 import {Meal_pssPdm, OblastIndex} from 'infoportal-common'
 import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
+import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {useI18n} from '@/core/i18n'
 import React, {useMemo, useState} from 'react'
@@ -13,6 +13,7 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {formatLargeNumber} from '@/core/i18n/localization/en'
 
 const isPssPdm = (_: PdmData<PdmForm>): _ is PdmData<Meal_pssPdm.T> => {
   return _.type === 'Pss'
@@ -122,6 +123,9 @@ export const MealPdmPssDashboard = () => {
               </SlidePanel>
             </Div>
             <Div column>
+              <SlideWidget sx={{flex: 1}} icon="group" title={m.submissions}>
+                {formatLargeNumber(data.length)}
+              </SlideWidget>
               <Panel title={m.ageGroup}>
                 <PanelBody>
                   <AgeGroupTable
