@@ -128,6 +128,7 @@ export namespace AiMineActionMapper {
     [DrcProject['UKR-000350 SIDA']]: 'MA-DRC-00009',
     [DrcProject['UKR-000397 GFFO']]: 'MA-DRC-00008',
     [DrcProject['UKR-000423 ECHO4']]: 'MA-DRC-00012',
+    [DrcProject['UKR-000386 Pooled Funds']]: 'MA-DRC-00013',
   } as const
 
   const mapTiaActivity = (data: IKoboMeta[], periodStr: string): Bundle[] => {
