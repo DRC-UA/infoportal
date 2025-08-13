@@ -1,10 +1,12 @@
-import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
-import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
-import {DrcProgram, DrcProject, groupBy, IKoboMeta, KoboMetaStatus, Period, PeriodHelper} from 'infoportal-common'
 import {match} from '@axanc/ts-utils'
-import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
+
+import {DrcProgram, DrcProject, groupBy, IKoboMeta, KoboMetaStatus, Period, PeriodHelper} from 'infoportal-common'
+
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
+import {ApiSdk} from '@/core/sdk/server/ApiSdk'
+import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
+import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 
 export namespace AiProtectionMapper {
   type Bundle = AiTable<AiProtectionType.Type, AiProtectionType.AiTypeActivitiesAndPeople>
@@ -53,11 +55,11 @@ export namespace AiProtectionMapper {
       groupBy({
         data,
         groups: [
-          {by: (_) => _.oblast!},
-          {by: (_) => _.raion!},
-          {by: (_) => _.hromada!},
-          {by: (_) => _.settlement!},
-          {by: (_) => _.project[0]},
+          {by: ({oblast}) => oblast},
+          {by: ({raion}) => raion!},
+          {by: ({hromada}) => hromada!},
+          {by: ({settlement}) => settlement!},
+          {by: ({project}) => project[0]},
         ],
         finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
           const activity: AiProtectionType.Type = {
@@ -73,7 +75,7 @@ export namespace AiProtectionMapper {
           const activityPrebuilt = {
             ...activity,
             ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
-            'Activities and People': subActivities.map((_) => _.activity),
+            'Activities and People': subActivities.map(({activity}) => activity),
           }
           subActivities.map((subActivity) => {
             const recordId = ActivityInfoSdk.makeRecordId({
@@ -113,9 +115,9 @@ export namespace AiProtectionMapper {
     const res: {activity: AiProtectionType.AiTypeActivitiesAndPeople; data: IKoboMeta[]}[] = []
     groupBy({
       data,
-      groups: [{by: (_) => _.activity!}, {by: (_) => _.displacement!}],
+      groups: [{by: ({activity}) => activity!}, {by: ({displacement}) => displacement!}],
       finalTransform: (grouped, [activity, displacement]) => {
-        const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons).compact())
+        const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(({persons}) => persons).compact())
         res.push({
           data: grouped,
           activity: {
@@ -141,6 +143,7 @@ export namespace AiProtectionMapper {
               .default(
                 () => `${aiInvalidValueFlag} acivity` as AiProtectionType.AiTypeActivitiesAndPeople['Indicators'],
               ),
+            'Response Theme': 'No specific theme',
             'Population Group': AiMapper.mapPopulationGroup(displacement),
             'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
             ...match<DrcProgram>(activity)
