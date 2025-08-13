@@ -65,8 +65,15 @@ export namespace AiMineActionType {
       'MA-DRC-00009': 'chyqpvrm7d3o87e1hz',
       'MA-DRC-00010': 'clyht14m7d3o87e1i0',
       'MA-DRC-00011': 'cbuernkm7k7a2ai3',
+      'MA-DRC-00012': 'c95awyvme8c9r4apq',
+      'MA-DRC-00013': 'cocpt1rme8cel9npr',
     },
-    'Response Theme': {'No specific theme': 'crfw0hkm4wiqb94f'},
+    'Response Theme': {
+      'No specific theme': 'crfw0hkm4wiqb94f',
+      Evacuations: 'crvmz4tma3ng31x7',
+      'Emergency response after strikes': 'civlosjma3ng8q38',
+      'Both (evacuation and emergency response after strikes)': 'cehf311ma3ngda29',
+    },
   }
 
   export type AiTypeActivitiesAndPeople = AiTypeActivitiesAndPeople.Type

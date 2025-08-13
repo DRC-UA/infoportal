@@ -46,7 +46,7 @@ export namespace AiMineActionMapper {
 
   const mapHdpActivity = async (data: AiMinactionSqlType[], periodStr: string): Promise<Bundle[]> => {
     return Promise.all(
-      data.map(async (_, i): Promise<Bundle> => {
+      data.map(async (submission, i): Promise<Bundle> => {
         const addFlagIfNotInList = (value: string, options: Record<string, string>): any => {
           if (!options[value]) return aiInvalidValueFlag + ' ' + value
           return value
@@ -54,34 +54,37 @@ export namespace AiMineActionMapper {
         const rawActivity: AiMineActionType.Type = {
           'Reporting Organization': 'Danish Refugee Council (DRC)',
           'Plan/Project Code': addFlagIfNotInList(
-            _['Plan/Project Code'],
+            submission['Plan/Project Code'],
             AiMineActionType.options['Activity Planning Module (Mine Action)'],
           ),
-          Oblast: _['Oblast Oblast ENG/UKR'] as OblastName,
-          Raion: _['Raion Raion ENG/UKR'],
-          Hromada: _['Hromada Hromada ENG/PCODE/UKR'],
+          Oblast: submission['Oblast Oblast ENG/UKR'] as OblastName,
+          Raion: submission['Raion Raion ENG/UKR'],
+          Hromada: submission['Hromada Hromada ENG/PCODE/UKR'],
           Settlement: undefined,
-          'Response Theme': addFlagIfNotInList(_['Response Theme'], AiMineActionType.options['Response Theme']),
+          'Response Theme': addFlagIfNotInList(
+            submission['Response Theme'],
+            AiMineActionType.options['Response Theme'],
+          ),
         }
         const rawSubActivity: AiMineActionType.AiTypeActivitiesAndPeople = {
-          'Reporting Month': _['Reporting Month'],
+          'Reporting Month': submission['Reporting Month'],
           'Population Group': addFlagIfNotInList(
-            _['Population Group'],
+            submission['Population Group'],
             AiMineActionType.AiTypeActivitiesAndPeople.options['Population Group'],
           ),
           Indicators: addFlagIfNotInList(
-            _['Indicator'],
+            submission['Indicator'],
             AiMineActionType.AiTypeActivitiesAndPeople.options['Indicators - Protection'],
           ),
-          'Total Individuals Reached': _['Total Individuals Reached'],
-          'Girls (0-17)': _['Girls (0-17)'],
-          'Boys (0-17)': _['Boys (0-17)'],
-          'Adult Women (18-59)': _['Adult Women (18-59)'],
-          'Adult Men (18-59)': _['Adult Men (18-59)'],
-          'Older Women (60+)': _['Older Women (60+)'],
-          'Older Men (60+)': _['Older Men (60+)'],
+          'Total Individuals Reached': submission['Total Individuals Reached'] ?? 0,
+          'Girls (0-17)': submission['Girls (0-17)'] ?? 0,
+          'Boys (0-17)': submission['Boys (0-17)'] ?? 0,
+          'Adult Women (18-59)': submission['Adult Women (18-59)'] ?? 0,
+          'Adult Men (18-59)': submission['Adult Men (18-59)'] ?? 0,
+          'Older Women (60+)': submission['Older Women (60+)'] ?? 0,
+          'Older Men (60+)': submission['Older Men (60+)'] ?? 0,
           'Non-individuals Reached/Quantity': 0,
-          'People with Disability': _['People with Disability'],
+          'People with Disability': submission['People with Disability'] ?? 0,
         }
         const recordId = ActivityInfoSdk.makeRecordId({
           index: i,
@@ -104,15 +107,15 @@ export namespace AiMineActionMapper {
 
         return {
           submit: checkAiValid(
-            _['Oblast Oblast ENG/UKR'],
-            _['Raion Raion ENG/UKR'],
-            _['Hromada Hromada ENG/PCODE/UKR'],
-            _['Plan/Project Code'],
+            submission['Oblast Oblast ENG/UKR'],
+            submission['Raion Raion ENG/UKR'],
+            submission['Hromada Hromada ENG/PCODE/UKR'],
+            submission['Plan/Project Code'],
           ),
           recordId,
           activity: rawActivity,
           subActivity: rawSubActivity,
-          data: [_],
+          data: [submission],
           requestBody: ActivityInfoSdk.wrapRequest(request),
         }
       }),
@@ -124,6 +127,8 @@ export namespace AiMineActionMapper {
     [DrcProject['UKR-000363 UHF8']]: 'MA-DRC-00005',
     [DrcProject['UKR-000350 SIDA']]: 'MA-DRC-00009',
     [DrcProject['UKR-000397 GFFO']]: 'MA-DRC-00008',
+    [DrcProject['UKR-000423 ECHO4']]: 'MA-DRC-00012',
+    [DrcProject['UKR-000386 Pooled Funds']]: 'MA-DRC-00013',
   } as const
 
   const mapTiaActivity = (data: IKoboMeta[], periodStr: string): Bundle[] => {
@@ -132,11 +137,11 @@ export namespace AiMineActionMapper {
     groupBy({
       data,
       groups: [
-        {by: (_) => _.oblast!},
-        {by: (_) => _.raion!},
-        {by: (_) => _.hromada!},
-        {by: (_) => _.settlement!},
-        {by: (_) => _.project[0]},
+        {by: ({oblast}) => oblast},
+        {by: ({raion}) => raion!},
+        {by: ({hromada}) => hromada!},
+        {by: ({settlement}) => settlement!},
+        {by: ({project}) => project[0]},
       ],
       finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
         const activity: AiMineActionType = {
@@ -174,7 +179,7 @@ export namespace AiMineActionMapper {
               activity.Settlement,
               activity['Plan/Project Code'],
               ...(activity['Activities and People']?.map(
-                (_: AiMineActionType.AiTypeActivitiesAndPeople) => _.Indicators,
+                ({Indicators}: AiMineActionType.AiTypeActivitiesAndPeople) => Indicators,
               ) ?? []),
             ),
           })
@@ -192,9 +197,9 @@ export namespace AiMineActionMapper {
     const res: {activity: AiMineActionType.AiTypeActivitiesAndPeople; data: IKoboMeta[]}[] = []
     groupBy({
       data,
-      groups: [{by: (_) => _.activity!}, {by: (_) => _.displacement!}],
+      groups: [{by: ({activity}) => activity!}, {by: ({displacement}) => displacement!}],
       finalTransform: (grouped, [activity, displacement]) => {
-        const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap((_) => _.persons).compact())
+        const disaggregation = AiMapper.disaggregatePersons(grouped.flatMap(({persons}) => persons).compact())
         res.push({
           data: grouped,
           activity: {
