@@ -1,4 +1,4 @@
-import {fnSwitch} from '@axanc/ts-utils'
+import {match} from '@axanc/ts-utils'
 import {aiLocationMap} from 'activityinfo-sdk/location-map'
 import {format} from 'date-fns'
 import {UaLocation} from 'ua-location'
@@ -52,15 +52,13 @@ export namespace AiMapper {
     }
   }
 
-  export const mapPopulationGroup = (_?: Person.DisplacementStatus): AiFslType.Type['Population Group'] => {
-    return fnSwitch(
-      _!,
-      {
+  export const mapPopulationGroup = (status?: Person.DisplacementStatus): AiFslType.Type['Population Group'] => {
+    return match(status)
+      .cases({
         Idp: 'Internally Displaced',
         // Returnee: 'Returnees',
-      },
-      () => 'Non-Displaced',
-    )
+      } as const)
+      .default('Non-Displaced')
   }
 
   export const disaggregatePersons = (
@@ -86,16 +84,18 @@ export namespace AiMapper {
     const disaggregation = Person.groupByGenderAndGroup(Person.ageGroup.UNHCR)(personsDefined)
 
     return {
-      'Adult Men (18-59)': disaggregation['18 - 59'].Male,
-      'Adult Women (18-59)': disaggregation['18 - 59'].Female,
-      'Boys (0-17)': disaggregation['0 - 17'].Male,
-      'Girls (0-17)': disaggregation['0 - 17'].Female,
-      'Older Men (60+)': disaggregation['60+'].Male,
-      'Older Women (60+)': disaggregation['60+'].Female,
-      'Total Individuals Reached': personsDefined.length,
-      'People with Disability': personsWD.length,
-      'Girls with disability (0-17)': personsWD.filter((_) => _.gender === Person.Gender.Female && _.age! < 18).length,
-      'Boys with disability (0-17)': personsWD.filter((_) => _.gender === Person.Gender.Male && _.age! < 18).length,
+      'Adult Men (18-59)': disaggregation['18 - 59'].Male ?? 0,
+      'Adult Women (18-59)': disaggregation['18 - 59'].Female ?? 0,
+      'Boys (0-17)': disaggregation['0 - 17'].Male ?? 0,
+      'Girls (0-17)': disaggregation['0 - 17'].Female ?? 0,
+      'Older Men (60+)': disaggregation['60+'].Male ?? 0,
+      'Older Women (60+)': disaggregation['60+'].Female ?? 0,
+      'Total Individuals Reached': personsDefined.length ?? 0,
+      'People with Disability': personsWD.length ?? 0,
+      'Girls with disability (0-17)':
+        personsWD.filter((_) => _.gender === Person.Gender.Female && _.age! < 18).length ?? 0,
+      'Boys with disability (0-17)':
+        personsWD.filter((_) => _.gender === Person.Gender.Male && _.age! < 18).length ?? 0,
       'Adult Women with disability (18-59)': personsWD.filter(
         (_) => _.gender === Person.Gender.Female && _.age! >= 18 && _.age! < 60,
       ).length,
