@@ -111,6 +111,7 @@ export namespace Meal_cfmInternal {
       'UKR-000396': `UKR-000396 Danish MFA`,
       'UKR-000397': `UKR-000397 GFFO`,
       'UKR-000399': `UKR-000399 SDC3`,
+      'UKR-000418': `UKR-000418 SIDA`,
       'UKR-000423': `UKR-000423 ECHO4`,
       Other: `Інше`,
     },
