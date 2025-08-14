@@ -1,10 +1,8 @@
-import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
-import React, {ReactNode, useCallback, useMemo, useState} from 'react'
-import {Page} from '@/shared/Page'
-import {fnSwitch, Obj} from '@axanc/ts-utils'
-import {useI18n} from '@/core/i18n'
-import {Panel} from '@/shared/Panel'
-import {IpInput} from '@/shared/Input/Input'
+import {useCallback, useMemo, type ReactNode} from 'react'
+import {match, Obj} from '@axanc/ts-utils'
+import {Autocomplete} from '@mui/material'
+import {NavLink} from 'react-router-dom'
+
 import {
   CfmDataPriority,
   CfmDataProgram,
@@ -18,8 +16,14 @@ import {
   OblastIndex,
   Regexp,
 } from 'infoportal-common'
-import {DebouncedInput} from '@/shared/DebouncedInput'
-import {TableIcon, TableIconBtn, TableIconProps} from '@/features/Mpca/MpcaData/TableIcon'
+
+import {useI18n} from '@/core/i18n'
+import {formatDateTime} from '@/core/i18n/localization/en'
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
+import {KoboAnswerFilter} from '@/core/sdk/server/kobo/KoboAnswerSdk'
+import {useSession} from '@/core/Session/SessionContext'
 import {
   CfmData,
   cfmMakeEditRequestKey,
@@ -27,23 +31,21 @@ import {
   cfmStatusIconIndex,
   useCfmContext,
 } from '@/features/Cfm/CfmContext'
-import {NavLink} from 'react-router-dom'
 import {cfmIndex} from '@/features/Cfm/Cfm'
-import {IpIconBtn} from '@/shared/IconBtn'
-import {useAsync} from '@/shared/hook/useAsync'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {Autocomplete} from '@mui/material'
-import {useSession} from '@/core/Session/SessionContext'
-import {Modal, TableEditCellBtn, Txt} from '@/shared'
-import {SelectDrcProject} from '@/shared/customInput/SelectDrcProject'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {IpSelectSingle} from '@/shared/Select/SelectSingle'
+import {TableIcon, TableIconBtn, TableIconProps} from '@/features/Mpca/MpcaData/TableIcon'
+import {Modal, Txt} from '@/shared'
+import {SelectDrcProject} from '@/shared/customInput/SelectDrcProject'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
+import {DebouncedInput} from '@/shared/DebouncedInput'
+import {useAsync} from '@/shared/hook/useAsync'
+import {IpIconBtn} from '@/shared/IconBtn'
+import {IpInput} from '@/shared/Input/Input'
+import {Page} from '@/shared/Page'
+import {Panel} from '@/shared/Panel'
+import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {IpSelectMultipleHelper} from '@/shared/Select/SelectMultiple'
-import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
-import {formatDateTime} from '@/core/i18n/localization/en'
 
 export interface CfmDataFilters extends KoboAnswerFilter {}
 
@@ -57,9 +59,8 @@ export const CfmPriorityLogo = ({
   priority?: CfmData['priority']
 }) => {
   const {m} = useI18n()
-  return fnSwitch(
-    priority!,
-    {
+  return match(priority)
+    .cases({
       Low: (
         <TableIcon tooltip={m._cfm.priority + ': ' + priority} sx={sx} fontSize={fontSize} color="info">
           looks_3
@@ -75,9 +76,8 @@ export const CfmPriorityLogo = ({
           looks_one
         </TableIcon>
       ),
-    },
-    () => undefined,
-  )
+    })
+    .default(undefined)
 }
 
 export const CfmTable = ({}: any) => {
