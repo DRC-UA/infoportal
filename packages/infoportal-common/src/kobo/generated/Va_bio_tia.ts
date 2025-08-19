@@ -1,6 +1,5 @@
 export namespace Va_bio_tia {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: aKZW9UTf9nqfiLhxtjcT3d
   export interface T {
     start: string
@@ -119,6 +118,7 @@ export namespace Va_bio_tia {
           assessment_needs_beneficiary: string | undefined | undefined
           type_assistance: undefined | Option<'type_assistance'>[] | undefined
           cash_assistance: string | undefined
+          modality_assistance: undefined | Option<'modality_assistance'> | undefined
           member_tia_provided: undefined | Option<'member_tia_provided'> | undefined
           not_cash: string | undefined
           cash_gender: undefined | Option<'add_cash_gender'> | undefined
@@ -139,6 +139,8 @@ export namespace Va_bio_tia {
           cash_assistance_provided3: string | undefined | undefined
           estimated_value3: number | undefined | undefined
           total_cash_assistance: number | undefined | undefined
+          needs_referrals: undefined | Option<'needs_referrals'>[] | undefined
+          needs_referrals_other: string | undefined | undefined
           responsible_drc_staff: undefined | Option<'responsible_drc_staff'> | undefined
           date_responsible_drc_staff: Date | undefined | undefined
           signature_responsible_drc_staff: string | undefined | undefined
@@ -152,7 +154,6 @@ export namespace Va_bio_tia {
     // old_case_number [hidden] Old case number
     old_case_number: string
   }
-
   export const options = {
     source_information_incident: {
       news: `News`,
@@ -172,8 +173,8 @@ export namespace Va_bio_tia {
       ukt000350_sida: `UKR-000350 SIDA`,
       ukr000386_mass_appeal: `UKR-000386 Pooled Funds`,
       ukr000397_gffo: `UKR-000397 GFFO`,
-      ukr000398_sdc: `UKR-000398 SDC`,
       ukr000423_echo4: `UKR-000423 ECHO4`,
+      ukr000426_sdc: `UKR-000426 SDC`,
       not_approved: `Not approved`,
       ongoing: `🕓 For revision`,
       rejected: `❌ Rejected`,
@@ -197,6 +198,10 @@ export namespace Va_bio_tia {
       nlv: `Mykolaiv (NLV)`,
       iev: `Kyiv (IEV)`,
       slo: `Sloviansk (SLO)`,
+    },
+    modality_assistance: {
+      inkind: `In-kind`,
+      cash: `In cash`,
     },
     responsible_drc_staff: {
       iryna_kylymenna: `Iryna KYLYMENNA`,
@@ -242,7 +247,7 @@ export namespace Va_bio_tia {
       dina_krakovetska: `Dina Krakovetska`,
       iryna_nesterenko: `Iryna Nesterenko`,
       myroslava_kondakova: `Myroslava Kondakova`,
-      juthi_ahmed: `Juthi Ahmed`,
+      nataliia_trokhymenko: `Nataliia Trokhymenko`,
       viktoriia_sheliekhova: `Viktoriia Sheliekhova`,
       iryna_kylymena: `Iryna Kylymena`,
       ann_halsig: `Ann Halsig`,
@@ -250,6 +255,7 @@ export namespace Va_bio_tia {
       robyn_shortall: `Robyn Shortall`,
       jakub_walenda: `Jakub Walenda`,
       nick_vovk: `Nick Vovk`,
+      juthi_ahmed: `Juthi Ahmed`,
     },
     type_eo: {
       landmine: `Landmine`,
@@ -344,6 +350,22 @@ export namespace Va_bio_tia {
       idp: `Internally Displaced People`,
       returnees: `Returnees`,
       host_communities: `Host Communities`,
+    },
+    needs_referrals: {
+      drc_mpca: `DRC - (MPCA, basic needs)`,
+      drc_protection: `DRC - Protection Case Management`,
+      drc_gbv: `DRC - GBV`,
+      drc_legal: `DRC - Legal`,
+      drc_pss: `DRC - PSS`,
+      drc_ecrec: `DRC - EcRec`,
+      drc_shelter: `DRC - Shelter`,
+      hi: `HI`,
+      nrc: `NRC`,
+      right_protection: `Right to Protection`,
+      sos_childrens_villages: `SOS Children's Villages`,
+      irc: `IRC`,
+      department_social_protection: `Department of Social Protection`,
+      other: `Other`,
     },
     case_oblast: {
       crimea: `Autonomous Republic of Crimea`,
@@ -2329,6 +2351,7 @@ export namespace Va_bio_tia {
         _['estimated_value2'] = _.estimated_value2 ? +_.estimated_value2 : undefined
         _['estimated_value3'] = _.estimated_value3 ? +_.estimated_value3 : undefined
         _['total_cash_assistance'] = _.total_cash_assistance ? +_.total_cash_assistance : undefined
+        _['needs_referrals'] = _.needs_referrals?.split(' ')
         _['date_responsible_drc_staff'] = _.date_responsible_drc_staff
           ? new Date(_.date_responsible_drc_staff)
           : undefined
