@@ -514,7 +514,7 @@ export class KoboService {
   }: {
     formId: Kobo.FormId
     answerIds: Kobo.SubmissionId[]
-    status: KoboValidation
+    status?: KoboValidation | null
     authorEmail: string
   }) => {
     const mappedValidation = KoboHelper.mapValidation.toKobo(status)
