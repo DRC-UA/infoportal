@@ -23,7 +23,7 @@ export namespace GlobalEvent {
   export interface KoboValidationEditedParams {
     formId: Kobo.FormId
     answerIds: Kobo.SubmissionId[]
-    status?: KoboValidation
+    status?: KoboValidation | null
     index?: number
     total?: number
   }
