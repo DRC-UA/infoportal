@@ -1,4 +1,8 @@
+import {duration, match, Obj, seq} from '@axanc/ts-utils'
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
+import {format} from 'date-fns'
+import {Kobo} from 'kobo-sdk'
+
 import {
   ApiPaginate,
   ApiPaginateHelper,
@@ -12,22 +16,23 @@ import {
   logPerformance,
   UUID,
 } from 'infoportal-common'
-import {KoboSdkGenerator} from './KoboSdkGenerator.js'
-import {duration, fnSwitch, Obj, seq} from '@axanc/ts-utils'
-import {format} from 'date-fns'
+
 import {KoboAnswersFilters} from '../../server/controller/kobo/ControllerKoboAnswer.js'
-import {UserSession} from '../session/UserSession.js'
-import {AccessService} from '../access/AccessService.js'
-import {AppFeatureId} from '../access/AccessType.js'
 import {GlobalEvent} from '../../core/GlobalEvent.js'
 import {defaultPagination} from '../../core/Type.js'
 import {app, AppCacheKey} from '../../index.js'
 import {appConf} from '../../core/conf/AppConf.js'
-import {KoboAnswerHistoryService} from './history/KoboAnswerHistoryService.js'
 import {AppError} from '../../helper/Errors.js'
 import {Util} from '../../helper/Utils.js'
-import {Kobo} from 'kobo-sdk'
-import Event = GlobalEvent.Event
+
+import {AccessService} from '../access/AccessService.js'
+import {AppFeatureId} from '../access/AccessType.js'
+import {UserSession} from '../session/UserSession.js'
+
+import {KoboAnswerHistoryService} from './history/KoboAnswerHistoryService.js'
+import {KoboSdkGenerator} from './KoboSdkGenerator.js'
+
+const Event = GlobalEvent.Event
 
 export type DbKoboAnswer<T extends Record<string, any> = Record<string, any>> = KoboSubmission<T, any> & {
   formId: Kobo.FormId
@@ -365,9 +370,8 @@ export class KoboService {
           if (k === 'submissionTime') {
             return format(d[k], 'yyyy-MM-dd')
           }
-          return fnSwitch(
-            indexLabel[k]?.type,
-            {
+          return match(indexLabel[k]?.type)
+            .cases({
               select_multiple: () =>
                 d[k]
                   ?.split(' ')
@@ -375,9 +379,8 @@ export class KoboService {
                   .join('|'),
               start: () => format(d[k], 'yyyy-MM-dd'),
               end: () => format(d[k], 'yyyy-MM-dd'),
-            },
-            (_) => indexOptionsLabels[d[k]] ?? d[k],
-          )
+            })
+            .default(indexOptionsLabels[d[k]] ?? d[k])
         })()
         ;(translated as any)[translatedKey.replace(/(<([^>]+)>)/gi, '')] = translatedValue
       })
