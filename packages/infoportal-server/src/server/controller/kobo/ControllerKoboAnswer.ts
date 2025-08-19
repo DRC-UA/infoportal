@@ -84,7 +84,7 @@ export class ControllerKoboAnswer {
     const body = await yup
       .object({
         answerIds: yup.array().of(yup.string().required()).required(),
-        status: yup.mixed<KoboValidation>().oneOf(Obj.values(KoboValidation)).required(),
+        status: yup.mixed<KoboValidation>().oneOf(Obj.values(KoboValidation)).nullable(),
       })
       .validate(req.body)
     const data = await this.service.updateValidation({...params, ...body, authorEmail: email})

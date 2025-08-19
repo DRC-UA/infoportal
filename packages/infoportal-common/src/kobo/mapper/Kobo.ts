@@ -1,5 +1,6 @@
+import {match} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
-import {fnSwitch} from '@axanc/ts-utils'
+
 import {KoboCustomDirective} from '../KoboCustomDirective.js'
 
 export enum KoboValidation {
@@ -23,7 +24,7 @@ export type KoboSubmissionMetaData<TTag extends Record<string, any> | undefined 
   geolocation: Kobo.Submission['_geolocation']
   id: Kobo.SubmissionId
   uuid: Kobo.Submission['_uuid']
-  validationStatus?: KoboValidation
+  validationStatus?: KoboValidation | null
   validatedBy?: string
   submittedBy?: string
   lastValidatedTimestamp?: number
@@ -99,18 +100,20 @@ export class KoboHelper {
   static readonly mapValidation = {
     fromKobo: (_: Kobo.Submission.Raw): undefined | KoboValidation => {
       if (_._validation_status?.uid)
-        return fnSwitch(_._validation_status.uid, {
-          validation_status_on_hold: KoboValidation.Pending,
-          validation_status_approved: KoboValidation.Approved,
-          validation_status_not_approved: KoboValidation.Rejected,
-          no_status: undefined,
-        })
+        return match(_._validation_status.uid)
+          .cases({
+            validation_status_on_hold: KoboValidation.Pending,
+            validation_status_approved: KoboValidation.Approved,
+            validation_status_not_approved: KoboValidation.Rejected,
+            no_status: undefined,
+          })
+          .default(undefined)
       if (_[KoboCustomDirective.Name._IP_VALIDATION_STATUS_EXTRA]) {
         return KoboValidation[_._IP_VALIDATION_STATUS_EXTRA as keyof typeof KoboValidation]
       }
     },
     toKobo: (
-      _?: KoboValidation,
+      _?: KoboValidation | null,
     ): {
       _IP_VALIDATION_STATUS_EXTRA?: KoboValidation
       _validation_status?: Kobo.Submission.Validation
@@ -119,15 +122,13 @@ export class KoboHelper {
         return {[KoboCustomDirective.Name._IP_VALIDATION_STATUS_EXTRA]: _}
       }
       return {
-        _validation_status: fnSwitch(
-          _!,
-          {
+        _validation_status: match(_)
+          .cases({
             [KoboValidation.Pending]: Kobo.Submission.Validation.validation_status_on_hold,
             [KoboValidation.Approved]: Kobo.Submission.Validation.validation_status_approved,
             [KoboValidation.Rejected]: Kobo.Submission.Validation.validation_status_not_approved,
-          },
-          () => Kobo.Submission.Validation.no_status,
-        ),
+          })
+          .default(Kobo.Submission.Validation.no_status),
       }
     },
   }
