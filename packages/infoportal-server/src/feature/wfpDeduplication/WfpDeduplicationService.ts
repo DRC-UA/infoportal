@@ -1,14 +1,17 @@
+import {seq} from '@axanc/ts-utils'
 import {PrismaClient} from '@prisma/client'
 import XlsxPopulate from 'xlsx-populate'
+
+import {ApiPaginateHelper, getDrcSuggestion, type WfpDeduplication, type ApiPaginate} from 'infoportal-common'
+
 import {UserSession} from '../session/UserSession.js'
 import {AccessService} from '../access/AccessService.js'
 import {AppFeatureId} from '../access/AccessType.js'
-import {seq} from '@axanc/ts-utils'
 import {PromisePool} from '@supercharge/promise-pool'
 import {appConf} from '../../core/conf/AppConf.js'
-import {ApiPaginateHelper, getDrcSuggestion, WfpDeduplication} from 'infoportal-common'
 import {GlobalEvent} from '../../core/GlobalEvent.js'
-import Event = GlobalEvent.Event
+
+const {Event} = GlobalEvent
 
 export interface WfpDbSearch {
   limit?: number
@@ -27,7 +30,7 @@ export class WfpDeduplicationService {
     private event = GlobalEvent.Class.getInstance(),
   ) {}
 
-  readonly searchByUserAccess = async (search: WfpDbSearch, user: UserSession) => {
+  readonly searchByUserAccess = async (query: WfpDbSearch, user: UserSession) => {
     const accesses = await this.access.searchForUser({featureId: AppFeatureId.wfp_deduplication, user})
     const authorizedOffices = [
       ...new Set(
@@ -38,20 +41,22 @@ export class WfpDeduplicationService {
     ]
     const filteredOffices =
       user.admin || authorizedOffices.length === 0
-        ? search.offices
-        : authorizedOffices.filter((_) => !search.offices || search.offices.includes(_))
-    return this.search({...search, offices: filteredOffices})
+        ? query.offices
+        : authorizedOffices.filter((office) => !query.offices || query.offices.includes(office))
+    return this.search({...query, offices: filteredOffices})
   }
 
-  readonly search = async (search: WfpDbSearch = {}) => {
+  readonly search = async ({createdAtStart, createdAtEnd, offices, taxId, limit, offset}: WfpDbSearch = {}): Promise<
+    ApiPaginate<WfpDeduplication>
+  > => {
     const where = {
       createdAt: {
-        gte: search.createdAtStart,
-        lte: search.createdAtEnd,
+        gte: createdAtStart,
+        lte: createdAtEnd,
       },
-      office: {in: search.offices},
+      office: {in: offices},
       beneficiary: {
-        taxId: {in: search.taxId},
+        taxId: {in: taxId},
       },
     }
     const [totalSize, data] = await Promise.all([
@@ -65,18 +70,18 @@ export class WfpDeduplicationService {
           },
         },
         where,
-        take: search.limit,
-        skip: search.offset,
+        take: limit,
+        skip: offset,
         orderBy: {
           createdAt: 'desc',
         },
       }),
     ])
     return ApiPaginateHelper.wrap(totalSize)(
-      data.map((_: any): WfpDeduplication => {
-        _.suggestion = getDrcSuggestion(_)
-        _.taxId = _.beneficiary.taxId
-        return _
+      data.map((record: any): WfpDeduplication => {
+        record.suggestion = getDrcSuggestion(record)
+        record.taxId = record.beneficiary.taxId
+        return record
       }),
     )
   }

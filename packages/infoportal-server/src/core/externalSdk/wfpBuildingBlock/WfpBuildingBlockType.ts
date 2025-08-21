@@ -26,12 +26,17 @@ export interface AssistanceProvided {
 }
 
 export class AssistanceProvided {
-  static readonly map = (_: Record<keyof AssistanceProvided, any>): AssistanceProvided => {
+  static readonly map = ({
+    createdAt,
+    expiry,
+    validFrom,
+    ...rest
+  }: Record<keyof AssistanceProvided, any>): AssistanceProvided => {
     return {
-      ..._,
-      createdAt: new Date(_.createdAt),
-      expiry: new Date(_.expiry),
-      validFrom: new Date(_.validFrom),
+      ...rest,
+      createdAt: new Date(createdAt),
+      expiry: new Date(expiry),
+      validFrom: new Date(validFrom),
     }
   }
 }
@@ -68,10 +73,12 @@ export class AssistancePrevented {
 }
 
 export interface WfpImport {
-  startedAt: Date
+  authorizedAt: Date
+  createdAt: Date
   parkedAt: Date
-  fileName: 'HRK_20230627.xlsx.gpg'
+  startedAt: Date
   finishedAt: Date
+  fileName: string
   type: 'beneficiary-import-requests'
   additionalInfo: {
     failsCount: number
@@ -86,12 +93,19 @@ export interface WfpImport {
 }
 
 export class WfpImportHelper {
-  static readonly map = (_: Record<keyof WfpImport, any>): WfpImport => {
+  static readonly map = ({
+    createdAt,
+    parkedAt,
+    startedAt,
+    finishedAt,
+    ...rest
+  }: Record<keyof WfpImport, any>): WfpImport => {
     return {
-      ..._,
-      startedAt: new Date(_.startedAt),
-      parkedAt: new Date(_.parkedAt),
-      finishedAt: new Date(_.finishedAt),
+      ...rest,
+      createdAt: new Date(createdAt),
+      parkedAt: new Date(parkedAt),
+      startedAt: new Date(startedAt),
+      finishedAt: new Date(finishedAt),
     }
   }
 }
