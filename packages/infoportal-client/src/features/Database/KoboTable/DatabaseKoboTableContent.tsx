@@ -91,6 +91,9 @@ export const DatabaseKoboTableContent = ({
   )
 
   const schemaColumns = useMemo(() => {
+    const repeatAsRows = ctx.groupDisplay.get.repeatAs === 'rows'
+    const repeatGroupName = ctx.groupDisplay.get.repeatGroupName
+
     const schemaColumns = columnBySchemaGenerator({
       formId: ctx.form.id,
       schema: ctx.schema,
@@ -103,13 +106,10 @@ export const DatabaseKoboTableContent = ({
           ? (questionName) =>
               ctxKoboUpdate.openById({
                 target: 'answer',
-                params: {
-                  formId: ctx.form.id,
-                  question: questionName,
-                  answerIds: selectedIds,
-                },
+                params: {formId: ctx.form.id, question: questionName, answerIds: selectedIds},
               })
           : undefined,
+      repeatGroupName: repeatAsRows ? repeatGroupName : undefined,
       m,
       t,
     }).getAll()
@@ -202,7 +202,7 @@ export const DatabaseKoboTableContent = ({
             ? {
                 onSelect: setSelectedIds,
                 selectActions: selectedHeader,
-                getId: (_) => _.id,
+                getId: (row) => `${row.id}#${row._index ?? 0}`,
               }
             : undefined
         }
