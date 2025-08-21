@@ -488,6 +488,7 @@ export class KoboService {
   }) => {
     answer = Array.isArray(answer) ? answer.join(' ') : answer
     const sdk = await this.sdkGenerator.getBy.formId(formId)
+    const isIndexedXPath = question.includes('[') && question.includes(']/')
     await Promise.all([
       this.history.create({
         type: 'answer',
@@ -497,14 +498,21 @@ export class KoboService {
         newValue: answer,
         authorEmail,
       }),
-      sdk.v2.submission.update({formId, submissionIds: answerIds, data: {[question]: answer}}),
-      await this.prisma.$executeRawUnsafe(
-        `UPDATE "KoboAnswers"
-         SET answers     = jsonb_set(answers, '{${question}}', '"${KoboService.safeJsonValue(answer ?? '')}"'),
-             "updatedAt" = NOW()
-         WHERE id IN (${KoboService.safeIds(answerIds).join(',')})
-        `,
-      ),
+      sdk.v2.submission.update({
+        formId,
+        submissionIds: answerIds,
+        data: {[question]: answer},
+        raw: isIndexedXPath ? true : undefined,
+      }),
+      isIndexedXPath
+        ? undefined
+        : this.prisma.$executeRawUnsafe(
+            `UPDATE "KoboAnswers"
+           SET answers     = jsonb_set(answers, '{${question}}', '"${KoboService.safeJsonValue(answer ?? '')}"'),
+               "updatedAt" = NOW()
+           WHERE id IN (${KoboService.safeIds(answerIds).join(',')})
+          `,
+          ),
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED_FROM_IP, {formId, answerIds, answer: {[question]: answer}})
   }

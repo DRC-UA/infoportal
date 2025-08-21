@@ -1,4 +1,4 @@
-import {useEffect, useMemo, type FC} from 'react'
+import {useEffect, useMemo, type FC, useState} from 'react'
 import {map} from '@axanc/ts-utils'
 import {useTheme} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
@@ -15,12 +15,13 @@ import {
   ColumnBySchemaGeneratorProps,
 } from '@/features/Database/KoboTable/columns/columnBySchema'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {IpBtn, Page} from '@/shared'
+import {IpBtn, Page, TableEditCellBtn} from '@/shared'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {Panel} from '@/shared/Panel'
 
 import type {DatabaseKoboRepeatGroupProps} from './types'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 const databaseUrlParamsValidation = yup.object({
   formId: yup.string().required(),
@@ -58,24 +59,30 @@ export const getColumnsForRepeatGroup = ({
   formId,
   schema,
   onRepeatGroupClick,
+  onEditIndexed,
   m,
   t,
   currentLang,
+  selectedRow,
 }: {
   groupName: string
   formId: Kobo.FormId
   schema: KoboSchemaHelper.Bundle
   onRepeatGroupClick?: ColumnBySchemaGeneratorProps['onRepeatGroupClick']
+  onEditIndexed?: (xpathIndexed: string, qName: string) => void
   m: ColumnBySchemaGeneratorProps['m']
   t: ColumnBySchemaGeneratorProps['t']
   currentLang?: AppLang
+  selectedRow?: KoboFlattenRepeatedGroup.Data
 }) => {
   const groupInfo = schema.helper.group.getByName(groupName)!
-  const res: DatatableColumn.Props<KoboFlattenRepeatedGroup.Data>[] = []
+  let res: DatatableColumn.Props<KoboFlattenRepeatedGroup.Data>[] = []
   const schemaGenerator = columnBySchemaGenerator({
     onRepeatGroupClick,
+    repeatGroupName: groupInfo.name,
     formId,
     schema,
+    onEdit: undefined,
     t,
     m,
     currentLang,
@@ -107,6 +114,32 @@ export const getColumnsForRepeatGroup = ({
     schemaGenerator.getSubmissionTime(),
     ...schemaGenerator.getByQuestions(groupInfo.questions),
   )
+
+  if (selectedRow && onEditIndexed) {
+    const getXPathByName = (qName: string) => schema.helper.questionIndex[qName]?.$xpath
+    const blocked = new Set(['id', 'submissionTime', '_index', '_parent_index', '_parent_table_name'])
+    res = res.map((col) => {
+      const qName = String(col.id)
+      if (blocked.has(qName)) return col
+      return {
+        ...col,
+        subHeader: (
+          <TableEditCellBtn
+            onClick={() => {
+              const qName = String(col.id)
+              const baseXPath = getXPathByName(qName)!
+              if (!baseXPath) return col
+              const xpathIndexed = KoboFlattenRepeatedGroup.buildIndexedXPath({
+                questionXPath: baseXPath,
+                row: selectedRow!,
+              })
+              onEditIndexed(xpathIndexed, qName)
+            }}
+          />
+        ),
+      }
+    })
+  }
   return res
 }
 
@@ -133,19 +166,91 @@ const DatabaseKoboRepeat = ({
   const {m} = useI18n()
   const groupInfo = schema.helper.group.getByName(group)!
   const paths = groupInfo.pathArr
+  const [selected, setSelected] = useState<string[]>([])
+  const {openById, asyncUpdateManyRepeatById} = useKoboUpdateContext()
 
   useEffect(() => {
     fetcherAnswers.fetch({force: false, clean: false})
   }, [formId])
 
+  const flat = useMemo(() => {
+    return KoboFlattenRepeatedGroup.run({data: fetcherAnswers.get?.data ?? [], path: paths})
+  }, [fetcherAnswers.get?.data, groupInfo])
+
+  const selectedRow = useMemo(() => {
+    if (!flat?.length || selected.length === 0) return undefined
+    const keyOf = (r: any) => `${r.id}-${r._index ?? 0}`
+    return flat.find((r) => keyOf(r) === selected[0])
+  }, [flat, selected])
+
   const {columns, filters} = useMemo(() => {
+    const enableEdit = selected.length > 0
     const res = getColumnsForRepeatGroup({
+      groupName: groupInfo.name,
       formId,
       schema,
       t,
       m,
-      onRepeatGroupClick: (_) => navigate(databaseIndex.siteMap.group.absolute(formId, _.name, _.row.id, _.row._index)),
-      groupName: groupInfo.name,
+      selectedRow,
+      onEditIndexed: enableEdit
+        ? (xpathIndexed: string, qName: string) => {
+            const keyOf = (r: any) => `${r.id}-${r._index ?? 0}`
+            const selectedRowsAll = (flat ?? []).filter((r) => selected.includes(keyOf(r)))
+
+            const base = selectedRow!
+            const baseAnswerId = String(base.id)
+            const getXPathByName = (name: string) => schema.helper.questionIndex[name]?.$xpath!
+
+            openById({
+              target: 'answer',
+              params: {
+                formId,
+                answerIds: [baseAnswerId],
+                question: qName,
+                questionIndexed: xpathIndexed,
+                indexChain: base._index_chain,
+                pathChain: base._path_chain,
+
+                onSubmitOverride: async (answer: any) => {
+                  const basePayload = {
+                    formId,
+                    answerIds: [baseAnswerId],
+                    question: qName,
+                    questionIndexed: xpathIndexed,
+                    indexChain: base._index_chain,
+                    pathChain: base._path_chain,
+                    answer,
+                  }
+
+                  const others = selectedRowsAll.filter(
+                    (r) => !(r.id === base.id && (r._index ?? 0) === (base._index ?? 0)),
+                  )
+                  const baseXPath = getXPathByName(qName)
+
+
+                  const othersPayloads = others.map((r) => ({
+                    formId,
+                    answerIds: [String(r.id)],
+                    question: qName,
+                    questionIndexed: KoboFlattenRepeatedGroup.buildIndexedXPath({
+                      questionXPath: baseXPath,
+                      row: r as any,
+                    }),
+                    indexChain: r._index_chain,
+                    pathChain: r._path_chain,
+                    answer,
+                  }))
+
+                  await asyncUpdateManyRepeatById.call([basePayload, ...othersPayloads])
+
+                  return 1 + othersPayloads.length
+                },
+              },
+            })
+          }
+        : undefined,
+      onRepeatGroupClick: ({name, row}) =>
+        navigate(databaseIndex.siteMap.group.absolute(formId, name, row.id, row._index)),
     })
     return {
       columns: res,
@@ -154,15 +259,19 @@ const DatabaseKoboRepeat = ({
         ...(qs.index ? {_parent_index: {value: qs.index}} : {}),
       },
     }
-  }, [formId, group, schema, data])
-
-  const flat = useMemo(() => {
-    return KoboFlattenRepeatedGroup.run({data: fetcherAnswers.get?.data ?? [], path: paths})
-  }, [fetcherAnswers.get?.data, groupInfo])
+  }, [formId, schema, groupInfo.name, t, m, selected, qs.id, qs.index, navigate])
 
   return (
     <Datatable
       defaultFilters={filters}
+      id={`db${formId}-g${group}`}
+      columns={columns}
+      data={flat}
+      select={{
+        getId: (row) => `${row.id}-${row._index ?? 0}`,
+        onSelect: setSelected,
+      }}
+      getRenderRowKey={(row) => `${row.id}#${row._index ?? 0}`}
       header={
         <NavLink
           to={
@@ -177,9 +286,6 @@ const DatabaseKoboRepeat = ({
           </IpBtn>
         </NavLink>
       }
-      id={`db${formId}-g${group}`}
-      columns={columns}
-      data={flat}
     />
   )
 }

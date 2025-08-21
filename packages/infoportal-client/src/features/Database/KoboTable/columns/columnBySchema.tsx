@@ -138,6 +138,7 @@ export type ColumnBySchemaGeneratorProps = {
   formId: Kobo.FormId
   onEdit?: (name: string) => void
   externalFilesIndex?: KoboExternalFilesIndex
+  repeatGroupName?: Kobo.Form.Question['name']
   onRepeatGroupClick?: (_: {name: string; row: Row; event: any}) => void
   t: Theme
   currentLang?: AppLang
@@ -151,6 +152,7 @@ export const columnBySchemaGenerator = ({
   formId,
   externalFilesIndex,
   schema,
+  repeatGroupName,
   onRepeatGroupClick,
   m,
   t,
@@ -162,17 +164,15 @@ export const columnBySchemaGenerator = ({
     DatatableColumn.Props<any>,
     'id' | 'groupLabel' | 'group' | 'typeIcon' | 'typeLabel' | 'head' | 'subHeader'
   > => {
+    const isEditable = editableColsType.has(q.type) && !noEditableColsId.has(q.name)
+    const showHeaderPencil = !!onEdit && isEditable && !repeatGroupName
     return {
       id: q.name,
       typeLabel: q.type,
-      ...map(q.$xpath.split('/')[0], (value) => ({groupLabel: schema.translate.question(value), group: value})),
-      ...(onEdit && editableColsType.has(q.type) && !noEditableColsId.has(q.name)
-        ? {
-            subHeader: <TableEditCellBtn onClick={() => onEdit(q.name)} />,
-          }
-        : {
-            typeIcon: <DatatableHeadTypeIconByKoboType children={q.type} />,
-          }),
+      ...map(q.$xpath.split('/')[0], (v) => ({groupLabel: schema.translate.question(v), group: v})),
+      ...(showHeaderPencil
+        ? {subHeader: <TableEditCellBtn onClick={() => onEdit!(q.name)} />}
+        : {typeIcon: <DatatableHeadTypeIconByKoboType children={q.type} />}),
       head: removeHtml(schema.translate.question(q.name)?.replace(/^#*/, '')),
     }
   }
