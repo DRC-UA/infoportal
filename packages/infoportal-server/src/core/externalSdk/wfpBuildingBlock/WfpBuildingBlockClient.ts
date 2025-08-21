@@ -1,6 +1,6 @@
-import {TOTP, URI} from 'otpauth'
 import {ApiClient} from 'kobo-sdk'
 import fetch from 'node-fetch'
+import {TOTP, URI} from 'otpauth'
 
 export class WfpBuildingBlockClient {
   constructor(
@@ -28,8 +28,8 @@ export class WfpBuildingBlockClient {
     return totp.generate()
   }
 
-  private readonly getApiToken = (): Promise<string> => {
-    return fetch(this.params.baseURL + '/manager/auth', {
+  private readonly getApiToken = async (): Promise<string> => {
+    const response = await fetch(this.params.baseURL + '/manager/auth', {
       method: 'POST',
       headers: {
         accept: 'application/json',
@@ -42,12 +42,15 @@ export class WfpBuildingBlockClient {
         otp: this.getOtpCode(),
       }),
     })
-      .then((_) => _.json())
-      .then((_: any) => _.apiToken)
+
+    const {apiToken} = await response.json()
+
+    return apiToken
   }
 
   generate = async () => {
     const token = await this.getApiToken()
+
     return new ApiClient({
       baseUrl: this.params.baseURL!,
       headers: {

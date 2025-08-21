@@ -1,20 +1,21 @@
-import {Layout} from '@/shared/Layout'
-import {WfpDeduplicationData} from '@/features/WfpDeduplication/WfpDeduplicationData'
-import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
-import React, {useMemo} from 'react'
+import {useMemo} from 'react'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
-import {useI18n} from '@/core/i18n'
-import {useIpToast} from '@/core/useToast'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {appFeaturesIndex} from '@/features/appFeatureId'
-import {useSession} from '@/core/Session/SessionContext'
-import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
-import {IpBtn} from '@/shared/Btn'
 import {NavLink, Route, Routes} from 'react-router-dom'
-import {WfpDeduplicationAccess} from '@/features/WfpDeduplication/WfpDeduplicationAccess'
-import {useAsync} from '@/shared/hook/useAsync'
-import {BtnUploader} from '@/shared/BtnUploader'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useI18n} from '@/core/i18n'
+import {useSession} from '@/core/Session/SessionContext'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
+import {useIpToast} from '@/core/useToast'
+import {appFeaturesIndex} from '@/features/appFeatureId'
+import {WfpDeduplicationAccess} from '@/features/WfpDeduplication/WfpDeduplicationAccess'
+import {WfpDeduplicationData} from '@/features/WfpDeduplication/WfpDeduplicationData'
+import {IpBtn} from '@/shared/Btn'
+import {BtnUploader} from '@/shared/BtnUploader'
+import {useAsync} from '@/shared/hook/useAsync'
+import {Layout} from '@/shared/Layout'
+import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
+import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
 
 export const wfpDeduplicationIndex = {
   basePath: '/wfp-deduplication',
@@ -71,9 +72,6 @@ const WpfDeduplicationSidebar = () => {
             </SidebarItem>
           )}
         </NavLink>
-        {/*<SidebarItem icon="bar_chart">*/}
-        {/*  {m.dashboard}*/}
-        {/*</SidebarItem>*/}
         <NavLink to={path(wfpDeduplicationIndex.siteMap.access)}>
           {({isActive}) => (
             <SidebarItem icon="person_add" active={isActive}>

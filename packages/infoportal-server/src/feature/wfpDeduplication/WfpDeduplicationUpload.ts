@@ -1,18 +1,20 @@
+import {Obj} from '@axanc/ts-utils'
+import {Prisma, PrismaClient} from '@prisma/client'
+import {addMinutes, parse, subMinutes} from 'date-fns'
+import {ApiError} from 'kobo-sdk'
+import promiseRetry from 'promise-retry'
+
+import {ApiPaginate, DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
+
 import {WFPBuildingBlockSdk} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockSdk.js'
 import {
   AssistancePrevented,
   AssistanceProvided,
   WfpFilters,
 } from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockType.js'
-import {Prisma, PrismaClient} from '@prisma/client'
-import {ApiPaginate, DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
-import {addMinutes, parse, subMinutes} from 'date-fns'
 import {appConf, AppConf} from '../../core/conf/AppConf.js'
 import {WfpBuildingBlockClient} from '../../core/externalSdk/wfpBuildingBlock/WfpBuildingBlockClient.js'
 import {app, AppLogger} from '../../index.js'
-import promiseRetry from 'promise-retry'
-import {Obj} from '@axanc/ts-utils'
-import {ApiError} from 'kobo-sdk'
 
 export class WfpDeduplicationUpload {
   private constructor(
@@ -39,8 +41,8 @@ export class WfpDeduplicationUpload {
     this.log.info('AssistanceProvided...')
     await this.throttledFetchAndRun({
       fetch: (_) =>
-        promiseRetry((retry, number) => {
-          return this.wfpSdk.getAssistanceProvided(_).catch((e: ApiError) => {
+        promiseRetry(async (retry, number) => {
+          return await this.wfpSdk.getAssistanceProvided(_).catch((e: ApiError) => {
             if (e.details.code === 401) {
               return Promise.reject(e)
             }
@@ -48,49 +50,64 @@ export class WfpDeduplicationUpload {
             return retry(number)
           })
         }),
-      runOnBatchedResult: async (res: AssistanceProvided[]) => {
-        this.log.debug('Run...')
-        await this.upsertMappingId(res.map((_) => _.beneficiaryId))
-        await this.prisma.mpcaWfpDeduplication.createMany({
-          data: res.map((_) => {
+      runOnBatchedResult: async (batch: AssistanceProvided[]) => {
+        this.log.debug(`Processing batch of ${batch.length} requests...`)
+        await this.upsertMappingId(batch.map(({beneficiaryId}) => beneficiaryId))
+        const {count} = await this.prisma.mpcaWfpDeduplication.createMany({
+          data: batch.map(({amount, id, createdAt, expiry, beneficiaryId, validFrom, category}) => {
             return {
-              amount: +_.amount,
-              wfpId: _.id,
-              createdAt: _.createdAt,
-              expiry: _.expiry,
-              beneficiaryId: _.beneficiaryId,
+              amount: +amount,
+              wfpId: id,
+              createdAt,
+              expiry,
+              beneficiaryId,
               status: WfpDeduplicationStatus.NotDeduplicated,
-              validFrom: _.validFrom,
-              category: _.category,
+              validFrom,
+              category,
             }
           }),
         })
+        this.log.debug(`${count} requests stored in mpcaWfpDeduplication table`)
+        if (count !== batch.length) this.log.debug('OOPS!')
       },
     })
     this.log.info('AssistancePrevented...')
     await this.throttledFetchAndRun({
-      fetch: (_) => this.wfpSdk.getAssistancePrevented(_),
+      fetch: (wfpFilters) => this.wfpSdk.getAssistancePrevented(wfpFilters),
       runOnBatchedResult: async (res: AssistancePrevented[]) => {
-        this.log.debug('Run...')
-        await this.upsertMappingId(res.map((_) => _.beneficiaryId))
+        this.log.debug('Upserting BB beneficiaryId, populating deduplication table...')
+        await this.upsertMappingId(res.map(({beneficiaryId}) => beneficiaryId))
         await this.prisma.mpcaWfpDeduplication.createMany({
-          data: res.map((_) => {
+          data: res.map(({amount, id, message, createdAt, expiry, beneficiaryId, validFrom, category, ...rest}) => {
             const status = (() => {
-              if (_.message.includes('Partially deduplicated')) {
+              if (message.includes('Partially deduplicated')) {
                 return WfpDeduplicationStatus.PartiallyDeduplicated
-              } else if (_.message.includes('Deduplicated')) {
+              } else if (message.includes('Deduplicated')) {
                 return WfpDeduplicationStatus.Deduplicated
               }
+
               return WfpDeduplicationStatus.Error
             })()
             const existing = (() => {
-              const match = _.message.match(
+              const match = message.match(
                 /-\s+Already\s+assisted\s+by\s+(.*?)\s+from\s+(\d{8})\s+to\s+(\d{8})\s+for\s+UAH\s+([\d,.\s]+)\s+for\s+(CASH-\w+)/,
               )
               if (!match) {
-                console.warn(_)
+                console.warn('No organization found in deduplication message:\n', {
+                  amount,
+                  id,
+                  message,
+                  createdAt,
+                  expiry,
+                  beneficiaryId,
+                  validFrom,
+                  category,
+                  ...rest,
+                })
+
                 return {}
               }
+
               return {
                 existingOrga: match![1],
                 existingStart: parse(match![2], 'yyyyMMdd', new Date()),
@@ -98,23 +115,24 @@ export class WfpDeduplicationUpload {
                 existingAmount: parseFloat(match![4].replace(/[.,]00\s*$/g, '').replaceAll(/[,.\s]/g, '')),
               }
             })()
+
             return {
-              amount: +_.amount,
-              wfpId: _.id,
-              createdAt: _.createdAt,
-              expiry: _.expiry,
-              beneficiaryId: _.beneficiaryId,
-              message: _.message,
+              amount: +amount,
+              wfpId: id,
+              createdAt,
+              expiry,
+              beneficiaryId,
+              message,
               status,
-              validFrom: _.validFrom,
-              category: _.category,
+              validFrom,
+              category,
               ...existing,
             }
           }),
         })
       },
     })
-    this.log.info('mergePartiallyDuplicated')
+    // this.log.info('mergePartiallyDuplicated')
     // await this.mergePartiallyDuplicated()
     this.log.info('setoblast')
     await this.setOblast()
@@ -125,11 +143,11 @@ export class WfpDeduplicationUpload {
 
   private readonly upsertMappingId = async (ids: string[]) => {
     await Promise.all(
-      ids.map((_) =>
+      ids.map((beneficiaryId) =>
         this.prisma.mpcaWfpDeduplicationIdMapping.upsert({
-          create: {beneficiaryId: _},
-          where: {beneficiaryId: _, taxId: undefined},
-          update: {beneficiaryId: _},
+          create: {beneficiaryId},
+          where: {beneficiaryId, taxId: undefined},
+          update: {beneficiaryId},
         }),
       ),
     )
@@ -142,7 +160,7 @@ export class WfpDeduplicationUpload {
       },
     })
     await Promise.all(
-      partiallyDuplicated.map((_) => {
+      partiallyDuplicated.map(async (_) => {
         return this.prisma.mpcaWfpDeduplication
           .findMany({
             where: {
@@ -151,26 +169,26 @@ export class WfpDeduplicationUpload {
               createdAt: {gt: subMinutes(_.createdAt, 20), lt: addMinutes(_.createdAt, 20)},
             },
           })
-          .then((res) => {
+          .then(async (res) => {
             if (res.length !== 1)
               console.error(
                 `Problem when searching matching entry ${_.beneficiaryId} at ${_.createdAt}, found ${res.length} entries.`,
               )
             if (res.length > 0)
-              return this.prisma.mpcaWfpDeduplication
+              return await this.prisma.mpcaWfpDeduplication
                 .update({
                   data: {amount: res[0].amount},
                   where: {id: _.id},
                 })
                 .then(() => res[0].id)
-            else return Promise.resolve(undefined)
+            else return await Promise.resolve(undefined)
           })
-          .then((deprecatedId) => {
+          .then(async (deprecatedId) => {
             if (deprecatedId)
-              return this.prisma.mpcaWfpDeduplication
+              return await this.prisma.mpcaWfpDeduplication
                 .delete({where: {id: deprecatedId}})
                 .catch(() => Promise.resolve(undefined))
-            return Promise.resolve(undefined)
+            return await Promise.resolve(undefined)
           })
       }),
     )
@@ -183,14 +201,14 @@ export class WfpDeduplicationUpload {
   }: {
     batchSize?: number
     fetch: (_: WfpFilters) => Promise<ApiPaginate<T>>
-    runOnBatchedResult: (batch: T[]) => Promise<R>
+    runOnBatchedResult: (batch: T[]) => R
   }): Promise<R[]> => {
     let offset = 0
     const r: R[] = []
     for (;;) {
       const res = await fetch({limit: batchSize, offset})
       if (res.data.length > 0) {
-        r.push(await runOnBatchedResult(res.data))
+        r.push(runOnBatchedResult(res.data))
         offset += res.data.length
       } else {
         break
@@ -221,10 +239,11 @@ export class WfpDeduplicationUpload {
     const possibleOffices = Obj.keys(officeMapping)
     const files = await this.throttledFetchAndRun({
       fetch: this.wfpSdk.getImportFiles,
-      runOnBatchedResult: async (_) => _,
-    }).then((_) => _.flatMap((_) => _))
+      runOnBatchedResult: (batch) => batch,
+    }).then((response) => response.flatMap((file) => file))
 
     let offset = 0
+
     for (const file of files) {
       this.log.debug(`Update ${file.finishedAt} ${file.fileName}`)
       const office = possibleOffices.find((oblastCode) => file.fileName.includes(oblastCode))
@@ -232,7 +251,11 @@ export class WfpDeduplicationUpload {
       const rowsCount = file.additionalInfo.rowCount
       const rows = await this.prisma.mpcaWfpDeduplication.findMany({
         select: {id: true, beneficiaryId: true},
-        orderBy: {createdAt: 'desc'},
+        orderBy: [
+          {createdAt: 'desc'},
+          {wfpId: 'asc'}, // Use wfpId as secondary sort when createdAt are same for a number of records
+          {id: 'asc'}, // Final tie-breaker with UUID
+        ],
         skip: offset,
         take: rowsCount,
       })

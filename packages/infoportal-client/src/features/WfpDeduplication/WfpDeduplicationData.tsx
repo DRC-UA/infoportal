@@ -1,28 +1,29 @@
-import {Page} from '@/shared/Page'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import React, {useEffect, useMemo} from 'react'
-import {useI18n} from '@/core/i18n'
-import {Panel} from '@/shared/Panel'
-import {DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
-import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
-import {Txt} from '@/shared/Txt'
-import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
+import {useEffect, useMemo} from 'react'
+import {match, Obj, seq} from '@axanc/ts-utils'
 import {format} from 'date-fns'
+
+import {DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useI18n} from '@/core/i18n'
+import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
+import {Datatable} from '@/shared/Datatable/Datatable'
+import type {DatatableOptions} from '@/shared/Datatable/util/datatableType'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import {Datatable} from '@/shared/Datatable/Datatable'
+import {Page} from '@/shared/Page'
+import {Panel} from '@/shared/Panel'
+import {Txt} from '@/shared/Txt'
 
 export const DeduplicationStatusIcon = ({status}: {status: WfpDeduplicationStatus}) => {
-  return fnSwitch(
-    status,
-    {
+  return match(status)
+    .cases({
       Deduplicated: <TableIcon color="warning" children="join_full" />,
       PartiallyDeduplicated: <TableIcon color="info" children="join_left" />,
       NotDeduplicated: <TableIcon color="success" children="check_circle" />,
       Error: <TableIcon color="error" children="error" />,
-    },
-    () => <></>,
-  )
+    })
+    .default(null)
 }
 
 export const WfpDeduplicationData = () => {
@@ -30,18 +31,20 @@ export const WfpDeduplicationData = () => {
   const _search = useFetcher(api.wfpDeduplication.search)
   const {formatDate, formatDateTime, formatLargeNumber} = useI18n()
   const {m} = useI18n()
+  const getOfficeOptions = (): DatatableOptions[] => Obj.values(DrcOffice).map((value) => ({label: value, value}))
+  const getStatusOptions = (): DatatableOptions[] => DatatableUtils.buildOptions(Obj.keys(WfpDeduplicationStatus), true)
 
   const {existingOrga, taxIdCounter} = useMemo(() => {
     if (!_search.get) return {}
     const data = seq(_search.get.data)
     return {
       taxIdCounter: data.groupByAndApply(
-        (_) => _.taxId ?? '',
-        (_) => _.length,
+        ({taxId}) => taxId ?? '',
+        (group) => group.length,
       ),
       existingOrga: data
-        .map((_) => _.existingOrga)
-        .distinct((_) => _)
+        .map(({existingOrga}) => existingOrga)
+        .distinct((organisation) => organisation)
         .compact()
         .map(DatatableUtils.buildOption),
     }
@@ -63,17 +66,17 @@ export const WfpDeduplicationData = () => {
             {
               id: 'fileName',
               head: m.fileName,
-              renderQuick: (_) => _.fileName,
+              renderQuick: ({fileName}) => fileName,
               type: 'string',
             },
             {
               id: 'createdAt',
               head: m.createdAt,
-              render: (_) => {
+              render: ({createdAt}) => {
                 return {
-                  label: formatDate(_.createdAt),
-                  value: _.createdAt,
-                  tooltip: formatDateTime(_.createdAt),
+                  label: formatDate(createdAt),
+                  value: createdAt,
+                  tooltip: formatDateTime(createdAt),
                 }
               },
               type: 'date',
@@ -81,29 +84,30 @@ export const WfpDeduplicationData = () => {
             {
               id: 'office',
               head: m.office,
-              renderQuick: (_) => _.office,
+              renderQuick: ({office}) => office,
               type: 'select_one',
-              options: () => Obj.values(DrcOffice).map((_) => ({label: _, value: _})),
+              options: getOfficeOptions,
             },
             {
               type: 'select_one',
               id: 'category',
               head: m.category,
-              renderQuick: (_) => _.category,
+              renderQuick: ({category}) => category,
             },
-            // {
-            //   id: 'beneficiaryId',
-            //   head: 'beneficiaryId',
-            //   render: _ => _.beneficiaryId, type: 'string'
-            // },
+            {
+              id: 'beneficiaryId',
+              head: 'Beneficiary Id',
+              renderQuick: ({beneficiaryId}) => beneficiaryId,
+              type: 'string',
+            },
             {
               id: 'taxId',
               head: m.taxID,
               type: 'string',
-              render: (_) => {
+              render: ({taxId}) => {
                 return {
-                  value: _.taxId,
-                  label: _.taxId ?? <Txt color="error">{m.mpca.uploadWfpTaxIdMapping}</Txt>,
+                  value: taxId,
+                  label: taxId ?? <Txt color="error">{m.mpca.uploadWfpTaxIdMapping}</Txt>,
                 }
               },
             },
@@ -111,17 +115,17 @@ export const WfpDeduplicationData = () => {
               id: 'taxIdOccurrences',
               head: m.taxIdOccurrences,
               type: 'number',
-              renderQuick: (_) => taxIdCounter?.[_.taxId!] ?? 0,
+              renderQuick: ({taxId}) => taxIdCounter?.[taxId!] ?? 0,
             },
             {
               id: 'amount',
               type: 'number',
               head: m.amount,
               align: 'right',
-              render: (_) => {
+              render: ({amount}) => {
                 return {
-                  label: formatLargeNumber(_.amount),
-                  value: _.amount,
+                  label: formatLargeNumber(amount),
+                  value: amount,
                 }
               },
             },
@@ -129,10 +133,10 @@ export const WfpDeduplicationData = () => {
               id: 'validFrom',
               head: m.validFrom,
               type: 'date',
-              render: (_) => {
+              render: ({validFrom}) => {
                 return {
-                  label: formatDate(_.validFrom),
-                  value: _.validFrom,
+                  label: formatDate(validFrom),
+                  value: validFrom,
                 }
               },
             },
@@ -140,17 +144,17 @@ export const WfpDeduplicationData = () => {
               id: 'expiry',
               head: m.expiry,
               type: 'date',
-              render: (_) => {
+              render: ({expiry}) => {
                 return {
-                  label: formatDate(_.expiry),
-                  value: _.expiry,
+                  label: formatDate(expiry),
+                  value: expiry,
                 }
               },
             },
             {
               id: 'suggestion',
               head: m.suggestion,
-              renderQuick: (_) => m.mpca.drcSupportSuggestion[_.suggestion],
+              renderQuick: ({suggestion}) => m.mpca.drcSupportSuggestion[suggestion],
               width: 246,
               type: 'select_one',
               // options: () => Obj.keys(DrcSupportSuggestion).map(_ => ({label: m.mpca.drcSupportSuggestion[_], value: _})),
@@ -159,10 +163,10 @@ export const WfpDeduplicationData = () => {
               id: 'suggestionDuration',
               head: m.mpca.suggestionDurationInMonths,
               type: 'number',
-              render: (_) => {
+              render: ({suggestionDurationInMonths}) => {
                 return {
-                  value: _.suggestionDurationInMonths,
-                  label: _.suggestionDurationInMonths + ' ' + m.months,
+                  value: suggestionDurationInMonths,
+                  label: `${suggestionDurationInMonths} ${m.months}`,
                 }
               },
             },
@@ -172,29 +176,29 @@ export const WfpDeduplicationData = () => {
               head: m.status,
               width: 0,
               type: 'select_one',
-              options: () => DatatableUtils.buildOptions(Obj.keys(WfpDeduplicationStatus), true),
-              render: (_) => {
+              options: getStatusOptions,
+              render: ({status}) => {
                 return {
-                  tooltip: m.mpca.status[_.status],
-                  label: <DeduplicationStatusIcon status={_.status} />,
-                  value: _.status ?? DatatableUtils.blank,
+                  tooltip: m.mpca.status[status],
+                  label: <DeduplicationStatusIcon status={status} />,
+                  value: status ?? DatatableUtils.blank,
                 }
               },
             },
             {
               id: 'existingOrga',
               head: m.mpca.existingOrga,
-              renderQuick: (_) => _.existingOrga,
+              renderQuick: ({existingOrga}) => existingOrga,
               options: existingOrga ? () => existingOrga : undefined,
               type: 'select_one',
             },
             {
               id: 'existingAmount',
               head: m.mpca.existingAmount,
-              render: (_) => {
+              render: ({existingAmount}) => {
                 return {
-                  label: _.existingAmount && formatLargeNumber(_.existingAmount),
-                  value: _.existingAmount,
+                  label: existingAmount && formatLargeNumber(existingAmount),
+                  value: existingAmount,
                 }
               },
               type: 'number',
@@ -202,10 +206,10 @@ export const WfpDeduplicationData = () => {
             {
               id: 'existingStart',
               head: m.mpca.existingStart,
-              render: (_) => {
+              render: ({existingStart}) => {
                 return {
-                  label: _.existingStart && formatDate(_.existingStart),
-                  value: _.existingStart,
+                  label: existingStart && formatDate(existingStart),
+                  value: existingStart,
                 }
               },
               type: 'date',
@@ -213,10 +217,10 @@ export const WfpDeduplicationData = () => {
             {
               id: 'existingEnd',
               head: m.mpca.existingEnd,
-              render: (_) => {
+              render: ({existingEnd}) => {
                 return {
-                  label: _.existingEnd && formatDate(_.existingEnd),
-                  value: _.existingEnd,
+                  label: existingEnd && formatDate(existingEnd),
+                  value: existingEnd,
                 }
               },
               type: 'date',

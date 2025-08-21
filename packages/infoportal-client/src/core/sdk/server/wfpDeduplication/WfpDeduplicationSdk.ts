@@ -1,5 +1,6 @@
-import {ApiClient} from '@/core/sdk/server/ApiClient'
 import {getDrcSuggestion, WfpDeduplication} from 'infoportal-common'
+
+import {ApiClient} from '@/core/sdk/server/ApiClient'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 
 interface WfpDeduplicationSearch {
@@ -21,26 +22,26 @@ export class WfpDeduplicationSdk {
     return this.client.postFile(`/wfp-deduplication/upload-taxid`, {file})
   }
 
-  readonly search = (filters: WfpDeduplicationSearch = {}): Promise<ApiPaginate<WfpDeduplication>> => {
-    return this.client.post<ApiPaginate<any>>(`/wfp-deduplication/search`, {body: filters}).then((_) => ({
-      ..._,
-      data: _.data.map(WfpDeduplicationSdk.map),
+  readonly search = async (filters: WfpDeduplicationSearch = {}): Promise<ApiPaginate<WfpDeduplication>> => {
+    return this.client.post<ApiPaginate<any>>(`/wfp-deduplication/search`, {body: filters}).then((response) => ({
+      ...response,
+      data: response.data.map(WfpDeduplicationSdk.map),
     }))
   }
 
   static readonly map = (
-    _: Record<keyof WfpDeduplication, any> & {beneficiary?: {taxId?: string}},
+    record: Record<keyof WfpDeduplication, any> & {beneficiary?: {taxId?: string}},
   ): WfpDeduplication => {
-    _.fileName = _.fileName?.replace('.gpg', '')
-    _.createdAt = new Date(_.createdAt)
-    _.validFrom = new Date(_.validFrom)
-    _.expiry = new Date(_.expiry)
-    _.existingStart = _.existingStart ? new Date(_.existingStart) : undefined
-    _.existingEnd = _.existingEnd ? new Date(_.existingEnd) : undefined
-    _.taxId = _.beneficiary?.taxId
-    const {suggestion, suggestionDurationInMonths} = getDrcSuggestion(_)
-    _.suggestion = suggestion
-    _.suggestionDurationInMonths = suggestionDurationInMonths
-    return _
+    record.fileName = record.fileName?.replace('.gpg', '')
+    record.createdAt = new Date(record.createdAt)
+    record.validFrom = new Date(record.validFrom)
+    record.expiry = new Date(record.expiry)
+    record.existingStart = record.existingStart ? new Date(record.existingStart) : undefined
+    record.existingEnd = record.existingEnd ? new Date(record.existingEnd) : undefined
+    record.taxId = record.beneficiary?.taxId
+    const {suggestion, suggestionDurationInMonths} = getDrcSuggestion(record)
+    record.suggestion = suggestion
+    record.suggestionDurationInMonths = suggestionDurationInMonths
+    return record
   }
 }
