@@ -324,7 +324,7 @@ export const _DashboardMealVisitPdf = () => {
                 parts={[
                   {question: 'Were all DRC staff clearly visible and identified?', field: 'visb', ifNoExplain: 'visbn'},
                   {question: 'Was the donor logo visible?', field: 'vislogo', ifNoExplain: 'vislogon'},
-                  {question: 'Any additional comments?', field: 'visf', ifNoExplain: 'vispo'},
+                  {question: 'Any additional comments?', field: 'has_comments', ifNoExplain: 'fcpc'},
                 ]}
               />
 
