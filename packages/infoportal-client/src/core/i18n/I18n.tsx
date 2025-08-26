@@ -1,8 +1,7 @@
-import * as React from 'react'
-import {ReactNode, useContext, useEffect, useMemo, useState} from 'react'
-import {en} from './localization/en'
+import {createContext, useContext, useEffect, useMemo, useState, type ReactNode} from 'react'
 import {Obj} from '@axanc/ts-utils'
-import {ua} from '@/core/i18n/localization/ua'
+
+import {en, ua} from './localization'
 
 export interface I18nContextProps {
   currentLang: AppLang
@@ -24,7 +23,7 @@ export const appLangs = {
 
 export type AppLang = keyof typeof appLangs
 
-const I18nContext = React.createContext<I18nContextProps>({} as any)
+const I18nContext = createContext<I18nContextProps>({} as any)
 
 export const useI18n = () => useContext<I18nContextProps>(I18nContext as any)
 
