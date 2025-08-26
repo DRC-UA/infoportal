@@ -10,6 +10,7 @@ import {Txt} from '@/shared'
 import {AppHeaderFeatures} from '@/shared/Layout/Header/AppHeaderFeatures'
 import {AppHeaderMenu} from '@/shared/Layout/Header/AppHeaderMenu'
 import {IpIconBtn} from '@/shared/IconBtn'
+import {LanguageSwitch} from '@/shared/LanguageSwitch'
 import {AppHeaderContainer} from '@/shared/Layout/Header/AppHeaderContainer'
 import {PopoverWrapper} from '@/shared/PopoverWrapper'
 
@@ -24,20 +25,11 @@ const lightThemeIcons = {
 
 export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: BoxProps) => {
   const {sidebarOpen, showSidebarButton, setSidebarOpen, title} = useLayoutContext()
-  const {m, availableLangs, currentLang, setLang} = useI18n()
+  const {m} = useI18n()
   const t = useTheme()
   const {
     theme: {brightness, setBrightness},
   } = useAppSettings()
-  const handleLanguageOptionClick = useCallback(
-    ({option, callback}: {option: (typeof availableLangs)[number]; callback: () => void}) => {
-      return (): void => {
-        setLang(option)
-        callback()
-      }
-    },
-    [setLang],
-  )
   const handleThemeOptionClick = useCallback(
     ({option, callback}: {option: keyof typeof lightThemeIcons; callback: () => void}) => {
       return (): void => {
@@ -93,27 +85,13 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: BoxProp
         />
         {children}
       </div>
-      <PopoverWrapper
-        popoverProps={{anchorOrigin: {vertical: 'bottom', horizontal: 'left'}}}
-        content={(close) =>
-          availableLangs.map((languageOption) => (
-            <MenuItem
-              key={languageOption}
-              selected={currentLang === languageOption}
-              onClick={handleLanguageOptionClick({
-                option: languageOption,
-                callback: close,
-              })}
-            >
-              {languageOption}
-            </MenuItem>
-          ))
-        }
-      >
-        <IconButton size="medium" sx={{width: 37, height: 37, fontSize: 'medium'}}>
-          {currentLang}
-        </IconButton>
-      </PopoverWrapper>
+      <LanguageSwitch>
+        {(currentLang) => (
+          <IconButton size="medium" sx={{width: 37, height: 37, fontSize: 'medium'}}>
+            {currentLang}
+          </IconButton>
+        )}
+      </LanguageSwitch>
       <PopoverWrapper
         popoverProps={{anchorOrigin: {vertical: 'bottom', horizontal: 'right'}}}
         content={(close) =>
