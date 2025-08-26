@@ -1,16 +1,17 @@
-import React, {ReactNode, useEffect, useState} from 'react'
+import {useEffect, useState, type ReactNode} from 'react'
+import {useSetState} from '@alexandreannic/react-hooks-lib'
+import {map} from '@axanc/ts-utils'
 import {Box, Collapse, LinearProgress, Typography} from '@mui/material'
+
+import {appConfig} from '@/conf/AppConfig'
+import {useI18n} from '@/core/i18n'
 import {combineSx, makeSx} from '@/core/theme'
 import {Txt} from '@/shared'
+import {DashboardHeader} from '@/shared/DashboardLayout/DashboardHeader'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {useSetState} from '@alexandreannic/react-hooks-lib'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
-import {DashboardHeader} from '@/shared/DashboardLayout/DashboardHeader'
 import {Page} from '@/shared/Page'
-import {map} from '@axanc/ts-utils'
-import {useI18n} from '@/core/i18n'
-import {appConfig} from '@/conf/AppConfig'
 
 const dashboardHeaderId = 'aa-header-id'
 
