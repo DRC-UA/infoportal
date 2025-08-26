@@ -1,6 +1,5 @@
 import {useCallback} from 'react'
 import {Obj} from '@axanc/ts-utils'
-import {IconButton} from '@mui/material'
 import {subDays} from 'date-fns'
 
 import {Period} from 'infoportal-common'
@@ -51,15 +50,7 @@ export const ProtectionDashboardMonitoWCtx = () => {
       loading={ctx.fetcherData.loading}
       title={m.ukraine}
       subTitle={m.protectionMonitoringDashboard}
-      action={
-        <LanguageSwitch>
-          {(currentLang) => (
-            <IconButton size="medium" sx={{width: 37, height: 37, fontSize: 'medium'}}>
-              {currentLang}
-            </IconButton>
-          )}
-        </LanguageSwitch>
-      }
+      action={<LanguageSwitch />}
       header={
         <DataFilterLayout
           hidePopup

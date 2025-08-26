@@ -4,7 +4,7 @@ import {IconButton, MenuItem} from '@mui/material'
 import {useI18n} from '@/core/i18n'
 import {PopoverWrapper} from '@/shared/PopoverWrapper'
 
-const LanguageSwitch: FC<{children: (currentLang: string) => ReactElement}> = ({children}) => {
+const LanguageSwitch: FC<{children?: (currentLang: string) => ReactElement}> = ({children}) => {
   const {m, availableLangs, currentLang, setLang} = useI18n()
 
   const handleLanguageOptionClick = useCallback(
@@ -35,7 +35,13 @@ const LanguageSwitch: FC<{children: (currentLang: string) => ReactElement}> = ({
         ))
       }
     >
-      {children(currentLang)}
+      {children ? (
+        children(currentLang)
+      ) : (
+        <IconButton size="medium" sx={{width: 37, height: 37, fontSize: 'medium'}}>
+          {currentLang}
+        </IconButton>
+      )}
     </PopoverWrapper>
   )
 }

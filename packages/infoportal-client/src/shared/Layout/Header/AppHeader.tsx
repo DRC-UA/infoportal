@@ -1,6 +1,6 @@
 import {useCallback} from 'react'
 import {Obj} from '@axanc/ts-utils'
-import {alpha, Icon, IconButton, MenuItem, useTheme, type BoxProps} from '@mui/material'
+import {alpha, Icon, MenuItem, useTheme, type BoxProps} from '@mui/material'
 import Link from 'next/link'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -85,13 +85,7 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: BoxProp
         />
         {children}
       </div>
-      <LanguageSwitch>
-        {(currentLang) => (
-          <IconButton size="medium" sx={{width: 37, height: 37, fontSize: 'medium'}}>
-            {currentLang}
-          </IconButton>
-        )}
-      </LanguageSwitch>
+      <LanguageSwitch />
       <PopoverWrapper
         popoverProps={{anchorOrigin: {vertical: 'bottom', horizontal: 'right'}}}
         content={(close) =>
