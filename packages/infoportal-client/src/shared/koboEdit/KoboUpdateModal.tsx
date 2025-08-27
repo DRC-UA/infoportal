@@ -90,12 +90,9 @@ export namespace KoboUpdateModal {
         confirmDisabled={_loading || !!fetcherUpdate.get}
         onConfirm={() => {
           const normalized =
-            value instanceof Date
-              ? value.toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' })
-              : value
-          fetcherUpdate.fetch({ force: true, clean: true }, normalized)
+            value instanceof Date ? value.toLocaleDateString('sv-SE', {timeZone: 'Europe/Kyiv'}) : value
+          fetcherUpdate.fetch({force: true, clean: true}, normalized)
         }}
-
         title={title}
       >
         <Txt truncate color="hint" block sx={{mb: 1, maxWidth: 400}}>
@@ -166,23 +163,36 @@ export namespace KoboUpdateModal {
     answerIds,
     onClose,
     onUpdated,
+    questionIndexed,
+    indexChain,
+    pathChain,
+    onSubmitOverride,
   }: {
     formId: Kobo.FormId
     columnName: string
     answerIds: Kobo.SubmissionId[]
     onClose?: () => void
     onUpdated?: (params: KoboUpdateAnswers<any, any>) => void
+    questionIndexed?: string
+    indexChain?: number[]
+    pathChain?: string[]
+    onSubmitOverride?: (value: any) => Promise<number>
   }) => {
     const {m} = useI18n()
     const ctxKoboUpdate = useKoboUpdateContext()
     const {columnDef, schema, loading: loadingSchema} = useKoboColumnDef({formId, columnName})
 
     const fetcherUpdate = useFetcher((value: any) => {
-      const p = {formId, answerIds, question: columnName, answer: value}
-      return ctxKoboUpdate.asyncUpdateById.answer.call(p).then(() => {
-        onUpdated?.(p)
-        return answerIds.length
-      })
+      const p = { formId, answerIds, question: columnName, answer: value, questionIndexed, indexChain, pathChain }
+      if (onSubmitOverride) {
+        return onSubmitOverride(value)
+      } else {
+        const p = { formId, answerIds, question: columnName, answer: value, questionIndexed, indexChain, pathChain }
+        return ctxKoboUpdate.asyncUpdateById.answer.call(p).then(() => {
+          onUpdated?.(p)
+          return answerIds.length
+        })
+      }
     })
 
     return (
