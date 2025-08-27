@@ -57,6 +57,42 @@ export const customForms: CustomForm[] = [
     ],
   },
   {
+    id: 'gbv_cm',
+    // langs: ['English (en)', 'Ukrainian (ua)'],
+    name: '[GBV CM] Case Managment',
+    forms: [
+      {
+        id: 'aYDgEB7JDPH7mKgTYo5ZJQ',
+        // langIndexes: [1, 0],
+      },
+      {
+        // langIndexes: [1, 0],
+        id: 'a8N56ecDP8J7uYfYdFWNBV',
+        join: {originId: 'aYDgEB7JDPH7mKgTYo5ZJQ', originColName: 'client_code', colName: 'client_code'},
+      },
+      {
+        // langIndexes: [1, 0],
+        id: 'ajrLm9hVbidCKnUXdyr7Ja',
+        join: {originId: 'aYDgEB7JDPH7mKgTYo5ZJQ', originColName: 'client_code', colName: 'client_code'},
+      },
+      {
+        // langIndexes: [1, 0],
+        id: 'aG2TZEWjtgnPqSfqGizrMg',
+        join: {originId: 'aYDgEB7JDPH7mKgTYo5ZJQ', originColName: 'client_code', colName: 'client_code'},
+      },
+      {
+        // langIndexes: [1, 0],
+        id: 'aMFYbug56WAQDHJ4fmFuL6',
+        join: {originId: 'aYDgEB7JDPH7mKgTYo5ZJQ', originColName: 'client_code', colName: 'client_code'},
+      },
+      {
+        // langIndexes: [1, 0],
+        id: 'awg7jysq6FWssttromNhNw',
+        join: {originId: 'aYDgEB7JDPH7mKgTYo5ZJQ', originColName: 'client_code', colName: 'client_code'},
+      },
+    ],
+  },
+  {
     id: 'msme',
     // langs: ['English (en)', 'Ukrainian (ua)'],
     name: '[ECREC] MSME',
