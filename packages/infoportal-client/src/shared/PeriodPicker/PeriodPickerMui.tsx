@@ -3,12 +3,12 @@ import {DateRange, DateRangePicker, PickersShortcutsItem, SingleInputDateRangeFi
 import {unstable_useMultiInputDateRangeField as useMultiInputDateRangeField} from '@mui/x-date-pickers-pro/MultiInputDateRangeField'
 import {Box, TextField} from '@mui/material'
 import {endOfMonth, format, startOfMonth, subMonths} from 'date-fns'
-import {enUS, uk, type Locale} from 'date-fns/locale'
+import {enUS, uk as ukUA, type Locale} from 'date-fns/locale'
 
 import {AppLang, useI18n} from '@/core/i18n'
 import {PeriodPickerProps} from '@/shared/PeriodPicker/PeriodPickerNative'
 
-const localeMap: Record<AppLang, Locale> = {en: enUS, uk: uk}
+const localeMap: Record<AppLang, Locale> = {en: enUS, uk: ukUA}
 
 const shortcutsMaker = (lang: AppLang): PickersShortcutsItem<DateRange<Date>>[] => {
   const today = new Date()
