@@ -1,8 +1,10 @@
-import {createContext, useContext, useEffect, useMemo, useState, type ReactNode} from 'react'
+import {createContext, useContext, useMemo, type ReactNode} from 'react'
 import {Obj} from '@axanc/ts-utils'
 import {LocalizationProvider} from '@mui/x-date-pickers-pro'
 import {AdapterDateFns} from '@mui/x-date-pickers-pro/AdapterDateFnsV3'
 import {enUS, uk as ukUA} from 'date-fns/locale'
+
+import {usePersistentState} from '@/shared/hook/usePersistantState'
 
 import {
   en,
@@ -44,11 +46,7 @@ export const withI18n = (Component: any) => (props: any) => (
 )
 
 export const I18nProvider = ({children, defaultLang = 'en'}: {readonly defaultLang?: AppLang; children: ReactNode}) => {
-  const [lang, setLang] = useState<AppLang>(defaultLang)
-
-  useEffect(() => {
-    setLang(defaultLang)
-  }, [defaultLang])
+  const [lang, setLang] = usePersistentState<AppLang>(defaultLang, {storageKey: 'language'})
 
   const {messages: m, adapterLocale} = useMemo(() => {
     switch (lang) {
