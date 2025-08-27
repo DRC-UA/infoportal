@@ -1,5 +1,8 @@
 import {createContext, useContext, useEffect, useMemo, useState, type ReactNode} from 'react'
 import {Obj} from '@axanc/ts-utils'
+import {LocalizationProvider} from '@mui/x-date-pickers-pro'
+import {AdapterDateFns} from '@mui/x-date-pickers-pro/AdapterDateFnsV3'
+import {enUS, uk} from 'date-fns/locale'
 
 import {en, ua} from './localization'
 
@@ -38,26 +41,32 @@ export const I18nProvider = ({children, defaultLang = 'en'}: {readonly defaultLa
     setLang(defaultLang)
   }, [defaultLang])
 
-  const {messages: m, ...others}: typeof en = useMemo(() => {
+  const {
+    messages: m,
+    adapterLocale,
+    ...rest
+  } = useMemo(() => {
     switch (lang) {
       case 'ua':
-        return ua as any
+        return {...ua, adapterLocale: uk}
       default:
-        return en
+        return {...en, adapterLocale: enUS}
     }
   }, [lang])
 
   return (
-    <I18nContext.Provider
-      value={{
-        currentLang: lang,
-        setLang,
-        availableLangs: Obj.keys(appLangs),
-        m,
-        ...others,
-      }}
-    >
-      {children}
-    </I18nContext.Provider>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={adapterLocale}>
+      <I18nContext.Provider
+        value={{
+          currentLang: lang,
+          setLang,
+          availableLangs: Obj.keys(appLangs),
+          m,
+          ...rest,
+        }}
+      >
+        {children}
+      </I18nContext.Provider>
+    </LocalizationProvider>
   )
 }

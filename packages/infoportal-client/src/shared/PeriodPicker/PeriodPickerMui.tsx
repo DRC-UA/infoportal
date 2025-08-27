@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react'
+import {forwardRef} from 'react'
 import {DateRange, DateRangePicker, PickersShortcutsItem, SingleInputDateRangeField} from '@mui/x-date-pickers-pro'
 import {unstable_useMultiInputDateRangeField as useMultiInputDateRangeField} from '@mui/x-date-pickers-pro/MultiInputDateRangeField'
 import {Box, TextField} from '@mui/material'
@@ -66,7 +66,7 @@ export const PeriodPickerMui = ({
   )
 }
 
-const BrowserMultiInputDateRangeField = React.forwardRef<HTMLDivElement, any>((props, ref) => {
+const BrowserMultiInputDateRangeField = forwardRef<HTMLDivElement, any>((props, ref) => {
   const {
     slotProps,
     value,
