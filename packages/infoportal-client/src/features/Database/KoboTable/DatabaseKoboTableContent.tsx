@@ -1,9 +1,9 @@
-import {useMemo, useState} from 'react'
-import {Alert, AlertProps, Icon, useTheme} from '@mui/material'
+import {useEffect, useMemo, useState} from 'react'
+import {Alert, AlertProps, FormControlLabel, Icon, Switch, useTheme} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
 import {useNavigate} from 'react-router-dom'
 
-import {KoboFlattenRepeatedGroup, KoboIndex, Legal_individual_aid} from 'infoportal-common'
+import {KoboFlattenRepeatedGroup, KoboIndex, Legal_individual_aid, protHHS_2_1Fields} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -34,7 +34,6 @@ import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableXlsGenerator} from '@/shared/Datatable/util/generateXLSFile'
 import {useAsync} from '@/shared/hook/useAsync'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 
 import {DatabaseGroupDisplayInput} from './groupDisplay/DatabaseGroupDisplayInput'
 
@@ -74,6 +73,13 @@ export const DatabaseKoboTableContent = ({
       replicateParentData: true,
     }) as (KoboFlattenRepeatedGroup.Cursor & KoboMappedAnswer)[]
   }, [ctx.data, ctx.groupDisplay.get])
+  const [showXmlLabels, setShowXmlLabels] = useState(false)
+
+  useEffect(() => {
+    ctxSchema.setLangIndex(showXmlLabels ? -1 : currentLang === 'uk' ? 1 : 0)
+  }, [ctxSchema, currentLang, showXmlLabels])
+
+  const handleXmlLabelsToggle = () => setShowXmlLabels((previous) => !previous)
 
   const customColumns: DatatableColumn.Props<any>[] = useMemo(
     () =>
@@ -241,19 +247,15 @@ export const DatabaseKoboTableContent = ({
         header={(params) => (
           <>
             <DatabaseViewInput sx={{mr: 1}} view={ctx.view} />
-            <IpSelectSingle<number>
-              hideNullOption
-              sx={{maxWidth: 128, mr: 1}}
-              defaultValue={ctxSchema.langIndex}
-              onChange={ctxSchema.setLangIndex}
-              options={[
-                {children: 'XML', value: -1},
-                ...ctx.schema.schemaSanitized.content.translations.map((_, i) => ({children: _, value: i})),
-              ]}
-            />
             {ctx.schema.helper.group.size > 0 && <DatabaseGroupDisplayInput sx={{mr: 1}} />}
             {header?.(params)}
             {ctx.form.deploymentStatus === 'archived' && <ArchiveAlert />}
+            {ctx.access.admin && (
+              <FormControlLabel
+                control={<Switch checked={showXmlLabels} onChange={handleXmlLabelsToggle} name="gilad" />}
+                label={m.xmlLabels}
+              />
+            )}
 
             <div style={{marginLeft: 'auto'}}>
               {ctx.access.admin && (

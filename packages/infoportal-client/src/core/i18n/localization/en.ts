@@ -441,6 +441,7 @@ const en = Object.freeze({
     trained: 'Trained',
     facilitated: 'Facilitated',
     victimAssistanceTitle: 'Victim Assistance',
+    xmlLabels: 'XML Labels',
     _meal: {
       openTracker: 'Open Excel tracker',
       visitMonitoring: 'Visit Monitoring',

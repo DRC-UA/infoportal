@@ -98,6 +98,7 @@ const uk = deepmerge(en, {
       sessionsNumber: 'Кількість сесій',
       individualsReached: 'Осіб охоплено',
     },
+    xmlLabels: 'XML поля',
     _shelter: {
       damageCondition: 'What is the Condition of the Building / Apartment',
     },
