@@ -1,12 +1,8 @@
-import {dateFromNow, formatDate, formatDateTime, formatDuration, formatLargeNumber, formatTime} from './en'
+import deepmerge from 'deepmerge'
 
-export const ua = {
-  formatDate,
-  formatTime,
-  formatDateTime,
-  dateFromNow,
-  formatDuration,
-  formatLargeNumber,
+import {en} from './en'
+
+const uk = deepmerge(en, {
   messages: {
     idps: 'Внутрішньо переміщені особи',
     nonDisplaced: 'Не переміщений',
@@ -125,4 +121,6 @@ export const ua = {
       },
     },
   },
-}
+})
+
+export {uk}

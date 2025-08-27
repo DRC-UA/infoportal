@@ -2,25 +2,34 @@ import {createContext, useContext, useEffect, useMemo, useState, type ReactNode}
 import {Obj} from '@axanc/ts-utils'
 import {LocalizationProvider} from '@mui/x-date-pickers-pro'
 import {AdapterDateFns} from '@mui/x-date-pickers-pro/AdapterDateFnsV3'
-import {enUS, uk} from 'date-fns/locale'
+import {enUS, uk as ukUA} from 'date-fns/locale'
 
-import {en, ua} from './localization'
+import {
+  en,
+  uk,
+  dateFromNow,
+  formatDate,
+  formatDateTime,
+  formatDuration,
+  formatLargeNumber,
+  formatTime,
+} from './localization'
 
 export interface I18nContextProps {
   currentLang: AppLang
   setLang: (_: AppLang) => void
   m: (typeof en)['messages']
   availableLangs: AppLang[]
-  formatLargeNumber: (typeof en)['formatLargeNumber']
-  formatDuration: (typeof en)['formatDuration']
-  formatDate: (typeof en)['formatDate']
-  dateFromNow: (typeof en)['dateFromNow']
-  formatTime: (typeof en)['formatTime']
-  formatDateTime: (typeof en)['formatDateTime']
+  formatLargeNumber: typeof formatLargeNumber
+  formatDuration: typeof formatDuration
+  formatDate: typeof formatDate
+  dateFromNow: typeof dateFromNow
+  formatTime: typeof formatTime
+  formatDateTime: typeof formatDateTime
 }
 
 export const appLangs = {
-  ua,
+  uk,
   en,
 }
 
@@ -41,14 +50,10 @@ export const I18nProvider = ({children, defaultLang = 'en'}: {readonly defaultLa
     setLang(defaultLang)
   }, [defaultLang])
 
-  const {
-    messages: m,
-    adapterLocale,
-    ...rest
-  } = useMemo(() => {
+  const {messages: m, adapterLocale} = useMemo(() => {
     switch (lang) {
-      case 'ua':
-        return {...ua, adapterLocale: uk}
+      case 'uk':
+        return {...uk, adapterLocale: ukUA}
       default:
         return {...en, adapterLocale: enUS}
     }
@@ -62,7 +67,12 @@ export const I18nProvider = ({children, defaultLang = 'en'}: {readonly defaultLa
           setLang,
           availableLangs: Obj.keys(appLangs),
           m,
-          ...rest,
+          dateFromNow,
+          formatDate: (date) => formatDate(date, lang),
+          formatDateTime,
+          formatDuration,
+          formatLargeNumber,
+          formatTime,
         }}
       >
         {children}

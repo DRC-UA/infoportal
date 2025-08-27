@@ -57,7 +57,7 @@ export const DatabaseKoboTableContent = ({
   onFiltersChange,
   onDataChange,
 }: Pick<DatabaseTableProps, 'onFiltersChange' | 'onDataChange'>) => {
-  const {m} = useI18n()
+  const {m, currentLang} = useI18n()
   const t = useTheme()
   const navigate = useNavigate()
   const {session} = useSession()
@@ -112,6 +112,7 @@ export const DatabaseKoboTableContent = ({
           : undefined,
       m,
       t,
+      currentLang,
     }).getAll()
 
     const processedData = // sort subcases of Individual Legal Aid
@@ -147,7 +148,17 @@ export const DatabaseKoboTableContent = ({
       m,
       t,
     }).transformColumns(schemaColumns)
-  }, [ctx.data, ctx.schema.schema, ctxSchema.langIndex, selectedIds, ctx.groupDisplay.get, ctx.externalFilesIndex, t])
+  }, [
+    ctx.data,
+    ctx.schema.schema,
+    ctxSchema.langIndex,
+    selectedIds,
+    ctx.groupDisplay.get,
+    ctx.externalFilesIndex,
+    t,
+    columnBySchemaGenerator,
+    currentLang,
+  ])
 
   const columns: DatatableColumn.Props<any>[] = useMemo(() => {
     const base = getColumnsBase({

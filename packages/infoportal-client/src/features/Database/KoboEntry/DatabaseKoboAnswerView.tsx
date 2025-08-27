@@ -189,7 +189,7 @@ const KoboAnswerQuestionView = ({
   answer: KoboMappedAnswer<any>
 }) => {
   const langIndex = useKoboSchemaContext()
-  const {formatDateTime} = useI18n()
+  const {formatDateTime, currentLang} = useI18n()
   const {m} = useI18n()
   const t = useTheme()
   const columns = useMemo(() => {
@@ -201,6 +201,7 @@ const KoboAnswerQuestionView = ({
       formId,
       t,
       schema,
+      currentLang,
     }).getByQuestions(group.questions)
   }, [schema.schemaSanitized, langIndex])
   switch (questionSchema.type) {

@@ -1,11 +1,15 @@
-import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+import {mapFor} from '@axanc/ts-utils'
+
 import {KoboSchemaHelper} from 'infoportal-common'
+
+import type {AppLang} from '@/core/i18n'
+import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
+
 import {
   colorRepeatedQuestionHeader,
   columnBySchemaGenerator,
   ColumnBySchemaGeneratorProps,
 } from '../columns/columnBySchema'
-import {mapFor} from '@axanc/ts-utils'
 
 export type DatabaseDisplay = {
   repeatAs?: 'rows' | 'columns'
@@ -20,6 +24,7 @@ type DatabaseKoboDisplayProps = {
   onRepeatGroupClick?: ColumnBySchemaGeneratorProps['onRepeatGroupClick']
   m: ColumnBySchemaGeneratorProps['m']
   t: ColumnBySchemaGeneratorProps['t']
+  currentLang?: AppLang
 }
 
 export const databaseKoboDisplayBuilder = ({
@@ -30,6 +35,7 @@ export const databaseKoboDisplayBuilder = ({
   onRepeatGroupClick,
   m,
   t,
+  currentLang,
 }: DatabaseKoboDisplayProps) => {
   const transformColumns = (columns: DatatableColumn.Props<any>[]): DatatableColumn.Props<any>[] => {
     switch (display.repeatAs) {
@@ -48,6 +54,7 @@ export const databaseKoboDisplayBuilder = ({
                 formId,
                 m,
                 t,
+                currentLang,
               })
                 .getByQuestions(group.questions)
                 .map((_, i) => {

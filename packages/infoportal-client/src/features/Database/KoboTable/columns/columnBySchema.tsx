@@ -11,8 +11,7 @@ import {
   removeHtml,
 } from 'infoportal-common'
 
-import {useI18n} from '@/core/i18n/I18n'
-import {formatDate, formatDateTime, Messages} from '@/core/i18n/localization/en'
+import {useI18n, formatDate, formatDateTime, type Messages, type AppLang} from '@/core/i18n'
 import {KoboExternalFilesIndex} from '@/features/Database/KoboTable/DatabaseKoboContext'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {IpBtn, TableEditCellBtn} from '@/shared'
@@ -141,6 +140,7 @@ export type ColumnBySchemaGeneratorProps = {
   externalFilesIndex?: KoboExternalFilesIndex
   onRepeatGroupClick?: (_: {name: string; row: Row; event: any}) => void
   t: Theme
+  currentLang?: AppLang
 }
 
 export const colorRepeatedQuestionHeader = (t: Theme) => alpha(t.palette.info.light, 0.22)
@@ -154,6 +154,7 @@ export const columnBySchemaGenerator = ({
   onRepeatGroupClick,
   m,
   t,
+  currentLang,
 }: ColumnBySchemaGeneratorProps) => {
   const getCommon = (
     q: Kobo.Form.Question,
@@ -367,8 +368,9 @@ export const columnBySchemaGenerator = ({
       render: (row: Row) => {
         const value = getValue(row, name) ? new Date(getValue(row, name)) : undefined
         const time = formatDateTime(value)
+
         return {
-          label: formatDate(value),
+          label: formatDate(value, currentLang),
           value,
           tooltip: time,
           export: time,
@@ -514,7 +516,7 @@ export const columnBySchemaGenerator = ({
         const _ = getRow(row)
         const time = formatDateTime(_.submissionTime)
         return {
-          label: formatDate(_.submissionTime),
+          label: formatDate(_.submissionTime, currentLang),
           value: _.submissionTime,
           tooltip: time,
           export: time,

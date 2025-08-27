@@ -13,7 +13,6 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {formatLargeNumber} from '@/core/i18n/localization/en'
 
 const isPssPdm = (_: PdmData<PdmForm>): _ is PdmData<Meal_pssPdm.T> => {
   return _.type === 'Pss'
@@ -24,7 +23,7 @@ export const MealPdmPssDashboard = () => {
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isPssPdm))
   const ctxSchema = useKoboSchemaContext()
   const schema = ctxSchema.byName.meal_pssPdm.get!
-  const {m} = useI18n()
+  const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
 
   const filterShape = useMemo(() => {

@@ -203,7 +203,7 @@ export default () => {
 
   let index = 0
   const title = (title: keyof typeof en) =>
-    `${lang === 'ua' ? 'Графік' : 'Graph'} ${++index}. ${lang === 'ua' ? ua[title] : en[title]}`
+    `${lang === 'uk' ? 'Графік' : 'Graph'} ${++index}. ${lang === 'uk' ? ua[title] : en[title]}`
 
   return (
     <Page loading={fetcher.loading} sx={{background: t.palette.background.paper}}>

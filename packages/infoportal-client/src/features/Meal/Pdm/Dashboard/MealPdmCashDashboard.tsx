@@ -19,7 +19,6 @@ import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {Box, Checkbox, FormControlLabel, Tab, Tabs, TextField, Typography} from '@mui/material'
-import {formatLargeNumber} from '@/core/i18n/localization/en'
 import {Lazy} from '@/shared'
 import {ChartBarGrouped, ChartBarVerticalGrouped} from '@/shared/charts/ChartBarGrouped'
 
@@ -102,7 +101,7 @@ export const MealPdmCashDashboard = () => {
   const ctxSchema = useKoboSchemaContext()
   const schema = ctxSchema.byName.meal_cashPdm.get!
   const langIndex = ctxSchema.langIndex
-  const {m, formatDateTime, formatDate} = useI18n()
+  const {m, formatLargeNumber} = useI18n()
   const {shape: commonShape} = usePdmFilters(ctx.fetcherAnswers.get?.filter(isCashOrEcrec))
   const [formTab, setFormTab] = useState<'PDM' | 'Registration'>('PDM')
   const [searchUniqueId, setSearchUniqueId] = useState<string>('')

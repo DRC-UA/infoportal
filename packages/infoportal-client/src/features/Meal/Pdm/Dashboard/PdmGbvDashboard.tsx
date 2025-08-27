@@ -14,7 +14,6 @@ import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {formatLargeNumber} from '@/core/i18n/localization/en'
 
 const mapOblast = OblastIndex.koboOblastIndexIso
 
@@ -28,7 +27,7 @@ export const PdmGbvDashboard = () => {
   const schema = ctxSchema.byName.protection_gbvPdm.get!
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isGbvPdm))
   const langIndex = ctxSchema.langIndex
-  const {m, formatDateTime, formatDate} = useI18n()
+  const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
   const filterShape = useMemo(() => {
     return DataFilter.makeShape(commonShape)
