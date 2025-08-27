@@ -55,4 +55,28 @@ export namespace KoboFlattenRepeatedGroup {
       replicateParentData,
     })
   }
+
+  export const buildIndexedXPath = ({questionXPath, row}: {questionXPath: string; row: Data}): string => {
+    const segs = questionXPath.split('/')
+    if (!segs.length) return questionXPath
+
+    const names = row._path_chain ?? []
+    const idxs = row._index_chain ?? []
+
+    if (!names.length || names.length !== idxs.length) return questionXPath
+
+    let p = 0
+    const out = segs.map((seg) => {
+      const clean = seg.replace(/\[\d+\]$/, '')
+      if (p < names.length && clean === names[p]) {
+        const idx1 = (idxs[p] ?? 0) + 1
+        p++
+        return `${clean}[${idx1}]`
+      }
+      return clean
+    })
+
+    return out.join('/')
+  }
+
 }

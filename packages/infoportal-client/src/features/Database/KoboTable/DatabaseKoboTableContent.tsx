@@ -230,7 +230,7 @@ export const DatabaseKoboTableContent = ({
             ? {
                 onSelect: setSelectedIds,
                 selectActions: selectedHeader,
-                getId: (row) => `${row.id}#${row._index ?? 0}`,
+                getId: (row) => String(row.id),
               }
             : undefined
         }

@@ -165,7 +165,8 @@ export const columnBySchemaGenerator = ({
     'id' | 'groupLabel' | 'group' | 'typeIcon' | 'typeLabel' | 'head' | 'subHeader'
   > => {
     const isEditable = editableColsType.has(q.type) && !noEditableColsId.has(q.name)
-    const showHeaderPencil = !!onEdit && isEditable && !repeatGroupName
+    const isInsideRepeat = !!repeatGroupName && q.$xpath?.split('/').includes(repeatGroupName)
+    const showHeaderPencil = !!onEdit && isEditable && !isInsideRepeat
     return {
       id: q.name,
       typeLabel: q.type,
