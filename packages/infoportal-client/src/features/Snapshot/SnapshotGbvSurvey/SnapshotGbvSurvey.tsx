@@ -1,8 +1,9 @@
-import {Theme} from '@mui/material'
-import {Pdf} from '@/shared/PdfLayout/PdfLayout'
+import {Box, type Theme} from '@mui/material'
+
 import {SnapshotMonitoSample} from '@/features/Snapshot/SnapshotGbvSurvey/SnapshotGbvMonitoSample'
 import {SnapshotMonitoSample2} from '@/features/Snapshot/SnapshotGbvSurvey/SnapshotGbvMonitoSample2'
-import React from 'react'
+import {LanguageSwitch} from '@/shared/LanguageSwitch'
+import {Pdf} from '@/shared/PdfLayout/PdfLayout'
 
 export const snapshotColors = (t: Theme) => [
   '#8884d8',
@@ -22,6 +23,9 @@ export const snapshotColors = (t: Theme) => [
 export const SnapshotGbvMonito = () => {
   return (
     <Pdf>
+      <Box sx={{'@media print': {display: 'none'}}} display="flex" justifyContent="flex-end" alignItems="center" pb={2}>
+        <LanguageSwitch />
+      </Box>
       <SnapshotMonitoSample />
       <SnapshotMonitoSample2 />
     </Pdf>
