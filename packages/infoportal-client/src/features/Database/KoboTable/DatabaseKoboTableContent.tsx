@@ -3,7 +3,7 @@ import {Alert, AlertProps, FormControlLabel, Icon, Switch, useTheme} from '@mui/
 import {Kobo} from 'kobo-sdk'
 import {useNavigate} from 'react-router-dom'
 
-import {KoboFlattenRepeatedGroup, KoboIndex, Legal_individual_aid, protHHS_2_1Fields} from 'infoportal-common'
+import {KoboFlattenRepeatedGroup, KoboIndex, Legal_individual_aid} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -76,7 +76,18 @@ export const DatabaseKoboTableContent = ({
   const [showXmlLabels, setShowXmlLabels] = useState(false)
 
   useEffect(() => {
-    ctxSchema.setLangIndex(showXmlLabels ? -1 : currentLang === 'uk' ? 1 : 0)
+    const {translations} = ctx.schema.schemaSanitized.content
+    let ukIndex = translations.findIndex((language) => language.includes('(uk)'))
+    let enIndex = translations.findIndex((language) => language.includes('(en)'))
+
+    if (ukIndex === -1) ukIndex = 0 // if not found, use the default language index, not XML
+    if (enIndex === -1) enIndex = 0 // if not found, use the default kanguage index, not XML
+
+    if (showXmlLabels) {
+      ctxSchema.setLangIndex(-1)
+    } else {
+      ctxSchema.setLangIndex(currentLang === 'uk' ? ukIndex : enIndex)
+    }
   }, [ctxSchema, currentLang, showXmlLabels])
 
   const handleXmlLabelsToggle = () => setShowXmlLabels((previous) => !previous)
