@@ -1,12 +1,8 @@
-import {dateFromNow, formatDate, formatDateTime, formatDuration, formatLargeNumber, formatTime} from './en'
+import deepmerge from 'deepmerge'
 
-export const ua = {
-  formatDate,
-  formatTime,
-  formatDateTime,
-  dateFromNow,
-  formatDuration,
-  formatLargeNumber,
+import {en} from './en'
+
+const uk = deepmerge(en, {
   messages: {
     idps: 'Внутрішньо переміщені особи',
     nonDisplaced: 'Не переміщений',
@@ -27,6 +23,7 @@ export const ua = {
     protHHSnapshot: {},
     includeNotSpecified: 'в т.ч. "Не зазначено"',
     damageCause: 'Причина руйнувань',
+    hhSize: 'Розмір домогосподарства',
     avgHHSize: 'Середній розмір домогосподарства',
     households: 'Домогосподарств',
     formOutcome: {
@@ -102,6 +99,11 @@ export const ua = {
       sessionsNumber: 'Кількість сесій',
       individualsReached: 'Осіб охоплено',
     },
+    xmlLabels: 'XML поля',
+    language: {
+      uk: 'Українська',
+      en: 'Англійська',
+    },
     _shelter: {
       damageCondition: 'What is the Condition of the Building / Apartment',
     },
@@ -125,4 +127,6 @@ export const ua = {
       },
     },
   },
-}
+})
+
+export {uk}

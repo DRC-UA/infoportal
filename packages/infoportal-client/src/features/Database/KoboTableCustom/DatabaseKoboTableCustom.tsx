@@ -125,7 +125,7 @@ const urlValidation = yup.object({
 
 export const DatabaseTableCustomRoute = () => {
   const {api} = useAppSettings()
-  const {m} = useI18n()
+  const {m, currentLang} = useI18n()
   const t = useTheme()
 
   const {id} = urlValidation.validateSync(useParams())
@@ -214,6 +214,7 @@ export const DatabaseTableCustomRoute = () => {
             : undefined,
         t,
         getRow: (_) => (_[formId] ?? {}) as any,
+        currentLang,
       }).getAll()
       cols[cols.length - 1].style = () => ({borderRight: '3px solid ' + t.palette.divider})
       cols[cols.length - 1].styleHead = {borderRight: '3px solid ' + t.palette.divider}

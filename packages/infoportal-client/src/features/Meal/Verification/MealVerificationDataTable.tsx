@@ -98,7 +98,7 @@ export const MealVerificationDataTable = <
 }: MealVerificationBundle<TReg, TVerif> & {refreshToVerify: () => void}) => {
   const {activity, dataReg, dataVerif, toVerify} = bundle
   const {api} = useAppSettings()
-  const {m} = useI18n()
+  const {m, currentLang} = useI18n()
   const t = useTheme()
   const {langIndex, setLangIndex} = useKoboSchemaContext()
   const ctx = useMealVerificationContext()
@@ -400,6 +400,7 @@ export const MealVerificationDataTable = <
                   getRow: (_) => _.rowReg,
                   m,
                   t,
+                  currentLang,
                 }).getByQuestion(q) ?? []
               )
             }) ?? []),

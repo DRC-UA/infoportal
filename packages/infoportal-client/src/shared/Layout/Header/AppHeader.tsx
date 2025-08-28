@@ -1,20 +1,21 @@
-import {alpha, BoxProps, Icon, MenuItem, useTheme} from '@mui/material'
-import {Txt} from '@/shared'
-import {layoutConfig} from '../index'
-import React from 'react'
-import {useLayoutContext} from '../LayoutContext'
-import {AppHeaderMenu} from '@/shared/Layout/Header/AppHeaderMenu'
-import {AppHeaderFeatures} from '@/shared/Layout/Header/AppHeaderFeatures'
-import {IpIconBtn} from '@/shared/IconBtn'
+import {useCallback} from 'react'
+import {Obj} from '@axanc/ts-utils'
+import {alpha, Icon, MenuItem, useTheme, type BoxProps} from '@mui/material'
 import Link from 'next/link'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useI18n} from '@/core/i18n'
+import {styleUtils} from '@/core/theme'
+import {Txt} from '@/shared'
+import {AppHeaderFeatures} from '@/shared/Layout/Header/AppHeaderFeatures'
+import {AppHeaderMenu} from '@/shared/Layout/Header/AppHeaderMenu'
+import {IpIconBtn} from '@/shared/IconBtn'
+import {LanguageSwitch} from '@/shared/LanguageSwitch'
 import {AppHeaderContainer} from '@/shared/Layout/Header/AppHeaderContainer'
 import {PopoverWrapper} from '@/shared/PopoverWrapper'
-import {useI18n} from '@/core/i18n'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {Obj} from '@axanc/ts-utils'
-import {styleUtils} from '@/core/theme'
 
-interface Props extends BoxProps {}
+import {layoutConfig} from '..'
+import {useLayoutContext} from '../LayoutContext'
 
 const lightThemeIcons = {
   light: 'light_mode',
@@ -22,13 +23,23 @@ const lightThemeIcons = {
   auto: 'brightness_medium',
 } as const
 
-export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) => {
+export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: BoxProps) => {
   const {sidebarOpen, showSidebarButton, setSidebarOpen, title} = useLayoutContext()
   const {m} = useI18n()
   const t = useTheme()
   const {
     theme: {brightness, setBrightness},
   } = useAppSettings()
+  const handleThemeOptionClick = useCallback(
+    ({option, callback}: {option: keyof typeof lightThemeIcons; callback: () => void}) => {
+      return (): void => {
+        setBrightness(option)
+        callback()
+      }
+    },
+    [setBrightness],
+  )
+
   return (
     <AppHeaderContainer
       component="header"
@@ -38,13 +49,6 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) 
         py: 0.5,
         display: 'flex',
         alignItems: 'center',
-        // position: 'fixed',
-        // top: 0,
-        // right: 0,
-        // left: 0,
-        // boxShadow: t => t.shadows[3],
-        // background: t => t.palette.background.paper,
-        // borderBottom: t => '1px solid ' + t.palette.divider,
         ...sx,
       }}
       id={id}
@@ -81,16 +85,18 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: Props) 
         />
         {children}
       </div>
+      <LanguageSwitch />
       <PopoverWrapper
+        popoverProps={{anchorOrigin: {vertical: 'bottom', horizontal: 'right'}}}
         content={(close) =>
           Obj.entries(lightThemeIcons).map(([theme, icon]) => (
             <MenuItem
               key={theme}
               selected={brightness === theme}
-              onClick={() => {
-                setBrightness(theme)
-                close()
-              }}
+              onClick={handleThemeOptionClick({
+                option: theme,
+                callback: close,
+              })}
             >
               <Icon sx={{mr: 1}}>{icon}</Icon>
               {m.lightTheme[theme]}

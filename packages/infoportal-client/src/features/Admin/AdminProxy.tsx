@@ -1,23 +1,23 @@
+import {useEffect} from 'react'
+import {useCrudList} from '@alexandreannic/react-hooks-lib'
+import {endOfDay} from 'date-fns'
+import {Controller, useForm} from 'react-hook-form'
+
+import {NullableFn, Regexp, slugify} from 'infoportal-common'
+
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
-import {useEffect} from 'react'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {useCrudList} from '@alexandreannic/react-hooks-lib'
 import {useI18n} from '@/core/i18n'
 import {Switch, TextField} from '@mui/material'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {Controller, useForm} from 'react-hook-form'
 import {IpInput} from '@/shared/Input/Input'
-import {Regexp, slugify} from 'infoportal-common'
 import {Txt} from '@/shared/Txt'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {Proxy} from '@/core/sdk/server/proxy/Proxy'
-import {endOfDay} from 'date-fns'
 import {Modal} from '@/shared'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import {formatDateTime} from '@/core/i18n/localization/en'
 import {appConfig} from '@/conf/AppConfig'
-import {NullableFn} from 'infoportal-common'
 
 interface CreateForm {
   name: string
@@ -29,7 +29,7 @@ interface CreateForm {
 
 export const AdminProxy = () => {
   const {api} = useAppSettings()
-  const {formatDate, m} = useI18n()
+  const {m, formatDateTime} = useI18n()
 
   const _createForm = useForm<CreateForm>({
     mode: 'onChange',

@@ -1,51 +1,12 @@
-import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 import {appConfig} from '@/conf/AppConfig'
+
 import {capitalize, DrcProgram, OblastIndex, OblastISO, Person} from 'infoportal-common'
 
-const invalidDate = ''
+import {formatDateTime} from './utils'
 
-export const isDateValid = (d?: Date): boolean => {
-  return !!d && d instanceof Date && !isNaN(d.getTime())
-}
+type Messages = (typeof en)['messages']
 
-export const formatDate = (d?: Date): string => {
-  if (!isDateValid(d)) return invalidDate
-  return d!.toLocaleDateString()
-}
-
-export const formatTime = (d?: Date): string => {
-  if (!isDateValid(d)) return invalidDate
-  return d!.toLocaleTimeString()
-}
-
-export const formatDateTime = (d?: Date): string => {
-  if (!isDateValid(d)) return invalidDate
-  return formatDate(d) + ' ' + formatTime(d)
-}
-
-export const dateFromNow: {
-  (d: Date): string
-  (d?: undefined): undefined
-  (d?: Date): string | undefined
-} = (d) => {
-  return d ? formatDistance(d, new Date(), {addSuffix: true}) : (undefined as any)
-}
-
-export const formatLargeNumber = (n?: number, options?: Intl.NumberFormatOptions): string => {
-  return n !== undefined && n !== null && !isNaN(n) ? n.toLocaleString('en-EN', options) : '-'
-}
-
-export const formatDuration = formatDurationFns
-
-export type Messages = (typeof en)['messages']
-
-export const en = Object.freeze({
-  formatDate,
-  formatTime,
-  formatDateTime,
-  dateFromNow,
-  formatDuration,
-  formatLargeNumber,
+const en = Object.freeze({
   messages: {
     default: 'Default',
     snapshot: 'Snapshot',
@@ -480,6 +441,11 @@ export const en = Object.freeze({
     trained: 'Trained',
     facilitated: 'Facilitated',
     victimAssistanceTitle: 'Victim Assistance',
+    xmlLabels: 'XML Labels',
+    language: {
+      uk: 'Ukranian',
+      en: 'English',
+    },
     _meal: {
       openTracker: 'Open Excel tracker',
       visitMonitoring: 'Visit Monitoring',
@@ -1287,3 +1253,5 @@ export const en = Object.freeze({
     },
   },
 })
+
+export {en, type Messages}

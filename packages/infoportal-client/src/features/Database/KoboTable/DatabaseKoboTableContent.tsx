@@ -1,5 +1,5 @@
-import {useMemo, useState} from 'react'
-import {Alert, AlertProps, Icon, useTheme} from '@mui/material'
+import {useEffect, useMemo, useState} from 'react'
+import {Alert, AlertProps, FormControlLabel, Icon, Switch, useTheme} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
 import {useNavigate} from 'react-router-dom'
 
@@ -34,7 +34,6 @@ import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
 import {DatatableXlsGenerator} from '@/shared/Datatable/util/generateXLSFile'
 import {useAsync} from '@/shared/hook/useAsync'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 
 import {DatabaseGroupDisplayInput} from './groupDisplay/DatabaseGroupDisplayInput'
 
@@ -57,7 +56,7 @@ export const DatabaseKoboTableContent = ({
   onFiltersChange,
   onDataChange,
 }: Pick<DatabaseTableProps, 'onFiltersChange' | 'onDataChange'>) => {
-  const {m} = useI18n()
+  const {m, currentLang} = useI18n()
   const t = useTheme()
   const navigate = useNavigate()
   const {session} = useSession()
@@ -74,6 +73,24 @@ export const DatabaseKoboTableContent = ({
       replicateParentData: true,
     }) as (KoboFlattenRepeatedGroup.Cursor & KoboMappedAnswer)[]
   }, [ctx.data, ctx.groupDisplay.get])
+  const [showXmlLabels, setShowXmlLabels] = useState(false)
+
+  useEffect(() => {
+    const {translations} = ctx.schema.schemaSanitized.content
+    let ukIndex = translations.findIndex((language) => language.includes('(uk)'))
+    let enIndex = translations.findIndex((language) => language.includes('(en)'))
+
+    if (ukIndex === -1) ukIndex = 0 // if not found, use the default language index, not XML
+    if (enIndex === -1) enIndex = 0 // if not found, use the default kanguage index, not XML
+
+    if (showXmlLabels) {
+      ctxSchema.setLangIndex(-1)
+    } else {
+      ctxSchema.setLangIndex(currentLang === 'uk' ? ukIndex : enIndex)
+    }
+  }, [ctxSchema, currentLang, showXmlLabels])
+
+  const handleXmlLabelsToggle = () => setShowXmlLabels((previous) => !previous)
 
   const customColumns: DatatableColumn.Props<any>[] = useMemo(
     () =>
@@ -112,6 +129,7 @@ export const DatabaseKoboTableContent = ({
           : undefined,
       m,
       t,
+      currentLang,
     }).getAll()
 
     const processedData = // sort subcases of Individual Legal Aid
@@ -147,7 +165,17 @@ export const DatabaseKoboTableContent = ({
       m,
       t,
     }).transformColumns(schemaColumns)
-  }, [ctx.data, ctx.schema.schema, ctxSchema.langIndex, selectedIds, ctx.groupDisplay.get, ctx.externalFilesIndex, t])
+  }, [
+    ctx.data,
+    ctx.schema.schema,
+    ctxSchema.langIndex,
+    selectedIds,
+    ctx.groupDisplay.get,
+    ctx.externalFilesIndex,
+    t,
+    columnBySchemaGenerator,
+    currentLang,
+  ])
 
   const columns: DatatableColumn.Props<any>[] = useMemo(() => {
     const base = getColumnsBase({
@@ -230,19 +258,15 @@ export const DatabaseKoboTableContent = ({
         header={(params) => (
           <>
             <DatabaseViewInput sx={{mr: 1}} view={ctx.view} />
-            <IpSelectSingle<number>
-              hideNullOption
-              sx={{maxWidth: 128, mr: 1}}
-              defaultValue={ctxSchema.langIndex}
-              onChange={ctxSchema.setLangIndex}
-              options={[
-                {children: 'XML', value: -1},
-                ...ctx.schema.schemaSanitized.content.translations.map((_, i) => ({children: _, value: i})),
-              ]}
-            />
             {ctx.schema.helper.group.size > 0 && <DatabaseGroupDisplayInput sx={{mr: 1}} />}
             {header?.(params)}
             {ctx.form.deploymentStatus === 'archived' && <ArchiveAlert />}
+            {ctx.access.admin && (
+              <FormControlLabel
+                control={<Switch checked={showXmlLabels} onChange={handleXmlLabelsToggle} name="gilad" />}
+                label={m.xmlLabels}
+              />
+            )}
 
             <div style={{marginLeft: 'auto'}}>
               {ctx.access.admin && (

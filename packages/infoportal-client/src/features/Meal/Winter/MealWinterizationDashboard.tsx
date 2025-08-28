@@ -18,7 +18,6 @@ import {appConfig} from '@/conf/AppConfig'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {AgeGroupTable, Lazy} from '@/shared'
 import {Box} from '@mui/material'
-import {formatLargeNumber} from '@/core/i18n/localization/en'
 
 export interface DashboardPageProps {
   filters: Record<string, string[]>
@@ -31,8 +30,7 @@ export const MealWinterizationDashboard = () => {
   const ctx = useMealWinterizationContext()
   const ctxSchema = useKoboSchemaContext()
   const schema = ctxSchema.byName.meal_winterizationPdm.get!
-  const langIndex = ctxSchema.langIndex
-  const {m, formatDateTime, formatDate} = useI18n()
+  const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
 
   const filterShape = useMemo(() => {

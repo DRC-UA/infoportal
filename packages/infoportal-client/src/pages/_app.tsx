@@ -1,30 +1,29 @@
-import React, {useEffect, useMemo} from 'react'
-import type {AppProps} from 'next/app'
-import {Provide} from '@/shared/Provide'
-import {Box, CssBaseline, Icon, ThemeProvider} from '@mui/material'
-import {I18nProvider, useI18n} from '@/core/i18n'
-import {CenteredContent, Txt} from '@/shared'
-import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {ApiClient} from '@/core/sdk/server/ApiClient'
-import {AppSettingsProvider, useAppSettings} from '@/core/context/ConfigContext'
-import {appConfig} from '@/conf/AppConfig'
+import {useEffect, useMemo} from 'react'
 import {MsalProvider} from '@azure/msal-react'
-import {getMsalInstance} from '@/core/msal'
-import {DRCLogo} from '@/shared/logo/logo'
 import {EmotionCache} from '@emotion/react'
-import {ModalProvider} from '@/shared/Modal/ModalProvider'
-import Head from 'next/head'
-import {LocalizationProvider} from '@mui/x-date-pickers-pro'
-import {AdapterDateFns} from '@mui/x-date-pickers-pro/AdapterDateFnsV3'
-import {LicenseInfo} from '@mui/x-license-pro'
-import {useRouter} from 'next/router'
-import {KoboSchemaProvider} from '@/features/KoboSchema/KoboSchemaContext'
-import {KoboUpdateProvider} from '@/core/context/KoboUpdateContext'
-import {KoboAnswersProvider} from '@/core/context/KoboAnswersContext'
-import {HashRouter} from 'react-router-dom'
-import {SessionProvider} from '@/core/Session/SessionContext'
-import {ToastProvider} from '@/shared/Toast'
+import {Box, CssBaseline, Icon, ThemeProvider} from '@mui/material'
 import {AppCacheProvider} from '@mui/material-nextjs/v15-pagesRouter'
+import {LicenseInfo} from '@mui/x-license-pro'
+import type {AppProps} from 'next/app'
+import Head from 'next/head'
+import {useRouter} from 'next/router'
+import {HashRouter} from 'react-router-dom'
+
+import {appConfig} from '@/conf/AppConfig'
+import {AppSettingsProvider, useAppSettings} from '@/core/context/ConfigContext'
+import {KoboAnswersProvider} from '@/core/context/KoboAnswersContext'
+import {KoboUpdateProvider} from '@/core/context/KoboUpdateContext'
+import {I18nProvider, useI18n} from '@/core/i18n'
+import {getMsalInstance} from '@/core/msal'
+import {ApiClient} from '@/core/sdk/server/ApiClient'
+import {ApiSdk} from '@/core/sdk/server/ApiSdk'
+import {SessionProvider} from '@/core/Session/SessionContext'
+import {KoboSchemaProvider} from '@/features/KoboSchema/KoboSchemaContext'
+import {CenteredContent, Txt} from '@/shared'
+import {DRCLogo} from '@/shared/logo/logo'
+import {ModalProvider} from '@/shared/Modal/ModalProvider'
+import {Provide} from '@/shared/Provide'
+import {ToastProvider} from '@/shared/Toast'
 
 LicenseInfo.setLicenseKey(appConfig.muiProLicenseKey ?? '')
 
@@ -70,11 +69,10 @@ const AppWithConfig = (props: AppProps) => {
   return (
     <Provide
       providers={[
-        (_) => <LocalizationProvider children={_} dateAdapter={AdapterDateFns} />,
+        (_) => <I18nProvider children={_} />,
         (_) => <ToastProvider children={_} />,
         (_) => <ThemeProvider theme={settings.theme.theme} children={_} />,
         (_) => <CssBaseline children={_} />,
-        (_) => <I18nProvider children={_} />,
         (_) => <MsalProvider children={_} instance={msal} />,
         ...(!isServerSide ? [(_: any) => <HashRouter children={_} />] : []),
         (_) => <KoboSchemaProvider children={_} />,

@@ -7,7 +7,7 @@ import * as yup from 'yup'
 
 import {KoboFlattenRepeatedGroup, KoboSchemaHelper} from 'infoportal-common'
 
-import {useI18n} from '@/core/i18n'
+import {useI18n, type AppLang} from '@/core/i18n'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {databaseIndex} from '@/features/Database/databaseIndex'
 import {
@@ -60,6 +60,7 @@ export const getColumnsForRepeatGroup = ({
   onRepeatGroupClick,
   m,
   t,
+  currentLang,
 }: {
   groupName: string
   formId: Kobo.FormId
@@ -67,6 +68,7 @@ export const getColumnsForRepeatGroup = ({
   onRepeatGroupClick?: ColumnBySchemaGeneratorProps['onRepeatGroupClick']
   m: ColumnBySchemaGeneratorProps['m']
   t: ColumnBySchemaGeneratorProps['t']
+  currentLang?: AppLang
 }) => {
   const groupInfo = schema.helper.group.getByName(groupName)!
   const res: DatatableColumn.Props<KoboFlattenRepeatedGroup.Data>[] = []
@@ -76,6 +78,7 @@ export const getColumnsForRepeatGroup = ({
     schema,
     t,
     m,
+    currentLang,
   })
   if (groupInfo.depth > 1) {
     res.push(

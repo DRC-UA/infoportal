@@ -6,11 +6,9 @@ import {Panel} from '@/shared/Panel'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Bn_re, DrcOffice, KoboIndex, koboMetaStatusLabel, KoboXmlMapper, MpcaEntity} from 'infoportal-common'
 import {IpBtn} from '@/shared/Btn'
-import {formatDateTime, formatLargeNumber} from '@/core/i18n/localization/en'
 import {MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
 import {SelectDrcProject} from '@/shared/customInput/SelectDrcProject'
 import {Box, Icon} from '@mui/material'
-import {useAsync} from '@/shared/hook/useAsync'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicationData'
@@ -22,20 +20,19 @@ import Link from 'next/link'
 import {Txt} from '@/shared/Txt'
 import {useSession} from '@/core/Session/SessionContext'
 import {AccessSdk} from '@/core/sdk/server/access/AccessSdk'
-import {fnSwitch, seq} from '@axanc/ts-utils'
+import {seq} from '@axanc/ts-utils'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {KoboApiSdk} from '@/core/sdk/server/kobo/KoboApiSdk'
-import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 
 const PrivateCell = () => {
   return <TableIcon color="disabled">lock</TableIcon>
 }
 
 export const MpcaData = () => {
-  const {m, formatDate} = useI18n()
-  const {api, conf} = useAppSettings()
+  const {m, formatDate, formatDateTime, formatLargeNumber} = useI18n()
+  const {conf} = useAppSettings()
   const {session, accesses} = useSession()
   const ctx = useMpcaContext()
   const [selected, setSelected] = useState<string[]>([])

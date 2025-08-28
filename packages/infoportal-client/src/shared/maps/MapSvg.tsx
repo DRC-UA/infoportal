@@ -4,7 +4,7 @@ import {MapSvgPaths, ukraineSvgPath} from './mapSvgPaths'
 import {alpha, Box, BoxProps, darken, useTheme} from '@mui/material'
 import {useMemo} from 'react'
 import {Txt} from '@/shared/Txt'
-import {formatLargeNumber} from '@/core/i18n/localization/en'
+import {formatLargeNumber} from '@/core/i18n'
 
 // viewBox="22.138577 52.380834 40.220623 44.387017"
 // width="612.47321"

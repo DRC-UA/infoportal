@@ -1,21 +1,27 @@
-import React, {useMemo} from 'react'
+import {forwardRef} from 'react'
 import {DateRange, DateRangePicker, PickersShortcutsItem, SingleInputDateRangeField} from '@mui/x-date-pickers-pro'
 import {unstable_useMultiInputDateRangeField as useMultiInputDateRangeField} from '@mui/x-date-pickers-pro/MultiInputDateRangeField'
 import {Box, TextField} from '@mui/material'
 import {endOfMonth, format, startOfMonth, subMonths} from 'date-fns'
+import {enUS, uk as ukUA, type Locale} from 'date-fns/locale'
+
+import {AppLang, useI18n} from '@/core/i18n'
 import {PeriodPickerProps} from '@/shared/PeriodPicker/PeriodPickerNative'
 
-const shortcutsItems: PickersShortcutsItem<DateRange<Date>>[] = (() => {
+const localeMap: Record<AppLang, Locale> = {en: enUS, uk: ukUA}
+
+const shortcutsMaker = (lang: AppLang): PickersShortcutsItem<DateRange<Date>>[] => {
   const today = new Date()
   const limit = 7
   return Array.from({length: limit}, (_, i) => {
     const currentDate = subMonths(today, limit - 1 - i)
+
     return {
-      label: format(currentDate, 'MMMM yyyy'),
+      label: format(currentDate, 'LLLL yyyy', {locale: localeMap[lang]}),
       getValue: () => [startOfMonth(currentDate), endOfMonth(currentDate)],
     }
   })
-})()
+}
 
 const toDateRange = (_?: [Date | undefined, Date | undefined]): DateRange<Date> => {
   const [start, end] = _ ?? []
@@ -39,6 +45,7 @@ export const PeriodPickerMui = ({
   fullWidth = true,
   sx,
 }: PeriodPickerProps) => {
+  const {currentLang} = useI18n()
   const handleChange: DateChangeHandler = (range: DateRange<Date>) => onChange(revertNulls(range))
 
   return (
@@ -59,14 +66,14 @@ export const PeriodPickerMui = ({
           sx: {minWidth: 228, marginTop: 0, paddingTop: 0, marginRight: 1, ...sx},
           fullWidth,
         },
-        shortcuts: {items: shortcutsItems},
+        shortcuts: {items: shortcutsMaker(currentLang)},
       }}
       slots={{field: SingleInputDateRangeField}}
     />
   )
 }
 
-const BrowserMultiInputDateRangeField = React.forwardRef<HTMLDivElement, any>((props, ref) => {
+const BrowserMultiInputDateRangeField = forwardRef<HTMLDivElement, any>((props, ref) => {
   const {
     slotProps,
     value,

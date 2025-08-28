@@ -12,6 +12,7 @@ import {IpAlert} from '@/shared/Alert'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {DashboardLayout} from '@/shared/DashboardLayout/DashboardLayout'
 import {DashboardFilterOptions} from '@/shared/DashboardLayout/DashboardFilterOptions'
+import {LanguageSwitch} from '@/shared/LanguageSwitch'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 import {ProtectionDashboardMonitoSample} from './ProtectionDashboardMonitoSample'
@@ -49,6 +50,7 @@ export const ProtectionDashboardMonitoWCtx = () => {
       loading={ctx.fetcherData.loading}
       title={m.ukraine}
       subTitle={m.protectionMonitoringDashboard}
+      action={<LanguageSwitch />}
       header={
         <DataFilterLayout
           hidePopup

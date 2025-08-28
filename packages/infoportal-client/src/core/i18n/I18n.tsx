@@ -1,30 +1,43 @@
-import * as React from 'react'
-import {ReactNode, useContext, useEffect, useMemo, useState} from 'react'
-import {en} from './localization/en'
+import {createContext, useContext, useMemo, type ReactNode} from 'react'
 import {Obj} from '@axanc/ts-utils'
-import {ua} from '@/core/i18n/localization/ua'
+import {LocalizationProvider} from '@mui/x-date-pickers-pro'
+import {AdapterDateFns} from '@mui/x-date-pickers-pro/AdapterDateFnsV3'
+import {enUS, uk as ukUA} from 'date-fns/locale'
+
+import {usePersistentState} from '@/shared/hook/usePersistantState'
+
+import {
+  en,
+  uk,
+  dateFromNow,
+  formatDate,
+  formatDateTime,
+  formatDuration,
+  formatLargeNumber,
+  formatTime,
+} from './localization'
 
 export interface I18nContextProps {
   currentLang: AppLang
   setLang: (_: AppLang) => void
   m: (typeof en)['messages']
   availableLangs: AppLang[]
-  formatLargeNumber: (typeof en)['formatLargeNumber']
-  formatDuration: (typeof en)['formatDuration']
-  formatDate: (typeof en)['formatDate']
-  dateFromNow: (typeof en)['dateFromNow']
-  formatTime: (typeof en)['formatTime']
-  formatDateTime: (typeof en)['formatDateTime']
+  formatLargeNumber: typeof formatLargeNumber
+  formatDuration: typeof formatDuration
+  formatDate: typeof formatDate
+  dateFromNow: typeof dateFromNow
+  formatTime: typeof formatTime
+  formatDateTime: typeof formatDateTime
 }
 
 export const appLangs = {
-  ua,
+  uk,
   en,
 }
 
 export type AppLang = keyof typeof appLangs
 
-const I18nContext = React.createContext<I18nContextProps>({} as any)
+const I18nContext = createContext<I18nContextProps>({} as any)
 
 export const useI18n = () => useContext<I18nContextProps>(I18nContext as any)
 
@@ -33,32 +46,35 @@ export const withI18n = (Component: any) => (props: any) => (
 )
 
 export const I18nProvider = ({children, defaultLang = 'en'}: {readonly defaultLang?: AppLang; children: ReactNode}) => {
-  const [lang, setLang] = useState<AppLang>(defaultLang)
+  const [lang, setLang] = usePersistentState<AppLang>(defaultLang, {storageKey: 'language'})
 
-  useEffect(() => {
-    setLang(defaultLang)
-  }, [defaultLang])
-
-  const {messages: m, ...others}: typeof en = useMemo(() => {
+  const {messages: m, adapterLocale} = useMemo(() => {
     switch (lang) {
-      case 'ua':
-        return ua as any
+      case 'uk':
+        return {...uk, adapterLocale: ukUA}
       default:
-        return en
+        return {...en, adapterLocale: enUS}
     }
   }, [lang])
 
   return (
-    <I18nContext.Provider
-      value={{
-        currentLang: lang,
-        setLang,
-        availableLangs: Obj.keys(appLangs),
-        m,
-        ...others,
-      }}
-    >
-      {children}
-    </I18nContext.Provider>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={adapterLocale}>
+      <I18nContext.Provider
+        value={{
+          currentLang: lang,
+          setLang,
+          availableLangs: Obj.keys(appLangs),
+          m,
+          dateFromNow,
+          formatDate: (date) => formatDate(date, lang),
+          formatDateTime,
+          formatDuration,
+          formatLargeNumber,
+          formatTime,
+        }}
+      >
+        {children}
+      </I18nContext.Provider>
+    </LocalizationProvider>
   )
 }

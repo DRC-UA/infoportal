@@ -1,4 +1,5 @@
-export {I18nProvider, useI18n, type AppLang} from './I18n'
+export {en, type Messages} from './en'
+export {uk} from './uk'
 export {
   dateFromNow,
   formatDate,
@@ -7,5 +8,4 @@ export {
   formatLargeNumber,
   formatTime,
   isDateValid,
-  type Messages,
-} from './localization'
+} from './utils'

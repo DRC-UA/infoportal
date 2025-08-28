@@ -5,7 +5,6 @@ import {Lazy} from '@/shared/Lazy'
 import {format} from 'date-fns'
 import {useI18n} from '@/core/i18n'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {formatLargeNumber} from '@/core/i18n/localization/en'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {ChartLine} from '@/shared/charts/ChartLine'
@@ -20,7 +19,7 @@ const colors = (t: Theme) => ({
 })
 
 export const SafetyIncidentDashboardAlert = () => {
-  const {m} = useI18n()
+  const {m, formatLargeNumber} = useI18n()
   const {dataFiltered, optionFilter, setOptionFilters} = useSafetyIncidentContext()
   const flatAlertData = useMemo(() => {
     return dataFiltered.flatMap((_) => {

@@ -18,7 +18,6 @@ import {
 } from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
-import {formatDateTime} from '@/core/i18n/localization/en'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
@@ -95,7 +94,7 @@ export const CfmTable = ({}: any) => {
   //   }, {} as Record<'meal_cfmInternal' | 'meal_cfmExternal', string[]>)
   // }, [selectedFromId_Ids])
 
-  const {m, formatDate, formatLargeNumber} = useI18n()
+  const {m, formatDate, formatDateTime} = useI18n()
   const {session} = useSession()
   const {api} = useAppSettings()
 
