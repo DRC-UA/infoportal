@@ -263,7 +263,15 @@ export const DatabaseKoboTableContent = ({
             {ctx.form.deploymentStatus === 'archived' && <ArchiveAlert />}
             {ctx.access.admin && (
               <FormControlLabel
-                control={<Switch checked={showXmlLabels} onChange={handleXmlLabelsToggle} name="gilad" />}
+                sx={{ml: 1}}
+                control={
+                  <Switch
+                    size="small"
+                    checked={showXmlLabels}
+                    onChange={handleXmlLabelsToggle}
+                    name="xml-fields-display-switch"
+                  />
+                }
                 label={m.xmlLabels}
               />
             )}
