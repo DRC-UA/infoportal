@@ -339,7 +339,15 @@ export class KoboMetaMapperEcrec {
 
     return KoboMetaMapper.make({
       // enumerator: Ecrec_msmeGrantReg.options.[answer.back_enum!],
-      office: DrcOffice.Mykolaiv,
+      office: match(answer.cal_office)
+        .cases({
+          kharkiv: DrcOffice.Kharkiv,
+          dnipro: DrcOffice.Dnipro,
+          mykovaiv: DrcOffice.Mykolaiv,
+          chernihiv: DrcOffice.Chernihiv,
+          sumy: DrcOffice.Sumy,
+        })
+        .default(undefined),
       oblast: oblast?.name,
       raion: KoboXmlMapper.Location.searchRaion(answer.raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
