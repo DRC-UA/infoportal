@@ -382,8 +382,8 @@ export class KoboMetaMapperEcrec {
     const project = DrcProject['UKR-000355 Danish MFA']
 
     return KoboMetaMapper.make({
-      // enumerator: Ecrec_vet2_dmfa.options.[answer.back_enum!],
-      office: DrcOffice.Mykolaiv,
+      enumerator: undefined,
+      office: undefined,
       oblast: oblast?.name,
       raion: KoboXmlMapper.Location.searchRaion(answer.raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
