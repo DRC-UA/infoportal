@@ -100,6 +100,10 @@ const uk = deepmerge(en, {
       individualsReached: 'Осіб охоплено',
     },
     xmlLabels: 'XML поля',
+    language: {
+      uk: 'Українська',
+      en: 'Англійська',
+    },
     _shelter: {
       damageCondition: 'What is the Condition of the Building / Apartment',
     },

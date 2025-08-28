@@ -442,6 +442,10 @@ const en = Object.freeze({
     facilitated: 'Facilitated',
     victimAssistanceTitle: 'Victim Assistance',
     xmlLabels: 'XML Labels',
+    language: {
+      uk: 'Ukranian',
+      en: 'English',
+    },
     _meal: {
       openTracker: 'Open Excel tracker',
       visitMonitoring: 'Visit Monitoring',

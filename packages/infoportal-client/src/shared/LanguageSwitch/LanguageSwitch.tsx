@@ -30,7 +30,7 @@ const LanguageSwitch: FC<{children?: (currentLang: string) => ReactElement}> = (
               callback: close,
             })}
           >
-            {languageOption}
+            {`${m.language[languageOption]} (${languageOption})`}
           </MenuItem>
         ))
       }
