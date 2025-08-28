@@ -18,6 +18,8 @@ import {
   Shelter_north,
   Shelter_nta,
   Shelter_ta,
+  Ecrec_small_scale,
+  Ecrec_subsistance,
 } from 'infoportal-common'
 import {map} from '@axanc/ts-utils'
 import {ShelterNtaTags, ShelterTaTags} from './tags/ShelterTags.js'
@@ -107,6 +109,14 @@ export class KoboMappedAnswersService {
   readonly searchBn_ecrecCashRegistration = this.buildMappedSearch(
     KoboIndex.byName('ecrec_cashRegistration').id,
     Ecrec_cashRegistration.map,
+  )
+  readonly searchEcrec_small_scale = this.buildMappedSearch(
+    KoboIndex.byName('ecrec_small_scale').id,
+    Ecrec_small_scale.map,
+  )
+  readonly searchEcrec_subsistance = this.buildMappedSearch(
+    KoboIndex.byName('ecrec_subsistance').id,
+    Ecrec_subsistance.map,
   )
   readonly searchBn_ecrecCashRent = this.buildMappedSearch(
     KoboIndex.byName('ecrec_cashRegistration').id,

@@ -16,6 +16,8 @@ import {
   Ecrec_vet2_dmfa,
   Ecrec_vetApplication,
   Ecrec_vetEvaluation,
+  Ecrec_small_scale,
+  Ecrec_subsistance,
   KoboBaseTags,
   KoboEcrec_cashRegistration,
   KoboHelper,
@@ -237,6 +239,78 @@ export class KoboMetaMapperEcrec {
 
     return KoboMetaMapper.make({
       enumerator: Ecrec_cashRegistrationBha.options.back_enum[answer.back_enum!],
+      office: KoboXmlMapper.office(answer.back_office),
+      oblast: oblast.name,
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
+      settlement: answer.ben_det_settlement,
+      sector: DrcSector.Livelihoods,
+      activity: DrcProgram.SectoralCashForAgriculture,
+      personsCount: persons.length,
+      persons,
+      project: project ? [project] : [],
+      donor: map(project, (_) => [DrcProjectHelper.donorByProject[_]]),
+      lastName: answer.ben_det_surname,
+      firstName: answer.ben_det_first_name,
+      patronymicName: answer.ben_det_pat_name,
+      taxId: answer.pay_det_tax_id_num,
+      phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+      status: KoboMetaHelper.mapCashStatus(row.tags?.status),
+      lastStatusUpdate: row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined,
+      passportNum: answer.pay_det_pass_num,
+      taxIdFileName: answer.pay_det_tax_id_ph,
+      taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
+      idFileName: answer.pay_det_id_ph,
+      idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
+    })
+  }
+
+  static readonly ecrec_small_scale: MetaMapperInsert<
+    KoboMetaOrigin<Ecrec_small_scale.T, KoboBaseTags & KoboTagStatus>
+  > = (row) => {
+    const answer = Ecrec_small_scale.map(row.answers)
+    const persons = KoboXmlMapper.Persons.ecrec_small_scale(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.oblast!)
+    const project = DrcProjectHelper.search(Ecrec_small_scale.options.back_donor[answer.back_donor!])
+
+    return KoboMetaMapper.make({
+      enumerator: Ecrec_small_scale.options.back_enum[answer.back_enum!],
+      office: KoboXmlMapper.office(answer.back_office),
+      oblast: oblast.name,
+      raion: KoboXmlMapper.Location.searchRaion(answer.raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
+      settlement: answer.settlement,
+      sector: DrcSector.Livelihoods,
+      activity: DrcProgram.SectoralCashForAgriculture,
+      personsCount: persons.length,
+      persons,
+      project: project ? [project] : [],
+      donor: map(project, (_) => [DrcProjectHelper.donorByProject[_]]),
+      lastName: answer.surname,
+      firstName: answer.first_name,
+      patronymicName: answer.pat_name,
+      taxId: answer.pay_det_tax_id_num,
+      phone: answer.ben_det_ph_number ? '' + answer.ben_det_ph_number : undefined,
+      status: KoboMetaHelper.mapCashStatus(row.tags?.status),
+      lastStatusUpdate: row.tags?.lastStatusUpdate ? new Date(row.tags?.lastStatusUpdate) : undefined,
+      passportNum: answer.pay_det_pass_num,
+      taxIdFileName: answer.pay_det_tax_id_ph,
+      taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
+      idFileName: answer.pay_det_id_ph,
+      idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
+    })
+  }
+
+static readonly ecrec_subsistance: MetaMapperInsert<
+    KoboMetaOrigin<Ecrec_subsistance.T, KoboBaseTags & KoboTagStatus>
+  > = (row) => {
+    const answer = Ecrec_subsistance.map(row.answers)
+    const persons = KoboXmlMapper.Persons.ecrec_subsistance(answer)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
+    const project = DrcProjectHelper.search(Ecrec_subsistance.options.back_donor[answer.back_donor!])
+
+    return KoboMetaMapper.make({
+      enumerator: Ecrec_subsistance.options.back_enum[answer.back_enum!],
       office: KoboXmlMapper.office(answer.back_office),
       oblast: oblast.name,
       raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
