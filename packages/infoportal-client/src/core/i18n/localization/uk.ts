@@ -23,6 +23,7 @@ const uk = deepmerge(en, {
     protHHSnapshot: {},
     includeNotSpecified: 'в т.ч. "Не зазначено"',
     damageCause: 'Причина руйнувань',
+    hhSize: 'Розмір домогосподарства',
     avgHHSize: 'Середній розмір домогосподарства',
     households: 'Домогосподарств',
     formOutcome: {
