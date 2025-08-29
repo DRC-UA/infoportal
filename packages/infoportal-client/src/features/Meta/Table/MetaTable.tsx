@@ -155,6 +155,12 @@ export const MetaTable = () => {
         renderQuick: (_) => _.activity,
       },
       {
+        id: 'modality',
+        type: 'select_one',
+        head: m.modality,
+        renderQuick: (_) => _.modality,
+      },
+      {
         id: 'project',
         type: 'select_multiple',
         head: m.project,
