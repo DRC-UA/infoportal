@@ -1,4 +1,5 @@
 import {match, seq} from '@axanc/ts-utils'
+import {intervalToDuration} from 'date-fns'
 
 import {Person} from '../../type/Person.js'
 import {OblastIndex} from '../../location/index.js'
@@ -36,6 +37,7 @@ import {
   Protection_gbv,
   Protection_groupSession,
   Protection_hhs3,
+  Protection_ipaTracker,
   Protection_pss,
   Protection_referral,
   Shelter_cashForShelter,
@@ -668,6 +670,45 @@ export namespace KoboXmlMapper {
           }
         })
         .compact()
+    }
+
+    export const protection_ipaTracker: PersonsMapper<Protection_ipaTracker.T> = ({
+      date_birth,
+      assessment_date,
+      gender,
+      status,
+      specific_need,
+    }) => {
+      return [
+        {
+          age:
+            date_birth && assessment_date
+              ? safeAge(
+                  intervalToDuration({
+                    start: date_birth,
+                    end: assessment_date,
+                  }).years,
+                )
+              : undefined,
+          gender: match(gender)
+            .cases({
+              man: Person.Gender.Male,
+              woman: Person.Gender.Female,
+              other: Person.Gender.Other,
+            })
+            .default(undefined),
+          displacement: match(status)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              idp_returnee: Person.DisplacementStatus.Returnee,
+              refugee: Person.DisplacementStatus.Refugee,
+              refugee_returnee: Person.DisplacementStatus.Returnee,
+              non_displaced: Person.DisplacementStatus.NonDisplaced,
+            })
+            .default(undefined),
+          disability: specific_need?.includes('person_disability') ? [Person.WgDisability.See] : undefined, // TODO: thinks of some new common disability type for such cases
+        },
+      ]
     }
 
     export const protection_pss: PersonsMapper<Protection_pss.T> = (row) => {
