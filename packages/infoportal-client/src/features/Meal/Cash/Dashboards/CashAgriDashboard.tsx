@@ -1,52 +1,45 @@
 import React, {useMemo, useState} from 'react'
 import {Seq, seq} from '@axanc/ts-utils'
-import {useI18n} from '@/core/i18n'
-import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
+import {Checkbox, FormControlLabel, Box, Tab, Tabs, Typography, TextField} from '@mui/material'
+
+import {formatLargeNumber, useI18n} from '@/core/i18n'
 import {DebouncedInput} from '@/shared/DebouncedInput'
-import {Div, PdfSlide, PdfSlideBody, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {Meal_cashPdm, Ecrec_cashRegistration, OblastIndex} from 'infoportal-common'
-import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
-import {appConfig} from '@/conf/AppConfig'
-import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
-import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
-import {AgeGroupTable} from '@/shared/AgeGroupTable'
-import {Panel, PanelBody} from '@/shared/Panel'
-import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
-import {Box, Checkbox, FormControlLabel, Tab, Tabs, TextField, Typography} from '@mui/material'
+import {Div, PdfSlide, PdfSlideBody, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {Lazy} from '@/shared'
+import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
+import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {ChartBarGrouped, ChartBarVerticalGrouped} from '@/shared/charts/ChartBarGrouped'
+import {useCashPdm, CashPdmData, CashPdmForm} from '@/features/Meal/Cash/Context/CashContext'
 
-const mapOblast = OblastIndex.koboOblastIndexIso
+import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {Meal_cashPdm, Ecrec_cashRegistration} from 'infoportal-common'
+import {CashOverview} from '@/features/Meal/Cash/Components/CashOverview'
+import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
+import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
+import {Registration} from '@/features/Meal/Cash/Components/Registration'
+import {AbilityCover} from '@/features/Meal/Cash/Components/AbilityCover'
+import {Outcome} from '@/features/Meal/Cash/Components/Outcome'
+import {useCashFilter} from '@/features/Meal/Cash/Context/useCashFilter'
 
-const isCashOrEcrec = (_: PdmData<PdmForm>): _ is PdmData<Meal_cashPdm.T | Ecrec_cashRegistration.T> =>
-  _.type === 'Cash' || _.type === 'Ecrec'
-
-const PdfSectionTitle = ({children}: {children: React.ReactNode}) => {
-  return (
-    <Box
-      sx={{
-        px: 1,
-        pb: 1,
-        borderBottom: '2px solid',
-        borderColor: (t) => t.palette.divider,
-        mb: 2,
-      }}
-    >
-      <Typography variant="h4" fontWeight="bold" color="text.primary">
-        {children}
-      </Typography>
-    </Box>
-  )
-}
+const PdfSectionTitle = ({children}: {children: React.ReactNode}) => (
+  <Box
+    sx={{
+      px: 1,
+      pb: 1,
+      borderBottom: '2px solid',
+      borderColor: (t) => t.palette.divider,
+      mb: 2,
+    }}
+  >
+    <Typography variant="h4" fontWeight="bold" color="text.primary">
+      {children}
+    </Typography>
+  </Box>
+)
 
 const baseColors = ['#6b0606', '#a12222', '#cf5959', '#e89b9b']
-
 const colorByQuestion: Record<string, string> = Object.fromEntries(
   [
     'lcs_sell_hh_assets',
@@ -76,17 +69,17 @@ const lcsSections = [
     severity: 'Emergency',
     questions: ['lcs_sell_house', 'lcs_move_elsewhere', 'lcs_degrading_income_source', 'lcs_ask_stranger'],
   },
-]
+] as const
 
-const buildLcsChartData = (data: PdmData<any>[], m: Record<string, string>): Record<string, ChartBarGrouped[]> => {
-  return Object.fromEntries(
+const buildLcsChartData = (data: CashPdmData<any>[], m: Record<string, string>): Record<string, ChartBarGrouped[]> =>
+  Object.fromEntries(
     lcsSections.map(({severity, questions}) => {
       const bars = questions.map((qName) => {
-        const valid = data.filter((d) => d.answers[qName] != null)
+        const valid = data.filter((d) => (d.answers as any)[qName] != null)
         return {
           key: qName,
           label: m[qName] ?? qName,
-          value: valid.filter((d) => d.answers[qName] === 'yes').length,
+          value: valid.filter((d) => (d.answers as any)[qName] === 'yes').length,
           base: valid.length,
           color: colorByQuestion[qName],
         }
@@ -94,68 +87,45 @@ const buildLcsChartData = (data: PdmData<any>[], m: Record<string, string>): Rec
       return [severity, [{category: severity, bars}]]
     }),
   )
-}
 
-export const MealPdmCashDashboard = () => {
-  const ctx = useMealPdmContext()
-  const ctxSchema = useKoboSchemaContext()
-  const schema = ctxSchema.byName.meal_cashPdm.get!
-  const langIndex = ctxSchema.langIndex
-  const {m, formatLargeNumber} = useI18n()
-  const {shape: commonShape} = usePdmFilters(ctx.fetcherAnswers.get?.filter(isCashOrEcrec))
+export const CashAgriDashboard = () => {
+  const ctx = useCashPdm()
+  const {m} = useI18n()
+
+  const {shape} = useCashFilter(ctx.fetcherAnswers.get)
+
   const [formTab, setFormTab] = useState<'PDM' | 'Registration'>('PDM')
-  const [searchUniqueId, setSearchUniqueId] = useState<string>('')
-  const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
+  const [filters, setFilters] = useState<Record<string, string[] | undefined>>({})
+  const [search, setSearch] = useState<string>('')
   const [onlyPdmEntries, setOnlyPdmEntries] = useState(false)
-  const filterShape = useMemo(() => {
-    return DataFilter.makeShape<PdmData<Meal_cashPdm.T | Ecrec_cashRegistration.T>>({
-      ...commonShape,
-      pdmtype: {
-        icon: appConfig.icons.project,
-        getOptions: () =>
-          schema.helper.getOptionsByQuestionName('pdmtype').map((_) => ({
-            value: _.name,
-            label: _.label[langIndex],
-          })),
-        label: m.mealMonitoringPdm.pdmType,
-        getValue: (_): string | undefined => {
-          if (_.type === 'Cash') {
-            const cashAnswers = _.answers as Meal_cashPdm.T
-            return cashAnswers.pdmtype?.[0]
-          }
-          return undefined
-        },
-      },
-      received: {
-        icon: 'check_circle',
-        getOptions: () => DataFilter.buildOptionsFromObject(Meal_cashPdm.options.any_member_household),
-        label: m.mealMonitoringPdm.received,
-        getValue: (_): string | undefined => {
-          if (_.type === 'Cash') {
-            const cashAnswers = _.answers as Meal_cashPdm.T
-            return cashAnswers.did_receive_cash
-          }
-          return undefined
-        },
-      },
-    })
-  }, [commonShape, schema])
+
+  const periodBounds = useMemo(() => {
+    const p = ctx.fetcherPeriod.get
+    if (!p) return {min: undefined as Date | undefined, max: undefined as Date | undefined}
+    const starts = [p.cashPdm.start, p.ecrec.start].filter(Boolean) as Date[]
+    const ends = [p.cashPdm.end, p.ecrec.end].filter(Boolean) as Date[]
+    const min = starts.length ? new Date(Math.min(...starts.map((d) => d.getTime()))) : undefined
+    const max = ends.length ? new Date(Math.max(...ends.map((d) => d.getTime()))) : undefined
+    return {min, max}
+  }, [ctx.fetcherPeriod.get])
 
   const data = useMemo(() => {
-    if (!ctx.fetcherAnswers.get) return seq<PdmData<Meal_cashPdm.T | Ecrec_cashRegistration.T>>([])
-    let all = ctx.fetcherAnswers.get.filter(isCashOrEcrec)
-    const ids = searchUniqueId
+    if (!ctx.fetcherAnswers.get) return seq<CashPdmData<CashPdmForm>>([])
+
+    let all = ctx.fetcherAnswers.get
+
+    const ids = search
       .split(/\s+/)
       .map((id) => id.trim())
       .filter(Boolean)
 
     if (ids.length > 0) {
       all = all.filter((entry) => {
-        if (entry.type === 'Cash') {
+        if (entry.source === 'pdm') {
           const unique = (entry.answers as Meal_cashPdm.T).unique_number?.toString()
           return ids.some((id) => unique?.includes(id))
         }
-        if (entry.type === 'Ecrec') {
+        if (entry.source === 'ecrec') {
           const phone = (entry.answers as Ecrec_cashRegistration.T).ben_det_ph_number?.toString()
           return ids.some((id) => phone?.includes(id))
         }
@@ -164,51 +134,49 @@ export const MealPdmCashDashboard = () => {
     }
 
     if (onlyPdmEntries) {
-      const pdmPhones = new Set(
+      const pdmIds = new Set(
         all
-          .filter((_) => _.type === 'Cash')
-          .map((_) => (_.answers as Meal_cashPdm.T).unique_number)
+          .filter((_) => _.source === 'pdm')
+          .map((_) => (_.answers as Meal_cashPdm.T).unique_number as any)
           .filter(Boolean),
       )
       all = all.filter((entry) => {
-        if (entry.type === 'Cash') return true
-        if (entry.type === 'Ecrec') {
+        if (entry.source === 'pdm') return true
+        if (entry.source === 'ecrec') {
           const phone = (entry.answers as Ecrec_cashRegistration.T).ben_det_ph_number
-          return phone !== undefined && pdmPhones.has(phone)
+          return phone !== undefined && pdmIds.has(phone)
         }
         return false
       })
     }
-    return DataFilter.filterData(all, filterShape, optionFilter)
-  }, [ctx.fetcherAnswers.get, filterShape, optionFilter, onlyPdmEntries])
 
-  const dataCash = useMemo(() => seq(data).filter((_) => _.type === 'Cash') as Seq<PdmData<Meal_cashPdm.T>>, [data])
+    return DataFilter.filterData(all, shape, filters)
+  }, [ctx.fetcherAnswers.get, shape, filters, search, onlyPdmEntries])
+
+  const dataCash = useMemo(
+    () => seq(data).filter((_) => _.source === 'pdm') as Seq<CashPdmData<Meal_cashPdm.T>>,
+    [data],
+  )
   const dataEcrec = useMemo(
-    () => seq(data).filter((_) => _.type === 'Ecrec') as Seq<PdmData<Ecrec_cashRegistration.T>>,
+    () => seq(data).filter((_) => _.source === 'ecrec') as Seq<CashPdmData<Ecrec_cashRegistration.T>>,
     [data],
   )
 
   const chartDataCash = useMemo(() => buildLcsChartData(dataCash, m.mealMonitoringPdm), [dataCash, m])
   const chartDataEcrec = useMemo(() => buildLcsChartData(dataEcrec, m.mealMonitoringPdm), [dataEcrec, m])
 
-  const OnlyPdmToggle = (
-    <Box>
-      <FormControlLabel
-        control={<Checkbox checked={onlyPdmEntries} onChange={(e) => setOnlyPdmEntries(e.target.checked)} />}
-        label={m.mealMonitoringPdm.onlyPdm}
-      />
-    </Box>
-  )
-
   return (
     <Page width="lg" loading={ctx.fetcherAnswers.loading}>
       <DataFilterLayout
-        shapes={filterShape}
-        filters={optionFilter}
-        setFilters={setOptionFilters}
+        shapes={shape}
+        filters={filters}
+        setFilters={setFilters}
         before={
           <>
-            {OnlyPdmToggle}
+            <FormControlLabel
+              control={<Checkbox checked={onlyPdmEntries} onChange={(e) => setOnlyPdmEntries(e.target.checked)} />}
+              label={m.mealMonitoringPdm.onlyPdm}
+            />
             <DebouncedInput<[Date | undefined, Date | undefined]>
               debounce={400}
               value={[ctx.periodFilter.start, ctx.periodFilter.end]}
@@ -219,89 +187,31 @@ export const MealPdmCashDashboard = () => {
                   defaultValue={value}
                   value={value}
                   onChange={onChange}
-                  min={ctx.fetcherPeriod.get?.start}
-                  max={ctx.fetcherPeriod.get?.end}
+                  min={periodBounds.min}
+                  max={periodBounds.max}
                   fullWidth={false}
                 />
               )}
             </DebouncedInput>
-            <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'}}>
-              <DebouncedInput<string> debounce={300} value={searchUniqueId} onChange={setSearchUniqueId}>
-                {(value, onChange) => (
-                  <TextField
-                    label="Unique ID or Phone"
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                    size="small"
-                    placeholder="Search by Unique ID or Phone"
-                    sx={{minWidth: 220}}
-                  />
-                )}
-              </DebouncedInput>
+
+            <Box sx={{display: 'flex', alignItems: 'center'}}>
+              <TextField
+                label="Unique ID or Phone"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                size="small"
+                placeholder="Search by Unique ID or Phone"
+                sx={{minWidth: 220, ml: 1}}
+              />
             </Box>
           </>
         }
       />
       {data && (
         <>
-          <PdfSectionTitle>{m.overview}</PdfSectionTitle>
-          <PdfSlide>
-            <PdfSlideBody>
-              <Div responsive>
-                <Div column sx={{maxHeight: '33%'}}>
-                  <Panel title={m.ageGroup}>
-                    <PanelBody>
-                      <AgeGroupTable
-                        tableId="pdm-dashboard"
-                        persons={data.flatMap((_) => _.persons).compact()}
-                        enableDisplacementStatusFilter
-                        enablePwdFilter
-                      />
-                    </PanelBody>
-                  </Panel>
-                  <Panel savableAsImg expendable title={m.location}>
-                    <PanelBody>
-                      <MapSvgByOblast
-                        sx={{maxWidth: 480, margin: 'auto'}}
-                        fillBaseOn="value"
-                        data={dataCash}
-                        getOblast={(_) => mapOblast[_.answers.ben_det_oblast!]}
-                        value={(_) => true}
-                        base={(_) => _.answers.ben_det_oblast !== undefined}
-                      />
-                    </PanelBody>
-                  </Panel>
-                </Div>
-                <Div column sx={{maxHeight: '33%'}}>
-                  <SlidePanel title={m.mealMonitoringPdm.didReceive}>
-                    <ChartBarSingleBy
-                      data={dataCash}
-                      by={(_) => _.answers.did_receive_cash}
-                      label={Meal_cashPdm.options.any_member_household}
-                      includeNullish
-                    />
-                  </SlidePanel>
-                  <SlidePanel title={m.mealMonitoringPdm.pdmType}>
-                    <ChartBarMultipleBy
-                      data={dataCash}
-                      by={(_) => _.answers.pdmtype}
-                      label={Meal_cashPdm.options.pdmtype}
-                    />
-                  </SlidePanel>
-                </Div>
-                <Div column sx={{maxHeight: '33%'}}>
-                  <SlidePanel title={m.project}>
-                    <ChartBarSingleBy
-                      data={dataCash}
-                      by={(_) => _.answers.donor}
-                      label={Meal_cashPdm.options.donor}
-                      includeNullish
-                    />
-                  </SlidePanel>
-                </Div>
-              </Div>
-            </PdfSlideBody>
-          </PdfSlide>
+          {seq(dataCash).length > 0 && <CashOverview data={dataCash} />}
+          {seq(dataCash).length > 0 && <Registration data={dataCash} />}
+
           <PdfSectionTitle>{m.mealMonitoringPdm.sufficiency}</PdfSectionTitle>
           <PdfSlide>
             <PdfSlideBody>
@@ -357,6 +267,7 @@ export const MealPdmCashDashboard = () => {
                     />
                   </SlidePanel>
                 </Div>
+
                 <Div column sx={{maxHeight: '33%'}}>
                   <SlidePanel title={m.mealMonitoringPdm.lifestockEnough}>
                     <ChartBarSingleBy
@@ -375,6 +286,7 @@ export const MealPdmCashDashboard = () => {
                     />
                   </SlidePanel>
                 </Div>
+
                 <Div column sx={{maxHeight: '33%'}}>
                   <SlidePanel title={m.mealMonitoringPdm.completed}>
                     <ChartBarSingleBy
@@ -396,6 +308,7 @@ export const MealPdmCashDashboard = () => {
               </Div>
             </PdfSlideBody>
           </PdfSlide>
+
           <PdfSlide>
             <PdfSlideBody>
               <Div responsive>
@@ -438,6 +351,7 @@ export const MealPdmCashDashboard = () => {
               </Div>
             </PdfSlideBody>
           </PdfSlide>
+
           <PdfSectionTitle>{m.mealMonitoringPdm.lcs}</PdfSectionTitle>
           <PdfSlide>
             <PdfSlideBody>
@@ -468,6 +382,7 @@ export const MealPdmCashDashboard = () => {
               </Div>
             </PdfSlideBody>
           </PdfSlide>
+
           <PdfSlide>
             <PdfSlideBody>
               <PdfSectionTitle>{m.mealMonitoringPdm.baseline}</PdfSectionTitle>
@@ -557,6 +472,7 @@ export const MealPdmCashDashboard = () => {
               </Div>
             </PdfSlideBody>
           </PdfSlide>
+
           <PdfSlide>
             <PdfSlideBody>
               <Div responsive>
@@ -616,9 +532,9 @@ export const MealPdmCashDashboard = () => {
               </Div>
             </PdfSlideBody>
           </PdfSlide>
+
           <PdfSlide>
             <PdfSlideBody>
-              <PdfSectionTitle>{m.mealMonitoringPdm.pdm}</PdfSectionTitle>
               <Div responsive>
                 <Div column sx={{maxHeight: '33%'}}>
                   <SlidePanel title={m.mealMonitoringPdm.lcs_sell_hh_assets}>
@@ -667,7 +583,7 @@ export const MealPdmCashDashboard = () => {
                         },
                       ].map(({icon, label, valueFn}) => (
                         <Box key={label} display="flex" flexDirection="column" alignItems="center" flex={1}>
-                          <Lazy deps={[dataEcrec]} fn={valueFn}>
+                          <Lazy deps={[dataCash]} fn={valueFn}>
                             {(value) => (
                               <Box display="flex" alignItems="center" gap={1}>
                                 <span className="material-icons" style={{fontSize: 20, color: '#555'}}>
@@ -714,6 +630,7 @@ export const MealPdmCashDashboard = () => {
               </Div>
             </PdfSlideBody>
           </PdfSlide>
+
           <PdfSlide>
             <PdfSlideBody>
               <Div responsive>
@@ -773,6 +690,8 @@ export const MealPdmCashDashboard = () => {
               </Div>
             </PdfSlideBody>
           </PdfSlide>
+          {seq(dataCash).length > 0 && <AbilityCover data={dataCash} />}
+          {seq(dataCash).length > 0 && <Outcome data={dataCash} />}
           <PdfSlide>
             <PdfSlideBody>
               <Div responsive>

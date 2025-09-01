@@ -25,13 +25,6 @@ export const MealPdm = ({formName}: {formName: KoboFormName}) => {
             <Tab
               sx={{minHeight: 34, py: 1}}
               component={NavLink}
-              value={mealIndex.siteMap.pdm.cashPdmDashboard}
-              to={mealIndex.siteMap.pdm.cashPdmDashboard}
-              label={m.mealMonitoringPdm.cashPdmDashboard}
-            />
-            <Tab
-              sx={{minHeight: 34, py: 1}}
-              component={NavLink}
               value={mealIndex.siteMap.pdm.shelterPdmDashboard}
               to={mealIndex.siteMap.pdm.shelterPdmDashboard}
               label={m.mealMonitoringPdm.shelterPdmDashboard}
