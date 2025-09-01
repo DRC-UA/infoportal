@@ -173,7 +173,6 @@ export class BuildKoboType {
       },
       meal_cashPdm: {
         formId: KoboIndex.byName('meal_cashPdm').id,
-        skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
       },
       meal_shelterPdm: {
         formId: KoboIndex.byName('meal_shelterPdm').id,

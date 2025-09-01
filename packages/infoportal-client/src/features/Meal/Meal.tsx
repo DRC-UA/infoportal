@@ -30,6 +30,12 @@ import {MealWinterizationDashboard} from '@/features/Meal/Winter/MealWinterizati
 import {PdmLegalDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmLegalDashboard'
 import {MealPdmPssDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmPssDashboard'
 import {MealPdmEoreDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmEoreDashboard'
+import {MealCash} from '@/features/Meal/Cash/MealCash'
+import {CashAgriDashboard} from '@/features/Meal/Cash/Dashboards/CashAgriDashboard'
+import {CashMpcaDashboard} from '@/features/Meal/Cash/Dashboards/CashMpcaDashboard'
+import {CashVetMsmeDashboard} from '@/features/Meal/Cash/Dashboards/CashVetMsmeDashboard'
+import {CashAnimalShelterDashboard} from '@/features/Meal/Cash/Dashboards/CashAnimalShelterDashboard'
+import {CashRentRepairDashboard} from '@/features/Meal/Cash/Dashboards/CashRentRepairDashboard'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -43,6 +49,7 @@ const relatedKoboForms: KoboFormName[] = [
   'legal_pam',
   'meal_pssPdm',
   'meal_eorePdm',
+  'ecrec_cashRegistration',
 ]
 
 export const mealIndex = {
@@ -68,6 +75,14 @@ export const mealIndex = {
       legalPdmDashboard: `/pdm/legal/dashboard`,
       pssPdmDashboard: `/pdm/pss/dashboard`,
       eorePdmDashboard: `/pdm/eore/dashboard`,
+    },
+    pdmCash: {
+      _: '/pdm/cash',
+      agri: `/pdm/cash/agri`,
+      mpca: `/pdm/cash/mpca`,
+      vetMsme: `/pdm/cash/vet-msme`,
+      animalShelter: `/pdm/cash/animal-shelter`,
+      rentRepair: `/pdm/cash/rent-repair`,
     },
     winterization: {
       _: '/winterization',
@@ -141,13 +156,26 @@ const MealSidebar = ({
               </SidebarItem>
             )}
           </NavLink>
-          <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_cashPdm'))} name="meal_cashPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_shelterPdm'))} name="meal_shelterPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_nfiPdm'))} name="meal_nfiPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('protection_gbvPdm'))} name="protection_gbvPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('legal_pam'))} name="legal_pam" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_pssPdm'))} name="meal_pssPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_eorePdm'))} name="meal_eorePdm" />
+        </SidebarSection>
+        <SidebarSection title={m._meal.cashPdm}>
+          <NavLink to={path(mealIndex.siteMap.pdmCash._)}>
+            {({isActive}) => (
+              <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>
+                {m.dashboard}
+              </SidebarItem>
+            )}
+          </NavLink>
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_cashPdm'))} name="meal_cashPdm" />
+          <SidebarKoboLink
+            path={path(mealIndex.siteMap.form('ecrec_cashRegistration'))}
+            name="ecrec_cashRegistration"
+          />
         </SidebarSection>
         <SidebarSection title={m._meal.winterization}>
           <NavLink to={path(mealIndex.siteMap.winterization.winterizationDashboard)}>
@@ -214,14 +242,21 @@ export const Meal = () => {
           </Route>
         )}
         <Route path={mealIndex.siteMap.pdm._} element={<MealPdm formName="meal_cashPdm" />}>
-          <Route index element={<Navigate to={mealIndex.siteMap.pdm.cashPdmDashboard} replace />} />
-          <Route path={mealIndex.siteMap.pdm.cashPdmDashboard} element={<MealPdmCashDashboard />} />
+          <Route index element={<Navigate to={mealIndex.siteMap.pdm.shelterPdmDashboard} replace />} />
           <Route path={mealIndex.siteMap.pdm.shelterPdmDashboard} element={<MealPdmShelterDashboard />} />
           <Route path={mealIndex.siteMap.pdm.nfiPdmDashboard} element={<MealPdmNfiDashboard />} />
           <Route path={mealIndex.siteMap.pdm.gbvPdmDashboard} element={<PdmGbvDashboard />} />
           <Route path={mealIndex.siteMap.pdm.legalPdmDashboard} element={<PdmLegalDashboard />} />
           <Route path={mealIndex.siteMap.pdm.pssPdmDashboard} element={<MealPdmPssDashboard />} />
           <Route path={mealIndex.siteMap.pdm.eorePdmDashboard} element={<MealPdmEoreDashboard />} />
+        </Route>
+        <Route path={mealIndex.siteMap.pdmCash._} element={<MealCash />}>
+          <Route index element={<Navigate to={mealIndex.siteMap.pdmCash.mpca} replace />} />
+          <Route path={mealIndex.siteMap.pdmCash.mpca} element={<CashMpcaDashboard />} />
+          <Route path={mealIndex.siteMap.pdmCash.agri} element={<CashAgriDashboard />} />
+          <Route path={mealIndex.siteMap.pdmCash.vetMsme} element={<CashVetMsmeDashboard />} />
+          <Route path={mealIndex.siteMap.pdmCash.animalShelter} element={<CashAnimalShelterDashboard />} />
+          <Route path={mealIndex.siteMap.pdmCash.rentRepair} element={<CashRentRepairDashboard />} />
         </Route>
         <Route path={mealIndex.siteMap.winterization._} element={<MealWinterization />}>
           <Route
