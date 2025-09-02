@@ -13,12 +13,18 @@ import {AbilityCover} from '@/features/Meal/Cash/Components/AbilityCover'
 import {Outcome} from '@/features/Meal/Cash/Components/Outcome'
 import {Accountability} from '@/features/Meal/Cash/Components/Accountability'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {Div, PdfSlide, PdfSlideBody, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
+import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
+import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {useI18n} from '@/core/i18n'
+import {Sufficiency} from '@/features/Meal/Cash/Components/Sufficiency'
 
 export const CashAnimalShelterDashboard = () => {
   const ctx = useCashPdm()
   const {shape} = useCashFilter(ctx.fetcherAnswers.get)
   const [filters, setFilters] = useState<Record<string, string[] | undefined>>({})
   const [search, setSearch] = useState<string>('')
+  const {m} = useI18n()
 
   const cashOnly: Seq<CashPdmData<Meal_cashPdm.T>> = useMemo(
     () => seq(ctx.fetcherAnswers.get).filter((_) => _.source === 'pdm') as Seq<CashPdmData<Meal_cashPdm.T>>,
@@ -83,9 +89,61 @@ export const CashAnimalShelterDashboard = () => {
       {data && (
         <>
           {seq(data).length > 0 && <CashOverview data={data} />}
+          <PdfSlide>
+            <PdfSlideBody>
+              <Div responsive>
+                <Div column sx={{maxHeight: '33%'}}>
+                  <SlidePanel title={m.mealMonitoringPdm.threeSectors}>
+                    <ChartBarMultipleBy
+                      data={data}
+                      by={(_) => _.answers.sectors_cash_assistance}
+                      label={Meal_cashPdm.options.sectors_cash_assistance}
+                      includeNullish
+                    />
+                  </SlidePanel>
+                </Div>
+                <Div column sx={{maxHeight: '33%'}}>
+                  <SlidePanel title={m.mealMonitoringPdm.spent}>
+                    <ChartBarSingleBy
+                      data={data}
+                      by={(_) => _.answers.spent_cash_assistance_received}
+                      label={Meal_cashPdm.options.sufficient_living_spaces}
+                      includeNullish
+                    />
+                  </SlidePanel>
+                  <SlidePanel title={m.mealMonitoringPdm.spendOn}>
+                    <ChartBarSingleBy
+                      data={data}
+                      by={(_) => _.answers.spend_cash_received}
+                      label={Meal_cashPdm.options.any_member_household}
+                      includeNullish
+                    />
+                  </SlidePanel>
+                  <SlidePanel title={m.mealMonitoringPdm.preferFuture}>
+                    <ChartBarSingleBy
+                      data={data}
+                      by={(_) => _.answers.receive_shelter_assistance}
+                      label={Meal_cashPdm.options.receive_shelter_assistance}
+                      includeNullish
+                    />
+                  </SlidePanel>
+                </Div>
+                <Div column sx={{maxHeight: '33%'}}>
+                  <SlidePanel title={m.mealMonitoringPdm.priorityNeeds}>
+                    <ChartBarMultipleBy
+                      data={data}
+                      by={(_) => _.answers.needs_community_currently}
+                      label={Meal_cashPdm.options.needs_community_currently}
+                      includeNullish
+                    />
+                  </SlidePanel>
+                </Div>
+              </Div>
+            </PdfSlideBody>
+          </PdfSlide>
           {seq(data).length > 0 && <Registration data={data} />}
+          {seq(data).length > 0 && <Sufficiency data={data} />}
           {seq(data).length > 0 && <AbilityCover data={data} />}
-          {seq(data).length > 0 && <Outcome data={data} />}
           {seq(data).length > 0 && <Accountability data={data} />}
         </>
       )}
