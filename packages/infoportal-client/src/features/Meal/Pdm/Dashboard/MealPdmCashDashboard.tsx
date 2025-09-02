@@ -318,7 +318,7 @@ export const MealPdmCashDashboard = () => {
                   <SlidePanel title={m.mealMonitoringPdm.sufficient}>
                     <ChartPieWidgetBy
                       dense
-                      title={m.mealMonitoringPdm.lifestock}
+                      title={m.mealMonitoringPdm.livestock}
                       data={dataCash}
                       filter={(_) =>
                         _.answers.received_feed_livestock_winter === 'yes' ||

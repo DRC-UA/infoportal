@@ -251,7 +251,7 @@ export const Meal = () => {
           <Route path={mealIndex.siteMap.pdm.eorePdmDashboard} element={<MealPdmEoreDashboard />} />
         </Route>
         <Route path={mealIndex.siteMap.pdmCash._} element={<MealCash />}>
-          <Route index element={<Navigate to={mealIndex.siteMap.pdmCash.vetMsme} replace />} />
+          <Route index element={<Navigate to={mealIndex.siteMap.pdmCash.mpca} replace />} />
           <Route path={mealIndex.siteMap.pdmCash.mpca} element={<CashMpcaDashboard />} />
           <Route path={mealIndex.siteMap.pdmCash.agri} element={<CashAgriDashboard />} />
           <Route path={mealIndex.siteMap.pdmCash.vetMsme} element={<CashVetMsmeDashboard />} />
