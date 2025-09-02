@@ -134,6 +134,7 @@ model KoboMeta {
   idFileName       String?
   idFileId         Int?
   passportNum      String?
+  modality         Modality?
 
   lastStatusUpdate DateTime?
   tags             Json?
@@ -141,6 +142,13 @@ model KoboMeta {
 
   @@index([formId])
   @@index([koboId])
+}
+
+enum Modality {
+  cash
+  inKind
+  voucher
+  combination
 }
 
 model User {
