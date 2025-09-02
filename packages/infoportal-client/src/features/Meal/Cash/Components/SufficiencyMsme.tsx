@@ -6,6 +6,7 @@ import {useI18n} from '@/core/i18n'
 import {CashPdmData} from '@/features/Meal/Cash/Context/CashContext'
 import {Div, PdfSlide, PdfSlideBody, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 
 const PdfSectionTitle = ({children}: {children: React.ReactNode}) => {
   return (
@@ -25,83 +26,91 @@ const PdfSectionTitle = ({children}: {children: React.ReactNode}) => {
   )
 }
 
-export const SufficiencyVet: React.FC<{
+export const SufficiencyMsme: React.FC<{
   data: Seq<CashPdmData<Meal_cashPdm.T>>
 }> = ({data}) => {
   const {m} = useI18n()
 
   return (
     <>
-      <PdfSectionTitle>{m.sufficiencyVet}</PdfSectionTitle>
+      <PdfSectionTitle>{m.sufficiencyMsme}</PdfSectionTitle>
       <PdfSlide>
         <PdfSlideBody>
           <Div responsive>
             <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.vocational}>
+              <SlidePanel title={m.mealMonitoringPdm.cashReceivedMsme}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.enrol_vocational_center}
+                  by={(_) => _.answers.cash_received_msme}
                   label={Meal_cashPdm.options.any_member_household}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.vocCompleted}>
-                <ChartBarSingleBy
+              <SlidePanel title={m.mealMonitoringPdm.useBusiness}>
+                <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.training_completed}
-                  label={Meal_cashPdm.options.training_completed}
+                  by={(_) => _.answers.cash_usage}
+                  label={Meal_cashPdm.options.cash_usage}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.vocCompletedNo}>
+              <SlidePanel title={m.mealMonitoringPdm.cashSufficientBusiness}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.training_no_reason}
-                  label={Meal_cashPdm.options.training_no_reason}
+                  by={(_) => _.answers.cash_sufficient}
+                  label={Meal_cashPdm.options.cash_sufficient}
                   includeNullish
                 />
               </SlidePanel>
             </Div>
             <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.hoursDedicated}>
+              <SlidePanel title={m.mealMonitoringPdm.businessImprove}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.hours_dedicating_vocational}
-                  label={Meal_cashPdm.options.hours_dedicating_vocational}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.useSkills}>
-                <ChartBarSingleBy
-                  data={data}
-                  by={(_) => _.answers.skills_usage}
-                  label={Meal_cashPdm.options.skills_usage}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.skillsImproved}>
-                <ChartBarSingleBy
-                  data={data}
-                  by={(_) => _.answers.believe_skills_improve}
+                  by={(_) => _.answers.business_improvement}
                   label={Meal_cashPdm.options.any_member_household}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.improvementsNotice}>
+                <ChartBarMultipleBy
+                  data={data}
+                  by={(_) => _.answers.improvements_noticed}
+                  label={Meal_cashPdm.options.improvements_noticed}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.challengeFaced}>
+                <ChartBarMultipleBy
+                  data={data}
+                  by={(_) => _.answers.challenges_faced}
+                  label={Meal_cashPdm.options.challenges_faced}
                   includeNullish
                 />
               </SlidePanel>
             </Div>
             <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.skillsPractice}>
+              <SlidePanel title={m.mealMonitoringPdm.trainingAttend}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.skills_usage_method}
-                  label={Meal_cashPdm.options.skills_usage_method}
+                  by={(_) => _.answers.training_attended}
+                  label={Meal_cashPdm.options.any_member_household}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.skillsConfident}>
+              <SlidePanel title={m.mealMonitoringPdm.trainingSatis}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.conf_using_skills}
-                  label={Meal_cashPdm.options.conf_using_skills}
+                  by={(_) => _.answers.training_satisfaction}
+                  label={Meal_cashPdm.options.training_satisfaction}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.trainingExpect}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.training_expectations_met}
+                  label={Meal_cashPdm.options.training_expectations_met}
                   includeNullish
                 />
               </SlidePanel>
@@ -112,63 +121,53 @@ export const SufficiencyVet: React.FC<{
       <PdfSlide>
         <PdfSlideBody>
           <Div responsive>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.startedJob}>
+            <Div column sx={{maxHeight: '50%'}}>
+              <SlidePanel title={m.mealMonitoringPdm.trainingRelevant}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.job_started_vocational}
-                  label={Meal_cashPdm.options.any_member_household}
+                  by={(_) => _.answers.training_relevance}
+                  label={Meal_cashPdm.options.training_relevance}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.workedLast}>
+              <SlidePanel title={m.mealMonitoringPdm.onlineFormat}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.worked_other_12m}
-                  label={Meal_cashPdm.options.any_member_household}
+                  by={(_) => _.answers.training_format_suitability}
+                  label={Meal_cashPdm.options.training_format_suitability}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.jobPermanent}>
+              <SlidePanel title={m.mealMonitoringPdm.durationSuitable}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.job_type}
-                  label={Meal_cashPdm.options.job_type}
-                  includeNullish
-                />
-              </SlidePanel>
-            </Div>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.continueWork}>
-                <ChartBarSingleBy
-                  data={data}
-                  by={(_) => _.answers.job_continuation}
-                  label={Meal_cashPdm.options.job_continuation}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.haveEarned}>
-                <ChartBarSingleBy
-                  data={data}
-                  by={(_) => _.answers.income_earned}
-                  label={Meal_cashPdm.options.any_member_household}
+                  by={(_) => _.answers.training_duration_sufficient}
+                  label={Meal_cashPdm.options.training_duration_sufficient}
                   includeNullish
                 />
               </SlidePanel>
             </Div>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.incomeSufficiency}>
+            <Div column sx={{maxHeight: '50%'}}>
+              <SlidePanel title={m.mealMonitoringPdm.revenueGenerate}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.income_sufficiency}
-                  label={Meal_cashPdm.options.income_sufficiency}
+                  by={(_) => _.answers.revenue_generated}
+                  label={Meal_cashPdm.options.any_member_household}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.vocationalRecommend}>
+              <SlidePanel title={m.mealMonitoringPdm.netIncome}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.recommendation}
+                  by={(_) => _.answers.net_income}
+                  label={Meal_cashPdm.options.any_member_household}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.likelyRecommend}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.recommendation_likelihood}
                   label={Meal_cashPdm.options.recommendation_likelihood}
                   includeNullish
                 />
