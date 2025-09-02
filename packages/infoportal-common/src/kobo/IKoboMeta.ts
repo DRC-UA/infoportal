@@ -9,6 +9,7 @@ import {Person} from '../type/Person.js'
 import {Ecrec_vet_bha388} from './generated/Ecrec_vet_bha388'
 import {Ecrec_msmeGrantReg} from './generated/Ecrec_msmeGrantReg.js'
 import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper/index.js'
+import {Ecrec_small_scale} from './generated/Ecrec_small_scale.js'
 
 export type IKoboMeta<TTag = any> = {
   id: UUID
@@ -93,6 +94,15 @@ export namespace KoboMetaHelper {
     Rejected: KoboMetaStatus.Rejected,
   }
 
+  const ecrecStatus: Partial<Record<keyof typeof Ecrec_small_scale.options.status, KoboMetaStatus>> = {
+    selected: KoboMetaStatus.Pending,
+    pending: KoboMetaStatus.Pending,
+    paid: KoboMetaStatus.Committed,
+    rejected: KoboMetaStatus.Rejected,
+    referred: KoboMetaStatus.Pending,
+    paymentrejected: KoboMetaStatus.Rejected,
+  }
+
   const msmeStatus: Partial<Record<keyof typeof Ecrec_msmeGrantReg.options.status_first_tranche, KoboMetaStatus>> = {
     pending: KoboMetaStatus.Pending,
     done: KoboMetaStatus.Committed,
@@ -118,6 +128,10 @@ export namespace KoboMetaHelper {
   export const mapMsmeStatus = (
     status: keyof typeof Ecrec_msmeGrantReg.options.status_first_tranche | undefined,
   ): KoboMetaStatus | undefined => match(status).cases(msmeStatus).default(undefined)
+
+  export const mapEcrecStatus = (
+    status: keyof typeof Ecrec_small_scale.options.status | undefined,
+  ): KoboMetaStatus | undefined => match(status).cases(ecrecStatus).default(undefined)
 
   export const mapVetStatus = (
     status: keyof typeof Ecrec_vet_bha388.options.course_payment | undefined,
