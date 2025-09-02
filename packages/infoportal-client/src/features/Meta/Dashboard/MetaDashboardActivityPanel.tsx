@@ -9,7 +9,7 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {PanelWBody} from '@/shared/Panel/PanelWBody'
 
 export const MetaDashboardActivityPanel = () => {
-  const [type, setType] = useState<'sector' | 'activity' | 'nfis'>('sector')
+  const [type, setType] = useState<'sector' | 'activity' | 'modality' | 'nfis'>('sector')
   const {m, formatLargeNumber} = useI18n()
   const {data: ctx} = useMetaContext()
   return (
@@ -17,12 +17,14 @@ export const MetaDashboardActivityPanel = () => {
       <ScRadioGroup value={type} onChange={setType} inline dense sx={{mb: 2}}>
         <ScRadioGroupItem hideRadio value="sector" title={m.program} />
         <ScRadioGroupItem hideRadio value="activity" title={m.activity} />
+        <ScRadioGroupItem hideRadio value="modality" title={m.modality} />
         <ScRadioGroupItem hideRadio value="nfis" title={m.nfis} />
       </ScRadioGroup>
 
       {fnSwitch(type, {
         sector: <ChartBarSingleBy data={ctx.filteredData} by={(_) => _.sector} />,
         activity: <ChartBarSingleBy data={ctx.filteredData} by={(_) => _.activity} />,
+        modality: <ChartBarSingleBy data={ctx.filteredData} by={(_) => _.modality} />,
         nfis: (
           <Lazy
             deps={[ctx.filteredData]}
