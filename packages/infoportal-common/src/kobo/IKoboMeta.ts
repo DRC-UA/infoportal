@@ -9,7 +9,7 @@ import {Person} from '../type/Person.js'
 import {Ecrec_vet_bha388} from './generated/Ecrec_vet_bha388'
 import {Ecrec_msmeGrantReg} from './generated/Ecrec_msmeGrantReg.js'
 import {CashStatus, KoboValidation, ShelterTaPriceLevel} from './mapper/index.js'
-import { Ecrec_small_scale } from './generated/Ecrec_small_scale.js'
+import {Ecrec_small_scale} from './generated/Ecrec_small_scale.js'
 
 export type IKoboMeta<TTag = any> = {
   id: UUID
