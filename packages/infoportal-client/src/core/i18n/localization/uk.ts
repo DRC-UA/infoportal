@@ -26,6 +26,7 @@ const uk = deepmerge(en, {
     hhSize: 'Розмір домогосподарства',
     avgHHSize: 'Середній розмір домогосподарства',
     households: 'Домогосподарств',
+    modality: 'Модальність',
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {
