@@ -411,6 +411,7 @@ const en = Object.freeze({
     abilityCover: 'Ability to Cover Basic Needs',
     outcome: 'Outcome',
     income: 'Income Generation',
+    coping: 'Coping Strategies',
     requests: 'Requests',
     selectADatabase: 'Select a Kobo form',
     noIdp: 'Non-IDP',
@@ -741,7 +742,8 @@ const en = Object.freeze({
       sellAssets:
         'In the last 30 days, did your household sell household assets/goods due to a lack of resources to cover basic needs?',
       livestock: 'Maintain agricultural needs during winter',
-      livestockSaf: 'Was the assistance you received sufficient to maintain your  animal feed needs/livestock activities  for the winter and early spring season?',
+      livestockSaf:
+        'Was the assistance you received sufficient to maintain your  animal feed needs/livestock activities  for the winter and early spring season?',
       renovate: 'Renovate your shelter for animals',
       spring: 'Cover agricultural needs during spring period',
       amountEnoughSpring: 'Was the amount enough to cover agricultural needs during the spring?',
@@ -803,6 +805,20 @@ const en = Object.freeze({
       revenueGenerate: 'Have you generated any revenue from your business since the support from DRC?',
       netIncome: 'After covering your monthly costs, do you have a net income (profit) from your business?',
       likelyRecommend: 'How likely are you to recommend this business support program to others?',
+      foodExpand: "Did your household's food expenditures increase or decrease after receiving assistance?",
+      proportion:
+        'Since receiving cash assistance, were you able to purchase or produce enough food to meet the basic needs of your household?',
+      mainChallenges:
+        "What were the main challenges that prevented you from meeting your household's basic food needs since receiving the cash assistance?",
+      hhIncrease:
+        'Did your household  increase or decrease number of livestock/poultry for fathering after receiving assistance?',
+      comparison:
+        'How has the cash you received affected your agricultural outputs/ production in comparison to last year?',
+      consumeMajor: 'Do you consume a majority of the crops you produce / livestock that you manage?',
+      opportunitySell:
+        "Do you have the opportunity to sell any animal products you don't use for your own consumption or any animals after fattening?",
+      naturalProd:
+        'After receiving assistance, has the income from the sale of natural/agricultura products (milk, eggs, cottage cheese, meat products, etc.) increased or decreased?',
     },
     lcsPdm: 'Coping Strategies',
     lcsRegistration: 'Coping Strategies',

@@ -36,48 +36,38 @@ export const Income: React.FC<{
       <PdfSlide>
         <PdfSlideBody>
           <Div responsive>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.extentHH}>
+            <Div column sx={{maxHeight: '50%'}}>
+              <SlidePanel title={m.mealMonitoringPdm.foodExpand}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.extent_household_basic_needs}
-                  label={Meal_cashPdm.options.extent_household_basic_needs}
+                  by={(_) => _.answers.food_expenditures_assistance}
+                  label={Meal_cashPdm.options.after_assistance_natural_products}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.extentDefine}>
+              <SlidePanel title={m.mealMonitoringPdm.proportion}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.extent_household_basic_needs_define}
-                  label={Meal_cashPdm.options.extent_household_basic_needs_define}
+                  by={(_) => _.answers.receiving_cash_purchase_produce}
+                  label={Meal_cashPdm.options.receiving_cash_purchase_produce}
                   includeNullish
                 />
               </SlidePanel>
             </Div>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.unableFulfill}>
+            <Div column sx={{maxHeight: '50%'}}>
+              <SlidePanel title={m.mealMonitoringPdm.mainChallenges}>
                 <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.basic_needs_unable_fulfill_bha345}
-                  label={Meal_cashPdm.options.basic_needs_unable_fulfill_bha345}
+                  by={(_) => _.answers.challenges_prevented_meeting}
+                  label={Meal_cashPdm.options.challenges_prevented_meeting}
                   includeNullish
                 />
               </SlidePanel>
-            </Div>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.whyUnable}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.basic_needs_unable_fully_reason_bha345}
-                  label={Meal_cashPdm.options.basic_needs_unable_fully_reason_bha345}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.feelSafe}>
+              <SlidePanel title={m.mealMonitoringPdm.hhIncrease}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.feel_safe_travelling}
-                  label={Meal_cashPdm.options.know_address_suggestions}
+                  by={(_) => _.answers.household_increase_decrease_livestock_receiving}
+                  label={Meal_cashPdm.options.after_assistance_natural_products}
                   includeNullish
                 />
               </SlidePanel>
@@ -88,48 +78,38 @@ export const Income: React.FC<{
       <PdfSlide>
         <PdfSlideBody>
           <Div responsive>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.respect}>
+            <Div column sx={{maxHeight: '50%'}}>
+              <SlidePanel title={m.mealMonitoringPdm.opportunitySell}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.feel_treated_respect}
-                  label={Meal_cashPdm.options.know_address_suggestions}
+                  by={(_) => _.answers.opportunity_sell_production_excesses}
+                  label={Meal_cashPdm.options.any_member_household}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.eoreSatis}>
+              <SlidePanel title={m.mealMonitoringPdm.comparison}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.satisfied_assistance_provided}
-                  label={Meal_cashPdm.options.know_address_suggestions}
-                  includeNullish
-                />
-              </SlidePanel>
-            </Div>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.exclude}>
-                <ChartBarSingleBy
-                  data={data}
-                  by={(_) => _.answers.know_people_needing}
-                  label={Meal_cashPdm.options.know_address_suggestions}
+                  by={(_) => _.answers.comparison_last_year}
+                  label={Meal_cashPdm.options.after_assistance_natural_products}
                   includeNullish
                 />
               </SlidePanel>
             </Div>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.viewsTaken}>
+            <Div column sx={{maxHeight: '50%'}}>
+              <SlidePanel title={m.mealMonitoringPdm.consumeMajor}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.account_organization_assistance}
-                  label={Meal_cashPdm.options.know_address_suggestions}
+                  by={(_) => _.answers.consume_majority_crops}
+                  label={Meal_cashPdm.options.any_member_household}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.wellInformed}>
+              <SlidePanel title={m.mealMonitoringPdm.naturalProd}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.feel_informed_assistance}
-                  label={Meal_cashPdm.options.know_address_suggestions}
+                  by={(_) => _.answers.after_assistance_natural_products}
+                  label={Meal_cashPdm.options.after_assistance_natural_products}
                   includeNullish
                 />
               </SlidePanel>

@@ -10,7 +10,6 @@ import {Box, TextField} from '@mui/material'
 import {CashOverview} from '@/features/Meal/Cash/Components/CashOverview'
 import {Registration} from '@/features/Meal/Cash/Components/Registration'
 import {AbilityCover} from '@/features/Meal/Cash/Components/AbilityCover'
-import {Outcome} from '@/features/Meal/Cash/Components/Outcome'
 import {Accountability} from '@/features/Meal/Cash/Components/Accountability'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {Div, PdfSlide, PdfSlideBody, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
@@ -18,6 +17,8 @@ import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {useI18n} from '@/core/i18n'
 import {Sufficiency} from '@/features/Meal/Cash/Components/Sufficiency'
+import {Income} from '@/features/Meal/Cash/Components/Income'
+import {Coping} from '@/features/Meal/Cash/Components/Coping'
 
 export const CashAnimalShelterDashboard = () => {
   const ctx = useCashPdm()
@@ -143,7 +144,9 @@ export const CashAnimalShelterDashboard = () => {
           </PdfSlide>
           {seq(data).length > 0 && <Registration data={data} />}
           {seq(data).length > 0 && <Sufficiency data={data} />}
+          {seq(data).length > 0 && <Income data={data} />}
           {seq(data).length > 0 && <AbilityCover data={data} />}
+          {seq(data).length > 0 && <Coping data={data} />}
           {seq(data).length > 0 && <Accountability data={data} />}
         </>
       )}
