@@ -133,10 +133,10 @@ model KoboMeta {
 }
 
 enum Modality {
-  cash
-  inKind
-  voucher
-  combination
+  Cash
+  InKind
+  Voucher
+  Combination
 }
 
 model User {
