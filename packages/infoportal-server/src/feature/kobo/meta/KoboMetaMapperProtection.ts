@@ -449,8 +449,8 @@ export class KoboMetaMapperProtection {
       donor: project && [DrcProjectHelper.donorByProject[project?.[0]]],
       modality: match(answer.type_assistance)
         .cases({
-          cash: AssistanceModality.cash,
-          in_kind: AssistanceModality.inKind,
+          cash: AssistanceModality.Cash,
+          in_kind: AssistanceModality.InKind,
         })
         .default(undefined),
       status: KoboMetaStatus.Committed,
