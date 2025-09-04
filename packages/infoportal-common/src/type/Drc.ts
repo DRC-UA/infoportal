@@ -467,8 +467,8 @@ export class DrcProjectHelper {
 export type DrcJob = string
 
 export enum AssistanceModality {
-  cash = 'Cash',
-  inKind = 'In-kind',
-  voucher = 'Voucher',
-  combination = 'Both cash and in-kind',
+  Cash = 'Cash',
+  InKind = 'In-kind',
+  Voucher = 'Voucher',
+  Combination = 'Both cash and in-kind',
 }
