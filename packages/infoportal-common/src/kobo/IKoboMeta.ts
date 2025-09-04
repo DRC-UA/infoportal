@@ -2,7 +2,7 @@ import {match} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
 
 import {OblastName} from '../location/index.js'
-import {DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc.js'
+import {AssistanceModality, DrcDonor, DrcOffice, DrcProgram, DrcProject, DrcSector} from '../type/Drc.js'
 import {StateStatus, UUID} from '../type/Generic.js'
 import {Person} from '../type/Person.js'
 
@@ -35,6 +35,7 @@ export type IKoboMeta<TTag = any> = {
   office?: DrcOffice
   project: DrcProject[]
   donor: DrcDonor[]
+  modality?: AssistanceModality
 
   persons?: Person.Details[]
   personsCount?: number

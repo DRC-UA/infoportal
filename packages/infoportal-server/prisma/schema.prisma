@@ -134,6 +134,7 @@ model KoboMeta {
   idFileName       String?
   idFileId         Int?
   passportNum      String?
+  modality         String?
 
   lastStatusUpdate DateTime?
   tags             Json?
