@@ -10,6 +10,7 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Box, Typography} from '@mui/material'
 import {CashPdmData} from '@/features/Meal/Cash/Context/CashContext'
+import {CashIndividuals} from '@/features/Meal/Cash/Components/CashIndividuals'
 
 const PdfSectionTitle = ({children}: {children: React.ReactNode}) => {
   return (
@@ -41,6 +42,7 @@ export const CashOverview: React.FC<{
         <PdfSlideBody>
           <Div responsive>
             <Div column sx={{maxHeight: '33%'}}>
+              <CashIndividuals data={data} />
               <Panel title={m.ageGroup}>
                 <PanelBody>
                   <AgeGroupTable
