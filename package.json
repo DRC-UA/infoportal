@@ -14,7 +14,8 @@
     "build:client": "npm run build --workspace infoportal-client",
     "build:common": "npm run build --workspace infoportal-common",
     "test:common": "npm run test --workspace infoportal-common",
-    "db-migrate-f": "npm run db-migrate-f --workspace infoportal-server",
+    "db-deploy": "npm run db-deploy --workspace infoportal-server",
+    "db-migrate": "npm run db-migrate --workspace infoportal-server",
     "db-generate": "npm run db-generate --workspace infoportal-server",
     "test": "npm test --workspace infoportal-common && npm test --workspace infoportal-server"
   },
