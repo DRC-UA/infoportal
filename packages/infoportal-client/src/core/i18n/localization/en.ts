@@ -497,6 +497,7 @@ const en = Object.freeze({
     },
     mealMonitoringPdm: {
       pdm: 'PDM',
+      pdmLcs: 'PDM (LCS)',
       cashPdmDashboard: 'Cash',
       shelterPdmDashboard: 'Shelter',
       nfiPdmDashboard: 'Nfi',
@@ -512,6 +513,7 @@ const en = Object.freeze({
       vetMsme: 'VET & MSME',
       onlyPdm: 'PDM entries',
       baseline: 'Baseline',
+      baselineReg: 'Baseline (Registration)',
       lcs: 'Numbers of LCS',
       use: 'Receiving and Use of Cash Assistance',
       sufficiency: 'Sufficiency',

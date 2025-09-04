@@ -37,7 +37,7 @@ export const AbilityCover: React.FC<{
       <PdfSlide>
         <PdfSlideBody>
           <Div responsive>
-            <Div column sx={{maxHeight: '33%'}}>
+            <Div column sx={{maxHeight: '50%'}}>
               <SlidePanel title={m.mealMonitoringPdm.enoughBasic}>
                 <ChartBarSingleBy
                   data={data}
@@ -55,7 +55,7 @@ export const AbilityCover: React.FC<{
                 />
               </SlidePanel>
             </Div>
-            <Div column sx={{maxHeight: '33%'}}>
+            <Div column sx={{maxHeight: '50%'}}>
               <SlidePanel title={m.mealMonitoringPdm.whichBasicNeed}>
                 <ChartBarMultipleBy
                   data={data}
@@ -69,158 +69,6 @@ export const AbilityCover: React.FC<{
                   data={data}
                   by={(_) => _.answers.enough_water_household}
                   label={Meal_cashPdm.options.any_member_household}
-                  includeNullish
-                />
-              </SlidePanel>
-            </Div>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.basicUnable}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.basic_needs_unable_fulfil}
-                  label={Meal_cashPdm.options.most_important_things}
-                  includeNullish
-                />
-              </SlidePanel>
-            </Div>
-          </Div>
-        </PdfSlideBody>
-      </PdfSlide>
-      <PdfSlide>
-        <PdfSlideBody>
-          <Div responsive>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.unableFood}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_basic_food}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableFoodChildren}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_food_children}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableWater}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_water_needs}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableHygiene}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_hygiene_needs}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-            </Div>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.unableHealth}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_healthcare_needs}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableHealthChildren}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_healthcare_children}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableHealthPregnant}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_healthcare_pregnant}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-            </Div>
-            <Div column sx={{maxHeight: '33%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.unableShelter}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_shelter_needs}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableTransport}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_transportation_needs}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableCommunication}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_communication_needs}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableEdu}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_education_needs}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-            </Div>
-          </Div>
-        </PdfSlideBody>
-      </PdfSlide>
-      <PdfSlide>
-        <PdfSlideBody>
-          <Div responsive>
-            <Div column sx={{maxHeight: '50%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.unableCloth}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_clothing_needs}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableUti}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_utilities}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.unableOther}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.unable_fulfil_other}
-                  label={Meal_cashPdm.options.unable_fulfil_other}
-                  includeNullish
-                />
-              </SlidePanel>
-            </Div>
-            <Div column sx={{maxHeight: '50%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.mostImportant}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={(_) => _.answers.most_important_things}
-                  label={Meal_cashPdm.options.most_important_things}
                   includeNullish
                 />
               </SlidePanel>
