@@ -57,6 +57,7 @@ import {
   Legal_individual_aid,
   Meal_pssPdm,
   Meal_eorePdm,
+  Bn_pam,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -297,6 +298,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('meal_cashPdm').id,
           fnMapKobo: Meal_cashPdm.map,
+          ...filters,
+        }),
+      ),
+      ...make('bn_pam', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('bn_pam').id,
+          fnMapKobo: Bn_pam.map,
           ...filters,
         }),
       ),
