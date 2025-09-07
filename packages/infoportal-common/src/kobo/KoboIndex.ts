@@ -79,6 +79,7 @@ const koboIndex = {
   shelter_nta: 'aL8oHMzJJ9soPepvK6YU9E',
   shelter_ta: 'aTP5nwZjpyR7oy7bdMZktC',
   va_bio_tia: 'aKZW9UTf9nqfiLhxtjcT3d',
+  bn_pam: 'aj8ESj397NhsSCPMcnmnQT',
 }
 
 const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex)).reduceObject(([k, v]) => [v, k])
@@ -161,6 +162,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   shelter_nta: '[Shelter] NTA',
   shelter_ta: '[Shelter] TA',
   va_bio_tia: '[VA] BIO & TIA Assessment form',
+  bn_pam: '[MEAL] Basic Needs PAM',
 }
 
 export type KoboFormName = keyof typeof koboIndex

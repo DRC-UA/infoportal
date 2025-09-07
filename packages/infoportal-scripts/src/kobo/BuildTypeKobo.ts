@@ -426,6 +426,9 @@ export class BuildKoboType {
         formId: KoboIndex.byName('legal_pam').id,
         langIndex: 1,
       },
+      bn_pam: {
+        formId: KoboIndex.byName('bn_pam').id,
+      },
     },
     (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>],
   )

@@ -20,10 +20,12 @@ import {
   OblastName,
   Period,
   Person,
+  Bn_pam,
 } from 'infoportal-common'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 import {match, seq, Seq} from '@axanc/ts-utils'
+import {mapBnPamToCashPdmData} from '@/features/Meal/Cash/Mappers/mapBnPamRow'
 
 export type CashActivityCode =
   | 'caf' // Cash for animal feed
@@ -43,7 +45,7 @@ export const CashActivityGroups = {
   rentRepair: ['caren', 'carep'] as CashActivityCode[],
 }
 
-export type CashPdmForm = Meal_cashPdm.T | Ecrec_cashRegistration.T
+export type CashPdmForm = Meal_cashPdm.T | Ecrec_cashRegistration.T | Bn_pam.T
 
 export type CashPdmData<T extends CashPdmForm = CashPdmForm> = {
   source: 'pdm' | 'ecrec'
@@ -76,17 +78,19 @@ export const CashPdmProvider: React.FC<{children: ReactNode}> = ({children}) => 
   const [periodFilter, setPeriodFilter] = useState<Partial<Period>>({})
 
   const fetcherPeriod = useFetcher(async () => {
-    const [cashPdm, ecrec] = await Promise.all([
+    const [cashPdm, ecrec, bnPam] = await Promise.all([
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_cashPdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('ecrec_cashRegistration').id),
+      api.kobo.answer.getPeriod(KoboIndex.byName('bn_pam').id),
     ])
-    return {cashPdm, ecrec}
+    return {cashPdm, ecrec, bnPam}
   })
 
   const request = async (): Promise<Seq<CashPdmData>> => {
-    const [cash, ecrec] = await Promise.all([
+    const [cash, ecrec, bnpam] = await Promise.all([
       api.kobo.typedAnswers.search.meal_cashPdm(),
       api.kobo.typedAnswers.search.ecrec_cashRegistration(),
+      api.kobo.typedAnswers.search.bn_pam(),
     ])
 
     const mapCash = seq(cash.data).map<CashPdmData<Meal_cashPdm.T>>((record) => ({
@@ -161,7 +165,9 @@ export const CashPdmProvider: React.FC<{children: ReactNode}> = ({children}) => 
       answers: record,
     }))
 
-    return seq([...mapCash, ...mapEcrec])
+    const mapBnPam = seq(bnpam.data).map(mapBnPamToCashPdmData)
+
+    return seq([...mapCash, ...mapEcrec, ...mapBnPam])
   }
 
   const fetcherAnswers = useFetcher(request)
@@ -177,19 +183,11 @@ export const CashPdmProvider: React.FC<{children: ReactNode}> = ({children}) => 
   useEffect(() => {
     const p = fetcherPeriod.get
     if (p) {
+      const starts = [p.cashPdm.start, p.ecrec.start, p.bnPam?.start].filter(Boolean) as Date[]
+      const ends = [p.cashPdm.end, p.ecrec.end, p.bnPam?.end].filter(Boolean) as Date[]
       setPeriodFilter({
-        start:
-          p.cashPdm.start && p.ecrec.start
-            ? p.cashPdm.start < p.ecrec.start
-              ? p.cashPdm.start
-              : p.ecrec.start
-            : p.cashPdm.start || p.ecrec.start,
-        end:
-          p.cashPdm.end && p.ecrec.end
-            ? p.cashPdm.end > p.ecrec.end
-              ? p.cashPdm.end
-              : p.ecrec.end
-            : p.cashPdm.end || p.ecrec.end,
+        start: starts.length ? new Date(Math.min(...starts.map((d) => d.getTime()))) : undefined,
+        end: ends.length ? new Date(Math.max(...ends.map((d) => d.getTime()))) : undefined,
       })
     }
   }, [fetcherPeriod.get])
