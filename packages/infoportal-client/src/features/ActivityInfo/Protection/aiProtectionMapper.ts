@@ -119,6 +119,7 @@ export namespace AiProtectionMapper {
         res.push({
           data: grouped,
           activity: {
+            'Response Theme': 'No specific theme',
             Indicators: match<DrcProgram>(activity)
               .cases({
                 [DrcProgram.Counselling]:
