@@ -74,16 +74,14 @@ namespace AiLegalMapper {
             'Reporting Organization': 'Danish Refugee Council (DRC)',
           }
           const subActivities = mapSubActivity(grouped, periodStr)
-          const activityPrebuilt = {
-            ...activity,
-            ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
-            'Activities and People': subActivities.map((_) => _.activity),
-          }
-          const requestBody = ActivityInfoSdk.wrapRequest(AiLegalType.buildRequest(activityPrebuilt, recordId))
-          subActivities.map((subActivity) => {
+          subActivities.map(async (subActivity) => {
             res.push({
               activity,
-              requestBody,
+              requestBody: {
+                ...activity,
+                ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
+                'Activities and People': [subActivity.activity],
+              },
               data: subActivity.data,
               subActivity: subActivity.activity,
               recordId,
