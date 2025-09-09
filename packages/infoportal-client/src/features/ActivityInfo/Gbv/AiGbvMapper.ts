@@ -55,17 +55,17 @@ export namespace AiGbvMapper2 {
           Settlement: settlement,
         }
         const subActivities = mapSubActivity(grouped, periodStr)
-        const activityPrebuilt = {
-          ...activity,
-          ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
-          'Activities and People': subActivities.map((_) => _.activity),
-        }
-        return subActivities.map((subActivity) => {
+        return subActivities.map(async (subActivity) => {
           const recordId = ActivityInfoSdk.makeRecordId({
             prefix: 'drcgbv',
             periodStr,
             index: i++,
           })
+          const activityPrebuilt = {
+            ...activity,
+            ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
+            'Activities and People': [subActivity.activity],
+          }
           res.push({
             activity,
             data: subActivity.data,
