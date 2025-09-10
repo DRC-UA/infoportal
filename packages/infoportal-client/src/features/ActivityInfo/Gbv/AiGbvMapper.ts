@@ -55,17 +55,22 @@ export namespace AiGbvMapper2 {
           Settlement: settlement,
         }
         const subActivities = mapSubActivity(grouped, periodStr)
-        const activityPrebuilt = {
-          ...activity,
-          ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
-          'Activities and People': subActivities.map((_) => _.activity),
-        }
-        return subActivities.map((subActivity) => {
+        return subActivities.map(async (subActivity) => {
           const recordId = ActivityInfoSdk.makeRecordId({
+            // MEMO: August 2025 was reported with "drcgbvnodups" prefix
+            // this was necessary due to duplicate records. When the error was fixed the duplicate subrecords retained.
+            // When entire record removed and posted new one with the same ID and a single chind ("Activities and People")
+            // the extra "Activities and People" are reemerging. So August was posted with custom prefix of the parent record.
+            // No need in custom prefix since September 2025
             prefix: 'drcgbv',
             periodStr,
             index: i++,
           })
+          const activityPrebuilt = {
+            ...activity,
+            ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
+            'Activities and People': [subActivity.activity],
+          }
           res.push({
             activity,
             data: subActivity.data,

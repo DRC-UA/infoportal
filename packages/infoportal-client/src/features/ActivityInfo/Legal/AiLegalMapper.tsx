@@ -60,11 +60,6 @@ namespace AiLegalMapper {
           {by: (_) => _.project[0]},
         ],
         finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
-          const recordId = ActivityInfoSdk.makeRecordId({
-            prefix: 'drcila',
-            periodStr,
-            index: i++,
-          })
           const activity: AiLegalType.Type = {
             Oblast: oblast,
             Raion: raion,
@@ -74,16 +69,25 @@ namespace AiLegalMapper {
             'Reporting Organization': 'Danish Refugee Council (DRC)',
           }
           const subActivities = mapSubActivity(grouped, periodStr)
-          const activityPrebuilt = {
-            ...activity,
-            ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
-            'Activities and People': subActivities.map((_) => _.activity),
-          }
-          const requestBody = ActivityInfoSdk.wrapRequest(AiLegalType.buildRequest(activityPrebuilt, recordId))
-          subActivities.map((subActivity) => {
+          subActivities.map(async (subActivity) => {
+            const recordId = ActivityInfoSdk.makeRecordId({
+              prefix: 'drcila',
+              periodStr,
+              index: i++,
+            })
+
             res.push({
               activity,
-              requestBody,
+              requestBody: ActivityInfoSdk.wrapRequest(
+                AiLegalType.buildRequest(
+                  {
+                    ...activity,
+                    ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
+                    'Activities and People': [subActivity.activity],
+                  },
+                  recordId,
+                ),
+              ),
               data: subActivity.data,
               subActivity: subActivity.activity,
               recordId,
@@ -148,6 +152,7 @@ namespace AiLegalMapper {
             'Older Women (60+)': disaggregation['Older Women (60+)'] ?? 0,
             'Older Men (60+)': disaggregation['Older Men (60+)'] ?? 0,
             'People with Disability': disaggregation['People with Disability'] ?? 0,
+            'Non-individuals Reached/Quantity': 0,
           },
         })
       },

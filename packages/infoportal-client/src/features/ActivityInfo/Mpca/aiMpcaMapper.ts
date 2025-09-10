@@ -31,6 +31,7 @@ export namespace AiMpcaMapper {
       .cases({
         [DrcProject['UKR-000380 DANIDA']]: 'MPCA-DRC-00001',
         [DrcProject['UKR-000386 Pooled Funds']]: 'MPCA-DRC-00001',
+        [DrcProject['UKR-000423 ECHO4']]: 'MPCA-DRC-00003',
       })
       .default(() => aiInvalidValueFlag + drcProject)
   }
@@ -110,7 +111,7 @@ export namespace AiMpcaMapper {
               AiMpcaType.Type['Theme'],
             ]
             const disag = AiMapper.disaggregatePersons(grouped.flatMap(({persons}) => persons).compact())
-            const ai: AiMpcaType.Type = {
+            const activity: AiMpcaType.Type = {
               'Reporting Organization': 'Danish Refugee Council (DRC)',
               'Implementing Partner': 'Danish Refugee Council (DRC)',
               Oblast: oblast,
@@ -172,17 +173,22 @@ export namespace AiMpcaMapper {
             })
             const request = AiMpcaType.buildRequest(
               {
-                ...ai,
+                ...activity,
                 ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
               },
               recordId,
             )
 
             return {
-              submit: checkAiValid(ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
+              submit: checkAiValid(
+                activity.Raion,
+                activity.Hromada,
+                activity.Settlement,
+                activity['Plan/Project Code'],
+              ),
               recordId,
               data: grouped,
-              activity: ai,
+              activity,
               requestBody: ActivityInfoSdk.wrapRequest(request),
             }
           },

@@ -77,6 +77,7 @@ export namespace AiLegalType {
       'Adult Men (18-59)': number
       'Older Women (60+)': number
       'Older Men (60+)': number
+      'Non-individuals Reached/Quantity': number
       /**
       Out of the total individuals reached
     */
@@ -105,6 +106,7 @@ export namespace AiLegalType {
             clhi83vm4wkxl81w: a['Adult Men (18-59)'],
             cty2zyem4wkyvyhx: a['Older Women (60+)'],
             csq1r47m4wl091ky: a['Older Men (60+)'],
+            ctm6pddm4wl2ky2z: a['Non-individuals Reached/Quantity'],
             c3knsqem4wl8nfu14: a['People with Disability'],
           },
         },
@@ -170,10 +172,10 @@ export namespace AiLegalType {
       },
       'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
       'Response Theme': {
-        'No specific theme': 'cfv425ymb6a4au97',
         Evacuations: 'cd70jqnmb6a51199',
         'Emergency response after strikes': 'cwb81gcmb6a51oba',
         'Both (evacuation & emergency response after strikes)': 'cx7nuzdmb6a52abb',
+        'No specific theme': 'codmw6jmewt7rna3',
       },
     }
   }

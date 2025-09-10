@@ -18,6 +18,7 @@ export namespace AiMpcaType {
     Raion: string
     Hromada: string
     Settlement?: string
+    'Registration in Transit Center'?: Opt<'Registration in Transit Center'>
     'Reporting Month': string
     'Activity Start month'?: string
     'Activity End month'?: string
@@ -64,6 +65,11 @@ export namespace AiMpcaType {
     'Older Men with disability (60+)'?: number
     'HNRP Scope'?: Opt<'HNRP Scope'>
     'Outside HNRP Scope sub-category'?: Opt<'Outside HNRP Scope categories'>
+    /**
+      PLEASE DO NOT EDIT THIS FIELD!
+      БУДЬ ЛАСКА, НЕ РЕДАГУЙТЕ ЦЕ ПОЛЕ!
+    */
+    Key?: string
   }
 
   export const buildRequest = (a: Type, recordId: string, parentRecordId: string | null = null) => {
@@ -97,6 +103,9 @@ export namespace AiMpcaType {
           crq21n6m558kb1284: a['Raion'] ? 'c1v215km4s71ndl22' + ':' + a['Raion'] : undefined,
           c7v65y7m558kb1385: a['Hromada'] ? 'cu8n0g0m4s7y2p16b' + ':' + a['Hromada'] : undefined,
           cbr0c35m558kb1386: a['Settlement'] ? 'cyr4ry4m4s81hdd6v' + ':' + a['Settlement'] : undefined,
+          cajy2jfmdo4syss3: a['Registration in Transit Center']
+            ? options['Registration in Transit Center'][a['Registration in Transit Center']!]
+            : undefined,
           cepu3q6m558kb1388: a['Reporting Month'],
           cxkld7tm558kb1389: a['Activity Start month'],
           cackn9bm558kb138a: a['Activity End month'],
@@ -125,6 +134,7 @@ export namespace AiMpcaType {
           cicbzowm558kb158p: a['Outside HNRP Scope sub-category']
             ? 'ch0e182m4vgc05r2' + ':' + options['Outside HNRP Scope categories'][a['Outside HNRP Scope sub-category']!]
             : undefined,
+          c4cq59jmbrn46li2: a['Key'],
         },
       },
     ]
@@ -132,7 +142,11 @@ export namespace AiMpcaType {
 
   export const options = {
     Partner: {'Danish Refugee Council (DRC)': 'cjmwszwm4s8hlkyrae'},
-    'MPCA Activity Planning Module (APM) - 2025': {'MPCA-DRC-00001': 'ctkcwohm7yj9l5c2'},
+    'MPCA Activity Planning Module (APM) - 2025': {
+      'MPCA-DRC-00001': 'ctkcwohm7yj9l5c2',
+      'MPCA-DRC-00002': 'ck9hxnmfcpyx5v3',
+      'MPCA-DRC-00003': 'cda0atumfdmlsfa2',
+    },
     Donor: {
       'ACT Alliance (ACT)': 'cei9dbm4s9iiu9cm',
       'AICM Ukraine (AICMUA)': 'clndct5m4s9iiu9cn',
@@ -640,6 +654,9 @@ export namespace AiMpcaType {
       'A Family for Every Orphan (AFFEO)': 'cqtsrqtmbs55vpr4',
       'World Relief (WorldRelief)': 'cfcveygmcsrbadf3',
       'Development Helps Alliance (DHA)': 'cnl3620mcu9adl93',
+      'IsraAID (IsraAID)': 'clc9kznmcxbb0r13',
+      'Romani Zbora (RomZ)': 'cuspe1omdx5sf784',
+      'British Red Cross (BRC)': 'criiabfmeifkbi34',
     },
     'Indicators - MPC': {
       'MPCA > Provision of multi-purpose cash > # individuals assisted with MPC': 'cvrs9bum4v5isrx16',
@@ -667,6 +684,7 @@ export namespace AiMpcaType {
       Evacuations: 'c6rj6slm558kb1281',
       'Evacuations; Emergency response after strikes': 'cmorvwvmaa2lhmv6',
     },
+    'Registration in Transit Center': {Yes: 'c7wn6eimdo4syss2', No: 'cwcf5cmmdo4tetr4'},
     'Number of Covered Months': {
       'One month': 'c3xgbpkm559hsia92',
       'Two months': 'chepl27m559i9mm94',
