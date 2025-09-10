@@ -40,8 +40,7 @@ export namespace AiFslType {
     'Outside HNRP Scope categories'?: Opt<'Outside HNRP Scope categories'>
     /**
       DO NOT EDIT THIS FIELD PLEASE!
-
-БУДЬ ЛАСКА, НЕ РЕДАГУЙТЕ ЦЕ ПОЛЕ!
+      БУДЬ ЛАСКА, НЕ РЕДАГУЙТЕ ЦЕ ПОЛЕ!
     */
     key?: string
   }
@@ -110,6 +109,7 @@ export namespace AiFslType {
           cvdttxbm74f1upg2j: a['Outside HNRP Scope categories']
             ? 'ch0e182m4vgc05r2' + ':' + options['Outside HNRP Scope categories'][a['Outside HNRP Scope categories']!]
             : undefined,
+          cz3jm3dm7vymwf82: a['key'],
         },
       },
     ]
@@ -202,7 +202,11 @@ export namespace AiFslType {
       'Delivered outside HNRP​ mechanism': 'cgc12ggm4vgdovj6',
       'Not aligned to guidance': 'cei6bscm4vgdvpq7',
     },
-    'Response Theme': {Evacuations: 'cpomm6tmaclgncx5', 'Emergency response after strikes': 'cdvh6xymaclhrqo7'},
+    'Response Theme': {
+      Evacuations: 'cpomm6tmaclgncx5',
+      'Emergency response after strikes': 'cdvh6xymaclhrqo7',
+      Both: 'cvypi9kme76bef02',
+    },
     'Implementation Status': {Ongoing: 'cw8mkxsm74db4w5r', Completed: 'c2eiij2m74dcav9t'},
     Frequency: {
       Weekly: 'cw34ekkm74ddh3wu',
