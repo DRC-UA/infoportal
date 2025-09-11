@@ -1,12 +1,13 @@
+import {useEffect, useMemo} from 'react'
 import {Badge, Box, Icon, LinearProgress, TablePagination, useTheme} from '@mui/material'
-import React, {useEffect, useMemo} from 'react'
-import {useI18n} from '@/core/i18n'
-import {Txt} from '@/shared/Txt'
-import {map, Obj} from '@axanc/ts-utils'
-import {IpIconBtn} from '@/shared'
 import {useMemoFn} from '@alexandreannic/react-hooks-lib'
-import {DatatableBody} from './DatatableBody'
-import {DatatableHead} from './DatatableHead'
+import {map, Obj} from '@axanc/ts-utils'
+import {format} from 'date-fns'
+
+import {slugify} from 'infoportal-common'
+
+import {useI18n} from '@/core/i18n'
+import {IpIconBtn} from '@/shared'
 import {DatatableColumn, DatatableRow, DatatableTableProps} from '@/shared/Datatable/util/datatableType'
 import {DatatableProvider, useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
 import {DatatableColumnToggle} from '@/shared/Datatable/DatatableColumnsToggle'
@@ -15,9 +16,11 @@ import {DatatableErrorBoundary} from '@/shared/Datatable/DatatableErrorBundary'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
 import {useAsync} from '@/shared/hook/useAsync'
-import {format} from 'date-fns'
-import {slugify} from 'infoportal-common'
+import {Txt} from '@/shared/Txt'
 import {DatatableXlsGenerator} from '@/shared/Datatable/util/generateXLSFile'
+
+import {DatatableBody} from './DatatableBody'
+import {DatatableHead} from './DatatableHead'
 
 export const Datatable = <T extends DatatableRow = DatatableRow>({
   total,
@@ -38,7 +41,7 @@ export const Datatable = <T extends DatatableRow = DatatableRow>({
   const innerColumns = useMemo(() => {
     return columns
       .map((col) => {
-        if ((col.type === 'date') && DatatableColumn.isQuick(col)) {
+        if (col.type === 'date' && DatatableColumn.isQuick(col)) {
           const prevRenderQuick = col.renderQuick
           col.renderQuick = (row: T) => {
             const raw = prevRenderQuick ? prevRenderQuick(row) : (row as any)[col.id]
@@ -119,6 +122,7 @@ const _Datatable = <T extends DatatableRow>({
   onClickRows,
   exportAdditionalSheets,
   contentProps,
+  joinedTable,
   ...props
 }: Pick<
   DatatableTableProps<T>,
@@ -133,6 +137,7 @@ const _Datatable = <T extends DatatableRow>({
   | 'renderEmptyState'
   | 'header'
   | 'loading'
+  | 'joinedTable'
   | 'sx'
 >) => {
   const t = useTheme()
@@ -248,6 +253,7 @@ const _Datatable = <T extends DatatableRow>({
               filters={ctx.data.filters}
               onHideColumns={ctx.columnsToggle.handleHide}
               columns={ctx.columnsToggle.filteredColumns}
+              joinedTable={joinedTable}
               columnsIndex={ctx.columnsIndex}
               select={ctx.select}
               selected={ctx.selected}

@@ -1,6 +1,6 @@
 import {memo} from 'react'
 import {match, map} from '@axanc/ts-utils'
-import {Checkbox, IconProps} from '@mui/material'
+import {Checkbox, IconProps, Tooltip} from '@mui/material'
 
 import {TableIcon, TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 import {DatatableContext} from '@/shared/Datatable/context/DatatableContext'
@@ -9,6 +9,9 @@ import {ResizableDiv} from '@/shared/Datatable/ResizableDiv'
 import {DatabaseHeadCell} from '@/shared/Datatable/DatatableHeadCell'
 import {TableHeadSectionCell} from '@/shared/Datatable/TableHeadSectionCell'
 import {DatatableHeadCopyIds} from '@/shared/Datatable/DatatableHeadCopyIds'
+import {Txt} from '@/shared/Txt'
+
+import {extractFormNameAndColumnsCount} from './utils'
 
 export const DatatableHead = (() => {
   const Component = <T extends DatatableRow>({
@@ -22,9 +25,11 @@ export const DatatableHead = (() => {
     onHideColumns,
     search,
     onOpenFilter,
+    joinedTable,
   }: {
     onOpenFilter: (columnId: string, event: any) => void
     onOpenStats: (columnId: string, event: any) => void
+    joinedTable?: boolean
   } & Pick<DatatableContext<T>, 'onResizeColumn' | 'selected' | 'columns' | 'columnsIndex' | 'select'> & {
       data?: T[]
       onHideColumns: (_: string[]) => void
@@ -39,6 +44,20 @@ export const DatatableHead = (() => {
           zIndex: 11,
         }}
       >
+        {joinedTable && (
+          <tr>
+            <th></th>
+            {extractFormNameAndColumnsCount(columns).map(({formName, columnsCount}) => (
+              <Tooltip key={formName} title={formName} followCursor>
+                <th colSpan={columnsCount}>
+                  <Txt size="title" bold>
+                    {formName}
+                  </Txt>
+                </th>
+              </Tooltip>
+            ))}
+          </tr>
+        )}
         <TableHeadSectionCell hasCheckboxColumn={!!select?.getId} columns={columns} onHideColumns={onHideColumns} />
         <tr className="tr">
           {map(select?.getId, (getId) => (

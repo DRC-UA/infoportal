@@ -59,6 +59,8 @@ export const AppHeader = ({children, sx, id = 'aa-header-id', ...props}: BoxProp
           display: 'flex',
           alignItems: 'center',
           width: '100%',
+          minWidth: 0, // needed to shrink to fix available space
+          marginRight: 'auto',
         }}
       >
         {showSidebarButton && (

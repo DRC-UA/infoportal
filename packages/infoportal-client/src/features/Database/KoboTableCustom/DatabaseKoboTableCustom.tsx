@@ -252,8 +252,10 @@ export const DatabaseTableCustomRoute = () => {
         getRow: (_) => (_[formId] ?? {}) as any,
         currentLang,
       }).getAll()
+
       cols[cols.length - 1].style = () => ({borderRight: '3px solid ' + t.palette.divider})
       cols[cols.length - 1].styleHead = {borderRight: '3px solid ' + t.palette.divider}
+
       return [
         ...getColumnsBase({
           selectedIds,
@@ -269,7 +271,7 @@ export const DatabaseTableCustomRoute = () => {
           getRow: (_) => _[formId] ?? {},
           selectedIds,
           ctxUpdate: ctxKoboUpdate,
-          formId: formId,
+          formId,
           canEdit: true,
           m,
         }),
@@ -277,6 +279,7 @@ export const DatabaseTableCustomRoute = () => {
       ].map((_) => {
         return {
           ..._,
+          formId,
           id: formId + '_' + _.id,
           group: formId + _.group,
           groupLabel: schema.schema.name + '/' + _.groupLabel,
@@ -287,13 +290,15 @@ export const DatabaseTableCustomRoute = () => {
   }, [...schemas, data, selectedIndexes, ctxSchema.langIndex, view.currentView])
 
   const loading = ctxSchema.anyLoading || !!formIds.find((_) => ctxAnswers.byId(_).loading)
+
   return (
     <>
       <Page width="full" sx={{p: 0}} loading={loading}>
         <Panel>
           <Datatable
-            onResizeColumn={view.onResizeColumn}
             id={customForm.id}
+            joinedTable
+            onResizeColumn={view.onResizeColumn}
             columns={columns}
             select={{
               onSelect: setSelectedIndexes,

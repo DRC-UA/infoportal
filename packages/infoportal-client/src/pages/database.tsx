@@ -1,6 +1,5 @@
-import React from 'react'
-import {Database} from '@/features/Database/Database'
 import {ProtectRoute} from '@/core/Session/SessionContext'
+import {Database} from '@/features/Database/Database'
 
 const DashboardProtectionHouseholdSurvey = () => {
   return (
