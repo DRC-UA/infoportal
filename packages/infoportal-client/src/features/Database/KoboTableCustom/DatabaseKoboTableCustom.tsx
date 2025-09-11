@@ -196,6 +196,14 @@ export const DatabaseTableCustomRoute = () => {
     setTitle(schemas.map((_) => _.schema.schema.name).join(' + '))
   }, [schemas])
 
+  const dataLoadingState = useMemo(
+    () => ({
+      formDataStates: formIds.map((id) => !!ctxAnswers.byId(id).get?.data),
+      langIndex: ctxSchema.langIndex,
+    }),
+    [formIds, ctxAnswers, ctxSchema.langIndex],
+  )
+
   const data = useMemo(() => {
     const dataSets = formIds.map((_) => ctxAnswers.byId(_).get?.data)
     if (!dataSets.every((_) => _ !== undefined)) return
@@ -227,7 +235,14 @@ export const DatabaseTableCustomRoute = () => {
           }),
       }
     })
-  }, [...formIds.map((_) => ctxAnswers.byId(_).get?.data), ctxSchema.langIndex])
+  }, [dataLoadingState])
+
+  const schemasState = useMemo(
+    () => ({
+      schemasData: schemas,
+    }),
+    [schemas],
+  )
 
   const columns: DatatableColumn.Props<any>[] = useMemo(() => {
     return schemas.flatMap(({formId, schema}) => {
@@ -287,7 +302,7 @@ export const DatabaseTableCustomRoute = () => {
         }
       })
     })
-  }, [...schemas, data, selectedIndexes, ctxSchema.langIndex, view.currentView])
+  }, [schemasState, data, selectedIndexes, ctxSchema.langIndex, view.currentView])
 
   const loading = ctxSchema.anyLoading || !!formIds.find((_) => ctxAnswers.byId(_).loading)
 
