@@ -61,6 +61,7 @@ export interface DatatableTableProps<T extends DatatableRow, K extends string = 
   onResizeColumn?: (_: K, size: number) => void
   rowsPerPageOptions?: number[]
   columns: DatatableColumn.Props<T, K>[]
+  joinedTable?: boolean
   hideColumnsToggle?: boolean
   hidePagination?: boolean
   showExportBtn?: boolean
@@ -112,6 +113,7 @@ export namespace DatatableColumn {
     group?: string
     groupLabel?: string
     noCsvExport?: boolean
+    formId?: string
     align?: 'center' | 'right'
     onClick?: (_: T) => void
     hidden?: boolean
