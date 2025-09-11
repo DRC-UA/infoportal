@@ -161,6 +161,16 @@ const urlValidation = yup.object({
   id: yup.string().required(),
 })
 
+const indexFinder = (array: string[] | undefined = [], queryString: string): number => {
+  let defaultIndex: number = 0
+
+  const foundIndex = array.findIndex((element) => element.includes(queryString))
+
+  if (foundIndex === -1) return defaultIndex
+
+  return foundIndex
+}
+
 export const DatabaseTableCustomRoute = () => {
   const {api} = useAppSettings()
   const {m, currentLang} = useI18n()
@@ -310,23 +320,13 @@ export const DatabaseTableCustomRoute = () => {
     })
   }, [schemasState, data, selectedIndexes, ctxSchema.langIndex, view.currentView])
 
-  const indexFinder = (array: string[], queryString: string): number => {
-    let defaultIndex: number = 0
-
-    const foundIndex = array.findIndex((element) => element.includes(queryString))
-
-    if (foundIndex === -1) return defaultIndex
-
-    return foundIndex
-  }
-
   useEffect(() => {
     const translations = {
       // we can't guarantee same language index in different form schemas,
       // but we are setting the lang index in common Kobo context, so let's base on the first schema
       // I know it's error-prone, can't see a better choice
-      en: indexFinder(schemas[0].schema.schemaSanitized.content.translations, '(en)'),
-      uk: indexFinder(schemas[0].schema.schemaSanitized.content.translations, '(uk)'),
+      en: indexFinder(schemas[0]?.schema.schemaSanitized.content.translations, '(en)'),
+      uk: indexFinder(schemas[0]?.schema.schemaSanitized.content.translations, '(uk)'),
     } as const
 
     if (showXmlLabels) {
