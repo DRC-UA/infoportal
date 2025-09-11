@@ -1,28 +1,30 @@
-import React, {useEffect, useMemo, useState} from 'react'
-import {Page} from '@/shared/Page'
-import {Panel} from '@/shared/Panel'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
+import {useEffect, useMemo, useState} from 'react'
 import {useParams} from 'react-router'
-import * as yup from 'yup'
 import {seq} from '@axanc/ts-utils'
-import {useI18n} from '@/core/i18n'
-import {Datatable} from '@/shared/Datatable/Datatable'
-import {useTheme} from '@mui/material'
-import {getColumnsCustom} from '@/features/Database/KoboTable/columns/columnsCustom'
-import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
-import {getColumnsBase} from '@/features/Database/KoboTable/columns/columnsBase'
+import {useTheme, FormControlLabel, Switch} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
+import * as yup from 'yup'
+
 import {KoboIndex, KoboSchemaHelper, KoboValidation, Shelter_ta} from 'infoportal-common'
+
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {IpSelectSingle} from '@/shared/Select/SelectSingle'
-import {useLayoutContext} from '@/shared/Layout/LayoutContext'
+import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
+import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
+import {useI18n} from '@/core/i18n'
+import {useSession} from '@/core/Session/SessionContext'
+import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
+import {getColumnsCustom} from '@/features/Database/KoboTable/columns/columnsCustom'
+import {ArchiveAlert} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
 import {useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
 import {DatabaseViewInput} from '@/features/Database/KoboTable/view/DatabaseViewInput'
-import {columnBySchemaGenerator} from '@/features/Database/KoboTable/columns/columnBySchema'
+import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
+import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
+import {getColumnsBase} from '@/features/Database/KoboTable/columns/columnsBase'
+import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableColumn} from '@/shared/Datatable/util/datatableType'
-import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
-import {ArchiveAlert} from '@/features/Database/KoboTable/DatabaseKoboTableContent'
+import {useLayoutContext} from '@/shared/Layout/LayoutContext'
+import {Page} from '@/shared/Page'
+import {Panel} from '@/shared/Panel'
 
 interface CustomForm {
   id: string
@@ -163,6 +165,7 @@ export const DatabaseTableCustomRoute = () => {
   const {api} = useAppSettings()
   const {m, currentLang} = useI18n()
   const t = useTheme()
+  const {session} = useSession()
 
   const {id} = urlValidation.validateSync(useParams())
 
@@ -175,6 +178,9 @@ export const DatabaseTableCustomRoute = () => {
   const {setTitle} = useLayoutContext()
 
   const [selectedIndexes, setSelectedIndexes] = useState<string[]>([])
+  const [showXmlLabels, setShowXmlLabels] = useState(false)
+
+  const handleXmlLabelsToggle = () => setShowXmlLabels((previous) => !previous)
 
   if (!customForm) return
 
@@ -304,6 +310,32 @@ export const DatabaseTableCustomRoute = () => {
     })
   }, [schemasState, data, selectedIndexes, ctxSchema.langIndex, view.currentView])
 
+  const indexFinder = (array: string[], queryString: string): number => {
+    let defaultIndex: number = 0
+
+    const foundIndex = array.findIndex((element) => element.includes(queryString))
+
+    if (foundIndex === -1) return defaultIndex
+
+    return foundIndex
+  }
+
+  useEffect(() => {
+    const translations = {
+      // we can't guarantee same language index in different form schemas,
+      // but we are setting the lang index in common Kobo context, so let's base on the first schema
+      // I know it's error-prone, can't see a better choice
+      en: indexFinder(schemas[0].schema.schemaSanitized.content.translations, '(en)'),
+      uk: indexFinder(schemas[0].schema.schemaSanitized.content.translations, '(uk)'),
+    } as const
+
+    if (showXmlLabels) {
+      ctxSchema.setLangIndex(-1)
+    } else {
+      ctxSchema.setLangIndex(translations[currentLang])
+    }
+  }, [schemasState, currentLang, showXmlLabels])
+
   const loading = ctxSchema.anyLoading || !!formIds.find((_) => ctxAnswers.byId(_).loading)
 
   return (
@@ -356,20 +388,20 @@ export const DatabaseTableCustomRoute = () => {
             header={
               <>
                 <DatabaseViewInput sx={{mr: 1}} view={view} />
-                <IpSelectSingle<number>
-                  hideNullOption
-                  sx={{maxWidth: 128, mr: 1}}
-                  defaultValue={ctxSchema.langIndex}
-                  onChange={ctxSchema.setLangIndex}
-                  options={[
-                    {children: 'XML', value: -1},
-                    // ...customForm.langs.map((l, i) => ({children: l, value: i})),
-                    ...(ctxSchema.byId[customForm.forms[0].id]?.get?.schemaSanitized.content.translations.map(
-                      (_, i) => ({children: _, value: i}),
-                    ) ?? []),
-                    // ...ctx.schema.schemaHelper.sanitizedSchema.content.translations.map((_, i) => ({children: _, value: i}))
-                  ]}
-                />
+                {session.admin && (
+                  <FormControlLabel
+                    sx={{ml: 1}}
+                    control={
+                      <Switch
+                        size="small"
+                        checked={showXmlLabels}
+                        onChange={handleXmlLabelsToggle}
+                        name="xml-fields-display-switch"
+                      />
+                    }
+                    label={m.xmlLabels}
+                  />
+                )}
                 {isFullyArchived && <ArchiveAlert />}
               </>
             }
