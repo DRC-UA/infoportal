@@ -468,7 +468,7 @@ export type DrcJob = string
 
 export enum AssistanceModality {
   Cash = 'Cash',
-  InKind = 'In-kind',
+  InKind = 'InKind',
   Voucher = 'Voucher',
-  Combination = 'Both cash and in-kind',
+  Combination = 'Combination',
 }
