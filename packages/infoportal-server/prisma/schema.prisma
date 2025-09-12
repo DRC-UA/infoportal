@@ -125,10 +125,18 @@ model KoboMeta {
   taxIdFileName    String?
   idFileId         Int?
   taxIdFileId      Int?
+  modality         Modality?
   persons          KoboPerson[]
 
   @@index([formId])
   @@index([koboId])
+}
+
+enum Modality {
+  cash
+  inKind
+  voucher
+  combination
 }
 
 model User {

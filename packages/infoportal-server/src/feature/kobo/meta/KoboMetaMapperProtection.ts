@@ -1,7 +1,8 @@
-import {map, match, seq} from '@axanc/ts-utils'
+import {map, match} from '@axanc/ts-utils'
 import {UaLocation} from 'ua-location'
 
 import {
+  AssistanceModality,
   DrcOffice,
   DrcProgram,
   DrcProject,
@@ -446,6 +447,12 @@ export class KoboMetaMapperProtection {
       personsCount: persons.length,
       project,
       donor: project && [DrcProjectHelper.donorByProject[project?.[0]]],
+      modality: match(answer.type_assistance)
+        .cases({
+          cash: AssistanceModality.cash,
+          in_kind: AssistanceModality.inKind,
+        })
+        .default(undefined),
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
     })
