@@ -1,14 +1,18 @@
-import {useAppSettings} from '@/core/context/ConfigContext'
-import React, {useEffect, useMemo} from 'react'
-import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
-import {useI18n} from '@/core/i18n'
-import * as yup from 'yup'
-import {databaseIndex} from '@/features/Database/databaseIndex'
-import {Navigate, NavLink, Outlet, Route, Routes} from 'react-router-dom'
-import {AppHeader} from '@/shared/Layout/Header/AppHeader'
-import {Layout} from '@/shared/Layout'
+import {useEffect, useMemo} from 'react'
+import {Obj, Seq, seq} from '@axanc/ts-utils'
 import {Icon, Skeleton, Tab, Tabs, Tooltip, useTheme} from '@mui/material'
 import {useLocation, useParams} from 'react-router'
+import {Navigate, NavLink, Outlet, Route, Routes} from 'react-router-dom'
+import * as yup from 'yup'
+
+import {KoboIndex} from 'infoportal-common'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
+import {useI18n} from '@/core/i18n'
+import {databaseIndex} from '@/features/Database/databaseIndex'
+import {AppHeader} from '@/shared/Layout/Header/AppHeader'
+import {Layout} from '@/shared/Layout'
 import {IpBtn} from '@/shared/Btn'
 import {DatabaseNew} from '@/features/Database/DatabaseNew/DatabaseNew'
 import {DatabaseProvider, useDatabaseContext} from '@/features/Database/DatabaseContext'
@@ -16,7 +20,6 @@ import {DatabaseAccessRoute} from '@/features/Database/Access/DatabaseAccess'
 import {DatabaseTableRoute} from '@/features/Database/KoboTable/DatabaseKoboTable'
 import {Txt} from '@/shared'
 import {useLayoutContext} from '@/shared/Layout/LayoutContext'
-import {Obj, Seq, seq} from '@axanc/ts-utils'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 import {DatabaseList} from '@/features/Database/DatabaseList'
 import {DatabaseKoboAnswerViewPage} from '@/features/Database/KoboEntry/DatabaseKoboAnswerView'
@@ -24,13 +27,13 @@ import {DatabaseHistory} from '@/features/Database/History/DatabaseHistory'
 import {customForms, DatabaseTableCustomRoute} from '@/features/Database/KoboTableCustom/DatabaseKoboTableCustom'
 import {IpIconBtn} from '@/shared/IconBtn'
 import {useAsync} from '@/shared/hook/useAsync'
-import {KoboIndex} from 'infoportal-common'
 import {Fender} from '@/shared/Fender'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {appConfig} from '@/conf/AppConfig'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatabaseKoboRepeatRoute} from '@/features/Database/RepeatGroup'
+import {usePersistentState} from '@/shared/hook/usePersistantState'
 
 export const databaseUrlParamsValidation = yup.object({
   formId: yup.string().required(),
@@ -57,8 +60,12 @@ export const DatabaseWithContext = () => {
   const t = useTheme()
   const {conf, api} = useAppSettings()
   const ctx = useDatabaseContext()
-  const [collapseAll, setCollapseAll] = React.useState<boolean | null>(null)
+  const [collapseAll, setCollapseAll] = usePersistentState<boolean>(true, {
+    storageKey: 'DatabaseWithContext-collapse-forms-list',
+  })
+
   useReactRouterDefaultRoute(databaseIndex.siteMap.index)
+
   const parsedFormNames: Record<string, Seq<Form>> = useMemo(() => {
     const mapped: Record<string, Form[]> = {
       forms:
