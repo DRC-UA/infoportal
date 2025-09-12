@@ -84,6 +84,7 @@ export enum DrcProgram {
   GBV = 'GBV',
   HygieneKit = 'HygieneKit',
   InfantWinterClothing = 'InfantWinterClothing',
+  IPA = 'IPA',
   Legal = 'Legal',
   LegalAid = 'LegalAid',
   LegalAssistanceCivil = 'Legal Assistance: civil',
@@ -130,6 +131,7 @@ export class DrcSectorHelper {
     GBV: [DrcSector.GBV],
     HygieneKit: [DrcSector.NFI],
     InfantWinterClothing: [DrcSector.NFI],
+    [DrcProgram.IPA]: [DrcSector.GeneralProtection],
     Legal: [DrcSector.GeneralProtection],
     LegalAid: [DrcSector.GBV], //	# of individuals at risk supported with GBV specialized legal assistance and counseling
     [DrcProgram.LegalAssistanceCivil]: [DrcSector.Legal],
@@ -463,3 +465,10 @@ export class DrcProjectHelper {
 }
 
 export type DrcJob = string
+
+export enum AssistanceModality {
+  Cash = 'Cash',
+  InKind = 'InKind',
+  Voucher = 'Voucher',
+  Combination = 'Combination',
+}

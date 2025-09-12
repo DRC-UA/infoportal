@@ -2,6 +2,7 @@ import {map, match} from '@axanc/ts-utils'
 import {UaLocation} from 'ua-location'
 
 import {
+  AssistanceModality,
   DrcOffice,
   DrcProgram,
   DrcProject,
@@ -17,6 +18,7 @@ import {
   Protection_gbv,
   Protection_groupSession,
   Protection_hhs3,
+  Protection_ipaTracker,
   Protection_pss,
   Protection_referral,
   ProtectionCommunityMonitoringTags,
@@ -407,6 +409,52 @@ export class KoboMetaMapperProtection {
         status: KoboMetaStatus.Committed,
         lastStatusUpdate: row.date,
       }
+    })
+  }
+
+  static readonly ipaTracker: MetaMapperInsert<KoboMetaOrigin<Protection_ipaTracker.T>> = (row) => {
+    const answer = Protection_ipaTracker.map(row.answers)
+    const persons = KoboXmlMapper.Persons.protection_ipaTracker(answer)
+    const project = match(answer.project)
+      .cases({
+        ukr000363_uhf8: [DrcProject['UKR-000363 UHF8']],
+        ukr000397_gffo: [DrcProject['UKR-000397 GFFO']],
+        ukr000423_echo4: [DrcProject['UKR-000423 ECHO4']],
+        ukr000345_bha2: [DrcProject['UKR-000345 BHA2']],
+        ukr000372_echo3: [DrcProject['UKR-000372 ECHO3']],
+        ukr000355_dmfa: [DrcProject['UKR-000355 Danish MFA']],
+        ukr000386_mass_appeal: [DrcProject['UKR-000386 Pooled Funds']],
+      })
+      .default(undefined)
+
+    return KoboMetaMapper.make({
+      office: match(answer.staff_to_insert_their_DRC_office)
+        .cases({
+          sloviansk: DrcOffice.Sloviansk,
+          chernihiv: DrcOffice.Chernihiv,
+          dnipro: DrcOffice.Dnipro,
+          kharkiv: DrcOffice.Kharkiv,
+          mykolaiv: DrcOffice.Mykolaiv,
+          sumy: DrcOffice.Sumy,
+        })
+        .default(undefined),
+      oblast: OblastIndex.byKoboName(answer.oblast)?.name!,
+      raion: KoboXmlMapper.Location.searchRaion(answer.raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
+      sector: DrcSector.GeneralProtection,
+      activity: DrcProgram.IPA,
+      persons,
+      personsCount: persons.length,
+      project,
+      donor: project && [DrcProjectHelper.donorByProject[project?.[0]]],
+      modality: match(answer.type_assistance)
+        .cases({
+          cash: AssistanceModality.Cash,
+          in_kind: AssistanceModality.InKind,
+        })
+        .default(undefined),
+      status: KoboMetaStatus.Committed,
+      lastStatusUpdate: row.date,
     })
   }
 }

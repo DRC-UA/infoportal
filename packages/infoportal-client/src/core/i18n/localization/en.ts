@@ -1280,6 +1280,7 @@ const en = Object.freeze({
         GBV: 'GBV',
         HygieneKit: 'Hygiene kit',
         InfantWinterClothing: 'Infant winter clothing',
+        IPA: 'IPA',
         Legal: 'Legal',
         LegalAid: 'GBV Legal Aid',
         'Legal Assistance: civil': 'Legal Assistance: Civil',

@@ -125,6 +125,7 @@ model KoboMeta {
   taxIdFileName    String?
   idFileId         Int?
   taxIdFileId      Int?
+  modality         Modality?
   persons          KoboPerson[]
 
   @@index([formId])
@@ -368,4 +369,11 @@ enum DatabaseViewVisibility {
 enum DatabaseViewColVisibility {
   Hidden
   Visible
+}
+
+enum Modality {
+  Cash
+  InKind
+  Voucher
+  Combination
 }

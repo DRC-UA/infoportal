@@ -77,6 +77,10 @@ export class BuildKoboType {
         formId: KoboIndex.byName('protection_groupSession').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
       },
+      protection_ipaTracker: {
+        formId: KoboIndex.byName('protection_ipaTracker').id,
+        skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'], // TODO: check the need for this
+      },
       protection_pss: {
         formId: KoboIndex.byName('protection_pss').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
