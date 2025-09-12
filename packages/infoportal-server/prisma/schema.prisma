@@ -377,3 +377,10 @@ enum DatabaseViewColVisibility {
   Hidden
   Visible
 }
+
+enum Modality {
+  Cash
+  InKind
+  Voucher
+  Combination
+}
