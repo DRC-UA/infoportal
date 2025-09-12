@@ -60,8 +60,8 @@ export const DatabaseWithContext = () => {
   const t = useTheme()
   const {conf, api} = useAppSettings()
   const ctx = useDatabaseContext()
-  const [collapseAll, setCollapseAll] = usePersistentState<boolean>(true, {
-    storageKey: 'DatabaseWithContext-collapse-forms-list',
+  const [collapseAll, setCollapseAll] = usePersistentState<boolean | null>(null, {
+    storageKey: 'database-sections-collapse-all',
   })
 
   useReactRouterDefaultRoute(databaseIndex.siteMap.index)
@@ -153,7 +153,7 @@ export const DatabaseWithContext = () => {
             </>
           ) : (
             Obj.entries(parsedFormNames)?.map(([category, forms]) => (
-              <SidebarSection dense title={category} key={category} forceCollapsed={collapseAll}>
+              <SidebarSection dense title={category} key={category} forceCollapsed={collapseAll} defaultOpen={false}>
                 {forms.map((_: Form) => (
                   <Tooltip key={_.id} title={_.parsedName.name} placement="right-end">
                     <NavLink to={_.url}>

@@ -1,5 +1,5 @@
 import {Box, Collapse} from '@mui/material'
-import {ReactNode, useEffect, useState} from 'react'
+import {useLayoutEffect, useState, type ReactNode} from 'react'
 import {Txt} from '@/shared/Txt'
 import {IpIconBtn} from '@/shared/IconBtn'
 
@@ -21,7 +21,7 @@ export const SidebarSection = ({
   const [open, setOpen] = useState(defaultOpen)
   const margin = 1 / (dense ? 4 : 2)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (forceCollapsed !== undefined && forceCollapsed !== null) {
       setOpen(!forceCollapsed)
     }
