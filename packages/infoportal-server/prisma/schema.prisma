@@ -132,13 +132,6 @@ model KoboMeta {
   @@index([koboId])
 }
 
-enum Modality {
-  Cash
-  InKind
-  Voucher
-  Combination
-}
-
 model User {
   id              String         @id @default(uuid())
   email           String         @unique
