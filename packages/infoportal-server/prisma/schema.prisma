@@ -7,8 +7,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  // provider = "postgresql"
-  // url      = "postgresql://alexandreac:sieges78@localhost:5432/im-tools"
 }
 
 model KoboServer {
@@ -22,44 +20,42 @@ model KoboServer {
 model KoboForm {
   id                 String               @id @default(uuid())
   name               String
-  server             KoboServer           @relation(fields: [serverId], references: [id])
   serverId           String
   createdAt          DateTime             @default(now())
   updatedAt          DateTime?
-  deploymentStatus   String?
-  updatedBy          String?
   uploadedBy         String?
+  updatedBy          String?
+  deploymentStatus   String?
   enketoUrl          String?
   submissionsCount   Int?
   KoboAnswers        KoboAnswers[]
   KoboAnswersHistory KoboAnswersHistory[]
+  server             KoboServer           @relation(fields: [serverId], references: [id])
 }
 
 model KoboAnswers {
-  id                     String    @id
-  uuid                   String
-  form                   KoboForm  @relation(fields: [formId], references: [id])
-  formId                 String
-  updatedAt              DateTime?
+  id                     String                    @id
   start                  DateTime
   end                    DateTime
-  date                   DateTime
   version                String?
-  submissionTime         DateTime
-  validationStatus       String?
-  validatedBy            String?
-  lastValidatedTimestamp Int?
   geolocation            String?
   answers                Json
+  submissionTime         DateTime
+  formId                 String
+  validationStatus       String?
+  lastValidatedTimestamp Int?
+  validatedBy            String?
   attachments            Json[]
-  source                 String?
   deletedAt              DateTime?
   deletedBy              String?
+  source                 String?
   tags                   Json?
-
-  mealVerifications MealVerificationAnswers[]
-  // meta              KoboMeta[]
-  histories         KoboAnswersHistory[]      @relation("KoboAnswersToHistory")
+  uuid                   String
+  date                   DateTime
+  updatedAt              DateTime?
+  form                   KoboForm                  @relation(fields: [formId], references: [id])
+  mealVerifications      MealVerificationAnswers[]
+  histories              KoboAnswersHistory[]      @relation("KoboAnswersToHistory")
 
   @@unique([id, formId])
   @@index([deletedAt])
@@ -69,24 +65,18 @@ model KoboAnswers {
 
 model KoboAnswersHistory {
   id       String        @id @default(uuid())
-  form     KoboForm?     @relation(fields: [formId], references: [id])
-  formId   String?
   answerId String?
-  answers  KoboAnswers[] @relation("KoboAnswersToHistory")
   by       String
   date     DateTime      @default(now())
   type     String?
   property String?
-  oldValue Json?
   newValue Json?
+  formId   String?
+  oldValue Json?
+  form     KoboForm?     @relation(fields: [formId], references: [id])
+  answers  KoboAnswers[] @relation("KoboAnswersToHistory")
 
   @@index([formId])
-}
-
-enum Gender {
-  Male
-  Female
-  Other
 }
 
 model KoboPerson {
@@ -95,17 +85,15 @@ model KoboPerson {
   gender       Gender?
   disability   String[]
   displacement String?
-  meta         KoboMeta @relation(fields: [metaId], references: [id], onDelete: Cascade)
   metaId       String
+  meta         KoboMeta @relation(fields: [metaId], references: [id], onDelete: Cascade)
 
   @@index([metaId])
 }
 
 model KoboMeta {
-  id               String    @id @default(uuid())
-  koboId           String
+  id               String       @id @default(uuid())
   uuid             String
-  // answer           KoboAnswers @relation(fields: [koboId], references: [id], onDelete: Cascade)
   formId           String
   referencedFormId String?
   date             DateTime
@@ -126,17 +114,17 @@ model KoboMeta {
   office           String?
   project          String[]
   donor            String[]
-  displacement     String?
   address          String?
   status           String?
-  taxIdFileName    String?
-  taxIdFileId      Int?
-  idFileName       String?
-  idFileId         Int?
-  passportNum      String?
-
+  displacement     String?
   lastStatusUpdate DateTime?
   tags             Json?
+  koboId           String
+  passportNum      String?
+  idFileName       String?
+  taxIdFileName    String?
+  idFileId         Int?
+  taxIdFileId      Int?
   persons          KoboPerson[]
 
   @@index([formId])
@@ -146,16 +134,16 @@ model KoboMeta {
 model User {
   id              String         @id @default(uuid())
   email           String         @unique
-  createdBy       String?
   createdAt       DateTime       @default(now())
   lastConnectedAt DateTime?
-  accessToken     String?
-  name            String?
-  drcJob          String?
-  avatar          Bytes?         @db.ByteA
-  drcOffice       String?
   admin           Boolean        @default(false)
   officer         String?
+  drcOffice       String?
+  drcJob          String?
+  createdBy       String?
+  accessToken     String?
+  name            String?
+  avatar          Bytes?
   activities      UserActivity[]
 
   @@index([email])
@@ -164,9 +152,9 @@ model User {
 model UserActivity {
   id     String   @id @default(uuid())
   at     DateTime @default(now())
-  user   User?    @relation(fields: [userId], references: [id])
   detail String?
   userId String?
+  user   User?    @relation(fields: [userId], references: [id])
 }
 
 model MpcaWfpDeduplicationIdMapping {
@@ -178,48 +166,38 @@ model MpcaWfpDeduplicationIdMapping {
 }
 
 model MpcaWfpDeduplication {
-  id             String                         @id @default(uuid())
-  office         String?
-  fileName       String?
-  fileUpload     DateTime?
-  category       String?
+  id             String                        @id @default(uuid())
   amount         Int
   wfpId          Int
   createdAt      DateTime
-  validFrom      DateTime
   expiry         DateTime
   beneficiaryId  String
-  beneficiary    MpcaWfpDeduplicationIdMapping? @relation(fields: [beneficiaryId], references: [beneficiaryId])
   message        String?
   status         String
+  validFrom      DateTime
   existingOrga   String?
   existingStart  DateTime?
   existingEnd    DateTime?
   existingAmount Int?
-}
-
-enum FeatureAccessLevel {
-  Read
-  Write
-  Admin
-}
-
-enum FeatureAccessType {
-  KoboForm
+  office         String?
+  fileName       String?
+  fileUpload     DateTime?
+  category       String?
+  beneficiary    MpcaWfpDeduplicationIdMapping @relation(fields: [beneficiaryId], references: [beneficiaryId])
 }
 
 model FeatureAccess {
   id          String             @id @default(uuid())
-  createdBy   String?
+  featureId   String?
+  params      Json?
+  level       FeatureAccessLevel
+  email       String?
   createdAt   DateTime           @default(now())
   updatedAt   DateTime?
+  createdBy   String?
   featureType FeatureAccessType?
-  featureId   String?
-  email       String?
-  drcOffice   String?
   drcJob      String?
-  level       FeatureAccessLevel
-  params      Json?
+  drcOffice   String?
   groupId     String?
   group       Group?             @relation(fields: [groupId], references: [id])
 }
@@ -240,8 +218,8 @@ model GroupItem {
   drcOffice String?
   email     String?
   level     FeatureAccessLevel
-  group     Group?             @relation(fields: [groupId], references: [id])
   groupId   String?
+  group     Group?             @relation(fields: [groupId], references: [id])
 }
 
 model AccessToken {
@@ -260,12 +238,12 @@ model Session {
 model Proxy {
   id        String       @id @default(uuid())
   createdAt DateTime     @default(now())
-  expireAt  DateTime?
   createdBy String?
   name      String       @unique
-  slug      String       @unique
   url       String
   disabled  Boolean?
+  slug      String       @unique
+  expireAt  DateTime?
   usage     ProxyUsage[]
 }
 
@@ -273,27 +251,17 @@ model ProxyUsage {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   ipAddresses String[]
-  proxy       Proxy    @relation(fields: [proxyId], references: [id])
   proxyId     String
+  proxy       Proxy    @relation(fields: [proxyId], references: [id])
 }
 
 model MealVerificationAnswers {
   id                 String                         @id @default(uuid())
-  koboAnswer         KoboAnswers                    @relation(fields: [koboAnswerId], references: [id], onDelete: Cascade)
-  mealVerification   MealVerification               @relation(fields: [mealVerificationId], references: [id])
   koboAnswerId       String
   mealVerificationId String
   status             MealVerificationAnswersStatus?
-}
-
-enum MealVerificationAnswersStatus {
-  Selected
-}
-
-enum MealVerificationStatus {
-  Approved
-  Rejected
-  Pending
+  koboAnswer         KoboAnswers                    @relation(fields: [koboAnswerId], references: [id], onDelete: Cascade)
+  mealVerification   MealVerification               @relation(fields: [mealVerificationId], references: [id])
 }
 
 model MealVerification {
@@ -304,8 +272,8 @@ model MealVerification {
   name      String
   desc      String?
   filters   Json
-  answers   MealVerificationAnswers[]
   status    MealVerificationStatus?
+  answers   MealVerificationAnswers[]
 }
 
 model JsonStore {
@@ -319,13 +287,13 @@ model JsonStore {
 
 model DatabaseView {
   id         String                 @id @default(uuid())
-  databaseId String
   name       String
   createdAt  DateTime               @default(now())
-  createdBy  String?
   updatedAt  DateTime?
   updatedBy  String?
   visibility DatabaseViewVisibility @default(Private)
+  databaseId String
+  createdBy  String?
   details    DatabaseViewCol[]
 
   @@unique([databaseId, name])
@@ -335,13 +303,60 @@ model DatabaseView {
 
 model DatabaseViewCol {
   name       String
-  view       DatabaseView?              @relation(fields: [viewId], references: [id], onDelete: Cascade)
   viewId     String
   width      Int?
   visibility DatabaseViewColVisibility? @default(Visible)
+  view       DatabaseView               @relation(fields: [viewId], references: [id], onDelete: Cascade)
 
   @@unique([name, viewId])
   @@index([name, viewId])
+}
+
+model EmailOutBox {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  createdBy   String?
+  context     String
+  to          String
+  subject     String
+  content     String?
+  deliveredAt DateTime?
+  cc          String?
+  tags        Json?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model workdoneat_backup {
+  id           String?
+  work_done_at String?
+
+  @@ignore
+}
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum FeatureAccessLevel {
+  Read
+  Write
+  Admin
+}
+
+enum FeatureAccessType {
+  KoboForm
+}
+
+enum MealVerificationAnswersStatus {
+  Selected
+}
+
+enum MealVerificationStatus {
+  Approved
+  Rejected
+  Pending
 }
 
 enum DatabaseViewVisibility {
@@ -353,17 +368,4 @@ enum DatabaseViewVisibility {
 enum DatabaseViewColVisibility {
   Hidden
   Visible
-}
-
-model EmailOutBox {
-  id          String    @id @default(uuid())
-  createdAt   DateTime  @default(now())
-  createdBy   String?
-  context     String
-  to          String
-  cc          String?
-  subject     String
-  content     String?
-  deliveredAt DateTime?
-  tags        Json?
 }
