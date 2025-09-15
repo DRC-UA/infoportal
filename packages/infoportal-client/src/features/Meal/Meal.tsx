@@ -21,7 +21,6 @@ import {appConfig} from '@/conf/AppConfig'
 import {MealPdm} from '@/features/Meal/Pdm/Dashboard/MealPdm'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {MealVerificationData} from '@/features/Meal/Verification/MealVerificationData'
-import {MealPdmCashDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmCashDashboard'
 import {MealPdmShelterDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmShelterDashboard'
 import {MealPdmNfiDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmNfiDashboard'
 import {PdmGbvDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGbvDashboard'
@@ -50,6 +49,7 @@ const relatedKoboForms: KoboFormName[] = [
   'meal_pssPdm',
   'meal_eorePdm',
   'ecrec_cashRegistration',
+  'bn_pam',
 ]
 
 export const mealIndex = {
@@ -176,6 +176,7 @@ const MealSidebar = ({
             path={path(mealIndex.siteMap.form('ecrec_cashRegistration'))}
             name="ecrec_cashRegistration"
           />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('bn_pam'))} name="bn_pam" />
         </SidebarSection>
         <SidebarSection title={m._meal.winterization}>
           <NavLink to={path(mealIndex.siteMap.winterization.winterizationDashboard)}>
@@ -212,7 +213,8 @@ export const Meal = () => {
               _.params?.koboFormId === KoboIndex.byName('protection_gbvPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('meal_winterizationPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('legal_pam').id ||
-              _.params?.koboFormId === KoboIndex.byName('meal_eorePdm').id
+              _.params?.koboFormId === KoboIndex.byName('meal_eorePdm').id ||
+              _.params?.koboFormId === KoboIndex.byName('bn_pam').id
             )
           })),
     }
