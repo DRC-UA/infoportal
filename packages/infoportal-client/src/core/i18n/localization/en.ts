@@ -501,7 +501,7 @@ const en = Object.freeze({
       cashPdmDashboard: 'Cash',
       shelterPdmDashboard: 'Shelter',
       nfiPdmDashboard: 'Nfi',
-      gbvPdmDashboard: 'Gbv',
+      gbvPdmDashboard: 'Dignity Kits',
       legalPdmDashboard: 'Legal',
       pssPdmDashboard: 'Pss',
       eorePdmDashboard: 'Eore',
@@ -593,7 +593,7 @@ const en = Object.freeze({
       feedback: 'Feedback',
       address:
         'Do you know how and where you could address your suggestions, feedback or complaints regarding the work of the DRC, if any?',
-
+      pssExcludedYes: 'If yes, who was mainly excluded?',
       outstandingNeeds: 'Outstanding needs',
       satisfiedProcess: 'Satisfied with process',
       inAdvance: 'Were you informed in advance about the amount you would receive?',

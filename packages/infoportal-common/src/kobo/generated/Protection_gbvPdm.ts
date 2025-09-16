@@ -31,9 +31,9 @@ export namespace Protection_gbvPdm {
     // introduction/age [integer] 1. What is your age?
     age: number | undefined
     // introduction/content_during_distribution [select_one] 2. Were you told about the content of what you were going to receive before or during distribution?
-    content_during_distribution: undefined | Option<'feel_staff_respect'>
+    content_during_distribution: undefined | Option<'informed_distribution_kits'>
     // introduction/items_received_kit [select_one] 3. Do you think the items you received in the dignity kit was as per the information you received about the content?
-    items_received_kit: undefined | Option<'feel_staff_respect'>
+    items_received_kit: undefined | Option<'informed_distribution_kits'>
     // introduction/used_items_kit [select_one] 4. Have you used any of the items in the dignity kit?
     used_items_kit: undefined | Option<'used_items_kit'>
     // introduction/satisfied_quantity_items [select_one] 5. How satisfied are you with the quantity of the items in the dignity kits you received from DRC?
@@ -45,23 +45,37 @@ export namespace Protection_gbvPdm {
     // introduction/satisfied_quality_items_001 [text] 6.1 If ‘partially dissatisfied’ or ‘dissatisfied’, could you please clarify:
     satisfied_quality_items_001: string | undefined
     // introduction/kit_received_relevant [select_one] 7. Was the kit you’ve received relevant to your needs?
-    kit_received_relevant: undefined | Option<'feel_staff_respect'>
+    kit_received_relevant: undefined | Option<'informed_distribution_kits'>
     // introduction/kit_received_relevant_no [text] 7.1 If ‘no’, could you please specify why
     kit_received_relevant_no: string | undefined
     // introduction/information_use_items [select_one] 8. Did you receive information on how to use the items in the dignity kits?
-    information_use_items: undefined | Option<'feel_staff_respect'>
+    information_use_items: undefined | Option<'informed_distribution_kits'>
     // introduction/safety_travelling [select_one] 9. Did you experience any safety concerns when travelling to the distribution or during the distribution?
-    safety_travelling: undefined | Option<'feel_staff_respect'>
-    // introduction/how_give_your_complaint [select_one] 10. Where you told about how you can give your complaint/feedback or questions about the assistance?
-    how_give_your_complaint: undefined | Option<'feel_staff_respect'>
-    // introduction/satisfied_assistance_provided [select_one] 11. Overall, are satisfied with the assistance provided by DRC?
-    satisfied_assistance_provided: undefined | Option<'feel_staff_respect'>
-    // introduction/satisfied_assistance_provided_no [text] 11.1 If ‘no’, could you please specify
+    safety_travelling: undefined | Option<'informed_distribution_kits'>
+    // introduction/safety_travelling_no [text] 9.1 Please explain what exactly caused your concern.
+    safety_travelling_no: string | undefined
+    // introduction/women_need_kits [select_one] 10. Do you know any women or girls who need dignity kits but have not received them from DRC?
+    women_need_kits: undefined | Option<'informed_distribution_kits'>
+    // introduction/women_need_kits_yes [text] 10.1 If yes, please explain why they did not receive them.
+    women_need_kits_yes: string | undefined
+    // introduction/how_give_your_complaint [select_one] 11. Where you told about how you can give your complaint/feedback or questions about the assistance?
+    how_give_your_complaint: undefined | Option<'informed_distribution_kits'>
+    // introduction/complaint_responded [select_one] 12. If you have ever given feedback or made a complaint, was it responded to or followed up?
+    complaint_responded: undefined | Option<'informed_distribution_kits'>
+    // introduction/complaint_responded_no [text] 12.1 If no, would you mind telling me which are the issues / what happened?
+    complaint_responded_no: string | undefined
+    // introduction/satisfied_assistance_provided [select_one] 13. Overall, are satisfied with the assistance provided by DRC?
+    satisfied_assistance_provided: undefined | Option<'informed_distribution_kits'>
+    // introduction/satisfied_assistance_provided_no [text] 13.1 If ‘no’, could you please specify
     satisfied_assistance_provided_no: string | undefined
-    // introduction/feel_staff_respect [select_one] 12. Did you feel that the DRC staff treated you with respect during the intervention?
-    feel_staff_respect: undefined | Option<'feel_staff_respect'>
-    // introduction/feel_staff_respect_no [text] 12.1 If ‘no’, could you please specify
+    // introduction/feel_staff_respect [select_one] 14. Did you feel that the DRC staff treated you with respect during the intervention?
+    feel_staff_respect: undefined | Option<'informed_distribution_kits'>
+    // introduction/feel_staff_respect_no [text] 14.1 If ‘no’, could you please specify
     feel_staff_respect_no: string | undefined
+    // introduction/informed_distribution_kits [select_one] 15. Did you feel well informed about the distribution of dignity kits?
+    informed_distribution_kits: undefined | Option<'informed_distribution_kits'>
+    // introduction/informed_distribution_kits_no [text] 15.1 If no, what could the have been done to better inform you about the assistance / services available to you?
+    informed_distribution_kits_no: string | undefined
     // introduction/feedback [text] Please provide any other feedback/comments:
     feedback: string | undefined
   }
@@ -78,8 +92,9 @@ export namespace Protection_gbvPdm {
       other: `Other`,
     },
     donor: {
-      '347_danida': `DANIDA UKR-000347`,
-      '336_uhf6': `UHF VI UKR-000336`,
+      ukr000347_danida: `DANIDA UKR-000347`,
+      ukr000336_uhf6: `UHF VI UKR-000336`,
+      ukr000423_echo4: `ECHO UKR-000423`,
     },
     partner: {
       positive_women_zaporizhzhia: `Positive Women Zaporizhzhia`,
@@ -92,7 +107,7 @@ export namespace Protection_gbvPdm {
       drc: `DRC`,
       ip: `Implementing partner`,
     },
-    feel_staff_respect: {
+    informed_distribution_kits: {
       yes: `Yes`,
       no: `No`,
       pna: `Prefer not to answer`,
