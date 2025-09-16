@@ -169,14 +169,14 @@ export const PdmGbvDashboard = () => {
                 <ChartBarSingleBy
                   data={data}
                   by={(_) => _.answers.information_use_items}
-                  label={Protection_gbvPdm.options.feel_staff_respect}
+                  label={Protection_gbvPdm.options.informed_distribution_kits}
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.overall}>
                 <ChartBarSingleBy
                   data={data}
                   by={(_) => _.answers.satisfied_assistance_provided}
-                  label={Protection_gbvPdm.options.feel_staff_respect}
+                  label={Protection_gbvPdm.options.informed_distribution_kits}
                 />
               </SlidePanel>
             </Div>
