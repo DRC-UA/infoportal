@@ -165,10 +165,23 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         seq(_.data).map((record) => ({
           type: PdmType.Gbv,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
+          office: match(record.back_office!)
+            .cases({
+              dnk: DrcOffice.Dnipro,
+              hrk: DrcOffice.Kharkiv,
+              chj: DrcOffice.Chernihiv,
+              umy: DrcOffice.Sumy,
+              nlv: DrcOffice.Mykolaiv,
+              lwo: DrcOffice.Lviv,
+              zap: DrcOffice.Zaporizhzhya,
+              slo: DrcOffice.Sloviansk,
+            })
+            .default(() => undefined),
           project: match(record.donor!)
             .cases({
-              '347_danida': DrcProject['UKR-000347 DANIDA'],
-              '336_uhf6': DrcProject['UKR-000336 UHF6'],
+              ukr000347_danida: DrcProject['UKR-000347 DANIDA'],
+              ukr000336_uhf6: DrcProject['UKR-000336 UHF6'],
+              ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
             })
             .default(() => undefined),
           answers: record,
