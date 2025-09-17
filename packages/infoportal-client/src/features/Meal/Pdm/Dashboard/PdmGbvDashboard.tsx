@@ -67,77 +67,6 @@ export const PdmGbvDashboard = () => {
         <>
           <Div responsive>
             <Div column sx={{maxHeight: '50%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.feedback}>
-                <ChartPieWidgetBy
-                  dense
-                  title={m.mealMonitoringPdm.kitContentTold}
-                  data={data}
-                  filter={(_) => _.answers.items_received_kit === 'yes' || _.answers.items_received_kit === 'no'}
-                  filterBase={(_) =>
-                    _.answers.items_received_kit === 'yes' ||
-                    _.answers.items_received_kit === 'no' ||
-                    _.answers.items_received_kit === 'pna'
-                  }
-                />
-                <ChartPieWidgetBy
-                  dense
-                  title={m.mealMonitoringPdm.itemsEskUsed}
-                  data={data}
-                  filter={(_) => _.answers.used_items_kit === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.used_items_kit === 'yes' ||
-                    _.answers.used_items_kit === 'no' ||
-                    _.answers.used_items_kit === 'pna' ||
-                    _.answers.used_items_kit === 'not_yet'
-                  }
-                />
-                <ChartPieWidgetBy
-                  dense
-                  title={m.mealMonitoringPdm.treated}
-                  data={data}
-                  filter={(_) => _.answers.feel_staff_respect === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.feel_staff_respect === 'no' ||
-                    _.answers.feel_staff_respect === 'yes' ||
-                    _.answers.feel_staff_respect === 'pna'
-                  }
-                />
-                <ChartPieWidgetBy
-                  dense
-                  title={m.mealMonitoringPdm.satisfiedNumber}
-                  data={data}
-                  filter={(_) => _.answers.satisfied_quantity_items === 'satisfied'}
-                  filterBase={(_) =>
-                    _.answers.satisfied_quantity_items === 'satisfied' ||
-                    _.answers.satisfied_quantity_items === 'pna' ||
-                    _.answers.satisfied_quantity_items === 'dissatisfied' ||
-                    _.answers.satisfied_quantity_items === 'partially'
-                  }
-                />
-                <ChartPieWidgetBy
-                  dense
-                  title={m.mealMonitoringPdm.satisfiedQuality}
-                  data={data}
-                  filter={(_) => _.answers.satisfied_quality_items === 'satisfied'}
-                  filterBase={(_) =>
-                    _.answers.satisfied_quality_items === 'satisfied' ||
-                    _.answers.satisfied_quality_items === 'dissatisfied' ||
-                    _.answers.satisfied_quality_items === 'partially' ||
-                    _.answers.satisfied_quality_items === 'pna'
-                  }
-                />
-                <ChartPieWidgetBy
-                  dense
-                  title={m.mealMonitoringPdm.relevant}
-                  data={data}
-                  filter={(_) => _.answers.kit_received_relevant === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.kit_received_relevant === 'yes' ||
-                    _.answers.kit_received_relevant === 'no' ||
-                    _.answers.kit_received_relevant === 'pna'
-                  }
-                />
-              </SlidePanel>
               <Panel savableAsImg expendable title={m.location}>
                 <PanelBody>
                   <MapSvgByOblast
@@ -150,26 +79,84 @@ export const PdmGbvDashboard = () => {
                   />
                 </PanelBody>
               </Panel>
-            </Div>
-            <Div column sx={{maxHeight: '50%'}}>
-              <SlideWidget sx={{flex: 1}} icon="group" title={m.mealMonitoringPdm.kits}>
-                {formatLargeNumber(data.length)}
-              </SlideWidget>
+              <SlidePanel title={m.donor}>
+                <ChartBarSingleBy data={data} by={(_) => _.answers.donor} label={Protection_gbvPdm.options.donor} />
+              </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.implementation}>
                 <ChartBarSingleBy
                   data={data}
                   by={(_) => _.answers.type_implementation ?? 'drc'}
                   label={Protection_gbvPdm.options.type_implementation}
+                  includeNullish={true}
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.partner_type}>
-                <ChartBarSingleBy data={data} by={(_) => _.answers.partner} label={Protection_gbvPdm.options.partner} />
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.partner}
+                  label={Protection_gbvPdm.options.partner}
+                  includeNullish={true}
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.kitContentTold}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.items_received_kit}
+                  label={Protection_gbvPdm.options.informed_distribution_kits}
+                  includeNullish={true}
+                />
+              </SlidePanel>
+            </Div>
+            <Div column sx={{maxHeight: '50%'}}>
+              <SlideWidget sx={{flex: 1}} icon="group" title={m.mealMonitoringPdm.kits}>
+                {formatLargeNumber(data.length)}
+              </SlideWidget>
+              <SlidePanel title={m.mealMonitoringPdm.itemsEskUsed}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.used_items_kit}
+                  label={Protection_gbvPdm.options.used_items_kit}
+                  includeNullish={true}
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.treated}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.feel_staff_respect}
+                  label={Protection_gbvPdm.options.informed_distribution_kits}
+                  includeNullish={true}
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.satisfiedNumber}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.satisfied_quantity_items}
+                  label={Protection_gbvPdm.options.satisfied_quality_items}
+                  includeNullish={true}
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.satisfiedQuality}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.satisfied_quality_items}
+                  label={Protection_gbvPdm.options.satisfied_quality_items}
+                  includeNullish={true}
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.relevant}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.kit_received_relevant}
+                  label={Protection_gbvPdm.options.informed_distribution_kits}
+                  includeNullish={true}
+                />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.info_used}>
                 <ChartBarSingleBy
                   data={data}
                   by={(_) => _.answers.information_use_items}
                   label={Protection_gbvPdm.options.informed_distribution_kits}
+                  includeNullish={true}
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.overall}>
@@ -177,6 +164,7 @@ export const PdmGbvDashboard = () => {
                   data={data}
                   by={(_) => _.answers.satisfied_assistance_provided}
                   label={Protection_gbvPdm.options.informed_distribution_kits}
+                  includeNullish={true}
                 />
               </SlidePanel>
             </Div>
