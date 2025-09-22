@@ -58,6 +58,7 @@ import {
   Meal_pssPdm,
   Meal_eorePdm,
   Bn_pam,
+  Shelter_commonSpaces,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -163,6 +164,13 @@ export class KoboTypedAnswerSdk {
           formId: KoboIndex.byName('shelter_nta').id,
           fnMapKobo: Shelter_nta.map,
           fnMapTags: (_) => _ as ShelterNtaTags,
+          ...filters,
+        }),
+      ),
+      ...make('shelter_commonSpaces', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('shelter_commonSpaces').id,
+          fnMapKobo: Shelter_commonSpaces.map,
           ...filters,
         }),
       ),
