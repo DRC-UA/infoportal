@@ -356,6 +356,7 @@ const en = Object.freeze({
     ukraine: 'Ukraine',
     location: 'Location',
     submissionTime: 'Submission',
+    reportDate: 'Reporting Date',
     submittedBy: 'By',
     add: 'Add',
     case: 'Case',
@@ -382,6 +383,7 @@ const en = Object.freeze({
     intentionToReturn: 'Intention to return',
     hhWithGapMeetingBasicNeeds: 'Basic needs gaps',
     unemployedMemberByOblast: 'By oblast population',
+    common: 'Common Spaces',
     Access: {
       giveAccessBy: 'Grant access by',
       jobAndOffice: 'Job and Office',
@@ -1192,6 +1194,11 @@ const en = Object.freeze({
     _shelter: {
       assignedContractor: 'Assigned contractors',
       assessmentLocations: 'Assessments locations',
+      gps: 'GPS coordinates',
+      damagedConflict: 'Building damaged by conflict?',
+      damage: 'Extent of damage',
+      personResponsible: 'Person responsible',
+      managementModel: 'Management model',
       repairCost: 'Total repairs cost',
       repairCostByHh: 'Repairs cost by HH',
       workDoneAt: 'Work done at',
