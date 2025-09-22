@@ -22,7 +22,7 @@ export const MealPdmEoreDashboard = () => {
   const ctx = useMealPdmContext()
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isEorePdm))
   const ctxSchema = useKoboSchemaContext()
-  const schema = ctxSchema.byName.meal_pssPdm.get!
+  const schema = ctxSchema.byName.meal_eorePdm.get!
   const {m} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
 
