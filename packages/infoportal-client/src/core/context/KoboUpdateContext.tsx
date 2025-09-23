@@ -58,6 +58,10 @@ export namespace KoboUpdate {
     export namespace ById {
       export type Answer<T extends Record<string, any> = any> = Omit<KoboUpdateAnswers<T>, 'answer'> & {
         onSuccess?: (params: KoboUpdateAnswers<T>) => void
+        questionIndexed?: string
+        indexChain?: number[]
+        pathChain?: string[]
+        onSubmitOverride?: (value: any) => Promise<number>
       }
       export type Validation = Omit<KoboUpdateValidation, 'status'> & {
         onSuccess?: (params: KoboUpdateValidation) => void
@@ -78,7 +82,11 @@ export namespace KoboUpdate {
         tag: string
         value: any
       }
-      export type Answer = KoboUpdateAnswers
+      export type Answer = KoboUpdateAnswers & {
+        questionIndexed?: string
+        indexChain?: number[]
+        pathChain?: string[]
+      }
       export type Validation = KoboUpdateValidation
     }
     export namespace ByName {
@@ -96,6 +104,16 @@ export namespace KoboUpdate {
       }
     }
   }
+}
+
+export type RepeatPatch = {
+  formId: Kobo.FormId
+  answerId: Kobo.SubmissionId
+  question: string
+  questionIndexed?: string
+  indexChain?: number[]
+  pathChain?: string[]
+  value: any
 }
 
 export interface KoboUpdateContext {
@@ -116,6 +134,7 @@ export interface KoboUpdateContext {
       ) => Promise<void>
     >
   }
+  asyncUpdateManyRepeatById: UseAsyncMultiple<(_: Array<KoboUpdate.Update.ById.Answer>) => Promise<void>>
   asyncDeleteById: UseAsyncMultiple<(_: Pick<KoboUpdateAnswers, 'formId' | 'answerIds'>) => Promise<void>>
   openById: Dispatch<SetStateAction<KoboUpdate.DialogParams.ById | null>>
   openByName: <T extends KoboFormNameMapped, TTarg extends 'tag' | 'answer'>(
@@ -134,35 +153,164 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
   const [openDialog, setOpenDialog] = useState<KoboUpdate.DialogParams.ById | null>(null)
   const ctxAnswers = useKoboAnswersContext()
 
+  const normalizeAnswerIds = (ids: (string | number)[]) => ids.map((x) => String(x).replace(/([#-]\d+)$/, ''))
+
+  const parseIndexedXPath = (q: string): {name: string; index?: number}[] => {
+    const segs: {name: string; index?: number}[] = []
+    const re = /([^/\[\]]+)(?:\[(\d+)\])?/g
+    let m: RegExpExecArray | null
+    while ((m = re.exec(q)) !== null) segs.push({name: m[1], index: m[2] ? Number(m[2]) - 1 : undefined})
+    return segs
+  }
+  const stripIndexes = (q: string) => q.replace(/\[(\d+)\]/g, '')
+
+  function setWithChains(
+    rec: Record<string, any>,
+    questionXPath: string,
+    value: any,
+    indexChain: number[],
+    pathChain: string[],
+  ) {
+    if (!indexChain.length || indexChain.length !== pathChain.length) return false
+
+    const leaf = questionXPath.split('/').pop()!
+    const qName = stripIndexes(leaf)
+    const leafPath = stripIndexes([...pathChain, leaf].join('/'))
+    const isDate = leafPath.toLowerCase().includes('date')
+    const norm = isDate && typeof value === 'string' ? new Date(value) : value
+
+    const deepestArrayKey = pathChain.join('/')
+    const arr = rec[deepestArrayKey]
+    if (!Array.isArray(arr)) return false
+
+    const idx = indexChain[indexChain.length - 1]!
+    if (idx < 0 || idx >= arr.length) return false
+
+    const itemOld = arr[idx] ?? {}
+    const itemNew = {
+      ...itemOld,
+      [leafPath]: norm,
+      [qName]: norm,
+    }
+    const arrNew = arr.slice()
+    arrNew[idx] = itemNew
+    rec[deepestArrayKey] = arrNew
+    return true
+  }
+
+  function setByIndexedXPath(rec: Record<string, any>, indexedXPath: string, value: any) {
+    const segs = parseIndexedXPath(indexedXPath)
+    if (!segs.some((s) => s.index != null)) {
+      const key = segs.map((s) => s.name).join('/')
+      const qName = segs[segs.length - 1].name
+      const isDate = key.toLowerCase().includes('date')
+      const norm = isDate && typeof value === 'string' ? new Date(value) : value
+      rec[key] = norm
+      rec[qName] = norm
+      return true
+    }
+
+    let pathSoFar: string[] = []
+    for (let i = 0; i < segs.length; i++) {
+      const s = segs[i]
+      pathSoFar.push(s.name)
+      if (s.index == null) continue
+
+      const arrayKey = pathSoFar.join('/')
+      const arr = rec[arrayKey]
+      if (!Array.isArray(arr)) return false
+      const idx0 = s.index
+      if (idx0 < 0 || idx0 >= arr.length) return false
+
+      const nextSegs = segs.slice(i + 1)
+      const leafKey = stripIndexes([...pathSoFar, ...nextSegs.map((_) => _.name)].join('/'))
+      const qName = nextSegs[nextSegs.length - 1]?.name ?? s.name
+      const isDate = leafKey.toLowerCase().includes('date')
+      const norm = isDate && typeof value === 'string' ? new Date(value) : value
+
+      const itemOld = arr[idx0] ?? {}
+      const itemNew = {...itemOld, [leafKey]: norm, [qName]: norm}
+      const newArr = [...arr]
+      newArr[idx0] = itemNew
+      rec[arrayKey] = newArr
+      return true
+    }
+    return false
+  }
+
+  const _optimisticBatchPatch = (patches: RepeatPatch[]) => {
+    if (!patches.length) return
+    const formId = patches[0].formId
+    const current = ctxAnswers.byId(formId).get
+    if (!current) return
+
+    const byAnswer = new Map<string, RepeatPatch[]>()
+    for (const p of patches) {
+      const key = String(p.answerId).replace(/([#-]\d+)$/, '')
+      const arr = byAnswer.get(key) ?? []
+      arr.push(p)
+      byAnswer.set(key, arr)
+    }
+
+    ctxAnswers.byId(formId).set({
+      ...current,
+      data: current.data.map((a) => {
+        const ps = byAnswer.get(String(a.id))
+        if (!ps) return a
+        const copy = {...a}
+        for (const p of ps) {
+          const keyToPatch = p.questionIndexed ?? p.question
+          if (!(p.indexChain && p.pathChain && setWithChains(copy, keyToPatch, p.value, p.indexChain, p.pathChain))) {
+            if (!setByIndexedXPath(copy, keyToPatch, p.value)) {
+              const isDate = keyToPatch.toLowerCase().includes('date')
+              ;(copy as any)[keyToPatch] = isDate && typeof p.value === 'string' ? new Date(p.value) : p.value
+            }
+          }
+        }
+        return copy
+      }),
+    })
+  }
+
   const _updateCacheById = ({
     formId,
     key,
     isTag,
     value,
     answerIds,
+    indexChain,
+    pathChain,
   }: {
     answerIds: Kobo.SubmissionId[]
     formId: string
     key: string
     isTag?: boolean
     value: any
+    indexChain?: number[]
+    pathChain?: string[]
+    questionIndexed?: string
   }) => {
-    const idsIndex = new Set(answerIds)
-    const currentAnswers = ctxAnswers.byId(formId).get
-    if (!currentAnswers) return
+    const ids = new Set(normalizeAnswerIds(answerIds))
+    const current = ctxAnswers.byId(formId).get
+    if (!current) return
+
     ctxAnswers.byId(formId).set({
-      ...currentAnswers,
-      data: currentAnswers.data.map((a) => {
-        if (idsIndex.has(a.id)) {
-          if (isTag) {
-            if (!a.tags) a.tags = {}
-            ;(a.tags as any)[key] = value
-          } else {
-            const isDateField = key.toLowerCase().includes('date')
-            a[key] = isDateField && typeof value === 'string' ? new Date(value) : value
+      ...current,
+      data: current.data.map((a) => {
+        if (!ids.has(String(a.id))) return a
+        const copy = {...a}
+        if (isTag) {
+          if (!copy.tags) copy.tags = {}
+          ;(copy.tags as any)[key] = value
+        } else {
+          if (!(indexChain && pathChain && setWithChains(copy, key, value, indexChain, pathChain))) {
+            if (!setByIndexedXPath(copy, key, value)) {
+              const isDate = key.toLowerCase().includes('date')
+              copy[key] = isDate && typeof value === 'string' ? new Date(value) : value
+            }
           }
         }
-        return {...a}
+        return copy
       }),
     })
   }
@@ -196,21 +344,45 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
       }),
     })
   }
+  const _updateManyRepeatById = async (payloads: Array<KoboUpdate.Update.ById.Answer>) => {
+    const patches: RepeatPatch[] = payloads.map((p) => ({
+      formId: p.formId,
+      answerId: String(p.answerIds[0]),
+      question: String(p.question),
+      questionIndexed: p.questionIndexed,
+      indexChain: p.indexChain,
+      pathChain: p.pathChain,
+      value: p.answer,
+    }))
+    _optimisticBatchPatch(patches)
 
-  const _updateById = async (p: KoboUpdateAnswers) => {
-    try {
-      await api.kobo.answer.updateAnswers({
-        answerIds: p.answerIds,
-        answer: p.answer,
-        formId: p.formId,
-        question: p.question,
-      })
+    for (const p of payloads) {
+      await _updateById({...p, answerIds: [String(p.answerIds[0])]}, { skipCache: true })
+    }
+  }
+
+  const asyncUpdateManyRepeatById = useAsync(_updateManyRepeatById, {requestKey: () => 'many'})
+
+  const _updateById = async (p: KoboUpdate.Update.ById.Answer, opts?: { skipCache?: boolean }) => {
+    const questionToPatch = p.questionIndexed ?? (p.question as string)
+    if (!opts?.skipCache) {
       _updateCacheById({
         formId: p.formId,
-        key: p.question,
+        key: questionToPatch,
         isTag: false,
         value: p.answer,
-        answerIds: p.answerIds,
+        answerIds: normalizeAnswerIds(p.answerIds),
+        indexChain: p.indexChain,
+        pathChain: p.pathChain,
+      })
+    }
+
+    try {
+      await api.kobo.answer.updateAnswers({
+        answerIds: normalizeAnswerIds(p.answerIds),
+        answer: p.answer,
+        formId: p.formId,
+        question: questionToPatch,
       })
     } catch (e) {
       toastHttpError(e)
@@ -227,7 +399,7 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
     ) => {
       await api.kobo.answer
         .updateAnswers({
-          answerIds: p.answerIds,
+          answerIds: normalizeAnswerIds(p.answerIds),
           answer: p.answer,
           formId: KoboIndex.byName(p.formName).id,
           question: p.question,
@@ -238,7 +410,7 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
             key: p.question,
             isTag: false,
             value: p.answer,
-            answerIds: p.answerIds,
+            answerIds: normalizeAnswerIds(p.answerIds),
           })
         })
         .catch((e) => {
@@ -252,11 +424,14 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
 
   const asyncUpdateValidationById = useAsync(
     async (params: KoboUpdateValidation) => {
-      await api.kobo.answer.updateValidation(params)
+      await api.kobo.answer.updateValidation({
+        ...params,
+        answerIds: normalizeAnswerIds(params.answerIds),
+      })
       const key: keyof KoboSubmissionMetaData = 'validationStatus'
       _updateCacheById({
         formId: params.formId,
-        answerIds: params.answerIds,
+        answerIds: normalizeAnswerIds(params.answerIds),
         key,
         value: params.status,
       })
@@ -268,22 +443,24 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
     async <T extends KoboFormNameMapped, K extends KeyOf<NonNullable<InferTypedAnswer<T>['tags']>>>(
       p: KoboUpdate.Update.ByName.Tag<T, K>,
     ) => {
+      const formId = KoboIndex.byName(p.formName).id
       await api.kobo.answer
         .updateTag({
-          answerIds: p.answerIds,
-          formId: KoboIndex.byName(p.formName).id,
+          answerIds: normalizeAnswerIds(p.answerIds),
+          formId,
           tags: {[p.tag]: p.value},
         })
-        .then((data) => {
+        .then(() => {
           _updateCacheByName({
-            key: p.tag,
+            key: p.tag as string,
             isTag: true,
-            answerIds: p.answerIds,
+            answerIds: normalizeAnswerIds(p.answerIds),
             value: p.value,
             formName: p.formName,
           })
         })
         .catch((e) => {
+          toastHttpError(e)
           ctxAnswers.byName(p.formName).fetch({force: true, clean: false})
           return Promise.reject(e)
         })
@@ -295,7 +472,7 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
     async (p: KoboUpdate.Update.ById.Tag) => {
       await api.kobo.answer
         .updateTag({
-          answerIds: p.answerIds,
+          answerIds: normalizeAnswerIds(p.answerIds),
           formId: p.formId,
           tags: {[p.tag]: p.value},
         })
@@ -305,10 +482,11 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
             key: p.tag,
             isTag: true,
             value: p.value,
-            answerIds: p.answerIds,
+            answerIds: normalizeAnswerIds(p.answerIds),
           })
         })
         .catch((e) => {
+          toastHttpError(e)
           ctxAnswers.byId(p.formId).fetch({force: true, clean: false})
           return Promise.reject(e)
         })
@@ -320,16 +498,16 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
     async ({answerIds, formId}: Pick<KoboUpdateAnswers, 'answerIds' | 'formId'>) => {
       await api.kobo.answer
         .delete({
-          answerIds: answerIds,
-          formId: formId,
+          answerIds: normalizeAnswerIds(answerIds),
+          formId,
         })
         .then(() => {
-          const idsIndex = new Set(answerIds)
+          const idsIndex = new Set(normalizeAnswerIds(answerIds))
           const currentAnswers = ctxAnswers.byId(formId).get
           if (!currentAnswers) return
           ctxAnswers.byId(formId).set({
             ...currentAnswers,
-            data: currentAnswers.data.filter((a) => !idsIndex.has(a.id)),
+            data: currentAnswers.data.filter((a) => !idsIndex.has(String(a.id))),
           })
         })
         .catch((e) => {
@@ -354,6 +532,7 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
           tag: asyncUpdateTagByName,
           answer: asyncUpdateAnswerByName,
         },
+        asyncUpdateManyRepeatById,
         openById: setOpenDialog,
         openByName: <T extends KoboFormNameMapped, TTarg extends 'tag' | 'answer'>(
           p: KoboUpdate.DialogParams.ByName<T, TTarg> | null,
@@ -383,6 +562,10 @@ export const KoboUpdateProvider = ({children}: {children: ReactNode}) => {
                 formId={openDialog.params.formId}
                 columnName={openDialog.params.question}
                 answerIds={openDialog.params.answerIds}
+                questionIndexed={(openDialog.params as any).questionIndexed}
+                indexChain={(openDialog.params as any).indexChain}
+                pathChain={(openDialog.params as any).pathChain}
+                onSubmitOverride={(openDialog.params as any).onSubmitOverride}
                 onClose={() => setOpenDialog(null)}
                 onUpdated={openDialog.params.onSuccess}
               />
