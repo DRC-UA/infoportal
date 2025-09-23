@@ -56,6 +56,7 @@ export class DbInit {
       'alix.journoud@drc.ngo',
       'katrina.zacharewski@drc.ngo',
       'isabel.pearson@drc.ngo',
+      'iryna.tkachuk@drc.ngo',
     ]
     return this.upsertUsers(
       adminsEmail.map((email) => ({

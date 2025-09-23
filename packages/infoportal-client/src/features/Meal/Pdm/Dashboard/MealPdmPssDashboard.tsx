@@ -13,6 +13,7 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 
 const isPssPdm = (_: PdmData<PdmForm>): _ is PdmData<Meal_pssPdm.T> => {
   return _.type === 'Pss'
@@ -120,6 +121,14 @@ export const MealPdmPssDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.suggestionsResponded}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={(_) => _.answers.suggestions_complaints_responded}
+                  label={Meal_pssPdm.options.suggestions_complaints_responded}
+                  includeNullish
+                />
+              </SlidePanel>
             </Div>
             <Div column>
               <SlideWidget sx={{flex: 1}} icon="group" title={m.submissions}>
@@ -171,8 +180,6 @@ export const MealPdmPssDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-            </Div>
-            <Div column>
               <SlidePanel title={m.mealMonitoringPdm.wellInformPss}>
                 <ChartBarSingleBy
                   data={data}
@@ -181,6 +188,8 @@ export const MealPdmPssDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
+            </Div>
+            <Div column>
               <SlidePanel title={m.mealMonitoringPdm.safePss}>
                 <ChartBarSingleBy
                   data={data}
@@ -194,6 +203,14 @@ export const MealPdmPssDashboard = () => {
                   data={data}
                   by={(_) => _.answers.know_people_needing_pss}
                   label={Meal_pssPdm.options.report_misconduct_employees}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={m.mealMonitoringPdm.pssExlucedYes}>
+                <ChartBarMultipleBy
+                  data={data}
+                  by={(_) => _.answers.know_people_needing_pss_yes_new}
+                  label={Meal_pssPdm.options.know_people_needing_pss_yes_new}
                   includeNullish
                 />
               </SlidePanel>
