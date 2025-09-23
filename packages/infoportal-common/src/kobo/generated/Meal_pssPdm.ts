@@ -130,8 +130,10 @@ export namespace Meal_pssPdm {
     think_change_sessions: string | undefined
     // ques_bey_echo/know_people_needing_pss [select_one] Do you know of people needing PSS who were excluded from this activity provided? (MEA. 2)
     know_people_needing_pss: undefined | Option<'report_misconduct_employees'>
-    // ques_bey_echo/know_people_needing_pss_yes [select_multiple] If yes, who was mainly excluded?
-    know_people_needing_pss_yes: undefined | Option<'know_people_needing_pss_yes'>[]
+    // ques_bey_echo/know_people_needing_pss_yes [text] If yes, who was mainly excluded?
+    know_people_needing_pss_yes: string | undefined
+    // ques_bey_echo/know_people_needing_pss_yes_new [select_multiple] If yes, who was mainly excluded?
+    know_people_needing_pss_yes_new: undefined | Option<'know_people_needing_pss_yes_new'>[]
     // ques_bey_echo/know_people_needing_pss_yes_other [text] If "Other," please specify:
     know_people_needing_pss_yes_other: string | undefined
     // ques_bey_echo/know_where_address_suggestions [select_one] Do you know how and where you could address your suggestions, comments or complaints related to the work of the Danish Refugee Council, if any? (ACC. 1)
@@ -309,7 +311,7 @@ export namespace Meal_pssPdm {
       zhytomyrska: `Zhytomyr`,
       sevastopol: `Sevastopol`,
     },
-    know_people_needing_pss_yes: {
+    know_people_needing_pss_yes_new: {
       child_headed: `Child Headed HH`,
       female_headed: `Female Headed HH`,
       pwd: `People with disability`,
@@ -336,6 +338,6 @@ export namespace Meal_pssPdm {
       gid: _.gid ? new Date(_.gid) : undefined,
       giage: _.giage ? +_.giage : undefined,
       ql: _.ql?.split(' '),
-      know_people_needing_pss_yes: _.know_people_needing_pss_yes?.split(' '),
+      know_people_needing_pss_yes_new: _.know_people_needing_pss_yes_new?.split(' '),
     }) as T
 }

@@ -583,6 +583,8 @@ const en = Object.freeze({
       satActivityBad: 'If ‘Mostly yes, Not really/not at all’: Would you mind telling us why you are not satisfied?',
       emotionalBenefit: 'Did you feel any emotional benefits from attending to the PSS sessions?',
       feelIntegrated: 'Did you feel integrated during the sessions by the facilitators?',
+      suggestionsResponded:
+        'To your knowledge, have suggestions or complaints raised been responded to or followed up?',
       rateQuality: 'Rating of the quality of the repair works performed on the scale from 1 to 5',
       howMuchTake:
         'How much time did it take from the moment your household registered into the CASH assistance program to the moment you actually received the money in your bank account?',
@@ -680,6 +682,7 @@ const en = Object.freeze({
       wellInformPss: 'Did you feel well informed about the PSS service available?',
       safePss: 'Did you feel safe during the PSS sessions?',
       pssExcluded: 'Do you know of people needing PSS who were excluded from this activity provided?',
+      pssExlucedYes: 'If yes, who was mainly excluded?',
       anyRisk: 'Been exposed to any risk as a consequence of receiving the CASH',
       receiveGift:
         'Have you ever had to provide someone with a commission, a gift, a tip to get in the list of project participants?',
