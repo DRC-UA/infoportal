@@ -44,21 +44,21 @@ const ShelterSidebar = () => {
     <Sidebar>
       <SidebarBody>
         <NavLink to={path(shelterIndex.siteMap.dashboard)} end>
-          {({isActive, isPending}) => (
+          {({isActive}) => (
             <SidebarItem icon="insights" active={isActive}>
               {m.dashboard}
             </SidebarItem>
           )}
         </NavLink>
         <NavLink to={path(shelterIndex.siteMap.data)} end>
-          {({isActive, isPending}) => (
+          {({isActive}) => (
             <SidebarItem icon="table_chart" active={isActive}>
               {m.data}
             </SidebarItem>
           )}
         </NavLink>
         <NavLink to={path(shelterIndex.siteMap.common)} end>
-          {({isActive, isPending}) => (
+          {({isActive}) => (
             <SidebarItem icon="table_chart" active={isActive}>
               {m.common}
             </SidebarItem>
@@ -86,7 +86,7 @@ const ShelterSidebar = () => {
 
 export const Shelter = () => {
   const {session, accesses} = useSession()
-  const canOpen = useMemo(() => !!appFeaturesIndex.shelter.showIf?.(session, accesses), [accesses])
+  const canOpen = useMemo(() => !!appFeaturesIndex.shelter.showIf?.(session, accesses), [accesses, session])
   return canOpen ? <ShelterWithAccess /> : <NoFeatureAccessPage />
 }
 
@@ -94,32 +94,27 @@ export const ShelterWithAccess = () => {
   const {session, accesses} = useSession()
   const ctxSchema = useKoboSchemaContext()
   const location = useLocation()
-  const isCommon = location.pathname.includes(shelterIndex.siteMap.common)
   useReactRouterDefaultRoute(shelterIndex.siteMap.data)
   const {access, allowedOffices} = useMemo(() => {
     const dbAccesses = seq(accesses).filter(Access.filterByFeature(AppFeatureId.kobo_database))
     const allowedOffices = dbAccesses
-      .flatMap((_) => {
-        return _.params?.filters?.back_office as Shelter_nta.T['back_office'][] | undefined
-      })
+      .flatMap((_) => _.params?.filters?.back_office as Shelter_nta.T['back_office'][] | undefined)
       .compact()
-    return {
-      access: Access.toSum(dbAccesses, session.admin),
-      allowedOffices,
-    }
+    return {access: Access.toSum(dbAccesses, session.admin), allowedOffices}
   }, [session, accesses])
 
+  const isCommon = location.pathname.startsWith(shelterIndex.siteMap.common)
   const fetcherData = useShelterData()
 
   useEffect(() => {
-    if (location.pathname.includes('/data/common-spaces')) {
+    if (isCommon) {
       ctxSchema.fetchByName('shelter_commonSpaces')
     } else {
       ctxSchema.fetchByName('shelter_nta')
       ctxSchema.fetchByName('shelter_ta')
       fetcherData.fetchAll()
     }
-  }, [location.pathname])
+  }, [isCommon])
 
   return (
     <Layout
@@ -147,6 +142,9 @@ export const ShelterWithAccess = () => {
             <Routes>
               <Route path={shelterIndex.siteMap.dashboard} element={<ShelterDashboard />} />
               <Route path={shelterIndex.siteMap.data} element={<ShelterTable />} />
+              {relatedKoboForms.map((_) => (
+                <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})} />
+              ))}
             </Routes>
           </ShelterProvider>
         )

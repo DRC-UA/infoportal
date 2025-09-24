@@ -26,6 +26,7 @@ export class ControllerActivityInfo {
           'isabel.pearson@drc.ngo',
           'mariia.halchenko@drc.ngo',
           'vladyslav.marchenko@drc.ngo',
+          'iryna.tkachuk@drc.ngo',
         ].includes(req.session.user?.email)
       ) {
         throw new AppError.Forbidden('only_owner_can_submit_ai')
