@@ -17,6 +17,7 @@ import {
   Meal_pssPdm,
   Meal_eorePdm,
   Ecrec_cashRegistration,
+  Awareness_raising_feedback,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {match, map, seq, Seq} from '@axanc/ts-utils'
@@ -32,6 +33,7 @@ export enum PdmType {
   Pss = 'Pss',
   Eore = 'Eore',
   Ecrec = 'Ecrec',
+  Awareness = 'Awareness',
 }
 
 export type PdmForm =
@@ -43,6 +45,7 @@ export type PdmForm =
   | Meal_pssPdm.T
   | Meal_eorePdm.T
   | Ecrec_cashRegistration.T
+  | Awareness_raising_feedback.T
 
 export type PdmData<T extends PdmForm> = {
   type: PdmType
@@ -295,6 +298,29 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
+      api.kobo.typedAnswers.search.awareness_raising_feedback().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Awareness,
+          oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
+          office: match(record.office!)
+            .cases({
+              dnk: DrcOffice.Dnipro,
+              hrk: DrcOffice.Kharkiv,
+              umy: DrcOffice.Sumy,
+              nlv: DrcOffice.Mykolaiv,
+              slo: DrcOffice.Sloviansk,
+            })
+            .default(() => undefined),
+          persons: KoboXmlMapper.Persons.awareness_raising_feedback(record),
+          project: match(record.donor!)
+            .cases({
+              ukr000423_echo4: DrcProject['UKR-000423 ECHO'],
+              ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
+            })
+            .default(() => undefined),
+          answers: record,
+        })),
+      ),
     ]).then((results) => seq(results.flat()))
   }
 
@@ -308,16 +334,30 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_pssPdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_eorePdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('ecrec_cashRegistration').id),
-    ]).then(([cashPeriod, shelterPeriod, nfiPeriod, gbvPeriod, legalPeriod, pssPeriod, eorePeriod, ecrecPeriod]) => ({
-      cashPeriod,
-      shelterPeriod,
-      nfiPeriod,
-      gbvPeriod,
-      legalPeriod,
-      pssPeriod,
-      eorePeriod,
-      ecrecPeriod,
-    }))
+      api.kobo.answer.getPeriod(KoboIndex.byName('awareness_raising_feedback').id),
+    ]).then(
+      ([
+        cashPeriod,
+        shelterPeriod,
+        nfiPeriod,
+        gbvPeriod,
+        legalPeriod,
+        pssPeriod,
+        eorePeriod,
+        ecrecPeriod,
+        awarenessPeriod,
+      ]) => ({
+        cashPeriod,
+        shelterPeriod,
+        nfiPeriod,
+        gbvPeriod,
+        legalPeriod,
+        pssPeriod,
+        eorePeriod,
+        ecrecPeriod,
+        awarenessPeriod,
+      }),
+    )
   })
 
   const fetcherAnswers = useFetcher(request)

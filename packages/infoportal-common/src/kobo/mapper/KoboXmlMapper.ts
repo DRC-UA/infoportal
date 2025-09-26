@@ -43,6 +43,7 @@ import {
   Shelter_cashForShelter,
   Shelter_nta,
   Va_bio_tia,
+  Awareness_raising_feedback,
 } from '../generated/index.js'
 
 export namespace KoboXmlMapper {
@@ -250,6 +251,22 @@ export namespace KoboXmlMapper {
     }
 
     // MEMO: please keep person mappers sorted
+
+    export const awareness_raising_feedback: PersonsMapper<Awareness_raising_feedback.T> = (row) => {
+      return [
+        {
+          age: row.age,
+          gender: match(row.gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+              pns: Person.Gender.Other,
+              other: Person.Gender.Other,
+            })
+            .default(undefined),
+        },
+      ]
+    }
 
     export const awareness_raising_partners: PersonsMapper<Awareness_raising_partners.T> = (row) => {
       return (

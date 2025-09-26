@@ -59,6 +59,7 @@ import {
   Meal_eorePdm,
   Bn_pam,
   Shelter_commonSpaces,
+  Awareness_raising_feedback,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -106,6 +107,13 @@ export class KoboTypedAnswerSdk {
   private readonly buildSearch = (request: 'searchByAccess' | 'search') => {
     const req = this.sdk[request]
     return {
+      ...make('awareness_raising_feedback', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('awareness_raising_feedback').id,
+          fnMapKobo: Awareness_raising_feedback.map,
+          ...filters,
+        }),
+      ),
       ...make('ecrec_msmeGrantReg', (filters?: KoboAnswerFilter) =>
         req({
           formId: KoboIndex.byName('ecrec_msmeGrantReg').id,
