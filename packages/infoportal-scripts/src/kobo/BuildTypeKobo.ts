@@ -26,6 +26,10 @@ export class BuildKoboType {
 
   static readonly config = Obj.map(
     {
+      awareness_raising_feedback: {
+        formId: KoboIndex.byName('awareness_raising_feedback').id,
+        langIndex: 1,
+      },
       awareness_raising_partners: {
         formId: KoboIndex.byName('awareness_raising_partners').id,
       },
