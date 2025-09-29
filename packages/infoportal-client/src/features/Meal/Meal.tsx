@@ -35,6 +35,7 @@ import {MealPdmEoreDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmEoreDas
 import {PdmLegalDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmLegalDashboard'
 import {PdmAwarenessDashboard} from '@/features/Meal/Pdm/Dashboard/PdmAwarenessDashboard'
 import {MealPdmVaDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmVaDashboard'
+import {PdmGbvCsDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGbvCsDashboard'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -52,6 +53,7 @@ const relatedKoboForms: KoboFormName[] = [
   'bn_pam',
   'awareness_raising_feedback',
   'va_tia_pdm',
+  'gbv_cs_pdm',
 ]
 
 export const mealIndex = {
@@ -95,6 +97,7 @@ export const mealIndex = {
         },
         gbv: {
           gbv: '/pdm/protection/gbv',
+          cs: '/pdm/protection/cs',
         },
         legal: {
           legal: '/pdm/protection/legal',
@@ -212,6 +215,9 @@ const MealSidebar = ({
               <NavLink to={path(mealIndex.siteMap.pdm.protection.gbv.gbv)}>
                 {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.gbvPdmDashboard}</SidebarItem>}
               </NavLink>
+              <NavLink to={path(mealIndex.siteMap.pdm.protection.gbv.cs)}>
+                {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.csPdmDashboard}</SidebarItem>}
+              </NavLink>
             </SidebarSection>
             <SidebarSection title={m.legalPdm}>
               <NavLink to={path(mealIndex.siteMap.pdm.protection.legal.legal)}>
@@ -234,6 +240,7 @@ const MealSidebar = ({
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_shelterPdm'))} name="meal_shelterPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_nfiPdm'))} name="meal_nfiPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('protection_gbvPdm'))} name="protection_gbvPdm" />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('gbv_cs_pdm'))} name="gbv_cs_pdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('legal_pam'))} name="legal_pam" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_pssPdm'))} name="meal_pssPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('va_tia_pdm'))} name="va_tia_pdm" />
@@ -279,7 +286,8 @@ export const Meal = () => {
               _.params?.koboFormId === KoboIndex.byName('awareness_raising_feedback').id ||
               _.params?.koboFormId === KoboIndex.byName('va_tia_pdm').id ||
               _.params?.koboFormId === KoboIndex.byName('meal_pssPdm').id ||
-              _.params?.koboFormId === KoboIndex.byName('bn_pam').id
+              _.params?.koboFormId === KoboIndex.byName('bn_pam').id ||
+              _.params?.koboFormId === KoboIndex.byName('gbv_cs_pdm').id
             )
           })),
     }
@@ -338,7 +346,14 @@ export const Meal = () => {
             path={mealIndex.siteMap.pdm.protection._}
             element={
               <MealPdmOutlet
-                forms={['meal_pssPdm', 'protection_gbvPdm', 'legal_pam', 'va_tia_pdm', 'awareness_raising_feedback']}
+                forms={[
+                  'meal_pssPdm',
+                  'protection_gbvPdm',
+                  'legal_pam',
+                  'va_tia_pdm',
+                  'awareness_raising_feedback',
+                  'gbv_cs_pdm',
+                ]}
               />
             }
           >
@@ -346,6 +361,7 @@ export const Meal = () => {
             <Route path="pss" element={<MealPdmPssDashboard />} />
             <Route path="victim" element={<MealPdmVaDashboard />} />
             <Route path="gbv" element={<PdmGbvDashboard />} />
+            <Route path="cs" element={<PdmGbvCsDashboard />} />
             <Route path="legal" element={<PdmLegalDashboard />} />
             <Route path="awareness" element={<PdmAwarenessDashboard />} />
           </Route>

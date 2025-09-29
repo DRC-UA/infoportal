@@ -205,6 +205,10 @@ export class BuildKoboType {
         formId: KoboIndex.byName('protection_gbvPdm').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
       },
+      gbv_csPdm: {
+        formId: KoboIndex.byName('gbv_cs_pdm').id,
+        skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
+      },
       meal_cfmInternal: {
         formId: KoboIndex.byName('meal_cfmInternal').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],

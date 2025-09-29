@@ -19,6 +19,7 @@ import {
   Ecrec_cashRegistration,
   Awareness_raising_feedback,
   Va_tia_pdm,
+  Gbv_csPdm,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {match, map, seq, Seq} from '@axanc/ts-utils'
@@ -36,6 +37,7 @@ export enum PdmType {
   Ecrec = 'Ecrec',
   Awareness = 'Awareness',
   Victim = 'Victim',
+  CaseManagement = 'CaseManagement',
 }
 
 export type PdmForm =
@@ -49,6 +51,7 @@ export type PdmForm =
   | Ecrec_cashRegistration.T
   | Awareness_raising_feedback.T
   | Va_tia_pdm.T
+  | Gbv_csPdm.T
 
 export type PdmData<T extends PdmForm> = {
   type: PdmType
@@ -353,6 +356,19 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
+      api.kobo.typedAnswers.search.gbv_cs_pdm().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.CaseManagement,
+          oblast: OblastIndex.byKoboName(record.location!)!.name,
+          persons: KoboXmlMapper.Persons.gbv_cs_pdm(record),
+          project: match(record.project_code!)
+            .cases({
+              ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+            })
+            .default(() => undefined),
+          answers: record,
+        })),
+      ),
     ]).then((results) => seq(results.flat()))
   }
 
@@ -368,6 +384,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
       api.kobo.answer.getPeriod(KoboIndex.byName('ecrec_cashRegistration').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('awareness_raising_feedback').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('va_tia_pdm').id),
+      api.kobo.answer.getPeriod(KoboIndex.byName('gbv_cs_pdm').id),
     ]).then(
       ([
         cashPeriod,
@@ -380,6 +397,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         ecrecPeriod,
         awarenessPeriod,
         victimPeriod,
+        gbvCsPeriod,
       ]) => ({
         cashPeriod,
         shelterPeriod,
@@ -391,6 +409,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         ecrecPeriod,
         awarenessPeriod,
         victimPeriod,
+        gbvCsPeriod,
       }),
     )
   })

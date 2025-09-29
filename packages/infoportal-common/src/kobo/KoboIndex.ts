@@ -14,6 +14,7 @@ const koboIndex = {
   bn_1_mpcaNfiNaa: 'aBGVXW2N26DaLehmKneuyB',
   bn_cashForRentApplication: 'aBupWbhtUmA7so3532tYLa',
   bn_cashForRentRegistration: 'ajNzDaUuLkcEvjQhVsAmao',
+  bn_pam: 'aj8ESj397NhsSCPMcnmnQT',
   bn_rapidResponse: 'aMJL9DG8qEcULqTZTKQbrq',
   bn_rapidResponse2: 'adpuqZypnqHb8LNfX49iA5',
   bn_rapidResponseSida: 'aTJRd5zLdPHcEhGDovh9dW',
@@ -34,6 +35,7 @@ const koboIndex = {
   ecrec_vetApplication: 'aGGGapARnC2ek7sA6SuHmu',
   ecrec_vetEvaluation: 'a4iDDoLpUJHbu6cwsn2fnG',
   ecrec_vet_bha388: 'aLEGqicGyzkZCeCYeWqEyG',
+  gbv_cs_pdm: 'aHAGjH9mL5kXT9jmpdceBt',
   legal_individual_aid: 'aJxhKpk5fw5SYjEkBopxvJ',
   legal_individual_aid_partners: 'aBzcRWZfNsYcavdadrgmsA',
   legal_pam: 'a3puEbm9w4ME323B6werxJ',
@@ -89,7 +91,6 @@ const koboIndex = {
   shelter_commonSpaces: 'a5LCi33Fte33grspeZFANk',
   va_bio_tia: 'aKZW9UTf9nqfiLhxtjcT3d',
   va_tia_pdm: 'aM29e4jscqujByABmvDLcW',
-  bn_pam: 'aj8ESj397NhsSCPMcnmnQT',
 }
 
 const koboFormById: Record<string, KoboFormName> = seq(Obj.entries(koboIndex)).reduceObject(([k, v]) => [v, k])
@@ -106,6 +107,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   bn_1_mpcaNfiNaa: '[Basic Needs] v1 Joint MPCA-NFI Registration Form (NAA Trial)',
   bn_cashForRentApplication: '[Basic Needs] Cash for Rent Application',
   bn_cashForRentRegistration: '[Basic Needs] Cash for Rent Registration',
+  bn_pam: '[MEAL] Basic Needs PAM',
   bn_rapidResponse: '[Basic Needs] Rapid Response Mechanism',
   bn_rapidResponse2: '[Basic Needs] Rapid Response Mechanism v2',
   bn_rapidResponseSida: '[Basic Needs] RRM SIDA',
@@ -127,6 +129,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
     '[Ecrec] VET - Training grants - we are now accepting applications / Гранти на навчання — відкриваємо прийом заявок',
   ecrec_vetEvaluation: '[Ecrec] VET - Candidate evaluation',
   ecrec_vet_bha388: '[Ecrec] VET BHA388 grant registration form',
+  gbv_cs_pdm: '[GBV] Case Management Client feedback form',
   legal_individual_aid: '[Legal] Individual Legal Aid Form',
   legal_individual_aid_partners: '[Legal] (PARTNERS) Individual Legal Aid Form',
   legal_pam: '[MEAL] Legal Aid PAM Master',
@@ -183,7 +186,6 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   shelter_commonSpaces: '[Shelter] Common Spaces repair registration',
   va_bio_tia: '[VA] BIO & TIA Assessment form',
   va_tia_pdm: 'PDM VA TIA',
-  bn_pam: '[MEAL] Basic Needs PAM',
 }
 
 export type KoboFormName = keyof typeof koboIndex

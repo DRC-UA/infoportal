@@ -45,6 +45,7 @@ import {
   Va_bio_tia,
   Awareness_raising_feedback,
   Va_tia_pdm,
+  Gbv_csPdm,
 } from '../generated/index.js'
 
 export namespace KoboXmlMapper {
@@ -904,6 +905,21 @@ export namespace KoboXmlMapper {
         {
           age: row.age,
           gender: match(row.gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+              other: Person.Gender.Other,
+            })
+            .default(undefined),
+        },
+      ]
+    }
+
+    export const gbv_cs_pdm: PersonsMapper<Gbv_csPdm.T> = (row) => {
+      return [
+        {
+          age: row.age,
+          gender: match(row.sex)
             .cases({
               male: Person.Gender.Male,
               female: Person.Gender.Female,

@@ -61,6 +61,7 @@ import {
   Shelter_commonSpaces,
   Awareness_raising_feedback,
   Va_tia_pdm,
+  Gbv_csPdm,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -513,6 +514,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('meal_eorePdm').id,
           fnMapKobo: Meal_eorePdm.map,
+          ...filters,
+        }),
+      ),
+      ...make('gbv_cs_pdm', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('gbv_cs_pdm').id,
+          fnMapKobo: Gbv_csPdm.map,
           ...filters,
         }),
       ),
