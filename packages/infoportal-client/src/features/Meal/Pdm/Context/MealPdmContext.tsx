@@ -18,6 +18,7 @@ import {
   Meal_eorePdm,
   Ecrec_cashRegistration,
   Awareness_raising_feedback,
+  Va_tia_pdm,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {match, map, seq, Seq} from '@axanc/ts-utils'
@@ -34,6 +35,7 @@ export enum PdmType {
   Eore = 'Eore',
   Ecrec = 'Ecrec',
   Awareness = 'Awareness',
+  Victim = 'Victim',
 }
 
 export type PdmForm =
@@ -46,6 +48,7 @@ export type PdmForm =
   | Meal_eorePdm.T
   | Ecrec_cashRegistration.T
   | Awareness_raising_feedback.T
+  | Va_tia_pdm.T
 
 export type PdmData<T extends PdmForm> = {
   type: PdmType
@@ -321,6 +324,35 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
+      api.kobo.typedAnswers.search.va_tia_pdm().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Victim,
+          office: match(record.office!)
+            .cases({
+              iev: DrcOffice.Kyiv,
+              dnk: DrcOffice.Dnipro,
+              hrk: DrcOffice.Kharkiv,
+              umy: DrcOffice.Sumy,
+              nlv: DrcOffice.Mykolaiv,
+              slo: DrcOffice.Sloviansk,
+              cej: DrcOffice.Chernihiv,
+            })
+            .default(() => undefined),
+          persons: KoboXmlMapper.Persons.va_tia_pdm(record),
+          project: match(record.project_ID!)
+            .cases({
+              ukr000350_sida: DrcProject['UKR-000350 SIDA'],
+              ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
+              ukr000306_dutch: DrcProject['UKR-000306 Dutch II'],
+              ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
+              ukr000386_mass_appeal: DrcProject['UKR-000386 Pooled Funds'],
+              ukr000423_echo4: DrcProject['UKR-000423 ECHO'],
+              ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
+            })
+            .default(() => undefined),
+          answers: record,
+        })),
+      ),
     ]).then((results) => seq(results.flat()))
   }
 
@@ -335,6 +367,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
       api.kobo.answer.getPeriod(KoboIndex.byName('meal_eorePdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('ecrec_cashRegistration').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('awareness_raising_feedback').id),
+      api.kobo.answer.getPeriod(KoboIndex.byName('va_tia_pdm').id),
     ]).then(
       ([
         cashPeriod,
@@ -346,6 +379,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         eorePeriod,
         ecrecPeriod,
         awarenessPeriod,
+        victimPeriod,
       ]) => ({
         cashPeriod,
         shelterPeriod,
@@ -356,6 +390,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         eorePeriod,
         ecrecPeriod,
         awarenessPeriod,
+        victimPeriod,
       }),
     )
   })

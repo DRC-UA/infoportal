@@ -88,6 +88,7 @@ const koboIndex = {
   shelter_ta: 'aTP5nwZjpyR7oy7bdMZktC',
   shelter_commonSpaces: 'a5LCi33Fte33grspeZFANk',
   va_bio_tia: 'aKZW9UTf9nqfiLhxtjcT3d',
+  va_tia_pdm: 'aM29e4jscqujByABmvDLcW',
   bn_pam: 'aj8ESj397NhsSCPMcnmnQT',
 }
 
@@ -181,6 +182,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   shelter_ta: '[Shelter] TA',
   shelter_commonSpaces: '[Shelter] Common Spaces repair registration',
   va_bio_tia: '[VA] BIO & TIA Assessment form',
+  va_tia_pdm: 'PDM VA TIA',
   bn_pam: '[MEAL] Basic Needs PAM',
 }
 
