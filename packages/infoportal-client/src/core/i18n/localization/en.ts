@@ -519,6 +519,7 @@ const en = Object.freeze({
       shelterOld: 'Shelter (household)',
       nfiPdmDashboard: 'NFI',
       gbvPdmDashboard: 'Dignity Kits',
+      csPdmDashboard: 'GBV Case Management',
       legalPdmDashboard: 'Legal',
       pssPdmDashboard: 'PSS',
       victim: 'Victim Assistance TIA',
@@ -907,6 +908,15 @@ const en = Object.freeze({
       safeVa: 'Did you feel safe all time communicating with DRC staff?',
       changedFamily:
         'With reference to the following scale, to what extent the assistance changed the situation of the individual/family?',
+      howFindServices: 'How did you find out about our services?',
+      receivedInfo:
+        'I received information about what services were available and what my options were in accessing services.',
+      samePerson: 'I could see the same person at each return visit.',
+      offeredSupport: 'I was offered the option of having a support person with me.',
+      supportAttention: 'I could access support without drawing attention to myself.',
+      staffConfidential: 'The staff respects confidentiality.',
+      caseworkerProvide: 'Did the caseworker explain to you how to provide a complaint or feedback if you wanted to?',
+      recommendFriend: 'Would you recommend a friend who has experienced GBV to come here for help?',
     },
     lcsPdm: 'Coping Strategies',
     lcsRegistration: 'Coping Strategies',
