@@ -521,6 +521,7 @@ const en = Object.freeze({
       gbvPdmDashboard: 'Dignity Kits',
       legalPdmDashboard: 'Legal',
       pssPdmDashboard: 'PSS',
+      victim: 'Victim Assistance TIA',
       eorePdmDashboard: 'Eore',
       pdmType: 'PDM Type',
       animalShelter: 'Animal Shelter',
@@ -540,6 +541,7 @@ const en = Object.freeze({
       awarenessType: 'Type of awareness raising',
       sufficient: 'Assistance was sufficient to',
       sessionType: 'Session type',
+      accessibilityInterview: 'Accessibility of beneficiary',
       location: 'Location',
       spentA: 'Spent?',
       method: 'Methodology group',
@@ -742,7 +744,7 @@ const en = Object.freeze({
       infoUnderstandable: 'Information was clear, understandable',
       clearExplanation: 'Lawyer gave you clear explanations',
       provisionHelped:
-        "Do you think the provision of legal aid has enhanced your and your family's wellbeing/ quality of life?",
+        "Do you think the provision of aid has enhanced your and your family's wellbeing/ quality of life?",
       wellInformed: 'Did you feel well informed',
       planToStay: 'Are you planning on staying in your repaired house/apartment permanently?',
       howHear: 'How did you hear about DRC and it’s partners free legal assistance?',
@@ -884,6 +886,27 @@ const en = Object.freeze({
         'How satisfied are you with the overall quality of the awareness-raising session you attended?',
       safeGbv:
         'Did you feel safe at all times travelling to participate in awareness-raising session the assistance/service (to/from your place), while participating in session, and upon return to your place?',
+      receiveHelp: 'Did you receive help from DRC representatives?',
+      whatAssistance: 'What assistance was approved by DRC?',
+      assistanceSpent: 'Was the received financial assistance spent?',
+      spentIntended: 'Was the received financial assistance spent as intended?',
+      rateSatisfaction:
+        'With reference to the following scale, how would you rate the level of your satisfaction with the assistance received?',
+      rateSatisfactionNo: "If 'not really', 'not at all', 'don't know', please specify",
+      viewInConsideration:
+        'With reference to the following scale, were your view or situation taken into consideration during provision of assistance?',
+      informingPartially:
+        'With reference to the following scale, were you made aware of the services available to EO survivors (financial support, legal support etc.)?',
+      challengeInAccess:
+        'With reference to the following scale, did you have any challenges in accessing DRC assistance?',
+      resolveProblem:
+        'With reference to the following scale, did the assistance help to resolve/mitigate your problem?',
+      withoutDrc:
+        "With reference to the following scale, will you be able to access the services you need in the future without DRC's support?",
+      scalePartially: 'With reference to the following scale, do you consider assistance to be on time?',
+      safeVa: 'Did you feel safe all time communicating with DRC staff?',
+      changedFamily:
+        'With reference to the following scale, to what extent the assistance changed the situation of the individual/family?',
     },
     lcsPdm: 'Coping Strategies',
     lcsRegistration: 'Coping Strategies',

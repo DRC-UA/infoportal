@@ -425,6 +425,10 @@ export class BuildKoboType {
       va_bio_tia: {
         formId: KoboIndex.byName('va_bio_tia').id,
       },
+      va_tia_pdm: {
+        formId: KoboIndex.byName('va_tia_pdm').id,
+        langIndex: 1,
+      },
       conflict_trainings: {
         formId: KoboIndex.byName('conflict_trainings').id,
       },

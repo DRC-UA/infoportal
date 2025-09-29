@@ -44,6 +44,7 @@ import {
   Shelter_nta,
   Va_bio_tia,
   Awareness_raising_feedback,
+  Va_tia_pdm,
 } from '../generated/index.js'
 
 export namespace KoboXmlMapper {
@@ -896,6 +897,21 @@ export namespace KoboXmlMapper {
           })
           .default(() => undefined),
       }))
+    }
+
+    export const va_tia_pdm: PersonsMapper<Va_tia_pdm.T> = (row) => {
+      return [
+        {
+          age: row.age,
+          gender: match(row.gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+              other: Person.Gender.Other,
+            })
+            .default(undefined),
+        },
+      ]
     }
 
     export const winter_pdm: PersonsMapper<Meal_winterizationPdm.T> = ({age, sex, status_person}) => {
