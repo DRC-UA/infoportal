@@ -187,7 +187,7 @@ export class KoboMetaService {
         orderBy: {
           date: 'desc',
         },
-      })) as unknown as IKoboMeta[] // TODO: get rid of unknown - there is a typing error needed a fix
+      })) as IKoboMeta[]
       this.log.info(`Fetch Meta from database... ${res.length} fetched in ${duration(performance.now() - t0)}`)
       return res
     },
