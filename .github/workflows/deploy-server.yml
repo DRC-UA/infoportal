@@ -31,9 +31,12 @@ jobs:
           npm run test --workspace infoportal-common --if-present
 
       - name: Generate Prisma schema and copy engines
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          # Generate Prisma client
+          # deploy migrations
           npm run db-deploy
+          # Generate Prisma client
           npm run db-generate
 
       - name: Copy Prisma client to server package
