@@ -67,7 +67,7 @@ export class KoboApiSdk {
     baseUrl: string
     formId: Kobo.FormId
     answerId: Kobo.SubmissionId
-    attachmentId: number
+    attachmentId: string
     fileName?: string
   }) => {
     const query = fileName ? `?fileName=${encodeURIComponent(fileName)}` : ''

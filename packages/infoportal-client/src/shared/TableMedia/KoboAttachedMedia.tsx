@@ -39,7 +39,7 @@ export const getKoboAttachmentUrl = ({
     ? KoboApiSdk.getAttachementUrl({
         formId,
         answerId,
-        attachmentId: attachment.id,
+        attachmentId: attachment.uid,
         baseUrl: conf.apiURL,
         fileName: attachment.filename,
       })
