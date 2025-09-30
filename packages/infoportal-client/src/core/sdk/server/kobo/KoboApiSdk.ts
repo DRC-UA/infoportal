@@ -74,7 +74,6 @@ export class KoboApiSdk {
     return `${baseUrl}/kobo-api/${formId}/submission/${answerId}/attachment/${attachmentId}${query}`
   }
 
-
   readonly proxy = <T = any>({
     url,
     method,
