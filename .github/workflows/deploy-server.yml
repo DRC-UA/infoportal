@@ -33,6 +33,7 @@ jobs:
       - name: Generate Prisma schema and copy engines
         run: |
           # Generate Prisma client
+          npm run db-deploy
           npm run db-generate
 
       - name: Copy Prisma client to server package

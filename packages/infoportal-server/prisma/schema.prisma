@@ -123,8 +123,8 @@ model KoboMeta {
   passportNum      String?
   idFileName       String?
   taxIdFileName    String?
-  idFileId         Int?
-  taxIdFileId      Int?
+  idFileId         String?
+  taxIdFileId      String?
   modality         Modality?
   persons          KoboPerson[]
 
