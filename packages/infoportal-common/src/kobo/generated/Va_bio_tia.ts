@@ -148,6 +148,7 @@ export namespace Va_bio_tia {
           project: undefined | Option<'project'> | undefined
           agreed_protection_manager: undefined | Option<'agreed_protection_manager'> | undefined
           date_agreed_hdp_manager: Date | undefined | undefined
+          date_assistance_provided: Date | undefined | undefined
           signature_agreed_hdp_manager: string | undefined | undefined
         }[]
       | undefined
@@ -230,6 +231,7 @@ export namespace Va_bio_tia {
       oleksandr_basenko: `Oleksandr BASENKO`,
       yana_semetsova: `Yana SEMETSOVA`,
       yana_beskrovna: `Yana Beskrovna`,
+      valentyna_dzhafarova: `Valentyna Dzhafarova`,
       kateryna_bobokalo: `Kateryna Bobokalo`,
       dmytro_tatarenko: `Dmytro TATARENKO`,
       nataliia_liakhovska: `Nataliia Liakhovska`,
@@ -2356,6 +2358,7 @@ export namespace Va_bio_tia {
           ? new Date(_.date_responsible_drc_staff)
           : undefined
         _['date_agreed_hdp_manager'] = _.date_agreed_hdp_manager ? new Date(_.date_agreed_hdp_manager) : undefined
+        _['date_assistance_provided'] = _.date_assistance_provided ? new Date(_.date_assistance_provided) : undefined
         return _
       }),
     }) as T
