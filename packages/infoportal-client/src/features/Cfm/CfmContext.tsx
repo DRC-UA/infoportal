@@ -183,7 +183,7 @@ export const CfmProvider = ({
         const res: CfmData[] = []
         external.data.forEach((_) => {
           const category = _.tags?.feedbackTypeOverride
-          if (_.id === '4735240') console.log({_})
+
           res.push({
             ..._,
             category,
