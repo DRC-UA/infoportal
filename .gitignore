@@ -67,8 +67,8 @@ bower_components
 .yarn-integrity
 
 # dotenv environment variables file
-packages/infoportal-server/.env
-packages/infoportal-client/.env
+packages/infoportal-server/.env.?*
+packages/infoportal-client/.env.?*
 .env.test
 infoportal-client/.env.local
 .env
