@@ -30,8 +30,10 @@ export const CommonSpacesTable = () => {
   const schema = ctxSchema.byName.shelter_commonSpaces.get!
 
   useEffect(() => {
-    answers.fetch({})
-  }, [])
+    if (!answers.get?.data) {
+      answers.fetch({})
+    }
+  }, [answers.get?.data])
 
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -43,7 +45,14 @@ export const CommonSpacesTable = () => {
       })),
     [],
   )
-
+  const modalitySelectOptions: IpSelectOption<Shelter_commonSpaces.Option<'modality_assistance'>>[] = useMemo(
+    () =>
+      Object.entries(Shelter_commonSpaces.options.modality_assistance).map(([value, text]) => ({
+        value: value as Shelter_commonSpaces.Option<'modality_assistance'>,
+        children: text,
+      })),
+    [],
+  )
   const columns = useMemo(() => {
     if (!schema) return []
     const trC = (q: string, v?: string) => (v ? schema.translate.choice(q, v) : '')
@@ -335,15 +344,45 @@ export const CommonSpacesTable = () => {
         id: 'modality_assistance',
         head: m.modality,
         type: 'select_one',
-        width: 160,
+        width: 190,
         options: () =>
-          schema.helper
-            .getOptionsByQuestionName('modality_assistance')
-            .map((o) => ({value: o.name, label: trC('modality_assistance', o.name)})),
+          Object.entries(Shelter_commonSpaces.options.modality_assistance).map(([value, text]) => ({
+            value,
+            label: text,
+          })),
+        subHeader: selectedIds.length > 0 && (
+          <TableEditCellBtn
+            onClick={() =>
+              ctxKoboUpdate.openByName({
+                target: 'answer',
+                params: {
+                  formName: 'shelter_commonSpaces',
+                  answerIds: selectedIds,
+                  question: 'modality_assistance',
+                },
+              })
+            }
+          />
+        ),
         render: (row) => ({
-          value: row.modality_assistance,
           option: row.modality_assistance,
-          label: trC('modality_assistance', row.modality_assistance),
+          value: row.modality_assistance,
+          label: (
+            <IpSelectSingle<Shelter_commonSpaces.Option<'modality_assistance'>>
+              value={(row.modality_assistance ?? null) as Shelter_commonSpaces.Option<'modality_assistance'> | null}
+              onChange={(modality_assistance) =>
+                ctxKoboUpdate.asyncUpdateByName.answer.call({
+                  formName: 'shelter_commonSpaces',
+                  answerIds: [row.id],
+                  question: 'modality_assistance',
+                  answer: (modality_assistance ?? undefined) as
+                    | Shelter_commonSpaces.Option<'modality_assistance'>
+                    | undefined,
+                })
+              }
+              options={modalitySelectOptions}
+            />
+          ),
         }),
       },
     ])
