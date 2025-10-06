@@ -36,6 +36,10 @@ import {PdmLegalDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmLegalDashb
 import {PdmAwarenessDashboard} from '@/features/Meal/Pdm/Dashboard/PdmAwarenessDashboard'
 import {MealPdmVaDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmVaDashboard'
 import {PdmGbvCsDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGbvCsDashboard'
+import {MealPdmWgssDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmWgssDashboard'
+import {PdmGirlShineDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGirlShineDashboard'
+import {PdmGpCsDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGpCsDashboard'
+import {PdmIpaDashboard} from '@/features/Meal/Pdm/Dashboard/PdmIpaDashboard'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -54,6 +58,10 @@ const relatedKoboForms: KoboFormName[] = [
   'awareness_raising_feedback',
   'va_tia_pdm',
   'gbv_cs_pdm',
+  'gbv_wgssPdm',
+  'gbv_girlShine',
+  'gp_case_management',
+  'protection_ipaPdm',
 ]
 
 export const mealIndex = {
@@ -94,10 +102,14 @@ export const mealIndex = {
         general: {
           pss: '/pdm/protection/pss',
           victim: '/pdm/protection/victim',
+          ipa: '/pdm/protection/ipa',
+          generalCs: '/pdm/protection/gp/cs',
         },
         gbv: {
           gbv: '/pdm/protection/gbv',
           cs: '/pdm/protection/cs',
+          wgss: '/pdm/protection/wgss',
+          girl: '/pdm/protection/girl',
         },
         legal: {
           legal: '/pdm/protection/legal',
@@ -210,6 +222,12 @@ const MealSidebar = ({
               <NavLink to={path(mealIndex.siteMap.pdm.protection.general.victim)}>
                 {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.victim}</SidebarItem>}
               </NavLink>
+              <NavLink to={path(mealIndex.siteMap.pdm.protection.general.ipa)}>
+                {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.ipa}</SidebarItem>}
+              </NavLink>
+              <NavLink to={path(mealIndex.siteMap.pdm.protection.general.generalCs)}>
+                {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.generalCs}</SidebarItem>}
+              </NavLink>
             </SidebarSection>
             <SidebarSection title={m.gbv}>
               <NavLink to={path(mealIndex.siteMap.pdm.protection.gbv.gbv)}>
@@ -217,6 +235,14 @@ const MealSidebar = ({
               </NavLink>
               <NavLink to={path(mealIndex.siteMap.pdm.protection.gbv.cs)}>
                 {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.csPdmDashboard}</SidebarItem>}
+              </NavLink>
+              <NavLink to={path(mealIndex.siteMap.pdm.protection.gbv.wgss)}>
+                {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.wgssPdmDashboard}</SidebarItem>}
+              </NavLink>
+              <NavLink to={path(mealIndex.siteMap.pdm.protection.gbv.girl)}>
+                {({isActive}) => (
+                  <SidebarItem active={isActive}>{m.mealMonitoringPdm.girlShinePdmDashboard}</SidebarItem>
+                )}
               </NavLink>
             </SidebarSection>
             <SidebarSection title={m.legalPdm}>
@@ -241,6 +267,10 @@ const MealSidebar = ({
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_nfiPdm'))} name="meal_nfiPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('protection_gbvPdm'))} name="protection_gbvPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('gbv_cs_pdm'))} name="gbv_cs_pdm" />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('gbv_wgssPdm'))} name="gbv_wgssPdm" />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('gbv_girlShine'))} name="gbv_girlShine" />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('gp_case_management'))} name="gp_case_management" />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('protection_ipaPdm'))} name="protection_ipaPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('legal_pam'))} name="legal_pam" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_pssPdm'))} name="meal_pssPdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('va_tia_pdm'))} name="va_tia_pdm" />
@@ -280,6 +310,7 @@ export const Meal = () => {
               _.params?.koboFormId === KoboIndex.byName('meal_shelterPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('meal_nfiPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('protection_gbvPdm').id ||
+              _.params?.koboFormId === KoboIndex.byName('protection_ipaPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('meal_winterizationPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('legal_pam').id ||
               _.params?.koboFormId === KoboIndex.byName('meal_eorePdm').id ||
@@ -287,7 +318,10 @@ export const Meal = () => {
               _.params?.koboFormId === KoboIndex.byName('va_tia_pdm').id ||
               _.params?.koboFormId === KoboIndex.byName('meal_pssPdm').id ||
               _.params?.koboFormId === KoboIndex.byName('bn_pam').id ||
-              _.params?.koboFormId === KoboIndex.byName('gbv_cs_pdm').id
+              _.params?.koboFormId === KoboIndex.byName('gbv_cs_pdm').id ||
+              _.params?.koboFormId === KoboIndex.byName('gbv_wgssPdm').id ||
+              _.params?.koboFormId === KoboIndex.byName('gbv_girlShine').id ||
+              _.params?.koboFormId === KoboIndex.byName('gp_case_management').id
             )
           })),
     }
@@ -353,6 +387,10 @@ export const Meal = () => {
                   'va_tia_pdm',
                   'awareness_raising_feedback',
                   'gbv_cs_pdm',
+                  'gbv_wgssPdm',
+                  'gbv_girlShine',
+                  'gp_case_management',
+                  'protection_ipaPdm',
                 ]}
               />
             }
@@ -360,8 +398,12 @@ export const Meal = () => {
             <Route index element={<Navigate to={mealIndex.siteMap.pdm.protection.general.pss} replace />} />
             <Route path="pss" element={<MealPdmPssDashboard />} />
             <Route path="victim" element={<MealPdmVaDashboard />} />
+            <Route path="ipa" element={<PdmIpaDashboard />} />
+            <Route path="generalCs" element={<PdmGpCsDashboard />} />
             <Route path="gbv" element={<PdmGbvDashboard />} />
             <Route path="cs" element={<PdmGbvCsDashboard />} />
+            <Route path="wgss" element={<MealPdmWgssDashboard />} />
+            <Route path="girl" element={<PdmGirlShineDashboard />} />
             <Route path="legal" element={<PdmLegalDashboard />} />
             <Route path="awareness" element={<PdmAwarenessDashboard />} />
           </Route>

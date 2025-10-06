@@ -62,6 +62,10 @@ import {
   Awareness_raising_feedback,
   Va_tia_pdm,
   Gbv_csPdm,
+  Gbv_girl_shine,
+  Gbv_wgss_pdm,
+  Gp_case_management,
+  Protection_ipa_pdm,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -521,6 +525,34 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('gbv_cs_pdm').id,
           fnMapKobo: Gbv_csPdm.map,
+          ...filters,
+        }),
+      ),
+      ...make('gbv_wgssPdm', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('gbv_wgssPdm').id,
+          fnMapKobo: Gbv_wgss_pdm.map,
+          ...filters,
+        }),
+      ),
+      ...make('gbv_girlShine', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('gbv_girlShine').id,
+          fnMapKobo: Gbv_girl_shine.map,
+          ...filters,
+        }),
+      ),
+      ...make('gp_case_management', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('gp_case_management').id,
+          fnMapKobo: Gp_case_management.map,
+          ...filters,
+        }),
+      ),
+      ...make('protection_ipaPdm', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('protection_ipaPdm').id,
+          fnMapKobo: Protection_ipa_pdm.map,
           ...filters,
         }),
       ),

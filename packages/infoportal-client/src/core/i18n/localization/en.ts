@@ -520,9 +520,13 @@ const en = Object.freeze({
       nfiPdmDashboard: 'NFI',
       gbvPdmDashboard: 'Dignity Kits',
       csPdmDashboard: 'GBV Case Management',
+      wgssPdmDashboard: 'GBV WGSS',
+      girlShinePdmDashboard: 'GBV Girl Shine',
       legalPdmDashboard: 'Legal',
       pssPdmDashboard: 'PSS',
       victim: 'Victim Assistance TIA',
+      ipa: 'IPA/C4P',
+      generalCs: 'GP Case Management',
       eorePdmDashboard: 'Eore',
       pdmType: 'PDM Type',
       animalShelter: 'Animal Shelter',
@@ -609,6 +613,7 @@ const en = Object.freeze({
       helpedThermal: 'Helped to improve thermal comfort for your hh',
       viewsTaken: 'Were your views taken into account by the organization about the assistance you received?',
       satisfiedAssistance: 'Satisfied with assistance',
+      satisfiedAssistanceNo: 'No really/not at all, because',
       satisfiedAmount: 'Satisfied with cash amount',
       satisfiedQuality: 'Satisfied with quality of items in kit',
       satisfiedKits: 'Satisfied with kits received',
@@ -746,7 +751,7 @@ const en = Object.freeze({
       clearExplanation: 'Lawyer gave you clear explanations',
       provisionHelped:
         "Do you think the provision of aid has enhanced your and your family's wellbeing/ quality of life?",
-      wellInformed: 'Did you feel well informed',
+      wellInformed: 'Did you feel well informed?',
       planToStay: 'Are you planning on staying in your repaired house/apartment permanently?',
       howHear: 'How did you hear about DRC and it’s partners free legal assistance?',
       howReport:
@@ -917,6 +922,33 @@ const en = Object.freeze({
       staffConfidential: 'The staff respects confidentiality.',
       caseworkerProvide: 'Did the caseworker explain to you how to provide a complaint or feedback if you wanted to?',
       recommendFriend: 'Would you recommend a friend who has experienced GBV to come here for help?',
+      longSafe: 'How long have you been coming to the safe space?',
+      wgssSafeTravel:
+        'Did you feel safe at all times travelling to women and girls safe space (to/from your place), while receiving the assistance/service, and upon return to your place?',
+      accessSafeSpace: 'Do you have any difficulties accessing the safe space?',
+      enjoyActivities: 'Do you enjoy participating in group activities in the safe space?',
+      activitiesRelevant: 'Are the activities in the safe space relevant to your needs?',
+      talkProblems: 'Do you feel able to talk to staff about your problems?',
+      girlSupport: 'Do you know where a women or girl could go to for support if they experienced violence?',
+      staffWelcomed: 'Do you feel welcomed by the staff every time you come to the safe space?',
+      considerateFeedback:
+        'Do you think the staff working in the safe space are considerate of the feedback and opinions provided by members in the safe space?',
+      thinkFacilitator:
+        'Was the person leading the session friendly, able to answer your questions, explain things clearly, and treat you kindly and with respect?',
+      girlShineSafe:
+        'Did you feel safe the whole time — when coming here, while participating in Girl Shine, and when going home?',
+      girlShineHappy: 'Are you happy with the Girl Shine sessions?',
+      ideaBetter:
+        'If you had an idea to make things better, or if something was wrong, do you think you could tell someone about it?',
+      girlShineComplaints: 'Do you know if ideas or complaints people shared were answered or acted on?',
+      facilitatorsListened:
+        'Did the facilitators listen to your opinion/preferences in topics you would like to discuss during Girl Shine?',
+      knewEnoughParticipate: 'Did you feel you knew enough about how to participate in Girl Shine program?',
+      optionSupport: 'Were you offered the option of having a support person with you?',
+      specify: 'Specify',
+      assistanceTreated:
+        'Did you feel that the DRC staff treated you with respect during the process of providing assistance?',
+      producedOutcome: 'Has the assistance provided produced the intended protection outcome?',
     },
     lcsPdm: 'Coping Strategies',
     lcsRegistration: 'Coping Strategies',

@@ -46,6 +46,10 @@ import {
   Awareness_raising_feedback,
   Va_tia_pdm,
   Gbv_csPdm,
+  Gbv_wgss_pdm,
+  Gp_case_management,
+  Protection_ipa_pdm,
+  Gbv_girl_shine,
 } from '../generated/index.js'
 
 export namespace KoboXmlMapper {
@@ -946,6 +950,53 @@ export namespace KoboXmlMapper {
               idp: Person.DisplacementStatus.Idp,
               long: Person.DisplacementStatus.NonDisplaced,
               returnee: Person.DisplacementStatus.Returnee,
+            })
+            .default(undefined),
+        },
+      ]
+    }
+
+    export const gbv_wgss_pdm: PersonsMapper<Gbv_wgss_pdm.T> = (row) => {
+      return [
+        {
+          age: row.age,
+        },
+      ]
+    }
+
+    export const gbv_girl_shine: PersonsMapper<Gbv_girl_shine.T> = (row) => {
+      return [
+        {
+          age: row.age,
+        },
+      ]
+    }
+
+    export const gp_case_management: PersonsMapper<Gp_case_management.T> = (row) => {
+      return [
+        {
+          age: row.age,
+          gender: match(row.gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+              other: Person.Gender.Other,
+              pns: Person.Gender.Other,
+            })
+            .default(undefined),
+        },
+      ]
+    }
+    export const protection_ipaPdm: PersonsMapper<Protection_ipa_pdm.T> = (row) => {
+      return [
+        {
+          age: row.age,
+          gender: match(row.gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+              other: Person.Gender.Other,
+              unspecified: Person.Gender.Other,
             })
             .default(undefined),
         },

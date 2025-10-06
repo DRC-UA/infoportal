@@ -20,6 +20,10 @@ import {
   Awareness_raising_feedback,
   Va_tia_pdm,
   Gbv_csPdm,
+  Gbv_girl_shine,
+  Gbv_wgss_pdm,
+  Gp_case_management,
+  Protection_ipa_pdm,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {match, map, seq, Seq} from '@axanc/ts-utils'
@@ -38,6 +42,10 @@ export enum PdmType {
   Awareness = 'Awareness',
   Victim = 'Victim',
   CaseManagement = 'CaseManagement',
+  Wgss = 'Wgss',
+  GirlShine = 'GirlShine',
+  GpCaseManagement = 'GpCaseManagement',
+  Ipa = 'Ipa',
 }
 
 export type PdmForm =
@@ -52,6 +60,10 @@ export type PdmForm =
   | Awareness_raising_feedback.T
   | Va_tia_pdm.T
   | Gbv_csPdm.T
+  | Gbv_girl_shine.T
+  | Gbv_wgss_pdm.T
+  | Gp_case_management.T
+  | Protection_ipa_pdm.T
 
 export type PdmData<T extends PdmForm> = {
   type: PdmType
@@ -369,6 +381,100 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
+      api.kobo.typedAnswers.search.gbv_wgssPdm().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Wgss,
+          office: match(record.office!)
+            .cases({
+              dnk: DrcOffice.Dnipro,
+              hrk: DrcOffice.Kharkiv,
+              umy: DrcOffice.Sumy,
+              nlv: DrcOffice.Mykolaiv,
+              slo: DrcOffice.Sloviansk,
+              cej: DrcOffice.Chernihiv,
+            })
+            .default(() => undefined),
+          persons: KoboXmlMapper.Persons.gbv_wgss_pdm(record),
+          project: match(record.project!)
+            .cases({
+              ukr000345_bha: DrcProject['UKR-000345 BHA2'],
+              ukr000355_dmfa: DrcProject['UKR-000355 Danish MFA'],
+              ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
+              ukr000372_echo: DrcProject['UKR-000372 ECHO3'],
+              ukr000423: DrcProject['UKR-000423 ECHO4'],
+              na: DrcProject['None'],
+            })
+            .default(() => undefined),
+          answers: record,
+        })),
+      ),
+      api.kobo.typedAnswers.search.gp_case_management().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.GpCaseManagement,
+          office: match(record.office!)
+            .cases({
+              dnipro: DrcOffice.Dnipro,
+              kharkiv: DrcOffice.Kharkiv,
+              sumy: DrcOffice.Sumy,
+              mykolaiv: DrcOffice.Mykolaiv,
+              sloviansk: DrcOffice.Sloviansk,
+            })
+            .default(() => undefined),
+          oblast: OblastIndex.byKoboName(record.oblast_provision!)!.name,
+          persons: KoboXmlMapper.Persons.gp_case_management(record),
+          project: match(record.project!)
+            .cases({
+              ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+            })
+            .default(() => undefined),
+          answers: record,
+        })),
+      ),
+      api.kobo.typedAnswers.search.gbv_girlShine().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.GirlShine,
+          project: match(record.project_code!)
+            .cases({
+              'UKR-000423': DrcProject['UKR-000423 ECHO4'],
+            })
+            .default(() => undefined),
+          persons: KoboXmlMapper.Persons.gbv_girl_shine(record),
+          answers: record,
+        })),
+      ),
+      api.kobo.typedAnswers.search.protection_ipaPdm().then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Ipa,
+          office: match(record.back_office!)
+            .cases({
+              dnk: DrcOffice.Dnipro,
+              hrk: DrcOffice.Kharkiv,
+              umy: DrcOffice.Sumy,
+              nlv: DrcOffice.Mykolaiv,
+              chj: DrcOffice.Chernihiv,
+              lwo: DrcOffice.Lviv,
+            })
+            .default(() => undefined),
+          oblast: OblastIndex.byKoboName(record.oblast_residence!)!.name,
+          persons: KoboXmlMapper.Persons.protection_ipaPdm(record),
+          project: match(record.donor!)
+            .cases({
+              ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
+              uhf6: DrcProject['UKR-000336 UHF6'],
+              uhf4: DrcProject['UKR-000314 UHF4'],
+              novo: DrcProject['UKR-000298 Novo-Nordisk'],
+              sdc: DrcProject['UKR-000330 SDC2'],
+              bha: DrcProject['UKR-000345 BHA2'],
+              echo: DrcProject['UKR-000322 ECHO2'],
+              pool: DrcProject['UKR-000270 Pooled Funds'],
+              okf: DrcProject['UKR-000309 OKF'],
+              ukr000423_echo: DrcProject['UKR-000423 ECHO4'],
+              other: DrcProject['Other'],
+            })
+            .default(() => undefined),
+          answers: record,
+        })),
+      ),
     ]).then((results) => seq(results.flat()))
   }
 
@@ -385,6 +491,9 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
       api.kobo.answer.getPeriod(KoboIndex.byName('awareness_raising_feedback').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('va_tia_pdm').id),
       api.kobo.answer.getPeriod(KoboIndex.byName('gbv_cs_pdm').id),
+      api.kobo.answer.getPeriod(KoboIndex.byName('gbv_wgssPdm').id),
+      api.kobo.answer.getPeriod(KoboIndex.byName('gbv_girlShine').id),
+      api.kobo.answer.getPeriod(KoboIndex.byName('protection_ipaPdm').id),
     ]).then(
       ([
         cashPeriod,
@@ -398,6 +507,9 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         awarenessPeriod,
         victimPeriod,
         gbvCsPeriod,
+        wgssPeriod,
+        girlShinePeriod,
+        ipaPeriod,
       ]) => ({
         cashPeriod,
         shelterPeriod,
@@ -410,6 +522,9 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         awarenessPeriod,
         victimPeriod,
         gbvCsPeriod,
+        wgssPeriod,
+        girlShinePeriod,
+        ipaPeriod,
       }),
     )
   })
