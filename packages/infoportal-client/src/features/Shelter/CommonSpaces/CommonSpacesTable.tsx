@@ -30,8 +30,10 @@ export const CommonSpacesTable = () => {
   const schema = ctxSchema.byName.shelter_commonSpaces.get!
 
   useEffect(() => {
-    answers.fetch({})
-  }, [])
+    if (!answers.get?.data) {
+      answers.fetch({})
+    }
+  }, [answers.get?.data])
 
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -373,7 +375,9 @@ export const CommonSpacesTable = () => {
                   formName: 'shelter_commonSpaces',
                   answerIds: [row.id],
                   question: 'modality_assistance',
-                  answer: (modality_assistance ?? undefined) as Shelter_commonSpaces.Option<'modality_assistance'> | undefined,
+                  answer: (modality_assistance ?? undefined) as
+                    | Shelter_commonSpaces.Option<'modality_assistance'>
+                    | undefined,
                 })
               }
               options={modalitySelectOptions}
