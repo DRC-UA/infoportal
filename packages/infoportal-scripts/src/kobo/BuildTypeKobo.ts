@@ -449,6 +449,18 @@ export class BuildKoboType {
       bn_pam: {
         formId: KoboIndex.byName('bn_pam').id,
       },
+      gbv_wgss_pdm: {
+        formId: KoboIndex.byName('gbv_wgssPdm').id,
+      },
+      gbv_girl_shine: {
+        formId: KoboIndex.byName('gbv_girlShine').id,
+      },
+      gp_case_management: {
+        formId: KoboIndex.byName('gp_case_management').id,
+      },
+      protection_ipa_pdm: {
+        formId: KoboIndex.byName('protection_ipaPdm').id,
+      },
     },
     (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>],
   )

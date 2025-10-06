@@ -161,6 +161,12 @@ export class KoboAnswerSdk {
         return Promise.resolve({start: new Date(2025, 7, 28), end: startOfDay(new Date())})
       case KoboIndex.byName('gbv_cs_pdm').id:
         return Promise.resolve({start: new Date(2024, 8, 27), end: startOfDay(new Date())})
+      case KoboIndex.byName('gbv_wgssPdm').id:
+        return Promise.resolve({start: new Date(2024, 7, 4), end: startOfDay(new Date())})
+      case KoboIndex.byName('gbv_girlShine').id:
+        return Promise.resolve({start: new Date(2025, 2, 27), end: startOfDay(new Date())})
+      case KoboIndex.byName('protection_ipaPdm').id:
+        return Promise.resolve({start: new Date(2023, 12, 27), end: startOfDay(new Date())})
       default:
         throw new Error('Check KoboAnswerSdk to implement getPeriod')
     }
