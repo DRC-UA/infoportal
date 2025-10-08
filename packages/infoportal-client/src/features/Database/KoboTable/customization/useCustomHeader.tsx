@@ -36,6 +36,7 @@ export const useCustomHeader = (): undefined | ((_: HeaderParams<any>) => ReactN
       case KoboIndex.byName('protection_groupSession').id:
       case KoboIndex.byName('protection_hhs3').id:
       case KoboIndex.byName('shelter_cashForShelter').id:
+      case KoboIndex.byName('shelter_modern_women').id:
       case KoboIndex.byName('shelter_nta').id:
       case KoboIndex.byName('protection_pss').id: {
         return (_: HeaderParams<{custom: KoboXmlMapper.Breakdown}>) => {

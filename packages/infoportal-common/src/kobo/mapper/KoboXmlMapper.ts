@@ -51,6 +51,7 @@ import {
   Protection_ipa_pdm,
   Gbv_girl_shine,
 } from '../generated/index.js'
+import {Shelter_modernWomen} from '../generated/Shelter_modernWomen'
 
 export namespace KoboXmlMapper {
   type ExtractHh<T, K extends keyof T> = T[K] extends any[] | undefined ? NonNullable<T[K]>[0] : never
@@ -796,6 +797,23 @@ export namespace KoboXmlMapper {
     }
 
     export const shelter_cashForShelter: PersonsMapper<Shelter_cashForShelter.T> = common
+
+    export const shelter_modernWomen: PersonsMapper<Shelter_modernWomen.T> = (row) => {
+      return common({
+        ...row,
+        hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          ..._,
+          hh_char_hh_res_stat: match(_.hh_char_res_stat)
+            .cases({
+              ret: 'ret',
+              ref_asy: 'ref_asy',
+              idp: 'idp',
+              long_res: 'long_res',
+            } as const)
+            .default(undefined),
+        })),
+      })
+    }
 
     export const shelter_pdm: PersonsMapper<Meal_shelterPdm.T> = (row) => {
       return [
