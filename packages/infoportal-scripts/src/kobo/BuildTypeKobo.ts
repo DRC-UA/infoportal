@@ -230,6 +230,10 @@ export class BuildKoboType {
         formId: KoboIndex.byName('shelter_commonSpaces').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
       },
+      shelter_modernWomen: {
+        formId: KoboIndex.byName('shelter_modern_women').id,
+        skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
+      },
       bn_rapidResponseSida: {
         formId: KoboIndex.byName('bn_rapidResponseSida').id,
       },
