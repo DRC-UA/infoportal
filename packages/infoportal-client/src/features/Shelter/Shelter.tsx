@@ -1,4 +1,4 @@
-import {NavLink, Route, Routes, useLocation} from 'react-router-dom'
+import {NavLink, Route, Routes, useLocation, useMatch} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -22,17 +22,17 @@ import {getKoboFormRouteProps, SidebarKoboLink} from '@/features/SidebarKoboLink
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {CommonSpacesTable} from '@/features/Shelter/CommonSpaces/CommonSpacesTable'
+import {CommonSpacesDashboard} from '@/features/Shelter/CommonSpaces/Dashboard/CommonSpacesDashboard'
 
 const relatedKoboForms: KoboFormName[] = ['shelter_nta', 'shelter_ta']
 
 export const shelterIndex = {
   basePath: '/shelter',
   siteMap: {
-    data: '/data',
-    common: '/data/common-spaces',
-    access: '/access',
-    dashboard: '/dashboard',
-    form: (id: KoboFormName = ':id' as any) => '/form/' + id,
+    access: 'access',
+    shelter: {data: 'data', dashboard: 'dashboard'},
+    common: {data: 'common-spaces/data', dashboard: 'common-spaces/dashboard'},
+    form: (id: KoboFormName = ':id' as any) => `form/${id}`,
   },
 }
 
@@ -43,27 +43,38 @@ const ShelterSidebar = () => {
   return (
     <Sidebar>
       <SidebarBody>
-        <NavLink to={path(shelterIndex.siteMap.dashboard)} end>
-          {({isActive}) => (
-            <SidebarItem icon="insights" active={isActive}>
-              {m.dashboard}
-            </SidebarItem>
-          )}
-        </NavLink>
-        <NavLink to={path(shelterIndex.siteMap.data)} end>
-          {({isActive}) => (
-            <SidebarItem icon="table_chart" active={isActive}>
-              {m.data}
-            </SidebarItem>
-          )}
-        </NavLink>
-        <NavLink to={path(shelterIndex.siteMap.common)} end>
-          {({isActive}) => (
-            <SidebarItem icon="table_chart" active={isActive}>
-              {m.common}
-            </SidebarItem>
-          )}
-        </NavLink>
+        <SidebarSection title={m.shelter}>
+          <NavLink to={path(shelterIndex.siteMap.shelter.data)} end>
+            {({isActive}) => (
+              <SidebarItem icon="table_chart" active={isActive}>
+                {m.data}
+              </SidebarItem>
+            )}
+          </NavLink>
+          <NavLink to={path(shelterIndex.siteMap.shelter.dashboard)} end>
+            {({isActive}) => (
+              <SidebarItem icon="insights" active={isActive}>
+                {m.dashboard}
+              </SidebarItem>
+            )}
+          </NavLink>
+        </SidebarSection>
+        <SidebarSection title={m.common}>
+          <NavLink to={path(shelterIndex.siteMap.common.data)} end>
+            {({isActive}) => (
+              <SidebarItem icon="table_chart" active={isActive}>
+                {m.data}
+              </SidebarItem>
+            )}
+          </NavLink>
+          <NavLink to={path(shelterIndex.siteMap.common.dashboard)} end>
+            {({isActive}) => (
+              <SidebarItem icon="insights" active={isActive}>
+                {m.dashboard}
+              </SidebarItem>
+            )}
+          </NavLink>
+        </SidebarSection>
         <Link
           href={conf.linkToFeature(
             AppFeatureId.kobo_database,
@@ -94,7 +105,7 @@ export const ShelterWithAccess = () => {
   const {session, accesses} = useSession()
   const ctxSchema = useKoboSchemaContext()
   const location = useLocation()
-  useReactRouterDefaultRoute(shelterIndex.siteMap.data)
+  useReactRouterDefaultRoute(shelterIndex.siteMap.shelter.data)
   const {access, allowedOffices} = useMemo(() => {
     const dbAccesses = seq(accesses).filter(Access.filterByFeature(AppFeatureId.kobo_database))
     const allowedOffices = dbAccesses
@@ -103,7 +114,7 @@ export const ShelterWithAccess = () => {
     return {access: Access.toSum(dbAccesses, session.admin), allowedOffices}
   }, [session, accesses])
 
-  const isCommon = location.pathname.startsWith(shelterIndex.siteMap.common)
+  const isCommon = !!useMatch('common-spaces/*')
   const fetcherData = useShelterData()
 
   useEffect(() => {
@@ -125,7 +136,8 @@ export const ShelterWithAccess = () => {
     >
       {isCommon ? (
         <Routes>
-          <Route path={shelterIndex.siteMap.common} element={<CommonSpacesTable />} />
+          <Route path={shelterIndex.siteMap.common.dashboard} element={<CommonSpacesDashboard />} />
+          <Route path={shelterIndex.siteMap.common.data} element={<CommonSpacesTable />} />
         </Routes>
       ) : (
         ctxSchema.byName.shelter_nta.get &&
@@ -140,8 +152,8 @@ export const ShelterWithAccess = () => {
             schemaTa={ctxSchema.byName.shelter_ta.get}
           >
             <Routes>
-              <Route path={shelterIndex.siteMap.dashboard} element={<ShelterDashboard />} />
-              <Route path={shelterIndex.siteMap.data} element={<ShelterTable />} />
+              <Route path={shelterIndex.siteMap.shelter.dashboard} element={<ShelterDashboard />} />
+              <Route path={shelterIndex.siteMap.shelter.data} element={<ShelterTable />} />
               {relatedKoboForms.map((_) => (
                 <Route key={_} {...getKoboFormRouteProps({path: shelterIndex.siteMap.form(_), name: _})} />
               ))}
