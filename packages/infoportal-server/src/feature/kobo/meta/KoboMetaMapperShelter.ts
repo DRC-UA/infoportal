@@ -1,9 +1,9 @@
-import {fnSwitch, map} from '@axanc/ts-utils'
+import {match, map} from '@axanc/ts-utils'
+
 import {
   Bn_cashForRentRegistration,
   CashForRentStatus,
   DrcDonor,
-  DrcOffice,
   DrcProgram,
   DrcProject,
   DrcProjectHelper,
@@ -15,16 +15,18 @@ import {
   KoboMetaShelterRepairTags,
   KoboMetaStatus,
   KoboTagStatus,
+  KoboXmlMapper,
   safeArray,
   Shelter_cashForShelter,
   Shelter_nta,
   Shelter_ta,
   ShelterNtaTags,
   ShelterTaTags,
+  Shelter_commonSpaces,
 } from 'infoportal-common'
-import {KoboMetaOrigin} from './KoboMetaType.js'
+
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService.js'
-import {KoboXmlMapper} from 'infoportal-common'
+import type {KoboMetaOrigin} from './KoboMetaType.js'
 
 export namespace KoboMetaMapperShelter {
   export const createCfRent: MetaMapperInsert<
@@ -33,9 +35,8 @@ export namespace KoboMetaMapperShelter {
     const answer = Bn_cashForRentRegistration.map(row.answers)
     const persons = KoboXmlMapper.Persons.bn_cashForRentRegistration(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
-    const status = fnSwitch(
-      row.tags?.status!,
-      {
+    const status = match(row.tags?.status!)
+      .cases({
         FirstPending: KoboMetaStatus.Pending,
         FirstPaid: KoboMetaStatus.Pending,
         FirstRejected: KoboMetaStatus.Pending,
@@ -44,9 +45,9 @@ export namespace KoboMetaMapperShelter {
         SecondRejected: KoboMetaStatus.Pending,
         Selected: KoboMetaStatus.Rejected,
         Referred: undefined,
-      },
-      () => undefined,
-    )
+      })
+      .default(() => undefined)
+
     return KoboMetaMapper.make({
       enumerator: Bn_cashForRentRegistration.options.back_enum[answer.back_enum!],
       office: KoboXmlMapper.office(answer.back_office),
@@ -80,6 +81,7 @@ export namespace KoboMetaMapperShelter {
     const persons = KoboXmlMapper.Persons.shelter_cashForShelter(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const project = DrcProjectHelper.search(Shelter_cashForShelter.options.donor[answer.donor!])
+
     return KoboMetaMapper.make({
       enumerator: Shelter_cashForShelter.options.name_enum[answer.name_enum!],
       office: KoboXmlMapper.office(answer.back_office),
@@ -114,6 +116,7 @@ export namespace KoboMetaMapperShelter {
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const project = safeArray(row.tags?.project)
     const isCfRepair = answer.modality === 'cash_for_repair'
+
     return KoboMetaMapper.make({
       enumerator: Shelter_nta.options.enum_name[answer.enum_name!],
       office: KoboXmlMapper.office(answer.back_office),
@@ -158,5 +161,38 @@ export namespace KoboMetaMapperShelter {
         tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {},
       },
     }
+  }
+
+  export const createCommonSpaces: MetaMapperInsert<KoboMetaOrigin<Shelter_commonSpaces.T>> = (row) => {
+    const answer = Shelter_commonSpaces.map(row.answers)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
+
+    return KoboMetaMapper.make({
+      enumerator: answer.person_responsible,
+      office: KoboXmlMapper.office(answer.office),
+      oblast: oblast?.name!,
+      displacement: undefined,
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
+      settlement: answer.settlement,
+      sector: DrcSector.Shelter,
+      activity: isCfRepair ? DrcProgram.CashForRepair : DrcProgram.ShelterRepair,
+      personsCount: persons.length,
+      persons: persons,
+      lastName: answer.ben_det_surname_l,
+      project: project,
+      donor: project.map((_) => DrcProjectHelper.donorByProject[_]),
+      firstName: answer.ben_det_first_name_l,
+      patronymicName: answer.ben_det_pat_name_l,
+      taxId: answer.pay_det_tax_id_num,
+      phone: answer.ben_det_ph_number_l ? '' + answer.ben_det_ph_number_l : undefined,
+      status: KoboMetaHelper.mapCashStatus(row.tags?.status),
+      lastStatusUpdate: row.tags?.lastStatusUpdate,
+      passportNum: answer.pay_det_pass_num,
+      taxIdFileName: answer.pay_det_tax_id_ph,
+      taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
+      idFileName: answer.pay_det_id_ph,
+      idFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_id_ph),
+    })
   }
 }
