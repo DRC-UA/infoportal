@@ -66,6 +66,7 @@ import {
   Gbv_wgss_pdm,
   Gp_case_management,
   Protection_ipa_pdm,
+  Shelter_modernWomen,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
@@ -553,6 +554,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('protection_ipaPdm').id,
           fnMapKobo: Protection_ipa_pdm.map,
+          ...filters,
+        }),
+      ),
+      ...make('shelter_modern_women', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('shelter_modern_women').id,
+          fnMapKobo: Shelter_modernWomen.map,
           ...filters,
         }),
       ),
