@@ -6,7 +6,6 @@ import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {Shelter_commonSpaces} from 'infoportal-common/kobo/generated/Shelter_commonSpaces'
 import {useI18n} from '@/core/i18n'
 import {seq} from '@axanc/ts-utils'
-import {CommonSpacesEntity} from '@/features/Shelter/CommonSpaces/Data/CommonSpacesEntity'
 import {appConfig} from '@/conf/AppConfig'
 
 export const useCommonSpacesData = () => {
@@ -21,14 +20,14 @@ export const useCommonSpacesData = () => {
     if (!ans.get?.data) ans.fetch({})
   }, [schema, ans.get?.data])
 
-  const data = (seq(ans.get?.data) ?? []) as unknown as CommonSpacesEntity[]
+  const data = seq(ans.get?.data) ?? []
 
   const [periodSubmission, setPeriodSubmission] = useState<Partial<Period>>({})
   const [periodWorkDone, setPeriodWorkDone] = useState<Partial<Period>>({})
 
   const filterShape = useMemo(
     () =>
-      DataFilter.makeShape<CommonSpacesEntity>({
+      DataFilter.makeShape<Shelter_commonSpaces.T>({
         office: {
           icon: 'business',
           label: m.office,
@@ -125,12 +124,15 @@ export const useCommonSpacesData = () => {
   }
 
   const kpi = useMemo(() => {
-    const s = seq(filteredByDate)
-    const households = s.sum((_) => _.occupied_apartments ?? 0)
-    const persons = s.sum((_) => _.individuals ?? 0)
+    let households = 0
+    let persons = 0
+    for (const r of dataFiltered) {
+      households += r.occupied_apartments ?? 0
+      persons += r.individuals ?? 0
+    }
     const hhSize = households ? persons / households : 0
     return {households, persons, hhSize}
-  }, [filteredByDate])
+  }, [dataFiltered])
 
   return {
     form,

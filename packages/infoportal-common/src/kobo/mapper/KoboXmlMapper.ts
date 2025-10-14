@@ -50,6 +50,7 @@ import {
   Gp_case_management,
   Protection_ipa_pdm,
   Gbv_girl_shine,
+  Shelter_commonSpaces,
 } from '../generated/index.js'
 import {Shelter_modernWomen} from '../generated/Shelter_modernWomen'
 
@@ -1019,6 +1020,37 @@ export namespace KoboXmlMapper {
             .default(undefined),
         },
       ]
+    }
+
+    export const shelter_common_test: PersonsMapper<Shelter_commonSpaces.T> = (row) => {
+
+      console.log('Rows appartments:' + row.apartment_information?.[0])
+      const commonEntries =
+        row.apartment_information?.filter(
+          (entry) =>
+            entry.hh_char_hh_det_dis_select !== undefined ||
+            entry.hh_char_hh_det_dis_level !== undefined ||
+            entry.hh_char_hh_det_age !== undefined ||
+            entry.hh_char_hh_det_gender !== undefined,
+        ) ?? []
+
+      return commonEntries.map(
+        ({hh_char_hh_det_age, hh_char_hh_det_gender, hh_char_hh_det_dis_select, hh_char_hh_det_dis_level}) => ({
+          age: safeAge(hh_char_hh_det_age),
+          gender: match(hh_char_hh_det_gender)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            })
+            .default(() => undefined),
+          displacement: undefined,
+          disability: Disability.common({
+            hh_char_hh_det_dis_level: hh_char_hh_det_dis_level as any,
+            hh_char_hh_det_dis_select: hh_char_hh_det_dis_select as any,
+          }),
+        }),
+      )
+      console.dir(row.apartment_information?.[0], { depth: null })
     }
   }
 
