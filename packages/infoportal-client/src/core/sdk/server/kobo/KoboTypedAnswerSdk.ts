@@ -66,7 +66,7 @@ import {
   Gbv_wgss_pdm,
   Gp_case_management,
   Protection_ipa_pdm,
-  Shelter_modernWomen
+  Shelter_modernWomen,
 } from 'infoportal-common'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
 import {fnSwitch, seq} from '@axanc/ts-utils'
