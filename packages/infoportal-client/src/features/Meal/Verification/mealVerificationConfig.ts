@@ -12,6 +12,7 @@ export const visibleMealVerificationActivityIds = [
   'ECREC VET BHA-388',
   '[Ecrec] Small Scale Farmer Registration Form',
   'ECREC MSME BHA-388',
+  'Partner LMW',
 ]
 
 export const mealVerificationConf = {
@@ -797,6 +798,39 @@ export const mealVerificationActivities = seq([
         reg: (_) => _.hh_char_hh_det?.[0].ben_det_res_stat,
         verif: (_) => _.ben_det_res_stat,
       },
+      ben_det_income: 'AUTO_MAPPING',
+      ben_det_hh_size: 'AUTO_MAPPING',
+      current_gov_assist_cff: 'AUTO_MAPPING',
+      type_property_living: 'AUTO_MAPPING',
+      utilities_fuel: 'AUTO_MAPPING',
+      functioning_fuel_delivery: 'AUTO_MAPPING',
+    },
+  }),
+  registerActivity({
+    sampleSizeRatio: 0.1,
+    label: 'Partner LMW',
+    id: 'Partner LMW',
+    registration: {
+      koboFormId: KoboIndex.byName('shelter_modern_women').id,
+      fetch: 'shelter_modern_women',
+      joinBy: (_) => _.pay_det_tax_id_num!,
+    },
+    verification: {
+      koboFormId: KoboIndex.byName('meal_verificationPartnerBnre').id,
+      fetch: 'meal_verificationPartnerBnre',
+      joinBy: (_) => _.pay_det_tax_id_num!,
+    },
+    verifiedColumns: {
+      back_consent: 'AUTO_MAPPING',
+      ben_det_surname: 'AUTO_MAPPING',
+      ben_det_first_name: 'AUTO_MAPPING',
+      ben_det_pat_name: 'AUTO_MAPPING',
+      ben_det_ph_number: 'AUTO_MAPPING',
+      ben_det_oblast: 'AUTO_MAPPING',
+      ben_det_raion: 'AUTO_MAPPING',
+      ben_det_hromada: 'AUTO_MAPPING',
+      ben_det_settlement: 'AUTO_MAPPING',
+      ben_det_res_stat: 'AUTO_MAPPING',
       ben_det_income: 'AUTO_MAPPING',
       ben_det_hh_size: 'AUTO_MAPPING',
       current_gov_assist_cff: 'AUTO_MAPPING',
