@@ -53,6 +53,14 @@ export const CommonSpacesTable = () => {
       })),
     [],
   )
+  const repairstandardsSelectOptions: IpSelectOption<Shelter_commonSpaces.Option<'compliance_standards'>>[] = useMemo(
+    () =>
+      Object.entries(Shelter_commonSpaces.options.compliance_standards).map(([value, text]) => ({
+        value: value as Shelter_commonSpaces.Option<'compliance_standards'>,
+        children: text,
+      })),
+    [],
+  )
   const columns = useMemo(() => {
     if (!schema) return []
     const trC = (q: string, v?: string) => (v ? schema.translate.choice(q, v) : '')
@@ -383,6 +391,92 @@ export const CommonSpacesTable = () => {
               options={modalitySelectOptions}
             />
           ),
+        }),
+      },
+      {
+        id: 'repairstandards',
+        head: m._shelter.repairStandards,
+        type: 'select_one',
+        width: 190,
+        options: () =>
+          Object.entries(Shelter_commonSpaces.options.compliance_standards).map(([value, text]) => ({
+            value,
+            label: text,
+          })),
+        subHeader: selectedIds.length > 0 && (
+          <TableEditCellBtn
+            onClick={() =>
+              ctxKoboUpdate.openByName({
+                target: 'answer',
+                params: {
+                  formName: 'shelter_commonSpaces',
+                  answerIds: selectedIds,
+                  question: 'compliance_standards',
+                },
+              })
+            }
+          />
+        ),
+        render: (row) => ({
+          option: row.compliance_standards,
+          value: row.compliance_standards,
+          label: (
+            <IpSelectSingle<Shelter_commonSpaces.Option<'compliance_standards'>>
+              value={(row.compliance_standards ?? null) as Shelter_commonSpaces.Option<'compliance_standards'> | null}
+              onChange={(compliance_standards) =>
+                ctxKoboUpdate.asyncUpdateByName.answer.call({
+                  formName: 'shelter_commonSpaces',
+                  answerIds: [row.id],
+                  question: 'compliance_standards',
+                  answer: (compliance_standards ?? undefined) as
+                    | Shelter_commonSpaces.Option<'compliance_standards'>
+                    | undefined,
+                })
+              }
+              options={repairstandardsSelectOptions}
+            />
+          ),
+        }),
+      },
+      {
+        id: 'notRepairStandards',
+        head: m._shelter.notRepairStandards,
+        type: 'string',
+        typeIcon: null,
+        width: 180,
+        subHeader: selectedIds.length > 0 && (
+          <TableEditCellBtn
+            onClick={() =>
+              ctxKoboUpdate.openByName({
+                target: 'answer',
+                params: {
+                  formName: 'shelter_commonSpaces',
+                  answerIds: selectedIds,
+                  question: 'compliance_standards_no',
+                },
+              })
+            }
+          />
+        ),
+        render: (row) => ({
+          value: row.compliance_standards_no,
+          label:
+            row.compliance_standards === 'no' ? (
+              <TableInput
+                originalValue={row.compliance_standards_no ?? null}
+                value={row.compliance_standards_no}
+                onChange={(val) =>
+                  ctxKoboUpdate.asyncUpdateByName.answer.call({
+                    formName: 'shelter_commonSpaces',
+                    answerIds: [row.id],
+                    question: 'compliance_standards_no',
+                    answer: val ?? undefined,
+                  })
+                }
+              />
+            ) : (
+              (row.compliance_standards_no ?? '')
+            ),
         }),
       },
     ])
