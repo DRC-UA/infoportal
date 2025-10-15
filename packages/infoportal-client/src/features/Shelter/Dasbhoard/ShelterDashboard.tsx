@@ -19,7 +19,7 @@ import {
   shelterDrcProject,
   ShelterProgress,
   ShelterTaPriceLevel,
-  Shelterstandards,
+  ShelterStandards,
 } from 'infoportal-common'
 
 import {MapSvg} from '@/shared/maps/MapSvg'
@@ -264,7 +264,7 @@ export const _ShelterDashboard = ({data, currency}: {currency: Currency; data: S
     groups: [{by: ({ta}) => ta?.tags?.standards!}],
     finalTransform: (input) =>
       input.map(({ta}) => ({
-        standardCompliance: match(ta?.tags?.standards as unknown as keyof typeof Shelterstandards)
+        standardCompliance: match(ta?.tags?.standards as unknown as keyof typeof ShelterStandards)
           .cases({
             yes: 'yes',
             no: 'no',
