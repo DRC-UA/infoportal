@@ -107,6 +107,14 @@ const uk = deepmerge(en, {
     },
     _shelter: {
       damageCondition: 'What is the Condition of the Building / Apartment',
+      repairStandardsWidget: {
+        chartTitle: (n: number) => `Відповідність стандартам ${n} відремонтованих локацій`,
+        labels: {
+          yes: 'Відповідає',
+          no: 'Не відповідає',
+          notDefined: 'Не визначено',
+        },
+      },
     },
     legal: {
       individualAid: 'Індивідуальна юридична допомога',

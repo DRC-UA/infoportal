@@ -1366,6 +1366,14 @@ const en = Object.freeze({
         yes: 'Yes',
         no: 'No',
       },
+      repairStandardsWidget: {
+        chartTitle: (n: number) => `Compliance with standards for ${n} of repaired sites`,
+        labels: {
+          yes: 'Compliant',
+          no: 'Non-compliant',
+          notDefined: 'Not defined',
+        },
+      },
     },
     note: 'Note',
     projectCode: 'Project Code',
