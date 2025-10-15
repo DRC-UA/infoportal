@@ -183,9 +183,17 @@ const DatabaseKoboRepeat = ({
     return flat.find((r) => keyOf(r) === selected[0])
   }, [flat, selected])
 
-  const {columns, filters} = useMemo(() => {
+  const filters = useMemo(
+    () => ({
+      id: qs.id,
+      ...(qs.index ? {_parent_index: {value: qs.index}} : {}),
+    }),
+    [qs.id, qs.index],
+  )
+
+  const columns = useMemo(() => {
     const enableEdit = selected.length > 0
-    const res = getColumnsForRepeatGroup({
+    return getColumnsForRepeatGroup({
       groupName: groupInfo.name,
       formId,
       schema,
@@ -227,7 +235,6 @@ const DatabaseKoboRepeat = ({
                   )
                   const baseXPath = getXPathByName(qName)
 
-
                   const othersPayloads = others.map((r) => ({
                     formId,
                     answerIds: [String(r.id)],
@@ -252,14 +259,7 @@ const DatabaseKoboRepeat = ({
       onRepeatGroupClick: ({name, row}) =>
         navigate(databaseIndex.siteMap.group.absolute(formId, name, row.id, row._index)),
     })
-    return {
-      columns: res,
-      filters: {
-        id: qs.id,
-        ...(qs.index ? {_parent_index: {value: qs.index}} : {}),
-      },
-    }
-  }, [formId, schema, groupInfo.name, t, m, selected, qs.id, qs.index, navigate])
+  }, [formId, schema, groupInfo.name, t, m, selected, selectedRow, navigate])
 
   return (
     <Datatable
