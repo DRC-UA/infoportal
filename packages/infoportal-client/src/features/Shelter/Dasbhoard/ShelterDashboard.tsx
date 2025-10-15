@@ -5,8 +5,10 @@ import React, {useMemo, useState} from 'react'
 import {Box} from '@mui/material'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {useI18n} from '@/core/i18n'
-import {fnSwitch, Obj, seq, Seq} from '@axanc/ts-utils'
+import {fnSwitch, Obj, seq, Seq, match} from '@axanc/ts-utils'
+
 import {
+  groupBy,
   DrcOffice,
   KoboValidation,
   OblastIndex,
@@ -17,7 +19,9 @@ import {
   shelterDrcProject,
   ShelterProgress,
   ShelterTaPriceLevel,
+  Shelterstandards,
 } from 'infoportal-common'
+
 import {MapSvg} from '@/shared/maps/MapSvg'
 import {Currency} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {DashboardFilterLabel} from '@/shared/DashboardLayout/DashboardFilterLabel'
@@ -254,6 +258,20 @@ export const _ShelterDashboard = ({data, currency}: {currency: Currency; data: S
   const {m, formatLargeNumber} = useI18n()
   const {conf} = useAppSettings()
   const persons = useMemo(() => data.flatMap((_) => _.persons ?? []), [data])
+  const completeWorksData = data.filter(({ta}) => ta?.tags?.progress === ShelterProgress.RepairWorksCompleted)
+  const {transforms} = groupBy({
+    data: completeWorksData,
+    groups: [{by: ({ta}) => ta?.tags?.standards!}],
+    finalTransform: (input) =>
+      input.map(({ta}) => ({
+        standardCompliance: match(ta?.tags?.standards as unknown as keyof typeof Shelterstandards)
+          .cases({
+            yes: 'yes',
+            no: 'no',
+          })
+          .default('notDefined'),
+      })),
+  })
 
   return (
     <Div responsive>
@@ -379,6 +397,13 @@ export const _ShelterDashboard = ({data, currency}: {currency: Currency; data: S
             filter={(_) => !!_.ta?.tags?.damageLevel}
             by={(_) => _.ta?.tags?.damageLevel}
             label={ShelterTaPriceLevel}
+          />
+        </SlidePanel>
+        <SlidePanel title={m._shelter.repairStandardsWidget.chartTitle(completeWorksData.length ?? 0)}>
+          <ChartBarSingleBy
+            data={seq(transforms.flat())}
+            by={({standardCompliance}) => standardCompliance}
+            label={m._shelter.repairStandardsWidget.labels}
           />
         </SlidePanel>
       </Div>
