@@ -149,6 +149,7 @@ export interface ShelterTaTags extends KoboBaseTags {
   price?: number
   damageLevel: ShelterTaPriceLevel
   standards?: Shelterstandards
+  notRepairStandards?: string
 }
 
 export class ShelterTaTagsHelper {

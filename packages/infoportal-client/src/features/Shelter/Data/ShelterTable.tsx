@@ -1333,6 +1333,48 @@ export const ShelterTable = () => {
           }
         },
       },
+      {
+        id: 'notRepairStandards',
+        group: 'ta',
+        groupLabel: KoboIndex.byName('shelter_ta').translation,
+        head: m._shelter.notRepairStandards,
+        type: 'string',
+        subHeader: selectedTa.length > 0 && (
+          <TableEditCellBtn
+            onClick={() =>
+              ctxKoboUpdate.openByName({
+                target: 'tag',
+                params: {
+                  formName: 'shelter_ta',
+                  answerIds: selectedTa,
+                  type: 'text',
+                  tag: 'notRepairStandards',
+                },
+              })
+            }
+          />
+        ),
+        render: (row) => {
+          return {
+            value: row.ta?.tags?.notRepairStandards,
+            label:row.ta?.tags?.standards === Shelterstandards.no &&
+                  map(row.ta, (ta) => (
+              <TableInput
+                originalValue={null}
+                value={row.ta?.tags?.notRepairStandards}
+                onChange={(_) =>
+                  ctxKoboUpdate.asyncUpdateByName.tag.call({
+                    formName: 'shelter_ta',
+                    answerIds: [ta.id],
+                    tag: 'notRepairStandards',
+                    value: _,
+                  })
+                }
+              />
+            )),
+          }
+        },
+      },
     ])
   }, [ctx.data.mappedData, ctx.langIndex, selectedIds])
 

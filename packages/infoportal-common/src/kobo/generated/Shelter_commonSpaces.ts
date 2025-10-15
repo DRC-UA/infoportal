@@ -1,6 +1,5 @@
 export namespace Shelter_commonSpaces {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: a5LCi33Fte33grspeZFANk
   export interface T {
     start: string
@@ -93,8 +92,9 @@ export namespace Shelter_commonSpaces {
     work_done: Date | undefined
     // compliance_standards [select_one] Compliance with technical and performance standards
     compliance_standards: undefined | Option<'compliance_standards'>
+    // compliance_standards_no [text] If 'No', please specify what issue is
+    compliance_standards_no: string | undefined
   }
-
   export const options = {
     compliance_standards: {
       yes: `Yes`,

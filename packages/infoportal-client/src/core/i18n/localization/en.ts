@@ -1321,6 +1321,7 @@ const en = Object.freeze({
       doorsSum: 'Σ Door (pc)',
       agreement: 'Agreement',
       workOrder: 'Work order',
+      notRepairStandards:'Please specify what issue is',
       complianceStandards: 'Compliance standards',
       contractor: 'Contractor',
       contractor1: 'Contractor lot 1',
