@@ -53,7 +53,7 @@ export const CommonSpacesTable = () => {
       })),
     [],
   )
-   const repairstandardsSelectOptions: IpSelectOption<Shelter_commonSpaces.Option<'compliance_standards'>>[] = useMemo(
+  const repairstandardsSelectOptions: IpSelectOption<Shelter_commonSpaces.Option<'compliance_standards'>>[] = useMemo(
     () =>
       Object.entries(Shelter_commonSpaces.options.compliance_standards).map(([value, text]) => ({
         value: value as Shelter_commonSpaces.Option<'compliance_standards'>,
@@ -461,23 +461,22 @@ export const CommonSpacesTable = () => {
         render: (row) => ({
           value: row.compliance_standards_no,
           label:
-      row.compliance_standards === 'no' ? (
-      <TableInput
-          originalValue={row.compliance_standards_no ?? null}
-          value={row.compliance_standards_no}
-          onChange={(val) =>
-            ctxKoboUpdate.asyncUpdateByName.answer.call({
-              formName: 'shelter_commonSpaces',
-              answerIds: [row.id],
-              question: 'compliance_standards_no',
-              answer: val ?? undefined,
-            })
-              }
-            />
-          ):
-          (
-        row.compliance_standards_no ?? ''
-      ),
+            row.compliance_standards === 'no' ? (
+              <TableInput
+                originalValue={row.compliance_standards_no ?? null}
+                value={row.compliance_standards_no}
+                onChange={(val) =>
+                  ctxKoboUpdate.asyncUpdateByName.answer.call({
+                    formName: 'shelter_commonSpaces',
+                    answerIds: [row.id],
+                    question: 'compliance_standards_no',
+                    answer: val ?? undefined,
+                  })
+                }
+              />
+            ) : (
+              (row.compliance_standards_no ?? '')
+            ),
         }),
       },
     ])

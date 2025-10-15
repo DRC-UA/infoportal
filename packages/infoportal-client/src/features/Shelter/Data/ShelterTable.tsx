@@ -12,7 +12,7 @@ import {
   ShelterContractor,
   shelterDrcProject,
   ShelterProgress,
-  Shelterstandards,
+  ShelterStandards,
   ShelterTaPriceLevel,
 } from 'infoportal-common'
 
@@ -1284,13 +1284,13 @@ export const ShelterTable = () => {
         },
       },
       {
-        id: 'repairstandards',
+        id: 'repairStandards',
         group: 'ta',
         groupLabel: KoboIndex.byName('shelter_ta').translation,
         width: 148,
         head: m._shelter.repairStandards,
         type: 'select_one',
-        options: () => Obj.keys(Shelterstandards).map((_) => ({value: _, label: _})),
+        options: () => Obj.keys(ShelterStandards).map((_) => ({value: _, label: _})),
         typeIcon: null,
         subHeader: selectedTa.length > 0 && (
           <TableEditCellBtn
@@ -1301,7 +1301,7 @@ export const ShelterTable = () => {
                   formName: 'shelter_ta',
                   answerIds: selectedTa,
                   type: 'select_one',
-                  options: Obj.values(Shelterstandards),
+                  options: Obj.values(ShelterStandards),
                   tag: 'standards',
                 },
               })
@@ -1316,7 +1316,7 @@ export const ShelterTable = () => {
               row.ta?.tags?.progress === ShelterProgress.RepairWorksCompleted &&
               map(row.ta, (ta) => {
                 return (
-                  <IpSelectSingle<Shelterstandards>
+                  <IpSelectSingle<ShelterStandards>
                     value={ta.tags?.standards}
                     onChange={(standard) => {
                       ctxKoboUpdate.asyncUpdateByName.tag.call({
@@ -1326,7 +1326,7 @@ export const ShelterTable = () => {
                         value: standard,
                       })
                     }}
-                    options={Obj.keys(Shelterstandards)}
+                    options={Obj.keys(ShelterStandards)}
                   />
                 )
               }),
@@ -1355,23 +1355,25 @@ export const ShelterTable = () => {
           />
         ),
         render: (row) => {
+          const showInput = row.ta?.tags?.standards === ShelterStandards.no
           return {
             value: row.ta?.tags?.notRepairStandards,
-            label:row.ta?.tags?.standards === Shelterstandards.no &&
-                  map(row.ta, (ta) => (
-              <TableInput
-                originalValue={null}
-                value={row.ta?.tags?.notRepairStandards}
-                onChange={(_) =>
-                  ctxKoboUpdate.asyncUpdateByName.tag.call({
-                    formName: 'shelter_ta',
-                    answerIds: [ta.id],
-                    tag: 'notRepairStandards',
-                    value: _,
-                  })
-                }
-              />
-            )),
+            label: showInput
+              ? map(row.ta, (ta) => (
+                  <TableInput
+                    originalValue={null}
+                    value={row.ta?.tags?.notRepairStandards}
+                    onChange={(_) =>
+                      ctxKoboUpdate.asyncUpdateByName.tag.call({
+                        formName: 'shelter_ta',
+                        answerIds: [ta.id],
+                        tag: 'notRepairStandards',
+                        value: _,
+                      })
+                    }
+                  />
+                ))
+              : (row.ta?.tags?.notRepairStandards ?? ''),
           }
         },
       },
