@@ -1,7 +1,8 @@
+import type {IKoboMeta} from 'infoportal-common'
+
 import {ApiClient} from '@/core/sdk/server/ApiClient'
 import {KoboMetaHelper, KoboMetaSearchParams} from '@/core/sdk/server/kobo-meta/KoboMeta'
 import {ApiPaginate, ApiSdkUtils} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {IKoboMeta} from 'infoportal-common'
 
 export class KoboMetaSdk {
   constructor(private client: ApiClient) {}

@@ -1,9 +1,9 @@
-import {fnSwitch, map} from '@axanc/ts-utils'
+import {map, match} from '@axanc/ts-utils'
+
 import {
   Bn_cashForRentRegistration,
   CashForRentStatus,
   DrcDonor,
-  DrcOffice,
   DrcProgram,
   DrcProject,
   DrcProjectHelper,
@@ -15,6 +15,7 @@ import {
   KoboMetaShelterRepairTags,
   KoboMetaStatus,
   KoboTagStatus,
+  KoboXmlMapper,
   safeArray,
   Shelter_cashForShelter,
   Shelter_nta,
@@ -22,9 +23,9 @@ import {
   ShelterNtaTags,
   ShelterTaTags,
 } from 'infoportal-common'
+
 import {KoboMetaOrigin} from './KoboMetaType.js'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService.js'
-import {KoboXmlMapper} from 'infoportal-common'
 
 export namespace KoboMetaMapperShelter {
   export const createCfRent: MetaMapperInsert<
@@ -33,9 +34,8 @@ export namespace KoboMetaMapperShelter {
     const answer = Bn_cashForRentRegistration.map(row.answers)
     const persons = KoboXmlMapper.Persons.bn_cashForRentRegistration(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
-    const status = fnSwitch(
-      row.tags?.status!,
-      {
+    const status = match(row.tags?.status!)
+      .cases({
         FirstPending: KoboMetaStatus.Pending,
         FirstPaid: KoboMetaStatus.Pending,
         FirstRejected: KoboMetaStatus.Pending,
@@ -44,9 +44,9 @@ export namespace KoboMetaMapperShelter {
         SecondRejected: KoboMetaStatus.Pending,
         Selected: KoboMetaStatus.Rejected,
         Referred: undefined,
-      },
-      () => undefined,
-    )
+      })
+      .default(undefined)
+
     return KoboMetaMapper.make({
       enumerator: Bn_cashForRentRegistration.options.back_enum[answer.back_enum!],
       office: KoboXmlMapper.office(answer.back_office),
@@ -80,6 +80,7 @@ export namespace KoboMetaMapperShelter {
     const persons = KoboXmlMapper.Persons.shelter_cashForShelter(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const project = DrcProjectHelper.search(Shelter_cashForShelter.options.donor[answer.donor!])
+
     return KoboMetaMapper.make({
       enumerator: Shelter_cashForShelter.options.name_enum[answer.name_enum!],
       office: KoboXmlMapper.office(answer.back_office),
@@ -114,6 +115,7 @@ export namespace KoboMetaMapperShelter {
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const project = safeArray(row.tags?.project)
     const isCfRepair = answer.modality === 'cash_for_repair'
+
     return KoboMetaMapper.make({
       enumerator: Shelter_nta.options.enum_name[answer.enum_name!],
       office: KoboXmlMapper.office(answer.back_office),
@@ -147,14 +149,16 @@ export namespace KoboMetaMapperShelter {
     row,
   ) => {
     const answers = Shelter_ta.map(row.answers)
+
     if (!row.tags || !answers.nta_id) return
+
     return {
       value: answers.nta_id,
       originMetaKey: 'koboId',
       changes: {
         referencedFormId: KoboIndex.byName('shelter_ta').id,
         status: row.tags.workDoneAt ? KoboMetaStatus.Committed : KoboMetaStatus.Pending,
-        lastStatusUpdate: row.tags.workDoneAt,
+        lastStatusUpdate: row.tags.workDoneAt && new Date(row.tags.workDoneAt),
         tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {},
       },
     }
