@@ -1,6 +1,9 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
-import {ApiPaginateHelper, KeyOf, multipleFilters, safeNumber} from 'infoportal-common'
-import {fnSwitch, map, Obj} from '@axanc/ts-utils'
+import {OrderBy} from '@alexandreannic/react-hooks-lib'
+import {match, map, Obj} from '@axanc/ts-utils'
+
+import {ApiPaginateHelper, KeyOf, KoboIndex, multipleFilters, safeNumber} from 'infoportal-common'
+
 import {
   DatatableColumn,
   DatatableFilterTypeMapping,
@@ -9,7 +12,6 @@ import {
   DatatableSearch,
   DatatableTableProps,
 } from '@/shared/Datatable/util/datatableType'
-import {OrderBy} from '@alexandreannic/react-hooks-lib'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 
@@ -53,16 +55,16 @@ export const useDatatableData = <T extends DatatableRow>({
   }, [])
 
   const filteredData = useMemo(() => {
-    return filterBy({data, filters, columnsIndex})
-  }, [data, filters])
+    return filterBy({data, filters, columnsIndex, id})
+  }, [data, filters, id])
 
   const filterExceptBy = useCallback(
     (key: KeyOf<T>) => {
       const filtersCopy = {...filters}
       delete filtersCopy[key]
-      return filterBy({data, filters: filtersCopy, columnsIndex})
+      return filterBy({data, filters: filtersCopy, columnsIndex, id})
     },
-    [data, filters],
+    [data, filters, id],
   )
 
   const filteredAndSortedData = useMemo(() => {
@@ -74,9 +76,8 @@ export const useDatatableData = <T extends DatatableRow>({
         }
         if (!col.type) return
         const sorted = d.sort(
-          fnSwitch(
-            col.type,
-            {
+          match(col.type)
+            .cases({
               number: () => (a: T, b: T) => {
                 const av = safeNumber(col.render(a).value as number, Number.MIN_SAFE_INTEGER)
                 const bv = safeNumber(col.render(b).value as number, Number.MIN_SAFE_INTEGER)
@@ -92,13 +93,12 @@ export const useDatatableData = <T extends DatatableRow>({
                   return -1
                 }
               },
-            },
-            () => (a: T, b: T) => {
+            })
+            .default(() => (a: T, b: T) => {
               const av = (col.render(a).value ?? '') + ''
               const bv = (col.render(b).value ?? '') + ''
               return av.localeCompare(bv) * (search.orderBy === 'asc' ? -1 : 1)
-            },
-          ),
+            }),
         )
         return [...sorted]
       }) ?? filteredData
@@ -129,10 +129,12 @@ const filterBy = <T extends DatatableRow>({
   data,
   filters,
   columnsIndex,
+  id,
 }: {
   data?: T[]
   filters: Record<KeyOf<T>, DatatableFilterValue>
   columnsIndex: Record<KeyOf<T>, DatatableColumn.InnerProps<T>>
+  id?: string
 }) => {
   if (!data) return
   return multipleFilters(
@@ -141,6 +143,23 @@ const filterBy = <T extends DatatableRow>({
       const filter = filters[k]
       const col = columnsIndex[k]
       if (col === undefined || filter === undefined) return
+
+      // Make custom filtering for Case Numbers in BN_RE form the same way IDs are filtered
+      if (id === KoboIndex.byName('bn_re').id && col.id === 'back_un_id') {
+        return (() => {
+          const typedFilter = filter as DatatableFilterTypeMapping['id']
+          const filteredCaseNumbers = typedFilter.split(/\s/)
+          return (row) => {
+            let v = col.render(row).value as string | undefined
+            if (v === undefined) return false
+            if (filteredCaseNumbers.length === 1) return v.includes(filteredCaseNumbers[0])
+            if (filteredCaseNumbers.length > 1) return filteredCaseNumbers.includes(v)
+            return false
+          }
+        })()
+      }
+
+      // let's get back to normal filtering
       switch (col.type) {
         case 'id': {
           const typedFilter = filter as DatatableFilterTypeMapping['id']
