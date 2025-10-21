@@ -87,9 +87,7 @@ export const DatatableFilterModal = ({
 }: DatatableFilterDialogProps) => {
   const {m} = useI18n()
   const [innerValue, setInnerValue] = useState<any>(value)
-  const {
-    form: {id: formId},
-  } = useDatabaseKoboTableContext()
+  const {form} = useDatabaseKoboTableContext()
 
   useEffect(() => {
     value && setInnerValue(value)
@@ -138,7 +136,7 @@ export const DatatableFilterModal = ({
         {type &&
           (() => {
             // Make custom filtering for Case Numbers in BN_RE form the same way IDs are filtered
-            if (formId === KoboIndex.byName('bn_re').id && columnId === 'back_un_id')
+            if (form?.id === KoboIndex.byName('bn_re').id && columnId === 'back_un_id')
               return (
                 <>
                   <Alert color="info" sx={{py: 0, mb: 1}}>
