@@ -188,6 +188,7 @@ const DatatableHeadTdBody = ({
             return <DatatableHeadCopyIds column={column} />
         }
       })()}
+      {column.id === 'back_un_id' ? <DatatableHeadCopyIds column={column} /> : null}
       {column.type && (
         <TableIconBtn color={active ? 'primary' : undefined} children="filter_alt" onClick={(e) => onOpenFilter(e)} />
       )}

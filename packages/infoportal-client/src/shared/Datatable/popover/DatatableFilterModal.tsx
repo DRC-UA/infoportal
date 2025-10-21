@@ -1,3 +1,8 @@
+import {Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useState} from 'react'
+import {OrderBy} from '@alexandreannic/react-hooks-lib'
+import {seq} from '@axanc/ts-utils'
+import {endOfDay} from 'date-fns'
+import {type} from 'os'
 import {
   Alert,
   Box,
@@ -11,20 +16,20 @@ import {
   Slider,
   Switch,
 } from '@mui/material'
-import {IpBtn, IpIconBtn, MultipleChoices} from '@/shared'
+
+import {KoboIndex} from 'infoportal-common'
+
 import {useI18n} from '@/core/i18n'
-import React, {Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useState} from 'react'
-import {IpInput} from '../../Input/Input'
-import {PeriodPicker} from '../../PeriodPicker/PeriodPicker'
-import {Txt} from '@/shared/Txt'
-import {OrderBy} from '@alexandreannic/react-hooks-lib'
+import {useDatabaseKoboTableContext} from '@/features/Database/KoboTable/DatabaseKoboContext'
+import {IpBtn, IpIconBtn, MultipleChoices} from '@/shared'
+import {useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
+import {DatatableFilterTypeMapping, DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {PanelBody, PanelHead} from '@/shared/Panel'
 import {PanelFoot} from '@/shared/Panel/PanelFoot'
-import {DatatableFilterTypeMapping, DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
-import {type} from 'os'
-import {seq} from '@axanc/ts-utils'
-import {useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
-import {endOfDay} from 'date-fns'
+import {Txt} from '@/shared/Txt'
+
+import {IpInput} from '../../Input/Input'
+import {PeriodPicker} from '../../PeriodPicker/PeriodPicker'
 
 export type DatatableFilterDialogProps = Pick<PopoverProps, 'anchorEl'> & {
   orderBy?: OrderBy
@@ -74,7 +79,6 @@ export const DatatableFilterModal = ({
   onClear,
   onClose,
   anchorEl,
-  // schema,
   columnId,
   title,
   options,
@@ -83,6 +87,10 @@ export const DatatableFilterModal = ({
 }: DatatableFilterDialogProps) => {
   const {m} = useI18n()
   const [innerValue, setInnerValue] = useState<any>(value)
+  const {
+    form: {id: formId},
+  } = useDatabaseKoboTableContext()
+
   useEffect(() => {
     value && setInnerValue(value)
   }, [value])
@@ -129,6 +137,21 @@ export const DatatableFilterModal = ({
         </Box>
         {type &&
           (() => {
+            // Make custom filtering for Case Numbers in BN_RE form the same way IDs are filtered
+            if (formId === KoboIndex.byName('bn_re').id && columnId === 'back_un_id')
+              return (
+                <>
+                  <Alert color="info" sx={{py: 0, mb: 1}}>
+                    {m._datatable.idFilterInfo}
+                  </Alert>
+                  <IpInput
+                    value={innerValue}
+                    onChange={(e) => setInnerValue(e.target.value)}
+                    placeholder={m._datatable.idFilterPlaceholder}
+                  />
+                </>
+              )
+
             switch (type) {
               case 'id': {
                 return (
