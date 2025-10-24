@@ -17,12 +17,12 @@ import {AppHeader} from '@/shared/Layout/Header/AppHeader'
 import {Sidebar, SidebarBody, SidebarItem} from '@/shared/Layout/Sidebar'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 
+import DashboardPss from './DashboardPss'
+
 const relatedKoboForms: KoboFormName[] = [
-  // 'protection_hhs2_1',
   'protection_communityMonitoring',
   'protection_groupSession',
   'protection_pss',
-  // 'protection_hhs1',
   'protection_gbv',
   'protection_coc',
   'safeguarding_psea',
@@ -32,6 +32,7 @@ export const protectionIndex = {
   basePath: '/protection',
   siteMap: {
     dashboard: '/dashboard',
+    dashboardPss: '/dashboard-pss',
     dashboardTabs: '/dashboard-tabs',
     form: (id = ':id') => '/form/' + id,
   },
@@ -41,14 +42,22 @@ export const ProtectionSidebar = () => {
   const path = (page: string) => '' + page
   const {conf} = useAppSettings()
   const {m} = useI18n()
+
   return (
     <Sidebar>
       <SidebarBody>
         <SidebarSection title={m.general}>
           <NavLink to={path(protectionIndex.siteMap.dashboard)}>
-            {({isActive, isPending}) => (
+            {({isActive}) => (
               <SidebarItem icon="home" active={isActive}>
                 {m.overview}
+              </SidebarItem>
+            )}
+          </NavLink>
+          <NavLink to={path(protectionIndex.siteMap.dashboardPss)}>
+            {({isActive}) => (
+              <SidebarItem icon={appConfig.icons.dashboard} active={isActive}>
+                PSS Dashboard
               </SidebarItem>
             )}
           </NavLink>
@@ -97,6 +106,7 @@ export const ProtectionSidebar = () => {
 
 export const Protection = () => {
   useReactRouterDefaultRoute(protectionIndex.siteMap.dashboard)
+
   return (
     <Layout
       title={appFeaturesIndex.protection.name}
@@ -105,6 +115,7 @@ export const Protection = () => {
     >
       <Routes>
         <Route path={protectionIndex.siteMap.dashboard} element={<ProtectionOverview />} />
+        <Route path={protectionIndex.siteMap.dashboardPss} element={<DashboardPss />} />
         <Route path="/dashboard-tabs" element={<ProtectionDashboardTabs />} />
         {relatedKoboForms.map((_) => (
           <Route key={_} {...getKoboFormRouteProps({path: protectionIndex.siteMap.form(_), name: _})} />
