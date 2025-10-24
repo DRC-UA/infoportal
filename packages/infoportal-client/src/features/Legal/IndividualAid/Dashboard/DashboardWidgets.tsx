@@ -9,7 +9,6 @@ import {
   Legal_individual_aid,
   OblastIndex,
   pickPrioritizedAid,
-  pluralize,
 } from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
@@ -65,7 +64,7 @@ const Widgets: FC = () => {
           <SlideWidget icon="person" title={m.individuals}>
             {dataFiltered.length}
           </SlideWidget>
-          <SlideWidget icon="cases" title={pluralize(m.legal.aidType.assistance)}>
+          <SlideWidget icon="cases" title={m.legal.aidType.assistance}>
             {assistances}
           </SlideWidget>
           <SlideWidget icon="question_answer" title={m.legal.aidType.councelling}>
