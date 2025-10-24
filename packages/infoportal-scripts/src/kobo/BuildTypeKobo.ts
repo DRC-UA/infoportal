@@ -88,6 +88,7 @@ export class BuildKoboType {
       protection_pss: {
         formId: KoboIndex.byName('protection_pss').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
+        langIndex: 1,
       },
       bn_cashForRentApplication: {
         formId: KoboIndex.byName('bn_cashForRentApplication').id,
