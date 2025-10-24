@@ -1,6 +1,7 @@
 import {duration, Enum, match} from '@axanc/ts-utils'
-import {NonNullableKeys} from '../type/Generic.js'
 import {addMonths, differenceInMonths, isAfter, isBefore, startOfMonth} from 'date-fns'
+
+import {NonNullableKeys} from '../type/Generic.js'
 
 export const generateId = () => ('' + Math.random()).split('.')[1]
 
@@ -370,7 +371,7 @@ export function appendSearchQuery(uri: string, params: Record<string, unknown> |
 
 const enOrdinalRules = new Intl.PluralRules('en-US', {type: 'ordinal'})
 
-export const pluralize = (
+export const orderize = (
   n: number | string,
   options?: typeof n extends 'number' ? {fullString?: boolean} : {suffix?: string},
 ): string => {
