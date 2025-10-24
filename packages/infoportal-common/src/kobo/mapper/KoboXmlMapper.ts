@@ -1023,7 +1023,6 @@ export namespace KoboXmlMapper {
     }
 
     export const shelter_common_test: PersonsMapper<Shelter_commonSpaces.T> = (row) => {
-
       console.log('Rows appartments:' + row.apartment_information?.[0])
       const commonEntries =
         row.apartment_information?.filter(
@@ -1050,7 +1049,7 @@ export namespace KoboXmlMapper {
           }),
         }),
       )
-      console.dir(row.apartment_information?.[0], { depth: null })
+      console.dir(row.apartment_information?.[0], {depth: null})
     }
   }
 
