@@ -3,6 +3,7 @@ import {appConfig} from '@/conf/AppConfig'
 import {capitalize, DrcProgram, OblastIndex, OblastISO, Person} from 'infoportal-common'
 
 import {formatDateTime} from './utils'
+import type {DictionaryShape} from './types'
 
 type Messages = (typeof en)['messages']
 
@@ -211,6 +212,7 @@ const en = Object.freeze({
     displacementStatus: 'Displacement status',
     householdStatus: 'Household Status',
     individuals: 'Individuals',
+    individualsCount: 'Individuals',
     uniqIndividuals: 'Unique individuals',
     individualsInterviewed: 'Individuals Interviewed',
     individualsAssistance: 'Individuals who used assistance',
@@ -1321,7 +1323,7 @@ const en = Object.freeze({
       doorsSum: 'Σ Door (pc)',
       agreement: 'Agreement',
       workOrder: 'Work order',
-      notRepairStandards:'Please specify what issue is',
+      notRepairStandards: 'Please specify what issue is',
       complianceStandards: 'Compliance standards',
       contractor: 'Contractor',
       contractor1: 'Contractor lot 1',
@@ -1509,7 +1511,33 @@ const en = Object.freeze({
         title: 'Beneficiaries by oblasts',
       },
     },
+    plurals: {
+      session: {
+        zero: 'Sessions',
+        one: 'Session',
+        two: 'Sessions',
+        few: 'Sessions',
+        many: 'Sessions',
+        other: 'Sessions',
+      },
+      individuals: {
+        zero: 'Indoviduals',
+        one: 'Indovidual',
+        two: 'Indoviduals',
+        few: 'Indoviduals',
+        many: 'Indoviduals',
+        other: 'Indoviduals',
+      },
+      uniqueIndividuals: {
+        zero: 'Unique Indoviduals',
+        one: 'Unique Indovidual',
+        two: 'Unique Indoviduals',
+        few: 'Unique Indoviduals',
+        many: 'Unique Indoviduals',
+        other: 'Unique Indoviduals',
+      },
+    },
   },
-})
+} satisfies DictionaryShape)
 
 export {en, type Messages}
