@@ -32,6 +32,10 @@ export namespace Protection_pss {
     activity_other: string | undefined
     // gi/activity_other_001 [select_one] What is this session?
     activity_other_001: undefined | Option<'activity_other_001'>
+    // gi/topic_session [select_one] Topic of Session
+    topic_session: undefined | Option<'topic_session'>
+    // gi/topic_session_other [text] If "Other", please specify
+    topic_session_other: string | undefined
     // gi/cycle_code [text] Group code
     cycle_code: string | undefined
     // gi/new_ben [select_one] Are they new beneficiaries?
@@ -50,9 +54,11 @@ export namespace Protection_pss {
     // gi/hh_char_hh_det [begin_repeat] Participant
     hh_char_hh_det:
       | {
+          code_beneficiary: string | undefined
           hh_char_hh_name: string | undefined | undefined
-          hh_char_hh_new_ben: undefined | Option<'registered_person_disability'> | undefined
+          hh_char_hh_new_ben: undefined | Option<'complete_testing'> | undefined
           hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
+          hh_char_date_birth: Date | undefined | undefined
           hh_char_hh_det_age: number | undefined | undefined
           hh_char_hh_det_status: undefined | Option<'hh_char_hh_det_status'> | undefined
           hh_char_civ_stat: undefined | Option<'hh_char_civ_stat'> | undefined
@@ -81,9 +87,9 @@ export namespace Protection_pss {
     // gi/individual_session/difficulty_usual_language [select_one] Using your usual (customary) language, do you have difficulty communicating, for example understanding or being understood by others?
     difficulty_usual_language: undefined | Option<'difficulty_usual_language'>
     // gi/individual_session/disability_status [select_one] Disability Status (staff only):
-    disability_status: undefined | Option<'registered_person_disability'>
+    disability_status: undefined | Option<'complete_testing'>
     // gi/individual_session/registered_person_disability [select_one] Are you registered as a person with disability with the Government of Ukraine?
-    registered_person_disability: undefined | Option<'registered_person_disability'>
+    registered_person_disability: undefined | Option<'complete_testing'>
     // gi/individual_session/date_first_consultation [date] Date of first consultation:
     date_first_consultation: Date | undefined
     // gi/individual_session/from [select_one] From
@@ -136,12 +142,18 @@ export namespace Protection_pss {
     beneficiary_perspective: string | undefined
     // gi/individual_session/mhpss_practitioners [text] MHPSS practitioners/psychologist perspective
     mhpss_practitioners: string | undefined
+    // gi/individual_session/status_case [select_one] Status
+    status_case: undefined | Option<'status_case'>
     // gi/individual_session/date_closure [date] Date of closure
     date_closure: Date | undefined
     // gi/individual_session/reason_closure [select_one] Reason for closure
     reason_closure: undefined | Option<'reason_closure'>
     // gi/individual_session/reason_closure_other [text] If "Other", please specify
     reason_closure_other: string | undefined
+    // gi/individual_session/improvement_condition [select_one] Did the beneficiary report an improvement in their condition (or achievement of the goal of the appeal)?
+    improvement_condition: undefined | Option<'complete_testing'>
+    // gi/individual_session/supervision [select_one] Supervision
+    supervision: undefined | Option<'complete_testing'>
     // gi/individual_session/referred [select_one] Referred to
     referred: undefined | Option<'referred'>
     // gi/individual_session/referred_other [text] If "Other", please specify
@@ -150,6 +162,342 @@ export namespace Protection_pss {
     top_type_act: string | undefined
     // gi/comments [text] Comments
     comments: string | undefined
+    // complete_testing [select_one] Was the test completed?
+    complete_testing: undefined | Option<'complete_testing'>
+    // type_testing [select_multiple] What type of test was completed?
+    type_testing: undefined | Option<'type_testing'>[]
+    // pre_test/not_psychological_distress_pre [note] **Psychological distress**
+    not_psychological_distress_pre: string
+    // pre_test/feel_sad_pre [select_one] 1. I feel sad
+    feel_sad_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/think_problems_pre [select_one] 2. I think too much about my problems
+    think_problems_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/trouble_sleeping_pre [select_one] 3. I have trouble sleeping
+    trouble_sleeping_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/cannot_concentrate_pre [select_one] 4. I cannot concentrate
+    cannot_concentrate_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/worried_future_pre [select_one] 5. I am worried about the future
+    worried_future_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/irritated_easily_pre [select_one] 6. I get irritated very easily
+    irritated_easily_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/overwhelmed_life_pre [select_one] 7. I feel overwhelmed in my daily life
+    overwhelmed_life_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/feel_anxious_pre [select_one] 8. I feel anxious (rapid heartbeat, rapid breathing, sweating)
+    feel_anxious_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/feel_tired_pre [select_one] 9. I feel tired and unmotivated
+    feel_tired_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/feel_hopeless_pre [select_one] 10. I feel hopeless
+    feel_hopeless_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/feel_afraid_pre [select_one] 11. I feel afraid
+    feel_afraid_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/feel_worthless_pre [select_one] 12. I feel worthless
+    feel_worthless_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/life_no_value_pre [select_one] 13. I feel that my life has no value
+    life_no_value_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/not_psycosocial_coping_pre [note] **Psycosocial Coping**
+    not_psycosocial_coping_pre: string
+    // pre_test/people_support_pre [select_one] 1. I have people who will support me in difficult times
+    people_support_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/past_experiences_pre [select_one] 2. My past experiences help me overcome difficulties in the present
+    past_experiences_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/hope_future_pre [select_one] 3. I have hope for the future
+    hope_future_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/believe_things_pre [select_one] 4. I believe that good things can happen in my life
+    believe_things_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/life_worth_pre [select_one] 5. I believe that my life is worth living
+    life_worth_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/ask_support_pre [select_one] 6. I am able to ask for support when I need it
+    ask_support_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/connected_people_pre [select_one] 7. I feel connected to the people around me
+    connected_people_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/difficult_moments_pre [select_one] 8. When difficult moments arise, I know that everything will work out
+    difficult_moments_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/faith_hope_pre [select_one] 9. I have faith that gives me hope for the best
+    faith_hope_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/difficult_situations_pre [select_one] 10. In difficult situations, I often find reasons to move forward
+    difficult_situations_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/overcoming_difficulties_pre [select_one] 11. I am capable of overcoming difficulties in life
+    overcoming_difficulties_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/influence_wellbeing_pre [select_one] 12. I can influence my well-being
+    influence_wellbeing_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/life_purpose_pre [select_one] 13. I feel that my life has a purpose
+    life_purpose_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/share_experiences_pre [select_one] 14. I have people with whom I can share my experiences
+    share_experiences_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/goals_life_pre [select_one] 15. I have goals and dreams in my life
+    goals_life_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/skills_cope_pre [select_one] 16. I have the skills to cope with difficulties in life
+    skills_cope_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/meaning_life_pre [select_one] 17. I find meaning in my daily life
+    meaning_life_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/not_who5_pre [note] **WHO 5**
+    not_who5_pre: string
+    // pre_test/good_mood_pre [select_one] 1. I felt energetic and was in a good mood.
+    good_mood_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/felt_calm_pre [select_one] 2. I felt calm and relaxed
+    felt_calm_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/active_energy_pre [select_one] 3. I felt active and full of energy
+    active_energy_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/feeling_refreshed_pre [select_one] 4. I woke up feeling refreshed and rested
+    feeling_refreshed_pre: undefined | Option<'interesting_things_post'>
+    // pre_test/interesting_things_pre [select_one] 5. I felt that my daily life was filled with interesting things
+    interesting_things_pre: undefined | Option<'interesting_things_post'>
+    // post_test/not_psychological_distress_post [note] **Psychological distress**
+    not_psychological_distress_post: string
+    // post_test/feel_sad_post [select_one] 1. I feel sad
+    feel_sad_post: undefined | Option<'interesting_things_post'>
+    // post_test/think_problems_post [select_one] 2. I think too much about my problems
+    think_problems_post: undefined | Option<'interesting_things_post'>
+    // post_test/trouble_sleeping_post [select_one] 3. I have trouble sleeping
+    trouble_sleeping_post: undefined | Option<'interesting_things_post'>
+    // post_test/cannot_concentrate_post [select_one] 4. I cannot concentrate
+    cannot_concentrate_post: undefined | Option<'interesting_things_post'>
+    // post_test/worried_future_post [select_one] 5. I am worried about the future
+    worried_future_post: undefined | Option<'interesting_things_post'>
+    // post_test/irritated_easily_post [select_one] 6. I get irritated very easily
+    irritated_easily_post: undefined | Option<'interesting_things_post'>
+    // post_test/overwhelmed_life_post [select_one] 7. I feel overwhelmed in my daily life
+    overwhelmed_life_post: undefined | Option<'interesting_things_post'>
+    // post_test/feel_anxious_post [select_one] 8. I feel anxious (rapid heartbeat, rapid breathing, sweating)
+    feel_anxious_post: undefined | Option<'interesting_things_post'>
+    // post_test/feel_tired_post [select_one] 9. I feel tired and unmotivated
+    feel_tired_post: undefined | Option<'interesting_things_post'>
+    // post_test/feel_hopeless_post [select_one] 10. I feel hopeless
+    feel_hopeless_post: undefined | Option<'interesting_things_post'>
+    // post_test/feel_afraid_post [select_one] 11. I feel afraid
+    feel_afraid_post: undefined | Option<'interesting_things_post'>
+    // post_test/feel_worthless_post [select_one] 12. I feel worthless
+    feel_worthless_post: undefined | Option<'interesting_things_post'>
+    // post_test/life_no_value_post [select_one] 13. I feel that my life has no value
+    life_no_value_post: undefined | Option<'interesting_things_post'>
+    // post_test/not_psycosocial_coping_post [note] **Psycosocial Coping**
+    not_psycosocial_coping_post: string
+    // post_test/people_support_post [select_one] 1. I have people who will support me in difficult times
+    people_support_post: undefined | Option<'interesting_things_post'>
+    // post_test/past_experiences_post [select_one] 2. My past experiences help me overcome difficulties in the present
+    past_experiences_post: undefined | Option<'interesting_things_post'>
+    // post_test/hope_future_post [select_one] 3. I have hope for the future
+    hope_future_post: undefined | Option<'interesting_things_post'>
+    // post_test/believe_things_post [select_one] 4. I believe that good things can happen in my life
+    believe_things_post: undefined | Option<'interesting_things_post'>
+    // post_test/life_worth_post [select_one] 5. I believe that my life is worth living
+    life_worth_post: undefined | Option<'interesting_things_post'>
+    // post_test/ask_support_post [select_one] 6. I am able to ask for support when I need it
+    ask_support_post: undefined | Option<'interesting_things_post'>
+    // post_test/connected_people_post [select_one] 7. I feel connected to the people around me
+    connected_people_post: undefined | Option<'interesting_things_post'>
+    // post_test/difficult_moments_post [select_one] 8. When difficult moments arise, I know that everything will work out
+    difficult_moments_post: undefined | Option<'interesting_things_post'>
+    // post_test/faith_hope_post [select_one] 9. I have faith that gives me hope for the best
+    faith_hope_post: undefined | Option<'interesting_things_post'>
+    // post_test/difficult_situations_post [select_one] 10. In difficult situations, I often find reasons to move forward
+    difficult_situations_post: undefined | Option<'interesting_things_post'>
+    // post_test/overcoming_difficulties_post [select_one] 11. I am capable of overcoming difficulties in life
+    overcoming_difficulties_post: undefined | Option<'interesting_things_post'>
+    // post_test/influence_wellbeing_post [select_one] 12. I can influence my well-being
+    influence_wellbeing_post: undefined | Option<'interesting_things_post'>
+    // post_test/life_purpose_post [select_one] 13. I feel that my life has a purpose
+    life_purpose_post: undefined | Option<'interesting_things_post'>
+    // post_test/share_experiences_post [select_one] 14. I have people with whom I can share my experiences
+    share_experiences_post: undefined | Option<'interesting_things_post'>
+    // post_test/goals_life_post [select_one] 15. I have goals and dreams in my life
+    goals_life_post: undefined | Option<'interesting_things_post'>
+    // post_test/skills_cope_post [select_one] 16. I have the skills to cope with difficulties in life
+    skills_cope_post: undefined | Option<'interesting_things_post'>
+    // post_test/meaning_life_post [select_one] 17. I find meaning in my daily life
+    meaning_life_post: undefined | Option<'interesting_things_post'>
+    // post_test/not_who5_post [note] **WHO 5**
+    not_who5_post: string
+    // post_test/good_mood_post [select_one] 1. I felt energetic and was in a good mood.
+    good_mood_post: undefined | Option<'interesting_things_post'>
+    // post_test/felt_calm_post [select_one] 2. I felt calm and relaxed
+    felt_calm_post: undefined | Option<'interesting_things_post'>
+    // post_test/active_energy_post [select_one] 3. I felt active and full of energy
+    active_energy_post: undefined | Option<'interesting_things_post'>
+    // post_test/feeling_refreshed_post [select_one] 4. I woke up feeling refreshed and rested
+    feeling_refreshed_post: undefined | Option<'interesting_things_post'>
+    // post_test/interesting_things_post [select_one] 5. I felt that my daily life was filled with interesting things
+    interesting_things_post: undefined | Option<'interesting_things_post'>
+    // gr_cal_pre [note] PRE-Test
+    gr_cal_pre: string
+    // psychological_distress_pre_001 [note] PSYCHOLOGICAL DISTRESS
+    psychological_distress_pre_001: string
+    // cal_feel_sad_pre [calculate] 1
+    cal_feel_sad_pre: string
+    // cal_think_problems_pre [calculate] 2
+    cal_think_problems_pre: string
+    // cal_trouble_sleeping_pre [calculate] 3
+    cal_trouble_sleeping_pre: string
+    // cal_cannot_concentrate_pre [calculate] 4
+    cal_cannot_concentrate_pre: string
+    // cal_worried_future_pre [calculate] 5
+    cal_worried_future_pre: string
+    // cal_irritated_easily_pre [calculate] 6
+    cal_irritated_easily_pre: string
+    // cal_overwhelmed_life_pre [calculate] 7
+    cal_overwhelmed_life_pre: string
+    // cal_feel_anxious_pre [calculate] 8
+    cal_feel_anxious_pre: string
+    // cal_feel_tired_pre [calculate] 9
+    cal_feel_tired_pre: string
+    // cal_feel_hopeless_pre [calculate] 10
+    cal_feel_hopeless_pre: string
+    // cal_feel_afraid_pre [calculate] 11
+    cal_feel_afraid_pre: string
+    // cal_feel_worthless_pre [calculate] 12
+    cal_feel_worthless_pre: string
+    // cal_life_no_value_pre [calculate] 13
+    cal_life_no_value_pre: string
+    // resilience_pre [note] RESILIENCE
+    resilience_pre: string
+    // cal_people_support_pre [calculate] 1
+    cal_people_support_pre: string
+    // cal_past_experiences_pre [calculate] 2
+    cal_past_experiences_pre: string
+    // cal_hope_future_pre [calculate] 3
+    cal_hope_future_pre: string
+    // cal_believe_things_pre [calculate] 4
+    cal_believe_things_pre: string
+    // cal_life_worth_pre [calculate] 5
+    cal_life_worth_pre: string
+    // cal_ask_support_pre [calculate] 6
+    cal_ask_support_pre: string
+    // cal_connected_people_pre [calculate] 7
+    cal_connected_people_pre: string
+    // cal_difficult_moments_pre [calculate] 8
+    cal_difficult_moments_pre: string
+    // cal_faith_hope_pre [calculate] 9
+    cal_faith_hope_pre: string
+    // cal_difficult_situations_pre [calculate] 10
+    cal_difficult_situations_pre: string
+    // cal_overcoming_difficulties_pre [calculate] 11
+    cal_overcoming_difficulties_pre: string
+    // cal_influence_wellbeing_pre [calculate] 12
+    cal_influence_wellbeing_pre: string
+    // cal_life_purpose_pre [calculate] 13
+    cal_life_purpose_pre: string
+    // cal_share_experiences_pre [calculate] 14
+    cal_share_experiences_pre: string
+    // cal_goals_life_pre [calculate] 15
+    cal_goals_life_pre: string
+    // cal_skills_cope_pre [calculate] 16
+    cal_skills_cope_pre: string
+    // cal_meaning_life_pre [calculate] 17
+    cal_meaning_life_pre: string
+    // who_pre [note] WHO 5 Pre-Test
+    who_pre: string
+    // cal_good_mood_pre [calculate] 1
+    cal_good_mood_pre: string
+    // cal_felt_calm_pre [calculate] 2
+    cal_felt_calm_pre: string
+    // cal_active_energy_pre [calculate] 3
+    cal_active_energy_pre: string
+    // cal_feeling_refreshed_pre [calculate] 4
+    cal_feeling_refreshed_pre: string
+    // cal_interesting_things_pre [calculate] 5
+    cal_interesting_things_pre: string
+    // gr_cal_post [note] POST-Test
+    gr_cal_post: string
+    // psychological_distress_post_001 [note] PSYCHOLOGICAL DISTRESS
+    psychological_distress_post_001: string
+    // cal_feel_sad_post [calculate] 1
+    cal_feel_sad_post: string
+    // cal_think_problems_post [calculate] 2
+    cal_think_problems_post: string
+    // cal_trouble_sleeping_post [calculate] 3
+    cal_trouble_sleeping_post: string
+    // cal_cannot_concentrate_post [calculate] 4
+    cal_cannot_concentrate_post: string
+    // cal_worried_future_post [calculate] 5
+    cal_worried_future_post: string
+    // cal_irritated_easily_post [calculate] 6
+    cal_irritated_easily_post: string
+    // cal_overwhelmed_life_post [calculate] 7
+    cal_overwhelmed_life_post: string
+    // cal_feel_anxious_post [calculate] 8
+    cal_feel_anxious_post: string
+    // cal_feel_tired_post [calculate] 9
+    cal_feel_tired_post: string
+    // cal_feel_hopeless_post [calculate] 10
+    cal_feel_hopeless_post: string
+    // cal_feel_afraid_post [calculate] 11
+    cal_feel_afraid_post: string
+    // cal_feel_worthless_post [calculate] 12
+    cal_feel_worthless_post: string
+    // cal_life_no_value_post [calculate] 13
+    cal_life_no_value_post: string
+    // resilience_post [note] RESILIENCE
+    resilience_post: string
+    // cal_people_support_post [calculate] 1
+    cal_people_support_post: string
+    // cal_past_experiences_post [calculate] 2
+    cal_past_experiences_post: string
+    // cal_hope_future_post [calculate] 3
+    cal_hope_future_post: string
+    // cal_believe_things_post [calculate] 4
+    cal_believe_things_post: string
+    // cal_life_worth_post [calculate] 5
+    cal_life_worth_post: string
+    // cal_ask_support_post [calculate] 6
+    cal_ask_support_post: string
+    // cal_connected_people_post [calculate] 7
+    cal_connected_people_post: string
+    // cal_difficult_moments_post [calculate] 8
+    cal_difficult_moments_post: string
+    // cal_faith_hope_post [calculate] 9
+    cal_faith_hope_post: string
+    // cal_difficult_situations_post [calculate] 10
+    cal_difficult_situations_post: string
+    // cal_overcoming_difficulties_post [calculate] 11
+    cal_overcoming_difficulties_post: string
+    // cal_influence_wellbeing_post [calculate] 12
+    cal_influence_wellbeing_post: string
+    // cal_life_purpose_post [calculate] 13
+    cal_life_purpose_post: string
+    // cal_share_experiences_post [calculate] 14
+    cal_share_experiences_post: string
+    // cal_goals_life_post [calculate] 15
+    cal_goals_life_post: string
+    // cal_skills_cope_post [calculate] 16
+    cal_skills_cope_post: string
+    // cal_meaning_life_post [calculate] 17
+    cal_meaning_life_post: string
+    // who_post [note] WHO 5 Post-Test
+    who_post: string
+    // cal_good_mood_post [calculate] 1
+    cal_good_mood_post: string
+    // cal_felt_calm_post [calculate] 2
+    cal_felt_calm_post: string
+    // cal_active_energy_post [calculate] 3
+    cal_active_energy_post: string
+    // cal_feeling_refreshed_post [calculate] 4
+    cal_feeling_refreshed_post: string
+    // cal_interesting_things_post [calculate] 5
+    cal_interesting_things_post: string
+    // total_pre [note] TOTAL PRE
+    total_pre: string
+    // cal_total_psychological_distress_pre [calculate] Psychological distress
+    cal_total_psychological_distress_pre: string
+    // cal_total_psycosocial_coping_pre [calculate] Psycosocial Coping
+    cal_total_psycosocial_coping_pre: string
+    // cal_total_who_pre [calculate] WHO 5
+    cal_total_who_pre: string
+    // total_post [note] TOTAL Post
+    total_post: string
+    // cal_total_psychological_distress_post [calculate] Psychological distress
+    cal_total_psychological_distress_post: string
+    // cal_total_psycosocial_coping_post [calculate] Psycosocial Coping
+    cal_total_psycosocial_coping_post: string
+    // cal_total_who_post [calculate] WHO 5
+    cal_total_who_post: string
+    // total_changes [note] CHANGES
+    total_changes: string
+    // cal_total_psychological_distress_changes [calculate] Psychological distress
+    cal_total_psychological_distress_changes: string
+    // cal_total_psycosocial_coping_changes [calculate] Psycosocial Coping
+    cal_total_psycosocial_coping_changes: string
+    // cal_total_who_changes [calculate] WHO 5
+    cal_total_who_changes: string
   }
   export const options = {
     staff_to_insert_their_DRC_office: {
@@ -309,6 +657,12 @@ export namespace Protection_pss {
       ace: `Commemorative event / community event`,
       ais: `Individual session`,
       p2p: `Peer to peer training`,
+      community_dialogues_session: `Community Dialogues Session`,
+      let: `PSS layer 2 recreational activity`,
+      other: `Other`,
+    },
+    topic_session: {
+      stigma_hromada: `Stigma in Hromada`,
       other: `Other`,
     },
     new_ben: {
@@ -327,7 +681,7 @@ export namespace Protection_pss {
       refugee: `Refugee`,
       pnd: `Prefers not to disclose`,
     },
-    registered_person_disability: {
+    complete_testing: {
       yes: `Yes`,
       no: `No`,
     },
@@ -463,6 +817,21 @@ export namespace Protection_pss {
       not_referred: `Not referred`,
       other: `Other`,
     },
+    status_case: {
+      closed: `Closed`,
+      continue: `Continue`,
+    },
+    type_testing: {
+      pre: `Pre`,
+      post: `Post`,
+    },
+    interesting_things_post: {
+      all: `All the time`,
+      most: `Most of the time`,
+      sometimes: `Sometimes`,
+      few: `A few times`,
+      not_all: `Not at all`,
+    },
     ben_det_oblast: {
       cherkaska: `Cherkaska`,
       chernihivska: `Chernihivska`,
@@ -520,6 +889,7 @@ export namespace Protection_pss {
       cycle_finished_at: _.cycle_finished_at ? new Date(_.cycle_finished_at) : undefined,
       numb_part: _.numb_part ? +_.numb_part : undefined,
       hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {
+        _['hh_char_date_birth'] = _.hh_char_date_birth ? new Date(_.hh_char_date_birth) : undefined
         _['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
         _['hh_char_hh_session'] = _.hh_char_hh_session?.split(' ')
         return _
@@ -536,5 +906,6 @@ export namespace Protection_pss {
       date_session7: _.date_session7 ? new Date(_.date_session7) : undefined,
       date_session8: _.date_session8 ? new Date(_.date_session8) : undefined,
       date_closure: _.date_closure ? new Date(_.date_closure) : undefined,
+      type_testing: _.type_testing?.split(' '),
     }) as T
 }
