@@ -112,6 +112,16 @@ export const CfmDashboard = () => {
             .sort()
             .map((_: any) => DataFilter.buildOption(_ ?? DataFilter.blank, KoboXmlMapper.Location.getHromadaLabel(_))),
       },
+      project: {
+        label: m.project,
+        getValue: (_) => _.tags?.project ?? DataFilter.blank,
+        getOptions: (get) =>
+          get()
+            .flatMap((entry) => entry.tags?.project)
+            .distinct((entry) => entry)
+            .sort()
+            .map((_: any) => DataFilter.buildOption(_ ?? DataFilter.blank, _)),
+      },
       program: {
         label: m.program,
         getValue: (_) => _.tags?.program ?? DataFilter.blank,
