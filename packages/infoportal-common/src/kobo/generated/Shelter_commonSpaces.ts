@@ -14,6 +14,7 @@ export namespace Shelter_commonSpaces {
     explain_chronic_disease: string | undefined
     hh_char_hh_det_dis_level: Option<'hh_char_hh_det_dis_level'> | undefined
     hh_char_hh_det_dis_select: Option<'hh_char_hh_det_dis_select'>[] | undefined
+    hh_char_res_stat: Option<'hh_char_res_stat'> | undefined
   }
   //
   export interface T {
@@ -79,6 +80,7 @@ export namespace Shelter_commonSpaces {
           hh_char_hh_det: HhCharacter[] | undefined
           hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
           hh_char_hh_det_age: number | undefined | undefined
+          hh_char_res_stat: Option<'hh_char_res_stat'> | undefined
           hh_char_hh_det_dis_select: undefined | Option<'hh_char_hh_det_dis_select'>[] | undefined
           hh_char_hh_det_dis_level: undefined | Option<'hh_char_hh_det_dis_level'> | undefined
           chronic_disease: undefined | Option<'compliance_standards'> | undefined
@@ -186,6 +188,12 @@ export namespace Shelter_commonSpaces {
       repair_started: `Repair works Started`,
       repair_completed: `Repair works Completed`,
     },
+    hh_char_res_stat: {
+      idp: `Internally Displaced Person (IDP)`,
+      long_res: `Long - Term Resident`,
+      ret: `Returnee`,
+      ref_asy: `Refugee/asylum seeker`,
+    },
     ben_det_oblast: {
       crimea: `Autonomous Republic of Crimea`,
       cherkaska: `Cherkasy`,
@@ -250,6 +258,7 @@ export namespace Shelter_commonSpaces {
             explain_chronic_disease,
             hh_char_hh_det_dis_level,
             hh_char_hh_det_dis_select,
+            hh_char_res_stat,
           }: HhCharacter) => ({
             male_hh_l18: male_hh_l18 ? +male_hh_l18 : undefined,
             male_hh_m18: male_hh_m18 ? +male_hh_m18 : undefined,
@@ -263,6 +272,7 @@ export namespace Shelter_commonSpaces {
             explain_chronic_disease,
             hh_char_hh_det_dis_level,
             hh_char_hh_det_dis_select,
+            hh_char_res_stat,
           }),
         )
         _['owner_number'] = _.owner_number ? +_.owner_number : undefined
