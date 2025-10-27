@@ -136,21 +136,22 @@ export const useCommonSpacesData = () => {
 
   return {
     form,
-    schema,
     answers: ans,
     data,
-    filteredByDate,
     dataFiltered,
+    fetching: ans.loading,
+    filteredByDate,
     filterShape,
     filters,
+    kpi,
+    schema,
     setFilters,
-    periodSubmission,
     setPeriodSubmission,
-    periodWorkDone,
     setPeriodWorkDone,
     selectedIds,
     setSelectedIds,
+    periodSubmission,
+    periodWorkDone,
     refetchAll,
-    kpi,
   }
 }

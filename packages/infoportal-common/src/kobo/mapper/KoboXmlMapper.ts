@@ -1023,21 +1023,12 @@ export namespace KoboXmlMapper {
     }
 
     export const shelter_common_test: PersonsMapper<Shelter_commonSpaces.T> = (row) => {
+      const flatEntries = row.apartment_information?.flatMap(({hh_char_hh_det}) => hh_char_hh_det)
 
-      console.log('Rows appartments:' + row.apartment_information?.[0])
-      const commonEntries =
-        row.apartment_information?.filter(
-          (entry) =>
-            entry.hh_char_hh_det_dis_select !== undefined ||
-            entry.hh_char_hh_det_dis_level !== undefined ||
-            entry.hh_char_hh_det_age !== undefined ||
-            entry.hh_char_hh_det_gender !== undefined,
-        ) ?? []
-
-      return commonEntries.map(
-        ({hh_char_hh_det_age, hh_char_hh_det_gender, hh_char_hh_det_dis_select, hh_char_hh_det_dis_level}) => ({
-          age: safeAge(hh_char_hh_det_age),
-          gender: match(hh_char_hh_det_gender)
+      return (
+        flatEntries?.map((subEntry) => ({
+          age: safeAge(subEntry?.hh_char_hh_det_age),
+          gender: match(subEntry?.hh_char_hh_det_gender)
             .cases({
               male: Person.Gender.Male,
               female: Person.Gender.Female,
@@ -1045,12 +1036,14 @@ export namespace KoboXmlMapper {
             .default(() => undefined),
           displacement: undefined,
           disability: Disability.common({
-            hh_char_hh_det_dis_level: hh_char_hh_det_dis_level as any,
-            hh_char_hh_det_dis_select: hh_char_hh_det_dis_select as any,
+            hh_char_hh_det_dis_level: subEntry?.hh_char_hh_det_dis_level,
+            hh_char_hh_det_dis_select:
+              ((subEntry?.hh_char_hh_det_dis_select as string | undefined)?.split(
+                ' ',
+              ) as Shelter_commonSpaces.Option<'hh_char_hh_det_dis_select'>[]) ?? [],
           }),
-        }),
+        })) ?? []
       )
-      console.dir(row.apartment_information?.[0], { depth: null })
     }
   }
 

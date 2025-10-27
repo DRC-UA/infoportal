@@ -17,5 +17,10 @@ export const koboSdkDrc = new KoboClient({
   // await FixKoboMigration.MissingSubmissions.run()
   // await FixKoboMigration.Tags.run()
   // await new ActivityInfoBuildType().buildAll()
-  // await new BuildKoboType().build('cbp_pre_post')
+
+  // MEMO: groups nested twice are treated as one-level array, so the typing and mapping for HH members shelter_commonSpaces is fixed manually
+  ;(() => {
+    console.log("PLEASE KEEP MANUAL CHANGES FOR THE SHELTER'S COMMON SPACES FOR THE REASON DESCRIBED ABOVE ")
+  })()
+  // await new BuildKoboType().build('shelter_commonSpaces')
 })()

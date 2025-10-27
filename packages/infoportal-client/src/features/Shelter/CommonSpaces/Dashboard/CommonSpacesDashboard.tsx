@@ -1,19 +1,21 @@
-import React, {useMemo} from 'react'
-import {Page} from '@/shared/Page'
-import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
-import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {Panel, PanelBody} from '@/shared/Panel'
+import {useMemo} from 'react'
+import {Obj, seq} from '@axanc/ts-utils'
+
+import {KoboXmlMapper, OblastIndex, Shelter_commonSpaces} from 'infoportal-common'
+
 import {useI18n} from '@/core/i18n'
 import {CommonSpacesProvider, useCommonSpacesContext} from '@/features/Shelter/CommonSpaces/Data/CommonSpacesContext'
-import {KoboXmlMapper, OblastIndex, Shelter_commonSpaces} from 'infoportal-common'
-import {Obj, seq} from '@axanc/ts-utils'
-import {makeChartData} from '@/shared/charts/chartHelper'
-import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
+import {AgeGroupTable} from '@/shared'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {MapSvg} from '@/shared/maps/MapSvg'
+import {makeChartData} from '@/shared/charts/chartHelper'
+import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {DashboardFilterLabel} from '@/shared/DashboardLayout/DashboardFilterLabel'
-import {AgeGroupTable} from '@/shared'
+import {MapSvg} from '@/shared/maps/MapSvg'
+import {Page} from '@/shared/Page'
+import {Panel, PanelBody} from '@/shared/Panel'
+import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
+import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 
 export const CommonSpacesDashboard = () => (
   <CommonSpacesProvider>
@@ -26,7 +28,7 @@ const CommonSpacesDashboardInner: React.FC = () => {
   const ctx = useCommonSpacesContext()
 
   return (
-    <Page width="full" loading={!!ctx.answers.loading}>
+    <Page loading={ctx.fetching} width="lg">
       <DataFilterLayout
         shapes={ctx.filterShape}
         filters={ctx.filters}
@@ -73,7 +75,7 @@ const _CommonSpacesDashboardBody: React.FC = () => {
     return rows.flatMap((row) => KoboXmlMapper.Persons.shelter_common_test(row) ?? [])
   }, [ctx.dataFiltered])
 
-  const oblastMapData = React.useMemo(() => {
+  const oblastMapData = useMemo(() => {
     const gb = seq(data).groupBy((_) => OblastIndex.byKoboName(_.ben_det_oblast)?.iso!)
     return new Obj(gb).transform((k, v) => [k, makeChartData({value: v.length})]).get()
   }, [data])
@@ -92,14 +94,14 @@ const _CommonSpacesDashboardBody: React.FC = () => {
             {formatLargeNumber(ctx.kpi.hhSize, {maximumFractionDigits: 2})}
           </SlideWidget>
         </Div>
-        {/*<Panel title={m.ageGroup}>*/}
-        {/*  <PanelBody>*/}
-        {/*    <AgeGroupTable tableId="cs-dashboard" persons={persons} enablePwdFilter />*/}
-        {/*  </PanelBody>*/}
-        {/*</Panel>*/}
         <Panel title={m._shelter.assessmentLocations}>
           <PanelBody>
             <MapSvg data={oblastMapData} sx={{maxWidth: 720, mx: 1}} maximumFractionDigits={0} base={data.length} />
+          </PanelBody>
+        </Panel>
+        <Panel title={m.ageGroup}>
+          <PanelBody>
+            <AgeGroupTable tableId="cs-dashboard" persons={persons} enablePwdFilter />
           </PanelBody>
         </Panel>
       </Div>
