@@ -1,4 +1,5 @@
-import React, {createContext, useContext} from 'react'
+import {createContext, useContext} from 'react'
+
 import {useCommonSpacesData} from '@/features/Shelter/CommonSpaces/Data/useCommonSpacesData'
 
 type Ctx = ReturnType<typeof useCommonSpacesData>
