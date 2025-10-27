@@ -34,6 +34,7 @@ const PssDashboardWithContext: FC = () => {
   const {translateOptions} = useOptionsTranslation('protection_pss')
   const pluralizeSessions = usePlurals(m.plurals.session)
   const pluralizeIndividuals = usePlurals(m.plurals.individuals)
+  const pluralizeUniqueIndividuals = usePlurals(m.plurals.uniqueIndividuals)
   const filteredIndividualSessions = data?.filtered.filter(({activity}) => activity === 'ais') ?? []
   const participantsById = useMemo(
     () =>
@@ -124,7 +125,7 @@ const PssDashboardWithContext: FC = () => {
                   >
                     {formatLargeNumber(filteredIndividualSessions.length)}
                   </SlideWidget>
-                  <SlideWidget sx={{flex: 1}} icon="person" title={pluralizeIndividuals(participantsById)!}>
+                  <SlideWidget sx={{flex: 1}} icon="person" title={pluralizeUniqueIndividuals(participantsById)!}>
                     {formatLargeNumber(participantsById)}
                   </SlideWidget>
                 </Div>
