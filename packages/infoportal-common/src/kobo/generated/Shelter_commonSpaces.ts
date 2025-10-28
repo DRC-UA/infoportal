@@ -2,21 +2,20 @@ export namespace Shelter_commonSpaces {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   // Form id: a5LCi33Fte33grspeZFANk
   type HhCharacter = {
-    male_hh_l18: string | undefined
-    male_hh_m18: string | undefined
-    female_hh_l18: string | undefined
-    female_hh_m18: string | undefined
-    chronic_disease: Option<'compliance_standards'> | undefined
-    calc_det_dis_level: string | undefined
-    hh_char_hh_det_age: number | undefined
     calc_chronic_disease: string | undefined
-    hh_char_hh_det_gender: Option<'hh_char_hh_det_gender'> | undefined
+    calc_det_dis_level: string | undefined
+    chronic_disease: Option<'compliance_standards'> | undefined
     explain_chronic_disease: string | undefined
+    hh_char_hh_det_age: number | undefined
+    hh_char_hh_det_gender: Option<'hh_char_hh_det_gender'> | undefined
     hh_char_hh_det_dis_level: Option<'hh_char_hh_det_dis_level'> | undefined
     hh_char_hh_det_dis_select: Option<'hh_char_hh_det_dis_select'>[] | undefined
-    hh_char_res_stat: Option<'hh_char_res_stat'> | undefined
+    female_hh_m18: string | undefined
+    female_hh_l18: string | undefined
+    male_hh_l18: string | undefined
+    male_hh_m18: string | undefined
   }
-  //
+
   export interface T {
     start: string
     end: string
@@ -78,19 +77,11 @@ export namespace Shelter_commonSpaces {
           owner_number: number | undefined | undefined
           ben_det_hh_size: number | undefined | undefined
           hh_char_hh_det: HhCharacter[] | undefined
-          hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
-          hh_char_hh_det_age: number | undefined | undefined
-          hh_char_res_stat: Option<'hh_char_res_stat'> | undefined
-          hh_char_hh_det_dis_select: undefined | Option<'hh_char_hh_det_dis_select'>[] | undefined
-          hh_char_hh_det_dis_level: undefined | Option<'hh_char_hh_det_dis_level'> | undefined
-          chronic_disease: undefined | Option<'compliance_standards'> | undefined
-          explain_chronic_disease: string | undefined | undefined
           female_hh_l18: string | undefined
           male_hh_l18: string | undefined
           female_hh_m18: string | undefined
           male_hh_m18: string | undefined
-          calc_det_dis_level: string | undefined
-          calc_chronic_disease: string | undefined
+          hh_char_res_stat: undefined | Option<'hh_char_res_stat'> | undefined
           eligible_egov: undefined | Option<'compliance_standards'> | undefined
           barriers_compensation: undefined | Option<'barriers_compensation'>[] | undefined
           barriers_compensation_other: string | undefined | undefined
@@ -258,7 +249,6 @@ export namespace Shelter_commonSpaces {
             explain_chronic_disease,
             hh_char_hh_det_dis_level,
             hh_char_hh_det_dis_select,
-            hh_char_res_stat,
           }: HhCharacter) => ({
             male_hh_l18: male_hh_l18 ? +male_hh_l18 : undefined,
             male_hh_m18: male_hh_m18 ? +male_hh_m18 : undefined,
@@ -272,7 +262,6 @@ export namespace Shelter_commonSpaces {
             explain_chronic_disease,
             hh_char_hh_det_dis_level,
             hh_char_hh_det_dis_select,
-            hh_char_res_stat,
           }),
         )
         _['owner_number'] = _.owner_number ? +_.owner_number : undefined
