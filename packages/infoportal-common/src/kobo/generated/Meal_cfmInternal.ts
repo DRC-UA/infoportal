@@ -113,6 +113,7 @@ export namespace Meal_cfmInternal {
       'UKR-000399': `UKR-000399 SDC3`,
       'UKR-000418': `UKR-000418 SIDA`,
       'UKR-000423': `UKR-000423 ECHO4`,
+      'UKR-000441': `UKR-000441 UHF10`,
       Other: `Інше`,
     },
     feedback_type: {
