@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {Period} from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
