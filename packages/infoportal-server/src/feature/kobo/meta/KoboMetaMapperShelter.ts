@@ -202,8 +202,13 @@ export namespace KoboMetaMapperShelter {
       status: match(answer.status)
         .cases({
           repair_completed: KoboMetaStatus.Committed,
+          contractor_visit: KoboMetaStatus.Pending,
+          purchase_request: KoboMetaStatus.Pending,
+          repair_started: KoboMetaStatus.Pending,
+          work_estimates: KoboMetaStatus.Pending,
+          work_order: KoboMetaStatus.Pending,
         })
-        .default(KoboMetaStatus.Pending),
+        .default(undefined),
       lastStatusUpdate: answer.work_done ?? row.date,
     })
   }
