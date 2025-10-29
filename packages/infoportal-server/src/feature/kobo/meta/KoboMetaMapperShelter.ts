@@ -188,12 +188,7 @@ export namespace KoboMetaMapperShelter {
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_settlement,
       sector: DrcSector.Shelter,
-      activity: match(answer.modality_assistance)
-        .cases({
-          cash: DrcProgram.CashForRepair,
-          contractor: DrcProgram.ShelterRepair,
-        })
-        .default(undefined),
+      activity: DrcProgram.ShelterCommonSpacesRepair,
       modality: match(answer.modality_assistance)
         .cases({
           cash: AssistanceModality.Cash,
