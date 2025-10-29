@@ -40,6 +40,7 @@ export const MetaDashboard = () => {
     KoboIndex.byName('protection_referral').id,
     KoboIndex.byName('protection_communityMonitoring').id,
     KoboIndex.byName('legal_individual_aid').id,
+    KoboIndex.byName('shelter_commonSpaces').id,
   ]
 
   const {monthlyAvgHHSizeData, avgHHSize} = useMemo(() => {

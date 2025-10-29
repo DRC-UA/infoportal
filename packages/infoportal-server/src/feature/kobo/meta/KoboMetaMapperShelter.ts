@@ -1,4 +1,4 @@
-import {map, match} from '@axanc/ts-utils'
+import {match, map} from '@axanc/ts-utils'
 
 import {
   Bn_cashForRentRegistration,
@@ -22,10 +22,12 @@ import {
   Shelter_ta,
   ShelterNtaTags,
   ShelterTaTags,
+  Shelter_commonSpaces,
+  AssistanceModality,
 } from 'infoportal-common'
 
-import {KoboMetaOrigin} from './KoboMetaType.js'
 import {KoboMetaMapper, MetaMapperInsert, MetaMapperMerge} from './KoboMetaService.js'
+import type {KoboMetaOrigin} from './KoboMetaType.js'
 
 export namespace KoboMetaMapperShelter {
   export const createCfRent: MetaMapperInsert<
@@ -162,5 +164,52 @@ export namespace KoboMetaMapperShelter {
         tags: row.tags?.damageLevel ? {damageLevel: row.tags?.damageLevel} : {},
       },
     }
+  }
+
+  export const createCommonSpaces: MetaMapperInsert<KoboMetaOrigin<Shelter_commonSpaces.T>> = (row) => {
+    const answer = Shelter_commonSpaces.map(row.answers)
+    const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
+    const persons = KoboXmlMapper.Persons.shelter_common_spaces(answer)
+    const project =
+      match(answer.project)
+        .cases({
+          ukr000399_sdc3: [DrcProject['UKR-000399 SDC3']],
+          ukr000423_echo4: [DrcProject['UKR-000423 ECHO4']],
+        })
+        .default(undefined) ?? []
+
+    return KoboMetaMapper.make({
+      date: answer.reporting_date,
+      enumerator: answer.person_responsible,
+      office: KoboXmlMapper.office(answer.office),
+      oblast: oblast?.name!,
+      displacement: undefined,
+      raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
+      hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
+      settlement: answer.ben_det_settlement,
+      sector: DrcSector.Shelter,
+      activity: match(answer.modality_assistance)
+        .cases({
+          cash: DrcProgram.CashForRepair,
+          contractor: DrcProgram.ShelterRepair,
+        })
+        .default(undefined),
+      modality: match(answer.modality_assistance)
+        .cases({
+          cash: AssistanceModality.Cash,
+          contractor: AssistanceModality.InKind,
+        })
+        .default(undefined),
+      personsCount: persons.length,
+      persons: persons,
+      project,
+      donor: project.map((_) => DrcProjectHelper.donorByProject[_]),
+      status: match(answer.status)
+        .cases({
+          repair_completed: KoboMetaStatus.Committed,
+        })
+        .default(KoboMetaStatus.Pending),
+      lastStatusUpdate: answer.work_done ?? row.date,
+    })
   }
 }
