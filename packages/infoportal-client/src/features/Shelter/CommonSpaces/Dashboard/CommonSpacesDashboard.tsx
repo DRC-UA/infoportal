@@ -72,7 +72,7 @@ const _CommonSpacesDashboardBody: React.FC = () => {
 
   const persons = useMemo(() => {
     const rows = ctx.dataFiltered ?? []
-    return rows.flatMap((row) => KoboXmlMapper.Persons.shelter_common_test(row) ?? [])
+    return rows.flatMap((row) => KoboXmlMapper.Persons.shelter_common_spaces(row) ?? [])
   }, [ctx.dataFiltered])
 
   const oblastMapData = useMemo(() => {

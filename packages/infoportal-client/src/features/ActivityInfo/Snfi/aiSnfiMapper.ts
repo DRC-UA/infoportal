@@ -6,8 +6,11 @@ import {
   groupBy,
   KoboMetaShelterRepairTags,
   KoboMetaStatus,
+  KoboXmlMapper,
   Period,
   PeriodHelper,
+  Person,
+  Shelter_commonSpaces,
   ShelterTaPriceLevel,
 } from 'infoportal-common'
 
@@ -219,5 +222,96 @@ export namespace AiShelterMapper {
           }).transforms,
         )
       })
+  }
+
+  export const reqCommonSpacesRepairs = (api: ApiSdk) => async (period: Partial<Period>) => {
+    const periodStr = AiMapper.getPeriodStr(period)
+
+    // META data is missing HH (apartments) details, so resorting to raw Kobo data:
+    const {data} = await api.kobo.typedAnswers.search.shelter_commonSpaces({
+      filters: {
+        filterBy: [{column: 'status', value: ['repair_completed' satisfies Shelter_commonSpaces.T['status']]}],
+      },
+    })
+
+    const rawDataInPeriod = data.filter((submission) => PeriodHelper.isDateIn(period, submission.work_done))
+    const inflatedData = rawDataInPeriod
+      .flatMap(({apartment_information, ...submission}) =>
+        apartment_information?.map((apartment) => ({...submission, apartment})),
+      )
+      .filter((record) => record !== undefined)
+
+    let index = 0
+
+    return Promise.all(
+      groupBy({
+        data: inflatedData,
+        groups: [
+          {by: ({project}) => project?.[0]!},
+          {by: ({ben_det_oblast}) => ben_det_oblast!},
+          {by: ({ben_det_raion}) => ben_det_raion!},
+          {by: ({ben_det_hromada}) => ben_det_hromada!},
+          {by: ({ben_det_settlement}) => ben_det_settlement!},
+          {by: ({modality_assistance}) => modality_assistance!},
+          {by: ({apartment: {hh_char_res_stat}}) => hh_char_res_stat!},
+        ],
+        finalTransform: async (grouped, [projectCode, oblastCode, raion, hromada, settlement, modality, status]) => {
+          const disagg = AiMapper.disaggregatePersons(
+            grouped.flatMap(({apartment}) => KoboXmlMapper.Persons.shelter_common_spaces_hh(apartment) ?? []),
+          )
+          const project = match(projectCode)
+            .cases({ukr000423_echo4: DrcProject['UKR-000423 ECHO4'], ukr000399_sdc3: DrcProject['UKR-000399 SDC']})
+            .default(undefined)
+          const oblast = KoboXmlMapper.Location.mapOblast(oblastCode)?.name!
+
+          const ai: AiTypeSnfiRmm.Type = {
+            Oblast: oblast,
+            Raion: KoboXmlMapper.Location.searchRaion(raion),
+            Hromada: KoboXmlMapper.Location.searchHromada(hromada!),
+            Settlement: settlement,
+            'Indicators - SNFI': match(modality)
+              .cases({
+                cash: 'Humanitarian repair > # supported through repairs of common spaces > cash-voucher',
+              } as const)
+              .default(() => 'Humanitarian repair > # supported through repairs of common spaces > in-kind'),
+            'Implementing Partner': 'Danish Refugee Council (DRC)',
+            'Plan/Project Code': getPlanCode(project!),
+            'Reporting Organization': 'Danish Refugee Council (DRC)',
+            'Reporting Month': periodStr,
+            'Population Group': AiMapper.mapPopulationGroup(
+              match(status).cases({idp: Person.DisplacementStatus.Idp}).default(Person.DisplacementStatus.NonDisplaced),
+            ),
+            'Non-individuals Reached': grouped.length,
+            'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,
+            'Adult Women (18-59)': disagg['Adult Women (18-59)'] ?? 0,
+            'Boys (0-17)': disagg['Boys (0-17)'] ?? 0,
+            'Girls (0-17)': disagg['Girls (0-17)'] ?? 0,
+            'Older Women (60+)': disagg['Older Women (60+)'] ?? 0,
+            'Older Men (60+)': disagg['Older Men (60+)'] ?? 0,
+            'Total Individuals Reached': disagg['Total Individuals Reached'] ?? 0,
+          }
+          const recordId = ActivityInfoSdk.makeRecordId({
+            prefix: 'drcsnficsr',
+            periodStr: periodStr,
+            index: index++,
+          })
+          const request = AiTypeSnfiRmm.buildRequest(
+            {
+              ...ai,
+              ...(await AiMapper.getLocationRecordIdByMeta({oblast, raion, hromada, settlement})),
+            },
+            recordId,
+          )
+
+          return {
+            recordId,
+            data: grouped,
+            activity: ai,
+            requestBody: ActivityInfoSdk.wrapRequest(request),
+            submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai.Settlement, ai['Plan/Project Code']),
+          }
+        },
+      }).transforms,
+    )
   }
 }

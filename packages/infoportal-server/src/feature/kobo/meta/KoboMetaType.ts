@@ -1,4 +1,5 @@
 import {Kobo} from 'kobo-sdk'
+
 import {KoboSubmissionMetaData, KoboValidation} from 'infoportal-common'
 
 export type KoboMetaOrigin<

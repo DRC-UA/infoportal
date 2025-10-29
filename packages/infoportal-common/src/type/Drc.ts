@@ -108,6 +108,7 @@ export enum DrcProgram {
   SectoralCashForAnimalFeed = 'SectoralCashForAnimalFeed',
   SectoralCashForAnimalShelterRepair = 'SectoralCashForAnimalShelterRepair',
   ShelterRepair = 'ShelterRepair',
+  ShelterCommonSpacesRepair = 'ShelterCommonSpacesRepair',
   TIA = 'TIA',
   VET = 'VET',
   WGSS = 'WGSS',
@@ -154,7 +155,8 @@ export class DrcSectorHelper {
     SectoralCashForAgriculture: [DrcSector.Livelihoods],
     SectoralCashForAnimalFeed: [DrcSector.Livelihoods],
     SectoralCashForAnimalShelterRepair: [DrcSector.Livelihoods],
-    ShelterRepair: [DrcSector.Shelter],
+    [DrcProgram.ShelterRepair]: [DrcSector.Shelter],
+    [DrcProgram.ShelterCommonSpacesRepair]: [DrcSector.Shelter],
     TIA: [DrcSector.VA],
     VET: [DrcSector.Livelihoods],
     WGSS: [DrcSector.GBV], //	# of women and girls who received recreational and livelihood skills including vocational education sessions in women and girls safe spaces

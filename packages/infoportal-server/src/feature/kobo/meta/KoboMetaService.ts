@@ -89,6 +89,7 @@ export class KoboMetaMapper {
     [KoboIndex.byName('protection_referral').id]: KoboMetaMapperProtection.referral,
     [KoboIndex.byName('shelter_nta').id]: KoboMetaMapperShelter.createNta,
     [KoboIndex.byName('shelter_cashForShelter').id]: KoboMetaMapperShelter.createCfShelter,
+    [KoboIndex.byName('shelter_commonSpaces').id]: KoboMetaMapperShelter.createCommonSpaces,
     [KoboIndex.byName('va_bio_tia').id]: KoboMetaMapperVa.bioAndTia,
   }
 

@@ -1006,6 +1006,7 @@ export namespace KoboXmlMapper {
         },
       ]
     }
+
     export const protection_ipaPdm: PersonsMapper<Protection_ipa_pdm.T> = (row) => {
       return [
         {
@@ -1022,28 +1023,43 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const shelter_common_test: PersonsMapper<Shelter_commonSpaces.T> = (row) => {
-      const flatEntries = row.apartment_information?.flatMap(({hh_char_hh_det}) => hh_char_hh_det)
-
+    export const shelter_common_spaces_hh: PersonsMapper<Shelter_commonSpaces.T['apartment_information'][number]> = (
+      hh,
+    ) => {
       return (
-        flatEntries?.map((subEntry) => ({
-          age: safeAge(subEntry?.hh_char_hh_det_age),
-          gender: match(subEntry?.hh_char_hh_det_gender)
+        hh.hh_char_hh_det.map((hhMember) => ({
+          age: safeAge(hhMember?.hh_char_hh_det_age),
+          gender: match(hhMember?.hh_char_hh_det_gender)
             .cases({
               male: Person.Gender.Male,
               female: Person.Gender.Female,
             })
             .default(() => undefined),
-          displacement: undefined,
+          displacement: match(hh.hh_char_res_stat)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              long_res: Person.DisplacementStatus.NonDisplaced,
+              ret: Person.DisplacementStatus.Returnee,
+              ref_asy: Person.DisplacementStatus.Refugee,
+            })
+            .default(undefined),
           disability: Disability.common({
-            hh_char_hh_det_dis_level: subEntry?.hh_char_hh_det_dis_level,
+            hh_char_hh_det_dis_level: hhMember?.hh_char_hh_det_dis_level,
             hh_char_hh_det_dis_select:
-              ((subEntry?.hh_char_hh_det_dis_select as string | undefined)?.split(
+              ((hhMember?.hh_char_hh_det_dis_select as string | undefined)?.split(
                 ' ',
               ) as Shelter_commonSpaces.Option<'hh_char_hh_det_dis_select'>[]) ?? [],
           }),
         })) ?? []
       )
+    }
+
+    export const shelter_common_spaces: PersonsMapper<Shelter_commonSpaces.T> = (row) => {
+      const hh = row.apartment_information?.flatMap(({hh_char_hh_det, hh_char_res_stat}) => {
+        return hh_char_hh_det?.map((hhMember) => ({...hhMember, hh_char_res_stat}))
+      })
+
+      return shelter_common_spaces_hh(hh)
     }
   }
 
