@@ -39,6 +39,8 @@ export namespace AiShelterMapper {
     return planCodes[p] ?? `${aiInvalidValueFlag} ${p}`
   }
 
+  const displacementStatusError = `${aiInvalidValueFlag} displacement status is not set or doesn't fit`
+
   export type Bundle = AiTable<AiTypeSnfiRmm.Type>
 
   export const reqEsk =
@@ -102,7 +104,8 @@ export namespace AiShelterMapper {
                       '2024-02': '2024-03',
                     })
                     .default(() => periodStr),
-                  'Population Group': AiMapper.mapPopulationGroup(displacement),
+                  'Population Group':
+                    AiMapper.mapPopulationGroup(displacement) ?? (displacementStatusError as 'Non-Displaced'), // assert to get rid of TS error in ugly way,
                   'Non-individuals Reached': grouped.length,
                   'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
                   'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
@@ -188,7 +191,16 @@ export namespace AiShelterMapper {
                 'Plan/Project Code': getPlanCode(project),
                 'Reporting Organization': 'Danish Refugee Council (DRC)',
                 'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
-                'Population Group': AiMapper.mapPopulationGroup(status),
+                'Population Group':
+                  AiMapper.mapPopulationGroup(
+                    match(status)
+                      .cases({
+                        Idp: Person.DisplacementStatus.Idp,
+                        NonDisplaced: Person.DisplacementStatus.NonDisplaced,
+                        Returnee: Person.DisplacementStatus.NonDisplaced,
+                      })
+                      .default(undefined),
+                  ) ?? (displacementStatusError as 'Non-Displaced'), // assert to get rid of TS error in ugly way,
                 'Non-individuals Reached': grouped.length,
                 'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,
                 'Adult Women (18-59)': disagg['Adult Women (18-59)'] ?? 0,
@@ -262,7 +274,10 @@ export namespace AiShelterMapper {
             grouped.flatMap(({apartment}) => KoboXmlMapper.Persons.shelter_common_spaces_hh(apartment) ?? []),
           )
           const project = match(projectCode)
-            .cases({ukr000423_echo4: DrcProject['UKR-000423 ECHO4'], ukr000399_sdc3: DrcProject['UKR-000399 SDC']})
+            .cases({
+              ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+              ukr000399_sdc3: DrcProject['UKR-000399 SDC3'],
+            })
             .default(undefined)
           const oblast = KoboXmlMapper.Location.mapOblast(oblastCode)?.name!
 
@@ -275,14 +290,21 @@ export namespace AiShelterMapper {
               .cases({
                 cash: 'Humanitarian repair > # supported through repairs of common spaces > cash-voucher',
               } as const)
-              .default(() => 'Humanitarian repair > # supported through repairs of common spaces > in-kind'),
+              .default('Humanitarian repair > # supported through repairs of common spaces > in-kind'),
             'Implementing Partner': 'Danish Refugee Council (DRC)',
             'Plan/Project Code': getPlanCode(project!),
             'Reporting Organization': 'Danish Refugee Council (DRC)',
             'Reporting Month': periodStr,
-            'Population Group': AiMapper.mapPopulationGroup(
-              match(status).cases({idp: Person.DisplacementStatus.Idp}).default(Person.DisplacementStatus.NonDisplaced),
-            ),
+            'Population Group':
+              AiMapper.mapPopulationGroup(
+                match(status)
+                  .cases({
+                    idp: Person.DisplacementStatus.Idp,
+                    long_res: Person.DisplacementStatus.NonDisplaced,
+                    ret: Person.DisplacementStatus.NonDisplaced,
+                  })
+                  .default(undefined),
+              ) ?? (`${aiInvalidValueFlag} Displacement Status Not Set` as 'Non-Displaced'), // assert to get rid of TS error in ugly way
             'Non-individuals Reached': grouped.length,
             'Adult Men (18-59)': disagg['Adult Men (18-59)'] ?? 0,
             'Adult Women (18-59)': disagg['Adult Women (18-59)'] ?? 0,

@@ -52,13 +52,17 @@ export namespace AiMapper {
     }
   }
 
-  export const mapPopulationGroup = (status?: Person.DisplacementStatus): AiFslType.Type['Population Group'] => {
+  export const mapPopulationGroup = (
+    status?: Person.DisplacementStatus,
+  ): AiFslType.Type['Population Group'] | undefined => {
     return match(status)
       .cases({
         Idp: 'Internally Displaced',
+        NonDisplaced: 'Non-Displaced',
         // Returnee: 'Returnees',
+        // Refugee: 'Refugees',
       } as const)
-      .default('Non-Displaced')
+      .default(undefined)
   }
 
   export const disaggregatePersons = (
