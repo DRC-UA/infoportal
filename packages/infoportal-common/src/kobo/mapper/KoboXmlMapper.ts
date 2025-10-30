@@ -1023,11 +1023,11 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const shelter_common_spaces_hh: PersonsMapper<Shelter_commonSpaces.T['apartment_information'][number]> = (
-      hh,
-    ) => {
+    export const shelter_common_spaces_hh: PersonsMapper<
+      Pick<NonNullable<Shelter_commonSpaces.T['apartment_information']>[number], 'hh_char_hh_det' | 'hh_char_res_stat'>
+    > = ({hh_char_hh_det, hh_char_res_stat}) => {
       return (
-        hh.hh_char_hh_det.map((hhMember) => ({
+        hh_char_hh_det?.map((hhMember) => ({
           age: safeAge(hhMember?.hh_char_hh_det_age),
           gender: match(hhMember?.hh_char_hh_det_gender)
             .cases({
@@ -1035,7 +1035,7 @@ export namespace KoboXmlMapper {
               female: Person.Gender.Female,
             })
             .default(() => undefined),
-          displacement: match(hh.hh_char_res_stat)
+          displacement: match(hh_char_res_stat)
             .cases({
               idp: Person.DisplacementStatus.Idp,
               long_res: Person.DisplacementStatus.NonDisplaced,
@@ -1055,11 +1055,12 @@ export namespace KoboXmlMapper {
     }
 
     export const shelter_common_spaces: PersonsMapper<Shelter_commonSpaces.T> = (row) => {
-      const hh = row.apartment_information?.flatMap(({hh_char_hh_det, hh_char_res_stat}) => {
-        return hh_char_hh_det?.map((hhMember) => ({...hhMember, hh_char_res_stat}))
-      })
+      const hhs = row.apartment_information?.map(({hh_char_hh_det, hh_char_res_stat}) => ({
+        hh_char_hh_det,
+        hh_char_res_stat,
+      }))
 
-      return shelter_common_spaces_hh(hh)
+      return hhs?.map(shelter_common_spaces_hh).flat() ?? []
     }
   }
 
