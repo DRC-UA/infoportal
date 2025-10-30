@@ -109,7 +109,7 @@ export namespace AiGbvMapper2 {
           activity: {
             'Non-individuals Reached/Quantity': grouped.length,
             'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
-            'Population Group': AiMapper.mapPopulationGroup(displacement),
+            'Population Group': AiMapper.mapPopulationGroup(displacement) ?? 'Non-Displaced',
             Indicators: match(activity)
               .cases({
                 WGSS: 'Support through Women and Girls Safe Spaces (WGSS) > # of women and girls who participated in skill-building, recreational, or livelihood (including vocational education) activities in women and girls safe spaces',

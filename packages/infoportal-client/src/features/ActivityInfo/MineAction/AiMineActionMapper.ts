@@ -205,7 +205,7 @@ export namespace AiMineActionMapper {
           activity: {
             'Non-individuals Reached/Quantity': grouped.length,
             'Reporting Month': periodStr,
-            'Population Group': AiMapper.mapPopulationGroup(displacement),
+            'Population Group': AiMapper.mapPopulationGroup(displacement) ?? 'Non-Displaced',
             Indicators: match(activity)
               .cases({
                 TIA: 'Cash assistance provided to mine / ERW survivor (SADD) > # EO survivors who received cash assistance (SADD)',

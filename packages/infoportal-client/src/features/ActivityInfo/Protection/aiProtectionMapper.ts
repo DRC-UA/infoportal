@@ -142,7 +142,7 @@ export namespace AiProtectionMapper {
               .default(
                 () => `${aiInvalidValueFlag} acivity` as AiProtectionType.AiTypeActivitiesAndPeople['Indicators'],
               ),
-            'Population Group': AiMapper.mapPopulationGroup(displacement),
+            'Population Group': AiMapper.mapPopulationGroup(displacement) ?? 'Non-Displaced',
             'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
             ...match<DrcProgram>(activity)
               .cases({

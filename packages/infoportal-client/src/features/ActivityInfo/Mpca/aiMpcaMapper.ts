@@ -96,7 +96,7 @@ export namespace AiMpcaMapper {
             {by: ({hromada}) => hromada!},
             {by: ({settlement}) => settlement!},
             {by: ({project}) => project?.[0]},
-            {by: ({displacement}) => AiMapper.mapPopulationGroup(displacement)},
+            {by: ({displacement}) => AiMapper.mapPopulationGroup(displacement) ?? 'Non-Displaced'},
             {by: ({theme}) => theme},
           ],
           finalTransform: async (grouped, groups) => {

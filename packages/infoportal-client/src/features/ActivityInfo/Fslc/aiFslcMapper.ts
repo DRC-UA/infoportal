@@ -123,7 +123,7 @@ export namespace AiFslcMapper {
               Raion: raion,
               Hromada: hromada,
               Settlement: settlement,
-              'Population Group': AiMapper.mapPopulationGroup(displacement!),
+              'Population Group': AiMapper.mapPopulationGroup(displacement!) ?? 'Non-Displaced',
               ...(() => {
                 if (activity === DrcProgram.MSME) {
                   const msmeDisaggregation = AiMapper.disaggregatePersons(

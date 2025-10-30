@@ -1,6 +1,15 @@
 import {match} from '@axanc/ts-utils'
 
-import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, Period, PeriodHelper, type IKoboMeta} from 'infoportal-common'
+import {
+  DrcProgram,
+  DrcProject,
+  groupBy,
+  KoboMetaStatus,
+  Period,
+  PeriodHelper,
+  Person,
+  type IKoboMeta,
+} from 'infoportal-common'
 
 import type {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
@@ -115,7 +124,7 @@ export namespace AiChildProtectionMapper {
           activity: {
             'Non-individuals Reached/Quantity': grouped.length,
             'Reporting Month': periodStr,
-            'Population Group': AiMapper.mapPopulationGroup(displacement),
+            'Population Group': AiMapper.mapPopulationGroup(displacement) ?? 'Non-Displaced',
             Indicators: match(activity)
               .cases({
                 TIA: 'Service for children affected by, or at-risk victims of, explosive ordnance (EO)/victim assistance > # of children and caregivers who have been affected by landmine or other explosive weapons received by prevention and/or survivor assistance interventions',

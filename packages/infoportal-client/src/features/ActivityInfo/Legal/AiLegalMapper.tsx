@@ -142,7 +142,7 @@ namespace AiLegalMapper {
                   'Protection counselling > # of individuals who received protection counselling',
               } as const)
               .default(() => `${aiInvalidValueFlag} acivity` as AiLegalType.AiTypeActivitiesAndPeople['Indicators']),
-            'Population Group': AiMapper.mapPopulationGroup(displacement),
+            'Population Group': AiMapper.mapPopulationGroup(displacement) ?? 'Non-Displaced',
             'Reporting Month': periodStr === '2025-05' ? '2025-06' : periodStr,
             'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
             'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,

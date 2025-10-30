@@ -63,7 +63,7 @@ export namespace AiWashMapper {
                     'WASH NFI distributions (in-kind) > # of individuals benefiting from hygiene kit/items distribution (in-kind)',
                   'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
                   'Is the disaggregation by population group, gender and age known?': 'Yes',
-                  'Population Group': AiMapper.mapPopulationGroup(displacement),
+                  'Population Group': AiMapper.mapPopulationGroup(displacement) ?? 'Non-Displaced',
                   'Total Reached (No Disaggregation)': null as any, //disaggregation['Total Individuals Reached']
                   'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,
                   'Boys (0-17)': disaggregation['Boys (0-17)'] ?? 0,
