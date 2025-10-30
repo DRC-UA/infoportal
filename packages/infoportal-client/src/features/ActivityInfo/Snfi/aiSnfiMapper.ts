@@ -241,6 +241,7 @@ export namespace AiShelterMapper {
         apartment_information?.map((apartment) => ({...submission, apartment})),
       )
       .filter((record) => record !== undefined)
+      .map((record) => ({...record, koboId: record.id})) // to pass kobo id to Activity Info Table
 
     let index = 0
 
@@ -248,7 +249,7 @@ export namespace AiShelterMapper {
       groupBy({
         data: inflatedData,
         groups: [
-          {by: ({project}) => project?.[0]!},
+          {by: ({project}) => project!},
           {by: ({ben_det_oblast}) => ben_det_oblast!},
           {by: ({ben_det_raion}) => ben_det_raion!},
           {by: ({ben_det_hromada}) => ben_det_hromada!},
