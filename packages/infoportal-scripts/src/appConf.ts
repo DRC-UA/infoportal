@@ -21,11 +21,11 @@ export const appConf = {
       urlV1: e(required)('KOBO_DRC_URLV1'),
       token: e(required)('KOBO_DRC_TOKEN'),
     },
-    // kf: {
-    //   url: e(required)('KOBO_KF_URL'),
-    //   urlV1: e(required)('KOBO_KF_URLV1'),
-    //   token: e(required)('KOBO_KF_TOKEN'),
-    // },
+    kf: {
+      url: e(required)('KOBO_KF_URL'),
+      urlV1: e(required)('KOBO_KF_URLV1'),
+      token: e(required)('KOBO_KF_TOKEN'),
+    },
   },
 }
 
