@@ -1447,6 +1447,7 @@ const en = Object.freeze({
         SectoralCashForAnimalFeed: 'Sectoral Cash for Animal feed',
         SectoralCashForAnimalShelterRepair: 'Sectoral Cash for Animal shelter repair',
         ShelterRepair: 'Shelter Repair',
+        ShelterCommonSpacesRepair: 'Shelter: Common Spaces Repair',
         TIA: 'TIA',
         VET: 'Vocational training (VET)',
         WGSS: 'WGSS Activities',
