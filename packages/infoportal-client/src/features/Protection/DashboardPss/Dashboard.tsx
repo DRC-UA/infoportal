@@ -1,4 +1,5 @@
 import {useMemo, type FC} from 'react'
+import {match} from '@axanc/ts-utils'
 import {format} from 'date-fns'
 
 import {capitalize, groupBy, OblastIndex, Person, Protection_pss} from 'infoportal-common'
@@ -35,22 +36,75 @@ const PssDashboardWithContext: FC = () => {
   const pluralizeSessions = usePlurals(m.plurals.session)
   const pluralizeIndividuals = usePlurals(m.plurals.individuals)
   const pluralizeUniqueIndividuals = usePlurals(m.plurals.uniqueIndividuals)
+  const pluralizeSubmissions = usePlurals(m.plurals.submission)
   const filteredIndividualSessions = data?.filtered.filter(({activity}) => activity === 'ais') ?? []
-  const participantsById = useMemo(
+  const clearFilters = () => {
+    filters.setFilters({})
+    filters.setPeriod({})
+  }
+
+  const distinctIndividuals = useMemo(
     () =>
       Object.entries(
         groupBy({
-          data: data?.flatFiltered.compactBy('participant_code') ?? [],
+          data:
+            data?.flatFiltered
+              .flatMap(({hh_char_hh_det, id}) => hh_char_hh_det?.map((char) => ({...char, id})) ?? [])
+              .filter(({code_beneficiary}) => Boolean(code_beneficiary)) ?? [],
           groups: [
             {
-              by: ({participant_code}) => participant_code!,
+              by: ({code_beneficiary}) => code_beneficiary!,
             },
           ],
-          finalTransform: (array) => array[0].participant_code,
+          finalTransform: (input) => ({occurrences: input.length, ids: input?.map(({id}) => id)}),
         }).groups,
-      ).length,
+      ),
     [data?.flatFiltered],
   )
+
+  const sessionsCounter = useMemo(() => {
+    const {pgs, ais, mhpss, community_dialogues_session} = groupBy({
+      data: data?.filtered ?? [],
+      groups: [
+        {
+          by: ({activity}) => activity!,
+        },
+      ],
+      finalTransform: (input) => input,
+    }).groups
+
+    return {
+      pgs: groupBy({
+        data: pgs?.filter(({cycle_code}) => cycle_code !== undefined),
+        groups: [{by: ({cycle_code}) => cycle_code!}],
+        finalTransform: (group) => ({cycle_length: group[0]?.cycle_type}),
+      }).transforms.reduce((accum, {cycle_length}) => {
+        return match(cycle_length)
+          .cases({
+            short: accum + 5,
+            short_6: accum + 6,
+            long: accum + 6,
+          })
+          .default(0)
+      }, 0),
+      ais: ais?.reduce((counter, submission) => {
+        const sessionsCount = [
+          submission.date_session1,
+          submission.date_session2,
+          submission.date_session3,
+          submission.date_session4,
+          submission.date_session5,
+          submission.date_session6,
+          submission.date_session7,
+          submission.date_session8,
+        ].filter(Boolean).length
+
+        return counter + sessionsCount
+      }, 0),
+    }
+  }, [data?.flatFiltered])
+
+  console.log(sessionsCounter)
 
   if (!data) return null
 
@@ -61,36 +115,58 @@ const PssDashboardWithContext: FC = () => {
         filters={filters.filters}
         shapes={filters.shape}
         setFilters={filters.setFilters}
-        onClear={() => {
-          filters.setFilters({})
-          filters.setPeriod({})
-        }}
+        onClear={clearFilters}
         before={
-          <>
-            <PeriodPicker
-              value={[filters.period.start, filters.period.end]}
-              defaultValue={[filters.period.start, filters.period.end]}
-              onChange={([start, end]) => {
-                filters.setPeriod((prev) => ({...prev, start, end}))
-              }}
-              label={[m.start, m.endIncluded]}
-              max={today}
-              fullWidth={false}
-            />
-          </>
+          <PeriodPicker
+            value={[filters.period.start, filters.period.end]}
+            defaultValue={[filters.period.start, filters.period.end]}
+            onChange={([start, end]) => {
+              filters.setPeriod((prev) => ({...prev, start, end}))
+            }}
+            label={[m.start, m.endIncluded]}
+            max={today}
+            fullWidth={false}
+          />
         }
       />
       <Div column>
+        <Div sx={{alignItems: 'stretch'}}>
+          <SlideWidget sx={{flex: 1}} icon="checklist" title={pluralizeSubmissions(data.filtered.length)!}>
+            {formatLargeNumber(data.filtered.length)}
+          </SlideWidget>
+          <SlideWidget sx={{flex: 1}} icon="person" title={pluralizeIndividuals(data.flatFiltered.length)!}>
+            {formatLargeNumber(data.flatFiltered.length)}
+          </SlideWidget>
+          <SlideWidget
+            sx={{flex: 1}}
+            icon="person"
+            title={`${pluralizeUniqueIndividuals(distinctIndividuals.length)}*`}
+            tooltip={m.pssDashboardUniqueIndividualsHint}
+          >
+            {distinctIndividuals.length}
+          </SlideWidget>
+        </Div>
         <Div responsive>
           <Div column>
-            <Div sx={{alignItems: 'stretch'}}>
-              <SlideWidget sx={{flex: 1}} icon="groups" title={pluralizeSessions(data.filtered.length)!}>
-                {formatLargeNumber(data.filtered.length)}
-              </SlideWidget>
-              <SlideWidget sx={{flex: 1}} icon="person" title={pluralizeIndividuals(data.flatFiltered.length)!}>
-                {formatLargeNumber(data.flatFiltered.length)}
-              </SlideWidget>
-            </Div>
+            <Panel title="Distinct Individuals">
+              <ChartBarSingleBy
+                data={data.flatFiltered.flatMap(
+                  ({hh_char_hh_det, ...rest}) =>
+                    hh_char_hh_det?.map(({code_beneficiary}) => ({
+                      ...rest,
+                      individualId: code_beneficiary ?? 'not set',
+                    })) ?? [{individualId: 'not set'}],
+                )}
+                by={({individualId}) => individualId}
+                label={distinctIndividuals.reduce(
+                  (accum, [individualId, {ids}]) => ({
+                    ...accum,
+                    [individualId ?? 'undefined']: `${individualId}: ${ids.join(' ')}`,
+                  }),
+                  {},
+                )}
+              />
+            </Panel>
             <Panel title={m.submissions}>
               <ChartLineBy
                 sx={{mt: 1}}
@@ -113,22 +189,6 @@ const PssDashboardWithContext: FC = () => {
                     }
                   />
                 )}
-              </PanelBody>
-            </Panel>
-            <Panel title={translateOptions('activity').find(({value}) => value === 'ais')?.label}>
-              <PanelBody>
-                <Div sx={{alignItems: 'stretch'}}>
-                  <SlideWidget
-                    sx={{flex: 1}}
-                    icon="group"
-                    title={pluralizeSessions(filteredIndividualSessions.length)!}
-                  >
-                    {formatLargeNumber(filteredIndividualSessions.length)}
-                  </SlideWidget>
-                  <SlideWidget sx={{flex: 1}} icon="person" title={pluralizeUniqueIndividuals(participantsById)!}>
-                    {formatLargeNumber(participantsById)}
-                  </SlideWidget>
-                </Div>
               </PanelBody>
             </Panel>
           </Div>

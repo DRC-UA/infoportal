@@ -1,11 +1,15 @@
-import {Box, BoxProps, Icon, useTheme} from '@mui/material'
+import {useEffect, useRef, type ReactNode} from 'react'
+import {Box, BoxProps, Icon, useTheme, Tooltip} from '@mui/material'
+
+import {uppercaseHandlingAcronyms} from 'infoportal-common'
+
 import {Txt, TxtProps} from '@/shared/Txt'
-import React, {ReactNode, useEffect, useRef} from 'react'
-import {usePdfContext} from './PdfLayout'
+
 import {Panel, PanelBody} from '../Panel'
 import {PanelProps} from '../Panel/Panel'
-import {uppercaseHandlingAcronyms} from 'infoportal-common'
 import {PanelBodyProps} from '../Panel/PanelBody'
+
+import {usePdfContext} from './PdfLayout'
 
 export const PdfSlide = ({
   format = 'horizontal',
@@ -16,6 +20,7 @@ export const PdfSlide = ({
   const y = '21.0cm'
   const width = format === 'horizontal' ? x : y
   const height = format === 'horizontal' ? y : x
+
   return (
     <Box
       {...props}
@@ -220,11 +225,19 @@ export const SlideWidget = ({
   children,
   title,
   icon,
+  tooltip,
   ...props
 }: Omit<PanelProps, 'title' | 'expendable' | 'savableAsImg'> & {
+  tooltip?: string
   icon?: string | ReactNode
   title: string
 }) => {
+  const text = (
+    <Txt block color="hint" bold sx={{lineHeight: 1, mt: 0.5}} fontSize="0.90em">
+      {uppercaseHandlingAcronyms(title)}
+    </Txt>
+  )
+
   return (
     <SlidePanel
       {...props}
@@ -266,9 +279,7 @@ export const SlideWidget = ({
           ))}
         {children}
       </Box>
-      <Txt block color="hint" bold sx={{lineHeight: 1, mt: 0.5}} fontSize="0.90em">
-        {uppercaseHandlingAcronyms(title)}
-      </Txt>
+      {tooltip ? <Tooltip title={tooltip}>{text}</Tooltip> : text}
     </SlidePanel>
   )
 }
