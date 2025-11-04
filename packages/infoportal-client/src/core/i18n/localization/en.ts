@@ -1523,6 +1523,7 @@ const en = Object.freeze({
     pssDashboard: {
       uniqueIndividualsHint: 'Depersonalized identifying data is being collected since late September 2025',
       sessionsCounterTitle: 'Sessions conducted:',
+      sessionsAttendanceWidgetTitle: 'PGS Attendance Statistics',
     },
     plurals: {
       session: {

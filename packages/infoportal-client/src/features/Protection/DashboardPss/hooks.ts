@@ -16,22 +16,22 @@ type UsePssFilter = ReturnType<typeof usePssFilters>
 
 const useOptionsTranslation = () => {
   const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
-  const schema = schemaContext.byName['protection_pss'].get
+  const pssSchema = schemaContext.byName['protection_pss'].get
 
-  const getOptionTranslation = useCallback(
-    (option: keyof Protection_pss.T) => {
+  const getOptionTranslations = useCallback(
+    (option: keyof Protection_pss.T | keyof typeof Protection_pss.options) => {
       return (
-        schema?.helper.getOptionsByQuestionName(option).map(({name}) => ({
+        pssSchema?.helper.getOptionsByQuestionName(option).map(({name}) => ({
           value: name,
-          label: schema.translate.choice(option, name) ?? name,
+          label: pssSchema.translate.choice(option, name) ?? name,
         })) ?? []
       )
     },
-    [schema],
+    [pssSchema],
   )
 
   return {
-    translateOptions: getOptionTranslation,
+    translateOption: getOptionTranslations,
   }
 }
 
@@ -39,7 +39,7 @@ const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
   const {m, currentLang} = useI18n()
   const [period, setPeriod] = useState<Partial<Period>>({})
   const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
-  const {translateOptions} = useOptionsTranslation()
+  const {translateOption} = useOptionsTranslation()
 
   useEffect(() => {
     schemaContext.setLangIndex(match(currentLang).cases({en: 1}).default(0))
@@ -51,35 +51,35 @@ const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
         icon: appConfig.icons.office,
         label: m.office,
         getValue: ({staff_to_insert_their_DRC_office}) => staff_to_insert_their_DRC_office,
-        getOptions: () => translateOptions('staff_to_insert_their_DRC_office'),
+        getOptions: () => translateOption('staff_to_insert_their_DRC_office'),
       },
       oblast: {
         icon: appConfig.icons.oblast,
         label: m.oblast,
         getValue: ({ben_det_oblast}) => ben_det_oblast,
-        getOptions: () => translateOptions('ben_det_oblast'),
+        getOptions: () => translateOption('ben_det_oblast'),
       },
       raion: {
         label: m.raion,
         getValue: ({ben_det_raion}) => ben_det_raion,
-        getOptions: () => translateOptions('ben_det_raion'),
+        getOptions: () => translateOption('ben_det_raion'),
       },
       hromada: {
         label: m.hromada,
         getValue: ({ben_det_hromada}) => ben_det_hromada,
-        getOptions: () => translateOptions('ben_det_hromada'),
+        getOptions: () => translateOption('ben_det_hromada'),
       },
       project: {
         icon: appConfig.icons.project,
         label: m.project,
         getValue: ({project}) => project,
-        getOptions: () => translateOptions('project'),
+        getOptions: () => translateOption('project'),
       },
       activity: {
         // icon: appConfig.icons.project,
         label: m.activity,
         getValue: ({activity}) => activity,
-        getOptions: () => translateOptions('activity'),
+        getOptions: () => translateOption('activity'),
       },
     })
   }, [data])

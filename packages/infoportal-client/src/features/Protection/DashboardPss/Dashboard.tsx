@@ -33,13 +33,13 @@ const DashboardPss: FC = () => {
 const PssDashboardWithContext: FC = () => {
   const {data, fetcher, filters} = usePssContext()
   const {m, formatLargeNumber} = useI18n()
-  const {translateOptions} = useOptionsTranslation()
+  const {translateOption} = useOptionsTranslation()
   const pluralizeIndividuals = usePlurals(m.plurals.individuals)
   const pluralizeUniqueIndividuals = usePlurals(m.plurals.uniqueIndividuals)
   const pluralizeSubmissions = usePlurals(m.plurals.submission)
   const translateActivityOptions = (sessionType: Protection_pss.T['activity']): string => {
     return (
-      translateOptions('activity').find(({value}) => value === sessionType)?.label ??
+      translateOption('activity').find(({value}) => value === sessionType)?.label ??
       `Missing translation for the "${sessionType}" option`
     )
   }
@@ -68,8 +68,6 @@ const PssDashboardWithContext: FC = () => {
       ),
     [data?.flatFiltered],
   )
-
-  // console.log(sessionsCounter)
 
   if (!data) return null
 
@@ -144,9 +142,25 @@ const PssDashboardWithContext: FC = () => {
                     data={data.filtered}
                     by={({activity}) => activity!}
                     label={
+                      Object.fromEntries(translateOption('activity').map(({value, label}) => [value, label])) as Record<
+                        Protection_pss.Option<'activity'>,
+                        string
+                      >
+                    }
+                  />
+                )}
+              </PanelBody>
+            </Panel>
+            <Panel title={m.pssDashboard.sessionsAttendanceWidgetTitle}>
+              <PanelBody>
+                {data.filtered && (
+                  <ChartBarMultipleBy
+                    data={data.filtered.flatMap(({hh_char_hh_det}) => hh_char_hh_det ?? []) ?? []}
+                    by={({hh_char_hh_session}) => hh_char_hh_session!}
+                    label={
                       Object.fromEntries(
-                        translateOptions('activity').map(({value, label}) => [value, label]),
-                      ) as Record<Protection_pss.Option<'activity'>, string>
+                        translateOption('hh_char_hh_session').map(({value, label}) => [value, label]),
+                      ) as Record<Protection_pss.Option<'hh_char_hh_session'>, string>
                     }
                   />
                 )}
@@ -191,7 +205,7 @@ const PssDashboardWithContext: FC = () => {
                     data={data.filtered}
                     by={({project}) => project!}
                     label={
-                      Object.fromEntries(translateOptions('project').map(({value, label}) => [value, label])) as Record<
+                      Object.fromEntries(translateOption('project').map(({value, label}) => [value, label])) as Record<
                         Protection_pss.Option<'project'>,
                         string
                       >
