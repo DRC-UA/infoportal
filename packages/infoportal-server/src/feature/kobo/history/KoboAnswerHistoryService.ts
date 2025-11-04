@@ -28,9 +28,14 @@ export class KoboAnswerHistoryService {
     private log: AppLogger = app.logger('KoboAnswerHistoryService'),
   ) {}
 
-  readonly search = (params: KoboAnswerHistoryHelper.Search) => {
-    return this.prisma.koboAnswersHistory
-      .findMany({
+  // chunkify the request due to a 32767 PostreSQL limitation on "bind variables in prepared statement"
+  readonly search = async ({formId, chunkSize = 10000}: KoboAnswerHistoryHelper.Search) => {
+    let skip = 0
+    let hasMore = true
+    const chunks: unknown[] = [] // TODO: apply constraint, avoid quick fixes
+
+    while (hasMore) {
+      const records = await this.prisma.koboAnswersHistory.findMany({
         include: {
           answers: {
             select: {
@@ -39,17 +44,28 @@ export class KoboAnswerHistoryService {
           },
         },
         where: {
-          formId: params.formId,
+          formId,
         },
         orderBy: {date: 'desc'},
+        skip,
+        take: chunkSize,
       })
-      .then((_) => {
-        return _.map((history) => ({
-          ...history,
-          answerIds: history.answers.map((_) => _.id),
-        }))
-      })
-      .then(ApiPaginateHelper.wrap())
+
+      if (records.length === 0) {
+        hasMore = false
+      } else {
+        chunks.push(
+          records.map((history) => ({
+            ...history,
+            answerIds: history.answers.map((_) => _.id),
+          })),
+        )
+        skip += chunkSize
+        hasMore = records.length === chunkSize
+      }
+    }
+
+    return ApiPaginateHelper.wrap()(chunks.flat())
   }
 
   readonly create = async ({authorEmail, formId, answerIds, property, newValue, type}: Create) => {

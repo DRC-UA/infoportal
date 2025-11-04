@@ -5,6 +5,7 @@ export namespace KoboAnswerHistoryHelper {
   export const validation = {
     search: yup.object({
       formId: yup.string().required(),
+      chunkSize: yup.number(),
     }),
   }
 
