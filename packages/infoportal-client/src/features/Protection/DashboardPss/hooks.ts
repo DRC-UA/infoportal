@@ -14,32 +14,38 @@ import type {ProtectionPssWithPersons} from './types'
 
 type UsePssFilter = ReturnType<typeof usePssFilters>
 
-const useOptionsTranslation = () => {
+const useTranslations = () => {
   const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
   const pssSchema = schemaContext.byName['protection_pss'].get
 
   const getOptionTranslations = useCallback(
     (option: keyof Protection_pss.T | keyof typeof Protection_pss.options) => {
-      return (
-        pssSchema?.helper.getOptionsByQuestionName(option).map(({name}) => ({
-          value: name,
-          label: pssSchema.translate.choice(option, name) ?? name,
-        })) ?? []
-      )
+      return pssSchema?.helper.getOptionsByQuestionName(option).map(({name}) => ({
+        value: name,
+        label: pssSchema.translate.choice(option, name) ?? name,
+      }))
     },
     [pssSchema],
   )
 
   return {
     translateOption: getOptionTranslations,
+    translateField: pssSchema?.translate.question,
   }
+}
+
+const useTranslateField = (): ((key: string) => string) | undefined => {
+  const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
+  const pssSchema = schemaContext.byName['protection_pss'].get
+
+  return pssSchema?.translate.question
 }
 
 const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
   const {m, currentLang} = useI18n()
   const [period, setPeriod] = useState<Partial<Period>>({})
   const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
-  const {translateOption} = useOptionsTranslation()
+  const {translateOption} = useTranslations()
 
   useEffect(() => {
     schemaContext.setLangIndex(match(currentLang).cases({en: 1}).default(0))
@@ -160,4 +166,4 @@ const useSessionsCounter = (data: PssContext['data']) =>
     }
   }, [data?.filtered])
 
-export {usePssFilters, useOptionsTranslation, useSessionsCounter, type UsePssFilter}
+export {usePssFilters, useSessionsCounter, useTranslations, type UsePssFilter}

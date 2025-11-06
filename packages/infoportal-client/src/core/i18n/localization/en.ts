@@ -1524,6 +1524,12 @@ const en = Object.freeze({
       uniqueIndividualsHint: 'Depersonalized identifying data is being collected since late September 2025',
       sessionsCounterTitle: 'Sessions conducted:',
       sessionsAttendanceWidgetTitle: 'PGS Attendance Statistics',
+      prePostWidget: {
+        title: 'Pre / Post Tests',
+        pre: 'Before',
+        post: 'After',
+        difference: 'Progress',
+      },
     },
     plurals: {
       session: {

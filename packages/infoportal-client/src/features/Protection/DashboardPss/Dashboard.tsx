@@ -1,54 +1,48 @@
 import {useMemo, type FC} from 'react'
-import {match} from '@axanc/ts-utils'
 import {format} from 'date-fns'
 
 import {capitalize, groupBy, OblastIndex, Person, Protection_pss} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
+import {Page, Txt} from '@/shared'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
+import {ChartBarVerticalGrouped} from '@/shared/charts/ChartBarGrouped'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {Page} from '@/shared/Page'
-import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
+import {Panel, PanelBody} from '@/shared/Panel'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePlurals} from '@/utils'
 
 import {PssContextProvider, usePssContext} from './Context'
-import {useOptionsTranslation, useSessionsCounter} from './hooks'
-import {Txt} from '@/shared'
+import {useTranslations, useSessionsCounter} from './hooks'
+import {colorByQuestion, prePostSummaryBuilder} from './utils'
 
-const DashboardPss: FC = () => {
-  return (
-    <PssContextProvider>
-      <PssDashboardWithContext />
-    </PssContextProvider>
-  )
-}
+const DashboardPss: FC = () => (
+  <PssContextProvider>
+    <PssDashboardWithContext />
+  </PssContextProvider>
+)
 
 const PssDashboardWithContext: FC = () => {
   const {data, fetcher, filters} = usePssContext()
   const {m, formatLargeNumber} = useI18n()
-  const {translateOption} = useOptionsTranslation()
+  const {translateOption, translateField} = useTranslations()
   const pluralizeIndividuals = usePlurals(m.plurals.individuals)
   const pluralizeUniqueIndividuals = usePlurals(m.plurals.uniqueIndividuals)
   const pluralizeSubmissions = usePlurals(m.plurals.submission)
   const translateActivityOptions = (sessionType: Protection_pss.T['activity']): string => {
     return (
-      translateOption('activity').find(({value}) => value === sessionType)?.label ??
+      translateOption('activity')?.find(({value}) => value === sessionType)?.label ??
       `Missing translation for the "${sessionType}" option`
     )
   }
   const sessionsCounter = useSessionsCounter(data)
-
-  const clearFilters = () => {
-    filters.setFilters({})
-    filters.setPeriod({})
-  }
+  const clearFilters = () => [filters.setFilters, filters.setPeriod].forEach((callback) => callback({}))
 
   const distinctIndividuals = useMemo(
     () =>
@@ -68,6 +62,8 @@ const PssDashboardWithContext: FC = () => {
       ),
     [data?.flatFiltered],
   )
+
+  const prePostTests = prePostSummaryBuilder(data?.filtered)
 
   if (!data) return null
 
@@ -141,12 +137,13 @@ const PssDashboardWithContext: FC = () => {
                   <ChartBarSingleBy
                     data={data.filtered}
                     by={({activity}) => activity!}
-                    label={
-                      Object.fromEntries(translateOption('activity').map(({value, label}) => [value, label])) as Record<
-                        Protection_pss.Option<'activity'>,
-                        string
-                      >
-                    }
+                    label={translateOption('activity')?.reduce(
+                      (result, {value, label}) => ({
+                        ...result,
+                        [value]: label,
+                      }),
+                      {} as Record<string, string>,
+                    )}
                   />
                 )}
               </PanelBody>
@@ -157,13 +154,40 @@ const PssDashboardWithContext: FC = () => {
                   <ChartBarMultipleBy
                     data={data.filtered.flatMap(({hh_char_hh_det}) => hh_char_hh_det ?? []) ?? []}
                     by={({hh_char_hh_session}) => hh_char_hh_session!}
-                    label={
-                      Object.fromEntries(
-                        translateOption('hh_char_hh_session').map(({value, label}) => [value, label]),
-                      ) as Record<Protection_pss.Option<'hh_char_hh_session'>, string>
-                    }
+                    label={translateOption('hh_char_hh_session')?.reduce(
+                      (result, {value, label}) => ({
+                        ...result,
+                        [value]: label,
+                      }),
+                      {} as Record<string, string>,
+                    )}
                   />
                 )}
+              </PanelBody>
+            </Panel>
+            <Panel title={m.pssDashboard.prePostWidget.title}>
+              <PanelBody sx={{display: 'flex'}}>
+                {prePostTests &&
+                  Object.entries(prePostTests).map(([field, figures]) => {
+                    return (
+                      <ChartBarVerticalGrouped
+                        key={field}
+                        height={400}
+                        showLegend={false}
+                        data={[
+                          {
+                            category: translateField ? translateField(field) : field,
+                            bars: Object.entries(figures).map(([name, value]) => ({
+                              key: name,
+                              label: m.pssDashboard.prePostWidget[name as keyof typeof figures],
+                              value,
+                              color: colorByQuestion[name],
+                            })),
+                          },
+                        ]}
+                      />
+                    )
+                  })}
               </PanelBody>
             </Panel>
           </Div>
@@ -204,12 +228,13 @@ const PssDashboardWithContext: FC = () => {
                   <ChartBarSingleBy
                     data={data.filtered}
                     by={({project}) => project!}
-                    label={
-                      Object.fromEntries(translateOption('project').map(({value, label}) => [value, label])) as Record<
-                        Protection_pss.Option<'project'>,
-                        string
-                      >
-                    }
+                    label={translateOption('project')?.reduce(
+                      (result, {value, label}) => ({
+                        ...result,
+                        [value]: label,
+                      }),
+                      {} as Record<string, string>,
+                    )}
                   />
                 )}
               </PanelBody>
