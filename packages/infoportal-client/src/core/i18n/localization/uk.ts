@@ -156,6 +156,12 @@ const uk = deepmerge(en, {
       uniqueIndividualsHint: 'Деперсоналізовані ідентифікуючі дані збираються з половини вересня 2025',
       sessionsCounterTitle: 'Проведено сесій:',
       sessionsAttendanceWidgetTitle: 'Відвідуваність СПП',
+      prePostWidget: {
+        title: 'Тестування до і після',
+        pre: 'До',
+        post: 'Після',
+        difference: 'Прогрес',
+      },
     },
     plurals: {
       session: {
