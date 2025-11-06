@@ -174,4 +174,5 @@ export const shelterDrcProject = [
   DrcProject['UKR-000386 Pooled Funds'],
   DrcProject['UKR-000399 SDC'],
   DrcProject['UKR-000423 ECHO4'],
+  DrcProject['UKR-000441 UHF10'],
 ]
