@@ -88,7 +88,9 @@ export namespace AiMpcaMapper {
 
       return Promise.all(
         groupBy({
-          data: dataWithTheme,
+          data: dataWithTheme.flatMap(
+            ({persons, ...rest}) => persons?.map((person) => ({...rest, persons: [person]})) ?? [],
+          ),
           groups: [
             {by: ({formId}) => formId},
             {by: ({oblast}: {oblast: OblastName}) => oblast!},
@@ -96,7 +98,7 @@ export namespace AiMpcaMapper {
             {by: ({hromada}) => hromada!},
             {by: ({settlement}) => settlement!},
             {by: ({project}) => project?.[0]},
-            {by: ({displacement}) => AiMapper.mapPopulationGroup(displacement) ?? 'Non-Displaced'},
+            {by: ({persons}) => AiMapper.mapPopulationGroup(persons[0].displacement) ?? aiInvalidValueFlag},
             {by: ({theme}) => theme},
           ],
           finalTransform: async (grouped, groups) => {
