@@ -1,5 +1,6 @@
 import {useMemo, type FC} from 'react'
 import {format} from 'date-fns'
+import {Box} from '@mui/material'
 
 import {capitalize, groupBy, OblastIndex, Person, Protection_pss} from 'infoportal-common'
 
@@ -21,6 +22,14 @@ import {usePlurals} from '@/utils'
 import {PssContextProvider, usePssContext} from './Context'
 import {useTranslations, useSessionsCounter} from './hooks'
 import {colorByQuestion, prePostSummaryBuilder} from './utils'
+
+const LegendColorSample: FC<{background: string}> = ({background}) => <Box sx={{width: 30, background}}></Box>
+const LegendItem: FC<{color: string; label: string}> = ({color, label}) => (
+  <Box display="flex" gap={1}>
+    <LegendColorSample background={color} />
+    <Txt>{label}</Txt>
+  </Box>
+)
 
 const DashboardPss: FC = () => (
   <PssContextProvider>
@@ -166,28 +175,35 @@ const PssDashboardWithContext: FC = () => {
               </PanelBody>
             </Panel>
             <Panel title={m.pssDashboard.prePostWidget.title}>
-              <PanelBody sx={{display: 'flex'}}>
-                {prePostTests &&
-                  Object.entries(prePostTests).map(([field, figures]) => {
-                    return (
-                      <ChartBarVerticalGrouped
-                        key={field}
-                        height={400}
-                        showLegend={false}
-                        data={[
-                          {
-                            category: translateField ? translateField(field) : field,
-                            bars: Object.entries(figures).map(([name, value]) => ({
-                              key: name,
-                              label: m.pssDashboard.prePostWidget[name as keyof typeof figures],
-                              value,
-                              color: colorByQuestion[name],
-                            })),
-                          },
-                        ]}
-                      />
-                    )
-                  })}
+              <PanelBody>
+                <Div sx={{display: 'flex', mb: 2}}>
+                  {prePostTests &&
+                    Object.entries(prePostTests).map(([field, figures]) => {
+                      return (
+                        <ChartBarVerticalGrouped
+                          key={field}
+                          height={400}
+                          showLegend={false}
+                          data={[
+                            {
+                              category: translateField ? translateField(field) : field,
+                              bars: Object.entries(figures).map(([name, value]) => ({
+                                key: name,
+                                label: m.pssDashboard.prePostWidget[name as keyof typeof figures],
+                                value,
+                                color: colorByQuestion[name],
+                              })),
+                            },
+                          ]}
+                        />
+                      )
+                    })}
+                </Div>
+                <Box display="flex" gap={4}>
+                  <LegendItem color={colorByQuestion.pre} label={m.pssDashboard.prePostWidget.pre} />
+                  <LegendItem color={colorByQuestion.post} label={m.pssDashboard.prePostWidget.post} />
+                  <LegendItem color={colorByQuestion.difference} label={m.pssDashboard.prePostWidget.difference} />
+                </Box>
               </PanelBody>
             </Panel>
           </Div>
