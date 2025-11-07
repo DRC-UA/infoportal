@@ -47,7 +47,7 @@ export const AiBundleTable = ({
   id: string
   fetcher: UseFetcher<(period: Partial<Period>) => Promise<AiTable<any, any, any>[]>>
 }) => {
-  const {api, conf} = useAppSettings()
+  const {api} = useAppSettings()
   const {toastHttpError} = useIpToast()
   const {session} = useSession()
   const {m} = useI18n()
@@ -200,15 +200,6 @@ export const AiBundleTable = ({
             typeIcon: <DatatableHeadIconByType type="id" />,
             className: 'td-id',
             renderQuick: (_) => _.data.map((_) => _.koboId).join(' '),
-            // options: () => DatatableUtils.buildOptions(fetcher.get?.flatMap(_ => _.data.map(_ => _.koboId)) ?? []),
-            // render: _ => {
-            //   // console.log(_)
-            //   const ids = _.data.map(_ => _.koboId)
-            //   return {
-            //     label: ids.join(' '),
-            //     value: ids,
-            //   }
-            // }
           },
           {
             id: 'id',
