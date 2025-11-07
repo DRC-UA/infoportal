@@ -88,8 +88,12 @@ export namespace AiMpcaMapper {
 
       return Promise.all(
         groupBy({
-          data: dataWithTheme.flatMap(
-            ({persons, ...rest}) => persons?.map((person) => ({...rest, persons: [person]})) ?? [],
+          data: dataWithTheme.flatMap(({amountUahFinal, persons = [], ...rest}) =>
+            persons.map((person) => ({
+              ...rest,
+              amountUahFinal: amountUahFinal ? amountUahFinal / persons.length : amountUahFinal,
+              persons: [person],
+            })),
           ),
           groups: [
             {by: ({formId}) => formId},
@@ -113,6 +117,7 @@ export namespace AiMpcaMapper {
               AiMpcaType.Type['Theme'],
             ]
             const disag = AiMapper.disaggregatePersons(grouped.flatMap(({persons}) => persons).compact())
+
             const activity: AiMpcaType.Type = {
               'Reporting Organization': 'Danish Refugee Council (DRC)',
               'Implementing Partner': 'Danish Refugee Council (DRC)',
@@ -145,7 +150,7 @@ export namespace AiMpcaMapper {
               Theme: theme,
               'Population Group': displacement,
               'Total amount (USD) distributed through MPCA':
-                grouped.sum((_) => _.amountUahFinal ?? 0) * appConfig.uahToUsd,
+                grouped.sum(({amountUahFinal}) => amountUahFinal ?? 0) * appConfig.uahToUsd,
               'Payment Frequency': 'Multiple payments',
               'Plan/Project Code': getPlanCode(project) as any as never,
               Activity:
