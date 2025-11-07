@@ -43,6 +43,7 @@ export namespace AiChildProtectionMapper {
     [DrcProject['UKR-000372 ECHO3']]: 'CP-DRC-00002',
     [DrcProject['UKR-000363 UHF8']]: 'CP-DRC-00003',
     [DrcProject['UKR-000350 SIDA']]: 'CP-DRC-00004',
+    [DrcProject['UKR-000423 ECHO4']]: 'CP-DRC-00002',
   } as const
 
   const mapTiaActivity = (data: IKoboMeta[], periodStr: string): Bundle[] => {
