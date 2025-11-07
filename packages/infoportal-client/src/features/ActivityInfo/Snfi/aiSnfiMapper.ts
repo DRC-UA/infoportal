@@ -63,14 +63,18 @@ export namespace AiShelterMapper {
         .then((data) => {
           return Promise.all(
             groupBy({
-              data,
+              // split by individuals to define displacement status
+              data: data.flatMap(({persons, ...rest}) =>
+                (persons ?? []).map((person) => ({...rest, persons: [person]})),
+              ),
               groups: [
                 {by: (_) => _.project?.[0]!},
                 {by: (_) => _.oblast!},
                 {by: (_) => _.raion!},
                 {by: (_) => _.hromada!},
                 {by: (_) => _.settlement!},
-                {by: (_) => _.displacement!},
+                // now there is exactly one individual in persons[]
+                {by: ({persons}) => persons[0].displacement!},
                 {by: (_) => _.activity!},
               ],
               finalTransform: async (
@@ -105,7 +109,8 @@ export namespace AiShelterMapper {
                     })
                     .default(() => periodStr),
                   'Population Group':
-                    AiMapper.mapPopulationGroup(displacement) ?? (displacementStatusError as 'Non-Displaced'), // assert to get rid of TS error in ugly way,
+                    AiMapper.mapSnfiPopulationGroup(displacement) ??
+                    (`${displacement}: ${displacementStatusError}` as 'Non-Displaced'), // assert to get rid of TS error in ugly way,
                   'Non-individuals Reached': grouped.length,
                   'Total Individuals Reached': disaggregation['Total Individuals Reached'] ?? 0,
                   'Girls (0-17)': disaggregation['Girls (0-17)'] ?? 0,

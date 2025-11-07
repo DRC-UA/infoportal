@@ -65,6 +65,19 @@ export namespace AiMapper {
       .default(undefined)
   }
 
+  export const mapSnfiPopulationGroup = (
+    status?: Person.DisplacementStatus,
+  ): AiFslType.Type['Population Group'] | undefined => {
+    return match(status)
+      .cases({
+        Idp: 'Internally Displaced',
+        NonDisplaced: 'Non-Displaced',
+        Returnee: 'Internally Displaced', // Activity Info accepts only IDP and Non-IDP
+        Refugee: 'Internally Displaced', // Activity Info accepts only IDP and Non-IDP
+      } as const)
+      .default(undefined)
+  }
+
   export const disaggregatePersons = (
     persons: Person.Details[],
   ): {
