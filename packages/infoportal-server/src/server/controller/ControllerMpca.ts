@@ -18,7 +18,7 @@ export class ControllerMpca {
   }
 
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
-    const body = await yup
+    await yup
       .object({
         filters: yup.object({
           start: yup.date(),
