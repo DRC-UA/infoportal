@@ -1,4 +1,5 @@
 import {match} from '@axanc/ts-utils'
+import {isDate} from 'date-fns'
 
 import {
   DrcOffice,
@@ -66,13 +67,7 @@ export class KoboMetaMapperVa {
         personsCount: persons.length,
         project: [project],
         donor: [DrcProjectHelper.donorByProject[project]],
-        status: match(answer.case_status)
-          .cases({
-            paid: KoboMetaStatus.Committed,
-            rejected: KoboMetaStatus.Rejected,
-            ongoing: KoboMetaStatus.Pending,
-          })
-          .default(undefined),
+        status: isDate(tia.date_assistance_provided) ? KoboMetaStatus.Committed : undefined,
         lastStatusUpdate: tia.date_assistance_provided,
       })
     })

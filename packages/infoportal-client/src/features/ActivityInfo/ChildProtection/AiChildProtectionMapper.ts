@@ -39,10 +39,10 @@ export namespace AiChildProtectionMapper {
     }
 
   const tiaPlanCode: Partial<Record<DrcProject, AiTypeChildProtectionAorRmm['Plan/Project Code']>> = {
-    [DrcProject['UKR-000397 GFFO']]: 'CP-DRC-00001',
-    [DrcProject['UKR-000372 ECHO3']]: 'CP-DRC-00002',
-    [DrcProject['UKR-000363 UHF8']]: 'CP-DRC-00003',
     [DrcProject['UKR-000350 SIDA']]: 'CP-DRC-00004',
+    [DrcProject['UKR-000363 UHF8']]: 'CP-DRC-00003',
+    [DrcProject['UKR-000372 ECHO3']]: 'CP-DRC-00002',
+    [DrcProject['UKR-000397 GFFO']]: 'CP-DRC-00001',
     [DrcProject['UKR-000423 ECHO4']]: 'CP-DRC-00002',
   } as const
 
