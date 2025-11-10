@@ -73,7 +73,7 @@ export class KoboMetaMapperVa {
             ongoing: KoboMetaStatus.Pending,
           })
           .default(undefined),
-        lastStatusUpdate: answer.date_paid,
+        lastStatusUpdate: tia.date_assistance_provided,
       })
     })
   }
