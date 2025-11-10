@@ -273,7 +273,10 @@ export namespace AiShelterMapper {
           {by: ({ben_det_hromada}) => ben_det_hromada!},
           {by: ({ben_det_settlement}) => ben_det_settlement!},
           {by: ({modality_assistance}) => modality_assistance!},
-          {by: ({apartment: {hh_char_res_stat}}) => hh_char_res_stat!},
+          {
+            by: ({apartment: {hh_char_res_stat}, koboId}) =>
+              (hh_char_res_stat ?? (koboId === '4753092' ? 'long_res' : undefined))!, // ad-hoc solution for a submission without collected residence status
+          },
         ],
         finalTransform: async (grouped, [projectCode, oblastCode, raion, hromada, settlement, modality, status]) => {
           const disagg = AiMapper.disaggregatePersons(
