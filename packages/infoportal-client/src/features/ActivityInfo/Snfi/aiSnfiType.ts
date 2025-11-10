@@ -101,6 +101,7 @@ export namespace AiTypeSnfiRmm {
       'SNFI-DRC-00009': 'coqp6ewm7xgn5l07',
       'SNFI-DRC-00010': 'cyfam4fmct791u22',
       'SNFI-DRC-00011': 'cxsivt3mct9gfu33',
+      'SNFI-DRC-00012': 'c8t96oimht46coz2',
     },
     'Indicators - SNFI': {
       'Emergency Shelter Support > # supported with emergency shelter kits > cash-voucher': 'cgccvcom6f3xnh22',
