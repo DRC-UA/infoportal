@@ -1321,7 +1321,7 @@ const en = Object.freeze({
       doorsSum: 'Σ Door (pc)',
       agreement: 'Agreement',
       workOrder: 'Work order',
-      notRepairStandards:'Please specify what issue is',
+      notRepairStandards: 'Please specify what issue is',
       complianceStandards: 'Compliance standards',
       contractor: 'Contractor',
       contractor1: 'Contractor lot 1',
@@ -1508,6 +1508,14 @@ const en = Object.freeze({
       aidClosureDate: 'Aid closure date',
       map: {
         title: 'Beneficiaries by oblasts',
+      },
+    },
+    communications: {
+      title: 'Communications Data',
+      subPages: {
+        yearlyReport: {
+          title: 'Yearly Report',
+        },
       },
     },
   },
