@@ -57,7 +57,7 @@ export const Pan = ({title, children}: {title: string; children: ReactNode}) => 
 // Female - Жінка; Male - Чоловік; Other - Інше
 const en = {
   'Household respondents per displacement group': 'Household respondents per displacement group',
-  'Surveyed households per age and gender groups': 'Surveyed households per age and gender groups',
+  'Age and gender of surveyed household members': 'Age and gender of surveyed household members',
   'Factors influencing displacement': 'Factors influencing displacement',
   'Intentions per displacement status': `Intentions per displacement status`,
   'Factors influencing the sense of safety': 'Factors influencing the sense of safety',
@@ -68,7 +68,7 @@ const en = {
 }
 
 const ua = {
-  'Surveyed households per age and gender groups': `Опитанні сім'ї за віком і статтю `,
+  'Age and gender of surveyed household members': `Опитанні сім'ї за віком і статтю `,
   'Household respondents per displacement group': 'Сімї за статусом переміщеної особи',
   'Factors influencing displacement': 'Чинники впливу на переміщення',
   'Intentions per displacement status': `Наміри щодо статусу переміщенної особи`,
@@ -86,6 +86,21 @@ const optionsUa: Partial<Record<keyof typeof Protection_hhs3.options, Record<str
     non_displaced: 'Не переміщена особа',
     returnee: 'Особа, котра повернулася',
     refugee: 'Біженець',
+  },
+  why_did_you_leave_your_area_of_origin:{
+    shelling_attacks_on_civilians: `Обстріл, напади на цивільне населення`,
+      exposure_to_uxoslandmines: `Вплив нерозірваних боєприпасів/наземних мін`,
+      destruction_or_damage_of_housing_land_andor_property_due_to_conflict: `Знищення або пошкодження житла, землі та/або майна внаслідок конфлікту`,
+      occupation_of_property: `Окупація майна`,
+      criminality: `Кримінальність`,
+      lack_of_access_to_safe_and_dignified_shelter: `Відсутність доступу до безпечного та гідного житла`,
+      lack_of_access_to_essential_services: `Відсутність доступу до основних послуг (охорона здоров'я, водопостачання, освіта, оформлення документів тощо)`,
+      lack_of_access_to_livelihoods_employment_and_economic_opportunities: `Відсутність доступу до засобів до існування, зайнятості та економічних можливостей`,
+      infrastructure_damagedestruction: `Пошкодження/руйнування інфраструктури`,
+      seeking_family_reunification: `Пошкодження/руйнування інфраструктури`,
+      fear_of_conscription: `Страх перед призовом до армії`,
+      unable_unwilling_to_answer: `Не можу/не хочу відповідати`,
+      other_specify: `Інше`,
   },
   what_are_your_households_intentions_in_terms_of_place_of_residence: {
     return_to_the_area_of_origin: 'Повернутися до місця постійного проживання',
@@ -108,6 +123,7 @@ const optionsUa: Partial<Record<keyof typeof Protection_hhs3.options, Record<str
     criminality: 'Кримінал',
     fighting_between_armed_or_security_actors: 'Битви між збройними силами або силовими структурами',
     risks_of_eviction: 'Ризики примусового виселення',
+    risks_of_arbitrary_arrest_detention:'Ризики безпідставного арешту/затримання ',
     intercommunity_tensions: 'Напруга всередині громади',
     other_specify: 'Інше',
   },
@@ -203,7 +219,7 @@ export default () => {
 
   let index = 0
   const title = (title: keyof typeof en) =>
-    `${lang === 'uk' ? 'Графік' : 'Graph'} ${++index}. ${lang === 'uk' ? ua[title] : en[title]}`
+    `${lang === 'en' ? 'Graph' : 'Графік'} ${++index}. ${lang === 'en' ? en[title] : ua[title]}`
 
   return (
     <Page loading={fetcher.loading} sx={{background: t.palette.background.paper}}>
@@ -232,7 +248,7 @@ export default () => {
           }}
         />
       </Pan>
-      <Pan title={title('Surveyed households per age and gender groups')}>
+      <Pan title={title('Age and gender of surveyed household members')}>
         {/*<Pan title={title('Опитанні сім\'ї за віком і статтю Female - Жінка; Male - Чоловік; Other - Інше')}>*/}
         <ChartBarStacker
           data={
@@ -242,7 +258,6 @@ export default () => {
                   key: _.key,
                   Жінка: _.Female,
                   Чоловік: _.Male,
-                  Інше: _.Other,
                 }))
           }
           height={250}
@@ -253,7 +268,10 @@ export default () => {
         <ChartBarMultipleBy
           data={data}
           by={(_) => _.why_did_you_leave_your_area_of_origin}
-          label={Protection_hhs3.options.why_did_you_leave_your_area_of_origin}
+          label={{
+            ...Protection_hhs3.options.why_did_you_leave_your_area_of_origin,
+            ...(lang === 'en' ? {} : optionsUa.why_did_you_leave_your_area_of_origin),
+          }}
           filterValue={['unable_unwilling_to_answer']}
         />
       </Pan>
