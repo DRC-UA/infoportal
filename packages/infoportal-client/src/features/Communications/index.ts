@@ -1,1 +1,1 @@
-export {Communications} from './Сommunications'
+export {Communications} from './Communications'

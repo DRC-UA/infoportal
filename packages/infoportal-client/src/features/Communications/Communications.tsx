@@ -1,9 +1,8 @@
-import type {ReactNode} from 'react'
+import type {FC} from 'react'
 import {Obj} from '@axanc/ts-utils'
 import {NavLink, Route, Routes} from 'react-router-dom'
 
 import {useI18n, type Messages} from '@/core/i18n'
-import {AiProtection} from '@/features/ActivityInfo/Protection/AiProtection'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
@@ -11,13 +10,13 @@ import {YearlyReport} from './YearlyReport'
 
 export const commsConfig: Record<
   'yearlyReport',
-  {id: string; name: keyof Messages['communications']['subPages']; path: string; component: ReactNode}
+  {id: string; name: keyof Messages['communications']['subPages']; path: string; component: FC}
 > = {
   yearlyReport: {
     id: 'afceb740ff0e441e157',
     name: 'yearlyReport',
     path: '/yearly-report',
-    component: <YearlyReport />,
+    component: YearlyReport,
   } as const,
 } as const
 
@@ -46,7 +45,7 @@ const Communications = () => {
     <Layout sidebar={<CommunicationsSidebar />} title={m.communications.title}>
       <Routes>
         {Obj.values(commsConfig).map((k) => (
-          <Route key={k.path} path={k.path} element={k.component} />
+          <Route key={k.path} path={k.path} Component={k.component} />
         ))}
       </Routes>
     </Layout>
