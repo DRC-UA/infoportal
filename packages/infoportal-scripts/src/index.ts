@@ -1,6 +1,5 @@
 import {KoboClient} from 'kobo-sdk'
 import winston from 'winston'
-import chalk from 'chalk'
 
 import {appConf} from './appConf'
 import {ActivityInfoBuildType} from './ActivityInfoBuildType'
