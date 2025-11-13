@@ -1,6 +1,7 @@
 import deepmerge from 'deepmerge'
 
 import {en} from './en'
+import type {DictionaryShape} from './types'
 
 const uk = deepmerge(en, {
   messages: {
@@ -27,6 +28,14 @@ const uk = deepmerge(en, {
     avgHHSize: 'Середній розмір домогосподарства',
     households: 'Домогосподарств',
     modality: 'Модальність',
+    individualsCount: 'Кількість осіб',
+    office: 'Офіс',
+    oblast: 'Область',
+    raion: 'Район',
+    hromada: 'Громада',
+    project: 'Проєкт',
+    activity: 'Активність',
+    submissions: '🤔 будь ласка, порадьте переклад 🤯',
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {
@@ -143,7 +152,33 @@ const uk = deepmerge(en, {
         },
       },
     },
+    plurals: {
+      session: {
+        zero: 'Сесій',
+        one: 'Сесія',
+        two: 'Сесії',
+        few: 'Сесії',
+        many: 'Сесій',
+        other: 'Сесій',
+      },
+      individuals: {
+        zero: 'Осіб',
+        one: 'Особа',
+        two: 'Осіб',
+        few: 'Особи',
+        many: 'Осіб',
+        other: 'Осіб',
+      },
+      uniqueIndividuals: {
+        zero: 'Унікальних осіб',
+        one: 'Унікальна особа',
+        two: 'Унікальні особи',
+        few: 'Унікальні особи',
+        many: 'Унікальних осіб',
+        other: 'Унікальних осіб',
+      },
+    },
   },
-})
+} satisfies DictionaryShape)
 
 export {uk}
