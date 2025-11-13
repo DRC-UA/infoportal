@@ -56,6 +56,7 @@ export namespace Ecrec_small_scale {
     ben_det_hh_size: number | undefined
     // beneficiary_details/ben_det_income [integer] Total household income during the last month
     ben_det_income: number | undefined
+    cal_head_tax: string
     // hh_char_hh_det [begin_repeat] HH Members
     hh_char_hh_det:
       | {
@@ -63,6 +64,12 @@ export namespace Ecrec_small_scale {
           hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
           hh_char_date_birth: Date | undefined | undefined
           hh_char_hh_det_age: number | undefined | undefined
+          hh_char_tax_id_yn: undefined | Option<'pay_det_tax_exempt'> | undefined
+          head_tax_id: string | undefined
+          hh_char_tax_id_num: string | undefined | undefined
+          hh_char_tax_id_photo: string | undefined
+          taxid_weightedsum: string | undefined
+          taxid_roundedsum: string | undefined
           hh_char_hh_res_stat: undefined | Option<'hh_char_hh_res_stat'> | undefined
           hh_char_hh_how_idp: undefined | Option<'hh_char_hh_how_idp'> | undefined
           hh_char_hh_det_dis_select: undefined | Option<'hh_char_hh_det_dis_select'>[] | undefined
@@ -228,6 +235,18 @@ export namespace Ecrec_small_scale {
     pay_det_tax_id_yn: undefined | Option<'pay_det_tax_exempt'>
     // final_details/pay_det_tax_id_num [text] Individual tax number
     pay_det_tax_id_num: string | undefined
+    // final_details/cal_organization [calculate] Organization
+    cal_organization: string
+    // final_details/cal_category [calculate] Category
+    cal_category: string
+    // final_details/cal_currency [calculate] Currency
+    cal_currency: string
+    // final_details/cal_amount [calculate] Amount
+    cal_amount: string
+    // final_details/cal_date_start [calculate] Start (YYYYMMDD)
+    cal_date_start: string
+    // final_details/cal_date_end [calculate] End (YYYYMMDD)
+    cal_date_end: string
     // final_details/pay_det_tax_id_ph [image] Tax ID photo
     pay_det_tax_id_ph: string
     // final_details/pay_det_tax_exempt [select_one] Have a tax exemptions?

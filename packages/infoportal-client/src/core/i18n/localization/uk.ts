@@ -135,6 +135,14 @@ const uk = deepmerge(en, {
         title: 'Бенефіціари по областях',
       },
     },
+    communications: {
+      title: 'Дані відділу комунікацій',
+      subPages: {
+        yearlyReport: {
+          title: 'Річний звіт',
+        },
+      },
+    },
   },
 })
 

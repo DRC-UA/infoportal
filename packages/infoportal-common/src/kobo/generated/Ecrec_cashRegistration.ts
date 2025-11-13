@@ -4,81 +4,81 @@ export namespace Ecrec_cashRegistration {
   export interface T {
     start: string
     end: string
-    // background/back_office [select_one] 1.1 Select Office
+    // background/back_office [select_one] 1.1 Офіс
     back_office: undefined | Option<'back_office'>
-    // background/back_enum [select_one] 1.2 Enumerator
+    // background/back_enum [select_one] 1.2 Переписувач
     back_enum: undefined | Option<'back_enum'>
-    // background/back_donor [select_one] 1.3 Project
+    // background/back_donor [select_one] 1.3 Проект
     back_donor: undefined | Option<'back_donor'>
-    // background/back_refer [select_one] 1.4 Was this case an internal DRC referral?
+    // background/back_refer [select_one] 1.4 Чи було це направлення здійснено у межах ДРБ?
     back_refer: undefined | Option<'pay_det_tax_exempt'>
-    // background/back_refer_who [select_one] 1.4.1 From which Department was the referral?
+    // background/back_refer_who [select_one] 1.4.1 З якого відділу було здійснено це направлення?
     back_refer_who: undefined | Option<'back_refer_who'>
-    // background/back_consent [select_one] 1.5 Consent
+    // background/back_consent [select_one] 1.5 Згода
     back_consent: undefined | Option<'pay_det_tax_exempt'>
-    // background/back_consen_no_reas [text] 1.5.1 Can you please give the reason for why you do not wish to consent to the questionnaire?
+    // background/back_consen_no_reas [text] 1.5.1 Зазначте, будь ласка, причину, з якої Ви не погоджуєтеся заповнити анкету?
     back_consen_no_reas: string | undefined
-    // background/back_consent_no_note [note] Thank you very much for your time, we will not proceed with the questionnaire without your consent.
+    // background/back_consent_no_note [note] Щиро дякуємо за ваш час, ми не будемо продовжувати заповнення анкети без вашої згоди.
     back_consent_no_note: string
-    // ben_det/ben_det_surname [text] 2.1 What is your surname name (as shown in personal ID)?
+    // ben_det/ben_det_surname [text] 2.1 Яке ваше прізвище (як вказано в паспорті)?
     ben_det_surname: string | undefined
-    // ben_det/ben_det_first_name [text] 2.2 What is your first name (as shown in personal ID)?
+    // ben_det/ben_det_first_name [text] 2.2 Яке ваше ім'я (як зазначено в паспорті)?
     ben_det_first_name: string | undefined
-    // ben_det/ben_det_pat_name [text] 2.3 What is your patronymic name?
+    // ben_det/ben_det_pat_name [text] 2.3 Яке ваше по-батькові?
     ben_det_pat_name: string | undefined
-    // ben_det/ben_det_ph_number [integer] 2.4 What is your phone number?
+    // ben_det/ben_det_ph_number [integer] 2.4 Ваш контактний номер телефону?
     ben_det_ph_number: number | undefined
-    // ben_det/ben_det_oblast [select_one] 2.5.1 Select oblast where registration is taking place
+    // ben_det/ben_det_oblast [select_one] 2.5.1 Виберіть область, де буде проходити реєстрація
     ben_det_oblast: undefined | Option<'hh_char_origin_oblast'>
-    // ben_det/ben_det_raion [select_one] 2.5.2 Select raion where registration is taking place
+    // ben_det/ben_det_raion [select_one] 2.5.2 Виберіть район, де буде проходити реєстрація
     ben_det_raion: undefined | string
-    // ben_det/ben_det_hromada [select_one] 2.5.3 Select hromada where registration is taking place
+    // ben_det/ben_det_hromada [select_one] 2.5.3 Виберіть громаду, де відбувається реєстрація
     ben_det_hromada: undefined | string
-    // ben_det/ben_det_settlement [select_one_from_file] 2.5.4 Select settlement where registration is taking place
+    // ben_det/ben_det_settlement [select_one_from_file] 2.5.4 Виберіть Поселення, де відбувається реєстрація
     ben_det_settlement: string
-    // ben_det/ben_det_res_stat [select_one] Select residential status
+    // ben_det/ben_det_res_stat [select_one] Виберіть статус проживання
     ben_det_res_stat: undefined | Option<'hh_char_hh_res_stat'>
-    // ben_det/ben_det_prev_oblast [select_one] What is your area of origin prior to displacement? (Select Oblast)
+    // ben_det/ben_det_prev_oblast [select_one] З якого регіону Ви перемістилися? (Виберіть область)
     ben_det_prev_oblast: undefined | Option<'hh_char_origin_oblast'>
-    // ben_det/ben_det_income [integer] 2.6 What was the total value in UAH of all the resources your household received in the last one month?
+    // ben_det/ben_det_income [integer] 2.6 Якою була загальна вартість у гривнях усіх ресурсів, отриманих Вашим домогосподарством за останній один місяць?
     ben_det_income: number | undefined
-    // ben_det/ben_det_hh_size [integer] 2.7 Indicate the total number of people in your household, including the HH
+    // ben_det/ben_det_hh_size [integer] 2.7 Кількість членів домогосподарства (включно з головою домогосподарства)
     ben_det_hh_size: number | undefined
-    // ben_det/ben_det_single_parent [select_one] 2.8 Are you single parent?
+    // ben_det/ben_det_single_parent [select_one] 2.8 Чи є ви одиноким батьком / одинокою матір'ю?
     ben_det_single_parent: undefined | Option<'pay_det_tax_exempt'>
-    // hh_char/hh_char_hhh [select_one] Are you the head of your household?
+    // hh_char/hh_char_hhh [select_one] Ви голова домогосподарства?
     hh_char_hhh: undefined | Option<'pay_det_tax_exempt'>
-    // hh_char/hh_char_res_gender [select_one] Select gender of respondent?
+    // hh_char/hh_char_res_gender [select_one] Виберіть стать респондента
     hh_char_res_gender: undefined | Option<'hh_char_hh_det_gender'>
-    // hh_char/hh_char_res_age [integer] Age of Respondent
+    // hh_char/hh_char_res_age [integer] Вік респондента
     hh_char_res_age: number | undefined
-    // hh_char/hh_char_res_dis_select [select_multiple] Please select any of the below that apply to respondent
+    // hh_char/hh_char_res_dis_select [select_multiple] Будь ласка, оберіть будь-який з наведених нижче пунктів, які стосуються респондента
     hh_char_res_dis_select: undefined | Option<'hh_char_dis_select'>[]
-    // hh_char/hh_char_res_dis_level [select_one] What is the level of difficulty for the selected options in the previous questions?
+    // hh_char/hh_char_res_dis_level [select_one] Який рівень складності обраних варіантів відповідей на попередні запитання?
     hh_char_res_dis_level: undefined | Option<'hh_char_dis_level'>
-    // hh_char/hh_char_hhh_gender [select_one] 3.1.1 What is the gender of Head of household?
+    // hh_char/hh_char_hhh_gender [select_one] 3.1.1 Яка стать голови домогосподарства?
     hh_char_hhh_gender: undefined | Option<'hh_char_hh_det_gender'>
-    // hh_char/hh_char_hhh_age [integer] 3.1.2 What is the age of the Head of Household?
+    // hh_char/hh_char_hhh_age [integer] 3.1.2 Скільки років голові домогосподарства?
     hh_char_hhh_age: number | undefined
-    // hh_char/hh_char_civ_stat [select_one] 3.1.3 What is the civil status of the Head of Household?
+    // hh_char/hh_char_civ_stat [select_one] 3.1.3 Який цивільно-правовий статус голови домогосподарства?
     hh_char_civ_stat: undefined | Option<'hh_char_civ_stat'>
-    // hh_char/hh_char_hhh_res_stat [select_one] 3.1.4 Select residential status of the Head of Household?
+    // hh_char/hh_char_hhh_res_stat [select_one] 3.1.4 Виберіть статус проживання голови домогосподарства?
     hh_char_hhh_res_stat: undefined | Option<'hh_char_hh_res_stat'>
-    // hh_char/hh_char_hhh_how_idp [select_one] 3.1.4.1 How long have you been an IDP?
+    // hh_char/hh_char_hhh_how_idp [select_one] 3.1.4.1 Як довго Ви є ВПО?
     hh_char_hhh_how_idp: undefined | Option<'hh_char_hh_how_idp'>
-    // hh_char/hh_char_origin_oblast [select_one] 3.1.4.2 What is your area of origin prior to displacement? (Select Oblast)
+    // hh_char/hh_char_origin_oblast [select_one] 3.1.4.2 З якого регіону Ви перемістилися? (Виберіть область)
     hh_char_origin_oblast: undefined | Option<'hh_char_origin_oblast'>
-    // hh_char/hh_char_hhh_dis_select [select_multiple] 3.1.5 Please select any of the below that apply to Head of household
+    // hh_char/hh_char_hhh_dis_select [select_multiple] 3.1.5 Будь ласка, оберіть будь-який з наведених нижче пунктів, які стосуються голови домогосподарства
     hh_char_hhh_dis_select: undefined | Option<'hh_char_dis_select'>[]
-    // hh_char/hh_char_hhh_dis_level [select_one] 3.1.6 What is the level of difficulty for the selected options in the previous questions?
+    // hh_char/hh_char_hhh_dis_level [select_one] 3.1.6 Який рівень складності обраних варіантів відповідей на попередні запитання?
     hh_char_hhh_dis_level: undefined | Option<'hh_char_dis_level'>
-    // hh_char/hh_char_hhh_chronic_disease [select_one] 3.1.7 Do you have a chronic disease?
+    // hh_char/hh_char_hhh_chronic_disease [select_one] 3.1.7 У вас є хронічні захворювання?
     hh_char_hhh_chronic_disease: undefined | Option<'pay_det_tax_exempt'>
     calc_hhh_res_dis_level: string
     calc_char_civ_stat: string
-    // hh_char/hh_char_chh [note] This is a child headed household (high risk protection case), please refer immediately to a DRC Protection colleague and complete internal referral form.
+    // hh_char/hh_char_chh [note] Це домогосподарство, яке очолює дитина (випадок захисту з високим рівнем ризику), будь ласка, негайно зверніться до відділу із захисту дітей.
     hh_char_chh: string
-    // hh_char/hh_char_hh_det [begin_repeat] 3.2 HH Members
+    // hh_char/hh_char_hh_det [begin_repeat] 3.2  Члени домогосподарства
     hh_char_hh_det:
       | {
           hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
@@ -105,76 +105,76 @@ export namespace Ecrec_cashRegistration {
     calc_tot_chi: string
     calc_tot_ed_age: string
     calc_tot_eld: string
-    // hh_char/calc_tot_dis [calculate] Total number of people wich disability
+    // hh_char/calc_tot_dis [calculate] Загальна кількість людей з інвалідністю
     calc_tot_dis: string
-    // hh_char/cal_tot_chronic_disease [calculate] Total number of people wich Chronic disease
+    // hh_char/cal_tot_chronic_disease [calculate] Загальна кількість людей з хронічними захворюваннями
     cal_tot_chronic_disease: string
-    // hh_char/cal_tot_idp [calculate] Total number of Internally Displaced Person (IDP)
+    // hh_char/cal_tot_idp [calculate] Загальна кількість внутрішньо переміщених осіб (ВПО)
     cal_tot_idp: string
-    // hh_char/cal_tot_idp_less_1y [calculate] Total number of Internally Displaced Person (IDP) Less 1 year
+    // hh_char/cal_tot_idp_less_1y [calculate] Загальна кількість внутрішньо переміщених осіб (ВПО) Менше 1 року
     cal_tot_idp_less_1y: string
-    // hh_char/cal_tot_idp_more_1y [calculate] Total number of Internally Displaced Person (IDP) More 1 year
+    // hh_char/cal_tot_idp_more_1y [calculate] Загальна кількість внутрішньо переміщених осіб (ВПО) Більше 1 року
     cal_tot_idp_more_1y: string
-    // hh_char/cal_tot_long_res [calculate] Total number of Long - Term Resident
+    // hh_char/cal_tot_long_res [calculate] Загальна кількість довгострокових жителів
     cal_tot_long_res: string
-    // hh_char/cal_tot_ret [calculate] Total number of Returnees
+    // hh_char/cal_tot_ret [calculate] Загальна кількість осіб, які повернулися
     cal_tot_ret: string
-    // hh_char/hh_char_preg [select_one] 3.3.1 Are any of the females in the household pregnat or lactating?
+    // hh_char/hh_char_preg [select_one] 3.3.1 Чи є у домогосподарстві жінки, які вагітні чи годують грудьми?
     hh_char_preg: undefined | Option<'pay_det_tax_exempt'>
-    // hh_char/pregnant_count [integer] 3.3.1.1 If yes, how many females are pregnant?
+    // hh_char/pregnant_count [integer] 3.3.3.1 Якщо так, то скільки жінок вагітні?
     pregnant_count: number | undefined
-    // hh_char/lactating_count [integer] 3.3.1.2 If yes, how many females are lactating?
+    // hh_char/lactating_count [integer] 3.3.1.2 Якщо так, то скільки жінок годують грудьми?
     lactating_count: number | undefined
-    // hh_char/disease_higher_expenditures [select_one] 3.3.2 If yes, does the presence of a person with a chronic disease in the household mean higher expenditures on things like healthcare.
+    // hh_char/disease_higher_expenditures [select_one] 3.3.2 Якщо так, то чи витрачає родина більше коштів на такі речі, як охорона здоров'я?
     disease_higher_expenditures: undefined | Option<'pay_det_tax_exempt'>
-    // hh_char/disease_does_working [select_one] 3.3.2.1 If yes, does the presense of a person with a chornic disease in the household prevent someone in the household from working as a result of taking on caregiver duties?
+    // hh_char/disease_does_working [select_one] 3.3.2.1 Якщо так, то чи має хтось з родини перешкоду з можливістю працювати внаслідок виконання обов'язків по догляду за людиною з хронічним захворюванням?
     disease_does_working: undefined | Option<'pay_det_tax_exempt'>
-    // hh_char/household_agricultural_activities [select_one] 3.3.3 Does the household have the physical ability to engage in light agricultural activities?
+    // hh_char/household_agricultural_activities [select_one] 3.3.3 Чи має домогосподарство фізичну можливість займатися легкою сільськогосподарською діяльністю?
     household_agricultural_activities: undefined | Option<'pay_det_tax_exempt'>
-    // hh_char/financial_manage_livestock [select_one] 3.3.3.1 If no, does the household have the financial or social resources they can use to cultivate their land or manage their livestock?
+    // hh_char/financial_manage_livestock [select_one] 3.3.3.1 Якщо ні, то чи має родина фінансові або соціальні ресурси, які вони можуть використовувати для обробки землі або утримання домашньої худоби?
     financial_manage_livestock: undefined | Option<'pay_det_tax_exempt'>
-    // hh_char/hh_char_dis_note [note] The next set of questions ask about difficulties you or members of your household may have doing certain activities. These questions only relates to household members over the age of 5 years old.**
+    // hh_char/hh_char_dis_note [note] Нижче наведені питання стосуються труднощів, з якими Ви або члени Вашого домогосподарства можете зіткнутися під час виконання певних дій. Ці запитання стосуються лише членів домогосподарства віком понад 5 років.**
     hh_char_dis_note: string
-    // hh_char/hh_char_dis_select [select_multiple] Please select any of the below that apply to you or a member of your household
+    // hh_char/hh_char_dis_select [select_multiple] Будь ласка, оберіть будь-який з наведених нижче пунктів, які стосуються вас або члена вашого домогосподарства
     hh_char_dis_select: undefined | Option<'hh_char_dis_select'>[]
-    // hh_char/hh_char_dis_level [select_one] What is the level of difficulty for the selected options in the previous questions?
+    // hh_char/hh_char_dis_level [select_one] Який рівень складності обраних варіантів відповідей на попередні запитання?
     hh_char_dis_level: undefined | Option<'hh_char_dis_level'>
     calc_dis_level: string
-    // cash_farmers/know_contamination_farming [select_one] Do you know of any contamination (e.g. unexploded ordnance) on the land which you are farming on?
+    // cash_farmers/know_contamination_farming [select_one] Чи знаєте ви про будь-яке можливе забруднення (наприклад, боєприпасами, що не розірвалися) на землі, яку ви обробляєте?
     know_contamination_farming: undefined | Option<'know_contamination_neighbour'>
-    // cash_farmers/know_contamination_neighbour [select_one] Do you know of any contamination (e.g. unexploded ordnance) on land of a neighbour or a small-scale farmer close by?
+    // cash_farmers/know_contamination_neighbour [select_one] Чи знаєте ви про будь-яке можливе забруднення (наприклад, нерозірваними боєприпасами) на землі сусіда або дрібного фермера, що знаходиться поблизу?
     know_contamination_neighbour: undefined | Option<'know_contamination_neighbour'>
-    // cash_farmers/know_contamination_neighbour_yes [select_one] Do you know if this/these indivudual(s) still continue to farm their land?
+    // cash_farmers/know_contamination_neighbour_yes [select_one] Чи знаєте ви, що ця/ці особи все ще продовжують обробляти свою землю?
     know_contamination_neighbour_yes: undefined | Option<'know_contamination_neighbour_yes'>
-    // cash_farmers/what_primary_livelihood [select_one] What is the primary livelihood in the household:
+    // cash_farmers/what_primary_livelihood [select_one] Основне джерело, що забезпечує продуктами харчування Ваше домогосподарство:
     what_primary_livelihood: undefined | Option<'what_primary_livelihood'>
-    // cash_farmers/what_primary_livelihood_other [text] If "Other", please specify
+    // cash_farmers/what_primary_livelihood_other [text] Якщо "Інше", вкажіть яке саме
     what_primary_livelihood_other: string | undefined
-    // cash_farmers/consume_majority [select_one] Do you consume a majority of the crops you produce / livestock that you manage:
+    // cash_farmers/consume_majority [select_one] Чи споживає Ваше домогосподарство значну частину того, що ви вирощуєте:
     consume_majority: undefined | Option<'pay_det_tax_exempt'>
-    // cash_farmers/land_own [decimal] How much land do you own:
+    // cash_farmers/land_own [decimal] Скільки землі у власності Вашого домогосподарства:
     land_own: number | undefined
-    // cash_farmers/land_cultivate [decimal] How much land do you cultivate or manage for crops and/or livestock:
+    // cash_farmers/land_cultivate [decimal] Скільки землі обробляє Ваше домогосподарство:
     land_cultivate: number | undefined
-    // cash_farmers/depend_basic_needs [select_one] Does agriculture and/or livestock management significantly contribute to the household being able to meet its basic needs?
+    // cash_farmers/depend_basic_needs [select_one] Чи робить сільське господарство та/або тваринництво значний внесок у те, що домогосподарство може задовольнити свої основні потреби?
     depend_basic_needs: undefined | Option<'pay_det_tax_exempt'>
-    // cash_farmers/eligible_assistance_agricultural [select_multiple] If eligible for assistance, what agricultural inputs do you intend to purchase:
+    // cash_farmers/eligible_assistance_agricultural [select_multiple] Якщо ви маєте право на отримання допомоги, які сільськогосподарські засоби виробництва ви маєте намір придбати:
     eligible_assistance_agricultural: undefined | Option<'eligible_assistance_agricultural'>[]
-    // cash_farmers/eligible_assistance_agricultural_other [text] If "Other", please specify
+    // cash_farmers/eligible_assistance_agricultural_other [text] Якщо "Інше", вкажіть що саме
     eligible_assistance_agricultural_other: string | undefined
-    // cash_farmers/not_many_livestock [note] ##### How many of the following livestock do you have:
+    // cash_farmers/not_many_livestock [note] ##### Скільки у вас є такої худоби:
     not_many_livestock: string
-    // cash_farmers/many_sheep_goat [integer] Sheep/goat:
+    // cash_farmers/many_sheep_goat [integer] Вівці/кози:
     many_sheep_goat: number | undefined
-    // cash_farmers/many_milking [integer] Milking/lactating cow:
+    // cash_farmers/many_milking [integer] Доїльна/лактуюча корова:
     many_milking: number | undefined
-    // cash_farmers/many_cow [integer] Dry cow:
+    // cash_farmers/many_cow [integer] Суха корова:
     many_cow: number | undefined
-    // cash_farmers/many_cattle [integer] Cattle
+    // cash_farmers/many_cattle [integer] Велика рогата худоба
     many_cattle: number | undefined
-    // cash_farmers/many_pig [integer] Pig:
+    // cash_farmers/many_pig [integer] Свиня:
     many_pig: number | undefined
-    // cash_farmers/many_poultry [integer] Poultry:
+    // cash_farmers/many_poultry [integer] Свійська птиця,кролик:
     many_poultry: number | undefined
     cal_cost_sheep_goat: string
     cal_cost_milking: string
@@ -189,239 +189,239 @@ export namespace Ecrec_cashRegistration {
     no_cal_cost_all: string
     cal_cost_all: string
     cal_cost_450: string
-    // cash_farmers/not_cost_all [note] Total amount of assistance required by the household: ${no_cal_cost_all}$
+    // cash_farmers/not_cost_all [note] undefined
     not_cost_all: string
-    // cash_farmers/not_cost_assist [note] Total amount of assistance: ${cal_cost_all}$
+    // cash_farmers/not_cost_assist [note] undefined
     not_cost_assist: string
-    // cash_farmers/barriers_providing_sufficient [select_one] Do you face barriers in providing sufficient quality and quantity of feed to your livestock?
+    // cash_farmers/barriers_providing_sufficient [select_one] Чи стикаєтесь ви з бар'єрами у забезпеченні достатньої кількості та якості кормів для вашої худоби?
     barriers_providing_sufficient: undefined | Option<'pay_det_tax_exempt'>
-    // cash_farmers/barriers_providing_sufficient_yes [text] If "Yes", please specify
+    // cash_farmers/barriers_providing_sufficient_yes [text] Якщо "Так", будь ласка, вкажіть
     barriers_providing_sufficient_yes: string | undefined
-    // cash_farmers/eligible_cash_feed [select_multiple] If eligible for cash for animal feed, what animal feed do you intend to purchase?
+    // cash_farmers/eligible_cash_feed [select_multiple] Якщо ви маєте право на отримання готівки на корми для тварин, які корми ви маєте намір придбати?
     eligible_cash_feed: undefined | Option<'eligible_cash_feed'>[]
-    // cash_farmers/eligible_cash_feed_other [text] If "Other", please specify
+    // cash_farmers/eligible_cash_feed_other [text] Якщо "Інше", будь ласка, вкажіть
     eligible_cash_feed_other: string | undefined
-    // cash_farmers/animal_shelter_need [select_one] Is your animal shelter in need of rehabilitation?
+    // cash_farmers/animal_shelter_need [select_one] Чи потребує ваш притулок реабілітації?
     animal_shelter_need: undefined | Option<'pay_det_tax_exempt'>
-    // cash_farmers/cash_animal_shelter [select_multiple] If eligible for cash for animal shelter assistance, what building materials do you intend to purchase
+    // cash_farmers/cash_animal_shelter [select_multiple] Якщо ви маєте право на отримання грошової допомоги для притулку для тварин, які будівельні матеріали ви маєте намір придбати?
     cash_animal_shelter: undefined | Option<'cash_animal_shelter'>[]
-    // cash_farmers/cash_animal_shelter_other [text] If "Other", please specify
+    // cash_farmers/cash_animal_shelter_other [text] Якщо "Інше", будь ласка, вкажіть
     cash_animal_shelter_other: string | undefined
-    // livelihoods_score/income_spent_food [integer] In the last 7 days, what proportion of the overall household income was spent on food (human consumption)?
+    // livelihoods_score/income_spent_food [integer] Яка сума загального доходу домогосподарства була витрачена на продукти харчування (споживання людиною) за останні 7 днів?
     income_spent_food: number | undefined
-    // livelihoods_score/income_spent_nonfood [integer] In the last 7 days, what proportion of the overall household income was spent on non-food items and services such as health and education related services?
+    // livelihoods_score/income_spent_nonfood [integer] Яка сума загального доходу домогосподарства була витрачена на непродовольчі товари та послуги, такі як послуги, пов'язані з охороною здоров'я та освітою за останні 7 днів?
     income_spent_nonfood: number | undefined
-    // livelihoods_score/lcs_sell_hh_assets [select_one] In the last 30 days, did your household sell household assets/goods (furniture/household appliances (i.e. TV, radio, washing machine, etc.) smart phone/jewellery,...) due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_sell_hh_assets [select_one] Чи продавало Ваше домогосподарство протягом останніх 30 днів домашнє майно/товари (меблі/побутову техніку, наприклад, телевізор, радіо, пральну машину, смартфон, ювелірні вироби тощо) через нестачу ресурсів для задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, комунальні послуги, паливо для опалення, питна вода тощо)?
     lcs_sell_hh_assets: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_spent_savings [select_one] In the last 30 days, did your household spend savings or сonsumed stocks "for a rainy day" due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_spent_savings [select_one] Чи витрачало Ваше домогосподарство за останні 30 днів свої заощадження через брак коштів на задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, комунальні послуги, паливо для опалення житла, питна вода тощо)?
     lcs_spent_savings: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_forrowed_food [select_one] In the last 30 days, did your household purchase food on credit or borrowed food  due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_forrowed_food [select_one] Чи купувало Ваше домогосподарство за останні 30 днів продукти у кредит або позичало продукти через брак коштів на задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, паливо для опалення житла, питна вода тощо)?
     lcs_forrowed_food: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_eat_elsewhere [select_one] In the last 30 days, did your household send household members to eat/live with another family or friends or eat at a food bank/soup kitchen/collective centre distributing food due to a lack of resources to cover to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_eat_elsewhere [select_one] Чи відправляло Ваше домогосподарство за останні 30 днів своїх членів харчуватися/ проживати до іншої сім'ї чи друзів або харчуватися в пункті видачі їжі / безкоштовній їдальні / МКП, через брак коштів на задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, паливо для опалення житла, питна вода тощо)?
     lcs_eat_elsewhere: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_sell_productive_assets [select_one] In the last 30 days, did your household sell productive assets or means of transport (sewing machine, bicycle, car, etc.) due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_sell_productive_assets [select_one] Чи продавало Ваше домогосподарство протягом останніх 30 днів виробничі активи або транспортні засоби (швейну машинку, велосипед, автомобіль тощо) через брак коштів для задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, комунальні послуги, паливо для опалення, питна вода тощо)?
     lcs_sell_productive_assets: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_reduce_health_expenditures [select_one] In the last 30 days, did your household reduce essential health expenditures (including drugs,) due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities,  fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_reduce_health_expenditures [select_one] Чи скорочувало Ваше домогосподарство витрати на охорону здоров'я ( у т.ч. на ліки) протягом останніх 30 днів через брак коштів на задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, комунальні послуги, паливо для опалення, питна вода тощо)?
     lcs_reduce_health_expenditures: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_decrease_fertilizer [select_one] In the last 30 days, did anyone in your household have to decrease expenditures on fertilizer, pesticide, fodder, animal feed, veterinary care, etc. due to a lack of food or money to buy it?
+    // livelihoods_score/lcs_decrease_fertilizer [select_one] Чи доводилося комусь із членів вашого домогосподарства за останні 30 днів зменшувати витрати на добрива, пестициди, фураж, корм для тварин, ветеринарну допомогу тощо через брак продуктів харчування або грошей на їх купівлю?
     lcs_decrease_fertilizer: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_reduce_education_expenditures [select_one] In the last 30 days, did your household reduce essential education expenditures due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water,  etc.)?
+    // livelihoods_score/lcs_reduce_education_expenditures [select_one] Чи скорочувало Ваше домогосподарство витрати на освіту протягом останніх 30 днів через брак коштів на задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, комунальні послуги, паливо для опалення, питна вода тощо)?
     lcs_reduce_education_expenditures: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_sell_house [select_one] In the last 30 days, did your household sell house or land due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_sell_house [select_one] Чи продавало Ваше домогосподарство за останні 30 днів будинок або землю через брак коштів на задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, паливо для опалення житла, питна вода тощо)?
     lcs_sell_house: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_move_elsewhere [select_one] In the last 30 days, did your HH member(-s) move elsewhere in search of work due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_move_elsewhere [select_one] Чи виїхав хтось із членів Вашого домогосподарства за останні 30 днів в інше місце у пошуках роботи через брак коштів для задоволення основних потреб через брак коштів на задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, паливо для опалення житла, питна вода тощо)?
     lcs_move_elsewhere: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_degrading_income_source [select_one] In the last 30 days, did your household use degrading sources of income, illegal work, or high risk jobs due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_degrading_income_source [select_one] Чи вдавалися члени Вашого домогосподарства протягом останніх 30 днів до принизливих джерел доходу, нелегальної роботи або роботи з підвищеним ризиком через брак коштів на задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, паливо для опалення житла, бутильована вода тощо)?
     lcs_degrading_income_source: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_ask_stranger [select_one] In the last 30 days, did your household have to ask strangers for money to cover essential needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    // livelihoods_score/lcs_ask_stranger [select_one] Чи доводилося Вашому домогосподарству протягом останніх 30 днів просити гроші у незнайомих людей для задоволення основних потреб (таких як їжа, житло, охорона здоров'я, освіта, комунальні послуги, паливо для опалення, питна вода тощо)?
     lcs_ask_stranger: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lcs_reason [select_multiple] What were the main reasons why your household decided to use these strategies?
+    // livelihoods_score/lcs_reason [select_multiple] З яких основних причин Ваше домогосподарство вирішило застосувати ці стратегії?
     lcs_reason: undefined | Option<'lcs_reason'>[]
-    // livelihoods_score/lcs_reason_other [text] If other, specify
+    // livelihoods_score/lcs_reason_other [text] Якщо інше, вкажіть
     lcs_reason_other: string | undefined
-    // livelihoods_score/lost_breadwiner [select_one] Did the household lose their breadwinner?
+    // livelihoods_score/lost_breadwiner [select_one] Чи втратили родина годувальника?
     lost_breadwiner: undefined | Option<'lost_breadwiner'>
-    // livelihoods_score/lost_breadwiner_conflict [select_one] Did the household lose their breadwinner as a result of the conflict (since 2014)?
+    // livelihoods_score/lost_breadwiner_conflict [select_one] Чи втратили родина годувальника внаслідок конфлікту (з 2014 року)?
     lost_breadwiner_conflict: undefined | Option<'pay_det_tax_exempt'>
-    // Documented_loss_Assets [select_one] Do you have documented lost of productive assets?
+    // Documented_loss_Assets [select_one] Чи є у вас документально підтверджені втрати виробничих активів?
     Documented_loss_Assets: undefined | Option<'pay_det_tax_exempt'>
-    // baseline_indicator/basic_needs_prioritize [select_one] To what extent is your household able to meet its basic needs as you define and prioritize them?
+    // baseline_indicator/basic_needs_prioritize [select_one] Наскільки ваше домогосподарство здатне задовольнити свої базові потреби, згідно з тим, як ви їх визначаєте та приорітезуєте ?
     basic_needs_prioritize: undefined | Option<'basic_needs_prioritize'>
-    // baseline_indicator/basic_needs_unable_fulfil [select_multiple] Which basic needs is your household currently unable to fulfil?
+    // baseline_indicator/basic_needs_unable_fulfil [select_multiple] Які базові потреби ваше домогосподарство наразі не може задовольнити?
     basic_needs_unable_fulfil: undefined | Option<'basic_needs_unable_fulfil'>[]
-    // baseline_indicator/basic_needs_unable_fulfil_other [text] Other, specify:
+    // baseline_indicator/basic_needs_unable_fulfil_other [text] Якщо інше, будь ласка, поясніть
     basic_needs_unable_fulfil_other: string | undefined
-    // baseline_indicator/unable_fulfil_basic_food [select_one] What were the reasons for these Basic food needs being unmet?
+    // baseline_indicator/unable_fulfil_basic_food [select_one] Якими були причини того, що Базові потреби в харчуванні залишилися незадоволеними?
     unable_fulfil_basic_food: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_basic_food_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_basic_food_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_basic_food_other: string | undefined
-    // baseline_indicator/unable_fulfil_food_children [select_one] What were the reasons for these Special food needs of your children 0–23 months being unmet?
+    // baseline_indicator/unable_fulfil_food_children [select_one] Якими були причини того, що Особливі потреби у харчуванні ваших дітей віком 0-23 місяці залишилися незадоволеними?
     unable_fulfil_food_children: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_food_children_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_food_children_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_food_children_other: string | undefined
-    // baseline_indicator/unable_fulfil_food_pregnant [select_one] What were the reasons for these Special food needs of pregnant and lactating women being unmet?
+    // baseline_indicator/unable_fulfil_food_pregnant [select_one] Якими були причини того, що Особливі потреби у харчуванні вагітних та жінок, що годують груддю залишилися незадоволеними?
     unable_fulfil_food_pregnant: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_food_pregnant_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_food_pregnant_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_food_pregnant_other: string | undefined
-    // baseline_indicator/unable_fulfil_water_needs [select_one] What were the reasons for these Water needs being unmet?
+    // baseline_indicator/unable_fulfil_water_needs [select_one] Якими були причини того, що Потреби у воді залишилися незадоволеними?
     unable_fulfil_water_needs: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_water_needs_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_water_needs_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_water_needs_other: string | undefined
-    // baseline_indicator/unable_fulfil_hygiene_needs [select_one] What were the reasons for these Hygiene needs being unmet?
+    // baseline_indicator/unable_fulfil_hygiene_needs [select_one] Якими були причини того, що Гігієнічні потреби залишилися незадоволеними?
     unable_fulfil_hygiene_needs: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_hygiene_needs_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_hygiene_needs_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_hygiene_needs_other: string | undefined
-    // baseline_indicator/unable_fulfil_shelter_needs [select_one] What were the reasons for these Shelter/housing needs being unmet?
+    // baseline_indicator/unable_fulfil_shelter_needs [select_one] Якими були причини того, що Потреби у притулку/житлі залишилися незадоволеними?
     unable_fulfil_shelter_needs: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_shelter_needs_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_shelter_needs_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_shelter_needs_other: string | undefined
-    // baseline_indicator/unable_fulfil_healthcare_needs [select_one] What were the reasons for these Healthcare needs of your households being unmet?
+    // baseline_indicator/unable_fulfil_healthcare_needs [select_one] Якими були причини того, що Потреби в охороні здоров'я ваших домогосподарств залишилися незадоволеними?
     unable_fulfil_healthcare_needs: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_healthcare_needs_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_healthcare_needs_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_healthcare_needs_other: string | undefined
-    // baseline_indicator/unable_fulfil_healthcare_children [select_one] What were the reasons for these Special healthcare needs of your children 0–23 months being unmet?
+    // baseline_indicator/unable_fulfil_healthcare_children [select_one] Якими були причини того, що Особливі медичні потреби Ваших дітей віком 0-23 місяці залишилися незадоволеними?
     unable_fulfil_healthcare_children: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_healthcare_children_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_healthcare_children_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_healthcare_children_other: string | undefined
-    // baseline_indicator/unable_fulfil_healthcare_pregnant [select_one] What were the reasons for these Special healthcare needs of pregnant and lactating women being unmet?
+    // baseline_indicator/unable_fulfil_healthcare_pregnant [select_one] Якими були причини того, що Особливі медичні потреби вагітних та жінок, що годують груддю залишилися незадоволеними?
     unable_fulfil_healthcare_pregnant: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_healthcare_pregnant_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_healthcare_pregnant_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_healthcare_pregnant_other: string | undefined
-    // baseline_indicator/unable_fulfil_transportation_needs [select_one] What were the reasons for these Transportation needs being unmet?
+    // baseline_indicator/unable_fulfil_transportation_needs [select_one] Якими були причини того, що Транспортні потреби залишилися незадоволеними?
     unable_fulfil_transportation_needs: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_transportation_needs_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_transportation_needs_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_transportation_needs_other: string | undefined
-    // baseline_indicator/unable_fulfil_communication_needs [select_one] What were the reasons for these Communication needs being unmet?
+    // baseline_indicator/unable_fulfil_communication_needs [select_one] Якими були причини того, що Потреби у спілкуванні залишилися незадоволеними?
     unable_fulfil_communication_needs: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_communication_needs_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_communication_needs_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_communication_needs_other: string | undefined
-    // baseline_indicator/unable_fulfil_education_needs [select_one] What were the reasons for these Education needs for children being unmet?
+    // baseline_indicator/unable_fulfil_education_needs [select_one] Якими були причини того, що Потреби в освіті для дітей залишилися незадоволеними?
     unable_fulfil_education_needs: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_education_needs_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_education_needs_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_education_needs_other: string | undefined
-    // baseline_indicator/unable_fulfil_clothing_needs [select_one] What were the reasons for these Clothing needs being unmet?
+    // baseline_indicator/unable_fulfil_clothing_needs [select_one] Якими були причини того, що Потреби в одязі залишилися незадоволеними?
     unable_fulfil_clothing_needs: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_clothing_needs_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_clothing_needs_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_clothing_needs_other: string | undefined
-    // baseline_indicator/unable_fulfil_utilities [select_one] What were the reasons for these Utilities being unmet?
+    // baseline_indicator/unable_fulfil_utilities [select_one] Якими були причини того, що Комунальні послуги залишилися незадоволеними?
     unable_fulfil_utilities: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_utilities_other [text] Other, specify:
+    // baseline_indicator/unable_fulfil_utilities_other [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_utilities_other: string | undefined
-    // baseline_indicator/unable_fulfil_other [select_one] What were the reasons for these Other being unmet?
+    // baseline_indicator/unable_fulfil_other [select_one] Якими були причини того, що Інше залишилися незадоволеними?
     unable_fulfil_other: undefined | Option<'unable_fulfil_other'>
-    // baseline_indicator/unable_fulfil_other_specify [text] Other, specify:
+    // baseline_indicator/unable_fulfil_other_specify [text] Якщо інше, будь ласка, поясніть
     unable_fulfil_other_specify: string | undefined
-    // ass_inc/not_information [note] Your information has been collected and will be reviewed in line with the selection and vulnerability criteria. We will reach out to you to provide decision on eligibility
+    // ass_inc/not_information [note] Ваша інформація була зібрана і буде розглянута відповідно до критеріїв відбору та вразливості. Ми зв'яжемося з вами, щоб повідомити про рішення щодо прийнятності
     not_information: string
-    // pay_det/pay_consent [select_one] 6.0 Thank you for answering the questions above, are you willing to provide your payment details?
+    // pay_det/pay_consent [select_one] 6.0 Дякуємо за відповіді на вищезазначені питання, чи готові ви надати свої платіжні реквізити?
     pay_consent: undefined | Option<'pay_det_tax_exempt'>
-    // pay_det/pay_det_s/pay_det_id_type [select_one] 6.1 What form of ID do you have?
+    // pay_det/pay_det_s/pay_det_id_type [select_one] 6.1 Яка у Вас форма посвідчення особи?
     pay_det_id_type: undefined | Option<'pay_det_id_type'>
-    // pay_det/pay_det_s/pay_det_id_type_oth [text] 6.1.1 What other form of ID do you have?
+    // pay_det/pay_det_s/pay_det_id_type_oth [text] 6.1.1 Яка інша форма посвідчення особи у Вас є?
     pay_det_id_type_oth: string | undefined
-    // pay_det/pay_det_s/pay_det_pass_ser [text] 6.2.1 Input Passport Series
+    // pay_det/pay_det_s/pay_det_pass_ser [text] 6.2.1 Серія паспорта
     pay_det_pass_ser: string | undefined
-    // pay_det/pay_det_s/pay_det_pass_num [text] 6.2.2 Number of ID
+    // pay_det/pay_det_s/pay_det_pass_num [text] 6.2.2 Номер ID
     pay_det_pass_num: string | undefined
-    // pay_det/pay_det_s/pay_det_id_ph [image] 6.2.3 Take a photo of the ID
+    // pay_det/pay_det_s/pay_det_id_ph [image] 6.2.3 Сфотографуйте посвідчення особи
     pay_det_id_ph: string
-    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_yn [select_one] 6.3.1 Do you have an individual tax number (TIN)?
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_yn [select_one] 6.3.1 Чи має бенефіціар індивідуальний податковий номер (ІПН)?
     pay_det_tax_id_yn: undefined | Option<'pay_det_tax_exempt'>
-    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_num [text] 6.3.2 What is your individual tax number?
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_num [text] 6.3.2 Ідентифікаційний номер (ІПН) бенефіціара
     pay_det_tax_id_num: string | undefined
-    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_ph [image] 6.3.3 Take a photo of the Tax ID
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_ph [image] 6.3.3 Сфотографуйте посвідчення платника податків
     pay_det_tax_id_ph: string
-    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt [select_one] 6.3.4 Do you have a tax exemptions?
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt [select_one] 6.3.4 Підтвердження відсутності ІПН
     pay_det_tax_exempt: undefined | Option<'pay_det_tax_exempt'>
-    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt_im [image] 6.3.5 Take a photo of the proof of the tax of exemptions
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt_im [image] 6.3.5 Сфотографуйте пільговий документ
     pay_det_tax_exempt_im: string
-    // pay_det/pay_det_s/pay_det_pay_meth [select_one] 6.4.1 What is your preferred payment method?
+    // pay_det/pay_det_s/pay_det_pay_meth [select_one] 6.4.1 Який у Вас бажаний спосіб оплати?
     pay_det_pay_meth: undefined | Option<'pay_det_pay_meth'>
-    // pay_det/pay_det_s/pay_det_iban [text] 6.4.2 What is your IBAN number?
+    // pay_det/pay_det_s/pay_det_iban [text] 6.4.2 Який у Вас IBAN-код?
     pay_det_iban: string | undefined
-    // pay_det/pay_det_s/pay_det_iban_im [image] 6.4.3 Take a picture of IBAN number if available
+    // pay_det/pay_det_s/pay_det_iban_im [image] 6.4.3 Сфотографуйте IBAN-код (якщо такий є)
     pay_det_iban_im: string
-    // pay_det/pay_det_s/pay_address [text] 6.4.4 Your address
+    // pay_det/pay_det_s/pay_address [text] 6.4.4 Яка Ваша адреса?
     pay_address: string | undefined
-    // pay_det/pay_det_s/pay_zip [text] 6.4.5 Your ZIP code
+    // pay_det/pay_det_s/pay_zip [text] 6.4.5 Яким іншим способам оплати Ви віддаєте перевагу?
     pay_zip: string | undefined
-    // pay_det/pay_det_s/pay_det_add_im [image] 6.4.6 Take a picture of the address page of passport
+    // pay_det/pay_det_s/pay_det_add_im [image] 6.4.6 Сфотографуйте сторінку з адресою в паспорті
     pay_det_add_im: string
-    // pay_det/pay_det_s/pay_det_pay_meth_oth [text] 6.4.7 What other Payment methods do you prefer?
+    // pay_det/pay_det_s/pay_det_pay_meth_oth [text] 6.4.7 Яким іншим способам оплати Ви віддаєте перевагу?
     pay_det_pay_meth_oth: string | undefined
-    // pay_det/pay_det_s/pay_det_pay_meth_none [text] 6.4.8 Can you highlight the main reason that none of these payment methods are suitable to you?
+    // pay_det/pay_det_s/pay_det_pay_meth_none [text] 6.4.8 Чи можете Ви навести головну причину того, що жоден із цих способів оплати Вам не підходить?
     pay_det_pay_meth_none: string | undefined
-    // fin_det/fin_det_res [text] 7.1 Other Comments from Respondent
+    // fin_det/fin_det_res [text] 7.1 Інші коментарі респондента
     fin_det_res: string | undefined
-    // fin_det/fin_det_enum [text] 7.2 Other Comments from Enumerator
+    // fin_det/fin_det_enum [text] 7.2 Інші коментарі особи, яка проводила оцінювання
     fin_det_enum: string | undefined
-    // fin_det/fin_det_oth_doc_im [image] 7.3 Please take picture of any other relevant document
+    // fin_det/fin_det_oth_doc_im [image] 7.3 Сфотографуйте будь-який інший відповідний документ
     fin_det_oth_doc_im: string
-    // fin_det/additional_photo1 [image] 7.4.1 Additional photo
+    // fin_det/additional_photo1 [image] Додаткові фотографії
     additional_photo1: string
-    // fin_det/additional_photo2 [image] 7.4.2 Additional photo
+    // fin_det/additional_photo2 [image] Додаткові фотографії
     additional_photo2: string
-    // fin_det/additional_photo3 [image] 7.4.3 Additional photo
+    // fin_det/additional_photo3 [image] Додаткові фотографії
     additional_photo3: string
-    // fin_det/additional_photo4 [image] 7.4.4 Additional photo
+    // fin_det/additional_photo4 [image] Додаткові фотографії
     additional_photo4: string
-    // fin_det/additional_photo5 [image] 7.4.5 Additional photo
+    // fin_det/additional_photo5 [image] Додаткові фотографії
     additional_photo5: string
-    // fin_det/additional_photo6 [image] 7.4.6 Additional photo
+    // fin_det/additional_photo6 [image] Додаткові фотографії
     additional_photo6: string
-    // fin_det/additional_photo7 [image] 7.4.7 Additional photo
+    // fin_det/additional_photo7 [image] Додаткові фотографії
     additional_photo7: string
-    // cal_eligibility [calculate] Eligibility
+    // cal_eligibility [calculate] undefined
     cal_eligibility: string
-    // cal_lim_income [calculate] Limited Income
+    // cal_lim_income [calculate] undefined
     cal_lim_income: string
-    // cal_spending_savings [calculate] Spending savings or consumed stocks
+    // cal_spending_savings [calculate] undefined
     cal_spending_savings: string
-    // cal_selling_household [calculate] Selling household assets/goods (refrigerator, television, jewelry…)
+    // cal_selling_household [calculate] undefined
     cal_selling_household: string
-    // cal_decrease_fertilizer [calculate] Decrease expenditures on fertilizer
+    // cal_decrease_fertilizer [calculate] undefined
     cal_decrease_fertilizer: string
-    // cal_purchasing_food [calculate] Purchasing food on credit or borrow food
+    // cal_purchasing_food [calculate] undefined
     cal_purchasing_food: string
-    // cal_selling_productive_assets [calculate] Selling productive assets or means of transport
+    // cal_selling_productive_assets [calculate] undefined
     cal_selling_productive_assets: string
-    // cal_reducing_essential_health [calculate] Reducing essential health expenditures
+    // cal_reducing_essential_health [calculate] undefined
     cal_reducing_essential_health: string
-    // cal_sending_members_eat [calculate] Sending members to eat/live with another family or friends or at food bank/soup kitchen
+    // cal_sending_members_eat [calculate] undefined
     cal_sending_members_eat: string
-    // cal_moving_elsewhere_work [calculate] Moving elsewhere in search of work
+    // cal_moving_elsewhere_work [calculate] undefined
     cal_moving_elsewhere_work: string
-    // cal_strangers_money_cover [calculate] Ask strangers for money to cover essential needs
+    // cal_strangers_money_cover [calculate] undefined
     cal_strangers_money_cover: string
-    // cal_sellling_house_land [calculate] Sellling house or land
+    // cal_sellling_house_land [calculate] undefined
     cal_sellling_house_land: string
-    // cal_reducing_essential_education [calculate] Reducing essential education expenditures
+    // cal_reducing_essential_education [calculate] undefined
     cal_reducing_essential_education: string
-    // cal_degrading_sources_income [calculate] Using degrading sources of income, illegal work, high risk jobs
+    // cal_degrading_sources_income [calculate] undefined
     cal_degrading_sources_income: string
-    // cal_size_hh_v1 [calculate] Size of household
+    // cal_size_hh_v1 [calculate] undefined
     cal_size_hh_v1: string
-    // cal_residence_status_v2_ue [calculate] Residence status
+    // cal_residence_status_v2_ue [calculate] undefined
     cal_residence_status_v2_ue: string
-    // cal_dis_chr_v2 [calculate] People with a disability
+    // cal_dis_chr_v2 [calculate] undefined
     cal_dis_chr_v2: string
-    // cal_chr_v4_ue [calculate] People with a chronic disease
+    // cal_chr_v4_ue [calculate] undefined
     cal_chr_v4_ue: string
-    // cal_single_parent_children_v3 [calculate] Single-headed household
+    // cal_single_parent_children_v3 [calculate] undefined
     cal_single_parent_children_v3: string
-    // cal_elderly_people_v4 [calculate] Elderly people
+    // cal_elderly_people_v4 [calculate] undefined
     cal_elderly_people_v4: string
-    // cal_perg_woman_v5 [calculate] Pregnant or lactating woman
+    // cal_perg_woman_v5 [calculate] undefined
     cal_perg_woman_v5: string
-    // cal_breadwinner_conflict_v6 [calculate] Household lost their breadwinner as a result of the conflict
+    // cal_breadwinner_conflict_v6 [calculate] undefined
     cal_breadwinner_conflict_v6: string
-    // cal_doc_loss [calculate] Documented loss of assets as a result of the conflict
+    // cal_doc_loss [calculate] undefined
     cal_doc_loss: string
-    // cal_negative_coping_strategies_v8 [calculate] Negative Coping Strategy Indicators
+    // cal_negative_coping_strategies_v8 [calculate] undefined
     cal_negative_coping_strategies_v8: string
-    // cal_income [calculate] Income
+    // cal_income [calculate] undefined
     cal_income: string
-    // cal_tot_vulnerability [calculate] Total Vulnerability
+    // cal_tot_vulnerability [calculate] undefined
     cal_tot_vulnerability: string
   }
   export const options = {
@@ -436,82 +436,82 @@ export namespace Ecrec_cashRegistration {
       umy: `Sumy(UMY)`,
     },
     back_enum: {
-      dmytro_ivanov: `Dmytro Ivanov`,
-      henadii_petrychenko: `Henadii Petrychenko`,
-      nadiia_yudaieva: `Nadiia Yudaieva`,
-      dmytro_tsaruk: `Dmytro Tsaruk`,
-      viktoria_ushan: `Viktoria Ushan`,
-      kostiantyn_yefimchuk: `Kostiantyn Yefimchuk`,
-      viktoriia_lytvynova: `Viktoriia Lytvynova`,
-      valerii_vietrov: `Valerii Vietrov`,
-      daria_kokalia: `Daria Kokalia`,
-      lwo_ex1: `Extra 1`,
-      lwo_ex2: `Extra 2`,
-      oleksandr_havrylov: `Oleksandr Havrylov`,
-      ievgen_kylymenniy: `Ievgen Kylymenniy`,
-      oleksandr_shmunk: `Oleksandr Shmunk`,
-      inna_kovalchuk: `Inna Kovalchuk`,
-      polina_prusakova: `Polina Prusakova`,
-      artem_chernukha_1: `Artem Chernukha`,
-      nlv_ex1: `Extra 1`,
-      nlv_ex2: `Extra 2`,
+      dmytro_ivanov: `Іванов Дмитро`,
+      henadii_petrychenko: `Петриченко Геннадій`,
+      nadiia_yudaieva: `Юдаєва Надія`,
+      dmytro_tsaruk: `Царук Дмитро`,
+      viktoria_ushan: `Ушань Вікторія`,
+      kostiantyn_yefimchuk: `Єфімчук Костянтин`,
+      viktoriia_lytvynova: `Вікторія Литвинова`,
+      valerii_vietrov: `Валерій Вєтров`,
+      daria_kokalia: `Кокаля Дар'я`,
+      lwo_ex1: `Додатковий 1`,
+      lwo_ex2: `Додатковий 1`,
+      oleksandr_havrylov: `Олександр Гаврилов`,
+      ievgen_kylymenniy: `Євген Килименний`,
+      oleksandr_shmunk: `Олександр Шмунк`,
+      inna_kovalchuk: `Інна Ковальчук`,
+      polina_prusakova: `Поліна Прусакова`,
+      artem_chernukha_1: `Чернуха Артем`,
+      nlv_ex1: `Додатковий 1`,
+      nlv_ex2: `Додатковий 1`,
       alina_bondarenko: `Alina Bondarenko`,
       serhii_dolzhenko: `Serhii Dolzhenko`,
       viktoria_klymenko: `Viktoria Klymenko`,
-      andrii_zahoruyev: `Andrii Zahoruyev`,
-      oleh_Ivanov: `Oleh Ivanov`,
-      karina_korzh: `Karina Korzh`,
-      serhii_nevmyvaka: `Serhii Nevmyvaka`,
-      olha_osmukha: `Olha Osmukha`,
-      halyna_diachenko: `Halyna Diachenko`,
-      mariia_kozachko: `Mariia Kozachko`,
-      maksym_mykytas: `Maksym Mykytas`,
-      vita_zolotarevska: `Vita Zolotarevska`,
-      olha_sakharnova: `Olha Sakharnova`,
-      andrii_matvieiev: `Andrii Matvieiev`,
-      sofiia_berezhna: `Sofiia Berezhna`,
-      illia_kutsenko: `Illia Kutsenko`,
-      dnk_ex1: `Extra 1`,
-      dnk_ex2: `Extra 2`,
-      yurii_volkov: `Yurii Volkov`,
-      andrii_zagoruiev: `Andrii Zagoruiev`,
-      olena_sydorenko: `Olena Sydorenko`,
-      svitlana_smyrnova: `Svitlana Smyrnova`,
-      tetiana_konovshii: `Tetiana Konovshii`,
-      bohdan_taranushchenko: `Bohdan Taranushchenko`,
-      olena_buglo: `Olena Buglo`,
-      vitalii_shapoval: `Vitalii Shapoval`,
-      hrk_ex1: `Extra 1`,
-      hrk_ex2: `Extra 2`,
-      dmytro_chernukha: `Chernukha Dmytro`,
-      anastasiia_reshynska: `Anastasiia Reshynska`,
-      nataliia_pushenko: `Pushenko Nataliia`,
-      tetiana_gorbatiuk: `Gorbatiuk Tetiana`,
-      oleksandr_lukomets: `Oleksandr Lukomets`,
-      katerina_severin: `Katerina Severin`,
-      maksim_sedun: `Maksim Sedun`,
-      surzhyk_oleksandr: `Surzhyk Oleksandr`,
-      chj_ex1: `Extra 1`,
-      chj_ex2: `Extra 2`,
-      khe_ex1: `Extra 1`,
-      khe_ex2: `Extra 2`,
-      khe_ex3: `Extra 3`,
-      khe_ex4: `Extra 4`,
-      zap_ex1: `Extra 1`,
-      zap_ex2: `Extra 2`,
-      zap_ex3: `Extra 3`,
-      zap_ex4: `Extra 4`,
-      honcharov_oleksandr: `Honcharov Oleksandr`,
-      vceronika_kaliuzhna: `Kaliuzhna Veronika`,
-      margaryta_pustova: `Pustova Margaryta`,
-      inna_mishchenko: `Inna Mishchenko`,
-      umy_ex1: `Anna Artiukh`,
-      umy_ex2: `Yevhenii Musiienko`,
-      umy_ex3: `Vitalii Hrynenko`,
-      umy_ext1: `Extra 1`,
-      umy_ext2: `Extra 2`,
-      umy_ext3: `Extra 3`,
-      umy_ex4: `Extra 4`,
+      andrii_zahoruyev: `Андрій Загоруєв`,
+      oleh_Ivanov: `Олег Іванов`,
+      karina_korzh: `Каріна Корж`,
+      serhii_nevmyvaka: `Сергій Невмивака`,
+      olha_osmukha: `Ольга Осьмуха`,
+      halyna_diachenko: `Галина Дьяченко`,
+      mariia_kozachko: `Марія Козачко`,
+      maksym_mykytas: `Максим Микитась`,
+      vita_zolotarevska: `Віта Золотаревська`,
+      olha_sakharnova: `Ольга Сахарнова`,
+      andrii_matvieiev: `Андрій Матвєєв`,
+      sofiia_berezhna: `Софія Бережна`,
+      illia_kutsenko: `Ілля Кутценко`,
+      dnk_ex1: `Додатковий 1`,
+      dnk_ex2: `Додатковий 1`,
+      yurii_volkov: `Юрій Волков`,
+      andrii_zagoruiev: `Андрій Загоруєв`,
+      olena_sydorenko: `Олена Сидоренко`,
+      svitlana_smyrnova: `Світлана Смирнова`,
+      tetiana_konovshii: `Тетяна Коновшій`,
+      bohdan_taranushchenko: `Богдан Таранущенко`,
+      olena_buglo: `Олена Бугло`,
+      vitalii_shapoval: `Віталій Шаповал`,
+      hrk_ex1: `Додатковий 1`,
+      hrk_ex2: `Додатковий 1`,
+      dmytro_chernukha: `Чернуха Дмитро`,
+      anastasiia_reshynska: `Анастасія Решинська`,
+      nataliia_pushenko: `Пушенко Наталія`,
+      tetiana_gorbatiuk: `Горбатюк Тетяна`,
+      oleksandr_lukomets: `Лукомець Олександр`,
+      katerina_severin: `Северін Катерина`,
+      maksim_sedun: `Седун Максим`,
+      surzhyk_oleksandr: `Суржик Олександр`,
+      chj_ex1: `Додатковий 1`,
+      chj_ex2: `Додатковийv2`,
+      khe_ex1: `Додатковий 1`,
+      khe_ex2: `Додатковий 2`,
+      khe_ex3: `Додатковий 3`,
+      khe_ex4: `Додатковий 4`,
+      zap_ex1: `Додатковий 1`,
+      zap_ex2: `Додатковий 2`,
+      zap_ex3: `Додатковий 3`,
+      zap_ex4: `Додатковий 4`,
+      honcharov_oleksandr: `Гончаров Олександр`,
+      vceronika_kaliuzhna: `Калюжна Вероніка`,
+      margaryta_pustova: `Пустова Маргарита`,
+      inna_mishchenko: `Інна Міщенко`,
+      umy_ex1: `Анна Артюх`,
+      umy_ex2: `Євгеній Мусієнко`,
+      umy_ex3: `Виталій Гриненко`,
+      umy_ext1: `Додатковий 1`,
+      umy_ext2: `Додатковий 2`,
+      umy_ext3: `Додатковий 3`,
+      umy_ex4: `Додатковий 4`,
       oleh_vyshnevskyi: `Oleh Vyshevskyi`,
     },
     back_donor: {
@@ -521,232 +521,232 @@ export namespace Ecrec_cashRegistration {
       '372_echo': `ECHO (UKR-000372)`,
     },
     pay_det_tax_exempt: {
-      yes: `Yes`,
-      no: `No`,
+      yes: `Так`,
+      no: `Ні`,
     },
     know_contamination_neighbour: {
-      yes: `Yes`,
-      no: `No`,
-      unwilling: `Unwilling or unable to answer`,
+      yes: `Так`,
+      no: `Ні`,
+      unwilling: `Не бажають або не можуть відповісти`,
     },
     back_refer_who: {
-      prot: `A = Protection`,
-      legal: `B = Legal`,
-      shelter: `C = Shelter`,
+      prot: `A = Захист`,
+      legal: `B = Юридичний`,
+      shelter: `C = Відновлення житла`,
     },
     hh_char_hh_how_idp: {
-      less_1y: `Less 1 year`,
-      more_1y: `More 1 year`,
+      less_1y: `Менше 1 року`,
+      more_1y: `Більше 1 року`,
     },
     lost_breadwiner: {
-      yes: `Yes`,
-      no_had_no_need_to_use_this_coping_strategy: `No, had no need to use this coping strategy`,
-      no_have_already_exhausted_this_coping_strategy_and_cannot_use_it_again: `No, have already exhausted this coping strategy and cannot use it again`,
-      not_applicable_this_coping_strategy_is_not_available_to_me: `Not applicable / This coping strategy is not available to me`,
-      prefer_not_to_answer: `Prefer not to answer`,
+      yes: `Так`,
+      no_had_no_need_to_use_this_coping_strategy: `Ні, не було потреби використовувати цю стратегію подолання труднощів`,
+      no_have_already_exhausted_this_coping_strategy_and_cannot_use_it_again: `Ні, ми вже вичерпали цю стратегію виживання та не можемо використовувати її знову`,
+      not_applicable_this_coping_strategy_is_not_available_to_me: `Не застосовно / Для мене ця стратегія недоступна`,
+      prefer_not_to_answer: `Не хочу відповідати`,
     },
     lcs_reason: {
-      to_access_or_pay_for_food: `To access or pay for food`,
-      to_access_or_pay_for_healthcare: `To access or pay for healthcare`,
-      to_access_or_pay_for_shelter: `To access or pay for shelter`,
-      to_access_or_pay_for_education: `To access or pay for education`,
-      other: `Other`,
-      dont_know: `Don't know`,
+      to_access_or_pay_for_food: `Щоб отримати доступ до або оплатити харчування;`,
+      to_access_or_pay_for_healthcare: `Щоб отримати доступ до медичних послуг або ліків або або оплатити їх;`,
+      to_access_or_pay_for_shelter: `Щоб отримати доступ до житла або оплатити його;`,
+      to_access_or_pay_for_education: `Щоб отримати доступ до навчання або оплатити його;`,
+      other: `Інше`,
+      dont_know: `Не знаю`,
     },
     eligible_cash_feed: {
-      hay: `Hay`,
-      concentrated_feed: `Concentrated feed`,
-      mineral_blocks: `Mineral blocks`,
-      wheat_seeds: `Wheat seeds`,
-      barley_seeds: `Barley seeds`,
-      other: `Other`,
+      hay: `Сіно`,
+      concentrated_feed: `Концентровані корми`,
+      mineral_blocks: `Мінеральні блоки`,
+      wheat_seeds: `Насіння пшениці`,
+      barley_seeds: `Насіння ячменю`,
+      other: `Інше`,
     },
     cash_animal_shelter: {
-      bricks: `Bricks`,
-      wood: `Wood`,
-      plywood: `Plywood`,
-      metal_panel: `Metal panel`,
-      roof_panel: `Roof Panel`,
-      cement: `Cement`,
-      nails: `Nails`,
-      other: `Other`,
+      bricks: `Цегла`,
+      wood: `Дерево`,
+      plywood: `Фанера`,
+      metal_panel: `Металева панель`,
+      roof_panel: `Покрівельна панель`,
+      cement: `Цемент`,
+      nails: `Цвяхи`,
+      other: `Інше`,
     },
     know_contamination_neighbour_yes: {
-      still: `Still farm all the land`,
-      partially: `Partially farm the land`,
-      stopped: `Stopped farming all togehter`,
-      uu: `Unable/unwilling to answer`,
+      still: `Досі обробляє цю землю`,
+      partially: `Частково обробляє землю`,
+      stopped: `Припинили обробляти цю землю`,
+      uu: `Не можу/не хочу відповісти`,
     },
     basic_needs_prioritize: {
-      all: `All`,
-      most: `Most`,
-      about_half: `About half`,
-      some: `Some (less than half)`,
-      none: `None`,
-      dont_wish: `I don’t wish to respond`,
+      all: `Всі`,
+      most: `Більшість`,
+      about_half: `Близько половини`,
+      some: `Деякі (менше половини)`,
+      none: `Жодної`,
+      dont_wish: `Я не хочу відповідати`,
     },
     basic_needs_unable_fulfil: {
-      basic_food: `Basic food needs`,
-      food_children: `Special food needs of your children 0–23 months`,
-      food_pregnant: `Special food needs of pregnant and lactating women`,
-      water_needs: `Water needs`,
-      hygiene_needs: `Hygiene needs`,
-      shelter_needs: `Shelter/housing needs`,
-      healthcare_needs: `Healthcare needs of your households`,
-      healthcare_children: `Special healthcare needs of your children 0–23 months`,
-      healthcare_pregnant: `Special healthcare needs of pregnant and lactating women`,
-      transportation_needs: `Transportation needs`,
-      communication_needs: `Communication needs`,
-      education_needs: `Education needs for children`,
-      clothing_needs: `Clothing needs`,
-      utilities: `Utilities`,
-      other: `Other`,
+      basic_food: `Базові потреби в харчуванні`,
+      food_children: `Особливі потреби у харчуванні ваших дітей віком 0-23 місяці`,
+      food_pregnant: `Особливі потреби у харчуванні вагітних та жінок, що годують груддю`,
+      water_needs: `Потреби у воді`,
+      hygiene_needs: `Гігієнічні потреби`,
+      shelter_needs: `Потреби у притулку/житлі`,
+      healthcare_needs: `Потреби в охороні здоров'я ваших домогосподарств`,
+      healthcare_children: `Особливі медичні потреби Ваших дітей віком 0-23 місяці`,
+      healthcare_pregnant: `Особливі медичні потреби вагітних та жінок, що годують груддю`,
+      transportation_needs: `Транспортні потреби`,
+      communication_needs: `Потреби у спілкуванні`,
+      education_needs: `Потреби в освіті для дітей`,
+      clothing_needs: `Потреби в одязі`,
+      utilities: `Комунальні послуги`,
+      other: `Інше`,
     },
     unable_fulfil_other: {
-      financial_reasons: `Financial reasons`,
-      not_available: `It is not available on the local market`,
-      other: `Other`,
+      financial_reasons: `Фінансові причини`,
+      not_available: `Відсутній на місцевому ринку`,
+      other: `Інше`,
     },
     hh_char_origin_oblast: {
-      cherkaska: `Cherkaska`,
-      chernihivska: `Chernihivska`,
-      chernivetska: `Chernivetska`,
-      dnipropetrovska: `Dnipropetrovska`,
-      donetska: `Donetska`,
-      'ivano-frankivska': `Ivano-Frankivska`,
-      kharkivska: `Kharkivska`,
-      khersonska: `Khersonska`,
-      khmelnytska: `Khmelnytska`,
-      kirovohradska: `Kirovohradska`,
-      kyivska: `Kyivska`,
-      luhanska: `Luhanska`,
-      lvivska: `Lvivska`,
-      mykolaivska: `Mykolaivska`,
-      odeska: `Odeska`,
-      poltavska: `Poltavska`,
-      rivnenska: `Rivnenska`,
-      sevastopilska: `Sevastopilska`,
-      sumska: `Sumska`,
-      ternopilska: `Ternopilska`,
-      vinnytska: `Vinnytska`,
-      volynska: `Volynska`,
-      zakarpatska: `Zakarpatska`,
-      zaporizka: `Zaporizka`,
-      zhytomyrska: `Zhytomyrska`,
+      cherkaska: `Черкаська`,
+      chernihivska: `Чернігівська`,
+      chernivetska: `Чернівецька`,
+      dnipropetrovska: `Дніпропетровська`,
+      donetska: `Донецька`,
+      'ivano-frankivska': `Івано-Франківська`,
+      kharkivska: `Харківська`,
+      khersonska: `Херсонська`,
+      khmelnytska: `Хмельницька`,
+      kirovohradska: `Кіровоградська`,
+      kyivska: `Київська`,
+      luhanska: `Луганська`,
+      lvivska: `Львівська`,
+      mykolaivska: `Миколаївська`,
+      odeska: `Одеська`,
+      poltavska: `Полтавська`,
+      rivnenska: `Рівненська`,
+      sevastopilska: `Севастопільська`,
+      sumska: `Сумська`,
+      ternopilska: `Тернопільська`,
+      vinnytska: `Вінницька`,
+      volynska: `Волинська`,
+      zakarpatska: `Закарпатська`,
+      zaporizka: `Запорізька`,
+      zhytomyrska: `Житомирська`,
     },
     hh_char_hh_res_stat: {
-      idp: `A = Internally Displaced Person (IDP)`,
-      long_res: `B = Long - Term Resident`,
-      ret: `C = Returnee`,
-      ref_asy: `D = Refugee/asylum seeker`,
+      idp: `A = Внутрішньо-переміщена особа (ВПО)`,
+      long_res: `B = Довгостроковий мешканець`,
+      ret: `C = Особа, яка повернулася`,
+      ref_asy: `D = Біженець/особа, що потребує прихистку`,
     },
     hh_char_hh_det_gender: {
-      male: `A = Male`,
-      female: `B = Female`,
+      male: `A = Чоловік`,
+      female: `B = Жінка`,
     },
     hh_char_civ_stat: {
-      single: `A = Single (Never Married)`,
-      dom_part: `B = Not Married but Living in Domestic Partnership`,
-      married: `C = Married`,
-      div_sep: `D = Divorced/Seperated`,
-      widow: `E = Widowed`,
-      abandoned: `F = Abandoned`,
+      single: `A = Неодружений(-а) (ніколи не був(-ла) одружений(-а))`,
+      dom_part: `B = Неодружений(-а), але живе у сімейному партнерстві`,
+      married: `C = Одружений(-а)`,
+      div_sep: `D = Розлучений(-а)/ проживає окремо`,
+      widow: `E = Удівець/ вдова`,
+      abandoned: `F = Покинутий(-а)`,
     },
     hh_char_dis_select: {
-      diff_see: `A = Have difficulty seeing, even if wearing glasses`,
-      diff_hear: `B = Have difficulty hearing, even if using a hearing aid`,
-      diff_walk: `C = Have difficulty walking or climbing steps`,
-      diff_rem: `D = Have difficulty remembering or concentrating`,
-      diff_care: `E = Have difficulty with self-care such as washing all over or dressing`,
-      diff_comm: `F = Have difficulty communicating, for example understanding or being understood`,
-      diff_none: `G = None of the above apply`,
+      diff_see: `A = Маєте труднощі із зором, навіть якщо носите окуляри`,
+      diff_hear: `B = Маєте проблеми зі слухом, навіть якщо користуєтеся слуховим апаратом`,
+      diff_walk: `C = Маєте труднощі з ходьбою або підйомом по сходах`,
+      diff_rem: `D = Маєте труднощі з запам'ятовуванням або концентрацією уваги`,
+      diff_care: `E = Мають труднощі з самообслуговуванням, наприклад, з миттям або одяганням`,
+      diff_comm: `F = Маєте труднощі у спілкуванні, наприклад, у розумінні чи розумінні інших людей`,
+      diff_none: `G = Ніщо з перерахованого вище не стосується`,
     },
     hh_char_dis_level: {
-      zero: `A = No, no difficulty`,
-      one: `B = Yes, some difficulty`,
-      two: `C = Yes, a lot of difficulty`,
-      fri: `D = Cannot do at all`,
+      zero: `A = Ні, труднощі відсутні`,
+      one: `B = Так, є деякі труднощі`,
+      two: `C = Так, багато труднощів`,
+      fri: `D = Взагалі не можу(-е) робити`,
     },
     undefined: {
-      no_damage: `No Structural Damage`,
-      minor_damage: `Minor Damage (light or medium damages such as broken windows and doors, minor roof damage)`,
-      heavy_damage: `Heavy Damage`,
-      rent: `B = Find Rental Accommodation`,
-      host: `B = Living with Friends/Family/Host`,
-      own_prop: `C = Living in Own Property`,
-      coll_cen: `D = Living in Collective Center`,
-      homeless: `E = Homeless`,
-      other_accom: `F = Other`,
-      secure: `A = Secure for Medium/Long Term`,
-      unable_pay: `B = Currently Unable to Pay Rent/Contribute to Collective Costs`,
-      dan_unable_pay: `C = In Danger of Being Unable to Pay Rent/Contribute to Collective Costs`,
-      unsuit_accom: `D = Accommodation Unsuitable for my needs`,
-      eviction: `E = Eviction/Removal for Other Reasons`,
-      remain: `A = Remain in Current Place`,
-      not_sure: `C = Not Sure/Don’t Know`,
-      always: `A = Always`,
-      not_always: `B = Not always on but comes daily`,
-      intermittent: `C = Comes on intermittent days`,
-      rarely: `D = Rarely`,
-      never: `E = Never`,
+      no_damage: `Відсутність структурних пошкоджень`,
+      minor_damage: `Незначні пошкодження (легкі або середні пошкодження, такі як розбиті вікна та двері, незначні пошкодження даху)`,
+      heavy_damage: `Сильні пошкодження`,
+      rent: `B = Орендувати житло`,
+      host: `B = Проживання з друзями/ родиною/ стороною, яка приймає`,
+      own_prop: `C = Проживання у власному житлі`,
+      coll_cen: `D = Проживання у центрі тимчасового розміщення`,
+      homeless: `E = Безхатній(-я)`,
+      other_accom: `F = Інше`,
+      secure: `A = Забезпечення на середній/ довгий строк`,
+      unable_pay: `B = Зараз не в змозі сплачувати орендну плату/ платити за центр тимчасового розміщення`,
+      dan_unable_pay: `C = Існує небезпека неможливості сплачувати орендну плату/ платити за центр тимчасового розміщення`,
+      unsuit_accom: `D = Житло, яке не відповідає моїм потребам`,
+      eviction: `E = Виселення з інших причин`,
+      remain: `A = Залишатися у поточному місці`,
+      not_sure: `C = Не впевнений(-а)/ не знаю`,
+      always: `A = Постійно`,
+      not_always: `B = Не постійно, але щодня приходить`,
+      intermittent: `C = Приходить у різні дні`,
+      rarely: `D = Рідко`,
+      never: `E = Ніколи`,
     },
     pay_det_id_type: {
-      nat_pass_card: `A = National Passport (card)`,
-      nat_pass_book: `B = National Passport (book)`,
-      nat_pass_diia: `C = National Passport (Diia app)`,
-      pass_ussr_red: `D = Passport (USSR red book)`,
-      pass_int: `E = Passport for international travel`,
-      birth_certificate: `F = Birth certificate`,
-      driver_lic: `G = Driver’s license`,
-      pen_cert: `H = Pensioner certificate`,
-      oth_id: `I = Other Form of ID`,
-      no_id: `J = No ID`,
+      nat_pass_card: `A = Національний паспорт (карта)`,
+      nat_pass_book: `B = Національний паспорт (книжка)`,
+      nat_pass_diia: `C = Національний паспорт (додаток Дія)`,
+      pass_ussr_red: `D = Паспорт (Червона книга СРСР)`,
+      pass_int: `E = Закордонний паспорт`,
+      birth_certificate: `F = Свідоцтво про народження`,
+      driver_lic: `G = Водійські права`,
+      pen_cert: `H = Посвідчення пенсіонера`,
+      oth_id: `I = Інша форма ідентифікатора`,
+      no_id: `J = Немає іншого типу`,
     },
     pay_det_pay_meth: {
-      raiff_trans: `A = Remittance Raiffaisen AVAL`,
-      ukrpost: `B = Ukrposhta`,
-      bank_card: `C = Bank card`,
-      other_pay: `D = Other Payment Method`,
-      none_pay: `E = None of the above fit my needs`,
+      raiff_trans: `A = Переказ через «Райффайзен Банк АВАЛЬ»`,
+      ukrpost: `B = Укрпошта`,
+      bank_card: `C = Банківська картка`,
+      other_pay: `D = Інший спосіб оплати`,
+      none_pay: `E = Жодний з перелічених способів мені не підходить`,
     },
     what_primary_livelihood: {
-      agricul: `Agricultural and/or livestock activities`,
-      grocery: `Grocery, shop`,
-      smalls: `Small shop/kiosk`,
-      carpentry: `Carpentry, carving, or woodwork`,
-      mechanic: `Mechanics`,
-      plumber: `Plumber`,
-      electrical: `Electrical work`,
-      construct: `Construction work`,
-      textiel: `Textile and tailoring`,
-      education: `Education centre`,
-      heath: `Heath centre`,
-      manufacturing: `Manufacturing/factory work`,
-      computer: `Computer, technology`,
-      administration: `Administration,`,
-      graphic: `Graphic design`,
-      transport: `Transport service`,
-      hairdressing: `Hairdressing/barber`,
-      pscoffe: `Providing services (such as coffee/tea, small restaurant, cooking, etc.)`,
-      pscleaning: `Providing services (cleaning, security)`,
-      ngo: `NGOs/UN agencies`,
-      government: `Government`,
-      other: `Other`,
-      none: `None of them`,
+      agricul: `Сільське господарство та/або тваринництво`,
+      grocery: `Продукти, магазин`,
+      smalls: `Невеликий магазин/кіоск`,
+      carpentry: `Столярні, різьбярські або деревообробні роботи`,
+      mechanic: `Механіка`,
+      plumber: `Сантехнік`,
+      electrical: `Електромонтажні роботи`,
+      construct: `Будівельні роботи`,
+      textiel: `Текстиль та пошиття одягу`,
+      education: `Освітній центр`,
+      heath: `Оздоровчий центр`,
+      manufacturing: `Виробництво / робота на заводі`,
+      computer: `Комп'ютер, технології`,
+      administration: `Адміністрування,`,
+      graphic: `Графічний дизайн`,
+      transport: `Транспортне обслуговування`,
+      hairdressing: `Перукарня/барбер`,
+      pscoffe: `Надання послуг (наприклад, кава/чай, невеликий ресторан, кулінарія тощо)`,
+      pscleaning: `Надання послуг (прибирання, охорона)`,
+      ngo: `НУО / агенції ООН`,
+      government: `Уряд`,
+      other: `Інше`,
+      none: `Жоден з них`,
     },
     eligible_assistance_agricultural: {
-      seeds: `Seeds`,
-      fertilizers: `Fertilizers`,
-      irrigationp: `Irrigation pipes (drop lines)`,
-      fuel: `Fuel (for agricultural machinery)`,
-      agriculser: `Agricultural services (tractor service, harvesting)`,
-      livestock: `Livestock (chickens, pigs, cows etc)`,
-      agricultool: `Agricultural tools (shovel, rake etc)`,
-      livestockf: `Livestock feed`,
-      buildingm: `Building materials,`,
-      other: `Other`,
+      seeds: `Насіння`,
+      fertilizers: `Добрива`,
+      irrigationp: `Зрошувальні труби (краплинні лінії)`,
+      fuel: `Паливо (для сільськогосподарської техніки)`,
+      agriculser: `Сільськогосподарські послуги (тракторний сервіс, збір врожаю)`,
+      livestock: `Тваринництво (кури, свині, корови тощо)`,
+      agricultool: `Сільськогосподарські інструменти (лопата, граблі тощо)`,
+      livestockf: `Корми для худоби`,
+      buildingm: `Будівельні матеріали,`,
+      other: `Інше`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}
