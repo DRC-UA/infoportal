@@ -123,6 +123,7 @@ const optionsUa: Partial<Record<keyof typeof Protection_hhs3.options, Record<str
     criminality: 'Кримінал',
     fighting_between_armed_or_security_actors: 'Битви між збройними силами або силовими структурами',
     risks_of_eviction: 'Ризики примусового виселення',
+    risks_of_arbitrary_arrest_detention:'Ризики безпідставного арешту/затримання ',
     intercommunity_tensions: 'Напруга всередині громади',
     other_specify: 'Інше',
   },
