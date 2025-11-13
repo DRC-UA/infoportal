@@ -44,6 +44,7 @@ const Communications = () => {
   return (
     <Layout sidebar={<CommunicationsSidebar />} title={m.communications.title}>
       <Routes>
+        <Route index element={<div>Communications page</div>} />
         {Obj.values(commsConfig).map((k) => (
           <Route key={k.path} path={k.path} Component={k.component} />
         ))}
