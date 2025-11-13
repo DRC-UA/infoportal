@@ -737,7 +737,7 @@ export namespace KoboXmlMapper {
     }
 
     export const protection_pss: PersonsMapper<Protection_pss.T> = (row) => {
-      if (row.new_ben === 'no') return []
+      if (row.new_ben === 'no') return [] // CHECK
 
       return common({
         hh_char_hh_det: row.hh_char_hh_det

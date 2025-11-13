@@ -1520,6 +1520,10 @@ const en = Object.freeze({
         },
       },
     },
+    pssDashboard: {
+      uniqueIndividualsHint: 'Depersonalized identifying data is being collected since late September 2025',
+      sessionsCounterTitle: 'Sessions conducted:',
+    },
     plurals: {
       session: {
         zero: 'Sessions',
@@ -1544,6 +1548,14 @@ const en = Object.freeze({
         few: 'Unique Individuals',
         many: 'Unique Individuals',
         other: 'Unique Individuals',
+      },
+      submission: {
+        zero: 'Submissions',
+        one: 'Submission',
+        two: 'Submissions',
+        few: 'Submissions',
+        many: 'Submissions',
+        other: 'Submissions',
       },
     },
   },

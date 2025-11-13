@@ -1,4 +1,5 @@
 import {useMemo, type FC} from 'react'
+import {match} from '@axanc/ts-utils'
 import {format} from 'date-fns'
 
 import {capitalize, groupBy, OblastIndex, Person, Protection_pss} from 'infoportal-common'
@@ -18,7 +19,8 @@ import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePlurals} from '@/utils'
 
 import {PssContextProvider, usePssContext} from './Context'
-import {useOptionsTranslation} from './hooks'
+import {useOptionsTranslation, useSessionsCounter} from './hooks'
+import {Txt} from '@/shared'
 
 const DashboardPss: FC = () => {
   return (
@@ -31,26 +33,43 @@ const DashboardPss: FC = () => {
 const PssDashboardWithContext: FC = () => {
   const {data, fetcher, filters} = usePssContext()
   const {m, formatLargeNumber} = useI18n()
-  const {translateOptions} = useOptionsTranslation('protection_pss')
-  const pluralizeSessions = usePlurals(m.plurals.session)
+  const {translateOptions} = useOptionsTranslation()
   const pluralizeIndividuals = usePlurals(m.plurals.individuals)
   const pluralizeUniqueIndividuals = usePlurals(m.plurals.uniqueIndividuals)
-  const filteredIndividualSessions = data?.filtered.filter(({activity}) => activity === 'ais') ?? []
-  const participantsById = useMemo(
+  const pluralizeSubmissions = usePlurals(m.plurals.submission)
+  const translateActivityOptions = (sessionType: Protection_pss.T['activity']): string => {
+    return (
+      translateOptions('activity').find(({value}) => value === sessionType)?.label ??
+      `Missing translation for the "${sessionType}" option`
+    )
+  }
+  const sessionsCounter = useSessionsCounter(data)
+
+  const clearFilters = () => {
+    filters.setFilters({})
+    filters.setPeriod({})
+  }
+
+  const distinctIndividuals = useMemo(
     () =>
       Object.entries(
         groupBy({
-          data: data?.flatFiltered.compactBy('participant_code') ?? [],
+          data:
+            data?.flatFiltered
+              .flatMap(({hh_char_hh_det, id}) => hh_char_hh_det?.map((char) => ({...char, id})) ?? [])
+              .filter(({code_beneficiary}) => Boolean(code_beneficiary)) ?? [],
           groups: [
             {
-              by: ({participant_code}) => participant_code!,
+              by: ({code_beneficiary}) => code_beneficiary!,
             },
           ],
-          finalTransform: (array) => array[0].participant_code,
+          finalTransform: (input) => ({occurrences: input.length, ids: input?.map(({id}) => id)}),
         }).groups,
-      ).length,
+      ),
     [data?.flatFiltered],
   )
+
+  // console.log(sessionsCounter)
 
   if (!data) return null
 
@@ -61,36 +80,54 @@ const PssDashboardWithContext: FC = () => {
         filters={filters.filters}
         shapes={filters.shape}
         setFilters={filters.setFilters}
-        onClear={() => {
-          filters.setFilters({})
-          filters.setPeriod({})
-        }}
+        onClear={clearFilters}
         before={
-          <>
-            <PeriodPicker
-              value={[filters.period.start, filters.period.end]}
-              defaultValue={[filters.period.start, filters.period.end]}
-              onChange={([start, end]) => {
-                filters.setPeriod((prev) => ({...prev, start, end}))
-              }}
-              label={[m.start, m.endIncluded]}
-              max={today}
-              fullWidth={false}
-            />
-          </>
+          <PeriodPicker
+            value={[filters.period.start, filters.period.end]}
+            defaultValue={[filters.period.start, filters.period.end]}
+            onChange={([start, end]) => {
+              filters.setPeriod((prev) => ({...prev, start, end}))
+            }}
+            label={[m.start, m.endIncluded]}
+            max={today}
+            fullWidth={false}
+          />
         }
       />
       <Div column>
+        <Div sx={{alignItems: 'stretch'}}>
+          <SlideWidget sx={{flex: 1}} icon="checklist" title={pluralizeSubmissions(data.filtered.length)!}>
+            {formatLargeNumber(data.filtered.length)}
+          </SlideWidget>
+          <SlideWidget sx={{flex: 1}} icon="person" title={pluralizeIndividuals(data.flatFiltered.length)!}>
+            {formatLargeNumber(data.flatFiltered.length)}
+          </SlideWidget>
+          <SlideWidget
+            sx={{flex: 1}}
+            icon="person"
+            title={`${pluralizeUniqueIndividuals(distinctIndividuals.length)}*`}
+            tooltip={m.pssDashboard.uniqueIndividualsHint}
+          >
+            {distinctIndividuals.length}
+          </SlideWidget>
+        </Div>
+        <Txt>{m.pssDashboard.sessionsCounterTitle}</Txt>
+        <Div sx={{alignItems: 'stretch'}}>
+          <SlideWidget sx={{flex: 1}} icon="groups" title={translateActivityOptions('pgs')}>
+            {formatLargeNumber(sessionsCounter.pgs)}
+          </SlideWidget>
+          <SlideWidget sx={{flex: 1}} icon="group" title={translateActivityOptions('ais')}>
+            {formatLargeNumber(sessionsCounter.ais)}
+          </SlideWidget>
+          <SlideWidget sx={{flex: 1}} icon="groups" title={translateActivityOptions('mhpss')}>
+            {formatLargeNumber(sessionsCounter.mhpss)}
+          </SlideWidget>
+          <SlideWidget sx={{flex: 1}} icon="groups" title={translateActivityOptions('community_dialogues_session')}>
+            {formatLargeNumber(sessionsCounter.community_dialogues_session)}
+          </SlideWidget>
+        </Div>
         <Div responsive>
           <Div column>
-            <Div sx={{alignItems: 'stretch'}}>
-              <SlideWidget sx={{flex: 1}} icon="groups" title={pluralizeSessions(data.filtered.length)!}>
-                {formatLargeNumber(data.filtered.length)}
-              </SlideWidget>
-              <SlideWidget sx={{flex: 1}} icon="person" title={pluralizeIndividuals(data.flatFiltered.length)!}>
-                {formatLargeNumber(data.flatFiltered.length)}
-              </SlideWidget>
-            </Div>
             <Panel title={m.submissions}>
               <ChartLineBy
                 sx={{mt: 1}}
@@ -113,22 +150,6 @@ const PssDashboardWithContext: FC = () => {
                     }
                   />
                 )}
-              </PanelBody>
-            </Panel>
-            <Panel title={translateOptions('activity').find(({value}) => value === 'ais')?.label}>
-              <PanelBody>
-                <Div sx={{alignItems: 'stretch'}}>
-                  <SlideWidget
-                    sx={{flex: 1}}
-                    icon="group"
-                    title={pluralizeSessions(filteredIndividualSessions.length)!}
-                  >
-                    {formatLargeNumber(filteredIndividualSessions.length)}
-                  </SlideWidget>
-                  <SlideWidget sx={{flex: 1}} icon="person" title={pluralizeUniqueIndividuals(participantsById)!}>
-                    {formatLargeNumber(participantsById)}
-                  </SlideWidget>
-                </Div>
               </PanelBody>
             </Panel>
           </Div>

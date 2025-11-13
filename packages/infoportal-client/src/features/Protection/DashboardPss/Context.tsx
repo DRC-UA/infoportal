@@ -36,6 +36,7 @@ const PssContextProvider = ({children}: {children: ReactNode}) => {
     ...record,
     persons: KoboXmlMapper.Persons.protection_pss(record),
   }))
+
   const flatData = useMemo(() => {
     return data?.flatMap(attachRecordToEachPerson).compact()
   }, [data])
