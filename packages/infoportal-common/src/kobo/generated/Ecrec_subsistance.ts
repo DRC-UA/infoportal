@@ -58,14 +58,23 @@ export namespace Ecrec_subsistance {
     ben_det_income: number | undefined
     // ben_det/ben_det_hh_size [integer] 2.9 Indicate the total number of people in your household, including the HHH
     ben_det_hh_size: number | undefined
+    cal_head_tax: string
     // hh_char/hh_char_civ_stat [select_one] 3.1 What is the civil status of the Head of Household?
     hh_char_civ_stat: undefined | Option<'hh_char_civ_stat'>
     calc_char_civ_stat: string
     // hh_char/hh_char_hh_det [begin_repeat] 3.1.1 HH Members
     hh_char_hh_det:
       | {
+          hh_chart_note_resp: string | undefined
           hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
+          hh_char_date_birth: Date | undefined | undefined
           hh_char_hh_det_age: number | undefined | undefined
+          hh_char_tax_id_yn: undefined | Option<'participating_training_agriculture'> | undefined
+          head_tax_id: string | undefined
+          hh_char_tax_id_num: string | undefined | undefined
+          hh_char_tax_id_photo: string | undefined
+          taxid_weightedsum: string | undefined
+          taxid_roundedsum: string | undefined
           hh_char_hh_res_stat: undefined | Option<'hh_char_hh_res_stat'> | undefined
           hh_char_hh_how_idp: undefined | Option<'hh_char_hh_how_idp'> | undefined
           hh_char_hh_det_dis_select: undefined | Option<'hh_char_hh_det_dis_select'>[] | undefined
@@ -262,6 +271,18 @@ export namespace Ecrec_subsistance {
     pay_det_tax_id_yn: undefined | Option<'participating_training_agriculture'>
     // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_num [text] 6.3.2 What is your individual tax number?
     pay_det_tax_id_num: string | undefined
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/cal_organization [calculate] Organization
+    cal_organization: string
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/cal_category [calculate] Category
+    cal_category: string
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/cal_currency [calculate] Currency
+    cal_currency: string
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/cal_amount [calculate] Amount
+    cal_amount: string
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/cal_date_start [calculate] Start (YYYYMMDD)
+    cal_date_start: string
+    // pay_det/pay_det_s/begin_group_vdIM9ogQb/cal_date_end [calculate] End (YYYYMMDD)
+    cal_date_end: string
     // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_ph [image] 6.3.3 Take a photo of the Tax ID
     pay_det_tax_id_ph: string
     // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt [select_one] 6.3.4 Do you have a tax exemptions?
@@ -639,6 +660,7 @@ export namespace Ecrec_subsistance {
       ben_det_income: _.ben_det_income ? +_.ben_det_income : undefined,
       ben_det_hh_size: _.ben_det_hh_size ? +_.ben_det_hh_size : undefined,
       hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {
+        _['hh_char_date_birth'] = _.hh_char_date_birth ? new Date(_.hh_char_date_birth) : undefined
         _['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined
         _['hh_char_hh_det_dis_select'] = _.hh_char_hh_det_dis_select?.split(' ')
         return _
