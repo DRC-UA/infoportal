@@ -1,4 +1,4 @@
-import type {FC} from 'react'
+import {useEffect, type FC} from 'react'
 import {Obj} from '@axanc/ts-utils'
 import {NavLink, Route, Routes} from 'react-router-dom'
 
@@ -41,10 +41,16 @@ const CommunicationsSidebar = () => {
 const Communications = () => {
   const {m} = useI18n()
 
+  useEffect(() => {
+    // force routing handover from Next's to React's router to fix the blank page
+    if (window.location.hash === '') {
+      window.location.replace(`communications#/${commsConfig.yearlyReport.path}`)
+    }
+  }, [])
+
   return (
     <Layout sidebar={<CommunicationsSidebar />} title={m.communications.title}>
       <Routes>
-        <Route index element={<div>Communications page</div>} />
         {Obj.values(commsConfig).map((k) => (
           <Route key={k.path} path={k.path} Component={k.component} />
         ))}
