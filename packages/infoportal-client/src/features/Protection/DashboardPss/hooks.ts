@@ -1,21 +1,22 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {Seq, match} from '@axanc/ts-utils'
 
-import {PeriodHelper, Protection_pss, type Period} from 'infoportal-common'
+import {groupBy, PeriodHelper, Protection_pss, type Period} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
-import {KoboSchemaContext, useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
+import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 
+import type {PssContext} from './Context'
 import type {ProtectionPssWithPersons} from './types'
 
 type UsePssFilter = ReturnType<typeof usePssFilters>
 
-const useOptionsTranslation = (contextName: keyof KoboSchemaContext['byName']) => {
-  const schemaContext = useKoboSchemaContext({autoFetch: [contextName]})
-  const schema = schemaContext.byName[contextName].get
+const useOptionsTranslation = () => {
+  const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
+  const schema = schemaContext.byName['protection_pss'].get
 
   const getOptionTranslation = useCallback(
     (option: keyof Protection_pss.T) => {
@@ -38,7 +39,7 @@ const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
   const {m, currentLang} = useI18n()
   const [period, setPeriod] = useState<Partial<Period>>({})
   const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
-  const {translateOptions} = useOptionsTranslation('protection_pss')
+  const {translateOptions} = useOptionsTranslation()
 
   useEffect(() => {
     schemaContext.setLangIndex(match(currentLang).cases({en: 1}).default(0))
@@ -112,4 +113,51 @@ const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
   }
 }
 
-export {usePssFilters, useOptionsTranslation, type UsePssFilter}
+const useSessionsCounter = (data: PssContext['data']) =>
+  useMemo(() => {
+    const {pgs, ais, mhpss, community_dialogues_session} = groupBy({
+      data: data?.filtered ?? [],
+      groups: [
+        {
+          by: ({activity}) => activity!,
+        },
+      ],
+      finalTransform: (input) => input,
+    }).groups
+
+    return {
+      pgs:
+        groupBy({
+          data: pgs?.filter(({cycle_code}) => cycle_code !== undefined),
+          groups: [{by: ({cycle_code}) => cycle_code!}],
+          finalTransform: (group) => ({cycle_length: group[0]?.cycle_type}),
+        }).transforms.reduce((accum, {cycle_length}) => {
+          return match(cycle_length)
+            .cases({
+              short: accum + 5,
+              short_6: accum + 6,
+              long: accum + 8,
+            })
+            .default(0)
+        }, 0) || undefined,
+      ais:
+        ais?.reduce((counter, submission) => {
+          const sessionsCount = [
+            submission.date_session1,
+            submission.date_session2,
+            submission.date_session3,
+            submission.date_session4,
+            submission.date_session5,
+            submission.date_session6,
+            submission.date_session7,
+            submission.date_session8,
+          ].filter(Boolean).length
+
+          return counter + sessionsCount
+        }, 0) || undefined,
+      mhpss: mhpss?.length,
+      community_dialogues_session: community_dialogues_session?.length,
+    }
+  }, [data?.filtered])
+
+export {usePssFilters, useOptionsTranslation, useSessionsCounter, type UsePssFilter}
