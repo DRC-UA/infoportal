@@ -42,9 +42,9 @@ const Communications = () => {
   const {m} = useI18n()
 
   useEffect(() => {
-    // force routing handover from Next's to React's router to fix the blank page
+    // redirect to Yearly Report by default
     if (window.location.hash === '') {
-      window.location.replace(`communications#/${commsConfig.yearlyReport.path}`)
+      window.location.replace(`communications#${commsConfig.yearlyReport.path}`)
     }
   }, [])
 
