@@ -1,7 +1,7 @@
 import type {FC} from 'react'
 
 import {ProtectRoute} from '@/core/Session/SessionContext'
-import {Communications} from '@/features/Communications'
+import {Communications} from '@/features/Communications/Communications'
 
 const CommunicationsPage: FC = () => {
   return (
