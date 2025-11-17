@@ -154,6 +154,16 @@ export namespace YearlyReportMapper {
         {} as Record<number, number>,
       )
 
+    const vaKoboIdToAmountDict = (
+      await api.kobo.typedAnswers.search.va_bio_tia(searchFilters).then(({data}) => data)
+    ).reduce(
+      (result, {id, receipt_number}) => ({
+        ...result,
+        [id]: receipt_number,
+      }),
+      {} as Record<number, number>,
+    )
+
     return groupBy({
       data,
       groups: [{by: ({sector}) => sector}, {by: ({oblast}) => oblast}, {by: ({indicator}) => indicator!}],
@@ -190,12 +200,19 @@ export namespace YearlyReportMapper {
               }, 0)
             : undefined
 
+        const totalVaPaid =
+          sector === DrcSector.VA
+            ? group.reduce((sum, {koboId}) => {
+                return sum + Number(vaKoboIdToAmountDict[Number(koboId)] ?? 0)
+              }, 0)
+            : undefined
+
         return {
           sector,
           oblast,
           indicator,
           beneficiaries: AiMapper.disaggregatePersons(group.flatMap((_) => _.persons).compact()),
-          totalPaid: totalPaid ?? totalEcrecPaid ?? totalShelterPaid, // groups can not have paiments in different activities
+          totalPaid: totalPaid ?? totalEcrecPaid ?? totalShelterPaid ?? totalVaPaid, // groups can not have paiments in different activities
         }
       },
     }).transforms
