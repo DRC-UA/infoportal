@@ -1,8 +1,8 @@
-import {useMemo, type FC} from 'react'
+import {useMemo, Fragment, type FC} from 'react'
 import {format} from 'date-fns'
-import {Box} from '@mui/material'
+import {Box, Typography} from '@mui/material'
 
-import {capitalize, groupBy, OblastIndex, Person, Protection_pss} from 'infoportal-common'
+import {capitalize, groupBy, OblastIndex, Person, Protection_pss, toPercent} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
@@ -176,26 +176,52 @@ const PssDashboardWithContext: FC = () => {
             </Panel>
             <Panel title={m.pssDashboard.prePostWidget.title}>
               <PanelBody>
-                <Div sx={{display: 'flex', mb: 2}}>
+                <Div sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
                   {prePostTests &&
                     Object.entries(prePostTests).map(([field, figures]) => {
                       return (
-                        <ChartBarVerticalGrouped
-                          key={field}
-                          height={400}
-                          showLegend={false}
-                          data={[
-                            {
-                              category: translateField ? translateField(field) : field,
-                              bars: Object.entries(figures).map(([name, value]) => ({
-                                key: name,
-                                label: m.pssDashboard.prePostWidget[name as keyof typeof figures],
-                                value,
-                                color: colorByQuestion[name],
-                              })),
-                            },
-                          ]}
-                        />
+                        <Fragment key={field}>
+                          <Typography>{translateField && translateField(field)}</Typography>
+                          <ChartBarVerticalGrouped
+                            height={140}
+                            layout="vertical"
+                            showLegend={false}
+                            barChartProps={{barCategoryGap: 15, barGap: 2}}
+                            barProps={(({pre, post}) => {
+                              const key = pre < post ? 'pre' : 'post'
+
+                              return {
+                                [key]: {stackId: key},
+                                difference: {stackId: key},
+                              }
+                            })(figures)}
+                            barLabelProps={Object.keys(figures).reduce(
+                              (accum, key) => ({
+                                ...accum,
+                                [key]: {
+                                  position: key === 'difference' ? 'insideRight' : 'insideLeft',
+                                  style: {fill: '#fff'},
+                                  content:
+                                    key === 'difference'
+                                      ? `${m.pssDashboard.prePostWidget[key as keyof typeof figures]} ${toPercent(figures.difference / Math.max(figures.post, figures.pre))}`
+                                      : m.pssDashboard.prePostWidget[key as keyof typeof figures],
+                                },
+                              }),
+                              {},
+                            )}
+                            data={[
+                              {
+                                category: translateField ? translateField(field) : field,
+                                bars: Object.entries(figures).map(([name, value]) => ({
+                                  key: name,
+                                  label: m.pssDashboard.prePostWidget[name as keyof typeof figures],
+                                  value,
+                                  color: colorByQuestion[name],
+                                })),
+                              },
+                            ]}
+                          />
+                        </Fragment>
                       )
                     })}
                 </Div>
