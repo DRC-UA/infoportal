@@ -1,4 +1,4 @@
-import type {FC} from 'react'
+import {useEffect, type FC} from 'react'
 import {Obj} from '@axanc/ts-utils'
 import {NavLink, Route, Routes} from 'react-router-dom'
 
@@ -40,6 +40,13 @@ const CommunicationsSidebar = () => {
 
 const Communications = () => {
   const {m} = useI18n()
+
+  useEffect(() => {
+    // redirect to Yearly Report by default
+    if (window.location.hash === '') {
+      window.location.replace(`communications#${commsConfig.yearlyReport.path}`)
+    }
+  }, [])
 
   return (
     <Layout sidebar={<CommunicationsSidebar />} title={m.communications.title}>

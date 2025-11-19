@@ -7,6 +7,7 @@ import {capitalize, KoboIndex} from 'infoportal-common'
 
 import {koboSdkDrc} from '../index'
 import {appConf} from '../appConf'
+import {commonSpacesReminder} from '../cc-reminder'
 
 interface KoboInterfaceGeneratorParams {
   outDir: string
@@ -88,6 +89,7 @@ export class BuildKoboType {
       protection_pss: {
         formId: KoboIndex.byName('protection_pss').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
+        langIndex: 1,
       },
       bn_cashForRentApplication: {
         formId: KoboIndex.byName('bn_cashForRentApplication').id,
@@ -470,6 +472,8 @@ export class BuildKoboType {
   )
 
   readonly build = (f: keyof (typeof BuildKoboType)['config']) => {
+    if (f === 'shelter_commonSpaces') commonSpacesReminder()
+
     return new KoboInterfaceGenerator(this.sdk, {
       outDir: this.outDir,
       ...BuildKoboType.config[f],
@@ -477,6 +481,8 @@ export class BuildKoboType {
   }
 
   readonly buildAll = () => {
+    commonSpacesReminder()
+
     return Promise.all(Obj.keys(BuildKoboType.config).map(this.build))
   }
 }

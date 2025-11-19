@@ -3,6 +3,7 @@ import {appConfig} from '@/conf/AppConfig'
 import {capitalize, DrcProgram, OblastIndex, OblastISO, Person} from 'infoportal-common'
 
 import {formatDateTime} from './utils'
+import type {DictionaryShape} from './types'
 
 type Messages = (typeof en)['messages']
 
@@ -211,6 +212,7 @@ const en = Object.freeze({
     displacementStatus: 'Displacement status',
     householdStatus: 'Household Status',
     individuals: 'Individuals',
+    individualsCount: 'Individuals',
     uniqIndividuals: 'Unique individuals',
     individualsInterviewed: 'Individuals Interviewed',
     individualsAssistance: 'Individuals who used assistance',
@@ -1518,7 +1520,52 @@ const en = Object.freeze({
         },
       },
     },
+    pssDashboard: {
+      uniqueIndividualsHint: 'Depersonalized identifying data is being collected since late September 2025',
+      sessionsCounterTitle: 'Sessions conducted:',
+      sessionsAttendanceWidgetTitle: 'PGS Attendance Statistics',
+      prePostWidget: {
+        title: 'Pre / Post Tests',
+        pre: 'Before',
+        post: 'After',
+        difference: 'Progress',
+      },
+    },
+    plurals: {
+      session: {
+        zero: 'Sessions',
+        one: 'Session',
+        two: 'Sessions',
+        few: 'Sessions',
+        many: 'Sessions',
+        other: 'Sessions',
+      },
+      individuals: {
+        zero: 'Individuals',
+        one: 'Individual',
+        two: 'Individuals',
+        few: 'Individuals',
+        many: 'Individuals',
+        other: 'Individuals',
+      },
+      uniqueIndividuals: {
+        zero: 'Unique Individuals',
+        one: 'Unique Individual',
+        two: 'Unique Individuals',
+        few: 'Unique Individuals',
+        many: 'Unique Individuals',
+        other: 'Unique Individuals',
+      },
+      submission: {
+        zero: 'Submissions',
+        one: 'Submission',
+        two: 'Submissions',
+        few: 'Submissions',
+        many: 'Submissions',
+        other: 'Submissions',
+      },
+    },
   },
-})
+} satisfies DictionaryShape)
 
 export {en, type Messages}

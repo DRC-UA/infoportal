@@ -1,6 +1,19 @@
-import React from 'react'
-import {Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend} from 'recharts'
+import type {ReactNode, ComponentProps} from 'react'
 import {Box, Typography, useTheme} from '@mui/material'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  type BarProps,
+  type LabelListProps,
+} from 'recharts'
+
 import {toPercent} from 'infoportal-common'
 
 export interface GroupedBarChartBar {
@@ -23,6 +36,10 @@ interface Props {
   width?: number | string
   showGrid?: boolean
   showLegend?: boolean
+  layout?: 'horizontal' | 'vertical'
+  barChartProps?: ComponentProps<typeof BarChart>
+  barProps?: Partial<Record<string, Pick<BarProps, 'stackId'>>>
+  barLabelProps?: Record<string, LabelListProps<{}>>
 }
 
 export const ChartBarVerticalGrouped = ({
@@ -31,11 +48,14 @@ export const ChartBarVerticalGrouped = ({
   width = '100%',
   showGrid = true,
   showLegend = true,
+  layout = 'horizontal',
+  barChartProps,
+  barProps,
+  barLabelProps,
 }: Props) => {
   const theme = useTheme()
 
   const allKeys = Array.from(new Set(data.flatMap((group) => group.bars.map((bar) => bar.key))))
-
   const flattened = data.map((group) => {
     const entry: Record<string, any> = {name: group.category}
     group.bars.forEach((bar) => {
@@ -61,15 +81,32 @@ export const ChartBarVerticalGrouped = ({
   return (
     <Box sx={{position: 'relative', height, width}}>
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={flattened} barCategoryGap={10} barGap={2}>
-          {showGrid && <CartesianGrid strokeDasharray="3 3" />}
-          <XAxis dataKey="name" />
-          <YAxis allowDecimals={false} />
+        <BarChart data={flattened} layout={layout} barCategoryGap={10} barGap={2} {...barChartProps}>
+          {showGrid && <CartesianGrid strokeDasharray="3 3" syncWithTicks />}
+          {layout === 'vertical' ? (
+            <>
+              <XAxis type="number" allowDecimals={false} />
+              <YAxis type="category" dataKey="name" tick={false} hide={true} />
+            </>
+          ) : (
+            <>
+              <XAxis dataKey="name" />
+              <YAxis allowDecimals={false} />
+            </>
+          )}
           <Tooltip
-            content={({active, payload}) => {
+            content={({active, payload, ...rest}) => {
               if (!active || !payload?.length) return null
               return (
-                <Box sx={{backgroundColor: 'white', p: 1, border: '1px solid #ccc', borderRadius: 1, boxShadow: 2}}>
+                <Box
+                  sx={{
+                    backgroundColor: theme.palette.background.paper,
+                    p: 1,
+                    border: '1px solid #ccc',
+                    borderRadius: 1,
+                    boxShadow: 2,
+                  }}
+                >
                   {payload.map((item: any) => {
                     const meta = barMeta[item.dataKey as string]
                     return (
@@ -80,11 +117,10 @@ export const ChartBarVerticalGrouped = ({
                             {meta.desc}
                           </Typography>
                         )}
-                        {meta.base != null && (
-                          <Typography variant="caption">
-                            {`${item.value} / ${meta.base} (${toPercent(item.value / meta.base)})`}
-                          </Typography>
-                        )}
+                        <Typography variant="caption">
+                          {item.value}
+                          {meta?.base && ` / ${meta.base} (${toPercent(item.value / meta.base)})`}
+                        </Typography>
                       </Box>
                     )
                   })}
@@ -99,7 +135,12 @@ export const ChartBarVerticalGrouped = ({
               dataKey={key}
               name={barMeta[key]?.label || key}
               fill={barMeta[key]?.color || theme.palette.primary.main}
-            />
+              {...(barProps ? barProps[key] : {})}
+            >
+              {barLabelProps ? (
+                <LabelList {...barLabelProps[key]}>{barLabelProps[key]?.content as ReactNode}</LabelList>
+              ) : null}
+            </Bar>
           ))}
         </BarChart>
       </ResponsiveContainer>

@@ -36,6 +36,7 @@ export const appConf = {
     password: e(required)('DBAZUREHDP_PWD'),
     port: e(required, int)('DBAZUREHDP_PORT'),
     schema: 'hdp',
+    connect: e(defaultValue(true))('CONNECT_TO_HDP_MSSQL'),
   },
   db: {
     maxPreparedStatementParams: 1000, // 1e3, down from 5e3, which is down from previous 5e4
