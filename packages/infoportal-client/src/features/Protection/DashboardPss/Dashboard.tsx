@@ -59,8 +59,14 @@ const PssDashboardWithContext: FC = () => {
         groupBy({
           data:
             data?.flatFiltered
-              .flatMap(({hh_char_hh_det, id}) => hh_char_hh_det?.map((char) => ({...char, id})) ?? [])
-              .filter(({code_beneficiary}) => Boolean(code_beneficiary)) ?? [],
+              .flatMap(
+                ({persons, id}) =>
+                  persons?.map((person) => ({
+                    ...(person as Person.Details & {code_beneficiary: string}), // safe to cast due to a custom KoboXmlMapper.Persons.protection_pss mapper
+                    id,
+                  })) ?? [],
+              )
+              .compact() ?? [],
           groups: [
             {
               by: ({code_beneficiary}) => code_beneficiary!,

@@ -739,22 +739,27 @@ export namespace KoboXmlMapper {
     export const protection_pss: PersonsMapper<Protection_pss.T> = (row) => {
       if (row.new_ben === 'no') return [] // CHECK
 
+      const accountableIndividuals = row.hh_char_hh_det
+        ?.filter((_) => {
+          if (_.hh_char_hh_new_ben === 'no') return false
+          if (row.activity !== 'pgs') return true
+          if (!_.hh_char_hh_session) return false
+          if (row.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
+          if (row.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
+          if (row.cycle_type === 'short_6') return _.hh_char_hh_session.length >= 4
+          return false
+        })
+        .map(({hh_char_hh_det_status, ...member}) => ({
+          ...member,
+          hh_char_hh_res_stat: hh_char_hh_det_status,
+        }))
+
       return common({
-        hh_char_hh_det: row.hh_char_hh_det
-          ?.filter((_) => {
-            if (_.hh_char_hh_new_ben === 'no') return false
-            if (row.activity !== 'pgs') return true
-            if (!_.hh_char_hh_session) return false
-            if (row.cycle_type === 'long') return _.hh_char_hh_session.length >= 5
-            if (row.cycle_type === 'short') return _.hh_char_hh_session.length >= 3
-            if (row.cycle_type === 'short_6') return _.hh_char_hh_session.length >= 4
-            return false
-          })
-          .map(({hh_char_hh_det_status, ...member}) => ({
-            ...member,
-            hh_char_hh_res_stat: hh_char_hh_det_status,
-          })),
-      })
+        hh_char_hh_det: accountableIndividuals,
+      }).map((individual, index) => ({
+        ...individual,
+        ...(accountableIndividuals && {code_beneficiary: accountableIndividuals[index].code_beneficiary}),
+      }))
     }
 
     export const protection_referral: PersonsMapper<Protection_referral.T> = (row) => {
