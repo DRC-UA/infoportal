@@ -59,6 +59,7 @@ export class KoboMetaMapperProtection {
         .cases({
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
+          slovyansk: DrcOffice.Sloviansk,
           kharkiv: DrcOffice.Kharkiv,
           lviv: DrcOffice.Lviv,
           mykolaiv: DrcOffice.Mykolaiv,
