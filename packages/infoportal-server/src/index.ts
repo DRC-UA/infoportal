@@ -1,17 +1,20 @@
-import {AppConf, appConf} from './core/conf/AppConf.js'
-import {Server} from './server/Server.js'
-import {PrismaClient} from '@prisma/client'
-import {ScheduledTask} from './scheduledTask/ScheduledTask.js'
-import {MpcaCachedDb} from './feature/mpca/MpcaCachedDb.js'
-import {KoboMetaService} from './feature/kobo/meta/KoboMetaService.js'
-import {IpCache, IpCacheApp} from 'infoportal-common'
 import {duration} from '@axanc/ts-utils'
+import {PrismaPg} from '@prisma/adapter-pg'
+import {PrismaClient} from '@prisma/client'
+import * as os from 'os'
+import {Syslog} from 'winston-syslog'
 import * as winston from 'winston'
 import {format, Logger as WinstonLogger} from 'winston'
-import {Syslog} from 'winston-syslog'
-import {EmailService} from './feature/email/EmailService.js'
+
+import {IpCache, IpCacheApp} from 'infoportal-common'
+
+import {AppConf, appConf} from './core/conf/AppConf.js'
 import {DbInit} from './core/DbInit.js'
-import * as os from 'os'
+import {EmailService} from './feature/email/EmailService.js'
+import {KoboMetaService} from './feature/kobo/meta/KoboMetaService.js'
+import {MpcaCachedDb} from './feature/mpca/MpcaCachedDb.js'
+import {Server} from './server/Server.js'
+import {ScheduledTask} from './scheduledTask/ScheduledTask.js'
 
 export type AppLogger = WinstonLogger
 
@@ -85,9 +88,11 @@ const startApp = async (conf: AppConf) => {
   //   }
   // }))
 
+  const adapter = new PrismaPg({connectionString: conf.db.url})
   const log = app.logger('')
   log.info(`Logger level: ${appConf.logLevel}`)
   const prisma = new PrismaClient({
+    adapter,
     // log: ['query']
   })
   const init = async () => {

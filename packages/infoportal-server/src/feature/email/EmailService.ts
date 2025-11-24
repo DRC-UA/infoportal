@@ -10,6 +10,8 @@ import {KoboService} from '../kobo/KoboService.js'
 import {Obj, seq} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
 
+import {PrismaPg} from '@prisma/adapter-pg'
+
 export enum EmailContext {
   Cfm = 'Cfm',
   Kobo = 'Kobo',
@@ -17,8 +19,9 @@ export enum EmailContext {
 
 export class EmailService {
   constructor(
-    private prisma = new PrismaClient(),
     private conf = appConf,
+    private adapter = new PrismaPg({connectionString: conf.db.url}),
+    private prisma = new PrismaClient({adapter}),
     private users = UserService.getInstance(prisma),
     private event = GlobalEvent.Class.getInstance(),
     private emailHelper = new EmailClient(prisma),
@@ -102,9 +105,9 @@ export class EmailService {
             Hello ${userName ?? ''},<br/><br/>
             A new CFM request has been assigned to you as the focal point in InfoPortal.<br/>
             <i>This email is an automatic notification sent from InfoPortal.</i>
-            <br/>   
+            <br/>
             <a href="${link}">Link to request</a>
-            <br/><br/> 
+            <br/><br/>
             Thank you!
           `,
         })
