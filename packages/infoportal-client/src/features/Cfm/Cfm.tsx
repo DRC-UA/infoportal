@@ -46,10 +46,11 @@ const CfmSidebar = () => {
     let coc = 0
     ctx.visibleData?.forEach((_) => {
       if (_.tags?.status === KoboMealCfmStatus.Open) {
-        if (_.priority === CfmDataPriority.High) coc++
         open++
+        if (_.priority === CfmDataPriority.High) coc++
       }
     })
+
     return {
       open,
       coc,
@@ -127,9 +128,8 @@ export const Cfm = () => {
   }, [])
   useReactRouterDefaultRoute(cfmIndex.siteMap.data)
 
-  if (!access) {
-    return <NoFeatureAccessPage />
-  }
+  if (!access) return <NoFeatureAccessPage />
+
   return (
     <>
       {schemaContext.byName.meal_cfmExternal.get && schemaContext.byName.meal_cfmInternal.get ? (
