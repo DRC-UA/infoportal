@@ -183,44 +183,48 @@ export const CfmProvider = ({
         const res: CfmData[] = []
         external.data.forEach((_) => {
           const category = _.tags?.feedbackTypeOverride
-
-          res.push({
-            ..._,
-            category,
-            // @ts-expect-error because THERE IS NO created_at on external data!!!
-            createdAt: _.created_at ? new Date(_.created_at) : undefined,
-            project: _.tags?.project,
-            priority: KoboMealCfmHelper.feedbackType2priority(category),
-            formId: KoboIndex.byName('meal_cfmExternal').id,
-            origin: CfmDataOrigin.External,
-            external_feedback_type: _.feedback_type,
-            external_consent: _.consent,
-            external_prot_support: _.prot_support,
-            form: CfmDataSource.External,
-            oblast: OblastIndex.byKoboName(_.ben_det_oblast!)!.name,
-            oblastIso: OblastIndex.byKoboName(_.ben_det_oblast!)!.iso,
-            feedback: _.complaint ?? _.thanks_feedback ?? _.request,
-          })
+          if (!_.tags?.deletedBy) {
+            res.push({
+              ..._,
+              category,
+              // @ts-expect-error because THERE IS NO created_at on external data!!!
+              createdAt: _.created_at ? new Date(_.created_at) : undefined,
+              project: _.tags?.project,
+              priority: KoboMealCfmHelper.feedbackType2priority(category),
+              formId: KoboIndex.byName('meal_cfmExternal').id,
+              origin: CfmDataOrigin.External,
+              external_feedback_type: _.feedback_type,
+              external_consent: _.consent,
+              external_prot_support: _.prot_support,
+              form: CfmDataSource.External,
+              oblast: OblastIndex.byKoboName(_.ben_det_oblast!)!.name,
+              oblastIso: OblastIndex.byKoboName(_.ben_det_oblast!)!.iso,
+              feedback: _.complaint ?? _.thanks_feedback ?? _.request,
+            })
+          }
         })
         internal.data.forEach(({created_at, ..._}) => {
           const category = _.tags?.feedbackTypeOverride ?? _.feedback_type
           const koboCode = _.project_code === 'Other' ? _.project_code_specify : _.project_code
           const parsedCode = koboCode?.match(/UKR.(000\d\d\d)/)?.[1]
 
-          res.push({
-            ..._,
-            project: DrcProjectHelper.searchByCode(parsedCode),
-            priority: KoboMealCfmHelper.feedbackType2priority(category),
-            category,
-            createdAt: created_at ? new Date(created_at) : undefined,
-            formId: KoboIndex.byName('meal_cfmInternal').id,
-            origin: CfmDataOrigin.Internal,
-            form: CfmDataSource.Internal,
-            // internal_project_code: _.project_code,
-            oblast: OblastIndex.byKoboName(_.ben_det_oblast!).name,
-            oblastIso: OblastIndex.byKoboName(_.ben_det_oblast!).iso,
-          })
+          if (!_.tags?.deletedBy) {
+            res.push({
+              ..._,
+              project: DrcProjectHelper.searchByCode(parsedCode),
+              priority: KoboMealCfmHelper.feedbackType2priority(category),
+              category,
+              createdAt: created_at ? new Date(created_at) : undefined,
+              formId: KoboIndex.byName('meal_cfmInternal').id,
+              origin: CfmDataOrigin.Internal,
+              form: CfmDataSource.Internal,
+              // internal_project_code: _.project_code,
+              oblast: OblastIndex.byKoboName(_.ben_det_oblast!).name,
+              oblastIso: OblastIndex.byKoboName(_.ben_det_oblast!).iso,
+            })
+          }
         })
+
         return seq(res).sort((b, a) => (a.date ?? a.submissionTime).getTime() - (b.date ?? b.submissionTime).getTime())
       }) ?? seq([])
     )
