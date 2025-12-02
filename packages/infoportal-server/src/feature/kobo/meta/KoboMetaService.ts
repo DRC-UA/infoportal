@@ -309,7 +309,6 @@ export class KoboMetaService {
         }
       })
       await chunkify({
-        concurrency: 1,
         size: this.conf.db.maxPreparedStatementParams,
         data: koboAnswersWithId.map(({persons, ...kobo}) => kobo),
         fn: async (data) => {
@@ -330,7 +329,6 @@ export class KoboMetaService {
         },
       })
       await chunkify({
-        concurrency: 1,
         size: this.conf.db.maxPreparedStatementParams,
         data: koboAnswersWithId.flatMap((_) => _.persons),
         fn: (data) => this.prisma.koboPerson.createMany({data}),
