@@ -333,7 +333,7 @@ export class KoboMetaService {
         concurrency: 1,
         size: this.conf.db.maxPreparedStatementParams,
         data: koboAnswersWithId.flatMap((_) => _.persons),
-        fn: (data) => this.prisma.koboPerson.createMany({data}),
+        fn: async (data) => await this.prisma.koboPerson.createMany({data}),
       })
       return koboAnswersWithId
     }
