@@ -116,6 +116,7 @@ export const CashPdmProvider: React.FC<{children: ReactNode}> = ({children}) => 
           ukr000341_hoffman_husmans_fond_mpca: DrcProject['UKR-000341 Hoffmans & Husmans'],
           ukr000342_private_funds: DrcProject['UKR-000342 Pooled Funds'],
           ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
+          ukr000388_bha: DrcProject['UKR-000388 BHA'],
           other: DrcProject['Other'],
         })
         .default(() => undefined),
