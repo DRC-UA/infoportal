@@ -40,7 +40,7 @@ export const appConf = {
   },
   db: {
     // TODO: debug chunkify, it fails saving some persons while syncing Meta when size is more than 1
-    maxPreparedStatementParams: 1, // down from 1e3, down from 5e3, which is down from previous 5e4
+    maxPreparedStatementParams: 1e3, // down from 5e3, which is down from previous 5e4
     maxConcurrency: e(int, defaultValue(50))('DATABASE_MAX_CONCURRENCY'),
     url: e(required)('DATABASE_URL'),
   },
