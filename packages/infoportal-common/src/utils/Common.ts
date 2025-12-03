@@ -371,9 +371,11 @@ export function appendSearchQuery(uri: string, params: Record<string, unknown> |
 
 const enOrdinalRules = new Intl.PluralRules('en-US', {type: 'ordinal'})
 
-export const orderize = (
-  n: number | string,
-  options?: typeof n extends 'number' ? {fullString?: boolean} : {suffix?: string},
+// export function orderize(n: number, options?: {fullString?: boolean}): string
+// export function orderize(n: string, options?: {suffix?: string}): string
+export const orderize = <T extends number | string>(
+  n: T,
+  options?: T extends number ? {fullString?: boolean} : {suffix?: string},
 ): string => {
   if (typeof n === 'number') {
     const rule = enOrdinalRules.select(n)
@@ -387,6 +389,6 @@ export const orderize = (
 
     return (options as {fullString?: boolean})?.fullString ? `${n}${suffix}` : suffix
   } else {
-    return `${n}${options?.suffix ?? 's'}`
+    return `${n}${(options as {suffix?: string})?.suffix ?? 's'}`
   }
 }
