@@ -758,7 +758,9 @@ export namespace KoboXmlMapper {
         hh_char_hh_det: accountableIndividuals,
       }).map((individual, index) => ({
         ...individual,
-        ...(accountableIndividuals && {code_beneficiary: accountableIndividuals[index].code_beneficiary}),
+        ...(accountableIndividuals?.[index]?.code_beneficiary && {
+          code_beneficiary: accountableIndividuals[index].code_beneficiary,
+        }),
       }))
     }
 
