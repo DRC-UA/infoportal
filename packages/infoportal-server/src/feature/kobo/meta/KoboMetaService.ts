@@ -305,34 +305,62 @@ export class KoboMetaService {
         return {
           ...p,
           id: genId,
-          persons: persons,
+          persons,
         }
       })
+
       await chunkify({
         size: this.conf.db.maxPreparedStatementParams,
-        data: koboAnswersWithId.map(({persons, ...kobo}) => kobo),
-        fn: async (data) => {
+        data: koboAnswersWithId,
+        fn: async (chunk) => {
           try {
-            return await this.prisma.koboMeta.createMany({
-              data,
-            })
+            const meta = chunk.map(({persons, ...meta}) => meta)
+            await this.prisma.koboMeta.createMany({data: meta})
           } catch (err) {
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0; i < chunk.length; i++) {
               try {
-                await this.prisma.koboMeta.create({data: data[i]})
-              } catch (recErr) {
-                console.error(`Failed record in ${orderize(i)} chunk:`, data[i], recErr)
+                const {persons, ...meta} = chunk[i]
+                await this.prisma.koboMeta.create({data: meta})
+              } catch (metaErr) {
+                console.error(`Failed meta record in ${orderize(i)} chunk:`, chunk[i], metaErr)
               }
             }
             throw err // Stop the process if any chunk fails
           }
         },
       })
+
       await chunkify({
         size: this.conf.db.maxPreparedStatementParams,
-        data: koboAnswersWithId.flatMap((_) => _.persons),
-        fn: (data) => this.prisma.koboPerson.createMany({data}),
+        data: koboAnswersWithId
+          .flatMap(({persons}) => persons)
+          .map(({age, gender, disability, displacement, id, metaId}) => ({
+            // filter uncommon fields out from person
+            age,
+            gender,
+            disability,
+            displacement,
+            id,
+            metaId,
+          })),
+        fn: async (chunk) => {
+          try {
+            await this.prisma.koboPerson.createMany({data: chunk})
+          } catch (error) {
+            for (let i = 0; i < chunk.length; i++) {
+              try {
+                await this.prisma.koboPerson.create({data: chunk[i]})
+              } catch (personErr) {
+                console.error(`Failed person record in ${orderize(i, {fullString: true})} chunk:`, chunk[i], personErr)
+                console.error(
+                  `Check the full record: ${koboAnswersWithId.find((record) => record.id === chunk[i].metaId)}`,
+                )
+              }
+            }
+          }
+        },
       })
+
       return koboAnswersWithId
     }
 
