@@ -41,6 +41,7 @@ export const MetaDashboard = () => {
     KoboIndex.byName('protection_communityMonitoring').id,
     KoboIndex.byName('legal_individual_aid').id,
     KoboIndex.byName('shelter_commonSpaces').id,
+    KoboIndex.byName('va_bio_tia').id,
   ]
 
   const {monthlyAvgHHSizeData, avgHHSize} = useMemo(() => {
