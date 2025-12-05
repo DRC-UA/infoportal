@@ -38,6 +38,8 @@ export const checkAiValid = (...args: (string | undefined)[]) => {
   return !args.find((_) => _ === undefined || _.includes(aiInvalidValueFlag))
 }
 
+const deduplicateKoboIds = (data: {koboId: string}[]): Set<string> => new Set(data.map(({koboId}) => koboId))
+
 export const AiBundleTable = ({
   fetcher,
   header,
@@ -191,7 +193,7 @@ export const AiBundleTable = ({
             id: 'submissions',
             head: m.submissions,
             type: 'number',
-            renderQuick: (_) => _.data.length,
+            renderQuick: ({data}) => deduplicateKoboIds(data).size,
           },
           {
             id: 'koboId',
@@ -199,7 +201,7 @@ export const AiBundleTable = ({
             head: m.koboId,
             typeIcon: <DatatableHeadIconByType type="id" />,
             className: 'td-id',
-            renderQuick: (_) => _.data.map((_) => _.koboId).join(' '),
+            renderQuick: ({data}) => Array.from(deduplicateKoboIds(data)).join(' '),
           },
           {
             id: 'id',
