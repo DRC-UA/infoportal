@@ -455,7 +455,7 @@ export class KoboMetaMapperProtection {
         })
         .default(undefined),
       status: KoboMetaStatus.Committed,
-      lastStatusUpdate: row.date,
+      lastStatusUpdate: answer.assistance_delivery_date,
     })
   }
 }
