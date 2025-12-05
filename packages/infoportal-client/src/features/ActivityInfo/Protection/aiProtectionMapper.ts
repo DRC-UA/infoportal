@@ -18,6 +18,7 @@ export namespace AiProtectionMapper {
         [DrcProject['UKR-000372 ECHO3']]: 'PRT-DRC-00002',
         [DrcProject['UKR-000355 Danish MFA']]: 'PRT-DRC-00004',
         [DrcProject['UKR-000423 ECHO4']]: 'PRT-DRC-00009',
+        [DrcProject['UKR-000388 BHA']]: 'PRT-DRC-00010',
         // UKR-000372 ECHO3
         // UKR-000363 UHF8
         // UKR-000345 BHA2
