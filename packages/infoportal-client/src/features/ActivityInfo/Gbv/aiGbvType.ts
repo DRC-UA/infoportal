@@ -13,7 +13,7 @@ export namespace AiGbvType {
     Hromada: string
     Settlement?: string
     'Collective Site'?: string
-    'Response Theme': Opt<'Response Theme'>
+    'Response Theme'?: Opt<'Response Theme'>
     'Activities and People'?: AiTypeActivitiesAndPeople[]
   }
 
@@ -59,6 +59,7 @@ export namespace AiGbvType {
       'GBV-DRC-00003': 'cbsvmkpm7uk5x6lc',
       'GBV-DRC-00004': 'crwci9mm8fsg4422',
       'GBV-DRC-00005': 'csreyx3mbg7zjhq2',
+      'GBV-DRC-00006': 'cvb4haymisj1w6i2',
     },
     'Response Theme': {'No specific theme': 'crfw0hkm4wiqb94f'},
   }
@@ -71,6 +72,7 @@ export namespace AiGbvType {
       'Reporting Month': string
       Indicators: Opt<'Indicators - Protection'>
       'Population Group': Opt<'Population Group'>
+      'Response Theme': Opt<'Response Theme'>
       'Total Individuals Reached': number
       'Girls (0-17)': number
       'Boys (0-17)': number
@@ -99,6 +101,7 @@ export namespace AiGbvType {
             cc9whaum4wl74eb12: a['Population Group']
               ? 'cknn1yzm4s6xuox1x' + ':' + options['Population Group'][a['Population Group']!]
               : undefined,
+            cb3o79omb9c0ua4d: a['Response Theme'] ? options['Response Theme'][a['Response Theme']!] : undefined,
             cxcth1bm4wk7dvms: a['Total Individuals Reached'],
             ce79tc4m4wkdpd4t: a['Girls (0-17)'],
             ckd43oym4wkfhmwu: a['Boys (0-17)'],
@@ -159,6 +162,13 @@ export namespace AiGbvType {
           'chntanum6g8dljqp',
       },
       'Population Group': {'Internally Displaced': 'c3yfomom4s6zizi20', 'Non-Displaced': 'cjccin8m4s6ztsm21'},
+      'Response Theme': {
+        'No specific theme//Немає конкретної теми': 'c7qdenrmb9c0ua2c',
+        'Evacuations//Підтримка евакуації людей': 'cui1hrqmb9c2knde',
+        'Emergency Response after Strikes// Надання екстреної допомоги після обстрілів': 'cxwxwgwmb9c2q9gf',
+        'Both (Evacuations and Emergency Response after Strikes)// Обидва (Підтримка евакуації людей + 	 Надання екстреної допомоги після обстрілів)':
+          'couyen4mb9c2wm2g',
+      },
     }
   }
 }

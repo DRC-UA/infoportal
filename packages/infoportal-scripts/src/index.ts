@@ -17,7 +17,7 @@ export const koboSdkDrc = new KoboClient({
   // await FixKoboMigration.resetWrongMigration()
   // await FixKoboMigration.MissingSubmissions.run()
   // await FixKoboMigration.Tags.run()
-  // await new ActivityInfoBuildType().buildAll()
+  await new ActivityInfoBuildType().buildAll()
 
   // MEMO: groups nested twice are treated as one-level array, so the typing and mapping for HH members shelter_commonSpaces is fixed manually
   commonSpacesReminder()
