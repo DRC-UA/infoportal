@@ -5,6 +5,7 @@ export namespace AiLegalType {
     'Reporting Organization': Opt<'Partner'>
     'Implementing Partner'?: Opt<'Partner'>
     'Implementing Partner 2'?: Opt<'Partner'>
+    'Implementing Partner 3'?: Opt<'Partner'>
     'Plan/Project Code': Opt<'Activity Planning Module (Protection)'>
     Oblast: string
     Raion: string
@@ -32,6 +33,9 @@ export namespace AiLegalType {
           c4y1cm9m4wi4r8x7: a['Implementing Partner 2']
             ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner 2']!]
             : undefined,
+          ckf4qe0mh0jlztl3: a['Implementing Partner 3']
+            ? 'cideet6m4jy2m0fy3x' + ':' + options['Partner'][a['Implementing Partner 3']!]
+            : undefined,
           cwe8bxcm4wi7lr68: a['Plan/Project Code']
             ? 'c9ujc88m4sgf6hw9' + ':' + options['Activity Planning Module (Protection)'][a['Plan/Project Code']!]
             : undefined,
@@ -57,6 +61,7 @@ export namespace AiLegalType {
       'PRT-DRC-00003': 'c91inndm73143d45',
       'PRT-DRC-00004': 'cmzh0x9m7317x856',
       'PRT-DRC-00009': 'cia5o5imbes21gi2',
+      'PRT-DRC-00010': 'cde4rbsmisjtx572',
     },
     'Response Theme': {'No specific theme': 'crfw0hkm4wiqb94f'},
   }
@@ -79,8 +84,8 @@ export namespace AiLegalType {
       'Older Men (60+)': number
       'Non-individuals Reached/Quantity': number
       /**
-      Out of the total individuals reached
-    */
+        Out of the total individuals reached
+      */
       'People with Disability'?: number
     }
 
