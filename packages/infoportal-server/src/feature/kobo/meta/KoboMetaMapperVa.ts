@@ -26,7 +26,6 @@ import {KoboMetaMapper, MetaMapperInsert} from './KoboMetaService.js'
 export class KoboMetaMapperVa {
   static readonly bioAndTia: MetaMapperInsert<KoboMetaOrigin<Va_bio_tia.T>> = (row) => {
     const answer = Va_bio_tia.map(row.answers)
-    const persons = KoboXmlMapper.Persons.va_bio_tia(answer)
 
     // Each TIA assessment can belong to a different project,
     // so we split them into separate meta records to avoid mixing multiple projects in a single record.
@@ -63,8 +62,8 @@ export class KoboMetaMapperVa {
         settlement: tia.settlement,
         sector: DrcSector.VA,
         activity: DrcProgram.TIA,
-        persons,
-        personsCount: persons.length,
+        persons: [KoboXmlMapper.Persons.va_tia(tia)],
+        personsCount: 1,
         project: [project],
         donor: [DrcProjectHelper.donorByProject[project]],
         status: isDate(tia.date_assistance_provided) ? KoboMetaStatus.Committed : undefined,

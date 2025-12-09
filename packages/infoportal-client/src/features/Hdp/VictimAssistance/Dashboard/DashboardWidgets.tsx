@@ -26,7 +26,9 @@ export const DashboardWidgets: FC = () => {
 
   const persons = useMemo(() => {
     return ctx.dataFiltered.flatMap((row) =>
-      showReceivedCash ? KoboXmlMapper.Persons.va_bio_tia_receivedCash(row) : KoboXmlMapper.Persons.va_bio_tia(row),
+      showReceivedCash
+        ? KoboXmlMapper.Persons.va_bio_tia_receivedCash(row)
+        : KoboXmlMapper.Persons.va_bio_tia(row.tia_assesment),
     )
   }, [ctx.dataFiltered, showReceivedCash])
 
