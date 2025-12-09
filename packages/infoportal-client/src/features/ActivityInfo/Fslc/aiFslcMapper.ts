@@ -28,6 +28,7 @@ export namespace AiFslcMapper {
   const getPlanCode = (_: DrcProject) => {
     return match(_)
       .cases({
+        [DrcProject['UKR-000355 Danish MFA']]: 'FSLC-DRC-00003',
         [DrcProject['UKR-000388 BHA']]: 'FSLC-DRC-00001',
         [DrcProject['UKR-000372 ECHO3']]: 'FSLC-DRC-00002',
       })
