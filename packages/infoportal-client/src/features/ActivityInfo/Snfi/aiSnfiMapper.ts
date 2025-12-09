@@ -160,7 +160,7 @@ export namespace AiShelterMapper {
         let index = 0
         return Promise.all(
           groupBy({
-            data: data,
+            data,
             groups: [
               {by: (_) => _.project?.[0]!},
               {by: (_) => _.oblast!},

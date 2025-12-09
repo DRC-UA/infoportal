@@ -222,7 +222,9 @@ export namespace KoboXmlMapper {
                   hh_char_hh_det_dis_level: row.hh_char_hhh_dis_level,
                   hh_char_hh_det_dis_select: row.hh_char_hhh_dis_select,
                 }),
-                displacement: Displacement.common({hh_char_hh_res_stat: row.hh_char_hhh_res_stat}),
+                displacement: Displacement.common({
+                  hh_char_hh_res_stat: row.hh_char_hhh_res_stat ?? row.ben_det_res_stat,
+                }),
               },
             ]
           : []),
@@ -844,15 +846,15 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const shelter_nta: PersonsMapper<Shelter_nta.T> = (row) => {
+    export const shelter_nta: PersonsMapper<Shelter_nta.T> = (answers) => {
       return common({
-        ...row,
-        hh_char_dis_select: shelter_nta_disability_mapper(row.hh_char_dis_select),
-        hh_char_hhh_dis_select: shelter_nta_disability_mapper(row.hh_char_hhh_dis_select),
-        hh_char_res_dis_select: shelter_nta_disability_mapper(row.hh_char_res_dis_select),
-        hh_char_hh_det: row.hh_char_hh_det?.map(({hh_char_hh_det_dis_select, ...member}) => ({
+        ...answers,
+        hh_char_dis_select: shelter_nta_disability_mapper(answers.hh_char_dis_select),
+        hh_char_hhh_dis_select: shelter_nta_disability_mapper(answers.hh_char_hhh_dis_select),
+        hh_char_res_dis_select: shelter_nta_disability_mapper(answers.hh_char_res_dis_select),
+        hh_char_hh_det: answers.hh_char_hh_det?.map(({hh_char_hh_det_dis_select, ...member}) => ({
           ...member,
-          hh_char_hh_res_stat: row.ben_det_res_stat,
+          hh_char_hh_res_stat: answers.ben_det_res_stat,
           hh_char_hh_det_dis_select: shelter_nta_disability_mapper(hh_char_hh_det_dis_select),
         })),
       })
