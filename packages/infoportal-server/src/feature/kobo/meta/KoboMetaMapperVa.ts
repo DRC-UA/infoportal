@@ -66,8 +66,18 @@ export class KoboMetaMapperVa {
         personsCount: 1,
         project: [project],
         donor: [DrcProjectHelper.donorByProject[project]],
-        status: isDate(tia.date_assistance_provided) ? KoboMetaStatus.Committed : undefined,
-        lastStatusUpdate: tia.date_assistance_provided,
+        status: isDate(tia.date_assistance_provided)
+          ? KoboMetaStatus.Committed
+          : match(row.validationStatus)
+              .cases({
+                Approved: KoboMetaStatus.Pending,
+                Pending: KoboMetaStatus.Pending,
+                Rejected: KoboMetaStatus.Rejected,
+                UnderReview: KoboMetaStatus.Pending,
+                Flagged: KoboMetaStatus.Pending,
+              })
+              .default(undefined),
+        lastStatusUpdate: tia.date_assistance_provided ?? tia.date,
       })
     })
   }
