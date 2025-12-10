@@ -129,9 +129,9 @@ export namespace KoboMetaMapperShelter {
       sector: DrcSector.Shelter,
       activity: isCfRepair ? DrcProgram.CashForRepair : DrcProgram.ShelterRepair,
       personsCount: persons.length,
-      persons: persons,
+      persons,
       lastName: answer.ben_det_surname_l,
-      project: project,
+      project,
       donor: project.map((_) => DrcProjectHelper.donorByProject[_]),
       firstName: answer.ben_det_first_name_l,
       patronymicName: answer.ben_det_pat_name_l,
@@ -196,7 +196,7 @@ export namespace KoboMetaMapperShelter {
         })
         .default(undefined),
       personsCount: persons.length,
-      persons: persons,
+      persons,
       project,
       donor: project.map((_) => DrcProjectHelper.donorByProject[_]),
       status: match(answer.status)

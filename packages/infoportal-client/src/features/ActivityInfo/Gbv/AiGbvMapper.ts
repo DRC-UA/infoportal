@@ -10,15 +10,6 @@ import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 export namespace AiGbvMapper2 {
   export type Bundle = AiTable<AiGbvType>
 
-  const planCode: Record<DrcProject, AiGbvType['Plan/Project code']> = {
-    [DrcProject['UKR-000345 BHA2']]: 'MISSING APM',
-    [DrcProject['UKR-000372 ECHO3']]: 'GBV-DRC-00002',
-    [DrcProject['UKR-000363 UHF8']]: 'GBV-DRC-00001',
-    [DrcProject['UKR-000355 Danish MFA']]: 'GBV-DRC-00003',
-    [DrcProject['UKR-000386 Pooled Funds']]: 'GBV-DRC-00004',
-    [DrcProject['UKR-000423 ECHO4']]: 'GBV-DRC-00005',
-  } as any
-
   export const req =
     (api: ApiSdk) =>
     async (period: Partial<Period>): Promise<Bundle[]> => {
@@ -46,9 +37,18 @@ export namespace AiGbvMapper2 {
       ],
       finalTransform: async (grouped, [oblast, raion, hromada, settlement, project]) => {
         const activity: AiGbvType = {
-          'Plan/Project code': planCode[project],
+          'Plan/Project code': match(project)
+            .cases({
+              [DrcProject['UKR-000345 BHA2']]: [`${aiInvalidValueFlag} missing BHA2` as any],
+              [DrcProject['UKR-000372 ECHO3']]: ['GBV-DRC-00002'],
+              [DrcProject['UKR-000363 UHF8']]: ['GBV-DRC-00001'],
+              [DrcProject['UKR-000355 Danish MFA']]: ['GBV-DRC-00003'],
+              [DrcProject['UKR-000386 Pooled Funds']]: ['GBV-DRC-00004'],
+              [DrcProject['UKR-000388 BHA']]: ['GBV-DRC-00006'],
+              [DrcProject['UKR-000423 ECHO4']]: ['GBV-DRC-00005'],
+            })
+            .default(`${aiInvalidValueFlag} ${project}` as any),
           'Reporting Organization': 'Danish Refugee Council (DRC)',
-          'Response Theme': 'No specific theme',
           Oblast: oblast,
           Raion: raion,
           Hromada: hromada,
@@ -110,6 +110,7 @@ export namespace AiGbvMapper2 {
             'Non-individuals Reached/Quantity': grouped.length,
             'Reporting Month': periodStr === '2025-01' ? '2025-02' : periodStr,
             'Population Group': AiMapper.mapPopulationGroup(displacement) ?? 'Non-Displaced',
+            'Response Theme': 'No specific theme//Немає конкретної теми',
             Indicators: match(activity)
               .cases({
                 WGSS: 'Support through Women and Girls Safe Spaces (WGSS) > # of women and girls who participated in skill-building, recreational, or livelihood (including vocational education) activities in women and girls safe spaces',

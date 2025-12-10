@@ -16,8 +16,9 @@ namespace AiLegalMapper {
     // @ts-expect-error It's OK to get an error here, we expect it to flag missing or mismatching data
     return match(project)
       .cases({
-        [DrcProject['UKR-000397 GFFO']]: 'PRT-DRC-00001',
         [DrcProject['UKR-000355 Danish MFA']]: 'PRT-DRC-00004',
+        [DrcProject['UKR-000397 GFFO']]: 'PRT-DRC-00001',
+        [DrcProject['UKR-000388 BHA']]: 'PRT-DRC-00010',
         [DrcProject['UKR-000423 ECHO4']]: 'PRT-DRC-00009',
       })
       .default(() => `${aiInvalidValueFlag} ${project}`)

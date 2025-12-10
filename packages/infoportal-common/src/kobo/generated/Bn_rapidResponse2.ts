@@ -40,6 +40,8 @@ export namespace Bn_rapidResponse2 {
     reduction_income: undefined | Option<'reduction_income'>
     // ben_det/documentation_reduction_income [image] Upload supporting documentation (hospital record, sick leave form, death certificate or inclusion in official local authority list)
     documentation_reduction_income: string
+    // ben_det/reduction_income_other [text] If other, specify
+    reduction_income_other: string | undefined
     // ben_det/safe_room [select_one] Do you have a warm, dry and safe room to spend the night in at your regular place of residence?
     safe_room: undefined | Option<'receive_pss'>
     // ben_det/access_water [select_one] Do you have access to potable/technical water?
@@ -220,7 +222,11 @@ export namespace Bn_rapidResponse2 {
     legal_support: undefined | Option<'legal_support'>
     // protection_questions/not_legal_support [note] *Note for DRC staff member*: If yes refer to Legal
     not_legal_support: string
-    // protection_questions/member_injured_mine [select_one] 2. Have you or any member of your household been injured by a mine, shell, or other explosive device?
+    // protection_questions/not_shelter_support [note] *Note for DRC staff member*: If yes refer to shelter*\
+    not_shelter_support: string
+    // protection_questions/not_legal_va [note] *Note for DRC staff member*: If yes refer to VA
+    not_legal_va: string
+    // protection_questions/member_injured_mine [select_one] 2. DRC supports people who have been affected by shelling or explosive devices. Have you or someone in your family been affected by this? If so, we can help connect you to our services.
     member_injured_mine: undefined | Option<'stressful_events'>
     // protection_questions/members_require_medical [select_one] 2.1. If yes, would do you or your family members require support for medical/rehabilitative treatment or other support?
     members_require_medical: undefined | Option<'stressful_events'>
@@ -233,6 +239,66 @@ export namespace Bn_rapidResponse2 {
     // protection_questions/not_pss [note] *Note for DRC staff member*: If yes refer to PSS
     not_pss: string
     protection_ref_dep: string
+    // monthly_expenditures_needs/food_expenditures [integer] Food
+    food_expenditures: number | undefined
+    // monthly_expenditures_needs/hygiene_expenditures [integer] Personal Hygiene items (toothpaste, soap, shampoo, toilet paper, menstrual pads, baby diapers)
+    hygiene_expenditures: number | undefined
+    // monthly_expenditures_needs/domestic_expenditures [integer] Domestic Cleaning items (sponges, dishwashing soap, etc)
+    domestic_expenditures: number | undefined
+    // monthly_expenditures_needs/nfi_expenditures [integer] Household non-food items (Towel sets, blankets, kitchen set, jerrycan, bucket, bed linen sets, and reinforced/re-usable bags)
+    nfi_expenditures: number | undefined
+    // monthly_expenditures_needs/clothing_expenditures [integer] Clothing and shoes
+    clothing_expenditures: number | undefined
+    // monthly_expenditures_needs/heating_expenditures [integer] Heating (fuel)
+    heating_expenditures: number | undefined
+    // monthly_expenditures_needs/utilities_expenditures [integer] Utilities (electricity, gas, fuel for cooking)
+    utilities_expenditures: number | undefined
+    // monthly_expenditures_needs/drinking_expenditures [integer] Drinking safe water
+    drinking_expenditures: number | undefined
+    // monthly_expenditures_needs/rent_expenditures [integer] Rent
+    rent_expenditures: number | undefined
+    // monthly_expenditures_needs/healthcare_expenditures [integer] Healthcare needs
+    healthcare_expenditures: number | undefined
+    // monthly_expenditures_needs/special_expenditures [integer] Special food for children or pregnant women
+    special_expenditures: number | undefined
+    // monthly_expenditures_needs/transportation_expenditures [integer] Transportation
+    transportation_expenditures: number | undefined
+    // monthly_expenditures_needs/education_expenditures [integer] Education materials (e.g. books)
+    education_expenditures: number | undefined
+    // monthly_expenditures_needs/communication_needs [integer] Communication needs
+    communication_needs: number | undefined
+    // monthly_expenditures_needs/family_budget [integer] Family budget
+    family_budget: number | undefined
+    // livelihoods_score/not_livelihoods [note] We ask about Livelihood Coping Strategies to understand how your household manages during difficult times.  This shows us if you need to make tough choices, like selling items or reducing meals.  Your answers help us know what kind of support would be most useful for you.
+    not_livelihoods: string
+    // livelihoods_score/lcs_spent_savings [select_one] In the last 30 days, spent savings due to lack of resources to access essential needs?
+    lcs_spent_savings: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_forrowed_food [select_one] In the last 30 days, borrowed money to access essential needs?
+    lcs_forrowed_food: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_reduced_utilities [select_one] In the last 30 days, reduced or ceased payments on essential utilities and bills due to lack of resources to access essential needs?
+    lcs_reduced_utilities: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_reduce_education_expenditures [select_one] In the last 30 days, reduced expenses on education due to lack of resources to access essential needs?
+    lcs_reduce_education_expenditures: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_sell_productive_assets [select_one] In the last 30 days, sold productive assets or means of transport (sewing machine, wheelbarrow, bicycle, car, etc.) due to lack of resources to access essential needs.
+    lcs_sell_productive_assets: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_reduce_health_expenditures [select_one] In the last 30 days, reduced expenses on essential health (including medicines) due to lack of resources to access essential needs.
+    lcs_reduce_health_expenditures: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_sell_hh_assets [select_one] In the last 30 days, sold household assets (furniture, appliances, jewelry, etc.) due to lack of resources to access essential needs?
+    lcs_sell_hh_assets: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_sell_house [select_one] In the last 30 days, selling property (house and/or land) that you did not want to sell
+    lcs_sell_house: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_strangers_money [select_one] In the last 30 days, have to ask strangers for money, or search for food which was free outside?
+    lcs_strangers_money: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_degrading_income_source [select_one] In the last 30 days, Have to take a job or employment which you would not have preferred to engage with, or makes you feel uncomfortable (for example having to work in contaminated fields, engaging in potentially dangerous or taboo work)
+    lcs_degrading_income_source: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_reason [select_multiple] What were the main reasons why your household decided to use these strategies?
+    lcs_reason: undefined | Option<'lcs_reason'>[]
+    // livelihoods_score/lcs_reason_other [text] If other, specify
+    lcs_reason_other: string | undefined
+    // livelihoods_score/lcs_move_elsewhere [select_one] During the past 30 days, did your HH member(-s) move elsewhere in search of work due to a lack of resources to cover basic needs (such as food, shelter, health, education, utilities, fuel for heating, drinking water, etc.)?
+    lcs_move_elsewhere: undefined | Option<'lcs_withdrew_children'>
+    // livelihoods_score/lcs_withdrew_children [select_one] During the past 30 days, did your household withdrew children from school
+    lcs_withdrew_children: undefined | Option<'lcs_withdrew_children'>
     // fin_det/fin_det_res [text] Comments Respondent
     fin_det_res: string | undefined
     // fin_det/fin_det_enum [text] Comments Enumerator
@@ -247,6 +313,8 @@ export namespace Bn_rapidResponse2 {
     additionals_photo2: string
     // fin_det/additionals_photo3 [image] Additionals photos
     additionals_photo3: string
+    // not_thank [note] Thank you for providing these answers, DRC will be in touch with you in the following week to notify if you are eligible for assistance. Please note you have been provided our Complaint and Feedback Mechanism details if you have any feedback on the registration process today.
+    not_thank: string
   }
   export const options = {
     back_office: {
@@ -260,6 +328,9 @@ export namespace Bn_rapidResponse2 {
       vitalii_hrynenko: `Vitalii Hrynenko`,
       yevhenii_musiienko: `Yevhenii Musiienko`,
       maksym_sedun: `Maksym Sedun`,
+      umy_enum1: `Enumerator 1`,
+      umy_enum2: `Enumerator 2`,
+      umy_enum3: `Enumerator 3`,
       oleksii_marchenko: `Oleksii Marchenko`,
       artem_chernukha: `Artem Chernukha`,
       svitlana_labunska: `Svitlana Labunska`,
@@ -296,6 +367,7 @@ export namespace Bn_rapidResponse2 {
       ivan_prokopkin: `Ivan Prokopkin`,
       nataliia_bykova: `Nataliia Bykova`,
       oleksii_pohorielov: `Oleksii Pohorielov`,
+      vitalii_shapoval: `Vitalii Shapoval`,
       hrk_ex1: `Extra 1`,
       hrk_ex2: `Extra 2`,
     },
@@ -314,7 +386,7 @@ export namespace Bn_rapidResponse2 {
       ukr000380_danida: `UKR-000380 DANIDA`,
       ukr000386_mass_appeal: `UKR-000386 Mass Appeal Ukraine 2024`,
       ukr000418_sida: `UKR-000418 SIDA`,
-      ukr000423_echo: `UKR-000423 ECHO4`,
+      ukr000423_echo4: `UKR-000423 ECHO4`,
     },
     back_prog_type: {
       mpca: `MPCA`,
@@ -342,6 +414,21 @@ export namespace Bn_rapidResponse2 {
       yes: `Yes`,
       no: `No`,
       not_applicable: `Not applicable as we don't have such members`,
+    },
+    lcs_withdrew_children: {
+      yes: `Yes`,
+      no_had_no_need_to_use_this_coping_strategy: `No, had no need to use this coping strategy`,
+      no_have_already_exhausted_this_coping_strategy_and_cannot_use_it_again: `No, have already exhausted this coping strategy and cannot use it again`,
+      not_applicable_this_coping_strategy_is_not_available_to_me: `Not applicable / This coping strategy is not available to me`,
+      prefer_not_to_answer: `Prefer not to answer`,
+    },
+    lcs_reason: {
+      to_access_or_pay_for_food: `To access or pay for food`,
+      to_access_or_pay_for_healthcare: `To access or pay for healthcare`,
+      to_access_or_pay_for_shelter: `To access or pay for shelter`,
+      to_access_or_pay_for_education: `To access or pay for education`,
+      other: `Other`,
+      dont_know: `Don't know`,
     },
     ben_det_oblast: {
       cherkaska: `Cherkaska`,
@@ -525,6 +612,7 @@ export namespace Bn_rapidResponse2 {
       member_passed: `A family member passed away due to a conflict-related event`,
       member_sick_leave: `A family member is on sick leave due to an injury related to the conflict related event`,
       no_events: `No such events occurred`,
+      other: `Other`,
     },
     plan_general_living: {
       current_salary: `✅ Current Salary/other income generating activity`,
@@ -601,5 +689,21 @@ export namespace Bn_rapidResponse2 {
       basic_needs_unable_fulfill_bha345: _.basic_needs_unable_fulfill_bha345?.split(' '),
       basic_needs_unable_fully_reason_bha345: _.basic_needs_unable_fully_reason_bha345?.split(' '),
       items_basicevel_comfort_no_bha_345: _.items_basicevel_comfort_no_bha_345?.split(' '),
+      food_expenditures: _.food_expenditures ? +_.food_expenditures : undefined,
+      hygiene_expenditures: _.hygiene_expenditures ? +_.hygiene_expenditures : undefined,
+      domestic_expenditures: _.domestic_expenditures ? +_.domestic_expenditures : undefined,
+      nfi_expenditures: _.nfi_expenditures ? +_.nfi_expenditures : undefined,
+      clothing_expenditures: _.clothing_expenditures ? +_.clothing_expenditures : undefined,
+      heating_expenditures: _.heating_expenditures ? +_.heating_expenditures : undefined,
+      utilities_expenditures: _.utilities_expenditures ? +_.utilities_expenditures : undefined,
+      drinking_expenditures: _.drinking_expenditures ? +_.drinking_expenditures : undefined,
+      rent_expenditures: _.rent_expenditures ? +_.rent_expenditures : undefined,
+      healthcare_expenditures: _.healthcare_expenditures ? +_.healthcare_expenditures : undefined,
+      special_expenditures: _.special_expenditures ? +_.special_expenditures : undefined,
+      transportation_expenditures: _.transportation_expenditures ? +_.transportation_expenditures : undefined,
+      education_expenditures: _.education_expenditures ? +_.education_expenditures : undefined,
+      communication_needs: _.communication_needs ? +_.communication_needs : undefined,
+      family_budget: _.family_budget ? +_.family_budget : undefined,
+      lcs_reason: _.lcs_reason?.split(' '),
     }) as T
 }

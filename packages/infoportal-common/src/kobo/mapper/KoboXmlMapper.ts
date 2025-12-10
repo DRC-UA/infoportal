@@ -222,7 +222,9 @@ export namespace KoboXmlMapper {
                   hh_char_hh_det_dis_level: row.hh_char_hhh_dis_level,
                   hh_char_hh_det_dis_select: row.hh_char_hhh_dis_select,
                 }),
-                displacement: Displacement.common({hh_char_hh_res_stat: row.hh_char_hhh_res_stat}),
+                displacement: Displacement.common({
+                  hh_char_hh_res_stat: row.hh_char_hhh_res_stat ?? row.ben_det_res_stat,
+                }),
               },
             ]
           : []),
@@ -844,15 +846,15 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const shelter_nta: PersonsMapper<Shelter_nta.T> = (row) => {
+    export const shelter_nta: PersonsMapper<Shelter_nta.T> = (answers) => {
       return common({
-        ...row,
-        hh_char_dis_select: shelter_nta_disability_mapper(row.hh_char_dis_select),
-        hh_char_hhh_dis_select: shelter_nta_disability_mapper(row.hh_char_hhh_dis_select),
-        hh_char_res_dis_select: shelter_nta_disability_mapper(row.hh_char_res_dis_select),
-        hh_char_hh_det: row.hh_char_hh_det?.map(({hh_char_hh_det_dis_select, ...member}) => ({
+        ...answers,
+        hh_char_dis_select: shelter_nta_disability_mapper(answers.hh_char_dis_select),
+        hh_char_hhh_dis_select: shelter_nta_disability_mapper(answers.hh_char_hhh_dis_select),
+        hh_char_res_dis_select: shelter_nta_disability_mapper(answers.hh_char_res_dis_select),
+        hh_char_hh_det: answers.hh_char_hh_det?.map(({hh_char_hh_det_dis_select, ...member}) => ({
           ...member,
-          hh_char_hh_res_stat: row.ben_det_res_stat,
+          hh_char_hh_res_stat: answers.ben_det_res_stat,
           hh_char_hh_det_dis_select: shelter_nta_disability_mapper(hh_char_hh_det_dis_select),
         })),
       })
@@ -881,13 +883,15 @@ export namespace KoboXmlMapper {
         .get() as Ecrec_cashRegistration.T['hh_char_res_dis_select']
     }
 
-    export const va_bio_tia: PersonsMapper<Va_bio_tia.T> = (row) => {
-      const tiaEntries =
-        row.tia_assesment?.filter(
-          (tia) => tia.res_stat !== undefined || tia.cash_age !== undefined || tia.cash_gender !== undefined,
-        ) ?? []
-
-      return tiaEntries.map(({cash_age, cash_gender, res_stat}) => ({
+    export const va_tia = ({
+      cash_age,
+      cash_gender,
+      res_stat,
+    }: Pick<
+      NonNullable<Va_bio_tia.T['tia_assesment']>[number],
+      'cash_age' | 'cash_gender' | 'res_stat'
+    >): Person.Details => {
+      return {
         age: cash_age,
         gender: match(cash_gender)
           .cases({
@@ -902,7 +906,16 @@ export namespace KoboXmlMapper {
             host_communities: Person.DisplacementStatus.NonDisplaced,
           })
           .default(() => undefined),
-      }))
+      }
+    }
+
+    export const va_bio_tia: PersonsMapper<Va_bio_tia.T['tia_assesment']> = (tias) => {
+      const filteredTias =
+        tias?.filter(
+          (tia) => tia.res_stat !== undefined || tia.cash_age !== undefined || tia.cash_gender !== undefined,
+        ) ?? []
+
+      return filteredTias.map(va_tia)
     }
 
     export const va_bio_tia_receivedCash: PersonsMapper<Va_bio_tia.T> = (row) => {
@@ -912,22 +925,9 @@ export namespace KoboXmlMapper {
             tia.add_res_stat !== undefined || tia.add_cash_age !== undefined || tia.add_cash_gender !== undefined,
         ) ?? []
 
-      return tiaEntries.map(({add_cash_age, add_cash_gender, add_res_stat}) => ({
-        age: add_cash_age,
-        gender: match(add_cash_gender)
-          .cases({
-            male: Person.Gender.Male,
-            female: Person.Gender.Female,
-          })
-          .default(() => undefined),
-        displacement: match(add_res_stat)
-          .cases({
-            idp: Person.DisplacementStatus.Idp,
-            returnees: Person.DisplacementStatus.Returnee,
-            host_communities: Person.DisplacementStatus.NonDisplaced,
-          })
-          .default(() => undefined),
-      }))
+      return tiaEntries.map(({add_cash_age, add_cash_gender, add_res_stat}) => {
+        return va_tia({cash_age: add_cash_age, cash_gender: add_cash_gender, res_stat: add_res_stat})
+      })
     }
 
     export const va_tia_pdm: PersonsMapper<Va_tia_pdm.T> = (row) => {

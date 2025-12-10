@@ -9,6 +9,7 @@ import {
   KoboIndex,
   KoboMetaStatus,
   PeriodHelper,
+  Person,
   type KoboBaseTags,
   type KoboSubmissionFlat,
   type MpcaEntity,
@@ -61,6 +62,19 @@ export namespace AiMpcaMapper {
     return 'Evacuations; Emergency response after strikes'
   }
 
+  export const mapPopulationGroup = (
+    status?: Person.DisplacementStatus,
+  ): AiMpcaType.Type['Population Group'] | undefined => {
+    return match(status)
+      .cases({
+        Idp: 'Internally Displaced',
+        NonDisplaced: 'Non-Displaced',
+        Returnee: 'Non-Displaced',
+        // Refugee: 'Refugees',
+      } as const)
+      .default(undefined)
+  }
+
   export const reqCashRegistration =
     (api: ApiSdk) =>
     async (period: Partial<Period>): Promise<Bundle[]> => {
@@ -102,7 +116,7 @@ export namespace AiMpcaMapper {
             {by: ({hromada}) => hromada!},
             {by: ({settlement}) => settlement!},
             {by: ({project}) => project?.[0]},
-            {by: ({persons}) => AiMapper.mapPopulationGroup(persons[0].displacement) ?? aiInvalidValueFlag},
+            {by: ({persons}) => mapPopulationGroup(persons[0].displacement) ?? aiInvalidValueFlag},
             {by: ({theme}) => theme},
           ],
           finalTransform: async (grouped, groups) => {
