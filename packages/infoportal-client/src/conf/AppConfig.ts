@@ -85,6 +85,8 @@ export const appConfig = {
     displacementStatus: 'directions_run',
     dataTable: 'table_view',
     dashboard: 'stacked_bar_chart',
+    topic: 'topic',
+    prePost: 'compare',
   },
   iconStatus: {
     error: 'error',
