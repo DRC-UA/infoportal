@@ -37,6 +37,12 @@ const uk = deepmerge(en, {
     activity: 'Активність',
     submissions: 'Записи',
     count: 'Кількість',
+    kobo: 'Kobo',
+    koboData: 'Дані Kobo',
+    dashboard: 'Дешборд',
+    dashboards: 'Дешборди',
+    topic: 'Тема',
+    testType: 'Тип тесту',
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {
@@ -164,6 +170,13 @@ const uk = deepmerge(en, {
         difference: 'Прогрес',
       },
     },
+    cbpDashboard: {
+      buttonLabel: 'Дешборд CBP тестів "до" і "після"',
+      mapTitle: 'Записи за областями',
+      prePostTestScores: 'Бали за тестами "до" і "після"',
+      progressLabel: 'Прогрес',
+      timelineTitle: (count: number) => `Записи за місяцями (загальна кількість: ${count})`,
+    },
     plurals: {
       session: {
         zero: 'Сесій',
@@ -180,6 +193,14 @@ const uk = deepmerge(en, {
         few: 'Особи',
         many: 'Осіб',
         other: 'Осіб',
+      },
+      oblast: {
+        zero: 'Областей',
+        one: 'Область',
+        two: 'Області',
+        few: 'Областей',
+        many: 'Областей',
+        other: 'Областей',
       },
       uniqueIndividuals: {
         zero: 'Унікальних осіб',

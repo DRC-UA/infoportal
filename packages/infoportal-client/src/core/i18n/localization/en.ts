@@ -173,6 +173,8 @@ const en = Object.freeze({
     downloadAsPdf: 'Download as PDF',
     all: 'All',
     details: 'Details',
+    topic: 'Topic',
+    testType: 'Test type',
     _datatable: {
       view: 'Views',
       createNewView: 'New view name...',
@@ -233,6 +235,7 @@ const en = Object.freeze({
     occurrences: 'Occurrences',
     hhSize: 'HH size',
     dashboard: 'Dashboard',
+    dashboards: 'Dashboards',
     loading: 'Loading',
     passportSerie: 'Passport serie',
     price: 'Price',
@@ -1521,6 +1524,7 @@ const en = Object.freeze({
       },
     },
     pssDashboard: {
+      buttonLabel: 'PSS Dashboard',
       uniqueIndividualsHint: 'Depersonalized identifying data is being collected since late September 2025',
       sessionsCounterTitle: 'Sessions conducted:',
       sessionsAttendanceWidgetTitle: 'PGS Attendance Statistics',
@@ -1530,6 +1534,13 @@ const en = Object.freeze({
         post: 'After',
         difference: 'Progress',
       },
+    },
+    cbpDashboard: {
+      buttonLabel: 'CBP Pre / Post Tests Dashboard',
+      mapTitle: 'Submissions by Oblast',
+      progressLabel: 'Progress',
+      prePostTestScores: 'Pre / Post Test Scoring',
+      timelineTitle: (count: number) => `Submissions by months (total count: ${count})`,
     },
     plurals: {
       session: {
@@ -1547,6 +1558,14 @@ const en = Object.freeze({
         few: 'Individuals',
         many: 'Individuals',
         other: 'Individuals',
+      },
+      oblast: {
+        zero: 'Oblasts',
+        one: 'Oblast',
+        two: 'Oblasts',
+        few: 'Oblasts',
+        many: 'Oblasts',
+        other: 'Oblasts',
       },
       uniqueIndividuals: {
         zero: 'Unique Individuals',
