@@ -1,8 +1,8 @@
-import * as React from 'react'
-import {ReactNode} from 'react'
+import type {ReactNode} from 'react'
+import {match} from '@axanc/ts-utils'
 import {Box, ButtonBase, ButtonBaseProps, Icon} from '@mui/material'
 import {alpha} from '@mui/material/styles'
-import {fnSwitch} from '@axanc/ts-utils'
+
 import {makeSx} from '@/core/theme'
 
 const css = makeSx({
@@ -44,15 +44,13 @@ export const SidebarItem = ({
         display: 'flex',
         alignItems: 'center',
         textDecoration: 'inherit',
-        minHeight: fnSwitch(
-          size!,
-          {
+        minHeight: match(size!)
+          .cases({
             normal: 36,
             small: 30,
             tiny: 28,
-          },
-          () => 36,
-        ),
+          })
+          .default(36),
         overflow: 'hidden',
         minWidth: 0,
         whiteSpace: 'nowrap',
@@ -63,15 +61,13 @@ export const SidebarItem = ({
         pl: 1.5,
         my:
           1 /
-          fnSwitch(
-            size!,
-            {
+          match(size!)
+            .cases({
               normal: 2,
               small: 4,
               tiny: 8,
-            },
-            () => 2,
-          ),
+            })
+            .default(2),
         borderTopRightRadius: 42,
         borderBottomRightRadius: 42,
         ...(props.disabled && {
