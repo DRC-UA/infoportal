@@ -99,14 +99,14 @@ export namespace KoboSchemaHelper {
   }
 
   export const buildBundle = ({schema, langIndex = 0}: {schema: Kobo.Form; langIndex?: number}): Bundle => {
-    const helper = buildHelper({schema: schema})
+    const helper = buildHelper({schema})
     const translate = buildTranslation({
-      schema: schema,
+      schema,
       langIndex,
       questionIndex: helper.questionIndex,
     })
     return {
-      schema: schema,
+      schema,
       schemaFlatAndSanitized: sanitizeQuestions(helper.group.questionsFlat),
       schemaSanitized: {
         ...schema,
