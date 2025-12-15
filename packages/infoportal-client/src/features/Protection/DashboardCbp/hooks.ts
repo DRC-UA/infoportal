@@ -1,13 +1,15 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {Seq, match} from '@axanc/ts-utils'
 
-import {Cbp_pre_post, groupBy, PeriodHelper, type Period} from 'infoportal-common'
+import {Cbp_pre_post, PeriodHelper, type Period} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
+
+import {mandatoryTrainingTopicScoreMap} from './constants'
 
 type UseCbpFilter = ReturnType<typeof useCbpFilters>
 
@@ -52,8 +54,12 @@ const useCbpFilters = (data: Seq<Cbp_pre_post.T> | undefined) => {
       topic: {
         icon: appConfig.icons.topic,
         label: m.topic,
-        getValue: ({topic}) => topic,
-        getOptions: () => translateOption('topic'),
+        getValue: ({topic}) => topic!,
+        getOptions: () => {
+          return translateOption('topic')?.filter((option) => {
+            return mandatoryTrainingTopicScoreMap.has(option.value as keyof typeof mandatoryTrainingTopicScoreMap.keys)
+          })
+        },
       },
       project: {
         icon: appConfig.icons.project,
@@ -112,30 +118,40 @@ const useCbpFilters = (data: Seq<Cbp_pre_post.T> | undefined) => {
     filters,
     setFilters,
     data: filteredData,
-    scoredData: filteredData?.filter(
-      ({
-        cal_total_hum_pri_pro_mai,
-        cal_total_safe_referrals,
-        cal_total_advocacy,
-        cal_total_pfa,
-        cal_total_pseah,
-        cal_total_group_facilitation_skills,
-        cal_total_roles_responsibilities_cbs,
-        cal_total_leadership_self_organization,
-        cal_total_protection_risks_analysis,
-      }) =>
-        [
+    scoredData: filteredData
+      ?.filter(
+        ({topic}) =>
+          topic !== undefined &&
+          [
+            'roles_responsibilities_cbs',
+            'hum_pri_pro_mai',
+            'protection_risks_analysis',
+            'safe_referrals',
+            'group_facilitation_skills',
+            'pseah',
+          ].includes(topic),
+      )
+      .filter(
+        ({
           cal_total_hum_pri_pro_mai,
           cal_total_safe_referrals,
-          cal_total_advocacy,
-          cal_total_pfa,
           cal_total_pseah,
           cal_total_group_facilitation_skills,
           cal_total_roles_responsibilities_cbs,
-          cal_total_leadership_self_organization,
           cal_total_protection_risks_analysis,
-        ].some((score) => Boolean(score)), // keep only records with training score
-    ),
+        }) => {
+          const mandatoryTrainingScores = [
+            cal_total_hum_pri_pro_mai,
+            cal_total_safe_referrals,
+            cal_total_pseah,
+            cal_total_group_facilitation_skills,
+            cal_total_roles_responsibilities_cbs,
+            cal_total_protection_risks_analysis,
+          ]
+
+          return mandatoryTrainingScores.some((score) => Boolean(score))
+        },
+      ),
     shape,
   }
 }

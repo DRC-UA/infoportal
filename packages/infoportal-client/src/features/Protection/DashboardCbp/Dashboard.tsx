@@ -1,6 +1,6 @@
-import {useMemo, Fragment, type FC} from 'react'
+import {useMemo, type FC} from 'react'
 import {match, seq, Obj} from '@axanc/ts-utils'
-import {Badge, Icon, Tooltip, Typography} from '@mui/material'
+import {Badge, Box, Icon, Tooltip, Typography} from '@mui/material'
 import {format} from 'date-fns'
 
 import {capitalize, groupBy, OblastIndex, toPercent} from 'infoportal-common'
@@ -39,7 +39,7 @@ const PssDashboardWithContext: FC = () => {
   const groupsByTopic = useMemo(
     () =>
       groupBy({
-        data: data?.filtered ?? [],
+        data: data?.scored ?? [],
         groups: [{by: ({topic}) => topic!}],
         finalTransform: (chunk) =>
           chunk.map(
@@ -70,7 +70,7 @@ const PssDashboardWithContext: FC = () => {
             }),
           ),
       }).groups,
-    [data],
+    [data?.scored],
   )
   const prePostResults = Obj.entries(groupsByTopic)
     .map(([topic, group]) => ({
@@ -164,7 +164,7 @@ const PssDashboardWithContext: FC = () => {
             <Panel title={m.topic}>
               <PanelBody>
                 <ChartBarSingleBy
-                  data={data.filtered}
+                  data={data.scored}
                   by={({topic}) => topic}
                   label={translateOption('topic')?.reduce(
                     (result, {value, label}) => ({
@@ -180,12 +180,12 @@ const PssDashboardWithContext: FC = () => {
               <PanelBody>
                 {prePostResults.map(({topic, scores}) =>
                   scores.length < 3 || scores.reduce((sum, {value}) => sum + value, 0) === 0 ? (
-                    <Fragment key={topic}>
+                    <Box key={topic} sx={{'& + &': {mt: 2}}}>
                       <Typography>{translateOption('topic')?.find(({value}) => value === topic)?.label}</Typography>
                       <ChartBarSingleBy data={seq([])} by={({topic}) => topic} />
-                    </Fragment>
+                    </Box>
                   ) : (
-                    <Fragment key={topic}>
+                    <Box key={topic} sx={{'& + &': {mt: 2}}}>
                       <Tooltip
                         title={chartTitleSupnote(
                           data.scored.filter(({topic: searchedTopic}) => topic === searchedTopic).length,
@@ -247,7 +247,7 @@ const PssDashboardWithContext: FC = () => {
                           },
                         ]}
                       />
-                    </Fragment>
+                    </Box>
                   ),
                 )}
               </PanelBody>
