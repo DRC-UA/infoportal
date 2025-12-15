@@ -35,7 +35,7 @@ const PssDashboardWithContext: FC = () => {
   const {translateOption, translateField} = useTranslations()
   const clearFilters = () => [filters.setFilters, filters.setPeriod].forEach((callback) => callback({}))
   const prePostTranslatedLabels = translateOption('complete_training')?.map(({label}) => label)
-  const pluralizeSubmission = usePlurals(m.plurals.submissionAccusativeCase)
+  const pluralizeSubmission = usePlurals(m.plurals.submissionLocative)
   const groupsByTopic = useMemo(
     () =>
       groupBy({

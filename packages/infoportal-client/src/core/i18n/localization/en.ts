@@ -1583,7 +1583,7 @@ const en = Object.freeze({
         many: 'Submissions',
         other: 'Submissions',
       },
-      submissionAccusativeCase: {
+      submissionLocative: {
         zero: 'submissions',
         one: 'submission',
         two: 'submissions',
