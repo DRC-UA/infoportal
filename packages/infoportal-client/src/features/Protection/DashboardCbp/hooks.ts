@@ -124,7 +124,7 @@ const useCbpFilters = (data: Seq<Cbp_pre_post.T> | undefined) => {
           topic !== undefined &&
           [
             'roles_responsibilities_cbs',
-            'hum_pri_pro_mai',
+            'hum_pri_pro_main',
             'protection_risks_analysis',
             'safe_referrals',
             'group_facilitation_skills',
