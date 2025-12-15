@@ -467,6 +467,9 @@ export class BuildKoboType {
       protection_ipa_pdm: {
         formId: KoboIndex.byName('protection_ipaPdm').id,
       },
+      protection_gbv_capacity_needs_assessment_2026: {
+        formId: KoboIndex.byName('protection_gbv_capacity_needs_assessment_2026').id,
+      },
     },
     (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>],
   )
