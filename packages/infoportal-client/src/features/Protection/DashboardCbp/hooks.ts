@@ -134,7 +134,7 @@ const useCbpFilters = (data: Seq<Cbp_pre_post.T> | undefined) => {
           cal_total_roles_responsibilities_cbs,
           cal_total_leadership_self_organization,
           cal_total_protection_risks_analysis,
-        ].some((score) => typeof score !== undefined), // keep only records with training score
+        ].some((score) => Boolean(score)), // keep only records with training score
     ),
     shape,
   }

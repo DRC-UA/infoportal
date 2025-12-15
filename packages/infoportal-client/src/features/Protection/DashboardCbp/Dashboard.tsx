@@ -1,6 +1,6 @@
 import {useMemo, Fragment, type FC} from 'react'
 import {match, seq, Obj} from '@axanc/ts-utils'
-import {Typography} from '@mui/material'
+import {Badge, Icon, Tooltip, Typography} from '@mui/material'
 import {format} from 'date-fns'
 
 import {capitalize, groupBy, OblastIndex, toPercent} from 'infoportal-common'
@@ -16,6 +16,7 @@ import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Div} from '@/shared/PdfLayout/PdfSlide'
+import {usePlurals} from '@/utils'
 
 import {PssContextProvider, useCbpContext} from './Context'
 import {useTranslations} from './hooks'
@@ -30,10 +31,11 @@ const DashboardCbp: FC = () => (
 
 const PssDashboardWithContext: FC = () => {
   const {data, fetcher, filters} = useCbpContext()
-  const {m} = useI18n()
+  const {m, currentLang} = useI18n()
   const {translateOption, translateField} = useTranslations()
   const clearFilters = () => [filters.setFilters, filters.setPeriod].forEach((callback) => callback({}))
   const prePostTranslatedLabels = translateOption('complete_training')?.map(({label}) => label)
+  const pluralizeSubmission = usePlurals(m.plurals.submissionAccusativeCase)
   const groupsByTopic = useMemo(
     () =>
       groupBy({
@@ -122,7 +124,13 @@ const PssDashboardWithContext: FC = () => {
         ],
       }
     })
-
+  const chartTitleSupnote = (count: number, lang: typeof currentLang) =>
+    match(lang)
+      .cases({
+        uk: `Ґрунтується на ${count} ${pluralizeSubmission(count)?.toLowerCase()}`,
+        en: `Based on ${count} ${pluralizeSubmission(count)?.toLocaleLowerCase()}`,
+      })
+      .exhaustive()
   const colorByQuestion: Record<string, string> = Object.fromEntries(
     [...(prePostTranslatedLabels ?? []), 'progress'].map((q, i) => [q, baseColors[i % baseColors.length]]),
   )
@@ -178,7 +186,25 @@ const PssDashboardWithContext: FC = () => {
                     </Fragment>
                   ) : (
                     <Fragment key={topic}>
-                      <Typography>{translateOption('topic')?.find(({value}) => value === topic)?.label}</Typography>
+                      <Tooltip
+                        title={chartTitleSupnote(
+                          data.scored.filter(({topic: searchedTopic}) => topic === searchedTopic).length,
+                          currentLang,
+                        )}
+                        placement="top-end"
+                      >
+                        <Badge
+                          badgeContent={
+                            <Icon fontSize="small" sx={{ml: 2}}>
+                              info
+                            </Icon>
+                          }
+                        >
+                          <Typography display="inline-block">
+                            {translateOption('topic')?.find(({value}) => value === topic)?.label!}
+                          </Typography>
+                        </Badge>
+                      </Tooltip>
                       <ChartBarVerticalGrouped
                         height={140}
                         layout="vertical"

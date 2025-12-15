@@ -218,6 +218,14 @@ const uk = deepmerge(en, {
         many: 'Записів',
         other: 'Записів',
       },
+      submissionAccusativeCase: {
+        zero: 'записів',
+        one: 'запису',
+        two: 'записів',
+        few: 'записів',
+        many: 'записів',
+        other: 'записів',
+      },
     },
   },
 } satisfies DictionaryShape)

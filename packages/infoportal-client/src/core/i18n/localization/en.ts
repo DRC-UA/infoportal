@@ -1583,6 +1583,14 @@ const en = Object.freeze({
         many: 'Submissions',
         other: 'Submissions',
       },
+      submissionAccusativeCase: {
+        zero: 'submissions',
+        one: 'submission',
+        two: 'submissions',
+        few: 'submissions',
+        many: 'submissions',
+        other: 'submissions',
+      },
     },
   },
 } satisfies DictionaryShape)
