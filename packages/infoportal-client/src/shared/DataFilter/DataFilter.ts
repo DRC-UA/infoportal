@@ -1,7 +1,9 @@
-import {multipleFilters} from 'infoportal-common'
+import type {ReactNode} from 'react'
 import {Obj, Seq} from '@axanc/ts-utils'
+
+import {multipleFilters} from 'infoportal-common'
+
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
-import {ReactNode} from 'react'
 
 export namespace DataFilter {
   export type Filter = Record<string, string[] | undefined>

@@ -88,7 +88,7 @@ const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
         getOptions: () => translateOption('activity'),
       },
     })
-  }, [data])
+  }, [data, translateOption])
 
   const [filters, setFilters] = usePersistentState<DataFilter.InferShape<typeof shape>>(
     {},

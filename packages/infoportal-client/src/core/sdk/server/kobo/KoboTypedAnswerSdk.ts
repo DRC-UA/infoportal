@@ -1,7 +1,8 @@
-import {ApiClient} from '@/core/sdk/server/ApiClient'
-import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
+import {match, seq} from '@axanc/ts-utils'
+
 import {
   Bn_re,
+  Cbp_pre_post,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
   Ecrec_msmeGrantEoi,
@@ -69,8 +70,10 @@ import {
   Protection_ipa_pdm,
   Shelter_modernWomen,
 } from 'infoportal-common'
+
+import {ApiClient} from '@/core/sdk/server/ApiClient'
+import {KoboAnswerFilter, KoboAnswerSdk} from '@/core/sdk/server/kobo/KoboAnswerSdk'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
-import {fnSwitch, seq} from '@axanc/ts-utils'
 
 /** @deprecated should be coming from the unified database */
 type Meta = {
@@ -119,6 +122,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('awareness_raising_feedback').id,
           fnMapKobo: Awareness_raising_feedback.map,
+          ...filters,
+        }),
+      ),
+      ...make('cbp_pre_post', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('cbp_pre_post').id,
+          fnMapKobo: Cbp_pre_post.map,
           ...filters,
         }),
       ),
@@ -202,25 +212,21 @@ export class KoboTypedAnswerSdk {
                     .filter((_) => _.hh_char_hh_new_ben !== 'no')
                     .map((p) => {
                       return {
-                        gender: fnSwitch(
-                          p.hh_char_hh_det_gender!,
-                          {
+                        gender: match(p.hh_char_hh_det_gender!)
+                          .cases({
                             male: Person.Gender.Male,
                             female: Person.Gender.Female,
                             other: Person.Gender.Other,
-                          },
-                          () => undefined,
-                        ),
+                          })
+                          .default(() => undefined),
                         age: p.hh_char_hh_det_age,
-                        displacement: fnSwitch(
-                          p.hh_char_hh_det_status!,
-                          {
+                        displacement: match(p.hh_char_hh_det_status!)
+                          .cases({
                             idp: Person.DisplacementStatus.Idp,
                             returnee: Person.DisplacementStatus.Idp,
                             'non-displaced': Person.DisplacementStatus.NonDisplaced,
-                          },
-                          () => undefined,
-                        ),
+                          })
+                          .default(() => undefined),
                       }
                     })
             return {..._, custom: {persons}}
