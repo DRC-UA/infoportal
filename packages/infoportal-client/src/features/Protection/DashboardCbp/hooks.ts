@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
-import {Seq, match} from '@axanc/ts-utils'
+import {Seq, match, seq} from '@axanc/ts-utils'
 
-import {Cbp_pre_post, PeriodHelper, type Period} from 'infoportal-common'
+import {Cbp_pre_post, PeriodHelper, type Period, groupBy} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
@@ -112,46 +112,58 @@ const useCbpFilters = (data: Seq<Cbp_pre_post.T> | undefined) => {
     return DataFilter.filterData(filteredBy_date, shape, filters)
   }, [data, filters, period, shape])
 
-  return {
-    period,
-    setPeriod,
-    filters,
-    setFilters,
-    data: filteredData,
-    scoredData: filteredData
-      ?.filter(
-        ({topic}) =>
-          topic !== undefined &&
-          [
-            'roles_responsibilities_cbs',
-            'hum_pri_pro_main',
-            'protection_risks_analysis',
-            'safe_referrals',
-            'group_facilitation_skills',
-            'pseah',
-          ].includes(topic),
-      )
-      .filter(
-        ({
+  const scoredData = filteredData
+    ?.filter(
+      ({topic}) =>
+        topic !== undefined &&
+        [
+          'roles_responsibilities_cbs',
+          'hum_pri_pro_main',
+          'protection_risks_analysis',
+          'safe_referrals',
+          'group_facilitation_skills',
+          'pseah',
+        ].includes(topic),
+    )
+    .filter(
+      ({
+        cal_total_hum_pri_pro_mai,
+        cal_total_safe_referrals,
+        cal_total_pseah,
+        cal_total_group_facilitation_skills,
+        cal_total_roles_responsibilities_cbs,
+        cal_total_protection_risks_analysis,
+      }) => {
+        const mandatoryTrainingScores = [
           cal_total_hum_pri_pro_mai,
           cal_total_safe_referrals,
           cal_total_pseah,
           cal_total_group_facilitation_skills,
           cal_total_roles_responsibilities_cbs,
           cal_total_protection_risks_analysis,
-        }) => {
-          const mandatoryTrainingScores = [
-            cal_total_hum_pri_pro_mai,
-            cal_total_safe_referrals,
-            cal_total_pseah,
-            cal_total_group_facilitation_skills,
-            cal_total_roles_responsibilities_cbs,
-            cal_total_protection_risks_analysis,
-          ]
+        ]
 
-          return mandatoryTrainingScores.some((score) => Boolean(score))
-        },
-      ),
+        return mandatoryTrainingScores.some((score) => Boolean(score))
+      },
+    )
+
+  const {yes: post, no: pre} = groupBy({
+    data: scoredData ?? seq([]),
+    groups: [{by: ({complete_training}) => complete_training!}],
+    finalTransform: (group) => group.map(({unique_code}) => unique_code),
+  }).groups
+
+  const reference = {pre: new Set(pre), post: new Set(post)}
+
+  return {
+    period,
+    setPeriod,
+    filters,
+    setFilters,
+    data,
+    scoredData: filteredData?.filter(({unique_code}) => {
+      return reference.pre.has(unique_code) && reference.post.has(unique_code)
+    }),
     shape,
   }
 }
