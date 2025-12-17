@@ -74,6 +74,7 @@ const koboIndex = {
   protection_gbv_cm_case_follow_up: 'ajrLm9hVbidCKnUXdyr7Ja',
   protection_gbv_cm_checklist_survivors: 'awg7jysq6FWssttromNhNw',
   protection_gbv_cm_safety_assessment_planning: 'aMFYbug56WAQDHJ4fmFuL6',
+  protection_gbv_capacity_needs_assessment_2026: 'arQ7HNfA6jGptXefTBsTxP',
   protection_groupSession: 'a8Tn94arrSaH2FQBhUa9Zo',
   protection_hhs1: 'aFU8x6tHksveU2c3hK7RUG',
   protection_hhs2: 'aRHsewShwZhXiy8jrBj9zf',
@@ -174,6 +175,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   protection_gbv_cm_checklist_survivors:
     '[GBV CM] Checklist for the distribution of cash assistance to GBV survivors as part of GBV case management',
   protection_gbv_cm_safety_assessment_planning: '[GBV CM] Safety Assessment and Planning tool',
+  protection_gbv_capacity_needs_assessment_2026: '[GBV] KII for the GBV Capacity-Building Needs Assessment 2026',
   protection_groupSession: '[Protection] Group Session',
   protection_hhs1: '[Protection] HHS (old v1)',
   protection_hhs2: '[Protection] HHS v2 (deprecated)',

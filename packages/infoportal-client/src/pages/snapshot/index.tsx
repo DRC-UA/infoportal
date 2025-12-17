@@ -37,6 +37,11 @@ const Index = () => {
               <ListItemText primary="Winterization 2024-2025 PDM" />
             </Link>
           </ListItem>
+          <ListItem>
+            <Link href={path('gbv-needs-assessment-2025')}>
+              <ListItemText primary="GBV needs assessment" />
+            </Link>
+          </ListItem>
         </List>
       </Page>
     </Layout>

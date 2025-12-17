@@ -1,7 +1,7 @@
 import {GlobalStyles, ThemeProvider} from '@mui/material'
 
 import {muiTheme} from '@/core/theme'
-import {SnapshotGbvMonito} from '@/features/Snapshot/SnapshotGbvSurvey/SnapshotGbvSurvey'
+import GbvNeedsAssessment from '@/features/Snapshot/GbvNeedsAssessment2025'
 
 const generalStyles = (
   <GlobalStyles
@@ -26,7 +26,7 @@ const SnapshotProtectionMonitoringPage = () => {
       })}
     >
       {generalStyles}
-      <SnapshotGbvMonito />
+      <GbvNeedsAssessment />
     </ThemeProvider>
   )
 }
