@@ -166,6 +166,10 @@ const useCbpFilters = (data: Seq<Cbp_pre_post.T> | undefined) => {
     scoredData: scoredData?.filter(({unique_code}) => {
       return reference.pre.has(unique_code) && reference.post.has(unique_code)
     }),
+    counter: {
+      pre: reference.pre,
+      post: reference.post,
+    },
     shape,
   }
 }

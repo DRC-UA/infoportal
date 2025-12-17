@@ -5,7 +5,7 @@ import {format} from 'date-fns'
 
 import {capitalize, groupBy, OblastIndex, toPercent} from 'infoportal-common'
 
-import {useI18n} from '@/core/i18n'
+import {formatLargeNumber, useI18n} from '@/core/i18n'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {Page} from '@/shared'
 import {ChartBarVerticalGrouped} from '@/shared/charts/ChartBarGrouped'
@@ -13,9 +13,9 @@ import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {Panel, PanelBody} from '@/shared/Panel'
+import {Panel, PanelBody, PanelHead} from '@/shared/Panel'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {Div} from '@/shared/PdfLayout/PdfSlide'
+import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePlurals} from '@/utils'
 
 import {PssContextProvider, useCbpContext} from './Context'
@@ -36,6 +36,8 @@ const PssDashboardWithContext: FC = () => {
   const clearFilters = () => [filters.setFilters, filters.setPeriod].forEach((callback) => callback({}))
   const prePostTranslatedLabels = translateOption('complete_training')?.map(({label}) => label)
   const pluralizeSubmission = usePlurals(m.plurals.submissionLocative)
+  const pluralizePreTest = usePlurals(m.plurals.preTest)
+  const pluralizePostTest = usePlurals(m.plurals.postTest)
   const groupsByTopic = useMemo(
     () =>
       groupBy({
@@ -267,15 +269,46 @@ const PssDashboardWithContext: FC = () => {
                 />
               </PanelBody>
             </Panel>
-            <Panel title={m.cbpDashboard.timelineTitle(data.filtered.length)}>
+            <Panel title={m.cbpDashboard.timelineTitle(data.scored.length)}>
               <ChartLineBy
                 sx={{mt: 1}}
-                data={data.filtered}
+                data={data.scored}
                 getX={({date}) => format(date!, 'yyyy-MM')}
                 getY={() => 1}
                 label={m.count}
               />
             </Panel>
+            <PanelHead>Data discrepancy analisis</PanelHead>
+            <Div sx={{alignItems: 'stretch'}}>
+              <SlideWidget sx={{flex: 1}} icon="checklist" title={pluralizePreTest(data.counter.pre.size)!}>
+                {formatLargeNumber(data.counter.pre.size)}
+              </SlideWidget>
+              <SlideWidget sx={{flex: 1}} icon="checklist" title={pluralizePostTest(data.counter.post.size)!}>
+                {formatLargeNumber(data.counter.post.size)}
+              </SlideWidget>
+            </Div>
+            <Div sx={{alignItems: 'stretch'}}>
+              <Panel sx={{flex: 1}}>
+                <PanelHead>{m.cbpDashboard.discrepancies.preList}</PanelHead>
+                <PanelBody>
+                  <Box sx={{maxHeight: 220, overflowY: 'auto'}}>
+                    {[...data.counter.pre.difference(data.counter.post)].map((id) => (
+                      <div key={id}>{id}</div>
+                    ))}
+                  </Box>
+                </PanelBody>
+              </Panel>
+              <Panel sx={{flex: 1}}>
+                <PanelHead>{m.cbpDashboard.discrepancies.postList}</PanelHead>
+                <PanelBody>
+                  <Box sx={{maxHeight: 220, overflowY: 'auto'}}>
+                    {[...data.counter.post.difference(data.counter.pre)].map((id) => (
+                      <div key={id}>{id}</div>
+                    ))}
+                  </Box>
+                </PanelBody>
+              </Panel>
+            </Div>
           </Div>
         </Div>
       </Div>
