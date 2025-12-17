@@ -123,6 +123,7 @@ const PssDashboardWithContext: FC = () => {
           {
             type: 'progress',
             value: progress,
+            fraction: progress / Math.min(Obj.values(values)[0]!, Obj.values(values)[1]!),
           },
         ],
       }
@@ -137,6 +138,13 @@ const PssDashboardWithContext: FC = () => {
       .exhaustive()
   const colorByQuestion: Record<string, string> = Object.fromEntries(
     [...(prePostTranslatedLabels ?? []), 'progress'].map((q, i) => [q, baseColors[i % baseColors.length]]),
+  )
+
+  const avgProgress = toPercent(
+    prePostResults
+      .flatMap(({scores}) => scores.map((score) => (score as {fraction: number}).fraction))
+      .filter((fraction) => fraction !== undefined)
+      .reduce((a, b) => a + b, 0) / prePostResults.length,
   )
 
   if (!data) return null
@@ -182,6 +190,7 @@ const PssDashboardWithContext: FC = () => {
             </Panel>
             <Panel title={m.cbpDashboard.prePostTestScores}>
               <PanelBody>
+                <Typography marginBottom={2}>{`${m.cbpDashboard.avgProgress}: ${avgProgress}`}</Typography>
                 {prePostResults.map(({topic, scores}) =>
                   scores.length < 3 || scores.reduce((sum, {value}) => sum + value, 0) === 0 ? (
                     <Box key={topic} sx={{'& + &': {mt: 2}}}>
@@ -278,7 +287,7 @@ const PssDashboardWithContext: FC = () => {
                 label={m.count}
               />
             </Panel>
-            <PanelHead>Data discrepancy analisis</PanelHead>
+            <PanelHead>{m.cbpDashboard.discrepancies.title}</PanelHead>
             <Div sx={{alignItems: 'stretch'}}>
               <SlideWidget sx={{flex: 1}} icon="checklist" title={pluralizePreTest(data.counter.pre.size)!}>
                 {formatLargeNumber(data.counter.pre.size)}
