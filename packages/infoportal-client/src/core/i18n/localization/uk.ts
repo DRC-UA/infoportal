@@ -177,6 +177,29 @@ const uk = deepmerge(en, {
       progressLabel: 'Прогрес',
       timelineTitle: (count: number) => `Записи за місяцями (загальна кількість: ${count})`,
     },
+    gbvNeedsAssessmentSnapshot: {
+      mykolaiv: {
+        2025: {
+          title: 'ГЗН: дослідження потреб з розбудови потенціалу на 2026',
+          subTitle: 'Україна – Миколаїв (2025)',
+          priorityTrainingTitle: 'Пріоритетні Потреби в тренінгах',
+          mapLegendTitle: 'Кількість респондентів за районами',
+          perspective_effective_system:
+            'Effectiveness of the system for responding to GBV and domestic violence cases in your hromada',
+          access_supervision_support: 'Access to supervision / mentoring support',
+          services_survivors_most: 'Most requested services for survivors in your hromada',
+          effective_training_formats: 'Most effective training formats for institution you represent',
+          main_challenges_services:
+            'Main challenges in providing services to GBV and domestic violence survivors during 2025',
+          main_barriers2025: 'Main barriers during 2025',
+          areas_staff_training: 'Priority areas for staff training identified during 2025',
+          training_high_risk_groups_yes: 'Group prioritization suggestion',
+          manage_staff_burnout: "Burnout and psychological support management by staff's institution",
+          strengthen_capacity_respond:
+            'Choice of training opportunity to strengthen capacity to respond the mentioned challenges',
+        },
+      },
+    },
     plurals: {
       session: {
         zero: 'Сесій',

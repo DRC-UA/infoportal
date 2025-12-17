@@ -69,6 +69,7 @@ import {
   Gp_case_management,
   Protection_ipa_pdm,
   Shelter_modernWomen,
+  Protection_gbv_capacity_needs_assessment_2026,
 } from 'infoportal-common'
 
 import {ApiClient} from '@/core/sdk/server/ApiClient'
@@ -575,6 +576,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('shelter_modern_women').id,
           fnMapKobo: Shelter_modernWomen.map,
+          ...filters,
+        }),
+      ),
+      ...make('protection_gbv_capacity_needs_assessment_2026', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('protection_gbv_capacity_needs_assessment_2026').id,
+          fnMapKobo: Protection_gbv_capacity_needs_assessment_2026.map,
           ...filters,
         }),
       ),

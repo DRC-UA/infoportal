@@ -70,6 +70,7 @@ export const Pdf = ({children, ...props}: BoxProps) => {
               my: 2,
               mx: 'auto',
             },
+            ...props.sx,
           }}
         >
           {children}
