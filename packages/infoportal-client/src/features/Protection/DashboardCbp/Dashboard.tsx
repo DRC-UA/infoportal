@@ -72,6 +72,7 @@ const PssDashboardWithContext: FC = () => {
       }).groups,
     [data?.scored],
   )
+
   const prePostResults = Obj.entries(groupsByTopic)
     .map(([topic, group]) => ({
       topic,
@@ -124,6 +125,7 @@ const PssDashboardWithContext: FC = () => {
         ],
       }
     })
+
   const chartTitleSupnote = (count: number, lang: typeof currentLang) =>
     match(lang)
       .cases({

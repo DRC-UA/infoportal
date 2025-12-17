@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {Seq, match, seq} from '@axanc/ts-utils'
 
-import {Cbp_pre_post, PeriodHelper, type Period, groupBy} from 'infoportal-common'
+import {Cbp_pre_post, PeriodHelper, type Period, groupBy, KoboMetaStatus} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
@@ -125,6 +125,8 @@ const useCbpFilters = (data: Seq<Cbp_pre_post.T> | undefined) => {
           'pseah',
         ].includes(topic),
     )
+    // @ts-expect-error validationStatus is a service property not used before explicitely, so ignored in interface
+    .filter(({validationStatus}) => validationStatus !== KoboMetaStatus.Rejected)
     .filter(
       ({
         cal_total_hum_pri_pro_mai,
@@ -161,7 +163,7 @@ const useCbpFilters = (data: Seq<Cbp_pre_post.T> | undefined) => {
     filters,
     setFilters,
     data,
-    scoredData: filteredData?.filter(({unique_code}) => {
+    scoredData: scoredData?.filter(({unique_code}) => {
       return reference.pre.has(unique_code) && reference.post.has(unique_code)
     }),
     shape,
