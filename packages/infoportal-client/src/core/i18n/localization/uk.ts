@@ -176,7 +176,7 @@ const uk = deepmerge(en, {
       prePostTestScores: 'Бали за тестами "до" і "після"',
       progressLabel: 'Прогрес',
       timelineTitle: (count: number) => `Записи за місяцями (загальна кількість: ${count})`,
-      avgProgress: 'Середній прогрес',
+      avgProgress: 'Середній прогрес покращення знань',
       discrepancies: {
         title: 'Аналіз розбіжностей даних',
         preList: 'Перелік ID без відповідного тесту "після":',

@@ -1541,7 +1541,7 @@ const en = Object.freeze({
       progressLabel: 'Progress',
       prePostTestScores: 'Pre / Post Test Scoring',
       timelineTitle: (count: number) => `Submissions by months (total count: ${count})`,
-      avgProgress: 'Average progress',
+      avgProgress: 'Average progress of knowledge increase',
       discrepancies: {
         title: 'Data discrepancy analisis',
         preList: 'List of IDs, missing post-test:',

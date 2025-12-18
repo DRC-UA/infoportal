@@ -1,6 +1,7 @@
 import {useMemo, type FC} from 'react'
 import {match, seq, Obj} from '@axanc/ts-utils'
 import {Badge, Box, Icon, Tooltip, Typography} from '@mui/material'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import {format} from 'date-fns'
 
 import {capitalize, groupBy, OblastIndex, toPercent} from 'infoportal-common'
@@ -188,9 +189,16 @@ const PssDashboardWithContext: FC = () => {
                 />
               </PanelBody>
             </Panel>
-            <Panel title={m.cbpDashboard.prePostTestScores}>
+            <PanelHead>{m.cbpDashboard.prePostTestScores}</PanelHead>
+            <SlideWidget
+              sx={{flex: 1}}
+              icon={<TrendingUpIcon color="disabled" sx={{mr: 1}} fontSize="large" />}
+              title={m.cbpDashboard.avgProgress}
+            >
+              {avgProgress}
+            </SlideWidget>
+            <Panel>
               <PanelBody>
-                <Typography marginBottom={2}>{`${m.cbpDashboard.avgProgress}: ${avgProgress}`}</Typography>
                 {prePostResults.map(({topic, scores}) =>
                   scores.length < 3 || scores.reduce((sum, {value}) => sum + value, 0) === 0 ? (
                     <Box key={topic} sx={{'& + &': {mt: 2}}}>
