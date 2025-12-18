@@ -101,11 +101,6 @@ export const AgeGroupTable = ({
                   <Switch size="small" sx={{mr: -1}} checked={onlyPwd} />
                 </IpBtn>
               )}
-              {/*<ScRadioGroup value={tableAgeGroup} onChange={setTableAgeGroup} dense inline>*/}
-              {/*  {Person.ageGroups.map(_ =>*/}
-              {/*    <ScRadioGroupItem key={_} value={_} title={m._ageGroup[_]} hideRadio/>*/}
-              {/*  )}*/}
-              {/*</ScRadioGroup>*/}
             </>
           )
         }
