@@ -176,6 +176,12 @@ const uk = deepmerge(en, {
       prePostTestScores: 'Бали за тестами "до" і "після"',
       progressLabel: 'Прогрес',
       timelineTitle: (count: number) => `Записи за місяцями (загальна кількість: ${count})`,
+      avgProgress: 'Середній прогрес покращення знань',
+      discrepancies: {
+        title: 'Аналіз розбіжностей даних',
+        preList: 'Перелік ID без відповідного тесту "після":',
+        postList: 'Перелік ID без відповідного тесту "до":',
+      },
     },
     gbvNeedsAssessmentSnapshot: {
       mykolaiv: {
@@ -248,6 +254,22 @@ const uk = deepmerge(en, {
         few: 'записах',
         many: 'записах',
         other: 'записах',
+      },
+      preTest: {
+        zero: 'Тестів "до"',
+        one: 'Тест "до"',
+        two: 'Тести "до"',
+        few: 'Тестів "до"',
+        many: 'Тестів "до"',
+        other: 'Тестів "до"',
+      },
+      postTest: {
+        zero: 'Тестів "після"',
+        one: 'Тест "після"',
+        two: 'Тести "після"',
+        few: 'Тестів "після"',
+        many: 'Тестів "після"',
+        other: 'Тестів "після"',
       },
     },
   },

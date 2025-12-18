@@ -16,6 +16,10 @@ interface CbpContext {
     filtered: Seq<Cbp_pre_post.T>
     raw: Seq<Cbp_pre_post.T>
     scored: Seq<Cbp_pre_post.T>
+    counter: {
+      pre: Set<string | undefined>
+      post: Set<string | undefined>
+    }
   }
 }
 
@@ -45,6 +49,7 @@ const PssContextProvider = ({children}: {children: ReactNode}) => {
                 raw: data,
                 filtered: filters.data,
                 scored: filters.scoredData,
+                counter: filters.counter,
               }
             : undefined,
         fetcher,

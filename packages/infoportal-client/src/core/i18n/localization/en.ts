@@ -1541,6 +1541,12 @@ const en = Object.freeze({
       progressLabel: 'Progress',
       prePostTestScores: 'Pre / Post Test Scoring',
       timelineTitle: (count: number) => `Submissions by months (total count: ${count})`,
+      avgProgress: 'Average progress of knowledge increase',
+      discrepancies: {
+        title: 'Data discrepancy analisis',
+        preList: 'List of IDs, missing post-test:',
+        postList: 'List of IDs, missing pre-test:',
+      },
     },
     gbvNeedsAssessmentSnapshot: {
       mykolaiv: {
@@ -1613,6 +1619,22 @@ const en = Object.freeze({
         few: 'submissions',
         many: 'submissions',
         other: 'submissions',
+      },
+      preTest: {
+        zero: 'Pre tests',
+        one: 'Pre test',
+        two: 'Pre tests',
+        few: 'Pre tests',
+        many: 'Pre tests',
+        other: 'Pre tests',
+      },
+      postTest: {
+        zero: 'Post tests',
+        one: 'Post test',
+        two: 'Post tests',
+        few: 'Post tests',
+        many: 'Post tests',
+        other: 'Post tests',
       },
     },
   },
