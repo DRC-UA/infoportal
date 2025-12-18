@@ -1543,7 +1543,7 @@ const en = Object.freeze({
       timelineTitle: (count: number) => `Submissions by months (total count: ${count})`,
       avgProgress: 'Average progress of knowledge increase',
       discrepancies: {
-        title: 'Data discrepancy analisis',
+        title: 'Data discrepancy analysis',
         preList: 'List of IDs, missing post-test:',
         postList: 'List of IDs, missing pre-test:',
       },
