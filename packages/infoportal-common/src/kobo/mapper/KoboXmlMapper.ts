@@ -26,6 +26,7 @@ import {
   Legal_individual_aid_partners,
   Legal_pam,
   Meal_cashPdm,
+  Meal_ecrec_agMsmeVetPam,
   Meal_eorePdm,
   Meal_nfiPdm,
   Meal_pssPdm,
@@ -456,6 +457,29 @@ export namespace KoboXmlMapper {
     export const ecrec_vetApplication: PersonsMapper<Ecrec_vetApplication.T> = common
 
     export const ecrec_vetEvaluation: PersonsMapper<Ecrec_vetEvaluation.T> = common
+
+    export const meal_ecrec_agMsmeVetPam: PersonsMapper<Meal_ecrec_agMsmeVetPam.T> = ({
+      age,
+      sex,
+      status_person,
+    }): Person.Details[] => [
+      {
+        age,
+        gender: match(sex)
+          .cases({
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          })
+          .default(undefined),
+        displacement: match(status_person)
+          .cases({
+            long: Person.DisplacementStatus.NonDisplaced,
+            idp: Person.DisplacementStatus.Idp,
+            returnee: Person.DisplacementStatus.Returnee,
+          })
+          .default(undefined),
+      },
+    ]
 
     export const eore_pdm: PersonsMapper<Meal_eorePdm.T> = (row) => {
       return [
