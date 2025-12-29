@@ -36,6 +36,7 @@ import {useAsync} from '@/shared/hook/useAsync'
 import {IpIconBtn} from '@/shared/IconBtn'
 
 import {DatabaseGroupDisplayInput} from './groupDisplay/DatabaseGroupDisplayInput'
+import {filterExcludedColumnsOut} from './columns/helpers'
 
 export const ArchiveAlert = ({sx, ...props}: AlertProps) => {
   const t = useTheme()
@@ -188,11 +189,13 @@ export const DatabaseKoboTableContent = ({
       openViewAnswer: ctxAnswers.openView,
     })
 
-    return [...base, ...customColumns, ...schemaColumns].map((_) => ({
-      ..._,
-      width: ctx.view.colsById[_.id]?.width ?? _.width ?? 90,
-    }))
-  }, [schemaColumns, ctx.view.currentView])
+    return [...base, ...customColumns, ...schemaColumns]
+      .map((_) => ({
+        ..._,
+        width: ctx.view.colsById[_.id]?.width ?? _.width ?? 90,
+      }))
+      .filter(({id}) => filterExcludedColumnsOut({formId: ctx.form.id, columnId: id}))
+  }, [schemaColumns, ctx.view.currentView, ctx.form.id])
 
   const {api} = useAppSettings()
   const selectedHeader = useCustomSelectedHeader({access: ctx.access, formId: ctx.form.id, selectedIds})

@@ -1,5 +1,7 @@
 import {KoboIndex} from 'infoportal-common'
-import type {Ecrec_small_scale, Ecrec_subsistance, Ecrec_msmeGrantReg} from 'infoportal-common/kobo/generated'
+import {Ecrec_small_scale, Ecrec_subsistance, Ecrec_msmeGrantReg} from 'infoportal-common/kobo/generated'
+
+import {EXCLUDED_COLUMNS_MAP} from './constants'
 
 const dictionary: Partial<Record<(typeof KoboIndex.names)[number], Set<string>>> = {
   ecrec_small_scale: new Set<keyof Ecrec_small_scale.T>([
@@ -29,4 +31,10 @@ const isCalculateNumeric = (formId: string, fieldName: string): boolean => {
   return dictionary[KoboIndex.searchById(formId)?.name!]?.has(fieldName) ?? false
 }
 
-export {isCalculateNumeric}
+const filterExcludedColumnsOut: (arg: {formId: string; columnId: string}) => boolean = ({formId, columnId}) => {
+  if (EXCLUDED_COLUMNS_MAP.get(formId)?.includes(columnId)) return false
+
+  return true
+}
+
+export {isCalculateNumeric, filterExcludedColumnsOut}
