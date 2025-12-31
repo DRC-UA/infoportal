@@ -15,9 +15,9 @@ export namespace Protection_counselling {
     // general_information/modality [select_one] Modality
     modality: undefined | Option<'modality'>
     // general_information/consent [select_one] Consent
-    consent: undefined | Option<'registered_person_disability'>
+    consent: undefined | Option<'accompaniment_need_identified'>
     // general_information/new_beneficiary [select_one] New Protection Counselling Beneficiary?
-    new_beneficiary: undefined | Option<'registered_person_disability'>
+    new_beneficiary: undefined | Option<'accompaniment_need_identified'>
     // general_information/not_new_beneficiary [select_one] If not a new beneficiary, is this:
     not_new_beneficiary: undefined | Option<'not_new_beneficiary'>
     // personal_data/age [integer] Age
@@ -53,9 +53,9 @@ export namespace Protection_counselling {
     // personal_data/difficulty_usual_language [select_one] Using your usual (customary) language, do you have difficulty communicating, for example understanding or being understood by others?
     difficulty_usual_language: undefined | Option<'difficulty_usual_language'>
     // personal_data/disability_status [select_one] Disability Status (staff only):
-    disability_status: undefined | Option<'registered_person_disability'>
+    disability_status: undefined | Option<'accompaniment_need_identified'>
     // personal_data/registered_person_disability [select_one] Are you registered as a person with disability with the Government of Ukraine?
-    registered_person_disability: undefined | Option<'registered_person_disability'>
+    registered_person_disability: undefined | Option<'accompaniment_need_identified'>
     // intake/background_needs/not_disscuss [note] ####What is it that you'd like to discuss or share with me?  Listen to the person’s situation and reasons for seeking assistance,  Make sure you facilitate the discussion by using active listening skills and healing statements.  Depending on what you are told adjust your follow-up questions.
     not_disscuss: string
     // intake/background_needs/discuss_notes [text] Notes:
@@ -130,6 +130,42 @@ export namespace Protection_counselling {
     actions_taken_referral: undefined | Option<'actions_taken_referral'>
     // services_support/Provision_of_direct_assistance [select_one] Provision of direct assistance
     Provision_of_direct_assistance: undefined | Option<'Provision_of_direct_assistance'>
+    // services_support/accompaniment/accompaniment_note [note] Note to staff: this section should only be completed if social accompaniment is being provided
+    accompaniment_note: string
+    // services_support/accompaniment/accompaniment_type [select_multiple] Type of social accompaniment:
+    accompaniment_type: undefined | Option<'accompaniment_type'>[]
+    accompaniment_type_other: string | undefined
+    // services_support/accompaniment/accompaniment_institution [select_multiple] Service / Institution involved:
+    accompaniment_institution: undefined | Option<'accompaniment_institution'>[]
+    accompaniment_institution_other: string | undefined
+    // services_support/accompaniment/accompaniment_planned_dates [begin_repeat] Planned dates:
+    accompaniment_planned_dates: {accompaniment_planned_date: Date | undefined | undefined}[] | undefined
+    // services_support/accompaniment/staff_role_clarified [select_one] Role of staff clarified (supportive, not representative)?
+    staff_role_clarified: undefined | Option<'accompaniment_need_identified'>
+    // services_support/accompaniment/accompaniment_completion/accompaniment_provision_dates [begin_repeat] Dates of accompaniment:
+    accompaniment_provision_dates: {accompaniment_provision_date: Date | undefined | undefined}[] | undefined
+    // services_support/accompaniment/accompaniment_completion/accompaniment_actions [select_multiple] Actions completed:
+    accompaniment_actions: undefined | Option<'accompaniment_actions'>[]
+    accompaniment_actions_challenges: string | undefined
+    // services_support/accompaniment/accompaniment_completion/accompaniment_safety [select_one] Any boundary or safety issues identified?
+    accompaniment_safety: undefined | Option<'accompaniment_need_identified'>
+    accompaniment_safety_actions_taken: string | undefined
+    // services_support/accompaniment/accompaniment_completion/accompaniment_outcomes_subtitle [note] Follow-Up & Outcomes
+    accompaniment_outcomes_subtitle: string
+    // services_support/accompaniment/accompaniment_completion/accompaniment_service_reached [select_one] Was the individual able to access the intended service?
+    accompaniment_service_reached: undefined | Option<'accompaniment_service_reached'>
+    // services_support/accompaniment/accompaniment_completion/accompaniment_need_identified [select_one] Additional needs identified?
+    accompaniment_need_identified: undefined | Option<'accompaniment_need_identified'>
+    // services_support/accompaniment/accompaniment_completion/accompaniment_need_identified_actions [text] If yes, describe the needs an actions taken:
+    accompaniment_need_identified_actions: string | undefined
+    // services_support/accompaniment/accompaniment_completion/accompaniment_case_closure [note] Case Closure (only to be completed if the case is closed)
+    accompaniment_case_closure: string
+    // services_support/accompaniment/accompaniment_completion/accompaniment_closure_reason [select_multiple] Reason for closure:
+    accompaniment_closure_reason: undefined | Option<'accompaniment_closure_reason'>[]
+    // services_support/accompaniment/accompaniment_completion/accompaniment_closure_date [date] Date of closure:
+    accompaniment_closure_date: Date | undefined
+    // services_support/accompaniment/accompaniment_completion/accompaniment_closure_explained [select_multiple] Closure explained to individual?
+    accompaniment_closure_explained: undefined | Option<'accompaniment_closure_explained'>[]
     // services_support/actions_taken_other [text] If "Other", please specify
     actions_taken_other: string | undefined
     // services_support/services_support_notes [text] Notes:
@@ -277,6 +313,7 @@ export namespace Protection_counselling {
     },
     project_code: {
       '363_uhf8': `UKR-000363 UHF VIII`,
+      ukr000388_bha3: `UKR-000388 BHA`,
       ukr000423_echo: `UKR-000423 ECHO`,
       na: `N/A`,
     },
@@ -284,8 +321,13 @@ export namespace Protection_counselling {
       inperson: `In-person`,
       phone: `Via phone`,
     },
-    registered_person_disability: {
+    accompaniment_need_identified: {
       yes: `Yes`,
+      no: `No`,
+    },
+    accompaniment_service_reached: {
+      yes: `Yes`,
+      partially: `Partially`,
       no: `No`,
     },
     gender: {
@@ -398,6 +440,35 @@ export namespace Protection_counselling {
       internal_other: `Internal referral to DRC other sectors`,
       external_referral: `External referral`,
     },
+    accompaniment_type: {
+      to_service_provider: `Accompaniment to service provider`,
+      scheduling: `Appointment scheduling`,
+      registration_or_phone_call: `Support with online registration / phone calls`,
+      navigation: `Orientation/navigation support`,
+      other: `Other`,
+    },
+    accompaniment_institution: {
+      asc: `Administrative Services Center`,
+      spd: `Department of Social Protection`,
+      health: `Medical / rehabilitation facility`,
+      legal: `Free Legal Aid Centre`,
+      other: `Other`,
+    },
+    accompaniment_actions: {
+      visit: `Appointment attended`,
+      registration: `Registration completed`,
+      reference: `Referral accepted`,
+      information: `Information provided`,
+    },
+    accompaniment_closure_reason: {
+      objective_achieved: `Objective achieved`,
+      referral_completed: `Referral completed`,
+      out_of_scope: `Further support outside scope`,
+      declined_by_beneficiary: `Individual declined further support`,
+    },
+    accompaniment_closure_explained: {
+      yes: `Yes`,
+    },
     ben_det_oblast: {
       cherkaska: `Cherkaska`,
       chernihivska: `Chernihivska`,
@@ -444,5 +515,23 @@ export namespace Protection_counselling {
       age: _.age ? +_.age : undefined,
       type_incident: _.type_incident?.split(' '),
       actions_taken: _.actions_taken?.split(' '),
+      accompaniment_type: _.accompaniment_type?.split(' '),
+      accompaniment_institution: _.accompaniment_institution?.split(' '),
+      accompaniment_planned_dates: _['accompaniment_planned_dates']?.map(extractQuestionName).map((_: any) => {
+        _['accompaniment_planned_date'] = _.accompaniment_planned_date
+          ? new Date(_.accompaniment_planned_date)
+          : undefined
+        return _
+      }),
+      accompaniment_provision_dates: _['accompaniment_provision_dates']?.map(extractQuestionName).map((_: any) => {
+        _['accompaniment_provision_date'] = _.accompaniment_provision_date
+          ? new Date(_.accompaniment_provision_date)
+          : undefined
+        return _
+      }),
+      accompaniment_actions: _.accompaniment_actions?.split(' '),
+      accompaniment_closure_reason: _.accompaniment_closure_reason?.split(' '),
+      accompaniment_closure_date: _.accompaniment_closure_date ? new Date(_.accompaniment_closure_date) : undefined,
+      accompaniment_closure_explained: _.accompaniment_closure_explained?.split(' '),
     }) as T
 }
