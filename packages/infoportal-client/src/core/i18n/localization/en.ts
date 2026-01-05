@@ -561,6 +561,7 @@ const en = Object.freeze({
       type: 'Assistance',
       esk: 'Emergency Shelter kits',
       delivery: 'Delivery process',
+      sidebarLinkLabelForEcrecAgMsmeVetPam: 'EcRec (Ag, MSME, VET) PAM',
       activityConducted: 'What activity have you conducted?',
       safeSolution: 'Safe and Dignified Shelter solutions',
       overcomeBarrier: 'Overcoming barriers to return',
