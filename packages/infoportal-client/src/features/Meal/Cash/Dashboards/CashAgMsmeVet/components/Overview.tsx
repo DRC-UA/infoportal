@@ -1,21 +1,19 @@
-import {Seq} from '@axanc/ts-utils'
+import type {FC} from 'react'
 import {Box, Typography} from '@mui/material'
 
 import {Meal_cashPdm, OblastIndex} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
-import {CashPdmData} from '@/features/Meal/Cash/Context/CashContext'
-import {CashIndividuals} from '@/features/Meal/Cash/Components/CashIndividuals'
 import {AgeGroupTable} from '@/shared'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 
-export const CashOverview: React.FC<{
-  data: Seq<CashPdmData<Meal_cashPdm.T>>
-}> = ({data}) => {
+import {CashIndividuals} from './CashIndividuals'
+import type {OverviewProps} from './types'
+
+export const CashOverview: FC<OverviewProps> = ({data}) => {
   const {m} = useI18n()
 
   return (

@@ -1,19 +1,18 @@
 import {match} from '@axanc/ts-utils'
 
 import {
-  Meal_cashPdm,
-  KoboSubmissionFlat,
-  Meal_ecrec_agMsmeVetPam,
-  OblastIndex,
+  DrcOffice,
   DrcProject,
   DrcProjectHelper,
-  DrcOffice,
+  KoboSubmissionFlat,
   KoboXmlMapper,
+  Meal_ecrec_agMsmeVetPam,
+  OblastIndex,
 } from 'infoportal-common'
 
-import {CashPdmData} from '@/features/Meal/Cash/Context/CashContext'
+import type {EcrecPdmDataType} from './types'
 
-const pdmAdapter = (record: KoboSubmissionFlat<Meal_ecrec_agMsmeVetPam.T>): CashPdmData<Meal_cashPdm.T> => ({
+const pdmAdapter = (record: KoboSubmissionFlat<Meal_ecrec_agMsmeVetPam.T>): EcrecPdmDataType => ({
   source: match(record.pdmtype).cases<'pdm' | 'ecrec'>({cfg: 'pdm'}).default('ecrec'),
   oblast: record.ben_det_oblast === 'crimea' ? undefined : OblastIndex.byKoboName(record.ben_det_oblast)?.name,
   raion: record.ben_det_raion,
@@ -42,7 +41,7 @@ const pdmAdapter = (record: KoboSubmissionFlat<Meal_ecrec_agMsmeVetPam.T>): Cash
   received: record.did_receive_cash ?? record.did_receive_cash_no,
   activity: record.pdmtype,
   persons: KoboXmlMapper.Persons.meal_ecrec_agMsmeVetPam(record),
-  answers: record as any,
+  familySize: (record.number_male ?? 0) + (record.number_female ?? 0),
 })
 
 export {pdmAdapter}
