@@ -1,5 +1,4 @@
 import type {FC} from 'react'
-import {Box, Typography} from '@mui/material'
 
 import {Meal_cashPdm, OblastIndex} from 'infoportal-common'
 
@@ -11,6 +10,8 @@ import {Panel, PanelBody} from '@/shared/Panel'
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 
 import {CashIndividuals} from './CashIndividuals'
+import ChartWidget from './ChartWidget'
+import Subtitle from './Subtitle'
 import type {OverviewProps} from './types'
 
 export const CashOverview: FC<OverviewProps> = ({data}) => {
@@ -18,20 +19,9 @@ export const CashOverview: FC<OverviewProps> = ({data}) => {
 
   return (
     <>
-      <Box
-        sx={{
-          pb: 1,
-          borderBottom: '2px solid',
-          borderColor: (t) => t.palette.divider,
-          mb: 2,
-        }}
-      >
-        <Typography variant="h4" fontWeight="bold" color="text.primary">
-          {m.overview}
-        </Typography>
-      </Box>
+      <Subtitle text={m.overview} />
       <Div responsive>
-        <Div column sx={{maxHeight: '33%'}}>
+        <Div column>
           <CashIndividuals data={data} />
           <Panel title={m.ageGroup}>
             <PanelBody>
@@ -45,36 +35,26 @@ export const CashOverview: FC<OverviewProps> = ({data}) => {
           </Panel>
         </Div>
 
-        <Div column sx={{maxHeight: '33%'}}>
-          <SlidePanel title={m.mealMonitoringPdm.didReceive}>
-            <ChartBarSingleBy
-              data={data}
-              by={({received}) => received}
-              label={Meal_cashPdm.options.any_member_household}
-              includeNullish
-            />
+        <Div column>
+          <SlidePanel title={m.mealMonitoringPdm.pdmType}>
+            <ChartBarSingleBy data={data} by={({pdmType}) => pdmType} label={Meal_cashPdm.options.pdmtype} />
           </SlidePanel>
+          <ChartWidget data={data} field={'did_receive_cash'} />
+          <ChartWidget data={data} field={'did_receive_cash_no'} />
 
           <SlidePanel title={m.project}>
             <ChartBarSingleBy data={data} by={({project}) => project} includeNullish />
           </SlidePanel>
-
-          <SlidePanel title={m.mealMonitoringPdm.pdmType}>
-            <ChartBarSingleBy data={data} by={({pdmType}) => pdmType} label={Meal_cashPdm.options.pdmtype} />
-          </SlidePanel>
         </Div>
 
-        <Div column sx={{maxHeight: '33%'}}>
+        <Div column>
           <Panel savableAsImg expendable title={m.location}>
             <PanelBody>
               <MapSvgByOblast
                 sx={{maxWidth: 480, margin: 'auto'}}
-                fillBaseOn="value"
                 data={data}
                 getOblast={({oblast}) => OblastIndex.byName(oblast)?.iso!}
-                value={() => true}
                 total={data.length}
-                base={({oblast}) => oblast !== undefined}
               />
             </PanelBody>
           </Panel>
