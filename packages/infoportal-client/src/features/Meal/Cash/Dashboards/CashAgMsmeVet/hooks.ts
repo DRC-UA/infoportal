@@ -19,16 +19,16 @@ const useTranslations = () => {
 
   const getOptionTranslations = useCallback(
     (option: keyof Meal_ecrec_agMsmeVetPam.T | keyof typeof Meal_ecrec_agMsmeVetPam.options) => {
-      return schema?.helper.getOptionsByQuestionName(option).map(({name}) => ({
+      return (schema?.helper.getOptionsByQuestionName(option) ?? []).map(({name}) => ({
         value: name,
-        label: schema.translate.choice(option, name) ?? name,
+        label: schema?.translate.choice(option, name) ?? name,
       }))
     },
     [schema],
   )
 
   useEffect(() => {
-    schemaContext.setLangIndex(match(currentLang).cases({en: 1}).default(0))
+    schemaContext.setLangIndex(match(currentLang).cases({en: 0, uk: 1}).exhaustive())
   }, [currentLang])
 
   return {
