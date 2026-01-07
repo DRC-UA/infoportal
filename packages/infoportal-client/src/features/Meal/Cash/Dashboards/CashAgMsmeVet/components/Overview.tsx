@@ -14,7 +14,7 @@ import ChartWidget from './ChartWidget'
 import Subtitle from './Subtitle'
 import type {OverviewProps} from './types'
 
-export const CashOverview: FC<OverviewProps> = ({data}) => {
+export const CashOverview: FC<OverviewProps> = ({data, pdmType}) => {
   const {m} = useI18n()
 
   return (
@@ -39,9 +39,9 @@ export const CashOverview: FC<OverviewProps> = ({data}) => {
           <SlidePanel title={m.mealMonitoringPdm.pdmType}>
             <ChartBarSingleBy data={data} by={({pdmType}) => pdmType} label={Meal_cashPdm.options.pdmtype} />
           </SlidePanel>
-          <ChartWidget data={data} field={'did_receive_cash'} />
-          <ChartWidget data={data} field={'did_receive_cash_no'} />
-
+          {(pdmType === undefined || pdmType.length === 0 || pdmType.includes('cfg')) && (
+            <ChartWidget data={data} field={'cfg_type'} />
+          )}
           <SlidePanel title={m.project}>
             <ChartBarSingleBy data={data} by={({project}) => project} includeNullish />
           </SlidePanel>
@@ -58,6 +58,8 @@ export const CashOverview: FC<OverviewProps> = ({data}) => {
               />
             </PanelBody>
           </Panel>
+          <ChartWidget data={data} field={'did_receive_cash'} />
+          <ChartWidget data={data} field={'did_receive_cash_no'} />
         </Div>
       </Div>
     </>

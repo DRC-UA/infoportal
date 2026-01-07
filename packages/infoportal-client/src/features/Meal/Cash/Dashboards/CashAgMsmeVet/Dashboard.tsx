@@ -31,7 +31,7 @@ const MealEcrecAgVetMsmeDashboard: FC = () => {
           </DebouncedInput>
         }
       />
-      <CashOverview data={data} />
+      <CashOverview data={data} pdmType={filters.pdmtype} />
       {(filters.pdmtype === undefined || filters.pdmtype.length === 0 || filters.pdmtype.includes('cfg')) && (
         <SufficiencyAg data={agriData} />
       )}
