@@ -4,15 +4,12 @@ import {Meal_ecrec_agMsmeVetPam} from 'infoportal-common'
 
 import type {EcrecPdmDataType} from '../types'
 
-type CashIndividualsProps = {data: Seq<EcrecPdmDataType>}
-type OverviewProps = {
-  data: Seq<EcrecPdmDataType>
+type PdmDataConsumerProps = {data: Seq<EcrecPdmDataType>}
+type OverviewProps = PdmDataConsumerProps & {
   pdmType?: string[]
 }
-type SufficiencyAgProps = {data: Seq<EcrecPdmDataType>}
-type ChartWidgetProps = {
-  data: Seq<EcrecPdmDataType>
+type ChartWidgetProps = PdmDataConsumerProps & {
   field: keyof Meal_ecrec_agMsmeVetPam.T
 }
 
-export type {CashIndividualsProps, OverviewProps, SufficiencyAgProps, ChartWidgetProps}
+export type {PdmDataConsumerProps, OverviewProps, ChartWidgetProps}

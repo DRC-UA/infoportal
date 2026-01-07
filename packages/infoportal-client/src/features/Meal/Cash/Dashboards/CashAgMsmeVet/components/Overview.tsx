@@ -42,9 +42,6 @@ export const CashOverview: FC<OverviewProps> = ({data, pdmType}) => {
           {(pdmType === undefined || pdmType.length === 0 || pdmType.includes('cfg')) && (
             <ChartWidget data={data} field={'cfg_type'} />
           )}
-          <SlidePanel title={m.project}>
-            <ChartBarSingleBy data={data} by={({project}) => project} includeNullish />
-          </SlidePanel>
         </Div>
 
         <Div column>
@@ -58,8 +55,9 @@ export const CashOverview: FC<OverviewProps> = ({data, pdmType}) => {
               />
             </PanelBody>
           </Panel>
-          <ChartWidget data={data} field={'did_receive_cash'} />
-          <ChartWidget data={data} field={'did_receive_cash_no'} />
+          <SlidePanel title={m.project}>
+            <ChartBarSingleBy data={data} by={({project}) => project} includeNullish />
+          </SlidePanel>
         </Div>
       </Div>
     </>

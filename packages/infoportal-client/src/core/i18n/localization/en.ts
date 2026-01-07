@@ -955,6 +955,7 @@ const en = Object.freeze({
       assistanceTreated:
         'Did you feel that the DRC staff treated you with respect during the process of providing assistance?',
       producedOutcome: 'Has the assistance provided produced the intended protection outcome?',
+      loadingDataSubtitlePlaceholder: 'Loading data',
     },
     lcsPdm: 'Coping Strategies',
     lcsRegistration: 'Coping Strategies',

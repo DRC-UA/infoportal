@@ -4,9 +4,9 @@ import {Box} from '@mui/material'
 import {formatLargeNumber, useI18n} from '@/core/i18n'
 import {Panel, PanelBody} from '@/shared/Panel'
 
-import type {CashIndividualsProps} from './types'
+import type {PdmDataConsumerProps} from './types'
 
-export const CashIndividuals: FC<CashIndividualsProps> = ({data}) => {
+export const CashIndividuals: FC<PdmDataConsumerProps> = ({data}) => {
   const {m} = useI18n()
 
   const {households, individuals} = useMemo(() => {
