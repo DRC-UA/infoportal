@@ -1,4 +1,4 @@
-import type {FC} from 'react'
+import {useMemo, type FC} from 'react'
 
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {DebouncedInput} from '@/shared/DebouncedInput'
@@ -6,10 +6,12 @@ import {Page} from '@/shared/Page'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 import {CashOverview} from './components/Overview'
+import SufficiencyAg from './components/SufficiencyAg'
 import {useCashAgMsmeVet} from './hooks'
 
 const MealEcrecAgVetMsmeDashboard: FC = () => {
   const {data, fetcher, shape, filters, setFilters, periodFilter, setPeriodFilter} = useCashAgMsmeVet()
+  const agriData = useMemo(() => data.filter(({pdmType}) => pdmType === 'cfg'), [data])
 
   return (
     <Page width="lg" loading={fetcher.loading}>
@@ -30,6 +32,9 @@ const MealEcrecAgVetMsmeDashboard: FC = () => {
         }
       />
       <CashOverview data={data} />
+      {(filters.pdmtype === undefined || filters.pdmtype.length === 0 || filters.pdmtype.includes('cfg')) && (
+        <SufficiencyAg data={agriData} />
+      )}
     </Page>
   )
 }

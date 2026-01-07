@@ -42,6 +42,7 @@ const pdmAdapter = (record: KoboSubmissionFlat<Meal_ecrec_agMsmeVetPam.T>): Ecre
   activity: record.pdmtype,
   persons: KoboXmlMapper.Persons.meal_ecrec_agMsmeVetPam(record),
   familySize: (record.number_male ?? 0) + (record.number_female ?? 0),
+  answers: record,
 })
 
 export {pdmAdapter}
