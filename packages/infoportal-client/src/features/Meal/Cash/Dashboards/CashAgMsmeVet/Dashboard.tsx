@@ -5,7 +5,7 @@ import {DebouncedInput} from '@/shared/DebouncedInput'
 import {Page} from '@/shared/Page'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
-import {CashOverview} from './components/Overview'
+import CashOverview from './components/Overview'
 import ReceivingAndUsage from './components/ReceiveingAndUsage'
 import RegistrationAndDelivery from './components/RegistrationAndDelivery'
 import SufficiencyAg from './components/SufficiencyAg'

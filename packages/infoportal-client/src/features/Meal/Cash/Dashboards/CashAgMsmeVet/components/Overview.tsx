@@ -14,7 +14,7 @@ import ChartWidget from './ChartWidget'
 import Subtitle from './Subtitle'
 import type {OverviewProps} from './types'
 
-export const CashOverview: FC<OverviewProps> = ({data, pdmType}) => {
+const CashOverview: FC<OverviewProps> = ({data, pdmType}) => {
   const {m} = useI18n()
 
   return (
@@ -63,3 +63,5 @@ export const CashOverview: FC<OverviewProps> = ({data, pdmType}) => {
     </>
   )
 }
+
+export default CashOverview
