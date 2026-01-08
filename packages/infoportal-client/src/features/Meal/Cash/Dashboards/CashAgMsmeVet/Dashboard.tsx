@@ -15,13 +15,13 @@ import {
   CashOverview,
   ReceivingAndUsage,
   RegistrationAndDelivery,
+  SufficiencyMsme,
   SufficiencyVet,
 } from './components'
 import {useCashAgMsmeVet, useTranslations} from './hooks'
 
 const MealEcrecAgVetMsmeDashboard: FC = () => {
   const {data, fetcher, shape, filters, setFilters, periodFilter, setPeriodFilter} = useCashAgMsmeVet()
-  const agriData = useMemo(() => data.filter(({pdmType}) => pdmType === 'cfg'), [data])
   const {cfg, msme, vet} = useMemo(
     () => groupBy({data, groups: [{by: ({pdmType}) => pdmType!}], finalTransform: (record) => record}).groups,
     [data],
@@ -79,6 +79,14 @@ const MealEcrecAgVetMsmeDashboard: FC = () => {
           data={vet}
           title={
             translateField ? translateField('sufficiency_vet') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder
+          }
+        />
+      )}
+      {(filters.pdmtype === undefined || filters.pdmtype.length === 0 || filters.pdmtype.includes('msme')) && (
+        <SufficiencyMsme
+          data={msme}
+          title={
+            translateField ? translateField('sufficiency_msme') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder
           }
         />
       )}
