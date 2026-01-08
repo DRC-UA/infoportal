@@ -5,6 +5,7 @@ import {Meal_ecrec_agMsmeVetPam} from 'infoportal-common'
 import type {EcrecPdmDataType} from '../types'
 
 type PdmDataConsumerProps = {data: Seq<EcrecPdmDataType>}
+type PdmSectionProps = PdmDataConsumerProps & {title: string}
 type OverviewProps = PdmDataConsumerProps & {
   pdmType?: string[]
 }
@@ -13,4 +14,4 @@ type ChartWidgetProps = PdmDataConsumerProps & {
   limitChartHeight?: number
 }
 
-export type {PdmDataConsumerProps, OverviewProps, ChartWidgetProps}
+export type {PdmDataConsumerProps, PdmSectionProps, OverviewProps, ChartWidgetProps}

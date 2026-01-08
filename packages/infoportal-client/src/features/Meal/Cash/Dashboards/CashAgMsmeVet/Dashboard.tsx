@@ -1,19 +1,19 @@
 import {useMemo, type FC} from 'react'
 
+import {useI18n} from '@/core/i18n'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {Page} from '@/shared/Page'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
-import CashOverview from './components/Overview'
-import ReceivingAndUsage from './components/ReceiveingAndUsage'
-import RegistrationAndDelivery from './components/RegistrationAndDelivery'
-import SufficiencyAg from './components/SufficiencyAg'
-import {useCashAgMsmeVet} from './hooks'
+import {CashOverview, ReceivingAndUsage, RegistrationAndDelivery, SufficiencyAg} from './components'
+import {useCashAgMsmeVet, useTranslations} from './hooks'
 
 const MealEcrecAgVetMsmeDashboard: FC = () => {
   const {data, fetcher, shape, filters, setFilters, periodFilter, setPeriodFilter} = useCashAgMsmeVet()
   const agriData = useMemo(() => data.filter(({pdmType}) => pdmType === 'cfg'), [data])
+  const {translateField} = useTranslations()
+  const {m} = useI18n()
 
   return (
     <Page width="lg" loading={fetcher.loading}>
@@ -34,10 +34,21 @@ const MealEcrecAgVetMsmeDashboard: FC = () => {
         }
       />
       <CashOverview data={data} pdmType={filters.pdmtype} />
-      <ReceivingAndUsage data={data} />
-      <RegistrationAndDelivery data={data} />
+      <ReceivingAndUsage
+        data={data}
+        title={
+          translateField ? translateField('use_mpca_assistance') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder
+        }
+      />
+      <RegistrationAndDelivery
+        data={data}
+        title={translateField ? translateField('delivery_process') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
+      />
       {(filters.pdmtype === undefined || filters.pdmtype.length === 0 || filters.pdmtype.includes('cfg')) && (
-        <SufficiencyAg data={agriData} />
+        <SufficiencyAg
+          data={agriData}
+          title={translateField ? translateField('sufficiency') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
+        />
       )}
     </Page>
   )
