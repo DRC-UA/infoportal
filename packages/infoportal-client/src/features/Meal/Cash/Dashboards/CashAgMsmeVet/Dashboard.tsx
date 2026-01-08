@@ -1,5 +1,7 @@
 import {useMemo, type FC} from 'react'
 
+import {groupBy} from 'infoportal-common'
+
 import {useI18n} from '@/core/i18n'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {DebouncedInput} from '@/shared/DebouncedInput'
@@ -13,12 +15,17 @@ import {
   CashOverview,
   ReceivingAndUsage,
   RegistrationAndDelivery,
+  SufficiencyVet,
 } from './components'
 import {useCashAgMsmeVet, useTranslations} from './hooks'
 
 const MealEcrecAgVetMsmeDashboard: FC = () => {
   const {data, fetcher, shape, filters, setFilters, periodFilter, setPeriodFilter} = useCashAgMsmeVet()
   const agriData = useMemo(() => data.filter(({pdmType}) => pdmType === 'cfg'), [data])
+  const {cfg, msme, vet} = useMemo(
+    () => groupBy({data, groups: [{by: ({pdmType}) => pdmType!}], finalTransform: (record) => record}).groups,
+    [data],
+  )
   const {translateField} = useTranslations()
   const {m} = useI18n()
 
@@ -54,18 +61,26 @@ const MealEcrecAgVetMsmeDashboard: FC = () => {
       {(filters.pdmtype === undefined || filters.pdmtype.length === 0 || filters.pdmtype.includes('cfg')) && (
         <>
           <AgSufficiency
-            data={agriData}
+            data={cfg}
             title={translateField ? translateField('sufficiency') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
           />
           <AgOutcome
-            data={agriData}
+            data={cfg}
             title={translateField ? translateField('outcome') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
           />
           <AgAccountability
-            data={agriData}
+            data={cfg}
             title={translateField ? translateField('aap') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
           />
         </>
+      )}
+      {(filters.pdmtype === undefined || filters.pdmtype.length === 0 || filters.pdmtype.includes('vet')) && (
+        <SufficiencyVet
+          data={vet}
+          title={
+            translateField ? translateField('sufficiency_vet') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder
+          }
+        />
       )}
     </Page>
   )
