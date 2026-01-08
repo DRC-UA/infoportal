@@ -35,6 +35,10 @@ const MealEcrecAgVetMsmeDashboard: FC = () => {
         shapes={shape}
         filters={filters}
         setFilters={setFilters}
+        onClear={() => {
+          setFilters({})
+          setPeriodFilter({})
+        }}
         before={
           <DebouncedInput<[Date | undefined, Date | undefined]>
             debounce={400}
