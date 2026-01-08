@@ -9,7 +9,7 @@ import ChartWidget from './ChartWidget'
 import Subtitle from './Subtitle'
 import type {PdmSectionProps} from './types'
 
-const SufficiencyAg: FC<PdmSectionProps> = ({data, title}) => (
+const AgSufficiency: FC<PdmSectionProps> = ({data, title}) => (
   <Box mt={2}>
     <Subtitle text={title} />
     <Div responsive>
@@ -79,4 +79,4 @@ const SufficiencyAg: FC<PdmSectionProps> = ({data, title}) => (
   </Box>
 )
 
-export default SufficiencyAg
+export default AgSufficiency

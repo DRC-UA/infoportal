@@ -6,7 +6,14 @@ import {DebouncedInput} from '@/shared/DebouncedInput'
 import {Page} from '@/shared/Page'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
-import {CashOverview, ReceivingAndUsage, RegistrationAndDelivery, SufficiencyAg} from './components'
+import {
+  AgAccountability,
+  AgSufficiency,
+  AgOutcome,
+  CashOverview,
+  ReceivingAndUsage,
+  RegistrationAndDelivery,
+} from './components'
 import {useCashAgMsmeVet, useTranslations} from './hooks'
 
 const MealEcrecAgVetMsmeDashboard: FC = () => {
@@ -45,10 +52,20 @@ const MealEcrecAgVetMsmeDashboard: FC = () => {
         title={translateField ? translateField('delivery_process') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
       />
       {(filters.pdmtype === undefined || filters.pdmtype.length === 0 || filters.pdmtype.includes('cfg')) && (
-        <SufficiencyAg
-          data={agriData}
-          title={translateField ? translateField('sufficiency') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
-        />
+        <>
+          <AgSufficiency
+            data={agriData}
+            title={translateField ? translateField('sufficiency') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
+          />
+          <AgOutcome
+            data={agriData}
+            title={translateField ? translateField('outcome') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
+          />
+          <AgAccountability
+            data={agriData}
+            title={translateField ? translateField('aap') : m.mealMonitoringPdm.loadingDataSubtitlePlaceholder}
+          />
+        </>
       )}
     </Page>
   )
