@@ -25,6 +25,7 @@ import {MealPdmNfiDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmNfiDashb
 import {PdmGbvDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGbvDashboard'
 import {MealWinterizationDashboard} from '@/features/Meal/Winter/MealWinterizationDashboard'
 import {MealPdmPssDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmPssDashboard'
+import CashAgMsmeVet from '@/features/Meal/Cash/Dashboards/CashAgMsmeVet'
 import {CashAgriDashboard} from '@/features/Meal/Cash/Dashboards/CashAgriDashboard'
 import {CashMpcaDashboard} from '@/features/Meal/Cash/Dashboards/CashMpcaDashboard'
 import {CashVetMsmeDashboard} from '@/features/Meal/Cash/Dashboards/CashVetMsmeDashboard'
@@ -84,6 +85,7 @@ export const mealIndex = {
         _: '/pdm/ecrec',
         agri: '/pdm/ecrec/agri',
         vetMsme: '/pdm/ecrec/vet-msme',
+        agVetMsme: '/pdm/ecrec/ag-vet-msme',
         animalShelter: '/pdm/ecrec/animal-shelter',
       },
       basicNeeds: {
@@ -190,6 +192,11 @@ const MealSidebar = ({
             </NavLink>
             <NavLink to={path(mealIndex.siteMap.pdm.ecrec.vetMsme)}>
               {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.vetMsme}</SidebarItem>}
+            </NavLink>
+            <NavLink to={path(mealIndex.siteMap.pdm.ecrec.agVetMsme)}>
+              {({isActive}) => (
+                <SidebarItem active={isActive}>{m.mealMonitoringPdm.sidebarLinkLabelForEcrecAgMsmeVetPam}</SidebarItem>
+              )}
             </NavLink>
             <NavLink to={path(mealIndex.siteMap.pdm.ecrec.animalShelter)}>
               {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.animalShelterFood}</SidebarItem>}
@@ -354,6 +361,8 @@ export const Meal = () => {
         {relatedKoboForms.map((_) => (
           <Route key={_} {...getKoboFormRouteProps({path: mealIndex.siteMap.form(_), name: _})} />
         ))}
+        {/* keep this route outside it's peer group to fix infinite setState in parent context*/}
+        <Route path={mealIndex.siteMap.pdm.ecrec.agVetMsme} element={<CashAgMsmeVet />} />
         <Route path={mealIndex.siteMap.pdm._}>
           <Route path={mealIndex.siteMap.pdm.ecrec._} element={<CashPdmOutlet />}>
             <Route index element={<Navigate to={mealIndex.siteMap.pdm.ecrec.agri} replace />} />

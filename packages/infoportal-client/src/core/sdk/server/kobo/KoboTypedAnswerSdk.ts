@@ -17,6 +17,7 @@ import {
   KoboMealCfmHelper,
   KoboProtection_hhs3,
   KoboSafetyIncidentHelper,
+  Meal_ecrec_agMsmeVetPam,
   Meal_cashPdm,
   Meal_cfmExternal,
   Meal_cfmInternal,
@@ -257,6 +258,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('ecrec_vetEvaluation').id,
           fnMapKobo: Ecrec_vetEvaluation.map,
+          ...filters,
+        }),
+      ),
+      ...make('meal_ecrec_agMsmeVetPam', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('meal_ecrec_agMsmeVetPam').id,
+          fnMapKobo: Meal_ecrec_agMsmeVetPam.map,
           ...filters,
         }),
       ),

@@ -159,6 +159,10 @@ const uk = deepmerge(en, {
         },
       },
     },
+    mealMonitoringPdm: {
+      sidebarLinkLabelForEcrecAgMsmeVetPam: 'EcRec (Ag, MSME, VET) PAM',
+      loadingDataSubtitlePlaceholder: 'Завантажую дані',
+    },
     pssDashboard: {
       uniqueIndividualsHint: 'Деперсоналізовані ідентифікуючі дані збираються з половини вересня 2025',
       sessionsCounterTitle: 'Проведено сесій:',

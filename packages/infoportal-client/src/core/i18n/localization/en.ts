@@ -561,6 +561,7 @@ const en = Object.freeze({
       type: 'Assistance',
       esk: 'Emergency Shelter kits',
       delivery: 'Delivery process',
+      sidebarLinkLabelForEcrecAgMsmeVetPam: 'EcRec (Ag, MSME, VET) PAM',
       activityConducted: 'What activity have you conducted?',
       safeSolution: 'Safe and Dignified Shelter solutions',
       overcomeBarrier: 'Overcoming barriers to return',
@@ -954,6 +955,7 @@ const en = Object.freeze({
       assistanceTreated:
         'Did you feel that the DRC staff treated you with respect during the process of providing assistance?',
       producedOutcome: 'Has the assistance provided produced the intended protection outcome?',
+      loadingDataSubtitlePlaceholder: 'Loading data',
     },
     lcsPdm: 'Coping Strategies',
     lcsRegistration: 'Coping Strategies',
