@@ -114,7 +114,7 @@ export const CfmDashboard = () => {
       },
       project: {
         label: m.project,
-        getValue: (_) => _.tags?.project ?? DataFilter.blank,
+        getValue: (_) => _.tags?.project ?? _.project ?? DataFilter.blank,
         getOptions: (get) =>
           get()
             .flatMap((entry) => entry.tags?.project)
