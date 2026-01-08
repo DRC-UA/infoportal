@@ -31,11 +31,9 @@ const SufficiencyAg: FC<PdmDataConsumerProps> = ({data}) => {
                 'training_inductions_agricultural_yes',
               ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
             ).map((field) => (
-              <ChartWidget key={field} data={data} field={field} />
+              <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
             ))}
           </Card>
-        </Div>
-        <Div column>
           <Card>
             {(
               [
@@ -43,9 +41,11 @@ const SufficiencyAg: FC<PdmDataConsumerProps> = ({data}) => {
                 'received_enough_agricultural_needs_long_other',
               ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
             ).map((field) => (
-              <ChartWidget key={field} data={data} field={field} />
+              <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
             ))}
           </Card>
+        </Div>
+        <Div column>
           <Card>
             {(
               [
@@ -58,7 +58,7 @@ const SufficiencyAg: FC<PdmDataConsumerProps> = ({data}) => {
                 'planning_use_money',
               ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
             ).map((field) => (
-              <ChartWidget key={field} data={data} field={field} />
+              <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
             ))}
           </Card>
         </Div>
@@ -70,7 +70,7 @@ const SufficiencyAg: FC<PdmDataConsumerProps> = ({data}) => {
                 'improve_planning_management_001',
               ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
             ).map((field) => (
-              <ChartWidget key={field} data={data} field={field} />
+              <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
             ))}
           </Card>
           <Card>
@@ -80,7 +80,7 @@ const SufficiencyAg: FC<PdmDataConsumerProps> = ({data}) => {
                 'improve_planning_agricultural_001',
               ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
             ).map((field) => (
-              <ChartWidget key={field} data={data} field={field} />
+              <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
             ))}
           </Card>
         </Div>

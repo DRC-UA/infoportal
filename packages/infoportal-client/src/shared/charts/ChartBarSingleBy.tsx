@@ -21,6 +21,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   min,
   includeNullish = false,
   forceShowEmptyLabels = false,
+  limitChartHeight,
 }: {
   debug?: boolean
   onClickData?: (_: K) => void
@@ -36,6 +37,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   onToggle?: (_: K) => void
   includeNullish?: boolean
   forceShowEmptyLabels?: boolean
+  limitChartHeight?: number
 }) => {
   const res = useMemo(() => {
     const source = seq(data)
@@ -70,6 +72,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
     <ChartBar
       data={finalData}
       onClickData={(_) => onClickData?.(_ as K)}
+      limitChartHeight={limitChartHeight}
       labels={
         !onToggle
           ? undefined

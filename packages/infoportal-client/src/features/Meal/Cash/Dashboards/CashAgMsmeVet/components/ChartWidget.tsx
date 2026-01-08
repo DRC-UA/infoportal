@@ -8,7 +8,7 @@ import {useTranslations} from '../hooks'
 
 import type {ChartWidgetProps} from './types'
 
-const ChartWidget: FC<ChartWidgetProps> = ({data, field}) => {
+const ChartWidget: FC<ChartWidgetProps> = ({data, field, limitChartHeight}) => {
   const {m} = useI18n()
   const {translateField, translateOption} = useTranslations()
 
@@ -21,6 +21,7 @@ const ChartWidget: FC<ChartWidgetProps> = ({data, field}) => {
           (labels, {value, label}) => ({...labels, ...{[value]: label}}),
           {} as Record<string, string>,
         )}
+        limitChartHeight={limitChartHeight}
         includeNullish
       />
     </SlidePanel>

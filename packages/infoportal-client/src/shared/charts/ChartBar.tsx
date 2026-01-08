@@ -25,6 +25,7 @@ interface Props<K extends string> {
   descs?: Record<K, ReactNode>
   data?: Record<K, BarChartData>
   barHeight?: number
+  limitChartHeight?: number
 }
 
 export const ChartBar = <K extends string>(props: Props<K>) => {
@@ -55,6 +56,7 @@ export const ChartBarContent = <K extends string>({
   hideValue,
   onClickData,
   showLastBorder,
+  limitChartHeight,
 }: Omit<Props<K>, 'data'> & {data: NonNullable<Props<K>['data']>}) => {
   const {
     values,
@@ -88,7 +90,7 @@ export const ChartBarContent = <K extends string>({
   const {formatLargeNumber} = useI18n()
 
   return (
-    <Box sx={{overflow: 'hidden'}}>
+    <Box sx={limitChartHeight ? {maxHeight: limitChartHeight, overflowY: 'auto'} : {overflow: 'hidden'}}>
       {Obj.keys(data).length === 0 && (
         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <Icon color="disabled" sx={{fontSize: 40, mb: 1}}>

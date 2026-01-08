@@ -10,6 +10,7 @@ type OverviewProps = PdmDataConsumerProps & {
 }
 type ChartWidgetProps = PdmDataConsumerProps & {
   field: keyof Meal_ecrec_agMsmeVetPam.T
+  limitChartHeight?: number
 }
 
 export type {PdmDataConsumerProps, OverviewProps, ChartWidgetProps}
