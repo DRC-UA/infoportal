@@ -7,6 +7,7 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 import {CashOverview} from './components/Overview'
 import ReceivingAndUsage from './components/ReceiveingAndUsage'
+import RegistrationAndDelivery from './components/RegistrationAndDelivery'
 import SufficiencyAg from './components/SufficiencyAg'
 import {useCashAgMsmeVet} from './hooks'
 
@@ -34,6 +35,7 @@ const MealEcrecAgVetMsmeDashboard: FC = () => {
       />
       <CashOverview data={data} pdmType={filters.pdmtype} />
       <ReceivingAndUsage data={data} />
+      <RegistrationAndDelivery data={data} />
       {(filters.pdmtype === undefined || filters.pdmtype.length === 0 || filters.pdmtype.includes('cfg')) && (
         <SufficiencyAg data={agriData} />
       )}
