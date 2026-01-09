@@ -264,6 +264,9 @@ export class KoboMetaMapperProtection {
     const answer = Protection_counselling.map(row.answers)
     const persons = KoboXmlMapper.Persons.protection_counselling(answer)
     const project = DrcProjectHelper.search(Protection_counselling.options.project_code[answer.project_code!])
+    const isBhaAccompaniment: boolean =
+      (answer.actions_taken?.includes('accompaniment') && project === DrcProject['UKR-000388 BHA']) ?? false
+    const accompanimentClosureDate = answer.accompaniment_closure_date
 
     return KoboMetaMapper.make({
       office: match(answer.staff_to_insert_their_DRC_office)
@@ -281,14 +284,16 @@ export class KoboMetaMapperProtection {
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
       sector: DrcSector.GeneralProtection,
-      activity: DrcProgram.Counselling,
-      persons: persons,
+      activity: isBhaAccompaniment ? DrcProgram.ProtectionAccompaniment : DrcProgram.Counselling,
+      persons,
       displacement: persons[0]?.displacement,
       personsCount: persons.length,
       project: project ? [project] : [],
       donor: map(DrcProjectHelper.donorByProject[project!], (_) => [_]) ?? [],
-      status: KoboMetaStatus.Committed,
-      lastStatusUpdate: row.date,
+      status: isBhaAccompaniment
+        ? KoboMetaStatus[accompanimentClosureDate ? 'Committed' : 'Pending']
+        : KoboMetaStatus.Committed,
+      lastStatusUpdate: isBhaAccompaniment && accompanimentClosureDate ? accompanimentClosureDate : row.date,
       enumerator: answer.staff_code,
     })
   }

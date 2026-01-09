@@ -34,11 +34,12 @@ export namespace AiProtectionMapper {
       return api.koboMeta
         .search({
           activities: [
+            DrcProgram.CommunityLevelPm,
             DrcProgram.Counselling,
             DrcProgram.MHPSSActivities,
             DrcProgram.PGS,
             DrcProgram.ProtectionMonitoring,
-            DrcProgram.CommunityLevelPm,
+            DrcProgram.ProtectionAccompaniment,
             DrcProgram.Referral,
           ],
           status: [KoboMetaStatus.Committed],
@@ -139,6 +140,8 @@ export namespace AiProtectionMapper {
                   'Awareness raising - Protection & HLP > # of individuals who participated in awareness raising activities on Protection',
                 [DrcProgram.Referral]:
                   'Referral to specialized services > # of individuals with specific needs referred to specialized services and assistance (Internal/External referrals)',
+                [DrcProgram.ProtectionAccompaniment]:
+                  'Case management - Protection > # of individuals who received social accompaniment',
               } as const)
               .default(
                 () => `${aiInvalidValueFlag} acivity` as AiProtectionType.AiTypeActivitiesAndPeople['Indicators'],

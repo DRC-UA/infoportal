@@ -56,11 +56,11 @@ export namespace Protection_counselling {
     disability_status: undefined | Option<'accompaniment_need_identified'>
     // personal_data/registered_person_disability [select_one] Are you registered as a person with disability with the Government of Ukraine?
     registered_person_disability: undefined | Option<'accompaniment_need_identified'>
-    // intake/background_needs/not_disscuss [note] ####What is it that you'd like to discuss or share with me?  Listen to the person’s situation and reasons for seeking assistance,  Make sure you facilitate the discussion by using active listening skills and healing statements.  Depending on what you are told adjust your follow-up questions.
+    // intake/background_needs/not_disscuss [note] **What is it that you'd like to discuss or share with me? ** - Listen to the person’s situation and reasons for seeking assistance,  - Make sure you facilitate the discussion by using active listening skills and healing statements.  - Depending on what you are told adjust your follow-up questions.
     not_disscuss: string
     // intake/background_needs/discuss_notes [text] Notes:
     discuss_notes: string | undefined
-    // intake/protection_risk/not_detail [note] Detail here if the person is at heightened risk as a result of experiencing (exposure to) a violation of their rights and/or disproportionate barriers to accessing services and support
+    // intake/protection_risk/not_detail [note] **Detail here if the person is at heightened risk as a result of experiencing (exposure to) a violation of their rights and/or disproportionate barriers to accessing services and support**
     not_detail: string
     // intake/protection_risk/type_incident [select_multiple] Type Of Incident
     type_incident: undefined | Option<'type_incident'>[]
@@ -130,13 +130,15 @@ export namespace Protection_counselling {
     actions_taken_referral: undefined | Option<'actions_taken_referral'>
     // services_support/Provision_of_direct_assistance [select_one] Provision of direct assistance
     Provision_of_direct_assistance: undefined | Option<'Provision_of_direct_assistance'>
-    // services_support/accompaniment/accompaniment_note [note] Note to staff: this section should only be completed if social accompaniment is being provided
+    // services_support/accompaniment/accompaniment_note [note] **_Note to staff:_ this section should only be completed if social accompaniment is being provided**
     accompaniment_note: string
     // services_support/accompaniment/accompaniment_type [select_multiple] Type of social accompaniment:
     accompaniment_type: undefined | Option<'accompaniment_type'>[]
+    // services_support/accompaniment/accompaniment_type_other [text] _Other type of accompaniment:_
     accompaniment_type_other: string | undefined
     // services_support/accompaniment/accompaniment_institution [select_multiple] Service / Institution involved:
     accompaniment_institution: undefined | Option<'accompaniment_institution'>[]
+    // services_support/accompaniment/accompaniment_institution_other [text] _Other service / institution:_
     accompaniment_institution_other: string | undefined
     // services_support/accompaniment/accompaniment_planned_dates [begin_repeat] Planned dates:
     accompaniment_planned_dates: {accompaniment_planned_date: Date | undefined | undefined}[] | undefined
@@ -146,11 +148,13 @@ export namespace Protection_counselling {
     accompaniment_provision_dates: {accompaniment_provision_date: Date | undefined | undefined}[] | undefined
     // services_support/accompaniment/accompaniment_completion/accompaniment_actions [select_multiple] Actions completed:
     accompaniment_actions: undefined | Option<'accompaniment_actions'>[]
+    // services_support/accompaniment/accompaniment_completion/accompaniment_actions_challenges [text] _Any challenges encountered:_
     accompaniment_actions_challenges: string | undefined
     // services_support/accompaniment/accompaniment_completion/accompaniment_safety [select_one] Any boundary or safety issues identified?
     accompaniment_safety: undefined | Option<'accompaniment_need_identified'>
+    // services_support/accompaniment/accompaniment_completion/accompaniment_safety_actions_taken [text] _If yes, describe and escalation action taken:_
     accompaniment_safety_actions_taken: string | undefined
-    // services_support/accompaniment/accompaniment_completion/accompaniment_outcomes_subtitle [note] Follow-Up & Outcomes
+    // services_support/accompaniment/accompaniment_completion/accompaniment_outcomes_subtitle [note] **Follow-Up & Outcomes**
     accompaniment_outcomes_subtitle: string
     // services_support/accompaniment/accompaniment_completion/accompaniment_service_reached [select_one] Was the individual able to access the intended service?
     accompaniment_service_reached: undefined | Option<'accompaniment_service_reached'>
@@ -158,7 +162,7 @@ export namespace Protection_counselling {
     accompaniment_need_identified: undefined | Option<'accompaniment_need_identified'>
     // services_support/accompaniment/accompaniment_completion/accompaniment_need_identified_actions [text] If yes, describe the needs an actions taken:
     accompaniment_need_identified_actions: string | undefined
-    // services_support/accompaniment/accompaniment_completion/accompaniment_case_closure [note] Case Closure (only to be completed if the case is closed)
+    // services_support/accompaniment/accompaniment_completion/accompaniment_case_closure [note] **Case Closure (only to be completed if the case is closed)**
     accompaniment_case_closure: string
     // services_support/accompaniment/accompaniment_completion/accompaniment_closure_reason [select_multiple] Reason for closure:
     accompaniment_closure_reason: undefined | Option<'accompaniment_closure_reason'>[]
