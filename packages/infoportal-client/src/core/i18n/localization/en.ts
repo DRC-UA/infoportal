@@ -1445,6 +1445,7 @@ const en = Object.freeze({
         Observation: 'Observation',
         PSS: 'PSS',
         PeerToPeerTraining: 'Peer-to-peer training',
+        'Protection Accompaniment': 'Protection Accompaniment',
         ProtectionMonitoring: 'Protection Monitoring',
         PsychologicalFirstAid: 'Psychological First Aid',
         PsychosocialGroupSession: 'Psychosocial groupDisplay session',
