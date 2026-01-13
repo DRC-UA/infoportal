@@ -216,26 +216,74 @@ const PssDashboardWithContext: FC = () => {
                 </Box>
               </PanelBody>
             </Panel>
-            <Panel title={m.pssDashboard.inprovementStatsWidget.title(improvements.base)}>
-              <PanelBody
-                sx={{flexDirection: 'row', display: 'flex', gap: 2, justifyContent: 'space-between', paddingRight: 5}}
-              >
+            <Panel title={m.pssDashboard.inprovementStatsWidget.titleGeneral}>
+              <PanelBody sx={{flexDirection: 'row', display: 'flex', gap: 2, paddingRight: 5}}>
                 <ChartPieWidget
+                  sx={{flex: 1}}
                   color={theme.palette.success.main}
                   title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
-                  value={improvements.positive}
+                  value={improvements.general.positive}
                   base={improvements.base}
                 />
                 <ChartPieWidget
+                  sx={{flex: 1}}
                   color={theme.palette.warning.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.noChanges}</Txt>}
-                  value={improvements.noChange}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                  value={improvements.general.negative}
+                  base={improvements.base}
+                />
+              </PanelBody>
+            </Panel>
+            <Panel title={m.pssDashboard.inprovementStatsWidget.titleDistress}>
+              <PanelBody sx={{flexDirection: 'row', display: 'flex', gap: 2, paddingRight: 5}}>
+                <ChartPieWidget
+                  sx={{flex: 1}}
+                  color={theme.palette.success.main}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                  value={improvements.distress.positive}
                   base={improvements.base}
                 />
                 <ChartPieWidget
-                  color={theme.palette.error.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.worsened}</Txt>}
-                  value={improvements.negative}
+                  sx={{flex: 1}}
+                  color={theme.palette.warning.main}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                  value={improvements.distress.negative}
+                  base={improvements.base}
+                />
+              </PanelBody>
+            </Panel>
+            <Panel title={m.pssDashboard.inprovementStatsWidget.titleCoping}>
+              <PanelBody sx={{flexDirection: 'row', display: 'flex', gap: 2, paddingRight: 5}}>
+                <ChartPieWidget
+                  sx={{flex: 1}}
+                  color={theme.palette.success.main}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                  value={improvements.coping.positive}
+                  base={improvements.base}
+                />
+                <ChartPieWidget
+                  sx={{flex: 1}}
+                  color={theme.palette.warning.main}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                  value={improvements.coping.negative}
+                  base={improvements.base}
+                />
+              </PanelBody>
+            </Panel>
+            <Panel title={m.pssDashboard.inprovementStatsWidget.titleWho5}>
+              <PanelBody sx={{flexDirection: 'row', display: 'flex', gap: 2, paddingRight: 5}}>
+                <ChartPieWidget
+                  sx={{flex: 1}}
+                  color={theme.palette.success.main}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                  value={improvements.who5.positive}
+                  base={improvements.base}
+                />
+                <ChartPieWidget
+                  sx={{flex: 1}}
+                  color={theme.palette.warning.main}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                  value={improvements.who5.negative}
                   base={improvements.base}
                 />
               </PanelBody>

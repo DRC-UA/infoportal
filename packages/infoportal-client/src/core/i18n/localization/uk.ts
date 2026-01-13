@@ -174,11 +174,13 @@ const uk = deepmerge(en, {
         difference: 'Прогрес',
       },
       inprovementStatsWidget: {
-        title: (count: number) => `Статистика зміни стану ${count} людей`,
+        titleGeneral: `Загальна статистика покращення`,
+        titleDistress: `Рівень стресу`,
+        titleCoping: `Здатність долання`,
+        titleWho5: `Показники WHO5`,
         labels: {
           improved: 'Покращення',
-          noChanges: 'Без змін',
-          worsened: 'Погіршення',
+          noChanges: 'Без покращення',
         },
       },
     },

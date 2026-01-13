@@ -1538,11 +1538,13 @@ const en = Object.freeze({
         difference: 'Progress',
       },
       inprovementStatsWidget: {
-        title: (count: number) => `Improvement stats based of ${count} beneficiaries`,
+        titleGeneral: `General Improvement Figures`,
+        titleDistress: `Distress Level`,
+        titleCoping: `Coping Ability`,
+        titleWho5: `WHO5 figures`,
         labels: {
           improved: 'Improved',
-          noChanges: 'No changes',
-          worsened: 'Worsened',
+          notImproved: 'Not improved',
         },
       },
     },

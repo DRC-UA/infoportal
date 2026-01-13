@@ -167,39 +167,60 @@ const useSessionsCounter = (data: PssContext['data']) =>
   }, [data?.filtered])
 
 const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
-  const initialStats = {positive: 0, negative: 0, noChange: 0, base: 0}
+  const initialStats = {
+    general: {positive: 0, negative: 0},
+    distress: {positive: 0, negative: 0},
+    coping: {positive: 0, negative: 0},
+    who5: {positive: 0, negative: 0},
+    base: 0,
+  }
   const [improvements, setImprovements] = useState(initialStats)
   const [individuals, setIndividuals] = useState(0)
 
   useEffect(() => {
-    const {pgs} = groupBy({
+    const {pgs, ais} = groupBy({
       data,
       groups: [{by: ({activity}) => activity!}],
       finalTransform: (record) => record,
     }).groups
 
     setImprovements(
-      (pgs ?? [])
+      [...(pgs ?? []), ...(ais ?? [])]
         .filter(({type_testing}) => type_testing?.length === 2)
         .reduce(
           (
-            {base, positive, negative, noChange},
+            {base, general, distress, coping, who5},
             {cal_total_psychological_distress_changes, cal_total_psycosocial_coping_changes, cal_total_who_changes},
           ) => {
-            const distressImprovement = Math.sign(Number(cal_total_psychological_distress_changes)) ?? 0
+            const distressImprovement = Math.sign(Number(cal_total_psychological_distress_changes))
             const copingImprovement = Math.sign(Number(cal_total_psycosocial_coping_changes))
             const whoImprovement = Math.sign(Number(cal_total_who_changes))
 
-            const score = Math.sign(distressImprovement + copingImprovement + whoImprovement)
+            const generalScore = distressImprovement + copingImprovement + whoImprovement
 
             return {
               base: ++base,
-              positive,
-              negative,
-              noChange,
-              ...match(score)
-                .cases({1: {positive: ++positive}, [-1]: {negative: ++negative}})
-                .default({noChange: ++noChange}),
+              general: {
+                ...(generalScore >= 1 &&
+                ![distressImprovement, copingImprovement, whoImprovement].some((subScore) => subScore === -1)
+                  ? {positive: ++general.positive, negative: general.negative}
+                  : {positive: general.positive, negative: ++general.negative}),
+              },
+              distress: {
+                ...(distressImprovement === 1
+                  ? {positive: ++distress.positive, negative: distress.negative}
+                  : {positive: distress.positive, negative: ++distress.negative}),
+              },
+              coping: {
+                ...(copingImprovement === 1
+                  ? {positive: ++coping.positive, negative: coping.negative}
+                  : {positive: coping.positive, negative: ++coping.negative}),
+              },
+              who5: {
+                ...(whoImprovement === 1
+                  ? {positive: ++who5.positive, negative: who5.negative}
+                  : {positive: who5.positive, negative: ++who5.negative}),
+              },
             }
           },
           initialStats,
