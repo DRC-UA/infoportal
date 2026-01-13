@@ -1,8 +1,9 @@
-import {useMemo, Fragment, type FC} from 'react'
+import {Fragment, type FC} from 'react'
 import {format} from 'date-fns'
-import {Box, Typography} from '@mui/material'
+import {Box, Typography, useTheme} from '@mui/material'
+import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 
-import {capitalize, groupBy, OblastIndex, Person, Protection_pss, toPercent} from 'infoportal-common'
+import {capitalize, OblastIndex, Person, Protection_pss, toPercent} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
@@ -20,7 +21,7 @@ import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePlurals} from '@/utils'
 
 import {PssContextProvider, usePssContext} from './Context'
-import {useTranslations, useSessionsCounter} from './hooks'
+import {useStats, useTranslations, useSessionsCounter} from './hooks'
 import {colorByQuestion, prePostSummaryBuilder} from './utils'
 
 const LegendColorSample: FC<{background: string}> = ({background}) => <Box sx={{width: 30, background}}></Box>
@@ -40,6 +41,7 @@ const DashboardPss: FC = () => (
 const PssDashboardWithContext: FC = () => {
   const {data, fetcher, filters} = usePssContext()
   const {m, formatLargeNumber} = useI18n()
+  const theme = useTheme()
   const {translateOption, translateField} = useTranslations()
   const pluralizeIndividuals = usePlurals(m.plurals.individuals)
   const pluralizeUniqueIndividuals = usePlurals(m.plurals.uniqueIndividuals)
@@ -52,31 +54,7 @@ const PssDashboardWithContext: FC = () => {
   }
   const sessionsCounter = useSessionsCounter(data)
   const clearFilters = () => [filters.setFilters, filters.setPeriod].forEach((callback) => callback({}))
-
-  const distinctIndividuals = useMemo(
-    () =>
-      Object.entries(
-        groupBy({
-          data:
-            data?.flatFiltered
-              .flatMap(
-                ({persons, id}) =>
-                  persons?.map((person) => ({
-                    ...(person as Person.Details & {code_beneficiary: string}), // safe to cast due to a custom KoboXmlMapper.Persons.protection_pss mapper
-                    id,
-                  })) ?? [],
-              )
-              .compact() ?? [],
-          groups: [
-            {
-              by: ({code_beneficiary}) => code_beneficiary!,
-            },
-          ],
-          finalTransform: (input) => ({occurrences: input.length, ids: input?.map(({id}) => id)}),
-        }).groups,
-      ),
-    [data?.flatFiltered],
-  )
+  const {improvements, individuals} = useStats(data?.flatFiltered)
 
   const prePostTests = prePostSummaryBuilder(data?.filtered)
 
@@ -114,10 +92,10 @@ const PssDashboardWithContext: FC = () => {
           <SlideWidget
             sx={{flex: 1}}
             icon="person"
-            title={`${pluralizeUniqueIndividuals(distinctIndividuals.length)}*`}
+            title={`${pluralizeUniqueIndividuals(individuals)}*`}
             tooltip={m.pssDashboard.uniqueIndividualsHint}
           >
-            {distinctIndividuals.length}
+            {individuals}
           </SlideWidget>
         </Div>
         <Txt>{m.pssDashboard.sessionsCounterTitle}</Txt>
@@ -236,6 +214,30 @@ const PssDashboardWithContext: FC = () => {
                   <LegendItem color={colorByQuestion.post} label={m.pssDashboard.prePostWidget.post} />
                   <LegendItem color={colorByQuestion.difference} label={m.pssDashboard.prePostWidget.difference} />
                 </Box>
+              </PanelBody>
+            </Panel>
+            <Panel title={m.pssDashboard.inprovementStatsWidget.title(improvements.base)}>
+              <PanelBody
+                sx={{flexDirection: 'row', display: 'flex', gap: 2, justifyContent: 'space-between', paddingRight: 5}}
+              >
+                <ChartPieWidget
+                  color={theme.palette.success.main}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                  value={improvements.positive}
+                  base={improvements.base}
+                />
+                <ChartPieWidget
+                  color={theme.palette.warning.main}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.noChanges}</Txt>}
+                  value={improvements.noChange}
+                  base={improvements.base}
+                />
+                <ChartPieWidget
+                  color={theme.palette.error.main}
+                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.worsened}</Txt>}
+                  value={improvements.negative}
+                  base={improvements.base}
+                />
               </PanelBody>
             </Panel>
           </Div>

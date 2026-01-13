@@ -1537,6 +1537,14 @@ const en = Object.freeze({
         post: 'After',
         difference: 'Progress',
       },
+      inprovementStatsWidget: {
+        title: (count: number) => `Improvement stats based of ${count} beneficiaries`,
+        labels: {
+          improved: 'Improved',
+          noChanges: 'No changes',
+          worsened: 'Worsened',
+        },
+      },
     },
     cbpDashboard: {
       buttonLabel: 'CBP Pre / Post Tests Dashboard',

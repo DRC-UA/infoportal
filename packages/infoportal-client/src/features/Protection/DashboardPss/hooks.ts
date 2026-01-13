@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
-import {Seq, match} from '@axanc/ts-utils'
+import {seq, match, type Seq} from '@axanc/ts-utils'
 
-import {groupBy, PeriodHelper, Protection_pss, type Period} from 'infoportal-common'
+import {groupBy, PeriodHelper, Protection_pss, Person, type Period} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
@@ -10,7 +10,7 @@ import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 
 import type {PssContext} from './Context'
-import type {ProtectionPssWithPersons} from './types'
+import type {ProtectionPssWithPersons, ProtectionPssWithPersonsFlat} from './types'
 
 type UsePssFilter = ReturnType<typeof usePssFilters>
 
@@ -166,4 +166,69 @@ const useSessionsCounter = (data: PssContext['data']) =>
     }
   }, [data?.filtered])
 
-export {usePssFilters, useSessionsCounter, useTranslations, type UsePssFilter}
+const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
+  const initialStats = {positive: 0, negative: 0, noChange: 0, base: 0}
+  const [improvements, setImprovements] = useState(initialStats)
+  const [individuals, setIndividuals] = useState(0)
+
+  useEffect(() => {
+    const {pgs} = groupBy({
+      data,
+      groups: [{by: ({activity}) => activity!}],
+      finalTransform: (record) => record,
+    }).groups
+
+    setImprovements(
+      (pgs ?? [])
+        .filter(({type_testing}) => type_testing?.length === 2)
+        .reduce(
+          (
+            {base, positive, negative, noChange},
+            {cal_total_psychological_distress_changes, cal_total_psycosocial_coping_changes, cal_total_who_changes},
+          ) => {
+            const distressImprovement = Math.sign(Number(cal_total_psychological_distress_changes)) ?? 0
+            const copingImprovement = Math.sign(Number(cal_total_psycosocial_coping_changes))
+            const whoImprovement = Math.sign(Number(cal_total_who_changes))
+
+            const score = Math.sign(distressImprovement + copingImprovement + whoImprovement)
+
+            return {
+              base: ++base,
+              positive,
+              negative,
+              noChange,
+              ...match(score)
+                .cases({1: {positive: ++positive}, [-1]: {negative: ++negative}})
+                .default({noChange: ++noChange}),
+            }
+          },
+          initialStats,
+        ),
+    )
+
+    setIndividuals(
+      groupBy({
+        data:
+          data
+            .flatMap(
+              ({persons, id}) =>
+                persons?.map((person) => ({
+                  ...(person as Person.Details & {code_beneficiary: string}), // safe to cast due to a custom KoboXmlMapper.Persons.protection_pss mapper
+                  id,
+                })) ?? [],
+            )
+            .compact() ?? [],
+        groups: [
+          {
+            by: ({code_beneficiary}) => code_beneficiary!,
+          },
+        ],
+        finalTransform: (input) => ({occurrences: input.length, ids: input?.map(({id}) => id)}),
+      }).transforms.length,
+    )
+  }, [data])
+
+  return {improvements, individuals}
+}
+
+export {useStats, usePssFilters, useSessionsCounter, useTranslations, type UsePssFilter}
