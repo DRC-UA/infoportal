@@ -173,6 +173,14 @@ const uk = deepmerge(en, {
         post: 'Після',
         difference: 'Прогрес',
       },
+      inprovementStatsWidget: {
+        title: (count: number) => `Статистика зміни стану ${count} людей`,
+        labels: {
+          improved: 'Покращення',
+          noChanges: 'Без змін',
+          worsened: 'Погіршення',
+        },
+      },
     },
     cbpDashboard: {
       buttonLabel: 'Дешборд CBP тестів "до" і "після"',
