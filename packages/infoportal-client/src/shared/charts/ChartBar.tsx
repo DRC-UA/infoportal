@@ -1,13 +1,14 @@
-import * as React from 'react'
-import {ReactNode, useMemo, useState} from 'react'
+import {useMemo, useState, type ReactNode} from 'react'
 import {alpha, Box, Icon, TooltipProps} from '@mui/material'
 import {useTimeout} from '@alexandreannic/react-hooks-lib'
-import {useI18n} from '@/core/i18n'
-import {Txt} from '@/shared/Txt'
 import {Obj} from '@axanc/ts-utils'
-import {LightTooltip, TooltipRow} from '@/shared/LightTooltip'
+
 import {toPercent} from 'infoportal-common'
+
+import {useI18n} from '@/core/i18n'
 import {ChartDataVal} from '@/shared/charts/chartHelper'
+import {LightTooltip, TooltipRow} from '@/shared/LightTooltip'
+import {Txt} from '@/shared/Txt'
 
 export interface BarChartData extends ChartDataVal {
   color?: string
@@ -65,6 +66,7 @@ export const ChartBarContent = <K extends string>({
     // base,
     percents,
   } = useMemo(() => {
+    data
     const values = Obj.values(data) as BarChartData[]
     const maxValue = Math.max(...values.map((_) => _.value))
     const sumValue = values.reduce((sum, _) => _.value + sum, 0)
@@ -103,6 +105,7 @@ export const ChartBarContent = <K extends string>({
       )}
       {Obj.entries(data).map(([k, item], i) => {
         const percentOfMax = 100 * (item.base ? percents[i] / maxPercent : item.value / maxValue)
+
         return (
           <TooltipWrapper item={item} base={item.base ?? sumValue} sumValue={sumValue} key={i}>
             <Box sx={{display: 'flex', alignItems: 'center'}} onClick={() => onClickData?.(k, item)}>
@@ -212,9 +215,10 @@ const TooltipWrapper = ({
   sumValue: number
   item: BarChartData
 }) => {
-  const {formatLargeNumber} = useI18n()
-  const {m} = useI18n()
+  const {formatLargeNumber, m} = useI18n()
+
   if (item.disabled) return children
+
   return (
     <LightTooltip
       {...props}

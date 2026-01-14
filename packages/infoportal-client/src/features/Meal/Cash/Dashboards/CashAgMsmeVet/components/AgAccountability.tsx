@@ -5,7 +5,7 @@ import {Meal_ecrec_agMsmeVetPam} from 'infoportal-common'
 
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 
-import ChartWidget from './ChartWidget'
+import ChartBarWidget from './ChartBarWidget'
 import Subtitle from './Subtitle'
 import type {PdmSectionProps} from './types'
 
@@ -17,7 +17,7 @@ const AgAccountability: FC<PdmSectionProps> = ({data, title}) => (
         <Card>
           {(['any_member_household', 'any_member_household_yes'] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]).map(
             (field) => (
-              <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+              <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
             ),
           )}
         </Card>
@@ -29,7 +29,7 @@ const AgAccountability: FC<PdmSectionProps> = ({data, title}) => (
               'provide_someone_commission_yes_other',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
       </Div>
@@ -45,14 +45,14 @@ const AgAccountability: FC<PdmSectionProps> = ({data, title}) => (
               'know_address_suggestions_no_other',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
       </Div>
       <Div column>
         <Card>
           {(['submitted_feedback_complaint', 'comment'] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
       </Div>

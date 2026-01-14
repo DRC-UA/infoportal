@@ -5,7 +5,7 @@ import {Meal_ecrec_agMsmeVetPam} from 'infoportal-common'
 
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 
-import ChartWidget from './ChartWidget'
+import ChartBarWidget from './ChartBarWidget'
 import Subtitle from './Subtitle'
 import type {PdmSectionProps} from './types'
 
@@ -14,7 +14,7 @@ const AgSufficiency: FC<PdmSectionProps> = ({data, title}) => (
     <Subtitle text={title} />
     <Div responsive>
       <Div column>
-        <ChartWidget data={data} field="cash_modality_inkind" />
+        <ChartBarWidget data={data} field="cash_modality_inkind" />
         <Card>
           {(
             [
@@ -22,7 +22,7 @@ const AgSufficiency: FC<PdmSectionProps> = ({data, title}) => (
               'training_inductions_agricultural_yes',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
         <Card>
@@ -32,7 +32,7 @@ const AgSufficiency: FC<PdmSectionProps> = ({data, title}) => (
               'received_enough_agricultural_needs_long_other',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
       </Div>
@@ -49,7 +49,7 @@ const AgSufficiency: FC<PdmSectionProps> = ({data, title}) => (
               'planning_use_money',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
       </Div>
@@ -61,7 +61,7 @@ const AgSufficiency: FC<PdmSectionProps> = ({data, title}) => (
               'improve_planning_management_001',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
         <Card>
@@ -71,7 +71,7 @@ const AgSufficiency: FC<PdmSectionProps> = ({data, title}) => (
               'improve_planning_agricultural_001',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
       </Div>

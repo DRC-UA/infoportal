@@ -10,7 +10,7 @@ import {Panel, PanelBody} from '@/shared/Panel'
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 
 import {CashIndividuals} from './CashIndividuals'
-import ChartWidget from './ChartWidget'
+import ChartBarWidget from './ChartBarWidget'
 import Subtitle from './Subtitle'
 import type {OverviewProps} from './types'
 
@@ -40,7 +40,7 @@ const CashOverview: FC<OverviewProps> = ({data, pdmType}) => {
             <ChartBarSingleBy data={data} by={({pdmType}) => pdmType} label={Meal_cashPdm.options.pdmtype} />
           </SlidePanel>
           {(pdmType === undefined || pdmType.length === 0 || pdmType.includes('cfg')) && (
-            <ChartWidget data={data} field={'cfg_type'} />
+            <ChartBarWidget data={data} field={'cfg_type'} />
           )}
         </Div>
 

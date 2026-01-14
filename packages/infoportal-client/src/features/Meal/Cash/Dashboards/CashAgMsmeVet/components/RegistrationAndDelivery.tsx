@@ -5,7 +5,7 @@ import {Meal_ecrec_agMsmeVetPam} from 'infoportal-common'
 
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 
-import ChartWidget from './ChartWidget'
+import ChartBarWidget from './ChartBarWidget'
 import Subtitle from './Subtitle'
 import type {PdmSectionProps} from './types'
 
@@ -17,14 +17,14 @@ const RegistrationAndDelivery: FC<PdmSectionProps> = ({data, title}) => (
         <Card>
           {(['assistance_delivered', 'assistance_delivered_other'] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]).map(
             (field) => (
-              <ChartWidget key={field} data={data} field={field} />
+              <ChartBarWidget key={field} data={data} field={field} />
             ),
           )}
         </Card>
         <Card>
           {(['satisfied_process', 'satisfied_process_no'] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]).map(
             (field) => (
-              <ChartWidget key={field} data={data} field={field} />
+              <ChartBarWidget key={field} data={data} field={field} />
             ),
           )}
         </Card>
@@ -33,7 +33,7 @@ const RegistrationAndDelivery: FC<PdmSectionProps> = ({data, title}) => (
         <Card>
           {(['satisfied_cash_amount', 'satisfied_cash_amount_no'] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]).map(
             (field) => (
-              <ChartWidget key={field} data={data} field={field} />
+              <ChartBarWidget key={field} data={data} field={field} />
             ),
           )}
         </Card>
@@ -44,7 +44,7 @@ const RegistrationAndDelivery: FC<PdmSectionProps> = ({data, title}) => (
               'amount_cash_received_correspond_yes',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} />
+            <ChartBarWidget key={field} data={data} field={field} />
           ))}
         </Card>
       </Div>
@@ -62,7 +62,7 @@ const RegistrationAndDelivery: FC<PdmSectionProps> = ({data, title}) => (
               'better_inform_distribution_other',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} />
+            <ChartBarWidget key={field} data={data} field={field} />
           ))}
         </Card>
       </Div>

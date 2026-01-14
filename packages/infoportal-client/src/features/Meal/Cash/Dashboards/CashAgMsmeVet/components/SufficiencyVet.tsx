@@ -5,7 +5,7 @@ import {Meal_ecrec_agMsmeVetPam} from 'infoportal-common'
 
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 
-import ChartWidget from './ChartWidget'
+import ChartBarWidget from './ChartBarWidget'
 import Subtitle from './Subtitle'
 import type {PdmSectionProps} from './types'
 
@@ -18,7 +18,7 @@ const SufficiencyVet: FC<PdmSectionProps> = ({data, title}) => (
           {(
             ['enrol_vocational_center', 'enrol_vocational_center_no'] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
         <Card>
@@ -30,7 +30,7 @@ const SufficiencyVet: FC<PdmSectionProps> = ({data, title}) => (
               'training_type_other',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
         <Card>
@@ -42,7 +42,7 @@ const SufficiencyVet: FC<PdmSectionProps> = ({data, title}) => (
               'skills_usage_method_no',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
         <Card>
@@ -54,7 +54,7 @@ const SufficiencyVet: FC<PdmSectionProps> = ({data, title}) => (
               'believe_increase_no',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
       </Div>
@@ -62,14 +62,14 @@ const SufficiencyVet: FC<PdmSectionProps> = ({data, title}) => (
         <Card>
           {(['conf_using_skills', 'conf_using_skills_not'] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]).map(
             (field) => (
-              <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+              <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
             ),
           )}
         </Card>
         <Card>
           {(['job_started_vocational', 'job_started_vocational_no'] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]).map(
             (field) => (
-              <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+              <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
             ),
           )}
         </Card>
@@ -88,7 +88,7 @@ const SufficiencyVet: FC<PdmSectionProps> = ({data, title}) => (
               'income_sufficiency_no',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
       </Div>
@@ -108,7 +108,7 @@ const SufficiencyVet: FC<PdmSectionProps> = ({data, title}) => (
               'barriers_finding_job_other',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} limitChartHeight={456} />
+            <ChartBarWidget key={field} data={data} field={field} limitChartHeight={456} />
           ))}
         </Card>
       </Div>

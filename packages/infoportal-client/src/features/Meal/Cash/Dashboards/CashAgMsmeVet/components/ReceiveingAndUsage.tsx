@@ -5,7 +5,7 @@ import {Meal_ecrec_agMsmeVetPam} from 'infoportal-common'
 
 import {Div} from '@/shared/PdfLayout/PdfSlide'
 
-import ChartWidget from './ChartWidget'
+import ChartBarWidget from './ChartBarWidget'
 import Subtitle from './Subtitle'
 import type {PdmSectionProps} from './types'
 
@@ -15,11 +15,11 @@ const ReceivingAndUsage: FC<PdmSectionProps> = ({data, title}) => (
     <Div responsive>
       <Div column>
         {(['did_receive_cash', 'did_receive_cash_no'] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]).map((field) => (
-          <ChartWidget key={field} data={data} field={field} />
+          <ChartBarWidget key={field} data={data} field={field} />
         ))}
       </Div>
       <Div column>
-        <ChartWidget data={data} field={'spend_cash_received'} />
+        <ChartBarWidget data={data} field={'spend_cash_received'} />
       </Div>
       <Div column>
         <Card>
@@ -31,7 +31,7 @@ const ReceivingAndUsage: FC<PdmSectionProps> = ({data, title}) => (
               'spent_cash_assistance_received_dk',
             ] satisfies (keyof Meal_ecrec_agMsmeVetPam.T)[]
           ).map((field) => (
-            <ChartWidget key={field} data={data} field={field} />
+            <ChartBarWidget key={field} data={data} field={field} />
           ))}
         </Card>
       </Div>
