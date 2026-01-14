@@ -227,6 +227,7 @@ export namespace Legal_individual_aid {
           date_recipt_statuses_other: Date | undefined | undefined
           name_obtained_statuses_other: string | undefined | undefined
           document_received_assistance: undefined | Option<'case_referred_further'> | undefined
+          date_document_received_assistance: Date | undefined | undefined
           beneficiary_application_type: undefined | Option<'beneficiary_application_type'> | undefined
           type_application_assistance: undefined | Option<'type_application_assistance'>[] | undefined
           institution_accompanying_cases: string | undefined | undefined
@@ -350,14 +351,17 @@ export namespace Legal_individual_aid {
       yuliia_ivanenko: `Yuliia Ivanenko yuliia.ivanenko@drc.ngo – Lawyer UMY`,
       vladyslav_dudchenko: `Vladyslav Dudchenko vladyslav.dudchenko@drc.ngo – Lawyer UMY`,
       andrii_kozhykhov: `Andrii Kozhykhov andrii.kozhykhov@drc.ngo – Lawyer HRK`,
+      oleksii_lukianishyn: `Oleksii Lukianishyn oleksii.lukianishyn@drc.ngo – Lawyer HRK`,
       serhii_shkramada: `Serhii Shkramada serhii.shkramada@drc.ngo – Lawyer SLO`,
       roman_pikulin: `Roman Pikulin roman.pikulin@drc.ngo – Lawyer SLO`,
+      yevhen_dehtiarov: `Yevhen Dehtiarov yevhen.dehtiarov@drc.ngo – Lawyer SLO`,
       inna_fedorova: `Inna Fedorova inna.fedorova@drc.ngo - Protection (Legal) TL NLV/KHE`,
       valentyna_shavlak: `Valentyna Shavlak valentyna.shavlak@drc.ngo - Lawyer NLV`,
       vitalii_kolodystyi: `Vitalii Kolodystyi vitalii.kolodystyi@drc.ngo - Lawyer NLV`,
       andrii_bielikov: `Andrii Bielikov andrii.bielikov@drc.ngo - Lawyer NLV`,
-      mykhailo_obolentsev: `Mykhailo Obolentsev mykhailo.obolentsev@drc.ngo - Lawyer DNK`,
       volodymyr_kryvoruchko: `Volodymyr Kryvoruchko volodymyr.kryvoruchko@drc.ngo - Lawyer NLV`,
+      mykhailo_obolentsev: `Mykhailo Obolentsev mykhailo.obolentsev@drc.ngo - Lawyer DNK`,
+      yelyzaveta_haponova: `Yelyzaveta Haponova yelyzaveta.haponova@drc.ngo - Lawyer DNK`,
       khrystyna_malikova: `Khrystyna Malikova khrystyna.malikova@drc.ngo  - Lawyer DNK`,
       tetiana_demianova: `Tetiana Demianova tetiana.demianova@drc.ngo - Lawyer IEV`,
       expert_panel: `Expert Panel`,
@@ -3160,6 +3164,9 @@ export namespace Legal_individual_aid {
           : undefined
         _['date_recipt_statuses_other'] = _.date_recipt_statuses_other
           ? new Date(_.date_recipt_statuses_other)
+          : undefined
+        _['date_document_received_assistance'] = _.date_document_received_assistance
+          ? new Date(_.date_document_received_assistance)
           : undefined
         _['type_application_assistance'] = _.type_application_assistance?.split(' ')
         _['date_assisting_court'] = _.date_assisting_court ? new Date(_.date_assisting_court) : undefined
