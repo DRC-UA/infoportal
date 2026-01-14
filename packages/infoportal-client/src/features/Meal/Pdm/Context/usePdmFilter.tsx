@@ -1,8 +1,9 @@
 import {useMemo} from 'react'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {seq, type Seq} from '@axanc/ts-utils'
+
 import {useI18n} from '@/core/i18n'
-import {PdmData, PdmForm} from '@/features/Meal/Pdm/Context/MealPdmContext'
-import {Seq, seq} from '@axanc/ts-utils'
+import type {PdmData, PdmForm} from '@/features/Meal/Pdm/Context/MealPdmContext'
+import {DataFilter} from '@/shared/DataFilter/DataFilter'
 
 export const usePdmFilters = (data: Seq<PdmData<PdmForm>> = seq()) => {
   const {m} = useI18n()
@@ -13,36 +14,36 @@ export const usePdmFilters = (data: Seq<PdmData<PdmForm>> = seq()) => {
         oblast: {
           icon: 'location_on',
           label: m.oblast,
-          getValue: (_) => _.oblast,
+          getValue: ({oblast}) => oblast,
           getOptions: () =>
             DataFilter.buildOptions(
               data
-                .flatMap((_) => _.oblast!)
-                .distinct((_) => _)
+                .flatMap(({oblast}) => oblast!)
+                .distinct((oblast) => oblast)
                 .sort(),
             ),
         },
         office: {
           icon: 'share',
           label: m.office,
-          getValue: (_) => _.office,
+          getValue: ({office}) => office,
           getOptions: () =>
             DataFilter.buildOptions(
               data
-                .flatMap((_) => _.office!)
-                .distinct((_) => _)
+                .flatMap(({office}) => office!)
+                .distinct((office) => office)
                 .sort(),
             ),
         },
         project: {
           icon: 'business',
           label: m.project,
-          getValue: (_) => _.project,
+          getValue: ({project}) => project,
           getOptions: () =>
             DataFilter.buildOptions(
               data
-                .flatMap((_) => _.project!)
-                .distinct((_) => _)
+                .flatMap(({project}) => project!)
+                .distinct((project) => project)
                 .sort(),
             ),
         },
