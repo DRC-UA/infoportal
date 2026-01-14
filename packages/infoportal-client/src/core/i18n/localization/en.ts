@@ -1538,10 +1538,10 @@ const en = Object.freeze({
         difference: 'Progress',
       },
       inprovementStatsWidget: {
-        titleGeneral: `General Improvement Figures`,
-        titleDistress: `Distress Level`,
-        titleCoping: `Coping Ability`,
-        titleWho5: `WHO5 figures`,
+        titleGeneral: `General Improvement`,
+        titleDistress: `Psychological Distress (Mental Health)`,
+        titleCoping: `Psycosocial Coping (capacities to cope)`,
+        titleWho5: `WHO-5 (psychosocial well-being)`,
         labels: {
           improved: 'Improved',
           notImproved: 'Not improved',

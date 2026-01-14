@@ -174,10 +174,10 @@ const uk = deepmerge(en, {
         difference: 'Прогрес',
       },
       inprovementStatsWidget: {
-        titleGeneral: `Загальна статистика покращення`,
-        titleDistress: `Рівень стресу`,
-        titleCoping: `Здатність долання`,
-        titleWho5: `Показники WHO5`,
+        titleGeneral: 'Загальне покращення стану',
+        titleDistress: `Психологічний дистрес (Ментальне здоров'я)`,
+        titleCoping: 'Психосоціальний копінг (спроможність долати стресові ситуації)',
+        titleWho5: 'WHO-5 (психосоціальне благополуччя)',
         labels: {
           improved: 'Покращення',
           noChanges: 'Без покращення',
