@@ -187,6 +187,14 @@ const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
     setImprovements(
       [...(pgs ?? []), ...(ais ?? [])]
         .filter(({type_testing}) => type_testing?.length === 2)
+        .filter(
+          ({cal_total_psychological_distress_changes, cal_total_psycosocial_coping_changes, cal_total_who_changes}) =>
+            [
+              cal_total_psychological_distress_changes,
+              cal_total_psycosocial_coping_changes,
+              cal_total_who_changes,
+            ].every((record) => record !== undefined),
+        )
         .reduce(
           (
             {base, general, distress, coping, who5},
