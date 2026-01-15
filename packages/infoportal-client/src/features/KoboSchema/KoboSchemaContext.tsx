@@ -94,12 +94,15 @@ export const KoboSchemaProvider = ({defaultLangIndex = 0, children}: KoboSchemaP
 
 export const useKoboSchemaContext = ({autoFetch}: {autoFetch?: KoboFormName[]} = {}) => {
   const ctx = useContext<KoboSchemaContext>(Context)
+
   if (!ctx) throw Error('Cannot used useKoboSchemasContext outside of KoboSchemasProvider.')
+
   useEffect(() => {
     if (autoFetch)
       autoFetch.forEach((name) => {
         ctx.fetchByName(name)
       })
   }, [])
+
   return ctx
 }

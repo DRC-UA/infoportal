@@ -1,39 +1,35 @@
-import React, {useEffect} from 'react'
+import type {FC} from 'react'
 import {Outlet} from 'react-router-dom'
+
 import {KoboFormName} from 'infoportal-common'
+
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {CashPdmProvider} from '@/features/Meal/Cash/Context/CashContext'
 import {MealPdmProvider} from '@/features/Meal/Pdm/Context/MealPdmContext'
 import {MealWinterizationProvider} from '@/features/Meal/Winter/MealWinterizationContext'
 
-const WithSchemas: React.FC<{forms: KoboFormName[]}> = ({forms}) => {
-  const ctx = useKoboSchemaContext()
-  useEffect(() => { forms.forEach((f) => ctx.fetchByName(f)) }, [ctx, forms])
-  return <Outlet/>
-}
+export const CashPdmOutlet: FC = () => {
+  useKoboSchemaContext({autoFetch: ['meal_cashPdm', 'ecrec_cashRegistration', 'bn_pam']})
 
-export const CashPdmOutlet: React.FC = () => {
-  const ctx = useKoboSchemaContext()
-  useEffect(() => {
-    ctx.fetchByName('meal_cashPdm')
-    ctx.fetchByName('ecrec_cashRegistration')
-    ctx.fetchByName('bn_pam')
-  }, [ctx])
   return (
     <CashPdmProvider>
-      <Outlet/>
+      <Outlet />
     </CashPdmProvider>
   )
 }
 
-export const MealPdmOutlet: React.FC<{forms: KoboFormName[]}> = ({forms}) => (
-  <MealPdmProvider>
-    <WithSchemas forms={forms}/>
-  </MealPdmProvider>
-)
+export const MealPdmOutlet: FC<{forms: KoboFormName[]}> = ({forms}) => {
+  useKoboSchemaContext({autoFetch: forms})
 
-export const WinterizationOutlet: React.FC = () => (
+  return (
+    <MealPdmProvider>
+      <Outlet />
+    </MealPdmProvider>
+  )
+}
+
+export const WinterizationOutlet: FC = () => (
   <MealWinterizationProvider>
-    <Outlet/>
+    <Outlet />
   </MealWinterizationProvider>
 )
