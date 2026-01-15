@@ -1,14 +1,13 @@
+import type {ReactNode} from 'react'
 import {styled, Tooltip, tooltipClasses, TooltipProps} from '@mui/material'
-import * as React from 'react'
-import {ReactNode} from 'react'
+
 import {Txt} from '@/shared/Txt'
 
 export const LightTooltip = styled(({className, ...props}: TooltipProps) => (
   <Tooltip {...props} classes={{popper: className}} />
 ))(({theme}) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: 'rgba(0, 0, 0, 0.87)',
+    backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[3],
     fontSize: 11,
   },
@@ -18,7 +17,7 @@ export const TooltipRow = ({label, hint, value}: {label?: ReactNode; hint?: Reac
   return (
     <>
       {label && (
-        <Txt block sx={{mt: 0.5}}>
+        <Txt block color="default" sx={{mt: 0.5}}>
           {label}
         </Txt>
       )}

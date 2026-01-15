@@ -20,7 +20,6 @@ interface Props<K extends string> {
   showLastBorder?: boolean
   hideValue?: boolean
   dense?: boolean
-  // base?: number
   icons?: Record<K, string>
   labels?: Record<K, ReactNode>
   descs?: Record<K, ReactNode>
@@ -80,10 +79,6 @@ export const ChartBarContent = <K extends string>({
       percents,
     }
   }, [data])
-  // const values: HorizontalBarChartGoogleData[] = useMemo(() => Obj.values(data), [data])
-  // const maxValue = useMemo(() => Math.max(...values.map(_ => _.value)), [data])
-  // const sumValue = useMemo(() => values.reduce((sum, _) => _.value + sum, 0), [data])
-  // const percents = useMemo(() => values.map(_ => _.value / ((base ?? _.base) || sumValue) * 100), [data])
   const maxPercent = useMemo(() => Math.max(...percents), [percents])
   const {m} = useI18n()
   const [appeared, setAppeared] = useState<boolean>(false)
@@ -170,7 +165,6 @@ export const ChartBarContent = <K extends string>({
                           sx={{
                             flex: 1,
                             minWidth: 52,
-                            color: (t) => t.palette.primary.main,
                             fontWeight: (t) => t.typography.fontWeightBold,
                           }}
                         >
@@ -225,7 +219,7 @@ const TooltipWrapper = ({
       open={item.disabled ? false : undefined}
       title={
         <>
-          <Txt size="big" block bold>
+          <Txt size="big" color="default" block bold>
             {item.label}
           </Txt>
           {item.desc && (
@@ -253,10 +247,6 @@ const TooltipWrapper = ({
                 value={toPercent(item.value / sumValue)}
               />
             )}
-            {/*<TooltipRow label="% of answers" value={Math.ceil(percentOfAll) + ' %'}/>*/}
-            {/*{sumValue !== percentOfBase && (*/}
-            {/*  <TooltipRow label="% of peoples" value={Math.ceil(percentOfBase) + ' %'}/>*/}
-            {/*)}*/}
           </Box>
         </>
       }
