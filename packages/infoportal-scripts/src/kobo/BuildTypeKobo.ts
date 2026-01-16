@@ -473,6 +473,12 @@ export class BuildKoboType {
       protection_gbv_capacity_needs_assessment_2026: {
         formId: KoboIndex.byName('protection_gbv_capacity_needs_assessment_2026').id,
       },
+      lmw_winterization_uhf_2025_2026: {
+        formId: KoboIndex.byName('lmw_winterization_uhf_2025_2026').id,
+      },
+      shelter_modern_women: {
+        formId: KoboIndex.byName('shelter_modern_women').id,
+      },
     },
     (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>],
   )
