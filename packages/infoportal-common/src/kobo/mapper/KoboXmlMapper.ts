@@ -25,7 +25,6 @@ import {
   Legal_individual_aid,
   Legal_individual_aid_partners,
   Legal_pam,
-  Lmw_winterization_uhf_2025_2026,
   Meal_cashPdm,
   Meal_ecrec_agMsmeVetPam,
   Meal_eorePdm,
@@ -33,6 +32,7 @@ import {
   Meal_pssPdm,
   Meal_shelterPdm,
   Meal_winterizationPdm,
+  Mistosyly_winterization_uhf_2025_2026,
   Partner_lampa,
   Protection_communityMonitoring,
   Protection_counselling,
@@ -577,7 +577,7 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const lmw_winterization_uhf_2025_2026: PersonsMapper<Lmw_winterization_uhf_2025_2026.T> = common
+    export const mistosyly_winterization_uhf_2025_2026: PersonsMapper<Mistosyly_winterization_uhf_2025_2026.T> = common
 
     export const nfi_pdm: PersonsMapper<Meal_nfiPdm.T> = ({age, sex}) => {
       return [

@@ -1,4 +1,4 @@
-export namespace Lmw_winterization_uhf_2025_2026 {
+export namespace Mistosyly_winterization_uhf_2025_2026 {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   // Form id: aWzCBaF8eT9gBEpmBr2pwv
   export interface T {
