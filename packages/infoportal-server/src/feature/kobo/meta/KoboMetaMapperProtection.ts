@@ -232,6 +232,7 @@ export class KoboMetaMapperProtection {
     const answer = Protection_hhs3.map(row.answers)
     const persons = KoboXmlMapper.Persons.protection_hhs3(answer)
     const projects = safeArray(row.tags?.projects)
+
     if (answer.have_you_filled_out_this_form_before === 'yes' || answer.present_yourself === 'no') return
 
     return KoboMetaMapper.make({
@@ -242,6 +243,7 @@ export class KoboMetaMapperProtection {
           kharkiv: DrcOffice.Kharkiv,
           lviv: DrcOffice.Lviv,
           mykolaiv: DrcOffice.Mykolaiv,
+          slovyansk: DrcOffice.Sloviansk,
           sumy: DrcOffice.Sumy,
         })
         .default(() => undefined),
