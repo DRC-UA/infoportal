@@ -221,7 +221,7 @@ export class KoboMetaMapperProtection {
       sector: DrcSector.GeneralProtection,
       activity: DrcProgram.Referral,
       status: KoboMetaStatus.Committed,
-      lastStatusUpdate: answer.month_provision,
+      lastStatusUpdate: answer.month_provision ?? answer.date_closure,
       personsCount: 1,
       persons: KoboXmlMapper.Persons.protection_referral(answer),
       enumerator: answer.staff_code,
