@@ -43,6 +43,7 @@ const uk = deepmerge(en, {
     dashboards: 'Дешборди',
     topic: 'Тема',
     testType: 'Тип тесту',
+    all: 'Всі',
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {

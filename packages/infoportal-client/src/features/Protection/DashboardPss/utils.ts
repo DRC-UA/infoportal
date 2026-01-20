@@ -1,8 +1,8 @@
 import type {Seq} from '@axanc/ts-utils'
 
-import {Protection_pss} from 'infoportal-common'
+import {groupBy, Protection_pss, Person} from 'infoportal-common'
 
-import type {ProtectionPssWithPersons} from './types'
+import type {ProtectionPssWithPersons, ProtectionPssWithPersonsFlat} from './types'
 
 const prePostSummaryBuilder = (
   data?: Seq<ProtectionPssWithPersons>,
@@ -81,4 +81,25 @@ const colorByQuestion: Record<string, string> = Object.fromEntries(
   ['pre', 'post', 'difference'].map((q, i) => [q, baseColors[i % baseColors.length]]),
 )
 
-export {colorByQuestion, prePostSummaryBuilder}
+const pickUnique = (data: Seq<ProtectionPssWithPersonsFlat>): Person.Details[] =>
+  groupBy({
+    data:
+      data
+        .flatMap(
+          ({persons, id}) =>
+            persons?.map((person) => ({
+              ...(person as Person.Details & {code_beneficiary: string}),
+              id,
+            })) ?? [],
+        )
+        .compact() ?? [],
+    groups: [
+      {
+        by: ({code_beneficiary}) => code_beneficiary!,
+      },
+    ],
+    finalTransform: (input) =>
+      input.flatMap(({age, gender, displacement, disability}) => ({age, gender, displacement, disability}))[0],
+  }).transforms
+
+export {colorByQuestion, prePostSummaryBuilder, pickUnique}

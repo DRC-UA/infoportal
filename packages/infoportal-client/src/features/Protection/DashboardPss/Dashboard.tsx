@@ -1,6 +1,6 @@
-import {Fragment, type FC} from 'react'
+import {useState, Fragment, type FC} from 'react'
 import {format} from 'date-fns'
-import {Box, Typography, useTheme} from '@mui/material'
+import {Box, Typography, Switch, useTheme} from '@mui/material'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 
 import {capitalize, OblastIndex, Person, Protection_pss, toPercent} from 'infoportal-common'
@@ -22,7 +22,7 @@ import {usePlurals} from '@/utils'
 
 import {PssContextProvider, usePssContext} from './Context'
 import {useStats, useTranslations, useSessionsCounter} from './hooks'
-import {colorByQuestion, prePostSummaryBuilder} from './utils'
+import {colorByQuestion, pickUnique, prePostSummaryBuilder} from './utils'
 
 const LegendColorSample: FC<{background: string}> = ({background}) => <Box sx={{width: 30, background}}></Box>
 const LegendItem: FC<{color: string; label: string}> = ({color, label}) => (
@@ -42,6 +42,7 @@ const PssDashboardWithContext: FC = () => {
   const {data, fetcher, filters} = usePssContext()
   const {m, formatLargeNumber} = useI18n()
   const theme = useTheme()
+  const [showUnique, setShowUnique] = useState(true)
   const {translateOption, translateField} = useTranslations()
   const pluralizeIndividuals = usePlurals(m.plurals.individuals)
   const pluralizeUniqueIndividuals = usePlurals(m.plurals.uniqueIndividuals)
@@ -55,8 +56,8 @@ const PssDashboardWithContext: FC = () => {
   const sessionsCounter = useSessionsCounter(data)
   const clearFilters = () => [filters.setFilters, filters.setPeriod].forEach((callback) => callback({}))
   const {improvements, individuals} = useStats(data?.flatFiltered)
-
   const prePostTests = prePostSummaryBuilder(data?.filtered)
+  const toggleUniqueness = () => setShowUnique((prev) => !prev)
 
   if (!data) return null
 
@@ -301,11 +302,21 @@ const PssDashboardWithContext: FC = () => {
                 />
               </PanelBody>
             </Panel>
-            <Panel title={m.ageGroup}>
+            <Panel
+              title={
+                <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+                  {m.ageGroup}{' '}
+                  <Box>
+                    {m.all} <Switch onChange={toggleUniqueness} checked={showUnique} color="primary" />{' '}
+                    {m.plurals.uniqueIndividuals.other}
+                  </Box>
+                </Box>
+              }
+            >
               <PanelBody>
                 <AgeGroupTable
                   tableId="protection-dashboard"
-                  persons={data.flatFiltered}
+                  persons={showUnique ? pickUnique(data.flatFiltered) : data.flatFiltered}
                   enableDisplacementStatusFilter
                   enablePwdFilter
                 />
