@@ -197,6 +197,7 @@ export class KoboMetaMapperProtection {
       )
     )
       return
+
     const project = DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project_code))
     const projects = project ? [project] : []
 
@@ -378,6 +379,7 @@ export class KoboMetaMapperProtection {
         )
         .filter((_) => _ !== undefined) ?? []
     if (activities.length === 0) return
+
     const persons = KoboXmlMapper.Persons.protection_gbv(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.ben_det_oblast!)
     const project = match(answer.project)
@@ -390,6 +392,7 @@ export class KoboMetaMapperProtection {
         ukr000355_dfma: DrcProject['UKR-000355 Danish MFA'],
         ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
         ukr000386_pooled_funds: DrcProject['UKR-000386 Pooled Funds'],
+        ukr000388_bha: DrcProject['UKR-000388 BHA'],
         ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
       })
       .default(() => DrcProjectHelper.search(Protection_gbv.options.project[answer.project!] ?? answer.project))

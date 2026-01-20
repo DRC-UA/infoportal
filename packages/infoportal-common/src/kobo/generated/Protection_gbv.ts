@@ -141,6 +141,7 @@ export namespace Protection_gbv {
       ukr000363_uhf8: `UKR-000363 (UHF VIII)`,
       ukr000372_echo3: `UKR-000372 (ECHO)`,
       ukr000386_pooled_funds: `UKR-000386 (Pooled Funds)`,
+      ukr000388_bha: `UKR-000388 (BHA)`,
       ukr000423_echo4: `UKR-000423 (ECHO)`,
     },
     location: {
