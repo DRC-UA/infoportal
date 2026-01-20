@@ -99,7 +99,9 @@ const pickUnique = (data: Seq<ProtectionPssWithPersonsFlat>): Person.Details[] =
       },
     ],
     finalTransform: (input) =>
-      input.flatMap(({age, gender, displacement, disability}) => ({age, gender, displacement, disability}))[0],
+      input.flatMap(({age, gender, displacement, disability}) => {
+        return {age, gender, displacement, disability}
+      })[0],
   }).transforms
 
 export {colorByQuestion, prePostSummaryBuilder, pickUnique}

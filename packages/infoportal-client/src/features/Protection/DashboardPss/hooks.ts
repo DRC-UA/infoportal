@@ -246,6 +246,7 @@ const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
                   id,
                 })) ?? [],
             )
+            .filter(({code_beneficiary}) => code_beneficiary !== undefined)
             .compact() ?? [],
         groups: [
           {
