@@ -92,6 +92,7 @@ const pickUnique = (data: Seq<ProtectionPssWithPersonsFlat>): Person.Details[] =
               id,
             })) ?? [],
         )
+        .filter(({code_beneficiary}) => code_beneficiary !== undefined)
         .compact() ?? [],
     groups: [
       {
