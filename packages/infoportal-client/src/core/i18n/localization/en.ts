@@ -147,6 +147,7 @@ const en = Object.freeze({
     grantAccess: 'Grant access',
     title: 'InfoPortal (IP)',
     noDataAtm: 'No data at the moment',
+    missingOrFaulty: 'Missing or faulty data',
     fileName: 'File name',
     subTitle: 'Ukraine',
     signIn: 'Sign-in',
@@ -1545,6 +1546,17 @@ const en = Object.freeze({
         labels: {
           improved: 'Improved',
           notImproved: 'Not improved',
+        },
+      },
+    },
+    gbvPrePostDahsboard: {
+      buttonLabel: 'GBV Pre / Post Tests',
+      widgets: {
+        scoresByTopic: {
+          title: 'Scores By Topic',
+        },
+        map: {
+          title: 'Tests By Oblasts',
         },
       },
     },

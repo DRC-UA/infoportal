@@ -11,6 +11,7 @@ const uk = deepmerge(en, {
     area: 'Область',
     answers: 'Відповіді',
     noDataAtm: 'На даний момент немає даних',
+    missingOrFaulty: 'Брак або невірні дані',
     seeResults: 'Переглянути результати',
     select3Outcomes: 'Будь ласка, виберіть 3 результати',
     somethingWentWrong: 'Щось пішло не так',
@@ -185,8 +186,19 @@ const uk = deepmerge(en, {
         },
       },
     },
+    gbvPrePostDahsboard: {
+      buttonLabel: 'ҐЗН Тести "до" і "після"',
+      widgets: {
+        scoresByTopic: {
+          title: 'Бали за темами',
+        },
+        map: {
+          title: 'Тести за областями',
+        },
+      },
+    },
     cbpDashboard: {
-      buttonLabel: 'Дешборд CBP тестів "до" і "після"',
+      buttonLabel: 'CBP тести "до" і "після"',
       mapTitle: 'Записи за областями',
       prePostTestScores: 'Бали за тестами "до" і "після"',
       progressLabel: 'Прогрес',
