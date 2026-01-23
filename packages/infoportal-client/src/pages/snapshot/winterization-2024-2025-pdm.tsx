@@ -1,5 +1,5 @@
-import React from 'react'
-import {GlobalStyles, ThemeProvider} from '@mui/material'
+import {ThemeProvider} from '@mui/material'
+
 import {muiTheme} from '@/core/theme'
 import {WinterizationSnapshot} from '@/features/Snapshot/Winterization'
 
