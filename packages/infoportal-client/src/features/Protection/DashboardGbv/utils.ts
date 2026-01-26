@@ -56,13 +56,14 @@ const groupTrainingsByTopic = (
 const sanitizeTests = (tests: TestResult[]) => {
   return tests.reduce(
     (accum, current) => {
-      if (
-        tests.length !== 2 ||
-        tests.filter(({type}) => type === 'post').length !== 1 ||
-        tests.filter(({type}) => type === 'pre').length !== 1 ||
-        tests.some(({score}) => score === undefined)
-      ) {
-        return {issues: true} as const
+      const preTests = tests.filter(({type}) => type === 'pre')
+      const postTests = tests.filter(({type}) => type === 'post')
+      const missingScore = tests.some(({score}) => score === undefined)
+
+      if (preTests.length !== 1 || postTests.length !== 1 || missingScore) {
+        return {
+          issues: true,
+        } as const
       }
 
       if (current.type === 'pre') {

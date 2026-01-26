@@ -3,7 +3,7 @@ import {Icon, Box, Typography} from '@mui/material'
 import {FilterAlt} from '@mui/icons-material'
 import {seq} from '@axanc/ts-utils'
 
-import {capitalize, OblastIndex, Protection_gbv_concepts_pre_post, toPercent} from 'infoportal-common'
+import {capitalize, OblastIndex, toPercent} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
 import {Page} from '@/shared'
@@ -19,8 +19,6 @@ import {usePlurals} from '@/utils'
 import {useTranslations, useGbvConceptsFilters} from './hooks'
 import {colorByQuestion, groupTrainingsByTopic, meanCounter, sanitizeTests} from './utils'
 import type {Scores} from './types'
-
-type Topics = Exclude<Protection_gbv_concepts_pre_post.T['topic'], undefined>
 
 const GbvConceptsDashboard: FC = () => {
   const {count, data, filters, setFilters, loading, shape, period, setPeriod, stats} = useGbvConceptsFilters()
@@ -119,7 +117,8 @@ const GbvConceptsDashboard: FC = () => {
                 return (
                   <PanelBody key={topic}>
                     <Typography mb={2}>
-                      {translateOption('topic')?.find(({value}) => value === topic)?.label}
+                      {translateOption('topic')?.find(({value}) => value === topic)?.label ??
+                        'Topic subject not specified'}
                     </Typography>
                     {scores.length > 0 ? (
                       <ChartBarVerticalGrouped

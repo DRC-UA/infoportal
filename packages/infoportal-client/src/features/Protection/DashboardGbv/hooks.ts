@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo} from 'react'
-import {seq, match, type Seq} from '@axanc/ts-utils'
+import {seq, match} from '@axanc/ts-utils'
 
-import {groupBy, PeriodHelper, Protection_gbv_concepts_pre_post, Regexp, type Period} from 'infoportal-common'
+import {groupBy, PeriodHelper, Protection_gbv_concepts_pre_post, type Period} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
@@ -44,7 +44,7 @@ const useGbvConceptsFilters = () => {
   )
   const schemaContext = useKoboSchemaContext({autoFetch: ['protection_gbv_concepts_pre_post']})
   const gbvConceptsFetcher = useKoboAnswersContext().byName('protection_gbv_concepts_pre_post')
-  const {translateOption, translateField} = useTranslations()
+  const {translateOption} = useTranslations()
 
   useEffect(() => {
     gbvConceptsFetcher.fetch()
