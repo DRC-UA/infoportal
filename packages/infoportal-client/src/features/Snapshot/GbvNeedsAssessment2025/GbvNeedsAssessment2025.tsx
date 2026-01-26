@@ -14,9 +14,11 @@ const GbvNeedsAssessment2025 = () => {
   const ctxAnswers = useKoboAnswersContext()
   const fetcher = ctxAnswers.byName('protection_gbv_capacity_needs_assessment_2026')
 
-  useEffect(() => {
-    fetcher.fetch()
-  }, [])
+  if (typeof window !== undefined) {
+    useEffect(() => {
+      fetcher.fetch()
+    }, [])
+  }
 
   return (
     <Pdf sx={{width: '21cm'}}>

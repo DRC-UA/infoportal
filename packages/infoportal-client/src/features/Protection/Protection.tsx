@@ -19,6 +19,7 @@ import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
 
 import DashboardCbp from './DashboardCbp'
 import DashboardPss from './DashboardPss'
+import DashboardGbv from './DashboardGbv'
 
 const relatedKoboForms: KoboFormName[] = [
   'cbp_pre_post',
@@ -35,6 +36,7 @@ export const protectionIndex = {
   siteMap: {
     dashboard: '/dashboard',
     dashboardPss: '/dashboard-pss',
+    dashboardGbv: '/dashboard-gbv',
     dashboardCbp: '/dashboard-cbp',
     dashboardTabs: '/dashboard-tabs',
     form: (id = ':id') => '/form/' + id,
@@ -61,6 +63,13 @@ export const ProtectionSidebar = () => {
             {({isActive}) => (
               <SidebarItem icon={appConfig.icons.dashboard} active={isActive} size="tiny">
                 {m.pssDashboard.buttonLabel}
+              </SidebarItem>
+            )}
+          </NavLink>
+          <NavLink to={path(protectionIndex.siteMap.dashboardGbv)}>
+            {({isActive}) => (
+              <SidebarItem icon={appConfig.icons.dashboard} active={isActive} size="tiny">
+                {m.gbvPrePostDahsboard.buttonLabel}
               </SidebarItem>
             )}
           </NavLink>
@@ -128,6 +137,7 @@ export const Protection = () => {
       <Routes>
         <Route path={protectionIndex.siteMap.dashboard} element={<ProtectionOverview />} />
         <Route path={protectionIndex.siteMap.dashboardPss} element={<DashboardPss />} />
+        <Route path={protectionIndex.siteMap.dashboardGbv} element={<DashboardGbv />} />
         <Route path={protectionIndex.siteMap.dashboardCbp} element={<DashboardCbp />} />
         <Route path="/dashboard-tabs" element={<ProtectionDashboardTabs />} />
         {relatedKoboForms.map((_) => (

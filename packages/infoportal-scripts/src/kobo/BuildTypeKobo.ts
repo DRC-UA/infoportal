@@ -479,6 +479,9 @@ export class BuildKoboType {
       shelter_modern_women: {
         formId: KoboIndex.byName('shelter_modern_women').id,
       },
+      protection_gbv_concepts_pre_post: {
+        formId: KoboIndex.byName('protection_gbv_concepts_pre_post').id,
+      },
     },
     (k, v) => [k, {formName: capitalize(k), ...v} as Omit<KoboInterfaceGeneratorParams, 'outDir'>],
   )

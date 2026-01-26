@@ -14,7 +14,7 @@ const Page3 = () => {
   const {m} = useI18n()
   const ctxAnswers = useKoboAnswersContext()
   const fetcher = ctxAnswers.byName('protection_gbv_capacity_needs_assessment_2026')
-  const {translateOption, translateField} = useTranslations()
+  const {translateOption} = useTranslations()
 
   const data = useMemo(() => seq(fetcher.get?.data ?? []), [fetcher.get])
 

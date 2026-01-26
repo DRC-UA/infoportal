@@ -18,7 +18,7 @@ export const MapSvgByOblast = <D extends Record<string, any>>({
   value?: (_: D) => boolean
   base?: (_: D) => boolean
   total?: number
-  getOblast: (_: D) => OblastISO
+  getOblast: (_: D) => OblastISO | undefined
   data: Seq<D>
   legend?: boolean
 } & Pick<BoxProps, 'sx'>) => {

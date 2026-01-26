@@ -36,6 +36,7 @@ import {
   Protection_coc,
   Protection_gbv,
   Protection_gbvSocialProviders,
+  Protection_gbv_concepts_pre_post,
   Protection_groupSession,
   Protection_hhs3,
   Protection_pfa_training_test,
@@ -591,6 +592,13 @@ export class KoboTypedAnswerSdk {
         req({
           formId: KoboIndex.byName('protection_gbv_capacity_needs_assessment_2026').id,
           fnMapKobo: Protection_gbv_capacity_needs_assessment_2026.map,
+          ...filters,
+        }),
+      ),
+      ...make('protection_gbv_concepts_pre_post', (filters?: KoboAnswerFilter) =>
+        req({
+          formId: KoboIndex.byName('protection_gbv_concepts_pre_post').id,
+          fnMapKobo: Protection_gbv_concepts_pre_post.map,
           ...filters,
         }),
       ),
