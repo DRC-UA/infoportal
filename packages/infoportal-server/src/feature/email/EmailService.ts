@@ -1,14 +1,18 @@
-import {GlobalEvent} from '../../core/GlobalEvent.js'
-import {EmailClient} from './EmailClient.js'
-import {KoboCustomDirective, KoboIndex, Regexp} from 'infoportal-common'
-import {app} from '../../index.js'
-import {UserService} from '../user/UserService.js'
+import {Obj, duration, seq} from '@axanc/ts-utils'
 import {PrismaClient} from '@prisma/client'
+import {Kobo} from 'kobo-sdk'
+
+import {KoboCustomDirective, KoboIndex, Regexp} from 'infoportal-common'
+
+import {GlobalEvent} from '../../core/GlobalEvent.js'
+import {app, AppCacheKey} from '../../index.js'
 import {FrontEndSiteMap} from '../../core/FrontEndSiteMap.js'
 import {appConf} from '../../core/conf/AppConf.js'
+
 import {KoboService} from '../kobo/KoboService.js'
-import {Obj, seq} from '@axanc/ts-utils'
-import {Kobo} from 'kobo-sdk'
+import {UserService} from '../user/UserService.js'
+
+import {EmailClient} from './EmailClient.js'
 
 export enum EmailContext {
   Cfm = 'Cfm',
@@ -35,8 +39,15 @@ export class EmailService {
     this.event.listen(GlobalEvent.Event.KOBO_ANSWER_NEW, this.sendEmailIfTriggered)
   }
 
+  private readonly getCachedSchema = app.cache.request({
+    key: AppCacheKey.KoboSchema,
+    genIndex: (p: {formId: string}) => p.formId,
+    ttlMs: duration(1, 'hour').toMs,
+    fn: async (p: {formId: string}) => await this.koboService.getSchema(p),
+  })
+
   readonly sendEmailIfTriggered = async (p: GlobalEvent.KoboAnswerEditedParams) => {
-    const schema = await this.koboService.getSchema({formId: p.formId})
+    const schema = await this.getCachedSchema({formId: p.formId})
     const toSend_names = Obj.keys(p.answer).filter((_) => _.startsWith(KoboCustomDirective.make('TRIGGER_EMAIL')))
     const toSend_questions = schema.content.survey.filter((_) => toSend_names.includes(_.name))
     await Promise.all(toSend_questions.map((_) => this.sendByQuestion(_, p)))
@@ -102,9 +113,9 @@ export class EmailService {
             Hello ${userName ?? ''},<br/><br/>
             A new CFM request has been assigned to you as the focal point in InfoPortal.<br/>
             <i>This email is an automatic notification sent from InfoPortal.</i>
-            <br/>   
+            <br/>
             <a href="${link}">Link to request</a>
-            <br/><br/> 
+            <br/><br/>
             Thank you!
           `,
         })

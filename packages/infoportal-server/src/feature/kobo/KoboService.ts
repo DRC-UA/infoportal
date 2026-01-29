@@ -1,4 +1,4 @@
-import {duration, match, Obj, seq} from '@axanc/ts-utils'
+import {chunkify, duration, match, Obj, seq} from '@axanc/ts-utils'
 import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
 import {format} from 'date-fns'
 import {Kobo} from 'kobo-sdk'
@@ -239,12 +239,30 @@ export class KoboService {
     return this.prisma.koboAnswers.create({data: KoboService.mapKoboAnswer(formId, answer)})
   }
 
-  readonly createMany = (formId: Kobo.FormId, answers: KoboSubmission[]) => {
+  readonly createMany = async (formId: Kobo.FormId, answers: KoboSubmission[]) => {
+    this.log.info(`createMany: Starting insertion of ${answers.length} answers for form ${formId}`)
     const inserts = answers.map((_) => KoboService.mapKoboAnswer(formId, _))
-    return this.prisma.koboAnswers.createMany({
+
+    let totalInserted = 0
+    let chunkIndex = 0
+    await chunkify({
+      size: this.conf.db.maxPreparedStatementParams,
       data: inserts,
-      skipDuplicates: true,
+      fn: async (chunk) => {
+        try {
+          const result = await this.prisma.koboAnswers.createMany({
+            data: chunk,
+            skipDuplicates: true,
+          })
+          totalInserted += result.count
+          return result
+        } catch (error) {
+          this.log.error(`createMany: Error inserting chunk ${chunkIndex}: ${error}`, {error})
+          throw error
+        }
+      },
     })
+    this.log.info(`createMany: Completed insertion. Total records inserted: ${totalInserted} out of ${answers.length}`)
   }
 
   // readonly generateXLSForHHS = async ({start, end}: {start?: Date, end?: Date}) => {
