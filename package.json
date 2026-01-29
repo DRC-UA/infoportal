@@ -28,7 +28,7 @@
     "tsx": "^4.19.3"
   },
   "dependencies": {
-    "kobo-sdk": "^2.5.0",
+    "kobo-sdk": "^2.5.3",
     "mime-types": "^3.0.1"
   },
   "overrides": {
