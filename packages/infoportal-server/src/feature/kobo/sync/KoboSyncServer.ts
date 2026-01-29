@@ -1,5 +1,5 @@
 import {chunkify, seq} from '@axanc/ts-utils'
-import {Prisma, PrismaClient} from '@prisma/client'
+import {PrismaClient} from '@prisma/client'
 import {Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
 
 import {KoboHelper, KoboIndex, KoboSubmission, logPerformance, UUID} from 'infoportal-common'
@@ -207,35 +207,25 @@ export class KoboSyncServer {
     const handleCreate = async () => {
       const notInsertedAnswers = remoteAnswers.filter((_) => !localAnswersIndex.has(_.id))
       this.debug(formId, `Handle create (${notInsertedAnswers.length})...`)
-      await this.service.createMany(formId, notInsertedAnswers)
-      const inserts = notInsertedAnswers.map((_) => {
-        const res: Prisma.KoboAnswersUncheckedCreateInput = {
-          formId,
-          answers: _.answers,
-          id: _.id,
-          uuid: _.uuid,
-          date: _.date,
-          start: _.start,
-          end: _.end,
-          submissionTime: _.submissionTime,
-          validationStatus: _.validationStatus,
-          lastValidatedTimestamp: _.lastValidatedTimestamp,
-          validatedBy: _.validatedBy,
-          version: _.version,
-          // source: serverId,
-          attachments: _.attachments,
-        }
+
+      // Pre-fetch and cache the schema to avoid rate-limiting when emitting many events
+      // This ensures the schema is in cache before email notifications try to fetch it
+      this.debug(formId, `Pre-caching schema to avoid API requests rate-limiting...`)
+      const koboService = new KoboService(this.prisma)
+      await koboService.getSchema({formId})
+      this.debug(formId, `Schema cached.`)
+
+      // Emit events for each new answer before creation
+      notInsertedAnswers.forEach((_) => {
         this.event.emit(GlobalEvent.Event.KOBO_ANSWER_NEW, {
           formId,
           answerIds: [_.id],
           answer: _.answers,
         })
-        return res
       })
-      await this.prisma.koboAnswers.createMany({
-        data: inserts,
-        skipDuplicates: true,
-      })
+
+      // Create all answers in batches using the service
+      await this.service.createMany(formId, notInsertedAnswers)
       return notInsertedAnswers
     }
 
