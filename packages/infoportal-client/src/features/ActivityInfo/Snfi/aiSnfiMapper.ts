@@ -29,7 +29,6 @@ export namespace AiShelterMapper {
     [DrcProject['UKR-000386 Pooled Funds']]: 'SNFI-DRC-00011',
     [DrcProject['UKR-000390 UHF9']]: 'SNFI-DRC-00007',
     [DrcProject['UKR-000397 GFFO']]: 'SNFI-DRC-00008',
-    [DrcProject['UKR-000399 SDC']]: 'SNFI-DRC-00009',
     [DrcProject['UKR-000399 SDC3']]: 'SNFI-DRC-00009',
     [DrcProject['UKR-000423 ECHO4']]: 'SNFI-DRC-00010',
     [DrcProject['UKR-000441 UHF10']]: 'SNFI-DRC-00012',

@@ -341,7 +341,7 @@ export namespace Legal_individual_aid {
       ukr000363_uhf8: `UKR-000363 UHF VIII`,
       ukr000388_bha: `UKR-000388 BHA`,
       ukr000397_gffo: `UKR-000397 GFFO`,
-      ukr000399_sdc: `UKR-000399 SDC`,
+      ukr000399_sdc: `UKR-000399 SDC3`,
       ukr000423_echo: `UKR-000423 ECHO`,
       ukr000424_dutch_mfa: `UKR-000424 Dutch MFA`,
       ukr000426_sdc: `UKR-000426 SDC`,

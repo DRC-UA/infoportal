@@ -154,7 +154,7 @@ export class KoboMetaMapperProtection {
         ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
         ukr000388_bha: DrcProject['UKR-000388 BHA'],
         ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
-        ukr000399_sdc: DrcProject['UKR-000399 SDC'],
+        ukr000399_sdc: DrcProject['UKR-000399 SDC3'],
         ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
         ukr000424_dutch_mfa: DrcProject['UKR-000424 Dutch MFA'],
         ukr000426_sdc: DrcProject['UKR-000426 SDC'],
