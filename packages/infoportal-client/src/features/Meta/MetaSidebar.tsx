@@ -1,10 +1,10 @@
-import {type ReactNode} from 'react'
+import type {ReactNode} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
 import {Box, Switch, Typography} from '@mui/material'
 import {useLocation} from 'react-router'
 import {NavLink} from 'react-router-dom'
 
-import {IKoboMeta} from 'infoportal-common'
+import type {IKoboMeta} from 'infoportal-common'
 
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {appConfig} from '@/conf/AppConfig'
