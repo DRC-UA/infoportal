@@ -72,6 +72,7 @@ export const MetaSidebar = () => {
             <SidebarItem icon="refresh" onClick={() => asyncRefresh.call().then(() => toastInfo(m._meta.refreshLong))}>
               {m._meta.refresh}
               <IpIconBtn
+                component="span"
                 color="primary"
                 loading={asyncRefresh.loading}
                 sx={{marginLeft: 'auto'}}
@@ -81,9 +82,10 @@ export const MetaSidebar = () => {
             <SidebarItem icon="no_sim" onClick={() => asyncKillCache.call()}>
               {m._meta.killCache}
               <IpIconBtn
-                sx={{marginLeft: 'auto'}}
+                component="span"
                 color="primary"
                 loading={asyncKillCache.loading}
+                sx={{marginLeft: 'auto'}}
                 children="refresh"
               />
             </SidebarItem>
