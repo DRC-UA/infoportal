@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react'
+import {useCallback, useMemo} from 'react'
 import {Obj, Seq} from '@axanc/ts-utils'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {appConfig} from '@/conf/AppConfig'
@@ -32,8 +32,26 @@ export type UseMetaData = ReturnType<typeof useMetaDashboardData>
 
 export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix?: string; data: Seq<IKoboMeta>}) => {
   const {m} = useI18n()
-  const [periodCommit, setPeriodCommit] = useState<Partial<Period>>({})
-  const [period, setPeriod] = useState<Partial<Period>>({})
+  const [periodCommit, setPeriodCommit] = usePersistentState<Partial<Period>>(
+    {},
+    {
+      storageKey: 'meta-commitment-period',
+      transformFromStorage: ({start, end}) => ({
+        ...(start && {start: new Date(start)}),
+        ...(end && {end: new Date(end)}),
+      }),
+    },
+  )
+  const [period, setPeriod] = usePersistentState<Partial<Period>>(
+    {},
+    {
+      storageKey: 'meta-submission-period',
+      transformFromStorage: ({start, end}) => ({
+        ...(start && {start: new Date(start)}),
+        ...(end && {end: new Date(end)}),
+      }),
+    },
+  )
 
   const shape = useMemo(() => {
     return DataFilter.makeShape<IKoboMeta>({
@@ -169,7 +187,6 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
     setCustomFilters({})
     setPeriod({})
     setPeriodCommit({})
-    setCustomFilters({})
   }, [])
 
   return {
