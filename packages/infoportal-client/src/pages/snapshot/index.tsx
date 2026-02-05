@@ -7,7 +7,8 @@ import {List, ListItem, ListItemText} from '@mui/material'
 
 const Index = () => {
   const {m} = useI18n()
-  const path = (route: string) => appFeaturesIndex.snapshot.path + '/' + route
+  const path = (slug: string) => appFeaturesIndex.snapshot.path + '/' + slug
+
   return (
     <Layout title={m.snapshot}>
       <Page>
@@ -39,7 +40,7 @@ const Index = () => {
           </ListItem>
           <ListItem>
             <Link href={path('gbv-needs-assessment-2025')}>
-              <ListItemText primary="GBV needs assessment" />
+              <ListItemText primary="GBV needs assessment for 2026" />
             </Link>
           </ListItem>
         </List>
