@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useState, type ChangeEvent} from 'react'
 import {Obj, Seq, seq} from '@axanc/ts-utils'
-import {Icon, Skeleton, Tab, Tabs, Tooltip, useTheme} from '@mui/material'
+import {Box, Icon, Skeleton, Tab, Tabs, Tooltip, useTheme} from '@mui/material'
 import {useLocation, useParams} from 'react-router'
 import {Navigate, NavLink, Outlet, Route, Routes} from 'react-router-dom'
 import * as yup from 'yup'
@@ -35,7 +35,6 @@ import {appConfig} from '@/conf/AppConfig'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatabaseKoboRepeatRoute} from '@/features/Database/RepeatGroup'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {set} from 'react-hook-form'
 
 export const databaseUrlParamsValidation = yup.object({
   formId: yup.string().required(),
@@ -152,7 +151,7 @@ export const DatabaseWithContext = () => {
             )}
           </NavLink>
 
-          <SidebarItem size="tiny">
+          <Box pl={1}>
             <IpInput
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -169,7 +168,7 @@ export const DatabaseWithContext = () => {
                 </IpIconBtn>
               }
             />
-          </SidebarItem>
+          </Box>
 
           {ctx._forms.loading ? (
             <>
