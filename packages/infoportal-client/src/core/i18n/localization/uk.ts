@@ -45,6 +45,8 @@ const uk = deepmerge(en, {
     topic: 'Тема',
     testType: 'Тип тесту',
     all: 'Всі',
+    filterPlaceholder: 'Фільтрувати...',
+    clearFilter: 'Очистити фільтр',
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {

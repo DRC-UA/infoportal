@@ -462,6 +462,7 @@ export class KoboMetaMapperProtection {
         .cases({
           cash: AssistanceModality.Cash,
           in_kind: AssistanceModality.InKind,
+          combined: AssistanceModality.Combination,
         })
         .default(undefined),
       status: KoboMetaStatus.Committed,
