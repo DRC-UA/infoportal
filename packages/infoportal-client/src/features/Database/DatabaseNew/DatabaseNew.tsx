@@ -53,6 +53,7 @@ export const DatabaseNew = ({children, onAdded}: {onAdded?: () => void; children
           setSelectedForm(undefined)
         }
       }}
+      onClose={handleClear}
       slotProps={{
         paper: {
           sx: {
