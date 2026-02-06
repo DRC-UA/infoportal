@@ -4,14 +4,12 @@ import {Txt} from '@/shared/Txt'
 import {IpIconBtn} from '@/shared/IconBtn'
 
 export const SidebarSection = ({
-  id,
   title,
   children,
   dense,
   defaultOpen = true,
   forceCollapsed,
 }: {
-  id?: string
   defaultOpen?: boolean
   dense?: boolean
   title: ReactNode

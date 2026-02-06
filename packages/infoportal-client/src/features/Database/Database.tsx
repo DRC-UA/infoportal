@@ -1,4 +1,4 @@
-import {useEffect, useMemo} from 'react'
+import {useEffect, useMemo, useState, type ChangeEvent} from 'react'
 import {Obj, Seq, seq} from '@axanc/ts-utils'
 import {Icon, Skeleton, Tab, Tabs, Tooltip, useTheme} from '@mui/material'
 import {useLocation, useParams} from 'react-router'
@@ -26,6 +26,7 @@ import {DatabaseKoboAnswerViewPage} from '@/features/Database/KoboEntry/Database
 import {DatabaseHistory} from '@/features/Database/History/DatabaseHistory'
 import {customForms, DatabaseTableCustomRoute} from '@/features/Database/KoboTableCustom/DatabaseKoboTableCustom'
 import {IpIconBtn} from '@/shared/IconBtn'
+import {IpInput} from '@/shared/Input/Input'
 import {useAsync} from '@/shared/hook/useAsync'
 import {Fender} from '@/shared/Fender'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
@@ -34,6 +35,7 @@ import {appConfig} from '@/conf/AppConfig'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatabaseKoboRepeatRoute} from '@/features/Database/RepeatGroup'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
+import {set} from 'react-hook-form'
 
 export const databaseUrlParamsValidation = yup.object({
   formId: yup.string().required(),
@@ -63,21 +65,30 @@ export const DatabaseWithContext = () => {
   const [collapseAll, setCollapseAll] = usePersistentState<boolean | null>(null, {
     storageKey: 'database-sections-collapse-all',
   })
+  const [initialCollapseAll] = useState(collapseAll ?? false)
+  const [query, setQuery] = useState('')
+  const handleClear = () => setQuery('')
 
   useReactRouterDefaultRoute(databaseIndex.siteMap.index)
 
   const parsedFormNames: Record<string, Seq<Form>> = useMemo(() => {
     const mapped: Record<string, Form[]> = {
-      forms:
+      forms: (
         ctx.formsAccessible?.map((_) => ({
           ..._,
           id: _.id,
           url: databaseIndex.siteMap.home(_.id),
           archived: _.deploymentStatus === 'archived',
           parsedName: KoboIndex.parseFormName(_.name),
-        })) ?? [],
+        })) ?? []
+      ).filter(
+        (form) =>
+          form.parsedName.name.toLowerCase().includes(query.toLocaleLowerCase()) ||
+          form.parsedName.program?.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+      ),
       custom: customForms
         .filter((c) => ctx.formsAccessible?.some((_) => _.id === c.forms[0]?.id))
+        .filter((form) => form.name.includes(query))
         .map((_) => ({
           url: databaseIndex.siteMap.custom(_.id),
           id: _.id,
@@ -92,11 +103,15 @@ export const DatabaseWithContext = () => {
     const grouped = seq([...mapped.forms, ...mapped.custom]).groupBy(
       (_) => _.parsedName.program?.toUpperCase() ?? m.others,
     )
+
+    // switch collapse state on search / end of search
+    setCollapseAll(() => (query.length > 0 ? false : initialCollapseAll))
+
     return new Obj(grouped)
       .map((k, v) => [k, v.sort((a, b) => a.parsedName.name.localeCompare(b.parsedName.name))])
       .sort(([ak], [bk]) => ak.localeCompare(bk))
       .get()
-  }, [ctx.formsAccessible])
+  }, [ctx.formsAccessible, query, initialCollapseAll, setCollapseAll])
 
   const asyncSyncAll = useAsync(api.kobo.form.refreshAll)
 
@@ -136,6 +151,26 @@ export const DatabaseWithContext = () => {
               </SidebarItem>
             )}
           </NavLink>
+
+          <SidebarItem size="tiny">
+            <IpInput
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={m.filterPlaceholder}
+              endAdornment={
+                <IpIconBtn
+                  disabled={!query.length}
+                  aria-label={m.clearFilter}
+                  title={m.clearFilter}
+                  size="small"
+                  onClick={handleClear}
+                >
+                  close
+                </IpIconBtn>
+              }
+            />
+          </SidebarItem>
+
           {ctx._forms.loading ? (
             <>
               <SidebarItem size="tiny">
