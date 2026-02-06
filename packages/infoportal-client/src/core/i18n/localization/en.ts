@@ -140,7 +140,7 @@ const en = Object.freeze({
     next: 'Next',
     clearFilter: 'Clear filter',
     logout: 'Logout',
-    youDontHaveAccess: `You don't have access. Contact alexandre.annic@drc.ngo`,
+    youDontHaveAccess: `You don't have access. Contact ${appConfig.contact}`,
     share: 'Share',
     refresh: 'Refresh',
     refreshTable: 'Refresh current data',
