@@ -10,9 +10,11 @@ export namespace Protection_ipaTracker {
     staff_code: undefined | Option<'staff_code'>
     // introduction/project [select_one] Project code
     project: undefined | Option<'project'>
+    // introduction/type_assis [select_one] Type of assistance
+    type_assis: undefined | Option<'type_assis'>
     // introduction/case_code [text] Case code
     case_code: string | undefined
-    // introduction/type_assistance [select_one] Type of assistance
+    // introduction/type_assistance [select_one] Modality of assistance
     type_assistance: undefined | Option<'type_assistance'>
     // introduction/protection_case_management [select_one] Is it a protection case management case?
     protection_case_management: undefined | Option<'pdm_consent'>
@@ -44,6 +46,30 @@ export namespace Protection_ipaTracker {
     raion: undefined | Option<'raion'>
     // case_information/hromada [select_one] Hromada
     hromada: undefined | Option<'hromada'>
+    // bd_fund/difficulty [select_one] Detail
+    difficulty: undefined | Option<'difficulty_usual_language'>
+    // bd_fund/difficulty_seeing [select_one] Do you have difficulty seeing, even if wearing glasses?
+    difficulty_seeing: undefined | Option<'difficulty_usual_language'>
+    // bd_fund/difficulty_hearing [select_one] Do you have difficulty hearing, even if using hearing aids?
+    difficulty_hearing: undefined | Option<'difficulty_usual_language'>
+    // bd_fund/difficulty_walking [select_one] Do you have difficulty walking or climbing steps?
+    difficulty_walking: undefined | Option<'difficulty_usual_language'>
+    // bd_fund/difficulty_remembering [select_one] Do you have difficulty remembering or concentrating?
+    difficulty_remembering: undefined | Option<'difficulty_usual_language'>
+    // bd_fund/difficulty_washing [select_one] Do you have difficulty with self-care, such as washing all over or dressing?
+    difficulty_washing: undefined | Option<'difficulty_usual_language'>
+    // bd_fund/difficulty_usual_language [select_one] Using your usual language, do you have difficulty communicating, for example understanding or being understood?
+    difficulty_usual_language: undefined | Option<'difficulty_usual_language'>
+    // bd_fund/disability_status [select_one] Disability Status (staff only):
+    disability_status: undefined | Option<'pdm_consent'>
+    // bd_fund/living_older_person [select_one] Living situation of the older person:
+    living_older_person: undefined | Option<'living_older_person'>
+    // bd_fund/living_older_person_other [text] If other, specify
+    living_older_person_other: string | undefined
+    // bd_fund/protection_risk [select_multiple] Protection Risk:
+    protection_risk: undefined | Option<'protection_risk'>[]
+    // bd_fund/protection_risk_other [text] If other, specify
+    protection_risk_other: string | undefined
     // ipa_assessment/type_need [select_multiple] Type of need covered
     type_need: undefined | Option<'type_need'>[]
     // ipa_assessment/type_need_other [text] If other, specify
@@ -82,12 +108,18 @@ export namespace Protection_ipaTracker {
       ukr000363_uhf8: `UKR-000363 UHF VIII`,
       ukr000372_echo3: `UKR-000372 ECHO`,
       ukr000386_mass_appeal: `UKR-000386 Mass Appeal`,
+      ukr000388_bha: `UKR-000388 BHA`,
       ukr000397_gffo: `UKR-000397 GFFO`,
       ukr000423_echo4: `UKR-000423 ECHO`,
     },
     type_assistance: {
       in_kind: `In-kind`,
       cash: `Cash`,
+      combined: `Combined`,
+    },
+    type_assis: {
+      ipa: `IPA`,
+      bd_fund: `Babusya/Didusya Fund`,
     },
     case_status: {
       open: `Open`,
@@ -185,6 +217,11 @@ export namespace Protection_ipaTracker {
       UMY013: `UMY013`,
       UMY014: `UMY014`,
       UMY015: `UMY015`,
+      UMY016: `UMY016`,
+      UMY017: `UMY017`,
+      UMY018: `UMY018`,
+      UMY019: `UMY019`,
+      UMY020: `UMY020`,
       HRK001: `HRK001`,
       HRK002: `HRK002`,
       HRK003: `HRK003`,
@@ -203,6 +240,10 @@ export namespace Protection_ipaTracker {
       HRK016: `HRK016`,
       HRK017: `HRK017`,
       HRK018: `HRK018`,
+      HRK019: `HRK019`,
+      HRK020: `HRK020`,
+      HRK021: `HRK021`,
+      HRK022: `HRK022`,
       HRK_A: `HRK-A`,
       HRK_B: `HRK-B`,
       HRK_C: `HRK-C`,
@@ -281,6 +322,29 @@ export namespace Protection_ipaTracker {
       SLO018: `SLO018`,
       SLO019: `SLO019`,
       SLO020: `SLO020`,
+    },
+    difficulty_usual_language: {
+      no: `No, no difficulty`,
+      yes_some: `Yes, some difficulty`,
+      yes_lot: `Yes, a lot of difficulty`,
+      cannot_all: `Cannot do at all`,
+    },
+    living_older_person: {
+      alone: `Living alone`,
+      spouse: `Living with spouse`,
+      family: `Living with family (extended)`,
+      neighbour: `Living with neighbour`,
+      collective_site: `Living in collective/transit site`,
+      other: `Other`,
+    },
+    protection_risk: {
+      barriers_mobility: `Barriers to mobility requiring urgent purchase/repair of assistive devices and the support is not available through referrals, providing this support will result in a serious protection risk.`,
+      emergency_care: `Emergency care-giving arrangements when an older person is left without necessary support.`,
+      neglect: `Risk of neglect, exploitation, abuse.`,
+      eviction: `Risk of eviction that requires short-term financial intervention`,
+      safely_evacuate: `Support is needed to safely evacuate or prepare for evacuation.`,
+      psychological_distress: `Psychological distress and social isolation that create barriers to maintaining personal safety, managing daily needs, or engaging with support network that can be mitigated or resolved through provision of support from DRC.`,
+      other: `Other`,
     },
     oblast: {
       cherkaska: `Cherkaska`,
@@ -2231,6 +2295,7 @@ export namespace Protection_ipaTracker {
       date_birth: _.date_birth ? new Date(_.date_birth) : undefined,
       ph_number: _.ph_number ? +_.ph_number : undefined,
       specific_need: _.specific_need?.split(' '),
+      protection_risk: _.protection_risk?.split(' '),
       type_need: _.type_need?.split(' '),
       budget_amount_assistance: _.budget_amount_assistance ? +_.budget_amount_assistance : undefined,
       assistance_delivery_date: _.assistance_delivery_date ? new Date(_.assistance_delivery_date) : undefined,
