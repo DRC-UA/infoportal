@@ -14,6 +14,8 @@ import {AiLegal} from '@/features/ActivityInfo/Legal/AiLegal'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
+import InterimReport from './InterimReport'
+
 export const activitiesConfig = {
   protectionGeneral: {
     id: 'czd5jf7lqf2zv4r4r',
@@ -69,6 +71,12 @@ export const activitiesConfig = {
     name: 'FSLC',
     path: '/fslc',
     component: <AiFslc />,
+  },
+  interim: {
+    id: 'interim-reports',
+    name: 'Interim Reports',
+    path: '/interim-reports',
+    component: <InterimReport />,
   },
 }
 

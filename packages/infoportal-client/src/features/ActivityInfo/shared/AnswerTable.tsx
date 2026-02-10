@@ -1,5 +1,5 @@
 import {BoxProps} from '@mui/material'
-import React from 'react'
+
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 

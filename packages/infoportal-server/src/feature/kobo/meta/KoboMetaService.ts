@@ -112,6 +112,8 @@ export namespace KoboMetaParams {
       status: yup.array().of(yup.mixed<KoboMetaStatus>().defined()).optional(),
       activities: yup.array().of(yup.mixed<DrcProgram>().defined()).optional(),
       sectors: yup.array().of(yup.mixed<DrcSector>().defined()).optional(),
+      start: yup.date().optional(),
+      end: yup.date().optional(),
     })
     .optional()
   export type SearchFilter = InferType<typeof schemaSearchFilter>
@@ -181,9 +183,15 @@ export class KoboMetaService {
           persons: true,
         },
         where: {
-          ...map(params?.status, (_) => ({status: {in: _}})),
-          ...map(params?.activities, (_) => ({activity: {in: _}})),
-          ...map(params?.sectors, (_) => ({sector: {in: _}})),
+          ...map(params.status, (_) => ({status: {in: _}})),
+          ...map(params.activities, (_) => ({activity: {in: _}})),
+          ...map(params.sectors, (_) => ({sector: {in: _}})),
+          ...((params.start || params.end) && {
+            lastStatusUpdate: {
+              ...(params.start && {gte: new Date(params.start)}),
+              ...(params.end && {lte: new Date(params.end)}),
+            },
+          }),
         },
         orderBy: {
           date: 'desc',
