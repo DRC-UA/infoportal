@@ -29,10 +29,11 @@ const InterimReport: FC = () => {
 
   return (
     <Page width="full" loading={loading}>
-      <Panel>
+      <Panel title="Interim 2026 Reports">
         <Datatable
           id="interim-reports-ocha"
           showExportBtn
+          sx={{mt: 2}}
           header={
             <PeriodPicker
               value={[period.start, period.end]}

@@ -74,8 +74,8 @@ export const activitiesConfig = {
   },
   interim: {
     id: 'interim-reports',
-    name: 'Interim Reports',
-    path: '/interim-reports',
+    name: 'Interim 2026 Reports',
+    path: '/interim-2026-reports',
     component: <InterimReport />,
   },
 }
