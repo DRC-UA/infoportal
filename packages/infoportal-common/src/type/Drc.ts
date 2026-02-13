@@ -55,6 +55,7 @@ export enum DrcSector {
   FoodSecurity = 'FoodSecurity',
   GBV = 'GBV',
   GeneralProtection = 'GeneralProtection',
+  ChildProtection = 'Child Protection',
   Health = 'Health',
   Legal = 'Legal',
   Livelihoods = 'Livelihoods',

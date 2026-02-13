@@ -107,6 +107,10 @@ class KoboMetaMapperLegal {
         })
         .default(undefined)
 
+      if (row.id === '5775507') {
+        console.log(KoboXmlMapper.Location.searchRaion(answers.settlement === 'kyiv' ? 'kyiv' : answers.raion))
+      }
+
       return KoboMetaMapper.make({
         office,
         ...(answers.oblast
