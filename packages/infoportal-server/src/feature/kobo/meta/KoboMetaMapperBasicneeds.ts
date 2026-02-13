@@ -152,7 +152,7 @@ export class KoboMetaBasicneeds {
     if (answer.form_length === 'short') return
     const getBnreProject = (
       back_donor?:
-        | Bn_re.Option<'nfi_dist_hkf_001_donor'>
+        | Bn_re.Option<'donor_nfi_fks'>
         | Bn_rapidResponse.Option<'back_donor'>
         | Bn_rapidResponse.Option<'donor_nfi_fks'>[0],
     ) => {
