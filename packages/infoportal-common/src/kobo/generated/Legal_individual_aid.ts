@@ -938,7 +938,7 @@ export namespace Legal_individual_aid {
       chernihivskyi: `Chernihivskyi`,
       vyzhnytskyi: `Vyzhnytskyi`,
       dnistrovskyi: `Dnistrovskyi`,
-      cnernivetskyi: `Cnernivetskyi`,
+      chernivetskyi: `Chernivetskyi`,
       dniprovskyi: `Dniprovskyi`,
       kamianskyi: `Kamianskyi`,
       kryvorizkyi: `Kryvorizkyi`,

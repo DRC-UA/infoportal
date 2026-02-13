@@ -4,6 +4,8 @@ export interface KoboMetaSearchParams {
   activities?: DrcProgram[]
   sectors?: DrcSector[]
   status?: KoboMetaStatus[]
+  start?: Date
+  end?: Date
 }
 
 export class KoboMetaHelper {
