@@ -1,19 +1,22 @@
-import {OblastISO, Va_tia_pdm} from 'infoportal-common'
-import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
-import {useI18n} from '@/core/i18n'
 import React, {useMemo, useState} from 'react'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {map, seq} from '@axanc/ts-utils'
+
+import {OblastISO, Va_tia_pdm} from 'infoportal-common'
+
+import {useI18n} from '@/core/i18n'
+import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
+import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
+import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {AgeGroupTable, DebouncedInput, Page} from '@/shared'
+import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Panel, PanelBody} from '@/shared/Panel'
+import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
+import {useKoboTranslations} from '@/utils/hooks'
 
 const isVictimPdm = (_: PdmData<PdmForm>): _ is PdmData<Va_tia_pdm.T> => {
   return _.type === 'Victim'
@@ -36,6 +39,7 @@ export const MealPdmVaDashboard = () => {
   const schema = ctxSchema.byName.va_tia_pdm.get!
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
+  const {translateField} = useKoboTranslations('va_tia_pdm')
 
   const filterShape = useMemo(() => {
     return DataFilter.makeShape<PdmData<Va_tia_pdm.T>>({
@@ -118,7 +122,7 @@ export const MealPdmVaDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.receiveHelp}>
+              <SlidePanel title={translateField && translateField('receive_help_drc')}>
                 <ChartBarSingleBy
                   data={data}
                   by={(_) => _.answers.receive_help_drc}
@@ -126,7 +130,7 @@ export const MealPdmVaDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.whatAssistance}>
+              <SlidePanel title={translateField && translateField('what_assistance_drc')}>
                 <ChartBarMultipleBy
                   data={data}
                   by={(_) => _.answers.what_assistance_drc}
@@ -153,17 +157,20 @@ export const MealPdmVaDashboard = () => {
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.rateSatisfaction}>
-                <ChartBarSingleBy
+                <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.rate_satisfaction_assistance}
+                  by={({answers}) => [
+                    answers.rate_satisfaction_assistance,
+                    answers.rate_satisfaction_assistance_partially,
+                  ]}
                   label={Va_tia_pdm.options.feel_drc_staff_security_no_001}
                   includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.scalePartially}>
-                <ChartBarSingleBy
+                <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.scale_assistance_time}
+                  by={({answers}) => [answers.scale_assistance_time, answers.scale_assistance_time_partially]}
                   label={Va_tia_pdm.options.scale_assistance_time_no}
                   includeNullish
                 />
@@ -177,25 +184,25 @@ export const MealPdmVaDashboard = () => {
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.address}>
-                <ChartBarSingleBy
+                <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.know_address_feedback}
+                  by={({answers}) => [answers.know_address_feedback, answers.know_address_feedback_partially]}
                   label={Va_tia_pdm.options.feel_drc_staff_security_no_001}
                   includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.safeVa}>
-                <ChartBarSingleBy
+                <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.feel_drc_staff_security}
+                  by={({answers}) => [answers.feel_drc_staff_security, answers.feel_drc_staff_security_partially]}
                   label={Va_tia_pdm.options.feel_drc_staff_security_no_001}
                   includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.feelTreated}>
-                <ChartBarSingleBy
+                <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.feel_drc_staff_respect}
+                  by={({answers}) => [answers.feel_drc_staff_respect, answers.feel_drc_staff_respect_partially]}
                   label={Va_tia_pdm.options.supported_improving_life_no_intended}
                   includeNullish
                 />
@@ -206,17 +213,20 @@ export const MealPdmVaDashboard = () => {
                 {formatLargeNumber(data.length)}
               </SlideWidget>
               <SlidePanel title={m.mealMonitoringPdm.viewInConsideration}>
-                <ChartBarSingleBy
+                <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.scale_situation_consideration}
+                  by={({answers}) => [
+                    answers.scale_situation_consideration,
+                    answers.scale_situation_consideration_partially,
+                  ]}
                   label={Va_tia_pdm.options.without_DRC_no}
                   includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.informingPartially}>
-                <ChartBarSingleBy
+                <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.informing}
+                  by={({answers}) => [answers.informing, answers.informing_partially]}
                   label={Va_tia_pdm.options.without_DRC_no}
                   includeNullish
                 />
@@ -230,9 +240,12 @@ export const MealPdmVaDashboard = () => {
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.challengeInAccess}>
-                <ChartBarSingleBy
+                <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.scale_challenges_accessing_drc_assistance}
+                  by={({answers}) => [
+                    answers.scale_challenges_accessing_drc_assistance,
+                    answers.scale_challenges_accessing_drc_assistance_partially,
+                  ]}
                   label={Va_tia_pdm.options.scale_challenges_accessing_drc_assistance_no}
                   includeNullish
                 />
