@@ -104,7 +104,7 @@ export const WinterizationMonitoring = () => {
               <ChartBarSingleBy
                 data={data ?? seq([])}
                 by={(_) => _.spent_cash_assistance_received}
-                label={Meal_winterizationPdm.options.amount_cash_received_correspond}
+                label={Meal_winterizationPdm.options.barriers_pwd_join}
               />
             </SlidePanel>
             <SlideTxt>
