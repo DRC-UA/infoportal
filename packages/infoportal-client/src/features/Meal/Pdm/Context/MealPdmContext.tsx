@@ -92,7 +92,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
 
   const request = (): Promise<Seq<PdmData<PdmForm>>> => {
     return Promise.all([
-      api.kobo.typedAnswers.search.meal_cashPdm().then((_) =>
+      api.kobo.typedAnswers.search.meal_cashPdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Cash,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
@@ -133,7 +133,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.meal_shelterPdm().then((_) =>
+      api.kobo.typedAnswers.search.meal_shelterPdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Shelter,
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
@@ -157,7 +157,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.meal_nfiPdm().then((_) =>
+      api.kobo.typedAnswers.search.meal_nfiPdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Nfi,
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
@@ -182,7 +182,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.protection_gbvPdm().then((_) =>
+      api.kobo.typedAnswers.search.protection_gbvPdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Gbv,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
@@ -208,7 +208,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.legal_pam().then((_) =>
+      api.kobo.typedAnswers.search.legal_pam({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Legal,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
@@ -229,7 +229,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.meal_pssPdm().then((_) =>
+      api.kobo.typedAnswers.search.meal_pssPdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Pss,
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
@@ -266,7 +266,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.meal_eorePdm().then((_) =>
+      api.kobo.typedAnswers.search.meal_eorePdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Eore,
           oblast: OblastIndex.byKoboName(record.oblast!)!.name,
@@ -289,7 +289,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.ecrec_cashRegistration().then((_) =>
+      api.kobo.typedAnswers.search.ecrec_cashRegistration({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Ecrec,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
@@ -317,7 +317,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.awareness_raising_feedback().then((_) =>
+      api.kobo.typedAnswers.search.awareness_raising_feedback({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Awareness,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
@@ -340,7 +340,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.va_tia_pdm().then((_) =>
+      api.kobo.typedAnswers.search.va_tia_pdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Victim,
           office: match(record.office!)
@@ -362,14 +362,15 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000306_dutch: DrcProject['UKR-000306 Dutch II'],
               ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
               ukr000386_mass_appeal: DrcProject['UKR-000386 Pooled Funds'],
-              ukr000423_echo4: DrcProject['UKR-000423 ECHO'],
+              ukr000388_bha: DrcProject['UKR-000388 BHA'],
               ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
+              ukr000423_echo4: DrcProject['UKR-000423 ECHO'],
             })
             .default(() => undefined),
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.gbv_cs_pdm().then((_) =>
+      api.kobo.typedAnswers.search.gbv_cs_pdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.CaseManagement,
           oblast: OblastIndex.byKoboName(record.location!)!.name,
@@ -382,7 +383,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.gbv_wgssPdm().then((_) =>
+      api.kobo.typedAnswers.search.gbv_wgssPdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Wgss,
           office: match(record.office!)
@@ -409,7 +410,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.gp_case_management().then((_) =>
+      api.kobo.typedAnswers.search.gp_case_management({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.GpCaseManagement,
           office: match(record.office!)
@@ -431,7 +432,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.gbv_girlShine().then((_) =>
+      api.kobo.typedAnswers.search.gbv_girlShine({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.GirlShine,
           project: match(record.project_code!)
@@ -443,7 +444,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           answers: record,
         })),
       ),
-      api.kobo.typedAnswers.search.protection_ipaPdm().then((_) =>
+      api.kobo.typedAnswers.search.protection_ipaPdm({filters: periodFilter}).then((_) =>
         seq(_.data).map((record) => ({
           type: PdmType.Ipa,
           office: match(record.back_office!)
