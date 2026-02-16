@@ -1,7 +1,18 @@
-import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState} from 'react'
-import {KoboSubmissionFlat, KoboIndex, Meal_winterizationPdm, Period} from 'infoportal-common'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+} from 'react'
 import {map, seq, Seq} from '@axanc/ts-utils'
 import {Kobo} from 'kobo-sdk'
+
+import {KoboSubmissionFlat, KoboIndex, Meal_winterizationPdm, Period} from 'infoportal-common'
+
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 
@@ -15,7 +26,7 @@ export interface MealWinterizationContext {
   answersIndex?: Record<Kobo.SubmissionId, KoboSubmissionFlat<Meal_winterizationPdm.T, any>>
 }
 
-const Context = React.createContext({} as MealWinterizationContext)
+const Context = createContext({} as MealWinterizationContext)
 
 export const useMealWinterizationContext = () => useContext<MealWinterizationContext>(Context)
 
