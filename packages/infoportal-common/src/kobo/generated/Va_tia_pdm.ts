@@ -1,6 +1,5 @@
 export namespace Va_tia_pdm {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: aM29e4jscqujByABmvDLcW
   export interface T {
     start: string
@@ -192,7 +191,6 @@ export namespace Va_tia_pdm {
     // comments_int [text] Interviewer's comments
     comments_int: string | undefined
   }
-
   export const options = {
     project_ID: {
       ukr000350_sida: `Sida Ukr-000350`,
@@ -200,6 +198,7 @@ export namespace Va_tia_pdm {
       ukr000306_dutch: `Dutch II Ukr-000306`,
       ukr000363_uhf8: `UHF 8 Ukr-000363`,
       ukr000386_mass_appeal: `MAF UKR-000386`,
+      ukr000388_bha: `BHA UKR-000388`,
       ukr000397_gffo: `GFFO Ukr-000397 (consortium)`,
       ukr000423_echo4: `ECHO4 UKR-000423`,
     },
