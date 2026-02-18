@@ -20,11 +20,11 @@ import {Access} from '@/core/sdk/server/access/Access'
 import {appConfig} from '@/conf/AppConfig'
 import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {MealVerificationData} from '@/features/Meal/Verification/MealVerificationData'
-import {MealPdmShelterDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmShelterDashboard'
-import {MealPdmNfiDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmNfiDashboard'
-import {PdmGbvDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGbvDashboard'
+import {MealPdmShelterDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmShelterDashboard'
+import {MealPdmNfiDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmNfiDashboard'
+import {PdmGbvDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGbvDashboard'
 import {MealWinterizationDashboard} from '@/features/Meal/Winter/MealWinterizationDashboard'
-import {MealPdmPssDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmPssDashboard'
+import {MealPdmPssDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmPssDashboard'
 import CashAgMsmeVet from '@/features/Meal/Cash/Dashboards/CashAgMsmeVet'
 import {CashAgriDashboard} from '@/features/Meal/Cash/Dashboards/CashAgriDashboard'
 import {CashMpcaDashboard} from '@/features/Meal/Cash/Dashboards/CashMpcaDashboard'
@@ -32,15 +32,17 @@ import {CashVetMsmeDashboard} from '@/features/Meal/Cash/Dashboards/CashVetMsmeD
 import {CashAnimalShelterDashboard} from '@/features/Meal/Cash/Dashboards/CashAnimalShelterDashboard'
 import {CashRentRepairDashboard} from '@/features/Meal/Cash/Dashboards/CashRentRepairDashboard'
 import {CashPdmOutlet, MealPdmOutlet, WinterizationOutlet} from '@/features/Meal/Pdm/MealRouteOutlets'
-import {MealPdmEoreDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmEoreDashboard'
-import {PdmLegalDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmLegalDashboard'
-import {PdmAwarenessDashboard} from '@/features/Meal/Pdm/Dashboard/PdmAwarenessDashboard'
-import {MealPdmVaDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmVaDashboard'
-import {PdmGbvCsDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGbvCsDashboard'
-import {MealPdmWgssDashboard} from '@/features/Meal/Pdm/Dashboard/MealPdmWgssDashboard'
-import {PdmGirlShineDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGirlShineDashboard'
-import {PdmGpCsDashboard} from '@/features/Meal/Pdm/Dashboard/PdmGpCsDashboard'
-import {PdmIpaDashboard} from '@/features/Meal/Pdm/Dashboard/PdmIpaDashboard'
+import {MealPdmEoreDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmEoreDashboard'
+import {PdmLegalDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmLegalDashboard'
+import {PdmAwarenessDashboard} from '@/features/Meal/Pdm/Dashboards/PdmAwarenessDashboard'
+import {MealPdmVaDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmVaDashboard'
+import {PdmGbvCsDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGbvCsDashboard'
+import {MealPdmWgssDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmWgssDashboard'
+import {PdmGirlShineDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGirlShineDashboard'
+import {PdmGpCsDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGpCsDashboard'
+import {PdmIpaDashboard} from '@/features/Meal/Pdm/Dashboards/PdmIpaDashboard'
+
+import VaDashboard from './Pdm/Dashboards/Va'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -406,7 +408,7 @@ export const Meal = () => {
           >
             <Route index element={<Navigate to={mealIndex.siteMap.pdm.protection.general.pss} replace />} />
             <Route path="pss" element={<MealPdmPssDashboard />} />
-            <Route path="victim" element={<MealPdmVaDashboard />} />
+            <Route path="victim" element={<VaDashboard />} />
             <Route path="ipa" element={<PdmIpaDashboard />} />
             <Route path="generalCs" element={<PdmGpCsDashboard />} />
             <Route path="gbv" element={<PdmGbvDashboard />} />
