@@ -256,7 +256,7 @@ export const MealPdmVaDashboard = () => {
                       .cases({partially: answers.informing_partially})
                       .default(answers.informing)
                   }
-                  label={Va_tia_pdm.options.without_DRC_no}
+                  label={translateLabels('informing')}
                   includeNullish
                 />
               </SlidePanel>
