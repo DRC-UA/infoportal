@@ -84,41 +84,29 @@ const useVaPdmData = () => {
         icon: 'share',
         label: m.office,
         getValue: ({office}) => office,
-        getOptions: () =>
-          DataFilter.buildOptions(
-            seq(answersFetcher.get)
-              .flatMap(({office}) => office!)
-              .distinct((office) => office)
-              .sort(),
-          ),
+        getOptions: () => DataFilter.buildOptionsFromObject(Va_tia_pdm.options.office),
       },
       project: {
         icon: 'business',
         label: m.project,
         getValue: ({project}) => project,
-        getOptions: () =>
-          DataFilter.buildOptions(
-            seq(answersFetcher.get)
-              .flatMap(({project}) => project!)
-              .distinct((project) => project)
-              .sort(),
-          ),
+        getOptions: () => DataFilter.buildOptionsFromObject(Va_tia_pdm.options.project_ID),
       },
       access: {
         icon: 'check_circle',
         getOptions: () =>
           DataFilter.buildOptionsFromObject(Va_tia_pdm.options.scale_challenges_accessing_drc_assistance_no),
         label: m.mealMonitoringPdm.accessibilityInterview,
-        getValue: (_) => _.answers.accessibility_interview,
+        getValue: ({answers}) => answers.accessibility_interview,
       },
       received: {
         icon: 'check_circle',
         getOptions: () => DataFilter.buildOptionsFromObject(Va_tia_pdm.options.receive_help_drc),
         label: m.mealMonitoringPdm.received,
-        getValue: (_) => _.answers.receive_help_drc,
+        getValue: ({answers}) => answers.receive_help_drc,
       },
     })
-  }, [schema, answersFetcher.get])
+  }, [schema, Va_tia_pdm])
 
   useEffect(() => {
     periodFetcher.fetch()
