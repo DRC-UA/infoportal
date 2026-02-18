@@ -1,9 +1,12 @@
+import {useMemo, type ReactNode} from 'react'
 import {Obj, seq, Seq} from '@axanc/ts-utils'
-import React, {ReactNode, useMemo} from 'react'
-import {BarChartData, ChartBar} from '@/shared/charts/ChartBar'
 import {Checkbox} from '@mui/material'
-import {ChartHelper} from '@/shared/charts/chartHelper'
+
 import {KeyOf} from 'infoportal-common'
+
+import {useI18n} from '@/core/i18n'
+import {BarChartData, ChartBar} from '@/shared/charts/ChartBar'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 
 export interface ChartBarMultipleByProps<
   D extends Record<string, any>,
@@ -46,6 +49,7 @@ export const ChartBarMultipleBy = <
   includeNullish,
   limitChartHeight,
 }: ChartBarMultipleByProps<D, K, O>) => {
+  const {m} = useI18n()
   const res = useMemo(() => {
     const sourceRaw = data.map((d) => {
       const val = by(d)
@@ -68,7 +72,7 @@ export const ChartBarMultipleBy = <
     })
       .setLabel({
         ...label,
-        undefined: 'Not specified',
+        undefined: m.notSpecified,
       })
       .take(limit)
       .get()

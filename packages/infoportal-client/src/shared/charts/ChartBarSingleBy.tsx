@@ -4,6 +4,7 @@ import {Checkbox} from '@mui/material'
 
 import {KeyOf} from 'infoportal-common'
 
+import {useI18n} from '@/core/i18n'
 import {ChartData, ChartDataVal, ChartHelper} from '@/shared/charts/chartHelper'
 import {ChartBar} from '@/shared/charts/ChartBar'
 
@@ -39,6 +40,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
   forceShowEmptyLabels?: boolean
   limitChartHeight?: number
 }) => {
+  const {m} = useI18n()
   const res = useMemo(() => {
     const source = seq(data)
       .filter(filter ?? ((_) => _))
@@ -51,7 +53,7 @@ export const ChartBarSingleBy = <D extends Record<string, any>, K extends string
     return ChartHelper.single({data: includeNullish ? source : source.compact()})
       .setLabel({
         ...label,
-        undefined: 'Not specified',
+        undefined: m.notSpecified,
       })
       .sortBy.value()
       .filterValue((_) => (min ? _.value > min : true))

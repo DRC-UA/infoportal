@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react'
-import {map, seq} from '@axanc/ts-utils'
+import {map, match, seq} from '@axanc/ts-utils'
 
 import {OblastISO, Va_tia_pdm} from 'infoportal-common'
 
@@ -39,8 +39,15 @@ export const MealPdmVaDashboard = () => {
   const schema = ctxSchema.byName.va_tia_pdm.get!
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
-  const {translateField} = useKoboTranslations('va_tia_pdm')
-
+  const {translateField, translateOption} = useKoboTranslations('va_tia_pdm')
+  const translateLabels = (option: string) =>
+    translateOption(option)?.reduce(
+      (result, {value, label}) => ({
+        ...result,
+        [value]: label,
+      }),
+      {} as Record<string, string>,
+    )
   const filterShape = useMemo(() => {
     return DataFilter.makeShape<PdmData<Va_tia_pdm.T>>({
       ...commonShape,
@@ -117,93 +124,110 @@ export const MealPdmVaDashboard = () => {
               <SlidePanel title={m.donor}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.project_ID}
-                  label={Va_tia_pdm.options.project_ID}
+                  by={({answers}) => answers.project_ID}
+                  label={translateLabels('project_ID')}
                   includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={translateField && translateField('receive_help_drc')}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.receive_help_drc}
-                  label={Va_tia_pdm.options.receive_help_drc}
+                  by={({answers}) => answers.receive_help_drc}
+                  label={translateLabels('receive_help_drc')}
                   includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={translateField && translateField('what_assistance_drc')}>
                 <ChartBarMultipleBy
                   data={data}
-                  by={(_) => _.answers.what_assistance_drc}
-                  label={Va_tia_pdm.options.what_assistance_drc}
+                  by={({answers}) => answers.what_assistance_drc}
+                  label={translateLabels('what_assistance_drc')}
                   includeNullish
                 />
               </SlidePanel>
             </Div>
             <Div column>
-              <SlidePanel title={m.mealMonitoringPdm.assistanceSpent}>
+              <SlidePanel title={translateField && translateField('money_spent_yn')}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.money_spent_yn}
-                  label={Va_tia_pdm.options.money_spent}
+                  by={({answers}) => answers.money_spent_yn}
+                  label={translateLabels('money_spent_yn')}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.spentIntended}>
+              <SlidePanel title={translateField && translateField('money_spent')}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.money_spent}
-                  label={Va_tia_pdm.options.money_spent}
+                  by={({answers}) => answers.money_spent}
+                  label={translateLabels('money_spent')}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.rateSatisfaction}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={({answers}) => [
-                    answers.rate_satisfaction_assistance,
-                    answers.rate_satisfaction_assistance_partially,
-                  ]}
-                  label={Va_tia_pdm.options.feel_drc_staff_security_no_001}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.scalePartially}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={({answers}) => [answers.scale_assistance_time, answers.scale_assistance_time_partially]}
-                  label={Va_tia_pdm.options.scale_assistance_time_no}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.changedFamily}>
+              <SlidePanel title={translateField && translateField('rate_satisfaction_assistance')}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.scale_changed_family}
-                  label={Va_tia_pdm.options.scale_changed_family}
+                  by={({answers}) =>
+                    match(answers.money_spent_yn)
+                      .cases({partially: answers.rate_satisfaction_assistance_partially})
+                      .default(answers.rate_satisfaction_assistance)
+                  }
+                  label={translateLabels('feel_drc_staff_security_no_001')}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.address}>
-                <ChartBarMultipleBy
+              <SlidePanel title={translateField && translateField('scale_assistance_time')}>
+                <ChartBarSingleBy
                   data={data}
-                  by={({answers}) => [answers.know_address_feedback, answers.know_address_feedback_partially]}
-                  label={Va_tia_pdm.options.feel_drc_staff_security_no_001}
+                  by={({answers}) =>
+                    match(answers.money_spent_yn)
+                      .cases({partially: answers.scale_assistance_time_partially})
+                      .default(answers.scale_assistance_time)
+                  }
+                  label={translateLabels('scale_assistance_time_no')}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.safeVa}>
-                <ChartBarMultipleBy
+              <SlidePanel title={translateField && translateField('scale_changed_family')}>
+                <ChartBarSingleBy
                   data={data}
-                  by={({answers}) => [answers.feel_drc_staff_security, answers.feel_drc_staff_security_partially]}
-                  label={Va_tia_pdm.options.feel_drc_staff_security_no_001}
+                  by={({answers}) => answers.scale_changed_family}
+                  label={translateLabels('scale_changed_family')}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.feelTreated}>
-                <ChartBarMultipleBy
+              <SlidePanel title={translateField && translateField('know_address_feedback')}>
+                <ChartBarSingleBy
                   data={data}
-                  by={({answers}) => [answers.feel_drc_staff_respect, answers.feel_drc_staff_respect_partially]}
-                  label={Va_tia_pdm.options.supported_improving_life_no_intended}
+                  by={({answers}) =>
+                    match(answers.money_spent_yn)
+                      .cases({partially: answers.know_address_feedback_partially})
+                      .default(answers.know_address_feedback)
+                  }
+                  label={translateLabels('know_address_feedback')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('feel_drc_staff_security')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers}) =>
+                    match(answers.money_spent_yn)
+                      .cases({partially: answers.feel_drc_staff_security_partially})
+                      .default(answers.feel_drc_staff_security)
+                  }
+                  label={translateLabels('feel_drc_staff_security')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('feel_drc_staff_respect')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers}) =>
+                    match(answers.money_spent_yn)
+                      .cases({partially: answers.feel_drc_staff_respect_partially})
+                      .default(answers.feel_drc_staff_respect)
+                  }
+                  label={translateLabels('supported_improving_life_no_intended')}
                   includeNullish
                 />
               </SlidePanel>
@@ -212,49 +236,57 @@ export const MealPdmVaDashboard = () => {
               <SlideWidget sx={{flex: 1}} icon="group" title={m.submissions}>
                 {formatLargeNumber(data.length)}
               </SlideWidget>
-              <SlidePanel title={m.mealMonitoringPdm.viewInConsideration}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={({answers}) => [
-                    answers.scale_situation_consideration,
-                    answers.scale_situation_consideration_partially,
-                  ]}
-                  label={Va_tia_pdm.options.without_DRC_no}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.informingPartially}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={({answers}) => [answers.informing, answers.informing_partially]}
-                  label={Va_tia_pdm.options.without_DRC_no}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.resolveProblem}>
+              <SlidePanel title={translateField && translateField('scale_situation_consideration')}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.scale_resolve_problem}
-                  label={Va_tia_pdm.options.without_DRC_no}
+                  by={({answers}) =>
+                    match(answers.money_spent_yn)
+                      .cases({partially: answers.scale_situation_consideration_partially})
+                      .default(answers.scale_situation_consideration)
+                  }
+                  label={translateLabels('scale_situation_consideration')}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.challengeInAccess}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={({answers}) => [
-                    answers.scale_challenges_accessing_drc_assistance,
-                    answers.scale_challenges_accessing_drc_assistance_partially,
-                  ]}
-                  label={Va_tia_pdm.options.scale_challenges_accessing_drc_assistance_no}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={m.mealMonitoringPdm.withoutDrc}>
+              <SlidePanel title={translateField && translateField('informing')}>
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.without_DRC}
+                  by={({answers}) =>
+                    match(answers.money_spent_yn)
+                      .cases({partially: answers.informing_partially})
+                      .default(answers.informing)
+                  }
                   label={Va_tia_pdm.options.without_DRC_no}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('scale_resolve_problem')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers}) => answers.scale_resolve_problem}
+                  label={translateLabels('scale_resolve_problem')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('scale_challenges_accessing_drc_assistance')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers}) =>
+                    match(answers.money_spent_yn)
+                      .cases({
+                        partially: answers.scale_challenges_accessing_drc_assistance_partially,
+                      })
+                      .default(answers.scale_challenges_accessing_drc_assistance)
+                  }
+                  label={translateLabels('scale_challenges_accessing_drc_assistance')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('without_DRC')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers}) => answers.without_DRC}
+                  label={translateLabels('without_DRC')}
                   includeNullish
                 />
               </SlidePanel>
