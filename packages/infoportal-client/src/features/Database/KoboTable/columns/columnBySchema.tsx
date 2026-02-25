@@ -143,7 +143,7 @@ export type ColumnBySchemaGeneratorProps = {
   getRow?: (_: Data) => Row
   schema: KoboSchemaHelper.Bundle
   formId: Kobo.FormId
-  isAdmin: boolean
+  isAdmin?: boolean
   onEdit?: (name: string) => void
   externalFilesIndex?: KoboExternalFilesIndex
   repeatGroupName?: Kobo.Form.Question['name']
