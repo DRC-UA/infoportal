@@ -51,7 +51,7 @@ const noEditableColsId: Set<string> = new Set<
   'cal_tot_vulnerability',
 ])
 
-const editableColsType: Set<Kobo.Form.QuestionType> = new Set([
+const editableColsType: Set<Kobo.Form.QuestionType | 'hidden'> = new Set([
   'select_one',
   'calculate',
   'select_multiple',
@@ -59,6 +59,7 @@ const editableColsType: Set<Kobo.Form.QuestionType> = new Set([
   'integer',
   'decimal',
   'date',
+  'hidden',
   'datetime',
 ])
 
@@ -142,6 +143,7 @@ export type ColumnBySchemaGeneratorProps = {
   getRow?: (_: Data) => Row
   schema: KoboSchemaHelper.Bundle
   formId: Kobo.FormId
+  isAdmin: boolean
   onEdit?: (name: string) => void
   externalFilesIndex?: KoboExternalFilesIndex
   repeatGroupName?: Kobo.Form.Question['name']
@@ -154,6 +156,7 @@ export const colorRepeatedQuestionHeader = (t: Theme) => alpha(t.palette.info.li
 
 export const columnBySchemaGenerator = ({
   getRow = (_) => _ as Row,
+  isAdmin,
   onEdit,
   formId,
   externalFilesIndex,
@@ -170,7 +173,9 @@ export const columnBySchemaGenerator = ({
     DatatableColumn.Props<any>,
     'id' | 'groupLabel' | 'group' | 'typeIcon' | 'typeLabel' | 'head' | 'subHeader'
   > => {
-    const isEditable = editableColsType.has(q.type) && !noEditableColsId.has(q.name)
+    const isEditable =
+      // @ts-expect-error to get rid of the error update kodo-sdk to include 'hidden' type to Kobo.Form.Question
+      editableColsType.has(q.type) && !noEditableColsId.has(q.name) && !(isAdmin === false && q.type === 'hidden')
     const isInsideRepeat = !!repeatGroupName && q.$xpath?.split('/').includes(repeatGroupName)
     const showHeaderPencil = !!onEdit && isEditable && !isInsideRepeat
     return {

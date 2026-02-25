@@ -136,6 +136,7 @@ export namespace KoboUpdateModal {
                   )
                 }
                 case 'text':
+                case 'hidden':
                 case 'calculate': {
                   return (
                     <IpInput multiline maxRows={9} fullWidth value={value} onChange={(e) => setValue(e.target.value)} />
@@ -183,11 +184,11 @@ export namespace KoboUpdateModal {
     const {columnDef, schema, loading: loadingSchema} = useKoboColumnDef({formId, columnName})
 
     const fetcherUpdate = useFetcher((value: any) => {
-      const p = { formId, answerIds, question: columnName, answer: value, questionIndexed, indexChain, pathChain }
+      const p = {formId, answerIds, question: columnName, answer: value, questionIndexed, indexChain, pathChain}
       if (onSubmitOverride) {
         return onSubmitOverride(value)
       } else {
-        const p = { formId, answerIds, question: columnName, answer: value, questionIndexed, indexChain, pathChain }
+        const p = {formId, answerIds, question: columnName, answer: value, questionIndexed, indexChain, pathChain}
         return ctxKoboUpdate.asyncUpdateById.answer.call(p).then(() => {
           onUpdated?.(p)
           return answerIds.length

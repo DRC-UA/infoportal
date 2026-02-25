@@ -119,6 +119,7 @@ export const DatabaseKoboTableContent = ({
       onRepeatGroupClick: ({name, row}) => {
         navigate(databaseIndex.siteMap.group.relative(name, row.id, row._index))
       },
+      isAdmin: session.admin === true,
       onEdit:
         selectedIds.length > 0
           ? (questionName) =>

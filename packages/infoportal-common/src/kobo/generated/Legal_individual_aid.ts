@@ -6,6 +6,8 @@ export namespace Legal_individual_aid {
     end: string
     // date [date] Date
     date: Date | undefined
+    // introduction/last_office [select_multiple] Office where the person received assistance
+    last_office: undefined | Option<'office'>[]
     // introduction/beneficiary_name [text] Beneficiary’s name
     beneficiary_name: string | undefined
     // introduction/representative_name [text] Legal representative’s name (if applicable)
@@ -282,6 +284,14 @@ export namespace Legal_individual_aid {
           external_other_needs_name_org: string | undefined | undefined
         }[]
       | undefined
+    check_umy: string
+    check_hrk: string
+    check_nlv: string
+    check_khe: string
+    check_iev: string
+    check_dnk: string
+    check_zap: string
+    check_slo: string
   }
   export const options = {
     case_referred_further: {
@@ -3044,6 +3054,7 @@ export namespace Legal_individual_aid {
     ({
       ..._,
       date: _.date ? new Date(_.date) : undefined,
+      last_office: _.last_office?.split(' '),
       age: _.age ? +_.age : undefined,
       vulnerability_detail: _.vulnerability_detail?.split(' '),
       number_issues: _.number_issues ? +_.number_issues : undefined,
