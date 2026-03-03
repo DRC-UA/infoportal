@@ -340,10 +340,13 @@ export class KoboMetaMapperEcrec {
     const answer = Ecrec_vet_bha388.map(row.answers)
     const persons = KoboXmlMapper.Persons.ecrec_vet_bha388(answer)
     const oblast = KoboXmlMapper.Location.mapOblast(answer.oblast!)
-    const project =
-      row.answers.alter_donor === 'ukr000386_pooled_funds'
-        ? DrcProject['UKR-000386 Pooled Funds']
-        : DrcProject['UKR-000388 BHA']
+    const project = match(row.answers.alter_donor)
+      .cases({
+        ukr000350_sida: DrcProject['UKR-000350 SIDA'],
+        ukr000386_pooled_funds: DrcProject['UKR-000386 Pooled Funds'],
+        ukr000388_bha: DrcProject['UKR-000388 BHA'],
+      })
+      .default(undefined)
 
     return KoboMetaMapper.make({
       enumerator: Ecrec_vet_bha388.options.back_enum_extra[answer.back_enum!],
