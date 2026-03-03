@@ -76,12 +76,6 @@ const useVaPdmData = () => {
         getValue: ({project}) => match(project).cases(insideObjectOut(projectCases)).default(undefined),
         getOptions: () => DataFilter.buildOptionsFromObject(Va_tia_pdm.options.project_ID),
       },
-      access: {
-        icon: 'check_circle',
-        label: m.mealMonitoringPdm.accessibilityInterview,
-        getValue: ({answers}) => answers.accessibility_interview,
-        getOptions: () => DataFilter.buildOptionsFromObject(Va_tia_pdm.options.receive_help_drc),
-      },
       received: {
         icon: 'check_circle',
         label: m.mealMonitoringPdm.received,
