@@ -50,6 +50,7 @@ const DatatableBody_ = <T extends DatatableRow>({
           )}
           {columns.map((_, i) => {
             const render = _.render(item)
+
             return (
               <td
                 title={render.tooltip as any}
