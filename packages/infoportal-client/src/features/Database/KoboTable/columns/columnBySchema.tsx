@@ -21,6 +21,7 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {getKoboAttachmentUrl, KoboAttachedFile, KoboAttachedImg} from '@/shared/TableMedia/KoboAttachedMedia'
 
 import {isCalculateNumeric} from './helpers'
+import {REPEAT_GROUP_BUTTON_REPLACEMENT} from './constants'
 
 export const MissingOption = ({value}: {value?: string}) => {
   const {m} = useI18n()
@@ -195,20 +196,32 @@ export const columnBySchemaGenerator = ({
 
   const getRepeatGroup = (name: string) => {
     const q = schema.helper.questionIndex[name]
+    const replacementQuestionKey = REPEAT_GROUP_BUTTON_REPLACEMENT[schema.schema.uid][name]
+    const replacementQuestion = schema.helper.questionIndex[replacementQuestionKey]
+
     return {
       ...getCommon(q),
-      type: 'string',
-      styleHead: {
-        background: colorRepeatedQuestionHeader(t),
-      },
       render: (row: Row) => {
-        const value = getValue(row, name) as any[]
+        const values = getValue(row, name) as any[] | undefined
+
+        // show selected answer instead of link button, if defined in VALUE_INSTEAD_OF_GROUP_BUTTON
+        if (replacementQuestion && row._index !== undefined) {
+          const index = row._index
+          const label = values?.[index]?.[replacementQuestionKey]
+
+          return {
+            export: label,
+            value: label,
+            label,
+          }
+        }
+
         return {
-          export: value?.length,
-          value: value?.length,
-          label: value && (
+          export: values?.length,
+          value: values?.length,
+          label: values && (
             <IpBtn
-              children={value.length}
+              children={values?.length}
               style={{padding: '0 4px'}}
               onClick={(event) => {
                 onRepeatGroupClick?.({
