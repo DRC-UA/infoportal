@@ -392,3 +392,7 @@ export const orderize = <T extends number | string>(
     return `${n}${(options as {suffix?: string})?.suffix ?? 's'}`
   }
 }
+
+export const insideObjectOut = <K extends string, V extends string>(input: Record<K, V>) => {
+  return Object.fromEntries(Object.entries(input).map(([key, value]) => [value, key])) as Record<V, K>
+}

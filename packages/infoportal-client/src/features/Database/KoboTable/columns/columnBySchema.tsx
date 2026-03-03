@@ -406,12 +406,14 @@ export const columnBySchemaGenerator = ({
 
   const getSelectOne = (name: string) => {
     const q = schema.helper.questionIndex[name]
+
     return {
       ...getCommon(q),
       type: 'select_one',
       render: (row: Row) => {
         const v = getValue(row, name) as string | undefined
         const render = schema.translate.choice(name, v)
+
         return {
           export: render,
           value: v,
@@ -428,9 +430,9 @@ export const columnBySchemaGenerator = ({
       ...getCommon(q),
       type: 'select_multiple',
       options: () =>
-        schema.helper.choicesIndex[q.select_from_list_name!].map((_) => ({
-          value: _.name,
-          label: schema.translate.choice(name, _.name),
+        schema.helper.choicesIndex[q.select_from_list_name!].map(({name}) => ({
+          value: name,
+          label: schema.translate.choice(name, name),
         })),
       render: (row: Row) => {
         const v = getValue(row, name) as string[] | undefined

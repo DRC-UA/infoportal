@@ -90,6 +90,14 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
+              <SlidePanel title={translateField && translateField('accessibility_interview')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers}) => answers.accessibility_interview}
+                  label={translateLabels('accessibility_interview')}
+                  includeNullish
+                />
+              </SlidePanel>
               <SlidePanel title={translateField && translateField('receive_help_drc')}>
                 <ChartBarSingleBy
                   data={data}
