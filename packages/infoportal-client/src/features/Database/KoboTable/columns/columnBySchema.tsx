@@ -196,7 +196,7 @@ export const columnBySchemaGenerator = ({
 
   const getRepeatGroup = (name: string) => {
     const q = schema.helper.questionIndex[name]
-    const replacementQuestionKey = REPEAT_GROUP_BUTTON_REPLACEMENT[schema.schema.uid][name]
+    const replacementQuestionKey = REPEAT_GROUP_BUTTON_REPLACEMENT[schema.schema.uid]?.[name]
     const replacementQuestion = schema.helper.questionIndex[replacementQuestionKey]
 
     return {
