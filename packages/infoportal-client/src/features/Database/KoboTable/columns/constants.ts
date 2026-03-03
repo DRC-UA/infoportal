@@ -18,6 +18,26 @@ const REPEAT_GROUP_BUTTON_REPLACEMENT: Record<string, Record<string, string>> = 
     q_know_give_feedback: 'know_give_feedback',
     q_should_drc_improve: 'should_drc_improve',
   },
+  [KoboIndex.byName('meal_fgdPamShelterSpp').id]: {
+    q_aware_solar_panels: 'aware_solar_panels',
+    q_outages_duration: 'outages_duration',
+    q_describe_situation_electricity: 'describe_situation_electricity',
+    q_access_electricity_improved: 'access_electricity_improved',
+    q_informed_project_goals: 'informed_project_goals',
+    q_need_spp_information: 'need_spp_information',
+    q_assistance_agreed_energy: 'assistance_agreed_energy',
+    q_changes_operation_institution: 'changes_operation_institution',
+    q_issues_still_spp: 'issues_still_spp',
+    q_concerns_installation_spp: 'concerns_installation_spp',
+    q_satisfied_results_spp: 'satisfied_results_spp',
+    q_more_energy_secure: 'more_energy_secure',
+    q_timely_institution_spp: 'timely_institution_spp',
+    q_spp_installation_reliability: 'spp_installation_reliability',
+    q_inform_provide_feedback: 'inform_provide_feedback',
+    q_cfm_flyers_distributed: 'cfm_flyers_distributed',
+    q_employees_requested_exchange: 'employees_requested_exchange',
+    q_contractor_requested_exchange: 'contractor_requested_exchange',
+  },
 }
 
 export {EXCLUDED_COLUMNS_MAP, REPEAT_GROUP_BUTTON_REPLACEMENT}
