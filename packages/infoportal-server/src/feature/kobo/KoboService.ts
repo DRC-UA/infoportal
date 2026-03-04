@@ -524,13 +524,16 @@ export class KoboService {
       }),
       isIndexedXPath
         ? undefined
-        : this.prisma.$executeRawUnsafe(
-            `UPDATE "KoboAnswers"
-           SET answers     = jsonb_set(answers, '{${question}}', '"${KoboService.safeJsonValue(answer ?? '')}"'),
-               "updatedAt" = NOW()
-           WHERE id IN (${KoboService.safeIds(answerIds).join(',')})
+        : this.prisma.$executeRaw`
+            UPDATE "KoboAnswers"
+            SET answers = jsonb_set(
+              answers,
+              ARRAY[${question}],
+              to_jsonb(${answer ?? ''})
+            ),
+            "updatedAt" = NOW()
+            WHERE id = ANY(${KoboService.safeIds(answerIds)})
           `,
-          ),
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED_FROM_IP, {formId, answerIds, answer: {[question]: answer}})
   }
