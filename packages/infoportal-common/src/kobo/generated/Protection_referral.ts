@@ -1,14 +1,13 @@
 export namespace Protection_referral {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: a62ZpworuN4nFLznsUej8r
   export interface T {
     start: string
     end: string
     // __IP__TRIGGER_EMAIL [calculate] New referral case
     __IP__TRIGGER_EMAIL: string
-    // __IP__TRIGGER_EMAIL_2 [calculate] New referral case
-    __IP__TRIGGER_EMAIL_DELEGATES: string
+    // __IP__TRIGGER_EMAIL_Delegates [calculate] New referral case
+    __IP__TRIGGER_EMAIL_Delegates: string
     // date [date] Date
     date: Date | undefined
     // introduction/staff_to_insert_their_DRC_office [select_one] 1.1 DRC office
@@ -35,6 +34,10 @@ export namespace Protection_referral {
     specific_need_other: string | undefined
     // referral_details/referral_type [select_one] 2.1 Referral type
     referral_type: undefined | Option<'referral_type'>
+    // referral_details/sub_office [select_one] Select the office in your area to which you would like to transfer this case.
+    sub_office: undefined | Option<'sub_office'>
+    // referral_details/verbal_consent [select_one] Verbal consent provided?
+    verbal_consent: undefined | Option<'referral_closed'>
     // referral_details/service_requested [select_multiple] 2.2 Service requested
     service_requested: undefined | Option<'service_requested'>[]
     // referral_details/service_requested_other [text] 2.2.1 If other service requested, please specify
@@ -44,11 +47,13 @@ export namespace Protection_referral {
     cal_shelter_rehabilitation: string
     cal_cash_rent: string
     cal_cash_repair: string
+    cal_cash_fuel: string
     cal_cash_utilities: string
     cal_emergency_shelter_kit: string
     cal_agricultural_livelihood_support: string
     cal_business_support: string
     cal_vocational_training: string
+    cal_subsistence_farmers: string
     cal_victim_assistance: string
     cal_legal_aid: string
     cal_psychosocial_support: string
@@ -129,7 +134,6 @@ export namespace Protection_referral {
     // follow_up/comments [text] 4.6 Comments
     comments: string | undefined
   }
-
   export const options = {
     incoming_outgoing_referral: {
       incoming: `Incoming referral`,
@@ -140,9 +144,16 @@ export namespace Protection_referral {
       '330_sdc': `UKR-000330 SDC`,
       '336_uhf_iv': `UKR-000336 UHF VI`,
       '345_bha': `UKR-000345 BHA`,
+      ukr000350_sida: `UKR-000350 SIDA`,
+      ukr000355_dmfa: `UKR-000355 DMFA`,
       '363_uhf8': `UKR-000363 UHF VIII`,
       '372_echo': `UKR-000372 ECHO`,
+      ukr000388_bha: `UKR-000388 BHA`,
       ukr000397_gffo: `UKR-000397 GFFO`,
+      ukr000423_echo: `UKR-000423 ECHO`,
+      ukr000424_dutch_mfa: `UKR-000424 DUTCH`,
+      ukr000426_sdc: `UKR-000426 SDC`,
+      ukr000457_dmfa: `UKR-000457 DMFA`,
     },
     referral_closed: {
       yes: `Yes`,
@@ -184,6 +195,7 @@ export namespace Protection_referral {
       cash_animal_shelter_repair: `Cash For Animal Shelter Repair`,
       business_support: `Business support`,
       vocational_training: `Vocational training`,
+      subsistence_farmers: `Cash for subsistence farmers`,
       victim_assistance: `Victim assistance`,
       legal_aid: `Legal aid`,
       psychosocial_support: `Psychosocial support`,
@@ -215,6 +227,7 @@ export namespace Protection_referral {
       tenth_april: `Tenth of April`,
       tgh: `TGH`,
       unhcr: `UNHCR`,
+      lampa: `LAMPA`,
       other: `Other`,
     },
     gender: {
@@ -243,10 +256,15 @@ export namespace Protection_referral {
       refugee_Refenee: `Refugee`,
       unspecified_Unspeciencified: `Unspecified`,
     },
+    sub_office: {
+      kharkiv: `Kharkiv`,
+      sloviansk: `Sloviansk`,
+    },
     staff_to_insert_their_DRC_office: {
       chernihiv: `Chernihiv`,
       dnipro: `Dnipro`,
       kharkiv: `Kharkiv`,
+      kyiv: `Kyiv`,
       lviv: `Lviv`,
       mykolaiv: `Mykolaiv`,
       sumy: `Sumy`,
@@ -269,6 +287,10 @@ export namespace Protection_referral {
       CEJ014: `CEJ014`,
       CEJ015: `CEJ015`,
       CEJ016: `CEJ016`,
+      CEJ017: `CEJ017`,
+      CEJ018: `CEJ018`,
+      CEJ019: `CEJ019`,
+      CEJ020: `CEJ020`,
       CEJ_A: `CEJ-A`,
       CEJ_B: `CEJ-B`,
       CEJ_C: `CEJ-C`,
@@ -288,6 +310,11 @@ export namespace Protection_referral {
       UMY013: `UMY013`,
       UMY014: `UMY014`,
       UMY015: `UMY015`,
+      UMY016: `UMY016`,
+      UMY017: `UMY017`,
+      UMY018: `UMY018`,
+      UMY019: `UMY019`,
+      UMY020: `UMY020`,
       HRK001: `HRK001`,
       HRK002: `HRK002`,
       HRK003: `HRK003`,
@@ -306,12 +333,24 @@ export namespace Protection_referral {
       HRK016: `HRK016`,
       HRK017: `HRK017`,
       HRK018: `HRK018`,
+      HRK019: `HRK019`,
+      HRK020: `HRK020`,
+      HRK021: `HRK021`,
+      HRK022: `HRK022`,
       HRK_A: `HRK-A`,
       HRK_B: `HRK-B`,
       HRK_C: `HRK-C`,
       HRK_D: `HRK-D`,
       HRK_E: `HRK-E`,
       HRK_F: `HRK-F`,
+      HRK_G: `HRK-G`,
+      HRK_CL4: `CL-04`,
+      HRK_CL5: `CL-05`,
+      HRK_CL6: `CL-06`,
+      HRK_CL7: `CL-07`,
+      HRK_CL8: `CL-08`,
+      HRK_CL9: `CL-09`,
+      HRK_CL10: `CL-10`,
       DNK001: `DNK001`,
       DNK002: `DNK002`,
       DNK003: `DNK003`,
@@ -327,6 +366,16 @@ export namespace Protection_referral {
       DNK013: `DNK013`,
       DNK014: `DNK014`,
       DNK015: `DNK015`,
+      DNK016: `DNK016`,
+      DNK017: `DNK017`,
+      DNK018: `DNK018`,
+      DNK019: `DNK019`,
+      DNK020: `DNK020`,
+      DNK021: `DNK021`,
+      DNK022: `DNK022`,
+      DNK023: `DNK023`,
+      DNK024: `DNK024`,
+      DNK025: `DNK025`,
       DNK_A: `DNK-A`,
       DNK_B: `DNK-B`,
       DNK_C: `DNK-C`,
@@ -343,9 +392,6 @@ export namespace Protection_referral {
       LWO010: `LWO010`,
       LWO011: `LWO011`,
       LWO012: `LWO012`,
-      LWO013: `LWO013`,
-      LWO014: `LWO014`,
-      LWO015: `LWO015`,
       NVL001: `NLV001`,
       NVL002: `NLV002`,
       NVL003: `NLV003`,
@@ -361,7 +407,11 @@ export namespace Protection_referral {
       NVL013: `NLV013`,
       NVL014: `NLV014`,
       NVL015: `NLV015`,
-      NLV_A: `NLV-A`,
+      NVL016: `NLV016`,
+      NVL017: `NLV017`,
+      NVL018: `NLV018`,
+      NVL019: `NLV019`,
+      NVL020: `NLV020`,
       NLV_B: `NLV-B`,
       NLV_C: `NLV-C`,
       NLV_D: `NLV-D`,
