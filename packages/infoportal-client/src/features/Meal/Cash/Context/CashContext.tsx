@@ -119,6 +119,7 @@ export const CashPdmProvider: React.FC<{children: ReactNode}> = ({children}) => 
           ukr000342_private_funds: DrcProject['UKR-000342 Pooled Funds'],
           ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
           ukr000388_bha: DrcProject['UKR-000388 BHA'],
+          ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
           other: DrcProject['Other'],
         })
         .default(() => undefined),

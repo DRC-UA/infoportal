@@ -17,6 +17,8 @@ export class MapFields {
         return DrcProject['UKR-000388 BHA']
       case 'ukr000380_danida':
         return DrcProject['UKR-000380 DANIDA']
+      case 'ukr000423_echo4':
+        return DrcProject['UKR-000423 ECHO4']
       default:
         return undefined
     }

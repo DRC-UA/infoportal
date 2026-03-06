@@ -53,6 +53,7 @@ import {
   Protection_ipa_pdm,
   Gbv_girl_shine,
   Shelter_commonSpaces,
+  Bn_pam,
 } from '../generated/index.js'
 import {Shelter_modernWomen} from '../generated/Shelter_modernWomen'
 
@@ -369,6 +370,27 @@ export namespace KoboXmlMapper {
     }
 
     export const cash_pdm: PersonsMapper<Meal_cashPdm.T> = (row) => {
+      return [
+        {
+          age: row.age,
+          gender: match(row.sex)
+            .cases({
+              male: Person.Gender.Male,
+              female: Person.Gender.Female,
+            })
+            .default(undefined),
+          displacement: match(row.status_person)
+            .cases({
+              idp: Person.DisplacementStatus.Idp,
+              long: Person.DisplacementStatus.NonDisplaced,
+              returnee: Person.DisplacementStatus.Returnee,
+            })
+            .default(undefined),
+        },
+      ]
+    }
+
+    export const bn_pam: PersonsMapper<Bn_pam.T> = (row) => {
       return [
         {
           age: row.age,

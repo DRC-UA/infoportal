@@ -25,6 +25,7 @@ import {
   Gp_case_management,
   Protection_ipa_pdm,
   DrcProjectHelper,
+  Bn_pam,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {match, map, seq, Seq} from '@axanc/ts-utils'
@@ -50,6 +51,7 @@ export enum PdmType {
 }
 
 export type PdmForm =
+  | Bn_pam.T
   | Meal_cashPdm.T
   | Meal_shelterPdm.T
   | Meal_nfiPdm.T
@@ -132,6 +134,47 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
             })
             .default(() => undefined),
           persons: KoboXmlMapper.Persons.cash_pdm(record),
+          answers: record,
+        })),
+      ),
+      api.kobo.typedAnswers.search.bn_pam({filters: periodFilter}).then((_) =>
+        seq(_.data).map((record) => ({
+          type: PdmType.Cash,
+          oblast: OblastIndex.byKoboName(record.ben_det_oblast)!.name,
+          project: match(record.donor)
+            .cases({
+              ukr000270_pofu: DrcProject['UKR-000270 Pooled Funds'],
+              ukr000304_pspu: DrcProject['UKR-000304 PSPU'],
+              ukr000307_private_foundations: DrcProject['UKR-000307 Private Foundations'],
+              ukr000350_sida: DrcProject['UKR-000350 SIDA'],
+              ukr000355_dmfa: DrcProject['UKR-000355 Danish MFA'],
+              ukr000371_dmfa: DrcProject['UKR-000371 ECHO3'],
+              ukr000373_nnf: DrcProject['UKR-000373 Novo-Nordilsk'],
+              ukr000378_dmfa: DrcProject['UKR-000378 Danish MFA'],
+              ukr000380_danida: DrcProject['UKR-000380 DANIDA'],
+              ukr000385_pooled_funds: DrcProject['UKR-000385 Pooled Funds'],
+              ukr000386_mass_appeals: DrcProject['UKR-000386 Pooled Funds'],
+              ukr000387_wra: DrcProject['UKR-000387 WRA'],
+              ukr000388_bha: DrcProject['UKR-000388 BHA'],
+              ukr000396_dmfa: DrcProject['UKR-000396 Danish MFA'],
+              ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
+              ukr000398_sdc: DrcProject['UKR-000398 SDC'],
+              ukr000399_sdc: DrcProject['UKR-000399 SDC3'],
+              ukr000418_sida: DrcProject['UKR-000418 SIDA'],
+            })
+            .default(DrcProjectHelper.searchByCode(record.donor)),
+          office: match(record.office!)
+            .cases({
+              dnipro: DrcOffice.Dnipro,
+              hrk: DrcOffice.Kharkiv,
+              chernihiv: DrcOffice.Chernihiv,
+              sumy: DrcOffice.Sumy,
+              mykolaiv: DrcOffice.Mykolaiv,
+              zaporizhzhya: DrcOffice.Zaporizhzhya,
+              slovyansk: DrcOffice.Sloviansk,
+            })
+            .default(() => undefined),
+          persons: KoboXmlMapper.Persons.bn_pam(record),
           answers: record,
         })),
       ),
