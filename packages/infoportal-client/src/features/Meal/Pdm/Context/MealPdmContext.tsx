@@ -24,6 +24,7 @@ import {
   Gbv_wgss_pdm,
   Gp_case_management,
   Protection_ipa_pdm,
+  DrcProjectHelper,
 } from 'infoportal-common'
 import {Kobo} from 'kobo-sdk'
 import {match, map, seq, Seq} from '@axanc/ts-utils'
@@ -96,7 +97,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
         seq(_.data).map((record) => ({
           type: PdmType.Cash,
           oblast: OblastIndex.byKoboName(record.ben_det_oblast!)!.name,
-          project: match(record.donor!)
+          project: match(record.donor)
             .cases({
               ukr000270_pofu: DrcProject['UKR-000270 Pooled Funds'],
               ukr000298_novo: DrcProject['UKR-000298 Novo-Nordisk'],
@@ -116,7 +117,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
               other: DrcProject['Other'],
             })
-            .default(() => undefined),
+            .default(DrcProjectHelper.searchByCode(record.donor)),
           office: match(record.office!)
             .cases({
               dnipro: DrcOffice.Dnipro,
