@@ -1000,6 +1000,7 @@ export namespace Meal_cashPdm {
       ukr000341_hoffman_husmans_fond_mpca: `Hoffman & Husmans Fond MPCA (UKR-000341)`,
       ukr000342_private_funds: `Private Funds UKR-000342`,
       ukr000380_danida: `DANIDA (UKR-000380)`,
+      ukr000423_echo4: `ECHO4 (UKR-000423)`,
       other: `Other`,
     },
     received_feed_livestock_winter_long: {
