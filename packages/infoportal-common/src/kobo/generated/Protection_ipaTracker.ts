@@ -111,6 +111,8 @@ export namespace Protection_ipaTracker {
       ukr000388_bha: `UKR-000388 BHA`,
       ukr000397_gffo: `UKR-000397 GFFO`,
       ukr000423_echo4: `UKR-000423 ECHO`,
+      ukr000426_sdc: `UKR-000426 SDC`,
+      ukr000457_dmfa: `UKR-000457 DMFA`,
     },
     type_assistance: {
       in_kind: `In-kind`,
