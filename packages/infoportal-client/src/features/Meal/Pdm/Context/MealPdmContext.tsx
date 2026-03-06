@@ -145,7 +145,6 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
             .cases({
               ukr000270_pofu: DrcProject['UKR-000270 Pooled Funds'],
               ukr000304_pspu: DrcProject['UKR-000304 PSPU'],
-              ukr000307_private_foundations: DrcProject['UKR-000307 Private Foundations'],
               ukr000350_sida: DrcProject['UKR-000350 SIDA'],
               ukr000355_dmfa: DrcProject['UKR-000355 Danish MFA'],
               ukr000371_dmfa: DrcProject['UKR-000371 ECHO3'],
@@ -154,7 +153,6 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000380_danida: DrcProject['UKR-000380 DANIDA'],
               ukr000385_pooled_funds: DrcProject['UKR-000385 Pooled Funds'],
               ukr000386_mass_appeals: DrcProject['UKR-000386 Pooled Funds'],
-              ukr000387_wra: DrcProject['UKR-000387 WRA'],
               ukr000388_bha: DrcProject['UKR-000388 BHA'],
               ukr000396_dmfa: DrcProject['UKR-000396 Danish MFA'],
               ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
