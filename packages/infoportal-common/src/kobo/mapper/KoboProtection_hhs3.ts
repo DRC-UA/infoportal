@@ -49,5 +49,6 @@ export const currentProtectionProjects = [
   DrcProject['UKR-000355 Danish MFA'],
   DrcProject['UKR-000397 GFFO'],
   DrcProject['UKR-000423 ECHO4'],
+  DrcProject['UKR-000457 DMFA'],
   DrcProject['None'],
 ]
