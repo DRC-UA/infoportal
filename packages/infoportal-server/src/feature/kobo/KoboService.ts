@@ -524,7 +524,7 @@ export class KoboService {
       }),
       isIndexedXPath
         ? undefined
-        : this.prisma.$executeRaw`
+        : this.prisma.$executeRaw(Prisma.sql`
             UPDATE "KoboAnswers"
             SET answers = jsonb_set(
               answers,
@@ -532,8 +532,8 @@ export class KoboService {
               to_jsonb(${answer ?? ''})
             ),
             "updatedAt" = NOW()
-            WHERE id = ANY(${KoboService.safeIds(answerIds)})
-          `,
+            WHERE id = ANY(${answerIds}::text[])
+          `),
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED_FROM_IP, {formId, answerIds, answer: {[question]: answer}})
   }
