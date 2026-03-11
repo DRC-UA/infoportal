@@ -426,16 +426,18 @@ export const columnBySchemaGenerator = ({
 
   const getSelectMultiple = (name: string) => {
     const q = schema.helper.questionIndex[name]
+
     return {
       ...getCommon(q),
       type: 'select_multiple',
       options: () =>
-        schema.helper.choicesIndex[q.select_from_list_name!].map(({name}) => ({
-          value: name,
-          label: schema.translate.choice(name, name),
+        schema.helper.choicesIndex[q.select_from_list_name!].map((choice) => ({
+          value: choice.name,
+          label: schema.translate.choice(name, choice.name),
         })),
       render: (row: Row) => {
         const v = getValue(row, name) as string[] | undefined
+
         try {
           const label = v?.map((_) => schema.translate.choice(name, _)).join(' | ')
           return {
