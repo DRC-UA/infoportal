@@ -1,4 +1,4 @@
-import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
+import {createContext, useContext, useEffect, useMemo, type ReactNode} from 'react'
 import {UseSetState} from '@alexandreannic/react-hooks-lib'
 import {UseDatatableData, useDatatableData} from '@/shared/Datatable/context/useDatatableData'
 import {DatatableModal, useDatatableModal} from '@/shared/Datatable/context/useDatatableModal'
@@ -23,7 +23,7 @@ export interface DatatableContext<T extends DatatableRow> {
   options: UseDatatableOptions<T>
 }
 
-const DatatableContext = React.createContext({} as DatatableContext<any>)
+const DatatableContext = createContext({} as DatatableContext<any>)
 
 export const useDatatableContext = <T extends DatatableRow>() => useContext<DatatableContext<T>>(DatatableContext)
 
@@ -85,7 +85,7 @@ export const DatatableProvider = <T extends DatatableRow>({
 
   const options = useDatatableOptions<T>({
     data,
-    columns: columns,
+    columns,
     columnsIndex,
   })
 

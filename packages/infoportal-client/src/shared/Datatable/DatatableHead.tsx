@@ -12,6 +12,7 @@ import {DatatableHeadCopyIds} from '@/shared/Datatable/DatatableHeadCopyIds'
 import {Txt} from '@/shared/Txt'
 
 import {extractFormNameAndColumnsCount} from './utils'
+import {CLIENT_PUBLIC_FILES_PATH} from 'next/dist/shared/lib/constants'
 
 export const DatatableHead = (() => {
   const Component = <T extends DatatableRow>({
@@ -109,6 +110,7 @@ export const DatatableHead = (() => {
           {columns.map((c) => {
             const sortedByThis = search.sortBy === c.id
             const active = sortedByThis || !!filters[c.id]
+
             return (
               <td
                 key={c.id}

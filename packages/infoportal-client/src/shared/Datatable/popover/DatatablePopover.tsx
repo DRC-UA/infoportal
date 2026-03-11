@@ -103,11 +103,13 @@ export const MultipleChoicesPopover = <T extends DatatableRow>({
         return ChartHelper.single({data: mapped})
       }
     })()
+
     return chart
       .setLabel(seq(translations).reduceObject<Record<string, ReactNode>>((_) => [_.value!, _.label!]))
       .sortBy.value()
       .get()
   }, [getValue, data, translations])
+
   return (
     <Popover
       open={!!anchorEl}

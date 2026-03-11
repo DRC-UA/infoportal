@@ -1,10 +1,11 @@
-import {DatatableColumn, DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
 import {useCallback, useEffect, useMemo} from 'react'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {seq} from '@axanc/ts-utils'
-import {UseDatatableData} from '@/shared/Datatable/context/useDatatableData'
 
 import {KeyOf} from 'infoportal-common'
+
+import {DatatableColumn, DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
+import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
+import {UseDatatableData} from '@/shared/Datatable/context/useDatatableData'
 
 export type UseDatatableOptions<T extends DatatableRow> = ReturnType<typeof useDatatableOptions<T>>
 
@@ -47,7 +48,7 @@ export const useDatatableOptions = <T extends DatatableRow>({
                 ?.map(col.render)
                 .distinct((_) => _.value)
                 .sort((a, b) => (b.value ?? '').localeCompare(a.value ?? ''))
-                .map((_) => DatatableUtils.buildCustomOption(_.value as string, _.option as string)),
+                .map((_) => DatatableUtils.buildCustomOption(_.value as string, _.option)),
             )
           } else if (col.type === 'select_multiple') {
             throw new Error(`options not implemented for ${columnId}.`)
@@ -65,8 +66,9 @@ export const useDatatableOptions = <T extends DatatableRow>({
           }
         }
       }
+
       return optionsRef.get(columnId)
     },
-    [data.filteredData, data.filters, columns],
+    [data, data.filteredData, data.filters, columns],
   )
 }

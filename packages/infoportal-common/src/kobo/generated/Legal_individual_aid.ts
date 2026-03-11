@@ -355,6 +355,7 @@ export namespace Legal_individual_aid {
       ukr000423_echo: `UKR-000423 ECHO`,
       ukr000424_dutch_mfa: `UKR-000424 Dutch MFA`,
       ukr000426_sdc: `UKR-000426 SDC`,
+      ukr000457_dmfa: `UKR-000457 DMFA`,
     },
     another_lawyer: {
       viktoriia_borman: `Viktoriia Borman viktoriia.borman@drc.ngo – Lawyer UMY`,
@@ -365,6 +366,7 @@ export namespace Legal_individual_aid {
       serhii_shkramada: `Serhii Shkramada serhii.shkramada@drc.ngo – Lawyer SLO`,
       roman_pikulin: `Roman Pikulin roman.pikulin@drc.ngo – Lawyer SLO`,
       yevhen_dehtiarov: `Yevhen Dehtiarov yevhen.dehtiarov@drc.ngo – Lawyer SLO`,
+      yevhen_fedorinov: `Yevhen Fedorinov yevhen.fedorinov@drc.ngo – Lawyer SLO`,
       inna_fedorova: `Inna Fedorova inna.fedorova@drc.ngo - Protection (Legal) TL NLV/KHE`,
       valentyna_shavlak: `Valentyna Shavlak valentyna.shavlak@drc.ngo - Lawyer NLV`,
       vitalii_kolodystyi: `Vitalii Kolodystyi vitalii.kolodystyi@drc.ngo - Lawyer NLV`,
