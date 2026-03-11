@@ -1,5 +1,5 @@
 import {chunkify, duration, match, Obj, seq} from '@axanc/ts-utils'
-import {KoboForm, Prisma, PrismaClient} from '@prisma/client'
+import {Prisma, PrismaClient, type KoboForm} from '@prisma/client'
 import {format} from 'date-fns'
 import {Kobo} from 'kobo-sdk'
 
@@ -166,10 +166,10 @@ export class KoboService {
                 OR: filters.filterBy?.flatMap((filter) =>
                   Util.ensureArr(filter.value).map((v) => ({
                     answers: {
-                      path: [filter.column],
+                      path: filter.column.split('/'),
                       ...(v
                         ? {
-                            ['string_contains']: v,
+                            string_contains: v,
                           }
                         : {
                             equals: Prisma.DbNull,

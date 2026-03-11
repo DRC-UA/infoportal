@@ -35,7 +35,7 @@ export const DatabaseAccessForm = ({
   form: Kobo.Form
 }) => {
   const langIndex = 0
-  const survey = form.content.survey
+  const survey = seq(form.content.survey)
 
   const {m} = useI18n()
   const {toastHttpError} = useIpToast()
@@ -53,15 +53,27 @@ export const DatabaseAccessForm = ({
 
   const accessForm = useForm<Form>()
 
-  const {indexQuestion, indexOptionsByListName, indexOptionsByName} = useMemo(() => {
+  const {
+    indexQuestion,
+    // indexQuestionXPath,
+    indexOptionsByListName,
+    indexOptionsByName,
+  } = useMemo(() => {
     return {
-      indexQuestion: seq(survey)
-        .compactBy('name')
-        .groupByFirst((_) => _.name),
-      indexOptionsByListName: seq(form.content.choices).groupBy((_) => _.list_name),
-      indexOptionsByName: seq(form.content.choices).groupByFirst((_) => _.name),
+      indexQuestion: survey.compactBy('name').groupByFirst(({name}) => name),
+      // indexQuestionXPath: survey.compactBy('$xpath').groupByFirst(({$xpath}) => $xpath),
+      indexOptionsByListName: seq(form.content.choices).groupBy(({list_name}) => list_name),
+      indexOptionsByName: seq(form.content.choices).groupByFirst(({name}) => name),
     }
   }, [form])
+
+  console.log({
+    indexQuestion,
+    // indexQuestionXPath,
+    indexOptionsByListName,
+    indexOptionsByName,
+    form,
+  })
 
   const questions = useMemo(() => {
     return map(survey, (schema) =>
@@ -121,7 +133,7 @@ export const DatabaseAccessForm = ({
                 <Autocomplete
                   {...field}
                   value={value}
-                  onInputChange={(event, newInputValue, reason) => {
+                  onInputChange={(_event, newInputValue, reason) => {
                     if (reason === 'reset') {
                       onChange('')
                     } else {
@@ -129,9 +141,9 @@ export const DatabaseAccessForm = ({
                     }
                   }}
                   filterOptions={filterOptions(indexQuestion)}
-                  onChange={(e, _) => {
-                    if (_) {
-                      onChange(_)
+                  onChange={(_event, value) => {
+                    if (value) {
+                      onChange(indexQuestion[value].$xpath)
                       accessForm.setValue('questionAnswer', [])
                     }
                   }}
@@ -158,7 +170,7 @@ export const DatabaseAccessForm = ({
                             <Txt bold block>
                               {template.label(indexQuestion[option], m)}
                             </Txt>
-                            <Txt color="disabled">{option}</Txt>
+                            <Txt color="disabled">{indexQuestion[option].$xpath}</Txt>
                           </div>
                         </Box>
                       )
@@ -173,7 +185,7 @@ export const DatabaseAccessForm = ({
                               {KoboSchemaHelper.getLabel(indexQuestion[option], langIndex).replace(/<[^>]+>/g, '') ??
                                 option}
                             </Txt>
-                            <Txt color="disabled">{option}</Txt>
+                            <Txt color="disabled">{indexQuestion[option].$xpath}</Txt>
                           </div>
                         </Box>
                       )
@@ -183,7 +195,7 @@ export const DatabaseAccessForm = ({
             />
             {map(accessForm.watch('question'), (questionName) => {
               if (questionName === '') return
-              const question = indexQuestion[questionName]
+              const question = Object.values(indexQuestion).find(({$xpath}) => $xpath === questionName)
               if (!question) return
               switch (question.type) {
                 case 'select_one':
@@ -221,19 +233,30 @@ export const DatabaseAccessForm = ({
                               <Chip size="small" variant="outlined" label={option} {...getTagProps({index})} />
                             ))
                           }
-                          renderOption={(props, option) => (
-                            <Box component="li" {...props} key={option}>
-                              <div>
-                                <Txt block>
+                          renderOption={(props, option) => {
+                            return (
+                              <Box
+                                component="li"
+                                {...props}
+                                key={option}
+                                sx={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'flex-start',
+                                }}
+                              >
+                                <Txt mr="auto">
                                   {KoboSchemaHelper.getLabel(indexOptionsByName[option], langIndex).replace(
                                     /<[^>]+>/g,
                                     '',
                                   ) ?? option}
                                 </Txt>
-                                <Txt color="disabled">{option}</Txt>
-                              </div>
-                            </Box>
-                          )}
+                                <Txt mr="auto" color="disabled">
+                                  {option}
+                                </Txt>
+                              </Box>
+                            )
+                          }}
                         />
                       )}
                     />
