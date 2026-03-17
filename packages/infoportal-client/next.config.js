@@ -1,7 +1,7 @@
-const path = require('path')
+import path from 'node:path'
 
 /** @type {import('next').NextConfig} */
-module.exports = {
+export default {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   externalDir: true,
   swcMinify: true,
