@@ -9,6 +9,7 @@ module.exports = {
   reactStrictMode: true,
   staticPageGenerationTimeout: 200,
   output: 'standalone',
+  skipTrailingSlashRedirect: true,
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
