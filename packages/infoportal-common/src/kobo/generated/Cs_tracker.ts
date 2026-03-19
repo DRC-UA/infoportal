@@ -1,6 +1,5 @@
 export namespace Cs_tracker {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: ac5Xu2t2vJ97WneTGaSVNH
   export interface T {
     start: string
@@ -39,8 +38,8 @@ export namespace Cs_tracker {
     participants_partner_name: number | undefined
     // participants_organisation/participants_other_num [integer] Number participants (Other)
     participants_other_num: number | undefined
-    // participants_organisation/participants_other_name [integer] Affiliation of participants (Other)
-    participants_other_name: number | undefined
+    // participants_organisation/participants_other_name [text] Affiliation of participants (Other)
+    participants_other_name: string | undefined
     // participants_organisation/sector_team [select_multiple] Sector/Team
     sector_team: undefined | Option<'sector_team'>[]
     // participants_organisation/hdp_num [integer] HDP:
@@ -94,33 +93,17 @@ export namespace Cs_tracker {
     // email [text] Please provide your e-mail in case of any follow-up questions
     email: string | undefined
   }
-
   export const options = {
     project_code: {
-      UKR_000270: `UKR-000270 Pooled Funds`,
-      'UKR-000304': `UKR-000304 PSPU`,
-      UKR_000306: `UKR-000306 Dutch II`,
-      UKR_000307: `UKR-000307 KG Foundation`,
-      UKR_000350: `UKR-000350 SIDA`,
-      UKR_000355: `UKR-000355 Danish MFA`,
-      UKR_000372: `UKR-000372 ECHO3`,
-      UKR_000373: `UKR-000373 Novo-Nordilsk`,
-      UKR_000378: `UKR-000378 Danish MFA`,
-      UKR_000380: `UKR-000380 DANIDA`,
-      UKR_000385: `UKR-000385 Pooled Funds`,
-      UKR_000386: `UKR-000386 Pooled Funds`,
-      'UK_-000387': `UKR-000387 WRA`,
-      UKR_000388: `UKR-000388 BHA`,
-      UKR_000392: `UKR-000392 HGBF HDP`,
-      UKR_000396: `UKR-000396 Danish MFA`,
-      UKR_000397: `UKR-000397 GFFO`,
-      UKR_000398: `UKR-000398 SDC`,
-      UKR_000399: `UKR-000399 SDC3`,
-      UKR_000418: `UKR-000418 SIDA`,
-      UKR_000419: `UKR-000419 Danida SPA`,
-      UKR_000420: `UKR-000419 Danida SPA`,
+      ukr000304_pspu: `UKR-000304 PSPU`,
+      ukr000306_dutch: `UKR-000306 Dutch II`,
+      ukr000350_sida: `UKR-000350 SIDA`,
+      ukr000355_dmfa: `UKR-000355 Danish MFA`,
+      ukr000363_uhf8: `UKR-000363 UHF8`,
+      ukr000424_dutch_mfa: `UKR-000424 Dutch MFA`,
+      ukr000426_sdc: `UKR-000426 SDC`,
       na: `Not applicable`,
-      other: `Other`,
+      other: `Other`
     },
     undefined: {
       bellow_30y: `Below 30 years old`,
@@ -132,12 +115,12 @@ export namespace Cs_tracker {
       other: `Other`,
       pns: `Prefer not to say`,
       yes: `Yes`,
-      no: `No`,
+      no: `No`
     },
     organisation: {
       drc: `DRC`,
       partner: `Partner`,
-      other: `Other Organisation`,
+      other: `Other Organisation`
     },
     sector_team: {
       hdp: `HDP`,
@@ -148,7 +131,7 @@ export namespace Cs_tracker {
       partnership: `Partnership`,
       support: `Support Services`,
       bn: `Basic Needs Team`,
-      other: `Other`,
+      other: `Other`
     },
     office: {
       kyiv: `Kyiv (CO)`,
@@ -160,26 +143,26 @@ export namespace Cs_tracker {
       ivankiv: `Ivankiv`,
       sloviansk: `Sloviansk`,
       dnipro: `Dnipro`,
-      other: `Other`,
+      other: `Other`
     },
     role_organisation: {
       manager: `Management`,
       support: `Non-Management`,
-      unknown: `Unknown`,
+      unknown: `Unknown`
     },
     training_format: {
       offline: `Offline`,
-      online: `Online`,
+      online: `Online`
     },
     training_duration: {
       half_day: `Half-day`,
       '1_2days': `1-2 days`,
-      '3days': `3 days`,
+      '3days': `3 days`
     },
     training_type: {
       session: `Training Session`,
-      tot: `ToT`,
-    },
+      tot: `ToT`
+    }
   } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
@@ -205,7 +188,6 @@ export namespace Cs_tracker {
       participants_partner_num: _.participants_partner_num ? +_.participants_partner_num : undefined,
       participants_partner_name: _.participants_partner_name ? +_.participants_partner_name : undefined,
       participants_other_num: _.participants_other_num ? +_.participants_other_num : undefined,
-      participants_other_name: _.participants_other_name ? +_.participants_other_name : undefined,
       sector_team: _.sector_team?.split(' '),
       hdp_num: _.hdp_num ? +_.hdp_num : undefined,
       ecrec_num: _.ecrec_num ? +_.ecrec_num : undefined,
@@ -228,6 +210,6 @@ export namespace Cs_tracker {
       role_organisation: _.role_organisation?.split(' '),
       manager_num: _.manager_num ? +_.manager_num : undefined,
       non_manager_num: _.non_manager_num ? +_.non_manager_num : undefined,
-      na_num: _.na_num ? +_.na_num : undefined,
+      na_num: _.na_num ? +_.na_num : undefined
     }) as T
 }
