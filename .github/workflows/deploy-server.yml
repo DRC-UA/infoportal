@@ -13,7 +13,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v6
         with:
-          node-version: lts/Krypton
+          node-version: ${{ env.RUNNER_NODE_VERSION }}
 
       - name: Clean
         run: |
