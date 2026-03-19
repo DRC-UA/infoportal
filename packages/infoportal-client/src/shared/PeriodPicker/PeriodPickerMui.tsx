@@ -51,7 +51,7 @@ export const PeriodPickerMui = ({
       minDate={min}
       maxDate={max}
       localeText={{start: label?.[0], end: label?.[1]}}
-      // sx={{mb: -0.25, mt: -0.5, ...sx}}
+      sx={{mb: -0.25, mt: -0.5, ...sx}}
       defaultValue={toDateRange(defaultValue)}
       value={toDateRange(value)}
       onChange={handleChange}
@@ -61,8 +61,16 @@ export const PeriodPickerMui = ({
         },
         textField: {
           size: 'small',
-          // sx: {minWidth: 228, marginTop: 0, paddingTop: 0, marginRight: 1, ...sx},
+          sx: {minWidth: 228, marginTop: 0, paddingTop: 0, ...sx},
           fullWidth,
+        },
+        inputAdornment: {
+          sx: {
+            marginLeft: 0.5,
+            '& .MuiIconButton-root': {
+              padding: 0.75,
+            },
+          },
         },
         shortcuts: {items: shortcutsMaker(currentLang)},
       }}

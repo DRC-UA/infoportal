@@ -1,17 +1,15 @@
+import {useEffect, useState} from 'react'
 import {
   FormControl,
   InputLabel,
-  InputProps as StandardInputProps,
+  type InputProps as StandardInputProps,
   OutlinedInput,
-  OutlinedInputProps,
-  TextFieldProps,
+  type OutlinedInputProps,
+  type TextFieldProps,
 } from '@mui/material'
-import {fromZonedTime} from 'date-fns-tz'
-import React, {useEffect, useState} from 'react'
 
 export interface DatepickerProps
-  extends Omit<OutlinedInputProps, 'onChange' | 'value'>,
-    Pick<TextFieldProps, 'InputProps' | 'InputLabelProps'> {
+  extends Omit<OutlinedInputProps, 'onChange' | 'value'>, Pick<TextFieldProps, 'InputProps' | 'InputLabelProps'> {
   min?: Date
   max?: Date
   value?: Date
@@ -21,7 +19,7 @@ export interface DatepickerProps
   fullWidth?: boolean
   withTime?: boolean
   timeOfDay?: // when picking a date, the Date returned will be at 00:00:000 in the user timezone
-  | 'startOfDay'
+    | 'startOfDay'
     // with this, it will be at 23:59:999 in the user timezone
     | 'endOfDay'
 }

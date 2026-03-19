@@ -127,35 +127,31 @@ export const MetaSidebar = () => {
                 />
               </Box>
             </Typography>
-            <SidebarSubSection dense title={m.submittedAt} keepOpen>
-              <Box sx={{px: 1}}>
-                <DebouncedInput<[Date | undefined, Date | undefined]>
-                  value={[ctx.period.start, ctx.period.end]}
-                  defaultValue={[ctx.period.start, ctx.period.end]}
-                  onChange={([start, end]) => {
-                    ctx.setPeriod((prev) => ({...prev, start, end}))
-                  }}
-                >
-                  {(value, onChange) => (
-                    <PeriodPicker value={value} onChange={onChange} label={[m.start, m.endIncluded]} max={today} />
-                  )}
-                </DebouncedInput>
-              </Box>
+            <SidebarSubSection dense title={m.submittedAt} px={0.2} keepOpen>
+              <DebouncedInput<[Date | undefined, Date | undefined]>
+                value={[ctx.period.start, ctx.period.end]}
+                defaultValue={[ctx.period.start, ctx.period.end]}
+                onChange={([start, end]) => {
+                  ctx.setPeriod((prev) => ({...prev, start, end}))
+                }}
+              >
+                {(value, onChange) => (
+                  <PeriodPicker value={value} onChange={onChange} label={[m.start, m.endIncluded]} max={today} />
+                )}
+              </DebouncedInput>
             </SidebarSubSection>
-            <SidebarSubSection dense title={m.committedAt} keepOpen>
-              <Box sx={{px: 1}}>
-                <DebouncedInput<[Date | undefined, Date | undefined]>
-                  value={[ctx.periodCommit.start, ctx.periodCommit.end]}
-                  defaultValue={[ctx.periodCommit.start, ctx.periodCommit.end]}
-                  onChange={([start, end]) => {
-                    ctx.setPeriodCommit((prev) => ({...prev, start, end}))
-                  }}
-                >
-                  {(value, onChange) => (
-                    <PeriodPicker value={value} onChange={onChange} label={[m.start, m.endIncluded]} max={today} />
-                  )}
-                </DebouncedInput>
-              </Box>
+            <SidebarSubSection dense title={m.committedAt} px={0.2} keepOpen>
+              <DebouncedInput<[Date | undefined, Date | undefined]>
+                value={[ctx.periodCommit.start, ctx.periodCommit.end]}
+                defaultValue={[ctx.periodCommit.start, ctx.periodCommit.end]}
+                onChange={([start, end]) => {
+                  ctx.setPeriodCommit((prev) => ({...prev, start, end}))
+                }}
+              >
+                {(value, onChange) => (
+                  <PeriodPicker value={value} onChange={onChange} label={[m.start, m.endIncluded]} max={today} />
+                )}
+              </DebouncedInput>
             </SidebarSubSection>
             <SidebarSubSection title={m.distinct} icon="join_inner">
               <Item label={m._meta.distinctBySubmission}>
