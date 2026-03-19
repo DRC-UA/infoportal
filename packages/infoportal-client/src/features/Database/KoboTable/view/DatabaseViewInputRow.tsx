@@ -1,35 +1,36 @@
-import {alpha, Box, Collapse, Radio} from '@mui/material'
+import {styled, alpha, Box, Collapse, Radio} from '@mui/material'
 import {DatabaseView, DatabaseViewVisibility} from '@/core/sdk/server/databaseView/DatabaseView'
 import {useI18n} from '@/core/i18n'
 import {IpIconBtn, Txt} from '@/shared'
 import {IpListItem} from '@/shared/IpListItem'
 import {ipSelectItem, IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {BtnConfirm} from '@/shared/BtnConfirm'
-import React from 'react'
-import {makeStyles} from 'tss-react/mui'
 
-const useStyles = makeStyles<{open?: boolean}>()((t, {open}) => ({
-  root: {
-    marginBottm: open ? t.spacing(1) : 0,
-    border: '2px solid transparent',
-    borderColor: open ? t.palette.primary.main : undefined,
-    // border: '2px solid + ' open ? alpha(t.palette.primary.main, .08) : undefined,
-    padding: open ? t.spacing(1) : 0,
-    transition: t.transitions.create('all'),
-    borderRadius: t.shape.borderRadius + 'px',
-    boxShadow: open ? t.shadows[1] : undefined,
-    ':hover': {
-      background: alpha(t.palette.primary.main, 0.08),
-    },
+const RootDiv = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{open?: boolean}>(({theme, open}) => ({
+  marginBottm: open ? theme.spacing(1) : 0,
+  border: '2px solid transparent',
+  borderColor: open ? theme.palette.primary.main : undefined,
+  // border: '2px solid + ' open ? alpha(t.palette.primary.main, .08) : undefined,
+  padding: open ? theme.spacing(1) : 0,
+  transition: theme.transitions.create('all'),
+  borderRadius: theme.shape.borderRadius + 'px',
+  boxShadow: open ? theme.shadows[1] : undefined,
+  ':hover': {
+    background: alpha(theme.palette.primary.main, 0.08),
   },
-  head: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingRight: 0,
-    paddingLeft: 0,
-    borderBottom: open ? `1px solid ${t.palette.divider}` : undefined,
-    marginBottom: open ? t.spacing(1) : 0,
-  },
+}))
+
+const HeadDiv = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{open?: boolean}>(({theme, open}) => ({
+  display: 'flex',
+  alignItems: 'center',
+  paddingRight: 0,
+  paddingLeft: 0,
+  borderBottom: open ? `1px solid ${theme.palette.divider}` : undefined,
+  marginBottom: open ? theme.spacing(1) : 0,
 }))
 
 export const DatabaseViewInputRow = ({
@@ -52,12 +53,11 @@ export const DatabaseViewInputRow = ({
   onClick: () => void
 }) => {
   const {m} = useI18n()
-  const {classes} = useStyles({open})
   const {formatDateTime} = useI18n()
 
   return (
-    <div className={classes.root}>
-      <div className={classes.head} onClick={onClick}>
+    <RootDiv open={open}>
+      <HeadDiv open={open} onClick={onClick}>
         <Radio checked={checked} />
         <Box sx={{flex: 1, height: '32px', display: 'flex', alignItems: 'center'}}>
           {view.name}&nbsp;<Txt color="hint">({view.visibility})</Txt>
@@ -67,7 +67,7 @@ export const DatabaseViewInputRow = ({
             {open ? 'close_fullscreen' : 'settings'}
           </IpIconBtn>
         </Box>
-      </div>
+      </HeadDiv>
       <Collapse in={open}>
         <IpListItem icon="notes">
           <Txt size="small">
@@ -110,12 +110,12 @@ export const DatabaseViewInputRow = ({
         </IpListItem>
         {!readOnly && (
           <IpListItem icon="delete">
-            <BtnConfirm size="small" iconAfter="chevron_right" onClick={onDelete}>
+            <BtnConfirm size="small" endIcon="chevron_right" onClick={onDelete}>
               {m.delete}
             </BtnConfirm>
           </IpListItem>
         )}
       </Collapse>
-    </div>
+    </RootDiv>
   )
 }

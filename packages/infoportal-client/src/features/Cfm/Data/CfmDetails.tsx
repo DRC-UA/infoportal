@@ -128,7 +128,7 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
         </Box>
       </PageTitle>
       <Grid container spacing={2} alignItems="stretch">
-        <Grid item xs={6}>
+        <Grid size={{xs: 6}}>
           <Panel>
             <PanelHead
               action={
@@ -192,7 +192,7 @@ export const CfmDetails = ({entry}: {entry: CfmData}) => {
             </PanelBody>
           </Panel>
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={{xs: 6}}>
           <Panel>
             <PanelBody>
               <ListRow icon="support_agent" label={m.focalPoint}>

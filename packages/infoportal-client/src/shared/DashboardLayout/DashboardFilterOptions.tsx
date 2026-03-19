@@ -1,29 +1,26 @@
 import {useCallback, useState, type ChangeEventHandler} from 'react'
-import {BoxProps, Checkbox, FormControlLabel, FormGroup, TextFieldProps} from '@mui/material'
-import {Txt, useMultipleChoices} from '@/shared'
-import {TextField} from '@mui/material'
-import {DashboardFilterLabel} from './DashboardFilterLabel'
-import {useI18n} from '@/core/i18n'
-import {DatatableOptions} from '@/shared/Datatable/util/datatableType'
-import {makeStyles} from 'tss-react/mui'
+import {BoxProps, Checkbox, FormControlLabel, FormGroup, styled, TextField} from '@mui/material'
 
-const useStyles = makeStyles<{dense?: boolean}>()((t, {dense}) => ({
-  optionSelectAll: {
-    display: 'block',
-    borderBottom: `1px solid ${t.palette.divider}`,
-    height: dense ? 32 : undefined,
-  },
-  option: {
-    whiteSpace: 'nowrap',
-    paddingRight: t.spacing(1),
-    paddingLeft: t.spacing(1),
-    marginRight: 0,
-    fontSize: dense ? '.825em' : undefined,
-    transition: t.transitions.create('all'),
-    height: dense ? 28 : undefined,
-    '&:hover': {
-      background: t.palette.action.hover,
-    },
+import {useI18n} from '@/core/i18n'
+import {Txt, useMultipleChoices} from '@/shared'
+import {DatatableOptions} from '@/shared/Datatable/util/datatableType'
+
+import {DashboardFilterLabel} from './DashboardFilterLabel'
+
+const FormControlLabelDense = styled(FormControlLabel, {
+  shouldForwardProp: (prop) => prop !== 'dense',
+})<{
+  dense?: boolean
+}>(({theme, dense}) => ({
+  whiteSpace: 'nowrap',
+  paddingRight: theme.spacing(1),
+  paddingLeft: theme.spacing(1),
+  marginRight: 0,
+  fontSize: dense ? '.825em' : undefined,
+  transition: theme.transitions.create('all'),
+  height: dense ? 28 : undefined,
+  '&:hover': {
+    background: theme.palette.action.hover,
   },
 }))
 
@@ -79,7 +76,6 @@ export const DashboardFilterOptionsContent = ({
   dense?: boolean
   searchable?: boolean
 }) => {
-  const {classes, cx} = useStyles({dense})
   const {m} = useI18n()
   const choices = useMultipleChoices({
     addBlankOption,
@@ -94,8 +90,9 @@ export const DashboardFilterOptionsContent = ({
 
   return (
     <>
-      <FormControlLabel
+      <FormControlLabelDense
         onClick={choices.toggleAll}
+        dense={dense}
         control={
           <Checkbox
             size="small"
@@ -111,7 +108,12 @@ export const DashboardFilterOptionsContent = ({
           // <AAIconBtn icon="clear" size="small" sx={{ml: 1.5}}/>
           // </Box>
         }
-        className={cx(classes.option, classes.optionSelectAll)}
+        sx={{
+          display: 'block',
+          borderBottom: `1px solid`,
+          borderBottomColor: 'palette.divider',
+          height: dense ? 32 : undefined,
+        }}
       />
       {searchable && <TextField variant="standard" fullWidth sx={{padding: 1}} onChange={handleQuery} />}
       <FormGroup
@@ -122,11 +124,11 @@ export const DashboardFilterOptionsContent = ({
         {choices.options
           .filter(({value}) => (query ? value.toLocaleLowerCase().includes(query) : true))
           .map((o) => (
-            <FormControlLabel
+            <FormControlLabelDense
               key={o.value}
+              dense={dense}
               control={<Checkbox size="small" name={o.value ?? undefined} checked={o.checked} />}
               label={<Txt fontSize={dense ? 'small' : undefined}>{o.label}</Txt>}
-              className={classes.option}
             />
           ))}
       </FormGroup>

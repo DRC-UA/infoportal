@@ -21,13 +21,20 @@ export default {
     // !! WARN !!
     ignoreBuildErrors: process.env.IGNORE_BUILD_TS_ERRORS === 'true',
   },
+  experimental: {
+    optimizePackageImports: ['@mui/material', '@mui/icons-material', '@mui/x-date-pickers-pro'],
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
   transpilePackages: [
+    '@mui/material',
+    '@mui/icons-material',
     '@mui/system',
     '@mui/utils',
+    '@mui/x-date-pickers',
     '@mui/x-date-pickers-pro',
+    '@mui/material-nextjs',
     'axios',
     'react-router',
     'react-router-dom',

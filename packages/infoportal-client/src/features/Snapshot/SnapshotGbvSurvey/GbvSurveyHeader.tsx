@@ -1,58 +1,36 @@
-import React, {useEffect} from 'react'
-import {Box, Typography} from '@mui/material'
-import {DRCLogo} from '@/shared/logo/logo'
-import {makeStyles} from 'tss-react/mui'
+import {useEffect} from 'react'
+import {Box, styled, Typography} from '@mui/material'
 
-const useStyles = makeStyles()((t) => ({
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: `${t.spacing(1)} ${t.spacing(2)}`,
-    backgroundColor: t.palette.background.default,
-    boxShadow: t.shadows[2],
-  },
-  titleContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  title: {
-    fontSize: '1.5em',
-    fontWeight: 'bold',
-    color: t.palette.primary.main,
-  },
-  subTitle: {
-    fontSize: '1.2em',
-    fontWeight: '300',
-    color: t.palette.text.secondary,
-  },
-  logo: {
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: 'auto',
-  },
+import {DRCLogo} from '@/shared/logo/logo'
+
+const BoxContainer = styled(Box)(({theme}) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
+  backgroundColor: theme.palette.background.default,
+  boxShadow: theme.shadows[2],
 }))
 
 const GbvSurveyHeader = () => {
-  const {classes, cx} = useStyles()
   useEffect(() => {
     document.title = 'DRC - GBV Survey for Social Service Providers Snapshot'
   }, [])
 
   return (
-    <Box className={classes.container}>
-      <Box className={classes.titleContainer}>
-        <Typography variant="h1" className={classes.title}>
+    <BoxContainer>
+      <Box display="flex" flexDirection="column">
+        <Typography variant="h1" fontSize="1.5em" fontWeight="bold" color="primary.main">
           GBV Survey for Social Service Providers Snapshot
         </Typography>
-        <Typography variant="h2" className={classes.subTitle}>
+        <Typography variant="h2" fontSize="1.2em" fontWeight="300" color="text.secondary">
           Ukraine - Mykolaiv (2024)
         </Typography>
       </Box>
-      <Box className={classes.logo}>
+      <Box display="flex" alignItems="center" marginLeft="auto">
         <DRCLogo height={24} />
       </Box>
-    </Box>
+    </BoxContainer>
   )
 }
 
