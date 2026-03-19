@@ -77,7 +77,7 @@ export class KoboMetaMapperVa {
                 Flagged: KoboMetaStatus.Pending,
               })
               .default(undefined),
-        lastStatusUpdate: tia.date_assistance_provided ?? tia.date,
+        lastStatusUpdate: tia.date_assistance_provided,
       })
     })
   }
