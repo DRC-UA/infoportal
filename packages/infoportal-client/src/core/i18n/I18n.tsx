@@ -1,7 +1,7 @@
 import {createContext, useContext, useMemo, type ReactNode} from 'react'
 import {Obj} from '@axanc/ts-utils'
 import {LocalizationProvider} from '@mui/x-date-pickers-pro'
-import {AdapterDateFns} from '@mui/x-date-pickers-pro/AdapterDateFnsV3'
+import {AdapterDateFns} from '@mui/x-date-pickers-pro/AdapterDateFns'
 import {enUS, uk as ukUA} from 'date-fns/locale'
 
 import {usePersistentState} from '@/shared/hook/usePersistantState'

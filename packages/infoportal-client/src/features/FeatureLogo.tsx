@@ -1,9 +1,9 @@
-import {AppFeature} from '@/features/appFeatureId'
-import React from 'react'
 import {ButtonBase, ButtonBaseProps, Icon, useTheme} from '@mui/material'
-import {Txt, TxtProps} from '@/shared/Txt'
 import Link from 'next/link'
+
 import {styleUtils} from '@/core/theme'
+import {AppFeature} from '@/features/appFeatureId'
+import {Txt, TxtProps} from '@/shared/Txt'
 
 export const FeatureLogo = ({
   feature,
@@ -17,6 +17,7 @@ export const FeatureLogo = ({
   fontSize?: TxtProps['fontSize']
 } & ButtonBaseProps) => {
   const t = useTheme()
+
   return (
     <Link href={feature.path} key={feature.path} style={{width: '100%'}}>
       <ButtonBase
