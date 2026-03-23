@@ -9,6 +9,7 @@ import {
   KoboSchemaHelper,
   KoboSubmissionMetaData,
   removeHtml,
+  KoboIndex,
 } from 'infoportal-common'
 
 import {useI18n, formatDate, formatDateTime, type Messages, type AppLang} from '@/core/i18n'
@@ -343,6 +344,12 @@ export const columnBySchemaGenerator = ({
 
   const getText = (name: string) => {
     const q = schema.helper.questionIndex[name]
+
+    // draw stats on enumerators in "[MEAL] MACMIII – HH baseline survey questionnaire" as an exception
+    if (schema.schema.uid === KoboIndex.byName('meal_macmiii_hh_baseline').id && name === 'enumerator') {
+      return getSelectOne(name)
+    }
+
     return {
       ...getCommon(q),
       type: 'string',
