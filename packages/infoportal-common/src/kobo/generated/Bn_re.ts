@@ -469,7 +469,7 @@ export namespace Bn_re {
       deduplicated: `✅ Deduplicated`,
       partially_deduplicated: `⚠️ Partially Deduplicated`,
       not_deduplicated: `❌ Not Deduplicated`,
-      need_deduplicate: `🕓 Requires Deduplicate`,
+      need_deduplicate: `🕓 Requires Deduplicate`
     },
     back_office: {
       lwo: `Lviv (LWO)`,
@@ -477,7 +477,7 @@ export namespace Bn_re {
       dnk: `Dnipro (DNK)`,
       hrk: `Kharkiv (HRK)`,
       nlv: `Mykloaiv (NLV)`,
-      umy: `Sumy (UMY)`,
+      umy: `Sumy (UMY)`
     },
     back_enum: {
       anna_artiukh: `Anna Artiukh`,
@@ -571,7 +571,7 @@ export namespace Bn_re {
       nadiia_yudaieva: `Nadiia Yudaieva`,
       dmytro_ivanov: `Dmytro Ivanov`,
       kostiantyn_yefimchuk: `Kostiantyn Yefimchuk`,
-      daria_kokalia: `Daria Kokalia`,
+      daria_kokalia: `Daria Kokalia`
     },
     donor_nfi_fks: {
       ukr000360_novo2: `UKR-000360 Novo Nordisk`,
@@ -599,12 +599,12 @@ export namespace Bn_re {
       ukr000390_uhf9: `UKR-000390 UHF9`,
       ukr000399_sdc3: `UKR-000399 SDC3`,
       ukr000423_echo4: `UKR-000423 ECHO4`,
-      ukr000441_uhf10: `UKR-000441 UHF10`,
+      ukr000441_uhf10: `UKR-000441 UHF10`
     },
     ben_det_idp_time: {
       zero_one: `0-1 month`,
       two_three: `2-3 months`,
-      over_3: `over 3 mounths`,
+      over_3: `over 3 mounths`
     },
     back_prog_type: {
       mpca: `MPCA`,
@@ -615,17 +615,17 @@ export namespace Bn_re {
       cfe: `Cash for Education`,
       iwk: `Infant Winterclothing Kit`,
       ihk: `Infant Hygiene Kit`,
-      cfr: `Cash for Rent`,
+      cfr: `Cash for Rent`
     },
     receive_pss: {
       yes: `Yes`,
-      no: `No`,
+      no: `No`
     },
     back_refer_who: {
       prot: `Protection`,
       legal: `Legal`,
       shelter: `Shelter`,
-      ecrec: `Economic Recovery (EcRec)`,
+      ecrec: `Economic Recovery (EcRec)`
     },
     utilities_fuel: {
       mains_piped_gas: `Mains/piped gas`,
@@ -634,13 +634,13 @@ export namespace Bn_re {
       mains_electricity: `Mains Electricity`,
       fuel: `Solid Fuel`,
       other: `Other`,
-      utilities: `Mains utilities`,
+      utilities: `Mains utilities`
     },
     mains_utilities: {
       electric: `Electric`,
       gas: `Gas`,
       cohs: `Community heating system`,
-      other: `Other`,
+      other: `Other`
     },
     mains_fuel: {
       wood: `Wood`,
@@ -648,18 +648,18 @@ export namespace Bn_re {
       charcoal: `Charcoal`,
       pellets: `Pellets`,
       ofmf: `Oil fed or multi fuel boiler`,
-      other: `Other`,
+      other: `Other`
     },
     functioning_fuel_delivery: {
       yes: `Yes`,
       no: `No`,
-      dk: `Don’t know`,
+      dk: `Don’t know`
     },
     current_gov_assist_cff: {
       yes: `Yes government support`,
       yes_another_agency: `Yes, from another humanitarian agency or similar`,
       yes_but: `Yes but not sufficient to cover needs`,
-      no: `No`,
+      no: `No`
     },
     ben_det_prev_oblast: {
       cherkaska: `Cherkaska`,
@@ -686,7 +686,7 @@ export namespace Bn_re {
       volynska: `Volynska`,
       zakarpatska: `Zakarpatska`,
       zaporizka: `Zaporizka`,
-      zhytomyrska: `Zhytomyrska`,
+      zhytomyrska: `Zhytomyrska`
     },
     ben_det_raion: {
       zvenyhorodskyi: `Zvenyhorodskyi`,
@@ -817,7 +817,7 @@ export namespace Bn_re {
       berdychivskyi: `Berdychivskyi`,
       zhytomyrskyi: `Zhytomyrskyi`,
       korostenskyi: `Korostenskyi`,
-      'novohrad-volynskyi': `Novohrad-Volynskyi`,
+      'novohrad-volynskyi': `Novohrad-Volynskyi`
     },
     ben_det_hromada: {
       abrykosivska: `Abrykosivska`,
@@ -2589,17 +2589,17 @@ export namespace Bn_re {
       zymnivska: `Zymnivska`,
       zymnovodivska: `Zymnovodivska`,
       zymohirivska: `Zymohirivska`,
-      zymynska: `Zymynska`,
+      zymynska: `Zymynska`
     },
     hh_char_res_stat: {
       idp: `A = Internally Displaced Person (IDP)`,
       long_res: `B = Long - Term Resident`,
       ret: `C = Returnee`,
-      ref_asy: `D = Refugee/asylum seeker`,
+      ref_asy: `D = Refugee/asylum seeker`
     },
     hh_char_hh_det_gender: {
       male: `A = Male`,
-      female: `B = Female`,
+      female: `B = Female`
     },
     hh_char_civ_stat: {
       single: `A = Single (Never Married)`,
@@ -2607,7 +2607,7 @@ export namespace Bn_re {
       married: `C = Married`,
       div_sep: `D = Divorced/Seperated`,
       widow: `E = Widowed`,
-      abandoned: `F = Abandoned`,
+      abandoned: `F = Abandoned`
     },
     hh_char_dis_select: {
       diff_see: `A = Have difficulty seeing, even if wearing glasses`,
@@ -2616,18 +2616,18 @@ export namespace Bn_re {
       diff_rem: `D = Have difficulty remembering or concentrating`,
       diff_care: `E = Have difficulty with self-care such as washing all over or dressing`,
       diff_comm: `F = Have difficulty communicating, for example understanding or being understood`,
-      diff_none: `G = None of the above apply`,
+      diff_none: `G = None of the above apply`
     },
     hh_char_dis_level: {
       zero: `A = No, no difficulty`,
       one: `B = Yes, some difficulty`,
       two: `C = Yes, a lot of difficulty`,
-      fri: `D = Cannot do at all`,
+      fri: `D = Cannot do at all`
     },
     shelter_damage: {
       no_damage: `No Structural Damage`,
       minor_damage: `Minor Damage (light or medium damages such as broken windows and doors, minor roof damage)`,
-      heavy_damage: `Heavy Damage`,
+      heavy_damage: `Heavy Damage`
     },
     cfr_curr_accom: {
       rent: `A = Renting Accommodation`,
@@ -2635,26 +2635,26 @@ export namespace Bn_re {
       own_prop: `C = Living in Own Property`,
       coll_cen: `D = Living in Collective Center`,
       homeless: `E = Homeless`,
-      other_accom: `F = Other`,
+      other_accom: `F = Other`
     },
     cfr_rent_stat: {
       secure: `A = Secure for Medium/Long Term`,
       unable_pay: `B = Currently Unable to Pay Rent/Contribute to Collective Costs`,
       dan_unable_pay: `C = In Danger of Being Unable to Pay Rent/Contribute to Collective Costs`,
       unsuit_accom: `D = Accommodation Unsuitable for my needs`,
-      eviction: `E = Eviction/Removal for Other Reasons`,
+      eviction: `E = Eviction/Removal for Other Reasons`
     },
     cfr_accom_int: {
       remain: `A = Remain in Current Place`,
       rent: `B = Find Rental Accommodation`,
-      not_sure: `C = Not Sure/Don’t Know`,
+      not_sure: `C = Not Sure/Don’t Know`
     },
     cfr_accom_cond_heat: {
       always: `A = Always`,
       not_always: `B = Not always on but comes daily`,
       intermittent: `C = Comes on intermittent days`,
       rarely: `D = Rarely`,
-      never: `E = Never`,
+      never: `E = Never`
     },
     pay_det_id_type: {
       nat_pass_card: `A = National Passport (card)`,
@@ -2666,7 +2666,7 @@ export namespace Bn_re {
       driver_lic: `G = Driver’s license`,
       pen_cert: `H = Pensioner certificate`,
       oth_id: `I = Other Form of ID`,
-      no_id: `J = No ID`,
+      no_id: `J = No ID`
     },
     pay_det_pay_meth: {
       bank_card: `A = Bank card`,
@@ -2674,18 +2674,18 @@ export namespace Bn_re {
       other_pay: `C = Other Payment Method`,
       none_pay: `D = None of the above fit my needs`,
       raiff_trans: `Remittance Raiffaisen AVAL`,
-      ukrpost: `Ukrposhta`,
+      ukrpost: `Ukrposhta`
     },
     undefined: {
       cash_fuel: `Cash for Fuel`,
-      cash_utilities: `Cash for Utilities`,
+      cash_utilities: `Cash for Utilities`
     },
     type_property_living: {
       external_walls: `Property with external  walls made of wood or compressed soil block/adobe/wattle houses (may include a combination of these)`,
       damaged_windows: `Property with single glazed or damaged windows`,
       poor_insulation: `Property with poor insulation, damaged roof or walls`,
       substantial_repairs: `Property in need of substantial repairs, such as cracked or damaged walls, poor insulation and ineffective thermal envelope.`,
-      none: `None of the above`,
+      none: `None of the above`
     },
     vulnerability_groups: {
       pwc: `People with chronic illness or serious medical conditions`,
@@ -2693,37 +2693,37 @@ export namespace Bn_re {
       minority_groups: `Members of Minority Groups: Including Roma, Crimean Tatars, stateless persons, individuals with undetermined nationality, and LGBTIQ+ persons`,
       foster_families: `Foster families taking care of children at risk: Including unaccompanied or orphaned children, children separated from parents, children living at the frontline, children in state care, including LGBTIQ+ children or adolescents`,
       socio_economic_hardship: `People Facing Severe Socio-Economic Hardship: Including unemployed individuals (particularly aged 40–60), families who lost their primary income earner due to conflict (death, injury, disappearance), those without access to social protection, and persons unable to meet basic needs such as food, shelter, clothing, heating, or medical care.`,
-      none: `None of the above`,
+      none: `None of the above`
     },
     type_accommodation: {
       house: `House/appartment`,
       collective_site: `Collective site`,
-      other: `Other`,
+      other: `Other`
     },
     legal_support: {
       lost_documents: `Lost or damaged personal documents or property ownership documents`,
       damaged_housing: `Damaged or destroyed housing.`,
       injuries_explosive: `Injuries caused by explosive ordnance`,
       no: `No`,
-      pns: `Prefer not to say`,
+      pns: `Prefer not to say`
     },
     stressful_events: {
       yes: `Yes`,
       no: `No`,
-      pns: `Prefer not to say`,
+      pns: `Prefer not to say`
     },
     recent_shock: {
       new: `Damaged by recent shock`,
-      old: `Old and in disrepair`,
+      old: `Old and in disrepair`
     },
     repair_home_there: {
       yes: `Yes, I can`,
-      no: `No, I need support`,
+      no: `No, I need support`
     },
     case_identified: {
       local_authority: `Referred by Local Authority List`,
-      drc_partner: `Directly identified by DRC/the partner`,
-    },
+      drc_partner: `Directly identified by DRC/the partner`
+    }
   } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
@@ -2773,6 +2773,6 @@ export namespace Bn_re {
       gap_assistance_received: _.gap_assistance_received ? +_.gap_assistance_received : undefined,
       mains_utilities: _.mains_utilities?.split(' '),
       mains_fuel: _.mains_fuel?.split(' '),
-      cfr_accom_cond_occ_rat: _.cfr_accom_cond_occ_rat ? +_.cfr_accom_cond_occ_rat : undefined,
+      cfr_accom_cond_occ_rat: _.cfr_accom_cond_occ_rat ? +_.cfr_accom_cond_occ_rat : undefined
     }) as T
 }
