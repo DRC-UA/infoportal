@@ -240,36 +240,54 @@ export class WfpDeduplicationUpload {
     const files = await this.throttledFetchAndRun({
       fetch: this.wfpSdk.getImportFiles,
       runOnBatchedResult: (batch) => batch,
-    }).then((response) => response.flatMap((file) => file))
+    }).then((response) =>
+      response.flatMap((file) => file).filter((file) => file.type === 'beneficiary-import-requests'),
+    )
 
-    let offset = 0
+    const allRows = await this.prisma.mpcaWfpDeduplication.findMany({
+      select: {id: true, beneficiaryId: true},
+      orderBy: [
+        {createdAt: 'desc'},
+        {wfpId: 'asc'}, // Use wfpId as secondary sort when createdAt are same for a number of records
+        {id: 'asc'}, // Final tie-breaker with UUID
+      ],
+    })
+
+    let rowIndex = 0
 
     for (const file of files) {
       this.log.debug(`Update ${file.finishedAt} ${file.fileName}`)
       const office = possibleOffices.find((oblastCode) => file.fileName.includes(oblastCode))
       if (!office) console.warn(`Oblast not found for filename ${file.fileName}`)
-      const rowsCount = file.additionalInfo.rowCount
-      const rows = await this.prisma.mpcaWfpDeduplication.findMany({
-        select: {id: true, beneficiaryId: true},
-        orderBy: [
-          {createdAt: 'desc'},
-          {wfpId: 'asc'}, // Use wfpId as secondary sort when createdAt are same for a number of records
-          {id: 'asc'}, // Final tie-breaker with UUID
-        ],
-        skip: offset,
-        take: rowsCount,
-      })
+
+      const targetCount = file.additionalInfo?.rowCount ?? 0
+      const distinctBeneficiaryIds = new Set<string>()
+      const fileRows: {id: string}[] = []
+
+      // Keep consuming consecutive rows until we hit `targetCount` unique beneficiary records.
+      while (distinctBeneficiaryIds.size < targetCount && rowIndex < allRows.length) {
+        const row = allRows[rowIndex]
+        distinctBeneficiaryIds.add(row.beneficiaryId)
+        fileRows.push(row)
+        rowIndex++
+      }
+
+      // Handle any trailing records that belong to the SAME trailing applicant from the current batch.
+      while (rowIndex < allRows.length && distinctBeneficiaryIds.has(allRows[rowIndex].beneficiaryId)) {
+        fileRows.push(allRows[rowIndex])
+        rowIndex++
+      }
+
       const officeValue = office ? officeMapping[office] : null
-      if (rows.length > 0) {
+      if (fileRows.length > 0) {
         await this.prisma.$executeRaw`
             UPDATE "MpcaWfpDeduplication"
             SET "office"     = ${officeValue},
                 "fileName"   = ${file.fileName},
                 "fileUpload" = ${new Date(file.finishedAt)}
-            WHERE "id" IN (${Prisma.join(rows.map((_) => _.id))})
+            WHERE "id" IN (${Prisma.join(fileRows.map((_) => _.id))})
         `
       }
-      offset += rowsCount
     }
   }
 }
