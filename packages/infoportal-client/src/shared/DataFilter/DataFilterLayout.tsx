@@ -62,9 +62,8 @@ export const DataFilterLayout = ({
       <Box
         sx={{
           flex: 1,
-          mt: -1,
           mb: 1,
-          pt: 2,
+          pt: 1,
           pb: 0.5,
           display: 'flex',
           alignItems: 'center',
@@ -75,6 +74,7 @@ export const DataFilterLayout = ({
           },
           ...(sx as any),
         }}
+        gap={1}
       >
         {before}
         <Box display="flex" gap={1} {...slotProps?.filtersBox}>

@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react'
+import {useMemo, useState} from 'react'
 import {map, match, seq} from '@axanc/ts-utils'
 
 import {OblastISO, Va_tia_pdm} from 'infoportal-common'
