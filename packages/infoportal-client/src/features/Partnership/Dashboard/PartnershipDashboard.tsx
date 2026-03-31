@@ -278,7 +278,7 @@ export const _PartnershipDashboard = ({schema}: {schema: KoboSchemaHelper.Bundle
             fn={() => {
               const gb = filteredAndPickedSgas.compactBy('Project_code').groupBy((_) => _.Project_code!)
               return new Obj(gb)
-                .transform((k, v) => {
+                .map((k, v) => {
                   const project: DrcProject = Obj.values(DrcProject).find((_) => _.includes('' + k))!
                   return [
                     project,

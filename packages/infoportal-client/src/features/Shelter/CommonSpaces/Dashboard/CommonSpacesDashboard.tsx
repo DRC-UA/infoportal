@@ -77,7 +77,7 @@ const _CommonSpacesDashboardBody: React.FC = () => {
 
   const oblastMapData = useMemo(() => {
     const gb = seq(data).groupBy((_) => OblastIndex.byKoboName(_.ben_det_oblast)?.iso!)
-    return new Obj(gb).transform((k, v) => [k, makeChartData({value: v.length})]).get()
+    return new Obj(gb).map((k, v) => [k, makeChartData({value: v.length})]).get()
   }, [data])
 
   return (

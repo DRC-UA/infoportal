@@ -1,14 +1,18 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
+import {useMemoFn} from '@alexandreannic/react-hooks-lib'
+import {Obj, seq} from '@axanc/ts-utils'
+import {Box, Icon} from '@mui/material'
+import Link from 'next/link'
+
+import {Bn_re, DrcOffice, KoboIndex, koboMetaStatusLabel, KoboXmlMapper, MpcaEntity} from 'infoportal-common'
+
 import {Page} from '@/shared/Page'
-import {useMpcaContext} from '../MpcaContext'
 import {useI18n} from '@/core/i18n'
 import {Panel} from '@/shared/Panel'
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {Bn_re, DrcOffice, KoboIndex, koboMetaStatusLabel, KoboXmlMapper, MpcaEntity} from 'infoportal-common'
 import {IpBtn} from '@/shared/Btn'
 import {MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
 import {SelectDrcProject} from '@/shared/customInput/SelectDrcProject'
-import {Box, Icon} from '@mui/material'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicationData'
@@ -16,15 +20,14 @@ import {TableImg} from '@/shared/TableMedia/TableImg'
 import {StateStatusIcon} from '@/shared/customInput/SelectStatus'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {databaseIndex} from '@/features/Database/databaseIndex'
-import Link from 'next/link'
 import {Txt} from '@/shared/Txt'
 import {useSession} from '@/core/Session/SessionContext'
 import {AccessSdk} from '@/core/sdk/server/access/AccessSdk'
-import {seq} from '@axanc/ts-utils'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
-import {useMemoFn} from '@alexandreannic/react-hooks-lib'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'
 import {KoboApiSdk} from '@/core/sdk/server/kobo/KoboApiSdk'
+
+import {useMpcaContext} from '../MpcaContext'
 
 const PrivateCell = () => {
   return <TableIcon color="disabled">lock</TableIcon>
@@ -42,8 +45,8 @@ export const MpcaData = () => {
   }, [])
 
   const index = useMemoFn(ctx.data, (d) =>
-    d.groupByAndApply(
-      (_) => _.taxId!,
+    Obj.mapValues(
+      d.groupBy((_) => _.taxId!),
       (d) => d.length,
     ),
   )

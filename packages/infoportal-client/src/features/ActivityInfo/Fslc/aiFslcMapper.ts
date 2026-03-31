@@ -40,7 +40,7 @@ export namespace AiFslcMapper {
     async (period: Partial<Period>): Promise<Bundle[]> => {
       const periodStr = AiMapper.getPeriodStr(period)
       let i = 0
-      const {data} = await api.koboMeta.search({
+      const {data} = await api.koboMeta.search<KoboMetaEcrecTags>({
         activities: [
           DrcProgram.SectoralCashForAgriculture,
           DrcProgram.SectoralCashForAnimalShelterRepair,
@@ -213,7 +213,7 @@ export namespace AiFslcMapper {
             return {
               submit: checkAiValid(ai.Oblast, ai.Raion, ai.Hromada, ai['Activity Plan Code']),
               recordId,
-              data: grouped,
+              data: grouped.get(),
               activity: ai,
               requestBody: ActivityInfoSdk.wrapRequest(request),
             }

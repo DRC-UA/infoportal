@@ -9,7 +9,6 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "downlevelIteration": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "strictPropertyInitialization": false,

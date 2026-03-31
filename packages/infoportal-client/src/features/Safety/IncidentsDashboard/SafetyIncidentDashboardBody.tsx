@@ -149,7 +149,7 @@ export const SafetyIncidentDashboardBody = () => {
             fn={() => {
               const x = dataFiltered?.groupBy((_) => (_.date_time ? format(_.date_time, 'yyyy-MM') : 'no_date'))
               return new Obj(x)
-                .transform((k, v) => [
+                .map((k, v) => [
                   k,
                   {
                     total: v.length,

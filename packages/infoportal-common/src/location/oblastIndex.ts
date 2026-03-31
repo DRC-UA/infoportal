@@ -134,7 +134,7 @@ export namespace OblastIndex {
 
   export const isos = Obj.keys(OblastIndex.oblastByISO)
 
-  const oblastIsoByName = Obj.transform(OblastIndex.oblastByISO, (k, v) => [v, k])
+  const oblastIsoByName = Obj.map(OblastIndex.oblastByISO, (k, v) => [v, k])
 
   export const koboOblastIndexIso = {
     aroc: 'UA01' as OblastISO, //'UA43'

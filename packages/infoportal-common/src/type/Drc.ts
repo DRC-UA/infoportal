@@ -434,11 +434,9 @@ export class DrcProjectHelper {
     None: DrcDonor.None,
   }
 
-  static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = seq(
-    Obj.entries(DrcProjectHelper.donorByProject),
-  ).groupByAndApply(
-    (_) => _[1],
-    (_) => _.map((_) => _[0]),
+  static readonly projectByDonor: Record<DrcDonor, DrcProject[]> = Obj.mapValues(
+    seq(Obj.entries(DrcProjectHelper.donorByProject)).groupBy((_) => _[1]),
+    (group) => group.map((_) => _[0]).get(),
   )
 
   static readonly extractCode = (str?: string): string | undefined => {

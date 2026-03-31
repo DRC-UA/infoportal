@@ -1,4 +1,6 @@
+/// <reference types="google.maps" />
 import {sleep} from '@axanc/ts-utils'
+
 import {appConfig} from '@/conf/AppConfig'
 
 const layers = import('./geojson.json')
@@ -23,7 +25,7 @@ export const initGoogleMaps = async ({
   }[]
 }) => {
   let trys = 0
-  while (!google) {
+  while (!window.google) {
     await sleep(200 + 100 * trys)
     trys++
     if (trys > 140) break

@@ -143,10 +143,7 @@ export const SnapshotProtMonitoNN2Livelihood = () => {
                 {(res) => (
                   <ChartBar
                     data={res.income}
-                    descs={Obj.transform(res.hhSize, (k, _) => [
-                      k,
-                      m.protHHSnapshot.avgHhSize(_.value / (_.base ?? 1)),
-                    ])}
+                    descs={Obj.map(res.hhSize, (k, _) => [k, m.protHHSnapshot.avgHhSize(_.value / (_.base ?? 1))])}
                   />
                 )}
               </Lazy>
