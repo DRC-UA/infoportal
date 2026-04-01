@@ -6,7 +6,7 @@
   "main": "lib/index.js",
   "scripts": {
     "postinstall": "prisma generate",
-    "test": "jest",
+    "test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js",
     "start": "node dist/bundle.mjs",
     "build": "webpack --config webpack.config.mjs",
     "dev-r": "nodemon src/index.ts",

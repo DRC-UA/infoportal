@@ -6,7 +6,9 @@ const config: JestConfigWithTsJest = {
   verbose: false,
   noStackTrace: true,
   extensionsToTreatAsEsm: ['.ts'],
-  setupFilesAfterEnv: ['<rootDir>/../../jest.setup.ts'], // Path to your setup file
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {useESM: true}], // Ensure proper regex escaping
   },
