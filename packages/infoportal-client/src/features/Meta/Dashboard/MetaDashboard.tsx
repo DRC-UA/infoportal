@@ -217,10 +217,11 @@ export const MetaDashboard = () => {
             <Lazy
               deps={[ctx.filteredData]}
               fn={() => {
-                const group = ctx.filteredData.groupByAndApply(
-                  (_) => _.status ?? 'Blank',
-                  (_) => _.length,
+                const group = Obj.mapValues(
+                  ctx.filteredData.groupBy((_) => _.status ?? 'Blank'),
+                  (group) => group.length,
                 )
+
                 return {
                   group,
                   total: seq(Obj.values(group)).sum(),

@@ -69,7 +69,11 @@ export const MapSvg = ({
   const theme = useTheme()
 
   const filteredData = useMemo(() => {
-    return omitValueLt ? new Obj(data).filter((k, v) => !!v && v.value >= omitValueLt).get() : data
+    return omitValueLt
+      ? seq(Obj.entries(data))
+          .filter(([k, v]) => !!v && v.value >= omitValueLt)
+          .reduceObject(([k, v]) => [k, v])
+      : data
   }, [data])
 
   const {max, min, maxPercent, minPercent} = useMemo(() => {

@@ -34,7 +34,7 @@ export namespace Utils {
 
   export const downloadBufferAsFile = (buffer: Buffer, filename: string) => {
     const _ = document.createElement('a')
-    const content = new Blob([buffer])
+    const content = new Blob([new Uint8Array(buffer)])
     const encodedUri = window.URL.createObjectURL(content)
     const link = document.createElement('a')
     link.setAttribute('href', encodedUri)

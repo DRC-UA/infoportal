@@ -1,4 +1,8 @@
-import React, {useEffect, useMemo} from 'react'
+import {useEffect, useMemo} from 'react'
+import {Obj} from '@axanc/ts-utils'
+import {ThemeProvider, useTheme} from '@mui/material'
+import {format} from 'date-fns'
+
 import {
   add,
   drcDonorTranlate,
@@ -9,14 +13,12 @@ import {
   PeriodHelper,
   Person,
 } from 'infoportal-common'
+
 import {Div, PdfSlide, PdfSlideBody, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {format} from 'date-fns'
-import {ThemeProvider, useTheme} from '@mui/material'
-import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
 import {useI18n} from '@/core/i18n'
+import {MetaDashboardProvider, useMetaContext} from '@/features/Meta/MetaContext'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Lazy} from '@/shared/Lazy'
-import {Obj} from '@axanc/ts-utils'
 import {ChartLine} from '@/shared/charts/ChartLine'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {PanelWBody} from '@/shared/Panel/PanelWBody'
@@ -24,7 +26,6 @@ import {snapshotColors} from '@/features/Snapshot/SnapshotProtMonitoEcho/Snapsho
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {ChartBarStacker} from '@/shared/charts/ChartBarStacked'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
-import {MetaSnapshotHeader, MetaSnapshotProps} from './MetaSnapshot'
 import {useShelterData} from '@/features/Shelter/useShelterData'
 import {muiTheme} from '@/core/theme'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -32,6 +33,8 @@ import {Txt} from '@/shared/Txt'
 import {Panel} from '@/shared/Panel/Panel'
 import {ChartBar} from '@/shared/charts/ChartBar'
 import {PanelBody, PanelTitle} from '@/shared/Panel'
+
+import {MetaSnapshotHeader, MetaSnapshotProps} from './MetaSnapshot'
 
 export const MetaSnapshotSnfi = (p: MetaSnapshotProps) => {
   const {theme} = useAppSettings()
@@ -65,16 +68,14 @@ export const Cp = ({period}: MetaSnapshotProps) => {
     return {
       filteredDataRepair,
       filteredDataRepairDone: filteredDataRepair.filter((_) => !!_.ta?.tags?.workDoneAt),
-      filteredDataRepairPlannedByAcc: filteredDataRepair.groupByAndApply(
-        (_) => _.nta?.dwelling_type!,
-        (_) => _.length,
+      filteredDataRepairPlannedByAcc: Obj.mapValues(
+        filteredDataRepair.groupBy((_) => _.nta?.dwelling_type!),
+        (group) => group.length,
       ),
-      filteredDataRepairDoneByAcc: filteredDataRepair
-        .filter((_) => !!_.ta?.tags?.workDoneAt)
-        .groupByAndApply(
-          (_) => _.nta?.dwelling_type!,
-          (_) => _.length,
-        ),
+      filteredDataRepairDoneByAcc: Obj.mapValues(
+        filteredDataRepair.filter((_) => !!_.ta?.tags?.workDoneAt).groupBy((_) => _.nta?.dwelling_type!),
+        (group) => group.length,
+      ),
       filterDataRepairHouse: filteredDataRepair.filter((_) => _.nta?.dwelling_type === 'house'),
       filterDataRepairApt: filteredDataRepair.filter((_) => _.nta?.dwelling_type === 'apartment'),
     }

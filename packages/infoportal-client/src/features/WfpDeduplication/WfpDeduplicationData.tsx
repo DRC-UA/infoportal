@@ -38,8 +38,8 @@ export const WfpDeduplicationData = () => {
     if (!_search.get) return {}
     const data = seq(_search.get.data)
     return {
-      taxIdCounter: data.groupByAndApply(
-        ({taxId}) => taxId ?? '',
+      taxIdCounter: Obj.mapValues(
+        data.groupBy(({taxId}) => taxId ?? ''),
         (group) => group.length,
       ),
       existingOrga: data

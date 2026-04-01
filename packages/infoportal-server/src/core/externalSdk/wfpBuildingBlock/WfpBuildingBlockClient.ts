@@ -1,5 +1,4 @@
 import {ApiClient} from 'kobo-sdk'
-import fetch from 'node-fetch'
 import {TOTP, URI} from 'otpauth'
 
 export class WfpBuildingBlockClient {

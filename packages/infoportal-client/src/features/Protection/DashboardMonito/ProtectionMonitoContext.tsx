@@ -225,8 +225,8 @@ export namespace ProtectionMonito {
         dataFiltered,
         dataPreviousPeriod,
         dataFlat,
-        dataByGender: dataFlat.groupByAndApply(
-          (_) => _.gender ?? Person.Gender.Other,
+        dataByGender: Obj.mapValues(
+          dataFlat.groupBy(({gender}) => gender ?? Person.Gender.Other),
           (_) => _.length,
         ),
         dataIdps: dataIdps,

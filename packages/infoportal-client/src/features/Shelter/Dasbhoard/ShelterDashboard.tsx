@@ -359,7 +359,7 @@ export const _ShelterDashboard = ({data, currency}: {currency: Currency; data: S
               deps={[data]}
               fn={() => {
                 const gb = seq(data).groupBy((_) => OblastIndex.byKoboName(_.nta?.ben_det_oblast)?.iso!)
-                return new Obj(gb).transform((k, v) => [k, makeChartData({value: v.length})]).get()
+                return new Obj(gb).map((k, v) => [k, makeChartData({value: v.length})]).get()
               }}
             >
               {(_) => <MapSvg data={_} sx={{mx: 1}} maximumFractionDigits={0} base={data.length} />}

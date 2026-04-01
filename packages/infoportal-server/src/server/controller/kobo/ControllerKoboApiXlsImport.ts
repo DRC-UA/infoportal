@@ -9,7 +9,7 @@ export class ControllerKoboApiXlsImport {
     private service = new ImportService(prisma),
   ) {}
 
-  readonly handleFileUpload = async (req: Request, res: Response, next: NextFunction) => {
+  readonly handleFileUpload = async (req: Request<{formId: string}>, res: Response, next: NextFunction) => {
     if (!req.file) {
       return next(new AppError.NoFileUploaded('No file was uploaded'))
     }

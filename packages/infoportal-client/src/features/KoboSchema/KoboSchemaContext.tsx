@@ -1,11 +1,22 @@
-import React, {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useMemo, useState} from 'react'
-import {Kobo} from 'kobo-sdk'
-import {KoboFormName, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
-import {useI18n} from '@/core/i18n'
-import {useFetchers} from '@/shared/hook/useFetchers'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {useIpToast} from '@/core/useToast'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+} from 'react'
 import {Obj} from '@axanc/ts-utils'
+import {Kobo} from 'kobo-sdk'
+
+import {KoboFormName, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {useI18n} from '@/core/i18n'
+import {useIpToast} from '@/core/useToast'
+import {useFetchers} from '@/shared/hook/useFetchers'
 
 interface KoboSchemaProviderProps {
   defaultLangIndex?: number
@@ -31,7 +42,7 @@ export interface KoboSchemaContext {
   byName: Record<KoboFormName, SchemaContextRes>
 }
 
-const Context = React.createContext({} as KoboSchemaContext)
+const Context = createContext({} as KoboSchemaContext)
 
 export const KoboSchemaProvider = ({defaultLangIndex = 0, children}: KoboSchemaProviderProps) => {
   const {m} = useI18n()
@@ -40,8 +51,8 @@ export const KoboSchemaProvider = ({defaultLangIndex = 0, children}: KoboSchemaP
   const {toastHttpError} = useIpToast()
 
   const {anyLoading, anyError, clearCache, ...fetchers} = useFetchers(
-    (id: Kobo.FormId) => {
-      return api.koboApi.getSchema({id}).catch((e) => {
+    async (id: Kobo.FormId) => {
+      return await api.koboApi.getSchema({id}).catch((e) => {
         toastHttpError(e)
         throw e
       })
@@ -58,7 +69,7 @@ export const KoboSchemaProvider = ({defaultLangIndex = 0, children}: KoboSchemaP
     } = {byId: {}, byName: {} as any}
     Obj.entries(fetchers.get).forEach(([id, schema]) => {
       const r = {
-        get: KoboSchemaHelper.buildBundle({schema, langIndex}),
+        get: KoboSchemaHelper.buildBundle({schema: schema!, langIndex}),
         loading: fetchers.loading[id],
         error: fetchers.error[id],
       }

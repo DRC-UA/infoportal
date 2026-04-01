@@ -104,7 +104,7 @@ export class ControllerKoboAnswer {
   }
 
   /** TODO need to handle public access */
-  readonly search = async (req: Request, res: Response, next: NextFunction) => {
+  readonly search = async (req: Request<{formId: string}>, res: Response, next: NextFunction) => {
     try {
       const {formId} = req.params
       const filters = await answersFiltersValidation.validate(req.body)
@@ -116,7 +116,7 @@ export class ControllerKoboAnswer {
     }
   }
 
-  readonly searchByUserAccess = async (req: Request, res: Response, next: NextFunction) => {
+  readonly searchByUserAccess = async (req: Request<{formId: string}>, res: Response, next: NextFunction) => {
     const {formId} = req.params
     const user = req.session.user
     const filters = await answersFiltersValidation.validate(req.body)

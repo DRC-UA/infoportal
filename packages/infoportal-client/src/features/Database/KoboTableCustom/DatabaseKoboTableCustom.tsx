@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useState} from 'react'
 import {useParams} from 'react-router'
-import {seq} from '@axanc/ts-utils'
+import {Obj, seq} from '@axanc/ts-utils'
 import {useTheme, FormControlLabel, Switch} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
 import * as yup from 'yup'
@@ -230,8 +230,8 @@ export const DatabaseTableCustomRoute = () => {
         {formId: _.join.originId, colName: _.join.originColName},
       ])
       .distinct((_) => _.formId)
-    const indexes = indexesParams.groupByAndApply(
-      (_) => _.formId,
+    const indexes = Obj.mapValues(
+      indexesParams.groupBy((_) => _.formId),
       (group) =>
         seq(
           ctxAnswers

@@ -35,11 +35,10 @@ import {CashPdmOutlet, MealPdmOutlet, WinterizationOutlet} from '@/features/Meal
 import {MealPdmEoreDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmEoreDashboard'
 import {PdmLegalDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmLegalDashboard'
 import {PdmAwarenessDashboard} from '@/features/Meal/Pdm/Dashboards/PdmAwarenessDashboard'
-import {MealPdmVaDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmVaDashboard'
 import {PdmGbvCsDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGbvCsDashboard'
 import {MealPdmWgssDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmWgssDashboard'
 import {PdmGirlShineDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGirlShineDashboard'
-import {PdmGpCsDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGpCsDashboard'
+import PdmGPCaseManagementDashboard from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CaseManagement'
 import {PdmIpaDashboard} from '@/features/Meal/Pdm/Dashboards/PdmIpaDashboard'
 
 import VaDashboard from './Pdm/Dashboards/Va'
@@ -107,7 +106,7 @@ export const mealIndex = {
           pss: '/pdm/protection/pss',
           victim: '/pdm/protection/victim',
           ipa: '/pdm/protection/ipa',
-          generalCs: '/pdm/protection/gp/cs',
+          caseManagement: '/pdm/protection/general/case-management',
         },
         gbv: {
           gbv: '/pdm/protection/gbv',
@@ -234,8 +233,10 @@ const MealSidebar = ({
               <NavLink to={path(mealIndex.siteMap.pdm.protection.general.ipa)}>
                 {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.ipa}</SidebarItem>}
               </NavLink>
-              <NavLink to={path(mealIndex.siteMap.pdm.protection.general.generalCs)}>
-                {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.generalCs}</SidebarItem>}
+              <NavLink to={path(mealIndex.siteMap.pdm.protection.general.caseManagement)}>
+                {({isActive}) => (
+                  <SidebarItem active={isActive}>{m.mealMonitoringPdm.generalCaseManagement}</SidebarItem>
+                )}
               </NavLink>
             </SidebarSection>
             <SidebarSection title={m.gbv}>
@@ -410,13 +411,13 @@ export const Meal = () => {
             <Route path="pss" element={<MealPdmPssDashboard />} />
             <Route path="victim" element={<VaDashboard />} />
             <Route path="ipa" element={<PdmIpaDashboard />} />
-            <Route path="generalCs" element={<PdmGpCsDashboard />} />
             <Route path="gbv" element={<PdmGbvDashboard />} />
             <Route path="cs" element={<PdmGbvCsDashboard />} />
             <Route path="wgss" element={<MealPdmWgssDashboard />} />
             <Route path="girl" element={<PdmGirlShineDashboard />} />
             <Route path="legal" element={<PdmLegalDashboard />} />
             <Route path="awareness" element={<PdmAwarenessDashboard />} />
+            <Route path="general/case-management" element={<PdmGPCaseManagementDashboard />} />
           </Route>
           <Route path={mealIndex.siteMap.pdm.hdp._} element={<MealPdmOutlet forms={['meal_eorePdm']} />}>
             <Route index element={<Navigate to={mealIndex.siteMap.pdm.hdp.eore} replace />} />

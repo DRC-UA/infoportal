@@ -76,6 +76,7 @@ export const MpcaDashboardDeduplication = ({data}: {data: Seq<MpcaEntity>}) => {
                         Sum: sum,
                       }
                     : {
+                        Total: undefined,
                         [WfpDeduplicationStatus.Deduplicated]: (deduplicated / total) * 100,
                         [WfpDeduplicationStatus.PartiallyDeduplicated]: (partiallyDeduplicated / total) * 100,
                         Sum: (sum / total) * 100,

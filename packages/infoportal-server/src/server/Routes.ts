@@ -40,8 +40,8 @@ export const getRoutes = (
 ) => {
   const cache = apicache.middleware
 
-  const errorCatcher = (handler: (req: Request, res: Response, next: NextFunction) => Promise<void>) => {
-    return async (req: Request, res: Response, next: NextFunction) => {
+  const errorCatcher = <P>(handler: (req: Request<P>, res: Response, next: NextFunction) => Promise<void>) => {
+    return async (req: Request<P>, res: Response, next: NextFunction) => {
       try {
         await handler(req, res, next)
       } catch (err) {
