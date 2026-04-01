@@ -68,8 +68,8 @@ const PdmGPCaseManagementDashboard = () => {
                 sx={{maxWidth: 480, margin: 'auto'}}
                 fillBaseOn="value"
                 data={data}
-                getOblast={({oblast_provision}) => OblastIndex.byName(oblast_provision)?.iso!}
-                value={() => true}
+                getOblast={({oblast_provision}) => OblastIndex.byKoboName(oblast_provision!)?.iso}
+                total={data.length}
                 base={({oblast_provision}) => oblast_provision !== undefined}
               />
             </PanelBody>
