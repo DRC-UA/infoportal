@@ -1,4 +1,4 @@
-import {chunkify, seq} from '@axanc/ts-utils'
+import {chunkify, Obj, seq} from '@axanc/ts-utils'
 import {PrismaClient} from '@prisma/client'
 import {Kobo, KoboSubmissionFormatter} from 'kobo-sdk'
 
@@ -271,12 +271,12 @@ export class KoboSyncServer {
           select: {id: true, answers: true},
           where: {id: {in: answersToUpdate.map((_) => _.id)}},
         })
-        .then((_) =>
-          seq(_).groupByAndApply(
-            (_) => _.id,
+        .then((result) => {
+          return Obj.mapValues(
+            seq(result).groupBy(({id}) => id),
             (_) => _[0].answers as Record<string, any>,
-          ),
-        )
+          )
+        })
       await Promise.all(
         answersToUpdate.map((a) => {
           this.event.emit(GlobalEvent.Event.KOBO_ANSWER_EDITED_FROM_KOBO, {
