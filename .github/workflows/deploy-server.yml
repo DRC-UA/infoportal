@@ -25,7 +25,6 @@ jobs:
           npm ci
 
       - name: Build, and test (common)
-        working-directory: ./packages/infoportal-common
         run: |
           npm run build --workspace infoportal-common --if-present
           npm run test --workspace infoportal-common --if-present
@@ -76,7 +75,6 @@ jobs:
           ls -l "$PACKAGE_NODE_MODULES/@prisma/engines/libquery_engine-debian-openssl-3.0.x.so.node" || echo "Verification failed: Query Engine in @prisma/engines not found"
 
       - name: Build, and test (server)
-        working-directory: ./packages/infoportal-server
         run: |
           npm run build --workspace infoportal-server --if-present
           npm run test --workspace infoportal-server --if-present
