@@ -1,4 +1,8 @@
-import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
+import {createContext, useContext, useEffect, useMemo, type ReactNode} from 'react'
+import {fnSwitch, map, Obj, Seq, seq} from '@axanc/ts-utils'
+import {Box, BoxProps} from '@mui/material'
+import {Kobo} from 'kobo-sdk'
+
 import {
   CfmDataPriority,
   CfmDataProgram,
@@ -18,18 +22,16 @@ import {
   OblastISO,
   OblastName,
 } from 'infoportal-common'
+
 import {useAsync, UseAsyncMultiple} from '@/shared/hook/useAsync'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {Access, AccessSum} from '@/core/sdk/server/access/Access'
 import {AppFeatureId} from '@/features/appFeatureId'
 import {useSession} from '@/core/Session/SessionContext'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {fnSwitch, map, Obj, Seq, seq} from '@axanc/ts-utils'
 import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 import {TableIcon, TableIconProps} from '@/features/Mpca/MpcaData/TableIcon'
-import {Box, BoxProps} from '@mui/material'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
-import {Kobo} from 'kobo-sdk'
 import {useKoboUpdateContext} from '@/core/context/KoboUpdateContext'
 
 export enum CfmDataOrigin {
@@ -132,7 +134,7 @@ export interface CfmContext {
   visibleData: Seq<CfmData>
 }
 
-const CfmContext = React.createContext({} as CfmContext)
+const CfmContext = createContext({} as CfmContext)
 
 export const useCfmContext = () => useContext<CfmContext>(CfmContext)
 
@@ -219,8 +221,8 @@ export const CfmProvider = ({
               origin: CfmDataOrigin.Internal,
               form: CfmDataSource.Internal,
               // internal_project_code: _.project_code,
-              oblast: OblastIndex.byKoboName(_.ben_det_oblast!).name,
-              oblastIso: OblastIndex.byKoboName(_.ben_det_oblast!).iso,
+              oblast: OblastIndex.byKoboName(_.ben_det_oblast!)?.name!,
+              oblastIso: OblastIndex.byKoboName(_.ben_det_oblast!)?.iso!,
             })
           }
         })
