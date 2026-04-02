@@ -481,7 +481,8 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
           project: match(record.project_code!)
             .cases({
               'UKR-000423': DrcProject['UKR-000423 ECHO4'],
-            })
+              ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+            } as unknown as Record<NonNullable<Gbv_girl_shine.T['project_code']>, DrcProject>)
             .default(() => undefined),
           persons: KoboXmlMapper.Persons.gbv_girl_shine(record),
           answers: record,
