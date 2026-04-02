@@ -5,23 +5,24 @@ import {Access} from '@/core/sdk/server/access/Access'
 import {KoboIndex} from 'infoportal-common'
 
 export enum AppFeatureId {
-  meal = 'meal',
-  kobo_database = 'kobo_database',
-  mpca = 'mpca',
-  ecrec = 'ecrec',
-  shelter = 'shelter',
-  partnership = 'partnership',
-  wfp_deduplication = 'wfp_deduplication',
   activity_info = 'activity_info',
-  cfm = 'cfm',
   admin = 'admin',
-  sandbox = 'sandbox',
-  snapshot = 'snapshot',
+  cfm = 'cfm',
   hdp = 'hdp',
-  safety = 'safety',
-  protection = 'protection',
-  metaDashboard = 'metaDashboard',
+  ecrec = 'ecrec',
+  esri = 'esri',
+  kobo_database = 'kobo_database',
   legal = 'legal',
+  meal = 'meal',
+  metaDashboard = 'metaDashboard',
+  mpca = 'mpca',
+  partnership = 'partnership',
+  protection = 'protection',
+  safety = 'safety',
+  sandbox = 'sandbox',
+  shelter = 'shelter',
+  snapshot = 'snapshot',
+  wfp_deduplication = 'wfp_deduplication',
 }
 
 export interface AppFeature {
@@ -30,11 +31,20 @@ export interface AppFeature {
   materialIcons: string
   color: string
   path: string
-  category: 'programs' | 'general' | 'settings'
+  category: 'programs' | 'general' | 'settings' | 'integrations'
   showIf?: (_?: UserSession, a?: Access[]) => boolean | undefined
 }
 
 export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
+  esri: {
+    id: AppFeatureId.metaDashboard,
+    name: 'Esri',
+    materialIcons: 'map',
+    color: '#fff',
+    path: '/esri',
+    category: 'integrations',
+    showIf: (u) => u?.admin,
+  },
   metaDashboard: {
     id: AppFeatureId.metaDashboard,
     name: 'Meta Dashboard',
@@ -42,7 +52,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#7300d7',
     path: '/meta-dashboard',
     category: 'general',
-    showIf: (u) => true,
+    showIf: () => true,
   },
   kobo_database: {
     id: AppFeatureId.kobo_database,
@@ -76,7 +86,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#00d82e',
     path: '/mpca',
     category: 'programs',
-    showIf: (u, accesses) => {
+    showIf: () => {
       return true
       // return u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.mpca)
     },
@@ -88,7 +98,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#daba00',
     category: 'programs',
     path: '/ecrec',
-    showIf: (u, accesses) => false,
+    showIf: () => false,
   },
   protection: {
     id: AppFeatureId.protection,
@@ -110,7 +120,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#1f9b97',
     path: '/meal',
     category: 'programs',
-    showIf: (u, accesses) => {
+    showIf: () => {
       return true
       // u?.admin || accesses && !!accesses
       //   .filter(Access.filterByFeature(AppFeatureId.kobo_database))
@@ -125,7 +135,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#00e6b8',
     path: '/activity-info',
     category: 'general',
-    showIf: (_) => true,
+    showIf: () => true,
   },
   wfp_deduplication: {
     id: AppFeatureId.wfp_deduplication,
@@ -148,7 +158,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#027ca2',
     path: '/hdp',
     category: 'programs',
-    showIf: (u, accesses) => true,
+    showIf: () => true,
   },
   cfm: {
     id: AppFeatureId.cfm,
@@ -157,7 +167,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#1c2c73',
     path: '/cfm',
     category: 'programs',
-    showIf: (u, accesses) => true,
+    showIf: () => true,
     // showIf: (u, accesses) => u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.cfm)
   },
   [AppFeatureId.partnership]: {
@@ -167,7 +177,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#8ab4f8',
     path: '/partnership',
     category: 'programs',
-    showIf: (u, accesses) => false,
+    showIf: () => false,
     // showIf: (u, accesses) => u?.admin || accesses && !!accesses.find(_ => _.featureId === AppFeatureId.cfm)
   },
   safety: {
@@ -178,7 +188,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: '#dd2222',
     path: '/safety',
     category: 'programs',
-    showIf: (u, accesses) => {
+    showIf: () => {
       return true
     },
   },
@@ -189,7 +199,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: 'silver',
     path: '/snapshot',
     category: 'settings',
-    showIf: (_) => true,
+    showIf: () => true,
   },
   admin: {
     id: AppFeatureId.admin,
@@ -198,7 +208,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     color: 'silver',
     path: '/admin',
     category: 'settings',
-    showIf: (_) => _ && _?.admin,
+    showIf: (u) => u?.admin,
   },
   sandbox: {
     id: AppFeatureId.sandbox,
@@ -207,7 +217,7 @@ export const appFeaturesIndex: Record<AppFeatureId, AppFeature> = {
     name: 'Sandbox',
     path: '/sandbox',
     category: 'settings',
-    showIf: (_) => _ && _?.email === appConfig.contact,
+    showIf: (u) => u?.email === appConfig.contact,
   },
   legal: {
     id: AppFeatureId.legal,

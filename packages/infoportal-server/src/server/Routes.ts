@@ -1,20 +1,23 @@
-import express, {NextFunction, Request, Response} from 'express'
-import {app, AppLogger} from '../index.js'
-import {ControllerMain} from './controller/ControllerMain.js'
 import {PrismaClient} from '@prisma/client'
+import express, {type NextFunction, type Request, type Response} from 'express'
+import apicache from 'apicache'
+
+import {UserSession} from '../feature/session/UserSession.js'
+import {UserService} from '../feature/user/UserService.js'
+import {AppError} from '../helper/Errors.js'
+import {app, AppLogger} from '../index.js'
+
+import {ControllerMain} from './controller/ControllerMain.js'
 import {ControllerActivityInfo} from './controller/ControllerActivityInfo.js'
+import {ControllerEsri} from './controller/ControllerEsri.js'
 import {ControllerKoboApi} from './controller/kobo/ControllerKoboApi.js'
 import {ControllerSession} from './controller/ControllerSession.js'
 import {ControllerKoboForm} from './controller/kobo/ControllerKoboForm.js'
 import {ControllerKoboServer} from './controller/kobo/ControllerKoboServer.js'
 import {ControllerKoboAnswer} from './controller/kobo/ControllerKoboAnswer.js'
 import {ControllerWfp} from './controller/ControllerWfp.js'
-import {Server} from './Server.js'
 import {ControllerAccess} from './controller/ControllerAccess.js'
 import {ControllerUser} from './controller/ControllerUser.js'
-import {UserSession} from '../feature/session/UserSession.js'
-import {AppError} from '../helper/Errors.js'
-import apicache from 'apicache'
 import {ControllerProxy} from './controller/ControllerProxy.js'
 import {ControllerMpca} from './controller/ControllerMpca.js'
 import {ControllerMealVerification} from './controller/ControllerMealVerification.js'
@@ -24,9 +27,9 @@ import {ControllerJsonStore} from './controller/ControllerJsonStore.js'
 import {ControllerHdp} from './controller/ControllerHdp.js'
 import {ControllerKoboAnswerHistory} from './controller/kobo/ControllerKoboAnswerHistory.js'
 import {ControllerCache} from './controller/ControllerCache.js'
-import {UserService} from '../feature/user/UserService.js'
 import {ControllerDatabaseView} from './controller/ControllerDatabaseView.js'
 import {ControllerKoboApiXlsImport} from './controller/kobo/ControllerKoboApiXlsImport.js'
+import {Server} from './Server.js'
 
 export interface AuthenticatedRequest extends Request {
   user?: UserSession
@@ -80,6 +83,7 @@ export const getRoutes = (
   const databaseView = new ControllerDatabaseView(prisma)
   const cacheController = new ControllerCache()
   const importData = new ControllerKoboApiXlsImport(prisma)
+  const esri = new ControllerEsri()
 
   const auth =
     ({adminOnly = false}: {adminOnly?: boolean} = {}) =>
@@ -212,6 +216,9 @@ export const getRoutes = (
     router.delete('/meal-verification/:id', auth(), errorCatcher(mealVerification.remove))
     router.post('/meal-verification/:id', auth(), errorCatcher(mealVerification.update))
     router.post('/meal-verification/answer/:id', auth(), errorCatcher(mealVerification.updateAnswerStatus))
+
+    router.get('/esri/feature-layers', auth(), errorCatcher(esri.listfeatureLayers))
+    router.post('/esri/feature-layers', auth(), errorCatcher(esri.getFeatureLayer))
 
     router.get('/cache', cacheController.get)
     router.post('/cache/clear', cacheController.clear)

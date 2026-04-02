@@ -64,6 +64,12 @@ export const appConf = {
     host: e(required)('EMAIL_HOST'),
     port: e(required, int)('EMAIL_PORT'),
   },
+  esri: {
+    arcGisClientId: e(required)('ARC_GIS_CLIENT_ID'),
+    arcGisClientSecret: e(required)('ARC_GIS_CLIENT_SECRET'),
+    arcGisRestPath: e(required)('ARC_GIS_REST_PATH'),
+    arcGisDrcId: e(required)('ARC_GIS_DRC_ID'),
+  },
 }
 
 export type AppConf = typeof appConf
