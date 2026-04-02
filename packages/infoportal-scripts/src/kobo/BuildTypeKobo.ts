@@ -552,8 +552,12 @@ class KoboInterfaceGenerator {
     ].join(`\n`)
     const prettierConfigPath = await prettier.resolveConfigFile()
     const prettierOptions = await prettier.resolveConfig(prettierConfigPath!)
-    const fileContent = await prettier.format(rawFileContent, {...prettierOptions, parser: 'typescript'})
-    fs.writeFileSync(location + '/' + this.options.formName + '.ts', fileContent)
+    const formattedFileContent = await prettier.format(rawFileContent, {
+      ...prettierOptions,
+      trailingComma: 'all',
+      parser: 'typescript',
+    })
+    fs.writeFileSync(location + '/' + this.options.formName + '.ts', formattedFileContent)
   }
 
   readonly extractQuestionNameFromGroupFn = `
