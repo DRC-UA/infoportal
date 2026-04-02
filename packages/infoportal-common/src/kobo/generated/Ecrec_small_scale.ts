@@ -21,11 +21,11 @@ export namespace Ecrec_small_scale {
     // background_consent/back_donor [select_one] Project
     back_donor: undefined | Option<'back_donor'>
     // background_consent/back_refer [select_one] Was this case an internal DRC referral?
-    back_refer: undefined | Option<'pay_det_tax_exempt'>
+    back_refer: undefined | Option<'currently_receiving_cash'>
     // background_consent/back_refer_who [select_one] From which Department was the referral?
     back_refer_who: undefined | Option<'back_refer_who'>
     // background_consent/back_consent [select_one] Consent
-    back_consent: undefined | Option<'pay_det_tax_exempt'>
+    back_consent: undefined | Option<'currently_receiving_cash'>
     // background_consent/back_consen_no_reas [text] Can you please give the reason for why you do not wish to consent to the questionnaire?
     back_consen_no_reas: string | undefined
     // background_consent/back_consent_no_note [note] Thank you very much for your time, we will not proceed with the questionnaire without your consent.
@@ -47,7 +47,7 @@ export namespace Ecrec_small_scale {
     // beneficiary_details/settlement [select_one_from_file] Settlement
     settlement: string
     // beneficiary_details/displace_escalation_conflic [select_one] Have you been displaced due to the escalation of the conflict after February 24, 2022?”
-    displace_escalation_conflic: undefined | Option<'pay_det_tax_exempt'>
+    displace_escalation_conflic: undefined | Option<'currently_receiving_cash'>
     // beneficiary_details/oblast_origin_displacement [select_one] What is your oblast origin prior to displacement?
     oblast_origin_displacement: undefined | Option<'oblast_origin_displacement'>
     // beneficiary_details/long_displaced [select_one] How long have you been displaced for?
@@ -64,7 +64,7 @@ export namespace Ecrec_small_scale {
           hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
           hh_char_date_birth: Date | undefined | undefined
           hh_char_hh_det_age: number | undefined | undefined
-          hh_char_tax_id_yn: undefined | Option<'pay_det_tax_exempt'> | undefined
+          hh_char_tax_id_yn: undefined | Option<'currently_receiving_cash'> | undefined
           head_tax_id: string | undefined
           hh_char_tax_id_num: string | undefined | undefined
           hh_char_tax_id_photo: string | undefined
@@ -104,19 +104,19 @@ export namespace Ecrec_small_scale {
     cal_tot_ret: string
     cal_tot_scoring_difficulty_level: string
     // household_characteristics/impact_ability_household [select_one] Does any of the above impact the ability of your household to engage in livelihood activities?
-    impact_ability_household: undefined | Option<'pay_det_tax_exempt'>
+    impact_ability_household: undefined | Option<'currently_receiving_cash'>
     // household_characteristics/household_contain_excombatants [select_one] Does your household contain any ex-combatants?
-    household_contain_excombatants: undefined | Option<'pay_det_tax_exempt'>
+    household_contain_excombatants: undefined | Option<'currently_receiving_cash'>
     // household_characteristics/many_excombatants [integer] Please specify how many
     many_excombatants: number | undefined
     // household_characteristics/certification_status_excombatants [select_one] Do they possess certification to confirm their status as ex-combatants?
-    certification_status_excombatants: undefined | Option<'pay_det_tax_exempt'>
+    certification_status_excombatants: undefined | Option<'currently_receiving_cash'>
     // household_characteristics/household_chronic_diseases [select_one] Does your household contain any people with chronic diseases leaving them unable to work or requiring full-time care?
-    household_chronic_diseases: undefined | Option<'pay_det_tax_exempt'>
+    household_chronic_diseases: undefined | Option<'currently_receiving_cash'>
     // household_characteristics/many_chronic_diseases [integer] Please specify how many
     many_chronic_diseases: number | undefined
     // household_characteristics/household_pregnant_that_breastfeeding [select_one] Does your household contain any pregnant women or women that are breastfeeding?
-    household_pregnant_that_breastfeeding: undefined | Option<'pay_det_tax_exempt'>
+    household_pregnant_that_breastfeeding: undefined | Option<'currently_receiving_cash'>
     // household_characteristics/many_pregnant_that_breastfeeding [integer] Please specify how many
     many_pregnant_that_breastfeeding: number | undefined
     // household_characteristics/income_spent_food [integer] In the last 30 days, what proportion of the overall household income was spent on food (human consumption)?
@@ -148,21 +148,21 @@ export namespace Ecrec_small_scale {
     // household_characteristics/lcs_reason_other [text] If other, specify
     lcs_reason_other: string | undefined
     // household_characteristics/lost_breadwiner_conflict [select_one] Did the household lose their breadwinner as a result of the conflict (since 2014)?
-    lost_breadwiner_conflict: undefined | Option<'pay_det_tax_exempt'>
+    lost_breadwiner_conflict: undefined | Option<'currently_receiving_cash'>
     // household_characteristics/documented_loss [select_one] Documented loss of assets as a result of the conflict ?
-    documented_loss: undefined | Option<'pay_det_tax_exempt'>
+    documented_loss: undefined | Option<'currently_receiving_cash'>
     // contamination/know_contamination_land [select_one] Do you have any contamination (e.g. unexploded ordnance) on your land that you are farming currently?
     know_contamination_land: undefined | Option<'land_rent_other'>
     // contamination/know_contamination_land_neighbour [select_one] Do you know of any contamination (e.g. unexploded ordnance) on land of a neighbour or a small-scale farmer close by?
     know_contamination_land_neighbour: undefined | Option<'land_rent_other'>
     // contamination/individual_continues_land [select_one] Do you know if this individual(s) still continues to farm their land?
-    individual_continues_land: undefined | Option<'pay_det_tax_exempt'>
+    individual_continues_land: undefined | Option<'currently_receiving_cash'>
     // registration_questions/primary_source_livelihoods [select_one] What is the primary source of livelihoods in the household?
     primary_source_livelihoods: undefined | Option<'primary_source_livelihoods'>
     // registration_questions/primary_source_livelihoods_other [text] If "Other," please specify
     primary_source_livelihoods_other: string | undefined
     // registration_questions/registered_farming_enterprise [select_one] Are you registered as a farming enterprise?
-    registered_farming_enterprise: undefined | Option<'pay_det_tax_exempt'>
+    registered_farming_enterprise: undefined | Option<'currently_receiving_cash'>
     // registration_questions/land_own [decimal] How much land do you own? (hectares)
     land_own: number | undefined
     // registration_questions/land_cultivate [decimal] How much land do you cultivate for agricultural purposes? (hectares)
@@ -202,25 +202,25 @@ export namespace Ecrec_small_scale {
     // registration_questions/sell_agricultural_products_other [text] If ‘Other’, please indicate which ones
     sell_agricultural_products_other: string | undefined
     // registration_questions/selling_reliably_produce [select_one] Do these ways of selling enable you to reliably sell your produce?
-    selling_reliably_produce: undefined | Option<'pay_det_tax_exempt'>
+    selling_reliably_produce: undefined | Option<'currently_receiving_cash'>
     // registration_questions/agricultural_inputs_purchase [select_multiple] If eligible for assistance, what agricultural inputs do you intend to purchase?
     agricultural_inputs_purchase: undefined | Option<'agricultural_inputs_purchase'>[]
     // registration_questions/agricultural_inputs_purchase_other [text] If "Other," please specify
     agricultural_inputs_purchase_other: string | undefined
     // registration_questions/confirm_capacity_productive [select_one] Please confirm that you have the capacity and assets to put the cash assistance to productive use
-    confirm_capacity_productive: undefined | Option<'pay_det_tax_exempt'>
+    confirm_capacity_productive: undefined | Option<'currently_receiving_cash'>
     // registration_questions/interested_training_agriculture [select_one] Are you interested in receiving training related to agriculture?
-    interested_training_agriculture: undefined | Option<'pay_det_tax_exempt'>
+    interested_training_agriculture: undefined | Option<'currently_receiving_cash'>
     // registration_questions/interested_training_agriculture_yes [text] What topics would you be interested in when it comes to training?
     interested_training_agriculture_yes: string | undefined
     // registration_questions/any_support_february2022 [select_one] Have you received any NGO or government support since February 2022?
-    any_support_february2022: undefined | Option<'pay_det_tax_exempt'>
+    any_support_february2022: undefined | Option<'currently_receiving_cash'>
     // registration_questions/any_support_february2022_details [text] Please provide more details about this
     any_support_february2022_details: string | undefined
     // registration_questions/plan_government_support_future [select_one] Do you plan to apply for any government support in the near future?
-    plan_government_support_future: undefined | Option<'pay_det_tax_exempt'>
+    plan_government_support_future: undefined | Option<'currently_receiving_cash'>
     // final_details/provide_payment_details [select_one] Thank you for answering the questions above, are you willing to provide your payment details?
-    provide_payment_details: undefined | Option<'pay_det_tax_exempt'>
+    provide_payment_details: undefined | Option<'currently_receiving_cash'>
     // final_details/pay_det_id_type [select_one] Form of ID do you have?
     pay_det_id_type: undefined | Option<'pay_det_id_type'>
     // final_details/pay_det_id_type_oth [text] Other form of ID do you have?
@@ -232,7 +232,7 @@ export namespace Ecrec_small_scale {
     // final_details/pay_det_id_ph [image] Take a photo of the ID
     pay_det_id_ph: string
     // final_details/pay_det_tax_id_yn [select_one] Have individual tax number (TIN)?
-    pay_det_tax_id_yn: undefined | Option<'pay_det_tax_exempt'>
+    pay_det_tax_id_yn: undefined | Option<'currently_receiving_cash'>
     // final_details/pay_det_tax_id_num [text] Individual tax number
     pay_det_tax_id_num: string | undefined
     // final_details/cal_organization [calculate] Organization
@@ -250,7 +250,7 @@ export namespace Ecrec_small_scale {
     // final_details/pay_det_tax_id_ph [image] Tax ID photo
     pay_det_tax_id_ph: string
     // final_details/pay_det_tax_exempt [select_one] Have a tax exemptions?
-    pay_det_tax_exempt: undefined | Option<'pay_det_tax_exempt'>
+    pay_det_tax_exempt: undefined | Option<'currently_receiving_cash'>
     // final_details/pay_det_tax_exempt_im [image] Proof of the tax of exemptions photo
     pay_det_tax_exempt_im: string
     // final_details/pay_det_pay_meth [select_one] Preferred Payment Method
@@ -266,6 +266,8 @@ export namespace Ecrec_small_scale {
     pay_zip: string | undefined
     // final_details/pay_det_add_im [image] Picture of Address Page of Passport
     pay_det_add_im: string
+    // final_details/currently_receiving_cash [select_one] Are you currently receiving, or have you received in the last six months, any cash assistance to restore your agricultural production?
+    currently_receiving_cash: undefined | Option<'currently_receiving_cash'>
     // final_details/addition_photo1 [image] Additional photo
     addition_photo1: string
     // final_details/addition_photo2 [image] Additional photo
@@ -353,7 +355,6 @@ export namespace Ecrec_small_scale {
       olha_sakharnova: `Olha Sakharnova`,
       oleksandr_lukomets: `Oleksandr Lukomets`,
       sofiia_berezhna: `Sofiia Berezhna`,
-      maksym_mykytas: `Maksym Mykytas`,
       tatiana_tsapii: `Tatiana Tsapii`,
       illia_kutsenko: `Illia Kutsenko`,
       iryna_nezdolina: `Ірина Нездоля`,
@@ -363,6 +364,7 @@ export namespace Ecrec_small_scale {
       enumerator_3_dnk: `Enumerator 3`,
       enumerator_4_dnk: `Enumerator 4`,
       enumerator_5_dnk: `Enumerator 5`,
+      maksym_mykytas: `Maksym Mykytas`,
       ivan_prokopkin: `Ivan Prokopkin`,
       nataliia_yermolova: `Nataliia Yermolova`,
       olena_buglo: `Olena Buglo`,
@@ -374,6 +376,8 @@ export namespace Ecrec_small_scale {
       nataliia_karimova: `Nataliia Karimova`,
       hrk_ex1: `Extra 1`,
       hrk_ex2: `Extra 2`,
+      hrk_ex3: `Extra 3`,
+      hrk_ex4: `Extra 4`,
       dmytro_chernukha: `Chernukha Dmytro`,
       nosenko_dmytro: `Nosenko Dmytro`,
       anastasiia_reshynska: `Reshynska Anastasiia`,
@@ -405,11 +409,14 @@ export namespace Ecrec_small_scale {
       slo_ex4: `Extra 4`,
     },
     back_donor: {
+      ukr000350_sida: `SIDA (UKR-000350)`,
       ukr000355_danish_mofa: `DMFA (UKR-000355)`,
       ukr000386_pooled_funds: `Pooled Funds (UKR-000386)`,
       ukr000388_bha: `BHA (UKR-000388)`,
+      ukr000424_dutch_mfa: `Dutch MFA (UKR-000424)`,
+      ukr000426_sdc: `SDC (UKR-000426)`,
     },
-    pay_det_tax_exempt: {
+    currently_receiving_cash: {
       yes: `Yes`,
       no: `No`,
     },
@@ -485,9 +492,10 @@ export namespace Ecrec_small_scale {
       no_id: `No ID`,
     },
     pay_det_pay_meth: {
+      bank_card: `Bank transfer`,
+      oschadbank: `Oschadbank`,
       raiff_trans: `Remittance Raiffaisen AVAL`,
       ukrpost: `Ukrposhta`,
-      bank_card: `Bank transfer`,
     },
     hh_char_hh_det_dis_select: {
       diff_see: `Have difficulty seeing, even if wearing glasses`,

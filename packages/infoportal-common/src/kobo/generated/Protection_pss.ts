@@ -627,7 +627,10 @@ export namespace Protection_pss {
       SLO008: `SLO008`,
     },
     project: {
+      ukr000284_bha: `UKR-000284 BHA`,
       ukr000309_okf: `UKR-000309 OKF`,
+      ukr000314_uhf4: `UKR-000314 UHF IV`,
+      ukr000322_echo2: `UKR-000322 ECHO`,
       ukr000329_sida: `UKR-000329 SIDA H2R`,
       ukr000336_uhf6: `UKR-000336 UHF VI`,
       ukr000345_bha2: `UKR-000345 BHA`,
@@ -639,9 +642,7 @@ export namespace Protection_pss {
       ukr000423_echo4: `UKR-000423 ECHO`,
       ukr000426_sdc: `UKR-000426 SDC`,
       ukr000457_dmfa: `UKR-000457 DMFA`,
-      ukr000284_bha: `UKR-000284 BHA`,
-      ukr000314_uhf4: `UKR-000314 UHF IV`,
-      ukr000322_echo2: `UKR-000322 ECHO`,
+      ukr000461_uhf: `UKR-000461 UHF`,
     },
     location: {
       logow: `Governmental collective site`,

@@ -170,7 +170,7 @@ export namespace Ecrec_msmeGrantSelection {
       zaporizka: `Запорізька`,
       lvivska: `Львівська`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

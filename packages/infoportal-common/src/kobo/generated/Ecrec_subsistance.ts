@@ -17,11 +17,11 @@ export namespace Ecrec_subsistance {
     // background/back_donor [select_one] 1.3 Project
     back_donor: undefined | Option<'back_donor'>
     // background/back_refer [select_one] 1.4 Was this case an internal DRC referral?
-    back_refer: undefined | Option<'participating_training_agriculture'>
+    back_refer: undefined | Option<'currently_receiving_cash'>
     // background/back_refer_who [select_one] 1.4.1 From which Department was the referral?
     back_refer_who: undefined | Option<'back_refer_who'>
     // background/back_consent [select_one] 1.5 Consent
-    back_consent: undefined | Option<'participating_training_agriculture'>
+    back_consent: undefined | Option<'currently_receiving_cash'>
     // background/back_consen_no_reas [text] 1.5.1 Can you please give the reason for why you do not wish to consent to the questionnaire?
     back_consen_no_reas: string | undefined
     // background/back_consent_no_note [note] Thank you very much for your time, we will not proceed with the questionnaire without your consent.
@@ -45,13 +45,13 @@ export namespace Ecrec_subsistance {
     // ben_det/ben_det_settlement_other [text] 2.5.4.1 If other, specify
     ben_det_settlement_other: string | undefined
     // ben_det/ben_det_res_stat [select_one] 2.6 Have you been displaced due to the escalation of the conflict after February 24, 2022
-    ben_det_res_stat: undefined | Option<'participating_training_agriculture'>
+    ben_det_res_stat: undefined | Option<'currently_receiving_cash'>
     // ben_det/ben_det_prev_oblast [select_one] 2.6.1 What is your area of origin prior to displacement?
     ben_det_prev_oblast: undefined | Option<'ben_det_prev_oblast'>
     // ben_det/ben_det_long_displaced [select_one] 2.6.2 How long have you been displaced ?
     ben_det_long_displaced: undefined | Option<'ben_det_long_displaced'>
     // ben_det/household_contain_excombatants [select_one] 2.7 Does your household contain any ex-combatants?
-    household_contain_excombatants: undefined | Option<'participating_training_agriculture'>
+    household_contain_excombatants: undefined | Option<'currently_receiving_cash'>
     // ben_det/many_excombatants [integer] 2.7.1 Please specify how many
     many_excombatants: number | undefined
     // ben_det/ben_det_income [integer] 2.8 What was your total household income during the last one month?
@@ -69,7 +69,7 @@ export namespace Ecrec_subsistance {
           hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
           hh_char_date_birth: Date | undefined | undefined
           hh_char_hh_det_age: number | undefined | undefined
-          hh_char_tax_id_yn: undefined | Option<'participating_training_agriculture'> | undefined
+          hh_char_tax_id_yn: undefined | Option<'currently_receiving_cash'> | undefined
           head_tax_id: string | undefined
           hh_char_tax_id_num: string | undefined | undefined
           hh_char_tax_id_photo: string | undefined
@@ -79,7 +79,7 @@ export namespace Ecrec_subsistance {
           hh_char_hh_how_idp: undefined | Option<'hh_char_hh_how_idp'> | undefined
           hh_char_hh_det_dis_select: undefined | Option<'hh_char_hh_det_dis_select'>[] | undefined
           hh_char_hh_det_dis_level: undefined | Option<'hh_char_hh_det_dis_level'> | undefined
-          hh_char_hh_chronic_disease: undefined | Option<'participating_training_agriculture'> | undefined
+          hh_char_hh_chronic_disease: undefined | Option<'currently_receiving_cash'> | undefined
           calc_u18: string | undefined
           calc_o60: string | undefined
           calc_ed_age: string | undefined
@@ -112,13 +112,13 @@ export namespace Ecrec_subsistance {
     // hh_char/cal_tot_ret [calculate] Total number of Returnees
     cal_tot_ret: string
     // hh_char/hh_char_preg [select_one] 3.2 Are any of the females in the household pregnat or lactating?
-    hh_char_preg: undefined | Option<'participating_training_agriculture'>
+    hh_char_preg: undefined | Option<'currently_receiving_cash'>
     // hh_char/hh_char_preg_number [integer] 3.2.1 How many Pregnant/Lactating Females in Household?
     hh_char_preg_number: number | undefined
     // hh_char/household_agricultural_activities [select_one] 3.3.1 Does the Household have the physical ability to engage in light agricultural activities?
-    household_agricultural_activities: undefined | Option<'participating_training_agriculture'>
+    household_agricultural_activities: undefined | Option<'currently_receiving_cash'>
     // hh_char/financial_manage_livestock [select_one] 3.3.1.1 If no, does the household have the financial or social resources they can use to cultivate their land or manage their livestock?
-    financial_manage_livestock: undefined | Option<'participating_training_agriculture'>
+    financial_manage_livestock: undefined | Option<'currently_receiving_cash'>
     // hh_char/hh_char_chh [note] This is a child headed household (high risk protection case), please refer immediately to a DRC Protection colleague and complete internal referral form.
     hh_char_chh: string
     // cash_farmers/what_primary_livelihood [select_one] 4.1 What is the primary source of livelihoods in the household
@@ -126,13 +126,13 @@ export namespace Ecrec_subsistance {
     // cash_farmers/what_primary_livelihood_other [text] 4.1.1 If "Other", please specify
     what_primary_livelihood_other: string | undefined
     // cash_farmers/consume_majority [select_one] 4.2 Do you consume a majority of the crops you produce / livestock that you manage
-    consume_majority: undefined | Option<'participating_training_agriculture'>
+    consume_majority: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/land_own [decimal] 4.3 How much land do you own
     land_own: number | undefined
     // cash_farmers/land_cultivate [decimal] 4.4 How much land do you cultivate for agricultural purposes?
     land_cultivate: number | undefined
     // cash_farmers/land_rent_other [select_one] 4.5.1 Do you have any land that you do not cultivate but rent out to other farmers?
-    land_rent_other: undefined | Option<'participating_training_agriculture'>
+    land_rent_other: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/rent_receive_year [integer] 4.5.2 What is the rent you receive per year in UAH?
     rent_receive_year: number | undefined
     // cash_farmers/not_livestock [note] How many of the following livestock do you own?
@@ -158,17 +158,17 @@ export namespace Ecrec_subsistance {
     // cash_farmers/other_animals_details [text] If "Other", please specify
     other_animals_details: string | undefined
     // cash_farmers/depend_basic_needs [select_one] Do your agricultural activities significantly contribute to your household being able to meet its basic food needs?
-    depend_basic_needs: undefined | Option<'participating_training_agriculture'>
+    depend_basic_needs: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/household_access_water [select_one] 4.6 Does the household have access to water or other means of irrigation?
-    household_access_water: undefined | Option<'participating_training_agriculture'>
+    household_access_water: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/access_basic_farming_tools [select_one] 4.7 Does the household have access to some basic farming tools and equipment?
-    access_basic_farming_tools: undefined | Option<'participating_training_agriculture'>
+    access_basic_farming_tools: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/eligible_assistance_agricultural [select_multiple] 4.8 If eligible for assistance, what agricultural inputs do you intend to purchase
     eligible_assistance_agricultural: undefined | Option<'eligible_assistance_agricultural'>[]
     // cash_farmers/eligible_assistance_agricultural_other [text] 4.9 If "Other", please specify
     eligible_assistance_agricultural_other: string | undefined
     // cash_farmers/interested_training_agriculture [select_one] 4.10 Would you be interested in receiving any training in topics related to agriculture?
-    interested_training_agriculture: undefined | Option<'participating_training_agriculture'>
+    interested_training_agriculture: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/interested_training_agriculture_yes [text] 4.10.1 Could you please specify which topic(s)?
     interested_training_agriculture_yes: string | undefined
     // livelihoods_score/income_spent_food [integer] 1 How much UAH did your household spend on food in the past month?
@@ -200,11 +200,11 @@ export namespace Ecrec_subsistance {
     // livelihoods_score/lcs_reason_other [text] 13.1 If other, specify
     lcs_reason_other: string | undefined
     // livelihoods_score/lost_breadwiner_conflict [select_one] 14 Did the household lose their breadwinner as a result of the conflict (since 2014)?
-    lost_breadwiner_conflict: undefined | Option<'participating_training_agriculture'>
+    lost_breadwiner_conflict: undefined | Option<'currently_receiving_cash'>
     // livelihoods_score/documented_loss [select_one] 15 Do you have documented lost of productive assets?
-    documented_loss: undefined | Option<'participating_training_agriculture'>
+    documented_loss: undefined | Option<'currently_receiving_cash'>
     // contamination/have_concerns_contamination [select_one] 1 Do you have any concerns about contamination on your land?
-    have_concerns_contamination: undefined | Option<'participating_training_agriculture'>
+    have_concerns_contamination: undefined | Option<'currently_receiving_cash'>
     // contamination/known_contamination_your [select_one] 2 Do you know of any contamination (e.g. unexploded ordnance) on your land?
     known_contamination_your: undefined | Option<'known_contamination_next'>
     // contamination/contamination_impact_your [select_one] 3 Has this impacted your ability to farm this land?
@@ -256,7 +256,7 @@ export namespace Ecrec_subsistance {
     // ass_inc/cal_tot_vulnerability [calculate] Total Vulnerability
     cal_tot_vulnerability: string
     // pay_det/pay_consent [select_one] 6.0 Thank you for answering the questions above, are you willing to provide your payment details?
-    pay_consent: undefined | Option<'participating_training_agriculture'>
+    pay_consent: undefined | Option<'currently_receiving_cash'>
     // pay_det/pay_det_s/pay_det_id_type [select_one] 6.1 What form of ID do you have?
     pay_det_id_type: undefined | Option<'pay_det_id_type'>
     // pay_det/pay_det_s/pay_det_id_type_oth [text] 6.1.1 What other form of ID do you have?
@@ -268,7 +268,7 @@ export namespace Ecrec_subsistance {
     // pay_det/pay_det_s/pay_det_id_ph [image] 6.2.3 Take a photo of the ID
     pay_det_id_ph: string
     // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_yn [select_one] 6.3.1 Do you have an individual tax number (TIN)?
-    pay_det_tax_id_yn: undefined | Option<'participating_training_agriculture'>
+    pay_det_tax_id_yn: undefined | Option<'currently_receiving_cash'>
     // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_num [text] 6.3.2 What is your individual tax number?
     pay_det_tax_id_num: string | undefined
     // pay_det/pay_det_s/begin_group_vdIM9ogQb/cal_organization [calculate] Organization
@@ -286,7 +286,7 @@ export namespace Ecrec_subsistance {
     // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_id_ph [image] 6.3.3 Take a photo of the Tax ID
     pay_det_tax_id_ph: string
     // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt [select_one] 6.3.4 Do you have a tax exemptions?
-    pay_det_tax_exempt: undefined | Option<'participating_training_agriculture'>
+    pay_det_tax_exempt: undefined | Option<'currently_receiving_cash'>
     // pay_det/pay_det_s/begin_group_vdIM9ogQb/pay_det_tax_exempt_im [image] 6.3.5 Take a photo of the proof of the tax of exemptions
     pay_det_tax_exempt_im: string
     // pay_det/pay_det_s/pay_det_pay_meth [select_one] 6.4.1 What is your preferred payment method?
@@ -302,11 +302,13 @@ export namespace Ecrec_subsistance {
     // pay_det/pay_det_s/pay_det_add_im [image] 6.4.6 Take a picture of the address page of passport
     pay_det_add_im: string
     // fin_det/participating_training_agriculture [select_one] Would you be interested in participating in a training related to agriculture and/or livestock?
-    participating_training_agriculture: undefined | Option<'participating_training_agriculture'>
+    participating_training_agriculture: undefined | Option<'currently_receiving_cash'>
     // fin_det/topics_interested_training [select_multiple] What topics would be interested in for the training?
     topics_interested_training: undefined | Option<'topics_interested_training'>[]
     // fin_det/topics_interested_training_other [text] If "Other", please specify
     topics_interested_training_other: string | undefined
+    // fin_det/currently_receiving_cash [select_one] Are you currently receiving, or have you received in the last six months, any cash assistance to restore your agricultural production?
+    currently_receiving_cash: undefined | Option<'currently_receiving_cash'>
     // fin_det/fin_det_res [text] 7.1 Other Comments from Respondent
     fin_det_res: string | undefined
     // fin_det/fin_det_enum [text] 7.2 Other Comments from Enumerator
@@ -365,7 +367,6 @@ export namespace Ecrec_subsistance {
       olha_sakharnova: `Olha Sakharnova`,
       oleksandr_lukomets: `Oleksandr Lukomets`,
       sofiia_berezhna: `Sofiia Berezhna`,
-      maksym_mykytas: `Maksym Mykytas`,
       tatiana_tsapii: `Tatiana Tsapii`,
       illia_kutsenko: `Illia Kutsenko`,
       iryna_nezdolina: `Iryna Nezdolina`,
@@ -375,6 +376,7 @@ export namespace Ecrec_subsistance {
       enumerator_3_dnk: `Enumerator 3`,
       enumerator_4_dnk: `Enumerator 4`,
       enumerator_5_dnk: `Enumerator 5`,
+      maksym_mykytas: `Maksym Mykytas`,
       ivan_prokopkin: `Ivan Prokopkin`,
       nataliia_yermolova: `Nataliia Yermolova`,
       olena_buglo: `Olena Buglo`,
@@ -386,6 +388,8 @@ export namespace Ecrec_subsistance {
       nataliia_karimova: `Nataliia Karimova`,
       hrk_ex1: `Extra 1`,
       hrk_ex2: `Extra 2`,
+      hrk_ex3: `Extra 3`,
+      hrk_ex4: `Extra 4`,
       dmytro_chernukha: `Chernukha Dmytro`,
       dmytro_nosenko: `Dmytro Nosenko`,
       anastasiia_reshynska: `Anastasiia Reshynska`,
@@ -411,11 +415,14 @@ export namespace Ecrec_subsistance {
       umy_ex4: `Extra 4`,
     },
     back_donor: {
-      ukr000348_bha: `BHA (UKR-000348)`,
+      ukr000350_sida: `SIDA (UKR-000350)`,
+      ukr000355_danish_mofa: `DMFA (UKR-000355)`,
+      ukr000386_pooled_funds: `Pooled Funds (UKR-000386)`,
       ukr000388_bha: `BHA (UKR-000388)`,
-      ukr000355_dmfa: `DMFA (UKR-000355)`,
+      ukr000424_dutch_mfa: `Dutch MFA (UKR-000424)`,
+      ukr000426_sdc: `SDC (UKR-000426)`,
     },
-    participating_training_agriculture: {
+    currently_receiving_cash: {
       yes: `Yes`,
       no: `No`,
     },
@@ -596,9 +603,10 @@ export namespace Ecrec_subsistance {
       no_id: `No ID`,
     },
     pay_det_pay_meth: {
+      bank_card: `Bank card`,
+      oschadbank: `Oschadbank`,
       raiff_trans: `Remittance Raiffaisen AVAL`,
       ukrpost: `Ukrposhta`,
-      bank_card: `Bank card`,
     },
     what_primary_livelihood: {
       agricul: `Agricultural and/or livestock activities`,

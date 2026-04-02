@@ -164,6 +164,7 @@ export namespace Meal_cfmExternal {
       zakarpatska: `Закарпатська`,
       zaporizka: `Запорізька`,
       zhytomyrska: `Житомирська`,
+      living_abroad: `Перебуваю за кордоном`,
     },
     feedback_type: {
       thanks: `Я хочу висловити подяку за отриману допомогу`,

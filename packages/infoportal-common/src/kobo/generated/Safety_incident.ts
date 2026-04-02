@@ -2021,7 +2021,7 @@ export namespace Safety_incident {
       clgo: `Government`,
       clin: `International (journalist; humanitarian; foreign fighter)`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

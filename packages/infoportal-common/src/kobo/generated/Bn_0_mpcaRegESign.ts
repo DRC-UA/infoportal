@@ -605,7 +605,7 @@ export namespace Bn_0_mpcaRegESign {
       '2': `Fewer`,
       '3': `No change`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

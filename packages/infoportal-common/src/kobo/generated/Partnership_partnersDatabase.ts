@@ -976,7 +976,7 @@ export namespace Partnership_partnersDatabase {
       yes: `Yes`,
       option_2: `No`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

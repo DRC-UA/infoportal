@@ -308,8 +308,8 @@ export namespace Ecrec_vetApplication {
       bank_card: `C = Bank card`,
     },
     case_selected_cover_cost: {
-      yes: `A = Yes`,
-      no: `B = No`,
+      yes: `Yes`,
+      no: `No`,
     },
     you_currently_employed_no: {
       '0_3_mounths': `0-3 months`,
@@ -399,7 +399,7 @@ export namespace Ecrec_vetApplication {
       mykolaivska: `Mykolaivska`,
       zaporizka: `Zaporizka`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

@@ -235,10 +235,10 @@ export class BuildKoboType {
         formId: KoboIndex.byName('shelter_commonSpaces').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
       },
-      shelter_modernWomen: {
-        formId: KoboIndex.byName('shelter_modern_women').id,
-        skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
-      },
+      // shelter_modernWomen: {
+      //   formId: KoboIndex.byName('shelter_modern_women').id,
+      //   skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],
+      // },
       bn_rapidResponseSida: {
         formId: KoboIndex.byName('bn_rapidResponseSida').id,
       },
@@ -420,18 +420,19 @@ export class BuildKoboType {
         formId: KoboIndex.byName('safety_incident').id,
         skipQuestionTyping: ['hromada', 'raion'],
       },
-      partner_pomogaem: {
-        formId: KoboIndex.byName('partner_pomogaem').id,
-      },
-      partner_lampa: {
-        formId: KoboIndex.byName('partner_lampa').id,
-      },
-      partner_angels: {
-        formId: KoboIndex.byName('partner_angels').id,
-      },
-      partner_misto_syly: {
-        formId: KoboIndex.byName('partner_misto_syly').id,
-      },
+      // THESE ARE THROWING 404:
+      // partner_pomogaem: {
+      //   formId: KoboIndex.byName('partner_pomogaem').id,
+      // },
+      // partner_lampa: {
+      //   formId: KoboIndex.byName('partner_lampa').id,
+      // },
+      // partner_angels: {
+      //   formId: KoboIndex.byName('partner_angels').id,
+      // },
+      // partner_misto_syly: {
+      //   formId: KoboIndex.byName('partner_misto_syly').id,
+      // },
       meal_verificationPartnerBnre: {
         formId: KoboIndex.byName('meal_verificationPartnerBnre').id,
       },
@@ -473,12 +474,12 @@ export class BuildKoboType {
       protection_gbv_capacity_needs_assessment_2026: {
         formId: KoboIndex.byName('protection_gbv_capacity_needs_assessment_2026').id,
       },
-      mistosyly_winterization_uhf_2025_2026: {
-        formId: KoboIndex.byName('mistosyly_winterization_uhf_2025_2026').id,
-      },
-      shelter_modern_women: {
-        formId: KoboIndex.byName('shelter_modern_women').id,
-      },
+      // mistosyly_winterization_uhf_2025_2026: {
+      //   formId: KoboIndex.byName('mistosyly_winterization_uhf_2025_2026').id,
+      // },
+      // shelter_modern_women: {
+      //   formId: KoboIndex.byName('shelter_modern_women').id,
+      // },
       protection_gbv_concepts_pre_post: {
         formId: KoboIndex.byName('protection_gbv_concepts_pre_post').id,
       },

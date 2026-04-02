@@ -1,6 +1,5 @@
 export namespace Safeguarding_psea {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: afq5ayhc2kssnomB8LR4oX
   export interface T {
     start: string
@@ -9,8 +8,10 @@ export namespace Safeguarding_psea {
     date_training: Date | undefined
     // general_information/training_format [select_one] Формат тренінгу
     training_format: undefined | Option<'training_format'>
-    // general_information/name_event [text] Назва заходу ?
-    name_event: string | undefined
+    // general_information/name_event [select_one] Назва заходу ?
+    name_event: undefined | Option<'name_event'>
+    // general_information/event_duration [select_one] Тривалість тренінгу
+    event_duration: undefined | Option<'event_duration'>
     // general_information/name_trainer [text] Ім'я та Прізвище тренера
     name_trainer: string | undefined
     // general_information/position_trainer [text] Посада тренера/ки
@@ -36,7 +37,6 @@ export namespace Safeguarding_psea {
         }[]
       | undefined
   }
-
   export const options = {
     training_format: {
       online: `Онлайн`,
@@ -92,6 +92,20 @@ export namespace Safeguarding_psea {
       turbota_dii: `PO "Turbota v Dii"`,
       ecoclub: `ГО "Екоклуб"`,
       other: `Інша`,
+    },
+    event_duration: {
+      '1hour': `1 година`,
+      '2hours': `2 години`,
+      '4hours': `4 години`,
+      One_day: `Один день`,
+      Two_days: `Два дні`,
+    },
+    name_event: {
+      safeguarding_pseah_training: `Safeguarding and PSEAH Training`,
+      refreshment_training: `Refreshment Training on Safeguarding and PSEAH`,
+      pseah_training: `PSEAH Training`,
+      safeguarding_training: `Safeguarding Training`,
+      partner_pseah: `Meeting with partner for strengthening PSEAH Organasational Capability`,
     },
   } as const
 

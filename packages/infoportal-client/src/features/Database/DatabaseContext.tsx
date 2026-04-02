@@ -1,16 +1,17 @@
-import React, {ReactNode, useContext, useEffect, useMemo} from 'react'
-import {useAppSettings} from '@/core/context/ConfigContext'
-import {ApiSdk} from '@/core/sdk/server/ApiSdk'
+import {createContext, useContext, useEffect, useMemo, type ReactNode} from 'react'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
-import {useIpToast} from '@/core/useToast'
-import {Access} from '@/core/sdk/server/access/Access'
-import {AppFeatureId} from '@/features/appFeatureId'
-import {useSession} from '@/core/Session/SessionContext'
-import {KoboForm} from '@/core/sdk/server/kobo/KoboMapper'
 import {seq} from '@axanc/ts-utils'
-import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
-import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 import {Kobo} from 'kobo-sdk'
+
+import {useAppSettings} from '@/core/context/ConfigContext'
+import {Access} from '@/core/sdk/server/access/Access'
+import {ApiSdk} from '@/core/sdk/server/ApiSdk'
+import {KoboForm} from '@/core/sdk/server/kobo/KoboMapper'
+import {KoboFormSdk} from '@/core/sdk/server/kobo/KoboFormSdk'
+import {useSession} from '@/core/Session/SessionContext'
+import {useIpToast} from '@/core/useToast'
+import {AppFeatureId} from '@/features/appFeatureId'
+import {useFetcher, UseFetcher} from '@/shared/hook/useFetcher'
 
 export interface DatabaseContext {
   _forms: UseFetcher<ApiSdk['kobo']['form']['getAll']>
@@ -20,7 +21,7 @@ export interface DatabaseContext {
   // servers: UseFetcher<ApiSdk['kobo']['server']['getAll']>
 }
 
-export const Context = React.createContext({} as DatabaseContext)
+export const Context = createContext({} as DatabaseContext)
 
 export const useDatabaseContext = () => useContext(Context)
 

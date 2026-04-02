@@ -2176,6 +2176,8 @@ export namespace Meal_visitMonitoring {
       natalia_baryshevska: `Natalia Baryshevska`,
       anna_chupryna: `Anna Chupryna`,
       olesia_hunko: `Olesia Hunko`,
+      daria_lishchuk: `Daria Lishchuk`,
+      alona_serebrianska: `Alona Serebrianska`,
       isabel_pearson: `Isabel Mary Pearson`,
       other: `Other`,
     },

@@ -316,7 +316,7 @@ export namespace Meal_verificationWinterization {
       ret: `C = Returnee`,
       ref_asy: `D = Refugee/asylum seeker`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

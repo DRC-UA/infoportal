@@ -297,7 +297,7 @@ export namespace Bn_cashForRentApplication {
       zolochivska_3g: `Zolochivska`,
       zymnovodivskag: `Zymnovodivska`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

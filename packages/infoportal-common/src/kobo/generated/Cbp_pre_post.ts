@@ -127,7 +127,7 @@ export namespace Cbp_pre_post {
     what_empathy: undefined | Option<'what_empathy'>
     // group_facilitation_skills/talking_distress_avoid [select_multiple] 3) Під час розмови з людиною, яка перебуває в емоційному стресі, щоб не зашкодити, нам потрібно уникати:
     talking_distress_avoid: undefined | Option<'talking_distress_avoid'>[]
-    // group_facilitation_skills/key_characteristics_team [select_one] 4) Ключова характеристика групи
+    // group_facilitation_skills/key_characteristics_team [select_one] 4) Ключова характеристика команди
     key_characteristics_team: undefined | Option<'key_characteristics_team'>
     // group_facilitation_skills/skills_good_leader [select_multiple] 5) Ключові навички хорошого лідера
     skills_good_leader: undefined | Option<'skills_good_leader'>[]

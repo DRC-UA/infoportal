@@ -112,7 +112,7 @@ export namespace Bn_1_mpcaNfiMyko {
       bk3: `BK3`,
       bk4: `BK4`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

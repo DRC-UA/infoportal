@@ -75,13 +75,15 @@ export namespace Shelter_commonSpaces {
           apt_number: string | undefined | undefined
           fp_name: string | undefined | undefined
           owner_number: number | undefined | undefined
+          hh_char_res_stat: undefined | Option<'hh_char_res_stat'> | undefined
           ben_det_hh_size: number | undefined | undefined
           hh_char_hh_det: HhCharacter[] | undefined
           female_hh_l18: string | undefined
           male_hh_l18: string | undefined
           female_hh_m18: string | undefined
           male_hh_m18: string | undefined
-          hh_char_res_stat: undefined | Option<'hh_char_res_stat'> | undefined
+          calc_det_dis_level: string | undefined
+          calc_chronic_disease: string | undefined
           eligible_egov: undefined | Option<'compliance_standards'> | undefined
           barriers_compensation: undefined | Option<'barriers_compensation'>[] | undefined
           barriers_compensation_other: string | undefined | undefined

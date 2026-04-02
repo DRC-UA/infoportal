@@ -4,6 +4,10 @@ export namespace Bn_rapidResponse {
   export interface T {
     start: string
     end: string
+    // status_paid [select_one] Status
+    status_paid: undefined | Option<'status_paid'>
+    // date_paid [date] Paid on
+    date_paid: Date | undefined
     // form_length [select_one] Select the form length
     form_length: undefined | Option<'form_length'>
     // form_approval [select_one] Do you have approval to use the short tool?
@@ -414,6 +418,14 @@ export namespace Bn_rapidResponse {
     fin_det_oth_doc_im_l: string
   }
   export const options = {
+    status_paid: {
+      selected: `❕ Selected`,
+      pending: `🕓 Pending`,
+      paid: `✅ Paid`,
+      rejected: `❌ Rejected`,
+      referred: `➖ Referred`,
+      payment_rejected: `❗ Payment Rejected`,
+    },
     back_donor: {
       echo: `ECHO`,
       uhf_4: `UHF 4`,
@@ -628,6 +640,7 @@ export namespace Bn_rapidResponse {
       umy_danida_347: `DANIDA`,
       '330_sdc_dnk': `SDC`,
       echo2_dnk: `ECHO2`,
+      ukr000336_uhf6: `UHF6`,
     },
     back_prog_type_l: {
       mpca_umy: `MPCA`,
@@ -2743,7 +2756,7 @@ export namespace Bn_rapidResponse {
       dorm: `In dorm`,
       other: `Other`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}
@@ -2758,6 +2771,7 @@ export namespace Bn_rapidResponse {
   export const map = (_: Record<keyof T, any>): T =>
     ({
       ..._,
+      date_paid: _.date_paid ? new Date(_.date_paid) : undefined,
       back_prog_type: _.back_prog_type?.split(' '),
       ben_det_ph_number: _.ben_det_ph_number ? +_.ben_det_ph_number : undefined,
       ben_det_hh_size: _.ben_det_hh_size ? +_.ben_det_hh_size : undefined,

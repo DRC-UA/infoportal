@@ -21,5 +21,6 @@ export const koboSdkDrc = new KoboClient({
 
   // MEMO: groups nested twice are treated as one-level array, so the typing and mapping for HH members shelter_commonSpaces is fixed manually
   commonSpacesReminder()
+  // await new BuildKoboType().buildAll()
   // await new BuildKoboType().build('meal_ecrec_agMsmeVetPam')
 })()

@@ -1,6 +1,5 @@
 export namespace Meal_eorePdm {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: aTHMDjqm7jodctcrBE4bS7
   export interface T {
     start: string
@@ -56,7 +55,6 @@ export namespace Meal_eorePdm {
     // begin/comments [text] Do you have any comments?
     comments: string | undefined
   }
-
   export const options = {
     office: {
       dnk: `Dnipro (DNK)`,
@@ -76,6 +74,7 @@ export namespace Meal_eorePdm {
       gffo331: `GFFO 331`,
       sida350: `SIDA 350`,
       uhf8_363: `UHF 8 363`,
+      ukr000371_dmfa: `DMFA 371`,
       ech372: `ECHO 372`,
       novonordisk373: `Novo Nordisk 373`,
       danida380: `Danida 380`,

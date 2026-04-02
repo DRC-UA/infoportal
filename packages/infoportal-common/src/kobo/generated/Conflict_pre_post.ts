@@ -1,6 +1,5 @@
 export namespace Conflict_pre_post {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: atG7X5hrbXbR9eseskUoCq
   export interface T {
     start: string
@@ -57,7 +56,6 @@ export namespace Conflict_pre_post {
     // training_evaluation/comments [text] Будь ласка, додайте тут будь-які додаткові коментарі, які у вас можливо є стосовно тренінгу та його змісту
     comments: string | undefined
   }
-
   export const options = {
     complete_training: {
       before: `До навчання`,

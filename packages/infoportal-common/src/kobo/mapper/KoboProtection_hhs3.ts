@@ -38,17 +38,19 @@ export interface ProtectionHhsTags extends KoboBaseTags {
 }
 
 export const currentProtectionProjects = [
+  DrcProject['UKR-000461 UHF'],
+  DrcProject['UKR-000457 DMFA'],
+  DrcProject['UKR-000426 SDC'],
+  DrcProject['UKR-000423 ECHO4'],
+  DrcProject['UKR-000397 GFFO'],
+  DrcProject['UKR-000372 ECHO3'],
   DrcProject['UKR-000363 UHF8'],
-  DrcProject['UKR-000298 Novo-Nordisk'],
+  DrcProject['UKR-000355 Danish MFA'],
+  DrcProject['UKR-000336 UHF6'],
   DrcProject['UKR-000322 ECHO2'],
   DrcProject['UKR-000314 UHF4'],
-  DrcProject['UKR-000336 UHF6'],
-  DrcProject['UKR-000226 SDC'],
   DrcProject['UKR-000309 OKF'],
-  DrcProject['UKR-000372 ECHO3'],
-  DrcProject['UKR-000355 Danish MFA'],
-  DrcProject['UKR-000397 GFFO'],
-  DrcProject['UKR-000423 ECHO4'],
-  DrcProject['UKR-000457 DMFA'],
+  DrcProject['UKR-000298 Novo-Nordisk'],
+  DrcProject['UKR-000226 SDC'],
   DrcProject['None'],
 ]

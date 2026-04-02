@@ -1,6 +1,5 @@
 export namespace Bn_pam {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: aj8ESj397NhsSCPMcnmnQT
   export interface T {
     start: string
@@ -36,13 +35,13 @@ export namespace Bn_pam {
     // informed_consent/not_mpca [note] Hello I am from DRC organization (please mention your organization name)! We want to ask you some questions to obtain information about the Cash Assistance that you and your household have received from us. We want to hear your thoughts so we can improve the way that we are doing our job. Your participation is voluntary and the questions will take around 20-30 minutes to answer. If you accept to participate, you have the option to stop answering or to not answer any question that you don't want to. This information will help us to understand what has been done appropriately in the process, what hasn't worked that good and what we should be doing differently. The information you share will be kept protected and will only be shared with a small group of people in the organization (please mention your organization name). Finally, please know that if you provide negative feedback about our work, this will not have any negative consequences to your permanence in this or future activities of this project.
     not_mpca: string
     // informed_consent/agree_interviewed [select_one] Do you agree to be interviewed?
-    agree_interviewed: undefined | Option<'report_drc_employee'>
+    agree_interviewed: undefined | Option<'barriers_purchase_fuel'>
     // informed_consent/did_receive_cash [select_one] Did you receive Cash assistance from DRC?
-    did_receive_cash: undefined | Option<'report_drc_employee'>
+    did_receive_cash: undefined | Option<'barriers_purchase_fuel'>
     // informed_consent/did_receive_cash_no [note] **As you have not received assistance, we will end the interview and follow up with our programs teams**
     did_receive_cash_no: string
     // informed_consent/spent_cash_assistance_received [select_one] Have you spent the cash assistance you received yet?
-    spent_cash_assistance_received: undefined | Option<'amount_cash_received_correspond'>
+    spent_cash_assistance_received: undefined | Option<'barriers_pwd_join'>
     // informed_consent/spent_cash_dk [text] Please explain why
     spent_cash_dk: string | undefined
     // informed_consent/spent_cash_assistance_received_no [text] When do you plan to use the assistance received? (cash for fuel, cash for utilities, cash for animal feed, cash for animal shelter, agricultural needs)
@@ -65,10 +64,48 @@ export namespace Bn_pam {
     sex: undefined | Option<'sex'>
     // overview/status_person [select_one] What is your residential status?
     status_person: undefined | Option<'status_person'>
+    // overview/condition_affects_daily [select_one] Do you have any condition that affects your daily activities?
+    condition_affects_daily: undefined | Option<'barriers_purchase_fuel'>
     // overview/how_many_family [integer] Number of family members reside with you in the apartment/house?
     how_many_family: number | undefined
     // overview/number_disabilities [integer] Number of family members with disabilities
     number_disabilities: number | undefined
+    // overview/ben_det_income [integer] What is the monthly income of your HH in UAH (including all pensions, salary, state payments)
+    ben_det_income: number | undefined
+    // monthly_expenditures_needs/note_spend_income [note] **Please specify (in UAH) how do you spend your income assistance on: **
+    note_spend_income: string
+    // monthly_expenditures_needs/food_expenditures [integer] Food
+    food_expenditures: number | undefined
+    // monthly_expenditures_needs/hygiene_expenditures [integer] Personal Hygiene items (toothpaste, soap, shampoo, toilet paper, menstrual pads, baby diapers)
+    hygiene_expenditures: number | undefined
+    // monthly_expenditures_needs/domestic_expenditures [integer] Domestic Cleaning items (sponges, dishwashing soap, etc)
+    domestic_expenditures: number | undefined
+    // monthly_expenditures_needs/nfi_expenditures [integer] Household non-food items (Towel sets, blankets, kitchen set, jerrycan, bucket, bed linen sets, and reinforced/re-usable bags)
+    nfi_expenditures: number | undefined
+    // monthly_expenditures_needs/clothing_expenditures [integer] Clothing and shoes
+    clothing_expenditures: number | undefined
+    // monthly_expenditures_needs/heating_expenditures [integer] Heating (fuel)
+    heating_expenditures: number | undefined
+    // monthly_expenditures_needs/utilities_expenditures [integer] Utilities (electricity, gas, fuel for cooking)
+    utilities_expenditures: number | undefined
+    // monthly_expenditures_needs/drinking_expenditures [integer] Drinking safe water
+    drinking_expenditures: number | undefined
+    // monthly_expenditures_needs/rent_expenditures [integer] Rent
+    rent_expenditures: number | undefined
+    // monthly_expenditures_needs/healthcare_expenditures [integer] Healthcare needs
+    healthcare_expenditures: number | undefined
+    // monthly_expenditures_needs/special_expenditures [integer] Special food for children or pregnant women
+    special_expenditures: number | undefined
+    // monthly_expenditures_needs/transportation_expenditures [integer] Transportation
+    transportation_expenditures: number | undefined
+    // monthly_expenditures_needs/education_expenditures [integer] Education materials (e.g. books)
+    education_expenditures: number | undefined
+    // monthly_expenditures_needs/communication_needs [integer] Communication needs
+    communication_needs: number | undefined
+    // monthly_expenditures_needs/value_monthly_expenditures [integer] #####Monthly expenditures on priority needs in the HH
+    value_monthly_expenditures: number | undefined
+    // monthly_expenditures_needs/cal_meb [note] Comparison of household expenditures with the Subsistence Minimum (6,318 UAH per person per month)
+    cal_meb: string
     // NFIs/received_number_communicated [select_one] Did the received number of kits correspond with the number that was communicated to you?
     received_number_communicated: undefined | Option<'received_number_communicated'>
     // NFIs/family_supported_kit [integer] How many people in your family were supported by this kit including you?
@@ -80,7 +117,7 @@ export namespace Bn_pam {
     // NFIs/current_time_cc [integer] What is the current average time a family stays in your center (in days)?
     current_time_cc: number | undefined
     // NFIs/residents_maximum_days [select_one] Are residents allowed to stay a maximum number of days?
-    residents_maximum_days: undefined | Option<'report_drc_employee'>
+    residents_maximum_days: undefined | Option<'barriers_purchase_fuel'>
     // NFIs/residents_maximum_days_yes [integer] If "Yes" then - How many?
     residents_maximum_days_yes: number | undefined
     // NFIs/satisfaction_kit [select_one] How would you describe your satisfaction with the kit provided to you?
@@ -122,23 +159,23 @@ export namespace Bn_pam {
     // delivery_process/satisfied_process_no [text] If "Not very satisfied" or "Not satisfied at all" then:  If you were not satisfied, could you tell us why you were not satisfied?
     satisfied_process_no: string | undefined
     // delivery_process/satisfied_cash_amount [select_one] Are you satisfied with the cash amount received?
-    satisfied_cash_amount: undefined | Option<'report_drc_employee'>
+    satisfied_cash_amount: undefined | Option<'barriers_purchase_fuel'>
     // delivery_process/satisfied_cash_amount_no [text] If "No", why?
     satisfied_cash_amount_no: string | undefined
     // delivery_process/amount_cash_received_correspond [select_one] Did the amount of cash received correspond to the amount communicated to you?
-    amount_cash_received_correspond: undefined | Option<'amount_cash_received_correspond'>
+    amount_cash_received_correspond: undefined | Option<'barriers_pwd_join'>
     // delivery_process/amount_cash_received_correspond_no [select_one] Did you receive less or more than what you were told you would be receiving?
     amount_cash_received_correspond_no: undefined | Option<'amount_cash_received_correspond_no'>
     // delivery_process/time_registered_assistance [select_one] How much time did it take from the moment your household registered to the moment you received the assistance from DRC?
     time_registered_assistance: undefined | Option<'time_registered_assistance'>
     // delivery_process/experience_problems [select_one] Did you experience any problems with the registration for assistance?
-    experience_problems: undefined | Option<'report_drc_employee'>
+    experience_problems: undefined | Option<'barriers_purchase_fuel'>
     // delivery_process/experience_problems_yes [select_multiple] If "Yes", what was the problem?
     experience_problems_yes: undefined | Option<'experience_problems_yes'>[]
     // delivery_process/experience_problems_yes_other [text] If "Other", please specify
     experience_problems_yes_other: string | undefined
     // delivery_process/organization_provide_information [select_one] Did the organization provide you with all the information you needed about the cash transfer?
-    organization_provide_information: undefined | Option<'report_drc_employee'>
+    organization_provide_information: undefined | Option<'barriers_purchase_fuel'>
     // delivery_process/organization_provide_information_no [text] If "No", why?
     organization_provide_information_no: string | undefined
     // delivery_process/better_inform_distribution [select_multiple] What could DRC have done to better inform you about the assistance or distribution?
@@ -149,10 +186,12 @@ export namespace Bn_pam {
     received_enough_agricultural_needs_long: undefined | Option<'received_enough_agricultural_needs_long'>
     // sufficiency/received_enough_agricultural_needs_long_other [text] If “Other” - Please, specify
     received_enough_agricultural_needs_long_other: string | undefined
+    // outcome/prior_receiving_assistance [select_multiple] What were your household’s priority basic needs prior to receiving assistance?
+    prior_receiving_assistance: undefined | Option<'important_helped_household'>[]
     // outcome/extent_needs_define [select_one] To what extent is your household able to meet its basic needs after receiving the assistance as you define and prioritize them ?
     extent_needs_define: undefined | Option<'extent_needs_define'>
-    // outcome/most_important_things [select_multiple] What are the most important things that the cash helped your household to do or buy that you could not do or buy before you received it?
-    most_important_things: undefined | Option<'most_important_things'>[]
+    // outcome/most_important_things [select_multiple] Which prioritized basic needs is your household currently unable to fulfil?
+    most_important_things: undefined | Option<'important_helped_household'>[]
     // outcome/unable_fully_basic_food_needs [select_one] Why are you unable to fully meet this need? (Basic food needs)
     unable_fully_basic_food_needs: undefined | Option<'unable_fully_other'>
     // outcome/unable_fully_basic_food_needs_other [text] If other, specify
@@ -209,20 +248,26 @@ export namespace Bn_pam {
     unable_fully_utilities: undefined | Option<'unable_fully_other'>
     // outcome/unable_fully_utilities_other [text] If other, specify
     unable_fully_utilities_other: string | undefined
+    // outcome/most_important_things_other [text] If other, specify
+    most_important_things_other: string | undefined
     // outcome/unable_fully_other [select_one] Why are you unable to fully meet this need? (Other)
     unable_fully_other: undefined | Option<'unable_fully_other'>
     // outcome/unable_fully_other_other [text] If other, specify
     unable_fully_other_other: string | undefined
+    // outcome/important_helped_household [select_multiple] What are the most important things that the cash helped your household to do or buy that you could not do or buy before you received it?
+    important_helped_household: undefined | Option<'important_helped_household'>[]
+    // outcome/important_helped_household_other [text] If other, specify
+    important_helped_household_other: string | undefined
     // outcome/received_basic_needs [select_one] Did the NFI or hygiene kit you received help you meet your basic needs (such as staying clean, warm, safe, or healthy)?
-    received_basic_needs: undefined | Option<'report_drc_employee'>
+    received_basic_needs: undefined | Option<'barriers_purchase_fuel'>
     // outcome/received_basic_needs_no [text] If ‘No” please specify:
     received_basic_needs_no: string | undefined
     // outcome/received_sufficient_needs [select_one] Was the NFI or hygiene kit you received sufficient to meet your basic needs for a reasonable period of time?
-    received_sufficient_needs: undefined | Option<'report_drc_employee'>
+    received_sufficient_needs: undefined | Option<'barriers_purchase_fuel'>
     // outcome/received_sufficient_needs_no [text] If ‘No” please specify:
     received_sufficient_needs_no: string | undefined
     // outcome/assistance_timely [select_one] Was the assistance you received timely for you?
-    assistance_timely: undefined | Option<'report_drc_employee'>
+    assistance_timely: undefined | Option<'barriers_purchase_fuel'>
     // outcome/assistance_timely_no [text] If ‘No” please specify:
     assistance_timely_no: string | undefined
     // outcome/feel_safe_travelling [select_one] Did you feel safe at all times travelling to receive the assistance/service (to/from your place), while receiving the assistance/service, and upon return to your place (SDH.1)?
@@ -254,7 +299,7 @@ export namespace Bn_pam {
     // outcome/where_are_staying_other [text] If "Other", please specify
     where_are_staying_other: string | undefined
     // outcome/any_member_household [select_one] Have you or any member of your household been exposed to any risk as a consequence of receiving the assistance?
-    any_member_household: undefined | Option<'report_drc_employee'>
+    any_member_household: undefined | Option<'barriers_purchase_fuel'>
     // outcome/any_member_household_yes [text] If "Yes", you have experienced any challenge or insecurity situation as consequence of receiving the assistance, can you tell us what happened?
     any_member_household_yes: string | undefined
     // outcome/provide_someone_commission [select_one] Have you ever had to provide someone with a commission, a gift, a tip, a service or a favor to get in the list of project participants, or to receive the assistance?
@@ -278,15 +323,66 @@ export namespace Bn_pam {
     // outcome/know_address_suggestions_no_other [text] If "Other", please specify
     know_address_suggestions_no_other: string | undefined
     // outcome/report_drc_employee [select_one] Do you know how and where to report if a DRC employee requested something from you in exchange for receiving assistance, made you feel uncomfortable in anyway, or insulted you? (misconduct)
-    report_drc_employee: undefined | Option<'report_drc_employee'>
+    report_drc_employee: undefined | Option<'barriers_purchase_fuel'>
+    // coping_strategies/resort_any_following [note] ####During the last 3 months, did your household have to resort to any of the following coping mechanisms?
+    resort_any_following: string
+    // coping_strategies/income_spent_food [integer] In the last 7 days, what proportion of the overall household income was spent on food (human consumption)?
+    income_spent_food: number | undefined
+    // coping_strategies/income_spent_nonfood [integer] In the last 7 days, what proportion of the overall household income was spent on non-food items and services such as health and education related services?
+    income_spent_nonfood: number | undefined
+    // coping_strategies/lcs_spent_savings [select_one] In the last 30 days, spent savings due to lack of resources to access essential needs?
+    lcs_spent_savings: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_forrowed_food [select_one] In the last 30 days, borrowed money to access essential needs?
+    lcs_forrowed_food: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_reduced_utilities [select_one] In the last 30 days, reduced or ceased payments on essential utilities and bills due to lack of resources to access essential needs?
+    lcs_reduced_utilities: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_reduce_education_expenditures [select_one] In the last 30 days, reduced expenses on education due to lack of resources to access essential needs?
+    lcs_reduce_education_expenditures: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_sell_productive_assets [select_one] In the last 30 days, sold productive assets or means of transport (sewing machine, wheelbarrow, bicycle, car, etc.) due to lack of resources to access essential needs.
+    lcs_sell_productive_assets: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_reduce_health_expenditures [select_one] In the last 30 days, reduced expenses on essential health (including medicines) due to lack of resources to access essential needs.
+    lcs_reduce_health_expenditures: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_sell_hh_assets [select_one] In the last 30 days, sold household assets (furniture, appliances, jewelry, etc.) due to lack of resources to access essential needs?
+    lcs_sell_hh_assets: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_sell_house [select_one] In the last 30 days, selling property (house and/or land) that you did not want to sell
+    lcs_sell_house: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_strangers_money [select_one] In the last 30 days, have to ask strangers for money, or search for food which was free outside?
+    lcs_strangers_money: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_degrading_income_source [select_one] In the last 30 days, Have to take a job or employment which you would not have preferred to engage with, or makes you feel uncomfortable (for example having to work in contaminated fields, engaging in potentially dangerous or taboo work)
+    lcs_degrading_income_source: undefined | Option<'lcs_degrading_income_source'>
+    // coping_strategies/lcs_reason [select_multiple] What were the main reasons why your household decided to use these strategies?
+    lcs_reason: undefined | Option<'lcs_reason'>[]
+    // coping_strategies/lcs_reason_other [text] If other, specify
+    lcs_reason_other: string | undefined
+    // access_pwd_assisstance/barriers_pwd_join [select_one] Did you feel there were any barriers for persons with disabilities to join these activities?
+    barriers_pwd_join: undefined | Option<'barriers_pwd_join'>
+    // access_pwd_assisstance/barriers_pwd_join_yes [text] If "Yes", please explain why:
+    barriers_pwd_join_yes: string | undefined
+    // access_pwd_assisstance/difficulties_accessing_cash [select_one] Did you face any difficulties accessing the cash?
+    difficulties_accessing_cash: undefined | Option<'barriers_purchase_fuel'>
+    // access_pwd_assisstance/difficulties_accessing_cash_yes [text] If "Yes", what issues did you face?
+    difficulties_accessing_cash_yes: string | undefined
+    // access_pwd_assisstance/location_withdraw_cash [select_one] How far is the location to withdraw cash from your home?
+    location_withdraw_cash: undefined | Option<'location_withdraw_cash'>
+    // access_pwd_assisstance/go_market_personally_fuel [select_one] Were you (or the caregiver of the person with disability in the household) able to go to the market personally to purchase fuel?
+    go_market_personally_fuel: undefined | Option<'barriers_purchase_fuel'>
+    // access_pwd_assisstance/go_market_personally_fuel_no [select_multiple] If No: Who made the purchase instead?
+    go_market_personally_fuel_no: undefined | Option<'go_market_personally_fuel_no'>[]
+    // access_pwd_assisstance/go_market_personally_fuel_no_other [text] If other, please specify
+    go_market_personally_fuel_no_other: string | undefined
+    // access_pwd_assisstance/barriers_purchase_fuel [select_one] Did you face any barriers in the purchase of this fuel?
+    barriers_purchase_fuel: undefined | Option<'barriers_purchase_fuel'>
+    // access_pwd_assisstance/barriers_purchase_fuel_yes [select_multiple] If Yes: What were the main barriers?
+    barriers_purchase_fuel_yes: undefined | Option<'barriers_purchase_fuel_yes'>[]
+    // access_pwd_assisstance/barriers_purchase_fuel_yes_other [text] If other, please specify
+    barriers_purchase_fuel_yes_other: string | undefined
     // comment [text] Interviewer's comment
     comment: string | undefined
     // not_thank [note] **Thank you for taking the time to fill out this form.**
     not_thank: string
   }
-
   export const options = {
-    most_important_things: {
+    important_helped_household: {
       basic_food_needs: `Basic food needs`,
       food_children_0_23m: `Special food needs of your children 0–23 months`,
       food_pregnant_lactating: `Special food needs of pregnant and lactating women`,
@@ -406,15 +502,6 @@ export namespace Bn_pam {
       cannot_cover: `Cannot cover`,
       all: `I spent all of my income on food`,
       all_extra_costs: `All the basic needs are covered and we can afford extra costs (cinema, café, etc.)`,
-      no_had_no_need_to_use_this_coping_strategy: `No, had no need to use this coping strategy`,
-      no_have_already_exhausted_this_coping_strategy_and_cannot_use_it_again: `No, have already exhausted this coping strategy and cannot use it again`,
-      not_applicable_this_coping_strategy_is_not_available_to_me: `Not applicable / This coping strategy is not available to me`,
-      prefer_not_to_answer: `Prefer not to answer`,
-      to_access_or_pay_for_food: `To access or pay for food`,
-      to_access_or_pay_for_healthcare: `To access or pay for healthcare`,
-      to_access_or_pay_for_shelter: `To access or pay for shelter`,
-      to_access_or_pay_for_education: `To access or pay for education`,
-      dont_know: `Don't know`,
       vety_few: `Very few of the needs`,
       no_needs: `No needs met`,
       clothing: `Clothing`,
@@ -529,7 +616,7 @@ export namespace Bn_pam {
       zaporizhzhya: `ZPR (Zaporizhzhya)`,
       slovyansk: `DOC (Slovyansk)`,
     },
-    report_drc_employee: {
+    barriers_purchase_fuel: {
       yes: `Yes`,
       no: `No`,
     },
@@ -604,7 +691,7 @@ export namespace Bn_pam {
       education: `Education materials (i.e., books)`,
       other: `Other`,
     },
-    amount_cash_received_correspond: {
+    barriers_pwd_join: {
       yes: `Yes`,
       no: `No`,
       dk: `Dont know`,
@@ -672,7 +759,24 @@ export namespace Bn_pam {
       ukr000399_sdc: `SDC (UKR-000399)`,
       ukr000418_sida: `SIDA (UKR-000418)`,
       ukr000419_dmfa: `DMFA (UKR-000419)`,
+      ukr000423_echo4: `ECHO (UKR-000423)`,
+      ukr000441_uhf11: `UHF (UKR-000441)`,
       other: `Other`,
+    },
+    lcs_degrading_income_source: {
+      yes: `Yes`,
+      no_had_no_need_to_use_this_coping_strategy: `No, because we did not need to`,
+      no_have_already_exhausted_this_coping_strategy_and_cannot_use_it_again: `No, because we have already exhausted this coping strategy and cannot use it again`,
+      not_applicable_this_coping_strategy_is_not_available_to_me: `Not applicable / This coping strategy is not available to me`,
+      prefer_not_to_answer: `Prefer not to answer`,
+    },
+    lcs_reason: {
+      to_access_or_pay_for_food: `To access or pay for food`,
+      to_access_or_pay_for_healthcare: `To access or pay for healthcare`,
+      to_access_or_pay_for_shelter: `To access or pay for shelter`,
+      to_access_or_pay_for_education: `To access or pay for education`,
+      other: `Other`,
+      dont_know: `Don't know`,
     },
     extent_needs_define: {
       all: `All of them`,
@@ -703,6 +807,27 @@ export namespace Bn_pam {
       financial_reasons: `Financial reasons /cannot afford`,
       not_available: `It is not available on the local market`,
       services_needed: `Services needed (I.e. health, education, or others that are normally not accessed in local markets) are not available`,
+      other: `Other`,
+    },
+    location_withdraw_cash: {
+      less_500m: `Less than 500 m`,
+      '500m_2km': `500 m – 2 km`,
+      more_2km: `More than 2 km`,
+    },
+    go_market_personally_fuel_no: {
+      family: `Family`,
+      neighbour: `Neighbour`,
+      volunteer: `Volunteer`,
+      vendor_delivered: `Vendor delivered`,
+      other: `Other`,
+    },
+    barriers_purchase_fuel_yes: {
+      distance: `Distance`,
+      no_accessible_transport: `No accessible transport`,
+      inaccessible_terrain: `Inaccessible terrain or stairs`,
+      heavy_weigh: `Heavy weight of the fuel`,
+      safety: `Safety/security concerns`,
+      lack_assistance: `Lack of assistance`,
       other: `Other`,
     },
     ben_det_oblast: {
@@ -2657,6 +2782,22 @@ export namespace Bn_pam {
       age: _.age ? +_.age : undefined,
       how_many_family: _.how_many_family ? +_.how_many_family : undefined,
       number_disabilities: _.number_disabilities ? +_.number_disabilities : undefined,
+      ben_det_income: _.ben_det_income ? +_.ben_det_income : undefined,
+      food_expenditures: _.food_expenditures ? +_.food_expenditures : undefined,
+      hygiene_expenditures: _.hygiene_expenditures ? +_.hygiene_expenditures : undefined,
+      domestic_expenditures: _.domestic_expenditures ? +_.domestic_expenditures : undefined,
+      nfi_expenditures: _.nfi_expenditures ? +_.nfi_expenditures : undefined,
+      clothing_expenditures: _.clothing_expenditures ? +_.clothing_expenditures : undefined,
+      heating_expenditures: _.heating_expenditures ? +_.heating_expenditures : undefined,
+      utilities_expenditures: _.utilities_expenditures ? +_.utilities_expenditures : undefined,
+      drinking_expenditures: _.drinking_expenditures ? +_.drinking_expenditures : undefined,
+      rent_expenditures: _.rent_expenditures ? +_.rent_expenditures : undefined,
+      healthcare_expenditures: _.healthcare_expenditures ? +_.healthcare_expenditures : undefined,
+      special_expenditures: _.special_expenditures ? +_.special_expenditures : undefined,
+      transportation_expenditures: _.transportation_expenditures ? +_.transportation_expenditures : undefined,
+      education_expenditures: _.education_expenditures ? +_.education_expenditures : undefined,
+      communication_needs: _.communication_needs ? +_.communication_needs : undefined,
+      value_monthly_expenditures: _.value_monthly_expenditures ? +_.value_monthly_expenditures : undefined,
       family_supported_kit: _.family_supported_kit ? +_.family_supported_kit : undefined,
       how_residents_cc: _.how_residents_cc ? +_.how_residents_cc : undefined,
       what_center_capacity: _.what_center_capacity ? +_.what_center_capacity : undefined,
@@ -2700,6 +2841,13 @@ export namespace Bn_pam {
         : undefined,
       experience_problems_yes: _.experience_problems_yes?.split(' '),
       better_inform_distribution: _.better_inform_distribution?.split(' '),
+      prior_receiving_assistance: _.prior_receiving_assistance?.split(' '),
       most_important_things: _.most_important_things?.split(' '),
+      important_helped_household: _.important_helped_household?.split(' '),
+      income_spent_food: _.income_spent_food ? +_.income_spent_food : undefined,
+      income_spent_nonfood: _.income_spent_nonfood ? +_.income_spent_nonfood : undefined,
+      lcs_reason: _.lcs_reason?.split(' '),
+      go_market_personally_fuel_no: _.go_market_personally_fuel_no?.split(' '),
+      barriers_purchase_fuel_yes: _.barriers_purchase_fuel_yes?.split(' '),
     }) as T
 }

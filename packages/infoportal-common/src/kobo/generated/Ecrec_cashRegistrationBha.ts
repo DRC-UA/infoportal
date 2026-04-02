@@ -480,7 +480,7 @@ export namespace Ecrec_cashRegistrationBha {
       buildingm: `Building materials,`,
       other: `Other`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

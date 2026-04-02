@@ -544,11 +544,12 @@ export namespace Bn_rapidResponse2 {
       no_id: `No ID`,
     },
     pay_det_pay_meth: {
-      raiff_trans: `Remittance Raiffaisen AVAL`,
-      ukrpost: `Ukrposhta`,
       bank_card: `Bank card`,
+      oschadbank: `Oschadbank`,
       other_pay: `Other Payment Method`,
       none_pay: `None of the above fit my needs`,
+      raiff_trans: `Remittance Raiffaisen AVAL`,
+      ukrpost: `Ukrposhta`,
     },
     extent_basic_needs_bha345: {
       all: `All`,

@@ -1,6 +1,5 @@
 export namespace Meal_pssPdm {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: a7bAcCujpff6E94FPRubzS
   export interface T {
     start: string
@@ -151,13 +150,13 @@ export namespace Meal_pssPdm {
     // oc/ocn [note] Thank you very much for your feedback!
     ocn: string
   }
-
   export const options = {
     gina: {
       north: `North`,
       west: `West`,
       east: `East`,
       south: `South`,
+      south_east: `South East`,
     },
     gire: {
       od: `Dnipro (DNK)`,
@@ -167,6 +166,7 @@ export namespace Meal_pssPdm {
       oy: `Kyiv (IEV)`,
       om: `Mykolaiv (NLV)`,
       os: `Sumy (UMY)`,
+      slo: `Slovyansk (SLO)`,
     },
     gis: {
       male: `Male`,
@@ -223,6 +223,7 @@ export namespace Meal_pssPdm {
       ukr000355_dmfa: `DMFA UKR-000355`,
       ukr000363_uhf8: `UHF8 UKR-000363`,
       ukr000372_echo3: `ECHO UKR -000372`,
+      ukr000388_bha: `ВНА UKR-000388`,
       ukr000423_echo4: `ECHO UKR -000423`,
     },
     received_similar_pss: {

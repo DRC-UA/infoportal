@@ -96,7 +96,7 @@ export namespace Gp_case_management {
     extent_problem_addressed_explain: string | undefined
     // overall_satisfaction/ability_solve_problems [select_one] Please complete the sentence.Through my participation in case management services, my ability to solve this/other problems has…
     ability_solve_problems: undefined | Option<'ability_solve_problems'>
-    // overall_satisfaction/ability_solve_problems [text] Please explain
+    // overall_satisfaction/ability_solve_problems_001 [text] Please explain
     ability_solve_problems_001: string | undefined
     // overall_satisfaction/overall_satisfied_services [select_one] Overall, how satisfied were you with the services that you received from DRC protection staff?
     overall_satisfied_services: undefined | Option<'overall_satisfied_services'>
@@ -110,7 +110,7 @@ export namespace Gp_case_management {
   export const options = {
     caseworker_agreed_contact: {
       yes: `Yes`,
-      no: `No`
+      no: `No`,
     },
     undefined: {
       yes: `Yes`,
@@ -2027,20 +2027,20 @@ export namespace Gp_case_management {
       zymnivska: `Zymnivska`,
       zymnovodivska: `Zymnovodivska`,
       zymohirivska: `Zymohirivska`,
-      zymynska: `Zymynska`
+      zymynska: `Zymynska`,
     },
     gender: {
       male: `Male`,
       female: `Female`,
       other: `Other`,
-      pns: `Prefers not to disclose`
+      pns: `Prefers not to disclose`,
     },
     office: {
       dnipro: `Dnipro`,
       kharkiv: `Kharkiv`,
       mykolaiv: `Mykolaiv`,
       sumy: `Sumy`,
-      sloviansk: `Sloviansk`
+      sloviansk: `Sloviansk`,
     },
     staff_code: {
       UMY001: `UMY001`,
@@ -2160,35 +2160,37 @@ export namespace Gp_case_management {
       SLO017: `SLO017`,
       SLO018: `SLO018`,
       SLO019: `SLO019`,
-      SLO020: `SLO020`
+      SLO020: `SLO020`,
     },
     overall_satisfied_services: {
       completely: `Completely satisfied`,
       somewhat: `Somewhat satisfied`,
-      not_all: `Not at all satisfied`
+      not_all: `Not at all satisfied`,
     },
     comfortable_staff_members: {
       completely: `Yes, completely`,
       somewhat: `Yes, somewhat`,
-      not_all: `No, not at all`
+      not_all: `No, not at all`,
     },
     extent_problem_addressed: {
       completely: `Completely`,
       somewhat: `Somewhat`,
-      not_all: `Not at all`
+      not_all: `Not at all`,
     },
     ability_solve_problems: {
       increased: `Increased`,
       not_changed: `Not changed`,
-      decreased: `Decreased`
+      decreased: `Decreased`,
     },
     project: {
-      ukr000423_echo4: `UKR-000423 ECHO4`
+      ukr000423_echo4: `UKR-000423 ECHO4`,
+      ukr000426_sdc: `UKR-000426 SDC`,
+      ukr000461_uhf: `UKR-000461 UHF`,
     },
     staff_treated_respect: {
       yes: `Yes`,
       no: `No`,
-      not_answer: `Prefer not to answer`
+      not_answer: `Prefer not to answer`,
     },
     oblast_provision: {
       crimea: `Autonomous Republic of Crimea`,
@@ -2217,8 +2219,8 @@ export namespace Gp_case_management {
       zakarpatska: `Zakarpattia`,
       zaporizka: `Zaporizhzhia`,
       zhytomyrska: `Zhytomyr`,
-      sevastopol: `Sevastopol`
-    }
+      sevastopol: `Sevastopol`,
+    },
   } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
@@ -2236,6 +2238,6 @@ export namespace Gp_case_management {
       ..._,
       date: _.date ? new Date(_.date) : undefined,
       age: _.age ? +_.age : undefined,
-      many_met_caseworker: _.many_met_caseworker ? +_.many_met_caseworker : undefined
+      many_met_caseworker: _.many_met_caseworker ? +_.many_met_caseworker : undefined,
     }) as T
 }

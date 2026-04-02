@@ -143,6 +143,7 @@ export namespace Protection_gbv {
       ukr000386_pooled_funds: `UKR-000386 (Pooled Funds)`,
       ukr000388_bha: `UKR-000388 (BHA)`,
       ukr000423_echo4: `UKR-000423 (ECHO)`,
+      ukr000457_dmfa: `UKR-000457 (DMFA)`,
     },
     location: {
       wgssd: `Women and Girls Safe Space (operated by DRC)`,

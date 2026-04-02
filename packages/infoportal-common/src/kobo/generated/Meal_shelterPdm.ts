@@ -1,6 +1,5 @@
 export namespace Meal_shelterPdm {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: a7iHZCW28ncZY7iDcqVF49
   export interface T {
     start: string
@@ -55,6 +54,8 @@ export namespace Meal_shelterPdm {
     number: number | undefined
     // group_vx8wu49/group_xz8mw33/Are_you_an_IDP_conflict_affected_person [select_one] What is your residential status?
     Are_you_an_IDP_conflict_affected_person: undefined | Option<'Are_you_an_IDP_conflict_affected_person'>
+    // group_vx8wu49/group_xz8mw33/condition_affects_daily [select_one] Do you have any condition that affects your daily activities?
+    condition_affects_daily: undefined | Option<'responded_complaint_feed'>
     // group_vx8wu49/group_xz8mw33/family_members [integer] How many family members reside with You in the repaired apartment/house (people reside in/stay in your institution)?
     family_members: number | undefined
     // group_vx8wu49/group_xz8mw33/hh_char_hh_det [begin_repeat] HH Members
@@ -84,6 +85,32 @@ export namespace Meal_shelterPdm {
     find_kits_useful: undefined | Option<'responded_complaint_feed'>
     // group_vx8wu49/kit_content_esk/find_kits_useful_no [text] If No - Specify
     find_kits_useful_no: string | undefined
+    // group_vx8wu49/ecm/used_cm_house [select_one] Have you used the construction materials in your house?
+    used_cm_house: undefined | Option<'responded_complaint_feed'>
+    // group_vx8wu49/ecm/materials_sufficient_address [select_one] Did the quantities and types of materials you received were sufficient to address the damage to your house?
+    materials_sufficient_address: undefined | Option<'materials_sufficient_address'>
+    // group_vx8wu49/ecm/used_cm_house_no [text] If No - Specify
+    used_cm_house_no: string | undefined
+    // group_vx8wu49/ecm/assisted_ecm_installation [select_one] Who assisted you with the installation?
+    assisted_ecm_installation: undefined | Option<'assisted_ecm_installation'>
+    // group_vx8wu49/ecm/assisted_ecm_installation_other [text] If "Other" Please specify:
+    assisted_ecm_installation_other: string | undefined
+    // group_vx8wu49/ecm/building_envelope [select_one] Did the installation of the materials seal the building envelope?
+    building_envelope: undefined | Option<'responded_complaint_feed'>
+    // group_vx8wu49/ecm/building_envelope_no [text] If No - Specify
+    building_envelope_no: string | undefined
+    // group_vx8wu49/ecm/particular_included_kit [select_one] Is there a particular item(s) you would wish to have included in the kit?
+    particular_included_kit: undefined | Option<'responded_complaint_feed'>
+    // group_vx8wu49/ecm/particular_included_kit_yes [text] If Yes - Specify
+    particular_included_kit_yes: string | undefined
+    // group_vx8wu49/ecm/preventing_using_materials [text] What is preventing you from using the materials?
+    preventing_using_materials: string | undefined
+    // group_vx8wu49/ecm/plan_use_ecm [text] When do you plan to use the Emergency Construction Materials?
+    plan_use_ecm: string | undefined
+    // group_vx8wu49/installation_misto_syly/quality_installation_misto_syly [select_one] Please,  rate the quality of the repair works performed
+    quality_installation_misto_syly: undefined | Option<'_6_Please_rate_the_quality_of'>
+    // group_vx8wu49/installation_misto_syly/quality_installation_misto_syly_specify [text] Please, specify
+    quality_installation_misto_syly_specify: string | undefined
     // group_vx8wu49/group_us0ek23/What_have_you_spent_the_money__001 [select_multiple] What have you spent the money you received on?
     What_have_you_spent_the_money__001: undefined | Option<'What_have_you_spent_the_money__001'>[]
     // group_vx8wu49/group_us0ek23/Please_specify_001 [text] Please, specify
@@ -106,10 +133,22 @@ export namespace Meal_shelterPdm {
     satisfied_assistance_provided: undefined | Option<'report_drc_employee'>
     // group_vx8wu49/group_hc0nm01/satisfied_assistance_provided_bad [text] Please , specify
     satisfied_assistance_provided_bad: string | undefined
+    // group_vx8wu49/group_hc0nm01/part_dwelling_insulated [select_multiple] Which part of the dwelling was insulated (e.g., walls, roof, windows, doors)?
+    part_dwelling_insulated: undefined | Option<'part_dwelling_insulated'>[]
+    // group_vx8wu49/group_hc0nm01/satisfied_registration_process [select_one] Are you satisfied with the registration process for the assistance?
+    satisfied_registration_process: undefined | Option<'responded_complaint_feed'>
+    // group_vx8wu49/group_hc0nm01/satisfied_registration_process_no [text] Please, specify why?
+    satisfied_registration_process_no: string | undefined
+    // group_vx8wu49/group_hc0nm01/time_elapsed_registration [select_one] How much time elapsed between registration and receiving the assistance?
+    time_elapsed_registration: undefined | Option<'time_elapsed_registration'>
+    // group_vx8wu49/group_hc0nm01/informed_timeframe_assistance [select_one] Were you informed about the timeframe of assistance delivery?
+    informed_timeframe_assistance: undefined | Option<'informed_timeframe_assistance'>
     // group_vx8wu49/group_hc0nm01/satisfied_repaired_premises [select_one] Are you satisfied with the repaired/insulated premises?(MEA.1)
     satisfied_repaired_premises: undefined | Option<'report_drc_employee'>
     // group_vx8wu49/group_hc0nm01/satisfied_repaired_premises_bad [text] Please , specify
     satisfied_repaired_premises_bad: string | undefined
+    // group_vx8wu49/group_hc0nm01/insulation_meet_needs [select_one] To what extent did the insulation assistance meet your needs this winter?
+    insulation_meet_needs: undefined | Option<'insulation_meet_needs'>
     // group_vx8wu49/group_hc0nm01/satisfied_esk_content [select_one] Are you satisfied with the ESK content of the kits received?
     satisfied_esk_content: undefined | Option<'report_drc_employee'>
     // group_vx8wu49/group_hc0nm01/satisfied_esk_content_bad [text] Please , specify
@@ -185,7 +224,7 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/safe_dignified/involved_repairs_home [select_multiple] How were you involved in the repairs/insulation of your home?
     involved_repairs_home: undefined | Option<'involved_repairs_home'>[]
     // group_vx8wu49/group_ec5jx74/meters_person_space [select_one] Is there at least 3.5 square meters per person of floor space
-    meters_person_space: undefined | Option<'freely_demand_payment'>
+    meters_person_space: undefined | Option<'same_chance_receive_support'>
     // group_vx8wu49/group_ec5jx74/shelter_solution_standards [select_one] Do you think the repair solution (and materials) provided are good quality and suitable for your local conditions (weather, safety, and durability)?
     shelter_solution_standards: undefined | Option<'responded_complaint_feed'>
     // group_vx8wu49/group_ec5jx74/find_good_materials [select_one] Were you able to find good quality materials and suitable for your local conditions?
@@ -197,11 +236,11 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/group_ec5jx74/repairs_done_accordance [select_one] Do you feel the repairs or insulation have been done safely and in a way that makes your home strong and secure?
     repairs_done_accordance: undefined | Option<'responded_complaint_feed'>
     // group_vx8wu49/group_ec5jx74/Are_you_currently_able [select_one] Are you currently able to cover your basic needs: access to water, cooking/getting food, shelter, hygiene, etc.).
-    Are_you_currently_able: undefined | Option<'freely_demand_payment'>
+    Are_you_currently_able: undefined | Option<'same_chance_receive_support'>
     // group_vx8wu49/group_ec5jx74/Are_you_currently_able_no [text] Please, specify
     Are_you_currently_able_no: string | undefined
     // group_vx8wu49/group_ec5jx74/received_correspond_needs [select_one] Did the assistance you received from DRC correspond with your needs?
-    received_correspond_needs: undefined | Option<'freely_demand_payment'>
+    received_correspond_needs: undefined | Option<'same_chance_receive_support'>
     // group_vx8wu49/group_ec5jx74/received_correspond_needs_no [text] If ‘No’ please specify
     received_correspond_needs_no: string | undefined
     // group_vx8wu49/group_ec5jx74/_5_Have_living_conditions_been [select_one] Have your living conditions improved as a result of the assistance that you received from DRC?
@@ -213,9 +252,13 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/group_ec5jx74/_5_1_Please_specify [text] Please, explain
     _5_1_Please_specify: string | undefined
     // group_vx8wu49/group_ec5jx74/living_sufficiently_comfort [select_one] Are you able to make at least one living area sufficiently warm for comfort?
-    living_sufficiently_comfort: undefined | Option<'freely_demand_payment'>
+    living_sufficiently_comfort: undefined | Option<'same_chance_receive_support'>
     // group_vx8wu49/group_ec5jx74/living_sufficiently_comfort_no [text] If No - Specify
     living_sufficiently_comfort_no: string | undefined
+    // group_vx8wu49/group_ec5jx74/does_cold_indoors [select_multiple] What does your household do when it is too cold indoors?
+    does_cold_indoors: undefined | Option<'does_cold_indoors'>[]
+    // group_vx8wu49/group_ec5jx74/does_cold_indoors_other [text] If "Other" Please specify:
+    does_cold_indoors_other: string | undefined
     // group_vx8wu49/group_ec5jx74/helped_thermal_comfort [select_one] Has assistance helped to improved thermal comfort for your household during winter season?
     helped_thermal_comfort: undefined | Option<'_17_Are_you_planning_on_stayin'>
     // group_vx8wu49/group_ec5jx74/helped_thermal_comfort_no [text] Please, specify
@@ -263,14 +306,34 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/outcome/feel_informed_repair_no [text] If no, what we should have done to better inform you about the assistance available to you?
     feel_informed_repair_no: string | undefined
     // group_vx8wu49/outcome/freely_demand_payment [select_one] Were you given assistance freely, with no demand or suggestion of payment in either money or kind?
-    freely_demand_payment: undefined | Option<'freely_demand_payment'>
+    freely_demand_payment: undefined | Option<'same_chance_receive_support'>
     // group_vx8wu49/outcome/freely_demand_payment_no [text] If No - Specify
     freely_demand_payment_no: string | undefined
     // group_vx8wu49/outcome/any_member_household [select_one] Have you or any member of your household been exposed to any risk as a consequence of receiving the CASH?
     any_member_household: undefined | Option<'responded_complaint_feed'>
     // group_vx8wu49/outcome/any_member_household_yes [text] If "Yes", you have experienced any challenge or insecurity situation as consequence of receiving CASH, can you tell us what happened?
     any_member_household_yes: string | undefined
-    // group_vx8wu49/group_bd6gx40/did_you_have_regular_commu [select_one] Do you feel that you had sufficient communication from DRC staff about the assistance you received?
+    // group_vx8wu49/access_pwd_assisstance/barriers_pwd_join [select_one] Did you feel there were any barriers for persons with disabilities to join these activities?
+    barriers_pwd_join: undefined | Option<'same_chance_receive_support'>
+    // group_vx8wu49/access_pwd_assisstance/barriers_pwd_join_yes [text] If "Yes", please explain why:
+    barriers_pwd_join_yes: string | undefined
+    // group_vx8wu49/access_pwd_assisstance/easily_receive_insulation [select_one] Were you (or someone in your household) able to easily receive and understand information about the insulation support?
+    easily_receive_insulation: undefined | Option<'responded_complaint_feed'>
+    // group_vx8wu49/access_pwd_assisstance/easily_receive_insulation_no [text] If No - Specify
+    easily_receive_insulation_no: string | undefined
+    // group_vx8wu49/access_pwd_assisstance/easy_participate_activities [select_one] Was it easy for you to participate in the project activities?
+    easy_participate_activities: undefined | Option<'responded_complaint_feed'>
+    // group_vx8wu49/access_pwd_assisstance/easy_participate_activities_no [text] If No - Specify
+    easy_participate_activities_no: string | undefined
+    // group_vx8wu49/access_pwd_assisstance/same_chance_receive_support [select_one] Do you think your household had the same chance to receive support as other households in your community?
+    same_chance_receive_support: undefined | Option<'same_chance_receive_support'>
+    // group_vx8wu49/access_pwd_assisstance/same_chance_receive_support_no [text] If No - Specify
+    same_chance_receive_support_no: string | undefined
+    // group_vx8wu49/access_pwd_assisstance/household_part_project [select_one] Is there anything that made it easier or harder for your household to take part in the project?
+    household_part_project: undefined | Option<'responded_complaint_feed'>
+    // group_vx8wu49/access_pwd_assisstance/household_part_project_yes [text] If "Yes", please specify what
+    household_part_project_yes: string | undefined
+    // group_vx8wu49/group_bd6gx40/did_you_have_regular_commu [select_one] Do you feel that you had sufficient communication from DRC staff about the assistance you received? (PEM.2)
     did_you_have_regular_commu: undefined | Option<'_17_Are_you_planning_on_stayin'>
     // group_vx8wu49/group_bd6gx40/did_you_have_regular_commu_comment [text] Please, specify
     did_you_have_regular_commu_comment: string | undefined
@@ -278,9 +341,9 @@ export namespace Meal_shelterPdm {
     where_address_feedback: undefined | Option<'report_drc_employee'>
     // group_vx8wu49/group_bd6gx40/not_feedback [note] To provide feedback (complaints, feedback, thanks, recommendations) you can use the phone number 0 800 33 95 18
     not_feedback: string
-    // group_vx8wu49/group_bd6gx40/where_address_feedback_yes [select_one] If "Yes", have you provided any feedback/ suggestions, complaints, or questions? (АСС.2)
+    // group_vx8wu49/group_bd6gx40/where_address_feedback_yes [select_one] If "Yes", have you provided any feedback/ suggestions, complaints, or questions? (АСС.1)
     where_address_feedback_yes: undefined | Option<'where_address_feedback_yes'>
-    // group_vx8wu49/group_bd6gx40/responded_complaint_feed [select_one] Has someone from DRC responded to your complaint or question?
+    // group_vx8wu49/group_bd6gx40/responded_complaint_feed [select_one] Has someone from DRC responded to your complaint or question? (АСС.2)
     responded_complaint_feed: undefined | Option<'responded_complaint_feed'>
     // group_vx8wu49/group_bd6gx40/where_address_feedback_yes_no [select_one] If "No did not provide any", why?
     where_address_feedback_yes_no: undefined | Option<'where_address_feedback_yes_no'>
@@ -307,7 +370,6 @@ export namespace Meal_shelterPdm {
     // Interviewer_s_comments [text] Interviewer's comments
     Interviewer_s_comments: string | undefined
   }
-
   export const options = {
     Donor: {
       novo: `Novonordisk (UKR-000298)`,
@@ -320,6 +382,8 @@ export namespace Meal_shelterPdm {
       ukr000372_echo: `ECHO (UKR-000372)`,
       ukr000390_uhf9: `UHF 9 (UKR-000390)`,
       ukr000399_sdc3: `SDC Winterization (UKR-000399)`,
+      ukr000423_echo4: `ECHO (UKR-000423)`,
+      ukr000441_uhf11: `UHF (UKR-0000441)`,
       other: `Other`,
     },
     office: {
@@ -329,6 +393,7 @@ export namespace Meal_shelterPdm {
       lwo: `Lviv (LWO)`,
       umy: `Sumy (UMY)`,
       nlv: `Mykloaiv (NLV)`,
+      slo: `Slovyansk (SLO)`,
       other: `Other`,
     },
     responded_complaint_feed: {
@@ -448,7 +513,7 @@ export namespace Meal_shelterPdm {
       dnk: `Does not know`,
       other: `Other`,
     },
-    freely_demand_payment: {
+    same_chance_receive_support: {
       yes: `Yes`,
       no: `No`,
       dk: `Don't know`,
@@ -556,6 +621,58 @@ export namespace Meal_shelterPdm {
       implemented_repairs: `I implemented the repairs myself with cash and technical support from DRC`,
       used_hired_labour: `I have used hired labour to carry out repairs/insulation`,
       not_involved: `I was not involved in the decisions`,
+    },
+    materials_sufficient_address: {
+      surplus_leftover: `No surplus leftover`,
+      lack_materials: `No lack of materials`,
+    },
+    assisted_ecm_installation: {
+      friends: `My friends`,
+      family: `My family`,
+      myself: `Myself`,
+      contractor: `A contractor`,
+      misto_syly: `Misto Syly`,
+      other: `Other`,
+    },
+    part_dwelling_insulated: {
+      attic: `Attic insulation`,
+      roof: `Roof insulation`,
+      external_wall: `External wall insulation`,
+      window_replacement: `Window replacement`,
+      entrance_door: `Entrance door replacement`,
+    },
+    does_cold_indoors: {
+      fewer_rooms: `Use fewer rooms and close off unused spaces`,
+      sleep_together: `Sleep in the same room together`,
+      reduce_heating_hours: `Reduce heating hours to save fuel`,
+      additional_clothing: `Use additional layers of clothing or blankets`,
+      neighbour: `Go to a neighbour’s or relative’s house`,
+      public_heated: `Spend more time in public heated spaces`,
+      burn_unsafe_materials: `Burn unsafe materials (e.g., trash, plastic, wet wood)`,
+      reduce_expenditures_other: `Reduce expenditures in other areas to afford heating`,
+      other: `Other`,
+      dk: `I dont know/Difficult to answer/I prefer not to answer`,
+    },
+    time_elapsed_registration: {
+      less_1m: `Less than 1 month`,
+      '1_2m': `1-2 months`,
+      '3_4m': `3-4 months`,
+      '5_6m': `5-6 months`,
+      more_6m: `More than 6 months`,
+    },
+    informed_timeframe_assistance: {
+      fully: `Yes, fully`,
+      mostly: `Yes, mostly`,
+      not_really: `Not really`,
+      not_all: `Not at all`,
+      dk: `Don't know`,
+      na: `No answer`,
+    },
+    insulation_meet_needs: {
+      fully: `Fully meets the needs`,
+      mostly: `Mostly meets the needs`,
+      partly: `Partly meets the needs`,
+      not_meet: `Does not meet the needs at all`,
     },
     oblast: {
       aroc: `Autonomous Republic of Crimea`,
@@ -2513,7 +2630,9 @@ export namespace Meal_shelterPdm {
         return _
       }),
       What_have_you_spent_the_money__001: _.What_have_you_spent_the_money__001?.split(' '),
+      part_dwelling_insulated: _.part_dwelling_insulated?.split(' '),
       involved_repairs_home: _.involved_repairs_home?.split(' '),
+      does_cold_indoors: _.does_cold_indoors?.split(' '),
       who_mainly_excluded: _.who_mainly_excluded?.split(' '),
       top3_priority_needs: _.top3_priority_needs?.split(' '),
     }) as T

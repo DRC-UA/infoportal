@@ -2189,7 +2189,7 @@ export namespace Protection_hhs2_1 {
       yes: `Yes`,
       no: `No`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

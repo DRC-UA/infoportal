@@ -277,7 +277,7 @@ export namespace Shelter_cashForShelter {
       bank_card: `Bank card`,
       none_pay: `None of the above fit my needs`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

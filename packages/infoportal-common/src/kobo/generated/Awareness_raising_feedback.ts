@@ -159,6 +159,7 @@ export namespace Awareness_raising_feedback {
       not_need: `No, did not need to provide it`,
     },
     donor: {
+      ukr000388_bha: `BHA (UKR-000388)`,
       ukr000397_gffo: `GFFO (UKR-000397)`,
       ukr000423_echo4: `ECHO (UKR-000423)`,
     },
@@ -168,6 +169,7 @@ export namespace Awareness_raising_feedback {
       artem_koniev: `Artem Koniev`,
       svitlana_shershneva: `Svitlana Shershneva`,
       natalia_baryshevska: `Natalia Baryshevska`,
+      olga_bassova: `Olga Bassova`,
     },
     office: {
       dnk: `DNK/ZAP`,

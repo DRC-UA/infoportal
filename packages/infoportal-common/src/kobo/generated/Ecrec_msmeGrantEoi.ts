@@ -248,18 +248,18 @@ export namespace Ecrec_msmeGrantEoi {
       umy_ex3: `Додатковий 3`,
       umy_ex4: `Додатковий 4`,
       ukr000348_bha: `BHA (UKR-000348)`,
-      prot: `A = Захист`,
-      legal: `B = Юридичний`,
-      shelter: `C = Відновлення житла`,
-      yes: `Так;`,
+      prot: `Захист`,
+      legal: `Юридичний`,
+      shelter: `Відновлення житла`,
+      yes: `Так`,
       no_had_no_need_to_use_this_coping_strategy: `Ні, не було потреби використовувати цю стратегію подолання труднощів;`,
       no_have_already_exhausted_this_coping_strategy_and_cannot_use_it_again: `Ні, ми вже вичерпали цю стратегію виживання та не можемо використовувати її знову;`,
       not_applicable_this_coping_strategy_is_not_available_to_me: `Не застосовно / Для мене ця стратегія недоступна;`,
       prefer_not_to_answer: `Не хочу відповідати`,
     },
     business_plan_submitted: {
-      yes: `A = Так`,
-      no: `B = Ні`,
+      yes: `Так`,
+      no: `Ні`,
     },
     ben_det_res_stat: {
       idp: `A = Внутрішньо-переміщена особа (ВПО)`,
@@ -393,7 +393,7 @@ export namespace Ecrec_msmeGrantEoi {
       sumska: `Сумська`,
       other: `Інша`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

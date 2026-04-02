@@ -1,6 +1,5 @@
 export namespace Protection_ipa_pdm {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: avUGhsv25KzyPrV6cpaM5h
   export interface T {
     start: string
@@ -92,7 +91,6 @@ export namespace Protection_ipa_pdm {
     // comments_inter [text] Coments for interviewer
     comments_inter: string | undefined
   }
-
   export const options = {
     type_interview: {
       remote: `Remote`,
@@ -105,6 +103,7 @@ export namespace Protection_ipa_pdm {
       hrk: `Kharkiv (HRK)`,
       nlv: `Mykloaiv (NLV)`,
       umy: `Sumy (UMY)`,
+      slo: `Sloviansk (SLO)`,
     },
     gender: {
       female: `Female`,

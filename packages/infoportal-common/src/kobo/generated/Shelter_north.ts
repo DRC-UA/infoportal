@@ -589,7 +589,7 @@ export namespace Shelter_north {
       hco: `Підрядник`,
       hfu: `Кошти`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

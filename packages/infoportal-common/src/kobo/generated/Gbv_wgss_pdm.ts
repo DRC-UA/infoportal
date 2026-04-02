@@ -1,6 +1,5 @@
 export namespace Gbv_wgss_pdm {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
-
   // Form id: aBNTzGaGVzG34frWk6AqFz
   export interface T {
     start: string
@@ -74,7 +73,6 @@ export namespace Gbv_wgss_pdm {
     // introduction/suggestions [text] 20. Do you have any suggestions or ideas on future activities in the safe space?
     suggestions: string | undefined
   }
-
   export const options = {
     project: {
       na: `N/A`,

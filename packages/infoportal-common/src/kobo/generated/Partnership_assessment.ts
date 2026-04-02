@@ -287,7 +287,7 @@ export namespace Partnership_assessment {
       who: `World Health Organization`,
       oth: `Other`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

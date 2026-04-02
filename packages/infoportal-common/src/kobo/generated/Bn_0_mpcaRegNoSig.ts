@@ -600,7 +600,7 @@ export namespace Bn_0_mpcaRegNoSig {
       '1': `Yes`,
       '2': `No`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

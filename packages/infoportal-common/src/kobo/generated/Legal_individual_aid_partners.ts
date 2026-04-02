@@ -319,6 +319,8 @@ export namespace Legal_individual_aid_partners {
       ievgeniia_smoliar: `Ievgeniia Smoliar`,
       olena_kholod: `Olena Kholod`,
       olga_pushna: `Olga Pushna`,
+      dmytrо_popov: `Dmytrо Popov`,
+      serhiy_bondarenko: `Serhiy Bondarenko`,
     },
     displacement: {
       idp: `ВПО`,

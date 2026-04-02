@@ -2230,7 +2230,7 @@ export namespace Bn_rapidResponseSida {
       deliver1: `The Kit(s) was delivered to my address.`,
       deliver2: `I collected the kit from the distribution site.`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

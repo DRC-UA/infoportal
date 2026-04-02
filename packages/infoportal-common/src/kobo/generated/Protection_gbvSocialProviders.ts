@@ -186,7 +186,7 @@ export namespace Protection_gbvSocialProviders {
       rarely: `Rarely`,
       never: `Never`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

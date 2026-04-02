@@ -196,7 +196,7 @@ export namespace Partnership_initialQuestionnaire {
       who: `World Health Organization`,
       other: `Other`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

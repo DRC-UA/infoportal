@@ -92,8 +92,9 @@ export namespace Protection_gbvPdm {
       other: `Other`,
     },
     donor: {
-      ukr000347_danida: `DANIDA UKR-000347`,
       ukr000336_uhf6: `UHF VI UKR-000336`,
+      ukr000347_danida: `DANIDA UKR-000347`,
+      ukr000355_dmfa: `DMFA UKR-000355`,
       ukr000423_echo4: `ECHO UKR-000423`,
     },
     partner: {

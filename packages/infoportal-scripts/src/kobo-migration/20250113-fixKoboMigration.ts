@@ -204,8 +204,8 @@ export namespace FixKoboMigration {
             uuid: {in: backupData.map((_) => _.uuid)},
           },
         })
-        const indexOld = seq(backupData).groupByAndApply(
-          (_) => _.id,
+        const indexOld = Obj.mapValues(
+          seq(backupData).groupBy((_) => _.id),
           (_) => {
             if (_.length === 0) throw new Error(JSON.stringify(_))
             if (_.distinct((_) => _).length > 1) {
@@ -214,8 +214,8 @@ export namespace FixKoboMigration {
             return _[0]?.uuid
           },
         )
-        const indexNew = seq(newIds).groupByAndApply(
-          (_) => _.uuid,
+        const indexNew = Obj.mapValues(
+          seq(newIds).groupBy((_) => _.uuid),
           (_) => {
             if (_.length !== 1) throw new Error(JSON.stringify(_))
             return _[0]?.id

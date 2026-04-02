@@ -544,7 +544,7 @@ export namespace Meal_pdmStandardised {
       citykyiv: `City Kyiv`,
       sevastopilska: `Sevastopil`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}

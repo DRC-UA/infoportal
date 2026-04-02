@@ -2262,7 +2262,7 @@ export namespace Bn_cashForRentRegistration {
       zymohirivska: `Zymohirivska`,
       zymynska: `Zymynska`,
     },
-  }
+  } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
     const output: any = {}
