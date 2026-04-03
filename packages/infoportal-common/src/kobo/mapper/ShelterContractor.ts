@@ -3,12 +3,14 @@ import {Shelter_ta} from '../generated/index.js'
 import {KoboShelterTa} from './KoboShelterTA.js'
 
 export enum ShelterContractor {
+  'Agent Bud' = 'Agent Bud',
   'Artbudservice' = 'Artbudservice',
   'Darwin' = 'Darwin',
   'Dom 2007' = 'Dom 2007',
   'Donmegastroy' = 'Donmegastroy',
   'Dosvid 2002' = 'Dosvid 2002',
   'Framplus' = 'Framplus',
+  'Goodwin XXI' = 'Goodwin XXI',
   'Interbud' = 'Interbud',
   'Kramelitbud' = 'Kramelitbud',
   'Kronos' = 'Kronos',
@@ -17,13 +19,13 @@ export enum ShelterContractor {
   'NVO ProektStroy' = 'NVO ProektStroy',
   'Osnova-R' = 'Osnova-R',
   'PGS Group' = 'PGS Group',
+  'SKS Stroy' = 'SKS Stroy',
   'Skytown' = 'Skytown',
   'Starlight' = 'Starlight',
   'Tribotechnika' = 'Tribotechnika',
   'Ukr Bud Tekhnolohiyi' = 'Ukr Bud Tekhnolohiyi',
   'Ukrbudtechnologii' = 'Ukrbudtechnologii',
   'Zhilvest' = 'Zhilvest',
-  'Agent Bud' = 'Agent Bud'
 }
 
 export class ShelterContractorPrices {
