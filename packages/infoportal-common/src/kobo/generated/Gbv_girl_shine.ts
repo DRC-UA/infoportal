@@ -98,6 +98,7 @@ export namespace Gbv_girl_shine {
     },
     project_code: {
       ukr000423_echo4: `UKR-000423 ECHO4`,
+      ukr000461_uhf: `UKR-000461 UHF`,
     },
     knew_enough_participate: {
       yes: `Yes`,

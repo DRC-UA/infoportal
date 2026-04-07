@@ -113,6 +113,7 @@ export namespace Protection_ipaTracker {
       ukr000423_echo4: `UKR-000423 ECHO`,
       ukr000426_sdc: `UKR-000426 SDC`,
       ukr000457_dmfa: `UKR-000457 DMFA`,
+      ukr000461_uhf: `UKR-000461 UHF`,
     },
     type_assistance: {
       in_kind: `In-kind`,

@@ -114,6 +114,7 @@ export namespace Gbv_csPdm {
     },
     project_code: {
       ukr000423_echo4: `UKR-000423 ECHO4`,
+      ukr000461_uhf: `UKR-000461 UHF`,
     },
   } as const
 

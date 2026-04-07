@@ -103,7 +103,7 @@ export namespace Cs_tracker {
       ukr000424_dutch_mfa: `UKR-000424 Dutch MFA`,
       ukr000426_sdc: `UKR-000426 SDC`,
       na: `Not applicable`,
-      other: `Other`
+      other: `Other`,
     },
     undefined: {
       bellow_30y: `Below 30 years old`,
@@ -115,12 +115,12 @@ export namespace Cs_tracker {
       other: `Other`,
       pns: `Prefer not to say`,
       yes: `Yes`,
-      no: `No`
+      no: `No`,
     },
     organisation: {
       drc: `DRC`,
       partner: `Partner`,
-      other: `Other Organisation`
+      other: `Other Organisation`,
     },
     sector_team: {
       hdp: `HDP`,
@@ -131,7 +131,7 @@ export namespace Cs_tracker {
       partnership: `Partnership`,
       support: `Support Services`,
       bn: `Basic Needs Team`,
-      other: `Other`
+      other: `Other`,
     },
     office: {
       kyiv: `Kyiv (CO)`,
@@ -143,26 +143,26 @@ export namespace Cs_tracker {
       ivankiv: `Ivankiv`,
       sloviansk: `Sloviansk`,
       dnipro: `Dnipro`,
-      other: `Other`
+      other: `Other`,
     },
     role_organisation: {
       manager: `Management`,
       support: `Non-Management`,
-      unknown: `Unknown`
+      unknown: `Unknown`,
     },
     training_format: {
       offline: `Offline`,
-      online: `Online`
+      online: `Online`,
     },
     training_duration: {
       half_day: `Half-day`,
       '1_2days': `1-2 days`,
-      '3days': `3 days`
+      '3days': `3 days`,
     },
     training_type: {
       session: `Training Session`,
-      tot: `ToT`
-    }
+      tot: `ToT`,
+    },
   } as const
 
   const extractQuestionName = (_: Record<string, any>) => {
@@ -210,6 +210,6 @@ export namespace Cs_tracker {
       role_organisation: _.role_organisation?.split(' '),
       manager_num: _.manager_num ? +_.manager_num : undefined,
       non_manager_num: _.non_manager_num ? +_.non_manager_num : undefined,
-      na_num: _.na_num ? +_.na_num : undefined
+      na_num: _.na_num ? +_.na_num : undefined,
     }) as T
 }
