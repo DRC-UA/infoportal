@@ -121,7 +121,7 @@ const Explanations: FC<{
   ))
 }
 
-const MissingData: FC<{sx: SxProps}> = ({sx, ...props}) => {
+const MissingData: FC<{sx?: SxProps}> = ({sx, ...props}) => {
   const {m} = useI18n()
 
   return (
