@@ -191,6 +191,13 @@ const uk = deepmerge(en, {
           noChanges: 'Без покращення',
         },
       },
+      resilienceWidget: {
+        title: 'Стійкість',
+        socialSupport: 'Відчуття соціальної згуртованості',
+        senseMeaning: 'Відчуття сенсу',
+        senseAgency: 'Відчуття спроможності',
+        senseHope: 'Відчуття надії',
+      },
     },
     gbvPrePostDahsboard: {
       buttonLabel: 'ҐЗН Тести "до" і "після"',

@@ -1551,6 +1551,13 @@ const en = Object.freeze({
           notImproved: 'Not improved',
         },
       },
+      resilienceWidget: {
+        title: 'Resilience',
+        socialSupport: 'Sense of Social Cohesion',
+        senseMeaning: 'Sense of Meaning',
+        senseAgency: 'Sense of Agency',
+        senseHope: 'Sense of Hope',
+      },
     },
     gbvPrePostDahsboard: {
       buttonLabel: 'GBV Pre / Post Tests',

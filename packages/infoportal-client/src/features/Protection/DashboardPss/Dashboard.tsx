@@ -1,7 +1,7 @@
 import {useState, Fragment, type FC} from 'react'
-import {format} from 'date-fns'
-import {Box, Typography, Switch, useTheme} from '@mui/material'
 import {seq} from '@axanc/ts-utils'
+import {Box, Typography, Switch, useTheme} from '@mui/material'
+import {format} from 'date-fns'
 
 import {capitalize, OblastIndex, Person, Protection_pss, toPercent} from 'infoportal-common'
 
@@ -22,8 +22,10 @@ import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePlurals} from '@/utils'
 
 import {PssContextProvider, usePssContext} from './Context'
-import {useStats, useTranslations, useSessionsCounter} from './hooks'
+import {useResilienceStats, useStats, useTranslations, useSessionsCounter} from './hooks'
 import {colorByQuestion, pickUnique, prePostSummaryBuilder} from './utils'
+import {MissingData} from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CaseManagement/Explanations'
+import {justifyContent} from '@mui/system'
 
 const LegendColorSample: FC<{background: string}> = ({background}) => <Box sx={{width: 30, background}}></Box>
 const LegendItem: FC<{color: string; label: string}> = ({color, label}) => (
@@ -61,6 +63,7 @@ const PssDashboardWithContext: FC = () => {
   const prePostTests = prePostSummaryBuilder(data?.filtered)
   const toggleAgeGroupUniqueness = () => setShowAgeGroupsUnique((prev) => !prev)
   const toggleDisplacementUniqueness = () => setShowDisplacementUnique((prev) => !prev)
+  const resilienceStats = useResilienceStats(data?.filtered)
 
   if (!data) return null
 
@@ -290,6 +293,78 @@ const PssDashboardWithContext: FC = () => {
                   value={improvements.who5.negative}
                   base={improvements.base}
                 />
+              </PanelBody>
+            </Panel>
+            <Panel title={m.pssDashboard.resilienceWidget.title}>
+              <PanelBody>
+                {!Object.values(resilienceStats)
+                  .map((stat) => Object.values(stat))
+                  .flat()
+                  .some(isNaN) ? (
+                  <Fragment>
+                    <Div sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
+                      {Object.entries(resilienceStats).map(([field, figures]) => {
+                        return (
+                          <Fragment key={field}>
+                            <Typography>
+                              {
+                                m.pssDashboard.resilienceWidget[
+                                  field as 'socialSupport' | 'senseMeaning' | 'senseAgency' | 'senseHope'
+                                ]
+                              }
+                            </Typography>
+                            <ChartBarVerticalGrouped
+                              height={140}
+                              layout="vertical"
+                              showLegend={false}
+                              barChartProps={{barCategoryGap: 15, barGap: 2}}
+                              barProps={(({pre, post}) => {
+                                const key = pre < post ? 'pre' : 'post'
+
+                                return {
+                                  [key]: {stackId: key},
+                                  difference: {stackId: key},
+                                }
+                              })(figures)}
+                              barLabelProps={Object.keys(figures).reduce(
+                                (accum, key) => ({
+                                  ...accum,
+                                  [key]: {
+                                    position: key === 'difference' ? 'insideRight' : 'insideLeft',
+                                    style: {fill: '#fff'},
+                                    content:
+                                      key === 'difference'
+                                        ? `${m.pssDashboard.prePostWidget[key as keyof typeof figures]} ${toPercent(figures.difference / Math.max(figures.post, figures.pre))}`
+                                        : m.pssDashboard.prePostWidget[key as keyof typeof figures],
+                                  },
+                                }),
+                                {},
+                              )}
+                              data={[
+                                {
+                                  category: translateField ? translateField(field) : field,
+                                  bars: Object.entries(figures).map(([name, value]) => ({
+                                    key: name,
+                                    label: m.pssDashboard.prePostWidget[name as keyof typeof figures],
+                                    value,
+                                    color: colorByQuestion[name],
+                                  })),
+                                },
+                              ]}
+                            />
+                          </Fragment>
+                        )
+                      })}
+                    </Div>
+                    <Box display="flex" gap={4}>
+                      <LegendItem color={colorByQuestion.pre} label={m.pssDashboard.prePostWidget.pre} />
+                      <LegendItem color={colorByQuestion.post} label={m.pssDashboard.prePostWidget.post} />
+                      <LegendItem color={colorByQuestion.difference} label={m.pssDashboard.prePostWidget.difference} />
+                    </Box>
+                  </Fragment>
+                ) : (
+                  <MissingData sx={{width: '100%'}} />
+                )}
               </PanelBody>
             </Panel>
           </Div>
