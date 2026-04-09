@@ -1,5 +1,5 @@
 import type {FC} from 'react'
-import {Box, Icon, Typography, TypographyProps} from '@mui/material'
+import {Box, Icon, Typography, type TypographyProps, type SxProps} from '@mui/material'
 
 import {Gp_case_management} from 'infoportal-common'
 
@@ -121,12 +121,14 @@ const Explanations: FC<{
   ))
 }
 
-const MissingData: FC = () => {
+const MissingData: FC<{sx: SxProps}> = ({sx, ...props}) => {
   const {m} = useI18n()
 
   return (
     <Box
+      {...props}
       sx={{
+        ...sx,
         textAlign: 'center',
         mt: 2,
         color: (t) => t.palette.text.disabled,

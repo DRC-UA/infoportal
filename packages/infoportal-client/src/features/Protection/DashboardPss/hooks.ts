@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {seq, match, type Seq} from '@axanc/ts-utils'
 
-import {groupBy, PeriodHelper, Protection_pss, Person, type Period} from 'infoportal-common'
+import {groupBy, PeriodHelper, Protection_pss, type Person, type Period} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
@@ -32,13 +32,6 @@ const useTranslations = () => {
     translateOption: getOptionTranslations,
     translateField: pssSchema?.translate.question,
   }
-}
-
-const useTranslateField = (): ((key: string) => string) | undefined => {
-  const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
-  const pssSchema = schemaContext.byName['protection_pss'].get
-
-  return pssSchema?.translate.question
 }
 
 const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
@@ -167,98 +160,268 @@ const useSessionsCounter = (data: PssContext['data']) =>
   }, [data?.filtered])
 
 const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
-  const initialStats = {
-    general: {positive: 0, negative: 0},
-    distress: {positive: 0, negative: 0},
-    coping: {positive: 0, negative: 0},
-    who5: {positive: 0, negative: 0},
-    base: 0,
-  }
-  const [improvements, setImprovements] = useState(initialStats)
-  const [individuals, setIndividuals] = useState(0)
+  return useMemo(() => {
+    const initialStats = {
+      general: {positive: 0, negative: 0},
+      distress: {positive: 0, negative: 0},
+      coping: {positive: 0, negative: 0},
+      who5: {positive: 0, negative: 0},
+      base: 0,
+    }
 
-  useEffect(() => {
     const {pgs, ais} = groupBy({
       data,
       groups: [{by: ({activity}) => activity!}],
       finalTransform: (record) => record,
     }).groups
 
-    setImprovements(
-      [...(pgs ?? []), ...(ais ?? [])]
-        .filter(({type_testing}) => type_testing?.length === 2)
-        .filter(
-          ({cal_total_psychological_distress_changes, cal_total_psycosocial_coping_changes, cal_total_who_changes}) =>
-            [
-              cal_total_psychological_distress_changes,
-              cal_total_psycosocial_coping_changes,
-              cal_total_who_changes,
-            ].every((record) => record !== undefined),
-        )
-        .reduce(
-          (
-            {base, general, distress, coping, who5},
-            {cal_total_psychological_distress_changes, cal_total_psycosocial_coping_changes, cal_total_who_changes},
-          ) => {
-            const distressImprovement = Math.sign(Number(cal_total_psychological_distress_changes))
-            const copingImprovement = Math.sign(Number(cal_total_psycosocial_coping_changes))
-            const whoImprovement = Math.sign(Number(cal_total_who_changes))
+    const improvements = [...(pgs ?? []), ...(ais ?? [])]
+      .filter(({type_testing}) => type_testing?.length === 2)
+      .filter(
+        ({cal_total_psychological_distress_changes, cal_total_psycosocial_coping_changes, cal_total_who_changes}) =>
+          [cal_total_psychological_distress_changes, cal_total_psycosocial_coping_changes, cal_total_who_changes].every(
+            (record) => record !== undefined,
+          ),
+      )
+      .reduce(
+        (
+          {base, general, distress, coping, who5},
+          {cal_total_psychological_distress_changes, cal_total_psycosocial_coping_changes, cal_total_who_changes},
+        ) => {
+          const distressImprovement = Math.sign(Number(cal_total_psychological_distress_changes))
+          const copingImprovement = Math.sign(Number(cal_total_psycosocial_coping_changes))
+          const whoImprovement = Math.sign(Number(cal_total_who_changes))
 
-            const generalScore = distressImprovement + copingImprovement + whoImprovement
+          const generalScore = distressImprovement + copingImprovement + whoImprovement
 
-            return {
-              base: ++base,
-              general: {
-                ...(generalScore >= 1 &&
-                ![distressImprovement, copingImprovement, whoImprovement].some((subScore) => subScore === -1)
-                  ? {positive: ++general.positive, negative: general.negative}
-                  : {positive: general.positive, negative: ++general.negative}),
-              },
-              distress: {
-                ...(distressImprovement === 1
-                  ? {positive: ++distress.positive, negative: distress.negative}
-                  : {positive: distress.positive, negative: ++distress.negative}),
-              },
-              coping: {
-                ...(copingImprovement === 1
-                  ? {positive: ++coping.positive, negative: coping.negative}
-                  : {positive: coping.positive, negative: ++coping.negative}),
-              },
-              who5: {
-                ...(whoImprovement === 1
-                  ? {positive: ++who5.positive, negative: who5.negative}
-                  : {positive: who5.positive, negative: ++who5.negative}),
-              },
-            }
-          },
-          initialStats,
-        ),
-    )
+          return {
+            base: ++base,
+            general: {
+              ...(generalScore >= 1 &&
+              ![distressImprovement, copingImprovement, whoImprovement].some((subScore) => subScore === -1)
+                ? {positive: ++general.positive, negative: general.negative}
+                : {positive: general.positive, negative: ++general.negative}),
+            },
+            distress: {
+              ...(distressImprovement === 1
+                ? {positive: ++distress.positive, negative: distress.negative}
+                : {positive: distress.positive, negative: ++distress.negative}),
+            },
+            coping: {
+              ...(copingImprovement === 1
+                ? {positive: ++coping.positive, negative: coping.negative}
+                : {positive: coping.positive, negative: ++coping.negative}),
+            },
+            who5: {
+              ...(whoImprovement === 1
+                ? {positive: ++who5.positive, negative: who5.negative}
+                : {positive: who5.positive, negative: ++who5.negative}),
+            },
+          }
+        },
+        initialStats,
+      )
 
-    setIndividuals(
-      groupBy({
-        data:
-          data
-            .flatMap(
-              ({persons, id}) =>
-                persons?.map((person) => ({
-                  ...(person as Person.Details & {code_beneficiary: string}), // safe to cast due to a custom KoboXmlMapper.Persons.protection_pss mapper
-                  id,
-                })) ?? [],
-            )
-            .filter(({code_beneficiary}) => code_beneficiary !== undefined)
-            .compact() ?? [],
-        groups: [
-          {
-            by: ({code_beneficiary}) => code_beneficiary!,
-          },
-        ],
-        finalTransform: (input) => ({occurrences: input.length, ids: input?.map(({id}) => id)}),
-      }).transforms.length,
-    )
+    const individuals = groupBy({
+      data:
+        data
+          .flatMap(
+            ({persons, id}) =>
+              persons?.map((person) => ({
+                ...(person as Person.Details & {code_beneficiary: string}), // safe to cast due to a custom KoboXmlMapper.Persons.protection_pss mapper
+                id,
+              })) ?? [],
+          )
+          .filter(({code_beneficiary}) => code_beneficiary !== undefined)
+          .compact() ?? [],
+      groups: [
+        {
+          by: ({code_beneficiary}) => code_beneficiary!,
+        },
+      ],
+      finalTransform: (input) => ({occurrences: input.length, ids: input?.map(({id}) => id)}),
+    }).transforms.length
+
+    return {improvements, individuals}
   }, [data])
-
-  return {improvements, individuals}
 }
 
-export {useStats, usePssFilters, useSessionsCounter, useTranslations, type UsePssFilter}
+const useResilienceStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) =>
+  useMemo(() => {
+    const pssSessions = data.filter(
+      ({activity, complete_testing}) => (activity === 'pgs' || activity === 'ais') && complete_testing === 'yes',
+    )
+
+    const {ais, pgs} = groupBy({
+      data: pssSessions,
+      groups: [{by: ({activity}) => activity!}],
+      finalTransform: (input) =>
+        input.map(
+          ({
+            type_testing,
+            complete_testing,
+            participant_code,
+            cal_people_support_pre,
+            cal_ask_support_pre,
+            cal_connected_people_pre,
+            cal_share_experiences_pre,
+            cal_hope_future_pre,
+            cal_difficult_situations_pre,
+            cal_life_purpose_pre,
+            cal_goals_life_pre,
+            cal_meaning_life_pre,
+            cal_past_experiences_pre,
+            cal_overcoming_difficulties_pre,
+            cal_influence_wellbeing_pre,
+            cal_skills_cope_pre,
+            cal_faith_hope_pre,
+            cal_difficult_moments_pre,
+            cal_life_worth_pre,
+            cal_believe_things_pre,
+            cal_people_support_post,
+            cal_ask_support_post,
+            cal_connected_people_post,
+            cal_share_experiences_post,
+            cal_hope_future_post,
+            cal_difficult_situations_post,
+            cal_life_purpose_post,
+            cal_goals_life_post,
+            cal_meaning_life_post,
+            cal_past_experiences_post,
+            cal_overcoming_difficulties_post,
+            cal_influence_wellbeing_post,
+            cal_skills_cope_post,
+            cal_faith_hope_post,
+            cal_difficult_moments_post,
+            cal_life_worth_post,
+            cal_believe_things_post,
+          }) => ({
+            type_testing,
+            complete_testing,
+            participant_code,
+            pre: {
+              socialSupport:
+                Number(cal_people_support_pre) +
+                Number(cal_ask_support_pre) +
+                Number(cal_connected_people_pre) +
+                Number(cal_share_experiences_pre),
+              senseMeaning:
+                Number(cal_hope_future_pre) +
+                Number(cal_difficult_situations_pre) +
+                Number(cal_life_purpose_pre) +
+                Number(cal_goals_life_pre) +
+                Number(cal_meaning_life_pre),
+              senseAgency:
+                Number(cal_past_experiences_pre) +
+                Number(cal_overcoming_difficulties_pre) +
+                Number(cal_influence_wellbeing_pre) +
+                Number(cal_skills_cope_pre),
+              senseHope:
+                Number(cal_faith_hope_pre) +
+                Number(cal_difficult_moments_pre) +
+                Number(cal_life_worth_pre) +
+                Number(cal_believe_things_pre),
+            },
+            post: {
+              socialSupport:
+                Number(cal_people_support_post) +
+                Number(cal_ask_support_post) +
+                Number(cal_connected_people_post) +
+                Number(cal_share_experiences_post),
+              senseMeaning:
+                Number(cal_hope_future_post) +
+                Number(cal_difficult_situations_post) +
+                Number(cal_life_purpose_post) +
+                Number(cal_goals_life_post) +
+                Number(cal_meaning_life_post),
+              senseAgency:
+                Number(cal_past_experiences_post) +
+                Number(cal_overcoming_difficulties_post) +
+                Number(cal_influence_wellbeing_post) +
+                Number(cal_skills_cope_post),
+              senseHope:
+                Number(cal_faith_hope_post) +
+                Number(cal_difficult_moments_post) +
+                Number(cal_life_worth_post) +
+                Number(cal_believe_things_post),
+            },
+          }),
+        ),
+    }).groups
+
+    const flatFilteredAis = (ais ?? seq([]))
+      .filter(({complete_testing, participant_code}) => complete_testing === 'yes' && participant_code !== undefined)
+      .flatMap(({type_testing, ...rest}) => type_testing?.map((type) => ({type_testing: type, ...rest})))
+      .compact()
+
+    const sanitizedAisPrePostPairs = groupBy({
+      data: flatFilteredAis,
+      groups: [{by: ({participant_code}) => participant_code!}],
+      finalTransform: (result) => result,
+    })
+      .transforms.filter((transform) => transform.length === 2)
+      .filter(([{type_testing: first}, {type_testing: second}]) => first !== second)
+      .flat()
+    const aisPre = sanitizedAisPrePostPairs.filter(({type_testing}) => type_testing === 'pre').map(({pre}) => pre)
+    const aisPost = sanitizedAisPrePostPairs.filter(({type_testing}) => type_testing === 'post').map(({post}) => post)
+
+    const sanitizedPgsPrePostPairs = (pgs ?? seq([])).filter(
+      ({type_testing}) => type_testing?.length === 2 && type_testing.includes('post') && type_testing.includes('pre'),
+    )
+
+    const pgsPre = sanitizedPgsPrePostPairs.map(({pre}) => pre)
+    const pgsPost = sanitizedPgsPrePostPairs.map(({post}) => post)
+
+    const pre = [...aisPre, ...pgsPre]
+    const post = [...aisPost, ...pgsPost]
+
+    const avgPre = calcAvgFigures(pre)
+    const avgPost = calcAvgFigures(post)
+
+    return {
+      socialSupport: {
+        pre: avgPre.socialSupport,
+        post: avgPost.socialSupport,
+        difference: avgPost.socialSupport - avgPre.socialSupport,
+      },
+      senseMeaning: {
+        pre: avgPre.senseMeaning,
+        post: avgPost.senseMeaning,
+        difference: avgPost.senseMeaning - avgPre.senseMeaning,
+      },
+      senseHope: {
+        pre: avgPre.senseHope,
+        post: avgPost.senseHope,
+        difference: avgPost.senseHope - avgPre.senseHope,
+      },
+      senseAgency: {
+        pre: avgPre.senseAgency,
+        post: avgPost.senseAgency,
+        difference: avgPost.senseAgency - avgPre.senseAgency,
+      },
+    }
+  }, [data])
+
+const calcAvgFigures = (
+  array: {
+    socialSupport: number
+    senseMeaning: number
+    senseAgency: number
+    senseHope: number
+  }[],
+) =>
+  Object.fromEntries(
+    Object.entries(
+      array.reduce(
+        (accumulator, current) => ({
+          socialSupport: accumulator.socialSupport + current.socialSupport,
+          senseMeaning: accumulator.senseMeaning + current.senseMeaning,
+          senseAgency: accumulator.senseAgency + current.senseAgency,
+          senseHope: accumulator.senseHope + current.senseHope,
+        }),
+        {socialSupport: 0, senseMeaning: 0, senseAgency: 0, senseHope: 0},
+      ),
+    ).map(([key, value]) => [key, value / array.length]),
+  )
+
+export {usePssFilters, useResilienceStats, useSessionsCounter, useStats, useTranslations, type UsePssFilter}
