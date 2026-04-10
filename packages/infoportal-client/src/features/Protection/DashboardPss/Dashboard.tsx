@@ -16,7 +16,7 @@ import {ChartLineBy} from '@/shared/charts/ChartLineBy'
 import {ChartPieWidget} from '@/shared/charts/ChartPieWidget'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {Panel, PanelBody} from '@/shared/Panel'
+import {Panel, PanelBody, PanelTitle} from '@/shared/Panel'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePlurals} from '@/utils'
@@ -25,7 +25,6 @@ import {PssContextProvider, usePssContext} from './Context'
 import {useResilienceStats, useStats, useTranslations, useSessionsCounter} from './hooks'
 import {colorByQuestion, pickUnique, prePostSummaryBuilder} from './utils'
 import {MissingData} from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CaseManagement/Explanations'
-import {justifyContent} from '@mui/system'
 
 const LegendColorSample: FC<{background: string}> = ({background}) => <Box sx={{width: 30, background}}></Box>
 const LegendItem: FC<{color: string; label: string}> = ({color, label}) => (
@@ -221,78 +220,82 @@ const PssDashboardWithContext: FC = () => {
                   <LegendItem color={colorByQuestion.post} label={m.pssDashboard.prePostWidget.post} />
                   <LegendItem color={colorByQuestion.difference} label={m.pssDashboard.prePostWidget.difference} />
                 </Box>
-              </PanelBody>
-            </Panel>
-            <Panel title={m.pssDashboard.inprovementStatsWidget.titleGeneral}>
-              <PanelBody sx={{flexDirection: 'row', display: 'flex', gap: 2, paddingRight: 5}}>
-                <ChartPieWidget
-                  sx={{flex: 1}}
-                  color={theme.palette.success.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
-                  value={improvements.general.positive}
-                  base={improvements.base}
-                />
-                <ChartPieWidget
-                  sx={{flex: 1}}
-                  color={theme.palette.warning.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
-                  value={improvements.general.negative}
-                  base={improvements.base}
-                />
-              </PanelBody>
-            </Panel>
-            <Panel title={m.pssDashboard.inprovementStatsWidget.titleDistress}>
-              <PanelBody sx={{flexDirection: 'row', display: 'flex', gap: 2, paddingRight: 5}}>
-                <ChartPieWidget
-                  sx={{flex: 1}}
-                  color={theme.palette.success.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
-                  value={improvements.distress.positive}
-                  base={improvements.base}
-                />
-                <ChartPieWidget
-                  sx={{flex: 1}}
-                  color={theme.palette.warning.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
-                  value={improvements.distress.negative}
-                  base={improvements.base}
-                />
-              </PanelBody>
-            </Panel>
-            <Panel title={m.pssDashboard.inprovementStatsWidget.titleCoping}>
-              <PanelBody sx={{flexDirection: 'row', display: 'flex', gap: 2, paddingRight: 5}}>
-                <ChartPieWidget
-                  sx={{flex: 1}}
-                  color={theme.palette.success.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
-                  value={improvements.coping.positive}
-                  base={improvements.base}
-                />
-                <ChartPieWidget
-                  sx={{flex: 1}}
-                  color={theme.palette.warning.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
-                  value={improvements.coping.negative}
-                  base={improvements.base}
-                />
-              </PanelBody>
-            </Panel>
-            <Panel title={m.pssDashboard.inprovementStatsWidget.titleWho5}>
-              <PanelBody sx={{flexDirection: 'row', display: 'flex', gap: 2, paddingRight: 5}}>
-                <ChartPieWidget
-                  sx={{flex: 1}}
-                  color={theme.palette.success.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
-                  value={improvements.who5.positive}
-                  base={improvements.base}
-                />
-                <ChartPieWidget
-                  sx={{flex: 1}}
-                  color={theme.palette.warning.main}
-                  title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
-                  value={improvements.who5.negative}
-                  base={improvements.base}
-                />
+                <Box sx={{flexDirection: 'column', display: 'flex', gap: 2, paddingTop: 4, paddingBottom: 2}}>
+                  <Typography>{m.pssDashboard.inprovementStatsWidget.titleGeneral}</Typography>
+                  <Box sx={{display: 'flex', gap: 2, paddingRight: 5}}>
+                    <ChartPieWidget
+                      sx={{flex: 1}}
+                      color={theme.palette.success.main}
+                      title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                      value={improvements.general.positive}
+                      base={improvements.base}
+                    />
+                    <ChartPieWidget
+                      sx={{flex: 1}}
+                      color={theme.palette.warning.main}
+                      title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                      value={improvements.general.negative}
+                      base={improvements.base}
+                    />
+                  </Box>
+                </Box>
+                <Box sx={{flexDirection: 'column', display: 'flex', gap: 2, paddingBlock: 2}}>
+                  <Typography>{m.pssDashboard.inprovementStatsWidget.titleDistress}</Typography>
+                  <Box sx={{display: 'flex', gap: 2, paddingRight: 5}}>
+                    <ChartPieWidget
+                      sx={{flex: 1}}
+                      color={theme.palette.success.main}
+                      title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                      value={improvements.distress.positive}
+                      base={improvements.base}
+                    />
+                    <ChartPieWidget
+                      sx={{flex: 1}}
+                      color={theme.palette.warning.main}
+                      title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                      value={improvements.distress.negative}
+                      base={improvements.base}
+                    />
+                  </Box>
+                </Box>
+                <Box sx={{flexDirection: 'column', display: 'flex', gap: 2, paddingBlock: 2}}>
+                  <Typography>{m.pssDashboard.inprovementStatsWidget.titleCoping}</Typography>
+                  <Box sx={{display: 'flex', gap: 2, paddingRight: 5}}>
+                    <ChartPieWidget
+                      sx={{flex: 1}}
+                      color={theme.palette.success.main}
+                      title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                      value={improvements.coping.positive}
+                      base={improvements.base}
+                    />
+                    <ChartPieWidget
+                      sx={{flex: 1}}
+                      color={theme.palette.warning.main}
+                      title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                      value={improvements.coping.negative}
+                      base={improvements.base}
+                    />
+                  </Box>
+                </Box>
+                <Box sx={{flexDirection: 'column', display: 'flex', gap: 2, paddingBlock: 2}}>
+                  <Typography>{m.pssDashboard.inprovementStatsWidget.titleWho5}</Typography>
+                  <Box sx={{display: 'flex', gap: 2, paddingRight: 5}}>
+                    <ChartPieWidget
+                      sx={{flex: 1}}
+                      color={theme.palette.success.main}
+                      title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                      value={improvements.who5.positive}
+                      base={improvements.base}
+                    />
+                    <ChartPieWidget
+                      sx={{flex: 1}}
+                      color={theme.palette.warning.main}
+                      title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                      value={improvements.who5.negative}
+                      base={improvements.base}
+                    />
+                  </Box>
+                </Box>
               </PanelBody>
             </Panel>
             <Panel title={m.pssDashboard.resilienceWidget.title}>
@@ -300,10 +303,12 @@ const PssDashboardWithContext: FC = () => {
                 {!Object.values(resilienceStats)
                   .map((stat) => Object.values(stat))
                   .flat()
-                  .some(isNaN) ? (
+                  .some((entry) =>
+                    typeof entry === 'object' ? isNaN(entry.negative) || isNaN(entry.positive) : isNaN(entry),
+                  ) ? (
                   <Fragment>
                     <Div sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
-                      {Object.entries(resilienceStats).map(([field, figures]) => {
+                      {Object.entries(resilienceStats).map(([field, {pre, post, difference}]) => {
                         return (
                           <Fragment key={field}>
                             <Typography>
@@ -325,8 +330,8 @@ const PssDashboardWithContext: FC = () => {
                                   [key]: {stackId: key},
                                   difference: {stackId: key},
                                 }
-                              })(figures)}
-                              barLabelProps={Object.keys(figures).reduce(
+                              })({pre, post})}
+                              barLabelProps={Object.keys({pre, post, difference}).reduce(
                                 (accum, key) => ({
                                   ...accum,
                                   [key]: {
@@ -334,8 +339,8 @@ const PssDashboardWithContext: FC = () => {
                                     style: {fill: '#fff'},
                                     content:
                                       key === 'difference'
-                                        ? `${m.pssDashboard.prePostWidget[key as keyof typeof figures]} ${toPercent(figures.difference / Math.max(figures.post, figures.pre))}`
-                                        : m.pssDashboard.prePostWidget[key as keyof typeof figures],
+                                        ? `${m.pssDashboard.prePostWidget[key]} ${toPercent(difference / Math.max(post, pre))}`
+                                        : m.pssDashboard.prePostWidget[key as 'pre' | 'post'],
                                   },
                                 }),
                                 {},
@@ -343,9 +348,9 @@ const PssDashboardWithContext: FC = () => {
                               data={[
                                 {
                                   category: translateField ? translateField(field) : field,
-                                  bars: Object.entries(figures).map(([name, value]) => ({
+                                  bars: Object.entries({pre, post, difference}).map(([name, value]) => ({
                                     key: name,
-                                    label: m.pssDashboard.prePostWidget[name as keyof typeof figures],
+                                    label: m.pssDashboard.prePostWidget[name as 'pre' | 'post'],
                                     value,
                                     color: colorByQuestion[name],
                                   })),
@@ -356,10 +361,87 @@ const PssDashboardWithContext: FC = () => {
                         )
                       })}
                     </Div>
-                    <Box display="flex" gap={4}>
+                    <Box display="flex" gap={4} paddingBottom={4}>
                       <LegendItem color={colorByQuestion.pre} label={m.pssDashboard.prePostWidget.pre} />
                       <LegendItem color={colorByQuestion.post} label={m.pssDashboard.prePostWidget.post} />
                       <LegendItem color={colorByQuestion.difference} label={m.pssDashboard.prePostWidget.difference} />
+                    </Box>{' '}
+                    <PanelTitle>{m.pssDashboard.resilienceWidget.subTitle}</PanelTitle>
+                    <Box sx={{flexDirection: 'column', display: 'flex', gap: 2, paddingBlock: 2}}>
+                      <Typography>{m.pssDashboard.resilienceWidget.socialSupport}</Typography>
+                      <Box sx={{display: 'flex', gap: 2, paddingRight: 5}}>
+                        <ChartPieWidget
+                          sx={{flex: 1}}
+                          color={theme.palette.success.main}
+                          title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                          value={resilienceStats.socialSupport.improvements.positive}
+                          base={improvements.base} // improvements and resilience share the base
+                        />
+                        <ChartPieWidget
+                          sx={{flex: 1}}
+                          color={theme.palette.warning.main}
+                          title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                          value={resilienceStats.socialSupport.improvements.negative}
+                          base={improvements.base} // improvements and resilience share the base
+                        />
+                      </Box>
+                    </Box>
+                    <Box sx={{flexDirection: 'column', display: 'flex', gap: 2, paddingBlock: 2}}>
+                      <Typography>{m.pssDashboard.resilienceWidget.senseMeaning}</Typography>
+                      <Box sx={{display: 'flex', gap: 2, paddingRight: 5}}>
+                        <ChartPieWidget
+                          sx={{flex: 1}}
+                          color={theme.palette.success.main}
+                          title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                          value={resilienceStats.senseMeaning.improvements.positive}
+                          base={improvements.base} // improvements and resilience share the base
+                        />
+                        <ChartPieWidget
+                          sx={{flex: 1}}
+                          color={theme.palette.warning.main}
+                          title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                          value={resilienceStats.senseMeaning.improvements.negative}
+                          base={improvements.base} // improvements and resilience share the base
+                        />
+                      </Box>
+                    </Box>
+                    <Box sx={{flexDirection: 'column', display: 'flex', gap: 2, paddingBlock: 2}}>
+                      <Typography>{m.pssDashboard.resilienceWidget.senseHope}</Typography>
+                      <Box sx={{display: 'flex', gap: 2, paddingRight: 5}}>
+                        <ChartPieWidget
+                          sx={{flex: 1}}
+                          color={theme.palette.success.main}
+                          title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                          value={resilienceStats.senseHope.improvements.positive}
+                          base={improvements.base} // improvements and resilience share the base
+                        />
+                        <ChartPieWidget
+                          sx={{flex: 1}}
+                          color={theme.palette.warning.main}
+                          title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                          value={resilienceStats.senseHope.improvements.negative}
+                          base={improvements.base} // improvements and resilience share the base
+                        />
+                      </Box>
+                    </Box>
+                    <Box sx={{flexDirection: 'column', display: 'flex', gap: 2, paddingBlock: 2}}>
+                      <Typography>{m.pssDashboard.resilienceWidget.senseAgency}</Typography>
+                      <Box sx={{display: 'flex', gap: 2, paddingRight: 5}}>
+                        <ChartPieWidget
+                          sx={{flex: 1}}
+                          color={theme.palette.success.main}
+                          title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.improved}</Txt>}
+                          value={resilienceStats.senseAgency.improvements.positive}
+                          base={improvements.base} // improvements and resilience share the base
+                        />
+                        <ChartPieWidget
+                          sx={{flex: 1}}
+                          color={theme.palette.warning.main}
+                          title={<Txt size="small">{m.pssDashboard.inprovementStatsWidget.labels.notImproved}</Txt>}
+                          value={resilienceStats.senseAgency.improvements.negative}
+                          base={improvements.base} // improvements and resilience share the base
+                        />
+                      </Box>
                     </Box>
                   </Fragment>
                 ) : (
