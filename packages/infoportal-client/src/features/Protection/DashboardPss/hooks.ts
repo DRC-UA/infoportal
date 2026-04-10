@@ -246,8 +246,8 @@ const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
   }, [data])
 }
 
-const useResilienceStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) =>
-  useMemo(() => {
+const useResilienceStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
+  return useMemo(() => {
     const pssSessions = data.filter(
       ({activity, complete_testing}) => (activity === 'pgs' || activity === 'ais') && complete_testing === 'yes',
     )
@@ -361,12 +361,51 @@ const useResilienceStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) =
     })
       .transforms.filter((transform) => transform.length === 2)
       .filter(([{type_testing: first}, {type_testing: second}]) => first !== second)
+
+    // current[0].pre.socialSupport >
+
+    const aisPre = sanitizedAisPrePostPairs
       .flat()
-    const aisPre = sanitizedAisPrePostPairs.filter(({type_testing}) => type_testing === 'pre').map(({pre}) => pre)
-    const aisPost = sanitizedAisPrePostPairs.filter(({type_testing}) => type_testing === 'post').map(({post}) => post)
+      .filter(({type_testing}) => type_testing === 'pre')
+      .map(({pre}) => pre)
+    const aisPost = sanitizedAisPrePostPairs
+      .flat()
+      .filter(({type_testing}) => type_testing === 'post')
+      .map(({post}) => post)
 
     const sanitizedPgsPrePostPairs = (pgs ?? seq([])).filter(
       ({type_testing}) => type_testing?.length === 2 && type_testing.includes('post') && type_testing.includes('pre'),
+    )
+
+    const improvementStats = [
+      ...sanitizedAisPrePostPairs.map(([sibling]) => sibling),
+      ...sanitizedPgsPrePostPairs,
+    ].reduce(
+      (accumulator, current) => {
+        return Object.fromEntries(
+          (['socialSupport', 'senseMeaning', 'senseHope', 'senseAgency'] as const).map((metric) => [
+            metric,
+            current.post[metric] > current.pre[metric]
+              ? {
+                  positive: accumulator?.[metric]?.positive + 1,
+                  negative: accumulator?.[metric]?.negative,
+                }
+              : {
+                  positive: accumulator?.[metric]?.positive,
+                  negative: accumulator?.[metric]?.negative + 1,
+                },
+          ]),
+        ) as Record<
+          'socialSupport' | 'senseMeaning' | 'senseHope' | 'senseAgency',
+          {positive: number; negative: number}
+        >
+      },
+      {
+        socialSupport: {positive: 0, negative: 0},
+        senseMeaning: {positive: 0, negative: 0},
+        senseHope: {positive: 0, negative: 0},
+        senseAgency: {positive: 0, negative: 0},
+      },
     )
 
     const pgsPre = sanitizedPgsPrePostPairs.map(({pre}) => pre)
@@ -383,24 +422,29 @@ const useResilienceStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) =
         pre: avgPre.socialSupport,
         post: avgPost.socialSupport,
         difference: avgPost.socialSupport - avgPre.socialSupport,
+        improvements: improvementStats.socialSupport,
       },
       senseMeaning: {
         pre: avgPre.senseMeaning,
         post: avgPost.senseMeaning,
         difference: avgPost.senseMeaning - avgPre.senseMeaning,
+        improvements: improvementStats.senseMeaning,
       },
       senseHope: {
         pre: avgPre.senseHope,
         post: avgPost.senseHope,
         difference: avgPost.senseHope - avgPre.senseHope,
+        improvements: improvementStats.senseHope,
       },
       senseAgency: {
         pre: avgPre.senseAgency,
         post: avgPost.senseAgency,
         difference: avgPost.senseAgency - avgPre.senseAgency,
+        improvements: improvementStats.senseAgency,
       },
     }
   }, [data])
+}
 
 const calcAvgFigures = (
   array: {
@@ -409,8 +453,8 @@ const calcAvgFigures = (
     senseAgency: number
     senseHope: number
   }[],
-) =>
-  Object.fromEntries(
+) => {
+  return Object.fromEntries(
     Object.entries(
       array.reduce(
         (accumulator, current) => ({
@@ -423,5 +467,6 @@ const calcAvgFigures = (
       ),
     ).map(([key, value]) => [key, value / array.length]),
   )
+}
 
 export {usePssFilters, useResilienceStats, useSessionsCounter, useStats, useTranslations, type UsePssFilter}

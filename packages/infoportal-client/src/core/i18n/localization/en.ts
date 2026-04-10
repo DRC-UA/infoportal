@@ -1552,7 +1552,8 @@ const en = Object.freeze({
         },
       },
       resilienceWidget: {
-        title: 'Resilience',
+        title: 'Average score of resilience components',
+        subTitle: 'Percentage of beneficiaries who improved resilience components',
         socialSupport: 'Sense of Social Cohesion',
         senseMeaning: 'Sense of Meaning',
         senseAgency: 'Sense of Agency',

@@ -192,7 +192,8 @@ const uk = deepmerge(en, {
         },
       },
       resilienceWidget: {
-        title: 'Стійкість',
+        title: 'Cередній бал компонентів стійкості',
+        subTitle: 'Покращення показників стійкості серед бенефіціарів',
         socialSupport: 'Відчуття соціальної згуртованості',
         senseMeaning: 'Відчуття сенсу',
         senseAgency: 'Відчуття спроможності',
