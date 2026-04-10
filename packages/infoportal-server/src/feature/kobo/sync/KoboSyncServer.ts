@@ -177,7 +177,13 @@ export class KoboSyncServer {
     this.debug(formId, `Fetch local answers... ${localAnswersIndex.size} fetched.`)
 
     const handleDelete = async () => {
-      const idsToDelete = [...localAnswersIndex.keys()].filter((_) => !remoteIdsIndex.has(_))
+      if (KoboIndex.byName('protection_referral').id === formId) {
+        this.info(formId, `Let's not wipe Referrals out - check the code comment for details`)
+      }
+      const idsToDelete =
+        KoboIndex.byName('protection_referral').id === formId
+          ? [] // do not wipe referrals out - the Kobo data was mistakenly emptied, we need to keep it
+          : [...localAnswersIndex.keys()].filter((_) => !remoteIdsIndex.has(_))
       const tracker = genUUID().slice(0, 5)
       this.info(formId, `Handle delete ${tracker} (${idsToDelete.length})...`)
       if (idsToDelete.length) {
