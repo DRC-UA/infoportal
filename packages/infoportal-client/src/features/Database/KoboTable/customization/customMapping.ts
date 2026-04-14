@@ -32,7 +32,7 @@ export const databaseCustomMapping: Record<any, (_: any) => any> = {
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.ecrec_vetEvaluation),
   [KoboIndex.byName('ecrec_vet_bha388').id]: (_) => ({
     ...KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.ecrec_vet_bha388),
-    alter_donor: _.alter_donor ?? 'UKR-000388 BHA', // draw default donor in Datatable, becuase Pool Funds were introduced as replacement for selected beneficiaries
+    //   // alter_donor: _.alter_donor ?? 'UKR-000388 BHA', // draw default donor in Datatable, becuase Pool Funds were introduced as replacement for selected beneficiaries
   }),
   [KoboIndex.byName('legal_individual_aid').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.legal_individual_aid),
