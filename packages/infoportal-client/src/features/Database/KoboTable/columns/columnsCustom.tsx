@@ -58,7 +58,7 @@ export const getColumnsCustom = ({
   selectedIds: Kobo.SubmissionId[]
   ctxUpdate: KoboUpdateContext
   m: Messages
-  augmentData: Record<'vaDuplications', Record<string, any[]> | undefined>
+  augmentData?: Record<'vaDuplications', Record<string, any[]> | undefined>
 }): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const getSelectMultipleTagSubHeader = ({
     tag,
@@ -880,8 +880,8 @@ export const getColumnsCustom = ({
           } = useDatatableContext()
 
           const value =
-            bio_name! in (augmentData.vaDuplications ?? [])
-              ? augmentData.vaDuplications![bio_name!].map(({id}) => id)
+            bio_name! in (augmentData?.vaDuplications ?? [])
+              ? augmentData?.vaDuplications![bio_name!].map(({id}) => id)
               : undefined
 
           return {
