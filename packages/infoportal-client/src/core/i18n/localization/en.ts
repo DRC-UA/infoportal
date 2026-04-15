@@ -26,6 +26,7 @@ const en = Object.freeze({
     },
     activities: 'Activities',
     noComment: 'No comment',
+    nameDuplication: 'Name duplication',
     answers: 'Answers',
     seeResults: `See results`,
     updating: 'Updating',

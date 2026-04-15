@@ -11,7 +11,7 @@ import {DatabaseDisplay} from '@/features/Database/KoboTable/groupDisplay/Databa
 import {databaseCustomMapping} from '@/features/Database/KoboTable/customization/customMapping'
 import {UseDatabaseView, useDatabaseView} from '@/features/Database/KoboTable/view/useDatabaseView'
 import {useAsync, UseAsyncSimple} from '@/shared/hook/useAsync'
-import {useFetcher} from '@/shared/hook/useFetcher'
+import {useFetcher, type UseFetcher} from '@/shared/hook/useFetcher'
 import {FetchParams} from '@/shared/hook/useFetchers'
 import {useObjectState, UseObjectStateReturn} from '@/shared/hook/useObjectState'
 import {AccessSum} from '@/core/sdk/server/access/Access'
@@ -33,6 +33,7 @@ export interface DatabaseKoboContext {
   externalFilesIndex?: KoboExternalFilesIndex
   view: UseDatabaseView
   groupDisplay: UseObjectStateReturn<DatabaseDisplay>
+  augmentDataFetchers: Record<string, UseFetcher<any> | undefined>
 }
 
 const Context = createContext({} as DatabaseKoboContext)
@@ -48,8 +49,9 @@ export const DatabaseKoboTableProvider = (props: {
   access: DatabaseKoboContext['access']
   form: DatabaseKoboContext['form']
   data?: KoboMappedAnswer[]
+  augmentDataFetchers?: Record<'vaDuplications', UseFetcher<any>>
 }) => {
-  const {form, data, children, refetch} = props
+  const {form, data, children, refetch, augmentDataFetchers} = props
   const {api} = useAppSettings()
   const [indexExternalFiles, setIndexExternalFiles] = useState<KoboExternalFilesIndex>()
 
@@ -123,6 +125,9 @@ export const DatabaseKoboTableProvider = (props: {
         groupDisplay,
         data: mappedData,
         setData: setMappedData as Dispatch<SetStateAction<KoboMappedAnswer[]>>,
+        augmentDataFetchers: {
+          vaDuplications: augmentDataFetchers?.vaDuplications,
+        } as const,
       }}
     >
       {children}

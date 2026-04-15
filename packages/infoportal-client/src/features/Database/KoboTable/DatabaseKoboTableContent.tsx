@@ -3,7 +3,7 @@ import {Alert, AlertProps, FormControlLabel, Icon, Switch, useTheme} from '@mui/
 import {Kobo} from 'kobo-sdk'
 import {useNavigate} from 'react-router-dom'
 
-import {KoboFlattenRepeatedGroup, KoboIndex, Legal_individual_aid} from 'infoportal-common'
+import {groupBy, KoboFlattenRepeatedGroup, KoboIndex, Legal_individual_aid} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -93,6 +93,12 @@ export const DatabaseKoboTableContent = ({
 
   const handleXmlLabelsToggle = () => setShowXmlLabels((previous) => !previous)
 
+  const vaDupGroups = groupBy({
+    data: ctx.augmentDataFetchers.vaDuplications?.get ?? [],
+    groups: [{by: ({bio_name}) => bio_name}],
+    finalTransform: (input) => input,
+  }).groups
+
   const customColumns: DatatableColumn.Props<any>[] = useMemo(
     () =>
       getColumnsCustom({
@@ -101,11 +107,14 @@ export const DatabaseKoboTableContent = ({
         canEdit: ctx.access.write,
         m,
         ctxUpdate: ctxKoboUpdate,
+        augmentData: {
+          vaDuplications: vaDupGroups,
+        } as const,
       }).map((_) => ({
         ..._,
         typeIcon: <DatatableHeadIconByType type={_.type} />,
       })),
-    [selectedIds, ctx.form.id],
+    [selectedIds, ctx.form.id, vaDupGroups],
   )
 
   const schemaColumns = useMemo(() => {

@@ -87,4 +87,8 @@ export class ApiSdk {
   readonly hdp: HdpSdk
   readonly cache: CacheSdk
   readonly importData: ImportFromXlsDataSdk
+
+  readonly getVaDuplicates = async () => {
+    return await this.client.get('/kobo/va/duplicate-records')
+  }
 }
