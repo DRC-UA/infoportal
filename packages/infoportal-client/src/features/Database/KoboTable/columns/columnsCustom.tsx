@@ -875,9 +875,7 @@ export const getColumnsCustom = ({
           const copy = async (data: any[] = []) => {
             await navigator.clipboard.writeText(data.join('\n'))
           }
-          const {
-            data: {setFilters},
-          } = useDatatableContext()
+          const {data} = useDatatableContext()
 
           const value =
             bio_name! in (augmentData?.vaDuplications ?? [])
@@ -902,7 +900,7 @@ export const getColumnsCustom = ({
                   </TableIconBtn>
                   <TableIconBtn
                     onClick={() => {
-                      setFilters({id: value.join(' ')})
+                      data?.setFilters({id: value.join(' ')})
                     }}
                   >
                     filter_alt
