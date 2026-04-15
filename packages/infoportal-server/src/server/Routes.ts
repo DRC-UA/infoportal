@@ -25,6 +25,7 @@ import {ControllerHdp} from './controller/ControllerHdp.js'
 import {ControllerKoboAnswerHistory} from './controller/kobo/ControllerKoboAnswerHistory.js'
 import {ControllerCache} from './controller/ControllerCache.js'
 import {UserService} from '../feature/user/UserService.js'
+import {ControllerVaDuplicates} from './controller/ControllerVaDuplicates.js'
 import {ControllerDatabaseView} from './controller/ControllerDatabaseView.js'
 import {ControllerKoboApiXlsImport} from './controller/kobo/ControllerKoboApiXlsImport.js'
 
@@ -80,6 +81,7 @@ export const getRoutes = (
   const databaseView = new ControllerDatabaseView(prisma)
   const cacheController = new ControllerCache()
   const importData = new ControllerKoboApiXlsImport(prisma)
+  const vaDuplicatesController = new ControllerVaDuplicates()
 
   const auth =
     ({adminOnly = false}: {adminOnly?: boolean} = {}) =>
@@ -181,6 +183,7 @@ export const getRoutes = (
     router.patch('/kobo/answer/:formId', auth(), errorCatcher(koboAnswer.updateAnswers))
     router.delete('/kobo/answer/:formId', auth({adminOnly: true}), errorCatcher(koboAnswer.deleteAnswers))
     router.post('/kobo/answer/:formId', errorCatcher(koboAnswer.search))
+    router.get('/kobo/va/duplicate-records', auth(), errorCatcher(vaDuplicatesController.get))
 
     router.get('/hdp/ai-risk-education', errorCatcher(hdp.fetchAiRiskEducation))
     router.get('/hdp/risk-education', errorCatcher(hdp.fetchRiskEducation))

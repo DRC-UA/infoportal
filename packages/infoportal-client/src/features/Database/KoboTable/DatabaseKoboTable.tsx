@@ -4,6 +4,8 @@ import {Skeleton} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
 import {useParams} from 'react-router'
 
+import {KoboIndex} from 'infoportal-common'
+
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
 import {DatatableSkeleton} from '@/shared/Datatable/DatatableSkeleton'
@@ -27,6 +29,7 @@ import {DatabaseKoboTableContent} from './DatabaseKoboTableContent'
 export const DatabaseTableRoute = () => {
   const ctx = useDatabaseContext()
   const {formId} = databaseUrlParamsValidation.validateSync(useParams())
+
   return map(ctx.getForm(formId), (form) => (
     <Page width="full" sx={{p: 0, pb: 0, mb: 0}}>
       <Panel sx={{mb: 0}}>
@@ -55,6 +58,7 @@ export const DatabaseTable = ({form, formId, onFiltersChange, onDataChange, data
   const ctxSchema = useKoboSchemaContext()
   const fetcherAnswers = useKoboAnswersContext().byId(formId)
   const fetcherForm = useFetcher(() => (form ? Promise.resolve(form) : api.kobo.form.get(formId)))
+  const vaDuplicationsFetcher = useFetcher(api.getVaDuplicates)
 
   const access = useMemo(() => {
     const list = accesses
@@ -70,6 +74,7 @@ export const DatabaseTable = ({form, formId, onFiltersChange, onDataChange, data
     fetcherForm.fetch()
     fetcherAnswers.fetch({force: true, clean: true})
     ctxSchema.fetchById(formId)
+    if (formId === KoboIndex.byName('va_bio_tia').id) vaDuplicationsFetcher.fetch()
   }, [formId])
 
   const loading = fetcherAnswers.loading
@@ -97,6 +102,7 @@ export const DatabaseTable = ({form, formId, onFiltersChange, onDataChange, data
           loading={loading}
           data={fetcherAnswers.get?.data}
           form={form}
+          augmentDataFetchers={{vaDuplications: vaDuplicationsFetcher} as const}
         >
           <DatabaseKoboTableContent onFiltersChange={onFiltersChange} onDataChange={onDataChange} />
         </DatabaseKoboTableProvider>

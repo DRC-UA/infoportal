@@ -1,4 +1,5 @@
 import {match, Obj, seq} from '@axanc/ts-utils'
+import {Box} from '@mui/material'
 import {Kobo} from 'kobo-sdk'
 
 import {
@@ -23,6 +24,7 @@ import {
   Protection_pfa_training_test,
   ProtectionHhsTags,
   safeArray,
+  Va_bio_tia,
 } from 'infoportal-common'
 
 import {KoboUpdateContext} from '@/core/context/KoboUpdateContext'
@@ -37,6 +39,9 @@ import {KoboEditModalOption} from '@/shared/koboEdit/KoboUpdateModal'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
+import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
+
+import {useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
 
 export const getColumnsCustom = ({
   selectedIds,
@@ -45,6 +50,7 @@ export const getColumnsCustom = ({
   getRow = (_) => _ as unknown as any,
   ctxUpdate,
   canEdit,
+  augmentData,
 }: {
   canEdit?: boolean
   formId: Kobo.FormId
@@ -52,6 +58,7 @@ export const getColumnsCustom = ({
   selectedIds: Kobo.SubmissionId[]
   ctxUpdate: KoboUpdateContext
   m: Messages
+  augmentData?: Record<'vaDuplications', Record<string, any[]> | undefined>
 }): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const getSelectMultipleTagSubHeader = ({
     tag,
@@ -853,6 +860,54 @@ export const getColumnsCustom = ({
                 <span style={{display: 'inline-block', width: '100%'}}>{total}</span>
               </div>
             ),
+          }
+        },
+      },
+    ],
+    [KoboIndex.byName('va_bio_tia').id]: [
+      {
+        id: 'va_duplicate_records',
+        head: m.nameDuplication,
+        type: 'string',
+        width: 120,
+        render: (row: Va_bio_tia.T) => {
+          const {bio_name}: KoboSubmissionFlat<Va_bio_tia.T> = getRow(row)
+          const copy = async (data: any[] = []) => {
+            await navigator.clipboard.writeText(data.join('\n'))
+          }
+          const {data} = useDatatableContext()
+
+          const value =
+            bio_name! in (augmentData?.vaDuplications ?? [])
+              ? augmentData?.vaDuplications![bio_name!].map(({id}) => id)
+              : undefined
+
+          return {
+            export: value?.join(', '),
+            value: value ? value.join(', ') : undefined,
+            label: value ? (
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Box flexShrink={1} flexGrow={0} overflow="hidden" textOverflow="ellipsis">
+                  {value.join(', ')}
+                </Box>
+                <Box display="flex">
+                  <TableIconBtn
+                    onClick={() => {
+                      copy(value)
+                    }}
+                  >
+                    content_copy
+                  </TableIconBtn>
+                  <TableIconBtn
+                    onClick={() => {
+                      data?.setFilters({id: value.join(' ')})
+                    }}
+                  >
+                    filter_alt
+                  </TableIconBtn>
+                </Box>
+              </Box>
+            ) : null,
           }
         },
       },

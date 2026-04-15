@@ -15,6 +15,7 @@ const uk = deepmerge(en, {
     seeResults: 'Переглянути результати',
     select3Outcomes: 'Будь ласка, виберіть 3 результати',
     somethingWentWrong: 'Щось пішло не так',
+    nameDuplication: 'Повторення імені',
     yes: 'Так',
     no: 'Ні',
     previous: 'Попередній',
