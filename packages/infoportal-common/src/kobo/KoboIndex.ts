@@ -140,7 +140,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   ecrec_vetApplication:
     '[Ecrec] VET - Training grants - we are now accepting applications / Гранти на навчання — відкриваємо прийом заявок',
   ecrec_vetEvaluation: '[Ecrec] VET - Candidate evaluation',
-  ecrec_vet_bha388: '[Ecrec] VET BHA388 grant registration form',
+  ecrec_vet_bha388: '[Ecrec] VET grant registration form',
   gbv_cs_pdm: '[GBV] Case Management Client feedback form',
   gbv_girlShine: '[GBV] Girl Shine Feedback Questionaire',
   gbv_wgssPdm: '[GBV] WGSS – Feedback Survey',
