@@ -7,11 +7,11 @@ import {KeyOf, KoboIndex, KoboSchemaHelper} from 'infoportal-common'
 import {InferTypedAnswer, KoboFormNameMapped} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 
 export const visibleMealVerificationActivityIds = [
-  '[Ecrec] Subsistance farmer registration',
-  'ECREC VET DMFA-355',
-  'ECREC VET BHA-388',
-  '[Ecrec] Small Scale Farmer Registration Form',
-  'ECREC MSME BHA-388',
+  '[ECREC] Subsistance farmer registration',
+  '[ECREC] VET DMFA-355',
+  '[ECREC] VET Registration',
+  '[ECREC] Small Scale Farmer Registration Form',
+  '[ECREC] MSME',
   'Partner LMW',
 ]
 
@@ -132,8 +132,8 @@ export const mealVerificationActivities = seq([
   }),
   registerActivity({
     sampleSizeRatio: 0.1,
-    label: 'ECREC VET DMFA-355',
-    id: 'ECREC VET DMFA-355',
+    label: '[ECREC] VET DMFA-355',
+    id: '[ECREC] VET DMFA-355',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_vet2_dmfa').id,
       fetch: 'ecrec_vet2_dmfa',
@@ -196,8 +196,8 @@ export const mealVerificationActivities = seq([
   }),
   registerActivity({
     sampleSizeRatio: 0.1,
-    label: 'ECREC VET BHA-388',
-    id: 'ECREC VET BHA-388',
+    label: '[ECREC] VET Registration',
+    id: '[ECREC] VET Registration',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_vet_bha388').id,
       fetch: 'ecrec_vet_bha388',
@@ -260,8 +260,8 @@ export const mealVerificationActivities = seq([
   }),
   registerActivity({
     sampleSizeRatio: 0.1,
-    label: '[Ecrec] Small Scale Farmer Registration Form',
-    id: '[Ecrec] Small Scale Farmer Registration Form',
+    label: '[ECREC] Small Scale Farmer Registration Form',
+    id: '[ECREC] Small Scale Farmer Registration Form',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_small_scale').id,
       fetch: 'ecrec_small_scale',
@@ -350,8 +350,8 @@ export const mealVerificationActivities = seq([
   }),
   registerActivity({
     sampleSizeRatio: 0.1,
-    label: '[Ecrec] Subsistance farmer registration',
-    id: '[Ecrec] Subsistance farmer registration',
+    label: '[ECREC] Subsistance farmer registration',
+    id: '[ECREC] Subsistance farmer registration',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_subsistance').id,
       fetch: 'ecrec_subsistance',
@@ -447,8 +447,8 @@ export const mealVerificationActivities = seq([
   }),
   registerActivity({
     sampleSizeRatio: 0.1,
-    label: 'ECREC MSME BHA-388',
-    id: 'ECREC MSME BHA-388',
+    label: '[ECREC] MSME',
+    id: '[ECREC] MSME',
     registration: {
       koboFormId: KoboIndex.byName('ecrec_msmeGrantReg').id,
       fetch: 'ecrec_msmeGrantReg',
