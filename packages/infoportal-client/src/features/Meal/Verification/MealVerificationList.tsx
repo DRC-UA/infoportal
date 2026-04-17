@@ -179,13 +179,13 @@ export const MealVerificationList = () => {
               head: m._mealVerif.activityForm,
               render: (_) => {
                 return {
-                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)
+                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity]?.registration.koboFormId)
                     ?.translation,
-                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].registration.koboFormId)
+                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity]?.registration.koboFormId)
                     ?.translation,
                   label: (
                     <MealVerificationLinkToForm
-                      koboFormId={mealVerificationActivitiesIndex[_.activity].registration.koboFormId}
+                      koboFormId={mealVerificationActivitiesIndex[_.activity]?.registration.koboFormId}
                     />
                   ),
                 }
@@ -197,13 +197,13 @@ export const MealVerificationList = () => {
               head: m._mealVerif.verificationForm,
               render: (_) => {
                 return {
-                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)
+                  option: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity]?.verification.koboFormId)
                     ?.translation,
-                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity].verification.koboFormId)
+                  value: KoboIndex.searchById(mealVerificationActivitiesIndex[_.activity]?.verification.koboFormId)
                     ?.translation,
                   label: (
                     <MealVerificationLinkToForm
-                      koboFormId={mealVerificationActivitiesIndex[_.activity].verification.koboFormId}
+                      koboFormId={mealVerificationActivitiesIndex[_.activity]?.verification.koboFormId}
                     />
                   ),
                 }
