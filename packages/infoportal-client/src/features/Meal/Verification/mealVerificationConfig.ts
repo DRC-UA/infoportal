@@ -12,7 +12,6 @@ export const visibleMealVerificationActivityIds = [
   '[ECREC] VET Registration',
   '[ECREC] Small Scale Farmer Registration Form',
   '[ECREC] MSME',
-  'Partner LMW',
 ]
 
 export const mealVerificationConf = {
