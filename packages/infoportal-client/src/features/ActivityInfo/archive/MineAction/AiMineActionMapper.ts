@@ -16,7 +16,8 @@ import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import type {AiMinactionSqlType} from '@/core/sdk/server/hdp/HdpSdkType'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
-import {AiMineActionType} from '@/features/ActivityInfo/MineAction/aiMineActionType'
+
+import {AiMineActionType} from './aiMineActionType'
 
 export namespace AiMineActionMapper {
   type Bundle = AiTable<AiMineActionType.Type, AiMineActionType.AiTypeActivitiesAndPeople>

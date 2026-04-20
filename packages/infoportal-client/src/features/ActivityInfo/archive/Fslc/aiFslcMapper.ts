@@ -18,9 +18,10 @@ import {
 
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiFslcType, AiFslType} from '@/features/ActivityInfo/Fslc/aiFslcType'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+
+import {AiFslcType, AiFslType} from './aiFslcType'
 
 export namespace AiFslcMapper {
   export type Bundle = AiTable<AiFslcType>

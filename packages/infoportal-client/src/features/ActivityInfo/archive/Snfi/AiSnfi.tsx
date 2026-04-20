@@ -1,11 +1,12 @@
 import {Period} from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {AiShelterMapper} from '@/features/ActivityInfo/Snfi/aiSnfiMapper'
 import {AiBundleTable} from '@/features/ActivityInfo/shared/AiTable'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 import {useFetcher} from '@/shared/hook/useFetcher'
+
+import {AiShelterMapper} from './aiSnfiMapper'
 
 export const AiSnfi = () => {
   const {api} = useAppSettings()

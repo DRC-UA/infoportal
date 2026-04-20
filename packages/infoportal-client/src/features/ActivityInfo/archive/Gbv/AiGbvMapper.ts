@@ -1,11 +1,12 @@
 import {DrcProject, DrcSector, groupBy, IKoboMeta, KoboMetaStatus, Period, PeriodHelper} from 'infoportal-common'
 
-import {AiGbvType} from '@/features/ActivityInfo/Gbv/aiGbvType'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {match} from '@axanc/ts-utils'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
+
+import {AiGbvType} from './aiGbvType'
 
 export namespace AiGbvMapper2 {
   export type Bundle = AiTable<AiGbvType>
