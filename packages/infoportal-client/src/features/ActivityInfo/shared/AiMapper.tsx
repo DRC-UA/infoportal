@@ -5,8 +5,8 @@ import {UaLocation} from 'ua-location'
 
 import {IKoboMeta, Period, Person} from 'infoportal-common'
 
-import {AiFslType} from '@/features/ActivityInfo/Fslc/aiFslcType'
-import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
+import {AiFslType} from '@/features/ActivityInfo/archive/Fslc/aiFslcType'
+import {AiProtectionType} from '@/features/ActivityInfo/archive/Protection/aiProtectionType'
 
 export namespace AiMapper {
   export const getPeriodStr = (p: Partial<Period>) => {

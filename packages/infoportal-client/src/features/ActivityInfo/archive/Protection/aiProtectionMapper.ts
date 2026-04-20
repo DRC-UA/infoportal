@@ -1,10 +1,11 @@
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
-import {AiProtectionType} from '@/features/ActivityInfo/Protection/aiProtectionType'
 import {DrcProgram, DrcProject, groupBy, IKoboMeta, KoboMetaStatus, Period, PeriodHelper} from 'infoportal-common'
 import {match} from '@axanc/ts-utils'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
+
+import {AiProtectionType} from './aiProtectionType'
 
 export namespace AiProtectionMapper {
   type Bundle = AiTable<AiProtectionType.Type, AiProtectionType.AiTypeActivitiesAndPeople>

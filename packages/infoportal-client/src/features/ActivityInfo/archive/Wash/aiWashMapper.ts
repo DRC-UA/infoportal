@@ -1,12 +1,13 @@
 import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from 'infoportal-common'
-import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
-import {AiWashType} from '@/features/ActivityInfo/Wash/aiWashType'
+
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {fnSwitch} from '@axanc/ts-utils'
-import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-import {activitiesConfig} from '@/features/ActivityInfo/ActivityInfo'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
+
 import {Period} from 'infoportal-common'
+
+import {AiWashType} from './aiWashType'
 
 export namespace AiWashMapper {
   const planCodes = {
