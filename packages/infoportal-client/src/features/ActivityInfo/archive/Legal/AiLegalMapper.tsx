@@ -1,11 +1,19 @@
 import {match, seq, type Seq} from '@axanc/ts-utils'
 
-import {DrcProgram, DrcProject, groupBy, IKoboMeta, KoboMetaStatus, PeriodHelper, type Period} from 'infoportal-common'
+import {
+  DrcProgram,
+  DrcProject,
+  groupBy,
+  KoboMetaStatus,
+  PeriodHelper,
+  type IKoboMeta,
+  type Period,
+} from 'infoportal-common'
 
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
-import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+import {AiMapper} from '@/features/ActivityInfo/archive/shared/AiMapper'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/archive/shared/AiTable'
 
 import {AiLegalType} from './AiLegalTypes'
 

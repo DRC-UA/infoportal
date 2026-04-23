@@ -13,8 +13,8 @@ import {
 
 import type {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
-import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+import {AiMapper} from '@/features/ActivityInfo/archive/shared/AiMapper'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/archive/shared/AiTable'
 
 import {AiTypeChildProtectionAorRmm} from './AiChildProtectionType'
 

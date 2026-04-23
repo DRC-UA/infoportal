@@ -1,7 +1,7 @@
 import {Period} from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
-import {AiBundleTable} from '@/features/ActivityInfo/shared/AiTable'
+import {AiBundleTable} from '@/features/ActivityInfo/archive/shared/AiTable'
 import {Panel} from '@/shared/Panel'
 import {Page} from '@/shared/Page'
 import {useFetcher} from '@/shared/hook/useFetcher'
