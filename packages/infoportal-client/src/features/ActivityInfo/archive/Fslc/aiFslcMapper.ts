@@ -18,8 +18,8 @@ import {
 
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
-import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
-import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+import {AiMapper} from '@/features/ActivityInfo/archive/shared/AiMapper'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/archive/shared/AiTable'
 
 import {AiFslcType, AiFslType} from './aiFslcType'
 
