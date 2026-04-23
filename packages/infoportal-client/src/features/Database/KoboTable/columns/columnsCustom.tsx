@@ -60,6 +60,7 @@ export const getColumnsCustom = ({
   m: Messages
   augmentData?: Record<'vaDuplications', Record<string, any[]> | undefined>
 }): DatatableColumn.Props<KoboMappedAnswer>[] => {
+  const {data} = useDatatableContext()
   const getSelectMultipleTagSubHeader = ({
     tag,
     options,
@@ -875,7 +876,6 @@ export const getColumnsCustom = ({
           const copy = async (data: any[] = []) => {
             await navigator.clipboard.writeText(data.join('\n'))
           }
-          const {data} = useDatatableContext()
 
           const value =
             bio_name! in (augmentData?.vaDuplications ?? [])
