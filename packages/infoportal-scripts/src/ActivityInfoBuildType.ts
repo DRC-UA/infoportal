@@ -1,4 +1,5 @@
 import {Obj} from '@axanc/ts-utils'
+
 import {AiBuilder} from 'activityinfo-sdk'
 
 import {appConf} from './appConf'
@@ -10,6 +11,7 @@ export class ActivityInfoBuildType {
       outDir: appConf.rootProjectDir + '/output',
     }),
     private formIds = {
+      monitoring: 'co9uppxmms4u30z1ppd',
       generalProtection: 'c1viqabm4whwvwo3',
       mineAction: 'cxpfp3xm513b6r15nwo',
       childProtection: 'cvgj28ym513hkiph7y',
@@ -22,6 +24,19 @@ export class ActivityInfoBuildType {
   ) {}
 
   readonly definition = {
+    monitoring: () =>
+      this.builder.generateSchema({
+        formId: this.formIds.monitoring,
+        questionSettings: {
+          'Lead Organization': {
+            filterChoices: (choices) => choices.includes('Danish Refugee Council'),
+          },
+          'Implementing Partner': {
+            filterChoices: (choices) => choices.includes('Danish Refugee Council'),
+          },
+        },
+      }),
+
     wash: () =>
       this.builder.generateSchema({
         formId: this.formIds.wash,

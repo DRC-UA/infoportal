@@ -3,9 +3,12 @@ import {Obj} from '@axanc/ts-utils'
 import {Box, Tabs, Tab, type BoxProps} from '@mui/material'
 import {NavLink, Route, Routes} from 'react-router-dom'
 
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
+
+import Protection from './protection'
 
 import {AiChildProtection} from './archive/ChildProtection/AiChildProtection'
 import {AiGbv} from './archive/Gbv/AiGbv'
@@ -17,6 +20,15 @@ import {AiMpca} from './archive/Mpca/AiMpca'
 import {AiProtection} from './archive/Protection/AiProtection'
 import {AiSnfi} from './archive/Snfi/AiSnfi'
 import {AiWash} from './archive/Wash/AiWash'
+
+const sectionsConfig: Record<'protection', Record<'id' | 'name' | 'path', string> & {Component: FC}> = {
+  protection: {
+    id: 'cjgyqc5mnctb7z82',
+    name: 'Protection',
+    path: 'protection',
+    Component: Protection,
+  },
+}
 
 export const archivedActivitiesConfig = {
   protectionGeneral: {
@@ -107,7 +119,11 @@ const ActivityInfoSidebar = () => {
         <Tab label="Archive" onClick={activateArchive} />
       </Tabs>
       <TabContent index={0} value={activeTab}>
-        <NavLink to="">{({isActive}) => <SidebarItem active={isActive}>Current reports</SidebarItem>}</NavLink>
+        {Obj.values(sectionsConfig).map(({id, path, name}) => (
+          <NavLink key={id} to={path}>
+            {({isActive}) => <SidebarItem active={isActive}>{name}</SidebarItem>}
+          </NavLink>
+        ))}
       </TabContent>
       <TabContent index={1} value={activeTab}>
         {Obj.keys(archivedActivitiesConfig).map((k) => (
@@ -125,10 +141,14 @@ const ActivityInfoSidebar = () => {
 }
 
 export const ActivityInfo = () => {
+  useReactRouterDefaultRoute(sectionsConfig.protection.path)
+
   return (
     <Layout sidebar={<ActivityInfoSidebar />} title={appFeaturesIndex.activity_info.name}>
       <Routes>
-        <Route index element={<div>Current reports will go here</div>}></Route>
+        {Obj.values(sectionsConfig).map(({id, path, Component}) => (
+          <Route key={id} {...{path, Component}} />
+        ))}
         <Route path={archivePath}>
           {Obj.values(archivedActivitiesConfig).map((k) => (
             <Route key={k.path} path={k.path} element={k.component} />
