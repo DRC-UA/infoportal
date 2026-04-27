@@ -41,8 +41,6 @@ import {IpSelectSingle} from '@/shared/Select/SelectSingle'
 import {TableEditCellBtn} from '@/shared/TableEditCellBtn'
 import {TableIconBtn} from '@/features/Mpca/MpcaData/TableIcon'
 
-import {useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
-
 export const getColumnsCustom = ({
   selectedIds,
   m,
@@ -60,7 +58,6 @@ export const getColumnsCustom = ({
   m: Messages
   augmentData?: Record<'vaDuplications', Record<string, any[]> | undefined>
 }): DatatableColumn.Props<KoboMappedAnswer>[] => {
-  const {data} = useDatatableContext()
   const getSelectMultipleTagSubHeader = ({
     tag,
     options,
@@ -897,13 +894,6 @@ export const getColumnsCustom = ({
                     }}
                   >
                     content_copy
-                  </TableIconBtn>
-                  <TableIconBtn
-                    onClick={() => {
-                      data?.setFilters({id: value.join(' ')})
-                    }}
-                  >
-                    filter_alt
                   </TableIconBtn>
                 </Box>
               </Box>
