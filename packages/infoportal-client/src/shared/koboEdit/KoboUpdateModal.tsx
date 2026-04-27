@@ -80,9 +80,9 @@ export namespace KoboUpdateModal {
     }, [options, value])
 
     const _loading = loading || fetcherUpdate.loading
+
     return (
       <BasicDialog
-        maxWidth="xs"
         open={true}
         onClose={onClose}
         loading={_loading}
@@ -93,6 +93,7 @@ export namespace KoboUpdateModal {
             value instanceof Date ? value.toLocaleDateString('sv-SE', {timeZone: 'Europe/Kyiv'}) : value
           fetcherUpdate.fetch({force: true, clean: true}, normalized)
         }}
+        PaperProps={{sx: {width: '100%'}}}
         title={title}
       >
         <Txt truncate color="hint" block sx={{mb: 1, maxWidth: 400}}>
