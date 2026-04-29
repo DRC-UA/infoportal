@@ -1,10 +1,10 @@
-import React from 'react'
-import {AnswerTable} from './AnswerTable'
-import {Modal} from '@/shared'
 import {useI18n} from '@/core/i18n'
-import {IpIconBtn} from '@/shared/IconBtn'
-import {AiTable} from '@/features/ActivityInfo/shared/AiTable'
+import {Modal} from '@/shared'
 import {IpBtnProps} from '@/shared/Btn'
+import {IpIconBtn} from '@/shared/IconBtn'
+
+import {AnswerTable} from './AnswerTable'
+import type {AiTable} from './AiTable'
 
 export const ActivityInfoActions = ({data, activity, requestBody}: AiTable) => {
   return (

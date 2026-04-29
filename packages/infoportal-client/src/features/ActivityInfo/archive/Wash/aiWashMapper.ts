@@ -2,7 +2,7 @@ import {DrcProgram, DrcProject, groupBy, KoboMetaStatus, PeriodHelper} from 'inf
 
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
-import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/shared/AiTable'
+import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/archive/shared/AiTable'
 import {AiMapper} from '@/features/ActivityInfo/shared/AiMapper'
 
 import {Period} from 'infoportal-common'
