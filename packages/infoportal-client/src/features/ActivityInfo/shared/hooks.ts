@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {seq, Obj, type Seq} from '@axanc/ts-utils'
-import {endOfMonth, startOfMonth} from 'date-fns'
+import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
 
 import {DrcProgram, IKoboMeta, KoboMetaStatus, type Period} from 'infoportal-common'
 
@@ -17,8 +17,8 @@ const useMetaFetcher = (
   const [data, setData] = useState<Bundle[]>([])
   const [columns, setColumns] = useState<Seq<{key: string; type: string}>>(seq([]))
   const [period, setPeriod] = useState<Partial<Period>>({
-    start: startOfMonth(today),
-    end: endOfMonth(today),
+    start: startOfMonth(subMonths(new Date(), 1)),
+    end: endOfMonth(subMonths(new Date(), 1)),
   })
   const {api} = useAppSettings()
   const fetcher = useFetcher(
