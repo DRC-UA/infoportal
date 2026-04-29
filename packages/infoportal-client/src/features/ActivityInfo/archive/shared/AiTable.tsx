@@ -15,7 +15,7 @@ import {
   AiPreviewRequest,
   AiSendBtn,
   AiViewAnswers,
-} from '@/features/ActivityInfo/shared/ActivityInfoActions'
+} from '@/features/ActivityInfo/archive/shared/ActivityInfoActions'
 import {IpBtn} from '@/shared/Btn'
 import {Datatable} from '@/shared/Datatable/Datatable'
 import {DatatableHeadIconByType} from '@/shared/Datatable/DatatableHead'

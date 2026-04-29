@@ -1608,6 +1608,12 @@ const en = Object.freeze({
         },
       },
     },
+    activityInfo: {
+      sidebarTabLabels: {
+        current: 'Current',
+        archive: 'Pre 2026 Archive',
+      },
+    },
     plurals: {
       session: {
         zero: 'Sessions',
