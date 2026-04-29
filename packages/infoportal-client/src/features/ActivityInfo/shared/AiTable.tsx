@@ -54,6 +54,7 @@ const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, loading}) 
             <IpBtn
               icon="send"
               variant="contained"
+              loading={_submit.anyLoading}
               sx={{ml: 'auto'}}
               onClick={() => {
                 if (!data) return
