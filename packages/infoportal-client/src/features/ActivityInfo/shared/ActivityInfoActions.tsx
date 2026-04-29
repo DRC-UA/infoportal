@@ -1,20 +1,20 @@
-import React from 'react'
-import {AnswerTable} from './AnswerTable'
 import {Modal} from '@/shared'
 import {useI18n} from '@/core/i18n'
 import {IpIconBtn} from '@/shared/IconBtn'
-import {AiTable} from '@/features/ActivityInfo/shared/AiTable'
 import {IpBtnProps} from '@/shared/Btn'
 
-export const ActivityInfoActions = ({data, activity, requestBody}: AiTable) => {
-  return (
-    <>
-      <AiViewAnswers answers={data} />
-      {activity && <AiPreviewActivity activity={activity} />}
-      {requestBody && <AiPreviewRequest request={requestBody} />}
-    </>
-  )
-}
+import {AnswerTable} from './AnswerTable'
+// import {AiTable} from './AiTable'
+
+// export const ActivityInfoActions = ({data, activity, requestBody}: AiTable) => {
+//   return (
+//     <>
+//       <AiViewAnswers answers={data} />
+//       {activity && <AiPreviewActivity activity={activity} />}
+//       {requestBody && <AiPreviewRequest request={requestBody} />}
+//     </>
+//   )
+// }
 
 export const AiViewAnswers = <T extends Record<string, any>>({answers, tooltip}: {tooltip?: string; answers: T[]}) => {
   const {m} = useI18n()
