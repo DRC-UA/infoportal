@@ -1,6 +1,6 @@
 import type {FC} from 'react'
 import {seq} from '@axanc/ts-utils'
-import {Badge, Box, useTheme} from '@mui/material'
+import {Badge, Box} from '@mui/material'
 import {endOfMonth, startOfYear} from 'date-fns'
 
 import {KoboIndex, type IKoboMeta} from 'infoportal-common'
@@ -31,7 +31,6 @@ const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, loading}) 
   const {api} = useAppSettings()
   const {m} = useI18n()
   const {toastHttpError} = useIpToast()
-  const theme = useTheme()
 
   const _submit = useAsync((id: string, p: any) => api.activityInfo.submitActivity(p), {requestKey: ([i]) => i})
 
@@ -148,8 +147,6 @@ const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, loading}) 
           id: 'activityInfoId',
           type: 'select_one',
           head: 'Record ID',
-          style: () => ({borderRight: '3px solid ' + theme.palette.divider}),
-          styleHead: {borderRight: '3px solid ' + theme.palette.divider},
           renderQuick: ({recordId}) => recordId,
         },
         // @ts-expect-error
