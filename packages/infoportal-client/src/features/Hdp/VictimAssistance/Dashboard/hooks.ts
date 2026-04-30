@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react'
 import {map, seq} from '@axanc/ts-utils'
 
-import {Va_bio_tia, KoboIndex, Period, PeriodHelper} from 'infoportal-common'
+import {Va_bio_tia, isDate, KoboIndex, Period, PeriodHelper, KoboValidation} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -52,7 +52,21 @@ export const useVictimAssistanceData = () => {
         },
         status: {
           icon: 'check_circle',
-          getValue: (_) => _.case_status,
+          getValue: ({validationStatus, tia_assesment}) => {
+            const dates = seq(tia_assesment)
+              .map(({date_assistance_provided}) => date_assistance_provided)
+              .compact()
+              .get()
+            if (dates.some((date) => isDate(date))) return 'paid'
+            if (
+              validationStatus === KoboValidation.Approved ||
+              validationStatus === KoboValidation.Flagged ||
+              validationStatus === KoboValidation.Pending ||
+              validationStatus === KoboValidation.UnderReview
+            )
+              return 'ongoing'
+            if (validationStatus === KoboValidation.Rejected) return 'rejected'
+          },
           getOptions: () => DataFilter.buildOptionsFromObject(Va_bio_tia.options.case_status),
           label: m.status,
         },
