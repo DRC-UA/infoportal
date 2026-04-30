@@ -176,7 +176,7 @@ const buildVaRequest = (
           ? 'csu4204mn7lzgxcz35' + ':' + options['Operation_Location_Admin3'][a['Hromada (Admin3)']!]
           : undefined,
         coi9s8pmnag4pv6aok: a['Settlement (Admin4)']
-          ? 'cx60wmrmn7m1v6bz3c' + ':' + a['Settlement (Admin4)']
+          ? 'cx60wmrmn7m1v6bz3c' + ':' + options['Operation_Location_Admin4'][a['Settlement (Admin4)']]
           : undefined,
         c1pbo1cmkepe9ny13v0: a['Population Group']
           ? 'c4zk43vmms4u30z1po7' + ':' + options['Operation_Population_Types'][a['Population Group']!]

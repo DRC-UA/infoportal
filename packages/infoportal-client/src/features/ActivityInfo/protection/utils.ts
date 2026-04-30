@@ -112,7 +112,7 @@ const mapVictimAssistance = async (data: IKoboMeta[], periodStr: string): Promis
           'Raion (Admin2)': UaLocation.Raion.findByName(raion)?.iso! as AiType51aMonitoring.Type['Raion (Admin2)'],
           'Hromada (Admin3)': UaLocation.Hromada.findByName(hromada)
             ?.iso as AiType51aMonitoring.Type['Hromada (Admin3)'],
-          'Settlement (Admin4)': settlementIso ?? '',
+          'Settlement (Admin4)': settlementIso?.toUpperCase() ?? '',
         } as const
 
         return groupBy({
@@ -139,7 +139,7 @@ const mapVictimAssistance = async (data: IKoboMeta[], periodStr: string): Promis
               ...(disability === 1 && {Disability: 'DSB' as const}),
               'Reached/Delivered - New Non-repeated (Manual)': record.length,
             } as const
-            const requestBody = buildVaRequest({...activity, 'Settlement (Admin4)': aiLocation.Settlement}, recordId)
+            const requestBody = buildVaRequest(activity, recordId)
 
             return {
               activity: labelActivities(activity, record),

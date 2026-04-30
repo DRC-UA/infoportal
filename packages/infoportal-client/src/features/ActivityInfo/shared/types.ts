@@ -39,11 +39,7 @@ namespace AiType51aMonitoring {
     'Oblast (Admin1)': Opt<'Operation_Location_Admin1'>
     'Raion (Admin2)': Opt<'Operation_Location_Admin2'>
     'Hromada (Admin3)': Opt<'Operation_Location_Admin3'>
-    /**
-    ⚠️ Typing is omitted due to the large number of choices.
-    ➡️ Directly use label from AiType51a_project_indicator_monitoring_disaggregation.options['Operation_Location_Admin4']
-  */
-    'Settlement (Admin4)'?: string
+    'Settlement (Admin4)'?: Opt<'Operation_Location_Admin4'>
     'Collective Site'?: Opt<'Operation_Location_Sites_Collective_Sites'>
     /**
     ⚠️ Typing is omitted due to the large number of choices.
