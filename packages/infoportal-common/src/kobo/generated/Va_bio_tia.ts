@@ -244,6 +244,7 @@ export namespace Va_bio_tia {
       nataliia_liakhovska: `Nataliia Liakhovska`,
       anna_kolesnyk: `Anna Kolesnyk`,
       oleksandra_martysheva: `Oleksandra Martysheva`,
+      olha_kashyrska: `Olha Kashyrska`,
       inna_geiko: `Inna Geiko`,
       elyzaveta_blyzno: `Elyzaveta Blyzno`,
       dmytro_kurhanov: `Dmytro Kurhanov`,
