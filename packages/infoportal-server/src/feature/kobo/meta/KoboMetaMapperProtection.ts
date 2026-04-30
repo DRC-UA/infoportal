@@ -341,13 +341,19 @@ export class KoboMetaMapperProtection {
       sector: DrcSector.PSS,
       activity: match(answer.activity)
         .cases({
+          ace: DrcProgram.ACE,
+          ais: DrcProgram.PIS,
+          community_dialogues_session: DrcProgram.CDS,
+          fra: DrcProgram.FRA,
+          let: DrcProgram.LET,
           mhpss: DrcProgram.MHPSSActivities,
           pgs: DrcProgram.PGS,
-          ais: DrcProgram.PIS,
           pfa: DrcProgram.PFA,
           p2p: DrcProgram.P2P,
+          rsa: DrcProgram.RSA,
+          other: DrcProgram.PSO,
         })
-        .default(() => undefined),
+        .default(undefined),
       personsCount: persons.length,
       persons,
       project: project ? [project] : [],
