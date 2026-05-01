@@ -7,7 +7,7 @@ import {AiTable, useMetaFetcher} from '@/features/ActivityInfo/shared'
 import {mapVictimAssistance} from './utils'
 import {Page} from '@/shared'
 
-const AiVictimAssistance: FC = () => {
+const VictimAssistance: FC = () => {
   const {fetcher, data, columns, period, setPeriod} = useMetaFetcher([DrcProgram.TIA], mapVictimAssistance)
 
   return (
@@ -17,4 +17,4 @@ const AiVictimAssistance: FC = () => {
   )
 }
 
-export {AiVictimAssistance}
+export {VictimAssistance}

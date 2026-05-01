@@ -1,1 +1,1 @@
-export {AiVictimAssistance} from './AiVictimAssistance'
+export {VictimAssistance} from './VictimAssistance'

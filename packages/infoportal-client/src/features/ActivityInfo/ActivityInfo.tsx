@@ -9,7 +9,7 @@ import {appFeaturesIndex} from '@/features/appFeatureId'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
-import {AiVictimAssistance} from './protection'
+import {VictimAssistance} from './protection'
 
 import {AiChildProtection} from './archive/ChildProtection/AiChildProtection'
 import {AiGbv} from './archive/Gbv/AiGbv'
@@ -27,7 +27,7 @@ const sectionsConfig: Record<'protection', Record<'id' | 'name' | 'path', string
     id: 'cjgyqc5mnctb7z82',
     name: '[Protection] Victim Assistance',
     path: 'victim-assistance',
-    Component: AiVictimAssistance,
+    Component: VictimAssistance,
   },
 }
 
