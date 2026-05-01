@@ -9,7 +9,7 @@ import {appFeaturesIndex} from '@/features/appFeatureId'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
-import {VictimAssistance} from './protection'
+import {VictimAssistance, General as GeneralProtection} from './protection'
 
 import {AiChildProtection} from './archive/ChildProtection/AiChildProtection'
 import {AiGbv} from './archive/Gbv/AiGbv'
@@ -22,9 +22,18 @@ import {AiProtection} from './archive/Protection/AiProtection'
 import {AiSnfi} from './archive/Snfi/AiSnfi'
 import {AiWash} from './archive/Wash/AiWash'
 
-const sectionsConfig: Record<'protection', Record<'id' | 'name' | 'path', string> & {Component: FC}> = {
-  protection: {
-    id: 'cjgyqc5mnctb7z82',
+const sectionsConfig: Record<
+  'victimAssistance' | 'protectionGeneral',
+  Record<'id' | 'name' | 'path', string> & {Component: FC}
+> = {
+  protectionGeneral: {
+    id: 'protection: general',
+    name: '[Protection] General',
+    path: 'general-protection',
+    Component: GeneralProtection,
+  },
+  victimAssistance: {
+    id: 'protection: victim assistance',
     name: '[Protection] Victim Assistance',
     path: 'victim-assistance',
     Component: VictimAssistance,
@@ -143,7 +152,7 @@ const ActivityInfoSidebar = () => {
 }
 
 export const ActivityInfo = () => {
-  useReactRouterDefaultRoute(sectionsConfig.protection.path)
+  useReactRouterDefaultRoute(sectionsConfig.protectionGeneral.path)
 
   return (
     <Layout sidebar={<ActivityInfoSidebar />} title={appFeaturesIndex.activity_info.name}>
