@@ -18,11 +18,6 @@ export const SessionLoginForm = ({setSession}: {setSession: (_: UserSession) => 
   const {toastError} = useIpToast()
   const msal = useMsal()
 
-  const _login = useAsync(() =>
-    msal.instance.loginPopup({
-      scopes: ['User.Read'],
-    }),
-  )
   // useEffectFn(_login.error, _ => _ && toastError(m.youDontHaveAccess))
 
   const _saveSession = useAsync(
