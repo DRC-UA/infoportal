@@ -148,42 +148,40 @@ const buildVaRequest = (
       recordId,
       parentRecordId,
       fields: {
-        crjesiymkemx9z5q20: a['Project']
-          ? 'cki8ts9mms4u30z1ppl' + ':' + options['2.2_Projects'][a['Project']!]
-          : undefined,
+        crjesiymkemx9z5q20: a['Project'] ? 'cki8ts9mms4u30z1ppl' + ':' + options['2.2_Projects'][a['Project']!] : ALERT,
         cu0zp4hmfc8b4us14k: a['Indicator']
           ? 'c4oosjxmms4u30z1po8' + ':' + options['1.3_Indicators'][a['Indicator']!]
-          : undefined,
+          : ALERT,
         c6z4q95mlhxfad84yg: a['Implementing Partner']
           ? 'cezl1y0mms4u30z1poo' + ':' + options['2.1_Partners'][a['Implementing Partner']!]
-          : undefined,
+          : ALERT,
         cehz88xmna5yojalqe: a['Strategic Priority']
           ? 'c2oqsn2mms4u30z1pow' + ':' + options['1.2_Logframe_Entities'][a['Strategic Priority']!]
-          : undefined,
+          : ALERT,
         cq7shsqmkfa9qrnbja: a['Reporting Period']
           ? 'c9umo4zmms4u30z1pom' + ':' + options['Operation_Time_Periods'][a['Reporting Period']!]
-          : undefined,
+          : ALERT,
         cwrq9ajmmoyl5nm52s6: a['Cash: Restriction']
           ? 'cbrh939mmktje0r3q8i' + ':' + options['Global_Cash_Restriction'][a['Cash: Restriction']!]
           : undefined,
         c3qow3mkep7nv513us: a['Oblast (Admin1)']
           ? 'cgj58hlmms4u30z1ppf' + ':' + options['Operation_Location_Admin1'][a['Oblast (Admin1)']!]
-          : undefined,
+          : ALERT,
         cgz15q5mkep96by13uu: a['Raion (Admin2)']
           ? 'co2lbowmms4u30z1pp3' + ':' + options['Operation_Location_Admin2'][a['Raion (Admin2)']!]
-          : undefined,
+          : ALERT,
         c8k4ckgmnafypuoaoi: a['Hromada (Admin3)']
           ? 'csu4204mn7lzgxcz35' + ':' + options['Operation_Location_Admin3'][a['Hromada (Admin3)']!]
-          : undefined,
+          : ALERT,
         coi9s8pmnag4pv6aok: a['Settlement (Admin4)']
           ? 'cx60wmrmn7m1v6bz3c' + ':' + options['Operation_Location_Admin4'][a['Settlement (Admin4)']]
           : undefined,
         c1pbo1cmkepe9ny13v0: a['Population Group']
           ? 'c4zk43vmms4u30z1po7' + ':' + options['Operation_Population_Types'][a['Population Group']!]
-          : undefined,
+          : ALERT,
         cugmnitmkepcpni13uy: a['Age & Sex']
           ? 'c27ard5mms4u30z1pp7' + ':' + options['Operation_Combination_Ages_Sexes'][a['Age & Sex']!]
-          : undefined,
+          : ALERT,
         cti2dzimkepfjvs13v2: a['Disability']
           ? 'ccctq99mluvh4121byz' + ':' + options['Global_Disabilities'][a['Disability']!]
           : undefined,
@@ -192,6 +190,8 @@ const buildVaRequest = (
     },
   ])
 }
+
+const buildProtectionRequest = buildVaRequest
 
 const periodIdReference = {
   '2026-01': 'ceziu41mkuup1ew6',
@@ -310,6 +310,7 @@ export {
   aiProjectCode2Name,
   buildRequest,
   buildVaRequest,
+  buildProtectionRequest,
   drc2AiProjectCode,
   meta2AiAgeGender,
   periodIdReference,

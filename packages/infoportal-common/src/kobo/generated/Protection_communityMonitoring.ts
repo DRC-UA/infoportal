@@ -1036,6 +1036,94 @@ export namespace Protection_communityMonitoring {
     rcsk_gbv: string | undefined
     // gi/rpa_collective_sites_kii/rcsk_needed_support [text] 9. Required Support
     rcsk_needed_support: string | undefined
+    // gi/digital_literacy_fgd/dl_overall_assessment [text] Overall Assessment of the Training
+    dl_overall_assessment: string | undefined
+    // gi/digital_literacy_fgd/dl_practical_skills [text] Practical Skills
+    dl_practical_skills: string | undefined
+    // gi/digital_literacy_fgd/dl_digital_safety [text] Digital Safety
+    dl_digital_safety: string | undefined
+    // gi/digital_literacy_fgd/dl_accessibility_older_persons [text] Accessibility for Older Persons
+    dl_accessibility_older_persons: string | undefined
+    // gi/digital_literacy_fgd/dl_changes_after_training [text] Changes After the Training
+    dl_changes_after_training: string | undefined
+    // gi/digital_literacy_fgd/dl_needs_improvements [text] Needs and Improvements
+    dl_needs_improvements: string | undefined
+    // gi/digital_literacy_fgd/dl_accountability_protection [text] Accountability and Protection
+    dl_accountability_protection: string | undefined
+    // gi/digital_literacy_fgd/dl_recommendations [text] What recommendations do you have to improve digital literacy programs in the future?
+    dl_recommendations: string | undefined
+    // gi/ht_labor_exploitation_kii/ht_le_kii_context [text] Context and livelihood situation:
+    ht_le_kii_context: string | undefined
+    // gi/ht_labor_exploitation_kii/ht_le_kii_trends [text] Labour exploitation trends:
+    ht_le_kii_trends: string | undefined
+    // gi/ht_labor_exploitation_kii/ht_le_kii_migration [text] Movement and migration for work:
+    ht_le_kii_migration: string | undefined
+    // gi/ht_labor_exploitation_kii/ht_le_kii_indicators_trafficking [text] Indicators of trafficking:
+    ht_le_kii_indicators_trafficking: string | undefined
+    // gi/ht_labor_exploitation_kii/ht_le_kii_coping_availability [text] Coping and service availability:
+    ht_le_kii_coping_availability: string | undefined
+    // gi/ht_labor_exploitation_fgd/ht_le_fgd_introduction [text] Introduction
+    ht_le_fgd_introduction: string | undefined
+    // gi/ht_labor_exploitation_fgd/ht_le_fgd_awareness_trafficking [text] Awareness of trafficking and exploitation
+    ht_le_fgd_awareness_trafficking: string | undefined
+    // gi/ht_labor_exploitation_fgd/ht_le_fgd_labour_eploitation [text] Labour exploitation risks and working conditions
+    ht_le_fgd_labour_eploitation: string | undefined
+    // gi/ht_labor_exploitation_fgd/ht_le_fgd_movement_work [text] Movement for work and migration risks
+    ht_le_fgd_movement_work: string | undefined
+    // gi/ht_labor_exploitation_fgd/ht_le_fgd_indicators_trafficking [text] Indicators of trafficking/ help-seeking behaviours
+    ht_le_fgd_indicators_trafficking: string | undefined
+    // gi/ht_labor_exploitation_fgd/ht_le_fgd_cpm [text] Community Protection Mechanisms and accessing services
+    ht_le_fgd_cpm: string | undefined
+    // gi/ht_labor_exploitation_fgd/ht_le_fgd_aob [text] AOB
+    ht_le_fgd_aob: string | undefined
+    // gi/ht_sexual_exploitation_kii/ht_se_kii_context [text] Context and gendered vulnerabilities
+    ht_se_kii_context: string | undefined
+    // gi/ht_sexual_exploitation_kii/ht_se_kii_trafficking_form [text] Trafficking as a form of GBV:
+    ht_se_kii_trafficking_form: string | undefined
+    // gi/ht_sexual_exploitation_kii/ht_se_kii_pathways_trafficking [text] Pathways into trafficking and exploitation:
+    ht_se_kii_pathways_trafficking: string | undefined
+    // gi/ht_sexual_exploitation_kii/ht_se_kii_labour_exploitation [text] Labour exploitation:
+    ht_se_kii_labour_exploitation: string | undefined
+    // gi/ht_sexual_exploitation_kii/ht_se_kii_prevention [text] Prevention:
+    ht_se_kii_prevention: string | undefined
+    // gi/ht_sexual_exploitation_fgd/ht_se_fgd_community_context [text] Community context and gendered challenges:
+    ht_se_fgd_community_context: string | undefined
+    // gi/ht_sexual_exploitation_fgd/ht_se_fgd_labour_exploitation [text] Labour exploitation and unsafe work:
+    ht_se_fgd_labour_exploitation: string | undefined
+    // gi/ht_sexual_exploitation_fgd/ht_se_fgd_sexual_exploitation [text] Sexual exploitation and survival strategies:
+    ht_se_fgd_sexual_exploitation: string | undefined
+    // gi/ht_sexual_exploitation_fgd/ht_se_fgd_unsafe_work [text] Unsafe work and labour exploitation:
+    ht_se_fgd_unsafe_work: string | undefined
+    // gi/ht_sexual_exploitation_fgd/ht_se_fgd_help_seeking [text] Help-seeking behaviours:
+    ht_se_fgd_help_seeking: string | undefined
+    // gi/ht_sexual_exploitation_fgd/ht_se_fgd_aob [text] AOB
+    ht_se_fgd_aob: string | undefined
+    // gi/pfu_regarding_access_kii/pfu_ra_kii_history_transition [text] History and transition
+    pfu_ra_kii_history_transition: string | undefined
+    // gi/pfu_regarding_access_kii/pfu_ra_kii_announced_changes [text] Announced changes / proposals
+    pfu_ra_kii_announced_changes: string | undefined
+    // gi/pfu_regarding_access_kii/pfu_ra_kii_accessibility_implementation [text] Accessibility and implementation
+    pfu_ra_kii_accessibility_implementation: string | undefined
+    // gi/pfu_regarding_access_kii/pfu_ra_kii_monitoring [text] Monitoring / Feedback
+    pfu_ra_kii_monitoring: string | undefined
+    // gi/pfu_regarding_access_kii/pfu_ra_kii_protection_risks [text] Protection risks and unintended consequences
+    pfu_ra_kii_protection_risks: string | undefined
+    // gi/pfu_regarding_access_kii/pfu_ra_kii_recommendations [text] Recommendations
+    pfu_ra_kii_recommendations: string | undefined
+    // gi/pfu_regarding_access_fgd/pfu_ra_fgd_awareness [text] Awareness and Expectations
+    pfu_ra_fgd_awareness: string | undefined
+    // gi/pfu_regarding_access_fgd/pfu_ra_fgd_actual_experience [text] Actual Experience Receiving Payments
+    pfu_ra_fgd_actual_experience: string | undefined
+    // gi/pfu_regarding_access_fgd/pfu_ra_fgd_barriers [text] Barriers / Challenges
+    pfu_ra_fgd_barriers: string | undefined
+    // gi/pfu_regarding_access_fgd/pfu_ra_fgd_risks_inclusion [text] Risks to Inclusion and Protection
+    pfu_ra_fgd_risks_inclusion: string | undefined
+    // gi/pfu_regarding_access_fgd/pfu_ra_fgd_implementation [text] Implementation of Promised Improvements
+    pfu_ra_fgd_implementation: string | undefined
+    // gi/pfu_regarding_access_fgd/pfu_ra_fgd_strategies [text] Strategies for Overcoming Challenges / Providing Support
+    pfu_ra_fgd_strategies: string | undefined
+    // gi/pfu_regarding_access_fgd/pfu_ra_fgd_recommendations [text] Recommendations
+    pfu_ra_fgd_recommendations: string | undefined
     // gi/topic_all/main_healthcare_available_area_q_all [text] Question 1: (other topic)
     main_healthcare_available_area_q_all: string | undefined
     // gi/topic_all/main_healthcare_available_area_a_all [text] Answer 1: (other topic)
@@ -1380,6 +1468,10 @@ export namespace Protection_communityMonitoring {
       veteran_reintegration: `Veteran Reintegration: Assessing Local Preparedness`,
       rpa_idp_needs: `RPA IDP’s Needs`,
       rpa_collective_sites: `RPA – Collective sites`,
+      digital_literacy: `Digital Literacy`,
+      ht_labor_exploitation: `Human Trafficking and Labor Exploitation`,
+      ht_sexual_exploitation: `Human Trafficking and Sexual Exploitation`,
+      pfu_regarding_access: `The Pension Fund of Ukraine’s Authority Regarding Access to Social Benefits`,
       psychosocial_support: `Psychosocial Support`,
       other: `Other`,
     },

@@ -10,6 +10,7 @@ export {
   aiProjectCode2Name,
   buildRequest,
   buildVaRequest,
+  buildProtectionRequest,
   drc2AiProjectCode,
   meta2AiAgeGender,
   periodIdReference,

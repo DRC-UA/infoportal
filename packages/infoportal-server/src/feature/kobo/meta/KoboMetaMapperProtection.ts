@@ -51,6 +51,13 @@ export class KoboMetaMapperProtection {
             unspecified: undefined,
           })
           .default(() => undefined),
+        displacement: match(answer.informant_status)
+          .cases({
+            idp: Person.DisplacementStatus.Idp,
+            'non-displaced': Person.DisplacementStatus.NonDisplaced,
+            returnee: Person.DisplacementStatus.Returnee,
+          })
+          .default(undefined),
       })
     }
 

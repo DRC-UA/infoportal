@@ -5,7 +5,8 @@ import {groupBy, IKoboMeta, Person} from 'infoportal-common'
 import {
   ageSexMapper,
   aiPopulationGroupCode,
-  buildVaRequest,
+  ALERT,
+  buildProtectionRequest,
   meta2AiAgeGender,
   PROGRAM_PREFIXES,
   type Bundle,
@@ -48,7 +49,7 @@ const mapGeneralProtection = async (data: IKoboMeta[], periodString: string): Pr
                 project,
                 drcProgram,
                 periodString,
-                sp: 'PLHUKR26/SP4',
+                sp: 'PLHUKR26/SP1',
                 oblast,
                 raion,
                 hromada,
@@ -65,7 +66,7 @@ const mapGeneralProtection = async (data: IKoboMeta[], periodString: string): Pr
               ...(disability === 1 && {Disability: 'DSB' as const}),
               'Reached/Delivered - New Non-repeated (Manual)': record.length,
             } as const
-            const requestBody = buildVaRequest(activity, recordId)
+            const requestBody = buildProtectionRequest(activity, recordId)
 
             return {
               activity: labelActivities(activity, record),
@@ -80,9 +81,9 @@ const mapGeneralProtection = async (data: IKoboMeta[], periodString: string): Pr
                   return false
                 }
 
-                return !Object.values(fields).some(
-                  (value) => (value as string)?.includes && (value as string)?.includes('undefined'),
-                )
+                return !Object.values(fields).some((value) => {
+                  return (value as string)?.includes && (value as string)?.includes(ALERT)
+                })
               }),
             }
           },
