@@ -35,7 +35,7 @@ const Filters: FC<FiltersProps> = ({
         wrapperBox: slotProps?.wrapperBox,
       }}
       before={
-        <Box display="flex">
+        <Box display="flex" gap={1}>
           <Box>
             <Typography fontSize="small">{m.legal.aidDate}</Typography>
             <PeriodPicker

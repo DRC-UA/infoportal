@@ -11,13 +11,17 @@ import {Panel} from '@/shared/Panel'
 
 import {useIndividualAidData} from '../Dashboard/hooks'
 import Filters from '../Filters'
-import {useLegalFilterShape} from '../hooks'
 
 const Data: FC = () => {
-  const filterShape = useLegalFilterShape()
-
-  const {optionFilter, setOptionFilters, casePeriod, setCasePeriod, caseClosurePeriod, setCaseClosurePeriod} =
-    useIndividualAidData()
+  const {
+    optionFilter,
+    filterShape,
+    setOptionFilters,
+    casePeriod,
+    setCasePeriod,
+    caseClosurePeriod,
+    setCaseClosurePeriod,
+  } = useIndividualAidData()
 
   const dataFilter = (record: KoboMappedAnswer) => {
     const typedRecord = record as unknown as KoboMappedAnswer<Legal_individual_aid.T>
