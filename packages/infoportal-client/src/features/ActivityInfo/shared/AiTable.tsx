@@ -137,7 +137,7 @@ const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, loading}) 
         },
         {
           id: 'koboId',
-          type: 'string',
+          type: 'id',
           head: m.koboId,
           typeIcon: <DatatableHeadIconByType type="id" />,
           className: 'td-id',
