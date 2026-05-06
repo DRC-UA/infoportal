@@ -12,10 +12,12 @@ const General: FC = () => {
     [
       DrcProgram.CommunityLevelPm,
       DrcProgram.Counselling,
+      DrcProgram.LegalAwarenessRaising,
       DrcProgram.MHPSSActivities,
       DrcProgram.PGS,
       DrcProgram.ProtectionMonitoring,
       DrcProgram.ProtectionAccompaniment,
+      DrcProgram.ProtectionAwarenessRasing,
       DrcProgram.Referral,
     ],
     mapGeneralProtection,

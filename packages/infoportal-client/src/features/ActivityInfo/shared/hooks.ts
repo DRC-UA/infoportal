@@ -13,7 +13,6 @@ const useMetaFetcher = (
   drcPrograms: DrcProgram[],
   mapper: (data: IKoboMeta[], period: string) => Promise<Bundle[]>,
 ) => {
-  const today = new Date()
   const [data, setData] = useState<Bundle[]>([])
   const [columns, setColumns] = useState<Seq<{key: string; type: string}>>(seq([]))
   const [period, setPeriod] = useState<Partial<Period>>({
