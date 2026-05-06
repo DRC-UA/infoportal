@@ -136,14 +136,33 @@ export class KoboMetaMapperProtection {
 
   static readonly groupSession: MetaMapperInsert<KoboMetaOrigin<Protection_groupSession.T>> = (row) => {
     const answer = Protection_groupSession.map(row.answers)
-    const activity = match(answer.activity as any)
+    const legacyActivity = match(answer.activity as any)
       .cases({
         gpt: DrcProgram.AwarenessRaisingSession,
         pss: DrcProgram.AwarenessRaisingSession,
-        // let:
+        information_session: DrcProgram.AwarenessRaisingSession,
       })
-      .default(() => undefined)
-    if (!activity) return
+      .default(undefined)
+    const infoSessionTopic = answer.topic_information_session
+    const newActivity = match(answer.activity_conducted)
+      .cases({
+        information_session: match(infoSessionTopic)
+          .cases({
+            general_protection_topic: DrcProgram.ProtectionAwarenessRasing,
+            legal_general_protection: DrcProgram.LegalAwarenessRaising,
+            legal_hlp: DrcProgram.LegalAwarenessRaising,
+            legal_gbv: DrcProgram.LegalAwarenessRaising,
+            legal_business_issues: DrcProgram.LegalAwarenessRaising,
+            legal_va: DrcProgram.LegalAwarenessRaising,
+          })
+          .default(DrcProgram.ProtectionAwarenessRasing),
+      })
+      .default(undefined)
+
+    if (!legacyActivity && !newActivity) return
+
+    const activity = legacyActivity || newActivity
+
     // if (answer.activity as any === 'gbv' || answer.activity === 'pss' || answer.activity === 'other' || answer.activity === 'let') return
     const persons = KoboXmlMapper.Persons.protection_groupSession(answer)
     const project = match(answer.project)
@@ -165,6 +184,8 @@ export class KoboMetaMapperProtection {
         ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
         ukr000424_dutch_mfa: DrcProject['UKR-000424 Dutch MFA'],
         ukr000426_sdc: DrcProject['UKR-000426 SDC'],
+        ukr000461_uhf: DrcProject['UKR-000461 UHF'],
+        ukr000462_echo: DrcProject['UKR-000462 ECHO'],
       })
       .default(() => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project)))
 

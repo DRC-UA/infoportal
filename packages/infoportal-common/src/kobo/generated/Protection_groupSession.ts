@@ -249,6 +249,8 @@ export namespace Protection_groupSession {
       ukr000424_dutch_mfa: `UKR-000424 Dutch MFA`,
       ukr000426_sdc: `UKR-000426 SDC`,
       ukr000457_dmfa: `UKR-000457 DMFA`,
+      ukr000461_uhf: `UKR-000461 UHF`,
+      ukr000462_echo: `UKR-000462 ECHO`,
       ukr000284_bha: `UKR-000284 BHA`,
       ukr000298_novo: `UKR-000298 Novo Nordisk`,
       ukr000309_okf: `UKR-000309 OKF`,
