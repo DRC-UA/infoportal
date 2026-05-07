@@ -81,7 +81,7 @@ const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, loading}) 
                 <>
                   <AiSendBtn
                     loading={_submit.loading[recordId]}
-                    disabled={!submit || JSON.stringify(requestBody).includes('undefined')}
+                    disabled={!submit}
                     onClick={() => {
                       _submit.call(recordId, [requestBody]).catch(toastHttpError)
                     }}

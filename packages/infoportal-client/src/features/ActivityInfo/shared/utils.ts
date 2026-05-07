@@ -267,13 +267,13 @@ const ageSexReference = {
   'Elderly Men': 'c2ijk1rmbf0xwnfhwa > cblbhipmmat7nkg23',
 } as const
 
-const ageSexMapper = (group: keyof typeof ageSexReference) => {
+const ageSexGroup2AiCodeMapper = (group: keyof typeof ageSexReference) => {
   return match(group)
     .cases(ageSexReference)
     .default(ALERT as (typeof ageSexReference)[keyof typeof ageSexReference])
 }
 
-const meta2AiAgeGender = (age: number | undefined, gender: Person.Gender) => {
+const meta2AiAgeGenderGroups = (age: number | undefined, gender: Person.Gender) => {
   if (age === undefined) {
     return
   }
@@ -283,7 +283,7 @@ const meta2AiAgeGender = (age: number | undefined, gender: Person.Gender) => {
         [Person.Gender.Male]: 'Boys' as const,
         [Person.Gender.Female]: 'Girls' as const,
       })
-      .default(undefined)
+      .default('Girls' as const)
   }
   if (age >= 18 && age < 60) {
     return match(gender)
@@ -291,7 +291,7 @@ const meta2AiAgeGender = (age: number | undefined, gender: Person.Gender) => {
         [Person.Gender.Male]: 'Adult Men' as const,
         [Person.Gender.Female]: 'Adult Women' as const,
       })
-      .default(undefined)
+      .default('Adult Women' as const)
   }
   if (age >= 60) {
     return match(gender)
@@ -299,12 +299,12 @@ const meta2AiAgeGender = (age: number | undefined, gender: Person.Gender) => {
         [Person.Gender.Male]: 'Elderly Men' as const,
         [Person.Gender.Female]: 'Elderly Women' as const,
       })
-      .default(undefined)
+      .default('Elderly Women' as const)
   }
 }
 
 export {
-  ageSexMapper,
+  ageSexGroup2AiCodeMapper,
   ageSexReference,
   aiPopulationGroupCode,
   aiProjectCode2Name,
@@ -312,7 +312,7 @@ export {
   buildVaRequest,
   buildProtectionRequest,
   drc2AiProjectCode,
-  meta2AiAgeGender,
+  meta2AiAgeGenderGroups,
   periodIdReference,
   periodMapper,
 }
