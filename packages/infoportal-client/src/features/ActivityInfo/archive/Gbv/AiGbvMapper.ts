@@ -1,6 +1,15 @@
 import {match} from '@axanc/ts-utils'
 
-import {DrcProject, DrcSector, groupBy, IKoboMeta, KoboMetaStatus, Period, PeriodHelper} from 'infoportal-common'
+import {
+  DrcProgram,
+  DrcProject,
+  DrcSector,
+  groupBy,
+  IKoboMeta,
+  KoboMetaStatus,
+  Period,
+  PeriodHelper,
+} from 'infoportal-common'
 
 import {ApiSdk} from '@/core/sdk/server/ApiSdk'
 import {aiInvalidValueFlag, AiTable, checkAiValid} from '@/features/ActivityInfo/archive/shared/AiTable'
@@ -118,7 +127,7 @@ export namespace AiGbvMapper2 {
                 WGSS: 'Support through Women and Girls Safe Spaces (WGSS) > # of women and girls who participated in skill-building, recreational, or livelihood (including vocational education) activities in women and girls safe spaces',
                 DignityKits:
                   'Dignity kits to GBV survivors and those at-risk > # of women and girls at risk who received dignity kits',
-                AwarenessRaisingSession:
+                [DrcProgram.AwarenessRaisingSession]:
                   'Conduct awareness raising campaigns on GBV > # of individuals reached with awareness-raising activities and GBV-lifesaving information',
                 PSS: 'Psychosocial (mobile & static) support to GBV survivors and those at-risk > # of individuals provided with specialized individual or group GBV psychosocial support that meet GBViE minimum standards (not including recreational activities)',
                 CapacityBuilding:
