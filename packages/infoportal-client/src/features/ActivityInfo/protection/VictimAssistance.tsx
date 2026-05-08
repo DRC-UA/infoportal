@@ -12,7 +12,7 @@ const VictimAssistance: FC = () => {
 
   return (
     <Page loading={fetcher.loading} width="full">
-      <AiTable {...{data, columns, period, setPeriod, loading: false}} />
+      <AiTable {...{data, columns, period, setPeriod}} />
     </Page>
   )
 }

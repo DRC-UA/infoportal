@@ -134,6 +134,7 @@ export class KoboMetaMapperProtection {
     }
   }
 
+  // Awareness Rasing and Capacity Building Form
   static readonly groupSession: MetaMapperInsert<KoboMetaOrigin<Protection_groupSession.T>> = (row) => {
     const answer = Protection_groupSession.map(row.answers)
     const legacyActivity = match(answer.activity as any)

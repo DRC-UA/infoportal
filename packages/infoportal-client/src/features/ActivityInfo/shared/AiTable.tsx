@@ -26,7 +26,7 @@ import type {AiTableProps} from './types'
 
 const deduplicateKoboIds = (data: IKoboMeta[]): Array<string> => Array.from(new Set(data.map(({koboId}) => koboId)))
 
-const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, loading}) => {
+const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod}) => {
   const {session} = useSession()
   const {api} = useAppSettings()
   const {m} = useI18n()
@@ -38,7 +38,6 @@ const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, loading}) 
     <Datatable
       defaultLimit={100}
       showExportBtn
-      loading={loading}
       data={data}
       header={
         <Box sx={{display: 'flex', alignItems: 'center', flex: 1}}>

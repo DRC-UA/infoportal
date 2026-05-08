@@ -21,7 +21,6 @@ interface AiTableProps {
   }>
   period: Partial<Period>
   setPeriod: Dispatch<SetStateAction<Partial<Period>>>
-  loading: boolean
 }
 
 namespace AiType51aMonitoring {

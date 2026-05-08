@@ -7,18 +7,14 @@ import {AiTable, useMetaFetcher} from '@/features/ActivityInfo/shared'
 import {mapGeneralProtection} from './utils'
 import {Page} from '@/shared'
 
-const General: FC = () => {
+const Gbv: FC = () => {
   const {fetcher, data, columns, period, setPeriod} = useMetaFetcher(
     [
-      DrcProgram.CommunityLevelPm,
-      DrcProgram.Counselling,
-      DrcProgram.LegalAwarenessRaising,
-      DrcProgram.MHPSSActivities,
-      DrcProgram.PGS,
-      DrcProgram.ProtectionMonitoring,
-      DrcProgram.ProtectionAccompaniment,
-      DrcProgram.ProtectionAwarenessRasing,
-      DrcProgram.Referral,
+      DrcProgram.AwarenessRaisingSession,
+      DrcProgram.CapacityBuilding,
+      DrcProgram.DignityKits,
+      DrcProgram.WGSS,
+      DrcProgram.PSS,
     ],
     mapGeneralProtection,
   )
@@ -30,4 +26,4 @@ const General: FC = () => {
   )
 }
 
-export {General}
+export {Gbv}

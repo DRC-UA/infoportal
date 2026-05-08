@@ -9,7 +9,7 @@ import {appFeaturesIndex} from '@/features/appFeatureId'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
-import {VictimAssistance, General as GeneralProtection} from './protection'
+import {ProtectionVictimAssistance, ProtectionGeneral, ProtectionGbv} from './protection'
 
 import {AiChildProtection} from './archive/ChildProtection/AiChildProtection'
 import {AiGbv} from './archive/Gbv/AiGbv'
@@ -29,14 +29,20 @@ const sectionsConfig: Record<
   protectionGeneral: {
     id: 'protection: general',
     name: '[Protection] General',
-    path: 'general-protection',
-    Component: GeneralProtection,
+    path: 'protection-general',
+    Component: ProtectionGeneral,
   },
+  // protectionGbv: {
+  //   id: 'protection: gbv',
+  //   name: '[Protection] GBV',
+  //   path: 'protection-gbv',
+  //   Component: ProtectionGbv,
+  // },
   victimAssistance: {
     id: 'protection: victim assistance',
     name: '[Protection] Victim Assistance',
-    path: 'victim-assistance',
-    Component: VictimAssistance,
+    path: 'protection-victim-assistance',
+    Component: ProtectionVictimAssistance,
   },
 }
 

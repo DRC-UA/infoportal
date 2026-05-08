@@ -6,7 +6,6 @@ import {
   ageSexGroup2AiCodeMapper,
   ageSexReference,
   aiPopulationGroupCode,
-  ALERT,
   buildProtectionRequest,
   meta2AiAgeGenderGroups,
   PROGRAM_PREFIXES,
