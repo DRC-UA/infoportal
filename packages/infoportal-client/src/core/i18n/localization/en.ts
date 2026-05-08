@@ -1420,7 +1420,7 @@ const en = Object.freeze({
     },
     ...(() => {
       const activities_: Record<DrcProgram, string> = {
-        AwarenessRaisingSession: 'Awareness Raising',
+        [DrcProgram.AwarenessRaisingSession]: 'Awareness Raising',
         CapacityBuilding: 'Capacity-building',
         CaseManagement: 'Case Management',
         CashForEducation: 'Cash for Education',
@@ -1446,7 +1446,6 @@ const en = Object.freeze({
         'Legal Assistance: civil with docs': 'Legal Assistance: Civil with Documents',
         'Legal Assistance: HLP': 'Legal Assistance: HLP',
         'Legal Assistance: HLP with docs': 'Legal Assistance: HLP with Documents',
-        'Legal Awareness Raising': 'Legal Awareness Raising Session',
         'Legal Counselling': 'Legal Counselling',
         MHPSSActivities: 'MHPSS awareness session',
         MPCA: 'MPCA',
@@ -1456,7 +1455,6 @@ const en = Object.freeze({
         PSS: 'PSS',
         PeerToPeerTraining: 'Peer-to-peer training',
         'Protection Accompaniment': 'Protection Accompaniment',
-        'Protection Awareness Raising': 'Protection Awareness Raising Session',
         ProtectionMonitoring: 'Protection Monitoring',
         'PSS: Other': 'PSS: Other',
         'PSS Layer 2 Recreational Activity': 'PSS Layer 2 Recreational Activity',
