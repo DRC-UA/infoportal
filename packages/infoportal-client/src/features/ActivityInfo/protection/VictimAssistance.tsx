@@ -8,7 +8,10 @@ import {mapVictimAssistance} from './utils'
 import {Page} from '@/shared'
 
 const VictimAssistance: FC = () => {
-  const {fetcher, data, columns, period, setPeriod} = useMetaFetcher([DrcProgram.TIA], mapVictimAssistance)
+  const {fetcher, data, columns, period, setPeriod} = useMetaFetcher({
+    activities: [DrcProgram.TIA],
+    mapper: mapVictimAssistance,
+  })
 
   return (
     <Page loading={fetcher.loading} width="full">

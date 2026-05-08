@@ -70,7 +70,7 @@ export enum DrcSector {
 
 export enum DrcProgram {
   ACE = 'Commemorative/Community Event',
-  AwarenessRaisingSession = 'AwarenessRaisingSession',
+  AwarenessRaisingSession = 'Awareness Raising Session',
   CapacityBuilding = 'CapacityBuilding',
   CaseManagement = 'CaseManagement',
   CashForEducation = 'CashForEducation',
@@ -95,7 +95,6 @@ export enum DrcProgram {
   LegalAssistanceCivilDocs = 'Legal Assistance: civil with docs',
   LegalAssistanceHlp = 'Legal Assistance: HLP',
   LegalAssistanceHlpDocs = 'Legal Assistance: HLP with docs',
-  LegalAwarenessRaising = 'Legal Awareness Raising',
   LegalCounselling = 'Legal Counselling',
   LET = 'PSS Layer 2 Recreational Activity',
   MHPSSActivities = 'MHPSSActivities',
@@ -111,7 +110,6 @@ export enum DrcProgram {
   PSS = 'PSS',
   ProtectionMonitoring = 'ProtectionMonitoring',
   ProtectionAccompaniment = 'Protection Accompaniment',
-  ProtectionAwarenessRasing = 'Protection Awareness Raising',
   Referral = 'Referral',
   RSA = 'Recreational/Social Activity',
   SectoralCashForAgriculture = 'SectoralCashForAgriculture',
@@ -127,7 +125,7 @@ export enum DrcProgram {
 export class DrcSectorHelper {
   private static readonly byProgram: Record<DrcProgram, DrcSector[]> = {
     [DrcProgram.ACE]: [DrcSector.PSS],
-    AwarenessRaisingSession: [DrcSector.GeneralProtection, DrcSector.GBV], //	# of individuals reached with awareness-raising activities and GBV-life-saving information
+    [DrcProgram.AwarenessRaisingSession]: [DrcSector.GeneralProtection, DrcSector.GBV, DrcSector.Legal], //	# of individuals reached with awareness-raising activities and GBV-life-saving information
     CapacityBuilding: [DrcSector.GBV], //	# of non-GBV service providers trained on GBV prevention, risk mitigation and referrals that meet GBViE minimum standards
     CaseManagement: [DrcSector.GBV], //	# of individuals reached with humanitarian cash and voucher assistance for GBV case management and
     CashForEducation: [DrcSector.Education],
@@ -152,7 +150,6 @@ export class DrcSectorHelper {
     [DrcProgram.LegalAssistanceCivilDocs]: [DrcSector.Legal],
     [DrcProgram.LegalAssistanceHlp]: [DrcSector.Legal],
     [DrcProgram.LegalAssistanceHlpDocs]: [DrcSector.Legal],
-    [DrcProgram.LegalAwarenessRaising]: [DrcSector.Legal],
     [DrcProgram.LegalCounselling]: [DrcSector.Legal],
     [DrcProgram.LET]: [DrcSector.PSS],
     MHPSSActivities: [DrcSector.PSS],
@@ -164,7 +161,6 @@ export class DrcSectorHelper {
     PeerToPeerTraining: [DrcSector.PSS],
     [DrcProgram.ProtectionAccompaniment]: [DrcSector.GeneralProtection],
     ProtectionMonitoring: [DrcSector.GeneralProtection],
-    [DrcProgram.ProtectionAwarenessRasing]: [DrcSector.GeneralProtection],
     [DrcProgram.PSO]: [DrcSector.PSS],
     PsychologicalFirstAid: [DrcSector.PSS],
     PsychosocialGroupSession: [DrcSector.PSS],

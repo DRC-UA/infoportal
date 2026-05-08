@@ -149,20 +149,32 @@ export class KoboMetaMapperProtection {
       .cases({
         information_session: match(infoSessionTopic)
           .cases({
-            general_protection_topic: DrcProgram.ProtectionAwarenessRasing,
-            legal_general_protection: DrcProgram.LegalAwarenessRaising,
-            legal_hlp: DrcProgram.LegalAwarenessRaising,
-            legal_gbv: DrcProgram.LegalAwarenessRaising,
-            legal_business_issues: DrcProgram.LegalAwarenessRaising,
-            legal_va: DrcProgram.LegalAwarenessRaising,
+            general_protection_topic: DrcProgram.AwarenessRaisingSession,
+            legal_general_protection: DrcProgram.AwarenessRaisingSession,
+            legal_hlp: DrcProgram.AwarenessRaisingSession,
+            legal_gbv: DrcProgram.AwarenessRaisingSession,
+            legal_business_issues: DrcProgram.AwarenessRaisingSession,
+            legal_va: DrcProgram.AwarenessRaisingSession,
           })
-          .default(DrcProgram.ProtectionAwarenessRasing),
+          .default(DrcProgram.AwarenessRaisingSession),
       })
       .default(undefined)
 
     if (!legacyActivity && !newActivity) return
 
     const activity = legacyActivity || newActivity
+
+    const sector = ((newActivity) => {
+      if (newActivity && answer.topic_information_session === 'general_protection_topic') {
+        return DrcSector.GeneralProtection
+      }
+
+      if (newActivity) {
+        return DrcSector.Legal
+      }
+
+      return DrcSector.GeneralProtection
+    })(newActivity)
 
     // if (answer.activity as any === 'gbv' || answer.activity === 'pss' || answer.activity === 'other' || answer.activity === 'let') return
     const persons = KoboXmlMapper.Persons.protection_groupSession(answer)
@@ -205,8 +217,8 @@ export class KoboMetaMapperProtection {
       raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
-      sector: DrcSector.GeneralProtection,
-      activity: activity,
+      sector,
+      activity,
       persons,
       personsCount: persons.length,
       project: project ? [project] : [],

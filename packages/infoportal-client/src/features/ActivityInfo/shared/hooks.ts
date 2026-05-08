@@ -2,17 +2,24 @@ import {useEffect, useState} from 'react'
 import {seq, Obj, type Seq} from '@axanc/ts-utils'
 import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
 
-import {DrcProgram, IKoboMeta, KoboMetaStatus, type Period} from 'infoportal-common'
+import {DrcProgram, DrcSector, IKoboMeta, KoboMetaStatus, type Period} from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher} from '@/shared/hook/useFetcher'
 
 import {AiMapper, type Bundle} from '@/features/ActivityInfo/shared'
 
-const useMetaFetcher = (
-  drcPrograms: DrcProgram[],
-  mapper: (data: IKoboMeta[], period: string) => Promise<Bundle[]>,
-) => {
+const useMetaFetcher = ({
+  sectors,
+  activities,
+  status = [KoboMetaStatus.Committed],
+  mapper,
+}: {
+  sectors?: DrcSector[]
+  activities?: DrcProgram[]
+  status?: KoboMetaStatus[]
+  mapper: (data: IKoboMeta[], period: string) => Promise<Bundle[]>
+}) => {
   const [data, setData] = useState<Bundle[]>([])
   const [columns, setColumns] = useState<Seq<{key: string; type: string}>>(seq([]))
   const [period, setPeriod] = useState<Partial<Period>>({
@@ -24,8 +31,9 @@ const useMetaFetcher = (
     async () =>
       await api.koboMeta
         .search({
-          activities: drcPrograms,
-          status: [KoboMetaStatus.Committed],
+          sectors,
+          activities,
+          status,
           ...period,
         })
         .then(async ({data}) => {
