@@ -188,7 +188,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   protection_gbv_cm_safety_assessment_planning: '[GBV CM] Safety Assessment and Planning tool',
   protection_gbv_capacity_needs_assessment_2026: '[GBV] KII for the GBV Capacity-Building Needs Assessment 2026',
   protection_gbv_concepts_pre_post: '[GBV] Concepts - Pre and post-test',
-  protection_groupSession: '[Protection] Group Session (aka Awareness & Capacity-building)',
+  protection_groupSession: '[Protection] Awareness & Capacity-building',
   protection_hhs1: '[Protection] HHS (old v1)',
   protection_hhs2: '[Protection] HHS v2 (deprecated)',
   protection_hhs2_1: '[Protection] HHS v2',
