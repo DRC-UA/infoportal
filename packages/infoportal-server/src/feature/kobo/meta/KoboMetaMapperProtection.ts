@@ -164,12 +164,12 @@ export class KoboMetaMapperProtection {
 
     const activity = legacyActivity || newActivity
 
-    const sector = ((newActivity) => {
-      if (newActivity && answer.topic_information_session === 'general_protection_topic') {
-        return DrcSector.GeneralProtection
-      }
-
-      if (newActivity) {
+    const sector = ((_activity) => {
+      if (
+        _activity &&
+        answer.topic_information_session !== undefined &&
+        ['legal_hlp', 'legal_gbv', 'legal_business_issues', 'legal_va'].includes(answer.topic_information_session)
+      ) {
         return DrcSector.Legal
       }
 
