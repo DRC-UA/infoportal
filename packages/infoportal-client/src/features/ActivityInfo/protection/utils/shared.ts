@@ -133,9 +133,9 @@ const pickIndicatorByProgram = ({activity, sector}: {activity: DrcProgram | unde
     .cases({
       [DrcSector.GeneralProtection]: match(activity)
         .cases({
+          [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
           [DrcProgram.CommunityLevelPm]: 'CLPRO/CA2/IN3', // CLPRO/CA2/IN3 - # of individuals who participated in  community-based protection activities (PRT)
           [DrcProgram.Counselling]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
-          [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
           [DrcProgram.MHPSSActivities]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
           [DrcProgram.PGS]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
           [DrcProgram.PSS]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
@@ -147,7 +147,7 @@ const pickIndicatorByProgram = ({activity, sector}: {activity: DrcProgram | unde
         .default(activity) as AiType51aMonitoring.Type['Indicator'],
       [DrcSector.Legal]: match(activity)
         .cases({
-          // MEMO: use on the same GENERAL PROTECTION page to produce uniqe key values set on ActivityInfo!!!
+          [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
           [DrcProgram.LegalAid]: 'CLPRO/CA5/IN2', // CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)
           [DrcProgram.LegalCounselling]: 'CLPRO/CA5/IN2', // CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)
           [DrcProgram.LegalAssistanceCivil]: 'CLPRO/CA5/IN2', // CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)
@@ -164,10 +164,10 @@ const pickIndicatorByProgram = ({activity, sector}: {activity: DrcProgram | unde
       [DrcSector.GBV]: match(activity)
         .cases({
           [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA23/IN2', // CLPRO/CA23/IN2 - # of affected-people directly receiving targeted,  life-saving information and guidance to prevent and respond to GBV Risks via  mobile teams
+          [DrcProgram.CapacityBuilding]: 'CLPRO/CA30/IN1', // CLPRO/CA30/IN1 - # of non-GBV humanitarian  or frontline workers across sectors receiving capacity strengthening,  including training, refresher courses, orientations or other support,
           [DrcProgram.DignityKits]: 'CLPRO/CA26/IN1', // CLPRO/CA26/IN1 - # of affected women and  girls supported through provision of dignity kits
           [DrcProgram.WGSS]: 'CLPRO/CA28/IN1', // CLPRO/CA28/IN1 - # of affected women and  girls supported through skill-building , recreational, or livelihood  (including vocatinal education) activities
           // [DrcProgram.PSS]: '',
-          [DrcProgram.CapacityBuilding]: 'CLPRO/CA30/IN1', // CLPRO/CA30/IN1 - # of non-GBV humanitarian  or frontline workers across sectors receiving capacity strengthening,  including training, refresher courses, orientations or other support,
         })
         .default(activity) as AiType51aMonitoring.Type['Indicator'],
     })

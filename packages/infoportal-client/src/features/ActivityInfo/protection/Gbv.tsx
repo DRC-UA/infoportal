@@ -5,7 +5,7 @@ import {DrcProgram, DrcSector} from 'infoportal-common'
 import {AiTable, useMetaFetcher} from '@/features/ActivityInfo/shared'
 import {Page} from '@/shared'
 
-import {mapProtection} from './utils'
+import {mapMakerProtection} from './utils'
 
 const Gbv: FC = () => {
   const {fetcher, data, columns, period, setPeriod} = useMetaFetcher({
@@ -17,7 +17,7 @@ const Gbv: FC = () => {
       DrcProgram.WGSS,
       // DrcProgram.PSS,
     ],
-    mapper: mapProtection,
+    mapper: mapMakerProtection('drcgbv'),
   })
 
   return (
