@@ -15,7 +15,7 @@ import {
 
 import {labelActivities, pickIndicatorByProgram, sharedActivityProps} from './shared'
 
-const mapGeneralProtection = async (data: IKoboMeta[], periodString: string): Promise<Bundle[]> => {
+const mapProtection = async (data: IKoboMeta[], periodString: string): Promise<Bundle[]> => {
   let i = 0
 
   const dataFlatByPersonWithIndicator = data.flatMap(
@@ -72,8 +72,7 @@ const mapGeneralProtection = async (data: IKoboMeta[], periodString: string): Pr
             '0' | '1',
           ]
         const [_namePart, isoPart] = (settlement as string).split('_')
-        const settlementIso = isoPart ?? settlement
-
+        const settlementIso = isoPart?.toUpperCase() ?? settlement
         const recordId = `${PROGRAM_PREFIXES.drcprot}${periodString.replace('-', '')}${String(++i).padStart(5, '0')}`
         const activity = {
           Indicator: indicator,
@@ -110,4 +109,4 @@ const mapGeneralProtection = async (data: IKoboMeta[], periodString: string): Pr
   ).then((result) => result.flat())
 }
 
-export {mapGeneralProtection}
+export {mapProtection}
