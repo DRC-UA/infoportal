@@ -1,6 +1,6 @@
 import {match} from '@axanc/ts-utils'
 
-import {groupBy, IKoboMeta, Person} from 'infoportal-common'
+import {DrcSector, groupBy, IKoboMeta, Person} from 'infoportal-common'
 
 import {
   ageSexGroup2AiCodeMapper,
@@ -44,7 +44,7 @@ const mapVictimAssistance = async (data: IKoboMeta[], periodString: string): Pro
           finalTransform: (record, [displacement, ageGender, disability]) => {
             const recordId = `${PROGRAM_PREFIXES.drcva}${periodString.replace('-', '')}${String(++i).padStart(5, '0')}`
             const activity = {
-              Indicator: pickIndicatorByProgram(drcProgram),
+              Indicator: pickIndicatorByProgram({activity: drcProgram, sector: DrcSector.VA}),
               ...sharedActivityProps({
                 project,
                 periodString,

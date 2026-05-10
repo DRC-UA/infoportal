@@ -23,7 +23,7 @@ import {AiSnfi} from './archive/Snfi/AiSnfi'
 import {AiWash} from './archive/Wash/AiWash'
 
 const sectionsConfig: Record<
-  'victimAssistance' | 'protectionGeneral',
+  'victimAssistance' | 'protectionGeneral' | 'protectionGbv',
   Record<'id' | 'name' | 'path', string> & {Component: FC}
 > = {
   protectionGeneral: {
@@ -32,12 +32,12 @@ const sectionsConfig: Record<
     path: 'protection-general',
     Component: ProtectionGeneral,
   },
-  // protectionGbv: {
-  //   id: 'protection: gbv',
-  //   name: '[Protection] GBV',
-  //   path: 'protection-gbv',
-  //   Component: ProtectionGbv,
-  // },
+  protectionGbv: {
+    id: 'protection: gbv',
+    name: '[Protection] GBV',
+    path: 'protection-gbv',
+    Component: ProtectionGbv,
+  },
   victimAssistance: {
     id: 'protection: victim assistance',
     name: '[Protection] Victim Assistance',

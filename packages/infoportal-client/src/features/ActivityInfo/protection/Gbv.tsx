@@ -3,9 +3,9 @@ import type {FC} from 'react'
 import {DrcProgram, DrcSector} from 'infoportal-common'
 
 import {AiTable, useMetaFetcher} from '@/features/ActivityInfo/shared'
-
-import {mapGeneralProtection} from './utils'
 import {Page} from '@/shared'
+
+import {mapGbv} from './utils'
 
 const Gbv: FC = () => {
   const {fetcher, data, columns, period, setPeriod} = useMetaFetcher({
@@ -15,9 +15,9 @@ const Gbv: FC = () => {
       DrcProgram.CapacityBuilding,
       DrcProgram.DignityKits,
       DrcProgram.WGSS,
-      DrcProgram.PSS,
+      // DrcProgram.PSS,
     ],
-    mapper: mapGeneralProtection,
+    mapper: mapGbv,
   })
 
   return (

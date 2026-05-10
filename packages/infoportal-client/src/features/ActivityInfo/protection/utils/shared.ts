@@ -1,7 +1,7 @@
 import {match, type Seq} from '@axanc/ts-utils'
 import {UaLocation} from 'ua-location'
 
-import {DrcProgram, DrcProject, IKoboMeta, insideObjectOut, Person} from 'infoportal-common'
+import {DrcProgram, DrcProject, DrcSector, IKoboMeta, insideObjectOut, Person} from 'infoportal-common'
 
 import {
   ageSexGroup2AiCodeMapper,
@@ -73,6 +73,14 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
                   'CLPRO/CA1/IN3 - # of people who received other forms of general  social support and services (inc. social accompaniment, home-based care,  social rehabilitation) (PRT)',
                 'CLPRO/CA2/IN3':
                   'CLPRO/CA2/IN3 - # of individuals who participated in  community-based protection activities (PRT)',
+                'CLPRO/CA23/IN2':
+                  'CLPRO/CA23/IN2 - # of affected-people directly receiving targeted,  life-saving information and guidance to prevent and respond to GBV Risks via  mobile teams',
+                'CLPRO/CA26/IN1':
+                  'CLPRO/CA26/IN1 - # of affected women and  girls supported through provision of dignity kits',
+                'CLPRO/CA28/IN1':
+                  'CLPRO/CA28/IN1 - # of affected women and  girls supported through skill-building , recreational, or livelihood  (including vocatinal education) activities',
+                'CLPRO/CA30/IN1':
+                  'CLPRO/CA30/IN1 - # of non-GBV humanitarian  or frontline workers across sectors receiving capacity strengthening,  including training, refresher courses, orientations or other support',
               })
               .default(`${ALERT} ${value}`),
           ],
@@ -115,22 +123,45 @@ const sharedActivityProps = ({
   } as const
 }
 
-const pickIndicatorByProgram = (drcProgram: DrcProgram | undefined) => {
-  return match(drcProgram)
+const pickIndicatorByProgram = ({activity, sector}: {activity: DrcProgram | undefined; sector: DrcSector}) => {
+  return match(sector)
     .cases({
-      [DrcProgram.CommunityLevelPm]: 'CLPRO/CA2/IN3', // CLPRO/CA2/IN3 - # of individuals who participated in  community-based protection activities (PRT)
-      [DrcProgram.Counselling]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
-      [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
-      [DrcProgram.MHPSSActivities]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
-      [DrcProgram.PGS]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
-      [DrcProgram.PSS]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
-      [DrcProgram.PIS]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
-      [DrcProgram.ProtectionAccompaniment]: 'CLPRO/CA1/IN3', // CLPRO/CA1/IN3 - # of people who received other forms of general  social support and services (inc. social accompaniment, home-based care,  social rehabilitation) (PRT)
-      [DrcProgram.ProtectionMonitoring]: 'CLPRO/CA12/IN1', // CLPRO/CA12/IN1 - # of people affected participating in monitoring of  protection situations
-      [DrcProgram.Referral]: 'CLPRO/CA8/IN1', // CLPRO/CA8/IN1 - # of people affected at  risk who were safely referred and connected to appropriate services in  response (PRT)
-      [DrcProgram.TIA]: 'CLPRO/CA14/IN1', // CLPRO/CA14/IN1 - # of children and caregivers who have been affected by landmine or other explosive weapons received by prevention and/or survivor assistance interventions (cash and vouchers)
+      [DrcSector.GeneralProtection]: match(activity)
+        .cases({
+          [DrcProgram.CommunityLevelPm]: 'CLPRO/CA2/IN3', // CLPRO/CA2/IN3 - # of individuals who participated in  community-based protection activities (PRT)
+          [DrcProgram.Counselling]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
+          [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
+          [DrcProgram.MHPSSActivities]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
+          [DrcProgram.PGS]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
+          [DrcProgram.PSS]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
+          [DrcProgram.PIS]: 'CLPRO/CA7/IN1', // CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities
+          [DrcProgram.ProtectionAccompaniment]: 'CLPRO/CA1/IN3', // CLPRO/CA1/IN3 - # of people who received other forms of general  social support and services (inc. social accompaniment, home-based care,  social rehabilitation) (PRT)
+          [DrcProgram.ProtectionMonitoring]: 'CLPRO/CA12/IN1', // CLPRO/CA12/IN1 - # of people affected participating in monitoring of  protection situations
+          [DrcProgram.Referral]: 'CLPRO/CA8/IN1', // CLPRO/CA8/IN1 - # of people affected at  risk who were safely referred and connected to appropriate services in  response (PRT)
+        })
+        .default(ALERT) as AiType51aMonitoring.Type['Indicator'],
+      [DrcSector.Legal]: match(activity)
+        .cases({
+          // MEMO: use on the same GENERAL PROTECTION page to produce uniqe key values set on ActivityInfo!!!
+          [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
+        })
+        .default(ALERT) as AiType51aMonitoring.Type['Indicator'],
+      [DrcSector.VA]: match(activity)
+        .cases({
+          [DrcProgram.TIA]: 'CLPRO/CA14/IN1', // CLPRO/CA14/IN1 - # of children and caregivers who have been affected by landmine or other explosive weapons received by prevention and/or survivor assistance interventions (cash and vouchers)
+        })
+        .default(ALERT) as AiType51aMonitoring.Type['Indicator'],
+      [DrcSector.GBV]: match(activity)
+        .cases({
+          [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA23/IN2', // CLPRO/CA23/IN2 - # of affected-people directly receiving targeted,  life-saving information and guidance to prevent and respond to GBV Risks via  mobile teams
+          [DrcProgram.DignityKits]: 'CLPRO/CA26/IN1', // CLPRO/CA26/IN1 - # of affected women and  girls supported through provision of dignity kits
+          [DrcProgram.WGSS]: 'CLPRO/CA28/IN1', // CLPRO/CA28/IN1 - # of affected women and  girls supported through skill-building , recreational, or livelihood  (including vocatinal education) activities
+          // [DrcProgram.PSS]: '',
+          [DrcProgram.CapacityBuilding]: 'CLPRO/CA30/IN1', // CLPRO/CA30/IN1 - # of non-GBV humanitarian  or frontline workers across sectors receiving capacity strengthening,  including training, refresher courses, orientations or other support,
+        })
+        .default(activity) as AiType51aMonitoring.Type['Indicator'],
     })
-    .default(ALERT) as AiType51aMonitoring.Type['Indicator']
+    .default(undefined)
 }
 
 export {labelActivities, pickIndicatorByProgram, sharedActivityProps}

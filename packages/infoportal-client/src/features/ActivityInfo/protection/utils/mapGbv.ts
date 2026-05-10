@@ -15,7 +15,7 @@ import {
 
 import {labelActivities, pickIndicatorByProgram, sharedActivityProps} from './shared'
 
-const mapGeneralProtection = async (data: IKoboMeta[], periodString: string): Promise<Bundle[]> => {
+const mapGbv = async (data: IKoboMeta[], periodString: string): Promise<Bundle[]> => {
   let i = 0
 
   const dataFlatByPersonWithIndicator = data.flatMap(
@@ -110,4 +110,4 @@ const mapGeneralProtection = async (data: IKoboMeta[], periodString: string): Pr
   ).then((result) => result.flat())
 }
 
-export {mapGeneralProtection}
+export {mapGbv}

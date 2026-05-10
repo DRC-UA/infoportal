@@ -3,13 +3,13 @@ import type {FC} from 'react'
 import {DrcProgram, DrcSector} from 'infoportal-common'
 
 import {AiTable, useMetaFetcher} from '@/features/ActivityInfo/shared'
+import {Page} from '@/shared'
 
 import {mapGeneralProtection} from './utils'
-import {Page} from '@/shared'
 
 const General: FC = () => {
   const {fetcher, data, columns, period, setPeriod} = useMetaFetcher({
-    sectors: [DrcSector.GeneralProtection],
+    sectors: [DrcSector.GeneralProtection, DrcSector.Legal, DrcSector.GBV],
     activities: [
       DrcProgram.AwarenessRaisingSession,
       DrcProgram.CommunityLevelPm,
