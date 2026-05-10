@@ -216,6 +216,7 @@ const drc2AiProjectCode = (project?: DrcProject): AiType51aMonitoring.Type['Proj
       [DrcProject['UKR-000426 SDC']]: '00255',
       [DrcProject['UKR-000424 Dutch MFA']]: '00261',
       [DrcProject['UKR-000423 ECHO4']]: '00139',
+      [DrcProject['UKR-000399 SDC3']]: '00253',
       [DrcProject['UKR-000397 GFFO']]: '00260',
       [DrcProject['UKR-000388 BHA']]: '00251',
       [DrcProject['UKR-000372 ECHO3']]: '00262',
@@ -229,20 +230,20 @@ const drc2AiProjectCode = (project?: DrcProject): AiType51aMonitoring.Type['Proj
 const aiProjectCode2Name = (project?: string): string => {
   return match(project)
     .cases({
-      '00139': 'HUKR26-CWG-SHL-PRO-00139 - UKR-000423 ECHO',
-      '00251': 'HUKR26-PRO-FSL-00251 - UKR-000388 BHA',
-      '00252': 'HUKR26-CWG-SHL-00252 - UKR-000441 UHF',
-      '00253': 'HUKR26-SHL-CWG-00253 - UKR-000399 SDC',
-      '00254': 'HUKR26-FSL-PRO-00254 - UKR-000350 SIDA',
-      '00255': 'HUKR26-PRO-FSL-00255 - UKR-000426 SDC',
-      '00256': 'HUKR26-CWG-PRO-SHL-WSH-FSL-00256 - UKR-000457 DMFA',
-      '00257': 'HUKR26-FSL-SHL-PRO-00257 - UKR-000355 DMFA',
-      '00258': 'HUKR26-CWG-SHL-00258 - UKR-000385 Pooled Funds',
-      '00259': 'HUKR26-PRO-SHL-CWG-00259 - UKR-000270 Pooled Funds',
-      '00260': 'HUKR26-PRO-00260 - UKR-000397 GFFO',
-      '00261': 'HUKR26-PRO-FSL-00261 - UKR-000424 Dutch MFA',
-      '00262': 'HUKR26-PRO-00262 - UKR-000372 ECHO',
       '00263': 'HUKR26-PRO-SHL-CWG-WSH-00263 - UKR-000461 UHF',
+      '00262': 'HUKR26-PRO-00262 - UKR-000372 ECHO',
+      '00261': 'HUKR26-PRO-FSL-00261 - UKR-000424 Dutch MFA',
+      '00260': 'HUKR26-PRO-00260 - UKR-000397 GFFO',
+      '00259': 'HUKR26-PRO-SHL-CWG-00259 - UKR-000270 Pooled Funds',
+      '00258': 'HUKR26-CWG-SHL-00258 - UKR-000385 Pooled Funds',
+      '00257': 'HUKR26-FSL-SHL-PRO-00257 - UKR-000355 DMFA',
+      '00256': 'HUKR26-CWG-PRO-SHL-WSH-FSL-00256 - UKR-000457 DMFA',
+      '00255': 'HUKR26-PRO-FSL-00255 - UKR-000426 SDC',
+      '00254': 'HUKR26-FSL-PRO-00254 - UKR-000350 SIDA',
+      '00253': 'HUKR26-SHL-CWG-00253 - UKR-000399 SDC',
+      '00252': 'HUKR26-CWG-SHL-00252 - UKR-000441 UHF',
+      '00251': 'HUKR26-PRO-FSL-00251 - UKR-000388 BHA',
+      '00139': 'HUKR26-CWG-SHL-PRO-00139 - UKR-000423 ECHO',
     } as const)
     .default(`${ALERT} ${project}`)
 }

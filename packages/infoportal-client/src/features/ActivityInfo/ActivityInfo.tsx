@@ -9,7 +9,7 @@ import {appFeaturesIndex} from '@/features/appFeatureId'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
-import {ProtectionVictimAssistance, ProtectionGeneral, ProtectionGbv} from './protection'
+import {ProtectionVictimAssistance, ProtectionGeneral, ProtectionGbv, ProtectionLegal} from './protection'
 
 import {AiChildProtection} from './archive/ChildProtection/AiChildProtection'
 import {AiGbv} from './archive/Gbv/AiGbv'
@@ -23,7 +23,7 @@ import {AiSnfi} from './archive/Snfi/AiSnfi'
 import {AiWash} from './archive/Wash/AiWash'
 
 const sectionsConfig: Record<
-  'victimAssistance' | 'protectionGeneral' | 'protectionGbv',
+  'victimAssistance' | 'protectionGeneral' | 'protectionGbv' | 'protectionLegal',
   Record<'id' | 'name' | 'path', string> & {Component: FC}
 > = {
   protectionGeneral: {
@@ -37,6 +37,12 @@ const sectionsConfig: Record<
     name: '[Protection] GBV',
     path: 'protection-gbv',
     Component: ProtectionGbv,
+  },
+  protectionLegal: {
+    id: 'protection: legal',
+    name: '[Protection] Legal',
+    path: 'protection-legal',
+    Component: ProtectionLegal,
   },
   victimAssistance: {
     id: 'protection: victim assistance',

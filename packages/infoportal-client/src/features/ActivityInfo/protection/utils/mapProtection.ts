@@ -15,10 +15,10 @@ import {
 
 import {labelActivities, pickIndicatorByProgram, sharedActivityProps} from './shared'
 
-const mapProtection = async (data: IKoboMeta[], periodString: string): Promise<Bundle[]> => {
+const mapProtection = async ({data, period}: {data: IKoboMeta[]; period: string}): Promise<Bundle[]> => {
   let i = 0
 
-  const dataFlatByPersonWithIndicator = data.flatMap(
+  const dataWithIndicator = data.flatMap(
     ({persons, displacement: _dropTopLevelDisplacement, activity, sector, ...rest}) => {
       return persons?.map((person) => ({
         ...rest,
@@ -46,7 +46,7 @@ const mapProtection = async (data: IKoboMeta[], periodString: string): Promise<B
 
   return await Promise.all(
     groupBy({
-      data: dataFlatByPersonWithIndicator,
+      data: dataWithIndicator,
       groups: [
         {by: ({project}) => project[0]},
         {by: ({indicator}) => indicator!},
@@ -73,12 +73,12 @@ const mapProtection = async (data: IKoboMeta[], periodString: string): Promise<B
           ]
         const [_namePart, isoPart] = (settlement as string).split('_')
         const settlementIso = isoPart?.toUpperCase() ?? settlement
-        const recordId = `${PROGRAM_PREFIXES.drcprot}${periodString.replace('-', '')}${String(++i).padStart(5, '0')}`
+        const recordId = `${PROGRAM_PREFIXES.drcprot}${period.replace('-', '')}${String(++i).padStart(5, '0')}`
         const activity = {
           Indicator: indicator,
           ...sharedActivityProps({
             project,
-            periodString,
+            period,
             sp: 'PLHUKR26/SP1',
             oblast,
             raion,

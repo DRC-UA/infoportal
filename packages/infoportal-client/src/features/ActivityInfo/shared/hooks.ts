@@ -18,7 +18,7 @@ const useMetaFetcher = ({
   sectors?: DrcSector[]
   activities?: DrcProgram[]
   status?: KoboMetaStatus[]
-  mapper: (data: IKoboMeta[], period: string) => Promise<Bundle[]>
+  mapper: (args: {data: IKoboMeta[]; period: string}) => Promise<Bundle[]>
 }) => {
   const [data, setData] = useState<Bundle[]>([])
   const [columns, setColumns] = useState<Seq<{key: string; type: string}>>(seq([]))
@@ -37,7 +37,7 @@ const useMetaFetcher = ({
           ...period,
         })
         .then(async ({data}) => {
-          setData(await mapper(data, AiMapper.getPeriodStr(period)))
+          setData(await mapper({data, period: AiMapper.getPeriodStr(period)}))
         }),
   )
 

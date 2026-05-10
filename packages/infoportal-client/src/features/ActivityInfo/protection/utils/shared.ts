@@ -81,6 +81,10 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
                   'CLPRO/CA28/IN1 - # of affected women and  girls supported through skill-building , recreational, or livelihood  (including vocatinal education) activities',
                 'CLPRO/CA30/IN1':
                   'CLPRO/CA30/IN1 - # of non-GBV humanitarian  or frontline workers across sectors receiving capacity strengthening,  including training, refresher courses, orientations or other support',
+                'CLPRO/CA5/IN2':
+                  'CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)',
+                'CLPRO/CA5/IN3':
+                  'CLPRO/CA5/IN3 - # of people affected  receiving house, land and property support (PRT)',
               })
               .default(`${ALERT} ${value}`),
           ],
@@ -92,7 +96,7 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
 
 const sharedActivityProps = ({
   project,
-  periodString,
+  period,
   sp,
   oblast: oblastQuery,
   raion: raionQuery,
@@ -100,12 +104,12 @@ const sharedActivityProps = ({
   settlement,
 }: {
   project: DrcProject
-  periodString: string
+  period: string
   sp: 'PLHUKR26/SP1' | 'PLHUKR26/SP2' | 'PLHUKR26/SP3' | 'PLHUKR26/SP4'
   oblast: string
   raion: string
   hromada: string
-  settlement: string
+  settlement: string | undefined
 }) => {
   const oblast = UaLocation.Oblast.findByName(oblastQuery)
   const raion = oblast?.raions?.find(({en}) => en === raionQuery)
@@ -115,11 +119,12 @@ const sharedActivityProps = ({
     Project: drc2AiProjectCode(project),
     'Implementing Partner': 'DRC - Danish Refugee Council',
     'Strategic Priority': sp,
-    'Reporting Period': periodMapper(periodString),
+    'Reporting Period': periodMapper(period),
     'Oblast (Admin1)': oblast?.iso as AiType51aMonitoring.Type['Oblast (Admin1)'],
     'Raion (Admin2)': raion?.iso as AiType51aMonitoring.Type['Raion (Admin2)'],
     'Hromada (Admin3)': hromada?.iso as AiType51aMonitoring.Type['Hromada (Admin3)'],
-    'Settlement (Admin4)': settlement,
+    // Weirdly settlement may === 'null' (string) in Individual Legal Aid form:
+    ...(settlement && settlement === 'null' ? undefined : {'Settlement (Admin4)': settlement}),
   } as const
 }
 
@@ -139,18 +144,23 @@ const pickIndicatorByProgram = ({activity, sector}: {activity: DrcProgram | unde
           [DrcProgram.ProtectionMonitoring]: 'CLPRO/CA12/IN1', // CLPRO/CA12/IN1 - # of people affected participating in monitoring of  protection situations
           [DrcProgram.Referral]: 'CLPRO/CA8/IN1', // CLPRO/CA8/IN1 - # of people affected at  risk who were safely referred and connected to appropriate services in  response (PRT)
         })
-        .default(ALERT) as AiType51aMonitoring.Type['Indicator'],
+        .default(activity) as AiType51aMonitoring.Type['Indicator'],
       [DrcSector.Legal]: match(activity)
         .cases({
           // MEMO: use on the same GENERAL PROTECTION page to produce uniqe key values set on ActivityInfo!!!
-          [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA6/IN2', // CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)
+          [DrcProgram.LegalAid]: 'CLPRO/CA5/IN2', // CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)
+          [DrcProgram.LegalCounselling]: 'CLPRO/CA5/IN2', // CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)
+          [DrcProgram.LegalAssistanceCivil]: 'CLPRO/CA5/IN2', // CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)
+          [DrcProgram.LegalAssistanceCivilDocs]: 'CLPRO/CA5/IN2', // CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)
+          [DrcProgram.LegalAssistanceHlp]: 'CLPRO/CA5/IN3', // CLPRO/CA5/IN3 - # of people affected  receiving house, land and property support (PRT)
+          [DrcProgram.LegalAssistanceHlpDocs]: 'CLPRO/CA5/IN3', // CLPRO/CA5/IN3 - # of people affected  receiving house, land and property support (PRT)
         })
-        .default(ALERT) as AiType51aMonitoring.Type['Indicator'],
+        .default(activity) as AiType51aMonitoring.Type['Indicator'],
       [DrcSector.VA]: match(activity)
         .cases({
           [DrcProgram.TIA]: 'CLPRO/CA14/IN1', // CLPRO/CA14/IN1 - # of children and caregivers who have been affected by landmine or other explosive weapons received by prevention and/or survivor assistance interventions (cash and vouchers)
         })
-        .default(ALERT) as AiType51aMonitoring.Type['Indicator'],
+        .default(activity) as AiType51aMonitoring.Type['Indicator'],
       [DrcSector.GBV]: match(activity)
         .cases({
           [DrcProgram.AwarenessRaisingSession]: 'CLPRO/CA23/IN2', // CLPRO/CA23/IN2 - # of affected-people directly receiving targeted,  life-saving information and guidance to prevent and respond to GBV Risks via  mobile teams
