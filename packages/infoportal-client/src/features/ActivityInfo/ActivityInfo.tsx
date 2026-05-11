@@ -10,6 +10,7 @@ import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
 import {ProtectionVictimAssistance, ProtectionGeneral, ProtectionGbv, ProtectionLegal} from './protection'
+import {Shelter} from './shelter'
 
 import {AiChildProtection} from './archive/ChildProtection/AiChildProtection'
 import {AiGbv} from './archive/Gbv/AiGbv'
@@ -23,7 +24,7 @@ import {AiSnfi} from './archive/Snfi/AiSnfi'
 import {AiWash} from './archive/Wash/AiWash'
 
 const sectionsConfig: Record<
-  'victimAssistance' | 'protectionGeneral' | 'protectionGbv' | 'protectionLegal',
+  'victimAssistance' | 'protectionGeneral' | 'protectionGbv' | 'protectionLegal' | 'shelter',
   Record<'id' | 'name' | 'path', string> & {Component: FC}
 > = {
   protectionGeneral: {
@@ -49,6 +50,12 @@ const sectionsConfig: Record<
     name: '[Protection] Victim Assistance',
     path: 'protection-victim-assistance',
     Component: ProtectionVictimAssistance,
+  },
+  shelter: {
+    id: 'shelter',
+    name: '[Shelter]',
+    path: 'shelter',
+    Component: Shelter,
   },
 }
 

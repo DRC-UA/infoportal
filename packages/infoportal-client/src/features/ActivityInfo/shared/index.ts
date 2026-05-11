@@ -12,7 +12,11 @@ export {
   buildVaRequest,
   buildProtectionRequest,
   drc2AiProjectCode,
+  labelActivities,
   meta2AiAgeGenderGroups,
   periodIdReference,
   periodMapper,
+  pickIndicatorByProgram,
+  sharedActivityProps,
+  sp1Oblasts,
 } from './utils'

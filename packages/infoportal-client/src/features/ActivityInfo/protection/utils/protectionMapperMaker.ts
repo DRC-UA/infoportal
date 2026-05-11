@@ -7,12 +7,14 @@ import {
   ageSexReference,
   aiPopulationGroupCode,
   buildProtectionRequest,
+  labelActivities,
   meta2AiAgeGenderGroups,
+  pickIndicatorByProgram,
+  sharedActivityProps,
+  sp1Oblasts,
   type Bundle,
   type AiType51aMonitoring,
 } from '@/features/ActivityInfo/shared'
-
-import {labelActivities, pickIndicatorByProgram, sharedActivityProps, sp1Oblasts} from './shared'
 
 const protectionMapperMaker =
   (prefix: string) =>
