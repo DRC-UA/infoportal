@@ -15,34 +15,48 @@ import {
   type AiType51aMonitoring,
 } from '@/features/ActivityInfo/shared'
 
+const cashRelatedIndicators = ['CLSHL/CA4/IN3', 'CLSHL/CA6/IN3', 'CLSHL/CA6/IN5', 'CLSHL/CA4/IN9']
+const repairRelatedIndicators = [
+  'CLSHL/CA4/IN4', // CLSHL/CA4/IN4 - # of people supported with  light repairs (in-kind)
+  'CLSHL/CA4/IN6', // CLSHL/CA4/IN6 - # of people supported with  medium repairs (in-kind)
+  'CLSHL/CA4/IN8', // CLSHL/CA4/IN8 - # of people supported with  heavy repairs (in-kind)
+  'CLSHL/CA4/IN3', // CLSHL/CA4/IN3 - # of people supported with light repairs (cash and  vouchers)
+  'CLSHL/CA4/IN9', // CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)
+  'CLSHL/CA4/IN10', // CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)
+]
+
 const shelterMapper = async ({data, period}: {data: IKoboMeta[]; period: string}): Promise<Bundle[]> => {
   let i = 0
 
   const dataWithIndicator = data.flatMap(
     ({persons, displacement: _dropTopLevelDisplacement, activity, sector, ...rest}) => {
+      const indicator = pickIndicatorByProgram({
+        activity: match(activity)
+          .cases({
+            [DrcProgram.ShelterRepair]: match(rest.tags?.damageLevel)
+              .cases({
+                [ShelterTaPriceLevel.Heavy]: ShelterTaPriceLevel.Medium,
+                [ShelterTaPriceLevel.Medium]: ShelterTaPriceLevel.Medium,
+                [ShelterTaPriceLevel.Light]: ShelterTaPriceLevel.Light,
+              })
+              .default(ShelterTaPriceLevel.Medium),
+            [DrcProgram.ShelterCommonSpacesRepair]: match(rest.modality)
+              .cases({Cash: 'common-spaces-cash'})
+              .default('common-spaces-in-kind'),
+          })
+          .default(activity),
+        sector,
+      })
+
       return persons?.map((person) => ({
         ...rest,
         ...person,
         activity,
         sector,
-        ageGender: meta2AiAgeGenderGroups(person.age, person.gender!),
-        indicator: pickIndicatorByProgram({
-          activity: match(activity)
-            .cases({
-              [DrcProgram.ShelterRepair]: match(rest.tags?.damageLevel)
-                .cases({
-                  [ShelterTaPriceLevel.Heavy]: ShelterTaPriceLevel.Medium,
-                  [ShelterTaPriceLevel.Medium]: ShelterTaPriceLevel.Medium,
-                  [ShelterTaPriceLevel.Light]: ShelterTaPriceLevel.Light,
-                })
-                .default(ShelterTaPriceLevel.Medium),
-              [DrcProgram.ShelterCommonSpacesRepair]: match(rest.modality)
-                .cases({Cash: 'common-spaces-cash'})
-                .default('common-spaces-in-kind'),
-            })
-            .default(activity),
-          sector,
-        }),
+        ageGender: repairRelatedIndicators.includes(indicator!)
+          ? undefined
+          : meta2AiAgeGenderGroups(person.age, person.gender!),
+        indicator,
         populationGroup: match(person.displacement)
           .cases({
             [Person.DisplacementStatus.Idp]: Person.DisplacementStatus.Idp,
@@ -89,6 +103,7 @@ const shelterMapper = async ({data, period}: {data: IKoboMeta[]; period: string}
         const recordId = `drcsnfi${period.replace('-', '')}${String(++i).padStart(5, '0')}`
         const activity = {
           Indicator: indicator,
+          ...(cashRelatedIndicators.includes(indicator) && ({'Cash: Restriction': 'RES'} as const)),
           ...sharedActivityProps({
             project,
             period,
@@ -99,8 +114,8 @@ const shelterMapper = async ({data, period}: {data: IKoboMeta[]; period: string}
             settlement: settlementIso,
           }),
           'Population Group': aiPopulationGroupCode[populationGroup as 'Idp' | 'NonDisplaced'],
-          'Age & Sex': ageSexGroup2AiCodeMapper(ageGender),
-          ...(disability === '1' && {Disability: 'DSB' as const}),
+          ...((ageGender as string) !== 'undefined' && {'Age & Sex': ageSexGroup2AiCodeMapper(ageGender)}),
+          ...(disability === '1' && ({Disability: 'DSB'} as const)),
           'Reached/Delivered - New Non-repeated (Manual)': record.length,
         } as const
 
