@@ -27,16 +27,20 @@ const shelterMapper = async ({data, period}: {data: IKoboMeta[]; period: string}
         sector,
         ageGender: meta2AiAgeGenderGroups(person.age, person.gender!),
         indicator: pickIndicatorByProgram({
-          activity:
-            activity === DrcProgram.ShelterRepair
-              ? match(rest.tags?.damageLevel)
-                  .cases({
-                    [ShelterTaPriceLevel.Heavy]: ShelterTaPriceLevel.Medium,
-                    [ShelterTaPriceLevel.Medium]: ShelterTaPriceLevel.Medium,
-                    [ShelterTaPriceLevel.Light]: ShelterTaPriceLevel.Light,
-                  })
-                  .default(ShelterTaPriceLevel.Medium)
-              : activity,
+          activity: match(activity)
+            .cases({
+              [DrcProgram.ShelterRepair]: match(rest.tags?.damageLevel)
+                .cases({
+                  [ShelterTaPriceLevel.Heavy]: ShelterTaPriceLevel.Medium,
+                  [ShelterTaPriceLevel.Medium]: ShelterTaPriceLevel.Medium,
+                  [ShelterTaPriceLevel.Light]: ShelterTaPriceLevel.Light,
+                })
+                .default(ShelterTaPriceLevel.Medium),
+              [DrcProgram.ShelterCommonSpacesRepair]: match(rest.modality)
+                .cases({Cash: 'common-spaces-cash'})
+                .default('common-spaces-in-kind'),
+            })
+            .default(activity),
           sector,
         }),
         populationGroup: match(person.displacement)

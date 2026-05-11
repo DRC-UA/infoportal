@@ -436,7 +436,7 @@ const pickIndicatorByProgram = ({
   activity,
   sector,
 }: {
-  activity: DrcProgram | ShelterTaPriceLevel | undefined
+  activity: DrcProgram | ShelterTaPriceLevel | string | undefined
   sector: DrcSector
 }) => {
   return match(sector)
@@ -487,6 +487,8 @@ const pickIndicatorByProgram = ({
           [ShelterTaPriceLevel.Heavy]: 'CLSHL/CA4/IN8', // CLSHL/CA4/IN8 - # of people supported with  heavy repairs (in-kind)
           [DrcProgram.CashForRepair]: 'CLSHL/CA4/IN3', // CLSHL/CA4/IN3 - # of people supported with light repairs (cash and  vouchers)
           [DrcProgram.CashForUtilities]: 'CLSHL/CA6/IN3', // CLSHL/CA6/IN3 - # of people supported with  cash for utilities (cash and vouchers)
+          'common-spaces-cash': 'CLSHL/CA4/IN9', // CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)
+          'common-spaces-in-kind': 'CLSHL/CA4/IN10', // CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)
         })
         .default(activity) as AiType51aMonitoring.Type['Indicator'],
     })
