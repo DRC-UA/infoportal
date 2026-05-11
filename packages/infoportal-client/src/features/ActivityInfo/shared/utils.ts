@@ -223,12 +223,15 @@ const drc2AiProjectCode = (project?: DrcProject): AiType51aMonitoring.Type['Proj
     .cases({
       [DrcProject['UKR-000461 UHF']]: '00263',
       [DrcProject['UKR-000457 DMFA']]: '00256',
+      [DrcProject['UKR-000441 UHF10']]: '00252',
+      [DrcProject['UKR-000441 UHF11']]: '00252',
       [DrcProject['UKR-000426 SDC']]: '00255',
       [DrcProject['UKR-000424 Dutch MFA']]: '00261',
       [DrcProject['UKR-000423 ECHO4']]: '00139',
       [DrcProject['UKR-000399 SDC3']]: '00253',
       [DrcProject['UKR-000397 GFFO']]: '00260',
       [DrcProject['UKR-000388 BHA']]: '00251',
+      [DrcProject['UKR-000385 Pooled Funds']]: '00258',
       [DrcProject['UKR-000372 ECHO3']]: '00262',
       [DrcProject['UKR-000355 Danish MFA']]: '00257',
       [DrcProject['UKR-000350 SIDA']]: '00254',
@@ -389,6 +392,10 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
                 'CLSHL/CA4/IN8': 'CLSHL/CA4/IN8 - # of people supported with  heavy repairs (in-kind)',
                 'CLSHL/CA4/IN3': 'CLSHL/CA4/IN3 - # of people supported with light repairs (cash and  vouchers)',
                 'CLSHL/CA6/IN3': 'CLSHL/CA6/IN3 - # of people supported with  cash for utilities (cash and vouchers)',
+                'CLSHL/CA6/IN5': 'CLSHL/CA6/IN5 - # of people supported with winter energy (cash and  vouchers)',
+                'CLSHL/CA4/IN9':
+                  'CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)',
+                'CLSHL/CA4/IN10': 'CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)',
               })
               .default(`${ALERT} ${value}`),
           ],
@@ -487,6 +494,7 @@ const pickIndicatorByProgram = ({
           [ShelterTaPriceLevel.Heavy]: 'CLSHL/CA4/IN8', // CLSHL/CA4/IN8 - # of people supported with  heavy repairs (in-kind)
           [DrcProgram.CashForRepair]: 'CLSHL/CA4/IN3', // CLSHL/CA4/IN3 - # of people supported with light repairs (cash and  vouchers)
           [DrcProgram.CashForUtilities]: 'CLSHL/CA6/IN3', // CLSHL/CA6/IN3 - # of people supported with  cash for utilities (cash and vouchers)
+          [DrcProgram.CashForFuel]: 'CLSHL/CA6/IN5', // CLSHL/CA6/IN5 - # of people supported with winter energy (cash and  vouchers)
           'common-spaces-cash': 'CLSHL/CA4/IN9', // CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)
           'common-spaces-in-kind': 'CLSHL/CA4/IN10', // CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)
         })
