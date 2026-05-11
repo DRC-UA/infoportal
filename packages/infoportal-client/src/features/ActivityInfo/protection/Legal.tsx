@@ -5,7 +5,7 @@ import {DrcProgram, DrcSector} from 'infoportal-common'
 import {AiTable, useMetaFetcher} from '@/features/ActivityInfo/shared'
 import {Page} from '@/shared'
 
-import {mapMakerProtection} from './utils'
+import {protectionMapperMaker} from './utils'
 
 const Legal: FC = () => {
   const {fetcher, data, columns, period, setPeriod} = useMetaFetcher({
@@ -17,7 +17,7 @@ const Legal: FC = () => {
       DrcProgram.LegalAssistanceCivilDocs,
       DrcProgram.LegalCounselling,
     ],
-    mapper: mapMakerProtection('drclegal'),
+    mapper: protectionMapperMaker('drclegal'),
   })
 
   return (

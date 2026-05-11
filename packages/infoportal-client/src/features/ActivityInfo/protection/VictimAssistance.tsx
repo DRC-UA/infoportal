@@ -5,12 +5,12 @@ import {DrcProgram} from 'infoportal-common'
 import {AiTable, useMetaFetcher} from '@/features/ActivityInfo/shared'
 import {Page} from '@/shared'
 
-import {mapMakerProtection} from './utils'
+import {protectionMapperMaker} from './utils'
 
 const VictimAssistance: FC = () => {
   const {fetcher, data, columns, period, setPeriod} = useMetaFetcher({
     activities: [DrcProgram.TIA],
-    mapper: mapMakerProtection('drcva'),
+    mapper: protectionMapperMaker('drcva'),
   })
 
   return (

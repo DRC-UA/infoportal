@@ -5,7 +5,7 @@ import {DrcProgram, DrcSector} from 'infoportal-common'
 import {AiTable, useMetaFetcher} from '@/features/ActivityInfo/shared'
 import {Page} from '@/shared'
 
-import {mapMakerProtection} from './utils'
+import {protectionMapperMaker} from './utils'
 
 const General: FC = () => {
   const {fetcher, data, columns, period, setPeriod} = useMetaFetcher({
@@ -20,7 +20,7 @@ const General: FC = () => {
       DrcProgram.ProtectionAccompaniment,
       DrcProgram.Referral,
     ],
-    mapper: mapMakerProtection('drcprot'),
+    mapper: protectionMapperMaker('drcprot'),
   })
 
   return (

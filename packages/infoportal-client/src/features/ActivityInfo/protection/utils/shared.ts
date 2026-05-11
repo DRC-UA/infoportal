@@ -24,6 +24,8 @@ const checkForReplacement = ({before, after}: {before: string | undefined; after
   return before !== after ? `${after} (replacement for original "${before}")` : after
 }
 
+const sp1Oblasts = ['Khersonska', 'Mykolaivska', 'Zaporizka', 'Dnipropetrovska', 'Kharkivska', 'Sumska', 'Chernihivska']
+
 const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Person.Details>): Bundle['activity'] => {
   return Object.fromEntries(
     Object.entries(activity).map(([key, value]) =>
@@ -109,7 +111,7 @@ const sharedActivityProps = ({
   oblast: string
   raion: string
   hromada: string
-  settlement: string | undefined
+  settlement: string
 }) => {
   const oblast = UaLocation.Oblast.findByName(oblastQuery)
   const raion = oblast?.raions?.find(({en}) => en === raionQuery)
@@ -124,7 +126,7 @@ const sharedActivityProps = ({
     'Raion (Admin2)': raion?.iso as AiType51aMonitoring.Type['Raion (Admin2)'],
     'Hromada (Admin3)': hromada?.iso as AiType51aMonitoring.Type['Hromada (Admin3)'],
     // Weirdly settlement may === 'null' (string) in Individual Legal Aid form:
-    ...(settlement && settlement === 'null' ? undefined : {'Settlement (Admin4)': settlement}),
+    ...(!['null', 'undefined'].includes(settlement) && {'Settlement (Admin4)': settlement}),
   } as const
 }
 
@@ -174,4 +176,4 @@ const pickIndicatorByProgram = ({activity, sector}: {activity: DrcProgram | unde
     .default(undefined)
 }
 
-export {labelActivities, pickIndicatorByProgram, sharedActivityProps}
+export {labelActivities, pickIndicatorByProgram, sharedActivityProps, sp1Oblasts}

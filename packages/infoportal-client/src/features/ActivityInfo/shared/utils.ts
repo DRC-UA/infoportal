@@ -63,8 +63,12 @@ const buildRequest = (a: AiType51aMonitoring.Type, recordId: string, parentRecor
         ct87ocrmnaggzd0aor: a['Health Facility']
           ? 'cdzw5ygmn7pu5g4191' + ':' + options['Operation_Location_Sites_Health_Facilities'][a['Health Facility']!]
           : undefined,
+        cir2x9xmoa7bc1dpk: a['Health Facility (Other)'],
         cgmnxb3mnaglzgiaot: a['Transit Centre']
           ? 'cbogrn0mn7q3eq64lx' + ':' + options['Operation_Location_Sites_Transit_Centres'][a['Transit Centre']!]
+          : undefined,
+        c6dowjymnagw1rmap2: a['Health Site Type']
+          ? 'c4cmmf8mn7ylwsi1m9r' + ':' + options['Operation_Site_Types_Health'][a['Health Site Type']!]
           : undefined,
         c1pbo1cmkepe9ny13v0: a['Population Group']
           ? 'c4zk43vmms4u30z1po7' + ':' + options['Operation_Population_Types'][a['Population Group']!]
@@ -87,9 +91,6 @@ const buildRequest = (a: AiType51aMonitoring.Type, recordId: string, parentRecor
           ? 'cvmtdismn83088h1bi' +
             ':' +
             options['Operation_Health_Accreditation_Types'][a['Health Accreditation Type']!]
-          : undefined,
-        c6dowjymnagw1rmap2: a['Health Site Type']
-          ? 'c4cmmf8mn7ylwsi1m9r' + ':' + options['Operation_Site_Types_Health'][a['Health Site Type']!]
           : undefined,
         cvllgmemnahcq78ap4: a['WASH Recipient Type']
           ? 'c4or1ofmn80qpcw1m9x' + ':' + options['Operation_Recipient_Types_WASH'][a['WASH Recipient Type']!]

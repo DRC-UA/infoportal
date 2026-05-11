@@ -25,7 +25,6 @@ interface AiTableProps {
 
 namespace AiType51aMonitoring {
   type Opt<T extends keyof typeof options> = keyof (typeof options)[T]
-
   export interface Type {
     Project: Opt<'2.2_Projects'>
     Indicator: Opt<'1.3_Indicators'>
@@ -38,7 +37,11 @@ namespace AiType51aMonitoring {
     'Oblast (Admin1)': Opt<'Operation_Location_Admin1'>
     'Raion (Admin2)': Opt<'Operation_Location_Admin2'>
     'Hromada (Admin3)': Opt<'Operation_Location_Admin3'>
-    'Settlement (Admin4)'?: Opt<'Operation_Location_Admin4'>
+    /**
+    ⚠️ Typing is omitted due to the large number of choices.
+    ➡️ Directly use label from AiType51a_project_indicator_monitoring_disaggregation.options['Operation_Location_Admin4']
+  */
+    'Settlement (Admin4)'?: string
     'Collective Site'?: Opt<'Operation_Location_Sites_Collective_Sites'>
     /**
     ⚠️ Typing is omitted due to the large number of choices.
@@ -46,14 +49,15 @@ namespace AiType51aMonitoring {
   */
     'Education Facility'?: string
     'Health Facility': Opt<'Operation_Location_Sites_Health_Facilities'>
+    'Health Facility (Other)': string
     'Transit Centre'?: Opt<'Operation_Location_Sites_Transit_Centres'>
+    'Health Site Type': Opt<'Operation_Site_Types_Health'>
     'Population Group': Opt<'Operation_Population_Types'>
     'Age & Sex': Opt<'Operation_Combination_Ages_Sexes'>
     Disability?: Opt<'Global_Disabilities'>
     'Education Learning Modality'?: Opt<'Operation_Education_Learning_Modalities'>
     'Education Level'?: Opt<'Operation_Site_Types_Education'>
     'Health Accreditation Type'?: Opt<'Operation_Health_Accreditation_Types'>
-    'Health Site Type': Opt<'Operation_Site_Types_Health'>
     'WASH Recipient Type'?: Opt<'Operation_Recipient_Types_WASH'>
     'Cash: Conditionality Type'?: Opt<'Operation_Cash_Conditionality_Types'>
     'Cash: Delivery'?: Opt<'Operation_Cash_Delivery'>
@@ -79,9 +83,135 @@ namespace AiType51aMonitoring {
     'Kilocalories (External Calc)'?: number
   }
 
+  export const buildRequest = (a: Type, recordId: string, parentRecordId: string | null = null) => {
+    return [
+      {
+        formId: 'co9uppxmms4u30z1ppd',
+        recordId,
+        parentRecordId,
+        fields: {
+          crjesiymkemx9z5q20: a['Project']
+            ? 'cki8ts9mms4u30z1ppl' + ':' + options['2.2_Projects'][a['Project']!]
+            : undefined,
+          cu0zp4hmfc8b4us14k: a['Indicator']
+            ? 'c4oosjxmms4u30z1po8' + ':' + options['1.3_Indicators'][a['Indicator']!]
+            : undefined,
+          c6z4q95mlhxfad84yg: a['Implementing Partner']
+            ? 'cezl1y0mms4u30z1poo' + ':' + options['2.1_Partners'][a['Implementing Partner']!]
+            : undefined,
+          cqd43w0mna8oo3q3tu1: a['Donor']
+            ? 'cezl1y0mms4u30z1poo' + ':' + options['2.1_Partners'][a['Donor']!]
+            : undefined,
+          ckken0mmmoy70rn52rx: a['Global Sector']
+            ? 'c16dgctmluvh4121c0f' + ':' + options['G2.4C_Global_Clusters_Sectors'][a['Global Sector']!]
+            : undefined,
+          cehz88xmna5yojalqe: a['Strategic Priority']
+            ? 'c2oqsn2mms4u30z1pow' + ':' + options['1.2_Logframe_Entities'][a['Strategic Priority']!]
+            : undefined,
+          cq7shsqmkfa9qrnbja: a['Reporting Period']
+            ? 'c9umo4zmms4u30z1pom' + ':' + options['Operation_Time_Periods'][a['Reporting Period']!]
+            : undefined,
+          cwrq9ajmmoyl5nm52s6: a['Cash: Restriction']
+            ? 'cbrh939mmktje0r3q8i' + ':' + options['Global_Cash_Restriction'][a['Cash: Restriction']!]
+            : undefined,
+          c3qow3mkep7nv513us: a['Oblast (Admin1)']
+            ? 'cgj58hlmms4u30z1ppf' + ':' + options['Operation_Location_Admin1'][a['Oblast (Admin1)']!]
+            : undefined,
+          cgz15q5mkep96by13uu: a['Raion (Admin2)']
+            ? 'co2lbowmms4u30z1pp3' + ':' + options['Operation_Location_Admin2'][a['Raion (Admin2)']!]
+            : undefined,
+          c8k4ckgmnafypuoaoi: a['Hromada (Admin3)']
+            ? 'csu4204mn7lzgxcz35' + ':' + options['Operation_Location_Admin3'][a['Hromada (Admin3)']!]
+            : undefined,
+          coi9s8pmnag4pv6aok: a['Settlement (Admin4)']
+            ? 'cx60wmrmn7m1v6bz3c' + ':' + options['Operation_Location_Admin4'][a['Settlement (Admin4)']!]
+            : undefined,
+          cez268lmnag6fd0aom: a['Collective Site']
+            ? 'cd5wyikmn7q402a3s7d' + ':' + options['Operation_Location_Sites_Collective_Sites'][a['Collective Site']!]
+            : undefined,
+          cayuombmnageb6qaoq: a['Education Facility']
+            ? 'csbdgetmn7pxpa34lw' +
+              ':' +
+              options['Operation_Location_Sites_Education_Facilities'][a['Education Facility']!]
+            : undefined,
+          ct87ocrmnaggzd0aor: a['Health Facility']
+            ? 'cdzw5ygmn7pu5g4191' + ':' + options['Operation_Location_Sites_Health_Facilities'][a['Health Facility']!]
+            : undefined,
+          cir2x9xmoa7bc1dpk: a['Health Facility (Other)'],
+          cgmnxb3mnaglzgiaot: a['Transit Centre']
+            ? 'cbogrn0mn7q3eq64lx' + ':' + options['Operation_Location_Sites_Transit_Centres'][a['Transit Centre']!]
+            : undefined,
+          c6dowjymnagw1rmap2: a['Health Site Type']
+            ? 'c4cmmf8mn7ylwsi1m9r' + ':' + options['Operation_Site_Types_Health'][a['Health Site Type']!]
+            : undefined,
+          c1pbo1cmkepe9ny13v0: a['Population Group']
+            ? 'c4zk43vmms4u30z1po7' + ':' + options['Operation_Population_Types'][a['Population Group']!]
+            : undefined,
+          cugmnitmkepcpni13uy: a['Age & Sex']
+            ? 'c27ard5mms4u30z1pp7' + ':' + options['Operation_Combination_Ages_Sexes'][a['Age & Sex']!]
+            : undefined,
+          cti2dzimkepfjvs13v2: a['Disability']
+            ? 'ccctq99mluvh4121byz' + ':' + options['Global_Disabilities'][a['Disability']!]
+            : undefined,
+          ce596f1mnagr2h7aoy: a['Education Learning Modality']
+            ? 'ci5fi3rmn81wduq1ma0' +
+              ':' +
+              options['Operation_Education_Learning_Modalities'][a['Education Learning Modality']!]
+            : undefined,
+          cs56snrmnag9an5aoo: a['Education Level']
+            ? 'cmmgqgsmn80kxdz4ou' + ':' + options['Operation_Site_Types_Education'][a['Education Level']!]
+            : undefined,
+          c42j285mnagsqpfap0: a['Health Accreditation Type']
+            ? 'cvmtdismn83088h1bi' +
+              ':' +
+              options['Operation_Health_Accreditation_Types'][a['Health Accreditation Type']!]
+            : undefined,
+          cvllgmemnahcq78ap4: a['WASH Recipient Type']
+            ? 'c4or1ofmn80qpcw1m9x' + ':' + options['Operation_Recipient_Types_WASH'][a['WASH Recipient Type']!]
+            : undefined,
+          cwl8s4mmmoyy3ys52sd: a['Cash: Conditionality Type']
+            ? 'clquca5mms4u30z1ppw' +
+              ':' +
+              options['Operation_Cash_Conditionality_Types'][a['Cash: Conditionality Type']!]
+            : undefined,
+          cnj5mjfmmoz1aj652sf: a['Cash: Delivery']
+            ? 'cu1jf6vmms4u30z1pos' + ':' + options['Operation_Cash_Delivery'][a['Cash: Delivery']!]
+            : undefined,
+          cf1cc5dmnahgbcqap5: a['Cash: Pilot Type']
+            ? 'c9n8iebmn81ghfd4ox' + ':' + options['Operation_Cash_Pilot_Types'][a['Cash: Pilot Type']!]
+            : undefined,
+          cj9v8eemnahqdr2ap8: a['Cash: Recipient Type']
+            ? 'c5m0u6wmn8126kp3t85' + ':' + options['Operation_Recipient_Types_CVA'][a['Cash: Recipient Type']!]
+            : undefined,
+          cyz6phumnagpa03aow: a['Payment Frequency']
+            ? 'ctc2o7bmn835c0l4oy' + ':' + options['Operation_Payment_Frequencies'][a['Payment Frequency']!]
+            : undefined,
+          c4ybaccmnipzzvu1683: a['Frequency']
+            ? 'csq26brmniptm5q391' + ':' + options['Operation_Food_Frequencies'][a['Frequency']!]
+            : undefined,
+          caods5gmmozb2yy52sj: a['Project Target (External Calc)'],
+          czfu9tnmj0jm5hvfv: a['Previous Periodic Measure (External Calc)'],
+          c200nr6mj0j6i89fq: a['Reached/Delivered - Total incl. Repeated (Manual)'],
+          c27qt22mj0jhkhhfr: a['Reached/Delivered - Total incl. Repeated (External Calc)'],
+          ctdr9mymncwrd3g5b7: a['Reached/Delivered - New Non-repeated (Manual)'],
+          cqs5ekwmncwru275b8: a['Reached/Delivered - New Non-repeated (External Calc)'],
+          cypk86zmmozfbpz52so: a['Previous Cumulative Measure (External Calc)'],
+          cy5kbi0mmozif8j52ss: a['Cumulative Measure (External Calc)'],
+          cqpzxh8mncwupww5bc: a['USD Amount (Manual)'],
+          codt66vmncww8w45bd: a['USD Amount (External Calc)'],
+          csqw7qvmncx51r45bi: a['Number of Months (Manual)'],
+          ccb3tyfmncx5n725bj: a['Number of Months (External Calc)'],
+          cho6421mncx8wan5bn: a['Description (Manual)'],
+          cys3yzmmncxade75bo: a['Description (External Calc)'],
+          cvhfc2mnit0zwt36n: a['Kilocalories (Manual)'],
+          cxxyxfgmnit1tq436o: a['Kilocalories (External Calc)'],
+        },
+      },
+    ]
+  }
+
   export const options = {
     '2.2_Projects': {
-      '00029': 'cxb37p7mnyodzbz3',
       '00139': 'cvirtg2mo1fmv5el',
       '00251': 'c3zx4f6mo5bmybx4',
       '00252': 'c5904edmo5gkdrli',
@@ -96,6 +226,7 @@ namespace AiType51aMonitoring {
       '00261': 'cpa11iqmo5jvc8ln',
       '00262': 'cvax6t0mo5jyw3zr',
       '00263': 'cmfh4tvmo5kbuiav',
+      '00686': 'cah6jilmo174npl2',
     },
     '1.3_Indicators': {
       'CLHEA/CA101/IN1': 'c5pkrm0mnd9bywb7a0',
@@ -286,7 +417,6 @@ namespace AiType51aMonitoring {
       'CLSHL/CA6/IN1': 'cpy72momneey1jq2h',
       'CLSHL/CA6/IN2': 'cyo8yk7mneey1jq2i',
       'CLSHL/CA6/IN3': 'ccr5jsmmneey1jq2j',
-      'CLSHL/CA6/IN4': 'cu0qiw4mneey1jq2k',
       'CLSHL/CA6/IN5': 'chitrgmmneey1jq2l',
       'CLSHL/CA6/IN6': 'cpw0idgmneey1jq2m',
       'CLSHL/CA6/IN7': 'cewoh4umneey1jq2n',
@@ -547,6 +677,7 @@ namespace AiType51aMonitoring {
       'CLPRO/CA6/IN8': 'c42rvgymo6zs2hu1c',
       'CLPRO/CA6/IN7': 'c79fuxmo6zs2hu1b',
       'CLPRO/CA8/IN3': 'ctuipbqmo701o1v1e',
+      'CLPRO/CA6/IN9': 'cojump4mobpd17b9',
     },
     '2.1_Partners': {
       'DRC - Danish Refugee Council': 'cl04mvbmn940pqq32',
@@ -587,6 +718,7 @@ namespace AiType51aMonitoring {
       GSCNUT: 'cvjhfzbmhc4mnu91q',
       GCLPR: 'cw5mvbymf3ydv27p',
       GCLSV: 'cxcv62tmf3ye25zs',
+      GCLRR: 'cwe1f2zmosqwpr7t',
     },
     '1.2_Logframe_Entities': {
       'CLHEA/CA101': 'cbdf2cqmnd84uvi1l',
@@ -77120,6 +77252,7 @@ namespace AiType51aMonitoring {
       '9766': 'ch6p9qqmnlkcwh9ax3',
       '9767': 'cvz7pynmnlkcwh9ax4',
       '9768': 'cp2fdy0mnlkcwh9ax5',
+      '9769': 'cepwrlemo8qbtqj5',
     },
     Operation_Location_Sites_Transit_Centres: {
       UKRs003922: 'ckakoxmnac06nz3w',
@@ -77132,26 +77265,6 @@ namespace AiType51aMonitoring {
       UKRs004016: 'cjr9z9tmnac06o043',
       UKRs010189: 'cg5xsgimnac06o044',
     },
-    Operation_Population_Types: {
-      cjds00nmbflt9ei1744: 'cl4i10jmms6qt4r1x',
-      c4aty4vmm8k5xgr1vf: 'c5ftsmamnfnvp8lt3a',
-    },
-    Operation_Combination_Ages_Sexes: {
-      'cyvv3hombf0xwnehw9 > cqklumpmmat7nkgy': 'c2riuuqmfdx4y6u7', // adult women
-      'c2ijk1rmbf0xwnfhwa > cqklumpmmat7nkgy': 'cd7gl9qmfdx4y6u4', // adult men
-      'cyvv3hombf0xwnehw9 > cw38kqnmbf11mexhwb': 'cf3g1spmfdx4y6u8', // girls
-      'c2ijk1rmbf0xwnfhwa > cw38kqnmbf11mexhwb': 'cmv2zmimfdx4y6u3', // boys
-      'c2ijk1rmbf0xwnfhwa > cblbhipmmat7nkg23': 'cqxz3smfdx4y6u5', // elderly men
-      'cyvv3hombf0xwnehw9 > cblbhipmmat7nkg23': 'cunfsaomfdx4y6u6', // elderly women
-    },
-    Global_Disabilities: {DSB: 'ckixt74mfdyaeavw'},
-    Operation_Education_Learning_Modalities: {
-      HY: 'c3q8u1imn81xghzcs',
-      OL: 'c92lu07mn81xghzcr',
-      IP: 'crvz6ikmn81xghzcq',
-    },
-    Operation_Site_Types_Education: {cr32czxmn80dj2x31: 'c4226efmn80lwkwb5', cs9vn40mn80cxrj2z: 'cu0xf8smn80lwkwb6'},
-    Operation_Health_Accreditation_Types: {U: 'c2sl80omn83153eda', C: 'cqzn0bzmn83153ed9', A: 'cfbbdl1mn83153ed8'},
     Operation_Site_Types_Health: {
       cr9eqa1mn7y692vm: 'cs0qacpmn7yp20tar',
       chn46bxmn7y692vb: 'cl6fsimmn7yp20taf',
@@ -77177,6 +77290,23 @@ namespace AiType51aMonitoring {
       cdmzh5amn7y692v6: 'cddsezqmn7yp20tae',
       cwx2cgfmn7y692vd: 'cn8ng8xmn7yp20taj',
     },
+    Operation_Population_Types: {cjds00nmbflt9ei1744: 'cl4i10jmms6qt4r1x', c4aty4vmm8k5xgr1vf: 'c5ftsmamnfnvp8lt3a'},
+    Operation_Combination_Ages_Sexes: {
+      'cyvv3hombf0xwnehw9 > cqklumpmmat7nkgy': 'c2riuuqmfdx4y6u7',
+      'c2ijk1rmbf0xwnfhwa > cqklumpmmat7nkgy': 'cd7gl9qmfdx4y6u4',
+      'cyvv3hombf0xwnehw9 > cw38kqnmbf11mexhwb': 'cf3g1spmfdx4y6u8',
+      'c2ijk1rmbf0xwnfhwa > cw38kqnmbf11mexhwb': 'cmv2zmimfdx4y6u3',
+      'c2ijk1rmbf0xwnfhwa > cblbhipmmat7nkg23': 'cqxz3smfdx4y6u5',
+      'cyvv3hombf0xwnehw9 > cblbhipmmat7nkg23': 'cunfsaomfdx4y6u6',
+    },
+    Global_Disabilities: {DSB: 'ckixt74mfdyaeavw'},
+    Operation_Education_Learning_Modalities: {
+      HY: 'c3q8u1imn81xghzcs',
+      OL: 'c92lu07mn81xghzcr',
+      IP: 'crvz6ikmn81xghzcq',
+    },
+    Operation_Site_Types_Education: {cr32czxmn80dj2x31: 'c4226efmn80lwkwb5', cs9vn40mn80cxrj2z: 'cu0xf8smn80lwkwb6'},
+    Operation_Health_Accreditation_Types: {U: 'c2sl80omn83153eda', C: 'cqzn0bzmn83153ed9', A: 'cfbbdl1mn83153ed8'},
     Operation_Recipient_Types_WASH: {
       csra663mn80fx0n34: 'c7eralfmn80zjc1br',
       cqzr6nsmn80fx0o3a: 'c34bp8bmn80zjc1bx',

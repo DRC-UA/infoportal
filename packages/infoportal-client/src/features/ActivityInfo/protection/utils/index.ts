@@ -1,1 +1,1 @@
-export {mapMakerProtection} from './mapMakerProtection'
+export {protectionMapperMaker} from './protectionMapperMaker'

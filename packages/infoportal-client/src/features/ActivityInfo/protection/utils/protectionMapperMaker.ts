@@ -1,6 +1,6 @@
 import {match} from '@axanc/ts-utils'
 
-import {groupBy, IKoboMeta, Person, DrcProject} from 'infoportal-common'
+import {DrcProject, groupBy, IKoboMeta, Person} from 'infoportal-common'
 
 import {
   ageSexGroup2AiCodeMapper,
@@ -12,9 +12,9 @@ import {
   type AiType51aMonitoring,
 } from '@/features/ActivityInfo/shared'
 
-import {labelActivities, pickIndicatorByProgram, sharedActivityProps} from './shared'
+import {labelActivities, pickIndicatorByProgram, sharedActivityProps, sp1Oblasts} from './shared'
 
-const mapMakerProtection =
+const protectionMapperMaker =
   (prefix: string) =>
   async ({data, period}: {data: IKoboMeta[]; period: string}): Promise<Bundle[]> => {
     let i = 0
@@ -54,7 +54,7 @@ const mapMakerProtection =
           {by: ({oblast}) => oblast},
           {by: ({raion}) => raion!},
           {by: ({hromada}) => hromada!},
-          {by: ({settlement}) => settlement!},
+          {by: ({settlement}) => settlement?.toUpperCase()!},
           {by: ({populationGroup}) => populationGroup!},
           {by: ({ageGender}) => ageGender!},
           {by: ({disability}) => (disability && Boolean(disability[0]) ? 1 : 0)},
@@ -80,7 +80,7 @@ const mapMakerProtection =
             ...sharedActivityProps({
               project,
               period,
-              sp: 'PLHUKR26/SP1',
+              sp: sp1Oblasts.includes(oblast) ? 'PLHUKR26/SP1' : 'PLHUKR26/SP4',
               oblast,
               raion,
               hromada,
@@ -110,4 +110,4 @@ const mapMakerProtection =
     ).then((result) => result.flat())
   }
 
-export {mapMakerProtection}
+export {protectionMapperMaker}
