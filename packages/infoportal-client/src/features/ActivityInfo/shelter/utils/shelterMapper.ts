@@ -15,14 +15,16 @@ import {
   type AiType51aMonitoring,
 } from '@/features/ActivityInfo/shared'
 
-const cashRelatedIndicators = ['CLSHL/CA4/IN3', 'CLSHL/CA6/IN3', 'CLSHL/CA6/IN5', 'CLSHL/CA4/IN9']
-const repairRelatedIndicators = [
-  'CLSHL/CA4/IN4', // CLSHL/CA4/IN4 - # of people supported with  light repairs (in-kind)
-  'CLSHL/CA4/IN6', // CLSHL/CA4/IN6 - # of people supported with  medium repairs (in-kind)
-  'CLSHL/CA4/IN8', // CLSHL/CA4/IN8 - # of people supported with  heavy repairs (in-kind)
-  'CLSHL/CA4/IN3', // CLSHL/CA4/IN3 - # of people supported with light repairs (cash and  vouchers)
-  'CLSHL/CA4/IN9', // CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)
-  'CLSHL/CA4/IN10', // CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)
+const cashIndicators = [
+  'CLSHL/CA4/IN3', // # of people supported with light repairs (cash and  vouchers)
+  'CLSHL/CA4/IN9', // # of people supported through repairs of common  spaces (cash and vouchers)
+  'CLSHL/CA6/IN3', // # of people supported with  cash for utilities (cash and vouchers)
+  'CLSHL/CA6/IN5', // # of people supported with winter energy (cash and  vouchers)
+]
+
+const winterizationIndicators = [
+  'CLSHL/CA6/IN3', // # of people supported with  cash for utilities (cash and vouchers)
+  'CLSHL/CA6/IN5', // # of people supported with winter energy (cash and  vouchers)
 ]
 
 const shelterMapper = async ({data, period}: {data: IKoboMeta[]; period: string}): Promise<Bundle[]> => {
@@ -53,9 +55,9 @@ const shelterMapper = async ({data, period}: {data: IKoboMeta[]; period: string}
         ...person,
         activity,
         sector,
-        ageGender: repairRelatedIndicators.includes(indicator!)
-          ? undefined
-          : meta2AiAgeGenderGroups(person.age, person.gender!),
+        ageGender: winterizationIndicators.includes(indicator!)
+          ? meta2AiAgeGenderGroups(person.age, person.gender!)
+          : undefined,
         indicator,
         populationGroup: match(person.displacement)
           .cases({
@@ -103,7 +105,7 @@ const shelterMapper = async ({data, period}: {data: IKoboMeta[]; period: string}
         const recordId = `drcsnfi${period.replace('-', '')}${String(++i).padStart(5, '0')}`
         const activity = {
           Indicator: indicator,
-          ...(cashRelatedIndicators.includes(indicator) && ({'Cash: Restriction': 'RES'} as const)),
+          ...(cashIndicators.includes(indicator) && ({'Cash: Restriction': 'RES'} as const)),
           ...sharedActivityProps({
             project,
             period,

@@ -161,37 +161,37 @@ const buildVaRequest = (
         crjesiymkemx9z5q20: a['Project'] ? 'cki8ts9mms4u30z1ppl' + ':' + options['2.2_Projects'][a['Project']!] : ALERT,
         cu0zp4hmfc8b4us14k: a['Indicator']
           ? 'c4oosjxmms4u30z1po8' + ':' + options['1.3_Indicators'][a['Indicator']!]
-          : ALERT,
+          : undefined,
         c6z4q95mlhxfad84yg: a['Implementing Partner']
           ? 'cezl1y0mms4u30z1poo' + ':' + options['2.1_Partners'][a['Implementing Partner']!]
-          : ALERT,
+          : undefined,
         cehz88xmna5yojalqe: a['Strategic Priority']
           ? 'c2oqsn2mms4u30z1pow' + ':' + options['1.2_Logframe_Entities'][a['Strategic Priority']!]
-          : ALERT,
+          : undefined,
         cq7shsqmkfa9qrnbja: a['Reporting Period']
           ? 'c9umo4zmms4u30z1pom' + ':' + options['Operation_Time_Periods'][a['Reporting Period']!]
-          : ALERT,
+          : undefined,
         cwrq9ajmmoyl5nm52s6: a['Cash: Restriction']
           ? 'cbrh939mmktje0r3q8i' + ':' + options['Global_Cash_Restriction'][a['Cash: Restriction']!]
           : undefined,
         c3qow3mkep7nv513us: a['Oblast (Admin1)']
           ? 'cgj58hlmms4u30z1ppf' + ':' + options['Operation_Location_Admin1'][a['Oblast (Admin1)']!]
-          : ALERT,
+          : undefined,
         cgz15q5mkep96by13uu: a['Raion (Admin2)']
           ? 'co2lbowmms4u30z1pp3' + ':' + options['Operation_Location_Admin2'][a['Raion (Admin2)']!]
-          : ALERT,
+          : undefined,
         c8k4ckgmnafypuoaoi: a['Hromada (Admin3)']
           ? 'csu4204mn7lzgxcz35' + ':' + options['Operation_Location_Admin3'][a['Hromada (Admin3)']!]
-          : ALERT,
+          : undefined,
         coi9s8pmnag4pv6aok: a['Settlement (Admin4)']
           ? 'cx60wmrmn7m1v6bz3c' + ':' + options['Operation_Location_Admin4'][a['Settlement (Admin4)']]
           : undefined,
         c1pbo1cmkepe9ny13v0: a['Population Group']
           ? 'c4zk43vmms4u30z1po7' + ':' + options['Operation_Population_Types'][a['Population Group']!]
-          : ALERT,
+          : undefined,
         cugmnitmkepcpni13uy: a['Age & Sex']
           ? 'c27ard5mms4u30z1pp7' + ':' + options['Operation_Combination_Ages_Sexes'][a['Age & Sex']!]
-          : ALERT,
+          : undefined,
         cti2dzimkepfjvs13v2: a['Disability']
           ? 'ccctq99mluvh4121byz' + ':' + options['Global_Disabilities'][a['Disability']!]
           : undefined,
@@ -282,16 +282,14 @@ const ageSexReference = {
 } as const
 
 const ageSexGroup2AiCodeMapper = (group: keyof typeof ageSexReference) => {
-  return match(group)
-    .cases(ageSexReference)
-    .default(ALERT as (typeof ageSexReference)[keyof typeof ageSexReference])
+  return match(group).cases(ageSexReference).default(undefined)
 }
 
 const meta2AiAgeGenderGroups = (age: number | undefined, gender: Person.Gender) => {
   if (age === undefined) {
     return
   }
-  if (age > 0 && age < 18) {
+  if (age >= 0 && age < 18) {
     return match(gender)
       .cases({
         [Person.Gender.Male]: 'Boys' as const,
@@ -316,6 +314,7 @@ const meta2AiAgeGenderGroups = (age: number | undefined, gender: Person.Gender) 
       .default('Elderly Women' as const)
   }
 }
+
 const checkForReplacement = ({before, after}: {before: string | undefined; after: string | undefined}) => {
   if (!before && !after) {
     return
@@ -334,8 +333,9 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
           Project: [key, aiProjectCode2Name(value as string)],
           'Age & Sex': [
             key,
-            insideObjectOut(ageSexReference)[value as ReturnType<typeof ageSexGroup2AiCodeMapper>] ??
-              `${ALERT} ${value}`,
+            value !== undefined
+              ? insideObjectOut(ageSexReference)[value as (typeof ageSexReference)[keyof typeof ageSexReference]]
+              : `${ALERT} ${value}`,
           ],
           'Reporting Period': [
             key,
@@ -361,8 +361,23 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
             key,
             match(value)
               .cases({
-                'CLPRO/CA14/IN1':
-                  'CLPRO/CA14/IN1 - # of children and caregivers who have been affected  by landmine or other explosive weapons received by prevention and/or survivor  assistance interventions (cash and vouchers)',
+                'CLPRO/CA1/IN3':
+                  'CLPRO/CA1/IN3 - # of people who received other forms of general  social support and services (inc. social accompaniment, home-based care,  social rehabilitation) (PRT)',
+                'CLPRO/CA2/IN3':
+                  'CLPRO/CA2/IN3 - # of individuals who participated in  community-based protection activities (PRT)',
+                'CLSHL/CA4/IN3': 'CLSHL/CA4/IN3 - # of people supported with light repairs (cash and  vouchers)',
+                'CLSHL/CA4/IN4': 'CLSHL/CA4/IN4 - # of people supported with  light repairs (in-kind)',
+                'CLSHL/CA4/IN6': 'CLSHL/CA4/IN6 - # of people supported with  medium repairs (in-kind)',
+                'CLSHL/CA4/IN8': 'CLSHL/CA4/IN8 - # of people supported with  heavy repairs (in-kind)',
+                'CLSHL/CA4/IN9':
+                  'CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)',
+                'CLSHL/CA4/IN10': 'CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)',
+                'CLPRO/CA5/IN2':
+                  'CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)',
+                'CLPRO/CA5/IN3':
+                  'CLPRO/CA5/IN3 - # of people affected  receiving house, land and property support (PRT)',
+                'CLSHL/CA6/IN3': 'CLSHL/CA6/IN3 - # of people supported with  cash for utilities (cash and vouchers)',
+                'CLSHL/CA6/IN5': 'CLSHL/CA6/IN5 - # of people supported with winter energy (cash and  vouchers)',
                 'CLPRO/CA6/IN2':
                   'CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)',
                 'CLPRO/CA7/IN1':
@@ -371,10 +386,8 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
                   'CLPRO/CA8/IN1 - # of people affected at  risk who were safely referred and connected to appropriate services in  response (PRT)',
                 'CLPRO/CA12/IN1':
                   'CLPRO/CA12/IN1 - # of people affected participating in monitoring of  protection situations',
-                'CLPRO/CA1/IN3':
-                  'CLPRO/CA1/IN3 - # of people who received other forms of general  social support and services (inc. social accompaniment, home-based care,  social rehabilitation) (PRT)',
-                'CLPRO/CA2/IN3':
-                  'CLPRO/CA2/IN3 - # of individuals who participated in  community-based protection activities (PRT)',
+                'CLPRO/CA14/IN1':
+                  'CLPRO/CA14/IN1 - # of children and caregivers who have been affected  by landmine or other explosive weapons received by prevention and/or survivor  assistance interventions (cash and vouchers)',
                 'CLPRO/CA23/IN2':
                   'CLPRO/CA23/IN2 - # of affected-people directly receiving targeted,  life-saving information and guidance to prevent and respond to GBV Risks via  mobile teams',
                 'CLPRO/CA26/IN1':
@@ -383,19 +396,6 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
                   'CLPRO/CA28/IN1 - # of affected women and  girls supported through skill-building , recreational, or livelihood  (including vocatinal education) activities',
                 'CLPRO/CA30/IN1':
                   'CLPRO/CA30/IN1 - # of non-GBV humanitarian  or frontline workers across sectors receiving capacity strengthening,  including training, refresher courses, orientations or other support',
-                'CLPRO/CA5/IN2':
-                  'CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)',
-                'CLPRO/CA5/IN3':
-                  'CLPRO/CA5/IN3 - # of people affected  receiving house, land and property support (PRT)',
-                'CLSHL/CA4/IN4': 'CLSHL/CA4/IN4 - # of people supported with  light repairs (in-kind)',
-                'CLSHL/CA4/IN6': 'CLSHL/CA4/IN6 - # of people supported with  medium repairs (in-kind)',
-                'CLSHL/CA4/IN8': 'CLSHL/CA4/IN8 - # of people supported with  heavy repairs (in-kind)',
-                'CLSHL/CA4/IN3': 'CLSHL/CA4/IN3 - # of people supported with light repairs (cash and  vouchers)',
-                'CLSHL/CA6/IN3': 'CLSHL/CA6/IN3 - # of people supported with  cash for utilities (cash and vouchers)',
-                'CLSHL/CA6/IN5': 'CLSHL/CA6/IN5 - # of people supported with winter energy (cash and  vouchers)',
-                'CLSHL/CA4/IN9':
-                  'CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)',
-                'CLSHL/CA4/IN10': 'CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)',
               })
               .default(`${ALERT} ${value}`),
           ],
