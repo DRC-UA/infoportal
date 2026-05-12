@@ -53,7 +53,7 @@ const sectionsConfig: Record<
   },
   shelter: {
     id: 'shelter',
-    name: '[Shelter]',
+    name: '[Shelter] Repairs and Winterization',
     path: 'shelter',
     Component: Shelter,
   },
