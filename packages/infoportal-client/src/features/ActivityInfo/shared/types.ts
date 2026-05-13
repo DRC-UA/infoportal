@@ -77347,7 +77347,10 @@ namespace AiType51aMonitoring {
       crd8wjxmn80fx0o3g: 'cvkuii8mn8143uzc8',
       clwlab0mn80fx0o3m: 'cfwihnimn8143uzce',
     },
-    Operation_Payment_Frequencies: {c9vwluvmmmvwndvnx: 'cdxt3nfmn83hynpdl', c24roslmmmvwndvnu: 'c3qgawnmn83hynodh'},
+    Operation_Payment_Frequencies: {
+      c9vwluvmmmvwndvnx: 'cdxt3nfmn83hynpdl',
+      c24roslmmmvwndvnu: 'c3qgawnmn83hynodh',
+    },
     Operation_Food_Frequencies: {
       c24roslmmmvwndvnu: 'cjkvwoomnipwao033t',
       c7w2io1mmmvwndvnw: 'c1v5uqzmnipwao033u',

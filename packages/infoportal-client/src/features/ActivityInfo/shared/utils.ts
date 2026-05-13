@@ -16,10 +16,10 @@ import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
 import {ALERT} from './constants'
 import {AiType51aMonitoring, Bundle} from './types'
 
-const buildRequest = (a: AiType51aMonitoring.Type, recordId: string, parentRecordId: string | null = null) => {
+const buildRequest = (a: Partial<AiType51aMonitoring.Type>, recordId: string, parentRecordId: string | null = null) => {
   const {options} = AiType51aMonitoring
 
-  return [
+  return ActivityInfoSdk.wrapRequest([
     {
       formId: 'co9uppxmms4u30z1ppd',
       recordId,
@@ -142,7 +142,7 @@ const buildRequest = (a: AiType51aMonitoring.Type, recordId: string, parentRecor
         cxxyxfgmnit1tq436o: a['Kilocalories (External Calc)'],
       },
     },
-  ]
+  ])
 }
 
 const buildVaRequest = (
@@ -285,6 +285,15 @@ const ageSexGroup2AiCodeMapper = (group: keyof typeof ageSexReference) => {
   return match(group).cases(ageSexReference).default(undefined)
 }
 
+const paymentFrequencyReference = {
+  'Lump sum - ONE': 'c9vwluvmmmvwndvnx',
+  'Monthly payments - MON': 'c24roslmmmvwndvnu',
+} as const
+
+const paymentFrequency2AiCodeMapper = (key: keyof typeof paymentFrequencyReference) => {
+  return match(key).cases(paymentFrequencyReference).default(undefined)
+}
+
 const meta2AiAgeGenderGroups = (age: number | undefined, gender: Person.Gender) => {
   if (age === undefined) {
     return
@@ -325,7 +334,10 @@ const checkForReplacement = ({before, after}: {before: string | undefined; after
 
 const sp1Oblasts = ['Khersonska', 'Mykolaivska', 'Zaporizka', 'Dnipropetrovska', 'Kharkivska', 'Sumska', 'Chernihivska']
 
-const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Person.Details>): Bundle['activity'] => {
+const labelActivities = (
+  activity: Bundle['activity'],
+  data: Seq<Partial<IKoboMeta> & Person.Details>,
+): Bundle['activity'] => {
   return Object.fromEntries(
     Object.entries(activity).map(([key, value]) =>
       match(key)
@@ -361,33 +373,21 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
             key,
             match(value)
               .cases({
+                'CLCWG/CA1/IN1':
+                  'CLCWG/CA1/IN1 - # of people having received the  Unified Cash Transfer for vulnerable people living in the frontline',
+                'CLCWG/CA1/IN2':
+                  'CLCWG/CA1/IN2 - # of people having  received multipurpose cash assistance for vulnerable people living in the  frontline',
+                'CLCWG/CA2/IN1': 'CLCWG/CA2/IN1 - # of people having received the Unified Cash  Transfer for evacuees',
+                'CLCWG/CA2/IN2':
+                  'CLCWG/CA2/IN2 - # of people having  received multipurpose cash assistance for evacuees',
                 'CLPRO/CA1/IN3':
                   'CLPRO/CA1/IN3 - # of people who received other forms of general  social support and services (inc. social accompaniment, home-based care,  social rehabilitation) (PRT)',
-                'CLPRO/CA2/IN3':
-                  'CLPRO/CA2/IN3 - # of individuals who participated in  community-based protection activities (PRT)',
-                'CLSHL/CA4/IN3': 'CLSHL/CA4/IN3 - # of people supported with light repairs (cash and  vouchers)',
-                'CLSHL/CA4/IN4': 'CLSHL/CA4/IN4 - # of people supported with  light repairs (in-kind)',
-                'CLSHL/CA4/IN6': 'CLSHL/CA4/IN6 - # of people supported with  medium repairs (in-kind)',
-                'CLSHL/CA4/IN8': 'CLSHL/CA4/IN8 - # of people supported with  heavy repairs (in-kind)',
-                'CLSHL/CA4/IN9':
-                  'CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)',
-                'CLSHL/CA4/IN10': 'CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)',
-                'CLPRO/CA5/IN2':
-                  'CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)',
-                'CLPRO/CA5/IN3':
-                  'CLPRO/CA5/IN3 - # of people affected  receiving house, land and property support (PRT)',
-                'CLSHL/CA6/IN3': 'CLSHL/CA6/IN3 - # of people supported with  cash for utilities (cash and vouchers)',
-                'CLSHL/CA6/IN5': 'CLSHL/CA6/IN5 - # of people supported with winter energy (cash and  vouchers)',
-                'CLPRO/CA6/IN2':
-                  'CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)',
-                'CLPRO/CA7/IN1':
-                  'CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities',
-                'CLPRO/CA8/IN1':
-                  'CLPRO/CA8/IN1 - # of people affected at  risk who were safely referred and connected to appropriate services in  response (PRT)',
                 'CLPRO/CA12/IN1':
                   'CLPRO/CA12/IN1 - # of people affected participating in monitoring of  protection situations',
                 'CLPRO/CA14/IN1':
                   'CLPRO/CA14/IN1 - # of children and caregivers who have been affected  by landmine or other explosive weapons received by prevention and/or survivor  assistance interventions (cash and vouchers)',
+                'CLPRO/CA2/IN3':
+                  'CLPRO/CA2/IN3 - # of individuals who participated in  community-based protection activities (PRT)',
                 'CLPRO/CA23/IN2':
                   'CLPRO/CA23/IN2 - # of affected-people directly receiving targeted,  life-saving information and guidance to prevent and respond to GBV Risks via  mobile teams',
                 'CLPRO/CA26/IN1':
@@ -396,8 +396,33 @@ const labelActivities = (activity: Bundle['activity'], data: Seq<IKoboMeta & Per
                   'CLPRO/CA28/IN1 - # of affected women and  girls supported through skill-building , recreational, or livelihood  (including vocatinal education) activities',
                 'CLPRO/CA30/IN1':
                   'CLPRO/CA30/IN1 - # of non-GBV humanitarian  or frontline workers across sectors receiving capacity strengthening,  including training, refresher courses, orientations or other support',
+                'CLPRO/CA5/IN2':
+                  'CLPRO/CA5/IN2 - # of people affected receiving legal assistance or  legal counselling (PRT)',
+                'CLPRO/CA5/IN3':
+                  'CLPRO/CA5/IN3 - # of people affected  receiving house, land and property support (PRT)',
+                'CLPRO/CA6/IN2':
+                  'CLPRO/CA6/IN2 - # of people who received protection information or  counselling (PRT)',
+                'CLPRO/CA7/IN1':
+                  'CLPRO/CA7/IN1 - # of people affected benefitting from age-, gender-  and disability-sensitive psychosocial support through group or individiual  activities',
+                'CLPRO/CA8/IN1':
+                  'CLPRO/CA8/IN1 - # of people affected at  risk who were safely referred and connected to appropriate services in  response (PRT)',
+                'CLSHL/CA4/IN10': 'CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)',
+                'CLSHL/CA4/IN3': 'CLSHL/CA4/IN3 - # of people supported with light repairs (cash and  vouchers)',
+                'CLSHL/CA4/IN4': 'CLSHL/CA4/IN4 - # of people supported with  light repairs (in-kind)',
+                'CLSHL/CA4/IN6': 'CLSHL/CA4/IN6 - # of people supported with  medium repairs (in-kind)',
+                'CLSHL/CA4/IN8': 'CLSHL/CA4/IN8 - # of people supported with  heavy repairs (in-kind)',
+                'CLSHL/CA4/IN9':
+                  'CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)',
+                'CLSHL/CA6/IN3': 'CLSHL/CA6/IN3 - # of people supported with  cash for utilities (cash and vouchers)',
+                'CLSHL/CA6/IN5': 'CLSHL/CA6/IN5 - # of people supported with winter energy (cash and  vouchers)',
               })
               .default(`${ALERT} ${value}`),
+          ],
+          'Payment Frequency': [
+            key,
+            insideObjectOut(paymentFrequencyReference)[
+              value as (typeof paymentFrequencyReference)[keyof typeof paymentFrequencyReference]
+            ],
           ],
         })
         .default([key, value]),
@@ -425,6 +450,15 @@ const sharedActivityProps = ({
   const oblast = UaLocation.Oblast.findByName(oblastQuery)
   const raion = oblast?.raions?.find(({en}) => en === raionQuery)
   const hromada = raion?.hromadas?.find(({en}) => en === hromadaQuery)
+
+  console.log({
+    oblast,
+    oblastQuery,
+    raion,
+    raionQuery,
+    hromada,
+    hromadaQuery,
+  })
 
   return {
     Project: drc2AiProjectCode(project),
@@ -484,7 +518,6 @@ const pickIndicatorByProgram = ({
           [DrcProgram.CapacityBuilding]: 'CLPRO/CA30/IN1', // CLPRO/CA30/IN1 - # of non-GBV humanitarian  or frontline workers across sectors receiving capacity strengthening,  including training, refresher courses, orientations or other support,
           [DrcProgram.DignityKits]: 'CLPRO/CA26/IN1', // CLPRO/CA26/IN1 - # of affected women and  girls supported through provision of dignity kits
           [DrcProgram.WGSS]: 'CLPRO/CA28/IN1', // CLPRO/CA28/IN1 - # of affected women and  girls supported through skill-building , recreational, or livelihood  (including vocatinal education) activities
-          // [DrcProgram.PSS]: '',
         })
         .default(activity) as AiType51aMonitoring.Type['Indicator'],
       [DrcSector.Shelter]: match(activity)
@@ -497,6 +530,14 @@ const pickIndicatorByProgram = ({
           [DrcProgram.CashForFuel]: 'CLSHL/CA6/IN5', // CLSHL/CA6/IN5 - # of people supported with winter energy (cash and  vouchers)
           'common-spaces-cash': 'CLSHL/CA4/IN9', // CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)
           'common-spaces-in-kind': 'CLSHL/CA4/IN10', // CLSHL/CA4/IN10 - # of people supported through repairs of common  spaces (in-kind)
+        })
+        .default(activity) as AiType51aMonitoring.Type['Indicator'],
+      [DrcSector.MPCA]: match(activity)
+        .cases({
+          'mpca-front-line': 'CLCWG/CA1/IN2', // CLCWG/CA1/IN2 - # of people having  received multipurpose cash assistance for vulnerable people living in the  frontline
+          'mpca-evacuees': 'CLCWG/CA2/IN2', // CLCWG/CA2/IN2 - # of people having  received multipurpose cash assistance for evacuees
+          'uct-front-line': 'CLCWG/CA1/IN1', // CLCWG/CA1/IN1 - # of people having received the  Unified Cash Transfer for vulnerable people living in the frontline
+          'uct-evacuees': 'CLCWG/CA2/IN1', // CLCWG/CA2/IN1 - # of people having received the Unified Cash  Transfer for evacuees
         })
         .default(activity) as AiType51aMonitoring.Type['Indicator'],
     })
@@ -517,6 +558,7 @@ export {
   buildProtectionRequest,
   drc2AiProjectCode,
   meta2AiAgeGenderGroups,
+  paymentFrequency2AiCodeMapper,
   periodIdReference,
   periodMapper,
 }

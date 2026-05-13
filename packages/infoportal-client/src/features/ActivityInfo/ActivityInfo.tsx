@@ -11,6 +11,7 @@ import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
 import {ProtectionVictimAssistance, ProtectionGeneral, ProtectionGbv, ProtectionLegal} from './protection'
 import {Shelter} from './shelter'
+import {Cash} from './cash'
 
 import {AiChildProtection} from './archive/ChildProtection/AiChildProtection'
 import {AiGbv} from './archive/Gbv/AiGbv'
@@ -24,7 +25,7 @@ import {AiSnfi} from './archive/Snfi/AiSnfi'
 import {AiWash} from './archive/Wash/AiWash'
 
 const sectionsConfig: Record<
-  'victimAssistance' | 'protectionGeneral' | 'protectionGbv' | 'protectionLegal' | 'shelter',
+  'victimAssistance' | 'protectionGeneral' | 'protectionGbv' | 'protectionLegal' | 'shelter' | 'mpca',
   Record<'id' | 'name' | 'path', string> & {Component: FC}
 > = {
   protectionGeneral: {
@@ -56,6 +57,12 @@ const sectionsConfig: Record<
     name: '[Shelter] Repairs and Winterization',
     path: 'shelter',
     Component: Shelter,
+  },
+  mpca: {
+    id: 'mpca',
+    name: '[MPCA] Cash transfers',
+    path: 'mpca',
+    Component: Cash,
   },
 }
 
