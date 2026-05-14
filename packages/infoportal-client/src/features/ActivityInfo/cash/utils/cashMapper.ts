@@ -60,6 +60,12 @@ const cashMapperMaker =
           } as const)
           .default('PLHUKR26/SP1')
 
+        const populationGroup = match(displacement)
+          .cases({
+            [Person.DisplacementStatus.Idp]: Person.DisplacementStatus.Idp,
+          })
+          .default(Person.DisplacementStatus.NonDisplaced)
+
         return {
           formId,
           koboId: id,
@@ -80,11 +86,8 @@ const cashMapperMaker =
           settlement: row.ben_det_settlement,
           ageGender: meta2AiAgeGenderGroups(age, gender!),
           disability,
-          populationGroup: match(displacement)
-            .cases({
-              [Person.DisplacementStatus.Idp]: Person.DisplacementStatus.Idp,
-            })
-            .default(Person.DisplacementStatus.NonDisplaced),
+          populationGroup,
+          displacement: populationGroup, // for better labelling only
           payment,
         }
       })
@@ -134,7 +137,6 @@ const cashMapperMaker =
           const recordId = `drc${['CLCWG/CA1/IN2', 'CLCWG/CA2/IN2'].includes(indicator) ? 'mpca' : 'uct'}${period.replace('-', '')}${String(++i).padStart(5, '0')}`
           const activity = {
             Indicator: indicator,
-            // 'Cash: Restriction': 'URES',
             ...sharedActivityProps({
               project,
               period,

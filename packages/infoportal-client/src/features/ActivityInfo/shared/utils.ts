@@ -451,15 +451,6 @@ const sharedActivityProps = ({
   const raion = oblast?.raions?.find(({en}) => en === raionQuery)
   const hromada = raion?.hromadas?.find(({en}) => en === hromadaQuery)
 
-  console.log({
-    oblast,
-    oblastQuery,
-    raion,
-    raionQuery,
-    hromada,
-    hromadaQuery,
-  })
-
   return {
     Project: drc2AiProjectCode(project),
     'Implementing Partner': 'DRC - Danish Refugee Council',
