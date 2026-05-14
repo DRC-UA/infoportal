@@ -1,0 +1,1 @@
+export {washMapper} from './washMapper'

@@ -1,0 +1,1 @@
+export {Wash} from './Wash'

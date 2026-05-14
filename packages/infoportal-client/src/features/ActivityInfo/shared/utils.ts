@@ -236,6 +236,7 @@ const drc2AiProjectCode = (project?: DrcProject): AiType51aMonitoring.Type['Proj
       [DrcProject['UKR-000355 Danish MFA']]: '00257',
       [DrcProject['UKR-000350 SIDA']]: '00254',
       [DrcProject['UKR-000270 Pooled Funds']]: '00259',
+      [DrcProject['UKR-000270 Pooled Funds Old (MPCA)']]: '00259',
     } as const)
     .default(`${ALERT} ${project}` as '00139')
 }
@@ -415,6 +416,7 @@ const labelActivities = (
                   'CLSHL/CA4/IN9 - # of people supported through repairs of common  spaces (cash and vouchers)',
                 'CLSHL/CA6/IN3': 'CLSHL/CA6/IN3 - # of people supported with  cash for utilities (cash and vouchers)',
                 'CLSHL/CA6/IN5': 'CLSHL/CA6/IN5 - # of people supported with winter energy (cash and  vouchers)',
+                'CLWSH/CA2/IN1': 'CLWSH/CA2/IN1 - # of people benefited from hygiene kit/items  distribution (in-kind)',
               })
               .default(`${ALERT} ${value}`),
           ],
@@ -529,6 +531,12 @@ const pickIndicatorByProgram = ({
           'mpca-evacuees': 'CLCWG/CA2/IN2', // CLCWG/CA2/IN2 - # of people having  received multipurpose cash assistance for evacuees
           'uct-front-line': 'CLCWG/CA1/IN1', // CLCWG/CA1/IN1 - # of people having received the  Unified Cash Transfer for vulnerable people living in the frontline
           'uct-evacuees': 'CLCWG/CA2/IN1', // CLCWG/CA2/IN1 - # of people having received the Unified Cash  Transfer for evacuees
+        })
+        .default(activity) as AiType51aMonitoring.Type['Indicator'],
+      [DrcSector.NFI]: match(activity)
+        .cases({
+          [DrcProgram.NFI]: 'CLWSH/CA2/IN1', // CLWSH/CA2/IN1 - # of people benefited from hygiene kit/items  distribution (in-kind)
+          [DrcProgram.HygieneKit]: 'CLWSH/CA2/IN1', // CLWSH/CA2/IN1 - # of people benefited from hygiene kit/items  distribution (in-kind)
         })
         .default(activity) as AiType51aMonitoring.Type['Indicator'],
     })
