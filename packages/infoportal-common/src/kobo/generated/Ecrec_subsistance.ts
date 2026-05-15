@@ -4,10 +4,16 @@ export namespace Ecrec_subsistance {
   export interface T {
     start: string
     end: string
+    // status_deduplication [select_one] Status deduplication
+    status_deduplication: undefined | Option<'status_deduplication'>
+    // notice_decision [select_one] Notice of the decision
+    notice_decision: undefined | Option<'currently_receiving_cash'>
     // status [select_one] Status
     status: undefined | Option<'status'>
     // date_payment [date] Payment Date
     date_payment: Date | undefined
+    // type_assistance [select_one] Assistance for:
+    type_assistance: undefined | Option<'type_assistance'>
     // background/date [date] Date
     date: Date | undefined
     // background/back_office [select_one] 1.1 Select Office
@@ -121,8 +127,8 @@ export namespace Ecrec_subsistance {
     financial_manage_livestock: undefined | Option<'currently_receiving_cash'>
     // hh_char/hh_char_chh [note] This is a child headed household (high risk protection case), please refer immediately to a DRC Protection colleague and complete internal referral form.
     hh_char_chh: string
-    // cash_farmers/what_primary_livelihood [select_one] 4.1 What is the primary source of livelihoods in the household
-    what_primary_livelihood: undefined | Option<'what_primary_livelihood'>
+    // cash_farmers/what_primary_livelihood [select_multiple] 4.1 What are the three main sources of income of livelihoods in the household
+    what_primary_livelihood: undefined | Option<'what_primary_livelihood'>[]
     // cash_farmers/what_primary_livelihood_other [text] 4.1.1 If "Other", please specify
     what_primary_livelihood_other: string | undefined
     // cash_farmers/consume_majority [select_one] 4.2 Do you consume a majority of the crops you produce / livestock that you manage
@@ -229,6 +235,8 @@ export namespace Ecrec_subsistance {
     ass_inc_sc_inc: string
     // ass_inc/ass_inc_sc_not_vul [note] **Unfortunately based upon our criteria, you do not qualify for program as you do not meet the threshold for vulnerability.**
     ass_inc_sc_not_vul: string
+    // ass_inc/photo_residence_registration [image] Take a clear photo of the official residence registration document (proof of address)
+    photo_residence_registration: string
     // ass_inc/cal_size_hh_v1 [calculate] Size of household
     cal_size_hh_v1: string
     // ass_inc/cal_residence_status_v2 [calculate] Residence status
@@ -331,6 +339,12 @@ export namespace Ecrec_subsistance {
     additional_photo7: string
   }
   export const options = {
+    status_deduplication: {
+      deduplicated: `✅ Deduplicated`,
+      partially_deduplicated: `⚠️ Partially Deduplicated`,
+      not_deduplicated: `❌ Not Deduplicated`,
+      need_deduplicate: `🕓 Requires Deduplicate`,
+    },
     status: {
       selected: `🟦 Selected`,
       pending: `🟡 Pending`,
@@ -338,6 +352,11 @@ export namespace Ecrec_subsistance {
       rejected: `🔴 Rejected`,
       referred: `🧾 Referred`,
       paymentrejected: `❗ Payment Rejected`,
+    },
+    type_assistance: {
+      agricultural: `Agricultural`,
+      livestock: `Livestock`,
+      mixed: `Mixed`,
     },
     back_office: {
       chj: `Chernihiv (CHJ)`,
@@ -385,6 +404,9 @@ export namespace Ecrec_subsistance {
       tetiana_konovshii: `Tetiana Konovshii`,
       vitalii_shapoval: `Vitalii Shapoval`,
       andrii_zagoruiev: `Andrii Zagoruiev`,
+      viktoriia_prokhorova: `Viktoriia Prokhorova`,
+      iryna_pohorazdova: `Iryna Pohorazdova`,
+      maryna_chyvilova: `Maryna Chyvilova`,
       nataliia_karimova: `Nataliia Karimova`,
       hrk_ex1: `Extra 1`,
       hrk_ex2: `Extra 2`,
@@ -674,6 +696,7 @@ export namespace Ecrec_subsistance {
         return _
       }),
       hh_char_preg_number: _.hh_char_preg_number ? +_.hh_char_preg_number : undefined,
+      what_primary_livelihood: _.what_primary_livelihood?.split(' '),
       rent_receive_year: _.rent_receive_year ? +_.rent_receive_year : undefined,
       poultry: _.poultry ? +_.poultry : undefined,
       cattle: _.cattle ? +_.cattle : undefined,

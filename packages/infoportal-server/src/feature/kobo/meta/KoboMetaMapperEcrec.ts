@@ -316,7 +316,12 @@ export class KoboMetaMapperEcrec {
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_settlement,
       sector: DrcSector.Livelihoods,
-      activity: DrcProgram.SectoralCashForAgriculture,
+      activity: match(answer.type_assistance)
+        .cases({
+          agricultural: DrcProgram.SectoralCashForAgriculture,
+          mixed: DrcProgram.SectoralCashMixed,
+        })
+        .default(undefined),
       personsCount: persons.length,
       persons,
       project: project ? [project] : [],
