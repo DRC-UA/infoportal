@@ -2,6 +2,7 @@ import {match, seq} from '@axanc/ts-utils'
 
 import {
   Bn_re,
+  Bn_rapidResponse2,
   Cbp_pre_post,
   Ecrec_cashRegistration,
   Ecrec_cashRegistrationBha,
@@ -69,9 +70,11 @@ import {
   Gbv_girl_shine,
   Gbv_wgss_pdm,
   Gp_case_management,
+  Protection_gbv_capacity_needs_assessment_2026,
   Protection_ipa_pdm,
   Shelter_modernWomen,
-  Protection_gbv_capacity_needs_assessment_2026,
+  type KoboSubmissionFlat,
+  type KoboTagStatus,
 } from 'infoportal-common'
 
 import {ApiClient} from '@/core/sdk/server/ApiClient'
@@ -347,6 +350,19 @@ export class KoboTypedAnswerSdk {
           fnMapKobo: Bn_pam.map,
           ...filters,
         }),
+      ),
+      ...make<'bn_rapidResponse2', KoboSubmissionFlat<Bn_rapidResponse2.T, KoboTagStatus>>(
+        'bn_rapidResponse2',
+        (filters?: KoboAnswerFilter) =>
+          req({
+            formId: KoboIndex.byName('bn_rapidResponse2').id,
+            fnMapKobo: Bn_rapidResponse2.map,
+            fnMapTags: (tags) => ({
+              ...tags,
+              ...(typeof tags?.lastStatusUpdate === 'string' && {lastStatusUpdate: new Date(tags?.lastStatusUpdate)}),
+            }),
+            ...filters,
+          }),
       ),
       ...make('meal_shelterPdm', (filters?: KoboAnswerFilter) =>
         req({

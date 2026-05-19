@@ -46,6 +46,10 @@ export namespace Protection_pss {
     cycle_type: undefined | Option<'cycle_type'>
     // gi/cycle_finished_at [date] Cycle finish date
     cycle_finished_at: Date | undefined
+    // gi/group_relevant_issues [select_multiple] The group identified that the most relevant issues in the community are those related to stigmatization (stereotypes, prejudice, discrimination) affecting the following groups/topics:
+    group_relevant_issues: undefined | Option<'group_relevant_issues'>[]
+    // gi/group_relevant_issues_other [text] If "Other", please specify
+    group_relevant_issues_other: string | undefined
     // gi/numb_part [integer] Number of participants
     numb_part: number | undefined
     // gi/participant_code [text] Participant code
@@ -63,6 +67,11 @@ export namespace Protection_pss {
           hh_char_hh_det_status: undefined | Option<'hh_char_hh_det_status'> | undefined
           hh_char_civ_stat: undefined | Option<'hh_char_civ_stat'> | undefined
           hh_char_hh_session: undefined | Option<'hh_char_hh_session'>[] | undefined
+          hh_char_hh_session_helpful: undefined | Option<'hh_char_hh_influence_understanding'> | undefined
+          hh_char_hh_informed_after: undefined | Option<'hh_char_hh_influence_understanding'> | undefined
+          hh_char_hh_different_perspective: undefined | Option<'hh_char_hh_influence_understanding'> | undefined
+          hh_char_hh_influence_understanding: undefined | Option<'hh_char_hh_influence_understanding'> | undefined
+          hh_char_hh_comments: string | undefined | undefined
           calc_session_comp: string | undefined
         }[]
       | undefined
@@ -846,6 +855,26 @@ export namespace Protection_pss {
       few: `A few times`,
       not_all: `Not at all`,
     },
+    hh_char_hh_influence_understanding: {
+      '0': `0`,
+      '1': `1`,
+      '2': `2`,
+      '3': `3`,
+      '4': `4`,
+      '5': `5`,
+    },
+    group_relevant_issues: {
+      idp: `IDPs`,
+      veterans: `Veterans and/or military personnel`,
+      older_adults: `Older adults`,
+      ethnic_minorities: `Ethnic minorities`,
+      pwd: `People with disabilities`,
+      sex: `Sex and/or gender`,
+      lgbtqi: `LGBTQI+`,
+      mental_health: `Mental health`,
+      religious_group: `Religious groups`,
+      other: `Other`,
+    },
     ben_det_oblast: {
       cherkaska: `Cherkaska`,
       chernihivska: `Chernihivska`,
@@ -901,6 +930,7 @@ export namespace Protection_pss {
       date: _.date ? new Date(_.date) : undefined,
       new_ben_no: _.new_ben_no ? +_.new_ben_no : undefined,
       cycle_finished_at: _.cycle_finished_at ? new Date(_.cycle_finished_at) : undefined,
+      group_relevant_issues: _.group_relevant_issues?.split(' '),
       numb_part: _.numb_part ? +_.numb_part : undefined,
       hh_char_hh_det: _['hh_char_hh_det']?.map(extractQuestionName).map((_: any) => {
         _['hh_char_date_birth'] = _.hh_char_date_birth ? new Date(_.hh_char_date_birth) : undefined

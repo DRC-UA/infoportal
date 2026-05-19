@@ -18,6 +18,13 @@ export const getMsalInstance = (config: AppConfig) => {
     },
     system: {
       // allowNativeBroker: false, // Disables WAM Broker
+      // NEW in v5 - Set appropriate timeouts
+      // popupBridgeTimeout: 10000, // 10 seconds for popup
+      // iframeBridgeTimeout: 6000, // 6 seconds for silent
+      // Optional: prevent WAM broker issues
+      allowPlatformBroker: false,
+      // Optional: improve startup performance
+      allowRedirectInIframe: false,
     },
   }
 
@@ -34,10 +41,13 @@ export const getMsalInstance = (config: AppConfig) => {
   }
 
   const msalInstance = new PublicClientApplication(msalConfig)
-  const accounts = msalInstance.getAllAccounts()
-  if (accounts.length > 0) {
-    msalInstance.setActiveAccount(accounts[0])
-  }
+
+  msalInstance.initialize().then(() => {
+    const accounts = msalInstance.getAllAccounts()
+    if (accounts.length > 0) {
+      msalInstance.setActiveAccount(accounts[0])
+    }
+  })
 
   msalInstance.addEventCallback((event: EventMessage) => {
     if (event.eventType === EventType.LOGIN_SUCCESS && event.payload) {

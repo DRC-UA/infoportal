@@ -37,8 +37,21 @@ export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
 }
 
+const isMsalPopup = typeof window !== 'undefined' && (window.opener || window !== window.parent)
+
+if (isMsalPopup) {
+  import('@azure/msal-browser/redirect-bridge')
+    .then(({broadcastResponseToMainFrame}) => {
+      broadcastResponseToMainFrame().catch(console.error)
+    })
+    .catch(() => {})
+}
+
 const App = (props: MyAppProps) => {
   const router = useRouter()
+
+  if (isMsalPopup) return null
+
   useEffect(() => {
     // initSentry(appConfigConfig)
     api.session.track(router.pathname)

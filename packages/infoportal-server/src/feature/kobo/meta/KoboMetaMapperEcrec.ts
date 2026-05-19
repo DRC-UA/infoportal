@@ -29,6 +29,7 @@ import {
   KoboXmlMapper,
   oblastByDrcOffice,
   VetApplicationStatus,
+  AssistanceModality,
 } from 'infoportal-common'
 
 import {appConf} from '../../../core/conf/AppConf.js'
@@ -316,7 +317,12 @@ export class KoboMetaMapperEcrec {
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_settlement,
       sector: DrcSector.Livelihoods,
-      activity: DrcProgram.SectoralCashForAgriculture,
+      activity: match(answer.type_assistance)
+        .cases({
+          agricultural: DrcProgram.SectoralCashForAgriculture,
+          mixed: DrcProgram.SectoralCashMixed,
+        })
+        .default(undefined),
       personsCount: persons.length,
       persons,
       project: project ? [project] : [],
@@ -329,6 +335,7 @@ export class KoboMetaMapperEcrec {
       status: KoboMetaHelper.mapEcrecStatus(answer.status),
       lastStatusUpdate: answer.date_payment,
       passportNum: answer.pay_det_pass_num,
+      modality: AssistanceModality.Cash,
       taxIdFileName: answer.pay_det_tax_id_ph,
       taxIdFileId: KoboHelper.findAttachmentId(row.attachments, answer.pay_det_tax_id_ph),
       idFileName: answer.pay_det_id_ph,

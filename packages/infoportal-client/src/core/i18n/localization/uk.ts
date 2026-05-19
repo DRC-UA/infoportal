@@ -248,6 +248,12 @@ const uk = deepmerge(en, {
         },
       },
     },
+    activityInfo: {
+      sidebarTabLabels: {
+        current: 'Поточне',
+        archive: 'Архів до 2026',
+      },
+    },
     plurals: {
       session: {
         zero: 'Сесій',

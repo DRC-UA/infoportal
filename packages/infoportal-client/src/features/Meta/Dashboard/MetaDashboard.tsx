@@ -37,6 +37,7 @@ export const MetaDashboard = () => {
 
   const formsToPassAvgHouseholdSizeCalculation = [
     KoboIndex.byName('protection_counselling').id,
+    KoboIndex.byName('protection_groupSession').id,
     KoboIndex.byName('protection_referral').id,
     KoboIndex.byName('protection_communityMonitoring').id,
     KoboIndex.byName('legal_individual_aid').id,

@@ -35,7 +35,7 @@ export type KoboUpdateTag = {
 interface KoboAnswerSearch {
   <
     TKoboAnswer extends Record<string, any>,
-    TTags extends KoboBaseTags = KoboBaseTags,
+    TTags extends Record<string, any> | undefined = KoboBaseTags,
     TCustomAnswer extends KoboSubmissionFlat<any, TTags> = KoboSubmissionFlat<TKoboAnswer, TTags>,
   >(
     _: KoboAnswerFilter & {

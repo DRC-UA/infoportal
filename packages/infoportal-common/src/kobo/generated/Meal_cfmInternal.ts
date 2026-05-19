@@ -56,6 +56,7 @@ export namespace Meal_cfmInternal {
       none: `Жодного`,
     },
     project_code: {
+      'UKR-000462': `UKR-000462 ECHO`,
       'UKR-000461': `UKR-000461 UHF`,
       'UKR-000441': `UKR-000441 UHF10`,
       'UKR-000423': `UKR-000423 ECHO4`,

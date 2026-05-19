@@ -51,6 +51,13 @@ export class KoboMetaMapperProtection {
             unspecified: undefined,
           })
           .default(() => undefined),
+        displacement: match(answer.informant_status)
+          .cases({
+            idp: Person.DisplacementStatus.Idp,
+            'non-displaced': Person.DisplacementStatus.NonDisplaced,
+            returnee: Person.DisplacementStatus.Returnee,
+          })
+          .default(undefined),
       })
     }
 
@@ -127,16 +134,48 @@ export class KoboMetaMapperProtection {
     }
   }
 
+  // Awareness Rasing and Capacity Building Form
   static readonly groupSession: MetaMapperInsert<KoboMetaOrigin<Protection_groupSession.T>> = (row) => {
     const answer = Protection_groupSession.map(row.answers)
-    const activity = match(answer.activity as any)
+    const legacyActivity = match(answer.activity as any)
       .cases({
         gpt: DrcProgram.AwarenessRaisingSession,
         pss: DrcProgram.AwarenessRaisingSession,
-        // let:
+        information_session: DrcProgram.AwarenessRaisingSession,
       })
-      .default(() => undefined)
-    if (!activity) return
+      .default(undefined)
+    const infoSessionTopic = answer.topic_information_session
+    const newActivity = match(answer.activity_conducted)
+      .cases({
+        information_session: match(infoSessionTopic)
+          .cases({
+            general_protection_topic: DrcProgram.AwarenessRaisingSession,
+            legal_general_protection: DrcProgram.AwarenessRaisingSession,
+            legal_hlp: DrcProgram.AwarenessRaisingSession,
+            legal_gbv: DrcProgram.AwarenessRaisingSession,
+            legal_business_issues: DrcProgram.AwarenessRaisingSession,
+            legal_va: DrcProgram.AwarenessRaisingSession,
+          })
+          .default(DrcProgram.AwarenessRaisingSession),
+      })
+      .default(undefined)
+
+    if (!legacyActivity && !newActivity) return
+
+    const activity = legacyActivity || newActivity
+
+    const sector = ((_activity) => {
+      if (
+        _activity &&
+        answer.topic_information_session !== undefined &&
+        ['legal_hlp', 'legal_gbv', 'legal_business_issues', 'legal_va'].includes(answer.topic_information_session)
+      ) {
+        return DrcSector.Legal
+      }
+
+      return DrcSector.GeneralProtection
+    })(newActivity)
+
     // if (answer.activity as any === 'gbv' || answer.activity === 'pss' || answer.activity === 'other' || answer.activity === 'let') return
     const persons = KoboXmlMapper.Persons.protection_groupSession(answer)
     const project = match(answer.project)
@@ -158,6 +197,8 @@ export class KoboMetaMapperProtection {
         ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
         ukr000424_dutch_mfa: DrcProject['UKR-000424 Dutch MFA'],
         ukr000426_sdc: DrcProject['UKR-000426 SDC'],
+        ukr000461_uhf: DrcProject['UKR-000461 UHF'],
+        ukr000462_echo: DrcProject['UKR-000462 ECHO'],
       })
       .default(() => DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project)))
 
@@ -176,8 +217,8 @@ export class KoboMetaMapperProtection {
       raion: KoboXmlMapper.Location.searchRaion(answer.ben_det_raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.ben_det_hromada),
       settlement: answer.ben_det_hromada_001,
-      sector: DrcSector.GeneralProtection,
-      activity: activity,
+      sector,
+      activity,
       persons,
       personsCount: persons.length,
       project: project ? [project] : [],
@@ -341,13 +382,19 @@ export class KoboMetaMapperProtection {
       sector: DrcSector.PSS,
       activity: match(answer.activity)
         .cases({
+          ace: DrcProgram.ACE,
+          ais: DrcProgram.PIS,
+          community_dialogues_session: DrcProgram.CDS,
+          fra: DrcProgram.FRA,
+          let: DrcProgram.LET,
           mhpss: DrcProgram.MHPSSActivities,
           pgs: DrcProgram.PGS,
-          ais: DrcProgram.PIS,
           pfa: DrcProgram.PFA,
           p2p: DrcProgram.P2P,
+          rsa: DrcProgram.RSA,
+          other: DrcProgram.PSO,
         })
-        .default(() => undefined),
+        .default(undefined),
       personsCount: persons.length,
       persons,
       project: project ? [project] : [],

@@ -45,12 +45,14 @@ export const DatatableHeadCopyIds = ({column}: {column: DatatableColumn.InnerPro
         content_copy
       </TableIconBtn>
       <Popover
-        PaperProps={{
-          sx: {
-            py: 1.5,
-            px: 2,
-            backdropFilter: 'blur(4px)',
-            backgroundColor: alpha(lighten(t.palette.success.light, 0.8), 0.8),
+        slotProps={{
+          paper: {
+            sx: {
+              py: 1.5,
+              px: 2,
+              backdropFilter: 'blur(4px)',
+              backgroundColor: alpha(lighten(t.palette.success.light, 0.8), 0.8),
+            },
           },
         }}
         open={!!anchorEl}

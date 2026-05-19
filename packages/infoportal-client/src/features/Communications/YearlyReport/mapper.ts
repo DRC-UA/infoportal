@@ -139,9 +139,10 @@ export namespace YearlyReportMapper {
                   total +
                   match(program)
                     .cases({
-                      SectoralCashForAgriculture: 7500,
-                      SectoralCashForAnimalFeed: 12000,
-                      SectoralCashForAnimalShelterRepair: 15000,
+                      [DrcProgram.SectoralCashForAgriculture]: 7500,
+                      [DrcProgram.SectoralCashForAnimalFeed]: 12000,
+                      [DrcProgram.SectoralCashForAnimalShelterRepair]: 15000,
+                      // [DrcProgram.SectoralCashMixed]: 0,
                     })
                     .default(0),
                 0,

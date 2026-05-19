@@ -1,0 +1,3 @@
+const ALERT = '⚠️'
+
+export {ALERT}
