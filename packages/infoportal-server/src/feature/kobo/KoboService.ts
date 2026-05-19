@@ -162,6 +162,7 @@ export class KoboService {
                 lt: filters.end,
               },
               formId,
+              ...(filters.ids ? {id: {in: filters.ids}} : {}),
               AND: {
                 OR: filters.filterBy?.flatMap((filter) =>
                   Util.ensureArr(filter.value).map((v) => ({

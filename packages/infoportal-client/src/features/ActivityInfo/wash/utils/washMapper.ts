@@ -42,7 +42,7 @@ const washMapper = async ({data, period}: {data: IKoboMeta[]; period: string}): 
   ) as (IKoboMeta &
     Person.Details & {
       ageGender: ReturnType<typeof meta2AiAgeGenderGroups>
-    } & {indicator: string} & {
+      indicator: string
       populationGroup: Person.DisplacementStatus
     })[]
 

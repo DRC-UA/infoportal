@@ -15,6 +15,7 @@ export {
   labelActivities,
   meta2AiAgeGenderGroups,
   paymentFrequency2AiCodeMapper,
+  paymentKey2AiCodeMapper,
   periodIdReference,
   periodMapper,
   pickIndicatorByProgram,

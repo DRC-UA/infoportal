@@ -295,6 +295,21 @@ const paymentFrequency2AiCodeMapper = (key: keyof typeof paymentFrequencyReferen
   return match(key).cases(paymentFrequencyReference).default(undefined)
 }
 
+const paymentDeliveryReference = {
+  'Digital wallet - DW': 'cshv8jtmn7tirddd',
+  'Bank transfer - to account - BT_ACC': 'c48g7j9mn7tirdcb',
+  'Money transfer - for cash pickup - BT_CSH': 'cctzieymn7tirddc',
+  'Home money delivery - HM': 'c24xwxpmn7tirdde',
+} as const
+
+const referenceKey2AiCodeMapper = <K extends string | number, V extends string>(reference: Record<K, V>) => {
+  return (key: K) => {
+    return match(key).cases(reference).default(undefined)
+  }
+}
+
+const paymentKey2AiCodeMapper = referenceKey2AiCodeMapper(paymentDeliveryReference)
+
 const meta2AiAgeGenderGroups = (age: number | undefined, gender: Person.Gender) => {
   if (age === undefined) {
     return
@@ -381,6 +396,10 @@ const labelActivities = (
                 'CLCWG/CA2/IN1': 'CLCWG/CA2/IN1 - # of people having received the Unified Cash  Transfer for evacuees',
                 'CLCWG/CA2/IN2':
                   'CLCWG/CA2/IN2 - # of people having  received multipurpose cash assistance for evacuees',
+                'CLFSL/CA6/IN1':
+                  'CLFSL/CA6/IN1 - # of people benefited from Emergency Food  Production (Crop) (cash and voucher)',
+                'CLFSL/CA8/IN1':
+                  'CLFSL/CA8/IN1 - # of people benefited from Emergency Food  Production (Mixed) (cash and voucher)',
                 'CLPRO/CA1/IN3':
                   'CLPRO/CA1/IN3 - # of people who received other forms of general  social support and services (inc. social accompaniment, home-based care,  social rehabilitation) (PRT)',
                 'CLPRO/CA12/IN1':
@@ -423,7 +442,13 @@ const labelActivities = (
           'Payment Frequency': [
             key,
             insideObjectOut(paymentFrequencyReference)[
-              value as (typeof paymentFrequencyReference)[keyof typeof paymentFrequencyReference]
+              value as (typeof paymentFrequencyReference)[keyof typeof paymentFrequencyReference] // TODO: IT'S UGLY. FIX THIS
+            ],
+          ],
+          'Cash: Delivery': [
+            key,
+            insideObjectOut(paymentDeliveryReference)[
+              value as (typeof paymentDeliveryReference)[keyof typeof paymentDeliveryReference]
             ],
           ],
         })
@@ -539,6 +564,12 @@ const pickIndicatorByProgram = ({
           [DrcProgram.HygieneKit]: 'CLWSH/CA2/IN1', // CLWSH/CA2/IN1 - # of people benefited from hygiene kit/items  distribution (in-kind)
         })
         .default(activity) as AiType51aMonitoring.Type['Indicator'],
+      [DrcSector.Livelihoods]: match(activity)
+        .cases({
+          [DrcProgram.SectoralCashForAgriculture]: 'CLFSL/CA6/IN1', // CLFSL/CA6/IN1 - # of people benefited from Emergency Food  Production (Crop) (cash and voucher)
+          [DrcProgram.SectoralCashMixed]: 'CLFSL/CA8/IN1', // CLFSL/CA8/IN1 - # of people benefited from Emergency Food  Production (Mixed) (cash and voucher)
+        })
+        .default(activity) as AiType51aMonitoring.Type['Indicator'],
     })
     .default(undefined)
 }
@@ -558,6 +589,7 @@ export {
   drc2AiProjectCode,
   meta2AiAgeGenderGroups,
   paymentFrequency2AiCodeMapper,
+  paymentKey2AiCodeMapper,
   periodIdReference,
   periodMapper,
 }

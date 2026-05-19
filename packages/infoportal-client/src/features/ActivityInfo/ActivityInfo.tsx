@@ -9,9 +9,10 @@ import {appFeaturesIndex} from '@/features/appFeatureId'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarItem} from '@/shared/Layout/Sidebar'
 
+import {Cash} from './cash'
+import {Ecrec} from './ecrec'
 import {ProtectionVictimAssistance, ProtectionGeneral, ProtectionGbv, ProtectionLegal} from './protection'
 import {Shelter} from './shelter'
-import {Cash} from './cash'
 import {Wash} from './wash'
 
 import {AiChildProtection} from './archive/ChildProtection/AiChildProtection'
@@ -26,7 +27,14 @@ import {AiSnfi} from './archive/Snfi/AiSnfi'
 import {AiWash} from './archive/Wash/AiWash'
 
 const sectionsConfig: Record<
-  'victimAssistance' | 'protectionGeneral' | 'protectionGbv' | 'protectionLegal' | 'shelter' | 'mpca' | 'wash',
+  | 'victimAssistance'
+  | 'protectionGeneral'
+  | 'protectionGbv'
+  | 'protectionLegal'
+  | 'shelter'
+  | 'mpca'
+  | 'ecrec'
+  | 'wash',
   Record<'id' | 'name' | 'path', string> & {Component: FC}
 > = {
   protectionGeneral: {
@@ -55,15 +63,21 @@ const sectionsConfig: Record<
   },
   shelter: {
     id: 'shelter',
-    name: '[Shelter] Repairs and Winterization',
+    name: '[Shelter] Repairs & Winterization',
     path: 'shelter',
     Component: Shelter,
   },
   mpca: {
     id: 'mpca',
-    name: '[MPCA] Cash transfers',
+    name: '[MPCA] Cash Transfers',
     path: 'mpca',
     Component: Cash,
+  },
+  ecrec: {
+    id: 'ecrec',
+    name: '[EcRec] Food Security & Livelihoods',
+    path: 'ecrec',
+    Component: Ecrec,
   },
   wash: {
     id: 'wash',

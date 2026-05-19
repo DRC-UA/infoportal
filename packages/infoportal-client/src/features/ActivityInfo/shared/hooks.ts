@@ -1,20 +1,11 @@
-import {useEffect, useMemo, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {seq, Obj, type Seq} from '@axanc/ts-utils'
-import {endOfMonth, startOfMonth, subMonths, isDate} from 'date-fns'
+import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
 
-import {
-  DrcProgram,
-  DrcSector,
-  IKoboMeta,
-  KoboMetaStatus,
-  PeriodHelper,
-  Bn_rapidResponse2,
-  type Period,
-  type KoboSubmissionFlat,
-  type KoboTagStatus,
-} from 'infoportal-common'
+import {DrcProgram, DrcSector, groupBy, IKoboMeta, KoboMetaStatus, type Period} from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
+import type {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
 import {useFetcher} from '@/shared/hook/useFetcher'
 
 import {AiMapper, type Bundle} from '@/features/ActivityInfo/shared'
@@ -48,6 +39,7 @@ const useMetaFetcher = ({
         })
         .then(async ({data}) => {
           setData(await mapper({data, period: AiMapper.getPeriodStr(period)}))
+          return data
         }),
   )
 
@@ -70,29 +62,32 @@ const useMetaFetcher = ({
   return {fetcher, period, setPeriod, data, setData, columns}
 }
 
-const useKoboFetcher = ({mapper}: {mapper: (args: {data: any[]; period: string}) => Promise<Bundle[]>}) => {
+const useKoboFetcher = (
+  formName: keyof KoboTypedAnswerSdk['search'],
+  {
+    mapper,
+    filterCallbackMaker,
+  }: {
+    mapper: (args: {data: any[]; period: string}) => Promise<Bundle[]>
+    filterCallbackMaker: (period: Partial<Period>) => (data: any) => boolean
+  },
+) => {
   const {api} = useAppSettings()
   const [period, setPeriod] = useState<Partial<Period>>({
     start: startOfMonth(subMonths(new Date(), 1)),
     end: endOfMonth(subMonths(new Date(), 1)),
   })
-  const [data, setData] = useState<KoboSubmissionFlat<Bn_rapidResponse2.T, KoboTagStatus>[]>([])
+  const [data, setData] = useState<ReturnType<KoboTypedAnswerSdk['search'][typeof formName]>[]>([])
   const [filteredMappedData, setFilteredMappedData] = useState<Bundle[]>([])
   const [columns, setColumns] = useState<Seq<{key: string; type: string}>>(seq([]))
-  const bnFetcher = useFetcher(async () => {
-    await api.kobo.typedAnswers.search.bn_rapidResponse2().then(({data}) => {
-      setData(data)
+  const fetcher = useFetcher(async () => {
+    await api.kobo.typedAnswers.search[formName]().then(({data}) => {
+      setData(data as any)
     })
   })
 
   useEffect(() => {
-    const filteredRawData = data.filter(({tags}) => {
-      return (
-        tags?.status === 'Paid' &&
-        isDate(tags?.lastStatusUpdate) &&
-        PeriodHelper.isDateIn(period, tags.lastStatusUpdate)
-      )
-    })
+    const filteredRawData = data.filter(filterCallbackMaker(period))
 
     mapper({data: filteredRawData, period: AiMapper.getPeriodStr(period)}).then((result) => {
       setFilteredMappedData(result)
@@ -109,13 +104,13 @@ const useKoboFetcher = ({mapper}: {mapper: (args: {data: any[]; period: string})
   }, [data, period])
 
   useEffect(() => {
-    bnFetcher.fetch()
+    fetcher.fetch()
   }, [])
 
   return {
     columns,
     data: filteredMappedData,
-    loading: bnFetcher.loading,
+    loading: fetcher.loading,
     period,
     setPeriod,
   }
