@@ -20,6 +20,7 @@ import {
   KoboSubmissionFlat,
   KoboTagStatus,
   KoboXmlMapper,
+  Meal_ecrec_agMsmeVetPam,
   Protection_gbv,
   Protection_pfa_training_test,
   ProtectionHhsTags,
@@ -56,7 +57,10 @@ export const getColumnsCustom = ({
   selectedIds: Kobo.SubmissionId[]
   ctxUpdate: KoboUpdateContext
   m: Messages
-  augmentData?: Record<'vaDuplications', Record<string, any[]> | undefined>
+  augmentData?: {
+    vaDuplications: Record<string, any[]> | undefined
+    ecrecAgri: Record<number, {land_own: string; land_cultivate: string}> | undefined
+  }
 }): DatatableColumn.Props<KoboMappedAnswer>[] => {
   const getSelectMultipleTagSubHeader = ({
     tag,
@@ -73,7 +77,7 @@ export const getColumnsCustom = ({
           ctxUpdate.openById({
             target: 'tag',
             params: {
-              formId: formId,
+              formId,
               answerIds: selectedIds,
               type,
               tag,
@@ -898,6 +902,58 @@ export const getColumnsCustom = ({
                 </Box>
               </Box>
             ) : null,
+          }
+        },
+      },
+    ],
+    [KoboIndex.byName('meal_ecrec_agMsmeVetPam').id]: [
+      {
+        id: 'land_own',
+        head: 'Land Own',
+        type: 'number',
+        render: ({unique_number}: KoboSubmissionFlat<Meal_ecrec_agMsmeVetPam.T>) => {
+          if (!(unique_number && augmentData?.ecrecAgri?.[unique_number])) {
+            return {
+              label: null,
+              value: undefined,
+            }
+          }
+
+          return {
+            export: augmentData.ecrecAgri[unique_number].land_own,
+            value: Number(augmentData.ecrecAgri[unique_number].land_own),
+            label: augmentData.ecrecAgri[unique_number].land_own,
+          }
+        },
+      },
+      {
+        id: 'land_cultivated',
+        head: 'Land Cultivated',
+        type: 'number',
+        render: ({unique_number}: KoboSubmissionFlat<Meal_ecrec_agMsmeVetPam.T>) => {
+          if (!(unique_number && augmentData?.ecrecAgri?.[unique_number])) {
+            return {
+              label: null,
+              value: undefined,
+            }
+          }
+
+          return {
+            export: augmentData.ecrecAgri[unique_number].land_cultivate,
+            value: Number(augmentData.ecrecAgri[unique_number].land_cultivate),
+            label: augmentData.ecrecAgri[unique_number].land_cultivate,
+          }
+        },
+      },
+      {
+        id: 'cultivated_when_assisted',
+        head: 'According to the cash grant you have received from DRC, how many hectares will you use the assistance/ inputs for?',
+        type: 'number',
+        render: ({hectares_use_assistance}: KoboSubmissionFlat<Meal_ecrec_agMsmeVetPam.T>) => {
+          return {
+            export: hectares_use_assistance,
+            label: hectares_use_assistance,
+            value: hectares_use_assistance,
           }
         },
       },

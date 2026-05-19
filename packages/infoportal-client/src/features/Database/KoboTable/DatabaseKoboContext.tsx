@@ -49,7 +49,7 @@ export const DatabaseKoboTableProvider = (props: {
   access: DatabaseKoboContext['access']
   form: DatabaseKoboContext['form']
   data?: KoboMappedAnswer[]
-  augmentDataFetchers?: Record<'vaDuplications', UseFetcher<any>>
+  augmentDataFetchers?: Record<'vaDuplications' | 'ecrecAgri', UseFetcher<any>>
 }) => {
   const {form, data, children, refetch, augmentDataFetchers} = props
   const {api} = useAppSettings()
@@ -127,6 +127,7 @@ export const DatabaseKoboTableProvider = (props: {
         setData: setMappedData as Dispatch<SetStateAction<KoboMappedAnswer[]>>,
         augmentDataFetchers: {
           vaDuplications: augmentDataFetchers?.vaDuplications,
+          ecrecAgri: augmentDataFetchers?.ecrecAgri,
         } as const,
       }}
     >

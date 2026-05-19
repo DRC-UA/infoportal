@@ -59,6 +59,19 @@ export const DatabaseTable = ({form, formId, onFiltersChange, onDataChange, data
   const fetcherAnswers = useKoboAnswersContext().byId(formId)
   const fetcherForm = useFetcher(() => (form ? Promise.resolve(form) : api.kobo.form.get(formId)))
   const vaDuplicationsFetcher = useFetcher(api.getVaDuplicates)
+  const ecrecAgriFetcher = useFetcher(async () => {
+    return Promise.all([
+      api.kobo.typedAnswers.search.ecrec_subsistance().then(({data}) => data),
+      api.kobo.typedAnswers.search.ecrec_small_scale().then(({data}) => data),
+    ]).then(([subsistance, smallScale]) =>
+      Object.fromEntries(
+        [...subsistance, ...smallScale].map(({ben_det_ph_number, land_cultivate, land_own}) => [
+          ben_det_ph_number!,
+          {land_cultivate, land_own},
+        ]),
+      ),
+    )
+  })
 
   const access = useMemo(() => {
     const list = accesses
@@ -75,6 +88,7 @@ export const DatabaseTable = ({form, formId, onFiltersChange, onDataChange, data
     fetcherAnswers.fetch({force: true, clean: true})
     ctxSchema.fetchById(formId)
     if (formId === KoboIndex.byName('va_bio_tia').id) vaDuplicationsFetcher.fetch()
+    if (formId === KoboIndex.byName('meal_ecrec_agMsmeVetPam').id) ecrecAgriFetcher.fetch({clean: false})
   }, [formId])
 
   const loading = fetcherAnswers.loading
@@ -102,7 +116,12 @@ export const DatabaseTable = ({form, formId, onFiltersChange, onDataChange, data
           loading={loading}
           data={fetcherAnswers.get?.data}
           form={form}
-          augmentDataFetchers={{vaDuplications: vaDuplicationsFetcher} as const}
+          augmentDataFetchers={
+            {
+              vaDuplications: vaDuplicationsFetcher,
+              ecrecAgri: ecrecAgriFetcher,
+            } as const
+          }
         >
           <DatabaseKoboTableContent onFiltersChange={onFiltersChange} onDataChange={onDataChange} />
         </DatabaseKoboTableProvider>

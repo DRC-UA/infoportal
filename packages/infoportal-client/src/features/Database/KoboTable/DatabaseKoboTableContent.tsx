@@ -109,6 +109,7 @@ export const DatabaseKoboTableContent = ({
         ctxUpdate: ctxKoboUpdate,
         augmentData: {
           vaDuplications: vaDupGroups,
+          ecrecAgri: ctx.augmentDataFetchers.ecrecAgri?.get ?? [],
         } as const,
       }).map((_) => ({
         ..._,
