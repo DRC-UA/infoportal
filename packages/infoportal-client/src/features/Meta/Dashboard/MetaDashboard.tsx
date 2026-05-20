@@ -43,6 +43,7 @@ export const MetaDashboard = () => {
     KoboIndex.byName('legal_individual_aid').id,
     KoboIndex.byName('shelter_commonSpaces').id,
     KoboIndex.byName('va_bio_tia').id,
+    KoboIndex.byName('protection_gbv').id,
   ]
 
   const {monthlyAvgHHSizeData, avgHHSize} = useMemo(() => {
@@ -74,12 +75,7 @@ export const MetaDashboard = () => {
       <Grid container sx={{mb: 2}} columnSpacing={2}>
         <Grid size={{xs: 6, md: 4, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
-            <Lazy
-              deps={[ctx.filteredData]}
-              fn={() => {
-                return ctx.filteredData.distinct((_) => _.formId).length
-              }}
-            >
+            <Lazy deps={[ctx.filteredData]} fn={() => ctx.filteredData.distinct(({formId}) => formId).length}>
               {(_) => formatLargeNumber(_)}
             </Lazy>
           </SlideWidget>
@@ -296,12 +292,12 @@ export const MetaDashboard = () => {
                 }))
               }}
             >
-              {(_) => (
+              {(data) => (
                 <ChartLine
                   fixMissingMonths
                   hideYTicks
                   height={200}
-                  data={_ as any}
+                  data={data as any}
                   colors={() => [t.palette.primary.main, t.palette.success.main]}
                   hideLabelToggle
                 />

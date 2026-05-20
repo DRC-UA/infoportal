@@ -233,6 +233,7 @@ const en = Object.freeze({
     participantsList: 'Participants list',
     participantsLoc: 'Participants by Location',
     submissions: 'Submissions',
+    people: 'People',
     householdSize: 'Household size',
     occurrences: 'Occurrences',
     hhSize: 'HH size',

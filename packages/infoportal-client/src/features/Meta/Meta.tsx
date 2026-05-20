@@ -25,8 +25,9 @@ export const metaSiteMap = {
 }
 
 const _Meta = () => {
-  const ctx = useMetaContext()
   useReactRouterDefaultRoute(metaSiteMap.routes.dashboard)
+  const ctx = useMetaContext()
+
   const isDevEnv = process?.env.NODE_ENV === 'development'
 
   return (

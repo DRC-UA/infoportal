@@ -39,6 +39,7 @@ const uk = deepmerge(en, {
     project: 'Проєкт',
     activity: 'Активність',
     submissions: 'Записи',
+    people: 'Люди',
     count: 'Кількість',
     kobo: 'Kobo',
     koboData: 'Дані Kobo',
