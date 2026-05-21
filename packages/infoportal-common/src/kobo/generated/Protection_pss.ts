@@ -571,6 +571,7 @@ export namespace Protection_pss {
       HRK014: `HRK014`,
       HRK015: `HRK015`,
       HRK020: `HRK020`,
+      HRK021: `HRK021`,
       DNK001: `DNK001`,
       DNK002: `DNK002`,
       DNK003: `DNK003`,
@@ -652,6 +653,7 @@ export namespace Protection_pss {
       ukr000426_sdc: `UKR-000426 SDC`,
       ukr000457_dmfa: `UKR-000457 DMFA`,
       ukr000461_uhf: `UKR-000461 UHF`,
+      ukr000462_echo: `UKR-000462 ECHO`,
     },
     location: {
       logow: `Governmental collective site`,
