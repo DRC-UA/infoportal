@@ -152,7 +152,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   meal_cashPdm: '[MEAL] Cash PDM',
   meal_cfmExternal: '[MEAL] Cfm External',
   meal_cfmInternal: '[MEAL] Cfm Internal',
-  meal_kiiCbpPam: '[MEAL] KII Community Based Protection PAM',
+  meal_kiiCbpPam: '[MEAL] Community Based Protection KII PAM',
   meal_ecrec_agMsmeVetPam: '[MEAL] Economic Recovery (Ag, MSME, VET) PAM',
   meal_eorePdm: '[MEAL] EORE PDM',
   meal_fgdPamShelterSpp: '[MEAL] FGD PAM Shelter SPP',
