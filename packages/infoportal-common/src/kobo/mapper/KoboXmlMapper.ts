@@ -790,6 +790,45 @@ export namespace KoboXmlMapper {
     export const protection_pss: PersonsMapper<Protection_pss.T> = (row) => {
       if (row.new_ben === 'no') return [] // CHECK
 
+      const difficulties = Object.fromEntries(
+        (
+          [
+            'difficulty_seeing',
+            'difficulty_hearing',
+            'difficulty_walking',
+            'difficulty_remembering',
+            'difficulty_washing',
+            'difficulty_usual_language',
+          ] as const
+        ).map((k) => [k, row[k]]),
+      )
+
+      const hh_char_hh_det_dis_level: Xml.DisabilityLevel = ((difficultyValues) => {
+        if (difficultyValues.some((difficulty) => difficulty === 'cannot_all')) return 'fri'
+        if (difficultyValues.some((difficulty) => difficulty === 'yes_lot')) return 'two'
+        if (difficultyValues.some((difficulty) => difficulty === 'yes_some')) return 'one'
+        if (difficultyValues.every((difficulty) => difficulty === 'no')) return 'zero'
+      })(Object.values(difficulties))
+
+      const hh_char_hh_det_dis_select: Xml.DisabilitySelected = ((difficultyEntries) => {
+        return seq(difficultyEntries)
+          .map(([key, value]) => {
+            if (value && ['yes_lot', 'yes_some', 'cannot_all'].includes(value)) {
+              return match(key)
+                .cases({
+                  difficulty_seeing: 'diff_see' as const,
+                  difficulty_hearing: 'diff_hear' as const,
+                  difficulty_walking: 'diff_walk' as const,
+                  difficulty_remembering: 'diff_rem' as const,
+                  difficulty_washing: 'diff_care' as const,
+                  difficulty_usual_language: 'diff_comm' as const,
+                })
+                .exhaustive()
+            }
+          })
+          .compact()
+      })(Object.entries(difficulties))
+
       const accountableIndividuals = row.hh_char_hh_det
         ?.filter((_) => {
           if (_.hh_char_hh_new_ben === 'no') return false
@@ -803,6 +842,8 @@ export namespace KoboXmlMapper {
         .map(({hh_char_hh_det_status, ...member}) => ({
           ...member,
           hh_char_hh_res_stat: hh_char_hh_det_status,
+          hh_char_hh_det_dis_level,
+          hh_char_hh_det_dis_select,
         }))
 
       return common({

@@ -361,6 +361,10 @@ export class KoboMetaMapperProtection {
         ukr000355_dmfa: DrcProject['UKR-000355 Danish MFA'],
         ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
         ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+        ukr000426_sdc: DrcProject['UKR-000426 SDC'],
+        ukr000457_dmfa: DrcProject['UKR-000457 DMFA'],
+        ukr000461_uhf: DrcProject['UKR-000461 UHF'],
+        ukr000462_echo: DrcProject['UKR-000462 ECHO'],
       })
       .default(() => DrcProjectHelper.search(answer.project))
 
