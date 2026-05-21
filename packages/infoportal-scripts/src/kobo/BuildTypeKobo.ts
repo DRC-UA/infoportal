@@ -191,6 +191,9 @@ export class BuildKoboType {
         formId: KoboIndex.byName('meal_shelterPdm').id,
         langIndex: 1,
       },
+      meal_kiiCbpPam: {
+        formId: KoboIndex.byName('meal_kiiCbpPam').id,
+      },
       meal_nfiPdm: {
         formId: KoboIndex.byName('meal_nfiPdm').id,
         skipQuestionTyping: ['ben_det_hromada', 'ben_det_raion'],

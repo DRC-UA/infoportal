@@ -39,6 +39,7 @@ import {PdmGbvCsDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGbvCsDashboar
 import {MealPdmWgssDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmWgssDashboard'
 import {PdmGirlShineDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGirlShineDashboard'
 import PdmGPCaseManagementDashboard from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CaseManagement'
+import CbpKiiDashboard from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CbpKii'
 import {PdmIpaDashboard} from '@/features/Meal/Pdm/Dashboards/PdmIpaDashboard'
 
 import VaDashboard from './Pdm/Dashboards/Va'
@@ -107,6 +108,7 @@ export const mealIndex = {
           victim: '/pdm/protection/victim',
           ipa: '/pdm/protection/ipa',
           caseManagement: '/pdm/protection/general/case-management',
+          cbpKii: '/pdm/protection/general/cbp-kii',
         },
         gbv: {
           gbv: '/pdm/protection/gbv',
@@ -238,6 +240,13 @@ const MealSidebar = ({
                   <SidebarItem active={isActive}>{m.mealMonitoringPdm.generalCaseManagement}</SidebarItem>
                 )}
               </NavLink>
+              <NavLink to={path(mealIndex.siteMap.pdm.protection.general.cbpKii)}>
+                {({isActive}) => (
+                  <SidebarItem active={isActive}>
+                    {KoboIndex.byName('meal_kiiCbpPam').translation.replace('[MEAL] ', '')}
+                  </SidebarItem>
+                )}
+              </NavLink>
             </SidebarSection>
             <SidebarSection title={m.gbv}>
               <NavLink to={path(mealIndex.siteMap.pdm.protection.gbv.gbv)}>
@@ -286,6 +295,7 @@ const MealSidebar = ({
           <SidebarKoboLink path={path(mealIndex.siteMap.form('va_tia_pdm'))} name="va_tia_pdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_eorePdm'))} name="meal_eorePdm" />
           <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_cashPdm'))} name="meal_cashPdm" />
+          <SidebarKoboLink path={path(mealIndex.siteMap.form('meal_kiiCbpPam'))} name="meal_kiiCbpPam" />
           <SidebarKoboLink
             path={path(mealIndex.siteMap.form('awareness_raising_feedback'))}
             name="awareness_raising_feedback"
@@ -418,6 +428,7 @@ export const Meal = () => {
             <Route path="legal" element={<PdmLegalDashboard />} />
             <Route path="awareness" element={<PdmAwarenessDashboard />} />
             <Route path="general/case-management" element={<PdmGPCaseManagementDashboard />} />
+            <Route path="general/cbp-kii" element={<CbpKiiDashboard />} />
           </Route>
           <Route path={mealIndex.siteMap.pdm.hdp._} element={<MealPdmOutlet forms={['meal_eorePdm']} />}>
             <Route index element={<Navigate to={mealIndex.siteMap.pdm.hdp.eore} replace />} />
