@@ -1002,6 +1002,8 @@ const en = Object.freeze({
       killCache: 'Clear cache',
       refreshLong: 'Refresh started, can takes few minutes.',
       pluggedKobo: 'Plugged Kobo',
+      recordIncludesPeopleWithDisabilities: 'Records with disabilities',
+      recordIncludesNoPeopleWithDisabilities: 'No disabilities registered',
     },
     protHHS2: {
       freedomOfMovement: 'Barriers to Freedom of Movement',

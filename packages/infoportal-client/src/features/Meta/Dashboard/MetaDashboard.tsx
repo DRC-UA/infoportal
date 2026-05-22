@@ -3,10 +3,9 @@ import {Obj, seq} from '@axanc/ts-utils'
 import {Box, FormControlLabel, Grid, Switch, Typography, useTheme} from '@mui/material'
 import {format, isAfter, compareAsc} from 'date-fns'
 
-import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
+import {KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
-import {MetaDashboardActivityPanel} from '@/features/Meta/Dashboard/MetaDashboardActivityPanel'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
@@ -24,6 +23,10 @@ import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Txt} from '@/shared/Txt'
 
+import {FORMS_TO_PASS_AVG_HOUSEHOLD_SIZE_CALCULATION} from './constants'
+import MetaDashboardActivityPanel from './MetaDashboardActivityPanel'
+import MetaDashboardForms from './MetaDashboardForms'
+
 export const MetaDashboard = () => {
   const t = useTheme()
   const {m, formatLargeNumber} = useI18n()
@@ -35,19 +38,8 @@ export const MetaDashboard = () => {
   const handleDisplacementAdornmentClick = () => setShowNullishDisplacementStatus((prev) => !prev)
   const noHHDataPlaceholder = '-'
 
-  const formsToPassAvgHouseholdSizeCalculation = [
-    KoboIndex.byName('protection_counselling').id,
-    KoboIndex.byName('protection_groupSession').id,
-    KoboIndex.byName('protection_referral').id,
-    KoboIndex.byName('protection_communityMonitoring').id,
-    KoboIndex.byName('legal_individual_aid').id,
-    KoboIndex.byName('shelter_commonSpaces').id,
-    KoboIndex.byName('va_bio_tia').id,
-    KoboIndex.byName('protection_gbv').id,
-  ]
-
   const {monthlyAvgHHSizeData, avgHHSize} = useMemo(() => {
-    const filtered = ctx.filteredData.filter((d) => !formsToPassAvgHouseholdSizeCalculation.includes(d.formId))
+    const filtered = ctx.filteredData.filter((d) => !FORMS_TO_PASS_AVG_HOUSEHOLD_SIZE_CALCULATION.includes(d.formId))
 
     const monthlyAvgHHSizeData = Object.entries(filtered.groupBy(({date}) => format(date, 'yyyy-MM')))
       .map(([month, entries]) => {
@@ -192,7 +184,7 @@ export const MetaDashboard = () => {
             <PanelBody>
               <ChartBarSingleBy
                 data={ctx.filteredPersons}
-                by={(_) => _.displacement}
+                by={({displacement}) => displacement}
                 includeNullish={showNullishDisplacementStatus}
                 label={{
                   ...Person.DisplacementStatus,
@@ -202,12 +194,7 @@ export const MetaDashboard = () => {
               />
             </PanelBody>
           </Panel>
-          <SlidePanel title={m.form}>
-            <ChartBarSingleBy
-              data={ctx.filteredData}
-              by={(_) => KoboIndex.searchById(_.formId)?.translation ?? _.formId}
-            />
-          </SlidePanel>
+          <MetaDashboardForms />
         </Div>
         <Div column>
           <SlidePanel>
@@ -215,7 +202,7 @@ export const MetaDashboard = () => {
               deps={[ctx.filteredData]}
               fn={() => {
                 const group = Obj.mapValues(
-                  ctx.filteredData.groupBy((_) => _.status ?? 'Blank'),
+                  ctx.filteredData.groupBy(({status}) => status ?? 'Blank'),
                   (group) => group.length,
                 )
 

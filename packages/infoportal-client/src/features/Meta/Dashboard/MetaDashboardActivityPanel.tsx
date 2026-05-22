@@ -1,4 +1,4 @@
-import {useMemo, useState, type ChangeEvent} from 'react'
+import {useMemo, useState, type ChangeEvent, type FC} from 'react'
 import {fnSwitch, Obj} from '@axanc/ts-utils'
 import {Box, Typography, Stack, Switch} from '@mui/material'
 
@@ -10,13 +10,15 @@ import {Lazy} from '@/shared/Lazy'
 import {PanelWBody} from '@/shared/Panel/PanelWBody'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 
-export const MetaDashboardActivityPanel = () => {
+import PeopleSubmissionsSwitchProps from './PeopleSubmissionsSwitch'
+
+const MetaDashboardActivityPanel: FC = () => {
   const [type, setType] = useState<'sector' | 'activity' | 'modality' | 'nfis'>('sector')
   const {m} = useI18n()
   const {
     data: {filteredData},
   } = useMetaContext()
-  const filteredFlatData = useMemo(
+  const flatFilteredData = useMemo(
     () => filteredData.flatMap(({persons, ...rest}) => persons!.map((person) => ({...rest, persons: [person]}))),
     [filteredData],
   )
@@ -25,7 +27,7 @@ export const MetaDashboardActivityPanel = () => {
     setDataSource(checked ? 'people' : 'submissions')
   }
 
-  const data = dataSource === 'submissions' ? filteredData : filteredFlatData
+  const data = dataSource === 'submissions' ? filteredData : flatFilteredData
 
   return (
     <PanelWBody>
@@ -36,11 +38,7 @@ export const MetaDashboardActivityPanel = () => {
           <ScRadioGroupItem hideRadio value="modality" title={m.modality} />
           <ScRadioGroupItem hideRadio value="nfis" title={m.nfis} />
         </ScRadioGroup>
-        <Box display="flex" flexDirection="row" gap={1}>
-          <Typography>{m.submissions}</Typography>
-          <Switch size="small" value={dataSource} color="primary" onChange={toggleDataSource} />
-          <Typography>{m.people}</Typography>
-        </Box>
+        <PeopleSubmissionsSwitchProps dataSource={dataSource} toggleDataSource={toggleDataSource} />
       </Stack>
 
       {fnSwitch(type, {
@@ -80,3 +78,5 @@ export const MetaDashboardActivityPanel = () => {
     </PanelWBody>
   )
 }
+
+export default MetaDashboardActivityPanel
