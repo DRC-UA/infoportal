@@ -224,6 +224,8 @@ export namespace KoboIndex {
     donors?: string[]
   }
 
+  export const namesIdsRecord = koboIndex
+
   export const names = Obj.keys(koboIndex)
 
   export const parseFormName = (name: string): ParsedForm => {
