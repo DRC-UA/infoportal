@@ -2,13 +2,10 @@ import {useMemo, useState} from 'react'
 import {Obj, seq} from '@axanc/ts-utils'
 import {Box, FormControlLabel, Grid, Switch, Typography, useTheme} from '@mui/material'
 import {format, isAfter, compareAsc} from 'date-fns'
-import Link from 'next/link'
-import {generatePath} from 'react-router'
 
-import {KoboIndex, KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
+import {KoboMetaStatus, OblastIndex, Person} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
-import {MetaDashboardActivityPanel} from '@/features/Meta/Dashboard/MetaDashboardActivityPanel'
 import {useMetaContext} from '@/features/Meta/MetaContext'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {ChartBarMultipleByKey} from '@/shared/charts/ChartBarMultipleByKey'
@@ -26,7 +23,9 @@ import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {ScRadioGroup, ScRadioGroupItem} from '@/shared/RadioGroup'
 import {Txt} from '@/shared/Txt'
 
-import {FORM_LABELS_DATA, FORMS_TO_PASS_AVG_HOUSEHOLD_SIZE_CALCULATION} from './constants'
+import {FORMS_TO_PASS_AVG_HOUSEHOLD_SIZE_CALCULATION} from './constants'
+import MetaDashboardActivityPanel from './MetaDashboardActivityPanel'
+import MetaDashboardForms from './MetaDashboardForms'
 
 export const MetaDashboard = () => {
   const t = useTheme()
@@ -195,20 +194,7 @@ export const MetaDashboard = () => {
               />
             </PanelBody>
           </Panel>
-          <SlidePanel title={m.form}>
-            <ChartBarSingleBy
-              data={ctx.filteredData}
-              label={Object.fromEntries(
-                FORM_LABELS_DATA.map(({label, formId}) => [
-                  label,
-                  <Link key={formId} href={generatePath('database#/form/:formId/database', {formId})} target="_blank">
-                    {label}
-                  </Link>,
-                ]),
-              )}
-              by={({formId}) => KoboIndex.searchById(formId)?.translation ?? formId}
-            />
-          </SlidePanel>
+          <MetaDashboardForms />
         </Div>
         <Div column>
           <SlidePanel>
