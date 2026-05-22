@@ -52,6 +52,7 @@ const uk = deepmerge(en, {
     filterPlaceholder: 'Фільтрувати...',
     clearFilter: 'Очистити фільтр',
     reportingPartner: 'Партнер, що звітує',
+    disability: 'Інвалідність',
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {
@@ -140,6 +141,17 @@ const uk = deepmerge(en, {
           notDefined: 'Не визначено',
         },
       },
+    },
+    _meta: {
+      distinctBySubmission: 'За записом',
+      distinctByTaxId: 'За ІПН',
+      distinctByPhone: 'За номером телефону',
+      refresh: 'Синхронізувати',
+      killCache: 'Очистити кеш',
+      refreshLong: 'Розпочато оновлення, може тривати кілька хвилин',
+      pluggedKobo: 'Підключено Кобо-форм',
+      recordIncludesPeopleWithDisabilities: 'Записів з особами з інвалідністю',
+      recordIncludesNoPeopleWithDisabilities: 'Записів без осіб з інвалідністю',
     },
     legal: {
       individualAid: 'Індивідуальна юридична допомога',

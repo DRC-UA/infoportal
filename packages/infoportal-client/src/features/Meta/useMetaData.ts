@@ -1,9 +1,20 @@
 import {useCallback, useMemo} from 'react'
 import {Obj, Seq} from '@axanc/ts-utils'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
+
+import {
+  drcOffices,
+  IKoboMeta,
+  KoboIndex,
+  KoboMetaStatus,
+  OblastIndex,
+  Period,
+  PeriodHelper,
+  Person,
+} from 'infoportal-common'
+
 import {appConfig} from '@/conf/AppConfig'
+import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
-import {drcOffices, IKoboMeta, KoboIndex, KoboMetaStatus, OblastIndex, Period, PeriodHelper} from 'infoportal-common'
 import {useI18n} from '@/core/i18n'
 
 export type DistinctBy = 'taxId' | 'phone' | 'submission'
@@ -61,6 +72,21 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
         getValue: (_) => _.status ?? DataFilter.blank,
         addBlankOption: true,
         getOptions: () => DataFilter.buildOptionsFromObject(KoboMetaStatus),
+      },
+      disability: {
+        icon: 'accessible',
+        label: m.disability,
+        getValue: ({persons}) =>
+          persons?.some(
+            ({disability}) =>
+              disability !== undefined && !disability.includes(Person.WgDisability.None) && disability.length > 0,
+          )
+            ? 'disabilities'
+            : 'no-disabilities',
+        getOptions: () => [
+          {value: 'disabilities', label: m._meta.recordIncludesPeopleWithDisabilities},
+          {value: 'no-disabilities', label: m._meta.recordIncludesNoPeopleWithDisabilities},
+        ],
       },
       sector: {
         icon: 'category',
@@ -146,7 +172,7 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
             .map((_) => ({value: _, label: _})),
       },
     })
-  }, [data])
+  }, [data, m])
   const [shapeFilters, setShapeFilters] = usePersistentState<DataFilter.InferShape<typeof shape>>(
     {},
     {storageKey: storageKeyPrefix + 'meta-dashboard-filters'},
