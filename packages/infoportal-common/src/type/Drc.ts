@@ -3,6 +3,7 @@ import {Obj, seq} from '@axanc/ts-utils'
 import {OblastName} from '../location/index.js'
 
 export enum DrcOffice {
+  Barvinkove = 'Barvinkove',
   Chernihiv = 'Chernihiv',
   Chernivtsi = 'Chernivtsi',
   Dnipro = 'Dnipro',
@@ -20,6 +21,7 @@ export enum DrcOffice {
 }
 
 export enum DrcOperatingOffice {
+  Barvinkove = 'Barvinkove',
   Dnipro = 'Dnipro',
   Kharkiv = 'Kharkiv',
   Kyiv = 'Kyiv',
@@ -29,19 +31,20 @@ export enum DrcOperatingOffice {
 }
 
 export const oblastByDrcOffice: Record<DrcOffice, OblastName> = {
-  Kyiv: 'Kyivska',
-  Sumy: 'Sumska',
-  Mykolaiv: 'Mykolaivska',
-  Lviv: 'Lvivska',
+  Barvinkove: 'Donetska',
   Chernihiv: 'Chernihivska',
-  Kharkiv: 'Kharkivska',
-  Dnipro: 'Dnipropetrovska',
-  Poltava: 'Poltavska',
   Chernivtsi: 'Chernihivska',
-  Sloviansk: 'Donetska',
-  Ivankiv: 'Ivano-Frankivska', // 🫣
+  Dnipro: 'Dnipropetrovska',
   Ichna: 'Chernihivska',
+  Ivankiv: 'Ivano-Frankivska',
+  Kharkiv: 'Kharkivska',
   Kherson: 'Khersonska',
+  Kyiv: 'Kyivska',
+  Lviv: 'Lvivska',
+  Mykolaiv: 'Mykolaivska',
+  Poltava: 'Poltavska',
+  Sloviansk: 'Donetska',
+  Sumy: 'Sumska',
   Zaporizhzhya: 'Zaporizka',
 }
 
@@ -196,6 +199,7 @@ export class DrcSectorHelper {
 }
 
 export type DrcOfficeShort =
+  | 'BRV'
   | 'CEJ'
   | 'DNK'
   | 'HRK'
@@ -213,6 +217,7 @@ export type DrcOfficeShort =
   | 'Zaporizhzhya'
 
 export const drcOfficeShort: Record<DrcOffice, DrcOfficeShort> = {
+  [DrcOffice.Barvinkove]: 'BRV',
   [DrcOffice.Chernihiv]: 'CEJ',
   [DrcOffice.Chernivtsi]: 'Chernivtsi',
   [DrcOffice.Dnipro]: 'DNK',
@@ -256,6 +261,7 @@ export enum DrcDonor {
   SIDA = 'SIDA',
   UHF = 'UHF',
   UNHC = 'UNHC',
+  WRA = 'WRA',
   // extra options out of sorted list:
   Other = 'Other',
   None = 'None',
@@ -288,6 +294,7 @@ export const drcDonorTranlate: Record<DrcDonor, string> = {
   SIDA: 'SIDA',
   UHF: 'UHF',
   UNHC: 'UNHC',
+  WRA: 'US Office of Weapons Removal and Abatement',
   // extra options out of sorted list:
   Other: 'Other',
   None: 'None',
@@ -352,6 +359,7 @@ export enum DrcProject {
   'UKR-000380 DANIDA' = 'UKR-000380 DANIDA',
   'UKR-000385 Pooled Funds' = 'UKR-000385 Pooled Funds',
   'UKR-000386 Pooled Funds' = 'UKR-000386 Pooled Funds',
+  'UKR-000387 WRA' = 'UKR-000387 WRA',
   'UKR-000388 BHA' = 'UKR-000388 BHA',
   'UKR-000390 UHF9' = 'UKR-000390 UHF9',
   'UKR-000396 Danish MFA' = 'UKR-000396 Danish MFA',
@@ -436,6 +444,7 @@ export class DrcProjectHelper {
     'UKR-000380 DANIDA': DrcDonor.DANI,
     'UKR-000385 Pooled Funds': DrcDonor.PoolFunds,
     'UKR-000386 Pooled Funds': DrcDonor.PoolFunds,
+    [DrcProject['UKR-000387 WRA']]: DrcDonor.WRA,
     'UKR-000388 BHA': DrcDonor.BHA,
     'UKR-000390 UHF9': DrcDonor.UHF,
     'UKR-000396 Danish MFA': DrcDonor.DMFA,

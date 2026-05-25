@@ -68,6 +68,7 @@ export namespace Meal_cfmInternal {
       'UKR-000396': `UKR-000396 Danish MFA`,
       'UKR-000390': `UKR-000390 UHF9`,
       'UKR-000388': `UKR-000388 BHA`,
+      'UKR-000387': `UKR-000387 WRA`,
       'UKR-000386': `UKR-000386 Pooled Funds`,
       'UKR-000385': `UKR-000385 Pooled Funds`,
       'UKR-000380': `UKR-000380 DANIDA`,
