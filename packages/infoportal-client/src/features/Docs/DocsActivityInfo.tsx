@@ -15,7 +15,7 @@ import {
 const DocsActivityInfo: FC = () => {
   return (
     <article>
-      <Typography variant="h2">Reporting to Activity Info</Typography>
+      <Typography variant="h2">Reporting to Activity Info [Obsolete since 2026]</Typography>
       <Typography variant="h3" marginBlock={2} id="1-activity-info-structure">
         1. Activity Info structure
       </Typography>
