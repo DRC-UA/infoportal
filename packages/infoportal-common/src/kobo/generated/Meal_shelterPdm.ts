@@ -8,8 +8,8 @@ export namespace Meal_shelterPdm {
     INTRO: string
     // Date_of_the_interview [date] Date of the interview
     Date_of_the_interview: Date | undefined
-    // Interviewer_s_name [text] Interviewer's name
-    Interviewer_s_name: string | undefined
+    // Interviewer_s_name [select_one] Interviewer's name
+    Interviewer_s_name: undefined | Option<'Interviewer_s_name'>
     // Donor [select_one] Donor
     Donor: undefined | Option<'Donor'>
     // Donor_other [text] If "Other" Please specify:
@@ -224,7 +224,7 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/safe_dignified/involved_repairs_home [select_multiple] How were you involved in the repairs/insulation of your home?
     involved_repairs_home: undefined | Option<'involved_repairs_home'>[]
     // group_vx8wu49/group_ec5jx74/meters_person_space [select_one] Is there at least 3.5 square meters per person of floor space
-    meters_person_space: undefined | Option<'same_chance_receive_support'>
+    meters_person_space: undefined | Option<'noticed_construction_problems'>
     // group_vx8wu49/group_ec5jx74/shelter_solution_standards [select_one] Do you think the repair solution (and materials) provided are good quality and suitable for your local conditions (weather, safety, and durability)?
     shelter_solution_standards: undefined | Option<'responded_complaint_feed'>
     // group_vx8wu49/group_ec5jx74/find_good_materials [select_one] Were you able to find good quality materials and suitable for your local conditions?
@@ -236,11 +236,11 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/group_ec5jx74/repairs_done_accordance [select_one] Do you feel the repairs or insulation have been done safely and in a way that makes your home strong and secure?
     repairs_done_accordance: undefined | Option<'responded_complaint_feed'>
     // group_vx8wu49/group_ec5jx74/Are_you_currently_able [select_one] Are you currently able to cover your basic needs: access to water, cooking/getting food, shelter, hygiene, etc.).
-    Are_you_currently_able: undefined | Option<'same_chance_receive_support'>
+    Are_you_currently_able: undefined | Option<'noticed_construction_problems'>
     // group_vx8wu49/group_ec5jx74/Are_you_currently_able_no [text] Please, specify
     Are_you_currently_able_no: string | undefined
     // group_vx8wu49/group_ec5jx74/received_correspond_needs [select_one] Did the assistance you received from DRC correspond with your needs?
-    received_correspond_needs: undefined | Option<'same_chance_receive_support'>
+    received_correspond_needs: undefined | Option<'noticed_construction_problems'>
     // group_vx8wu49/group_ec5jx74/received_correspond_needs_no [text] If ‘No’ please specify
     received_correspond_needs_no: string | undefined
     // group_vx8wu49/group_ec5jx74/_5_Have_living_conditions_been [select_one] Have your living conditions improved as a result of the assistance that you received from DRC?
@@ -252,7 +252,7 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/group_ec5jx74/_5_1_Please_specify [text] Please, explain
     _5_1_Please_specify: string | undefined
     // group_vx8wu49/group_ec5jx74/living_sufficiently_comfort [select_one] Are you able to make at least one living area sufficiently warm for comfort?
-    living_sufficiently_comfort: undefined | Option<'same_chance_receive_support'>
+    living_sufficiently_comfort: undefined | Option<'noticed_construction_problems'>
     // group_vx8wu49/group_ec5jx74/living_sufficiently_comfort_no [text] If No - Specify
     living_sufficiently_comfort_no: string | undefined
     // group_vx8wu49/group_ec5jx74/does_cold_indoors [select_multiple] What does your household do when it is too cold indoors?
@@ -306,7 +306,7 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/outcome/feel_informed_repair_no [text] If no, what we should have done to better inform you about the assistance available to you?
     feel_informed_repair_no: string | undefined
     // group_vx8wu49/outcome/freely_demand_payment [select_one] Were you given assistance freely, with no demand or suggestion of payment in either money or kind?
-    freely_demand_payment: undefined | Option<'same_chance_receive_support'>
+    freely_demand_payment: undefined | Option<'noticed_construction_problems'>
     // group_vx8wu49/outcome/freely_demand_payment_no [text] If No - Specify
     freely_demand_payment_no: string | undefined
     // group_vx8wu49/outcome/any_member_household [select_one] Have you or any member of your household been exposed to any risk as a consequence of receiving the CASH?
@@ -314,7 +314,7 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/outcome/any_member_household_yes [text] If "Yes", you have experienced any challenge or insecurity situation as consequence of receiving CASH, can you tell us what happened?
     any_member_household_yes: string | undefined
     // group_vx8wu49/access_pwd_assisstance/barriers_pwd_join [select_one] Did you feel there were any barriers for persons with disabilities to join these activities?
-    barriers_pwd_join: undefined | Option<'same_chance_receive_support'>
+    barriers_pwd_join: undefined | Option<'noticed_construction_problems'>
     // group_vx8wu49/access_pwd_assisstance/barriers_pwd_join_yes [text] If "Yes", please explain why:
     barriers_pwd_join_yes: string | undefined
     // group_vx8wu49/access_pwd_assisstance/easily_receive_insulation [select_one] Were you (or someone in your household) able to easily receive and understand information about the insulation support?
@@ -326,13 +326,123 @@ export namespace Meal_shelterPdm {
     // group_vx8wu49/access_pwd_assisstance/easy_participate_activities_no [text] If No - Specify
     easy_participate_activities_no: string | undefined
     // group_vx8wu49/access_pwd_assisstance/same_chance_receive_support [select_one] Do you think your household had the same chance to receive support as other households in your community?
-    same_chance_receive_support: undefined | Option<'same_chance_receive_support'>
+    same_chance_receive_support: undefined | Option<'noticed_construction_problems'>
     // group_vx8wu49/access_pwd_assisstance/same_chance_receive_support_no [text] If No - Specify
     same_chance_receive_support_no: string | undefined
     // group_vx8wu49/access_pwd_assisstance/household_part_project [select_one] Is there anything that made it easier or harder for your household to take part in the project?
     household_part_project: undefined | Option<'responded_complaint_feed'>
     // group_vx8wu49/access_pwd_assisstance/household_part_project_yes [text] If "Yes", please specify what
     household_part_project_yes: string | undefined
+    // group_vx8wu49/common_spaces/common_spaces_questionnaire_type [select_one] Questionnaire type
+    common_spaces_questionnaire_type: undefined | Option<'common_spaces_questionnaire_type'>
+    // group_vx8wu49/common_spaces/modality_interview [select_one] Modality of the interview
+    modality_interview: undefined | Option<'modality_interview'>
+    // group_vx8wu49/common_spaces/address_building [text] Name / address of building
+    address_building: string | undefined
+    // group_vx8wu49/common_spaces/building_section_repairs [text] Building section / entrance covered by the repairs
+    building_section_repairs: string | undefined
+    // group_vx8wu49/common_spaces/interviewee_position [text] Interviewee position / role
+    interviewee_position: string | undefined
+    // group_vx8wu49/common_spaces/respondent_relation_building [select_one] Respondent relation to the building
+    respondent_relation_building: undefined | Option<'respondent_relation_building'>
+    // group_vx8wu49/common_spaces/respondent_relation_building_other [text] If "Other" Please specify:
+    respondent_relation_building_other: string | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/repair_works_completed [date] When were the repair works completed?
+    repair_works_completed: Date | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/common_space_repair [select_multiple] What were the main common-space repair works carried out?
+    common_space_repair: undefined | Option<'common_space_repair'>[]
+    // group_vx8wu49/common_spaces/kii_common_spaces/common_space_repair_other [text] If "Other" Please specify:
+    common_space_repair_other: string | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/households_repaired_section [integer] How many households in the repaired section(s) benefited from the intervention?
+    households_repaired_section: number | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/extent_repairs_address_conflict [select_one] To what extent did the repairs address the conflict-related damage in the common spaces?
+    extent_repairs_address_conflict: undefined | Option<'repairs_mainly_address'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/extent_repairs_address_conflict_no [text] If "Only partially" or "No", Please specify:
+    extent_repairs_address_conflict_no: string | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/repairs_restored_safety [select_one] To what extent have the repairs restored safety in the repaired common spaces?
+    repairs_restored_safety: undefined | Option<'report_drc_employee'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/repairs_restored_core_functionality [select_one] To what extent have the repairs restored core functionality of the repaired common-space elements and systems?
+    repairs_restored_core_functionality: undefined | Option<'repairs_restored_core_functionality'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/repairs_restored_core_functionality_no [text] If "Partially restored" or "Not restored", Please specify:
+    repairs_restored_core_functionality_no: string | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/repaired_elements_properly [select_one] Are the repaired common-space elements and systems currently working properly?
+    repaired_elements_properly: undefined | Option<'repaired_elements_working'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/repaired_elements_properly_no [text] If "Partially functional (some problems)" or "Not functional", Please specify:
+    repaired_elements_properly_no: string | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/technical_defects_appeared [select_one] Have any technical defects or repair issues appeared since completion?
+    technical_defects_appeared: undefined | Option<'technical_defects_appeared'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/technical_defects_appeared_yes [text] If "Yes, minor" or "Yes, major", Please specify:
+    technical_defects_appeared_yes: string | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/helped_affected_evidnovlennia [select_one] Have the repairs helped affected households in this building access or move forward with eVidnovlennia / state compensation?
+    helped_affected_evidnovlennia: undefined | Option<'helped_affected_evidnovlennia'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/normal_access_apartments [select_one] Since the repairs, are the repaired common spaces fully usable and supporting normal access to apartments?
+    normal_access_apartments: undefined | Option<'clean_after_works'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/normal_access_apartments_no [text] If "Partially" or "No", Please specify:
+    normal_access_apartments_no: string | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/groups_access_common_spaces [select_one] To what extent can all groups, including older people and persons with disabilities, access and use the repaired common spaces?
+    groups_access_common_spaces: undefined | Option<'groups_access_common_spaces'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/accessibility_features_repairs [select_one] Were accessibility features included in the repairs, and are they currently functional?
+    accessibility_features_repairs: undefined | Option<'accessibility_features_repairs'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/barriers_people_common_spaces [text] What barriers, if any, still exist for people with specific needs in the common spaces?
+    barriers_people_common_spaces: string | undefined
+    // group_vx8wu49/common_spaces/kii_common_spaces/residents_clearly_informed [select_one] Were residents clearly informed about the scope of works, timing, possible disruptions, and expected results?
+    residents_clearly_informed: undefined | Option<'adequately_informed_works'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/residents_concerns_considered [select_one] Were residents’ concerns or feedback considered during planning and implementation?
+    residents_concerns_considered: undefined | Option<'feedback_during_repairs'>
+    // group_vx8wu49/common_spaces/kii_common_spaces/issues_needs_remain [text] What issues or needs remain that should be addressed in future support?
+    issues_needs_remain: string | undefined
+    // group_vx8wu49/common_spaces/hh_common_spaces/describe_condition_repaired [select_one] How would you describe the condition of the repaired common spaces after the repairs compared to before?
+    describe_condition_repaired: undefined | Option<'describe_condition_repaired'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/describe_condition_repaired_no [text] If "No change" or "Worse", Please specify:
+    describe_condition_repaired_no: string | undefined
+    // group_vx8wu49/common_spaces/hh_common_spaces/repaired_easier_access_apartment [select_one] Do the repaired common spaces make it easier and safer for you to access and use your apartment / building?
+    repaired_easier_access_apartment: undefined | Option<'repaired_easier_access_apartment'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/repaired_easier_access_apartment_no [text] If "Not really" or "No, it is harder now", Please specify:
+    repaired_easier_access_apartment_no: string | undefined
+    // group_vx8wu49/common_spaces/hh_common_spaces/repaired_elements_working [select_one] Are the repaired common-space elements currently working well (for example doors, windows, roof-related elements, lighting, handrails, shared systems)?
+    repaired_elements_working: undefined | Option<'repaired_elements_working'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/repaired_elements_working_no [text] If "Partially functional (some problems)" or "Not functional", Please specify:
+    repaired_elements_working_no: string | undefined
+    // group_vx8wu49/common_spaces/hh_common_spaces/noticed_construction_problems [select_one] Have you noticed any repair or construction problems after completion (for example leaks, cracks, broken fittings, damaged finishes)?
+    noticed_construction_problems: undefined | Option<'noticed_construction_problems'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/noticed_construction_problems_yes [text] If "Yes", Please specify:
+    noticed_construction_problems_yes: string | undefined
+    // group_vx8wu49/common_spaces/hh_common_spaces/repairs_mainly_address [select_one] To your knowledge, did the repairs mainly address the damage caused by the conflict in the common spaces?
+    repairs_mainly_address: undefined | Option<'repairs_mainly_address'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/repairs_mainly_address_no [text] If "Only partially" or "No", Please specify:
+    repairs_mainly_address_no: string | undefined
+    // group_vx8wu49/common_spaces/hh_common_spaces/affected_household_evidnovlennia [select_one] Have the repairs helped your household access or move forward with eVidnovlennia / state compensation?
+    affected_household_evidnovlennia: undefined | Option<'affected_household_evidnovlennia'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/safe_feel_using_spaces [select_one] How safe do you feel when using the repaired common spaces now?
+    safe_feel_using_spaces: undefined | Option<'report_drc_employee'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/safe_feel_using_spaces_no [text] If "Not really" or "Not at all", Please describe:
+    safe_feel_using_spaces_no: string | undefined
+    // group_vx8wu49/common_spaces/hh_common_spaces/repairs_improved_safety_groups [select_one] Have the repairs improved safety for women, children, older persons, persons with disabilities, or other vulnerable groups in your household?
+    repairs_improved_safety_groups: undefined | Option<'repairs_improved_safety_groups'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/spaces_easy_access [select_one] Are the repaired common spaces easy to access and use for older people and persons with disabilities in your household?
+    spaces_easy_access: undefined | Option<'spaces_easy_access'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/adequately_informed_works [select_one] Were you adequately informed about the works, timeline, possible disruptions, and expected results?
+    adequately_informed_works: undefined | Option<'adequately_informed_works'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/feedback_during_repairs [select_one] Do you feel residents’ concerns or feedback were considered during the repairs?
+    feedback_during_repairs: undefined | Option<'feedback_during_repairs'>
+    // group_vx8wu49/common_spaces/hh_common_spaces/needs_improvement_spaces [text] What still needs improvement in the common spaces of this building?
+    needs_improvement_spaces: string | undefined
+    // group_vx8wu49/common_spaces/repairs_improved_protection [select_one] Have the repairs improved protection from cold, drafts, rain, or water ingress in the repaired common spaces?
+    repairs_improved_protection: undefined | Option<'repairs_improved_protection'>
+    // group_vx8wu49/common_spaces/repairs_improved_protection_no [text] If "No change" or "Worsened", Please specify:
+    repairs_improved_protection_no: string | undefined
+    // group_vx8wu49/common_spaces/clean_after_works [select_one] Were the common spaces left clean and free of construction debris or unsafe leftover materials after the works?
+    clean_after_works: undefined | Option<'clean_after_works'>
+    // group_vx8wu49/common_spaces/clean_after_works_no [text] If "Partially" or "No", Please describe:
+    clean_after_works_no: string | undefined
+    // group_vx8wu49/common_spaces/satisfied_repairs_common_spaces [select_one] Overall, how satisfied are you with the repairs to the common spaces?
+    satisfied_repairs_common_spaces: undefined | Option<'report_drc_employee'>
+    // group_vx8wu49/common_spaces/satisfied_repairs_common_spaces_no [text] If "Not really" or "Not at all", Please describe:
+    satisfied_repairs_common_spaces_no: string | undefined
+    // group_vx8wu49/common_spaces/cs_treated_respect [select_one] Did you feel you were treated with respect by DRC/partner staff/contractor during the the distribution/rehabilitation or activity (SDH.2)?
+    cs_treated_respect: undefined | Option<'report_drc_employee'>
+    // group_vx8wu49/common_spaces/cs_treated_respect_no [text] If "Not really" or "Not at all", Please describe:
+    cs_treated_respect_no: string | undefined
     // group_vx8wu49/group_bd6gx40/did_you_have_regular_commu [select_one] Do you feel that you had sufficient communication from DRC staff about the assistance you received? (PEM.2)
     did_you_have_regular_commu: undefined | Option<'_17_Are_you_planning_on_stayin'>
     // group_vx8wu49/group_bd6gx40/did_you_have_regular_commu_comment [text] Please, specify
@@ -371,6 +481,19 @@ export namespace Meal_shelterPdm {
     Interviewer_s_comments: string | undefined
   }
   export const options = {
+    Interviewer_s_name: {
+      halina: `Halina`,
+      maria: `Maria`,
+      oleg: `Oleg`,
+      oleksii: `Oleksii`,
+      pavlo: `Pavlo`,
+      jullia: `Jullia`,
+      anastasia: `Anastasia`,
+      volodymyr: `Volodymyr`,
+      victoriia: `Victoriia`,
+      iryna: `Iryna`,
+      maryna: `Maryna`,
+    },
     Donor: {
       novo: `Novonordisk (UKR-000298)`,
       unhcr: `UNHCR (UKR-000308)`,
@@ -408,6 +531,7 @@ export namespace Meal_shelterPdm {
       ecm: `Emergency construction materials (ECM)`,
       insulation_contractor: `Insulation (Contractor driven approach)`,
       cash_insulation: `Cash for insualation`,
+      common_spaces: `Repairs of Common Spaces in Multi-Apartment Buildings`,
       other: `Other`,
     },
     hh_char_hh_det_gender: {
@@ -425,7 +549,7 @@ export namespace Meal_shelterPdm {
       myes: `Mostly yes`,
       nore: `Not really`,
       noal: `Not at all`,
-      dk: `I do not know`,
+      dk: `Don’t know`,
       piyf: `Yes- greatly`,
       piym: `Yes- mostly`,
       piys: `Yes- some`,
@@ -435,7 +559,10 @@ export namespace Meal_shelterPdm {
       yes_many: `Yes I know many people who have been excluded from the assistance`,
       yes_few: `I know a few people who were excluded from the assistance`,
       not_many: `There were not many people who were excluded from the assistance`,
-      no: `No people were excluded who were in need`,
+      no: `No`,
+      substantially: `Yes, substantially`,
+      some: `Yes, to some extent`,
+      not_really: `Not really`,
     },
     _6_Please_rate_the_quality_of: {
       very_dis: `Very Dissatisfied`,
@@ -513,7 +640,7 @@ export namespace Meal_shelterPdm {
       dnk: `Does not know`,
       other: `Other`,
     },
-    same_chance_receive_support: {
+    noticed_construction_problems: {
       yes: `Yes`,
       no: `No`,
       dk: `Don't know`,
@@ -673,6 +800,141 @@ export namespace Meal_shelterPdm {
       mostly: `Mostly meets the needs`,
       partly: `Partly meets the needs`,
       not_meet: `Does not meet the needs at all`,
+    },
+    common_spaces_questionnaire_type: {
+      kii: `KIIs`,
+      hh: `HH level`,
+    },
+    modality_interview: {
+      in_person: `In Person`,
+      remote: `Remote`,
+    },
+    respondent_relation_building: {
+      owner: `Resident owner`,
+      tenant: `Resident tenant`,
+      non_resident_owner: `Non-resident owner`,
+      caretaker: `Caretaker / building representative`,
+      other: `Other`,
+    },
+    common_space_repair: {
+      roof: `Roof repair`,
+      windows: `Windows / entrance doors`,
+      stairwell: `Stairwell / interior repairs`,
+      mep: `Mechanical Electrical and Plumbing systems (MEP) repair in common spaces (electricity, lighting, heating, water, drainage, ventilation)`,
+      facade: `Facade repair`,
+      accessibility_improvements: `Accessibility improvements`,
+      other: `Other`,
+    },
+    repairs_mainly_address: {
+      completely: `Yes, completely`,
+      mostly: `Mostly`,
+      partially: `Only partially`,
+      no: `No`,
+      dk: `Don’t know`,
+    },
+    repairs_restored_core_functionality: {
+      fully: `Fully restored`,
+      mostly: `Mostly restored, with minor issues`,
+      partially: `Partially restored`,
+      not: `Not restored`,
+      dk: `Don’t know`,
+    },
+    repairs_improved_protection: {
+      significant: `Significant improvement`,
+      some: `Some improvement`,
+      no_change: `No change`,
+      worsened: `Worsened`,
+      dk: `Don’t know`,
+    },
+    repaired_elements_working: {
+      fully: `Fully functional`,
+      mostly: `Mostly functional (minor issues)`,
+      partially: `Partially functional (some problems)`,
+      not: `Not functional`,
+      dk: `Don’t know`,
+    },
+    technical_defects_appeared: {
+      no: `No`,
+      minor: `Yes, minor`,
+      major: `Yes, major`,
+      dk: `Don’t know`,
+    },
+    helped_affected_evidnovlennia: {
+      most: `Yes, for most affected households`,
+      some: `Yes, for some affected households`,
+      no: `No`,
+      not_applicable: `Not applicable`,
+      dk: `Don’t know`,
+    },
+    clean_after_works: {
+      fully: `Yes, fully`,
+      mostly: `Mostly`,
+      partially: `Partially`,
+      no: `No`,
+      dk: `Don’t know`,
+    },
+    groups_access_common_spaces: {
+      fully: `Fully accessible for all groups`,
+      mostly: `Mostly accessible, with minor barriers`,
+      partially: `Partially accessible, with significant barriers`,
+      barely: `Barely accessible, with major barriers`,
+      not: `Not accessible at all`,
+      dk: `Don’t know`,
+    },
+    accessibility_features_repairs: {
+      all: `Yes, all included and functional`,
+      some: `Some included and / or not all functional`,
+      no: `No accessibility features were included`,
+      dk: `Don’t know`,
+    },
+    adequately_informed_works: {
+      fully: `Fully informed`,
+      mostly: `Mostly informed`,
+      partially: `Partly informed`,
+      not: `Not informed`,
+      dk: `Don’t know`,
+    },
+    feedback_during_repairs: {
+      substantially: `Yes, substantially`,
+      some: `Yes, to some extent`,
+      not_really: `Not really`,
+      no: `No`,
+      dk: `Don’t know`,
+    },
+    describe_condition_repaired: {
+      much_better: `Much better`,
+      somewhat_better: `Somewhat better`,
+      no_change: `No change`,
+      worse: `Worse`,
+      dk: `Don’t know`,
+    },
+    repaired_easier_access_apartment: {
+      definitely: `Yes, definitely`,
+      somewhat: `Somewhat`,
+      not_really: `Not really`,
+      no: `No, it is harder now`,
+      dk: `Don’t know`,
+    },
+    affected_household_evidnovlennia: {
+      significantly: `Yes, significantly`,
+      somewhat: `Somewhat`,
+      no: `No`,
+      not_applicable: `Not applicable`,
+      dk: `Don’t know`,
+    },
+    repairs_improved_safety_groups: {
+      significantly: `Yes, significantly`,
+      somewhat: `Somewhat`,
+      no_change: `No change`,
+      worsened: `Worsened`,
+      dk: `Don’t know / Not applicable`,
+    },
+    spaces_easy_access: {
+      fully: `Fully accessible`,
+      mostly: `Mostly accessible, with minor barriers`,
+      some: `Some parts are difficult to access`,
+      not: `Not accessible`,
+      dk: `Don’t know / Not applicable`,
     },
     oblast: {
       aroc: `Autonomous Republic of Crimea`,
@@ -2634,6 +2896,9 @@ export namespace Meal_shelterPdm {
       involved_repairs_home: _.involved_repairs_home?.split(' '),
       does_cold_indoors: _.does_cold_indoors?.split(' '),
       who_mainly_excluded: _.who_mainly_excluded?.split(' '),
+      repair_works_completed: _.repair_works_completed ? new Date(_.repair_works_completed) : undefined,
+      common_space_repair: _.common_space_repair?.split(' '),
+      households_repaired_section: _.households_repaired_section ? +_.households_repaired_section : undefined,
       top3_priority_needs: _.top3_priority_needs?.split(' '),
     }) as T
 }
