@@ -2,7 +2,7 @@ import {useMemo, useState} from 'react'
 import {seq} from '@axanc/ts-utils'
 import {UaLocation} from 'ua-location'
 
-import {capitalize, Period, PeriodHelper, pickPrioritizedAid, Legal_individual_aid, DrcOffice} from 'infoportal-common'
+import {capitalize, Period, PeriodHelper, pickPrioritizedAid, Legal_individual_aid} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
@@ -69,27 +69,24 @@ const useIndividualAidData = () => {
         applicationType: {
           icon: 'cases',
           getValue: ({number_case}) => {
-            return number_case?.map(({beneficiary_application_type}) => beneficiary_application_type!)
+            return number_case?.map(({beneficiary_application_type}) => beneficiary_application_type!).flat()
           },
           multiple: true,
-          getOptions: () =>
-            DataFilter.buildOptionsFromObject(Legal_individual_aid.options.beneficiary_application_type),
+          getOptions: () => {
+            return DataFilter.buildOptionsFromObject(Legal_individual_aid.options.beneficiary_application_type)
+          },
           label: m.legal.aidType.title,
         },
         caseStatus: {
           icon: 'fact_check',
-          getValue: ({number_case}) => {
-            return number_case?.map(({status_case}) => status_case!)
-          },
+          getValue: ({number_case}) => number_case?.map(({status_case}) => status_case!),
           multiple: true,
           getOptions: () => DataFilter.buildOptionsFromObject(Legal_individual_aid.options.status_case),
           label: m.legal.aidStatus,
         },
         caseCategory: {
           icon: 'check',
-          getValue: ({number_case}) => {
-            return number_case?.map(({category_issue}) => category_issue!)
-          },
+          getValue: ({number_case}) => number_case?.map(({category_issue}) => category_issue!),
           multiple: true,
           getOptions: () => DataFilter.buildOptionsFromObject(Legal_individual_aid.options.category_issue),
           label: m.legal.aidCategory,

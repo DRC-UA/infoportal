@@ -29,9 +29,11 @@ export namespace Legal_individual_aid {
     // introduction/age [integer] Age
     age: number | undefined
     // introduction/vulnerability [select_one] Does the Beneficiary have any Specific Need – Vulnerability
-    vulnerability: undefined | Option<'case_referred_further'>
+    vulnerability: undefined | Option<'consent_sharing_data_drc_departments'>
     // introduction/vulnerability_detail [select_multiple] If "Yes" Please select:
     vulnerability_detail: undefined | Option<'vulnerability_detail'>[]
+    // introduction/strategic_priority [select_one] Strategic Priority
+    strategic_priority: undefined | Option<'strategic_priority'>
     // introduction/displacement [select_one] Displacement status
     displacement: undefined | Option<'displacement'>
     // introduction/place_residence [select_one] Place of residence
@@ -53,11 +55,13 @@ export namespace Legal_individual_aid {
     // number_case [begin_repeat] Number of legal issues
     number_case:
       | {
+          hlp_case: string | undefined
+          hlp_successful: string | undefined
           date_case: Date | undefined | undefined
           project: undefined | Option<'project'> | undefined
           office: undefined | Option<'office'> | undefined
           first_lawyer: undefined | Option<'another_lawyer'> | undefined
-          managed_another_lawyer: undefined | Option<'case_referred_further'> | undefined
+          managed_another_lawyer: undefined | Option<'consent_sharing_data_drc_departments'> | undefined
           another_lawyer: undefined | Option<'another_lawyer'> | undefined
           case_identification: undefined | Option<'case_identification'> | undefined
           self_referral: undefined | Option<'self_referral'> | undefined
@@ -149,88 +153,33 @@ export namespace Legal_individual_aid {
           category_issue_other: string | undefined | undefined
           msme: undefined | Option<'msme'>[] | undefined
           msme_other: string | undefined | undefined
-          counselling_matter_documentation: undefined | Option<'case_referred_further'> | undefined
+          document_received_assistance: undefined | Option<'consent_sharing_data_drc_departments'> | undefined
+          date_document_received_assistance: Date | undefined | undefined
+          counselling_matter_documentation: undefined | Option<'consent_sharing_data_drc_departments'> | undefined
           counselling_matter_documentation_yes: undefined | Option<'counselling_matter_documentation_yes'>[] | undefined
           counselling_matter_hlp: undefined | Option<'counselling_matter_hlp'>[] | undefined
-          document_status_ownership_documents_housing: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_ownership_documents_housing: Date | undefined | undefined
           name_obtained_ownership_documents_housing: string | undefined | undefined
-          document_status_ownership_documents_land: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_ownership_documents_land: Date | undefined | undefined
           name_obtained_ownership_documents_land: string | undefined | undefined
           counselling_matter_civil_documentation:
             | undefined
             | Option<'counselling_matter_civil_documentation'>[]
             | undefined
           counselling_matter_personal: undefined | Option<'counselling_matter_personal'>[] | undefined
-          document_status_personal_identity: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_personal_identity: Date | undefined | undefined
           name_obtained_personal_identity: string | undefined | undefined
-          document_status_personal_territorial: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_personal_territorial: Date | undefined | undefined
-          document_status_personal_education: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_personal_education: Date | undefined | undefined
           name_obtained_personal_education: string | undefined | undefined
           counselling_matter_personal_other: string | undefined | undefined
-          document_status_personal_other: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_personal_other: Date | undefined | undefined
           name_obtained_personal_other: string | undefined | undefined
           counselling_matter_citizenship: undefined | Option<'counselling_matter_citizenship'>[] | undefined
-          document_status_citizenship_confirming: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_citizenship_confirming: Date | undefined | undefined
           name_obtained_citizenship_confirming: string | undefined | undefined
-          document_status_citizenship_stateless: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_citizenship_stateless: Date | undefined | undefined
-          document_status_citizenship_extending: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_citizenship_extending: Date | undefined | undefined
           counselling_matter_citizenship_other: string | undefined | undefined
-          document_status_citizenship_other: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_citizenship_other: Date | undefined | undefined
           name_obtained_citizenship_other: string | undefined | undefined
           counselling_matter_civil: undefined | Option<'counselling_matter_civil'>[] | undefined
-          document_status_civil_birth: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_civil_birth: Date | undefined | undefined
-          document_status_civil_death: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_civil_death: Date | undefined | undefined
-          document_status_civil_marriage: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_civil_marriage: Date | undefined | undefined
-          document_status_civil_adoption: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_civil_adoption: Date | undefined | undefined
           counselling_matter_civil_other: string | undefined | undefined
-          document_status_civil_other: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_civil_other: Date | undefined | undefined
           name_obtained_civil_other: string | undefined | undefined
           counselling_matter_statuses: undefined | Option<'counselling_matter_statuses'>[] | undefined
-          document_status_statuses_idp: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_idp: Date | undefined | undefined
-          document_status_statuses_affected_child: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_affected_child: Date | undefined | undefined
-          document_status_statuses_general_disability: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_general_disability: Date | undefined | undefined
-          document_status_statuses_disability_civilians:
-            | undefined
-            | Option<'document_status_statuses_other'>
-            | undefined
-          date_recipt_statuses_disability_civilians: Date | undefined | undefined
-          document_status_statuses_disability_veterans: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_disability_veterans: Date | undefined | undefined
-          document_status_statuses_prisoner_status: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_prisoner_status: Date | undefined | undefined
-          document_status_statuses_appointment: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_appointment: Date | undefined | undefined
-          document_status_statuses_chernobyl_disaster: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_chernobyl_disaster: Date | undefined | undefined
-          document_status_statuses_pension_certificate: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_pension_certificate: Date | undefined | undefined
-          document_status_statuses_many_children: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_many_children: Date | undefined | undefined
           counselling_matter_statuses_other: string | undefined | undefined
-          document_status_statuses_other: undefined | Option<'document_status_statuses_other'> | undefined
-          date_recipt_statuses_other: Date | undefined | undefined
           name_obtained_statuses_other: string | undefined | undefined
-          document_received_assistance: undefined | Option<'case_referred_further'> | undefined
-          date_document_received_assistance: Date | undefined | undefined
-          beneficiary_application_type: undefined | Option<'beneficiary_application_type'> | undefined
+          beneficiary_application_type: undefined | Option<'beneficiary_application_type'>[] | undefined
           type_application_assistance: undefined | Option<'type_application_assistance'>[] | undefined
           institution_accompanying_cases: string | undefined | undefined
           date_assisting_court: Date | undefined | undefined
@@ -272,10 +221,13 @@ export namespace Legal_individual_aid {
           identified_legal_needs: string | undefined | undefined
           details_legal_activity: string | undefined | undefined
           further_actions: string | undefined | undefined
-          any_other_needs: undefined | Option<'case_referred_further'> | undefined
-          case_referred_further: undefined | Option<'case_referred_further'> | undefined
+          sharing_data_legal: undefined | Option<'consent_sharing_data_drc_departments'> | undefined
+          consent_pam: undefined | Option<'consent_sharing_data_drc_departments'> | undefined
+          any_other_needs: undefined | Option<'consent_sharing_data_drc_departments'> | undefined
+          case_referred_further: undefined | Option<'consent_sharing_data_drc_departments'> | undefined
           case_referred_further_no: string | undefined | undefined
           case_referred_further_yes: undefined | Option<'case_referred_further_yes'> | undefined
+          consent_sharing_data_drc_departments: undefined | Option<'consent_sharing_data_drc_departments'> | undefined
           internal_referral_number: string | undefined | undefined
           internal_other_needs: undefined | Option<'external_other_needs'> | undefined
           internal_other_needs_other: string | undefined | undefined
@@ -294,7 +246,7 @@ export namespace Legal_individual_aid {
     check_slo: string
   }
   export const options = {
-    case_referred_further: {
+    consent_sharing_data_drc_departments: {
       yes: `Yes`,
       no: `No`,
     },
@@ -307,12 +259,13 @@ export namespace Legal_individual_aid {
       dnk: `Dnipro (DNK)`,
       zap: `Zaporizhzhya (ZAP)`,
       slo: `Sloviansk (SLO)`,
+      brv: `Barvinkove (BRV)`,
     },
     displacement: {
       idp: `IDP`,
       non_idp: `Non IDP, local affected population`,
       displaced_abroad: `Displaced abroad`,
-      returnee: `Returnee`,
+      returnee: `Returnees from abroad`,
       refugee: `Refugee/asylum seekers`,
       persons_move: `Other persons on the move`,
     },
@@ -349,6 +302,7 @@ export namespace Legal_individual_aid {
       ukr000350_sida: `UKR-000350 SIDA`,
       ukr000355_danish_mofa: `UKR-000355 DMFA Mykolaiv`,
       ukr000363_uhf8: `UKR-000363 UHF VIII`,
+      ukr000372_echo: `UKR-000372 ECHO`,
       ukr000388_bha: `UKR-000388 BHA`,
       ukr000397_gffo: `UKR-000397 GFFO`,
       ukr000399_sdc: `UKR-000399 SDC3`,
@@ -365,20 +319,20 @@ export namespace Legal_individual_aid {
       vladyslav_dudchenko: `Vladyslav Dudchenko vladyslav.dudchenko@drc.ngo – Lawyer UMY`,
       andrii_kozhykhov: `Andrii Kozhykhov andrii.kozhykhov@drc.ngo – Lawyer HRK`,
       oleksii_lukianishyn: `Oleksii Lukianishyn oleksii.lukianishyn@drc.ngo – Lawyer HRK`,
-      serhii_shkramada: `Serhii Shkramada serhii.shkramada@drc.ngo – Lawyer SLO`,
-      roman_pikulin: `Roman Pikulin roman.pikulin@drc.ngo – Lawyer SLO`,
-      yevhen_dehtiarov: `Yevhen Dehtiarov yevhen.dehtiarov@drc.ngo – Lawyer SLO`,
-      yevhen_fedorinov: `Yevhen Fedorinov yevhen.fedorinov@drc.ngo – Lawyer SLO`,
+      yevhen_dehtiarov: `Yevhen Dehtiarov yevhen.dehtiarov@drc.ngo – Lawyer BRV`,
+      yevhen_fedorinov: `Yevhen Fedorinov yevhen.fedorinov@drc.ngo – Lawyer BRV`,
       inna_fedorova: `Inna Fedorova inna.fedorova@drc.ngo - Protection (Legal) TL NLV/KHE`,
-      valentyna_shavlak: `Valentyna Shavlak valentyna.shavlak@drc.ngo - Lawyer NLV`,
       vitalii_kolodystyi: `Vitalii Kolodystyi vitalii.kolodystyi@drc.ngo - Lawyer NLV`,
       andrii_bielikov: `Andrii Bielikov andrii.bielikov@drc.ngo - Lawyer NLV`,
       volodymyr_kryvoruchko: `Volodymyr Kryvoruchko volodymyr.kryvoruchko@drc.ngo - Lawyer NLV`,
-      mykhailo_obolentsev: `Mykhailo Obolentsev mykhailo.obolentsev@drc.ngo - Lawyer DNK`,
       yelyzaveta_haponova: `Yelyzaveta Haponova yelyzaveta.haponova@drc.ngo - Lawyer DNK`,
+      expert_panel: `Expert Panel`,
+      serhii_shkramada: `Serhii Shkramada serhii.shkramada@drc.ngo – Lawyer BRV`,
+      roman_pikulin: `Roman Pikulin roman.pikulin@drc.ngo – Lawyer BRV`,
+      valentyna_shavlak: `Valentyna Shavlak valentyna.shavlak@drc.ngo - Lawyer NLV`,
+      mykhailo_obolentsev: `Mykhailo Obolentsev mykhailo.obolentsev@drc.ngo - Lawyer DNK`,
       khrystyna_malikova: `Khrystyna Malikova khrystyna.malikova@drc.ngo  - Lawyer DNK`,
       tetiana_demianova: `Tetiana Demianova tetiana.demianova@drc.ngo - Lawyer IEV`,
-      expert_panel: `Expert Panel`,
     },
     case_identification: {
       self_referral: `Self Referral`,
@@ -404,6 +358,7 @@ export namespace Legal_individual_aid {
       gbv: `DRC GBV`,
       shelter: `DRC Shelter`,
       ecrec: `DRC EcRec`,
+      cfm: `DRC CFM`,
     },
     groups_project_focus: {
       general_protection: `General Protection (No Specific Target Group or project indicator other than legal aid services)`,
@@ -411,6 +366,7 @@ export namespace Legal_individual_aid {
       gbv_survivors: `GBV Survivors and Individual At-Risk of GBV`,
       va_eo: `VA EO and PwD Related`,
       ecrec: `EcRec Projects Related`,
+      veterans: `Veterans and families of veterans`,
     },
     gbv_survivors_focus: {
       gbv_legal_issues: `legal issues of GBV survivors`,
@@ -443,7 +399,7 @@ export namespace Legal_individual_aid {
       utility_services: `Utility Services`,
       cooperatives: `Cooperatives, Management Companies (Management of Multistorey Building)`,
       temporary_housing: `Temporary housing/collective sites`,
-      social_housing: `Social housing`,
+      social_housing: `Housing programmes`,
       subsidies: `Subsidies`,
       register_damage: `Register of Damage for Ukraine (RD4U) – HLP`,
       other: `Other`,
@@ -501,6 +457,7 @@ export namespace Legal_individual_aid {
     hlp_utility_services: {
       accrued_utility_payments: `Accrued utility payments`,
       debt_buildings: `Debt for the damaged/destroyed buildings.`,
+      housing_utilities_subsidies: `Housing and utilities subsidies /priviledges`,
       other: `Other`,
     },
     hlp_temporary_housing: {
@@ -512,6 +469,8 @@ export namespace Legal_individual_aid {
     hlp_social_housing: {
       registration_housing: `Registration for the housing waiting list`,
       privatization_housing: `Privatization of social housing`,
+      housing_vouchers: `Housing vouchers`,
+      housing_financing_programmes: `Housing Financing Programmes`,
       other: `Other`,
     },
     hlp_subsidies: {
@@ -523,7 +482,7 @@ export namespace Legal_individual_aid {
       damage_residential: `А3.1 Damage or destruction of residential immovable property`,
       damage_non_residential: `А3.2 Damage or Destruction of Non-Residential Immovable Property`,
       loss_housing: `A3.3 Loss of Housing or Residence`,
-      loss_access: `A3.6 Loss of Access or Control of Immovable Property in the Temporarily Occupied Territories`,
+      loss_access: `A3.4 Loss of Access or Control of Immovable Property in the Temporarily Occupied Territories`,
       other: `Other`,
     },
     category_issue_gbv: {
@@ -558,6 +517,8 @@ export namespace Legal_individual_aid {
       child_rights: `Child rights`,
       education: `Education, including access to documentation`,
       healthcare: `Healthcare, including access to medical records`,
+      access_treatment: `Access to treatment`,
+      access_rehabilitation: `Access to rehabilitation`,
       credits_invidual: `Credits/ Loans for individuals`,
       injury_and_disability: `UXO/ Injury and Disability related issues`,
       other_social_protection: `Other social protection and social benefits`,
@@ -750,6 +711,8 @@ export namespace Legal_individual_aid {
       refused_assistance: `The beneficiary refused further assistance`,
       passed_away: `The beneficiary passed away`,
       unavailable: `The beneficiary is unavailable`,
+      yes: `Yes`,
+      no: `No, document/status application pending`,
     },
     msme: {
       business_registration: `Business registration and deregistration`,
@@ -799,9 +762,14 @@ export namespace Legal_individual_aid {
       external: `External Actor`,
     },
     external_other_needs: {
+      ecrec: `EcRec and livelihoods`,
+      shelter: `Shelter`,
+      hmpss: `HMPSS`,
+      cash_protection: `Cash for Protection Case Management`,
+      gbv_cm: `GBV Case Management`,
+      basic_needs: `Basic Needs`,
       mpca: `MPCA`,
       nfi: `Non-Food Items`,
-      shelter: `Shelter rehabilitation`,
       cash_rent: `Cash for rent`,
       cash_repair: `Cash for repair`,
       cash_fuel: `Cash for solid fuel`,
@@ -836,10 +804,6 @@ export namespace Legal_individual_aid {
       local_authorities: `Local authorities`,
       other_organizations: `Other organizations`,
       personal_contacts: `Personal Contacts`,
-    },
-    document_status_statuses_other: {
-      yes: `Yes`,
-      no: `No, document/status application pending`,
     },
     counselling_matter_documentation_yes: {
       hlp: `HLP`,
@@ -900,6 +864,12 @@ export namespace Legal_individual_aid {
     beneficiary_cannot: {
       positive: `Positive Final Result Obtained (need are fully met)`,
       negative: `Negative Final Result Obtained (needs cannot be addressed further)`,
+    },
+    strategic_priority: {
+      sp1: `SP 1: vulnerable close to the front line (0-50 km)`,
+      sp2: `SP 2: newly displaced and evacuated, inc. transit centres and collective sites (less th. 3 months)`,
+      sp3: `SP 3: emergency response after strikes (72 hours, inc. EO victims)`,
+      sp4: `SP 4: displaced and vulnerable not covered by soc.protection networks (more th. 3 months; 50+km)`,
     },
     oblast: {
       crimea: `Autonomous Republic of Crimea`,
@@ -3103,86 +3073,17 @@ export namespace Legal_individual_aid {
         _['injured_veterans'] = _.injured_veterans?.split(' ')
         _['other_social_protection'] = _.other_social_protection?.split(' ')
         _['msme'] = _.msme?.split(' ')
-        _['counselling_matter_documentation_yes'] = _.counselling_matter_documentation_yes?.split(' ')
-        _['counselling_matter_hlp'] = _.counselling_matter_hlp?.split(' ')
-        _['date_recipt_ownership_documents_housing'] = _.date_recipt_ownership_documents_housing
-          ? new Date(_.date_recipt_ownership_documents_housing)
-          : undefined
-        _['date_recipt_ownership_documents_land'] = _.date_recipt_ownership_documents_land
-          ? new Date(_.date_recipt_ownership_documents_land)
-          : undefined
-        _['counselling_matter_civil_documentation'] = _.counselling_matter_civil_documentation?.split(' ')
-        _['counselling_matter_personal'] = _.counselling_matter_personal?.split(' ')
-        _['date_recipt_personal_identity'] = _.date_recipt_personal_identity
-          ? new Date(_.date_recipt_personal_identity)
-          : undefined
-        _['date_recipt_personal_territorial'] = _.date_recipt_personal_territorial
-          ? new Date(_.date_recipt_personal_territorial)
-          : undefined
-        _['date_recipt_personal_education'] = _.date_recipt_personal_education
-          ? new Date(_.date_recipt_personal_education)
-          : undefined
-        _['date_recipt_personal_other'] = _.date_recipt_personal_other
-          ? new Date(_.date_recipt_personal_other)
-          : undefined
-        _['counselling_matter_citizenship'] = _.counselling_matter_citizenship?.split(' ')
-        _['date_recipt_citizenship_confirming'] = _.date_recipt_citizenship_confirming
-          ? new Date(_.date_recipt_citizenship_confirming)
-          : undefined
-        _['date_recipt_citizenship_stateless'] = _.date_recipt_citizenship_stateless
-          ? new Date(_.date_recipt_citizenship_stateless)
-          : undefined
-        _['date_recipt_citizenship_extending'] = _.date_recipt_citizenship_extending
-          ? new Date(_.date_recipt_citizenship_extending)
-          : undefined
-        _['date_recipt_citizenship_other'] = _.date_recipt_citizenship_other
-          ? new Date(_.date_recipt_citizenship_other)
-          : undefined
-        _['counselling_matter_civil'] = _.counselling_matter_civil?.split(' ')
-        _['date_recipt_civil_birth'] = _.date_recipt_civil_birth ? new Date(_.date_recipt_civil_birth) : undefined
-        _['date_recipt_civil_death'] = _.date_recipt_civil_death ? new Date(_.date_recipt_civil_death) : undefined
-        _['date_recipt_civil_marriage'] = _.date_recipt_civil_marriage
-          ? new Date(_.date_recipt_civil_marriage)
-          : undefined
-        _['date_recipt_civil_adoption'] = _.date_recipt_civil_adoption
-          ? new Date(_.date_recipt_civil_adoption)
-          : undefined
-        _['date_recipt_civil_other'] = _.date_recipt_civil_other ? new Date(_.date_recipt_civil_other) : undefined
-        _['counselling_matter_statuses'] = _.counselling_matter_statuses?.split(' ')
-        _['date_recipt_statuses_idp'] = _.date_recipt_statuses_idp ? new Date(_.date_recipt_statuses_idp) : undefined
-        _['date_recipt_statuses_affected_child'] = _.date_recipt_statuses_affected_child
-          ? new Date(_.date_recipt_statuses_affected_child)
-          : undefined
-        _['date_recipt_statuses_general_disability'] = _.date_recipt_statuses_general_disability
-          ? new Date(_.date_recipt_statuses_general_disability)
-          : undefined
-        _['date_recipt_statuses_disability_civilians'] = _.date_recipt_statuses_disability_civilians
-          ? new Date(_.date_recipt_statuses_disability_civilians)
-          : undefined
-        _['date_recipt_statuses_disability_veterans'] = _.date_recipt_statuses_disability_veterans
-          ? new Date(_.date_recipt_statuses_disability_veterans)
-          : undefined
-        _['date_recipt_statuses_prisoner_status'] = _.date_recipt_statuses_prisoner_status
-          ? new Date(_.date_recipt_statuses_prisoner_status)
-          : undefined
-        _['date_recipt_statuses_appointment'] = _.date_recipt_statuses_appointment
-          ? new Date(_.date_recipt_statuses_appointment)
-          : undefined
-        _['date_recipt_statuses_chernobyl_disaster'] = _.date_recipt_statuses_chernobyl_disaster
-          ? new Date(_.date_recipt_statuses_chernobyl_disaster)
-          : undefined
-        _['date_recipt_statuses_pension_certificate'] = _.date_recipt_statuses_pension_certificate
-          ? new Date(_.date_recipt_statuses_pension_certificate)
-          : undefined
-        _['date_recipt_statuses_many_children'] = _.date_recipt_statuses_many_children
-          ? new Date(_.date_recipt_statuses_many_children)
-          : undefined
-        _['date_recipt_statuses_other'] = _.date_recipt_statuses_other
-          ? new Date(_.date_recipt_statuses_other)
-          : undefined
         _['date_document_received_assistance'] = _.date_document_received_assistance
           ? new Date(_.date_document_received_assistance)
           : undefined
+        _['counselling_matter_documentation_yes'] = _.counselling_matter_documentation_yes?.split(' ')
+        _['counselling_matter_hlp'] = _.counselling_matter_hlp?.split(' ')
+        _['counselling_matter_civil_documentation'] = _.counselling_matter_civil_documentation?.split(' ')
+        _['counselling_matter_personal'] = _.counselling_matter_personal?.split(' ')
+        _['counselling_matter_citizenship'] = _.counselling_matter_citizenship?.split(' ')
+        _['counselling_matter_civil'] = _.counselling_matter_civil?.split(' ')
+        _['counselling_matter_statuses'] = _.counselling_matter_statuses?.split(' ')
+        _['beneficiary_application_type'] = _.beneficiary_application_type?.split(' ')
         _['type_application_assistance'] = _.type_application_assistance?.split(' ')
         _['date_assisting_court'] = _.date_assisting_court ? new Date(_.date_assisting_court) : undefined
         _['type_provision_ipa'] = _.type_provision_ipa?.split(' ')

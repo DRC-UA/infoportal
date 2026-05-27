@@ -149,7 +149,7 @@ export const DatabaseKoboTableContent = ({
         ? (ctx.data as unknown as Legal_individual_aid.T[])?.map((record) => {
             const cases: Legal_individual_aid.T['number_case'] = record.number_case && [...record.number_case]
             const assistanceIndex = cases?.findIndex(({beneficiary_application_type, status_case}) => {
-              return beneficiary_application_type === 'assistance' && status_case === 'closed_ready'
+              return beneficiary_application_type?.includes('assistance') && status_case === 'closed_ready'
             })
 
             // let's return early, if no complete assistance found, or found in the first record
