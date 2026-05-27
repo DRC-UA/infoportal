@@ -35,13 +35,12 @@ const Widgets: FC = () => {
 
       return {
         ...result,
-        ...(number_case?.[0]?.beneficiary_application_type === 'assistance'
-          ? {
-              assistances: ++result.assistances,
-            }
-          : {
-              counselling: ++result.counselling,
-            }),
+        ...(number_case?.[0]?.beneficiary_application_type?.includes('assistance') && {
+          assistances: ++result.assistances,
+        }),
+        ...(number_case?.[0]?.beneficiary_application_type?.includes('counselling') && {
+          counselling: ++result.counselling,
+        }),
         docs: {
           ...result.docs,
           ...(activity === DrcProgram['LegalAssistanceHlpDocs'] ? {hlp: ++result.docs.hlp} : undefined),

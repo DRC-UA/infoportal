@@ -354,6 +354,8 @@ export enum DrcProject {
   // @deprecated wrong code 371, it should be 372
   'UKR-000371 ECHO3' = 'UKR-000371 ECHO3',
   'UKR-000372 ECHO3' = 'UKR-000372 ECHO3',
+  // workaround for Individual Legal Aid form
+  'UKR-000372 ECHO' = 'UKR-000372 ECHO3',
   'UKR-000373 Novo-Nordilsk' = 'UKR-000373 Novo-Nordilsk',
   'UKR-000378 Danish MFA' = 'UKR-000378 Danish MFA',
   'UKR-000380 DANIDA' = 'UKR-000380 DANIDA',
