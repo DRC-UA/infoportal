@@ -1,5 +1,6 @@
-import {NextFunction, Request, Response} from 'express'
+import type {Request, Response} from 'express'
 import {PrismaClient} from '@prisma/client'
+import csvtojson from 'csvtojson'
 
 import {yup} from '../../helper/Utils.js'
 import {WfpDbSearch, WfpDeduplicationService} from '../../feature/wfpDeduplication/WfpDeduplicationService.js'
@@ -15,7 +16,7 @@ export class ControllerWfp {
     private conf = appConf,
   ) {}
 
-  readonly uploadTaxIdMapping = async (req: Request, res: Response, next: NextFunction) => {
+  readonly uploadTaxIdMapping = async (req: Request, res: Response) => {
     if (!req.file) {
       throw new WfPDeduplicationError.NoFileUploaded()
     }
@@ -23,13 +24,29 @@ export class ControllerWfp {
     res.send({})
   }
 
-  readonly refresh = async (req: Request, res: Response, next: NextFunction) => {
+  readonly uploadDeduplication = async ({body: {office}, files}: Request, res: Response) => {
+    if (!office) {
+      throw new WfPDeduplicationError.NoFileUploaded()
+    }
+    if (!files) {
+      throw new WfPDeduplicationError.NoFileUploaded()
+    }
+    if (Array.isArray(files)) {
+      const result = await Promise.all(files.map((file) => csvtojson().fromFile(file.path)))
+      console.log(result)
+      // files.forEach((file) => console.log(file))
+      await this.service.uploadDeduplications({office, files})
+    }
+    res.status(201).send()
+  }
+
+  readonly refresh = async (req: Request, res: Response) => {
     const upload = await WfpDeduplicationUpload.construct(this.conf, this.prisma)
     await upload.saveAll()
     res.send()
   }
 
-  readonly search = async (req: Request, res: Response, next: NextFunction) => {
+  readonly search = async (req: Request, res: Response) => {
     if (!req.session.user) {
       throw new AppError.Forbidden('')
     }

@@ -1,4 +1,4 @@
-import {getDrcSuggestion, WfpDeduplication} from 'infoportal-common'
+import {DrcOffice, getDrcSuggestion, WfpDeduplication} from 'infoportal-common'
 
 import {ApiClient} from '@/core/sdk/server/ApiClient'
 import {ApiPaginate} from '@/core/sdk/server/_core/ApiSdkUtils'
@@ -20,6 +20,10 @@ export class WfpDeduplicationSdk {
 
   readonly uploadTaxIdsMapping = (file: File) => {
     return this.client.postFile(`/wfp-deduplication/upload-taxid`, {file})
+  }
+
+  readonly uploadDeduplicationResults = ({office, files}: {office: DrcOffice; files: File[]}) => {
+    return this.client.postFiles(`/wfp-deduplication/upload-deduplication`, {office, files})
   }
 
   readonly search = async (filters: WfpDeduplicationSearch = {}): Promise<ApiPaginate<WfpDeduplication>> => {

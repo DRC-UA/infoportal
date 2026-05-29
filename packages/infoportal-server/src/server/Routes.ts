@@ -200,13 +200,19 @@ export const getRoutes = (
 
     router.post('/mpca/search', errorCatcher(mpca.search))
     router.post('/mpca/refresh', auth(), errorCatcher(mpca.refresh))
-    router.post('/wfp-deduplication/refresh', auth(), errorCatcher(wfp.refresh))
+    // router.post('/wfp-deduplication/refresh', auth(), errorCatcher(wfp.refresh))
     router.post('/wfp-deduplication/search', auth(), errorCatcher(wfp.search))
     router.post(
       '/wfp-deduplication/upload-taxid',
       auth(),
       Server.upload.single('aa-file'),
       errorCatcher(wfp.uploadTaxIdMapping),
+    )
+    router.post(
+      '/wfp-deduplication/upload-deduplication',
+      auth(),
+      Server.upload.array('files'),
+      errorCatcher(wfp.uploadDeduplication),
     )
 
     router.put('/meal-verification', auth(), errorCatcher(mealVerification.create))

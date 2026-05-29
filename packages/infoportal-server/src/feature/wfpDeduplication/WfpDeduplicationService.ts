@@ -104,4 +104,23 @@ export class WfpDeduplicationService {
       )
     this.event.emit(Event.WFP_DEDUPLICATION_SYNCHRONIZED)
   }
+
+  readonly uploadDeduplications = async (args) => {
+    console.log(args)
+    // const xls = await XlsxPopulate.fromFileAsync(filePath)
+    // const data = xls
+    //   .activeSheet()
+    //   ._rows.splice(1)
+    //   .map((_) => ({beneficiaryId: _.cell(1).value() as string, taxId: ('' + _.cell(2).value()) as string}))
+    // await PromisePool.for(data)
+    //   .withConcurrency(this.conf.db.maxConcurrency)
+    //   .process((_: any) =>
+    //     this.prisma.mpcaWfpDeduplicationIdMapping.upsert({
+    //       update: _,
+    //       where: {beneficiaryId: _.beneficiaryId},
+    //       create: _,
+    //     }),
+    //   )
+    // this.event.emit(Event.WFP_DEDUPLICATION_SYNCHRONIZED)
+  }
 }
