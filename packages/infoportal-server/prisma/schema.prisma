@@ -187,6 +187,31 @@ model MpcaWfpDeduplication {
   beneficiary    MpcaWfpDeduplicationIdMapping @relation(fields: [beneficiaryId], references: [beneficiaryId])
 }
 
+model UctWfpDeduplication {
+  id                String   @id @default(cuid())
+  batchId           String   @default(uuid())
+  fileName          String
+  drcOffice         String
+  taxId             String
+  result            String?
+  organisation      String
+  deduplicationType String?
+  reason            String?
+  category          String
+  currency          Currency
+  amount            Int
+  startDate         String
+  endDate           String
+
+  @@unique([fileName, taxId])
+}
+
+enum Currency {
+  USD
+  UAH
+  EUR
+}
+
 model FeatureAccess {
   id          String             @id @default(uuid())
   featureId   String?

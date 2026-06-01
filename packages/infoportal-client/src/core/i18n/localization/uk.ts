@@ -53,6 +53,16 @@ const uk = deepmerge(en, {
     clearFilter: 'Очистити фільтр',
     reportingPartner: 'Партнер, що звітує',
     disability: 'Інвалідність',
+    uploadDeduplicationFiles: 'Завантажити файли дедуплікації',
+    dropZonePlaceholder: 'Перетягніть файли сюди. Або клікніть для відкриття діалогу',
+    uploadFilesModal: {
+      steps: ['Вибір офісу DRC', 'Вибір файлів для завантаження'],
+      buttonLabels: {
+        back: 'Назад',
+        uploadFiles: 'Завантажити файли',
+        next: 'Вперед',
+      },
+    },
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {

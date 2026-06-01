@@ -1,6 +1,7 @@
 import axios, {AxiosError, AxiosResponse, ResponseType} from 'axios'
 import * as qs from 'qs'
-import {objectToQueryString} from 'infoportal-common'
+
+import {DrcOffice, objectToQueryString} from 'infoportal-common'
 
 export interface RequestOption {
   readonly qs?: any
@@ -162,6 +163,24 @@ export class ApiClient {
         'Content-Type': 'multipart/form-data',
       },
       body: form,
+    })
+  }
+
+  readonly postFiles = <T = any>(
+    uri: string,
+    options: RequestOption & {office: DrcOffice; files: File[]},
+  ): Promise<T> => {
+    const formData = new FormData()
+    formData.append('office', options.office)
+    options.files.forEach((file) => formData.append('files', file))
+
+    return this.request('POST', uri, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formData,
     })
   }
 

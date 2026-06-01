@@ -1,9 +1,18 @@
 import {seq} from '@axanc/ts-utils'
-import {PrismaClient} from '@prisma/client'
+import {PrismaClient, type UctWfpDeduplication} from '@prisma/client'
 import {PromisePool} from '@supercharge/promise-pool'
+import csvtojson, {csv} from 'csvtojson'
 import XlsxPopulate from 'xlsx-populate'
+import {validate as validateUuid} from 'uuid'
 
-import {ApiPaginateHelper, getDrcSuggestion, type WfpDeduplication, type ApiPaginate} from 'infoportal-common'
+import {
+  ApiPaginateHelper,
+  getDrcSuggestion,
+  type WfpDeduplication,
+  type ApiPaginate,
+  DrcOffice,
+  groupBy,
+} from 'infoportal-common'
 
 import {appConf} from '../../core/conf/AppConf.js'
 import {GlobalEvent} from '../../core/GlobalEvent.js'
@@ -11,6 +20,8 @@ import {GlobalEvent} from '../../core/GlobalEvent.js'
 import {AccessService} from '../access/AccessService.js'
 import {AppFeatureId} from '../access/AccessType.js'
 import {UserSession} from '../session/UserSession.js'
+
+import {csvFile2DbAdapter} from './library/index.js'
 
 const {Event} = GlobalEvent
 
@@ -103,5 +114,31 @@ export class WfpDeduplicationService {
         }),
       )
     this.event.emit(Event.WFP_DEDUPLICATION_SYNCHRONIZED)
+  }
+
+  readonly uploadDeduplications: (args: {office: DrcOffice; files: Express.Multer.File[]}) => Promise<void> = async ({
+    office,
+    files,
+  }) => {
+    const uploadBatch: Omit<UctWfpDeduplication, 'id'>[] = []
+    for (const file of files) {
+      const csvFile = await csvtojson().fromFile(file.path)
+      const uuid = file.originalname.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0]
+      const isUuidValis = validateUuid(uuid)
+
+      if (!isUuidValis || uuid === undefined) throw "the file name doesn't contain valid UUID"
+
+      uploadBatch.push(
+        ...csvFile2DbAdapter({drcOffice: office, batchId: uuid, fileName: file.originalname, records: csvFile}),
+      )
+    }
+
+    const uploadBatchOrderedById = groupBy({
+      data: uploadBatch,
+      groups: [{by: ({taxId}) => taxId}],
+      finalTransform: (raw) => raw,
+    }).transforms.flat()
+    // console.log(uploadBatchOrderedById)
+    await this.prisma.uctWfpDeduplication.createMany({data: uploadBatchOrderedById})
   }
 }

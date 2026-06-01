@@ -1166,6 +1166,16 @@ const en = Object.freeze({
     koboForms: 'Kobo forms',
     disability: 'Disability',
     otherKoboForms: 'Other Kobo forms',
+    uploadDeduplicationFiles: 'Upload Deduplication Files',
+    dropZonePlaceholder: 'Drop files here, or click to open file dialog',
+    uploadFilesModal: {
+      steps: ['Select DRC Office', 'Select Files to Upload'],
+      buttonLabels: {
+        back: 'Back',
+        uploadFiles: 'Upload Files',
+        next: 'Next',
+      },
+    },
     _wfpDeduplication: {},
     _partner: {
       residualRisk: 'Residual Risk',
