@@ -245,6 +245,7 @@ const drc2AiProjectCode = (project?: DrcProject): AiType51aMonitoring.Type['Proj
 const aiProjectCode2Name = (project?: string): string => {
   return match(project)
     .cases({
+      '00977': 'HUKR26-CWG-PRO-SHL-FSL-WSH-00977 - UKR-000462 ECHO',
       '00263': 'HUKR26-PRO-SHL-CWG-WSH-00263 - UKR-000461 UHF',
       '00262': 'HUKR26-PRO-00262 - UKR-000372 ECHO',
       '00261': 'HUKR26-PRO-FSL-00261 - UKR-000424 Dutch MFA',

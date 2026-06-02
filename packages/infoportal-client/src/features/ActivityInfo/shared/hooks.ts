@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {seq, Obj, type Seq} from '@axanc/ts-utils'
 import {endOfMonth, startOfMonth, subMonths} from 'date-fns'
 
-import {DrcProgram, DrcSector, groupBy, IKoboMeta, KoboMetaStatus, type Period} from 'infoportal-common'
+import {DrcProgram, DrcSector, IKoboMeta, KoboMetaStatus, type Period} from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
 import type {KoboTypedAnswerSdk} from '@/core/sdk/server/kobo/KoboTypedAnswerSdk'
