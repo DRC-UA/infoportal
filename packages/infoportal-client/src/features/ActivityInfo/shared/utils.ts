@@ -221,6 +221,7 @@ const periodIdReference = {
 const drc2AiProjectCode = (project?: DrcProject): AiType51aMonitoring.Type['Project'] => {
   return match(project)
     .cases({
+      [DrcProject['UKR-000462 ECHO']]: '00977',
       [DrcProject['UKR-000461 UHF']]: '00263',
       [DrcProject['UKR-000457 DMFA']]: '00256',
       [DrcProject['UKR-000441 UHF10']]: '00252',

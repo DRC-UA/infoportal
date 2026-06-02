@@ -227,6 +227,15 @@ namespace AiType51aMonitoring {
       '00262': 'cvax6t0mo5jyw3zr',
       '00263': 'cmfh4tvmo5kbuiav',
       '00686': 'cah6jilmo174npl2',
+      '00957': 'cxm9lt9mpp512i82',
+      '00959': 'crkpt9jmpp65kjcj',
+      '00961': 'cyxnarkmpp6json10',
+      '00963': 'cwmqbykmpp6xzm819',
+      '00964': 'csbtou7mpp9p0161p',
+      '00965': 'co2g89xmppbn7eb1x',
+      '00966': 'cpv8s03mppbuq0523',
+      '00967': 'cusksqwmppdx44i28',
+      '00977': 'ca4kjsampw9b75i2',
     },
     '1.3_Indicators': {
       'CLHEA/CA101/IN1': 'c5pkrm0mnd9bywb7a0',
@@ -77253,6 +77262,8 @@ namespace AiType51aMonitoring {
       '9767': 'cvz7pynmnlkcwh9ax4',
       '9768': 'cp2fdy0mnlkcwh9ax5',
       '9769': 'cepwrlemo8qbtqj5',
+      '10001': 'cs3vb7qmp1bl1q93',
+      '10002': 'clus2rymp54466b3',
     },
     Operation_Location_Sites_Transit_Centres: {
       UKRs003922: 'ckakoxmnac06nz3w',
@@ -77330,7 +77341,12 @@ namespace AiType51aMonitoring {
       cctzieymn7tirddc: 'crf0pd3mn7tlom39p',
       c24xwxpmn7tirdde: 'cd72amjmn7tlom39r',
     },
-    Operation_Cash_Pilot_Types: {BLK: 'cptpqc8mn81hyhlcl', SP2: 'ctb4opamn81hyhlcn', FLD: 'ckfrhyimn81hyhlcm'},
+    Operation_Cash_Pilot_Types: {
+      BLK: 'cptpqc8mn81hyhlcl',
+      SP2: 'ctb4opamn81hyhlcn',
+      FLD: 'ckfrhyimn81hyhlcm',
+      RTN: 'cfb44rhmp2obcg73',
+    },
     Operation_Recipient_Types_CVA: {
       c6eeklamn80fx0o3k: 'c5thz5smn8143uzcc',
       cuf0qs5mn80fx0o3i: 'cdbvc1nmn8143uzca',
@@ -77347,10 +77363,7 @@ namespace AiType51aMonitoring {
       crd8wjxmn80fx0o3g: 'cvkuii8mn8143uzc8',
       clwlab0mn80fx0o3m: 'cfwihnimn8143uzce',
     },
-    Operation_Payment_Frequencies: {
-      c9vwluvmmmvwndvnx: 'cdxt3nfmn83hynpdl',
-      c24roslmmmvwndvnu: 'c3qgawnmn83hynodh',
-    },
+    Operation_Payment_Frequencies: {c9vwluvmmmvwndvnx: 'cdxt3nfmn83hynpdl', c24roslmmmvwndvnu: 'c3qgawnmn83hynodh'},
     Operation_Food_Frequencies: {
       c24roslmmmvwndvnu: 'cjkvwoomnipwao033t',
       c7w2io1mmmvwndvnw: 'c1v5uqzmnipwao033u',
