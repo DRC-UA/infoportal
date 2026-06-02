@@ -9,7 +9,7 @@ import {protectionMapperMaker} from './utils'
 
 const General: FC = () => {
   const {fetcher, data, columns, period, setPeriod} = useMetaFetcher({
-    sectors: [DrcSector.GeneralProtection, DrcSector.Legal, DrcSector.GBV],
+    sectors: [DrcSector.GeneralProtection, DrcSector.Legal],
     activities: [
       DrcProgram.AwarenessRaisingSession,
       DrcProgram.CommunityLevelPm,
