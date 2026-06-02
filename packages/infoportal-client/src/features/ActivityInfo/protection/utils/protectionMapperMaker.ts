@@ -91,6 +91,7 @@ const protectionMapperMaker =
             'Population Group': aiPopulationGroupCode[populationGroup as 'Idp' | 'NonDisplaced'],
             'Age & Sex': ageSexGroup2AiCodeMapper(ageGender),
             ...(disability === '1' && {Disability: 'DSB' as const}),
+            ...(indicator === 'CLPRO/CA14/IN1' && {'Cash: Restriction': 'RES' as const}),
             'Reached/Delivered - New Non-repeated (Manual)': record.length,
           } as const
 
