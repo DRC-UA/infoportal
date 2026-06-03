@@ -1,18 +1,11 @@
 import {seq} from '@axanc/ts-utils'
 import {PrismaClient, type UctWfpDeduplication} from '@prisma/client'
 import {PromisePool} from '@supercharge/promise-pool'
-import csvtojson, {csv} from 'csvtojson'
+import csvtojson from 'csvtojson'
 import XlsxPopulate from 'xlsx-populate'
 import {validate as validateUuid} from 'uuid'
 
-import {
-  ApiPaginateHelper,
-  getDrcSuggestion,
-  type WfpDeduplication,
-  type ApiPaginate,
-  DrcOffice,
-  groupBy,
-} from 'infoportal-common'
+import {ApiPaginateHelper, DrcOffice, groupBy, type ApiPaginate} from 'infoportal-common'
 
 import {appConf} from '../../core/conf/AppConf.js'
 import {GlobalEvent} from '../../core/GlobalEvent.js'
@@ -58,44 +51,23 @@ export class WfpDeduplicationService {
     return this.search({...query, offices: filteredOffices})
   }
 
-  readonly search = async ({createdAtStart, createdAtEnd, offices, taxId, limit, offset}: WfpDbSearch = {}): Promise<
-    ApiPaginate<WfpDeduplication>
+  readonly search = async ({offices, taxId, limit, offset}: WfpDbSearch = {}): Promise<
+    ApiPaginate<UctWfpDeduplication>
   > => {
     const where = {
-      createdAt: {
-        gte: createdAtStart,
-        lte: createdAtEnd,
-      },
-      office: {in: offices},
-      beneficiary: {
-        taxId: {in: taxId},
-      },
+      drcOffice: {in: offices},
+      taxId: {in: taxId},
     }
     const [totalSize, data] = await Promise.all([
-      this.prisma.mpcaWfpDeduplication.count({where}),
-      this.prisma.mpcaWfpDeduplication.findMany({
-        include: {
-          beneficiary: {
-            select: {
-              taxId: true,
-            },
-          },
-        },
+      this.prisma.uctWfpDeduplication.count({where}),
+      this.prisma.uctWfpDeduplication.findMany({
         where,
         take: limit,
         skip: offset,
-        orderBy: {
-          createdAt: 'desc',
-        },
       }),
     ])
-    return ApiPaginateHelper.wrap(totalSize)(
-      data.map((record: any): WfpDeduplication => {
-        record.suggestion = getDrcSuggestion(record)
-        record.taxId = record.beneficiary.taxId
-        return record
-      }),
-    )
+
+    return ApiPaginateHelper.wrap(totalSize)(data)
   }
 
   readonly uploadTaxId = async (filePath: string) => {

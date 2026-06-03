@@ -1,3 +1,5 @@
+import type {UctWfpDeduplication} from '@prisma/client'
+
 import {DrcOffice, getDrcSuggestion, WfpDeduplication} from 'infoportal-common'
 
 import {ApiClient} from '@/core/sdk/server/ApiClient'
@@ -26,11 +28,8 @@ export class WfpDeduplicationSdk {
     return this.client.postFiles(`/wfp-deduplication/upload-deduplication`, {office, files})
   }
 
-  readonly search = async (filters: WfpDeduplicationSearch = {}): Promise<ApiPaginate<WfpDeduplication>> => {
-    return this.client.post<ApiPaginate<any>>(`/wfp-deduplication/search`, {body: filters}).then((response) => ({
-      ...response,
-      data: response.data.map(WfpDeduplicationSdk.map),
-    }))
+  readonly search = async (filters: WfpDeduplicationSearch = {}): Promise<ApiPaginate<UctWfpDeduplication>> => {
+    return await this.client.post<ApiPaginate<any>>(`/wfp-deduplication/search`, {body: filters})
   }
 
   static readonly map = (

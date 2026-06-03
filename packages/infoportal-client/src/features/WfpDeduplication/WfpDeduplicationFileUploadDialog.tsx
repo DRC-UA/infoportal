@@ -1,4 +1,4 @@
-import {useCallback, useState, type FC, type SetStateAction, type Dispatch} from 'react'
+import {useCallback, useMemo, useState, type FC, type SetStateAction, type Dispatch} from 'react'
 import {useDropzone} from 'react-dropzone'
 import {match} from '@axanc/ts-utils'
 import {Box, Button, Chip, Dialog, Stack, Stepper, Step, StepButton} from '@mui/material'
@@ -19,6 +19,8 @@ type WpfDeduplicationFileUploadDialogProps = {
   setFiles: Dispatch<SetStateAction<File[]>>
   onUpload(): Promise<void>
 }
+
+const acceptedFilePatterns = ['deduplication_result_', 'transaction_result_']
 
 const WpfDeduplicationFileUploadDialog: FC<WpfDeduplicationFileUploadDialogProps> = ({
   open,
@@ -45,7 +47,12 @@ const WpfDeduplicationFileUploadDialog: FC<WpfDeduplicationFileUploadDialogProps
       }),
     [setFiles],
   )
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({
+    onDrop,
+    accept: {
+      'text/csv': [],
+    },
+  })
 
   const handleDelete = (index: number) => () => setFiles((files) => files.filter((_, i) => i !== index))
 
@@ -59,6 +66,13 @@ const WpfDeduplicationFileUploadDialog: FC<WpfDeduplicationFileUploadDialogProps
     onReset()
     setCurrentStep(0)
   }
+
+  const isValid = useMemo(() => {
+    if (files.length !== 2) return false
+    if (!acceptedFilePatterns.every((pattern) => files.some(({name}) => name.includes(pattern)))) return false
+
+    return true
+  }, [files])
 
   return (
     <Dialog
@@ -120,10 +134,7 @@ const WpfDeduplicationFileUploadDialog: FC<WpfDeduplicationFileUploadDialogProps
             {m.uploadFilesModal.buttonLabels.back}
           </Button>
           <Box sx={{flex: '1 1 auto'}} />
-          <Button
-            onClick={isLastStep() ? onUpload : handleNext}
-            disabled={(isLastStep() && files.length === 0) ?? false}
-          >
+          <Button onClick={isLastStep() ? onUpload : handleNext} disabled={(isLastStep() && !isValid) ?? false}>
             {isLastStep() ? m.uploadFilesModal.buttonLabels.uploadFiles : m.uploadFilesModal.buttonLabels.next}
           </Button>
         </Box>
