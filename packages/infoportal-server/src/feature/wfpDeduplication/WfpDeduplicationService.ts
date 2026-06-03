@@ -116,29 +116,39 @@ export class WfpDeduplicationService {
     this.event.emit(Event.WFP_DEDUPLICATION_SYNCHRONIZED)
   }
 
-  readonly uploadDeduplications: (args: {office: DrcOffice; files: Express.Multer.File[]}) => Promise<void> = async ({
-    office,
-    files,
-  }) => {
-    const uploadBatch: Omit<UctWfpDeduplication, 'id'>[] = []
-    for (const file of files) {
-      const csvFile = await csvtojson().fromFile(file.path)
-      const uuid = file.originalname.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0]
-      const isUuidValis = validateUuid(uuid)
+  readonly uploadDeduplications: (args: {office: DrcOffice; files: Express.Multer.File[]}) => Promise<{count: number}> =
+    async ({office, files}) => {
+      const uploadBatch: Omit<UctWfpDeduplication, 'id'>[] = []
 
-      if (!isUuidValis || uuid === undefined) throw "the file name doesn't contain valid UUID"
+      for (const file of files) {
+        const csvFile = await csvtojson().fromFile(file.path)
+        const uuid = file.originalname.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0]
+        const isUuidValis = validateUuid(uuid)
 
-      uploadBatch.push(
-        ...csvFile2DbAdapter({drcOffice: office, batchId: uuid, fileName: file.originalname, records: csvFile}),
-      )
+        if (!isUuidValis || uuid === undefined) throw "the file name doesn't contain valid UUID"
+
+        const deduplicatedRecords = [...new Set(csvFile.map((record) => JSON.stringify(record)))].map((record) =>
+          JSON.parse(record),
+        ) // BB may return files with multiple identical records, wich fail to pass unique fileName, taxID pair constraint
+
+        uploadBatch.push(
+          ...csvFile2DbAdapter({
+            drcOffice: office,
+            batchId: uuid,
+            fileName: file.originalname,
+            records: deduplicatedRecords,
+          }),
+        )
+      }
+
+      const uploadBatchOrderedById = groupBy({
+        data: uploadBatch,
+        groups: [{by: ({taxId}) => taxId}],
+        finalTransform: (group) => {
+          return [...group.sort(({result}) => (result === 'Deduplicated - see deduplication report.' ? -1 : 0))]
+        },
+      }).transforms.flat()
+
+      return await this.prisma.uctWfpDeduplication.createMany({data: uploadBatchOrderedById})
     }
-
-    const uploadBatchOrderedById = groupBy({
-      data: uploadBatch,
-      groups: [{by: ({taxId}) => taxId}],
-      finalTransform: (raw) => raw,
-    }).transforms.flat()
-    // console.log(uploadBatchOrderedById)
-    await this.prisma.uctWfpDeduplication.createMany({data: uploadBatchOrderedById})
-  }
 }

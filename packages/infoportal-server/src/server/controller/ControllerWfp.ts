@@ -35,10 +35,13 @@ export class ControllerWfp {
     if (!files) {
       throw new WfPDeduplicationError.NoFileUploaded()
     }
-    if (Array.isArray(files)) {
-      await this.service.uploadDeduplications({office, files})
+    if (!Array.isArray(files)) {
+      throw new WfPDeduplicationError.NoFileUploaded()
     }
-    res.status(201).send()
+
+    const result = await this.service.uploadDeduplications({office, files})
+
+    res.status(201).send(result)
   }
 
   readonly refresh = async (_req: Request, res: Response) => {

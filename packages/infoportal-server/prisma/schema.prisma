@@ -203,7 +203,7 @@ model UctWfpDeduplication {
   startDate         String
   endDate           String
 
-  @@unique([fileName, taxId])
+  @@unique([fileName, taxId, deduplicationType, reason])
 }
 
 enum Currency {
