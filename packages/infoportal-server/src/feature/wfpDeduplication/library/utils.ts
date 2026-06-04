@@ -22,7 +22,7 @@ const csvFile2DbAdapter = ({
   drcOffice,
   batchId,
   fileName,
-  records,
+  records: rawRecords,
 }: {
   drcOffice: DrcOffice
   batchId: string
@@ -32,6 +32,8 @@ const csvFile2DbAdapter = ({
     | Record<(typeof TRANSACTION_FIELDS)[number], string>
   )[]
 }): Omit<UctWfpDeduplication, 'id'>[] => {
+  const records = rawRecords.filter((record) => !Obj.values(record).every((value) => value === '')) // get rid of empty rows, causing 500
+
   if (!records || records.length === 0) return []
 
   const sharedFields = {
