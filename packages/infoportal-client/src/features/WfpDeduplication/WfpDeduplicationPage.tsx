@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react'
+import {useCallback, useMemo, useState, type FC, type Dispatch, type SetStateAction} from 'react'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import FileUploadIcon from '@mui/icons-material/FileUpload'
 import {Box, Button} from '@mui/material'
@@ -30,7 +30,7 @@ export const wfpDeduplicationIndex = {
   },
 }
 
-const WpfDeduplicationSidebar = () => {
+const WpfDeduplicationSidebar: FC<{setRerender: Dispatch<SetStateAction<boolean>>}> = ({setRerender}) => {
   const {api} = useAppSettings()
   const {session} = useSession()
   const [drcOffice, setDrcOffice] = usePersistentState<DrcOffice | undefined>(session.drcOffice, {
@@ -46,7 +46,13 @@ const WpfDeduplicationSidebar = () => {
   const closeUploadDialog = () => setUploadDialogOpen(false)
   const onReset = () => setFiles([])
   const onUpload = useCallback(async () => {
-    if (drcOffice) upload.call({office: drcOffice, files}).catch(toastHttpError)
+    if (drcOffice)
+      upload
+        .call({office: drcOffice, files})
+        .catch(toastHttpError)
+        .finally(() => {
+          setRerender((prev) => !prev)
+        })
     closeUploadDialog()
   }, [upload, drcOffice, files, closeUploadDialog])
 
@@ -100,6 +106,7 @@ const WpfDeduplicationSidebar = () => {
 
 export const WfpDeduplicationPage = () => {
   const {accesses, session} = useSession()
+  const [rerender, setRerender] = useState(false)
   const access = useMemo(() => appFeaturesIndex.wfp_deduplication.showIf?.(session, accesses), [session, accesses])
 
   useReactRouterDefaultRoute(wfpDeduplicationIndex.siteMap.data)
@@ -107,9 +114,12 @@ export const WfpDeduplicationPage = () => {
   if (!access) <NoFeatureAccessPage />
 
   return (
-    <Layout title={appFeaturesIndex.wfp_deduplication.name} sidebar={<WpfDeduplicationSidebar />}>
+    <Layout
+      title={appFeaturesIndex.wfp_deduplication.name}
+      sidebar={<WpfDeduplicationSidebar setRerender={setRerender} />}
+    >
       <Routes>
-        <Route path={wfpDeduplicationIndex.siteMap.data} element={<WfpDeduplicationData />} />
+        <Route path={wfpDeduplicationIndex.siteMap.data} element={<WfpDeduplicationData rerender={rerender} />} />
         <Route path={wfpDeduplicationIndex.siteMap.access} element={<WfpDeduplicationAccess />} />
       </Routes>
     </Layout>

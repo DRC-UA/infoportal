@@ -67,7 +67,7 @@ export class WfpDeduplicationService {
       }),
     ])
 
-    return ApiPaginateHelper.wrap(totalSize)(data)
+    return ApiPaginateHelper.wrap(totalSize)(data.reverse())
   }
 
   readonly uploadTaxId = async (filePath: string) => {
@@ -119,7 +119,7 @@ export class WfpDeduplicationService {
         finalTransform: (group) => {
           if (group.length === 1) return group
 
-          group.sort(({result}) => (result === 'Deduplicated - see deduplication report.' ? -1 : 0))
+          group.sort(({result}) => (result === 'Deduplicated - see deduplication report.' ? 1 : 0))
 
           return group
         },

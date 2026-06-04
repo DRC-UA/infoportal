@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {useEffect, type FC} from 'react'
 import {match} from '@axanc/ts-utils'
 import {format} from 'date-fns'
 
@@ -23,7 +23,7 @@ export const DeduplicationStatusIcon = ({status}: {status: WfpDeduplicationStatu
     .default(null)
 }
 
-export const WfpDeduplicationData = () => {
+export const WfpDeduplicationData: FC<{rerender: boolean}> = ({rerender}) => {
   const {api} = useAppSettings()
   const _search = useFetcher(api.wfpDeduplication.search)
   const {formatLargeNumber} = useI18n()
@@ -31,7 +31,7 @@ export const WfpDeduplicationData = () => {
 
   useEffect(() => {
     _search.fetch()
-  }, [])
+  }, [rerender])
 
   return (
     <Page width="full">
