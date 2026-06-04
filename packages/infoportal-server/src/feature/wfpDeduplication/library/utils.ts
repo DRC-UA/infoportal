@@ -1,9 +1,9 @@
 import {Obj} from '@axanc/ts-utils'
 import {Currency, type UctWfpDeduplication} from '@prisma/client'
 
-import type {DrcOffice} from 'infoportal-common/type/Drc'
+import type {DrcOffice} from 'infoportal-common'
 
-import {DEDUPLICATION_FIELDS, TRANSACTION_FIELDS} from './constants'
+import {DEDUPLICATION_FIELDS, TRANSACTION_FIELDS} from './constants.js'
 
 const parseCurrency = (currency: string): Currency => {
   switch (currency) {

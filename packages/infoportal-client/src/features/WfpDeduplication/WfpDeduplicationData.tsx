@@ -41,7 +41,7 @@ export const WfpDeduplicationData = () => {
           showExportBtn
           title={'wfp-deduplication-' + format(new Date(), 'yyyy-MM-dd')}
           loading={_search.loading}
-          rowStyle={({result}) => ({opacity: result === 'Success - loaded' ? 1 : 0.5})}
+          rowStyle={({deduplicationType}) => ({opacity: deduplicationType === null ? 1 : 0.5})}
           columns={[
             {
               id: 'batchId',
@@ -118,7 +118,7 @@ export const WfpDeduplicationData = () => {
             {
               id: 'reason',
               head: 'Reason',
-              type: 'string',
+              type: 'select_one',
               renderQuick: ({reason}) => reason ?? undefined,
             },
             {

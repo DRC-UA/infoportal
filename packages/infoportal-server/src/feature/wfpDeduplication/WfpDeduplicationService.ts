@@ -117,7 +117,11 @@ export class WfpDeduplicationService {
         data: uploadBatch,
         groups: [{by: ({taxId}) => taxId}],
         finalTransform: (group) => {
-          return [...group.sort(({result}) => (result === 'Deduplicated - see deduplication report.' ? -1 : 0))]
+          if (group.length === 1) return group
+
+          group.sort(({result}) => (result === 'Deduplicated - see deduplication report.' ? -1 : 0))
+
+          return group
         },
       }).transforms.flat()
 

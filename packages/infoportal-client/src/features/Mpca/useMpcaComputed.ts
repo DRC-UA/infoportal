@@ -1,6 +1,6 @@
 import {Obj, Seq} from '@axanc/ts-utils'
 import {useMemo} from 'react'
-import {DrcSupportSuggestion, MpcaEntity} from 'infoportal-common'
+import {MpcaEntity} from 'infoportal-common'
 
 export type UseMpcaComputed = ReturnType<typeof useMpcaComputed>
 
@@ -12,21 +12,11 @@ export const useMpcaComputed = ({data}: {data: Seq<MpcaEntity>}) =>
       // flatData,
       persons: data.flatMap((_) => _.persons).compact(),
       deduplications,
-      preventedAssistance: deduplications.filter((_) =>
-        [
-          DrcSupportSuggestion.NoAssistanceFullDuplication,
-          DrcSupportSuggestion.NoAssistanceExactSameTimeframe,
-          DrcSupportSuggestion.NoAssistanceDrcDuplication,
-        ].includes(_.suggestion),
-      ),
+      preventedAssistance: deduplications.filter(({reason}) => Boolean(reason)),
       multipleTimeAssisted: (() => {
         const grouped = data
-          .filter((_) =>
-            [DrcSupportSuggestion.FullNoDuplication, DrcSupportSuggestion.FullNoDuplication, undefined].includes(
-              _.deduplication?.suggestion,
-            ),
-          )
-          .groupBy((_) => _.taxId!)
+          .filter(({deduplication}) => deduplication?.reason === undefined)
+          .groupBy(({taxId}) => taxId!)
         return new Obj(grouped)
           .map((k, v) => [k, v.length])
           .filter((k, v) => v > 1)

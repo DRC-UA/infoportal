@@ -121,19 +121,14 @@ export const MpcaDashboard = () => {
       deduplication: {
         icon: appFeaturesIndex.wfp_deduplication.materialIcons,
         label: m.duplication,
-        getValue: (_) => _.deduplication?.status ?? DatatableUtils.blank,
-        getOptions: () => [
-          DataFilter.blankOption,
-          ...Obj.values(WfpDeduplicationStatus).map((_) =>
-            DataFilter.buildOption(
-              _,
-              <>
-                <DeduplicationStatusIcon status={_} />
-                &nbsp;{_}
-              </>,
-            ),
-          ),
-        ],
+        getValue: (_) => _.deduplication?.deduplicationType ?? DatatableUtils.blank,
+        getOptions: (get) =>
+          get()
+            .map(({deduplication}) => deduplication?.deduplicationType)
+            .compact()
+            .distinct((dedup) => dedup)
+            .sort()
+            .map(DataFilter.buildOption),
       },
       oblast: {
         icon: 'location_on',

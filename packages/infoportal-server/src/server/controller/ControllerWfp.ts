@@ -1,7 +1,7 @@
 import type {Request, Response} from 'express'
 import {PrismaClient} from '@prisma/client'
 
-import type {DrcOffice} from 'infoportal-common/type/Drc'
+import type {DrcOffice} from 'infoportal-common'
 
 import {yup} from '../../helper/Utils.js'
 import {WfpDbSearch, WfpDeduplicationService} from '../../feature/wfpDeduplication/WfpDeduplicationService.js'
