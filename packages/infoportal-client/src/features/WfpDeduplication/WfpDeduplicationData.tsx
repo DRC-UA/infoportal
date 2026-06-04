@@ -1,5 +1,6 @@
 import {useEffect, type FC} from 'react'
 import {match} from '@axanc/ts-utils'
+import {useTheme} from '@mui/material'
 import {format} from 'date-fns'
 
 import {WfpDeduplicationStatus} from 'infoportal-common'
@@ -28,6 +29,7 @@ export const WfpDeduplicationData: FC<{rerender: boolean}> = ({rerender}) => {
   const _search = useFetcher(api.wfpDeduplication.search)
   const {formatLargeNumber} = useI18n()
   const {m} = useI18n()
+  const theme = useTheme()
 
   useEffect(() => {
     _search.fetch()
@@ -41,7 +43,10 @@ export const WfpDeduplicationData: FC<{rerender: boolean}> = ({rerender}) => {
           showExportBtn
           title={'wfp-deduplication-' + format(new Date(), 'yyyy-MM-dd')}
           loading={_search.loading}
-          rowStyle={({deduplicationType}) => ({opacity: deduplicationType === null ? 1 : 0.5})}
+          rowStyle={({deduplicationType, result}) => ({
+            ...(deduplicationType !== null && {opacity: 0.5}),
+            ...(result === 'Deduplicated - see deduplication report.' && {color: theme.palette.error.main}),
+          })}
           columns={[
             {
               id: 'batchId',
