@@ -306,6 +306,8 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000363_uhf8: DrcProject['UKR-000363 UHF8'],
               ukr000372_echo3: DrcProject['UKR-000372 ECHO3'],
               ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+              ukr000461_uhf: DrcProject['UKR-000461 UHF'],
+              ukr000462_echo: DrcProject['UKR-000462 ECHO'],
             })
             .default(DrcProjectHelper.searchByCode(record.gido)),
           answers: record,
