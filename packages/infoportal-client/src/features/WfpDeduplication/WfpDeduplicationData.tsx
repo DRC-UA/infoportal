@@ -16,7 +16,7 @@ export const DeduplicationStatusIcon = ({status}: {status: Deduplication}) => {
   return match(status)
     .cases({
       [Deduplication.Eligible]: <TableIcon color="success" children="check_circle" sx={{mr: 1}} />,
-      [Deduplication.Deduplicated]: <TableIcon color="warning" children="join_full" sx={{mr: 1}} />,
+      [Deduplication.Deduplicated]: <TableIcon color="error" children="join_full" sx={{mr: 1}} />,
     })
     .default(null)
 }
