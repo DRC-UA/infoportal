@@ -60,13 +60,18 @@ export const MpcaDashboardDeduplication = ({data}: {data: Seq<MpcaEntity>}) => {
               .map((k, v) => {
                 const seqv = seq(v)
                 const total = seqv.length
-                const deduplicated = seqv.filter(
-                  (_) => _.deduplication?.status === WfpDeduplicationStatus.Deduplicated,
-                ).length
-                const partiallyDeduplicated = seqv.filter(
-                  (_) => _.deduplication?.status === WfpDeduplicationStatus.PartiallyDeduplicated,
-                ).length
-                const sum = deduplicated + partiallyDeduplicated
+
+                // const deduplicated = seqv.filter(
+                //   (_) => _.deduplication?.status === WfpDeduplicationStatus.Deduplicated,
+                // ).length
+                // const partiallyDeduplicated = seqv.filter(
+                //   (_) => _.deduplication?.status === WfpDeduplicationStatus.PartiallyDeduplicated,
+                // ).length
+                // const sum = deduplicated + partiallyDeduplicated
+
+                const deduplicated = seqv.filter((_) => Boolean(_.deduplication?.deduplicationType)).length
+                const partiallyDeduplicated = 0
+                const sum = deduplicated
                 const res =
                   curveType === 'value'
                     ? {

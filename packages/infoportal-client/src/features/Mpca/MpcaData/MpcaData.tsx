@@ -15,7 +15,6 @@ import {MpcaHelper} from '@/core/sdk/server/mpca/MpcaEntity'
 import {SelectDrcProject} from '@/shared/customInput/SelectDrcProject'
 import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import {DeduplicationStatusIcon} from '@/features/WfpDeduplication/WfpDeduplicationData'
 import {TableImg} from '@/shared/TableMedia/TableImg'
 import {StateStatusIcon} from '@/shared/customInput/SelectStatus'
 import {AppFeatureId} from '@/features/appFeatureId'
@@ -230,10 +229,9 @@ export const MpcaData = () => {
               // options: () => DatatableUtils.buildOptions(Obj.keys(WfpDeduplicationStatus), true),
               render: (_) => {
                 return {
-                  tooltip: _.deduplication && m.mpca.status[_.deduplication.status],
-                  value: _.deduplication?.status,
-                  option: _.deduplication?.status,
-                  label: _.deduplication && <DeduplicationStatusIcon status={_.deduplication.status} />,
+                  value: _.deduplication?.result ?? undefined,
+                  option: _.deduplication?.result ?? undefined,
+                  label: _.deduplication?.result,
                 }
               },
             },

@@ -88,7 +88,7 @@ export const Mpca = () => {
       <Layout title={appFeaturesIndex.mpca.name} sidebar={<MpcaSidebar />} header={<AppHeader id="app-header" />}>
         <Routes>
           <Route path={mpcaIndex.siteMap.dashboard} element={<MpcaDashboard />} />
-          <Route path={mpcaIndex.siteMap.deduplication} element={<WfpDeduplicationData />} />
+          <Route path={mpcaIndex.siteMap.deduplication} element={<WfpDeduplicationData rerender={true} />} />
           <Route path={mpcaIndex.siteMap.data} element={<MpcaData />} />
         </Routes>
       </Layout>

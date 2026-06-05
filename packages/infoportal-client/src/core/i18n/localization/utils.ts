@@ -13,14 +13,14 @@ const formatDate = (d: Date | undefined, currentLang?: AppLang): string => {
   return d!.toLocaleDateString(currentLang)
 }
 
-const formatTime = (d?: Date): string => {
+const formatTime = (d: Date | undefined, currentLang?: AppLang): string => {
   if (!isDateValid(d)) return invalidDate
-  return d!.toLocaleTimeString()
+  return d!.toLocaleTimeString(currentLang)
 }
 
-const formatDateTime = (d?: Date): string => {
+const formatDateTime = (d: Date | undefined, currentLang: AppLang = 'en'): string => {
   if (!isDateValid(d)) return invalidDate
-  return formatDate(d) + ' ' + formatTime(d)
+  return formatDate(d, currentLang) + ' ' + formatTime(d, currentLang)
 }
 
 const dateFromNow: {

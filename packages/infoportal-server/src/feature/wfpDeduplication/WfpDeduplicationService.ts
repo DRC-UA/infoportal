@@ -1,9 +1,11 @@
 import {seq} from '@axanc/ts-utils'
-import {PrismaClient} from '@prisma/client'
+import {PrismaClient, type UctWfpDeduplication} from '@prisma/client'
 import {PromisePool} from '@supercharge/promise-pool'
+import csvtojson from 'csvtojson'
 import XlsxPopulate from 'xlsx-populate'
+import {validate as validateUuid} from 'uuid'
 
-import {ApiPaginateHelper, getDrcSuggestion, type WfpDeduplication, type ApiPaginate} from 'infoportal-common'
+import {ApiPaginateHelper, DrcOffice, groupBy, type ApiPaginate} from 'infoportal-common'
 
 import {appConf} from '../../core/conf/AppConf.js'
 import {GlobalEvent} from '../../core/GlobalEvent.js'
@@ -11,6 +13,8 @@ import {GlobalEvent} from '../../core/GlobalEvent.js'
 import {AccessService} from '../access/AccessService.js'
 import {AppFeatureId} from '../access/AccessType.js'
 import {UserSession} from '../session/UserSession.js'
+
+import {csvFile2DbAdapter} from './library/index.js'
 
 const {Event} = GlobalEvent
 
@@ -47,44 +51,24 @@ export class WfpDeduplicationService {
     return this.search({...query, offices: filteredOffices})
   }
 
-  readonly search = async ({createdAtStart, createdAtEnd, offices, taxId, limit, offset}: WfpDbSearch = {}): Promise<
-    ApiPaginate<WfpDeduplication>
+  readonly search = async ({offices, taxId, limit, offset}: WfpDbSearch = {}): Promise<
+    ApiPaginate<UctWfpDeduplication>
   > => {
     const where = {
-      createdAt: {
-        gte: createdAtStart,
-        lte: createdAtEnd,
-      },
-      office: {in: offices},
-      beneficiary: {
-        taxId: {in: taxId},
-      },
+      drcOffice: {in: offices},
+      taxId: {in: taxId},
     }
     const [totalSize, data] = await Promise.all([
-      this.prisma.mpcaWfpDeduplication.count({where}),
-      this.prisma.mpcaWfpDeduplication.findMany({
-        include: {
-          beneficiary: {
-            select: {
-              taxId: true,
-            },
-          },
-        },
+      this.prisma.uctWfpDeduplication.count({where}),
+      this.prisma.uctWfpDeduplication.findMany({
         where,
         take: limit,
         skip: offset,
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: [{uploadedAt: 'asc'}, {batchId: 'asc'}, {taxId: 'asc'}, {status: 'desc'}],
       }),
     ])
-    return ApiPaginateHelper.wrap(totalSize)(
-      data.map((record: any): WfpDeduplication => {
-        record.suggestion = getDrcSuggestion(record)
-        record.taxId = record.beneficiary.taxId
-        return record
-      }),
-    )
+
+    return ApiPaginateHelper.wrap(totalSize)(data.reverse())
   }
 
   readonly uploadTaxId = async (filePath: string) => {
@@ -104,4 +88,44 @@ export class WfpDeduplicationService {
       )
     this.event.emit(Event.WFP_DEDUPLICATION_SYNCHRONIZED)
   }
+
+  readonly uploadDeduplications: (args: {office: DrcOffice; files: Express.Multer.File[]}) => Promise<{count: number}> =
+    async ({office, files}) => {
+      const uploadBatch: Omit<UctWfpDeduplication, 'id' | 'uploadedAt'>[] = []
+
+      for (const file of files) {
+        const csvFile = await csvtojson().fromFile(file.path)
+        const uuid = file.originalname.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0]
+        const isUuidValis = validateUuid(uuid)
+
+        if (!isUuidValis || uuid === undefined) throw "the file name doesn't contain valid UUID"
+
+        const deduplicatedRecords = [...new Set(csvFile.map((record) => JSON.stringify(record)))].map((record) =>
+          JSON.parse(record),
+        ) // BB may return files with multiple identical records, wich fail to pass unique fileName, taxID pair constraint
+
+        uploadBatch.push(
+          ...csvFile2DbAdapter({
+            drcOffice: office,
+            batchId: uuid,
+            fileName: file.originalname,
+            records: deduplicatedRecords,
+          }),
+        )
+      }
+
+      const uploadBatchOrderedById = groupBy({
+        data: uploadBatch,
+        groups: [{by: ({taxId}) => taxId}],
+        finalTransform: (group) => {
+          if (group.length === 1) return group
+
+          group.sort(({result}) => (result === 'Deduplicated - see deduplication report.' ? 1 : 0))
+
+          return group
+        },
+      }).transforms.flat()
+
+      return await this.prisma.uctWfpDeduplication.createMany({data: uploadBatchOrderedById})
+    }
 }

@@ -1,58 +1,36 @@
-import {useEffect, useMemo} from 'react'
-import {match, Obj, seq} from '@axanc/ts-utils'
-import {format} from 'date-fns'
-
-import {DrcOffice, WfpDeduplicationStatus} from 'infoportal-common'
+import {useEffect, type FC} from 'react'
+import {match} from '@axanc/ts-utils'
+import {useTheme} from '@mui/material'
+import {Deduplication} from '@prisma/client'
+import {toDate} from 'date-fns'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@/core/i18n'
 import {TableIcon} from '@/features/Mpca/MpcaData/TableIcon'
 import {Datatable} from '@/shared/Datatable/Datatable'
-import type {DatatableOptions} from '@/shared/Datatable/util/datatableType'
-import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {useFetcher} from '@/shared/hook/useFetcher'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
-import {Txt} from '@/shared/Txt'
 
-export const DeduplicationStatusIcon = ({status}: {status: WfpDeduplicationStatus}) => {
+export const DeduplicationStatusIcon = ({status}: {status: Deduplication}) => {
   return match(status)
     .cases({
-      Deduplicated: <TableIcon color="warning" children="join_full" />,
-      PartiallyDeduplicated: <TableIcon color="info" children="join_left" />,
-      NotDeduplicated: <TableIcon color="success" children="check_circle" />,
-      Error: <TableIcon color="error" children="error" />,
+      [Deduplication.Eligible]: <TableIcon color="success" children="check_circle" sx={{mr: 1}} />,
+      [Deduplication.Deduplicated]: <TableIcon color="error" children="join_full" sx={{mr: 1}} />,
     })
     .default(null)
 }
 
-export const WfpDeduplicationData = () => {
+export const WfpDeduplicationData: FC<{rerender: boolean}> = ({rerender}) => {
   const {api} = useAppSettings()
   const _search = useFetcher(api.wfpDeduplication.search)
-  const {formatDate, formatDateTime, formatLargeNumber} = useI18n()
-  const {m} = useI18n()
-  const getOfficeOptions = (): DatatableOptions[] => Obj.values(DrcOffice).map((value) => ({label: value, value}))
-  const getStatusOptions = (): DatatableOptions[] => DatatableUtils.buildOptions(Obj.keys(WfpDeduplicationStatus), true)
-
-  const {existingOrga, taxIdCounter} = useMemo(() => {
-    if (!_search.get) return {}
-    const data = seq(_search.get.data)
-    return {
-      taxIdCounter: Obj.mapValues(
-        data.groupBy(({taxId}) => taxId ?? ''),
-        (group) => group.length,
-      ),
-      existingOrga: data
-        .map(({existingOrga}) => existingOrga)
-        .distinct((organisation) => organisation)
-        .compact()
-        .map(DatatableUtils.buildOption),
-    }
-  }, [_search.get])
+  const {formatLargeNumber} = useI18n()
+  const {m, formatDate, formatDateTime} = useI18n()
+  const theme = useTheme()
 
   useEffect(() => {
     _search.fetch()
-  }, [])
+  }, [rerender])
 
   return (
     <Page width="full">
@@ -60,62 +38,69 @@ export const WfpDeduplicationData = () => {
         <Datatable
           id="wfp"
           showExportBtn
-          title={'wfp-deduplication-' + format(new Date(), 'yyyy-MM-dd')}
+          title={'wfp-deduplication-' + formatDate(new Date())}
           loading={_search.loading}
+          rowStyle={({deduplicationType, result}) => ({
+            ...(deduplicationType !== null && {opacity: 0.5}),
+            ...(result === 'Deduplicated - see deduplication report.' && {color: theme.palette.error.main}),
+          })}
           columns={[
             {
-              id: 'fileName',
-              head: m.fileName,
-              renderQuick: ({fileName}) => fileName,
-              type: 'string',
+              id: 'status',
+              type: 'select_one',
+              head: m.status,
+              align: 'center',
+              render: ({status}) => ({
+                label: status && <DeduplicationStatusIcon status={status} />,
+                value: (status ?? undefined) as string | undefined,
+              }),
             },
             {
-              id: 'createdAt',
-              head: m.createdAt,
-              render: ({createdAt}) => {
+              id: 'uploadedAt',
+              type: 'date',
+              head: m.uploadedAt,
+              render: ({uploadedAt}) => {
                 return {
-                  label: formatDate(createdAt),
-                  value: createdAt,
-                  tooltip: formatDateTime(createdAt),
+                  label: uploadedAt && formatDateTime(toDate(uploadedAt)),
+                  value: (uploadedAt && toDate(uploadedAt)) || undefined,
                 }
               },
-              type: 'date',
             },
             {
-              id: 'office',
-              head: m.office,
-              renderQuick: ({office}) => office,
-              type: 'select_one',
-              options: getOfficeOptions,
+              id: 'batchId',
+              type: 'string',
+              head: m.batchId,
+              renderQuick: ({batchId}) => batchId,
             },
             {
+              id: 'fileName',
+              type: 'string',
+              head: m.fileName,
+              renderQuick: ({fileName}) => fileName,
+            },
+            {
+              id: 'drcOffice',
               type: 'select_one',
+              head: m.drcOffice,
+              render: ({drcOffice}) => {
+                return {
+                  label: drcOffice,
+                  value: drcOffice,
+                  tooltip: drcOffice,
+                }
+              },
+            },
+            {
               id: 'category',
+              type: 'select_one',
               head: m.category,
               renderQuick: ({category}) => category,
-            },
-            {
-              id: 'beneficiaryId',
-              head: 'Beneficiary Id',
-              renderQuick: ({beneficiaryId}) => beneficiaryId,
-              type: 'string',
             },
             {
               id: 'taxId',
               head: m.taxID,
               type: 'string',
-              render: ({taxId}) => {
-                return {
-                  value: taxId,
-                  label: taxId ?? <Txt color="error">{m.mpca.uploadWfpTaxIdMapping}</Txt>,
-                }
-              },
-            },
-            {
-              id: 'taxIdOccurrences',
-              head: m.taxIdOccurrences,
-              type: 'number',
-              renderQuick: ({taxId}) => taxIdCounter?.[taxId!] ?? 0,
+              renderQuick: ({taxId}) => taxId,
             },
             {
               id: 'amount',
@@ -130,100 +115,46 @@ export const WfpDeduplicationData = () => {
               },
             },
             {
-              id: 'validFrom',
-              head: m.validFrom,
-              type: 'date',
-              render: ({validFrom}) => {
-                return {
-                  label: formatDate(validFrom),
-                  value: validFrom,
-                }
-              },
-            },
-            {
-              id: 'expiry',
-              head: m.expiry,
-              type: 'date',
-              render: ({expiry}) => {
-                return {
-                  label: formatDate(expiry),
-                  value: expiry,
-                }
-              },
-            },
-            {
-              id: 'suggestion',
-              head: m.suggestion,
-              renderQuick: ({suggestion}) => m.mpca.drcSupportSuggestion[suggestion],
-              width: 246,
+              id: 'currency',
               type: 'select_one',
-              // options: () => Obj.keys(DrcSupportSuggestion).map(_ => ({label: m.mpca.drcSupportSuggestion[_], value: _})),
+              head: m.currency,
+              renderQuick: ({currency}) => currency,
             },
             {
-              id: 'suggestionDuration',
-              head: m.mpca.suggestionDurationInMonths,
-              type: 'number',
-              render: ({suggestionDurationInMonths}) => {
-                return {
-                  value: suggestionDurationInMonths,
-                  label: `${suggestionDurationInMonths} ${m.months}`,
-                }
-              },
+              id: 'result',
+              type: 'string',
+              head: m.result,
+              renderQuick: ({result}) => result ?? undefined,
             },
             {
-              id: 'status',
-              align: 'center',
-              head: m.status,
-              width: 0,
+              id: 'organisation',
               type: 'select_one',
-              options: getStatusOptions,
-              render: ({status}) => {
-                return {
-                  tooltip: m.mpca.status[status],
-                  label: <DeduplicationStatusIcon status={status} />,
-                  value: status ?? DatatableUtils.blank,
-                }
-              },
+              head: m.organisation,
+              renderQuick: ({organisation}) => organisation,
             },
             {
-              id: 'existingOrga',
-              head: m.mpca.existingOrga,
-              renderQuick: ({existingOrga}) => existingOrga,
-              options: existingOrga ? () => existingOrga : undefined,
+              id: 'deduplicationType',
               type: 'select_one',
+              head: m.deduplicationType,
+              renderQuick: ({deduplicationType}) => deduplicationType ?? undefined,
             },
             {
-              id: 'existingAmount',
-              head: m.mpca.existingAmount,
-              render: ({existingAmount}) => {
-                return {
-                  label: existingAmount && formatLargeNumber(existingAmount),
-                  value: existingAmount,
-                }
-              },
-              type: 'number',
+              id: 'reason',
+              head: m.reason,
+              type: 'select_one',
+              renderQuick: ({reason}) => reason ?? undefined,
             },
             {
-              id: 'existingStart',
-              head: m.mpca.existingStart,
-              render: ({existingStart}) => {
-                return {
-                  label: existingStart && formatDate(existingStart),
-                  value: existingStart,
-                }
-              },
-              type: 'date',
+              id: 'startDate',
+              head: m.startDate,
+              type: 'string',
+              renderQuick: ({startDate}) => startDate,
             },
             {
-              id: 'existingEnd',
-              head: m.mpca.existingEnd,
-              render: ({existingEnd}) => {
-                return {
-                  label: existingEnd && formatDate(existingEnd),
-                  value: existingEnd,
-                }
-              },
-              type: 'date',
+              id: 'endDate',
+              head: m.endDate,
+              type: 'string',
+              renderQuick: ({endDate}) => endDate,
             },
           ]}
           data={_search.get?.data}

@@ -1,6 +1,10 @@
-import {useMemo} from 'react'
+import {useCallback, useMemo, useState, type FC, type Dispatch, type SetStateAction} from 'react'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
+import FileUploadIcon from '@mui/icons-material/FileUpload'
+import {Box, Button} from '@mui/material'
 import {NavLink, Route, Routes} from 'react-router-dom'
+
+import {DrcOffice} from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@/core/i18n'
@@ -10,12 +14,13 @@ import {useIpToast} from '@/core/useToast'
 import {appFeaturesIndex} from '@/features/appFeatureId'
 import {WfpDeduplicationAccess} from '@/features/WfpDeduplication/WfpDeduplicationAccess'
 import {WfpDeduplicationData} from '@/features/WfpDeduplication/WfpDeduplicationData'
-import {IpBtn} from '@/shared/Btn'
-import {BtnUploader} from '@/shared/BtnUploader'
 import {useAsync} from '@/shared/hook/useAsync'
+import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {Layout} from '@/shared/Layout'
 import {Sidebar, SidebarBody, SidebarHr, SidebarItem} from '@/shared/Layout/Sidebar'
 import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
+
+import FileUploadDialog from './WfpDeduplicationFileUploadDialog'
 
 export const wfpDeduplicationIndex = {
   basePath: '/wfp-deduplication',
@@ -25,46 +30,50 @@ export const wfpDeduplicationIndex = {
   },
 }
 
-const WpfDeduplicationSidebar = () => {
+const WpfDeduplicationSidebar: FC<{setRerender: Dispatch<SetStateAction<boolean>>}> = ({setRerender}) => {
   const {api} = useAppSettings()
   const {session} = useSession()
-
-  const _uploadTaxIdMapping = useAsync(api.wfpDeduplication.uploadTaxIdsMapping)
-  const _refreshData = useAsync(api.wfpDeduplication.refresh)
+  const [drcOffice, setDrcOffice] = usePersistentState<DrcOffice | undefined>(session.drcOffice, {
+    storageKey: 'wfp-deduplication-office',
+  })
+  const [files, setFiles] = useState<File[]>([])
+  const upload = useAsync(api.wfpDeduplication.uploadDeduplicationResults)
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
   const {m} = useI18n()
   const {toastHttpError} = useIpToast()
   const path = (page: string) => '' + page
+  const toggleUploadDialog = () => setUploadDialogOpen((prev) => !prev)
+  const closeUploadDialog = () => setUploadDialogOpen(false)
+  const onReset = () => setFiles([])
+  const onUpload = useCallback(async () => {
+    if (drcOffice)
+      upload
+        .call({office: drcOffice, files})
+        .catch(toastHttpError)
+        .finally(() => {
+          setRerender((prev) => !prev)
+        })
+    closeUploadDialog()
+  }, [upload, drcOffice, files, closeUploadDialog])
 
-  useEffectFn(_uploadTaxIdMapping.error, toastHttpError)
-  useEffectFn(_refreshData.error, toastHttpError)
+  useEffectFn(upload.error, toastHttpError)
 
   return (
     <Sidebar headerId="app-header">
       <SidebarBody>
-        {session.admin && (
-          <>
-            <SidebarItem>
-              <BtnUploader
-                fullWidth
-                variant="outlined"
-                uploading={_uploadTaxIdMapping.loading}
-                onUpload={_uploadTaxIdMapping.call}
-                onDelete={console.log}
-                msg={{
-                  invalidSize: m.error,
-                  loading: m.loading,
-                  upload: m.mpca.uploadWfpTaxIdMapping,
-                }}
-              />
-            </SidebarItem>
-            <SidebarItem>
-              <IpBtn variant="outlined" icon="refresh" onClick={_refreshData.call} loading={_refreshData.loading}>
-                {m.refresh}
-              </IpBtn>
-            </SidebarItem>
-            <SidebarHr sx={{my: 2}} />
-          </>
-        )}
+        <Button
+          startIcon={<FileUploadIcon />}
+          variant="outlined"
+          loading={upload.loading}
+          onClick={toggleUploadDialog}
+          sx={{width: 'calc(100% - 6px)', ml: 0.75, mr: 0, mt: 0, mb: 1.5}}
+          title={m.uploadDeduplicationFiles}
+        >
+          <Box sx={{whiteSpace: 'nowrap', overflowX: 'hidden', textOverflow: 'ellipsis'}}>
+            {m.uploadDeduplicationFiles}
+          </Box>
+        </Button>
+        <SidebarHr sx={{my: 2}} />
         <NavLink to={path(wfpDeduplicationIndex.siteMap.data)}>
           {({isActive}) => (
             <SidebarItem icon="list_alt" active={isActive}>
@@ -80,21 +89,37 @@ const WpfDeduplicationSidebar = () => {
           )}
         </NavLink>
       </SidebarBody>
+      <FileUploadDialog
+        open={uploadDialogOpen}
+        onClose={closeUploadDialog}
+        enableOfficeSelection={session.admin ?? false}
+        drcOffice={drcOffice}
+        setDrcOffice={setDrcOffice}
+        onReset={onReset}
+        files={files}
+        setFiles={setFiles}
+        onUpload={onUpload}
+      />
     </Sidebar>
   )
 }
 
 export const WfpDeduplicationPage = () => {
   const {accesses, session} = useSession()
+  const [rerender, setRerender] = useState(false)
   const access = useMemo(() => appFeaturesIndex.wfp_deduplication.showIf?.(session, accesses), [session, accesses])
+
   useReactRouterDefaultRoute(wfpDeduplicationIndex.siteMap.data)
-  if (!access) {
-    return <NoFeatureAccessPage />
-  }
+
+  if (!access) <NoFeatureAccessPage />
+
   return (
-    <Layout title={appFeaturesIndex.wfp_deduplication.name} sidebar={<WpfDeduplicationSidebar />}>
+    <Layout
+      title={appFeaturesIndex.wfp_deduplication.name}
+      sidebar={<WpfDeduplicationSidebar setRerender={setRerender} />}
+    >
       <Routes>
-        <Route path={wfpDeduplicationIndex.siteMap.data} element={<WfpDeduplicationData />} />
+        <Route path={wfpDeduplicationIndex.siteMap.data} element={<WfpDeduplicationData rerender={rerender} />} />
         <Route path={wfpDeduplicationIndex.siteMap.access} element={<WfpDeduplicationAccess />} />
       </Routes>
     </Layout>

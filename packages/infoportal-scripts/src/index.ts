@@ -13,14 +13,13 @@ export const koboSdkDrc = new KoboClient({
   token: appConf.kobo.drc.token,
   log: winston.createLogger(),
 })
-;(async () => {
-  // await FixKoboMigration.resetWrongMigration()
-  // await FixKoboMigration.MissingSubmissions.run()
-  // await FixKoboMigration.Tags.run()
-  // await new ActivityInfoBuildType().definition.monitoring()
 
-  // MEMO: groups nested twice are treated as one-level array, so the typing and mapping for HH members shelter_commonSpaces is fixed manually
-  commonSpacesReminder()
-  // await new BuildKoboType().buildAll()
-  // await new BuildKoboType().build('protection_pss')
-})()
+// await FixKoboMigration.resetWrongMigration()
+// await FixKoboMigration.MissingSubmissions.run()
+// await FixKoboMigration.Tags.run()
+// await new ActivityInfoBuildType().definition.monitoring()
+
+// MEMO: groups nested twice are treated as one-level array, so the typing and mapping for HH members shelter_commonSpaces is fixed manually
+commonSpacesReminder()
+// await new BuildKoboType().buildAll()
+new BuildKoboType().build('protection_counselling').finally(() => console.log('interface is generated'))

@@ -67,7 +67,7 @@ export const I18nProvider = ({children, defaultLang = 'en'}: {readonly defaultLa
           m,
           dateFromNow,
           formatDate: (date) => formatDate(date, lang),
-          formatDateTime,
+          formatDateTime: (date) => formatDateTime(date, lang),
           formatDuration,
           formatLargeNumber,
           formatTime,
