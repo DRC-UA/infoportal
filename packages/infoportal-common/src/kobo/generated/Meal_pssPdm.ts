@@ -211,7 +211,7 @@ export namespace Meal_pssPdm {
     },
     gido: {
       ukr000284_bha: `ВНА UKR-000284`,
-      ukr000270_pofu: `Pooled Funds UKR- 000270`,
+      ukr000270_pofu: `Pooled Funds UKR-000270`,
       ukr000298_novo: `Novonordisk UKR-000298`,
       ukr000309_okf: `OKF UKR-000309`,
       ukr000314_uhf4: `UHF4 UKR-000314`,
@@ -222,9 +222,12 @@ export namespace Meal_pssPdm {
       ukr000347_danida: `DANIDA UKR-000347`,
       ukr000355_dmfa: `DMFA UKR-000355`,
       ukr000363_uhf8: `UHF8 UKR-000363`,
-      ukr000372_echo3: `ECHO UKR -000372`,
+      ukr000372_echo3: `ECHO UKR-000372`,
       ukr000388_bha: `ВНА UKR-000388`,
-      ukr000423_echo4: `ECHO UKR -000423`,
+      ukr000423_echo4: `ECHO UKR-000423`,
+      ukr000426_sdc: `SDC UKR-000426`,
+      ukr000461_uhf: `UHF UKR-000461`,
+      ukr000462_echo: `ECHO UKR-000462`,
     },
     received_similar_pss: {
       drc: `Yes, DRC`,

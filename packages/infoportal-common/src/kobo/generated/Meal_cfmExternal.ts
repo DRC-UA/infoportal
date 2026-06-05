@@ -8,7 +8,7 @@ export namespace Meal_cfmExternal {
     benef_origin: undefined | Option<'benef_origin'>
     // consent [note] Зверніть увагу, що ви збираєтеся поділитися своїми особистими контактними даними, щоб фахівці DRC мали змогу відповісти на ваш запит.
     consent: string
-    // begin_group_QpVWZ8qgD/not_before [note] Перед заповненням даної он-лайн форми просимо ознайомитися з найбільш поширеними питаннями та відповідями стосовно діяльності Данської Ради у справах біженців:
+    // begin_group_QpVWZ8qgD/not_before [note] Перед заповненням даної онлайн форми просимо ознайомитися з найбільш поширеними питаннями та відповідями стосовно діяльності Данської Ради у справах біженців:
     not_before: string
     // begin_group_QpVWZ8qgD/not_assistance [note] ####Яку допомогу ви надаєте?
     not_assistance: string
@@ -18,7 +18,7 @@ export namespace Meal_cfmExternal {
     not_decided: string
     // begin_group_QpVWZ8qgD/not_registration [note] ####Просимо зауважити, що ця форма НЕ є реєстрацією на допомогу.
     not_registration: string
-    // begin_group_QpVWZ8qgD/not_prefer [note] ####Для отримання додаткової інформації, ви можете зателефонувати нам за номером: #### 📞 0 800 33 95 18
+    // begin_group_QpVWZ8qgD/not_prefer [note] ####Для отримання додаткової інформації, ви можете зателефонувати нам за номером: #### 📞 0 800 33 95 18 (ПН-ПТ 09:00-17:00)
     not_prefer: string
     // begin_group_QpVWZ8qgD/existing_beneficiary [select_one] Чи отримували ви вже якусь допомогу від DRC безпосередньо або від партнерів DRC?
     existing_beneficiary: undefined | Option<'prot_support'>
@@ -54,7 +54,7 @@ export namespace Meal_cfmExternal {
     thanks_feedback: string | undefined
     // begin_group_eCcGd9p3r/complaint [text] Будь ласка, надайте інформацію щодо вашої скарги
     complaint: string | undefined
-    // begin_group_eCcGd9p3r/prot_support [select_one] Ви готові обговорити це з нашою командою DRC, чи Ви хотіли поговорити зі спеціалістом з чутливих випадків?
+    // begin_group_eCcGd9p3r/prot_support [select_one] Ви готові обговорити це з нашою командою DRC?
     prot_support: undefined | Option<'prot_support'>
     // begin_group_eCcGd9p3r/request [text] Будь ласка, надайте детальну інформацію щодо ваших потреб:
     request: string | undefined
