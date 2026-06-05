@@ -606,6 +606,10 @@ export namespace Bn_pam {
     did_receive_cash_yes: {
       empca: `Emergency MPCA`,
       bnmpca: `Basic Needs MPCA`,
+      uct1: `UCT 1`,
+      uct2: `UCT 2`,
+      uct3: `UCT 3`,
+      uct4: `UCT 4`,
     },
     office: {
       dnipro: `DNK (Dnipro)`,
