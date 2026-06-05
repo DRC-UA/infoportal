@@ -64,6 +64,7 @@ export class WfpDeduplicationService {
         where,
         take: limit,
         skip: offset,
+        orderBy: [{uploadedAt: 'asc'}, {batchId: 'asc'}, {taxId: 'asc'}, {status: 'desc'}],
       }),
     ])
 

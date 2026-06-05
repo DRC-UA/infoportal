@@ -33,7 +33,7 @@ const WpfDeduplicationFileUploadDialog: FC<WpfDeduplicationFileUploadDialogProps
   setFiles,
   onUpload,
 }) => {
-  const {m} = useI18n()
+  const {m, currentLang} = useI18n()
   const [currentStep, setCurrentStep] = useState(0)
   const totalSteps = () => m.uploadFilesModal.steps.length
   const isLastStep = () => currentStep === totalSteps() - 1
@@ -74,6 +74,11 @@ const WpfDeduplicationFileUploadDialog: FC<WpfDeduplicationFileUploadDialogProps
     return true
   }, [files])
 
+  const steps = [
+    m.uploadFilesModal.steps[currentLang === 'en' ? 0 : 2], // why the array has both, en and uk strings? Weird )
+    m.uploadFilesModal.steps[currentLang === 'en' ? 1 : 3],
+  ]
+
   return (
     <Dialog
       open={open}
@@ -85,7 +90,7 @@ const WpfDeduplicationFileUploadDialog: FC<WpfDeduplicationFileUploadDialogProps
     >
       <Stack direction="column" display="flex" justifyContent="space-between" p={2} minHeight={200}>
         <Stepper nonLinear activeStep={currentStep} sx={{mb: 2}}>
-          {m.uploadFilesModal.steps.map((label, index) => (
+          {steps.map((label, index) => (
             <Step key={label}>
               <StepButton aria-controls="stepper-content" color="inherit" onClick={handleStep(index)}>
                 {label}
