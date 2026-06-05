@@ -90,7 +90,7 @@ export class WfpDeduplicationService {
 
   readonly uploadDeduplications: (args: {office: DrcOffice; files: Express.Multer.File[]}) => Promise<{count: number}> =
     async ({office, files}) => {
-      const uploadBatch: Omit<UctWfpDeduplication, 'id'>[] = []
+      const uploadBatch: Omit<UctWfpDeduplication, 'id' | 'uploadedAt'>[] = []
 
       for (const file of files) {
         const csvFile = await csvtojson().fromFile(file.path)

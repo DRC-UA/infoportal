@@ -188,8 +188,10 @@ model MpcaWfpDeduplication {
 }
 
 model UctWfpDeduplication {
-  id                String   @id @default(cuid())
-  batchId           String   @default(uuid())
+  uploadedAt        DateTime?      @default(now())
+  id                String         @id @default(cuid())
+  batchId           String         @default(uuid())
+  status            Deduplication?
   fileName          String
   drcOffice         String
   taxId             String
@@ -204,6 +206,11 @@ model UctWfpDeduplication {
   endDate           String
 
   @@unique([fileName, taxId, deduplicationType, reason])
+}
+
+enum Deduplication {
+  Eligible
+  Deduplicated
 }
 
 enum Currency {

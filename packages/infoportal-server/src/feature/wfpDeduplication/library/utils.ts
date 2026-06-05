@@ -1,5 +1,5 @@
-import {Obj} from '@axanc/ts-utils'
-import {Currency, type UctWfpDeduplication} from '@prisma/client'
+import {Obj, match} from '@axanc/ts-utils'
+import {Currency, Deduplication, type UctWfpDeduplication} from '@prisma/client'
 
 import type {DrcOffice} from 'infoportal-common'
 
@@ -31,7 +31,7 @@ const csvFile2DbAdapter = ({
     | Record<(typeof DEDUPLICATION_FIELDS)[number], string>
     | Record<(typeof TRANSACTION_FIELDS)[number], string>
   )[]
-}): Omit<UctWfpDeduplication, 'id'>[] => {
+}): Omit<UctWfpDeduplication, 'id' | 'uploadedAt'>[] => {
   const records = rawRecords.filter((record) => !Obj.values(record).every((value) => value === '')) // get rid of empty rows, causing 500
 
   if (!records || records.length === 0) return []
@@ -48,6 +48,12 @@ const csvFile2DbAdapter = ({
       ...sharedFields,
       taxId: record['Tax ID'],
       result: record['Results'],
+      status: match('Results')
+        .cases({
+          ['Success - loaded' as string]: Deduplication.Eligible,
+          ['Deduplicated - see deduplication report.' as string]: Deduplication.Deduplicated,
+        })
+        .default(null) as Deduplication,
       organisation: record['Existing - Organization'],
       deduplicationType: record['Deduplication Type'] || null,
       category: record['Existing - Category'],
@@ -65,6 +71,12 @@ const csvFile2DbAdapter = ({
       ...sharedFields,
       taxId: record['Tax ID'],
       result: record['Results'],
+      status: match(record['Results'])
+        .cases({
+          ['Success - loaded']: Deduplication.Eligible,
+          ['Deduplicated - see deduplication report.']: Deduplication.Deduplicated,
+        })
+        .default(null) as Deduplication,
       organisation: record['Organization'],
       deduplicationType: null,
       category: record['Category'],

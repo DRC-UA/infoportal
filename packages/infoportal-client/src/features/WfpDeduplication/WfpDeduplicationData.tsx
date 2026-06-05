@@ -1,9 +1,8 @@
 import {useEffect, type FC} from 'react'
 import {match} from '@axanc/ts-utils'
 import {useTheme} from '@mui/material'
-import {format} from 'date-fns'
-
-import {WfpDeduplicationStatus} from 'infoportal-common'
+import {Deduplication} from '@prisma/client'
+import {toDate} from 'date-fns'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@/core/i18n'
@@ -13,13 +12,11 @@ import {useFetcher} from '@/shared/hook/useFetcher'
 import {Page} from '@/shared/Page'
 import {Panel} from '@/shared/Panel'
 
-export const DeduplicationStatusIcon = ({status}: {status: WfpDeduplicationStatus}) => {
+export const DeduplicationStatusIcon = ({status}: {status: Deduplication}) => {
   return match(status)
     .cases({
-      Deduplicated: <TableIcon color="warning" children="join_full" />,
-      PartiallyDeduplicated: <TableIcon color="info" children="join_left" />,
-      NotDeduplicated: <TableIcon color="success" children="check_circle" />,
-      Error: <TableIcon color="error" children="error" />,
+      [Deduplication.Eligible]: <TableIcon color="success" children="check_circle" sx={{mr: 1}} />,
+      [Deduplication.Deduplicated]: <TableIcon color="warning" children="join_full" sx={{mr: 1}} />,
     })
     .default(null)
 }
@@ -28,7 +25,7 @@ export const WfpDeduplicationData: FC<{rerender: boolean}> = ({rerender}) => {
   const {api} = useAppSettings()
   const _search = useFetcher(api.wfpDeduplication.search)
   const {formatLargeNumber} = useI18n()
-  const {m} = useI18n()
+  const {m, formatDate, formatDateTime} = useI18n()
   const theme = useTheme()
 
   useEffect(() => {
@@ -41,7 +38,7 @@ export const WfpDeduplicationData: FC<{rerender: boolean}> = ({rerender}) => {
         <Datatable
           id="wfp"
           showExportBtn
-          title={'wfp-deduplication-' + format(new Date(), 'yyyy-MM-dd')}
+          title={'wfp-deduplication-' + formatDate(new Date())}
           loading={_search.loading}
           rowStyle={({deduplicationType, result}) => ({
             ...(deduplicationType !== null && {opacity: 0.5}),
@@ -49,9 +46,30 @@ export const WfpDeduplicationData: FC<{rerender: boolean}> = ({rerender}) => {
           })}
           columns={[
             {
+              id: 'status',
+              type: 'select_one',
+              head: m.status,
+              align: 'center',
+              render: ({status}) => ({
+                label: status && <DeduplicationStatusIcon status={status} />,
+                value: (status ?? undefined) as string | undefined,
+              }),
+            },
+            {
+              id: 'uploadedAt',
+              type: 'date',
+              head: m.uploadedAt,
+              render: ({uploadedAt}) => {
+                return {
+                  label: uploadedAt && formatDateTime(toDate(uploadedAt)),
+                  value: (uploadedAt && toDate(uploadedAt)) || undefined,
+                }
+              },
+            },
+            {
               id: 'batchId',
               type: 'string',
-              head: 'Batch ID',
+              head: m.batchId,
               renderQuick: ({batchId}) => batchId,
             },
             {
@@ -99,42 +117,42 @@ export const WfpDeduplicationData: FC<{rerender: boolean}> = ({rerender}) => {
             {
               id: 'currency',
               type: 'select_one',
-              head: 'Currency',
+              head: m.currency,
               renderQuick: ({currency}) => currency,
             },
             {
               id: 'result',
               type: 'string',
-              head: 'Result',
+              head: m.result,
               renderQuick: ({result}) => result ?? undefined,
             },
             {
               id: 'organisation',
               type: 'select_one',
-              head: 'Organisation',
+              head: m.organisation,
               renderQuick: ({organisation}) => organisation,
             },
             {
               id: 'deduplicationType',
               type: 'select_one',
-              head: 'Deduplication Type',
+              head: m.deduplicationType,
               renderQuick: ({deduplicationType}) => deduplicationType ?? undefined,
             },
             {
               id: 'reason',
-              head: 'Reason',
+              head: m.reason,
               type: 'select_one',
               renderQuick: ({reason}) => reason ?? undefined,
             },
             {
               id: 'startDate',
-              head: 'Start Date',
+              head: m.startDate,
               type: 'string',
               renderQuick: ({startDate}) => startDate,
             },
             {
               id: 'endDate',
-              head: 'End Date',
+              head: m.endDate,
               type: 'string',
               renderQuick: ({endDate}) => endDate,
             },
