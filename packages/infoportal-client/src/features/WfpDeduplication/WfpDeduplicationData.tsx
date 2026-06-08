@@ -1,6 +1,6 @@
 import {useEffect, type FC} from 'react'
 import {match} from '@axanc/ts-utils'
-import {useTheme} from '@mui/material'
+import {Tooltip, useTheme} from '@mui/material'
 import {Deduplication} from '@prisma/client'
 import {toDate} from 'date-fns'
 
@@ -50,9 +50,26 @@ export const WfpDeduplicationData: FC<{rerender: boolean}> = ({rerender}) => {
               type: 'select_one',
               head: m.status,
               align: 'center',
+              options: () => {
+                return Array.from(new Set(_search.get?.data.map(({status}) => status))).map((status) => {
+                  return {
+                    title: status ?? 'No status',
+                    label: status && (
+                      <>
+                        <DeduplicationStatusIcon status={status} /> {status}
+                      </>
+                    ),
+                    value: status ?? '',
+                  }
+                })
+              },
               render: ({status}) => ({
-                label: status && <DeduplicationStatusIcon status={status} />,
-                value: (status ?? undefined) as string | undefined,
+                label: status && (
+                  <Tooltip title={status}>
+                    <DeduplicationStatusIcon status={status} />
+                  </Tooltip>
+                ),
+                value: status ?? '',
               }),
             },
             {
