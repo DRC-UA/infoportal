@@ -41,6 +41,7 @@ export class KoboMetaMapperVa {
         : mappedProject in DrcProject
           ? DrcProject[mappedProject as keyof typeof DrcProject]
           : undefined
+      if (mappedProject === 'UKR-000306 DUTCH') console.log(projectKey, mappedProject, project)
 
       if (!project) return []
 
