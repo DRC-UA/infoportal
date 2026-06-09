@@ -87,6 +87,7 @@ export namespace Protection_groupSession {
       mykolaiv: `Mykolaiv`,
       sumy: `Sumy`,
       sloviansk: `Sloviansk`,
+      barvinkove: `Barvinkove`,
       kyiv: `Kyiv`,
     },
     staff_code_001: {

@@ -47,6 +47,7 @@ export class KoboMetaMapperVa {
       return KoboMetaMapper.make({
         office: match(answer.office_bio)
           .cases({
+            brv: DrcOffice.Barvinkove,
             cej: DrcOffice.Chernihiv,
             dnk: DrcOffice.Dnipro,
             hrk: DrcOffice.Kharkiv,

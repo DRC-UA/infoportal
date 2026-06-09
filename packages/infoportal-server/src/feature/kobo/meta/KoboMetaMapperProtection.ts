@@ -64,6 +64,7 @@ export class KoboMetaMapperProtection {
     return {
       office: match(answer.staff_to_insert_their_DRC_office)
         .cases({
+          barvinkove: DrcOffice.Barvinkove,
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           slovyansk: DrcOffice.Sloviansk,
@@ -205,6 +206,7 @@ export class KoboMetaMapperProtection {
     return {
       office: match(answer.staff_to_insert_their_DRC_office)
         .cases({
+          barvinkove: DrcOffice.Barvinkove,
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
@@ -245,6 +247,7 @@ export class KoboMetaMapperProtection {
     return KoboMetaMapper.make({
       office: match(answer.staff_to_insert_their_DRC_office)
         .cases({
+          barvinkove: DrcOffice.Barvinkove,
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
@@ -280,6 +283,7 @@ export class KoboMetaMapperProtection {
     return KoboMetaMapper.make({
       office: match(answer.staff_to_insert_their_DRC_office)
         .cases({
+          barvinkove: DrcOffice.Barvinkove,
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
@@ -315,6 +319,7 @@ export class KoboMetaMapperProtection {
     return KoboMetaMapper.make({
       office: match(answer.staff_to_insert_their_DRC_office)
         .cases({
+          barvinkove: DrcOffice.Barvinkove,
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,
           kharkiv: DrcOffice.Kharkiv,
@@ -445,6 +450,9 @@ export class KoboMetaMapperProtection {
         ukr000386_pooled_funds: DrcProject['UKR-000386 Pooled Funds'],
         ukr000388_bha: DrcProject['UKR-000388 BHA'],
         ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+        ukr000457_dmfa: DrcProject['UKR-000457 DMFA'],
+        ukr000461_uhf: DrcProject['UKR-000461 UHF'],
+        ukr000462_echo: DrcProject['UKR-000462 ECHO'],
       })
       .default(() => DrcProjectHelper.search(Protection_gbv.options.project[answer.project!] ?? answer.project))
 
@@ -486,12 +494,18 @@ export class KoboMetaMapperProtection {
         ukr000372_echo3: [DrcProject['UKR-000372 ECHO3']],
         ukr000355_dmfa: [DrcProject['UKR-000355 Danish MFA']],
         ukr000386_mass_appeal: [DrcProject['UKR-000386 Pooled Funds']],
+        ukr000388_bha: [DrcProject['UKR-000388 BHA']],
+        ukr000426_sdc: [DrcProject['UKR-000426 SDC']],
+        ukr000457_dmfa: [DrcProject['UKR-000457 DMFA']],
+        ukr000461_uhf: [DrcProject['UKR-000461 UHF']],
+        ukr000462_echo: [DrcProject['UKR-000462 ECHO']],
       })
       .default(undefined)
 
     return KoboMetaMapper.make({
       office: match(answer.staff_to_insert_their_DRC_office)
         .cases({
+          barvinkove: DrcOffice.Barvinkove,
           sloviansk: DrcOffice.Sloviansk,
           chernihiv: DrcOffice.Chernihiv,
           dnipro: DrcOffice.Dnipro,

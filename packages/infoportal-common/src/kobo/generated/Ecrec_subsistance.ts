@@ -135,12 +135,18 @@ export namespace Ecrec_subsistance {
     consume_majority: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/land_own [decimal] 4.3 How much land do you own
     land_own: number | undefined
+    // cash_farmers/rent_use_farmland [select_one] 4.3.1 Do you rent or use other farmland for cultivation?
+    rent_use_farmland: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/land_cultivate [decimal] 4.4 How much land do you cultivate for agricultural purposes?
     land_cultivate: number | undefined
     // cash_farmers/land_rent_other [select_one] 4.5.1 Do you have any land that you do not cultivate but rent out to other farmers?
     land_rent_other: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/rent_receive_year [integer] 4.5.2 What is the rent you receive per year in UAH?
     rent_receive_year: number | undefined
+    // cash_farmers/ownership_documents_land [select_one] Does the household have ownership documents for the land, regardless of whether they cultivate it themselves, rent it to others, or rent land from another household?
+    ownership_documents_land: undefined | Option<'currently_receiving_cash'>
+    // cash_farmers/photo_ownership_documents_land [image] Upload photo of your documents
+    photo_ownership_documents_land: string
     // cash_farmers/not_livestock [note] How many of the following livestock do you own?
     not_livestock: string
     // cash_farmers/poultry [integer] Poultry:
@@ -163,6 +169,10 @@ export namespace Ecrec_subsistance {
     other_animals: number | undefined
     // cash_farmers/other_animals_details [text] If "Other", please specify
     other_animals_details: string | undefined
+    // cash_farmers/ownership_documents_livestock [select_one] Does the household have ownership documents for livestock
+    ownership_documents_livestock: undefined | Option<'currently_receiving_cash'>
+    // cash_farmers/photo_ownership_documents_livestock [image] Upload photo of your documents
+    photo_ownership_documents_livestock: string
     // cash_farmers/depend_basic_needs [select_one] Do your agricultural activities significantly contribute to your household being able to meet its basic food needs?
     depend_basic_needs: undefined | Option<'currently_receiving_cash'>
     // cash_farmers/household_access_water [select_one] 4.6 Does the household have access to water or other means of irrigation?

@@ -4,10 +4,16 @@ export namespace Ecrec_small_scale {
   export interface T {
     start: string
     end: string
+    // status_deduplication [select_one] Status deduplication
+    status_deduplication: undefined | Option<'status_deduplication'>
+    // notice_decision [select_one] Notice of the decision
+    notice_decision: undefined | Option<'currently_receiving_cash'>
     // status [select_one] Status
     status: undefined | Option<'status'>
     // date_payment [date] Payment Date
     date_payment: Date | undefined
+    // type_assistance [select_one] Assistance for:
+    type_assistance: undefined | Option<'type_assistance'>
     // cal_eligibility [calculate] Eligibility
     cal_eligibility: string
     // cal_tot_vulnerability [calculate] Total score Vulnerability
@@ -157,20 +163,26 @@ export namespace Ecrec_small_scale {
     know_contamination_land_neighbour: undefined | Option<'land_rent_other'>
     // contamination/individual_continues_land [select_one] Do you know if this individual(s) still continues to farm their land?
     individual_continues_land: undefined | Option<'currently_receiving_cash'>
-    // registration_questions/primary_source_livelihoods [select_one] What is the primary source of livelihoods in the household?
-    primary_source_livelihoods: undefined | Option<'primary_source_livelihoods'>
+    // registration_questions/primary_source_livelihoods [select_multiple] What are the three main sources of income of livelihoods in the household
+    primary_source_livelihoods: undefined | Option<'primary_source_livelihoods'>[]
     // registration_questions/primary_source_livelihoods_other [text] If "Other," please specify
     primary_source_livelihoods_other: string | undefined
     // registration_questions/registered_farming_enterprise [select_one] Are you registered as a farming enterprise?
     registered_farming_enterprise: undefined | Option<'currently_receiving_cash'>
     // registration_questions/land_own [decimal] How much land do you own? (hectares)
     land_own: number | undefined
+    // registration_questions/rent_use_farmland [select_one] Do you rent or use other farmland for cultivation?
+    rent_use_farmland: undefined | Option<'currently_receiving_cash'>
     // registration_questions/land_cultivate [decimal] How much land do you cultivate for agricultural purposes? (hectares)
     land_cultivate: number | undefined
     // registration_questions/land_rent_other [select_one] Do you have any land that you do not cultivate but rent out to other farmers?
     land_rent_other: undefined | Option<'land_rent_other'>
     // registration_questions/land_rent_other_yes [integer] If yes, what is the rent you receive per year in UAH?
     land_rent_other_yes: number | undefined
+    // registration_questions/ownership_documents_land [select_one] Does the household have ownership documents for the land, regardless of whether they cultivate it themselves, rent it to others, or rent land from another household?
+    ownership_documents_land: undefined | Option<'currently_receiving_cash'>
+    // registration_questions/photo_ownership_documents_land [image] Upload photo of your documents
+    photo_ownership_documents_land: string
     // registration_questions/not_many_livestock [note] ##### How many of the following livestock do you have:
     not_many_livestock: string
     // registration_questions/many_poultry [integer] Poultry:
@@ -193,6 +205,10 @@ export namespace Ecrec_small_scale {
     many_other: number | undefined
     // registration_questions/detail_other_livestock [text] If ‘Other’, please indicate which ones
     detail_other_livestock: string | undefined
+    // registration_questions/ownership_documents_livestock [select_one] Does the household have ownership documents for livestock
+    ownership_documents_livestock: undefined | Option<'currently_receiving_cash'>
+    // registration_questions/photo_ownership_documents_livestock [image] Upload photo of your documents
+    photo_ownership_documents_livestock: string
     // registration_questions/income_generate_agricultural [integer] How much income do you generate from your agricultural activities per month in UAH?
     income_generate_agricultural: number | undefined
     // registration_questions/years_engaged_agricultural [integer] How many years have you been engaged in agricultural activities?
@@ -219,6 +235,8 @@ export namespace Ecrec_small_scale {
     any_support_february2022_details: string | undefined
     // registration_questions/plan_government_support_future [select_one] Do you plan to apply for any government support in the near future?
     plan_government_support_future: undefined | Option<'currently_receiving_cash'>
+    // registration_questions/photo_residence_registration [image] Take a clear photo of the official residence registration document (proof of address)
+    photo_residence_registration: string
     // final_details/provide_payment_details [select_one] Thank you for answering the questions above, are you willing to provide your payment details?
     provide_payment_details: undefined | Option<'currently_receiving_cash'>
     // final_details/pay_det_id_type [select_one] Form of ID do you have?
@@ -318,6 +336,12 @@ export namespace Ecrec_small_scale {
     cal_income_v12: string
   }
   export const options = {
+    status_deduplication: {
+      deduplicated: `✅ Deduplicated`,
+      partially_deduplicated: `⚠️ Partially Deduplicated`,
+      not_deduplicated: `❌ Not Deduplicated`,
+      need_deduplicate: `🕓 Requires Deduplicate`,
+    },
     status: {
       selected: `🟦 Selected`,
       pending: `🟡 Pending`,
@@ -325,6 +349,11 @@ export namespace Ecrec_small_scale {
       rejected: `🔴 Rejected`,
       referred: `🧾 Referred`,
       paymentrejected: `❗ Payment Rejected`,
+    },
+    type_assistance: {
+      agricultural: `Agricultural`,
+      livestock: `Livestock`,
+      mixed: `Mixed`,
     },
     back_office: {
       chj: `Chernihiv (CEJ)`,
@@ -373,6 +402,9 @@ export namespace Ecrec_small_scale {
       tetiana_konovshii: `Tetiana Konovshii`,
       vitalii_shapoval: `Vitalii Shapoval`,
       andrii_zagoruiev: `Andrii Zagoruiev`,
+      viktoriia_prokhorova: `Viktoriia Prokhorova`,
+      iryna_pohorazdova: `Iryna Pohorazdova`,
+      maryna_chyvilova: `Maryna Chyvilova`,
       nataliia_karimova: `Nataliia Karimova`,
       hrk_ex1: `Extra 1`,
       hrk_ex2: `Extra 2`,
@@ -457,7 +489,27 @@ export namespace Ecrec_small_scale {
       dont_know: `Don't know`,
     },
     primary_source_livelihoods: {
-      agricultural_activities: `Agricultural activities (including livestock)`,
+      agricultural_activities: `Agricultural and/or livestock activities`,
+      grocery: `Grocery, shop`,
+      smalls: `Small shop/kiosk`,
+      carpentry: `Carpentry, carving, or woodwork`,
+      mechanic: `Mechanics`,
+      plumber: `Plumber`,
+      electrical: `Electrical work`,
+      construct: `Construction work`,
+      textiel: `Textile and tailoring`,
+      education: `Education centre`,
+      heath: `Heath centre`,
+      manufacturing: `Manufacturing/factory work`,
+      computer: `Computer, technology`,
+      administration: `Administration,`,
+      graphic: `Graphic design`,
+      transport: `Transport service`,
+      hairdressing: `Hairdressing/barber`,
+      pscoffe: `Providing services (such as coffee/tea, small restaurant, cooking, etc.)`,
+      pscleaning: `Providing services (cleaning, security)`,
+      ngo: `NGOs/UN agencies`,
+      government: `Government`,
       formal_employment: `Formal employment`,
       allowances: `Allowances/pensions, etc.`,
       other: `Other`,
@@ -2481,6 +2533,7 @@ export namespace Ecrec_small_scale {
       income_spent_food: _.income_spent_food ? +_.income_spent_food : undefined,
       income_spent_nonfood: _.income_spent_nonfood ? +_.income_spent_nonfood : undefined,
       lcs_reason: _.lcs_reason?.split(' '),
+      primary_source_livelihoods: _.primary_source_livelihoods?.split(' '),
       land_rent_other_yes: _.land_rent_other_yes ? +_.land_rent_other_yes : undefined,
       many_poultry: _.many_poultry ? +_.many_poultry : undefined,
       many_cattle: _.many_cattle ? +_.many_cattle : undefined,

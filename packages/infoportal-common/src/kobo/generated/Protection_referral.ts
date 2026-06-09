@@ -11,34 +11,52 @@ export namespace Protection_referral {
     // date [date] Date
     date: Date | undefined
     // introduction/staff_to_insert_their_DRC_office [select_one] 1.1 DRC office
-    staff_to_insert_their_DRC_office: undefined | Option<'staff_to_insert_their_DRC_office'>
-    // introduction/staff_code [select_one] 1.2 Staff code (facilitator)
+    staff_to_insert_their_DRC_office: undefined | Option<'referring_office'>
+    // introduction/team [select_one] 1.2 Team
+    team: undefined | Option<'team'>
+    // introduction/staff_code [select_one] 1.2.1 Staff code (facilitator)
     staff_code: undefined | Option<'staff_code'>
-    // introduction/incoming_outgoing_referral [select_one] 1.3 Incoming or outgoing referral?
+    // introduction/staff_email [text] 1.2.2 Staff Email
+    staff_email: string | undefined
+    // introduction/referral_type [select_one] 1.3 Referral type
+    referral_type: undefined | Option<'referral_type'>
+    // introduction/referring_office [select_one] 1,4 Referral to the office
+    referring_office: undefined | Option<'referring_office'>
+    // introduction/incoming_outgoing_referral [select_one] 1.5 Incoming or outgoing referral?
     incoming_outgoing_referral: undefined | Option<'incoming_outgoing_referral'>
-    // introduction/project_code [select_one] 1.4 Project code
+    // introduction/project_code [select_one] 1.6 Project code
     project_code: undefined | Option<'project_code'>
-    // introduction/referral_numb [text] 1.5 Referral #
+    // introduction/referral_numb [text] 1.7 Referral #
     referral_numb: string | undefined
     // introduction/calc_ref_numb [calculate] Fully Referral number
     calc_ref_numb: string
-    // introduction/person_successfully_referred_drc [select_one] 1.6 Has the person already been successfully referred by DRC protection team?
-    person_successfully_referred_drc: undefined | Option<'referral_closed'>
-    // introduction/date_referral [date] 1.7 Date of referral
+    // introduction/person_successfully_referred_drc [select_one] 1.8 Has the person already been successfully referred by DRC protection team?
+    person_successfully_referred_drc: undefined | Option<'verbal_consent'>
+    // introduction/date_referral [date] 1.9 Date of referral
     date_referral: Date | undefined
-    // introduction/priority_level [select_one] 1.8 Priority level
+    // introduction/priority_level [select_one] 1.10 Priority level
     priority_level: undefined | Option<'priority_level'>
-    // introduction/specific_need [select_multiple] 1.9 Specific need
-    specific_need: undefined | Option<'specific_need'>[]
-    // introduction/specific_need_other [text] 1.9.1 If other specific need, please specify
-    specific_need_other: string | undefined
-    // referral_details/referral_type [select_one] 2.1 Referral type
-    referral_type: undefined | Option<'referral_type'>
-    // referral_details/sub_office [select_one] Select the office in your area to which you would like to transfer this case.
-    sub_office: undefined | Option<'sub_office'>
     // referral_details/verbal_consent [select_one] Verbal consent provided?
-    verbal_consent: undefined | Option<'referral_closed'>
-    // referral_details/service_requested [select_multiple] 2.2 Service requested
+    verbal_consent: undefined | Option<'verbal_consent'>
+    // referral_details/informed_consent_obtained [select_one] How was informed consent obtained?
+    informed_consent_obtained: undefined | Option<'informed_consent_obtained'>
+    // referral_details/sector_need [select_one] 2.2 What sector is the need associated with?
+    sector_need: undefined | Option<'sector_need'>
+    cal_sector_protection: string
+    cal_sector_shelter: string
+    cal_sector_ecrec: string
+    cal_sector_hma: string
+    cal_sector_emergency: string
+    // referral_details/specific_need [select_multiple] 2.2.1 Specific need
+    specific_need: undefined | Option<'specific_need'>[]
+    // referral_details/specific_need_other [text] 2.2.1.1 If other specific need, please specify
+    specific_need_other: string | undefined
+    cal_house_damage: string
+    cal_house_substandard: string
+    cal_common_spaces: string
+    cal_social_facility: string
+    cal_infrastructure_damage: string
+    // referral_details/service_requested [select_multiple] 2.2.2 Service requested
     service_requested: undefined | Option<'service_requested'>[]
     // referral_details/service_requested_other [text] 2.2.1 If other service requested, please specify
     service_requested_other: string | undefined
@@ -53,7 +71,7 @@ export namespace Protection_referral {
     cal_agricultural_livelihood_support: string
     cal_business_support: string
     cal_vocational_training: string
-    cal_subsistence_farmers: string
+    cal_employment_support: string
     cal_victim_assistance: string
     cal_legal_aid: string
     cal_psychosocial_support: string
@@ -61,33 +79,31 @@ export namespace Protection_referral {
     cal_ipa: string
     cal_gbv: string
     cal_eore: string
-    // referral_details/receiving_department_out_inc [note] 2.3 Receiving department
-    receiving_department_out_inc: string
-    // referral_details/receiving_staff_out_inc [note] 2.4 Receiving staff
+    // referral_details/receiving_staff_out_inc [note] 2.3 Receiving staff
     receiving_staff_out_inc: string
-    // referral_details/service_requested_prot [select_one] 2.5 Service requested
+    // referral_details/service_requested_prot [select_one] 2.4 Service requested
     service_requested_prot: undefined | Option<'service_requested_prot'>
-    // referral_details/service_requested_prot_other [text] 2.5.1 If other service requested, please specify
+    // referral_details/service_requested_prot_other [text] 2.4.1 If other service requested, please specify
     service_requested_prot_other: string | undefined
-    // referral_details/sending_department_inc_inc [text] 2.6 Sending department
+    // referral_details/sending_department_inc_inc [text] 2.5 Sending department
     sending_department_inc_inc: string | undefined
-    // referral_details/sending_staff_inc_inc [text] 2.7 Sending staff
+    // referral_details/sending_staff_inc_inc [text] 2.6 Sending staff
     sending_staff_inc_inc: string | undefined
-    // referral_details/name_receiving_agency_out [select_one] 2.8 Receiving agency: name of the agency
+    // referral_details/name_receiving_agency_out [select_one] 2.7 Receiving agency: name of the agency
     name_receiving_agency_out: undefined | Option<'name_receiving_agency_inc'>
-    // referral_details/name_receiving_agency_out_other [text] 2.8.1 If other receiving agency, please specify
+    // referral_details/name_receiving_agency_out_other [text] 2.7.1 If other receiving agency, please specify
     name_receiving_agency_out_other: string | undefined
-    // referral_details/rec_agency_fp_name_out [text] 2.9 Receiving agency: focal point's name
+    // referral_details/rec_agency_fp_name_out [text] 2.8 Receiving agency: focal point's name
     rec_agency_fp_name_out: string | undefined
-    // referral_details/rec_agency_fp_contact_details_out [text] 2.10 Receiving agency: focal point's contact details
+    // referral_details/rec_agency_fp_contact_details_out [text] 2.9 Receiving agency: focal point's contact details
     rec_agency_fp_contact_details_out: string | undefined
-    // referral_details/name_receiving_agency_inc [select_one] 2.11 Sending agency: name of the agency
+    // referral_details/name_receiving_agency_inc [select_one] 2.10 Sending agency: name of the agency
     name_receiving_agency_inc: undefined | Option<'name_receiving_agency_inc'>
-    // referral_details/name_receiving_agency_inc_other [text] 2.11.1 If other sending agency, please specify
+    // referral_details/name_receiving_agency_inc_other [text] 2.10.1 If other sending agency, please specify
     name_receiving_agency_inc_other: string | undefined
-    // referral_details/sen_agency_fp_name_inc [text] 2.12 Sending agency: focal point's name
+    // referral_details/sen_agency_fp_name_inc [text] 2.11 Sending agency: focal point's name
     sen_agency_fp_name_inc: string | undefined
-    // referral_details/sen_agency_fp_contact_details_inc [text] 2.13 Sending agency: focal point's contact details
+    // referral_details/sen_agency_fp_contact_details_inc [text] 2.12 Sending agency: focal point's contact details
     sen_agency_fp_contact_details_inc: string | undefined
     // biodata/name [text] 3.1 Name
     name: string | undefined
@@ -121,41 +137,64 @@ export namespace Protection_referral {
     service_provided: undefined | Option<'service_provided'>
     // follow_up/not_service_provided_out [select_one] 4.4.1 If service was not provided, explain why
     not_service_provided_out: undefined | Option<'not_service_provided_out'>
-    // follow_up/not_service_provided_other [text] 4.4.2 If other reason, please explain
+    // follow_up/not_service_provided_other [text] 4.4.1.1 If other reason, please explain
     not_service_provided_other: string | undefined
     // follow_up/not_service_provided_inc [text] 4.4.3 If service was not provided, explain why
     not_service_provided_inc: string | undefined
     // follow_up/month_provision [date] 4.4.4 If service was provided, month of provision
     month_provision: Date | undefined
-    // follow_up/referral_closed [select_one] Is the referral closed?
-    referral_closed: undefined | Option<'referral_closed'>
     // follow_up/date_closure [date] 4.5 Date of closure
     date_closure: Date | undefined
     // follow_up/comments [text] 4.6 Comments
     comments: string | undefined
   }
   export const options = {
+    team: {
+      protection: `Protection`,
+      shelter: `Shelter`,
+      ecrec: `Economic Recovery`,
+      hma: `HMA`,
+      emergency: `Emergency`,
+    },
     incoming_outgoing_referral: {
       incoming: `Incoming referral`,
       outgoing: `Outgoing referral`,
     },
     project_code: {
+      unknown: `Unknown`,
+      ukr000270_pofu: `UKR-000270 Pooled Funds`,
+      ukr000355_dmfa: `UKR-000355 DMFA`,
+      ukr000304_pspu: `UKR-000304 DNK PSPU`,
+      ukr000350_sida: `UKR-000350 SIDA`,
+      ukr000371_dmfa: `UKR-000371 DMFA`,
+      ukr000385_pooled_funds: `UKR-000385 Pooled Funds`,
+      ukr000378_dmfa: `UKR-000378 DMFA`,
+      ukr000387_wra: `UKR-000387 WRA`,
+      ukr000388_bha: `UKR-000388 BHA`,
+      ukr000396_dmfa: `UKR-000396 DMFA`,
+      ukr000399_sdc3: `UKR-000399 SDC`,
+      ukr000398_sdc: `UKR-000398 SDC`,
+      ukr000419_dmfa: `UKR-000419 DMFA`,
+      ukr000420_hbgf: `UKR-000420 HBGF`,
+      ukr000423_echo: `UKR-000423 ECHO`,
+      ukr000424_dutch_mfa: `UKR-000424 Dutch MFA`,
+      ukr000426_sdc: `UKR-000426 SDC`,
+      ukr000430_mass_appeals: `UKR-000430 Mass Appeals`,
+      ukr000431_pooled_funds: `UKR-000431 Pooled Funds`,
+      ukr000441_uhf11: `UKR-000441 UHF`,
+      ukr000444_unicef: `UKR-000444 UNICEF`,
+      ukr000457_dmfa: `UKR-000457 DMFA`,
+      ukr000461_uhf: `UKR-000461 UHF`,
+      ukr000462_echo: `UKR-000462 ECHO`,
       '297_novo': `UKR-000298 Novo Nordisk`,
       '330_sdc': `UKR-000330 SDC`,
       '336_uhf_iv': `UKR-000336 UHF VI`,
       '345_bha': `UKR-000345 BHA`,
-      ukr000350_sida: `UKR-000350 SIDA`,
-      ukr000355_dmfa: `UKR-000355 DMFA`,
       '363_uhf8': `UKR-000363 UHF VIII`,
       '372_echo': `UKR-000372 ECHO`,
-      ukr000388_bha: `UKR-000388 BHA`,
       ukr000397_gffo: `UKR-000397 GFFO`,
-      ukr000423_echo: `UKR-000423 ECHO`,
-      ukr000424_dutch_mfa: `UKR-000424 DUTCH`,
-      ukr000426_sdc: `UKR-000426 SDC`,
-      ukr000457_dmfa: `UKR-000457 DMFA`,
     },
-    referral_closed: {
+    verbal_consent: {
       yes: `Yes`,
       no: `No`,
     },
@@ -163,6 +202,13 @@ export namespace Protection_referral {
       high: `High`,
       medium: `Medium`,
       low: `Low`,
+    },
+    sector_need: {
+      protection: `Protection`,
+      shelter: `Shelter`,
+      ecrec: `Economic Recovery`,
+      hma: `HMA`,
+      emergency: `Emergency / Basic needs`,
     },
     specific_need: {
       older_person: `Older person at risk`,
@@ -175,6 +221,28 @@ export namespace Protection_referral {
       no_legal_documentation: `No legal documentation`,
       discrimination_marginalization: `Discrimination/marginalization`,
       survivor_violence: `Survivor of violence`,
+      victim_assistance: `Victim Assistance for survivors of explosive ordnance`,
+      legal_aid: `Legal aid`,
+      psychosocial_support: `Psychosocial support`,
+      protection_case_management: `Protection case management`,
+      gbv: `Gender based violence`,
+      house_damage: `House or apartment damaged by the war`,
+      house_substandard: `House in substandard conditions`,
+      common_spaces: `Building with damaged common spaces`,
+      social_facility: `Social facility damaged (school, house of culture, etc)`,
+      infrastructure_damage: `Community infrastructure damaged (water supply, heating, etc.)`,
+      energy_outage: `Power/energy outages`,
+      agric_damage: `Agricutural infrastructure damaged`,
+      income: `Income/employment`,
+      land_access: `Access to land`,
+      eo_reported: `Explosive ordnance reported`,
+      eo_observed: `Explosive ordnance observed`,
+      eore_question: `Questions regarding explosive ordnance or EORE`,
+      eo_fear: `Areas that the community are afraid to or do not access due to fears of Explosive Ordnance`,
+      access_block_eo: `Access routes blocked due to presence or fear of explosive ordnance`,
+      meet_basic_needs: `Household unable to meet basic needs (food, medicine, water, heating, shelter, hygiene items, clothing, transportation, communication)`,
+      evacuated: `Household evacuated (by the government or self-evacuated) in the past month?`,
+      urgent_expenses: `Household has urgent expenses that cannot be covered`,
       other: `Other`,
     },
     referral_type: {
@@ -184,18 +252,21 @@ export namespace Protection_referral {
     service_requested: {
       mpca: `MPCA`,
       nfi: `Non-Food Items`,
-      shelter_rehabilitation: `Shelter rehabilitation`,
-      cash_rent: `Cash for rent`,
+      shelter_rehabilitation: `Shelter insulation`,
       cash_repair: `Cash for repair`,
+      common_spaces: `Repairs of common spaces in multi-apartment buildings`,
+      social_facilities: `Repairs of Social Facilities (e.g. schools, hospital)`,
+      community_infrastructure: `Infrastructure repairs (e.g. water, heating)`,
+      insulation: `Insulation`,
+      emergency_shelter_kit: `Emergency shelter kit`,
       cash_fuel: `Cash for solid fuel`,
       cash_utilities: `Cash for utilities`,
-      emergency_shelter_kit: `Emergency shelter kit`,
+      emergency_construction_materials: `Emergency construction materials`,
       employment_support: `Employment support`,
-      agricultural_livelihood_support: `Agricultural livelihood support`,
-      cash_animal_shelter_repair: `Cash For Animal Shelter Repair`,
       business_support: `Business support`,
       vocational_training: `Vocational training`,
-      subsistence_farmers: `Cash for subsistence farmers`,
+      subsistence_farmers: `Support for subsistence farmers`,
+      smallscale_farmers: `Support for small scale farmers`,
       victim_assistance: `Victim assistance`,
       legal_aid: `Legal aid`,
       psychosocial_support: `Psychosocial support`,
@@ -205,7 +276,11 @@ export namespace Protection_referral {
       child_protection: `Child protection`,
       education: `Education`,
       eore: `EORE`,
+      physical_rehab: `Physical Rehabilitiaion`,
       other: `Other`,
+      cash_rent: `Cash for rent`,
+      agricultural_livelihood_support: `Agricultural livelihood support`,
+      cash_animal_shelter_repair: `Cash For Animal Shelter Repair`,
     },
     service_requested_prot: {
       legal_aid: `Legal aid`,
@@ -231,8 +306,8 @@ export namespace Protection_referral {
       other: `Other`,
     },
     gender: {
-      man: `Man`,
-      woman: `Woman`,
+      man: `Male`,
+      woman: `Female`,
       boy: `Boy`,
       girl: `Girl`,
       other: `Other`,
@@ -256,11 +331,11 @@ export namespace Protection_referral {
       refugee_Refenee: `Refugee`,
       unspecified_Unspeciencified: `Unspecified`,
     },
-    sub_office: {
+    undefined: {
       kharkiv: `Kharkiv`,
       sloviansk: `Sloviansk`,
     },
-    staff_to_insert_their_DRC_office: {
+    referring_office: {
       chernihiv: `Chernihiv`,
       dnipro: `Dnipro`,
       kharkiv: `Kharkiv`,
@@ -269,6 +344,8 @@ export namespace Protection_referral {
       mykolaiv: `Mykolaiv`,
       sumy: `Sumy`,
       sloviansk: `Sloviansk`,
+      barvinkove: `Barvinkove`,
+      kherson: `Kherson`,
     },
     staff_code: {
       CEJ001: `CEJ001`,
@@ -336,7 +413,6 @@ export namespace Protection_referral {
       HRK019: `HRK019`,
       HRK020: `HRK020`,
       HRK021: `HRK021`,
-      HRK022: `HRK022`,
       HRK_A: `HRK-A`,
       HRK_B: `HRK-B`,
       HRK_C: `HRK-C`,
@@ -351,6 +427,8 @@ export namespace Protection_referral {
       HRK_CL8: `CL-08`,
       HRK_CL9: `CL-09`,
       HRK_CL10: `CL-10`,
+      HRK_CL13: `CL-13`,
+      HRK_CL14: `CL-14`,
       DNK001: `DNK001`,
       DNK002: `DNK002`,
       DNK003: `DNK003`,
@@ -435,6 +513,11 @@ export namespace Protection_referral {
       SLO018: `SLO018`,
       SLO019: `SLO019`,
       SLO020: `SLO020`,
+    },
+    informed_consent_obtained: {
+      person: `In person`,
+      phone: `By phone/remote`,
+      writing: `In writing`,
     },
     oblast: {
       cherkaska: `Cherkaska`,

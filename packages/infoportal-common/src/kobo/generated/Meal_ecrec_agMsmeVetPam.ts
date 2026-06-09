@@ -718,8 +718,9 @@ export namespace Meal_ecrec_agMsmeVetPam {
       smna: `No answer`,
     },
     donor: {
-      ukr000388_bha: `BHA (UKR-000388)`,
+      ukr000350_sida: `SIDA (UKR-000350)`,
       ukr000355_dmfa: `Danish MFA (UKR-000355)`,
+      ukr000388_bha: `BHA (UKR-000388)`,
       ukr000424_dutchmfa: `Dutch MFA (UKR000424)`,
       other: `Other`,
     },

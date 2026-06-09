@@ -190,6 +190,10 @@ export class KoboMetaMapperEcrec {
     if (answer.back_consent !== 'yes' && answer.back_consent_lviv !== 'yes') return
     const office = match(answer.ben_det_oblast)
       .cases({
+        chernihivska: DrcOffice.Chernihiv,
+        donetska: DrcOffice.Sloviansk,
+        kharkivska: DrcOffice.Kharkiv,
+        sumska: DrcOffice.Sumy,
         dnipropetrovska: DrcOffice.Dnipro,
         zaporizka: DrcOffice.Dnipro,
         mykolaivska: DrcOffice.Dnipro,

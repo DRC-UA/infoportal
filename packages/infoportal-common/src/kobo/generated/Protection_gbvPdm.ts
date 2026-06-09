@@ -30,8 +30,10 @@ export namespace Protection_gbvPdm {
     ben_det_settlement: string
     // introduction/age [integer] 1. What is your age?
     age: number | undefined
-    // introduction/content_during_distribution [select_one] 2. Were you told about the content of what you were going to receive before or during distribution?
+    // introduction/content_during_distribution [select_one] 2. Were you told about the content of what you were going to receive during the session/briefing (conducted before or during distribution)?
     content_during_distribution: undefined | Option<'informed_distribution_kits'>
+    // introduction/participate_preliminary_distribution [select_one] 2.1 Did you participate in session/briefing preliminary to the distribution?
+    participate_preliminary_distribution: undefined | Option<'informed_distribution_kits'>
     // introduction/items_received_kit [select_one] 3. Do you think the items you received in the dignity kit was as per the information you received about the content?
     items_received_kit: undefined | Option<'informed_distribution_kits'>
     // introduction/used_items_kit [select_one] 4. Have you used any of the items in the dignity kit?
@@ -95,7 +97,9 @@ export namespace Protection_gbvPdm {
       ukr000336_uhf6: `UHF VI UKR-000336`,
       ukr000347_danida: `DANIDA UKR-000347`,
       ukr000355_dmfa: `DMFA UKR-000355`,
+      ukr000388_bha: `BHA UKR-000388`,
       ukr000423_echo4: `ECHO UKR-000423`,
+      ukr000461_uhf: `UHF UKR-000461`,
     },
     partner: {
       positive_women_zaporizhzhia: `Positive Women Zaporizhzhia`,

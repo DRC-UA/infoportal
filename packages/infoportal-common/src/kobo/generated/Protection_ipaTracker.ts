@@ -101,6 +101,7 @@ export namespace Protection_ipaTracker {
       mykolaiv: `Mykolaiv`,
       sumy: `Sumy`,
       sloviansk: `Sloviansk`,
+      barvinkove: `Barvinkove`,
     },
     project: {
       ukr000345_bha2: `UKR-000345 BHA`,
@@ -114,6 +115,7 @@ export namespace Protection_ipaTracker {
       ukr000426_sdc: `UKR-000426 SDC`,
       ukr000457_dmfa: `UKR-000457 DMFA`,
       ukr000461_uhf: `UKR-000461 UHF`,
+      ukr000462_echo: `UKR-000462 ECHO`,
     },
     type_assistance: {
       in_kind: `In-kind`,

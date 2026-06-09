@@ -131,6 +131,7 @@ export namespace Protection_gbv {
       NVL010: `NLV-J`,
       NVL011: `NLV-K`,
       NVL012: `NLV-L`,
+      NVL013: `NLV-M`,
     },
     project: {
       ukr000284_bha: `UKR-000284 (BHA)`,
@@ -144,6 +145,8 @@ export namespace Protection_gbv {
       ukr000388_bha: `UKR-000388 (BHA)`,
       ukr000423_echo4: `UKR-000423 (ECHO)`,
       ukr000457_dmfa: `UKR-000457 (DMFA)`,
+      ukr000461_uhf: `UKR-000461 (UHF)`,
+      ukr000462_echo: `UKR-000462 (ECHO)`,
     },
     location: {
       wgssd: `Women and Girls Safe Space (operated by DRC)`,

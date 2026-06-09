@@ -97,6 +97,7 @@ export namespace Gbv_girl_shine {
       women_rise: `Women Rise`,
     },
     project_code: {
+      ukr000388_bha: `UKR-000388 BHA`,
       ukr000423_echo4: `UKR-000423 ECHO4`,
       ukr000461_uhf: `UKR-000461 UHF`,
     },

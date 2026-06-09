@@ -69,6 +69,9 @@ export namespace Va_bio_tia {
           code_settlement: string | undefined
           type_eo: undefined | Option<'type_eo'> | undefined
           activity_during_incident: undefined | Option<'activity_during_incident'> | undefined
+          activity_during_incident_other: string | undefined | undefined
+          victims_profession: undefined | Option<'victims_profession'> | undefined
+          victims_profession_other: string | undefined | undefined
           circumstances_description: string | undefined | undefined
           victims: string | undefined
           total_victims: number | undefined | undefined
@@ -110,6 +113,8 @@ export namespace Va_bio_tia {
           case_family_member: undefined | Option<'member_tia_provided'> | undefined
           case_disability_status: undefined | Option<'add_cash_disability_status'> | undefined
           type_damages: string | undefined | undefined
+          type_injurity: undefined | Option<'type_injurity'>[] | undefined
+          type_injurity_other: string | undefined | undefined
           consequences_injury: string | undefined | undefined
           assistance_provided_ngo: undefined | Option<'add_cash_disability_status'> | undefined
           assistance_provided_ngo_yes: string | undefined | undefined
@@ -201,6 +206,7 @@ export namespace Va_bio_tia {
       nlv: `Mykolaiv (NLV)`,
       iev: `Kyiv (IEV)`,
       slo: `Sloviansk (SLO)`,
+      brv: `Barvinkove (BRV)`,
     },
     modality_assistance: {
       inkind: `In-kind`,
@@ -229,6 +235,9 @@ export namespace Va_bio_tia {
       yurii_samoilik: `Yurii Samoilik`,
       vadym_ivanov: `Vadym Ivanov`,
       svitlana_kotliar: `Svitlana Kotliar`,
+      anastasiia_hida: `Anastasiia Hida`,
+      alona_tkach: `Alona Tkach`,
+      tetiana_bitimierova: `Tetiana Bitimierova`,
       daria_pisteleva: `Daria Pisteleva`,
       mariia_kozachko: `Mariia Kozachko`,
       nataliia_pereleshyna: `Nataliia Pereleshyna`,
@@ -239,12 +248,14 @@ export namespace Va_bio_tia {
       yana_beskrovna: `Yana Beskrovna`,
       valentyna_dzhafarova: `Valentyna Dzhafarova`,
       liliia_lifer: `Liliia Lifer`,
+      anna_kolesnyk: `Anna Kolesnyk`,
       kateryna_bobokalo: `Kateryna Bobokalo`,
       dmytro_tatarenko: `Dmytro Tatarenko`,
       nataliia_liakhovska: `Nataliia Liakhovska`,
-      anna_kolesnyk: `Anna Kolesnyk`,
       oleksandra_martysheva: `Oleksandra Martysheva`,
       olha_kashyrska: `Olha Kashyrska`,
+      natalia_vasko: `Natalia Vasko`,
+      anna_hanonchenko: `Anna Hanonchenko`,
       inna_geiko: `Inna Geiko`,
       elyzaveta_blyzno: `Elyzaveta Blyzno`,
       dmytro_kurhanov: `Dmytro Kurhanov`,
@@ -277,10 +288,68 @@ export namespace Va_bio_tia {
       unknow: `Unknown`,
     },
     activity_during_incident: {
-      civil_activities: `Civil activities`,
-      demining: `Demining`,
+      agricultural: `Agricultural activities`,
+      gathering_food: `Gathering food/firewood/fetching water`,
+      household_work: `Household work`,
+      herding_livestock: `Herding livestock`,
+      hunting_fishing: `Hunting/fishing`,
+      demining: `Demining activities`,
       military_activities: `Military activities`,
-      humanitarian_activities: `Humanitarian activities`,
+      passing_explosive: `Passing by/standing near an explosive item`,
+      stepped_explosive: `Stepped on/ran over an explosive item`,
+      moving_explosive: `Intentionally moving an explosive item`,
+      playing_explosive: `Playing with an explosive item`,
+      traveling: `Traveling`,
+      leisure: `Leisure`,
+      humanitarian_activities: `Humanitarian activities / Volunteer`,
+      other: `Other`,
+      civil_activities: `Civil activities`,
+    },
+    victims_profession: {
+      agricultural_worker: `Agricultural worker`,
+      child: `Child`,
+      civil_servant: `Civil servant`,
+      construction_worker: `Construction worker`,
+      critical_infrastructure_worker: `Critical infrastructure worker`,
+      entrepreneur: `Entrepreneur`,
+      fisherman: `Fisherman`,
+      forester: `Forester`,
+      humanitarian_organization_worker: `Humanitarian organization worker`,
+      worker_demining: `Worker involved in demining activities`,
+      medical_worker: `Medical worker`,
+      military_personnel: `Military personnel`,
+      police_officer: `Police officer`,
+      public_worker: `Public worker`,
+      retiree: `Retiree`,
+      student: `Student`,
+      teacher: `Teacher`,
+      unemployed: `Unemployed`,
+      other: `Other`,
+    },
+    type_injurity: {
+      lower_limb_amputation: `Lower limb amputation`,
+      upper_limb_amputation: `Upper limb amputation`,
+      partial_amputation: `Partial amputation (fingers, hand, foot)`,
+      multiple_shrapnel_wounds: `Multiple shrapnel wounds`,
+      penetrating_injuries: `Penetrating injuries`,
+      internal_organ_injuries: `Internal organ injuries`,
+      chest_injuries: `Chest injuries`,
+      abdominal_injuries: `Abdominal injuries`,
+      opend_traumatic_brain: `Opend traumatic brain injury (TBI)`,
+      closed_traumatic_brain: `Closed traumatic brain injury`,
+      contusion: `Contusion`,
+      acoustic_trauma: `Acoustic trauma`,
+      hearing_impairment: `Hearing impairment`,
+      hearing_loss: `Partial or total hearing loss`,
+      visual_impairment: `Visual impairment`,
+      vision_loss: `Vision loss (one or both eyes)`,
+      burns: `Burns`,
+      soft_tissue_injuries: `Soft tissue injuries`,
+      bone_fractures: `Bone fractures`,
+      vascular_injuries: `Vascular injuries`,
+      nerve_injuries: `Nerve injuries`,
+      psychological_trauma: `Psychological trauma / PTSD`,
+      other: `Other`,
     },
     case_injured_dead: {
       injured: `Injured`,
@@ -2356,6 +2425,7 @@ export namespace Va_bio_tia {
         _['nubmer_Injured_dead'] = _.nubmer_Injured_dead ? +_.nubmer_Injured_dead : undefined
         _['age'] = _.age ? +_.age : undefined
         _['case_age'] = _.case_age ? +_.case_age : undefined
+        _['type_injurity'] = _.type_injurity?.split(' ')
         _['vulnerabilities'] = _.vulnerabilities?.split(' ')
         _['type_assistance'] = _.type_assistance?.split(' ')
         _['cash_age'] = _.cash_age ? +_.cash_age : undefined

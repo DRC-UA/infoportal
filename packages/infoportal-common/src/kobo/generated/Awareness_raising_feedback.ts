@@ -162,6 +162,8 @@ export namespace Awareness_raising_feedback {
       ukr000388_bha: `BHA (UKR-000388)`,
       ukr000397_gffo: `GFFO (UKR-000397)`,
       ukr000423_echo4: `ECHO (UKR-000423)`,
+      ukr000461_uhf: `UHF (UKR-000461)`,
+      ukr000462_echo: `ECHO (UKR-000462)`,
     },
     interviewer: {
       olena_likar: `Olena Likar`,

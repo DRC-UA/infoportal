@@ -2250,6 +2250,9 @@ export namespace Meal_visitMonitoring {
       ukr000423_echo: `UKR-000423 ECHO 2025`,
       ukr000426_sdc: `UKR-000426 SDC`,
       ukr000441_uhf10: `UKR-000441 UHF10 Winterization`,
+      ukr000457_dmfa: `UKR-000457 DANISH MoFA`,
+      ukr000461_uhf: `UKR-000461 UHF`,
+      ukr000462_echo: `UKR-000462 ECHO`,
     },
     mdt: {
       basic: `Basic Needs`,
@@ -2288,6 +2291,10 @@ export namespace Meal_visitMonitoring {
       cff: `Monitoring CFF (Cash for Fuel)`,
       cfu: `Monitoring CFU (Cash for Utilities)`,
       wsk: `Monitoring WSK (Winterization Supplies Kit - Ukraine, IOM)`,
+      uct1: `UCT1 (Unified Cash Transfer 1)`,
+      uct2: `UCT2 (Unified Cash Transfer 2)`,
+      uct3: `UCT3 (Unified Cash Transfer 3)`,
+      uct4: `UCT4 (Unified Cash Transfer 4)`,
     },
     pae: {
       mmg: `Monitoring Micro grants`,

@@ -388,8 +388,6 @@ export namespace Meal_verificationEcrec {
     fin_det_res: string | undefined
     // fin_det/fin_det_enum [text] Інші коментарі особи, яка проводила оцінювання
     fin_det_enum: string | undefined
-    // fin_det/fin_det_oth_doc_im [image] Сфотографуйте будь-який інший відповідний документ
-    fin_det_oth_doc_im: string
   }
   export const options = {
     back_office: {
@@ -556,6 +554,9 @@ export namespace Meal_verificationEcrec {
       uhf8: `UHF-8`,
       bha_llh_348: `BHA – LLH 348`,
       ukr000388_bha: `BHA-388`,
+      ukr000350_sida: `SIDA (UKR-000350)`,
+      ukr000424_dutch_mfa: `Dutch MFA (UKR-000424)`,
+      ukr000426_sdc: `SDC (UKR-000426)`,
       danish_mfa_355: `Danish MFA 355`,
     },
     which_support_registered: {

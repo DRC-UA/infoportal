@@ -2041,6 +2041,7 @@ export namespace Gp_case_management {
       mykolaiv: `Mykolaiv`,
       sumy: `Sumy`,
       sloviansk: `Sloviansk`,
+      barvinkove: `Barvinkove`,
     },
     staff_code: {
       UMY001: `UMY001`,
@@ -2083,6 +2084,7 @@ export namespace Gp_case_management {
       HRK018: `HRK018`,
       HRK019: `HRK019`,
       HRK020: `HRK020`,
+      HRK021: `HRK021`,
       HRK_A: `HRK-A`,
       HRK_B: `HRK-B`,
       HRK_C: `HRK-C`,
@@ -2183,9 +2185,12 @@ export namespace Gp_case_management {
       decreased: `Decreased`,
     },
     project: {
+      ukr000388_bha: `UKR-000388 BHA`,
+      ukr000397_gffo: `UKR-000397 GFFO`,
       ukr000423_echo4: `UKR-000423 ECHO4`,
       ukr000426_sdc: `UKR-000426 SDC`,
       ukr000461_uhf: `UKR-000461 UHF`,
+      ukr000462_echo: `UKR-000462 ECHO`,
     },
     staff_treated_respect: {
       yes: `Yes`,

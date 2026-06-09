@@ -44,6 +44,7 @@ class KoboMetaMapperLegal {
 
       const office = match(aid?.office)
         .cases({
+          brv: DrcOffice.Barvinkove,
           umy: DrcOffice.Sumy,
           hrk: DrcOffice.Kharkiv,
           nlv: DrcOffice.Mykolaiv,
@@ -59,6 +60,12 @@ class KoboMetaMapperLegal {
       // so setting manually here:)
       const officeLocation = match(aid?.office as any)
         .cases({
+          brv: {
+            oblast: oblastByDrcOffice[DrcOffice.Barvinkove].toLocaleLowerCase(),
+            raion: 'Izumskyi',
+            hromada: 'Barvinkivska',
+            settlement: 'Barvinkove_UA6304003001',
+          },
           umy: {
             oblast: oblastByDrcOffice[DrcOffice.Sumy].toLocaleLowerCase(),
             raion: 'Sumskyi',

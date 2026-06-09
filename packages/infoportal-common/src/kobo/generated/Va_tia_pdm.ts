@@ -201,6 +201,7 @@ export namespace Va_tia_pdm {
       ukr000388_bha: `BHA UKR-000388`,
       ukr000397_gffo: `GFFO Ukr-000397 (consortium)`,
       ukr000423_echo4: `ECHO4 UKR-000423`,
+      ukr000426_sdc: `SDC UKR-000426`,
     },
     office: {
       iev: `Kyiv`,
