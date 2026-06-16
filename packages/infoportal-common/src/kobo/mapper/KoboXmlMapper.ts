@@ -978,9 +978,10 @@ export namespace KoboXmlMapper {
       cash_age,
       cash_gender,
       res_stat,
+      cash_disability_status,
     }: Pick<
       NonNullable<Va_bio_tia.T['tia_assesment']>[number],
-      'cash_age' | 'cash_gender' | 'res_stat'
+      'cash_age' | 'cash_gender' | 'res_stat' | 'cash_disability_status'
     >): Person.Details => {
       return {
         age: cash_age,
@@ -997,6 +998,7 @@ export namespace KoboXmlMapper {
             host_communities: Person.DisplacementStatus.NonDisplaced,
           })
           .default(() => undefined),
+        disability: cash_disability_status === 'yes' ? [Person.WgDisability.Walk] : [], // no spesific difficalty question is asked, so default disability is set to Walk (most probable after explosion injury)
       }
     }
 
@@ -1016,8 +1018,13 @@ export namespace KoboXmlMapper {
             tia.add_res_stat !== undefined || tia.add_cash_age !== undefined || tia.add_cash_gender !== undefined,
         ) ?? []
 
-      return tiaEntries.map(({add_cash_age, add_cash_gender, add_res_stat}) => {
-        return va_tia({cash_age: add_cash_age, cash_gender: add_cash_gender, res_stat: add_res_stat})
+      return tiaEntries.map(({add_cash_age, add_cash_gender, add_res_stat, cash_disability_status}) => {
+        return va_tia({
+          cash_age: add_cash_age,
+          cash_gender: add_cash_gender,
+          res_stat: add_res_stat,
+          cash_disability_status,
+        })
       })
     }
 
