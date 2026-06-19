@@ -17,13 +17,15 @@ export namespace AiType51aMonitoring {
         [DrcProject['UKR-000426 SDC']]: '00255' as const,
         [DrcProject['UKR-000424 Dutch MFA']]: '00261' as const,
         [DrcProject['UKR-000423 ECHO4']]: '00139' as const,
+        [DrcProject['UKR-000420 HGBF']]: '01069' as const,
         [DrcProject['UKR-000397 GFFO']]: '00260' as const,
         [DrcProject['UKR-000388 BHA']]: '00251' as const,
+        [DrcProject['UKR-000387 WRA']]: '01068' as const,
         [DrcProject['UKR-000372 ECHO3']]: '00262' as const,
         [DrcProject['UKR-000355 Danish MFA']]: '00257' as const,
         [DrcProject['UKR-000350 SIDA']]: '00254' as const,
         [DrcProject['UKR-000270 Pooled Funds']]: '00259' as const,
-      })
+      } satisfies {[K in DrcProject]?: keyof (typeof options)['2.2_Projects']})
       .default(`${aiInvalidValueFlag} ${project}` as any)
   }
 
@@ -40,25 +42,26 @@ export namespace AiType51aMonitoring {
     'Raion (Admin2)': Opt<'Operation_Location_Admin2'>
     'Hromada (Admin3)': Opt<'Operation_Location_Admin3'>
     /**
-    ⚠️ Typing is omitted due to the large number of choices.
-    ➡️ Directly use label from AiType51a_project_indicator_monitoring_disaggregation.options['Operation_Location_Admin4']
-  */
+      ⚠️ Typing is omitted due to the large number of choices.
+      ➡️ Directly use label from AiType51a_project_indicator_monitoring_disaggregation.options['Operation_Location_Admin4']
+    */
     'Settlement (Admin4)'?: string
     'Collective Site'?: Opt<'Operation_Location_Sites_Collective_Sites'>
     /**
-    ⚠️ Typing is omitted due to the large number of choices.
-    ➡️ Directly use label from AiType51a_project_indicator_monitoring_disaggregation.options['Operation_Location_Sites_Education_Facilities']
-  */
+      ⚠️ Typing is omitted due to the large number of choices.
+      ➡️ Directly use label from AiType51a_project_indicator_monitoring_disaggregation.options['Operation_Location_Sites_Education_Facilities']
+    */
     'Education Facility'?: string
     'Health Facility': Opt<'Operation_Location_Sites_Health_Facilities'>
+    'Health Facility (Other)': string
     'Transit Centre'?: Opt<'Operation_Location_Sites_Transit_Centres'>
+    'Health Site Type': Opt<'Operation_Site_Types_Health'>
     'Population Group': Opt<'Operation_Population_Types'>
     'Age & Sex': Opt<'Operation_Combination_Ages_Sexes'>
     Disability?: Opt<'Global_Disabilities'>
     'Education Learning Modality'?: Opt<'Operation_Education_Learning_Modalities'>
     'Education Level'?: Opt<'Operation_Site_Types_Education'>
     'Health Accreditation Type'?: Opt<'Operation_Health_Accreditation_Types'>
-    'Health Site Type': Opt<'Operation_Site_Types_Health'>
     'WASH Recipient Type'?: Opt<'Operation_Recipient_Types_WASH'>
     'Cash: Conditionality Type'?: Opt<'Operation_Cash_Conditionality_Types'>
     'Cash: Delivery'?: Opt<'Operation_Cash_Delivery'>
@@ -138,8 +141,12 @@ export namespace AiType51aMonitoring {
           ct87ocrmnaggzd0aor: a['Health Facility']
             ? 'cdzw5ygmn7pu5g4191' + ':' + options['Operation_Location_Sites_Health_Facilities'][a['Health Facility']!]
             : undefined,
+          cir2x9xmoa7bc1dpk: a['Health Facility (Other)'],
           cgmnxb3mnaglzgiaot: a['Transit Centre']
             ? 'cbogrn0mn7q3eq64lx' + ':' + options['Operation_Location_Sites_Transit_Centres'][a['Transit Centre']!]
+            : undefined,
+          c6dowjymnagw1rmap2: a['Health Site Type']
+            ? 'c4cmmf8mn7ylwsi1m9r' + ':' + options['Operation_Site_Types_Health'][a['Health Site Type']!]
             : undefined,
           c1pbo1cmkepe9ny13v0: a['Population Group']
             ? 'c4zk43vmms4u30z1po7' + ':' + options['Operation_Population_Types'][a['Population Group']!]
@@ -162,9 +169,6 @@ export namespace AiType51aMonitoring {
             ? 'cvmtdismn83088h1bi' +
               ':' +
               options['Operation_Health_Accreditation_Types'][a['Health Accreditation Type']!]
-            : undefined,
-          c6dowjymnagw1rmap2: a['Health Site Type']
-            ? 'c4cmmf8mn7ylwsi1m9r' + ':' + options['Operation_Site_Types_Health'][a['Health Site Type']!]
             : undefined,
           cvllgmemnahcq78ap4: a['WASH Recipient Type']
             ? 'c4or1ofmn80qpcw1m9x' + ':' + options['Operation_Recipient_Types_WASH'][a['WASH Recipient Type']!]
@@ -212,7 +216,6 @@ export namespace AiType51aMonitoring {
 
   export const options = {
     '2.2_Projects': {
-      '00029': 'cxb37p7mnyodzbz3',
       '00139': 'cvirtg2mo1fmv5el',
       '00251': 'c3zx4f6mo5bmybx4',
       '00252': 'c5904edmo5gkdrli',
@@ -227,6 +230,22 @@ export namespace AiType51aMonitoring {
       '00261': 'cpa11iqmo5jvc8ln',
       '00262': 'cvax6t0mo5jyw3zr',
       '00263': 'cmfh4tvmo5kbuiav',
+      '00686': 'cah6jilmo174npl2',
+      '00957': 'cxm9lt9mpp512i82',
+      '00959': 'crkpt9jmpp65kjcj',
+      '00961': 'cyxnarkmpp6json10',
+      '00963': 'cwmqbykmpp6xzm819',
+      '00964': 'csbtou7mpp9p0161p',
+      '00965': 'co2g89xmppbn7eb1x',
+      '00966': 'cpv8s03mppbuq0523',
+      '00967': 'cusksqwmppdx44i28',
+      '00977': 'ca4kjsampw9b75i2',
+      '00994': 'c7r93qymq53l1972',
+      '00995': 'cq5gy74mq53v9413',
+      '00996': 'c7jkxsdmq548mko8',
+      '00997': 'cw894cimq54emqdh',
+      '01068': 'cqpxf06mqklgu9x6',
+      '01069': 'cackgoymqklrq9fc',
     },
     '1.3_Indicators': {
       'CLHEA/CA101/IN1': 'c5pkrm0mnd9bywb7a0',
@@ -417,7 +436,6 @@ export namespace AiType51aMonitoring {
       'CLSHL/CA6/IN1': 'cpy72momneey1jq2h',
       'CLSHL/CA6/IN2': 'cyo8yk7mneey1jq2i',
       'CLSHL/CA6/IN3': 'ccr5jsmmneey1jq2j',
-      'CLSHL/CA6/IN4': 'cu0qiw4mneey1jq2k',
       'CLSHL/CA6/IN5': 'chitrgmmneey1jq2l',
       'CLSHL/CA6/IN6': 'cpw0idgmneey1jq2m',
       'CLSHL/CA6/IN7': 'cewoh4umneey1jq2n',
@@ -718,6 +736,7 @@ export namespace AiType51aMonitoring {
       GSCNUT: 'cvjhfzbmhc4mnu91q',
       GCLPR: 'cw5mvbymf3ydv27p',
       GCLSV: 'cxcv62tmf3ye25zs',
+      GCLRR: 'cwe1f2zmosqwpr7t',
     },
     '1.2_Logframe_Entities': {
       'CLHEA/CA101': 'cbdf2cqmnd84uvi1l',
@@ -36773,6 +36792,20 @@ export namespace AiType51aMonitoring {
       UKRs012121: 'c5w4aowmna9hz383ff',
       UKRs012122: 'c6vnun4mna9hz383fg',
       UKRs012123: 'c3f2p2hmna9hz383fh',
+      UKRs003893: 'c69i9rqmqaq4jdfjv',
+      UKRs012128: 'csh4pijmqaq4jdfjw',
+      UKRs012127: 'cjm2topmqaq51frjx',
+      UKRs012114: 'c36rg84mqaq51frjy',
+      UKRs012132: 'crdwwjmmqaq51frjz',
+      UKRs012125: 'crfqie6mqaq51frk0',
+      UKRs012124: 'c7et7ismqaq5tv3k1',
+      UKRs012129: 'cajzoz8mqaq5tv3k2',
+      UKRs012130: 'cki8mhemqaq9m8ok5',
+      UKRs011903: 'c7wb3onmqaq9rqek6',
+      UKRs008661: 'c4c2i6fmqaq9x6wk7',
+      UKRs012126: 'c4cjcpmqaqa2f7k8',
+      UKRs012131: 'cof243umqaqa7azk9',
+      UKRs012133: 'crwf8y2mqaqa7azka',
     },
     Operation_Location_Sites_Education_Facilities: {
       '7': 'cfk0z0gmnsoe6ys1eic',
@@ -77251,6 +77284,9 @@ export namespace AiType51aMonitoring {
       '9766': 'ch6p9qqmnlkcwh9ax3',
       '9767': 'cvz7pynmnlkcwh9ax4',
       '9768': 'cp2fdy0mnlkcwh9ax5',
+      '9769': 'cepwrlemo8qbtqj5',
+      '10001': 'cs3vb7qmp1bl1q93',
+      '10002': 'clus2rymp54466b3',
     },
     Operation_Location_Sites_Transit_Centres: {
       UKRs003922: 'ckakoxmnac06nz3w',
@@ -77262,24 +77298,8 @@ export namespace AiType51aMonitoring {
       UKRs012097: 'cmegr9imnac06o042',
       UKRs004016: 'cjr9z9tmnac06o043',
       UKRs010189: 'cg5xsgimnac06o044',
+      UKRs011456: 'cqqv0r3mqakqqan89h',
     },
-    Operation_Population_Types: {cjds00nmbflt9ei1744: 'cl4i10jmms6qt4r1x', c4aty4vmm8k5xgr1vf: 'c5ftsmamnfnvp8lt3a'},
-    Operation_Combination_Ages_Sexes: {
-      'cyvv3hombf0xwnehw9 > cqklumpmmat7nkgy': 'c2riuuqmfdx4y6u7',
-      'c2ijk1rmbf0xwnfhwa > cqklumpmmat7nkgy': 'cd7gl9qmfdx4y6u4',
-      'cyvv3hombf0xwnehw9 > cw38kqnmbf11mexhwb': 'cf3g1spmfdx4y6u8',
-      'c2ijk1rmbf0xwnfhwa > cw38kqnmbf11mexhwb': 'cmv2zmimfdx4y6u3',
-      'c2ijk1rmbf0xwnfhwa > cblbhipmmat7nkg23': 'cqxz3smfdx4y6u5',
-      'cyvv3hombf0xwnehw9 > cblbhipmmat7nkg23': 'cunfsaomfdx4y6u6',
-    },
-    Global_Disabilities: {DSB: 'ckixt74mfdyaeavw'},
-    Operation_Education_Learning_Modalities: {
-      HY: 'c3q8u1imn81xghzcs',
-      OL: 'c92lu07mn81xghzcr',
-      IP: 'crvz6ikmn81xghzcq',
-    },
-    Operation_Site_Types_Education: {cr32czxmn80dj2x31: 'c4226efmn80lwkwb5', cs9vn40mn80cxrj2z: 'cu0xf8smn80lwkwb6'},
-    Operation_Health_Accreditation_Types: {U: 'c2sl80omn83153eda', C: 'cqzn0bzmn83153ed9', A: 'cfbbdl1mn83153ed8'},
     Operation_Site_Types_Health: {
       cr9eqa1mn7y692vm: 'cs0qacpmn7yp20tar',
       chn46bxmn7y692vb: 'cl6fsimmn7yp20taf',
@@ -77305,6 +77325,23 @@ export namespace AiType51aMonitoring {
       cdmzh5amn7y692v6: 'cddsezqmn7yp20tae',
       cwx2cgfmn7y692vd: 'cn8ng8xmn7yp20taj',
     },
+    Operation_Population_Types: {cjds00nmbflt9ei1744: 'cl4i10jmms6qt4r1x', c4aty4vmm8k5xgr1vf: 'c5ftsmamnfnvp8lt3a'},
+    Operation_Combination_Ages_Sexes: {
+      'cyvv3hombf0xwnehw9 > cqklumpmmat7nkgy': 'c2riuuqmfdx4y6u7',
+      'c2ijk1rmbf0xwnfhwa > cqklumpmmat7nkgy': 'cd7gl9qmfdx4y6u4',
+      'cyvv3hombf0xwnehw9 > cw38kqnmbf11mexhwb': 'cf3g1spmfdx4y6u8',
+      'c2ijk1rmbf0xwnfhwa > cw38kqnmbf11mexhwb': 'cmv2zmimfdx4y6u3',
+      'c2ijk1rmbf0xwnfhwa > cblbhipmmat7nkg23': 'cqxz3smfdx4y6u5',
+      'cyvv3hombf0xwnehw9 > cblbhipmmat7nkg23': 'cunfsaomfdx4y6u6',
+    },
+    Global_Disabilities: {DSB: 'ckixt74mfdyaeavw'},
+    Operation_Education_Learning_Modalities: {
+      HY: 'c3q8u1imn81xghzcs',
+      OL: 'c92lu07mn81xghzcr',
+      IP: 'crvz6ikmn81xghzcq',
+    },
+    Operation_Site_Types_Education: {cr32czxmn80dj2x31: 'c4226efmn80lwkwb5', cs9vn40mn80cxrj2z: 'cu0xf8smn80lwkwb6'},
+    Operation_Health_Accreditation_Types: {U: 'c2sl80omn83153eda', C: 'cqzn0bzmn83153ed9', A: 'cfbbdl1mn83153ed8'},
     Operation_Recipient_Types_WASH: {
       csra663mn80fx0n34: 'c7eralfmn80zjc1br',
       cqzr6nsmn80fx0o3a: 'c34bp8bmn80zjc1bx',
@@ -77328,7 +77365,12 @@ export namespace AiType51aMonitoring {
       cctzieymn7tirddc: 'crf0pd3mn7tlom39p',
       c24xwxpmn7tirdde: 'cd72amjmn7tlom39r',
     },
-    Operation_Cash_Pilot_Types: {BLK: 'cptpqc8mn81hyhlcl', SP2: 'ctb4opamn81hyhlcn', FLD: 'ckfrhyimn81hyhlcm'},
+    Operation_Cash_Pilot_Types: {
+      BLK: 'cptpqc8mn81hyhlcl',
+      SP2: 'ctb4opamn81hyhlcn',
+      FLD: 'ckfrhyimn81hyhlcm',
+      RTN: 'cfb44rhmp2obcg73',
+    },
     Operation_Recipient_Types_CVA: {
       c6eeklamn80fx0o3k: 'c5thz5smn8143uzcc',
       cuf0qs5mn80fx0o3i: 'cdbvc1nmn8143uzca',
