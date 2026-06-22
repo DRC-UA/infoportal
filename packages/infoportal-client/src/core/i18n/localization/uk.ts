@@ -62,6 +62,7 @@ const uk = deepmerge(en, {
     taxID: 'ІПН',
     amount: 'Сума',
     currency: 'Валюта',
+    uah2usd: 'Курс UAH до USD',
     result: 'Результат',
     reason: 'Причина',
     status: 'Статус',

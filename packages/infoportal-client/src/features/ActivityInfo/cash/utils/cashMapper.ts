@@ -32,7 +32,7 @@ import {
 type StrategicPriority = ReturnType<typeof sharedActivityProps>['Strategic Priority']
 
 const cashMapperMaker =
-  (uah2usd: number) =>
+  (uah2usd: (arg?: string | undefined) => number) =>
   async ({
     data,
     period,
@@ -152,8 +152,11 @@ const cashMapperMaker =
             ...(disability === '1' && ({Disability: 'DSB'} as const)),
             'Reached/Delivered - Total incl. Repeated (Manual)': records.length,
             'Reached/Delivered - New Non-repeated (Manual)': records.length,
-            'USD Amount (Manual)':
-              records.map(({payment}) => payment).reduce((total, current) => total + current, 0) * uah2usd,
+            'USD Amount (Manual)': Number(
+              (
+                records.map(({payment}) => payment).reduce((total, current) => total + current, 0) * uah2usd(period)
+              ).toFixed(2),
+            ),
             'Number of Months (Manual)': 3,
           } as const
 

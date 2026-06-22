@@ -332,7 +332,7 @@ export const _ShelterDashboard = ({data, currency}: {currency: Currency; data: S
               return {
                 amount:
                   assisted.sum((_) => _.ta?._price ?? 0) *
-                  fnSwitch(currency, {[Currency.UAH]: 1, [Currency.USD]: conf.uahToUsd}),
+                  fnSwitch(currency, {[Currency.UAH]: 1, [Currency.USD]: conf.uah2usd()}),
                 assistedHhs: assisted.length,
               }
             }}

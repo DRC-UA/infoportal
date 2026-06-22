@@ -165,7 +165,7 @@ export namespace AiMpcaMapper {
               Theme: theme,
               'Population Group': displacement,
               'Total amount (USD) distributed through MPCA':
-                grouped.sum(({amountUahFinal}) => amountUahFinal ?? 0) * appConfig.uahToUsd,
+                grouped.sum(({amountUahFinal}) => amountUahFinal ?? 0) * appConfig.uah2usd(),
               'Payment Frequency': 'Multiple payments',
               'Plan/Project Code': getPlanCode(project) as any as never,
               Activity:

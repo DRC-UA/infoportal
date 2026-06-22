@@ -8,16 +8,25 @@ import {cashMapperMaker, filterCallbackMaker} from './utils'
 
 const Cash: FC = () => {
   const {
-    conf: {uahToUsd},
+    conf: {uah2usd},
   } = useAppSettings()
+
   const {period, setPeriod, loading, data, columns} = useKoboFetcher('bn_rapidResponse2', {
-    mapper: cashMapperMaker(uahToUsd),
+    mapper: cashMapperMaker(uah2usd),
     filterCallbackMaker,
   })
 
   return (
     <Page loading={loading} width="full">
-      <AiTable {...{data, columns, period, setPeriod}} />
+      <AiTable
+        {...{
+          data,
+          columns,
+          period,
+          setPeriod,
+          showCurrencyRate: true,
+        }}
+      />
     </Page>
   )
 }

@@ -193,7 +193,7 @@ export const MpcaDashboard = () => {
         amount *
         fnSwitch(currency, {
           [Currency.UAH]: 1,
-          [Currency.USD]: conf.uahToUsd,
+          [Currency.USD]: conf.uah2usd(),
         })
       )
       // return formatLargeNumber(converted) + ' ' + Currency.UAH

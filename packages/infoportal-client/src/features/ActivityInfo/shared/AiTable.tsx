@@ -1,6 +1,6 @@
 import type {FC} from 'react'
 import {seq} from '@axanc/ts-utils'
-import {Badge, Box} from '@mui/material'
+import {Badge, Box, Typography} from '@mui/material'
 import {endOfMonth, startOfYear} from 'date-fns'
 
 import {KoboIndex, type IKoboMeta} from 'infoportal-common'
@@ -22,16 +22,19 @@ import {DatatableUtils} from '@/shared/Datatable/util/datatableUtils'
 import {useAsync} from '@/shared/hook/useAsync'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
+import {AiMapper} from './AiMapper'
 import type {AiTableProps} from './types'
 
 const deduplicateKoboIds = (data: IKoboMeta[]): Array<string> => Array.from(new Set(data.map(({koboId}) => koboId)))
 
-const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod}) => {
+const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, showCurrencyRate}) => {
   const {session} = useSession()
-  const {api} = useAppSettings()
+  const {
+    api,
+    conf: {uah2usd},
+  } = useAppSettings()
   const {m} = useI18n()
   const {toastHttpError} = useIpToast()
-
   const _submit = useAsync((id: string, p: any) => api.activityInfo.submitActivity(p), {requestKey: ([i]) => i})
 
   return (
@@ -41,13 +44,25 @@ const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod}) => {
       data={data}
       header={
         <Box sx={{display: 'flex', alignItems: 'center', flex: 1}}>
-          <PeriodPicker
-            min={startOfYear('2026')}
-            value={[period.start, period.end]}
-            onChange={([start, end]) => setPeriod({start, end})}
-            fullWidth={false}
-            max={endOfMonth(new Date())}
-          />
+          <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
+            <PeriodPicker
+              min={startOfYear('2026')}
+              value={[period.start, period.end]}
+              onChange={([start, end]) => setPeriod({start, end})}
+              fullWidth={false}
+              max={endOfMonth(new Date())}
+            />
+            {showCurrencyRate ? (
+              <Typography>
+                {m.uah2usd}:&nbsp;
+                {
+                  <Typography component="span" fontWeight="bold">
+                    {uah2usd(AiMapper.getPeriodStr(period))}
+                  </Typography>
+                }
+              </Typography>
+            ) : null}
+          </Box>
           {session.admin && (
             <IpBtn
               icon="send"

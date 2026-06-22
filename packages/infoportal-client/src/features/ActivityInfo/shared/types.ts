@@ -1,4 +1,4 @@
-import type {Dispatch, SetStateAction} from 'react'
+import type {Dispatch, ReactElement, SetStateAction} from 'react'
 import type {Seq} from '@axanc/ts-utils'
 
 import type {KoboSubmissionFlat, Period} from 'infoportal-common'
@@ -19,6 +19,7 @@ interface AiTableProps {
     key: string
     type: string
   }>
+  showCurrencyRate?: boolean
   period: Partial<Period>
   setPeriod: Dispatch<SetStateAction<Partial<Period>>>
 }

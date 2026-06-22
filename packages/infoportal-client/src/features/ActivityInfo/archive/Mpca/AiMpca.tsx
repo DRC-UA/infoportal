@@ -11,7 +11,9 @@ import {AiMpcaMapper} from './aiMpcaMapper'
 export const AiMpca = () => {
   const {api} = useAppSettings()
   const fetcher = useFetcher((period: Partial<Period>) => AiMpcaMapper.reqCashRegistration(api)(period))
-  const {conf} = useAppSettings()
+  const {
+    conf: {uah2usd},
+  } = useAppSettings()
 
   return (
     <Page width="full">
@@ -21,7 +23,7 @@ export const AiMpca = () => {
           id="mpca"
           header={
             <>
-              USD to UAH&nbsp;<b>{conf.uahToUsd}</b>
+              &nbsp;USD to UAH&nbsp;<b>{uah2usd()}</b>
             </>
           }
         />

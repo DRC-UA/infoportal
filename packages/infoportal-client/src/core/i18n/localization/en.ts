@@ -251,6 +251,7 @@ const en = Object.freeze({
     taxIdPhoto: 'Tax ID Photo',
     submittedAt: 'Submitted at',
     currency: 'Currency',
+    uah2usd: 'UAH to USD rate',
     result: 'Result',
     clearAll: 'Clear all',
     committedAt: 'Committed at',

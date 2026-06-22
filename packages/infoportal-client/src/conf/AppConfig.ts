@@ -1,4 +1,5 @@
-import {bool, defaultValue, env, required} from '@axanc/ts-utils'
+import {bool, defaultValue, env, match, required} from '@axanc/ts-utils'
+
 import {AppFeatureId, appFeaturesIndex} from '@/features/appFeatureId'
 
 enum Env {
@@ -36,7 +37,17 @@ const e = env(persistedTempEnvVariablesForFront)
 export const appConfig = {
   /** @deprecated not working*/
   production: e((_) => _?.toLowerCase() === 'production', defaultValue(true))('NODE_ENV'),
-  uahToUsd: 0.027,
+  uah2usd: (period?: string | undefined) =>
+    match(period)
+      .cases({
+        '2026-01': 0.02357,
+        '2026-02': 0.02314,
+        '2026-03': 0.02304,
+        '2026-04': 0.02268,
+        '2026-05': 0.02267,
+        '2026-06': 0.02254,
+      } as const)
+      .default(0.027),
   muiProLicenseKey: e()(Env.NEXT_PUBLIC_MUI_PRO_LICENSE_KEY),
   linkToFeature: (feature: AppFeatureId, path: string) => {
     const featurePath = appFeaturesIndex[feature]?.path ?? feature
