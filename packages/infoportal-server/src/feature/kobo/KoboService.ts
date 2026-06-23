@@ -34,6 +34,13 @@ import {KoboSdkGenerator} from './KoboSdkGenerator.js'
 
 const Event = GlobalEvent.Event
 
+function parseJsonbPath(question: string): string[] {
+  return question.split('/').map((segment) => {
+    const match = segment.match(/^\[(\d+)\]$/)
+    return match ? String(Number(match[1]) - 1) : segment
+  })
+}
+
 export type DbKoboAnswer<T extends Record<string, any> = Record<string, any>> = KoboSubmission<T, any> & {
   formId: Kobo.FormId
 }
@@ -508,6 +515,9 @@ export class KoboService {
     answer = Array.isArray(answer) ? answer.join(' ') : answer
     const sdk = await this.sdkGenerator.getBy.formId(formId)
     const isIndexedXPath = question.includes('[') && question.includes(']/')
+    const qPath = parseJsonbPath(question)
+    const sqlPath = Prisma.sql`ARRAY[${Prisma.join(qPath.map((segment) => Prisma.sql`${segment}`))}]`
+    const answerJsonb = Prisma.sql`${JSON.stringify(answer ?? '')}::jsonb`
     await Promise.all([
       this.history.create({
         type: 'answer',
@@ -523,18 +533,13 @@ export class KoboService {
         data: {[question]: answer},
         raw: isIndexedXPath ? true : undefined,
       }),
-      isIndexedXPath
-        ? undefined
-        : this.prisma.$executeRaw(Prisma.sql`
-            UPDATE "KoboAnswers"
-            SET answers = jsonb_set(
-              answers,
-              ARRAY[${question}],
-              to_jsonb(${answer ?? ''})
-            ),
-            "updatedAt" = NOW()
-            WHERE id = ANY(${answerIds}::text[])
-          `),
+      this.prisma.$executeRaw(Prisma.sql`
+        UPDATE "KoboAnswers"
+        SET
+          answers     = jsonb_set(answers, ${sqlPath}, ${answerJsonb}, true),
+          "updatedAt" = NOW()
+        WHERE id = ANY(${answerIds}::text[])
+      `),
     ])
     this.event.emit(Event.KOBO_ANSWER_EDITED_FROM_IP, {formId, answerIds, answer: {[question]: answer}})
   }

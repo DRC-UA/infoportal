@@ -71,12 +71,11 @@ export namespace KoboFlattenRepeatedGroup {
       if (p < names.length && clean === names[p]) {
         const idx1 = (idxs[p] ?? 0) + 1
         p++
-        return `${clean}[${idx1}]`
+        return `${clean}/[${idx1}]`
       }
       return clean
     })
 
     return out.join('/')
   }
-
 }
