@@ -83,13 +83,13 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                   {formatLargeNumber(ctx.filteredUniqueData.length)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="group" title="Average HH size">
-                  {(ctx.filteredUniquePersons.length / ctx.filteredUniqueData.length).toFixed(2)}
+                  {(ctx.filteredPersons.length / ctx.filteredUniqueData.length).toFixed(2)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
                   {formatLargeNumber(ctx.filteredPersons.length)}
                 </SlideWidget>
                 <SlideWidget sx={{flex: 1}} icon="person_remove" title={m.uniqIndividuals}>
-                  {formatLargeNumber(ctx.filteredUniquePersons.length)}
+                  {formatLargeNumber(ctx.filteredPersons.length)}
                 </SlideWidget>
               </Div>
             </Div>
@@ -127,7 +127,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                     <ChartPieWidgetBy
                       dense
                       title="Females"
-                      data={ctx.filteredUniquePersons}
+                      data={ctx.filteredPersons}
                       filter={(_) => _.gender === Person.Gender.Female}
                     />
                   </PanelWBody>
@@ -137,7 +137,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                     <ChartPieWidgetBy
                       dense
                       title={<span style={{textTransform: 'none'}}>PwDs</span>}
-                      data={ctx.filteredUniquePersons}
+                      data={ctx.filteredPersons}
                       filter={(_) => (_.disability ?? []).length > 0}
                     />
                   </PanelWBody>
