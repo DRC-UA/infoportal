@@ -65,19 +65,19 @@ export const MetaDashboard = () => {
   return (
     <Page width="lg" loading={fetcher.loading}>
       <Grid container sx={{mb: 2}} columnSpacing={2}>
-        <Grid size={{xs: 6, md: 4, lg: 2}}>
+        <Grid size={{xs: 6, md: 4, lg: 12 / 5}}>
           <SlideWidget sx={{flex: 1}} icon="electrical_services" title={m._meta.pluggedKobo}>
             <Lazy deps={[ctx.filteredData]} fn={() => ctx.filteredData.distinct(({formId}) => formId).length}>
               {(_) => formatLargeNumber(_)}
             </Lazy>
           </SlideWidget>
         </Grid>
-        <Grid size={{xs: 6, md: 4, lg: 2}}>
+        <Grid size={{xs: 6, md: 4, lg: 12 / 5}}>
           <SlideWidget sx={{flex: 1}} icon="storage" title={m.submissions}>
             {formatLargeNumber(ctx.filteredData.length)}
           </SlideWidget>
         </Grid>
-        <Grid size={{xs: 6, md: 4, lg: 2}}>
+        <Grid size={{xs: 6, md: 4, lg: 12 / 5}}>
           <SlideWidget sx={{flex: 1}} icon="home" title={m.hhs}>
             {
               // if individual forms are selected, there is no HH data:
@@ -85,19 +85,14 @@ export const MetaDashboard = () => {
             }
           </SlideWidget>
         </Grid>
-        <Grid size={{xs: 6, md: 4, lg: 2}}>
+        <Grid size={{xs: 6, md: 4, lg: 12 / 5}}>
           <SlideWidget sx={{flex: 1}} icon="group" title={m.hhSize}>
             {avgHHSize}
           </SlideWidget>
         </Grid>
-        <Grid size={{xs: 6, md: 4, lg: 2}}>
+        <Grid size={{xs: 6, md: 4, lg: 12 / 5}}>
           <SlideWidget sx={{flex: 1}} icon="person" title={m.individuals}>
             {formatLargeNumber(ctx.filteredPersons.length)}
-          </SlideWidget>
-        </Grid>
-        <Grid size={{xs: 6, md: 4, lg: 2}}>
-          <SlideWidget sx={{flex: 1}} icon="person" title={m.uniqIndividuals}>
-            {formatLargeNumber(ctx.filteredUniquePersons.length)}
           </SlideWidget>
         </Grid>
       </Grid>

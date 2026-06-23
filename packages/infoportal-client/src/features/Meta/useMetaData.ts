@@ -206,7 +206,6 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
 
   const filteredUniqueData = useMemo(() => filteredData.distinct((_) => _.koboId), [filteredData])
   const filteredPersons = useMemo(() => filteredData.flatMap((_) => _.persons ?? []), [filteredData])
-  const filteredUniquePersons = useMemo(() => filteredUniqueData.flatMap((_) => _.persons ?? []), [filteredData])
 
   const clearAllFilter = useCallback(() => {
     setShapeFilters({})
@@ -241,8 +240,7 @@ export const useMetaDashboardData = ({data, storageKeyPrefix}: {storageKeyPrefix
     clearAllFilter,
     data,
     filteredData: distinctBy.has('submission') ? filteredUniqueData : filteredData,
-    filteredPersons: distinctBy.has('submission') ? filteredUniquePersons : filteredPersons,
+    filteredPersons,
     filteredUniqueData,
-    filteredUniquePersons,
   }
 }
