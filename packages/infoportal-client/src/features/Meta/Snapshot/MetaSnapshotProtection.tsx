@@ -108,7 +108,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                     <ChartPieWidgetBy
                       dense
                       title="Females"
-                      data={ctx.filteredUniquePersons}
+                      data={ctx.filteredPersons}
                       filter={(_) => _.gender === Person.Gender.Female}
                     />
                   </PanelWBody>
@@ -118,7 +118,7 @@ export const Cp = ({period}: MetaSnapshotProps) => {
                     <ChartPieWidgetBy
                       dense
                       title={<span style={{textTransform: 'none'}}>PwDs</span>}
-                      data={ctx.filteredUniquePersons}
+                      data={ctx.filteredPersons}
                       filter={(_) => (_.disability ?? []).length > 0}
                     />
                   </PanelWBody>
