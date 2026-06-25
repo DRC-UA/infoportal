@@ -213,6 +213,7 @@ export namespace Awareness_raising_feedback {
     type_awareness_raising: {
       legal: `Legal Awareness Raising`,
       pss: `PSS Awareness Raising`,
+      community_dialogues: `Community Dialogues`,
       gbv: `GBV Awareness raising sessions`,
     },
     more_informed_topic_gbv: {

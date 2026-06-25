@@ -80,6 +80,14 @@ export namespace Ecrec_small_scale {
           hh_char_hh_how_idp: undefined | Option<'hh_char_hh_how_idp'> | undefined
           hh_char_hh_det_dis_select: undefined | Option<'hh_char_hh_det_dis_select'>[] | undefined
           hh_char_hh_det_dis_level: undefined | Option<'hh_char_hh_det_dis_level'> | undefined
+          not_questions_difficulties: string | undefined
+          difficulty: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_seeing: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_hearing: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_walking: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_remembering: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_washing: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_usual_language: undefined | Option<'difficulty_usual_language'> | undefined
           calc_u18: string | undefined
           calc_o60: string | undefined
           calc_ed_age: string | undefined
@@ -563,6 +571,12 @@ export namespace Ecrec_small_scale {
       one: `Yes, some difficulty`,
       two: `Yes, a lot of difficulty`,
       fri: `Cannot do at all`,
+    },
+    difficulty_usual_language: {
+      no_difficulty: `No, no difficulty`,
+      some: `Yes, some difficulty`,
+      lot: `Yes, a lot of difficulty`,
+      cannot_all: `Cannot do at all`,
     },
     hh_char_hh_res_stat: {
       idp: `Internally Displaced Person (IDP)`,

@@ -13,6 +13,7 @@
     "build:server": "npm run build --workspace infoportal-server",
     "build:client": "npm run build --workspace infoportal-client",
     "build:common": "npm run build --workspace infoportal-common",
+    "clear-build:all": "rm -rf packages/infoportal-client/.next packages/infoportal-common/lib packages/infoportal-scripts/lib packages/inforportal-server/dist **/tsconfig.tsbuildinfo",
     "test:common": "npm run test --workspace infoportal-common",
     "db-deploy": "npm run db-deploy --workspace infoportal-server",
     "db-migrate": "npm run db-migrate --workspace infoportal-server",

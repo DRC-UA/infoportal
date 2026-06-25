@@ -2189,6 +2189,7 @@ export namespace Gp_case_management {
       ukr000397_gffo: `UKR-000397 GFFO`,
       ukr000423_echo4: `UKR-000423 ECHO4`,
       ukr000426_sdc: `UKR-000426 SDC`,
+      ukr000457_dmfa: `UKR-000457 DMFA`,
       ukr000461_uhf: `UKR-000461 UHF`,
       ukr000462_echo: `UKR-000462 ECHO`,
     },
