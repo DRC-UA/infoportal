@@ -218,9 +218,10 @@ export const _DashboardMealVisitPdf = () => {
                   </Row>
                 )}
               </Box>
+              <Title size="big">General Observations</Title>
               {(
                 [
-                  {title: 'General Observation:', field: 'main_objective'},
+                  {title: 'Main Objective:', field: 'main_objective'},
                   {title: 'Target Groups:', field: 'target_groups'},
                   {title: 'Activity Overview:', field: 'activity_overview'},
                   {title: 'Satisfaction and Feedback:', field: 'satisfaction_level'},
