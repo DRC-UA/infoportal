@@ -1,11 +1,13 @@
-import React, {useMemo, useState} from 'react'
+import {useMemo, useState} from 'react'
 import {map, seq} from '@axanc/ts-utils'
+
+import {Meal_shelterPdm, OblastIndex} from 'infoportal-common'
+
 import {useI18n} from '@/core/i18n'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {DebouncedInput} from '@/shared/DebouncedInput'
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {OblastIndex} from 'infoportal-common'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
@@ -15,7 +17,6 @@ import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {Meal_shelterPdm} from 'infoportal-common'
 import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Txt} from '@/shared'
@@ -47,7 +48,7 @@ export const MealPdmShelterDashboard = () => {
   const schema = ctxSchema.byName.meal_shelterPdm.get!
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isShelterPdm))
   const langIndex = ctxSchema.langIndex
-  const {m, formatDateTime, formatDate} = useI18n()
+  const {m} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
   const filterShape = useMemo(() => {
     return DataFilter.makeShape<PdmData<Meal_shelterPdm.T>>({
@@ -125,20 +126,19 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   data={data}
                   title={m.mealMonitoringPdm.spent}
-                  filter={(_) => _.answers.spent_cash_assistance_received === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.spent_cash_assistance_received === 'yes' ||
-                    _.answers.spent_cash_assistance_received === 'no'
+                  filter={({answers: {spent_cash_assistance_received}}) => spent_cash_assistance_received === 'yes'}
+                  filterBase={({answers: {spent_cash_assistance_received}}) =>
+                    ['yes', 'no', undefined, null].includes(spent_cash_assistance_received)
                   }
-                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
                   data={data}
                   title={m.mealMonitoringPdm.spendOn}
-                  filter={(_) => _.answers.spend_cash_received === 'yes'}
-                  filterBase={(_) => _.answers.spend_cash_received === 'yes' || _.answers.spend_cash_received === 'no'}
-                  includeNullish
+                  filter={({answers: {spend_cash_received}}) => spend_cash_received === 'yes'}
+                  filterBase={({answers: {spend_cash_received}}) =>
+                    ['yes', 'no', undefined, null].includes(spend_cash_received)
+                  }
                 />
               </SlidePanel>
               <DashboardPanelTitle> {m.mealMonitoringPdm.esk} </DashboardPanelTitle>
@@ -147,9 +147,10 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   data={data}
                   title={m.mealMonitoringPdm.usedEsk}
-                  filter={(_) => _.answers.used_provided_esk === 'yes'}
-                  filterBase={(_) => _.answers.used_provided_esk === 'yes' || _.answers.used_provided_esk === 'no'}
-                  includeNullish
+                  filter={({answers: {used_provided_esk}}) => used_provided_esk === 'yes'}
+                  filterBase={({answers: {used_provided_esk}}) =>
+                    ['yes', 'no', undefined, null].includes(used_provided_esk)
+                  }
                 />
                 <ChartBarSingleBy
                   data={data}
@@ -171,11 +172,10 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   data={data}
                   title={m.mealMonitoringPdm.quantityKit}
-                  filter={(_) => _.answers.quantity_given_sufficient === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.quantity_given_sufficient === 'yes' || _.answers.quantity_given_sufficient === 'no'
+                  filter={({answers: {quantity_given_sufficient}}) => quantity_given_sufficient === 'yes'}
+                  filterBase={({answers: {quantity_given_sufficient}}) =>
+                    ['yes', 'no', undefined, null].includes(quantity_given_sufficient)
                   }
-                  includeNullish
                 />
                 <ChartBarSingleBy
                   data={data}
@@ -189,9 +189,10 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   data={data}
                   title={m.mealMonitoringPdm.findUseful}
-                  filter={(_) => _.answers.find_kits_useful === 'yes'}
-                  filterBase={(_) => _.answers.find_kits_useful === 'yes' || _.answers.find_kits_useful === 'no'}
-                  includeNullish
+                  filter={({answers: {find_kits_useful}}) => find_kits_useful === 'yes'}
+                  filterBase={({answers: {find_kits_useful}}) =>
+                    ['yes', 'no', undefined, null].includes(find_kits_useful)
+                  }
                 />
                 <ChartBarSingleBy
                   data={data}
@@ -282,48 +283,34 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   title={m.mealMonitoringPdm.treated}
                   data={data}
-                  filter={(_) => _.answers.feel_treated_respect === 'yesc' || _.answers.feel_treated_respect === 'myes'}
-                  filterBase={(_) =>
-                    _.answers.feel_treated_respect === 'yesc' ||
-                    _.answers.feel_treated_respect === 'myes' ||
-                    _.answers.feel_treated_respect === 'notr' ||
-                    _.answers.feel_treated_respect === 'nota' ||
-                    _.answers.feel_treated_respect === 'dk' ||
-                    _.answers.feel_treated_respect === 'na'
+                  filter={({answers: {feel_treated_respect}}) =>
+                    feel_treated_respect === 'yesc' || feel_treated_respect === 'myes'
                   }
-                  includeNullish
+                  filterBase={({answers: {feel_treated_respect}}) =>
+                    ['yesc', 'myes', 'notr', 'nota', 'dk', 'na', undefined, null].includes(feel_treated_respect)
+                  }
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.wellInformed}
                   data={data}
-                  filter={(_) => _.answers.feel_informed_repair === 'yesc' || _.answers.feel_informed_repair === 'myes'}
-                  filterBase={(_) =>
-                    _.answers.feel_informed_repair === 'yesc' ||
-                    _.answers.feel_informed_repair === 'myes' ||
-                    _.answers.feel_informed_repair === 'notr' ||
-                    _.answers.feel_informed_repair === 'nota' ||
-                    _.answers.feel_informed_repair === 'dk' ||
-                    _.answers.feel_informed_repair === 'na'
+                  filter={({answers: {feel_informed_repair}}) =>
+                    feel_informed_repair === 'yesc' || feel_informed_repair === 'myes'
                   }
-                  includeNullish
+                  filterBase={({answers: {feel_informed_repair}}) =>
+                    ['yesc', 'myes', 'notr', 'nota', 'dk', 'na', undefined, null].includes(feel_informed_repair)
+                  }
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.safeReceiving}
                   data={data}
-                  filter={(_) =>
-                    _.answers.safe_during_distribution === 'yesc' || _.answers.safe_during_distribution === 'myes'
+                  filter={({answers: {safe_during_distribution}}) =>
+                    safe_during_distribution === 'yesc' || safe_during_distribution === 'myes'
                   }
-                  filterBase={(_) =>
-                    _.answers.safe_during_distribution === 'yesc' ||
-                    _.answers.safe_during_distribution === 'myes' ||
-                    _.answers.safe_during_distribution === 'notr' ||
-                    _.answers.safe_during_distribution === 'nota' ||
-                    _.answers.safe_during_distribution === 'dk' ||
-                    _.answers.safe_during_distribution === 'na'
+                  filterBase={({answers: {safe_during_distribution}}) =>
+                    ['yesc', 'myes', 'notr', 'nota', 'dk', 'na', undefined, null].includes(safe_during_distribution)
                   }
-                  includeNullish
                 />
               </SlidePanel>
             </Div>
@@ -352,32 +339,28 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   title={m.mealMonitoringPdm.culturalNeeds}
                   data={data}
-                  filter={(_) => _.answers.shelter_culturally_acceptable === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.shelter_culturally_acceptable === 'yes' ||
-                    _.answers.shelter_culturally_acceptable === 'no'
+                  filter={({answers: {shelter_culturally_acceptable}}) => shelter_culturally_acceptable === 'yes'}
+                  filterBase={({answers: {shelter_culturally_acceptable}}) =>
+                    ['yes', 'no', undefined, null].includes(shelter_culturally_acceptable)
                   }
-                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.wishesConsider}
                   data={data}
-                  filter={(_) => _.answers.planning_support_activity === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.planning_support_activity === 'yes' || _.answers.planning_support_activity === 'no'
+                  filter={({answers: {planning_support_activity}}) => planning_support_activity === 'yes'}
+                  filterBase={({answers: {planning_support_activity}}) =>
+                    ['yes', 'no', undefined, null].includes(planning_support_activity)
                   }
-                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.sleepSpace}
                   data={data}
-                  filter={(_) => _.answers.appropriate_sleeping_space === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.appropriate_sleeping_space === 'yes' || _.answers.appropriate_sleeping_space === 'no'
+                  filter={({answers: {appropriate_sleeping_space}}) => appropriate_sleeping_space === 'yes'}
+                  filterBase={({answers: {appropriate_sleeping_space}}) =>
+                    ['yes', 'no', undefined, null].includes(appropriate_sleeping_space)
                   }
-                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.howInvolved}>
@@ -394,23 +377,18 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   title={m.mealMonitoringPdm.coverBasic}
                   data={data}
-                  filter={(_) => _.answers.Are_you_currently_able === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.Are_you_currently_able === 'yes' ||
-                    _.answers.Are_you_currently_able === 'no' ||
-                    _.answers.Are_you_currently_able === 'dk'
+                  filter={({answers: {Are_you_currently_able}}) => Are_you_currently_able === 'yes'}
+                  filterBase={({answers: {Are_you_currently_able}}) =>
+                    ['yes', 'no', 'dk', undefined, null].includes(Are_you_currently_able)
                   }
-                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.metersPerson}
                   data={data}
-                  filter={(_) => _.answers.meters_person_space === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.meters_person_space === 'yes' ||
-                    _.answers.meters_person_space === 'no' ||
-                    _.answers.meters_person_space === 'dk'
+                  filter={({answers: {meters_person_space}}) => meters_person_space === 'yes'}
+                  filterBase={({answers: {meters_person_space}}) =>
+                    ['yes', 'no', 'dk', undefined, null].includes(meters_person_space)
                   }
                   includeNullish
                 />
@@ -418,29 +396,28 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   title={m.mealMonitoringPdm.suitable}
                   data={data}
-                  filter={(_) => _.answers.shelter_solution_standards === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.shelter_solution_standards === 'yes' || _.answers.shelter_solution_standards === 'no'
+                  filter={({answers: {shelter_solution_standards}}) => shelter_solution_standards === 'yes'}
+                  filterBase={({answers: {shelter_solution_standards}}) =>
+                    ['yes', 'no', undefined, null].includes(shelter_solution_standards)
                   }
-                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.ableToFind}
                   data={data}
-                  filter={(_) => _.answers.find_good_materials === 'yes'}
-                  filterBase={(_) => _.answers.find_good_materials === 'yes' || _.answers.find_good_materials === 'no'}
-                  includeNullish
+                  filter={({answers: {find_good_materials}}) => find_good_materials === 'yes'}
+                  filterBase={({answers: {find_good_materials}}) =>
+                    ['yes', 'no', undefined, null].includes(find_good_materials)
+                  }
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.insulation}
                   data={data}
-                  filter={(_) => _.answers.repairs_done_accordance === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.repairs_done_accordance === 'yes' || _.answers.repairs_done_accordance === 'no'
+                  filter={({answers: {repairs_done_accordance}}) => repairs_done_accordance === 'yes'}
+                  filterBase={({answers: {repairs_done_accordance}}) =>
+                    ['yes', 'no', undefined, null].includes(repairs_done_accordance)
                   }
-                  includeNullish
                 />
               </SlidePanel>
               <SlidePanel title={m.mealMonitoringPdm.rateQuality}>
@@ -456,49 +433,37 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   title={m.mealMonitoringPdm.materialSat}
                   data={data}
-                  filter={(_) => _.answers._7_Are_you_satisfied_with_the_ === 'yes'}
-                  filterBase={(_) =>
-                    _.answers._7_Are_you_satisfied_with_the_ === 'yes' ||
-                    _.answers._7_Are_you_satisfied_with_the_ === 'no' ||
-                    _.answers._7_Are_you_satisfied_with_the_ === 'other'
+                  filter={({answers: {_7_Are_you_satisfied_with_the_}}) => _7_Are_you_satisfied_with_the_ === 'yes'}
+                  filterBase={({answers: {_7_Are_you_satisfied_with_the_}}) =>
+                    ['yes', 'no', 'other', undefined, null].includes(_7_Are_you_satisfied_with_the_)
                   }
-                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.correspondNeeds}
                   data={data}
-                  filter={(_) => _.answers.received_correspond_needs === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.received_correspond_needs === 'yes' ||
-                    _.answers.received_correspond_needs === 'no' ||
-                    _.answers.received_correspond_needs === 'dk'
+                  filter={({answers: {received_correspond_needs}}) => received_correspond_needs === 'yes'}
+                  filterBase={({answers: {received_correspond_needs}}) =>
+                    ['yes', 'no', 'dk', undefined, null].includes(received_correspond_needs)
                   }
-                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.conditionsImproved}
                   data={data}
-                  filter={(_) => _.answers._5_Have_living_conditions_been === 'yes'}
-                  filterBase={(_) =>
-                    _.answers._5_Have_living_conditions_been === 'yes' ||
-                    _.answers._5_Have_living_conditions_been === 'no' ||
-                    _.answers._5_Have_living_conditions_been === 'other'
+                  filter={({answers: {_5_Have_living_conditions_been}}) => _5_Have_living_conditions_been === 'yes'}
+                  filterBase={({answers: {_5_Have_living_conditions_been}}) =>
+                    ['yes', 'no', 'other', undefined, null].includes(_5_Have_living_conditions_been)
                   }
-                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
                   title={m.mealMonitoringPdm.warmComfort}
                   data={data}
-                  filter={(_) => _.answers.living_sufficiently_comfort === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.living_sufficiently_comfort === 'yes' ||
-                    _.answers.living_sufficiently_comfort === 'no' ||
-                    _.answers.living_sufficiently_comfort === 'dk'
+                  filter={({answers: {living_sufficiently_comfort}}) => living_sufficiently_comfort === 'yes'}
+                  filterBase={({answers: {living_sufficiently_comfort}}) =>
+                    ['yes', 'no', 'dk', undefined, null].includes(living_sufficiently_comfort)
                   }
-                  includeNullish
                 />
                 <ChartPieWidgetBy
                   dense
@@ -516,13 +481,10 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   title={m.mealMonitoringPdm.houseActivities}
                   data={data}
-                  filter={(_) => _.answers._8_Has_the_re_construction_be === 'yes'}
-                  filterBase={(_) =>
-                    _.answers._8_Has_the_re_construction_be === 'yes' ||
-                    _.answers._8_Has_the_re_construction_be === 'no' ||
-                    _.answers._8_Has_the_re_construction_be === 'other'
+                  filter={({answers: {_8_Has_the_re_construction_be}}) => _8_Has_the_re_construction_be === 'yes'}
+                  filterBase={({answers: {_8_Has_the_re_construction_be}}) =>
+                    ['yes', 'no', 'other', undefined, null].includes(_8_Has_the_re_construction_be)
                   }
-                  includeNullish
                 />
               </SlidePanel>
               <DashboardPanelTitle> {m.mealMonitoringPdm.accountabilityCRM} </DashboardPanelTitle>
@@ -531,11 +493,9 @@ export const MealPdmShelterDashboard = () => {
                   dense
                   title={m.mealMonitoringPdm.communication}
                   data={data}
-                  filter={(_) => _.answers.did_you_have_regular_commu === 'yes'}
-                  filterBase={(_) =>
-                    _.answers.did_you_have_regular_commu === 'yes' ||
-                    _.answers.did_you_have_regular_commu === 'no' ||
-                    _.answers.did_you_have_regular_commu === 'other'
+                  filter={({answers: {did_you_have_regular_commu}}) => did_you_have_regular_commu === 'yes'}
+                  filterBase={({answers: {did_you_have_regular_commu}}) =>
+                    ['yes', 'no', 'other', undefined, null].includes(did_you_have_regular_commu)
                   }
                   includeNullish
                 />

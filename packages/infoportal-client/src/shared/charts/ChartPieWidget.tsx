@@ -8,6 +8,7 @@ import {useI18n} from '@/core/i18n'
 import {LightTooltip, TooltipRow} from '@/shared/LightTooltip'
 import {toPercent} from 'infoportal-common'
 import {previousPeriodDeltaDays} from '@/features/Safety/IncidentsDashboard/useSafetyIncidentData'
+import {flexShrink} from '@mui/system'
 
 export interface ChartPieIndicatorProps extends Omit<PanelProps, 'title'> {
   fractionDigits?: number
@@ -139,6 +140,7 @@ const Donut = ({percent = 0, size = 55, color}: {percent?: number; size?: number
       height={size}
       width={size}
       hideLabel
+      sx={{flexShrink: 0}}
       data={{
         value: Math.round(percent * 100) / 100,
         rest: 1 - percent,
