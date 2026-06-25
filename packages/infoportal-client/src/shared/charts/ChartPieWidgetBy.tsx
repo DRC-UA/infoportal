@@ -29,7 +29,7 @@ export const ChartPieWidgetBy = <T,>({
   const percent = ({res, base}: {res: number; base: number}) => res / base
   const run = (d: Seq<T>) => {
     const base = filterBase ? d.filter((item) => includeNullish || filterBase(item)) : d
-    const res = base.filter((item) => includeNullish || filter(item))
+    const res = base.filter((item) => filter(item))
 
     return {
       res: res.length,
