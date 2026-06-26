@@ -221,7 +221,7 @@ export namespace KoboXmlMapper {
 
         if (Object.values(wgq).some(Boolean)) {
           return Object.entries(wgq).reduce((accum, [difficulty, level]) => {
-            if (['cannot_all', 'lot'].includes(level as Xml.WashingtonGroupQuestion)) {
+            if (['cannot_all', 'lot', 'yes_lot'].includes(level as Xml.WashingtonGroupQuestion)) {
               return (
                 match(difficulty)
                   .cases({
@@ -686,9 +686,19 @@ export namespace KoboXmlMapper {
     export const partner_lampa: PersonsMapper<Partner_lampa.T> = common
 
     export const protection_communityMonitoring: PersonsMapper<Protection_communityMonitoring.T> = (row) => {
+      const {
+        difficulty_seeing,
+        difficulty_hearing,
+        difficulty_walking,
+        difficulty_remembering,
+        difficulty_washing,
+        difficulty_usual_language,
+      } = row
+
       return common({
         // @ts-expect-error void IS undefined. Kind of. Period. Sorry. Blame me in case of crashes
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          // FGD participants
           ..._,
           hh_char_hh_det_dis_select: seq(row.key_informant_difficulty ?? [])
             .map((_) => {
@@ -705,7 +715,20 @@ export namespace KoboXmlMapper {
             .compact()
             .get(),
           hh_char_hh_res_stat: _.hh_char_hh_det_status,
-        })),
+        })) ?? [
+          // KII informant
+          {
+            difficulty_seeing,
+            difficulty_hearing,
+            difficulty_walking,
+            difficulty_remembering,
+            difficulty_washing,
+            difficulty_usual_language,
+            hh_char_hh_res_stat: row.informant_status,
+            hh_char_hh_det_age: row.informant_age,
+            hh_char_hh_det_gender: row.informant_gender,
+          },
+        ],
       })
     }
 
@@ -754,7 +777,7 @@ export namespace KoboXmlMapper {
       return match(difficulty)
         .cases({
           no: false,
-          yes_some: true,
+          yes_some: false,
           yes_lot: true,
           cannot_all: true,
         })
@@ -795,22 +818,23 @@ export namespace KoboXmlMapper {
                 returnee: Person.DisplacementStatus.Returnee,
               })
               .default(undefined),
-            disability: hh.hh_char_hh_det_disability
-              ?.map((_) =>
-                match(_)
-                  .cases({
-                    no: Person.WgDisability.None,
-                    wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
-                    wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
-                    wg_walking_or_climbing_steps: Person.WgDisability.Walk,
-                    wg_remembering_or_concentrating: Person.WgDisability.Rem,
-                    wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
-                    wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
-                    unable_unwilling_to_answer: undefined,
-                  })
-                  .default(undefined),
-              )
-              .filter((_) => !!_),
+            disability:
+              hh.hh_char_hh_det_disability
+                ?.map((_) =>
+                  match(_)
+                    .cases({
+                      no: Person.WgDisability.None,
+                      wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
+                      wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
+                      wg_walking_or_climbing_steps: Person.WgDisability.Walk,
+                      wg_remembering_or_concentrating: Person.WgDisability.Rem,
+                      wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
+                      wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
+                      unable_unwilling_to_answer: undefined,
+                    })
+                    .default(undefined),
+                )
+                .filter((_) => !!_) ?? Disability.common(hh),
           }
         })
         .compact()
@@ -822,7 +846,22 @@ export namespace KoboXmlMapper {
       gender,
       status,
       specific_need,
+      difficulty_seeing,
+      difficulty_hearing,
+      difficulty_walking,
+      difficulty_remembering,
+      difficulty_washing,
+      difficulty_usual_language,
     }) => {
+      const wgq = {
+        difficulty_seeing,
+        difficulty_hearing,
+        difficulty_walking,
+        difficulty_remembering,
+        difficulty_washing,
+        difficulty_usual_language,
+      }
+
       return [
         {
           age:
@@ -850,7 +889,26 @@ export namespace KoboXmlMapper {
               non_displaced: Person.DisplacementStatus.NonDisplaced,
             })
             .default(undefined),
-          disability: specific_need?.includes('person_disability') ? [Person.WgDisability.See] : undefined, // TODO: thinks of some new common disability type for such cases
+          disability: specific_need?.includes('person_disability')
+            ? [Person.WgDisability.See]
+            : Object.entries(wgq).reduce((disabilities, [difficulty, level]) => {
+                if (['cannot_all', 'yes_lot'].includes(level as Xml.WashingtonGroupQuestion)) {
+                  return (
+                    match(difficulty)
+                      .cases({
+                        difficulty_seeing: [...disabilities, Person.WgDisability.See],
+                        difficulty_hearing: [...disabilities, Person.WgDisability.Hear],
+                        difficulty_walking: [...disabilities, Person.WgDisability.Walk],
+                        difficulty_remembering: [...disabilities, Person.WgDisability.Rem],
+                        difficulty_washing: [...disabilities, Person.WgDisability.Care],
+                        difficulty_usual_language: [...disabilities, Person.WgDisability.Comm],
+                      })
+                      .exhaustive() ?? disabilities
+                  )
+                }
+
+                return disabilities
+              }, [] as Person.WgDisability[]),
         },
       ]
     }
