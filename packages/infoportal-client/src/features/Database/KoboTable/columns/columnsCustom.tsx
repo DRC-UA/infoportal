@@ -124,8 +124,31 @@ export const getColumnsCustom = ({
           if (['more_24m', '12_24m'].includes(row.long_displaced!)) scoring.residenceStatus += 2
           else if (['less_3m', '3_6m', '6_12m'].includes(row.long_displaced!)) scoring.residenceStatus += 3
         }
+        // filter in people with disabilities by legacy and new WGQ:
         const disabilitiesCount =
-          row.family_member?.filter((member) => ['one', 'two', 'fri'].includes(member.dis_level!)).length || 0
+          row.family_member?.filter(
+            (member) =>
+              ['one', 'two', 'fri'].includes(member.dis_level!) ||
+              (((m): m is NonNullable<Ecrec_vet_bha388.T['family_member']>[number] =>
+                (
+                  [
+                    'difficulty_seeing',
+                    'difficulty_hearing',
+                    'difficulty_walking',
+                    'difficulty_remembering',
+                    'difficulty_washing',
+                    'difficulty_usual_language',
+                  ] as const
+                ).every((p) => p in m))(member) && // assuring type compatibility
+                [
+                  member.difficulty_seeing,
+                  member.difficulty_hearing,
+                  member.difficulty_walking,
+                  member.difficulty_remembering,
+                  member.difficulty_washing,
+                  member.difficulty_usual_language,
+                ].some((difficulty) => ['cannot_all', 'lot'].includes(difficulty as string))),
+          ).length || 0
         scoring.pwd += disabilitiesCount === 1 ? 1 : disabilitiesCount >= 2 ? 3 : 0
 
         scoring.chronic_disease += row.many_chronic_diseases! === 1 ? 1 : row.many_chronic_diseases! >= 2 ? 3 : 0
