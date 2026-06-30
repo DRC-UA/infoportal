@@ -184,6 +184,7 @@ export namespace Protection_referral {
       ukr000441_uhf11: `UKR-000441 UHF`,
       ukr000444_unicef: `UKR-000444 UNICEF`,
       ukr000457_dmfa: `UKR-000457 DMFA`,
+      ukr000459_danida: `UKR-000459 DANIDA`,
       ukr000461_uhf: `UKR-000461 UHF`,
       ukr000462_echo: `UKR-000462 ECHO`,
       '297_novo': `UKR-000298 Novo Nordisk`,
