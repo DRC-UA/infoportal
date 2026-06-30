@@ -124,6 +124,7 @@ export const getColumnsCustom = ({
           if (['more_24m', '12_24m'].includes(row.long_displaced!)) scoring.residenceStatus += 2
           else if (['less_3m', '3_6m', '6_12m'].includes(row.long_displaced!)) scoring.residenceStatus += 3
         }
+
         // filter in people with disabilities by legacy and new WGQ:
         const disabilitiesCount =
           row.family_member?.filter(
@@ -139,7 +140,7 @@ export const getColumnsCustom = ({
                     'difficulty_washing',
                     'difficulty_usual_language',
                   ] as const
-                ).every((p) => p in m))(member) && // assuring type compatibility
+                ).some((p) => p in m && p !== undefined))(member) && // assuring type compatibility
                 [
                   member.difficulty_seeing,
                   member.difficulty_hearing,
