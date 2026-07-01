@@ -696,34 +696,41 @@ export namespace KoboXmlMapper {
       } = row
 
       return common({
-        // @ts-expect-error void IS undefined. Kind of. Period. Sorry. Blame me in case of crashes
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
           // FGD participants
           ..._,
-          hh_char_hh_det_dis_select: seq(row.key_informant_difficulty ?? [])
-            .map((_) => {
-              match(_).cases({
-                no: 'diff_none',
-                seeing: 'diff_see',
-                hearing: 'diff_hear',
-                walking: 'diff_walk',
-                remembering_concentrating: 'diff_rem',
-                self_care: 'diff_care',
-                using_usual_language: 'diff_comm',
-              })
-            })
-            .compact()
-            .get(),
+          hh_char_hh_det_dis_select: [],
           hh_char_hh_res_stat: _.hh_char_hh_det_status,
         })) ?? [
           // KII informant
           {
-            difficulty_seeing,
-            difficulty_hearing,
-            difficulty_walking,
-            difficulty_remembering,
-            difficulty_washing,
-            difficulty_usual_language,
+            ...(row.key_informant_difficulty
+              ? {
+                  hh_char_hh_det_dis_select: seq(row.key_informant_difficulty) // check whether old WGQ are filled or the new ones
+                    .map((difficulty) => {
+                      return match(difficulty)
+                        .cases({
+                          no: 'diff_none',
+                          seeing: 'diff_see',
+                          hearing: 'diff_hear',
+                          walking: 'diff_walk',
+                          remembering_concentrating: 'diff_rem',
+                          self_care: 'diff_care',
+                          using_usual_language: 'diff_comm',
+                        } as const)
+                        .default('diff_none')
+                    })
+                    .compact()
+                    .get(),
+                }
+              : {
+                  difficulty_seeing,
+                  difficulty_hearing,
+                  difficulty_walking,
+                  difficulty_remembering,
+                  difficulty_washing,
+                  difficulty_usual_language,
+                }),
             hh_char_hh_res_stat: row.informant_status,
             hh_char_hh_det_age: row.informant_age,
             hh_char_hh_det_gender: row.informant_gender,
