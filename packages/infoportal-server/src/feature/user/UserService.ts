@@ -50,7 +50,7 @@ export class UserService {
   }
 
   readonly getAll = async () => {
-    return this.loadUsersCache()
+    return await this.loadUsersCache()
   }
 
   readonly usersCount = async (): Promise<number> => {
@@ -66,6 +66,13 @@ export class UserService {
         cache.push(user!)
       }
     }
+
+    if (user?.accessToken) {
+      const {accessToken: _token, ...sanitizedUser} = user
+
+      return sanitizedUser
+    }
+
     return user
   }
 

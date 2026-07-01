@@ -14,8 +14,9 @@ export class ControllerUser {
   ) {}
 
   readonly search = async (req: Request, res: Response, next: NextFunction) => {
+    const isAdmin = req.session.user?.admin
     const data = await this.service.getAll()
-    res.send(data)
+    res.send(isAdmin ? data : data.map(({accessToken: _token, ...user}) => user))
   }
 
   readonly count = async (req: Request, res: Response, next: NextFunction) => {
