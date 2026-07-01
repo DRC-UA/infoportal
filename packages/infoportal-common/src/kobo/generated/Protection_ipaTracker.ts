@@ -125,6 +125,7 @@ export namespace Protection_ipaTracker {
     type_assis: {
       ipa: `IPA`,
       bd_fund: `Babusya/Didusya Fund`,
+      c4p_uct_referral: `C4P linked to UCT referral`,
     },
     case_status: {
       open: `Open`,
@@ -227,6 +228,11 @@ export namespace Protection_ipaTracker {
       UMY018: `UMY018`,
       UMY019: `UMY019`,
       UMY020: `UMY020`,
+      UMY021: `UMY021`,
+      UMY022: `UMY022`,
+      UMY023: `UMY023`,
+      UMY024: `UMY024`,
+      UMY025: `UMY025`,
       HRK001: `HRK001`,
       HRK002: `HRK002`,
       HRK003: `HRK003`,

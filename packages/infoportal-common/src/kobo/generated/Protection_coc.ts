@@ -57,11 +57,13 @@ export namespace Protection_coc {
       dnipro: `Dnipro`,
       kharkiv: `Kharkiv`,
       sloviansk: `Sloviansk`,
+      barvinkove: `Barvinkove`,
       mykolaiv: `Mykolaiv`,
       kyiv: `Kyiv`,
       ivankiv: `Ivankiv`,
       kherson: `Kherson`,
       sumy: `Sumy`,
+      shostka: `Shostka`,
       ichna: `Ichna`,
       other: `Other`,
       lviv: `Lviv`,
@@ -121,6 +123,8 @@ export namespace Protection_coc {
       viktoriia_sheliekhova: `Viktoriia Sheliekhova`,
       sacha_kuilman: `Sacha Kuilman`,
       shaun_booth: `Shaun Booth`,
+      maryna_bondarenko: `Maryna Bondarenko`,
+      oleksii_voloshchenko: `Oleksii Voloshchenko`,
     },
   } as const
 

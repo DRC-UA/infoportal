@@ -45,8 +45,12 @@ export const databaseCustomMapping: Record<any, (_: any) => any> = {
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.partner_lampa),
   [KoboIndex.byName('protection_communityMonitoring').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.protection_communityMonitoring),
+  [KoboIndex.byName('protection_gbv').id]: (_) =>
+    KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.protection_gbv),
   [KoboIndex.byName('protection_groupSession').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.protection_groupSession),
+  [KoboIndex.byName('protection_ipaTracker').id]: (_) =>
+    KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.protection_ipaTracker),
   [KoboIndex.byName('protection_hhs3').id]: (_) =>
     KoboXmlMapper.Breakdown.addProperty(_, KoboXmlMapper.Persons.protection_hhs3),
   [KoboIndex.byName('protection_pss').id]: (_) =>

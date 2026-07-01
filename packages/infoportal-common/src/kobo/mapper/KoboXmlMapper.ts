@@ -76,6 +76,8 @@ export namespace KoboXmlMapper {
 
     export type DisabilitySelected = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_det_dis_select']
 
+    export type WashingtonGroupQuestion = 'no_difficulty' | 'some' | 'lot' | 'cannot_all'
+
     // export type Displacement = ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_res_stat']
     export type Office =
       | 'brv'
@@ -117,6 +119,12 @@ export namespace KoboXmlMapper {
       hh_char_hh_det_age?: ExtractHh<Ecrec_cashRegistration.T, 'hh_char_hh_det'>['hh_char_hh_det_age']
       hh_char_hh_det_dis_level?: DisabilityLevel
       hh_char_hh_res_stat?: Displacement
+      difficulty_seeing?: WashingtonGroupQuestion
+      difficulty_hearing?: WashingtonGroupQuestion
+      difficulty_walking?: WashingtonGroupQuestion
+      difficulty_remembering?: WashingtonGroupQuestion
+      difficulty_washing?: WashingtonGroupQuestion
+      difficulty_usual_language?: WashingtonGroupQuestion
     }
 
     export type Row = {
@@ -191,13 +199,53 @@ export namespace KoboXmlMapper {
     }
 
     namespace Disability {
-      export const common = (person: {
-        hh_char_hh_det_dis_level?: Xml.DisabilityLevel
-        hh_char_hh_det_dis_select?: Xml.DisabilitySelected
-      }): undefined | Person.WgDisability[] => {
-        if (!person.hh_char_hh_det_dis_level) return undefined
-        if (person.hh_char_hh_det_dis_level === 'zero') return [Person.WgDisability.None]
-        return person.hh_char_hh_det_dis_select
+      export const common = ({
+        hh_char_hh_det_dis_level,
+        hh_char_hh_det_dis_select,
+        difficulty_seeing,
+        difficulty_hearing,
+        difficulty_walking,
+        difficulty_remembering,
+        difficulty_washing,
+        difficulty_usual_language,
+      }: Xml.Individual): undefined | Person.WgDisability[] => {
+        // check first new Washington Group Questions
+        const wgq: Record<string, Xml.WashingtonGroupQuestion | undefined> = {
+          difficulty_seeing,
+          difficulty_hearing,
+          difficulty_walking,
+          difficulty_remembering,
+          difficulty_washing,
+          difficulty_usual_language,
+        }
+
+        if (Object.values(wgq).some(Boolean)) {
+          return Object.entries(wgq).reduce((accum, [difficulty, level]) => {
+            if (['cannot_all', 'lot', 'yes_lot'].includes(level as Xml.WashingtonGroupQuestion)) {
+              return (
+                match(difficulty)
+                  .cases({
+                    difficulty_seeing: [...accum, Person.WgDisability.See],
+                    difficulty_hearing: [...accum, Person.WgDisability.Hear],
+                    difficulty_walking: [...accum, Person.WgDisability.Walk],
+                    difficulty_remembering: [...accum, Person.WgDisability.Rem],
+                    difficulty_washing: [...accum, Person.WgDisability.Care],
+                    difficulty_usual_language: [...accum, Person.WgDisability.Comm],
+                  })
+                  .exhaustive() ?? accum
+              )
+            }
+
+            return accum
+          }, [] as Person.WgDisability[])
+        }
+
+        // fallback to the legacy option
+        if (!hh_char_hh_det_dis_level) return undefined
+
+        if (hh_char_hh_det_dis_level === 'zero') return [Person.WgDisability.None]
+
+        return hh_char_hh_det_dis_select
           ?.map((_) =>
             match(_)
               .cases({
@@ -245,11 +293,11 @@ export namespace KoboXmlMapper {
               },
             ]
           : []),
-        ...(row.hh_char_hh_det ?? []).map((_) => ({
-          age: _.hh_char_hh_det_age,
-          gender: Gender.common(_),
-          disability: Disability.common(_),
-          displacement: Displacement.common(_),
+        ...(row.hh_char_hh_det ?? []).map((individual) => ({
+          age: individual.hh_char_hh_det_age,
+          gender: Gender.common(individual),
+          disability: Disability.common(individual),
+          displacement: Displacement.common(individual),
         })),
       ]
     }
@@ -444,15 +492,34 @@ export namespace KoboXmlMapper {
 
     export const ecrec_small_scale: PersonsMapper<Ecrec_small_scale.T> = common
 
-    export const ecrec_vet_bha388: PersonsMapper<Ecrec_vet_bha388.T> = (row) => {
+    export const ecrec_vet_bha388: PersonsMapper<Ecrec_vet_bha388.T> = (answers) => {
       return common({
-        hh_char_hh_det: row.family_member?.map(({gender, age, dis_select, dis_level}) => ({
-          hh_char_hh_det_age: age,
-          hh_char_hh_det_gender: gender,
-          hh_char_hh_det_dis_select: dis_select,
-          hh_char_hh_det_dis_level: dis_level,
-          hh_char_hh_res_stat: row.res_stat, // notice it comes from the row, not the family member
-        })),
+        hh_char_hh_det: answers.family_member?.map(
+          ({
+            gender,
+            age,
+            dis_select,
+            dis_level,
+            difficulty_seeing,
+            difficulty_hearing,
+            difficulty_walking,
+            difficulty_remembering,
+            difficulty_washing,
+            difficulty_usual_language,
+          }) => ({
+            difficulty_seeing,
+            difficulty_hearing,
+            difficulty_walking,
+            difficulty_remembering,
+            difficulty_washing,
+            difficulty_usual_language,
+            hh_char_hh_det_age: age,
+            hh_char_hh_det_gender: gender,
+            hh_char_hh_det_dis_select: dis_select,
+            hh_char_hh_det_dis_level: dis_level,
+            hh_char_hh_res_stat: answers.res_stat, // notice it comes from the row, not the family member
+          }),
+        ),
       })
     }
 
@@ -619,26 +686,56 @@ export namespace KoboXmlMapper {
     export const partner_lampa: PersonsMapper<Partner_lampa.T> = common
 
     export const protection_communityMonitoring: PersonsMapper<Protection_communityMonitoring.T> = (row) => {
+      const {
+        difficulty_seeing,
+        difficulty_hearing,
+        difficulty_walking,
+        difficulty_remembering,
+        difficulty_washing,
+        difficulty_usual_language,
+      } = row
+
       return common({
-        // @ts-expect-error void IS undefined. Kind of. Period. Sorry. Blame me in case of crashes
         hh_char_hh_det: row.hh_char_hh_det?.map((_) => ({
+          // FGD participants
           ..._,
-          hh_char_hh_det_dis_select: seq(row.key_informant_difficulty ?? [])
-            .map((_) => {
-              match(_).cases({
-                no: 'diff_none',
-                seeing: 'diff_see',
-                hearing: 'diff_hear',
-                walking: 'diff_walk',
-                remembering_concentrating: 'diff_rem',
-                self_care: 'diff_care',
-                using_usual_language: 'diff_comm',
-              })
-            })
-            .compact()
-            .get(),
+          hh_char_hh_det_dis_select: [],
           hh_char_hh_res_stat: _.hh_char_hh_det_status,
-        })),
+        })) ?? [
+          // KII informant
+          {
+            ...(row.key_informant_difficulty
+              ? {
+                  hh_char_hh_det_dis_select: seq(row.key_informant_difficulty) // check whether old WGQ are filled or the new ones
+                    .map((difficulty) => {
+                      return match(difficulty)
+                        .cases({
+                          no: 'diff_none',
+                          seeing: 'diff_see',
+                          hearing: 'diff_hear',
+                          walking: 'diff_walk',
+                          remembering_concentrating: 'diff_rem',
+                          self_care: 'diff_care',
+                          using_usual_language: 'diff_comm',
+                        } as const)
+                        .default('diff_none')
+                    })
+                    .compact()
+                    .get(),
+                }
+              : {
+                  difficulty_seeing,
+                  difficulty_hearing,
+                  difficulty_walking,
+                  difficulty_remembering,
+                  difficulty_washing,
+                  difficulty_usual_language,
+                }),
+            hh_char_hh_res_stat: row.informant_status,
+            hh_char_hh_det_age: row.informant_age,
+            hh_char_hh_det_gender: row.informant_gender,
+          },
+        ],
       })
     }
 
@@ -687,7 +784,7 @@ export namespace KoboXmlMapper {
       return match(difficulty)
         .cases({
           no: false,
-          yes_some: true,
+          yes_some: false,
           yes_lot: true,
           cannot_all: true,
         })
@@ -728,22 +825,23 @@ export namespace KoboXmlMapper {
                 returnee: Person.DisplacementStatus.Returnee,
               })
               .default(undefined),
-            disability: hh.hh_char_hh_det_disability
-              ?.map((_) =>
-                match(_)
-                  .cases({
-                    no: Person.WgDisability.None,
-                    wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
-                    wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
-                    wg_walking_or_climbing_steps: Person.WgDisability.Walk,
-                    wg_remembering_or_concentrating: Person.WgDisability.Rem,
-                    wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
-                    wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
-                    unable_unwilling_to_answer: undefined,
-                  })
-                  .default(undefined),
-              )
-              .filter((_) => !!_),
+            disability:
+              hh.hh_char_hh_det_disability
+                ?.map((_) =>
+                  match(_)
+                    .cases({
+                      no: Person.WgDisability.None,
+                      wg_seeing_even_if_wearing_glasses: Person.WgDisability.See,
+                      wg_hearing_even_if_using_a_hearing_aid: Person.WgDisability.Hear,
+                      wg_walking_or_climbing_steps: Person.WgDisability.Walk,
+                      wg_remembering_or_concentrating: Person.WgDisability.Rem,
+                      wg_selfcare_such_as_washing_all_over_or_dressing: Person.WgDisability.Care,
+                      wg_using_your_usual_language_have_difficulty_communicating: Person.WgDisability.Comm,
+                      unable_unwilling_to_answer: undefined,
+                    })
+                    .default(undefined),
+                )
+                .filter((_) => !!_) ?? Disability.common(hh),
           }
         })
         .compact()
@@ -755,7 +853,22 @@ export namespace KoboXmlMapper {
       gender,
       status,
       specific_need,
+      difficulty_seeing,
+      difficulty_hearing,
+      difficulty_walking,
+      difficulty_remembering,
+      difficulty_washing,
+      difficulty_usual_language,
     }) => {
+      const wgq = {
+        difficulty_seeing,
+        difficulty_hearing,
+        difficulty_walking,
+        difficulty_remembering,
+        difficulty_washing,
+        difficulty_usual_language,
+      }
+
       return [
         {
           age:
@@ -783,7 +896,26 @@ export namespace KoboXmlMapper {
               non_displaced: Person.DisplacementStatus.NonDisplaced,
             })
             .default(undefined),
-          disability: specific_need?.includes('person_disability') ? [Person.WgDisability.See] : undefined, // TODO: thinks of some new common disability type for such cases
+          disability: specific_need?.includes('person_disability')
+            ? [Person.WgDisability.See]
+            : Object.entries(wgq).reduce((disabilities, [difficulty, level]) => {
+                if (['cannot_all', 'yes_lot'].includes(level as Xml.WashingtonGroupQuestion)) {
+                  return (
+                    match(difficulty)
+                      .cases({
+                        difficulty_seeing: [...disabilities, Person.WgDisability.See],
+                        difficulty_hearing: [...disabilities, Person.WgDisability.Hear],
+                        difficulty_walking: [...disabilities, Person.WgDisability.Walk],
+                        difficulty_remembering: [...disabilities, Person.WgDisability.Rem],
+                        difficulty_washing: [...disabilities, Person.WgDisability.Care],
+                        difficulty_usual_language: [...disabilities, Person.WgDisability.Comm],
+                      })
+                      .exhaustive() ?? disabilities
+                  )
+                }
+
+                return disabilities
+              }, [] as Person.WgDisability[]),
         },
       ]
     }
@@ -1128,44 +1260,48 @@ export namespace KoboXmlMapper {
       ]
     }
 
-    export const shelter_common_spaces_hh: PersonsMapper<
-      Pick<NonNullable<Shelter_commonSpaces.T['apartment_information']>[number], 'hh_char_hh_det' | 'hh_char_res_stat'>
-    > = ({hh_char_hh_det, hh_char_res_stat}) => {
-      return (
-        hh_char_hh_det?.map((hhMember) => ({
-          age: safeAge(hhMember?.hh_char_hh_det_age),
-          gender: match(hhMember?.hh_char_hh_det_gender)
-            .cases({
-              male: Person.Gender.Male,
-              female: Person.Gender.Female,
-            })
-            .default(() => undefined),
-          displacement: match(hh_char_res_stat)
-            .cases({
-              idp: Person.DisplacementStatus.Idp,
-              long_res: Person.DisplacementStatus.NonDisplaced,
-              ret: Person.DisplacementStatus.Returnee,
-              ref_asy: Person.DisplacementStatus.Refugee,
-            })
-            .default(undefined),
-          disability: Disability.common({
-            hh_char_hh_det_dis_level: hhMember?.hh_char_hh_det_dis_level,
-            hh_char_hh_det_dis_select:
-              ((hhMember?.hh_char_hh_det_dis_select as string | undefined)?.split(
-                ' ',
-              ) as Shelter_commonSpaces.Option<'hh_char_hh_det_dis_select'>[]) ?? [],
-          }),
-        })) ?? []
-      )
+    export const shelter_common_spaces_apartment_mapper = ({
+      hh_char_res_stat,
+      hh_char_hh_det_age,
+      hh_char_hh_det_gender,
+      hh_char_hh_det_dis_level,
+      hh_char_hh_det_dis_select,
+    }: Pick<
+      NonNullable<Shelter_commonSpaces.T['apartment_information']>[number],
+      | 'hh_char_res_stat'
+      | 'hh_char_hh_det_age'
+      | 'hh_char_hh_det_gender'
+      | 'hh_char_hh_det_dis_level'
+      | 'hh_char_hh_det_dis_select'
+    >): Person.Details => {
+      return {
+        age: safeAge(hh_char_hh_det_age),
+        gender: match(hh_char_hh_det_gender)
+          .cases({
+            male: Person.Gender.Male,
+            female: Person.Gender.Female,
+          })
+          .default(undefined),
+        displacement: match(hh_char_res_stat)
+          .cases({
+            idp: Person.DisplacementStatus.Idp,
+            long_res: Person.DisplacementStatus.NonDisplaced,
+            ret: Person.DisplacementStatus.Returnee,
+            ref_asy: Person.DisplacementStatus.Refugee,
+          })
+          .default(undefined),
+        disability: Disability.common({
+          hh_char_hh_det_dis_level,
+          hh_char_hh_det_dis_select:
+            ((hh_char_hh_det_dis_select as string | undefined)?.split(
+              ' ',
+            ) as Shelter_commonSpaces.Option<'hh_char_hh_det_dis_select'>[]) ?? [],
+        }),
+      }
     }
 
     export const shelter_common_spaces: PersonsMapper<Shelter_commonSpaces.T> = (row) => {
-      const hhs = row.apartment_information?.map(({hh_char_hh_det, hh_char_res_stat}) => ({
-        hh_char_hh_det,
-        hh_char_res_stat,
-      }))
-
-      return hhs?.map(shelter_common_spaces_hh).flat() ?? []
+      return row.apartment_information?.map(shelter_common_spaces_apartment_mapper) ?? []
     }
   }
 

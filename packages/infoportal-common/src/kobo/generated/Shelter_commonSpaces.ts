@@ -1,21 +1,6 @@
 export namespace Shelter_commonSpaces {
   export type Option<T extends keyof typeof options> = keyof (typeof options)[T]
   // Form id: a5LCi33Fte33grspeZFANk
-  type HhCharacter = {
-    calc_chronic_disease: string | undefined
-    calc_det_dis_level: string | undefined
-    chronic_disease: Option<'compliance_standards'> | undefined
-    explain_chronic_disease: string | undefined
-    hh_char_hh_det_age: number | undefined
-    hh_char_hh_det_gender: Option<'hh_char_hh_det_gender'> | undefined
-    hh_char_hh_det_dis_level: Option<'hh_char_hh_det_dis_level'> | undefined
-    hh_char_hh_det_dis_select: Option<'hh_char_hh_det_dis_select'>[] | undefined
-    female_hh_m18: string | undefined
-    female_hh_l18: string | undefined
-    male_hh_l18: string | undefined
-    male_hh_m18: string | undefined
-  }
-
   export interface T {
     start: string
     end: string
@@ -77,7 +62,13 @@ export namespace Shelter_commonSpaces {
           owner_number: number | undefined | undefined
           hh_char_res_stat: undefined | Option<'hh_char_res_stat'> | undefined
           ben_det_hh_size: number | undefined | undefined
-          hh_char_hh_det: HhCharacter[] | undefined
+          hh_char_hh_det: string | undefined
+          hh_char_hh_det_gender: undefined | Option<'hh_char_hh_det_gender'> | undefined
+          hh_char_hh_det_age: number | undefined | undefined
+          hh_char_hh_det_dis_select: undefined | Option<'hh_char_hh_det_dis_select'>[] | undefined
+          hh_char_hh_det_dis_level: undefined | Option<'hh_char_hh_det_dis_level'> | undefined
+          chronic_disease: undefined | Option<'compliance_standards'> | undefined
+          explain_chronic_disease: string | undefined | undefined
           female_hh_l18: string | undefined
           male_hh_l18: string | undefined
           female_hh_m18: string | undefined
@@ -237,35 +228,6 @@ export namespace Shelter_commonSpaces {
       occupied_apartments: _.occupied_apartments ? +_.occupied_apartments : undefined,
       individuals: _.individuals ? +_.individuals : undefined,
       apartment_information: _['apartment_information']?.map(extractQuestionName).map((_: any) => {
-        _['hh_char_hh_det'] = _.hh_char_hh_det?.map(
-          ({
-            male_hh_l18,
-            male_hh_m18,
-            female_hh_l18,
-            female_hh_m18,
-            chronic_disease,
-            calc_det_dis_level,
-            hh_char_hh_det_age,
-            calc_chronic_disease,
-            hh_char_hh_det_gender,
-            explain_chronic_disease,
-            hh_char_hh_det_dis_level,
-            hh_char_hh_det_dis_select,
-          }: HhCharacter) => ({
-            male_hh_l18: male_hh_l18 ? +male_hh_l18 : undefined,
-            male_hh_m18: male_hh_m18 ? +male_hh_m18 : undefined,
-            female_hh_l18: female_hh_l18 ? +female_hh_l18 : undefined,
-            female_hh_m18: female_hh_m18 ? +female_hh_m18 : undefined,
-            chronic_disease,
-            calc_det_dis_level,
-            hh_char_hh_det_age,
-            calc_chronic_disease,
-            hh_char_hh_det_gender,
-            explain_chronic_disease,
-            hh_char_hh_det_dis_level,
-            hh_char_hh_det_dis_select,
-          }),
-        )
         _['owner_number'] = _.owner_number ? +_.owner_number : undefined
         _['ben_det_hh_size'] = _.ben_det_hh_size ? +_.ben_det_hh_size : undefined
         _['hh_char_hh_det_age'] = _.hh_char_hh_det_age ? +_.hh_char_hh_det_age : undefined

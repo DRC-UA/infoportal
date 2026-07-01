@@ -77,28 +77,6 @@ export namespace Protection_pss {
       | undefined
     // gi/calc_sum_session_comp [calculate] Number of people who attended 60% of the sessions
     calc_sum_session_comp: string
-    // gi/individual_session/not_barriers_participation [note] #####Barriers to participation
-    not_barriers_participation: string
-    // gi/individual_session/not_questions_difficulties [note] **The next questions ask about difficulties you may have doing certain activities because of a health problem.**
-    not_questions_difficulties: string
-    // gi/individual_session/difficulty [select_one] Detail
-    difficulty: undefined | Option<'difficulty_usual_language'>
-    // gi/individual_session/difficulty_seeing [select_one] Do you have difficulty seeing, even if wearing glasses?
-    difficulty_seeing: undefined | Option<'difficulty_usual_language'>
-    // gi/individual_session/difficulty_hearing [select_one] Do you  have difficulty hearing, even if using a hearing aid?
-    difficulty_hearing: undefined | Option<'difficulty_usual_language'>
-    // gi/individual_session/difficulty_walking [select_one] Do you  have difficulty walking or climbing steps?
-    difficulty_walking: undefined | Option<'difficulty_usual_language'>
-    // gi/individual_session/difficulty_remembering [select_one] Do you have difficulty remembering or concentrating?
-    difficulty_remembering: undefined | Option<'difficulty_usual_language'>
-    // gi/individual_session/difficulty_washing [select_one] Do you  have difficulty (with self-care such as) washing all over or dressing?
-    difficulty_washing: undefined | Option<'difficulty_usual_language'>
-    // gi/individual_session/difficulty_usual_language [select_one] Using your usual (customary) language, do you have difficulty communicating, for example understanding or being understood by others?
-    difficulty_usual_language: undefined | Option<'difficulty_usual_language'>
-    // gi/individual_session/disability_status [select_one] Disability Status (staff only):
-    disability_status: undefined | Option<'complete_testing'>
-    // gi/individual_session/registered_person_disability [select_one] Are you registered as a person with disability with the Government of Ukraine?
-    registered_person_disability: undefined | Option<'complete_testing'>
     // gi/individual_session/date_first_consultation [date] Date of first consultation:
     date_first_consultation: Date | undefined
     // gi/individual_session/from [select_one] From
@@ -171,6 +149,26 @@ export namespace Protection_pss {
     top_type_act: string | undefined
     // gi/comments [text] Comments
     comments: string | undefined
+    // barriers_participation/not_questions_difficulties [note] **The next questions ask about difficulties you may have doing certain activities because of a health problem.**
+    not_questions_difficulties: string
+    // barriers_participation/difficulty [select_one] Detail
+    difficulty: undefined | Option<'difficulty_usual_language'>
+    // barriers_participation/difficulty_seeing [select_one] Do you have difficulty seeing, even if wearing glasses?
+    difficulty_seeing: undefined | Option<'difficulty_usual_language'>
+    // barriers_participation/difficulty_hearing [select_one] Do you  have difficulty hearing, even if using a hearing aid?
+    difficulty_hearing: undefined | Option<'difficulty_usual_language'>
+    // barriers_participation/difficulty_walking [select_one] Do you  have difficulty walking or climbing steps?
+    difficulty_walking: undefined | Option<'difficulty_usual_language'>
+    // barriers_participation/difficulty_remembering [select_one] Do you have difficulty remembering or concentrating?
+    difficulty_remembering: undefined | Option<'difficulty_usual_language'>
+    // barriers_participation/difficulty_washing [select_one] Do you  have difficulty (with self-care such as) washing all over or dressing?
+    difficulty_washing: undefined | Option<'difficulty_usual_language'>
+    // barriers_participation/difficulty_usual_language [select_one] Using your usual (customary) language, do you have difficulty communicating, for example understanding or being understood by others?
+    difficulty_usual_language: undefined | Option<'difficulty_usual_language'>
+    // barriers_participation/disability_status [select_one] Disability Status (staff only):
+    disability_status: undefined | Option<'complete_testing'>
+    // barriers_participation/registered_person_disability [select_one] Are you registered as a person with disability with the Government of Ukraine?
+    registered_person_disability: undefined | Option<'complete_testing'>
     // complete_testing [select_one] Was the test completed?
     complete_testing: undefined | Option<'complete_testing'>
     // type_testing [select_multiple] What type of test was completed?
@@ -555,6 +553,11 @@ export namespace Protection_pss {
       UMY018: `UMY018`,
       UMY019: `UMY019`,
       UMY020: `UMY020`,
+      UMY021: `UMY021`,
+      UMY022: `UMY022`,
+      UMY023: `UMY023`,
+      UMY024: `UMY024`,
+      UMY025: `UMY025`,
       HRK001: `HRK001`,
       HRK002: `HRK002`,
       HRK003: `HRK003`,
@@ -592,6 +595,16 @@ export namespace Protection_pss {
       DNK018: `DNK018`,
       DNK019: `DNK019`,
       DNK020: `DNK020`,
+      DNK021: `DNK021`,
+      DNK022: `DNK022`,
+      DNK023: `DNK023`,
+      DNK024: `DNK024`,
+      DNK025: `DNK025`,
+      DNK026: `DNK026`,
+      DNK027: `DNK027`,
+      DNK028: `DNK028`,
+      DNK029: `DNK029`,
+      DNK030: `DNK030`,
       LWO001: `LWO001`,
       LWO002: `LWO002`,
       LWO003: `LWO003`,

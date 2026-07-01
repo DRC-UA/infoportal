@@ -281,7 +281,9 @@ export namespace AiShelterMapper {
         ],
         finalTransform: async (grouped, [projectCode, oblastCode, raion, hromada, settlement, modality, status]) => {
           const disagg = AiMapper.disaggregatePersons(
-            grouped.flatMap(({apartment}) => KoboXmlMapper.Persons.shelter_common_spaces_hh(apartment) ?? []),
+            grouped.flatMap(
+              ({apartment}) => KoboXmlMapper.Persons.shelter_common_spaces_apartment_mapper(apartment) ?? [],
+            ),
           )
           const project = match(projectCode)
             .cases({

@@ -85,6 +85,14 @@ export namespace Ecrec_subsistance {
           hh_char_hh_how_idp: undefined | Option<'hh_char_hh_how_idp'> | undefined
           hh_char_hh_det_dis_select: undefined | Option<'hh_char_hh_det_dis_select'>[] | undefined
           hh_char_hh_det_dis_level: undefined | Option<'hh_char_hh_det_dis_level'> | undefined
+          not_questions_difficulties: string | undefined
+          difficulty: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_seeing: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_hearing: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_walking: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_remembering: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_washing: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_usual_language: undefined | Option<'difficulty_usual_language'> | undefined
           hh_char_hh_chronic_disease: undefined | Option<'currently_receiving_cash'> | undefined
           calc_u18: string | undefined
           calc_o60: string | undefined
@@ -621,6 +629,12 @@ export namespace Ecrec_subsistance {
       one: `Yes, some difficulty`,
       two: `Yes, a lot of difficulty`,
       fri: `Cannot do at all`,
+    },
+    difficulty_usual_language: {
+      no_difficulty: `No, no difficulty`,
+      some: `Yes, some difficulty`,
+      lot: `Yes, a lot of difficulty`,
+      cannot_all: `Cannot do at all`,
     },
     pay_det_id_type: {
       nat_pass_card: `National Passport (card)`,

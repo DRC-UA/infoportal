@@ -67,13 +67,21 @@ export namespace Protection_hhs3 {
             | undefined
             | Option<'do_you_have_a_household_member_that_has_a_lot_of_difficulty'>[]
             | undefined
-          have6_15: string | undefined
+          not_questions_difficulties: string | undefined
+          difficulty: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_seeing: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_hearing: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_walking: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_remembering: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_washing: undefined | Option<'difficulty_usual_language'> | undefined
+          difficulty_usual_language: undefined | Option<'difficulty_usual_language'> | undefined
           hh_char_wg_seeing_even_if_wearing_glasses: string | undefined
           hh_char_wg_hearing_even_if_using_a_hearing_aid: string | undefined
           hh_char_wg_walking_or_climbing_steps: string | undefined
           hh_char_wg_remembering_or_concentrating: string | undefined
           hh_char_wg_selfcare_such_as_washing_all_over_or_dressing: string | undefined
           hh_char_wg_using_your_usual_language_have_difficulty_communicating: string | undefined
+          have6_15: string | undefined
           haveBoy: string | undefined
           haveOtherSex: string | undefined
           haveGirl: string | undefined
@@ -654,6 +662,11 @@ export namespace Protection_hhs3 {
       UMY018: `UMY018`,
       UMY019: `UMY019`,
       UMY020: `UMY020`,
+      UMY021: `UMY021`,
+      UMY022: `UMY022`,
+      UMY023: `UMY023`,
+      UMY024: `UMY024`,
+      UMY025: `UMY025`,
       HRK001: `HRK001`,
       HRK002: `HRK002`,
       HRK003: `HRK003`,
@@ -765,6 +778,12 @@ export namespace Protection_hhs3 {
     have_you_filled_out_this_form_before: {
       yes: `Yes`,
       no: `No`,
+    },
+    difficulty_usual_language: {
+      no_difficulty: `No, no difficulty`,
+      some: `Yes, some difficulty`,
+      lot: `Yes, a lot of difficulty`,
+      cannot_all: `Cannot do at all`,
     },
     what_is_your_area_of_origin_oblast: {
       UA01: `Autonomous Republic of Crimea`,

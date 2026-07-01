@@ -40,6 +40,22 @@ export namespace Protection_communityMonitoring {
     informant_status: undefined | Option<'hh_char_hh_det_status'>
     // gi/key_informant_difficulty [select_multiple] Indicate if key informant has a lot of difficulty (or cannot do at all) any of the following:
     key_informant_difficulty: undefined | Option<'key_informant_difficulty'>[]
+    // gi/not_questions_difficulties [note] **The next questions ask about difficulties you may have doing certain activities because of a health problem.**
+    not_questions_difficulties: string
+    // gi/difficulty [select_one] Detail
+    difficulty: undefined | Option<'difficulty_usual_language'>
+    // gi/difficulty_seeing [select_one] Do you have difficulty seeing, even if wearing glasses?
+    difficulty_seeing: undefined | Option<'difficulty_usual_language'>
+    // gi/difficulty_hearing [select_one] Do you  have difficulty hearing, even if using a hearing aid?
+    difficulty_hearing: undefined | Option<'difficulty_usual_language'>
+    // gi/difficulty_walking [select_one] Do you  have difficulty walking or climbing steps?
+    difficulty_walking: undefined | Option<'difficulty_usual_language'>
+    // gi/difficulty_remembering [select_one] Do you have difficulty remembering or concentrating?
+    difficulty_remembering: undefined | Option<'difficulty_usual_language'>
+    // gi/difficulty_washing [select_one] Do you  have difficulty (with self-care such as) washing all over or dressing?
+    difficulty_washing: undefined | Option<'difficulty_usual_language'>
+    // gi/difficulty_usual_language [select_one] Using your usual (customary) language, do you have difficulty communicating, for example understanding or being understood by others?
+    difficulty_usual_language: undefined | Option<'difficulty_usual_language'>
     // gi/disability_status_government [select_one] Indicate if key informant has a disability status from the Government of Ukraine:
     disability_status_government: undefined | Option<'disability_status_government'>
     // gi/numb_part [integer] Number of participants
@@ -1348,6 +1364,12 @@ export namespace Protection_communityMonitoring {
       LWO010: `LWO010`,
       LWO011: `LWO011`,
       LWO012: `LWO012`,
+    },
+    difficulty_usual_language: {
+      no_difficulty: `No, no difficulty`,
+      some: `Yes, some difficulty`,
+      lot: `Yes, a lot of difficulty`,
+      cannot_all: `Cannot do at all`,
     },
     ben_det_oblast: {
       cherkaska: `Cherkaska`,

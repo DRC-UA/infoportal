@@ -317,6 +317,7 @@ export namespace Legal_individual_aid {
       viktoriia_borman: `Viktoriia Borman viktoriia.borman@drc.ngo – Lawyer UMY`,
       yuliia_ivanenko: `Yuliia Ivanenko yuliia.ivanenko@drc.ngo – Lawyer UMY`,
       vladyslav_dudchenko: `Vladyslav Dudchenko vladyslav.dudchenko@drc.ngo – Lawyer UMY`,
+      svitlana_yermolenko: `Svitlana Yermolenko svitlana.yermolenko@drc.ngo – Lawyer UMY`,
       andrii_kozhykhov: `Andrii Kozhykhov andrii.kozhykhov@drc.ngo – Lawyer HRK`,
       oleksii_lukianishyn: `Oleksii Lukianishyn oleksii.lukianishyn@drc.ngo – Lawyer HRK`,
       yevhen_dehtiarov: `Yevhen Dehtiarov yevhen.dehtiarov@drc.ngo – Lawyer BRV`,

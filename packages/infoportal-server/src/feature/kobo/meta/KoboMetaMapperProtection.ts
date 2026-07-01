@@ -530,7 +530,7 @@ export class KoboMetaMapperProtection {
           combined: AssistanceModality.Combination,
         })
         .default(undefined),
-      status: KoboMetaStatus.Committed,
+      status: KoboMetaStatus[answer.assistance_delivery_date ? 'Committed' : 'Pending'],
       lastStatusUpdate: answer.assistance_delivery_date,
     })
   }
