@@ -651,7 +651,7 @@ const en = Object.freeze({
       inAdvance: 'Were you informed in advance about the amount you would receive?',
       whichType: 'Which type of assistance have you received?',
       assistanceCorrespond: 'Did the amount received correspond to one communicated to you?',
-      isEnough: 'Is it enough for your HH whole winter season 24-25?',
+      isEnough: 'Is it enough for your HH whole winter season?',
       longCover: 'For how long will the assistance cover your heating needs?',
       access: 'Do you have access to basic facilities (electricity, water, gas)?',
       correspond: 'Cash received correspond to the amount was told',
