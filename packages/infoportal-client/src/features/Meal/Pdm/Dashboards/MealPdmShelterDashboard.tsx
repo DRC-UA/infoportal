@@ -20,6 +20,7 @@ import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {Txt} from '@/shared'
+import {useKoboTranslations} from '@/utils'
 
 const mapOblast = OblastIndex.koboOblastIndexIso
 
@@ -47,9 +48,18 @@ export const MealPdmShelterDashboard = () => {
   const ctxSchema = useKoboSchemaContext()
   const schema = ctxSchema.byName.meal_shelterPdm.get!
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isShelterPdm))
-  const langIndex = ctxSchema.langIndex
   const {m} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
+  const {translateField, translateOption} = useKoboTranslations('meal_shelterPdm')
+  const translateLabels = (option: string) =>
+    translateOption(option)?.reduce(
+      (result, {value, label}) => ({
+        ...result,
+        [value]: label,
+      }),
+      {} as Record<string, string>,
+    )
+
   const filterShape = useMemo(() => {
     return DataFilter.makeShape<PdmData<Meal_shelterPdm.T>>({
       ...commonShape,
@@ -743,6 +753,63 @@ export const MealPdmShelterDashboard = () => {
                   data={data}
                   by={(_) => _.answers.top3_priority_needs}
                   label={Meal_shelterPdm.options.top3_priority_needs}
+                  includeNullish
+                />
+              </SlidePanel>
+              <DashboardPanelTitle>July 2026 Update for Needs Assessment:</DashboardPanelTitle>
+              <SlidePanel title={translateField && translateField('part_dwelling_insulated')}>
+                <ChartBarMultipleBy
+                  data={data}
+                  by={({answers: {part_dwelling_insulated}}) => part_dwelling_insulated}
+                  label={translateLabels('part_dwelling_insulated')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('satisfied_repaired_premises')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers: {satisfied_repaired_premises}}) => satisfied_repaired_premises}
+                  label={translateLabels('satisfied_repaired_premises')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('insulation_meet_needs')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers: {insulation_meet_needs}}) => insulation_meet_needs}
+                  label={translateLabels('insulation_meet_needs')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('assistance_provided_project')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers: {assistance_provided_project}}) => assistance_provided_project}
+                  label={translateLabels('assistance_provided_project')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('shelter_culturally_acceptable')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers: {shelter_culturally_acceptable}}) => shelter_culturally_acceptable}
+                  label={translateLabels('shelter_culturally_acceptable')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('repairs_done_accordance')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({answers: {repairs_done_accordance}}) => repairs_done_accordance}
+                  label={translateLabels('repairs_done_accordance')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('top3_priority_needs')}>
+                <ChartBarMultipleBy
+                  data={data}
+                  by={({answers: {top3_priority_needs}}) => top3_priority_needs}
+                  label={translateLabels('top3_priority_needs')}
                   includeNullish
                 />
               </SlidePanel>
