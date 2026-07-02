@@ -1,16 +1,18 @@
+import {useEffect, useMemo, useState} from 'react'
+import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
+import {Divider, Grid, Icon, useTheme} from '@mui/material'
+import {Legend} from 'recharts'
+
+import {OblastIndex, Period, PeriodHelper, Protection_coc} from 'infoportal-common'
+
 import {Page} from '@/shared/Page'
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher} from '@/shared/hook/useFetcher'
-import React, {useEffect, useMemo, useState} from 'react'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {OblastIndex, Period, PeriodHelper, Protection_coc} from 'infoportal-common'
-import {fnSwitch, Obj, seq} from '@axanc/ts-utils'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Panel, PanelBody, PanelTitle} from '@/shared/Panel'
-import {Divider, Grid, Icon, useTheme} from '@mui/material'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {snapshotAlternateColor} from '@/features/Snapshot/SnapshotProtMonitoEcho/SnapshotProtMonitoEcho'
-import {Legend} from 'recharts'
 import {commonLegendProps} from '@/shared/charts/ChartBarStacked'
 import {ChartPie} from '@/shared/charts/ChartPie'
 import {useI18n} from '@/core/i18n'
@@ -33,8 +35,8 @@ export const ProtectionDashboardPsea = () => {
 
   const [optionFilter, setOptionFilters] = useState<DataFilter.InferShape<typeof filterShape>>({})
   const [period, setPeriod] = useState<Partial<Period>>({})
-
   const fetcherCoc = useFetcher(api.kobo.typedAnswers.search.protection_coc)
+
   useEffect(() => {
     fetcherCoc.fetch()
   }, [])
