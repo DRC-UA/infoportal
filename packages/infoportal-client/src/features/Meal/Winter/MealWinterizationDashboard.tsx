@@ -505,6 +505,14 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
+              <SlidePanel title={translateField && translateField('enough_hh_winter_season')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({enough_hh_winter_season}) => enough_hh_winter_season}
+                  label={translateLabels('enough_hh_winter_season')}
+                  includeNullish
+                />
+              </SlidePanel>
               <SlidePanel title={translateField && translateField('enough_hh_winter_season_no')}>
                 <ChartBarSingleBy
                   data={data}
@@ -575,15 +583,6 @@ export const MealWinterizationDashboard = () => {
                   data={data}
                   by={({receive_shelter_assistance_no}) => receive_shelter_assistance_no}
                   label={translateLabels('receive_shelter_assistance_no')}
-                  includeNullish
-                />
-              </SlidePanel>
-              <SlidePanel title={translateField && translateField('needs_community_currently')}>
-                <ChartBarMultipleBy
-                  data={data}
-                  by={({needs_community_currently}) => needs_community_currently}
-                  label={translateLabels('needs_community_currently')}
-                  limitChartHeight={480}
                   includeNullish
                 />
               </SlidePanel>
