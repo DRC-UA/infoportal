@@ -209,6 +209,15 @@ export const MealWinterizationDashboard = () => {
                     label={Meal_winterizationPdm.options.needs_community_currently}
                   />
                 </SlidePanel>
+                <SlidePanel title={translateField && translateField('needs_community_currently_other')}>
+                  <ChartBarSingleBy
+                    data={data}
+                    by={({needs_community_currently_other}) => needs_community_currently_other}
+                    label={translateLabels('needs_community_currently_other')}
+                    limitChartHeight={480}
+                    includeNullish
+                  />
+                </SlidePanel>
               </SlidePanel>
             </Div>
             <Div column sx={{maxHeight: '33%'}}>
@@ -578,15 +587,6 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('needs_community_currently_other')}>
-                <ChartBarSingleBy
-                  data={data}
-                  by={({needs_community_currently_other}) => needs_community_currently_other}
-                  label={translateLabels('needs_community_currently_other')}
-                  limitChartHeight={480}
-                  includeNullish
-                />
-              </SlidePanel>
               <SlidePanel title={translateField && translateField('community_purchase_fuel')}>
                 <ChartBarSingleBy
                   data={data}
@@ -603,20 +603,20 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('needs_community_currently')}>
-                <ChartBarMultipleBy
+              <SlidePanel title={translateField && translateField('multiple_forms_assistance')}>
+                <ChartBarSingleBy
                   data={data}
-                  by={({needs_community_currently}) => needs_community_currently}
-                  label={translateLabels('needs_community_currently')}
+                  by={({multiple_forms_assistance}) => multiple_forms_assistance}
+                  label={translateLabels('multiple_forms_assistance')}
                   limitChartHeight={480}
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('needs_community_currently_other')}>
+              <SlidePanel title={translateField && translateField('multiple_forms_assistance_why')}>
                 <ChartBarSingleBy
                   data={data}
-                  by={({needs_community_currently_other}) => needs_community_currently_other}
-                  label={translateLabels('needs_community_currently_other')}
+                  by={({multiple_forms_assistance_why}) => multiple_forms_assistance_why}
+                  label={translateLabels('multiple_forms_assistance_why')}
                   limitChartHeight={480}
                   includeNullish
                 />
