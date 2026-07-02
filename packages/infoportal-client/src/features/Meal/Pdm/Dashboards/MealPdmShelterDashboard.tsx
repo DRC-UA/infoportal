@@ -48,7 +48,6 @@ export const MealPdmShelterDashboard = () => {
   const ctxSchema = useKoboSchemaContext()
   const schema = ctxSchema.byName.meal_shelterPdm.get!
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isShelterPdm))
-  const langIndex = ctxSchema.langIndex
   const {m} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
   const {translateField, translateOption} = useKoboTranslations('meal_shelterPdm')

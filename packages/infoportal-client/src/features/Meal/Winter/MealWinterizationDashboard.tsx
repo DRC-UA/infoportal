@@ -1,5 +1,10 @@
-import React, {useMemo, useState} from 'react'
+import {useMemo, useState} from 'react'
 import {map, seq, Seq} from '@axanc/ts-utils'
+import {Box, Typography} from '@mui/material'
+
+import {KoboSubmissionFlat, KoboXmlMapper, Meal_winterizationPdm, OblastIndex} from 'infoportal-common'
+
+import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
@@ -8,16 +13,14 @@ import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
 import {ChartPieWidgetBy} from '@/shared/charts/ChartPieWidgetBy'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
-import {KoboSubmissionFlat, KoboXmlMapper, Meal_winterizationPdm, OblastIndex, PeriodHelper} from 'infoportal-common'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {Page} from '@/shared/Page'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {useMealWinterizationContext} from '@/features/Meal/Winter/MealWinterizationContext'
-import {appConfig} from '@/conf/AppConfig'
 import {Panel, PanelBody} from '@/shared/Panel'
-import {AgeGroupTable, Lazy} from '@/shared'
-import {Box} from '@mui/material'
+import {AgeGroupTable, Lazy, Txt} from '@/shared'
+import {useKoboTranslations} from '@/utils'
 
 export interface DashboardPageProps {
   filters: Record<string, string[]>
@@ -32,6 +35,15 @@ export const MealWinterizationDashboard = () => {
   const schema = ctxSchema.byName.meal_winterizationPdm.get!
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
+  const {translateField, translateOption} = useKoboTranslations('meal_winterizationPdm', {uk: 1, en: 0})
+  const translateLabels = (option: string) =>
+    translateOption(option)?.reduce(
+      (result, {value, label}) => ({
+        ...result,
+        [value]: label,
+      }),
+      {} as Record<string, string>,
+    )
 
   const filterShape = useMemo(() => {
     return DataFilter.makeShape<KoboSubmissionFlat<Meal_winterizationPdm.T>>({
@@ -278,8 +290,6 @@ export const MealWinterizationDashboard = () => {
                   label={Meal_winterizationPdm.options.any_member_household}
                 />
               </SlidePanel>
-            </Div>
-            <Div column>
               <SlidePanel title={m.mealMonitoringPdm.feedback}>
                 <ChartPieWidgetBy
                   dense
@@ -390,6 +400,226 @@ export const MealWinterizationDashboard = () => {
                     label={Meal_winterizationPdm.options.were_informed_timeframe}
                   />
                 </SlidePanel>
+              </SlidePanel>
+            </Div>
+            <Div column>
+              <Typography
+                sx={{
+                  fontSize: '1.75rem',
+                  fontWeight: 'bold',
+                  lineHeight: 1.3,
+                  color: 'text.primary',
+                  mt: 0.5,
+                  mb: 1,
+                }}
+              >
+                July 2026 Update for Needs Assessment:
+              </Typography>
+              <SlidePanel title={translateField && translateField('extent_cash_correspond')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({extent_cash_correspond}) => extent_cash_correspond}
+                  label={translateLabels('extent_cash_correspond')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('extent_cash_correspond_bad')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({extent_cash_correspond_bad}) => extent_cash_correspond_bad}
+                  label={translateLabels('extent_cash_correspond_bad')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('level_heating_improved')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({level_heating_improved}) => level_heating_improved}
+                  label={translateLabels('level_heating_improved')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('level_heating_improved_dec_other')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({level_heating_improved_dec_other}) => level_heating_improved_dec_other}
+                  label={translateLabels('level_heating_improved_dec_other')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('helped_thermal_comfort')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({helped_thermal_comfort}) => helped_thermal_comfort}
+                  label={translateLabels('helped_thermal_comfort')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('helped_thermal_comfort_no')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({helped_thermal_comfort_no}) => helped_thermal_comfort_no}
+                  label={translateLabels('helped_thermal_comfort_no')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('type_fuel_most')}>
+                <ChartBarMultipleBy
+                  data={data}
+                  by={({type_fuel_most}) => type_fuel_most}
+                  label={translateLabels('type_fuel_most')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('type_fuel_most_other')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({type_fuel_most_other}) => type_fuel_most_other}
+                  label={translateLabels('type_fuel_most_other')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('cash_modality_inkind')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({cash_modality_inkind}) => cash_modality_inkind}
+                  label={translateLabels('cash_modality_inkind')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('cash_modality_inkind_yes')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({cash_modality_inkind_yes}) => cash_modality_inkind_yes}
+                  label={translateLabels('cash_modality_inkind_yes')}
+                  limitChartHeight={480}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('enough_hh_winter_season_no')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({enough_hh_winter_season_no}) => enough_hh_winter_season_no?.toString()}
+                  label={translateLabels('enough_hh_winter_season_no')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('enough_hh_winter_season_cash_no')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({enough_hh_winter_season_cash_no}) => enough_hh_winter_season_cash_no?.toString()}
+                  label={translateLabels('enough_hh_winter_season_cash_no')}
+                  limitChartHeight={480}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('types_fuels_available')}>
+                <ChartBarMultipleBy
+                  data={data}
+                  by={({types_fuels_available}) => types_fuels_available}
+                  label={translateLabels('types_fuels_available')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('satisfied_assistance_provided')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({satisfied_assistance_provided}) => satisfied_assistance_provided}
+                  label={translateLabels('satisfied_assistance_provided')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('satisfied_timing_assistance')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({satisfied_timing_assistance}) => satisfied_timing_assistance}
+                  label={translateLabels('satisfied_timing_assistance')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('assistance_timely')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({assistance_timely}) => assistance_timely}
+                  label={translateLabels('assistance_timely')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('assistance_dwelling_sufficiently')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({assistance_dwelling_sufficiently}) => assistance_dwelling_sufficiently}
+                  label={translateLabels('assistance_dwelling_sufficiently')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('receive_shelter_assistance')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({receive_shelter_assistance}) => receive_shelter_assistance}
+                  label={translateLabels('receive_shelter_assistance')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('receive_shelter_assistance_no')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({receive_shelter_assistance_no}) => receive_shelter_assistance_no}
+                  label={translateLabels('receive_shelter_assistance_no')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('needs_community_currently')}>
+                <ChartBarMultipleBy
+                  data={data}
+                  by={({needs_community_currently}) => needs_community_currently}
+                  label={translateLabels('needs_community_currently')}
+                  limitChartHeight={480}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('needs_community_currently_other')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({needs_community_currently_other}) => needs_community_currently_other}
+                  label={translateLabels('needs_community_currently_other')}
+                  limitChartHeight={480}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('community_purchase_fuel')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({community_purchase_fuel}) => community_purchase_fuel}
+                  label={translateLabels('community_purchase_fuel')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('community_purchase_fuel_other')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({community_purchase_fuel_other}) => community_purchase_fuel_other}
+                  label={translateLabels('community_purchase_fuel_other')}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('needs_community_currently')}>
+                <ChartBarMultipleBy
+                  data={data}
+                  by={({needs_community_currently}) => needs_community_currently}
+                  label={translateLabels('needs_community_currently')}
+                  limitChartHeight={480}
+                  includeNullish
+                />
+              </SlidePanel>
+              <SlidePanel title={translateField && translateField('needs_community_currently_other')}>
+                <ChartBarSingleBy
+                  data={data}
+                  by={({needs_community_currently_other}) => needs_community_currently_other}
+                  label={translateLabels('needs_community_currently_other')}
+                  limitChartHeight={480}
+                  includeNullish
+                />
               </SlidePanel>
             </Div>
           </Div>
