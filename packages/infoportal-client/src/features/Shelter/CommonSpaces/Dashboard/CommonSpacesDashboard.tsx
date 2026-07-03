@@ -71,9 +71,8 @@ const _CommonSpacesDashboardBody: React.FC = () => {
   const data = ctx.dataFiltered
 
   const persons = useMemo(() => {
-    const rows = ctx.dataFiltered ?? []
-    return rows.flatMap((row) => KoboXmlMapper.Persons.shelter_common_spaces(row) ?? [])
-  }, [ctx.dataFiltered])
+    return data.map(KoboXmlMapper.Persons.shelter_common_spaces).flat()
+  }, [data])
 
   const oblastMapData = useMemo(() => {
     const gb = seq(data).groupBy((_) => OblastIndex.byKoboName(_.ben_det_oblast)?.iso!)
