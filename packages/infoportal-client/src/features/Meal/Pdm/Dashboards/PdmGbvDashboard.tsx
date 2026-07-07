@@ -1,20 +1,20 @@
+import {useMemo, useState} from 'react'
+import {map, seq} from '@axanc/ts-utils'
+
 import {OblastIndex, Protection_gbvPdm} from 'infoportal-common'
+
 import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {useI18n} from '@/core/i18n'
-import React, {useMemo, useState} from 'react'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {map, seq} from '@axanc/ts-utils'
 import {DebouncedInput, Page} from '@/shared'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-
-const mapOblast = OblastIndex.koboOblastIndexIso
 
 const isGbvPdm = (_: PdmData<PdmForm>): _ is PdmData<Protection_gbvPdm.T> => {
   return _.type === 'Gbv'
@@ -23,9 +23,7 @@ const isGbvPdm = (_: PdmData<PdmForm>): _ is PdmData<Protection_gbvPdm.T> => {
 export const PdmGbvDashboard = () => {
   const ctx = useMealPdmContext()
   const ctxSchema = useKoboSchemaContext()
-  const schema = ctxSchema.byName.protection_gbvPdm.get!
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isGbvPdm))
-  const langIndex = ctxSchema.langIndex
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
   const filterShape = useMemo(() => {

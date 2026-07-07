@@ -1,12 +1,13 @@
+import {useMemo, useState} from 'react'
+import {map, seq} from '@axanc/ts-utils'
+
 import {Gbv_girl_shine} from 'infoportal-common'
+
 import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {useI18n} from '@/core/i18n'
-import React, {useMemo, useState} from 'react'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {map, seq} from '@axanc/ts-utils'
 import {AgeGroupTable, DebouncedInput, Page} from '@/shared'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
@@ -19,14 +20,28 @@ const isGirlPdm = (_: PdmData<PdmForm>): _ is PdmData<Gbv_girl_shine.T> => {
 
 export const PdmGirlShineDashboard = () => {
   const ctx = useMealPdmContext()
-  const ctxSchema = useKoboSchemaContext()
-  const schema = ctxSchema.byName.gbv_girlShine.get!
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isGirlPdm))
-  const langIndex = ctxSchema.langIndex
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
   const filterShape = useMemo(() => {
-    return DataFilter.makeShape(commonShape)
+    return DataFilter.makeShape({
+      ...commonShape,
+      topic: {
+        icon: 'topic',
+        label: m.topic,
+        getValue: ({topic}) => topic,
+        getOptions: () => [
+          {
+            value: 'women_rise',
+            label: 'Women Rise',
+          },
+          {
+            value: 'girl_shine',
+            label: 'Girl Shine',
+          },
+        ],
+      },
+    })
   }, [commonShape])
 
   const data = useMemo(() => {

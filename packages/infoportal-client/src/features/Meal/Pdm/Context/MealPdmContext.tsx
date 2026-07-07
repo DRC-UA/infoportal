@@ -486,8 +486,13 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
             .cases({
               'UKR-000423': DrcProject['UKR-000423 ECHO4'],
               ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+              ukr000388_bha: DrcProject['UKR-000388 BHA'],
+              ukr000457_dmfa: DrcProject['UKR-000457 DMFA'],
+              ukr000461_uhf: DrcProject['UKR-000461 UHF'],
+              ukr000462_echo: DrcProject['UKR-000462 ECHO'],
             } as unknown as Record<NonNullable<Gbv_girl_shine.T['project_code']>, DrcProject>)
-            .default(() => undefined),
+            .default(DrcProjectHelper.searchByCode(record.project_code)),
+          topic: record.topic,
           persons: KoboXmlMapper.Persons.gbv_girl_shine(record),
           answers: record,
         })),
