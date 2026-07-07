@@ -1,21 +1,21 @@
+import {useMemo, useState} from 'react'
+import {map, seq} from '@axanc/ts-utils'
+import {Box, Typography} from '@mui/material'
+
 import {Awareness_raising_feedback, OblastIndex} from 'infoportal-common'
+
+import {useI18n} from '@/core/i18n'
 import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
-import {useI18n} from '@/core/i18n'
-import React, {useMemo, useState} from 'react'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {map, seq} from '@axanc/ts-utils'
 import {DebouncedInput, Page} from '@/shared'
-import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
-import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {Panel, PanelBody} from '@/shared/Panel'
-import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
-import {Box, Typography} from '@mui/material'
-
-const mapOblast = OblastIndex.koboOblastIndexIso
+import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
+import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
+import {Panel, PanelBody} from '@/shared/Panel'
+import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 const isAwarenessPdm = (_: PdmData<PdmForm>): _ is PdmData<Awareness_raising_feedback.T> => {
   return _.type === 'Awareness'
@@ -44,7 +44,6 @@ export const PdmAwarenessDashboard = () => {
   const ctxSchema = useKoboSchemaContext()
   const schema = ctxSchema.byName.awareness_raising_feedback.get!
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isAwarenessPdm))
-  const langIndex = ctxSchema.langIndex
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
   const filterShape = useMemo(() => {
