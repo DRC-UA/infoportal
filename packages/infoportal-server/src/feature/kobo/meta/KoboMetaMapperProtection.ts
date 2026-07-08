@@ -40,26 +40,6 @@ export class KoboMetaMapperProtection {
     if (answer.pmt_npc !== 'no') return // select non-PMT KII (NPC) only
 
     const persons = KoboXmlMapper.Persons.protection_communityMonitoring(answer)
-    if (answer.informant_gender || answer.informant_age) {
-      persons.push({
-        age: answer.informant_age,
-        gender: match(answer.informant_gender)
-          .cases({
-            female: Gender.Female,
-            male: Gender.Male,
-            other: Gender.Other,
-            unspecified: undefined,
-          })
-          .default(() => undefined),
-        displacement: match(answer.informant_status)
-          .cases({
-            idp: Person.DisplacementStatus.Idp,
-            'non-displaced': Person.DisplacementStatus.NonDisplaced,
-            returnee: Person.DisplacementStatus.Returnee,
-          })
-          .default(undefined),
-      })
-    }
 
     return {
       office: match(answer.staff_to_insert_their_DRC_office)
