@@ -456,7 +456,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000423: DrcProject['UKR-000423 ECHO4'],
               na: DrcProject['None'],
             })
-            .default(() => undefined),
+            .default(DrcProjectHelper.search(record.project)),
           answers: record,
         })),
       ),
