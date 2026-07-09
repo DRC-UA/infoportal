@@ -41,7 +41,6 @@ export const CashMpcaDashboard = () => {
       }),
       {} as Record<string, string>,
     )
-  const labelOptions = {most_important_things: 'important_helped_household'}
 
   const cashOnly: Seq<CashPdmData<Meal_cashPdm.T>> = useMemo(
     () => seq(ctx.fetcherAnswers.get).filter(({source}) => source === 'pdm') as Seq<CashPdmData<Meal_cashPdm.T>>,
