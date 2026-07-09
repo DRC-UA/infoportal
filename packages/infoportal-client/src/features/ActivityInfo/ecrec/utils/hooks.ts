@@ -12,6 +12,7 @@ import {
   Ecrec_subsistance,
   Period,
   IKoboMeta,
+  DrcProgram,
 } from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -37,6 +38,7 @@ const useEcrecData = () => {
     async () =>
       await api.koboMeta
         .search({
+          activities: [DrcProgram.SectoralCashForAgriculture, DrcProgram.SectoralCashMixed],
           sectors: [DrcSector.Livelihoods],
           status: [KoboMetaStatus.Committed],
           ...period,
