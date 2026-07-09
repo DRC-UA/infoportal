@@ -1,14 +1,17 @@
 import {useMemo} from 'react'
 import {seq, Seq} from '@axanc/ts-utils'
 
-import {Meal_cashPdm} from 'infoportal-common'
+import {Meal_cashPdm, Bn_pam} from 'infoportal-common'
 
 import {CashPdmData, CashPdmForm} from '@/features/Meal/Cash/Context/CashContext'
 import {useI18n} from '@/core/i18n'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {useKoboTranslations} from '@/utils'
 
-export const useCashFilter = (data: Seq<CashPdmData<CashPdmForm>> = seq()) => {
+export const useCashFilter = (data: Seq<CashPdmData<CashPdmForm>> = seq(), {isBn = false}: {isBn?: boolean} = {}) => {
   const {m} = useI18n()
+  const {translateField} = useKoboTranslations('bn_pam', {en: 0, uk: 1})
+
   const shape = useMemo(
     () =>
       DataFilter.makeShape<CashPdmData<CashPdmForm>>({
@@ -80,6 +83,14 @@ export const useCashFilter = (data: Seq<CashPdmData<CashPdmForm>> = seq()) => {
             (Array.isArray((_.answers as any).pdmtype) ? (_.answers as any).pdmtype[0] : (_.answers as any).pdmtype),
           getOptions: () => DataFilter.buildOptionsFromObject(Meal_cashPdm.options.pdmtype),
         },
+        ...(isBn && {
+          assistanceType: {
+            icon: 'category',
+            label: translateField ? translateField('type_bn') : '',
+            getValue: ({answers}) => (answers as Bn_pam.T).type_bn,
+            getOptions: () => DataFilter.buildOptionsFromObject(Bn_pam.options.type_bn),
+          },
+        }),
         received: {
           icon: 'check_circle',
           label: m.mealMonitoringPdm.received,
@@ -87,7 +98,7 @@ export const useCashFilter = (data: Seq<CashPdmData<CashPdmForm>> = seq()) => {
           getOptions: () => DataFilter.buildOptionsFromObject(Meal_cashPdm.options.any_member_household),
         },
       }),
-    [data, m],
+    [data, m, translateField],
   )
 
   return {shape}

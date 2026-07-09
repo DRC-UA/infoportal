@@ -1,9 +1,13 @@
-import {CashPdmData} from '@/features/Meal/Cash/Context/CashContext'
-import {Meal_cashPdm, Bn_pam, KoboSubmissionFlat, OblastIndex} from 'infoportal-common'
-import {normalizeBnPamToMealPdmAnswers} from './normalizeBnPamToMealPdm'
-import {MapFields} from './mapFields'
+import {match} from '@axanc/ts-utils'
 
-export const mapBnPamToCashPdmData = (rec: KoboSubmissionFlat<Bn_pam.T>): CashPdmData<Meal_cashPdm.T> => {
+import {CashPdmData} from '@/features/Meal/Cash/Context/CashContext'
+
+import {Meal_cashPdm, Bn_pam, KoboSubmissionFlat, OblastIndex, KoboXmlMapper} from 'infoportal-common'
+
+import {MapFields} from './mapFields'
+import {normalizeBnPamToMealPdmAnswers} from './normalizeBnPamToMealPdm'
+
+export const mapBnPamToCashPdmData = (rec: KoboSubmissionFlat<Bn_pam.T>): CashPdmData<Bn_pam.T> => {
   const mealCore = normalizeBnPamToMealPdmAnswers(rec)
   const mealAnswers = MapFields.attachMeta(rec, mealCore)
 
@@ -21,8 +25,7 @@ export const mapBnPamToCashPdmData = (rec: KoboSubmissionFlat<Bn_pam.T>): CashPd
     pdmType: mealAnswers.pdmtype?.[0],
     received: mealAnswers.did_receive_cash,
     activity: undefined,
-    persons: undefined,
-
-    answers: mealAnswers,
+    persons: KoboXmlMapper.Persons.bn_pam(rec),
+    answers: rec,
   }
 }

@@ -1,6 +1,8 @@
 import {Meal_cashPdm, Bn_pam} from 'infoportal-common'
-import {pick, yn} from './utils'
+
 import {MapFields} from '@/features/Meal/Cash/Mappers/mapFields'
+
+import {pick, yn} from './utils'
 
 const manualAliases: Partial<Record<keyof typeof Meal_cashPdm.options, Record<string, string>>> = {
   satisfied_process: {

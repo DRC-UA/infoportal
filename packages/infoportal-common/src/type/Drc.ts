@@ -379,6 +379,7 @@ export enum DrcProject {
   'UKR-000441 UHF10' = 'UKR-000441 UHF10',
   'UKR-000441 UHF11' = 'UKR-000441 UHF11',
   'UKR-000457 DMFA' = 'UKR-000457 DMFA',
+  'UKR-000459 DANIDA' = 'UKR-000459 DANIDA',
   'UKR-000461 UHF' = 'UKR-000461 UHF',
   'UKR-000462 ECHO' = 'UKR-000462 ECHO',
   // extra options out of sorted list:
@@ -463,6 +464,7 @@ export class DrcProjectHelper {
     'UKR-000441 UHF10': DrcDonor.UHF,
     'UKR-000441 UHF11': DrcDonor.UHF,
     'UKR-000457 DMFA': DrcDonor.DMFA,
+    'UKR-000459 DANIDA': DrcDonor.DANI,
     'UKR-000461 UHF': DrcDonor.UHF,
     'UKR-000462 ECHO': DrcDonor.ECHO,
     // extra options out of sorted list:
