@@ -351,7 +351,7 @@ export class KoboMetaMapperProtection {
         ukr000461_uhf: DrcProject['UKR-000461 UHF'],
         ukr000462_echo: DrcProject['UKR-000462 ECHO'],
       })
-      .default(() => DrcProjectHelper.search(answer.project))
+      .default(DrcProjectHelper.search(answer.project))
 
     return {
       office: match(answer.staff_to_insert_their_DRC_office)
@@ -480,7 +480,10 @@ export class KoboMetaMapperProtection {
         ukr000461_uhf: [DrcProject['UKR-000461 UHF']],
         ukr000462_echo: [DrcProject['UKR-000462 ECHO']],
       })
-      .default(undefined)
+      .default(() => {
+        const foundProject = DrcProjectHelper.search(Protection_ipaTracker.options.project[answer.project!])
+        return foundProject ? [foundProject] : undefined
+      })
 
     return KoboMetaMapper.make({
       office: match(answer.staff_to_insert_their_DRC_office)
