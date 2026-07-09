@@ -8,11 +8,12 @@ import {
   type SetStateAction,
   type ReactNode,
 } from 'react'
-import {match, seq, Seq} from '@axanc/ts-utils'
+import {match, seq, type Seq} from '@axanc/ts-utils'
 
 import {
   DrcOffice,
   DrcProject,
+  DrcProjectHelper,
   Ecrec_cashRegistration,
   KoboIndex,
   KoboSubmissionFlat,
@@ -100,7 +101,7 @@ export const CashPdmProvider: React.FC<{children: ReactNode}> = ({children}) => 
       oblast: record.ben_det_oblast ? OblastIndex.byKoboName(record.ben_det_oblast)?.name : undefined,
       raion: record.ben_det_raion ?? undefined,
       hromada: record.ben_det_hromada ?? undefined,
-      project: match(record.donor!)
+      project: match(record.donor)
         .cases({
           ukr000270_pofu: DrcProject['UKR-000270 Pooled Funds'],
           ukr000298_novo: DrcProject['UKR-000298 Novo-Nordisk'],
@@ -122,7 +123,7 @@ export const CashPdmProvider: React.FC<{children: ReactNode}> = ({children}) => 
           ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
           other: DrcProject['Other'],
         })
-        .default(() => undefined),
+        .default(DrcProjectHelper.searchByCode(record.donor)),
       office: match(record.office!)
         .cases({
           dnipro: DrcOffice.Dnipro,
@@ -198,7 +199,7 @@ export const CashPdmProvider: React.FC<{children: ReactNode}> = ({children}) => 
 
   useEffect(() => {
     fetcherAnswers.fetch({force: true, clean: false})
-  }, [periodFilter])
+  }, [])
 
   const selectByActivities = (codes: CashActivityCode[]) =>
     seq(fetcherAnswers.get)

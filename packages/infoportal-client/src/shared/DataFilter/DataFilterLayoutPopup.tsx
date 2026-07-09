@@ -72,7 +72,18 @@ export const DataFilterLayoutPopup = ({
             // maxHeight: '50vh',
           }}
         >
-          <Box sx={{mb: 1}}>{before}</Box>
+          <Box
+            sx={{
+              marginLeft: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'stretch',
+              gap: 2,
+              mb: 2,
+            }}
+          >
+            {before}
+          </Box>
           {Obj.entries(shapes).map(([name, shape]) => (
             <Box key={name} sx={{display: 'flex', alignItems: 'center', mb: 2}}>
               <Icon color="disabled" sx={{minWidth: 22}}>

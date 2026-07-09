@@ -107,6 +107,7 @@ export const DataFilterLayout = ({
           display: 'flex',
           alignItems: 'center',
           mt: 1,
+          ...slotProps?.controlsBox?.sx,
         }}
         {...slotProps?.controlsBox}
       >
