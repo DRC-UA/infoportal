@@ -45,7 +45,8 @@ const cashMapperMaker =
     const flatMappedData = data.flatMap(({id, formId, ...row}) => {
       const persons = KoboXmlMapper.Persons.bn_rapidResponse2(row)
 
-      return persons.map(({age, gender, displacement, disability}) => {
+      // ignore HH member displacement status:
+      return persons.map(({age, gender, displacement: _displacement, disability}) => {
         const inFirstQuarter = isWithinInterval(row.tags?.lastStatusUpdate!, {
           start: new Date('2026-01-01'),
           end: new Date('2026-03-31'),
@@ -60,11 +61,12 @@ const cashMapperMaker =
           } as const)
           .default('PLHUKR26/SP1')
 
-        const populationGroup = match(displacement)
+        const displacement = match(row.leave_regular_place)
           .cases({
-            [Person.DisplacementStatus.Idp]: Person.DisplacementStatus.Idp,
+            yes: Person.DisplacementStatus.Idp,
+            no: Person.DisplacementStatus.NonDisplaced,
           })
-          .default(Person.DisplacementStatus.NonDisplaced)
+          .default(undefined)
 
         return {
           formId,
@@ -86,8 +88,7 @@ const cashMapperMaker =
           settlement: row.ben_det_settlement,
           ageGender: meta2AiAgeGenderGroups(age, gender!),
           disability,
-          populationGroup,
-          displacement: populationGroup, // for better labelling only
+          displacement,
           payment,
         }
       })
@@ -104,7 +105,7 @@ const cashMapperMaker =
           {by: ({raion}) => raion!},
           {by: ({hromada}) => hromada!},
           {by: ({settlement}) => settlement?.toUpperCase()!},
-          {by: ({populationGroup}) => populationGroup!},
+          {by: ({displacement}) => displacement!},
           {by: ({ageGender}) => ageGender!},
           {by: ({disability}) => (disability && Boolean(disability[0]) ? 1 : 0)},
         ],
@@ -117,7 +118,7 @@ const cashMapperMaker =
             raion,
             hromada,
             settlement,
-            populationGroup,
+            displacement,
             ageGender,
             disability,
           ] = groups as [
@@ -146,7 +147,7 @@ const cashMapperMaker =
               hromada,
               settlement: settlementIso,
             }),
-            'Population Group': aiPopulationGroupCode[populationGroup as 'Idp' | 'NonDisplaced'],
+            'Population Group': aiPopulationGroupCode[displacement as 'Idp' | 'NonDisplaced'],
             'Age & Sex': ageSexGroup2AiCodeMapper(ageGender),
             'Payment Frequency': paymentFrequency2AiCodeMapper('Lump sum - ONE'),
             ...(disability === '1' && ({Disability: 'DSB'} as const)),
