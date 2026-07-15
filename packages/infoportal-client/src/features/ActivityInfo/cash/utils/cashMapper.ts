@@ -158,7 +158,7 @@ const cashMapperMaker =
                 records.map(({payment}) => payment).reduce((total, current) => total + current, 0) * uah2usd(period)
               ).toFixed(2),
             ),
-            'Number of Months (Manual)': 3,
+            'Number of Months (Manual)': indicator === 'CLCWG/CA1/IN1' ? 6 : 3,
           } as const
 
           const requestBody = buildRequest(activity, recordId)
