@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react'
+import {useEffect, useMemo, useState} from 'react'
 import {seq, type Seq} from '@axanc/ts-utils'
 import {Box, Divider, TextField, Typography} from '@mui/material'
 import {isWithinInterval, isAfter, isBefore} from 'date-fns'
@@ -6,12 +6,14 @@ import {isWithinInterval, isAfter, isBefore} from 'date-fns'
 import {Bn_pam, Meal_cashPdm, OblastIndex} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
+import {useAppSettings} from '@/core/context/ConfigContext'
 import {CashPdmData, useCashPdm} from '@/features/Meal/Cash/Context/CashContext'
 import {useCashFilter} from '@/features/Meal/Cash/Context/useCashFilter'
 import {AgeGroupTable, DebouncedInput, Page} from '@/shared'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {useFetcher} from '@/shared/hook/useFetcher'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Div, SlidePanel} from '@/shared/PdfLayout/PdfSlide'
@@ -25,6 +27,8 @@ import {Code} from './styled-components'
 export const CashMpcaDashboard = () => {
   const ctx = useCashPdm()
   const {shape} = useCashFilter(ctx.fetcherAnswers.get, {isBn: true})
+  const {api} = useAppSettings()
+  const rrmFetcher = useFetcher(api.kobo.typedAnswers.search.bn_rapidResponse2)
   const [filters, setFilters] = useState<Record<string, string[] | undefined>>({})
   const [search, setSearch] = useState<string>('')
   const {m} = useI18n()
@@ -105,6 +109,90 @@ export const CashMpcaDashboard = () => {
 
     return DataFilter.filterData(rows, shape, filters) as Seq<CashPdmData<Meal_cashPdm.T>>
   }, [cashOnly, shape, filters, search, ctx.periodFilter, interviewPeriodFilter])
+
+  useEffect(() => {
+    rrmFetcher.fetch()
+  }, [])
+
+  const rrm2RelatedRecords = useMemo(() => {
+    const uniqueNumbersSet = new Set(
+      data
+        .map(({answers: {unique_number}}) => unique_number)
+        .filter(Boolean)
+        .map(String),
+    )
+    const rrmKoboIds = new Set((rrmFetcher.get?.data ?? []).map(({id}) => id))
+    const uniqueIdSet = uniqueNumbersSet.intersection(rrmKoboIds)
+
+    return {
+      before: (rrmFetcher.get?.data ?? [])
+        .filter(({id}) => uniqueIdSet.has(id))
+        .map(
+          ({
+            lcs_spent_savings,
+            lcs_forrowed_food,
+            lcs_reduced_utilities,
+            lcs_reduce_education_expenditures,
+            lcs_sell_productive_assets,
+            lcs_reduce_health_expenditures,
+            lcs_sell_hh_assets,
+            lcs_sell_house,
+            lcs_strangers_money,
+            lcs_degrading_income_source,
+            lcs_move_elsewhere,
+            lcs_withdrew_children,
+          }) => {
+            return Object.entries({
+              lcs_spent_savings,
+              lcs_forrowed_food,
+              lcs_reduced_utilities,
+              lcs_reduce_education_expenditures,
+              lcs_sell_productive_assets,
+              lcs_reduce_health_expenditures,
+              lcs_sell_hh_assets,
+              lcs_sell_house,
+              lcs_strangers_money,
+              lcs_degrading_income_source,
+              lcs_move_elsewhere,
+              lcs_withdrew_children,
+            }).reduce((strategies, [name, value]) => (value === 'yes' ? [...strategies, name] : strategies), [])
+          },
+        ),
+      after: (data as unknown as Seq<CashPdmData<Bn_pam.T>>)
+        .filter(({answers: {unique_number}}) => uniqueIdSet.has(String(unique_number)))
+        .map(
+          ({
+            answers: {
+              lcs_spent_savings,
+              lcs_forrowed_food,
+              lcs_reduced_utilities,
+              lcs_reduce_education_expenditures,
+              lcs_sell_productive_assets,
+              lcs_reduce_health_expenditures,
+              lcs_sell_hh_assets,
+              lcs_sell_house,
+              lcs_strangers_money,
+              lcs_degrading_income_source,
+            },
+          }) => {
+            return Object.entries({
+              lcs_spent_savings,
+              lcs_forrowed_food,
+              lcs_reduced_utilities,
+              lcs_reduce_education_expenditures,
+              lcs_sell_productive_assets,
+              lcs_reduce_health_expenditures,
+              lcs_sell_hh_assets,
+              lcs_sell_house,
+              lcs_strangers_money,
+              lcs_degrading_income_source,
+            }).reduce((strategies, [name, value]) => (value === 'yes' ? [...strategies, name] : strategies), [])
+          },
+        ),
+    }
+  }, [data, rrmFetcher.get])
+
+  console.log(rrm2RelatedRecords)
 
   return (
     <Page width="lg" loading={ctx.fetcherAnswers.loading}>
