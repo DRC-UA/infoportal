@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from 'react'
-import {seq, type Seq} from '@axanc/ts-utils'
+import {seq, Obj, type Seq} from '@axanc/ts-utils'
 import {Box, Divider, TextField, Typography} from '@mui/material'
 import {isWithinInterval, isAfter, isBefore} from 'date-fns'
 
@@ -22,6 +22,7 @@ import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {useKoboTranslations} from '@/utils'
 
 import Subtitle from './CashAgMsmeVet/components/Subtitle'
+import {useCopingStrategiesFigures} from './hooks'
 import {Code} from './styled-components'
 
 export const CashMpcaDashboard = () => {
@@ -114,85 +115,7 @@ export const CashMpcaDashboard = () => {
     rrmFetcher.fetch()
   }, [])
 
-  const rrm2RelatedRecords = useMemo(() => {
-    const uniqueNumbersSet = new Set(
-      data
-        .map(({answers: {unique_number}}) => unique_number)
-        .filter(Boolean)
-        .map(String),
-    )
-    const rrmKoboIds = new Set((rrmFetcher.get?.data ?? []).map(({id}) => id))
-    const uniqueIdSet = uniqueNumbersSet.intersection(rrmKoboIds)
-
-    return {
-      before: (rrmFetcher.get?.data ?? [])
-        .filter(({id}) => uniqueIdSet.has(id))
-        .map(
-          ({
-            lcs_spent_savings,
-            lcs_forrowed_food,
-            lcs_reduced_utilities,
-            lcs_reduce_education_expenditures,
-            lcs_sell_productive_assets,
-            lcs_reduce_health_expenditures,
-            lcs_sell_hh_assets,
-            lcs_sell_house,
-            lcs_strangers_money,
-            lcs_degrading_income_source,
-            lcs_move_elsewhere,
-            lcs_withdrew_children,
-          }) => {
-            return Object.entries({
-              lcs_spent_savings,
-              lcs_forrowed_food,
-              lcs_reduced_utilities,
-              lcs_reduce_education_expenditures,
-              lcs_sell_productive_assets,
-              lcs_reduce_health_expenditures,
-              lcs_sell_hh_assets,
-              lcs_sell_house,
-              lcs_strangers_money,
-              lcs_degrading_income_source,
-              lcs_move_elsewhere,
-              lcs_withdrew_children,
-            }).reduce((strategies, [name, value]) => (value === 'yes' ? [...strategies, name] : strategies), [])
-          },
-        ),
-      after: (data as unknown as Seq<CashPdmData<Bn_pam.T>>)
-        .filter(({answers: {unique_number}}) => uniqueIdSet.has(String(unique_number)))
-        .map(
-          ({
-            answers: {
-              lcs_spent_savings,
-              lcs_forrowed_food,
-              lcs_reduced_utilities,
-              lcs_reduce_education_expenditures,
-              lcs_sell_productive_assets,
-              lcs_reduce_health_expenditures,
-              lcs_sell_hh_assets,
-              lcs_sell_house,
-              lcs_strangers_money,
-              lcs_degrading_income_source,
-            },
-          }) => {
-            return Object.entries({
-              lcs_spent_savings,
-              lcs_forrowed_food,
-              lcs_reduced_utilities,
-              lcs_reduce_education_expenditures,
-              lcs_sell_productive_assets,
-              lcs_reduce_health_expenditures,
-              lcs_sell_hh_assets,
-              lcs_sell_house,
-              lcs_strangers_money,
-              lcs_degrading_income_source,
-            }).reduce((strategies, [name, value]) => (value === 'yes' ? [...strategies, name] : strategies), [])
-          },
-        ),
-    }
-  }, [data, rrmFetcher.get])
-
-  console.log(rrm2RelatedRecords)
+  const copingStrategies = useCopingStrategiesFigures(data)
 
   return (
     <Page width="lg" loading={ctx.fetcherAnswers.loading}>
@@ -608,18 +531,22 @@ export const CashMpcaDashboard = () => {
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.cal_meb}
-              label={{'1': 'Covers', '0': 'Does not cover'}}
+              label={{'0': 'MEB Covers Expanditures', '1': 'Expanditures Exceed MEB'}}
               includeNullish
             />
           </SlidePanel>
           <Typography lineHeight={1.2}>
             <pre>
-              <Code>{'if((8422 + ((family size - 1) * 3028)) <= total expenses, "Covers", "Does not cover")'}</Code>
+              <Code>
+                {
+                  'if((8422 + ((family size - 1) * 3028)) <= total expenses, "Expanditures Exceed MEB", "MEB Covers Expanditures")'
+                }
+              </Code>
             </pre>
             The "6,318 UAH" of subsistance minimum income is outdated text, the formula used for calculation is using
             "8,422 UAH". The formula in words: "if subsistance base of 8,422UAH + 3,028UAH per each additional person in
-            the household is less than the total expenses, then print 'Covers' (1), otherwise print 'Doesn not cover'
-            (0)"
+            the household is less than the total expenses, then print 'MEB Covers Expanditures' (0), otherwise print
+            'Expanditures Exceed MEB' (1)"
           </Typography>
         </Div>
       </Div>
@@ -818,6 +745,49 @@ export const CashMpcaDashboard = () => {
       </Div>
       <Div responsive marginBottom={2}>
         <Div column>
+          <SlidePanel title="Before">
+            <ChartBarMultipleBy
+              data={copingStrategies.before}
+              by={(field) => field}
+              label={[
+                'lcs_spent_savings',
+                'lcs_forrowed_food',
+                'lcs_reduced_utilities',
+                'lcs_reduce_education_expenditures',
+                'lcs_sell_productive_assets',
+                'lcs_reduce_health_expenditures',
+                'lcs_sell_hh_assets',
+                'lcs_sell_house',
+                'lcs_strangers_money',
+                'lcs_degrading_income_source',
+                'lcs_move_elsewhere',
+                'lcs_withdrew_children',
+              ].reduce((dict, value) => ({...dict, [value]: translateField && translateField(value)}), {})}
+              limitChartHeight={480}
+              includeNullish
+            />
+          </SlidePanel>
+          <SlidePanel title="After">
+            <ChartBarMultipleBy
+              data={copingStrategies.after}
+              by={(field) => field}
+              label={[
+                'lcs_spent_savings',
+                'lcs_forrowed_food',
+                'lcs_reduced_utilities',
+                'lcs_reduce_education_expenditures',
+                'lcs_sell_productive_assets',
+                'lcs_reduce_health_expenditures',
+                'lcs_sell_hh_assets',
+                'lcs_sell_house',
+                'lcs_strangers_money',
+                'lcs_degrading_income_source',
+              ].reduce((dict, value) => ({...dict, [value]: translateField && translateField(value)}), {})}
+              limitChartHeight={480}
+              includeNullish
+            />
+          </SlidePanel>
+
           {(
             [
               'resort_any_following',
