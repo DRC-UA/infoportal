@@ -12,7 +12,7 @@ export class SessionSdk {
   constructor(private client: ApiClient) {}
 
   readonly login = (body: LoginRequest) => {
-    return this.client.post<UserSession>(`/session/login`, {body})
+    return this.client.post<UserSession>(`/session/login/`, {body})
   }
 
   readonly logout = () => {
