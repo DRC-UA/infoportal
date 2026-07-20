@@ -13,7 +13,7 @@ export default {
   reactStrictMode: true,
   staticPageGenerationTimeout: 200,
   output: 'standalone',
-  skipTrailingSlashRedirect: true,
+  skipTrailingSlashRedirect: false,
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if

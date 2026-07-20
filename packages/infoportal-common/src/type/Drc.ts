@@ -261,6 +261,7 @@ export enum DrcDonor {
   SIDA = 'SIDA',
   UHF = 'UHF',
   UNHC = 'UNHC',
+  'Villum Fundation' = 'Villum Fundation',
   WRA = 'WRA',
   // extra options out of sorted list:
   Other = 'Other',
@@ -294,6 +295,7 @@ export const drcDonorTranlate: Record<DrcDonor, string> = {
   SIDA: 'SIDA',
   UHF: 'UHF',
   UNHC: 'UNHC',
+  'Villum Fundation': 'Villum Fundation',
   WRA: 'US Office of Weapons Removal and Abatement',
   // extra options out of sorted list:
   Other: 'Other',
@@ -382,6 +384,7 @@ export enum DrcProject {
   'UKR-000459 DANIDA' = 'UKR-000459 DANIDA',
   'UKR-000461 UHF' = 'UKR-000461 UHF',
   'UKR-000462 ECHO' = 'UKR-000462 ECHO',
+  'UKR-000464 Villum Fundation' = 'UKR-000464 Villum Fundation',
   // extra options out of sorted list:
   'Other' = 'Other',
   'None' = 'None',
@@ -467,6 +470,7 @@ export class DrcProjectHelper {
     'UKR-000459 DANIDA': DrcDonor.DANI,
     'UKR-000461 UHF': DrcDonor.UHF,
     'UKR-000462 ECHO': DrcDonor.ECHO,
+    'UKR-000464 Villum Fundation': DrcDonor['Villum Fundation'],
     // extra options out of sorted list:
     Other: DrcDonor.Other,
     None: DrcDonor.None,
