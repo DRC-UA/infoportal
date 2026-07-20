@@ -209,18 +209,18 @@ const uk = deepmerge(en, {
       sidebarLinkLabelForEcrecAgMsmeVetPam: 'EcRec (Ag, MSME, VET) PAM',
       loadingDataSubtitlePlaceholder: 'Завантажую дані',
       explanationsSubtitleFor: 'Пояснення відповіді',
-      cashPdmWidgets: {
-        copingStrategy: {
-          severity: {
-            titles: {
-              before: 'Застосовані стратегії за рівнем стресовості до надання допомоги',
-              after: 'Застосовані стратегії за рівнем стресовості після надання допомоги',
-            },
-            labels: {
-              stress: 'Стресс',
-              crisis: 'Криза',
-              emergency: 'Надзвичайна ситуація',
-            },
+    },
+    cashPdmWidgets: {
+      copingStrategy: {
+        severity: {
+          titles: {
+            before: 'Застосовані стратегії за рівнем стресовості до надання допомоги',
+            after: 'Застосовані стратегії за рівнем стресовості після надання допомоги',
+          },
+          labels: {
+            stress: 'Стресс',
+            crisis: 'Криза',
+            emergency: 'Надзвичайна ситуація',
           },
         },
       },

@@ -971,18 +971,18 @@ const en = Object.freeze({
       producedOutcome: 'Has the assistance provided produced the intended protection outcome?',
       loadingDataSubtitlePlaceholder: 'Loading data',
       explanationsSubtitleFor: 'Explanations for answer',
-      cashPdmWidgets: {
-        copingStrategy: {
-          severity: {
-            titles: {
-              before: 'Applied Strategies by Severity Before Assistance',
-              after: 'Applied Strategies by Severity After Assistance',
-            },
-            labels: {
-              stress: 'Stress',
-              crisis: 'Crisis',
-              emergency: 'Emergency',
-            },
+    },
+    cashPdmWidgets: {
+      copingStrategy: {
+        severity: {
+          titles: {
+            before: 'Applied Strategies by Severity Before Assistance',
+            after: 'Applied Strategies by Severity After Assistance',
+          },
+          labels: {
+            stress: 'Stress',
+            crisis: 'Crisis',
+            emergency: 'Emergency',
           },
         },
       },

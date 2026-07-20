@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from 'react'
-import {seq, Obj, type Seq} from '@axanc/ts-utils'
+import {seq, type Seq} from '@axanc/ts-utils'
 import {Box, Divider, TextField, Typography} from '@mui/material'
 import {isWithinInterval, isAfter, isBefore} from 'date-fns'
 
@@ -815,20 +815,20 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={m.mealMonitoringPdm.cashPdmWidgets.copingStrategy.severity.titles.before}>
+          <SlidePanel title={m.cashPdmWidgets.copingStrategy.severity.titles.before}>
             <ChartBarMultipleBy
               data={copingStrategies.severity.before}
               by={(field) => field}
-              label={m.mealMonitoringPdm.cashPdmWidgets.copingStrategy.severity.labels}
+              label={m.cashPdmWidgets.copingStrategy.severity.labels}
               limitChartHeight={480}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={m.mealMonitoringPdm.cashPdmWidgets.copingStrategy.severity.titles.after}>
+          <SlidePanel title={m.cashPdmWidgets.copingStrategy.severity.titles.after}>
             <ChartBarMultipleBy
               data={copingStrategies.severity.after}
               by={(field) => field}
-              label={m.mealMonitoringPdm.cashPdmWidgets.copingStrategy.severity.labels}
+              label={m.cashPdmWidgets.copingStrategy.severity.labels}
               limitChartHeight={480}
               includeNullish
             />
