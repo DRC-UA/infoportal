@@ -767,9 +767,9 @@ export const CashMpcaDashboard = () => {
       </Div>
       <Div responsive marginBottom={2}>
         <Div column>
-          <SlidePanel title="Before">
+          <SlidePanel title="Baseline: Registration Form">
             <ChartBarMultipleBy
-              data={copingStrategies.before}
+              data={copingStrategies.strategies.before}
               by={(field) => field}
               label={[
                 'lcs_spent_savings',
@@ -792,9 +792,9 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title="After">
+          <SlidePanel title="PDM">
             <ChartBarMultipleBy
-              data={copingStrategies.after}
+              data={copingStrategies.strategies.after}
               by={(field) => field}
               label={[
                 'lcs_spent_savings',
@@ -811,6 +811,24 @@ export const CashMpcaDashboard = () => {
                 (dict, value) => ({...dict, [value]: (translateBnPamField && translateBnPamField(value)) || ''}),
                 {} as Record<string, string>,
               )}
+              limitChartHeight={480}
+              includeNullish
+            />
+          </SlidePanel>
+          <SlidePanel title={m.mealMonitoringPdm.cashPdmWidgets.copingStrategy.severity.titles.before}>
+            <ChartBarMultipleBy
+              data={copingStrategies.severity.before}
+              by={(field) => field}
+              label={m.mealMonitoringPdm.cashPdmWidgets.copingStrategy.severity.labels}
+              limitChartHeight={480}
+              includeNullish
+            />
+          </SlidePanel>
+          <SlidePanel title={m.mealMonitoringPdm.cashPdmWidgets.copingStrategy.severity.titles.after}>
+            <ChartBarMultipleBy
+              data={copingStrategies.severity.after}
+              by={(field) => field}
+              label={m.mealMonitoringPdm.cashPdmWidgets.copingStrategy.severity.labels}
               limitChartHeight={480}
               includeNullish
             />

@@ -3,7 +3,6 @@ import {seq, Obj, type Seq} from '@axanc/ts-utils'
 
 import {
   Bn_pam,
-  Meal_cashPdm,
   Bn_rapidResponse2,
   type KoboSubmissionFlat,
   type KoboTagStatus,
@@ -33,11 +32,24 @@ const beforeFields: BeforeCopingRelatedFields = [
   'lcs_withdrew_children',
 ]
 
+const severityMap = {
+  lcs_spent_savings: 'stress',
+  lcs_forrowed_food: 'stress',
+  lcs_reduced_utilities: 'stress',
+  lcs_reduce_education_expenditures: 'stress',
+  lcs_sell_productive_assets: 'crisis',
+  lcs_reduce_health_expenditures: 'crisis',
+  lcs_sell_hh_assets: 'crisis',
+  lcs_sell_house: 'emergency',
+  lcs_strangers_money: 'emergency',
+  lcs_degrading_income_source: 'emergency',
+} as const
+
 const useCopingStrategiesFigures = (data: Seq<CashPdmData<Bn_pam.T>>) => {
   const {api} = useAppSettings()
   const rrmFetcher = useFetcher(api.kobo.typedAnswers.search.bn_rapidResponse2)
 
-  const {before, after} = useMemo(() => {
+  const strategies = useMemo(() => {
     const uniqueNumbersSet = new Set(
       data
         .map(({answers: {unique_number}}) => unique_number)
@@ -98,13 +110,24 @@ const useCopingStrategiesFigures = (data: Seq<CashPdmData<Bn_pam.T>>) => {
     }
   }, [data, rrmFetcher.get])
 
+  const severity = useMemo(() => {
+    return {
+      before: strategies.before.map((record) =>
+        record.map((strategy) => severityMap[strategy as keyof typeof severityMap]).filter(Boolean),
+      ),
+      after: strategies.after.map((record) =>
+        record.map((strategy) => severityMap[strategy as keyof typeof severityMap]).filter(Boolean),
+      ),
+    }
+  }, [strategies])
+
   useEffect(() => {
     if (!rrmFetcher.get) rrmFetcher.fetch()
   }, [])
 
   return {
-    before,
-    after,
+    strategies,
+    severity,
     isLoading: rrmFetcher.loading,
   }
 }
