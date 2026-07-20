@@ -37,9 +37,27 @@ export const CashMpcaDashboard = () => {
     start?: Date
     end?: Date
   }>(ctx.periodFilter)
-  const {translateField, translateOption} = useKoboTranslations('bn_pam', {en: 0, uk: 1})
-  const translateLabels = (option: string) =>
-    translateOption(option)?.reduce(
+  const {translateField: translateBnPamField, translateOption: translateBnPamOption} = useKoboTranslations('bn_pam', {
+    en: 0,
+    uk: 1,
+  })
+  const translateBnPamLabels = (option: string) =>
+    translateBnPamOption(option)?.reduce(
+      (result, {value, label}) => ({
+        ...result,
+        [value]: label,
+      }),
+      {} as Record<string, string>,
+    )
+  const {translateField: translateCashPdmField, translateOption: translateCashPdmOption} = useKoboTranslations(
+    'bn_rapidResponse2',
+    {
+      en: 0,
+      uk: 1,
+    },
+  )
+  const translateCashPdmLabels = (option: string) =>
+    translateBnPamOption(option)?.reduce(
       (result, {value, label}) => ({
         ...result,
         [value]: label,
@@ -115,7 +133,7 @@ export const CashMpcaDashboard = () => {
     rrmFetcher.fetch()
   }, [])
 
-  const copingStrategies = useCopingStrategiesFigures(data)
+  const copingStrategies = useCopingStrategiesFigures(data as unknown as Seq<CashPdmData<Bn_pam.T>>)
 
   return (
     <Page width="lg" loading={ctx.fetcherAnswers.loading}>
@@ -236,7 +254,7 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('did_receive_cash')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('did_receive_cash')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.did_receive_cash}
@@ -249,36 +267,38 @@ export const CashMpcaDashboard = () => {
           </SlidePanel>
         </Div>
         <Div column>
-          <SlidePanel title={translateField && translateField('spent_cash_assistance_received')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('spent_cash_assistance_received')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.spent_cash_assistance_received}
-              label={translateLabels('spent_cash_assistance_received')}
+              label={translateBnPamLabels('spent_cash_assistance_received')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('spent_cash_assistance_received')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('spent_cash_assistance_received')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.spent_cash_assistance_received}
-              label={translateLabels('spent_cash_assistance_received')}
+              label={translateBnPamLabels('spent_cash_assistance_received')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('spent_cash_assistance_received_no')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('spent_cash_assistance_received_no')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.spent_cash_assistance_received_no}
-              label={translateLabels('spent_cash_assistance_received_no')}
+              label={translateBnPamLabels('spent_cash_assistance_received_no')}
               limitChartHeight={480}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('spent_cash_assistance_received_no_mait_reason')}>
+          <SlidePanel
+            title={translateBnPamField && translateBnPamField('spent_cash_assistance_received_no_mait_reason')}
+          >
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.spent_cash_assistance_received_no_mait_reason}
-              label={translateLabels('spent_cash_assistance_received_no_mait_reason')}
+              label={translateBnPamLabels('spent_cash_assistance_received_no_mait_reason')}
               limitChartHeight={480}
               includeNullish
             />
@@ -346,7 +366,7 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('amount_cash_received_correspond')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('amount_cash_received_correspond')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.amount_cash_received_correspond}
@@ -354,7 +374,7 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('amount_cash_received_correspond_no')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('amount_cash_received_correspond_no')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.amount_cash_received_correspond_no}
@@ -379,11 +399,11 @@ export const CashMpcaDashboard = () => {
             <ChartBarMultipleBy
               data={data}
               by={({answers}) => answers.experience_problems_yes}
-              label={translateLabels('experience_problems_yes')}
+              label={translateBnPamLabels('experience_problems_yes')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('experience_problems_yes_other')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('experience_problems_yes_other')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.experience_problems_yes_other}
@@ -401,7 +421,7 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('organization_provide_information_no')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('organization_provide_information_no')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.organization_provide_information_no}
@@ -439,7 +459,7 @@ export const CashMpcaDashboard = () => {
       <Subtitle text={m.abilityCover} />
       <Div responsive>
         <Div column>
-          <SlidePanel title={translateField && translateField('ben_det_income')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('ben_det_income')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => String(answers.ben_det_income)}
@@ -481,7 +501,9 @@ export const CashMpcaDashboard = () => {
           </SlidePanel>
         </Div>
         <Div column>
-          <Typography lineHeight={1.2}>{translateField && translateField('monthly_expenditures_needs')}</Typography>
+          <Typography lineHeight={1.2}>
+            {translateBnPamField && translateBnPamField('monthly_expenditures_needs')}
+          </Typography>
           {(
             [
               'food_expenditures',
@@ -494,11 +516,11 @@ export const CashMpcaDashboard = () => {
               'drinking_expenditures',
             ] as const
           ).map((field) => (
-            <SlidePanel key={field} title={translateField && translateField(field)}>
+            <SlidePanel key={field} title={translateBnPamField && translateBnPamField(field)}>
               <ChartBarSingleBy
                 data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                 by={({answers}) => String(answers[field])}
-                label={translateLabels(field)}
+                label={translateBnPamLabels(field)}
                 limitChartHeight={360}
                 includeNullish
               />
@@ -517,17 +539,17 @@ export const CashMpcaDashboard = () => {
               'value_monthly_expenditures',
             ] as const
           ).map((field) => (
-            <SlidePanel key={field} title={translateField && translateField(field)}>
+            <SlidePanel key={field} title={translateBnPamField && translateBnPamField(field)}>
               <ChartBarSingleBy
                 data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                 by={({answers}) => String(answers[field])}
-                label={translateLabels(field)}
+                label={translateBnPamLabels(field)}
                 limitChartHeight={360}
                 includeNullish
               />
             </SlidePanel>
           ))}
-          <SlidePanel title={translateField && translateField('cal_meb')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('cal_meb')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.cal_meb}
@@ -552,11 +574,11 @@ export const CashMpcaDashboard = () => {
       </Div>
       <Subtitle text={m.outcome} />
       <Div responsive marginBottom={2}>
-        <Typography lineHeight={1.2}>{translateField && translateField('use_mpca_assistance')}</Typography>
+        <Typography lineHeight={1.2}>{translateBnPamField && translateBnPamField('use_mpca_assistance')}</Typography>
       </Div>
       <Div responsive marginBottom={2}>
         <Div column>
-          <SlidePanel title={translateField && translateField('sectors_cash_assistance')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('sectors_cash_assistance')}>
             <ChartBarMultipleBy
               data={data}
               by={({answers}) => answers.sectors_cash_assistance}
@@ -565,7 +587,7 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('sectors_cash_assistance_other')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('sectors_cash_assistance_other')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.sectors_cash_assistance_other}
@@ -585,7 +607,7 @@ export const CashMpcaDashboard = () => {
               'sectors_cash_assistance_utilities',
             ] as const
           ).map((field) => (
-            <SlidePanel key={field} title={translateField && translateField(field)}>
+            <SlidePanel key={field} title={translateBnPamField && translateBnPamField(field)}>
               <ChartBarSingleBy
                 data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                 by={({answers}) => String(answers[field])}
@@ -607,7 +629,7 @@ export const CashMpcaDashboard = () => {
               'sectors_cash_assistance_other_spend',
             ] as const
           ).map((field) => (
-            <SlidePanel key={field} title={translateField && translateField(field)}>
+            <SlidePanel key={field} title={translateBnPamField && translateBnPamField(field)}>
               <ChartBarSingleBy
                 data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                 by={({answers}) => String(answers[field])}
@@ -616,20 +638,20 @@ export const CashMpcaDashboard = () => {
               />
             </SlidePanel>
           ))}
-          <SlidePanel title={translateField && translateField('feel_safe_travelling')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('feel_safe_travelling')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.feel_safe_travelling}
-              label={translateLabels('feel_safe_travelling')}
+              label={translateBnPamLabels('feel_safe_travelling')}
               limitChartHeight={360}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('feel_safe_travelling_bad')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('feel_safe_travelling_bad')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.feel_safe_travelling_bad}
-              label={translateLabels('feel_safe_travelling_bad')}
+              label={translateBnPamLabels('feel_safe_travelling_bad')}
               limitChartHeight={360}
               includeNullish
             />
@@ -642,7 +664,7 @@ export const CashMpcaDashboard = () => {
       </Div>
       <Div responsive marginBottom={2}>
         <Div column>
-          <SlidePanel title={translateField && translateField('prior_receiving_assistance')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('prior_receiving_assistance')}>
             <ChartBarMultipleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.prior_receiving_assistance}
@@ -672,12 +694,12 @@ export const CashMpcaDashboard = () => {
               'unable_fully_healthcare_other',
             ] as const
           ).map((field) => (
-            <SlidePanel key={field} title={translateField && translateField(field)}>
+            <SlidePanel key={field} title={translateBnPamField && translateBnPamField(field)}>
               {data.some(({answers}) => Array.isArray((answers as unknown as Bn_pam.T)[field])) ? (
                 <ChartBarMultipleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => (Array.isArray(answers[field]) ? answers[field] : [answers[field]])}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -685,7 +707,7 @@ export const CashMpcaDashboard = () => {
                 <ChartBarSingleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => answers[field] as string}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -717,12 +739,12 @@ export const CashMpcaDashboard = () => {
               'important_helped_household_other',
             ] as const
           ).map((field) => (
-            <SlidePanel key={field} title={translateField && translateField(field)}>
+            <SlidePanel key={field} title={translateBnPamField && translateBnPamField(field)}>
               {data.some(({answers}) => Array.isArray((answers as unknown as Bn_pam.T)[field])) ? (
                 <ChartBarMultipleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => (Array.isArray(answers[field]) ? answers[field] : [answers[field]])}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -730,7 +752,7 @@ export const CashMpcaDashboard = () => {
                 <ChartBarSingleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => answers[field] as string}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -762,7 +784,10 @@ export const CashMpcaDashboard = () => {
                 'lcs_degrading_income_source',
                 'lcs_move_elsewhere',
                 'lcs_withdrew_children',
-              ].reduce((dict, value) => ({...dict, [value]: translateField && translateField(value)}), {})}
+              ].reduce(
+                (dict, value) => ({...dict, [value]: (translateCashPdmField && translateCashPdmField(value)) || ''}),
+                {} as Record<string, string>,
+              )}
               limitChartHeight={480}
               includeNullish
             />
@@ -782,7 +807,10 @@ export const CashMpcaDashboard = () => {
                 'lcs_sell_house',
                 'lcs_strangers_money',
                 'lcs_degrading_income_source',
-              ].reduce((dict, value) => ({...dict, [value]: translateField && translateField(value)}), {})}
+              ].reduce(
+                (dict, value) => ({...dict, [value]: (translateBnPamField && translateBnPamField(value)) || ''}),
+                {} as Record<string, string>,
+              )}
               limitChartHeight={480}
               includeNullish
             />
@@ -797,12 +825,12 @@ export const CashMpcaDashboard = () => {
               'lcs_forrowed_food',
             ] as const
           ).map((field) => (
-            <SlidePanel key={field} title={translateField && translateField(field)}>
+            <SlidePanel key={field} title={translateBnPamField && translateBnPamField(field)}>
               {data.some(({answers}) => Array.isArray((answers as unknown as Bn_pam.T)[field])) ? (
                 <ChartBarMultipleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => (Array.isArray(answers[field]) ? answers[field] : [String(answers[field])])}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -810,7 +838,7 @@ export const CashMpcaDashboard = () => {
                 <ChartBarSingleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => answers[field] as string}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -828,12 +856,12 @@ export const CashMpcaDashboard = () => {
               'lcs_sell_hh_assets',
             ] as const
           ).map((field) => (
-            <SlidePanel key={field} title={translateField && translateField(field)}>
+            <SlidePanel key={field} title={translateBnPamField && translateBnPamField(field)}>
               {data.some(({answers}) => Array.isArray((answers as unknown as Bn_pam.T)[field])) ? (
                 <ChartBarMultipleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => (Array.isArray(answers[field]) ? answers[field] : [String(answers[field])])}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -841,7 +869,7 @@ export const CashMpcaDashboard = () => {
                 <ChartBarSingleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => answers[field] as string}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -860,12 +888,12 @@ export const CashMpcaDashboard = () => {
               'lcs_reason_other',
             ] as const
           ).map((field) => (
-            <SlidePanel key={field} title={translateField && translateField(field)}>
+            <SlidePanel key={field} title={translateBnPamField && translateBnPamField(field)}>
               {data.some(({answers}) => Array.isArray((answers as unknown as Bn_pam.T)[field])) ? (
                 <ChartBarMultipleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => (Array.isArray(answers[field]) ? answers[field] : [String(answers[field])])}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -873,7 +901,7 @@ export const CashMpcaDashboard = () => {
                 <ChartBarSingleBy
                   data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
                   by={({answers}) => answers[field] as string}
-                  label={translateLabels(field)}
+                  label={translateBnPamLabels(field)}
                   limitChartHeight={480}
                   includeNullish
                 />
@@ -901,19 +929,19 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('feel_treated_respect')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('feel_treated_respect')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.feel_treated_respect}
-              label={translateLabels('feel_treated_respect')}
+              label={translateBnPamLabels('feel_treated_respect')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('satisfied_assistance_provided')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('satisfied_assistance_provided')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.satisfied_assistance_provided}
-              label={translateLabels('satisfied_assistance_provided')}
+              label={translateBnPamLabels('satisfied_assistance_provided')}
               includeNullish
             />
           </SlidePanel>
@@ -935,11 +963,11 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('know_people_needing')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('know_people_needing')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.know_people_needing}
-              label={translateLabels('know_people_needing')}
+              label={translateBnPamLabels('know_people_needing')}
               includeNullish
             />
           </SlidePanel>
@@ -970,27 +998,27 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('account_organization_assistance')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('account_organization_assistance')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.account_organization_assistance}
-              label={translateLabels('account_organization_assistance')}
+              label={translateBnPamLabels('account_organization_assistance')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('where_are_staying')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('where_are_staying')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.where_are_staying}
-              label={translateLabels('where_are_staying')}
+              label={translateBnPamLabels('where_are_staying')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('feel_informed_assistance')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('feel_informed_assistance')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.feel_informed_assistance}
-              label={translateLabels('feel_informed_assistance')}
+              label={translateBnPamLabels('feel_informed_assistance')}
               includeNullish
             />
           </SlidePanel>
@@ -1023,27 +1051,27 @@ export const CashMpcaDashboard = () => {
       <Subtitle text={m.accountability} />
       <Div responsive>
         <Div column>
-          <SlidePanel title={translateField && translateField('any_member_household')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('any_member_household')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.any_member_household}
-              label={translateLabels('any_member_household')}
+              label={translateBnPamLabels('any_member_household')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('provide_someone_commission')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('provide_someone_commission')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.provide_someone_commission}
-              label={translateLabels('provide_someone_commission')}
+              label={translateBnPamLabels('provide_someone_commission')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('provide_someone_commission_yes')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('provide_someone_commission_yes')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.provide_someone_commission_yes}
-              label={translateLabels('provide_someone_commission_yes')}
+              label={translateBnPamLabels('provide_someone_commission_yes')}
               includeNullish
             />
           </SlidePanel>
@@ -1057,27 +1085,27 @@ export const CashMpcaDashboard = () => {
           </SlidePanel>
         </Div>
         <Div column>
-          <SlidePanel title={translateField && translateField('know_address_suggestions')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('know_address_suggestions')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.know_address_suggestions}
-              label={translateLabels('know_address_suggestions')}
+              label={translateBnPamLabels('know_address_suggestions')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('know_address_suggestions_yes')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('know_address_suggestions_yes')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.know_address_suggestions_yes}
-              label={translateLabels('know_address_suggestions_yes')}
+              label={translateBnPamLabels('know_address_suggestions_yes')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('know_address_suggestions_yes_ndnp')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('know_address_suggestions_yes_ndnp')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.know_address_suggestions_yes_ndnp}
-              label={translateLabels('know_address_suggestions_yes_ndnp')}
+              label={translateBnPamLabels('know_address_suggestions_yes_ndnp')}
               includeNullish
             />
           </SlidePanel>
@@ -1099,27 +1127,27 @@ export const CashMpcaDashboard = () => {
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('know_address_suggestions_no')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('know_address_suggestions_no')}>
             <ChartBarSingleBy
               data={data}
               by={({answers}) => answers.know_address_suggestions_no}
-              label={translateLabels('know_address_suggestions_no')}
+              label={translateBnPamLabels('know_address_suggestions_no')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('submitted_complaint')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('submitted_complaint')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.submitted_complaint}
-              label={translateLabels('submitted_complaint')}
+              label={translateBnPamLabels('submitted_complaint')}
               includeNullish
             />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('report_drc_employee')}>
+          <SlidePanel title={translateBnPamField && translateBnPamField('report_drc_employee')}>
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.report_drc_employee}
-              label={translateLabels('report_drc_employee')}
+              label={translateBnPamLabels('report_drc_employee')}
               includeNullish
             />
           </SlidePanel>

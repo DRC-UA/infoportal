@@ -1,14 +1,24 @@
 import {useEffect, useMemo} from 'react'
 import {seq, Obj, type Seq} from '@axanc/ts-utils'
 
-import {Bn_pam, Meal_cashPdm} from 'infoportal-common'
+import {
+  Bn_pam,
+  Meal_cashPdm,
+  Bn_rapidResponse2,
+  type KoboSubmissionFlat,
+  type KoboTagStatus,
+  type CashStatus,
+} from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useFetcher} from '@/shared/hook/useFetcher'
 
 import {CashPdmData} from '../Context/CashContext'
 
-const beforeFields = [
+type BeforeCopingRelatedFields = Array<keyof KoboSubmissionFlat<Bn_rapidResponse2.T, KoboTagStatus<CashStatus>>>
+type AfterCopingRelatedFields = Array<keyof KoboSubmissionFlat<Bn_pam.T, KoboTagStatus<CashStatus>>>
+
+const beforeFields: BeforeCopingRelatedFields = [
   'lcs_spent_savings',
   'lcs_forrowed_food',
   'lcs_reduced_utilities',
@@ -23,7 +33,7 @@ const beforeFields = [
   'lcs_withdrew_children',
 ]
 
-const useCopingStrategiesFigures = (data: Seq<CashPdmData<Meal_cashPdm.T>>) => {
+const useCopingStrategiesFigures = (data: Seq<CashPdmData<Bn_pam.T>>) => {
   const {api} = useAppSettings()
   const rrmFetcher = useFetcher(api.kobo.typedAnswers.search.bn_rapidResponse2)
 
@@ -41,15 +51,16 @@ const useCopingStrategiesFigures = (data: Seq<CashPdmData<Meal_cashPdm.T>>) => {
       before: seq(
         (rrmFetcher.get?.data ?? [])
           .filter(({id}) => uniqueIdSet.has(id))
-          .map(({...beforeFields}) => {
-            return Obj.entries(beforeFields).reduce(
-              (strategies, [name, value]) => (value === 'yes' ? [...strategies, name] : strategies),
-              [],
+          .map((record) => {
+            return Obj.entries(record).reduce(
+              (strategies, [name, value]) =>
+                beforeFields.includes(name) && value === 'yes' ? [...strategies, name] : strategies,
+              [] as BeforeCopingRelatedFields,
             )
           }),
       ),
       after: seq(
-        (data as unknown as Seq<CashPdmData<Bn_pam.T>>)
+        data
           .filter(({answers: {unique_number}}) => uniqueIdSet.has(String(unique_number)))
           .map(
             ({
@@ -77,7 +88,10 @@ const useCopingStrategiesFigures = (data: Seq<CashPdmData<Meal_cashPdm.T>>) => {
                 lcs_sell_house,
                 lcs_strangers_money,
                 lcs_degrading_income_source,
-              }).reduce((strategies, [name, value]) => (value === 'yes' ? [...strategies, name] : strategies), [])
+              }).reduce(
+                (strategies, [name, value]) => (value === 'yes' ? [...strategies, name] : strategies),
+                [] as AfterCopingRelatedFields,
+              )
             },
           ),
       ),
