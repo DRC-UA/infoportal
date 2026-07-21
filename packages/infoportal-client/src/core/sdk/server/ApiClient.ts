@@ -87,10 +87,7 @@ export class ApiClient {
       return client
         .request({
           method,
-          url:
-            url +
-            (options?.qs && Object.keys(options.qs).length > 0 ? '?' + objectToQueryString(options.qs) : '') +
-            '/',
+          url: url + (options?.qs && Object.keys(options.qs).length > 0 ? '?' + objectToQueryString(options.qs) : ''),
           headers: builtOptions?.headers,
           // TODO(Alex) Check if it works
           // params: options?.qs,
