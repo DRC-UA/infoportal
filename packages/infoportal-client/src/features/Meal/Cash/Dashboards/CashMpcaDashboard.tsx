@@ -553,7 +553,7 @@ export const CashMpcaDashboard = () => {
             <ChartBarSingleBy
               data={data as unknown as Seq<CashPdmData<Bn_pam.T>>}
               by={({answers}) => answers.cal_meb}
-              label={{'0': 'MEB Covers Expanditures', '1': 'Expanditures Exceed MEB'}}
+              label={{'0': 'Expanditures < MEB', '1': 'Expanditures > MEB'}}
               includeNullish
             />
           </SlidePanel>
@@ -561,14 +561,10 @@ export const CashMpcaDashboard = () => {
             <pre>
               <Code>
                 {
-                  'if((8422 + ((family size - 1) * 3028)) <= total expenses, "Expanditures Exceed MEB", "MEB Covers Expanditures")'
+                  'if ((8422 + ((family size - 1) * 3028)) > total expenses, then "Expanditures < MEB [0]", else "Expanditures > MEB [1]")'
                 }
               </Code>
             </pre>
-            The "6,318 UAH" of subsistance minimum income is outdated text, the formula used for calculation is using
-            "8,422 UAH". The formula in words: "if subsistance base of 8,422UAH + 3,028UAH per each additional person in
-            the household is less than the total expenses, then print 'MEB Covers Expanditures' (0), otherwise print
-            'Expanditures Exceed MEB' (1)"
           </Typography>
         </Div>
       </Div>
