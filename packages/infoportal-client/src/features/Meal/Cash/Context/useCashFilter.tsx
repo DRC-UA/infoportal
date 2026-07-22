@@ -86,7 +86,7 @@ export const useCashFilter = (data: Seq<CashPdmData<CashPdmForm>> = seq(), {isBn
         ...(isBn && {
           assistanceType: {
             icon: 'category',
-            label: translateField ? translateField('type_bn') : '',
+            label: translateField('type_bn') ?? '',
             getValue: ({answers}) => (answers as Bn_pam.T).type_bn,
             getOptions: () => DataFilter.buildOptionsFromObject(Bn_pam.options.type_bn),
           },
