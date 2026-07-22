@@ -26,7 +26,7 @@ const MealEcrecAgVetMsmeDashboard: FC = () => {
     () => groupBy({data, groups: [{by: ({pdmType}) => pdmType!}], finalTransform: (record) => record}).groups,
     [data],
   )
-  const {translateField} = useKoboTranslations('meal_ecrec_agMsmeVetPam')
+  const {translateField} = useKoboTranslations('meal_ecrec_agMsmeVetPam', {uk: 1, en: 0})
 
   return (
     <Page width="lg" loading={fetcher.loading}>
