@@ -14,16 +14,16 @@ import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Panel, PanelBody} from '@/shared/Panel'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {usePlurals} from '@/utils'
+import {useKoboTranslations, usePlurals} from '@/utils'
 
-import {useTranslations, useGbvConceptsFilters} from './hooks'
+import {useGbvConceptsFilters} from './hooks'
 import {colorByQuestion, groupTrainingsByTopic, meanCounter, sanitizeTests} from './utils'
 import type {Scores} from './types'
 
 const GbvConceptsDashboard: FC = () => {
   const {count, data, filters, setFilters, loading, shape, period, setPeriod, stats} = useGbvConceptsFilters()
   const {m, formatLargeNumber} = useI18n()
-  const {translateOption, translateField} = useTranslations()
+  const {translateOption, translateField, translateLabels} = useKoboTranslations('protection_gbv_concepts_pre_post')
   const clearFilters = () => {
     setPeriod({})
     setFilters({})
@@ -78,13 +78,7 @@ const GbvConceptsDashboard: FC = () => {
                 data={data ?? seq([])}
                 by={({project_code}) => project_code!}
                 includeNullish
-                label={translateOption('project_code')?.reduce(
-                  (result, {value, label}) => ({
-                    ...result,
-                    [value]: label,
-                  }),
-                  {} as Record<string, string>,
-                )}
+                label={translateLabels('project_code')}
               />
             </PanelBody>
           </Panel>
@@ -94,13 +88,7 @@ const GbvConceptsDashboard: FC = () => {
                 data={data ?? seq([])}
                 by={({topic}) => topic!}
                 includeNullish
-                label={translateOption('topic')?.reduce(
-                  (result, {value, label}) => ({
-                    ...result,
-                    [value]: label,
-                  }),
-                  {} as Record<string, string>,
-                )}
+                label={translateLabels('topic')}
               />
             </PanelBody>
           </Panel>
@@ -150,7 +138,7 @@ const GbvConceptsDashboard: FC = () => {
                         )}
                         data={[
                           {
-                            category: translateField ? translateField(topic) : topic,
+                            category: translateField(topic),
                             bars: Object.entries(meanCounter(scores)).map(([key, value]) => ({
                               key,
                               label: key,

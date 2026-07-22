@@ -1,37 +1,17 @@
-import {useCallback, useEffect, useMemo} from 'react'
-import {seq, match} from '@axanc/ts-utils'
+import {useEffect, useMemo} from 'react'
+import {seq} from '@axanc/ts-utils'
 
 import {groupBy, PeriodHelper, Protection_gbv_concepts_pre_post, type Period} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
 import {useKoboAnswersContext} from '@/core/context/KoboAnswersContext'
-
-const useTranslations = () => {
-  const schemaContext = useKoboSchemaContext({autoFetch: ['protection_gbv_concepts_pre_post']})
-  const gbvConceptsSchema = schemaContext.byName['protection_gbv_concepts_pre_post'].get
-
-  const getOptionTranslations = useCallback(
-    (option: keyof Protection_gbv_concepts_pre_post.T | keyof typeof Protection_gbv_concepts_pre_post.options) => {
-      return gbvConceptsSchema?.helper.getOptionsByQuestionName(option)?.map(({name}) => ({
-        value: name,
-        label: gbvConceptsSchema.translate.choice(option, name) ?? name,
-      }))
-    },
-    [gbvConceptsSchema],
-  )
-
-  return {
-    translateOption: getOptionTranslations,
-    translateField: gbvConceptsSchema?.translate.question,
-  }
-}
+import {useKoboTranslations} from '@/utils'
 
 const useGbvConceptsFilters = () => {
-  const {m, currentLang} = useI18n()
+  const {m} = useI18n()
   const [period, setPeriod] = usePersistentState<Partial<Period>>(
     {},
     {
@@ -42,17 +22,12 @@ const useGbvConceptsFilters = () => {
       }),
     },
   )
-  const schemaContext = useKoboSchemaContext({autoFetch: ['protection_gbv_concepts_pre_post']})
   const gbvConceptsFetcher = useKoboAnswersContext().byName('protection_gbv_concepts_pre_post')
-  const {translateOption} = useTranslations()
+  const {translateOption} = useKoboTranslations('protection_gbv_concepts_pre_post')
 
   useEffect(() => {
     gbvConceptsFetcher.fetch()
   }, [])
-
-  useEffect(() => {
-    schemaContext.setLangIndex(match(currentLang).cases({uk: 1}).default(0))
-  }, [currentLang])
 
   const shape = useMemo(() => {
     return DataFilter.makeShape<Protection_gbv_concepts_pre_post.T>({
@@ -149,4 +124,4 @@ const useGbvConceptsFilters = () => {
   }
 }
 
-export {useGbvConceptsFilters, useTranslations}
+export {useGbvConceptsFilters}

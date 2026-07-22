@@ -1,48 +1,23 @@
-import {useCallback, useEffect, useMemo, useState} from 'react'
+import {useMemo, useState} from 'react'
 import {seq, match, type Seq} from '@axanc/ts-utils'
 
-import {groupBy, PeriodHelper, Protection_pss, type Person, type Period} from 'infoportal-common'
+import {groupBy, PeriodHelper, type Person, type Period} from 'infoportal-common'
 
 import {appConfig} from '@/conf/AppConfig'
 import {useI18n} from '@/core/i18n'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {usePersistentState} from '@/shared/hook/usePersistantState'
+import {useKoboTranslations} from '@/utils'
 
 import type {PssContext} from './Context'
 import type {ProtectionPssWithPersons, ProtectionPssWithPersonsFlat} from './types'
 
 type UsePssFilter = ReturnType<typeof usePssFilters>
 
-const useTranslations = () => {
-  const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
-  const pssSchema = schemaContext.byName['protection_pss'].get
-
-  const getOptionTranslations = useCallback(
-    (option: keyof Protection_pss.T | keyof typeof Protection_pss.options) => {
-      return pssSchema?.helper.getOptionsByQuestionName(option).map(({name}) => ({
-        value: name,
-        label: pssSchema.translate.choice(option, name) ?? name,
-      }))
-    },
-    [pssSchema],
-  )
-
-  return {
-    translateOption: getOptionTranslations,
-    translateField: pssSchema?.translate.question,
-  }
-}
-
 const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
-  const {m, currentLang} = useI18n()
+  const {m} = useI18n()
   const [period, setPeriod] = useState<Partial<Period>>({})
-  const schemaContext = useKoboSchemaContext({autoFetch: ['protection_pss']})
-  const {translateOption} = useTranslations()
-
-  useEffect(() => {
-    schemaContext.setLangIndex(match(currentLang).cases({en: 1}).default(0))
-  }, [currentLang])
+  const {translateOption} = useKoboTranslations('protection_pss')
 
   const shape = useMemo(() => {
     return DataFilter.makeShape<ProtectionPssWithPersons>({
@@ -469,4 +444,4 @@ const calcAvgFigures = (
   )
 }
 
-export {usePssFilters, useResilienceStats, useSessionsCounter, useStats, useTranslations, type UsePssFilter}
+export {usePssFilters, useResilienceStats, useSessionsCounter, useStats, type UsePssFilter}

@@ -19,10 +19,10 @@ import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {Panel, PanelBody, PanelTitle} from '@/shared/Panel'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {Div, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {usePlurals} from '@/utils'
+import {useKoboTranslations, usePlurals} from '@/utils'
 
 import {PssContextProvider, usePssContext} from './Context'
-import {useResilienceStats, useStats, useTranslations, useSessionsCounter} from './hooks'
+import {useResilienceStats, useStats, useSessionsCounter} from './hooks'
 import {colorByQuestion, pickUnique, prePostSummaryBuilder} from './utils'
 import {MissingData} from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CaseManagement/Explanations'
 
@@ -46,7 +46,7 @@ const PssDashboardWithContext: FC = () => {
   const theme = useTheme()
   const [showAgeGroupsUnique, setShowAgeGroupsUnique] = useState(true)
   const [showDisplacementUnique, setShowDisplacementUnique] = useState(true)
-  const {translateOption, translateField} = useTranslations()
+  const {translateOption, translateField} = useKoboTranslations('protection_pss')
   const pluralizeIndividuals = usePlurals(m.plurals.individuals)
   const pluralizeUniqueIndividuals = usePlurals(m.plurals.uniqueIndividuals)
   const pluralizeSubmissions = usePlurals(m.plurals.submission)
