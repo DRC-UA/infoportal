@@ -29,15 +29,7 @@ import {useVaPdmData} from './hooks'
 const VaDashboard: FC = () => {
   const {data, loading, filterShape, optionFilter, setOptionFilters, periodFilter, setPeriodFilter} = useVaPdmData()
   const {m, formatLargeNumber} = useI18n()
-  const {translateField, translateOption} = useKoboTranslations('va_tia_pdm')
-  const translateLabels = (option: string) =>
-    translateOption(option)?.reduce(
-      (result, {value, label}) => ({
-        ...result,
-        [value]: label,
-      }),
-      {} as Record<string, string>,
-    )
+  const {translateField, translateLabels} = useKoboTranslations('va_tia_pdm')
 
   return (
     <Page width="lg" loading={loading}>

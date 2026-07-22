@@ -39,15 +39,7 @@ export const MealPdmVaDashboard = () => {
   const schema = ctxSchema.byName.va_tia_pdm.get!
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
-  const {translateField, translateOption} = useKoboTranslations('va_tia_pdm')
-  const translateLabels = (option: string) =>
-    translateOption(option)?.reduce(
-      (result, {value, label}) => ({
-        ...result,
-        [value]: label,
-      }),
-      {} as Record<string, string>,
-    )
+  const {translateField, translateLabels} = useKoboTranslations('va_tia_pdm')
   const filterShape = useMemo(() => {
     return DataFilter.makeShape<PdmData<Va_tia_pdm.T>>({
       ...commonShape,

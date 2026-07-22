@@ -19,15 +19,7 @@ const PdmGPCaseManagementDashboard = () => {
   const {data, loading, filterShape, optionFilter, setOptionFilters, periodFilter, setPeriodFilter} =
     useGpCaseManagementData()
   const {m, formatLargeNumber} = useI18n()
-  const {translateField, translateOption} = useKoboTranslations('gp_case_management', {uk: 1, en: 0})
-  const translateLabels = (option: string) =>
-    translateOption(option)?.reduce(
-      (result, {value, label}) => ({
-        ...result,
-        [value]: label,
-      }),
-      {} as Record<string, string>,
-    )
+  const {translateField, translateLabels} = useKoboTranslations('gp_case_management', {uk: 1, en: 0})
   const avgMeetings = useMemo(() => {
     return data.length > 0
       ? (data

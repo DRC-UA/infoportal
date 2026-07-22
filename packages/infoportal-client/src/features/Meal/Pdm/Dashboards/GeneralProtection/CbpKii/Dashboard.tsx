@@ -17,15 +17,7 @@ import {useCbpKiiData} from './hooks'
 const CommunityKiiDashboard = () => {
   const {data, loading, filterShape, optionFilter, setOptionFilters, periodFilter, setPeriodFilter} = useCbpKiiData()
   const {m, formatLargeNumber} = useI18n()
-  const {translateField, translateOption} = useKoboTranslations('meal_kiiCbpPam', {uk: 1, en: 0})
-  const translateLabels = (option: string) =>
-    translateOption(option)?.reduce(
-      (result, {value, label}) => ({
-        ...result,
-        [value]: label,
-      }),
-      {} as Record<string, string>,
-    )
+  const {translateField, translateLabels} = useKoboTranslations('meal_kiiCbpPam', {uk: 1, en: 0})
 
   return (
     <Page width="lg" loading={loading}>

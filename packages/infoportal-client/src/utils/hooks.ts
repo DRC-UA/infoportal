@@ -30,15 +30,24 @@ const useKoboTranslations = (formName: KoboFormName, langCases: {uk: 0; en: 1} |
   )
 
   const translateField = useCallback(
-    (key: string): string | undefined => {
+    (key: string): string => {
       const translateFunction = formSchema?.translate.question
 
       if (!translateFunction) return 'Loading form scheme translations...'
 
-      return translateFunction(key)
+      return translateFunction(key) ?? `Failed to translate the "${key}" field`
     },
     [formSchema?.translate.question],
   )
+
+  const translateLabels = (option: string) =>
+    translateOption(option)?.reduce(
+      (result, {value, label}) => ({
+        ...result,
+        [value]: label,
+      }),
+      {} as Record<string, string>,
+    )
 
   useEffect(() => {
     schemaContext.setLangIndex(match(currentLang).cases(langCases).exhaustive())
@@ -47,6 +56,7 @@ const useKoboTranslations = (formName: KoboFormName, langCases: {uk: 0; en: 1} |
   return {
     translateOption,
     translateField,
+    translateLabels,
   }
 }
 

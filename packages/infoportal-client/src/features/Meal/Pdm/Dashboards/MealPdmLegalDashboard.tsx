@@ -35,15 +35,7 @@ export const PdmLegalDashboard = () => {
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
   const [interviewPeriod, setInterviewPeriod] = useState<[Date | undefined, Date | undefined]>([undefined, undefined])
   const [uniqueId, setUniqueId] = useState<string>('')
-  const {translateField, translateOption} = useKoboTranslations('legal_pam')
-  const translateLabels = (option: string) =>
-    translateOption(option)?.reduce(
-      (result, {value, label}) => ({
-        ...result,
-        [value]: label,
-      }),
-      {} as Record<string, string>,
-    )
+  const {translateField, translateLabels} = useKoboTranslations('legal_pam')
   const filterShape = useMemo(() => {
     const {oblast, office, project} = commonShape
     return DataFilter.makeShape<PdmData<Legal_pam.T>>({

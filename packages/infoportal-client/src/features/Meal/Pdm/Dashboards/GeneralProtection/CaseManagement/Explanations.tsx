@@ -95,15 +95,7 @@ const Explanations: FC<{
   explanation: QuestionsExplanations['explanation']
 }> = ({data, question, explanation}) => {
   const {m} = useI18n()
-  const {translateOption} = useKoboTranslations('gp_case_management', {uk: 1, en: 0})
-  const translateLabels = (option: string) =>
-    translateOption(option)?.reduce(
-      (result, {value, label}) => ({
-        ...result,
-        [value]: label,
-      }),
-      {} as Record<string, string>,
-    )
+  const {translateLabels} = useKoboTranslations('gp_case_management', {uk: 1, en: 0})
   const answersExplanationsMap = extractExplanations(data, {
     question,
     explanation,

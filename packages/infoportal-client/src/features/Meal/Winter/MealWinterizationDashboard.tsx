@@ -35,15 +35,7 @@ export const MealWinterizationDashboard = () => {
   const schema = ctxSchema.byName.meal_winterizationPdm.get!
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
-  const {translateField, translateOption} = useKoboTranslations('meal_winterizationPdm', {uk: 1, en: 0})
-  const translateLabels = (option: string) =>
-    translateOption(option)?.reduce(
-      (result, {value, label}) => ({
-        ...result,
-        [value]: label,
-      }),
-      {} as Record<string, string>,
-    )
+  const {translateField, translateLabels} = useKoboTranslations('meal_winterizationPdm', {uk: 1, en: 0})
 
   const filterShape = useMemo(() => {
     return DataFilter.makeShape<KoboSubmissionFlat<Meal_winterizationPdm.T>>({

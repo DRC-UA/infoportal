@@ -1,41 +1,16 @@
-import {useCallback, useEffect, useMemo, useState, type Dispatch, type SetStateAction} from 'react'
-import {match, seq, Seq} from '@axanc/ts-utils'
+import {useEffect, useMemo, useState} from 'react'
+import {seq, Seq} from '@axanc/ts-utils'
 
 import {Meal_ecrec_agMsmeVetPam, KoboSubmissionFlat, Period} from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
 import {useI18n} from '@/core/i18n'
 import {useIpToast} from '@/core/useToast'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {useFetcher} from '@/shared/hook/useFetcher'
+import {useKoboTranslations} from '@/utils'
 
 import {pdmAdapter} from './utils'
-
-const useTranslations = () => {
-  const schemaContext = useKoboSchemaContext({autoFetch: ['meal_ecrec_agMsmeVetPam']})
-  const schema = schemaContext.byName['meal_ecrec_agMsmeVetPam'].get
-  const {currentLang} = useI18n()
-
-  const getOptionTranslations = useCallback(
-    (option: keyof Meal_ecrec_agMsmeVetPam.T | keyof typeof Meal_ecrec_agMsmeVetPam.options) => {
-      return (schema?.helper.getOptionsByQuestionName(option) ?? []).map(({name}) => ({
-        value: name,
-        label: schema?.translate.choice(option, name) ?? name,
-      }))
-    },
-    [schema],
-  )
-
-  useEffect(() => {
-    schemaContext.setLangIndex(match(currentLang).cases({en: 0, uk: 1}).exhaustive())
-  }, [currentLang])
-
-  return {
-    translateOption: getOptionTranslations,
-    translateField: schema?.translate.question,
-  }
-}
 
 const useCashAgMsmeVet = () => {
   const {api} = useAppSettings()
@@ -44,7 +19,7 @@ const useCashAgMsmeVet = () => {
   const [data, setData] = useState<Seq<KoboSubmissionFlat<Meal_ecrec_agMsmeVetPam.T>>>(seq([]))
   const {toastHttpError} = useIpToast()
   const {m} = useI18n()
-  const {translateOption} = useTranslations()
+  const {translateOption} = useKoboTranslations('meal_ecrec_agMsmeVetPam')
   const labelFinder =
     <K extends keyof typeof Meal_ecrec_agMsmeVetPam.options>(entity: K) =>
     (item: Meal_ecrec_agMsmeVetPam.Option<K> | undefined) =>
@@ -183,4 +158,4 @@ const useCashAgMsmeVet = () => {
   }
 }
 
-export {useCashAgMsmeVet, useTranslations}
+export {useCashAgMsmeVet}

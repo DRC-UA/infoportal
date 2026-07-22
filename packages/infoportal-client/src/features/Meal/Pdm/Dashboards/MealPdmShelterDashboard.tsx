@@ -50,15 +50,7 @@ export const MealPdmShelterDashboard = () => {
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isShelterPdm))
   const {m} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
-  const {translateField, translateOption} = useKoboTranslations('meal_shelterPdm')
-  const translateLabels = (option: string) =>
-    translateOption(option)?.reduce(
-      (result, {value, label}) => ({
-        ...result,
-        [value]: label,
-      }),
-      {} as Record<string, string>,
-    )
+  const {translateField, translateLabels} = useKoboTranslations('meal_shelterPdm')
 
   const filterShape = useMemo(() => {
     return DataFilter.makeShape<PdmData<Meal_shelterPdm.T>>({
