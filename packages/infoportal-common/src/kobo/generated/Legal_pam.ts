@@ -172,6 +172,7 @@ export namespace Legal_pam {
       ukr000388_bha: `BHA -UKR-000388 (top up)`,
       ukr000397_gffo: `GFFO UKR-000397`,
       ukr000423_echo4: `ECHO - UKR-000423`,
+      ukr000461_uhf: `UHF - UKR-000461`,
       ukr000xxx_fcdo: `FCDO (Livelihoods)`,
     },
     office: {
