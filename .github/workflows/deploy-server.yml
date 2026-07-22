@@ -76,8 +76,8 @@ jobs:
 
       - name: Build, and test (server)
         run: |
-          npm run build --workspace infoportal-server --if-present
           npm run test --workspace infoportal-server --if-present
+          npm run build --workspace infoportal-server --if-present
 
       - name: Update deployment tag
         run: |
