@@ -209,7 +209,7 @@ export const MealWinterizationDashboard = () => {
                     label={Meal_winterizationPdm.options.needs_community_currently}
                   />
                 </SlidePanel>
-                <SlidePanel title={translateField && translateField('needs_community_currently_other')}>
+                <SlidePanel title={translateField('needs_community_currently_other')}>
                   <ChartBarSingleBy
                     data={data}
                     by={({needs_community_currently_other}) => needs_community_currently_other}
@@ -424,7 +424,7 @@ export const MealWinterizationDashboard = () => {
               >
                 July 2026 Update for Needs Assessment:
               </Typography>
-              <SlidePanel title={translateField && translateField('extent_cash_correspond')}>
+              <SlidePanel title={translateField('extent_cash_correspond')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({extent_cash_correspond}) => extent_cash_correspond}
@@ -432,7 +432,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('extent_cash_correspond_bad')}>
+              <SlidePanel title={translateField('extent_cash_correspond_bad')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({extent_cash_correspond_bad}) => extent_cash_correspond_bad}
@@ -440,7 +440,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('level_heating_improved')}>
+              <SlidePanel title={translateField('level_heating_improved')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({level_heating_improved}) => level_heating_improved}
@@ -448,7 +448,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('level_heating_improved_dec_other')}>
+              <SlidePanel title={translateField('level_heating_improved_dec_other')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({level_heating_improved_dec_other}) => level_heating_improved_dec_other}
@@ -456,7 +456,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('helped_thermal_comfort')}>
+              <SlidePanel title={translateField('helped_thermal_comfort')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({helped_thermal_comfort}) => helped_thermal_comfort}
@@ -464,7 +464,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('helped_thermal_comfort_no')}>
+              <SlidePanel title={translateField('helped_thermal_comfort_no')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({helped_thermal_comfort_no}) => helped_thermal_comfort_no}
@@ -472,7 +472,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('type_fuel_most')}>
+              <SlidePanel title={translateField('type_fuel_most')}>
                 <ChartBarMultipleBy
                   data={data}
                   by={({type_fuel_most}) => type_fuel_most}
@@ -480,7 +480,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('type_fuel_most_other')}>
+              <SlidePanel title={translateField('type_fuel_most_other')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({type_fuel_most_other}) => type_fuel_most_other}
@@ -488,7 +488,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('cash_modality_inkind')}>
+              <SlidePanel title={translateField('cash_modality_inkind')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({cash_modality_inkind}) => cash_modality_inkind}
@@ -496,7 +496,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('cash_modality_inkind_yes')}>
+              <SlidePanel title={translateField('cash_modality_inkind_yes')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({cash_modality_inkind_yes}) => cash_modality_inkind_yes}
@@ -505,7 +505,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('enough_hh_winter_season')}>
+              <SlidePanel title={translateField('enough_hh_winter_season')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({enough_hh_winter_season}) => enough_hh_winter_season}
@@ -513,7 +513,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('enough_hh_winter_season_no')}>
+              <SlidePanel title={translateField('enough_hh_winter_season_no')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({enough_hh_winter_season_no}) => enough_hh_winter_season_no?.toString()}
@@ -521,7 +521,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('enough_hh_winter_season_cash_no')}>
+              <SlidePanel title={translateField('enough_hh_winter_season_cash_no')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({enough_hh_winter_season_cash_no}) => enough_hh_winter_season_cash_no?.toString()}
@@ -530,7 +530,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('types_fuels_available')}>
+              <SlidePanel title={translateField('types_fuels_available')}>
                 <ChartBarMultipleBy
                   data={data}
                   by={({types_fuels_available}) => types_fuels_available}
@@ -538,7 +538,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('satisfied_assistance_provided')}>
+              <SlidePanel title={translateField('satisfied_assistance_provided')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({satisfied_assistance_provided}) => satisfied_assistance_provided}
@@ -546,7 +546,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('satisfied_timing_assistance')}>
+              <SlidePanel title={translateField('satisfied_timing_assistance')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({satisfied_timing_assistance}) => satisfied_timing_assistance}
@@ -554,7 +554,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('assistance_timely')}>
+              <SlidePanel title={translateField('assistance_timely')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({assistance_timely}) => assistance_timely}
@@ -562,7 +562,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('assistance_dwelling_sufficiently')}>
+              <SlidePanel title={translateField('assistance_dwelling_sufficiently')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({assistance_dwelling_sufficiently}) => assistance_dwelling_sufficiently}
@@ -570,7 +570,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('receive_shelter_assistance')}>
+              <SlidePanel title={translateField('receive_shelter_assistance')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({receive_shelter_assistance}) => receive_shelter_assistance}
@@ -578,7 +578,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('receive_shelter_assistance_no')}>
+              <SlidePanel title={translateField('receive_shelter_assistance_no')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({receive_shelter_assistance_no}) => receive_shelter_assistance_no}
@@ -586,7 +586,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('community_purchase_fuel')}>
+              <SlidePanel title={translateField('community_purchase_fuel')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({community_purchase_fuel}) => community_purchase_fuel}
@@ -594,7 +594,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('community_purchase_fuel_other')}>
+              <SlidePanel title={translateField('community_purchase_fuel_other')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({community_purchase_fuel_other}) => community_purchase_fuel_other}
@@ -602,7 +602,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('multiple_forms_assistance')}>
+              <SlidePanel title={translateField('multiple_forms_assistance')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({multiple_forms_assistance}) => multiple_forms_assistance}
@@ -611,7 +611,7 @@ export const MealWinterizationDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('multiple_forms_assistance_why')}>
+              <SlidePanel title={translateField('multiple_forms_assistance_why')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({multiple_forms_assistance_why}) => multiple_forms_assistance_why}

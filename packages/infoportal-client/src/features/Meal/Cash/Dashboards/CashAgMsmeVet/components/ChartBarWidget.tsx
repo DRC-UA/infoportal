@@ -14,7 +14,7 @@ const ChartBarWidget: FC<ChartWidgetProps> = ({data, field, limitChartHeight}) =
   const {translateField, translateOption} = useTranslations()
 
   return (
-    <SlidePanel title={translateField && translateField(field)}>
+    <SlidePanel title={translateField(field)}>
       {Array.isArray(data?.[0]?.answers[field]) ? (
         <ChartBarMultipleBy
           data={data}

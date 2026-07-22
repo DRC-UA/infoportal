@@ -17,16 +17,27 @@ const usePlurals = (nounObject: Record<Intl.LDMLPluralRule, string>) => {
 const useKoboTranslations = (formName: KoboFormName, langCases: {uk: 0; en: 1} | {uk: 1; en: 0} = {uk: 0, en: 1}) => {
   const {currentLang} = useI18n()
   const schemaContext = useKoboSchemaContext({autoFetch: [formName]})
-  const gbvConceptsSchema = schemaContext.byName[formName].get
+  const formSchema = schemaContext.byName[formName].get
 
-  const getOptionTranslations = useCallback(
+  const translateOption = useCallback(
     (option: string) => {
-      return gbvConceptsSchema?.helper.getOptionsByQuestionName(option)?.map(({name}) => ({
+      return formSchema?.helper.getOptionsByQuestionName(option)?.map(({name}) => ({
         value: name,
-        label: gbvConceptsSchema.translate.choice(option, name) ?? name,
+        label: formSchema.translate.choice(option, name) ?? name,
       }))
     },
-    [gbvConceptsSchema],
+    [formSchema],
+  )
+
+  const translateField = useCallback(
+    (key: string): string | undefined => {
+      const translateFunction = formSchema?.translate.question
+
+      if (!translateFunction) return 'Loading form scheme translations...'
+
+      return translateFunction(key)
+    },
+    [formSchema?.translate.question],
   )
 
   useEffect(() => {
@@ -34,8 +45,8 @@ const useKoboTranslations = (formName: KoboFormName, langCases: {uk: 0; en: 1} |
   }, [currentLang])
 
   return {
-    translateOption: getOptionTranslations,
-    translateField: gbvConceptsSchema?.translate.question,
+    translateOption,
+    translateField,
   }
 }
 

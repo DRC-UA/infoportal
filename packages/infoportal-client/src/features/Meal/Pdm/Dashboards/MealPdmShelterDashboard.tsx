@@ -757,7 +757,7 @@ export const MealPdmShelterDashboard = () => {
                 />
               </SlidePanel>
               <DashboardPanelTitle>July 2026 Update for Needs Assessment:</DashboardPanelTitle>
-              <SlidePanel title={translateField && translateField('part_dwelling_insulated')}>
+              <SlidePanel title={translateField('part_dwelling_insulated')}>
                 <ChartBarMultipleBy
                   data={data}
                   by={({answers: {part_dwelling_insulated}}) => part_dwelling_insulated}
@@ -765,7 +765,7 @@ export const MealPdmShelterDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('satisfied_repaired_premises')}>
+              <SlidePanel title={translateField('satisfied_repaired_premises')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers: {satisfied_repaired_premises}}) => satisfied_repaired_premises}
@@ -773,7 +773,7 @@ export const MealPdmShelterDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('insulation_meet_needs')}>
+              <SlidePanel title={translateField('insulation_meet_needs')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers: {insulation_meet_needs}}) => insulation_meet_needs}
@@ -781,7 +781,7 @@ export const MealPdmShelterDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('assistance_provided_project')}>
+              <SlidePanel title={translateField('assistance_provided_project')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers: {assistance_provided_project}}) => assistance_provided_project}
@@ -789,7 +789,7 @@ export const MealPdmShelterDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('shelter_culturally_acceptable')}>
+              <SlidePanel title={translateField('shelter_culturally_acceptable')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers: {shelter_culturally_acceptable}}) => shelter_culturally_acceptable}
@@ -797,7 +797,7 @@ export const MealPdmShelterDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('repairs_done_accordance')}>
+              <SlidePanel title={translateField('repairs_done_accordance')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers: {repairs_done_accordance}}) => repairs_done_accordance}
@@ -805,7 +805,7 @@ export const MealPdmShelterDashboard = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('top3_priority_needs')}>
+              <SlidePanel title={translateField('top3_priority_needs')}>
                 <ChartBarMultipleBy
                   data={data}
                   by={({answers: {top3_priority_needs}}) => top3_priority_needs}

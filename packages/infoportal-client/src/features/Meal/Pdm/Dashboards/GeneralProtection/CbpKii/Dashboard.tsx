@@ -62,15 +62,15 @@ const CommunityKiiDashboard = () => {
               />
             </PanelBody>
           </Panel>
-          <SlidePanel title={translateField && translateField('project')}>
+          <SlidePanel title={translateField('project')}>
             <ChartBarSingleBy data={data} by={({project}) => project} label={translateLabels('project')} />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('respondent_role')}>
+          <SlidePanel title={translateField('respondent_role')}>
             {data.map(({id, respondent_role}) => (
               <Quotation key={`${id}-${respondent_role}`}>{respondent_role}</Quotation>
             ))}
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('type_support')}>
+          <SlidePanel title={translateField('type_support')}>
             <ChartBarMultipleBy
               data={data}
               by={({type_support}) => type_support}
@@ -80,7 +80,7 @@ const CommunityKiiDashboard = () => {
           </SlidePanel>
           {[['support_community_ability', 'other', 'community_ability_situation_worsened'] as const].map(
             ([question, answer, explanation]) => (
-              <SlidePanel key={question} title={translateField && translateField(question)}>
+              <SlidePanel key={question} title={translateField(question)}>
                 <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
                 {explanation && answer && (
                   <Explanations data={data} question={question} answer={answer} explanation={explanation} />
@@ -88,7 +88,7 @@ const CommunityKiiDashboard = () => {
               </SlidePanel>
             ),
           )}
-          <SlidePanel title={translateField && translateField('issues_better_respond')}>
+          <SlidePanel title={translateField('issues_better_respond')}>
             {data.map(({id, issues_better_respond}) => (
               <Quotation key={`${id}-${issues_better_respond}`}>{issues_better_respond}</Quotation>
             ))}
@@ -99,7 +99,7 @@ const CommunityKiiDashboard = () => {
             ['support_meet', ['partially', 'not'] as any, 'support_meet_bad'] as const,
             ['support_improving_ability', 'not', 'support_improving_ability_bad'] as const,
           ].map(([question, answer, explanation]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
               {explanation && answer && (
                 <Explanations data={data} question={question} answer={answer} explanation={explanation} />
@@ -110,7 +110,7 @@ const CommunityKiiDashboard = () => {
         <Div column>
           {[['support_vulnerable_groups', 'no', 'support_vulnerable_groups_no'] as const].map(
             ([question, answer, explanation]) => (
-              <SlidePanel key={question} title={translateField && translateField(question)}>
+              <SlidePanel key={question} title={translateField(question)}>
                 <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
                 {explanation && answer && (
                   <Explanations data={data} question={question} answer={answer} explanation={explanation} />
@@ -118,26 +118,23 @@ const CommunityKiiDashboard = () => {
               </SlidePanel>
             ),
           )}
-          <SlidePanel
-            key="groups_barriers_participating"
-            title={translateField && translateField('groups_barriers_participating')}
-          >
+          <SlidePanel key="groups_barriers_participating" title={translateField('groups_barriers_participating')}>
             {data.map(({id, groups_barriers_participating}) => (
               <Quotation key={`${id}-${groups_barriers_participating}`}>{groups_barriers_participating}</Quotation>
             ))}
           </SlidePanel>
           {[['continue_supporting_community'] as const].map(([question]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
             </SlidePanel>
           ))}
-          <SlidePanel key="additional_support_need" title={translateField && translateField('additional_support_need')}>
+          <SlidePanel key="additional_support_need" title={translateField('additional_support_need')}>
             {data.map(({id, additional_support_need}) => (
               <Quotation key={`${id}-${additional_support_need}`}>{additional_support_need}</Quotation>
             ))}
           </SlidePanel>
           {[['activities_making_safer'] as const].map(([question]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
             </SlidePanel>
           ))}
@@ -150,14 +147,14 @@ const CommunityKiiDashboard = () => {
             ['complaint_question'] as const,
             ['staff_respect', 'no', 'staff_respect_no'] as const,
           ].map(([question, answer, explanation]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
               {explanation && answer && (
                 <Explanations data={data} question={question} answer={answer} explanation={explanation} />
               )}
             </SlidePanel>
           ))}
-          <SlidePanel title={translateField && translateField('information_relevant')}>
+          <SlidePanel title={translateField('information_relevant')}>
             {data.map(({id, information_relevant}) => (
               <Quotation key={`${id}-${information_relevant}`}>{information_relevant}</Quotation>
             ))}
