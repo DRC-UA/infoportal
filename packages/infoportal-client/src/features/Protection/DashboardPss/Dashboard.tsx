@@ -171,7 +171,7 @@ const PssDashboardWithContext: FC = () => {
                     Object.entries(prePostTests).map(([field, figures]) => {
                       return (
                         <Fragment key={field}>
-                          <Typography>{translateField && translateField(field)}</Typography>
+                          <Typography>{translateField(field)}</Typography>
                           <ChartBarVerticalGrouped
                             height={140}
                             layout="vertical"

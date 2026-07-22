@@ -15,9 +15,6 @@ import {useKoboTranslations} from '@/utils/hooks'
 import {Explanations, MissingData, Quotation} from './Explanations'
 import {useGpCaseManagementData} from './hooks'
 
-const ANSWER_KEYS = ['yes', 'no', 'completely', 'somewhat', 'not_all'] as const
-type AnswerKey = keyof typeof ANSWER_KEYS
-
 const PdmGPCaseManagementDashboard = () => {
   const {data, loading, filterShape, optionFilter, setOptionFilters, periodFilter, setPeriodFilter} =
     useGpCaseManagementData()
@@ -84,25 +81,21 @@ const PdmGPCaseManagementDashboard = () => {
               />
             </PanelBody>
           </Panel>
-          <SlidePanel title={translateField && translateField('gender')}>
+          <SlidePanel title={translateField('gender')}>
             <ChartBarSingleBy data={data} by={({gender}) => gender} label={translateLabels('gender')} />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('project')}>
+          <SlidePanel title={translateField('project')}>
             <ChartBarSingleBy data={data} by={({project}) => project} label={translateLabels('project')} />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('office')}>
+          <SlidePanel title={translateField('office')}>
             <ChartBarSingleBy data={data} by={({office}) => office} label={translateLabels('office')} includeNullish />
           </SlidePanel>
-          <SlidePanel title={translateField && translateField('staff_code')}>
+          <SlidePanel title={translateField('staff_code')}>
             <ChartBarSingleBy data={data} by={({staff_code}) => staff_code} label={translateLabels('staff_code')} />
           </SlidePanel>
         </Div>
         <Div column>
-          <SlideWidget
-            sx={{flex: 1}}
-            icon="repeat"
-            title={(translateField && translateField('many_met_caseworker')) ?? ''}
-          >
+          <SlideWidget sx={{flex: 1}} icon="repeat" title={translateField('many_met_caseworker') ?? ''}>
             {avgMeetings ? formatLargeNumber(avgMeetings) : 0}
           </SlideWidget>
           {[
@@ -112,7 +105,7 @@ const PdmGPCaseManagementDashboard = () => {
             ['information_services_available', 'information_services_available_explain'] as const,
             ['satisfied_caseworke_knowledge', 'satisfied_caseworke_knowledge_explain'] as const,
           ].map(([question, explanation]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
               <Explanations data={data} question={question} explanation={explanation} />
             </SlidePanel>
@@ -124,7 +117,7 @@ const PdmGPCaseManagementDashboard = () => {
             ['pressured_time_caseworker', 'pressured_time_caseworker_yes'] as const,
             ['views_case_management', 'views_case_management_no'] as const,
           ].map(([question, explanation]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
               <Explanations data={data} question={question} explanation={explanation} />
             </SlidePanel>
@@ -133,13 +126,13 @@ const PdmGPCaseManagementDashboard = () => {
             ['caseworker_communication_skills', 'caseworker_communication_skills_explain'] as const,
             ['comfortable_staff_members', 'comfortable_staff_members_explain'] as const,
           ].map(([question, explanation]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
               <Explanations data={data} question={question} explanation={explanation} />
             </SlidePanel>
           ))}
           {(['caseworker_attitude_towards', 'services_most_helpful'] as const).map((question) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               {(() => {
                 const answers = data.map((record) => record[question]).compact()
 
@@ -155,12 +148,12 @@ const PdmGPCaseManagementDashboard = () => {
             ['channel_suggestion_complaint', 'channel_suggestion_complaint_explain'] as const,
             ['made_complaint_responded', 'made_complaint_responded_no'] as const,
           ].map(([question, explanation]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
               <Explanations data={data} question={question} explanation={explanation} />
             </SlidePanel>
           ))}
-          <SlidePanel title={translateField && translateField('explain_rights_beginning')}>
+          <SlidePanel title={translateField('explain_rights_beginning')}>
             <ChartBarSingleBy
               data={data}
               by={({explain_rights_beginning}) => explain_rights_beginning}
@@ -171,7 +164,7 @@ const PdmGPCaseManagementDashboard = () => {
             ['caseworker_agreed_contact', 'caseworker_agreed_contact_explain'] as const,
             ['staff_treated_respect', 'staff_treated_respect_no'] as const,
           ].map(([question, explanation]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
               <Explanations data={data} question={question} explanation={explanation} />
             </SlidePanel>
@@ -181,12 +174,12 @@ const PdmGPCaseManagementDashboard = () => {
             ['ability_solve_problems', 'ability_solve_problems_001'] as const,
             ['overall_satisfied_services', 'overall_satisfied_services_explain'] as const,
           ].map(([question, explanation]) => (
-            <SlidePanel key={question} title={translateField && translateField(question)}>
+            <SlidePanel key={question} title={translateField(question)}>
               <ChartBarSingleBy data={data} by={(record) => record[question]} label={translateLabels(question)} />
               <Explanations data={data} question={question} explanation={explanation} />
             </SlidePanel>
           ))}
-          <SlidePanel title={translateField && translateField('comment')}>
+          <SlidePanel title={translateField('comment')}>
             {(() => {
               const answers = data.map(({comment}) => comment).compact()
 

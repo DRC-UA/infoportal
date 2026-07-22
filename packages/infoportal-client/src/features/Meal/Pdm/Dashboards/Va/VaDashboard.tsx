@@ -90,7 +90,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('accessibility_interview')}>
+              <SlidePanel title={translateField('accessibility_interview')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) => answers.accessibility_interview}
@@ -98,7 +98,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('receive_help_drc')}>
+              <SlidePanel title={translateField('receive_help_drc')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) => answers.receive_help_drc}
@@ -106,7 +106,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('what_assistance_drc')}>
+              <SlidePanel title={translateField('what_assistance_drc')}>
                 <ChartBarMultipleBy
                   data={data}
                   by={({answers}) => answers.what_assistance_drc}
@@ -116,7 +116,7 @@ const VaDashboard: FC = () => {
               </SlidePanel>
             </Div>
             <Div column>
-              <SlidePanel title={translateField && translateField('money_spent_yn')}>
+              <SlidePanel title={translateField('money_spent_yn')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) => answers.money_spent_yn}
@@ -124,7 +124,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('money_spent')}>
+              <SlidePanel title={translateField('money_spent')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) => answers.money_spent}
@@ -132,7 +132,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('rate_satisfaction_assistance')}>
+              <SlidePanel title={translateField('rate_satisfaction_assistance')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) =>
@@ -144,7 +144,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('scale_assistance_time')}>
+              <SlidePanel title={translateField('scale_assistance_time')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) =>
@@ -156,7 +156,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('scale_changed_family')}>
+              <SlidePanel title={translateField('scale_changed_family')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) => answers.scale_changed_family}
@@ -164,7 +164,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('know_address_feedback')}>
+              <SlidePanel title={translateField('know_address_feedback')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) =>
@@ -176,7 +176,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('feel_drc_staff_security')}>
+              <SlidePanel title={translateField('feel_drc_staff_security')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) =>
@@ -188,7 +188,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('feel_drc_staff_respect')}>
+              <SlidePanel title={translateField('feel_drc_staff_respect')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) =>
@@ -205,7 +205,7 @@ const VaDashboard: FC = () => {
               <SlideWidget sx={{flex: 1}} icon="group" title={m.submissions}>
                 {formatLargeNumber(data.length)}
               </SlideWidget>
-              <SlidePanel title={translateField && translateField('scale_situation_consideration')}>
+              <SlidePanel title={translateField('scale_situation_consideration')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) =>
@@ -217,7 +217,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('informing')}>
+              <SlidePanel title={translateField('informing')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) =>
@@ -229,7 +229,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('scale_resolve_problem')}>
+              <SlidePanel title={translateField('scale_resolve_problem')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) => answers.scale_resolve_problem}
@@ -237,7 +237,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('scale_challenges_accessing_drc_assistance')}>
+              <SlidePanel title={translateField('scale_challenges_accessing_drc_assistance')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) =>
@@ -251,7 +251,7 @@ const VaDashboard: FC = () => {
                   includeNullish
                 />
               </SlidePanel>
-              <SlidePanel title={translateField && translateField('without_DRC')}>
+              <SlidePanel title={translateField('without_DRC')}>
                 <ChartBarSingleBy
                   data={data}
                   by={({answers}) => answers.without_DRC}
