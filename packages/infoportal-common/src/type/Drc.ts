@@ -249,6 +249,7 @@ export enum DrcDonor {
   HGBF = 'HGBF',
   HoffmansAndHusmans = 'HoffmansAndHusmans',
   MOFA = 'MOFA',
+  NORAD = 'NORAD',
   NovoNordisk = 'NovoNordisk',
   OKF = 'OKF',
   PFRU = 'PFRU',
@@ -283,6 +284,7 @@ export const drcDonorTranlate: Record<DrcDonor, string> = {
   HGBF: 'Howard G. Buffett Fund',
   HoffmansAndHusmans: 'Hoffmans & Husmans',
   MOFA: 'MOFA',
+  NORAD: 'Norwegian Agency for Development Cooperation',
   NovoNordisk: 'Novo Nordisk',
   OKF: 'OKF',
   PFRU: 'PFRU',
@@ -385,6 +387,7 @@ export enum DrcProject {
   'UKR-000461 UHF' = 'UKR-000461 UHF',
   'UKR-000462 ECHO' = 'UKR-000462 ECHO',
   'UKR-000464 Villum Fundation' = 'UKR-000464 Villum Fundation',
+  'UKR-000467 NORAD' = 'UKR-000467 NORAD',
   // extra options out of sorted list:
   'Other' = 'Other',
   'None' = 'None',
@@ -471,6 +474,7 @@ export class DrcProjectHelper {
     'UKR-000461 UHF': DrcDonor.UHF,
     'UKR-000462 ECHO': DrcDonor.ECHO,
     'UKR-000464 Villum Fundation': DrcDonor['Villum Fundation'],
+    'UKR-000467 NORAD': DrcDonor['NORAD'],
     // extra options out of sorted list:
     Other: DrcDonor.Other,
     None: DrcDonor.None,

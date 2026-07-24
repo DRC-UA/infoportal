@@ -56,6 +56,7 @@ export namespace Meal_cfmInternal {
       none: `Жодного`,
     },
     project_code: {
+      'UKR-000467': `UKR-000467 NORAD`,
       'UKR-000464': `UKR-000464 Villum Fundation`,
       'UKR-000462': `UKR-000462 ECHO`,
       'UKR-000461': `UKR-000461 UHF`,
