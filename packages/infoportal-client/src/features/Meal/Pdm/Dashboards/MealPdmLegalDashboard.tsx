@@ -115,7 +115,7 @@ export const PdmLegalDashboard = () => {
 
   return (
     <Page width="lg" loading={ctx.fetcherAnswers.loading}>
-      <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2}}>
+      <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2}}>
         <Box sx={{display: 'flex', flexDirection: 'column'}}>
           <Txt size="small" color="primary" sx={{ml: 0.5, mb: 0.5}}>
             Submitted at
