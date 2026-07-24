@@ -20,8 +20,6 @@ const isWgssPdm = (_: PdmData<PdmForm>): _ is PdmData<Gbv_wgss_pdm.T> => {
 export const MealPdmWgssDashboard = () => {
   const ctx = useMealPdmContext()
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isWgssPdm))
-  const ctxSchema = useKoboSchemaContext()
-  const schema = ctxSchema.byName.gbv_wgssPdm.get!
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
 
@@ -49,7 +47,7 @@ export const MealPdmWgssDashboard = () => {
           >
             {(value, onChange) => (
               <PeriodPicker
-                sx={{marginTop: '-6px'}}
+                fullWidth={false}
                 value={value ?? [undefined, undefined]}
                 onChange={onChange}
                 min={ctx.fetcherPeriod.get?.start}
