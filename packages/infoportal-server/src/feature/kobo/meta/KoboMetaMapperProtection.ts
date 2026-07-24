@@ -501,7 +501,13 @@ export class KoboMetaMapperProtection {
       raion: KoboXmlMapper.Location.searchRaion(answer.raion),
       hromada: KoboXmlMapper.Location.searchHromada(answer.hromada),
       sector: DrcSector.GeneralProtection,
-      activity: DrcProgram.IPA,
+      activity: match(answer.type_assis)
+        .cases({
+          ipa: DrcProgram.IPA,
+          bd_fund: DrcProgram.IPAForElderly,
+          c4p_uct_referral: DrcProgram.IPAC4P,
+        })
+        .default(undefined),
       persons,
       personsCount: persons.length,
       project,
