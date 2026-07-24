@@ -150,6 +150,8 @@ export class DrcSectorHelper {
     HygieneKit: [DrcSector.NFI],
     InfantWinterClothing: [DrcSector.NFI],
     [DrcProgram.IPA]: [DrcSector.GeneralProtection],
+    [DrcProgram.IPAForElderly]: [DrcSector.GeneralProtection],
+    [DrcProgram.IPAC4P]: [DrcSector.GeneralProtection],
     Legal: [DrcSector.GeneralProtection],
     LegalAid: [DrcSector.GBV], //	# of individuals at risk supported with GBV specialized legal assistance and counseling
     [DrcProgram.LegalAssistanceCivil]: [DrcSector.Legal],
