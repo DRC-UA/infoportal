@@ -1,5 +1,6 @@
-import {useMemo, useState} from 'react'
+import {useMemo, useState, type ReactNode} from 'react'
 import {map, seq} from '@axanc/ts-utils'
+import {isEqual} from 'lodash'
 
 import {Gbv_girl_shine} from 'infoportal-common'
 
@@ -13,9 +14,33 @@ import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {Panel, PanelBody} from '@/shared/Panel'
+import {useKoboTranslations} from '@/utils/hooks'
 
-const isGirlPdm = (_: PdmData<PdmForm>): _ is PdmData<Gbv_girl_shine.T> => {
-  return _.type === 'GirlShine'
+const isGirlPdm = (record: PdmData<PdmForm>): record is PdmData<Gbv_girl_shine.T> => {
+  return record.type === 'GirlShine'
+}
+
+const titleSwitch = ({
+  titles,
+  filter,
+  translator,
+}: {
+  titles: {
+    gs: string
+    wr: string
+  }
+  filter: string[] | undefined
+  translator: (key: string) => string
+}): ReactNode => {
+  if (isEqual(filter, ['girl_shine'])) {
+    return translator(titles.gs)
+  }
+
+  if (isEqual(filter, ['women_rise'])) {
+    return translator(titles.wr)
+  }
+
+  return `${translator(titles.gs)} [ AND ] ${translator(titles.wr)}`
 }
 
 export const PdmGirlShineDashboard = () => {
@@ -43,6 +68,7 @@ export const PdmGirlShineDashboard = () => {
       },
     })
   }, [commonShape])
+  const {translateField} = useKoboTranslations('gbv_girlShine', {en: 0, uk: 1})
 
   const data = useMemo(() => {
     return map(ctx.fetcherAnswers.get, (_) => {
@@ -107,10 +133,16 @@ export const PdmGirlShineDashboard = () => {
               </SlidePanel>
             </Div>
             <Div column sx={{maxHeight: '50%'}}>
-              <SlidePanel title={m.mealMonitoringPdm.girlShineSafe}>
+              <SlidePanel
+                title={titleSwitch({
+                  titles: {gs: 'safe_whole_time', wr: 'safe_times_traveling'},
+                  filter: optionFilter.topic,
+                  translator: translateField,
+                })}
+              >
                 <ChartBarSingleBy
                   data={data}
-                  by={(_) => _.answers.safe_whole_time}
+                  by={({answers: {safe_whole_time, safe_times_traveling}}) => safe_whole_time || safe_times_traveling}
                   label={Gbv_girl_shine.options.knew_enough_participate}
                 />
               </SlidePanel>
