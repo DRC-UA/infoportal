@@ -1,14 +1,20 @@
+import {useMemo} from 'react'
 import {Navigate, NavLink, Route, Routes} from 'react-router-dom'
+import {Divider} from '@mui/material'
+
+import {KoboFormName, KoboIndex} from 'infoportal-common'
+
+import {appConfig} from '@/conf/AppConfig'
+import {useI18n} from '@/core/i18n'
+import {useSession} from '@/core/Session/SessionContext'
+import {Access} from '@/core/sdk/server/access/Access'
+import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
+import {AppFeatureId, appFeaturesIndex} from '@/features/appFeatureId'
 import {Sidebar, SidebarBody, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
-import {useI18n} from '@/core/i18n'
-import React, {useMemo} from 'react'
 import {AppHeader} from '@/shared/Layout/Header/AppHeader'
-import {useSession} from '@/core/Session/SessionContext'
-import {AppFeatureId, appFeaturesIndex} from '@/features/appFeatureId'
 import {NoFeatureAccessPage} from '@/shared/NoFeatureAccessPage'
 import {SidebarSection} from '@/shared/Layout/Sidebar/SidebarSection'
-import {KoboFormName, KoboIndex} from 'infoportal-common'
 import {MealVerificationList} from '@/features/Meal/Verification/MealVerificationList'
 import {MealVerificationForm} from '@/features/Meal/Verification/Form/MealVerificationForm'
 import {getKoboFormRouteProps, SidebarKoboLink} from '@/features/SidebarKoboLink'
@@ -16,9 +22,6 @@ import {MealVisit} from '@/features/Meal/Visit/MealVisit'
 import {MealVisitDashboard} from '@/features/Meal/Visit/MealVisitDashboard'
 import {MealVisitDetails} from '@/features/Meal/Visit/MealVisitDetails'
 import {MealVerification} from '@/features/Meal/Verification/MealVerification'
-import {Access} from '@/core/sdk/server/access/Access'
-import {appConfig} from '@/conf/AppConfig'
-import {useReactRouterDefaultRoute} from '@/core/useReactRouterDefaultRoute'
 import {MealVerificationData} from '@/features/Meal/Verification/MealVerificationData'
 import {MealPdmShelterDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmShelterDashboard'
 import {MealPdmNfiDashboard} from '@/features/Meal/Pdm/Dashboards/MealPdmNfiDashboard'
@@ -43,6 +46,7 @@ import CbpKiiDashboard from '@/features/Meal/Pdm/Dashboards/GeneralProtection/Cb
 import {PdmIpaDashboard} from '@/features/Meal/Pdm/Dashboards/PdmIpaDashboard'
 
 import VaDashboard from './Pdm/Dashboards/Va'
+import EchoPmKoi from './EchoPmKoi'
 
 const relatedKoboForms: KoboFormName[] = [
   'meal_verificationWinterization',
@@ -80,6 +84,9 @@ export const mealIndex = {
       list: '/verification/list',
       form: '/verification/form',
       data: (_: string = '/:id') => `/verification/${_}`,
+    },
+    echo: {
+      root: '/echo-pm-koi',
     },
     pdm: {
       _: '/pdm',
@@ -188,6 +195,10 @@ const MealSidebar = ({
             />
           </SidebarSection>
         )}
+        <NavLink to={path(mealIndex.siteMap.echo.root)}>
+          {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.echoLinkLabel}</SidebarItem>}
+        </NavLink>
+        <Divider />
         <SidebarSection title={m._meal.pdm}>
           <SidebarSection title={m.ecrec}>
             <NavLink to={path(mealIndex.siteMap.pdm.ecrec.agri)}>
@@ -370,6 +381,7 @@ export const Meal = () => {
             <Route path={mealIndex.siteMap.verification.data()} element={<MealVerificationData />} />
           </Route>
         )}
+        <Route path={mealIndex.siteMap.echo.root} Component={EchoPmKoi} />
         <Route index element={<Navigate to={mealIndex.siteMap.visit.dashboard} />} />
         {relatedKoboForms.map((_) => (
           <Route key={_} {...getKoboFormRouteProps({path: mealIndex.siteMap.form(_), name: _})} />

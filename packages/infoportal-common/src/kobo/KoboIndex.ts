@@ -224,6 +224,8 @@ export namespace KoboIndex {
     donors?: string[]
   }
 
+  export type KoboId = (typeof koboIndex)[keyof typeof koboIndex]
+
   export const namesIdsRecord = koboIndex
 
   export const names = Obj.keys(koboIndex)
