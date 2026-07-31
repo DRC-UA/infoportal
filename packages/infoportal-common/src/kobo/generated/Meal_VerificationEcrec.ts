@@ -98,8 +98,8 @@ export namespace Meal_verificationEcrec {
     known_contamination_your: undefined | Option<'known_contamination_your'>
     // subsistance_farmer/contamination_impact_your [select_one] Чи вплинуло це на вашу здатність обробляти цю землю?
     contamination_impact_your: undefined | Option<'contamination_impact_your'>
-    // subsistance_farmer/what_primary_livelihood [select_one] Що є основним джерелом засобів до існування в домогосподарстві:
-    what_primary_livelihood: undefined | Option<'what_primary_livelihood'>
+    // subsistance_farmer/what_primary_livelihood [select_multiple] Які три основні джерела доходу та засобів до існування є у домогосподарстві?
+    what_primary_livelihood: undefined | Option<'what_primary_livelihood'>[]
     // subsistance_farmer/what_primary_livelihood_other [text] Якщо "Інше", вкажіть яке саме
     what_primary_livelihood_other: string | undefined
     // subsistance_farmer/consume_majority_sub [select_one] Чи споживає Ваше домогосподарство значну частину того, що ви вирощуєте:
@@ -884,6 +884,7 @@ export namespace Meal_verificationEcrec {
       many_pig: _.many_pig ? +_.many_pig : undefined,
       many_poultry: _.many_poultry ? +_.many_poultry : undefined,
       type_assistance: _.type_assistance?.split(' '),
+      what_primary_livelihood: _.what_primary_livelihood?.split(' '),
       rent_receive_year: _.rent_receive_year ? +_.rent_receive_year : undefined,
       poultry: _.poultry ? +_.poultry : undefined,
       cattle: _.cattle ? +_.cattle : undefined,
