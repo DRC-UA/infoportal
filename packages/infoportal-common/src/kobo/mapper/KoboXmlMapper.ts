@@ -221,7 +221,7 @@ export namespace KoboXmlMapper {
 
         if (Object.values(wgq).some(Boolean)) {
           return Object.entries(wgq).reduce((accum, [difficulty, level]) => {
-            if (['cannot_all', 'lot', 'yes_lot'].includes(level as Xml.WashingtonGroupQuestion)) {
+            if (['cannot_all', 'lot', 'yes_lot'].includes(level!)) {
               return (
                 match(difficulty)
                   .cases({
@@ -946,7 +946,7 @@ export namespace KoboXmlMapper {
       const hh_char_hh_det_dis_select: Xml.DisabilitySelected = ((difficultyEntries) => {
         return seq(difficultyEntries)
           .map(([key, value]) => {
-            if (value && ['yes_lot', 'yes_some', 'cannot_all'].includes(value)) {
+            if (value && ['yes_lot', 'cannot_all'].includes(value)) {
               return match(key)
                 .cases({
                   difficulty_seeing: 'diff_see' as const,
