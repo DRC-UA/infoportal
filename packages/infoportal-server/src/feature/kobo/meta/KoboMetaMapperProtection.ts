@@ -218,8 +218,9 @@ export class KoboMetaMapperProtection {
         answer.incoming_outgoing_referral === 'outgoing' &&
         answer.service_provided === 'yes'
       )
-    )
+    ) {
       return
+    }
 
     const project = DrcProjectHelper.searchByCode(DrcProjectHelper.searchCode(answer.project_code))
     const projects = project ? [project] : []
