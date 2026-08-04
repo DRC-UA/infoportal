@@ -185,6 +185,7 @@ export namespace KoboXmlMapper {
         return match(person.hh_char_hh_res_stat)
           .cases({
             idp: Person.DisplacementStatus.Idp,
+            idp_returnee: Person.DisplacementStatus.Returnee,
             displaced: Person.DisplacementStatus.Idp,
             long: Person.DisplacementStatus.NonDisplaced,
             long_res: Person.DisplacementStatus.NonDisplaced,
