@@ -4,6 +4,7 @@ import {match, seq, Seq} from '@axanc/ts-utils'
 import {
   DrcOffice,
   DrcProject,
+  DrcProjectHelper,
   KoboIndex,
   KoboSubmissionFlat,
   KoboXmlMapper,
@@ -37,6 +38,7 @@ const projectCases = {
   ukr000388_bha: DrcProject['UKR-000388 BHA'],
   ukr000397_gffo: DrcProject['UKR-000397 GFFO'],
   ukr000423_echo4: DrcProject['UKR-000423 ECHO'],
+  ukr000426_sdc: DrcProject['UKR-000426 SDC'],
 }
 
 const useVaPdmData = () => {
@@ -53,9 +55,7 @@ const useVaPdmData = () => {
         seq(data).map((record) => ({
           office: match(record.office).cases(Va_tia_pdm.options.office).default(undefined) as DrcOffice | undefined,
           persons: KoboXmlMapper.Persons.va_tia_pdm(record),
-          project: match(record.project_ID!)
-            .cases(projectCases)
-            .default(() => undefined),
+          project: match(record.project_ID).cases(projectCases).default(DrcProjectHelper.search(record.project_ID)),
           answers: record,
         })),
       )
