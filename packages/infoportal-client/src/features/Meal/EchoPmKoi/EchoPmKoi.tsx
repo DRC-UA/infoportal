@@ -12,7 +12,7 @@ import {DataFilter} from '@/shared/DataFilter/DataFilter'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 import {EchoTableBody, EchoTableHead} from './components'
-import {gbvWgssPdmMapper, isUndefined, prepareTableData} from './tools'
+import {gbvWgssPdmMapper, isUndefined, prepareTableData, pssPdmMapper} from './tools'
 import type {EchoPmKoiTableData, EchoPmKoiRecord, DateRange} from './types'
 
 const EchoPmKoi: FC = () => {
@@ -106,8 +106,11 @@ const EchoPmKoi: FC = () => {
   }, [applyFilters, mappedData])
 
   useEffect(() => {
-    Promise.all([byName('gbv_wgssPdm').fetch()])
-      .then(([gbvWgssPdmData]) => [...gbvWgssPdmMapper(gbvWgssPdmData)])
+    Promise.all([byName('gbv_wgssPdm').fetch(), byName('meal_pssPdm').fetch()])
+      .then(([gbvWgssPdmData, mealPssPdmData]) => [
+        ...gbvWgssPdmMapper(gbvWgssPdmData),
+        ...pssPdmMapper(mealPssPdmData),
+      ])
       .then(setMappedData)
       .finally(stopLoadingIndication)
   }, [])
