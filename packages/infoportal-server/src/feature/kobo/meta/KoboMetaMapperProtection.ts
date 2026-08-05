@@ -363,6 +363,7 @@ export class KoboMetaMapperProtection {
           lviv: DrcOffice.Lviv,
           mykolaiv: DrcOffice.Mykolaiv,
           sumy: DrcOffice.Sumy,
+          slovyansk: DrcOffice.Sloviansk,
         })
         .default(() => undefined),
       oblast: oblast.name,
