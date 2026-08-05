@@ -1,4 +1,4 @@
-import {Person} from 'infoportal-common'
+import {DrcProject, Person} from 'infoportal-common'
 
 import {prepareTableData} from './tools'
 
@@ -10,6 +10,7 @@ type EchoPmKoiRecord = {
   age: number | undefined
   disability: boolean | undefined
   date: Date | undefined
+  project: DrcProject | undefined
   answers: {
     sdh1: AnswerOptions
     sdh2: AnswerOptions
@@ -24,4 +25,6 @@ type EchoPmKoiRecord = {
 
 type EchoPmKoiTableData = ReturnType<typeof prepareTableData>
 
-export type {EchoPmKoiRecord, EchoPmKoiTableData}
+type DateRange = [Date | undefined, Date | undefined]
+
+export type {EchoPmKoiRecord, EchoPmKoiTableData, DateRange}

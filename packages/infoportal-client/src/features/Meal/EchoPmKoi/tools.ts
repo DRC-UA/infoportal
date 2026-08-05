@@ -1,10 +1,10 @@
-import {match, seq, groupsBy} from '@axanc/ts-utils'
+import {match, Obj, seq, groupsBy} from '@axanc/ts-utils'
 
 import {DrcProject, Gbv_wgss_pdm, KoboIndex, Person, groupBy, safeNumber} from 'infoportal-common'
 
 import type {EchoPmKoiRecord} from './types'
 
-const echoAgeGroups = Object.keys(Person.ageGroup.ECHO).filter((group) => group !== '0 - 4')
+const echoAgeGroups = Obj.keys(Person.ageGroup.ECHO).filter((group) => group !== '0 - 4')
 
 const gbvWgssAnswerMatcher = (answer: 'yes' | 'no' | 'pna' | 'partially' | undefined) => {
   return match(answer)
@@ -65,33 +65,40 @@ const prepareTableData = (echoPmKoiRecords: EchoPmKoiRecord[]) => {
     )
     .flat()
 
-  return groupBy({
-    data: flattenedByQuestions,
-    groups: [{by: ({question}) => question}],
-    finalTransform: (data) => {
-      return groupBy({
-        data,
-        groups: [{by: ({answer}) => answer!}],
-        finalTransform: (answerGroupData) =>
-          groupBy({
-            data: answerGroupData,
-            groups: [{by: ({gender}) => gender!}],
-            finalTransform: (genderGroupData) => {
-              const ageGenderEchoGroups = Person.groupByGenderAndGroup(Person.ageGroup.ECHO)(genderGroupData)
-              const ageGenderEchoEntries = Object.entries(ageGenderEchoGroups).map(([ageGroup, genderStats]) => [
-                ageGroup,
-                Object.values(genderStats)[0],
-              ])
+  return {
+    sampleSizes: Person.groupByGenderAndGroup(Person.ageGroup.ECHO)(echoPmKoiRecords),
+    body: groupBy({
+      data: flattenedByQuestions,
+      groups: [{by: ({question}) => question}],
+      finalTransform: (questionGroup, [question]) => {
+        return groupBy({
+          data: questionGroup,
+          groups: [{by: ({answer}) => answer!}],
+          finalTransform: (answerGroupData) =>
+            groupBy({
+              data: answerGroupData,
+              groups: [{by: ({gender}) => gender!}],
+              finalTransform: (genderGroupData) => {
+                const ageGenderEchoGroups = Person.groupByGenderAndGroup(Person.ageGroup.ECHO)(genderGroupData)
+                const ageGenderEchoEntries = Object.entries(ageGenderEchoGroups).map(([ageGroup, genderStats]) => [
+                  ageGroup,
+                  Object.values(genderStats)[0],
+                ])
 
-              return {
-                ...Object.fromEntries(ageGenderEchoEntries),
-                Disability: genderGroupData.count(({disability}) => !!disability),
-              }
-            },
-          }).groups,
-      }).groups
-    },
-  }).groups
+                return {
+                  ...Object.fromEntries(ageGenderEchoEntries),
+                  Disability: genderGroupData.count(({disability}) => !!disability),
+                }
+              },
+            }).groups,
+        }).groups
+      },
+    }).groups,
+  }
 }
 
-export {echoAgeGroups, gbvWgssPdmMapper, prepareTableData}
+const isUndefined = (input: unknown): boolean => {
+  return input === undefined ? true : false
+}
+
+export {echoAgeGroups, gbvWgssPdmMapper, prepareTableData, isUndefined}
