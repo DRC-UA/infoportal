@@ -251,6 +251,7 @@ namespace AiType51aMonitoring {
       '01111': 'c4gt8thmrapu1inm',
       '01124': 'cj801wvmrdot3q56',
       '01125': 'c5ugjmvmrdp2jpdg',
+      '01174': 'cieksxumsfwle0z4',
     },
     '1.3_Indicators': {
       'CLHEA/CA101/IN1': 'c5pkrm0mnd9bywb7a0',
@@ -36819,6 +36820,13 @@ namespace AiType51aMonitoring {
       UKRs012137: 'cnacecrmqouudvzip',
       UKRs012139: 'c7vgscqmqouujb0iq',
       UKRs011989: 'ca27n3imqouujb0ir',
+      UKRs012143: 'cizw5e8mrugs1zpnh',
+      UKRs012144: 'cwyn69gmrugsm0xrh',
+      UKRs008333: 'ccdu51qmrugsm0xri',
+      UKRs012145: 'cy87smymrugswgnvi',
+      UKRs012141: 'cqhcs8rmrugu61513f',
+      UKRs012142: 'cjzwt5amrugu61513g',
+      UKRs012146: 'c52dt61mrugub2u13h',
     },
     Operation_Location_Sites_Education_Facilities: {
       '7': 'cfk0z0gmnsoe6ys1eic',

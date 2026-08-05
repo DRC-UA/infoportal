@@ -39,6 +39,7 @@ class KoboMetaMapperLegal {
           ukr000457_dmfa: DrcProject['UKR-000457 DMFA'],
           ukr000461_uhf: DrcProject['UKR-000461 UHF'],
           ukr000462_echo: DrcProject['UKR-000462 ECHO'],
+          ukr000467_norad: DrcProject['UKR-000467 NORAD'],
         })
         .default(undefined)
 
