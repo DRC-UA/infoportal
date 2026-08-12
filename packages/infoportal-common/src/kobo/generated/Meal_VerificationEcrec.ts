@@ -557,6 +557,7 @@ export namespace Meal_verificationEcrec {
       ukr000350_sida: `SIDA (UKR-000350)`,
       ukr000424_dutch_mfa: `Dutch MFA (UKR-000424)`,
       ukr000426_sdc: `SDC (UKR-000426)`,
+      ukr000459_danida: `DANIDA (UKR-000459)`,
       danish_mfa_355: `Danish MFA 355`,
     },
     which_support_registered: {
