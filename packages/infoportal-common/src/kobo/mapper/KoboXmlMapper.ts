@@ -793,6 +793,8 @@ export namespace KoboXmlMapper {
     }
 
     export const protection_gbv: PersonsMapper<Protection_gbv.T> = (row) => {
+      if (row.new_ben === 'no') return []
+
       return common({
         hh_char_hh_det: row.hh_char_hh_det
           ?.filter((_) => _.hh_char_hh_new_ben !== 'no')
