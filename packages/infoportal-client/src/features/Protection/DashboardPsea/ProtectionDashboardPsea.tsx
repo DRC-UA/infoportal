@@ -139,7 +139,7 @@ export const ProtectionDashboardPsea = () => {
         }
       />
       <Grid container sx={{mb: 2, alignItems: 'stretch'}} columnSpacing={2}>
-        <Grid size={{xs: 6, md: 3}}>
+        <Grid size={{xs: 6, md: 3, lg: 2}}>
           <SlideWidget sx={{flex: 1}} icon="storage" title={m._protection.trainings}>
             {dataFiltered.length}
           </SlideWidget>
@@ -149,7 +149,7 @@ export const ProtectionDashboardPsea = () => {
             {participants.length}
           </SlideWidget>
         </Grid>
-        <Grid size={{xs: 6, md: 3}}>
+        <Grid size={{xs: 6, md: 3, lg: 4}}>
           <Panel sx={{height: '100%', mb: 0, display: 'flex', alignItems: 'center', pl: 2}}>
             <ChartPieWidget
               title="Participation rate"
