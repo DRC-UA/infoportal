@@ -531,6 +531,7 @@ const en = Object.freeze({
       hasPriorityQueuesForVulnerableIndividuals: 'Priority queues for vulnerable individuals',
     },
     mealMonitoringPdm: {
+      echoLinkLabel: 'ECHO Key Outcome Indicators',
       pdm: 'PDM',
       pdmLcs: 'PDM (LCS)',
       cashPdmDashboard: 'Cash',

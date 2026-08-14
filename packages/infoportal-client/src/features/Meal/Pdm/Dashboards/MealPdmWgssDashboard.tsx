@@ -1,17 +1,18 @@
-import {Gbv_wgss_pdm} from 'infoportal-common'
-import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
-import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
-import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
-import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
-import {useI18n} from '@/core/i18n'
-import React, {useMemo, useState} from 'react'
-import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {useMemo, useState} from 'react'
 import {map, seq} from '@axanc/ts-utils'
+
+import {Gbv_wgss_pdm} from 'infoportal-common'
+
+import {useI18n} from '@/core/i18n'
+import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
+import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {AgeGroupTable, DebouncedInput, Page} from '@/shared'
-import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
-import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
-import {Panel, PanelBody} from '@/shared/Panel'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
+import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
+import {Panel, PanelBody} from '@/shared/Panel'
+import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
+import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 const isWgssPdm = (_: PdmData<PdmForm>): _ is PdmData<Gbv_wgss_pdm.T> => {
   return _.type === 'Wgss'
@@ -20,8 +21,6 @@ const isWgssPdm = (_: PdmData<PdmForm>): _ is PdmData<Gbv_wgss_pdm.T> => {
 export const MealPdmWgssDashboard = () => {
   const ctx = useMealPdmContext()
   const {shape: commonShape} = usePdmFilters(seq(ctx.fetcherAnswers.get).filter(isWgssPdm))
-  const ctxSchema = useKoboSchemaContext()
-  const schema = ctxSchema.byName.gbv_wgssPdm.get!
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
 
@@ -49,7 +48,7 @@ export const MealPdmWgssDashboard = () => {
           >
             {(value, onChange) => (
               <PeriodPicker
-                sx={{marginTop: '-6px'}}
+                fullWidth={false}
                 value={value ?? [undefined, undefined]}
                 onChange={onChange}
                 min={ctx.fetcherPeriod.get?.start}

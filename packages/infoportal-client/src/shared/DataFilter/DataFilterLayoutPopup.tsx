@@ -1,13 +1,14 @@
-import {Box, Icon, Popover} from '@mui/material'
-import React, {useEffect, useState} from 'react'
-import {IpIconBtn} from '@/shared/IconBtn'
+import {useEffect, useState} from 'react'
 import {Obj, Seq} from '@axanc/ts-utils'
+import {Box, Icon, Popover} from '@mui/material'
+
+import {IpBtn} from '@/shared/Btn'
 import {FilterLayoutProps} from '@/shared/DataFilter/DataFilterLayout'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
+import {useI18n} from '@/core/i18n'
+import {IpIconBtn} from '@/shared/IconBtn'
 import {IpSelectMultiple} from '@/shared/Select/SelectMultiple'
 import {Txt} from '@/shared/Txt'
-import {IpBtn} from '@/shared/Btn'
-import {useI18n} from '@/core/i18n'
 
 export const DataFilterLayoutPopup = ({
   before,
@@ -15,8 +16,6 @@ export const DataFilterLayoutPopup = ({
   sx,
   shapes,
   filters,
-  setFilters,
-  onClear,
   onConfirm,
   getFilteredOptions,
   onClose,
@@ -27,7 +26,7 @@ export const DataFilterLayoutPopup = ({
   onClear?: () => void
 }) => {
   const {m} = useI18n()
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   const [innerFilters, setInnerFilters] = useState(filters)
 

@@ -15,8 +15,6 @@ import {MapSvgByOblast} from '@/shared/maps/MapSvgByOblast'
 import {ChartBarSingleBy} from '@/shared/charts/ChartBarSingleBy'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
 
-const mapOblast = OblastIndex.koboOblastIndexIso
-
 const isCsPdm = (_: PdmData<PdmForm>): _ is PdmData<Gbv_csPdm.T> => {
   return _.type === 'CaseManagement'
 }
@@ -53,7 +51,7 @@ export const PdmGbvCsDashboard = () => {
           >
             {(value, onChange) => (
               <PeriodPicker
-                sx={{marginTop: '-6px'}}
+                fullWidth={false}
                 value={value ?? [undefined, undefined]}
                 onChange={onChange}
                 min={ctx.fetcherPeriod.get?.start}

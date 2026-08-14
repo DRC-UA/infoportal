@@ -152,8 +152,8 @@ export namespace Meal_verificationEcrec {
     know_contamination_land_neighbour: undefined | Option<'land_rent_other_small'>
     // small_scall_farmer/individual_continues_land [select_one] Чи знаєте ви, чи продовжує ця особа (особи) обробляти свою землю?
     individual_continues_land: undefined | Option<'project_spend_grant'>
-    // small_scall_farmer/primary_source_livelihoods [select_one] Що є основним джерелом засобів до існування в домогосподарстві?
-    primary_source_livelihoods: undefined | Option<'primary_source_livelihoods'>
+    // small_scall_farmer/primary_source_livelihoods [select_multiple] Які три основні джерела доходу та засобів до існування є у домогосподарстві?
+    primary_source_livelihoods: undefined | Option<'primary_source_livelihoods'>[]
     // small_scall_farmer/primary_source_livelihoods_other [text] Якщо «Інше», будь ласка, вкажіть
     primary_source_livelihoods_other: string | undefined
     // small_scall_farmer/registered_farming_enterprise [select_one] Чи маєте ви реєстрацію фермерського господарства?
@@ -557,6 +557,7 @@ export namespace Meal_verificationEcrec {
       ukr000350_sida: `SIDA (UKR-000350)`,
       ukr000424_dutch_mfa: `Dutch MFA (UKR-000424)`,
       ukr000426_sdc: `SDC (UKR-000426)`,
+      ukr000459_danida: `DANIDA (UKR-000459)`,
       danish_mfa_355: `Danish MFA 355`,
     },
     which_support_registered: {
@@ -800,7 +801,27 @@ export namespace Meal_verificationEcrec {
       other: `Інше`,
     },
     primary_source_livelihoods: {
-      agricultural_activities: `Сільськогосподарська діяльність (включаючи тваринництво)`,
+      agricultural_activities: `Сільське господарство та/або тваринництво`,
+      grocery: `Продукти, магазин`,
+      smalls: `Невеликий магазин/кіоск`,
+      carpentry: `Столярні, різьбярські або деревообробні роботи`,
+      mechanic: `Механіка`,
+      plumber: `Сантехнік`,
+      electrical: `Електромонтажні роботи`,
+      construct: `Будівельні роботи`,
+      textiel: `Текстиль та пошиття одягу`,
+      education: `Освітній центр`,
+      heath: `Оздоровчий центр`,
+      manufacturing: `Виробництво / робота на заводі`,
+      computer: `Комп'ютер, технології`,
+      administration: `Адміністрування,`,
+      graphic: `Графічний дизайн`,
+      transport: `Транспортне обслуговування`,
+      hairdressing: `Перукарня/барбер`,
+      pscoffe: `Надання послуг (наприклад, кава/чай, невеликий ресторан, кулінарія тощо)`,
+      pscleaning: `Надання послуг (прибирання, охорона)`,
+      ngo: `НУО / агенції ООН`,
+      government: `Уряд`,
       formal_employment: `Офіційне працевлаштування`,
       allowances: `Грошова допомога/пенсії тощо`,
       other: `Інше`,
@@ -896,6 +917,7 @@ export namespace Meal_verificationEcrec {
       bee_families: _.bee_families ? +_.bee_families : undefined,
       other_animals: _.other_animals ? +_.other_animals : undefined,
       eligible_assistance_agricultural: _.eligible_assistance_agricultural?.split(' '),
+      primary_source_livelihoods: _.primary_source_livelihoods?.split(' '),
       land_rent_other_yes: _.land_rent_other_yes ? +_.land_rent_other_yes : undefined,
       many_poultry_small: _.many_poultry_small ? +_.many_poultry_small : undefined,
       many_cattle_small: _.many_cattle_small ? +_.many_cattle_small : undefined,

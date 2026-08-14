@@ -312,6 +312,7 @@ export namespace Legal_individual_aid {
       ukr000457_dmfa: `UKR-000457 DMFA`,
       ukr000461_uhf: `UKR-000461 UHF`,
       ukr000462_echo: `UKR-000462 ECHO`,
+      ukr000467_norad: `UKR-000467 NORAD`,
     },
     another_lawyer: {
       viktoriia_borman: `Viktoriia Borman viktoriia.borman@drc.ngo – Lawyer UMY`,
