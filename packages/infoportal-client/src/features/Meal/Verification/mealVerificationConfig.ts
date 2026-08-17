@@ -495,6 +495,10 @@ export const mealVerificationActivities = seq([
           else return ''
         },
       },
+      grant_purpose_use: {
+        reg: (_) => _.grant_purpose_use,
+        verif: (_) => _.grant_purpose_use,
+      },
     },
   }),
   registerActivity({
