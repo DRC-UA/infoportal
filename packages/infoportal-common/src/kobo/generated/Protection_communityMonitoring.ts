@@ -1140,6 +1140,74 @@ export namespace Protection_communityMonitoring {
     pfu_ra_fgd_strategies: string | undefined
     // gi/pfu_regarding_access_fgd/pfu_ra_fgd_recommendations [text] Recommendations
     pfu_ra_fgd_recommendations: string | undefined
+    // gi/insecurity_tenure_fgd/itf_introduction [text] Introduction
+    itf_introduction: string | undefined
+    // gi/insecurity_tenure_fgd/itf_accommodation [text] Accommodation
+    itf_accommodation: string | undefined
+    // gi/insecurity_tenure_fgd/itf_difficulties [text] Difficulties
+    itf_difficulties: string | undefined
+    // gi/insecurity_tenure_fgd/itf_aob [text] AOB
+    itf_aob: string | undefined
+    // gi/forced_eviction_kii/fek_housing_situation [text] Housing situation
+    fek_housing_situation: string | undefined
+    // gi/forced_eviction_kii/fek_live [text] Live
+    fek_live: string | undefined
+    // gi/forced_eviction_kii/fek_pressuer_evict [text] Pressuer to evict
+    fek_pressuer_evict: string | undefined
+    // gi/forced_eviction_kii/fek_consequences_eviction [text] Consequences after eviction
+    fek_consequences_eviction: string | undefined
+    // gi/forced_eviction_fgd/fef_housing_security [text] Housing security
+    fef_housing_security: string | undefined
+    // gi/forced_eviction_fgd/fef_forced_eviction [text] Forced eviction
+    fef_forced_eviction: string | undefined
+    // gi/forced_eviction_fgd/fef_aob [text] AOB
+    fef_aob: string | undefined
+    // gi/access_sh_long_idp_kii/aslik_housing_situation [text] Housing Situation and Community Response
+    aslik_housing_situation: string | undefined
+    // gi/access_sh_long_idp_kii/aslik_housing_policy [text] Housing Policy and Access to Housing Solutions
+    aslik_housing_policy: string | undefined
+    // gi/access_sh_long_idp_kii/aslik_challenges [text] Challenges and Available Community Resources
+    aslik_challenges: string | undefined
+    // gi/access_sh_long_idp_kii/aslik_state_programmes [text] State Programmes and Partnership
+    aslik_state_programmes: string | undefined
+    // gi/access_sh_long_idp_kii/aslik_future_priorities [text] Future Priorities and Recommendations
+    aslik_future_priorities: string | undefined
+    // gi/access_sh_long_idp_fgd/aslif_housing_situation [text] Current Housing Situation
+    aslif_housing_situation: string | undefined
+    // gi/access_sh_long_idp_fgd/aslif_awareness [text] Awareness of and Access to Housing Solutions
+    aslif_awareness: string | undefined
+    // gi/access_sh_long_idp_fgd/aslif_barriers [text] Barriers
+    aslif_barriers: string | undefined
+    // gi/access_sh_long_idp_fgd/aslif_adequacy_support [text] Adequacy of Existing Support
+    aslif_adequacy_support: string | undefined
+    // gi/access_sh_long_idp_fgd/aslif_integration [text] Integration, Durable Solutions and Recommendations
+    aslif_integration: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_kii/ipcdok_overall_situation [text] Overall Situation Assessment
+    ipcdok_overall_situation: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_kii/ipcdok_impact_population [text] Impact on the Population
+    ipcdok_impact_population: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_kii/ipcdok_impact_functioning [text] Impact on the Functioning of Critical Services
+    ipcdok_impact_functioning: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_kii/ipcdok_local_authorities [text] Local Authorities' Preparedness and Response
+    ipcdok_local_authorities: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_kii/ipcdok_alternative_mechanisms [text] Alternative Mechanisms for Supporting the Population
+    ipcdok_alternative_mechanisms: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_kii/ipcdok_humanitarian_assistance [text] Humanitarian Assistance
+    ipcdok_humanitarian_assistance: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_fgd/ipcdof_introduction [text] Introduction
+    ipcdof_introduction: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_fgd/ipcdof_impact_daily [text] Impact on Daily Life
+    ipcdof_impact_daily: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_fgd/ipcdof_access_essential [text] Access to Essential Services
+    ipcdof_access_essential: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_fgd/ipcdof_protection_risks [text] Protection Risks
+    ipcdof_protection_risks: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_fgd/ipcdof_coping_strategies [text] Coping Strategies
+    ipcdof_coping_strategies: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_fgd/ipcdof_humanitarian_assistance [text] Humanitarian Assistance
+    ipcdof_humanitarian_assistance: string | undefined
+    // gi/impact_power_cuts_donetska_oblast_fgd/ipcdof_looking_ahead [text] Looking Ahead
+    ipcdof_looking_ahead: string | undefined
     // gi/topic_all/main_healthcare_available_area_q_all [text] Question 1: (other topic)
     main_healthcare_available_area_q_all: string | undefined
     // gi/topic_all/main_healthcare_available_area_a_all [text] Answer 1: (other topic)
@@ -1218,6 +1286,9 @@ export namespace Protection_communityMonitoring {
       UMY021: `UMY021`,
       UMY022: `UMY022`,
       UMY023: `UMY023`,
+      UMY024: `UMY024`,
+      UMY025: `UMY025`,
+      UMY026: `UMY026`,
       HRK001: `HRK001`,
       HRK002: `HRK002`,
       HRK003: `HRK003`,
@@ -1501,7 +1572,11 @@ export namespace Protection_communityMonitoring {
       ht_labor_exploitation: `Human Trafficking and Labor Exploitation`,
       ht_sexual_exploitation: `Human Trafficking and Sexual Exploitation`,
       pfu_regarding_access: `The Pension Fund of Ukraine’s Authority Regarding Access to Social Benefits`,
+      forced_eviction: `Forced eviction`,
+      insecurity_tenure: `Insecurity of tenure`,
       psychosocial_support: `Psychosocial Support`,
+      access_sh_long_idp: `Access to Social Housing and Housing Solutions for Long-Term IDPs`,
+      impact_power_cuts_donetska_oblast: `Impact of the power cuts and impending water crisis in Donetska oblast`,
       other: `Other`,
     },
     key_informant_difficulty: {
