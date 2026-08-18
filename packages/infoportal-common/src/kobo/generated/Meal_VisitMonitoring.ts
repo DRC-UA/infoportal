@@ -2252,6 +2252,7 @@ export namespace Meal_visitMonitoring {
       ukr000441_uhf10: `UKR-000441 UHF10 Winterization`,
       ukr000453_gerf: `UKR-000453 GERF`,
       ukr000457_dmfa: `UKR-000457 DANISH MoFA`,
+      ukr000459_danida: `UKR-000459 DANIDA`,
       ukr000461_uhf: `UKR-000461 UHF`,
       ukr000462_echo: `UKR-000462 ECHO`,
     },
@@ -2317,6 +2318,7 @@ export namespace Meal_visitMonitoring {
     pal: {
       mc: `Monitoring Mobile Clinic`,
       legal_awareness_monitoring: `Monitoring Legal Awareness Training`,
+      legal_awareness_monitoring_session: `Monitoring Legal Awareness Session`,
     },
     pap: {
       pss: `Monitoring GBV PSS (group and individual)`,
