@@ -1608,6 +1608,10 @@ const en = Object.freeze({
         senseAgency: 'Sense of Agency',
         senseHope: 'Sense of Hope',
       },
+      uniquesByProjectWidget: {
+        title: 'Unique beneficiaries by project',
+        total: 'Total beneficiaries in the projects, including intersection:',
+      },
     },
     gbvPrePostDahsboard: {
       buttonLabel: 'GBV Pre / Post Tests',
