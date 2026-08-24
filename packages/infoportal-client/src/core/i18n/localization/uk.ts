@@ -253,6 +253,10 @@ const uk = deepmerge(en, {
         senseAgency: 'Відчуття спроможності',
         senseHope: 'Відчуття надії',
       },
+      uniquesByProjectWidget: {
+        title: 'Унікальні бенефіціари за проєктом',
+        total: 'Разом в обраних проєктах, включаючи перетин:',
+      },
     },
     gbvPrePostDahsboard: {
       buttonLabel: 'ҐЗН Тести "до" і "після"',

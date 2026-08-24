@@ -1,5 +1,5 @@
 import {useMemo, useState} from 'react'
-import {seq, match, type Seq} from '@axanc/ts-utils'
+import {seq, match, Obj, type Seq} from '@axanc/ts-utils'
 
 import {groupBy, PeriodHelper, type Person, type Period} from 'infoportal-common'
 
@@ -217,7 +217,33 @@ const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
       finalTransform: (input) => ({occurrences: input.length, ids: input?.map(({id}) => id)}),
     }).transforms.length
 
-    return {improvements, individuals}
+    const individualsByProject = seq(
+      groupBy({
+        data: data
+          .flatMap(
+            ({project, persons}) =>
+              persons?.map((person) => ({
+                ...(person as Person.Details & {code_beneficiary: string}), // safe to cast due to a custom KoboXmlMapper.Persons.protection_pss mapper
+                project,
+              })) ?? [],
+          )
+          .filter(({code_beneficiary}) => code_beneficiary !== undefined),
+        groups: [
+          {
+            by: ({project}) => project!,
+          },
+          {
+            by: ({code_beneficiary}) => code_beneficiary!,
+          },
+        ],
+        finalTransform: (_input, [project, beneficiary]) => ({
+          project,
+          beneficiary,
+        }),
+      }).transforms,
+    )
+
+    return {improvements, individuals, individualsByProject}
   }, [data])
 }
 

@@ -6,6 +6,7 @@ import {format} from 'date-fns'
 import {capitalize, OblastIndex, Person, Protection_pss, toPercent} from 'infoportal-common'
 
 import {useI18n} from '@/core/i18n'
+import {MissingData} from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CaseManagement/Explanations'
 import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
 import {Page, Txt} from '@/shared'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
@@ -24,7 +25,6 @@ import {useKoboTranslations, usePlurals} from '@/utils'
 import {PssContextProvider, usePssContext} from './Context'
 import {useResilienceStats, useStats, useSessionsCounter} from './hooks'
 import {colorByQuestion, pickUnique, prePostSummaryBuilder} from './utils'
-import {MissingData} from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CaseManagement/Explanations'
 
 const LegendColorSample: FC<{background: string}> = ({background}) => <Box sx={{width: 30, background}}></Box>
 const LegendItem: FC<{color: string; label: string}> = ({color, label}) => (
@@ -58,7 +58,7 @@ const PssDashboardWithContext: FC = () => {
   }
   const sessionsCounter = useSessionsCounter(data)
   const clearFilters = () => [filters.setFilters, filters.setPeriod].forEach((callback) => callback({}))
-  const {improvements, individuals} = useStats(data?.flatFiltered)
+  const {improvements, individuals, individualsByProject} = useStats(data?.flatFiltered)
   const prePostTests = prePostSummaryBuilder(data?.filtered)
   const toggleAgeGroupUniqueness = () => setShowAgeGroupsUnique((prev) => !prev)
   const toggleDisplacementUniqueness = () => setShowDisplacementUnique((prev) => !prev)
@@ -101,7 +101,7 @@ const PssDashboardWithContext: FC = () => {
             title={`${pluralizeUniqueIndividuals(individuals)}*`}
             tooltip={m.pssDashboard.uniqueIndividualsHint}
           >
-            {individuals}
+            {formatLargeNumber(individuals)}
           </SlideWidget>
         </Div>
         <Txt>{m.pssDashboard.sessionsCounterTitle}</Txt>
@@ -517,6 +517,24 @@ const PssDashboardWithContext: FC = () => {
                     )}
                   />
                 )}
+              </PanelBody>
+            </Panel>
+            <Panel title={m.pssDashboard.uniquesByProjectWidget.title}>
+              <PanelBody>
+                <ChartBarSingleBy
+                  data={individualsByProject}
+                  by={({project}) => project!}
+                  label={translateOption('project')?.reduce(
+                    (result, {value, label}) => ({
+                      ...result,
+                      [value]: label,
+                    }),
+                    {} as Record<string, string>,
+                  )}
+                />
+                <Box
+                  paddingTop={2}
+                >{`${m.pssDashboard.uniquesByProjectWidget.total} ${formatLargeNumber(individualsByProject.length)}`}</Box>
               </PanelBody>
             </Panel>
           </Div>
