@@ -54,8 +54,6 @@ export const AgeGroupTable = ({
     return Obj.entries(gb).map(([k, v]) => ({ageGroup: k, ...v}))
   }, [persons, tableAgeGroup, onlyPwd, displacementStatus, enableDisplacementStatusFilter, enablePwdFilter])
 
-  console.log(data)
-
   return (
     <Box {...sx}>
       <Datatable
