@@ -1,11 +1,24 @@
-import {Box, Icon, useTheme} from '@mui/material'
-import {Txt} from '@/shared/Txt'
-import React, {ReactNode} from 'react'
+import type {ReactNode} from 'react'
+import {Box, Icon, useTheme, type SxProps} from '@mui/material'
 
-export const AccessFormSection = ({label, icon, children}: {icon?: string; children: ReactNode; label: string}) => {
+import {Txt} from '@/shared/Txt'
+
+export const AccessFormSection = ({
+  label,
+  icon,
+  children,
+  sx,
+  childrenBoxSx,
+}: {
+  icon?: string
+  children: ReactNode
+  label: string
+  sx?: SxProps
+  childrenBoxSx?: SxProps
+}) => {
   const t = useTheme()
   return (
-    <Box sx={{ml: -0.5}}>
+    <Box sx={{ml: -0.5, ...sx}}>
       <Box sx={{display: 'flex', alignItems: 'center', mb: 1}}>
         <Box
           sx={{
@@ -34,6 +47,7 @@ export const AccessFormSection = ({label, icon, children}: {icon?: string; child
           pl: 2,
           pb: 2,
           mb: 1,
+          ...childrenBoxSx,
         }}
       >
         {children}
