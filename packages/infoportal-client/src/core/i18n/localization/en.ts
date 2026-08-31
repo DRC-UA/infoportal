@@ -123,6 +123,7 @@ const en = Object.freeze({
     format: 'Format',
     previous: 'Previous',
     filter: 'Filter',
+    addFilter: 'Add Filter',
     distinct: 'Distinct',
     noneFormatted: '<i>None</i>',
     none: 'None',

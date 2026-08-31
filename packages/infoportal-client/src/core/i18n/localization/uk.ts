@@ -49,6 +49,7 @@ const uk = deepmerge(en, {
     testType: 'Тип тесту',
     all: 'Всі',
     month: 'Місяць',
+    addFilter: 'Додати фільтр',
     filterPlaceholder: 'Фільтрувати...',
     clearFilter: 'Очистити фільтр',
     reportingPartner: 'Партнер, що звітує',
