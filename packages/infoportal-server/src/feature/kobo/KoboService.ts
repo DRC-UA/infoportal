@@ -151,6 +151,7 @@ export class KoboService {
         paginate = defaultPagination,
         // includeMeta,
       } = params
+
       return (
         this.prisma.koboAnswers
           .findMany({
@@ -170,22 +171,20 @@ export class KoboService {
               },
               formId,
               ...(filters.ids ? {id: {in: filters.ids}} : {}),
-              AND: {
-                OR: filters.filterBy?.flatMap((filter) =>
-                  Util.ensureArr(filter.value).map((v) => ({
-                    answers: {
-                      path: [filter.column],
-                      ...(v
-                        ? {
-                            ['string_contains']: v,
-                          }
-                        : {
-                            equals: Prisma.DbNull,
-                          }),
-                    },
-                  })),
-                ),
-              },
+              AND: filters.filterBy?.map((filter) => ({
+                OR: Util.ensureArr(filter.value).map((v) => ({
+                  answers: {
+                    path: [filter.column],
+                    ...(v
+                      ? {
+                          ['string_contains']: v,
+                        }
+                      : {
+                          equals: Prisma.DbNull,
+                        }),
+                  },
+                })),
+              })),
             },
           })
           .then((_) =>
