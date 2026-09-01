@@ -152,6 +152,40 @@ export class KoboService {
         // includeMeta,
       } = params
 
+      console.log(
+        JSON.stringify(
+          {
+            where: {
+              deletedAt: null,
+              date: {
+                gte: filters.start,
+                lt: filters.end,
+              },
+              formId,
+              ...(filters.ids ? {id: {in: filters.ids}} : {}),
+              OR: filters.filterBy?.map((filter) => ({
+                OR: Util.ensureArr(filter.value).map((v) => ({
+                  answers: {
+                    path: [filter.column],
+                    ...(v
+                      ? {
+                          ['string_contains']: v,
+                        }
+                      : {
+                          equals: Prisma.DbNull,
+                        }),
+                  },
+                })),
+              })),
+            },
+          },
+          null,
+          2,
+        ),
+      )
+
+      console.log(filters.filterBy)
+
       return (
         this.prisma.koboAnswers
           .findMany({
