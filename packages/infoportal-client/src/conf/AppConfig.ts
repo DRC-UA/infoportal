@@ -48,6 +48,7 @@ export const appConfig = {
         '2026-06': 0.02254,
         '2026-07': 0.02203,
         '2026-08': 0.02197,
+        '2026-09': 0.02198,
       } as const)
       .default(0.027),
   muiProLicenseKey: e()(Env.NEXT_PUBLIC_MUI_PRO_LICENSE_KEY),
