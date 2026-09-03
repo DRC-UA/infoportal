@@ -120,7 +120,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
               other: DrcProject['Other'],
             })
-            .default(DrcProjectHelper.searchByCode(record.donor)),
+            .default(DrcProjectHelper.search(record.donor)),
           office: match(record.office!)
             .cases({
               dnipro: DrcOffice.Dnipro,
@@ -160,7 +160,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000399_sdc: DrcProject['UKR-000399 SDC3'],
               ukr000418_sida: DrcProject['UKR-000418 SIDA'],
             })
-            .default(DrcProjectHelper.searchByCode(record.donor)),
+            .default(DrcProjectHelper.search(record.donor)),
           office: match(record.office!)
             .cases({
               dnipro: DrcOffice.Dnipro,
@@ -222,7 +222,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               sdcs: DrcProject['UKR-000330 SDC2'],
               mofa: DrcProject['UKR-000301 DANISH MoFA'],
             })
-            .default(DrcProjectHelper.searchByCode(record.donor)),
+            .default(DrcProjectHelper.search(record.donor)),
           office: KoboXmlMapper.office(record.office_responsible),
           persons: KoboXmlMapper.Persons.nfi_pdm(record),
           answers: record,
@@ -249,8 +249,9 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000347_danida: DrcProject['UKR-000347 DANIDA'],
               ukr000336_uhf6: DrcProject['UKR-000336 UHF6'],
               ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
+              ukr000461_uhf: DrcProject['UKR-000461 UHF'],
             })
-            .default(DrcProjectHelper.searchByCode(record.donor)),
+            .default(DrcProjectHelper.search(record.donor)),
           answers: record,
         })),
       ),
@@ -311,7 +312,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000461_uhf: DrcProject['UKR-000461 UHF'],
               ukr000462_echo: DrcProject['UKR-000462 ECHO'],
             })
-            .default(DrcProjectHelper.searchByCode(record.gido)),
+            .default(DrcProjectHelper.search(record.gido)),
           answers: record,
         })),
       ),
@@ -349,7 +350,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               uhf7: DrcProject['UKR-000352 UHF7'],
               uhf6: DrcProject['UKR-000336 UHF6'],
             })
-            .default(DrcProjectHelper.searchByCode(record.back_donor)),
+            .default(DrcProjectHelper.search(record.back_donor)),
           office: match(record.back_office!)
             .cases({
               dnk: DrcOffice.Dnipro,
@@ -388,7 +389,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000461_uhf: DrcProject['UKR-000461 UHF'],
               ukr000462_echo: DrcProject['UKR-000462 ECHO'],
             })
-            .default(DrcProjectHelper.searchByCode(record.donor)),
+            .default(DrcProjectHelper.search(record.donor)),
           answers: record,
         })),
       ),
@@ -496,7 +497,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000461_uhf: DrcProject['UKR-000461 UHF'],
               ukr000462_echo: DrcProject['UKR-000462 ECHO'],
             } as unknown as Record<NonNullable<Gbv_girl_shine.T['project_code']>, DrcProject>)
-            .default(DrcProjectHelper.searchByCode(record.project_code)),
+            .default(DrcProjectHelper.search(record.project_code)),
           topic: record.topic,
           persons: KoboXmlMapper.Persons.gbv_girl_shine(record),
           answers: record,
