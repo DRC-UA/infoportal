@@ -194,9 +194,10 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               ukr000399_sdc3: DrcProject['UKR-000399 SDC3'],
               ukr000423_echo4: DrcProject['UKR-000423 ECHO4'],
               ukr000441_uhf11: DrcProject['UKR-000441 UHF11'],
+              ukr000461_uhf: DrcProject['UKR-000461 UHF'],
               other: DrcProject['Other'],
             })
-            .default(DrcProjectHelper.searchByCode(record.Donor)),
+            .default(DrcProjectHelper.search(record.Donor)),
           office: KoboXmlMapper.office(record.office),
           persons: KoboXmlMapper.Persons.shelter_pdm(record),
           answers: record,
