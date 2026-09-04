@@ -16,7 +16,8 @@ type UsePssFilter = ReturnType<typeof usePssFilters>
 
 const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
   const {m} = useI18n()
-  const [period, setPeriod] = useState<Partial<Period>>({})
+  const [sessionPeriod, setSessionPeriod] = useState<Partial<Period>>({})
+  const [closurePeriod, setClosurePeriod] = useState<Partial<Period>>({})
   const {translateOption} = useKoboTranslations('protection_pss')
 
   const shape = useMemo(() => {
@@ -65,21 +66,32 @@ const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
 
   const filteredData = useMemo(() => {
     if (!data) return
-    const filteredBy_date = data.filter((d) => {
+    const filteredBySessionDate = data.filter((d) => {
       try {
-        const isDateIn = PeriodHelper.isDateIn(period, d.date)
+        const isDateIn = PeriodHelper.isDateIn(sessionPeriod, d.date)
         if (!isDateIn) return false
         return true
       } catch (e) {
         console.log(e, d)
       }
     })
-    return DataFilter.filterData(filteredBy_date, shape, filters)
-  }, [data, filters, period, shape])
+    const filteredByClosureDate = filteredBySessionDate.filter(({cycle_finished_at, date}) => {
+      try {
+        const isDateIn = PeriodHelper.isDateIn(closurePeriod, cycle_finished_at ?? date)
+        if (!isDateIn) return false
+        return true
+      } catch (e) {
+        console.log(e, cycle_finished_at ?? date)
+      }
+    })
+    return DataFilter.filterData(filteredByClosureDate, shape, filters)
+  }, [data, filters, sessionPeriod, closurePeriod, shape])
 
   return {
-    period,
-    setPeriod,
+    sessionPeriod,
+    setSessionPeriod,
+    closurePeriod,
+    setClosurePeriod,
     filters,
     setFilters,
     data: filteredData,

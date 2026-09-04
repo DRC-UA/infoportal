@@ -19,6 +19,8 @@ const en = Object.freeze({
     notExist: 'Not exist',
     area: 'Area',
     men: 'Men',
+    sessionDate: 'Session Date',
+    closureDate: 'Closure Date',
     lightTheme: {
       light: 'Light',
       dark: 'Dark',
