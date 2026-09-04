@@ -7,8 +7,7 @@ import {capitalize, OblastIndex, Person, Protection_pss, toPercent} from 'infopo
 
 import {useI18n} from '@/core/i18n'
 import {MissingData} from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CaseManagement/Explanations'
-import {today} from '@/features/Mpca/Dashboard/MpcaDashboard'
-import {Page, Txt} from '@/shared'
+import {DebouncedInput, Page, Txt} from '@/shared'
 import {AgeGroupTable} from '@/shared/AgeGroupTable'
 import {ChartBarVerticalGrouped} from '@/shared/charts/ChartBarGrouped'
 import {ChartBarMultipleBy} from '@/shared/charts/ChartBarMultipleBy'
@@ -57,7 +56,9 @@ const PssDashboardWithContext: FC = () => {
     )
   }
   const sessionsCounter = useSessionsCounter(data)
-  const clearFilters = () => [filters.setFilters, filters.setPeriod].forEach((callback) => callback({}))
+  const clearFilters = () => {
+    ;[filters.setFilters, filters.setSessionPeriod, filters.setClosurePeriod].forEach((callback) => callback({}))
+  }
   const {improvements, individuals, individualsByProject} = useStats(data?.flatFiltered)
   const prePostTests = prePostSummaryBuilder(data?.filtered)
   const toggleAgeGroupUniqueness = () => setShowAgeGroupsUnique((prev) => !prev)
@@ -74,17 +75,73 @@ const PssDashboardWithContext: FC = () => {
         shapes={filters.shape}
         setFilters={filters.setFilters}
         onClear={clearFilters}
+        slotProps={{
+          wrapperBox: {flexDirection: 'row'},
+          filtersBox: {marginBottom: 0.25},
+          controlsBox: {sx: {alignSelf: 'flex-end', display: 'flex', marginBottom: 1.5}},
+        }}
+        sx={{alignItems: 'flex-end'}}
         before={
-          <PeriodPicker
-            value={[filters.period.start, filters.period.end]}
-            defaultValue={[filters.period.start, filters.period.end]}
-            onChange={([start, end]) => {
-              filters.setPeriod((prev) => ({...prev, start, end}))
-            }}
-            label={[m.start, m.endIncluded]}
-            max={today}
-            fullWidth={false}
-          />
+          <>
+            <DebouncedInput<[Date | undefined, Date | undefined]>
+              debounce={400}
+              value={[filters.sessionPeriod.start, filters.sessionPeriod.end]}
+              onChange={([start, end]) => {
+                filters.setSessionPeriod((prev) => ({...prev, start, end}))
+              }}
+            >
+              {(value, onChange) => (
+                <Box
+                  sx={{
+                    '.MuiPopover-root &': {
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 1,
+                    },
+                    mr: 'unset',
+                  }}
+                >
+                  <Typography fontSize="small">{m.sessionDate}</Typography>
+                  <PeriodPicker
+                    value={value}
+                    onChange={onChange}
+                    label={[m.start, m.endIncluded]}
+                    sx={{'.MuiPopover-root &': {maxWidth: '250px'}}}
+                  />
+                </Box>
+              )}
+            </DebouncedInput>
+            <DebouncedInput<[Date | undefined, Date | undefined]>
+              debounce={400}
+              value={[filters.closurePeriod.start, filters.closurePeriod.end]}
+              onChange={([start, end]) => {
+                filters.setClosurePeriod((prev) => ({...prev, start, end}))
+              }}
+            >
+              {(value, onChange) => (
+                <Box
+                  sx={{
+                    '.MuiPopover-root &': {
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 1,
+                    },
+                    mr: 'unset',
+                  }}
+                >
+                  <Typography fontSize="small">{m.closureDate}</Typography>
+                  <PeriodPicker
+                    value={value}
+                    onChange={onChange}
+                    label={[m.start, m.endIncluded]}
+                    sx={{'.MuiPopover-root &': {maxWidth: '250px'}}}
+                  />
+                </Box>
+              )}
+            </DebouncedInput>
+          </>
         }
       />
       <Div column>
