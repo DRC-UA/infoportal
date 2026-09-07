@@ -72,6 +72,7 @@ const uk = deepmerge(en, {
     startDate: 'Дата початку',
     endDate: 'Дата закінчення',
     deduplicationType: 'Тип дедуплікації',
+    vetPamVsRegSidebarTitle: "VET PAM / Реєстрація – об'єднана таблиця",
     uploadFilesModal: {
       steps: ['Вибір офісу DRC', 'Вибір файлів для завантаження'],
       buttonLabels: {

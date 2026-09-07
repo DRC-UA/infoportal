@@ -396,3 +396,17 @@ export const orderize = <T extends number | string>(
 export const insideObjectOut = <K extends string, V extends string>(input: Record<K, V>) => {
   return Object.fromEntries(Object.entries(input).map(([key, value]) => [value, key])) as Record<V, K>
 }
+
+export function leftJoin<L, R, K>(
+  left: readonly L[],
+  right: readonly R[],
+  leftKey: (row: L) => K,
+  rightKey: (row: R) => K,
+): Array<L & {right?: R}> {
+  const rightIndex = new Map<K, R>(right.map((row) => [rightKey(row), row]))
+
+  return left.map((leftRow) => ({
+    ...leftRow,
+    right: rightIndex.get(leftKey(leftRow)),
+  }))
+}

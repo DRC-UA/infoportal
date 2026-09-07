@@ -1,0 +1,1 @@
+export {VetPamVsReg} from './VetPamVsReg'

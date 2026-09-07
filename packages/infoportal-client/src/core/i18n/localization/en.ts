@@ -183,6 +183,7 @@ const en = Object.freeze({
     details: 'Details',
     topic: 'Topic',
     testType: 'Test type',
+    vetPamVsRegSidebarTitle: 'VET PAM vs Registration Joined Table',
     _datatable: {
       view: 'Views',
       createNewView: 'New view name...',
