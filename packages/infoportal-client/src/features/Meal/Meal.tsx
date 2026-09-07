@@ -44,6 +44,7 @@ import {PdmGirlShineDashboard} from '@/features/Meal/Pdm/Dashboards/PdmGirlShine
 import PdmGPCaseManagementDashboard from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CaseManagement'
 import CbpKiiDashboard from '@/features/Meal/Pdm/Dashboards/GeneralProtection/CbpKii'
 import {PdmIpaDashboard} from '@/features/Meal/Pdm/Dashboards/PdmIpaDashboard'
+import {VetPamVsReg} from '@/features/Meal/Pdm/VetPamVsReg'
 
 import VaDashboard from './Pdm/Dashboards/Va'
 import EchoPmKoi from './EchoPmKoi'
@@ -96,6 +97,7 @@ export const mealIndex = {
         vetMsme: '/pdm/ecrec/vet-msme',
         agVetMsme: '/pdm/ecrec/ag-vet-msme',
         animalShelter: '/pdm/ecrec/animal-shelter',
+        vetPamVsReg: '/pdm/ecrec/vet-pam-vs-reg',
       },
       basicNeeds: {
         _: '/pdm/basic-needs',
@@ -214,6 +216,9 @@ const MealSidebar = ({
             </NavLink>
             <NavLink to={path(mealIndex.siteMap.pdm.ecrec.animalShelter)}>
               {({isActive}) => <SidebarItem active={isActive}>{m.mealMonitoringPdm.animalShelterFood}</SidebarItem>}
+            </NavLink>
+            <NavLink to={path(mealIndex.siteMap.pdm.ecrec.vetPamVsReg)}>
+              {({isActive}) => <SidebarItem active={isActive}>{m.vetPamVsRegSidebarTitle}</SidebarItem>}
             </NavLink>
           </SidebarSection>
           <SidebarSection title={m.basicNeeds}>
@@ -394,6 +399,7 @@ export const Meal = () => {
             <Route path="agri" element={<CashAgriDashboard />} />
             <Route path="vet-msme" element={<CashVetMsmeDashboard />} />
             <Route path="animal-shelter" element={<CashAnimalShelterDashboard />} />
+            <Route path="vet-pam-vs-reg" element={<VetPamVsReg />} />
           </Route>
           <Route path={mealIndex.siteMap.pdm.basicNeeds.mpca} element={<CashPdmOutlet />}>
             <Route index element={<CashMpcaDashboard />} />
