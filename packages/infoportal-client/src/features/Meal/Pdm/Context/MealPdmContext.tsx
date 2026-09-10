@@ -314,6 +314,7 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
             })
             .default(DrcProjectHelper.search(record.gido)),
           answers: record,
+          sessionDate: record.gid,
         })),
       ),
       api.kobo.typedAnswers.search.meal_eorePdm({filters: periodFilter}).then((_) =>

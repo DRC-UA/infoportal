@@ -1,12 +1,16 @@
-import {Meal_pssPdm, OblastIndex} from 'infoportal-common'
+import {useMemo, useState} from 'react'
+import {map, seq} from '@axanc/ts-utils'
+import {isWithinInterval, type Interval} from 'date-fns'
+import {Box, Typography} from '@mui/material'
+
+import {Meal_pssPdm, OblastIndex, type Period} from 'infoportal-common'
+
 import {PdmData, PdmForm, useMealPdmContext} from '@/features/Meal/Pdm/Context/MealPdmContext'
 import {useKoboSchemaContext} from '@/features/KoboSchema/KoboSchemaContext'
 import {Div, SlidePanel, SlideWidget} from '@/shared/PdfLayout/PdfSlide'
 import {usePdmFilters} from '@/features/Meal/Pdm/Context/usePdmFilter'
 import {useI18n} from '@/core/i18n'
-import React, {useMemo, useState} from 'react'
 import {DataFilter} from '@/shared/DataFilter/DataFilter'
-import {map, seq} from '@axanc/ts-utils'
 import {AgeGroupTable, DebouncedInput, Page} from '@/shared'
 import {DataFilterLayout} from '@/shared/DataFilter/DataFilterLayout'
 import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
@@ -26,6 +30,7 @@ export const MealPdmPssDashboard = () => {
   const schema = ctxSchema.byName.meal_pssPdm.get!
   const {m, formatLargeNumber} = useI18n()
   const [optionFilter, setOptionFilters] = useState<Record<string, string[] | undefined>>({})
+  const [sessionPeriod, setSessionPeriod] = useState<Partial<Period>>()
 
   const filterShape = useMemo(() => {
     return DataFilter.makeShape<PdmData<Meal_pssPdm.T>>({
@@ -40,10 +45,16 @@ export const MealPdmPssDashboard = () => {
   }, [commonShape, schema])
 
   const data = useMemo(() => {
-    return map(ctx.fetcherAnswers.get, (_) => {
-      return seq(DataFilter.filterData(_.filter(isPssPdm), filterShape, optionFilter))
+    const preFilteredData = map(ctx.fetcherAnswers.get, (_) => {
+      return DataFilter.filterData(_.filter(isPssPdm), filterShape, optionFilter)
     })
-  }, [ctx.fetcherAnswers.get, optionFilter, filterShape])
+
+    if ([sessionPeriod, sessionPeriod?.end, sessionPeriod?.start].some((element) => element === undefined)) {
+      return preFilteredData
+    }
+
+    return preFilteredData?.filter((record) => isWithinInterval((record as any).sessionDate, sessionPeriod as Interval))
+  }, [ctx.fetcherAnswers.get, optionFilter, filterShape, sessionPeriod])
 
   return (
     <Page width="lg" loading={ctx.fetcherAnswers.loading}>
@@ -51,22 +62,65 @@ export const MealPdmPssDashboard = () => {
         shapes={filterShape}
         filters={optionFilter}
         setFilters={setOptionFilters}
+        slotProps={{
+          wrapperBox: {flexDirection: 'row'},
+          filtersBox: {marginBottom: 0.25},
+          controlsBox: {sx: {alignSelf: 'flex-end', display: 'flex', marginBottom: 1.5}},
+        }}
+        sx={{alignItems: 'flex-end'}}
         before={
-          <DebouncedInput<[Date | undefined, Date | undefined]>
-            debounce={400}
-            value={[ctx.periodFilter.start, ctx.periodFilter.end]}
-            onChange={([start, end]) => ctx.setPeriodFilter((prev) => ({...prev, start, end}))}
-          >
-            {(value, onChange) => (
-              <PeriodPicker
-                fullWidth={false}
-                value={value ?? [undefined, undefined]}
-                onChange={onChange}
-                min={ctx.fetcherPeriod.get?.start}
-                max={ctx.fetcherPeriod.get?.end}
-              />
-            )}
-          </DebouncedInput>
+          <>
+            <DebouncedInput<[Date | undefined, Date | undefined]>
+              debounce={400}
+              value={[ctx.periodFilter.start, ctx.periodFilter.end]}
+              onChange={([start, end]) => ctx.setPeriodFilter((prev) => ({...prev, start, end}))}
+            >
+              {(value, onChange) => (
+                <Box
+                  sx={{
+                    '.MuiPopover-root &': {
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 1,
+                    },
+                    mr: 'unset',
+                  }}
+                >
+                  <Typography fontSize="small">{m.submissionDate}</Typography>
+                  <PeriodPicker
+                    fullWidth={false}
+                    value={value ?? [undefined, undefined]}
+                    onChange={onChange}
+                    min={ctx.fetcherPeriod.get?.start}
+                    max={ctx.fetcherPeriod.get?.end}
+                  />
+                </Box>
+              )}
+            </DebouncedInput>
+            <DebouncedInput<[Date | undefined, Date | undefined]>
+              debounce={400}
+              value={[sessionPeriod?.start, sessionPeriod?.end]}
+              onChange={([start, end]) => setSessionPeriod((prev) => ({...prev, start, end}))}
+            >
+              {(value, onChange) => (
+                <Box
+                  sx={{
+                    '.MuiPopover-root &': {
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 1,
+                    },
+                    mr: 'unset',
+                  }}
+                >
+                  <Typography fontSize="small">{m.monitoringDate}</Typography>
+                  <PeriodPicker fullWidth={false} value={value ?? [undefined, undefined]} onChange={onChange} />
+                </Box>
+              )}
+            </DebouncedInput>
+          </>
         }
       />
       {data && (
