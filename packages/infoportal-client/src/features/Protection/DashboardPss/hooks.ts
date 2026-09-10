@@ -1,5 +1,5 @@
 import {useMemo, useState} from 'react'
-import {seq, match, Obj, type Seq} from '@axanc/ts-utils'
+import {seq, match, type Seq} from '@axanc/ts-utils'
 
 import {groupBy, PeriodHelper, type Person, type Period} from 'infoportal-common'
 
@@ -17,7 +17,6 @@ type UsePssFilter = ReturnType<typeof usePssFilters>
 const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
   const {m} = useI18n()
   const [sessionPeriod, setSessionPeriod] = useState<Partial<Period>>({})
-  const [closurePeriod, setClosurePeriod] = useState<Partial<Period>>({})
   const {translateOption} = useKoboTranslations('protection_pss')
 
   const shape = useMemo(() => {
@@ -75,23 +74,13 @@ const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
         console.log(e, d)
       }
     })
-    const filteredByClosureDate = filteredBySessionDate.filter(({cycle_finished_at, date}) => {
-      try {
-        const isDateIn = PeriodHelper.isDateIn(closurePeriod, cycle_finished_at ?? date)
-        if (!isDateIn) return false
-        return true
-      } catch (e) {
-        console.log(e, cycle_finished_at ?? date)
-      }
-    })
-    return DataFilter.filterData(filteredByClosureDate, shape, filters)
-  }, [data, filters, sessionPeriod, closurePeriod, shape])
+
+    return DataFilter.filterData(filteredBySessionDate, shape, filters)
+  }, [data, filters, sessionPeriod, shape])
 
   return {
     sessionPeriod,
     setSessionPeriod,
-    closurePeriod,
-    setClosurePeriod,
     filters,
     setFilters,
     data: filteredData,

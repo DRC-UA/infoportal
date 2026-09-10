@@ -57,7 +57,7 @@ const PssDashboardWithContext: FC = () => {
   }
   const sessionsCounter = useSessionsCounter(data)
   const clearFilters = () => {
-    ;[filters.setFilters, filters.setSessionPeriod, filters.setClosurePeriod].forEach((callback) => callback({}))
+    ;[filters.setFilters, filters.setSessionPeriod].forEach((callback) => callback({}))
   }
   const {improvements, individuals, individualsByProject} = useStats(data?.flatFiltered)
   const prePostTests = prePostSummaryBuilder(data?.filtered)
@@ -82,66 +82,22 @@ const PssDashboardWithContext: FC = () => {
         }}
         sx={{alignItems: 'flex-end'}}
         before={
-          <>
-            <DebouncedInput<[Date | undefined, Date | undefined]>
-              debounce={400}
-              value={[filters.sessionPeriod.start, filters.sessionPeriod.end]}
-              onChange={([start, end]) => {
-                filters.setSessionPeriod((prev) => ({...prev, start, end}))
-              }}
-            >
-              {(value, onChange) => (
-                <Box
-                  sx={{
-                    '.MuiPopover-root &': {
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 1,
-                    },
-                    mr: 'unset',
-                  }}
-                >
-                  <Typography fontSize="small">{m.sessionDate}</Typography>
-                  <PeriodPicker
-                    value={value}
-                    onChange={onChange}
-                    label={[m.start, m.endIncluded]}
-                    sx={{'.MuiPopover-root &': {maxWidth: '250px'}}}
-                  />
-                </Box>
-              )}
-            </DebouncedInput>
-            <DebouncedInput<[Date | undefined, Date | undefined]>
-              debounce={400}
-              value={[filters.closurePeriod.start, filters.closurePeriod.end]}
-              onChange={([start, end]) => {
-                filters.setClosurePeriod((prev) => ({...prev, start, end}))
-              }}
-            >
-              {(value, onChange) => (
-                <Box
-                  sx={{
-                    '.MuiPopover-root &': {
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 1,
-                    },
-                    mr: 'unset',
-                  }}
-                >
-                  <Typography fontSize="small">{m.closureDate}</Typography>
-                  <PeriodPicker
-                    value={value}
-                    onChange={onChange}
-                    label={[m.start, m.endIncluded]}
-                    sx={{'.MuiPopover-root &': {maxWidth: '250px'}}}
-                  />
-                </Box>
-              )}
-            </DebouncedInput>
-          </>
+          <DebouncedInput<[Date | undefined, Date | undefined]>
+            debounce={400}
+            value={[filters.sessionPeriod.start, filters.sessionPeriod.end]}
+            onChange={([start, end]) => {
+              filters.setSessionPeriod((prev) => ({...prev, start, end}))
+            }}
+          >
+            {(value, onChange) => (
+              <PeriodPicker
+                value={value}
+                onChange={onChange}
+                label={[m.start, m.endIncluded]}
+                sx={{maxWidth: '250px'}}
+              />
+            )}
+          </DebouncedInput>
         }
       />
       <Div column>
