@@ -59,7 +59,11 @@ const PssDashboardWithContext: FC = () => {
   const clearFilters = () => {
     ;[filters.setFilters, filters.setSessionPeriod].forEach((callback) => callback({}))
   }
-  const {improvements, individuals, individualsByProject} = useStats(data?.flatFiltered)
+  const {improvements, individuals, individualsByProject} = useStats({
+    filteredData: data?.flatFiltered,
+    rawData: data?.flat,
+    period: filters.sessionPeriod,
+  })
   const prePostTests = prePostSummaryBuilder(data?.filtered)
   const toggleAgeGroupUniqueness = () => setShowAgeGroupsUnique((prev) => !prev)
   const toggleDisplacementUniqueness = () => setShowDisplacementUnique((prev) => !prev)

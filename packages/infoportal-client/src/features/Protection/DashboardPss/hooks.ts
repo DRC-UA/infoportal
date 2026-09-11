@@ -1,5 +1,6 @@
 import {useMemo, useState} from 'react'
 import {seq, match, type Seq} from '@axanc/ts-utils'
+import {min, isBefore} from 'date-fns'
 
 import {groupBy, PeriodHelper, type Person, type Period} from 'infoportal-common'
 
@@ -13,6 +14,19 @@ import type {PssContext} from './Context'
 import type {ProtectionPssWithPersons, ProtectionPssWithPersonsFlat} from './types'
 
 type UsePssFilter = ReturnType<typeof usePssFilters>
+
+const getParticipationDate = ({
+  activity,
+  date,
+  cycle_finished_at,
+  date_first_consultation,
+}: Partial<ProtectionPssWithPersons>) =>
+  match(activity)
+    .cases({
+      pgs: cycle_finished_at,
+      ais: date_first_consultation,
+    })
+    .default(date)
 
 const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
   const {m} = useI18n()
@@ -66,8 +80,13 @@ const usePssFilters = (data: Seq<ProtectionPssWithPersons> | undefined) => {
   const filteredData = useMemo(() => {
     if (!data) return
     const filteredBySessionDate = data.filter((d) => {
+      const {activity, date, cycle_finished_at, date_first_consultation} = d
+
       try {
-        const isDateIn = PeriodHelper.isDateIn(sessionPeriod, d.date)
+        const isDateIn = PeriodHelper.isDateIn(
+          sessionPeriod,
+          getParticipationDate({activity, date, cycle_finished_at, date_first_consultation}),
+        )
         if (!isDateIn) return false
         return true
       } catch (e) {
@@ -135,7 +154,47 @@ const useSessionsCounter = (data: PssContext['data']) =>
     }
   }, [data?.filtered])
 
-const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
+const useStats = ({
+  filteredData = seq([]),
+  rawData = seq([]),
+  period,
+}: {
+  filteredData: Seq<ProtectionPssWithPersonsFlat> | undefined
+  rawData: Seq<ProtectionPssWithPersonsFlat> | undefined
+  period?: Partial<Period>
+}) => {
+  const beneficiaryEarliestDateByProject = useMemo(
+    () =>
+      groupBy({
+        data:
+          rawData
+            .flatMap(
+              ({persons, id, project, activity, date, cycle_finished_at, date_first_consultation}) =>
+                persons?.map((person) => ({
+                  ...(person as Person.Details & {code_beneficiary: string}), // safe to cast due to a custom KoboXmlMapper.Persons.protection_pss mapper
+                  id,
+                  project,
+                  activity,
+                  date,
+                  cycle_finished_at,
+                  date_first_consultation,
+                })) ?? [],
+            )
+            .filter(({code_beneficiary}) => code_beneficiary !== undefined)
+            .compact() ?? [],
+        groups: [
+          {
+            by: ({code_beneficiary}) => code_beneficiary!,
+          },
+          {
+            by: ({project}) => project!,
+          },
+        ],
+        finalTransform: (groupData) => min(groupData.map(getParticipationDate).compact()),
+      }).groups,
+    [rawData],
+  )
+
   return useMemo(() => {
     const initialStats = {
       general: {positive: 0, negative: 0},
@@ -144,9 +203,8 @@ const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
       who5: {positive: 0, negative: 0},
       base: 0,
     }
-
     const {pgs, ais} = groupBy({
-      data,
+      data: filteredData,
       groups: [{by: ({activity}) => activity!}],
       finalTransform: (record) => record,
     }).groups
@@ -200,16 +258,31 @@ const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
 
     const individuals = groupBy({
       data:
-        data
+        filteredData
           .flatMap(
-            ({persons, id}) =>
+            ({persons, id, project}) =>
               persons?.map((person) => ({
                 ...(person as Person.Details & {code_beneficiary: string}), // safe to cast due to a custom KoboXmlMapper.Persons.protection_pss mapper
                 id,
+                project,
               })) ?? [],
           )
           .filter(({code_beneficiary}) => code_beneficiary !== undefined)
-          .compact() ?? [],
+          .compact()
+          .filter(({project, code_beneficiary}) => {
+            // filter those repeated within project out
+            if (!period || !period.start || !project) {
+              return true
+            }
+
+            const firstDateInProject = beneficiaryEarliestDateByProject[code_beneficiary][project]
+
+            if (isBefore(firstDateInProject, period.start)) {
+              return false
+            }
+
+            return true
+          }) ?? [],
       groups: [
         {
           by: ({code_beneficiary}) => code_beneficiary!,
@@ -220,7 +293,7 @@ const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
 
     const individualsByProject = seq(
       groupBy({
-        data: data
+        data: filteredData
           .flatMap(
             ({project, persons}) =>
               persons?.map((person) => ({
@@ -245,7 +318,7 @@ const useStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
     )
 
     return {improvements, individuals, individualsByProject}
-  }, [data])
+  }, [filteredData])
 }
 
 const useResilienceStats = (data: Seq<ProtectionPssWithPersonsFlat> = seq([])) => {
