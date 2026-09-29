@@ -531,9 +531,10 @@ export const MealPdmProvider = ({children}: {children: ReactNode}) => {
               pool: DrcProject['UKR-000270 Pooled Funds'],
               okf: DrcProject['UKR-000309 OKF'],
               ukr000423_echo: DrcProject['UKR-000423 ECHO4'],
+              ukr000461_uhf: DrcProject['UKR-000461 UHF'],
               other: DrcProject['Other'],
             })
-            .default(() => undefined),
+            .default(DrcProjectHelper.search(record.donor)),
           answers: record,
         })),
       ),

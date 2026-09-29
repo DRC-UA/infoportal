@@ -210,6 +210,7 @@ export namespace Protection_ipa_pdm {
       pool: `PF UKR-000270`,
       okf: `OKF UKR-000309`,
       ukr000423_echo: `ECHO UKR-000423`,
+      ukr000461_uhf: `UHF UKR-000461`,
       other: `Other`,
     },
     report_employee_requested: {
