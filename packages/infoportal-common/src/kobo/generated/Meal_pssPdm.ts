@@ -210,8 +210,8 @@ export namespace Meal_pssPdm {
       oth: `Other`,
     },
     gido: {
-      ukr000388_bha: `ВНА UKR-000388`,
       ukr000423_echo4: `ECHO UKR-000423`,
+      ukr000424_dmfa: `DMFA UKR-000424`,
       ukr000426_sdc: `SDC UKR-000426`,
       ukr000457_dmfa: `DMFA UKR-000457`,
       ukr000461_uhf: `UHF UKR-000461`,
@@ -229,6 +229,7 @@ export namespace Meal_pssPdm {
       ukr000355_dmfa: `DMFA UKR-000355`,
       ukr000363_uhf8: `UHF8 UKR-000363`,
       ukr000372_echo3: `ECHO UKR-000372`,
+      ukr000388_bha: `ВНА UKR-000388`,
     },
     received_similar_pss: {
       drc: `Yes, DRC`,

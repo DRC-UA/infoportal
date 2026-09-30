@@ -160,7 +160,7 @@ const koboFormTranslation: Record<KoboFormName, string> = {
   meal_nfiPdm: '[MEAL] NFI PDM',
   meal_macmiii_hh_baseline: '[MEAL] MACMIII – HH baseline survey questionnaire',
   meal_pdmStandardised: '[MEAL] MPCA Standardised PDM',
-  meal_pssPdm: '[MEAL] PSS PDM',
+  meal_pssPdm: '[MEAL] Post-assistance feedback – PSS', // old name is Post-assistance monitoring
   meal_shelterPdm: '[MEAL] Shelter PDM',
   meal_verificationEcrec: '[MEAL] Verification EcRec',
   meal_verificationPartnerBnre: '[MEAL] Verification Partner BNRE',
