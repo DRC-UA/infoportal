@@ -351,6 +351,8 @@ export class KoboMetaMapperProtection {
         ukr000457_dmfa: DrcProject['UKR-000457 DMFA'],
         ukr000461_uhf: DrcProject['UKR-000461 UHF'],
         ukr000462_echo: DrcProject['UKR-000462 ECHO'],
+        ukr000467_norad: DrcProject['UKR-000467 NORAD'],
+        ukr000475_uhf: DrcProject['UKR-000475 UHF'],
       })
       .default(DrcProjectHelper.search(answer.project))
 
@@ -481,6 +483,7 @@ export class KoboMetaMapperProtection {
         ukr000457_dmfa: [DrcProject['UKR-000457 DMFA']],
         ukr000461_uhf: [DrcProject['UKR-000461 UHF']],
         ukr000462_echo: [DrcProject['UKR-000462 ECHO']],
+        ukr000475_uhf: [DrcProject['UKR-000475 UHF']],
       })
       .default(() => {
         const foundProject = DrcProjectHelper.search(Protection_ipaTracker.options.project[answer.project!])
