@@ -282,7 +282,7 @@ export class KoboMetaMapperProtection {
       activity: DrcProgram.ProtectionMonitoring,
       persons,
       personsCount: persons.length,
-      project: projects,
+      project: Array.isArray(projects) ? projects : [projects],
       donor: projects.map((_) => DrcProjectHelper.donorByProject[_]),
       status: KoboMetaStatus.Committed,
       lastStatusUpdate: row.date,
