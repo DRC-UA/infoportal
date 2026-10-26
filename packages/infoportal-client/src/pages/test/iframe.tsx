@@ -1,4 +1,4 @@
-import {useState, useEffect, type ChangeEvent} from 'react'
+import {useState, type ChangeEvent} from 'react'
 import {Box, Input} from '@mui/material'
 import {Route, Routes} from 'react-router-dom'
 
@@ -10,18 +10,11 @@ export default () => {
     setUri(e.target.value)
   }
 
-  useEffect(() => {
-    // force routing handover from Next's to React's router to fix the blank page
-    if (window.location.hash === '') {
-      window.location.replace(`iframe#`)
-    }
-  }, [])
-
   return (
     <ProtectRoute>
       <Routes>
         <Route
-          path="/"
+          index
           element={
             <Box
               component="main"
@@ -37,7 +30,7 @@ export default () => {
               }}
             >
               <Input value={uri} onChange={handleChange} />
-              <iframe width="100%" style={{flexGrow: 1}} src={uri}></iframe>
+              <iframe title="Embedded Kobo Form" width="100%" style={{flexGrow: 1, border: 'none'}} src={uri}></iframe>
             </Box>
           }
         />
