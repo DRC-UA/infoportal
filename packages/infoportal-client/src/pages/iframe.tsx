@@ -28,7 +28,7 @@ export default () => {
               sx={{
                 width: '100%',
                 maxWidth: 840,
-                height: '90vh',
+                height: '100vh',
                 marginInline: 'auto',
                 display: 'flex',
                 gap: 2,
@@ -37,7 +37,7 @@ export default () => {
               }}
             >
               <Input value={uri} onChange={handleChange} />
-              <iframe width="100%" height="100%" src={uri}></iframe>
+              <iframe width="100%" style={{flexGrow: 1}} src={uri}></iframe>
             </Box>
           }
         />
