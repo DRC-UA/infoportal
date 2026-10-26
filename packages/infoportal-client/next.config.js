@@ -39,5 +39,7 @@ export default {
     'react-router',
     'react-router-dom',
     'cookie',
+    'kobo-sdk',
+    'uuid',
   ],
 }
