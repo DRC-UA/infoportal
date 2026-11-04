@@ -31,6 +31,58 @@ import {
 
 type StrategicPriority = ReturnType<typeof sharedActivityProps>['Strategic Priority']
 
+const activityMaker = ({
+  records,
+  indicator,
+  project,
+  period,
+  strategicPriority,
+  oblast,
+  raion,
+  hromada,
+  settlement,
+  displacement,
+  ageGender,
+  disability,
+  rate,
+}: {
+  records: {payment: number}[]
+  indicator: ReturnType<typeof pickIndicatorByProgram>
+  project: DrcProject
+  period: string
+  strategicPriority: 'PLHUKR26/SP1' | 'PLHUKR26/SP2' | 'PLHUKR26/SP3' | 'PLHUKR26/SP4'
+  oblast: string
+  raion: string
+  hromada: string
+  settlement: string
+  displacement: Person.DisplacementStatus
+  ageGender: keyof typeof ageSexReference
+  disability?: Person.WgDisability
+  rate: (arg?: string | undefined) => number
+}) =>
+  ({
+    Indicator: indicator,
+    ...sharedActivityProps({
+      project,
+      period,
+      sp: strategicPriority,
+      oblast,
+      raion,
+      hromada,
+      settlement,
+    }),
+    'Population Group': aiPopulationGroupCode[displacement as 'Idp' | 'NonDisplaced'],
+    'Age & Sex': ageSexGroup2AiCodeMapper(ageGender),
+    'Payment Frequency': paymentFrequency2AiCodeMapper('Lump sum - ONE'),
+    Disability: undefined,
+    'Reached/Delivered - Total incl. Repeated (Manual)': records.length,
+    'Reached/Delivered - New Non-repeated (Manual)': records.length,
+    'USD Amount (Manual)': Number(
+      (records.map(({payment}) => payment).reduce((total, current) => total + current, 0) * rate(period)).toFixed(2),
+    ),
+    'Number of Months (Manual)': indicator === 'CLCWG/CA1/IN1' ? 6 : 3,
+  }) as const
+
 const cashMapperMaker =
   (uah2usd: (arg?: string | undefined) => number) =>
   async ({
@@ -107,73 +159,61 @@ const cashMapperMaker =
           {by: ({settlement}) => settlement?.toUpperCase()!},
           {by: ({displacement}) => displacement!},
           {by: ({ageGender}) => ageGender!},
-          {by: ({disability}) => (disability && Boolean(disability[0]) ? 1 : 0)},
         ],
         finalTransform: async (records, groups) => {
-          const [
-            project,
+          const [project, indicator, strategicPriority, oblast, raion, hromada, settlement, displacement, ageGender] =
+            groups as [
+              DrcProject,
+              AiType51aMonitoring.Type['Indicator'],
+              StrategicPriority,
+              string,
+              string,
+              string,
+              string,
+              Person.DisplacementStatus,
+              keyof typeof ageSexReference,
+            ]
+          const [_namePart, isoPart] = (settlement as string).split('_')
+          const settlementIso = isoPart?.toUpperCase() ?? settlement
+          const recordId = `drc${['CLCWG/CA1/IN2', 'CLCWG/CA2/IN2'].includes(indicator) ? 'mpca' : 'uct'}${period.replace('-', '')}${String(++i).padStart(5, '0')}`
+          const activity = activityMaker({
+            records,
             indicator,
+            project,
+            period,
             strategicPriority,
             oblast,
             raion,
             hromada,
-            settlement,
+            settlement: settlementIso,
             displacement,
             ageGender,
-            disability,
-          ] = groups as [
-            DrcProject,
-            AiType51aMonitoring.Type['Indicator'],
-            StrategicPriority,
-            string,
-            string,
-            string,
-            string,
-            Person.DisplacementStatus,
-            keyof typeof ageSexReference,
-            '0' | '1',
-          ]
-          const [_namePart, isoPart] = (settlement as string).split('_')
-          const settlementIso = isoPart?.toUpperCase() ?? settlement
-          const recordId = `drc${['CLCWG/CA1/IN2', 'CLCWG/CA2/IN2'].includes(indicator) ? 'mpca' : 'uct'}${period.replace('-', '')}${String(++i).padStart(5, '0')}`
-          const activity = {
-            Indicator: indicator,
-            ...sharedActivityProps({
-              project,
-              period,
-              sp: strategicPriority,
-              oblast,
-              raion,
-              hromada,
-              settlement: settlementIso,
+            rate: uah2usd,
+          })
+
+          console.log(
+            groupBy({
+              data: records,
+              groups: [{by: ({disability}) => (disability && Boolean(disability[0]) ? 1 : 0)}],
+              finalTransform: (records, groups) => ({records, groups}),
             }),
-            'Population Group': aiPopulationGroupCode[displacement as 'Idp' | 'NonDisplaced'],
-            'Age & Sex': ageSexGroup2AiCodeMapper(ageGender),
-            'Payment Frequency': paymentFrequency2AiCodeMapper('Lump sum - ONE'),
-            ...(disability === '1' && ({Disability: 'DSB'} as const)),
-            'Reached/Delivered - Total incl. Repeated (Manual)': records.length,
-            'Reached/Delivered - New Non-repeated (Manual)': records.length,
-            'USD Amount (Manual)': Number(
-              (
-                records.map(({payment}) => payment).reduce((total, current) => total + current, 0) * uah2usd(period)
-              ).toFixed(2),
-            ),
-            'Number of Months (Manual)': indicator === 'CLCWG/CA1/IN1' ? 6 : 3,
-          } as const
+          )
 
           const requestBody = buildRequest(activity, recordId)
 
-          return {
-            activity: labelActivities(activity, records),
-            data: records,
-            recordId,
-            requestBody,
-            submit: requestBody.changes.some(({fields}) => {
-              return !Object.values(fields).some((value) => {
-                return (value as string)?.includes && (value as string)?.includes('undefined')
-              })
-            }),
-          }
+          return [
+            {
+              activity: labelActivities(activity, records),
+              data: records,
+              recordId,
+              requestBody,
+              submit: requestBody.changes.some(({fields}) => {
+                return !Object.values(fields).some((value) => {
+                  return (value as string)?.includes && (value as string)?.includes('undefined')
+                })
+              }),
+            },
+          ]
         },
       }).transforms,
     ).then((result) => result.flat())
