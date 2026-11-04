@@ -3,6 +3,7 @@ import {match} from '@axanc/ts-utils'
 import {DrcProject, groupBy, IKoboMeta, Person} from 'infoportal-common'
 
 import {
+  activityRecordMaker,
   ageSexGroup2AiCodeMapper,
   ageSexReference,
   aiPopulationGroupCode,
@@ -59,21 +60,18 @@ const protectionMapperMaker =
           {by: ({settlement}) => settlement?.toUpperCase()!},
           {by: ({populationGroup}) => populationGroup!},
           {by: ({ageGender}) => ageGender!},
-          {by: ({disability}) => (disability && Boolean(disability[0]) ? 1 : 0)},
         ],
-        finalTransform: async (record, groups) => {
-          const [project, indicator, oblast, raion, hromada, settlement, populationGroup, ageGender, disability] =
-            groups as [
-              DrcProject,
-              AiType51aMonitoring.Type['Indicator'],
-              string,
-              string,
-              string,
-              string,
-              Person.DisplacementStatus,
-              keyof typeof ageSexReference,
-              '0' | '1',
-            ]
+        finalTransform: async (records, groups) => {
+          const [project, indicator, oblast, raion, hromada, settlement, populationGroup, ageGender] = groups as [
+            DrcProject,
+            AiType51aMonitoring.Type['Indicator'],
+            string,
+            string,
+            string,
+            string,
+            Person.DisplacementStatus,
+            keyof typeof ageSexReference,
+          ]
           const [_namePart, isoPart] = (settlement as string).split('_')
           const settlementIso = isoPart?.toUpperCase() ?? settlement
           const recordId = `${prefix}${period.replace('-', '')}${String(++i).padStart(5, '0')}`
@@ -90,24 +88,36 @@ const protectionMapperMaker =
             }),
             'Population Group': aiPopulationGroupCode[populationGroup as 'Idp' | 'NonDisplaced'],
             'Age & Sex': ageSexGroup2AiCodeMapper(ageGender),
-            ...(disability === '1' && {Disability: 'DSB' as const}),
             ...(indicator === 'CLPRO/CA14/IN1' && {'Cash: Restriction': 'RES' as const}),
-            'Reached/Delivered - New Non-repeated (Manual)': record.length,
+            'Reached/Delivered - New Non-repeated (Manual)': records.length,
           } as const
 
-          const requestBody = buildProtectionRequest(activity, recordId)
+          const recordsWithDisabilities = records.filter(({disability}) => disability && Boolean(disability[0]))
 
-          return {
-            activity: labelActivities(activity, record),
-            data: record,
-            recordId,
-            requestBody,
-            submit: requestBody.changes.some(({fields}) => {
-              return !Object.values(fields).some((value) => {
-                return (value as string)?.includes && (value as string)?.includes('undefined')
-              })
+          return [
+            activityRecordMaker({
+              activity,
+              data: records,
+              recordId,
+              activityLabelMaker: labelActivities,
+              requestBodyBuilder: buildProtectionRequest,
             }),
-          }
+            ...(recordsWithDisabilities.length
+              ? [
+                  activityRecordMaker({
+                    activity: {
+                      ...activity,
+                      Disability: 'DSB',
+                      'Reached/Delivered - New Non-repeated (Manual)': recordsWithDisabilities.length,
+                    },
+                    data: recordsWithDisabilities,
+                    recordId: `${recordId}dsb`,
+                    activityLabelMaker: labelActivities,
+                    requestBodyBuilder: buildProtectionRequest,
+                  }),
+                ]
+              : []),
+          ]
         },
       }).transforms,
     ).then((result) => result.flat())

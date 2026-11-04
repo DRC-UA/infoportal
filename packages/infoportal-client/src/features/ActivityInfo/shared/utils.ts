@@ -12,6 +12,7 @@ import {
 } from 'infoportal-common'
 
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
+import type {ActivityInfoRequest} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 
 import {ALERT} from './constants'
 import {AiType51aMonitoring, Bundle} from './types'
@@ -578,11 +579,43 @@ const pickIndicatorByProgram = ({
     .default(undefined)
 }
 
+const activityRecordMaker = <
+  T extends Partial<Bundle['activity']>,
+  P extends Seq<Partial<IKoboMeta> & Person.Details>,
+>({
+  activity,
+  data,
+  recordId,
+  activityLabelMaker,
+  requestBodyBuilder,
+}: {
+  activity: T
+  data: P
+  recordId: string
+  activityLabelMaker: (activity: T, data: P) => T
+  requestBodyBuilder: (activity: T, recordId: string) => ActivityInfoRequest
+}) => {
+  const requestBody = requestBodyBuilder(activity, recordId)
+
+  return {
+    activity: activityLabelMaker(activity, data),
+    data,
+    recordId,
+    requestBody,
+    submit: requestBody.changes.some(({fields}) => {
+      return !Object.values(fields).some((value) => {
+        return (value as string)?.includes && (value as string)?.includes('undefined')
+      })
+    }),
+  }
+}
+
 export {
   labelActivities,
   pickIndicatorByProgram,
   sharedActivityProps,
   sp1Oblasts,
+  activityRecordMaker,
   ageSexGroup2AiCodeMapper,
   ageSexReference,
   aiPopulationGroupCode,
