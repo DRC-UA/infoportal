@@ -1,4 +1,4 @@
-import {match, type Seq} from '@axanc/ts-utils'
+import {match, seq, type Seq} from '@axanc/ts-utils'
 import {UaLocation} from 'ua-location'
 
 import {
@@ -581,7 +581,7 @@ const pickIndicatorByProgram = ({
 
 const activityReportMaker = <
   T extends Partial<Bundle['activity']>,
-  P extends Seq<Partial<IKoboMeta> & Person.Details>,
+  P extends Seq<Partial<IKoboMeta> & Person.Details & {amount?: number}>,
 >({
   activity,
   data,
@@ -589,6 +589,7 @@ const activityReportMaker = <
   activityLabelMaker,
   requestBodyBuilder,
   disabilities,
+  currencyRate = 0,
 }: {
   activity: T
   data: P
@@ -596,11 +597,13 @@ const activityReportMaker = <
   activityLabelMaker: (activity: T, data: P) => T
   requestBodyBuilder: (activity: T, recordId: string) => ActivityInfoRequest
   disabilities?: boolean
+  currencyRate?: number
 }) => {
   const requestBody = requestBodyBuilder(activity, recordId)
 
   if (disabilities) {
     const recordsWithDisabilities = data.filter(({disability}) => disability && Boolean(disability[0]))
+
     if (recordsWithDisabilities.length === 0) return
 
     return {
@@ -608,6 +611,12 @@ const activityReportMaker = <
         {
           ...activity,
           Disability: 'DSB',
+          ...(activity['USD Amount (Manual)'] && {
+            'USD Amount (Manual)': seq(recordsWithDisabilities.map(({amount}) => amount ?? 0)).sum() * currencyRate,
+          }),
+          ...(activity['Reached/Delivered - Total incl. Repeated (Manual)'] && {
+            'Reached/Delivered - Total incl. Repeated (Manual)': recordsWithDisabilities.length,
+          }),
           'Reached/Delivered - New Non-repeated (Manual)': recordsWithDisabilities.length,
         },
         data,

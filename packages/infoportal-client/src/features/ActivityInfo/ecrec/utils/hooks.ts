@@ -7,12 +7,12 @@ import {
   groupBy,
   KoboIndex,
   KoboMetaStatus,
-  Ecrec_vet_bha388,
   Ecrec_msmeGrantReg,
   Ecrec_subsistance,
   Period,
   IKoboMeta,
   DrcProgram,
+  Ecrec_small_scale,
 } from 'infoportal-common'
 
 import {useAppSettings} from '@/core/context/ConfigContext'
@@ -22,7 +22,10 @@ import {useFetcher} from '@/shared/hook/useFetcher'
 import {ecrecMapper} from './ecrecMapper'
 
 const useEcrecData = () => {
-  const {api} = useAppSettings()
+  const {
+    api,
+    conf: {uah2usd},
+  } = useAppSettings()
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<Bundle[]>([])
   const [metaData, setMetaData] = useState<IKoboMeta[]>([])
@@ -87,6 +90,18 @@ const useEcrecData = () => {
                 ),
               }))
             }
+
+            if (formId === KoboIndex.byName('ecrec_small_scale').id) {
+              setAmountsData((before) => ({
+                ...before,
+                ...Object.fromEntries(
+                  (data as unknown as (Ecrec_small_scale.T & {id: string})[]).map(({id, cal_amount}) => [
+                    [id],
+                    [Number(cal_amount ?? 0)],
+                  ]),
+                ),
+              }))
+            }
           })
       }),
     ).finally(() => {
@@ -103,7 +118,10 @@ const useEcrecData = () => {
         koboId,
         formId,
         amount: match(formId)
-          .cases({[KoboIndex.byName('ecrec_subsistance').id]: amountsData[koboId] ?? 0})
+          .cases({
+            [KoboIndex.byName('ecrec_subsistance').id]: amountsData[koboId] ?? 0,
+            [KoboIndex.byName('ecrec_small_scale').id]: amountsData[koboId] ?? 0,
+          })
           .default(0),
         ...record,
       }
@@ -112,6 +130,7 @@ const useEcrecData = () => {
     ecrecMapper({
       data,
       period: AiMapper.getPeriodStr(period),
+      uah2usd: uah2usd(AiMapper.getPeriodStr(period)),
     }).then((aiBundles) => {
       setData(aiBundles)
       setColumns(
