@@ -579,7 +579,7 @@ const pickIndicatorByProgram = ({
     .default(undefined)
 }
 
-const activityRecordMaker = <
+const activityReportMaker = <
   T extends Partial<Bundle['activity']>,
   P extends Seq<Partial<IKoboMeta> & Person.Details>,
 >({
@@ -588,14 +588,40 @@ const activityRecordMaker = <
   recordId,
   activityLabelMaker,
   requestBodyBuilder,
+  disabilities,
 }: {
   activity: T
   data: P
   recordId: string
   activityLabelMaker: (activity: T, data: P) => T
   requestBodyBuilder: (activity: T, recordId: string) => ActivityInfoRequest
+  disabilities?: boolean
 }) => {
   const requestBody = requestBodyBuilder(activity, recordId)
+
+  if (disabilities) {
+    const recordsWithDisabilities = data.filter(({disability}) => disability && Boolean(disability[0]))
+    if (recordsWithDisabilities.length === 0) return
+
+    return {
+      activity: activityLabelMaker(
+        {
+          ...activity,
+          Disability: 'DSB',
+          'Reached/Delivered - New Non-repeated (Manual)': recordsWithDisabilities.length,
+        },
+        data,
+      ),
+      data: recordsWithDisabilities,
+      recordId: `${recordId}dsb`,
+      requestBody,
+      submit: requestBody.changes.some(({fields}) => {
+        return !Object.values(fields).some((value) => {
+          return (value as string)?.includes && (value as string)?.includes('undefined')
+        })
+      }),
+    }
+  }
 
   return {
     activity: activityLabelMaker(activity, data),
@@ -615,7 +641,7 @@ export {
   pickIndicatorByProgram,
   sharedActivityProps,
   sp1Oblasts,
-  activityRecordMaker,
+  activityReportMaker,
   ageSexGroup2AiCodeMapper,
   ageSexReference,
   aiPopulationGroupCode,

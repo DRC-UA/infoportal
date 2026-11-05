@@ -3,7 +3,7 @@ import {match} from '@axanc/ts-utils'
 import {DrcProject, groupBy, IKoboMeta, Person} from 'infoportal-common'
 
 import {
-  activityRecordMaker,
+  activityReportMaker,
   ageSexGroup2AiCodeMapper,
   ageSexReference,
   aiPopulationGroupCode,
@@ -92,28 +92,25 @@ const protectionMapperMaker =
             'Reached/Delivered - New Non-repeated (Manual)': records.length,
           } as const
 
-          const recordsWithDisabilities = records.filter(({disability}) => disability && Boolean(disability[0]))
+          const areDisabilities = records.some(({disability}) => disability && Boolean(disability[0]))
 
           return [
-            activityRecordMaker({
+            activityReportMaker({
               activity,
               data: records,
               recordId,
               activityLabelMaker: labelActivities,
               requestBodyBuilder: buildProtectionRequest,
             }),
-            ...(recordsWithDisabilities.length
+            ...(areDisabilities
               ? [
-                  activityRecordMaker({
-                    activity: {
-                      ...activity,
-                      Disability: 'DSB',
-                      'Reached/Delivered - New Non-repeated (Manual)': recordsWithDisabilities.length,
-                    },
-                    data: recordsWithDisabilities,
-                    recordId: `${recordId}dsb`,
+                  activityReportMaker({
+                    activity,
+                    data: records,
+                    recordId,
                     activityLabelMaker: labelActivities,
                     requestBodyBuilder: buildProtectionRequest,
+                    disabilities: true,
                   }),
                 ]
               : []),

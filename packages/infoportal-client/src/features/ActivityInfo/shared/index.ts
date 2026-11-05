@@ -4,7 +4,7 @@ export {ALERT} from './constants'
 export {useMetaFetcher, useKoboFetcher} from './hooks'
 export {AiType51aMonitoring, type AiTableProps, type AiTableData, type Bundle} from './types'
 export {
-  activityRecordMaker,
+  activityReportMaker,
   ageSexGroup2AiCodeMapper,
   ageSexReference,
   aiPopulationGroupCode,
