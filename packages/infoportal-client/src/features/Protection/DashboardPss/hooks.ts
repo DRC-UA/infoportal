@@ -288,8 +288,8 @@ const useStats = ({
           by: ({code_beneficiary}) => code_beneficiary!,
         },
       ],
-      finalTransform: (input) => ({occurrences: input.length, ids: input?.map(({id}) => id)}),
-    }).transforms.length
+      finalTransform: (input) => input[0],
+    }).transforms
 
     const individualsByProject = seq(
       groupBy({

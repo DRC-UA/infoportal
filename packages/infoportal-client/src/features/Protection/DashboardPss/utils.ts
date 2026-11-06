@@ -81,28 +81,4 @@ const colorByQuestion: Record<string, string> = Object.fromEntries(
   ['pre', 'post', 'difference'].map((q, i) => [q, baseColors[i % baseColors.length]]),
 )
 
-const pickUnique = (data: Seq<ProtectionPssWithPersonsFlat>): Person.Details[] =>
-  groupBy({
-    data:
-      data
-        .flatMap(
-          ({persons, id}) =>
-            persons?.map((person) => ({
-              ...(person as Person.Details & {code_beneficiary: string}),
-              id,
-            })) ?? [],
-        )
-        .filter(({code_beneficiary}) => code_beneficiary !== undefined)
-        .compact() ?? [],
-    groups: [
-      {
-        by: ({code_beneficiary}) => code_beneficiary!,
-      },
-    ],
-    finalTransform: (input) =>
-      input.flatMap(({age, gender, displacement, disability}) => {
-        return {age, gender, displacement, disability}
-      })[0],
-  }).transforms
-
-export {colorByQuestion, prePostSummaryBuilder, pickUnique}
+export {colorByQuestion, prePostSummaryBuilder}

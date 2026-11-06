@@ -1,5 +1,5 @@
 import {useState, Fragment, type FC} from 'react'
-import {seq} from '@axanc/ts-utils'
+import {seq, type Seq} from '@axanc/ts-utils'
 import {Box, Typography, Switch, useTheme} from '@mui/material'
 import {format} from 'date-fns'
 
@@ -23,7 +23,8 @@ import {useKoboTranslations, usePlurals} from '@/utils'
 
 import {PssContextProvider, usePssContext} from './Context'
 import {useResilienceStats, useStats, useSessionsCounter} from './hooks'
-import {colorByQuestion, pickUnique, prePostSummaryBuilder} from './utils'
+import {colorByQuestion, prePostSummaryBuilder} from './utils'
+import type {ProtectionPssWithPersonsFlat} from './types'
 
 const LegendColorSample: FC<{background: string}> = ({background}) => <Box sx={{width: 30, background}}></Box>
 const LegendItem: FC<{color: string; label: string}> = ({color, label}) => (
@@ -115,10 +116,10 @@ const PssDashboardWithContext: FC = () => {
           <SlideWidget
             sx={{flex: 1}}
             icon="person"
-            title={`${pluralizeUniqueIndividuals(individuals)}*`}
+            title={`${pluralizeUniqueIndividuals(individuals.length)}*`}
             tooltip={m.pssDashboard.uniqueIndividualsHint}
           >
-            {formatLargeNumber(individuals)}
+            {formatLargeNumber(individuals.length)}
           </SlideWidget>
         </Div>
         <Txt>{m.pssDashboard.sessionsCounterTitle}</Txt>
@@ -493,7 +494,7 @@ const PssDashboardWithContext: FC = () => {
               <PanelBody>
                 <AgeGroupTable
                   tableId="protection-dashboard"
-                  persons={showAgeGroupsUnique ? pickUnique(data.flatFiltered) : data.flatFiltered}
+                  persons={showAgeGroupsUnique ? individuals : data.flatFiltered}
                   enableDisplacementStatusFilter
                   enablePwdFilter
                 />
@@ -513,45 +514,14 @@ const PssDashboardWithContext: FC = () => {
             >
               <PanelBody>
                 <ChartBarSingleBy
-                  data={seq(showDisplacementUnique ? pickUnique(data.flatFiltered) : data.flatFiltered)}
+                  data={seq(
+                    showDisplacementUnique
+                      ? (individuals as unknown as Seq<ProtectionPssWithPersonsFlat>)
+                      : data.flatFiltered,
+                  )}
                   by={(_) => _.displacement}
                   label={Person.DisplacementStatus}
                 />
-              </PanelBody>
-            </Panel>
-            <Panel title={m.project}>
-              <PanelBody>
-                {data.filtered && (
-                  <ChartBarSingleBy
-                    data={data.filtered}
-                    by={({project}) => project!}
-                    label={translateOption('project')?.reduce(
-                      (result, {value, label}) => ({
-                        ...result,
-                        [value]: label,
-                      }),
-                      {} as Record<string, string>,
-                    )}
-                  />
-                )}
-              </PanelBody>
-            </Panel>
-            <Panel title={m.pssDashboard.uniquesByProjectWidget.title}>
-              <PanelBody>
-                <ChartBarSingleBy
-                  data={individualsByProject}
-                  by={({project}) => project!}
-                  label={translateOption('project')?.reduce(
-                    (result, {value, label}) => ({
-                      ...result,
-                      [value]: label,
-                    }),
-                    {} as Record<string, string>,
-                  )}
-                />
-                <Box
-                  paddingTop={2}
-                >{`${m.pssDashboard.uniquesByProjectWidget.total} ${formatLargeNumber(individualsByProject.length)}`}</Box>
               </PanelBody>
             </Panel>
           </Div>
