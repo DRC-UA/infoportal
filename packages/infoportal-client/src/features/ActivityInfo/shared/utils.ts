@@ -599,38 +599,41 @@ const activityReportMaker = <
   disabilities?: boolean
   currencyRate?: number
 }) => {
-  const requestBody = requestBodyBuilder(activity, recordId)
-
   if (disabilities) {
     const recordsWithDisabilities = data.filter(({disability}) => disability && Boolean(disability[0]))
 
     if (recordsWithDisabilities.length === 0) return
 
+    const activityForDsb = {
+      ...activity,
+      Disability: 'DSB',
+      ...(activity['USD Amount (Manual)'] && {
+        'USD Amount (Manual)': seq(recordsWithDisabilities.map(({amount}) => amount ?? 0)).sum() * currencyRate,
+      }),
+      ...(activity['Reached/Delivered - Total incl. Repeated (Manual)'] && {
+        'Reached/Delivered - Total incl. Repeated (Manual)': recordsWithDisabilities.length,
+      }),
+      'Reached/Delivered - New Non-repeated (Manual)': recordsWithDisabilities.length,
+    }
+
+    const recordIdForDsb = `${recordId}dsb`
+
+    const requestBodyForDsb = requestBodyBuilder(activityForDsb, recordIdForDsb)
+
     return {
-      activity: activityLabelMaker(
-        {
-          ...activity,
-          Disability: 'DSB',
-          ...(activity['USD Amount (Manual)'] && {
-            'USD Amount (Manual)': seq(recordsWithDisabilities.map(({amount}) => amount ?? 0)).sum() * currencyRate,
-          }),
-          ...(activity['Reached/Delivered - Total incl. Repeated (Manual)'] && {
-            'Reached/Delivered - Total incl. Repeated (Manual)': recordsWithDisabilities.length,
-          }),
-          'Reached/Delivered - New Non-repeated (Manual)': recordsWithDisabilities.length,
-        },
-        data,
-      ),
+      activity: activityLabelMaker(activityForDsb, data),
       data: recordsWithDisabilities,
-      recordId: `${recordId}dsb`,
-      requestBody,
-      submit: requestBody.changes.some(({fields}) => {
+      recordId: recordIdForDsb,
+      requestBody: requestBodyForDsb,
+      submit: requestBodyForDsb.changes.some(({fields}) => {
         return !Object.values(fields).some((value) => {
           return (value as string)?.includes && (value as string)?.includes('undefined')
         })
       }),
     }
   }
+
+  const requestBody = requestBodyBuilder(activity, recordId)
 
   return {
     activity: activityLabelMaker(activity, data),
