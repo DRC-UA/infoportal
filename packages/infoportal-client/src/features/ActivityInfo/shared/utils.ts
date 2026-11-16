@@ -1,4 +1,4 @@
-import {match, type Seq} from '@axanc/ts-utils'
+import {match, seq, type Seq} from '@axanc/ts-utils'
 import {UaLocation} from 'ua-location'
 
 import {
@@ -12,6 +12,7 @@ import {
 } from 'infoportal-common'
 
 import {ActivityInfoSdk} from '@/core/sdk/server/activity-info/ActiviftyInfoSdk'
+import type {ActivityInfoRequest} from '@/core/sdk/server/activity-info/ActiviftyInfoType'
 
 import {ALERT} from './constants'
 import {AiType51aMonitoring, Bundle} from './types'
@@ -578,11 +579,81 @@ const pickIndicatorByProgram = ({
     .default(undefined)
 }
 
+const activityReportMaker = <
+  T extends Partial<Bundle['activity']>,
+  P extends Seq<Partial<IKoboMeta> & Person.Details & {amount?: number}>,
+>({
+  activity,
+  data,
+  recordId,
+  activityLabelMaker,
+  requestBodyBuilder,
+  disabilities,
+  currencyRate = 0,
+}: {
+  activity: T
+  data: P
+  recordId: string
+  activityLabelMaker: (activity: T, data: P) => T
+  requestBodyBuilder: (activity: T, recordId: string) => ActivityInfoRequest
+  disabilities?: boolean
+  currencyRate?: number
+}) => {
+  if (disabilities) {
+    const recordsWithDisabilities = data.filter(({disability}) => disability && Boolean(disability[0]))
+
+    if (recordsWithDisabilities.length === 0) return
+
+    const activityForDsb = {
+      ...activity,
+      Disability: 'DSB',
+      ...(activity['USD Amount (Manual)'] && {
+        'USD Amount (Manual)': seq(recordsWithDisabilities.map(({amount}) => amount ?? 0)).sum() * currencyRate,
+      }),
+      ...(activity['Reached/Delivered - Total incl. Repeated (Manual)'] && {
+        'Reached/Delivered - Total incl. Repeated (Manual)': recordsWithDisabilities.length,
+      }),
+      'Reached/Delivered - New Non-repeated (Manual)': recordsWithDisabilities.length,
+    }
+
+    const recordIdForDsb = `${recordId}dsb`
+
+    const requestBodyForDsb = requestBodyBuilder(activityForDsb, recordIdForDsb)
+
+    return {
+      activity: activityLabelMaker(activityForDsb, data),
+      data: recordsWithDisabilities,
+      recordId: recordIdForDsb,
+      requestBody: requestBodyForDsb,
+      submit: requestBodyForDsb.changes.some(({fields}) => {
+        return !Object.values(fields).some((value) => {
+          return (value as string)?.includes && (value as string)?.includes('undefined')
+        })
+      }),
+    }
+  }
+
+  const requestBody = requestBodyBuilder(activity, recordId)
+
+  return {
+    activity: activityLabelMaker(activity, data),
+    data,
+    recordId,
+    requestBody,
+    submit: requestBody.changes.some(({fields}) => {
+      return !Object.values(fields).some((value) => {
+        return (value as string)?.includes && (value as string)?.includes('undefined')
+      })
+    }),
+  }
+}
+
 export {
   labelActivities,
   pickIndicatorByProgram,
   sharedActivityProps,
   sp1Oblasts,
+  activityReportMaker,
   ageSexGroup2AiCodeMapper,
   ageSexReference,
   aiPopulationGroupCode,

@@ -16,6 +16,7 @@ import {
 } from 'infoportal-common'
 
 import {
+  activityReportMaker,
   ageSexGroup2AiCodeMapper,
   ageSexReference,
   aiPopulationGroupCode,
@@ -107,32 +108,20 @@ const cashMapperMaker =
           {by: ({settlement}) => settlement?.toUpperCase()!},
           {by: ({displacement}) => displacement!},
           {by: ({ageGender}) => ageGender!},
-          {by: ({disability}) => (disability && Boolean(disability[0]) ? 1 : 0)},
         ],
         finalTransform: async (records, groups) => {
-          const [
-            project,
-            indicator,
-            strategicPriority,
-            oblast,
-            raion,
-            hromada,
-            settlement,
-            displacement,
-            ageGender,
-            disability,
-          ] = groups as [
-            DrcProject,
-            AiType51aMonitoring.Type['Indicator'],
-            StrategicPriority,
-            string,
-            string,
-            string,
-            string,
-            Person.DisplacementStatus,
-            keyof typeof ageSexReference,
-            '0' | '1',
-          ]
+          const [project, indicator, strategicPriority, oblast, raion, hromada, settlement, displacement, ageGender] =
+            groups as [
+              DrcProject,
+              AiType51aMonitoring.Type['Indicator'],
+              StrategicPriority,
+              string,
+              string,
+              string,
+              string,
+              Person.DisplacementStatus,
+              keyof typeof ageSexReference,
+            ]
           const [_namePart, isoPart] = (settlement as string).split('_')
           const settlementIso = isoPart?.toUpperCase() ?? settlement
           const recordId = `drc${['CLCWG/CA1/IN2', 'CLCWG/CA2/IN2'].includes(indicator) ? 'mpca' : 'uct'}${period.replace('-', '')}${String(++i).padStart(5, '0')}`
@@ -145,12 +134,12 @@ const cashMapperMaker =
               oblast,
               raion,
               hromada,
-              settlement: settlementIso,
+              settlement,
             }),
             'Population Group': aiPopulationGroupCode[displacement as 'Idp' | 'NonDisplaced'],
             'Age & Sex': ageSexGroup2AiCodeMapper(ageGender),
             'Payment Frequency': paymentFrequency2AiCodeMapper('Lump sum - ONE'),
-            ...(disability === '1' && ({Disability: 'DSB'} as const)),
+            Disability: undefined,
             'Reached/Delivered - Total incl. Repeated (Manual)': records.length,
             'Reached/Delivered - New Non-repeated (Manual)': records.length,
             'USD Amount (Manual)': Number(
@@ -159,21 +148,41 @@ const cashMapperMaker =
               ).toFixed(2),
             ),
             'Number of Months (Manual)': indicator === 'CLCWG/CA1/IN1' ? 6 : 3,
-          } as const
-
-          const requestBody = buildRequest(activity, recordId)
-
-          return {
-            activity: labelActivities(activity, records),
-            data: records,
-            recordId,
-            requestBody,
-            submit: requestBody.changes.some(({fields}) => {
-              return !Object.values(fields).some((value) => {
-                return (value as string)?.includes && (value as string)?.includes('undefined')
-              })
-            }),
           }
+
+          const areThereDisabilities = records.some(({disability}) => disability && Boolean(disability[0]))
+
+          return [
+            activityReportMaker({
+              activity,
+              data: records,
+              recordId,
+              activityLabelMaker: labelActivities,
+              requestBodyBuilder: buildRequest,
+            }),
+            ...(areThereDisabilities
+              ? [
+                  activityReportMaker({
+                    activity: {
+                      ...activity,
+                      'USD Amount (Manual)': Number(
+                        (
+                          records
+                            .filter(({disability}) => disability && Boolean(disability[0]))
+                            .map(({payment}) => payment)
+                            .reduce((total, current) => total + current, 0) * uah2usd(period)
+                        ).toFixed(2),
+                      ),
+                    },
+                    data: records,
+                    recordId,
+                    activityLabelMaker: labelActivities,
+                    requestBodyBuilder: buildRequest,
+                    disabilities: true,
+                  }),
+                ]
+              : []),
+          ]
         },
       }).transforms,
     ).then((result) => result.flat())
