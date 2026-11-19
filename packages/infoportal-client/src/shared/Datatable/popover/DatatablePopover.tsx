@@ -1,16 +1,18 @@
+import {ReactNode, useMemo} from 'react'
+import {seq} from '@axanc/ts-utils'
 import {Box, Popover, PopoverProps} from '@mui/material'
-import React, {ReactNode, useMemo} from 'react'
-import {ChartBar} from '@/shared/charts/ChartBar'
-import {PanelBody, PanelHead} from '@/shared/Panel'
-import {IpBtn} from '@/shared/Btn'
+
+import {KeyOf} from 'infoportal-common'
+
 import {useI18n} from '@/core/i18n'
-import {PanelFoot} from '@/shared/Panel/PanelFoot'
-import {Txt} from '@/shared/Txt'
+import {IpBtn} from '@/shared/Btn'
+import {ChartBar} from '@/shared/charts/ChartBar'
+import {ChartHelper} from '@/shared/charts/chartHelper'
 import {ChartLineByDate} from '@/shared/charts/ChartLineByDate'
 import {DatatableOptions, DatatableRow} from '@/shared/Datatable/util/datatableType'
-import {seq} from '@axanc/ts-utils'
-import {KeyOf} from 'infoportal-common'
-import {ChartHelper} from '@/shared/charts/chartHelper'
+import {PanelBody, PanelHead} from '@/shared/Panel'
+import {PanelFoot} from '@/shared/Panel/PanelFoot'
+import {Txt} from '@/shared/Txt'
 
 const RenderRow = ({label, value}: {label: ReactNode; value: ReactNode}) => {
   return (
@@ -48,6 +50,7 @@ export const NumberChoicesPopover = <T,>({
     const avg = sum / mapped.length
     return {mapped, min, max, sum, avg}
   }, [data, question])
+
   return (
     <Popover open={!!anchorEl} anchorEl={anchorEl} onClose={onClose}>
       <PanelHead>{question as string}</PanelHead>
@@ -78,8 +81,6 @@ export const MultipleChoicesPopover = <T extends DatatableRow>({
 }: {
   title?: ReactNode
   translations?: DatatableOptions[]
-  // multiple?: boolean
-  // getValue: (_: T) => string[] | string
   data: T[]
 } & Pick<PopoverProps, 'anchorEl' | 'onClose'> &
   (
@@ -92,7 +93,7 @@ export const MultipleChoicesPopover = <T extends DatatableRow>({
         getValue: (_: T) => string
       }
   )) => {
-  const {m} = useI18n()
+  const {m, currentLang} = useI18n()
   const chart = useMemo(() => {
     const chart = (() => {
       if (multiple) {
@@ -108,7 +109,7 @@ export const MultipleChoicesPopover = <T extends DatatableRow>({
       .setLabel(seq(translations).reduceObject<Record<string, ReactNode>>((_) => [_.value!, _.label!]))
       .sortBy.value()
       .get()
-  }, [getValue, data, translations])
+  }, [getValue, data, translations, currentLang])
 
   return (
     <Popover
@@ -144,17 +145,7 @@ export const DatesPopover = <T,>({
   title: string
 } & Pick<PopoverProps, 'anchorEl' | 'onClose'>) => {
   const {m} = useI18n()
-  // const chart = useMemo(() => {
-  //   const res: Record<string, Record<K, number>> = {}
-  //   data.forEach(d => {
-  //     if (!d[question]) return
-  //     const date = d[q] as Date
-  //     const yyyyMM = format(date, 'yyyy-MM')
-  //     if (!res[yyyyMM]) res[yyyyMM] = 0
-  //     res[yyyyMM] += 1
-  //   })
-  //   return res
-  // }, [question, data])
+
   return (
     <Popover open={!!anchorEl} anchorEl={anchorEl} onClose={onClose}>
       <PanelHead>{title}</PanelHead>

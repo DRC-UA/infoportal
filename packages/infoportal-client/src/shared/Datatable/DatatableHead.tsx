@@ -82,7 +82,6 @@ export const DatatableHead = (() => {
                 style={c.styleHead}
                 key={c.id}
                 title={c.head}
-                // onClick={() => onSortBy(c.id)}
                 className={[
                   c.classHead ?? '',
                   'td th',

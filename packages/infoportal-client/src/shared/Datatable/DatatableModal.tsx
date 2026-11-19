@@ -1,12 +1,13 @@
-import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
-import {DatatableFilterModal} from '@/shared/Datatable/popover/DatatableFilterModal'
-import React from 'react'
 import {map} from '@axanc/ts-utils'
+
 import {useDatatableContext} from '@/shared/Datatable/context/DatatableContext'
+import {DatatableFilterModal} from '@/shared/Datatable/popover/DatatableFilterModal'
 import {DatesPopover, MultipleChoicesPopover, NumberChoicesPopover} from '@/shared/Datatable/popover/DatatablePopover'
+import {DatatableFilterValue} from '@/shared/Datatable/util/datatableType'
 
 export const DatatableModal = () => {
   const ctx = useDatatableContext()
+
   return (
     <>
       {map(ctx.modal.filterPopover.get, (popover) => {
@@ -19,7 +20,7 @@ export const DatatableModal = () => {
             title={column.head}
             anchorEl={popover.event.target}
             columnId={id}
-            renderValue={(_: any) => column.render(_).value}
+            renderValue={(_: any) => column.render(_).label}
             options={ctx.options(id)}
             type={column.type}
             orderBy={ctx.data.search.orderBy}
@@ -78,7 +79,7 @@ export const DatatableModal = () => {
                 translations={ctx.options(id)}
                 anchorEl={popover.event.target}
                 multiple={column.type === 'select_multiple'}
-                getValue={(_: any) => column.render(_).value as any}
+                getValue={(_: any) => column.render(_).label as any}
                 title={column.head}
                 data={ctx.data.filteredData ?? []}
                 onClose={ctx.modal.statsPopover.close}
