@@ -48,7 +48,6 @@ export const ChartBar = <K extends string>(props: Props<K>) => {
 
 export const ChartBarContent = <K extends string>({
   data,
-  // base,
   icons,
   labels,
   descs,
@@ -58,18 +57,10 @@ export const ChartBarContent = <K extends string>({
   showLastBorder,
   limitChartHeight,
 }: Omit<Props<K>, 'data'> & {data: NonNullable<Props<K>['data']>}) => {
-  const {
-    values,
-    maxValue,
-    sumValue,
-    // base,
-    percents,
-  } = useMemo(() => {
-    data
+  const {values, maxValue, sumValue, percents} = useMemo(() => {
     const values = Obj.values(data) as BarChartData[]
     const maxValue = Math.max(...values.map((_) => _.value))
     const sumValue = values.reduce((sum, _) => _.value + sum, 0)
-    // const base = values[0]?.base ?? sumValue
     const percents = values.map((_) => (_.value / (_.base ?? sumValue)) * 100)
     return {
       values,
