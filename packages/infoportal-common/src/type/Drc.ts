@@ -394,6 +394,7 @@ export enum DrcProject {
   'UKR-000464 Villum Fundation' = 'UKR-000464 Villum Fundation',
   'UKR-000467 NORAD' = 'UKR-000467 NORAD',
   'UKR-000475 UHF' = 'UKR-000475 UHF',
+  'UKR-000477 UHF' = 'UKR-000477 UHF',
   // extra options out of sorted list:
   'Other' = 'Other',
   'None' = 'None',
@@ -483,6 +484,7 @@ export class DrcProjectHelper {
     'UKR-000464 Villum Fundation': DrcDonor['Villum Fundation'],
     'UKR-000467 NORAD': DrcDonor['NORAD'],
     'UKR-000475 UHF': DrcDonor['UHF'],
+    'UKR-000477 UHF': DrcDonor['UHF'],
     // extra options out of sorted list:
     Other: DrcDonor.Other,
     None: DrcDonor.None,
