@@ -13,27 +13,17 @@ import {useIndividualAidData} from '../Dashboard/hooks'
 import Filters from '../Filters'
 
 const Data: FC = () => {
-  const {
-    optionFilter,
-    filterShape,
-    setOptionFilters,
-    casePeriod,
-    setCasePeriod,
-    caseClosurePeriod,
-    setCaseClosurePeriod,
-  } = useIndividualAidData()
+  const {optionFilter, filterShape, setOptionFilters, casePeriod, setCasePeriod} = useIndividualAidData()
 
   const dataFilter = (record: KoboMappedAnswer) => {
     const typedRecord = record as unknown as KoboMappedAnswer<Legal_individual_aid.T>
     const passesOptionFilters = DataFilter.filterData([typedRecord], filterShape, optionFilter).length > 0
     const passesDateFilters =
-      typedRecord.number_case?.some(
-        ({date_case, date_case_closure}) =>
-          PeriodHelper.isDateIn(casePeriod, date_case) && PeriodHelper.isDateIn(caseClosurePeriod, date_case_closure),
-      ) ?? false
+      typedRecord.number_case?.some(({date_case}) => PeriodHelper.isDateIn(casePeriod, date_case)) ?? false
 
     return passesOptionFilters && passesDateFilters
   }
+
   const handleFiltersChange = useCallback(
     (filters: Record<string, DatatableFilterValue>) => {
       // Convert Datatable filter values to our format
@@ -67,8 +57,6 @@ const Data: FC = () => {
           setOptionFilters={setOptionFilters}
           casePeriod={casePeriod}
           setCasePeriod={setCasePeriod}
-          caseClosurePeriod={caseClosurePeriod}
-          setCaseClosurePeriod={setCaseClosurePeriod}
           slotProps={{wrapperBox: {paddingInline: 1}}}
         />
         <DatabaseTable

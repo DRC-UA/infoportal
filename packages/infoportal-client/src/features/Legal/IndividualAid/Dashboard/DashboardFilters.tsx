@@ -14,8 +14,6 @@ const DashboardFilters: FC = () => {
       setOptionFilters={ctx.setOptionFilters}
       setCasePeriod={ctx.setCasePeriod}
       casePeriod={ctx.casePeriod}
-      caseClosurePeriod={ctx.caseClosurePeriod}
-      setCaseClosurePeriod={ctx.setCaseClosurePeriod}
     />
   )
 }
