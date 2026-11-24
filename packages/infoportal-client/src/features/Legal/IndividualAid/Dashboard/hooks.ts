@@ -14,6 +14,7 @@ const useIndividualAidData = () => {
   const {m} = useI18n()
   const fetcherAnswer = useKoboAnswersContext().byName('legal_individual_aid')
   const [casePeriod, setCasePeriod] = useState<Partial<Period>>({})
+  const [caseClosurePeriod, setCaseClosurePeriod] = useState<Partial<Period>>({})
 
   const [optionFilter, setOptionFilters] = useState<
     Partial<Record<keyof Legal_individual_aid.T, string[] | undefined>>
@@ -105,9 +106,12 @@ const useIndividualAidData = () => {
         }
       })
       .filter(({number_case}) => {
-        return PeriodHelper.isDateIn(casePeriod, number_case?.[0]?.date_case)
+        return (
+          PeriodHelper.isDateIn(casePeriod, number_case?.[0]?.date_case) &&
+          PeriodHelper.isDateIn(caseClosurePeriod, number_case?.[0]?.date_case_closure)
+        )
       })
-  }, [data, filterShape, optionFilter, casePeriod])
+  }, [data, filterShape, optionFilter, casePeriod, caseClosurePeriod])
 
   return {
     data,
@@ -118,6 +122,8 @@ const useIndividualAidData = () => {
     setOptionFilters,
     casePeriod,
     setCasePeriod,
+    caseClosurePeriod,
+    setCaseClosurePeriod,
   }
 }
 

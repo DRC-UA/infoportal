@@ -13,6 +13,8 @@ interface FiltersProps {
   setOptionFilters: Dispatch<SetStateAction<Record<string, string[] | undefined>>>
   setCasePeriod: Dispatch<SetStateAction<Period>>
   casePeriod?: Period
+  caseClosurePeriod?: Period
+  setCaseClosurePeriod: Dispatch<SetStateAction<Period>>
   slotProps?: {
     wrapperBox?: BoxProps
   }
