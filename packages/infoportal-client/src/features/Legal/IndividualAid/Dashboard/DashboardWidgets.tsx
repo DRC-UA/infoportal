@@ -26,15 +26,12 @@ import {useIndividualAidContext} from './context'
 // MEMO: all figures are PEOPLE - those who receive aid, get documents issued etc
 const Widgets: FC = () => {
   const {dataFiltered} = useIndividualAidContext()
-  console.log(dataFiltered.filter((record) => ['8369641', '8365580'].includes(record.id)))
   const {m} = useI18n()
   // the dataFiltered is already memoized in the hook called above
   // calculate everything in one Array.prototype.reduce run:
   const {assistances, counselling, docs} = dataFiltered.reduce(
-    (result, {number_case, id}) => {
+    (result, {number_case}) => {
       const {activity} = pickPrioritizedAid(number_case)
-
-      if (['8369641', '8365580'].includes(id)) console.log({id, number_case, activity})
 
       return {
         ...result,
