@@ -7,16 +7,7 @@ import {PeriodPicker} from '@/shared/PeriodPicker/PeriodPicker'
 
 import type {FiltersProps} from './types'
 
-const Filters: FC<FiltersProps> = ({
-  shapes,
-  filters,
-  setOptionFilters,
-  setCasePeriod,
-  casePeriod,
-  caseClosurePeriod,
-  setCaseClosurePeriod,
-  slotProps,
-}) => {
+const Filters: FC<FiltersProps> = ({shapes, filters, setOptionFilters, setCasePeriod, casePeriod, slotProps}) => {
   const {m} = useI18n()
 
   return (
@@ -26,7 +17,6 @@ const Filters: FC<FiltersProps> = ({
       onClear={() => {
         setOptionFilters({})
         setCasePeriod({})
-        setCaseClosurePeriod({})
       }}
       setFilters={setOptionFilters}
       slotProps={{
@@ -47,19 +37,6 @@ const Filters: FC<FiltersProps> = ({
               label={[m.start, m.endIncluded]}
               min={casePeriod?.start}
               max={casePeriod?.end}
-            />
-          </Box>
-          <Box>
-            <Typography fontSize="small">{m.legal.aidClosureDate}</Typography>
-            <PeriodPicker
-              value={[caseClosurePeriod?.start, caseClosurePeriod?.end]}
-              onChange={([start, end]) => {
-                setCaseClosurePeriod((prev) => ({...prev, start, end}))
-              }}
-              fullWidth={false}
-              label={[m.start, m.endIncluded]}
-              min={caseClosurePeriod?.start}
-              max={caseClosurePeriod?.end}
             />
           </Box>
         </Box>

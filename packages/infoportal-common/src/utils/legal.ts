@@ -12,42 +12,34 @@ const pickPrioritizedAid = (
   if (aids === undefined) return {}
 
   const hlpAssistanceWithDoc: NonNullable<Legal_individual_aid.T['number_case']>[number] | undefined = aids.find(
-    ({beneficiary_application_type, counselling_matter_documentation_yes, date_document_received_assistance}) => {
+    ({beneficiary_application_type, counselling_matter_documentation_yes, document_received_assistance}) => {
       return (
         beneficiary_application_type?.includes('assistance') &&
         counselling_matter_documentation_yes?.includes('hlp') &&
-        isDate(date_document_received_assistance)
+        document_received_assistance === 'yes'
       )
     },
   )
 
   const hlpAssistance: NonNullable<Legal_individual_aid.T['number_case']>[number] | undefined = aids.find(
-    ({beneficiary_application_type, category_issue, date_document_received_assistance}) => {
-      return (
-        beneficiary_application_type?.includes('assistance') &&
-        category_issue === 'hlp' &&
-        !isDate(date_document_received_assistance)
-      )
+    ({beneficiary_application_type, category_issue}) => {
+      return beneficiary_application_type?.includes('assistance') && category_issue === 'hlp'
     },
   )
 
   const civilAssistanceWithDoc: NonNullable<Legal_individual_aid.T['number_case']>[number] | undefined = aids.find(
-    ({beneficiary_application_type, category_issue, date_document_received_assistance}) => {
+    ({beneficiary_application_type, category_issue, document_received_assistance}) => {
       return (
         beneficiary_application_type?.includes('assistance') &&
         category_issue !== 'hlp' &&
-        isDate(date_document_received_assistance)
+        document_received_assistance === 'yes'
       )
     },
   )
 
   const civilAssistance: NonNullable<Legal_individual_aid.T['number_case']>[number] | undefined = aids.find(
     ({beneficiary_application_type, category_issue, date_document_received_assistance}) => {
-      return (
-        beneficiary_application_type?.includes('assistance') &&
-        category_issue !== 'hlp' &&
-        !isDate(date_document_received_assistance)
-      )
+      return beneficiary_application_type?.includes('assistance') && category_issue !== 'hlp'
     },
   )
 
