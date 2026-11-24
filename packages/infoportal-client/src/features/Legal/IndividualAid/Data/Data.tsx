@@ -32,7 +32,9 @@ const Data: FC = () => {
           PeriodHelper.isDateIn(casePeriod, date_case) &&
           PeriodHelper.isDateIn(
             caseClosurePeriod,
-            date_case_closure ?? (beneficiary_application_type?.includes('counselling') && date_case),
+            date_case_closure ?? (
+              beneficiary_application_type?.includes('counselling') ? date_case : undefined
+            ),
         ),
       ) ?? false
 

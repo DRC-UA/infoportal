@@ -111,7 +111,9 @@ const useIndividualAidData = () => {
           PeriodHelper.isDateIn(
             caseClosurePeriod,
             number_case?.[0]?.date_case_closure ??
-              (number_case?.[0]?.beneficiary_application_type?.includes('counselling') && number_case?.[0]?.date_case),
+              (number_case?.[0]?.beneficiary_application_type?.includes('counselling')
+                ? number_case?.[0]?.date_case
+                : undefined),
           )
         )
       })
