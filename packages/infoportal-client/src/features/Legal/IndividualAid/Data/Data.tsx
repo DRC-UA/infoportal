@@ -28,8 +28,12 @@ const Data: FC = () => {
     const passesOptionFilters = DataFilter.filterData([typedRecord], filterShape, optionFilter).length > 0
     const passesDateFilters =
       typedRecord.number_case?.some(
-        ({date_case, date_case_closure}) =>
-          PeriodHelper.isDateIn(casePeriod, date_case) && PeriodHelper.isDateIn(caseClosurePeriod, date_case_closure),
+        ({date_case, date_case_closure, beneficiary_application_type}) =>
+          PeriodHelper.isDateIn(casePeriod, date_case) &&
+          PeriodHelper.isDateIn(
+            caseClosurePeriod,
+            date_case_closure ?? (beneficiary_application_type?.includes('counselling') && date_case),
+        ),
       ) ?? false
 
     return passesOptionFilters && passesDateFilters
