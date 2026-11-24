@@ -45,8 +45,6 @@ const Filters: FC<FiltersProps> = ({
               }}
               fullWidth={false}
               label={[m.start, m.endIncluded]}
-              min={casePeriod?.start}
-              max={casePeriod?.end}
             />
           </Box>
           <Box>
@@ -58,8 +56,6 @@ const Filters: FC<FiltersProps> = ({
               }}
               fullWidth={false}
               label={[m.start, m.endIncluded]}
-              min={caseClosurePeriod?.start}
-              max={caseClosurePeriod?.end}
             />
           </Box>
         </Box>
