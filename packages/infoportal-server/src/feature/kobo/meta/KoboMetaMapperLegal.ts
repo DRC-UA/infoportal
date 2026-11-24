@@ -144,7 +144,13 @@ class KoboMetaMapperLegal {
             pending: KoboMetaStatus.Pending,
             closed_ready: KoboMetaStatus.Committed,
           })
-          .default(() => (aid.status_case_pending ? KoboMetaStatus.Pending : undefined)),
+          .default(() =>
+            aid.status_case_pending
+              ? KoboMetaStatus.Pending
+              : aid.beneficiary_application_type?.includes('counselling')
+                ? KoboMetaStatus.Committed
+                : undefined,
+          ),
         lastStatusUpdate: aid?.date_case_closure ?? aid?.date_case ?? row.updatedAt ?? row.date,
       })
     }
