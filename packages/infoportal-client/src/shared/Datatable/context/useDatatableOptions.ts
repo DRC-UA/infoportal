@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo} from 'react'
+import {useCallback, useEffect} from 'react'
 import {seq} from '@axanc/ts-utils'
 
 import {KeyOf} from 'infoportal-common'
@@ -20,18 +20,11 @@ export const useDatatableOptions = <T extends DatatableRow>({
   columns: DatatableColumn.InnerProps<any>[]
   columnsIndex: Record<KeyOf<T>, DatatableColumn.InnerProps<any>>
 }) => {
-  const automaticOptionColumns = useMemo(
-    () => columns.filter((_) => (_.type === 'select_multiple' || _.type === 'select_one') && _.options === undefined),
-    [columns],
-  )
-
   useEffect(
     function resetAutomaticRef() {
-      automaticOptionColumns.forEach((c) => {
-        optionsRef.delete(c.id)
-      })
+      optionsRef.clear()
     },
-    [data.filteredData],
+    [columns, data.filteredData],
   )
 
   return useCallback(
@@ -52,17 +45,6 @@ export const useDatatableOptions = <T extends DatatableRow>({
             )
           } else if (col.type === 'select_multiple') {
             throw new Error(`options not implemented for ${columnId}.`)
-            // optionsRef.set(columnId, seq(data.filterExceptBy(columnId))
-            //   ?.flatMap(_ => col.render(_).value)
-            //   .distinct(_ => _)
-            //   .sort((a, b) => (a ?? '').localeCompare(b ?? ''))
-            //   .map(_ => {
-            //     console.log(col)
-            //     console.log(_)
-            //     console.log(col.render(_))
-            //     return _ ? DatatableUtils.buildCustomOption(_, col.render(_).option as string) : DatatableUtils.blankOption
-            //   })
-            // )
           }
         }
       }
