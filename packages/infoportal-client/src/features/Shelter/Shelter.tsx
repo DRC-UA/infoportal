@@ -1,4 +1,4 @@
-import {NavLink, Route, Routes, useLocation, useMatch} from 'react-router-dom'
+import {NavLink, Route, Routes, useMatch} from 'react-router-dom'
 import {Sidebar, SidebarBody, SidebarItem} from '@/shared/Layout/Sidebar'
 import {Layout} from '@/shared/Layout'
 import {useI18n} from '@/core/i18n'
@@ -104,11 +104,16 @@ export const Shelter = () => {
 export const ShelterWithAccess = () => {
   const {session, accesses} = useSession()
   const ctxSchema = useKoboSchemaContext()
-  const location = useLocation()
   useReactRouterDefaultRoute(shelterIndex.siteMap.shelter.data)
   const {access, allowedOffices} = useMemo(() => {
     const dbAccesses = seq(accesses).filter(Access.filterByFeature(AppFeatureId.kobo_database))
     const allowedOffices = dbAccesses
+      .filter(({params}) => {
+        return (
+          params?.koboFormId &&
+          [KoboIndex.byName('shelter_nta').id, KoboIndex.byName('shelter_ta').id].includes(params?.koboFormId)
+        )
+      }) // check offices restriction only in NTA, TA forms
       .flatMap((_) => _.params?.filters?.back_office as Shelter_nta.T['back_office'][] | undefined)
       .compact()
     return {access: Access.toSum(dbAccesses, session.admin), allowedOffices}
