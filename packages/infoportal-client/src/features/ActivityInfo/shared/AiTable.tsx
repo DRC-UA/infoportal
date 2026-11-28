@@ -163,7 +163,7 @@ const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, showCurren
         },
         {
           id: 'activityInfoId',
-          type: 'select_one',
+          type: 'id',
           head: 'Record ID',
           renderQuick: ({recordId}) => recordId,
         },
