@@ -72,10 +72,14 @@ const AiTable: FC<AiTableProps> = ({data, columns, period, setPeriod, showCurren
               onClick={() => {
                 if (!data) return
                 _submit
-                  .call(
-                    'all',
-                    data.filter(({submit}) => submit).map(({requestBody}) => requestBody),
-                  )
+                  .call('all', [
+                    {
+                      changes: data
+                        .filter(({submit}) => submit)
+                        .map(({requestBody: {changes}}) => changes)
+                        .flat(),
+                    },
+                  ])
                   .catch(toastHttpError)
               }}
             >
